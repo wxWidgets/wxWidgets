@@ -366,7 +366,21 @@ public:
     bool HandlePower(WXWPARAM wParam, WXLPARAM lParam, bool *vetoed);
 
 
-    // Window procedure
+    // The main body of common window proc for all wxWindow objects. It tries
+    // to handle the given message and returns true if it was handled (the
+    // appropriate return value is then put in result, which must be non-NULL)
+    // or false if it wasn't.
+    //
+    // This function should be overridden in any new code instead of
+    // MSWWindowProc() even if currently most of the code overrides
+    // MSWWindowProc() as it had been written before this function was added.
+    virtual bool MSWHandleMessage(WXLRESULT *result,
+                                  WXUINT message,
+                                  WXWPARAM wParam,
+                                  WXLPARAM lParam);
+
+    // Common Window procedure for all wxWindow objects: forwards to
+    // MSWHandleMessage() and MSWDefWindowProc() if the message wasn't handled.
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     // Calls an appropriate default window procedure

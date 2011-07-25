@@ -354,7 +354,7 @@ public:
     HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG lpmsg, WORD)
     {
         // TODO: send an event with this id
-        if (m_window->m_oleInPlaceActiveObject.Ok())
+        if (m_window->m_oleInPlaceActiveObject.IsOk())
             m_window->m_oleInPlaceActiveObject->TranslateAccelerator(lpmsg);
         return S_FALSE;
     }
@@ -425,7 +425,7 @@ public:
     HRESULT STDMETHODCALLTYPE DeactivateAndUndo(){return S_OK; }
     HRESULT STDMETHODCALLTYPE OnPosRectChange(LPCRECT lprcPosRect)
     {
-        if (m_window->m_oleInPlaceObject.Ok() && lprcPosRect)
+        if (m_window->m_oleInPlaceObject.IsOk() && lprcPosRect)
         {
            //
            // Result of several hours and days of bug hunting -
@@ -606,7 +606,7 @@ public:
     {
         wxAutoIOleInPlaceSite inPlaceSite(
             IID_IOleInPlaceSite, (IDispatch *) this);
-        if (!inPlaceSite.Ok())
+        if (!inPlaceSite.IsOk())
             return E_FAIL;
 
         if (pViewToActivate)
@@ -618,7 +618,7 @@ public:
         {
             wxAutoIOleDocument oleDoc(
                 IID_IOleDocument, m_window->m_oleObject);
-            if (! oleDoc.Ok())
+            if (! oleDoc.IsOk())
                 return E_FAIL;
 
             HRESULT hr = oleDoc->CreateView(inPlaceSite, NULL,
@@ -878,13 +878,13 @@ wxActiveXContainer::wxActiveXContainer(wxWindow * parent,
 wxActiveXContainer::~wxActiveXContainer()
 {
     // disconnect connection points
-    if (m_oleInPlaceObject.Ok())
+    if (m_oleInPlaceObject.IsOk())
     {
         m_oleInPlaceObject->InPlaceDeactivate();
         m_oleInPlaceObject->UIDeactivate();
     }
 
-    if (m_oleObject.Ok())
+    if (m_oleObject.IsOk())
     {
         if (m_docAdviseCookie != 0)
             m_oleObject->Unadvise(m_docAdviseCookie);
@@ -934,7 +934,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     CHECK_HR(hret);
     // adviseSink
     wxAutoIAdviseSink adviseSink(IID_IAdviseSink, (IDispatch *) m_frameSite);
-    wxASSERT(adviseSink.Ok());
+    wxASSERT(adviseSink.IsOk());
 
     // Get Dispatch interface
     hret = m_Dispatch.QueryInterface(IID_IDispatch, m_ActiveX);
@@ -946,13 +946,13 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     // get type info via class info
     wxAutoIProvideClassInfo classInfo(IID_IProvideClassInfo, m_ActiveX);
-    wxASSERT(classInfo.Ok());
+    wxASSERT(classInfo.IsOk());
 
     // type info
     wxAutoITypeInfo typeInfo;
     hret = classInfo->GetClassInfo(typeInfo.GetRef());
     CHECK_HR(hret);
-    wxASSERT(typeInfo.Ok());
+    wxASSERT(typeInfo.IsOk());
 
     // TYPEATTR
     TYPEATTR *ta = NULL;
@@ -975,7 +975,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         // get dispatch type info interface
         wxAutoITypeInfo  ti;
         hret = typeInfo->GetRefTypeInfo(rt, ti.GetRef());
-        if (! ti.Ok())
+        if (! ti.IsOk())
             continue;
 
         CHECK_HR(hret);
@@ -1016,7 +1016,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
                 DWORD                    adviseCookie = 0;
 
                 wxAutoIConnectionPointContainer cpContainer(IID_IConnectionPointContainer, m_ActiveX);
-                wxASSERT( cpContainer.Ok());
+                wxASSERT( cpContainer.IsOk());
 
                 HRESULT hret =
                     cpContainer->FindConnectionPoint(ta->guid, cp.GetRef());
@@ -1093,7 +1093,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     wxAutoIPersistStreamInit
         pPersistStreamInit(IID_IPersistStreamInit, m_oleObject);
 
-    if (pPersistStreamInit.Ok())
+    if (pPersistStreamInit.IsOk())
     {
         hret = pPersistStreamInit->InitNew();
         CHECK_HR(hret);
@@ -1105,7 +1105,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     m_oleObjectHWND = 0;
 
-    if (m_oleInPlaceObject.Ok())
+    if (m_oleInPlaceObject.IsOk())
     {
         hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
         if (SUCCEEDED(hret))
@@ -1119,7 +1119,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         wxCopyRectToRECT(m_realparent->GetClientSize(), posRect);
 
         if (posRect.right > 0 && posRect.bottom > 0 &&
-            m_oleInPlaceObject.Ok())
+            m_oleInPlaceObject.IsOk())
         {
             m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
         }
@@ -1133,7 +1133,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         CHECK_HR(hret);
     }
 
-    if (! m_oleObjectHWND && m_oleInPlaceObject.Ok())
+    if (! m_oleObjectHWND && m_oleInPlaceObject.IsOk())
     {
         hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
         CHECK_HR(hret);
@@ -1182,7 +1182,7 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
         return;
 
     // extents are in HIMETRIC units
-    if (m_oleObject.Ok())
+    if (m_oleObject.IsOk())
     {
         m_oleObject->DoVerb(OLEIVERB_HIDE, 0, m_clientSite, 0,
             (HWND)m_realparent->GetHWND(), &posRect);
@@ -1200,7 +1200,7 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
             (HWND)m_realparent->GetHWND(), &posRect);
     }
 
-    if (m_oleInPlaceObject.Ok())
+    if (m_oleInPlaceObject.IsOk())
         m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
 
     event.Skip();
@@ -1244,7 +1244,7 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
 //---------------------------------------------------------------------------
 void wxActiveXContainer::OnSetFocus(wxFocusEvent& event)
 {
-    if (m_oleInPlaceActiveObject.Ok())
+    if (m_oleInPlaceActiveObject.IsOk())
         m_oleInPlaceActiveObject->OnFrameWindowActivate(TRUE);
 
     event.Skip();
@@ -1258,7 +1258,7 @@ void wxActiveXContainer::OnSetFocus(wxFocusEvent& event)
 //---------------------------------------------------------------------------
 void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 {
-    if (m_oleInPlaceActiveObject.Ok())
+    if (m_oleInPlaceActiveObject.IsOk())
         m_oleInPlaceActiveObject->OnFrameWindowActivate(FALSE);
 
     event.Skip();

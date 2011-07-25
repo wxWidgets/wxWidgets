@@ -165,7 +165,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_BTNFACE:
         case wxSYS_COLOUR_MENUBAR:
         case wxSYS_COLOUR_3DLIGHT:
-            if (!gs_objects.m_colBtnFace.Ok())
+            if (!gs_objects.m_colBtnFace.IsOk())
             {
                 int red, green, blue;
                 if ( !GetColourFromGTKWidget(red, green, blue) )
@@ -190,7 +190,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_GRAYTEXT:
         case wxSYS_COLOUR_BTNSHADOW:
         //case wxSYS_COLOUR_3DSHADOW:
-            if (!gs_objects.m_colBtnShadow.Ok())
+            if (!gs_objects.m_colBtnShadow.IsOk())
             {
                 wxColour faceColour(GetColour(wxSYS_COLOUR_3DFACE));
                 gs_objects.m_colBtnShadow =
@@ -206,7 +206,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             return * wxWHITE;
 
         case wxSYS_COLOUR_HIGHLIGHT:
-            if (!gs_objects.m_colHighlight.Ok())
+            if (!gs_objects.m_colHighlight.IsOk())
             {
                 int red, green, blue;
                 if ( !GetColourFromGTKWidget(red, green, blue,
@@ -225,7 +225,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             return gs_objects.m_colHighlight;
 
         case wxSYS_COLOUR_LISTBOX:
-            if (!gs_objects.m_colListBox.Ok())
+            if (!gs_objects.m_colListBox.IsOk())
             {
                 int red, green, blue;
                 if ( GetColourFromGTKWidget(red, green, blue,
@@ -250,7 +250,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_BTNTEXT:
         case wxSYS_COLOUR_LISTBOXTEXT:
-            if (!gs_objects.m_colBtnText.Ok())
+            if (!gs_objects.m_colBtnText.IsOk())
             {
                 int red, green, blue;
                 if ( !GetColourFromGTKWidget(red, green, blue,
@@ -270,20 +270,20 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             return gs_objects.m_colBtnText;
 
         case wxSYS_COLOUR_INFOBK:
-            if (!gs_objects.m_colTooltip.Ok()) {
+            if (!gs_objects.m_colTooltip.IsOk()) {
                 GetTooltipColors();
             }
             return gs_objects.m_colTooltip;
 
         case wxSYS_COLOUR_INFOTEXT:
-            if (!gs_objects.m_colTooltipText.Ok()) {
+            if (!gs_objects.m_colTooltipText.IsOk()) {
                 GetTooltipColors();
             }
             return gs_objects.m_colTooltipText;
 
         case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
-            if (!gs_objects.m_colHighlightText.Ok())
+            if (!gs_objects.m_colHighlightText.IsOk())
             {
                 wxColour hclr = GetColour(wxSYS_COLOUR_HIGHLIGHT);
                 if (hclr.Red() > 200 && hclr.Green() > 200 && hclr.Blue() > 200)
@@ -298,7 +298,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
 
         case wxSYS_COLOUR_ACTIVECAPTION:
         case wxSYS_COLOUR_MENUHILIGHT:
-            if (!gs_objects.m_colMenuItemHighlight.Ok())
+            if (!gs_objects.m_colMenuItemHighlight.IsOk())
             {
                 int red, green, blue;
                 if ( !GetColourFromGTKWidget(red, green, blue,
@@ -346,7 +346,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         case wxSYS_DEVICE_DEFAULT_FONT:
         case wxSYS_DEFAULT_GUI_FONT:
         {
-            if (!gs_objects.m_fontSystem.Ok())
+            if (!gs_objects.m_fontSystem.IsOk())
             {
                 gs_objects.m_fontSystem = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
             }

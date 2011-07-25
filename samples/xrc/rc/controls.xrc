@@ -511,14 +511,25 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxListCtrl" name="controls_listctrl">
                                     <size>220,160</size>
                                     <style>wxLC_REPORT|wxBORDER_SIMPLE</style>
+                                    <imagelist-small>
+                                        <size>16,16</size>
+                                        <bitmap stock_id="wxART_HELP_BOOK"/>
+                                        <bitmap stock_id="wxART_INFORMATION"/>
+                                        <bitmap stock_id="wxART_GO_UP"/>
+                                        <bitmap stock_id="wxART_PLUS"/>
+                                        <bitmap stock_id="wxART_GO_DOWN"/>
+                                        <bitmap stock_id="wxART_WARNING"/>
+                                    </imagelist-small>
                                     <object class="listcol">
                                         <text>Name</text>
-                                        <width>150</width>
+                                        <width>105</width>
+                                        <image>0</image>
                                     </object>
                                     <object class="listcol">
                                         <text>Weight</text>
                                         <align>wxLIST_FORMAT_RIGHT</align>
-                                        <width>50</width>
+                                        <width>105</width>
+                                        <image>1</image>
                                     </object>
                                     <!-- the items are added from the code -->
                                 </object>
@@ -1136,9 +1147,18 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxTreebook" name="controls_treebook">
                                     <size>350,280</size>
                                     <style>wxSUNKEN_BORDER</style>
+                                    <imagelist>
+                                        <size>16,16</size>
+                                        <bitmap stock_id="wxART_HELP_BOOK"/>
+                                        <bitmap stock_id="wxART_QUESTION"/>
+                                        <bitmap stock_id="wxART_INFORMATION"/>
+                                        <bitmap stock_id="wxART_GO_HOME"/>
+                                    </imagelist>
                                     <object class="treebookpage">
                                         <label>Page 1</label>
                                         <depth>0</depth>
+                                        <image>0</image>
+                                        <expanded>1</expanded>
                                         <object class="wxButton" name="controls_treebook_button1">
                                             <size>200,180</size>
                                             <label>Button N1</label>
@@ -1147,10 +1167,13 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <object class="treebookpage">
                                         <label>Empty Page 2</label>
                                         <depth>1</depth>
+                                        <image>1</image>
+                                        <expanded>1</expanded>
                                     </object>
                                     <object class="treebookpage">
                                         <label>Page 3</label>
                                         <depth>2</depth>
+                                        <image>2</image>
                                         <object class="wxButton" name="controls_treebook_button3">
                                             <size>200,180</size>
                                             <label>Button N3</label>
@@ -1159,6 +1182,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <object class="treebookpage">
                                         <label>Page 4</label>
                                         <depth>1</depth>
+                                        <image>3</image>
                                         <object class="wxButton" name="controls_treebook_button4">
                                             <size>200,180</size>
                                             <label>Button N4</label>

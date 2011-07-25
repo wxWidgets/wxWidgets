@@ -83,6 +83,16 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
     }
 }
 
+void wxGUIEventLoop::WakeUp()
+{
+    OSStatus err = noErr;
+    wxMacCarbonEvent wakeupEvent;
+    wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
+                        kEventAttributeNone );
+    err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
+                            kEventPriorityHigh );
+}
+
 void wxGUIEventLoop::DoRun()
 {
     wxMacAutoreleasePool autoreleasepool;

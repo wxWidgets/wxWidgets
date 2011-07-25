@@ -171,22 +171,18 @@ void wxListBase::DoCopy(const wxListBase& list)
     {
         case wxKEY_INTEGER:
             {
-                long key;
                 for ( wxNodeBase *node = list.GetFirst(); node; node = node->GetNext() )
                 {
-                    key = node->GetKeyInteger();
-                    Append(key, node->GetData());
+                    Append(node->GetKeyInteger(), node->GetData());
                 }
                 break;
             }
 
         case wxKEY_STRING:
             {
-                const wxChar *key;
                 for ( wxNodeBase *node = list.GetFirst(); node; node = node->GetNext() )
                 {
-                    key = node->GetKeyString();
-                    Append(key, node->GetData());
+                    Append(node->GetKeyString(), node->GetData());
                 }
                 break;
             }

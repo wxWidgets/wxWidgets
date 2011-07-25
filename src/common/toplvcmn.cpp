@@ -39,10 +39,7 @@
 BEGIN_EVENT_TABLE(wxTopLevelWindowBase, wxWindow)
     EVT_CLOSE(wxTopLevelWindowBase::OnCloseWindow)
     EVT_SIZE(wxTopLevelWindowBase::OnSize)
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxTopLevelWindowBase)
 END_EVENT_TABLE()
-
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxTopLevelWindowBase, wxWindow)
 
 // ============================================================================
 // implementation
@@ -58,8 +55,6 @@ wxTopLevelWindowBase::wxTopLevelWindowBase()
 {
     // Unlike windows, top level windows are created hidden by default.
     m_isShown = false;
-
-    WX_INIT_CONTROL_CONTAINER();
 }
 
 wxTopLevelWindowBase::~wxTopLevelWindowBase()
@@ -352,7 +347,7 @@ void wxTopLevelWindowBase::SetIcon(const wxIcon& icon)
     // passing wxNullIcon to SetIcon() is possible (it means that we shouldn't
     // have any icon), but adding an invalid icon to wxIconBundle is not
     wxIconBundle icons;
-    if ( icon.Ok() )
+    if ( icon.IsOk() )
         icons.AddIcon(icon);
 
     SetIcons(icons);

@@ -53,6 +53,7 @@ bool DrawingView::OnCreate(wxDocument *doc, long flags)
         wxFrame* frame = app.CreateChildFrame(this, true);
         wxASSERT(frame == GetFrame());
         m_canvas = new MyCanvas(this);
+        frame->Show();
     }
     else // single document mode
     {
@@ -64,7 +65,6 @@ bool DrawingView::OnCreate(wxDocument *doc, long flags)
         doc->GetCommandProcessor()->SetEditMenu(app.GetMainWindowEditMenu());
         doc->GetCommandProcessor()->Initialize();
     }
-    GetFrame()->Show();
 
     return true;
 }
@@ -362,3 +362,76 @@ bool ImageView::OnClose(bool deleteWindow)
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// ImageDetailsView
+// ----------------------------------------------------------------------------
+
+ImageDetailsView::ImageDetailsView(ImageDetailsDocument *doc)
+                : wxView()
+{
+    SetDocument(doc);
+
+    m_frame = wxGetApp().CreateChildFrame(this, false);
+    m_frame->SetTitle("Image Details");
+
+    wxPanel * const panel = new wxPanel(m_frame);
+    wxFlexGridSizer * const sizer = new wxFlexGridSizer(2, wxSize(5, 5));
+    const wxSizerFlags
+        flags = wxSizerFlags().Align(wxALIGN_CENTRE_VERTICAL).Border();
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Image &file:"), flags);
+    sizer->Add(new wxStaticText(panel, wxID_ANY, doc->GetFilename()), flags);
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Image &type:"), flags);
+    wxString typeStr;
+    switch ( doc->GetType() )
+    {
+        case wxBITMAP_TYPE_PNG:
+            typeStr = "PNG";
+            break;
+
+        case wxBITMAP_TYPE_JPEG:
+            typeStr = "JPEG";
+            break;
+
+        default:
+            typeStr = "Unknown";
+    }
+    sizer->Add(new wxStaticText(panel, wxID_ANY, typeStr), flags);
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Image &size:"), flags);
+    wxSize size = doc->GetSize();
+    sizer->Add(new wxStaticText(panel, wxID_ANY,
+                                wxString::Format("%d*%d", size.x, size.y)),
+               flags);
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Number of unique &colours:"),
+               flags);
+    sizer->Add(new wxStaticText(panel, wxID_ANY,
+                                wxString::Format("%lu", doc->GetNumColours())),
+               flags);
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Uses &alpha:"), flags);
+    sizer->Add(new wxStaticText(panel, wxID_ANY,
+                                doc->HasAlpha() ? "Yes" : "No"), flags);
+
+    panel->SetSizer(sizer);
+    m_frame->SetClientSize(panel->GetBestSize());
+    m_frame->Show(true);
+}
+
+void ImageDetailsView::OnDraw(wxDC * WXUNUSED(dc))
+{
+    // nothing to do here, we use controls to show our information
+}
+
+bool ImageDetailsView::OnClose(bool deleteWindow)
+{
+    if ( wxGetApp().GetMode() != MyApp::Mode_Single && deleteWindow )
+    {
+        delete m_frame;
+        m_frame = NULL;
+    }
+
+    return true;
+}

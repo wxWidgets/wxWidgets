@@ -1645,7 +1645,7 @@ wxMBConvUTF16straight::FromWChar(char *dst, size_t dstLen,
     wxUint16 *outBuff = reinterpret_cast<wxUint16 *>(dst);
     for ( size_t n = 0; n < srcLen; n++ )
     {
-        wxUint16 cc[2];
+        wxUint16 cc[2] = { 0 };
         const size_t numChars = encode_utf16(*src++, cc);
         if ( numChars == wxCONV_FAILED )
             return wxCONV_FAILED;
@@ -1728,7 +1728,7 @@ wxMBConvUTF16swap::FromWChar(char *dst, size_t dstLen,
     wxUint16 *outBuff = reinterpret_cast<wxUint16 *>(dst);
     for ( const wchar_t *srcEnd = src + srcLen; src < srcEnd; src++ )
     {
-        wxUint16 cc[2];
+        wxUint16 cc[2] = { 0 };
         const size_t numChars = encode_utf16(*src, cc);
         if ( numChars == wxCONV_FAILED )
             return wxCONV_FAILED;
@@ -1812,7 +1812,7 @@ wxMBConvUTF32straight::ToWChar(wchar_t *dst, size_t dstLen,
     size_t outLen = 0;
     for ( size_t n = 0; n < inLen; n++ )
     {
-        wxUint16 cc[2];
+        wxUint16 cc[2] = { 0 };
         const size_t numChars = encode_utf16(*inBuff++, cc);
         if ( numChars == wxCONV_FAILED )
             return wxCONV_FAILED;
@@ -1890,7 +1890,7 @@ wxMBConvUTF32swap::ToWChar(wchar_t *dst, size_t dstLen,
     size_t outLen = 0;
     for ( size_t n = 0; n < inLen; n++, inBuff++ )
     {
-        wxUint16 cc[2];
+        wxUint16 cc[2] = { 0 };
         const size_t numChars = encode_utf16(wxUINT32_SWAP_ALWAYS(*inBuff), cc);
         if ( numChars == wxCONV_FAILED )
             return wxCONV_FAILED;

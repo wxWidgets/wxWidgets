@@ -293,7 +293,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         m_animationCtrl->Play();
     #else
         wxFileInputStream stream(filename);
-        if (!stream.Ok())
+        if (!stream.IsOk())
         {
             wxLogError(wxT("Sorry, this animation is not a valid format for wxAnimation."));
             return;

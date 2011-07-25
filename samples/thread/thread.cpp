@@ -969,7 +969,7 @@ wxThread::ExitCode MyWorkerThread::Entry()
     if ( TestDestroy() )
         return NULL;
 
-    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+    wxThreadEvent event( wxEVT_THREAD, WORKER_EVENT );
 
     event.SetInt( 50 );
     wxQueueEvent( m_frame, event.Clone() );
@@ -984,7 +984,7 @@ wxThread::ExitCode MyWorkerThread::Entry()
             break;
 
         // create any type of command event here
-        wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+        wxThreadEvent event( wxEVT_THREAD, WORKER_EVENT );
         event.SetInt( m_count );
 
         // send in a thread-safe way
@@ -993,7 +993,7 @@ wxThread::ExitCode MyWorkerThread::Entry()
         wxMilliSleep(200);
     }
 
-    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+    wxThreadEvent event( wxEVT_THREAD, WORKER_EVENT );
     event.SetInt(-1); // that's all
     wxQueueEvent( m_frame, event.Clone() );
 #endif
@@ -1043,7 +1043,7 @@ wxThread::ExitCode MyGUIThread::Entry()
         wxMutexGuiLeave();
 
         // notify the dialog that another piece of our masterpiece is complete:
-        wxThreadEvent event( wxEVT_COMMAND_THREAD, GUITHREAD_EVENT );
+        wxThreadEvent event( wxEVT_THREAD, GUITHREAD_EVENT );
         event.SetInt(i+1);
         wxQueueEvent( m_dlg, event.Clone() );
 

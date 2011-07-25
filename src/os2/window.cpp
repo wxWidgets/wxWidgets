@@ -571,7 +571,7 @@ bool wxWindowOS2::SetCursor( const wxCursor& rCursor)
         return false;
     }
 
-    if ( m_cursor.Ok() ) {
+    if ( m_cursor.IsOk() ) {
         HWND                            hWnd = GetHwnd();
         POINTL                          vPoint;
         RECTL                           vRect;

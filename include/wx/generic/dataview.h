@@ -172,6 +172,8 @@ public:
     virtual wxRect GetItemRect( const wxDataViewItem & item,
                                 const wxDataViewColumn *column = NULL ) const;
 
+    virtual bool SetRowHeight( int rowHeight );
+
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );
     virtual bool IsExpanded( const wxDataViewItem & item ) const;
@@ -185,7 +187,7 @@ public:
 
     virtual wxBorder GetDefaultBorder() const;
 
-    void StartEditor( const wxDataViewItem & item, unsigned int column );
+    virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
 protected:
     virtual int GetSelections( wxArrayInt & sel ) const;

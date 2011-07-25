@@ -391,7 +391,7 @@ const wxCursor *wxGetGlobalCursor()
 
 void wxSetCursor(const wxCursor& cursor)
 {
-    if ( cursor.Ok() )
+    if ( cursor.IsOk() )
     {
         ::SetCursor(GetHcursorOf(cursor));
 

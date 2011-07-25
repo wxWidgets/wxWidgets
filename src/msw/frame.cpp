@@ -938,7 +938,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
         case WM_QUERYDRAGICON:
             {
                 const wxIcon& icon = GetIcon();
-                HICON hIcon = icon.Ok() ? GetHiconOf(icon)
+                HICON hIcon = icon.IsOk() ? GetHiconOf(icon)
                                         : (HICON)GetDefaultIcon();
                 rc = (WXLRESULT)hIcon;
                 processed = rc != 0;

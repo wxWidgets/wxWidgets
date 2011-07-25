@@ -225,7 +225,7 @@ void wxMenuItem::SetBitmaps(const wxBitmap& bmpChecked,
     }
     else
     {
-        wxASSERT_MSG(!bmpUnchecked.Ok(),wxT("Normal menu items should only have one bitmap"));
+        wxASSERT_MSG(!bmpUnchecked.IsOk(),wxT("Normal menu items should only have one bitmap"));
         [m_cocoaNSMenuItem setImage: bmpChecked.GetNSImage(true)];
     }
 }

@@ -61,28 +61,14 @@ class wxSearchTextCtrl : public wxTextCtrl
 public:
     wxSearchTextCtrl(wxSearchCtrl *search, const wxString& value, int style)
         : wxTextCtrl(search, wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     style | wxNO_BORDER)
+                     (style & ~wxBORDER_MASK) | wxNO_BORDER)
     {
         m_search = search;
-        m_defaultFG = GetForegroundColour();
+
+        SetHint(_("Search"));
 
         // remove the default minsize, the searchctrl will have one instead
         SetSizeHints(wxDefaultCoord,wxDefaultCoord);
-    }
-
-    void SetDescriptiveText(const wxString& text)
-    {
-        if ( GetValue() == m_descriptiveText )
-        {
-            ChangeValue(wxEmptyString);
-        }
-
-        m_descriptiveText = text;
-    }
-
-    wxString GetDescriptiveText() const
-    {
-        return m_descriptiveText;
     }
 
 
@@ -128,30 +114,8 @@ protected:
         m_search->GetEventHandler()->ProcessEvent(event);
     }
 
-    void OnIdle(wxIdleEvent& WXUNUSED(event))
-    {
-        if ( IsEmpty() && !(wxWindow::FindFocus() == this) )
-        {
-            ChangeValue(m_descriptiveText);
-            SetInsertionPoint(0);
-            SetForegroundColour(m_defaultFG.ChangeLightness (LIGHT_STEP));
-        }
-    }
-
-    void OnFocus(wxFocusEvent& event)
-    {
-        event.Skip();
-        if ( GetValue() == m_descriptiveText )
-        {
-            ChangeValue(wxEmptyString);
-            SetForegroundColour(m_defaultFG);
-        }
-    }
-
 private:
     wxSearchCtrl* m_search;
-    wxString      m_descriptiveText;
-    wxColour      m_defaultFG;
 
     DECLARE_EVENT_TABLE()
 };
@@ -161,8 +125,6 @@ BEGIN_EVENT_TABLE(wxSearchTextCtrl, wxTextCtrl)
     EVT_TEXT_ENTER(wxID_ANY, wxSearchTextCtrl::OnText)
     EVT_TEXT_URL(wxID_ANY, wxSearchTextCtrl::OnTextUrl)
     EVT_TEXT_MAXLEN(wxID_ANY, wxSearchTextCtrl::OnText)
-    EVT_IDLE(wxSearchTextCtrl::OnIdle)
-    EVT_SET_FOCUS(wxSearchTextCtrl::OnFocus)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -181,6 +143,13 @@ public:
 
     void SetBitmapLabel(const wxBitmap& label) { m_bmp = label; }
 
+    // The buttons in wxSearchCtrl shouldn't accept focus from keyboard because
+    // this would interfere with the usual TAB processing: the user expects
+    // that pressing TAB in the search control should switch focus to the next
+    // control and not give it to the button inside the same control. Besides,
+    // the search button can be already activated by pressing "Enter" so there
+    // is really no reason for it to be able to get focus from keyboard.
+    virtual bool AcceptsFocusFromKeyboard() const { return false; }
 
 protected:
     wxSize DoGetBestSize() const
@@ -317,8 +286,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
         return false;
     }
 
-    m_text = new wxSearchTextCtrl(this, value, style & ~wxBORDER_MASK);
-    m_text->SetDescriptiveText(_("Search"));
+    m_text = new wxSearchTextCtrl(this, value, style);
 
     m_searchButton = new wxSearchButton(this,
                                         wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN,
@@ -434,12 +402,12 @@ bool wxSearchCtrl::IsCancelButtonVisible() const
 
 void wxSearchCtrl::SetDescriptiveText(const wxString& text)
 {
-    m_text->SetDescriptiveText(text);
+    m_text->SetHint(text);
 }
 
 wxString wxSearchCtrl::GetDescriptiveText() const
 {
-    return m_text->GetDescriptiveText();
+    return m_text->GetHint();
 }
 
 // ----------------------------------------------------------------------------
@@ -538,11 +506,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
 
 wxString wxSearchCtrl::DoGetValue() const
 {
-    wxString value = m_text->GetValue();
-    if (value == m_text->GetDescriptiveText())
-        return wxEmptyString;
-    else
-        return value;
+    return m_text->GetValue();
 }
 wxString wxSearchCtrl::GetRange(long from, long to) const
 {
@@ -799,7 +763,7 @@ bool wxSearchCtrl::SetFont(const wxFont& font)
 void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
 {
     m_searchBitmap = bitmap;
-    m_searchBitmapUser = bitmap.Ok();
+    m_searchBitmapUser = bitmap.IsOk();
     if ( m_searchBitmapUser )
     {
         if ( m_searchButton && !HasMenu() )
@@ -819,7 +783,7 @@ void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
 void wxSearchCtrl::SetSearchMenuBitmap( const wxBitmap& bitmap )
 {
     m_searchMenuBitmap = bitmap;
-    m_searchMenuBitmapUser = bitmap.Ok();
+    m_searchMenuBitmapUser = bitmap.IsOk();
     if ( m_searchMenuBitmapUser )
     {
         if ( m_searchButton && m_menu )
@@ -839,7 +803,7 @@ void wxSearchCtrl::SetSearchMenuBitmap( const wxBitmap& bitmap )
 void wxSearchCtrl::SetCancelBitmap( const wxBitmap& bitmap )
 {
     m_cancelBitmap = bitmap;
-    m_cancelBitmapUser = bitmap.Ok();
+    m_cancelBitmapUser = bitmap.IsOk();
     if ( m_cancelBitmapUser )
     {
         if ( m_cancelButton )
@@ -1119,7 +1083,7 @@ void wxSearchCtrl::RecalcBitmaps()
     if ( !m_searchBitmapUser )
     {
         if (
-            !m_searchBitmap.Ok() ||
+            !m_searchBitmap.IsOk() ||
             m_searchBitmap.GetHeight() != bitmapHeight ||
             m_searchBitmap.GetWidth() != bitmapWidth
             )
@@ -1137,7 +1101,7 @@ void wxSearchCtrl::RecalcBitmaps()
     if ( !m_searchMenuBitmapUser )
     {
         if (
-            !m_searchMenuBitmap.Ok() ||
+            !m_searchMenuBitmap.IsOk() ||
             m_searchMenuBitmap.GetHeight() != bitmapHeight ||
             m_searchMenuBitmap.GetWidth() != bitmapWidth
             )
@@ -1155,7 +1119,7 @@ void wxSearchCtrl::RecalcBitmaps()
     if ( !m_cancelBitmapUser )
     {
         if (
-            !m_cancelBitmap.Ok() ||
+            !m_cancelBitmap.IsOk() ||
             m_cancelBitmap.GetHeight() != bitmapHeight ||
             m_cancelBitmap.GetWidth() != bitmapHeight
             )

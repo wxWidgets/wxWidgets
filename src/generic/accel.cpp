@@ -162,7 +162,7 @@ void wxAcceleratorTable::Remove(const wxAcceleratorEntry& entry)
 const wxAcceleratorEntry *
 wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
 {
-    if ( !Ok() )
+    if ( !IsOk() )
     {
         // not an error, the accel table is just empty
         return NULL;

@@ -137,7 +137,7 @@ bool MyApp::OnInit()
         bitmap = wxBitmap(mobile_xpm);
 
     bool ok = frame->m_isPda
-            ? bitmap.Ok()
+            ? bitmap.IsOk()
             : bitmap.LoadFile(wxT("splash.png"), wxBITMAP_TYPE_PNG);
 
     if (ok)
@@ -218,7 +218,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     if (m_isPda) bitmap = wxBitmap(mobile_xpm);
 
     bool ok = m_isPda
-            ? bitmap.Ok()
+            ? bitmap.IsOk()
             : bitmap.LoadFile(wxT("splash.png"), wxBITMAP_TYPE_PNG);
 
     if (ok)

@@ -512,6 +512,19 @@ public:
     // this needs to overidden if the axis is inverted
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
+#ifdef __WXMSW__
+    // Native Windows functions using the underlying HDC don't honour GDI+
+    // transformations which may be applied to it. Using this function we can
+    // transform the coordinates manually before passing them to such functions
+    // (as in e.g. wxRendererMSW code). It doesn't do anything if this is not a
+    // wxGCDC.
+    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const
+    {
+        return r;
+    }
+#endif // __WXMSW__
+
+
     // ---------------------------------------------------------
     // the actual drawing API
 
@@ -1344,13 +1357,13 @@ public:
 
     ~wxDCTextColourChanger()
     {
-        if ( m_colFgOld.Ok() )
+        if ( m_colFgOld.IsOk() )
             m_dc.SetTextForeground(m_colFgOld);
     }
 
     void Set(const wxColour& col)
     {
-        if ( !m_colFgOld.Ok() )
+        if ( !m_colFgOld.IsOk() )
             m_colFgOld = m_dc.GetTextForeground();
         m_dc.SetTextForeground(col);
     }
@@ -1378,7 +1391,7 @@ public:
 
     ~wxDCPenChanger()
     {
-        if ( m_penOld.Ok() )
+        if ( m_penOld.IsOk() )
             m_dc.SetPen(m_penOld);
     }
 
@@ -1405,7 +1418,7 @@ public:
 
     ~wxDCBrushChanger()
     {
-        if ( m_brushOld.Ok() )
+        if ( m_brushOld.IsOk() )
             m_dc.SetBrush(m_brushOld);
     }
 
@@ -1461,14 +1474,14 @@ public:
 
     void Set(const wxFont& font)
     {
-        if ( !m_fontOld.Ok() )
+        if ( !m_fontOld.IsOk() )
             m_fontOld = m_dc.GetFont();
         m_dc.SetFont(font);
     }
 
     ~wxDCFontChanger()
     {
-        if ( m_fontOld.Ok() )
+        if ( m_fontOld.IsOk() )
             m_dc.SetFont(m_fontOld);
     }
 

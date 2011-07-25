@@ -272,7 +272,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                                 smile_height, 1 );
 
     // demonstrates XPM automatically using the mask when saving
-    if ( m_bmpSmileXpm.Ok() )
+    if ( m_bmpSmileXpm.IsOk() )
         m_bmpSmileXpm.SaveFile(wxT("saved.xpm"), wxBITMAP_TYPE_XPM);
 
 #if wxUSE_ICO_CUR
@@ -389,7 +389,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     PrepareDC( dc );
 
     dc.DrawText( wxT("Loaded image"), 30, 10 );
-    if (my_square.Ok())
+    if (my_square.IsOk())
         dc.DrawBitmap( my_square, 30, 30 );
 
     dc.DrawText( wxT("Drawn directly"), 150, 10 );
@@ -399,11 +399,11 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawRectangle( 170, 50, 60, 60 );
 
-    if (my_anti.Ok())
+    if (my_anti.IsOk())
         dc.DrawBitmap( my_anti, 280, 30 );
 
     dc.DrawText( wxT("PNG handler"), 30, 135 );
-    if (my_horse_png.Ok())
+    if (my_horse_png.IsOk())
     {
         dc.DrawBitmap( my_horse_png, 30, 150 );
         wxRect rect(0,0,100,100);
@@ -413,55 +413,55 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     dc.DrawText( wxT("JPEG handler"), 30, 365 );
-    if (my_horse_jpeg.Ok())
+    if (my_horse_jpeg.IsOk())
         dc.DrawBitmap( my_horse_jpeg, 30, 380 );
 
     dc.DrawText( wxT("Green rotated to red"), 280, 365 );
-    if (colorized_horse_jpeg.Ok())
+    if (colorized_horse_jpeg.IsOk())
         dc.DrawBitmap( colorized_horse_jpeg, 280, 380 );
 
     dc.DrawText( wxT("CMYK JPEG image"), 530, 365 );
-    if (my_cmyk_jpeg.Ok())
+    if (my_cmyk_jpeg.IsOk())
         dc.DrawBitmap( my_cmyk_jpeg, 530, 380 );
 
     dc.DrawText( wxT("GIF handler"), 30, 595 );
-    if (my_horse_gif.Ok())
+    if (my_horse_gif.IsOk())
         dc.DrawBitmap( my_horse_gif, 30, 610 );
 
     dc.DrawText( wxT("PCX handler"), 30, 825 );
-    if (my_horse_pcx.Ok())
+    if (my_horse_pcx.IsOk())
         dc.DrawBitmap( my_horse_pcx, 30, 840 );
 
     dc.DrawText( wxT("BMP handler"), 30, 1055 );
-    if (my_horse_bmp.Ok())
+    if (my_horse_bmp.IsOk())
         dc.DrawBitmap( my_horse_bmp, 30, 1070 );
 
     dc.DrawText( wxT("BMP read from memory"), 280, 1055 );
-    if (my_horse_bmp2.Ok())
+    if (my_horse_bmp2.IsOk())
         dc.DrawBitmap( my_horse_bmp2, 280, 1070 );
 
     dc.DrawText( wxT("PNM handler"), 30, 1285 );
-    if (my_horse_pnm.Ok())
+    if (my_horse_pnm.IsOk())
         dc.DrawBitmap( my_horse_pnm, 30, 1300 );
 
     dc.DrawText( wxT("PNM handler (ascii grey)"), 280, 1285 );
-    if (my_horse_asciigrey_pnm.Ok())
+    if (my_horse_asciigrey_pnm.IsOk())
         dc.DrawBitmap( my_horse_asciigrey_pnm, 280, 1300 );
 
     dc.DrawText( wxT("PNM handler (raw grey)"), 530, 1285 );
-    if (my_horse_rawgrey_pnm.Ok())
+    if (my_horse_rawgrey_pnm.IsOk())
         dc.DrawBitmap( my_horse_rawgrey_pnm, 530, 1300 );
 
     dc.DrawText( wxT("TIFF handler"), 30, 1515 );
-    if (my_horse_tiff.Ok())
+    if (my_horse_tiff.IsOk())
         dc.DrawBitmap( my_horse_tiff, 30, 1530 );
 
     dc.DrawText( wxT("TGA handler"), 30, 1745 );
-    if (my_horse_tga.Ok())
+    if (my_horse_tga.IsOk())
         dc.DrawBitmap( my_horse_tga, 30, 1760 );
 
     dc.DrawText( wxT("XPM handler"), 30, 1975 );
-    if (my_horse_xpm.Ok())
+    if (my_horse_xpm.IsOk())
         dc.DrawBitmap( my_horse_xpm, 30, 2000 );
 
     // toucans
@@ -501,7 +501,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawBitmap(my_toucan_blur, x, y+15, true);
     }
 
-    if (my_smile_xbm.Ok())
+    if (my_smile_xbm.IsOk())
     {
         int x = 300, y = 1800;
 
@@ -543,7 +543,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     memdc.DrawLine( 5, 42, 50, 42 );
     memdc.SelectObject( wxNullBitmap );
 
-    if (mono.Ok())
+    if (mono.IsOk())
     {
         int x = 300, y = 1900;
 
@@ -572,20 +572,20 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawRectangle( 20, 2220, 560, 68 );
 
     dc.DrawText(wxT("XPM bitmap"), 30, 2230 );
-    if ( m_bmpSmileXpm.Ok() )
+    if ( m_bmpSmileXpm.IsOk() )
         dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, true);
 
     dc.DrawText(wxT("XPM icon"), 110, 2230 );
-    if ( m_iconSmileXpm.Ok() )
+    if ( m_iconSmileXpm.IsOk() )
         dc.DrawIcon(m_iconSmileXpm, 110, 2250);
 
     // testing icon -> bitmap conversion
     wxBitmap to_blit( m_iconSmileXpm );
-    if (to_blit.Ok())
+    if (to_blit.IsOk())
     {
         dc.DrawText( wxT("SubBitmap"), 170, 2230 );
         wxBitmap sub = to_blit.GetSubBitmap( wxRect(0,0,15,15) );
-        if (sub.Ok())
+        if (sub.IsOk())
             dc.DrawBitmap( sub, 170, 2250, true );
 
         dc.DrawText( wxT("Enlarged"), 250, 2230 );
@@ -607,19 +607,19 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     dc.DrawText( wxT("ICO handler (1st image)"), 30, 2290 );
-    if (my_horse_ico32.Ok())
+    if (my_horse_ico32.IsOk())
         dc.DrawBitmap( my_horse_ico32, 30, 2330, true );
 
     dc.DrawText( wxT("ICO handler (2nd image)"), 230, 2290 );
-    if (my_horse_ico16.Ok())
+    if (my_horse_ico16.IsOk())
         dc.DrawBitmap( my_horse_ico16, 230, 2330, true );
 
     dc.DrawText( wxT("ICO handler (best image)"), 430, 2290 );
-    if (my_horse_ico.Ok())
+    if (my_horse_ico.IsOk())
         dc.DrawBitmap( my_horse_ico, 430, 2330, true );
 
     dc.DrawText( wxT("CUR handler"), 30, 2390 );
-    if (my_horse_cur.Ok())
+    if (my_horse_cur.IsOk())
     {
         dc.DrawBitmap( my_horse_cur, 30, 2420, true );
         dc.SetPen (*wxRED_PEN);
@@ -630,7 +630,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawText( wxT("ANI handler"), 230, 2390 );
     for ( int i=0; i < m_ani_images; i++ )
     {
-        if (my_horse_ani[i].Ok())
+        if (my_horse_ani[i].IsOk())
         {
             dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, true );
         }

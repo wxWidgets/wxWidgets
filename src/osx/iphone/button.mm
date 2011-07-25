@@ -23,39 +23,6 @@
 
 #include "wx/osx/private.h"
 
-wxSize wxButton::DoGetBestSize() const
-{
-    if ( GetId() == wxID_HELP )
-        return wxSize( 18 , 18 ) ;
-
-    wxSize sz = GetDefaultSize() ;
-
-    wxRect r ;
-
-    GetPeer()->GetBestRect(&r);
-
-    if ( r.GetWidth() == 0 && r.GetHeight() == 0 )
-    {
-    }
-    sz.x = r.GetWidth();
-    sz.y = r.GetHeight();
-
-    int wBtn = 72;
-
-    if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
-        sz.x = wBtn;
-
-    return sz ;
-}
-
-wxSize wxButton::GetDefaultSize()
-{
-    int wBtn = 72 ;
-    int hBtn = 35 ;
-
-    return wxSize(wBtn, hBtn);
-}
-
 @implementation wxUIButton
 
 + (void)initialize

@@ -59,43 +59,6 @@ changes:
   their overridden OnExecute() or override a more convenient OnExec() instead.
 
 
-Use of STL containers by default
---------------------------------
-
-wxWidgets uses STL containers for the implementation of wxVector, wxList,
-wxDList and wxStack by default since 2.9.2 release. While the STL-based
-versions are mostly compatible with the old ones, there are some differences:
-
- - wxList::compatibility_iterator must be used instead of wxList::Node* when
-   iterating over the list contents. The compatibility_iterator class has the
-   same semantics as a Node pointer but it is an object and not a pointer, so
-   you need to write
-
-        for ( wxWindowList::compatibility_iterator it = list.GetFirst();
-              it;
-              it = it->GetNext() )
-            ...
-
-   instead of the old
-
-        for ( wxWindowList::Node *n = list.GetFirst(); n; n = n->GetNext() )
-            ...
-
- - wxSortedArrayString and wxArrayString are separate classes now and the
-   former doesn't derive from the latter. If you need to convert a sorted array
-   to a normal one, you must copy all the elements. Alternatively, you may
-   avoid the use of wxSortedArrayString by using a normal array and calling its
-   Sort() method when needed.
-
- - WX_DEFINE_ARRAY_INT(bool) cannot be used because of the differences in
-   std::vector<bool> specialization compared with the generic std::vector<>
-   class. Please either use std::vector<bool> directly or use an integer array
-   instead.
-
-Finally notice that you may set wxUSE_STD_CONTAINERS to 0 when compiling
-wxWidgets to use the non-STL containers.
-
-
 wxODBC and contrib libraries removal
 ------------------------------------
 
@@ -471,13 +434,40 @@ Major new features in this release
   was added.
 
 
-2.9.2:
+2.9.3:
 ------
 
 All:
 
-- Use standard implementations of container classes by default, you need to
-  explicitly set wxUSE_STD_CONTAINERS to 0 to use wxWidgets implementations.
+- Fix parsing of negated long options in wxCmdLineParser (roed_bis).
+
+All (GUI):
+
+- Added documented, public wxNavigationEnabled<> class.
+- Support float, double and file name values in wxGenericValidator (troelsk).
+- Fix keyboard navigation in wxGrid with hidden columns (ivan_14_32).
+- Add wxDataViewEvent::IsEditCancelled() (Allonii).
+- Allow marking wxTreeBook nodes to expand initially in XRC (RedTide).
+- Added customizable wxDocManager::OnMRUFileNotExist() virtual method.
+
+OSX:
+
+- Implement wxRegion::Equal() (Dr.Acula).
+
+GTK:
+
+- Generate events for two auxiliary mouse buttons in wxGTK (Marcin Wojdyr).
+
+MSW:
+
+- Added wxGCDC(wxEnhMetaFileDC) ctor (Marcin Wojdyr).
+
+
+2.9.2: (released 2011-07-05)
+------
+
+All:
+
 - Added cwd and env arguments to wxExecute() (Emilien Kia).
 - Added "rest" argument to wxString::Before{First,Last}().
 - Added wxThread::OnKill() and OnDelete() callbacks.
@@ -492,6 +482,7 @@ All:
 - Added wxThread::Wait() and Delete() "wait mode" parameter (Catalin Raceanu).
 - Allow showing milliseconds in wxLog time stamps (tan).
 - Added support for processing instructions in wxXmlDocument (Nick Matthews).
+- Added wxThreadEvent for communicating between threads to wxBase.
 
 Unix:
 
@@ -504,6 +495,7 @@ All (GUI):
 - Added wxCommandLinkButton (Rickard Westerlund, GSoC 2010 project).
 - Added wxUIActionSimulator (Steven Lamerton, GSoC 2010 project).
 - Added support for dynamic auto-completion in wxTextEntry.
+- Added images support to wxToggleButton (Garrick Meeker).
 - wxAUI: support auto-orientable toolbars (wsu).
 - wxAUI: add support for icons in pane title bars (triton).
 - Added wxPanel::SetBackgroundBitmap().
@@ -512,6 +504,7 @@ All (GUI):
 - wxHTML: render in RTL order inside RTL window (Richard Bullington-McGuire).
 - wxRibbon: added EVT_RIBBONGALLERY_CLICKED event (John Roberts).
 - wxRibbon: allow hiding the panels and showing tabs only (snowleopard).
+- Add support for child documents to docview framework.
 - Add support for CP-866 encoding to wxEncodingConverter (madnut).
 - Consistency fixes for keyboard events across all major ports.
 - Added EVT_RIBBONBAR_TAB_LEFT_DCLICK event (snowleopard).
@@ -522,10 +515,13 @@ All (GUI):
 - Added wxDocManager::FindTemplate() (troelsk).
 - Return bool, not void, from wxImage::ConvertAlphaToMask() (troelsk).
 - Fixed resizing columns in wxGrid when they were reordered.
+- Fixed keyboard navigation when wxGrid columns are reordered.
 - Added wxImage::Rotate180() (Jeff Tupper).
 - Added support for saving TGA files.
 - Added wxArtProvider returning higher quality icons from Tango project.
 - wxPropertyGrid: Added "HasAlpha" attribute for wxColourProperty.
+- wxPropertyGrid: Disabling a property didn't work properly if a child item
+  was selected (Sébastien Gallou).
 - Added support for saving PNG files with palette (troelsk).
 - Added support for saving as GIF and animated GIF (troelsk).
 - Fix wxWrapSizer minimal size calculation (Catalin Raceanu).
@@ -541,6 +537,7 @@ All (GUI):
 - Allow customizing AUI tab colours in wxAuiTabArt (snowleopard).
 - Added wxAffineMatrix2D class (Catalin Raceanu).
 - Allow showing preview frame non modally (John Roberts).
+- Improve appearance of the generic wxHyperlinkCtrl (David Connet).
 
 GTK:
 
@@ -549,6 +546,7 @@ GTK:
 - wxTLW generates wxEVT_MAXIMIZE.
 - Fix copying clipboard data to primary selection (David Hart).
 - Implement wxGraphicsContext::GetSize() (Marcin Wojdyr).
+- Implement wxCalendarCtrl::SetDateRange() for the native control.
 
 MSW:
 

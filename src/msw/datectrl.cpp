@@ -188,12 +188,41 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 
     SYSTEMTIME st;
     if ( dt.IsValid() )
+    {
+        // Don't try setting the date if it's out of range: calendar control
+        // under XP (and presumably all the other pre-Vista Windows versions)
+        // doesn't return false from DateTime_SetSystemtime() in this case but
+        // doesn't actually change the date, so we can't update our m_date
+        // unconditionally and would need to check whether it was changed
+        // before doing it. It looks simpler to just check whether it's in
+        // range here instead.
+        //
+        // If we ever drop support for XP we could rely on the return value of
+        // DateTime_SetSystemtime() but this probably won't happen in near
+        // future.
+        wxDateTime dtStart, dtEnd;
+        GetRange(&dtStart, &dtEnd);
+        if ( (dtStart.IsValid() && dt < dtStart) ||
+                (dtEnd.IsValid() && dt > dtEnd) )
+        {
+            // Fail silently, some existing code relies on SetValue() with an
+            // out of range value simply doing nothing -- so don't.
+            return;
+        }
+
         dt.GetAsMSWSysTime(&st);
+    }
+
     if ( !DateTime_SetSystemtime(GetHwnd(),
                                  dt.IsValid() ? GDT_VALID : GDT_NONE,
                                  &st) )
     {
-        wxLogDebug(wxT("DateTime_SetSystemtime() failed"));
+        // The only expected failure is when the date is out of range but we
+        // already checked for this above.
+        wxFAIL_MSG( wxT("Setting the calendar date unexpectedly failed.") );
+
+        // In any case, skip updating m_date below.
+        return;
     }
 
     // we need to keep only the date part, times don't make sense for this

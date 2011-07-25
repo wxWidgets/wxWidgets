@@ -712,10 +712,10 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
 #if wxUSE_IMAGE
             wxASSERT(fn.FileExists());
             wxImage image(fn.GetFullPath());
-            wxASSERT(image.Ok());
+            wxASSERT(image.IsOk());
             RescaleImage(image, foundSize.x, foundSize.y);
             wxBitmap bmp(image);
-            wxASSERT( bmp.Ok() );
+            wxASSERT( bmp.IsOk() );
 #else
             wxBitmap bmp(wxNullBitmap);
 #endif
@@ -842,7 +842,7 @@ wxBitmap BitmapComboBoxWidgetsPage::LoadBitmap(const wxString& filepath)
     }
 
     wxImage image(filepath);
-    if ( image.Ok() )
+    if ( image.IsOk() )
     {
         // Rescale very large images
         int ow = image.GetWidth();

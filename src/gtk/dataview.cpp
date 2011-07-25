@@ -1333,6 +1333,17 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
 
     wxSize size = cell->GetSize();
 
+    wxDataViewCtrl * const ctrl = cell->GetOwner()->GetOwner();
+
+    // Uniform row height, if specified, overrides the value returned by the
+    // renderer.
+    if ( !ctrl->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
+    {
+        const int uniformHeight = ctrl->GTKGetUniformRowHeight();
+        if ( uniformHeight > 0 )
+            size.y = uniformHeight;
+    }
+
     int xpad, ypad;
     gtk_cell_renderer_get_padding(renderer, &xpad, &ypad);
     int calc_width  = xpad * 2 + size.x;
@@ -1824,7 +1835,7 @@ wxDataViewCellMode wxDataViewRenderer::GetMode() const
     return ret;
 }
 
-void wxDataViewRenderer::GtkUpdateAlignment()
+void wxDataViewRenderer::GtkApplyAlignment(GtkCellRenderer *renderer)
 {
     int align = m_alignment;
 
@@ -1850,7 +1861,7 @@ void wxDataViewRenderer::GtkUpdateAlignment()
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_FLOAT );
     g_value_set_float( &gvalue, xalign );
-    g_object_set_property( G_OBJECT(m_renderer), "xalign", &gvalue );
+    g_object_set_property( G_OBJECT(renderer), "xalign", &gvalue );
     g_value_unset( &gvalue );
 
     // vertical alignment:
@@ -1864,7 +1875,7 @@ void wxDataViewRenderer::GtkUpdateAlignment()
     GValue gvalue2 = { 0, };
     g_value_init( &gvalue2, G_TYPE_FLOAT );
     g_value_set_float( &gvalue2, yalign );
-    g_object_set_property( G_OBJECT(m_renderer), "yalign", &gvalue2 );
+    g_object_set_property( G_OBJECT(renderer), "yalign", &gvalue2 );
     g_value_unset( &gvalue2 );
 }
 
@@ -2348,14 +2359,20 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
         Init(mode, align);
 }
 
+void wxDataViewCustomRenderer::GtkInitTextRenderer()
+{
+    m_text_renderer = GTK_CELL_RENDERER_TEXT(gtk_cell_renderer_text_new());
+    g_object_ref_sink(m_text_renderer);
+
+    GtkApplyAlignment(GTK_CELL_RENDERER(m_text_renderer));
+}
+
 GtkCellRendererText *wxDataViewCustomRenderer::GtkGetTextRenderer() const
 {
     if ( !m_text_renderer )
     {
         // we create it on demand so need to do it even from a const function
-        const_cast<wxDataViewCustomRenderer *>(this)->
-        m_text_renderer = GTK_CELL_RENDERER_TEXT(gtk_cell_renderer_text_new());
-        g_object_ref_sink(m_text_renderer);
+        const_cast<wxDataViewCustomRenderer *>(this)->GtkInitTextRenderer();
     }
 
     return m_text_renderer;
@@ -2448,15 +2465,20 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     {
         m_renderer = (GtkCellRenderer*) gtk_cell_renderer_progress_new();
 
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, G_TYPE_STRING );
-
-        g_value_set_string( &gvalue, wxGTK_CONV_FONT( m_label, GetOwner()->GetOwner()->GetFont() ) );
-        g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
-        g_value_unset( &gvalue );
-
         SetMode(mode);
         SetAlignment(align);
+
+#if !wxUSE_UNICODE
+        // We can't initialize the renderer just yet because we don't have the
+        // pointer to the column that uses this renderer yet and so attempt to
+        // dereference GetOwner() to get the font that is used as a source of
+        // encoding in multibyte-to-Unicode conversion in GTKSetLabel() in
+        // non-Unicode builds would crash. So simply remember to do it later.
+        if ( !m_label.empty() )
+            m_needsToSetLabel = true;
+        else
+#endif // !wxUSE_UNICODE
+            GTKSetLabel();
     }
     else
 #endif
@@ -2470,11 +2492,36 @@ wxDataViewProgressRenderer::~wxDataViewProgressRenderer()
 {
 }
 
+void wxDataViewProgressRenderer::GTKSetLabel()
+{
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_STRING );
+
+    // Take care to not use GetOwner() here if the label is empty, we can be
+    // called from ctor when GetOwner() is still NULL in this case.
+    g_value_set_string( &gvalue,
+                        m_label.empty() ? ""
+                                        : wxGTK_CONV_FONT(m_label,
+                                            GetOwner()->GetOwner()->GetFont())
+                      );
+    g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
+    g_value_unset( &gvalue );
+
+#if !wxUSE_UNICODE
+    m_needsToSetLabel = false;
+#endif // !wxUSE_UNICODE
+}
+
 bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
 {
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
     {
+#if !wxUSE_UNICODE
+        if ( m_needsToSetLabel )
+            GTKSetLabel();
+#endif // !wxUSE_UNICODE
+
         gint tmp = (long) value;
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_INT );
@@ -3083,7 +3130,7 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
 {
     wxDataViewColumnBase::SetBitmap( bitmap );
 
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
     {
         GtkImage *gtk_image = GTK_IMAGE(m_image);
 
@@ -3531,6 +3578,7 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     GtkTreePath *path )
 {
     delete m_dragDataObject;
+    m_dragDataObject = NULL;
 
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
     if ( !item )
@@ -4473,6 +4521,8 @@ void wxDataViewCtrl::Init()
     m_internal = NULL;
 
     m_cols.DeleteContents( true );
+
+    m_uniformRowHeight = -1;
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent,
@@ -4836,6 +4886,33 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     gtk_tree_view_set_cursor(GTK_TREE_VIEW(m_treeview), path, NULL, FALSE);
 }
 
+void wxDataViewCtrl::StartEditor(const wxDataViewItem& item, unsigned int column)
+{
+    wxCHECK_RET( m_treeview,
+                 "Current item can't be set before creating the control." );
+
+    // We need to make sure the model knows about this item or the path would
+    // be invalid and gtk_tree_view_set_cursor() would silently do nothing.
+    ExpandAncestors(item);
+    
+    wxDataViewColumn *dvcolumn = GetColumn(column);
+    wxASSERT_MSG(dvcolumn, "Could not retrieve column");
+    GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(dvcolumn->GetGtkHandle());
+
+    // We also need to preserve the existing selection from changing.
+    // Unfortunately the only way to do it seems to use our own selection
+    // function and forbid any selection changes during set cursor call.
+    wxGtkTreeSelectionLock
+        lock(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)));
+
+    // Do move the cursor now.
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    wxGtkTreePath path(m_internal->get_path( &iter ));
+
+    gtk_tree_view_set_cursor(GTK_TREE_VIEW(m_treeview), path, gcolumn, TRUE);
+}
+
 wxDataViewItem wxDataViewCtrl::GetSelection() const
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
@@ -5074,6 +5151,12 @@ wxDataViewCtrl::GetItemRect(const wxDataViewItem& WXUNUSED(item),
                             const wxDataViewColumn *WXUNUSED(column)) const
 {
     return wxRect();
+}
+
+bool wxDataViewCtrl::SetRowHeight(int rowHeight)
+{
+    m_uniformRowHeight = rowHeight;
+    return true;
 }
 
 void wxDataViewCtrl::DoSetExpanderColumn()

@@ -271,7 +271,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     return self;
 }
 
@@ -299,8 +299,8 @@ extern int wxOSXGetIdFromSelector(SEL action );
         wxMenuItem* menuitem = mbar->FindItem(wxOSXGetIdFromSelector(action), &menu);
         if ( menu != NULL && menuitem != NULL)
         {
-            if ( menu->HandleCommandUpdateStatus(menuitem) )
-                return menuitem->IsEnabled();
+            menu->HandleCommandUpdateStatus(menuitem);
+            return menuitem->IsEnabled();
         }
     }
     return YES;
@@ -452,6 +452,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
             editor = [[wxNSTextFieldEditor alloc] init];
             [editor setFieldEditor:YES];
             [tf setFieldEditor:editor];
+            [editor release];
         }
         return editor;
     }
@@ -716,8 +717,12 @@ bool wxNonOwnedWindowCocoaImpl::SetTransparent(wxByte alpha)
     return true;
 }
 
-bool wxNonOwnedWindowCocoaImpl::SetBackgroundColour(const wxColour& WXUNUSED(col) )
+bool wxNonOwnedWindowCocoaImpl::SetBackgroundColour(const wxColour& col )
 {
+    [m_macWindow setBackgroundColor:[NSColor colorWithCalibratedRed:(CGFloat) (col.Red() / 255.0)
+                                                             green:(CGFloat) (col.Green() / 255.0)
+                                                              blue:(CGFloat) (col.Blue() / 255.0)
+                                                             alpha:(CGFloat) (col.Alpha() / 255.0)]];
     return true;
 }
 
@@ -873,25 +878,39 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         m_macFullScreenData = data ;
         data->m_formerLevel = [m_macWindow level];
         data->m_formerFrame = [m_macWindow frame];
-        CGDisplayCapture( kCGDirectMainDisplay );
-        [m_macWindow setLevel:CGShieldingWindowLevel()];
+#if 0
+        // CGDisplayCapture( kCGDirectMainDisplay );
+        //[m_macWindow setLevel:NSMainMenuWindowLevel+1/*CGShieldingWindowLevel()*/];
+#endif
         NSRect screenframe = [[NSScreen mainScreen] frame];
         NSRect frame = NSMakeRect (0, 0, 100, 100);
         NSRect contentRect;
         contentRect = [NSWindow contentRectForFrameRect: frame
-                                styleMask: NSTitledWindowMask];
+                                styleMask: [m_macWindow styleMask]];
         screenframe.origin.y += (frame.origin.y - contentRect.origin.y);
         screenframe.size.height += (frame.size.height - contentRect.size.height);
         [m_macWindow setFrame:screenframe display:YES];
+
+        SetSystemUIMode(kUIModeAllHidden,
+                                kUIOptionDisableAppleMenu
+                        /*
+                                | kUIOptionDisableProcessSwitch
+                                | kUIOptionDisableForceQuit
+                         */); 
     }
     else if ( m_macFullScreenData != NULL )
     {
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
-        CGDisplayRelease( kCGDirectMainDisplay );
-        [m_macWindow setLevel:data->m_formerLevel];
+#if 0
+        // CGDisplayRelease( kCGDirectMainDisplay );
+        // [m_macWindow setLevel:data->m_formerLevel];
+#endif
+        
         [m_macWindow setFrame:data->m_formerFrame display:YES];
         delete data ;
         m_macFullScreenData = NULL ;
+
+        SetSystemUIMode(kUIModeNormal, 0); 
     }
 
     return true;

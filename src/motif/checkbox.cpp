@@ -138,7 +138,7 @@ void wxCheckBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
 
 void wxCheckBox::ChangeBackgroundColour()
 {
-    if (!m_backgroundColour.Ok())
+    if (!m_backgroundColour.IsOk())
         return;
 
     wxComputeColours (XtDisplay((Widget) m_mainWidget), & m_backgroundColour,

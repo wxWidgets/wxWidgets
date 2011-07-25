@@ -31,6 +31,7 @@
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
+#include "wx/dcgraph.h"
 #include "wx/scopeguard.h"
 #include "wx/splitter.h"
 #include "wx/renderer.h"
@@ -394,8 +395,12 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
                                       const wxRect& rect,
                                       int flags)
 {
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+    
     RECT r;
-    wxCopyRectToRECT(rect, r);
+    wxCopyRectToRECT(adjustedRect, r);
 
     int style = DFCS_SCROLLCOMBOBOX;
     if ( flags & wxCONTROL_DISABLED )
@@ -414,8 +419,12 @@ wxRendererMSW::DoDrawFrameControl(UINT type,
                                   const wxRect& rect,
                                   int flags)
 {
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
     RECT r;
-    wxCopyRectToRECT(rect, r);
+    wxCopyRectToRECT(adjustedRect, r);
 
     int style = kind;
     if ( flags & wxCONTROL_CHECKED )
@@ -615,8 +624,12 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
         return;
     }
 
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
     RECT r;
-    wxCopyRectToRECT(rect, r);
+    wxCopyRectToRECT(adjustedRect, r);
 
     int state;
     if ( flags & wxCONTROL_PRESSED )
@@ -654,8 +667,12 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
         return m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
     }
 
+    wxCHECK_MSG( dc.GetImpl(), -1, wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
     RECT r;
-    wxCopyRectToRECT(rect, r);
+    wxCopyRectToRECT(adjustedRect, r);
 
     int state;
     if ( flags & wxCONTROL_PRESSED )
@@ -696,8 +713,12 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
         return;
     }
 
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
     RECT r;
-    wxCopyRectToRECT(rect, r);
+    wxCopyRectToRECT(adjustedRect, r);
 
     int state = flags & wxCONTROL_EXPANDED ? GLPS_OPENED : GLPS_CLOSED;
     wxUxThemeEngine::Get()->DrawThemeBackground
@@ -734,8 +755,12 @@ wxRendererXP::DoDrawButtonLike(HTHEME htheme,
                                const wxRect& rect,
                                int flags)
 {
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
     RECT r;
-    wxCopyRectToRECT(rect, r);
+    wxCopyRectToRECT(adjustedRect, r);
 
     // the base state is always 1, whether it is PBS_NORMAL,
     // {CBS,RBS}_UNCHECKEDNORMAL or CBS_NORMAL

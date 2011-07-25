@@ -194,9 +194,9 @@ methodOverrideMap = {
                 const wxColour& background) {
 
                 SendMsg(%s, markerNumber, markerSymbol);
-                if (foreground.Ok())
+                if (foreground.IsOk())
                     MarkerSetForeground(markerNumber, foreground);
-                if (background.Ok())
+                if (background.IsOk())
                     MarkerSetBackground(markerNumber, background);''',
 
      ('Set the symbol used for a particular marker number,',

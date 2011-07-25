@@ -708,7 +708,9 @@ public:
 /**
     Used inside a class declaration to declare that the class should be made
     known to the class hierarchy, but objects of this class cannot be created
-    dynamically. The same as wxDECLARE_DYNAMIC_CLASS().
+    dynamically.
+
+    The same as wxDECLARE_ABSTRACT_CLASS().
 
     @header{wx/object.h}
 */

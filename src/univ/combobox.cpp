@@ -273,12 +273,13 @@ wxComboBox::~wxComboBox()
 
 wxString wxComboBox::DoGetValue() const
 {
-    return wxComboCtrl::GetValue();
+    return GetTextCtrl() ? GetTextCtrl()->GetValue() : wxString();
 }
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    wxComboCtrl::SetValue(value);
+    if ( GetTextCtrl() )
+        GetTextCtrl()->SetValue(value);
 }
 
 void wxComboBox::WriteText(const wxString& value)

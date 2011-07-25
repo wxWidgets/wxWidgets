@@ -1667,7 +1667,7 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     Destroy();
 }
 
-void wxPreviewFrame::Initialize(wxPreviewFrameModalityKind kind)
+void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
 {
 #if wxUSE_STATUSBAR
     CreateStatusBar();
@@ -1989,7 +1989,7 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
     {
         m_previewBitmap = new wxBitmap(pageRect.width, pageRect.height);
 
-        if (!m_previewBitmap || !m_previewBitmap->Ok())
+        if (!m_previewBitmap || !m_previewBitmap->IsOk())
         {
             InvalidatePreviewBitmap();
             wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
@@ -2210,7 +2210,7 @@ int wxPrintPreview::GetMinPage() const
 
 bool wxPrintPreview::IsOk() const
 {
-    return m_pimpl->Ok();
+    return m_pimpl->IsOk();
 }
 
 void wxPrintPreview::SetOk(bool ok)

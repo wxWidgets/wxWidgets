@@ -300,13 +300,13 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
     else
     {
         // restore the standard colours fonts
-        if ( m_colFgOld.Ok() )
+        if ( m_colFgOld.IsOk() )
         {
             m_control->SetForegroundColour(m_colFgOld);
             m_colFgOld = wxNullColour;
         }
 
-        if ( m_colBgOld.Ok() )
+        if ( m_colBgOld.IsOk() )
         {
             m_control->SetBackgroundColour(m_colBgOld);
             m_colBgOld = wxNullColour;
@@ -314,7 +314,7 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
 
 // Workaround for GTK+1 font setting problem on some platforms
 #if !defined(__WXGTK__) || defined(__WXGTK20__)
-        if ( m_fontOld.Ok() )
+        if ( m_fontOld.IsOk() )
         {
             m_control->SetFont(m_fontOld);
             m_fontOld = wxNullFont;

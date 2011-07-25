@@ -410,7 +410,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     wxPreviewFrame *frame =
         new wxPreviewFrame(preview, this, wxT("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
-    frame->Initialize(m_previewModality);
+    frame->InitializeWithModality(m_previewModality);
     frame->Show();
 }
 

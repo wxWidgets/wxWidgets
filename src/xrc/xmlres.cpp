@@ -1745,7 +1745,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param, const wxColour& 
         // the colour doesn't use #RRGGBB format, check if it is symbolic
         // colour name:
         clr = GetSystemColour(v);
-        if (clr.Ok())
+        if (clr.IsOk())
             return clr;
 
         ReportParamError
@@ -1823,7 +1823,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxXmlNode* node,
                           art_id, art_client) )
     {
         wxBitmap stockArt(wxArtProvider::GetBitmap(art_id, art_client, size));
-        if ( stockArt.Ok() )
+        if ( stockArt.IsOk() )
             return stockArt;
     }
 
@@ -1847,7 +1847,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxXmlNode* node,
     wxImage img(name);
 #endif
 
-    if (!img.Ok())
+    if (!img.IsOk())
     {
         ReportParamError
         (
@@ -1961,7 +1961,7 @@ wxImageList *wxXmlResourceHandler::GetImageList(const wxString& param)
         {
             if (n->GetType() == wxXML_ELEMENT_NODE && n->GetName() == parambitmap)
             {
-                wxIcon icon = GetIcon(n);
+                wxIcon icon = GetIcon(n, wxART_OTHER, size);
                 if ( !imagelist )
                 {
                     // We need the real image list size to create it.
@@ -2277,7 +2277,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     // is this font based on a system font?
     wxFont font = GetSystemFont(GetParamValue(wxT("sysfont")));
 
-    if (font.Ok())
+    if (font.IsOk())
     {
         if (hasSize && isize != -1)
             font.SetPointSize(isize);

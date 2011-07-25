@@ -821,7 +821,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     if (!attr.GetFontFaceName().IsEmpty())
         str << wxT(" face=\"") << attr.GetFontFaceName() << wxT("\"");
 
-    if (attr.GetTextColour().Ok())
+    if (attr.GetTextColour().IsOk())
         str << wxT(" color=\"#") << ColourToHexString(attr.GetTextColour()) << wxT("\"");
 
     str << wxT(">");

@@ -323,7 +323,7 @@ bool wxWindowDFB::SetCursor(const wxCursor& cursor)
 
 #warning "implement this"
 #if 0
-    if ( m_cursor.Ok() )
+    if ( m_cursor.IsOk() )
         DFB_wmSetWindowCursor(m_wnd, *m_cursor.GetDFBCursor());
     else
         DFB_wmSetWindowCursor(m_wnd, *wxSTANDARD_CURSOR->GetDFBCursor());

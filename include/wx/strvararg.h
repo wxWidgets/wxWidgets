@@ -825,7 +825,7 @@ WX_ARG_NORMALIZER_FORWARD(const signed char&, signed char);
 #undef WX_ARG_NORMALIZER_FORWARD
 #undef _WX_ARG_NORMALIZER_FORWARD_IMPL
 
-#undef wxASSERT_ARG_TYPE
+// NB: Don't #undef wxASSERT_ARG_TYPE here as it's also used in wx/longlong.h.
 
 // ----------------------------------------------------------------------------
 // WX_VA_ARG_STRING

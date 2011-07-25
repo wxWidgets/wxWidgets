@@ -166,6 +166,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_choicebooktest.o \
 	test_gui_choicetest.o \
 	test_gui_comboboxtest.o \
+	test_gui_datepickerctrltest.o \
 	test_gui_frametest.o \
 	test_gui_gaugetest.o \
 	test_gui_gridtest.o \
@@ -730,6 +731,9 @@ test_gui_choicetest.o: $(srcdir)/controls/choicetest.cpp $(TEST_GUI_ODEP)
 
 test_gui_comboboxtest.o: $(srcdir)/controls/comboboxtest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/comboboxtest.cpp
+
+test_gui_datepickerctrltest.o: $(srcdir)/controls/datepickerctrltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/datepickerctrltest.cpp
 
 test_gui_frametest.o: $(srcdir)/controls/frametest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/frametest.cpp

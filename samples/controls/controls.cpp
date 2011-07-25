@@ -721,7 +721,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     for ( size_t n = 0; n < Image_Max; n++ )
     {
         wxBitmap bmp(s_iconNames[n]);
-        if ( !bmp.Ok() || (imagelist->Add(bmp) == -1) )
+        if ( !bmp.IsOk() || (imagelist->Add(bmp) == -1) )
         {
             wxLogWarning(wxT("Couldn't load the image '%s' for the book control page %d."),
                     s_iconNames[n], n);
@@ -957,7 +957,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #if defined(__WXMSW__) || defined(__WXMOTIF__)
     // test for masked bitmap display
     bitmap = wxBitmap(wxT("test2.bmp"), wxBITMAP_TYPE_BMP);
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
     {
        bitmap.SetMask(new wxMask(bitmap, *wxBLUE));
 
@@ -1183,7 +1183,7 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
 
     SetThemeEnabled(false);
     // test panel colour changing and propagation to the subcontrols
-    if ( s_colOld.Ok() )
+    if ( s_colOld.IsOk() )
     {
         SetBackgroundColour(s_colOld);
         s_colOld = wxNullColour;

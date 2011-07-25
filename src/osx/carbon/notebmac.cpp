@@ -169,7 +169,7 @@ void wxMacControl::SetupTabs( const wxNotebook& notebook)
         if ( notebook.GetImageList() && notebook.GetPageImage(ii) >= 0 )
         {
             const wxBitmap bmap = notebook.GetImageList()->GetBitmap( notebook.GetPageImage( ii ) ) ;
-            if ( bmap.Ok() )
+            if ( bmap.IsOk() )
             {
                 ControlButtonContentInfo info ;
 

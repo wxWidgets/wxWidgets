@@ -1113,6 +1113,33 @@ template<> class numeric_limits<wxULongLong>
 
 #endif // wxUSE_LONGLONG_NATIVE
 
+// ----------------------------------------------------------------------------
+// Specialize wxArgNormalizer to allow using wxLongLong directly with wx pseudo
+// vararg functions.
+// ----------------------------------------------------------------------------
+
+// Notice that this must be done here and not in wx/strvararg.h itself because
+// we can't include wx/longlong.h from there as this header itself includes
+// wx/string.h which includes wx/strvararg.h too, so to avoid the circular
+// dependencies we can only do it here (or add another header just for this but
+// it doesn't seem necessary).
+#include "wx/strvararg.h"
+
+template<>
+struct WXDLLIMPEXP_BASE wxArgNormalizer<wxLongLong>
+{
+     wxArgNormalizer(wxLongLong value,
+                     const wxFormatString *fmt, unsigned index)
+         : m_value(value)
+     {
+         wxASSERT_ARG_TYPE( fmt, index, wxFormatString::Arg_LongLongInt );
+     }
+
+     wxLongLong_t get() const { return m_value.GetValue(); }
+
+     wxLongLong m_value;
+};
+
 #endif // wxUSE_LONGLONG
 
 #endif // _WX_LONGLONG_H

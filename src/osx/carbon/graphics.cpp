@@ -225,7 +225,7 @@ class ImagePattern : public wxMacCoreGraphicsPattern
 public :
     ImagePattern( const wxBitmap* bmp , const CGAffineTransform& transform )
     {
-        wxASSERT( bmp && bmp->Ok() );
+        wxASSERT( bmp && bmp->IsOk() );
 #ifdef __WXMAC__
         Init( (CGImageRef) bmp->CreateCGImage() , transform );
 #endif
@@ -500,7 +500,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
         case wxPENSTYLE_STIPPLE:
             {
                 wxBitmap* bmp = pen.GetStipple();
-                if ( bmp && bmp->Ok() )
+                if ( bmp && bmp->IsOk() )
                 {
                     m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
                     m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
@@ -647,7 +647,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
     {
         // now brush is a bitmap
         wxBitmap* bmp = brush.GetStipple();
-        if ( bmp && bmp->Ok() )
+        if ( bmp && bmp->IsOk() )
         {
             m_isPattern = true;
             m_patternColorComponents = new CGFloat[1] ;
@@ -1415,6 +1415,8 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+    
     virtual bool SetCompositionMode(wxCompositionMode op);
 
     virtual void BeginLayer(wxDouble opacity);
@@ -1487,6 +1489,11 @@ public:
     virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    
+    // fast convenience methods
+    
+    
+    virtual void DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
 
     void SetNativeContext( CGContextRef cg );
 
@@ -1573,6 +1580,8 @@ void wxMacCoreGraphicsContext::Init()
     m_view = NULL;
 #endif
     m_invisible = false;
+    m_antialias = wxANTIALIAS_DEFAULT;
+    m_interpolation = wxINTERPOLATION_DEFAULT;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
@@ -1703,16 +1712,10 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
         if ( m_cgContext )
         {
             CGContextSaveGState( m_cgContext );
-            CGContextConcatCTM( m_cgContext, m_windowTransform );
-            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
-            m_contextSynthesized = true;
 #if wxOSX_USE_COCOA_OR_CARBON
             if ( m_clipRgn.get() )
             {
-                // the clip region is in device coordinates, so we convert this again to user coordinates
                 wxCFRef<HIMutableShapeRef> hishape( HIShapeCreateMutableCopy( m_clipRgn ) );
-                CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
-                HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
                 // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
                 if ( HIShapeIsEmpty(hishape))
                 {
@@ -1726,6 +1729,9 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
                 }
             }
 #endif
+            CGContextConcatCTM( m_cgContext, m_windowTransform );
+            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
+            m_contextSynthesized = true;
             CGContextSaveGState( m_cgContext );
 
 #if 0 // turn on for debugging of clientdc
@@ -1772,6 +1778,45 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
             return false;
     }
     CGContextSetShouldAntialias(m_cgContext, antialiasMode);
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality interpolation)
+{
+    if (!EnsureIsValid())
+        return true;
+    
+    if (m_interpolation == interpolation)
+        return true;
+
+    m_interpolation = interpolation;
+    CGInterpolationQuality quality;
+    
+    switch (interpolation) 
+    {
+        case wxINTERPOLATION_DEFAULT:
+            quality = kCGInterpolationDefault;
+            break;
+        case wxINTERPOLATION_NONE:
+            quality = kCGInterpolationNone;
+            break;
+        case wxINTERPOLATION_FAST:
+            quality = kCGInterpolationLow;
+            break;
+        case wxINTERPOLATION_GOOD:
+#if wxOSX_USE_COCOA_OR_CARBON
+            quality = UMAGetSystemVersion() < 0x1060 ? kCGInterpolationHigh : (CGInterpolationQuality) 4 /*kCGInterpolationMedium only on 10.6*/;
+#else
+            quality = kCGInterpolationMedium;
+#endif
+            break;
+        case wxINTERPOLATION_BEST:
+            quality = kCGInterpolationHigh;
+            break;
+        default:
+            return false;
+    }
+    CGContextSetInterpolationQuality(m_cgContext, quality);
     return true;
 }
 
@@ -1955,6 +2000,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
         // the clipping itself must be stored as device coordinates, otherwise
         // we cannot apply it back correctly
         r.origin= CGPointApplyAffineTransform( r.origin, m_windowTransform );
+        r.size= CGSizeApplyAffineTransform(r.size, m_windowTransform);
         m_clipRgn.reset(HIShapeCreateWithRect(&r));
 #else
     // allow usage as measuring context
@@ -2613,6 +2659,27 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
     return m_cgContext;
 }
 
+
+void wxMacCoreGraphicsContext::DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if (m_composition == wxCOMPOSITION_DEST) 
+        return; 
+
+    CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+    if ( !m_brush.IsNull() )
+    {
+        ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
+        CGContextFillRect(m_cgContext, rect);
+    }
+    
+    wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
+    if ( !m_pen.IsNull() )
+    {
+        ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
+        CGContextStrokeRect(m_cgContext, rect);
+    }
+}
+
 // concatenates this transform with the current transform of this context
 void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 {
@@ -2842,7 +2909,7 @@ wxGraphicsMatrix wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b
 
 wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 {
-    if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -2854,7 +2921,7 @@ wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
 {
-    if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
@@ -2866,7 +2933,7 @@ wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
 
 wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
 {
-    if ( bmp.Ok() )
+    if ( bmp.IsOk() )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxMacCoreGraphicsBitmapData( this , bmp.CreateCGImage(), bmp.GetDepth() == 1 ) );
@@ -2931,7 +2998,7 @@ wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 // sets the font
 wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         wxGraphicsFont p;
         p.SetRefData(new wxMacCoreGraphicsFontData( this , font, col ));

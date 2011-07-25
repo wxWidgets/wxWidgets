@@ -66,7 +66,7 @@ bool wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
 bool wxGLCanvasBase::SetColour(const wxString& colour)
 {
     wxColour col = wxTheColourDatabase->Find(colour);
-    if ( !col.Ok() )
+    if ( !col.IsOk() )
         return false;
 
 #ifdef wxHAS_OPENGL_ES

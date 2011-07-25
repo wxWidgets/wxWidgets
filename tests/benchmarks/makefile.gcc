@@ -30,6 +30,7 @@ BENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	$(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.o \
+	$(OBJS)\bench_datetime.o \
 	$(OBJS)\bench_htmlpars.o \
 	$(OBJS)\bench_htmltag.o \
 	$(OBJS)\bench_ipcclient.o \
@@ -196,6 +197,9 @@ data:
 	for %%f in (htmltest.html) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\bench_bench.o: ./bench.cpp
+	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_datetime.o: ./datetime.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_htmlpars.o: ./htmlparser/htmlpars.cpp

@@ -148,7 +148,7 @@ void wxRadioButton::SendEvent()
 wxSize wxRadioButton::GetBitmapSize() const
 {
     wxBitmap bmp = GetBitmap(State_Normal, Status_Checked);
-    return bmp.Ok() ? wxSize(bmp.GetWidth(), bmp.GetHeight())
+    return bmp.IsOk() ? wxSize(bmp.GetWidth(), bmp.GetHeight())
                     : GetRenderer()->GetRadioBitmapSize();
 }
 

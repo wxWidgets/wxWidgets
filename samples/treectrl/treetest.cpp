@@ -901,14 +901,14 @@ void MyFrame::OnSelectLast(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
 {
     wxColour col = wxGetColourFromUser(this, m_treeCtrl->GetForegroundColour());
-    if ( col.Ok() )
+    if ( col.IsOk() )
         m_treeCtrl->SetForegroundColour(col);
 }
 
 void MyFrame::OnSetBgColour(wxCommandEvent& WXUNUSED(event))
 {
     wxColour col = wxGetColourFromUser(this, m_treeCtrl->GetBackgroundColour());
-    if ( col.Ok() )
+    if ( col.IsOk() )
         m_treeCtrl->SetBackgroundColour(col);
 }
 

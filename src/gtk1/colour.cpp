@@ -182,42 +182,42 @@ void wxColour::InitRGBA(unsigned char red, unsigned char green, unsigned char bl
 
 unsigned char wxColour::Red() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid colour") );
 
     return (unsigned char)(M_COLDATA->m_color.red >> SHIFT);
 }
 
 unsigned char wxColour::Green() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid colour") );
 
     return (unsigned char)(M_COLDATA->m_color.green >> SHIFT);
 }
 
 unsigned char wxColour::Blue() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid colour") );
 
     return (unsigned char)(M_COLDATA->m_color.blue >> SHIFT);
 }
 
 void wxColour::CalcPixel( GdkColormap *cmap )
 {
-    if (!Ok()) return;
+    if (!IsOk()) return;
 
     M_COLDATA->AllocColour( cmap );
 }
 
 int wxColour::GetPixel() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid colour") );
 
     return M_COLDATA->m_color.pixel;
 }
 
 GdkColor *wxColour::GetColor() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid colour") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid colour") );
 
     return &M_COLDATA->m_color;
 }

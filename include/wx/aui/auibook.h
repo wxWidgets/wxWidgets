@@ -502,18 +502,22 @@ protected:
 
 
 
-class WXDLLIMPEXP_AUI wxAuiNotebook : public wxControl
+class WXDLLIMPEXP_AUI wxAuiNotebook : public wxNavigationEnabled<wxControl>
 {
 
 public:
 
-    wxAuiNotebook();
+    wxAuiNotebook() { Init(); }
 
     wxAuiNotebook(wxWindow* parent,
                   wxWindowID id = wxID_ANY,
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
-                  long style = wxAUI_NB_DEFAULT_STYLE);
+                  long style = wxAUI_NB_DEFAULT_STYLE)
+    {
+        Init();
+        Create(parent, id, pos, size, style);
+    }
 
     virtual ~wxAuiNotebook();
 
@@ -595,6 +599,9 @@ public:
     virtual void Thaw();
 
 protected:
+    // Common part of all ctors.
+    void Init();
+
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
@@ -627,6 +634,7 @@ protected:
     void OnTabBeginDrag(wxAuiNotebookEvent& evt);
     void OnTabDragMotion(wxAuiNotebookEvent& evt);
     void OnTabEndDrag(wxAuiNotebookEvent& evt);
+    void OnTabCancelDrag(wxAuiNotebookEvent& evt);
     void OnTabButton(wxAuiNotebookEvent& evt);
     void OnTabMiddleDown(wxAuiNotebookEvent& evt);
     void OnTabMiddleUp(wxAuiNotebookEvent& evt);
@@ -664,9 +672,6 @@ protected:
     DECLARE_CLASS(wxAuiNotebook)
     DECLARE_EVENT_TABLE()
 #endif
-
-    WX_DECLARE_CONTROL_CONTAINER();
-
 };
 
 

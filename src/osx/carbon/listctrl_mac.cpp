@@ -943,7 +943,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
         if (item.GetMask() & wxLIST_MASK_TEXT)
         {
             wxFontEncoding enc;
-            if ( m_font.Ok() )
+            if ( m_font.IsOk() )
                 enc = GetFont().GetEncoding();
             else
                 enc = wxLocale::GetSystemEncoding();
@@ -2177,7 +2177,7 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
         if (imageList && imageList->GetImageCount() > 0)
         {
             wxBitmap bmp = imageList->GetBitmap(0);
-            //if (bmp.Ok())
+            //if (bmp.IsOk())
             //    type = kDataBrowserIconAndTextType;
         }
 
@@ -2786,7 +2786,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     if (bgColor == wxNullColour)
         bgColor = listBgColor;
 
-    if (!font.Ok())
+    if (!font.IsOk())
         font = list->GetFont();
 
     wxCFStringRef cfString( text, wxLocale::GetSystemEncoding() );
@@ -2850,12 +2850,12 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     else
     {
 
-        if (color.Ok())
+        if (color.IsOk())
             color.GetRGBColor(&labelColor);
-        else if (list->GetTextColour().Ok())
+        else if (list->GetTextColour().IsOk())
             list->GetTextColour().GetRGBColor(&labelColor);
 
-        if (bgColor.Ok())
+        if (bgColor.IsOk())
         {
             bgColor.GetRGBColor(&backgroundColor);
             CGContextSaveGState(context);
@@ -2897,7 +2897,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     {
         info.version = kHIThemeTextInfoVersionOne;
         info.fontID = kThemeViewsFont;
-        if (font.Ok())
+        if (font.IsOk())
         {
             info.fontID = kThemeSpecifiedFont;
             info.font = (CTFontRef) font.OSXGetCTFont();
@@ -2911,7 +2911,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         info.version = kHIThemeTextInfoVersionZero;
         info.fontID = kThemeViewsFont;
 
-        if (font.Ok())
+        if (font.IsOk())
         {
             info.fontID = font.MacGetThemeFontID();
 

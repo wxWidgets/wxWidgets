@@ -443,7 +443,7 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             {
                 // set our cursor for all windows (but see below)
                 wxCursor cursor = m_cursor;
-                if ( !cursor.Ok() )
+                if ( !cursor.IsOk() )
                     cursor = wxCURSOR_ARROW;
 
                 ::SetCursor(GetHcursorOf(cursor));

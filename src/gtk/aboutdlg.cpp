@@ -145,7 +145,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
             gtk_about_dialog_set_license(dlg, NULL);
 
         wxIcon icon = info.GetIcon();
-        if ( icon.Ok() )
+        if ( icon.IsOk() )
             gtk_about_dialog_set_logo(dlg, info.GetIcon().GetPixbuf());
 
         if ( info.HasWebSite() )

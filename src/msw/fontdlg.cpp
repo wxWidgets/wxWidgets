@@ -68,13 +68,13 @@ int wxFontDialog::ShowModal()
         chooseFontStruct.hwndOwner = GetHwndOf(m_parent);
     chooseFontStruct.lpLogFont = &logFont;
 
-    if ( m_fontData.m_initialFont.Ok() )
+    if ( m_fontData.m_initialFont.IsOk() )
     {
         flags |= CF_INITTOLOGFONTSTRUCT;
         wxFillLogFont(&logFont, &m_fontData.m_initialFont);
     }
 
-    if ( m_fontData.m_fontColour.Ok() )
+    if ( m_fontData.m_fontColour.IsOk() )
     {
         chooseFontStruct.rgbColors = wxColourToRGB(m_fontData.m_fontColour);
     }

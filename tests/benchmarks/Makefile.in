@@ -43,6 +43,7 @@ BENCH_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CXXFLAGS)
 BENCH_OBJECTS =  \
 	bench_bench.o \
+	bench_datetime.o \
 	bench_htmlpars.o \
 	bench_htmltag.o \
 	bench_ipcclient.o \
@@ -130,6 +131,9 @@ data:
 
 bench_bench.o: $(srcdir)/bench.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/bench.cpp
+
+bench_datetime.o: $(srcdir)/datetime.cpp
+	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/datetime.cpp
 
 bench_htmlpars.o: $(srcdir)/htmlparser/htmlpars.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/htmlparser/htmlpars.cpp

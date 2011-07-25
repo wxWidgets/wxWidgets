@@ -503,7 +503,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_lbox = new wxListBox(this, wxID_ANY);
     wxFont font(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL,
                 wxFONTWEIGHT_NORMAL);
-    if ( font.Ok() )
+    if ( font.IsOk() )
         m_lbox->SetFont(font);
 
 #if wxUSE_STATUSBAR
@@ -1470,8 +1470,8 @@ void MyPipeFrame::DoGetFromStream(wxTextCtrl *text, wxInputStream& in)
 {
     while ( in.CanRead() )
     {
-        wxChar buffer[4096];
-        buffer[in.Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = wxT('\0');
+        char buffer[4096];
+        buffer[in.Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = '\0';
 
         text->AppendText(buffer);
     }

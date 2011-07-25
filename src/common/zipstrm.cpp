@@ -1341,7 +1341,7 @@ void wxZipInputStream::Init(const wxString& file)
     ffile = static_cast<wxFFileInputStream*>(m_parent_i_stream);
     wxZipEntryPtr_ entry;
 
-    if (ffile->Ok()) {
+    if (ffile->IsOk()) {
         do {
             entry.reset(GetNextEntry());
         }

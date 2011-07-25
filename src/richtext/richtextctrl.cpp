@@ -230,7 +230,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
                            validator, name))
         return false;
 
-    if (!GetFont().Ok())
+    if (!GetFont().IsOk())
     {
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     }
@@ -456,6 +456,11 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     if (GetCaret())
         GetCaret()->Show();
     PositionCaret();
+#else
+#if !defined(__WXMAC__)
+    // Causes caret dropouts on Mac
+    PositionCaret();
+#endif
 #endif
 }
 
@@ -563,12 +568,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 
         // For now, don't handle shift-click when we're selecting multiple objects.
         if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
-        {
-            if (!m_selection.IsValid())
-                ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-            else
-                ExtendSelection(m_caretPosition, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-        }
+            ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
         else
             SelectNone();
     }
@@ -2323,7 +2323,7 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop)
 void wxRichTextCtrl::PaintBackground(wxDC& dc)
 {
     wxColour backgroundColour = GetBackgroundColour();
-    if (!backgroundColour.Ok())
+    if (!backgroundColour.IsOk())
         backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
     // Clear the background
@@ -2350,9 +2350,9 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
     if (sz.x < 1 || sz.y < 1)
         return false;
 
-    if (!m_bufferBitmap.Ok() || m_bufferBitmap.GetWidth() < sz.x || m_bufferBitmap.GetHeight() < sz.y)
+    if (!m_bufferBitmap.IsOk() || m_bufferBitmap.GetWidth() < sz.x || m_bufferBitmap.GetHeight() < sz.y)
         m_bufferBitmap = wxBitmap(sz.x, sz.y);
-    return m_bufferBitmap.Ok();
+    return m_bufferBitmap.IsOk();
 }
 #endif
 
@@ -2664,12 +2664,12 @@ bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock, const wx
 
 bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType, const wxRichTextAttr& textAttr)
 {
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
     {
         wxRichTextImageBlock imageBlock;
 
         wxImage image = bitmap.ConvertToImage();
-        if (image.Ok() && imageBlock.MakeImageBlock(image, bitmapType))
+        if (image.IsOk() && imageBlock.MakeImageBlock(image, bitmapType))
             return WriteImage(imageBlock, textAttr);
     }
 
@@ -2925,12 +2925,18 @@ void wxRichTextCtrl::SetSelection(long from, long to)
 // Editing
 // ----------------------------------------------------------------------------
 
-void wxRichTextCtrl::Replace(long WXUNUSED(from), long WXUNUSED(to),
+void wxRichTextCtrl::Replace(long from, long to,
                              const wxString& value)
 {
     BeginBatchUndo(_("Replace"));
 
+    SetSelection(from, to);
+
+    wxRichTextAttr attr = GetDefaultStyle();
+
     DeleteSelectedContent();
+
+    SetDefaultStyle(attr);
 
     DoWriteText(value, SetValue_SelectionOnly);
 

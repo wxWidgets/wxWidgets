@@ -55,6 +55,7 @@
 #include "view.h"
 
 #include "wx/cmdline.h"
+#include "wx/config.h"
 
 #ifdef __WXMAC__
     #include "wx/filename.h"
@@ -150,7 +151,10 @@ bool MyApp::OnInit()
 
     ::wxInitAllImageHandlers();
 
-    SetAppName("DocView Sample");
+    // Fill in the application information fields before creating wxConfig.
+    SetVendorName("wxWidgets");
+    SetAppName("wx_docview_sample");
+    SetAppDisplayName("wxWidgets DocView Sample");
 
     //// Create a document manager
     wxDocManager *docManager = new wxDocManager;
@@ -217,6 +221,10 @@ bool MyApp::OnInit()
 
     // A nice touch: a history of files visited. Use this menu.
     docManager->FileHistoryUseMenu(menuFile);
+#if wxUSE_CONFIG
+    docManager->FileHistoryLoad(*wxConfig::Get());
+#endif // wxUSE_CONFIG
+
 
     if ( m_mode == Mode_Single )
     {
@@ -236,7 +244,11 @@ bool MyApp::OnInit()
 
 int MyApp::OnExit()
 {
-    delete wxDocManager::GetDocumentManager();
+    wxDocManager * const manager = wxDocManager::GetDocumentManager();
+#if wxUSE_CONFIG
+    manager->FileHistorySave(*wxConfig::Get());
+#endif // wxUSE_CONFIG
+    delete manager;
 
     return wxApp::OnExit();
 }

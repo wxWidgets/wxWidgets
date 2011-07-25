@@ -169,7 +169,7 @@ void wxStdRenderer::DrawBackground(wxDC& dc,
 {
     wxColour colBg;
 
-    if (col.Ok())
+    if (col.IsOk())
     {
         colBg = col;
     }
@@ -678,7 +678,7 @@ void wxStdRenderer::DrawCheckButton(wxDC& dc,
                                     wxAlignment align,
                                     int indexAccel)
 {
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
         DrawCheckOrRadioButton(dc, label, bitmap, rect, flags, align, indexAccel);
     else
         DrawCheckOrRadioButton(dc, label, GetCheckBitmap(flags), rect, flags, align, indexAccel);
@@ -692,7 +692,7 @@ void wxStdRenderer::DrawRadioButton(wxDC& dc,
                                     wxAlignment align,
                                     int indexAccel)
 {
-    if (bitmap.Ok())
+    if (bitmap.IsOk())
         DrawCheckOrRadioButton(dc, label, bitmap, rect, flags, align, indexAccel);
     else
         DrawCheckOrRadioButton(dc, label, GetRadioBitmap(flags), rect, flags, align, indexAccel);
@@ -1148,7 +1148,7 @@ void wxStdRenderer::DrawFrameIcon(wxDC& dc,
                                   const wxIcon& icon,
                                   int flags)
 {
-    if ( icon.Ok() )
+    if ( icon.IsOk() )
     {
         wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
         dc.DrawIcon(icon, r.x, r.y);
@@ -1174,7 +1174,7 @@ void wxStdRenderer::DrawFrameButton(wxDC& dc,
     }
 
     wxBitmap bmp = GetFrameButtonBitmap(idx);
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
         return;
 
     wxRect rectBtn(x, y, FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT);

@@ -1534,9 +1534,8 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
         // m_colLabels stores just as many elements as it needs, e.g. if only
         // the label of the first column had been set it would have only one
         // element and not numCols, so account for it
-        int nToRm = m_colLabels.size() - colID;
-        if ( nToRm > 0 )
-            m_colLabels.RemoveAt( colID, nToRm );
+        int numRemaining = m_colLabels.size() - colID;
+        m_colLabels.RemoveAt( colID, wxMin(numCols, numRemaining) );
     }
 
     if ( numCols >= curNumCols )

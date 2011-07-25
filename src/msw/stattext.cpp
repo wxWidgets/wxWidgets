@@ -98,7 +98,7 @@ wxSize wxStaticText::DoGetBestClientSize() const
 {
     wxClientDC dc(const_cast<wxStaticText *>(this));
     wxFont font(GetFont());
-    if (!font.Ok())
+    if (!font.IsOk())
         font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
     dc.SetFont(font);

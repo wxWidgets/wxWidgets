@@ -324,7 +324,7 @@ private:
 
 - (id)initWithItemIdentifier: (NSString*) identifier
 {
-    [super initWithItemIdentifier:identifier];
+    self = [super initWithItemIdentifier:identifier];
     impl = NULL;
     [self setTarget: self];
     [self setAction: @selector(clickedAction:)];
@@ -413,7 +413,7 @@ private:
 
 - (id)initWithFrame:(NSRect)frame
 {
-    [super initWithFrame:frame];
+    self = [super initWithFrame:frame];
     impl = NULL;
     [self setTarget: self];
     [self setAction: @selector(clickedAction:)];

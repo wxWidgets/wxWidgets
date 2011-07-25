@@ -527,7 +527,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
 #if wxUSE_IMAGE
         wxImage image ;
         image.LoadFile( cursor_file, flags ) ;
-        if ( image.Ok() )
+        if ( image.IsOk() )
         {
             image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX ) ;
             image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY ) ;

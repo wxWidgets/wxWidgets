@@ -499,7 +499,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& name)
     static wxColour s_col;
 
     s_col = Find(name);
-    if ( !s_col.Ok() )
+    if ( !s_col.IsOk() )
         return NULL;
 
     return new wxColour(s_col);
@@ -780,7 +780,7 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, wxPenStyle
 
     wxPen* pen = NULL;
     wxPen penTmp(colour, width, style);
-    if (penTmp.Ok())
+    if (penTmp.IsOk())
     {
         pen = new wxPen(penTmp);
         list.Append(pen);
@@ -802,7 +802,7 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, wxBrushStyle st
 
     wxBrush* brush = NULL;
     wxBrush brushTmp(colour, style);
-    if (brushTmp.Ok())
+    if (brushTmp.IsOk())
     {
         brush = new wxBrush(brushTmp);
         list.Append(brush);
@@ -872,7 +872,7 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     // font not found, create the new one
     font = NULL;
     wxFont fontTmp(pointSize, family, style, weight, underline, facename, encoding);
-    if (fontTmp.Ok())
+    if (fontTmp.IsOk())
     {
         font = new wxFont(fontTmp);
         list.Append(font);

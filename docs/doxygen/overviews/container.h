@@ -10,21 +10,44 @@
 
 @page overview_container Container Classes
 
-Classes: wxList<T>, wxArray<T>, wxVector<T>
+Classes: wxList<T>, wxArray<T>, wxVector<T>, wxStack<T>, wxHashMap, wxHashSet
 
-wxWidgets uses itself several container classes including doubly-linked lists
-and dynamic arrays (i.e. arrays which expand automatically when they become
-full). For both historical and portability reasons wxWidgets does not require
-the use of STL (which provides the standard implementation of many container
-classes in C++) but it can be compiled in STL mode. Additionally, wxWidgets
-provides the new wxVector<T> class template which can be used like the std::vector
-class and is actually just a typedef to std::vector if wxWidgets is compiled
-in STL mode.
+@section overview_container_intro Overview
 
-wxWidgets non-template container classes don't pretend to be as powerful or full as STL
-ones, but they are quite useful and may be compiled with absolutely any C++
-compiler. They're used internally by wxWidgets, but may, of course, be used in
-your programs as well if you wish.
+For historical reasons, wxWidgets uses custom container classes internally.
+This was unfortunately unavoidable during a long time when the standard library
+wasn't widely available and can't be easily changed even now that it is for
+compatibility reasons. If you are building your own version of the library and
+don't care about compatibility nor slight (less than 5%) size penalty imposed
+by the use of STL classes, you may choose to use the "STL" build of wxWidgets
+in which these custom classes are replaced with their standard counterparts and
+only read the section @ref overview_container_std explaining how to do it.
+
+Otherwise you will need to know about the custom wxWidgets container classes
+such as wxList<T> and wxArray<T> if only to use wxWidgets functions that work
+with them, e.g. wxWindow::GetChildren(), and you should find the information
+about using these classes below useful.
+
+Notice that we recommend that you use standard classes directly in your own
+code instead of the container classes provided by wxWidgets in any case as the
+standard classes are easier to use and may also be safer because of extra
+run-time checks they may perform as well as more efficient.
+
+Finally notice that recent versions of wxWidgets also provide standard-like
+classes such as wxVector<T>, wxStack<T> or wxDList which can be used exactly
+like the std::vector<T>, std::stack<T> and std::list<T*>, respectively, and
+actually are just typedefs for the corresponding types if wxWidgets is compiled
+in STL mode. These classes could be useful if you wish to avoid the use of the
+standard library in your code for some reason.
+
+To summarize, you should use the standard container classes such as
+std::vector<T> and std::list<T> if possible and wxVector<T> or wxDList<T> if
+it isn't and only use legacy wxWidgets containers such as wxArray<T> and
+wxList<T> when you must, i.e. when you use a wxWidgets function taking or
+returning a container of such type.
+
+
+@section overview_container_legacy Legacy Classes
 
 The list classes in wxWidgets are doubly-linked lists which may either own the
 objects they contain (meaning that the list deletes the object when it is
@@ -40,10 +63,10 @@ two sorts: the "plain" arrays which store either built-in types such as "char",
 own the object pointers to which they store.
 
 For the same portability reasons, the container classes implementation in
-wxWidgets does not use templates, but is rather based on C preprocessor i.e. is
-done with the macros: WX_DECLARE_LIST() and WX_DEFINE_LIST() for the linked
-lists and WX_DECLARE_ARRAY(), WX_DECLARE_OBJARRAY() and WX_DEFINE_OBJARRAY()
-for the dynamic arrays.
+wxWidgets don't use templates, but are rather based on C preprocessor i.e. are
+implemented using the macros: WX_DECLARE_LIST() and WX_DEFINE_LIST() for the
+linked lists and WX_DECLARE_ARRAY(), WX_DECLARE_OBJARRAY() and
+WX_DEFINE_OBJARRAY() for the dynamic arrays.
 
 The "DECLARE" macro declares a new container class containing the elements of
 given type and is needed for all three types of container classes: lists,
@@ -66,6 +89,42 @@ array classes are defined: wxArrayInt, wxArrayLong, wxArrayPtrVoid and
 wxArrayString. The first three store elements of corresponding types, but
 wxArrayString is somewhat special: it is an optimized version of wxArray which
 uses its knowledge about wxString reference counting schema.
+
+
+@section overview_container_std STL Build
+
+To build wxWidgets with the standard containers you need to set
+wxUSE_STD_CONTAINERS option to 1 in @c wx/msw/setup.h for wxMSW builds or
+specify @c --enable-std_containers option to configure (which is also
+implicitly enabled by @c --enable-stl option) in Unix builds.
+
+The standard container build is mostly, but not quite, compatible with the
+default one. Here are the most important differences:
+ - wxList::compatibility_iterator must be used instead of wxList::Node* when
+   iterating over the list contents. The compatibility_iterator class has the
+   same semantics as a Node pointer but it is an object and not a pointer, so
+   you need to write
+        @code
+        for ( wxWindowList::compatibility_iterator it = list.GetFirst();
+              it;
+              it = it->GetNext() )
+            ...
+        @endcode
+   instead of the old
+        @code
+        for ( wxWindowList::Node *n = list.GetFirst(); n; n = n->GetNext() )
+            ...
+        @endcode
+ - wxSortedArrayString and wxArrayString are separate classes now and the
+   former doesn't derive from the latter. If you need to convert a sorted array
+   to a normal one, you must copy all the elements. Alternatively, you may
+   avoid the use of wxSortedArrayString by using a normal array and calling its
+   Sort() method when needed.
+ - WX_DEFINE_ARRAY_INT(bool) cannot be used because of the differences in
+   std::vector<bool> specialization compared with the generic std::vector<>
+   class. Please either use std::vector<bool> directly or use an integer array
+   instead.
+
 
 */
 

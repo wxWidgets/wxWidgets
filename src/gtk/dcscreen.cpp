@@ -13,13 +13,8 @@
 #include "wx/dcscreen.h"
 #include "wx/gtk/dcscreen.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/window.h"
-#endif
-
-#include <gdk/gdk.h>
-#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
 // wxScreenDCImpl
@@ -58,6 +53,8 @@ void wxScreenDCImpl::Init()
 
 wxScreenDCImpl::~wxScreenDCImpl()
 {
+    g_object_unref(m_context);
+
     gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
     gdk_gc_set_subwindow( m_brushGC, GDK_CLIP_BY_CHILDREN );
     gdk_gc_set_subwindow( m_textGC, GDK_CLIP_BY_CHILDREN );

@@ -101,7 +101,6 @@ private:
     // common part of Append (if pos == -1)  and Insert
     bool GtkAppend(wxMenuItem *item, int pos=-1);
 
-    GtkWidget *m_prevRadio;
 
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };

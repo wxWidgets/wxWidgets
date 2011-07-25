@@ -1076,10 +1076,10 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxRichT
 wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool isPara)
 {
     wxString str;
-    if (attr.HasTextColour() && attr.GetTextColour().Ok())
+    if (attr.HasTextColour() && attr.GetTextColour().IsOk())
         AddAttribute(str, wxT("textcolor"), attr.GetTextColour());
 
-    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().Ok())
+    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().IsOk())
         AddAttribute(str, wxT("bgcolor"), attr.GetBackgroundColour());
 
     if (attr.HasFontSize())
@@ -1371,9 +1371,9 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxXmlNode* parent, wxRichTextSt
 
 bool wxRichTextXMLHandler::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, bool isPara)
 {
-    if (attr.HasTextColour() && attr.GetTextColour().Ok())
+    if (attr.HasTextColour() && attr.GetTextColour().IsOk())
         node->AddAttribute(wxT("textcolor"), MakeString(attr.GetTextColour()));
-    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().Ok())
+    if (attr.HasBackgroundColour() && attr.GetBackgroundColour().IsOk())
         node->AddAttribute(wxT("bgcolor"), MakeString(attr.GetBackgroundColour()));
 
     if (attr.HasFontSize())
@@ -2381,7 +2381,7 @@ bool wxRichTextImage::ExportXML(wxOutputStream& stream, int indent, wxRichTextXM
 
     ::OutputIndentation(stream, indent);
     ::OutputString(stream, wxT("<image"), handler->GetConvMem(), handler->GetConvFile());
-    if (!GetImageBlock().Ok())
+    if (!GetImageBlock().IsOk())
     {
         // No data
         ::OutputString(stream, style + wxT(">"), handler->GetConvMem(), handler->GetConvFile());
@@ -2419,7 +2419,7 @@ bool wxRichTextImage::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler
     wxXmlNode* elementNode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("image"));
     parent->AddChild(elementNode);
 
-    if (GetImageBlock().Ok())
+    if (GetImageBlock().IsOk())
         elementNode->AddAttribute(wxT("imagetype"), MakeString((int) GetImageBlock().GetImageType()));
 
     handler->AddAttributes(elementNode, GetAttributes(), false);

@@ -633,6 +633,11 @@ void wxDataViewCtrl::AddChildren(wxDataViewItem const& parentItem)
   (void) GetModel()->ItemsAdded(parentItem,items);
 }
 
+void wxDataViewCtrl::StartEditor( const wxDataViewItem & item, unsigned int column )
+{
+    GetDataViewPeer()->StartEditor(item, column);
+}
+
 void wxDataViewCtrl::FinishCustomItemEditing()
 {
   if (GetCustomRendererItem().IsOk())

@@ -302,7 +302,7 @@ void wxSetCursor(const wxCursor& cursor)
 {
     extern wxCursor *g_globalCursor;
 
-    if ( cursor.Ok() && cursor.GetHCURSOR() )
+    if ( cursor.IsOk() && cursor.GetHCURSOR() )
     {
 //        ::SetCursor((HCURSOR) cursor.GetHCURSOR());
 

@@ -1015,7 +1015,7 @@ void wxTopLevelWindowOS2::SetIcons(
 
     const wxIcon& vIcon = rIcons.GetIconOfExactSize(32);
 
-    if (vIcon.Ok())
+    if (vIcon.IsOk())
     {
         ::WinSendMsg( m_hFrame
                      ,WM_SETICON

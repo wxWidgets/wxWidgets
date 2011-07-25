@@ -135,7 +135,7 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
     if (tag.HasParam(wxT("BGCOLOR")))
     {
         tag.GetParamAsColour(wxT("BGCOLOR"), &m_tBkg);
-        if (m_tBkg.Ok())
+        if (m_tBkg.IsOk())
             SetBackgroundColour(m_tBkg);
     }
     if (tag.HasParam(wxT("VALIGN")))
@@ -344,7 +344,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         wxColour bk = m_rBkg;
         if (tag.HasParam(wxT("BGCOLOR")))
             tag.GetParamAsColour(wxT("BGCOLOR"), &bk);
-        if (bk.Ok())
+        if (bk.IsOk())
             cell->SetBackgroundColour(bk);
     }
     if (m_Border > 0)

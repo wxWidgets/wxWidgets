@@ -24,6 +24,7 @@
     #include "wx/hash.h"
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/math.h"
     #include "wx/event.h"
     #include "wx/window.h"
     #include "wx/panel.h"
@@ -158,7 +159,7 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
         dc.SetFont(font);
 
     const wxBitmap& bmp = cell.GetBitmap();
-    if ( bmp.Ok() &&
+    if ( bmp.IsOk() &&
         // Do not draw oversized bitmap outside choice popup
          ((flags & ChoicePopup) || bmp.GetHeight() < rect.height )
         )
@@ -327,7 +328,7 @@ wxSize wxPGDefaultRenderer::GetImageSize( const wxPGProperty* property,
         {
             wxBitmap* bmp = property->GetValueImage();
 
-            if ( bmp && bmp->Ok() )
+            if ( bmp && bmp->IsOk() )
                 return wxSize(bmp->GetWidth(),bmp->GetHeight());
         }
     }
@@ -1297,7 +1298,7 @@ void wxPGProperty::OnCustomPaint( wxDC& dc,
 {
     wxBitmap* bmp = m_valueBitmap;
 
-    wxCHECK_RET( bmp && bmp->Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( bmp && bmp->IsOk(), wxT("invalid bitmap") );
 
     wxCHECK_RET( rect.x >= 0, wxT("unexpected measure call") );
 
@@ -2091,7 +2092,7 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 {
     delete m_valueBitmap;
 
-    if ( &bmp && bmp.Ok() )
+    if ( &bmp && bmp.IsOk() )
     {
         // Resize the image
         wxSize maxSz = GetGrid()->GetImageSize();
@@ -2103,8 +2104,8 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
             // Here we use high-quality wxImage scaling functions available
             wxImage img = bmp.ConvertToImage();
             double scaleY = (double)maxSz.y / (double)imSz.y;
-            img.Rescale(((double)bmp.GetWidth())*scaleY,
-                        ((double)bmp.GetHeight())*scaleY,
+            img.Rescale(wxRound(bmp.GetWidth()*scaleY),
+                        wxRound(bmp.GetHeight()*scaleY),
                         wxIMAGE_QUALITY_HIGH);
             wxBitmap* bmpNew = new wxBitmap(img, 32);
         #else
@@ -2567,6 +2568,25 @@ void wxPGProperty::DeleteChildren()
         i--;
         state->DoDelete(Item(i), true);
     }
+}
+
+bool wxPGProperty::IsChildSelected( bool recursive ) const
+{
+    size_t i;
+    for ( i = 0; i < GetChildCount(); i++ )
+    {
+        wxPGProperty* child = Item(i);
+
+        // Test child
+        if ( m_parentState->DoIsPropertySelected( child ) )
+            return true;
+
+        // Test sub-childs
+        if ( recursive && child->IsChildSelected( recursive ) )
+            return true;
+    }
+
+    return false;
 }
 
 wxVariant wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),

@@ -17,7 +17,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.9.2], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.9.3], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -43,7 +43,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=2
 wx_minor_version_number=9
-wx_release_number=2
+wx_release_number=3
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -372,7 +372,7 @@ dnl wxUSE_ALL_FEATURES which is the only which has to be set to "yes" by
 dnl default)
 DEFAULT_wxUSE_ALL_FEATURES=yes
 
-DEFAULT_wxUSE_STD_CONTAINERS=$DEFAULT_STD_FLAG
+DEFAULT_wxUSE_STD_CONTAINERS=no
 DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
@@ -701,6 +701,11 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
+if test "$wxUSE_STL" = "yes"; then
+    DEFAULT_wxUSE_STD_CONTAINERS=yes
+    DEFAULT_wxUSE_STD_IOSTREAM=yes
+    DEFAULT_wxUSE_STD_STRING=yes
+fi
 WX_ARG_ENABLE(std_containers,[  --enable-std_containers use standard C++ container classes], wxUSE_STD_CONTAINERS)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
@@ -5665,6 +5670,11 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
                 fi
             fi
         else
+            wxUSE_FSWATCHER=no
+        fi
+    else
+        if test "$wxUSE_THREADS" != "yes"; then
+            AC_MSG_WARN([wxFileSystemWatcher disabled due to --disable-threads])
             wxUSE_FSWATCHER=no
         fi
     fi

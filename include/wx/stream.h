@@ -64,7 +64,7 @@ public:
     bool operator!() const { return !IsOk(); }
 
     // reset the stream state
-    void Reset() { m_lasterror = wxSTREAM_NO_ERROR; }
+    void Reset(wxStreamError error = wxSTREAM_NO_ERROR) { m_lasterror = error; }
 
     // this doesn't make sense for all streams, always test its return value
     virtual size_t GetSize() const;

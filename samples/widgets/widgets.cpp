@@ -800,11 +800,11 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
     // allow for debugging the default colour the first time this is called
     WidgetsPage *page = CurrentPage();
 
-    if (!m_colFg.Ok())
+    if (!m_colFg.IsOk())
         m_colFg = page->GetForegroundColour();
 
     wxColour col = GetColourFromUser(this, m_colFg);
-    if ( !col.Ok() )
+    if ( !col.IsOk() )
         return;
 
     m_colFg = col;
@@ -823,11 +823,11 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
     WidgetsPage *page = CurrentPage();
 
-    if ( !m_colBg.Ok() )
+    if ( !m_colBg.IsOk() )
         m_colBg = page->GetBackgroundColour();
 
     wxColour col = GetColourFromUser(this, m_colBg);
-    if ( !col.Ok() )
+    if ( !col.IsOk() )
         return;
 
     m_colBg = col;
@@ -845,7 +845,7 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnSetPageBg(wxCommandEvent& WXUNUSED(event))
 {
     wxColour col = GetColourFromUser(this, GetBackgroundColour());
-    if ( !col.Ok() )
+    if ( !col.IsOk() )
         return;
 
     CurrentPage()->SetBackgroundColour(col);
@@ -857,11 +857,11 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_FONTDLG
     WidgetsPage *page = CurrentPage();
 
-    if (!m_font.Ok())
+    if (!m_font.IsOk())
         m_font = page->GetFont();
 
     wxFont font = wxGetFontFromUser(this, m_font);
-    if ( !font.Ok() )
+    if ( !font.IsOk() )
         return;
 
     m_font = font;

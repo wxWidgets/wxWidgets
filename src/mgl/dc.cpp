@@ -205,7 +205,7 @@ void wxDC::InitializeMGLDC()
 
 void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxRect rect(XLOG2DEV(cx), YLOG2DEV(cy), XLOG2DEVREL(cw), YLOG2DEVREL(ch));
 
@@ -222,7 +222,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 
 void wxDC::DoSetDeviceClippingRegion(const wxRegion& region)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( region.IsEmpty() )
     {
@@ -262,7 +262,7 @@ void wxDC::DoSetDeviceClippingRegion(const wxRegion& region)
 
 void wxDC::DestroyClippingRegion()
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( !m_globalClippingRegion.IsNull() )
     {
@@ -303,7 +303,7 @@ int wxDC::GetDepth() const
 
 void wxDC::Clear()
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     m_MGLDC->makeCurrent(); // will go away with MGL6.0
     if ( m_backgroundBrush.GetStyle() != wxTRANSPARENT )
@@ -340,7 +340,7 @@ bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
 void wxDC::DoCrossHair(wxCoord x, wxCoord y)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( m_pen.GetStyle() != wxTRANSPARENT )
     {
@@ -361,7 +361,7 @@ void wxDC::DoCrossHair(wxCoord x, wxCoord y)
 
 void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( m_pen.GetStyle() != wxTRANSPARENT )
     {
@@ -381,7 +381,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
                      wxCoord x2, wxCoord y2,
                      wxCoord xc, wxCoord yc)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxCoord xx1 = XLOG2DEV(x1);
     wxCoord yy1 = YLOG2DEV(y1);
@@ -440,7 +440,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
 
 void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( m_pen.GetStyle() != wxTRANSPARENT )
     {
@@ -454,7 +454,7 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,wxPolygonFillMode WXUNUSED(fillStyle))
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxCoord xxoffset = XLOG2DEVREL(xoffset),
             yyoffset = YLOG2DEVREL(yoffset);
@@ -495,7 +495,7 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
 
 void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( m_pen.GetStyle() != wxTRANSPARENT )
     {
@@ -516,7 +516,7 @@ void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxCoord xx = XLOG2DEV(x);
     wxCoord yy = YLOG2DEV(y);
@@ -559,7 +559,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     if ( radius < 0.0 )
         radius = -radius * ((width < height) ? width : height);
@@ -635,7 +635,7 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
 void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxCoord x2 = (x+width);
     wxCoord y2 = (y+height);
@@ -664,7 +664,7 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxCoord x2 = (x+w);
     wxCoord y2 = (y+h);
@@ -736,7 +736,7 @@ bool wxDC::SelectMGLFont()
 
 void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     SelectMGLFont();
 
@@ -999,7 +999,7 @@ void wxDC::SelectMGLFatPen(int style, int flag)
 
 void wxDC::SelectPen()
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxColour& clr = m_pen.GetColour();
     m_MGLDC->makeCurrent(); // will go away with MGL6.0
@@ -1045,7 +1045,7 @@ void wxDC::SelectPen()
 
 void wxDC::SelectBrush()
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     wxColour fg, bg;
     m_MGLDC->makeCurrent(); // will go away with MGL6.0
@@ -1071,7 +1071,7 @@ void wxDC::SelectBrush()
 
 void wxDC::SetPen(const wxPen& pen)
 {
-    if ( !pen.Ok() ) return;
+    if ( !pen.IsOk() ) return;
     if ( m_pen == pen ) return;
     m_pen = pen;
     m_penSelected = false;
@@ -1080,7 +1080,7 @@ void wxDC::SetPen(const wxPen& pen)
 
 void wxDC::SetBrush(const wxBrush& brush)
 {
-    if ( !brush.Ok() ) return;
+    if ( !brush.IsOk() ) return;
     if ( m_brush == brush ) return;
     m_brush = brush;
     m_brushSelected = false;
@@ -1089,11 +1089,11 @@ void wxDC::SetBrush(const wxBrush& brush)
 
 void wxDC::SetPalette(const wxPalette& palette)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    if ( !palette.Ok() )
+    if ( !palette.IsOk() )
     {
-        if ( m_oldPalette.Ok() )
+        if ( m_oldPalette.IsOk() )
             SetPalette(m_oldPalette);
         return;
     }
@@ -1112,7 +1112,7 @@ void wxDC::SetPalette(const wxPalette& palette)
 
 void wxDC::SetFont(const wxFont& font)
 {
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         m_font = font;
         m_mglFont = NULL;
@@ -1121,9 +1121,9 @@ void wxDC::SetFont(const wxFont& font)
 
 void wxDC::SetBackground(const wxBrush& brush)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    if (!brush.Ok()) return;
+    if (!brush.IsOk()) return;
 
     m_backgroundBrush = brush;
     wxColour &clr = m_backgroundBrush.GetColour();
@@ -1143,7 +1143,7 @@ void wxDC::SetBackgroundMode(int mode)
 
 void wxDC::SetLogicalFunction(wxRasterOperationMode function)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
     m_logicalFunction = function;
 
@@ -1301,7 +1301,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                   wxRasterOperationMode rop, bool useMask,
                   wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid dc") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid dc") );
     wxCHECK_MSG( source, false, wxT("invalid source dc") );
 
     // transform the source DC coords to the device ones
@@ -1349,8 +1349,8 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
 
 void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
-    wxCHECK_RET( bmp.Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
+    wxCHECK_RET( bmp.IsOk(), wxT("invalid bitmap") );
 
     wxCoord w = bmp.GetWidth();
     wxCoord h = bmp.GetHeight();
@@ -1392,8 +1392,8 @@ void wxDC::DoDrawSubBitmap(const wxBitmap &bmp,
                            wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                            wxCoord destx, wxCoord desty, int rop, bool useMask)
 {
-    wxCHECK_RET( Ok(), wxT("invalid dc") );
-    wxCHECK_RET( bmp.Ok(), wxT("invalid bitmap") );
+    wxCHECK_RET( IsOk(), wxT("invalid dc") );
+    wxCHECK_RET( bmp.IsOk(), wxT("invalid bitmap") );
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + w, y + h);

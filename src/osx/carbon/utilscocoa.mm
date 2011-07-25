@@ -413,8 +413,7 @@ CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage )
     if (nsimage != nil)
     {
         NSSize imageSize = [nsimage size];
-        CGColorSpaceRef genericRGB = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB); 
-        CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, genericRGB, kCGImageAlphaPremultipliedFirst); 
+        CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst); 
         NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:nsGraphicsContext];

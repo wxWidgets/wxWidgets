@@ -25,6 +25,7 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxToolBar;
 #endif
 
+class wxMenuRadioItemsData;
 
 // Not using a combined wxToolBar/wxMenuBar? then use
 // a commandbar in WinCE .NET to implement the
@@ -63,12 +64,15 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    virtual void Attach(wxMenuBarBase *menubar);
-
     bool MSWCommand(WXUINT param, WXWORD id);
 
     // get the native menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
+
+    // Return the start and end position of the radio group to which the item
+    // at the given position belongs. Returns false if there is no radio group
+    // containing this position.
+    bool MSWGetRadioGroupRange(int pos, int *start, int *end) const;
 
 #if wxUSE_ACCEL
     // called by wxMenuBar to build its accel table from the accels of all menus
@@ -122,14 +126,16 @@ private:
     // common part of Append/Insert (behaves as Append is pos == (size_t)-1)
     bool DoInsertOrAppend(wxMenuItem *item, size_t pos = (size_t)-1);
 
-    // terminate the current radio group, if any
-    void EndRadioGroup();
+
+    // This variable contains the description of the radio item groups and
+    // allows to find whether an item at the given position is part of the
+    // group and also where its group starts and ends.
+    //
+    // It is initially NULL and only allocated if we have any radio items.
+    wxMenuRadioItemsData *m_radioData;
 
     // if true, insert a breal before appending the next item
     bool m_doBreak;
-
-    // the position of the first item in the current radio group or -1
-    int m_startRadioGroup;
 
     // the menu handle of this menu
     WXHMENU m_hMenu;

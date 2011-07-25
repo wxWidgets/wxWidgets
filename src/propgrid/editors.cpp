@@ -774,7 +774,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     const wxBitmap* itemBitmap = NULL;
 
-    if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().Ok() && comValIndex == -1 )
+    if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
         itemBitmap = &choices.Item(item).GetBitmap();
 
     //

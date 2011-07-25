@@ -205,7 +205,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter& items,
 
         wxDoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
 
-        if( m_font.Ok() )
+        if( m_font.IsOk() )
             wxDoChangeFont( w, m_font );
 
         m_widgetArray.Insert(w, pos);
@@ -429,7 +429,7 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
     // Note that this causes the widget to be resized back
     // to its original size! We therefore have to set the size
     // back again. TODO: a better way in Motif?
-    if (m_mainWidget && m_font.Ok())
+    if (m_mainWidget && m_font.IsOk())
     {
         Display* dpy = XtDisplay((Widget) m_mainWidget);
         int width, height, width1, height1;

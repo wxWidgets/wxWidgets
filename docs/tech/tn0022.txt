@@ -1,6 +1,13 @@
                         Making a new wxWidgets release
                         ==============================
 
+Before making the release
+-------------------------
+
+Update docs/readme.txt. Please review its contents in addition to just
+changing the version number.
+
+
 Creating release files
 ----------------------
 
@@ -25,9 +32,31 @@ IMPORTANT NOTE: You *must* run this script from a clean source tree, that is,
           release. If you have legitimate modifications in the tree that need
           to be in the release, commit them first.
 
+To generate the windows installer (.exe) and the documentation files (chm and htb formats)
+run:
 
-Also run doxygen to create HTML documentation and pack it in .tar.bz2 and .zip
-formats.
+build\tools\bld_chm_exe.bat
+
+which depends on the wxwidgets.iss file, and generates output in the %DAILY% directory. It 
+assumes a clean copy of the wxWidgets source tree in %INNO%. Temporary files will be generated 
+in the tree from which the batch file is run. It depends on doxygen, a number of gnu
+win32 tools and Microsofts htmlhelp compiler. The wxwidgets.iss file should not need 
+editing, but you will want to check that the bld_chm_exe.bat has the correct version number.
+
+
+
+Alternative non official release scripts
+----------------------------------------
+
+If you use git-svn, then you can use alternative script that avoids the
+problems such as using non-clean tree and also has better handling of the ends
+of lines conversions. To use it you need to run
+
+- build/tools/svn-find-native-eols.pl
+- build/tools/git-make-release
+- build/tools/make-html-docs
+
+(the last one can also be used without git).
 
 
 Uploading
@@ -37,7 +66,7 @@ Upload the files to SourceForge (the simplest is to scp them to
 sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z) and to
 ftp.wxwidgets.org (ask Chris to do it).
 
-Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it).
+Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 
 
 Announcement

@@ -3,5 +3,12 @@ WXTOOLKITUPPER = CARBON
 
 #include "wx.xcconfig"
 
+MACOSX_DEPLOYMENT_TARGET = 10.4
+
+GCC_VERSION = 4.2
+GCC_VERSION[arch=ppc] = 4.0
+
+ARCHS = ppc i386
+
 OTHER_LDFLAGS = -framework WebKit -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework AGL -framework OpenGL -framework QuickTime
-VALID_ARCHS = i386 ppc ppc7400 ppc970
+

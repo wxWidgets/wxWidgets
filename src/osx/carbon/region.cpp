@@ -89,8 +89,8 @@ wxRegion::wxRegion(long x, long y, long w, long h)
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
     m_refData = new wxRegionRefData(topLeft.x , topLeft.y ,
-                                    topLeft.x - bottomRight.x ,
-                                    topLeft.y - bottomRight.y);
+                                    bottomRight.x - topLeft.x,
+                                    bottomRight.y - topLeft.y);
 }
 
 wxRegion::wxRegion(const wxRect& rect)
@@ -191,6 +191,8 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
         // nothing to do
         return true;
 
+    AllocExclusive();
+
     verify_noerr( HIShapeOffset( M_REGION , x , y ) ) ;
 
     return true ;
@@ -200,19 +202,9 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 //! Union /e region with this.
 bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 {
-    wxCHECK_MSG( region.Ok(), false, wxT("invalid wxRegion") );
+    wxCHECK_MSG( region.IsOk(), false, wxT("invalid wxRegion") );
 
-    // Don't change shared data
-    if (!m_refData)
-    {
-        m_refData = new wxRegionRefData();
-    }
-    else if (m_refData->GetRefCount() > 1)
-    {
-        wxRegionRefData* ref = (wxRegionRefData*)m_refData;
-        UnRef();
-        m_refData = new wxRegionRefData(*ref);
-    }
+    AllocExclusive();
 
     switch (op)
     {
@@ -250,11 +242,21 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 //# Information on region
 //-----------------------------------------------------------------------------
 
-bool wxRegion::DoIsEqual(const wxRegion& WXUNUSED(region)) const
+bool wxRegion::DoIsEqual(const wxRegion& region) const
 {
-    wxFAIL_MSG( wxT("not implemented") );
+    // There doesn't seem to be any native function for checking the equality
+    // of HIShapes so we compute their differences to determine if they are
+    // equal.
+    wxRegion r(*this);
+    r.Subtract(region);
 
-    return false;
+    if ( !r.IsEmpty() )
+        return false;
+
+    wxRegion r2(region);
+    r2.Subtract(*this);
+
+    return r2.IsEmpty();
 }
 
 // Outer bounds of region

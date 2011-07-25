@@ -126,12 +126,12 @@ bool wxPalette::GetRGB(int pixel,
 
 int wxPalette::GetColoursCount() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid palette") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid palette") );
     return M_PALETTEDATA->m_count;
 }
 
 palette_t *wxPalette::GetMGLpalette_t() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid palette") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid palette") );
     return M_PALETTEDATA->m_entries;
 }

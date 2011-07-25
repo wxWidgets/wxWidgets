@@ -150,10 +150,10 @@ MyDllApp::MyDllApp()
 
     Connect(wxEVT_IDLE, wxIdleEventHandler(MyDllApp::OnIdle));
     Connect(CMD_SHOW_WINDOW,
-            wxEVT_COMMAND_THREAD,
+            wxEVT_THREAD,
             wxThreadEventHandler(MyDllApp::OnShowWindow));
     Connect(CMD_TERMINATE,
-            wxEVT_COMMAND_THREAD,
+            wxEVT_THREAD,
             wxThreadEventHandler(MyDllApp::OnTerminate));
 }
 
@@ -288,7 +288,7 @@ void run_wx_gui_from_dll(const char *title)
 
     // Send a message to wx thread to show a new frame:
     wxThreadEvent *event =
-        new wxThreadEvent(wxEVT_COMMAND_THREAD, CMD_SHOW_WINDOW);
+        new wxThreadEvent(wxEVT_THREAD, CMD_SHOW_WINDOW);
     event->SetString(title);
     wxQueueEvent(wxApp::GetInstance(), event);
 }
@@ -303,7 +303,7 @@ void wx_dll_cleanup()
     // If wx main thread is running, we need to stop it. To accomplish this,
     // send a message telling it to terminate the app.
     wxThreadEvent *event =
-        new wxThreadEvent(wxEVT_COMMAND_THREAD, CMD_TERMINATE);
+        new wxThreadEvent(wxEVT_THREAD, CMD_TERMINATE);
     wxQueueEvent(wxApp::GetInstance(), event);
 
     // We must then wait for the thread to actually terminate.

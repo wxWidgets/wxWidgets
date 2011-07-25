@@ -95,10 +95,10 @@ void wxControlRenderer::DrawButtonLabel(const wxBitmap& bitmap,
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 
     wxString label = m_window->GetLabel();
-    if ( !label.empty() || bitmap.Ok() )
+    if ( !label.empty() || bitmap.IsOk() )
     {
         wxRect rectLabel = m_rect;
-        if ( bitmap.Ok() )
+        if ( bitmap.IsOk() )
         {
             rectLabel.Inflate(-marginX, -marginY);
         }
@@ -158,7 +158,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
 {
     // we may change the bitmap if we stretch it
     wxBitmap bmp = bitmap;
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
         return;
 
     int width = bmp.GetWidth(),

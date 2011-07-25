@@ -62,7 +62,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     Destroy();
 
     m_selected = bitmap;
-    if (m_selected.Ok())
+    if (m_selected.IsOk())
     {
         if (m_selected.GetPixmap())
         {
@@ -86,7 +86,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
 void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
 {
-    if (m_selected.Ok())
+    if (m_selected.IsOk())
     {
         if (width) (*width) = m_selected.GetWidth();
         if (height) (*height) = m_selected.GetHeight();

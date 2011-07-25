@@ -48,6 +48,7 @@ wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_CANCEL_DRAG, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, wxAuiNotebookEvent);
@@ -2306,6 +2307,16 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 {
+    if (m_is_dragging)
+    {
+        m_is_dragging = false;
+
+        wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_CANCEL_DRAG, m_windowId);
+        evt.SetSelection(GetIdxFromWindow(m_click_tab));
+        evt.SetOldSelection(evt.GetSelection());
+        evt.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(evt);
+    }
 }
 
 void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
@@ -2825,6 +2836,9 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
                       wxEVT_COMMAND_AUINOTEBOOK_END_DRAG,
                       wxAuiNotebook::OnTabEndDrag)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
+                      wxEVT_COMMAND_AUINOTEBOOK_CANCEL_DRAG,
+                      wxAuiNotebook::OnTabCancelDrag)
+    EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION,
                       wxAuiNotebook::OnTabDragMotion)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
@@ -2846,18 +2860,9 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
                       wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK,
                       wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
-
-#ifdef wxHAS_NATIVE_TAB_TRAVERSAL
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxAuiNotebook)
-#else
-    // Avoid clash with container event handler functions
-    EVT_SET_FOCUS(wxAuiNotebook::OnFocus)
-#endif
 END_EVENT_TABLE()
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxAuiNotebook, wxControl)
-
-wxAuiNotebook::wxAuiNotebook()
+void wxAuiNotebook::Init()
 {
     m_curpage = -1;
     m_tab_id_counter = wxAuiBaseTabCtrlId;
@@ -2865,18 +2870,6 @@ wxAuiNotebook::wxAuiNotebook()
     m_tab_ctrl_height = 20;
     m_requested_bmp_size = wxDefaultSize;
     m_requested_tabctrl_height = -1;
-}
-
-wxAuiNotebook::wxAuiNotebook(wxWindow *parent,
-                             wxWindowID id,
-                             const wxPoint& pos,
-                             const wxSize& size,
-                             long style) : wxControl(parent, id, pos, size, style)
-{
-    m_dummy_wnd = NULL;
-    m_requested_bmp_size = wxDefaultSize;
-    m_requested_tabctrl_height = -1;
-    InitNotebook(style);
 }
 
 bool wxAuiNotebook::Create(wxWindow* parent,
@@ -2897,9 +2890,6 @@ bool wxAuiNotebook::Create(wxWindow* parent,
 // code called by all constructors
 void wxAuiNotebook::InitNotebook(long style)
 {
-    WX_INIT_CONTROL_CONTAINER();
-    // SetCanFocus(false);
-
     SetName(wxT("wxAuiNotebook"));
     m_curpage = -1;
     m_tab_id_counter = wxAuiBaseTabCtrlId;
@@ -4113,6 +4103,18 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
 }
 
 
+
+void wxAuiNotebook::OnTabCancelDrag(wxAuiNotebookEvent& command_evt)
+{
+    wxAuiNotebookEvent& evt = (wxAuiNotebookEvent&)command_evt;
+
+    m_mgr.HideHint();
+
+    wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
+    wxCHECK_RET( src_tabs, _T("no source object?") );
+
+    src_tabs->SetCursor(wxCursor(wxCURSOR_ARROW));
+}
 
 wxAuiTabCtrl* wxAuiNotebook::GetTabCtrlFromPoint(const wxPoint& pt)
 {

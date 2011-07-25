@@ -611,6 +611,10 @@ public:
         Don't include the trailing separator in the returned string. This is
         the default (the value of this flag is 0) and exists only for symmetry
         with wxPATH_GET_SEPARATOR.
+
+        @note If the path is a toplevel one (e.g. @c "/" on Unix or @c "C:\" on
+              Windows), then the returned path will contain trailing separator
+              even with @c wxPATH_NO_SEPARATOR.
     */
     wxString GetPath(int flags = wxPATH_GET_VOLUME,
                      wxPathFormat format = wxPATH_NATIVE) const;

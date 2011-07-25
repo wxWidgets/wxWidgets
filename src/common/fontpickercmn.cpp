@@ -137,7 +137,7 @@ void wxFontPickerCtrl::UpdatePickerFromTextCtrl()
     //     string returned by wxFont::GetNativeFontInfoDesc() and not
     //     the user-friendly one returned by wxFont::GetNativeFontInfoUserDesc()
     wxFont f = String2Font(m_text->GetValue());
-    if (!f.Ok())
+    if (!f.IsOk())
         return;     // invalid user input
 
     if (M_PICKER->GetSelectedFont() != f)

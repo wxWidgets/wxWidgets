@@ -180,7 +180,7 @@ static wxCursor  gs_globalCursor = wxNullCursor;
 
 void wxSetCursor(const wxCursor& cursor)
 {
-    if ( cursor.Ok() )
+    if ( cursor.IsOk() )
     {
         if ( g_winMng )
             MGL_wmSetGlobalCursor(g_winMng, *cursor.GetMGLCursor());
@@ -225,11 +225,11 @@ void wxBeginBusyCursor(const wxCursor *cursor)
 {
     if ( gs_busyCount++ > 0 ) return;
 
-    wxASSERT_MSG( !gs_savedCursor.Ok(),
+    wxASSERT_MSG( !gs_savedCursor.IsOk(),
                   wxT("forgot to call wxEndBusyCursor, will leak memory") );
 
     gs_savedCursor = gs_globalCursor;
-    if ( cursor->Ok() )
+    if ( cursor->IsOk() )
         wxSetCursor(*cursor);
     else
         wxSetCursor(wxCursor(wxCURSOR_WAIT));

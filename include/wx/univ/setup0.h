@@ -302,20 +302,18 @@
 // usually more limited) implementations are used which allows to avoid the
 // dependency on the C++ run-time library.
 //
-// Default is 1 if compiler supports it. Currently this means not one of the
-// compilers mentioned in wxUSE_STD_DEFAULT comment and also not VC6 as it
-// needs non-default options for such build to avoid getting "fatal error
-// C1076: compiler limit : internal heap limit reached; use /Zm to specify a
-// higher limit" in its own standard headers, so you need to ensure you do
-// increase the heap size before enabling this option for this compiler.
+// Notice that the compilers mentioned in wxUSE_STD_DEFAULT comment above don't
+// support using standard containers and that VC6 needs non-default options for
+// such build to avoid getting "fatal error C1076: compiler limit : internal
+// heap limit reached; use /Zm to specify a higher limit" in its own standard
+// headers, so you need to ensure you do increase the heap size before enabling
+// this option for this compiler.
 //
-// Recommended setting: 1 unless you use a system without good implementation
-// of STL.
-#if defined(_MSC_VER) && _MSC_VER < 1300
-    #define wxUSE_STD_CONTAINERS 0
-#else
-    #define wxUSE_STD_CONTAINERS wxUSE_STD_DEFAULT
-#endif
+// Default is 0 for compatibility reasons.
+//
+// Recommended setting: 1 unless compatibility with the official wxWidgets
+// build and/or the existing code is a concern.
+#define wxUSE_STD_CONTAINERS 0
 
 // Use standard C++ streams if 1 instead of wx streams in some places. If
 // disabled, wx streams are used everywhere and wxWidgets doesn't depend on the

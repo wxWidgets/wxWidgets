@@ -761,6 +761,11 @@ void* wxProgressDialogTaskRunner::Entry()
         wxTdc.caption = m_sharedData.m_title.wx_str();
         wxTdc.message = m_sharedData.m_message.wx_str();
 
+        // MSWCommonTaskDialogInit() will add an IDCANCEL button but we need to
+        // give it the correct label.
+        wxTdc.btnOKLabel = m_sharedData.m_labelCancel;
+        wxTdc.useCustomLabels = true;
+
         wxTdc.MSWCommonTaskDialogInit( tdc );
         tdc.pfCallback = TaskDialogCallbackProc;
         tdc.lpCallbackData = (LONG_PTR) &m_sharedData;
@@ -769,15 +774,8 @@ void* wxProgressDialogTaskRunner::Entry()
         tdc.dwFlags &= ~TDF_EXPAND_FOOTER_AREA; // Expand in content area.
         tdc.dwCommonButtons = 0; // Don't use common buttons.
 
-        wxTdc.useCustomLabels = true;
-
         if ( m_sharedData.m_style & wxPD_CAN_SKIP )
             wxTdc.AddTaskDialogButton( tdc, Id_SkipBtn, 0, _("Skip") );
-
-        // Use a Cancel button when requested or use a Close button when
-        // the dialog does not automatically hide.
-        wxTdc.AddTaskDialogButton( tdc, IDCANCEL, 0,
-                                   m_sharedData.m_labelCancel );
 
         tdc.dwFlags |= TDF_CALLBACK_TIMER | TDF_SHOW_PROGRESS_BAR;
 

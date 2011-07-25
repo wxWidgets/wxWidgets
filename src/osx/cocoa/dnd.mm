@@ -64,7 +64,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 
 - (id)init
 {
-    [super init];
+    self = [super init];
     dragFinished = NO;
     resultCode = NSDragOperationNone;
     impl = 0;

@@ -711,7 +711,7 @@ void FormMain::OnPropertyGridChange( wxPropertyGridEvent& event )
     if ( name == wxT("Font") )
     {
         wxFont font = wxANY_AS(value, wxFont);
-        wxASSERT( font.Ok() );
+        wxASSERT( font.IsOk() );
 
         m_pPropGridManager->SetFont( font );
     }

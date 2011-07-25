@@ -394,7 +394,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswuddll\wxprec_richtextdll.pch"
 				ObjectFile="vc_mswuddll\richtext\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw292ud_richtext_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw293ud_richtext_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -404,7 +404,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw292ud_richtext_vc_custom;WXUSINGDLL;WXMAKINGDLL_RICHTEXT"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw293ud_richtext_vc_custom;WXUSINGDLL;WXMAKINGDLL_RICHTEXT"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -415,14 +415,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxmsw29ud_adv.lib ..\..\lib\vc_dll\wxmsw29ud_html.lib ..\..\lib\vc_dll\wxbase29ud_xml.lib ..\..\lib\vc_dll\wxmsw29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw292ud_richtext_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw293ud_richtext_vc_custom.dll"
 				LinkIncremental="2"
 				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_richtext.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw292ud_richtext_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw293ud_richtext_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -485,7 +485,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswudll\wxprec_richtextdll.pch"
 				ObjectFile="vc_mswudll\richtext\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw292u_richtext_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw293u_richtext_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -495,7 +495,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw292u_richtext_vc_custom;WXUSINGDLL;WXMAKINGDLL_RICHTEXT"
+				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw293u_richtext_vc_custom;WXUSINGDLL;WXMAKINGDLL_RICHTEXT"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -506,14 +506,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxmsw29u_adv.lib ..\..\lib\vc_dll\wxmsw29u_html.lib ..\..\lib\vc_dll\wxbase29u_xml.lib ..\..\lib\vc_dll\wxmsw29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw292u_richtext_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw293u_richtext_vc_custom.dll"
 				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_richtext.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw292u_richtext_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw293u_richtext_vc_custom.pdb"
 				TargetMachine="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -580,7 +580,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_richtextdll.pch"
 				ObjectFile="vc_mswunivuddll\richtext\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv292ud_richtext_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv293ud_richtext_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -590,7 +590,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv292ud_richtext_vc_custom;WXUSINGDLL;WXMAKINGDLL_RICHTEXT"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv293ud_richtext_vc_custom;WXUSINGDLL;WXMAKINGDLL_RICHTEXT"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -601,14 +601,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxmswuniv29ud_adv.lib ..\..\lib\vc_dll\wxmswuniv29ud_html.lib ..\..\lib\vc_dll\wxbase29ud_xml.lib ..\..\lib\vc_dll\wxmswuniv29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxmswuniv292ud_richtext_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmswuniv293ud_richtext_vc_custom.dll"
 				LinkIncremental="2"
 				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29ud_richtext.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv292ud_richtext_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv293ud_richtext_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -671,7 +671,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswunivudll\wxprec_richtextdll.pch"
 				ObjectFile="vc_mswunivudll\richtext\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv292u_richtext_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv293u_richtext_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -681,7 +681,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv292u_richtext_vc_custom;WXUSINGDLL;WXMAKINGDLL_RICHTEXT"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv293u_richtext_vc_custom;WXUSINGDLL;WXMAKINGDLL_RICHTEXT"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -692,14 +692,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxmswuniv29u_adv.lib ..\..\lib\vc_dll\wxmswuniv29u_html.lib ..\..\lib\vc_dll\wxbase29u_xml.lib ..\..\lib\vc_dll\wxmswuniv29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
-				OutputFile="..\..\lib\vc_dll\wxmswuniv292u_richtext_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmswuniv293u_richtext_vc_custom.dll"
 				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_richtext.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv292u_richtext_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv293u_richtext_vc_custom.pdb"
 				TargetMachine="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -1047,11 +1047,31 @@
 			UniqueIdentifier="{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}"
 			>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextbackgroundpage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextborderspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextbuffer.h"
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextbulletspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextdialogpage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextfontpage.h"
 				>
 			</File>
 			<File
@@ -1067,11 +1087,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextindentspage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextliststylepage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextmarginspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextprint.h"
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextsizepage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextstyledlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextstylepage.h"
 				>
 			</File>
 			<File
@@ -1080,6 +1120,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\richtext\richtextsymboldlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtext\richtextuicustomization.h"
 				>
 			</File>
 			<File

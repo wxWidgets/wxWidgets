@@ -153,7 +153,8 @@ public:
         ProcessData(&*Values.begin(), Values.size(), pfnWriter, pfnReader);
     }
 
-    bool Ok(void) const {
+    bool IsOk() const
+    {
         return m_ok;
     }
 };
@@ -214,8 +215,8 @@ void DataStreamTestCase::LongLongRW()
 
     CPPUNIT_ASSERT( TestRW(wxLongLong(0x12345678l)) == wxLongLong(0x12345678l) );
     CPPUNIT_ASSERT( TestRW(wxLongLong(0x12345678l, 0xabcdef01l)) == wxLongLong(0x12345678l, 0xabcdef01l) );
-    CPPUNIT_ASSERT( TestMultiRW<wxLongLong>(ValuesLL, &wxDataOutputStream::WriteLL, &wxDataInputStream::ReadLL).Ok() );
-    CPPUNIT_ASSERT( TestMultiRW<wxULongLong>(ValuesULL, &wxDataOutputStream::WriteLL, &wxDataInputStream::ReadLL).Ok() );
+    CPPUNIT_ASSERT( TestMultiRW<wxLongLong>(ValuesLL, &wxDataOutputStream::WriteLL, &wxDataInputStream::ReadLL).IsOk() );
+    CPPUNIT_ASSERT( TestMultiRW<wxULongLong>(ValuesULL, &wxDataOutputStream::WriteLL, &wxDataInputStream::ReadLL).IsOk() );
 }
 #endif
 
@@ -238,8 +239,8 @@ void DataStreamTestCase::Int64RW()
 
     CPPUNIT_ASSERT( TestRW(wxUint64(0x12345678l)) == wxUint64(0x12345678l) );
     CPPUNIT_ASSERT( TestRW((wxUint64(0x12345678l) << 32) + wxUint64(0xabcdef01l)) == (wxUint64(0x12345678l) << 32) + wxUint64(0xabcdef01l) );
-    CPPUNIT_ASSERT( TestMultiRW<wxInt64>(ValuesI64, &wxDataOutputStream::Write64, &wxDataInputStream::Read64).Ok() );
-    CPPUNIT_ASSERT( TestMultiRW<wxUint64>(ValuesUI64, &wxDataOutputStream::Write64, &wxDataInputStream::Read64).Ok() );
+    CPPUNIT_ASSERT( TestMultiRW<wxInt64>(ValuesI64, &wxDataOutputStream::Write64, &wxDataInputStream::Read64).IsOk() );
+    CPPUNIT_ASSERT( TestMultiRW<wxUint64>(ValuesUI64, &wxDataOutputStream::Write64, &wxDataInputStream::Read64).IsOk() );
 }
 #endif
 

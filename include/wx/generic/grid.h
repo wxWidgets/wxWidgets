@@ -432,9 +432,9 @@ public:
     void SetKind(wxAttrKind kind) { m_attrkind = kind; }
 
     // accessors
-    bool HasTextColour() const { return m_colText.Ok(); }
-    bool HasBackgroundColour() const { return m_colBack.Ok(); }
-    bool HasFont() const { return m_font.Ok(); }
+    bool HasTextColour() const { return m_colText.IsOk(); }
+    bool HasBackgroundColour() const { return m_colBack.IsOk(); }
+    bool HasFont() const { return m_font.IsOk(); }
     bool HasAlignment() const
     {
         return m_hAlign != wxALIGN_INVALID || m_vAlign != wxALIGN_INVALID;

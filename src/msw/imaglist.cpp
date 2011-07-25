@@ -299,7 +299,7 @@ bool wxImageList::Draw(int index,
     if ( solidBackground )
     {
         const wxBrush& brush = dc.GetBackground();
-        if ( brush.Ok() )
+        if ( brush.IsOk() )
         {
             clr = wxColourToRGB(brush.GetColour());
         }
@@ -399,7 +399,7 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
     wxMask *pMask;
     bool deleteMask = false;
 
-    if ( mask.Ok() )
+    if ( mask.IsOk() )
     {
         hbmpMask = GetHbitmapOf(mask);
         pMask = NULL;

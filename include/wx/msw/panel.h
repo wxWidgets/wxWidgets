@@ -3,7 +3,7 @@
 // Purpose:     wxMSW-specific wxPanel class.
 // Author:      Vadim Zeitlin
 // Created:     2011-03-18
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,6 +33,8 @@ public:
 
         Create(parent, winid, pos, size, style, name);
     }
+
+    virtual ~wxPanel();
 
     // This is overridden for MSW to return true for all panels that are child
     // of a window with themed background (such as wxNotebook) which should

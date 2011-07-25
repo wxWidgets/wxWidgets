@@ -41,6 +41,10 @@ public:
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxFileDialogNameStr);
 
+#if wxOSX_USE_COCOA
+    ~wxFileDialog();
+#endif
+    
     virtual void GetPaths(wxArrayString& paths) const { paths = m_paths; }
     virtual void GetFilenames(wxArrayString& files) const { files = m_fileNames ; }
 
@@ -81,6 +85,7 @@ protected:
     int m_firstFileTypeFilter;
     wxArrayString m_currentExtensions;
     WX_NSObject m_delegate;
+    WX_NSObject m_sheetDelegate;
 #endif
 };
 

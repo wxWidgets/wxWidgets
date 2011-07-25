@@ -55,7 +55,7 @@ void wxMemoryDCImpl::Init()
 
 wxMemoryDCImpl::~wxMemoryDCImpl()
 {
-    if ( m_selected.Ok() )
+    if ( m_selected.IsOk() )
     {
         m_selected.EndRawAccess() ;
         wxDELETE(m_graphicContext);
@@ -64,14 +64,14 @@ wxMemoryDCImpl::~wxMemoryDCImpl()
 
 void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
-    if ( m_selected.Ok() )
+    if ( m_selected.IsOk() )
     {
         m_selected.EndRawAccess() ;
         wxDELETE(m_graphicContext);
     }
 
     m_selected = bitmap;
-    if (m_selected.Ok())
+    if (m_selected.IsOk())
     {
         if ( m_selected.GetDepth() != 1 )
             m_selected.UseAlpha() ;
@@ -97,7 +97,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
 void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
 {
-    if (m_selected.Ok())
+    if (m_selected.IsOk())
     {
         if (width)
             (*width) = m_selected.GetWidth();

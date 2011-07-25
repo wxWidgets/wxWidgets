@@ -107,7 +107,7 @@ wxWindow *wxButtonBase::SetDefault()
     return tlw->SetDefaultItem(this);
 }
 
-void wxButtonBase::SetBitmapPosition(wxDirection dir)
+void wxAnyButtonBase::SetBitmapPosition(wxDirection dir)
 {
     wxASSERT_MSG( !(dir & ~wxDIRECTION_MASK), "non-direction flag used" );
     wxASSERT_MSG( !!(dir & wxLEFT) +

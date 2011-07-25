@@ -56,7 +56,7 @@ public :
         MenuItemIndex i = FindMenuItemIndex() ;
         if ( i > 0 )
         {
-            if ( bitmap.Ok() )
+            if ( bitmap.IsOk() )
             {
 #if wxUSE_BMPBUTTON
                 ControlButtonContentInfo info ;

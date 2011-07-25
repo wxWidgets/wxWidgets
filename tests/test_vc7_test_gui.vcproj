@@ -620,6 +620,9 @@
 				RelativePath=".\config\config.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\datepickerctrltest.cpp">
+			</File>
+			<File
 				RelativePath=".\dummy.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">

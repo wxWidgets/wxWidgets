@@ -585,7 +585,7 @@ wxColour wxMonoColourScheme::GetBackground(wxWindow *win) const
     }
 
     // doesn't depend on the state
-    if ( !col.Ok() )
+    if ( !col.IsOk() )
     {
         col = GetBg();
     }
@@ -770,7 +770,7 @@ wxBitmap wxMonoRenderer::GetIndicator(IndicatorType indType, int flags)
     GetIndicatorsFromFlags(flags, indState, indStatus);
 
     wxBitmap& bmp = m_bmpIndicators[indType][indState][indStatus];
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
     {
         const char **xpm = ms_xpmIndicators[indType][indState][indStatus];
         if ( xpm )
@@ -787,7 +787,7 @@ wxBitmap wxMonoRenderer::GetFrameButtonBitmap(FrameButtonType type)
 {
     if ( type == FrameButton_Close )
     {
-        if ( !m_bmpFrameClose.Ok() )
+        if ( !m_bmpFrameClose.IsOk() )
         {
             static const char *xpmFrameClose[] = {
             /* columns rows colors chars-per-pixel */
@@ -1045,7 +1045,7 @@ void wxMonoRenderer::DrawArrow(wxDC& dc,
     wxCHECK_RET( arrowDir != Arrow_Max, wxT("invalid arrow direction") );
 
     wxBitmap& bmp = m_bmpArrows[arrowDir];
-    if ( !bmp.Ok() )
+    if ( !bmp.IsOk() )
     {
         bmp = wxBitmap(ms_xpmArrows[arrowDir]);
     }

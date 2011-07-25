@@ -167,6 +167,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
         NSRect rectBox = NSMakeRect( 0 , 0 , 192 , 40 );
         accessoryView = [[wxMacFontPanelAccView alloc] initWithFrame:rectBox];
         [fontPanel setAccessoryView:accessoryView];
+        [accessoryView release];
 
         [fontPanel setDefaultButtonCell:[[accessoryView okButton] cell]] ;
     }
@@ -174,14 +175,14 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     [accessoryView resetFlags];
 #if wxOSX_USE_COCOA
     wxFont font = *wxNORMAL_FONT ;
-    if ( fontdata.m_initialFont.Ok() )
+    if ( fontdata.m_initialFont.IsOk() )
     {
         font = fontdata.m_initialFont ;
     }
 
     [[NSFontPanel sharedFontPanel] setPanelFont: font.OSXGetNSFont() isMultiple:NO];
 
-    if(fontdata.m_fontColour.Ok())
+    if(fontdata.m_fontColour.IsOk())
         [[NSColorPanel sharedColorPanel] setColor:
             [NSColor colorWithCalibratedRed:fontdata.m_fontColour.Red() / 255.0
                                         green:fontdata.m_fontColour.Green() / 255.0
@@ -220,7 +221,6 @@ int RunMixedFontDialog(wxFontDialog* dialog)
         retval = wxID_OK ;
     }
     [fontPanel setAccessoryView:nil];
-    [accessoryView release];
 
     return retval ;
 }
@@ -373,7 +373,7 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 
     //if the font is valid set the default (selected) font of the
     //NSFontDialog to that font
-    if (thewxfont.Ok())
+    if (thewxfont.IsOk())
     {
         NSFontTraitMask theMask = 0;
 
@@ -401,7 +401,7 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 
     }
 
-    if(m_fontData.m_fontColour.Ok())
+    if(m_fontData.m_fontColour.IsOk())
         [[NSColorPanel sharedColorPanel] setColor:
             [NSColor colorWithCalibratedRed:m_fontData.m_fontColour.Red() / 255.0
                                         green:m_fontData.m_fontColour.Green() / 255.0

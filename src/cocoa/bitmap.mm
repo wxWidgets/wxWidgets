@@ -166,7 +166,7 @@ WX_NSBitmapImageRep wxBitmap::GetNSBitmapImageRep()
 
 WX_NSImage wxBitmap::GetNSImage(bool useMask) const
 {
-    if(!Ok())
+    if(!IsOk())
         return nil;
     NSImage *nsimage = [[[NSImage alloc]
             initWithSize:NSMakeSize(GetWidth(), GetHeight())] autorelease];
@@ -351,7 +351,7 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
     wxImage image;
     if(!image.LoadFile(filename,type))
         return false;
-    if(!image.Ok())
+    if(!image.IsOk())
         return false;
     *this = wxBitmap(image);
     return true;
@@ -428,7 +428,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 {
     wxAutoNSAutoreleasePool pool;
-    if(!Ok())
+    if(!IsOk())
         return wxNullBitmap;
     NSImage *nsimage = GetNSImage(false);
 
@@ -450,7 +450,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 wxImage wxBitmap::ConvertToImage() const
 {
     wxAutoNSAutoreleasePool pool;
-    if(!Ok())
+    if(!IsOk())
         return /*wxImage(5,5)*/wxNullImage;
     NSImage *nsimage = GetNSImage(false /* don't use mask */);
     wxImage newImage(M_BITMAPDATA->m_width,M_BITMAPDATA->m_height);
@@ -476,7 +476,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
     wxAutoNSAutoreleasePool pool;
     UnRef();
 
-    wxCHECK_MSG(image.Ok(), false, wxT("invalid image"));
+    wxCHECK_MSG(image.IsOk(), false, wxT("invalid image"));
     wxCHECK_MSG(depth == -1 || depth == 1, false, wxT("invalid bitmap depth"));
 
     m_refData = new wxBitmapRefData();
@@ -511,7 +511,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-    if(!Ok())
+    if(!IsOk())
         return NULL;
 
     NSBitmapImageRep *bitmapRep = M_BITMAPDATA->m_cocoaNSBitmapImageRep;
@@ -657,7 +657,7 @@ static bool wxMask_CreateFromBitmapData(PixelData srcData, const wxColour& colou
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
     wxAutoNSAutoreleasePool pool;
-    if(!bitmap.Ok())
+    if(!bitmap.IsOk())
         return false;
     int bmpWidth = bitmap.GetWidth();
     int bmpHeight = bitmap.GetHeight();

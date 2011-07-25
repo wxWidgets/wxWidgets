@@ -32,7 +32,9 @@ public:
     MyFrame(const wxString& title);
     virtual ~MyFrame();
 
-    void AddDirectory(const wxString& dir);
+    // Add an entry of the specified type asking the user for the filename if
+    // the one passed to this function is empty.
+    void AddEntry(wxFSWPathType type, wxString filename = wxString());
 
     bool CreateWatcherIfNecessary();
 
@@ -47,6 +49,7 @@ private:
     void OnAbout(wxCommandEvent& event);
 
     void OnAdd(wxCommandEvent& event);
+    void OnAddTree(wxCommandEvent& event);
     void OnRemove(wxCommandEvent& event);
 
     void OnFileSystemEvent(wxFileSystemWatcherEvent& event);
@@ -87,7 +90,7 @@ public:
         if ( m_frame->CreateWatcherIfNecessary() )
         {
             if ( !m_dirToWatch.empty() )
-                m_frame->AddDirectory(m_dirToWatch);
+                m_frame->AddEntry(wxFSWPath_Dir, m_dirToWatch);
         }
     }
 
@@ -144,7 +147,8 @@ MyFrame::MyFrame(const wxString& title)
         MENU_ID_WATCH = 101,
 
         BTN_ID_ADD = 200,
-        BTN_ID_REMOVE = 201,
+        BTN_ID_ADD_TREE,
+        BTN_ID_REMOVE
     };
 
     // ================================================================
@@ -194,9 +198,11 @@ MyFrame::MyFrame(const wxString& title)
 
     // buttons
     wxButton* buttonAdd = new wxButton(panel, BTN_ID_ADD, "&Add");
+    wxButton* buttonAddTree = new wxButton(panel, BTN_ID_ADD_TREE, "Add &tree");
     wxButton* buttonRemove = new wxButton(panel, BTN_ID_REMOVE, "&Remove");
     wxSizer *btnSizer = new wxGridSizer(2);
     btnSizer->Add(buttonAdd, wxSizerFlags().Center().Border(wxALL));
+    btnSizer->Add(buttonAddTree, wxSizerFlags().Center().Border(wxALL));
     btnSizer->Add(buttonRemove, wxSizerFlags().Center().Border(wxALL));
 
     // and put it all together
@@ -253,6 +259,8 @@ MyFrame::MyFrame(const wxString& title)
     // buttons
     Connect(BTN_ID_ADD, wxEVT_COMMAND_BUTTON_CLICKED,
             wxCommandEventHandler(MyFrame::OnAdd));
+    Connect(BTN_ID_ADD_TREE, wxEVT_COMMAND_BUTTON_CLICKED,
+            wxCommandEventHandler(MyFrame::OnAddTree));
     Connect(BTN_ID_REMOVE, wxEVT_COMMAND_BUTTON_CLICKED,
             wxCommandEventHandler(MyFrame::OnRemove));
 
@@ -318,29 +326,54 @@ void MyFrame::OnWatch(wxCommandEvent& event)
 
 void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
-    wxCHECK_RET(m_watcher, "Watcher not initialized");
-
-    // TODO account for adding the files as well
-    const wxString& dir = wxDirSelector("Choose a folder to watch", "",
-                                    wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
-    if ( dir.empty() )
-        return;
-
-    AddDirectory(dir);
+    AddEntry(wxFSWPath_Dir);
 }
 
-void MyFrame::AddDirectory(const wxString& dir)
+void MyFrame::OnAddTree(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogDebug("Adding directory: '%s'", dir);
+    AddEntry(wxFSWPath_Tree);
+}
 
-    if (!m_watcher->Add(wxFileName::DirName(dir), wxFSW_EVENT_ALL))
+void MyFrame::AddEntry(wxFSWPathType type, wxString filename)
+{
+    if ( filename.empty() )
     {
-        wxLogError("Error adding '%s' to watched paths", dir);
+        // TODO account for adding the files as well
+        filename = wxDirSelector("Choose a folder to watch", "",
+                                 wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
+        if ( filename.empty() )
+            return;
     }
-    else
+
+    wxCHECK_RET(m_watcher, "Watcher not initialized");
+
+    wxLogDebug("Adding %s: '%s'",
+               filename,
+               type == wxFSWPath_Dir ? "directory" : "directory tree");
+
+    bool ok = false;
+    switch ( type )
     {
-        m_filesList->InsertItem(m_filesList->GetItemCount(), dir);
+        case wxFSWPath_Dir:
+            ok = m_watcher->Add(wxFileName::DirName(filename));
+            break;
+
+        case wxFSWPath_Tree:
+            ok = m_watcher->AddTree(wxFileName::DirName(filename));
+            break;
+
+        case wxFSWPath_File:
+        case wxFSWPath_None:
+            wxFAIL_MSG( "Unexpected path type." );
     }
+
+    if (!ok)
+    {
+        wxLogError("Error adding '%s' to watched paths", filename);
+        return;
+    }
+
+    m_filesList->InsertItem(m_filesList->GetItemCount(), filename);
 }
 
 void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))

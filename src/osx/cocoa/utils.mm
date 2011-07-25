@@ -179,7 +179,7 @@ void wxBell()
 @implementation ModalDialogDelegate
 - (id)init
 {
-    [super init];
+    self = [super init];
     sheetFinished = NO;
     resultCode = -1;
     impl = 0;
@@ -379,7 +379,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
         [view lockFocus];
         // we use this method as other methods force a repaint, and this method can be
         // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
-        NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
+        NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]];
         [view unlockFocus];
         if ( [rep respondsToSelector:@selector(CGImage)] )
         {
@@ -388,8 +388,6 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
             CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
             // since our context is upside down we dont use CGContextDrawImage
             wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
-            CGImageRelease(cgImageRef);
-            cgImageRef = NULL;
         }
         else
         {

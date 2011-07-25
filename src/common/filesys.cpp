@@ -255,7 +255,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 #else
 #error One of wxUSE_FILE or wxUSE_FFILE must be set to 1 for wxFSHandler to work
 #endif
-    if ( !is->Ok() )
+    if ( !is->IsOk() )
     {
         delete is;
         return NULL;

@@ -40,6 +40,9 @@ private:
 #if wxUSE_STD_STRING
         CPPUNIT_TEST( StdString );
 #endif
+#if wxUSE_LONGLONG
+        CPPUNIT_TEST( LongLongPrintf );
+#endif
         CPPUNIT_TEST( Sscanf );
         CPPUNIT_TEST( RepeatedPrintf );
         CPPUNIT_TEST( ArgsValidation );
@@ -49,6 +52,9 @@ private:
     void CharPrintf();
 #if wxUSE_STD_STRING
     void StdString();
+#endif
+#if wxUSE_LONGLONG
+    void LongLongPrintf();
 #endif
     void Sscanf();
     void RepeatedPrintf();
@@ -151,6 +157,18 @@ void VarArgTestCase::StdString()
     CPPUNIT_ASSERT_EQUAL( "string widechar(2).", s );
 }
 #endif // wxUSE_STD_STRING
+
+#if wxUSE_LONGLONG
+void VarArgTestCase::LongLongPrintf()
+{
+    const char * const llfmt = "%" wxLongLongFmtSpec "d";
+
+    CPPUNIT_ASSERT_EQUAL( "17", wxString::Format(llfmt, wxLL(17)) );
+
+    wxLongLong ll = 1234567890;
+    CPPUNIT_ASSERT_EQUAL( "1234567890", wxString::Format(llfmt, ll) );
+}
+#endif // wxUSE_LONGLONG
 
 void VarArgTestCase::Sscanf()
 {

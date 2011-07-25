@@ -53,9 +53,14 @@ public:
       AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
 #endif // wxUSE_EVENTLOOP_SOURCE
 
-    void ObserverCallBack(CFRunLoopObserverRef observer, int activity);
 
 protected:
+    void CommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
+    void DefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
+
+    static void OSXCommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity, void *info);
+    static void OSXDefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity, void *info);
+
     // get the currently executing CFRunLoop
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;
 
@@ -74,8 +79,11 @@ protected:
     // cfrunloop
     CFRunLoopRef m_runLoop;
 
-    // runloop observer
-    CFRunLoopObserverRef m_runLoopObserver;
+    // common modes runloop observer
+    CFRunLoopObserverRef m_commonModeRunLoopObserver;
+
+    // default mode runloop observer
+    CFRunLoopObserverRef m_defaultModeRunLoopObserver;
 
 private:
     // process all already pending events and dispatch a new one (blocking

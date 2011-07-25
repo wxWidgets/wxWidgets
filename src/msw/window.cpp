@@ -186,7 +186,7 @@ extern wxMenu *wxCurrentPopupMenu;
 // This is a hack used by the owner-drawn wxButton implementation to ensure
 // that the brush used for erasing its background is correctly aligned with the
 // control.
-extern wxWindowMSW *wxWindowBeingErased = NULL;
+wxWindowMSW *wxWindowBeingErased = NULL;
 #endif // wxUSE_UXTHEME
 
 namespace
@@ -829,6 +829,7 @@ bool wxWindowMSW::SetFont(const wxFont& font)
 
     return true;
 }
+
 bool wxWindowMSW::SetCursor(const wxCursor& cursor)
 {
     if ( !wxWindowBase::SetCursor(cursor) )
@@ -838,7 +839,10 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
     }
 
     // don't "overwrite" busy cursor
-    if ( m_cursor.Ok() && !wxIsBusy() )
+    if ( wxIsBusy() )
+        return true;
+
+    if ( m_cursor.IsOk() )
     {
         // normally we should change the cursor only if it's over this window
         // but we should do it always if we capture the mouse currently
@@ -864,6 +868,26 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
             ::SetCursor(GetHcursorOf(m_cursor));
         }
         //else: will be set later when the mouse enters this window
+    }
+    else // Invalid cursor: this means reset to the default one.
+    {
+        // To revert to the correct cursor we need to find the window currently
+        // under the cursor and ask it to set its cursor itself as only it
+        // knows what it is.
+        POINT pt;
+        if ( !::GetCursorPos(&pt) )
+        {
+            wxLogLastError(wxT("GetCursorPos"));
+            return false;
+        }
+
+        const wxWindow* win = wxFindWindowAtPoint(wxPoint(pt.x, pt.y));
+        if ( !win )
+            win = this;
+
+        ::SendMessage(GetHwndOf(win), WM_SETCURSOR,
+                      (WPARAM)GetHwndOf(win),
+                      MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
     }
 
     return true;
@@ -1787,6 +1811,15 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         if ( y )
             *y = rect.bottom;
     }
+
+    // The size of the client window can't be negative but ::GetClientRect()
+    // can return negative size for an extremely small (1x1) window with
+    // borders so ensure that we correct it here as having negative sizes is
+    // completely unexpected.
+    if ( x && *x < 0 )
+        *x = 0;
+    if ( y && *y < 0 )
+        *y = 0;
 }
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
@@ -2140,7 +2173,7 @@ void wxWindowMSW::DoGetTextExtent(const wxString& string,
                                   int *externalLeading,
                                   const wxFont *fontToUse) const
 {
-    wxASSERT_MSG( !fontToUse || fontToUse->Ok(),
+    wxASSERT_MSG( !fontToUse || fontToUse->IsOk(),
                     wxT("invalid font in GetTextExtent()") );
 
     HFONT hfontToUse;
@@ -2204,18 +2237,16 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->UpdateUI();
 
+    wxPoint pt;
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
-        wxPoint mouse = ScreenToClient(wxGetMousePosition());
-        x = mouse.x; y = mouse.y;
+        pt = wxGetMousePosition();
+    }
+    else
+    {
+        pt = ClientToScreen(wxPoint(x, y));
     }
 
-    HWND hWnd = GetHwnd();
-    HMENU hMenu = GetHmenuOf(menu);
-    POINT point;
-    point.x = x;
-    point.y = y;
-    ::ClientToScreen(hWnd, &point);
 #if defined(__WXWINCE__)
     static const UINT flags = 0;
 #else // !__WXWINCE__
@@ -2233,7 +2264,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     }
 #endif // __WXWINCE__/!__WXWINCE__
 
-    ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
+    ::TrackPopupMenu(GetHmenuOf(menu), flags, pt.x, pt.y, 0, GetHwnd(), NULL);
 
     // we need to do it right now as otherwise the events are never going to be
     // sent to wxCurrentPopupMenu from HandleCommand()
@@ -2372,8 +2403,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                 // emulate the button click
                                 btn = wxFindWinFromHandle(msg->hwnd);
                             }
-
-                            bProcess = false;
                         }
                         else // not a button itself, do we have default button?
                         {
@@ -2432,6 +2461,13 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             btn->MSWCommand(BN_CLICKED, 0 /* unused */);
                             return true;
                         }
+
+                        // This "Return" key press won't be actually used for
+                        // navigation so don't generate wxNavigationKeyEvent
+                        // for it but still pass it to IsDialogMessage() as it
+                        // may handle it in some other way (e.g. by playing the
+                        // default error sound).
+                        bProcess = false;
 
 #endif // wxUSE_BUTTON
 
@@ -2692,7 +2728,11 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     return rc;
 }
 
-WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+bool
+wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
+                              WXUINT message,
+                              WXWPARAM wParam,
+                              WXLPARAM lParam)
 {
     // did we process the message?
     bool processed = false;
@@ -3572,15 +3612,26 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
     }
 
     if ( !processed )
+        return false;
+
+    *result = rc.result;
+
+    return true;
+}
+
+WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    WXLRESULT result;
+    if ( !MSWHandleMessage(&result, message, wParam, lParam) )
     {
 #if wxDEBUG_LEVEL >= 2
         wxLogTrace("winmsg", wxT("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(message));
 #endif // wxDEBUG_LEVEL >= 2
-        rc.result = MSWDefWindowProc(message, wParam, lParam);
+        result = MSWDefWindowProc(message, wParam, lParam);
     }
 
-    return rc.result;
+    return result;
 }
 
 // ----------------------------------------------------------------------------
@@ -4181,7 +4232,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             // m_cursor if the user code caught EVT_SET_CURSOR() and returned
             // nothing from it - this is a way to say that our cursor shouldn't
             // be used for this point
-            if ( !processedEvtSetCursor && m_cursor.Ok() )
+            if ( !processedEvtSetCursor && m_cursor.IsOk() )
             {
                 hcursor = GetHcursorOf(m_cursor);
             }
@@ -4189,7 +4240,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             if ( !hcursor && !GetParent() )
             {
                 const wxCursor *cursor = wxGetGlobalCursor();
-                if ( cursor && cursor->Ok() )
+                if ( cursor && cursor->IsOk() )
                 {
                     hcursor = GetHcursorOf(*cursor);
                 }
@@ -4626,7 +4677,7 @@ extern wxCOLORMAP *wxGetStdColourMap()
             // to.
             wxLogNull logNo; // suppress error if we couldn't load the bitmap
             wxBitmap stdColourBitmap(wxT("wxBITMAP_STD_COLOURS"));
-            if ( stdColourBitmap.Ok() )
+            if ( stdColourBitmap.IsOk() )
             {
                 // the pixels in the bitmap must correspond to wxSTD_COL_XXX!
                 wxASSERT_MSG( stdColourBitmap.GetWidth() == wxSTD_COL_MAX,

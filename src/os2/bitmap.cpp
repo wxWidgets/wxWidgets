@@ -142,7 +142,7 @@ bool wxBitmap::CopyFromCursor(
 {
     UnRef();
 
-    if (!rCursor.Ok())
+    if (!rCursor.IsOk())
         return(false);
     return(CopyFromIconOrCursor(rCursor));
 } // end of wxBitmap::CopyFromCursor
@@ -153,7 +153,7 @@ bool wxBitmap::CopyFromIcon(
 {
     UnRef();
 
-    if (!rIcon.Ok())
+    if (!rIcon.IsOk())
         return(false);
 
     return CopyFromIconOrCursor(rIcon);
@@ -379,7 +379,7 @@ bool wxBitmap::Create(
     }
     SetHBITMAP((WXHBITMAP)hBmp);
 
-    return Ok();
+    return IsOk();
 } // end of wxBitmap::Create
 
 bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
@@ -398,7 +398,7 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
     else // no bitmap handler found
     {
         wxImage image;
-        if ( image.LoadFile( filename, type ) && image.Ok() )
+        if ( image.LoadFile( filename, type ) && image.IsOk() )
         {
             *this = wxBitmap(image);
 
@@ -493,7 +493,7 @@ bool wxBitmap::SaveFile(
         // FIXME what about palette? shouldn't we use it?
         wxImage                     vImage = ConvertToImage();
 
-        if (!vImage.Ok())
+        if (!vImage.IsOk())
             return false;
 
         return(vImage.SaveFile( rFilename
@@ -512,7 +512,7 @@ bool wxBitmap::CreateFromImage (
 , int                               nDepth
 )
 {
-    wxCHECK_MSG(rImage.Ok(), false, wxT("invalid image"));
+    wxCHECK_MSG(rImage.IsOk(), false, wxT("invalid image"));
     m_refData = new wxBitmapRefData();
 
     int                             nSizeLimit = 1024 * 768 * 3;
@@ -549,7 +549,7 @@ bool wxBitmap::CreateFromImage (
     //
     // Set bitmap parameters
     //
-    wxCHECK_MSG(rImage.Ok(), false, wxT("invalid image"));
+    wxCHECK_MSG(rImage.IsOk(), false, wxT("invalid image"));
     SetWidth(nWidth);
     SetHeight(nBmpHeight);
     if (nDepth == 1)
@@ -624,7 +624,7 @@ bool wxBitmap::CreateFromImage (
                             );
 #if wxUSE_PALETTE
     HPAL                            hOldPalette = NULLHANDLE;
-    if (rImage.GetPalette().Ok())
+    if (rImage.GetPalette().IsOk())
     {
         hOldPalette = ::GpiSelectPalette(hPS, (HPAL)rImage.GetPalette().GetHPALETTE());
     }
@@ -840,7 +840,7 @@ wxImage wxBitmap::ConvertToImage() const
     wxImage                         vImage;
     wxDC*                           pDC;
 
-    wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid bitmap") );
 
     //
     // Create an wxImage object
@@ -1072,7 +1072,7 @@ wxBitmap wxBitmap::GetSubBitmap(
   const wxRect&                     rRect
 ) const
 {
-    wxCHECK_MSG( Ok() &&
+    wxCHECK_MSG( IsOk() &&
                  (rRect.x >= 0) && (rRect.y >= 0) &&
                  (rRect.x + rRect.width <= GetWidth()) &&
                  (rRect.y + rRect.height <= GetHeight()),
@@ -1082,7 +1082,7 @@ wxBitmap wxBitmap::GetSubBitmap(
                                          ,rRect.height
                                          ,GetDepth()
                                         );
-    wxASSERT_MSG( vRet.Ok(), wxT("GetSubBitmap error") );
+    wxASSERT_MSG( vRet.IsOk(), wxT("GetSubBitmap error") );
 
 
     //
@@ -1268,7 +1268,7 @@ bool wxMask::Create(
         ::GpiDeleteBitmap((HBITMAP) m_hMaskBitmap);
         m_hMaskBitmap = 0;
     }
-    if (!rBitmap.Ok() || rBitmap.GetDepth() != 1)
+    if (!rBitmap.IsOk() || rBitmap.GetDepth() != 1)
     {
         return false;
     }
@@ -1316,7 +1316,7 @@ bool wxMask::Create(
         ::GpiDeleteBitmap((HBITMAP) m_hMaskBitmap);
         m_hMaskBitmap = 0;
     }
-    if (rBitmap.Ok() && rBitmap.GetPalette()->Ok())
+    if (rBitmap.IsOk() && rBitmap.GetPalette()->IsOk())
     {
         unsigned char               cRed;
         unsigned char               cGreen;
@@ -1366,7 +1366,7 @@ bool wxMask::Create(
         ::GpiDeleteBitmap((HBITMAP) m_hMaskBitmap);
         m_hMaskBitmap = 0;
     }
-    if (!rBitmap.Ok())
+    if (!rBitmap.IsOk())
     {
         return false;
     }

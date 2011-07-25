@@ -144,7 +144,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
     static wxObject* wxCreateObject()
 
 #define wxDECLARE_CLASS(name)                                                 \
-    wxDECLARE_DYNAMIC_CLASS(name)
+    wxDECLARE_ABSTRACT_CLASS(name)
 
 
 // common part of the macros below

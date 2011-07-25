@@ -182,7 +182,7 @@ void wxPen::SetStipple(const wxBitmap& WXUNUSED(stipple))
 
 int wxPen::GetDashes( wxDash **ptr ) const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
 
     *ptr = (wxDash*)M_PENDATA->m_dash;
     return M_PENDATA->m_countDashes;
@@ -190,49 +190,49 @@ int wxPen::GetDashes( wxDash **ptr ) const
 
 int wxPen::GetDashCount() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
 
     return (M_PENDATA->m_countDashes);
 }
 
 wxDash* wxPen::GetDash() const
 {
-    wxCHECK_MSG( Ok(), NULL, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid pen") );
 
     return (wxDash*)M_PENDATA->m_dash;
 }
 
 wxPenCap wxPen::GetCap() const
 {
-    wxCHECK_MSG( Ok(), wxCAP_INVALID, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), wxCAP_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_capStyle;
 }
 
 wxPenJoin wxPen::GetJoin() const
 {
-    wxCHECK_MSG( Ok(), wxJOIN_INVALID, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), wxJOIN_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_joinStyle;
 }
 
 wxPenStyle wxPen::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxPENSTYLE_INVALID, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), wxPENSTYLE_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_style;
 }
 
 int wxPen::GetWidth() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_width;
 }
 
 wxColour wxPen::GetColour() const
 {
-    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid pen") );
 
     return M_PENDATA->m_colour;
 }

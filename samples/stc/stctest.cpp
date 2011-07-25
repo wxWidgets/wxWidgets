@@ -430,7 +430,7 @@ void AppFrame::OnPrintPreview (wxCommandEvent &WXUNUSED(event)) {
         new wxPrintPreview (new EditPrint (m_edit),
                             new EditPrint (m_edit),
                             &printDialogData);
-    if (!preview->Ok()) {
+    if (!preview->IsOk()) {
         delete preview;
         wxMessageBox (_("There was a problem with previewing.\n\
                          Perhaps your current printer is not correctly?"),

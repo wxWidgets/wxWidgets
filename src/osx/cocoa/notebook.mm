@@ -49,7 +49,7 @@
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     return self;
 }
 
@@ -175,7 +175,7 @@ public:
             if ( notebook.GetImageList() && notebook.GetPageImage(i) >= 0 )
             {
                 const wxBitmap bmap = notebook.GetImageList()->GetBitmap( notebook.GetPageImage( i ) ) ;
-                if ( bmap.Ok() )
+                if ( bmap.IsOk() )
                 {
                     // TODO how to set an image on a tab
                 }

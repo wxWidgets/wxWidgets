@@ -763,21 +763,27 @@ bool wxDataViewRendererBase::FinishEditing()
 
     DestroyEditControl();
 
-    if (!Validate(value))
-        return false;
-
+    bool isValid = Validate(value);
     unsigned int col = GetOwner()->GetModelColumn();
-    dv_ctrl->GetModel()->ChangeValue(value, m_item, col);
 
     // Now we should send Editing Done event
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl->GetId() );
     event.SetDataViewColumn( GetOwner() );
     event.SetModel( dv_ctrl->GetModel() );
     event.SetItem( m_item );
+    event.SetValue( value );
+    event.SetColumn( col );
+    event.SetEditCanceled( !isValid );
     event.SetEventObject( dv_ctrl );
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
-    return true;
+    if ( isValid && event.IsAllowed() )
+    {
+        dv_ctrl->GetModel()->ChangeValue(value, m_item, col);
+        return true;
+    }
+
+    return false;
 }
 
 void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
@@ -1456,7 +1462,15 @@ bool wxDataViewSpinRenderer::Render( wxRect rect, wxDC *dc, int state )
 
 wxSize wxDataViewSpinRenderer::GetSize() const
 {
-    return wxSize(80,16);
+    wxSize sz = GetTextExtent(wxString::Format("%d", (int)m_data));
+
+    // Allow some space for the spin buttons, which is approximately the size
+    // of a scrollbar (and getting pixel-exact value would be complicated).
+    // Also add some whitespace between the text and the button:
+    sz.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    sz.x += GetTextExtent("M").x;
+
+    return sz;
 }
 
 bool wxDataViewSpinRenderer::SetValue( const wxVariant &value )
@@ -1514,7 +1528,18 @@ bool wxDataViewChoiceRenderer::Render( wxRect rect, wxDC *dc, int state )
 
 wxSize wxDataViewChoiceRenderer::GetSize() const
 {
-    return wxSize(80,16);
+    wxSize sz;
+
+    for ( wxArrayString::const_iterator i = m_choices.begin(); i != m_choices.end(); ++i )
+        sz.IncTo(GetTextExtent(*i));
+
+    // Allow some space for the right-side button, which is approximately the
+    // size of a scrollbar (and getting pixel-exact value would be complicated).
+    // Also add some whitespace between the text and the button:
+    sz.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    sz.x += GetTextExtent("M").x;
+
+    return sz;
 }
 
 bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )

@@ -61,7 +61,7 @@ public:
 private:
     wxSize GetBitmapSize()
     {
-        return m_bitmap.Ok() ? wxSize(m_bitmap.GetWidth(), m_bitmap.GetHeight())
+        return m_bitmap.IsOk() ? wxSize(m_bitmap.GetWidth(), m_bitmap.GetHeight())
                              : wxSize(16, 16); // this is completely arbitrary
     }
 

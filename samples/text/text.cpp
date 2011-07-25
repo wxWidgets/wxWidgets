@@ -733,10 +733,27 @@ static wxString GetMouseEventDesc(const wxMouseEvent& ev)
         dbl = ev.RightDClick();
         up = ev.RightUp();
     }
+    else if ( ev.Aux1Down() || ev.Aux1Up() || ev.Aux1DClick() )
+    {
+        button = wxT("Aux1");
+        dbl = ev.Aux1DClick();
+        up = ev.Aux1Up();
+    }
+    else if ( ev.Aux2Down() || ev.Aux2Up() || ev.Aux2DClick() )
+    {
+        button = wxT("Aux2");
+        dbl = ev.Aux2DClick();
+        up = ev.Aux2Up();
+    }
+    else if ( ev.GetWheelRotation() )
+    {
+        return wxString::Format("Wheel rotation %+d", ev.GetWheelRotation());
+    }
     else
     {
         return wxT("Unknown mouse event");
     }
+    wxASSERT(!(dbl && up));
 
     return wxString::Format(wxT("%s mouse button %s"),
                             button.c_str(),
@@ -780,6 +797,8 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
             << GetChar( ev.LeftIsDown(), wxT('1') )
             << GetChar( ev.MiddleIsDown(), wxT('2') )
             << GetChar( ev.RightIsDown(), wxT('3') )
+            << GetChar( ev.Aux1IsDown(), wxT('x') )
+            << GetChar( ev.Aux2IsDown(), wxT('X') )
             << GetChar( ev.ControlDown(), wxT('C') )
             << GetChar( ev.AltDown(), wxT('A') )
             << GetChar( ev.ShiftDown(), wxT('S') )
@@ -1848,7 +1867,7 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
         {
             wxString msg;
             wxString facename(wxT("unknown"));
-            if (attr.GetFont().Ok())
+            if (attr.GetFont().IsOk())
             {
                 facename = attr.GetFont().GetFaceName();
             }

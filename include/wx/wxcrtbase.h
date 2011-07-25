@@ -188,9 +188,12 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #endif /* __WXWINCE__ */
 
 /* Almost all compiler have strdup(), but not quite all: CodeWarrior under
-   Mac and VC++ for Windows CE don't provide it; additionally, gcc under
-   Mac and OpenVMS do not have wcsdup: */
-#if defined(__VISUALC__) && __VISUALC__ >= 1400
+   Mac and VC++ for Windows CE don't provide it. Another special case is gcc in
+   strict ANSI mode: normally it doesn't provide strdup() but MinGW does
+   provide it under MSVC-compatible name so test for it before checking
+   __WX_STRICT_ANSI_GCC__. */
+#if (defined(__VISUALC__) && __VISUALC__ >= 1400) || \
+    defined(__MINGW32__)
     #define wxCRT_StrdupA _strdup
 #elif !((defined(__MWERKS__) && defined(__WXMAC__)) || \
         defined(__WXWINCE__) || \

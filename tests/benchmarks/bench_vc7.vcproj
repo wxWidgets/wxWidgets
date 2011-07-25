@@ -545,6 +545,9 @@
 				RelativePath=".\bench.cpp">
 			</File>
 			<File
+				RelativePath=".\datetime.cpp">
+			</File>
+			<File
 				RelativePath=".\htmlparser\htmlpars.cpp">
 			</File>
 			<File

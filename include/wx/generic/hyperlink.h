@@ -75,6 +75,12 @@ protected:
     // Renders the hyperlink.
     void OnPaint(wxPaintEvent& event);
 
+    // Handle set/kill focus events (invalidate for painting focus rect)
+    void OnFocus(wxFocusEvent& event);
+
+    // Fire a HyperlinkEvent on space
+    void OnChar(wxKeyEvent& event);
+
     // Returns the wxRect of the label of this hyperlink.
     // This is different from the clientsize's rectangle when
     // clientsize != bestsize and this rectangle is influenced

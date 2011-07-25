@@ -1589,6 +1589,7 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
     input.Replace(wxT("\\|"), wxT("\a"));
     input.Replace(wxT("\\;"), wxT("\b"));
 
+    m_has_maximized = false;
     while (1)
     {
         wxAuiPaneInfo pane;
@@ -1630,6 +1631,9 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         pane_part.Replace(wxT("\b"), wxT(";"));
 
         LoadPaneInfo(pane_part, pane);
+
+        if ( pane.IsMaximized() )
+            m_has_maximized = true;
 
         wxAuiPaneInfo& p = GetPane(pane.name);
         if (!p.IsOk())
@@ -2889,7 +2893,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
 
     if (pt.x < layer_insert_offset &&
-        pt.x > layer_insert_offset-auiLayerInsertPixels)
+        pt.x > layer_insert_offset-auiLayerInsertPixels &&
+        pt.y > 0 &&
+        pt.y < cli_size.y)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_LEFT),
                                 GetMaxLayer(docks, wxAUI_DOCK_BOTTOM)),
@@ -2905,7 +2911,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         return ProcessDockResult(target, drop);
     }
     else if (pt.y < layer_insert_offset &&
-             pt.y > layer_insert_offset-auiLayerInsertPixels)
+             pt.y > layer_insert_offset-auiLayerInsertPixels &&
+             pt.x > 0 &&
+             pt.x < cli_size.x)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_TOP),
                                 GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
@@ -2921,7 +2929,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         return ProcessDockResult(target, drop);
     }
     else if (pt.x >= cli_size.x - layer_insert_offset &&
-             pt.x < cli_size.x - layer_insert_offset + auiLayerInsertPixels)
+             pt.x < cli_size.x - layer_insert_offset + auiLayerInsertPixels &&
+             pt.y > 0 &&
+             pt.y < cli_size.y)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_RIGHT),
                                 GetMaxLayer(docks, wxAUI_DOCK_TOP)),
@@ -2937,7 +2947,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         return ProcessDockResult(target, drop);
     }
     else if (pt.y >= cli_size.y - layer_insert_offset &&
-             pt.y < cli_size.y - layer_insert_offset + auiLayerInsertPixels)
+             pt.y < cli_size.y - layer_insert_offset + auiLayerInsertPixels &&
+             pt.x > 0 &&
+             pt.x < cli_size.x)
     {
         int new_layer = wxMax( wxMax( GetMaxLayer(docks, wxAUI_DOCK_BOTTOM),
                                       GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
@@ -3338,7 +3350,8 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             wxAuiPaneInfo& pane = m_panes.Item(i);
 
             if (pane.IsFloating() &&
-                pane.frame->IsShown())
+                    pane.frame &&
+                        pane.frame->IsShown())
             {
                 wxRect rect = pane.frame->GetRect();
 #ifdef __WXGTK__
@@ -3429,6 +3442,15 @@ void wxAuiManager::StartPaneDrag(wxWindow* pane_window,
     m_action_window = pane_window;
     m_action_offset = offset;
     m_frame->CaptureMouse();
+
+    if (pane.frame)
+    {
+        wxRect window_rect = pane.frame->GetRect();
+        wxRect client_rect = pane.frame->GetClientRect();
+        wxPoint client_pt = pane.frame->ClientToScreen(client_rect.GetTopLeft());
+        wxPoint origin_pt = client_pt - window_rect.GetTopLeft();
+        m_action_offset += origin_pt;
+    }
 }
 
 
@@ -4601,6 +4623,15 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
     {
         if (m_action_window)
         {
+            // We can't move the child window so we need to get the frame that
+            // we want to be really moving. This is probably not the best place
+            // to do this but at least it fixes the bug (#13177) for now.
+            if (!m_action_window->IsKindOf(CLASSINFO(wxAuiFloatingFrame)))
+            {
+                wxAuiPaneInfo& pane = GetPane(m_action_window);
+                m_action_window = pane.frame;
+            }
+
             wxPoint pt = m_frame->ClientToScreen(event.GetPosition());
             m_action_window->Move(pt.x - m_action_offset.x,
                                 pt.y - m_action_offset.y);

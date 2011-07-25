@@ -695,7 +695,7 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(*GetPrintData());
     wxPrintPreview *preview = new wxPrintPreview(printout1, printout2, &printDialogData);
-    if (!preview->Ok())
+    if (!preview->IsOk())
     {
         delete preview;
         return false;
@@ -731,7 +731,7 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
 
 void wxHtmlEasyPrinting::PageSetup()
 {
-    if (!GetPrintData()->Ok())
+    if (!GetPrintData()->IsOk())
     {
         wxLogError(_("There was a problem during page setup: you may need to set a default printer."));
         return;

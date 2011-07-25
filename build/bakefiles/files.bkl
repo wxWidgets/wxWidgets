@@ -812,6 +812,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
     wx/affinematrix2d.h
+    wx/anybutton.h
     wx/bmpbuttn.h
     wx/brush.h
     wx/button.h
@@ -1146,6 +1147,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
     <!-- GTK+ specific files: -->
+    src/gtk/anybutton.cpp
     src/gtk/artgtk.cpp
     src/gtk/bmpbuttn.cpp
     src/gtk/button.cpp
@@ -1200,6 +1202,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/gtk/accel.h
+    wx/gtk/anybutton.h
     wx/gtk/bmpbuttn.h
     wx/gtk/button.h
     wx/gtk/checkbox.h
@@ -1727,6 +1730,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
+    src/msw/anybutton.cpp
     src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
@@ -1782,6 +1786,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/filepickerg.h
     wx/generic/fontpickerg.h
     wx/msw/accel.h
+    wx/msw/anybutton.h
     wx/msw/app.h
     wx/msw/bitmap.h
     wx/msw/bmpbuttn.h
@@ -2299,6 +2304,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_CARBON_COCOA_SRC" hints="files">
 <if cond="PLATFORM_MACOSX=='1'">
     <!-- Common controls implementation -->
+    src/osx/anybutton_osx.cpp
     src/osx/bmpbuttn_osx.cpp
     src/osx/button_osx.cpp
     src/osx/checkbox_osx.cpp
@@ -2382,6 +2388,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/html/webkit.h
     <!-- other shared headers -->
     wx/osx/accel.h
+    wx/osx/anybutton.h
     wx/osx/app.h
     wx/osx/bitmap.h
     wx/osx/bmpbuttn.h
@@ -2483,6 +2490,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_CARBON_SRC" hints="files">
     <!-- carbon files -->
     $(OSX_CARBON_COCOA_SRC)
+    src/osx/carbon/anybutton.cpp
     src/osx/carbon/bmpbuttn.cpp
     src/osx/carbon/button.cpp
     src/osx/carbon/checkbox.cpp
@@ -2540,6 +2548,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OSX_COCOA_SRC" hints="files">
     $(OSX_CARBON_COCOA_SRC)
+    src/osx/cocoa/anybutton.mm
     src/osx/cocoa/button.mm
     src/osx/cocoa/checkbox.mm
     src/osx/cocoa/choice.mm
@@ -2589,6 +2598,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/regiong.cpp
     src/generic/icon.cpp
     <!-- iphone files -->
+    src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
     src/osx/iphone/checkbox.mm
     src/osx/iphone/dialog.mm
@@ -3012,13 +3022,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
-    src/msw/hyperlink.cpp
     src/msw/notifmsg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
-    wx/msw/hyperlink.h
     wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
@@ -3032,6 +3040,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/commandlinkbutton.cpp
     src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
+    src/msw/hyperlink.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
     wx/generic/animate.h
@@ -3039,6 +3048,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/commandlinkbutton.h
     wx/msw/calctrl.h
     wx/msw/datectrl.h
+    wx/msw/hyperlink.h
 </set>
 
 <!-- not built on WindowsCE: -->
@@ -3655,28 +3665,39 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="RICHTEXT_SRC" hints="files">
-    src/richtext/richtextctrl.cpp
     src/richtext/richtextbuffer.cpp
-    src/richtext/richtextstyles.cpp
-    src/richtext/richtextxml.cpp
-    src/richtext/richtexthtml.cpp
+    src/richtext/richtextctrl.cpp
     src/richtext/richtextformatdlg.cpp
-    src/richtext/richtextsymboldlg.cpp
-    src/richtext/richtextstyledlg.cpp
-    src/richtext/richtextprint.cpp
+    src/richtext/richtexthtml.cpp
     src/richtext/richtextimagedlg.cpp
+    src/richtext/richtextprint.cpp
+    src/richtext/richtextstyledlg.cpp
+    src/richtext/richtextstyles.cpp
+    src/richtext/richtextsymboldlg.cpp
+    src/richtext/richtextxml.cpp
 </set>
 <set var="RICHTEXT_HDR" hints="files">
-    wx/richtext/richtextctrl.h
+    wx/richtext/richtextbackgroundpage.h
+    wx/richtext/richtextborderspage.h
     wx/richtext/richtextbuffer.h
-    wx/richtext/richtexthtml.h
-    wx/richtext/richtextstyles.h
-    wx/richtext/richtextxml.h
+    wx/richtext/richtextbulletspage.h
+    wx/richtext/richtextctrl.h
+    wx/richtext/richtextdialogpage.h
+    wx/richtext/richtextfontpage.h
     wx/richtext/richtextformatdlg.h
-    wx/richtext/richtextsymboldlg.h
-    wx/richtext/richtextstyledlg.h
-    wx/richtext/richtextprint.h
+    wx/richtext/richtexthtml.h
     wx/richtext/richtextimagedlg.h
+    wx/richtext/richtextindentspage.h
+    wx/richtext/richtextliststylepage.h
+    wx/richtext/richtextmarginspage.h
+    wx/richtext/richtextprint.h
+    wx/richtext/richtextsizepage.h
+    wx/richtext/richtextstyledlg.h
+    wx/richtext/richtextstylepage.h
+    wx/richtext/richtextstyles.h
+    wx/richtext/richtextsymboldlg.h
+    wx/richtext/richtextuicustomization.h
+    wx/richtext/richtextxml.h
 </set>
 
 

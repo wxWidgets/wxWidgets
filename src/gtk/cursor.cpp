@@ -423,7 +423,7 @@ void wxBeginBusyCursor(const wxCursor* cursor)
     if (gs_busyCount++ > 0)
         return;
 
-    wxASSERT_MSG( !gs_savedCursor.Ok(),
+    wxASSERT_MSG( !gs_savedCursor.IsOk(),
                   wxT("forgot to call wxEndBusyCursor, will leak memory") );
 
     gs_savedCursor = g_globalCursor;

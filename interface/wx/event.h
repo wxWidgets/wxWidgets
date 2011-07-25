@@ -3023,27 +3023,29 @@ public:
 /**
     @class wxThreadEvent
 
-    This class adds some simple functionalities to wxCommandEvent conceived
-    for inter-threads communications.
+    This class adds some simple functionality to wxEvent to facilitate
+    inter-thread communication.
 
-    This event is not natively emitted by any control/class: this is just
-    an helper class for the user.
+    This event is not natively emitted by any control/class: it is just
+    a helper class for the user.
     Its most important feature is the GetEventCategory() implementation which
-    allows thread events to @b NOT be processed by wxEventLoopBase::YieldFor calls
+    allows thread events @b NOT to be processed by wxEventLoopBase::YieldFor calls
     (unless the @c wxEVT_CATEGORY_THREAD is specified - which is never in wx code).
 
     @library{wxcore}
     @category{events,threading}
 
     @see @ref overview_thread, wxEventLoopBase::YieldFor
+
+    @since 2.9.0
 */
-class wxThreadEvent : public wxCommandEvent
+class wxThreadEvent : public wxEvent
 {
 public:
     /**
         Constructor.
     */
-    wxThreadEvent(wxEventType eventType = wxEVT_COMMAND_THREAD, int id = wxID_ANY);
+    wxThreadEvent(wxEventType eventType = wxEVT_THREAD, int id = wxID_ANY);
 
     /**
         Clones this event making sure that all internal members which use
@@ -3090,6 +3092,37 @@ public:
      */
     template<typename T>
     T GetPayload() const;
+
+    /**
+        Returns extra information integer value.
+    */
+    long GetExtraLong() const;
+
+    /**
+        Returns stored integer value.
+    */
+    int GetInt() const;
+
+    /**
+        Returns stored string value.
+    */
+    wxString GetString() const;
+
+
+    /**
+        Sets the extra information value.
+    */
+    void SetExtraLong(long extraLong);
+
+    /**
+        Sets the integer value.
+    */
+    void SetInt(int intCommand);
+
+    /**
+        Sets the string value.
+    */
+    void SetString(const wxString& string);
 };
 
 
@@ -3464,8 +3497,8 @@ public:
 
     This event is mainly used by wxWidgets implementations.
     A wxNavigationKeyEvent handler is automatically provided by wxWidgets
-    when you make a class into a control container with the macro
-    WX_DECLARE_CONTROL_CONTAINER.
+    when you enable keyboard navigation inside a window by inheriting it from
+    wxNavigationEnabled<>.
 
     @beginEventTable{wxNavigationKeyEvent}
     @event{EVT_NAVIGATION_KEY(func)}
@@ -3768,8 +3801,6 @@ public:
     the current platform and/or window manager).
     Notice that the event is not triggered when the application is iconized
     (minimized) or restored under wxMSW.
-
-    Currently only wxMSW, wxGTK and wxOS2 generate such events.
 
     @onlyfor{wxmsw,wxgtk,wxos2}
 
@@ -4246,7 +4277,7 @@ wxEventType wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED;
 wxEventType wxEVT_COMMAND_TOOL_ENTER;
 wxEventType wxEVT_COMMAND_COMBOBOX_DROPDOWN;
 wxEventType wxEVT_COMMAND_COMBOBOX_CLOSEUP;
-wxEventType wxEVT_COMMAND_THREAD;
+wxEventType wxEVT_THREAD;
 wxEventType wxEVT_LEFT_DOWN;
 wxEventType wxEVT_LEFT_UP;
 wxEventType wxEVT_MIDDLE_DOWN;

@@ -139,6 +139,8 @@ void CmdLineTestCase::ParseSwitches()
     p.AddSwitch("b");
     p.AddSwitch("c");
     p.AddSwitch("d");
+    p.AddSwitch("n", "neg", "Switch that can be negated",
+                wxCMD_LINE_SWITCH_NEGATABLE);
 
     p.SetCmdLine("");
     CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
@@ -182,6 +184,23 @@ void CmdLineTestCase::ParseSwitches()
     CPPUNIT_ASSERT( !p.Found("b") );
     CPPUNIT_ASSERT( !p.Found("c") );
     CPPUNIT_ASSERT( p.Found("d") );
+
+    p.SetCmdLine("-n");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_NOT_FOUND, p.FoundSwitch("a") );
+    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_ON, p.FoundSwitch("n") );
+
+    p.SetCmdLine("-n-");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_OFF, p.FoundSwitch("neg") );
+
+    p.SetCmdLine("--neg");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_ON, p.FoundSwitch("neg") );
+
+    p.SetCmdLine("--neg-");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_OFF, p.FoundSwitch("n") );
 }
 
 void CmdLineTestCase::Usage()

@@ -170,7 +170,7 @@ bool wxPrintData::IsOk() const
 {
     m_nativeData->TransferFrom( *this );
 
-    return m_nativeData->Ok();
+    return m_nativeData->IsOk();
 }
 
 // ----------------------------------------------------------------------------

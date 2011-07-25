@@ -25,6 +25,7 @@
 #include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
 #include "wx/stopwatch.h"
+#include "wx/dcgraph.h"
 
 // ============================================================================
 // Constants used locally
@@ -520,7 +521,7 @@ outlineView:(NSOutlineView*)outlineView
     event.SetItem(wxDataViewItemFromItem(item));
     event.SetModel(dvc->GetModel());
 
-    BOOL dragSuccessful;
+    BOOL dragSuccessful = false;
     if ( [bestType compare:DataViewPboardType] == NSOrderedSame )
     {
         NSArray* dataArray((NSArray*)
@@ -756,7 +757,7 @@ outlineView:(NSOutlineView*)outlineView
     if (bestType == nil)
         return NSDragOperationNone;
 
-    NSDragOperation dragOperation;
+    NSDragOperation dragOperation = NSDragOperationNone;
     wxDataViewCtrl* const dvc(implementation->GetDataViewCtrl());
 
     wxCHECK_MSG(dvc, false, "Pointer to data view control not set correctly.");
@@ -862,7 +863,7 @@ outlineView:(NSOutlineView*)outlineView
     if ([writeItems count] > 0)
     {
         bool            dataStringAvailable(true); // a flag indicating if for all items a data string is available
-        NSMutableArray* dataArray = [[NSMutableArray arrayWithCapacity:[writeItems count]] retain]; // data of all items
+        NSMutableArray* dataArray = [NSMutableArray arrayWithCapacity:[writeItems count]]; // data of all items
         wxString        dataString; // contains the string data of all items
 
         // send a begin drag event for all selected items and proceed with
@@ -1164,9 +1165,27 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
-    wxDC * const dc = renderer->GetDC();
-    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), dc, 0);
-    renderer->SetDC(NULL);
+    // if this method is called everything is already setup correctly, 
+    CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextSaveGState( context );
+    
+    if ( ![controlView isFlipped] )
+    {
+        CGContextTranslateCTM( context, 0,  [controlView bounds].size.height );
+        CGContextScaleCTM( context, 1, -1 );
+    }
+        
+    wxGCDC dc;
+    wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(context);
+    dc.SetGraphicsContext(gc);
+
+    int state = 0;
+    if ( [self isHighlighted] )
+        state |= wxDATAVIEW_CELL_SELECTED;
+
+    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), &dc, state);
+
+    CGContextRestoreGState( context );
 }
 
 -(NSRect) imageRectForBounds:(NSRect)cellFrame
@@ -2165,9 +2184,9 @@ bool wxCocoaDataViewControl::IsExpanded(const wxDataViewItem& item) const
 bool wxCocoaDataViewControl::Reload()
 {
     [m_DataSource clearBuffers];
+    [m_OutlineView reloadData];
     [m_OutlineView scrollColumnToVisible:0];
     [m_OutlineView scrollRowToVisible:0];
-    [m_OutlineView reloadData];
     return true;
 }
 
@@ -2312,6 +2331,11 @@ void wxCocoaDataViewControl::Resort()
 {
     [m_DataSource clearChildren];
     [m_OutlineView reloadData];
+}
+
+void wxCocoaDataViewControl::StartEditor( const wxDataViewItem & item, unsigned int column )
+{
+    [m_OutlineView editColumn:column row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]] withEvent:nil select:YES];
 }
 
 //
@@ -2780,9 +2804,9 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
 
     cell = [[NSPopUpButtonCell alloc] init];
     [cell setControlSize:NSMiniControlSize];
-    [cell setFont:[[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]] autorelease]];
+    [cell setFont:[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
     for (size_t i=0; i<choices.GetCount(); ++i)
-        [cell addItemWithTitle:[[wxCFStringRef(choices[i]).AsNSString() retain] autorelease]];
+        [cell addItemWithTitle:wxCFStringRef(choices[i]).AsNSString()];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
 }

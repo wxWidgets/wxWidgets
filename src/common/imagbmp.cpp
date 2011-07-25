@@ -91,7 +91,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 {
     wxCHECK_MSG( image, false, wxT("invalid pointer in wxBMPHandler::SaveFile") );
 
-    if ( !image->Ok() )
+    if ( !image->IsOk() )
     {
         if ( verbose )
         {
@@ -351,7 +351,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
     // pointer to the image data, use quantized if available
     wxUint8 *data = (wxUint8*) image->GetData();
-    if (q_image) if (q_image->Ok()) data = (wxUint8*) q_image->GetData();
+    if (q_image) if (q_image->IsOk()) data = (wxUint8*) q_image->GetData();
 
     wxUint8 *buffer = new wxUint8[row_width];
     memset(buffer, 0, row_width);
@@ -1249,7 +1249,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
         // wxCountingOutputStream::IsOk() always returns true for now and this
         // "if" provokes VC++ warnings in optimized build
 #if 0
-        if ( !cStream.Ok() )
+        if ( !cStream.IsOk() )
         {
             if ( verbose )
             {
@@ -1335,6 +1335,11 @@ bool wxICOHandler::SaveFile(wxImage *image,
 bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
+    if ( stream.IsSeekable() && stream.SeekI(0) == wxInvalidOffset )
+    {
+        return false;
+    }
+
     return DoLoadFile(image, stream, verbose, index);
 }
 
@@ -1423,10 +1428,16 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
 
 int wxICOHandler::DoGetImageCount(wxInputStream& stream)
 {
+    // It's ok to modify the stream position in this function.
+
+    if ( stream.IsSeekable() && stream.SeekI(0) == wxInvalidOffset )
+    {
+        return 0;
+    }
+
     ICONDIR IconDir;
 
     if (stream.Read(&IconDir, sizeof(IconDir)).LastRead() != sizeof(IconDir))
-             // it's ok to modify the stream position here
         return 0;
 
     return (int)wxUINT16_SWAP_ON_BE(IconDir.idCount);
@@ -1492,8 +1503,15 @@ int wxANIHandler::DoGetImageCount(wxInputStream& stream)
 
 static bool CanReadICOOrCUR(wxInputStream *stream, wxUint16 resourceType)
 {
+    // It's ok to modify the stream position in this function.
+
+    if ( stream->IsSeekable() && stream->SeekI(0) == wxInvalidOffset )
+    {
+        return false;
+    }
+
     ICONDIR iconDir;
-    if ( !stream->Read(&iconDir, sizeof(iconDir)) )     // it's ok to modify the stream position here
+    if ( !stream->Read(&iconDir, sizeof(iconDir)) )
     {
         return false;
     }

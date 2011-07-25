@@ -122,7 +122,7 @@ void StatBmpWidgetsPage::RecreateWidget()
         return;
 
     wxImage image(filepath);
-    if (! image.Ok() )
+    if (! image.IsOk() )
     {
         wxLogMessage("Reading image from file '%s' failed.", filepath.c_str());
         return;

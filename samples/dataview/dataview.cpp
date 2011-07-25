@@ -540,10 +540,10 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_music_model = new MyMusicTreeModel;
             m_ctrl[0]->AssociateModel( m_music_model.get() );
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP && wxUSE_UNICODE
             m_ctrl[0]->EnableDragSource( wxDF_UNICODETEXT );
             m_ctrl[0]->EnableDropTarget( wxDF_UNICODETEXT );
-#endif // wxUSE_DRAG_AND_DROP
+#endif // wxUSE_DRAG_AND_DROP && wxUSE_UNICODE
 
             // column 0 of the view control:
 
@@ -1160,8 +1160,11 @@ void MyFrame::OnAddTreeItem(wxCommandEvent& WXUNUSED(event))
 {
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
     wxDataViewItem selected = ctrl->GetSelection();
-    if (ctrl->IsContainer(selected))
-        ctrl->AppendItem( selected, "Item", 0 );
+    if (ctrl->IsContainer(selected)) {
+        wxDataViewItem newitem = ctrl->AppendItem( selected, "Item", 0 );
+        ctrl->Select(newitem);
+        ctrl->StartEditor(newitem, 0);
+    }
 }
 
 void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event))

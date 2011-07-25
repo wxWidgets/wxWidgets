@@ -315,7 +315,7 @@ bool Server::OnInit()
     m_listeningSocket->SetEventHandler(*this);
     m_listeningSocket->SetNotify(wxSOCKET_CONNECTION_FLAG);
     m_listeningSocket->Notify(true);
-    if (!m_listeningSocket->Ok())
+    if (!m_listeningSocket->IsOk())
     {
         wxLogError("Cannot bind listening socket");
         return false;

@@ -52,7 +52,7 @@ public:
 
     GtkCellRenderer* GetGtkHandle() { return m_renderer; }
     void GtkInitHandlers();
-    void GtkUpdateAlignment();
+    void GtkUpdateAlignment() { GtkApplyAlignment(m_renderer); }
 
     // should be overridden to return true if the renderer supports properties
     // corresponding to wxDataViewItemAttr field, see wxGtkTreeCellDataFunc()
@@ -85,6 +85,9 @@ protected:
                                   const wxDataViewItem& item,
                                   unsigned col);
 
+    // Apply our effective alignment (i.e. m_alignment if specified or the
+    // associated column alignment by default) to the given renderer.
+    void GtkApplyAlignment(GtkCellRenderer *renderer);
 
     GtkCellRenderer    *m_renderer;
     int                 m_alignment;

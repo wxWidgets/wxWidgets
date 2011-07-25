@@ -498,7 +498,7 @@ bool wxTCPServer::Create(const wxString& serverName)
 
     delete addr;
 
-    if (!m_server->Ok())
+    if (!m_server->IsOk())
     {
         m_server->Destroy();
         m_server = NULL;
@@ -877,7 +877,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
     wxSocketBase *sock = server->Accept();
     if (!sock)
         return;
-    if (!sock->Ok())
+    if (!sock->IsOk())
     {
         sock->Destroy();
         return;

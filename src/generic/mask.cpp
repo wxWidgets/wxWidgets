@@ -49,12 +49,12 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
     wxImage imgSrc(bitmap.ConvertToImage());
     imgSrc.SetMask(false);
     wxImage image(imgSrc.ConvertToMono(clr.Red(), clr.Green(), clr.Blue()));
-    if ( !image.Ok() )
+    if ( !image.IsOk() )
         return false;
 
     m_bitmap = wxBitmap(image, 1);
 
-    return m_bitmap.Ok();
+    return m_bitmap.IsOk();
 #else // !wxUSE_IMAGE
     wxUnusedVar(bitmap);
     wxUnusedVar(colour);
@@ -65,7 +65,7 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 
 bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 {
-    wxCHECK_MSG( bitmap.Ok(), false, wxT("Invalid bitmap") );
+    wxCHECK_MSG( bitmap.IsOk(), false, wxT("Invalid bitmap") );
     wxCHECK_MSG( bitmap.GetDepth() == 1, false, wxT("Cannot create mask from colour bitmap") );
 
     m_bitmap = bitmap;

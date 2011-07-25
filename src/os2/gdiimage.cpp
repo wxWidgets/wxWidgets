@@ -376,7 +376,7 @@ bool wxBMPResourceHandler::LoadFile( wxBitmap* pBitmap,
 
     wxBitmapRefData*                pData = pBitmap->GetBitmapData();
 
-    if ( pBitmap->Ok() )
+    if ( pBitmap->IsOk() )
     {
         BITMAPINFOHEADER            vBmph;
 
@@ -385,7 +385,7 @@ bool wxBMPResourceHandler::LoadFile( wxBitmap* pBitmap,
         pData->m_nHeight = vBmph.cy;
         pData->m_nDepth  = vBmph.cBitCount;
     }
-    return(pBitmap->Ok());
+    return(pBitmap->IsOk());
 } // end of wxBMPResourceHandler::LoadFile
 
 bool wxBMPFileHandler::LoadFile( wxBitmap*       pBitmap,
@@ -477,5 +477,5 @@ bool wxICOResourceHandler::LoadIcon( wxIcon*         pIcon,
 
     pIcon->SetHICON((WXHICON)hIcon);
 
-    return pIcon->Ok();
+    return pIcon->IsOk();
 } // end of wxICOResourceHandler::LoadIcon

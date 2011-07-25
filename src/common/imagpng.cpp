@@ -558,7 +558,7 @@ wxPNGHandler::LoadFile(wxImage *image,
 
     image->Create((int)width, (int)height, (bool) false /* no need to init pixels */);
 
-    if (!image->Ok())
+    if (!image->IsOk())
         goto error;
 
     // initialize all line pointers to NULL to ensure that they can be safely
@@ -660,7 +660,7 @@ error:
        wxLogError(_("Couldn't load a PNG image - file is corrupted or not enough memory."));
     }
 
-    if ( image->Ok() )
+    if ( image->IsOk() )
     {
         image->Destroy();
     }
@@ -795,15 +795,13 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 #endif
     ;
 
-    png_color_8 mask;
+    png_color_8 mask = { 0, 0, 0, 0, 0 };
 
     if (bHasMask)
     {
         mask.red   = image->GetMaskRed();
         mask.green = image->GetMaskGreen();
         mask.blue  = image->GetMaskBlue();
-        mask.alpha = 0;
-        mask.gray  = 0;
     }
 
     PaletteMap palette;

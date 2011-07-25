@@ -335,6 +335,8 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+    
     virtual bool SetCompositionMode(wxCompositionMode op);
 
     virtual void BeginLayer(wxDouble opacity);
@@ -634,7 +636,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
     case wxPENSTYLE_STIPPLE :
         {
             wxBitmap* bmp = pen.GetStipple();
-            if ( bmp && bmp->Ok() )
+            if ( bmp && bmp->IsOk() )
             {
                 m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
 #if wxUSE_PALETTE
@@ -745,7 +747,7 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
     else
     {
         wxBitmap* bmp = brush.GetStipple();
-        if ( bmp && bmp->Ok() )
+        if ( bmp && bmp->IsOk() )
         {
             wxDELETE( m_brushImage );
             m_brushImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
@@ -1479,6 +1481,12 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
     return true;
 }
 
+bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality WXUNUSED(interpolation))
+{
+    // placeholder
+    return false;
+}
+
 bool wxGDIPlusContext::SetCompositionMode(wxCompositionMode op)
 {
     if ( m_composition == op )
@@ -1539,6 +1547,8 @@ void wxGDIPlusContext::PushState()
 
 void wxGDIPlusContext::PopState()
 {
+    wxCHECK_RET( !m_stateStack.empty(), wxT("No state to pop") );
+
     GraphicsState state = m_stateStack.top();
     m_stateStack.pop();
     m_context->Restore(state);
@@ -1988,7 +1998,7 @@ wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDoub
 wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsPen);
-    if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -2001,7 +2011,7 @@ wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
 wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
-    if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
@@ -2044,7 +2054,7 @@ wxGDIPlusRenderer::CreateGDIPlusFont( const wxGDIPlusContext* gc,
                                       const wxColour &col )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         wxGraphicsFont p;
         p.SetRefData(new wxGDIPlusFontData( this, gc, font, col ));
@@ -2057,7 +2067,7 @@ wxGDIPlusRenderer::CreateGDIPlusFont( const wxGDIPlusContext* gc,
 wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap &bitmap )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBitmap);
-    if ( bitmap.Ok() )
+    if ( bitmap.IsOk() )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxGDIPlusBitmapData( this , bitmap ));

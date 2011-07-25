@@ -34,6 +34,12 @@
 #include "wx/clipbrd.h"
 #include "wx/dnd.h"
 
+#if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
+    #include "wx/beforestd.h"
+    #include <string>
+    #include "wx/afterstd.h"
+#endif
+
 #include "ScintillaWX.h"
 #include "ExternalLexer.h"
 #include "wx/stc/stc.h"
@@ -1068,9 +1074,7 @@ void ScintillaWX::DoDragLeave() {
 
 // Force the whole window to be repainted
 void ScintillaWX::FullPaint() {
-#ifndef __WXMAC__
     stc->Refresh(false);
-#endif
     stc->Update();
 }
 

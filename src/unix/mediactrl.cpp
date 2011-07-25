@@ -38,7 +38,8 @@
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
-#    include <gdk/gdkx.h>           // for GDK_WINDOW_XWINDOW
+    #include <gdk/gdkx.h>
+    #include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -262,7 +263,7 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
     if(event->count > 0)
         return FALSE;
 
-    GdkWindow *window = widget->window;
+    GdkWindow* window = gtk_widget_get_window(widget);
 
     // I've seen this reccommended somewhere...
     // TODO: Is this needed? Maybe it is just cruft...
@@ -305,7 +306,7 @@ static gint gtk_window_realize_callback(GtkWidget* widget,
 {
     gdk_flush();
 
-    GdkWindow *window = widget->window;
+    GdkWindow* window = gtk_widget_get_window(widget);
     wxASSERT(window);
 
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
@@ -698,7 +699,7 @@ void wxGStreamerMediaBackend::SetupXOverlay()
 {
     // Use the xoverlay extension to tell gstreamer to play in our window
 #ifdef __WXGTK__
-    if(!GTK_WIDGET_REALIZED(m_ctrl->m_wxwindow))
+    if (!gtk_widget_get_realized(m_ctrl->m_wxwindow))
     {
         // Not realized yet - set to connect at realization time
         g_signal_connect (m_ctrl->m_wxwindow,
@@ -710,20 +711,18 @@ void wxGStreamerMediaBackend::SetupXOverlay()
     {
         gdk_flush();
 
-        GdkWindow *window = m_ctrl->m_wxwindow->window;
+        GdkWindow* window = gtk_widget_get_window(m_ctrl->m_wxwindow);
         wxASSERT(window);
 #endif
-
-    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(m_xoverlay),
+        gst_x_overlay_set_xwindow_id(GST_X_OVERLAY(m_xoverlay),
 #ifdef __WXGTK__
                         GDK_WINDOW_XWINDOW( window )
 #else
                         ctrl->GetHandle()
 #endif
                                   );
-
 #ifdef __WXGTK__
-    g_signal_connect (m_ctrl->m_wxwindow,
+        g_signal_connect(m_ctrl->m_wxwindow,
                         // m_ctrl->m_wxwindow/*m_ctrl->m_widget*/,
                       "expose_event",
                       G_CALLBACK(gtk_window_expose_callback), this);

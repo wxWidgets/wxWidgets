@@ -46,55 +46,63 @@ inline wxString NumStr(double f)
     return wxString::FromCDouble(f, 2);
 }
 
+// Return the colour representation as HTML-like "#rrggbb" string and also
+// returns its alpha as opacity number in 0..1 range.
+wxString Col2SVG(wxColour c, float *opacity)
+{
+    if ( c.Alpha() != wxALPHA_OPAQUE )
+    {
+        *opacity = c.Alpha()/255.;
+
+        // Remove the alpha before using GetAsString(wxC2S_HTML_SYNTAX) as it
+        // doesn't support colours with alpha channel.
+        c = wxColour(c.GetRGB());
+    }
+    else // No alpha.
+    {
+        *opacity = 1.;
+    }
+
+    return c.GetAsString(wxC2S_HTML_SYNTAX);
+}
+
 wxString wxPenString(wxColour c, int style = wxPENSTYLE_SOLID)
 {
-    wxString s = wxT("stroke:") + c.GetAsString(wxC2S_HTML_SYNTAX)  + wxT("; ");
-    // Use the color's alpha value (if not opaque) for the opacity.
-    // Note that a transparent pen will override the alpha value.
-    if (c.Alpha() != wxALPHA_OPAQUE && style != wxPENSTYLE_TRANSPARENT)
+    float opacity;
+    wxString s = wxT("stroke:") + Col2SVG(c, &opacity)  + wxT("; ");
+
+    switch ( style )
     {
-        s += wxString::Format(wxT("stroke-opacity:%s; "), NumStr(c.Alpha()/255.));
+        case wxPENSTYLE_SOLID:
+            s += wxString::Format(wxT("stroke-opacity:%s; "), NumStr(opacity));
+            break;
+        case wxPENSTYLE_TRANSPARENT:
+            s += wxT("stroke-opacity:0.0; ");
+            break;
+        default :
+            wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Pen Style not available"));
     }
-    else
-    {
-        switch ( style )
-        {
-            case wxPENSTYLE_SOLID:
-                s += wxT("stroke-opacity:1.0; ");
-                break;
-            case wxPENSTYLE_TRANSPARENT:
-                s += wxT("stroke-opacity:0.0; ");
-                break;
-            default :
-                wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Pen Style not available"));
-        }
-    }
+
     return s;
 }
 
 wxString wxBrushString(wxColour c, int style = wxBRUSHSTYLE_SOLID)
 {
-    wxString s = wxT("fill:") + c.GetAsString(wxC2S_HTML_SYNTAX)  + wxT("; ");
-    // Use the color's alpha value (if not opaque) for the opacity.
-    // Note that a transparent brush will override the alpha value.
-    if (c.Alpha() != wxALPHA_OPAQUE && style != wxBRUSHSTYLE_TRANSPARENT)
+    float opacity;
+    wxString s = wxT("fill:") + Col2SVG(c, &opacity)  + wxT("; ");
+
+    switch ( style )
     {
-        s += wxString::Format(wxT("fill-opacity:%s; "), NumStr(c.Alpha()/255.));
+        case wxBRUSHSTYLE_SOLID:
+            s += wxString::Format(wxT("fill-opacity:%s; "), NumStr(opacity));
+            break;
+        case wxBRUSHSTYLE_TRANSPARENT:
+            s += wxT("fill-opacity:0.0; ");
+            break;
+        default :
+            wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Brush Style not available"));
     }
-    else
-    {
-        switch ( style )
-        {
-            case wxBRUSHSTYLE_SOLID:
-                s += wxT("fill-opacity:1.0; ");
-                break;
-            case wxBRUSHSTYLE_TRANSPARENT:
-                s += wxT("fill-opacity:0.0; ");
-                break;
-            default :
-                wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Brush Style not available"));
-        }
-    }
+
     return s;
 }
 
@@ -139,7 +147,7 @@ void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height, dou
     ////////////////////code here
 
     m_outfile = new wxFileOutputStream(filename);
-    m_OK = m_outfile->Ok();
+    m_OK = m_outfile->IsOk();
     if (m_OK)
     {
         m_filename = filename;
@@ -643,14 +651,14 @@ void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
     {
         write(s);
     }
-    m_OK = m_outfile->Ok() && bPNG_OK;
+    m_OK = m_outfile->IsOk() && bPNG_OK;
 }
 
 void wxSVGFileDCImpl::write(const wxString &s)
 {
     const wxCharBuffer buf = s.utf8_str();
     m_outfile->Write(buf, strlen((const char *)buf));
-    m_OK = m_outfile->Ok();
+    m_OK = m_outfile->IsOk();
 }
 
 
