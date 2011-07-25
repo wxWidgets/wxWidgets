@@ -1170,7 +1170,6 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
                                   frame:(WebFrame *)frame
                        decisionListener:(id<WebPolicyDecisionListener>)listener
 {
-    //wxUnusedVar(sender);
     wxUnusedVar(frame);
 
     wxASSERT(wx_webviewctrls.find(sender) != wx_webviewctrls.end());
@@ -1201,8 +1200,17 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
                         newFrameName:(NSString *)frameName
                     decisionListener:(id < WebPolicyDecisionListener >)listener
 {
-    wxUnusedVar(sender);
     wxUnusedVar(actionInformation);
+    
+    wxASSERT(wx_webviewctrls.find(sender) != wx_webviewctrls.end());
+    NSString *url = [[request URL] absoluteString];
+    wxString target = wxStringWithNSString([frame name]);
+    wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+                                   wx_webviewctrls[sender]->GetId(),
+                                   wxStringWithNSString( url ), target, true);
+
+    if (webKitWindow && webKitWindow->GetEventHandler())
+        webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
 
     [listener ignore];
 }
