@@ -110,6 +110,9 @@ wxCursor::wxCursor(const char bits[], int width, int height,
     if (hotSpotY < 0 || hotSpotY >= height)
         hotSpotY = 0;
 
+#ifdef __WXGTK30__
+    // FIXME Remove GdkBitmap
+#else
     GdkBitmap* data = gdk_bitmap_create_from_data(
         gtk_widget_get_window(wxGetRootWindow()), const_cast<char*>(bits), width, height);
     GdkBitmap* mask = gdk_bitmap_create_from_data(
@@ -122,6 +125,7 @@ wxCursor::wxCursor(const char bits[], int width, int height,
 
     g_object_unref (data);
     g_object_unref (mask);
+#endif
 }
 
 wxCursor::~wxCursor()
@@ -135,6 +139,9 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
     GdkCursorType gdk_cur = GDK_LEFT_PTR;
     switch (cursorId)
     {
+#ifdef __WXGTK30__
+        case wxCURSOR_BLANK:            gdk_cur = GDK_BLANK_CURSOR; break;
+#else
         case wxCURSOR_BLANK:
             {
                 const char bits[] = { 0 };
@@ -149,7 +156,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
                 g_object_unref(pixmap);
             }
             return;
-
+#endif
         case wxCURSOR_ARROW:            // fall through to default
         case wxCURSOR_DEFAULT:          gdk_cur = GDK_LEFT_PTR; break;
         case wxCURSOR_RIGHT_ARROW:      gdk_cur = GDK_RIGHT_PTR; break;
@@ -224,7 +231,11 @@ void wxCursor::InitFromImage( const wxImage & image )
     m_refData = new wxCursorRefData;
     wxImage image_copy(image);
 
+#ifdef __WXGTK30__
+    GdkDisplay* display = gdk_window_get_display(gtk_widget_get_window(wxGetRootWindow()));
+#else
     GdkDisplay* display = gdk_drawable_get_display(gtk_widget_get_window(wxGetRootWindow()));
+#endif
     if (gdk_display_supports_cursor_color(display))
     {
         if (!image.HasAlpha())
@@ -244,7 +255,11 @@ void wxCursor::InitFromImage( const wxImage & image )
     else // no colour cursor support
     {
         unsigned long keyMaskColor = 0;
+#ifdef __WXGTK30__
+        cairo_surface_t *maskRaw;
+#else
         GdkPixmap *maskRaw;
+#endif
         if (bHasMask)
         {
             keyMaskColor = wxImageHistogram::MakeKey(
@@ -256,16 +271,24 @@ void wxCursor::InitFromImage( const wxImage & image )
         }
         else
         {
+#ifdef __WXGTK30__
+            // FIXME Rethink mask
+#else
             const int size = ((w + 7) / 8) * h;
             char* bits = new char[size];
             memset(bits, 0xff, size);
             maskRaw = gdk_bitmap_create_from_data(
                 gtk_widget_get_window(wxGetRootWindow()), bits, w, h);
             delete[] bits;
+#endif
         }
 
+#ifdef __WXGTK30__
+        // FIXME Does comment leads to memory leak?
+#else
         // assign the raw pointer to wxGtkObject to ensure it is unref'd later
         wxGtkObject<GdkPixmap> mask(maskRaw);
+#endif
 
         // modify image so wxBitmap can be used to convert to pixmap
         image_copy.SetMask(false);
@@ -334,6 +357,9 @@ void wxCursor::InitFromImage( const wxImage & image )
             bg = tmp;
         }
 
+#ifdef __WXGTK30__
+        // FIXME Is it OK to comment out?
+#else
         M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap
                                  (
                                     bitmap.GetPixmap(),
@@ -341,6 +367,7 @@ void wxCursor::InitFromImage( const wxImage & image )
                                     fg.GetColor(), bg.GetColor(),
                                     hotSpotX, hotSpotY
                                  );
+#endif
     }
 }
 
@@ -399,8 +426,13 @@ static void UpdateCursors(const wxWindowList& list, GdkDisplay*& display)
         if (display == NULL && win->m_widget)
         {
             GdkWindow* w = gtk_widget_get_window(win->m_widget);
-            if (w)
+            if (w) {
+#ifdef __WXGTK30__
+                display = gdk_window_get_display(w);
+#else
                 display = gdk_drawable_get_display(w);
+#endif
+            }
         }
         win->GTKUpdateCursor(true, false);
         UpdateCursors(win->GetChildren(), display);
