@@ -537,11 +537,12 @@ public:
     /**
         Get the URL being visited
     */
-    const wxString& GetHref() const { return m_href; }
+    const wxString& GetHref() const;
 
     /**
-        Get the target (frame or window) in which the URL that caused this event
-        is viewed, or an empty string if not available.
+        Get the name of the target frame which the url of this event
+        has been or will be loaded into. This may return an emptry string
+        if the frame is not avaliable.
     */
     const wxString& GetTarget() const;
 
