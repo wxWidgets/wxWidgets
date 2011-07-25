@@ -1098,7 +1098,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/tooltip.cpp
     src/gtk/toplevel.cpp
     src/gtk/utilsgtk.cpp
-    src/gtk3/win_gtk.cpp
+    src/gtk/win_gtk.cpp
     src/gtk/window.cpp
 </set>
 <set var="GTK3_LOWLEVEL_HDR" hints="files">
