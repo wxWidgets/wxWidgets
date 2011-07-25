@@ -166,13 +166,13 @@ public:
         m_container.SetContainerWindow(this);
 
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL
-        Connect(wxEVT_NAVIGATION_KEY,
+        BaseWindowClass::Connect(wxEVT_NAVIGATION_KEY,
                 wxNavigationKeyEventHandler(wxNavigationEnabled::OnNavigationKey));
 
-        Connect(wxEVT_SET_FOCUS,
+        BaseWindowClass::Connect(wxEVT_SET_FOCUS,
                 wxFocusEventHandler(wxNavigationEnabled::OnFocus));
 
-        Connect(wxEVT_CHILD_FOCUS,
+        BaseWindowClass::Connect(wxEVT_CHILD_FOCUS,
                 wxChildFocusEventHandler(wxNavigationEnabled::OnChildFocus));
 #endif // !wxHAS_NATIVE_TAB_TRAVERSAL
     }
