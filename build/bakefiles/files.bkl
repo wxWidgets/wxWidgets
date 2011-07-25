@@ -1076,13 +1076,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/clipbrd.cpp
     src/gtk/colour.cpp
     src/gtk/cursor.cpp
-    src/gtk3/dataobj.cpp
+    src/gtk/dataobj.cpp
     src/gtk3/dc.cpp
     src/gtk3/dcclient.cpp
     src/gtk3/dcmemory.cpp
     src/gtk3/dcscreen.cpp
-    src/gtk3/dnd.cpp
-    src/gtk3/evtloop.cpp
+    src/gtk/dnd.cpp
+    src/gtk/evtloop.cpp
     src/gtk/filectrl.cpp
     src/gtk/filehistory.cpp
     src/gtk/font.cpp

@@ -346,8 +346,27 @@ static inline GdkWindow* wx_gtk_entry_get_text_window(GtkEntry* entry)
 }
 #define gtk_entry_get_text_window wx_gtk_entry_get_text_window
 
-#endif // !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
+// ----------------------------------------------------------------------------
+// the following were introduced in GTK+ 2.22
 
+inline GdkDragAction wx_gdk_drag_context_get_actions(GdkDragContext *context)
+{
+    return context->action;
+}
+#define gdk_drag_context_get_actions wx_gdk_drag_context_get_actions
+
+inline GdkDragAction wx_gdk_drag_context_get_suggested_actions(GdkDragContext *context)
+{
+    return context->suggested_action;
+}
+#define gdk_drag_context_get_suggested_action wx_gdk_drag_context_get_suggested_action
+
+inline GList* wx_gdk_drag_context_list_targets(GdkDragContext *context)
+{
+    return context->targets;
+}
+#define gdk_drag_context_list_targets wx_gdk_drag_context_list_targets
+#endif // !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
 
 #endif // _WX_GTK_PRIVATE_COMPAT_H_
 

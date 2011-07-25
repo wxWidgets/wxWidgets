@@ -363,7 +363,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
     /* Owen Taylor: "call gtk_drag_finish() with
        success == TRUE" */
 
-    if ((gtk_selection_data_get_length(data) <= 0) || (gtk_selection_data_get_format(data) != 8))
+    if (gtk_selection_data_get_length(data) <= 0 || gtk_selection_data_get_format(data) != 8)
     {
         /* negative data length and non 8-bit data format
            qualifies for junk */
@@ -538,7 +538,9 @@ bool wxDropTarget::GetData()
     if (!m_dataObject->IsSupportedFormat( dragFormat ))
         return false;
 
-    m_dataObject->SetData( dragFormat, (size_t)gtk_selection_data_get_length(m_dragData), (const void*)gtk_selection_data_get_data(m_dragData) );
+    m_dataObject->SetData(dragFormat,
+        (size_t)gtk_selection_data_get_length(m_dragData),
+        (const void*)gtk_selection_data_get_data(m_dragData));
 
     return true;
 }
@@ -605,7 +607,7 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
                        guint               WXUNUSED(time),
                        wxDropSource       *drop_source )
 {
-    wxDataFormat format( gtk_selection_data_get_target(selection_data) );
+    wxDataFormat format(gtk_selection_data_get_target(selection_data));
 
     wxLogTrace(TRACE_DND, wxT("Drop source: format requested: %s"),
                format.GetId().c_str());
@@ -734,11 +736,11 @@ void wxDropSource::SetIcons(const wxIcon &iconCopy,
     m_iconMove = iconMove;
     m_iconNone = iconNone;
 
-    if ( !m_iconCopy.Ok() )
+    if ( !m_iconCopy.IsOk() )
         m_iconCopy = wxIcon(page_xpm);
-    if ( !m_iconMove.Ok() )
+    if ( !m_iconMove.IsOk() )
         m_iconMove = m_iconCopy;
-    if ( !m_iconNone.Ok() )
+    if ( !m_iconNone.IsOk() )
         m_iconNone = m_iconCopy;
 }
 
@@ -757,7 +759,11 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
     else
         icon = &m_iconNone;
 
+#ifdef __WXGTK30__
     GdkPixbuf *mask;
+#else
+    GdkBitmap *mask;
+#endif
     if ( icon->GetMask() )
         mask = icon->GetMask()->GetBitmap();
     else

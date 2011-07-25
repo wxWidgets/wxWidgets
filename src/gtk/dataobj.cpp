@@ -384,12 +384,12 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
 
     m_bitmap = wxBitmap(image);
 
-    return m_bitmap.IsOk();
+    return m_bitmap.Ok();
 }
 
 void wxBitmapDataObject::DoConvertToPng()
 {
-    if ( !m_bitmap.IsOk() )
+    if ( !m_bitmap.Ok() )
         return;
 
     wxCHECK_RET( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
