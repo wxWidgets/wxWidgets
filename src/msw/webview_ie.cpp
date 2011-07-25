@@ -1019,9 +1019,13 @@ ULONG VirtualProtocol::Release()
 }
 
 HRESULT VirtualProtocol::Start(LPCWSTR szUrl, IInternetProtocolSink *pOIProtSink,
-                            IInternetBindInfo *pOIBindInfo, DWORD grfPI, 
-                            HANDLE_PTR dwReserved)
+                               IInternetBindInfo *pOIBindInfo, DWORD grfPI, 
+                               HANDLE_PTR dwReserved)
 {
+    wxUnusedVar(szUrl);
+    wxUnusedVar(pOIBindInfo);
+    wxUnusedVar(grfPI);
+    wxUnusedVar(dwReserved);
     m_protocolSink = pOIProtSink;
     //We have to clean up incoming paths from the webview control as they are
     //not properly escaped, see also the comment in filesys.cpp line 668
@@ -1074,6 +1078,12 @@ HRESULT VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
         wxDELETE(m_file);
         return INET_E_DOWNLOAD_FAILURE;
     }
+    else
+    {
+        //Dummy return to surpress a compiler warning
+        wxFAIL;
+        return INET_E_DOWNLOAD_FAILURE;
+    }
 }
 
 HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
@@ -1091,8 +1101,8 @@ HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
 
 STDMETHODIMP ClassFactory::LockServer(BOOL fLock)
 {
-     return S_OK;
-
+    wxUnusedVar(fLock);
+    return S_OK;
 }
 
 ULONG ClassFactory::AddRef(void)

@@ -179,9 +179,10 @@ public:
     ULONG STDMETHODCALLTYPE Release();
 
     //IInternetProtocolRoot
-    HRESULT STDMETHODCALLTYPE Abort(HRESULT hrReason, DWORD dwOptions)
+    HRESULT STDMETHODCALLTYPE Abort(HRESULT WXUNUSED(hrReason), 
+                                    DWORD WXUNUSED(dwOptions))
                                    { return E_NOTIMPL; }
-    HRESULT STDMETHODCALLTYPE Continue(PROTOCOLDATA *pProtocolData)
+    HRESULT STDMETHODCALLTYPE Continue(PROTOCOLDATA *WXUNUSED(pProtocolData))
                                        { return S_OK; }
     HRESULT STDMETHODCALLTYPE Resume() { return S_OK; }
     HRESULT STDMETHODCALLTYPE Start(LPCWSTR szUrl, 
@@ -190,13 +191,15 @@ public:
                                     DWORD grfPI, 
                                     HANDLE_PTR dwReserved);
     HRESULT STDMETHODCALLTYPE Suspend() { return S_OK; }
-    HRESULT STDMETHODCALLTYPE Terminate(DWORD dwOptions) { return S_OK; }
+    HRESULT STDMETHODCALLTYPE Terminate(DWORD WXUNUSED(dwOptions)) { return S_OK; }
 
     //IInternetProtocol
-    HRESULT STDMETHODCALLTYPE LockRequest(DWORD dwOptions) { return S_OK; }
+    HRESULT STDMETHODCALLTYPE LockRequest(DWORD WXUNUSED(dwOptions)) 
+                                          { return S_OK; }
     HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead);
-    HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, 
-                                   ULARGE_INTEGER* plibNewPosition) 
+    HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER WXUNUSED(dlibMove), 
+                                   DWORD WXUNUSED(dwOrigin), 
+                                   ULARGE_INTEGER* WXUNUSED(plibNewPosition)) 
                                    { return E_FAIL; }
     HRESULT STDMETHODCALLTYPE UnlockRequest() { return S_OK; }
 };
