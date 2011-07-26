@@ -15,7 +15,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBKIT && (defined(__WXMAC__) || defined(__WXCOCOA__))
+//#if wxUSE_WEBKIT && (defined(__WXMAC__) || defined(__WXCOCOA__))
 
 #include "wx/control.h"
 #include "wx/webview.h"
@@ -80,9 +80,9 @@ public:
     virtual void ClearHistory() {}
     virtual void EnableHistory(bool enable = true) {}
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory()
-            { return wxVector<wxSharedPtr<wxWebHistoryItem> >() }
+            { return wxVector<wxSharedPtr<wxWebHistoryItem> >(); }
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() 
-            { return wxVector<wxSharedPtr<wxWebHistoryItem> >() }
+            { return wxVector<wxSharedPtr<wxWebHistoryItem> >(); }
     virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) {}
     
     //Undo / redo functionality
@@ -105,7 +105,7 @@ public:
     
     //Selection
     virtual void DeleteSelection();
-    virtual bool HasSelection() { return false };
+    virtual bool HasSelection() { return false; };
     virtual void SelectAll() {};
     virtual wxString GetSelectedText();
     virtual wxString GetSelectedSource() { return ""; }
@@ -158,8 +158,14 @@ private:
     void* m_webKitCtrlEventHandler;
     //It should be WebView*, but WebView is an Objective-C class
     //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
+    
+#if wxOSX_USE_CARBON
+    wxMacControl *m_peer;
+#else
+    wxWidgetCocoaImpl *m_peer;
+#endif
 };
 
-#endif // wxUSE_WEBKIT
+//#endif // wxUSE_WEBKIT
 
 #endif // _WX_WEBKIT_H_

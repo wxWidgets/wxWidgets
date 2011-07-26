@@ -21,7 +21,7 @@
     #include "wx/wx.h"
 #endif
 
-#if wxHAVE_WEB_BACKEND_OSX_WEBKIT
+//#if wxHAVE_WEB_BACKEND_OSX_WEBKIT
 
 #ifdef __WXCOCOA__
 #include "wx/cocoa/autorelease.h"
@@ -323,25 +323,6 @@ inline NSString* wxNSStringWithWxString(const wxString &wxstring)
 #endif // wxUSE_UNICODE
 }
 
-inline int wxNavTypeFromWebNavType(int type){
-    if (type == WebNavigationTypeLinkClicked)
-        return wxWEBKIT_NAV_LINK_CLICKED;
-
-    if (type == WebNavigationTypeFormSubmitted)
-        return wxWEBKIT_NAV_FORM_SUBMITTED;
-
-    if (type == WebNavigationTypeBackForward)
-        return wxWEBKIT_NAV_BACK_NEXT;
-
-    if (type == WebNavigationTypeReload)
-        return wxWEBKIT_NAV_RELOAD;
-
-    if (type == WebNavigationTypeFormResubmitted)
-        return wxWEBKIT_NAV_FORM_RESUBMITTED;
-
-    return wxWEBKIT_NAV_OTHER;
-}
-
 @interface MyFrameLoadMonitor : NSObject
 {
     wxWebViewWebKit* webKitWindow;
@@ -411,7 +392,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     if(m_parent) m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,sizeInstance);
 #else
-    m_macIsUserPane = false;
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
 #if wxOSX_USE_CARBON
@@ -735,7 +715,7 @@ wxString wxWebViewWebKit::GetSelectedText()
 void wxWebViewWebKit::RunScript(const wxString& javascript)
 {
     if ( !m_webView )
-        return wxEmptyString;
+        return;
 
     [[m_webView windowScriptObject] evaluateWebScript:
                     (NSString*)wxNSStringWithWxString( javascript )];
@@ -932,7 +912,7 @@ void wxWebViewWebKit::Cut()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView cut];
+    [(WebView*)m_webView cut:m_webView];
 }
 
 void wxWebViewWebKit::Copy()
@@ -940,7 +920,7 @@ void wxWebViewWebKit::Copy()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView copy];
+    [(WebView*)m_webView copy:m_webView];
 }
 
 void wxWebViewWebKit::Paste()
@@ -948,7 +928,7 @@ void wxWebViewWebKit::Paste()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView paste];
+    [(WebView*)m_webView paste:m_webView];
 }
 
 void wxWebViewWebKit::DeleteSelection()
@@ -1216,4 +1196,4 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
 }
 @end
 
-#endif //wxHAVE_WEB_BACKEND_OSX_WEBKIT
+//#endif //wxHAVE_WEB_BACKEND_OSX_WEBKIT
