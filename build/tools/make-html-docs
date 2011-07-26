@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# This script creates archives of HTML documentation in  tar.bz2 and zip
+# formats. It relies on docs/doxygen/regen.sh to really generate the docs.
+#
+# The script should be ran from the root of wxWidgets checkout and creates the
+# output files in its parent directory.
+
+version=$1
+if [ -z "$version" ]; then
+    echo "Must specify the distribution version." >&2
+    exit 1
+fi
+
+set -e
+set -x
+
+docs_dir_name=wxWidgets-$version
+docs_file_basename=wxWidgets-docs-html-$version
+
+cd docs/doxygen
+./regen.sh html
+cd out
+mv html $docs_dir_name
+tar cjf ../../../../$docs_file_basename.tar.bz2 $docs_dir_name
+cd $docs_dir_name
+zip -q -r ../../../../../$docs_file_basename.zip .
+
+cd ..
+mv $docs_dir_name html

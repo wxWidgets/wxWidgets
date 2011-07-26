@@ -1,12 +1,12 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.9.1
+SET WXW_VER=2.9.3
 if (%WXW_VER%)==() SET WXW_VER=SVN
 
 echo docs building for %WXW_VER%
 
 rem  This builds the docs in %WXWIN% in a number of formats 
 rem  and a clean inno setup in a second tree
-rem  it uses a number of tools nmake, gnuwin32 zip & dos2unix, ghostscript
+rem  it uses a number of tools, gnuwin32 zip & dos2unix, 
 rem  writes a log file in c:\
 
 echo Building wxWidgets-%WXW_VER% docs... > c:\temp.log
@@ -65,6 +65,7 @@ cd html
 del *.dot
 del *.md5
 zip -r wx.htb *.*
+copy wx.htb %DAILY%\wxWidgets-%WXW_VER%-html.zip
 zip wxWidgets-%WXW_VER%-htb.zip wx.htb
 copy wxWidgets-%WXW_VER%-htb.zip %DAILY%
 

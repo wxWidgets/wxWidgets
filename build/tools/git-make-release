@@ -28,7 +28,7 @@
 
 version=$1
 if [ -z "$version" ]; then
-    echo "Must specify the distribution version." >2
+    echo "Must specify the distribution version." >&2
     exit 1
 fi
 

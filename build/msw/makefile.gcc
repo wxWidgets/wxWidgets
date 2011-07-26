@@ -31,7 +31,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 	RUNTIME_LIBS="$(RUNTIME_LIBS)" GCC_VERSION="$(GCC_VERSION)"
 CPPDEPS = -MT$@ -MF$@.d -MD -MP
 WX_RELEASE_NODOT = 29
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)3
 COMPILER_PREFIX = gcc
 OBJS = \
 	$(COMPILER_PREFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -1748,6 +1748,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_generic_statusbr.o \
 	$(OBJS)\monodll_prntdlgg.o \
 	$(OBJS)\monodll_msw_accel.o \
+	$(OBJS)\monodll_anybutton.o \
 	$(OBJS)\monodll_artmsw.o \
 	$(OBJS)\monodll_msw_bmpbuttn.o \
 	$(OBJS)\monodll_msw_button.o \
@@ -2517,6 +2518,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_generic_statusbr.o \
 	$(OBJS)\monolib_prntdlgg.o \
 	$(OBJS)\monolib_msw_accel.o \
+	$(OBJS)\monolib_anybutton.o \
 	$(OBJS)\monolib_artmsw.o \
 	$(OBJS)\monolib_msw_bmpbuttn.o \
 	$(OBJS)\monolib_msw_button.o \
@@ -3184,6 +3186,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_generic_statusbr.o \
 	$(OBJS)\coredll_prntdlgg.o \
 	$(OBJS)\coredll_msw_accel.o \
+	$(OBJS)\coredll_anybutton.o \
 	$(OBJS)\coredll_artmsw.o \
 	$(OBJS)\coredll_msw_bmpbuttn.o \
 	$(OBJS)\coredll_msw_button.o \
@@ -3733,6 +3736,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_generic_statusbr.o \
 	$(OBJS)\corelib_prntdlgg.o \
 	$(OBJS)\corelib_msw_accel.o \
+	$(OBJS)\corelib_anybutton.o \
 	$(OBJS)\corelib_artmsw.o \
 	$(OBJS)\corelib_msw_bmpbuttn.o \
 	$(OBJS)\corelib_msw_button.o \
@@ -5358,7 +5362,7 @@ $(SETUPHDIR)\wx\msw\rcdefs.h: $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcdefs
 build_cfg_file: $(SETUPHDIR)
 	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=9 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=2 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=3 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -6425,6 +6429,9 @@ $(OBJS)\monodll_generic_statusbr.o: ../../src/generic/statusbr.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_msw_accel.o: ../../src/msw/accel.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_anybutton.o: ../../src/msw/anybutton.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_artmsw.o: ../../src/msw/artmsw.cpp
@@ -8773,6 +8780,9 @@ $(OBJS)\monolib_generic_statusbr.o: ../../src/generic/statusbr.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_msw_accel.o: ../../src/msw/accel.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_anybutton.o: ../../src/msw/anybutton.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_artmsw.o: ../../src/msw/artmsw.cpp
@@ -11534,6 +11544,9 @@ $(OBJS)\coredll_generic_statusbr.o: ../../src/generic/statusbr.cpp
 $(OBJS)\coredll_msw_accel.o: ../../src/msw/accel.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_anybutton.o: ../../src/msw/anybutton.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_artmsw.o: ../../src/msw/artmsw.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12937,6 +12950,9 @@ $(OBJS)\corelib_generic_statusbr.o: ../../src/generic/statusbr.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_msw_accel.o: ../../src/msw/accel.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_anybutton.o: ../../src/msw/anybutton.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_artmsw.o: ../../src/msw/artmsw.cpp
