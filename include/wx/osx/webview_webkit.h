@@ -24,6 +24,9 @@
 // Web Kit Control
 // ----------------------------------------------------------------------------
 
+class wxMacControl;
+class wxWidgetCocoaImpl;
+
 class WXDLLIMPEXP_WEB wxWebViewWebKit : public wxWebView
 {
 public:
