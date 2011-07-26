@@ -258,14 +258,8 @@ wxgtk_webview_webkit_new_window(WebKitWebView*,
     if (webKitCtrl && webKitCtrl->GetEventHandler())
         webKitCtrl->GetEventHandler()->ProcessEvent(thisEvent);
 
-    if (thisEvent.IsVetoed())
-    {
-        webkit_web_policy_decision_ignore(policy_decision);
-    }
-    else
-    {
-        webkit_web_policy_decision_use(policy_decision);
-    }
+    //We always want the user to handle this themselves
+    webkit_web_policy_decision_ignore(policy_decision);
     return TRUE;
 }
 
