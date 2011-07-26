@@ -43,8 +43,7 @@ static inline GtkWidget* wx_gtk_scrolled_window_get_vscrollbar(GtkScrolledWindow
 }
 #define gtk_scrolled_window_get_vscrollbar wx_gtk_scrolled_window_get_vscrollbar
 
-static inline GdkWidget* 
-wx_gtk_bin_get_child(GtkBin* bin)
+static inline GtkWidget* wx_gtk_bin_get_child(GtkBin* bin)
 {
     return bin->child;
 }
@@ -361,7 +360,7 @@ inline GdkDragAction wx_gdk_drag_context_get_actions(GdkDragContext *context)
 }
 #define gdk_drag_context_get_actions wx_gdk_drag_context_get_actions
 
-inline GdkDragAction wx_gdk_drag_context_get_suggested_actions(GdkDragContext *context)
+inline GdkDragAction wx_gdk_drag_context_get_suggested_action(GdkDragContext *context)
 {
     return context->suggested_action;
 }

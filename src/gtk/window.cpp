@@ -312,7 +312,7 @@ wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
-//#if 0
+#ifdef __WXGTK30__
 extern "C" {
 static gboolean
 gtk_window_draw_callback( GtkWidget *da, cairo_t *cr, wxWindow *win )
@@ -335,8 +335,7 @@ gtk_window_draw_callback( GtkWidget *da, cairo_t *cr, wxWindow *win )
     return FALSE;
 }
 }
-//#endif
-#if 0
+#else
 extern "C" {
 static gboolean
 gtk_window_expose_callback( GtkWidget*,
