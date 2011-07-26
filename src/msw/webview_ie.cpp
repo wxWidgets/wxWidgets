@@ -101,7 +101,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
     IInternetSession* session;
     if(CoInternetGetSession(0, &session, 0) != S_OK)
         return false;
-    HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, L"file", 0, NULL, 0);
+    HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, L"test", 0, NULL, 0);
     if(FAILED(hr))
         return false; 
 
@@ -990,10 +990,16 @@ ULONG VirtualProtocol::AddRef()
 
 HRESULT VirtualProtocol::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if ((riid == IID_IUnknown) || (riid == IID_IInternetProtocol)
-       || (riid == IID_IInternetProtocolRoot))
+    if(riid == IID_IUnknown || riid == IID_IInternetProtocol
+       || riid == IID_IInternetProtocolRoot)
     {
-        *ppvObject = this;
+        *ppvObject = (IInternetProtocol*)this;
+        AddRef();
+        return S_OK;
+    }
+    else if(riid == IID_IInternetProtocolInfo)
+    {
+        *ppvObject = (IInternetProtocolInfo*)this;
         AddRef();
         return S_OK;
     }
@@ -1032,6 +1038,7 @@ HRESULT VirtualProtocol::Start(LPCWSTR szUrl, IInternetProtocolSink *pOIProtSink
     wxString path = wxString(szUrl).BeforeFirst(':') +  ":" + 
                     EscapeFileNameCharsInURL(wxString(szUrl).AfterFirst(':'));
     path.Replace("///", "/");
+    path.Replace("test", "file");
     m_file = m_fileSys->OpenFile(path);
 
     if(!m_file)
@@ -1039,11 +1046,11 @@ HRESULT VirtualProtocol::Start(LPCWSTR szUrl, IInternetProtocolSink *pOIProtSink
 
     //We return the stream length for current and total size as we can always
     //read the whole file from the stream
+    wxFileOffset length = m_file->GetStream()->GetLength();
     m_protocolSink->ReportData(BSCF_FIRSTDATANOTIFICATION | 
                                BSCF_DATAFULLYAVAILABLE |
                                BSCF_LASTDATANOTIFICATION,
-                               m_file->GetStream()->GetLength(),
-                               m_file->GetStream()->GetLength());
+                               length, length);
     return S_OK; 
 }
 
@@ -1084,6 +1091,30 @@ HRESULT VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
         wxFAIL;
         return INET_E_DOWNLOAD_FAILURE;
     }
+}
+
+HRESULT VirtualProtocol::CombineUrl(LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl,
+                                    DWORD dwCombineFlags, LPWSTR pwzResult, 
+                                    DWORD cchResult, DWORD *pcchResult, 
+                                    DWORD dwReserved)
+{
+    return INET_E_DEFAULT_ACTION;
+}
+
+HRESULT VirtualProtocol::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction,
+                                  DWORD dwParseFlags, LPWSTR pwzResult,
+                                  DWORD cchResult, DWORD *pcchResult,
+                                  DWORD dwReserved)
+{
+    return INET_E_DEFAULT_ACTION;
+}
+    
+HRESULT VirtualProtocol::QueryInfo(LPCWSTR pwzUrl, QUERYOPTION OueryOption, 
+                                   DWORD dwQueryFlags, LPVOID pBuffer,
+                                   DWORD cbBuffer, DWORD *pcbBuf,  
+                                   DWORD dwReserved)
+{
+    return INET_E_DEFAULT_ACTION;
 }
 
 HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
