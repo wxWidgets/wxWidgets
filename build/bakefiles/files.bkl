@@ -1077,7 +1077,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/colour.cpp
     src/gtk/cursor.cpp
     src/gtk/dataobj.cpp
-    src/gtk3/dc.cpp
+    src/gtk/dc.cpp
     src/gtk3/dcclient.cpp
     src/gtk3/dcmemory.cpp
     src/gtk3/dcscreen.cpp
