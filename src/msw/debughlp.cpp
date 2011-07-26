@@ -359,6 +359,10 @@ wxDbgHelpDLL::DumpField(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
                     case SYMBOL_TAG_BASE_CLASS:
                         s = DumpUDT(&sym, pVariable, level);
                         break;
+
+                    default:
+                        // Suppress gcc warnings about unhandled enum values.
+                        break;
                 }
             }
 
@@ -366,6 +370,11 @@ wxDbgHelpDLL::DumpField(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
             {
                 s = GetSymbolName(pSym) + wxT(" = ") + s;
             }
+            break;
+
+        default:
+            // Suppress gcc warnings about unhandled enum values, don't assert
+            // to avoid problems during fatal crash generation.
             break;
     }
 
@@ -520,6 +529,11 @@ wxDbgHelpDLL::DumpSymbol(PSYMBOL_INFO pSym, void *pVariable)
     SYMBOL_INFO symDeref = *pSym;
     switch ( DereferenceSymbol(&symDeref, &pVariable) )
     {
+        default:
+            // Suppress gcc warnings about unhandled enum values, don't assert
+            // to avoid problems during fatal crash generation.
+            break;
+
         case SYMBOL_TAG_UDT:
             // show UDT recursively
             s = DumpUDT(&symDeref, pVariable);

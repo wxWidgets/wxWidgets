@@ -161,7 +161,7 @@ protected :
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     column = nil;
     return self;
 }
@@ -224,7 +224,7 @@ protected:
 
 - (id) init
 {
-    [super init];
+    self = [super init];
     impl = nil;
     return self;
 }

@@ -63,11 +63,15 @@ wxTextEntry::~wxTextEntry()
 
 wxString wxTextEntry::DoGetValue() const
 {
+    wxCHECK_MSG( GetTextPeer(), wxString(), "Must create the control first" );
+
     return GetTextPeer()->GetStringValue() ;
 }
 
 void wxTextEntry::GetSelection(long* from, long* to) const
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     GetTextPeer()->GetSelection( from , to ) ;
 }
 
@@ -80,18 +84,24 @@ void wxTextEntry::SetMaxLength(unsigned long len)
 
 void wxTextEntry::Copy()
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     if (CanCopy())
         GetTextPeer()->Copy() ;
 }
 
 void wxTextEntry::Cut()
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     if (CanCut())
         GetTextPeer()->Cut() ;
 }
 
 void wxTextEntry::Paste()
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     if (CanPaste())
         GetTextPeer()->Paste() ;
 }
@@ -122,16 +132,20 @@ bool wxTextEntry::CanPaste() const
     if (!IsEditable())
         return false;
 
+    wxCHECK_MSG( GetTextPeer(), false, "Must create the control first" );
+
     return GetTextPeer()->CanPaste() ;
 }
 
 void wxTextEntry::SetEditable(bool editable)
 {
-    if ( editable != m_editable )
-    {
-        m_editable = editable ;
-        GetTextPeer()->SetEditable( editable ) ;
-    }
+    if ( editable == m_editable )
+        return;
+
+    m_editable = editable ;
+
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+    GetTextPeer()->SetEditable( editable ) ;
 }
 
 void wxTextEntry::SetInsertionPoint(long pos)
@@ -155,11 +169,15 @@ long wxTextEntry::GetInsertionPoint() const
 
 wxTextPos wxTextEntry::GetLastPosition() const
 {
+    wxCHECK_MSG( GetTextPeer(), -1, "Must create the control first" );
+
     return GetTextPeer()->GetLastPosition() ;
 }
 
 void wxTextEntry::Remove(long from, long to)
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     {
         EventsSuppressor noevents(this);
         GetTextPeer()->Remove( from , to );
@@ -170,11 +188,15 @@ void wxTextEntry::Remove(long from, long to)
 
 void wxTextEntry::SetSelection(long from, long to)
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     GetTextPeer()->SetSelection( from , to ) ;
 }
 
 void wxTextEntry::WriteText(const wxString& str)
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     {
         EventsSuppressor noevents(this);
         GetTextPeer()->WriteText( str );
@@ -185,6 +207,8 @@ void wxTextEntry::WriteText(const wxString& str)
 
 void wxTextEntry::Clear()
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     {
         EventsSuppressor noevents(this);
         GetTextPeer()->Clear();
@@ -204,12 +228,16 @@ bool wxTextEntry::IsEditable() const
 
 void wxTextEntry::Undo()
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     if (CanUndo())
         GetTextPeer()->Undo() ;
 }
 
 void wxTextEntry::Redo()
 {
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
     if (CanRedo())
         GetTextPeer()->Redo() ;
 }
@@ -219,6 +247,8 @@ bool wxTextEntry::CanUndo() const
     if ( !IsEditable() )
         return false ;
 
+    wxCHECK_MSG( GetTextPeer(), false, "Must create the control first" );
+
     return GetTextPeer()->CanUndo() ;
 }
 
@@ -226,6 +256,8 @@ bool wxTextEntry::CanRedo() const
 {
     if ( !IsEditable() )
         return false ;
+
+    wxCHECK_MSG( GetTextPeer(), false, "Must create the control first" );
 
     return GetTextPeer()->CanRedo() ;
 }

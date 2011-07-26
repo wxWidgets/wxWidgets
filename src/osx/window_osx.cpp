@@ -444,7 +444,8 @@ void wxWindowMac::MacChildAdded()
 #endif
 }
 
-void wxWindowMac::MacPostControlCreate(const wxPoint& WXUNUSED(pos), const wxSize& size)
+void wxWindowMac::MacPostControlCreate(const wxPoint& WXUNUSED(pos),
+                                       const wxSize& WXUNUSED(size))
 {
     // todo remove if refactoring works correctly
 #if 0

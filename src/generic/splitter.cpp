@@ -66,11 +66,7 @@ BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
 #if defined( __WXMSW__ ) || defined( __WXMAC__)
     EVT_SET_CURSOR(wxSplitterWindow::OnSetCursor)
 #endif // wxMSW
-
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxSplitterWindow)
 END_EVENT_TABLE()
-
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxSplitterWindow, wxWindow)
 
 static bool IsLive(wxSplitterWindow* wnd)
 {
@@ -117,8 +113,6 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
 
 void wxSplitterWindow::Init()
 {
-    WX_INIT_CONTROL_CONTAINER();
-
     m_splitMode = wxSPLIT_VERTICAL;
     m_permitUnsplitAlways = true;
     m_windowOne = NULL;

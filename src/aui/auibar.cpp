@@ -69,41 +69,6 @@ const int BUTTON_DROPDOWN_WIDTH = 10;
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color);
 
-static wxBitmap MakeDisabledBitmap(wxBitmap& bmp)
-{
-    wxImage image = bmp.ConvertToImage();
-
-    int mr, mg, mb;
-    mr = image.GetMaskRed();
-    mg = image.GetMaskGreen();
-    mb = image.GetMaskBlue();
-
-    unsigned char* data = image.GetData();
-    int width = image.GetWidth();
-    int height = image.GetHeight();
-    bool has_mask = image.HasMask();
-
-    for (int y = height-1; y >= 0; --y)
-    {
-        for (int x = width-1; x >= 0; --x)
-        {
-            data = image.GetData() + (y*(width*3))+(x*3);
-            unsigned char* r = data;
-            unsigned char* g = data+1;
-            unsigned char* b = data+2;
-
-            if (has_mask && *r == mr && *g == mg && *b == mb)
-                continue;
-
-            *r = wxColour::AlphaBlend(*r, 255, 0.4);
-            *g = wxColour::AlphaBlend(*g, 255, 0.4);
-            *b = wxColour::AlphaBlend(*b, 255, 0.4);
-        }
-    }
-
-    return wxBitmap(image);
-}
-
 static wxColor GetBaseColor()
 {
 
@@ -996,10 +961,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
         // no disabled bitmap specified, we need to make one
         if (item.bitmap.IsOk())
         {
-            //wxImage img = item.bitmap.ConvertToImage();
-            //wxImage grey_version = img.ConvertToGreyscale();
-            //item.disabled_bitmap = wxBitmap(grey_version);
-            item.disabled_bitmap = MakeDisabledBitmap(item.bitmap);
+            item.disabled_bitmap = item.bitmap.ConvertToDisabled();
         }
     }
     m_items.Add(item);

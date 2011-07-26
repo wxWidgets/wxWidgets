@@ -106,8 +106,7 @@ struct wxCmdLineOption
         type = typ;
         flags = fl;
 
-        m_hasVal = false;
-        m_isNegated = false;
+        Reset();
     }
 
     // can't use union easily here, so just store all possible data fields, we
@@ -142,11 +141,18 @@ struct wxCmdLineOption
         { Check(wxCMD_LINE_VAL_DATE); m_dateVal = val; m_hasVal = true; }
 #endif // wxUSE_DATETIME
 
-    void SetHasValue(bool hasValue = true) { m_hasVal = hasValue; }
+    void SetHasValue() { m_hasVal = true; }
     bool HasValue() const { return m_hasVal; }
 
     void SetNegated() { m_isNegated = true; }
     bool IsNegated() const { return m_isNegated; }
+
+    // Reset to the initial state, called before parsing another command line.
+    void Reset()
+    {
+        m_hasVal =
+        m_isNegated = false;
+    }
 
 public:
     wxCmdLineEntryType kind;
@@ -637,8 +643,7 @@ void wxCmdLineParser::Reset()
 {
     for ( size_t i = 0; i < m_data->m_options.GetCount(); i++ )
     {
-        wxCmdLineOption& opt = m_data->m_options[i];
-        opt.SetHasValue(false);
+        m_data->m_options[i].Reset();
     }
 }
 
@@ -702,11 +707,45 @@ int wxCmdLineParser::Parse(bool showUsage)
 
                 if (longOptionsEnabled)
                 {
+                    wxString errorOpt;
+
                     optInd = m_data->FindOptionByLongName(name);
                     if ( optInd == wxNOT_FOUND )
                     {
-                        errorMsg << wxString::Format(_("Unknown long option '%s'"), name.c_str())
-                                 << wxT('\n');
+                        // Check if this could be a negatable long option.
+                        if ( name.Last() == '-' )
+                        {
+                            name.RemoveLast();
+
+                            optInd = m_data->FindOptionByLongName(name);
+                            if ( optInd != wxNOT_FOUND )
+                            {
+                                if ( !(m_data->m_options[optInd].flags &
+                                        wxCMD_LINE_SWITCH_NEGATABLE) )
+                                {
+                                    errorOpt.Printf
+                                             (
+                                              _("Option '%s' can't be negated"),
+                                              name
+                                             );
+                                    optInd = wxNOT_FOUND;
+                                }
+                            }
+                        }
+
+                        if ( optInd == wxNOT_FOUND )
+                        {
+                            if ( errorOpt.empty() )
+                            {
+                                errorOpt.Printf
+                                         (
+                                          _("Unknown long option '%s'"),
+                                          name
+                                         );
+                            }
+
+                            errorMsg << errorOpt << wxT('\n');
+                        }
                     }
                 }
                 else

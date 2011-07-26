@@ -31,15 +31,12 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                    int xPos, int yPos,
                                    bool noRefresh)
 {
+    // prevent programmatic position changes from causing scroll events
+    m_win->SetScrollPos(wxHORIZONTAL, xPos);
+    m_win->SetScrollPos(wxVERTICAL, yPos);
+
     base_type::SetScrollbars(
         pixelsPerUnitX, pixelsPerUnitY, noUnitsX, noUnitsY, xPos, yPos, noRefresh);
-
-    gtk_range_set_value(m_win->m_scrollBar[wxWindow::ScrollDir_Horz], m_xScrollPosition);
-    gtk_range_set_value(m_win->m_scrollBar[wxWindow::ScrollDir_Vert], m_yScrollPosition);
-    m_win->m_scrollPos[wxWindow::ScrollDir_Horz] =
-        gtk_range_get_value(m_win->m_scrollBar[wxWindow::ScrollDir_Horz]);
-    m_win->m_scrollPos[wxWindow::ScrollDir_Vert] =
-        gtk_range_get_value(m_win->m_scrollBar[wxWindow::ScrollDir_Vert]);
 }
 
 void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,

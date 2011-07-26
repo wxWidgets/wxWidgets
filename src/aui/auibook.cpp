@@ -2860,18 +2860,9 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
                       wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK,
                       wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
-
-#ifdef wxHAS_NATIVE_TAB_TRAVERSAL
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxAuiNotebook)
-#else
-    // Avoid clash with container event handler functions
-    EVT_SET_FOCUS(wxAuiNotebook::OnFocus)
-#endif
 END_EVENT_TABLE()
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxAuiNotebook, wxControl)
-
-wxAuiNotebook::wxAuiNotebook()
+void wxAuiNotebook::Init()
 {
     m_curpage = -1;
     m_tab_id_counter = wxAuiBaseTabCtrlId;
@@ -2879,18 +2870,6 @@ wxAuiNotebook::wxAuiNotebook()
     m_tab_ctrl_height = 20;
     m_requested_bmp_size = wxDefaultSize;
     m_requested_tabctrl_height = -1;
-}
-
-wxAuiNotebook::wxAuiNotebook(wxWindow *parent,
-                             wxWindowID id,
-                             const wxPoint& pos,
-                             const wxSize& size,
-                             long style) : wxControl(parent, id, pos, size, style)
-{
-    m_dummy_wnd = NULL;
-    m_requested_bmp_size = wxDefaultSize;
-    m_requested_tabctrl_height = -1;
-    InitNotebook(style);
 }
 
 bool wxAuiNotebook::Create(wxWindow* parent,
@@ -2911,9 +2890,6 @@ bool wxAuiNotebook::Create(wxWindow* parent,
 // code called by all constructors
 void wxAuiNotebook::InitNotebook(long style)
 {
-    WX_INIT_CONTROL_CONTAINER();
-    // SetCanFocus(false);
-
     SetName(wxT("wxAuiNotebook"));
     m_curpage = -1;
     m_tab_id_counter = wxAuiBaseTabCtrlId;

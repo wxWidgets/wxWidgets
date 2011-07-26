@@ -802,12 +802,32 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
     // [NSWindow setAllowsConcurrentViewDrawing:NO] does not affect it.
     if ( !wxThread::IsMain() )
     {
-      // just call the superclass handler, we don't need any custom wx drawing
-      // here and it seems to work fine:
-      wxOSX_DrawRectHandlerPtr
-          superimpl = (wxOSX_DrawRectHandlerPtr)
-                        [[self superclass] instanceMethodForSelector:_cmd];
-      superimpl(self, _cmd, rect);
+        if ( impl->IsUserPane() )
+        {
+            wxWindow* win = impl->GetWXPeer();
+            if ( win->UseBgCol() )
+            {
+                
+                CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+                CGContextSaveGState( context );
+
+                CGContextSetFillColorWithColor( context, win->GetBackgroundColour().GetCGColor());
+                CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+                CGContextFillRect( context, r );
+
+                CGContextRestoreGState( context );
+            }
+        }
+        else 
+        {
+            // just call the superclass handler, we don't need any custom wx drawing
+            // here and it seems to work fine:
+            wxOSX_DrawRectHandlerPtr
+            superimpl = (wxOSX_DrawRectHandlerPtr)
+            [[self superclass] instanceMethodForSelector:_cmd];
+            superimpl(self, _cmd, rect);
+        }
+
       return;
     }
 #endif // wxUSE_THREADS
@@ -1424,7 +1444,7 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 
 - (id)init:(wxWindow *)win
 {
-    [super init];
+    self = [super init];
 
     m_win = win;
     m_isDone = false;
@@ -2095,9 +2115,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     // this will fire higher level events, like insertText, to help
     // us handle EVT_CHAR, etc.
 
-    if ( IsUserPane() && [event type] == NSKeyDown)
+    if ( !result )
     {
-        if ( !result )
+        if ( IsUserPane() && [event type] == NSKeyDown)
         {
             if ( wxevent.GetKeyCode() < WXK_SPACE || wxevent.GetKeyCode() == WXK_DELETE || wxevent.GetKeyCode() >= WXK_START )
             {

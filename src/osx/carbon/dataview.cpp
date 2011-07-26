@@ -1236,6 +1236,11 @@ void wxMacDataViewDataBrowserListViewControl::OnSize()
     SetHasScrollBars(true,true);
 }
 
+void wxMacDataViewDataBrowserListViewControl::StartEditor( const wxDataViewItem & item, unsigned int column )
+{
+    // implement me
+}
+
 //
 // callback functions (inherited from wxMacDataBrowserTableViewControl)
 //

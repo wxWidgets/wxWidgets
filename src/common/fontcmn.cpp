@@ -29,6 +29,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/intl.h"
+    #include "wx/math.h"
     #include "wx/dcscreen.h"
     #include "wx/log.h"
     #include "wx/gdicmn.h"
@@ -511,7 +512,7 @@ int wxFontBase::AdjustToSymbolicSize(wxFontSymbolicSize size, int base)
         WrongFontSizeFactorsSize
     );
 
-    return factors[size - wxFONTSIZE_XX_SMALL]*base;
+    return wxRound(factors[size - wxFONTSIZE_XX_SMALL]*base);
 }
 
 wxFont& wxFont::MakeBold()

@@ -112,6 +112,10 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 #endif
         }
     }
+    else
+    {
+        res.hRes = res.vRes = 300;
+    }
 
     m_maxX = wxCoord((double)m_maxX * res.hRes / 72.0);
     m_maxY = wxCoord((double)m_maxY * res.vRes / 72.0);

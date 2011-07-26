@@ -795,15 +795,13 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 #endif
     ;
 
-    png_color_8 mask;
+    png_color_8 mask = { 0, 0, 0, 0, 0 };
 
     if (bHasMask)
     {
         mask.red   = image->GetMaskRed();
         mask.green = image->GetMaskGreen();
         mask.blue  = image->GetMaskBlue();
-        mask.alpha = 0;
-        mask.gray  = 0;
     }
 
     PaletteMap palette;

@@ -1961,7 +1961,7 @@ wxImageList *wxXmlResourceHandler::GetImageList(const wxString& param)
         {
             if (n->GetType() == wxXML_ELEMENT_NODE && n->GetName() == parambitmap)
             {
-                wxIcon icon = GetIcon(n);
+                wxIcon icon = GetIcon(n, wxART_OTHER, size);
                 if ( !imagelist )
                 {
                     // We need the real image list size to create it.

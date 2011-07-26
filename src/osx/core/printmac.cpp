@@ -651,6 +651,11 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 #endif
         }
     }
+    else
+    {
+        // fallback
+        res.hRes = res.vRes = 300;
+    }
     printout->SetPPIPrinter(int(res.hRes), int(res.vRes));
 
     // Set printout parameters

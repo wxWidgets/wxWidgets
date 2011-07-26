@@ -53,27 +53,26 @@ static inline double DegToRad(double deg)
     return (deg * M_PI) / 180.0;
 }
 
-static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode *op)
+static wxCompositionMode TranslateRasterOp(wxRasterOperationMode function)
 {
     switch ( function )
     {
         case wxCOPY: // src
             // since we are supporting alpha, _OVER is closer to the intention than _SOURCE
             // since the latter would overwrite even when alpha is not set to opaque
-            *op = wxCOMPOSITION_OVER; 
-            break;
+            return wxCOMPOSITION_OVER;
+
         case wxOR:         // src OR dst
-            *op = wxCOMPOSITION_ADD;
-            break;
+            return wxCOMPOSITION_ADD;
+
         case wxNO_OP:      // dst
-            *op = wxCOMPOSITION_DEST; // ignore the source
-            break;
+            return wxCOMPOSITION_DEST; // ignore the source
+
         case wxCLEAR:      // 0
-            *op = wxCOMPOSITION_CLEAR;// clear dst
-            break;
+            return wxCOMPOSITION_CLEAR;// clear dst
+
         case wxXOR:        // src XOR dst
-            *op = wxCOMPOSITION_XOR;
-            break;
+            return wxCOMPOSITION_XOR;
 
         case wxAND:        // src AND dst
         case wxAND_INVERT: // (NOT src) AND dst
@@ -86,10 +85,10 @@ static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode 
         case wxOR_REVERSE: // src OR (NOT dst)
         case wxSET:        // 1
         case wxSRC_INVERT: // NOT src
-        default:
-            return false;
+            break;
     }
-    return true;
+
+    return wxCOMPOSITION_INVALID;
 }
 
 //-----------------------------------------------------------------------------
@@ -115,6 +114,13 @@ wxGCDC::wxGCDC( const wxPrinterDC& dc) :
 }
 #endif
 
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+wxGCDC::wxGCDC(const wxEnhMetaFileDC& dc)
+   : wxDC(new wxGCDCImpl(this, dc))
+{
+}
+#endif
+
 wxGCDC::wxGCDC() :
   wxDC( new wxGCDCImpl( this ) )
 {
@@ -124,7 +130,7 @@ wxGCDC::~wxGCDC()
 {
 }
 
-wxGraphicsContext* wxGCDC::GetGraphicsContext()
+wxGraphicsContext* wxGCDC::GetGraphicsContext() const
 {
     if (!m_pimpl) return NULL;
     wxGCDCImpl *gc_impl = (wxGCDCImpl*) m_pimpl;
@@ -191,6 +197,15 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc ) :
 {
     Init();
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
+}
+#endif
+
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+wxGCDCImpl::wxGCDCImpl(wxDC *owner, const wxEnhMetaFileDC& dc)
+   : wxDCImpl(owner)
+{
+    Init();
+    SetGraphicsContext(wxGraphicsContext::Create(dc));
 }
 #endif
 
@@ -502,8 +517,8 @@ void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 
     m_logicalFunction = function;
 
-    wxCompositionMode mode;
-    m_logicalFunctionSupported = TranslateRasterOp( function, &mode);
+    wxCompositionMode mode = TranslateRasterOp( function );
+    m_logicalFunctionSupported = mode != wxCOMPOSITION_INVALID;
     if (m_logicalFunctionSupported)
         m_logicalFunctionSupported = m_graphicContext->SetCompositionMode(mode);
 
@@ -874,8 +889,8 @@ bool wxGCDCImpl::DoStretchBlit(
     if ( logical_func == wxNO_OP )
         return true;
 
-    wxCompositionMode mode;
-    if ( !TranslateRasterOp(logical_func, &mode) )
+    wxCompositionMode mode = TranslateRasterOp(logical_func);
+    if ( mode == wxCOMPOSITION_INVALID )
     {
         wxFAIL_MSG( wxT("Blitting is not supported with this logical operation.") );
         return false;
@@ -1156,5 +1171,22 @@ void wxGCDCImpl::DoDrawCheckMark(wxCoord x, wxCoord y,
 {
     wxDCImpl::DoDrawCheckMark(x,y,width,height);
 }
+
+#ifdef __WXMSW__
+wxRect wxGCDCImpl::MSWApplyGDIPlusTransform(const wxRect& r) const
+{
+    wxGraphicsContext* const gc = GetGraphicsContext();
+    wxCHECK_MSG( gc, r, wxT("Invalid wxGCDC") );
+
+    double x = 0,
+           y = 0;
+    gc->GetTransform().TransformPoint(&x, &y);
+
+    wxRect rect(r);
+    rect.Offset(x, y);
+
+    return rect;
+}
+#endif // __WXMSW__
 
 #endif // wxUSE_GRAPHICS_CONTEXT

@@ -128,6 +128,8 @@ void wxListCtrlXmlHandler::HandleListCol()
     HandleCommonItemAttrs(item);
     if (HasParam(wxT("width")))
         item.SetWidth((int)GetLong(wxT("width")));
+    if (HasParam(wxT("image")))
+        item.SetImage((int)GetLong(wxT("image")));
 
     list->InsertColumn(list->GetColumnCount(), item);
 }
@@ -160,7 +162,7 @@ void wxListCtrlXmlHandler::HandleListItem()
     int image;
     if ( list->HasFlag(wxLC_ICON) )
         image = GetImageIndex(list, wxIMAGE_LIST_NORMAL);
-    else if ( list->HasFlag(wxLC_SMALL_ICON) )
+    else if ( list->HasFlag(wxLC_SMALL_ICON) || list->HasFlag(wxLC_REPORT) || list->HasFlag(wxLC_LIST) )
         image = GetImageIndex(list, wxIMAGE_LIST_SMALL);
     else
         image = wxNOT_FOUND;

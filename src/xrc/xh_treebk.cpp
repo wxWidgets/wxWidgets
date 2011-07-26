@@ -76,6 +76,24 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
 
         CreateChildren(m_tbk, true/*only this handler*/);
 
+        wxXmlNode *node = GetParamNode("object");
+        int pageIndex = 0;
+        for (unsigned int i = 0; i < m_tbk->GetPageCount(); i++)
+        {
+            if ( m_tbk->GetPage(i) )
+            {
+                wxXmlNode *child = node->GetChildren();
+                while (child)
+                {
+                    if (child->GetName() == "expanded" && child->GetNodeContent() == "1")
+                        m_tbk->ExpandNode(pageIndex, true);
+
+                    child = child->GetNext();
+                }
+                pageIndex++;
+            }
+        }
+
         m_treeContext = old_treeContext;
         m_isInside = old_ins;
         m_tbk = old_par;

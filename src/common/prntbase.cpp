@@ -1667,7 +1667,7 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     Destroy();
 }
 
-void wxPreviewFrame::Initialize(wxPreviewFrameModalityKind kind)
+void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
 {
 #if wxUSE_STATUSBAR
     CreateStatusBar();

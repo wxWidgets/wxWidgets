@@ -1415,6 +1415,8 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+    
     virtual bool SetCompositionMode(wxCompositionMode op);
 
     virtual void BeginLayer(wxDouble opacity);
@@ -1487,6 +1489,11 @@ public:
     virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    
+    // fast convenience methods
+    
+    
+    virtual void DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
 
     void SetNativeContext( CGContextRef cg );
 
@@ -1573,6 +1580,8 @@ void wxMacCoreGraphicsContext::Init()
     m_view = NULL;
 #endif
     m_invisible = false;
+    m_antialias = wxANTIALIAS_DEFAULT;
+    m_interpolation = wxINTERPOLATION_DEFAULT;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
@@ -1769,6 +1778,45 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
             return false;
     }
     CGContextSetShouldAntialias(m_cgContext, antialiasMode);
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality interpolation)
+{
+    if (!EnsureIsValid())
+        return true;
+    
+    if (m_interpolation == interpolation)
+        return true;
+
+    m_interpolation = interpolation;
+    CGInterpolationQuality quality;
+    
+    switch (interpolation) 
+    {
+        case wxINTERPOLATION_DEFAULT:
+            quality = kCGInterpolationDefault;
+            break;
+        case wxINTERPOLATION_NONE:
+            quality = kCGInterpolationNone;
+            break;
+        case wxINTERPOLATION_FAST:
+            quality = kCGInterpolationLow;
+            break;
+        case wxINTERPOLATION_GOOD:
+#if wxOSX_USE_COCOA_OR_CARBON
+            quality = UMAGetSystemVersion() < 0x1060 ? kCGInterpolationHigh : (CGInterpolationQuality) 4 /*kCGInterpolationMedium only on 10.6*/;
+#else
+            quality = kCGInterpolationMedium;
+#endif
+            break;
+        case wxINTERPOLATION_BEST:
+            quality = kCGInterpolationHigh;
+            break;
+        default:
+            return false;
+    }
+    CGContextSetInterpolationQuality(m_cgContext, quality);
     return true;
 }
 
@@ -2609,6 +2657,27 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 void * wxMacCoreGraphicsContext::GetNativeContext()
 {
     return m_cgContext;
+}
+
+
+void wxMacCoreGraphicsContext::DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if (m_composition == wxCOMPOSITION_DEST) 
+        return; 
+
+    CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+    if ( !m_brush.IsNull() )
+    {
+        ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
+        CGContextFillRect(m_cgContext, rect);
+    }
+    
+    wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
+    if ( !m_pen.IsNull() )
+    {
+        ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
+        CGContextStrokeRect(m_cgContext, rect);
+    }
 }
 
 // concatenates this transform with the current transform of this context

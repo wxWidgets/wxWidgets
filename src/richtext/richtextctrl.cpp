@@ -456,6 +456,11 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     if (GetCaret())
         GetCaret()->Show();
     PositionCaret();
+#else
+#if !defined(__WXMAC__)
+    // Causes caret dropouts on Mac
+    PositionCaret();
+#endif
 #endif
 }
 
@@ -563,12 +568,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 
         // For now, don't handle shift-click when we're selecting multiple objects.
         if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
-        {
-            if (!m_selection.IsValid())
-                ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-            else
-                ExtendSelection(m_caretPosition, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-        }
+            ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
         else
             SelectNone();
     }
@@ -2925,12 +2925,18 @@ void wxRichTextCtrl::SetSelection(long from, long to)
 // Editing
 // ----------------------------------------------------------------------------
 
-void wxRichTextCtrl::Replace(long WXUNUSED(from), long WXUNUSED(to),
+void wxRichTextCtrl::Replace(long from, long to,
                              const wxString& value)
 {
     BeginBatchUndo(_("Replace"));
 
+    SetSelection(from, to);
+
+    wxRichTextAttr attr = GetDefaultStyle();
+
     DeleteSelectedContent();
+
+    SetDefaultStyle(attr);
 
     DoWriteText(value, SetValue_SelectionOnly);
 

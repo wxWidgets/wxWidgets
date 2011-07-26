@@ -5703,6 +5703,11 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
         else
             wxUSE_FSWATCHER=no
         fi
+    else
+        if test "$wxUSE_THREADS" != "yes"; then
+            AC_MSG_WARN([wxFileSystemWatcher disabled due to --disable-threads])
+            wxUSE_FSWATCHER=no
+        fi
     fi
 
     if test "$wxUSE_FSWATCHER" = "yes"; then

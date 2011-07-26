@@ -214,6 +214,8 @@ private:
             model->Resort();
 
         owner->OnColumnChange(idx);
+
+        SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, idx);
     }
 
     void OnRClick(wxHeaderCtrlEvent& event)
@@ -531,6 +533,8 @@ public:
     int GetLineStart( unsigned int row ) const;  // row * m_lineHeight in fixed mode
     int GetLineHeight( unsigned int row ) const; // m_lineHeight in fixed mode
     int GetLineAt( unsigned int y ) const;       // y / m_lineHeight in fixed mode
+
+    void SetRowHeight( int lineHeight ) { m_lineHeight = lineHeight; }
 
     // Some useful functions for row and item mapping
     wxDataViewItem GetItemByRow( unsigned int row ) const;
@@ -1769,8 +1773,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                 dataitem = node->GetItem();
 
-                if ((i > 0) && model->IsContainer(dataitem) &&
-                    !model->HasContainerColumns(dataitem))
+                // Skip all columns of "container" rows except the expander
+                // column itself unless HasContainerColumns() overrides this.
+                if ( col != GetOwner()->GetExpanderColumn() &&
+                        model->IsContainer(dataitem) &&
+                            !model->HasContainerColumns(dataitem) )
                     continue;
             }
             else
@@ -3027,7 +3034,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
     // Find the item along the parent-chain.
     // This algorithm is designed to speed up the node-finding method
     wxDataViewTreeNode* node = m_root;
-    for( unsigned iter = parentChain.size()-1; iter>=0; --iter )
+    for( unsigned iter = parentChain.size()-1; ; --iter )
     {
         if( node->HasChildren() )
         {
@@ -3058,6 +3065,9 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
         }
         else
             return NULL;
+
+        if ( !iter )
+            break;
     }
     return NULL;
 }
@@ -3369,7 +3379,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_DOWN:
-            if ( m_currentRow < GetRowCount() - 1 )
+            if ( m_currentRow + 1 < GetRowCount() )
                 OnArrowChar( m_currentRow + 1, event );
             break;
         // Add the process for tree expanding/collapsing
@@ -3718,8 +3728,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         if (!IsRowSelected(current))
         {
             SelectAllRows(false);
+            const unsigned oldCurrent = m_currentRow;
             ChangeCurrentRow(current);
             SelectRow(m_currentRow,true);
+            RefreshRow(oldCurrent);
             SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
         }
     }
@@ -4020,6 +4032,16 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
     Layout();
 
     AdjustScrollbars();
+
+    // We must redraw the headers if their height changed. Normally this
+    // shouldn't happen as the control shouldn't let itself be resized beneath
+    // its minimal height but avoid the display artefacts that appear if it
+    // does happen, e.g. because there is really not enough vertical space.
+    if ( !HasFlag(wxDV_NO_HEADER) && m_headerArea &&
+            m_headerArea->GetSize().y <= m_headerArea->GetBestSize(). y )
+    {
+        m_headerArea->Refresh();
+    }
 }
 
 void wxDataViewCtrl::SetFocus()
@@ -4122,6 +4144,16 @@ void wxDataViewCtrl::DoSetIndent()
 unsigned int wxDataViewCtrl::GetColumnCount() const
 {
     return m_cols.GetCount();
+}
+
+bool wxDataViewCtrl::SetRowHeight( int lineHeight )
+{
+    if ( !m_clientArea )
+        return false;
+
+    m_clientArea->SetRowHeight(lineHeight);
+
+    return true;
 }
 
 wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int idx ) const

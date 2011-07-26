@@ -45,6 +45,13 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
     SetMessage( message );
     SetWindowStyle(style);
     SetPath(defaultPath);
+    m_sheetDelegate = [[ModalDialogDelegate alloc] init];
+    [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
+}
+
+wxDirDialog::~wxDirDialog()
+{
+    [m_sheetDelegate release];
 }
 
 void wxDirDialog::ShowWindowModal()
@@ -74,10 +81,8 @@ void wxDirDialog::ShowWindowModal()
     if (parentWindow)
     {
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
-        [sheetDelegate setImplementation: this];
         [oPanel beginSheetForDirectory:dir.AsNSString() file:nil types: nil
-            modalForWindow: nativeParent modalDelegate: sheetDelegate
+            modalForWindow: nativeParent modalDelegate: m_sheetDelegate
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];
     }

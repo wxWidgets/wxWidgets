@@ -335,6 +335,8 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+    
     virtual bool SetCompositionMode(wxCompositionMode op);
 
     virtual void BeginLayer(wxDouble opacity);
@@ -1479,6 +1481,12 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
     return true;
 }
 
+bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality WXUNUSED(interpolation))
+{
+    // placeholder
+    return false;
+}
+
 bool wxGDIPlusContext::SetCompositionMode(wxCompositionMode op)
 {
     if ( m_composition == op )
@@ -1539,6 +1547,8 @@ void wxGDIPlusContext::PushState()
 
 void wxGDIPlusContext::PopState()
 {
+    wxCHECK_RET( !m_stateStack.empty(), wxT("No state to pop") );
+
     GraphicsState state = m_stateStack.top();
     m_stateStack.pop();
     m_context->Restore(state);
