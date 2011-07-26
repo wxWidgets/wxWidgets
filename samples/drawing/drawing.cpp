@@ -37,6 +37,7 @@
 #include "wx/overlay.h"
 #include "wx/graphics.h"
 #include "wx/filename.h"
+#include "wx/metafile.h"
 
 #define TEST_CAIRO_EVERYWHERE 0
 
@@ -101,6 +102,8 @@ public:
 #if wxUSE_GRAPHICS_CONTEXT
     void OnGraphicContext(wxCommandEvent& event);
 #endif
+    void OnCopy(wxCommandEvent& event);
+    void OnSave(wxCommandEvent& event);
     void OnShow(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
 
@@ -146,6 +149,7 @@ public:
 #if wxUSE_GRAPHICS_CONTEXT
     void UseGraphicContext(bool use) { m_useContext = use; Refresh(); }
 #endif
+    void Draw(wxDC& dc);
 
 protected:
     enum DrawMode
@@ -224,6 +228,8 @@ enum
 #if wxUSE_GRAPHICS_CONTEXT
     File_GraphicContext,
 #endif
+    File_Copy,
+    File_Save,
 
     MenuOption_First,
 
@@ -359,6 +365,9 @@ bool MyApp::OnInit()
         // still continue, the sample can be used without images too if they're
         // missing for whatever reason
     }
+#if wxUSE_LIBPNG
+      wxImage::AddHandler( new wxPNGHandler );
+#endif
 
     return true;
 }
@@ -1478,21 +1487,47 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     }
 }
 
-#if TEST_CAIRO_EVERYWHERE
-extern wxGraphicsRenderer* gCairoRenderer;
-#endif
-
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxPaintDC pdc(this);
+    Draw(pdc);
+}
 
+void MyCanvas::Draw(wxDC& pdc)
+{
 #if wxUSE_GRAPHICS_CONTEXT
-#if TEST_CAIRO_EVERYWHERE
     wxGCDC gdc;
-    gdc.SetGraphicsContext( gCairoRenderer->CreateContext( pdc ) );
+    wxGraphicsRenderer* const renderer = wxGraphicsRenderer::
+#if TEST_CAIRO_EVERYWHERE
+        GetCairoRenderer()
 #else
-     wxGCDC gdc( pdc ) ;
+        GetDefaultRenderer()
 #endif
+        ;
+
+    wxGraphicsContext* context;
+    if ( wxPaintDC *paintdc = wxDynamicCast(&pdc, wxPaintDC) )
+    {
+        context = renderer->CreateContext(*paintdc);
+    }
+    else if ( wxMemoryDC *memdc = wxDynamicCast(&pdc, wxMemoryDC) )
+    {
+        context = renderer->CreateContext(*memdc);
+    }
+#if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
+    else if ( wxMetafileDC *metadc = wxDynamicCast(&pdc, wxMetafileDC) )
+    {
+        context = renderer->CreateContext(*metadc);
+    }
+#endif
+    else
+    {
+        wxFAIL_MSG( "Unknown wxDC kind" );
+        return;
+    }
+
+    gdc.SetGraphicsContext(context);
+
     wxDC &dc = m_useContext ? (wxDC&) gdc : (wxDC&) pdc ;
 #else
     wxDC &dc = pdc ;
@@ -1691,6 +1726,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_GRAPHICS_CONTEXT
     EVT_MENU      (File_GraphicContext, MyFrame::OnGraphicContext)
 #endif
+    EVT_MENU      (File_Copy,     MyFrame::OnCopy)
+    EVT_MENU      (File_Save,     MyFrame::OnSave)
 
     EVT_MENU_RANGE(MenuShow_First,   MenuShow_Last,   MyFrame::OnShow)
 
@@ -1719,7 +1756,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_GRAPHICS_CONTEXT
     menuFile->Append(File_ShowAlpha, wxT("&Alpha screen\tF10"));
 #endif
-    menuFile->Append(File_ShowSplines, wxT("&Splines screen\tF11"));
+    menuFile->Append(File_ShowSplines, wxT("Spl&ines screen\tF11"));
     menuFile->Append(File_ShowGradients, wxT("&Gradients screen\tF12"));
 #if wxUSE_GRAPHICS_CONTEXT
      menuFile->Append(File_ShowGraphics, wxT("&Graphics screen"));
@@ -1729,6 +1766,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_GRAPHICS_CONTEXT
     menuFile->AppendCheckItem(File_GraphicContext, wxT("&Use GraphicContext\tCtrl-Y"), wxT("Use GraphicContext"));
 #endif
+    menuFile->AppendSeparator();
+#if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
+    menuFile->Append(File_Copy, wxT("Copy to clipboard"));
+#endif
+    menuFile->Append(File_Save, wxT("&Save...\tCtrl-S"), wxT("Save drawing to file"));
     menuFile->AppendSeparator();
     menuFile->Append(File_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
@@ -1835,6 +1877,38 @@ void MyFrame::OnGraphicContext(wxCommandEvent& event)
     m_canvas->UseGraphicContext(event.IsChecked());
 }
 #endif
+
+void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
+{
+#if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
+    wxMetafileDC dc;
+    if (!dc.IsOk())
+        return;
+    m_canvas->Draw(dc);
+    wxMetafile *mf = dc.Close();
+    if (!mf)
+        return;
+    mf->SetClipboard();
+    delete mf;
+#endif
+}
+
+void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
+{
+    wxFileDialog dlg(this, wxT("Save as bitmap"), wxT(""), wxT(""),
+#if wxUSE_LIBPNG
+                     wxT("PNG image (*.png)|*.png;*.PNG|")
+#endif
+                     wxT("Bitmap image (*.bmp)|*.bmp;*.BMP"),
+                     wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (dlg.ShowModal() == wxID_OK)
+    {
+        wxBitmap bmp(500, 800);
+        wxMemoryDC mdc(bmp);
+        m_canvas->Draw(mdc);
+        bmp.ConvertToImage().SaveFile(dlg.GetPath());
+    }
+}
 
 void MyFrame::OnShow(wxCommandEvent& event)
 {

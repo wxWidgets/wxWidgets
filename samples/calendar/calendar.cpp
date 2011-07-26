@@ -280,7 +280,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #ifdef __WXGTK20__
     EVT_UPDATE_UI(Calendar_Cal_Monday, MyFrame::OnUpdateUIGenericOnly)
     EVT_UPDATE_UI(Calendar_Cal_Holidays, MyFrame::OnUpdateUIGenericOnly)
-    EVT_UPDATE_UI(Calendar_Cal_LimitDates, MyFrame::OnUpdateUIGenericOnly)
 #endif
     EVT_UPDATE_UI(Calendar_Cal_Special, MyFrame::OnUpdateUIGenericOnly)
     EVT_UPDATE_UI(Calendar_Cal_SurroundWeeks, MyFrame::OnUpdateUIGenericOnly)

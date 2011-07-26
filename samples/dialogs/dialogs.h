@@ -293,7 +293,10 @@ public:
     TestDefaultActionDialog( wxWindow *parent );
 
     void OnListBoxDClick(wxCommandEvent& event);
+    void OnDisableOK(wxCommandEvent& event);
+    void OnDisableCancel(wxCommandEvent& event);
     void OnCatchListBoxDClick(wxCommandEvent& event);
+    void OnTextEnter(wxCommandEvent& event);
 
 private:
     bool   m_catchListBoxDClick;

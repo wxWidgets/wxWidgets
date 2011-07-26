@@ -88,12 +88,14 @@ public:
         return wxColour();
     }
 
-    virtual wxString ColourToString( const wxColour& col, int index ) const
+    virtual wxString ColourToString( const wxColour& col,
+                                     int index,
+                                     int argFlags = 0 ) const
     {
         if ( index == (int)(m_choices.GetCount()-1) )
             return wxT("");
 
-        return wxColourProperty::ColourToString(col, index);
+        return wxColourProperty::ColourToString(col, index, argFlags);
     }
 
     virtual int GetCustomColourIndex() const

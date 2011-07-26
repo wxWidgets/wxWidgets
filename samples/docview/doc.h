@@ -198,13 +198,18 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// A document class representing an image
+// Image and image details document classes (both are read-only for simplicity)
 // ----------------------------------------------------------------------------
 
+// This is a normal document containing an image, just like TextEditDocument
+// above contains some text. It can be created from an image file on disk as
+// usual.
 class ImageDocument : public wxDocument
 {
 public:
     ImageDocument() : wxDocument() { }
+
+    virtual bool OnOpenDocument(const wxString& file);
 
     wxImage GetImage() const { return m_image; }
 
@@ -216,6 +221,30 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(ImageDocument);
     DECLARE_DYNAMIC_CLASS(ImageDocument)
+};
+
+// This is a child document of ImageDocument: this document doesn't
+// correspond to any file on disk, it's part of ImageDocument and can't be
+// instantiated independently of it.
+class ImageDetailsDocument : public wxDocument
+{
+public:
+    ImageDetailsDocument(ImageDocument *parent);
+
+    // accessors for ImageDetailsView
+    wxSize GetSize() const { return m_size; }
+    unsigned long GetNumColours() const { return m_numColours; }
+    wxBitmapType GetType() const { return m_type; }
+    bool HasAlpha() const { return m_hasAlpha; }
+
+private:
+    // some information about the image we choose to show to the user
+    wxSize m_size;
+    unsigned long m_numColours;
+    wxBitmapType m_type;
+    bool m_hasAlpha;
+
+    wxDECLARE_NO_COPY_CLASS(ImageDetailsDocument);
 };
 
 #endif // _WX_SAMPLES_DOCVIEW_DOC_H_

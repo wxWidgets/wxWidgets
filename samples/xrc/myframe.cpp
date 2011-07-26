@@ -229,9 +229,9 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     // XRCCTRL
     wxListCtrl * const list = XRCCTRL(dlg, "controls_listctrl", wxListCtrl);
 
-    list->InsertItem(0, "Athos");   list->SetItem(0, 1, "90");
-    list->InsertItem(1, "Porthos"); list->SetItem(1, 1, "120");
-    list->InsertItem(2, "Aramis");  list->SetItem(2, 1, "80");
+    list->InsertItem(0, "Athos", 0);   list->SetItem(0, 1, "90", 2);
+    list->InsertItem(1, "Porthos", 5); list->SetItem(1, 1, "120", 3);
+    list->InsertItem(2, "Aramis", 1);  list->SetItem(2, 1, "80", 4);
 #endif // wxUSE_LISTCTRL
 
 #if wxUSE_TREECTRL
