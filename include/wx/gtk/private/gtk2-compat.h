@@ -219,6 +219,12 @@ static inline void wx_gtk_widget_get_allocation(GtkWidget* widget, GtkAllocation
 }
 #define gtk_widget_get_allocation wx_gtk_widget_get_allocation
 
+static inline GtkWidget* wx_gtk_widget_get_parent(GtkWidget* widget)
+{
+    return widget->parent;
+}
+#define gtk_widget_get_parent wx_gtk_widget_get_parent
+
 inline gboolean wx_gtk_widget_get_has_window(GtkWidget *widget)
 {
     return !GTK_WIDGET_NO_WINDOW(widget);

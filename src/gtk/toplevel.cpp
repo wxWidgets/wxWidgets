@@ -88,7 +88,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
     wxASSERT_MSG(window, "wxgtk_window_set_urgency_hint: GdkWindow not realized");
     XWMHints *wm_hints;
 
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     GdkDisplay *display = gtk_widget_get_display(GTK_WIDGET(win));
     wm_hints = XGetWMHints(gdk_x11_display_get_xdisplay(display), gdk_x11_window_get_xid(window));
 #else
@@ -103,7 +103,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
     else
         wm_hints->flags &= ~XUrgencyHint;
 
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     XSetWMHints(gdk_x11_display_get_xdisplay(display), gdk_x11_window_get_xid(window), wm_hints);
 #else
     XSetWMHints(GDK_WINDOW_XDISPLAY(window), GDK_WINDOW_XWINDOW(window), wm_hints);
@@ -417,7 +417,7 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
 {
     static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     GdkDisplay *display = gdk_window_get_display(window);
     Atom xproperty = gdk_x11_atom_to_xatom_for_display(display, property);
 #else
@@ -430,7 +430,7 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     gulong nitems, bytes_after;
     guchar* data;
 
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     Status status = XGetWindowProperty(
         gdk_x11_display_get_xdisplay(display),
         gdk_x11_window_get_xid(window),
@@ -650,8 +650,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect(m_wxwindow, "size_allocate",
         G_CALLBACK(size_allocate), this);
 
+#ifndef __WXGTK30__
     g_signal_connect (m_widget, "size_request",
                       G_CALLBACK (wxgtk_tlw_size_request_callback), this);
+#endif
     PostCreation();
 
 #if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
@@ -834,7 +836,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gdk_window_set_functions(window, (GdkWMFunction)0);
 
             gdk_window_get_origin(window, &root_x, &root_y);
-        #if GTK_CHECK_VERSION(3,0,0)
+        #ifdef __WXGTK30__
             gdk_window_get_geometry(window, &client_x, &client_y, &width, &height);
         #else
             gdk_window_get_geometry(window, &client_x, &client_y, &width, &height, NULL);
@@ -843,7 +845,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gdk_window_move_resize(
                 window, -client_x, -client_y, screen_width + 1, screen_height + 1);
 
-        #if GTK_CHECK_VERSION(3,0,0)
+        #ifdef __WXGTK30__
             wxSetFullScreenStateX11((WXDisplay*)gdk_display_get_default(),
                                     (WXWindow)GDK_ROOT_WINDOW(),
                                     (WXWindow)gdk_x11_window_get_xid(window),
@@ -862,7 +864,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
             gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
 
-        #if GTK_CHECK_VERSION(3,0,0)
+        #ifdef __WXGTK30__
             wxSetFullScreenStateX11((WXDisplay*)gdk_display_get_default(),
                                     (WXWindow)GDK_ROOT_WINDOW(),
                                     (WXWindow)gdk_x11_window_get_xid(window),
@@ -969,7 +971,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         xevent.type = ClientMessage;
         GdkWindow* window = gtk_widget_get_window(m_widget);
 
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
         xevent.window = gdk_x11_window_get_xid(window);
         xevent.message_type = gdk_x11_atom_to_xatom_for_display(
             gdk_window_get_display(window),

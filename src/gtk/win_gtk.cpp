@@ -41,11 +41,7 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
 {
     GtkAllocation allocation;
 
-#if GTK_CHECK_VERSION(3,0,0)
     gtk_widget_get_allocation(widget, &allocation);
-#else
-    allocation = widget->allocation; 
-#endif
 
     const bool is_resize =
         allocation.width  != alloc->width ||
@@ -60,22 +56,13 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
     int w = alloc->width - 2 * border_x;
     if (w < 0) w = 0;
 
-#if GTK_CHECK_VERSION(3,0,0)
     if (gtk_widget_get_realized(widget) && (is_move || is_resize))
-#else
-    if (GTK_WIDGET_REALIZED(widget) && (is_move || is_resize))
-#endif
     {
         int h = alloc->height - 2 * border_y;
         if (h < 0) h = 0;
 
-#if GTK_CHECK_VERSION(3,0,0)
         gdk_window_move_resize(gtk_widget_get_window(widget),
             alloc->x + border_x, alloc->y + border_y, w, h);
-#else
-        gdk_window_move_resize(widget->window,
-            alloc->x + border_x, alloc->y + border_y, w, h);
-#endif
 
         if (is_resize && (border_x || border_y))
         {
@@ -90,18 +77,14 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
     allocation = *alloc;
 
     // adjust child positions
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     for (const GList* list = gtk_container_get_children(GTK_CONTAINER(&(pizza->m_fixed))); list; list = list->next)
 #else
     for (const GList* list = pizza->m_fixed.children; list; list = list->next)
 #endif
     {
         const GtkFixedChild* child = static_cast<GtkFixedChild*>(list->data);
-#if GTK_CHECK_VERSION(3,0,0)
         if (gtk_widget_get_visible(child->widget))
-#else
-        if (GTK_WIDGET_VISIBLE(child->widget))
-#endif
         {
             GtkAllocation child_alloc;
             // note that child positions do not take border into
@@ -127,13 +110,8 @@ static void realize(GtkWidget* widget)
     GtkAllocation allocation;
     GdkWindow*    win;
 
-#if GTK_CHECK_VERSION(3,0,0)
     gtk_widget_get_allocation(widget, &allocation);
     win = gtk_widget_get_window(widget);
-#else
-    allocation = widget->allocation; 
-    win = widget->window;
-#endif
 
     wxPizza* pizza = WX_PIZZA(widget);
     if (pizza->m_border_style)
@@ -155,13 +133,8 @@ static void show(GtkWidget* widget)
     GtkWidget* parent;
     GtkAllocation allocation;
 
-#if GTK_CHECK_VERSION(3,0,0)
     parent = gtk_widget_get_parent(widget);
     gtk_widget_get_allocation(widget, &allocation);
-#else
-    parent = widget->parent;
-    allocation = widget->allocation; 
-#endif
 
     if (parent && WX_PIZZA(widget)->m_border_style)
     {
@@ -178,13 +151,8 @@ static void hide(GtkWidget* widget)
     GtkWidget* parent;
     GtkAllocation allocation;
 
-#if GTK_CHECK_VERSION(3,0,0)
     parent = gtk_widget_get_parent(widget);
     gtk_widget_get_allocation(widget, &allocation);
-#else
-    parent = widget->parent;
-    allocation = widget->allocation; 
-#endif
 
     if (parent && WX_PIZZA(widget)->m_border_style)
     {
@@ -251,7 +219,7 @@ static void class_init(void* g_class, void*)
 
     // needed to make widget appear scrollable to GTK+
     klass->set_scroll_adjustments = set_scroll_adjustments;
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     // TODO Make widget appear scrollable to GTK3
 #else
     widget_class->set_scroll_adjustments_signal =
@@ -272,7 +240,7 @@ static void class_init(void* g_class, void*)
 
 GType wxPizza::type()
 {
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     static GType type;
 #else
     static GtkType type;
@@ -303,7 +271,7 @@ GtkWidget* wxPizza::New(long windowStyle)
     pizza->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;
     // mask off border styles not useable with wxPizza
     pizza->m_border_style = int(windowStyle & BORDER_STYLES);
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     gtk_widget_set_has_window(widget, true);
 #else
     gtk_fixed_set_has_window(GTK_FIXED(widget), true);
@@ -332,7 +300,7 @@ GtkWidget* wxPizza::New(long windowStyle)
 void wxPizza::move(GtkWidget* widget, int x, int y)
 {
     GtkFixed* fixed = &m_fixed;
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__
     for (const GList* list = gtk_container_get_children(GTK_CONTAINER(fixed)); list; list = list->next)
 #else
     for (const GList* list = fixed->children; list; list = list->next)
@@ -366,13 +334,8 @@ static void scroll_adjust(GtkWidget* widget, void* data)
     GtkAllocation allocation;
     GdkWindow*    win;
 
-#if GTK_CHECK_VERSION(3,0,0)
     gtk_widget_get_allocation(widget, &allocation);
     win = gtk_widget_get_window(widget);
-#else
-    allocation = widget->allocation; 
-    win = widget->window;
-#endif
     allocation.x += p->dx;
     allocation.y += p->dy;
 
@@ -393,11 +356,7 @@ void wxPizza::scroll(int dx, int dy)
     GtkWidget* widget = GTK_WIDGET(this);
     GdkWindow*    win;
 
-#if GTK_CHECK_VERSION(3,0,0)
     win = gtk_widget_get_window(widget);
-#else
-    win = widget->window;
-#endif
 
     if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
         dx = -dx;
