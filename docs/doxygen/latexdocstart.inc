@@ -49,7 +49,7 @@
 \end{center}
 \end{figure}
 \vspace*{2cm}
-{\large Version 2.9.2 }\\
+{\large Version 2.9.3 }\\
 \vspace*{1cm}
 {Generated on \today}\\
 \end{center}
