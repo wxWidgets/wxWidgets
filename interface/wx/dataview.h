@@ -1095,6 +1095,14 @@ public:
     */
     virtual void SetSelections(const wxDataViewItemArray& sel);
 
+    /** 
+        Programmatically starts editing the given item on the given column.
+        Currently not implemented on wxOSX Carbon.
+        @since 2.9.2
+    */
+    
+    virtual void StartEditor(const wxDataViewItem & item, unsigned int column);
+
     /**
         Unselect the given item.
     */
@@ -1105,6 +1113,26 @@ public:
         This method only has effect if multiple selections are allowed.
     */
     virtual void UnselectAll();
+
+    /**
+        Sets the row height.
+
+        This function can only be used when all rows have the same height, i.e.
+        when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
+
+        Currently this is implemented in the generic and native GTK versions
+        only and nothing is done (and @false returned) when using OS X port.
+
+        Also notice that this method can only be used to increase the row
+        height compared with the default one (as determined by the return value
+        of wxDataViewRenderer::GetSize()), if it is set to a too small value
+        then the minimum required by the renderers will be used.
+
+        @return @true if the line height was changed or @false otherwise.
+
+        @since 2.9.2
+    */
+    virtual bool SetRowHeight(int rowHeight);
 };
 
 
@@ -2686,6 +2714,26 @@ public:
         Returns a reference to a value.
     */
     const wxVariant& GetValue() const;
+
+    /**
+        Can be used to determine whether the new value is going to be accepted
+        in wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE handler.
+
+        Returns @true if editing the item was cancelled or if the user tried to
+        enter an invalid value (refused by wxDataViewRenderer::Validate()). If
+        this method returns @false, it means that the value in the model is
+        about to be changed to the new one.
+
+        Notice that wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event handler can
+        call wxNotifyEvent::Veto() to prevent this from happening.
+
+        Currently support for setting this field and for vetoing the change is
+        only available in the generic version of wxDataViewCtrl, i.e. under MSW
+        but not GTK nor OS X.
+
+        @since 2.9.3
+     */
+    bool IsEditCancelled() const;
 
     /**
         Sets the column index associated with this event.

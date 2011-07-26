@@ -221,6 +221,10 @@ public:
 
     /**
         Adds a new page.
+
+        The page must have the book control itself as the parent and must not
+        have been added to this control previously.
+
         The call to this function may generate the page changing events.
 
         @param page

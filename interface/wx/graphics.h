@@ -213,6 +213,23 @@ enum wxAntialiasMode
 };
 
 /**
+    Interpolation quality used by wxGraphicsContext::SetInterpolationQuality().
+ */
+enum wxInterpolationQuality
+{
+    /** default interpolation, based on type of context, in general medium quality */
+    wxINTERPOLATION_DEFAULT,
+    /** no interpolation */
+    wxINTERPOLATION_NONE, 
+    /** fast interpolation, suited for interactivity */
+    wxINTERPOLATION_FAST,
+    /** better quality */
+    wxINTERPOLATION_GOOD,
+    /** best quality, not suited for interactivity */
+    wxINTERPOLATION_BEST
+};
+
+/**
     Compositing is done using Porter-Duff compositions
     (see http://keithp.com/~keithp/porterduff/p253-porter.pdf) with
     wxGraphicsContext::SetCompositionMode().
@@ -224,6 +241,14 @@ enum wxAntialiasMode
 */
 enum wxCompositionMode
 {
+    /**
+        Indicates invalid or unsupported composition mode.
+
+        This value can't be passed to wxGraphicsContext::SetCompositionMode().
+
+        @since 2.9.2
+     */
+    wxCOMPOSITION_INVALID = -1,
     wxCOMPOSITION_CLEAR, /**< @e R = 0 */
     wxCOMPOSITION_SOURCE, /**< @e R = S */
     wxCOMPOSITION_OVER, /**< @e R = @e S + @e D*(1 - @e Sa) */
@@ -237,7 +262,7 @@ enum wxCompositionMode
     wxCOMPOSITION_DEST_OUT, /**< @e R = @e D*(1 - @e Sa) */
     wxCOMPOSITION_DEST_ATOP, /**< @e R = @e S*(1 - @e Da) + @e D*@e Sa */
     wxCOMPOSITION_XOR, /**< @e R = @e S*(1 - @e Da) + @e D*(1 - @e Sa) */
-    wxCOMPOSITION_ADD, /**< @e R = @e S + @e D */
+    wxCOMPOSITION_ADD  /**< @e R = @e S + @e D */
 };
 
 
@@ -316,6 +341,16 @@ public:
         @see wxGraphicsRenderer::CreateContext(), @ref overview_unixprinting
     */
     static wxGraphicsContext* Create(const wxPrinterDC& dc);
+
+    /**
+        Creates a wxGraphicsContext from a wxEnhMetaFileDC.
+
+        This function, as wxEnhMetaFileDC class itself, is only available only
+        under MSW.
+
+        @see wxGraphicsRenderer::CreateContext()
+    */
+    static wxGraphicsContext* Create(const wxEnhMetaFileDC& dc);
 
     /**
         Clips drawings to the specified region.
@@ -659,6 +694,16 @@ public:
     virtual wxAntialiasMode GetAntialiasMode() const ;
 
     /**
+        Sets the interpolation quality, returns true if it supported
+     */
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
+    
+    /**
+        Returns the current interpolation quality
+     */
+    virtual wxInterpolationQuality GetInterpolationQuality() const;
+    
+    /**
         Sets the compositing operator, returns true if it supported
     */
     virtual bool SetCompositionMode(wxCompositionMode op) = 0;
@@ -826,6 +871,14 @@ public:
         Creates a wxGraphicsContext from a wxPrinterDC
     */
     virtual wxGraphicsContext* CreateContext(const wxPrinterDC& dc) = 0 ;
+
+    /**
+        Creates a wxGraphicsContext from a wxEnhMetaFileDC.
+
+        This function, as wxEnhMetaFileDC class itself, is only available only
+        under MSW.
+    */
+    virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& dc) = 0;
 
     /**
         Creates a native brush from a wxBrush.

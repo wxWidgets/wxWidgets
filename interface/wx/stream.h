@@ -81,6 +81,18 @@ public:
     virtual bool IsSeekable() const;
 
     /**
+        Resets the stream state.
+
+        By default, resets the stream to good state, i.e. clears any errors.
+        Since wxWidgets 2.9.3 can be also used to explicitly set the state to
+        the specified error (the @a error argument didn't exist in the previous
+        versions).
+
+        @see GetLastError()
+     */
+    void Reset(wxStreamError error = wxSTREAM_NO_ERROR);
+
+    /**
         Returns the opposite of IsOk().
         You can use this function to test the validity of the stream as if
         it was a pointer:

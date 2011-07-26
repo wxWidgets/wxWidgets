@@ -105,6 +105,11 @@ public:
         range is set (or only one of the bounds is set), @a dt1 and/or @a dt2
         are set to be invalid.
 
+        Notice that when using a native MSW implementation of this control the
+        lower range is always set, even if SetRange() hadn't been called
+        explicitly, as the native control only supports dates later than year
+        1601.
+
         @param dt1
             Pointer to the object which receives the lower range limit or
             becomes invalid if it is not set. May be @NULL if the caller is not

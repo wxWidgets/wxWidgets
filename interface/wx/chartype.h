@@ -35,10 +35,10 @@
 /**
     Compatibility macro which expands to wxT() in wxWidgets 2 only.
 
-    This macro can be used in the code which needs to compile with both
-    wxWidgets 2 and 3 versions in places where v2 API requires a Unicode string
-    (in Unicode build) and v3 API only accepts a standard narrow
-    string as in e.g. wxCmdLineEntryDesc structure objects initializers.
+    This macro can be used in code which needs to compile with both
+    wxWidgets 2 and 3 versions, in places where the wx2 API requires a Unicode string
+    (in Unicode build) but the wx3 API only accepts a standard narrow
+    string, as in e.g. wxCmdLineEntryDesc structure objects initializers.
 
     Example of use:
     @code
@@ -50,18 +50,21 @@
     };
     @endcode
 
-    Without @c wxT_2 the code above wouldn't compile with wxWidgets 2, with @c
-    wxT instead of it, it wouldn't compile with wxWidgets 3.
+    Without @c wxT_2 the code above wouldn't compile with wxWidgets 2, but using @c
+    wxT instead, it wouldn't compile with wxWidgets 3.
 
     @see wxT()
 
+    @since 2.8.12, 2.9.2
+
     @header{wx/chartype.h}
  */
+#define wxT_2(string)
 
 /**
-    wxS is macro which can be used with character and string literals (in other words,
-    @c 'x' or @c "foo") to either convert them to wide characters or wide strings
-    in @c wchar_t-based (UTF-16) builds or keep them unchanged in @c char-based
+    wxS is a macro which can be used with character and string literals (in other words,
+    @c 'x' or @c "foo") to convert them either to wide characters or wide strings
+    in @c wchar_t-based (UTF-16) builds, or to keep them unchanged in @c char-based
     (UTF-8) builds.
 
     Basically this macro produces characters or strings of type wxStringCharType.

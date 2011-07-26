@@ -747,6 +747,38 @@ public:
     */
     void SetMaxDocsOpen(int n);
 
+
+protected:
+    /**
+        Called when a file selected from the MRU list doesn't exist any more.
+
+        The default behaviour is to remove the file from the MRU (most recently
+        used) files list and the corresponding menu and notify the user about
+        it but this method can be overridden to customize it.
+
+        For example, an application may want to just give an error about the
+        missing file @a filename but not remove it from the file history. Or it
+        could ask the user whether the file should be kept or removed.
+
+        Notice that this method is called only if the file selected by user
+        from the MRU files in the menu doesn't exist, but not if opening it
+        failed for any other reason because in the latter case the default
+        behaviour of removing the file from the MRU list is inappropriate.
+        If you still want to do it, you would need to do it by calling
+        RemoveFileFromHistory() explicitly in the part of the file opening code
+        that may fail.
+
+        @since 2.9.3
+
+        @param n
+            The index of the file in the MRU list, it can be passed to
+            RemoveFileFromHistory() to remove this file from the list.
+        @param filename
+            The full name of the file.
+     */
+    virtual void OnMRUFileNotExist(unsigned n, const wxString& filename);
+
+
     /**
         The currently active view.
     */
@@ -769,18 +801,15 @@ public:
     wxFileHistory* m_fileHistory;
 
     /**
-        Stores the flags passed to the constructor.
-    */
-    long m_flags;
-
-    /**
         The directory last selected by the user when opening a file.
     */
-    wxFileHistory* m_fileHistory;
+    wxString m_lastDirectory;
 
     /**
         Stores the maximum number of documents that can be opened before
-        existing documents are closed. By default, this is 10,000.
+        existing documents are closed.
+
+        By default, this is @c INT_MAX i.e. practically unlimited.
     */
     int m_maxDocsOpen;
 };
@@ -1130,8 +1159,24 @@ public:
     @class wxDocument
 
     The document class can be used to model an application's file-based data.
+
     It is part of the document/view framework supported by wxWidgets, and
     cooperates with the wxView, wxDocTemplate and wxDocManager classes.
+
+    A normal document is the one created without parent document and is
+    associated with a disk file. Since version 2.9.2 wxWidgets also supports a
+    special kind of documents called <em>child documents</em> which are virtual
+    in the sense that they do not correspond to a file but rather to a part of
+    their parent document. Because of this, the child documents can't be
+    created directly by user but can only be created by the parent document
+    (usually when it's being created itself). They also can't be independently
+    saved. A child document has its own view with the corresponding window.
+    This view can be closed by user but, importantly, is also automatically
+    closed when its parent document is closed. Thus, child documents may be
+    convenient for creating additional windows which need to be closed when the
+    main document is. The docview sample demonstrates this use of child
+    documents by creating a child document containing the information about the
+    parameters of the image opened in the main document.
 
     @library{wxcore}
     @category{docview}
@@ -1144,8 +1189,14 @@ public:
     /**
         Constructor. Define your own default constructor to initialize
         application-specific data.
+
+        @param parent
+            Specifying a non-@c NULL parent document here makes this document a
+            special <em>child document</em>, see their description in the class
+            documentation. Notice that this parameter exists but is ignored in
+            wxWidgets versions prior to 2.9.1.
     */
-    wxDocument(wxDocument* parent = 0);
+    wxDocument(wxDocument* parent = NULL);
 
     /**
         Destructor. Removes itself from the document manager.
@@ -1277,6 +1328,18 @@ public:
     wxList& GetViews();
     const wxList& GetViews() const;
     //@}
+
+    /**
+        Returns true if this document is a child document corresponding to a
+        part of the parent document and not a disk file as usual.
+
+        This method can be used to check whether file-related operations make
+        sense for this document as they only apply to top-level documents and
+        not child ones.
+
+        @since 2.9.2
+     */
+    bool IsChildDocument() const;
 
     /**
         Returns @true if the document has been modified since the last save,

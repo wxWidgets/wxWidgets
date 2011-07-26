@@ -183,6 +183,17 @@ public:
     Note that all available wxBitmapHandlers for a given wxWidgets port are 
     automatically loaded at startup so you won't need to use wxBitmap::AddHandler.
 
+    More on the difference between wxImage and wxBitmap: wxImage is just a
+    buffer of RGB bytes with an optional buffer for the alpha bytes. It is all
+    generic, platform independent and image file format independent code. It
+    includes generic code for scaling, resizing, clipping, and other manipulations
+    of the image data. OTOH, wxBitmap is intended to be a wrapper of whatever is
+    the native image format that is quickest/easiest to draw to a DC or to be the
+    target of the drawing operations performed on a wxMemoryDC. By splitting the
+    responsibilities between wxImage/wxBitmap like this then it's easier to use
+    generic code shared by all platforms and image types for generic operations and
+    platform specific code where performance or compatibility is needed.
+
     @library{wxcore}
     @category{gdi}
 

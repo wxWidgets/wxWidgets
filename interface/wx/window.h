@@ -495,6 +495,9 @@ public:
         current parent window (e.g. a non-standard toolbar in a wxFrame)
         and then re-inserted into another.
 
+        Notice that currently you need to explicitly call
+        wxNotebook::RemovePage() before reparenting a notebook page.
+
         @param newParent
             New parent.
     */

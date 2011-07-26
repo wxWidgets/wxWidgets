@@ -195,21 +195,44 @@ public:
     virtual void CreateControlBar();
 
     /**
-        Creates the preview canvas and control bar.
+        Initializes the frame elements and prepares for showing it.
 
-        By default also disables the other existing top level windows to
-        prepare for showing the preview frame modally. Since wxWidgets 2.9.2
-        this can be changed by specifying either wxPreviewFrame_WindowModal --
-        to disable just the parent window -- or wxPreviewFrame_NonModal -- to
-        not disable any windows at all -- as @a kind parameter.
+        Calling this method is equivalent to calling InitializeWithModality()
+        with wxPreviewFrame_AppModal argument, please see its documentation for
+        more details.
 
-        This function must be called by the application prior to showing the frame.
+        Please notice that this function is virtual mostly for backwards
+        compatibility only, there is no real need to override it as it's never
+        called by wxWidgets itself.
+     */
+    virtual void Initialize();
+
+    /**
+        Initializes the frame elements and prepares for showing it with the
+        given modality kind.
+
+        This method creates the frame elements by calling CreateCanvas() and
+        CreateControlBar() methods (which may be overridden to customize them)
+        and prepares to show the frame according to the value of @a kind
+        parameter:
+            - If it is wxPreviewFrame_AppModal, all the other application
+            windows will be disabled when this frame is shown. This is the same
+            behaviour as that of simple Initialize().
+            - If it is wxPreviewFrame_WindowModal, only the parent window of
+            the preview frame will be disabled when it is shown.
+            - And if it is wxPreviewFrame_NonModal, no windows at all will be
+            disabled while the preview is shown.
+
+        Notice that this function (or Initialize()) must be called by the
+        application prior to showing the frame but you still must call @c
+        Show(true) to actually show it afterwards.
 
         @param kind
-            The modality kind of preview frame. @since 2.9.2
+            The modality kind of preview frame.
+
+        @since 2.9.2
     */
-    virtual void Initialize(wxPreviewFrameModalityKind kind
-                                = wxPreviewFrame_AppModal);
+    virtual void InitializeWithModality(wxPreviewFrameModalityKind kind);
 
     /**
         Enables any disabled frames in the application, and deletes the print preview
