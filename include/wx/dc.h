@@ -512,6 +512,19 @@ public:
     // this needs to overidden if the axis is inverted
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
+#ifdef __WXMSW__
+    // Native Windows functions using the underlying HDC don't honour GDI+
+    // transformations which may be applied to it. Using this function we can
+    // transform the coordinates manually before passing them to such functions
+    // (as in e.g. wxRendererMSW code). It doesn't do anything if this is not a
+    // wxGCDC.
+    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const
+    {
+        return r;
+    }
+#endif // __WXMSW__
+
+
     // ---------------------------------------------------------
     // the actual drawing API
 

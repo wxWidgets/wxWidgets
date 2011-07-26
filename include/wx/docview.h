@@ -17,6 +17,7 @@
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
 #include "wx/list.h"
+#include "wx/dlist.h"
 #include "wx/string.h"
 #include "wx/frame.h"
 #include "wx/filehistory.h"
@@ -172,6 +173,10 @@ public:
     // dialogs. Override if necessary.
     virtual wxWindow *GetDocumentWindow() const;
 
+    // Returns true if this document is a child document corresponding to a
+    // part of the parent document and not a disk file as usual.
+    bool IsChildDocument() const { return m_documentParent != NULL; }
+
 protected:
     wxList                m_documentViews;
     wxString              m_documentFile;
@@ -179,7 +184,12 @@ protected:
     wxString              m_documentTypeName;
     wxDocTemplate*        m_documentTemplate;
     bool                  m_documentModified;
+
+    // if the document parent is non-NULL, it's a pseudo-document corresponding
+    // to a part of the parent document which can't be saved or loaded
+    // independently of its parent and is always closed when its parent is
     wxDocument*           m_documentParent;
+
     wxCommandProcessor*   m_commandProcessor;
     bool                  m_savedYet;
 
@@ -193,6 +203,10 @@ protected:
     wxString DoGetUserReadableName() const;
 
 private:
+    // list of all documents whose m_documentParent is this one
+    typedef wxDList<wxDocument> DocsList;
+    DocsList m_childDocuments;
+
     DECLARE_ABSTRACT_CLASS(wxDocument)
     wxDECLARE_NO_COPY_CLASS(wxDocument);
 };
@@ -386,6 +400,7 @@ public:
     void OnUpdateFileRevert(wxUpdateUIEvent& event);
     void OnUpdateFileNew(wxUpdateUIEvent& event);
     void OnUpdateFileSave(wxUpdateUIEvent& event);
+    void OnUpdateFileSaveAs(wxUpdateUIEvent& event);
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
@@ -495,6 +510,11 @@ public:
 
 
 protected:
+    // Called when a file selected from the MRU list doesn't exist any more.
+    // The default behaviour is to remove the file from the MRU and notify the
+    // user about it but this method can be overridden to customize it.
+    virtual void OnMRUFileNotExist(unsigned n, const wxString& filename);
+
     // Open the MRU file with the given index in our associated file history.
     void DoOpenMRUFile(unsigned n);
 #if wxUSE_PRINTING_ARCHITECTURE

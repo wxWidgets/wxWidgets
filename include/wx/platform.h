@@ -182,6 +182,13 @@
     #include "wx/setup_gccxml.h"
 #endif
 
+/*
+   Convenience for any optional classes that use the wxAnyButton base class.
+ */
+#if wxUSE_TOGGLEBTN || wxUSE_BUTTON
+    #define wxHAS_ANY_BUTTON
+#endif
+
 
 /*
    Hardware platform detection.

@@ -212,7 +212,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxControl,
                                             public wxTextCtrlIface,
                                             public wxScrollHelper
 {
-    DECLARE_CLASS( wxRichTextCtrl )
+    DECLARE_DYNAMIC_CLASS( wxRichTextCtrl )
     DECLARE_EVENT_TABLE()
 
 public:

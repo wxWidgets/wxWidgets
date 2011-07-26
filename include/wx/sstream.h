@@ -66,9 +66,9 @@ public:
     wxStringOutputStream(wxString *pString = NULL,
                          wxMBConv& conv = wxConvUTF8)
         : m_conv(conv)
-#if wxUSE_UNICODE_WCHAR
+#if wxUSE_UNICODE
         , m_unconv(0)
-#endif // wxUSE_UNICODE_WCHAR
+#endif // wxUSE_UNICODE
     {
         m_str = pString ? pString : &m_strInternal;
         m_pos = m_str->length() / sizeof(wxChar);
@@ -98,10 +98,10 @@ private:
     // arbitrary 8 bit data
     wxMBConv& m_conv;
 
-#if wxUSE_UNICODE_WCHAR
+#if wxUSE_UNICODE
     // unconverted data from the last call to OnSysWrite()
     wxMemoryBuffer m_unconv;
-#endif // wxUSE_UNICODE_WCHAR
+#endif // wxUSE_UNICODE
 
     wxDECLARE_NO_COPY_CLASS(wxStringOutputStream);
 };

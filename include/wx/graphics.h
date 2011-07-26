@@ -27,6 +27,20 @@ enum wxAntialiasMode
     wxANTIALIAS_DEFAULT,
 };
 
+enum wxInterpolationQuality
+{
+    // default interpolation
+    wxINTERPOLATION_DEFAULT,
+    // no interpolation
+    wxINTERPOLATION_NONE, 
+    // fast interpolation, suited for interactivity
+    wxINTERPOLATION_FAST,
+    // better quality
+    wxINTERPOLATION_GOOD,
+    // best quality, not suited for interactivity
+    wxINTERPOLATION_BEST
+};
+
 enum wxCompositionMode
 {
     // R = Result, S = Source, D = Destination, premultiplied with alpha
@@ -35,6 +49,7 @@ enum wxCompositionMode
     // classic Porter-Duff compositions
     // http://keithp.com/~keithp/porterduff/p253-porter.pdf
 
+    wxCOMPOSITION_INVALID = -1, /* indicates invalid/unsupported mode */
     wxCOMPOSITION_CLEAR, /* R = 0 */
     wxCOMPOSITION_SOURCE, /* R = S */
     wxCOMPOSITION_OVER, /* R = S + D*(1 - Sa) */
@@ -50,7 +65,7 @@ enum wxCompositionMode
     wxCOMPOSITION_XOR, /* R = S*(1 - Da) + D*(1 - Sa) */
 
     // mathematical compositions
-    wxCOMPOSITION_ADD, /* R = S + D */
+    wxCOMPOSITION_ADD /* R = S + D */
 };
 
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
@@ -496,6 +511,12 @@ public:
     // sets the antialiasing mode, returns true if it supported
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
 
+    // returns the current interpolation quality
+    virtual wxInterpolationQuality GetInterpolationQuality() const { return m_interpolation; }
+    
+    // sets the interpolation quality, returns true if it supported
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
+    
     // returns the current compositing operator
     virtual wxCompositionMode GetCompositionMode() const { return m_composition; }
 
@@ -660,6 +681,7 @@ protected:
     wxGraphicsFont m_font;
     wxAntialiasMode m_antialias;
     wxCompositionMode m_composition;
+    wxInterpolationQuality m_interpolation;
     bool m_enableOffset;
 
 protected:

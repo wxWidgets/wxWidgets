@@ -89,6 +89,7 @@ public:
 
     // as above, but takes reference DC as first argument to take resolution,
     // size, font metrics etc. from
+    wxEXPLICIT
     wxEnhMetaFileDC(const wxDC& referenceDC,
                     const wxString& filename = wxEmptyString,
                     int width = 0, int height = 0,

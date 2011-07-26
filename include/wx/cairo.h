@@ -132,11 +132,12 @@ public:
     wxDL_VOIDMETHOD_DEFINE( cairo_translate,
         (cairo_t *cr, double tx, double ty), (cr, tx, ty) )
 
+#if wxUSE_PANGO
     wxDL_VOIDMETHOD_DEFINE( pango_cairo_update_layout,
         (cairo_t *cr, PangoLayout *layout), (cr, layout) )
     wxDL_VOIDMETHOD_DEFINE( pango_cairo_show_layout,
         (cairo_t *cr, PangoLayout *layout), (cr, layout) )
-
+#endif
     wxDECLARE_NO_COPY_CLASS(wxCairoLibrary);
 };
 

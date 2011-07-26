@@ -20,6 +20,8 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxCFEventLoop
 public:
     wxGUIEventLoop();
 
+    virtual void WakeUp();
+
 protected:
     virtual int DoDispatchTimeout(unsigned long timeout);
 

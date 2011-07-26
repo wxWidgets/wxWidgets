@@ -398,9 +398,26 @@ public:
                    const wxString& name = wxFrameNameStr);
     virtual ~wxPreviewFrame();
 
+    // Either Initialize() or InitializeWithModality() must be called before
+    // showing the preview frame, the former being just a particular case of
+    // the latter initializing the frame for being showing app-modally.
+
+    // Notice that we must keep Initialize() with its existing signature to
+    // avoid breaking the old code that overrides it and we can't reuse the
+    // same name for the other functions to avoid virtual function hiding
+    // problem and the associated warnings given by some compilers (e.g. from
+    // g++ with -Woverloaded-virtual).
+    virtual void Initialize()
+    {
+        InitializeWithModality(wxPreviewFrame_AppModal);
+    }
+
+    // Also note that this method is not virtual as it doesn't need to be
+    // overridden: it's never called by wxWidgets (of course, the same is true
+    // for Initialize() but, again, it must remain virtual for compatibility).
+    void InitializeWithModality(wxPreviewFrameModalityKind kind);
+
     void OnCloseWindow(wxCloseEvent& event);
-    virtual void Initialize(wxPreviewFrameModalityKind kind
-                                = wxPreviewFrame_AppModal);
     virtual void CreateCanvas();
     virtual void CreateControlBar();
 

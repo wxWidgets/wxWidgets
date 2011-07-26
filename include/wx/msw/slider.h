@@ -106,6 +106,10 @@ protected:
     wxRect GetBoundingBox() const;
 
     // Get the height and, if the pointers are non NULL, widths of both labels.
+    //
+    // Notice that the return value will be 0 if we don't have wxSL_LABELS
+    // style but we do fill widthMin and widthMax even if we don't have
+    // wxSL_MIN_MAX_LABELS style set so the caller should account for it.
     int GetLabelsSize(int *widthMin = NULL, int *widthMax = NULL) const;
 
 
@@ -123,8 +127,6 @@ protected:
     int           m_pageSize;
     int           m_lineSize;
     int           m_tickFreq;
-    int           m_minLabelWidth;
-    int           m_maxLabelWidth;
 
     // flag needed to detect whether we're getting THUMBRELEASE event because
     // of dragging the thumb or scrolling the mouse wheel
