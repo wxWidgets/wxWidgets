@@ -14,6 +14,11 @@
 
 #include "wx/defs.h"
 
+#ifndef wxHAS_NATIVE_TAB_TRAVERSAL
+    // We need wxEVT_XXX declarations in this case.
+    #include "wx/event.h"
+#endif
+
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
@@ -115,9 +120,6 @@ protected:
 };
 
 #else // !wxHAS_NATIVE_TAB_TRAVERSAL
-
-class WXDLLIMPEXP_FWD_CORE wxFocusEvent;
-class WXDLLIMPEXP_FWD_CORE wxNavigationKeyEvent;
 
 // ----------------------------------------------------------------------------
 // wxControlContainer for TAB navigation implemented in wx itself
