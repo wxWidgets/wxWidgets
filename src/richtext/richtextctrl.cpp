@@ -2639,7 +2639,7 @@ void wxRichTextCtrl::Replace(long from, long to,
 
     SetSelection(from, to);
 
-    wxRichTextAttr attr = GetDefaultStyle();
+    wxTextAttrEx attr = GetDefaultStyleEx();
 
     DeleteSelectedContent();
 
