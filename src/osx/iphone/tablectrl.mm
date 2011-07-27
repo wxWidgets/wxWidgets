@@ -132,7 +132,7 @@ titleForHeaderInSection:(NSInteger)section {
     NSUInteger uSection = (NSUInteger)section;
     
     wxArrayString sectionTitles = dataSource->GetSectionTitles(moTableCtrl);
-    if (sectionTitles.Count() < uSection) {
+    if (sectionTitles.Count() < uSection+1) {
         return @"";
     }
     
@@ -157,7 +157,13 @@ titleForHeaderInSection:(NSInteger)section {
         return [self tableView:tableView dummyCellForRowAtIndexPath:indexPath];
     }
     
-    wxUITableViewCell *cocoaCell = (wxUITableViewCell *)(cell->GetCellWidgetImpl()->GetWXWidget());
+    wxOSXWidgetImpl* cellWidgetImpl = cell->GetCellWidgetImpl();
+    wxASSERT_MSG(cellWidgetImpl, "Unable to get wxUITableViewCell from wxTableCell");
+    if ( !cellWidgetImpl ) {
+        return [self tableView:tableView dummyCellForRowAtIndexPath:indexPath];
+    }
+
+    wxUITableViewCell* cocoaCell = (wxUITableViewCell *)(cellWidgetImpl->GetWXWidget());
     wxASSERT_MSG(cocoaCell, "Unable to get wxUITableViewCell from wxTableCell");
     if (! cocoaCell) {
         return [self tableView:tableView dummyCellForRowAtIndexPath:indexPath];
@@ -494,7 +500,19 @@ void wxTableCtrl::SetSelection(const wxTablePath& path)
 /// Removes the selection at the given path.
 void wxTableCtrl::Deselect(const wxTablePath& path)
 {
-    // FIXME stub
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:path.GetRow()
+                                                inSection:path.GetSection()];
+    if ( !indexPath ) {
+        return;
+    }
+
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return;
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath
+                             animated:YES];
 }
 
 wxTablePath* wxTableCtrl::GetSelection() const

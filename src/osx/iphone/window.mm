@@ -550,11 +550,15 @@ bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style)
 
 void wxWidgetIPhoneImpl::SetLabel(const wxString& title, wxFontEncoding encoding)
 {
+    // UIButton
     if ( [m_osxView respondsToSelector:@selector(setTitle:forState:) ] )
     {
-        wxCFStringRef cf( title , encoding );
-        [m_osxView setTitle:cf.AsNSString()
-                   forState:UIControlStateNormal ];
+        UIButtonType buttonType = [(UIButton *)m_osxView buttonType];
+        if (buttonType == UIButtonTypeCustom || buttonType == UIButtonTypeRoundedRect) {
+            wxCFStringRef cf( title , encoding );
+            [m_osxView setTitle:cf.AsNSString()
+                       forState:UIControlStateNormal];
+        }
     }
     else if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
     {
@@ -820,7 +824,7 @@ void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf
     CGPoint clickLocation;
     if ( [touch view] != slf && IsRootControl() )
     {
-        NSLog(@"self is %@ and touch view is %@",slf,[touch view]);
+        //NSLog(@"self is %@ and touch view is %@",slf,[touch view]);
         inRecursion = true;
         inRecursion = false;
     }
