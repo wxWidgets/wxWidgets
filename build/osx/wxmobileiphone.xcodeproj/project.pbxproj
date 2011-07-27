@@ -1822,6 +1822,9 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0410;
+			};
 			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxMobileiPhone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;

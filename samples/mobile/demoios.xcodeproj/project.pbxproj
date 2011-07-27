@@ -380,6 +380,7 @@
 			baseConfigurationReference = 409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Don't Code Sign";
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = Info_iphone.plist;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
@@ -390,6 +391,7 @@
 			baseConfigurationReference = 409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Don't Code Sign";
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = Info_iphone.plist;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
