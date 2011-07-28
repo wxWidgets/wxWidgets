@@ -15,7 +15,7 @@
 
 #include "wx/setup.h"
 
-//#if wxUSE_WEBKIT && (defined(__WXMAC__) || defined(__WXCOCOA__))
+#if wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX_MAC__)
 
 #include "wx/control.h"
 #include "wx/webview.h"
@@ -172,6 +172,6 @@ private:
 #endif
 };
 
-//#endif // wxUSE_WEBKIT
+#endif // wxUSE_WEBKIT
 
 #endif // _WX_WEBKIT_H_

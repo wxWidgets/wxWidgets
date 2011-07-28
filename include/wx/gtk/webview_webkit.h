@@ -12,7 +12,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_WEBKIT
+#if wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
 #include "webkit/webkit.h"
 #include "wx/sharedptr.h"
