@@ -77,30 +77,34 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
     allocation = *alloc;
 
     // adjust child positions
-#ifdef __WXGTK30__
-    for (const GList* list = gtk_container_get_children(GTK_CONTAINER(&(pizza->m_fixed))); list; list = list->next)
-#else
-    for (const GList* list = pizza->m_fixed.children; list; list = list->next)
-#endif
+    GList* list = gtk_container_get_children(GTK_CONTAINER(pizza));
+    for (const GList* p = list; p; p = p->next)
     {
-        const GtkFixedChild* child = static_cast<GtkFixedChild*>(list->data);
-        if (gtk_widget_get_visible(child->widget))
+        GtkWidget* child = GTK_WIDGET(p->data);
+        if (gtk_widget_get_visible(child))
         {
+            GValue value = { 0 };
+            g_value_init(&value, G_TYPE_INT);
+            gtk_container_child_get_property(GTK_CONTAINER(pizza), child, "x", &value);
+            const int x = g_value_get_int(&value);
+            gtk_container_child_get_property(GTK_CONTAINER(pizza), child, "y", &value);
+            const int y = g_value_get_int(&value);
             GtkAllocation child_alloc;
             // note that child positions do not take border into
             // account, they need to be relative to widget->window,
             // which has already been adjusted
-            child_alloc.x = child->x - pizza->m_scroll_x;
-            child_alloc.y = child->y - pizza->m_scroll_y;
+            child_alloc.x = x - pizza->m_scroll_x;
+            child_alloc.y = y - pizza->m_scroll_y;
             GtkRequisition req;
-            gtk_widget_get_child_requisition(child->widget, &req);
+            gtk_widget_get_child_requisition(child, &req);
             child_alloc.width  = req.width;
             child_alloc.height = req.height;
             if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
                 child_alloc.x = w - child_alloc.x - child_alloc.width;
-            gtk_widget_size_allocate(child->widget, &child_alloc);
+            gtk_widget_size_allocate(child, &child_alloc);
         }
     }
+    g_list_free(list);
 }
 
 static void realize(GtkWidget* widget)
