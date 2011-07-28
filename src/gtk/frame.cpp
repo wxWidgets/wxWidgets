@@ -336,11 +336,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
         {
             // Vertical toolbar and m_wxwindow go into an hbox, inside the
             // vbox (m_mainWidget). hbox is created on demand.
-        #ifdef __WXGTK30__
             GtkWidget* hbox = gtk_widget_get_parent(m_wxwindow);
-        #else
-            GtkWidget* hbox = m_wxwindow->parent;
-        #endif
             if (!GTK_IS_HBOX(hbox))
             {
                 hbox = gtk_hbox_new(false, 0);
