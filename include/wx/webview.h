@@ -20,6 +20,8 @@
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 
+class wxFSFile;
+
 class WXDLLIMPEXP_WEB wxWebHistoryItem
 {
 public:
@@ -102,6 +104,14 @@ enum wxWebViewBackend
 
     /** Use Microsoft Internet Explorer as web engine */
     wxWEB_VIEW_BACKEND_IE
+};
+
+class WXDLLIMPEXP_WEB wxWebProtocolHandler
+{
+public:
+    virtual wxString GetProtocol() = 0;
+    virtual wxFSFile* GetFile(const wxString &uri) = 0;
+    virtual wxString CombineURIs(const wxString &baseuri, const wxString &newuri) = 0;
 };
 
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[];

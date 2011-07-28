@@ -26,6 +26,7 @@
 #include "wx/msw/registry.h"
 #include "wx/msw/missing.h"
 #include "wx/filesys.h"
+#include "wx/tokenzr.h"
 
 //We link to urlmon as it is required for CoInternetGetSession
 #pragma comment(lib, "urlmon")
@@ -53,6 +54,71 @@ static wxString EscapeFileNameCharsInURL(const char *in)
     }
 
     return s;
+}
+
+wxWebFileProtocolHandler::wxWebFileProtocolHandler()
+{
+    m_protocol = "test";
+    m_fileSystem = new wxFileSystem();
+}
+
+wxFSFile* wxWebFileProtocolHandler::GetFile(const wxString &uri)
+{
+    size_t pos = uri.find('?');
+    //There is no query string so we can load the file directly
+    if(pos == wxString::npos)
+    {
+        size_t doubleslash = uri.find("//");
+        //The path is incorrectly formed without // after the first protocol
+        if(doubleslash == wxString::npos)
+            return NULL;
+
+        wxString fspath = "file:" + 
+                          EscapeFileNameCharsInURL(uri.substr(doubleslash + 2));
+        return m_fileSystem->OpenFile(fspath);
+    }
+    //Otherwise we have a query string of some kind that we need to extract
+    else{
+        //First we extract the query string, this should have two parameters, 
+        //protocol=type and path=path
+        wxString query = uri.substr(pos + 1), protocol, path;
+        //We also trim the query off the end as we handle it alone
+        wxString lefturi = uri.substr(0, pos);
+        wxStringTokenizer tokenizer(query, ";");
+        while(tokenizer.HasMoreTokens() && (protocol == "" || path == ""))
+        {
+            wxString token = tokenizer.GetNextToken();
+            if(token.substr(0, 9) == "protocol=")
+            {
+                protocol = token.substr(9);
+            }
+            else if(token.substr(0, 5) == "path=")
+            {
+                path = token.substr(5);
+            }
+        }
+        if(protocol == "" || path == "")
+            return NULL;
+
+        //We now have the path and the protocol and so can format a correct uri
+        //to pass to wxFileSystem to get a wxFSFile
+        size_t doubleslash = uri.find("//");
+        //The path is incorrectly formed without // after the first protocol
+        if(doubleslash == wxString::npos)
+            return NULL;
+
+        wxString fspath = "file:" + 
+                          EscapeFileNameCharsInURL(lefturi.substr(doubleslash + 2))
+                          + "#" + protocol +":" + path;
+        return m_fileSystem->OpenFile(fspath);
+    }
+}
+
+wxString wxWebFileProtocolHandler::CombineURIs(const wxString &baseuri, 
+                                               const wxString &newuri)
+{
+    //Still need to be implemented correctly
+    return newuri;
 }
 
 BEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
@@ -93,17 +159,9 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     m_webBrowser->put_RegisterAsBrowser(VARIANT_TRUE);
     m_webBrowser->put_RegisterAsDropTarget(VARIANT_TRUE);
-    //m_webBrowser->put_Silent(VARIANT_FALSE);
 
-    //We register a custom handler for the file protocol so we can handle
-    //Virtual file systems
-    ClassFactory* cf = new ClassFactory;
-    IInternetSession* session;
-    if(CoInternetGetSession(0, &session, 0) != S_OK)
-        return false;
-    HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, L"test", 0, NULL, 0);
-    if(FAILED(hr))
-        return false; 
+    //For testing purposes
+    RegisterProtocol(new wxWebFileProtocolHandler());
 
     m_container = new wxActiveXContainer(this, IID_IWebBrowser2, m_webBrowser);
 
@@ -699,6 +757,22 @@ void wxWebViewIE::RunScript(const wxString& javascript)
     document->Release();
 }
 
+void wxWebViewIE::RegisterProtocol(wxWebProtocolHandler* handler)
+{
+    ClassFactory* cf = new ClassFactory(handler);
+    IInternetSession* session;
+    if(FAILED(CoInternetGetSession(0, &session, 0)))
+    {
+        wxFAIL_MSG("Could not retrive internet session");
+    }
+
+    HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, handler->GetProtocol(), 0, NULL, 0);
+    if(FAILED(hr))
+    {
+        wxFAIL_MSG("Could not register protocol");
+    }
+}
+
 bool wxWebViewIE::CanExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();
@@ -970,16 +1044,15 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
     evt.Skip();
 }
 
-VirtualProtocol::VirtualProtocol()
+VirtualProtocol::VirtualProtocol(wxWebProtocolHandler *handler)
 {
     m_refCount = 0;
     m_file = NULL;
-    m_fileSys = new wxFileSystem;
+    m_handler = handler;
 }
 
 VirtualProtocol::~VirtualProtocol()
 {
-    wxDELETE(m_fileSys);
 }
 
 ULONG VirtualProtocol::AddRef()
@@ -990,8 +1063,8 @@ ULONG VirtualProtocol::AddRef()
 
 HRESULT VirtualProtocol::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if(riid == IID_IUnknown || riid == IID_IInternetProtocol
-       || riid == IID_IInternetProtocolRoot)
+    if(riid == IID_IUnknown || riid == IID_IInternetProtocolRoot || 
+       riid == IID_IInternetProtocol)
     {
         *ppvObject = (IInternetProtocol*)this;
         AddRef();
@@ -1033,13 +1106,10 @@ HRESULT VirtualProtocol::Start(LPCWSTR szUrl, IInternetProtocolSink *pOIProtSink
     wxUnusedVar(grfPI);
     wxUnusedVar(dwReserved);
     m_protocolSink = pOIProtSink;
-    //We have to clean up incoming paths from the webview control as they are
-    //not properly escaped, see also the comment in filesys.cpp line 668
-    wxString path = wxString(szUrl).BeforeFirst(':') +  ":" + 
-                    EscapeFileNameCharsInURL(wxString(szUrl).AfterFirst(':'));
-    path.Replace("///", "/");
-    path.Replace("test", "file");
-    m_file = m_fileSys->OpenFile(path);
+    
+    //We get the file itself from the protocol handler
+    m_file = m_handler->GetFile(szUrl);
+
 
     if(!m_file)
         return INET_E_RESOURCE_NOT_FOUND;
@@ -1106,7 +1176,10 @@ HRESULT VirtualProtocol::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction,
                                   DWORD cchResult, DWORD *pcchResult,
                                   DWORD dwReserved)
 {
-    return INET_E_DEFAULT_ACTION;
+    //return INET_E_DEFAULT_ACTION;
+    wcscpy(pwzResult, pwzUrl);
+    *pcchResult = wcslen(pwzResult);
+    return S_OK;
 }
     
 HRESULT VirtualProtocol::QueryInfo(LPCWSTR pwzUrl, QUERYOPTION OueryOption, 
@@ -1122,7 +1195,7 @@ HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
 {
     if (pUnkOuter) 
         return CLASS_E_NOAGGREGATION;
-    VirtualProtocol* vp = new VirtualProtocol;
+    VirtualProtocol* vp = new VirtualProtocol(m_handler);
     vp->AddRef();
     HRESULT hr = vp->QueryInterface(riid, ppvObject);
     vp->Release();
