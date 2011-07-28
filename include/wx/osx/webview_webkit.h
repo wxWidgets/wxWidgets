@@ -115,6 +115,9 @@ public:
     virtual void ClearSelection() {}
     
     void RunScript(const wxString& javascript);
+    
+    //Virtual Filesystem Support
+    virtual void RegisterProtocol(wxWebProtocolHandler* hanlder) {};
 
     // ---- methods not from the parent (common) interface
     bool  CanGetPageSource();

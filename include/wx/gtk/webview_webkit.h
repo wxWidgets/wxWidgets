@@ -150,6 +150,9 @@ public:
     virtual void ClearSelection();
 
     virtual void RunScript(const wxString& javascript);
+    
+    //Virtual Filesystem Support
+    virtual void RegisterProtocol(wxWebProtocolHandler* hanlder);
 
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;

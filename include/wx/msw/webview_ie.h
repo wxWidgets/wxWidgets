@@ -22,23 +22,7 @@
 #include "wx/vector.h"
 
 struct IHTMLDocument2;
-
 class wxFSFile;
-class wxFileSystem;
-
-//Loads from uris such as file:///C:/example/example.html or archives such as
-//file:///C:/example/example.zip?protocol=zip;path=example.html 
-class WXDLLIMPEXP_WEB wxWebFileProtocolHandler : public wxWebProtocolHandler
-{
-public:
-    wxWebFileProtocolHandler();
-    virtual wxString GetProtocol() { return m_protocol; }
-    virtual wxFSFile* GetFile(const wxString &uri);
-    virtual wxString CombineURIs(const wxString &baseuri, const wxString &newuri);
-private:
-    wxString m_protocol;
-    wxFileSystem* m_fileSystem;
-};
 
 class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
 {

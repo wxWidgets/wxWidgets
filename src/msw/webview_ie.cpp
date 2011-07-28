@@ -26,100 +26,9 @@
 #include "wx/msw/registry.h"
 #include "wx/msw/missing.h"
 #include "wx/filesys.h"
-#include "wx/tokenzr.h"
 
 //We link to urlmon as it is required for CoInternetGetSession
 #pragma comment(lib, "urlmon")
-
-//Taken from wx/filesys.cpp
-static wxString EscapeFileNameCharsInURL(const char *in)
-{
-    wxString s;
-
-    for ( const unsigned char *p = (const unsigned char*)in; *p; ++p )
-    {
-        const unsigned char c = *p;
-
-        if ( c == '/' || c == '-' || c == '.' || c == '_' || c == '~' ||
-             (c >= '0' && c <= '9') ||
-             (c >= 'a' && c <= 'z') ||
-             (c >= 'A' && c <= 'Z') )
-        {
-            s << c;
-        }
-        else
-        {
-            s << wxString::Format("%%%02x", c);
-        }
-    }
-
-    return s;
-}
-
-wxWebFileProtocolHandler::wxWebFileProtocolHandler()
-{
-    m_protocol = "test";
-    m_fileSystem = new wxFileSystem();
-}
-
-wxFSFile* wxWebFileProtocolHandler::GetFile(const wxString &uri)
-{
-    size_t pos = uri.find('?');
-    //There is no query string so we can load the file directly
-    if(pos == wxString::npos)
-    {
-        size_t doubleslash = uri.find("//");
-        //The path is incorrectly formed without // after the first protocol
-        if(doubleslash == wxString::npos)
-            return NULL;
-
-        wxString fspath = "file:" + 
-                          EscapeFileNameCharsInURL(uri.substr(doubleslash + 2));
-        return m_fileSystem->OpenFile(fspath);
-    }
-    //Otherwise we have a query string of some kind that we need to extract
-    else{
-        //First we extract the query string, this should have two parameters, 
-        //protocol=type and path=path
-        wxString query = uri.substr(pos + 1), protocol, path;
-        //We also trim the query off the end as we handle it alone
-        wxString lefturi = uri.substr(0, pos);
-        wxStringTokenizer tokenizer(query, ";");
-        while(tokenizer.HasMoreTokens() && (protocol == "" || path == ""))
-        {
-            wxString token = tokenizer.GetNextToken();
-            if(token.substr(0, 9) == "protocol=")
-            {
-                protocol = token.substr(9);
-            }
-            else if(token.substr(0, 5) == "path=")
-            {
-                path = token.substr(5);
-            }
-        }
-        if(protocol == "" || path == "")
-            return NULL;
-
-        //We now have the path and the protocol and so can format a correct uri
-        //to pass to wxFileSystem to get a wxFSFile
-        size_t doubleslash = uri.find("//");
-        //The path is incorrectly formed without // after the first protocol
-        if(doubleslash == wxString::npos)
-            return NULL;
-
-        wxString fspath = "file:" + 
-                          EscapeFileNameCharsInURL(lefturi.substr(doubleslash + 2))
-                          + "#" + protocol +":" + path;
-        return m_fileSystem->OpenFile(fspath);
-    }
-}
-
-wxString wxWebFileProtocolHandler::CombineURIs(const wxString &baseuri, 
-                                               const wxString &newuri)
-{
-    //Still need to be implemented correctly
-    return newuri;
-}
 
 BEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
     EVT_ACTIVEX(wxID_ANY, wxWebViewIE::onActiveXEvent)
@@ -159,9 +68,6 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     m_webBrowser->put_RegisterAsBrowser(VARIANT_TRUE);
     m_webBrowser->put_RegisterAsDropTarget(VARIANT_TRUE);
-
-    //For testing purposes
-    RegisterProtocol(new wxWebFileProtocolHandler());
 
     m_container = new wxActiveXContainer(this, IID_IWebBrowser2, m_webBrowser);
 

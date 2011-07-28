@@ -27,6 +27,8 @@
 #include <wx/settings.h>
 #include <wx/webview.h>
 #include <wx/infobar.h>
+#include <wx/filesys.h>
+#include <wx/fs_arc.h>
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
     #include "../sample.xpm"
@@ -139,6 +141,9 @@ bool WebApp::OnInit()
 
 WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
 {
+    //Required from virtual file system archive support
+    wxFileSystem::AddHandler(new wxArchiveFSHandler);
+
     // set the frame icon
     SetIcon(wxICON(sample));
     SetTitle("wxWebView Sample");
@@ -183,6 +188,9 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     // Create the webview
     m_browser = wxWebView::New(this, wxID_ANY, "http://www.wxwidgets.org");
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
+
+    //We register the test:// protocol for testing purposes
+    m_browser->RegisterProtocol(new wxWebFileProtocolHandler());
 
     SetSizer(topsizer);
 
