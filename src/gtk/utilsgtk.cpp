@@ -290,7 +290,7 @@ wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 #if wxUSE_INTL
 void wxGUIAppTraits::SetLocale()
 {
-#ifdef __WXGTK20__ 
+#ifndef __WXGTK30__ 
     /*
         Copied from gtk+ documentation:
         Initializes internationalization support for GTK+. gtk_init() automatically

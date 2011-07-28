@@ -10,6 +10,7 @@
 #ifndef _WX_GTK_BITMAP_H_
 #define _WX_GTK_BITMAP_H_
 
+typedef struct _cairo_surface cairo_surface_t;
 typedef struct _GdkPixbuf GdkPixbuf;
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 

@@ -33,7 +33,7 @@ public:
         m_blue = blue;
         m_alpha = alpha;
         m_color.pixel = 0;
-#ifdef __WXGTK20__
+#ifndef __WXGTK30__
         m_colormap = NULL;
 #endif
     }
@@ -47,7 +47,7 @@ public:
     void AllocColour( GdkColormap* cmap );
 
     GdkColor     m_color;
-#ifdef __WXGTK20__
+#ifndef __WXGTK30__
     GdkColormap *m_colormap;
 #endif
     // gdk_colormap_alloc_color may change the RGB values in m_color, so we need separate copies
@@ -61,7 +61,7 @@ public:
 
 void wxColourRefData::FreeColour()
 {
-#ifdef __WXGTK20__
+#ifndef __WXGTK30__
     if (m_colormap)
     {
         gdk_colormap_free_colors(m_colormap, &m_color, 1);
@@ -73,7 +73,7 @@ void wxColourRefData::FreeColour()
 
 void wxColourRefData::AllocColour( GdkColormap *cmap )
 {
-#ifdef __WXGTK20__
+#ifndef __WXGTK30__
     if (m_colormap != cmap)
     {
         FreeColour();
@@ -161,7 +161,7 @@ unsigned char wxColour::Alpha() const
     return M_COLDATA->m_alpha;
 }
 
-#ifdef __WXGTK20__
+#ifndef __WXGTK30__
 void wxColour::CalcPixel( GdkColormap *cmap )
 {
     if (!IsOk()) return;

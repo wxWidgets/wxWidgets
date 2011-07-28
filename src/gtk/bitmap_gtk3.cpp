@@ -336,7 +336,7 @@ wxBitmapRefData::wxBitmapRefData(int width, int height, int depth)
     m_width = width;
     m_height = height;
     m_bpp = depth;
-#ifdef __WXGTK20__
+#ifndef __WXGTK30__
     if (m_bpp < 0)
         m_bpp = gdk_drawable_get_depth(wxGetRootWindow()->window);
 #endif

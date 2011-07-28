@@ -1304,7 +1304,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window 
 }
 #endif
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) && !defined(__WXGTK30__)
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable )
 : wxGraphicsContext(renderer)
 {

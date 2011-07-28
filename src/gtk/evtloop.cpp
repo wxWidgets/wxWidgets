@@ -269,7 +269,7 @@ static void wxgtk_main_do_event(GdkEvent* event, void* data)
     case GDK_DESTROY:
 
     case GDK_EXPOSE:
-#ifdef __WXGTK20__
+#ifndef __WXGTK30__
     case GDK_NO_EXPOSE:
 #endif
     case GDK_MAP:

@@ -406,7 +406,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) && !defined(__WXGTK30__)
     // Draw grip first
     if ( ShowsSizeGrip() )
     {

@@ -761,7 +761,7 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
         icon = &m_iconNone;
 
 #ifdef __WXGTK30__
-    GdkPixbuf *mask;
+    cairo_surface_t *mask;
 #else
     GdkBitmap *mask;
 #endif
@@ -770,7 +770,7 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
     else
         mask = NULL;
 
-#ifdef __WXGTK20__
+#ifndef __WXGTK30__
     GdkPixmap *pixmap = icon->GetPixmap();
 #endif
 
