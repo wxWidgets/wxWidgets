@@ -1349,6 +1349,28 @@ public:
     virtual bool PositionToXY(long pos, long* x, long* y) const;
 
     /**
+        Converts given text position to client coordinates in pixels.
+
+        This function allows to find where is the character at the given
+        position displayed in the text control.
+
+        @onlyfor{wxmsw,wxgtk}. Additionally, wxGTK only implements this method
+        for multiline controls and ::wxDefaultPosition is always returned for
+        the single line ones.
+
+        @param pos
+            Text position in 0 to GetLastPosition() range (inclusive).
+        @return
+            On success returns a wxPoint which contains client coordinates for
+            the given position in pixels, otherwise returns ::wxDefaultPosition.
+
+        @since 2.9.3
+
+        @see XYToPosition(), PositionToXY()
+    */
+    wxPoint PositionToCoords(long pos) const;
+
+    /**
         Saves the contents of the control in a text file.
 
         @param filename

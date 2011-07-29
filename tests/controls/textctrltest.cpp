@@ -59,6 +59,9 @@ private:
         CPPUNIT_TEST( Style );
         CPPUNIT_TEST( Lines );
         CPPUNIT_TEST( LogTextCtrl );
+        CPPUNIT_TEST( PositionToCoords );
+        CPPUNIT_TEST( PositionToCoordsRich );
+        CPPUNIT_TEST( PositionToCoordsRich2 );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
@@ -71,6 +74,11 @@ private:
     void Style();
     void Lines();
     void LogTextCtrl();
+    void PositionToCoords();
+    void PositionToCoordsRich();
+    void PositionToCoordsRich2();
+
+    void DoPositionToCoordsTestWithStyle(long style);
 
     wxTextCtrl *m_text;
 
@@ -421,5 +429,99 @@ void TextCtrlTestCase::LogTextCtrl()
 
     CPPUNIT_ASSERT(!m_text->IsEmpty());
 }
+
+void TextCtrlTestCase::PositionToCoords()
+{
+    DoPositionToCoordsTestWithStyle(0);
+}
+
+void TextCtrlTestCase::PositionToCoordsRich()
+{
+    DoPositionToCoordsTestWithStyle(wxTE_RICH);
+}
+
+void TextCtrlTestCase::PositionToCoordsRich2()
+{
+    DoPositionToCoordsTestWithStyle(wxTE_RICH2);
+}
+
+void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
+{
+    static const int TEXT_HEIGHT = 200;
+
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxSize(400, TEXT_HEIGHT),
+                            wxTE_MULTILINE | style);
+
+    // Asking for invalid index should fail.
+    WX_ASSERT_FAILS_WITH_ASSERT( m_text->PositionToCoords(1) );
+
+    // Getting position shouldn't return wxDefaultPosition except if the method
+    // is not implemented at all in the current port.
+    const wxPoint pos0 = m_text->PositionToCoords(0);
+    if ( pos0 == wxDefaultPosition )
+    {
+#if defined(__WXMSW__) || defined(__WXGTK20__)
+        CPPUNIT_FAIL( "PositionToCoords() unexpectedly failed." );
+#endif
+        return;
+    }
+
+    CPPUNIT_ASSERT(pos0.x >= 0);
+    CPPUNIT_ASSERT(pos0.y >= 0);
+
+
+    m_text->SetValue("Hello");
+    wxYield(); // Let GTK layout the control correctly.
+
+    // Position of non-first character should be positive.
+    const long posHello4 = m_text->PositionToCoords(4).x;
+    CPPUNIT_ASSERT( posHello4 > 0 );
+
+    // Asking for position beyond the last character should succeed and return
+    // reasonable result.
+    CPPUNIT_ASSERT( m_text->PositionToCoords(5).x > posHello4 );
+
+    // But asking for the next position should fail.
+    WX_ASSERT_FAILS_WITH_ASSERT( m_text->PositionToCoords(6) );
+
+    // Test getting the coordinates of the last character when it is in the
+    // beginning of a new line to exercise MSW code which has specific logic
+    // for it.
+    m_text->AppendText("\n");
+    const wxPoint posLast = m_text->PositionToCoords(m_text->GetLastPosition());
+    CPPUNIT_ASSERT_EQUAL( pos0.x, posLast.x );
+    CPPUNIT_ASSERT( posLast.y > 0 );
+
+
+    // Add enough contents to the control to make sure it has a scrollbar.
+    m_text->SetValue("First line" + wxString(50, '\n') + "Last line");
+    m_text->SetInsertionPoint(0);
+    wxYield(); // Let GTK layout the control correctly.
+
+    // This shouldn't change anything for the first position coordinates.
+    CPPUNIT_ASSERT_EQUAL( pos0, m_text->PositionToCoords(0) );
+
+    // And the last one must be beyond the window boundary and so not be
+    // visible -- but getting its coordinate should still work.
+    CPPUNIT_ASSERT
+    (
+        m_text->PositionToCoords(m_text->GetLastPosition()).y > TEXT_HEIGHT
+    );
+
+
+    // Now make it scroll to the end and check that the first position now has
+    // negative offset as its above the visible part of the window while the
+    // last position is in its bounds.
+    m_text->SetInsertionPointEnd();
+
+    CPPUNIT_ASSERT( m_text->PositionToCoords(0).y < 0 );
+    CPPUNIT_ASSERT
+    (
+        m_text->PositionToCoords(m_text->GetInsertionPoint()).y <= TEXT_HEIGHT
+    );
+}
+
 
 #endif //wxUSE_TEXTCTRL

@@ -167,6 +167,8 @@ protected:
 
     virtual void DoSetValue(const wxString &value, int flags = 0);
 
+    virtual wxPoint DoPositionToCoords(long pos) const;
+
     // wrappers hiding the differences between functions doing the same thing
     // for GtkTextView and GtkEntry (all of them use current window style to
     // set the given characteristic)

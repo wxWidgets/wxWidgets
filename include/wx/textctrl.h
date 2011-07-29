@@ -574,6 +574,11 @@ public:
     virtual long XYToPosition(long x, long y) const = 0;
     virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
 
+    // translate the given position (which is just an index in the text control)
+    // to client coordinates
+    wxPoint PositionToCoords(long pos) const;
+
+
     virtual void ShowPosition(long pos) = 0;
 
     // find the character at position given in pixels
@@ -592,6 +597,13 @@ protected:
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
 
+    // Return true if the given position is valid, i.e. positive and less than
+    // the last position.
+    virtual bool IsValidPosition(long pos) const = 0;
+
+    // Default stub implementation of PositionToCoords() always returns
+    // wxDefaultPosition.
+    virtual wxPoint DoPositionToCoords(long pos) const;
 
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default
@@ -623,6 +635,12 @@ public:
     virtual void SetValue(const wxString& value)
     {
        wxTextEntryBase::SetValue(value);
+    }
+
+protected:
+    virtual bool IsValidPosition(long pos) const
+    {
+        return pos >= 0 && pos <= GetLastPosition();
     }
 
 private:
@@ -722,6 +740,12 @@ protected:
 
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
+
+    // Another wxTextAreaBase override.
+    virtual bool IsValidPosition(long pos) const
+    {
+        return pos >= 0 && pos <= GetLastPosition();
+    }
 
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() { return this; }

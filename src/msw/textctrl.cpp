@@ -1489,6 +1489,93 @@ wxTextCtrl::HitTest(const wxPoint& pt, long *posOut) const
     return rc;
 }
 
+wxPoint wxTextCtrl::DoPositionToCoords(long pos) const
+{
+    // FIXME: This code is broken for rich edit version 2.0 as it uses the same
+    // API as plain edit i.e. the coordinates are returned directly instead of
+    // filling the POINT passed as WPARAM with them but we can't distinguish
+    // between 2.0 and 3.0 unfortunately (see also the use of EM_POSFROMCHAR
+    // above).
+#if wxUSE_RICHEDIT
+    if ( IsRich() )
+    {
+        POINT pt;
+        LRESULT rc = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, (WPARAM)&pt, pos);
+        if ( rc != -1 )
+            return wxPoint(pt.x, pt.y);
+    }
+    else
+#endif // wxUSE_RICHEDIT
+    {
+        LRESULT rc = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, pos, 0);
+        if ( rc == -1 )
+        {
+            // Finding coordinates for the last position of the control fails
+            // in plain EDIT control, try to compensate for it by finding it
+            // ourselves from the position of the previous character.
+            if ( pos < GetLastPosition() )
+            {
+                // It's not the expected correctable failure case so just fail.
+                return wxDefaultPosition;
+            }
+
+            if ( pos == 0 )
+            {
+                // We're being asked the coordinates of the first (and last and
+                // only) position in an empty control. There is no way to get
+                // it directly with EM_POSFROMCHAR but EM_GETMARGINS returns
+                // the correct value for at least the horizontal offset.
+                rc = ::SendMessage(GetHwnd(), EM_GETMARGINS, 0, 0);
+
+                // Text control seems to effectively add 1 to margin.
+                return wxPoint(LOWORD(rc) + 1, 1);
+            }
+
+            // We do have a previous character, try to get its coordinates.
+            rc = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, pos - 1, 0);
+            if ( rc == -1 )
+            {
+                // If getting coordinates of the previous character failed as
+                // well, just give up.
+                return wxDefaultPosition;
+            }
+
+            wxString prevChar = GetRange(pos - 1, pos);
+            wxSize prevCharSize = GetTextExtent(prevChar);
+
+            if ( prevChar == wxT("\n" ))
+            {
+                // 'pos' is at the beginning of a new line so its X coordinate
+                // should be the same as X coordinate of the first character of
+                // any other line while its Y coordinate will be approximately
+                // (but we can't compute it exactly...) one character height
+                // more than that of the previous character.
+                LRESULT coords0 = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, 0, 0);
+                if ( coords0 == -1 )
+                    return wxDefaultPosition;
+
+                rc = MAKELPARAM(LOWORD(coords0), HIWORD(rc) + prevCharSize.y);
+            }
+            else
+            {
+                // Simple case: previous character is in the same line so this
+                // one is just after it.
+                rc += MAKELPARAM(prevCharSize.x, 0);
+            }
+        }
+
+        // Notice that {LO,HI}WORD macros return WORDs, i.e. unsigned shorts,
+        // while we want to have signed values here (the y coordinate of any
+        // position above the first currently visible line is negative, for
+        // example), hence the need for casts.
+        return wxPoint(static_cast<short>(LOWORD(rc)),
+                        static_cast<short>(HIWORD(rc)));
+    }
+
+    return wxDefaultPosition;
+}
+
+
 // ----------------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------------
