@@ -1074,7 +1074,14 @@ HRESULT VirtualProtocol::CombineUrl(LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl,
                                     DWORD cchResult, DWORD *pcchResult, 
                                     DWORD dwReserved)
 {
-    return INET_E_DEFAULT_ACTION;
+    wxString newuri = m_handler->CombineURIs(pwzBaseUrl, pwzRelativeUrl);
+    //Check the buffer we are given can hold the new urll
+    if(wxStrlen(newuri) > cchResult)
+        return S_FALSE;
+
+    wxStrcpy(pwzResult, newuri.c_str());
+    *pcchResult = wxStrlen(newuri);
+    return S_OK;
 }
 
 HRESULT VirtualProtocol::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction,
@@ -1083,8 +1090,8 @@ HRESULT VirtualProtocol::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction,
                                   DWORD dwReserved)
 {
     //return INET_E_DEFAULT_ACTION;
-    wcscpy(pwzResult, pwzUrl);
-    *pcchResult = wcslen(pwzResult);
+    wxStrcpy(pwzResult, pwzUrl);
+    *pcchResult = wxStrlen(pwzResult);
     return S_OK;
 }
     

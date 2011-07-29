@@ -125,8 +125,109 @@ wxFSFile* wxWebFileProtocolHandler::GetFile(const wxString &uri)
 wxString wxWebFileProtocolHandler::CombineURIs(const wxString &baseuri, 
                                                const wxString &newuri)
 {
-    //Still need to be implemented correctly
-    return newuri;
+    //If there is a colon in the path then we just return it
+    if(newuri.find(':') != wxString::npos)
+    {
+        return newuri;
+    }
+    //We have an absolute path and no query string
+    else if(newuri.substr(0, 1) == "/" && baseuri.find('?') == wxString::npos)
+    {
+        //By finding the next / after file:// we get to the end of the 
+        //(optional) hostname
+        size_t pos = baseuri.find('/', 7);
+        //So we return up to the end of the hostname, plus the newuri
+        return baseuri.substr(0, pos) + newuri;
+    }
+    //We have an absolute path and a query string
+    else if(newuri.substr(0, 1) == "/" && baseuri.find('?') != wxString::npos)
+    {
+        wxString query = baseuri.substr(baseuri.find('?') + 1);
+        wxString newquery;
+        wxStringTokenizer tokenizer(query, ";");
+        while(tokenizer.HasMoreTokens())
+        {
+            wxString token = tokenizer.GetNextToken();
+            if(token.substr(0, 5) == "path=")
+            {
+                //As the path is absolue simply replace the old path with the
+                //new one
+                newquery = newquery + "path=" + newuri;
+            }
+            else
+            {
+                newquery += token;
+            }
+            //We need to add the separators back
+            if(tokenizer.HasMoreTokens())
+                newquery += ';';
+        }
+        return baseuri.substr(0, baseuri.find('?')) + "?" + newquery;
+    }
+    //We have a relative path and no query string
+    else if(baseuri.find('?') == wxString::npos)
+    {
+        //By finding the next / after file:// we get to the end of the 
+        //(optional) hostname
+        size_t pos = baseuri.find('/', 7);
+        wxString path = baseuri.substr(pos);
+        //Then we remove the last filename
+        path = path.BeforeLast('/') + '/';
+        //Ensure that we have the leading / so we can normalise properly
+        if(path.substr(0, 1) != "/")
+            path = "/" + path;
+
+        //If we have a colon in the path (i.e. we are on windows) we need to 
+        //handle it specially
+        if(path.find(':') != wxString::npos)
+        {
+            wxFileName fn(path.AfterFirst('/').AfterFirst('/') + newuri);
+            fn.Normalize(wxPATH_NORM_DOTS, "", wxPATH_UNIX);
+            return baseuri.substr(0, pos) + '/' + 
+                   path.AfterFirst('/').BeforeFirst('/') + '/' + 
+                   fn.GetFullPath(wxPATH_UNIX);
+        }
+        else
+        {
+            //We can now use wxFileName to perform the normalisation
+            wxFileName fn(path + newuri);
+            fn.Normalize(wxPATH_NORM_DOTS, "", wxPATH_UNIX);
+            return baseuri.substr(0, pos) + fn.GetFullPath(wxPATH_UNIX);
+        }
+    }
+    //We have a relative path and a query string
+    else
+    {
+        wxString query = baseuri.substr(baseuri.find('?') + 1);
+        wxString newquery;
+        wxStringTokenizer tokenizer(query, ";");
+        while(tokenizer.HasMoreTokens())
+        {
+            wxString token = tokenizer.GetNextToken();
+            if(token.substr(0, 5) == "path=")
+            {
+                wxString path = token.substr(6);
+                //Then we remove the last filename
+                path = path.BeforeLast('/') + '/';
+                //Ensure that we have the leading / so we can normalise properly
+                //if(path.substr(0, 1) != "/")
+                //    path = "/" + path;
+
+                //We can now use wxFileName to perform the normalisation
+                wxFileName fn(path + newuri);
+                fn.Normalize(wxPATH_NORM_DOTS, "", wxPATH_UNIX);
+                newquery = newquery + "path=" + fn.GetFullPath(wxPATH_UNIX);
+            }
+            else
+            {
+                newquery += token;
+            }
+            //We need to add the separators back
+            if(tokenizer.HasMoreTokens())
+                newquery += ';';
+        }
+        return baseuri.substr(0, baseuri.find('?')) + "?" + newquery;
+    }
 }
 
 // static
