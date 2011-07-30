@@ -388,7 +388,6 @@ void TextCtrlTestCase::Style()
 
 void TextCtrlTestCase::Lines()
 {
-#ifndef __WXOSX__
     delete m_text;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
                             wxDefaultPosition, wxSize(400, 200), wxTE_MULTILINE | wxTE_DONTWRAP);
@@ -407,6 +406,17 @@ void TextCtrlTestCase::Lines()
     CPPUNIT_ASSERT_EQUAL(5, m_text->GetNumberOfLines());
     CPPUNIT_ASSERT_EQUAL(0, m_text->GetLineLength(3));
     CPPUNIT_ASSERT_EQUAL("", m_text->GetLineText(3));
+
+    // Verify that wrapped lines count as 2 lines.
+    //
+    // This currently doesn't work neither in wxGTK nor wxOSX/Cocoa, see
+    // #12366, where GetNumberOfLines() always returns the number of logical,
+    // not physical, lines.
+    m_text->AppendText("\n" + wxString(50, '1') + ' ' + wxString(50, '2'));
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__)
+    CPPUNIT_ASSERT_EQUAL(6, m_text->GetNumberOfLines());
+#else
+    CPPUNIT_ASSERT_EQUAL(7, m_text->GetNumberOfLines());
 #endif
 }
 

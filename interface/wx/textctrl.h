@@ -1197,19 +1197,15 @@ public:
     /**
         Returns the number of lines in the text control buffer.
 
+        The returned number is the number of logical lines, i.e. just the count
+        of the number of newline characters in the control + 1, for wxGTK and
+        wxOSX/Cocoa ports while it is the number of physical lines, i.e. the
+        count of lines actually shown in the control, in wxMSW and wxOSX/Carbon.
+        Because of this discrepancy, it is not recommended to use this function.
+
         @remarks
             Note that even empty text controls have one line (where the
             insertion point is), so GetNumberOfLines() never returns 0.
-            For wxGTK using GTK+ 1.2.x and earlier, the number of lines in a
-            multi-line text control is calculated by actually counting newline
-            characters in the buffer, i.e. this function returns the number of
-            logical lines and doesn't depend on whether any of them are wrapped.
-            For all the other platforms, the number of physical lines in the
-            control is returned.
-            Also note that you may wish to avoid using functions that work with
-            line numbers if you are working with controls that contain large
-            amounts of text as this function has O(N) complexity for N being
-            the number of lines.
     */
     virtual int GetNumberOfLines() const;
 
