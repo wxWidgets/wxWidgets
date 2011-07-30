@@ -3,7 +3,7 @@
 // Purpose:     Common interface and events for web view component
 // Author:      Marianne Gagnon
 // Id:          $Id$
-// Copyright:   (c) 2010 Marianne Gagnon
+// Copyright:   (c) 2010 Marianne Gagnon, 2011 Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -38,6 +38,7 @@ wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebNavigationEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebNavigationEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebNavigationEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, wxWebNavigationEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, wxWebNavigationEvent );
 
 //Taken from wx/filesys.cpp
 static wxString EscapeFileNameCharsInURL(const char *in)

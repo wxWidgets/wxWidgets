@@ -3,7 +3,7 @@
 // Purpose:     Common interface and events for web view component
 // Author:      Marianne Gagnon
 // Id:          $Id$
-// Copyright:   (c) 2010 Marianne Gagnon
+// Copyright:   (c) 2010 Marianne Gagnon, 2011 Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -421,6 +421,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxW
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebNavigationEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebNavigationEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, wxWebNavigationEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, wxWebNavigationEvent );
 
 typedef void (wxEvtHandler::*wxWebNavigationEventFunction)
              (wxWebNavigationEvent&);
@@ -446,6 +447,10 @@ typedef void (wxEvtHandler::*wxWebNavigationEventFunction)
 
 #define EVT_WEB_VIEW_NEWWINDOW(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, id, \
+                     wxHtmlNavigatingEventHandler(fn))
+
+#define EVT_WEB_VIEW_TITLE_CHANGED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, id, \
                      wxHtmlNavigatingEventHandler(fn))
 
 #endif // wxUSE_WEB

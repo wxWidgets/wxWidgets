@@ -157,6 +157,9 @@ public:
        Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to 
        happen, for example to load the page in a new window or tab.
+    @event{EVT_WEB_VIEW_TITLE_CHANGED(id, func)}
+       Process a @c wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED event, generated when 
+       the page title changes. Use GetString to get the title.
     @endEventTable
    
     @library{wxweb}
@@ -521,6 +524,9 @@ public:
        Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to 
        happen, for example to load the page in a new window or tab.
+    @event{EVT_WEB_VIEW_TITLE_CHANGED(id, func)}
+       Process a @c wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED event, generated when 
+       the page title changes. Use GetString to get the title.
     @endEventTable
 
     @library{wxweb}

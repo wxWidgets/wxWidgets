@@ -65,7 +65,7 @@ static gboolean
 wxgtk_webview_webkit_navigation(WebKitWebView*,
                                 WebKitWebFrame *frame,
                                 WebKitNetworkRequest *request,
-                                WebKitWebNavigationAction*,
+                                WebKitWebNavigationAction *,
                                 WebKitWebPolicyDecision *policy_decision,
                                 wxWebViewWebKit *webKitCtrl)
 {
@@ -263,6 +263,24 @@ wxgtk_webview_webkit_new_window(WebKitWebView*,
     return TRUE;
 }
 
+static void
+wxgtk_webview_webkit_title_changed(WebKitWebView *webView,
+                                   WebKitWebFrame *frame,
+                                   gchar *title,
+                                   wxWebViewWebKit *webKitCtrl)
+{
+    wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+                                   webKitCtrl->GetId(),
+                                   webKitCtrl->GetCurrentURL(),
+                                   "",
+                                   true);
+    thisEvent.SetString(wxString(title, wxConvUTF8));
+
+    if (webKitCtrl && webKitCtrl->GetEventHandler())
+        webKitCtrl->GetEventHandler()->ProcessEvent(thisEvent);
+
+}
+
 } // extern "C"
 
 //-----------------------------------------------------------------------------
@@ -313,6 +331,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     g_signal_connect_after(web_view, "new-window-policy-decision-requested",
                            G_CALLBACK(wxgtk_webview_webkit_new_window), this);
+
+    g_signal_connect_after(web_view, "title-changed",
+                           G_CALLBACK(wxgtk_webview_webkit_title_changed), this);
 
     m_parent->DoAddChild( this );
 

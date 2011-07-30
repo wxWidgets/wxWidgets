@@ -3,7 +3,7 @@
 // Purpose:     wxMSW wxWebViewIE class implementation for web view component
 // Author:      Marianne Gagnon
 // Id:          $Id$
-// Copyright:   (c) 2010 Marianne Gagnon, Steven Lamerton
+// Copyright:   (c) 2010 Marianne Gagnon, 2011 Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -803,6 +803,13 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
         case DISPID_TITLECHANGE:
         {
+            wxString title = evt[0].GetString();
+
+            wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+                                       GetId(), GetCurrentURL(), wxEmptyString, true);
+            event.SetString(title);
+            event.SetEventObject(this);
+            HandleWindowEvent(event);
             break;
         }
 

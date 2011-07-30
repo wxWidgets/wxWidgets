@@ -68,6 +68,7 @@ public:
     void OnNavigationComplete(wxWebNavigationEvent& evt);
     void OnDocumentLoaded(wxWebNavigationEvent& evt);
     void OnNewWindow(wxWebNavigationEvent& evt);
+    void OnTitleChanged(wxWebNavigationEvent& evt);
     void OnViewSourceRequest(wxCommandEvent& evt);
     void OnToolsClicked(wxCommandEvent& evt);
     void OnSetZoom(wxCommandEvent& evt);
@@ -266,6 +267,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxWebNavigationEventHandler(WebFrame::OnError), NULL, this);
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
             wxWebNavigationEventHandler(WebFrame::OnNewWindow), NULL, this);
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+            wxWebNavigationEventHandler(WebFrame::OnTitleChanged), NULL, this);
 
     // Connect the menu events
     Connect(viewSource->GetId(), wxEVT_COMMAND_MENU_SELECTED,
@@ -506,6 +509,12 @@ void WebFrame::OnNewWindow(wxWebNavigationEvent& evt)
     if(m_tools_handle_new_window->IsChecked())
         m_browser->LoadUrl(evt.GetURL());
 
+    UpdateState();
+}
+
+void WebFrame::OnTitleChanged(wxWebNavigationEvent& evt)
+{
+    wxLogMessage("%s", "Title changed; title='" + evt.GetString() + "'");
     UpdateState();
 }
 

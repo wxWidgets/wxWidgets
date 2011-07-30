@@ -1132,6 +1132,16 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
     {
         webKitWindow->SetPageTitle(wxStringWithNSString( title ));
     }
+    wxString target = wxStringWithNSString([frame name]);
+    wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+                                   wx_webviewctrls[sender]->GetId(),
+                                   wx_webviewctrls[sender]->GetCurrentURL(),
+                                   target, true);
+                                   
+    thisEvent.SetString(wxStringWithNSString(title));
+
+    if (webKitWindow && webKitWindow->GetEventHandler())
+        webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
 }
 @end
 
