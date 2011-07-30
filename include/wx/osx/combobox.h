@@ -144,9 +144,7 @@ class WXDLLIMPEXP_CORE wxComboBox :
 
     virtual bool        OSXHandleClicked( double timestampsec );
 
-#if wxOSX_USE_CARBON
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
-#endif
 
 #if wxOSX_USE_COCOA
     wxComboWidgetImpl* GetComboPeer() const;
