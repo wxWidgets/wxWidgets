@@ -775,9 +775,10 @@ int wxTextWidgetImpl::GetLineLength(long lineNo) const
             count = 0;
             for (size_t j = i; j < content.length(); j++)
             {
-                count++;
                 if (content[j] == '\n')
                     return count;
+
+                count++;
             }
 
             return count;
