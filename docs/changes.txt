@@ -440,6 +440,7 @@ Major new features in this release
 All:
 
 - Fix parsing of negated long options in wxCmdLineParser (roed_bis).
+- Fix crash in wxArray::insert() overload taking iterator range (wsu).
 
 All (GUI):
 
