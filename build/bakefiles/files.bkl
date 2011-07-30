@@ -3357,6 +3357,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="WEB_SRC" hints="files">
     $(WEB_SRC_PLATFORM)
     src/common/webview.cpp
+    src/common/webviewfilehandler.cpp
 </set>
 
 <set var="WEB_HDR_PLATFORM" hints="files">
@@ -3367,6 +3368,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="WEB_HDR" hints="files">
     $(WEB_HDR_PLATFORM)
     wx/webview.h
+    wx/webviewfilehandler.h
 </set>
 
 <!-- ====================================================================== -->

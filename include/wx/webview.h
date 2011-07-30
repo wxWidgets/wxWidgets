@@ -107,27 +107,13 @@ enum wxWebViewBackend
     wxWEB_VIEW_BACKEND_IE
 };
 
-//Base class for custom protocol handlers
-class WXDLLIMPEXP_WEB wxWebProtocolHandler
+//Base class for custom scheme handlers
+class WXDLLIMPEXP_WEB wxWebHandler
 {
 public:
-    virtual wxString GetProtocol() = 0;
+    virtual wxString GetName() const = 0;
     virtual wxFSFile* GetFile(const wxString &uri) = 0;
     virtual wxString CombineURIs(const wxString &baseuri, const wxString &newuri) = 0;
-};
-
-//Loads from uris such as file:///C:/example/example.html or archives such as
-//file:///C:/example/example.zip?protocol=zip;path=example.html 
-class WXDLLIMPEXP_WEB wxWebFileProtocolHandler : public wxWebProtocolHandler
-{
-public:
-    wxWebFileProtocolHandler();
-    virtual wxString GetProtocol() { return m_protocol; }
-    virtual wxFSFile* GetFile(const wxString &uri);
-    virtual wxString CombineURIs(const wxString &baseuri, const wxString &newuri);
-private:
-    wxString m_protocol;
-    wxFileSystem* m_fileSystem;
 };
 
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[];
@@ -361,7 +347,7 @@ public:
     virtual void Redo() = 0;
 
     //Virtual Filesystem Support
-    virtual void RegisterProtocol(wxWebProtocolHandler* handler) = 0;
+    virtual void RegisterHandler(wxWebHandler* handler) = 0;
 };
 
 class WXDLLIMPEXP_WEB wxWebNavigationEvent : public wxCommandEvent

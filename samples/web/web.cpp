@@ -26,6 +26,7 @@
 #include <wx/notifmsg.h>
 #include <wx/settings.h>
 #include <wx/webview.h>
+#include <wx/webviewfilehandler.h>
 #include <wx/infobar.h>
 #include <wx/filesys.h>
 #include <wx/fs_arc.h>
@@ -191,7 +192,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     //We register the test:// protocol for testing purposes
-    m_browser->RegisterProtocol(new wxWebFileProtocolHandler());
+    m_browser->RegisterHandler(new wxWebFileHandler());
 
     SetSizer(topsizer);
 

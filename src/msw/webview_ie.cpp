@@ -663,7 +663,7 @@ void wxWebViewIE::RunScript(const wxString& javascript)
     document->Release();
 }
 
-void wxWebViewIE::RegisterProtocol(wxWebProtocolHandler* handler)
+void wxWebViewIE::RegisterHandler(wxWebHandler* handler)
 {
     ClassFactory* cf = new ClassFactory(handler);
     IInternetSession* session;
@@ -672,7 +672,7 @@ void wxWebViewIE::RegisterProtocol(wxWebProtocolHandler* handler)
         wxFAIL_MSG("Could not retrive internet session");
     }
 
-    HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, handler->GetProtocol(), 0, NULL, 0);
+    HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, handler->GetName(), 0, NULL, 0);
     if(FAILED(hr))
     {
         wxFAIL_MSG("Could not register protocol");
@@ -957,7 +957,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
     evt.Skip();
 }
 
-VirtualProtocol::VirtualProtocol(wxWebProtocolHandler *handler)
+VirtualProtocol::VirtualProtocol(wxWebHandler *handler)
 {
     m_refCount = 0;
     m_file = NULL;

@@ -152,7 +152,7 @@ public:
     virtual void RunScript(const wxString& javascript);
     
     //Virtual Filesystem Support
-    virtual void RegisterProtocol(wxWebProtocolHandler* hanlder);
+    virtual void RegisterHandler(wxWebHandler* handler);
 
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;
