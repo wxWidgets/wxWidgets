@@ -57,11 +57,18 @@
 - (void)setSelectable:(BOOL)flag;
 @end
 
+// An object of this class is created before the text is modified
+// programmatically and destroyed as soon as this is done. It does several
+// things, like ensuring that the control is editable to allow setting its text
+// at all and eating any unwanted focus loss events from textDidEndEditing:
+// which don't really correspond to focus change.
 class wxMacEditHelper
 {
 public :
     wxMacEditHelper( NSView* textView )
     {
+        m_viewPreviouslyEdited = ms_viewCurrentlyEdited;
+        ms_viewCurrentlyEdited =
         m_textView = textView;
         m_formerEditable = YES;
         if ( textView )
@@ -79,13 +86,26 @@ public :
             [m_textView setEditable:m_formerEditable];
             [m_textView setSelectable:m_formerSelectable];
         }
+
+        ms_viewCurrentlyEdited = m_viewPreviouslyEdited;
     }
+
+    // Returns the last view we were instantiated for or NULL.
+    static NSView *GetCurrentlyEditedView() { return ms_viewCurrentlyEdited; }
 
 protected :
     BOOL m_formerEditable ;
     BOOL m_formerSelectable;
     NSView* m_textView;
+
+    // The original value of ms_viewCurrentlyEdited when this object was
+    // created.
+    NSView* m_viewPreviouslyEdited;
+
+    static NSView* ms_viewCurrentlyEdited;
 } ;
+
+NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @implementation wxNSSecureTextField
 
@@ -222,6 +242,15 @@ protected :
 - (void)textDidEndEditing:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
+
+    if ( self == wxMacEditHelper::GetCurrentlyEditedView() )
+    {
+        // This notification is generated as the result of calling our own
+        // wxTextCtrl method (e.g. WriteText()) and doesn't correspond to any
+        // real focus loss event so skip generating it.
+        return;
+    }
+
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
