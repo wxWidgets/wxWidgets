@@ -26,12 +26,13 @@ class wxComboWidgetImpl;
 
 // Combobox item
 class WXDLLIMPEXP_CORE wxComboBox :
+    public wxWindowWithItems<
 #if wxOSX_USE_CARBON
-    public wxNavigationEnabled<wxControl>,
+                wxNavigationEnabled<wxControl>,
 #else
-    public wxControl,
+                wxControl,
 #endif
-    public wxComboBoxBase
+                wxComboBoxBase>
 {
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 
@@ -143,8 +144,6 @@ class WXDLLIMPEXP_CORE wxComboBox :
     // osx specific event handling common for all osx-ports
 
     virtual bool        OSXHandleClicked( double timestampsec );
-
-    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 #if wxOSX_USE_COCOA
     wxComboWidgetImpl* GetComboPeer() const;

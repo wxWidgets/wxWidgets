@@ -34,7 +34,8 @@ class WXDLLIMPEXP_FWD_CORE wxListBox;
 // NB: Normally we'd like wxComboBox to inherit from wxComboBoxBase, but here
 //     we can't really do that since both wxComboBoxBase and wxComboCtrl inherit
 //     from wxTextCtrl.
-class WXDLLIMPEXP_CORE wxComboBox : public wxComboCtrl, public wxItemContainer
+class WXDLLIMPEXP_CORE wxComboBox :
+    public wxWindowWithItems<wxComboCtrl, wxItemContainer>
 {
 public:
     // ctors and such
@@ -140,8 +141,6 @@ public:
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
     virtual wxString GetStringSelection() const;
-
-    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
     // we have our own input handler and our own actions
     // (but wxComboCtrl already handled Popup/Dismiss)
