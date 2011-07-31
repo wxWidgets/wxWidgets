@@ -49,6 +49,11 @@ AC_DEFUN([WX_VISIBILITY],
          error this platform has no visibility;
          #endif
 
+         /* at the time of Xcode 4.1 / Clang 3, Clang++ still didn't have the bugs sorted out: */
+         #if defined(__clang__)
+         clang compiler is still broken w.r.t. visibility;
+         #endif
+
          extern __attribute__((__visibility__("hidden"))) int hiddenvar;
          extern __attribute__((__visibility__("default"))) int exportedvar;
          extern __attribute__((__visibility__("hidden"))) int hiddenfunc (void);
