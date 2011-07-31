@@ -359,7 +359,7 @@ void name::insert(iterator it, const_iterator first, const_iterator last)   \
   Grow(nInsert);                                                            \
                                                                             \
   /* old iterator could have been invalidated by Grow(). */                 \
-  it = begin() + nInsert;                                                   \
+  it = begin() + nIndex;                                                    \
                                                                             \
   memmove(&m_pItems[nIndex + nInsert], &m_pItems[nIndex],                   \
           (m_nCount - nIndex)*sizeof(T));                                   \
