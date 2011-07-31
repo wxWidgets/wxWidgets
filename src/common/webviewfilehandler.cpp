@@ -19,6 +19,40 @@
 #include "wx/webviewfilehandler.h"
 #include "wx/filesys.h"
 #include "wx/tokenzr.h"
+#include "wx/hashmap.h"
+
+typedef wxStringToStringHashMap QueryMap;
+
+QueryMap QueryStringToQueryMap(wxString query)
+{
+    QueryMap map;
+
+    if(query.substr(0, 1) == "?")
+        query = query.substr(1);
+
+    wxStringTokenizer tokenizer(query, ";");
+    while(tokenizer.HasMoreTokens())
+    {
+        wxString token = tokenizer.GetNextToken();
+        size_t pos = token.find('=');
+        map[token.substr(0, pos)] = token.substr(pos + 1);
+    }
+    return map;
+}
+
+wxString QueryMapToQueryString(QueryMap map)
+{
+    wxString query = "?";
+
+    QueryMap::iterator it;
+    for(it = map.begin(); it != map.end(); ++it)
+    {
+        query = query + it->first + "=" + it->second + ";";
+    }
+
+    //Chop the end ; off
+    return query.substr(0, query.length() - 1);
+}
 
 //Taken from wx/filesys.cpp
 static wxString EscapeFileNameCharsInURL(const char *in)
@@ -68,26 +102,11 @@ wxFSFile* wxWebFileHandler::GetFile(const wxString &uri)
     }
     //Otherwise we have a query string of some kind that we need to extract
     else{
-        //First we extract the query string, this should have two parameters, 
-        //protocol=type and path=path
-        wxString query = uri.substr(pos + 1), protocol, path;
-        //We also trim the query off the end as we handle it alone
         wxString lefturi = uri.substr(0, pos);
-        wxStringTokenizer tokenizer(query, ";");
-        while(tokenizer.HasMoreTokens() && (protocol == "" || path == ""))
-        {
-            wxString token = tokenizer.GetNextToken();
-            if(token.substr(0, 9) == "protocol=")
-            {
-                protocol = token.substr(9);
-            }
-            else if(token.substr(0, 5) == "path=")
-            {
-                path = token.substr(5);
-            }
-        }
-        if(protocol == "" || path == "")
-            return NULL;
+
+        //We extract the query parts that we need
+        QueryMap map = QueryStringToQueryMap(uri.substr(pos));
+        wxString protocol = map["protocol"], path = map["path"];
 
         //We now have the path and the protocol and so can format a correct uri
         //to pass to wxFileSystem to get a wxFSFile
@@ -104,7 +123,7 @@ wxFSFile* wxWebFileHandler::GetFile(const wxString &uri)
 }
 
 wxString wxWebFileHandler::CombineURIs(const wxString &baseuri, 
-                                               const wxString &newuri)
+                                       const wxString &newuri)
 {
     //If there is a colon in the path then we just return it
     if(newuri.find(':') != wxString::npos)
@@ -123,27 +142,11 @@ wxString wxWebFileHandler::CombineURIs(const wxString &baseuri,
     //We have an absolute path and a query string
     else if(newuri.substr(0, 1) == "/" && baseuri.find('?') != wxString::npos)
     {
-        wxString query = baseuri.substr(baseuri.find('?') + 1);
-        wxString newquery;
-        wxStringTokenizer tokenizer(query, ";");
-        while(tokenizer.HasMoreTokens())
-        {
-            wxString token = tokenizer.GetNextToken();
-            if(token.substr(0, 5) == "path=")
-            {
-                //As the path is absolue simply replace the old path with the
-                //new one
-                newquery = newquery + "path=" + newuri;
-            }
-            else
-            {
-                newquery += token;
-            }
-            //We need to add the separators back
-            if(tokenizer.HasMoreTokens())
-                newquery += ';';
-        }
-        return baseuri.substr(0, baseuri.find('?')) + "?" + newquery;
+        QueryMap map = QueryStringToQueryMap(baseuri.substr(baseuri.find('?')));
+        //As the path is absolue simply replace the old path with the new one
+        map["path"] = newuri;
+        wxString newquery = QueryMapToQueryString(map);
+        return baseuri.substr(0, baseuri.find('?')) + newquery;
     }
     //We have a relative path and no query string
     else if(baseuri.find('?') == wxString::npos)
@@ -154,9 +157,6 @@ wxString wxWebFileHandler::CombineURIs(const wxString &baseuri,
         wxString path = baseuri.substr(pos);
         //Then we remove the last filename
         path = path.BeforeLast('/') + '/';
-        //Ensure that we have the leading / so we can normalise properly
-        if(path.substr(0, 1) != "/")
-            path = "/" + path;
 
         //If we have a colon in the path (i.e. we are on windows) we need to 
         //handle it specially
@@ -179,35 +179,18 @@ wxString wxWebFileHandler::CombineURIs(const wxString &baseuri,
     //We have a relative path and a query string
     else
     {
-        wxString query = baseuri.substr(baseuri.find('?') + 1);
-        wxString newquery;
-        wxStringTokenizer tokenizer(query, ";");
-        while(tokenizer.HasMoreTokens())
-        {
-            wxString token = tokenizer.GetNextToken();
-            if(token.substr(0, 5) == "path=")
-            {
-                wxString path = token.substr(6);
-                //Then we remove the last filename
-                path = path.BeforeLast('/') + '/';
-                //Ensure that we have the leading / so we can normalise properly
-                //if(path.substr(0, 1) != "/")
-                //    path = "/" + path;
+        QueryMap map = QueryStringToQueryMap(baseuri.substr(baseuri.find('?')));
+        wxString path = map["path"];
+        //Then we remove the last filename
+        path = path.BeforeLast('/') + '/';
 
-                //We can now use wxFileName to perform the normalisation
-                wxFileName fn(path + newuri);
-                fn.Normalize(wxPATH_NORM_DOTS, "", wxPATH_UNIX);
-                newquery = newquery + "path=" + fn.GetFullPath(wxPATH_UNIX);
-            }
-            else
-            {
-                newquery += token;
-            }
-            //We need to add the separators back
-            if(tokenizer.HasMoreTokens())
-                newquery += ';';
-        }
-        return baseuri.substr(0, baseuri.find('?')) + "?" + newquery;
+        //We can now use wxFileName to perform the normalisation
+        wxFileName fn(path + newuri);
+        fn.Normalize(wxPATH_NORM_DOTS, "", wxPATH_UNIX);
+        map["path"] = fn.GetFullPath(wxPATH_UNIX);
+
+        wxString newquery = QueryMapToQueryString(map);
+        return baseuri.substr(0, baseuri.find('?')) + newquery;
     }
 }
 #endif // wxUSE_WEB
