@@ -3361,9 +3361,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="WEB_HDR_PLATFORM" hints="files">
-    <if cond="TOOLKIT=='MSW'">wx/msw/webview_ie.h</if>
-    <if cond="PLATFORM_UNIX=='1'">wx/gtk/webview_webkit.h</if>
-    <if cond="PLATFORM_MACOSX=='1'">wx/osx/webview_webkit.h</if>
+    <if cond="TOOLKIT=='MSW'">
+        wx/msw/webhistoryitem_ie.h
+        wx/msw/webview_ie.h
+    </if>
+    <if cond="PLATFORM_UNIX=='1'">
+        wx/gtk/webhistoryitem_webkit.h
+        wx/gtk/webview_webkit.h
+    </if>
+    <if cond="PLATFORM_MACOSX=='1'">
+        wx/osx/webhistoryitem_webkit.h
+        wx/osx/webview_webkit.h
+    </if>
 </set>
 <set var="WEB_HDR" hints="files">
     $(WEB_HDR_PLATFORM)

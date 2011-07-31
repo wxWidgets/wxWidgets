@@ -20,20 +20,13 @@
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 
+#include "wx/osx/webhistoryitem_webkit.h"
+#include "wx/gtk/webhistoryitem_webkit.h"
+#include "wx/msw/webhistoryitem_ie.h"
+
 class wxFSFile;
 class wxFileSystem;
 
-class WXDLLIMPEXP_WEB wxWebHistoryItem
-{
-public:
-    wxWebHistoryItem(const wxString& url, const wxString& title) : 
-                     m_url(url), m_title(title) {}
-    wxString GetUrl() { return m_url; }
-    wxString GetTitle() { return m_title; }
-
-private:
-    wxString m_url, m_title;
-};
 
 /**
  * Zoom level in web view component
