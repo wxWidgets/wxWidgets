@@ -18,36 +18,6 @@
 #include "wx/sharedptr.h"
 #include "wx/webview.h"
 
-//A set of hash function so we can map wxWebHistoryItems to WebKitWebHistoryItems
-class SharedPtrHash
-{
-public:
-    SharedPtrHash() { }
-
-    unsigned long operator()( const wxSharedPtr<wxWebHistoryItem> & item ) const
-    {
-        
-        return wxPointerHash()(item.get());
-    }
-    SharedPtrHash& operator=(const SharedPtrHash&) { return *this; }
-};
-
-class SharedPtrEqual
-{
-public:
-    SharedPtrEqual() { }
-    bool operator()( const wxSharedPtr<wxWebHistoryItem> & a,
-                     const wxSharedPtr<wxWebHistoryItem> & b ) const
-    {
-        return wxPointerEqual()(a.get(), b.get());
-    }
-
-    SharedPtrEqual& operator=(const SharedPtrEqual&) { return *this; }
-};
-
-WX_DECLARE_HASH_MAP(wxSharedPtr<wxWebHistoryItem>, WebKitWebHistoryItem*,
-                    SharedPtrHash, SharedPtrEqual, HistoryItemHash);
-
 //-----------------------------------------------------------------------------
 // wxWebViewWebKit
 //-----------------------------------------------------------------------------
@@ -152,7 +122,7 @@ public:
     virtual void RunScript(const wxString& javascript);
     
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxWebHandler* handler);
+    virtual void RegisterHandler(wxWebHandler* handler) {};
 
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;
@@ -177,7 +147,6 @@ private:
 
     GtkWidget *web_view;
     gint m_historyLimit;
-    HistoryItemHash m_historyMap;
 
     // FIXME: try to get DECLARE_DYNAMIC_CLASS macros & stuff right
     //DECLARE_DYNAMIC_CLASS(wxWebViewWebKit)

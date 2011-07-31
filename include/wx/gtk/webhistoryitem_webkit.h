@@ -14,6 +14,8 @@
 
 #if wxUSE_WEBVIEW_WEBKIT
 
+#include "webkit/webkit.h"
+
 class WXDLLIMPEXP_WEB wxWebHistoryItem
 {
 public:
@@ -22,8 +24,11 @@ public:
     wxString GetUrl() { return m_url; }
     wxString GetTitle() { return m_title; }
 
+    friend class wxWebViewWebKit;
+
 private:
     wxString m_url, m_title;
+    WebKitWebHistoryItem* m_histItem;
 };
 
 #endif // wxUSE_WEBVIEW_WEBKIT

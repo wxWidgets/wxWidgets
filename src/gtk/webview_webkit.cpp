@@ -469,11 +469,12 @@ wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
     for(int i = g_list_length(list) - 1; i >= 0 ; i--)
     {
         WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)g_list_nth_data(list, i);
-        wxSharedPtr<wxWebHistoryItem> item(new wxWebHistoryItem(
-                                           webkit_web_history_item_get_uri(gtkitem),
-                                           webkit_web_history_item_get_title(gtkitem)));
+        wxWebHistoryItem* wxitem = new wxWebHistoryItem(
+                                   webkit_web_history_item_get_uri(gtkitem),
+                                   webkit_web_history_item_get_title(gtkitem));
+        wxitem->m_histItem = gtkitem;
+        wxSharedPtr<wxWebHistoryItem> item(wxitem);
         backhist.push_back(item);
-        m_historyMap[item] = gtkitem;
     }
     return backhist;
 }
@@ -488,23 +489,25 @@ wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetForwardHistory()
     for(guint i = 0; i < g_list_length(list); i++)
     {
         WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)g_list_nth_data(list, i);
-        wxSharedPtr<wxWebHistoryItem> item(new wxWebHistoryItem(
-                                           webkit_web_history_item_get_uri(gtkitem),
-                                           webkit_web_history_item_get_title(gtkitem)));
+        wxWebHistoryItem* wxitem = new wxWebHistoryItem(
+                                   webkit_web_history_item_get_uri(gtkitem),
+                                   webkit_web_history_item_get_title(gtkitem));
+        wxitem->m_histItem = gtkitem;
+        wxSharedPtr<wxWebHistoryItem> item(wxitem);
         forwardhist.push_back(item);
-        m_historyMap[item] = gtkitem;
     }
     return forwardhist;
 }
 
 void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item)
 {
-    WebKitWebHistoryItem* gtkitem = m_historyMap[item];
+    WebKitWebHistoryItem* gtkitem = item->m_histItem;
     if(gtkitem)
     {
         WebKitWebBackForwardList* history;
         history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
-        webkit_web_back_forward_list_go_to_item(history, gtkitem);
+        webkit_web_back_forward_list_go_to_item(WEBKIT_WEB_BACK_FORWARD_LIST(history), 
+                                                WEBKIT_WEB_HISTORY_ITEM(gtkitem));
     }
 }
 
