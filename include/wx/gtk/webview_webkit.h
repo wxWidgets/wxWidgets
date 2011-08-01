@@ -122,7 +122,7 @@ public:
     virtual void RunScript(const wxString& javascript);
     
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxWebHandler* handler) {};
+    virtual void RegisterHandler(wxWebHandler* WXUNUSED(handler)) {};
 
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;

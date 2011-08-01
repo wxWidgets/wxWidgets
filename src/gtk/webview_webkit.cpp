@@ -264,8 +264,8 @@ wxgtk_webview_webkit_new_window(WebKitWebView*,
 }
 
 static void
-wxgtk_webview_webkit_title_changed(WebKitWebView *webView,
-                                   WebKitWebFrame *frame,
+wxgtk_webview_webkit_title_changed(WebKitWebView*,
+                                   WebKitWebFrame*,
                                    gchar *title,
                                    wxWebViewWebKit *webKitCtrl)
 {
