@@ -64,6 +64,8 @@ public:
     virtual void SetPageTitle(const wxString& title) { m_pageTitle = title; }
     virtual wxString GetPageTitle(){ return m_pageTitle; }
 
+    //We do not want to hide the other overloads
+    using wxWebView::SetPage;
     virtual void SetPage(const wxString& html, const wxString& baseUrl);
 
     virtual void Print();
@@ -82,12 +84,12 @@ public:
     
     //History functions
     virtual void ClearHistory() {}
-    virtual void EnableHistory(bool enable = true) {}
+    virtual void EnableHistory(bool WXUNUSED(enable) = true) {}
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory()
             { return wxVector<wxSharedPtr<wxWebHistoryItem> >(); }
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() 
             { return wxVector<wxSharedPtr<wxWebHistoryItem> >(); }
-    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) {}
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> WXUNUSED(item)) {}
     
     //Undo / redo functionality
     virtual bool CanUndo() { return false; }
@@ -118,7 +120,7 @@ public:
     void RunScript(const wxString& javascript);
     
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxWebHandler* handler) {};
+    virtual void RegisterHandler(wxWebHandler* WXUNUSED(handler)) {};
 
     // ---- methods not from the parent (common) interface
     bool  CanGetPageSource();
