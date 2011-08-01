@@ -41,8 +41,11 @@
 #error "wxStyledTextControl is needed by this sample"
 #endif
 
+#if defined(__WXMSW__) || defined(__WXOSX__)
 #include "stop.xpm"
 #include "refresh.xpm"
+#endif
+
 #include "wxlogo.xpm"
 
 class WebApp : public wxApp
@@ -306,7 +309,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnMode),  NULL, this );
 }
 
-void WebFrame::OnAnimationTimer(wxTimerEvent& evt)
+void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
 {
     m_animation_angle += 15;
     if (m_animation_angle > 360) m_animation_angle -= 360;
@@ -374,7 +377,7 @@ void WebFrame::UpdateState()
 /**
   * Callback invoked when user entered an URL and pressed enter
   */
-void WebFrame::OnUrl(wxCommandEvent& evt)
+void WebFrame::OnUrl(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->LoadUrl( m_url->GetValue() );
     UpdateState();
@@ -383,7 +386,7 @@ void WebFrame::OnUrl(wxCommandEvent& evt)
 /**
     * Callback invoked when user pressed the "back" button
     */
-void WebFrame::OnBack(wxCommandEvent& evt)
+void WebFrame::OnBack(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->GoBack();
     UpdateState();
@@ -392,7 +395,7 @@ void WebFrame::OnBack(wxCommandEvent& evt)
 /**
   * Callback invoked when user pressed the "forward" button
   */
-void WebFrame::OnForward(wxCommandEvent& evt)
+void WebFrame::OnForward(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->GoForward();
     UpdateState();
@@ -401,7 +404,7 @@ void WebFrame::OnForward(wxCommandEvent& evt)
 /**
   * Callback invoked when user pressed the "stop" button
   */
-void WebFrame::OnStop(wxCommandEvent& evt)
+void WebFrame::OnStop(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Stop();
     UpdateState();
@@ -410,50 +413,50 @@ void WebFrame::OnStop(wxCommandEvent& evt)
 /**
   * Callback invoked when user pressed the "reload" button
   */
-void WebFrame::OnReload(wxCommandEvent& evt)
+void WebFrame::OnReload(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Reload();
     UpdateState();
 }
 
-void WebFrame::OnClearHistory(wxCommandEvent& evt)
+void WebFrame::OnClearHistory(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->ClearHistory();
     UpdateState();
 }
 
-void WebFrame::OnEnableHistory(wxCommandEvent& evt)
+void WebFrame::OnEnableHistory(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->EnableHistory(m_tools_enable_history->IsChecked());
     UpdateState();
 }
 
-void WebFrame::OnCut(wxCommandEvent& evt)
+void WebFrame::OnCut(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Cut();
 }
 
-void WebFrame::OnCopy(wxCommandEvent& evt)
+void WebFrame::OnCopy(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Copy();
 }
 
-void WebFrame::OnPaste(wxCommandEvent& evt)
+void WebFrame::OnPaste(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Paste();
 }
 
-void WebFrame::OnUndo(wxCommandEvent& evt)
+void WebFrame::OnUndo(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Undo();
 }
 
-void WebFrame::OnRedo(wxCommandEvent& evt)
+void WebFrame::OnRedo(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Redo();
 }
 
-void WebFrame::OnMode(wxCommandEvent& evt)
+void WebFrame::OnMode(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->SetEditable(m_edit_mode->IsChecked());
 }
@@ -494,7 +497,9 @@ void WebFrame::OnDocumentLoaded(wxWebNavigationEvent& evt)
 {
     //Only notify if the document is the main frame, not a subframe
     if(evt.GetURL() == m_browser->GetCurrentURL())
+    {
         wxLogMessage("%s", "Document loaded; url='" + evt.GetURL() + "'");
+    }
     UpdateState();
 }
 
@@ -522,7 +527,7 @@ void WebFrame::OnTitleChanged(wxWebNavigationEvent& evt)
 /**
   * Invoked when user selects the "View Source" menu item
   */
-void WebFrame::OnViewSourceRequest(wxCommandEvent& evt)
+void WebFrame::OnViewSourceRequest(wxCommandEvent& WXUNUSED(evt))
 {
     SourceViewDialog dlg(this, m_browser->GetPageSource());
     dlg.ShowModal();
@@ -531,7 +536,7 @@ void WebFrame::OnViewSourceRequest(wxCommandEvent& evt)
 /**
   * Invoked when user selects the "Menu" item
   */
-void WebFrame::OnToolsClicked(wxCommandEvent& evt)
+void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
 {
     if(m_browser->GetCurrentURL() == "")
         return;
@@ -604,7 +609,7 @@ void WebFrame::OnSetZoom(wxCommandEvent& evt)
     }
 }
 
-void WebFrame::OnZoomLayout(wxCommandEvent& evt)
+void WebFrame::OnZoomLayout(wxCommandEvent& WXUNUSED(evt))
 {
     if(m_tools_layout->IsChecked())
         m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
@@ -665,7 +670,7 @@ void WebFrame::OnError(wxWebNavigationEvent& evt)
 /**
   * Invoked when user selects "Print" from the menu
   */
-void WebFrame::OnPrint(wxCommandEvent& evt)
+void WebFrame::OnPrint(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Print();
 }
