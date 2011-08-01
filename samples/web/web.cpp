@@ -468,6 +468,11 @@ void WebFrame::OnMode(wxCommandEvent& WXUNUSED(evt))
   */
 void WebFrame::OnNavigationRequest(wxWebNavigationEvent& evt)
 {
+    if(m_info->IsShown())
+    {
+        m_info->Show(false);
+    }
+
     wxLogMessage("%s", "Navigation request to '" + evt.GetURL() + "' (target='" +
     evt.GetTarget() + "')");
     
