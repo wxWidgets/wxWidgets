@@ -148,10 +148,9 @@ private:
     GtkWidget *web_view;
     gint m_historyLimit;
 
-    // FIXME: try to get DECLARE_DYNAMIC_CLASS macros & stuff right
-    //DECLARE_DYNAMIC_CLASS(wxWebViewWebKit)
+    wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 };
 
-#endif // if wxHAVE_WEB_BACKEND_GTK_WEBKIT
+#endif // wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
 #endif

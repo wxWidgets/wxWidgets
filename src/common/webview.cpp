@@ -29,7 +29,8 @@ WX_CHECK_BUILD_OPTIONS("wxWEB")
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[] = "wxWebView";
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewDefaultURLStr[] = "about:blank";
 
-IMPLEMENT_DYNAMIC_CLASS(wxWebNavigationEvent, wxCommandEvent)
+wxIMPLEMENT_ABSTRACT_CLASS(wxWebView, wxControl);
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebNavigationEvent, wxCommandEvent);
 
 wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wxWebNavigationEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebNavigationEvent );

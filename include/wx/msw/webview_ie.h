@@ -157,6 +157,7 @@ private:
     void ExecCommand(wxString command);
     IHTMLDocument2* GetDocument();
 
+    wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
 
 class VirtualProtocol : public IInternetProtocol, public IInternetProtocolInfo

@@ -341,6 +341,8 @@ public:
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxWebHandler* handler) = 0;
+
+    wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };
 
 class WXDLLIMPEXP_WEB wxWebNavigationEvent : public wxCommandEvent

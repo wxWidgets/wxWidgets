@@ -27,6 +27,8 @@
 #include "wx/msw/missing.h"
 #include "wx/filesys.h"
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
+
 //We link to urlmon as it is required for CoInternetGetSession
 #pragma comment(lib, "urlmon")
 

@@ -287,7 +287,7 @@ wxgtk_webview_webkit_title_changed(WebKitWebView*,
 // wxWebViewWebKit
 //-----------------------------------------------------------------------------
 
-//IMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 
 bool wxWebViewWebKit::Create(wxWindow *parent,
                       wxWindowID id,
