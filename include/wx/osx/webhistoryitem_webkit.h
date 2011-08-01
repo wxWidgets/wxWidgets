@@ -12,7 +12,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_WEBKIT
+#if wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX_MAC__)
 
 class WXDLLIMPEXP_WEB wxWebHistoryItem
 {
@@ -26,6 +26,6 @@ private:
     wxString m_url, m_title;
 };
 
-#endif // wxUSE_WEBVIEW_WEBKIT
+#endif // wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX_MAC__)
 
 #endif // _WX_OSX_WEBHISTORYITEM_H_

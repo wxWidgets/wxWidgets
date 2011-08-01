@@ -331,6 +331,12 @@
 
 #define wxUSE_STC 0
 
+#define wxUSE_WEB 0
+
+#define wxUSE_WEBVIEW_WEBKIT 0
+
+#define wxUSE_WEBVIEW_IE     0
+
 
 
 #ifdef _MSC_VER

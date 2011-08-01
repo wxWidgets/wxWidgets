@@ -12,7 +12,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_IE
+#if wxUSE_WEBVIEW_IE && defined(__WXMSW__)
 
 #include "wx/control.h"
 #include "wx/webview.h"
@@ -243,6 +243,6 @@ private:
     wxWebHandler* m_handler;
 };
 
-#endif // wxUSE_WEBVIEW_IE
+#endif // wxUSE_WEBVIEW_IE && defined(__WXMSW__)
 
 #endif // wxWebViewIE_H
