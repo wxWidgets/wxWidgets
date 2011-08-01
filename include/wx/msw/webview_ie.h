@@ -210,8 +210,9 @@ public:
                                          DWORD dwCombineFlags, 
                                          LPWSTR pwzResult, DWORD cchResult,
                                          DWORD *pcchResult, DWORD dwReserved);
-    HRESULT STDMETHODCALLTYPE CompareUrl(LPCWSTR pwzUrl1, LPCWSTR pwzUrl2,
-                                         DWORD dwCompareFlags)
+    HRESULT STDMETHODCALLTYPE CompareUrl(LPCWSTR WXUNUSED(pwzUrl1), 
+                                         LPCWSTR WXUNUSED(pwzUrl2),
+                                         DWORD WXUNUSED(dwCompareFlags))
                                          { return INET_E_DEFAULT_ACTION; }
     HRESULT STDMETHODCALLTYPE ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction,
                                        DWORD dwParseFlags, LPWSTR pwzResult,

@@ -1077,12 +1077,14 @@ HRESULT VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
 }
 
 HRESULT VirtualProtocol::CombineUrl(LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl,
-                                    DWORD dwCombineFlags, LPWSTR pwzResult, 
+                                    DWORD WXUNUSED(dwCombineFlags), 
+                                    LPWSTR pwzResult, 
                                     DWORD cchResult, DWORD *pcchResult, 
-                                    DWORD dwReserved)
+                                    DWORD WXUNUSED(dwReserved))
 {
+
     wxString newuri = m_handler->CombineURIs(pwzBaseUrl, pwzRelativeUrl);
-    //Check the buffer we are given can hold the new urll
+    //Check the buffer we are given can hold the new url
     if(wxStrlen(newuri) > cchResult)
         return S_FALSE;
 
@@ -1091,21 +1093,29 @@ HRESULT VirtualProtocol::CombineUrl(LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl,
     return S_OK;
 }
 
-HRESULT VirtualProtocol::ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction,
-                                  DWORD dwParseFlags, LPWSTR pwzResult,
+HRESULT VirtualProtocol::ParseUrl(LPCWSTR pwzUrl, 
+                                  PARSEACTION WXUNUSED(ParseAction),
+                                  DWORD WXUNUSED(dwParseFlags), 
+                                  LPWSTR pwzResult,
                                   DWORD cchResult, DWORD *pcchResult,
-                                  DWORD dwReserved)
+                                  DWORD WXUNUSED(dwReserved))
 {
-    //return INET_E_DEFAULT_ACTION;
+    //Check the buffer we are given can hold the new url
+    if(wxStrlen(pwzUrl) > cchResult)
+        return S_FALSE;
+
     wxStrcpy(pwzResult, pwzUrl);
     *pcchResult = wxStrlen(pwzResult);
     return S_OK;
 }
     
-HRESULT VirtualProtocol::QueryInfo(LPCWSTR pwzUrl, QUERYOPTION OueryOption, 
-                                   DWORD dwQueryFlags, LPVOID pBuffer,
-                                   DWORD cbBuffer, DWORD *pcbBuf,  
-                                   DWORD dwReserved)
+HRESULT VirtualProtocol::QueryInfo(LPCWSTR WXUNUSED(pwzUrl), 
+                                   QUERYOPTION WXUNUSED(OueryOption), 
+                                   DWORD WXUNUSED(dwQueryFlags), 
+                                   LPVOID WXUNUSED(pBuffer),
+                                   DWORD WXUNUSED(cbBuffer), 
+                                   DWORD* WXUNUSED(pcbBuf),  
+                                   DWORD WXUNUSED(dwReserved))
 {
     return INET_E_DEFAULT_ACTION;
 }
