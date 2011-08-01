@@ -14,14 +14,15 @@
 
 #include "wx/osx/webview_webkit.h"
 
+#if wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
+                         ||  defined(__WXOSX_CARBON__))
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
-
-//#if wxHAVE_WEB_BACKEND_OSX_WEBKIT
 
 #ifdef __WXCOCOA__
 #include "wx/cocoa/autorelease.h"
@@ -45,7 +46,7 @@ std::map<WebView*, wxWebViewWebKit*> wx_webviewctrls;
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 
 BEGIN_EVENT_TABLE(wxWebViewWebKit, wxControl)
 #if defined(__WXMAC__) && wxOSX_USE_CARBON
@@ -1194,10 +1195,9 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
     
     wxASSERT(wx_webviewctrls.find(sender) != wx_webviewctrls.end());
     NSString *url = [[request URL] absoluteString];
-    wxString target = wxStringWithNSString([frame name]);
     wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
                                    wx_webviewctrls[sender]->GetId(),
-                                   wxStringWithNSString( url ), target, true);
+                                   wxStringWithNSString( url ), "", true);
 
     if (webKitWindow && webKitWindow->GetEventHandler())
         webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
@@ -1206,4 +1206,4 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
 }
 @end
 
-//#endif //wxHAVE_WEB_BACKEND_OSX_WEBKIT
+#endif //wxUSE_WEBVIEW_WEBKIT

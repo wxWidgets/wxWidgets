@@ -15,7 +15,8 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX_MAC__)
+#if wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
+                         ||  defined(__WXOSX_CARBON__))
 
 #include "wx/control.h"
 #include "wx/webview.h"
