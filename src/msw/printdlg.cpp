@@ -193,9 +193,6 @@ bool wxWindowsPrintNativeData::IsOk() const
 bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 {
     if ( !m_devMode )
-        InitializeDevMode();
-
-    if ( !m_devMode )
         return false;
 
     GlobalPtrLock lockDevMode(m_devMode);
@@ -386,21 +383,20 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
     return true;
 }
 
-void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, WinPrinter* printer)
+bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 {
-    if (m_devMode)
-        return;
-
-    LPTSTR szPrinterName = (LPTSTR)printerName.wx_str();
+    HGLOBAL hDevMode = static_cast<HGLOBAL>(m_devMode);
+    WinPrinter printer;
+    LPTSTR szPrinterName = (LPTSTR)data.GetPrinterName().wx_str();
 
     // From MSDN: How To Modify Printer Settings with the DocumentProperties() Function
     // The purpose of this is to fill the DEVMODE with privdata from printer driver.
     // If we have a printer name and OpenPrinter sucessfully returns
     // this replaces the PrintDlg function which creates the DEVMODE filled only with data from default printer.
-    if ( !m_devMode && !printerName.IsEmpty() )
+    if ( !m_devMode && !data.GetPrinterName().IsEmpty() )
     {
         // Open printer
-        if ( printer && printer->Open( printerName ) == TRUE )
+        if ( printer.Open( data.GetPrinterName() ) == TRUE )
         {
             DWORD dwNeeded, dwRet;
 
@@ -428,11 +424,12 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
             {
                 // If failure, cleanup
                 GlobalFree( tempDevMode );
-                printer->Close();
+                printer.Close();
             }
             else
             {
-                m_devMode = tempDevMode;
+                hDevMode = tempDevMode;
+                m_devMode = hDevMode;
                 tempDevMode = NULL;
             }
         }
@@ -474,7 +471,8 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         }
         else
         {
-            m_devMode = pd.hDevMode;
+            hDevMode = pd.hDevMode;
+            m_devMode = hDevMode;
             pd.hDevMode = NULL;
 
             // We'll create a new DEVNAMEs structure below.
@@ -488,18 +486,6 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
 
         }
     }
-
-}
-
-bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
-{
-    WinPrinter printer;
-    LPTSTR szPrinterName = (LPTSTR)data.GetPrinterName().wx_str();
-
-    if (!m_devMode)
-        InitializeDevMode(data.GetPrinterName(), &printer);
-
-    HGLOBAL hDevMode = static_cast<HGLOBAL>(m_devMode);
 
     if ( hDevMode )
     {

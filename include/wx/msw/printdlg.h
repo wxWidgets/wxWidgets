@@ -20,7 +20,6 @@
 #include "wx/printdlg.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
-class WinPrinter;
 
 //----------------------------------------------------------------------------
 // wxWindowsPrintNativeData
@@ -38,7 +37,6 @@ public:
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const;
 
-    void InitializeDevMode(const wxString &printerName = wxEmptyString, WinPrinter* printer = NULL);
     void* GetDevMode() const { return m_devMode; }
     void SetDevMode(void* data) { m_devMode = data; }
     void* GetDevNames() const { return m_devNames; }
