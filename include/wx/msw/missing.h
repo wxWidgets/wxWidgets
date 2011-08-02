@@ -568,7 +568,7 @@ typedef enum CommandStateChangeConstants {
 enum
 {
     OLECMDID_OPTICAL_ZOOM = 63
-}
+};
 #endif
 
 #ifndef INET_E_INVALID_CERTIFICATE
