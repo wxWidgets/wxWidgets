@@ -940,11 +940,24 @@ void wxWebViewWebKit::DeleteSelection()
     [(WebView*)m_webView deleteSelection];
 }
 
+bool wxWebViewWebKit::HasSelection()
+{
+    DOMRange* range = [m_webView selectedDOMRange];
+    if(!range)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 void wxWebViewWebKit::EnableHistory(bool enable)
 {
     if ( !m_webView )
         return;
-        
+
     [m_webView setMaintainsBackForwardList:enable];
 }
 
