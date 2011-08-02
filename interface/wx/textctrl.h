@@ -221,11 +221,6 @@ public:
                const wxTextAttr* compareWith = NULL);
 
     /**
-        Creates a font from the font attributes.
-    */
-    wxFont CreateFont() const;
-
-    /**
         Copies all defined/valid properties from overlay to current object.
     */
     void Merge(const wxTextAttr& overlay);
