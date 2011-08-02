@@ -1727,7 +1727,9 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
     wxListItem info;
     info.m_image = imageIndex;
     info.m_text = label;
-    info.m_mask = wxLIST_MASK_IMAGE | wxLIST_MASK_TEXT;
+    info.m_mask = wxLIST_MASK_TEXT;
+    if (imageIndex > -1)
+        info.m_mask |= wxLIST_MASK_IMAGE;
     info.m_itemId = index;
     return InsertItem(info);
 }
