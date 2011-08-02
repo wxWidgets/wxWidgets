@@ -1297,17 +1297,31 @@ wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
         exceptfds;                      // always want to know about errors
 
     if ( flags & wxSOCKET_INPUT_FLAG )
-    {
         preadfds = &readfds;
+
+    if ( flags & wxSOCKET_OUTPUT_FLAG )
+        pwritefds = &writefds;
+
+    // When using non-blocking connect() the client socket becomes connected
+    // (successfully or not) when it becomes writable but when using
+    // non-blocking accept() the server socket becomes connected when it
+    // becomes readable.
+    if ( flags & wxSOCKET_CONNECTION_FLAG )
+    {
+        if ( m_server )
+            preadfds = &readfds;
+        else
+            pwritefds = &writefds;
+    }
+
+    if ( preadfds )
+    {
         wxFD_ZERO(preadfds);
         wxFD_SET(m_fd, preadfds);
     }
 
-    // when using non-blocking connect() the socket becomes connected
-    // (successfully or not) when it becomes writable
-    if ( flags & (wxSOCKET_OUTPUT_FLAG | wxSOCKET_CONNECTION_FLAG) )
+    if ( pwritefds )
     {
-        pwritefds = &writefds;
         wxFD_ZERO(pwritefds);
         wxFD_SET(m_fd, pwritefds);
     }
