@@ -737,6 +737,13 @@ bool wxTopLevelWindowMSW::IsMaximized() const
 
 void wxTopLevelWindowMSW::Iconize(bool iconize)
 {
+    if ( iconize == m_iconized )
+    {
+        // Do nothing, in particular don't restore non-iconized windows when
+        // Iconize(false) is called as this would wrongly un-maximize them.
+        return;
+    }
+
     if ( IsShown() )
     {
         // change the window state immediately
