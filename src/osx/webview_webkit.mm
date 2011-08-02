@@ -940,6 +940,14 @@ void wxWebViewWebKit::DeleteSelection()
     [(WebView*)m_webView deleteSelection];
 }
 
+void wxWebViewWebKit::EnableHistory(bool enable)
+{
+    if ( !m_webView )
+        return;
+        
+    [m_webView setMaintainsBackForwardList:enable];
+}
+
 //------------------------------------------------------------
 // Listener interfaces
 //------------------------------------------------------------

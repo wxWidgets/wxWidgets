@@ -84,7 +84,7 @@ public:
     
     //History functions
     virtual void ClearHistory() {}
-    virtual void EnableHistory(bool WXUNUSED(enable) = true) {}
+    virtual void EnableHistory(bool enable = true);
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory()
             { return wxVector<wxSharedPtr<wxWebHistoryItem> >(); }
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() 
