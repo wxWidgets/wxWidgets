@@ -270,7 +270,7 @@ void wxRichTextListStylePage::CreateControls()
     wxBoxSizer* itemBoxSizer28 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer26->Add(itemBoxSizer28, 0, wxGROW, 5);
     wxArrayString m_symbolCtrlStrings;
-    m_symbolCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL, _T(""), wxDefaultPosition, wxSize(60, -1), m_symbolCtrlStrings, wxCB_DROPDOWN );
+    m_symbolCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL, wxEmptyString, wxDefaultPosition, wxSize(60, -1), m_symbolCtrlStrings, wxCB_DROPDOWN );
     m_symbolCtrl->SetHelpText(_("The bullet character."));
     if (wxRichTextListStylePage::ShowToolTips())
         m_symbolCtrl->SetToolTip(_("The bullet character."));
@@ -288,7 +288,7 @@ void wxRichTextListStylePage::CreateControls()
     itemBoxSizer26->Add(itemStaticText32, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxArrayString m_symbolFontCtrlStrings;
-    m_symbolFontCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, m_symbolFontCtrlStrings, wxCB_DROPDOWN );
+    m_symbolFontCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_symbolFontCtrlStrings, wxCB_DROPDOWN );
     if (wxRichTextListStylePage::ShowToolTips())
         m_symbolFontCtrl->SetToolTip(_("Available fonts."));
     itemBoxSizer26->Add(m_symbolFontCtrl, 0, wxGROW|wxALL, 5);
@@ -299,7 +299,7 @@ void wxRichTextListStylePage::CreateControls()
     itemBoxSizer26->Add(itemStaticText35, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     wxArrayString m_bulletNameCtrlStrings;
-    m_bulletNameCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL, _T(""), wxDefaultPosition, wxDefaultSize, m_bulletNameCtrlStrings, wxCB_DROPDOWN );
+    m_bulletNameCtrl = new wxComboBox( itemPanel10, ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_bulletNameCtrlStrings, wxCB_DROPDOWN );
     m_bulletNameCtrl->SetHelpText(_("A standard bullet name."));
     if (wxRichTextListStylePage::ShowToolTips())
         m_bulletNameCtrl->SetToolTip(_("A standard bullet name."));
@@ -382,7 +382,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer59 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer57->Add(itemBoxSizer59, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentLeft = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_INDENTLEFT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeft = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_INDENTLEFT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeft->SetHelpText(_("The left indent."));
     if (wxRichTextListStylePage::ShowToolTips())
         m_indentLeft->SetToolTip(_("The left indent."));
@@ -393,7 +393,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer62 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer57->Add(itemBoxSizer62, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentLeftFirst = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_INDENTFIRSTLINE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeftFirst = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_INDENTFIRSTLINE, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeftFirst->SetHelpText(_("The first line indent."));
     if (wxRichTextListStylePage::ShowToolTips())
         m_indentLeftFirst->SetToolTip(_("The first line indent."));
@@ -404,7 +404,7 @@ void wxRichTextListStylePage::CreateControls()
 
     wxBoxSizer* itemBoxSizer65 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer57->Add(itemBoxSizer65, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_indentRight = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_INDENTRIGHT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentRight = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_INDENTRIGHT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentRight->SetHelpText(_("The right indent."));
     if (wxRichTextListStylePage::ShowToolTips())
         m_indentRight->SetToolTip(_("The right indent."));
@@ -431,40 +431,43 @@ void wxRichTextListStylePage::CreateControls()
     wxStaticText* itemStaticText75 = new wxStaticText( itemPanel37, wxID_STATIC, _("Before a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemFlexGridSizer74->Add(itemStaticText75, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxBoxSizer* itemBoxSizer76 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer74->Add(itemBoxSizer76, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_spacingBefore = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_SPACINGBEFORE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingBefore = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_SPACINGBEFORE, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_spacingBefore->SetHelpText(_("The spacing before the paragraph."));
     if (wxRichTextListStylePage::ShowToolTips())
         m_spacingBefore->SetToolTip(_("The spacing before the paragraph."));
-    itemBoxSizer76->Add(m_spacingBefore, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer74->Add(m_spacingBefore, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText78 = new wxStaticText( itemPanel37, wxID_STATIC, _("After a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer74->Add(itemStaticText78, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText77 = new wxStaticText( itemPanel37, wxID_STATIC, _("After a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer74->Add(itemStaticText77, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxBoxSizer* itemBoxSizer79 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer74->Add(itemBoxSizer79, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    m_spacingAfter = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_SPACINGAFTER, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingAfter = new wxTextCtrl( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_SPACINGAFTER, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_spacingAfter->SetHelpText(_("The spacing after the paragraph."));
     if (wxRichTextListStylePage::ShowToolTips())
         m_spacingAfter->SetToolTip(_("The spacing after the paragraph."));
-    itemBoxSizer79->Add(m_spacingAfter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer74->Add(m_spacingAfter, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText81 = new wxStaticText( itemPanel37, wxID_STATIC, _("Line spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer74->Add(itemStaticText81, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText79 = new wxStaticText( itemPanel37, wxID_STATIC, _("Line spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer74->Add(itemStaticText79, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxBoxSizer* itemBoxSizer82 = new wxBoxSizer(wxHORIZONTAL);
-    itemFlexGridSizer74->Add(itemBoxSizer82, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     wxArrayString m_spacingLineStrings;
+    m_spacingLineStrings.Add(_("(none)"));
     m_spacingLineStrings.Add(_("Single"));
+    m_spacingLineStrings.Add(_("1.1"));
+    m_spacingLineStrings.Add(_("1.2"));
+    m_spacingLineStrings.Add(_("1.3"));
+    m_spacingLineStrings.Add(_("1.4"));
     m_spacingLineStrings.Add(_("1.5"));
+    m_spacingLineStrings.Add(_("1.6"));
+    m_spacingLineStrings.Add(_("1.7"));
+    m_spacingLineStrings.Add(_("1.8"));
+    m_spacingLineStrings.Add(_("1.9"));
     m_spacingLineStrings.Add(_("2"));
-    m_spacingLine = new wxComboBox( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_LINESPACING, _("Single"), wxDefaultPosition, wxDefaultSize, m_spacingLineStrings, wxCB_READONLY );
-    m_spacingLine->SetStringSelection(_("Single"));
+    m_spacingLine = new wxComboBox( itemPanel37, ID_RICHTEXTLISTSTYLEPAGE_LINESPACING, _("(none)"), wxDefaultPosition, wxSize(85, -1), m_spacingLineStrings, wxCB_READONLY );
+    m_spacingLine->SetStringSelection(_("(none)"));
     m_spacingLine->SetHelpText(_("The line spacing."));
     if (wxRichTextListStylePage::ShowToolTips())
         m_spacingLine->SetToolTip(_("The line spacing."));
-    itemBoxSizer82->Add(m_spacingLine, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer74->Add(m_spacingLine, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemNotebook9->AddPage(itemPanel37, _("Spacing"));
 
@@ -629,14 +632,10 @@ bool wxRichTextListStylePage::TransferDataFromWindow()
     else
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_PARA_SPACING_BEFORE));
 
-    int spacingIndex = m_spacingLine->GetSelection();
+    int spacingIndex = m_spacingLine->GetSelection() - 1;
     int lineSpacing = 0;
-    if (spacingIndex == 0)
-        lineSpacing = 10;
-    else if (spacingIndex == 1)
-        lineSpacing = 15;
-    else if (spacingIndex == 2)
-        lineSpacing = 20;
+    if (spacingIndex > -1)
+        lineSpacing = 10 + spacingIndex;
 
     if (lineSpacing == 0)
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_LINE_SPACING));
@@ -783,19 +782,15 @@ void wxRichTextListStylePage::DoTransferDataToWindow()
         int index = 0;
 
         int lineSpacing = attr->GetLineSpacing();
-        if (lineSpacing == 10)
-            index = 0;
-        else if (lineSpacing == 15)
-            index = 1;
-        else if (lineSpacing == 20)
-            index = 2;
+        if (lineSpacing >= 10 && lineSpacing <= 20)
+            index = (lineSpacing - 10) + 1;
         else
-            index = -1;
+            index = 0;
 
         m_spacingLine->SetSelection(index);
     }
     else
-        m_spacingLine->SetSelection(-1);
+        m_spacingLine->SetSelection(0);
 
     /// BULLETS
     if (attr->HasBulletStyle())
