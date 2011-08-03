@@ -16,6 +16,7 @@
 #include "wx/gtk/webview_webkit.h"
 #include "wx/gtk/control.h"
 #include "wx/gtk/private.h"
+#include "wx/filesys.h"
 #include "webkit/webkit.h"
 
 // ----------------------------------------------------------------------------
@@ -62,7 +63,7 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
 }
 
 static gboolean
-wxgtk_webview_webkit_navigation(WebKitWebView*,
+wxgtk_webview_webkit_navigation(WebKitWebView *view,
                                 WebKitWebFrame *frame,
                                 WebKitNetworkRequest *request,
                                 WebKitWebNavigationAction *,
@@ -91,6 +92,31 @@ wxgtk_webview_webkit_navigation(WebKitWebView*,
     }
     else
     {
+        wxString wxuri = uri;
+        wxWebHandler *handler = NULL;
+        wxVector<wxWebHandler*> hanlders = webKitCtrl->GetHandlers();
+        //We are not vetoed so see if we match one of the additional handlers
+        for(wxVector<wxWebHandler*>::iterator it = hanlders.begin();
+            it != hanlders.end(); ++it)
+        {
+            if(wxuri.substr(0, (*it)->GetName().length()) == (*it)->GetName())
+            {
+                handler = (*it);
+            }
+        }
+        //If we found a handler we can then use it to load the file directly 
+        //ourselves
+        if(handler)
+        {
+            wxFSFile* file = handler->GetFile(wxuri);
+            g_signal_handlers_block_by_func(view, 
+                                           (gpointer)wxgtk_webview_webkit_navigation, 
+                                           webKitCtrl);
+            webKitCtrl->SetPage(*file->GetStream(), wxuri);
+            g_signal_handlers_unblock_by_func(view, 
+                                             (gpointer)wxgtk_webview_webkit_navigation, 
+                                             webKitCtrl);
+        }
         return FALSE;
     }
 }
@@ -818,6 +844,11 @@ void wxWebViewWebKit::RunScript(const wxString& javascript)
 {
     webkit_web_view_execute_script(WEBKIT_WEB_VIEW(web_view), 
                                    javascript.mb_str(wxConvUTF8));
+}
+
+void wxWebViewWebKit::RegisterHandler(wxWebHandler* handler)
+{
+    m_handlerList.push_back(handler);
 }
 
 // static
