@@ -475,8 +475,11 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
                 wxWindow *focusedParent = m_winParent;
                 while ( parent )
                 {
-                    // we don't want to tab into a different dialog or frame
-                    if ( focusedParent->IsTopLevel() )
+                    // We don't want to tab into a different dialog or frame or
+                    // even an MDI child frame, so test for this explicitly
+                    // (and in particular don't just use IsTopLevel() which
+                    // would return false in the latter case).
+                    if ( focusedParent->IsTopNavigationDomain() )
                         break;
 
                     event.SetCurrentFocus( focusedParent );
