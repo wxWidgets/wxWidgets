@@ -472,18 +472,18 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
                 // looping inside this panel (normally, the focus will go to
                 // the next/previous item after this panel in the parent
                 // panel).
-                wxWindow *focussed_child_of_parent = m_winParent;
+                wxWindow *focusedParent = m_winParent;
                 while ( parent )
                 {
                     // we don't want to tab into a different dialog or frame
-                    if ( focussed_child_of_parent->IsTopLevel() )
+                    if ( focusedParent->IsTopLevel() )
                         break;
 
-                    event.SetCurrentFocus( focussed_child_of_parent );
+                    event.SetCurrentFocus( focusedParent );
                     if ( parent->GetEventHandler()->ProcessEvent( event ) )
                         return;
 
-                    focussed_child_of_parent = parent;
+                    focusedParent = parent;
 
                     parent = parent->GetParent();
                 }
