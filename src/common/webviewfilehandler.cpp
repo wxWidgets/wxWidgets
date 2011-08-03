@@ -46,7 +46,7 @@ static wxString EscapeFileNameCharsInURL(const char *in)
 
 wxWebFileHandler::wxWebFileHandler()
 {
-    m_name = "test";
+    m_name = "file";
     m_fileSystem = new wxFileSystem();
 }
 
