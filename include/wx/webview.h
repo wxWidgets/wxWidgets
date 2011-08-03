@@ -106,7 +106,6 @@ class WXDLLIMPEXP_WEB wxWebHandler
 public:
     virtual wxString GetName() const = 0;
     virtual wxFSFile* GetFile(const wxString &uri) = 0;
-    virtual wxString CombineURIs(const wxString &baseuri, const wxString &newuri) = 0;
 };
 
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[];

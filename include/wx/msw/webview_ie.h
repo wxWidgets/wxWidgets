@@ -160,7 +160,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
 
-class VirtualProtocol : public IInternetProtocol, public IInternetProtocolInfo
+class VirtualProtocol : public IInternetProtocol
 {
 protected:
     ULONG m_refCount;
@@ -204,26 +204,6 @@ public:
                                    ULARGE_INTEGER* WXUNUSED(plibNewPosition)) 
                                    { return E_FAIL; }
     HRESULT STDMETHODCALLTYPE UnlockRequest() { return S_OK; }
-
-    //IInternetProtocolInfo
-    HRESULT STDMETHODCALLTYPE CombineUrl(LPCWSTR pwzBaseUrl, 
-                                         LPCWSTR pwzRelativeUrl, 
-                                         DWORD dwCombineFlags, 
-                                         LPWSTR pwzResult, DWORD cchResult,
-                                         DWORD *pcchResult, DWORD dwReserved);
-    HRESULT STDMETHODCALLTYPE CompareUrl(LPCWSTR WXUNUSED(pwzUrl1), 
-                                         LPCWSTR WXUNUSED(pwzUrl2),
-                                         DWORD WXUNUSED(dwCompareFlags))
-                                         { return INET_E_DEFAULT_ACTION; }
-    HRESULT STDMETHODCALLTYPE ParseUrl(LPCWSTR pwzUrl, PARSEACTION ParseAction,
-                                       DWORD dwParseFlags, LPWSTR pwzResult,
-                                       DWORD cchResult, DWORD *pcchResult,
-                                       DWORD dwReserved);
-    HRESULT STDMETHODCALLTYPE QueryInfo(LPCWSTR pwzUrl, 
-                                        QUERYOPTION OueryOption, 
-                                        DWORD dwQueryFlags, LPVOID pBuffer,
-                                        DWORD cbBuffer, DWORD *pcbBuf, 
-                                        DWORD dwReserved);
 };
 
 class ClassFactory : public IClassFactory

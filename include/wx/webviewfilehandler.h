@@ -20,7 +20,7 @@ class wxFileSystem;
 #include "wx/webview.h"
 
 //Loads from uris such as file:///C:/example/example.html or archives such as
-//file:///C:/example/example.zip?protocol=zip;path=example.html 
+//file:///C:/example/example.zip;protocol=zip/example.html 
 
 class WXDLLIMPEXP_WEB wxWebFileHandler : public wxWebHandler
 {
@@ -28,7 +28,6 @@ public:
     wxWebFileHandler();
     virtual wxString GetName() const { return m_name; }
     virtual wxFSFile* GetFile(const wxString &uri);
-    virtual wxString CombineURIs(const wxString &baseuri, const wxString &newuri);
 private:
     wxString m_name;
     wxFileSystem* m_fileSystem;
