@@ -198,7 +198,7 @@ wxWidgetImplType* wxWidgetImpl::CreateNavigationController(wxWindowMac* wxpeer,
                                                            wxWindowID WXUNUSED(id),
                                                            const wxPoint& pos,
                                                            const wxSize& size,
-                                                           long WXUNUSED(style),
+                                                           long style,
                                                            long WXUNUSED(extraStyle))
 {
     wxUINavigationController* v = [[wxUINavigationController alloc] initWithFakeRootViewController];
@@ -212,6 +212,21 @@ wxWidgetImplType* wxWidgetImpl::CreateNavigationController(wxWindowMac* wxpeer,
             parentViewFrame.origin.y = 0;
             [v.view setFrame:parentViewFrame];
         }        
+    }
+    
+    // Style
+    if (style != 0) {
+        UIBarStyle navBarStyle = UIBarStyleDefault;
+        
+        if (style & wxNAVCTRL_NORMAL_BG) {
+            navBarStyle = UIBarStyleDefault;
+        } else if (style & wxNAVCTRL_BLACK_OPAQUE_BG) {
+            navBarStyle = UIBarStyleBlackOpaque;
+        } else if (style & wxNAVCTRL_BLACK_TRANSLUCENT_BG) {
+            navBarStyle = UIBarStyleBlackTranslucent;
+        }
+        
+        [v.navigationBar setBarStyle:navBarStyle];
     }
     
     wxWidgetIPhoneImpl* c = new wxNavigationCtrlIPhoneImpl( wxpeer, v, v.view );

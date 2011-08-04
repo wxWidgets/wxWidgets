@@ -20,7 +20,7 @@ public:
                             const wxPoint& pos = wxDefaultPosition,
                             const wxSize& size = wxDefaultSize,
                             long style = wxTAB_TRAVERSAL,
-                            const wxString& name = _("wxButton Mobile"));
+                            const wxString& name = _("wxNotebook Mobile"));
         
 protected:
     bool CreateControls();

@@ -176,7 +176,7 @@ wxWidgetImplType* CreateIPhoneButton(wxWindowMac* wxpeer,
     } else if (style & wxBU_CONTACT_ADD) {
         buttonType = UIButtonTypeContactAdd;
     } else {
-        buttonType = UIButtonTypeCustom;
+        buttonType = UIButtonTypeRoundedRect;
     }
     
     wxUIButton* v = [[wxUIButton buttonWithType:buttonType] retain];

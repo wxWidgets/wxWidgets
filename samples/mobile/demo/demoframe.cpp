@@ -58,7 +58,7 @@ public:
 
         // Create off-screen to avoid flicker
         wxPanel* panel = new wxPanel(ctrl, wxID_ANY, wxPoint(-100, -100), wxSize(10, 10));
-        //panel->Show(false);
+        //panel->Show(false);    // FIXME
         panel->SetBackgroundColour(wxColour(wxT("#E3E4FF")));
         SetWindow(panel);
 
