@@ -137,7 +137,11 @@ void wxNotebookIPhoneImpl::SetMaximum( wxInt32 maximum )
 
 // Set a text badge for the given item
 bool wxNotebookIPhoneImpl::SetBadge(int item, const wxString& badge)
-{        
+{
+    if ( badge.empty() ) {
+        return false;
+    }
+    
     if ( [[m_tabBarController viewControllers] count] < (unsigned int)(item+1) ) {
         return false;
     }
@@ -150,7 +154,15 @@ bool wxNotebookIPhoneImpl::SetBadge(int item, const wxString& badge)
     }
     
     wxCFStringRef cf( badge );
-    [tabBarItem setBadgeValue:cf.AsNSString()];
+    @try {
+        [tabBarItem setBadgeValue:cf.AsNSString()];
+    }
+    @catch (NSException *e) {
+        // FIXME sometimes crashes with "Unknown exception"
+        NSLog(@"failed setting a badge: %@ %@", [e name], [e reason]);
+        wxASSERT_MSG(0, "failed setting a badge");
+        return false;
+    }    
     
     return true;
 }

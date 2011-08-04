@@ -22,8 +22,8 @@
 
 #include "tests.h"
 
-#include "tests_barbutton.h"
 #include "tests_button.h"
+#include "tests_notebook.h"
 
 
 #pragma mark -
@@ -40,33 +40,17 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     //
     // Tests
     //
-    
-#if 0
-    // wxBarButton
-    m_testNames.Add(_("wxBarButton"));
-    m_testDescriptions.Add(_("A button class used by wxMoNavigationBar, wxMoNavigationCtrl, wxMoToolBar, wxMoTabCtrl, and wxMoSegmentedCtrl."));
-    m_testPanels.Add(new MobileTestsWxBarButtonPanel());
-#endif
-    
-#if 0
-    // wxBitmapButton
-    m_testNames.Add(_("wxBitmapButton"));
-    m_testDescriptions.Add(_("A button that shows a bitmap label."));
-    m_testPanels.Add(new MobileTestsWxBitmapButtonPanel());
-#endif
-    
+            
     // wxButton
     m_testNames.Add(_("wxButton"));
     m_testDescriptions.Add(_("This shows a text button."));
     m_testPanels.Add(new MobileTestsWxButtonPanel());
     
-#if 0
-    // wxFrame
-    m_testNames.Add(_("wxFrame"));
-    m_testDescriptions(_("A special iPhone frame class to use in wxMobile emulation mode or iPhone."));
-    m_testPanels.Add(new wxFrameMobileTests());
-#endif    
-    
+    // wxNotebook
+    m_testNames.Add(_("wxNotebook"));
+    m_testDescriptions.Add(_("This is an implementation of the standard wxNotebook class."));
+    m_testPanels.Add(new MobileTestsWxNotebookPanel());
+        
     //
     // --
     //

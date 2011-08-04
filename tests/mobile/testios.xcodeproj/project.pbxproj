@@ -13,6 +13,7 @@
 		407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074F5E912ED969C00693A3F /* libwx_osx_iphone.a */; };
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
 		B932117513DFC3BE0067FD1F /* tests_button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B932117413DFC3BD0067FD1F /* tests_button.cpp */; };
+		B9C67EA713EA1DC000E2E44A /* tests_notebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C67EA613EA1DC000E2E44A /* tests_notebook.cpp */; };
 		B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA6F9113BF1EF900061979 /* libz.dylib */; };
 		B9CA720513BF960400061979 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA720413BF960400061979 /* QuartzCore.framework */; };
 		B9DC3C9213DFA74600DA5A41 /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9DC3C9113DFA74600DA5A41 /* tests.cpp */; };
@@ -74,6 +75,8 @@
 		B932117413DFC3BD0067FD1F /* tests_button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_button.cpp; sourceTree = "<group>"; };
 		B932117613DFC3C90067FD1F /* tests_button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_button.h; sourceTree = "<group>"; };
 		B932117713DFCBE80067FD1F /* testpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testpanel.h; sourceTree = "<group>"; };
+		B9C67EA513EA1DAF00E2E44A /* tests_notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_notebook.h; sourceTree = "<group>"; };
+		B9C67EA613EA1DC000E2E44A /* tests_notebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_notebook.cpp; sourceTree = "<group>"; };
 		B9CA6F9113BF1EF900061979 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B9CA720413BF960400061979 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B9DC3C9113DFA74600DA5A41 /* tests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests.cpp; sourceTree = "<group>"; };
@@ -230,6 +233,8 @@
 				B9DC3C9113DFA74600DA5A41 /* tests.cpp */,
 				B932117613DFC3C90067FD1F /* tests_button.h */,
 				B932117413DFC3BD0067FD1F /* tests_button.cpp */,
+				B9C67EA513EA1DAF00E2E44A /* tests_notebook.h */,
+				B9C67EA613EA1DC000E2E44A /* tests_notebook.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -343,6 +348,7 @@
 				B9F32A9513CE7ACE007E7023 /* alertsheetdlg.mm in Sources */,
 				B9DC3C9213DFA74600DA5A41 /* tests.cpp in Sources */,
 				B932117513DFC3BE0067FD1F /* tests_button.cpp in Sources */,
+				B9C67EA713EA1DC000E2E44A /* tests_notebook.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
