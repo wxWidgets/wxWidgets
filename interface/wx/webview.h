@@ -117,6 +117,31 @@ public:
 };
 
 /**
+    @class wxWebHandler
+  
+    The base class for handling custom schemes in wxWebView, for example to 
+    allow virtual file system support.
+   
+    @library{wxweb}
+    @category{web}
+    
+    @see wxWebView
+ */
+class wxWebHandler
+{
+public:
+    /**
+        @return A pointer to the file represented by @c uri.
+    */  
+    virtual wxFSFile* GetFile(const wxString &uri) = 0;
+
+    /**
+        @return The name of the scheme, for example @c file or @c http.
+    */
+    virtual wxString GetName() const = 0;
+};
+
+/**
     @class wxWebView
   
     This control may be used to render web (HTML / CSS / javascript) documents.
@@ -131,6 +156,20 @@ public:
   
     Note that errors are generally reported asynchronously though the
     @c wxEVT_COMMAND_WEB_VIEW_ERROR event described below.
+    
+    @section vfs Virtual File Systems and Custom Schemes
+    
+    wxWebView supports the registering of custom scheme handlers, for example
+    @c file or @c http. To do this create a new class which inherits from 
+    wxWebHandler, where the wxWebHandler::GetName() method returns the scheme
+    you wish to handle and wxWebHandler::GetFile() returns a pointer to a 
+    wxFSFile which represents the given url. You can then register your handler
+    with RegisterHandler() it will be called for all pages and resources.
+    
+    wxWebFileHandler is provided to allow the navigation of pages inside a zip
+    archive. It overrides the @c file scheme and provides support for the 
+    standard @c file syntax as well as paths to archives of the form 
+    @c file:///C:/exmaple/docs.zip;protocol=zip/main.htm 
   
     @beginEventEmissionTable{wxWebNavigationEvent}
     @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
@@ -164,6 +203,7 @@ public:
    
     @library{wxweb}
     @category{ctrl,web}
+    @see wxWebHandler, wxWebNavigationEvent
  */
 class wxWebView : public wxControl
 {
@@ -258,6 +298,12 @@ public:
         displayed page.
     */
     virtual void Print() = 0;
+    
+    /**
+        Registers a custom scheme handler.
+        @param handler A pointer to a heap allocated wxWebHandler.
+    */
+    virtual void RegisterHandler(wxWebHandler* handler) = 0;
 
     /**
         Reload the currently displayed URL.
