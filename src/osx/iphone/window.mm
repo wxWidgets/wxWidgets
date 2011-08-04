@@ -550,17 +550,7 @@ bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style)
 
 void wxWidgetIPhoneImpl::SetLabel(const wxString& title, wxFontEncoding encoding)
 {
-    // UIButton
-    if ( [m_osxView respondsToSelector:@selector(setTitle:forState:) ] )
-    {
-        UIButtonType buttonType = [(UIButton *)m_osxView buttonType];
-        if (buttonType == UIButtonTypeCustom || buttonType == UIButtonTypeRoundedRect) {
-            wxCFStringRef cf( title , encoding );
-            [m_osxView setTitle:cf.AsNSString()
-                       forState:UIControlStateNormal];
-        }
-    }
-    else if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
+    if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
     {
         wxCFStringRef cf( title , encoding );
         [m_osxView setStringValue:cf.AsNSString()];
@@ -586,6 +576,14 @@ wxInt32 wxWidgetIPhoneImpl::GetValue() const
 }
 
 void wxWidgetIPhoneImpl::SetValue( wxInt32 v )
+{
+}
+
+void wxWidgetIPhoneImpl::SetDefaultButton( bool isDefault )
+{
+}
+
+void wxWidgetIPhoneImpl::PerformClick()
 {
 }
 

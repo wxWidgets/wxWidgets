@@ -25,17 +25,15 @@
 
 wxSize wxButton::DoGetBestSize() const
 {
-    if ( GetId() == wxID_HELP )
-        return wxSize( 18 , 18 ) ;
-
-    wxSize sz = GetDefaultSize() ;
-
-    wxRect r ;
+    wxSize sz = GetDefaultSize();
+    wxRect r;
 
     GetPeer()->GetBestRect(&r);
 
-    if ( r.GetWidth() == 0 && r.GetHeight() == 0 )
+    wxASSERT_MSG(r.GetWidth() != 0 && r.GetHeight() != 0, "wxButton's width or height is 0");
+    if ( r.GetWidth() == 0 || r.GetHeight() == 0 )
     {
+        r = sz; // FIXME
     }
     sz.x = r.GetWidth();
     sz.y = r.GetHeight();
@@ -75,25 +73,127 @@ wxSize wxButton::GetDefaultSize()
     
 }
 
-- (void)setTitle:(NSString *)title forState:(UIControlState)state {
+- (NSString *)description {
     
-    // Set title only when rounded rect. / custom
-    if (self.buttonType == UIButtonTypeCustom || self.buttonType == UIButtonTypeRoundedRect) {
-        [super setTitle:title
-               forState:state];
-    }
+    NSString *strButtonType = nil;
+    switch (self.buttonType) {
+        case UIButtonTypeCustom:    strButtonType = @"UIButtonTypeCustom";  break;
+        case UIButtonTypeRoundedRect:   strButtonType = @"UIButtonTypeRoundedRect"; break;
+        case UIButtonTypeDetailDisclosure:  strButtonType = @"UIButtonTypeDetailDisclosure";    break;
+        case UIButtonTypeInfoLight: strButtonType = @"UIButtonTypeInfoLight";   break;
+        case UIButtonTypeInfoDark:  strButtonType = @"UIButtonTypeInfoDark";    break;
+        case UIButtonTypeContactAdd:    strButtonType = @"UIButtonTypeContactAdd";  break;
+        default:    strButtonType = @"UNKNOWN";  break;
+    };
+    
+    NSMutableString *description = [NSMutableString stringWithString:@""];
+    [description appendFormat:@"<%@: 0x%08x; superClass = %@; frame = %@; hidden = %@; opaque = %@; alpha = %f; backgroundColor = %@, buttonType = %@>",
+     NSStringFromClass([self class]),
+     self,
+     NSStringFromClass([self superclass]),
+     NSStringFromCGRect(self.frame),
+     (self.hidden ? @"YES" : @"NO"),
+     (self.opaque ? @"YES" : @"NO"),
+     self.alpha,
+     [self.backgroundColor description],
+     strButtonType];
+    
+    return [NSString stringWithString:description];
 
+    
 }
 
 @end
 
+#pragma mark -
+#pragma mark Peer implementation
 
-void wxWidgetIPhoneImpl::SetDefaultButton( bool isDefault )
+class wxButtonIPhoneImpl : public wxWidgetIPhoneImpl
 {
-}
+public:
+    wxButtonIPhoneImpl( wxWindowMac* peer , WXWidget w, UIButtonType buttonType ) : wxWidgetIPhoneImpl(peer, w)
+    {
+        m_buttonType = buttonType;
+    }
+        
+    void SetLabel(const wxString& title, wxFontEncoding encoding)
+    {
+        if (AcceptsLabel() and !title.empty()) {
+            wxCFStringRef cf( title , encoding );
+            [m_osxView setTitle:cf.AsNSString()
+                         forState:UIControlStateNormal];
+        } else {
+            [m_osxView setTitle:nil
+                       forState:UIControlStateNormal];            
+        }
+    }
+    
+    bool AcceptsLabel() const
+    {
+        return (m_buttonType == UIButtonTypeCustom || m_buttonType == UIButtonTypeRoundedRect);
+    }
+        
+    bool IsEnabled() const
+    {
+        [m_osxView enabled];
+    }
+    
+    void Enable( bool enable )
+    {
+        [m_osxView setEnabled:enable];
+    }
 
-void wxWidgetIPhoneImpl::PerformClick()
+    
+private:
+    // Save a copy of button's type because [m_osxView buttonType]
+    // doesn't work with anything but round rect. or custom
+    // (maybe has something to do with UIButton being a class cluster)
+    UIButtonType m_buttonType;
+};
+
+
+// "Private" button creation function
+wxWidgetImplType* CreateIPhoneButton(wxWindowMac* wxpeer,
+                                     wxWindowMac* parent,
+                                     wxWindowID id,
+                                     const wxString& label,
+                                     const wxBitmap& bitmap,
+                                     const wxPoint& pos,
+                                     const wxSize& size,
+                                     long style,
+                                     long extraStyle)
 {
+    // Type
+    UIButtonType buttonType;
+    if (style & wxBU_ROUNDED_RECTANGLE) {
+        buttonType = UIButtonTypeRoundedRect;
+    } else if (style & wxBU_DISCLOSURE) {
+        buttonType = UIButtonTypeDetailDisclosure;
+    } else if (style & wxBU_INFO_LIGHT) {
+        buttonType = UIButtonTypeInfoLight;
+    } else if (style & wxBU_INFO_DARK) {
+        buttonType = UIButtonTypeInfoDark;
+    } else if (style & wxBU_CONTACT_ADD) {
+        buttonType = UIButtonTypeContactAdd;
+    } else {
+        buttonType = UIButtonTypeCustom;
+    }
+    
+    wxUIButton* v = [[wxUIButton buttonWithType:buttonType] retain];
+    v.frame = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
+    
+    // Bitmap
+    if (bitmap.IsOk()) {
+        [v setImage:[bitmap.GetUIImage() retain]
+           forState:UIControlStateNormal];
+    } else {
+        [v setImage:nil
+           forState:UIControlStateNormal];
+    }
+    
+    // Label is being set elsewhere (in SetPeer())
+    
+    return new wxButtonIPhoneImpl( wxpeer, v, buttonType );
 }
 
 
@@ -106,34 +206,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton(wxWindowMac* wxpeer,
                                              long style,
                                              long extraStyle)
 {
-    CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    
-    // Button type
-    UIButtonType buttonType;
-    if (style & wxBU_ROUNDED_RECTANGLE) {
-        buttonType = UIButtonTypeRoundedRect;
-    } else if (style & wxBU_DISCLOSURE) {
-        return CreateDisclosureTriangle(wxpeer, parent, id, wxEmptyString, pos, size, style, extraStyle);
-    } else if (style & wxBU_INFO_LIGHT) {
-        buttonType = UIButtonTypeInfoLight;
-    } else if (style & wxBU_INFO_DARK) {
-        buttonType = UIButtonTypeInfoDark;
-    } else if (style & wxBU_CONTACT_ADD) {
-        buttonType = UIButtonTypeContactAdd;
-    } else {
-        buttonType = UIButtonTypeCustom;
-    }
-    
-    wxUIButton* v = [[wxUIButton buttonWithType:buttonType] retain];
-    v.frame = r;
-    
-    if (buttonType == UIButtonTypeCustom || buttonType == UIButtonTypeRoundedRect) {
-        [v setTitle:[NSString stringWithString:wxCFStringRef(label).AsNSString()]
-           forState:UIControlStateNormal];
-    }
-    
-    wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
-    return c;
+    return CreateIPhoneButton(wxpeer, parent, id, label, wxNullBitmap, pos, size, style, extraStyle);
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateBitmapButton(wxWindowMac* wxpeer,
@@ -145,32 +218,17 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton(wxWindowMac* wxpeer,
                                                    long style,
                                                    long extraStyle)
 {    
-    if (style & wxBU_DISCLOSURE) {
-        return CreateDisclosureTriangle(wxpeer, parent, id, wxEmptyString, pos, size, style, extraStyle);
-    }
-
-    CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-            
-    wxUIButton* v = [[wxUIButton buttonWithType:UIButtonTypeCustom] retain];
-    v.frame = r;
-    [v setImage:[bitmap.GetUIImage() retain]
-       forState:UIControlStateNormal];
-    wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
-    return c;
+    return CreateIPhoneButton(wxpeer, parent, id, wxEmptyString, bitmap, pos, size, style, extraStyle);
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle(wxWindowMac* wxpeer,
                                                          wxWindowMac* parent,
-                                                         wxWindowID WXUNUSED(id),
+                                                         wxWindowID id,
                                                          const wxString& WXUNUSED(label),
                                                          const wxPoint& pos,
                                                          const wxSize& size,
                                                          long style,
-                                                         long WXUNUSED(extraStyle))
+                                                         long extraStyle)
 {
-    CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxUIButton* v = [[wxUIButton buttonWithType:UIButtonTypeDetailDisclosure] retain];
-    [v setFrame:r];
-    wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
-    return c;
+    return CreateIPhoneButton(wxpeer, parent, id, wxEmptyString, wxNullBitmap, pos, size, style, extraStyle);
 }
