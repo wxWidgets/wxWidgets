@@ -254,7 +254,13 @@ MobileTestsApp::MobileTestsApp()
 
 void MobileTestsApp::Init()
 {
-
+    // Log everything
+    wxLog::SetLogLevel(wxLOG_Max);
+    wxLog::SetVerbose();
+    
+    // Log to STDOUT
+    wxLog *logger_cout = new wxLogStream(&std::cout);
+    wxLog::SetActiveTarget(logger_cout);
 }
 
 bool MobileTestsApp::OnInit()
