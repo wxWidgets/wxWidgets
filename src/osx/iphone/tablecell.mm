@@ -209,10 +209,12 @@
     // Bitmap
     UIImage *img = nil;
     wxBitmap bitmap = tableCell->GetBitmap();
-    if ((img = bitmap.GetUIImage())) {
+    if (bitmap.IsOk() && (img = bitmap.GetUIImage())) {
         [img retain];
+        [self.imageView setImage:img];
+    } else {
+        [self.imageView setImage:nil];
     }
-    [self.imageView setImage:img];
 
     
     // FIXME other properties (font, selectedBitmap, event handler, ...)
