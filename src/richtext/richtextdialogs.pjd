@@ -4395,6 +4395,69 @@
                       </document>
                     </document>
                   </document>
+                  <document>
+                    <string name="title">"wxCheckBox: ID_RICHTEXTINDENTSSPACINGPAGE_PAGEBREAK"</string>
+                    <string name="type">"dialog-control-document"</string>
+                    <string name="filename">""</string>
+                    <string name="icon-name">"checkbox"</string>
+                    <long name="is-transient">0</long>
+                    <long name="owns-file">1</long>
+                    <long name="title-mode">0</long>
+                    <long name="locked">0</long>
+                    <string name="proxy-type">"wbCheckBoxProxy"</string>
+                    <string name="proxy-Id name">"ID_RICHTEXTINDENTSSPACINGPAGE_PAGEBREAK"</string>
+                    <long name="proxy-Id value">10106</long>
+                    <string name="proxy-Name">""</string>
+                    <string name="proxy-Class">"wxCheckBox"</string>
+                    <string name="proxy-Base class">"wxCheckBox"</string>
+                    <bool name="proxy-External implementation">1</bool>
+                    <bool name="proxy-Separate files">0</bool>
+                    <string name="proxy-Implementation filename">""</string>
+                    <string name="proxy-Header filename">""</string>
+                    <string name="proxy-Member variable name">""</string>
+                    <string name="proxy-Label">"&amp;Page Break"</string>
+                    <bool name="proxy-Initial value">0</bool>
+                    <string name="proxy-Help text">"Inserts a page break before the paragraph."</string>
+                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Data variable">""</string>
+                    <string name="proxy-Data validator">""</string>
+                    <string name="proxy-Data source">""</string>
+                    <string name="proxy-Data class name">""</string>
+                    <string name="proxy-Data class implementation filename">""</string>
+                    <string name="proxy-Data class header filename">""</string>
+                    <string name="proxy-Data class manager window">""</string>
+                    <string name="proxy-Background colour">""</string>
+                    <string name="proxy-Foreground colour">""</string>
+                    <string name="proxy-Font">""</string>
+                    <bool name="proxy-Hidden">0</bool>
+                    <bool name="proxy-Enabled">1</bool>
+                    <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                    <bool name="proxy-wxALIGN_RIGHT">0</bool>
+                    <bool name="proxy-wxCHK_2STATE">0</bool>
+                    <bool name="proxy-wxCHK_3STATE">0</bool>
+                    <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">0</bool>
+                    <bool name="proxy-wxWANTS_CHARS">0</bool>
+                    <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                    <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                    <string name="proxy-Custom styles">""</string>
+                    <long name="proxy-X">-1</long>
+                    <long name="proxy-Y">-1</long>
+                    <long name="proxy-Width">-1</long>
+                    <long name="proxy-Height">-1</long>
+                    <string name="proxy-AlignH">"Left"</string>
+                    <string name="proxy-AlignV">"Centre"</string>
+                    <long name="proxy-Stretch factor">0</long>
+                    <long name="proxy-Border">5</long>
+                    <bool name="proxy-wxLEFT">1</bool>
+                    <bool name="proxy-wxRIGHT">1</bool>
+                    <bool name="proxy-wxTOP">1</bool>
+                    <bool name="proxy-wxBOTTOM">1</bool>
+                    <bool name="proxy-wxSHAPED">0</bool>
+                    <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                    <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                    <string name="proxy-Custom arguments">""</string>
+                    <string name="proxy-Custom ctor arguments">""</string>
+                  </document>
                 </document>
               </document>
               <document>
@@ -10463,6 +10526,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>

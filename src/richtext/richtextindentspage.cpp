@@ -312,6 +312,13 @@ void wxRichTextIndentsSpacingPage::CreateControls()
         m_spacingLine->SetToolTip(_("The line spacing."));
     itemFlexGridSizer38->Add(m_spacingLine, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
+    wxCheckBox* itemCheckBox45 = new wxCheckBox( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_PAGEBREAK, _("&Page Break"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemCheckBox45->SetValue(false);
+    itemCheckBox45->SetHelpText(_("Inserts a page break before the paragraph."));
+    if (wxRichTextIndentsSpacingPage::ShowToolTips())
+        itemCheckBox45->SetToolTip(_("Inserts a page break before the paragraph."));
+    itemBoxSizer34->Add(itemCheckBox45, 0, wxALIGN_LEFT|wxALL, 5);
+
     itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
     m_previewCtrl = new wxRichTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_PREVIEW_CTRL, wxEmptyString, wxDefaultPosition, wxSize(350, 100), wxVSCROLL|wxTE_READONLY );
@@ -448,6 +455,8 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
     else
         attr->SetOutlineLevel(outlineLevel-1);
 
+    attr->SetPageBreak(((wxCheckBox*) FindWindow(ID_RICHTEXTINDENTSSPACINGPAGE_PAGEBREAK))->GetValue());
+
     return true;
 }
 
@@ -543,6 +552,8 @@ bool wxRichTextIndentsSpacingPage::TransferDataToWindow()
     }
     else
         m_outlineLevelCtrl->SetSelection(0);
+
+    ((wxCheckBox*) FindWindow(ID_RICHTEXTINDENTSSPACINGPAGE_PAGEBREAK))->SetValue(attr->HasPageBreak());
 
     UpdatePreview();
 
