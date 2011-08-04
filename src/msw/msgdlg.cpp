@@ -511,6 +511,11 @@ int wxMessageDialog::ShowMessageBox()
         }
     }
 
+    if ( wxStyle & wxHELP )
+    {
+        msStyle |= MB_HELP;
+    }
+
     // set the icon style
     switch ( GetEffectiveIcon() )
     {
@@ -630,7 +635,7 @@ void wxMessageDialog::DoCentre(int dir)
 #ifdef wxHAS_MSW_TASKDIALOG
 
 wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
-                     : buttons(new TASKDIALOG_BUTTON[3])
+                     : buttons(new TASKDIALOG_BUTTON[MAX_BUTTONS])
 {
     parent = dlg.GetParentForModalDialog();
     caption = dlg.GetCaption();
@@ -665,6 +670,7 @@ wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
     btnNoLabel = dlg.GetNoLabel();
     btnOKLabel = dlg.GetOKLabel();
     btnCancelLabel = dlg.GetCancelLabel();
+    btnHelpLabel = dlg.GetHelpLabel();
 }
 
 void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
@@ -755,6 +761,15 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
             AddTaskDialogButton(tdc, IDCANCEL, TDCBF_CANCEL_BUTTON, btnOKLabel);
         }
     }
+
+    if ( style & wxHELP )
+    {
+        // There is no support for "Help" button in the task dialog, it can
+        // only show "Retry" or "Close" ones.
+        useCustomLabels = true;
+
+        AddTaskDialogButton(tdc, IDHELP, 0 /* not used */, btnHelpLabel);
+    }
 }
 
 void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
@@ -770,6 +785,10 @@ void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
         tdBtn.nButtonID = btnCustomId;
         tdBtn.pszButtonText = customLabel.wx_str();
         tdc.cButtons++;
+
+        // We should never have more than 4 buttons currently as this is the
+        // maximal number of buttons supported by the message dialog.
+        wxASSERT_MSG( tdc.cButtons <= MAX_BUTTONS, wxT("Too many buttons") );
     }
     else
     {
@@ -838,6 +857,9 @@ int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)
             break;
         case IDNO:
             ans = wxID_NO;
+            break;
+        case IDHELP:
+            ans = wxID_HELP;
             break;
     }
 

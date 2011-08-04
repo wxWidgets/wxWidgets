@@ -2669,6 +2669,7 @@ const TestMessageBoxDialog::BtnInfo TestMessageBoxDialog::ms_btnInfo[] =
     { wxNO,     "&No"     },
     { wxOK,     "&Ok"     },
     { wxCANCEL, "&Cancel" },
+    { wxHELP,   "&Help"   },
 };
 
 BEGIN_EVENT_TABLE(TestMessageBoxDialog, wxDialog)
@@ -2889,6 +2890,11 @@ void TestMessageBoxDialog::PrepareMessageDialog(wxMessageDialogBase &dlg)
             dlg.SetOKLabel(m_labels[Btn_Ok]->GetValue());
         }
     }
+
+    if ( style & wxHELP )
+    {
+        dlg.SetHelpLabel(m_labels[Btn_Help]->GetValue());
+    }
 }
 
 void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
@@ -2896,7 +2902,34 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
     wxMessageDialog dlg(this, GetMessage(), "Test Message Box", GetStyle());
     PrepareMessageDialog(dlg);
 
-    dlg.ShowModal();
+    wxString btnName;
+    switch ( dlg.ShowModal() )
+    {
+        case wxID_OK:
+            btnName = "OK";
+            break;
+
+        case wxID_CANCEL:
+            // Avoid the extra message box if the dialog was cancelled.
+            return;
+
+        case wxID_YES:
+            btnName = "Yes";
+            break;
+
+        case wxID_NO:
+            btnName = "No";
+            break;
+
+        case wxID_HELP:
+            btnName = "Help";
+            break;
+
+        default:
+            btnName = "Unknown";
+    }
+
+    wxLogMessage("Dialog was closed with the \"%s\" button.", btnName);
 }
 
 void TestMessageBoxDialog::OnClose(wxCommandEvent& WXUNUSED(event))
