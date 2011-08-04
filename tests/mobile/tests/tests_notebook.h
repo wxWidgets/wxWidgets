@@ -21,17 +21,32 @@ public:
                             const wxSize& size = wxDefaultSize,
                             long style = wxTAB_TRAVERSAL,
                             const wxString& name = _("wxButton Mobile"));
-    
+        
 protected:
     bool CreateControls();
-    
-    void OnButtonClicked(wxCommandEvent& WXUNUSED(event));
     
     DECLARE_EVENT_TABLE()
     
 private:
     
     wxNotebook *m_notebook;
+};
+
+
+// Sample notebook page
+class MobileTestsWxNotebookPage : public wxPanel {
+    
+public:
+    MobileTestsWxNotebookPage(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = "panel") : wxPanel(parent, id, pos, size, style, name) { }
+  
+protected:
+    
+    void OnInsertPageButtonClicked(wxCommandEvent& WXUNUSED(event));
+    void OnDeletePageButtonClicked(wxCommandEvent& WXUNUSED(event));
+    void OnDeleteAllPagesButtonClicked(wxCommandEvent& WXUNUSED(event));
+
+    DECLARE_EVENT_TABLE()
+    
 };
 
 #endif

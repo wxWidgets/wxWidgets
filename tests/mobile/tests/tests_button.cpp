@@ -64,5 +64,5 @@ bool MobileTestsWxButtonPanel::CreateControls()
 /// Show an action sheet
 void MobileTestsWxButtonPanel::OnButtonClicked(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogInfo("Button clicked");
+    wxLogInfo("m_buttonRoundedRectangle button clicked");
 }

@@ -158,7 +158,8 @@ bool wxNotebookIPhoneImpl::SetBadge(int item, const wxString& badge)
         [tabBarItem setBadgeValue:cf.AsNSString()];
     }
     @catch (NSException *e) {
-        // FIXME sometimes crashes with "Unknown exception"
+        // FIXME raises exception:
+        // 'failed setting a badge: CALayerInvalidGeometry CALayer position contains NaN: [20 nan]'
         NSLog(@"failed setting a badge: %@ %@", [e name], [e reason]);
         wxASSERT_MSG(0, "failed setting a badge");
         return false;
