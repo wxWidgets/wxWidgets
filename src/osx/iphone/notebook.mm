@@ -209,31 +209,39 @@ void wxNotebookIPhoneImpl::SetupTabs( const wxNotebook& notebook )
     {
         wxNotebookPage* page = notebook.GetPage(i);
         UIViewController *controller = [[m_tabBarController viewControllers] objectAtIndex:i];
-                    
-        int pageImage = notebook.GetPageImage(i);
-        UITabBarSystemItem systemItem = UITabBarSystemItemHistory;
         
-        switch (pageImage) {
-            case wxID_FAVORITES:    systemItem = UITabBarSystemItemFavorites;   break;
-            case wxID_FEATURED:     systemItem = UITabBarSystemItemFeatured;    break;
-            case wxID_TOPRATED:     systemItem = UITabBarSystemItemTopRated;    break;
-            case wxID_RECENTS:      systemItem = UITabBarSystemItemRecents;     break;
-            case wxID_CONTACTS:     systemItem = UITabBarSystemItemContacts;    break;
-            case wxID_HISTORY:      systemItem = UITabBarSystemItemBookmarks;   break;
-            case wxID_BOOKMARKS:    systemItem = UITabBarSystemItemBookmarks;   break;
-            case wxID_SEARCH:       systemItem = UITabBarSystemItemSearch;      break;
-            case wxID_DOWNLOADS:    systemItem = UITabBarSystemItemDownloads;   break;
-            case wxID_MOSTRECENT:   systemItem = UITabBarSystemItemMostRecent;  break;
-            case wxID_MOSTVIEWED:   systemItem = UITabBarSystemItemMostViewed;  break;
-            default:                systemItem = UITabBarSystemItemHistory;     break;
-        };
-         
-        controller.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:systemItem
-                                                                           tag:i];
-        
-        [controller setView:page->GetPeer()->GetWXWidget()];
         wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
         NSString *tabTitle = cf.AsNSString();
+        int pageImage = notebook.GetPageImage(i);
+        
+        if (pageImage != -1) {  // System item
+            UITabBarSystemItem systemItem = UITabBarSystemItemHistory;
+            
+            switch (pageImage) {
+                case wxID_FAVORITES:    systemItem = UITabBarSystemItemFavorites;   break;
+                case wxID_FEATURED:     systemItem = UITabBarSystemItemFeatured;    break;
+                case wxID_TOPRATED:     systemItem = UITabBarSystemItemTopRated;    break;
+                case wxID_RECENTS:      systemItem = UITabBarSystemItemRecents;     break;
+                case wxID_CONTACTS:     systemItem = UITabBarSystemItemContacts;    break;
+                case wxID_HISTORY:      systemItem = UITabBarSystemItemHistory;     break;
+                case wxID_BOOKMARKS:    systemItem = UITabBarSystemItemBookmarks;   break;
+                case wxID_SEARCH:       systemItem = UITabBarSystemItemSearch;      break;
+                case wxID_DOWNLOADS:    systemItem = UITabBarSystemItemDownloads;   break;
+                case wxID_MOSTRECENT:   systemItem = UITabBarSystemItemMostRecent;  break;
+                case wxID_MOSTVIEWED:   systemItem = UITabBarSystemItemMostViewed;  break;
+                case wxID_MORE:         systemItem = UITabBarSystemItemMore;        break;
+                default:                systemItem = UITabBarSystemItemHistory;     break;
+            };
+            
+            controller.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:systemItem
+                                                                               tag:i];
+        } else {
+            controller.tabBarItem = [[UITabBarItem alloc] initWithTitle:tabTitle
+                                                                  image:nil // FIXME
+                                                                    tag:i];
+        }
+        
+        [controller setView:page->GetPeer()->GetWXWidget()];
         [controller setTitle:tabTitle];
     }
     
