@@ -63,13 +63,19 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
 }
 
 static gboolean
-wxgtk_webview_webkit_navigation(WebKitWebView *view,
+wxgtk_webview_webkit_navigation(WebKitWebView *,
                                 WebKitWebFrame *frame,
                                 WebKitNetworkRequest *request,
                                 WebKitWebNavigationAction *,
                                 WebKitWebPolicyDecision *policy_decision,
                                 wxWebViewWebKit *webKitCtrl)
 {
+    if(webKitCtrl->m_guard)
+    {
+        webKitCtrl->m_guard = false;
+        return FALSE;
+    }
+
     webKitCtrl->m_busy = true;
 
     const gchar* uri = webkit_network_request_get_uri(request);
@@ -108,14 +114,15 @@ wxgtk_webview_webkit_navigation(WebKitWebView *view,
         //ourselves
         if(handler)
         {
+            webKitCtrl->m_guard = true;
             wxFSFile* file = handler->GetFile(wxuri);
-            g_signal_handlers_block_by_func(view, 
-                                           (gpointer)wxgtk_webview_webkit_navigation, 
-                                           webKitCtrl);
-            webKitCtrl->SetPage(*file->GetStream(), wxuri);
-            g_signal_handlers_unblock_by_func(view, 
-                                             (gpointer)wxgtk_webview_webkit_navigation, 
-                                             webKitCtrl);
+            if(file)
+            {
+                webKitCtrl->SetPage(*file->GetStream(), wxuri);
+            }
+            //We need to throw some sort of error here if file is NULL
+            webkit_web_policy_decision_ignore(policy_decision);
+            return TRUE;
         }
         return FALSE;
     }
@@ -325,6 +332,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 {
     m_ready = false;
     m_busy = false;
+    m_guard = false;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))

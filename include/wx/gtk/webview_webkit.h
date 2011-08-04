@@ -137,6 +137,10 @@ public:
      */
     bool m_busy;
 
+    //We use this flag to stop recursion when we load a page from the navigation
+    //callback, mainly when loading a VFS page
+    bool m_guard;
+
 protected:
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
