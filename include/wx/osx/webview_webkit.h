@@ -85,11 +85,9 @@ public:
     //History functions
     virtual void ClearHistory();
     virtual void EnableHistory(bool enable = true);
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory()
-            { return wxVector<wxSharedPtr<wxWebHistoryItem> >(); }
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() 
-            { return wxVector<wxSharedPtr<wxWebHistoryItem> >(); }
-    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> WXUNUSED(item)) {}
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory();
+    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory();
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item);
     
     //Undo / redo functionality
     virtual bool CanUndo();

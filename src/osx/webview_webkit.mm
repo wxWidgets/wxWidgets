@@ -958,6 +958,47 @@ void wxWebViewWebKit::ClearHistory()
     [m_webView setMaintainsBackForwardList:YES];
 }
 
+wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
+{
+    wxVector<wxSharedPtr<wxWebHistoryItem> > backhist;
+    WebBackForwardList* history = [m_webView backForwardList];
+    int count = [history backListCount];
+    for(int i = -count; i < 0; i++)
+    {
+        WebHistoryItem* item = [history itemAtIndex:i];
+        wxString url = wxStringWithNSString([item URLString]);
+        wxString title = wxStringWithNSString([item title]);
+        wxWebHistoryItem* wxitem = new wxWebHistoryItem(url, title);
+        wxitem->m_histItem = item;
+        wxSharedPtr<wxWebHistoryItem> itemptr(wxitem);
+        backhist.push_back(itemptr);
+    }
+    return backhist;
+}
+
+wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetForwardHistory()
+{
+    wxVector<wxSharedPtr<wxWebHistoryItem> > forwardhist;
+    WebBackForwardList* history = [m_webView backForwardList];
+    int count = [history forwardListCount];
+    for(int i = 1; i <= count; i++)
+    {
+        WebHistoryItem* item = [history itemAtIndex:i];
+        wxString url = wxStringWithNSString([item URLString]);
+        wxString title = wxStringWithNSString([item title]);
+        wxWebHistoryItem* wxitem = new wxWebHistoryItem(url, title);
+        wxitem->m_histItem = item;
+        wxSharedPtr<wxWebHistoryItem> itemptr(wxitem);
+        forwardhist.push_back(itemptr);
+    }
+    return forwardhist;
+}
+
+void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item)
+{
+    [m_webView goToBackForwardItem:item->m_histItem];
+}
+
 bool wxWebViewWebKit::CanUndo()
 {
     return [[m_webView undoManager] canUndo];

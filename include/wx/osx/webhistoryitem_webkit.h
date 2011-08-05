@@ -18,13 +18,16 @@
 class WXDLLIMPEXP_WEB wxWebHistoryItem
 {
 public:
-    wxWebHistoryItem(const wxString& url, const wxString& title) : 
+    wxWebHistoryItem(const wxString& url, const wxString& title) :
                      m_url(url), m_title(title) {}
     wxString GetUrl() { return m_url; }
     wxString GetTitle() { return m_title; }
 
+    friend class wxWebViewWebKit;
+
 private:
     wxString m_url, m_title;
+    struct objc_object *m_histItem;
 };
 
 #endif // wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX_MAC__)
