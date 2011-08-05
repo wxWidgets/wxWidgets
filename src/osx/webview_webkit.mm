@@ -440,7 +440,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     [m_webView setPolicyDelegate:myPolicyDelegate];
 
-    InternalLoadURL(strURL);
+    LoadUrl(strURL);
     return true;
 }
 
@@ -461,15 +461,6 @@ wxWebViewWebKit::~wxWebViewWebKit()
 // ----------------------------------------------------------------------------
 // public methods
 // ----------------------------------------------------------------------------
-
-void wxWebViewWebKit::InternalLoadURL(const wxString &url)
-{
-    if( !m_webView )
-        return;
-
-    [[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:
-            [NSURL URLWithString:wxNSStringWithWxString(url)]]];
-}
 
 bool wxWebViewWebKit::CanGoBack()
 {
@@ -803,7 +794,8 @@ void wxWebViewWebKit::MacVisibilityChanged(){
 
 void wxWebViewWebKit::LoadUrl(const wxString& url)
 {
-    InternalLoadURL(url);
+    [[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:
+            [NSURL URLWithString:wxNSStringWithWxString(url)]]];
 }
 
 wxString wxWebViewWebKit::GetCurrentURL()

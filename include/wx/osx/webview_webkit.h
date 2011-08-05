@@ -51,8 +51,6 @@ public:
                 const wxString& name = wxWebViewNameStr);
     virtual ~wxWebViewWebKit();
 
-    void InternalLoadURL(const wxString &url);
-
     virtual bool CanGoBack();
     virtual bool CanGoForward();
     virtual void GoBack();
