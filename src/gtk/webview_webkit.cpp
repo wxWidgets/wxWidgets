@@ -73,6 +73,10 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     if(webKitCtrl->m_guard)
     {
         webKitCtrl->m_guard = false;
+        //We set this to make sure that we don't try to load the page again from 
+        //the resource request callback
+        webKitCtrl->m_vfsurl = webkit_network_request_get_uri(request);
+        webkit_web_policy_decision_use(policy_decision);
         return FALSE;
     }
 
@@ -314,6 +318,58 @@ wxgtk_webview_webkit_title_changed(WebKitWebView*,
 
 }
 
+static void
+wxgtk_webview_webkit_resource_req(WebKitWebView *,
+                                  WebKitWebFrame *,
+                                  WebKitWebResource *,
+                                  WebKitNetworkRequest *request,
+                                  WebKitNetworkResponse *,
+                                  wxWebViewWebKit *webKitCtrl)
+{
+    wxString uri = webkit_network_request_get_uri(request);
+    
+    wxWebHandler *handler = NULL;
+    wxVector<wxWebHandler*> hanlders = webKitCtrl->GetHandlers();
+    
+    //We are not vetoed so see if we match one of the additional handlers
+    for(wxVector<wxWebHandler*>::iterator it = hanlders.begin();
+        it != hanlders.end(); ++it)
+    {
+        if(uri.substr(0, (*it)->GetName().length()) == (*it)->GetName())
+        {
+            handler = (*it);
+        }
+    }
+    //If we found a handler we can then use it to load the file directly 
+    //ourselves
+    if(handler)
+    {
+        //If it is requsting the page itself then return as we have already
+        //loaded it from the archive
+        if(webKitCtrl->m_vfsurl == uri)
+            return;
+
+        wxFSFile* file = handler->GetFile(uri);
+        if(file)
+        {
+            //We redirect to a temp file for now, small things could be loaded
+            //using the data scheme
+            size_t size = file->GetStream()->GetLength();
+            char *buffer = new char[size];
+            wxFile tempfile;
+            wxString path = wxFileName::CreateTempFileName("wxwebview_", &tempfile);
+            //We can then stream from the archive to the temp file
+            file->GetStream()->Read(buffer, size);
+            tempfile.Write(buffer, size);
+            tempfile.Close();
+            delete[] buffer;
+            //Then we can redirect the call
+            webkit_network_request_set_uri(request, "file://" + path);
+        }
+        
+    }
+}
+
 } // extern "C"
 
 //-----------------------------------------------------------------------------
@@ -368,6 +424,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     g_signal_connect_after(web_view, "title-changed",
                            G_CALLBACK(wxgtk_webview_webkit_title_changed), this);
+
+    g_signal_connect_after(web_view, "resource-request-starting",
+                           G_CALLBACK(wxgtk_webview_webkit_resource_req), this);
 
     m_parent->DoAddChild( this );
 

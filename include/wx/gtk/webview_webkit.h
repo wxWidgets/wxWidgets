@@ -136,6 +136,9 @@ public:
      * user)
      */
     bool m_busy;
+    
+    bool m_guard;
+    wxString m_vfsurl;
 
     //We use this flag to stop recursion when we load a page from the navigation
     //callback, mainly when loading a VFS page
