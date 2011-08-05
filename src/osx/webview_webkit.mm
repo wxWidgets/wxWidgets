@@ -961,6 +961,26 @@ void wxWebViewWebKit::EnableHistory(bool enable)
     [m_webView setMaintainsBackForwardList:enable];
 }
 
+bool wxWebViewWebKit::CanUndo()
+{
+    return [[m_webView undoManager] canUndo];
+}
+
+bool wxWebViewWebKit::CanRedo()
+{
+    return [[m_webView undoManager] canRedo];
+}
+
+void wxWebViewWebKit::Undo()
+{
+    [[m_webView undoManager] undo];
+}
+
+void wxWebViewWebKit::Redo()
+{
+    [[m_webView undoManager] redo];
+}
+
 //------------------------------------------------------------
 // Listener interfaces
 //------------------------------------------------------------

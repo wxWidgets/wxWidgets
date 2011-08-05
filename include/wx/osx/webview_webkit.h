@@ -92,10 +92,10 @@ public:
     virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> WXUNUSED(item)) {}
     
     //Undo / redo functionality
-    virtual bool CanUndo() { return false; }
-    virtual bool CanRedo() { return false; }
-    virtual void Undo() {}
-    virtual void Redo() {}
+    virtual bool CanUndo();
+    virtual bool CanRedo();
+    virtual void Undo();
+    virtual void Redo();
 
     //Clipboard functions
     virtual bool CanCut() { return false; }
