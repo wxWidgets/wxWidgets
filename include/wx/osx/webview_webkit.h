@@ -128,8 +128,6 @@ public:
     void  SetScrollPos(int pos);
     int   GetScrollPos();
 
-    wxString GetSelection();
-
     bool  CanIncreaseTextSize();
     void  IncreaseTextSize();
     bool  CanDecreaseTextSize();

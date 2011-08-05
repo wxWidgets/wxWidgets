@@ -568,15 +568,6 @@ wxString wxWebViewWebKit::GetPageSource()
     return wxEmptyString;
 }
 
-wxString wxWebViewWebKit::GetSelection()
-{
-    if ( !m_webView )
-        return wxEmptyString;
-
-    NSString* selectedText = [[m_webView selectedDOMRange] toString];
-    return wxStringWithNSString( selectedText );
-}
-
 bool wxWebViewWebKit::CanIncreaseTextSize()
 {
     if ( !m_webView )
