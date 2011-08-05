@@ -354,7 +354,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                                  const wxString& name)
 {
     m_busy = false;
-    //m_pageTitle = _("Untitled Page");
 
  //still needed for wxCocoa??
 /*
