@@ -83,7 +83,7 @@ public:
     virtual bool IsBusy() { return m_busy; }
     
     //History functions
-    virtual void ClearHistory() {}
+    virtual void ClearHistory();
     virtual void EnableHistory(bool enable = true);
     virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory()
             { return wxVector<wxSharedPtr<wxWebHistoryItem> >(); }

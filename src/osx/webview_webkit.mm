@@ -440,6 +440,10 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
             [[MyPolicyDelegate alloc] initWithWxWindow: this];
 
     [m_webView setPolicyDelegate:myPolicyDelegate];
+    
+    // add history
+    WebHistory* history = [[WebHistory alloc] init];
+    [WebHistory setOptionalSharedHistory:history];
 
     InternalLoadURL(strURL);
     return true;
@@ -950,6 +954,11 @@ void wxWebViewWebKit::EnableHistory(bool enable)
         return;
 
     [m_webView setMaintainsBackForwardList:enable];
+}
+
+void wxWebViewWebKit::ClearHistory()
+{
+    [[WebHistory optionalSharedHistory] removeAllItems];
 }
 
 bool wxWebViewWebKit::CanUndo()
