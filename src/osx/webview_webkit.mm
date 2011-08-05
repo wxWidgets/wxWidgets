@@ -28,6 +28,7 @@
 #include "wx/cocoa/autorelease.h"
 #else
 #include "wx/osx/private.h"
+#include "wx/cocoa/string.h"
 
 #include <WebKit/WebKit.h>
 #include <WebKit/HIWebView.h>
@@ -301,28 +302,6 @@ static pascal OSStatus wxWebViewWebKitEventHandler( EventHandlerCallRef handler 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
 
 #endif
-
-//---------------------------------------------------------
-// helper functions for NSString<->wxString conversion
-//---------------------------------------------------------
-
-inline wxString wxStringWithNSString(NSString *nsstring)
-{
-#if wxUSE_UNICODE
-    return wxString([nsstring UTF8String], wxConvUTF8);
-#else
-    return wxString([nsstring lossyCString]);
-#endif // wxUSE_UNICODE
-}
-
-inline NSString* wxNSStringWithWxString(const wxString &wxstring)
-{
-#if wxUSE_UNICODE
-    return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];
-#else
-    return [NSString stringWithCString: wxstring.c_str() length:wxstring.Len()];
-#endif // wxUSE_UNICODE
-}
 
 @interface MyFrameLoadMonitor : NSObject
 {
