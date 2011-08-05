@@ -456,6 +456,7 @@ All (GUI):
 OSX:
 
 - Implement wxRegion::Equal() (Dr.Acula).
+- Implement wxFileType::GetOpenCommand().
 - wxGetOsVersion() now returns more sensible version numbers, e.g. 10 and 6
   for OS X 10.6.
 
