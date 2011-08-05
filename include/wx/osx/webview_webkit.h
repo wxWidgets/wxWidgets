@@ -61,8 +61,6 @@ public:
     virtual void Stop();
     virtual wxString GetPageSource();
     virtual wxString GetPageText() { return ""; }
-    virtual void SetPageTitle(const wxString& title) { m_pageTitle = title; }
-    virtual wxString GetPageTitle(){ return m_pageTitle; }
 
     //We do not want to hide the other overloads
     using wxWebView::SetPage;

@@ -814,7 +814,7 @@ wxString wxWebViewWebKit::GetCurrentURL()
 
 wxString wxWebViewWebKit::GetCurrentTitle()
 {
-    return GetPageTitle();
+    return wxStringWithNSString([m_webView mainFrameTitle]);
 }
 
 float wxWebViewWebKit::GetWebkitZoom()
@@ -1208,10 +1208,6 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
 - (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title
                                          forFrame:(WebFrame *)frame
 {
-    if (webKitWindow && frame == [sender mainFrame])
-    {
-        webKitWindow->SetPageTitle(wxStringWithNSString( title ));
-    }
     wxString target = wxStringWithNSString([frame name]);
     wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
                                    wx_webviewctrls[sender]->GetId(),
