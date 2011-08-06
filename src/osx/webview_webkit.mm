@@ -925,6 +925,17 @@ void wxWebViewWebKit::SelectAll()
     RunScript("window.getSelection().selectAllChildren(document.body);");
 }
 
+wxString wxWebViewWebKit::GetSelectedSource()
+{
+    wxString script = ("var range = window.getSelection().getRangeAt(0);"
+                       "var element = document.createElement('div');"
+                       "element.appendChild(range.cloneContents());"
+                       "return element.innerHTML;");
+    id result = [[m_webView windowScriptObject]
+                   evaluateWebScript:wxNSStringWithWxString(script)];
+    return wxStringWithNSString([result stringValue]);
+}
+
 wxString wxWebViewWebKit::GetPageText()
 {
     id result = [[m_webView windowScriptObject]
