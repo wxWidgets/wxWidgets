@@ -417,6 +417,23 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     if (!window->m_wxwindow) return;
     if (!gtk_widget_is_drawable(window->m_wxwindow)) return;
 
+#ifdef __WXGTK30__
+    gtk_paint_handle
+    (
+        gtk_widget_get_style(window->m_wxwindow),
+        gdk_cairo_create(window->GTKGetDrawingWindow()),
+        // flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
+        GTK_STATE_NORMAL,
+        GTK_SHADOW_NONE,
+        window->m_wxwindow,
+        "paned",
+        rect.x,
+        rect.y,
+        rect.width,
+        rect.height,
+        (orientation == wxVERTICAL) ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
+    );
+#else // __WXGTK20__
     gtk_paint_handle
     (
         gtk_widget_get_style(window->m_wxwindow),
@@ -433,6 +450,7 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
         rect.height,
         (orientation == wxVERTICAL) ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
     );
+#endif 
 
 #else
     wxUnusedVar(window);

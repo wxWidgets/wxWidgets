@@ -406,6 +406,33 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
+#ifdef __WXGTK30__
+    // Draw grip first
+    if ( ShowsSizeGrip() )
+    {
+        const wxRect& rc = GetSizeGripRect();
+        
+        GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_widget));
+        cairo_t         *cr      = gdk_cairo_create(gtk_widget_get_window(m_widget));
+
+        gtk_render_handle( context, cr, rc.x, rc.y, rc.width, rc.height );
+
+        // Note: The following code should work too. The only difference is that 
+        // gtk_paint_resize_grip() is deprecated since gtk-3.0 (JC)
+        //
+        // GdkWindowEdge edge =
+        //     GetLayoutDirection() == wxLayout_RightToLeft ? GDK_WINDOW_EDGE_SOUTH_WEST :
+        //                                                    GDK_WINDOW_EDGE_SOUTH_EAST;
+        // gtk_paint_resize_grip(gtk_widget_get_style(m_widget),
+        //                     gdk_cairo_create(gtk_widget_get_window(m_widget)),
+        //                     gtk_widget_get_state(m_widget),
+        //                     m_widget,
+        //                     "statusbar",
+        //                     edge,
+        //                     rc.x, rc.y, rc.width, rc.height );
+    }
+#endif // __WXGTK30__
+
 #if defined(__WXGTK20__) && !defined(__WXGTK30__)
     // Draw grip first
     if ( ShowsSizeGrip() )
@@ -424,32 +451,6 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
                             rc.x, rc.y, rc.width, rc.height );
     }
 #endif // __WXGTK20__
-
-#ifdef __WXGTK30__
-    // Draw grip first
-    if ( ShowsSizeGrip() )
-    {
-        const wxRect& rc = GetSizeGripRect();
-        
-        GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(m_widget));
-        cairo_t         *cr      = gdk_cairo_create(gtk_widget_get_window(m_widget));
-
-        gtk_render_handle( context, cr, rc.x, rc.y, rc.width, rc.height );
-
-        // Note: The following code should work too. The only difference is that 
-        // gtk_paint_resize_grip() is deprecated since gtk-3.0
-        // GdkWindowEdge edge =
-        //     GetLayoutDirection() == wxLayout_RightToLeft ? GDK_WINDOW_EDGE_SOUTH_WEST :
-        //                                                    GDK_WINDOW_EDGE_SOUTH_EAST;
-        // gtk_paint_resize_grip(gtk_widget_get_style(m_widget),
-        //                     gdk_cairo_create(gtk_widget_get_window(m_widget)),
-        //                     gtk_widget_get_state(m_widget),
-        //                     m_widget,
-        //                     "statusbar",
-        //                     edge,
-        //                     rc.x, rc.y, rc.width, rc.height );
-    }
-#endif // __WXGTK30__
 
     if (GetFont().IsOk())
         dc.SetFont(GetFont());

@@ -1195,7 +1195,7 @@ public :
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc )
 : wxGraphicsContext(renderer)
 {
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) || defined(__WXGTK30__)
     const wxDCImpl *impl = dc.GetImpl();
     Init( (cairo_t*) impl->GetCairoContext() );
 
