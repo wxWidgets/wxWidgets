@@ -1079,9 +1079,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/cursor.cpp
     src/gtk/dataobj.cpp
     src/gtk/dc.cpp
-    src/gtk3/dcclient.cpp
-    src/gtk3/dcmemory.cpp
-    src/gtk3/dcscreen.cpp
+    src/gtk/dcclient_gtk3.cpp
+    src/gtk/dcmemory_gtk3.cpp
+    src/gtk/dcscreen_gtk3.cpp
     src/gtk/dnd.cpp
     src/gtk/evtloop.cpp
     src/gtk/filectrl.cpp

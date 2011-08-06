@@ -5100,9 +5100,9 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk_cursor.o \
 	monodll_gtk_dataobj.o \
 	monodll_gtk_dc.o \
-	monodll_gtk3_dcclient.o \
-	monodll_gtk3_dcmemory.o \
-	monodll_gtk3_dcscreen.o \
+	monodll_dcclient_gtk3.o \
+	monodll_dcmemory_gtk3.o \
+	monodll_dcscreen_gtk3.o \
 	monodll_gtk_dnd.o \
 	monodll_gtk_evtloop.o \
 	monodll_filectrl.o \
@@ -6078,9 +6078,9 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk_cursor.o \
 	monodll_gtk_dataobj.o \
 	monodll_gtk_dc.o \
-	monodll_gtk3_dcclient.o \
-	monodll_gtk3_dcmemory.o \
-	monodll_gtk3_dcscreen.o \
+	monodll_dcclient_gtk3.o \
+	monodll_dcmemory_gtk3.o \
+	monodll_dcscreen_gtk3.o \
 	monodll_gtk_dnd.o \
 	monodll_gtk_evtloop.o \
 	monodll_filectrl.o \
@@ -7171,9 +7171,9 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk_cursor.o \
 	monolib_gtk_dataobj.o \
 	monolib_gtk_dc.o \
-	monolib_gtk3_dcclient.o \
-	monolib_gtk3_dcmemory.o \
-	monolib_gtk3_dcscreen.o \
+	monolib_dcclient_gtk3.o \
+	monolib_dcmemory_gtk3.o \
+	monolib_dcscreen_gtk3.o \
 	monolib_gtk_dnd.o \
 	monolib_gtk_evtloop.o \
 	monolib_filectrl.o \
@@ -8149,9 +8149,9 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk_cursor.o \
 	monolib_gtk_dataobj.o \
 	monolib_gtk_dc.o \
-	monolib_gtk3_dcclient.o \
-	monolib_gtk3_dcmemory.o \
-	monolib_gtk3_dcscreen.o \
+	monolib_dcclient_gtk3.o \
+	monolib_dcmemory_gtk3.o \
+	monolib_dcscreen_gtk3.o \
 	monolib_gtk_dnd.o \
 	monolib_gtk_evtloop.o \
 	monolib_filectrl.o \
@@ -9426,9 +9426,9 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk_cursor.o \
 	coredll_gtk_dataobj.o \
 	coredll_gtk_dc.o \
-	coredll_gtk3_dcclient.o \
-	coredll_gtk3_dcmemory.o \
-	coredll_gtk3_dcscreen.o \
+	coredll_dcclient_gtk3.o \
+	coredll_dcmemory_gtk3.o \
+	coredll_dcscreen_gtk3.o \
 	coredll_gtk_dnd.o \
 	coredll_gtk_evtloop.o \
 	coredll_filectrl.o \
@@ -10404,9 +10404,9 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk_cursor.o \
 	coredll_gtk_dataobj.o \
 	coredll_gtk_dc.o \
-	coredll_gtk3_dcclient.o \
-	coredll_gtk3_dcmemory.o \
-	coredll_gtk3_dcscreen.o \
+	coredll_dcclient_gtk3.o \
+	coredll_dcmemory_gtk3.o \
+	coredll_dcscreen_gtk3.o \
 	coredll_gtk_dnd.o \
 	coredll_gtk_evtloop.o \
 	coredll_filectrl.o \
@@ -11157,9 +11157,9 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk_cursor.o \
 	corelib_gtk_dataobj.o \
 	corelib_gtk_dc.o \
-	corelib_gtk3_dcclient.o \
-	corelib_gtk3_dcmemory.o \
-	corelib_gtk3_dcscreen.o \
+	corelib_dcclient_gtk3.o \
+	corelib_dcmemory_gtk3.o \
+	corelib_dcscreen_gtk3.o \
 	corelib_gtk_dnd.o \
 	corelib_gtk_evtloop.o \
 	corelib_filectrl.o \
@@ -12135,9 +12135,9 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk_cursor.o \
 	corelib_gtk_dataobj.o \
 	corelib_gtk_dc.o \
-	corelib_gtk3_dcclient.o \
-	corelib_gtk3_dcmemory.o \
-	corelib_gtk3_dcscreen.o \
+	corelib_dcclient_gtk3.o \
+	corelib_dcmemory_gtk3.o \
+	corelib_dcscreen_gtk3.o \
 	corelib_gtk_dnd.o \
 	corelib_gtk_evtloop.o \
 	corelib_filectrl.o \
@@ -18331,14 +18331,14 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_dc.o: $(srcdir)/src/gtk/dc.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dc.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dcclient.o: $(srcdir)/src/gtk3/dcclient.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dcclient.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_dcclient_gtk3.o: $(srcdir)/src/gtk/dcclient_gtk3.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dcclient_gtk3.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dcmemory.o: $(srcdir)/src/gtk3/dcmemory.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dcmemory.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_dcmemory_gtk3.o: $(srcdir)/src/gtk/dcmemory_gtk3.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dcmemory_gtk3.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk3_dcscreen.o: $(srcdir)/src/gtk3/dcscreen.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk3/dcscreen.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_dcscreen_gtk3.o: $(srcdir)/src/gtk/dcscreen_gtk3.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dcscreen_gtk3.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk_dnd.o: $(srcdir)/src/gtk/dnd.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dnd.cpp
@@ -23938,14 +23938,14 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_dc.o: $(srcdir)/src/gtk/dc.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dc.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dcclient.o: $(srcdir)/src/gtk3/dcclient.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dcclient.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_dcclient_gtk3.o: $(srcdir)/src/gtk/dcclient_gtk3.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dcclient_gtk3.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dcmemory.o: $(srcdir)/src/gtk3/dcmemory.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dcmemory.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_dcmemory_gtk3.o: $(srcdir)/src/gtk/dcmemory_gtk3.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dcmemory_gtk3.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk3_dcscreen.o: $(srcdir)/src/gtk3/dcscreen.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk3/dcscreen.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_dcscreen_gtk3.o: $(srcdir)/src/gtk/dcscreen_gtk3.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dcscreen_gtk3.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk_dnd.o: $(srcdir)/src/gtk/dnd.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dnd.cpp
@@ -29725,14 +29725,14 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_dc.o: $(srcdir)/src/gtk/dc.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/dc.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dcclient.o: $(srcdir)/src/gtk3/dcclient.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dcclient.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_dcclient_gtk3.o: $(srcdir)/src/gtk/dcclient_gtk3.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/dcclient_gtk3.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dcmemory.o: $(srcdir)/src/gtk3/dcmemory.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dcmemory.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_dcmemory_gtk3.o: $(srcdir)/src/gtk/dcmemory_gtk3.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/dcmemory_gtk3.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk3_dcscreen.o: $(srcdir)/src/gtk3/dcscreen.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk3/dcscreen.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_dcscreen_gtk3.o: $(srcdir)/src/gtk/dcscreen_gtk3.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/dcscreen_gtk3.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk_dnd.o: $(srcdir)/src/gtk/dnd.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/dnd.cpp
@@ -34015,14 +34015,14 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_dc.o: $(srcdir)/src/gtk/dc.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/dc.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dcclient.o: $(srcdir)/src/gtk3/dcclient.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dcclient.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_dcclient_gtk3.o: $(srcdir)/src/gtk/dcclient_gtk3.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/dcclient_gtk3.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dcmemory.o: $(srcdir)/src/gtk3/dcmemory.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dcmemory.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_dcmemory_gtk3.o: $(srcdir)/src/gtk/dcmemory_gtk3.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/dcmemory_gtk3.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk3_dcscreen.o: $(srcdir)/src/gtk3/dcscreen.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk3/dcscreen.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_dcscreen_gtk3.o: $(srcdir)/src/gtk/dcscreen_gtk3.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/dcscreen_gtk3.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk_dnd.o: $(srcdir)/src/gtk/dnd.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/dnd.cpp
