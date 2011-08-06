@@ -58,7 +58,7 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
     virtual void Stop();
     virtual wxString GetPageSource();
-    virtual wxString GetPageText() { return ""; }
+    virtual wxString GetPageText();
 
     //We do not want to hide the other overloads
     using wxWebView::SetPage;
