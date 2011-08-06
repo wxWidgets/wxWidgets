@@ -24,16 +24,12 @@
     #include "wx/wx.h"
 #endif
 
-#ifdef __WXCOCOA__
-#include "wx/cocoa/autorelease.h"
-#else
 #include "wx/osx/private.h"
 #include "wx/cocoa/string.h"
 
 #include <WebKit/WebKit.h>
 #include <WebKit/HIWebView.h>
 #include <WebKit/CarbonUtils.h>
-#endif
 
 #include <Foundation/NSURLError.h>
 
@@ -334,43 +330,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 {
     m_busy = false;
 
- //still needed for wxCocoa??
-/*
-    int width, height;
-    wxSize sizeInstance;
-    if (size.x == wxDefaultCoord || size.y == wxDefaultCoord)
-    {
-        m_parent->GetClientSize(&width, &height);
-        sizeInstance.x = width;
-        sizeInstance.y = height;
-    }
-    else
-    {
-        sizeInstance.x = size.x;
-        sizeInstance.y = size.y;
-    }
-*/
-    // now create and attach WebKit view...
-#ifdef __WXCOCOA__
-    wxControl::Create(parent, m_windowID, pos, sizeInstance, style, name);
-    SetSize(pos.x, pos.y, sizeInstance.x, sizeInstance.y);
-
-    wxTopLevelWindowCocoa *topWin = wxDynamicCast(this, wxTopLevelWindowCocoa);
-    NSWindow* nsWin = topWin->GetNSWindow();
-    NSRect rect;
-    rect.origin.x = pos.x;
-    rect.origin.y = pos.y;
-    rect.size.width = sizeInstance.x;
-    rect.size.height = sizeInstance.y;
-    m_webView = (WebView*)[[WebView alloc] initWithFrame:rect
-                                               frameName:@"webkitFrame"
-                                               groupName:@"webkitGroup"];
-    SetNSView(m_webView);
-    [m_cocoaNSView release];
-
-    if(m_parent) m_parent->CocoaAddChild(this);
-    SetInitialFrameRect(pos,sizeInstance);
-#else
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
 #if wxOSX_USE_CARBON
@@ -405,7 +364,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 #endif
     [m_webView setHidden:false];
 
-#endif
+
 
     // Register event listener interfaces
     MyFrameLoadMonitor* myFrameLoadMonitor =
