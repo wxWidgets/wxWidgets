@@ -1499,15 +1499,44 @@ wxFormatConverter::wxFormatConverter(const wxChar *format)
     {
         if ( CopyFmtChar(*format++) == _T('%') )
         {
-            // skip any flags
-            while ( IsFlagChar(*format) )
-                CopyFmtChar(*format++);
-
-            // and possible width
-            if ( *format == _T('*') )
-                CopyFmtChar(*format++);
-            else
+#if wxUSE_PRINTF_POS_PARAMS
+            if( *format >= '0' && *format <= '9' )
+            {
                 SkipDigits(&format);
+                if( *format == '$' )
+                {
+                    // It was a positional printf argument
+
+                    CopyFmtChar(*format++);
+
+                    // skip any flags
+                    while ( IsFlagChar(*format) )
+                        CopyFmtChar(*format++);
+
+                    // and possible width
+                    if ( *format == _T('*') )
+                        CopyFmtChar(*format++);
+                    else
+                        SkipDigits(&format);
+                }
+                else
+                {
+                    // Must have been width
+                }
+            }
+            else
+#endif
+            {
+                // skip any flags
+                while ( IsFlagChar(*format) )
+                    CopyFmtChar(*format++);
+
+                // and possible width
+                if ( *format == _T('*') )
+                    CopyFmtChar(*format++);
+                else
+                    SkipDigits(&format);
+            }
 
             // precision?
             if ( *format == _T('.') )
