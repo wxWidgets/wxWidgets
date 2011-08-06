@@ -228,6 +228,7 @@ private:
         Btn_No,
         Btn_Ok,
         Btn_Cancel,
+        Btn_Help,
         Btn_Max
     };
 
