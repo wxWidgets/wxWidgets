@@ -914,6 +914,12 @@ bool wxWebViewWebKit::HasSelection()
     }
 }
 
+void wxWebViewWebKit::ClearSelection()
+{
+    //We use javascript as selection isn't exposed at the moment in webkit
+    RunScript("window.getSelection().removeAllRanges();");
+}
+
 void wxWebViewWebKit::EnableHistory(bool enable)
 {
     if ( !m_webView )

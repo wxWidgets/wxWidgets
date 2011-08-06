@@ -109,7 +109,7 @@ public:
     virtual void SelectAll() {};
     virtual wxString GetSelectedText();
     virtual wxString GetSelectedSource() { return ""; }
-    virtual void ClearSelection() {}
+    virtual void ClearSelection();
     
     void RunScript(const wxString& javascript);
     
