@@ -920,6 +920,11 @@ void wxWebViewWebKit::ClearSelection()
     RunScript("window.getSelection().removeAllRanges();");
 }
 
+void wxWebViewWebKit::SelectAll()
+{
+    RunScript("window.getSelection().selectAllChildren(document.body);");
+}
+
 wxString wxWebViewWebKit::GetPageText()
 {
     id result = [[m_webView windowScriptObject]

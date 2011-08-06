@@ -106,7 +106,7 @@ public:
     //Selection
     virtual void DeleteSelection();
     virtual bool HasSelection();
-    virtual void SelectAll() {};
+    virtual void SelectAll();
     virtual wxString GetSelectedText();
     virtual wxString GetSelectedSource() { return ""; }
     virtual void ClearSelection();
