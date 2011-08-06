@@ -282,6 +282,7 @@ public:
     // override some base class virtuals
     virtual bool Destroy();
     virtual bool IsTopLevel() const { return true; }
+    virtual bool IsTopNavigationDomain() const { return true; }
     virtual bool IsVisible() const { return IsShown(); }
 
     // event handlers

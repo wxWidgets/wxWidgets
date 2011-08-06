@@ -1422,6 +1422,15 @@ public:
     virtual wxWindow *GetMainWindowOfCompositeControl()
         { return (wxWindow*)this; }
 
+    // If this function returns true, keyboard navigation events shouldn't
+    // escape from it. A typical example of such "navigation domain" is a top
+    // level window because pressing TAB in one of them must not transfer focus
+    // to a different top level window. But it's not limited to them, e.g. MDI
+    // children frames are not top level windows (and their IsTopLevel()
+    // returns false) but still are self-contained navigation domains as well.
+    virtual bool IsTopNavigationDomain() const { return false; }
+
+
 protected:
     // helper for the derived class Create() methods: the first overload, with
     // validator parameter, should be used for child windows while the second

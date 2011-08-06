@@ -1361,6 +1361,8 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
             return wxNO;
         case wxID_CANCEL:
             return wxCANCEL;
+        case wxID_HELP:
+            return wxHELP;
     }
 
     wxFAIL_MSG( wxT("unexpected return code from wxMessageDialog") );

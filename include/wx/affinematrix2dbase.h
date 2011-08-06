@@ -11,6 +11,9 @@
 #define _WX_AFFINEMATRIX2DBASE_H_
 
 #include "wx/defs.h"
+
+#if wxUSE_GEOMETRY
+
 #include "wx/geometry.h"
 
 struct wxMatrix2D
@@ -37,7 +40,7 @@ class WXDLLIMPEXP_CORE wxAffineMatrix2DBase
 public:
     wxAffineMatrix2DBase() {}
     virtual ~wxAffineMatrix2DBase() {}
-    
+
     // sets the matrix to the respective values
     virtual void Set(const wxMatrix2D& mat2D, const wxPoint2DDouble& tr) = 0;
 
@@ -118,5 +121,7 @@ protected:
     virtual
         wxPoint2DDouble DoTransformDistance(const wxPoint2DDouble& p) const = 0;
 };
+
+#endif // wxUSE_GEOMETRY
 
 #endif // _WX_AFFINEMATRIX2DBASE_H_

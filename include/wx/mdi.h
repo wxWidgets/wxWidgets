@@ -176,6 +176,11 @@ public:
     // level windows too
     virtual bool IsTopLevel() const { return false; }
 
+    // In all ports keyboard navigation must stop at MDI child frame level and
+    // can't cross its boundary. Indicate this by overriding this function to
+    // return true.
+    virtual bool IsTopNavigationDomain() const { return true; }
+
 protected:
     wxMDIParentFrame *m_mdiParent;
 };

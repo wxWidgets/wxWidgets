@@ -22,6 +22,12 @@
         Puts Yes and No buttons in the message box. It is recommended to always
         use @c wxCANCEL with this style as otherwise the message box won't have
         a close button under wxMSW and the user will be forced to answer it.
+    @style{wxHELP}
+        Puts a Help button to the message box. This button can have special
+        appearance or be specially positioned if its label is not changed from
+        the default one. Notice that using this button is not supported when
+        showing a message box from non-main thread in wxOSX/Cocoa and it is not
+        supported in wxOSX/Carbon at all. @since 2.9.3.
     @style{wxNO_DEFAULT}
         Makes the "No" button default, can only be used with @c wxYES_NO.
     @style{wxCANCEL_DEFAULT}
@@ -117,6 +123,19 @@ public:
     virtual void SetExtendedMessage(const wxString& extendedMessage);
 
     /**
+        Sets the label for the Help button.
+
+        Please see the remarks in SetYesNoLabels() documentation.
+
+        Notice that changing the label of the help button resets its special
+        status (if any, this depends on the platform) and it will be treated
+        just like another button in this case.
+
+        @since 2.9.3
+     */
+    virtual bool SetHelpLabel(const ButtonLabel& help);
+
+    /**
         Sets the message shown by the dialog.
 
         @since 2.9.0
@@ -190,7 +209,8 @@ public:
     virtual bool SetYesNoLabels(const ButtonLabel& yes, const ButtonLabel& no);
 
     /**
-        Shows the dialog, returning one of wxID_OK, wxID_CANCEL, wxID_YES, wxID_NO.
+        Shows the dialog, returning one of wxID_OK, wxID_CANCEL, wxID_YES,
+        wxID_NO or wxID_HELP.
 
         Notice that this method returns the identifier of the button which was
         clicked unlike wxMessageBox() function.
@@ -215,9 +235,9 @@ public:
     extended text and custom labels for the message box buttons, are not
     provided by this function but only by wxMessageDialog.
 
-    The return value is one of: @c wxYES, @c wxNO, @c wxCANCEL or @c wxOK
-    (notice that this return value is @b different from the return value of
-    wxMessageDialog::ShowModal()).
+    The return value is one of: @c wxYES, @c wxNO, @c wxCANCEL, @c wxOK or @c
+    wxHELP (notice that this return value is @b different from the return value
+    of wxMessageDialog::ShowModal()).
 
     For example:
     @code

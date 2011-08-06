@@ -43,7 +43,7 @@ protected:
     void* ConstructNSAlert();
 #endif
 
-    int m_buttonId[3];
+    int m_buttonId[4];
     int m_buttonCount;
 
 #if wxOSX_USE_COCOA

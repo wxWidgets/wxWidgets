@@ -881,7 +881,7 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
             return false;
         }
 
-        const wxWindow* win = wxFindWindowAtPoint(wxPoint(pt.x, pt.y));
+        const wxWindowMSW* win = wxFindWindowAtPoint(wxPoint(pt.x, pt.y));
         if ( !win )
             win = this;
 

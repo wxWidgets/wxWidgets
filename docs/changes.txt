@@ -440,10 +440,13 @@ Major new features in this release
 All:
 
 - Fix parsing of negated long options in wxCmdLineParser (roed_bis).
+- Fix crash in wxArray::insert() overload taking iterator range (wsu).
 
 All (GUI):
 
 - Added documented, public wxNavigationEnabled<> class.
+- Added wxTextCtrl::PositionToCoords() (Navaneeth).
+- Added support for wxHELP button to wxMessageDialog.
 - Support float, double and file name values in wxGenericValidator (troelsk).
 - Fix keyboard navigation in wxGrid with hidden columns (ivan_14_32).
 - Add wxDataViewEvent::IsEditCancelled() (Allonii).
@@ -453,6 +456,9 @@ All (GUI):
 OSX:
 
 - Implement wxRegion::Equal() (Dr.Acula).
+- Implement wxFileType::GetOpenCommand().
+- wxGetOsVersion() now returns more sensible version numbers, e.g. 10 and 6
+  for OS X 10.6.
 
 GTK:
 

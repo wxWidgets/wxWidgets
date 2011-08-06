@@ -1097,15 +1097,15 @@ WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &st
 namespace std
 {
 
-template<> class numeric_limits<wxLongLong>
-    : public numeric_limits<wxLongLong_t>
-{
-};
-
-template<> class numeric_limits<wxULongLong>
-    : public numeric_limits<wxULongLong_t>
-{
-};
+#ifdef __clang__
+  // libstdc++ (used by Clang) uses struct for numeric_limits; unlike gcc, clang
+  // warns about this
+  template<> struct numeric_limits<wxLongLong>  : public numeric_limits<wxLongLong_t> {};
+  template<> struct numeric_limits<wxULongLong> : public numeric_limits<wxULongLong_t> {};
+#else
+  template<> class numeric_limits<wxLongLong>  : public numeric_limits<wxLongLong_t> {};
+  template<> class numeric_limits<wxULongLong> : public numeric_limits<wxULongLong_t> {};
+#endif
 
 } // namespace std
 

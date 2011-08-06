@@ -40,6 +40,7 @@ private:
     virtual wxString GetDefaultNoLabel() const;
     virtual wxString GetDefaultOKLabel() const;
     virtual wxString GetDefaultCancelLabel() const;
+    virtual wxString GetDefaultHelpLabel() const;
 
     // create the real GTK+ dialog: this is done from ShowModal() to allow
     // changing the message between constructing the dialog and showing it
