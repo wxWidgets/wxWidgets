@@ -416,8 +416,6 @@ int LINKAGEMODE wxGenericTreeModelItemCmp( void ** id1, void ** id2)
 
 WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSelection,
                                             WXDLLIMPEXP_ADV);
-WX_DECLARE_LIST(wxDataViewItem, ItemList);
-WX_DEFINE_LIST(ItemList)
 
 class wxDataViewMainWindow: public wxWindow
 {
