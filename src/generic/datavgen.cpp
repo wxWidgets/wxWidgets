@@ -2064,7 +2064,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
     // Change the current row to the last row if the current exceed the max row number
     if( m_currentRow > GetRowCount() )
-        m_currentRow = m_count - 1;
+        ChangeCurrentRow(m_count - 1);
 
     UpdateDisplay();
 
