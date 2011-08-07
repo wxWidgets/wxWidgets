@@ -415,10 +415,7 @@ void wxWebViewWebKit::GoBack()
     if ( !m_webView )
         return;
 
-    bool result = [(WebView*)m_webView goBack];
-
-    // TODO: return result (if it also exists in other backends...)
-    //return result;
+    [(WebView*)m_webView goBack];
 }
 
 void wxWebViewWebKit::GoForward()
@@ -426,10 +423,7 @@ void wxWebViewWebKit::GoForward()
     if ( !m_webView )
         return;
 
-    bool result = [(WebView*)m_webView goForward];
-
-    // TODO: return result (if it also exists in other backends...)
-    //return result;
+    [(WebView*)m_webView goForward];
 }
 
 void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
