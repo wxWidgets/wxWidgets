@@ -2006,66 +2006,61 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
             (wxDataViewVirtualListModel*) GetOwner()->GetModel();
         m_count = list_model->GetCount();
 
-        if( m_currentRow > GetRowCount() )
-            m_currentRow = m_count - 1;
-
         // TODO: why empty the entire selection?
         m_selection.Empty();
-
-        UpdateDisplay();
-
-        return true;
     }
-
-    wxDataViewTreeNode * node = FindNode(parent);
-
-    // Notice that it is possible that the item being deleted is not in the
-    // tree at all, for example we could be deleting a never shown (because
-    // collapsed) item in a tree model. So it's not an error if we don't know
-    // about this item, just return without doing anything then.
-    if ( !node || node->GetChildren().Index(item.GetID()) == wxNOT_FOUND )
-        return false;
-
-    int sub = -1;
-    node->GetChildren().Remove( item.GetID() );
-    // Manipolate selection
-    if( m_selection.GetCount() > 1 )
+    else // general case
     {
-        m_selection.Empty();
-    }
-    bool isContainer = false;
-    wxDataViewTreeNodes nds = node->GetNodes();
-    for (size_t i = 0; i < nds.GetCount(); i ++)
-    {
-        if (nds[i]->GetItem() == item)
+        wxDataViewTreeNode * node = FindNode(parent);
+
+        // Notice that it is possible that the item being deleted is not in the
+        // tree at all, for example we could be deleting a never shown (because
+        // collapsed) item in a tree model. So it's not an error if we don't know
+        // about this item, just return without doing anything then.
+        if ( !node || node->GetChildren().Index(item.GetID()) == wxNOT_FOUND )
+            return false;
+
+        int sub = -1;
+        node->GetChildren().Remove( item.GetID() );
+        // Manipolate selection
+        if( m_selection.GetCount() > 1 )
         {
-            isContainer = true;
-            break;
+            m_selection.Empty();
         }
-    }
-    if( isContainer )
-    {
-        wxDataViewTreeNode * n = NULL;
-        wxDataViewTreeNodes nodes = node->GetNodes();
-        int len = nodes.GetCount();
-        for( int i = 0; i < len; i ++)
+        bool isContainer = false;
+        wxDataViewTreeNodes nds = node->GetNodes();
+        for (size_t i = 0; i < nds.GetCount(); i ++)
         {
-            if( nodes[i]->GetItem() == item )
+            if (nds[i]->GetItem() == item)
             {
-                n = nodes[i];
+                isContainer = true;
                 break;
             }
         }
+        if( isContainer )
+        {
+            wxDataViewTreeNode * n = NULL;
+            wxDataViewTreeNodes nodes = node->GetNodes();
+            int len = nodes.GetCount();
+            for( int i = 0; i < len; i ++)
+            {
+                if( nodes[i]->GetItem() == item )
+                {
+                    n = nodes[i];
+                    break;
+                }
+            }
 
-        wxCHECK_MSG( n != NULL, false, "item not found" );
+            wxCHECK_MSG( n != NULL, false, "item not found" );
 
-        node->GetNodes().Remove( n );
-        sub -= n->GetSubTreeCount();
-        ::DestroyTreeHelper(n);
+            node->GetNodes().Remove( n );
+            sub -= n->GetSubTreeCount();
+            ::DestroyTreeHelper(n);
+        }
+        // Make the row number invalid and get a new valid one when user call GetRowCount
+        m_count = -1;
+        node->ChangeSubTreeCount(sub);
     }
-    // Make the row number invalid and get a new valid one when user call GetRowCount
-    m_count = -1;
-    node->ChangeSubTreeCount(sub);
 
     // Change the current row to the last row if the current exceed the max row number
     if( m_currentRow > GetRowCount() )
