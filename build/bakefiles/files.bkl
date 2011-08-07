@@ -1146,6 +1146,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
     <!-- GTK+ specific files: -->
+    src/gtk/anybutton.cpp
     src/gtk/artgtk.cpp
     src/gtk/bmpbuttn.cpp
     src/gtk/button.cpp
@@ -1200,6 +1201,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/gtk/accel.h
+    wx/gtk/anybutton.h
     wx/gtk/bmpbuttn.h
     wx/gtk/button.h
     wx/gtk/checkbox.h
