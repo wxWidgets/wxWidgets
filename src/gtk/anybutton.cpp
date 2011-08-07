@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     1998-05-20 (extracted from button.cpp)
-// Id:          $Id: anybutton.cpp 67326 2011-03-28 06:27:49Z PC $
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ bool wxAnyButton::Enable( bool enable )
 
 GdkWindow *wxAnyButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return GTK_BUTTON(m_widget)->event_window;
+    return gtk_button_get_event_window(GTK_BUTTON(m_widget));
 }
 
 // static
