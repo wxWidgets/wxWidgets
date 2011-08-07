@@ -5395,6 +5395,7 @@ fi
 if test "$WXGTK3" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGTK30__,$WXGTK3)
   WXGTK2=1
+  WXGTK12=1
 fi
 
 if test "$WXGTK2" = 1 ; then
@@ -8062,7 +8063,9 @@ AC_SUBST(CPPUNIT_LIBS)
 case "$TOOLKIT" in
     GTK)
         TOOLKIT_DESC="GTK+"
-        if test "$WXGTK2" = 1; then
+        if test "$WXGTK3" = 1; then
+            TOOLKIT_DESC="$TOOLKIT_DESC 3"
+        elif test "$WXGTK2" = 1; then
             TOOLKIT_DESC="$TOOLKIT_DESC 2"
             if test "$wxUSE_GTKPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
@@ -8083,9 +8086,6 @@ case "$TOOLKIT" in
             if test "$TOOLKIT_EXTRA" != ""; then
                 TOOLKIT_DESC="$TOOLKIT_DESC with support for `echo $TOOLKIT_EXTRA | tr -s ' '`"
             fi
-        fi
-        if test "$WXGTK3" = 1; then
-            TOOLKIT_DESC="$TOOLKIT_DESC 3"
         fi
         ;;
 
