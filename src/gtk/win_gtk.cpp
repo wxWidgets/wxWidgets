@@ -303,20 +303,17 @@ GtkWidget* wxPizza::New(long windowStyle)
 // we need to avoid that to prevent endless sizing loops, so check first
 void wxPizza::move(GtkWidget* widget, int x, int y)
 {
-    GtkFixed* fixed = &m_fixed;
-#ifdef __WXGTK30__
-    for (const GList* list = gtk_container_get_children(GTK_CONTAINER(fixed)); list; list = list->next)
-#else
-    for (const GList* list = fixed->children; list; list = list->next)
-#endif
+    if (gtk_widget_get_parent(widget))
     {
-        const GtkFixedChild* child = static_cast<GtkFixedChild*>(list->data);
-        if (child->widget == widget)
-        {
-            if (child->x != x || child->y != y)
-                gtk_fixed_move(fixed, widget, x, y);
-            break;
-        }
+        GValue value = { 0 };
+        g_value_init(&value, G_TYPE_INT);
+        GtkContainer* container = GTK_CONTAINER(this);
+        gtk_container_child_get_property(container, widget, "x", &value);
+        const int child_x = g_value_get_int(&value);
+        gtk_container_child_get_property(container, widget, "y", &value);
+        const int child_y = g_value_get_int(&value);
+        if (child_x != x || child_y != y)
+            gtk_fixed_move(&m_fixed, widget, x, y);
     }
 }
 
