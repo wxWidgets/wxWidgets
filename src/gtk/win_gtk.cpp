@@ -74,7 +74,7 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
         }
     }
 
-    allocation = *alloc;
+    gtk_widget_set_allocation(widget, alloc);
 
     // adjust child positions
     GList* list = gtk_container_get_children(GTK_CONTAINER(pizza));
