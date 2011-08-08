@@ -439,25 +439,26 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     }
 #endif // !__WXWINCE__
 
+#if !defined(__WXWINCE__) || defined(__WINCE_STANDARDSDK__)
     // move the dialog to its initial position without forcing repainting
     int x, y, w, h;
     (void)MSWGetCreateWindowCoords(pos, size, x, y, w, h);
 
     if ( x == (int)CW_USEDEFAULT )
     {
-        // centre it on the screen - what else can we do?
-        wxSize sizeDpy = wxGetDisplaySize();
-
-        x = (sizeDpy.x - w) / 2;
-        y = (sizeDpy.y - h) / 2;
+        // Let the system position the window, just set its size.
+        ::SetWindowPos(GetHwnd(), 0,
+                       0, 0, w, h,
+                       SWP_NOMOVE | SWP_NOZORDER);
     }
-
-#if !defined(__WXWINCE__) || defined(__WINCE_STANDARDSDK__)
-    if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
+    else // Move the window to the desired location and set its size too.
     {
-        wxLogLastError(wxT("MoveWindow"));
+        if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
+        {
+            wxLogLastError(wxT("MoveWindow"));
+        }
     }
-#endif
+#endif // !__WXWINCE__
 
     if ( !title.empty() )
     {
