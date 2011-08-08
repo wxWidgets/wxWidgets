@@ -150,12 +150,12 @@ public:
     
     @par wxWEB_VIEW_BACKEND_IE (MSW)
     
-    The IE backend uses Microsoft's Trident rendering engine, specifically the 
+    The IE backend uses Microsoft's Trident rendering engine, specifically the
     version used by the locally installed copy of Internet Explorer. As such it
-    is only avaliable for the MSW port. By default recent versions of of the 
+    is only available for the MSW port. By default recent versions of the 
     <a href="http://msdn.microsoft.com/en-us/library/aa752085%28v=VS.85%29.aspx">WebBrowser</a>
     control, which this backend uses, emulate Internet Explorer 7. This can be
-    chaged with a registry setting, see 
+    changed with a registry setting, see 
     <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
@@ -164,17 +164,17 @@ public:
     
     Under GTK the WebKit backend uses 
     <a href="http://webkitgtk.org/">WebKitGTK+</a>. The current minimum version
-    requirent is 1.3.1 which ships by defult with Ubuntu Natty and Debian 
-    Wheezy and has the package name libwebkitgtk-dev. Custom schemes and virtual
-    files systems are supported under this backend, however embedded resources 
-    such as images and stylesheets are currently extracted to a temporary file
-    before being loaded.
+    required is 1.3.1 which ships by default with Ubuntu Natty and Debian
+    Wheezy and has the package name libwebkitgtk-dev. Custom schemes and 
+    virtual files systems are supported under this backend, however embedded
+    resources such as images and stylesheets are currently extracted to a 
+    temporary file before being loaded.
     
     @par wxWEB_VIEW_WEBKIT (OSX)
     
     The OSX WebKit backend uses Apple's 
     <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
-    class. Currently it does not support custom shemes and virtual file systems.
+    class. Currently it does not support custom schemes and virtual file systems.
 
     @section async Asynchronous Notifications
     
