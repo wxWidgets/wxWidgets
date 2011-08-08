@@ -145,6 +145,11 @@ public:
     @class wxWebView
   
     This control may be used to render web (HTML / CSS / javascript) documents.
+    It is designed to allow the creation of multiple backends for each port, 
+    although currently just one is available. It differs from wxHtmlWindow in
+    that each backend is actually a full rendering engine, Trident on MSW and
+    Webkit on OSX and GTK. This allows the correct viewing complex pages with
+    javascript and css. 
     
     @section descriptions Backend Descriptions
     
@@ -382,7 +387,7 @@ public:
     /**
         Returns @true if the current selection can be copied.
         
-        @note Tgis always returns @c false on the OSX WebKit backend.
+        @note This always returns @c false on the OSX WebKit backend.
     */
     virtual bool CanCopy() = 0;
 
