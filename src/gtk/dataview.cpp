@@ -1036,8 +1036,8 @@ static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
                         GdkEvent                *event,
                         GtkWidget               *widget,
                         const gchar             *path,
-                        GdkRectangle            *background_area,
-                        GdkRectangle            *cell_area,
+                        const GdkRectangle            *background_area,
+                        const GdkRectangle            *cell_area,
                         GtkCellRendererState     flags );
 
 
@@ -1109,8 +1109,8 @@ static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
                         GdkEvent                *gdk_event,
                         GtkWidget               *widget,
                         const gchar             *path,
-                        GdkRectangle            *background_area,
-                        GdkRectangle            *cell_area,
+                        const GdkRectangle            *background_area,
+                        const GdkRectangle            *cell_area,
                         GtkCellRendererState     flags )
 {
     GtkWxCellRendererText *wxgtk_renderer = (GtkWxCellRendererText *) gtk_renderer;
@@ -1178,7 +1178,7 @@ static void gtk_wx_cell_renderer_finalize (
 static void gtk_wx_cell_renderer_get_size (
                         GtkCellRenderer         *cell,
                         GtkWidget               *widget,
-                        GdkRectangle            *rectangle,
+                        const GdkRectangle            *rectangle,
                         gint                    *x_offset,
                         gint                    *y_offset,
                         gint                    *width,
@@ -1322,7 +1322,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
 static void
 gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
                                GtkWidget       *WXUNUSED(widget),
-                               GdkRectangle    *cell_area,
+                               const GdkRectangle    *cell_area,
                                gint            *x_offset,
                                gint            *y_offset,
                                gint            *width,
@@ -1636,7 +1636,7 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
             double d = gtk_adjustment_get_value( hadjust );
             int xdiff = (int) d;
 
-            int ydiff = gcolumn->button->allocation.height;
+            int ydiff = gtk_widget_get_allocated_height(gtk_tree_view_column_get_button(gcolumn));
             // Redraw
             gtk_widget_queue_draw_area( GTK_WIDGET(widget),
                 cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
@@ -3085,9 +3085,10 @@ void wxDataViewColumn::OnInternalIdle()
     if (gtk_widget_get_realized(GetOwner()->m_treeview))
     {
         GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-        if (column->button)
+        if (gtk_tree_view_column_get_button(column))
         {
-            g_signal_connect(column->button, "button_press_event",
+            g_signal_connect(gtk_tree_view_column_get_button(column),
+                    "button_press_event",
                       G_CALLBACK (gtk_dataview_header_button_press_callback), this);
 
             // otherwise the event will be blocked by GTK+
@@ -3134,7 +3135,11 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
     {
         GtkImage *gtk_image = GTK_IMAGE(m_image);
 
+#ifdef __WXGTK30__
+        cairo_surface_t *mask = NULL;
+#else
         GdkBitmap *mask = NULL;
+#endif
         if (bitmap.GetMask())
             mask = bitmap.GetMask()->GetBitmap();
 
@@ -3145,8 +3150,11 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
         }
         else
         {
+#ifdef __WXGTK30__
+#else
             gtk_image_set_from_pixmap(GTK_IMAGE(gtk_image),
                                       bitmap.GetPixmap(), mask);
+#endif
         }
         gtk_widget_show( m_image );
     }

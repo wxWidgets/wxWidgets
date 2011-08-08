@@ -377,6 +377,27 @@ inline GdkWindow* wx_gtk_button_get_event_window(GtkButton *button)
     return button->event_window;
 }
 #define gtk_button_get_event_window wx_gtk_button_get_event_window
+
+// ----------------------------------------------------------------------------
+// the following were introduced in GTK+ 3.0
+
+inline GtkWidget* wx_gtk_tree_view_column_get_button(GtkTreeViewColumn *tree_column)
+{
+    return tree_column->button;
+}
+#define gtk_tree_view_column_get_button wx_gtk_tree_view_column_get_button
+
+inline int wx_gtk_widget_get_allocated_width(GtkWidget *widget)
+{
+    return widget->allocation.width;
+}
+#define gtk_widget_get_allocated_width wx_gtk_widget_get_allocated_width
+
+inline int wx_gtk_widget_get_allocated_height(GtkWidget *widget)
+{
+    return widget->allocation.height;
+}
+#define gtk_widget_get_allocated_height wx_gtk_widget_get_allocated_height
 #endif // !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
 
 #endif // _WX_GTK_PRIVATE_COMPAT_H_

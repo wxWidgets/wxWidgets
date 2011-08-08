@@ -12,7 +12,11 @@
 #ifndef _WX_GTK_DVRENDERERS_H_
 #define _WX_GTK_DVRENDERERS_H_
 
+#ifdef __WXGTK30__
+typedef cairo_rectangle_int_t GdkRectangle;
+#else
 typedef struct _GdkRectangle GdkRectangle;
+#endif
 
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
