@@ -3697,6 +3697,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='OSX_COCOA'">src/osx/cocoa/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='OSX_IPHONE'">src/osx/iphone/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">
+        src/gtk/glcanvas.cpp
+        src/unix/glx11.cpp
+    </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         src/gtk/glcanvas.cpp
         src/unix/glx11.cpp
@@ -4060,6 +4064,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_IPHONE'">$(ADVANCED_OSX_IPHONE_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC) $(ADVANCED_MOTIF_SRC)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
@@ -4074,6 +4079,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_IPHONE'">$(ADVANCED_OSX_IPHONE_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR) $(ADVANCED_MOTIF_HDR)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
@@ -4083,11 +4089,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <!-- wxAdv files not used by wxUniv -->
     <set var="ADVANCED_PLATFORM_NATIVE_SRC" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_NATIVE_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_NATIVE_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_NATIVE_HDR" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_NATIVE_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_NATIVE_HDR)</if>
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_HDR)</if>

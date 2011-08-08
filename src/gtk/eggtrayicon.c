@@ -115,7 +115,9 @@ Anders
 #include <string.h>
 #include "eggtrayicon.h"
 
+#if defined(__WXGTK20__) && !defined(__WXGTK30__)
 #include <gdkconfig.h>
+#endif
 #if defined (GDK_WINDOWING_X11)
 #include <gdk/gdkx.h>
 #include <X11/Xatom.h>
@@ -364,7 +366,7 @@ egg_tray_icon_send_manager_message (EggTrayIcon *icon,
   ev.window = window;
   ev.message_type = icon->system_tray_opcode_atom;
   ev.format = 32;
-  ev.data.l[0] = gdk_x11_get_server_time (GTK_WIDGET (icon)->window);
+  ev.data.l[0] = gdk_x11_get_server_time (gtk_widget_get_window(GTK_WIDGET(icon)));
   ev.data.l[1] = message;
   ev.data.l[2] = data1;
   ev.data.l[3] = data2;
@@ -450,7 +452,7 @@ egg_tray_icon_manager_window_destroyed (EggTrayIcon *icon)
 static gboolean
 transparent_expose_event (GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 {
-  gdk_window_clear_area (widget->window, event->area.x, event->area.y,
+  gdk_window_clear_area (gtk_widget_get_window(widget), event->area.x, event->area.y,
 			 event->area.width, event->area.height);
   return FALSE;
 }
@@ -459,7 +461,7 @@ static void
 make_transparent_again (GtkWidget *widget, GtkStyle *previous_style,
 			gpointer user_data)
 {
-  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  gdk_window_set_back_pixmap (gtk_widget_get_window(widget), NULL, TRUE);
 }
 
 static void
@@ -470,7 +472,7 @@ make_transparent (GtkWidget *widget, gpointer user_data)
 
   gtk_widget_set_app_paintable (widget, TRUE);
   gtk_widget_set_double_buffered (widget, FALSE);
-  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  gdk_window_set_back_pixmap (gtk_widget_get_window(widget), NULL, TRUE);
   g_signal_connect (widget, "expose_event",
 		    G_CALLBACK (transparent_expose_event), NULL);
   g_signal_connect_after (widget, "style_set",

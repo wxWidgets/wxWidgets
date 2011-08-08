@@ -3700,6 +3700,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR =  \
 	wx/gtk/hildon/notifmsg.h \
 	wx/gtk/taskbar.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_ADVANCED_PLATFORM_HDR =  \
+	wx/unix/joystick.h \
+	wx/unix/sound.h \
+	wx/unix/taskbarx11.h \
+	wx/gtk/hildon/notifmsg.h \
+	wx/gtk/taskbar.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR =  \
 	wx/unix/joystick.h \
 	wx/unix/sound.h \
@@ -3749,6 +3756,15 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/gtk/dvrenderers.h \
 	wx/gtk/hyperlink.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_ADVANCED_PLATFORM_NATIVE_HDR =  \
+	wx/gtk/animate.h \
+	wx/gtk/bmpcbox.h \
+	wx/gtk/calctrl.h \
+	wx/gtk/dataview.h \
+	wx/gtk/dvrenderer.h \
+	wx/gtk/dvrenderers.h \
+	wx/gtk/hyperlink.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_ADVANCED_PLATFORM_NATIVE_HDR)
 COND_TOOLKIT_MSW_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/generic/animate.h \
 	wx/msw/bmpcbox.h \
@@ -6368,6 +6384,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_gtk_dataview.o \
 	monodll_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
+	monodll_gtk_aboutdlg.o \
+	monodll_animate.o \
+	monodll_gtk_bmpcbox.o \
+	monodll_gtk_calctrl.o \
+	monodll_gtk_dataview.o \
+	monodll_gtk_hyperlink.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_animateg.o \
 	monodll_msw_bmpcbox.o \
@@ -8440,6 +8464,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_gtk_dataview.o \
 	monolib_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
+	monolib_gtk_aboutdlg.o \
+	monolib_animate.o \
+	monolib_gtk_bmpcbox.o \
+	monolib_gtk_calctrl.o \
+	monolib_gtk_dataview.o \
+	monolib_gtk_hyperlink.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_animateg.o \
 	monolib_msw_bmpcbox.o \
@@ -12497,6 +12529,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_gtk_dataview.o \
 	advdll_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
+	advdll_gtk_aboutdlg.o \
+	advdll_animate.o \
+	advdll_gtk_bmpcbox.o \
+	advdll_gtk_calctrl.o \
+	advdll_gtk_dataview.o \
+	advdll_gtk_hyperlink.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_animateg.o \
 	advdll_msw_bmpcbox.o \
@@ -12601,6 +12641,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_gtk_dataview.o \
 	advlib_gtk_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
+	advlib_gtk_aboutdlg.o \
+	advlib_animate.o \
+	advlib_gtk_bmpcbox.o \
+	advlib_gtk_calctrl.o \
+	advlib_gtk_dataview.o \
+	advlib_gtk_hyperlink.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_animateg.o \
 	advlib_msw_bmpcbox.o \
@@ -13563,6 +13611,8 @@ COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	= gldll_gtk1_glcanvas.o gldll_glx11.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_PLATFORM_OBJECTS \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= gldll_gtk_glcanvas.o gldll_glx11.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__OPENGL_SRC_PLATFORM_OBJECTS \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= gldll_gtk_glcanvas.o gldll_glx11.o
 @COND_TOOLKIT_MOTIF@__OPENGL_SRC_PLATFORM_OBJECTS = \
 @COND_TOOLKIT_MOTIF@	gldll_x11_glcanvas.o gldll_glx11.o
 @COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_msw_glcanvas.o
@@ -13603,6 +13653,8 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	= gllib_gtk1_glcanvas.o gllib_glx11.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= gllib_gtk_glcanvas.o gllib_glx11.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= gllib_gtk_glcanvas.o gllib_glx11.o
 @COND_TOOLKIT_MOTIF@__OPENGL_SRC_PLATFORM_OBJECTS_1 = \
 @COND_TOOLKIT_MOTIF@	gllib_x11_glcanvas.o gllib_glx11.o
 @COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_msw_glcanvas.o
@@ -13760,6 +13812,15 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_gtk_eggtrayicon.o \
 	monodll_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
+	monodll_unix_joystick.o \
+	monodll_unix_sound.o \
+	monodll_taskbarx11.o \
+	monodll_gtk_taskbar.o \
+	monodll_gtk_eggtrayicon.o \
+	monodll_hildon_notifmsg.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_unix_joystick.o \
@@ -13946,6 +14007,15 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_gtk_eggtrayicon.o \
 	monolib_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
+	monolib_taskbarcmn.o \
+	monolib_unix_joystick.o \
+	monolib_unix_sound.o \
+	monolib_taskbarx11.o \
+	monolib_gtk_taskbar.o \
+	monolib_gtk_eggtrayicon.o \
+	monolib_hildon_notifmsg.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_unix_joystick.o \
@@ -14230,6 +14300,15 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_gtk_eggtrayicon.o \
 	advdll_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
+	advdll_taskbarcmn.o \
+	advdll_unix_joystick.o \
+	advdll_unix_sound.o \
+	advdll_taskbarx11.o \
+	advdll_gtk_taskbar.o \
+	advdll_gtk_eggtrayicon.o \
+	advdll_hildon_notifmsg.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_8)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_unix_joystick.o \
@@ -14318,6 +14397,15 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_gtk_eggtrayicon.o \
 	advlib_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9)
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
+	advlib_taskbarcmn.o \
+	advlib_unix_joystick.o \
+	advlib_unix_sound.o \
+	advlib_taskbarx11.o \
+	advlib_gtk_taskbar.o \
+	advlib_gtk_eggtrayicon.o \
+	advlib_hildon_notifmsg.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_9)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_unix_joystick.o \
@@ -17555,24 +17643,6 @@ monodll_mono.o: $(srcdir)/src/univ/themes/mono.cpp $(MONODLL_ODEP)
 
 monodll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/themes/win32.cpp
-
-monodll_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
-
-monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-monodll_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
-
-monodll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
-
-monodll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
-
-monodll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 monodll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
@@ -21363,6 +21433,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
@@ -21495,6 +21568,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
@@ -21509,6 +21585,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
@@ -21525,6 +21604,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
@@ -21537,11 +21619,20 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
@@ -21557,6 +21648,42 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_os2_sound.o: $(srcdir)/src/os2/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_bmpcbox.o: $(srcdir)/src/msw/bmpcbox.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/bmpcbox.cpp
@@ -23165,24 +23292,6 @@ monolib_mono.o: $(srcdir)/src/univ/themes/mono.cpp $(MONOLIB_ODEP)
 
 monolib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/themes/win32.cpp
-
-monolib_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
-
-monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-monolib_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
-
-monolib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
-
-monolib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
-
-monolib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 monolib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
@@ -26973,6 +27082,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
@@ -27105,6 +27217,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
@@ -27119,6 +27234,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
@@ -27135,6 +27253,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
@@ -27147,11 +27268,20 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
@@ -27167,6 +27297,42 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_os2_sound.o: $(srcdir)/src/os2/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_bmpcbox.o: $(srcdir)/src/msw/bmpcbox.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/bmpcbox.cpp
@@ -36957,24 +37123,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_ADV
 
-advdll_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
-
-advdll_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-advdll_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
-
-advdll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
-
-advdll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
-
-advdll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
-
 advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
@@ -37079,6 +37227,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_MOTIF@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
@@ -37212,6 +37363,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@advdll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
@@ -37226,6 +37380,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_MOTIF@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
@@ -37242,6 +37399,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
@@ -37254,11 +37414,20 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
@@ -37274,6 +37443,42 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_PM@advdll_os2_sound.o: $(srcdir)/src/os2/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advdll_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advdll_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advdll_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advdll_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advdll_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advdll_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advdll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advdll_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advdll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advdll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advdll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advdll_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advdll_msw_bmpcbox.o: $(srcdir)/src/msw/bmpcbox.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/bmpcbox.cpp
@@ -37310,24 +37515,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_WINCE_WXUNIV_0@advdll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
-
-advlib_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
-
-advlib_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-advlib_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
-
-advlib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
-
-advlib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
-
-advlib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
@@ -37433,6 +37620,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_MOTIF@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
@@ -37566,6 +37756,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@advlib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
@@ -37580,6 +37773,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_MOTIF@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
@@ -37596,6 +37792,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
@@ -37608,11 +37807,20 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
@@ -37628,6 +37836,42 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_PM@advlib_os2_sound.o: $(srcdir)/src/os2/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advlib_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advlib_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advlib_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advlib_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advlib_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advlib_gtk_bmpcbox.o: $(srcdir)/src/gtk/bmpcbox.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/bmpcbox.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advlib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advlib_gtk_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advlib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advlib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@advlib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advlib_gtk_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advlib_msw_bmpcbox.o: $(srcdir)/src/msw/bmpcbox.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/bmpcbox.cpp
@@ -38577,9 +38821,6 @@ gldll_iphone_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(GLDLL_ODEP)
 gldll_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
 
-gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
-	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
 gldll_gtk1_glcanvas.o: $(srcdir)/src/gtk1/glcanvas.cpp $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk1/glcanvas.cpp
 
@@ -38594,6 +38835,15 @@ gldll_os2_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp $(GLDLL_ODEP)
 
 @COND_TOOLKIT_OSX_IPHONE@gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
@@ -38634,9 +38884,6 @@ gllib_iphone_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(GLLIB_ODEP)
 gllib_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
 
-gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
-	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
 gllib_gtk1_glcanvas.o: $(srcdir)/src/gtk1/glcanvas.cpp $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk1/glcanvas.cpp
 
@@ -38651,6 +38898,15 @@ gllib_os2_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp $(GLLIB_ODEP)
 
 @COND_TOOLKIT_OSX_IPHONE@gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp

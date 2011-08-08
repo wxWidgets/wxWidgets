@@ -153,7 +153,11 @@ wxTaskBarIcon::Private::~Private()
     }
     if (m_tooltips)
     {
+#ifdef __WXGTK30__
+        gtk_widget_destroy(GTK_WIDGET(m_tooltips));
+#else
         gtk_object_destroy(GTK_OBJECT(m_tooltips));
+#endif
         g_object_unref(m_tooltips);
     }
 }
