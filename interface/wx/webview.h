@@ -381,16 +381,22 @@ public:
 
     /**
         Returns @true if the current selection can be copied.
+        
+        @note Tgis always returns @c false on the OSX WebKit backend.
     */
     virtual bool CanCopy() = 0;
 
     /**
         Returns @true if the current selection can be cut.
+        
+         @note This always returns @c false on the OSX WebKit backend.
     */
     virtual bool CanCut() = 0;
 
     /**
         Returns @true if data can be pasted.
+        
+        @note This always returns @c false on the OSX WebKit backend.
     */
     virtual bool CanPaste() = 0;
 
