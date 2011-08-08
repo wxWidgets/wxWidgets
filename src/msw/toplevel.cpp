@@ -141,6 +141,8 @@ void wxTopLevelWindowMSW::Init()
 
     m_activateInfo = (void*) info;
 #endif
+
+    m_menuSystem = NULL;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -326,9 +328,9 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
     WXLRESULT rc = 0;
     bool processed = false;
 
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     switch ( message )
     {
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
         case WM_ACTIVATE:
         {
             SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
@@ -355,8 +357,32 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
             }
             break;
         }
+#endif // __SMARTPHONE__ || __POCKETPC__
+
+        case WM_SYSCOMMAND:
+            // We may need to generate events for the items added to the system
+            // menu if it had been created (and presumably modified).
+            if ( m_menuSystem )
+            {
+                // From MSDN:
+                //
+                //      ... the four low-order bits of the wParam parameter are
+                //      used internally by the system. To obtain the correct
+                //      result when testing the value of wParam, an application
+                //      must combine the value 0xFFF0 with the wParam value by
+                //      using the bitwise AND operator.
+                unsigned id = wParam & 0xfff0;
+
+                // SC_SIZE is the first of the system-defined commands and we
+                // leave those to DefWindowProc().
+                if ( id < SC_SIZE )
+                {
+                    if ( m_menuSystem->MSWCommand(0 /* unused anyhow */, id) )
+                        processed = true;
+                }
+            }
+            break;
     }
-#endif
 
     if ( !processed )
         rc = wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
@@ -578,6 +604,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 {
+    delete m_menuSystem;
+
     SendDestroyEvent();
 
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
@@ -1226,6 +1254,39 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
     }
 }
 
+wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
+{
+    if ( !m_menuSystem )
+    {
+        HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE);
+        if ( !hmenu )
+        {
+            wxLogLastError(wxT("GetSystemMenu()"));
+            return NULL;
+        }
+
+        wxTopLevelWindowMSW * const
+            self = const_cast<wxTopLevelWindowMSW *>(this);
+
+        self->m_menuSystem = wxMenu::MSWNewFromHMENU(hmenu);
+
+        // We need to somehow associate this menu with this window to ensure
+        // that we get events from it. A natural idea would be to pretend that
+        // it's attached to our menu bar but this wouldn't work if we don't
+        // have any menu bar which is a common case for applications using
+        // custom items in the system menu (they mostly do it exactly because
+        // they don't have any other menus).
+        //
+        // So reuse the invoking window pointer instead, this is not exactly
+        // correct but doesn't seem to have any serious drawbacks.
+        m_menuSystem->SetInvokingWindow(self);
+    }
+
+    return m_menuSystem;
+}
+
+// ----------------------------------------------------------------------------
+// Transparency support
 // ---------------------------------------------------------------------------
 
 bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)

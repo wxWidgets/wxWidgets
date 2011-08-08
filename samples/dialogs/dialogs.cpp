@@ -648,6 +648,24 @@ MyFrame::MyFrame(const wxString& title)
     // covers our entire client area to avoid jarring colour jumps
     SetOwnBackgroundColour(m_canvas->GetBackgroundColour());
 #endif // wxUSE_INFOBAR
+
+#ifdef __WXMSW__
+    // Test MSW-specific function allowing to access the "system" menu.
+    wxMenu * const menu = MSWGetSystemMenu();
+    if ( menu )
+    {
+        menu->AppendSeparator();
+
+        // The ids of the menu commands in MSW system menu must be multiple of
+        // 16 so we can't use DIALOGS_ABOUTDLG_SIMPLE here because it might not
+        // satisfy this condition and need to define and connect a separate id.
+        static const int DIALOGS_SYSTEM_ABOUT = 0x4010;
+
+        menu->Append(DIALOGS_SYSTEM_ABOUT, "&About...");
+        Connect(DIALOGS_SYSTEM_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+                wxCommandEventHandler(MyFrame::ShowSimpleAboutDialog));
+    }
+#endif // __WXMSW__
 }
 
 MyFrame::~MyFrame()
