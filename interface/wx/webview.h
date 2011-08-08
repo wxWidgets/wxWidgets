@@ -153,9 +153,16 @@ public:
     setting, see 
     <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
     this</a> article for more information.
-  
-    Note that errors are generally reported asynchronously though the
-    @c wxEVT_COMMAND_WEB_VIEW_ERROR event described below.
+
+    @section async Asynchronous Notifications
+    
+    Many of the methods in wxWebView are asynchronous, i.e. they return
+    immediately and perform their work in the background. This includes
+    functions such as LoadUrl() and Reload(). To receive notification of the 
+    progress and completion of these functions you need to handle the events
+    that are provided. Specifically @c wxEVT_COMMAND_WEB_VIEW_LOADED notifies
+    when the page or a sub-frame has finished loading and 
+    @c wxEVT_COMMAND_WEB_VIEW_ERROR notifies that an error has occurred.
     
     @section vfs Virtual File Systems and Custom Schemes
     
