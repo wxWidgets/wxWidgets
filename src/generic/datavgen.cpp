@@ -4428,13 +4428,23 @@ int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
 {
     sel.Empty();
     wxDataViewSelection selection = m_clientArea->GetSelections();
-    int len = selection.GetCount();
-    for( int i = 0; i < len; i ++)
+
+    for ( wxDataViewSelection::const_iterator i = selection.begin();
+          i != selection.end();
+          ++i )
     {
-        unsigned int row = selection[i];
-        sel.Add( m_clientArea->GetItemByRow( row ) );
+        wxDataViewItem item = m_clientArea->GetItemByRow(*i);
+        if ( item.IsOk() )
+        {
+            sel.Add(item);
+        }
+        else
+        {
+            wxFAIL_MSG( "invalid item in selection - bad internal state" );
+        }
     }
-    return len;
+
+    return sel.size();
 }
 
 void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
