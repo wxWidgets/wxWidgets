@@ -363,7 +363,11 @@ void wxAnimationCtrl::DisplayStaticImage()
     if (m_bmpStaticReal.IsOk())
     {
         // show inactive bitmap
+#ifdef __WXGTK30__
+        cairo_surface_t *mask = NULL;
+#else
         GdkBitmap *mask = NULL;
+#endif
         if (m_bmpStaticReal.GetMask())
             mask = m_bmpStaticReal.GetMask()->GetBitmap();
 
@@ -374,8 +378,10 @@ void wxAnimationCtrl::DisplayStaticImage()
         }
         else
         {
+#if defined(__WXGTK20__) && !defined(__WXGTK30__)
             gtk_image_set_from_pixmap(GTK_IMAGE(m_widget),
                                       m_bmpStaticReal.GetPixmap(), mask);
+#endif
         }
     }
     else

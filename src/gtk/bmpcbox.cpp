@@ -121,7 +121,11 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
     }
     else
     {
+#ifdef __WXGTK30__
+        m_widget = gtk_combo_box_new_with_model_and_entry( GTK_TREE_MODEL(store) );
+#else // __WXGTK20__
         m_widget = gtk_combo_box_entry_new_with_model( GTK_TREE_MODEL(store), m_stringCellIndex );
+#endif
         m_entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(m_widget)));
         gtk_editable_set_editable(GTK_EDITABLE(m_entry), true);
     }
