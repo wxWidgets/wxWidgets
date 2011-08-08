@@ -371,6 +371,12 @@ inline GList* wx_gdk_drag_context_list_targets(GdkDragContext *context)
     return context->targets;
 }
 #define gdk_drag_context_list_targets wx_gdk_drag_context_list_targets
+
+inline GdkWindow* wx_gtk_button_get_event_window(GtkButton *button)
+{
+    return button->event_window;
+}
+#define gtk_button_get_event_window wx_gtk_button_get_event_window
 #endif // !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
 
 #endif // _WX_GTK_PRIVATE_COMPAT_H_
