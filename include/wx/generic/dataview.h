@@ -190,14 +190,6 @@ public:
     virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
 protected:
-    virtual int GetSelections( wxArrayInt & sel ) const;
-    virtual void SetSelections( const wxArrayInt & sel );
-    virtual void Select( int row );
-    virtual void Unselect( int row );
-    virtual bool IsSelected( int row ) const;
-    virtual void SelectRange( int from, int to );
-    virtual void UnselectRange( int from, int to );
-
     virtual void EnsureVisible( int row, int column );
 
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
