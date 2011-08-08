@@ -41,12 +41,12 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 2.9
-WX_VERSION = $(WX_RELEASE).2
+WX_VERSION = $(WX_RELEASE).3
 LIBDIRNAME = $(wx_top_builddir)/lib
 DIALOGS_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/samples $(CXXWARNINGS) $(CPPFLAGS) \
+	$(CXXFLAGS)
 DIALOGS_OBJECTS =  \
 	$(__dialogs___win32rc) \
 	$(__dialogs_os2_lib_res) \
@@ -94,6 +94,8 @@ COND_PLATFORM_OS2_1___dialogs___os2_emxbindcmd = $(NM) dialogs$(EXEEXT) | if \
 @COND_PLATFORM_MACOSX_1@__dialogs_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= dialogs.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__dialogs_bundle___depname = dialogs_bundle
+@COND_TOOLKIT_COCOA@____dialogs_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	$(__dialogs_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____dialogs_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_MAC@	$(__dialogs_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____dialogs_BUNDLE_TGT_REF_DEP \
@@ -102,18 +104,18 @@ COND_PLATFORM_OS2_1___dialogs___os2_emxbindcmd = $(NM) dialogs$(EXEEXT) | if \
 @COND_TOOLKIT_OSX_COCOA@	= $(__dialogs_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_IPHONE@____dialogs_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__dialogs_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_COCOA@____dialogs_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	$(__dialogs_app_Contents_PkgInfo___depname)
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	= dialogs_colrdlgg.o dialogs_dirdlgg.o \
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	dialogs_filedlgg.o dialogs_fontdlgg.o
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	= dialogs_colrdlgg.o dialogs_dirdlgg.o \
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	dialogs_filedlgg.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= dialogs_filedlgg.o
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	= dialogs_colrdlgg.o dialogs_dirdlgg.o \
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	dialogs_filedlgg.o dialogs_fontdlgg.o
 @COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
 @COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	= dialogs_fontdlgg.o dialogs_filedlgg.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= dialogs_filedlgg.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= dialogs_filedlgg.o
 COND_MONOLITHIC_0___WXLIB_ADV_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_ADV_p = $(COND_MONOLITHIC_0___WXLIB_ADV_p)
@@ -202,41 +204,44 @@ data:
 	esac; \
 	done
 
-dialogs_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+dialogs_sample_rc.o: $(srcdir)/samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 dialogs_dialogs.o: $(srcdir)/dialogs.cpp
 	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/dialogs.cpp
 
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_colrdlgg.o: $(srcdir)/../../src/generic/colrdlgg.cpp
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/colrdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/colrdlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@dialogs_colrdlgg.o: $(srcdir)/../../src/generic/colrdlgg.cpp
-@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/colrdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@dialogs_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/colrdlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_dirdlgg.o: $(srcdir)/../../src/generic/dirdlgg.cpp
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/dirdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/dirdlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@dialogs_dirdlgg.o: $(srcdir)/../../src/generic/dirdlgg.cpp
-@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/dirdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@dialogs_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/dirdlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
-@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
+@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp
+@COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@dialogs_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@dialogs_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_fontdlgg.o: $(srcdir)/../../src/generic/fontdlgg.cpp
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/fontdlgg.cpp
+@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp
+@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@dialogs_fontdlgg.o: $(srcdir)/../../src/generic/fontdlgg.cpp
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/fontdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp
+@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
+
+@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@dialogs_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp
+@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
 
 # Include dependency info, if present:

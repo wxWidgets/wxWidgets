@@ -21,6 +21,9 @@
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
             $(WXTOPDIR)src/generic/filedlgg.cpp
         </if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">
+            $(WXTOPDIR)src/generic/filedlgg.cpp
+        </if>
         <if cond="TOOLKIT=='PM' and WXUNIV=='0' and SHARED=='0'">
             $(WXTOPDIR)src/generic/fontdlgg.cpp
             $(WXTOPDIR)src/generic/filedlgg.cpp
