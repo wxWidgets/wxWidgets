@@ -103,10 +103,10 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     else
     {
         wxString wxuri = uri;
-        wxWebHandler *handler = NULL;
-        wxVector<wxWebHandler*> hanlders = webKitCtrl->GetHandlers();
+        wxSharedPtr<wxWebHandler> handler;
+        wxVector<wxSharedPtr<wxWebHandler> > hanlders = webKitCtrl->GetHandlers();
         //We are not vetoed so see if we match one of the additional handlers
-        for(wxVector<wxWebHandler*>::iterator it = hanlders.begin();
+        for(wxVector<wxSharedPtr<wxWebHandler> >::iterator it = hanlders.begin();
             it != hanlders.end(); ++it)
         {
             if(wxuri.substr(0, (*it)->GetName().length()) == (*it)->GetName())
@@ -328,11 +328,11 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
 {
     wxString uri = webkit_network_request_get_uri(request);
     
-    wxWebHandler *handler = NULL;
-    wxVector<wxWebHandler*> hanlders = webKitCtrl->GetHandlers();
+    wxSharedPtr<wxWebHandler> handler;
+    wxVector<wxSharedPtr<wxWebHandler> > hanlders = webKitCtrl->GetHandlers();
     
     //We are not vetoed so see if we match one of the additional handlers
-    for(wxVector<wxWebHandler*>::iterator it = hanlders.begin();
+    for(wxVector<wxSharedPtr<wxWebHandler> >::iterator it = hanlders.begin();
         it != hanlders.end(); ++it)
     {
         if(uri.substr(0, (*it)->GetName().length()) == (*it)->GetName())
@@ -913,7 +913,7 @@ void wxWebViewWebKit::RunScript(const wxString& javascript)
                                    javascript.mb_str(wxConvUTF8));
 }
 
-void wxWebViewWebKit::RegisterHandler(wxWebHandler* handler)
+void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebHandler> handler)
 {
     m_handlerList.push_back(handler);
 }

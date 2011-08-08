@@ -339,7 +339,7 @@ public:
     virtual void Redo() = 0;
 
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxWebHandler* handler) = 0;
+    virtual void RegisterHandler(wxSharedPtr<wxWebHandler> handler) = 0;
 
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };

@@ -195,7 +195,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     //We register the test:// protocol for testing purposes
-    m_browser->RegisterHandler(new wxWebFileHandler());
+    m_browser->RegisterHandler(wxSharedPtr<wxWebHandler>(new wxWebFileHandler()));
 
     SetSizer(topsizer);
 

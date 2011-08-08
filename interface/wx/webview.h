@@ -335,9 +335,9 @@ public:
     
     /**
         Registers a custom scheme handler.
-        @param handler A pointer to a heap allocated wxWebHandler.
+        @param handler A shared pointer to a wxWebHandler.
     */
-    virtual void RegisterHandler(wxWebHandler* handler) = 0;
+    virtual void RegisterHandler(wxSharedPtr<wxWebHandler> handler) = 0;
 
     /**
         Reload the currently displayed URL.
