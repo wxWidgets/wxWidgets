@@ -6,6 +6,12 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+//
+// Tests:
+// + <constructor>
+// - SetLabel()
+//
+
 #ifndef testios_tests_button_h
 #define testios_tests_button_h
 

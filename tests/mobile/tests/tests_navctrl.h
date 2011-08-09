@@ -6,6 +6,23 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+//
+// Tests:
+// - wxNavigationCtrl ()
+// + wxNavigationCtrl (wxWindow *parent, wxWindowID id=wxID_ANY, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=0, const wxValidator &validator=wxDefaultValidator, const wxString &name=wxNavigationCtrlNameStr)
+// + bool   Create (wxWindow *parent, wxWindowID id=wxID_ANY, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=0, const wxValidator &validator=wxDefaultValidator, const wxString &name=wxNavigationCtrlNameStr)
+// + virtual bool                   PushController (wxMoViewController *controller)
+// + virtual wxMoViewController*    PopController ()
+// + virtual wxMoViewController*    GetTopController () const 
+// + virtual wxMoViewController*    GetBackController () const 
+// + const wxMoViewControllerArray& GetControllers () const 
+// - void                           SetControllers (const wxMoViewControllerArray &controllers)
+// - void                           ClearControllers ()
+// - wxMoNavigationBar *            GetNavigationBar () const 
+// - void                           Freeze ()
+// - void                           Thaw ()
+// - bool                           IsFrozen () const 
+
 #ifndef testios_tests_navctrl_h
 #define testios_tests_navctrl_h
 
