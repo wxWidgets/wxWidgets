@@ -130,7 +130,7 @@ pascal OSErr AEHandleGURL( const AppleEvent *event , AppleEvent *reply , SRefCon
 }
 
 
-// AEODoc Calls MacOpenFile on each of the files passed
+// AEODoc Calls MacOpenFiles with all of the files passed
 
 short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
 {
@@ -158,6 +158,7 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
     wxString fName ;
     FSRef theRef ;
 
+    wxArrayString fileNames;
     for (i = 1; i <= itemsInList; i++)
     {
         AEGetNthPtr(
@@ -165,8 +166,10 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
             (Ptr)&theRef, sizeof(theRef), &actualSize);
         fName = wxMacFSRefToPath( &theRef ) ;
 
-        MacOpenFile(fName);
+        fileNames.Add(fName);
     }
+
+    MacOpenFiles(fileNames);
 
     return noErr;
 }
@@ -273,6 +276,16 @@ short wxApp::MacHandleAERApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
 //----------------------------------------------------------------------
 // Support Routines linking the Mac...File Calls to the Document Manager
 //----------------------------------------------------------------------
+
+void wxApp::MacOpenFiles(const wxArrayString & fileNames )
+{
+    size_t i;
+    const size_t fileCount = fileNames.GetCount();
+    for (i = 0; i < fileCount; i++)
+    {
+        MacOpenFile(fileNames[i]);
+    }
+}
 
 void wxApp::MacOpenFile(const wxString & fileName )
 {

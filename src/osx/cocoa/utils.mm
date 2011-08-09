@@ -55,12 +55,18 @@ void wxBell()
     wxUnusedVar(application);
 }
 
-- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename
+- (void)application:(NSApplication *)sender openFiles:(NSArray *)fileNames
 {
     wxUnusedVar(sender);
-    wxCFStringRef cf(wxCFRetain(filename));
-    wxTheApp->MacOpenFile(cf.AsString()) ;
-    return YES;
+    wxArrayString fileList;
+    size_t i;
+    const size_t count = [fileNames count];
+    for (i = 0; i < count; i++)
+    {
+        fileList.Add( wxCFStringRef::AsString([fileNames objectAtIndex:i]) );
+    }
+
+    wxTheApp->MacOpenFiles(fileList);
 }
 
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender

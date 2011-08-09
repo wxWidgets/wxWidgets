@@ -122,7 +122,10 @@ public:
     virtual short         MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAERApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
 #endif
-    // in response of an open-document apple event
+    // in response of an openFiles message with Cocoa and an
+    // open-document apple event with Carbon
+    virtual void         MacOpenFiles(const wxArrayString &fileNames) ;
+    // called by MacOpenFiles for each file.
     virtual void         MacOpenFile(const wxString &fileName) ;
     // in response of a get-url apple event
     virtual void         MacOpenURL(const wxString &url) ;

@@ -569,7 +569,7 @@ public:
 
         Under Windows and Linux/Unix, you should parse the command line
         arguments and check for files to be opened when starting your
-        application. Under OS X, you need to override MacOpenFile()
+        application. Under OS X, you need to override MacOpenFiles()
         since command line arguments are used differently there.
 
         You may use the wxCmdLineParser to parse command line arguments.
@@ -803,15 +803,34 @@ public:
     virtual void MacNewFile();
 
     /**
+        Called in response of an openFiles message with Cocoa, or an
+        "open-document" Apple event with Carbon.
+
+        You need to override this method in order to open one or more document
+        files after the user double clicked on it or if the files and/or
+        folders were dropped on either the application in the dock or the
+        application icon in Finder.
+
+        By default this method calls MacOpenFile for each file/folder.
+
+        @onlyfor{wxosx}
+
+        @since 2.9.3
+    */
+    virtual void MacOpenFiles(const wxArrayString& fileNames);
+
+    /**
         Called in response of an "open-document" Apple event.
 
-        You need to override this method in order to open a document file after the
-        user double clicked on it or if the document file was dropped on either the
-        running application or the application icon in Finder.
+        @deprecated
+        This function is kept mostly for backwards compatibility. Please
+        override wxApp::MacOpenFiles method instead in any new code.
 
         @onlyfor{wxosx}
     */
-    virtual void MacOpenFile(const wxString& fileName);
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual void MacOpenFile(const wxString& fileName)
+    );
 
     /**
         Called in response of a "get-url" Apple event.
