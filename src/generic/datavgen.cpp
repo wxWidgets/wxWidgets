@@ -4429,11 +4429,10 @@ int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
     sel.Empty();
     wxDataViewSelection selection = m_clientArea->GetSelections();
 
-    for ( wxDataViewSelection::const_iterator i = selection.begin();
-          i != selection.end();
-          ++i )
+    const size_t len = selection.size();
+    for ( size_t i = 0; i < len; i++ )
     {
-        wxDataViewItem item = m_clientArea->GetItemByRow(*i);
+        wxDataViewItem item = m_clientArea->GetItemByRow(selection[i]);
         if ( item.IsOk() )
         {
             sel.Add(item);
