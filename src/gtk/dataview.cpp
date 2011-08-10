@@ -1036,8 +1036,13 @@ static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
                         GdkEvent                *event,
                         GtkWidget               *widget,
                         const gchar             *path,
-                        const GdkRectangle            *background_area,
-                        const GdkRectangle            *cell_area,
+#ifdef __WXGTK30__
+                        const GdkRectangle      *background_area,
+                        const GdkRectangle      *cell_area,
+#else
+                        GdkRectangle            *background_area,
+                        GdkRectangle            *cell_area,
+#endif
                         GtkCellRendererState     flags );
 
 
@@ -1109,8 +1114,13 @@ static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
                         GdkEvent                *gdk_event,
                         GtkWidget               *widget,
                         const gchar             *path,
-                        const GdkRectangle            *background_area,
-                        const GdkRectangle            *cell_area,
+#ifdef __WXGTK30__
+                        const GdkRectangle      *background_area,
+                        const GdkRectangle      *cell_area,
+#else
+                        GdkRectangle            *background_area,
+                        GdkRectangle            *cell_area,
+#endif
                         GtkCellRendererState     flags )
 {
     GtkWxCellRendererText *wxgtk_renderer = (GtkWxCellRendererText *) gtk_renderer;
@@ -1178,7 +1188,12 @@ static void gtk_wx_cell_renderer_finalize (
 static void gtk_wx_cell_renderer_get_size (
                         GtkCellRenderer         *cell,
                         GtkWidget               *widget,
-                        const GdkRectangle            *rectangle,
+#ifdef __WXGTK30__
+
+                  const GdkRectangle            *rectangle,
+#else
+                        GdkRectangle            *rectangle,
+#endif
                         gint                    *x_offset,
                         gint                    *y_offset,
                         gint                    *width,
@@ -1322,7 +1337,11 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
 static void
 gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
                                GtkWidget       *WXUNUSED(widget),
-                               const GdkRectangle    *cell_area,
+#ifdef __WXGTK30__
+                         const GdkRectangle    *cell_area,
+#else
+                               GdkRectangle    *cell_area,
+#endif
                                gint            *x_offset,
                                gint            *y_offset,
                                gint            *width,

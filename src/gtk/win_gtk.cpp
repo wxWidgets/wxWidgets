@@ -40,6 +40,7 @@ struct wxPizzaClass
 
 #ifdef __WXGTK30__
 enum {
+    P_0,
     P_HADJUSTMENT,
     P_VADJUSTMENT
 };
@@ -260,12 +261,23 @@ static void wxpizza_class_init(void* g_class, void*)
     parent_class = GTK_WIDGET_CLASS(g_type_class_peek_parent(g_class));
 }
 
+#ifdef __WXGTK30__
+static void wxpizza_init(wxPizza* self)
+{
+    self->m_scroll_x = 0;
+    self->m_scroll_y = 0;
+    // self->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;
+    // mask off border styles not useable with wxPizza
+    // self->m_border_style = int(windowStyle & BORDER_STYLES);
+}
+#endif
+
 } // extern "C"
 
 #if defined(__WXGTK20__) && !defined(__WXGTK30__)
 GType wxPizza::type()
 {
-    static GType type;
+    // static GType type;
     static GtkType type;
     if (type == 0)
     {
@@ -287,7 +299,11 @@ GType wxPizza::type()
 
 GtkWidget* wxPizza::New(long windowStyle)
 {
+#ifdef __WXGTK30__
+    GtkWidget* widget = GTK_WIDGET(g_object_new(wxpizza_get_type(), NULL));
+#else
     GtkWidget* widget = GTK_WIDGET(g_object_new(type(), NULL));
+#endif
     wxPizza* pizza = WX_PIZZA(widget);
     pizza->m_scroll_x = 0;
     pizza->m_scroll_y = 0;

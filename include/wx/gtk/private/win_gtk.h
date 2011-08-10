@@ -12,8 +12,13 @@
 
 #include <gtk/gtk.h>
 
+#ifdef __WXGTK30__
+#define WX_PIZZA(obj) G_TYPE_CHECK_INSTANCE_CAST(obj, wxpizza_get_type(), wxPizza)
+#define WX_IS_PIZZA(obj) G_TYPE_CHECK_INSTANCE_TYPE(obj, wxpizza_get_type())
+#else
 #define WX_PIZZA(obj) G_TYPE_CHECK_INSTANCE_CAST(obj, wxPizza::type(), wxPizza)
 #define WX_IS_PIZZA(obj) G_TYPE_CHECK_INSTANCE_TYPE(obj, wxPizza::type())
+#endif
 
 struct WXDLLIMPEXP_CORE wxPizza
 {
@@ -36,5 +41,9 @@ struct WXDLLIMPEXP_CORE wxPizza
     int m_border_style;
     bool m_is_scrollable;
 };
+
+extern "C" {
+GType wxpizza_get_type(void);
+}
 
 #endif // _WX_GTK_PIZZA_H_
