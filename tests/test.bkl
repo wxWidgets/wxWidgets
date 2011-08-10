@@ -147,6 +147,7 @@
             controls/choicebooktest.cpp
             controls/choicetest.cpp
             controls/comboboxtest.cpp
+            controls/dataviewctrltest.cpp
             controls/datepickerctrltest.cpp
             controls/frametest.cpp
             controls/gaugetest.cpp
