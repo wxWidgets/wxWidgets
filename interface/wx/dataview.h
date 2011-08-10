@@ -614,8 +614,9 @@ public:
     /**
         Constructor.
     */
-    wxDataViewItem(void* id = NULL);
+    wxDataViewItem();
     wxDataViewItem(const wxDataViewItem& item);
+    explicit wxDataViewItem(void* id);
     //@}
 
     /**

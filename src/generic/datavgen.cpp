@@ -406,7 +406,7 @@ int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode ** node1,
 
 int LINKAGEMODE wxGenericTreeModelItemCmp( void ** id1, void ** id2)
 {
-    return g_model->Compare( *id1, *id2, g_column, g_asending );
+    return g_model->Compare( wxDataViewItem(*id1), wxDataViewItem(*id2), g_column, g_asending );
 }
 
 
@@ -2702,7 +2702,7 @@ public:
             if( node->GetNodes().GetCount() == 0)
             {
                 int index = static_cast<int>(row) - current - 1;
-                ret = node->GetChildren().Item( index );
+                ret = wxDataViewItem(node->GetChildren().Item( index ));
                 return DoJob::OK;
             }
             return DoJob::CONT;
