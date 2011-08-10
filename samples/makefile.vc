@@ -18,10 +18,10 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	TARGET_CPU="$(TARGET_CPU)" DEBUG_INFO="$(DEBUG_INFO)" \
 	DEBUG_FLAG="$(DEBUG_FLAG)" DEBUG_RUNTIME_LIBS="$(DEBUG_RUNTIME_LIBS)" \
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" \
-	USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" \
-	USE_RIBBON="$(USE_RIBBON)" USE_PROPGRID="$(USE_PROPGRID)" \
-	USE_RICHTEXT="$(USE_RICHTEXT)" USE_STC="$(USE_STC)" \
-	USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
+	USE_WEB="$(USE_WEB)" USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" \
+	USE_AUI="$(USE_AUI)" USE_RIBBON="$(USE_RIBBON)" \
+	USE_PROPGRID="$(USE_PROPGRID)" USE_RICHTEXT="$(USE_RICHTEXT)" \
+	USE_STC="$(USE_STC)" USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" \
 	USE_THREADS="$(USE_THREADS)" USE_CAIRO="$(USE_CAIRO)" \
 	OFFICIAL_BUILD="$(OFFICIAL_BUILD)" VENDOR="$(VENDOR)" \
@@ -35,7 +35,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: sub_access sub_animate sub_artprov sub_aui sub_calendar sub_caret sub_clipboard sub_collpane sub_combo sub_config sub_console sub_controls sub_dataview sub_dialogs sub_dialup sub_display sub_dll sub_dnd sub_docview sub_dragimag sub_drawing sub_erase sub_event sub_except sub_exec sub_font sub_grid sub_help sub_htlbox sub_html sub_image sub_internat sub_ipc sub_joytest sub_keyboard sub_layout sub_listctrl sub_mdi sub_mediaplayer sub_menu sub_minimal sub_nativdlg sub_notebook sub_oleauto sub_opengl sub_ownerdrw sub_popup sub_power sub_printing sub_propgrid sub_regtest sub_render sub_ribbon sub_richtext sub_sashtest sub_scroll sub_shaped sub_sockets sub_sound sub_splash sub_splitter sub_statbar sub_stc sub_svg sub_taborder sub_taskbar sub_text sub_thread sub_toolbar sub_treectrl sub_typetest sub_uiaction sub_validate sub_vscroll sub_widgets sub_wizard sub_wrapsizer sub_xrc
+all: sub_access sub_animate sub_artprov sub_aui sub_calendar sub_caret sub_clipboard sub_collpane sub_combo sub_config sub_console sub_controls sub_dataview sub_dialogs sub_dialup sub_display sub_dll sub_dnd sub_docview sub_dragimag sub_drawing sub_erase sub_event sub_except sub_exec sub_font sub_grid sub_help sub_htlbox sub_html sub_image sub_internat sub_ipc sub_joytest sub_keyboard sub_layout sub_listctrl sub_mdi sub_mediaplayer sub_menu sub_minimal sub_nativdlg sub_notebook sub_oleauto sub_opengl sub_ownerdrw sub_popup sub_power sub_printing sub_propgrid sub_regtest sub_render sub_ribbon sub_richtext sub_sashtest sub_scroll sub_shaped sub_sockets sub_sound sub_splash sub_splitter sub_statbar sub_stc sub_svg sub_taborder sub_taskbar sub_text sub_thread sub_toolbar sub_treectrl sub_typetest sub_uiaction sub_validate sub_vscroll sub_web sub_widgets sub_wizard sub_wrapsizer sub_xrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -261,6 +261,9 @@ clean:
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 	cd vscroll
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd "$(MAKEDIR)"
+	cd web
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 	cd widgets
@@ -652,6 +655,11 @@ sub_validate:
 
 sub_vscroll: 
 	cd vscroll
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd "$(MAKEDIR)"
+
+sub_web: 
+	cd web
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 

@@ -69,6 +69,9 @@ USE_GUI = 1
 # Build wxHTML library (USE_GUI must be 1)? [0,1]
 USE_HTML = 1
 
+# Build wxWeb library (USE_GUI must be 1)? [0,1]
+USE_WEB = 1
+
 # Build multimedia library (USE_GUI must be 1)? [0,1]
 USE_MEDIA = 1
 

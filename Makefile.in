@@ -61,6 +61,7 @@ TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_XML = @EXTRALIBS_XML@
 EXTRALIBS_HTML = @EXTRALIBS_HTML@
+EXTRALIBS_WEB = @EXTRALIBS_WEB@
 EXTRALIBS_MEDIA = @EXTRALIBS_MEDIA@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
@@ -1613,6 +1614,39 @@ HTMLLIB_OBJECTS =  \
 	htmllib_winpars.o \
 	htmllib_htmllbox.o
 HTMLLIB_ODEP =  $(_____pch_wxprec_htmllib_wx_wxprec_h_gch___depname)
+WEBDLL_CXXFLAGS = $(__webdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
+	$(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_WEB $(PIC_FLAG) $(CXXWARNINGS) \
+	$(CPPFLAGS) $(CXXFLAGS)
+WEBDLL_OBJCXXFLAGS = $(__webdll_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) \
+	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DWXUSINGDLL -DWXMAKINGDLL_WEB $(PIC_FLAG) \
+	$(CPPFLAGS) $(OBJCXXFLAGS)
+WEBDLL_OBJECTS =  \
+	$(__webdll___win32rc) \
+	$(__WEB_SRC_PLATFORM_OBJECTS_2) \
+	webdll_webview.o \
+	webdll_webviewfilehandler.o
+WEBDLL_ODEP =  $(_____pch_wxprec_webdll_wx_wxprec_h_gch___depname)
+WEBLIB_CXXFLAGS = $(__weblib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
+	$(__INC_EXPAT_p) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
+WEBLIB_OBJCXXFLAGS = $(__weblib_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) \
+	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CPPFLAGS) $(OBJCXXFLAGS)
+WEBLIB_OBJECTS =  \
+	$(__WEB_SRC_PLATFORM_OBJECTS_3) \
+	weblib_webview.o \
+	weblib_webviewfilehandler.o
+WEBLIB_ODEP =  $(_____pch_wxprec_weblib_wx_wxprec_h_gch___depname)
 QADLL_CXXFLAGS = $(__qadll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
@@ -4191,7 +4225,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/richtext/richtextsymboldlg.h \
 	wx/richtext/richtextuicustomization.h \
 	wx/richtext/richtextxml.h \
-	wx/stc/stc.h
+	wx/stc/stc.h \
+	${WEB_HDR}
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
 COND_MONOLITHIC_1_SHARED_1___monodll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -4389,6 +4424,9 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_styleparams.o \
 	monodll_winpars.o \
 	monodll_htmllbox.o \
+	$(__WEB_SRC_PLATFORM_OBJECTS) \
+	monodll_webview.o \
+	monodll_webviewfilehandler.o \
 	monodll_debugrpt.o \
 	monodll_dbgrptg.o \
 	monodll_xh_animatctrl.o \
@@ -6171,6 +6209,11 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = monodll_helpbest.o
+@COND_PLATFORM_MACOSX_1@__WEB_SRC_PLATFORM_OBJECTS \
+@COND_PLATFORM_MACOSX_1@	= monodll_osx_webview_webkit.o
+@COND_PLATFORM_UNIX_1@__WEB_SRC_PLATFORM_OBJECTS = \
+@COND_PLATFORM_UNIX_1@	monodll_gtk_webview_webkit.o
+@COND_TOOLKIT_MSW@__WEB_SRC_PLATFORM_OBJECTS = monodll_webview_ie.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monodll_sound_sdl.o
 @COND_PLATFORM_WIN32_1@__monodll___win32rc = monodll_version_rc.o
@@ -6319,6 +6362,9 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_styleparams.o \
 	monolib_winpars.o \
 	monolib_htmllbox.o \
+	$(__WEB_SRC_PLATFORM_OBJECTS_1) \
+	monolib_webview.o \
+	monolib_webviewfilehandler.o \
 	monolib_debugrpt.o \
 	monolib_dbgrptg.o \
 	monolib_xh_animatctrl.o \
@@ -8103,6 +8149,11 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_helpbest.o
+@COND_PLATFORM_MACOSX_1@__WEB_SRC_PLATFORM_OBJECTS_1 \
+@COND_PLATFORM_MACOSX_1@	= monolib_osx_webview_webkit.o
+@COND_PLATFORM_UNIX_1@__WEB_SRC_PLATFORM_OBJECTS_1 = \
+@COND_PLATFORM_UNIX_1@	monolib_gtk_webview_webkit.o
+@COND_TOOLKIT_MSW@__WEB_SRC_PLATFORM_OBJECTS_1 = monolib_webview_ie.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_1 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monolib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1___basedll___depname = \
@@ -12176,6 +12227,97 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname = \
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_helpbest.o
 @COND_SHARED_1@____wxhtml_namedll_DEP = $(__htmldll___depname)
 @COND_SHARED_0@____wxhtml_namelib_DEP = $(__htmllib___depname)
+COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1___webdll___depname = \
+	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@__webdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1___webdll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@__install_webdll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	= install_webdll
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@__uninstall_webdll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	= uninstall_webdll
+COND_PLATFORM_MACOSX_1___webdll___macinstnamecmd = -install_name \
+	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+@COND_PLATFORM_MACOSX_1@__webdll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___webdll___macinstnamecmd)
+COND_PLATFORM_OS2_1___webdll___importlib = -import \
+	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_PLATFORM_OS2_1@__webdll___importlib = $(COND_PLATFORM_OS2_1___webdll___importlib)
+COND_WINDOWS_IMPLIB_1___webdll___importlib = \
+	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_WINDOWS_IMPLIB_1@__webdll___importlib = $(COND_WINDOWS_IMPLIB_1___webdll___importlib)
+@COND_GCC_PCH_1@__webdll_PCH_INC = -I./.pch/wxprec_webdll
+@COND_ICC_PCH_1@__webdll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@	./.pch/wxprec_webdll/wx/wxprec.h.gch
+@COND_USE_PCH_1@_____pch_wxprec_webdll_wx_wxprec_h_gch___depname \
+@COND_USE_PCH_1@	= ./.pch/wxprec_webdll/wx/wxprec.h.gch
+COND_USE_SOVERLINUX_1___webdll___soname_flags = \
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+@COND_USE_SOVERLINUX_1@__webdll___soname_flags = $(COND_USE_SOVERLINUX_1___webdll___soname_flags)
+COND_USE_SOVERSOLARIS_1___webdll___soname_flags = \
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_USE_SOVERSOLARIS_1@__webdll___soname_flags = $(COND_USE_SOVERSOLARIS_1___webdll___soname_flags)
+COND_USE_SOTWOSYMLINKS_1___webdll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX))
+@COND_USE_SOTWOSYMLINKS_1@__webdll___so_symlinks_cmd = $(COND_USE_SOTWOSYMLINKS_1___webdll___so_symlinks_cmd)
+COND_USE_SOVERSOLARIS_1___webdll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX))
+@COND_USE_SOVERSOLARIS_1@__webdll___so_symlinks_cmd = $(COND_USE_SOVERSOLARIS_1___webdll___so_symlinks_cmd)
+COND_USE_SOTWOSYMLINKS_1___webdll___so_symlinks_inst_cmd = rm -f \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_USE_SOTWOSYMLINKS_1@__webdll___so_symlinks_inst_cmd = $(COND_USE_SOTWOSYMLINKS_1___webdll___so_symlinks_inst_cmd)
+COND_USE_SOVERSOLARIS_1___webdll___so_symlinks_inst_cmd = rm -f \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX);
+@COND_USE_SOVERSOLARIS_1@__webdll___so_symlinks_inst_cmd = $(COND_USE_SOVERSOLARIS_1___webdll___so_symlinks_inst_cmd)
+COND_USE_SOTWOSYMLINKS_1___webdll___so_symlinks_uninst_cmd = rm -f \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_USE_SOTWOSYMLINKS_1@__webdll___so_symlinks_uninst_cmd = $(COND_USE_SOTWOSYMLINKS_1___webdll___so_symlinks_uninst_cmd)
+COND_USE_SOVERSOLARIS_1___webdll___so_symlinks_uninst_cmd = rm -f \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_USE_SOVERSOLARIS_1@__webdll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___webdll___so_symlinks_uninst_cmd)
+@COND_PLATFORM_WIN32_1@__webdll___win32rc = webdll_version_rc.o
+@COND_PLATFORM_MACOSX_1@__WEB_SRC_PLATFORM_OBJECTS_2 \
+@COND_PLATFORM_MACOSX_1@	= webdll_osx_webview_webkit.o
+@COND_PLATFORM_UNIX_1@__WEB_SRC_PLATFORM_OBJECTS_2 = \
+@COND_PLATFORM_UNIX_1@	webdll_gtk_webview_webkit.o
+@COND_TOOLKIT_MSW@__WEB_SRC_PLATFORM_OBJECTS_2 = webdll_webview_ie.o
+COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1___weblib___depname = \
+	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@__weblib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1___weblib___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@__install_weblib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@	= install_weblib
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@__uninstall_weblib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@	= uninstall_weblib
+@COND_GCC_PCH_1@__weblib_PCH_INC = -I./.pch/wxprec_weblib
+@COND_ICC_PCH_1@__weblib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@	./.pch/wxprec_weblib/wx/wxprec.h.gch
+@COND_USE_PCH_1@_____pch_wxprec_weblib_wx_wxprec_h_gch___depname \
+@COND_USE_PCH_1@	= ./.pch/wxprec_weblib/wx/wxprec.h.gch
+@COND_PLATFORM_MACOSX_1@__WEB_SRC_PLATFORM_OBJECTS_3 \
+@COND_PLATFORM_MACOSX_1@	= weblib_osx_webview_webkit.o
+@COND_PLATFORM_UNIX_1@__WEB_SRC_PLATFORM_OBJECTS_3 = \
+@COND_PLATFORM_UNIX_1@	weblib_gtk_webview_webkit.o
+@COND_TOOLKIT_MSW@__WEB_SRC_PLATFORM_OBJECTS_3 = weblib_webview_ie.o
+@COND_SHARED_1@____wxweb_namedll_DEP = $(__webdll___depname)
+@COND_SHARED_0@____wxweb_namelib_DEP = $(__weblib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1___qadll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1@__qadll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1___qadll___depname)
@@ -13724,11 +13866,11 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll_library_link_LIBR_0 \
 	= \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@__htmldll_library_link_LIBR_0 = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll_library_link_LIBR_0)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_63 = --define __WXUNIVERSAL__
-@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_62 = --define wxDEBUG_LEVEL=0
-@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_61 = --define wxNO_EXCEPTIONS
-@COND_USE_RTTI_0@__RTTI_DEFINE_p_61 = --define wxNO_RTTI
-@COND_USE_THREADS_0@__THREAD_DEFINE_p_61 = --define wxNO_THREADS
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_67 = --define __WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_66 = --define wxDEBUG_LEVEL=0
+@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_65 = --define wxNO_EXCEPTIONS
+@COND_USE_RTTI_0@__RTTI_DEFINE_p_65 = --define wxNO_RTTI
+@COND_USE_THREADS_0@__THREAD_DEFINE_p_65 = --define wxNO_THREADS
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).3
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .3.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
@@ -13742,20 +13884,20 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll_library_link_LIBR_0 \
 @COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1@dll___targetsuf3 = .$(SO_SUFFIX).3
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_wxUSE_LIBTIFF_builtin@__INC_TIFF_BUILD_p_62 \
+@COND_wxUSE_LIBTIFF_builtin@__INC_TIFF_BUILD_p_66 \
 @COND_wxUSE_LIBTIFF_builtin@	= --include-dir \
 @COND_wxUSE_LIBTIFF_builtin@	$(wx_top_builddir)/src/tiff/libtiff
-@COND_wxUSE_LIBTIFF_builtin@__INC_TIFF_p_62 = \
+@COND_wxUSE_LIBTIFF_builtin@__INC_TIFF_p_66 = \
 @COND_wxUSE_LIBTIFF_builtin@	--include-dir $(top_srcdir)/src/tiff/libtiff
-@COND_wxUSE_LIBJPEG_builtin@__INC_JPEG_p_62 = \
+@COND_wxUSE_LIBJPEG_builtin@__INC_JPEG_p_66 = \
 @COND_wxUSE_LIBJPEG_builtin@	--include-dir $(top_srcdir)/src/jpeg
-@COND_wxUSE_LIBPNG_builtin@__INC_PNG_p_61 = \
+@COND_wxUSE_LIBPNG_builtin@__INC_PNG_p_65 = \
 @COND_wxUSE_LIBPNG_builtin@	--include-dir $(top_srcdir)/src/png
-@COND_wxUSE_ZLIB_builtin@__INC_ZLIB_p_63 = \
+@COND_wxUSE_ZLIB_builtin@__INC_ZLIB_p_67 = \
 @COND_wxUSE_ZLIB_builtin@	--include-dir $(top_srcdir)/src/zlib
-@COND_wxUSE_REGEX_builtin@__INC_REGEX_p_61 = \
+@COND_wxUSE_REGEX_builtin@__INC_REGEX_p_65 = \
 @COND_wxUSE_REGEX_builtin@	--include-dir $(top_srcdir)/src/regex
-@COND_wxUSE_EXPAT_builtin@__INC_EXPAT_p_61 = \
+@COND_wxUSE_EXPAT_builtin@__INC_EXPAT_p_65 = \
 @COND_wxUSE_EXPAT_builtin@	--include-dir $(top_srcdir)/src/expat/lib
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@__LIB_TIFF_p \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= \
@@ -13789,9 +13931,9 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxexpat___depname) $(__wxscintilla___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__ribbondll___depname) $(__ribbonlib___depname) $(__propgriddll___depname) $(__propgridlib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__stcdll___depname) $(__stclib___depname) $(__gldll___depname) $(__gllib___depname) $(__sound_sdl___depname) $(__wxrc___depname) $(__cocoa_res___depname)
+all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxexpat___depname) $(__wxscintilla___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__webdll___depname) $(__weblib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__ribbondll___depname) $(__ribbonlib___depname) $(__propgriddll___depname) $(__propgridlib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__stcdll___depname) $(__stclib___depname) $(__gldll___depname) $(__gllib___depname) $(__sound_sdl___depname) $(__wxrc___depname) $(__cocoa_res___depname)
 
-install: $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxexpat___depname) $(__install_wxscintilla___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_mediadll___depname) $(__install_medialib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_qadll___depname) $(__install_qalib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_xrcdll___depname) $(__install_xrclib___depname) $(__install_auidll___depname) $(__install_auilib___depname) $(__install_ribbondll___depname) $(__install_ribbonlib___depname) $(__install_propgriddll___depname) $(__install_propgridlib___depname) $(__install_richtextdll___depname) $(__install_richtextlib___depname) $(__install_stcdll___depname) $(__install_stclib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_sound_sdl___depname) $(__install_wxrc___depname) install-wxconfig locale_install locale_msw_install $(__cocoa_res_install___depname)
+install: $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxexpat___depname) $(__install_wxscintilla___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_mediadll___depname) $(__install_medialib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_webdll___depname) $(__install_weblib___depname) $(__install_qadll___depname) $(__install_qalib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_xrcdll___depname) $(__install_xrclib___depname) $(__install_auidll___depname) $(__install_auilib___depname) $(__install_ribbondll___depname) $(__install_ribbonlib___depname) $(__install_propgriddll___depname) $(__install_propgridlib___depname) $(__install_richtextdll___depname) $(__install_richtextlib___depname) $(__install_stcdll___depname) $(__install_stclib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_sound_sdl___depname) $(__install_wxrc___depname) install-wxconfig locale_install locale_msw_install $(__cocoa_res_install___depname)
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/aclocal
 	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(DESTDIR)$(datadir)/aclocal)
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/bakefile/presets
@@ -13827,7 +13969,7 @@ install: $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__instal
 	@echo " ------------------------------------------------------"
 	@echo " "
 
-uninstall: $(__uninstall_wxregex___depname) $(__uninstall_wxzlib___depname) $(__uninstall_wxpng___depname) $(__uninstall_wxjpeg___depname) $(__uninstall_wxtiff___depname) $(__uninstall_wxexpat___depname) $(__uninstall_wxscintilla___depname) $(__uninstall_monodll___depname) $(__uninstall_monolib___depname) $(__uninstall_basedll___depname) $(__uninstall_baselib___depname) $(__uninstall_netdll___depname) $(__uninstall_netlib___depname) $(__uninstall_coredll___depname) $(__uninstall_corelib___depname) $(__uninstall_advdll___depname) $(__uninstall_advlib___depname) $(__uninstall_mediadll___depname) $(__uninstall_medialib___depname) $(__uninstall_htmldll___depname) $(__uninstall_htmllib___depname) $(__uninstall_qadll___depname) $(__uninstall_qalib___depname) $(__uninstall_xmldll___depname) $(__uninstall_xmllib___depname) $(__uninstall_xrcdll___depname) $(__uninstall_xrclib___depname) $(__uninstall_auidll___depname) $(__uninstall_auilib___depname) $(__uninstall_ribbondll___depname) $(__uninstall_ribbonlib___depname) $(__uninstall_propgriddll___depname) $(__uninstall_propgridlib___depname) $(__uninstall_richtextdll___depname) $(__uninstall_richtextlib___depname) $(__uninstall_stcdll___depname) $(__uninstall_stclib___depname) $(__uninstall_gldll___depname) $(__uninstall_gllib___depname) $(__uninstall_sound_sdl___depname) locale_uninstall locale_msw_uninstall
+uninstall: $(__uninstall_wxregex___depname) $(__uninstall_wxzlib___depname) $(__uninstall_wxpng___depname) $(__uninstall_wxjpeg___depname) $(__uninstall_wxtiff___depname) $(__uninstall_wxexpat___depname) $(__uninstall_wxscintilla___depname) $(__uninstall_monodll___depname) $(__uninstall_monolib___depname) $(__uninstall_basedll___depname) $(__uninstall_baselib___depname) $(__uninstall_netdll___depname) $(__uninstall_netlib___depname) $(__uninstall_coredll___depname) $(__uninstall_corelib___depname) $(__uninstall_advdll___depname) $(__uninstall_advlib___depname) $(__uninstall_mediadll___depname) $(__uninstall_medialib___depname) $(__uninstall_htmldll___depname) $(__uninstall_htmllib___depname) $(__uninstall_webdll___depname) $(__uninstall_weblib___depname) $(__uninstall_qadll___depname) $(__uninstall_qalib___depname) $(__uninstall_xmldll___depname) $(__uninstall_xmllib___depname) $(__uninstall_xrcdll___depname) $(__uninstall_xrclib___depname) $(__uninstall_auidll___depname) $(__uninstall_auilib___depname) $(__uninstall_ribbondll___depname) $(__uninstall_ribbonlib___depname) $(__uninstall_propgriddll___depname) $(__uninstall_propgridlib___depname) $(__uninstall_richtextdll___depname) $(__uninstall_richtextlib___depname) $(__uninstall_stcdll___depname) $(__uninstall_stclib___depname) $(__uninstall_gldll___depname) $(__uninstall_gllib___depname) $(__uninstall_sound_sdl___depname) locale_uninstall locale_msw_uninstall
 	(cd $(DESTDIR)$(datadir)/aclocal ; rm -f wxwin.m4)
 	(cd $(DESTDIR)$(datadir)/bakefile/presets ; rm -f wx.bkl wx_unix.bkl wx_win32.bkl wx_xrc.bkl wx_presets.py)
 	for f in setup.h $(RCDEFS_H); do \
@@ -13845,6 +13987,7 @@ install-strip: install
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -13894,6 +14037,10 @@ clean: $(__clean_wxrc___depname)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
+	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
@@ -14023,7 +14170,7 @@ distclean: clean
 @COND_SHARED_0_USE_STC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wxscintilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 
 @COND_MONOLITHIC_1_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__monodll___win32rc) $(__wxscintilla_library_link_DEP)
-@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(__wxscintilla_library_link_LIBR)    -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(EXTRALIBS_MEDIA) $(PLUGIN_ADV_EXTRALIBS) $(__wxscintilla_library_link_LIBR_1) $(LIBS)
+@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(__wxscintilla_library_link_LIBR)    -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(EXTRALIBS_WEB) $(EXTRALIBS_MEDIA) $(PLUGIN_ADV_EXTRALIBS) $(__wxscintilla_library_link_LIBR_1) $(LIBS)
 @COND_MONOLITHIC_1_SHARED_1@	$(DYLIB_RPATH_POSTLINK)
 @COND_MONOLITHIC_1_SHARED_1@	
 @COND_MONOLITHIC_1_SHARED_1@	$(__monodll___so_symlinks_cmd)
@@ -14278,6 +14425,43 @@ distclean: clean
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/wxprec_htmllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(HTMLLIB_CXXFLAGS)
 
 @COND_MONOLITHIC_0_USE_HTML_1@wxhtml: $(____wxhtml_namedll_DEP) $(____wxhtml_namelib_DEP)
+
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(WEBDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__webdll___win32rc) $(__coredll___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	$(SHARED_LD_CXX) $@ $(WEBDLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME)    -L$(LIBDIRNAME) $(__webdll___macinstnamecmd) $(__webdll___importlib) $(__webdll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(LIBS)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	$(DYLIB_RPATH_POSTLINK)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	$(__webdll___so_symlinks_cmd)
+
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@install_webdll: $(__webdll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	(cd $(DESTDIR)$(libdir) ; $(__webdll___so_symlinks_inst_cmd))
+
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@uninstall_webdll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	rm -f $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1@	(cd $(DESTDIR)$(libdir) ; $(__webdll___so_symlinks_uninst_cmd))
+
+@COND_USE_PCH_1@./.pch/wxprec_webdll/wx/wxprec.h.gch: 
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/wxprec_webdll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(WEBDLL_CXXFLAGS)
+
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(WEBLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@	rm -f $@
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@	$(AR) $(AROPTIONS) $@ $(WEBLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@	$(RANLIB) $@
+
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@install_weblib: $(__weblib___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
+
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@uninstall_weblib: 
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
+
+@COND_USE_PCH_1@./.pch/wxprec_weblib/wx/wxprec.h.gch: 
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/wxprec_weblib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(WEBLIB_CXXFLAGS)
+
+@COND_MONOLITHIC_0_USE_WEB_1@wxweb: $(____wxweb_namedll_DEP) $(____wxweb_namelib_DEP)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(QADLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__qadll___win32rc) $(__coredll___depname) $(__basedll___depname) $(__xmldll___depname)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1@	$(SHARED_LD_CXX) $@ $(QADLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) -L$(LIBDIRNAME)    -L$(LIBDIRNAME) $(__qadll___macinstnamecmd) $(__qadll___importlib) $(__qadll___soname_flags) $(WXMACVERSION_CMD) $(LDFLAGS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX) $(LIBS)
@@ -17141,6 +17325,21 @@ monodll_winpars.o: $(srcdir)/src/html/winpars.cpp $(MONODLL_ODEP)
 
 monodll_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/htmllbox.cpp
+
+monodll_webview_ie.o: $(srcdir)/src/msw/webview_ie.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/webview_ie.cpp
+
+monodll_gtk_webview_webkit.o: $(srcdir)/src/gtk/webview_webkit.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/webview_webkit.cpp
+
+monodll_osx_webview_webkit.o: $(srcdir)/src/osx/webview_webkit.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/webview_webkit.mm
+
+monodll_webview.o: $(srcdir)/src/common/webview.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/webview.cpp
+
+monodll_webviewfilehandler.o: $(srcdir)/src/common/webviewfilehandler.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/webviewfilehandler.cpp
 
 monodll_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
@@ -20683,7 +20882,7 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 monodll_version_rc.o: $(srcdir)/src/msw/version.rc $(MONODLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define wxUSE_BASE=1 --define WXMAKINGDLL
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define wxUSE_BASE=1 --define WXMAKINGDLL
 
 monolib_any.o: $(srcdir)/src/common/any.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/any.cpp
@@ -22466,6 +22665,21 @@ monolib_winpars.o: $(srcdir)/src/html/winpars.cpp $(MONOLIB_ODEP)
 
 monolib_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/htmllbox.cpp
+
+monolib_webview_ie.o: $(srcdir)/src/msw/webview_ie.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/webview_ie.cpp
+
+monolib_gtk_webview_webkit.o: $(srcdir)/src/gtk/webview_webkit.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/webview_webkit.cpp
+
+monolib_osx_webview_webkit.o: $(srcdir)/src/osx/webview_webkit.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/webview_webkit.mm
+
+monolib_webview.o: $(srcdir)/src/common/webview.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/webview.cpp
+
+monolib_webviewfilehandler.o: $(srcdir)/src/common/webviewfilehandler.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/webviewfilehandler.cpp
 
 monolib_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
@@ -26008,7 +26222,7 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 basedll_version_rc.o: $(srcdir)/src/msw/version.rc $(BASEDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define wxUSE_GUI=0 --define WXMAKINGDLL_BASE --define wxUSE_BASE=1
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define wxUSE_GUI=0 --define WXMAKINGDLL_BASE --define wxUSE_BASE=1
 
 basedll_any.o: $(srcdir)/src/common/any.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/any.cpp
@@ -27019,7 +27233,7 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
 netdll_version_rc.o: $(srcdir)/src/msw/version.rc $(NETDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define wxUSE_GUI=0 --define WXUSINGDLL --define WXMAKINGDLL_NET
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define wxUSE_GUI=0 --define WXUSINGDLL --define WXMAKINGDLL_NET
 
 netdll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
@@ -27136,7 +27350,7 @@ netlib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(NETLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
 coredll_version_rc.o: $(srcdir)/src/msw/version.rc $(COREDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_CORE --define wxUSE_BASE=0
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_CORE --define wxUSE_BASE=0
 
 coredll_event.o: $(srcdir)/src/common/event.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/event.cpp
@@ -35155,7 +35369,7 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
 
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_ADV
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_ADV
 
 advdll_gtk_aboutdlg.o: $(srcdir)/src/gtk/aboutdlg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/aboutdlg.cpp
@@ -35866,7 +36080,7 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
 mediadll_version_rc.o: $(srcdir)/src/msw/version.rc $(MEDIADLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_MEDIA
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_MEDIA
 
 mediadll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIADLL_ODEP)
 	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
@@ -35941,7 +36155,7 @@ medialib_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIALIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
 htmldll_version_rc.o: $(srcdir)/src/msw/version.rc $(HTMLDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_HTML
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_HTML
 
 htmldll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(HTMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
@@ -36111,8 +36325,41 @@ htmllib_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(HTMLLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@htmllib_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
+webdll_version_rc.o: $(srcdir)/src/msw/version.rc $(WEBDLL_ODEP)
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_WEB
+
+webdll_webview_ie.o: $(srcdir)/src/msw/webview_ie.cpp $(WEBDLL_ODEP)
+	$(CXXC) -c -o $@ $(WEBDLL_CXXFLAGS) $(srcdir)/src/msw/webview_ie.cpp
+
+webdll_gtk_webview_webkit.o: $(srcdir)/src/gtk/webview_webkit.cpp $(WEBDLL_ODEP)
+	$(CXXC) -c -o $@ $(WEBDLL_CXXFLAGS) $(srcdir)/src/gtk/webview_webkit.cpp
+
+webdll_osx_webview_webkit.o: $(srcdir)/src/osx/webview_webkit.mm $(WEBDLL_ODEP)
+	$(CXXC) -c -o $@ $(WEBDLL_OBJCXXFLAGS) $(srcdir)/src/osx/webview_webkit.mm
+
+webdll_webview.o: $(srcdir)/src/common/webview.cpp $(WEBDLL_ODEP)
+	$(CXXC) -c -o $@ $(WEBDLL_CXXFLAGS) $(srcdir)/src/common/webview.cpp
+
+webdll_webviewfilehandler.o: $(srcdir)/src/common/webviewfilehandler.cpp $(WEBDLL_ODEP)
+	$(CXXC) -c -o $@ $(WEBDLL_CXXFLAGS) $(srcdir)/src/common/webviewfilehandler.cpp
+
+weblib_webview_ie.o: $(srcdir)/src/msw/webview_ie.cpp $(WEBLIB_ODEP)
+	$(CXXC) -c -o $@ $(WEBLIB_CXXFLAGS) $(srcdir)/src/msw/webview_ie.cpp
+
+weblib_gtk_webview_webkit.o: $(srcdir)/src/gtk/webview_webkit.cpp $(WEBLIB_ODEP)
+	$(CXXC) -c -o $@ $(WEBLIB_CXXFLAGS) $(srcdir)/src/gtk/webview_webkit.cpp
+
+weblib_osx_webview_webkit.o: $(srcdir)/src/osx/webview_webkit.mm $(WEBLIB_ODEP)
+	$(CXXC) -c -o $@ $(WEBLIB_OBJCXXFLAGS) $(srcdir)/src/osx/webview_webkit.mm
+
+weblib_webview.o: $(srcdir)/src/common/webview.cpp $(WEBLIB_ODEP)
+	$(CXXC) -c -o $@ $(WEBLIB_CXXFLAGS) $(srcdir)/src/common/webview.cpp
+
+weblib_webviewfilehandler.o: $(srcdir)/src/common/webviewfilehandler.cpp $(WEBLIB_ODEP)
+	$(CXXC) -c -o $@ $(WEBLIB_CXXFLAGS) $(srcdir)/src/common/webviewfilehandler.cpp
+
 qadll_version_rc.o: $(srcdir)/src/msw/version.rc $(QADLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_QA
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_QA
 
 qadll_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(QADLL_ODEP)
 	$(CXXC) -c -o $@ $(QADLL_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
@@ -36127,7 +36374,7 @@ qalib_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(QALIB_ODEP)
 	$(CXXC) -c -o $@ $(QALIB_CXXFLAGS) $(srcdir)/src/generic/dbgrptg.cpp
 
 xmldll_version_rc.o: $(srcdir)/src/msw/version.rc $(XMLDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define wxUSE_GUI=0 --define WXUSINGDLL --define WXMAKINGDLL_XML
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define wxUSE_GUI=0 --define WXUSINGDLL --define WXMAKINGDLL_XML
 
 xmldll_xml.o: $(srcdir)/src/xml/xml.cpp $(XMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(XMLDLL_CXXFLAGS) $(srcdir)/src/xml/xml.cpp
@@ -36142,7 +36389,7 @@ xmllib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(XMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(XMLLIB_CXXFLAGS) $(srcdir)/src/common/xtixml.cpp
 
 xrcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(XRCDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_XRC
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_XRC
 
 xrcdll_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
@@ -36523,7 +36770,7 @@ xrclib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
 
 auidll_version_rc.o: $(srcdir)/src/msw/version.rc $(AUIDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_AUI
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_AUI
 
 auidll_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
@@ -36562,7 +36809,7 @@ auilib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
 
 ribbondll_version_rc.o: $(srcdir)/src/msw/version.rc $(RIBBONDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_RIBBON
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_RIBBON
 
 ribbondll_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
@@ -36625,7 +36872,7 @@ ribbonlib_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
 
 propgriddll_version_rc.o: $(srcdir)/src/msw/version.rc $(PROPGRIDDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_PROPGRID
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_PROPGRID
 
 propgriddll_advprops.o: $(srcdir)/src/propgrid/advprops.cpp $(PROPGRIDDLL_ODEP)
 	$(CXXC) -c -o $@ $(PROPGRIDDLL_CXXFLAGS) $(srcdir)/src/propgrid/advprops.cpp
@@ -36676,7 +36923,7 @@ propgridlib_props.o: $(srcdir)/src/propgrid/props.cpp $(PROPGRIDLIB_ODEP)
 	$(CXXC) -c -o $@ $(PROPGRIDLIB_CXXFLAGS) $(srcdir)/src/propgrid/props.cpp
 
 richtextdll_version_rc.o: $(srcdir)/src/msw/version.rc $(RICHTEXTDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_RICHTEXT
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_RICHTEXT
 
 richtextdll_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(RICHTEXTDLL_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
@@ -36739,7 +36986,7 @@ richtextlib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(RICHTEXTLIB_
 	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
 stcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(STCDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define WXUSINGDLL --define WXMAKINGDLL_STC
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define WXUSINGDLL --define WXMAKINGDLL_STC
 
 stcdll_stc.o: $(srcdir)/src/stc/stc.cpp $(STCDLL_ODEP)
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/src/stc/stc.cpp
@@ -36760,7 +37007,7 @@ stclib_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(STCLIB_ODEP)
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
 
 gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_GL
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_GL
 
 gldll_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
@@ -37842,6 +38089,7 @@ rpm: bzip-dist
 	uninstall_advdll install_advlib uninstall_advlib wxadv install_mediadll \
 	uninstall_mediadll install_medialib uninstall_medialib wxmedia \
 	install_htmldll uninstall_htmldll install_htmllib uninstall_htmllib wxhtml \
+	install_webdll uninstall_webdll install_weblib uninstall_weblib wxweb \
 	install_qadll uninstall_qadll install_qalib uninstall_qalib wxqa \
 	install_xmldll uninstall_xmldll install_xmllib uninstall_xmllib wxxml \
 	install_xrcdll uninstall_xrcdll install_xrclib uninstall_xrclib wxxrc \

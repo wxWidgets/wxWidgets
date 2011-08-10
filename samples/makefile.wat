@@ -39,10 +39,10 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 	WXUNIV="$(WXUNIV)" UNICODE="$(UNICODE)" BUILD="$(BUILD)" &
 	DEBUG_INFO="$(DEBUG_INFO)" DEBUG_FLAG="$(DEBUG_FLAG)" &
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" &
-	USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" &
-	USE_RIBBON="$(USE_RIBBON)" USE_PROPGRID="$(USE_PROPGRID)" &
-	USE_RICHTEXT="$(USE_RICHTEXT)" USE_STC="$(USE_STC)" &
-	USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" &
+	USE_WEB="$(USE_WEB)" USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" &
+	USE_AUI="$(USE_AUI)" USE_RIBBON="$(USE_RIBBON)" &
+	USE_PROPGRID="$(USE_PROPGRID)" USE_RICHTEXT="$(USE_RICHTEXT)" &
+	USE_STC="$(USE_STC)" USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" &
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" &
 	USE_THREADS="$(USE_THREADS)" USE_CAIRO="$(USE_CAIRO)" &
 	OFFICIAL_BUILD="$(OFFICIAL_BUILD)" VENDOR="$(VENDOR)" &
@@ -53,7 +53,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 
 ### Targets: ###
 
-all : .SYMBOLIC access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll widgets wizard wrapsizer xrc
+all : .SYMBOLIC access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll web widgets wizard wrapsizer xrc
 
 clean : .SYMBOLIC 
 	-if exist .\*.obj del .\*.obj
@@ -281,6 +281,9 @@ clean : .SYMBOLIC
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd vscroll
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd web
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd widgets
@@ -666,6 +669,11 @@ validate : .SYMBOLIC
 
 vscroll : .SYMBOLIC 
 	cd vscroll
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+web : .SYMBOLIC 
+	cd web
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 

@@ -76,6 +76,11 @@ __test_gui___depname =
 !ifeq USE_GUI 1
 __test_gui___depname = $(OBJS)\test_gui.exe
 !endif
+__WXLIB_WEB_p =
+!ifeq MONOLITHIC 0
+__WXLIB_WEB_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web.lib
+!endif
 __WXLIB_RICHTEXT_p =
 !ifeq MONOLITHIC 0
 __WXLIB_RICHTEXT_p = &
@@ -424,6 +429,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_treebooktest.obj &
 	$(OBJS)\test_gui_treectrltest.obj &
 	$(OBJS)\test_gui_virtlistctrltest.obj &
+	$(OBJS)\test_gui_webtest.obj &
 	$(OBJS)\test_gui_windowtest.obj &
 	$(OBJS)\test_gui_clone.obj &
 	$(OBJS)\test_gui_propagation.obj &
@@ -486,7 +492,7 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	@%append $(OBJS)\test_gui.lbc option caseexact
 	@%append $(OBJS)\test_gui.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
 	@for %i in ($(TEST_GUI_OBJECTS)) do @%append $(OBJS)\test_gui.lbc file %i
-	@for %i in ( $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test_gui.lbc library %i
+	@for %i in ( $(__WXLIB_WEB_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test_gui.lbc library %i
 	@%append $(OBJS)\test_gui.lbc option resource=$(OBJS)\test_gui_sample.res
 	@for %i in () do @%append $(OBJS)\test_gui.lbc option stack=%i
 	wlink @$(OBJS)\test_gui.lbc
@@ -921,6 +927,9 @@ $(OBJS)\test_gui_treectrltest.obj :  .AUTODEPEND .\controls\treectrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_virtlistctrltest.obj :  .AUTODEPEND .\controls\virtlistctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_webtest.obj :  .AUTODEPEND .\controls\webtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_windowtest.obj :  .AUTODEPEND .\controls\windowtest.cpp

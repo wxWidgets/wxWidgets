@@ -27,8 +27,8 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 	-DUNICODE="$(UNICODE)" -DMSLU="$(MSLU)" -DBUILD="$(BUILD)" \
 	-DDEBUG_INFO="$(DEBUG_INFO)" -DDEBUG_FLAG="$(DEBUG_FLAG)" \
 	-DMONOLITHIC="$(MONOLITHIC)" -DUSE_GUI="$(USE_GUI)" \
-	-DUSE_HTML="$(USE_HTML)" -DUSE_MEDIA="$(USE_MEDIA)" -DUSE_XRC="$(USE_XRC)" \
-	-DUSE_AUI="$(USE_AUI)" -DUSE_RIBBON="$(USE_RIBBON)" \
+	-DUSE_HTML="$(USE_HTML)" -DUSE_WEB="$(USE_WEB)" -DUSE_MEDIA="$(USE_MEDIA)" \
+	-DUSE_XRC="$(USE_XRC)" -DUSE_AUI="$(USE_AUI)" -DUSE_RIBBON="$(USE_RIBBON)" \
 	-DUSE_PROPGRID="$(USE_PROPGRID)" -DUSE_RICHTEXT="$(USE_RICHTEXT)" \
 	-DUSE_STC="$(USE_STC)" -DUSE_OPENGL="$(USE_OPENGL)" -DUSE_QA="$(USE_QA)" \
 	-DUSE_EXCEPTIONS="$(USE_EXCEPTIONS)" -DUSE_RTTI="$(USE_RTTI)" \
@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll web widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -346,6 +346,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>vscroll.bat
 	call vscroll.bat
 	@del vscroll.bat
+	@echo cd web >web.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>web.bat
+	call web.bat
+	@del web.bat
 	@echo cd widgets >widgets.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>widgets.bat
 	call widgets.bat
@@ -810,6 +814,12 @@ vscroll:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>vscroll.bat
 	call vscroll.bat
 	@del vscroll.bat
+
+web: 
+	@echo cd web >web.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>web.bat
+	call web.bat
+	@del web.bat
 
 widgets: 
 	@echo cd widgets >widgets.bat
