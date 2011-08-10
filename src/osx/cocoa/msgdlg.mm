@@ -138,6 +138,8 @@ int wxMessageDialog::ShowModal()
             }
         }
 
+        wxASSERT_MSG( !(style & wxHELP), "wxHELP not supported in non-GUI thread" );
+
         CFOptionFlags exitButton;
         OSStatus err = CFUserNotificationDisplayAlert(
             0, alertType, NULL, NULL, NULL, cfTitle, cfText,
@@ -285,5 +287,15 @@ void* wxMessageDialog::ConstructNSAlert()
         }
 
     }
+
+    if ( style & wxHELP )
+    {
+        wxCFStringRef cfHelpString( GetHelpLabel(), GetFont().GetEncoding() );
+        [alert addButtonWithTitle:cfHelpString.AsNSString()];
+        m_buttonId[ m_buttonCount++ ] = wxID_HELP;
+    }
+
+    wxASSERT_MSG( m_buttonCount <= WXSIZEOF(m_buttonId), "Too many buttons" );
+
     return alert;
 }

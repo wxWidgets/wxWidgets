@@ -1084,6 +1084,19 @@ wxTextAreaBase::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(pos)) const
     return wxTE_HT_UNKNOWN;
 }
 
+wxPoint wxTextAreaBase::PositionToCoords(long pos) const
+{
+    wxCHECK_MSG( IsValidPosition(pos), wxDefaultPosition,
+                 wxS("Position argument out of range.") );
+
+    return DoPositionToCoords(pos);
+}
+
+wxPoint wxTextAreaBase::DoPositionToCoords(long WXUNUSED(pos)) const
+{
+    return wxDefaultPosition;
+}
+
 #else // !wxUSE_TEXTCTRL
 
 // define this one even if !wxUSE_TEXTCTRL because it is also used by other

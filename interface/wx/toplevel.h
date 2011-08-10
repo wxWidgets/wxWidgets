@@ -263,6 +263,33 @@ public:
     virtual void Maximize(bool maximize = true);
 
     /**
+        MSW-specific function for accessing the system menu.
+
+        Returns a wxMenu pointer representing the system menu of the window
+        under MSW. The returned wxMenu may be used, if non-@c NULL, to add
+        extra items to the system menu. The usual @c wxEVT_COMMAND_MENU_SELECTED
+        events (that can be processed using @c EVT_MENU event table macro) will
+        then be generated for them. All the other wxMenu methods may be used as
+        well but notice that they won't allow you to access any standard system
+        menu items (e.g. they can't be deleted or modified in any way
+        currently).
+
+        Notice that because of the native system limitations the identifiers of
+        the items added to the system menu must be multiples of 16, otherwise
+        no events will be generated for them.
+
+        The returned pointer must @em not be deleted, it is owned by the window
+        and will be only deleted when the window itself is destroyed.
+
+        This function is not available in the other ports by design, any
+        occurrences of it in the portable code must be guarded by @code #ifdef
+        __WXMSW__ @endcode preprocessor guards.
+
+        @since 2.9.3
+     */
+    wxMenu *MSWGetSystemMenu() const;
+
+    /**
         Use a system-dependent way to attract users attention to the window when
         it is in background.
 

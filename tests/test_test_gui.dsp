@@ -307,6 +307,10 @@ SOURCE=.\config\config.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\dataviewctrltest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\datepickerctrltest.cpp
 # End Source File
 # Begin Source File

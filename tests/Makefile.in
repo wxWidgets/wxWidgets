@@ -46,7 +46,7 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 2.9
-WX_VERSION = $(WX_RELEASE).2
+WX_VERSION = $(WX_RELEASE).3
 LIBDIRNAME = $(wx_top_builddir)/lib
 TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -166,6 +166,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_choicebooktest.o \
 	test_gui_choicetest.o \
 	test_gui_comboboxtest.o \
+	test_gui_dataviewctrltest.o \
 	test_gui_datepickerctrltest.o \
 	test_gui_frametest.o \
 	test_gui_gaugetest.o \
@@ -731,6 +732,9 @@ test_gui_choicetest.o: $(srcdir)/controls/choicetest.cpp $(TEST_GUI_ODEP)
 
 test_gui_comboboxtest.o: $(srcdir)/controls/comboboxtest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/comboboxtest.cpp
+
+test_gui_dataviewctrltest.o: $(srcdir)/controls/dataviewctrltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/dataviewctrltest.cpp
 
 test_gui_datepickerctrltest.o: $(srcdir)/controls/datepickerctrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/datepickerctrltest.cpp

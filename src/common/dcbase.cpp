@@ -35,6 +35,7 @@
 #ifndef WX_PRECOMP
     #include "wx/math.h"
     #include "wx/module.h"
+    #include "wx/window.h"
 #endif
 
 #ifdef __WXMSW__

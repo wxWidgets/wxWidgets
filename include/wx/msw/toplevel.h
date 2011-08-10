@@ -77,6 +77,19 @@ public:
     virtual bool CanSetTransparent();
 
 
+    // MSW-specific methods
+    // --------------------
+
+    // Return the menu representing the "system" menu of the window. You can
+    // call wxMenu::AppendWhatever() methods on it but removing items from it
+    // is in general not a good idea.
+    //
+    // The pointer returned by this method belongs to the window and will be
+    // deleted when the window itself is, do not delete it yourself. May return
+    // NULL if getting the system menu failed.
+    wxMenu *MSWGetSystemMenu() const;
+
+
     // implementation from now on
     // --------------------------
 
@@ -213,6 +226,10 @@ private:
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     void* m_activateInfo;
 #endif
+
+    // The system menu: initially NULL but can be set (once) by
+    // MSWGetSystemMenu(). Owned by this window.
+    wxMenu *m_menuSystem;
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW);

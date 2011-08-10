@@ -260,7 +260,7 @@ inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 // ---------------------------------------------------------------------------
 
 // Construct a menu with optional title (then use append)
-void wxMenu::Init()
+void wxMenu::InitNoCreate()
 {
     m_radioData = NULL;
     m_doBreak = false;
@@ -270,6 +270,11 @@ void wxMenu::Init()
     m_maxBitmapWidth = 0;
     m_maxAccelWidth = -1;
 #endif // wxUSE_OWNER_DRAWN
+}
+
+void wxMenu::Init()
+{
+    InitNoCreate();
 
     // create the menu
     m_hMenu = (WXHMENU)CreatePopupMenu();
@@ -284,6 +289,24 @@ void wxMenu::Init()
         const wxString title = m_title;
         m_title.clear(); // so that SetTitle() knows there was no title before
         SetTitle(title);
+    }
+}
+
+wxMenu::wxMenu(WXHMENU hMenu)
+{
+    InitNoCreate();
+
+    m_hMenu = hMenu;
+
+    // Ensure that our internal idea of how many items we have corresponds to
+    // the real number of items in the menu.
+    //
+    // We could also retrieve the real labels of the items here but it doesn't
+    // seem to be worth the trouble.
+    const int numExistingItems = ::GetMenuItemCount(m_hMenu);
+    for ( int n = 0; n < numExistingItems; n++ )
+    {
+        wxMenuBase::DoAppend(wxMenuItem::New(this, wxID_SEPARATOR));
     }
 }
 

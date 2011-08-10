@@ -151,6 +151,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_choicebooktest.obj \
 	$(OBJS)\test_gui_choicetest.obj \
 	$(OBJS)\test_gui_comboboxtest.obj \
+	$(OBJS)\test_gui_dataviewctrltest.obj \
 	$(OBJS)\test_gui_datepickerctrltest.obj \
 	$(OBJS)\test_gui_frametest.obj \
 	$(OBJS)\test_gui_gaugetest.obj \
@@ -779,6 +780,9 @@ $(OBJS)\test_gui_choicetest.obj: .\controls\choicetest.cpp
 
 $(OBJS)\test_gui_comboboxtest.obj: .\controls\comboboxtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\comboboxtest.cpp
+
+$(OBJS)\test_gui_dataviewctrltest.obj: .\controls\dataviewctrltest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\dataviewctrltest.cpp
 
 $(OBJS)\test_gui_datepickerctrltest.obj: .\controls\datepickerctrltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\datepickerctrltest.cpp

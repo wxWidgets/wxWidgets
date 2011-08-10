@@ -421,7 +421,7 @@ public:
                                 unsigned int col) const;
 
     /**
-        Returns the number of items (i.e. rows) in the list.
+        Returns the number of items (or rows) in the list.
     */
     unsigned int GetCount() const;
 
@@ -614,8 +614,9 @@ public:
     /**
         Constructor.
     */
-    wxDataViewItem(void* id = NULL);
+    wxDataViewItem();
     wxDataViewItem(const wxDataViewItem& item);
+    explicit wxDataViewItem(void* id);
     //@}
 
     /**

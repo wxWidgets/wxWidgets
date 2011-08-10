@@ -648,6 +648,24 @@ MyFrame::MyFrame(const wxString& title)
     // covers our entire client area to avoid jarring colour jumps
     SetOwnBackgroundColour(m_canvas->GetBackgroundColour());
 #endif // wxUSE_INFOBAR
+
+#ifdef __WXMSW__
+    // Test MSW-specific function allowing to access the "system" menu.
+    wxMenu * const menu = MSWGetSystemMenu();
+    if ( menu )
+    {
+        menu->AppendSeparator();
+
+        // The ids of the menu commands in MSW system menu must be multiple of
+        // 16 so we can't use DIALOGS_ABOUTDLG_SIMPLE here because it might not
+        // satisfy this condition and need to define and connect a separate id.
+        static const int DIALOGS_SYSTEM_ABOUT = 0x4010;
+
+        menu->Append(DIALOGS_SYSTEM_ABOUT, "&About...");
+        Connect(DIALOGS_SYSTEM_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+                wxCommandEventHandler(MyFrame::ShowSimpleAboutDialog));
+    }
+#endif // __WXMSW__
 }
 
 MyFrame::~MyFrame()
@@ -2669,6 +2687,7 @@ const TestMessageBoxDialog::BtnInfo TestMessageBoxDialog::ms_btnInfo[] =
     { wxNO,     "&No"     },
     { wxOK,     "&Ok"     },
     { wxCANCEL, "&Cancel" },
+    { wxHELP,   "&Help"   },
 };
 
 BEGIN_EVENT_TABLE(TestMessageBoxDialog, wxDialog)
@@ -2889,6 +2908,11 @@ void TestMessageBoxDialog::PrepareMessageDialog(wxMessageDialogBase &dlg)
             dlg.SetOKLabel(m_labels[Btn_Ok]->GetValue());
         }
     }
+
+    if ( style & wxHELP )
+    {
+        dlg.SetHelpLabel(m_labels[Btn_Help]->GetValue());
+    }
 }
 
 void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
@@ -2896,7 +2920,34 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
     wxMessageDialog dlg(this, GetMessage(), "Test Message Box", GetStyle());
     PrepareMessageDialog(dlg);
 
-    dlg.ShowModal();
+    wxString btnName;
+    switch ( dlg.ShowModal() )
+    {
+        case wxID_OK:
+            btnName = "OK";
+            break;
+
+        case wxID_CANCEL:
+            // Avoid the extra message box if the dialog was cancelled.
+            return;
+
+        case wxID_YES:
+            btnName = "Yes";
+            break;
+
+        case wxID_NO:
+            btnName = "No";
+            break;
+
+        case wxID_HELP:
+            btnName = "Help";
+            break;
+
+        default:
+            btnName = "Unknown";
+    }
+
+    wxLogMessage("Dialog was closed with the \"%s\" button.", btnName);
 }
 
 void TestMessageBoxDialog::OnClose(wxCommandEvent& WXUNUSED(event))

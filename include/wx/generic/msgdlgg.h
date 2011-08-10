@@ -32,6 +32,7 @@ protected:
 
     void OnYes(wxCommandEvent& event);
     void OnNo(wxCommandEvent& event);
+    void OnHelp(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
 
     // can be overridden to provide more contents to the dialog

@@ -141,6 +141,7 @@ public:
     wxTextCtrl* m_spacingBefore;
     wxTextCtrl* m_spacingAfter;
     wxComboBox* m_spacingLine;
+    wxCheckBox* m_pageBreakCtrl;
     wxRichTextCtrl* m_previewCtrl;
     /// Control identifiers
     enum {
@@ -157,6 +158,7 @@ public:
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE = 10114,
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER = 10116,
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE = 10115,
+        ID_RICHTEXTINDENTSSPACINGPAGE_PAGEBREAK = 10106,
         ID_RICHTEXTINDENTSSPACINGPAGE_PREVIEW_CTRL = 10109
     };
 ////@end wxRichTextIndentsSpacingPage member variables

@@ -25,10 +25,6 @@ wxComboBox::~wxComboBox()
 {
 }
 
-void wxComboBox::Init()
-{
-}
-
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& value,
            const wxPoint& pos,

@@ -81,10 +81,11 @@ extern WXDLLIMPEXP_DATA_ADV(const char) wxDataViewCtrlNameStr[];
 class WXDLLIMPEXP_ADV wxDataViewItem
 {
 public:
-    wxDataViewItem( void* id = NULL )
-        { m_id = id; }
-    wxDataViewItem( const wxDataViewItem &item )
-        { m_id = item.m_id; }
+    wxDataViewItem() : m_id(NULL) {}
+    wxDataViewItem(const wxDataViewItem &item) : m_id(item.m_id) {}
+
+    wxEXPLICIT wxDataViewItem(void* id) : m_id(id) {}
+
     bool IsOk() const                  { return m_id != NULL; }
     void* GetID() const                { return m_id; }
     operator const void* () const      { return m_id; }

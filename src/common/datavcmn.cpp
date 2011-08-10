@@ -387,7 +387,7 @@ wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
     // build initial index
     unsigned int i;
     for (i = 1; i < initial_size+1; i++)
-            m_hash.Add( wxUIntToPtr(i) );
+            m_hash.Add( wxDataViewItem(wxUIntToPtr(i)) );
     m_nextFreeID = initial_size + 1;
 }
 
@@ -403,7 +403,7 @@ void wxDataViewIndexListModel::Reset( unsigned int new_size )
     // build initial index
     unsigned int i;
     for (i = 1; i < new_size+1; i++)
-            m_hash.Add( wxUIntToPtr(i) );
+            m_hash.Add( wxDataViewItem(wxUIntToPtr(i)) );
 
     m_nextFreeID = new_size + 1;
 
@@ -417,8 +417,8 @@ void wxDataViewIndexListModel::RowPrepended()
     unsigned int id = m_nextFreeID;
     m_nextFreeID++;
 
-    m_hash.Insert( wxUIntToPtr(id), 0 );
     wxDataViewItem item( wxUIntToPtr(id) );
+    m_hash.Insert( item, 0 );
     ItemAdded( wxDataViewItem(0), item );
 
 }
@@ -430,8 +430,8 @@ void wxDataViewIndexListModel::RowInserted( unsigned int before )
     unsigned int id = m_nextFreeID;
     m_nextFreeID++;
 
-    m_hash.Insert( wxUIntToPtr(id), before );
     wxDataViewItem item( wxUIntToPtr(id) );
+    m_hash.Insert( item, before );
     ItemAdded( wxDataViewItem(0), item );
 }
 
@@ -440,8 +440,8 @@ void wxDataViewIndexListModel::RowAppended()
     unsigned int id = m_nextFreeID;
     m_nextFreeID++;
 
-    m_hash.Add( wxUIntToPtr(id) );
     wxDataViewItem item( wxUIntToPtr(id) );
+    m_hash.Add( item );
     ItemAdded( wxDataViewItem(0), item );
 }
 
@@ -490,7 +490,7 @@ unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) cons
         return wxPtrToUInt(item.GetID())-1;
 
     // assert for not found
-    return (unsigned int) m_hash.Index( item.GetID() );
+    return (unsigned int) m_hash.Index( item );
 }
 
 wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
@@ -2005,7 +2005,7 @@ wxDataViewItem wxDataViewTreeStore::GetNthChild( const wxDataViewItem& parent, u
 
     wxDataViewTreeStoreNodeList::compatibility_iterator node = parent_node->GetChildren().Item( pos );
     if (node)
-        return node->GetData();
+        return wxDataViewItem(node->GetData());
 
     return wxDataViewItem(0);
 }
@@ -2111,7 +2111,7 @@ void wxDataViewTreeStore::DeleteChildren( const wxDataViewItem& item )
 
 void wxDataViewTreeStore::DeleteAllItems()
 {
-    DeleteChildren(m_root);
+    DeleteChildren(wxDataViewItem(m_root));
 }
 
 void

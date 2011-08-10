@@ -388,6 +388,21 @@ public:
         }
     }
 
+    // returns node corresponding to 'item' if its in m_nodes or NULL otherwise
+    wxDataViewTreeNode *FindItemAsNode(const wxDataViewItem& item) const
+    {
+        for ( wxDataViewTreeNodes::const_iterator i = m_nodes.begin();
+              i != m_nodes.end();
+              ++i )
+        {
+            if( (*i)->GetItem() == item )
+                return *i;
+        }
+
+        return NULL;
+    }
+
+
 private:
     wxDataViewTreeNode  *m_parent;
     wxDataViewTreeNodes  m_nodes;
@@ -406,7 +421,7 @@ int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode ** node1,
 
 int LINKAGEMODE wxGenericTreeModelItemCmp( void ** id1, void ** id2)
 {
-    return g_model->Compare( *id1, *id2, g_column, g_asending );
+    return g_model->Compare( wxDataViewItem(*id1), wxDataViewItem(*id2), g_column, g_asending );
 }
 
 
@@ -414,10 +429,7 @@ int LINKAGEMODE wxGenericTreeModelItemCmp( void ** id1, void ** id2)
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
-WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSelection,
-                                            WXDLLIMPEXP_ADV);
-WX_DECLARE_LIST(wxDataViewItem, ItemList);
-WX_DEFINE_LIST(ItemList)
+WX_DEFINE_SORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSelection);
 
 class wxDataViewMainWindow: public wxWindow
 {
@@ -2009,70 +2021,112 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
             (wxDataViewVirtualListModel*) GetOwner()->GetModel();
         m_count = list_model->GetCount();
 
-        if( m_currentRow > GetRowCount() )
-            m_currentRow = m_count - 1;
-
-        // TODO: why empty the entire selection?
-        m_selection.Empty();
-
-        UpdateDisplay();
-
-        return true;
-    }
-
-    wxDataViewTreeNode * node = FindNode(parent);
-
-    // Notice that it is possible that the item being deleted is not in the
-    // tree at all, for example we could be deleting a never shown (because
-    // collapsed) item in a tree model. So it's not an error if we don't know
-    // about this item, just return without doing anything then.
-    if ( !node || node->GetChildren().Index(item.GetID()) == wxNOT_FOUND )
-        return false;
-
-    int sub = -1;
-    node->GetChildren().Remove( item.GetID() );
-    // Manipolate selection
-    if( m_selection.GetCount() > 1 )
-    {
-        m_selection.Empty();
-    }
-    bool isContainer = false;
-    wxDataViewTreeNodes nds = node->GetNodes();
-    for (size_t i = 0; i < nds.GetCount(); i ++)
-    {
-        if (nds[i]->GetItem() == item)
+        if ( !m_selection.empty() )
         {
-            isContainer = true;
-            break;
-        }
-    }
-    if( isContainer )
-    {
-        wxDataViewTreeNode * n = NULL;
-        wxDataViewTreeNodes nodes = node->GetNodes();
-        int len = nodes.GetCount();
-        for( int i = 0; i < len; i ++)
-        {
-            if( nodes[i]->GetItem() == item )
+            const int row = GetRowByItem(item);
+
+            const size_t selCount = m_selection.size();
+            for ( size_t i = 0; i < selCount; i++ )
             {
-                n = nodes[i];
+                if ( m_selection[i] > (unsigned)row )
+                    m_selection[i]--;
+            }
+
+            int itemRow = m_selection.Index(row);
+            if ( itemRow != wxNOT_FOUND )
+                m_selection.RemoveAt(itemRow);
+        }
+
+    }
+    else // general case
+    {
+        wxDataViewTreeNode * node = FindNode(parent);
+        int itemPosInNode = node ? node->GetChildren().Index(item.GetID()) : wxNOT_FOUND;
+
+        // Notice that it is possible that the item being deleted is not in the
+        // tree at all, for example we could be deleting a never shown (because
+        // collapsed) item in a tree model. So it's not an error if we don't know
+        // about this item, just return without doing anything then.
+        if ( !node || itemPosInNode == wxNOT_FOUND )
+            return false;
+
+        bool isContainer = false;
+        wxDataViewTreeNode *itemNode = NULL;
+
+        const wxDataViewTreeNodes nds = node->GetNodes();
+        for (size_t i = 0; i < nds.GetCount(); i ++)
+        {
+            if (nds[i]->GetItem() == item)
+            {
+                isContainer = true;
+                itemNode = nds[i];
                 break;
             }
         }
 
-        wxCHECK_MSG( n != NULL, false, "item not found" );
+        // Delete the item from wxDataViewTreeNode representation:
+        int itemsDeleted = 1;
+        node->GetChildren().Remove( item.GetID() );
 
-        node->GetNodes().Remove( n );
-        sub -= n->GetSubTreeCount();
-        ::DestroyTreeHelper(n);
+        if( isContainer )
+        {
+            wxDataViewTreeNode *n = node->FindItemAsNode(item);
+
+            wxCHECK_MSG( n != NULL, false, "item not found" );
+
+            node->GetNodes().Remove( n );
+            itemsDeleted += n->GetSubTreeCount();
+            ::DestroyTreeHelper(n);
+        }
+
+        // Make the row number invalid and get a new valid one when user call GetRowCount
+        m_count = -1;
+        node->ChangeSubTreeCount(-itemsDeleted);
+
+        // Update selection by removing 'item' and its entire children tree from the selection.
+        if ( !m_selection.empty() )
+        {
+            // we can't call GetRowByItem() on 'item', as it's already deleted, so compute it from
+            // the parent ('node') and position in its list of children
+            int itemRow;
+            if ( itemPosInNode == 0 )
+            {
+                // 1st child, row number is that of the parent node + 1
+                itemRow = GetRowByItem(node->GetItem()) + 1;
+            }
+            else
+            {
+                // row number is that of the sibling above 'item' + its subtree if any + 1
+                const wxDataViewItem sibling = wxDataViewItem(node->GetChildren()[itemPosInNode - 1]);
+                const wxDataViewTreeNode *siblingNode = node->FindItemAsNode(sibling);
+
+                itemRow = GetRowByItem(sibling);
+                if ( siblingNode )
+                    itemRow += siblingNode->GetSubTreeCount();
+                itemRow += 1;
+            }
+
+            wxDataViewSelection newsel(wxDataViewSelectionCmp);
+
+            for ( wxDataViewSelection::const_iterator i = m_selection.begin();
+                  i != m_selection.end();
+                  ++i )
+            {
+                const int s = *i;
+                if ( s < itemRow )
+                    newsel.push_back(s);
+                else if ( s >= itemRow + itemsDeleted )
+                    newsel.push_back(s - itemsDeleted);
+                // else: deleted item, remove from selection
+            }
+
+            m_selection = newsel;
+        }
     }
-    // Make the row number invalid and get a new valid one when user call GetRowCount
-    m_count = -1;
-    node->ChangeSubTreeCount(sub);
 
     // Change the current row to the last row if the current exceed the max row number
     if( m_currentRow > GetRowCount() )
-        m_currentRow = m_count - 1;
+        ChangeCurrentRow(m_count - 1);
 
     UpdateDisplay();
 
@@ -2710,7 +2764,7 @@ public:
             if( node->GetNodes().GetCount() == 0)
             {
                 int index = static_cast<int>(row) - current - 1;
-                ret = node->GetChildren().Item( index );
+                ret = wxDataViewItem(node->GetChildren().Item( index ));
                 return DoJob::OK;
             }
             return DoJob::CONT;
@@ -4436,13 +4490,22 @@ int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
 {
     sel.Empty();
     wxDataViewSelection selection = m_clientArea->GetSelections();
-    int len = selection.GetCount();
-    for( int i = 0; i < len; i ++)
+
+    const size_t len = selection.size();
+    for ( size_t i = 0; i < len; i++ )
     {
-        unsigned int row = selection[i];
-        sel.Add( m_clientArea->GetItemByRow( row ) );
+        wxDataViewItem item = m_clientArea->GetItemByRow(selection[i]);
+        if ( item.IsOk() )
+        {
+            sel.Add(item);
+        }
+        else
+        {
+            wxFAIL_MSG( "invalid item in selection - bad internal state" );
+        }
     }
-    return len;
+
+    return sel.size();
 }
 
 void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
@@ -4504,73 +4567,6 @@ bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
         return m_clientArea->IsRowSelected(row);
     }
     return false;
-}
-
-// Selection code with row number as parameter
-int wxDataViewCtrl::GetSelections( wxArrayInt & sel ) const
-{
-    sel.Empty();
-    wxDataViewSelection selection = m_clientArea->GetSelections();
-    int len = selection.GetCount();
-    for( int i = 0; i < len; i ++)
-    {
-        unsigned int row = selection[i];
-        sel.Add( row );
-    }
-    return len;
-}
-
-void wxDataViewCtrl::SetSelections( const wxArrayInt & sel )
-{
-    wxDataViewSelection selection(wxDataViewSelectionCmp);
-    int len = sel.GetCount();
-    for( int i = 0; i < len; i ++ )
-    {
-        int row = sel[i];
-        if( row >= 0 )
-            selection.Add( static_cast<unsigned int>(row) );
-    }
-    m_clientArea->SetSelections( selection );
-}
-
-void wxDataViewCtrl::Select( int row )
-{
-    if( row >= 0 )
-    {
-        if (m_clientArea->IsSingleSel())
-            m_clientArea->SelectAllRows(false);
-        m_clientArea->SelectRow( row, true );
-    }
-}
-
-void wxDataViewCtrl::Unselect( int row )
-{
-    if( row >= 0 )
-        m_clientArea->SelectRow(row, false);
-}
-
-bool wxDataViewCtrl::IsSelected( int row ) const
-{
-    if( row >= 0 )
-        return m_clientArea->IsRowSelected(row);
-    return false;
-}
-
-void wxDataViewCtrl::SelectRange( int from, int to )
-{
-    wxArrayInt sel;
-    for( int i = from; i < to; i ++ )
-        sel.Add( i );
-    m_clientArea->Select(sel);
-}
-
-void wxDataViewCtrl::UnselectRange( int from, int to )
-{
-    wxDataViewSelection sel = m_clientArea->GetSelections();
-    for( int i = from; i < to; i ++ )
-        if( sel.Index( i ) != wxNOT_FOUND )
-            sel.Remove( i );
-    m_clientArea->SetSelections(sel);
 }
 
 void wxDataViewCtrl::SelectAll()

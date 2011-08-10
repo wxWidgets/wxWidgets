@@ -279,10 +279,10 @@ bool hvApp::OpenBook(wxHtmlHelpController* controller)
 
 #ifdef __WXMAC__
 /// Respond to Apple Event for opening a document
-void hvApp::MacOpenFile(const wxString& filename)
+void hvApp::MacOpenFiles(const wxArrayString& fileNames)
 {
     wxBusyCursor bcur;
-    wxFileName fileName(filename);
+    wxFileName fileName(fileNames[0]);
     m_helpController->AddBook(fileName);
     m_helpController->DisplayContents();
 }

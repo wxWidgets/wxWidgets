@@ -4027,7 +4027,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     wxListLineData *line = new wxListLineData(this);
 
     line->SetItem( item.m_col, item );
-    if ( item.m_mask & wxLIST_MASK_IMAGE )
+    if ( item.m_mask & wxLIST_MASK_IMAGE && item.GetImage() != -1)
     {
         // Reset the buffered height if it's not big enough for the new image.
         if (m_small_image_list)
@@ -4866,7 +4866,9 @@ long wxGenericListCtrl::InsertItem( long index, const wxString &label, int image
     wxListItem info;
     info.m_text = label;
     info.m_image = imageIndex;
-    info.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE;
+    info.m_mask = wxLIST_MASK_TEXT;
+    if (imageIndex > -1)
+        info.m_mask |= wxLIST_MASK_IMAGE;
     info.m_itemId = index;
     return InsertItem( info );
 }
