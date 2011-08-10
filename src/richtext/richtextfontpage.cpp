@@ -39,6 +39,10 @@ BEGIN_EVENT_TABLE( wxRichTextFontPage, wxRichTextDialogPage )
 
     EVT_COMBOBOX( ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, wxRichTextFontPage::OnUnderliningCtrlSelected )
 
+    EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_COLOURCTRL_LABEL, wxRichTextFontPage::OnUnderliningCtrlSelected )
+
+    EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_BGCOLOURCTRL_LABEL, wxRichTextFontPage::OnUnderliningCtrlSelected )
+
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL, wxRichTextFontPage::OnStrikethroughctrlClick )
 
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_CAPSCTRL, wxRichTextFontPage::OnCapsctrlClick )
@@ -85,7 +89,9 @@ void wxRichTextFontPage::Init()
     m_styleCtrl = NULL;
     m_weightCtrl = NULL;
     m_underliningCtrl = NULL;
+    m_textColourLabel = NULL;
     m_colourCtrl = NULL;
+    m_bgColourLabel = NULL;
     m_bgColourCtrl = NULL;
     m_strikethroughCtrl = NULL;
     m_capitalsCtrl = NULL;
@@ -216,8 +222,9 @@ void wxRichTextFontPage::CreateControls()
     wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer13->Add(itemBoxSizer24, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText25 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Colour:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer24->Add(itemStaticText25, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
+    m_textColourLabel = new wxCheckBox( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_COLOURCTRL_LABEL, _("&Colour:"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_textColourLabel->SetValue(false);
+    itemBoxSizer24->Add(m_textColourLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxTOP, 5);
 
     m_colourCtrl = new wxRichTextColourSwatchCtrl( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_COLOURCTRL, wxDefaultPosition, wxSize(40, 20), 0 );
     m_colourCtrl->SetHelpText(_("Click to change the text colour."));
@@ -228,8 +235,9 @@ void wxRichTextFontPage::CreateControls()
     wxBoxSizer* itemBoxSizer27 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer13->Add(itemBoxSizer27, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText28 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Bg colour:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer27->Add(itemStaticText28, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
+    m_bgColourLabel = new wxCheckBox( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_BGCOLOURCTRL_LABEL, _("&Bg colour:"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_bgColourLabel->SetValue(false);
+    itemBoxSizer27->Add(m_bgColourLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxTOP, 5);
 
     m_bgColourCtrl = new wxRichTextColourSwatchCtrl( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_BGCOLOURCTRL, wxDefaultPosition, wxSize(40, 20), 0 );
     m_bgColourCtrl->SetHelpText(_("Click to change the text background colour."));
@@ -280,12 +288,15 @@ void wxRichTextFontPage::CreateControls()
 
     m_faceListBox->UpdateFonts();
 
+    m_styleCtrl->Append(_("(none)"));
     m_styleCtrl->Append(_("Regular"));
     m_styleCtrl->Append(_("Italic"));
 
+    m_weightCtrl->Append(_("(none)"));
     m_weightCtrl->Append(_("Regular"));
     m_weightCtrl->Append(_("Bold"));
 
+    m_underliningCtrl->Append(_("(none)"));
     m_underliningCtrl->Append(_("Not underlined"));
     m_underliningCtrl->Append(_("Underlined"));
 
@@ -327,10 +338,10 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_FONT_SIZE));
 
-    if (m_styleCtrl->GetSelection() != wxNOT_FOUND)
+    if (m_styleCtrl->GetSelection() != wxNOT_FOUND && m_styleCtrl->GetSelection() != 0)
     {
         wxFontStyle style;
-        if (m_styleCtrl->GetStringSelection() == _("Italic"))
+        if (m_styleCtrl->GetSelection() == 2)
             style = wxFONTSTYLE_ITALIC;
         else
             style = wxFONTSTYLE_NORMAL;
@@ -340,10 +351,10 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_FONT_ITALIC));
 
-    if (m_weightCtrl->GetSelection() != wxNOT_FOUND)
+    if (m_weightCtrl->GetSelection() != wxNOT_FOUND && m_weightCtrl->GetSelection() != 0)
     {
         wxFontWeight weight;
-        if (m_weightCtrl->GetStringSelection() == _("Bold"))
+        if (m_weightCtrl->GetSelection() == 2)
             weight = wxFONTWEIGHT_BOLD;
         else
             weight = wxFONTWEIGHT_NORMAL;
@@ -353,10 +364,10 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_FONT_WEIGHT));
 
-    if (m_underliningCtrl->GetSelection() != wxNOT_FOUND)
+    if (m_underliningCtrl->GetSelection() != wxNOT_FOUND && m_underliningCtrl->GetSelection() != 0)
     {
         bool underlined;
-        if (m_underliningCtrl->GetStringSelection() == _("Underlined"))
+        if (m_underliningCtrl->GetSelection() == 2)
             underlined = true;
         else
             underlined = false;
@@ -366,14 +377,14 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_FONT_UNDERLINE));
 
-    if (m_colourPresent)
+    if (m_textColourLabel->GetValue())
     {
         attr->SetTextColour(m_colourCtrl->GetColour());
     }
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_TEXT_COLOUR));
 
-    if (m_bgColourPresent)
+    if (m_bgColourLabel->GetValue())
     {
         attr->SetBackgroundColour(m_bgColourCtrl->GetColour());
     }
@@ -456,49 +467,61 @@ bool wxRichTextFontPage::TransferDataToWindow()
     if (attr->HasFontWeight())
     {
         if (attr->GetFontWeight() == wxBOLD)
-            m_weightCtrl->SetSelection(1);
+            m_weightCtrl->SetSelection(2);
         else
-            m_weightCtrl->SetSelection(0);
+            m_weightCtrl->SetSelection(1);
     }
     else
     {
-        m_weightCtrl->SetSelection(wxNOT_FOUND);
+        m_weightCtrl->SetSelection(0);
     }
 
     if (attr->HasFontItalic())
     {
         if (attr->GetFontStyle() == wxITALIC)
-            m_styleCtrl->SetSelection(1);
+            m_styleCtrl->SetSelection(2);
         else
-            m_styleCtrl->SetSelection(0);
+            m_styleCtrl->SetSelection(1);
     }
     else
     {
-        m_styleCtrl->SetSelection(wxNOT_FOUND);
+        m_styleCtrl->SetSelection(0);
     }
 
     if (attr->HasFontUnderlined())
     {
         if (attr->GetFontUnderlined())
-            m_underliningCtrl->SetSelection(1);
+            m_underliningCtrl->SetSelection(2);
         else
-            m_underliningCtrl->SetSelection(0);
+            m_underliningCtrl->SetSelection(1);
     }
     else
     {
-        m_underliningCtrl->SetSelection(wxNOT_FOUND);
+        m_underliningCtrl->SetSelection(0);
     }
 
     if (attr->HasTextColour())
     {
         m_colourCtrl->SetColour(attr->GetTextColour());
+        m_textColourLabel->SetValue(true);
         m_colourPresent = true;
+    }
+    else
+    {
+        m_colourCtrl->SetColour(*wxBLACK);
+        m_textColourLabel->SetValue(false);
     }
 
     if (attr->HasBackgroundColour())
     {
         m_bgColourCtrl->SetColour(attr->GetBackgroundColour());
+        m_bgColourLabel->SetValue(true);
         m_bgColourPresent = true;
+    }
+    else
+    {
+        m_bgColourCtrl->SetColour(*wxWHITE);
+        m_bgColourLabel->SetValue(false);
     }
 
     if (attr->HasTextEffects())
@@ -572,11 +595,30 @@ void wxRichTextFontPage::UpdatePreview()
 {
     wxRichTextAttr attr;
 
-    if (m_colourPresent)
-        m_previewCtrl->SetForegroundColour(m_colourCtrl->GetBackgroundColour());
+    if (m_textColourLabel->GetValue())
+        m_previewCtrl->SetForegroundColour(m_colourCtrl->GetColour());
+    else
+    {
+        m_previewCtrl->SetForegroundColour(*wxBLACK);
+        if (!(m_colourCtrl->GetColour() == *wxBLACK))
+        {
+            m_colourCtrl->SetColour(*wxBLACK);
+            m_colourCtrl->Refresh();
+        }
+    }
 
-    if (m_bgColourPresent)
-        m_previewCtrl->SetBackgroundColour(m_bgColourCtrl->GetBackgroundColour());
+    if (m_bgColourLabel->GetValue())
+        m_previewCtrl->SetBackgroundColour(m_bgColourCtrl->GetColour());
+    else
+    {
+        m_previewCtrl->SetBackgroundColour(*wxWHITE);
+
+        if (!(m_bgColourCtrl->GetColour() == *wxWHITE))
+        {
+            m_bgColourCtrl->SetColour(*wxWHITE);
+            m_bgColourCtrl->Refresh();
+        }
+    }
 
     if (m_faceListBox->GetSelection() != wxNOT_FOUND)
     {
@@ -592,10 +634,10 @@ void wxRichTextFontPage::UpdatePreview()
             attr.SetFontSize(sz);
     }
 
-    if (m_styleCtrl->GetSelection() != wxNOT_FOUND)
+    if (m_styleCtrl->GetSelection() != wxNOT_FOUND && m_styleCtrl->GetSelection() != 0)
     {
         wxFontStyle style;
-        if (m_styleCtrl->GetStringSelection() == _("Italic"))
+        if (m_styleCtrl->GetSelection() == 2)
             style = wxFONTSTYLE_ITALIC;
         else
             style = wxFONTSTYLE_NORMAL;
@@ -603,10 +645,10 @@ void wxRichTextFontPage::UpdatePreview()
         attr.SetFontStyle(style);
     }
 
-    if (m_weightCtrl->GetSelection() != wxNOT_FOUND)
+    if (m_weightCtrl->GetSelection() != wxNOT_FOUND && m_weightCtrl->GetSelection() != 0)
     {
         wxFontWeight weight;
-        if (m_weightCtrl->GetStringSelection() == _("Bold"))
+        if (m_weightCtrl->GetSelection() == 2)
             weight = wxFONTWEIGHT_BOLD;
         else
             weight = wxFONTWEIGHT_NORMAL;
@@ -614,10 +656,10 @@ void wxRichTextFontPage::UpdatePreview()
         attr.SetFontWeight(weight);
     }
 
-    if (m_underliningCtrl->GetSelection() != wxNOT_FOUND)
+    if (m_underliningCtrl->GetSelection() != wxNOT_FOUND && m_underliningCtrl->GetSelection() != 0)
     {
         bool underlined;
-        if (m_underliningCtrl->GetStringSelection() == _("Underlined"))
+        if (m_underliningCtrl->GetSelection() == 2)
             underlined = true;
         else
             underlined = false;
@@ -740,11 +782,15 @@ void wxRichTextFontPage::OnSizeTextCtrlUpdated( wxCommandEvent& WXUNUSED(event) 
 
 void wxRichTextFontPage::OnSizeListBoxSelected( wxCommandEvent& event )
 {
+    bool oldDontUpdate = m_dontUpdate;
     m_dontUpdate = true;
 
     m_sizeTextCtrl->SetValue(event.GetString());
 
-    m_dontUpdate = false;
+    m_dontUpdate = oldDontUpdate;
+
+    if (m_dontUpdate)
+        return;
 
     UpdatePreview();
 }
@@ -755,11 +801,15 @@ void wxRichTextFontPage::OnSizeListBoxSelected( wxCommandEvent& event )
 
 void wxRichTextFontPage::OnFaceListBoxSelected( wxCommandEvent& WXUNUSED(event) )
 {
+    bool oldDontUpdate = m_dontUpdate;
     m_dontUpdate = true;
 
     m_faceTextCtrl->SetValue(m_faceListBox->GetFaceName(m_faceListBox->GetSelection()));
 
-    m_dontUpdate = false;
+    m_dontUpdate = oldDontUpdate;
+
+    if (m_dontUpdate)
+        return;
 
     UpdatePreview();
 }
@@ -770,6 +820,9 @@ void wxRichTextFontPage::OnFaceListBoxSelected( wxCommandEvent& WXUNUSED(event) 
 
 void wxRichTextFontPage::OnStyleCtrlSelected( wxCommandEvent& WXUNUSED(event) )
 {
+    if (m_dontUpdate)
+        return;
+
     UpdatePreview();
 }
 
@@ -780,6 +833,9 @@ void wxRichTextFontPage::OnStyleCtrlSelected( wxCommandEvent& WXUNUSED(event) )
 
 void wxRichTextFontPage::OnUnderliningCtrlSelected( wxCommandEvent& WXUNUSED(event) )
 {
+    if (m_dontUpdate)
+        return;
+
     UpdatePreview();
 }
 
@@ -790,6 +846,9 @@ void wxRichTextFontPage::OnUnderliningCtrlSelected( wxCommandEvent& WXUNUSED(eve
 
 void wxRichTextFontPage::OnWeightCtrlSelected( wxCommandEvent& WXUNUSED(event) )
 {
+    if (m_dontUpdate)
+        return;
+
     UpdatePreview();
 }
 
@@ -800,6 +859,19 @@ void wxRichTextFontPage::OnColourClicked( wxCommandEvent& event )
     else if (event.GetId() == m_bgColourCtrl->GetId())
         m_bgColourPresent = true;
 
+    m_dontUpdate = true;
+
+    if (event.GetId() == m_colourCtrl->GetId())
+    {
+        m_textColourLabel->SetValue(true);
+    }
+    else if (event.GetId() == m_bgColourCtrl->GetId())
+    {
+        m_bgColourLabel->SetValue(true);
+    }
+
+    m_dontUpdate = false;
+
     UpdatePreview();
 }
 /*!
@@ -808,6 +880,9 @@ void wxRichTextFontPage::OnColourClicked( wxCommandEvent& event )
 
 void wxRichTextFontPage::OnStrikethroughctrlClick( wxCommandEvent& WXUNUSED(event) )
 {
+    if (m_dontUpdate)
+        return;
+
     UpdatePreview();
 }
 
@@ -817,6 +892,9 @@ void wxRichTextFontPage::OnStrikethroughctrlClick( wxCommandEvent& WXUNUSED(even
 
 void wxRichTextFontPage::OnCapsctrlClick( wxCommandEvent& WXUNUSED(event) )
 {
+    if (m_dontUpdate)
+        return;
+
     UpdatePreview();
 }
 
@@ -826,6 +904,9 @@ void wxRichTextFontPage::OnCapsctrlClick( wxCommandEvent& WXUNUSED(event) )
 
 void wxRichTextFontPage::OnRichtextfontpageSuperscriptClick( wxCommandEvent& WXUNUSED(event) )
 {
+    if (m_dontUpdate)
+        return;
+
     if ( m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
         m_subscriptCtrl->Set3StateValue( wxCHK_UNCHECKED );
 
@@ -838,6 +919,9 @@ void wxRichTextFontPage::OnRichtextfontpageSuperscriptClick( wxCommandEvent& WXU
 
 void wxRichTextFontPage::OnRichtextfontpageSubscriptClick( wxCommandEvent& WXUNUSED(event) )
 {
+    if (m_dontUpdate)
+        return;
+
     if ( m_subscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
         m_superscriptCtrl->Set3StateValue( wxCHK_UNCHECKED );
 

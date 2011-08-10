@@ -388,6 +388,21 @@ public:
         }
     }
 
+    // returns node corresponding to 'item' if its in m_nodes or NULL otherwise
+    wxDataViewTreeNode *FindItemAsNode(const wxDataViewItem& item) const
+    {
+        for ( wxDataViewTreeNodes::const_iterator i = m_nodes.begin();
+              i != m_nodes.end();
+              ++i )
+        {
+            if( (*i)->GetItem() == item )
+                return *i;
+        }
+
+        return NULL;
+    }
+
+
 private:
     wxDataViewTreeNode  *m_parent;
     wxDataViewTreeNodes  m_nodes;
@@ -406,7 +421,7 @@ int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode ** node1,
 
 int LINKAGEMODE wxGenericTreeModelItemCmp( void ** id1, void ** id2)
 {
-    return g_model->Compare( *id1, *id2, g_column, g_asending );
+    return g_model->Compare( wxDataViewItem(*id1), wxDataViewItem(*id2), g_column, g_asending );
 }
 
 
@@ -2006,60 +2021,107 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
             (wxDataViewVirtualListModel*) GetOwner()->GetModel();
         m_count = list_model->GetCount();
 
-        // TODO: why empty the entire selection?
-        m_selection.Empty();
+        if ( !m_selection.empty() )
+        {
+            const int row = GetRowByItem(item);
+
+            const size_t selCount = m_selection.size();
+            for ( size_t i = 0; i < selCount; i++ )
+            {
+                if ( m_selection[i] > (unsigned)row )
+                    m_selection[i]--;
+            }
+
+            int itemRow = m_selection.Index(row);
+            if ( itemRow != wxNOT_FOUND )
+                m_selection.RemoveAt(itemRow);
+        }
+
     }
     else // general case
     {
         wxDataViewTreeNode * node = FindNode(parent);
+        int itemPosInNode = node ? node->GetChildren().Index(item.GetID()) : wxNOT_FOUND;
 
         // Notice that it is possible that the item being deleted is not in the
         // tree at all, for example we could be deleting a never shown (because
         // collapsed) item in a tree model. So it's not an error if we don't know
         // about this item, just return without doing anything then.
-        if ( !node || node->GetChildren().Index(item.GetID()) == wxNOT_FOUND )
+        if ( !node || itemPosInNode == wxNOT_FOUND )
             return false;
 
-        int sub = -1;
-        node->GetChildren().Remove( item.GetID() );
-        // Manipolate selection
-        if( m_selection.GetCount() > 1 )
-        {
-            m_selection.Empty();
-        }
         bool isContainer = false;
-        wxDataViewTreeNodes nds = node->GetNodes();
+        wxDataViewTreeNode *itemNode = NULL;
+
+        const wxDataViewTreeNodes nds = node->GetNodes();
         for (size_t i = 0; i < nds.GetCount(); i ++)
         {
             if (nds[i]->GetItem() == item)
             {
                 isContainer = true;
+                itemNode = nds[i];
                 break;
             }
         }
+
+        // Delete the item from wxDataViewTreeNode representation:
+        int itemsDeleted = 1;
+        node->GetChildren().Remove( item.GetID() );
+
         if( isContainer )
         {
-            wxDataViewTreeNode * n = NULL;
-            wxDataViewTreeNodes nodes = node->GetNodes();
-            int len = nodes.GetCount();
-            for( int i = 0; i < len; i ++)
-            {
-                if( nodes[i]->GetItem() == item )
-                {
-                    n = nodes[i];
-                    break;
-                }
-            }
+            wxDataViewTreeNode *n = node->FindItemAsNode(item);
 
             wxCHECK_MSG( n != NULL, false, "item not found" );
 
             node->GetNodes().Remove( n );
-            sub -= n->GetSubTreeCount();
+            itemsDeleted += n->GetSubTreeCount();
             ::DestroyTreeHelper(n);
         }
+
         // Make the row number invalid and get a new valid one when user call GetRowCount
         m_count = -1;
-        node->ChangeSubTreeCount(sub);
+        node->ChangeSubTreeCount(-itemsDeleted);
+
+        // Update selection by removing 'item' and its entire children tree from the selection.
+        if ( !m_selection.empty() )
+        {
+            // we can't call GetRowByItem() on 'item', as it's already deleted, so compute it from
+            // the parent ('node') and position in its list of children
+            int itemRow;
+            if ( itemPosInNode == 0 )
+            {
+                // 1st child, row number is that of the parent node + 1
+                itemRow = GetRowByItem(node->GetItem()) + 1;
+            }
+            else
+            {
+                // row number is that of the sibling above 'item' + its subtree if any + 1
+                const wxDataViewItem sibling = wxDataViewItem(node->GetChildren()[itemPosInNode - 1]);
+                const wxDataViewTreeNode *siblingNode = node->FindItemAsNode(sibling);
+
+                itemRow = GetRowByItem(sibling);
+                if ( siblingNode )
+                    itemRow += siblingNode->GetSubTreeCount();
+                itemRow += 1;
+            }
+
+            wxDataViewSelection newsel(wxDataViewSelectionCmp);
+
+            for ( wxDataViewSelection::const_iterator i = m_selection.begin();
+                  i != m_selection.end();
+                  ++i )
+            {
+                const int s = *i;
+                if ( s < itemRow )
+                    newsel.push_back(s);
+                else if ( s >= itemRow + itemsDeleted )
+                    newsel.push_back(s - itemsDeleted);
+                // else: deleted item, remove from selection
+            }
+
+            m_selection = newsel;
+        }
     }
 
     // Change the current row to the last row if the current exceed the max row number
@@ -2702,7 +2764,7 @@ public:
             if( node->GetNodes().GetCount() == 0)
             {
                 int index = static_cast<int>(row) - current - 1;
-                ret = node->GetChildren().Item( index );
+                ret = wxDataViewItem(node->GetChildren().Item( index ));
                 return DoJob::OK;
             }
             return DoJob::CONT;

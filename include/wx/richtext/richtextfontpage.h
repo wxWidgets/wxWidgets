@@ -134,7 +134,9 @@ public:
     wxComboBox* m_styleCtrl;
     wxComboBox* m_weightCtrl;
     wxComboBox* m_underliningCtrl;
+    wxCheckBox* m_textColourLabel;
     wxRichTextColourSwatchCtrl* m_colourCtrl;
+    wxCheckBox* m_bgColourLabel;
     wxRichTextColourSwatchCtrl* m_bgColourCtrl;
     wxCheckBox* m_strikethroughCtrl;
     wxCheckBox* m_capitalsCtrl;
@@ -151,7 +153,9 @@ public:
         ID_RICHTEXTFONTPAGE_STYLECTRL = 10007,
         ID_RICHTEXTFONTPAGE_WEIGHTCTRL = 10004,
         ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL = 10008,
+        ID_RICHTEXTFONTPAGE_COLOURCTRL_LABEL = 10015,
         ID_RICHTEXTFONTPAGE_COLOURCTRL = 10009,
+        ID_RICHTEXTFONTPAGE_BGCOLOURCTRL_LABEL = 10016,
         ID_RICHTEXTFONTPAGE_BGCOLOURCTRL = 10014,
         ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL = 10010,
         ID_RICHTEXTFONTPAGE_CAPSCTRL = 10011,

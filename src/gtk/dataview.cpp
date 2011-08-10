@@ -300,7 +300,7 @@ private:
 static
 int LINKAGEMODE wxGtkTreeModelChildCmp( void** id1, void** id2 )
 {
-    int ret = gs_internal->GetDataViewModel()->Compare( *id1, *id2,
+    int ret = gs_internal->GetDataViewModel()->Compare( wxDataViewItem(*id1), wxDataViewItem(*id2),
         gs_internal->GetSortColumn(), (gs_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
 
     return ret;
@@ -3361,7 +3361,7 @@ int wxGtkTreeModelChildWithPosCmp( const void* data1, const void* data2, const v
 static
 int LINKAGEMODE wxGtkTreeModelChildPtrCmp( void*** data1, void*** data2 )
 {
-    return gs_internal->GetDataViewModel()->Compare( **data1, **data2,
+    return gs_internal->GetDataViewModel()->Compare( wxDataViewItem(**data1), wxDataViewItem(**data2),
         gs_internal->GetSortColumn(), (gs_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
 }
 
