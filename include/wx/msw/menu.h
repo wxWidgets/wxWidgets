@@ -61,6 +61,14 @@ public:
 
     virtual void SetTitle(const wxString& title);
 
+    // MSW-only methods
+    // ----------------
+
+    // Create a new menu from the given native HMENU. Takes ownership of the
+    // menu handle and will delete it when this object is destroyed.
+    static wxMenu *MSWNewFromHMENU(WXHMENU hMenu) { return new wxMenu(hMenu); }
+
+
     // implementation only from now on
     // -------------------------------
 
@@ -120,7 +128,14 @@ protected:
     virtual wxMenuItem* DoRemove(wxMenuItem *item);
 
 private:
-    // common part of all ctors
+    // This constructor is private, use MSWNewFromHMENU() to use it.
+    wxMenu(WXHMENU hMenu);
+
+    // Common part of all ctors, it doesn't create a new HMENU.
+    void InitNoCreate();
+
+    // Common part of all ctors except of the one above taking a native menu
+    // handler: calls InitNoCreate() and also creates a new menu.
     void Init();
 
     // common part of Append/Insert (behaves as Append is pos == (size_t)-1)

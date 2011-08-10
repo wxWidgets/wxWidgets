@@ -1906,7 +1906,7 @@ void wxGDIPlusRenderer::Unload()
     if ( m_gditoken )
     {
         GdiplusShutdown(m_gditoken);
-        m_gditoken = NULL;
+        m_gditoken = 0;
     }
     m_loaded = -1; // next Load() will try again
 }

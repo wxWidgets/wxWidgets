@@ -351,6 +351,12 @@ static inline GdkWindow* wx_gtk_entry_get_text_window(GtkEntry* entry)
 }
 #define gtk_entry_get_text_window wx_gtk_entry_get_text_window
 
+static void wx_gtk_widget_set_has_window(GtkWidget* widget, gboolean has_window)
+{
+    gtk_fixed_set_has_window(GTK_FIXED(widget), has_window); 
+}
+#define gtk_widget_set_has_window wx_gtk_widget_set_has_window
+
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.22
 

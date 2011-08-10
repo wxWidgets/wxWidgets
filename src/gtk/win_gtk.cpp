@@ -31,11 +31,22 @@ static GtkWidgetClass* parent_class;
 
 extern "C" {
 
+
 struct wxPizzaClass
 {
     GtkFixedClass parent;
     void (*set_scroll_adjustments)(GtkWidget*, GtkAdjustment*, GtkAdjustment*);
 };
+
+#ifdef __WXGTK30__
+enum {
+    P_HADJUSTMENT,
+    P_VADJUSTMENT
+};
+
+G_DEFINE_TYPE_WITH_CODE(wxPizza, wxpizza, GTK_TYPE_FIXED, 
+        G_IMPLEMENT_INTERFACE(GTK_TYPE_SCROLLABLE, NULL));
+#endif
 
 static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
 {
@@ -212,7 +223,11 @@ g_cclosure_user_marshal_VOID__OBJECT_OBJECT (GClosure     *closure,
             data2);
 }
 
-static void class_init(void* g_class, void*)
+#ifdef __WXGTK30__
+static void wxpizza_class_init(wxPizzaClass* g_class)
+#else
+static void wxpizza_class_init(void* g_class, void*)
+#endif
 {
     GtkWidgetClass* widget_class = (GtkWidgetClass*)g_class;
     widget_class->size_allocate = size_allocate;
@@ -225,6 +240,11 @@ static void class_init(void* g_class, void*)
     klass->set_scroll_adjustments = set_scroll_adjustments;
 #ifdef __WXGTK30__
     // TODO Make widget appear scrollable to GTK3
+    GObjectClass *gobject_class = G_OBJECT_CLASS(g_class);
+
+    // Override properties
+    g_object_class_override_property(gobject_class, P_HADJUSTMENT, "hadjustment");
+    g_object_class_override_property(gobject_class, P_VADJUSTMENT, "vadjustment");
 #else
     widget_class->set_scroll_adjustments_signal =
         g_signal_new(
@@ -242,20 +262,17 @@ static void class_init(void* g_class, void*)
 
 } // extern "C"
 
+#if defined(__WXGTK20__) && !defined(__WXGTK30__)
 GType wxPizza::type()
 {
-#ifdef __WXGTK30__
     static GType type;
-#else
     static GtkType type;
-#endif
-
     if (type == 0)
     {
         const GTypeInfo info = {
             sizeof(wxPizzaClass),
             NULL, NULL,
-            class_init,
+            wxpizza_class_init,
             NULL, NULL,
             sizeof(wxPizza), 0,
             NULL, NULL
@@ -263,8 +280,10 @@ GType wxPizza::type()
         type = g_type_register_static(
             GTK_TYPE_FIXED, "wxPizza", &info, GTypeFlags(0));
     }
+
     return type;
 }
+#endif
 
 GtkWidget* wxPizza::New(long windowStyle)
 {
@@ -275,11 +294,7 @@ GtkWidget* wxPizza::New(long windowStyle)
     pizza->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;
     // mask off border styles not useable with wxPizza
     pizza->m_border_style = int(windowStyle & BORDER_STYLES);
-#ifdef __WXGTK30__
     gtk_widget_set_has_window(widget, true);
-#else
-    gtk_fixed_set_has_window(GTK_FIXED(widget), true);
-#endif
     gtk_widget_add_events(widget,
         GDK_EXPOSURE_MASK |
         GDK_SCROLL_MASK |

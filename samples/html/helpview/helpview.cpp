@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printing.cpp
+// Name:        helpview.cpp
 // Purpose:     wxHtml sample: help browser
 // Author:      ?
 // Modified by:

@@ -224,10 +224,17 @@ wxSize wxCollapsiblePane::DoGetBestSize() const
     req.width = 2;
     req.height = 2;
 #ifdef __WXGTK30__
+    // NB: I have to declear this dummy variable 'nat' otherwise get_preferred_height/width
+    //     will crash. But per gtk+ documentation, it seems OK that the third argument be 
+    //     NULL (JC)
+    GtkRequisition nat;
+    nat.width = 0;
+    nat.height = 0;
+
     (* GTK_WIDGET_CLASS( GTK_WIDGET_GET_CLASS(m_widget) )->get_preferred_width )
-            (m_widget, &(req.width), NULL );
+            (m_widget, &(req.width), &(nat.width) );
     (* GTK_WIDGET_CLASS( GTK_WIDGET_GET_CLASS(m_widget) )->get_preferred_height )
-            (m_widget, &(req.height), NULL );
+            (m_widget, &(req.height), &(nat.height) );
 #else
     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
             (m_widget, &req );
@@ -288,13 +295,8 @@ void wxCollapsiblePane::OnSize(wxSizeEvent &ev)
 GdkWindow *wxCollapsiblePane::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
     GtkWidget *label = gtk_expander_get_label_widget( GTK_EXPANDER(m_widget) );
-#ifdef __WXGTK30__
     windows.Add( gtk_widget_get_window(label) );
     windows.Add( gtk_widget_get_window(m_widget) );
-#else
-    windows.Add( label->window );
-    windows.Add( m_widget->window );
-#endif
 
     return NULL;
 }

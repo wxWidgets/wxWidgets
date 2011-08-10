@@ -22,7 +22,9 @@ struct WXDLLIMPEXP_CORE wxPizza
         wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME };
 
     static GtkWidget* New(long windowStyle = 0);
+#if defined(__WXGTK20__) && !defined(__WXGTK30__)
     static GType type();
+#endif
     void move(GtkWidget* widget, int x, int y);
     void put(GtkWidget* widget, int x, int y);
     void scroll(int dx, int dy);

@@ -467,6 +467,7 @@ GTK:
 MSW:
 
 - Added wxGCDC(wxEnhMetaFileDC) ctor (Marcin Wojdyr).
+- Added wxTopLevelWindow::MSWGetSystemMenu().
 
 
 2.9.2: (released 2011-07-05)
