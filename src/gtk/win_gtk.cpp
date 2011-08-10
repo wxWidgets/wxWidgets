@@ -40,9 +40,11 @@ struct wxPizzaClass
 
 #ifdef __WXGTK30__
 enum {
-    P_0,
-    P_HADJUSTMENT,
-    P_VADJUSTMENT
+    PROP_0,
+    PROP_HADJUSTMENT,
+    PROP_VADJUSTMENT,
+    PROP_HSCROLL_POLICY,
+    PROP_VSCROLL_POLICY
 };
 
 G_DEFINE_TYPE_WITH_CODE(wxPizza, wxpizza, GTK_TYPE_FIXED, 
@@ -224,6 +226,7 @@ g_cclosure_user_marshal_VOID__OBJECT_OBJECT (GClosure     *closure,
             data2);
 }
 
+#ifdef __WXGTK30__
 static void
 wxpizza_set_property(GObject         *object,
                guint            prop_id,
@@ -234,20 +237,20 @@ wxpizza_set_property(GObject         *object,
 
   switch (prop_id)
     {
-    case P_HADJUSTMENT:
+    case PROP_HADJUSTMENT:
       // wxpizza_set_hadjustment (pizza, g_value_get_object (value));
       break;
-    case P_VADJUSTMENT:
+    case PROP_VADJUSTMENT:
       // wxpizza_set_vadjustment (pizza, g_value_get_object (value));
       break;
-    // case PROP_HSCROLL_POLICY:
-    //   viewport->priv->hscroll_policy = g_value_get_enum (value);
-    //   gtk_widget_queue_resize (GTK_WIDGET (viewport));
-    //   break;
-    // case PROP_VSCROLL_POLICY:
-    //   viewport->priv->vscroll_policy = g_value_get_enum (value);
-    //   gtk_widget_queue_resize (GTK_WIDGET (viewport));
-    //   break;
+    case PROP_HSCROLL_POLICY:
+      // viewport->priv->hscroll_policy = g_value_get_enum (value);
+      // gtk_widget_queue_resize (GTK_WIDGET (viewport));
+      break;
+    case PROP_VSCROLL_POLICY:
+      // viewport->priv->vscroll_policy = g_value_get_enum (value);
+      // gtk_widget_queue_resize (GTK_WIDGET (viewport));
+      break;
     // case PROP_SHADOW_TYPE:
     //   gtk_viewport_set_shadow_type (viewport, g_value_get_enum (value));
     //   break;
@@ -267,18 +270,18 @@ wxpizza_get_property(GObject         *object,
 
   switch (prop_id)
     {
-    case P_HADJUSTMENT:
+    case PROP_HADJUSTMENT:
       // g_value_set_object (value, priv->hadjustment);
       break;
-    case P_VADJUSTMENT:
+    case PROP_VADJUSTMENT:
       // g_value_set_object (value, priv->vadjustment);
       break;
-    // case PROP_HSCROLL_POLICY:
-    //   g_value_set_enum (value, priv->hscroll_policy);
-    //   break;
-    // case PROP_VSCROLL_POLICY:
-    //   g_value_set_enum (value, priv->vscroll_policy);
-    //   break;
+    case PROP_HSCROLL_POLICY:
+      // g_value_set_enum (value, priv->hscroll_policy);
+      break;
+    case PROP_VSCROLL_POLICY:
+      // g_value_set_enum (value, priv->vscroll_policy);
+      break;
     // case PROP_SHADOW_TYPE:
     //   g_value_set_enum (value, priv->shadow_type);
     //   break;
@@ -287,6 +290,7 @@ wxpizza_get_property(GObject         *object,
       break;
     }
 }
+#endif
 
 #ifdef __WXGTK30__
 static void wxpizza_class_init(wxPizzaClass* g_class)
@@ -309,8 +313,10 @@ static void wxpizza_class_init(void* g_class, void*)
     gobject_class->set_property = wxpizza_set_property;
     gobject_class->get_property = wxpizza_get_property;
     // Override properties
-    g_object_class_override_property(gobject_class, P_HADJUSTMENT, "hadjustment");
-    g_object_class_override_property(gobject_class, P_VADJUSTMENT, "vadjustment");
+    g_object_class_override_property(gobject_class, PROP_HADJUSTMENT, "hadjustment");
+    g_object_class_override_property(gobject_class, PROP_VADJUSTMENT, "vadjustment");
+    g_object_class_override_property(gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
+    g_object_class_override_property(gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 #else
     widget_class->set_scroll_adjustments_signal =
         g_signal_new(
