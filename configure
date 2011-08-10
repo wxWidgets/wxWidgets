@@ -849,6 +849,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1
+COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1
 COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1
 COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1
@@ -860,6 +861,7 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1
+COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1
 COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1
 COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1
@@ -875,6 +877,7 @@ COND_MONOLITHIC_0_USE_QA_1
 COND_MONOLITHIC_0_USE_RIBBON_1
 COND_MONOLITHIC_0_USE_RICHTEXT_1
 COND_MONOLITHIC_0_USE_STC_1
+COND_MONOLITHIC_0_USE_WEB_1
 COND_MONOLITHIC_0_USE_XRC_1
 COND_MONOLITHIC_1
 COND_MONOLITHIC_1_SHARED_0
@@ -1801,6 +1804,7 @@ Optional Features:
   --enable-postscript     use wxPostscriptDC device context (default for gtk+)
   --enable-printarch      use printing architecture
   --enable-svg            use wxSVGFileDC device context
+  --enable-web            use wxWeb library
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
@@ -1900,6 +1904,7 @@ Optional Features:
   --enable-accessibility  enable accessibility support
   --enable-uiactionsim    use wxUIActionSimulator (experimental)
   --enable-dctransform    use wxDC::SetTransformMatrix and related
+  --enable-webview-webkit use wxWebView WebKit backend
   --enable-palette        use wxPalette class
   --enable-image          use wxImage class
   --enable-gif            use gif images (GIF file format)
@@ -1914,6 +1919,7 @@ Optional Features:
   --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)
   --enable-uxtheme        enable support for Windows XP themed look (Win32 only)
   --enable-wxdib          use wxDIB class (Win32 only)
+  --enable-webview-ie     use wxWebView IE backend (Win32 only)
   --enable-autoidman      use automatic ids management
   --disable-largefile     omit support for large files
   --disable-gtktest       do not try to compile and run a test GTK+ program
@@ -9622,6 +9628,50 @@ fi
 echo "${ECHO_T}$result" >&6; }
 
 
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-web" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-web... $ECHO_C" >&6; }
+          # Check whether --enable-web was given.
+if test "${enable_web+set}" = set; then
+  enableval=$enable_web;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_web='wxUSE_WEB=yes'
+                          else
+                            wx_cv_use_web='wxUSE_WEB=no'
+                          fi
+
+else
+
+                          wx_cv_use_web='wxUSE_WEB=${'DEFAULT_wxUSE_WEB":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_web"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_WEB = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_WEB
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
 if test "$wxUSE_MAC" != 1; then
 
           enablestring=
@@ -14052,6 +14102,50 @@ fi
 echo "${ECHO_T}$result" >&6; }
 
 
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-webviewwebkit" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-webviewwebkit... $ECHO_C" >&6; }
+          # Check whether --enable-webviewwebkit was given.
+if test "${enable_webviewwebkit+set}" = set; then
+  enableval=$enable_webviewwebkit;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webviewwebkit='wxUSE_WEBVIEW_WEBKIT=yes'
+                          else
+                            wx_cv_use_webviewwebkit='wxUSE_WEBVIEW_WEBKIT=no'
+                          fi
+
+else
+
+                          wx_cv_use_webviewwebkit='wxUSE_WEBVIEW_WEBKIT=${'DEFAULT_wxUSE_WEBVIEW_WEBKIT":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webviewwebkit"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_WEBVIEW_WEBKIT = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_WEBVIEW_WEBKIT
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
 
 
           enablestring=
@@ -14666,6 +14760,50 @@ fi
             fi
           else
             result=$wxUSE_DIB
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-webviewie" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-webviewie... $ECHO_C" >&6; }
+          # Check whether --enable-webviewie was given.
+if test "${enable_webviewie+set}" = set; then
+  enableval=$enable_webviewie;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webviewie='wxUSE_WEBVIEW_IE=yes'
+                          else
+                            wx_cv_use_webviewie='wxUSE_WEBVIEW_IE=no'
+                          fi
+
+else
+
+                          wx_cv_use_webviewie='wxUSE_WEBVIEW_IE=${'DEFAULT_wxUSE_WEBVIEW_IE":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webviewie"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_WEBVIEW_IE = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_WEBVIEW_IE
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -48162,6 +48300,208 @@ _ACEOF
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS richtext"
 fi
 
+USE_WEB=0
+if test "$wxUSE_WEB" = "yes"; then
+   cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEB 1
+_ACEOF
+
+   USE_WEB=1
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS web"
+
+   if test "$wxUSE_WEBVIEW_WEBKIT" = "yes" -a "$wxUSE_GTK" = 1; then
+       cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBVIEW_WEBKIT 1
+_ACEOF
+
+       { echo "$as_me:$LINENO: checking for webkitgtk libraries" >&5
+echo $ECHO_N "checking for webkitgtk libraries... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libwebkitgtk-1.0.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+       if test "$ac_find_libraries" != "" ; then
+
+    if test "$ac_find_libraries" = "default location"; then
+    ac_path_to_link=""
+  else
+    echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_link=""
+    else
+      ac_path_to_link=" -L$ac_find_libraries"
+    fi
+  fi
+
+           if test "$ac_path_to_link" != " -L/usr/lib" ; then
+               LDFLAGS="$LDFLAGS $ac_path_to_link"
+           fi
+           GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwebkitgtk-1.0"
+           { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+       else
+           { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+           { echo "$as_me:$LINENO: WARNING: libwebkitgtk-1.0 not found; disabling webkit backend" >&5
+echo "$as_me: WARNING: libwebkitgtk-1.0 not found; disabling webkit backend" >&2;}
+           wxUSE_WEBVIEW_WEBKIT="no"
+       fi
+
+       { echo "$as_me:$LINENO: checking for webkitgtk includes" >&5
+echo $ECHO_N "checking for webkitgtk includes... $ECHO_C" >&6; }
+
+ac_find_includes=
+for ac_dir in $SEARCH_INCLUDE /usr/include/webkit-1.0 /usr/include
+  do
+    if test -f "$ac_dir/webkit/webkit.h"; then
+      ac_find_includes=$ac_dir
+      break
+    fi
+  done
+
+       if test "$ac_find_includes" != "" ; then
+           { echo "$as_me:$LINENO: result: found in $ac_find_includes" >&5
+echo "${ECHO_T}found in $ac_find_includes" >&6; }
+
+    if test "x$ac_find_includes" = "x/usr/include"; then
+    ac_path_to_include=""
+  else
+    echo "$CPPFLAGS" | grep "\-I$ac_find_includes" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_include=""
+    else
+      ac_path_to_include=" -I$ac_find_includes"
+    fi
+  fi
+
+           CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+       else
+           { echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6; }
+       fi
+              { echo "$as_me:$LINENO: checking for libsoup includes" >&5
+echo $ECHO_N "checking for libsoup includes... $ECHO_C" >&6; }
+
+ac_find_includes=
+for ac_dir in $SEARCH_INCLUDE /usr/include/libsoup-2.4 /usr/include
+  do
+    if test -f "$ac_dir/libsoup/soup.h"; then
+      ac_find_includes=$ac_dir
+      break
+    fi
+  done
+
+       if test "$ac_find_includes" != "" ; then
+           { echo "$as_me:$LINENO: result: found in $ac_find_includes" >&5
+echo "${ECHO_T}found in $ac_find_includes" >&6; }
+
+    if test "x$ac_find_includes" = "x/usr/include"; then
+    ac_path_to_include=""
+  else
+    echo "$CPPFLAGS" | grep "\-I$ac_find_includes" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_include=""
+    else
+      ac_path_to_include=" -I$ac_find_includes"
+    fi
+  fi
+
+           CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+       else
+           { echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6; }
+       fi
+   fi
+
+    if test "$wxUSE_WEBVIEW_WEBKIT" = "yes" -a "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
+        old_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="-x objective-c++ $CPPFLAGS"
+        { echo "$as_me:$LINENO: checking for WebKit/HIWebView.h" >&5
+echo $ECHO_N "checking for WebKit/HIWebView.h... $ECHO_C" >&6; }
+if test "${ac_cv_header_WebKit_HIWebView_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                           #include <Carbon/Carbon.h>
+                           #include <WebKit/WebKit.h>
+
+
+#include <WebKit/HIWebView.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_cv_header_WebKit_HIWebView_h=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_header_WebKit_HIWebView_h=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_header_WebKit_HIWebView_h" >&5
+echo "${ECHO_T}$ac_cv_header_WebKit_HIWebView_h" >&6; }
+if test $ac_cv_header_WebKit_HIWebView_h = yes; then
+
+                           cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBVIEW_WEBKIT 1
+_ACEOF
+
+                           WEBKIT_LINK="-framework WebKit"
+
+else
+
+                           { echo "$as_me:$LINENO: WARNING: WebKit headers not found; disabling wxWebView WebKit" >&5
+echo "$as_me: WARNING: WebKit headers not found; disabling wxWebView WebKit" >&2;}
+                           wxUSE_WEBVIEW_WEBKIT=no
+
+fi
+
+
+        CPPFLAGS="$old_CPPFLAGS"
+    elif test "$wxUSE_OLD_COCOA" = 1; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBVIEW_WEBKIT 1
+_ACEOF
+
+    else
+        wxUSE_WEBVIEW_WEBKIT=no
+    fi
+fi
+
 
 if test "$wxUSE_IMAGE" = "yes" ; then
     cat >>confdefs.h <<\_ACEOF
@@ -48957,6 +49297,10 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_STC" = "yes" ; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_WEB" = "yes" ; then
+        STD_GUI_LIBS="web $STD_GUI_LIBS"
+        BUILT_WX_LIBS="web $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_XRC" = "yes" ; then
         STD_GUI_LIBS="xrc $STD_GUI_LIBS"
@@ -51753,6 +52097,11 @@ EOF
         COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1=""
     fi
 
+    COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_WEB" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1=""
+    fi
+
     COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_PROPGRID" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1=""
@@ -51806,6 +52155,11 @@ EOF
     COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_QA" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1=""
+    fi
+
+    COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_WEB" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1=""
     fi
 
     COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1="#"
@@ -51881,6 +52235,11 @@ EOF
     COND_MONOLITHIC_0_USE_STC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_STC" = "x1" ; then
         COND_MONOLITHIC_0_USE_STC_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_WEB_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_WEB" = "x1" ; then
+        COND_MONOLITHIC_0_USE_WEB_1=""
     fi
 
     COND_MONOLITHIC_0_USE_XRC_1="#"
@@ -54001,6 +54360,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1!$COND_MONOLITHIC_0_SHARED_0_USE_GUI_1$ac_de
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1!$COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1!$COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1!$COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1$ac_delim
+COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1!$COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEB_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1!$COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1!$COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1!$COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1$ac_delim
@@ -54012,6 +54372,7 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1!$COND_MONOLITHIC_0_SHARED_1_USE_GUI_1$ac_de
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1!$COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1!$COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1!$COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1$ac_delim
+COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1!$COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEB_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1!$COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1!$COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1!$COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1$ac_delim
@@ -54027,6 +54388,7 @@ COND_MONOLITHIC_0_USE_QA_1!$COND_MONOLITHIC_0_USE_QA_1$ac_delim
 COND_MONOLITHIC_0_USE_RIBBON_1!$COND_MONOLITHIC_0_USE_RIBBON_1$ac_delim
 COND_MONOLITHIC_0_USE_RICHTEXT_1!$COND_MONOLITHIC_0_USE_RICHTEXT_1$ac_delim
 COND_MONOLITHIC_0_USE_STC_1!$COND_MONOLITHIC_0_USE_STC_1$ac_delim
+COND_MONOLITHIC_0_USE_WEB_1!$COND_MONOLITHIC_0_USE_WEB_1$ac_delim
 COND_MONOLITHIC_0_USE_XRC_1!$COND_MONOLITHIC_0_USE_XRC_1$ac_delim
 COND_MONOLITHIC_1!$COND_MONOLITHIC_1$ac_delim
 COND_MONOLITHIC_1_SHARED_0!$COND_MONOLITHIC_1_SHARED_0$ac_delim
@@ -54056,9 +54418,6 @@ COND_PLATFORM_OS2_1!$COND_PLATFORM_OS2_1$ac_delim
 COND_PLATFORM_UNIX_0!$COND_PLATFORM_UNIX_0$ac_delim
 COND_PLATFORM_UNIX_1!$COND_PLATFORM_UNIX_1$ac_delim
 COND_PLATFORM_UNIX_1_TOOLKIT_MGL!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL$ac_delim
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1$ac_delim
-COND_PLATFORM_UNIX_1_USE_GUI_1!$COND_PLATFORM_UNIX_1_USE_GUI_1$ac_delim
-COND_PLATFORM_UNIX_1_USE_PLUGINS_0!$COND_PLATFORM_UNIX_1_USE_PLUGINS_0$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -54100,6 +54459,9 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1$ac_delim
+COND_PLATFORM_UNIX_1_USE_GUI_1!$COND_PLATFORM_UNIX_1_USE_GUI_1$ac_delim
+COND_PLATFORM_UNIX_1_USE_PLUGINS_0!$COND_PLATFORM_UNIX_1_USE_PLUGINS_0$ac_delim
 COND_PLATFORM_WIN32_0!$COND_PLATFORM_WIN32_0$ac_delim
 COND_PLATFORM_WIN32_1!$COND_PLATFORM_WIN32_1$ac_delim
 COND_PLATFORM_WIN32_1_SHARED_0!$COND_PLATFORM_WIN32_1_SHARED_0$ac_delim
@@ -54194,9 +54556,6 @@ COND_WXUNIV_1!$COND_WXUNIV_1$ac_delim
 COND_WXUSE_EXPAT_BUILTIN!$COND_WXUSE_EXPAT_BUILTIN$ac_delim
 COND_WXUSE_LIBJPEG_BUILTIN!$COND_WXUSE_LIBJPEG_BUILTIN$ac_delim
 COND_WXUSE_LIBPNG_BUILTIN!$COND_WXUSE_LIBPNG_BUILTIN$ac_delim
-COND_WXUSE_LIBTIFF_BUILTIN!$COND_WXUSE_LIBTIFF_BUILTIN$ac_delim
-COND_WXUSE_REGEX_BUILTIN!$COND_WXUSE_REGEX_BUILTIN$ac_delim
-COND_WXUSE_ZLIB_BUILTIN!$COND_WXUSE_ZLIB_BUILTIN$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -54238,6 +54597,9 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_WXUSE_LIBTIFF_BUILTIN!$COND_WXUSE_LIBTIFF_BUILTIN$ac_delim
+COND_WXUSE_REGEX_BUILTIN!$COND_WXUSE_REGEX_BUILTIN$ac_delim
+COND_WXUSE_ZLIB_BUILTIN!$COND_WXUSE_ZLIB_BUILTIN$ac_delim
 COND_wxUSE_EXPAT_builtin!$COND_wxUSE_EXPAT_builtin$ac_delim
 COND_wxUSE_LIBJPEG_builtin!$COND_wxUSE_LIBJPEG_builtin$ac_delim
 COND_wxUSE_LIBPNG_builtin!$COND_wxUSE_LIBPNG_builtin$ac_delim
@@ -54291,7 +54653,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 51; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 54; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
