@@ -31,11 +31,12 @@ static GtkWidgetClass* parent_class;
 
 extern "C" {
 
-
 struct wxPizzaClass
 {
     GtkFixedClass parent;
+#ifndef __WXGTK30__
     void (*set_scroll_adjustments)(GtkWidget*, GtkAdjustment*, GtkAdjustment*);
+#endif
 };
 
 #ifdef __WXGTK30__
@@ -46,9 +47,6 @@ enum {
     PROP_HSCROLL_POLICY,
     PROP_VSCROLL_POLICY
 };
-
-G_DEFINE_TYPE_WITH_CODE(wxPizza, wxpizza, GTK_TYPE_FIXED, 
-        G_IMPLEMENT_INTERFACE(GTK_TYPE_SCROLLABLE, NULL));
 #endif
 
 static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
@@ -182,6 +180,17 @@ static void hide(GtkWidget* widget)
     parent_class->hide(widget);
 }
 
+#ifdef __WXGTK30__
+// Needed to implement GtkScrollable interface, but we don't care about the
+// properties. wxWindowGTK handles the adjustments and scroll policy.
+static void get_property(GObject*, guint, GValue*, GParamSpec*)
+{
+}
+
+static void set_property(GObject*, guint, const GValue*, GParamSpec*)
+{
+}
+#else
 // not used, but needs to exist so gtk_widget_set_scroll_adjustments will work
 static void set_scroll_adjustments(GtkWidget*, GtkAdjustment*, GtkAdjustment*)
 {
@@ -225,99 +234,30 @@ g_cclosure_user_marshal_VOID__OBJECT_OBJECT (GClosure     *closure,
             g_marshal_value_peek_object (param_values + 2),
             data2);
 }
-
-#ifdef __WXGTK30__
-static void
-wxpizza_set_property(GObject         *object,
-               guint            prop_id,
-               const GValue    *value,
-               GParamSpec      *pspec)
-{
-  wxPizza *pizza = WX_PIZZA(object);
-
-  switch (prop_id)
-    {
-    case PROP_HADJUSTMENT:
-      // wxpizza_set_hadjustment (pizza, g_value_get_object (value));
-      break;
-    case PROP_VADJUSTMENT:
-      // wxpizza_set_vadjustment (pizza, g_value_get_object (value));
-      break;
-    case PROP_HSCROLL_POLICY:
-      // viewport->priv->hscroll_policy = g_value_get_enum (value);
-      // gtk_widget_queue_resize (GTK_WIDGET (viewport));
-      break;
-    case PROP_VSCROLL_POLICY:
-      // viewport->priv->vscroll_policy = g_value_get_enum (value);
-      // gtk_widget_queue_resize (GTK_WIDGET (viewport));
-      break;
-    // case PROP_SHADOW_TYPE:
-    //   gtk_viewport_set_shadow_type (viewport, g_value_get_enum (value));
-    //   break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-wxpizza_get_property(GObject         *object,
-               guint            prop_id,
-               GValue          *value,
-               GParamSpec      *pspec)
-{
-  wxPizza *pizza = WX_PIZZA(object);
-
-  switch (prop_id)
-    {
-    case PROP_HADJUSTMENT:
-      // g_value_set_object (value, priv->hadjustment);
-      break;
-    case PROP_VADJUSTMENT:
-      // g_value_set_object (value, priv->vadjustment);
-      break;
-    case PROP_HSCROLL_POLICY:
-      // g_value_set_enum (value, priv->hscroll_policy);
-      break;
-    case PROP_VSCROLL_POLICY:
-      // g_value_set_enum (value, priv->vscroll_policy);
-      break;
-    // case PROP_SHADOW_TYPE:
-    //   g_value_set_enum (value, priv->shadow_type);
-    //   break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
 #endif
 
-#ifdef __WXGTK30__
-static void wxpizza_class_init(wxPizzaClass* g_class)
-#else
-static void wxpizza_class_init(void* g_class, void*)
-#endif
+static void class_init(void* g_class, void*)
 {
     GtkWidgetClass* widget_class = (GtkWidgetClass*)g_class;
     widget_class->size_allocate = size_allocate;
     widget_class->realize = realize;
     widget_class->show = show;
     widget_class->hide = hide;
-    wxPizzaClass* klass = (wxPizzaClass*)g_class;
 
-    // needed to make widget appear scrollable to GTK+
-    klass->set_scroll_adjustments = set_scroll_adjustments;
 #ifdef __WXGTK30__
     GObjectClass *gobject_class = G_OBJECT_CLASS(g_class);
 
-    gobject_class->set_property = wxpizza_set_property;
-    gobject_class->get_property = wxpizza_get_property;
+    gobject_class->set_property = set_property;
+    gobject_class->get_property = get_property;
     // Override properties
     g_object_class_override_property(gobject_class, PROP_HADJUSTMENT, "hadjustment");
     g_object_class_override_property(gobject_class, PROP_VADJUSTMENT, "vadjustment");
     g_object_class_override_property(gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
     g_object_class_override_property(gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 #else
+    wxPizzaClass* klass = (wxPizzaClass*)g_class;
+    // needed to make widget appear scrollable to GTK+
+    klass->set_scroll_adjustments = set_scroll_adjustments;
     widget_class->set_scroll_adjustments_signal =
         g_signal_new(
             "set_scroll_adjustments",
@@ -332,49 +272,34 @@ static void wxpizza_class_init(void* g_class, void*)
     parent_class = GTK_WIDGET_CLASS(g_type_class_peek_parent(g_class));
 }
 
-#ifdef __WXGTK30__
-static void wxpizza_init(wxPizza* self)
-{
-    self->m_scroll_x = 0;
-    self->m_scroll_y = 0;
-    // self->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;
-    // mask off border styles not useable with wxPizza
-    // self->m_border_style = int(windowStyle & BORDER_STYLES);
-}
-#endif
-
 } // extern "C"
 
-#if defined(__WXGTK20__) && !defined(__WXGTK30__)
 GType wxPizza::type()
 {
-    // static GType type;
-    static GtkType type;
+    static GType type;
     if (type == 0)
     {
         const GTypeInfo info = {
             sizeof(wxPizzaClass),
             NULL, NULL,
-            wxpizza_class_init,
+            class_init,
             NULL, NULL,
             sizeof(wxPizza), 0,
             NULL, NULL
         };
         type = g_type_register_static(
             GTK_TYPE_FIXED, "wxPizza", &info, GTypeFlags(0));
+#ifdef __WXGTK30__
+        const GInterfaceInfo interface_info = { NULL, NULL, NULL };
+        g_type_add_interface_static(type, GTK_TYPE_SCROLLABLE, &interface_info);
+#endif
     }
-
     return type;
 }
-#endif
 
 GtkWidget* wxPizza::New(long windowStyle)
 {
-#ifdef __WXGTK30__
-    GtkWidget* widget = GTK_WIDGET(g_object_new(wxpizza_get_type(), NULL));
-#else
     GtkWidget* widget = GTK_WIDGET(g_object_new(type(), NULL));
-#endif
     wxPizza* pizza = WX_PIZZA(widget);
     pizza->m_scroll_x = 0;
     pizza->m_scroll_y = 0;

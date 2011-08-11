@@ -245,7 +245,7 @@ gdk_window_warp_pointer (GdkWindow      *window,
   if (!window)
     window = gdk_get_default_root_window();
 
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__ 
   if (!gdk_window_is_destroyed(window))
 #else
   if (!GDK_WINDOW_DESTROYED(window))
@@ -380,7 +380,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 
     if (win->HasFlag(wxBORDER_SIMPLE))
     {
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__ 
         cairo_t* cr = gdk_cairo_create(gdk_event->window);
         cairo_rectangle(cr, x, y, w - 1, h - 1);
         cairo_set_source_rgb(cr, 0, 0, 0);
@@ -410,7 +410,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
         // over upper left (w,h) of parent window
         GdkRectangle clipRect = { x, y, w, h };
 
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__ 
         cairo_t* cr = gdk_cairo_create(gdk_event->window);
 
         gdk_cairo_rectangle(cr, &clipRect);
@@ -434,7 +434,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 
 extern "C" {
 static void
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__ 
     parent_set(GtkWidget* widget, GtkWidget* old_parent, wxWindow* win)
 #else
     parent_set(GtkWidget* widget, GtkObject* old_parent, wxWindow* win)
@@ -1453,7 +1453,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
     if ( gdk_event->type == GDK_2BUTTON_PRESS &&
             gdk_event->button >= 1 && gdk_event->button <= 3 )
     {
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK30__ 
         // TODO I don't know what would happen if I just skip. I cannot find the similar 
         // field in gtk3
 #else
