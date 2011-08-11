@@ -22,21 +22,21 @@
     #include "wx/wx.h"
 #endif
 
-#include <wx/artprov.h>
-#include <wx/notifmsg.h>
-#include <wx/settings.h>
-#include <wx/webview.h>
-#include <wx/webviewfilehandler.h>
-#include <wx/infobar.h>
-#include <wx/filesys.h>
-#include <wx/fs_arc.h>
+#include "wx/artprov.h"
+#include "wx/notifmsg.h"
+#include "wx/settings.h"
+#include "wx/webview.h"
+#include "wx/webviewfilehandler.h"
+#include "wx/infobar.h"
+#include "wx/filesys.h"
+#include "wx/fs_arc.h"
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
     #include "../sample.xpm"
 #endif
 
 #if wxUSE_STC
-#include <wx/stc/stc.h> 
+#include "wx/stc/stc.h"
 #else
 #error "wxStyledTextControl is needed by this sample"
 #endif
