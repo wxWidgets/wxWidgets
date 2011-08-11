@@ -194,7 +194,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_browser = wxWebView::New(this, wxID_ANY, "http://www.wxwidgets.org");
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
-    //We register the test:// protocol for testing purposes
+    //We register the file:// protocol for testing purposes
     m_browser->RegisterHandler(wxSharedPtr<wxWebHandler>(new wxWebFileHandler()));
 
     SetSizer(topsizer);
