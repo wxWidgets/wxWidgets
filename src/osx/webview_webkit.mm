@@ -330,20 +330,21 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
 #if wxOSX_USE_CARBON
-    m_peer = new wxMacControl(this);
+    wxMacControl* peer = new wxMacControl(this);
     WebInitForCarbon();
-    HIWebViewCreate( m_peer->GetControlRefAddr() );
+    HIWebViewCreate( peer->GetControlRefAddr() );
 
-    m_webView = (WebView*) HIWebViewGetWebView( m_peer->GetControlRef() );
+    m_webView = (WebView*) HIWebViewGetWebView( peer->GetControlRef() );
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     if ( UMAGetSystemVersion() >= 0x1030 )
-        HIViewChangeFeatures( m_peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
+        HIViewChangeFeatures( peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
 #endif
-    InstallControlEventHandler(m_peer->GetControlRef(),
+    InstallControlEventHandler(peer->GetControlRef(),
                                GetwxWebViewWebKitEventHandlerUPP(),
                                GetEventTypeCount(eventList), eventList, this,
                               (EventHandlerRef *)&m_webKitCtrlEventHandler);
+    SetPeer(peer);
 #else
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     m_webView = [[WebView alloc] initWithFrame:r
@@ -355,7 +356,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     MacPostControlCreate(pos, size);
 
 #if wxOSX_USE_CARBON
-    HIViewSetVisible( m_peer->GetControlRef(), true );
+    HIViewSetVisible( GetPeer()->GetControlRef(), true );
 #endif
     [m_webView setHidden:false];
 
@@ -711,7 +712,7 @@ void wxWebViewWebKit::OnSize(wxSizeEvent &event)
 
 void wxWebViewWebKit::MacVisibilityChanged(){
 #if defined(__WXMAC__) && wxOSX_USE_CARBON
-    bool isHidden = !IsControlVisible( m_peer->GetControlRef());
+    bool isHidden = !IsControlVisible( GetPeer()->GetControlRef());
     if (!isHidden)
         [(WebView*)m_webView display];
 
