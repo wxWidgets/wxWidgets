@@ -295,7 +295,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
 
 #endif
 
-@interface MyFrameLoadMonitor : NSObject
+@interface WebViewLoadDelegate : NSObject
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -304,7 +304,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
 
 @end
 
-@interface MyPolicyDelegate : NSObject
+@interface WebViewPolicyDelegate : NSObject
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -363,16 +363,16 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
 
     // Register event listener interfaces
-    MyFrameLoadMonitor* myFrameLoadMonitor =
-            [[MyFrameLoadMonitor alloc] initWithWxWindow: this];
+    WebViewLoadDelegate* loadDelegate =
+            [[WebViewWebKitLoadDelegate alloc] initWithWxWindow: this];
 
-    [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
+    [m_webView setFrameLoadDelegate:loadDelegate];
 
     // this is used to veto page loads, etc.
-    MyPolicyDelegate* myPolicyDelegate =
-            [[MyPolicyDelegate alloc] initWithWxWindow: this];
+    WebViewPolicyDelegate* policyDelegate =
+            [[WebViewPolicyDelegate alloc] initWithWxWindow: this];
 
-    [m_webView setPolicyDelegate:myPolicyDelegate];
+    [m_webView setPolicyDelegate:policyDelegate];
 
     LoadUrl(strURL);
     return true;
@@ -380,16 +380,16 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
 wxWebViewWebKit::~wxWebViewWebKit()
 {
-    MyFrameLoadMonitor* myFrameLoadMonitor = [m_webView frameLoadDelegate];
-    MyPolicyDelegate* myPolicyDelegate = [m_webView policyDelegate];
+    WebViewLoadDelegate* loadDelegate = [m_webView frameLoadDelegate];
+    WebViewPolicyDelegate* policyDelegate = [m_webView policyDelegate];
     [m_webView setFrameLoadDelegate: nil];
     [m_webView setPolicyDelegate: nil];
 
-    if (myFrameLoadMonitor)
-        [myFrameLoadMonitor release];
+    if (loadDelegate)
+        [loadDelegate release];
 
-    if (myPolicyDelegate)
-        [myPolicyDelegate release];
+    if (policyDelegate)
+        [policyDelegate release];
 }
 
 // ----------------------------------------------------------------------------
@@ -976,7 +976,7 @@ void wxWebViewWebKit::Redo()
 // destroyed. Therefore, we must be careful to check both the existence
 // of the Carbon control and the event handler before firing events.
 
-@implementation MyFrameLoadMonitor
+@implementation WebViewLoadDelegate
 
 - initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
@@ -1164,7 +1164,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
 }
 @end
 
-@implementation MyPolicyDelegate
+@implementation WebViewPolicyDelegate
 
 - initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
