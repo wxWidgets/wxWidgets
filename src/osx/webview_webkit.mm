@@ -364,7 +364,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     // Register event listener interfaces
     WebViewLoadDelegate* loadDelegate =
-            [[WebViewWebKitLoadDelegate alloc] initWithWxWindow: this];
+            [[WebViewLoadDelegate alloc] initWithWxWindow: this];
 
     [m_webView setFrameLoadDelegate:loadDelegate];
 
