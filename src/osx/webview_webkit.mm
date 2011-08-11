@@ -326,6 +326,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 {
     m_busy = false;
 
+    DontCreatePeer();
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
 #if wxOSX_USE_CARBON
@@ -348,7 +349,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     m_webView = [[WebView alloc] initWithFrame:r
                                      frameName:@"webkitFrame"
                                      groupName:@"webkitGroup"];
-    m_peer = new wxWidgetCocoaImpl( this, m_webView );
+    SetPeer(new wxWidgetCocoaImpl( this, m_webView ));
 #endif
 
     MacPostControlCreate(pos, size);
