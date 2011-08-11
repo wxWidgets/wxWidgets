@@ -159,12 +159,6 @@ private:
     void* m_webKitCtrlEventHandler;
     //It should be WebView*, but WebView is an Objective-C class
     //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
-    
-#if wxOSX_USE_CARBON
-    wxMacControl *m_peer;
-#else
-    wxWidgetCocoaImpl *m_peer;
-#endif
 };
 
 #endif // wxUSE_WEBKIT
