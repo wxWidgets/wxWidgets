@@ -26,6 +26,8 @@
 
 #include "wx/osx/private.h"
 #include "wx/cocoa/string.h"
+#include "wx/hashmap.h"
+#include "wx/filesys.h"
 
 #include <WebKit/WebKit.h>
 #include <WebKit/HIWebView.h>
@@ -313,6 +315,16 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
 
 @end
 
+//We use a hash to map scheme names to wxWebHandlers
+WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebHandler>, wxStringToWebHandlerMap);
+
+static wxStringToWebHandlerMap g_stringHandlerMap;
+
+@interface WebViewCustomProtocol : NSURLProtocol
+{
+}
+@end
+
 // ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
@@ -373,6 +385,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
             [[WebViewPolicyDelegate alloc] initWithWxWindow: this];
 
     [m_webView setPolicyDelegate:policyDelegate];
+
+    //Register our own class for custom scheme handling
+    [NSURLProtocol registerClass:[WebViewCustomProtocol class]];
 
     LoadUrl(strURL);
     return true;
@@ -967,6 +982,11 @@ void wxWebViewWebKit::Redo()
     [[m_webView undoManager] redo];
 }
 
+void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebHandler> handler)
+{
+    g_stringHandlerMap[handler->GetName()] = handler;
+}
+
 //------------------------------------------------------------
 // Listener interfaces
 //------------------------------------------------------------
@@ -1220,6 +1240,73 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
 
     [listener ignore];
 }
+@end
+
+@implementation WebViewCustomProtocol
+
++ (BOOL)canInitWithRequest:(NSURLRequest *)request
+{
+    NSString *scheme = [[request URL] scheme];
+
+    wxStringToWebHandlerMap::const_iterator it;
+    for( it = g_stringHandlerMap.begin(); it != g_stringHandlerMap.end(); ++it )
+    {
+        if(it->first.IsSameAs(wxStringWithNSString(scheme)))
+        {
+            return YES;
+        }
+    }
+
+	return NO;
+}
+
++ (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request
+{
+    //We don't do any processing here as the wxWebHandler classes do it
+    return request;
+}
+
+- (void)startLoading
+{
+    NSURLRequest *request = [self request];
+	NSString* path = [[request URL] absoluteString];
+
+    wxString wxpath = wxStringWithNSString(path);
+    wxString scheme = wxStringWithNSString([[request URL] scheme]);
+    wxFSFile* file = g_stringHandlerMap[scheme]->GetFile(wxpath);
+    size_t length = file->GetStream()->GetLength();
+
+
+    NSURLResponse *response =  [[NSURLResponse alloc] initWithURL:[request URL]
+			                   MIMEType:wxNSStringWithWxString(file->GetMimeType())
+			                   expectedContentLength:length 
+			                   textEncodingName:nil];
+    
+    //Load the data, we malloc it so it is tidied up properly
+    void* buffer = malloc(length);
+    file->GetStream()->Read(buffer, length);
+    NSData *data = [[NSData alloc] initWithBytesNoCopy:buffer length:length];
+    
+    id<NSURLProtocolClient> client = [self client];
+
+    //We do not support caching anything yet
+	[client URLProtocol:self didReceiveResponse:response 
+            cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+
+    //Set the data
+	[client URLProtocol:self didLoadData:data];
+
+	//Notify that we have finished
+	[client URLProtocolDidFinishLoading:self];
+
+	[response release];
+}
+
+- (void)stopLoading
+{
+
+}
+
 @end
 
 #endif //wxUSE_WEBVIEW_WEBKIT
