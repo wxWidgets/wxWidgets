@@ -14,9 +14,9 @@
 
 #if wxUSE_WEB
 
-#include <wx/control.h>
-#include <wx/event.h>
-#include <wx/sstream.h>
+#include "wx/control.h"
+#include "wx/event.h"
+#include "wx/sstream.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 
