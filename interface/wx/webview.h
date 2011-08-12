@@ -172,14 +172,15 @@ public:
     required is 1.3.1 which ships by default with Ubuntu Natty and Debian
     Wheezy and has the package name libwebkitgtk-dev. Custom schemes and 
     virtual files systems are supported under this backend, however embedded
-    resources such as images and stylesheets are currently extracted to a 
-    temporary file before being loaded.
+    resources such as images and stylesheets are currently loaded using the
+    data:// scheme.
     
     @par wxWEB_VIEW_WEBKIT (OSX)
     
     The OSX WebKit backend uses Apple's 
     <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
-    class. Currently it does not support custom schemes and virtual file systems.
+    class. This backend has full support for custom schemes and virtual file
+    systems.
 
     @section async Asynchronous Notifications
     
