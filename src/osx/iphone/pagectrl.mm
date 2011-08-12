@@ -46,8 +46,23 @@ class wxPageCtrlIPhoneImpl : public wxWidgetIPhoneImpl
 public:
     wxPageCtrlIPhoneImpl( wxWindowMac* peer , WXWidget w ) : wxWidgetIPhoneImpl(peer, w)
     {
-        
-    }    
+        m_pageControl = w;
+    }
+    
+    void SetPageCount(int pageCount)
+    {
+        [m_pageControl setNumberOfPages:pageCount];
+    }
+    
+    void SetCurrentPage(int page)
+    {
+        [m_pageControl setCurrentPage:page];
+    }
+    
+    
+    
+private:
+    wxUIPageControl* m_pageControl;
 };
 
 wxWidgetImplType* wxWidgetImpl::CreatePageCtrl(wxWindowMac* wxpeer,
@@ -59,11 +74,15 @@ wxWidgetImplType* wxWidgetImpl::CreatePageCtrl(wxWindowMac* wxpeer,
                                                long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
+    
+    BOOL hidesForSinglePage = NO;
+    if (style & wxPC_HIDE_FOR_SINGLE_PAGE) {
+        hidesForSinglePage = YES;
+    }
 
     wxUIPageControl* v = [[wxUIPageControl alloc] init];
-    [v setNumberOfPages:4];
-    [v setCurrentPage:2];
-    [v setHidesForSinglePage:NO];
+    [v setNumberOfPages:0];
+    [v setHidesForSinglePage:hidesForSinglePage];
     
     wxWidgetIPhoneImpl* c = new wxPageCtrlIPhoneImpl( wxpeer, v );
     return c;
@@ -76,12 +95,6 @@ wxWidgetImplType* wxWidgetImpl::CreatePageCtrl(wxWindowMac* wxpeer,
 IMPLEMENT_DYNAMIC_CLASS(wxPageCtrl, wxPageCtrlBase)
 
 BEGIN_EVENT_TABLE(wxPageCtrl, wxPageCtrlBase)
-#if 0
-    EVT_PAINT(wxPageCtrl::OnPaint)
-    EVT_ERASE_BACKGROUND(wxPageCtrl::OnEraseBackground)    
-    EVT_SIZE(wxPageCtrl::OnSize)
-    EVT_MOUSE_EVENTS(wxPageCtrl::OnMouseEvent)
-#endif
 END_EVENT_TABLE()
 
 
@@ -118,13 +131,26 @@ void wxPageCtrl::Init()
 /// Sets the page count.
 void wxPageCtrl::SetPageCount(int pageCount)
 {
+    wxPageCtrlIPhoneImpl* peer = (wxPageCtrlIPhoneImpl *)GetPeer();
+    wxASSERT_MSG(peer, "No peer");
+    if ( !peer ) {
+        return;
+    }
+    
+    peer->SetPageCount(pageCount);
     m_pageCount = pageCount;
-    // FIXME stub
 }
 
 /// Sets the current page.
 void wxPageCtrl::SetCurrentPage(int page)
 {
+    wxPageCtrlIPhoneImpl* peer = (wxPageCtrlIPhoneImpl *)GetPeer();
+    wxASSERT_MSG(peer, "No peer");
+    if ( !peer ) {
+        return;
+    }
+    
+    peer->SetCurrentPage(page);
+    
     m_currentPage = page;
-    // FIXME stub
 }
