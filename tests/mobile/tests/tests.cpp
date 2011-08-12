@@ -29,6 +29,7 @@
 #include "tests_textctrl.h"
 #include "tests_webctrl.h"
 #include "tests_checkbox.h"
+#include "tests_toolbar.h"
 
 
 #pragma mark -
@@ -80,6 +81,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxCheckBox"));
     m_testDescriptions.Add(_("A checkbox is a labelled box which by default is either on (checkmark is visible) or off (no checkmark)."));
     m_testPanels.Add(new MobileTestsWxCheckBoxPanel());
+    
+    // wxToolBar
+    m_testNames.Add(_("wxToolBar"));
+    m_testDescriptions.Add(_("A horizontal toolbar containing text and/or bitmap buttons."));
+    m_testPanels.Add(new MobileTestsWxToolBarPanel());
     
     //
     // --
