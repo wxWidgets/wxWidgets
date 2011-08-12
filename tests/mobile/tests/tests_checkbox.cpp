@@ -9,6 +9,7 @@
 
 #include "tests_checkbox.h"
 
+
 BEGIN_EVENT_TABLE(MobileTestsWxCheckBoxPanel, wxPanel)
 END_EVENT_TABLE()
 
@@ -42,6 +43,7 @@ bool MobileTestsWxCheckBoxPanel::CreateControls()
     // 
 
     m_checkBox = new wxCheckBox(this, wxID_ANY, "This should not be shown.");
+    m_checkBox->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(MobileTestsWxCheckBoxPanel::OnCheckBox), NULL, this);
     checkBoxSizer->Add(m_checkBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
     // Setters/Getters
@@ -49,4 +51,9 @@ bool MobileTestsWxCheckBoxPanel::CreateControls()
     wxASSERT_MSG(m_checkBox->GetValue() == true, "Check box value should be true.");
     
     return true;
+}
+
+void MobileTestsWxCheckBoxPanel::OnCheckBox(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Event wxEVT_CHECKBOX");
 }

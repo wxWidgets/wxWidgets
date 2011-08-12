@@ -10,6 +10,8 @@
 //
 // TESTS:
 // 
+// events:
+//   wxEVT_CHECKBOX(id, func)
 // - SetValue()
 // - GetValue()
 
@@ -27,7 +29,10 @@ public:
                             const wxPoint& pos = wxDefaultPosition,
                             const wxSize& size = wxDefaultSize,
                             long style = wxTAB_TRAVERSAL,
-                            const wxString& name = _("wxWebCtrl Mobile"));
+                            const wxString& name = _("wxCheckBox Mobile"));
+    
+    // Event tests
+    void OnCheckBox(wxCommandEvent& WXUNUSED(event));
     
 protected:
     bool CreateControls();
