@@ -1195,7 +1195,7 @@ public :
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc )
 : wxGraphicsContext(renderer)
 {
-#if defined(__WXGTK20__) || defined(__WXGTK30__)
+#if defined(__WXGTK20__)
     const wxDCImpl *impl = dc.GetImpl();
     Init( (cairo_t*) impl->GetCairoContext() );
 
@@ -1880,7 +1880,7 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 {
-#if defined(__WXGTK20__) || defined(__WXGTK30__)
+#if defined(__WXGTK20__) 
     const wxDCImpl *impl = dc.GetImpl();
     cairo_t* context = (cairo_t*) impl->GetCairoContext();
     if (context)
