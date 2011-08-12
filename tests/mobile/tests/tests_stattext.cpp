@@ -9,8 +9,6 @@
 
 #include "tests_stattext.h"
 
-#define MobileTestsWxButtonClickedID    wxID_PROPERTIES
-
 BEGIN_EVENT_TABLE(MobileTestsWxStaticTextPanel, wxPanel)
     //EVT_BUTTON(MobileTestsWxButtonClickedID, MobileTestsWxStaticTextPanel::OnButtonClicked)
 END_EVENT_TABLE()

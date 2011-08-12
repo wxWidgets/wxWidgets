@@ -26,6 +26,7 @@
 #include "tests_notebook.h"
 #include "tests_navctrl.h"
 #include "tests_stattext.h"
+#include "tests_textctrl.h"
 
 
 #pragma mark -
@@ -62,6 +63,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxStaticText"));
     m_testDescriptions.Add(_("A control showing a text string."));
     m_testPanels.Add(new MobileTestsWxStaticTextPanel());
+
+    // wxTextCtrl
+    m_testNames.Add(_("wxTextCtrl"));
+    m_testDescriptions.Add(_("A single or multi-line text control."));
+    m_testPanels.Add(new MobileTestsWxTextCtrlPanel());
     
     //
     // --

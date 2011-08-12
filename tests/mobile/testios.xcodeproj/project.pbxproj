@@ -13,6 +13,7 @@
 		407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074F5E912ED969C00693A3F /* libwx_osx_iphone.a */; };
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
 		B92FE45613F2E82000408AD7 /* tests_stattext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B92FE45513F2E82000408AD7 /* tests_stattext.cpp */; };
+		B92FE45B13F2EAB000408AD7 /* tests_textctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B92FE45A13F2EAB000408AD7 /* tests_textctrl.cpp */; };
 		B932117513DFC3BE0067FD1F /* tests_button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B932117413DFC3BD0067FD1F /* tests_button.cpp */; };
 		B9C67EA713EA1DC000E2E44A /* tests_notebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C67EA613EA1DC000E2E44A /* tests_notebook.cpp */; };
 		B9C67EAA13EAFA8600E2E44A /* tests_navctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C67EA913EAFA8600E2E44A /* tests_navctrl.cpp */; };
@@ -76,6 +77,8 @@
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
 		B92FE45413F2E82000408AD7 /* tests_stattext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_stattext.h; sourceTree = "<group>"; };
 		B92FE45513F2E82000408AD7 /* tests_stattext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_stattext.cpp; sourceTree = "<group>"; };
+		B92FE45913F2EAB000408AD7 /* tests_textctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_textctrl.h; sourceTree = "<group>"; };
+		B92FE45A13F2EAB000408AD7 /* tests_textctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_textctrl.cpp; sourceTree = "<group>"; };
 		B932117413DFC3BD0067FD1F /* tests_button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_button.cpp; sourceTree = "<group>"; };
 		B932117613DFC3C90067FD1F /* tests_button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_button.h; sourceTree = "<group>"; };
 		B932117713DFCBE80067FD1F /* testpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testpanel.h; sourceTree = "<group>"; };
@@ -245,6 +248,8 @@
 				B9C67EA913EAFA8600E2E44A /* tests_navctrl.cpp */,
 				B92FE45413F2E82000408AD7 /* tests_stattext.h */,
 				B92FE45513F2E82000408AD7 /* tests_stattext.cpp */,
+				B92FE45913F2EAB000408AD7 /* tests_textctrl.h */,
+				B92FE45A13F2EAB000408AD7 /* tests_textctrl.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -361,6 +366,7 @@
 				B9C67EA713EA1DC000E2E44A /* tests_notebook.cpp in Sources */,
 				B9C67EAA13EAFA8600E2E44A /* tests_navctrl.cpp in Sources */,
 				B92FE45613F2E82000408AD7 /* tests_stattext.cpp in Sources */,
+				B92FE45B13F2EAB000408AD7 /* tests_textctrl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
