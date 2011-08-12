@@ -682,12 +682,6 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
                                       wxWindowGTK *win,
                                       GdkEventKey *gdk_event)
 {
-    int x = 0;
-    int y = 0;
-    GdkModifierType state;
-    if (gdk_event->window)
-        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
-
     event.SetTimestamp( gdk_event->time );
     event.SetId(win->GetId());
 
@@ -741,10 +735,8 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_rawCode = (wxUint32) gdk_event->keyval;
     event.m_rawFlags = gdk_event->hardware_keycode;
 
-    wxGetMousePosition( &x, &y );
-    win->ScreenToClient( &x, &y );
-    event.m_x = x;
-    event.m_y = y;
+    wxGetMousePosition(&event.m_x, &event.m_y);
+    win->ScreenToClient(&event.m_x, &event.m_y);
     event.SetEventObject( win );
 }
 
