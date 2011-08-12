@@ -448,8 +448,14 @@ static void
     GtkWidget* parent = gtk_widget_get_parent(widget);
     if (parent)
     {
+#ifdef __WXGTK30__ 
+        // TODO Rewrite border drawing callback function for gtk+3. (JC)
+        // g_signal_connect_after(parent, "expose_event",
+        //     G_CALLBACK(expose_event_border), win);
+#else
         g_signal_connect_after(parent, "expose_event",
             G_CALLBACK(expose_event_border), win);
+#endif
     }
 }
 }
