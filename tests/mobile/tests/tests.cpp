@@ -31,6 +31,7 @@
 #include "tests_checkbox.h"
 #include "tests_toolbar.h"
 #include "tests_gauge.h"
+#include "tests_pagectrl.h"
 
 
 #pragma mark -
@@ -92,6 +93,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxGauge"));
     m_testDescriptions.Add(_("A gauge class, representing a range and current value."));
     m_testPanels.Add(new MobileTestsWxGaugePanel());
+
+    // wxPageCtrl
+    m_testNames.Add(_("wxPageCtrl"));
+    m_testDescriptions.Add(_("A control representing available pages as a row of dots, with one dot selected to represent the current page."));
+    m_testPanels.Add(new MobileTestsWxPageCtrlPanel());
     
     //
     // --

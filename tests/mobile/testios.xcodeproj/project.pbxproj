@@ -19,6 +19,7 @@
 		B932117513DFC3BE0067FD1F /* tests_button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B932117413DFC3BD0067FD1F /* tests_button.cpp */; };
 		B955212813F540BD00A6B79A /* tests_toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B955212713F540BD00A6B79A /* tests_toolbar.cpp */; };
 		B955215413F5454400A6B79A /* tests_gauge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B955215313F5454400A6B79A /* tests_gauge.cpp */; };
+		B955216513F5474000A6B79A /* tests_pagectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B955216413F5474000A6B79A /* tests_pagectrl.cpp */; };
 		B9C67EA713EA1DC000E2E44A /* tests_notebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C67EA613EA1DC000E2E44A /* tests_notebook.cpp */; };
 		B9C67EAA13EAFA8600E2E44A /* tests_navctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C67EA913EAFA8600E2E44A /* tests_navctrl.cpp */; };
 		B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA6F9113BF1EF900061979 /* libz.dylib */; };
@@ -95,6 +96,8 @@
 		B955212A13F5429500A6B79A /* tests_toolbar_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_toolbar_bitmap.h; sourceTree = "<group>"; };
 		B955215213F5454400A6B79A /* tests_gauge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_gauge.h; sourceTree = "<group>"; };
 		B955215313F5454400A6B79A /* tests_gauge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_gauge.cpp; sourceTree = "<group>"; };
+		B955216313F5474000A6B79A /* tests_pagectrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_pagectrl.h; sourceTree = "<group>"; };
+		B955216413F5474000A6B79A /* tests_pagectrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_pagectrl.cpp; sourceTree = "<group>"; };
 		B9C67EA513EA1DAF00E2E44A /* tests_notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_notebook.h; sourceTree = "<group>"; };
 		B9C67EA613EA1DC000E2E44A /* tests_notebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_notebook.cpp; sourceTree = "<group>"; };
 		B9C67EA813EAFA7400E2E44A /* tests_navctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_navctrl.h; sourceTree = "<group>"; };
@@ -272,6 +275,8 @@
 				B955212A13F5429500A6B79A /* tests_toolbar_bitmap.h */,
 				B955215213F5454400A6B79A /* tests_gauge.h */,
 				B955215313F5454400A6B79A /* tests_gauge.cpp */,
+				B955216313F5474000A6B79A /* tests_pagectrl.h */,
+				B955216413F5474000A6B79A /* tests_pagectrl.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -393,6 +398,7 @@
 				B92FE46913F2F1CC00408AD7 /* tests_checkbox.cpp in Sources */,
 				B955212813F540BD00A6B79A /* tests_toolbar.cpp in Sources */,
 				B955215413F5454400A6B79A /* tests_gauge.cpp in Sources */,
+				B955216513F5474000A6B79A /* tests_pagectrl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
