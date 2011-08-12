@@ -94,7 +94,7 @@ void wxDisplaySizeMM( int *width, int *height )
 
 void wxGetMousePosition( int* x, int* y )
 {
-    gdk_window_get_pointer( NULL, x, y, NULL );
+    gdk_window_get_pointer(gtk_widget_get_root_window(wxGetRootWindow()), x, y, NULL);
 }
 
 bool wxColourDisplay()
