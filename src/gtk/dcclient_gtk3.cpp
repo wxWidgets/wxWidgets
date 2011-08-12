@@ -55,6 +55,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     // m_release = false;
     // if ( cg == NULL )
     // {
+    if (window->GTKGetDrawingWindow())
+    {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
     // }
     // else
@@ -68,10 +70,10 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
 
     //     SetGraphicsContext( wxGraphicsContext::CreateFromNative( cg ) );
     // }
-    DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
+        DoSetClippingRegion(0, 0, m_width, m_height);
 
-    SetBackground(wxBrush(window->GetBackgroundColour(),wxSOLID));
-
+        SetBackground(wxBrush(window->GetBackgroundColour()));
+    }
     SetFont( window->GetFont() ) ;
 }
 
@@ -151,8 +153,11 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
     m_window->GetClientSize( &m_width , &m_height);
     if ( !m_window->IsShownOnScreen() )
         m_width = m_height = 0;
-    SetDeviceOrigin( origin.x, origin.y );
-    DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
+    if (window->GTKGetDrawingWindow())
+    {
+        SetDeviceOrigin(origin.x, origin.y);
+        DoSetClippingRegion(0, 0, m_width, m_height);
+    }
 }
 
 wxClientDCImpl::~wxClientDCImpl()
