@@ -32,6 +32,7 @@
 #include "tests_toolbar.h"
 #include "tests_gauge.h"
 #include "tests_pagectrl.h"
+#include "tests_segctrl.h"
 
 
 #pragma mark -
@@ -98,6 +99,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxPageCtrl"));
     m_testDescriptions.Add(_("A control representing available pages as a row of dots, with one dot selected to represent the current page."));
     m_testPanels.Add(new MobileTestsWxPageCtrlPanel());
+
+    // wxSegmentedCtrl
+    m_testNames.Add(_("wxSegmentedCtrl"));
+    m_testDescriptions.Add(_("A class with the same API as wxMoTabCtrl, but displaying a space-efficient row of buttons."));
+    m_testPanels.Add(new MobileTestsWxSegmentedCtrlPanel());
     
     //
     // --
