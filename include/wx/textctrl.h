@@ -116,8 +116,8 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
 #define wxTE_RICH2          0x8000
 
-// reuse wxTE_RICH2's value for CAPEDIT control on Windows CE
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+// reuse wxTE_RICH2's value for CAPEDIT control on Windows CE and iOS
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__) || defined(__WXOSX_IPHONE__)
 #define wxTE_CAPITALIZE     wxTE_RICH2
 #else
 #define wxTE_CAPITALIZE     0

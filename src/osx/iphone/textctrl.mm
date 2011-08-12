@@ -602,6 +602,13 @@ bool wxUITextFieldControl::CanPaste() const
 
 void wxUITextFieldControl::SetEditable(bool editable)
 {
+    if (m_textField) {
+        if ( !editable ) {
+            [m_textField resignFirstResponder];
+        }
+        
+        [m_textField setEnabled: editable];
+    }
 }
 
 void wxUITextFieldControl::GetSelection( long* from, long* to) const
@@ -732,14 +739,22 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     }
 #endif
     
-    if ( style & wxTE_PASSWORD )
+    if ( style & wxTE_PASSWORD ) {
         [tv setSecureTextEntry:YES];
+    }
+    
+    if ( style & wxTE_CAPITALIZE ) {
+        [tv setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+    } else {
+        [tv setAutocapitalizationType:UITextAutocapitalizationTypeSentences];
+    }
     
     if ( !(style & wxTE_MULTILINE) )
     {
         [tv setAutocorrectionType:UITextAutocorrectionTypeNo];
 		[tv setReturnKeyType:UIReturnKeyDone];
     }
+    
     [tv setKeyboardType:UIKeyboardTypeDefault];
     
     t->SetStringValue(str);
