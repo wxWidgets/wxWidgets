@@ -207,5 +207,6 @@ int wxSegmentedCtrl::SetSelection(int item)
     
     NSInteger previousSelection = [segmentedControl selectedSegmentIndex];
     [segmentedControl setSelectedSegmentIndex:item];
+    
     return previousSelection;
 }

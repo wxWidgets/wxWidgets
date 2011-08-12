@@ -33,6 +33,7 @@
 #include "tests_gauge.h"
 #include "tests_pagectrl.h"
 #include "tests_segctrl.h"
+#include "tests_scrolwin.h"
 
 
 #pragma mark -
@@ -104,6 +105,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxSegmentedCtrl"));
     m_testDescriptions.Add(_("A class with the same API as wxMoTabCtrl, but displaying a space-efficient row of buttons."));
     m_testPanels.Add(new MobileTestsWxSegmentedCtrlPanel());
+
+    // wxScrolledWindow
+    m_testNames.Add(_("wxScrolledWindow"));
+    m_testDescriptions.Add(_("A container that scrolls its content."));
+    m_testPanels.Add(new MobileTestsWxScrolledWindowPanel());
     
     //
     // --
