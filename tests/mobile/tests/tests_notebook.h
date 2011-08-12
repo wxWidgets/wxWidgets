@@ -7,7 +7,11 @@
 //
 
 //
-// Tests:
+// TESTS:
+// 
+// events:
+//   - wxEVT_NOTEBOOK_PAGE_CHANGED
+//   - wxEVT_NOTEBOOK_PAGE_CHANGING
 // + wxNotebook ()
 // + wxNotebook (wxWindow *parent, wxWindowID id, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=0, const wxString &name=wxNotebookNameStr)
 // + bool       Create (wxWindow *parent, wxWindowID id, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=0, const wxString &name=wxNotebookNameStr)
@@ -53,8 +57,7 @@ protected:
     DECLARE_EVENT_TABLE()
     
 private:
-    
-    wxNotebook *m_notebook;
+    wxNotebook* m_notebook;
 };
 
 
@@ -62,7 +65,12 @@ private:
 class MobileTestsWxNotebookPage : public wxPanel {
     
 public:
-    MobileTestsWxNotebookPage(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = "panel") : wxPanel(parent, id, pos, size, style, name) { }
+    MobileTestsWxNotebookPage(wxWindow* parent,
+                              wxWindowID id = wxID_ANY,
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = wxTAB_TRAVERSAL,
+                              const wxString& name = "panel");
   
 protected:
     
@@ -71,7 +79,6 @@ protected:
     void OnDeleteAllPagesButtonClicked(wxCommandEvent& WXUNUSED(event));
 
     DECLARE_EVENT_TABLE()
-    
 };
 
 #endif

@@ -7,8 +7,14 @@
 //
 
 //
-// Tests:
-// + <constructor>
+// TESTS:
+// 
+// styles:
+//   + wxBU_ROUNDED_RECTANGLE
+//   + wxBU_DISCLOSURE
+//   + wxBU_INFO_LIGHT
+//   + wxBU_INFO_DARK
+//   + wxBU_CONTACT_ADD
 // - SetLabel()
 //
 
@@ -36,7 +42,6 @@ protected:
     DECLARE_EVENT_TABLE()
 
 private:
-    
     wxButton* m_buttonRoundedRectangle;
     wxButton* m_buttonDisclosure;
     wxButton* m_buttonInfoLight;

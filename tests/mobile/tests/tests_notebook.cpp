@@ -60,12 +60,7 @@ bool MobileTestsWxNotebookPanel::CreateControls()
     MobileTestsWxNotebookPage* page3 = new MobileTestsWxNotebookPage(m_notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), wxNO_BORDER);
     m_notebook->AddPage(page3, _("Third"), false, wxID_CONTACTS);
     m_notebook->SetBadge(2, wxT("1"));
-    
-    // FIXME nav. bar's height doesn't get counted in wxPanel
-    wxButton* insertPageButton = new wxButton(page3, MobileTestsWxNotebookInsertPageID, "Insert page", wxPoint(0, 45), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
-    wxButton* deletePageButton = new wxButton(page3, MobileTestsWxNotebookDeletePageID, "Delete page", wxPoint(0, 90), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
-    wxButton* deleteAllPagesButton = new wxButton(page3, MobileTestsWxNotebookDeleteAllPagesID, "Delete all pages", wxPoint(0, 135), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
-    
+        
     // Getters
     wxASSERT_MSG(m_notebook->GetPageCount() == 3, "Invalid page count");
     wxASSERT_MSG(m_notebook->GetSelection() == 0, "Invalid selection");
@@ -94,6 +89,19 @@ BEGIN_EVENT_TABLE(MobileTestsWxNotebookPage, wxPanel)
     EVT_BUTTON(MobileTestsWxNotebookDeleteAllPagesID, MobileTestsWxNotebookPage::OnDeleteAllPagesButtonClicked)
 END_EVENT_TABLE()
 
+
+MobileTestsWxNotebookPage::MobileTestsWxNotebookPage(wxWindow* parent,
+                                                     wxWindowID id,
+                                                     const wxPoint& pos,
+                                                     const wxSize& size,
+                                                     long style,
+                                                     const wxString& name) : wxPanel(parent, id, pos, size, style, name)
+{
+    // FIXME nav. bar's height doesn't get counted in wxPanel
+    wxButton* insertPageButton = new wxButton(this, MobileTestsWxNotebookInsertPageID, "Insert page", wxPoint(0, 45), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+    wxButton* deletePageButton = new wxButton(this, MobileTestsWxNotebookDeletePageID, "Delete page", wxPoint(0, 90), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+    wxButton* deleteAllPagesButton = new wxButton(this, MobileTestsWxNotebookDeleteAllPagesID, "Delete all pages", wxPoint(0, 135), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+}
 
 void MobileTestsWxNotebookPage::OnInsertPageButtonClicked(wxCommandEvent& WXUNUSED(event))
 {
