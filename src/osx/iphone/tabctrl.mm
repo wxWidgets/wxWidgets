@@ -25,6 +25,7 @@
 #include "wx/toplevel.h"
 #endif
 
+#include "wx/osx/private.h"
 #include "wx/tabctrl.h"
 
 #include "wx/imaglist.h"
@@ -315,4 +316,26 @@ wxString wxTabCtrl::GetBadge(int item) const
     // FIXME stub
     
     return wxEmptyString;
+}
+
+bool wxTabCtrl::SetButtonBackgroundColour(const wxColour &colour)
+{
+    UIView *view = GetPeer()->GetWXWidget();
+    if ( !view ) {
+        return false;
+    }
+    
+    UIColor *uiColor = [[[UIColor alloc] initWithCGColor:colour.GetCGColor()] autorelease];
+    if ( !uiColor ) {
+        return false;
+    }
+    
+    if ([view respondsToSelector:@selector(setTintColor:)]) {
+        [view performSelector:@selector(setTintColor:)
+                   withObject:uiColor];
+    }
+    
+    m_buttonBackgroundColour = colour;
+    
+    return true;
 }

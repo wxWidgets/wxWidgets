@@ -14,10 +14,10 @@
 //   + wxEVT_COMMAND_TAB_SEL_CHANGING
 //   + wxEVT_COMMAND_TAB_SEL_CHANGED
 // - wxMoSegmentedCtrl (wxWindow *parent, wxWindowID id, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=wxTAB_TEXT|wxTAB_BITMAP, const wxString &name=wxT("segCtrl"))
-// - int     GetSelection () const 
+// + int     GetSelection () const 
 // - int     GetCurFocus () const 
 // - wxImageList *     GetImageList () const 
-// - int     GetItemCount () const 
+// + int     GetItemCount () const 
 // - bool     GetItemRect (int item, wxRect &rect) const 
 // - wxString     GetItemText (int item) const 
 // - int     GetItemImage (int item) const 
@@ -39,8 +39,8 @@
 // - wxString     GetBadge (int item) const 
 // - virtual void     SetBorderColour (const wxColour &colour)
 // - virtual wxColour     GetBorderColour () const 
-// - virtual bool     SetButtonBackgroundColour (const wxColour &colour)
-// - virtual wxColour     GetButtonBackgroundColour () const
+// + virtual bool     SetButtonBackgroundColour (const wxColour &colour)
+// + virtual wxColour     GetButtonBackgroundColour () const
 
 #ifndef testios_tests_segctrl_h
 #define testios_tests_segctrl_h

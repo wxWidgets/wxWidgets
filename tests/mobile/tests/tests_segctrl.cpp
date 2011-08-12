@@ -52,6 +52,14 @@ bool MobileTestsWxSegmentedCtrlPanel::CreateControls()
     m_segCtrl->Connect(wxEVT_COMMAND_TAB_SEL_CHANGING, wxCommandEventHandler(MobileTestsWxSegmentedCtrlPanel::OnChanging), NULL, this);
     m_segCtrl->Connect(wxEVT_COMMAND_TAB_SEL_CHANGED, wxCommandEventHandler(MobileTestsWxSegmentedCtrlPanel::OnChanged), NULL, this);
     
+    // Test getters
+    wxASSERT_MSG(m_segCtrl->GetItemCount() == 3, "Incorrect item count");
+    wxASSERT_MSG(m_segCtrl->GetSelection() == 1, "Incorrect selected index");
+    
+    // Set tint colour
+    m_segCtrl->SetButtonBackgroundColour(*wxRED);
+    wxASSERT_MSG(m_segCtrl->GetButtonBackgroundColour() == *wxRED, "Incorrect button background colour");
+    
     return true;
 }
 

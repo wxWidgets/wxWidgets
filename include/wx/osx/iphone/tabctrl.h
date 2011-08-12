@@ -125,6 +125,10 @@ public:
     
     /// Get the text badge for the given item
     virtual wxString GetBadge(int item) const;
+        
+    /// Sets the button background colour.
+    virtual bool SetButtonBackgroundColour(const wxColour &colour);
+        
     
     // Implementation
     

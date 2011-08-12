@@ -138,7 +138,6 @@ bool wxSegmentedCtrl::Create(wxWindow *parent,
 {
     DontCreatePeer();
     
-    //if (! wxTabCtrl::Create(parent, id, pos, size, style, name)) {
     if (! wxSegmentedCtrlBase::Create(parent, id, pos, size, style, name)) {
         return false;
     }
