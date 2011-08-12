@@ -17,6 +17,7 @@
 #include "wx/gtk/control.h"
 #include "wx/gtk/private.h"
 #include "wx/filesys.h"
+#include "wx/base64.h"
 #include "webkit/webkit.h"
 
 // ----------------------------------------------------------------------------
@@ -352,19 +353,16 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
         wxFSFile* file = handler->GetFile(uri);
         if(file)
         {
-            //We redirect to a temp file for now, small things could be loaded
-            //using the data scheme
+            //We load the data into a data url to save it being written out again
             size_t size = file->GetStream()->GetLength();
             char *buffer = new char[size];
-            wxFile tempfile;
-            wxString path = wxFileName::CreateTempFileName("wxwebview_", &tempfile);
-            //We can then stream from the archive to the temp file
             file->GetStream()->Read(buffer, size);
-            tempfile.Write(buffer, size);
-            tempfile.Close();
+            wxString data = wxBase64Encode(buffer, size);
             delete[] buffer;
+            wxString mime = file->GetMimeType();
+            wxString path = "data:" + mime + ";base64," + data;
             //Then we can redirect the call
-            webkit_network_request_set_uri(request, "file://" + path);
+            webkit_network_request_set_uri(request, path);
         }
         
     }
