@@ -362,8 +362,7 @@ int wxIBMessageBox(const wxString& message,
                    int style = wxOK,
                    wxWindow *parent = NULL,
                    int x = -1,
-                   int y = -1);
-
+                   int y = -1);                   
 
 // ----------------------------------------------------------------------------
 // wxSheetDialog classes themselves

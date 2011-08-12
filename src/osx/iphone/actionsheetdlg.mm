@@ -201,6 +201,9 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxActionSheetDialog, wxSheetDialogBase)
 
+// FIXME belongs to base class
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_SHEET_DIALOG_BUTTON_CLICKED)
+
 BEGIN_EVENT_TABLE(wxActionSheetDialog, wxSheetDialogBase)
 END_EVENT_TABLE()
 

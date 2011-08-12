@@ -34,6 +34,7 @@
 #include "tests_pagectrl.h"
 #include "tests_segctrl.h"
 #include "tests_scrolwin.h"
+#include "tests_sheetdlg.h"
 
 
 #pragma mark -
@@ -110,6 +111,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxScrolledWindow"));
     m_testDescriptions.Add(_("A container that scrolls its content."));
     m_testPanels.Add(new MobileTestsWxScrolledWindowPanel());
+
+    // wxActionSheetDialog, wxAlertSheetDialog
+    m_testNames.Add(_("wxActionSheetDialog, wxAlertSheetDialog"));
+    m_testDescriptions.Add(_("Wrappers for UIActionSheet and UIAlertView."));
+    m_testPanels.Add(new MobileTestsWxSheetDialogPanel());
     
     //
     // --
