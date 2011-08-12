@@ -774,7 +774,13 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
             //As we are complete we also add to the history list, but not if the
             //page is not the main page, ie it is a subframe
-            if(m_historyEnabled && !m_historyLoadingFromList && url == GetCurrentURL())
+            //We also have to check if we are loading a file:// url, if so we 
+            //need to change the comparison as ie passes back a different style
+            //of url
+            if(m_historyEnabled && !m_historyLoadingFromList && 
+              (url == GetCurrentURL() || 
+              (GetCurrentURL().substr(0, 4) == "file" && 
+               wxFileSystem::URLToFileName(GetCurrentURL()).GetFullPath() == url)))
             {
                 //If we are not at the end of the list, then erase everything
                 //between us and the end before adding the new page
