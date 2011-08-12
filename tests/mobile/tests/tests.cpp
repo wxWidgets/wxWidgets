@@ -30,6 +30,7 @@
 #include "tests_webctrl.h"
 #include "tests_checkbox.h"
 #include "tests_toolbar.h"
+#include "tests_gauge.h"
 
 
 #pragma mark -
@@ -86,6 +87,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxToolBar"));
     m_testDescriptions.Add(_("A horizontal toolbar containing text and/or bitmap buttons."));
     m_testPanels.Add(new MobileTestsWxToolBarPanel());
+
+    // wxGauge
+    m_testNames.Add(_("wxGauge"));
+    m_testDescriptions.Add(_("A gauge class, representing a range and current value."));
+    m_testPanels.Add(new MobileTestsWxGaugePanel());
     
     //
     // --

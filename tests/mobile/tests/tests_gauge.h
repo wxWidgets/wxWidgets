@@ -1,8 +1,8 @@
 /*
- *  tests_checkbox.h
+ *  tests_gauge.h
  *  testios
  *
- *  Created by Linas Valiukas on 2011-08-10.
+ *  Created by Linas Valiukas on 2011-08-12.
  *  Copyright 2011 __MyCompanyName__. All rights reserved.
  *
  */
@@ -10,18 +10,18 @@
 //
 // TESTS:
 // 
-// events:
-//   + wxEVT_CHECKBOX(id, func)
-// + SetValue()
-// + GetValue()
+// styles:
+//   - wxGA_HORIZONTAL
+//   - wxGA_VERTICAL
 
-#ifndef testios_tests_checkbox_h
-#define testios_tests_checkbox_h
+
+#ifndef testios_tests_gauge_h
+#define testios_tests_gauge_h
 
 #include "testpanel.h"
-#include "wx/checkbox.h"
+#include "wx/gauge.h"
 
-class MobileTestsWxCheckBoxPanel : public MobileTestsWxPanel {
+class MobileTestsWxGaugePanel : public MobileTestsWxPanel {
     
 public:
     bool CreateWithControls(wxWindow* parent,
@@ -29,10 +29,7 @@ public:
                             const wxPoint& pos = wxDefaultPosition,
                             const wxSize& size = wxDefaultSize,
                             long style = wxTAB_TRAVERSAL,
-                            const wxString& name = _("wxCheckBox Mobile"));
-    
-    // Event tests
-    void OnCheckBox(wxCommandEvent& WXUNUSED(event));
+                            const wxString& name = _("wxGauge Mobile"));
     
 protected:
     bool CreateControls();
@@ -40,7 +37,7 @@ protected:
     DECLARE_EVENT_TABLE()
     
 private:
-    wxCheckBox* m_checkBox;
+    wxGauge* m_gauge;
 };
 
 #endif
