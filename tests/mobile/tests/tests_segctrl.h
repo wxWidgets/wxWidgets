@@ -10,7 +10,10 @@
 //
 // TESTS:
 // 
-// - wxMoTabCtrl (wxWindow *parent, wxWindowID id, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=wxTAB_TEXT|wxTAB_BITMAP, const wxString &name=wxT("tabCtrl"))
+// events:
+//   + wxEVT_COMMAND_TAB_SEL_CHANGING
+//   + wxEVT_COMMAND_TAB_SEL_CHANGED
+// - wxMoSegmentedCtrl (wxWindow *parent, wxWindowID id, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=wxTAB_TEXT|wxTAB_BITMAP, const wxString &name=wxT("segCtrl"))
 // - int     GetSelection () const 
 // - int     GetCurFocus () const 
 // - wxImageList *     GetImageList () const 
@@ -54,6 +57,10 @@ public:
                             const wxSize& size = wxDefaultSize,
                             long style = wxTAB_TRAVERSAL,
                             const wxString& name = _("wxSegmentedCtrl Mobile"));
+    
+    // Event tests
+    void OnChanging(wxCommandEvent& WXUNUSED(event));
+    void OnChanged(wxCommandEvent& WXUNUSED(event));
     
 protected:
     bool CreateControls();

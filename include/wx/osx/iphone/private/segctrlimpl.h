@@ -12,6 +12,7 @@
 #ifndef _WX_OSX_IPHONE_PRIVATE_SEGCTRL_H_
 #define _WX_OSX_IPHONE_PRIVATE_SEGCTRL_H_
 
+#include "wx/segctrl.h"
 #include "wx/osx/private.h"
 
 
@@ -19,7 +20,11 @@
 
 @interface wxUISegmentedControl : UISegmentedControl
 {
+    wxSegmentedCtrl *moSegmentedCtrl;
 }
+
+- (id)initWithWxSegmentedCtrl:(wxSegmentedCtrl *)initWxSegmentedCtrl;
+- (void)segmentHasBeenChanged:(id)sender;
 
 @end
 

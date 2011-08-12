@@ -29,6 +29,48 @@
 
 @implementation wxUISegmentedControl
 
+- (id)init {
+    if ((self = [super init])) {
+        moSegmentedCtrl = NULL;
+        
+        [self addTarget:self
+                 action:@selector(segmentHasBeenChanged:)
+       forControlEvents:UIControlEventValueChanged];
+    }
+    
+    return self;
+}
+
+- (id)initWithWxSegmentedCtrl:(wxSegmentedCtrl *)initWxSegmentedCtrl {
+    if ((self = [self init])) {
+        moSegmentedCtrl = initWxSegmentedCtrl;
+    }
+    
+    return self;
+}
+
+- (void)segmentHasBeenChanged:(id)sender {
+    if ( !moSegmentedCtrl ) {
+        return;
+    }
+    
+    int selection = [self selectedSegmentIndex];
+        
+    // wxEVT_COMMAND_TAB_SEL_CHANGING
+    // FIXME should be able to veto the change
+    wxTabEvent changingEvent(wxEVT_COMMAND_TAB_SEL_CHANGING, moSegmentedCtrl->GetId());
+    changingEvent.SetEventObject(moSegmentedCtrl);
+    changingEvent.SetEventType(wxEVT_COMMAND_TAB_SEL_CHANGING);
+    changingEvent.SetSelection(selection);
+    moSegmentedCtrl->GetEventHandler()->ProcessEvent(changingEvent);    
+    
+    // wxEVT_COMMAND_TAB_SEL_CHANGED
+    wxTabEvent changedEvent(wxEVT_COMMAND_TAB_SEL_CHANGED, moSegmentedCtrl->GetId());
+    changedEvent.SetEventObject(moSegmentedCtrl);
+    changedEvent.SetEventType(wxEVT_COMMAND_TAB_SEL_CHANGED);
+    changedEvent.SetSelection(selection);
+    moSegmentedCtrl->GetEventHandler()->ProcessEvent(changedEvent);    
+}
 
 @end
 

@@ -47,7 +47,7 @@ bool MobileTestsWxToolBarPanel::CreateControls()
     
     // Toolbar
     
-    m_toolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_BLACK_OPAQUE_BG);
+    m_toolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxSize(300, 44), wxTB_BLACK_OPAQUE_BG);
     sizer->Add(m_toolbar, 0, wxEXPAND, 0);
     
     // Events

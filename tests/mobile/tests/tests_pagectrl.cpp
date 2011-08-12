@@ -41,7 +41,7 @@ bool MobileTestsWxPageCtrlPanel::CreateControls()
     // Page control
     // 
     
-    m_pageCtrl = new wxPageCtrl(this, wxID_ANY);
+    m_pageCtrl = new wxPageCtrl(this, wxID_ANY, wxPoint(0, 30), wxSize(90, 45));
     m_pageCtrl->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxPageCtrlPanel::OnPageChanged), NULL, this);
     m_pageCtrl->SetPageCount(6);
     m_pageCtrl->SetCurrentPage(2);

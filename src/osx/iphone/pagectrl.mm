@@ -31,6 +31,7 @@
     wxPageCtrl *moPageCtrl;
 }
 
+- (id)initWithWxPageCtrl:(wxPageCtrl *)initWxPageCtrl;
 - (void)pageHasBeenChanged:(id)sender;
 
 @end
@@ -38,7 +39,7 @@
 @implementation wxUIPageControl
 
 - (id)init {
-    if ((self = [super init])) {
+    if ((self = [self init])) {
         moPageCtrl = NULL;
         
         [self addTarget:self
