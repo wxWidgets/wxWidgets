@@ -8,7 +8,6 @@
 
 #include "tests_navctrl.h"
 
-
 #pragma mark -
 #pragma mark wxNavigationCtrl
 
@@ -84,6 +83,11 @@ void MobileTestsWxNavCtrlPanel::OnNavCtrlPushing(wxCommandEvent& WXUNUSED(event)
 #pragma mark -
 #pragma mark wxNavigationCtrl test view controller
 
+#define MobileTestsWxNavigationCtrlPopVCID      123
+#define MobileTestsWxNavigationCtrlPushVCID     124
+#define MobileTestsWxNavigationCtrlClearVCsID   125
+
+
 MobileTestswxNavCtrlViewController::MobileTestswxNavCtrlViewController(const wxString& title,
                                                                        wxNavigationCtrl* ctrl,
                                                                        int viewNumber) : wxViewController(title)
@@ -97,16 +101,16 @@ MobileTestswxNavCtrlViewController::MobileTestswxNavCtrlViewController(const wxS
     SetWindow(panel);
 
     // "Pop VC" button
-    wxButton* popVCButton = new wxButton(panel, wxID_ANY, _("Pop VC"), wxPoint(0, 0));
+    wxButton* popVCButton = new wxButton(panel, MobileTestsWxNavigationCtrlPopVCID, _("Pop VC"), wxPoint(0, 0));
     panel->Connect(popVCButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestswxNavCtrlViewController::OnPopVC), NULL, this);
 
     // "Push new VC" button
-    wxButton* pushVCButton = new wxButton(panel, wxID_ANY, wxString::Format(_("Create Test VC %d"), viewNumber+1), wxPoint(0, 45));
+    wxButton* pushVCButton = new wxButton(panel, MobileTestsWxNavigationCtrlPushVCID, wxString::Format(_("Create Test VC %d"), viewNumber+1), wxPoint(0, 45));
     panel->Connect(pushVCButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestswxNavCtrlViewController::OnPushVC), NULL, this);
     
     // "Clear VCs" button
-    wxButton* clearVCsButton = new wxButton(panel, wxID_ANY, _("Clear VCs"), wxPoint(0, 90));
-    panel->Connect(clearVCsButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestswxNavCtrlViewController::OnClearVCs), NULL, this);
+    wxButton* clearVCsButton = new wxButton(panel, MobileTestsWxNavigationCtrlClearVCsID, _("Clear VCs"), wxPoint(0, 90));
+    panel->Connect(clearVCsButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestswxNavCtrlViewController::OnClearVCs), NULL, this);    
 }
 
 void MobileTestswxNavCtrlViewController::OnPushVC(wxCommandEvent& WXUNUSED(event))
@@ -114,10 +118,7 @@ void MobileTestswxNavCtrlViewController::OnPushVC(wxCommandEvent& WXUNUSED(event
     // Test current conditions
     wxViewControllerArray controllers = m_navCtrl->GetControllers();
     wxASSERT_MSG(controllers.Count() == m_viewNumber, "Incorrect number of controllers");
-    
-    // Test resetting controllers
-    m_navCtrl->SetControllers(controllers);
-    
+        
     wxLogMessage("Pushing a new view controller");
     
     wxASSERT_MSG(m_navCtrl->PushController(new MobileTestswxNavCtrlViewController(wxString::Format(_("Test VC %d"), m_viewNumber+1), m_navCtrl, m_viewNumber+1)), "Unable to push a new view controller");

@@ -362,7 +362,9 @@ wxViewController* wxNavigationCtrl::PopController()
     }
     
     if (topItem->GetNavigationItem()) {
-        (void) m_navBar->PopItem();
+        if ( m_navBar ) {
+            m_navBar->PopItem();
+        }
     }
     
     m_controllers.RemoveAt(m_controllers.GetCount()-1);
@@ -428,7 +430,9 @@ wxViewController* wxNavigationCtrl::GetRootController() const
 // Clears the item stack, deleting the items.
 void wxNavigationCtrl::ClearControllers()
 {
-    m_navBar->ClearItems(false);
+    if ( m_navBar ) {
+        m_navBar->ClearItems(false);
+    }
     
     size_t i;
     size_t count = m_controllers.GetCount();
