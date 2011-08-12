@@ -35,13 +35,15 @@ bool MobileTestsWxWebCtrlPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxWebCtrlPanel::CreateControls()
 {
-    wxBoxSizer* textCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* webCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
     
     //
     // Web control
     // 
 
     m_webCtrl = new wxWebKitCtrl(this, wxID_ANY);
+    webCtrlSizer->Add(m_webCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
     m_webCtrl->LoadURL("http://www.wxwidgets.org/");
     
     wxASSERT_MSG(!m_webCtrl->CanGoBack(), "Web control can't go back at the moment");

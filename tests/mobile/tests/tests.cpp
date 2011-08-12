@@ -28,6 +28,7 @@
 #include "tests_stattext.h"
 #include "tests_textctrl.h"
 #include "tests_webctrl.h"
+#include "tests_checkbox.h"
 
 
 #pragma mark -
@@ -74,6 +75,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxWebKitCtrl"));
     m_testDescriptions.Add(_("A control for displaying remote web pages."));
     m_testPanels.Add(new MobileTestsWxWebCtrlPanel());
+
+    // wxCheckBox
+    m_testNames.Add(_("wxCheckBox"));
+    m_testDescriptions.Add(_("A checkbox is a labelled box which by default is either on (checkmark is visible) or off (no checkmark)."));
+    m_testPanels.Add(new MobileTestsWxCheckBoxPanel());
     
     //
     // --
