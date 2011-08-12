@@ -44,6 +44,9 @@ bool MobileTestsWxNavCtrlPanel::CreateControls()
     m_navCtrl = new wxNavigationCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNAVCTRL_BLACK_OPAQUE_BG);
     sizer->Add(m_navCtrl, 1, wxEXPAND, 0);
     
+    // Test events
+    m_navCtrl->Connect(wxEVT_COMMAND_NAVCTRL_POPPED, wxCommandEventHandler(MobileTestsWxNavCtrlPanel::OnNavCtrlPopped), NULL, this);
+    
     // Test getters
     wxASSERT_MSG(!m_navCtrl->GetTopController(), "Top controller should not be present at the moment");
     wxASSERT_MSG(!m_navCtrl->GetBackController(), "Back controller should not be present at the moment");
@@ -57,11 +60,33 @@ bool MobileTestsWxNavCtrlPanel::CreateControls()
     return true;
 }
 
+void MobileTestsWxNavCtrlPanel::OnNavCtrlPopped(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Event wxEVT_COMMAND_NAVCTRL_POPPED: a controller was popped");
+}
+
+void MobileTestsWxNavCtrlPanel::OnNavCtrlPushed(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Event wxEVT_COMMAND_NAVCTRL_PUSHED: a controller was pushed");
+}
+
+void MobileTestsWxNavCtrlPanel::OnNavCtrlPopping(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Event wxEVT_COMMAND_NAVCTRL_POPPING: a controller is about to be popped");
+}
+
+void MobileTestsWxNavCtrlPanel::OnNavCtrlPushing(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("wxEVT_COMMAND_NAVCTRL_PUSHING: a controller is about to be pushed");
+}
+
 
 #pragma mark -
 #pragma mark wxNavigationCtrl test view controller
 
-MobileTestswxNavCtrlViewController::MobileTestswxNavCtrlViewController(const wxString& title, wxNavigationCtrl* ctrl, int viewNumber) : wxViewController(title)
+MobileTestswxNavCtrlViewController::MobileTestswxNavCtrlViewController(const wxString& title,
+                                                                       wxNavigationCtrl* ctrl,
+                                                                       int viewNumber) : wxViewController(title)
 {
     m_navCtrl = ctrl;
     m_viewNumber = viewNumber;
@@ -71,10 +96,17 @@ MobileTestswxNavCtrlViewController::MobileTestswxNavCtrlViewController(const wxS
     panel->SetBackgroundColour(wxColour(wxT("#E3E4FF")));
     SetWindow(panel);
 
+    // "Pop VC" button
+    wxButton* popVCButton = new wxButton(panel, wxID_ANY, _("Pop VC"), wxPoint(0, 0));
+    panel->Connect(popVCButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestswxNavCtrlViewController::OnPopVC), NULL, this);
+
     // "Push new VC" button
-    wxString label(wxString::Format(_("Create Test VC %d"), viewNumber+1));
-    wxButton* button = new wxButton(panel, wxID_ANY, label, wxPoint(0, 45));
-    panel->Connect(button->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestswxNavCtrlViewController::OnPushVC), NULL, this);
+    wxButton* pushVCButton = new wxButton(panel, wxID_ANY, wxString::Format(_("Create Test VC %d"), viewNumber+1), wxPoint(0, 45));
+    panel->Connect(pushVCButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestswxNavCtrlViewController::OnPushVC), NULL, this);
+    
+    // "Clear VCs" button
+    wxButton* clearVCsButton = new wxButton(panel, wxID_ANY, _("Clear VCs"), wxPoint(0, 90));
+    panel->Connect(clearVCsButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestswxNavCtrlViewController::OnClearVCs), NULL, this);
 }
 
 void MobileTestswxNavCtrlViewController::OnPushVC(wxCommandEvent& WXUNUSED(event))
@@ -83,6 +115,8 @@ void MobileTestswxNavCtrlViewController::OnPushVC(wxCommandEvent& WXUNUSED(event
     wxViewControllerArray controllers = m_navCtrl->GetControllers();
     wxASSERT_MSG(controllers.Count() == m_viewNumber, "Incorrect number of controllers");
     
+    // Test resetting controllers
+    m_navCtrl->SetControllers(controllers);
     
     wxLogMessage("Pushing a new view controller");
     
@@ -94,4 +128,11 @@ void MobileTestswxNavCtrlViewController::OnPopVC(wxCommandEvent& WXUNUSED(event)
     wxLogMessage("Pulling a view controller");
     
     m_navCtrl->PopController();
+}
+
+void MobileTestswxNavCtrlViewController::OnClearVCs(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Clearing view controllers");
+
+    m_navCtrl->ClearControllers();
 }
