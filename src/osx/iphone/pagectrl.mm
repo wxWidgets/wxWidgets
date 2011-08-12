@@ -28,12 +28,47 @@
 
 @interface wxUIPageControl : UIPageControl
 {
+    wxPageCtrl *moPageCtrl;
 }
+
+- (void)pageHasBeenChanged:(id)sender;
 
 @end
 
 @implementation wxUIPageControl
 
+- (id)init {
+    if ((self = [super init])) {
+        moPageCtrl = NULL;
+        
+        [self addTarget:self
+                 action:@selector(pageHasBeenChanged:)
+       forControlEvents:UIControlEventValueChanged];        
+    }
+    
+    return self;
+}
+
+- (id)initWithWxPageCtrl:(wxPageCtrl *)initWxPageCtrl {
+    if ((self = [super init])) {
+        moPageCtrl = initWxPageCtrl;
+    }
+    
+    return self;
+}
+
+- (void)pageHasBeenChanged:(id)sender {
+    if ( !moPageCtrl ) {
+        return;
+    }
+    
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, moPageCtrl->GetId());
+    event.SetEventObject(moPageCtrl);
+    event.SetInt(moPageCtrl->GetCurrentPage());
+    event.SetExtraLong(moPageCtrl->GetCurrentPage());
+    
+    moPageCtrl->GetEventHandler()->ProcessEvent(event);
+}
 
 @end
 
@@ -80,7 +115,7 @@ wxWidgetImplType* wxWidgetImpl::CreatePageCtrl(wxWindowMac* wxpeer,
         hidesForSinglePage = YES;
     }
 
-    wxUIPageControl* v = [[wxUIPageControl alloc] init];
+    wxUIPageControl* v = [[wxUIPageControl alloc] initWithWxPageCtrl:(wxPageCtrl *)wxpeer];
     [v setNumberOfPages:0];
     [v setHidesForSinglePage:hidesForSinglePage];
     
