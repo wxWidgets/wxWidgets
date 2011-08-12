@@ -25,6 +25,7 @@
 #include "tests_button.h"
 #include "tests_notebook.h"
 #include "tests_navctrl.h"
+#include "tests_stattext.h"
 
 
 #pragma mark -
@@ -54,9 +55,14 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
 
     // wxNavigationCtrl
     m_testNames.Add(_("wxNavigationCtrl"));
-    m_testDescriptions.Add(_("This class makes it easy to implement a style of interface similar to a web browser, where an action in the currently displayed window causes another window to replace it, and allowing a return to the previously displayed window using the Back button.."));
+    m_testDescriptions.Add(_("This class makes it easy to implement a style of interface similar to a web browser, where an action in the currently displayed window causes another window to replace it, and allowing a return to the previously displayed window using the Back button."));
     m_testPanels.Add(new MobileTestsWxNavCtrlPanel());
 
+    // wxLabel
+    m_testNames.Add(_("wxStaticText"));
+    m_testDescriptions.Add(_("A control showing a text string."));
+    m_testPanels.Add(new MobileTestsWxStaticTextPanel());
+    
     //
     // --
     //
