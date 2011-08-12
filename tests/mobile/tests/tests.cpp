@@ -27,6 +27,7 @@
 #include "tests_navctrl.h"
 #include "tests_stattext.h"
 #include "tests_textctrl.h"
+#include "tests_webctrl.h"
 
 
 #pragma mark -
@@ -68,6 +69,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxTextCtrl"));
     m_testDescriptions.Add(_("A single or multi-line text control."));
     m_testPanels.Add(new MobileTestsWxTextCtrlPanel());
+
+    // wxWebKitCtrl
+    m_testNames.Add(_("wxWebKitCtrl"));
+    m_testDescriptions.Add(_("A control for displaying remote web pages."));
+    m_testPanels.Add(new MobileTestsWxWebCtrlPanel());
     
     //
     // --
