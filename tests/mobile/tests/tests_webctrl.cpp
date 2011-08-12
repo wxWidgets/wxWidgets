@@ -41,8 +41,12 @@ bool MobileTestsWxWebCtrlPanel::CreateControls()
     // Web control
     // 
 
-    m_webCtrl = new wxWebKitCtrl(this, wxID_ANY);
+    m_webCtrl = new wxWebKitCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(300, 300));
     webCtrlSizer->Add(m_webCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    
+    m_webCtrl->Connect(wxEVT_WEBKIT_STATE_CHANGED, wxCommandEventHandler(MobileTestsWxWebCtrlPanel::OnWebKitStateChanged), NULL, this);
+    m_webCtrl->Connect(wxEVT_WEBKIT_BEFORE_LOAD, wxCommandEventHandler(MobileTestsWxWebCtrlPanel::OnWebKitBeforeLoad), NULL, this);
+    m_webCtrl->Connect(wxEVT_WEBKIT_NEW_WINDOW, wxCommandEventHandler(MobileTestsWxWebCtrlPanel::OnWebKitNewWindow), NULL, this);
 
     m_webCtrl->LoadURL("http://www.wxwidgets.org/");
     
@@ -50,4 +54,19 @@ bool MobileTestsWxWebCtrlPanel::CreateControls()
     wxASSERT_MSG(!m_webCtrl->CanGoForward(), "Web control can't go forward at the moment");
     
     return true;
+}
+
+void MobileTestsWxWebCtrlPanel::OnWebKitStateChanged(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Event wxEVT_WEBKIT_STATE_CHANGED");
+}
+
+void MobileTestsWxWebCtrlPanel::OnWebKitBeforeLoad(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Event wxEVT_WEBKIT_BEFORE_LOAD");
+}
+
+void MobileTestsWxWebCtrlPanel::OnWebKitNewWindow(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Event wxEVT_WEBKIT_NEW_WINDOW");
 }

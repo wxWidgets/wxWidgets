@@ -12,6 +12,10 @@
 //
 // TESTS:
 // 
+// events:
+//   + wxEVT_WEBKIT_STATE_CHANGED
+//   + wxEVT_WEBKIT_BEFORE_LOAD
+//   + wxEVT_WEBKIT_NEW_WINDOW
 // - wxWebKitCtrl()
 // + wxWebKitCtrl (wxWindow *parent, wxWindowID id, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=0, const wxValidator &validator=wxDefaultValidator, const wxString &name=wxWebCtrlNameStr)
 // + bool  LoadURL (const wxString &url)
@@ -37,6 +41,11 @@ public:
                             const wxSize& size = wxDefaultSize,
                             long style = wxTAB_TRAVERSAL,
                             const wxString& name = _("wxWebCtrl Mobile"));
+    
+    // Event tests
+    void OnWebKitStateChanged(wxCommandEvent& WXUNUSED(event));
+    void OnWebKitBeforeLoad(wxCommandEvent& WXUNUSED(event));
+    void OnWebKitNewWindow(wxCommandEvent& WXUNUSED(event));
         
 protected:
     bool CreateControls();
