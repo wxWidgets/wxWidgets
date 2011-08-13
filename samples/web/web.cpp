@@ -48,6 +48,11 @@
 
 #include "wxlogo.xpm"
 
+
+//We map menu items to their history items
+WX_DECLARE_HASH_MAP(int, wxSharedPtr<wxWebHistoryItem>,
+                    wxIntegerHash, wxIntegerEqual, wxMenuHistoryMap);
+
 class WebApp : public wxApp
 {
 public:
@@ -85,6 +90,7 @@ public:
     void OnRedo(wxCommandEvent& evt);
     void OnMode(wxCommandEvent& evt);
     void OnZoomLayout(wxCommandEvent& evt);
+    void OnHistory(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -98,6 +104,7 @@ private:
     wxToolBarToolBase* m_toolbar_tools;
 
     wxMenu* m_tools_menu;
+    wxMenu* m_tools_history_menu;
     wxMenuItem* m_tools_layout;
     wxMenuItem* m_tools_tiny;
     wxMenuItem* m_tools_small;
@@ -119,6 +126,8 @@ private:
 
     wxInfoBar *m_info;
     wxStaticText* m_info_text;
+
+    wxMenuHistoryMap m_histMenuItems;
 };
 
 class SourceViewDialog : public wxDialog
@@ -220,8 +229,14 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_tools_handle_navigation = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle Navigation"));
     m_tools_handle_new_window = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle New Windows"));
     m_tools_menu->AppendSeparator();
-    wxMenuItem* clearhist =  m_tools_menu->Append(wxID_ANY, _("Clear History"));
-    m_tools_enable_history = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable History"));
+
+    //History menu
+    m_tools_history_menu = new wxMenu();
+    wxMenuItem* clearhist =  m_tools_history_menu->Append(wxID_ANY, _("Clear History"));
+    m_tools_enable_history = m_tools_history_menu->AppendCheckItem(wxID_ANY, _("Enable History"));
+    m_tools_history_menu->AppendSeparator();
+
+    wxMenuItem* history = m_tools_menu->AppendSubMenu(m_tools_history_menu, "History");
 
     //Create an editing menu
     wxMenu* editmenu = new wxMenu();
@@ -578,6 +593,41 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
 
     m_edit_undo->Enable(m_browser->CanUndo());
     m_edit_redo->Enable(m_browser->CanRedo());
+
+    //Firstly we clear the existing menu items, then we add the current ones
+    wxMenuHistoryMap::const_iterator it;
+    for( it = m_histMenuItems.begin(); it != m_histMenuItems.end(); ++it )
+    {
+        m_tools_history_menu->Destroy(it->first);
+    }
+    m_histMenuItems.clear();
+
+    wxVector<wxSharedPtr<wxWebHistoryItem> > back = m_browser->GetBackwardHistory();
+    wxVector<wxSharedPtr<wxWebHistoryItem> > forward = m_browser->GetForwardHistory();
+
+    wxMenuItem* item;
+
+    for(unsigned int i = 0; i < back.size(); i++)
+    {
+        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, back[i]->GetTitle());
+        m_histMenuItems[item->GetId()] = back[i];
+        Connect(item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+                wxCommandEventHandler(WebFrame::OnHistory), NULL, this );
+    }
+
+    item = m_tools_history_menu->AppendRadioItem(wxID_ANY, m_browser->GetCurrentTitle());
+    item->Check();
+
+    //No need to connect the current item
+    m_histMenuItems[item->GetId()] = wxSharedPtr<wxWebHistoryItem>(new wxWebHistoryItem(m_browser->GetCurrentURL(), m_browser->GetCurrentTitle()));
+
+    for(unsigned int i = 0; i < forward.size(); i++)
+    {
+        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, forward[i]->GetTitle());
+        m_histMenuItems[item->GetId()] = forward[i];
+        Connect(item->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+                wxCommandEventHandler(WebFrame::OnHistory), NULL, this );
+    }
     
     wxPoint position = ScreenToClient( wxGetMousePosition() );
     PopupMenu(m_tools_menu, position.x, position.y);
@@ -620,6 +670,11 @@ void WebFrame::OnZoomLayout(wxCommandEvent& WXUNUSED(evt))
         m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
     else
         m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_TEXT);
+}
+
+void WebFrame::OnHistory(wxCommandEvent& evt)
+{
+    m_browser->LoadHistoryItem(m_histMenuItems[evt.GetId()]);
 }
 
 /**
