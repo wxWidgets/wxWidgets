@@ -92,6 +92,9 @@ public:
     void OnZoomLayout(wxCommandEvent& evt);
     void OnHistory(wxCommandEvent& evt);
     void OnRunScript(wxCommandEvent& evt);
+    void OnClearSelection(wxCommandEvent& evt);
+    void OnDeleteSelection(wxCommandEvent& evt);
+    void OnSelectAll(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -121,6 +124,8 @@ private:
     wxMenuItem* m_edit_undo;
     wxMenuItem* m_edit_redo;
     wxMenuItem* m_edit_mode;
+    wxMenuItem* m_selection_clear;
+    wxMenuItem* m_selection_delete;
 
     wxTimer* m_timer;
     int m_animation_angle;
@@ -255,6 +260,14 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
 
     wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
 
+    //Selection menu
+    wxMenu* selection = new wxMenu();
+    m_selection_clear = selection->Append(wxID_ANY, _("Clear Selection"));
+    m_selection_delete = selection->Append(wxID_ANY, _("Delete Selection"));
+    wxMenuItem* selectall = selection->Append(wxID_ANY, _("Select All"));
+
+    editmenu->AppendSubMenu(selection, "Selection");
+
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
@@ -327,6 +340,12 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnMode),  NULL, this );
     Connect(script->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
+    Connect(m_selection_clear->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
+    Connect(m_selection_delete->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnDeleteSelection),  NULL, this );
+    Connect(selectall->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnSelectAll),  NULL, this );
 }
 
 void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
@@ -599,6 +618,9 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     m_edit_undo->Enable(m_browser->CanUndo());
     m_edit_redo->Enable(m_browser->CanRedo());
 
+    m_selection_clear->Enable(m_browser->HasSelection());
+    m_selection_delete->Enable(m_browser->HasSelection());
+
     //Firstly we clear the existing menu items, then we add the current ones
     wxMenuHistoryMap::const_iterator it;
     for( it = m_histMenuItems.begin(); it != m_histMenuItems.end(); ++it )
@@ -689,6 +711,21 @@ void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
     {
         m_browser->RunScript(dialog.GetValue());
     }
+}
+
+void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
+{
+    m_browser->ClearSelection();
+}
+
+void WebFrame::OnDeleteSelection(wxCommandEvent& WXUNUSED(evt))
+{
+    m_browser->DeleteSelection();
+}
+
+void WebFrame::OnSelectAll(wxCommandEvent& WXUNUSED(evt))
+{
+    m_browser->SelectAll();
 }
 
 /**
