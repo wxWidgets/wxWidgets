@@ -91,6 +91,7 @@ public:
     void OnMode(wxCommandEvent& evt);
     void OnZoomLayout(wxCommandEvent& evt);
     void OnHistory(wxCommandEvent& evt);
+    void OnRunScript(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -236,7 +237,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_tools_enable_history = m_tools_history_menu->AppendCheckItem(wxID_ANY, _("Enable History"));
     m_tools_history_menu->AppendSeparator();
 
-    wxMenuItem* history = m_tools_menu->AppendSubMenu(m_tools_history_menu, "History");
+    m_tools_menu->AppendSubMenu(m_tools_history_menu, "History");
 
     //Create an editing menu
     wxMenu* editmenu = new wxMenu();
@@ -251,6 +252,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
 
     m_tools_menu->AppendSeparator();
     m_tools_menu->AppendSubMenu(editmenu, "Edit");
+
+    wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
 
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
@@ -322,6 +325,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnRedo),  NULL, this );
     Connect(m_edit_mode->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnMode),  NULL, this );
+    Connect(script->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
 }
 
 void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
@@ -675,6 +680,15 @@ void WebFrame::OnZoomLayout(wxCommandEvent& WXUNUSED(evt))
 void WebFrame::OnHistory(wxCommandEvent& evt)
 {
     m_browser->LoadHistoryItem(m_histMenuItems[evt.GetId()]);
+}
+
+void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
+{
+    wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
+    if(dialog.ShowModal() == wxID_OK)
+    {
+        m_browser->RunScript(dialog.GetValue());
+    }
 }
 
 /**
