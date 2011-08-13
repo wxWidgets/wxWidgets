@@ -470,7 +470,7 @@ void WebFrame::OnNavigationRequest(wxWebNavigationEvent& evt)
 {
     if(m_info->IsShown())
     {
-        m_info->Show(false);
+        m_info->Dismiss();
     }
 
     wxLogMessage("%s", "Navigation request to '" + evt.GetURL() + "' (target='" +
