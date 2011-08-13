@@ -54,7 +54,7 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
     if ( GetParamNode("bitmap") )
     {
         wxDirection dir;
-        const wxString dirstr = GetParamValue("direction");
+        const wxString dirstr = GetParamValue("bitmapposition");
         if ( dirstr.empty() || dirstr == "wxLEFT" )
             dir = wxLEFT;
         else if ( dirstr == "wxRIGHT" )
