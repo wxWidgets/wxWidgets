@@ -519,7 +519,7 @@ public:
     unsigned int GetRowCount();
 
     wxDataViewItem GetSelection() const;
-    wxDataViewSelection GetSelections(){ return m_selection; }
+    const wxDataViewSelection& GetSelections() const { return m_selection; }
     void SetSelections( const wxDataViewSelection & sel )
         { m_selection = sel; UpdateDisplay(); }
     void Select( const wxArrayInt& aSelections );
@@ -2108,11 +2108,10 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
             wxDataViewSelection newsel(wxDataViewSelectionCmp);
 
-            for ( wxDataViewSelection::const_iterator i = m_selection.begin();
-                  i != m_selection.end();
-                  ++i )
+            const size_t numSelections = m_selection.size();
+            for ( size_t i = 0; i < numSelections; ++i )
             {
-                const int s = *i;
+                const int s = m_selection[i];
                 if ( s < itemRow )
                     newsel.push_back(s);
                 else if ( s >= itemRow + itemsDeleted )
@@ -4489,12 +4488,12 @@ wxDataViewItem wxDataViewCtrl::GetSelection() const
 int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
 {
     sel.Empty();
-    wxDataViewSelection selection = m_clientArea->GetSelections();
+    const wxDataViewSelection& selections = m_clientArea->GetSelections();
 
-    const size_t len = selection.size();
+    const size_t len = selections.size();
     for ( size_t i = 0; i < len; i++ )
     {
-        wxDataViewItem item = m_clientArea->GetItemByRow(selection[i]);
+        wxDataViewItem item = m_clientArea->GetItemByRow(selections[i]);
         if ( item.IsOk() )
         {
             sel.Add(item);

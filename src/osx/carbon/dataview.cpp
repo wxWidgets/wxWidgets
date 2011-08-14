@@ -1756,7 +1756,7 @@ DataBrowserTrackingResult wxMacDataViewDataBrowserListViewControl::DataBrowserTr
   dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(GetWXPeer());
   wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
   wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,false,_("Pointer to model not set correctly."));
-  dataViewCustomRendererItem = reinterpret_cast<void*>(itemID);
+  dataViewCustomRendererItem = wxDataViewItem(reinterpret_cast<void*>(itemID));
   wxCHECK_MSG(dataViewCustomRendererItem.IsOk(),kDataBrowserNothingHit,_("Invalid data view item"));
   dataViewColumnPtr = GetColumnPtr(propertyID);
   wxCHECK_MSG(dataViewColumnPtr != NULL,kDataBrowserNothingHit,_("No column existing."));
@@ -1814,8 +1814,11 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAcceptDragProc(DragR
     wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE,dataViewCtrlPtr->GetId());
 
     dataViewEvent.SetEventObject(dataViewCtrlPtr);
-    dataViewEvent.SetItem(reinterpret_cast<void*>(itemID)); // this is the item that receives the event
-                                                            // (can be an invalid item ID, this is especially useful if the dataview does not contain any items)
+
+    // this is the item that receives the event (can be an invalid item ID, this is
+    // especially useful if the dataview does not contain any items)
+    dataViewEvent.SetItem( wxDataViewItem(reinterpret_cast<void*>(itemID)) );
+
     dataViewEvent.SetModel(dataViewCtrlPtr->GetModel());
     dataViewEvent.SetDataObject(dataObjects);
     dataViewEvent.SetDataFormat(GetDnDDataFormat(dataObjects));
@@ -1848,7 +1851,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAddDragItemProc(Drag
   dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(GetWXPeer());
   wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
   wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,false,_("Pointer to model not set correctly."));
-  dataViewItem = reinterpret_cast<void*>(itemID);
+  dataViewItem = wxDataViewItem(reinterpret_cast<void*>(itemID));
   wxCHECK_MSG(dataViewItem.IsOk(),false,_("Invalid data view item"));
 
  // send a begin drag event and proceed with dragging unless the event is vetoed:
@@ -1988,8 +1991,11 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserReceiveDragProc(Drag
     wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_DROP,dataViewCtrlPtr->GetId());
 
     dataViewEvent.SetEventObject(dataViewCtrlPtr);
-    dataViewEvent.SetItem(reinterpret_cast<void*>(itemID)); // this is the item that receives the event
-                                                            // (can be an invalid item ID, this is especially useful if the dataview does not contain any items)
+
+    // this is the item that receives the event (can be an invalid item ID, this is
+    // especially useful if the dataview does not contain any items)
+    dataViewEvent.SetItem( wxDataViewItem(reinterpret_cast<void*>(itemID)) );
+
     dataViewEvent.SetModel(dataViewCtrlPtr->GetModel());
     dataViewEvent.SetDataObject(dataObjects);
     dataViewEvent.SetDataFormat(GetDnDDataFormat(dataObjects));

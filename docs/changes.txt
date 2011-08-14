@@ -452,6 +452,7 @@ All (GUI):
 - Add wxDataViewEvent::IsEditCancelled() (Allonii).
 - Allow marking wxTreeBook nodes to expand initially in XRC (RedTide).
 - Added customizable wxDocManager::OnMRUFileNotExist() virtual method.
+- Fix stock labels when not using mnemonics for Chinese (cw.ahbong).
 
 OSX:
 

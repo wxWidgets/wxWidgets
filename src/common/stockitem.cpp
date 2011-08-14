@@ -118,85 +118,87 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
 {
     wxString stockLabel;
 
-    #define STOCKITEM(stockid, label) \
-        case stockid:                 \
-            stockLabel = label;       \
-            break;
+#ifdef __WXMSW__
+    // special case: the "Cancel" button shouldn't have a mnemonic under MSW
+    // for consistency with the native dialogs (which don't use any mnemonic
+    // for it because it is already bound to Esc implicitly)
+    if ( id == wxID_CANCEL )
+        flags &= ~wxSTOCK_WITH_MNEMONIC;
+#endif // __WXMSW__
+
+
+    #define STOCKITEM(stockid, labelWithMnemonic, labelPlain)                 \
+        case stockid:                                                         \
+            if(flags & wxSTOCK_WITH_MNEMONIC)                                 \
+                stockLabel = labelWithMnemonic;                               \
+            else                                                              \
+                stockLabel = labelPlain;                                      \
+            break
 
     switch (id)
     {
-        STOCKITEM(wxID_ABOUT,               _("&About..."))
-        STOCKITEM(wxID_ADD,                 _("Add"))
-        STOCKITEM(wxID_APPLY,               _("&Apply"))
-        STOCKITEM(wxID_BACKWARD,            _("&Back"))
-        STOCKITEM(wxID_BOLD,                _("&Bold"))
-        STOCKITEM(wxID_BOTTOM,              _("&Bottom"))
-        STOCKITEM(wxID_CANCEL,              _("&Cancel"))
-        STOCKITEM(wxID_CDROM,               _("&CD-Rom"))
-        STOCKITEM(wxID_CLEAR,               _("&Clear"))
-        STOCKITEM(wxID_CLOSE,               _("&Close"))
-        STOCKITEM(wxID_CONVERT,             _("&Convert"))
-        STOCKITEM(wxID_COPY,                _("&Copy"))
-        STOCKITEM(wxID_CUT,                 _("Cu&t"))
-        STOCKITEM(wxID_DELETE,              _("&Delete"))
-        STOCKITEM(wxID_DOWN,                _("&Down"))
-        STOCKITEM(wxID_EDIT,                _("&Edit"))
-        STOCKITEM(wxID_EXECUTE,             _("&Execute"))
-        STOCKITEM(wxID_EXIT,                _("&Quit"))
-        STOCKITEM(wxID_FILE,                _("&File"))
-        STOCKITEM(wxID_FIND,                _("&Find"))
-        STOCKITEM(wxID_FIRST,               _("&First"))
-        STOCKITEM(wxID_FLOPPY,              _("&Floppy"))
-        STOCKITEM(wxID_FORWARD,             _("&Forward"))
-        STOCKITEM(wxID_HARDDISK,            _("&Harddisk"))
-        STOCKITEM(wxID_HELP,                _("&Help"))
-        STOCKITEM(wxID_HOME,                _("&Home"))
-        STOCKITEM(wxID_INDENT,              _("Indent"))
-        STOCKITEM(wxID_INDEX,               _("&Index"))
-        STOCKITEM(wxID_INFO,                _("&Info"))
-        STOCKITEM(wxID_ITALIC,              _("&Italic"))
-        STOCKITEM(wxID_JUMP_TO,             _("&Jump to"))
-        STOCKITEM(wxID_JUSTIFY_CENTER,      _("Centered"))
-        STOCKITEM(wxID_JUSTIFY_FILL,        _("Justified"))
-        STOCKITEM(wxID_JUSTIFY_LEFT,        _("Align Left"))
-        STOCKITEM(wxID_JUSTIFY_RIGHT,       _("Align Right"))
-        STOCKITEM(wxID_LAST,                _("&Last"))
-        STOCKITEM(wxID_NETWORK,             _("&Network"))
-        STOCKITEM(wxID_NEW,                 _("&New"))
-        STOCKITEM(wxID_NO,                  _("&No"))
-        STOCKITEM(wxID_OK,                  _("&OK"))
-        STOCKITEM(wxID_OPEN,                _("&Open..."))
-        STOCKITEM(wxID_PASTE,               _("&Paste"))
-        STOCKITEM(wxID_PREFERENCES,         _("&Preferences"))
-        STOCKITEM(wxID_PREVIEW,             _("Print previe&w"))
-        STOCKITEM(wxID_PRINT,               _("&Print..."))
-        STOCKITEM(wxID_PROPERTIES,          _("&Properties"))
-        STOCKITEM(wxID_REDO,                _("&Redo"))
-        STOCKITEM(wxID_REFRESH,             _("Refresh"))
-        STOCKITEM(wxID_REMOVE,              _("Remove"))
-        STOCKITEM(wxID_REPLACE,             _("Rep&lace"))
-        STOCKITEM(wxID_REVERT_TO_SAVED,     _("Revert to Saved"))
-        STOCKITEM(wxID_SAVE,                _("&Save"))
-        STOCKITEM(wxID_SAVEAS,              _("Save &As..."))
-        STOCKITEM(wxID_SELECTALL,           _("Select &All"))
-        STOCKITEM(wxID_SELECT_COLOR,        _("&Color"))
-        STOCKITEM(wxID_SELECT_FONT,         _("&Font"))
-        STOCKITEM(wxID_SORT_ASCENDING,      _("&Ascending"))
-        STOCKITEM(wxID_SORT_DESCENDING,     _("&Descending"))
-        STOCKITEM(wxID_SPELL_CHECK,         _("&Spell Check"))
-        STOCKITEM(wxID_STOP,                _("&Stop"))
-        STOCKITEM(wxID_STRIKETHROUGH,       _("&Strikethrough"))
-        STOCKITEM(wxID_TOP,                 _("&Top"))
-        STOCKITEM(wxID_UNDELETE,            _("Undelete"))
-        STOCKITEM(wxID_UNDERLINE,           _("&Underline"))
-        STOCKITEM(wxID_UNDO,                _("&Undo"))
-        STOCKITEM(wxID_UNINDENT,            _("&Unindent"))
-        STOCKITEM(wxID_UP,                  _("&Up"))
-        STOCKITEM(wxID_YES,                 _("&Yes"))
-        STOCKITEM(wxID_ZOOM_100,            _("&Actual Size"))
-        STOCKITEM(wxID_ZOOM_FIT,            _("Zoom to &Fit"))
-        STOCKITEM(wxID_ZOOM_IN,             _("Zoom &In"))
-        STOCKITEM(wxID_ZOOM_OUT,            _("Zoom &Out"))
+        STOCKITEM(wxID_ABOUT,               _("&About..."),           _("About..."));
+        STOCKITEM(wxID_ADD,                 _("Add"),                 _("Add"));
+        STOCKITEM(wxID_APPLY,               _("&Apply"),              _("Apply"));
+        STOCKITEM(wxID_BACKWARD,            _("&Back"),               _("Back"));
+        STOCKITEM(wxID_BOLD,                _("&Bold"),               _("Bold"));
+        STOCKITEM(wxID_BOTTOM,              _("&Bottom"),             _("Bottom"));
+        STOCKITEM(wxID_CANCEL,              _("&Cancel"),             _("Cancel"));
+        STOCKITEM(wxID_CDROM,               _("&CD-Rom"),             _("CD-Rom"));
+        STOCKITEM(wxID_CLEAR,               _("&Clear"),              _("Clear"));
+        STOCKITEM(wxID_CLOSE,               _("&Close"),              _("Close"));
+        STOCKITEM(wxID_CONVERT,             _("&Convert"),            _("Convert"));
+        STOCKITEM(wxID_COPY,                _("&Copy"),               _("Copy"));
+        STOCKITEM(wxID_CUT,                 _("Cu&t"),                _("Cut"));
+        STOCKITEM(wxID_DELETE,              _("&Delete"),             _("Delete"));
+        STOCKITEM(wxID_DOWN,                _("&Down"),               _("Down"));
+        STOCKITEM(wxID_EDIT,                _("&Edit"),               _("Edit"));
+        STOCKITEM(wxID_EXECUTE,             _("&Execute"),            _("Execute"));
+        STOCKITEM(wxID_EXIT,                _("&Quit"),               _("Quit"));
+        STOCKITEM(wxID_FILE,                _("&File"),               _("File"));
+        STOCKITEM(wxID_FIND,                _("&Find"),               _("Find"));
+        STOCKITEM(wxID_FIRST,               _("&First"),              _("First"));
+        STOCKITEM(wxID_FLOPPY,              _("&Floppy"),             _("Floppy"));
+        STOCKITEM(wxID_FORWARD,             _("&Forward"),            _("Forward"));
+        STOCKITEM(wxID_HARDDISK,            _("&Harddisk"),           _("Harddisk"));
+        STOCKITEM(wxID_HELP,                _("&Help"),               _("Help"));
+        STOCKITEM(wxID_HOME,                _("&Home"),               _("Home"));
+        STOCKITEM(wxID_INDENT,              _("Indent"),              _("Indent"));
+        STOCKITEM(wxID_INDEX,               _("&Index"),              _("Index"));
+        STOCKITEM(wxID_INFO,                _("&Info"),               _("Info"));
+        STOCKITEM(wxID_ITALIC,              _("&Italic"),             _("Italic"));
+        STOCKITEM(wxID_JUSTIFY_CENTER,      _("Centered"),            _("Centered"));
+        STOCKITEM(wxID_JUSTIFY_FILL,        _("Justified"),           _("Justified"));
+        STOCKITEM(wxID_LAST,                _("&Last"),               _("Last"));
+        STOCKITEM(wxID_NETWORK,             _("&Network"),            _("Network"));
+        STOCKITEM(wxID_NEW,                 _("&New"),                _("New"));
+        STOCKITEM(wxID_NO,                  _("&No"),                 _("No"));
+        STOCKITEM(wxID_OK,                  _("&OK"),                 _("OK"));
+        STOCKITEM(wxID_OPEN,                _("&Open..."),            _("Open..."));
+        STOCKITEM(wxID_PASTE,               _("&Paste"),              _("Paste"));
+        STOCKITEM(wxID_PREFERENCES,         _("&Preferences"),        _("Preferences"));
+        STOCKITEM(wxID_PREVIEW,             _("&Preview..."),         _("Preview..."));
+        STOCKITEM(wxID_PRINT,               _("&Print..."),           _("Print..."));
+        STOCKITEM(wxID_PROPERTIES,          _("&Properties"),         _("Properties"));
+        STOCKITEM(wxID_REDO,                _("&Redo"),               _("Redo"));
+        STOCKITEM(wxID_REFRESH,             _("Refresh"),             _("Refresh"));
+        STOCKITEM(wxID_REMOVE,              _("Remove"),              _("Remove"));
+        STOCKITEM(wxID_REPLACE,             _("Rep&lace"),            _("Replace"));
+        STOCKITEM(wxID_SAVE,                _("&Save"),               _("Save"));
+        STOCKITEM(wxID_SAVEAS,              _("&Save as"),            _("Save as"));
+        STOCKITEM(wxID_SELECT_COLOR,        _("&Color"),              _("Color"));
+        STOCKITEM(wxID_SELECT_FONT,         _("&Font"),               _("Font"));
+        STOCKITEM(wxID_SORT_ASCENDING,      _("&Ascending"),          _("Ascending"));
+        STOCKITEM(wxID_SORT_DESCENDING,     _("&Descending"),         _("Descending"));
+        STOCKITEM(wxID_STOP,                _("&Stop"),               _("Stop"));
+        STOCKITEM(wxID_STRIKETHROUGH,       _("&Strikethrough"),      _("Strikethrough"));
+        STOCKITEM(wxID_TOP,                 _("&Top"),                _("Top"));
+        STOCKITEM(wxID_UNDELETE,            _("Undelete"),            _("Undelete"));
+        STOCKITEM(wxID_UNDERLINE,           _("&Underline"),          _("Underline"));
+        STOCKITEM(wxID_UNDO,                _("&Undo"),               _("Undo"));
+        STOCKITEM(wxID_UNINDENT,            _("&Unindent"),           _("Unindent"));
+        STOCKITEM(wxID_UP,                  _("&Up"),                 _("Up"));
+        STOCKITEM(wxID_YES,                 _("&Yes"),                _("Yes"));
 
         default:
             wxFAIL_MSG( wxT("invalid stock item ID") );
@@ -216,19 +218,6 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         // buttons which shouldn't have accelerators in their labels
         wxASSERT_MSG( !(flags & wxSTOCK_WITH_ACCELERATOR),
                         "labels without ellipsis shouldn't use accelerators" );
-    }
-
-#ifdef __WXMSW__
-    // special case: the "Cancel" button shouldn't have a mnemonic under MSW
-    // for consistency with the native dialogs (which don't use any mnemonic
-    // for it because it is already bound to Esc implicitly)
-    if ( id == wxID_CANCEL )
-        flags &= ~wxSTOCK_WITH_MNEMONIC;
-#endif // __WXMSW__
-
-    if ( !(flags & wxSTOCK_WITH_MNEMONIC) )
-    {
-        stockLabel = wxStripMenuCodes(stockLabel);
     }
 
 #if wxUSE_ACCEL
