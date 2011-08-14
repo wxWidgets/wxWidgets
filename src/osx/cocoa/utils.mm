@@ -54,8 +54,8 @@ void wxBell()
 - (void)applicationWillFinishLaunching:(NSNotification *)application {	
     wxUnusedVar(application);
     
-    // we must install our handlers later than setting the app delegates, because otherwise our handlers
-    // get overwritten
+    // we must install our handlers later than setting the app delegate, because otherwise our handlers
+    // get overwritten in the meantime
 
     NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
     
