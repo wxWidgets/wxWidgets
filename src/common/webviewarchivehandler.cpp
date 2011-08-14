@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        webviewfilehandler.cpp
-// Purpose:     Custom handler for the file scheme to allow archive browsing
+// Purpose:     Custom webview handler to allow archive browsing
 // Author:      Steven Lamerton
 // Id:          $Id$
 // Copyright:   (c) 2011 Steven Lamerton
@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/webviewfilehandler.h"
+#include "wx/webviewarchivehandler.h"
 #include "wx/filesys.h"
 
 //Taken from wx/filesys.cpp
@@ -44,13 +44,13 @@ static wxString EscapeFileNameCharsInURL(const char *in)
     return s;
 }
 
-wxWebFileHandler::wxWebFileHandler()
+wxWebViewArchiveHandler::wxWebViewArchiveHandler(const wxString& scheme) :
+                         wxWebViewHandler(scheme)
 {
-    m_name = "file";
     m_fileSystem = new wxFileSystem();
 }
 
-wxFSFile* wxWebFileHandler::GetFile(const wxString &uri)
+wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
 {
     //If there is a fragment at the end of the path then we need to strip it
     //off as not all backends do this for us

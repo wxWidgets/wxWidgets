@@ -114,7 +114,7 @@ public:
     void RunScript(const wxString& javascript);
     
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxSharedPtr<wxWebHandler> handler);
+    virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
 
     // ---- methods not from the parent (common) interface
     bool  CanGetPageSource();

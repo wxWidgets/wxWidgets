@@ -1,31 +1,31 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        webfilehandler.h
-// Purpose:     interface of wxWebFileHandler
+// Purpose:     interface of wxWebViewArchiveHandler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxWebFileHandler
+    @class wxWebViewArchiveHandler
   
     A custom handler for the file scheme which also supports loading from 
-    archives. The syntax for wxWebFileHandler differs from virtual file 
+    archives. The syntax for wxWebViewArchiveHandler differs from virtual file 
     systems in the rest of wxWidgets by using a syntax such as
-    @c file:///C:/exmaple/docs.zip;protocol=zip/main.htm Currently the only
-    supported protocol is @c zip. 
+    <code> scheme:///C:/exmaple/docs.zip;protocol=zip/main.htm </code> 
+    Currently the only supported protocol is @c zip. 
    
     @library{wxweb}
     @category{web}
     
-    @see wxWebView, wxWebHandler
+    @see wxWebView, wxWebViewHandler
  */
-class wxWebFileHandler : public wxWebHandler
+class wxWebViewArchiveHandler : public wxWebViewHandler
 {
 public:
     /**
-        @return The string @c "file"
+        Constructor.
     */
-    virtual wxString GetName() const;
+    wxWebViewArchiveHandler(const wxString& scheme);
     virtual wxFSFile* GetFile(const wxString &uri);
 };

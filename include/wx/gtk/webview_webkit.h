@@ -122,8 +122,8 @@ public:
     virtual void RunScript(const wxString& javascript);
     
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxSharedPtr<wxWebHandler> handler);
-    virtual wxVector<wxSharedPtr<wxWebHandler> > GetHandlers() { return m_handlerList; }
+    virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
+    virtual wxVector<wxSharedPtr<wxWebViewHandler> > GetHandlers() { return m_handlerList; }
 
     /** FIXME: hack to work around signals being received too early */
     bool m_ready;
@@ -155,7 +155,7 @@ private:
     GtkWidget *web_view;
     gint m_historyLimit;
 
-    wxVector<wxSharedPtr<wxWebHandler> > m_handlerList;
+    wxVector<wxSharedPtr<wxWebViewHandler> > m_handlerList;
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 };

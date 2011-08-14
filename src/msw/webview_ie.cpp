@@ -665,7 +665,7 @@ void wxWebViewIE::RunScript(const wxString& javascript)
     document->Release();
 }
 
-void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebHandler> handler)
+void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     ClassFactory* cf = new ClassFactory(handler);
     IInternetSession* session;
@@ -965,7 +965,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
     evt.Skip();
 }
 
-VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebHandler> handler)
+VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler)
 {
     m_refCount = 0;
     m_file = NULL;

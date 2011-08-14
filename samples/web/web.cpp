@@ -26,7 +26,7 @@
 #include "wx/notifmsg.h"
 #include "wx/settings.h"
 #include "wx/webview.h"
-#include "wx/webviewfilehandler.h"
+#include "wx/webviewarchivehandler.h"
 #include "wx/infobar.h"
 #include "wx/filesys.h"
 #include "wx/fs_arc.h"
@@ -209,8 +209,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     m_browser = wxWebView::New(this, wxID_ANY, "http://www.wxwidgets.org");
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
-    //We register the file:// protocol for testing purposes
-    m_browser->RegisterHandler(wxSharedPtr<wxWebHandler>(new wxWebFileHandler()));
+    //We register the wxfs:// protocol for testing purposes
+    m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));
 
     SetSizer(topsizer);
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        webviewfilehandler.h
-// Purpose:     Custom handler for the file scheme to allow archive browsing
+// Name:        webviewarchivehandler.h
+// Purpose:     Custom webview handler to allow archive browsing
 // Author:      Steven Lamerton
 // Id:          $Id$
 // Copyright:   (c) 2011 Steven Lamerton
@@ -19,17 +19,15 @@ class wxFileSystem;
 
 #include "wx/webview.h"
 
-//Loads from uris such as file:///C:/example/example.html or archives such as
-//file:///C:/example/example.zip;protocol=zip/example.html 
+//Loads from uris such as scheme:///C:/example/example.html or archives such as
+//scheme:///C:/example/example.zip;protocol=zip/example.html 
 
-class WXDLLIMPEXP_WEB wxWebFileHandler : public wxWebHandler
+class WXDLLIMPEXP_WEB wxWebViewArchiveHandler : public wxWebViewHandler
 {
 public:
-    wxWebFileHandler();
-    virtual wxString GetName() const { return m_name; }
+    wxWebViewArchiveHandler(const wxString& scheme);
     virtual wxFSFile* GetFile(const wxString &uri);
 private:
-    wxString m_name;
     wxFileSystem* m_fileSystem;
 };
 

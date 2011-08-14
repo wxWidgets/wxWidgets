@@ -110,7 +110,7 @@ public:
     virtual void RunScript(const wxString& javascript);
 
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxSharedPtr<wxWebHandler> handler);
+    virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
 
     // ---- IE-specific methods
 
@@ -169,10 +169,10 @@ protected:
     VOID * fileP;
 
     wxFSFile* m_file;
-    wxSharedPtr<wxWebHandler> m_handler;
+    wxSharedPtr<wxWebViewHandler> m_handler;
 
 public:
-    VirtualProtocol(wxSharedPtr<wxWebHandler> handler);
+    VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler);
     ~VirtualProtocol();
 
     //IUnknown
@@ -211,7 +211,7 @@ class ClassFactory : public IClassFactory
 private:
     ULONG m_refCount;
 public:
-    ClassFactory(wxSharedPtr<wxWebHandler> handler) : m_handler(handler) {}
+    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler) {}
     //IUnknown
     ULONG STDMETHODCALLTYPE AddRef();
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
@@ -222,7 +222,7 @@ public:
                                              REFIID riid, void** ppvObject);
     HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
 private:
-    wxSharedPtr<wxWebHandler> m_handler;
+    wxSharedPtr<wxWebViewHandler> m_handler;
 };
 
 #endif // wxUSE_WEBVIEW_IE && defined(__WXMSW__)

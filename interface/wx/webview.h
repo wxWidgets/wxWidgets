@@ -117,7 +117,7 @@ public:
 };
 
 /**
-    @class wxWebHandler
+    @class wxWebViewHandler
   
     The base class for handling custom schemes in wxWebView, for example to 
     allow virtual file system support.
@@ -127,16 +127,22 @@ public:
     
     @see wxWebView
  */
-class wxWebHandler
+class wxWebViewHandler
 {
 public:
+    /**
+        Constructor. Takes the name of the scheme that will be handled by this
+        class for example @c file or @c zip.
+    */
+    wxWebViewHandler(const wxString& scheme);
+
     /**
         @return A pointer to the file represented by @c uri.
     */  
     virtual wxFSFile* GetFile(const wxString &uri) = 0;
 
     /**
-        @return The name of the scheme, for example @c file or @c http.
+        @return The name of the scheme, as passed to the constructor.
     */
     virtual wxString GetName() const = 0;
 };
@@ -196,8 +202,7 @@ public:
     
     wxWebView supports the registering of custom scheme handlers, for example
     @c file or @c http. To do this create a new class which inherits from 
-    wxWebHandler, where the wxWebHandler::GetName() method returns the scheme
-    you wish to handle and wxWebHandler::GetFile() returns a pointer to a 
+    wxWebViewHandler, where wxWebHandler::GetFile() returns a pointer to a 
     wxFSFile which represents the given url. You can then register your handler
     with RegisterHandler() it will be called for all pages and resources.
     
@@ -338,7 +343,7 @@ public:
         Registers a custom scheme handler.
         @param handler A shared pointer to a wxWebHandler.
     */
-    virtual void RegisterHandler(wxSharedPtr<wxWebHandler> handler) = 0;
+    virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
 
     /**
         Reload the currently displayed URL.

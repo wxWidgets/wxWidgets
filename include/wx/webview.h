@@ -101,11 +101,14 @@ enum wxWebViewBackend
 };
 
 //Base class for custom scheme handlers
-class WXDLLIMPEXP_WEB wxWebHandler
+class WXDLLIMPEXP_WEB wxWebViewHandler
 {
 public:
-    virtual wxString GetName() const = 0;
+    wxWebViewHandler(const wxString& scheme) : m_scheme(scheme) {}
+    virtual wxString GetName() const { return m_scheme; }
     virtual wxFSFile* GetFile(const wxString &uri) = 0;
+private:
+    wxString m_scheme;
 };
 
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[];
@@ -339,7 +342,7 @@ public:
     virtual void Redo() = 0;
 
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxSharedPtr<wxWebHandler> handler) = 0;
+    virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
 
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };

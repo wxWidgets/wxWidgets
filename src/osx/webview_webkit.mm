@@ -315,8 +315,8 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
 
 @end
 
-//We use a hash to map scheme names to wxWebHandlers
-WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebHandler>, wxStringToWebHandlerMap);
+//We use a hash to map scheme names to wxWebViewHandler
+WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
 
 static wxStringToWebHandlerMap g_stringHandlerMap;
 
@@ -982,7 +982,7 @@ void wxWebViewWebKit::Redo()
     [[m_webView undoManager] redo];
 }
 
-void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebHandler> handler)
+void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     g_stringHandlerMap[handler->GetName()] = handler;
 }
@@ -1262,7 +1262,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebNavigationError* out)
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request
 {
-    //We don't do any processing here as the wxWebHandler classes do it
+    //We don't do any processing here as the wxWebViewHandler classes do it
     return request;
 }
 
