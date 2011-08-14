@@ -177,6 +177,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_OPEN,                _("&Open..."),            _("Open..."));
         STOCKITEM(wxID_PASTE,               _("&Paste"),              _("Paste"));
         STOCKITEM(wxID_PREFERENCES,         _("&Preferences"),        _("Preferences"));
+        STOCKITEM(wxID_PREVIEW,             _("&Preview..."),         _("Preview..."));
         STOCKITEM(wxID_PRINT,               _("&Print..."),           _("Print..."));
         STOCKITEM(wxID_PROPERTIES,          _("&Properties"),         _("Properties"));
         STOCKITEM(wxID_REDO,                _("&Redo"),               _("Redo"));
@@ -184,6 +185,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_REMOVE,              _("Remove"),              _("Remove"));
         STOCKITEM(wxID_REPLACE,             _("Rep&lace"),            _("Replace"));
         STOCKITEM(wxID_SAVE,                _("&Save"),               _("Save"));
+        STOCKITEM(wxID_SAVEAS,              _("&Save as"),            _("Save as"));
         STOCKITEM(wxID_SELECT_COLOR,        _("&Color"),              _("Color"));
         STOCKITEM(wxID_SELECT_FONT,         _("&Font"),               _("Font"));
         STOCKITEM(wxID_SORT_ASCENDING,      _("&Ascending"),          _("Ascending"));
