@@ -145,9 +145,9 @@ static GdkWindow* wxGetGdkWindowForDC(wxWindow* win, wxDC& dc)
     GdkWindow* gdk_window = NULL;
 
 #if wxUSE_GRAPHICS_CONTEXT
-    if ( dc.IsKindOf( CLASSINFO(wxGCDC) ) )
+    // if ( dc.IsKindOf( CLASSINFO(wxGCDC) ) )
         gdk_window = win->GTKGetDrawingWindow();
-    else
+    // else
 #endif
     {
 #if wxUSE_NEW_DC
