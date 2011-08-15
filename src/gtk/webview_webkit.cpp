@@ -44,22 +44,22 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
     if (status == WEBKIT_LOAD_FINISHED)
     {
         webKitCtrl->m_busy = false;
-        wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_LOADED,
-                                       webKitCtrl->GetId(),
-                                       url, target, false);
+        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED,
+                             webKitCtrl->GetId(),
+                             url, target, false);
 
         if (webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(thisEvent);
+            webKitCtrl->GetEventHandler()->ProcessEvent(event);
     }
     else if (status ==  WEBKIT_LOAD_COMMITTED)
     {
         webKitCtrl->m_busy = true;
-        wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
-                                       webKitCtrl->GetId(),
-                                       url, target, false);
+        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+                             webKitCtrl->GetId(),
+                             url, target, false);
 
         if (webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(thisEvent);
+            webKitCtrl->GetEventHandler()->ProcessEvent(event);
     }
 }
 
@@ -86,16 +86,16 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     const gchar* uri = webkit_network_request_get_uri(request);
 
     wxString target = webkit_web_frame_get_name (frame);
-    wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
-                                   webKitCtrl->GetId(),
-                                   wxString( uri, wxConvUTF8 ),
-                                   target,
-                                   true);
+    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
+                         webKitCtrl->GetId(),
+                         wxString( uri, wxConvUTF8 ),
+                         target,
+                         true);
 
     if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(thisEvent);
+        webKitCtrl->GetEventHandler()->ProcessEvent(event);
 
-    if (thisEvent.IsVetoed())
+    if (event.IsVetoed())
     {
         webKitCtrl->m_busy = false;
         webkit_web_policy_decision_ignore(policy_decision);
@@ -141,7 +141,7 @@ wxgtk_webview_webkit_error(WebKitWebView*,
                            wxWebViewWebKit* webKitWindow)
 {
     webKitWindow->m_busy = false;
-    wxWebNavigationError type = wxWEB_NAV_ERR_OTHER;
+    wxWebViewNavigationError type = wxWEB_NAV_ERR_OTHER;
 
     GError* error = (GError*)web_error;
     wxString description(error->message, wxConvUTF8);
@@ -260,17 +260,15 @@ wxgtk_webview_webkit_error(WebKitWebView*,
     }
     */
 
-    wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_ERROR,
-                                   webKitWindow->GetId(),
-                                   uri,
-                                   wxEmptyString,
-                                   false);
-    thisEvent.SetString(description);
-    thisEvent.SetInt(type);
+    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR,
+                         webKitWindow->GetId(),
+                         uri, "", false);
+    event.SetString(description);
+    event.SetInt(type);
 
     if (webKitWindow && webKitWindow->GetEventHandler())
     {
-        webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+        webKitWindow->GetEventHandler()->ProcessEvent(event);
     }
 
     return FALSE;
@@ -287,14 +285,14 @@ wxgtk_webview_webkit_new_window(WebKitWebView*,
     const gchar* uri = webkit_network_request_get_uri(request);
 
     wxString target = webkit_web_frame_get_name (frame);
-    wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
-                                   webKitCtrl->GetId(),
-                                   wxString( uri, wxConvUTF8 ),
-                                   target,
-                                   true);
+    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+                                       webKitCtrl->GetId(),
+                                       wxString( uri, wxConvUTF8 ),
+                                       target,
+                                       true);
 
     if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(thisEvent);
+        webKitCtrl->GetEventHandler()->ProcessEvent(event);
 
     //We always want the user to handle this themselves
     webkit_web_policy_decision_ignore(policy_decision);
@@ -307,15 +305,14 @@ wxgtk_webview_webkit_title_changed(WebKitWebView*,
                                    gchar *title,
                                    wxWebViewWebKit *webKitCtrl)
 {
-    wxWebNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
-                                   webKitCtrl->GetId(),
-                                   webKitCtrl->GetCurrentURL(),
-                                   "",
-                                   true);
-    thisEvent.SetString(wxString(title, wxConvUTF8));
+    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+                         webKitCtrl->GetId(),
+                         webKitCtrl->GetCurrentURL(),
+                         "", true);
+    event.SetString(wxString(title, wxConvUTF8));
 
     if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(thisEvent);
+        webKitCtrl->GetEventHandler()->ProcessEvent(event);
 
 }
 

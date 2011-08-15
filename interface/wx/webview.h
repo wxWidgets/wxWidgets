@@ -37,7 +37,7 @@ enum wxWebViewZoomType
 /** 
     Types of errors that can cause navigation to fail
 */
-enum wxWebNavigationError
+enum wxWebViewNavigationError
 {
     /** Connection error (timeout, etc.) */
     wxWEB_NAV_ERR_CONNECTION,
@@ -211,7 +211,7 @@ public:
     standard @c file syntax as well as paths to archives of the form 
     @c file:///C:/exmaple/docs.zip;protocol=zip/main.htm 
   
-    @beginEventEmissionTable{wxWebNavigationEvent}
+    @beginEventEmissionTable{wxWebViewEvent}
     @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
@@ -243,7 +243,7 @@ public:
    
     @library{wxweb}
     @category{ctrl,web}
-    @see wxWebHandler, wxWebNavigationEvent
+    @see wxWebHandler, wxWebViewEvent
  */
 class wxWebView : public wxControl
 {
@@ -586,12 +586,12 @@ public:
 
 
 /**
-    @class wxWebNavigationEvent
+    @class wxWebViewEvent
 
     A navigation  event holds information about events associated with 
     wxWebView objects.
 
-    @beginEventEmissionTable{wxWebNavigationEvent}
+    @beginEventEmissionTable{wxWebViewEvent}
     @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
@@ -626,12 +626,12 @@ public:
 
     @see wxWebView
 */
-class wxWebNavigationEvent : public wxCommandEvent
+class wxWebViewEvent : public wxCommandEvent
 {
 public:
-    wxWebNavigationEvent();
-    wxWebNavigationEvent(wxEventType type, int id, const wxString href,
-                         const wxString target, bool canVeto);
+    wxWebViewEvent();
+    wxWebViewEvent(wxEventType type, int id, const wxString href,
+                   const wxString target, bool canVeto);
 
     /**
         Get the name of the target frame which the url of this event

@@ -53,7 +53,7 @@ enum wxWebViewZoomType
 };
 
 /** Types of errors that can cause navigation to fail */
-enum wxWebNavigationError
+enum wxWebViewNavigationError
 {
     /** Connection error (timeout, etc.) */
     wxWEB_NAV_ERR_CONNECTION,
@@ -347,12 +347,12 @@ public:
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };
 
-class WXDLLIMPEXP_WEB wxWebNavigationEvent : public wxCommandEvent
+class WXDLLIMPEXP_WEB wxWebViewEvent : public wxCommandEvent
 {
 public:
-    wxWebNavigationEvent() {}
-    wxWebNavigationEvent(wxEventType type, int id, const wxString url,
-                         const wxString target, bool canVeto)
+    wxWebViewEvent() {}
+    wxWebViewEvent(wxEventType type, int id, const wxString url,
+                   const wxString target, bool canVeto)
         : wxCommandEvent(type, id)
     {
         m_url = url;
@@ -373,7 +373,7 @@ public:
     const wxString& GetTarget() const { return m_target; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent* Clone() const { return new wxWebNavigationEvent(*this); }
+    virtual wxEvent* Clone() const { return new wxWebViewEvent(*this); }
 
     /** Get whether this event may be vetoed (stopped/prevented). Only
       *  meaningful for events fired before navigation takes place.
@@ -396,45 +396,45 @@ private:
     bool m_canVeto;
     bool m_vetoed;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebNavigationEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebViewEvent);
 };
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wxWebNavigationEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebNavigationEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebNavigationEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebNavigationEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, wxWebNavigationEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, wxWebNavigationEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEB, wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, wxWebViewEvent );
 
-typedef void (wxEvtHandler::*wxWebNavigationEventFunction)
-             (wxWebNavigationEvent&);
+typedef void (wxEvtHandler::*wxWebViewEventFunction)
+             (wxWebViewEvent&);
 
-#define wxWebNavigationEventHandler(func) \
-    wxEVENT_HANDLER_CAST(wxWebNavigationEventFunction, func)
+#define wxWebViewEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxWebViewEventFunction, func)
 
 #define EVT_WEB_VIEW_NAVIGATING(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NAVIGATING, id, \
-                     wxHtmlNavigatingEventHandler(fn))
+                     wxWebViewEventHandler(fn))
 
 #define EVT_WEB_VIEW_NAVIGATED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NAVIGATED, id, \
-                     wxHtmlNavigatingEventHandler(fn))
+                     wxWebViewEventHandler(fn))
 
 #define EVT_WEB_VIEW_LOADED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_LOADED, id, \
-                     wxHtmlNavigatingEventHandler(fn))
+                     wxWebViewEventHandler(fn))
 
 #define EVT_WEB_VIEW_ERRROR(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_ERROR, id, \
-                     wxHtmlNavigatingEventHandler(fn))
+                     wxWebViewEventHandler(fn))
 
 #define EVT_WEB_VIEW_NEWWINDOW(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, id, \
-                     wxHtmlNavigatingEventHandler(fn))
+                     wxWebViewEventHandler(fn))
 
 #define EVT_WEB_VIEW_TITLE_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, id, \
-                     wxHtmlNavigatingEventHandler(fn))
+                     wxWebViewEventHandler(fn))
 
 #endif // wxUSE_WEB
 

@@ -109,8 +109,8 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
 
         //We send the events when we are done to mimic webkit
         //Navigated event
-        wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
-                                   GetId(), baseUrl, "", false);
+        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+                             GetId(), baseUrl, "", false);
         event.SetEventObject(this);
         HandleWindowEvent(event);
 
@@ -722,8 +722,8 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             wxString url = evt[1].GetString();
             wxString target = evt[3].GetString();
 
-            wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
-                                       GetId(), url, target, true);
+            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
+                                 GetId(), url, target, true);
             event.SetEventObject(this);
             HandleWindowEvent(event);
 
@@ -748,8 +748,8 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             wxString url = evt[1].GetString();
             // TODO: set target parameter if possible
             wxString target = wxEmptyString;
-            wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
-                                       GetId(), url, target, false);
+            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+                                 GetId(), url, target, false);
             event.SetEventObject(this);
             HandleWindowEvent(event);
             break;
@@ -797,8 +797,8 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             m_historyLoadingFromList = false;
             // TODO: set target parameter if possible
             wxString target = wxEmptyString;
-            wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED, GetId(),
-                                       url, target, false);
+            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED, GetId(),
+                                 url, target, false);
             event.SetEventObject(this);
             HandleWindowEvent(event);
             break;
@@ -813,8 +813,8 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
         {
             wxString title = evt[0].GetString();
 
-            wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
-                                       GetId(), GetCurrentURL(), wxEmptyString, true);
+            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+                                 GetId(), GetCurrentURL(), wxEmptyString, true);
             event.SetString(title);
             event.SetEventObject(this);
             HandleWindowEvent(event);
@@ -823,7 +823,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
         case DISPID_NAVIGATEERROR:
         {
-            wxWebNavigationError errorType = wxWEB_NAV_ERR_OTHER;
+            wxWebViewNavigationError errorType = wxWEB_NAV_ERR_OTHER;
             wxString errorCode = "?";
             switch (evt[3].GetLong())
             {
@@ -937,8 +937,8 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
             wxString url = evt[1].GetString();
             wxString target = evt[2].GetString();
-            wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR, GetId(),
-                                       url, target, false);
+            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR, GetId(),
+                                 url, target, false);
             event.SetEventObject(this);
             event.SetInt(errorType);
             event.SetString(errorCode);
@@ -949,8 +949,8 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
         {
             wxString url = evt[4].GetString();
 
-            wxWebNavigationEvent event(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
-                                       GetId(), url, wxEmptyString, true);
+            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+                                 GetId(), url, wxEmptyString, true);
             event.SetEventObject(this);
             HandleWindowEvent(event);
 

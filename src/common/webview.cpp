@@ -30,14 +30,14 @@ extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[] = "wxWebView";
 extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewDefaultURLStr[] = "about:blank";
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxWebView, wxControl);
-wxIMPLEMENT_DYNAMIC_CLASS(wxWebNavigationEvent, wxCommandEvent);
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEvent, wxCommandEvent);
 
-wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wxWebNavigationEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebNavigationEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebNavigationEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebNavigationEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, wxWebNavigationEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, wxWebNavigationEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wxWebViewEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebViewEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebViewEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebViewEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, wxWebViewEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, wxWebViewEvent );
 
 // static
 wxWebView* wxWebView::New(wxWebViewBackend backend)

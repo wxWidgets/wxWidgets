@@ -73,15 +73,15 @@ public:
     void OnReload(wxCommandEvent& evt);
     void OnClearHistory(wxCommandEvent& evt);
     void OnEnableHistory(wxCommandEvent& evt);
-    void OnNavigationRequest(wxWebNavigationEvent& evt);
-    void OnNavigationComplete(wxWebNavigationEvent& evt);
-    void OnDocumentLoaded(wxWebNavigationEvent& evt);
-    void OnNewWindow(wxWebNavigationEvent& evt);
-    void OnTitleChanged(wxWebNavigationEvent& evt);
+    void OnNavigationRequest(wxWebViewEvent& evt);
+    void OnNavigationComplete(wxWebViewEvent& evt);
+    void OnDocumentLoaded(wxWebViewEvent& evt);
+    void OnNewWindow(wxWebViewEvent& evt);
+    void OnTitleChanged(wxWebViewEvent& evt);
     void OnViewSourceRequest(wxCommandEvent& evt);
     void OnToolsClicked(wxCommandEvent& evt);
     void OnSetZoom(wxCommandEvent& evt);
-    void OnError(wxWebNavigationEvent& evt);
+    void OnError(wxWebViewEvent& evt);
     void OnPrint(wxCommandEvent& evt);
     void OnCut(wxCommandEvent& evt);
     void OnCopy(wxCommandEvent& evt);
@@ -293,17 +293,17 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
 
     // Connect the webview events
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
-            wxWebNavigationEventHandler(WebFrame::OnNavigationRequest), NULL, this);
+            wxWebViewEventHandler(WebFrame::OnNavigationRequest), NULL, this);
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
-            wxWebNavigationEventHandler(WebFrame::OnNavigationComplete), NULL, this);
+            wxWebViewEventHandler(WebFrame::OnNavigationComplete), NULL, this);
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_LOADED,
-            wxWebNavigationEventHandler(WebFrame::OnDocumentLoaded), NULL, this);     
+            wxWebViewEventHandler(WebFrame::OnDocumentLoaded), NULL, this);     
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_ERROR,
-            wxWebNavigationEventHandler(WebFrame::OnError), NULL, this);
+            wxWebViewEventHandler(WebFrame::OnError), NULL, this);
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
-            wxWebNavigationEventHandler(WebFrame::OnNewWindow), NULL, this);
+            wxWebViewEventHandler(WebFrame::OnNewWindow), NULL, this);
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
-            wxWebNavigationEventHandler(WebFrame::OnTitleChanged), NULL, this);
+            wxWebViewEventHandler(WebFrame::OnTitleChanged), NULL, this);
 
     // Connect the menu events
     Connect(viewSource->GetId(), wxEVT_COMMAND_MENU_SELECTED,
@@ -505,7 +505,7 @@ void WebFrame::OnMode(wxCommandEvent& WXUNUSED(evt))
   * Callback invoked when there is a request to load a new page (for instance
   * when the user clicks a link)
   */
-void WebFrame::OnNavigationRequest(wxWebNavigationEvent& evt)
+void WebFrame::OnNavigationRequest(wxWebViewEvent& evt)
 {
     if(m_info->IsShown())
     {
@@ -528,7 +528,7 @@ void WebFrame::OnNavigationRequest(wxWebNavigationEvent& evt)
 /**
   * Callback invoked when a navigation request was accepted
   */
-void WebFrame::OnNavigationComplete(wxWebNavigationEvent& evt)
+void WebFrame::OnNavigationComplete(wxWebViewEvent& evt)
 {
     wxLogMessage("%s", "Navigation complete; url='" + evt.GetURL() + "'");
     UpdateState();
@@ -537,7 +537,7 @@ void WebFrame::OnNavigationComplete(wxWebNavigationEvent& evt)
 /**
   * Callback invoked when a page is finished loading
   */
-void WebFrame::OnDocumentLoaded(wxWebNavigationEvent& evt)
+void WebFrame::OnDocumentLoaded(wxWebViewEvent& evt)
 {
     //Only notify if the document is the main frame, not a subframe
     if(evt.GetURL() == m_browser->GetCurrentURL())
@@ -550,7 +550,7 @@ void WebFrame::OnDocumentLoaded(wxWebNavigationEvent& evt)
 /**
   * On new window, we veto to stop extra windows appearing
   */
-void WebFrame::OnNewWindow(wxWebNavigationEvent& evt)
+void WebFrame::OnNewWindow(wxWebViewEvent& evt)
 {
     wxLogMessage("%s", "New window; url='" + evt.GetURL() + "'");
 
@@ -562,7 +562,7 @@ void WebFrame::OnNewWindow(wxWebNavigationEvent& evt)
     UpdateState();
 }
 
-void WebFrame::OnTitleChanged(wxWebNavigationEvent& evt)
+void WebFrame::OnTitleChanged(wxWebViewEvent& evt)
 {
     wxLogMessage("%s", "Title changed; title='" + evt.GetString() + "'");
     UpdateState();
@@ -731,7 +731,7 @@ void WebFrame::OnSelectAll(wxCommandEvent& WXUNUSED(evt))
 /**
   * Callback invoked when a loading error occurs
   */
-void WebFrame::OnError(wxWebNavigationEvent& evt)
+void WebFrame::OnError(wxWebViewEvent& evt)
 {
     wxString errorCategory;
     switch (evt.GetInt())
