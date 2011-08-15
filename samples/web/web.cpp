@@ -95,6 +95,7 @@ public:
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
+    void OnLoadScheme(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -268,6 +269,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
 
     editmenu->AppendSubMenu(selection, "Selection");
 
+    wxMenuItem* loadscheme =  m_tools_menu->Append(wxID_ANY, _("Custom Scheme Example"));
+
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
@@ -346,6 +349,8 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnDeleteSelection),  NULL, this );
     Connect(selectall->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnSelectAll),  NULL, this );
+    Connect(loadscheme->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnLoadScheme),  NULL, this );
 }
 
 void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
@@ -500,6 +505,16 @@ void WebFrame::OnMode(wxCommandEvent& WXUNUSED(evt))
     m_browser->SetEditable(m_edit_mode->IsChecked());
 }
 
+void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
+{
+    wxFileName helpfile("../help/doc.zip");
+    helpfile.MakeAbsolute();
+    wxString path = helpfile.GetFullPath();
+    //Under MSW we need to flip the slashes
+    path.Replace("\\", "/");
+    path = "wxfs:///" + path + ";protocol=zip/doc.htm";
+    m_browser->LoadUrl(path);
+}
 
 /**
   * Callback invoked when there is a request to load a new page (for instance
