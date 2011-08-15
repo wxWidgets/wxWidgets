@@ -98,15 +98,23 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 
 wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
-    // // wxScreenDC is derived from wxWindowDC, so a screen dc will
-    // // call this method when a Blit is performed with it as a source.
-    // if (!m_window)
-    //     return wxNullBitmap;
+    // wxScreenDC is derived from wxWindowDC, so a screen dc will
+    // call this method when a Blit is performed with it as a source.
+    if (!m_window)
+        return wxNullBitmap;
 
     // ControlRef handle = (ControlRef) m_window->GetHandle();
     // if ( !handle )
     //     return wxNullBitmap;
+    
+    GtkWidget *offscreen_window = gtk_offscreen_window_new();
 
+    gtk_widget_reparent(m_window->m_wxwindow, offscreen_window);
+
+    GdkWindow* gdkwindow = gtk_widget_get_window(m_window->m_wxwindow);
+    if ( !gdkwindow )
+        return wxNullBitmap;
+   
     // HIRect rect;
     // CGImageRef image;
     // CGContextRef context;
