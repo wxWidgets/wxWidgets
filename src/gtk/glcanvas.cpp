@@ -107,9 +107,13 @@ parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void*
         {
             GdkScreen* screen = gtk_widget_get_screen(win->m_wxwindow);
             visual = gdk_x11_screen_lookup_visual(screen, xvi->visualid);
+#ifdef __WXGTK30__
+            gtk_widget_set_visual(win->m_wxwindow, visual);
+#else
             GdkColormap* colormap = gdk_colormap_new(visual, false);
             gtk_widget_set_colormap(win->m_wxwindow, colormap);
             g_object_unref(colormap);
+#endif
         }
         // remove hook
         return false;
@@ -245,7 +249,11 @@ bool wxGLCanvas::Create(wxWindow *parent,
 Window wxGLCanvas::GetXWindow() const
 {
     GdkWindow* window = GTKGetDrawingWindow();
+#ifdef __WXGTK30__
+    return window ? gdk_x11_window_get_xid(window) : 0;
+#else
     return window ? GDK_WINDOW_XWINDOW(window) : 0;
+#endif
 }
 
 void wxGLCanvas::OnInternalIdle()
