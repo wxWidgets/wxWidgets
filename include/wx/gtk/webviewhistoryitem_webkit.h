@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/gtk/webhistoryitem.h
-// Purpose:     wxWebHistoryItem header for GTK
+// Name:        include/wx/gtk/webviewhistoryitem.h
+// Purpose:     wxWebViewHistoryItem header for GTK
 // Author:      Steven Lamerton
 // Id:          $Id$
 // Copyright:   (c) 2011 Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_WEBHISTORYITEM_H_
-#define _WX_GTK_WEBHISTORYITEM_H_
+#ifndef _WX_GTK_WEBVIEWHISTORYITEM_H_
+#define _WX_GTK_WEBVIEWHISTORYITEM_H_
 
 #include "wx/setup.h"
 
@@ -16,10 +16,10 @@
 
 #include "webkit/webkit.h"
 
-class WXDLLIMPEXP_WEB wxWebHistoryItem
+class WXDLLIMPEXP_WEB wxWebViewHistoryItem
 {
 public:
-    wxWebHistoryItem(const wxString& url, const wxString& title) : 
+    wxWebViewHistoryItem(const wxString& url, const wxString& title) : 
                      m_url(url), m_title(title) {}
     wxString GetUrl() { return m_url; }
     wxString GetTitle() { return m_title; }
@@ -33,4 +33,4 @@ private:
 
 #endif // wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
-#endif // _WX_GTK_WEBHISTORYITEM_H_
+#endif // _WX_GTK_WEBVIEWHISTORYITEM_H_

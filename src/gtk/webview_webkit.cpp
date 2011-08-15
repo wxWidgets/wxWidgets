@@ -546,9 +546,9 @@ void wxWebViewWebKit::EnableHistory(bool enable)
     }
 }
 
-wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
+wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
 {
-    wxVector<wxSharedPtr<wxWebHistoryItem> > backhist; 
+    wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist; 
     WebKitWebBackForwardList* history;
     history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
     GList* list = webkit_web_back_forward_list_get_back_list_with_limit(history, 
@@ -557,19 +557,19 @@ wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
     for(int i = g_list_length(list) - 1; i >= 0 ; i--)
     {
         WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)g_list_nth_data(list, i);
-        wxWebHistoryItem* wxitem = new wxWebHistoryItem(
+        wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
                                    webkit_web_history_item_get_uri(gtkitem),
                                    webkit_web_history_item_get_title(gtkitem));
         wxitem->m_histItem = gtkitem;
-        wxSharedPtr<wxWebHistoryItem> item(wxitem);
+        wxSharedPtr<wxWebViewHistoryItem> item(wxitem);
         backhist.push_back(item);
     }
     return backhist;
 }
 
-wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetForwardHistory()
+wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory()
 {
-    wxVector<wxSharedPtr<wxWebHistoryItem> > forwardhist; 
+    wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist; 
     WebKitWebBackForwardList* history;
     history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
     GList* list = webkit_web_back_forward_list_get_forward_list_with_limit(history, 
@@ -577,17 +577,17 @@ wxVector<wxSharedPtr<wxWebHistoryItem> > wxWebViewWebKit::GetForwardHistory()
     for(guint i = 0; i < g_list_length(list); i++)
     {
         WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)g_list_nth_data(list, i);
-        wxWebHistoryItem* wxitem = new wxWebHistoryItem(
+        wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
                                    webkit_web_history_item_get_uri(gtkitem),
                                    webkit_web_history_item_get_title(gtkitem));
         wxitem->m_histItem = gtkitem;
-        wxSharedPtr<wxWebHistoryItem> item(wxitem);
+        wxSharedPtr<wxWebViewHistoryItem> item(wxitem);
         forwardhist.push_back(item);
     }
     return forwardhist;
 }
 
-void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item)
+void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
 {
     WebKitWebHistoryItem* gtkitem = item->m_histItem;
     if(gtkitem)

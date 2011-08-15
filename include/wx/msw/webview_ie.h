@@ -50,9 +50,9 @@ public:
            const wxString& name = wxWebViewNameStr);
 
     virtual void LoadUrl(const wxString& url);
-    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item);
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory();
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory();
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item);
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory();
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory();
 
     virtual bool CanGoForward();
     virtual bool CanGoBack();
@@ -147,7 +147,7 @@ private:
     //which are added as documentcomplete events arrive, unless we are loading
     //an item from the history. The position is stored as an int, and reflects
     //where we are in the history list.
-    wxVector<wxSharedPtr<wxWebHistoryItem> > m_historyList;
+    wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
     int m_historyPosition;
     bool m_historyLoadingFromList;
     bool m_historyEnabled;

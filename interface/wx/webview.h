@@ -87,7 +87,7 @@ enum wxWebViewBackend
 };
 
 /**
-    @class wxWebHistoryItem
+    @class wxWebViewHistoryItem
   
     A simple class that contains the URL and title of an element of the history
     of a wxWebView. 
@@ -97,13 +97,13 @@ enum wxWebViewBackend
     
     @see wxWebView
  */
-class wxWebHistoryItem
+class wxWebViewHistoryItem
 {
 public:
     /**
         Construtor.
     */
-    wxWebHistoryItem(const wxString& url, const wxString& title);
+    wxWebViewHistoryItem(const wxString& url, const wxString& title);
     
     /**
         @return The url of the page.
@@ -456,14 +456,14 @@ public:
         Returns a list of items in the back history. The first item in the
         vector is the first page that was loaded by the control.
     */
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory() = 0;
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory() = 0;
 
     /**
         Returns a list of items in the forward history. The first item in the 
         vector is the next item in the history with respect to the curently 
         loaded page.
     */
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() = 0;
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory() = 0;
 
     /** 
         Navigate back in the history of visited pages.
@@ -480,7 +480,7 @@ public:
     /**
         Loads a history item. 
     */
-    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) = 0;
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) = 0;
     
     /**
         @name Selection

@@ -74,9 +74,9 @@ public:
     virtual bool CanGoForward();
     virtual void ClearHistory();
     virtual void EnableHistory(bool enable = true);
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory();
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory();
-    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item);
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory();
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory();
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item);
     virtual wxString GetCurrentURL();
     virtual wxString GetCurrentTitle();
     virtual wxString GetPageSource();

@@ -50,7 +50,7 @@
 
 
 //We map menu items to their history items
-WX_DECLARE_HASH_MAP(int, wxSharedPtr<wxWebHistoryItem>,
+WX_DECLARE_HASH_MAP(int, wxSharedPtr<wxWebViewHistoryItem>,
                     wxIntegerHash, wxIntegerEqual, wxMenuHistoryMap);
 
 class WebApp : public wxApp
@@ -629,8 +629,8 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     }
     m_histMenuItems.clear();
 
-    wxVector<wxSharedPtr<wxWebHistoryItem> > back = m_browser->GetBackwardHistory();
-    wxVector<wxSharedPtr<wxWebHistoryItem> > forward = m_browser->GetForwardHistory();
+    wxVector<wxSharedPtr<wxWebViewHistoryItem> > back = m_browser->GetBackwardHistory();
+    wxVector<wxSharedPtr<wxWebViewHistoryItem> > forward = m_browser->GetForwardHistory();
 
     wxMenuItem* item;
 
@@ -646,7 +646,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     item->Check();
 
     //No need to connect the current item
-    m_histMenuItems[item->GetId()] = wxSharedPtr<wxWebHistoryItem>(new wxWebHistoryItem(m_browser->GetCurrentURL(), m_browser->GetCurrentTitle()));
+    m_histMenuItems[item->GetId()] = wxSharedPtr<wxWebViewHistoryItem>(new wxWebViewHistoryItem(m_browser->GetCurrentURL(), m_browser->GetCurrentTitle()));
 
     for(unsigned int i = 0; i < forward.size(); i++)
     {

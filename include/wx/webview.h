@@ -20,9 +20,9 @@
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 
-#include "wx/osx/webhistoryitem_webkit.h"
-#include "wx/gtk/webhistoryitem_webkit.h"
-#include "wx/msw/webhistoryitem_ie.h"
+#include "wx/osx/webviewhistoryitem_webkit.h"
+#include "wx/gtk/webviewhistoryitem_webkit.h"
+#include "wx/msw/webviewhistoryitem_ie.h"
 
 class wxFSFile;
 class wxFileSystem;
@@ -193,9 +193,9 @@ public:
 
     virtual void ClearHistory() = 0;
     virtual void EnableHistory(bool enable = true) = 0;
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetBackwardHistory() = 0;
-    virtual wxVector<wxSharedPtr<wxWebHistoryItem> > GetForwardHistory() = 0;
-    virtual void LoadHistoryItem(wxSharedPtr<wxWebHistoryItem> item) = 0;
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory() = 0;
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory() = 0;
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) = 0;
 
     /**
      * Stop the current page loading process, if any.
