@@ -222,6 +222,8 @@ void wxGCDCImpl::Init()
 
     m_graphicContext = wxGraphicsContext::Create();
     m_logicalFunctionSupported = true;
+
+    m_matrixOriginal = m_graphicContext->CreateMatrix(1,0,0,1,0,0);
 }
 
 
