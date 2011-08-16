@@ -35,18 +35,18 @@ bool MobileTestsWxSegmentedCtrlPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxSegmentedCtrlPanel::CreateControls()
 {
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
     //
     // Segmented control
     // 
     
-    m_segCtrl = new wxSegmentedCtrl(this, wxID_ANY, wxPoint(50, 50), wxSize(300, 40));
+    m_segCtrl = new wxSegmentedCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     m_segCtrl->AddItem(_("Tiger"));
     m_segCtrl->AddItem(_("Cheetah"));
     m_segCtrl->AddItem(_("Pig"));
     m_segCtrl->SetSelection(1);
-    sizer->Add(m_segCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizer->Add(m_segCtrl, 0, wxEXPAND|wxALL, 5);
     
     // Events
     m_segCtrl->Connect(wxEVT_COMMAND_TAB_SEL_CHANGING, wxCommandEventHandler(MobileTestsWxSegmentedCtrlPanel::OnChanging), NULL, this);
