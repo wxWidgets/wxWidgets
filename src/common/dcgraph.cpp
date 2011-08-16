@@ -898,6 +898,17 @@ bool wxGCDCImpl::DoStretchBlit(
         return false;
     }
 
+    wxRect subrect(source->LogicalToDeviceX(xsrc),
+                   source->LogicalToDeviceY(ysrc),
+                   source->LogicalToDeviceXRel(srcWidth),
+                   source->LogicalToDeviceYRel(srcHeight));
+    // clip the subrect down to the size of the source DC
+    wxRect clip;
+    source->GetSize(&clip.width, &clip.height);
+    subrect.Intersect(clip);
+    if (subrect.width == 0)
+        return true;
+
     bool retval = true;
 
     wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
@@ -914,21 +925,6 @@ bool wxGCDCImpl::DoStretchBlit(
             xsrcMask = xsrc;
             ysrcMask = ysrc;
         }
-
-        wxRect subrect(source->LogicalToDeviceX(xsrc),
-                       source->LogicalToDeviceY(ysrc),
-                       source->LogicalToDeviceXRel(srcWidth),
-                       source->LogicalToDeviceYRel(srcHeight));
-
-        // if needed clip the subrect down to the size of the source DC
-        wxCoord sw, sh;
-        source->GetSize(&sw, &sh);
-        sw = source->LogicalToDeviceXRel(sw);
-        sh = source->LogicalToDeviceYRel(sh);
-        if (subrect.x + subrect.width > sw)
-            subrect.width = sw - subrect.x;
-        if (subrect.y + subrect.height > sh)
-            subrect.height = sh - subrect.y;
 
         wxBitmap blit = source->GetAsBitmap( &subrect );
 
