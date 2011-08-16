@@ -35,14 +35,15 @@ bool MobileTestsWxSearchCtrlPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxSearchCtrlPanel::CreateControls()
 {
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
     
     //
     // Search control
     // 
     
-    m_searchCtrl = new wxSearchCtrl( this, wxID_ANY, _("Search"), wxDefaultPosition, wxSize(280, -1), 0 );
-    sizer->Add(m_searchCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_searchCtrl = new wxSearchCtrl( this, wxID_ANY, _("Search"), wxDefaultPosition, wxDefaultSize, 0 );
+    sizer->Add(m_searchCtrl, 0, wxEXPAND|wxALL, 5);
     
     return true;
 }
