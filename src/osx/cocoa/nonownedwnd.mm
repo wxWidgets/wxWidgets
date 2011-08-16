@@ -858,6 +858,7 @@ void wxNonOwnedWindowCocoaImpl::Maximize(bool WXUNUSED(maximize))
 
 typedef struct
 {
+    NSUInteger m_formerStyleMask;
     int m_formerLevel;
     NSRect m_formerFrame;
 } FullScreenData ;
@@ -878,6 +879,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         m_macFullScreenData = data ;
         data->m_formerLevel = [m_macWindow level];
         data->m_formerFrame = [m_macWindow frame];
+        data->m_formerStyleMask = [m_macWindow styleMask];
 #if 0
         // CGDisplayCapture( kCGDirectMainDisplay );
         //[m_macWindow setLevel:NSMainMenuWindowLevel+1/*CGShieldingWindowLevel()*/];
@@ -885,6 +887,12 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         NSRect screenframe = [[NSScreen mainScreen] frame];
         NSRect frame = NSMakeRect (0, 0, 100, 100);
         NSRect contentRect;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+        if ( [ m_macWindow respondsToSelector:@selector(setStyleMask:) ] )
+            [m_macWindow setStyleMask:data->m_formerStyleMask & ~ NSResizableWindowMask];
+#endif
+        
         contentRect = [NSWindow contentRectForFrameRect: frame
                                 styleMask: [m_macWindow styleMask]];
         screenframe.origin.y += (frame.origin.y - contentRect.origin.y);
@@ -907,6 +915,10 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 #endif
         
         [m_macWindow setFrame:data->m_formerFrame display:YES];
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+        if ( [ m_macWindow respondsToSelector:@selector(setStyleMask:) ] )
+            [m_macWindow setStyleMask:data->m_formerStyleMask];
+#endif
         delete data ;
         m_macFullScreenData = NULL ;
 
