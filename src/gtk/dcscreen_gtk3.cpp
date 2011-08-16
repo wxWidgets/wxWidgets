@@ -43,30 +43,10 @@ wxScreenDCImpl::~wxScreenDCImpl()
 
 wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
+    wxBitmap bitmap;
     wxRect rect = subrect ? *subrect : wxRect(0, 0, m_width, m_height);
-
-    wxBitmap bmp(rect.GetSize(), 32);
-
-    // CGRect srcRect = CGRectMake(rect.x, rect.y, rect.width, rect.height);
-
-    // CGContextRef context = (CGContextRef)bmp.GetHBITMAP();
-
-    // CGContextSaveGState(context);
-
-    // CGContextTranslateCTM( context, 0,  m_height );
-    // CGContextScaleCTM( context, 1, -1 );
-
-    // if ( subrect )
-    //     srcRect = CGRectOffset( srcRect, -subrect->x, -subrect->y ) ;
-
-    // CGImageRef image = grabViaOpenGL(kCGNullDirectDisplay, srcRect);
-
-    // wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
-
-    // CGContextDrawImage(context, srcRect, image);
-
-    // CGImageRelease(image);
-
-    // CGContextRestoreGState(context);
-    return bmp;
+    GdkWindow* window = gdk_get_default_root_window();
+    bitmap.SetPixbuf(gdk_pixbuf_get_from_window(
+        window, rect.x, rect.y, rect.width, rect.height));
+    return bitmap;
 }

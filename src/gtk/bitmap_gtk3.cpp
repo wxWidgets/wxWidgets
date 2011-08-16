@@ -727,7 +727,8 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     if (bmpData->m_mask && bmpData->m_mask->m_bitmap)
     {
 #ifdef __WXGTK30__
-        wxFAIL_MSG("Not yet implemented in wxGTK3");
+        newRef->m_mask = new wxMask;
+        newRef->m_mask->m_bitmap = cairo_surface_create_for_rectangle(bmpData->m_mask->m_bitmap, rect.x, rect.y, w, h);
 #else
         GdkPixmap* sub_mask = gdk_pixmap_new(bmpData->m_mask->m_bitmap, w, h, 1);
         newRef->m_mask = new wxMask;
