@@ -43,7 +43,7 @@ bool MobileTestsWxWebCtrlPanel::CreateControls()
     // 
 
     m_webCtrl = new wxWebKitCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-    webCtrlSizer->Add(m_webCtrl, 0, wxEXPAND|wxALL, 5);
+    webCtrlSizer->Add(m_webCtrl, 1, wxEXPAND|wxALL, 5);
     
     m_webCtrl->Connect(wxEVT_WEBKIT_STATE_CHANGED, wxCommandEventHandler(MobileTestsWxWebCtrlPanel::OnWebKitStateChanged), NULL, this);
     m_webCtrl->Connect(wxEVT_WEBKIT_BEFORE_LOAD, wxCommandEventHandler(MobileTestsWxWebCtrlPanel::OnWebKitBeforeLoad), NULL, this);

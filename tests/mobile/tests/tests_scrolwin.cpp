@@ -35,13 +35,15 @@ bool MobileTestsWxScrolledWindowPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxScrolledWindowPanel::CreateControls()
 {
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
     
     //
     // Scrolled window
     // 
 
-    m_scrolWin = new wxScrolledWindow(this, wxID_ANY, wxPoint(0, 0), wxSize(300, 300), (wxHSCROLL|wxVSCROLL));
+    m_scrolWin = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, (wxHSCROLL|wxVSCROLL));
+    sizer->Add(m_scrolWin,1,wxEXPAND|wxALL,5);
     m_scrolWin->SetBackgroundColour(*wxGREEN);
     m_scrolWin->SetVirtualSize(wxSize(600, 600));
     
