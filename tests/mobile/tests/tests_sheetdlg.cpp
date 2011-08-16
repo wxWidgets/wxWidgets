@@ -35,17 +35,20 @@ bool MobileTestsWxSheetDialogPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxSheetDialogPanel::CreateControls()
 {
-    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(buttonSizer);
     
     //
     // "Show sheet" buttons
     // 
     
-    m_showActionSheetButton = new wxButton(this, wxID_ANY, "Show wxActionSheetDialog", wxPoint(0, 0), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+    m_showActionSheetButton = new wxButton(this, wxID_ANY, "Show wxActionSheetDialog", wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
     m_showActionSheetButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxSheetDialogPanel::OnShowActionSheet), NULL, this);
+    buttonSizer->Add(m_showActionSheetButton,0,wxEXPAND|wxALL,5);
 
-    m_showAlertSheetButton = new wxButton(this, wxID_ANY, "Show wxAlertSheetDialog", wxPoint(0, 45), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+    m_showAlertSheetButton = new wxButton(this, wxID_ANY, "Show wxAlertSheetDialog", wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
     m_showAlertSheetButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxSheetDialogPanel::OnShowAlertSheet), NULL, this);
+    buttonSizer->Add(m_showAlertSheetButton,0,wxEXPAND|wxALL,5);
     
     return true;
 }
