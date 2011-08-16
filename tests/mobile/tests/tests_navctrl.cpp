@@ -37,8 +37,8 @@ bool MobileTestsWxNavCtrlPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxNavCtrlPanel::CreateControls()
 {
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    this->SetSizer(sizer);
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
 
     m_navCtrl = new wxNavigationCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNAVCTRL_BLACK_OPAQUE_BG);
     sizer->Add(m_navCtrl, 1, wxEXPAND, 0);
