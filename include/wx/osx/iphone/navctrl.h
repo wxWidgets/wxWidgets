@@ -76,6 +76,10 @@ public:
         
     /// Returns true if the control is 'frozen', i.e. suppresses display updates and resizes.
     bool IsFrozen() const { return m_freezeCount > 0; }
+    
+    
+    // Implementation: get Cocoa's wxUINavigationController
+    void* GetNativeNavigationController();
         
 protected:
     

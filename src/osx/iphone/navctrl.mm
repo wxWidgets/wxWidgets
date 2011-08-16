@@ -269,12 +269,12 @@ void wxNavigationCtrl::Init()
 
 /// Creation function.
 bool wxNavigationCtrl::Create(wxWindow *parent,
-                                wxWindowID id,
-                                const wxPoint& pos,
-                                const wxSize& size,
-                                long style,
-                                const wxValidator& validator,
-                                const wxString& name)
+                              wxWindowID id,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxValidator& validator,
+                              const wxString& name)
 {
     DontCreatePeer();
     
@@ -284,9 +284,22 @@ bool wxNavigationCtrl::Create(wxWindow *parent,
     
     SetPeer(wxWidgetImpl::CreateNavigationController( this, parent, id, pos, size, style, GetExtraStyle() ));
     
+    // Create a navigation bar too
+    m_navBar = new wxNavigationBar(this, wxID_ANY);
+    
     MacPostControlCreate( pos, size );
     
     return true;    
+}
+
+void* wxNavigationCtrl::GetNativeNavigationController()
+{
+    wxNavigationCtrlIPhoneImpl* impl = (wxNavigationCtrlIPhoneImpl *)GetPeer();
+    if ( !impl ) {
+        return NULL;
+    }
+    
+    return impl->GetNativeNavigationController();
 }
 
 // Pushes a controller onto the stack.

@@ -81,7 +81,7 @@ wxWidgetImplType* wxWidgetImpl::CreateNavigationBar(wxWindowMac* wxpeer,
     wxASSERT_MSG(parent, "No parent was passed");
     wxNavigationCtrl* navCtrl = (wxNavigationCtrl *)parent;
     
-    wxUINavigationController* cocoaNavCtrl = (wxUINavigationController *)(parent->GetPeer()->GetWXWidget());
+    wxUINavigationController* cocoaNavCtrl = (wxUINavigationController *)(navCtrl->GetNativeNavigationController());
     wxASSERT_MSG(cocoaNavCtrl, "Parent does not contain Cocoa control (widget)");
     wxASSERT_MSG([cocoaNavCtrl isKindOfClass:[wxUINavigationController class]], "Parent's native widget is not wxUINavigationController");
     

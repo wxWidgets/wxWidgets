@@ -68,6 +68,9 @@ public:
     virtual bool PushViewController(wxViewController *controller);
     virtual bool PopViewController();
     
+    // Implementation: get Cocoa's wxUINavigationController
+    void* GetNativeNavigationController() { return m_navcontroller; }
+    
 private:
     void* m_navcontroller;
 };
