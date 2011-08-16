@@ -653,20 +653,19 @@ enum wxKeyModifier
 {
     wxMOD_NONE      = 0x0000,
     wxMOD_ALT       = 0x0001,
+    /** Ctlr Key, corresponds to Command key on OS X */
     wxMOD_CONTROL   = 0x0002,
     wxMOD_ALTGR     = wxMOD_ALT | wxMOD_CONTROL,
     wxMOD_SHIFT     = 0x0004,
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
-
-    /**
-        Notice that @c wxMOD_CMD should be used instead of @c wxMOD_CONTROL
-        in portable code to account for the fact that although
-        @c Control modifier exists under Mac OS, it is not used for the same
-        purpose as under Windows or Unix there while the special Mac-specific
-        @c Command modifier is used in exactly the same way.
-    */
-    wxMOD_CMD       = wxMOD_META,
+    
+    /** used to describe the true Ctrl Key under OSX, 
+    identic to @c wxMOD_CONTROL on other platforms */
+    wxMOD_RAW_CONTROL,
+    
+    /** deprecated, identic to @c wxMOD_CONTROL on all platforms */
+    wxMOD_CMD       = wxMOD_CONTROL,
     wxMOD_ALL       = 0xffff
 };
 

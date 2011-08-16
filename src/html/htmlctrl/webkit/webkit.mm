@@ -796,7 +796,7 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
-    [super init];
+    self = [super init];
     webKitWindow = inWindow;    // non retained
     return self;
 }
@@ -877,7 +877,7 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
-    [super init];
+    self = [super init];
     webKitWindow = inWindow;    // non retained
     return self;
 }

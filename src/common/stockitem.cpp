@@ -281,17 +281,17 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
 
     switch (id)
     {
-        STOCKITEM(wxID_COPY,                wxACCEL_CMD,'C')
-        STOCKITEM(wxID_CUT,                 wxACCEL_CMD,'X')
-        STOCKITEM(wxID_FIND,                wxACCEL_CMD,'F')
-        STOCKITEM(wxID_HELP,                wxACCEL_CMD,'H')
-        STOCKITEM(wxID_NEW,                 wxACCEL_CMD,'N')
-        STOCKITEM(wxID_OPEN,                wxACCEL_CMD,'O')
-        STOCKITEM(wxID_PASTE,               wxACCEL_CMD,'V')
-        STOCKITEM(wxID_REDO,                wxACCEL_CMD | wxACCEL_SHIFT,'Z')
-        STOCKITEM(wxID_REPLACE,             wxACCEL_CMD,'R')
-        STOCKITEM(wxID_SAVE,                wxACCEL_CMD,'S')
-        STOCKITEM(wxID_UNDO,                wxACCEL_CMD,'Z')
+        STOCKITEM(wxID_COPY,                wxACCEL_CTRL,'C')
+        STOCKITEM(wxID_CUT,                 wxACCEL_CTRL,'X')
+        STOCKITEM(wxID_FIND,                wxACCEL_CTRL,'F')
+        STOCKITEM(wxID_HELP,                wxACCEL_CTRL,'H')
+        STOCKITEM(wxID_NEW,                 wxACCEL_CTRL,'N')
+        STOCKITEM(wxID_OPEN,                wxACCEL_CTRL,'O')
+        STOCKITEM(wxID_PASTE,               wxACCEL_CTRL,'V')
+        STOCKITEM(wxID_REDO,                wxACCEL_CTRL | wxACCEL_SHIFT,'Z')
+        STOCKITEM(wxID_REPLACE,             wxACCEL_CTRL,'R')
+        STOCKITEM(wxID_SAVE,                wxACCEL_CTRL,'S')
+        STOCKITEM(wxID_UNDO,                wxACCEL_CTRL,'Z')
 
         default:
             // set the wxAcceleratorEntry to return into an invalid state:
