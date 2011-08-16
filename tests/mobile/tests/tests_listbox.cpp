@@ -35,7 +35,8 @@ bool MobileTestsWxListBoxPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxListBoxPanel::CreateControls()
 {
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
     
     //
     // List box
@@ -46,7 +47,7 @@ bool MobileTestsWxListBoxPanel::CreateControls()
         listboxStrings.Add(wxString::Format(wxT("This is string %d"), (int) i));
     }
     
-    m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize(-1, 120), listboxStrings, wxBORDER_SIMPLE );
+    m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, listboxStrings, wxBORDER_SIMPLE );
     m_listBox->SetSelection(1);   // 2nd element
     m_listBox->Connect(wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler(MobileTestsWxListBoxPanel::OnListBoxSelected), NULL, this);
     sizer->Add(m_listBox, 1, wxEXPAND|wxALL, 5);
