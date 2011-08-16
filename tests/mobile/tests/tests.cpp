@@ -37,6 +37,7 @@
 #include "tests_sheetdlg.h"
 #include "tests_searchctrl.h"
 #include "tests_listbox.h"
+#include "tests_viewcontroller.h"
 
 
 #pragma mark -
@@ -128,6 +129,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxListBox"));
     m_testDescriptions.Add(_("A control consisting of a number of components that can be spun."));
     m_testPanels.Add(new MobileTestsWxListBoxPanel());
+
+    // wxViewController
+    m_testNames.Add(_("wxViewController"));
+    m_testDescriptions.Add(_("The view controller manages a window, usually in conjunction with the wxNavigationCtrl class."));
+    m_testPanels.Add(new MobileTestsWxViewControllerPanel());
     
     //
     // --
