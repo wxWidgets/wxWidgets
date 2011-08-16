@@ -36,7 +36,8 @@ bool MobileTestsWxCheckBoxPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxCheckBoxPanel::CreateControls()
 {
-    wxBoxSizer* checkBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* checkBoxSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(checkBoxSizer);
     
     //
     // Check box
