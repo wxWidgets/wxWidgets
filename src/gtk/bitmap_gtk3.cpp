@@ -423,7 +423,6 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
     }
     else
     {
-#ifdef __WXGTK30__
         // I don't know if there is a simpler way to copy cairo_image_surface. (JC)
         cairo_format_t format;
         int stride;
@@ -433,22 +432,22 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
         stride = cairo_format_stride_for_width( CAIRO_FORMAT_RGB24, w );
         src_data = image.GetData();
 
+        int rowpad = stride - 4 * w;
         // Caller is in charge of allocation of memory.(JC)
         data = (unsigned char *)malloc( stride * h );
-        memcpy( data, src_data, stride * h );
+
+        for (int y = 0; y < h; y++, data += rowpad)
+        {
+            for (int x = 0; x < w; x++, data += 4, src_data += 3)
+            {
+                data[0] = 0;
+                data[1] = src_data[0];
+                data[2] = src_data[1];
+                data[3] = src_data[2];
+            }
+        }
 
         SetPixmap(cairo_image_surface_create_for_data( data, CAIRO_FORMAT_RGB24, w, h, stride ));
-#else
-        SetPixmap(gdk_pixmap_new(wxGetRootWindow()->window, w, h, depth));
-        if (!M_BMPDATA)
-            return false;
-
-        wxGtkObject<GdkGC> gc(gdk_gc_new(M_BMPDATA->m_pixmap));
-        gdk_draw_rgb_image(
-            M_BMPDATA->m_pixmap, gc,
-            0, 0, w, h,
-            GDK_RGB_DITHER_NONE, image.GetData(), w * 3);
-#endif
     }
 
     const wxByte* alpha = image.GetAlpha();
@@ -723,15 +722,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     }
     if (bmpData->m_pixmap)
     {
-#ifdef __WXGTK30__
-        wxFAIL_MSG("Not yet implemented in wxGTK3");
-#else
-        newRef->m_pixmap = gdk_pixmap_new(bmpData->m_pixmap, w, h, -1);
-        GdkGC* gc = gdk_gc_new(newRef->m_pixmap);
-        gdk_draw_drawable(
-            newRef->m_pixmap, gc, bmpData->m_pixmap, rect.x, rect.y, 0, 0, w, h);
-        g_object_unref(gc);
-#endif
+        newRef->m_pixmap = cairo_surface_create_for_rectangle(bmpData->m_pixmap, rect.x, rect.y, w, h);
     }
     if (bmpData->m_mask && bmpData->m_mask->m_bitmap)
     {
@@ -823,7 +814,6 @@ void wxBitmap::SetDepth( int depth )
     M_BMPDATA->m_bpp = depth;
 }
 
-#ifdef __WXGTK30__
 void wxBitmap::SetPixmap( cairo_surface_t *pixmap )
 {
     UnRef();
@@ -888,51 +878,6 @@ cairo_surface_t *wxBitmap::GetPixmap() const
     }
     return bmpData->m_pixmap;
 }
-#else
-void wxBitmap::SetPixmap( GdkPixmap *pixmap )
-{
-    UnRef();
-
-    if (!pixmap)
-        return;
-
-    int w, h;
-    gdk_drawable_get_size(pixmap, &w, &h);
-    wxBitmapRefData* bmpData = new wxBitmapRefData(w, h, 0);
-    m_refData = bmpData;
-    bmpData->m_pixmap = pixmap;
-    bmpData->m_bpp = gdk_drawable_get_depth(pixmap);
-}
-
-GdkPixmap *wxBitmap::GetPixmap() const
-{
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
-
-    wxBitmapRefData* bmpData = M_BMPDATA;
-    if (bmpData->m_pixmap)
-        return bmpData->m_pixmap;
-
-    if (bmpData->m_pixbuf)
-    {
-        GdkPixmap** mask_pixmap = NULL;
-        if (gdk_pixbuf_get_has_alpha(bmpData->m_pixbuf))
-        {
-            // make new mask from alpha
-            delete bmpData->m_mask;
-            bmpData->m_mask = new wxMask;
-            mask_pixmap = &bmpData->m_mask->m_bitmap;
-        }
-        gdk_pixbuf_render_pixmap_and_mask(
-            bmpData->m_pixbuf, &bmpData->m_pixmap, mask_pixmap, 128);
-    }
-    else
-    {
-        bmpData->m_pixmap = gdk_pixmap_new(wxGetRootWindow()->window,
-            bmpData->m_width, bmpData->m_height, bmpData->m_bpp == 1 ? 1 : -1);
-    }
-    return bmpData->m_pixmap;
-}
-#endif
 
 bool wxBitmap::HasPixmap() const
 {
