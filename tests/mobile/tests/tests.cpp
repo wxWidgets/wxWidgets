@@ -36,6 +36,7 @@
 #include "tests_scrolwin.h"
 #include "tests_sheetdlg.h"
 #include "tests_searchctrl.h"
+#include "tests_listbox.h"
 
 
 #pragma mark -
@@ -122,6 +123,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxSearchCtrl"));
     m_testDescriptions.Add(_("A search control."));
     m_testPanels.Add(new MobileTestsWxSearchCtrlPanel());
+
+    // wxListBox
+    m_testNames.Add(_("wxListBox"));
+    m_testDescriptions.Add(_("A control consisting of a number of components that can be spun."));
+    m_testPanels.Add(new MobileTestsWxListBoxPanel());
     
     //
     // --
