@@ -581,30 +581,30 @@ wxImage wxBitmap::ConvertToImage() const
     }
     else
     {
-#ifdef __WXGTK30__
-        wxFAIL_MSG("Not implemented in wxGTK3");
-#else
-        GdkPixmap* pixmap = GetPixmap();
-        GdkPixmap* pixmap_invert = NULL;
-        if (GetDepth() == 1)
+        GdkPixbuf* pixbuf = gdk_pixbuf_get_from_surface(GetPixmap(), 0, 0, w, h);
+
+        unsigned char* alpha = NULL;
+        if (gdk_pixbuf_get_has_alpha(pixbuf))
         {
-            // mono bitmaps are inverted, i.e. 0 is white
-            pixmap_invert = gdk_pixmap_new(pixmap, w, h, 1);
-            wxGtkObject<GdkGC> gc(gdk_gc_new(pixmap_invert));
-            gdk_gc_set_function(gc, GDK_COPY_INVERT);
-            gdk_draw_drawable(pixmap_invert, gc, pixmap, 0, 0, 0, 0, w, h);
-            pixmap = pixmap_invert;
+            image.SetAlpha();
+            alpha = image.GetAlpha();
         }
-        // create a pixbuf which shares data with the wxImage
-        GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data(
-            data, GDK_COLORSPACE_RGB, false, 8, w, h, 3 * w, NULL, NULL);
+        const unsigned char* in = gdk_pixbuf_get_pixels(pixbuf);
+        unsigned char *out = data;
+        const int inc = 3 + int(alpha != NULL);
+        const int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - inc * w;
 
-        gdk_pixbuf_get_from_drawable(pixbuf, pixmap, NULL, 0, 0, 0, 0, w, h);
-
-        g_object_unref(pixbuf);
-        if (pixmap_invert != NULL)
-            g_object_unref(pixmap_invert);
-#endif
+        for (int y = 0; y < h; y++, in += rowpad)
+        {
+            for (int x = 0; x < w; x++, in += inc, out += 3)
+            {
+                out[0] = in[0];
+                out[1] = in[1];
+                out[2] = in[2];
+                if (alpha != NULL)
+                    *alpha++ = in[3];
+            }
+        }
     }
     // convert mask, unless there is already alpha
     if (GetMask() && !image.HasAlpha())
@@ -619,11 +619,7 @@ wxImage wxBitmap::ConvertToImage() const
         const int MASK_BLUE_REPLACEMENT = 2;
 
         image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
-#ifdef __WXGTK30__
         GdkPixbuf* image_mask = gdk_pixbuf_get_from_surface(GetMask()->GetBitmap(), 0, 0, w, h);
-#else
-        GdkImage* image_mask = gdk_drawable_get_image(GetMask()->GetBitmap(), 0, 0, w, h);
-#endif
 
         for (int y = 0; y < h; y++)
         {
