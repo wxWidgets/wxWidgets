@@ -35,6 +35,7 @@
 #include "tests_segctrl.h"
 #include "tests_scrolwin.h"
 #include "tests_sheetdlg.h"
+#include "tests_searchctrl.h"
 
 
 #pragma mark -
@@ -116,6 +117,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testNames.Add(_("wxActionSheetDialog, wxAlertSheetDialog"));
     m_testDescriptions.Add(_("Wrappers for UIActionSheet and UIAlertView."));
     m_testPanels.Add(new MobileTestsWxSheetDialogPanel());
+
+    // wxSearchCtrl
+    m_testNames.Add(_("wxSearchCtrl"));
+    m_testDescriptions.Add(_("A search control."));
+    m_testPanels.Add(new MobileTestsWxSearchCtrlPanel());
     
     //
     // --
