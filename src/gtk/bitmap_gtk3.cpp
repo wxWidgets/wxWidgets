@@ -118,14 +118,14 @@ wxMask::wxMask( const wxBitmap& bitmap )
 wxMask::~wxMask()
 {
     if (m_bitmap)
-        g_object_unref (m_bitmap);
+        cairo_surface_destroy (m_bitmap);
 }
 
 void wxMask::FreeData()
 {
     if (m_bitmap)
     {
-        g_object_unref (m_bitmap);
+        cairo_surface_destroy (m_bitmap);
         m_bitmap = NULL;
     }
 }
@@ -281,7 +281,7 @@ wxBitmapRefData::wxBitmapRefData(int width, int height, int depth)
 wxBitmapRefData::~wxBitmapRefData()
 {
     if (m_pixmap)
-        g_object_unref (m_pixmap);
+        cairo_surface_destroy (m_pixmap);
     if (m_pixbuf)
         g_object_unref (m_pixbuf);
     delete m_mask;
