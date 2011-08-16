@@ -37,26 +37,26 @@ bool MobileTestsWxButtonPanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxButtonPanel::CreateControls()
 {
-    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
-
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(buttonSizer);
     //
     // Various styles
     // 
     
-    m_buttonRoundedRectangle = new wxButton(this, MobileTestsWxButtonClickedID, "Click me!", wxPoint(0, 0), wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+    m_buttonRoundedRectangle = new wxButton(this, MobileTestsWxButtonClickedID, "Click me!", wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
     buttonSizer->Add(m_buttonRoundedRectangle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
-    m_buttonDisclosure = new wxButton(this, wxID_ANY, "This text should not be shown.", wxPoint(0, 40), wxDefaultSize, wxBU_DISCLOSURE);
-    //buttonSizer->Add(m_buttonDisclosure, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_buttonDisclosure = new wxButton(this, wxID_ANY, "This text should not be shown.", wxDefaultPosition, wxDefaultSize, wxBU_DISCLOSURE);
+    buttonSizer->Add(m_buttonDisclosure, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
-    m_buttonInfoLight = new wxButton(this, wxID_ANY, "This text should not be shown.", wxPoint(0, 80), wxDefaultSize, wxBU_INFO_LIGHT);
-    //buttonSizer->Add(m_buttonInfoLight, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_buttonInfoLight = new wxButton(this, wxID_ANY, "This text should not be shown.", wxDefaultPosition, wxDefaultSize, wxBU_INFO_LIGHT);
+    buttonSizer->Add(m_buttonInfoLight, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
-    m_buttonInfoDark = new wxButton(this, wxID_ANY, "This text should not be shown.", wxPoint(0, 120), wxDefaultSize, wxBU_INFO_DARK);
-    //buttonSizer->Add(m_buttonInfoDark, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);    
+    m_buttonInfoDark = new wxButton(this, wxID_ANY, "This text should not be shown.", wxDefaultPosition, wxDefaultSize, wxBU_INFO_DARK);
+    buttonSizer->Add(m_buttonInfoDark, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);    
     
-    m_buttonContactAdd = new wxButton(this, wxID_ANY, "This text should not be shown.", wxPoint(0, 160), wxDefaultSize, wxBU_CONTACT_ADD);
-    //buttonSizer->Add(m_buttonContactAdd, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_buttonContactAdd = new wxButton(this, wxID_ANY, "This text should not be shown.", wxDefaultPosition, wxDefaultSize, wxBU_CONTACT_ADD);
+    buttonSizer->Add(m_buttonContactAdd, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
     return true;
 }
