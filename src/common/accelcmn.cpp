@@ -307,7 +307,7 @@ wxString wxAcceleratorEntry::ToString() const
     int flags = GetFlags();
     if ( flags & wxACCEL_ALT )
         text += _("Alt+");
-    if ( flags & (wxACCEL_CTRL | wxACCEL_CMD) )
+    if ( flags & wxACCEL_CTRL )
         text += _("Ctrl+");
     if ( flags & wxACCEL_SHIFT )
         text += _("Shift+");

@@ -80,7 +80,7 @@ wxDialog::~wxDialog()
 // about it
 bool wxDialog::IsEscapeKey(const wxKeyEvent& event)
 {
-    if ( event.GetKeyCode() == '.' && event.GetModifiers() == wxMOD_CMD )
+    if ( event.GetKeyCode() == '.' && event.GetModifiers() == wxMOD_CONTROL )
         return true;
 
     return wxDialogBase::IsEscapeKey(event);

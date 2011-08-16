@@ -2667,9 +2667,9 @@ bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         mac_modifiers |= optionKey;
     if ( modifiers & wxMOD_SHIFT )
         mac_modifiers |= shiftKey;
-    if ( modifiers & wxMOD_CONTROL )
+    if ( modifiers & wxMOD_RAW_CONTROL )
         mac_modifiers |= controlKey;
-    if ( modifiers & wxMOD_META )
+    if ( modifiers & wxMOD_CONTROL )
         mac_modifiers |= cmdKey;
     
     EventHotKeyRef hotKeyRef;
