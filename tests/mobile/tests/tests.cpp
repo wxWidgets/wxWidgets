@@ -200,11 +200,8 @@ void MobileTestsDataSource::OnSelectRow(wxTableCtrlEvent& event)
     wxASSERT_MSG(path.GetRow() < m_testNames.Count(), "Unknown test selected");
     
     MobileTestsWxPanel *testPanel = m_testPanels[path.GetRow()];
-    testPanel->CreateWithControls(m_navCtrl, wxID_ANY, wxPoint(-200, -200), wxSize(10, 10), 0);
+    testPanel->CreateWithControls(m_navCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
     testPanel->SetBackgroundColour(wxColour(wxT("#E3E4FF")));
-
-    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    testPanel->SetSizer(sizer);
 
     PushWindow(testPanel, wxEmptyString);
 }
