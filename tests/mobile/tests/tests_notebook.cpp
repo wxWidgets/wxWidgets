@@ -47,17 +47,17 @@ bool MobileTestsWxNotebookPanel::CreateControls()
     SetSizer(topSizer);
     
     // Notebook
-    m_notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxSize(-1, -1), 0);
+    m_notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
     topSizer->Add(m_notebook, 1, wxEXPAND);
     
     // Three panels
-    MobileTestsWxNotebookPage* page1 = new MobileTestsWxNotebookPage(m_notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), 0);
+    MobileTestsWxNotebookPage* page1 = new MobileTestsWxNotebookPage(m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
     m_notebook->AddPage(page1, _("First"), true, wxID_TOPRATED);
     
-    MobileTestsWxNotebookPage* page2 = new MobileTestsWxNotebookPage(m_notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), wxNO_BORDER);
+    MobileTestsWxNotebookPage* page2 = new MobileTestsWxNotebookPage(m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
     m_notebook->AddPage(page2, _("Second"), false, wxID_SEARCH);
 
-    MobileTestsWxNotebookPage* page3 = new MobileTestsWxNotebookPage(m_notebook, wxID_ANY, wxPoint(0, 0), wxSize(320, 411), wxNO_BORDER);
+    MobileTestsWxNotebookPage* page3 = new MobileTestsWxNotebookPage(m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER);
     m_notebook->AddPage(page3, _("Third"), false, wxID_CONTACTS);
     m_notebook->SetBadge(2, wxT("1"));
         
