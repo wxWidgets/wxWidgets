@@ -908,6 +908,24 @@ void wxBitmap::SetPixmap( cairo_surface_t *pixmap )
     wxBitmapRefData* bmpData = new wxBitmapRefData(w, h, 0);
     m_refData = bmpData;
     bmpData->m_pixmap = pixmap;
+    
+    cairo_format_t fmt = cairo_image_surface_get_format( pixmap );
+
+    switch (fmt) {
+    case CAIRO_FORMAT_A1:
+        bmpData->m_bpp = 1;
+        break;
+    case CAIRO_FORMAT_A8:
+        bmpData->m_bpp = 8;
+        break;
+    case CAIRO_FORMAT_RGB24:
+    case CAIRO_FORMAT_ARGB32:
+        bmpData->m_bpp = 32;
+        break;
+    case CAIRO_FORMAT_INVALID:
+        bmpData->m_bpp = 0;
+        break;
+    }
 }
 
 cairo_surface_t *wxBitmap::GetPixmap() const
