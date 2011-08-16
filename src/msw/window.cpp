@@ -2981,6 +2981,13 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 
                 processed = true;
             }
+            else if (IsOfStandardClass() && IsKindOf(CLASSINFO(wxTextCtrl)) && ((wxTextCtrl*)this)->IsMultiLine())
+            {
+                rc.result = MSWDefWindowProc(message, wParam, lParam);
+                // Clear the DLGC_HASSETSEL bit from the return value
+                rc.result &= ~DLGC_HASSETSEL;
+                processed = true;
+            }
             //else: get the dlg code from the DefWindowProc()
             break;
 

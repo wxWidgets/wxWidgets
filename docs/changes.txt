@@ -103,6 +103,11 @@ All (GUI):
 - Fixed wxOwnerDrawnComboBox/wxBitmapComboBox client data corruption when
   wxCB_SORT is used.
 
+wxMSW:
+
+- Multiline text controls no longer select all content when gaining focus from
+  the keyboard.
+
 wxGTK:
 
 - Fix wxClipboard::GetData() for asymmetric wxDataObjects (Timothy Lee).
