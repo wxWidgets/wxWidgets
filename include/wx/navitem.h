@@ -50,37 +50,37 @@ public:
     virtual ~wxNavigationItemBase() { }
     
     /// Sets the button to show on the top item, when this item is under the top item.
-    void SetBackButton(wxBarButton* backButton) { m_backButton = backButton; }
+    virtual void SetBackButton(wxBarButton* backButton) { m_backButton = backButton; }
     
     /// Gets the button to show on the top item, when this item is under the top item.
     wxBarButton* GetBackButton() const { return m_backButton; }
     
     /// Sets the button to show on the left when this item is at the top.
-    void SetLeftButton(wxBarButton* leftButton) { m_leftButton = leftButton; }
+    virtual void SetLeftButton(wxBarButton* leftButton) { m_leftButton = leftButton; }
     
     /// Gets the button to show on the left when this item is at the top.
     wxBarButton* GetLeftButton() const { return m_leftButton; }
     
     /// Sets the button to show on the right when this item is at the top.
-    void SetRightButton(wxBarButton* rightButton) { m_rightButton = rightButton; }
+    virtual void SetRightButton(wxBarButton* rightButton) { m_rightButton = rightButton; }
     
     /// Gets the button to show on the right when this item is at the top.
     wxBarButton* GetRightButton() const { return m_rightButton; }
     
     /// Sets the title.
-    void SetTitle(const wxString& title) { m_title = title; }
+    virtual void SetTitle(const wxString& title) { m_title = title; }
     
     /// Gets the title.
     const wxString& GetTitle() const { return m_title; }
     
     /// Sets whether the custom buttons should be deleted on deletion of this item.
-    void SetOwnButtons(bool own) { m_ownButtons = own; }
+    virtual void SetOwnButtons(bool own) { m_ownButtons = own; }
     
     /// Returns true if the custom buttons should be deleted on deletion of this item.
     bool GetOwnButtons() const { return m_ownButtons; }
     
     /// Sets whether the back button should be hidden when this item is at the top.
-    void SetHideBackButton(bool hide) { m_hideBackButton = hide; }
+    virtual void SetHideBackButton(bool hide) { m_hideBackButton = hide; }
     
     /// Returns true if the back button should be hidden when this item is at the top.
     bool GetHideBackButton() const { return m_hideBackButton; }
@@ -89,7 +89,7 @@ public:
     wxViewController* GetViewController() const { return m_viewController; }
     
     /// Sets the associated view controller
-    void SetViewController(wxViewController* controller) { m_viewController = controller; }
+    virtual void SetViewController(wxViewController* controller) { m_viewController = controller; }
     
 protected:
     
@@ -99,8 +99,8 @@ protected:
     wxString              m_title;
     wxViewController*     m_viewController;
     
-    bool                    m_ownButtons;
-    bool                    m_hideBackButton;
+    bool                  m_ownButtons;
+    bool                  m_hideBackButton;
     
     wxDECLARE_NO_COPY_CLASS(wxNavigationItemBase);    
 };

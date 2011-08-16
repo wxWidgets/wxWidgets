@@ -93,7 +93,7 @@ public:
                         const wxValidator& validator = wxDefaultValidator,
                         const wxString& name = wxNavigationBarNameStr);
     
-    virtual ~wxNavigationBarBase();
+    virtual ~wxNavigationBarBase() { }
     
     /// Pushes an item onto the stack. If this function returns false, it may have
     /// been vetoed in an event handler and the application must delete the item
@@ -124,13 +124,7 @@ public:
     virtual wxBarButton* GetLeftButton() = 0;
     virtual wxBarButton* GetRightButton() = 0;
     virtual wxString GetCurrentTitle() = 0;
-    
-    // Position the buttons
-    virtual void PositionButtons() = 0;
-    
-    // Gets the best size for this button
-    virtual wxSize GetBestButtonSize(wxDC& dc, const wxBarButton& item) const = 0;
-    
+        
     void SetButtonMarginX(int margin) { m_buttonMarginX = margin; }
     int GetButtonMarginX() const { return m_buttonMarginX; }
     
@@ -164,8 +158,6 @@ protected:
     
     wxNavigationItemArray m_items;
     
-private:
-    
     // Default back button
     wxBarButton           m_backButton;
     
@@ -174,7 +166,9 @@ private:
     int                     m_buttonMarginInterItemY;   // between image and label
     int                     m_interButtonSpacing;
     int                     m_endMargin;                // margin between left or right side and first or last button
-    
+
+private:
+        
     wxDECLARE_NO_COPY_CLASS(wxNavigationBarBase);
 };
 

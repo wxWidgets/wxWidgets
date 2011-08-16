@@ -78,13 +78,7 @@ public:
     wxBarButton* GetLeftButton();
     wxBarButton* GetRightButton();
     wxString GetCurrentTitle();
-    
-    // Position the buttons
-    void PositionButtons();
-    
-    // Gets the best size for this button
-    wxSize GetBestButtonSize(wxDC& dc, const wxBarButton& item) const;
-        
+            
     bool SetBackgroundColour(const wxColour &colour);
     bool SetForegroundColour(const wxColour &colour);
     bool SetFont(const wxFont& font);
@@ -95,31 +89,7 @@ protected:
     
     // send a notification event, return true if processed
     bool SendClickEvent(wxBarButton* button);
-    
-    // Draw background
-    void DrawBackground(wxDC& dc);
-    
-    // Hit test
-    int HitTest(const wxPoint& pt, wxBarButton** button);
-    
-    // Draw a button
-    void DrawButton(wxDC& dc, wxBarButton& item);
-    
-    // Draw the title
-    void DrawTitle(wxDC& dc);
-    
-    // Draw all items
-    void DrawItems(wxDC& dc);
-    
-    // Get the best size
-    wxSize DoGetBestSize() const;
-    
-    void OnPaint(wxPaintEvent& event);
-    void OnMouseEvent(wxMouseEvent& event);
-    void OnSize(wxSizeEvent& event);
-    void OnBack(wxCommandEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
-    
+        
 private:
     
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNavigationBar)

@@ -73,23 +73,23 @@ public:
     
     /// Constructor taking a string label.
     wxBarButtonBase(wxWindow *parent,
-                  wxWindowID id,
-                  const wxString& label = wxEmptyString,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxDefaultSize,
-                  long style = 0,
-                  const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = wxT("barbutton"));
+                    wxWindowID id,
+                    const wxString& label = wxEmptyString,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString& name = wxT("barbutton"));
     
     /// Constructor taking a bitmap label.
     wxBarButtonBase(wxWindow *parent,
-                  wxWindowID id,
-                  const wxBitmap& bitmap,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxDefaultSize,
-                  long style = 0,
-                  const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = wxT("barbutton"));
+                    wxWindowID id,
+                    const wxBitmap& bitmap,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString& name = wxT("barbutton"));
         
     virtual ~wxBarButtonBase() { }
     
@@ -103,37 +103,37 @@ public:
     virtual bool SetBackgroundColour(const wxColour &colour) { m_backgroundColour = colour; return true; }
     
     /// Gets the button background colour.
-    virtual wxColour GetBackgroundColour() const { return m_backgroundColour; }
+    wxColour GetBackgroundColour() const { return m_backgroundColour; }
     
     /// Sets the button foreground (text) colour.
     virtual bool SetForegroundColour(const wxColour &colour) { m_foregroundColour = colour; return true; }
     
     /// Gets the button foreground (text) colour.
-    virtual wxColour GetForegroundColour() const { return m_foregroundColour; }
+    wxColour GetForegroundColour() const { return m_foregroundColour; }
     
     /// Sets the selection colour.
     virtual void SetSelectionColour(const wxColour& colour) { m_selectionColour = colour; }
     
     /// Gets the selection colour.
-    virtual wxColour GetSelectionColour() const { return m_selectionColour; }
+    wxColour GetSelectionColour() const { return m_selectionColour; }
     
     /// Sets the button font.
     virtual void SetFont(const wxFont& font) { m_font = font; }
     
     /// Gets the button font.
-    virtual wxFont GetFont() const { return m_font; }
+    wxFont GetFont() const { return m_font; }
     
     /// Enables the button.
-    //virtual bool Enable(bool enable) { SetEnabled(enable); return true; }
+    bool Enable(bool enable) { SetEnabled(enable); return true; }
     
     /// Returns true if the button is enabled.
-    //virtual bool IsEnabled() const { return GetEnabled(); }
+    bool IsEnabled() const { return GetEnabled(); }
     
     /// Sets the button border colour.
     virtual void SetBorderColour(const wxColour &colour) { m_borderColour = colour; }
     
     /// Gets the button border colour.
-    virtual wxColour GetBorderColour() const { return m_borderColour; }
+    wxColour GetBorderColour() const { return m_borderColour; }
     
     /// Gets the position and size of the button.
     const wxRect& GetRect() const { return m_rect; }
@@ -145,16 +145,16 @@ public:
     wxSize GetSize() const { return m_rect.GetSize(); }
     
     /// Sets the size of the button.
-    void SetSize(const wxSize& sz) { m_rect.SetSize(sz); }
+    virtual void SetSize(const wxSize& sz) { m_rect.SetSize(sz); }
     
     /// Gets the position of the button.
     wxPoint GetPosition() const { return m_rect.GetPosition(); }
     
     /// Sets the position of the button.
-    void SetPosition(const wxPoint& pt) { m_rect.SetPosition(pt); }
+    virtual void SetPosition(const wxPoint& pt) { m_rect.SetPosition(pt); }
     
     /// Sets the normal state bitmap.
-    void SetNormalBitmap(const wxBitmap& bitmap) { m_normalBitmap = bitmap; }
+    virtual void SetNormalBitmap(const wxBitmap& bitmap) { m_normalBitmap = bitmap; }
     
     /// Gets the normal state bitmap.
     wxBitmap& GetNormalBitmap() { return m_normalBitmap; }
@@ -163,7 +163,7 @@ public:
     const wxBitmap& GetNormalBitmap() const { return m_normalBitmap; }
     
     /// Sets the disabled state bitmap.
-    void SetDisabledBitmap(const wxBitmap& bitmap) { m_disabledBitmap = bitmap; }
+    virtual void SetDisabledBitmap(const wxBitmap& bitmap) { m_disabledBitmap = bitmap; }
     
     /// Gets the disabled state bitmap.
     wxBitmap& GetDisabledBitmap() { return m_disabledBitmap; }
@@ -172,7 +172,7 @@ public:
     const wxBitmap& GetDisabledBitmap() const { return m_disabledBitmap; }
     
     /// Sets the selected state bitmap.
-    void SetSelectedBitmap(const wxBitmap& bitmap) { m_selectedBitmap = bitmap; }
+    virtual void SetSelectedBitmap(const wxBitmap& bitmap) { m_selectedBitmap = bitmap; }
     
     /// Gets the selected state bitmap.
     wxBitmap& GetSelectedBitmap() { return m_selectedBitmap; }
@@ -181,7 +181,7 @@ public:
     const wxBitmap& GetSelectedBitmap() const { return m_selectedBitmap; }
     
     /// Sets the highlighted state bitmap.
-    void SetHighlightedBitmap(const wxBitmap& bitmap) { m_highlightedBitmap = bitmap; }
+    virtual void SetHighlightedBitmap(const wxBitmap& bitmap) { m_highlightedBitmap = bitmap; }
     
     /// Gets the highlighted state bitmap.
     wxBitmap& GetHighlightedBitmap() { return m_highlightedBitmap; }
@@ -190,19 +190,11 @@ public:
     const wxBitmap& GetHighlightedBitmap() const { return m_highlightedBitmap; }
     
     /// Sets the text label.
-    void SetLabel(const wxString& label) { m_label = label; }
+    virtual void SetLabel(const wxString& label) { m_label = label; }
     
     /// Gets the text label.
     const wxString& GetLabel() const { return m_label; }
-    
-    /// Sets the button badge - text that appears in a circle on top of the
-    /// button.
-    void SetBadge(const wxString& badge) { m_badge = badge; }
-    
-    /// Gets the button badge - text that appears in a circle on top of the
-    /// button.
-    const wxString& GetBadge() const { return m_badge; }
-    
+        
     /// Sets the button identifier.
     void SetId(int id) { m_id = id; }
     
@@ -218,39 +210,38 @@ public:
     
     // Not public API
     
-    /*
     // Sets the horizontal margin between button edge and content.
-    void SetMarginX(int margin) { m_marginX = margin; }
+    virtual void SetMarginX(int margin) { m_marginX = margin; }
     
     // Gets the horizontal margin between button edge and content.
     int GetMarginX() const { return m_marginX; }
     
     // Sets the vertical margin between button edge content.
-    void SetMarginY(int margin) { m_marginY = margin; }
+    virtual void SetMarginY(int margin) { m_marginY = margin; }
     
     // Gets the vertical margin between button edge content.
     int GetMarginY() const { return m_marginY; }
     
     // Sets the enabled flag.
-    void SetEnabled(bool enabled) { m_enabled = enabled; }
+    virtual void SetEnabled(bool enabled) { m_enabled = enabled; }
     
     // Gets the enabled flag.
     bool GetEnabled() const { return m_enabled; }
     
     // Sets the selected flag.
-    void SetSelected(bool selected) { m_selected = selected; }
+    virtual void SetSelected(bool selected) { m_selected = selected; }
     
     // Gets the selected flag.
     bool GetSelected() const { return m_selected; }
     
     // Sets the highlighted flag.
-    void SetHighlighted(bool hilighted) { m_highlighted = hilighted; }
+    virtual void SetHighlighted(bool highlighted) { m_highlighted = highlighted; }
     
     // Gets the highlighted flag.
     bool GetHighlighted() const { return m_highlighted; }
     
     // Sets the button style.
-    void SetStyle(int style) { m_style = style; }
+    virtual void SetStyle(int style) { m_style = style; }
     
     // Gets the button style.
     int GetStyle() const { return m_style; }
@@ -279,16 +270,6 @@ public:
     /// Get a bitmap, such as a PNG, from raw data. wxbile Implementation only.
     //static wxBitmap GetBitmapFromData(const unsigned char *data, int length);
     
-    /// Get the best size. wxbile Implementation only.
-    //virtual wxSize GetBestButtonSize(wxDC& dc) const;
-    
-    /// Get the best size.
-    virtual wxSize GetBestSize() const { return DoGetBestSize(); }
-    
-    /// Draw the  button. wxbile Implementation only.
-    //void Draw(wxDC& dc, int flags);
-    */
-    
 protected:
     // send a notification event, return true if processed
     //bool SendClickEvent();
@@ -300,10 +281,6 @@ protected:
     //virtual void OnSetLabel();
     
     //void ProcessMouseEvent(wxMouseEvent& event);
-    
-private:
-    
-    wxDECLARE_NO_COPY_CLASS(wxBarButtonBase);
     
     wxColour    m_borderColour;
     wxColour    m_backgroundColour;
@@ -328,6 +305,9 @@ private:
     int         m_imageId;
     wxWindow*   m_parent;
     
+private:
+    
+    wxDECLARE_NO_COPY_CLASS(wxBarButtonBase);    
 };
 
 WX_DECLARE_OBJARRAY(wxBarButton, wxBarButtonArray);

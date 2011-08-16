@@ -49,6 +49,7 @@ bool MobileTestsWxNavCtrlPanel::CreateControls()
     // Test getters
     wxASSERT_MSG(!m_navCtrl->GetTopController(), "Top controller should not be present at the moment");
     wxASSERT_MSG(!m_navCtrl->GetBackController(), "Back controller should not be present at the moment");
+    wxASSERT_MSG(m_navCtrl->GetNavigationBar() != NULL, "Navigation bar is present");
     
     MobileTestswxNavCtrlViewController* firstController = new MobileTestswxNavCtrlViewController("First VC", m_navCtrl, 1);
     m_navCtrl->PushController(firstController);

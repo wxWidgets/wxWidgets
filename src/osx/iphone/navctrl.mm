@@ -213,22 +213,7 @@ wxWidgetImplType* wxWidgetImpl::CreateNavigationController(wxWindowMac* wxpeer,
             [v.view setFrame:parentViewFrame];
         }        
     }
-    
-    // Style
-    if (style != 0) {
-        UIBarStyle navBarStyle = UIBarStyleDefault;
         
-        if (style & wxNAVCTRL_NORMAL_BG) {
-            navBarStyle = UIBarStyleDefault;
-        } else if (style & wxNAVCTRL_BLACK_OPAQUE_BG) {
-            navBarStyle = UIBarStyleBlackOpaque;
-        } else if (style & wxNAVCTRL_BLACK_TRANSLUCENT_BG) {
-            navBarStyle = UIBarStyleBlackTranslucent;
-        }
-        
-        [v.navigationBar setBarStyle:navBarStyle];
-    }
-    
     wxWidgetIPhoneImpl* c = new wxNavigationCtrlIPhoneImpl( wxpeer, v, v.view );
     return c;
 }

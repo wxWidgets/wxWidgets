@@ -538,6 +538,14 @@ public :
                                     const wxSize& size,
                                     long style,
                                     long extraStyle);
+
+    static wxWidgetImplType*    CreateNavigationBar( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID id,
+                                    const wxPoint& pos,
+                                    const wxSize& size,
+                                    long style,
+                                    long extraStyle);
                                     
     static wxWidgetImplType*    CreateTableViewCtrl( wxWindowMac* wxpeer,
                                     wxWindowMac* parent,

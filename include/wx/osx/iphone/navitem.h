@@ -51,11 +51,40 @@ public:
                 bool ownButtons = false);
     
     virtual ~wxNavigationItem();
+    
+    /// Sets the button to show on the top item, when this item is under the top item.
+    virtual void SetBackButton(wxBarButton* backButton);
         
+    /// Sets the button to show on the left when this item is at the top.
+    virtual void SetLeftButton(wxBarButton* leftButton);
+        
+    /// Sets the button to show on the right when this item is at the top.
+    virtual void SetRightButton(wxBarButton* rightButton);
+        
+    /// Sets the title.
+    virtual void SetTitle(const wxString& title);
+        
+    /// Sets whether the custom buttons should be deleted on deletion of this item.
+    virtual void SetOwnButtons(bool own);
+        
+    /// Sets whether the back button should be hidden when this item is at the top.
+    virtual void SetHideBackButton(bool hide);
+    
+    /// Sets the associated view controller
+    virtual void SetViewController(wxViewController* controller);
+    
+    
+    // Implementation: get Cocoa's UINavigationItem
+    void* GetNativeNavItem() { return m_nativeNavItem; }
+    
 protected:
     void Init();
     
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNavigationItem);
+    
+private:
+    // Implementation: instance of Cocoa's UINavigationItem
+    void*   m_nativeNavItem;
 };
 
 #endif

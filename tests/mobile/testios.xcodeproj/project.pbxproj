@@ -27,6 +27,7 @@
 		B9BE544313F77E69007AF138 /* tests_listbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9BE544213F77E69007AF138 /* tests_listbox.cpp */; };
 		B9BE54A213F8F15E007AF138 /* tests_viewcontroller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9BE54A113F8F15E007AF138 /* tests_viewcontroller.cpp */; };
 		B9BE54B113F8F29D007AF138 /* tests_viewcontroller_vc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9BE54B013F8F29D007AF138 /* tests_viewcontroller_vc.cpp */; };
+		B9BE54E413F8F964007AF138 /* navbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9BE54E313F8F964007AF138 /* navbar.mm */; };
 		B9C67EA713EA1DC000E2E44A /* tests_notebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C67EA613EA1DC000E2E44A /* tests_notebook.cpp */; };
 		B9C67EAA13EAFA8600E2E44A /* tests_navctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C67EA913EAFA8600E2E44A /* tests_navctrl.cpp */; };
 		B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA6F9113BF1EF900061979 /* libz.dylib */; };
@@ -119,6 +120,7 @@
 		B9BE54A113F8F15E007AF138 /* tests_viewcontroller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_viewcontroller.cpp; sourceTree = "<group>"; };
 		B9BE54AF13F8F29D007AF138 /* tests_viewcontroller_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_viewcontroller_vc.h; sourceTree = "<group>"; };
 		B9BE54B013F8F29D007AF138 /* tests_viewcontroller_vc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_viewcontroller_vc.cpp; sourceTree = "<group>"; };
+		B9BE54E313F8F964007AF138 /* navbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navbar.mm; path = ../../src/osx/iphone/navbar.mm; sourceTree = SOURCE_ROOT; };
 		B9C67EA513EA1DAF00E2E44A /* tests_notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_notebook.h; sourceTree = "<group>"; };
 		B9C67EA613EA1DC000E2E44A /* tests_notebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_notebook.cpp; sourceTree = "<group>"; };
 		B9C67EA813EAFA7400E2E44A /* tests_navctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_navctrl.h; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				B9ED3FE713CA6A12007570A4 /* glcanvas.mm */,
 				B9ED3FE813CA6A12007570A4 /* listbox.mm */,
 				B9ED3FE913CA6A12007570A4 /* msgdlg.mm */,
+				B9BE54E313F8F964007AF138 /* navbar.mm */,
 				B9ED3FEA13CA6A12007570A4 /* navctrl.mm */,
 				B9FE836613CBA872009182C3 /* navitem.mm */,
 				B9ED3FEB13CA6A12007570A4 /* nonownedwnd.mm */,
@@ -441,6 +444,7 @@
 				B9BE544313F77E69007AF138 /* tests_listbox.cpp in Sources */,
 				B9BE54A213F8F15E007AF138 /* tests_viewcontroller.cpp in Sources */,
 				B9BE54B113F8F29D007AF138 /* tests_viewcontroller_vc.cpp in Sources */,
+				B9BE54E413F8F964007AF138 /* navbar.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
