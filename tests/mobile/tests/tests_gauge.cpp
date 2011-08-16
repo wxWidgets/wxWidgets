@@ -35,15 +35,16 @@ bool MobileTestsWxGaugePanel::CreateWithControls(wxWindow* parent,
 
 bool MobileTestsWxGaugePanel::CreateControls()
 {
-    wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
     
     //
     // Gauge
     // 
     
-    m_gauge = new wxGauge(this, wxID_ANY, 100, wxDefaultPosition, wxSize(200, 15), 0 );
+    m_gauge = new wxGauge(this, wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, 0 );
     m_gauge->SetValue(50);
-    sizer->Add(m_gauge, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizer->Add(m_gauge, 0, wxEXPAND|wxALL, 5);
     
     return true;
 }
