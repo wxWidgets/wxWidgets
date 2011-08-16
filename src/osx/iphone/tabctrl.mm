@@ -276,10 +276,7 @@ void wxTabCtrl::SetPadding(const wxSize& WXUNUSED(padding))
 
 wxSize wxTabCtrl::DoGetBestSize() const
 {
-    // FIXME stub
-    
-    wxSize empty(1, 1);
-    return empty;
+    return wxWindowMac::DoGetBestSize() ;
 }
 
 void wxTabCtrl::OnMouseEvent(wxMouseEvent& event)

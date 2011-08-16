@@ -95,7 +95,8 @@ wxWidgetImplType* wxWidgetImpl::CreateSegmentedCtrl(wxWindowMac* wxpeer,
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     
     wxUISegmentedControl* v = [[wxUISegmentedControl alloc] init];
-    
+    v.frame = r;
+
     wxWidgetIPhoneImpl* c = new wxSegmentedCtrlIPhoneImpl( wxpeer, v );
     return c;
 }
