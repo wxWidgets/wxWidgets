@@ -131,9 +131,9 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testPanels.Add(new MobileTestsWxListBoxPanel());
 
     // wxViewController
-    m_testNames.Add(_("wxViewController"));
-    m_testDescriptions.Add(_("The view controller manages a window, usually in conjunction with the wxNavigationCtrl class."));
-    m_testPanels.Add(new MobileTestsWxViewControllerPanel());
+    //m_testNames.Add(_("wxViewController"));
+    //m_testDescriptions.Add(_("The view controller manages a window, usually in conjunction with the wxNavigationCtrl class."));
+    //m_testPanels.Add(new MobileTestsWxViewControllerPanel());
     
     //
     // --
