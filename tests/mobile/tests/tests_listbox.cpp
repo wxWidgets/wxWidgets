@@ -51,6 +51,13 @@ bool MobileTestsWxListBoxPanel::CreateControls()
     m_listBox->Connect(wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler(MobileTestsWxListBoxPanel::OnListBoxSelected), NULL, this);
     sizer->Add(m_listBox, 1, wxEXPAND|wxALL, 5);
     
+    // Test getters
+    wxASSERT_MSG(m_listBox->IsSelected(1), "2nd item should be reported as selected");
+    wxASSERT_MSG(!m_listBox->IsSelected(0), "1st item should be reported as not selected");
+    wxArrayInt selections;
+    wxASSERT_MSG(m_listBox->GetSelections(selections) == 1, "A single item is selected");
+    wxASSERT_MSG(selections.Count() == 1, "A single item is selected");
+    
     return true;
 }
 

@@ -12,7 +12,7 @@
 // 
 // events:
 //   + wxEVT_COMMAND_LISTBOX_SELECTED
-// + wxMoListBox (wxWindow *parent, wxWindowID id=wxID_ANY, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, const wxArrayString &strings=wxArrayString(), long style=wxLB_SINGLE, const wxValidator &validator=wxDefaultValidator, const wxString &name=wxMoVListBoxNameStr)
+// + wxListBox (wxWindow *parent, wxWindowID id=wxID_ANY, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, const wxArrayString &strings=wxArrayString(), long style=wxLB_SINGLE, const wxValidator &validator=wxDefaultValidator, const wxString &name=wxMoVListBoxNameStr)
 // - bool   Create (wxWindow *parent, wxWindowID id=wxID_ANY, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, const wxArrayString &strings=wxArrayString(), long style=wxLB_SINGLE, const wxValidator &validator=wxDefaultValidator, const wxString &name=wxMoVListBoxNameStr)
 // - void   Append (const wxString &str)
 // - int    Insert (const wxString &str, int pos)
@@ -25,10 +25,16 @@
 // - wxArrayString GetStrings () const
 // - int    GetCount () const
 // - void   InsertItems (const wxArrayString &items, int pos)
-// - int    GetSelections (wxArrayInt &selections) const
-// - virtual void  SetSelection (int component, int selection)
 // + virtual void  SetSelection (int selection)
-// - virtual int   GetSelection (int component) const
+// - void     Deselect (int n)
+// + virtual int   GetSelections (wxArrayInt &selections) const 
+// - void    InsertItems (unsigned int nItems, const wxString *items, unsigned int pos)
+// - void    InsertItems (const wxArrayString &items, unsigned int pos)
+// + virtual bool  IsSelected (int n) const 
+// - void    Set (unsigned int n, const wxString *choices, void *clientData)
+// - void    Set (const wxArrayString &choices, void *clientData)
+// - void    SetFirstItem (int n)
+// - void    SetFirstItem (const wxString &string)
 
 #ifndef testios_tests_listbox_h
 #define testios_tests_listbox_h
