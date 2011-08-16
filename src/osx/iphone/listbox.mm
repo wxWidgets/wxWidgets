@@ -80,7 +80,7 @@ public:
     // add and remove
     void ListDelete( unsigned int n )
     {
-        
+        [m_pickerView reloadAllComponents];
     }
     
     void ListInsert( unsigned int n )
@@ -90,45 +90,64 @@ public:
     
     void ListClear()
     {
-        
+        [m_pickerView reloadAllComponents];
     }
     
     // selecting
     void ListDeselectAll()
     {
-        
+        [m_pickerView selectRow:-1
+                    inComponent:0
+                       animated:NO];
     }
     
     void ListSetSelection( unsigned int n, bool select, bool multi )
     {
-        
+        if (select) {
+            [m_pickerView selectRow:n
+                        inComponent:0
+                           animated:NO];
+        } else {
+            ListDeselectAll();
+        }
     }
     
     int ListGetSelection() const
     {
-        return 0;
+        return [m_pickerView selectedRowInComponent:0];
     }
     
     int ListGetSelections( wxArrayInt& aSelections ) const
     {
-        return 0;
+        aSelections.Empty();
+        
+        int count = ListGetCount();
+        int selectedRow = [m_pickerView selectedRowInComponent:0];
+        
+        for (int i = 0; i < count; ++i) {
+            if (i == selectedRow) {
+                aSelections.Add(i);
+            }
+        }
+        
+        return aSelections.Count();
     }
     
     bool ListIsSelected( unsigned int n ) const
     {
-        return false;
+        return [m_pickerView selectedRowInComponent:0] == n;
     }
     
     // display
     void ListScrollTo( unsigned int n )
     {
-        
+        ListSetSelection(n, true, false);
     }
     
     // accessing content
     unsigned int ListGetCount() const
     {
-        return 0;
+        return [m_pickerView numberOfRowsInComponent:0];
     }
     
     int DoListHitTest( const wxPoint& inpoint ) const
@@ -143,17 +162,25 @@ public:
     
     void UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL )
     {
-        
+        [m_pickerView reloadAllComponents];
     }
     
     void UpdateLineToEnd( unsigned int n)
     {
-        
+        [m_pickerView reloadAllComponents];
     }
     
     void controlDoubleAction(WXWidget slf, void* _cmd, void* sender)
     {
+        wxListBox* list = static_cast<wxListBox*> ( GetWXPeer());
+        wxCHECK_RET( list != NULL , wxT("ListBox expected"));
         
+        int sel = [m_pickerView selectedRowInComponent:0];
+        if ((sel < 0) || (sel > (int) list->GetCount())) {  // OS X can select an item below the last item (why?)
+            return;
+        }
+        
+        list->HandleLineEvent( sel, true );        
     }
     
 protected:
@@ -194,7 +221,18 @@ protected:
 #pragma mark UIPickerViewDelegate
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    if (! implementation) {
+        return;
+    }
     
+    wxListBox* lb = dynamic_cast<wxListBox*> ( implementation->GetWXPeer() );
+    
+    if ((row < 0) || (row > (int) lb->GetCount())) {
+        return;
+    }
+    
+    wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, lb->GetId() );
+    lb->GetEventHandler()->ProcessEvent(event);
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
