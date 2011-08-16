@@ -33,6 +33,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/frame.h"
+    #include "wx/menu.h"
     #include "wx/containr.h"        // wxSetFocusToChild()
     #include "wx/module.h"
 #endif //WX_PRECOMP
