@@ -317,6 +317,13 @@ bool wxNavigationCtrl::PushController(wxViewController* controller)
         }
     }
     
+    wxRect rect = GetClientSize() ;
+    wxWindow* win = controller->GetWindow();
+    
+    win->SetSize( rect );
+    if ( win->GetAutoLayout() )
+        win->Layout();
+
     m_controllers.Add(controller);
     wxNavigationCtrlIPhoneImpl *peer = (wxNavigationCtrlIPhoneImpl *)GetPeer();
     if (! peer->PushViewController(controller)) {
