@@ -34,10 +34,11 @@ enum wxAcceleratorEntryFlags
     wxACCEL_CTRL    = 0x0002,   // hold Ctrl key down
     wxACCEL_SHIFT   = 0x0004,   // hold Shift key down
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
-    wxACCEL_CMD      = 0x0008   // Command key on OS X
+    wxACCEL_RAW_CTRL= 0x0008,   // 
 #else
-    wxACCEL_CMD      = wxACCEL_CTRL
+    wxACCEL_RAW_CTRL= wxACCEL_CTRL,
 #endif
+    wxACCEL_CMD     = wxACCEL_CTRL
 };
 
 // ----------------------------------------------------------------------------
