@@ -96,6 +96,9 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
         if (entry->GetFlags() & wxACCEL_SHIFT)
             modifiers |= kMenuShiftModifier ;
 
+        if (entry->GetFlags() & wxACCEL_RAW_CTRL)
+            modifiers |= kMenuControlModifier ;
+        
         SInt16 glyph = 0 ;
         SInt16 macKey = key ;
         if ( key >= WXK_F1 && key <= WXK_F15 )
