@@ -27,34 +27,11 @@
 
 extern GtkWidget *wxGetRootWindow();
 
-#ifdef __WXGTK30__
 static void PixmapToPixbuf(cairo_surface_t* pixmap, GdkPixbuf* pixbuf, int w, int h)
 {
     pixbuf = gdk_pixbuf_get_from_surface( pixmap, 0, 0, w, h );
 }
-#else
-static void PixmapToPixbuf(GdkPixmap* pixmap, GdkPixbuf* pixbuf, int w, int h)
-{
-    gdk_pixbuf_get_from_drawable(pixbuf, pixmap, NULL, 0, 0, 0, 0, w, h);
-    if (gdk_drawable_get_depth(pixmap) == 1)
-    {
-        // invert to match XBM convention
-        guchar* p = gdk_pixbuf_get_pixels(pixbuf);
-        const int inc = 3 + int(gdk_pixbuf_get_has_alpha(pixbuf) != 0);
-        const int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - w * inc;
-        for (int y = h; y; y--, p += rowpad)
-            for (int x = w; x; x--, p += inc)
-            {
-                // pixels are either (0,0,0) or (0xff,0xff,0xff)
-                p[0] = ~p[0];
-                p[1] = ~p[1];
-                p[2] = ~p[2];
-            }
-    }
-}
-#endif
 
-#ifdef __WXGTK30__
 static void MaskToAlpha(cairo_surface_t* mask, GdkPixbuf* pixbuf, int w, int h)
 {
     GdkPixbuf* mask_pixbuf = gdk_pixbuf_get_from_surface( mask, 0, 0, w, h );
@@ -75,29 +52,6 @@ static void MaskToAlpha(cairo_surface_t* mask, GdkPixbuf* pixbuf, int w, int h)
     }
     g_object_unref(mask_pixbuf);
 }
-#else
-static void MaskToAlpha(GdkPixmap* mask, GdkPixbuf* pixbuf, int w, int h)
-{
-    GdkPixbuf* mask_pixbuf = gdk_pixbuf_get_from_drawable(
-        NULL, mask, NULL, 0, 0, 0, 0, w, h);
-    guchar* p = gdk_pixbuf_get_pixels(pixbuf) + 3;
-    const guchar* mask_data = gdk_pixbuf_get_pixels(mask_pixbuf);
-    const int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - w * 4;
-    const int mask_rowpad = gdk_pixbuf_get_rowstride(mask_pixbuf) - w * 3;
-    for (int y = h; y; y--, p += rowpad, mask_data += mask_rowpad)
-    {
-        for (int x = w; x; x--, p += 4, mask_data += 3)
-        {
-            *p = 255;
-            // no need to test all 3 components,
-            //   pixels are either (0,0,0) or (0xff,0xff,0xff)
-            if (mask_data[0] == 0)
-                *p = 0;
-        }
-    }
-    g_object_unref(mask_pixbuf);
-}
-#endif
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -121,7 +75,6 @@ wxMask::wxMask(const wxMask& mask)
     gint w, h;
 
     // create a copy of an existing mask
-#ifdef __WXGTK30__
     // I don't know if there is a simpler way to copy cairo_image_surface. (JC)
     w = cairo_image_surface_get_width( mask.m_bitmap );
     h = cairo_image_surface_get_height( mask.m_bitmap );
@@ -140,13 +93,6 @@ wxMask::wxMask(const wxMask& mask)
     memcpy( data, src_data, stride * h );
 
     m_bitmap = cairo_image_surface_create_for_data( data, format, w, h, stride );
-#else
-    gdk_drawable_get_size(mask.m_bitmap, &w, &h);
-    m_bitmap = gdk_pixmap_new(mask.m_bitmap, w, h, 1);
-
-    wxGtkObject<GdkGC> gc(gdk_gc_new(m_bitmap));
-    gdk_draw_drawable(m_bitmap, gc, mask.m_bitmap, 0, 0, 0, 0, -1, -1);
-#endif
 }
 
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
@@ -186,9 +132,6 @@ void wxMask::FreeData()
 
 bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 {
-#ifdef __WXGTK30__
-    wxFAIL_MSG("Not implemented for GTK+3.0 backend");
-#else
     const int w = bitmap.GetWidth();
     const int h = bitmap.GetHeight();
 
@@ -217,36 +160,28 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
             // move index to next byte boundary
             bit_index = (bit_index + 7) & ~7u;
         }
+        int stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w);
+        m_bitmap = cairo_image_surface_create_for_data((unsigned char*)out, CAIRO_FORMAT_RGB24,
+                w, h, stride);
+
+        delete[] out;
     }
     else
     {
-        GdkImage* image = gdk_drawable_get_image(bitmap.GetPixmap(), 0, 0, w, h);
-        GdkColormap* colormap = gdk_image_get_colormap(image);
-        guint32 mask_pixel;
-        if (colormap == NULL)
-            // mono bitmap, white is pixel value 0
-            mask_pixel = guint32(colour.Red() != 255 || colour.Green() != 255 || colour.Blue() != 255);
-        else
-        {
-            wxColor c(colour);
-            c.CalcPixel(colormap);
-            mask_pixel = c.GetPixel();
-        }
-        for (int y = 0; y < h; y++)
-        {
-            for (int x = 0; x < w; x++, bit_index++)
-                if (gdk_image_get_pixel(image, x, y) == mask_pixel)
-                    out[bit_index >> 3] ^= 1 << (bit_index & 7);
-            bit_index = (bit_index + 7) & ~7u;
-        }
-        g_object_unref(image);
+        cairo_content_t content = cairo_surface_get_content(bitmap.GetPixmap());
+        cairo_surface_t* surface = cairo_surface_create_similar(bitmap.GetPixmap(),
+                content, w, h);
+        cairo_t* cr = cairo_create( surface );
+        cairo_set_source_rgb( cr, colour.Red()/255.0, colour.Green()/255.0, colour.Blue()/255.0);
+        cairo_rectangle( cr, 0, 0, w, h);
+        cairo_clip( cr );
+        cairo_fill( cr );
+        cairo_destroy( cr );    
+
+        m_bitmap = surface;
     }
 
-    m_bitmap = gdk_bitmap_create_from_data(wxGetRootWindow()->window, (char*)out, w, h);
-
-    delete[] out;
     return true;
-#endif
 }
 
 bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
@@ -952,9 +887,8 @@ cairo_surface_t *wxBitmap::GetPixmap() const
     }
     else
     {
-        wxFAIL_MSG("Not implemented in wxGTK3");
-        // bmpData->m_pixmap = gdk_pixmap_new(wxGetRootWindow()->window,
-        //     bmpData->m_width, bmpData->m_height, bmpData->m_bpp == 1 ? 1 : -1);
+        bmpData->m_pixmap = cairo_image_surface_create(CAIRO_FORMAT_RGB24,
+            bmpData->m_width, bmpData->m_height);
     }
     return bmpData->m_pixmap;
 }
