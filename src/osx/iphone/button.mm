@@ -25,24 +25,25 @@
 
 wxSize wxButton::DoGetBestSize() const
 {
-    wxSize sz = GetDefaultSize();
+    wxSize sz;
+    
     wxRect r;
-
     GetPeer()->GetBestRect(&r);
 
-    wxASSERT_MSG(r.GetWidth() != 0 && r.GetHeight() != 0, "wxButton's width or height is 0");
-    if ( r.GetWidth() == 0 || r.GetHeight() == 0 )
-    {
-        r = sz; // FIXME
-    }
     sz.x = r.GetWidth();
     sz.y = r.GetHeight();
 
-    int wBtn = 72;
-
-    if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
-        sz.x = wBtn;
-
+    if ( GetWindowStyle() & ( wxBU_DISCLOSURE | wxBU_INFO_LIGHT | wxBU_INFO_DARK |wxBU_CONTACT_ADD ) )
+    {
+        // never adjust for these
+    }
+    else 
+    {
+        int wBtn = GetDefaultSize().x;
+        if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
+            sz.x = wBtn;
+    }
+    
     return sz ;
 }
 
@@ -179,16 +180,22 @@ wxWidgetImplType* CreateIPhoneButton(wxWindowMac* wxpeer,
         buttonType = UIButtonTypeRoundedRect;
     }
     
-    wxUIButton* v = [[wxUIButton buttonWithType:buttonType] retain];
+    UIButton* v = [[UIButton buttonWithType:buttonType] retain];
     v.frame = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     
-    // Bitmap
-    if (bitmap.IsOk()) {
-        [v setImage:[bitmap.GetUIImage() retain]
-           forState:UIControlStateNormal];
-    } else {
-        [v setImage:nil
-           forState:UIControlStateNormal];
+    if ( buttonType == UIButtonTypeRoundedRect )
+    {
+        // Bitmap
+
+        if (bitmap.IsOk()) 
+        {
+            [v setImage:[bitmap.GetUIImage() retain]
+               forState:UIControlStateNormal];
+        } else 
+        {
+            [v setImage:nil
+               forState:UIControlStateNormal];
+        }
     }
     
     // Label is being set elsewhere (in SetPeer())
