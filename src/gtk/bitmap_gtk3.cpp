@@ -989,17 +989,9 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
                                                          oldRef->m_bpp);
     if (oldRef->m_pixmap != NULL)
     {
-#ifdef __WXGTK30__
-        wxFAIL_MSG("Not implemented");
-#else
-        newRef->m_pixmap = gdk_pixmap_new(
-            oldRef->m_pixmap, oldRef->m_width, oldRef->m_height,
-            // use pixmap depth, m_bpp may not match
-            gdk_drawable_get_depth(oldRef->m_pixmap));
-        wxGtkObject<GdkGC> gc(gdk_gc_new(newRef->m_pixmap));
-        gdk_draw_drawable(
-            newRef->m_pixmap, gc, oldRef->m_pixmap, 0, 0, 0, 0, -1, -1);
-#endif
+        cairo_content_t content = cairo_surface_get_content(oldRef->m_pixmap);
+        newRef->m_pixmap = cairo_surface_create_similar(
+                oldRef->m_pixmap, content, oldRef->m_width, oldRef->m_height);
     }
     if (oldRef->m_pixbuf != NULL)
     {
