@@ -92,9 +92,9 @@ public:
     virtual void Redo();
 
     //Clipboard functions
-    virtual bool CanCut() const { return false; }
-    virtual bool CanCopy() const { return false; }
-    virtual bool CanPaste() const { return false; }
+    virtual bool CanCut() const { return true; }
+    virtual bool CanCopy() const { return true; }
+    virtual bool CanPaste() const { return true; }
     virtual void Cut();
     virtual void Copy();
     virtual void Paste();

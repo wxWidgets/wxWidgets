@@ -393,21 +393,21 @@ public:
     /**
         Returns @true if the current selection can be copied.
         
-        @note This always returns @c false on the OSX WebKit backend.
+        @note This always returns @c true on the OSX WebKit backend.
     */
     virtual bool CanCopy() const = 0;
 
     /**
         Returns @true if the current selection can be cut.
         
-         @note This always returns @c false on the OSX WebKit backend.
+         @note This always returns @c true on the OSX WebKit backend.
     */
     virtual bool CanCut() const = 0;
 
     /**
         Returns @true if data can be pasted.
         
-        @note This always returns @c false on the OSX WebKit backend.
+        @note This always returns @c true on the OSX WebKit backend.
     */
     virtual bool CanPaste() const = 0;
 
