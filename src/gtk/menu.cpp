@@ -127,6 +127,9 @@ DetachFromFrame(wxMenu* menu, wxFrame* frame)
         // can be an MDI child frame which is a fake frame and not a TLW at all
         GtkWindow * const tlw = GTK_WINDOW(wxGetTopLevelParent(frame)->m_widget);
 #ifdef __WXGTK30__
+        // FIXME: implement gtk+3 based GetPixmap() management, i.e.
+        // 'get_preferred_width()'
+        // (JC)
         if (g_slist_find(gtk_accel_groups_from_object(G_OBJECT(menu->m_menu)), tlw))
 #else
         if (g_slist_find(menu->m_accel->acceleratables, tlw))
