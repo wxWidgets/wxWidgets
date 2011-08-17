@@ -167,8 +167,11 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_INDEX,               _("&Index"),              _("Index"));
         STOCKITEM(wxID_INFO,                _("&Info"),               _("Info"));
         STOCKITEM(wxID_ITALIC,              _("&Italic"),             _("Italic"));
+        STOCKITEM(wxID_JUMP_TO,             _("&Jump to"),            _("Jump to"));
         STOCKITEM(wxID_JUSTIFY_CENTER,      _("Centered"),            _("Centered"));
         STOCKITEM(wxID_JUSTIFY_FILL,        _("Justified"),           _("Justified"));
+        STOCKITEM(wxID_JUSTIFY_LEFT,        _("Align Left"),          _("Align Left"));
+        STOCKITEM(wxID_JUSTIFY_RIGHT,       _("Align Right"),         _("Align Right"));
         STOCKITEM(wxID_LAST,                _("&Last"),               _("Last"));
         STOCKITEM(wxID_NETWORK,             _("&Network"),            _("Network"));
         STOCKITEM(wxID_NEW,                 _("&New"),                _("New"));
@@ -184,12 +187,15 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_REFRESH,             _("Refresh"),             _("Refresh"));
         STOCKITEM(wxID_REMOVE,              _("Remove"),              _("Remove"));
         STOCKITEM(wxID_REPLACE,             _("Rep&lace"),            _("Replace"));
+        STOCKITEM(wxID_REVERT_TO_SAVED,     _("Revert to Saved"),     _("Revert to Saved"));
         STOCKITEM(wxID_SAVE,                _("&Save"),               _("Save"));
         STOCKITEM(wxID_SAVEAS,              _("&Save as"),            _("Save as"));
+        STOCKITEM(wxID_SELECTALL,           _("Select &All"),         _("Select All"));
         STOCKITEM(wxID_SELECT_COLOR,        _("&Color"),              _("Color"));
         STOCKITEM(wxID_SELECT_FONT,         _("&Font"),               _("Font"));
         STOCKITEM(wxID_SORT_ASCENDING,      _("&Ascending"),          _("Ascending"));
         STOCKITEM(wxID_SORT_DESCENDING,     _("&Descending"),         _("Descending"));
+        STOCKITEM(wxID_SPELL_CHECK,         _("&Spell Check"),        _("Spell Check"));
         STOCKITEM(wxID_STOP,                _("&Stop"),               _("Stop"));
         STOCKITEM(wxID_STRIKETHROUGH,       _("&Strikethrough"),      _("Strikethrough"));
         STOCKITEM(wxID_TOP,                 _("&Top"),                _("Top"));
@@ -199,6 +205,10 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_UNINDENT,            _("&Unindent"),           _("Unindent"));
         STOCKITEM(wxID_UP,                  _("&Up"),                 _("Up"));
         STOCKITEM(wxID_YES,                 _("&Yes"),                _("Yes"));
+        STOCKITEM(wxID_ZOOM_100,            _("&Actual Size"),        _("Actual Size"));
+        STOCKITEM(wxID_ZOOM_FIT,            _("Zoom to &Fit"),        _("Zoom to Fit"));
+        STOCKITEM(wxID_ZOOM_IN,             _("Zoom &In"),            _("Zoom In"));
+        STOCKITEM(wxID_ZOOM_OUT,            _("Zoom &Out"),           _("Zoom Out"));
 
         default:
             wxFAIL_MSG( wxT("invalid stock item ID") );

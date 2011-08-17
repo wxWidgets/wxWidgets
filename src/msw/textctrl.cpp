@@ -1951,6 +1951,9 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     //     live with it.
                     lRc = lDlgCode;
                 }
+                if (IsMultiLine())
+                    // Clear the DLGC_HASSETSEL bit from the return value
+                    lRc &= ~DLGC_HASSETSEL;
             }
             break;
 
