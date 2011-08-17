@@ -1018,13 +1018,13 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxString target = wxStringWithNSString([frame name]);
-        wxWebViewNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
-                                           webKitWindow->GetId(),
-                                           wxStringWithNSString( url ),
-                                           target, false);
+        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+                             webKitWindow->GetId(),
+                             wxStringWithNSString( url ),
+                             target);
 
         if (webKitWindow && webKitWindow->GetEventHandler())
-            webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+            webKitWindow->GetEventHandler()->ProcessEvent(event);
     }
 }
 
@@ -1036,13 +1036,13 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
 
         wxString target = wxStringWithNSString([frame name]);
-        wxWebViewNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_LOADED,
-                                           webKitWindow->GetId(),
-                                           wxStringWithNSString( url ),
-                                           target, false);
+        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED,
+                             webKitWindow->GetId(),
+                             wxStringWithNSString( url ),
+                             target);
 
         if (webKitWindow && webKitWindow->GetEventHandler())
-            webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+            webKitWindow->GetEventHandler()->ProcessEvent(event);
     }
 }
 
@@ -1130,16 +1130,16 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
         wxWebViewNavigationError type;
         wxString description = nsErrorToWxHtmlError(error, &type);
-		wxWebViewNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_ERROR,
-		                                   webKitWindow->GetId(),
-                                           wxStringWithNSString( url ),
-                                           wxEmptyString, false);
-		thisEvent.SetString(description);
-		thisEvent.SetInt(type);
+		wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR,
+		                     webKitWindow->GetId(),
+                             wxStringWithNSString( url ),
+                             wxEmptyString);
+		event.SetString(description);
+		event.SetInt(type);
 
 		if (webKitWindow && webKitWindow->GetEventHandler())
 		{
-			webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+			webKitWindow->GetEventHandler()->ProcessEvent(event);
 		}
     }
 }
@@ -1156,15 +1156,15 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 		wxWebViewNavigationError type;
         wxString description = nsErrorToWxHtmlError(error, &type);
-		wxWebViewNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_ERROR,
-		                                   webKitWindow->GetId(),
-                                           wxStringWithNSString( url ),
-                                           wxEmptyString, false);
-		thisEvent.SetString(description);
-		thisEvent.SetInt(type);
+		wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR,
+		                     webKitWindow->GetId(),
+                             wxStringWithNSString( url ),
+                             wxEmptyString);
+		event.SetString(description);
+		event.SetInt(type);
 
 		if (webKitWindow && webKitWindow->GetEventHandler())
-			webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+			webKitWindow->GetEventHandler()->ProcessEvent(event);
     }
 }
 
@@ -1172,15 +1172,15 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                                          forFrame:(WebFrame *)frame
 {
     wxString target = wxStringWithNSString([frame name]);
-    wxWebViewNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
-                                       webKitWindow->GetId(),
-                                       webKitWindow->GetCurrentURL(),
-                                       target, true);
+    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+                         webKitWindow->GetId(),
+                         webKitWindow->GetCurrentURL(),
+                         target);
                                    
-    thisEvent.SetString(wxStringWithNSString(title));
+    event.SetString(wxStringWithNSString(title));
 
     if (webKitWindow && webKitWindow->GetEventHandler())
-        webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+        webKitWindow->GetEventHandler()->ProcessEvent(event);
 }
 @end
 
@@ -1204,14 +1204,14 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     webKitWindow->m_busy = true;
     NSString *url = [[request URL] absoluteString];
     wxString target = wxStringWithNSString([frame name]);
-    wxWebViewNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
-                                       webKitWindow->GetId(),
-                                       wxStringWithNSString( url ), target, true);
+    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
+                         webKitWindow->GetId(),
+                         wxStringWithNSString( url ), target);
 
     if (webKitWindow && webKitWindow->GetEventHandler())
-        webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+        webKitWindow->GetEventHandler()->ProcessEvent(event);
 
-    if (thisEvent.IsVetoed())
+    if (!event.IsAllowed())
     {
         webKitWindow->m_busy = false;
         [listener ignore];
@@ -1231,12 +1231,12 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     wxUnusedVar(actionInformation);
 
     NSString *url = [[request URL] absoluteString];
-    wxWebViewNavigationEvent thisEvent(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
-                                       webKitWindow->GetId(),
-                                       wxStringWithNSString( url ), "", true);
+    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+                         webKitWindow->GetId(),
+                         wxStringWithNSString( url ), "");
 
     if (webKitWindow && webKitWindow->GetEventHandler())
-        webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+        webKitWindow->GetEventHandler()->ProcessEvent(event);
 
     [listener ignore];
 }

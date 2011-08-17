@@ -171,36 +171,23 @@ public:
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };
 
-class WXDLLIMPEXP_WEB wxWebViewEvent : public wxCommandEvent
+class WXDLLIMPEXP_WEB wxWebViewEvent : public wxNotifyEvent
 {
 public:
     wxWebViewEvent() {}
     wxWebViewEvent(wxEventType type, int id, const wxString url,
-                   const wxString target, bool canVeto)
-        : wxCommandEvent(type, id)
-    {
-        m_url = url;
-        m_target = target;
-        m_vetoed = false;
-        m_canVeto = canVeto;
-    }
+                   const wxString target)
+        : wxNotifyEvent(type, id), m_url(url), m_target(target)
+    {}
 
 
     const wxString& GetURL() const { return m_url; }
     const wxString& GetTarget() const { return m_target; }
 
     virtual wxEvent* Clone() const { return new wxWebViewEvent(*this); }
-
-    bool CanVeto() const { return m_canVeto; }
-    bool IsVetoed() const { return m_vetoed; }
-
-    void Veto() { wxASSERT(m_canVeto); m_vetoed = true; }
-
 private:
     wxString m_url;
     wxString m_target;
-    bool m_canVeto;
-    bool m_vetoed;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebViewEvent);
 };

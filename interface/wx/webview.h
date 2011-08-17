@@ -243,7 +243,7 @@ public:
    
     @library{wxweb}
     @category{ctrl,web}
-    @see wxWebHandler, wxWebViewEvent
+    @see wxWebViewHandler, wxWebViewEvent
  */
 class wxWebView : public wxControl
 {
@@ -626,12 +626,12 @@ public:
 
     @see wxWebView
 */
-class wxWebViewEvent : public wxCommandEvent
+class wxWebViewEvent : public wxNotifyEvent
 {
 public:
     wxWebViewEvent();
     wxWebViewEvent(wxEventType type, int id, const wxString href,
-                   const wxString target, bool canVeto);
+                   const wxString target);
 
     /**
         Get the name of the target frame which the url of this event
@@ -644,24 +644,4 @@ public:
         Get the URL being visited
     */
     const wxString& GetURL() const;
-
-    virtual wxEvent* Clone() const;
-
-    /** 
-        Get whether this event may be vetoed (stopped/prevented). Only
-        meaningful for events fired before navigation takes place.
-     */
-    bool CanVeto() const;
-
-    /** 
-        Whether this event was vetoed (stopped/prevented). Only meaningful for
-        events fired before navigation takes place or new window events.
-     */
-    bool IsVetoed() const;
-
-    /** 
-        Veto (prevent/stop) this event. Only meaningful for events fired
-        before navigation takes place. Only valid if CanVeto() returned true.
-     */
-    void Veto();
 };
