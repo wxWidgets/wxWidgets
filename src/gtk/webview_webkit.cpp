@@ -475,7 +475,7 @@ void wxWebViewWebKit::SetWebkitZoom(float level)
     webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW(web_view), level);
 }
 
-float wxWebViewWebKit::GetWebkitZoom()
+float wxWebViewWebKit::GetWebkitZoom() const
 {
     return webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW(web_view));
 }
@@ -514,13 +514,13 @@ void wxWebViewWebKit::GoForward()
 }
 
 
-bool wxWebViewWebKit::CanGoBack()
+bool wxWebViewWebKit::CanGoBack() const
 {
     return webkit_web_view_can_go_back (WEBKIT_WEB_VIEW(web_view));
 }
 
 
-bool wxWebViewWebKit::CanGoForward()
+bool wxWebViewWebKit::CanGoForward() const
 {
     return webkit_web_view_can_go_forward (WEBKIT_WEB_VIEW(web_view));
 }
@@ -599,17 +599,17 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     }
 }
 
-bool wxWebViewWebKit::CanCut()
+bool wxWebViewWebKit::CanCut() const
 {
     return webkit_web_view_can_cut_clipboard(WEBKIT_WEB_VIEW(web_view));
 }
 
-bool wxWebViewWebKit::CanCopy()
+bool wxWebViewWebKit::CanCopy() const
 {
     return webkit_web_view_can_copy_clipboard(WEBKIT_WEB_VIEW(web_view));
 }
 
-bool wxWebViewWebKit::CanPaste()
+bool wxWebViewWebKit::CanPaste() const
 {
     return webkit_web_view_can_paste_clipboard(WEBKIT_WEB_VIEW(web_view));
 }
@@ -629,12 +629,12 @@ void wxWebViewWebKit::Paste()
     webkit_web_view_paste_clipboard(WEBKIT_WEB_VIEW(web_view));
 }
 
-bool wxWebViewWebKit::CanUndo()
+bool wxWebViewWebKit::CanUndo() const
 {
     return webkit_web_view_can_undo(WEBKIT_WEB_VIEW(web_view));
 }
 
-bool wxWebViewWebKit::CanRedo()
+bool wxWebViewWebKit::CanRedo() const
 {
     return webkit_web_view_can_redo(WEBKIT_WEB_VIEW(web_view));
 }
@@ -649,7 +649,7 @@ void wxWebViewWebKit::Redo()
     webkit_web_view_redo(WEBKIT_WEB_VIEW(web_view));
 }
 
-wxString wxWebViewWebKit::GetCurrentURL()
+wxString wxWebViewWebKit::GetCurrentURL() const
 {
     // FIXME: check which encoding the web kit control uses instead of
     // assuming UTF8 (here and elsewhere too)
@@ -658,14 +658,14 @@ wxString wxWebViewWebKit::GetCurrentURL()
 }
 
 
-wxString wxWebViewWebKit::GetCurrentTitle()
+wxString wxWebViewWebKit::GetCurrentTitle() const
 {
     return wxString::FromUTF8(webkit_web_view_get_title(
                                 WEBKIT_WEB_VIEW(web_view)));
 }
 
 
-wxString wxWebViewWebKit::GetPageSource()
+wxString wxWebViewWebKit::GetPageSource() const
 {
     WebKitWebFrame* frame = webkit_web_view_get_main_frame(
         WEBKIT_WEB_VIEW(web_view));
@@ -678,7 +678,7 @@ wxString wxWebViewWebKit::GetPageSource()
 }
 
 
-wxWebViewZoom wxWebViewWebKit::GetZoom()
+wxWebViewZoom wxWebViewWebKit::GetZoom() const
 {
     float zoom = GetWebkitZoom();
 
@@ -786,7 +786,7 @@ void wxWebViewWebKit::Print()
 }
 
 
-bool wxWebViewWebKit::IsBusy()
+bool wxWebViewWebKit::IsBusy() const
 {
     return m_busy;
 
@@ -817,7 +817,7 @@ void wxWebViewWebKit::SetEditable(bool enable)
     webkit_web_view_set_editable(WEBKIT_WEB_VIEW(web_view), enable);
 }
 
-bool wxWebViewWebKit::IsEditable()
+bool wxWebViewWebKit::IsEditable() const
 {
     return webkit_web_view_get_editable(WEBKIT_WEB_VIEW(web_view));
 }
@@ -827,7 +827,7 @@ void wxWebViewWebKit::DeleteSelection()
     webkit_web_view_delete_selection(WEBKIT_WEB_VIEW(web_view));
 }
 
-bool wxWebViewWebKit::HasSelection()
+bool wxWebViewWebKit::HasSelection() const
 {
     return webkit_web_view_has_selection(WEBKIT_WEB_VIEW(web_view));
 }
@@ -837,7 +837,7 @@ void wxWebViewWebKit::SelectAll()
     webkit_web_view_select_all(WEBKIT_WEB_VIEW(web_view));
 }
 
-wxString wxWebViewWebKit::GetSelectedText()
+wxString wxWebViewWebKit::GetSelectedText() const
 {
     WebKitDOMDocument* doc; 
     WebKitDOMDOMWindow* win;
@@ -853,7 +853,7 @@ wxString wxWebViewWebKit::GetSelectedText()
                     wxConvUTF8);
 }
 
-wxString wxWebViewWebKit::GetSelectedSource()
+wxString wxWebViewWebKit::GetSelectedSource() const
 {
     WebKitDOMDocument* doc; 
     WebKitDOMDOMWindow* win;
@@ -891,7 +891,7 @@ void wxWebViewWebKit::ClearSelection()
 
 }
 
-wxString wxWebViewWebKit::GetPageText()
+wxString wxWebViewWebKit::GetPageText() const
 {
     WebKitDOMDocument* doc; 
     WebKitDOMHTMLElement* body;

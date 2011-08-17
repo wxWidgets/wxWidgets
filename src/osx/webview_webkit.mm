@@ -411,7 +411,7 @@ wxWebViewWebKit::~wxWebViewWebKit()
 // public methods
 // ----------------------------------------------------------------------------
 
-bool wxWebViewWebKit::CanGoBack()
+bool wxWebViewWebKit::CanGoBack() const
 {
     if ( !m_webView )
         return false;
@@ -419,7 +419,7 @@ bool wxWebViewWebKit::CanGoBack()
     return [m_webView canGoBack];
 }
 
-bool wxWebViewWebKit::CanGoForward()
+bool wxWebViewWebKit::CanGoForward() const
 {
     if ( !m_webView )
         return false;
@@ -469,7 +469,7 @@ void wxWebViewWebKit::Stop()
     [[m_webView mainFrame] stopLoading];
 }
 
-bool wxWebViewWebKit::CanGetPageSource()
+bool wxWebViewWebKit::CanGetPageSource() const
 {
     if ( !m_webView )
         return false;
@@ -478,7 +478,7 @@ bool wxWebViewWebKit::CanGetPageSource()
     return ( [[dataSource representation] canProvideDocumentSource] );
 }
 
-wxString wxWebViewWebKit::GetPageSource()
+wxString wxWebViewWebKit::GetPageSource() const
 {
 
     if (CanGetPageSource())
@@ -501,7 +501,7 @@ wxString wxWebViewWebKit::GetPageSource()
     return wxEmptyString;
 }
 
-bool wxWebViewWebKit::CanIncreaseTextSize()
+bool wxWebViewWebKit::CanIncreaseTextSize() const
 {
     if ( !m_webView )
         return false;
@@ -521,7 +521,7 @@ void wxWebViewWebKit::IncreaseTextSize()
         [m_webView makeTextLarger:(WebView*)m_webView];
 }
 
-bool wxWebViewWebKit::CanDecreaseTextSize()
+bool wxWebViewWebKit::CanDecreaseTextSize() const
 {
     if ( !m_webView )
         return false;
@@ -573,7 +573,7 @@ void wxWebViewWebKit::SetEditable(bool enable)
     [m_webView setEditable:enable ];
 }
 
-bool wxWebViewWebKit::IsEditable()
+bool wxWebViewWebKit::IsEditable() const
 {
     if ( !m_webView )
         return false;
@@ -629,7 +629,7 @@ void wxWebViewWebKit::SetScrollPos(int pos)
             (NSString*)wxNSStringWithWxString( javascript )];
 }
 
-wxString wxWebViewWebKit::GetSelectedText()
+wxString wxWebViewWebKit::GetSelectedText() const
 {
     NSString* selection = [[m_webView selectedDOMRange] markupString];
     if (!selection) return wxEmptyString;
@@ -741,17 +741,17 @@ void wxWebViewWebKit::LoadUrl(const wxString& url)
             [NSURL URLWithString:wxNSStringWithWxString(url)]]];
 }
 
-wxString wxWebViewWebKit::GetCurrentURL()
+wxString wxWebViewWebKit::GetCurrentURL() const
 {
     return wxStringWithNSString([m_webView mainFrameURL]);
 }
 
-wxString wxWebViewWebKit::GetCurrentTitle()
+wxString wxWebViewWebKit::GetCurrentTitle() const
 {
     return wxStringWithNSString([m_webView mainFrameTitle]);
 }
 
-float wxWebViewWebKit::GetWebkitZoom()
+float wxWebViewWebKit::GetWebkitZoom() const
 {
     return [m_webView textSizeMultiplier];
 }
@@ -761,7 +761,7 @@ void wxWebViewWebKit::SetWebkitZoom(float zoom)
     [m_webView setTextSizeMultiplier:zoom];
 }
 
-wxWebViewZoom wxWebViewWebKit::GetZoom()
+wxWebViewZoom wxWebViewWebKit::GetZoom() const
 {
     float zoom = GetWebkitZoom();
 
@@ -865,7 +865,7 @@ void wxWebViewWebKit::DeleteSelection()
     [(WebView*)m_webView deleteSelection];
 }
 
-bool wxWebViewWebKit::HasSelection()
+bool wxWebViewWebKit::HasSelection() const
 {
     DOMRange* range = [m_webView selectedDOMRange];
     if(!range)
@@ -889,7 +889,7 @@ void wxWebViewWebKit::SelectAll()
     RunScript("window.getSelection().selectAllChildren(document.body);");
 }
 
-wxString wxWebViewWebKit::GetSelectedSource()
+wxString wxWebViewWebKit::GetSelectedSource() const
 {
     wxString script = ("var range = window.getSelection().getRangeAt(0);"
                        "var element = document.createElement('div');"
@@ -900,7 +900,7 @@ wxString wxWebViewWebKit::GetSelectedSource()
     return wxStringWithNSString([result stringValue]);
 }
 
-wxString wxWebViewWebKit::GetPageText()
+wxString wxWebViewWebKit::GetPageText() const
 {
     id result = [[m_webView windowScriptObject]
                  evaluateWebScript:@"document.body.textContent"];
@@ -962,12 +962,12 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     [m_webView goToBackForwardItem:item->m_histItem];
 }
 
-bool wxWebViewWebKit::CanUndo()
+bool wxWebViewWebKit::CanUndo() const
 {
     return [[m_webView undoManager] canUndo];
 }
 
-bool wxWebViewWebKit::CanRedo()
+bool wxWebViewWebKit::CanRedo() const
 {
     return [[m_webView undoManager] canRedo];
 }

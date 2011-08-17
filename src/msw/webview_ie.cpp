@@ -126,7 +126,7 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
 
 }
 
-wxString wxWebViewIE::GetPageSource()
+wxString wxWebViewIE::GetPageSource() const
 {
     IHTMLDocument2* document = GetDocument();
     IHTMLElement *bodyTag = NULL;
@@ -150,7 +150,7 @@ wxString wxWebViewIE::GetPageSource()
     return source;
 }
 
-wxWebViewZoom wxWebViewIE::GetZoom()
+wxWebViewZoom wxWebViewIE::GetZoom() const
 {
     if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_LAYOUT)
         return GetIEOpticalZoom();
@@ -190,7 +190,7 @@ void wxWebViewIE::SetIETextZoom(wxWebViewZoom level)
     wxASSERT(result == S_OK);
 }
 
-wxWebViewZoom wxWebViewIE::GetIETextZoom()
+wxWebViewZoom wxWebViewIE::GetIETextZoom() const
 {
     VARIANT zoomVariant;
     VariantInit (&zoomVariant);
@@ -242,7 +242,7 @@ void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
     wxASSERT(result == S_OK);
 }
 
-wxWebViewZoom wxWebViewIE::GetIEOpticalZoom()
+wxWebViewZoom wxWebViewIE::GetIEOpticalZoom() const
 {
     VARIANT zoomVariant;
     VariantInit (&zoomVariant);
@@ -309,7 +309,7 @@ void wxWebViewIE::Print()
                          OLECMDEXECOPT_DODEFAULT, NULL, NULL);
 }
 
-bool wxWebViewIE::CanGoBack()
+bool wxWebViewIE::CanGoBack() const
 {
     if(m_historyEnabled)
         return m_historyPosition > 0;
@@ -317,7 +317,7 @@ bool wxWebViewIE::CanGoBack()
         return false;
 }
 
-bool wxWebViewIE::CanGoForward()
+bool wxWebViewIE::CanGoForward() const
 {
     if(m_historyEnabled)
         return m_historyPosition != static_cast<int>(m_historyList.size()) - 1;
@@ -433,8 +433,8 @@ void wxWebViewIE::SetOfflineMode(bool offline)
     wxASSERT(success);
 }
 
-bool wxWebViewIE::IsBusy()
-{
+bool wxWebViewIE::IsBusy() const
+{ 
     if (m_isBusy) return true;
 
     wxVariant out = m_ie.GetProperty("Busy");
@@ -444,7 +444,7 @@ bool wxWebViewIE::IsBusy()
     return out.GetBool();
 }
 
-wxString wxWebViewIE::GetCurrentURL()
+wxString wxWebViewIE::GetCurrentURL() const
 {
     wxVariant out = m_ie.GetProperty("LocationURL");
 
@@ -452,7 +452,7 @@ wxString wxWebViewIE::GetCurrentURL()
     return out.GetString();
 }
 
-wxString wxWebViewIE::GetCurrentTitle()
+wxString wxWebViewIE::GetCurrentTitle() const
 {
     IHTMLDocument2* document = GetDocument();
     BSTR title;
@@ -462,16 +462,16 @@ wxString wxWebViewIE::GetCurrentTitle()
     return wxString(title);
 }
 
-bool wxWebViewIE::CanCut()
+bool wxWebViewIE::CanCut() const
 {
     return CanExecCommand("Cut");
 }
 
-bool wxWebViewIE::CanCopy()
+bool wxWebViewIE::CanCopy() const
 {
     return CanExecCommand("Copy");
 }
-bool wxWebViewIE::CanPaste()
+bool wxWebViewIE::CanPaste() const
 {
     return CanExecCommand("Paste");
 }
@@ -491,11 +491,11 @@ void wxWebViewIE::Paste()
     ExecCommand("Paste");
 }
 
-bool wxWebViewIE::CanUndo()
+bool wxWebViewIE::CanUndo() const
 {
     return CanExecCommand("Undo");
 }
-bool wxWebViewIE::CanRedo()
+bool wxWebViewIE::CanRedo() const
 {
     return CanExecCommand("Redo");
 }
@@ -521,7 +521,7 @@ void wxWebViewIE::SetEditable(bool enable)
     document->Release();
 }
 
-bool wxWebViewIE::IsEditable()
+bool wxWebViewIE::IsEditable() const
 {
     IHTMLDocument2* document = GetDocument();
     BSTR mode;
@@ -538,7 +538,7 @@ void wxWebViewIE::SelectAll()
     ExecCommand("SelectAll");
 }
 
-bool wxWebViewIE::HasSelection()
+bool wxWebViewIE::HasSelection() const
 {
     IHTMLDocument2* document = GetDocument();
     IHTMLSelectionObject* selection;
@@ -560,7 +560,7 @@ void wxWebViewIE::DeleteSelection()
     ExecCommand("Delete");
 }
 
-wxString wxWebViewIE::GetSelectedText()
+wxString wxWebViewIE::GetSelectedText() const
 {
     IHTMLDocument2* document = GetDocument();
     IHTMLSelectionObject* selection;
@@ -589,7 +589,7 @@ wxString wxWebViewIE::GetSelectedText()
     return selected;
 }
 
-wxString wxWebViewIE::GetSelectedSource()
+wxString wxWebViewIE::GetSelectedSource() const
 {
     IHTMLDocument2* document = GetDocument();
     IHTMLSelectionObject* selection;
@@ -632,7 +632,7 @@ void wxWebViewIE::ClearSelection()
     document->Release();
 }
 
-wxString wxWebViewIE::GetPageText()
+wxString wxWebViewIE::GetPageText() const
 {
     IHTMLDocument2* document = GetDocument();
     wxString text;
@@ -681,7 +681,7 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     }
 }
 
-bool wxWebViewIE::CanExecCommand(wxString command)
+bool wxWebViewIE::CanExecCommand(wxString command) const
 {
     IHTMLDocument2* document = GetDocument();
     VARIANT_BOOL enabled;
@@ -699,7 +699,7 @@ void wxWebViewIE::ExecCommand(wxString command)
     document->Release();
 }
 
-IHTMLDocument2* wxWebViewIE::GetDocument()
+IHTMLDocument2* wxWebViewIE::GetDocument() const
 {
     wxVariant variant = m_ie.GetProperty("Document");
     IHTMLDocument2* document = (IHTMLDocument2*)variant.GetVoidPtr();

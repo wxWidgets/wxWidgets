@@ -165,12 +165,12 @@ public:
     /** Get whether it is possible to navigate back in the history of
       * visited pages
       */
-    virtual bool CanGoBack() = 0;
+    virtual bool CanGoBack() const = 0;
 
     /** Get whether it is possible to navigate forward in the history of
       * visited pages
       */
-    virtual bool CanGoForward() = 0;
+    virtual bool CanGoForward() const = 0;
 
     /** Navigate back in the history of visited pages.
       * Only valid if CanGoBack() returned true.
@@ -214,13 +214,13 @@ public:
     /**
      * Get the URL of the currently displayed document
      */
-    virtual wxString GetCurrentURL() = 0;
+    virtual wxString GetCurrentURL() const = 0;
 
     /**
      * Get the title of the current web page, or its URL/path if title is not
      * available
      */
-    virtual wxString GetCurrentTitle() = 0;
+    virtual wxString GetCurrentTitle() const = 0;
 
     // TODO: handle choosing a frame when calling GetPageSource()?
     /**
@@ -228,14 +228,14 @@ public:
      * @return the HTML source code, or an empty string if no page is currently
      *         shown
      */
-    virtual wxString GetPageSource() = 0;
-    virtual wxString GetPageText() = 0;
+    virtual wxString GetPageSource() const = 0;
+    virtual wxString GetPageText() const = 0;
 
    /**
      * Get the zoom factor of the page
      * @return How much the HTML document is zoomed (scaleed)
      */
-    virtual wxWebViewZoom GetZoom() = 0;
+    virtual wxWebViewZoom GetZoom() const = 0;
 
     /**
      * Set the zoom factor of the page
@@ -290,13 +290,13 @@ public:
     }
 
     virtual void SetEditable(bool enable = true) = 0;
-    virtual bool IsEditable() = 0;
+    virtual bool IsEditable() const = 0;
 
     virtual void SelectAll() = 0;
-    virtual bool HasSelection() = 0;
+    virtual bool HasSelection() const = 0;
     virtual void DeleteSelection() = 0;
-    virtual wxString GetSelectedText() = 0;
-    virtual wxString GetSelectedSource() = 0;
+    virtual wxString GetSelectedText() const = 0;
+    virtual wxString GetSelectedSource() const = 0;
     virtual void ClearSelection() = 0;
 
     virtual void RunScript(const wxString& javascript) = 0;
@@ -325,19 +325,19 @@ public:
     /**
      * Returns whether the web control is currently busy (e.g. loading a page)
      */
-    virtual bool IsBusy() = 0;
+    virtual bool IsBusy() const = 0;
 
     //Clipboard functions
-    virtual bool CanCut() = 0;
-    virtual bool CanCopy() = 0;
-    virtual bool CanPaste() = 0;
+    virtual bool CanCut() const = 0;
+    virtual bool CanCopy() const = 0;
+    virtual bool CanPaste() const = 0;
     virtual void Cut() = 0;
     virtual void Copy() = 0;
     virtual void Paste() = 0;
 
     //Undo / redo functionality
-    virtual bool CanUndo() = 0;
-    virtual bool CanRedo() = 0;
+    virtual bool CanUndo() const = 0;
+    virtual bool CanRedo() const = 0;
     virtual void Undo() = 0;
     virtual void Redo() = 0;
 

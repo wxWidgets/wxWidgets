@@ -63,60 +63,60 @@ public:
     void ZoomIn();
     void ZoomOut();
     void SetWebkitZoom(float level);
-    float GetWebkitZoom();
+    float GetWebkitZoom() const;
 
     virtual void Stop();
     virtual void LoadUrl(const wxString& url);
     virtual void GoBack();
     virtual void GoForward();
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
-    virtual bool CanGoBack();
-    virtual bool CanGoForward();
+    virtual bool CanGoBack() const;
+    virtual bool CanGoForward() const;
     virtual void ClearHistory();
     virtual void EnableHistory(bool enable = true);
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory();
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory();
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item);
-    virtual wxString GetCurrentURL();
-    virtual wxString GetCurrentTitle();
-    virtual wxString GetPageSource();
-    virtual wxString GetPageText();
+    virtual wxString GetCurrentURL() const;
+    virtual wxString GetCurrentTitle() const;
+    virtual wxString GetPageSource() const;
+    virtual wxString GetPageText() const;
     //We do not want to hide the other overloads
     using wxWebView::SetPage;
     virtual void SetPage(const wxString& html, const wxString& baseUrl);
     virtual void Print();
-    virtual bool IsBusy();
+    virtual bool IsBusy() const;
 
     void SetZoomType(wxWebViewZoomType);
     wxWebViewZoomType GetZoomType() const;
     bool CanSetZoomType(wxWebViewZoomType) const;
-    virtual wxWebViewZoom GetZoom();
+    virtual wxWebViewZoom GetZoom() const;
     virtual void SetZoom(wxWebViewZoom);
 
     //Clipboard functions
-    virtual bool CanCut();
-    virtual bool CanCopy();
-    virtual bool CanPaste();
+    virtual bool CanCut() const;
+    virtual bool CanCopy() const;
+    virtual bool CanPaste() const;
     virtual void Cut();
     virtual void Copy();
     virtual void Paste();
 
     //Undo / redo functionality
-    virtual bool CanUndo();
-    virtual bool CanRedo();
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
     virtual void Undo();
     virtual void Redo();
 
     //Editing functions
     virtual void SetEditable(bool enable = true);
-    virtual bool IsEditable();
+    virtual bool IsEditable() const;
 
     //Selection
     virtual void DeleteSelection();
-    virtual bool HasSelection();
+    virtual bool HasSelection() const;
     virtual void SelectAll();
-    virtual wxString GetSelectedText();
-    virtual wxString GetSelectedSource();
+    virtual wxString GetSelectedText() const;
+    virtual wxString GetSelectedSource() const;
     virtual void ClearSelection();
 
     virtual void RunScript(const wxString& javascript);

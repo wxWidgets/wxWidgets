@@ -295,34 +295,34 @@ public:
         Get the title of the current web page, or its URL/path if title is not
         available.
     */
-    virtual wxString GetCurrentTitle() = 0;
+    virtual wxString GetCurrentTitle() const = 0;
 
    /**
         Get the URL of the currently displayed document.
     */
-    virtual wxString GetCurrentURL() = 0;
+    virtual wxString GetCurrentURL() const = 0;
 
     /**
         Get the HTML source code of the currently displayed document.
         @return The HTML source code, or an empty string if no page is currently
                 shown.
     */
-    virtual wxString GetPageSource() = 0;
+    virtual wxString GetPageSource() const = 0;
     
     /**
         Get the text of the current page.
     */
-    virtual wxString GetPageText() = 0;
+    virtual wxString GetPageText() const = 0;
     
     /**
         Returns whether the web control is currently busy (e.g. loading a page).
     */
-    virtual bool IsBusy() = 0;
+    virtual bool IsBusy() const = 0;
 
     /**
         Returns whether the web control is currently editable
     */
-    virtual bool IsEditable() = 0;
+    virtual bool IsEditable() const = 0;
 
     /**
         Load a web page from a URL
@@ -395,21 +395,21 @@ public:
         
         @note This always returns @c false on the OSX WebKit backend.
     */
-    virtual bool CanCopy() = 0;
+    virtual bool CanCopy() const = 0;
 
     /**
         Returns @true if the current selection can be cut.
         
          @note This always returns @c false on the OSX WebKit backend.
     */
-    virtual bool CanCut() = 0;
+    virtual bool CanCut() const = 0;
 
     /**
         Returns @true if data can be pasted.
         
         @note This always returns @c false on the OSX WebKit backend.
     */
-    virtual bool CanPaste() = 0;
+    virtual bool CanPaste() const = 0;
 
     /**
         Copies the current selection. 
@@ -434,13 +434,13 @@ public:
         Returns @true if it is possible to navigate backward in the history of
         visited pages.
     */
-    virtual bool CanGoBack() = 0;
+    virtual bool CanGoBack() const = 0;
 
     /** 
         Returns @true if it is possible to navigate forward in the history of
         visited pages.
     */
-    virtual bool CanGoForward() = 0;
+    virtual bool CanGoForward() const = 0;
 
     /**
         Clear the history, this will also remove the visible page.
@@ -501,17 +501,17 @@ public:
     /**
         Returns the currently selected source, if any.
     */
-    virtual wxString GetSelectedSource() = 0;
+    virtual wxString GetSelectedSource() const = 0;
     
     /**
         Returns the currently selected text, if any.
     */
-    virtual wxString GetSelectedText() = 0;
+    virtual wxString GetSelectedText() const = 0;
 
     /**
         Returns @true if there is a current selection.
     */
-    virtual bool HasSelection() = 0;
+    virtual bool HasSelection() const = 0;
 
     /**
         Selects the entire page.
@@ -525,12 +525,12 @@ public:
     /**
         Returns @true if there is an action to redo.
     */
-    virtual bool CanRedo() = 0;
+    virtual bool CanRedo() const = 0;
 
     /**
         Returns @true if there is an action to undo.
     */
-    virtual bool CanUndo() = 0;
+    virtual bool CanUndo() const = 0;
 
     /**
         Redos the last action.
@@ -558,7 +558,7 @@ public:
         Get the zoom factor of the page.
         @return The current level of zoom.
     */
-    virtual wxWebViewZoom GetZoom() = 0;
+    virtual wxWebViewZoom GetZoom() const = 0;
 
     /**
         Get how the zoom factor is currently interpreted.

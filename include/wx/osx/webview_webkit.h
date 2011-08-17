@@ -51,14 +51,14 @@ public:
                 const wxString& name = wxWebViewNameStr);
     virtual ~wxWebViewWebKit();
 
-    virtual bool CanGoBack();
-    virtual bool CanGoForward();
+    virtual bool CanGoBack() const;
+    virtual bool CanGoForward() const;
     virtual void GoBack();
     virtual void GoForward();
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
     virtual void Stop();
-    virtual wxString GetPageSource();
-    virtual wxString GetPageText();
+    virtual wxString GetPageSource() const;
+    virtual wxString GetPageText() const;
 
     //We do not want to hide the other overloads
     using wxWebView::SetPage;
@@ -67,16 +67,16 @@ public:
     virtual void Print();
 
     virtual void LoadUrl(const wxString& url);
-    virtual wxString GetCurrentURL();
-    virtual wxString GetCurrentTitle();
-    virtual wxWebViewZoom GetZoom();
+    virtual wxString GetCurrentURL() const;
+    virtual wxString GetCurrentTitle() const;
+    virtual wxWebViewZoom GetZoom() const;
     virtual void SetZoom(wxWebViewZoom zoom);
 
     virtual void SetZoomType(wxWebViewZoomType zoomType);
     virtual wxWebViewZoomType GetZoomType() const;
     virtual bool CanSetZoomType(wxWebViewZoomType type) const;
 
-    virtual bool IsBusy() { return m_busy; }
+    virtual bool IsBusy() const { return m_busy; }
     
     //History functions
     virtual void ClearHistory();
@@ -86,29 +86,29 @@ public:
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item);
     
     //Undo / redo functionality
-    virtual bool CanUndo();
-    virtual bool CanRedo();
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
     virtual void Undo();
     virtual void Redo();
 
     //Clipboard functions
-    virtual bool CanCut() { return false; }
-    virtual bool CanCopy() { return false; }
-    virtual bool CanPaste() { return false; }
+    virtual bool CanCut() const { return false; }
+    virtual bool CanCopy() const { return false; }
+    virtual bool CanPaste() const { return false; }
     virtual void Cut();
     virtual void Copy();
     virtual void Paste();
     
     //Editing functions
     virtual void SetEditable(bool enable = true);
-    virtual bool IsEditable();
+    virtual bool IsEditable() const;
     
     //Selection
     virtual void DeleteSelection();
-    virtual bool HasSelection();
+    virtual bool HasSelection() const;
     virtual void SelectAll();
-    virtual wxString GetSelectedText();
-    virtual wxString GetSelectedSource();
+    virtual wxString GetSelectedText() const;
+    virtual wxString GetSelectedSource() const;
     virtual void ClearSelection();
     
     void RunScript(const wxString& javascript);
@@ -117,17 +117,17 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
 
     // ---- methods not from the parent (common) interface
-    bool  CanGetPageSource();
+    bool  CanGetPageSource() const;
 
     void  SetScrollPos(int pos);
     int   GetScrollPos();
 
-    bool  CanIncreaseTextSize();
+    bool  CanIncreaseTextSize() const;
     void  IncreaseTextSize();
-    bool  CanDecreaseTextSize();
+    bool  CanDecreaseTextSize() const;
     void  DecreaseTextSize();
 
-    float GetWebkitZoom();
+    float GetWebkitZoom() const;
     void  SetWebkitZoom(float zoom);
 
     // don't hide base class virtuals

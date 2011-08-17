@@ -54,8 +54,8 @@ public:
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory();
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory();
 
-    virtual bool CanGoForward();
-    virtual bool CanGoBack();
+    virtual bool CanGoForward() const;
+    virtual bool CanGoBack() const;
     virtual void GoBack();
     virtual void GoForward();
     virtual void ClearHistory();
@@ -63,12 +63,12 @@ public:
     virtual void Stop();
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
 
-    virtual wxString GetPageSource();
-    virtual wxString GetPageText();
+    virtual wxString GetPageSource() const;
+    virtual wxString GetPageText() const;
 
-    virtual bool IsBusy();
-    virtual wxString GetCurrentURL();
-    virtual wxString GetCurrentTitle();
+    virtual bool IsBusy() const;
+    virtual wxString GetCurrentURL() const;
+    virtual wxString GetCurrentTitle() const;
 
     virtual void SetZoomType(wxWebViewZoomType);
     virtual wxWebViewZoomType GetZoomType() const;
@@ -78,33 +78,33 @@ public:
 
     virtual void SetPage(const wxString& html, const wxString& baseUrl);
 
-    virtual wxWebViewZoom GetZoom();
+    virtual wxWebViewZoom GetZoom() const;
     virtual void SetZoom(wxWebViewZoom zoom);
 
     //Clipboard functions
-    virtual bool CanCut();
-    virtual bool CanCopy();
-    virtual bool CanPaste();
+    virtual bool CanCut() const;
+    virtual bool CanCopy() const;
+    virtual bool CanPaste() const;
     virtual void Cut();
     virtual void Copy();
     virtual void Paste();
 
     //Undo / redo functionality
-    virtual bool CanUndo();
-    virtual bool CanRedo();
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
     virtual void Undo();
     virtual void Redo();
 
     //Editing functions
     virtual void SetEditable(bool enable = true);
-    virtual bool IsEditable();
+    virtual bool IsEditable() const;
 
     //Selection
     virtual void SelectAll();
-    virtual bool HasSelection();
+    virtual bool HasSelection() const;
     virtual void DeleteSelection();
-    virtual wxString GetSelectedText();
-    virtual wxString GetSelectedSource();
+    virtual wxString GetSelectedText() const;
+    virtual wxString GetSelectedSource() const;
     virtual void ClearSelection();
 
     virtual void RunScript(const wxString& javascript);
@@ -118,10 +118,10 @@ public:
     bool IsOfflineMode();
     void SetOfflineMode(bool offline);
 
-    wxWebViewZoom GetIETextZoom();
+    wxWebViewZoom GetIETextZoom() const;
     void SetIETextZoom(wxWebViewZoom level);
 
-    wxWebViewZoom GetIEOpticalZoom();
+    wxWebViewZoom GetIEOpticalZoom() const;
     void SetIEOpticalZoom(wxWebViewZoom level);
 
     void onActiveXEvent(wxActiveXEvent& evt);
@@ -153,9 +153,9 @@ private:
     bool m_historyEnabled;
 
     //Generic helper functions for IHtmlDocument commands
-    bool CanExecCommand(wxString command);
+    bool CanExecCommand(wxString command) const;
     void ExecCommand(wxString command);
-    IHTMLDocument2* GetDocument();
+    IHTMLDocument2* GetDocument() const;
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
