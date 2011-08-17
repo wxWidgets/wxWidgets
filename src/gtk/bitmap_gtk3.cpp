@@ -243,11 +243,7 @@ public:
 
     virtual bool IsOk() const;
 
-#ifdef __WXGTK30__
     cairo_surface_t      *m_pixmap;
-#else
-    GdkPixmap      *m_pixmap;
-#endif
     GdkPixbuf      *m_pixbuf;
     wxMask         *m_mask;
     int             m_width;
@@ -868,7 +864,31 @@ cairo_surface_t *wxBitmap::GetPixmap() const
             bmpData->m_mask = new wxMask;
             mask_pixmap = &bmpData->m_mask->m_bitmap;
         }
-        wxFAIL_MSG("Not implemented in wxGTK3");
+
+        int w = bmpData->m_width;
+        int h = bmpData->m_height;
+        int stride = cairo_format_stride_for_width( CAIRO_FORMAT_RGB24, w );
+        unsigned char *src_data;
+        unsigned char *data;  
+
+        src_data = gdk_pixbuf_get_pixels(bmpData->m_pixbuf);
+
+        int rowpad = stride - 4 * w;
+        // Caller is in charge of allocation of memory.(JC)
+        data = (unsigned char *)malloc( stride * h );
+
+        for (int y = 0; y < h; y++, data += rowpad)
+        {
+            for (int x = 0; x < w; x++, data += 4, src_data += 3)
+            {
+                data[0] = 0;
+                data[1] = src_data[0];
+                data[2] = src_data[1];
+                data[3] = src_data[2];
+            }
+        }
+
+        bmpData->m_pixmap = cairo_image_surface_create_for_data( data, CAIRO_FORMAT_RGB24, w, h, stride );
         // gdk_pixbuf_render_pixmap_and_mask(
         //     bmpData->m_pixbuf, &bmpData->m_pixmap, mask_pixmap, 128);
     }

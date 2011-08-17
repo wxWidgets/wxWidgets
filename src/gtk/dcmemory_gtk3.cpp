@@ -70,12 +70,14 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     }
 
     m_selected = bitmap;
+
     if (m_selected.IsOk())
     {
         // if ( m_selected.GetDepth() != 1 )
         //     m_selected.UseAlpha() ;
 
         // m_selected.BeginRawAccess() ;
+        bitmap.GetPixmap();
         m_width = bitmap.GetWidth();
         m_height = bitmap.GetHeight();
         // CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
