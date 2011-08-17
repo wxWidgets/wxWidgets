@@ -49,7 +49,7 @@ public:
            long style = 0,
            const wxString& name = wxWebViewNameStr);
 
-    virtual void LoadUrl(const wxString& url);
+    virtual void LoadURL(const wxString& url);
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item);
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory();
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory();

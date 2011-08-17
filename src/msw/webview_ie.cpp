@@ -75,12 +75,12 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetDoubleBuffered(true);
-    LoadUrl(url);
+    LoadURL(url);
     return true;
 }
 
 
-void wxWebViewIE::LoadUrl(const wxString& url)
+void wxWebViewIE::LoadURL(const wxString& url)
 {
     m_ie.CallMethod("Navigate", (BSTR) url.wc_str(), NULL, NULL, NULL, NULL);
 }
@@ -337,7 +337,7 @@ void wxWebViewIE::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     wxASSERT_MSG(pos != static_cast<int>(m_historyList.size()),
                  "invalid history item");
     m_historyLoadingFromList = true;
-    LoadUrl(item->GetUrl());
+    LoadURL(item->GetUrl());
     m_historyPosition = pos;
 }
 

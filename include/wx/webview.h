@@ -113,7 +113,7 @@ public:
     virtual wxString GetPageText() const = 0;
     virtual bool IsBusy() const = 0;
     virtual bool IsEditable() const = 0;
-    virtual void LoadUrl(const wxString& url) = 0;
+    virtual void LoadURL(const wxString& url) = 0;
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;

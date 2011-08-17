@@ -389,7 +389,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     //Register our own class for custom scheme handling
     [NSURLProtocol registerClass:[WebViewCustomProtocol class]];
 
-    LoadUrl(strURL);
+    LoadURL(strURL);
     return true;
 }
 
@@ -735,7 +735,7 @@ void wxWebViewWebKit::MacVisibilityChanged(){
 #endif
 }
 
-void wxWebViewWebKit::LoadUrl(const wxString& url)
+void wxWebViewWebKit::LoadURL(const wxString& url)
 {
     [[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:
             [NSURL URLWithString:wxNSStringWithWxString(url)]]];

@@ -61,7 +61,7 @@ public:
     }
 
     virtual void Stop();
-    virtual void LoadUrl(const wxString& url);
+    virtual void LoadURL(const wxString& url);
     virtual void GoBack();
     virtual void GoForward();
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);

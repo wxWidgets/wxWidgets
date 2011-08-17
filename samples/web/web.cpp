@@ -423,7 +423,7 @@ void WebFrame::UpdateState()
   */
 void WebFrame::OnUrl(wxCommandEvent& WXUNUSED(evt))
 {
-    m_browser->LoadUrl( m_url->GetValue() );
+    m_browser->LoadURL( m_url->GetValue() );
     UpdateState();
 }
 
@@ -513,7 +513,7 @@ void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
     //Under MSW we need to flip the slashes
     path.Replace("\\", "/");
     path = "wxfs:///" + path + ";protocol=zip/doc.htm";
-    m_browser->LoadUrl(path);
+    m_browser->LoadURL(path);
 }
 
 /**
@@ -572,7 +572,7 @@ void WebFrame::OnNewWindow(wxWebViewEvent& evt)
     //If we handle new window events then just load them in this window as we 
     //are a single window browser
     if(m_tools_handle_new_window->IsChecked())
-        m_browser->LoadUrl(evt.GetURL());
+        m_browser->LoadURL(evt.GetURL());
 
     UpdateState();
 }

@@ -331,7 +331,7 @@ public:
             to know whether loading the URL was successful, register to receive
             navigation error events.
     */
-    virtual void LoadUrl(const wxString& url) = 0;
+    virtual void LoadURL(const wxString& url) = 0;
 
     /**
         Opens a print dialog so that the user may print the currently

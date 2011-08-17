@@ -66,7 +66,7 @@ public:
 
     virtual void Print();
 
-    virtual void LoadUrl(const wxString& url);
+    virtual void LoadURL(const wxString& url);
     virtual wxString GetCurrentURL() const;
     virtual wxString GetCurrentTitle() const;
     virtual wxWebViewZoom GetZoom() const;
