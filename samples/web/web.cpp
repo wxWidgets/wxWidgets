@@ -533,11 +533,18 @@ void WebFrame::OnNavigationRequest(wxWebViewEvent& evt)
     wxASSERT(m_browser->IsBusy());
 
     //If we don't want to handle navigation then veto the event and navigation
-    //will not take place
+    //will not take place, we also need to stop the loading animation
     if(!m_tools_handle_navigation->IsChecked())
+    {
         evt.Veto();
-
-    UpdateState();
+        if (m_timer != NULL) m_timer->Stop(); // stop animation timer
+        m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), wxBitmap(wxlogo_xpm));
+        m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );      
+    }
+    else
+    {
+        UpdateState();
+    }
 }
 
 /**
