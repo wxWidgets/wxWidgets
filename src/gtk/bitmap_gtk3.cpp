@@ -897,11 +897,7 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
 
     const int w = bmpData->m_width;
     const int h = bmpData->m_height;
-#ifdef __WXGTK30__
     cairo_surface_t* mask = NULL;
-#else
-    GdkPixmap* mask = NULL;
-#endif
     if (bmpData->m_mask)
         mask = bmpData->m_mask->m_bitmap;
     const bool useAlpha = bmpData->m_alphaRequested || mask;

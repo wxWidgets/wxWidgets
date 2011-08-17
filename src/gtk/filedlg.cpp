@@ -147,8 +147,12 @@ static void extra_widget_size_request(GtkWidget*, GtkRequisition* req, wxWindow*
 
 void wxFileDialog::AddChildGTK(wxWindowGTK* child)
 {
+#ifndef __WXGTK30__
+    // FIXME: implement gtk+3 based geometry management, i.e. 'get_preferred_width()'
+    // (JC)
     g_signal_connect_after(child->m_widget, "size_request",
         G_CALLBACK(extra_widget_size_request), child);
+#endif
     gtk_file_chooser_set_extra_widget(
         GTK_FILE_CHOOSER(m_widget), child->m_widget);
 }
