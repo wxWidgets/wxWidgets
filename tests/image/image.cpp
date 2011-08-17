@@ -77,6 +77,7 @@ private:
         CPPUNIT_TEST( ReadCorruptedTGA );
         CPPUNIT_TEST( GIFComment );
         CPPUNIT_TEST( DibPadding );
+        CPPUNIT_TEST( BMPFlippingAndRLECompression );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -90,6 +91,7 @@ private:
     void ReadCorruptedTGA();
     void GIFComment();
     void DibPadding();
+    void BMPFlippingAndRLECompression();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -1262,6 +1264,26 @@ void ImageTestCase::DibPadding()
     CPPUNIT_ASSERT( image.SaveFile(memOut, wxBITMAP_TYPE_ICO) );
 }
 
+static void CompareBMPImage(const wxString& file1, const wxString& file2)
+{
+    wxImage image1(file1);
+    CPPUNIT_ASSERT( image1.IsOk() );
+
+    wxImage image2(file2);
+    CPPUNIT_ASSERT( image2.IsOk() );
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP), image1, 0, &image2);
+}
+
+void ImageTestCase::BMPFlippingAndRLECompression()
+{
+    CompareBMPImage("image/horse_grey.bmp", "image/horse_grey_flipped.bmp");
+
+    CompareBMPImage("image/horse_rle8.bmp", "image/horse_grey.bmp");
+    CompareBMPImage("image/horse_rle8.bmp", "image/horse_rle8_flipped.bmp");
+
+    CompareBMPImage("image/horse_rle4.bmp", "image/horse_rle4_flipped.bmp");
+}
 #endif //wxUSE_IMAGE
 
 
