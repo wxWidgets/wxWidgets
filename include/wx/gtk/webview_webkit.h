@@ -60,11 +60,6 @@ public:
         DoMoveWindow(x, y, width, height);
     }
 
-    void ZoomIn();
-    void ZoomOut();
-    void SetWebkitZoom(float level);
-    float GetWebkitZoom() const;
-
     virtual void Stop();
     virtual void LoadUrl(const wxString& url);
     virtual void GoBack();
@@ -148,6 +143,11 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
+
+    void ZoomIn();
+    void ZoomOut();
+    void SetWebkitZoom(float level);
+    float GetWebkitZoom() const;
 
     // focus event handler: calls GTKUpdateBitmap()
     void GTKOnFocus(wxFocusEvent& event);
