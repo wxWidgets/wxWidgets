@@ -77,12 +77,16 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         //     m_selected.UseAlpha() ;
 
         // m_selected.BeginRawAccess() ;
-        bitmap.GetPixmap();
         m_width = bitmap.GetWidth();
         m_height = bitmap.GetHeight();
         // CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
         // CGContextRef bmCtx = (CGContextRef) m_selected.GetHBITMAP();
+        cairo_t *cr = cairo_create(bitmap.GetPixmap());
 
+        if ( cr ) 
+        {
+             SetGraphicsContext( wxGraphicsContext::CreateFromNative( cr ) );
+        }
         // if ( bmCtx )
         // {
         //     CGContextSetFillColorSpace( bmCtx, genericColorSpace );
