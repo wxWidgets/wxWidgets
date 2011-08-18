@@ -54,12 +54,6 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    // helper to allow access to protected member from GTK callback
-    void MoveWindow(int x, int y, int width, int height)
-    {
-        DoMoveWindow(x, y, width, height);
-    }
-
     virtual void Stop();
     virtual void LoadURL(const wxString& url);
     virtual void GoBack();
