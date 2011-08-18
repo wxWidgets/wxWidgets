@@ -1084,16 +1084,20 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                 *out = wxWEB_NAV_ERR_USER_CANCELLED;
                 break;
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5                
             case NSURLErrorCannotDecodeRawData:
             case NSURLErrorCannotDecodeContentData:
-            case NSURLErrorBadServerResponse:
             case NSURLErrorCannotParseResponse:
+#endif
+            case NSURLErrorBadServerResponse:
                 *out = wxWEB_NAV_ERR_REQUEST;
                 break;
 
             case NSURLErrorUserAuthenticationRequired:
             case NSURLErrorSecureConnectionFailed:
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
             case NSURLErrorClientCertificateRequired:
+#endif
                 *out = wxWEB_NAV_ERR_AUTH;
                 break;
 
