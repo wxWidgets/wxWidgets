@@ -1225,7 +1225,12 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 
     m_enableOffset = true;
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK30__
+    wxDCImpl *impldc = (wxDCImpl*) dc.GetImpl();
+    Init( gdk_cairo_create( impldc->GetWindow()->GTKGetDrawingWindow() ) );
+#endif
+
+#if defined(__WXGTK20__) && !defined(__WXGTK30__)
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
