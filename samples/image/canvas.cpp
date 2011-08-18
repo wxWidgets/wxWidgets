@@ -88,6 +88,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     image.Destroy();
 
+    // wxImage image;
+
     if ( image.LoadFile( dir + wxT("test.png") ) )
         my_square = wxBitmap( image );
 
@@ -399,8 +401,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawRectangle( 170, 50, 60, 60 );
 
-    if (my_anti.IsOk())
-        dc.DrawBitmap( my_anti, 280, 30 );
+    // if (my_anti.IsOk())
+    //     dc.DrawBitmap( my_anti, 280, 30 );
 
     dc.DrawText( wxT("PNG handler"), 30, 135 );
     if (my_horse_png.IsOk())
@@ -501,140 +503,140 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawBitmap(my_toucan_blur, x, y+15, true);
     }
 
-    if (my_smile_xbm.IsOk())
-    {
-        int x = 300, y = 1800;
+    // if (my_smile_xbm.IsOk())
+    // {
+    //     int x = 300, y = 1800;
 
-        dc.DrawText( wxT("XBM bitmap"), x, y );
-        dc.DrawText( wxT("(green on red)"), x, y + 15 );
-        dc.SetTextForeground( wxT("GREEN") );
-        dc.SetTextBackground( wxT("RED") );
-        dc.DrawBitmap( my_smile_xbm, x, y + 30 );
+    //     dc.DrawText( wxT("XBM bitmap"), x, y );
+    //     dc.DrawText( wxT("(green on red)"), x, y + 15 );
+    //     dc.SetTextForeground( wxT("GREEN") );
+    //     dc.SetTextBackground( wxT("RED") );
+    //     // dc.DrawBitmap( my_smile_xbm, x, y + 30 );
 
-        dc.SetTextForeground( *wxBLACK );
-        dc.DrawText( wxT("After wxImage conversion"), x + 120, y );
-        dc.DrawText( wxT("(red on white)"), x + 120, y + 15 );
-        dc.SetTextForeground( wxT("RED") );
-        wxImage i = my_smile_xbm.ConvertToImage();
-        i.SetMaskColour( 255, 255, 255 );
-        i.Replace( 0, 0, 0,
-            wxRED_PEN->GetColour().Red(),
-            wxRED_PEN->GetColour().Green(),
-            wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( wxBitmap(i), x + 120, y + 30, true );
-        dc.SetTextForeground( *wxBLACK );
-    }
+    //     dc.SetTextForeground( *wxBLACK );
+    //     dc.DrawText( wxT("After wxImage conversion"), x + 120, y );
+    //     dc.DrawText( wxT("(red on white)"), x + 120, y + 15 );
+    //     dc.SetTextForeground( wxT("RED") );
+    //     wxImage i = my_smile_xbm.ConvertToImage();
+    //     i.SetMaskColour( 255, 255, 255 );
+    //     i.Replace( 0, 0, 0,
+    //         wxRED_PEN->GetColour().Red(),
+    //         wxRED_PEN->GetColour().Green(),
+    //         wxRED_PEN->GetColour().Blue() );
+    //     dc.DrawBitmap( wxBitmap(i), x + 120, y + 30, true );
+    //     dc.SetTextForeground( *wxBLACK );
+    // }
 
 
-    wxBitmap mono( 60,50,1 );
-    wxMemoryDC memdc;
-    memdc.SelectObject( mono );
-    memdc.SetPen( *wxBLACK_PEN );
-    memdc.SetBrush( *wxWHITE_BRUSH );
-    memdc.DrawRectangle( 0,0,60,50 );
-    memdc.SetTextForeground( *wxBLACK );
-#ifndef __WXGTK20__
-    // I cannot convince GTK2 to draw into mono bitmaps
-    memdc.DrawText( wxT("Hi!"), 5, 5 );
-#endif
-    memdc.SetBrush( *wxBLACK_BRUSH );
-    memdc.DrawRectangle( 33,5,20,20 );
-    memdc.SetPen( *wxRED_PEN );
-    memdc.DrawLine( 5, 42, 50, 42 );
-    memdc.SelectObject( wxNullBitmap );
+//     wxBitmap mono( 60,50,1 );
+//     wxMemoryDC memdc;
+//     memdc.SelectObject( mono );
+//     memdc.SetPen( *wxBLACK_PEN );
+//     memdc.SetBrush( *wxWHITE_BRUSH );
+//     memdc.DrawRectangle( 0,0,60,50 );
+//     memdc.SetTextForeground( *wxBLACK );
+// #ifndef __WXGTK20__
+//     // I cannot convince GTK2 to draw into mono bitmaps
+//     memdc.DrawText( wxT("Hi!"), 5, 5 );
+// #endif
+//     memdc.SetBrush( *wxBLACK_BRUSH );
+//     memdc.DrawRectangle( 33,5,20,20 );
+//     memdc.SetPen( *wxRED_PEN );
+//     memdc.DrawLine( 5, 42, 50, 42 );
+//     memdc.SelectObject( wxNullBitmap );
 
-    if (mono.IsOk())
-    {
-        int x = 300, y = 1900;
+    // if (mono.IsOk())
+    // {
+    //     int x = 300, y = 1900;
 
-        dc.DrawText( wxT("Mono bitmap"), x, y );
-        dc.DrawText( wxT("(red on green)"), x, y + 15 );
-        dc.SetTextForeground( wxT("RED") );
-        dc.SetTextBackground( wxT("GREEN") );
-        dc.DrawBitmap( mono, x, y + 30 );
+    //     dc.DrawText( wxT("Mono bitmap"), x, y );
+    //     dc.DrawText( wxT("(red on green)"), x, y + 15 );
+    //     dc.SetTextForeground( wxT("RED") );
+    //     dc.SetTextBackground( wxT("GREEN") );
+    //     dc.DrawBitmap( mono, x, y + 30 );
 
-        dc.SetTextForeground( *wxBLACK );
-        dc.DrawText( wxT("After wxImage conversion"), x + 120, y );
-        dc.DrawText( wxT("(red on white)"), x + 120, y + 15 );
-        dc.SetTextForeground( wxT("RED") );
-        wxImage i = mono.ConvertToImage();
-        i.SetMaskColour( 255,255,255 );
-        i.Replace( 0,0,0,
-            wxRED_PEN->GetColour().Red(),
-            wxRED_PEN->GetColour().Green(),
-            wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( wxBitmap(i), x + 120, y + 30, true );
-        dc.SetTextForeground( *wxBLACK );
-    }
+    //     dc.SetTextForeground( *wxBLACK );
+    //     dc.DrawText( wxT("After wxImage conversion"), x + 120, y );
+    //     dc.DrawText( wxT("(red on white)"), x + 120, y + 15 );
+    //     dc.SetTextForeground( wxT("RED") );
+    //     wxImage i = mono.ConvertToImage();
+    //     i.SetMaskColour( 255,255,255 );
+    //     i.Replace( 0,0,0,
+    //         wxRED_PEN->GetColour().Red(),
+    //         wxRED_PEN->GetColour().Green(),
+    //         wxRED_PEN->GetColour().Blue() );
+    //     dc.DrawBitmap( wxBitmap(i), x + 120, y + 30, true );
+    //     dc.SetTextForeground( *wxBLACK );
+    // }
 
-    // For testing transparency
-    dc.SetBrush( *wxRED_BRUSH );
-    dc.DrawRectangle( 20, 2220, 560, 68 );
+    // // For testing transparency
+    // dc.SetBrush( *wxRED_BRUSH );
+    // dc.DrawRectangle( 20, 2220, 560, 68 );
 
-    dc.DrawText(wxT("XPM bitmap"), 30, 2230 );
-    if ( m_bmpSmileXpm.IsOk() )
-        dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, true);
+    // dc.DrawText(wxT("XPM bitmap"), 30, 2230 );
+    // if ( m_bmpSmileXpm.IsOk() )
+    //     dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, true);
 
-    dc.DrawText(wxT("XPM icon"), 110, 2230 );
-    if ( m_iconSmileXpm.IsOk() )
-        dc.DrawIcon(m_iconSmileXpm, 110, 2250);
+    // dc.DrawText(wxT("XPM icon"), 110, 2230 );
+    // if ( m_iconSmileXpm.IsOk() )
+    //     dc.DrawIcon(m_iconSmileXpm, 110, 2250);
 
-    // testing icon -> bitmap conversion
-    wxBitmap to_blit( m_iconSmileXpm );
-    if (to_blit.IsOk())
-    {
-        dc.DrawText( wxT("SubBitmap"), 170, 2230 );
-        wxBitmap sub = to_blit.GetSubBitmap( wxRect(0,0,15,15) );
-        if (sub.IsOk())
-            dc.DrawBitmap( sub, 170, 2250, true );
+    // // testing icon -> bitmap conversion
+    // wxBitmap to_blit( m_iconSmileXpm );
+    // if (to_blit.IsOk())
+    // {
+    //     dc.DrawText( wxT("SubBitmap"), 170, 2230 );
+    //     wxBitmap sub = to_blit.GetSubBitmap( wxRect(0,0,15,15) );
+    //     if (sub.IsOk())
+    //         dc.DrawBitmap( sub, 170, 2250, true );
 
-        dc.DrawText( wxT("Enlarged"), 250, 2230 );
-        dc.SetUserScale( 1.5, 1.5 );
-        dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5), true );
-        dc.SetUserScale( 2, 2 );
-        dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), true );
-        dc.SetUserScale( 1.0, 1.0 );
+    //     dc.DrawText( wxT("Enlarged"), 250, 2230 );
+    //     dc.SetUserScale( 1.5, 1.5 );
+    //     dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5), true );
+    //     dc.SetUserScale( 2, 2 );
+    //     dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), true );
+    //     dc.SetUserScale( 1.0, 1.0 );
 
-        dc.DrawText( wxT("Blit"), 400, 2230);
-        wxMemoryDC blit_dc;
-        blit_dc.SelectObject( to_blit );
-        dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
-        dc.SetUserScale( 1.5, 1.5 );
-        dc.Blit( (int)(450/1.5), (int)(2250/1.5), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
-        dc.SetUserScale( 2, 2 );
-        dc.Blit( (int)(500/2), (int)(2250/2), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
-        dc.SetUserScale( 1.0, 1.0 );
-    }
+    //     dc.DrawText( wxT("Blit"), 400, 2230);
+    //     wxMemoryDC blit_dc;
+    //     blit_dc.SelectObject( to_blit );
+    //     dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
+    //     dc.SetUserScale( 1.5, 1.5 );
+    //     dc.Blit( (int)(450/1.5), (int)(2250/1.5), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
+    //     dc.SetUserScale( 2, 2 );
+    //     dc.Blit( (int)(500/2), (int)(2250/2), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, true );
+    //     dc.SetUserScale( 1.0, 1.0 );
+    // }
 
-    dc.DrawText( wxT("ICO handler (1st image)"), 30, 2290 );
-    if (my_horse_ico32.IsOk())
-        dc.DrawBitmap( my_horse_ico32, 30, 2330, true );
+    // dc.DrawText( wxT("ICO handler (1st image)"), 30, 2290 );
+    // if (my_horse_ico32.IsOk())
+    //     dc.DrawBitmap( my_horse_ico32, 30, 2330, true );
 
-    dc.DrawText( wxT("ICO handler (2nd image)"), 230, 2290 );
-    if (my_horse_ico16.IsOk())
-        dc.DrawBitmap( my_horse_ico16, 230, 2330, true );
+    // dc.DrawText( wxT("ICO handler (2nd image)"), 230, 2290 );
+    // if (my_horse_ico16.IsOk())
+    //     dc.DrawBitmap( my_horse_ico16, 230, 2330, true );
 
-    dc.DrawText( wxT("ICO handler (best image)"), 430, 2290 );
-    if (my_horse_ico.IsOk())
-        dc.DrawBitmap( my_horse_ico, 430, 2330, true );
+    // dc.DrawText( wxT("ICO handler (best image)"), 430, 2290 );
+    // if (my_horse_ico.IsOk())
+    //     dc.DrawBitmap( my_horse_ico, 430, 2330, true );
 
-    dc.DrawText( wxT("CUR handler"), 30, 2390 );
-    if (my_horse_cur.IsOk())
-    {
-        dc.DrawBitmap( my_horse_cur, 30, 2420, true );
-        dc.SetPen (*wxRED_PEN);
-        dc.DrawLine (xH-10,yH,xH+10,yH);
-        dc.DrawLine (xH,yH-10,xH,yH+10);
-    }
+    // dc.DrawText( wxT("CUR handler"), 30, 2390 );
+    // if (my_horse_cur.IsOk())
+    // {
+    //     dc.DrawBitmap( my_horse_cur, 30, 2420, true );
+    //     dc.SetPen (*wxRED_PEN);
+    //     dc.DrawLine (xH-10,yH,xH+10,yH);
+    //     dc.DrawLine (xH,yH-10,xH,yH+10);
+    // }
 
-    dc.DrawText( wxT("ANI handler"), 230, 2390 );
-    for ( int i=0; i < m_ani_images; i++ )
-    {
-        if (my_horse_ani[i].IsOk())
-        {
-            dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, true );
-        }
-    }
+    // dc.DrawText( wxT("ANI handler"), 230, 2390 );
+    // for ( int i=0; i < m_ani_images; i++ )
+    // {
+    //     if (my_horse_ani[i].IsOk())
+    //     {
+    //         dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, true );
+    //     }
+    // }
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
