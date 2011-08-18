@@ -912,15 +912,8 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
         return;
     }
 
-    if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */
-        || type == wxBITMAP_TYPE_TIF)
+    if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */)
     {
-        /*
-        TIFF is skipped because the memory stream can't be loaded. Libtiff
-        looks for a TIFF directory at offset 120008 while the memory
-        stream size is only 120008 bytes (when saving as a file
-        the file size is 120280 bytes).
-        */
         return;
     }
 

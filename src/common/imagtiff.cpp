@@ -192,8 +192,42 @@ wxTIFFSeekOProc(thandle_t handle, toff_t off, int whence)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
 
-    return wxFileOffsetToTIFF(stream->SeekO((wxFileOffset)off,
-                                            wxSeekModeFromTIFF(whence)));
+    toff_t offset = wxFileOffsetToTIFF(
+        stream->SeekO((wxFileOffset)off, wxSeekModeFromTIFF(whence)) );
+
+    if (offset != (toff_t) -1 || whence != SEEK_SET)
+    {
+        return offset;
+    }
+
+
+    /*
+    Try to workaround problems with libtiff seeking past the end of streams.
+
+    This occurs when libtiff is writing tag entries past the end of a
+    stream but hasn't written the directory yet (which will be placed
+    before the tags and contain offsets to the just written tags).
+    The behaviour for seeking past the end of a stream is not consistent
+    and doesn't work with for example wxMemoryOutputStream. When this type
+    of seeking fails (with SEEK_SET), fill in the gap with zeroes and try
+    again.
+    */
+
+    wxFileOffset streamLength = stream->GetLength();
+    if (streamLength != wxInvalidOffset && (wxFileOffset) off > streamLength)
+    {
+       if (stream->SeekO(streamLength, wxFromStart) == wxInvalidOffset)
+       {
+           return (toff_t) -1;
+       }
+
+       for (wxFileOffset i = 0; i < (wxFileOffset) off - streamLength; ++i)
+       {
+           stream->PutC(0);
+       }
+    }
+
+    return wxFileOffsetToTIFF( stream->TellO() );
 }
 
 int TIFFLINKAGEMODE
