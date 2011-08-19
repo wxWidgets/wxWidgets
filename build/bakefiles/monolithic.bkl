@@ -4,9 +4,9 @@
 
     <set var="MONOLIB_GUI_SRC">
         <if cond="USE_GUI=='1'">
-            $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(WEB_SRC) $(QA_SRC)
-            $(XRC_SRC) $(AUI_SRC) $(PROPGRID_SRC) $(RIBBON_SRC) $(RICHTEXT_SRC)
-            $(STC_SRC)
+            $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(WEBVIEW_SRC)
+            $(QA_SRC) $(XRC_SRC) $(AUI_SRC) $(PROPGRID_SRC) $(RIBBON_SRC)
+            $(RICHTEXT_SRC) $(STC_SRC)
         </if>
     </set>
     <set var="MONOLIB_SRC">
@@ -25,7 +25,7 @@
         <define>WXMAKINGDLL</define>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
         <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
-        <ldlibs>$(EXTRALIBS_WEB)</ldlibs>
+        <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <ldlibs>$(EXTRALIBS_MEDIA)</ldlibs>
         <ldlibs>$(PLUGIN_MONOLIB_EXTRALIBS)</ldlibs>
         <library>$(wxscintilla_library_link)</library>

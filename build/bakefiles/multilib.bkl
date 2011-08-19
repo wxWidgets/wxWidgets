@@ -174,28 +174,28 @@
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">html=htmllib+htmldll</set>
 
     <!-- ================================================================ -->
-    <!--                               wxWEB                              -->
+    <!--                               wxWEBVIEW                          -->
     <!-- ================================================================ -->
 
-    <dll id="webdll" template="wx_dll"
-         cond="SHARED=='1' and USE_GUI=='1' and USE_WEB=='1' and MONOLITHIC=='0'">
+    <dll id="webviewdll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
-        <define>WXMAKINGDLL_WEB</define>
-        <sources>$(WEB_SRC)</sources>
+        <define>WXMAKINGDLL_WEBVIEW</define>
+        <sources>$(WEBVIEW_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
-        <msvc-headers>$(WEB_HDR)</msvc-headers>
+        <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
     </dll>
 
-    <lib id="weblib" template="wx_lib"
-         cond="SHARED=='0' and USE_GUI=='1' and USE_WEB=='1' and MONOLITHIC=='0'">
-        <sources>$(WEB_SRC)</sources>
-        <msvc-headers>$(WEB_HDR)</msvc-headers>
+    <lib id="webviewlib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
+        <sources>$(WEBVIEW_SRC)</sources>
+        <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
     </lib>
 
-    <wxshortcut id="wxweb" cond="MONOLITHIC=='0' and USE_WEB=='1'"/>
+    <wxshortcut id="wxwebview" cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'"/>
 
-    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">web=weblib+webdll</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">webview=webviewlib+webviewdll</set>
 
     <!-- ================================================================ -->
     <!--                             OpenGL                               -->

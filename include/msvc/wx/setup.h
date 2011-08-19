@@ -187,8 +187,8 @@
         #pragma comment(lib, wxMSW_LIB_NAME("stc"))
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
     #endif
-    #if wxUSE_WEB && !defined(wxNO_WEB_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("web"))
+    #if wxUSE_WEBVIEW && !defined(wxNO_WEBVIEW_LIB)
+        #pragma comment(lib, wxMSW_LIB_NAME("webview"))
     #endif
 #endif // wxUSE_GUI
 

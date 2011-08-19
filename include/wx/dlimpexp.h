@@ -102,7 +102,7 @@
 #    define WXMAKINGDLL_RICHTEXT
 #    define WXMAKINGDLL_MEDIA
 #    define WXMAKINGDLL_STC
-#    define WXMAKINGDLL_WEB
+#    define WXMAKINGDLL_WEBVIEW
 #endif /* WXMAKINGDLL */
 
 /*
@@ -275,15 +275,15 @@
 #    define WXDLLIMPEXP_DATA_STC(type) type
 #endif
 
-#ifdef WXMAKINGDLL_WEB
-#    define WXDLLIMPEXP_WEB WXEXPORT
-#    define WXDLLIMPEXP_DATA_WEB(type) WXEXPORT type
+#ifdef WXMAKINGDLL_WEBVIEW
+#    define WXDLLIMPEXP_WEBVIEW WXEXPORT
+#    define WXDLLIMPEXP_DATA_WEBVIEW(type) WXEXPORT type
 #elif defined(WXUSINGDLL)
-#    define WXDLLIMPEXP_WEB WXIMPORT
-#    define WXDLLIMPEXP_DATA_WEB(type) WXIMPORT type
+#    define WXDLLIMPEXP_WEBVIEW WXIMPORT
+#    define WXDLLIMPEXP_DATA_WEBVIEW(type) WXIMPORT type
 #else /* not making nor using DLL */
-#    define WXDLLIMPEXP_WEB
-#    define WXDLLIMPEXP_DATA_WEB(type) type
+#    define WXDLLIMPEXP_WEBVIEW
+#    define WXDLLIMPEXP_DATA_WEBVIEW(type) type
 #endif
 
 /*
@@ -307,7 +307,7 @@
     #define WXDLLIMPEXP_FWD_RICHTEXT
     #define WXDLLIMPEXP_FWD_MEDIA
     #define WXDLLIMPEXP_FWD_STC
-    #define WXDLLIMPEXP_FWD_WEB
+    #define WXDLLIMPEXP_FWD_WEBVIEW
 #else
     #define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
     #define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
@@ -323,7 +323,7 @@
     #define WXDLLIMPEXP_FWD_RICHTEXT  WXDLLIMPEXP_RICHTEXT
     #define WXDLLIMPEXP_FWD_MEDIA     WXDLLIMPEXP_MEDIA
     #define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
-    #define WXDLLIMPEXP_FWD_WEB       WXDLLIMPEXP_WEB
+    #define WXDLLIMPEXP_FWD_WEBVIEW   WXDLLIMPEXP_WEBVIEW
 #endif
 
 /* for backwards compatibility, define suffix-less versions too */

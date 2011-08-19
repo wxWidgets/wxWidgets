@@ -15,7 +15,7 @@
 #if wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
                          ||  defined(__WXOSX_CARBON__))
 
-class WXDLLIMPEXP_WEB wxWebViewHistoryItem
+class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {
 public:
     wxWebViewHistoryItem(const wxString& url, const wxString& title) :

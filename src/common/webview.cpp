@@ -24,10 +24,10 @@
 
 // DLL options compatibility check:
 #include "wx/app.h"
-WX_CHECK_BUILD_OPTIONS("wxWEB")
+WX_CHECK_BUILD_OPTIONS("wxWEBVIEW")
 
-extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewNameStr[] = "wxWebView";
-extern WXDLLIMPEXP_DATA_WEB(const char) wxWebViewDefaultURLStr[] = "about:blank";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[] = "wxWebView";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[] = "about:blank";
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxWebView, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEvent, wxCommandEvent);

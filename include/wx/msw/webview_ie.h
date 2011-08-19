@@ -24,7 +24,7 @@
 struct IHTMLDocument2;
 class wxFSFile;
 
-class WXDLLIMPEXP_WEB wxWebViewIE : public wxWebView
+class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
 public:
 

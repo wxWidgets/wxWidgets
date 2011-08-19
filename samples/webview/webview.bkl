@@ -4,12 +4,12 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="web" template="wx_sample" template_append="wx_append">
+    <exe id="webview" template="wx_sample" template_append="wx_append">
         <sources>
-            web.cpp
+            webview.cpp
         </sources>
         <headers></headers>
-        <wx-lib>web</wx-lib>
+        <wx-lib>webview</wx-lib>
         <wx-lib>stc</wx-lib>       
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>

@@ -200,11 +200,11 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
-    <option name="USE_WEB">
+    <option name="USE_WEBVIEW">
         <values>0,1</values>
         <default-value>1</default-value>
         <description>
-            Build wxWeb library (USE_GUI must be 1)?
+            Build wxWebView library (USE_GUI must be 1)?
         </description>
     </option>
     
@@ -380,7 +380,7 @@ to run the tests, include CppUnit library here.
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_XML"/>
         <option name="EXTRALIBS_HTML"/>
-        <option name="EXTRALIBS_WEB"/>
+        <option name="EXTRALIBS_WEBVIEW"/>
         <option name="EXTRALIBS_MEDIA"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
@@ -441,7 +441,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS"/>
         <set var="EXTRALIBS_XML"/>
         <set var="EXTRALIBS_HTML"/>
-        <set var="EXTRALIBS_WEB"/>
+        <set var="EXTRALIBS_WEBVIEW"/>
         <set var="EXTRALIBS_MEDIA"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
@@ -490,7 +490,7 @@ Set the version of your Mingw installation here.
         <set var="USE_RICHTEXT">1</set>
         <set var="USE_STC">1</set>
         <set var="USE_HTML">1</set>
-        <set var="USE_WEB">1</set>
+        <set var="USE_WEBVIEW">1</set>
         <set var="USE_MEDIA">1</set>
         <set var="USE_XRC">1</set>
         <set var="USE_OPENGL">1</set>

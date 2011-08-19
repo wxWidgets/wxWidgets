@@ -16,7 +16,7 @@
 
 #include "webkit/webkit.h"
 
-class WXDLLIMPEXP_WEB wxWebViewHistoryItem
+class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {
 public:
     wxWebViewHistoryItem(const wxString& url, const wxString& title) : 

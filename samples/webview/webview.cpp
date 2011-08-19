@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        web.cpp
+// Name:        webview.cpp
 // Purpose:     wxWebView sample
 // Author:      Marianne Gagnon
 // Id:          $Id$

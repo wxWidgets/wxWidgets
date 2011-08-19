@@ -22,7 +22,7 @@ class wxFileSystem;
 //Loads from uris such as scheme:///C:/example/example.html or archives such as
 //scheme:///C:/example/example.zip;protocol=zip/example.html 
 
-class WXDLLIMPEXP_WEB wxWebViewArchiveHandler : public wxWebViewHandler
+class WXDLLIMPEXP_WEBVIEW wxWebViewArchiveHandler : public wxWebViewHandler
 {
 public:
     wxWebViewArchiveHandler(const wxString& scheme);

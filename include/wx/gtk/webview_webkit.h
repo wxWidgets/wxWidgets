@@ -22,7 +22,7 @@
 // wxWebViewWebKit
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_WEB wxWebViewWebKit : public wxWebView
+class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 {
 public:
     wxWebViewWebKit() { Init(); }
