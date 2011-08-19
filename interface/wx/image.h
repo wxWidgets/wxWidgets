@@ -1168,6 +1168,39 @@ public:
             the resulting PNG file. Use this option if your application produces
             images with small size variation.
 
+        Options specific to wxTIFFHandler:
+        @li @c wxIMAGE_OPTION_TIFF_BITSPERSAMPLE: Number of bits per
+            sample (channel). Currently values of 1 and 8 are supported. A
+            value of 1 results in a black and white image. A value of 8 (the
+            default) can mean greyscale or RGB, depending on the value of
+            @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL.
+        @li @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL: Number of samples
+            (channels) per pixel. Currently values of 1 and 3 are supported.
+            A value of 1 results in either a greyscale (by default) or black and
+            white image, depending on the value of
+            @c wxIMAGE_OPTION_TIFF_BITSPERSAMPLE. A value of 3 (the default)
+            will result in an RGB image.
+        @li @c wxIMAGE_OPTION_TIFF_COMPRESSION: Compression type. By default
+            it is set to 1 (COMPRESSION_NONE). Typical other values are
+            5 (COMPRESSION_LZW) and 7 (COMPRESSION_JPEG). See tiff.h for more
+            options.
+        @li @c wxIMAGE_OPTION_TIFF_PHOTOMETRIC: Specifies the photometric
+            interpretation. By default it is set to 2 (PHOTOMETRIC_RGB) for RGB
+            images and 0 (PHOTOMETRIC_MINISWHITE) for greyscale or black and
+            white images. It can also be set to 1 (PHOTOMETRIC_MINISBLACK) to
+            treat the lowest value as black and highest as white.
+            If you want a greyscale image it is also sufficient to only specify
+            @c wxIMAGE_OPTION_TIFF_PHOTOMETRIC and set it to either
+            PHOTOMETRIC_MINISWHITE or PHOTOMETRIC_MINISBLACK. The other values
+            are taken care of.
+
+        @note
+        Be careful when combining the options @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL,
+        @c wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, and @c wxIMAGE_OPTION_TIFF_PHOTOMETRIC.
+        While some measures are taken to prevent illegal combinations and/or
+        values, it is still easy to abuse them and come up with invalid
+        results in the form of either corrupted images or crashes.
+
         @param name
             The name of the option, case-insensitive.
         @return
