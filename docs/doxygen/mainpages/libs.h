@@ -39,7 +39,7 @@ digraph Dependancies
     wxRichText [fillcolor = green, URL = "\ref page_libs_wxrichtext"];
     wxSTC      [fillcolor = green, URL = "\ref page_libs_wxstc"];
     wxXRC      [fillcolor = green, URL = "\ref page_libs_wxxrc"];
-    wxWeb      [fillcolor = green, URL = "\ref page_libs_wxweb"];
+    wxWebView  [fillcolor = green, URL = "\ref page_libs_wxwebview"];
 
     wxCore -> wxBase;
     wxNet -> wxBase;
@@ -56,7 +56,7 @@ digraph Dependancies
     wxRichText -> wxAdvanced; wxRichText -> wxHTML; wxRichText -> wxXML;
     wxSTC -> wxCore;
     wxXRC -> wxAdvanced; wxXRC -> wxHTML; wxXRC -> wxXML;
-    wxWeb -> wxCore;
+    wxWebView -> wxCore;
 }
 @enddot
 
@@ -204,9 +204,9 @@ text editor. See <http://www.scintilla.org/> for more info about Scintilla.
 
 Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 
-@section page_libs_wxweb wxWeb
+@section page_libs_wxwebview wxWebView
 
-The wxWeb library contains the wxWebView control.
+The wxWebView library contains the wxWebView control and its associated classes.
 
 Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 

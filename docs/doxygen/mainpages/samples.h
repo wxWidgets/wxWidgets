@@ -41,7 +41,7 @@ may find the following samples showing the corresponding controls:
 @li wxTreeCtrl: @ref page_samples_treectrl
 @li wxGrid: @ref page_samples_grid
 @li wxDataViewCtrl: @ref page_samples_dataview
-@li wxWebView: @ref page_samples_web
+@li wxWebView: @ref page_samples_webview
 
 Finally, here is the full list of samples:
 <!--
@@ -134,7 +134,7 @@ TODO: Organize them in a more human-readable way.
 @li @sample{uiaction}
 @li @sample{validate}
 @li @sample{vscroll}
-@li @sample{web}
+@li @sample{webview}
 @li @sample{widgets}
 @li @sample{wizard}
 @li @sample{wrapsizer}
@@ -1020,14 +1020,14 @@ control.
 
 @sampledir{vscroll}
 
-@section page_samples_web wxWebView Sample
+@section page_samples_webview wxWebView Sample
 
 The wxWebView sample demonstarates the various capabilities of the wxWebView
 control. It is set up as a simple single window web broswer, but with support
 for many of the more complex wxWebView features, including browsing through 
 archives.
 
-@sampledir{web}
+@sampledir{webview}
 
 @section page_samples_widgets Widgets Sample
 

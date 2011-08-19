@@ -92,8 +92,8 @@ enum wxWebViewBackend
     A simple class that contains the URL and title of an element of the history
     of a wxWebView. 
    
-    @library{wxweb}
-    @category{web}
+    @library{wxwebview}
+    @category{webview}
     
     @see wxWebView
  */
@@ -122,8 +122,8 @@ public:
     The base class for handling custom schemes in wxWebView, for example to 
     allow virtual file system support.
    
-    @library{wxweb}
-    @category{web}
+    @library{wxwebview}
+    @category{webview}
     
     @see wxWebView
  */
@@ -241,8 +241,8 @@ public:
        the page title changes. Use GetString to get the title.
     @endEventTable
    
-    @library{wxweb}
-    @category{ctrl,web}
+    @library{wxwebview}
+    @category{ctrl,webview}
     @see wxWebViewHandler, wxWebViewEvent
  */
 class wxWebView : public wxControl
@@ -621,8 +621,8 @@ public:
        the page title changes. Use GetString to get the title.
     @endEventTable
 
-    @library{wxweb}
-    @category{events,web}
+    @library{wxwebview}
+    @category{events,webview}
 
     @see wxWebView
 */

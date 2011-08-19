@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        webfilehandler.h
+// Name:        webviewarchivehandler.h
 // Purpose:     interface of wxWebViewArchiveHandler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -15,8 +15,8 @@
     <code> scheme:///C:/exmaple/docs.zip;protocol=zip/main.htm </code> 
     Currently the only supported protocol is @c zip. 
    
-    @library{wxweb}
-    @category{web}
+    @library{wxwebview}
+    @category{webview}
     
     @see wxWebView, wxWebViewHandler
  */
