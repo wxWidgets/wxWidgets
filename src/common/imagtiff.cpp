@@ -593,7 +593,15 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     int bps = image->GetOptionInt(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE);
     if ( !bps )
+    {
         bps = 8;
+    }
+    else if (bps == 1)
+    {
+        // One bit per sample combined with 3 samples per pixel is
+        // not allowed and crashes libtiff.
+        spp = 1;
+    }
 
     int compression = image->GetOptionInt(wxIMAGE_OPTION_TIFF_COMPRESSION);
     if ( !compression )
