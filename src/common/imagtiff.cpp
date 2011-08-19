@@ -619,7 +619,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
     else if (spp == 1)
     {
-        photometric = PHOTOMETRIC_MINISBLACK;
+        photometric = PHOTOMETRIC_MINISWHITE;
     }
 
     const bool isColouredImage = (spp > 1)
