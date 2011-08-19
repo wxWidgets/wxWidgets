@@ -338,7 +338,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data fr
+all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr
 
 install: 
 
@@ -403,6 +403,18 @@ data:
 	fi; \
 	case "$$x" in ?*) \
 	cp -pRf $(srcdir)/$$f . ;; \
+	esac; \
+	done
+
+data-images: 
+	@mkdir -p image
+	@for f in horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp; do \
+	if test ! -f image/$$f -a ! -d image/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/image/$$f -newer image/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/image/$$f image ;; \
 	esac; \
 	done
 
@@ -925,4 +937,4 @@ failtest:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean test_gui_bundle data fr
+.PHONY: all install uninstall clean distclean test_gui_bundle data data-images fr
