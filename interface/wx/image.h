@@ -1084,9 +1084,15 @@ public:
     /**
         Gets a user-defined string-valued option.
 
-        Currently the only defined string option is
+        Generic options:
         @li @c wxIMAGE_OPTION_FILENAME: The name of the file from which the image
             was loaded.
+
+        Options specific to wxGIFHandler:
+        @li @c wxIMAGE_OPTION_GIF_COMMENT: The comment text that is read from
+            or written to the GIF file. In an animated GIF each frame can have
+            its own comment. If there is only a comment in the first frame of
+            a GIF it will not be repeated in other frames.
 
         @param name
             The name of the option, case-insensitive.
@@ -1161,12 +1167,6 @@ public:
             (in bytes) for saving a PNG file. Ideally this should be as big as
             the resulting PNG file. Use this option if your application produces
             images with small size variation.
-
-        Options specific to wxGIFHandler:
-        @li @c wxIMAGE_OPTION_GIF_COMMENT: The comment text that is read from
-            or written to the GIF file. In an animated GIF each frame can have
-            its own comment. If there is only a comment in the first frame of
-            a GIF it will not be repeated in other frames.
 
         @param name
             The name of the option, case-insensitive.
