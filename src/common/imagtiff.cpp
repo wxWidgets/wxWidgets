@@ -437,7 +437,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
 
 
-    uint16 spp, bpp, compression;
+    uint16 spp, bps, compression;
     /*
     Read some baseline TIFF tags which helps when re-saving a TIFF
     to be similar to the original image.
@@ -447,9 +447,9 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         image->SetOption(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, spp);
     }
 
-    if ( TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bpp) )
+    if ( TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bps) )
     {
-        image->SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, bpp);
+        image->SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, bps);
     }
 
     if ( TIFFGetFieldDefaulted(tif, TIFFTAG_COMPRESSION, &compression) )
@@ -591,9 +591,9 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if ( !spp )
         spp = 3;
 
-    int bpp = image->GetOptionInt(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE);
-    if ( !bpp )
-        bpp = 8;
+    int bps = image->GetOptionInt(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE);
+    if ( !bps )
+        bps = 8;
 
     int compression = image->GetOptionInt(wxIMAGE_OPTION_TIFF_COMPRESSION);
     if ( !compression )
@@ -606,20 +606,20 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
 
     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp);
-    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bpp);
-    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, spp*bpp == 1 ? PHOTOMETRIC_MINISBLACK
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, spp*bps == 1 ? PHOTOMETRIC_MINISBLACK
                                                         : PHOTOMETRIC_RGB);
     TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
 
-    // scanlinesize if determined by spp and bpp
-    tsize_t linebytes = (tsize_t)image->GetWidth() * spp * bpp / 8;
+    // scanlinesize if determined by spp and bps
+    tsize_t linebytes = (tsize_t)image->GetWidth() * spp * bps / 8;
 
-    if ( (image->GetWidth() % 8 > 0) && (spp * bpp < 8) )
+    if ( (image->GetWidth() % 8 > 0) && (spp * bps < 8) )
         linebytes+=1;
 
     unsigned char *buf;
 
-    if (TIFFScanlineSize(tif) > linebytes || (spp * bpp < 24))
+    if (TIFFScanlineSize(tif) > linebytes || (spp * bps < 24))
     {
         buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
         if (!buf)
@@ -646,7 +646,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     {
         if ( buf )
         {
-            if ( spp * bpp > 1 )
+            if ( spp * bps > 1 )
             {
                 // color image
                 memcpy(buf, ptr, image->GetWidth());
