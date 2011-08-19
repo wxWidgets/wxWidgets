@@ -12,7 +12,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEB
+#if wxUSE_WEBVIEW
 
 #include "wx/control.h"
 #include "wx/event.h"
@@ -229,6 +229,6 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, id, \
                      wxWebViewEventHandler(fn))
 
-#endif // wxUSE_WEB
+#endif // wxUSE_WEBVIEW
 
 #endif // _WX_WEB_VIEW_H_

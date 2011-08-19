@@ -10,7 +10,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_WEB
+#if wxUSE_WEBVIEW
 
 #if defined(__BORLANDC__)
     #pragma hdrstop
@@ -112,4 +112,4 @@ wxWebView* wxWebView::New(wxWindow* parent,
     }
 }
 
-#endif // wxUSE_WEB
+#endif // wxUSE_WEBVIEW

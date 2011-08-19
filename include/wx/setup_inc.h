@@ -706,7 +706,7 @@
 // Default is 1
 //
 // Recommended setting: 1
-#define wxUSE_WEB 1
+#define wxUSE_WEBVIEW 1
 
 // Use the IE wxWebView backend
 //

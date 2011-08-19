@@ -9,7 +9,7 @@
 
 #include "testprec.h"
 
-#if wxUSE_WEB
+#if wxUSE_WEBVIEW
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -244,4 +244,4 @@ void WebTestCase::RunScript()
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
 }
 
-#endif //wxUSE_WEB
+#endif //wxUSE_WEBVIEW

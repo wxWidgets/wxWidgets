@@ -331,7 +331,7 @@
 
 #define wxUSE_STC 0
 
-#define wxUSE_WEB 0
+#define wxUSE_WEBVIEW 0
 
 #define wxUSE_WEBVIEW_WEBKIT 0
 

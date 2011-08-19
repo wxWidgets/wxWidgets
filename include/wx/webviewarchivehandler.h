@@ -12,7 +12,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEB
+#if wxUSE_WEBVIEW
 
 class wxFSFile;
 class wxFileSystem;
@@ -31,6 +31,6 @@ private:
     wxFileSystem* m_fileSystem;
 };
 
-#endif
+#endif // wxUSE_WEBVIEW
 
 #endif // _WX_WEB_VIEW_FILE_HANDLER_H_
