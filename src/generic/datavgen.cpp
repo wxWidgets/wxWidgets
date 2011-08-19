@@ -1976,33 +1976,34 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetOwner()->GetModel();
         m_count = list_model->GetCount();
-        UpdateDisplay();
-        return true;
-    }
-
-    SortPrepare();
-
-    wxDataViewTreeNode * node;
-    node = FindNode(parent);
-
-    if( node == NULL )
-        return false;
-
-    node->SetHasChildren( true );
-
-    if( g_model->IsContainer( item ) )
-    {
-        wxDataViewTreeNode * newnode = new wxDataViewTreeNode( node );
-        newnode->SetItem(item);
-        newnode->SetHasChildren( true );
-        node->AddNode( newnode);
     }
     else
-        node->AddLeaf( item.GetID() );
+    {
+        SortPrepare();
 
-    node->ChangeSubTreeCount(1);
+        wxDataViewTreeNode * node;
+        node = FindNode(parent);
 
-    m_count = -1;
+        if( node == NULL )
+            return false;
+
+        node->SetHasChildren( true );
+
+        if( g_model->IsContainer( item ) )
+        {
+            wxDataViewTreeNode * newnode = new wxDataViewTreeNode( node );
+            newnode->SetItem(item);
+            newnode->SetHasChildren( true );
+            node->AddNode( newnode);
+        }
+        else
+            node->AddLeaf( item.GetID() );
+
+        node->ChangeSubTreeCount(1);
+
+        m_count = -1;
+    }
+
     UpdateDisplay();
 
     return true;
