@@ -437,6 +437,8 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
 
 
+    image->SetOption(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, photometric);
+
     uint16 spp, bps, compression;
     /*
     Read some baseline TIFF tags which helps when re-saving a TIFF
@@ -603,6 +605,27 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
         spp = 1;
     }
 
+    int photometric = PHOTOMETRIC_RGB;
+
+    if ( image->HasOption(wxIMAGE_OPTION_TIFF_PHOTOMETRIC) )
+    {
+        photometric = image->GetOptionInt(wxIMAGE_OPTION_TIFF_PHOTOMETRIC);
+        if (photometric == PHOTOMETRIC_MINISWHITE
+            || photometric == PHOTOMETRIC_MINISBLACK)
+        {
+            // either b/w or greyscale
+            spp = 1;
+        }
+    }
+    else if (spp == 1)
+    {
+        photometric = PHOTOMETRIC_MINISBLACK;
+    }
+
+    const bool isColouredImage = (spp > 1)
+        && (photometric != PHOTOMETRIC_MINISWHITE)
+        && (photometric != PHOTOMETRIC_MINISBLACK);
+
     int compression = image->GetOptionInt(wxIMAGE_OPTION_TIFF_COMPRESSION);
     if ( !compression )
     {
@@ -615,8 +638,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp);
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps);
-    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, spp*bps == 1 ? PHOTOMETRIC_MINISBLACK
-                                                        : PHOTOMETRIC_RGB);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photometric);
     TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
 
     // scanlinesize if determined by spp and bps
@@ -627,7 +649,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     unsigned char *buf;
 
-    if (TIFFScanlineSize(tif) > linebytes || (spp * bps < 24))
+    if (TIFFScanlineSize(tif) > linebytes || !isColouredImage)
     {
         buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
         if (!buf)
@@ -649,12 +671,13 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (uint32) -1));
 
+    const bool minIsWhite = (photometric == PHOTOMETRIC_MINISWHITE);
     unsigned char *ptr = image->GetData();
     for ( int row = 0; row < image->GetHeight(); row++ )
     {
         if ( buf )
         {
-            if ( spp * bps > 1 )
+            if (isColouredImage)
             {
                 // color image
                 memcpy(buf, ptr, image->GetWidth());
@@ -663,7 +686,13 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
             {
                 for ( int column = 0; column < linebytes; column++ )
                 {
-                    buf[column] = ptr[column*3 + 1];
+                    uint8 value = ptr[column*3 + 1];
+                    if (minIsWhite)
+                    {
+                        value = 255 - value;
+                    }
+
+                    buf[column] = value;
                 }
             }
             else // black and white image
@@ -673,7 +702,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                     uint8 reverse = 0;
                     for ( int bp = 0; bp < 8; bp++ )
                     {
-                        if ( ptr[column*24 + bp*3 + 1] > 127 )
+                        if ( (ptr[column*24 + bp*3 + 1] <=127) == minIsWhite )
                         {
                             // check only green as this is sufficient
                             reverse = (uint8)(reverse | 128 >> bp);

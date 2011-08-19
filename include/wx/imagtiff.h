@@ -25,6 +25,7 @@
 #define wxIMAGE_OPTION_TIFF_BITSPERSAMPLE               wxString(wxT("BitsPerSample"))
 #define wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL             wxString(wxT("SamplesPerPixel"))
 #define wxIMAGE_OPTION_TIFF_COMPRESSION                 wxString(wxT("Compression"))
+#define wxIMAGE_OPTION_TIFF_PHOTOMETRIC                 wxString(wxT("Photometric"))
 #define wxIMAGE_OPTION_TIFF_IMAGEDESCRIPTOR             wxString(wxT("ImageDescriptor"))
 
 // for backwards compatibility
