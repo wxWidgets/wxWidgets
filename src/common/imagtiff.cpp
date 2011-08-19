@@ -666,9 +666,9 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                     uint8 reverse = 0;
                     for ( int bp = 0; bp < 8; bp++ )
                     {
-                        if ( ptr[column*24 + bp*3] > 127 )
+                        if ( ptr[column*24 + bp*3 + 1] > 127 )
                         {
-                            // check only red as this is sufficient
+                            // check only green as this is sufficient
                             reverse = (uint8)(reverse | 128 >> bp);
                         }
                     }
