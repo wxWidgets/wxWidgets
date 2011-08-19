@@ -1115,6 +1115,7 @@ static void TestTIFFImage(const wxString& option, int value)
 void ImageTestCase::SaveTIFF()
 {
     TestTIFFImage(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, 1);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 1);
 }
 
 void ImageTestCase::SaveAnimatedGIF()

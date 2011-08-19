@@ -659,6 +659,13 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                 // color image
                 memcpy(buf, ptr, image->GetWidth());
             }
+            else if (spp * bps == 8) // greyscale image
+            {
+                for ( int column = 0; column < linebytes; column++ )
+                {
+                    buf[column] = ptr[column*3 + 1];
+                }
+            }
             else // black and white image
             {
                 for ( int column = 0; column < linebytes; column++ )
