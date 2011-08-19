@@ -444,17 +444,17 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     */
     if ( TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &spp) )
     {
-        image->SetOption(wxIMAGE_OPTION_SAMPLESPERPIXEL, spp);
+        image->SetOption(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, spp);
     }
 
     if ( TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bpp) )
     {
-        image->SetOption(wxIMAGE_OPTION_BITSPERSAMPLE, bpp);
+        image->SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, bpp);
     }
 
     if ( TIFFGetFieldDefaulted(tif, TIFFTAG_COMPRESSION, &compression) )
     {
-        image->SetOption(wxIMAGE_OPTION_COMPRESSION, compression);
+        image->SetOption(wxIMAGE_OPTION_TIFF_COMPRESSION, compression);
     }
 
     // Set the resolution unit.
@@ -587,15 +587,15 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
 
 
-    int spp = image->GetOptionInt(wxIMAGE_OPTION_SAMPLESPERPIXEL);
+    int spp = image->GetOptionInt(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL);
     if ( !spp )
         spp = 3;
 
-    int bpp = image->GetOptionInt(wxIMAGE_OPTION_BITSPERSAMPLE);
+    int bpp = image->GetOptionInt(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE);
     if ( !bpp )
         bpp = 8;
 
-    int compression = image->GetOptionInt(wxIMAGE_OPTION_COMPRESSION);
+    int compression = image->GetOptionInt(wxIMAGE_OPTION_TIFF_COMPRESSION);
     if ( !compression )
     {
         // we can't use COMPRESSION_LZW because current version of libtiff
