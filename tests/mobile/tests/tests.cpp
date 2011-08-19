@@ -38,6 +38,7 @@
 #include "tests_searchctrl.h"
 #include "tests_listbox.h"
 #include "tests_viewcontroller.h"
+#include "tests_wheelsctrl.h"
 
 
 #pragma mark -
@@ -127,9 +128,14 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
 
     // wxListBox
     m_testNames.Add(_("wxListBox"));
-    m_testDescriptions.Add(_("A control consisting of a number of components that can be spun."));
+    m_testDescriptions.Add(_("A listbox is used to select one or more of a list of strings."));
     m_testPanels.Add(new MobileTestsWxListBoxPanel());
 
+    // wxWheelsCtrl
+    m_testNames.Add(_("wxWheelsCtrl"));
+    m_testDescriptions.Add(_("A control consisting of a number of components that can be spun."));
+    m_testPanels.Add(new MobileTestsWxWheelsCtrlPanel());
+    
     // wxViewController
     //m_testNames.Add(_("wxViewController"));
     //m_testDescriptions.Add(_("The view controller manages a window, usually in conjunction with the wxNavigationCtrl class."));

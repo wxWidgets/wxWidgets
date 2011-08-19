@@ -21,7 +21,6 @@ extern WXDLLEXPORT_DATA(const wxChar) wxWheelsCtrlNameStr[];
 
 class WXDLLEXPORT wxWheelsCtrl;
 class WXDLLEXPORT wxWheelsDataSource;
-class WXDLLEXPORT wxWheelsListBox;
 
 
 #pragma mark wxWheelComponent
@@ -33,17 +32,14 @@ public:
 
     // Constructor.
     wxWheelComponent(wxWheelsCtrl* wheelsCtrl,
-                     wxWheelsListBox* listBox,
                      int n)
     {
         Init();
+        
         m_wheelsCtrl = wheelsCtrl;
-        m_listBox = listBox;
         m_componentNumber = n;
     }
 
-    wxWheelsListBox* GetListBox() const { return m_listBox; }
-    void SetListBox(wxWheelsListBox* listBox) { m_listBox = listBox; }
     int GetComponentNumber() const { return m_componentNumber; }
     const wxRect& GetRect() const { return m_rect; }
     void SetRect(const wxRect& rect) { m_rect = rect; }
@@ -52,15 +48,13 @@ public:
 protected:
     void Init()
     {
-        m_listBox = NULL;
         m_componentNumber = 0;
         m_wheelsCtrl = NULL;
     }
     
 private:
-    wxWheelsListBox*  m_listBox;
-    int                 m_componentNumber;
-    wxRect              m_rect;
+    int               m_componentNumber;
+    wxRect            m_rect;
     wxWheelsCtrl*     m_wheelsCtrl;
 };
 
@@ -89,16 +83,14 @@ public:
 
     /// Constructor.
     wxWheelsCtrlBase(wxWindow *parent,
-                   wxWindowID id,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = 0,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxWheelsCtrlNameStr) { }
+                     wxWindowID id,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = 0,
+                     const wxValidator& validator = wxDefaultValidator,
+                     const wxString& name = wxWheelsCtrlNameStr) { }
 
     virtual ~wxWheelsCtrlBase() { }
-
-    virtual void ClearComponents() = 0;
 
     /// Reloads and displays all components.
     virtual bool ReloadAllComponents() = 0;
@@ -121,9 +113,6 @@ public:
     /// Returns the number of components.
     virtual int GetComponentCount() const = 0;
 
-    /// Returns the size required to display the largest view in the given component.
-    virtual wxSize GetRowSizeForComponent(int component) const = 0;
-
     /// Sets the row selection indicator flag
     virtual void SetRowSelectionIndicator(bool showRowSelection) { m_showRowSelection = showRowSelection; }
 
@@ -136,27 +125,14 @@ public:
     /// Sets the data source object, recreating the components.
     virtual void SetDataSource(wxWheelsDataSource* dataSource, bool ownsDataSource = false) = 0;
 
-    /// Initializes the components from the current data source. You do not usually
-    /// need to call this function since it is called from SetDataSource.
-    virtual bool InitializeComponents() = 0;
-
     // Returns the array of components.
     virtual const wxWheelComponentArray& GetComponents() const { return m_components; }
 
     // Returns the given component. Implementation only.
     virtual wxWheelComponent* GetComponent(int component) const { return m_components[component]; }
 
-    /*
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual bool SetForegroundColour(const wxColour &colour);
-    virtual bool SetFont(const wxFont& font);
-    virtual bool Enable(bool enable);
-    */
-
-private:
+protected:
     
-    wxDECLARE_NO_COPY_CLASS(wxWheelsCtrlBase);
-
     bool                    m_showRowSelection;
     wxWheelsDataSource*     m_dataSource;
     bool                    m_ownDataSource;
@@ -167,6 +143,8 @@ private:
     int                     m_topMargin;
     int                     m_bottomMargin;
     int                     m_interWheelSpacing;
+    
+    wxDECLARE_NO_COPY_CLASS(wxWheelsCtrlBase);
 };
 
 
@@ -250,47 +228,44 @@ public:
     void Init() {}
 
     /// Override to provide the number of components.
-    virtual int GetNumberOfComponents(wxWheelsCtrl* ctrl) = 0;
+    virtual int GetNumberOfComponents(wxWheelsCtrl* ctrl) { return 0; }
 
     /// Override to provide the number of rows in a component.
     virtual int GetNumberOfRowsForComponent(wxWheelsCtrl* ctrl,
-                                            int component) = 0;
+                                            int component) { return 0; }
 
     /// Override to provide the row height for a component. Should returns a height in pixels.
     virtual int GetRowHeightForComponent(wxWheelsCtrl* ctrl,
-                                         int component) = 0;
+                                         int component) { return 0; }
 
     /// Override to provide the row width for a component. Should returns a width in pixels.
     virtual int GetRowWidthForComponent(wxWheelsCtrl* ctrl,
-                                        int component) = 0;
+                                        int component) { return 0; }
 
     /// Override to provide the title for a component's row. If you override GetRowWindow instead,
     /// this method is optional.
     virtual wxString GetRowTitle(wxWheelsCtrl* WXUNUSED(ctrl),
                                  int WXUNUSED(component),
-                                 int WXUNUSED(row))
-    {
-        return wxEmptyString;
-    }
+                                 int WXUNUSED(row)) { return wxEmptyString; }
 
     /// Override to provide a control for a component's row. This is optional.
     virtual wxWindow* GetRowWindow(wxWheelsCtrl* WXUNUSED(ctrl),
                                    int WXUNUSED(component),
                                    int WXUNUSED(row),
-                                   wxWindow* WXUNUSED(reusingWindow))
-    {
-        return NULL;
-    }
+                                   wxWindow* WXUNUSED(reusingWindow)) { return NULL; }
 
     /// Override to intercept row click; by default, sends an event to itself and then to control.
     virtual bool OnSelectRow(wxWheelsCtrl* ctrl,
                              int component,
-                             int row);
+                             int row) { }
 
 protected:
 
     DECLARE_CLASS(wxWheelsDataSource)
 };
+
+WX_DECLARE_OBJARRAY(wxArrayString, wxArrayOfStringArrays);
+WX_DECLARE_OBJARRAY(wxSize, wxSizeArray);
 
 
 #pragma mark wxWheelsTextDataSource
@@ -304,20 +279,17 @@ protected:
     @category{wxbile}
 */
 
-WX_DECLARE_OBJARRAY(wxArrayString, wxArrayOfStringArrays);
-WX_DECLARE_OBJARRAY(wxSize, wxSizeArray);
-
 class WXDLLEXPORT wxWheelsTextDataSource: public wxWheelsDataSource
 {
 public:
     /// Constructor.
     wxWheelsTextDataSource(int componentCount = 1,
-                             const wxSize& rowSize = wxDefaultSize);
+                           const wxSize& rowSize = wxDefaultSize);
 
     void Init();
 
     /// Override to provide the number of components.
-    virtual int GetNumberOfComponents(wxWheelsCtrl* WXUNUSED(ctrl)) { return m_componentCount; }
+    virtual int GetNumberOfComponents(wxWheelsCtrl* WXUNUSED(ctrl));
 
     /// Override to provide the number of rows in a component.
     virtual int GetNumberOfRowsForComponent(wxWheelsCtrl* ctrl,
@@ -337,7 +309,7 @@ public:
                                  int component,
                                  int row);
 
-// New methods
+    // New methods
 
     wxArrayString GetStrings(int component = 0) const;
     void SetStrings(const wxArrayString& strings, int component = 0);
@@ -346,96 +318,130 @@ public:
     void SetRowSize(const wxSize& sz, int component = 0);
 
     void SetComponentCount(int count);
-    int GetComponentCount() const { return m_componentCount; }
+    int GetComponentCount() const;
 
 protected:
 
     wxArrayOfStringArrays m_stringArrays;
     wxSizeArray           m_rowSizes;
-    int                     m_componentCount;
+    int                   m_componentCount;
 
     DECLARE_CLASS(wxWheelsDataSource)
 };
 
 
-#pragma mark wxWheelsListBox
+#pragma mark wxWheelsDateTimeDataSource
+
+// wxWheelsDateTimeDataSource modes
+enum {
+    wxWHEELS_DT_TIME =      0x00000000,
+    wxWHEELS_DT_DATE =      0x00010000,
+    wxWHEELS_DT_DATE_TIME = 0x00020000,
+    wxWHEELS_DT_COUNTDOWN = 0x00040000,
+};
+
 
 /**
-    @class wxWheelsListBox
+    @class wxWheelsDateTimeDataSource
 
-    A listbox to implement a single component in a wheels control.
-    Currently this works for text strings only.
+    A class for creating a wheel control for choosing date and/or time.
 
-    @category{wxbileImplementation}
-  */
+    @category{wxbile}
+*/
 
-class WXDLLEXPORT wxWheelsListBox: public wxVListBox
+class WXDLLEXPORT wxWheelsDateTimeDataSource: public wxWheelsDataSource
 {
 public:
-    /// Default constructor.
-    wxWheelsListBox();
-
     /// Constructor.
-    wxWheelsListBox(wxWindow *parent,
-                      wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long style = wxLB_SINGLE,
-                      const wxString& name = wxVListBoxNameStr);
+    wxWheelsDateTimeDataSource()
+    {
+        Init();
+    }
 
-    /// Creation function.
-    bool Create(wxWindow *parent,
-                wxWindowID id = wxID_ANY,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxLB_SINGLE,
-                const wxString& name = wxVListBoxNameStr);
+    void Init()
+    {
+        m_pickerMode = wxWHEELS_DT_DATE_TIME;
+        m_initialDate = NULL;
+        m_minimumDate = NULL;
+        m_maximumDate = NULL;
+        m_minuteInterval = 1;
+        m_countDownDuration = 0.0;
+    }
 
-    virtual ~wxWheelsListBox();
+    // Not used.
+    virtual int GetNumberOfComponents(wxWheelsCtrl* WXUNUSED(ctrl)) { return 0; }
 
-    /// Sets the wheels control implementing this control.
-    void SetWheelsCtrl(wxWheelsCtrl* ctrl) { m_wheelsCtrl = ctrl; }
+    // Not used.
+    virtual int GetNumberOfRowsForComponent(wxWheelsCtrl* ctrl,
+                                            int component) { return 0; }
 
-    /// Gets the wheels control implementing this control.
-    wxWheelsCtrl* GetWheelsCtrl() const { return m_wheelsCtrl; }
+    // Not used.
+    virtual int GetRowHeightForComponent(wxWheelsCtrl* ctrl,
+                                         int component) { return 0; }
 
-    /// Sets the component number that this list represents.
-    void SetComponentNumber(int n) { m_componentNumber = n; }
+    // Not used.
+    virtual int GetRowWidthForComponent(wxWheelsCtrl* ctrl,
+                                        int component) { return 0; }
 
-    /// Gets the component number that this list represents.
-    int GetComponentNumber() const { return m_componentNumber; }
+    // Not used.
+    virtual wxString GetRowTitle(wxWheelsCtrl* ctrl,
+                                 int component,
+                                 int row) { return wxEmptyString; }
 
-    /// Gets the component for this listbox.
-    wxWheelComponent* GetComponent() const;
+    // New methods
+    
+    /// Get date picker mode.
+    int GetPickerMode() { return m_pickerMode; }
+    
+    /// Set date picker mode.
+    void SetPickerMode(int pickerMode) { m_pickerMode = pickerMode; }
+    
+    /// Get initial picker date.
+    wxDateTime* GetInitialDate() { return m_initialDate; }
+    
+    /// Set initial picker date.
+    void SetInitialDate(wxDateTime* initialDate) { m_initialDate = initialDate; }
+    
+    /// Get minumum picker date.
+    wxDateTime* GetMinimumPickerDate() { return m_minimumDate; }
+    
+    /// Set minumum picker date.
+    void SetMinimumPickerDate(wxDateTime* minimumDate) { m_minimumDate = minimumDate; }
+    
+    /// Get maximum picker date.
+    wxDateTime* GetMaximumPickerDate() { return m_maximumDate; }
+    
+    /// Set maximum picker date.
+    void SetMaximumPickerDate(wxDateTime* maximumDate) { m_maximumDate = maximumDate; }
+    
+    /// Get minute interval.
+    int GetMinuteInterval() { return m_minuteInterval; }
+    
+    /// Set minute interval.
+    void SetMinuteInterval(int minuteInterval) { m_minuteInterval = minuteInterval; }
+    
+    /// Get count down duration (timer mode only).
+    double GetCountDownDuration() { return m_countDownDuration; }
+    
+    /// Set count down duration (timer mode only).
+    void SetCountDownDuration(double countDownDuration ) { m_countDownDuration = countDownDuration;  }
+    
+    /// Override to intercept date select; by default, sends an event to itself and then to control.
+    virtual bool OnSelectDate(wxWheelsCtrl *ctrl, wxDateTime *date) { }
 
 protected:
-    virtual void OnDrawBackground(wxDC& dc,
-                                  const wxRect& rect,
-                                  size_t n) const;
-    virtual void DrawBackground(wxDC& dc);
-
-    virtual wxSize DoGetBestSize() const;
-
-    void OnSelect(wxCommandEvent& event);
-
-    // the derived class must implement this function to actually draw the item
-    // with the given index on the provided DC
-    virtual void OnDrawItem(wxDC& dc,
-                            const wxRect& rect,
-                            size_t n) const;
-
-    // the derived class must implement this method to return the height of the
-    // specified item
-    virtual wxCoord OnMeasureItem(size_t n) const ;
-
-    // common part of all ctors
-    void Init();
-
-    wxWheelsCtrl* m_wheelsCtrl;
-    int             m_componentNumber;
-
-    DECLARE_CLASS(wxWheelsListBox)
+    
+    DECLARE_CLASS(wxWheelsDataSource)
+    
+private:
+    int         m_pickerMode;
+    wxDateTime* m_initialDate;
+    wxDateTime* m_minimumDate;
+    wxDateTime* m_maximumDate;
+    int         m_minuteInterval;
+    double      m_countDownDuration;
 };
+
 
 
 // ----------------------------------------------------------------------------

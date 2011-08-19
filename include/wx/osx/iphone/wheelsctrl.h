@@ -43,8 +43,6 @@ public:
 
     virtual ~wxWheelsCtrl();
 
-    virtual void ClearComponents();
-
     /// Reloads and displays all components.
     virtual bool ReloadAllComponents();
 
@@ -63,20 +61,8 @@ public:
     /// Returns the number of components.
     virtual int GetComponentCount() const;
 
-    /// Returns the size required to display the largest view in the given component.
-    virtual wxSize GetRowSizeForComponent(int component) const;
-
     /// Sets the data source object, recreating the components.
     void SetDataSource(wxWheelsDataSource* dataSource, bool ownsDataSource = false);
-
-    /// Initializes the components from the current data source. You do not usually
-    /// need to call this function since it is called from SetDataSource.
-    virtual bool InitializeComponents();
-
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual bool SetForegroundColour(const wxColour &colour);
-    virtual bool SetFont(const wxFont& font);
-    virtual bool Enable(bool enable);
 
 protected:
     

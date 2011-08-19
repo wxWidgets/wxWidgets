@@ -59,6 +59,8 @@
 		B9ED401113CA6A12007570A4 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FF913CA6A12007570A4 /* window.mm */; };
 		B9F3295913CE0763007E7023 /* actionsheetdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9F3295813CE0763007E7023 /* actionsheetdlg.mm */; };
 		B9F32A9513CE7ACE007E7023 /* alertsheetdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9F32A9413CE7ACE007E7023 /* alertsheetdlg.mm */; };
+		B9F4169D13FDB45600688F55 /* tests_wheelsctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9F4169C13FDB45600688F55 /* tests_wheelsctrl.cpp */; };
+		B9F416E013FDBDAB00688F55 /* wheelsctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9F416DF13FDBDAB00688F55 /* wheelsctrl.cpp */; };
 		B9FE823A13CB441B009182C3 /* viewcontroller.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE823913CB441B009182C3 /* viewcontroller.mm */; };
 		B9FE836713CBA872009182C3 /* navitem.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE836613CBA872009182C3 /* navitem.mm */; };
 		B9FE838113CBA9F2009182C3 /* tabctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE838013CBA9F2009182C3 /* tabctrl.mm */; };
@@ -155,6 +157,9 @@
 		B9ED3FF913CA6A12007570A4 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = ../../src/osx/iphone/window.mm; sourceTree = SOURCE_ROOT; };
 		B9F3295813CE0763007E7023 /* actionsheetdlg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = actionsheetdlg.mm; path = ../../src/osx/iphone/actionsheetdlg.mm; sourceTree = SOURCE_ROOT; };
 		B9F32A9413CE7ACE007E7023 /* alertsheetdlg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = alertsheetdlg.mm; path = ../../src/osx/iphone/alertsheetdlg.mm; sourceTree = SOURCE_ROOT; };
+		B9F4169B13FDB45600688F55 /* tests_wheelsctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_wheelsctrl.h; sourceTree = "<group>"; };
+		B9F4169C13FDB45600688F55 /* tests_wheelsctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_wheelsctrl.cpp; sourceTree = "<group>"; };
+		B9F416DF13FDBDAB00688F55 /* wheelsctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wheelsctrl.cpp; path = ../../src/generic/wheelsctrl.cpp; sourceTree = SOURCE_ROOT; };
 		B9FE823913CB441B009182C3 /* viewcontroller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = viewcontroller.mm; path = ../../src/osx/iphone/viewcontroller.mm; sourceTree = SOURCE_ROOT; };
 		B9FE836613CBA872009182C3 /* navitem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navitem.mm; path = ../../src/osx/iphone/navitem.mm; sourceTree = SOURCE_ROOT; };
 		B9FE838013CBA9F2009182C3 /* tabctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tabctrl.mm; path = ../../src/osx/iphone/tabctrl.mm; sourceTree = SOURCE_ROOT; };
@@ -269,6 +274,7 @@
 				B9FE823913CB441B009182C3 /* viewcontroller.mm */,
 				B9ED3FF813CA6A12007570A4 /* webkit.mm */,
 				B9FE83FF13CBB4A5009182C3 /* wheelsctrl.mm */,
+				B9F416DF13FDBDAB00688F55 /* wheelsctrl.cpp */,
 				B9ED3FF913CA6A12007570A4 /* window.mm */,
 			);
 			name = "src-osx-iphone";
@@ -315,6 +321,8 @@
 				B9BE54A113F8F15E007AF138 /* tests_viewcontroller.cpp */,
 				B9BE54AF13F8F29D007AF138 /* tests_viewcontroller_vc.h */,
 				B9BE54B013F8F29D007AF138 /* tests_viewcontroller_vc.cpp */,
+				B9F4169B13FDB45600688F55 /* tests_wheelsctrl.h */,
+				B9F4169C13FDB45600688F55 /* tests_wheelsctrl.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -445,6 +453,8 @@
 				B9BE54A213F8F15E007AF138 /* tests_viewcontroller.cpp in Sources */,
 				B9BE54B113F8F29D007AF138 /* tests_viewcontroller_vc.cpp in Sources */,
 				B9BE54E413F8F964007AF138 /* navbar.mm in Sources */,
+				B9F4169D13FDB45600688F55 /* tests_wheelsctrl.cpp in Sources */,
+				B9F416E013FDBDAB00688F55 /* wheelsctrl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

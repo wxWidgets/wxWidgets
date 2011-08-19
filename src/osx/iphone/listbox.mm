@@ -32,7 +32,7 @@
 
 class wxListWidgetIPhoneImpl;
 
-@interface wxUIPickerView : UIPickerView  <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface wxUIPickerView : UIPickerView <UIPickerViewDataSource, UIPickerViewDelegate>
 {
 @private
     wxListWidgetIPhoneImpl* implementation;
