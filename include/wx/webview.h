@@ -74,6 +74,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 {
 public:
     wxWebViewHandler(const wxString& scheme) : m_scheme(scheme) {}
+    virtual ~wxWebViewHandler() {}
     virtual wxString GetName() const { return m_scheme; }
     virtual wxFSFile* GetFile(const wxString &uri) = 0;
 private:
