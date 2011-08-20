@@ -73,6 +73,7 @@ private:
         CPPUNIT_TEST( CompareLoadedImage );
         CPPUNIT_TEST( CompareSavedImage );
         CPPUNIT_TEST( SavePNG );
+        CPPUNIT_TEST( SaveTIFF );
         CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( ReadCorruptedTGA );
         CPPUNIT_TEST( GIFComment );
@@ -87,6 +88,7 @@ private:
     void CompareLoadedImage();
     void CompareSavedImage();
     void SavePNG();
+    void SaveTIFF();
     void SaveAnimatedGIF();
     void ReadCorruptedTGA();
     void GIFComment();
@@ -1086,6 +1088,36 @@ void ImageTestCase::SavePNG()
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
         expected8, wxIMAGE_HAVE_ALPHA);
 
+}
+
+static void TestTIFFImage(const wxString& option, int value)
+{
+    wxImage image("horse.png");
+
+    wxMemoryOutputStream memOut;
+    image.SetOption(option, value);
+
+    CPPUNIT_ASSERT(image.SaveFile(memOut, wxBITMAP_TYPE_TIF));
+
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+
+    wxImage savedImage(memIn);
+    CPPUNIT_ASSERT(savedImage.IsOk());
+
+    WX_ASSERT_EQUAL_MESSAGE(("While checking for option %s", option),
+        true, savedImage.HasOption(option));
+
+    WX_ASSERT_EQUAL_MESSAGE(("While testing for %s", option),
+        value, savedImage.GetOptionInt(option));
+}
+
+void ImageTestCase::SaveTIFF()
+{
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, 1);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 1);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, 0/*PHOTOMETRIC_MINISWHITE*/);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, 1/*PHOTOMETRIC_MINISBLACK*/);
 }
 
 void ImageTestCase::SaveAnimatedGIF()

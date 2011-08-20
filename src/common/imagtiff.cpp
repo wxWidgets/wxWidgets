@@ -437,24 +437,26 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
 
 
-    uint16 spp, bpp, compression;
+    image->SetOption(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, photometric);
+
+    uint16 spp, bps, compression;
     /*
     Read some baseline TIFF tags which helps when re-saving a TIFF
     to be similar to the original image.
     */
     if ( TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &spp) )
     {
-        image->SetOption(wxIMAGE_OPTION_SAMPLESPERPIXEL, spp);
+        image->SetOption(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, spp);
     }
 
-    if ( TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bpp) )
+    if ( TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bps) )
     {
-        image->SetOption(wxIMAGE_OPTION_BITSPERSAMPLE, bpp);
+        image->SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, bps);
     }
 
     if ( TIFFGetFieldDefaulted(tif, TIFFTAG_COMPRESSION, &compression) )
     {
-        image->SetOption(wxIMAGE_OPTION_COMPRESSION, compression);
+        image->SetOption(wxIMAGE_OPTION_TIFF_COMPRESSION, compression);
     }
 
     // Set the resolution unit.
@@ -587,15 +589,44 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
 
 
-    int spp = image->GetOptionInt(wxIMAGE_OPTION_SAMPLESPERPIXEL);
+    int spp = image->GetOptionInt(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL);
     if ( !spp )
         spp = 3;
 
-    int bpp = image->GetOptionInt(wxIMAGE_OPTION_BITSPERSAMPLE);
-    if ( !bpp )
-        bpp = 8;
+    int bps = image->GetOptionInt(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE);
+    if ( !bps )
+    {
+        bps = 8;
+    }
+    else if (bps == 1)
+    {
+        // One bit per sample combined with 3 samples per pixel is
+        // not allowed and crashes libtiff.
+        spp = 1;
+    }
 
-    int compression = image->GetOptionInt(wxIMAGE_OPTION_COMPRESSION);
+    int photometric = PHOTOMETRIC_RGB;
+
+    if ( image->HasOption(wxIMAGE_OPTION_TIFF_PHOTOMETRIC) )
+    {
+        photometric = image->GetOptionInt(wxIMAGE_OPTION_TIFF_PHOTOMETRIC);
+        if (photometric == PHOTOMETRIC_MINISWHITE
+            || photometric == PHOTOMETRIC_MINISBLACK)
+        {
+            // either b/w or greyscale
+            spp = 1;
+        }
+    }
+    else if (spp == 1)
+    {
+        photometric = PHOTOMETRIC_MINISWHITE;
+    }
+
+    const bool isColouredImage = (spp > 1)
+        && (photometric != PHOTOMETRIC_MINISWHITE)
+        && (photometric != PHOTOMETRIC_MINISBLACK);
+
+    int compression = image->GetOptionInt(wxIMAGE_OPTION_TIFF_COMPRESSION);
     if ( !compression )
     {
         // we can't use COMPRESSION_LZW because current version of libtiff
@@ -606,20 +637,19 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
 
     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp);
-    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bpp);
-    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, spp*bpp == 1 ? PHOTOMETRIC_MINISBLACK
-                                                        : PHOTOMETRIC_RGB);
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photometric);
     TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
 
-    // scanlinesize if determined by spp and bpp
-    tsize_t linebytes = (tsize_t)image->GetWidth() * spp * bpp / 8;
+    // scanlinesize if determined by spp and bps
+    tsize_t linebytes = (tsize_t)image->GetWidth() * spp * bps / 8;
 
-    if ( (image->GetWidth() % 8 > 0) && (spp * bpp < 8) )
+    if ( (image->GetWidth() % 8 > 0) && (spp * bps < 8) )
         linebytes+=1;
 
     unsigned char *buf;
 
-    if (TIFFScanlineSize(tif) > linebytes || (spp * bpp < 24))
+    if (TIFFScanlineSize(tif) > linebytes || !isColouredImage)
     {
         buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
         if (!buf)
@@ -641,15 +671,29 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (uint32) -1));
 
+    const bool minIsWhite = (photometric == PHOTOMETRIC_MINISWHITE);
     unsigned char *ptr = image->GetData();
     for ( int row = 0; row < image->GetHeight(); row++ )
     {
         if ( buf )
         {
-            if ( spp * bpp > 1 )
+            if (isColouredImage)
             {
                 // color image
                 memcpy(buf, ptr, image->GetWidth());
+            }
+            else if (spp * bps == 8) // greyscale image
+            {
+                for ( int column = 0; column < linebytes; column++ )
+                {
+                    uint8 value = ptr[column*3 + 1];
+                    if (minIsWhite)
+                    {
+                        value = 255 - value;
+                    }
+
+                    buf[column] = value;
+                }
             }
             else // black and white image
             {
@@ -658,9 +702,9 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                     uint8 reverse = 0;
                     for ( int bp = 0; bp < 8; bp++ )
                     {
-                        if ( ptr[column*24 + bp*3] > 0 )
+                        if ( (ptr[column*24 + bp*3 + 1] <=127) == minIsWhite )
                         {
-                            // check only red as this is sufficient
+                            // check only green as this is sufficient
                             reverse = (uint8)(reverse | 128 >> bp);
                         }
                     }

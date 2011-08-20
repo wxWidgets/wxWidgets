@@ -230,6 +230,14 @@
                horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
     </wx-data>
 
+    <wx-data id="data-images">
+        <srcdir>$(SRCDIR)/image</srcdir>
+        <dstdir>image</dstdir>
+        <files>horse_grey.bmp  horse_grey_flipped.bmp
+               horse_rle4.bmp  horse_rle4_flipped.bmp
+               horse_rle8.bmp  horse_rle8_flipped.bmp</files>
+    </wx-data>
+
     <template id="catalog">
         <dstdir>$(BUILDDIR)/intl/$(id)</dstdir>
         <srcdir>$(SRCDIR)/intl/$(id)</srcdir>

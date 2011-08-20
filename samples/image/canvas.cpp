@@ -503,29 +503,29 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawBitmap(my_toucan_blur, x, y+15, true);
     }
 
-    // if (my_smile_xbm.IsOk())
-    // {
-    //     int x = 300, y = 1800;
+    if (my_smile_xbm.IsOk())
+    {
+        int x = 300, y = 1800;
 
-    //     dc.DrawText( wxT("XBM bitmap"), x, y );
-    //     dc.DrawText( wxT("(green on red)"), x, y + 15 );
-    //     dc.SetTextForeground( wxT("GREEN") );
-    //     dc.SetTextBackground( wxT("RED") );
-    //     // dc.DrawBitmap( my_smile_xbm, x, y + 30 );
+        dc.DrawText( wxT("XBM bitmap"), x, y );
+        dc.DrawText( wxT("(green on red)"), x, y + 15 );
+        dc.SetTextForeground( wxT("GREEN") );
+        dc.SetTextBackground( wxT("RED") );
+        dc.DrawBitmap( my_smile_xbm, x, y + 30 );
 
-    //     dc.SetTextForeground( *wxBLACK );
-    //     dc.DrawText( wxT("After wxImage conversion"), x + 120, y );
-    //     dc.DrawText( wxT("(red on white)"), x + 120, y + 15 );
-    //     dc.SetTextForeground( wxT("RED") );
-    //     wxImage i = my_smile_xbm.ConvertToImage();
-    //     i.SetMaskColour( 255, 255, 255 );
-    //     i.Replace( 0, 0, 0,
-    //         wxRED_PEN->GetColour().Red(),
-    //         wxRED_PEN->GetColour().Green(),
-    //         wxRED_PEN->GetColour().Blue() );
-    //     dc.DrawBitmap( wxBitmap(i), x + 120, y + 30, true );
-    //     dc.SetTextForeground( *wxBLACK );
-    // }
+        dc.SetTextForeground( *wxBLACK );
+        dc.DrawText( wxT("After wxImage conversion"), x + 120, y );
+        dc.DrawText( wxT("(red on white)"), x + 120, y + 15 );
+        dc.SetTextForeground( wxT("RED") );
+        wxImage i = my_smile_xbm.ConvertToImage();
+        i.SetMaskColour( 255, 255, 255 );
+        i.Replace( 0, 0, 0,
+            wxRED_PEN->GetColour().Red(),
+            wxRED_PEN->GetColour().Green(),
+            wxRED_PEN->GetColour().Blue() );
+        dc.DrawBitmap( wxBitmap(i), x + 120, y + 30, true );
+        dc.SetTextForeground( *wxBLACK );
+    }
 
 
 //     wxBitmap mono( 60,50,1 );
