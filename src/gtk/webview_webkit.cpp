@@ -43,6 +43,17 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
 
     if (status == WEBKIT_LOAD_FINISHED)
     {
+        WebKitWebBackForwardList* hist = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(widget));
+        WebKitWebHistoryItem* item = webkit_web_back_forward_list_get_current_item(hist);
+        //We have to check if we are actually storing history
+        //If the item isn't added we add it ourselves, it isn't added otherwise
+        //with a custom scheme.
+        if(WEBKIT_IS_WEB_HISTORY_ITEM(item) && webkit_web_history_item_get_uri(item) != url)
+        {
+            WebKitWebHistoryItem* newitem = webkit_web_history_item_new_with_data(url, webKitCtrl->GetCurrentTitle());
+            webkit_web_back_forward_list_add_item(hist, newitem);
+        }
+
         webKitCtrl->m_busy = false;
         wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED,
                              webKitCtrl->GetId(),
