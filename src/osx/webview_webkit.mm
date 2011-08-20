@@ -1062,7 +1062,9 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
             case NSURLErrorResourceUnavailable:
             case NSURLErrorHTTPTooManyRedirects:
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
             case NSURLErrorDataLengthExceedsMaximum:
+#endif
             case NSURLErrorBadURL:
             case NSURLErrorFileIsDirectory:
                 *out = wxWEB_NAV_ERR_REQUEST;
