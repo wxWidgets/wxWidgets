@@ -1969,7 +1969,6 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
-    GetOwner()->InvalidateColBestWidths();
 
     if (IsVirtualList())
     {
@@ -2004,6 +2003,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         m_count = -1;
     }
 
+    GetOwner()->InvalidateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2014,8 +2014,6 @@ static void DestroyTreeHelper( wxDataViewTreeNode * node);
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                                        const wxDataViewItem& item)
 {
-    GetOwner()->InvalidateColBestWidths();
-
     if (IsVirtualList())
     {
         wxDataViewVirtualListModel *list_model =
@@ -2128,6 +2126,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     if( m_currentRow > GetRowCount() )
         ChangeCurrentRow(m_count - 1);
 
+    GetOwner()->InvalidateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2135,10 +2134,10 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
 bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 {
-    GetOwner()->InvalidateColBestWidths();
-
     SortPrepare();
     g_model->Resort();
+
+    GetOwner()->InvalidateColBestWidths();
 
     // Send event
     wxWindow *parent = GetParent();
@@ -2167,8 +2166,6 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     if (view_column == -1)
         return false;
 
-    GetOwner()->InvalidateColBestWidth(view_column);
-
     // NOTE: to be valid, we cannot use e.g. INT_MAX - 1
 /*#define MAX_VIRTUAL_WIDTH       100000
 
@@ -2180,6 +2177,8 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 */
     SortPrepare();
     g_model->Resort();
+
+    GetOwner()->InvalidateColBestWidth(view_column);
 
     // Send event
     wxWindow *parent = GetParent();
@@ -2196,14 +2195,13 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 
 bool wxDataViewMainWindow::Cleared()
 {
-    GetOwner()->InvalidateColBestWidths();
-
     DestroyTree();
     m_selection.Clear();
 
     SortPrepare();
     BuildTree( GetOwner()->GetModel() );
 
+    GetOwner()->InvalidateColBestWidths();
     UpdateDisplay();
 
     return true;
