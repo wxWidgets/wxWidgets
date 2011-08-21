@@ -457,20 +457,31 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
     const wxByte* alpha = image.GetAlpha();
     if (alpha != NULL || image.HasMask())
     {
-        // create mask as XBM format bitmap
+        // create mask as CAIRO_FORMAT_A1 image surface
 
-        const size_t out_size = size_t((w + 7) / 8) * unsigned(h);
-        wxByte* out = new wxByte[out_size];
-        memset(out, 0xff, out_size);
-        unsigned bit_index = 0;
+        int stride = cairo_format_stride_for_width( CAIRO_FORMAT_A1, w );
+        unsigned char *data = (unsigned char *)malloc( stride * h );
+        memset(data, 0, stride*h);
+        unsigned char *data_start = data;
+        int byte_index = 0;
+        int rowpad = stride - size_t((w+7)/8);
+
         if (alpha != NULL)
         {
-            for (int y = 0; y < h; y++)
+            for (int y = 0; y < h; y++, byte_index += rowpad)
             {
-                for (int x = 0; x < w; x++, bit_index++)
+                for (int x = 0; x < w; x++)
+                {
                     if (*alpha++ < wxIMAGE_ALPHA_THRESHOLD)
-                        out[bit_index >> 3] ^= 1 << (bit_index & 7);
-                bit_index = (bit_index + 7) & ~7u;
+                    {
+                        int move = x % 8;
+                        data[byte_index] |= (1 << move);
+                    }
+                    if ((x+1)%8 == 0)
+                    {
+                        byte_index++;
+                    }
+                }
             }
         }
         else
@@ -479,29 +490,27 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
             const wxByte g_mask = image.GetMaskGreen();
             const wxByte b_mask = image.GetMaskBlue();
             const wxByte* in = image.GetData();
-            for (int y = 0; y < h; y++)
+
+            for (int y = 0; y < h; y++, byte_index += rowpad)
             {
-                for (int x = 0; x < w; x++, in += 3, bit_index++)
+                for (int x = 0; x < w; x++, in += 3)
+                {
                     if (in[0] == r_mask && in[1] == g_mask && in[2] == b_mask)
-                        out[bit_index >> 3] ^= 1 << (bit_index & 7);
-                bit_index = (bit_index + 7) & ~7u;
+                    {
+                        int move = x % 8;
+                        data[byte_index] |= (1 << move);
+                    }
+                    if ((x+1)%8 == 0)
+                    {
+                        byte_index++;
+                    }
+                }
             }
         }
+
         wxMask* mask = new wxMask;
-        // I don't know if there is a simpler way to copy cairo_image_surface. (JC)
-        unsigned char *src_data;
-        unsigned char *data;  
-
-        // FIXME: CAIRO_FORMAT_A1 is good here? (JC)
-        int stride = cairo_format_stride_for_width( CAIRO_FORMAT_A1, w );
-
-        // Caller is in charge of allocation of memory.(JC)
-        data = (unsigned char *)malloc( stride * h );
-        memcpy( data, out, stride * h );
-
-        mask->m_bitmap = cairo_image_surface_create_for_data( data, CAIRO_FORMAT_A1, w, h, stride );
+        mask->m_bitmap = cairo_image_surface_create_for_data( data_start, CAIRO_FORMAT_A1, w, h, stride );
         SetMask(mask);
-        delete[] out;
     }
     return IsOk();
 }
