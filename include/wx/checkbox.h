@@ -41,18 +41,6 @@
  */
 #define wxCHK_ALLOW_3RD_STATE_FOR_USER 0x2000
 
-/*
- * The possible states of a 3-state checkbox (Compatible
- * with the 2-state checkbox).
- */
-enum wxCheckBoxState
-{
-    wxCHK_UNCHECKED,
-    wxCHK_CHECKED,
-    wxCHK_UNDETERMINED /* 3-state checkbox only */
-};
-
-
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 
 // ----------------------------------------------------------------------------

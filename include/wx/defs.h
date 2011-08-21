@@ -2235,6 +2235,18 @@ enum wxItemKind
     wxITEM_MAX
 };
 
+/*
+ * The possible states of a 3-state checkbox (Compatible
+ * with the 2-state checkbox).
+ */
+enum wxCheckBoxState
+{
+    wxCHK_UNCHECKED,
+    wxCHK_CHECKED,
+    wxCHK_UNDETERMINED /* 3-state checkbox only */
+};
+
+
 /*  hit test results */
 enum wxHitTest
 {
