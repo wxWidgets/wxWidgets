@@ -37,7 +37,12 @@ public:
 protected:
     bool CreateControls();
     
-    void OnButtonClicked(wxCommandEvent& WXUNUSED(event));
+    void OnButtonRoundedRectangleClicked(wxCommandEvent& WXUNUSED(event));
+    void OnButtonDisclosureClicked(wxCommandEvent& WXUNUSED(event));
+    void OnButtonInfoLightClicked(wxCommandEvent& WXUNUSED(event));
+    void OnButtonInfoDarkClicked(wxCommandEvent& WXUNUSED(event));
+    void OnButtonContactAddClicked(wxCommandEvent& WXUNUSED(event));
+    void OnButtonBitmapClicked(wxCommandEvent& WXUNUSED(event));
     
     DECLARE_EVENT_TABLE()
 
@@ -47,6 +52,7 @@ private:
     wxButton* m_buttonInfoLight;
     wxButton* m_buttonInfoDark;
     wxButton* m_buttonContactAdd;
+    wxBitmapButton* m_buttonBitmap;
 };
 
 #endif

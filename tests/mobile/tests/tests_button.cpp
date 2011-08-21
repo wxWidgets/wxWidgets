@@ -7,13 +7,11 @@
 //
 
 #include "tests_button.h"
+#include "tests_bitmap.h"
 
-#define MobileTestsWxButtonClickedID    wxID_PROPERTIES
 
 BEGIN_EVENT_TABLE(MobileTestsWxButtonPanel, wxPanel)
-    EVT_BUTTON(MobileTestsWxButtonClickedID, MobileTestsWxButtonPanel::OnButtonClicked)
 END_EVENT_TABLE()
-
 
 bool MobileTestsWxButtonPanel::CreateWithControls(wxWindow* parent,
                                       wxWindowID id,
@@ -43,26 +41,59 @@ bool MobileTestsWxButtonPanel::CreateControls()
     // Various styles
     // 
     
-    m_buttonRoundedRectangle = new wxButton(this, MobileTestsWxButtonClickedID, "Click me!", wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+    m_buttonRoundedRectangle = new wxButton(this, wxID_ANY, "Click me!", wxDefaultPosition, wxDefaultSize, wxBU_ROUNDED_RECTANGLE);
+    m_buttonRoundedRectangle->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxButtonPanel::OnButtonRoundedRectangleClicked), NULL, this);
     buttonSizer->Add(m_buttonRoundedRectangle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
     m_buttonDisclosure = new wxButton(this, wxID_ANY, "This text should not be shown.", wxDefaultPosition, wxDefaultSize, wxBU_DISCLOSURE);
+    m_buttonDisclosure->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxButtonPanel::OnButtonDisclosureClicked), NULL, this);
     buttonSizer->Add(m_buttonDisclosure, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
     m_buttonInfoLight = new wxButton(this, wxID_ANY, "This text should not be shown.", wxDefaultPosition, wxDefaultSize, wxBU_INFO_LIGHT);
+    m_buttonInfoLight->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxButtonPanel::OnButtonInfoLightClicked), NULL, this);
     buttonSizer->Add(m_buttonInfoLight, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
     m_buttonInfoDark = new wxButton(this, wxID_ANY, "This text should not be shown.", wxDefaultPosition, wxDefaultSize, wxBU_INFO_DARK);
+    m_buttonInfoDark->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxButtonPanel::OnButtonInfoDarkClicked), NULL, this);
     buttonSizer->Add(m_buttonInfoDark, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);    
     
     m_buttonContactAdd = new wxButton(this, wxID_ANY, "This text should not be shown.", wxDefaultPosition, wxDefaultSize, wxBU_CONTACT_ADD);
+    m_buttonContactAdd->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxButtonPanel::OnButtonContactAddClicked), NULL, this);
     buttonSizer->Add(m_buttonContactAdd, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    
+    m_buttonBitmap = new wxBitmapButton(this, wxID_ANY, tests_bitmap, wxDefaultPosition, wxDefaultSize);
+    m_buttonBitmap->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MobileTestsWxButtonPanel::OnButtonBitmapClicked), NULL, this);
+    buttonSizer->Add(m_buttonBitmap, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     
     return true;
 }
 
-/// Show an action sheet
-void MobileTestsWxButtonPanel::OnButtonClicked(wxCommandEvent& WXUNUSED(event))
+void MobileTestsWxButtonPanel::OnButtonRoundedRectangleClicked(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogInfo("m_buttonRoundedRectangle button clicked");
+    wxLogMessage("Rectangle button clicked");
+}
+
+void MobileTestsWxButtonPanel::OnButtonDisclosureClicked(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Disclosure button clicked");    
+}
+
+void MobileTestsWxButtonPanel::OnButtonInfoLightClicked(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Info light button clicked");
+}
+
+void MobileTestsWxButtonPanel::OnButtonInfoDarkClicked(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Info dark button clicked");
+}
+
+void MobileTestsWxButtonPanel::OnButtonContactAddClicked(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Contact add button clicked");
+}
+
+void MobileTestsWxButtonPanel::OnButtonBitmapClicked(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage("Bitmap button clicked");
 }
