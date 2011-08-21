@@ -59,13 +59,8 @@ public:
     /// on the right hand side of a plain list.
     virtual wxArrayString GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl)) const;
     
-    void OnSelectRow(wxTableCtrlEvent& event);
-    
-    // Utility to push table onto the navigation controller
-    void PushTable(wxTableCtrl* tableCtrl, wxTableDataSource* dataSource, const wxString& title);
-    
-    // Utility to push a window onto the navigation controller
-    void PushWindow(wxWindow* win, const wxString& title);
+    bool OnSelectRow(wxTableCtrl* ctrl,
+                     wxTablePath path);
     
     DECLARE_EVENT_TABLE()
 protected:

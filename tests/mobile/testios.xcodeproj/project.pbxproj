@@ -12,6 +12,7 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		407EE18312F04CD500D0F171 /* libwx_osx_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4074F5E912ED969C00693A3F /* libwx_osx_iphone.a */; };
 		407EE18A12F04CF900D0F171 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407EE18912F04CF900D0F171 /* AudioToolbox.framework */; };
+		B90C2DC413FF648E00D70940 /* tests_tablectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B90C2DC313FF648E00D70940 /* tests_tablectrl.cpp */; };
 		B92FE45613F2E82000408AD7 /* tests_stattext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B92FE45513F2E82000408AD7 /* tests_stattext.cpp */; };
 		B92FE45B13F2EAB000408AD7 /* tests_textctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B92FE45A13F2EAB000408AD7 /* tests_textctrl.cpp */; };
 		B92FE46413F2EFAF00408AD7 /* tests_webctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B92FE46313F2EFAF00408AD7 /* tests_webctrl.cpp */; };
@@ -33,6 +34,8 @@
 		B9CA6F9213BF1EF900061979 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA6F9113BF1EF900061979 /* libz.dylib */; };
 		B9CA720513BF960400061979 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CA720413BF960400061979 /* QuartzCore.framework */; };
 		B9DC3C9213DFA74600DA5A41 /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9DC3C9113DFA74600DA5A41 /* tests.cpp */; };
+		B9E501DB1400E7F6003FB88A /* tablectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9E501DA1400E7F6003FB88A /* tablectrl.cpp */; };
+		B9E501E61400E8FF003FB88A /* navctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9E501E51400E8FF003FB88A /* navctrl.cpp */; };
 		B9ED3FFA13CA6A12007570A4 /* button.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE213CA6A12007570A4 /* button.mm */; };
 		B9ED3FFB13CA6A12007570A4 /* checkbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE313CA6A12007570A4 /* checkbox.mm */; };
 		B9ED3FFC13CA6A12007570A4 /* dialog.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED3FE413CA6A12007570A4 /* dialog.mm */; };
@@ -90,6 +93,8 @@
 		407EE18912F04CF900D0F171 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		409CBDC913B13C7100AB1F39 /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
 		409CBDCA13B13C7100AB1F39 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
+		B90C2DC213FF648E00D70940 /* tests_tablectrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_tablectrl.h; sourceTree = "<group>"; };
+		B90C2DC313FF648E00D70940 /* tests_tablectrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_tablectrl.cpp; sourceTree = "<group>"; };
 		B92FE45413F2E82000408AD7 /* tests_stattext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_stattext.h; sourceTree = "<group>"; };
 		B92FE45513F2E82000408AD7 /* tests_stattext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_stattext.cpp; sourceTree = "<group>"; };
 		B92FE45913F2EAB000408AD7 /* tests_textctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_textctrl.h; sourceTree = "<group>"; };
@@ -131,6 +136,8 @@
 		B9CA720413BF960400061979 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B9DC3C9113DFA74600DA5A41 /* tests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests.cpp; sourceTree = "<group>"; };
 		B9DC3C9313DFA82000DA5A41 /* tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests.h; sourceTree = "<group>"; };
+		B9E501DA1400E7F6003FB88A /* tablectrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tablectrl.cpp; path = ../../src/generic/tablectrl.cpp; sourceTree = SOURCE_ROOT; };
+		B9E501E51400E8FF003FB88A /* navctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = navctrl.cpp; path = ../../src/generic/navctrl.cpp; sourceTree = SOURCE_ROOT; };
 		B9ED3FE213CA6A12007570A4 /* button.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = button.mm; path = ../../src/osx/iphone/button.mm; sourceTree = SOURCE_ROOT; };
 		B9ED3FE313CA6A12007570A4 /* checkbox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = checkbox.mm; path = ../../src/osx/iphone/checkbox.mm; sourceTree = SOURCE_ROOT; };
 		B9ED3FE413CA6A12007570A4 /* dialog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = dialog.mm; path = ../../src/osx/iphone/dialog.mm; sourceTree = SOURCE_ROOT; };
@@ -256,6 +263,7 @@
 				B9ED3FE913CA6A12007570A4 /* msgdlg.mm */,
 				B9BE54E313F8F964007AF138 /* navbar.mm */,
 				B9ED3FEA13CA6A12007570A4 /* navctrl.mm */,
+				B9E501E51400E8FF003FB88A /* navctrl.cpp */,
 				B9FE836613CBA872009182C3 /* navitem.mm */,
 				B9ED3FEB13CA6A12007570A4 /* nonownedwnd.mm */,
 				B9ED3FEC13CA6A12007570A4 /* notebook.mm */,
@@ -268,6 +276,7 @@
 				B9ED3FF313CA6A12007570A4 /* tablecell.mm */,
 				B9FE838013CBA9F2009182C3 /* tabctrl.mm */,
 				B9ED3FF413CA6A12007570A4 /* tablectrl.mm */,
+				B9E501DA1400E7F6003FB88A /* tablectrl.cpp */,
 				B9ED3FF513CA6A12007570A4 /* textctrl.mm */,
 				B9ED3FF613CA6A12007570A4 /* toolbar.mm */,
 				B9ED3FF713CA6A12007570A4 /* utils.mm */,
@@ -323,6 +332,8 @@
 				B9BE54B013F8F29D007AF138 /* tests_viewcontroller_vc.cpp */,
 				B9F4169B13FDB45600688F55 /* tests_wheelsctrl.h */,
 				B9F4169C13FDB45600688F55 /* tests_wheelsctrl.cpp */,
+				B90C2DC213FF648E00D70940 /* tests_tablectrl.h */,
+				B90C2DC313FF648E00D70940 /* tests_tablectrl.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -455,6 +466,9 @@
 				B9BE54E413F8F964007AF138 /* navbar.mm in Sources */,
 				B9F4169D13FDB45600688F55 /* tests_wheelsctrl.cpp in Sources */,
 				B9F416E013FDBDAB00688F55 /* wheelsctrl.cpp in Sources */,
+				B90C2DC413FF648E00D70940 /* tests_tablectrl.cpp in Sources */,
+				B9E501DB1400E7F6003FB88A /* tablectrl.cpp in Sources */,
+				B9E501E61400E8FF003FB88A /* navctrl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

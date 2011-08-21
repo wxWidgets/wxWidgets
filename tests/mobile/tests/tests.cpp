@@ -39,13 +39,13 @@
 #include "tests_listbox.h"
 #include "tests_viewcontroller.h"
 #include "tests_wheelsctrl.h"
+#include "tests_tablectrl.h"
 
 
 #pragma mark -
 #pragma mark Tests table data source
 
 BEGIN_EVENT_TABLE(MobileTestsDataSource, wxTableDataSource)
-    EVT_TABLE_ROW_SELECTED(wxID_ANY, MobileTestsDataSource::OnSelectRow)
 END_EVENT_TABLE()
 
 MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
@@ -141,6 +141,11 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     //m_testDescriptions.Add(_("The view controller manages a window, usually in conjunction with the wxNavigationCtrl class."));
     //m_testPanels.Add(new MobileTestsWxViewControllerPanel());
     
+    // wxTableCtrl
+    m_testNames.Add(_("wxTableCtrl"));
+    m_testDescriptions.Add(_("This class manages a table of one-column rows that can have sections (grouped) or no sections and an optional index (plain)."));
+    m_testPanels.Add(new MobileTestsWxTableCtrlPanel(ctrl));
+    
     //
     // --
     //
@@ -194,14 +199,10 @@ wxArrayString MobileTestsDataSource::GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl))
     return index;
 }
 
-void MobileTestsDataSource::OnSelectRow(wxTableCtrlEvent& event)
+bool MobileTestsDataSource::OnSelectRow(wxTableCtrl* ctrl,
+                                        wxTablePath path)
 {
-    wxTablePath path = event.GetPath();
-    
-    wxTableCtrl* tableCtrl = event.GetTableCtrl();
-    if (tableCtrl) {
-        tableCtrl->Deselect(event.GetPath());
-    }
+    ctrl->Deselect(path);
     
     wxASSERT_MSG(path.GetRow() < m_testNames.Count(), "Unknown test selected");
     
@@ -209,31 +210,7 @@ void MobileTestsDataSource::OnSelectRow(wxTableCtrlEvent& event)
     testPanel->CreateWithControls(m_navCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
     testPanel->SetBackgroundColour(wxColour(wxT("#E3E4FF")));
 
-    PushWindow(testPanel, wxEmptyString);
-}
-
-// Utility to push a table onto the navigation controller
-void MobileTestsDataSource::PushTable(wxTableCtrl* tableCtrl, wxTableDataSource* dataSource, const wxString& title)
-{
-    wxViewController* controller = new wxViewController(title);
-    tableCtrl->Show(false);
-    controller->SetWindow(tableCtrl);
-    
-    tableCtrl->SetDataSource(dataSource, true /* own this data source */);    
-    m_navCtrl->PushController(controller);
-    tableCtrl->Show(true);
-    
-    tableCtrl->ReloadData();
-}
-
-// Utility to push a window onto the navigation controller
-void MobileTestsDataSource::PushWindow(wxWindow* win, const wxString& title)
-{
-    wxViewController* controller = new wxViewController(title);
-    win->Show(false);
-    controller->SetWindow(win);
-    m_navCtrl->PushController(controller);
-    win->Show(true);
+    m_navCtrl->PushWindow(testPanel, wxEmptyString);
 }
 
 
