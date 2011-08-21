@@ -36,7 +36,13 @@ public:
         wxItemContainer::Clear();
     }
 
-    bool IsEmpty() const { return wxItemContainer::IsEmpty(); }
+    // IsEmpty() is ambiguous because we inherit it from both wxItemContainer
+    // and wxTextEntry, and even if defined it here to help the compiler with
+    // choosing one of them, it would still be confusing for the human users of
+    // this class. So instead define the clearly named methods below and leave
+    // IsEmpty() ambiguous to trigger a compilation error if it's used.
+    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
+    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
 
     // also bring in GetSelection() versions of both base classes in scope
     //

@@ -333,6 +333,9 @@ Changes in behaviour which may result in compilation errors
 
 - wxST_MARKUP doesn't exist any more, use wxControl::SetLabelMarkup() instead.
 
+- wxComboBox::IsEmpty(), which was previously available in some ports (but not
+  wxMSW), doesn't exist any more, use either IsListEmpty() or IsTextEmpty().
+
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -453,6 +456,7 @@ All (GUI):
 - Allow marking wxTreeBook nodes to expand initially in XRC (RedTide).
 - Added customizable wxDocManager::OnMRUFileNotExist() virtual method.
 - Fix stock labels when not using mnemonics for Chinese (cw.ahbong).
+- Added wxComboBox::IsListEmpty() and IsTextEmpty().
 
 OSX:
 
