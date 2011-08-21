@@ -297,15 +297,37 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     wxASSERT(depth == 1);
     if (width > 0 && height > 0 && depth == 1)
     {
-#ifdef __WXGTK30__
-        // NB: Keep in mind that Cairo images must have a rowstride of 4 bytes, so you will need to
-        //     align your data properly
-        int stride = cairo_format_stride_for_width( CAIRO_FORMAT_A1, width );
-        // FIXME Pass in CAIRO_FORMAT_A1 is probably not right. (JC)
-        SetPixmap(cairo_image_surface_create_for_data((unsigned char*)bits, CAIRO_FORMAT_A1, width, height, stride));
-#else
-        SetPixmap(gdk_bitmap_create_from_data(gtk_widget_get_window(wxGetRootWindow()), bits, width, height));
-#endif
+        // Caller is in charge of allocation of memory.(JC)
+        int stride = cairo_format_stride_for_width( CAIRO_FORMAT_RGB24, width );
+        unsigned char *image_data = new unsigned char( stride * height );
+        memset(image_data, 0, stride*height);
+        unsigned int *data = (unsigned int *)image_data;
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int move = x % 8;
+                int bit = ( (*bits) & (1 << move ) ) >> move;
+                
+                if (bit == 1) 
+                {
+                    *data = 0;
+                }
+                else
+                {
+                    *data = (255 << 16 | 255 << 8 | 255);
+                }
+                ++data;
+
+                if ((x+1)%8 == 0)
+                {
+                    ++bits;
+                }
+            }
+        }
+
+        SetPixmap(cairo_image_surface_create_for_data( image_data, CAIRO_FORMAT_RGB24, width, height, stride ));
     }
 }
 
