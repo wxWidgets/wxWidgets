@@ -96,7 +96,7 @@ public:
                   wxNotebookPage *pPage,
                   const wxString& strText,
                   bool bSelect = false,
-                  int imageId = -1);
+                  int imageId = NO_IMAGE);
 
     // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
     // style.

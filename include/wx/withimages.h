@@ -21,6 +21,11 @@
 class WXDLLIMPEXP_CORE wxWithImages
 {
 public:
+    enum
+    {
+        NO_IMAGE = -1
+    };
+
     wxWithImages()
     {
         m_imageList = NULL;
@@ -55,13 +60,13 @@ protected:
 
     // Return the image with the given index from the image list.
     //
-    // If there is no image list or if index == -1 (which traditionally means
-    // that no image should be used for the given item), silently returns
+    // If there is no image list or if index == NO_IMAGE, silently returns
     // wxNullIcon.
     wxIcon GetImage(int iconIndex) const
     {
-        return m_imageList && iconIndex != -1 ? m_imageList->GetIcon(iconIndex)
-                                              : wxNullIcon;
+        return m_imageList && iconIndex != NO_IMAGE
+                    ? m_imageList->GetIcon(iconIndex)
+                    : wxNullIcon;
     }
 
 private:

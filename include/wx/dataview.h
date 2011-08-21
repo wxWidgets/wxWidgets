@@ -1262,20 +1262,20 @@ public:
         { return GetStore()->IsContainer(item); }
 
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
-        const wxString &text, int icon = -1, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
     wxDataViewItem PrependItem( const wxDataViewItem& parent,
-        const wxString &text, int icon = -1, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
     wxDataViewItem InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, int icon = -1, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
 
     wxDataViewItem PrependContainer( const wxDataViewItem& parent,
-        const wxString &text, int icon = -1, int expanded = -1,
+        const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
         wxClientData *data = NULL );
     wxDataViewItem AppendContainer( const wxDataViewItem& parent,
-        const wxString &text, int icon = -1, int expanded = -1,
+        const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
         wxClientData *data = NULL );
     wxDataViewItem InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, int icon = -1, int expanded = -1,
+        const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
         wxClientData *data = NULL );
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const

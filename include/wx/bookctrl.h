@@ -181,7 +181,7 @@ public:
     virtual bool AddPage(wxWindow *page,
                          const wxString& text,
                          bool bSelect = false,
-                         int imageId = -1)
+                         int imageId = NO_IMAGE)
     {
         DoInvalidateBestSize();
         return InsertPage(GetPageCount(), page, text, bSelect, imageId);
@@ -192,7 +192,7 @@ public:
                             wxWindow *page,
                             const wxString& text,
                             bool bSelect = false,
-                            int imageId = -1) = 0;
+                            int imageId = NO_IMAGE) = 0;
 
     // set the currently selected page, return the index of the previously
     // selected one (or wxNOT_FOUND on error)
