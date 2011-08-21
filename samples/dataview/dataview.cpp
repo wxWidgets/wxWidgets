@@ -684,7 +684,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 
             wxImageList *ilist = new wxImageList( 16, 16 );
             ilist->Add( wxIcon(wx_small_xpm) );
-            tc->SetImageList( ilist );
+            tc->AssignImageList( ilist );
 
             wxDataViewItem parent =
                 tc->AppendContainer( wxDataViewItem(0), "The Root", 0 );

@@ -145,7 +145,7 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), false,
         wxT("SetPageImage: invalid notebook page") );
-    wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), false,
+    wxCHECK_MSG( HasImageList() && nImage < GetImageList()->GetImageCount(), false,
         wxT("SetPageImage: invalid image index") );
 
     if ( nImage != m_images[nPage] )

@@ -24,6 +24,7 @@
 #include "wx/weakref.h"
 #include "wx/vector.h"
 #include "wx/dataobj.h"
+#include "wx/withimages.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -1230,10 +1231,11 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl
+class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl,
+                                          public wxWithImages
 {
 public:
-    wxDataViewTreeCtrl() { Init(); }
+    wxDataViewTreeCtrl() { }
     wxDataViewTreeCtrl(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,
@@ -1241,12 +1243,8 @@ public:
                        long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
                        const wxValidator& validator = wxDefaultValidator)
     {
-        Init();
-
         Create(parent, id, pos, size, style, validator);
     }
-
-    virtual ~wxDataViewTreeCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -1262,9 +1260,6 @@ public:
 
     bool IsContainer( const wxDataViewItem& item ) const
         { return GetStore()->IsContainer(item); }
-
-    void SetImageList( wxImageList *imagelist );
-    wxImageList* GetImageList() { return m_imageList; }
 
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
         const wxString &text, int icon = -1, wxClientData *data = NULL );
@@ -1309,14 +1304,6 @@ public:
     void OnExpanded( wxDataViewEvent &event );
     void OnCollapsed( wxDataViewEvent &event );
     void OnSize( wxSizeEvent &event );
-
-private:
-    void Init()
-    {
-        m_imageList = NULL;
-    }
-
-    wxImageList *m_imageList;
 
 private:
     DECLARE_EVENT_TABLE()

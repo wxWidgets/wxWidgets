@@ -920,6 +920,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/valnum.h
     wx/window.h
     wx/windowid.h
+    wx/withimages.h
     wx/wrapsizer.h
     wx/wupdlock.h
 

@@ -22,6 +22,7 @@
 
 #include "wx/control.h"
 #include "wx/dynarray.h"
+#include "wx/withimages.h"
 
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxWindow *, wxArrayPages);
 
@@ -54,7 +55,8 @@ enum
 // wxBookCtrlBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxBookCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxBookCtrlBase : public wxControl,
+                                        public wxWithImages
 {
 public:
     // construction
@@ -85,9 +87,6 @@ public:
                 long style = 0,
                 const wxString& name = wxEmptyString);
 
-    // dtor
-    virtual ~wxBookCtrlBase();
-
 
     // accessors
     // ---------
@@ -116,15 +115,6 @@ public:
     // image list stuff: each page may have an image associated with it (all
     // images belong to the same image list)
     // ---------------------------------------------------------------------
-
-    // sets the image list to use, it is *not* deleted by the control
-    virtual void SetImageList(wxImageList *imageList);
-
-    // as SetImageList() but we will delete the image list ourselves
-    void AssignImageList(wxImageList *imageList);
-
-    // get pointer (may be NULL) to the associated image list
-    wxImageList* GetImageList() const { return m_imageList; }
 
     // sets/returns item's image index in the current image list
     virtual int GetPageImage(size_t n) const = 0;
@@ -319,12 +309,6 @@ protected:
 
     // the array of all pages of this control
     wxArrayPages m_pages;
-
-    // the associated image list or NULL
-    wxImageList *m_imageList;
-
-    // true if we must delete m_imageList
-    bool m_ownsImageList;
 
     // get the page area
     virtual wxRect GetPageRect() const;

@@ -2248,11 +2248,6 @@ BEGIN_EVENT_TABLE(wxDataViewTreeCtrl,wxDataViewCtrl)
    EVT_SIZE( wxDataViewTreeCtrl::OnSize )
 END_EVENT_TABLE()
 
-wxDataViewTreeCtrl::~wxDataViewTreeCtrl()
-{
-    delete m_imageList;
-}
-
 bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator )
 {
@@ -2277,21 +2272,11 @@ bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
     return true;
 }
 
-void wxDataViewTreeCtrl::SetImageList( wxImageList *imagelist )
-{
-    delete m_imageList;
-
-    m_imageList = imagelist;
-}
-
 wxDataViewItem wxDataViewTreeCtrl::AppendItem( const wxDataViewItem& parent,
         const wxString &text, int iconIndex, wxClientData *data )
 {
-    wxIcon icon = wxNullIcon;
-    if (m_imageList && (iconIndex != -1))
-        icon = m_imageList->GetIcon( iconIndex );
-
-    wxDataViewItem res = GetStore()->AppendItem( parent, text, icon, data );
+    wxDataViewItem res = GetStore()->
+        AppendItem( parent, text, GetImage(iconIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -2301,11 +2286,8 @@ wxDataViewItem wxDataViewTreeCtrl::AppendItem( const wxDataViewItem& parent,
 wxDataViewItem wxDataViewTreeCtrl::PrependItem( const wxDataViewItem& parent,
         const wxString &text, int iconIndex, wxClientData *data )
 {
-    wxIcon icon = wxNullIcon;
-    if (m_imageList && (iconIndex != -1))
-        icon = m_imageList->GetIcon( iconIndex );
-
-    wxDataViewItem res = GetStore()->PrependItem( parent, text, icon, data );
+    wxDataViewItem res = GetStore()->
+        PrependItem( parent, text, GetImage(iconIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -2315,11 +2297,8 @@ wxDataViewItem wxDataViewTreeCtrl::PrependItem( const wxDataViewItem& parent,
 wxDataViewItem wxDataViewTreeCtrl::InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
         const wxString &text, int iconIndex, wxClientData *data )
 {
-    wxIcon icon = wxNullIcon;
-    if (m_imageList && (iconIndex != -1))
-        icon = m_imageList->GetIcon( iconIndex );
-
-    wxDataViewItem res = GetStore()->InsertItem( parent, previous, text, icon, data );
+    wxDataViewItem res = GetStore()->
+        InsertItem( parent, previous, text, GetImage(iconIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -2329,15 +2308,9 @@ wxDataViewItem wxDataViewTreeCtrl::InsertItem( const wxDataViewItem& parent, con
 wxDataViewItem wxDataViewTreeCtrl::PrependContainer( const wxDataViewItem& parent,
         const wxString &text, int iconIndex, int expandedIndex, wxClientData *data )
 {
-    wxIcon icon = wxNullIcon;
-    if (m_imageList && (iconIndex != -1))
-        icon = m_imageList->GetIcon( iconIndex );
-
-    wxIcon expanded = wxNullIcon;
-    if (m_imageList && (expandedIndex != -1))
-        expanded = m_imageList->GetIcon( expandedIndex );
-
-    wxDataViewItem res = GetStore()->PrependContainer( parent, text, icon, expanded, data );
+    wxDataViewItem res = GetStore()->
+        PrependContainer( parent, text,
+                          GetImage(iconIndex), GetImage(expandedIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -2347,15 +2320,9 @@ wxDataViewItem wxDataViewTreeCtrl::PrependContainer( const wxDataViewItem& paren
 wxDataViewItem wxDataViewTreeCtrl::AppendContainer( const wxDataViewItem& parent,
         const wxString &text, int iconIndex, int expandedIndex, wxClientData *data )
 {
-    wxIcon icon = wxNullIcon;
-    if (m_imageList && (iconIndex != -1))
-        icon = m_imageList->GetIcon( iconIndex );
-
-    wxIcon expanded = wxNullIcon;
-    if (m_imageList && (expandedIndex != -1))
-        expanded = m_imageList->GetIcon( expandedIndex );
-
-    wxDataViewItem res = GetStore()->AppendContainer( parent, text, icon, expanded, data );
+    wxDataViewItem res = GetStore()->
+        AppendContainer( parent, text,
+                         GetImage(iconIndex), GetImage(expandedIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -2365,15 +2332,9 @@ wxDataViewItem wxDataViewTreeCtrl::AppendContainer( const wxDataViewItem& parent
 wxDataViewItem wxDataViewTreeCtrl::InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
         const wxString &text, int iconIndex, int expandedIndex, wxClientData *data )
 {
-    wxIcon icon = wxNullIcon;
-    if (m_imageList && (iconIndex != -1))
-        icon = m_imageList->GetIcon( iconIndex );
-
-    wxIcon expanded = wxNullIcon;
-    if (m_imageList && (expandedIndex != -1))
-        expanded = m_imageList->GetIcon( expandedIndex );
-
-    wxDataViewItem res = GetStore()->InsertContainer( parent, previous, text, icon, expanded, data );
+    wxDataViewItem res = GetStore()->
+        InsertContainer( parent, previous, text,
+                         GetImage(iconIndex), GetImage(expandedIndex), data );
 
     GetStore()->ItemAdded( parent, res );
 
@@ -2442,7 +2403,7 @@ void  wxDataViewTreeCtrl::DeleteAllItems()
 
 void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 {
-    if (m_imageList) return;
+    if (HasImageList()) return;
 
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;
@@ -2454,7 +2415,7 @@ void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 
 void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 {
-    if (m_imageList) return;
+    if (HasImageList()) return;
 
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;

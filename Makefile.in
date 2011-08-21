@@ -3946,6 +3946,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/valnum.h \
 	wx/window.h \
 	wx/windowid.h \
+	wx/withimages.h \
 	wx/wrapsizer.h \
 	wx/wupdlock.h \
 	wx/accel.h \

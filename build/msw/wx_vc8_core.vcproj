@@ -7748,6 +7748,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\withimages.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\wizard.h"
 				>
 			</File>

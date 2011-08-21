@@ -6960,6 +6960,10 @@ SOURCE=..\..\include\wx\windowid.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\withimages.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\wizard.h
 # End Source File
 # Begin Source File
