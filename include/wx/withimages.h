@@ -12,6 +12,7 @@
 #define _WX_WITHIMAGES_H_
 
 #include "wx/defs.h"
+#include "wx/icon.h"
 #include "wx/imaglist.h"
 
 // ----------------------------------------------------------------------------
