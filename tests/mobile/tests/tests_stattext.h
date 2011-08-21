@@ -15,6 +15,7 @@
 
 #include "testpanel.h"
 #include "wx/stattext.h"
+#include "wx/statbmp.h"
 
 class MobileTestsWxStaticTextPanel : public MobileTestsWxPanel {
     
@@ -24,7 +25,7 @@ public:
                             const wxPoint& pos = wxDefaultPosition,
                             const wxSize& size = wxDefaultSize,
                             long style = wxTAB_TRAVERSAL,
-                            const wxString& name = _("wxStaticText Mobile"));
+                            const wxString& name = _("wxStaticText, wxStaticBitmap Mobile"));
     
 protected:
     bool CreateControls();
@@ -35,6 +36,7 @@ private:
     wxStaticText* m_textLeft;
     wxStaticText* m_textCentre;
     wxStaticText* m_textRight;
+    wxStaticBitmap* m_bitmap;
 };
 
 #endif

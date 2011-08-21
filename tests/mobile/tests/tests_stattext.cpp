@@ -8,11 +8,11 @@
  */
 
 #include "tests_stattext.h"
+#include "tests_bitmap.h"
+
 
 BEGIN_EVENT_TABLE(MobileTestsWxStaticTextPanel, wxPanel)
-    //EVT_BUTTON(MobileTestsWxButtonClickedID, MobileTestsWxStaticTextPanel::OnButtonClicked)
 END_EVENT_TABLE()
-
 
 bool MobileTestsWxStaticTextPanel::CreateWithControls(wxWindow* parent,
                                                       wxWindowID id,
@@ -40,7 +40,7 @@ bool MobileTestsWxStaticTextPanel::CreateControls()
     SetSizer(textSizer);
     
     //
-    // Various labels
+    // Various labels and bitmaps
     // 
     
     m_textLeft = new wxStaticText(this, wxID_ANY, "Left", wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
@@ -54,6 +54,9 @@ bool MobileTestsWxStaticTextPanel::CreateControls()
     m_textRight = new wxStaticText(this, wxID_ANY, "Right", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
     m_textRight->SetBackgroundColour(*wxBLUE);
     textSizer->Add(m_textRight, 0, wxEXPAND|wxALL, 5);
+    
+    m_bitmap = new wxStaticBitmap(this, wxID_ANY, tests_bitmap, wxDefaultPosition, wxDefaultSize);
+    textSizer->Add(m_bitmap, 0, wxEXPAND|wxALL, 5);
 
     return true;
 }

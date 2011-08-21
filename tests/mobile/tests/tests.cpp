@@ -57,8 +57,8 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     //
             
     // wxButton
-    m_testNames.Add(_("wxButton"));
-    m_testDescriptions.Add(_("This shows a text button."));
+    m_testNames.Add(_("wxButton, wxBitmapButton"));
+    m_testDescriptions.Add(_("This shows a text/bitmap button."));
     m_testPanels.Add(new MobileTestsWxButtonPanel());
     
     // wxNotebook
@@ -72,8 +72,8 @@ MobileTestsDataSource::MobileTestsDataSource(wxNavigationCtrl* ctrl)
     m_testPanels.Add(new MobileTestsWxNavCtrlPanel());
 
     // wxLabel
-    m_testNames.Add(_("wxStaticText"));
-    m_testDescriptions.Add(_("A control showing a text string."));
+    m_testNames.Add(_("wxStaticText, wxStaticBitmap"));
+    m_testDescriptions.Add(_("A control showing a static text string / bitmap."));
     m_testPanels.Add(new MobileTestsWxStaticTextPanel());
 
     // wxTextCtrl
