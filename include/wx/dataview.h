@@ -21,6 +21,7 @@
 #include "wx/variant.h"
 #include "wx/dynarray.h"
 #include "wx/icon.h"
+#include "wx/itemid.h"
 #include "wx/weakref.h"
 #include "wx/vector.h"
 #include "wx/dataobj.h"
@@ -45,7 +46,6 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewItem;
 class WXDLLIMPEXP_FWD_ADV wxDataViewModel;
 class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
@@ -79,33 +79,13 @@ extern WXDLLIMPEXP_DATA_ADV(const char) wxDataViewCtrlNameStr[];
 // wxDataViewItem
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewItem
+// Make it a class and not a typedef to allow forward declaring it.
+class wxDataViewItem : public wxItemId<void*>
 {
 public:
-    wxDataViewItem() : m_id(NULL) {}
-    wxDataViewItem(const wxDataViewItem &item) : m_id(item.m_id) {}
-
-    wxEXPLICIT wxDataViewItem(void* id) : m_id(id) {}
-
-    bool IsOk() const                  { return m_id != NULL; }
-    void* GetID() const                { return m_id; }
-    operator const void* () const      { return m_id; }
-
-private:
-    void* m_id;
+    wxDataViewItem() : wxItemId<void*>() { }
+    wxEXPLICIT wxDataViewItem(void* pItem) : wxItemId<void*>(pItem) { }
 };
-
-inline
-bool operator==(const wxDataViewItem& left, const wxDataViewItem& right)
-{
-    return left.GetID() == right.GetID();
-}
-
-inline
-bool operator!=(const wxDataViewItem& left, const wxDataViewItem& right)
-{
-    return !(left == right);
-}
 
 WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 

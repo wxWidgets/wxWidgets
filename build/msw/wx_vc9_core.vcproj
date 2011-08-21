@@ -7228,6 +7228,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\itemid.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\joystick.h"
 				>
 			</File>

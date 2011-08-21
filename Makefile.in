@@ -3905,6 +3905,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/helphtml.h \
 	wx/icon.h \
 	wx/infobar.h \
+	wx/itemid.h \
 	wx/layout.h \
 	wx/listbox.h \
 	wx/mdi.h \

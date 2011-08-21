@@ -6444,6 +6444,10 @@ SOURCE=..\..\include\wx\infobar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\itemid.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\joystick.h
 # End Source File
 # Begin Source File

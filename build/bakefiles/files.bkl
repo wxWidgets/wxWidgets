@@ -879,6 +879,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/helphtml.h
     wx/icon.h
     wx/infobar.h
+    wx/itemid.h
     wx/layout.h
     wx/listbox.h
     wx/mdi.h
