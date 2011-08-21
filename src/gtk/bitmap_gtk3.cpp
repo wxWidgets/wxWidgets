@@ -299,7 +299,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     {
         // Caller is in charge of allocation of memory.(JC)
         int stride = cairo_format_stride_for_width( CAIRO_FORMAT_RGB24, width );
-        unsigned char *image_data = new unsigned char( stride * height );
+        unsigned char *image_data = new unsigned char[stride * height];
         memset(image_data, 0, stride*height);
         unsigned int *data = (unsigned int *)image_data;
 
