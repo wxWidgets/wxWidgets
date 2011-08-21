@@ -227,7 +227,6 @@ extern WXDLLEXPORT_DATA(const wxChar) wxNavigationCtrlNameStr[] = wxT("Navigatio
 IMPLEMENT_DYNAMIC_CLASS(wxNavigationCtrl, wxNavigationCtrlBase)
 
 BEGIN_EVENT_TABLE(wxNavigationCtrl, wxNavigationCtrlBase)
-EVT_SIZE(wxNavigationCtrl::OnSize)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxNavigationCtrlEvent, wxNotifyEvent)
@@ -454,16 +453,4 @@ void wxNavigationCtrl::ClearControllers()
             delete controller;
         }
     }
-}
-
-#pragma mark Events
-
-void wxNavigationCtrl::OnBack(wxCommandEvent& WXUNUSED(event))
-{
-    // FIXME stub
-}
-
-void wxNavigationCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-    // FIXME stub
 }

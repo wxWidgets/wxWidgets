@@ -87,14 +87,27 @@ wxString wxViewController::GetTitle() const
 /// Sets the associated window
 void wxViewController::SetWindow(wxWindow* window)
 {
-    m_window = window;
+    wxASSERT_MSG(window, "Window is NULL");
+    if ( !window ) {
+        return;
+    }
     
     UIViewController *viewController = (UIViewController *)m_uiviewcontroller;
     wxOSXWidgetImpl *windowPeer = window->GetPeer();
+    
     wxASSERT_MSG(windowPeer, "No window peer");
+    if ( !windowPeer ) {
+        return;
+    }
+    
     UIView *windowUIView = windowPeer->GetWXWidget();
-    wxASSERT_MSG(windowUIView, "No window peer UIView");
+    wxASSERT_MSG(windowUIView, "No native widget for window");
+    if ( !windowUIView ) {
+        return;
+    }
+        
     [viewController setView:windowUIView];
+    m_window = window;
 }
 
 /// Gets the navigation item
