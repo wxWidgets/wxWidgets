@@ -21,7 +21,6 @@
 
 #include "wx/mstream.h"
 #include "wx/dcbuffer.h"
-#include "wx/arrimpl.cpp"
 
 #include "wx/tablectrl.h"
 #include "wx/osx/private.h"
@@ -50,7 +49,6 @@
     }
     
     wxTableDataSource *dataSource = moTableCtrl->GetDataSource();
-    wxASSERT_MSG(dataSource != NULL, "wxTableCtrl datasource is unset.");
 
     return dataSource;
 }
@@ -104,10 +102,13 @@
 
     wxTableDataSource *dataSource = [self moDataSource];
     if (dataSource == NULL) {
-        return 0;
+        return 1;
     }
     
-    return dataSource->GetSectionCount(moTableCtrl);
+    int sectionCount = dataSource->GetSectionCount(moTableCtrl);
+    wxASSERT_MSG(sectionCount >= 1, "Table section count must be 1 or more");
+    
+    return sectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -181,17 +182,16 @@ titleForHeaderInSection:(NSInteger)section {
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     wxTablePath path = wxTablePath(indexPath.section, indexPath.row);
+    
+    wxTableDataSource *dataSource = [self moDataSource];
+    
+    // Both table controller and data source get informed
+    dataSource->OnSelectRow(moTableCtrl, path);
+
     wxTableCtrlEvent event(wxEVT_COMMAND_TABLE_ROW_SELECTED, moTableCtrl->GetId(), moTableCtrl);
     event.SetPath(path);
     event.SetEventObject(moTableCtrl);
-    
-    wxTableDataSource *dataSource = [self moDataSource];
-    if (dataSource == NULL) {
-        moTableCtrl->GetEventHandler()->ProcessEvent(event);
-    } else {
-        dataSource->ProcessEvent(event);
-    }
-        
+    moTableCtrl->GetEventHandler()->ProcessEvent(event);
 }
 
 @end
@@ -206,7 +206,7 @@ wxTableViewCtrlIPhoneImpl::wxTableViewCtrlIPhoneImpl( wxWindowMac* peer,
 {
     m_tableViewController = tableViewController;
     m_tableView = tableView;
-    m_tableCtrl = NULL;
+    m_tableCtrl = (wxTableCtrl *)peer;
 }
     
 bool wxTableViewCtrlIPhoneImpl::ReloadData()
@@ -248,40 +248,9 @@ wxWidgetImplType* wxWidgetImpl::CreateTableViewCtrl( wxWindowMac* wxpeer,
 #pragma mark -
 #pragma mark wxTableCtrl implementation
 
-IMPLEMENT_DYNAMIC_CLASS(wxTableCtrl, wxTableCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxTablePath, wxObject)
-IMPLEMENT_CLASS(wxTableDataSource, wxEvtHandler)
-IMPLEMENT_CLASS(wxTableRow, wxObject)
-IMPLEMENT_CLASS(wxTableSection, wxObject)
-
-WX_DEFINE_EXPORTED_OBJARRAY(wxTableSectionArray);
-WX_DEFINE_EXPORTED_OBJARRAY(wxTableRowArray);
-WX_DEFINE_EXPORTED_OBJARRAY(wxTablePathArray);
 
 BEGIN_EVENT_TABLE(wxTableCtrl, wxTableCtrlBase)
-#if 0
-    EVT_PAINT(wxTableCtrl::OnPaint)
-    EVT_SIZE(wxTableCtrl::OnSize)
-    EVT_TOUCH_SCROLL_DRAG(wxTableCtrl::OnTouchScrollDrag)
-    EVT_TOUCH_SCROLL_CANCEL_TOUCHES(wxTableCtrl::OnCancelTouch)
-    EVT_MOUSE_EVENTS(wxTableCtrl::OnMouseEvent)
-    EVT_ERASE_BACKGROUND(wxTableCtrl::OnEraseBackground)
-    EVT_MOUSE_CAPTURE_CHANGED(wxTableCtrl::OnMouseCaptureChanged)
-
-    EVT_TABLE_ADD_CLICKED(wxID_ANY, wxTableCtrl::OnAddClicked)
-    EVT_TABLE_DELETE_CLICKED(wxID_ANY, wxTableCtrl::OnDeleteClicked)
-    EVT_TABLE_CONFIRM_DELETE_CLICKED(wxID_ANY, wxTableCtrl::OnConfirmDeleteClicked)
-#endif
 END_EVENT_TABLE()
-
-IMPLEMENT_DYNAMIC_CLASS(wxTableCtrlEvent, wxNotifyEvent)
-
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_ROW_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_ACCESSORY_CLICKED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_ADD_CLICKED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_DELETE_CLICKED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_CONFIRM_DELETE_CLICKED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TABLE_MOVE_DRAGGED)
 
 
 /// Constructor.

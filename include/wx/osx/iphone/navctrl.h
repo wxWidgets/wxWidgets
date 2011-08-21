@@ -85,9 +85,6 @@ protected:
     
     void Init();
     
-    void OnSize(wxSizeEvent& event);
-    void OnBack(wxCommandEvent& event);
-
 private:
     
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNavigationCtrl)

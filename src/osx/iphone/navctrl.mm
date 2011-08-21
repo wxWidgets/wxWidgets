@@ -222,19 +222,10 @@ wxWidgetImplType* wxWidgetImpl::CreateNavigationController(wxWindowMac* wxpeer,
 #pragma mark -
 #pragma mark wxNavigationCtrl implementation
 
-extern WXDLLEXPORT_DATA(const wxChar) wxNavigationCtrlNameStr[] = wxT("NavigationCtrl");
-
 IMPLEMENT_DYNAMIC_CLASS(wxNavigationCtrl, wxNavigationCtrlBase)
 
 BEGIN_EVENT_TABLE(wxNavigationCtrl, wxNavigationCtrlBase)
 END_EVENT_TABLE()
-
-IMPLEMENT_DYNAMIC_CLASS(wxNavigationCtrlEvent, wxNotifyEvent)
-
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NAVCTRL_POPPED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NAVCTRL_POPPING)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NAVCTRL_PUSHED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NAVCTRL_PUSHING)
 
 
 /// Default constructor.
@@ -385,50 +376,6 @@ wxViewController* wxNavigationCtrl::PopController()
     }
     
     return topItem;
-}
-
-// Sets the item stack.
-void wxNavigationCtrl::SetControllers(const wxViewControllerArray& controllers)
-{
-    ClearControllers();
-    
-    size_t i;
-    for (i = 0; i < controllers.GetCount(); i++) {
-        PushController(controllers[i]);
-    }
-}
-
-// Returns the top item.
-wxViewController* wxNavigationCtrl::GetTopController() const
-{
-    if (m_controllers.GetCount() > 0) {
-        wxViewController* controller = m_controllers[m_controllers.GetCount()-1];
-        return controller;
-    } else {
-        return NULL;
-    }
-}
-
-// Returns the back item.
-wxViewController* wxNavigationCtrl::GetBackController() const
-{
-    if (m_controllers.GetCount() > 1) {
-        wxViewController* controller = m_controllers[m_controllers.GetCount()-2];
-        return controller;
-    } else {
-        return NULL;
-    }
-}
-
-// Returns the root item.
-wxViewController* wxNavigationCtrl::GetRootController() const
-{
-    if (m_controllers.GetCount() > 1) {
-        wxViewController* controller = m_controllers[0];
-        return controller;
-    } else {
-        return NULL;
-    }
 }
 
 // Clears the item stack, deleting the items.

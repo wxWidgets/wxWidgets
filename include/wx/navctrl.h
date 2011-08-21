@@ -17,6 +17,7 @@
 
 #include "wx/navbar.h"
 #include "wx/viewcontroller.h"
+#include "wx/tablectrl.h"
 
 extern WXDLLEXPORT_DATA(const wxChar) wxNavigationCtrlNameStr[];
 
@@ -140,18 +141,14 @@ public:
     /// Returns true if the control is 'frozen', i.e. suppresses display updates and resizes.
     virtual bool IsFrozen() const { return m_freezeCount > 0; }
     
-    /*
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual bool SetForegroundColour(const wxColour &colour);
-    virtual bool SetFont(const wxFont& font);
-    virtual bool Enable(bool enable);
-    */
+    // Utility to push a table onto the navigation controller
+    void PushTable(wxTableCtrl* tableCtrl, const wxString& title);
+
+    // Utility to push a window onto the navigation controller
+    void PushWindow(wxWindow* win, const wxString& title);
 
 protected:
-    
-    virtual void OnSize(wxSizeEvent& event) = 0;
-    virtual void OnBack(wxCommandEvent& event) = 0;
-    
+        
     wxViewControllerArray m_controllers;
     wxNavigationBar*      m_navBar;
     int                   m_freezeCount;

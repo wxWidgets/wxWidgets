@@ -598,6 +598,10 @@ public:
     {
         return wxTableCtrlBase::EditStyleShowDeleteButton;
     }
+    
+    /// Override to intercept row click; by default, sends an event to itself and then to control.
+    virtual bool OnSelectRow(wxTableCtrl* ctrl,
+                             wxTablePath path) { }
 
     DECLARE_CLASS(wxTableDataSource)
     
@@ -666,7 +670,7 @@ BEGIN_DECLARE_EVENT_TYPES()
 END_DECLARE_EVENT_TYPES()
 
 #define wxTableCtrlEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTableCtrlEventHandler, &func)
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTableCtrlEventFunction, &func)
 
 #define EVT_TABLE_ROW_SELECTED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_TABLE_ROW_SELECTED, \
   id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTableCtrlEventFunction, & fn ), NULL),
