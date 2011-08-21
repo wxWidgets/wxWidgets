@@ -224,8 +224,8 @@ private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
-    void InvalidateColBestWidths();
-    void InvalidateColBestWidth(int idx);
+    void UpdateColBestWidths();
+    void UpdateColBestWidth(int idx);
 
     wxDataViewColumnList      m_cols;
     // cached column best widths or 0 if not computed, values are for

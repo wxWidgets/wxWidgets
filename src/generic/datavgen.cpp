@@ -2003,7 +2003,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         m_count = -1;
     }
 
-    GetOwner()->InvalidateColBestWidths();
+    GetOwner()->UpdateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2126,7 +2126,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     if( m_currentRow > GetRowCount() )
         ChangeCurrentRow(m_count - 1);
 
-    GetOwner()->InvalidateColBestWidths();
+    GetOwner()->UpdateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2137,7 +2137,7 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
     SortPrepare();
     g_model->Resort();
 
-    GetOwner()->InvalidateColBestWidths();
+    GetOwner()->UpdateColBestWidths();
 
     // Send event
     wxWindow *parent = GetParent();
@@ -2178,7 +2178,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     SortPrepare();
     g_model->Resort();
 
-    GetOwner()->InvalidateColBestWidth(view_column);
+    GetOwner()->UpdateColBestWidth(view_column);
 
     // Send event
     wxWindow *parent = GetParent();
@@ -2201,7 +2201,7 @@ bool wxDataViewMainWindow::Cleared()
     SortPrepare();
     BuildTree( GetOwner()->GetModel() );
 
-    GetOwner()->InvalidateColBestWidths();
+    GetOwner()->UpdateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -4400,7 +4400,7 @@ bool wxDataViewCtrl::ClearColumns()
     return true;
 }
 
-void wxDataViewCtrl::InvalidateColBestWidth(int idx)
+void wxDataViewCtrl::UpdateColBestWidth(int idx)
 {
     m_colsBestWidths[idx] = 0;
 
@@ -4408,7 +4408,7 @@ void wxDataViewCtrl::InvalidateColBestWidth(int idx)
         m_headerArea->UpdateColumn(idx);
 }
 
-void wxDataViewCtrl::InvalidateColBestWidths()
+void wxDataViewCtrl::UpdateColBestWidths()
 {
     m_colsBestWidths.clear();
     m_colsBestWidths.resize(m_cols.size());
