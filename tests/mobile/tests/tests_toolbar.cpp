@@ -8,7 +8,7 @@
  */
 
 #include "tests_toolbar.h"
-#include "tests_toolbar_bitmap.h"
+#include "tests_bitmap.h"
 
 BEGIN_EVENT_TABLE(MobileTestsWxToolBarPanel, wxPanel)
 END_EVENT_TABLE()
@@ -53,7 +53,7 @@ bool MobileTestsWxToolBarPanel::CreateControls()
     // Events
     m_toolbar->Connect(wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler(MobileTestsWxToolBarPanel::OnToolBarToolClicked), NULL, this);
     
-    m_toolbar->AddTool(100, _("First tool"), wxBitmap(tests_toolbar_bitmap));
+    m_toolbar->AddTool(100, _("First tool"), wxBitmap(tests_bitmap));
     m_toolbar->AddSeparator();
     m_toolbar->AddTool(wxID_REFRESH, wxEmptyString, wxNullBitmap);
     m_toolbar->AddSeparator();

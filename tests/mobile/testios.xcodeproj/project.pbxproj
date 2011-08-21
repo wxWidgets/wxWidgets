@@ -103,7 +103,7 @@
 		B932117713DFCBE80067FD1F /* testpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testpanel.h; sourceTree = "<group>"; };
 		B955212613F540BD00A6B79A /* tests_toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_toolbar.h; sourceTree = "<group>"; };
 		B955212713F540BD00A6B79A /* tests_toolbar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_toolbar.cpp; sourceTree = "<group>"; };
-		B955212A13F5429500A6B79A /* tests_toolbar_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_toolbar_bitmap.h; sourceTree = "<group>"; };
+		B955212A13F5429500A6B79A /* tests_bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_bitmap.h; sourceTree = "<group>"; };
 		B955215213F5454400A6B79A /* tests_gauge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_gauge.h; sourceTree = "<group>"; };
 		B955215313F5454400A6B79A /* tests_gauge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests_gauge.cpp; sourceTree = "<group>"; };
 		B955216313F5474000A6B79A /* tests_pagectrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tests_pagectrl.h; sourceTree = "<group>"; };
@@ -284,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				B932117713DFCBE80067FD1F /* testpanel.h */,
+				B955212A13F5429500A6B79A /* tests_bitmap.h */,
 				B9DC3C9313DFA82000DA5A41 /* tests.h */,
 				B9DC3C9113DFA74600DA5A41 /* tests.cpp */,
 				B932117613DFC3C90067FD1F /* tests_button.h */,
@@ -302,7 +303,6 @@
 				B92FE46813F2F1CC00408AD7 /* tests_checkbox.cpp */,
 				B955212613F540BD00A6B79A /* tests_toolbar.h */,
 				B955212713F540BD00A6B79A /* tests_toolbar.cpp */,
-				B955212A13F5429500A6B79A /* tests_toolbar_bitmap.h */,
 				B955215213F5454400A6B79A /* tests_gauge.h */,
 				B955215313F5454400A6B79A /* tests_gauge.cpp */,
 				B955216313F5474000A6B79A /* tests_pagectrl.h */,

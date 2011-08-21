@@ -1,5 +1,5 @@
 /*
- *  tests_toolbar_bitmap.h
+ *  tests_bitmap.h
  *  testios
  *
  *  Created by Linas Valiukas on 2011-08-12.
@@ -7,11 +7,11 @@
  *
  */
 
-#ifndef testios_tests_toolbar_bitmap_h
-#define testios_tests_toolbar_bitmap_h
+#ifndef testios_tests_bitmap_h
+#define testios_tests_bitmap_h
 
 /* XPM */
-static const char *tests_toolbar_bitmap[] = {
+static const char *tests_bitmap[] = {
     "16 16 105 2",
     "   c None",
     ".  c #888888",
@@ -135,4 +135,4 @@ static const char *tests_toolbar_bitmap[] = {
     "          d $.%.&.*.=.          ",
     "                                "};
 
-#endif  // 'testios_tests_toolbar_bitmap_h'
+#endif  // 'testios_tests_bitmap_h'
