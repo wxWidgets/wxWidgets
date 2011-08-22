@@ -29,7 +29,6 @@ extern GtkWidget *wxGetRootWindow();
 
 static void MaskToAlpha(cairo_surface_t* mask, GdkPixbuf* pixbuf, int w, int h)
 {
-
     GdkPixbuf* mask_pixbuf = gdk_pixbuf_get_from_surface( mask, 0, 0, w, h );
     guchar* p = gdk_pixbuf_get_pixels(pixbuf) + 3;
     const guchar* mask_data = gdk_pixbuf_get_pixels(mask_pixbuf);
@@ -42,7 +41,7 @@ static void MaskToAlpha(cairo_surface_t* mask, GdkPixbuf* pixbuf, int w, int h)
             *p = 255;
             // no need to test all 3 components,
             //   pixels are either (0,0,0) or (0xff,0xff,0xff)
-            if (mask_data[3] == 0)
+            if (mask_data[3] == 255)
                 *p = 0;
         }
     }
@@ -465,11 +464,11 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
         memset(data, 0x00, stride*h);
         unsigned char *data_start = data;
         int byte_index = 0;
-        int rowpad = stride - size_t((w+7)/8);
+        int rowpad = stride*8 - w;
 
         if (alpha != NULL)
         {
-            for (int y = 0; y < h; y++, byte_index += rowpad)
+            for (int y = 0; y < h; y++)
             {
                 for (int x = 0; x < w; x++)
                 {
@@ -480,9 +479,14 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
                     }
                     if ((x+1)%8 == 0)
                     {
-                        data[byte_index] ^= 0xff;
+                        // data[byte_index] ^= 0xff;
                         byte_index++;
                     }
+                }
+
+                if (rowpad != 0) 
+                {
+                    byte_index++;
                 }
             }
         }
@@ -493,7 +497,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
             const wxByte b_mask = image.GetMaskBlue();
             const wxByte* in = image.GetData();
 
-            for (int y = 0; y < h; y++, byte_index += rowpad)
+            for (int y = 0; y < h; y++)
             {
                 for (int x = 0; x < w; x++, in += 3)
                 {
@@ -504,9 +508,13 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
                     }
                     if ((x+1)%8 == 0)
                     {
-                        data[byte_index] ^= 0xff;
+                        // data[byte_index] ^= 0xff;
                         byte_index++;
                     }
+                }
+                if (rowpad != 0) 
+                {
+                    byte_index++;
                 }
             }
         }
