@@ -15,40 +15,6 @@
 #include "wx/dynarray.h"
 
 
-#pragma mark wxTableCellContentWindow
-
-class WXDLLEXPORT wxTableCellContentWindow: public wxTableCellContentWindowBase
-{
-public:
-    wxTableCellContentWindow() { Init(); }
-    wxTableCellContentWindow(wxWindow* parent,
-                               wxWindowID id = wxID_ANY,
-                               const wxPoint& pos = wxDefaultPosition,
-                               const wxSize& sz = wxDefaultSize,
-                               long style = 0)
-    {
-        Create(parent, id, pos, sz, style);
-    }
-    bool Create(wxWindow* parent,
-                wxWindowID id = wxID_ANY,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& sz = wxDefaultSize,
-                long style = 0);
-            
-protected:
-    void Init();
-    
-    void OnPaint(wxPaintEvent& event);
-    void OnMouseEvents(wxMouseEvent& event);
-    
-    wxTableCell*  m_cell;
-    wxTableCtrl*  m_tableCtrl;
-    
-    DECLARE_DYNAMIC_CLASS(wxTableCellContentWindow)
-    DECLARE_EVENT_TABLE()
-};
-
-
 #pragma mark wxTableCell
 
 /**
@@ -75,10 +41,7 @@ public:
     
     /// Prepares the cell for reuse
     virtual void PrepareForReuse(wxTableCtrl* tableCtrl);
-    
-    /// Creates the content window.
-    virtual bool CreateContentWindow(wxTableCtrl* ctrl);
-    
+        
     void SetText(const wxString& text);
     void SetDetailText(const wxString& text);
     void SetTextFont(const wxFont& font);

@@ -140,8 +140,17 @@ wxTableCell::wxTableCell(wxTableCtrl* ctrl, const wxString& reuseName, wxTableCe
 
 wxTableCell::~wxTableCell()
 {
-    NSLog(@"cell is being freed");
-    // FIXME stub
+    bool accessoriesAreDifferent = (m_accessoryWindow != m_editingAccessoryWindow);
+        
+    if (m_accessoryWindow) {
+        delete m_accessoryWindow;
+        m_accessoryWindow = NULL;
+    }
+    
+    if (m_editingAccessoryWindow && accessoriesAreDifferent) {
+        delete m_editingAccessoryWindow;
+    }
+    m_editingAccessoryWindow = NULL;
 }
 
 void wxTableCell::Init()
@@ -161,7 +170,6 @@ void wxTableCell::Init()
     m_editingAccessoryWindow = NULL;
     m_indentationLevel = 0;
     m_indentationWidth = 0;
-    m_contentWindow = NULL;
     m_cellStyle = CellStyleDefault;
     m_detailWidth = 80;
     m_editingMode = false;
@@ -171,14 +179,31 @@ void wxTableCell::Init()
 
 void wxTableCell::Copy(const wxTableCell& cell)
 {
-    // FIXME stub
-}
-
-bool wxTableCell::CreateContentWindow(wxTableCtrl* ctrl)
-{
-    // FIXME stub
-    
-    return true;
+    m_reuseName = cell.m_reuseName;
+    m_font = cell.m_font;
+    m_detailFont = cell.m_detailFont;
+    m_text = cell.m_text;
+    m_detailText = cell.m_detailText;
+    m_textColour = cell.m_textColour;
+    m_detailTextColour = cell.m_detailTextColour;
+    m_selectedTextColour = cell.m_selectedTextColour;
+    m_textAlignment = cell.m_textAlignment;
+    m_detailTextAlignment = cell.m_detailTextAlignment;
+    m_textLineBreakMode = cell.m_textLineBreakMode;
+    m_bitmap = cell.m_bitmap;
+    m_selectedBitmap = cell.m_selectedBitmap;
+    m_selected = cell.m_selected;
+    m_selectionStyle = cell.m_selectionStyle;
+    //m_eventHandler = cell.m_eventHandler;
+    m_accessoryType = cell.m_accessoryType;
+    m_editingAccessoryType = cell.m_editingAccessoryType;
+    m_indentationLevel = cell.m_indentationLevel;
+    m_indentationWidth = cell.m_indentationWidth;
+    m_cellStyle = cell.m_cellStyle;
+    m_detailWidth = cell.m_detailWidth;
+    m_editingMode = cell.m_editingMode;
+    m_shouldIndentWhileEditing = cell.m_shouldIndentWhileEditing;
+    m_showReorderingButton = cell.m_showReorderingButton;
 }
 
 void wxTableCell::SetText(const wxString& text)

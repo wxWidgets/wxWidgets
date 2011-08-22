@@ -16,38 +16,8 @@
 
 #include "wx/vscroll.h"
 
-class WXDLLIMPEXP_FWD_BASE wxTableCellContentWindow;
 class WXDLLEXPORT wxTableCell;
 class WXDLLEXPORT wxTableCtrl;
-
-
-#pragma mark wxTableCellContentWindow
-
-class WXDLLEXPORT wxTableCellContentWindowBase: public wxWindow
-{
-public:
-    wxTableCellContentWindowBase() { }
-    wxTableCellContentWindowBase(wxWindow* parent,
-                                 wxWindowID id = wxID_ANY,
-                                 const wxPoint& pos = wxDefaultPosition,
-                                 const wxSize& sz = wxDefaultSize,
-                                 long style = 0);
-    
-    void SetCell(wxTableCell* cell) { m_cell = cell; }
-    wxTableCell* GetCell() const { return m_cell; }
-    
-    void SetTableCtrl(wxTableCtrl* ctrl) { m_tableCtrl = ctrl; }
-    wxTableCtrl* GetTableCtrl() const { return m_tableCtrl; }
-    
-protected:    
-    wxTableCell*  m_cell;
-    wxTableCtrl*  m_tableCtrl;
-    
-    //DECLARE_DYNAMIC_CLASS(wxTableCellContentWindow)
-    //DECLARE_EVENT_TABLE()
-    
-    wxDECLARE_NO_COPY_CLASS(wxTableCellContentWindowBase);
-};
 
 
 #pragma mark wxTableCell
@@ -151,10 +121,7 @@ public:
     
     /// Prepares the cell for reuse
     virtual void PrepareForReuse(wxTableCtrl* tableCtrl) = 0;
-    
-    /// Creates the content window.
-    virtual bool CreateContentWindow(wxTableCtrl* ctrl) = 0;
-    
+        
     /// Sets the name used to identify this type of cell for reuse.
     virtual void SetReuseName(const wxString& name) { m_reuseName = name; }
     
@@ -301,13 +268,7 @@ public:
     /// how this dimension is found.
     virtual void SetDetailWidth(float width) { m_detailWidth = width; }
     virtual float GetDetailWidth() const { return m_detailWidth; }
-    
-    /// Sets the content window for the cell.
-    virtual void SetContentWindow(wxTableCellContentWindow* win) { m_contentWindow = win; }
-    
-    /// Gets the content window for the cell.
-    virtual wxTableCellContentWindow* GetContentWindow() const { return m_contentWindow; }
-    
+        
     /// Sets the accessory type. This can be AccessoryTypeNone, AccessoryTypeDisclosureIndicator,
     /// AccessoryTypeDetailDisclosureButton, or AccessoryTypeCheckmark.
     /// The accessory is the image or button that appears on the right of the row.
@@ -394,7 +355,6 @@ protected:
     bool                        m_editingMode;
     bool                        m_shouldIndentWhileEditing;
     bool                        m_showReorderingButton;
-    wxTableCellContentWindow* m_contentWindow;
     wxWindow*                   m_accessoryWindow;
     wxWindow*                   m_editingAccessoryWindow;
     
