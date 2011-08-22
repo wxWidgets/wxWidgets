@@ -34,6 +34,7 @@
 #include "wx/gtk/dcclient.h"
 
 #include "wx/gtk/private/gdkconv.h"
+#include "wx/gtk/private/list.h"
 using namespace wxGTKImpl;
 
 class wxGtkDataViewModelNotifier;
@@ -96,6 +97,26 @@ private:
     GtkTreePath *m_path;
 
     wxDECLARE_NO_COPY_CLASS(wxGtkTreePath);
+};
+
+// ----------------------------------------------------------------------------
+// wxGtkTreePathList: self-destroying list of GtkTreePath objects.
+// ----------------------------------------------------------------------------
+
+class wxGtkTreePathList : public wxGtkList
+{
+public:
+    // Ctor takes ownership of the list.
+    explicit wxGtkTreePathList(GList* list)
+        : wxGtkList(list)
+    {
+    }
+
+    ~wxGtkTreePathList()
+    {
+        // Delete the list contents, wxGtkList will delete the list itself.
+        g_list_foreach(m_list, (GFunc)gtk_tree_path_free, NULL);
+    }
 };
 
 // ----------------------------------------------------------------------------
@@ -4811,13 +4832,9 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 {
     GtkTreeViewColumn *gtk_column = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
 
-    GList *list = gtk_tree_view_get_columns( GTK_TREE_VIEW(m_treeview) );
+    wxGtkList list(gtk_tree_view_get_columns(GTK_TREE_VIEW(m_treeview)));
 
-    gint pos = g_list_index( list, (gconstpointer)  gtk_column );
-
-    g_list_free( list );
-
-    return pos;
+    return g_list_index( list, (gconstpointer)  gtk_column );
 }
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
@@ -4956,22 +4973,16 @@ int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
     if (HasFlag(wxDV_MULTIPLE))
     {
         GtkTreeModel *model;
-        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
+        wxGtkTreePathList list(gtk_tree_selection_get_selected_rows(selection, &model));
 
         int count = 0;
-        while (list)
+        for ( GList* current = list; current; current = g_list_next(current) )
         {
             GtkTreePath *path = (GtkTreePath*) list->data;
 
             sel.Add(GTKPathToItem(path));
-
-            list = g_list_next( list );
             count++;
         }
-
-        // delete list
-        g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
-        g_list_free( list );
 
         return count;
     }
