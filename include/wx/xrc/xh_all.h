@@ -15,6 +15,7 @@
 // Existing handlers:
 
 #include "wx/xrc/xh_animatctrl.h"
+#include "wx/xrc/xh_bannerwindow.h"
 #include "wx/xrc/xh_bmp.h"
 #include "wx/xrc/xh_bmpbt.h"
 #include "wx/xrc/xh_bmpcbox.h"

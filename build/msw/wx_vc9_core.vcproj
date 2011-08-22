@@ -7780,6 +7780,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_bannerwindow.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_bmp.h"
 				>
 			</File>
