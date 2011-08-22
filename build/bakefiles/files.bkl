@@ -788,6 +788,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/logg.cpp
     src/generic/markuptext.cpp
     src/generic/msgdlgg.cpp
+    src/generic/navctrl.cpp
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp
     src/generic/progdlgg.cpp
@@ -801,6 +802,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/srchctlg.cpp
     src/generic/statbmpg.cpp
     src/generic/stattextg.cpp
+    src/generic/tablectrl.cpp
     src/generic/textdlgg.cpp
     src/generic/tipwin.cpp
     src/generic/toolbkg.cpp
@@ -808,6 +810,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/treebkg.cpp
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
+    src/generic/wheelsctrl.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
