@@ -6,7 +6,7 @@
 // Copyright:   (c) 2010 Marianne Gagnon, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -178,17 +178,17 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     // Create the toolbar
     m_toolbar = CreateToolBar(wxTB_TEXT);
     m_toolbar->SetToolBitmapSize(wxSize(32, 32));
- 
+
     wxBitmap back = wxArtProvider::GetBitmap(wxART_GO_BACK , wxART_TOOLBAR);
     wxBitmap forward = wxArtProvider::GetBitmap(wxART_GO_FORWARD , wxART_TOOLBAR);
     #ifdef __WXGTK__
         wxBitmap stop = wxArtProvider::GetBitmap("gtk-stop", wxART_TOOLBAR);
-    #else 
+    #else
         wxBitmap stop = wxBitmap(stop_xpm);
     #endif
     #ifdef __WXGTK__
         wxBitmap refresh = wxArtProvider::GetBitmap("gtk-refresh", wxART_TOOLBAR);
-    #else 
+    #else
         wxBitmap refresh = wxBitmap(refresh_xpm);
     #endif
 
@@ -291,7 +291,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     Connect(m_toolbar_tools->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
             wxCommandEventHandler(WebFrame::OnToolsClicked), NULL, this );
 
-    Connect(m_url->GetId(), wxEVT_COMMAND_TEXT_ENTER, 
+    Connect(m_url->GetId(), wxEVT_COMMAND_TEXT_ENTER,
             wxCommandEventHandler(WebFrame::OnUrl), NULL, this );
 
     // Connect the webview events
@@ -300,7 +300,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
             wxWebViewEventHandler(WebFrame::OnNavigationComplete), NULL, this);
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_LOADED,
-            wxWebViewEventHandler(WebFrame::OnDocumentLoaded), NULL, this);     
+            wxWebViewEventHandler(WebFrame::OnDocumentLoaded), NULL, this);
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_ERROR,
             wxWebViewEventHandler(WebFrame::OnError), NULL, this);
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
@@ -357,14 +357,14 @@ void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
 {
     m_animation_angle += 15;
     if (m_animation_angle > 360) m_animation_angle -= 360;
-    
-    wxBitmap image(24, 24);    
+
+    wxBitmap image(24, 24);
     {
         wxMemoryDC dc;
         dc.SelectObject(image);
         dc.SetBackground(wxBrush(wxColour(255,0,255)));
         dc.Clear();
-        
+
         if (m_animation_angle >= 0 && m_animation_angle <= 180)
         {
             dc.SetBrush(*wxYELLOW_BRUSH);
@@ -372,9 +372,9 @@ void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
             dc.DrawCircle(16 - int(sin(m_animation_angle*0.01745f /* convert to radians */)*14.0f),
             16 + int(cos(m_animation_angle*0.01745f /* convert to radians */)*14.0f), 3 );
         }
-        
+
         dc.DrawBitmap(wxBitmap(wxlogo_xpm), 0, 0, true);
-        
+
         if (m_animation_angle > 180)
         {
             dc.SetBrush(*wxYELLOW_BRUSH);
@@ -382,7 +382,7 @@ void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
             dc.DrawCircle(16 - int(sin(m_animation_angle*0.01745f /* convert to radians */)*14.0f),
             16 + int(cos(m_animation_angle*0.01745f /* convert to radians */)*14.0f), 3 );
         }
-    }  
+    }
     image.SetMask(new wxMask(image, wxColour(255,0,255)));
     m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), image);
 }
@@ -395,7 +395,7 @@ void WebFrame::UpdateState()
 {
     m_toolbar->EnableTool( m_toolbar_back->GetId(), m_browser->CanGoBack() );
     m_toolbar->EnableTool( m_toolbar_forward->GetId(), m_browser->CanGoForward() );
-    
+
     if (m_browser->IsBusy())
     {
         if (m_timer == NULL)
@@ -404,16 +404,16 @@ void WebFrame::UpdateState()
             this->Connect(wxEVT_TIMER, wxTimerEventHandler(WebFrame::OnAnimationTimer), NULL, this);
         }
         m_timer->Start(100); // start animation timer
-        
-        m_toolbar->EnableTool( m_toolbar_stop->GetId(), true );    
+
+        m_toolbar->EnableTool( m_toolbar_stop->GetId(), true );
     }
     else
     {
         if (m_timer != NULL) m_timer->Stop(); // stop animation timer
         m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), wxBitmap(wxlogo_xpm));
-        m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );            
+        m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );
     }
-    
+
     SetTitle( m_browser->GetCurrentTitle() );
     m_url->SetValue( m_browser->GetCurrentURL() );
 }
@@ -529,7 +529,7 @@ void WebFrame::OnNavigationRequest(wxWebViewEvent& evt)
 
     wxLogMessage("%s", "Navigation request to '" + evt.GetURL() + "' (target='" +
     evt.GetTarget() + "')");
-    
+
     wxASSERT(m_browser->IsBusy());
 
     //If we don't want to handle navigation then veto the event and navigation
@@ -539,7 +539,7 @@ void WebFrame::OnNavigationRequest(wxWebViewEvent& evt)
         evt.Veto();
         if (m_timer != NULL) m_timer->Stop(); // stop animation timer
         m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), wxBitmap(wxlogo_xpm));
-        m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );      
+        m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );
     }
     else
     {
@@ -576,7 +576,7 @@ void WebFrame::OnNewWindow(wxWebViewEvent& evt)
 {
     wxLogMessage("%s", "New window; url='" + evt.GetURL() + "'");
 
-    //If we handle new window events then just load them in this window as we 
+    //If we handle new window events then just load them in this window as we
     //are a single window browser
     if(m_tools_handle_new_window->IsChecked())
         m_browser->LoadURL(evt.GetURL());
@@ -608,7 +608,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
         return;
 
     m_tools_tiny->Check(false);
-    m_tools_small->Check(false); 
+    m_tools_small->Check(false);
     m_tools_medium->Check(false);
     m_tools_large->Check(false);
     m_tools_largest->Check(false);
@@ -656,7 +656,8 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
 
     wxMenuItem* item;
 
-    for(unsigned int i = 0; i < back.size(); i++)
+    unsigned int i;
+    for(i = 0; i < back.size(); i++)
     {
         item = m_tools_history_menu->AppendRadioItem(wxID_ANY, back[i]->GetTitle());
         m_histMenuItems[item->GetId()] = back[i];
@@ -670,14 +671,14 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     //No need to connect the current item
     m_histMenuItems[item->GetId()] = wxSharedPtr<wxWebViewHistoryItem>(new wxWebViewHistoryItem(m_browser->GetCurrentURL(), m_browser->GetCurrentTitle()));
 
-    for(unsigned int i = 0; i < forward.size(); i++)
+    for(i = 0; i < forward.size(); i++)
     {
         item = m_tools_history_menu->AppendRadioItem(wxID_ANY, forward[i]->GetTitle());
         m_histMenuItems[item->GetId()] = forward[i];
         Connect(item->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
                 wxCommandEventHandler(WebFrame::OnHistory), NULL, this );
     }
-    
+
     wxPoint position = ScreenToClient( wxGetMousePosition() );
     PopupMenu(m_tools_menu, position.x, position.y);
 }
@@ -761,42 +762,42 @@ void WebFrame::OnError(wxWebViewEvent& evt)
     case  wxWEB_NAV_ERR_CONNECTION:
         errorCategory = "wxWEB_NAV_ERR_CONNECTION";
         break;
-        
+
     case wxWEB_NAV_ERR_CERTIFICATE:
         errorCategory = "wxWEB_NAV_ERR_CERTIFICATE";
         break;
-        
+
     case wxWEB_NAV_ERR_AUTH:
         errorCategory = "wxWEB_NAV_ERR_AUTH";
         break;
-        
+
     case wxWEB_NAV_ERR_SECURITY:
         errorCategory = "wxWEB_NAV_ERR_SECURITY";
         break;
-        
+
     case wxWEB_NAV_ERR_NOT_FOUND:
         errorCategory = "wxWEB_NAV_ERR_NOT_FOUND";
         break;
-        
+
     case wxWEB_NAV_ERR_REQUEST:
         errorCategory = "wxWEB_NAV_ERR_REQUEST";
         break;
-        
+
     case wxWEB_NAV_ERR_USER_CANCELLED:
         errorCategory = "wxWEB_NAV_ERR_USER_CANCELLED";
         break;
-        
+
     case wxWEB_NAV_ERR_OTHER:
         errorCategory = "wxWEB_NAV_ERR_OTHER";
         break;
     }
-    
+
     wxLogMessage("Error; url='" + evt.GetURL() + "', error='" + errorCategory + "' (" + evt.GetString() + ")");
-    
+
     //Show the info bar with an error
     m_info->ShowMessage(_("An error occurred loading ") + evt.GetURL() + "\n" +
     "'" + errorCategory + "' (" + evt.GetString() + ")", wxICON_ERROR);
-    
+
     UpdateState();
 }
 
@@ -815,7 +816,7 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
 {
     wxStyledTextCtrl* text = new wxStyledTextCtrl(this, wxID_ANY);
     text->SetMarginWidth(1, 30);
-    text->SetMarginType(1, wxSTC_MARGIN_NUMBER); 
+    text->SetMarginType(1, wxSTC_MARGIN_NUMBER);
     text->SetText(source);
 
     text->StyleClearAll();
