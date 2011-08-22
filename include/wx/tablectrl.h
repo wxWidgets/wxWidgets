@@ -582,6 +582,10 @@ public:
     virtual bool OnSelectRow(wxTableCtrl* ctrl,
                              wxTablePath path) { }
 
+    /// Override to intercept row accessory click; by default, sends an event to itself and then to control.
+    virtual bool OnClickAccessory(wxTableCtrl* ctrl,
+                                  wxTablePath path) { }
+
     DECLARE_CLASS(wxTableDataSource)
     
 protected:

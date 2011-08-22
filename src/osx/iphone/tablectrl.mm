@@ -194,6 +194,22 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     moTableCtrl->GetEventHandler()->ProcessEvent(event);
 }
 
+- (void)tableView:(UITableView *)tableView
+accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    
+    wxTablePath path = wxTablePath(indexPath.section, indexPath.row);
+    
+    wxTableDataSource *dataSource = [self moDataSource];
+    
+    // Both table controller and data source get informed
+    dataSource->OnClickAccessory(moTableCtrl, path);
+    
+    wxTableCtrlEvent event(wxEVT_COMMAND_TABLE_ACCESSORY_CLICKED, moTableCtrl->GetId(), moTableCtrl);
+    event.SetPath(path);
+    event.SetEventObject(moTableCtrl);
+    moTableCtrl->GetEventHandler()->ProcessEvent(event);
+}
+
 @end
 
 
