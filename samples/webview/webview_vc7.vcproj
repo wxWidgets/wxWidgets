@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="web"
-	ProjectGUID="{3DE660A1-F4BF-594F-8FD3-2A1A27D0498C}">
+	Name="webview"
+	ProjectGUID="{5AE6DA7C-2316-5AC1-824F-0093385C19A9}">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="vc_mswud"
-			IntermediateDirectory="vc_mswud\web"
+			IntermediateDirectory="vc_mswud\webview"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -35,8 +35,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				ObjectFile="vc_mswud\web\"
-				ProgramDataBaseFileName="vc_mswud\web.pdb"
+				ObjectFile="vc_mswud\webview\"
+				ProgramDataBaseFileName="vc_mswud\webview.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -46,13 +46,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_web.lib  wxmsw29ud_stc.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud.lib  wxscintillad.lib  wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswud\web.exe"
+				AdditionalDependencies="wxmsw29ud_webview.lib  wxmsw29ud_stc.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud.lib  wxscintillad.lib  wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswud\webview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswud\web.pdb"
+				ProgramDatabaseFile="vc_mswud\webview.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -84,7 +84,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="vc_mswu"
-			IntermediateDirectory="vc_mswu\web"
+			IntermediateDirectory="vc_mswu\webview"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -97,8 +97,8 @@
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
-				ObjectFile="vc_mswu\web\"
-				ProgramDataBaseFileName="vc_mswu\web.pdb"
+				ObjectFile="vc_mswu\webview\"
+				ProgramDataBaseFileName="vc_mswu\webview.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -108,13 +108,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_web.lib  wxmsw29u_stc.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u.lib  wxscintilla.lib  wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswu\web.exe"
+				AdditionalDependencies="wxmsw29u_webview.lib  wxmsw29u_stc.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u.lib  wxscintilla.lib  wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswu\webview.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswu\web.pdb"
+				ProgramDatabaseFile="vc_mswu\webview.pdb"
 				SubSystem="2"
 				TargetMachine="1"
 				OptimizeReferences="2"
@@ -148,7 +148,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="vc_mswunivud"
-			IntermediateDirectory="vc_mswunivud\web"
+			IntermediateDirectory="vc_mswunivud\webview"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -164,8 +164,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				ObjectFile="vc_mswunivud\web\"
-				ProgramDataBaseFileName="vc_mswunivud\web.pdb"
+				ObjectFile="vc_mswunivud\webview\"
+				ProgramDataBaseFileName="vc_mswunivud\webview.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -175,13 +175,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_web.lib  wxmswuniv29ud_stc.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib  wxscintillad.lib  wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswunivud\web.exe"
+				AdditionalDependencies="wxmswuniv29ud_webview.lib  wxmswuniv29ud_stc.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib  wxscintillad.lib  wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswunivud\webview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswunivud\web.pdb"
+				ProgramDatabaseFile="vc_mswunivud\webview.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -213,7 +213,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="vc_mswunivu"
-			IntermediateDirectory="vc_mswunivu\web"
+			IntermediateDirectory="vc_mswunivu\webview"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -226,8 +226,8 @@
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
-				ObjectFile="vc_mswunivu\web\"
-				ProgramDataBaseFileName="vc_mswunivu\web.pdb"
+				ObjectFile="vc_mswunivu\webview\"
+				ProgramDataBaseFileName="vc_mswunivu\webview.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -237,13 +237,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_web.lib  wxmswuniv29u_stc.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u.lib  wxscintilla.lib  wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswunivu\web.exe"
+				AdditionalDependencies="wxmswuniv29u_webview.lib  wxmswuniv29u_stc.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u.lib  wxscintilla.lib  wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswunivu\webview.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswunivu\web.pdb"
+				ProgramDatabaseFile="vc_mswunivu\webview.pdb"
 				SubSystem="2"
 				TargetMachine="1"
 				OptimizeReferences="2"
@@ -277,7 +277,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="vc_mswuddll"
-			IntermediateDirectory="vc_mswuddll\web"
+			IntermediateDirectory="vc_mswuddll\webview"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -293,8 +293,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				ObjectFile="vc_mswuddll\web\"
-				ProgramDataBaseFileName="vc_mswuddll\web.pdb"
+				ObjectFile="vc_mswuddll\webview\"
+				ProgramDataBaseFileName="vc_mswuddll\webview.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -304,13 +304,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_web.lib  wxmsw29ud_stc.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud.lib  wxscintillad.lib  wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswuddll\web.exe"
+				AdditionalDependencies="wxmsw29ud_webview.lib  wxmsw29ud_stc.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud.lib  wxscintillad.lib  wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswuddll\webview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswuddll\web.pdb"
+				ProgramDatabaseFile="vc_mswuddll\webview.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -342,7 +342,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="vc_mswudll"
-			IntermediateDirectory="vc_mswudll\web"
+			IntermediateDirectory="vc_mswudll\webview"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -355,8 +355,8 @@
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
-				ObjectFile="vc_mswudll\web\"
-				ProgramDataBaseFileName="vc_mswudll\web.pdb"
+				ObjectFile="vc_mswudll\webview\"
+				ProgramDataBaseFileName="vc_mswudll\webview.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -366,13 +366,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_web.lib  wxmsw29u_stc.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u.lib  wxscintilla.lib  wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswudll\web.exe"
+				AdditionalDependencies="wxmsw29u_webview.lib  wxmsw29u_stc.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u.lib  wxscintilla.lib  wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswudll\webview.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswudll\web.pdb"
+				ProgramDatabaseFile="vc_mswudll\webview.pdb"
 				SubSystem="2"
 				TargetMachine="1"
 				OptimizeReferences="2"
@@ -406,7 +406,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="vc_mswunivuddll"
-			IntermediateDirectory="vc_mswunivuddll\web"
+			IntermediateDirectory="vc_mswunivuddll\webview"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -422,8 +422,8 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				ObjectFile="vc_mswunivuddll\web\"
-				ProgramDataBaseFileName="vc_mswunivuddll\web.pdb"
+				ObjectFile="vc_mswunivuddll\webview\"
+				ProgramDataBaseFileName="vc_mswunivuddll\webview.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -433,13 +433,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_web.lib  wxmswuniv29ud_stc.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib  wxscintillad.lib  wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswunivuddll\web.exe"
+				AdditionalDependencies="wxmswuniv29ud_webview.lib  wxmswuniv29ud_stc.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib  wxscintillad.lib  wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswunivuddll\webview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswunivuddll\web.pdb"
+				ProgramDatabaseFile="vc_mswunivuddll\webview.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -471,7 +471,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="vc_mswunivudll"
-			IntermediateDirectory="vc_mswunivudll\web"
+			IntermediateDirectory="vc_mswunivudll\webview"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -484,8 +484,8 @@
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
-				ObjectFile="vc_mswunivudll\web\"
-				ProgramDataBaseFileName="vc_mswunivudll\web.pdb"
+				ObjectFile="vc_mswunivudll\webview\"
+				ProgramDataBaseFileName="vc_mswunivudll\webview.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -495,13 +495,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_web.lib  wxmswuniv29u_stc.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u.lib  wxscintilla.lib  wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswunivudll\web.exe"
+				AdditionalDependencies="wxmswuniv29u_webview.lib  wxmswuniv29u_stc.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u.lib  wxscintilla.lib  wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswunivudll\webview.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswunivudll\web.pdb"
+				ProgramDatabaseFile="vc_mswunivudll\webview.pdb"
 				SubSystem="2"
 				TargetMachine="1"
 				OptimizeReferences="2"
@@ -542,7 +542,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\web.cpp">
+				RelativePath=".\webview.cpp">
 			</File>
 		</Filter>
 		<Filter
