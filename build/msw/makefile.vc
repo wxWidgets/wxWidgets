@@ -2434,6 +2434,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_hyperlnkcmn.obj \
 	$(OBJS)\monodll_odcombocmn.obj \
 	$(OBJS)\monodll_aboutdlgg.obj \
+	$(OBJS)\monodll_bannerwindow.obj \
 	$(OBJS)\monodll_bmpcboxg.obj \
 	$(OBJS)\monodll_calctrlg.obj \
 	$(OBJS)\monodll_commandlinkbuttong.obj \
@@ -2478,6 +2479,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_hyperlnkcmn.obj \
 	$(OBJS)\monodll_odcombocmn.obj \
 	$(OBJS)\monodll_aboutdlgg.obj \
+	$(OBJS)\monodll_bannerwindow.obj \
 	$(OBJS)\monodll_bmpcboxg.obj \
 	$(OBJS)\monodll_calctrlg.obj \
 	$(OBJS)\monodll_commandlinkbuttong.obj \
@@ -3204,6 +3206,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_hyperlnkcmn.obj \
 	$(OBJS)\monolib_odcombocmn.obj \
 	$(OBJS)\monolib_aboutdlgg.obj \
+	$(OBJS)\monolib_bannerwindow.obj \
 	$(OBJS)\monolib_bmpcboxg.obj \
 	$(OBJS)\monolib_calctrlg.obj \
 	$(OBJS)\monolib_commandlinkbuttong.obj \
@@ -3248,6 +3251,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_hyperlnkcmn.obj \
 	$(OBJS)\monolib_odcombocmn.obj \
 	$(OBJS)\monolib_aboutdlgg.obj \
+	$(OBJS)\monolib_bannerwindow.obj \
 	$(OBJS)\monolib_bmpcboxg.obj \
 	$(OBJS)\monolib_calctrlg.obj \
 	$(OBJS)\monolib_commandlinkbuttong.obj \
@@ -4498,6 +4502,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_hyperlnkcmn.obj \
 	$(OBJS)\advdll_odcombocmn.obj \
 	$(OBJS)\advdll_aboutdlgg.obj \
+	$(OBJS)\advdll_bannerwindow.obj \
 	$(OBJS)\advdll_bmpcboxg.obj \
 	$(OBJS)\advdll_calctrlg.obj \
 	$(OBJS)\advdll_commandlinkbuttong.obj \
@@ -4542,6 +4547,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_hyperlnkcmn.obj \
 	$(OBJS)\advdll_odcombocmn.obj \
 	$(OBJS)\advdll_aboutdlgg.obj \
+	$(OBJS)\advdll_bannerwindow.obj \
 	$(OBJS)\advdll_bmpcboxg.obj \
 	$(OBJS)\advdll_calctrlg.obj \
 	$(OBJS)\advdll_commandlinkbuttong.obj \
@@ -4590,6 +4596,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_hyperlnkcmn.obj \
 	$(OBJS)\advlib_odcombocmn.obj \
 	$(OBJS)\advlib_aboutdlgg.obj \
+	$(OBJS)\advlib_bannerwindow.obj \
 	$(OBJS)\advlib_bmpcboxg.obj \
 	$(OBJS)\advlib_calctrlg.obj \
 	$(OBJS)\advlib_commandlinkbuttong.obj \
@@ -4634,6 +4641,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_hyperlnkcmn.obj \
 	$(OBJS)\advlib_odcombocmn.obj \
 	$(OBJS)\advlib_aboutdlgg.obj \
+	$(OBJS)\advlib_bannerwindow.obj \
 	$(OBJS)\advlib_bmpcboxg.obj \
 	$(OBJS)\advlib_calctrlg.obj \
 	$(OBJS)\advlib_commandlinkbuttong.obj \
@@ -8697,6 +8705,11 @@ $(OBJS)\monodll_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
 !endif
@@ -11045,6 +11058,11 @@ $(OBJS)\monolib_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -14805,6 +14823,9 @@ $(OBJS)\advdll_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
 $(OBJS)\advdll_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
 
+$(OBJS)\advdll_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
+
 $(OBJS)\advdll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
 
@@ -14930,6 +14951,9 @@ $(OBJS)\advlib_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
 
 $(OBJS)\advlib_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
+
+$(OBJS)\advlib_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
 
 $(OBJS)\advlib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp

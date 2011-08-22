@@ -286,7 +286,7 @@ $(OBJS)\xrcdemo.exe :  $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_sample.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS)\rc mkdir $(OBJS)\rc
-	for %f in (artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm objref.xrc objrefdlg.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
+	for %f in (artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm objref.xrc objrefdlg.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm wxbanner.gif) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
 
 $(OBJS)\xrcdemo_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<

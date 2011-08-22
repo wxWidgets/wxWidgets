@@ -1809,6 +1809,7 @@ Optional Features:
   --enable-markup         support wxControl::SetLabelMarkup
   --enable-accel          use accelerators
   --enable-animatectrl    use wxAnimationCtrl class
+  --enable-bannerwindow   use wxBannerWindow class
   --enable-artstd         use standard XPM icons in wxArtProvider
   --enable-arttango       use Tango icons in wxArtProvider
   --enable-bmpbutton      use wxBitmapButton class
@@ -9853,6 +9854,7 @@ echo "${ECHO_T}$result" >&6; }
 if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_ACCEL=no
     DEFAULT_wxUSE_ANIMATIONCTRL=no
+    DEFAULT_wxUSE_BANNERWINDOW=no
     DEFAULT_wxUSE_BMPBUTTON=no
     DEFAULT_wxUSE_BUTTON=no
     DEFAULT_wxUSE_CALCTRL=no
@@ -10038,6 +10040,50 @@ fi
             fi
           else
             result=$wxUSE_ANIMATIONCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-bannerwindow" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-bannerwindow... $ECHO_C" >&6; }
+          # Check whether --enable-bannerwindow was given.
+if test "${enable_bannerwindow+set}" = set; then
+  enableval=$enable_bannerwindow;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_bannerwindow='wxUSE_BANNERWINDOW=yes'
+                          else
+                            wx_cv_use_bannerwindow='wxUSE_BANNERWINDOW=no'
+                          fi
+
+else
+
+                          wx_cv_use_bannerwindow='wxUSE_BANNERWINDOW=${'DEFAULT_wxUSE_BANNERWINDOW":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_bannerwindow"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_BANNERWINDOW = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_BANNERWINDOW
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -47253,6 +47299,13 @@ _ACEOF
 
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS animate"
+fi
+
+if test "$wxUSE_BANNERWINDOW" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_BANNERWINDOW 1
+_ACEOF
+
 fi
 
 if test "$wxUSE_BUTTON" = "yes"; then

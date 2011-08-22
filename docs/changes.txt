@@ -450,6 +450,7 @@ All (GUI):
 - Added documented, public wxNavigationEnabled<> class.
 - Added wxTextCtrl::PositionToCoords() (Navaneeth).
 - Added support for wxHELP button to wxMessageDialog.
+- Added wxBannerWindow class.
 - Support float, double and file name values in wxGenericValidator (troelsk).
 - Fix keyboard navigation in wxGrid with hidden columns (ivan_14_32).
 - Add wxDataViewEvent::IsEditCancelled() (Allonii).

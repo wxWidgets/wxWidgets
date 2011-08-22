@@ -6772,6 +6772,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\bannerwindow.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\ribbon\bar.h"
 				>
 			</File>

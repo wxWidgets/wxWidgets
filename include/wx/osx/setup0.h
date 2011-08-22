@@ -804,6 +804,7 @@
 //
 // Recommended setting: 1
 #define wxUSE_ANIMATIONCTRL 1   // wxAnimationCtrl
+#define wxUSE_BANNERWINDOW  1   // wxBannerWindow
 #define wxUSE_BUTTON        1   // wxButton
 #define wxUSE_BMPBUTTON     1   // wxBitmapButton
 #define wxUSE_CALENDARCTRL  1   // wxCalendarCtrl

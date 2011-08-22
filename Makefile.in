@@ -3676,6 +3676,7 @@ COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_NATIVE_HDR =  \
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
 	wx/animate.h \
+	wx/bannerwindow.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/commandlinkbutton.h \
@@ -3723,6 +3724,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
 	wx/animate.h \
+	wx/bannerwindow.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/commandlinkbutton.h \
@@ -6073,6 +6075,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_hyperlnkcmn.o \
 	monodll_odcombocmn.o \
 	monodll_aboutdlgg.o \
+	monodll_bannerwindow.o \
 	monodll_bmpcboxg.o \
 	monodll_calctrlg.o \
 	monodll_commandlinkbuttong.o \
@@ -6105,6 +6108,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_hyperlnkcmn.o \
 	monodll_odcombocmn.o \
 	monodll_aboutdlgg.o \
+	monodll_bannerwindow.o \
 	monodll_bmpcboxg.o \
 	monodll_calctrlg.o \
 	monodll_commandlinkbuttong.o \
@@ -8003,6 +8007,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_hyperlnkcmn.o \
 	monolib_odcombocmn.o \
 	monolib_aboutdlgg.o \
+	monolib_bannerwindow.o \
 	monolib_bmpcboxg.o \
 	monolib_calctrlg.o \
 	monolib_commandlinkbuttong.o \
@@ -8035,6 +8040,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_hyperlnkcmn.o \
 	monolib_odcombocmn.o \
 	monolib_aboutdlgg.o \
+	monolib_bannerwindow.o \
 	monolib_bmpcboxg.o \
 	monolib_calctrlg.o \
 	monolib_commandlinkbuttong.o \
@@ -11776,6 +11782,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_hyperlnkcmn.o \
 	advdll_odcombocmn.o \
 	advdll_aboutdlgg.o \
+	advdll_bannerwindow.o \
 	advdll_bmpcboxg.o \
 	advdll_calctrlg.o \
 	advdll_commandlinkbuttong.o \
@@ -11808,6 +11815,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_hyperlnkcmn.o \
 	advdll_odcombocmn.o \
 	advdll_aboutdlgg.o \
+	advdll_bannerwindow.o \
 	advdll_bmpcboxg.o \
 	advdll_calctrlg.o \
 	advdll_commandlinkbuttong.o \
@@ -11880,6 +11888,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_hyperlnkcmn.o \
 	advlib_odcombocmn.o \
 	advlib_aboutdlgg.o \
+	advlib_bannerwindow.o \
 	advlib_bmpcboxg.o \
 	advlib_calctrlg.o \
 	advlib_commandlinkbuttong.o \
@@ -11912,6 +11921,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_hyperlnkcmn.o \
 	advlib_odcombocmn.o \
 	advlib_aboutdlgg.o \
+	advlib_bannerwindow.o \
 	advlib_bmpcboxg.o \
 	advlib_calctrlg.o \
 	advlib_commandlinkbuttong.o \
@@ -20342,6 +20352,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
+@COND_USE_GUI_1@monodll_bannerwindow.o: $(srcdir)/src/generic/bannerwindow.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bannerwindow.cpp
+
 @COND_USE_GUI_1@monodll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
@@ -25666,6 +25679,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
+
+@COND_USE_GUI_1@monolib_bannerwindow.o: $(srcdir)/src/generic/bannerwindow.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bannerwindow.cpp
 
 @COND_USE_GUI_1@monolib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
@@ -35204,6 +35220,9 @@ advdll_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(ADVDLL_ODEP)
 advdll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
+advdll_bannerwindow.o: $(srcdir)/src/generic/bannerwindow.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/bannerwindow.cpp
+
 advdll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
@@ -35557,6 +35576,9 @@ advlib_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(ADVLIB_ODEP)
 
 advlib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
+
+advlib_bannerwindow.o: $(srcdir)/src/generic/bannerwindow.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/bannerwindow.cpp
 
 advlib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp

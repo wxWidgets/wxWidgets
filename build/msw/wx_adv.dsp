@@ -563,6 +563,10 @@ SOURCE=..\..\src\generic\animateg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\bannerwindow.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\bmpcboxg.cpp
 # End Source File
 # Begin Source File
@@ -1009,6 +1013,10 @@ SOURCE=..\..\include\wx\aboutdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\animate.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\bannerwindow.h
 # End Source File
 # Begin Source File
 

@@ -2953,6 +2953,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/hyperlnkcmn.cpp
     src/common/odcombocmn.cpp
     src/generic/aboutdlgg.cpp
+    src/generic/bannerwindow.cpp
     src/generic/bmpcboxg.cpp
     src/generic/calctrlg.cpp
     src/generic/commandlinkbuttong.cpp
@@ -2978,6 +2979,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_CMN_HDR" hints="files">
     wx/aboutdlg.h
     wx/animate.h
+    wx/bannerwindow.h
     wx/bmpcbox.h
     wx/calctrl.h
     wx/commandlinkbutton.h

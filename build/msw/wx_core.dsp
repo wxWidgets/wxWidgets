@@ -5984,6 +5984,10 @@ SOURCE=..\..\include\wx\aui\auibook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\bannerwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\ribbon\bar.h
 # End Source File
 # Begin Source File
