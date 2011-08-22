@@ -2023,16 +2023,19 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         {
             const int row = GetRowByItem(item);
 
+            int rowIndexInSelection = wxNOT_FOUND;
+
             const size_t selCount = m_selection.size();
             for ( size_t i = 0; i < selCount; i++ )
             {
-                if ( m_selection[i] > (unsigned)row )
+                if ( m_selection[i] == (unsigned)row )
+                    rowIndexInSelection = i;
+                else if ( m_selection[i] > (unsigned)row )
                     m_selection[i]--;
             }
 
-            int itemRow = m_selection.Index(row);
-            if ( itemRow != wxNOT_FOUND )
-                m_selection.RemoveAt(itemRow);
+            if ( rowIndexInSelection != wxNOT_FOUND )
+                m_selection.RemoveAt(rowIndexInSelection);
         }
 
     }
