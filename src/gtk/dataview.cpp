@@ -1644,23 +1644,28 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
             GtkTreeView *widget = GTK_TREE_VIEW(ctrl->GtkGetTreeView());
             GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
 
-            // Get cell area
-            GtkTreeIter iter;
-            iter.stamp = wxgtk_model->stamp;
-            iter.user_data = (gpointer) item.GetID();
-            wxGtkTreePath path(wxgtk_tree_model_get_path(
-                GTK_TREE_MODEL(wxgtk_model), &iter ));
-            GdkRectangle cell_area;
-            gtk_tree_view_get_cell_area( widget, path, gcolumn, &cell_area );
+            // Don't attempt to refresh not yet realized tree, it is useless
+            // and results in GTK errors.
+            if ( gtk_widget_get_realized(ctrl->GtkGetTreeView()) )
+            {
+                // Get cell area
+                GtkTreeIter iter;
+                iter.stamp = wxgtk_model->stamp;
+                iter.user_data = (gpointer) item.GetID();
+                wxGtkTreePath path(wxgtk_tree_model_get_path(
+                    GTK_TREE_MODEL(wxgtk_model), &iter ));
+                GdkRectangle cell_area;
+                gtk_tree_view_get_cell_area( widget, path, gcolumn, &cell_area );
 
-            GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
-            double d = gtk_adjustment_get_value( hadjust );
-            int xdiff = (int) d;
+                GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
+                double d = gtk_adjustment_get_value( hadjust );
+                int xdiff = (int) d;
 
-            int ydiff = gcolumn->button->allocation.height;
-            // Redraw
-            gtk_widget_queue_draw_area( GTK_WIDGET(widget),
-                cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
+                int ydiff = gcolumn->button->allocation.height;
+                // Redraw
+                gtk_widget_queue_draw_area( GTK_WIDGET(widget),
+                    cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
+            }
 
             m_internal->ValueChanged( item, model_column );
 
