@@ -173,8 +173,9 @@ protected:
     wxWeakRef<wxWindow>     m_editorCtrl;
     wxDataViewItem          m_item; // for m_editorCtrl
 
-    // internal utility:
-    const wxDataViewCtrl* GetView() const;
+    // internal utility, may be used anywhere the window associated with the
+    // renderer is required
+    wxDataViewCtrl* GetView() const;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRendererBase)

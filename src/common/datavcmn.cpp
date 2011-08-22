@@ -673,7 +673,7 @@ wxDataViewRendererBase::~wxDataViewRendererBase()
 {
 }
 
-const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
+wxDataViewCtrl* wxDataViewRendererBase::GetView() const
 {
     return const_cast<wxDataViewRendererBase*>(this)->GetOwner()->GetOwner();
 }
