@@ -3584,8 +3584,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    // Test whether the mouse is hovered on the tree item button
+    // Test whether the mouse is hovering over the expander (a.k.a tree "+"
+    // button) and also determine the offset of the real cell start, skipping
+    // the indentation and the expander itself.
     bool hoverOverExpander = false;
+    int expanderOffset = 0;
     if ((!IsList()) && (GetOwner()->GetExpanderColumn() == col))
     {
         wxDataViewTreeNode * node = GetTreeNodeByRow(current);
@@ -3599,6 +3602,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             wxRect rect( xpos + indent,
                         GetLineStart( current ) + (GetLineHeight(current) - m_lineHeight)/2,
                         m_lineHeight, m_lineHeight);
+
+            expanderOffset = indent + m_lineHeight;
+
             if( rect.Contains(x, y) )
             {
                 // So the mouse is over the expander
@@ -3889,8 +3895,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             // notify cell about click
             cell->PrepareForItem(model, item, col->GetModelColumn());
 
-            wxRect cell_rect( xpos, GetLineStart( current ),
-                              col->GetWidth(), GetLineHeight( current ) );
+            wxRect cell_rect( xpos + expanderOffset,
+                              GetLineStart( current ),
+                              col->GetWidth() - expanderOffset,
+                              GetLineHeight( current ) );
 
             // Report position relative to the cell's custom area, i.e.
             // no the entire space as given by the control but the one
