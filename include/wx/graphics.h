@@ -24,7 +24,7 @@
 enum wxAntialiasMode
 {
     wxANTIALIAS_NONE, // should be 0
-    wxANTIALIAS_DEFAULT,
+    wxANTIALIAS_DEFAULT
 };
 
 enum wxInterpolationQuality
