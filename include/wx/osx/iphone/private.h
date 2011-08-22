@@ -194,6 +194,8 @@ protected :
     WXDLLIMPEXP_CORE wxRect wxFromNSRect( UIView* parent, const CGRect& rect );
     WXDLLIMPEXP_CORE CGPoint wxToNSPoint( UIView* parent, const wxPoint& p );
     WXDLLIMPEXP_CORE wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p );
+    WXDLLIMPEXP_CORE CGSize wxToNSSize( UIView* parent, const wxSize& r );
+    WXDLLIMPEXP_CORE wxSize wxFromNSSize( UIView* parent, const CGSize& size );
 
     CGRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size ,
         bool adjustForOrigin = true );

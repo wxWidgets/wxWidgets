@@ -66,7 +66,6 @@
 		B9F416E013FDBDAB00688F55 /* wheelsctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9F416DF13FDBDAB00688F55 /* wheelsctrl.cpp */; };
 		B9FE823A13CB441B009182C3 /* viewcontroller.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE823913CB441B009182C3 /* viewcontroller.mm */; };
 		B9FE836713CBA872009182C3 /* navitem.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE836613CBA872009182C3 /* navitem.mm */; };
-		B9FE838113CBA9F2009182C3 /* tabctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE838013CBA9F2009182C3 /* tabctrl.mm */; };
 		B9FE83D913CBB12C009182C3 /* buttonstrip.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE83D813CBB12C009182C3 /* buttonstrip.mm */; };
 		B9FE840013CBB4A5009182C3 /* wheelsctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE83FF13CBB4A5009182C3 /* wheelsctrl.mm */; };
 		B9FE842213CBBBC2009182C3 /* barbutton.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FE842113CBBBC2009182C3 /* barbutton.mm */; };
@@ -169,7 +168,6 @@
 		B9F416DF13FDBDAB00688F55 /* wheelsctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wheelsctrl.cpp; path = ../../src/generic/wheelsctrl.cpp; sourceTree = SOURCE_ROOT; };
 		B9FE823913CB441B009182C3 /* viewcontroller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = viewcontroller.mm; path = ../../src/osx/iphone/viewcontroller.mm; sourceTree = SOURCE_ROOT; };
 		B9FE836613CBA872009182C3 /* navitem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = navitem.mm; path = ../../src/osx/iphone/navitem.mm; sourceTree = SOURCE_ROOT; };
-		B9FE838013CBA9F2009182C3 /* tabctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tabctrl.mm; path = ../../src/osx/iphone/tabctrl.mm; sourceTree = SOURCE_ROOT; };
 		B9FE83D813CBB12C009182C3 /* buttonstrip.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = buttonstrip.mm; path = ../../src/osx/iphone/buttonstrip.mm; sourceTree = SOURCE_ROOT; };
 		B9FE83FF13CBB4A5009182C3 /* wheelsctrl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = wheelsctrl.mm; path = ../../src/osx/iphone/wheelsctrl.mm; sourceTree = SOURCE_ROOT; };
 		B9FE842113CBBBC2009182C3 /* barbutton.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = barbutton.mm; path = ../../src/osx/iphone/barbutton.mm; sourceTree = SOURCE_ROOT; };
@@ -274,7 +272,6 @@
 				B9ED3FF113CA6A12007570A4 /* srchctrl.mm */,
 				B9ED3FF213CA6A12007570A4 /* stattext.mm */,
 				B9ED3FF313CA6A12007570A4 /* tablecell.mm */,
-				B9FE838013CBA9F2009182C3 /* tabctrl.mm */,
 				B9ED3FF413CA6A12007570A4 /* tablectrl.mm */,
 				B9E501DA1400E7F6003FB88A /* tablectrl.cpp */,
 				B9ED3FF513CA6A12007570A4 /* textctrl.mm */,
@@ -439,7 +436,6 @@
 				B9ED401113CA6A12007570A4 /* window.mm in Sources */,
 				B9FE823A13CB441B009182C3 /* viewcontroller.mm in Sources */,
 				B9FE836713CBA872009182C3 /* navitem.mm in Sources */,
-				B9FE838113CBA9F2009182C3 /* tabctrl.mm in Sources */,
 				B9FE83D913CBB12C009182C3 /* buttonstrip.mm in Sources */,
 				B9FE840013CBB4A5009182C3 /* wheelsctrl.mm in Sources */,
 				B9FE842213CBBBC2009182C3 /* barbutton.mm in Sources */,

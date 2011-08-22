@@ -33,6 +33,16 @@ wxRect wxFromNSRect( UIView* parent, const CGRect& rect )
     return wxRect( x, y, rect.size.width, rect.size.height );
 }
 
+CGSize wxToNSSize(UIView* WXUNUSED(parent), const wxSize& r )
+{
+    return CGSizeMake(r.GetWidth(), r.GetHeight());
+}
+
+wxSize wxFromNSSize(UIView* WXUNUSED(parent), const CGSize& size )
+{
+    return wxSize(size.width, size.height);
+}
+
 CGPoint wxToNSPoint( UIView* parent, const wxPoint& p )
 {
     CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];

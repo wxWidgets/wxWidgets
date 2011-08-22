@@ -59,7 +59,6 @@ public:
                             const wxString& name = _("wxSegmentedCtrl Mobile"));
     
     // Event tests
-    void OnChanging(wxCommandEvent& WXUNUSED(event));
     void OnChanged(wxCommandEvent& WXUNUSED(event));
     
 protected:

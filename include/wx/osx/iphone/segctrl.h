@@ -31,31 +31,72 @@ public:
                       wxWindowID id,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
-                      long style = wxTAB_TEXT,
-                      const wxString& name = wxT("tabCtrl"));
+                      long style = 0,
+                      const wxString& name = wxT("segmentedCtrl"));
     
     /// Creation function.
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTAB_TEXT,
+                long style = 0,
                 const wxString& name = wxT("segmentedCtrl"));
-            
-    // wxTabCtrl overrides
+        
+    /// Insert an item, passing an optional index into the image list.
+    bool InsertItem(int item, const wxString& text, int imageId = -1);
     
-    /// Add an item, passing an optional index into the image list.
-    bool AddItem(const wxString& text, int imageId = -1);
+    /// Insert an item, passing a bitmap.
+    bool InsertItem(int item, const wxString& text, const wxBitmap& bitmap);
+        
+    /// Get the number of items
+    int GetItemCount() const;
     
-    /// Add an item, passing a bitmap.
-    bool AddItem(const wxString& text, const wxBitmap& bitmap);
-
+    /// Get the selection
+    int GetSelection() const;
+    
     /// Set the selection, generating events
     int SetSelection(int item);
     
-protected:
+    /// Set the selection, without generating events
+    int ChangeSelection(int item);
     
-    void Init();
+    /// Get the item text
+    wxString GetItemText(int item) const;
+    
+    /// Set the text for an item
+    bool SetItemText(int item, const wxString& text);
+    
+    /// Get the item image
+    wxBitmap GetItemImage(int item) const;
+    
+    /// Set the image for an item
+    bool SetItemImage(int item, wxBitmap& image);
+    
+    /// Get the content offset
+    wxSize GetContentOffset(int item) const;
+    
+    /// Set the content offset
+    void SetContentOffset(int item, const wxSize& size);
+    
+    /// Get the segment width
+    float GetWidth(int item) const;
+    
+    /// Set the segment width
+    void SetWidth(int item, const float width);
+    
+    /// Set button background ("tint") colour
+    void SetButtonBackgroundColour(const wxColour& colour);
+    
+    /// Get button background ("tint") colour
+    const wxColour& GetButtonBackgroundColour() const;
+    
+    /// Delete an item
+    bool DeleteItem(int item);
+    
+    /// Delete all items
+    bool DeleteAllItems();
+            
+protected:
     
     DECLARE_NO_COPY_CLASS(wxSegmentedCtrl)
     DECLARE_EVENT_TABLE()

@@ -49,8 +49,7 @@ bool MobileTestsWxSegmentedCtrlPanel::CreateControls()
     sizer->Add(m_segCtrl, 0, wxEXPAND|wxALL, 5);
     
     // Events
-    m_segCtrl->Connect(wxEVT_COMMAND_TAB_SEL_CHANGING, wxCommandEventHandler(MobileTestsWxSegmentedCtrlPanel::OnChanging), NULL, this);
-    m_segCtrl->Connect(wxEVT_COMMAND_TAB_SEL_CHANGED, wxCommandEventHandler(MobileTestsWxSegmentedCtrlPanel::OnChanged), NULL, this);
+    m_segCtrl->Connect(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MobileTestsWxSegmentedCtrlPanel::OnChanged), NULL, this);
     
     // Test getters
     wxASSERT_MSG(m_segCtrl->GetItemCount() == 3, "Incorrect item count");
@@ -63,12 +62,7 @@ bool MobileTestsWxSegmentedCtrlPanel::CreateControls()
     return true;
 }
 
-void MobileTestsWxSegmentedCtrlPanel::OnChanging(wxCommandEvent& WXUNUSED(event))
-{
-    wxLogMessage("Event wxEVT_COMMAND_TAB_SEL_CHANGING");
-}
-
 void MobileTestsWxSegmentedCtrlPanel::OnChanged(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogMessage("Event wxEVT_COMMAND_TAB_SEL_CHANGED");
+    wxLogMessage("Event wxEVT_COMMAND_MENU_SELECTED");
 }
