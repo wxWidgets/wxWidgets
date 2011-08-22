@@ -105,6 +105,9 @@ public:
 
     /// Sets editing mode (not yet implemented).
     virtual bool SetEditingMode(bool editingMode, bool animated = true);
+    
+    /// Returns true if in edit mode (not implemented).
+    virtual bool IsEditing() const;
 
     // Finds a cell that isn't being displayed currently,
     // either from the current pool or from an area of
@@ -125,15 +128,28 @@ public:
     
     /// Gets the selection, or NULL if there is none.
     wxTablePath* GetSelection() const;
-
-    /*
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual bool SetForegroundColour(const wxColour &colour);
-    virtual bool SetFont(const wxFont& font);
-    virtual bool Enable(bool enable);
-    */
     
-    virtual bool HasIndex() const { return m_indexTitles.GetCount() > 0; }
+    /// Sets the cell separator style.
+    void SetCellSeparatorStyle(int style);
+    
+    /// Sets the cell separator colour.
+    void SetCellSeparatorColour(const wxColour &colour);
+    
+    /// Sets the standard row height in pixels.
+    void SetRowHeight(float height);
+    
+    /// Sets the section header height in pixels.
+    void SetSectionHeaderHeight(float height);
+
+    /// Sets the section footer height in pixels.
+    void SetSectionFooterHeight(float height);
+    
+    /// Pass @true to allow row selection during editing.
+    void SetAllowSelectionDuringEditing(bool allow);
+    
+    /// Sets a boolean of whether selection of cells is allowed.
+    void SetAllowSelection(bool allow);
+    
     
 protected:
     

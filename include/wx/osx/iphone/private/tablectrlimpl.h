@@ -53,7 +53,9 @@ public:
                               wxUITableViewController* tableViewController,
                               wxUITableView *tableView );
     
-    virtual bool ReloadData();
+    bool ReloadData();
+    bool SetEditingMode(bool editingMode, bool animated);
+    bool SetSelection(const wxTablePath& path);
         
 private:
     wxUITableViewController *m_tableViewController;

@@ -95,9 +95,6 @@
     tableCell->SetSelectionStyle(tableCell->GetSelectionStyle());
     tableCell->SetIndentationLevel(tableCell->GetIndentationLevel());
     tableCell->SetIndentationWidth(tableCell->GetIndentationWidth());
-    
-    // FIXME other properties (font, selectedBitmap, event handler, ...)
-    
 }
 
 @end
@@ -716,5 +713,10 @@ float wxTableCell::GetDetailWidth() const
 // Prepares the cell for reuse
 void wxTableCell::PrepareForReuse(wxTableCtrl* WXUNUSED(tableCtrl))
 {
-    // FIXME stub
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell prepareForReuse];
 }

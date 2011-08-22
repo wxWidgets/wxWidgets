@@ -231,6 +231,30 @@ bool wxTableViewCtrlIPhoneImpl::ReloadData()
     return true;
 }
 
+bool wxTableViewCtrlIPhoneImpl::SetEditingMode(bool editingMode,
+                                               bool animated)
+{
+    [m_tableView setEditing:editingMode
+                   animated:YES];
+    return true;
+}
+
+bool wxTableViewCtrlIPhoneImpl::SetSelection(const wxTablePath& path)
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:path.GetRow()
+                                                inSection:path.GetSection()];
+    if ( !indexPath ) {
+        return false;
+    }
+    
+    [m_tableView selectRowAtIndexPath:indexPath
+                             animated:YES
+                       scrollPosition:UITableViewScrollPositionTop];
+    
+    return true;
+}
+
+
 
 wxWidgetImplType* wxWidgetImpl::CreateTableViewCtrl( wxWindowMac* wxpeer,
                                                      wxWindowMac* WXUNUSED(parent),
@@ -282,11 +306,11 @@ wxTableCtrl::wxTableCtrl(wxWindow *parent,
 }
 
 bool wxTableCtrl::Create(wxWindow *parent,
-                           wxWindowID id,
-                           const wxPoint& pos,
-                           const wxSize& size,
-                           long style,
-                           const wxString& name)
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& name)
 {
     DontCreatePeer();
     
@@ -308,8 +332,10 @@ wxTableCtrl::~wxTableCtrl()
 
 wxTableCell* wxTableCtrl::GetReusableCell(const wxString& reuseName)
 {
-    // FIXME
+    // FIXME doesn't work as of now, so pretend there are no reusable cells.
     return NULL;
+    
+    // ---
     
     // Let the Cocoa part take care of the reusability.
     
@@ -318,7 +344,7 @@ wxTableCell* wxTableCtrl::GetReusableCell(const wxString& reuseName)
         return NULL;
     }
     
-    NSString *cellIdentifier = wxCFStringRef(reuseName).AsNSString();
+    NSString *cellIdentifier = [NSString stringWithString:wxCFStringRef(reuseName).AsNSString()];
     if (! cellIdentifier) {
         return NULL;
     }
@@ -331,22 +357,6 @@ wxTableCell* wxTableCtrl::GetReusableCell(const wxString& reuseName)
     return [cell tableCell];
 }
 
-// Clears all data
-void wxTableCtrl::Clear()
-{
-    m_sections.Clear();
-    m_indexTitles.Clear();
-    
-    size_t i;
-    for (i = 0; i < m_reusableCells.GetCount(); i++)
-    {
-        wxTableCell* cell = m_reusableCells[i];
-        delete cell;
-    }
-    m_reusableCells.Clear();
-    m_totalTableHeight = 0;
-}
-
 bool wxTableCtrl::ReloadData(bool resetScrollbars)
 {
     Clear();
@@ -355,82 +365,74 @@ bool wxTableCtrl::ReloadData(bool resetScrollbars)
     return peer->ReloadData();
 }
 
-/// Starts batching of operations within which no visual updates are performed.
-/// You can nest Freeze/Thaw operations.
-void wxTableCtrl::Freeze()
+// Property conversion helper
+UITableViewRowAnimation WxTableCtrlGetCocoaUITableViewRowAnimation(wxTableCtrl::RowAnimationStyle animationStyle)
 {
-    // FIXME stub
-}
-
-/// Ends batching of operations, refetches the data, and refreshes the window.
-void wxTableCtrl::Thaw()
-{
-    // FIXME stub
-}
-
-/// Finds the path for the cell.
-bool wxTableCtrl::FindPathForCell(wxTableCell* cell, wxTablePath& path) const
-{
-    // FIXME stub
-    return false;
-}
-
-/// Finds the cell for the path.
-wxTableCell* wxTableCtrl::FindCellForPath(const wxTablePath& path) const
-{
-    // FIXME stub
-    return NULL;
-}
-
-// Inserts the given rows, by getting the new data. In the generic implementation,
-// the data is completely refreshed, but on Cocoa Touch
-// this will be optimized and animated.
-bool wxTableCtrl::ReloadRows(const wxTablePathArray& WXUNUSED(paths),
-                             RowAnimationStyle WXUNUSED(animationStyle))
-{
-    // FIXME stub
+    UITableViewRowAnimation cocoaAnimationStyle;
+        
+    switch (animationStyle) {
+        case wxTableCtrl::RowAnimationNone:      cocoaAnimationStyle = UITableViewRowAnimationNone;      break;
+        case wxTableCtrl::RowAnimationFade:      cocoaAnimationStyle = UITableViewRowAnimationFade;      break;
+        case wxTableCtrl::RowAnimationRight:     cocoaAnimationStyle = UITableViewRowAnimationRight;     break;
+        case wxTableCtrl::RowAnimationLeft:      cocoaAnimationStyle = UITableViewRowAnimationLeft;      break;
+        case wxTableCtrl::RowAnimationTop:       cocoaAnimationStyle = UITableViewRowAnimationTop;       break;
+        case wxTableCtrl::RowAnimationBottom:    cocoaAnimationStyle = UITableViewRowAnimationBottom;    break;
+        default:                                 cocoaAnimationStyle = UITableViewRowAnimationRight;     break;
+    };
     
-    return true;
+    return cocoaAnimationStyle;
 }
 
-// Sets editing mode (not yet implemented).
+// Sets editing mode.
 bool wxTableCtrl::SetEditingMode(bool editingMode,
-                                 bool WXUNUSED(animated))
+                                 bool animated)
 {
-    // FIXME stub
+    wxTableViewCtrlIPhoneImpl *peer = (wxTableViewCtrlIPhoneImpl *)GetPeer();
+    if ( !peer->SetEditingMode(editingMode, animated) ) {
+        return false;
+    }
+    
+    m_editingMode = editingMode;
     
     return true;
+}
+
+bool wxTableCtrl::IsEditing() const
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return false;
+    }
+    
+    return tableView.editing;
 }
 
 // Inserts the given sections, by getting the new data. In the generic implementation,
 // the data is completely refreshed, but on Cocoa Touch
 // this will be optimized and animated.
-bool wxTableCtrl::InsertSections(const wxArrayInt& WXUNUSED(sections),
-                                 RowAnimationStyle WXUNUSED(animationStyle))
+bool wxTableCtrl::InsertSections(const wxArrayInt& sections,
+                                 RowAnimationStyle animationStyle)
 {
-    // FIXME stub
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return false;
+    }
     
-    return true;
-}
-
-// Deletes the given rows, by getting the new data. In the generic implementation,
-// the data is completely refreshed, but on Cocoa Touch
-// this will be optimized and animated.
-bool wxTableCtrl::DeleteRows(const wxTablePathArray& WXUNUSED(paths),
-                             RowAnimationStyle WXUNUSED(animationStyle))
-{
-    // FIXME stub
+    if (sections.GetCount() == 0) {
+        return true;
+    }
     
-    return true;
-}
-
-// Inserts the given rows, by getting the new data. In the generic implementation,
-// the data is completely refreshed, but on Cocoa Touch
-// this will be optimized and animated.
-bool wxTableCtrl::InsertRows(const wxTablePathArray& WXUNUSED(paths),
-                             RowAnimationStyle WXUNUSED(animationStyle))
-{
-    // FIXME stub
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    size_t i;
+    int section;
+    
+    for (i = 0; i < sections.GetCount(); ++i) {
+        section = sections[i];
+        [indexSet addIndex:section];
+    }
+    
+    [tableView insertSections:indexSet
+             withRowAnimation:WxTableCtrlGetCocoaUITableViewRowAnimation(animationStyle)];
     
     return true;
 }
@@ -438,10 +440,29 @@ bool wxTableCtrl::InsertRows(const wxTablePathArray& WXUNUSED(paths),
 // Refreshes the given sections, by getting the new data. In the generic implementation,
 // the data is completely refreshed, but on Cocoa Touch
 // this will be optimized and animated.
-bool wxTableCtrl::ReloadSections(const wxArrayInt& WXUNUSED(sections),
-                                 RowAnimationStyle WXUNUSED(animationStyle))
+bool wxTableCtrl::ReloadSections(const wxArrayInt& sections,
+                                 RowAnimationStyle animationStyle)
 {
-    // FIXME stub
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return false;
+    }
+    
+    if (sections.GetCount() == 0) {
+        return true;
+    }
+    
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    size_t i;
+    int section;
+    
+    for (i = 0; i < sections.GetCount(); ++i) {
+        section = sections[i];
+        [indexSet addIndex:section];
+    }
+    
+    [tableView reloadSections:indexSet
+             withRowAnimation:WxTableCtrlGetCocoaUITableViewRowAnimation(animationStyle)];
     
     return true;
 }
@@ -449,10 +470,140 @@ bool wxTableCtrl::ReloadSections(const wxArrayInt& WXUNUSED(sections),
 // Deletes the given sections, by getting the new data. In the generic implementation,
 // the data is completely refreshed, but on Cocoa Touch
 // this will be optimized and animated.
-bool wxTableCtrl::DeleteSections(const wxArrayInt& WXUNUSED(sections),
-                                 RowAnimationStyle WXUNUSED(animationStyle))
+bool wxTableCtrl::DeleteSections(const wxArrayInt& sections,
+                                 RowAnimationStyle animationStyle)
 {
-    // FIXME stub
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return false;
+    }
+    
+    if (sections.GetCount() == 0) {
+        return true;
+    }
+    
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    size_t i;
+    int section;
+    
+    for (i = 0; i < sections.GetCount(); ++i) {
+        section = sections[i];
+        [indexSet addIndex:section];
+    }
+    
+    [tableView deleteSections:indexSet
+             withRowAnimation:WxTableCtrlGetCocoaUITableViewRowAnimation(animationStyle)];
+    
+    return true;
+}
+
+// Inserts the given rows, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::InsertRows(const wxTablePathArray& paths,
+                             RowAnimationStyle animationStyle)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return false;
+    }
+    
+    if (paths.GetCount() == 0) {
+        return true;
+    }
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    NSIndexPath *indexPath = nil;
+    wxTablePath tablePath = NULL;
+    size_t i;
+    
+    for (i = 0; i < paths.GetCount(); ++i) {
+        tablePath = paths[i];
+        indexPath = [NSIndexPath indexPathForRow:tablePath.GetRow()
+                                       inSection:tablePath.GetSection()];
+        if ( !indexPath ) {
+            return false;
+        }
+        
+        [indexPaths addObject:indexPath];
+    }
+    
+    [tableView insertRowsAtIndexPaths:indexPaths
+                     withRowAnimation:WxTableCtrlGetCocoaUITableViewRowAnimation(animationStyle)];
+    
+    return true;
+}
+
+// Inserts the given rows, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::ReloadRows(const wxTablePathArray& paths,
+                             RowAnimationStyle animationStyle)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return false;
+    }
+    
+    if (paths.GetCount() == 0) {
+        return true;
+    }
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    NSIndexPath *indexPath = nil;
+    wxTablePath tablePath = NULL;
+    size_t i;
+    
+    for (i = 0; i < paths.GetCount(); ++i) {
+        tablePath = paths[i];
+        indexPath = [NSIndexPath indexPathForRow:tablePath.GetRow()
+                                       inSection:tablePath.GetSection()];
+        if ( !indexPath ) {
+            return false;
+        }
+        
+        [indexPaths addObject:indexPath];
+    }
+    
+    [tableView reloadRowsAtIndexPaths:indexPaths
+                     withRowAnimation:WxTableCtrlGetCocoaUITableViewRowAnimation(animationStyle)];
+    
+    return true;
+}
+
+// Deletes the given rows, by getting the new data. In the generic implementation,
+// the data is completely refreshed, but on Cocoa Touch
+// this will be optimized and animated.
+bool wxTableCtrl::DeleteRows(const wxTablePathArray& paths,
+                             RowAnimationStyle animationStyle)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if (! tableView) {
+        return false;
+    }
+    
+    if (paths.GetCount() == 0) {
+        return true;
+    }
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    NSIndexPath *indexPath = nil;
+    wxTablePath tablePath = NULL;
+    size_t i;
+    
+    for (i = 0; i < paths.GetCount(); ++i) {
+        tablePath = paths[i];
+        indexPath = [NSIndexPath indexPathForRow:tablePath.GetRow()
+                                       inSection:tablePath.GetSection()];
+        if ( !indexPath ) {
+            return false;
+        }
+        
+        [indexPaths addObject:indexPath];
+    }
+    
+    [tableView deleteRowsAtIndexPaths:indexPaths
+                     withRowAnimation:WxTableCtrlGetCocoaUITableViewRowAnimation(animationStyle)];
     
     return true;
 }
@@ -479,7 +630,12 @@ bool wxTableCtrl::ScrollToPath(const wxTablePath& path)
 
 void wxTableCtrl::SetSelection(const wxTablePath& path)
 {
-    // FIXME stub
+    wxTableViewCtrlIPhoneImpl *peer = (wxTableViewCtrlIPhoneImpl *)GetPeer();
+    if ( !peer->SetSelection(path) ) {
+        return;
+    }
+    
+    m_selection = path;
 }
 
 /// Removes the selection at the given path.
@@ -502,18 +658,126 @@ void wxTableCtrl::Deselect(const wxTablePath& path)
 
 wxTablePath* wxTableCtrl::GetSelection() const
 {
-    // FIXME stub
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if ( !tableView ) {
+        return NULL;
+    }
     
-    return NULL;
+    NSIndexPath *indexPath = [tableView indexPathForSelectedRow];
+    if ( !indexPath ) {
+        return NULL;
+    }
+    
+    wxTablePath* path = new wxTablePath(indexPath.section, indexPath.row);
+    return path;
 }
 
 // Loads the data within the specified rectangle.
 bool wxTableCtrl::LoadVisibleData(const wxRect& rect1)
 {
-    // FIXME stub
-    
+    // no-op?
     return true;
 }
+
+void wxTableCtrl::SetCellSeparatorStyle(int style)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if ( !tableView ) {
+        return;
+    }
+
+    UITableViewCellSeparatorStyle separatorStyle;
+    switch (style) {
+        case CellSeparatorStyleNone:        separatorStyle = UITableViewCellSeparatorStyleNone;         break;
+        case CellSeparatorStyleSingleLine:  separatorStyle = UITableViewCellSeparatorStyleSingleLine;   break;
+        default:                            separatorStyle = UITableViewCellSeparatorStyleSingleLine;   break;
+    };
+    
+    [tableView setSeparatorStyle:separatorStyle];
+    
+    m_separatorStyle = style;
+}
+
+void wxTableCtrl::SetCellSeparatorColour(const wxColour &colour)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if ( !tableView ) {
+        return;
+    }
+
+    // Title colour
+    UIColor *cocoaSeparatorColour = [[[UIColor alloc] initWithCGColor:colour.GetCGColor()] autorelease];
+    if (cocoaSeparatorColour) {
+        [tableView setSeparatorColor:cocoaSeparatorColour];
+    } else {
+        [tableView setSeparatorColor:[UIColor grayColor]];
+    }
+    
+    m_separatorColour = colour;
+}
+
+void wxTableCtrl::SetRowHeight(float height)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if ( !tableView ) {
+        return;
+    }
+
+    [tableView setRowHeight:height];
+    
+    m_rowHeight = height;
+}
+
+/// Sets the section header height in pixels.
+void wxTableCtrl::SetSectionHeaderHeight(float height)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if ( !tableView ) {
+        return;
+    }
+
+    [tableView setSectionHeaderHeight:height];
+ 
+    m_sectionHeaderHeight = height;
+}
+
+/// Sets the section footer height in pixels.
+void wxTableCtrl::SetSectionFooterHeight(float height)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if ( !tableView ) {
+        return;
+    }
+
+    [tableView setSectionFooterHeight:height];
+    
+    m_sectionFooterHeight = height;
+}
+
+void wxTableCtrl::SetAllowSelection(bool allow)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if ( !tableView ) {
+        return;
+    }
+    
+    [tableView setAllowsSelection:allow];
+    
+    m_allowsSelection = allow;        
+}
+
+void wxTableCtrl::SetAllowSelectionDuringEditing(bool allow)
+{
+    wxUITableView *tableView = (wxUITableView *)GetPeer()->GetWXWidget();
+    if ( !tableView ) {
+        return;
+    }
+    
+    [tableView setAllowsSelectionDuringEditing:allow];
+
+    m_allowsSelectionDuringEditing = allow;    
+}
+
 
 #pragma mark wxTableDataSource implementation
 

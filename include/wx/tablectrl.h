@@ -116,6 +116,9 @@ public:
         m_rowY = row.m_rowY;
         m_rowHeight = row.m_rowHeight;
     }
+    
+    wxTableCell* GetTableCell() const { return m_tableCell; }
+    void SetTableCell(wxTableCell* tableCell) { m_tableCell = tableCell; }
 
 protected:
     // Can be NULL if the cell has been reused.
@@ -171,6 +174,9 @@ public:
 
     void SetSectionName(const wxString& name) { m_sectionName = name; }
     const wxString& GetSectionName() const { return m_sectionName; }
+    
+    const wxTableRowArray& GetRows() const { return m_rows; }
+    void SetRows(const wxTableRowArray& rows) { m_rows = rows; }
 
 protected:
     wxString            m_sectionName;
@@ -357,120 +363,55 @@ public:
     virtual wxTablePath* GetSelection() const = 0;
 
     /// Sets the cell separator style.
-    void SetCellSeparatorStyle(int style) { m_separatorStyle = style; }
+    virtual void SetCellSeparatorStyle(int style) { m_separatorStyle = style; }
 
     /// Gets the cell separator style.
-    int GetCellSeparatorStyle() const { return m_separatorStyle; }
+    virtual int GetCellSeparatorStyle() const { return m_separatorStyle; }
+    
+    /// Sets the cell separator colour.
+    virtual void SetCellSeparatorColour(const wxColour &colour) { m_separatorColour = colour; }
+    
+    /// Gets the cell separator colour.
+    virtual const wxColour& GetCellSeparatorColour() { return m_separatorColour; }
 
     /// Sets the standard row height in pixels.
-    void SetRowHeight(int height) { m_rowHeight = height; }
+    virtual void SetRowHeight(float height) { m_rowHeight = height; }
 
     /// Gets the standard row height in pixels.
-    int GetRowHeight() const { return m_rowHeight; }
+    virtual float GetRowHeight() const { return m_rowHeight; }
 
     /// Sets the section header height in pixels.
-    void SetSectionHeaderHeight(int height) { m_sectionHeaderHeight = height; }
+    virtual void SetSectionHeaderHeight(float height) { m_sectionHeaderHeight = height; }
 
     /// Gets the section header height in pixels.
-    int GetSectionHeaderHeight() const { return m_sectionHeaderHeight; }
+    float GetSectionHeaderHeight() const { return m_sectionHeaderHeight; }
 
     /// Sets the section footer height in pixels.
-    void SetSectionFooterHeight(int height) { m_sectionFooterHeight = height; }
+    virtual void SetSectionFooterHeight(float height) { m_sectionFooterHeight = height; }
 
     /// Gets the section footer height in pixels.
-    int GetSectionFooterHeight() const { return m_sectionFooterHeight; }
+    float GetSectionFooterHeight() const { return m_sectionFooterHeight; }
 
     /// Is the delete confirmation button showing for this path?
     bool IsDeleteButtonShowing(const wxTablePath& path) const { return (m_deletePath == path); }
+    
+    /// Gets a boolean of whether selection of cells is allowed.
+    bool GetAllowSelection() const { return m_allowsSelection; }
+
+    /// Sets a boolean of whether selection of cells is allowed.
+    virtual void SetAllowSelection(bool allow) { m_allowsSelection = allow; }
 
     /// Returns @true if row selection is allowed during editing. The default is @false.
     bool GetAllowSelectionDuringEditing() const { return m_allowsSelectionDuringEditing; }
 
     /// Pass @true to allow row selection during editing.
-    void SetAllowSelectionDuringEditing(bool allow) { m_allowsSelectionDuringEditing = allow; }
-
-// Implementation-only from here
-
-    /*
-    // Repositions all row controls
-    void PositionAllRowControls();
-
-    // Positions the controls in the specified row.
-    bool PositionRowControls(const wxTablePath& path);
-
-    // Sets the left and right margin in grouped mode.
-    void SetLeftRightMargin(int margin) { m_leftRightMargin = margin; }
-
-    // Gets the left and right margin in grouped mode.
-    int GetLeftRightMargin() const { return m_leftRightMargin; }
-
-    // Sets the top and bottom margin in grouped mode.
-    void SetTopBottomMargin(int margin) { m_topBottomMargin = margin; }
-
-    // Gets the top and bottom margin in grouped mode.
-    int GetTopBottomMargin() const { return m_topBottomMargin; }
-
-    void SetInterSectionSpacing(int spacing) { m_interSectionSpacing = spacing; }
-    int GetInterSectionSpacing() const { return m_interSectionSpacing; }
-    */
-
-    /*
-    virtual bool SetBackgroundColour(const wxColour &colour) = 0;
-    virtual bool SetForegroundColour(const wxColour &colour) = 0;
-    virtual bool SetFont(const wxFont& font) = 0;
-    virtual bool Enable(bool enable) = 0;
-    */
-    
-    /*
-    virtual bool SetSectionFont(const wxFont& font);
-    virtual wxFont GetSectionFont() const { return m_sectionFont; }
-    */
+    virtual void SetAllowSelectionDuringEditing(bool allow) { m_allowsSelectionDuringEditing = allow; }
 
     virtual bool HasIndex() const { return m_indexTitles.GetCount() > 0; }
-
-    /*
-    void DoShowDeleteButton(bool show, const wxTablePath& path);
-    void ShowDeleteButton(const wxTablePath& path) { DoShowDeleteButton(true, path); }
-    void HideDeleteButton() { DoShowDeleteButton(false, wxTablePath(-1, -1)); }
-    wxTablePath GetDeletePath() const { return m_deletePath; }
-    bool DeletingThisRow(const wxTablePath& path) const { return m_deletePath == path; }
-    bool Deleting() const { return m_deletePath.IsValid(); }
-    */
-
-    // Load a bitmap from data
-    /*
-    wxBitmap LoadBitmap(const char* bitmapData, size_t len);
-    wxBitmap LoadBitmap(unsigned char bitmapData[], size_t len) { return LoadBitmap((const char*) bitmapData, len); }
-    wxBitmap LoadBitmap(const void *bitmapData, size_t len) { return LoadBitmap((const char*) bitmapData, len); }
-    */
     
 protected:
     
-    void Init() { m_dataSource = NULL; }
-
-    /*
-    virtual wxSize DoGetBestSize() const;
-    virtual void OnInternalIdle();
-
-    void OnPaint(wxPaintEvent& event);
-    void OnMouseEvent(wxuseEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
-    void OnSize(wxSizeEvent& event);
-    void OnTouchScrollDrag(wxTouchScrollEvent & event);
-    void OnCancelTouch(wxTouchScrollEvent& event);
-    void OnMouseCaptureChanged(wxuseCaptureChangedEvent& event);
-
-    void OnAddClicked(wxTableCtrlEvent& event);
-    void OnDeleteClicked(wxTableCtrlEvent& event);
-    void OnConfirmDeleteClicked(wxTableCtrlEvent& event);
-    void OnConfirmDeleteButtonClicked(wxCommandEvent& event);
-
-    /// Hit test
-    int HitTest(const wxPoint& pt, int& retSection, int& retRow, int& region) const;
-
-    // Recalculates dimensions
-    bool RecalculateDimensions();
-    */
+    void Init();
 
     wxTableCellArray        m_reusableCells;
     wxTableSectionArray     m_sections;
@@ -479,12 +420,13 @@ protected:
     int                     m_leftRightMargin;
     int                     m_topBottomMargin;
     int                     m_interSectionSpacing;
-    int                     m_rowHeight;
-    int                     m_sectionHeaderHeight;
-    int                     m_sectionFooterHeight;
+    float                   m_rowHeight;
+    float                   m_sectionHeaderHeight;
+    float                   m_sectionFooterHeight;
     int                     m_totalTableHeight;
     int                     m_accessoryWidth;
     int                     m_separatorStyle;
+    wxColour                m_separatorColour;
     wxBitmap                m_disclosureBitmap;
     wxBitmap                m_detailDisclosureBitmap;
     wxBitmap                m_checkmarkBitmap;
@@ -498,6 +440,7 @@ protected:
     int                     m_mouseStatus;
     int                     m_freezeCount;
     bool                    m_editingMode;
+    bool                    m_allowsSelection;
     bool                    m_allowsSelectionDuringEditing;
     wxButton*               m_deleteButton;
     wxTablePath             m_deletePath;
