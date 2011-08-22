@@ -1094,6 +1094,16 @@ void wxDataViewCtrlBase::SetCurrentItem(const wxDataViewItem& item)
         Select(item);
 }
 
+wxDataViewItem wxDataViewCtrlBase::GetSelection() const
+{
+    if ( GetSelectedItemsCount() != 1 )
+        return wxDataViewItem();
+
+    wxDataViewItemArray selections;
+    GetSelections(selections);
+    return selections[0];
+}
+
 wxDataViewColumn *
 wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )

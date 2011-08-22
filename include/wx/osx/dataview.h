@@ -176,7 +176,7 @@ public:
 
   virtual unsigned int GetCount() const;
   virtual wxRect GetItemRect(const wxDataViewItem& item, const wxDataViewColumn* columnPtr) const;
-  virtual wxDataViewItem GetSelection() const;
+  virtual int GetSelectedItemsCount() const;
   virtual int GetSelections(wxDataViewItemArray& sel) const;
 
   virtual void HitTest(const wxPoint& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;

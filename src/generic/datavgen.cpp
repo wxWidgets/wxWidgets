@@ -518,7 +518,6 @@ public:
     unsigned int GetLastVisibleRow();
     unsigned int GetRowCount();
 
-    wxDataViewItem GetSelection() const;
     const wxDataViewSelection& GetSelections() const { return m_selection; }
     void SetSelections( const wxDataViewSelection & sel )
         { m_selection = sel; UpdateDisplay(); }
@@ -3962,14 +3961,6 @@ void wxDataViewMainWindow::OnKillFocus( wxFocusEvent &event )
     event.Skip();
 }
 
-wxDataViewItem wxDataViewMainWindow::GetSelection() const
-{
-    if( m_selection.GetCount() != 1 )
-        return wxDataViewItem();
-
-    return GetItemByRow( m_selection.Item(0));
-}
-
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
@@ -4486,10 +4477,9 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     }
 }
 
-// Selection code with wxDataViewItem as parameters
-wxDataViewItem wxDataViewCtrl::GetSelection() const
+int wxDataViewCtrl::GetSelectedItemsCount() const
 {
-    return m_clientArea->GetSelection();
+    return m_clientArea->GetSelections().size();
 }
 
 int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const

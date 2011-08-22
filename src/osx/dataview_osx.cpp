@@ -535,15 +535,9 @@ wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn 
     return wxRect();
 }
 
-wxDataViewItem wxDataViewCtrl::GetSelection() const
+int wxDataViewCtrl::GetSelectedItemsCount() const
 {
-  wxDataViewItemArray itemIDs;
-
-
-  if (GetDataViewPeer()->GetSelections(itemIDs) > 0)
-    return itemIDs[0];
-  else
-    return wxDataViewItem();
+  return GetDataViewPeer()->GetSelectedItemsCount();
 }
 
 int wxDataViewCtrl::GetSelections(wxDataViewItemArray& sel) const

@@ -663,7 +663,15 @@ public:
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
 
-    virtual wxDataViewItem GetSelection() const = 0;
+    // Selection: both GetSelection() and GetSelections() can be used for the
+    // controls both with and without wxDV_MULTIPLE style. For single selection
+    // controls GetSelections() is not very useful however. And for multi
+    // selection controls GetSelection() returns an invalid item if more than
+    // one item is selected. Use GetSelectedItemsCount() or HasSelection() to
+    // check if any items are selected at all.
+    virtual int GetSelectedItemsCount() const = 0;
+    bool HasSelection() const { return GetSelectedItemsCount() != 0; }
+    wxDataViewItem GetSelection() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const = 0;
     virtual void SetSelections( const wxDataViewItemArray & sel ) = 0;
     virtual void Select( const wxDataViewItem & item ) = 0;

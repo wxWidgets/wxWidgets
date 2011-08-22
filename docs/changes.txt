@@ -199,6 +199,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   prevent the parent wxTopLevelWindow from interfering with the keyboard
   handling of the window that captured the mouse.
 
+- wxDataViewCtrl::GetSelection() now returns invalid item in all ports (this
+  behaved differently in wxMSW and wxGTK/wxOSX before) if more than one item
+  is selected in a control with wxDV_MULTIPLE style.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
@@ -458,6 +462,7 @@ All (GUI):
 - Added customizable wxDocManager::OnMRUFileNotExist() virtual method.
 - Fix stock labels when not using mnemonics for Chinese (cw.ahbong).
 - Added wxComboBox::IsListEmpty() and IsTextEmpty().
+- Added wxDataViewCtrl::GetSelectedItemsCount() and HasSelection().
 
 OSX:
 
