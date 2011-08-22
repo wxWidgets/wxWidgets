@@ -29,19 +29,20 @@ extern GtkWidget *wxGetRootWindow();
 
 static void MaskToAlpha(cairo_surface_t* mask, GdkPixbuf* pixbuf, int w, int h)
 {
+
     GdkPixbuf* mask_pixbuf = gdk_pixbuf_get_from_surface( mask, 0, 0, w, h );
     guchar* p = gdk_pixbuf_get_pixels(pixbuf) + 3;
     const guchar* mask_data = gdk_pixbuf_get_pixels(mask_pixbuf);
     const int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - w * 4;
-    const int mask_rowpad = gdk_pixbuf_get_rowstride(mask_pixbuf) - w * 3;
+    const int mask_rowpad = gdk_pixbuf_get_rowstride(mask_pixbuf) - w * 4;
     for (int y = h; y; y--, p += rowpad, mask_data += mask_rowpad)
     {
-        for (int x = w; x; x--, p += 4, mask_data += 3)
+        for (int x = w; x; x--, p += 4, mask_data += 4)
         {
             *p = 255;
             // no need to test all 3 components,
             //   pixels are either (0,0,0) or (0xff,0xff,0xff)
-            if (mask_data[0] == 0)
+            if (mask_data[3] == 0)
                 *p = 0;
         }
     }
@@ -461,7 +462,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
 
         int stride = cairo_format_stride_for_width( CAIRO_FORMAT_A1, w );
         unsigned char *data = (unsigned char *)malloc( stride * h );
-        memset(data, 0, stride*h);
+        memset(data, 0x00, stride*h);
         unsigned char *data_start = data;
         int byte_index = 0;
         int rowpad = stride - size_t((w+7)/8);
@@ -479,6 +480,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
                     }
                     if ((x+1)%8 == 0)
                     {
+                        data[byte_index] ^= 0xff;
                         byte_index++;
                     }
                 }
@@ -502,6 +504,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
                     }
                     if ((x+1)%8 == 0)
                     {
+                        data[byte_index] ^= 0xff;
                         byte_index++;
                     }
                 }
@@ -933,9 +936,21 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
     const bool useAlpha = bmpData->m_alphaRequested || mask;
     bmpData->m_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, useAlpha, 8, w, h);
     if (bmpData->m_pixmap)
+    {
+        g_object_unref(bmpData->m_pixbuf);
         bmpData->m_pixbuf = gdk_pixbuf_get_from_surface( bmpData->m_pixmap, 0, 0, w, h );
-    if (mask)
+    }
+    if (mask) 
+    {
+        if (!gdk_pixbuf_get_has_alpha(bmpData->m_pixbuf)) 
+        {
+            GdkPixbuf *new_pixbuf = gdk_pixbuf_add_alpha(bmpData->m_pixbuf, FALSE, 0, 0, 0);
+            g_object_unref(bmpData->m_pixbuf);
+            bmpData->m_pixbuf = new_pixbuf;
+
+        }
         MaskToAlpha(mask, bmpData->m_pixbuf, w, h);
+    }
     return bmpData->m_pixbuf;
 }
 
