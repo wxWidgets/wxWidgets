@@ -2596,7 +2596,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/alertsheetdlg.mm
     src/osx/iphone/barbutton.mm
     src/osx/iphone/button.mm
-    src/osx/iphone/buttonstrip.mm
     src/osx/iphone/checkbox.mm
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
