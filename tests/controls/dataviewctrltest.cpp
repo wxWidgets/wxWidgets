@@ -196,4 +196,4 @@ void DataViewCtrlTestCase::GetSelectionForSingle()
     TestSelectionFor0and1();
 }
 
-#endif //wxUSE_TREECTRL
+#endif //wxUSE_DATAVIEWCTRL
