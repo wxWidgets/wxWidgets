@@ -83,7 +83,10 @@ ALIASES += flag{1}="</div>\li <span class='flag'>\1</span>:<div class='flagDesc'
 ALIASES += endFlagTable="</div>\n"
 
 # creates appearance section: this should be used for all main GUI controls
+# that look different in different ports. genericAppearance can be used for the
+# controls that always look the same.
 ALIASES += appearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'/></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'/></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'/></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> \endhtmlonly"
+ALIASES += genericAppearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='generic/\1' alt='Generic appearance' class='appearance'/></td></tr></table></div> \endhtmlonly"
 
 # aliases for the creation of "named member groups"
 # USAGE: the first argument must not contain spaces and be a unique identifier 
