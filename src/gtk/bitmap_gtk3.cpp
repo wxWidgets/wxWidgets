@@ -464,11 +464,11 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
         memset(data, 0x00, stride*h);
         unsigned char *data_start = data;
         int byte_index = 0;
-        int rowpad = stride*8 - w;
+        int rowpad = stride - size_t((w+7)/8);
 
         if (alpha != NULL)
         {
-            for (int y = 0; y < h; y++)
+            for (int y = 0; y < h; y++, byte_index += rowpad)
             {
                 for (int x = 0; x < w; x++)
                 {
@@ -483,8 +483,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
                         byte_index++;
                     }
                 }
-
-                if (rowpad != 0) 
+                if (w%8 != 0) 
                 {
                     byte_index++;
                 }
@@ -497,7 +496,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
             const wxByte b_mask = image.GetMaskBlue();
             const wxByte* in = image.GetData();
 
-            for (int y = 0; y < h; y++)
+            for (int y = 0; y < h; y++, byte_index += rowpad)
             {
                 for (int x = 0; x < w; x++, in += 3)
                 {
@@ -512,7 +511,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
                         byte_index++;
                     }
                 }
-                if (rowpad != 0) 
+                if (w%8 != 0) 
                 {
                     byte_index++;
                 }
@@ -741,7 +740,17 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     }
     if (bmpData->m_pixmap)
     {
-        newRef->m_pixmap = cairo_surface_create_for_rectangle(bmpData->m_pixmap, rect.x, rect.y, w, h);
+        cairo_format_t format = cairo_image_surface_get_format(bmpData->m_pixmap);
+        cairo_surface_t *surface = cairo_image_surface_create(format, w, h);
+        cairo_t *cr = cairo_create(surface);
+        cairo_set_source_surface(cr, bmpData->m_pixmap, 0, 0);
+        cairo_rectangle(cr, rect.x, rect.y, w, h);
+        cairo_clip(cr);
+        cairo_paint(cr);
+        cairo_destroy(cr);
+
+        newRef->m_pixmap = surface;
+        /* newRef->m_pixmap = cairo_surface_create_for_rectangle(bmpData->m_pixmap, rect.x, rect.y, w, h); */
     }
     if (bmpData->m_mask && bmpData->m_mask->m_bitmap)
     {
@@ -860,6 +869,8 @@ void wxBitmap::SetPixmap( cairo_surface_t *pixmap )
         bmpData->m_bpp = 8;
         break;
     case CAIRO_FORMAT_RGB24:
+        bmpData->m_bpp = 24;
+        break;
     case CAIRO_FORMAT_ARGB32:
         bmpData->m_bpp = 32;
         break;
