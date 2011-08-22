@@ -74,148 +74,27 @@
         return;
     }
     
-    // Title
-    NSString *title = [NSString stringWithString:wxCFStringRef(tableCell->GetText()).AsNSString()];
-    if (title) {
-        [self.textLabel setText:title];
-    } else {
-        [self.textLabel setText:nil];
-    }
-    
-    // Subtitle
-    NSString *subtitle = [NSString stringWithString:wxCFStringRef(tableCell->GetDetailText()).AsNSString()];
-    if (subtitle) {
-        [self.detailTextLabel setText:subtitle];
-    } else {
-        [self.detailTextLabel setText:nil];
-    }
-    
-    // Title colour
-    UIColor *titleColour = nil;
-    wxColour wxTextColour = tableCell->GetTextColour();
-    titleColour = [[[UIColor alloc] initWithCGColor:wxTextColour.GetCGColor()] autorelease];
-    if (titleColour) {
-        [self.textLabel setTextColor:titleColour];
-    } else {
-        [self.textLabel setTextColor:[UIColor blackColor]];
-    }
-
-    // Subtitle colour
-    UIColor *subtitleColour = nil;
-    wxColour wxDetailTextColour = tableCell->GetDetailTextColour();
-    subtitleColour = [[[UIColor alloc] initWithCGColor:wxDetailTextColour.GetCGColor()] autorelease];
-    if (subtitleColour) {
-        [self.detailTextLabel setTextColor:subtitleColour];
-    } else {
-        [self.detailTextLabel setTextColor:[UIColor grayColor]]; // FIXME might be blue or gray
-    }
-
-    // Selected title colour
-    UIColor *selectedTitleColour = nil;
-    wxColour wxSelectedTitleColour = tableCell->GetSelectedTextColour();
-    selectedTitleColour = [[[UIColor alloc] initWithCGColor:wxSelectedTitleColour.GetCGColor()] autorelease];
-    if (selectedTitleColour) {
-        [self.textLabel setHighlightedTextColor:selectedTitleColour];
-    } else {
-        [self.textLabel setHighlightedTextColor:nil];
-    }
-
-    // Selected subtitle colour
-    UIColor *selectedSubtitleColour = nil;
-    wxColour wxSelectedSubtitleColour = tableCell->GetSelectedTextColour();
-    selectedSubtitleColour = [[[UIColor alloc] initWithCGColor:wxSelectedSubtitleColour.GetCGColor()] autorelease];
-    if (selectedSubtitleColour) {
-        [self.detailTextLabel setHighlightedTextColor:selectedSubtitleColour];
-    } else {
-        [self.detailTextLabel setHighlightedTextColor:nil];
-    }
-    
-    // Title alignment
-    wxTableCell::wxTableCellTextAlignment wxTitleAlignment = tableCell->GetTextAlignment();
-    UITextAlignment titleAlignment;
-    if (wxTitleAlignment != wxTableCell::TextAlignmentLeft) {
-        NSLog(@"something's wrong");
-    }
-    switch (wxTitleAlignment) {
-        case wxTableCell::TextAlignmentLeft:      titleAlignment = UITextAlignmentLeft;   break;
-        case wxTableCell::TextAlignmentCenter:    titleAlignment = UITextAlignmentCenter; break;
-        case wxTableCell::TextAlignmentRight:     titleAlignment = UITextAlignmentRight;  break;
-        default:                                  titleAlignment = UITextAlignmentLeft;   break;
-    };
-    [self.textLabel setTextAlignment:titleAlignment];
-
-    // Subtitle alignment
-    wxTableCell::wxTableCellTextAlignment wxSubtitleAlignment = tableCell->GetDetailTextAlignment();
-    UITextAlignment subtitleAlignment;
-    switch (wxSubtitleAlignment) {
-        case wxTableCell::TextAlignmentLeft:      subtitleAlignment = UITextAlignmentLeft;   break;
-        case wxTableCell::TextAlignmentCenter:    subtitleAlignment = UITextAlignmentCenter; break;
-        case wxTableCell::TextAlignmentRight:     subtitleAlignment = UITextAlignmentRight;  break;
-        default:                                  subtitleAlignment = UITextAlignmentLeft;   break;
-    };
-    [self.detailTextLabel setTextAlignment:subtitleAlignment];
-    
-    // Accessory type
-    wxTableCell::wxTableCellAccessoryType wxAccessoryType = tableCell->GetAccessoryType();
-    UITableViewCellAccessoryType accessoryType;
-    switch (wxAccessoryType) {
-        case wxTableCell::AccessoryTypeNone:                      accessoryType = UITableViewCellAccessoryNone;                   break;
-        case wxTableCell::AccessoryTypeDisclosureIndicator:       accessoryType = UITableViewCellAccessoryDisclosureIndicator;    break;
-        case wxTableCell::AccessoryTypeDetailDisclosureButton:    accessoryType = UITableViewCellAccessoryDetailDisclosureButton; break;
-        case wxTableCell::AccessoryTypeCheckmark:                 accessoryType = UITableViewCellAccessoryCheckmark;              break;
-        default:                                                  accessoryType = UITableViewCellAccessoryNone;                   break;
-    };
-    [self setAccessoryType:accessoryType];
-    
-    // Selection style
-    wxTableCell::wxTableCellSelectionStyle wxSelectionStyle = tableCell->GetSelectionStyle();
-    UITableViewCellSelectionStyle selectionStyle;
-    switch (wxSelectionStyle) {
-        case wxTableCell::SelectionStyleNone:     selectionStyle = UITableViewCellSelectionStyleNone;     break;
-        case wxTableCell::SelectionStyleBlue:     selectionStyle = UITableViewCellSelectionStyleBlue;     break;
-        case wxTableCell::SelectionStyleGrey:     selectionStyle = UITableViewCellSelectionStyleGray;     break;
-        default:                                  selectionStyle = UITableViewCellSelectionStyleBlue;     break;
-    };
-    [self setSelectionStyle:selectionStyle];
-    
-    // Title line break mode (FIXME merge with detail line break mode to avoid duplicating the code)
-    wxTableCell::wxTableCellLineBreakMode wxTitleLineBreakMode = tableCell->GetTextLineBreakMode();
-    UILineBreakMode titleLineBreakMode;
-    switch (wxTitleLineBreakMode) {
-        case wxTableCell::LineBreakModeWordWrap:         titleLineBreakMode = UILineBreakModeWordWrap;           break;
-        case wxTableCell::LineBreakModeCharacterWrap:    titleLineBreakMode = UILineBreakModeCharacterWrap;      break;
-        case wxTableCell::LineBreakModeClip:             titleLineBreakMode = UILineBreakModeClip;               break;
-        case wxTableCell::LineBreakModeHeadTruncation:   titleLineBreakMode = UILineBreakModeHeadTruncation;     break;
-        case wxTableCell::LineBreakModeTailTruncation:   titleLineBreakMode = UILineBreakModeTailTruncation;     break;
-        case wxTableCell::LineBreakModeMiddleTruncation: titleLineBreakMode = UILineBreakModeMiddleTruncation;   break;
-        default:                                         titleLineBreakMode = UILineBreakModeTailTruncation;     break;
-    };
-    [self.textLabel setLineBreakMode:titleLineBreakMode];
-
-    // Subtitle line break mode (FIXME merge with title line break mode to avoid duplicating the code)
-    wxTableCell::wxTableCellLineBreakMode wxSubtitleLineBreakMode = tableCell->GetDetailTextLineBreakMode();
-    UILineBreakMode subtitleLineBreakMode;
-    switch (wxSubtitleLineBreakMode) {
-        case wxTableCell::LineBreakModeWordWrap:         subtitleLineBreakMode = UILineBreakModeWordWrap;           break;
-        case wxTableCell::LineBreakModeCharacterWrap:    subtitleLineBreakMode = UILineBreakModeCharacterWrap;      break;
-        case wxTableCell::LineBreakModeClip:             subtitleLineBreakMode = UILineBreakModeClip;               break;
-        case wxTableCell::LineBreakModeHeadTruncation:   subtitleLineBreakMode = UILineBreakModeHeadTruncation;     break;
-        case wxTableCell::LineBreakModeTailTruncation:   subtitleLineBreakMode = UILineBreakModeTailTruncation;     break;
-        case wxTableCell::LineBreakModeMiddleTruncation: subtitleLineBreakMode = UILineBreakModeMiddleTruncation;   break;
-        default:                                           subtitleLineBreakMode = UILineBreakModeTailTruncation;     break;
-    };
-    [self.detailTextLabel setLineBreakMode:subtitleLineBreakMode];
-    
-    // Bitmap
-    UIImage *img = nil;
-    wxBitmap bitmap = tableCell->GetBitmap();
-    if (bitmap.IsOk() && (img = bitmap.GetUIImage())) {
-        [img retain];
-        [self.imageView setImage:img];
-    } else {
-        [self.imageView setImage:nil];
-    }
-
+    // Use setters as they set the actual "native" widget properties
+    // FIXME do they really need to be re-commited to native widget? I guess the original idea
+    // was that these are re-set because a cell might be taken from the reuse pool.
+    tableCell->SetText(tableCell->GetText());
+    tableCell->SetDetailText(tableCell->GetDetailText());
+    tableCell->SetTextFont(tableCell->GetTextFont());
+    tableCell->SetDetailTextFont(tableCell->GetDetailTextFont());
+    tableCell->SetTextColour(tableCell->GetTextColour());
+    tableCell->SetDetailTextColour(tableCell->GetDetailTextColour());
+    tableCell->SetSelectedTextColour(tableCell->GetSelectedTextColour());
+    tableCell->SetSelectedDetailTextColour(tableCell->GetSelectedDetailTextColour());
+    tableCell->SetTextAlignment(tableCell->GetTextAlignment());
+    tableCell->SetDetailTextAlignment(tableCell->GetDetailTextAlignment());
+    tableCell->SetTextLineBreakMode(tableCell->GetTextLineBreakMode());
+    tableCell->SetDetailTextLineBreakMode(tableCell->GetDetailTextLineBreakMode());
+    tableCell->SetAccessoryWindow(tableCell->GetAccessoryWindow());
+    tableCell->SetAccessoryType(tableCell->GetAccessoryType());
+    tableCell->SetBitmap(tableCell->GetBitmap());
+    tableCell->SetSelectionStyle(tableCell->GetSelectionStyle());
+    tableCell->SetIndentationLevel(tableCell->GetIndentationLevel());
+    tableCell->SetIndentationWidth(tableCell->GetIndentationWidth());
     
     // FIXME other properties (font, selectedBitmap, event handler, ...)
     
@@ -283,7 +162,6 @@ void wxTableCell::Init()
     m_accessoryWindow = NULL;
     m_editingAccessoryType = AccessoryTypeNone;
     m_editingAccessoryWindow = NULL;
-    //m_editStyle = EditStyleNone;
     m_indentationLevel = 0;
     m_indentationWidth = 0;
     m_contentWindow = NULL;
@@ -306,10 +184,342 @@ bool wxTableCell::CreateContentWindow(wxTableCtrl* ctrl)
     return true;
 }
 
+void wxTableCell::SetText(const wxString& text)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    // Title
+    NSString *title = [NSString stringWithString:wxCFStringRef(text).AsNSString()];
+    if (title) {
+        [cell.textLabel setText:title];
+    } else {
+        [cell.textLabel setText:nil];
+    }
+
+    m_text = text;
+}
+
+void wxTableCell::SetDetailText(const wxString& text)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    // Subtitle
+    NSString *subtitle = [NSString stringWithString:wxCFStringRef(text).AsNSString()];
+    if (subtitle) {
+        [cell.detailTextLabel setText:subtitle];
+    } else {
+        [cell.detailTextLabel setText:nil];
+    }
+    
+    m_detailText = text;
+}
+
+void wxTableCell::SetTextFont(const wxFont& font)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    if (font.IsOk()) {
+        UIFont *cocoaFont = font.OSXGetUIFont();
+        [cell.textLabel setFont:cocoaFont];
+    } else {
+        [cell.textLabel setFont:nil];
+    }
+    
+    m_font = font;
+}
+
+void wxTableCell::SetDetailTextFont(const wxFont& font)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    if (font.IsOk()) {
+        UIFont *cocoaFont = font.OSXGetUIFont();
+        [cell.detailTextLabel setFont:cocoaFont];
+    } else {
+        [cell.detailTextLabel setFont:nil];
+    }
+    
+    m_detailFont = font;
+}
+
+void wxTableCell::SetTextColour(const wxColour& colour)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    // Title colour
+    UIColor *titleColour = nil;
+    titleColour = [[[UIColor alloc] initWithCGColor:colour.GetCGColor()] autorelease];
+    if (titleColour) {
+        [cell.textLabel setTextColor:titleColour];
+    } else {
+        [cell.textLabel setTextColor:[UIColor blackColor]];
+    }
+    
+    m_textColour = colour;
+}
+
+void wxTableCell::SetDetailTextColour(const wxColour& colour)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    // Subtitle colour
+    UIColor *subtitleColour = [[[UIColor alloc] initWithCGColor:colour.GetCGColor()] autorelease];
+    if (subtitleColour) {
+        [cell.detailTextLabel setTextColor:subtitleColour];
+    } else {
+        [cell.detailTextLabel setTextColor:[UIColor grayColor]]; // FIXME might be blue or gray
+    }
+    
+    m_detailTextColour = colour;
+}
+
+void wxTableCell::SetSelectedTextColour(const wxColour& colour)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    // Selected title colour
+    UIColor *selectedTitleColour = [[[UIColor alloc] initWithCGColor:colour.GetCGColor()] autorelease];
+    if (selectedTitleColour) {
+        [cell.textLabel setHighlightedTextColor:selectedTitleColour];
+    } else {
+        [cell.textLabel setHighlightedTextColor:nil];
+    }
+    
+    m_selectedTextColour = colour;
+}
+
+void wxTableCell::SetSelectedDetailTextColour(const wxColour& colour)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    // Selected subtitle colour
+    UIColor *selectedSubtitleColour = [[[UIColor alloc] initWithCGColor:colour.GetCGColor()] autorelease];
+    if (selectedSubtitleColour) {
+        [cell.detailTextLabel setHighlightedTextColor:selectedSubtitleColour];
+    } else {
+        [cell.detailTextLabel setHighlightedTextColor:nil];
+    }
+    
+    m_selectedDetailTextColour = colour;
+}
+
+void wxTableCell::SetTextAlignment(wxTableCellTextAlignment alignment)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    // Title alignment
+    UITextAlignment titleAlignment;
+    switch (alignment) {
+        case wxTableCell::TextAlignmentLeft:      titleAlignment = UITextAlignmentLeft;   break;
+        case wxTableCell::TextAlignmentCenter:    titleAlignment = UITextAlignmentCenter; break;
+        case wxTableCell::TextAlignmentRight:     titleAlignment = UITextAlignmentRight;  break;
+        default:                                  titleAlignment = UITextAlignmentLeft;   break;
+    };
+    [cell.textLabel setTextAlignment:titleAlignment];
+    
+    m_textAlignment = alignment;
+}
+
+void wxTableCell::SetDetailTextAlignment(wxTableCellTextAlignment alignment)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    // Subtitle alignment
+    UITextAlignment subtitleAlignment;
+    switch (alignment) {
+        case wxTableCell::TextAlignmentLeft:      subtitleAlignment = UITextAlignmentLeft;   break;
+        case wxTableCell::TextAlignmentCenter:    subtitleAlignment = UITextAlignmentCenter; break;
+        case wxTableCell::TextAlignmentRight:     subtitleAlignment = UITextAlignmentRight;  break;
+        default:                                  subtitleAlignment = UITextAlignmentLeft;   break;
+    };
+    [cell.detailTextLabel setTextAlignment:subtitleAlignment];
+    
+    m_detailTextAlignment = alignment;
+}
+
+// Property conversion helper
+UILineBreakMode WxTableCellGetCocoaLineBreakMode(wxTableCell::wxTableCellLineBreakMode lineBreakMode)
+{
+    UILineBreakMode cocoaLineBreakMode;
+    switch (lineBreakMode) {
+        case wxTableCell::LineBreakModeWordWrap:         cocoaLineBreakMode = UILineBreakModeWordWrap;           break;
+        case wxTableCell::LineBreakModeCharacterWrap:    cocoaLineBreakMode = UILineBreakModeCharacterWrap;      break;
+        case wxTableCell::LineBreakModeClip:             cocoaLineBreakMode = UILineBreakModeClip;               break;
+        case wxTableCell::LineBreakModeHeadTruncation:   cocoaLineBreakMode = UILineBreakModeHeadTruncation;     break;
+        case wxTableCell::LineBreakModeTailTruncation:   cocoaLineBreakMode = UILineBreakModeTailTruncation;     break;
+        case wxTableCell::LineBreakModeMiddleTruncation: cocoaLineBreakMode = UILineBreakModeMiddleTruncation;   break;
+        default:                                         cocoaLineBreakMode = UILineBreakModeTailTruncation;     break;
+    };
+    
+    return cocoaLineBreakMode;
+}
+
+void wxTableCell::SetTextLineBreakMode(wxTableCellLineBreakMode lineBreakMode)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }    
+    
+    // Title line break mode
+    [cell.textLabel setLineBreakMode:WxTableCellGetCocoaLineBreakMode(lineBreakMode)];
+
+    m_textLineBreakMode = lineBreakMode;
+}
+
+void wxTableCell::SetDetailTextLineBreakMode(wxTableCellLineBreakMode lineBreakMode)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }    
+    
+    // Title line break mode
+    [cell.detailTextLabel setLineBreakMode:WxTableCellGetCocoaLineBreakMode(lineBreakMode)];
+    
+    m_detailTextLineBreakMode = lineBreakMode;
+}
+
+void wxTableCell::SetBitmap(const wxBitmap& bitmap)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }    
+
+    // Bitmap
+    UIImage *img = nil;
+    if (bitmap.IsOk() && (img = bitmap.GetUIImage())) {
+        [img retain];
+        [cell.imageView setImage:img];
+    } else {
+        [cell.imageView setImage:nil];
+    }
+    
+    m_bitmap = bitmap;
+}
+
+void wxTableCell::SetSelectedBitmap(const wxBitmap& bitmap)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }    
+    
+    // Selection bitmap
+    UIImage *img = nil;
+    if (bitmap.IsOk() && (img = bitmap.GetUIImage())) {
+        [img retain];
+        [cell.imageView setHighlightedImage:img];
+    } else {
+        [cell.imageView setHighlightedImage:nil];
+    }
+    
+    m_selectedBitmap = bitmap;
+}
+
+void wxTableCell::SetSelectionStyle(wxTableCellSelectionStyle style)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }    
+
+    UITableViewCellSelectionStyle selectionStyle;
+    switch (style) {
+        case wxTableCell::SelectionStyleNone:     selectionStyle = UITableViewCellSelectionStyleNone;     break;
+        case wxTableCell::SelectionStyleBlue:     selectionStyle = UITableViewCellSelectionStyleBlue;     break;
+        case wxTableCell::SelectionStyleGrey:     selectionStyle = UITableViewCellSelectionStyleGray;     break;
+        default:                                  selectionStyle = UITableViewCellSelectionStyleBlue;     break;
+    };
+    [cell setSelectionStyle:selectionStyle];
+    
+    m_selectionStyle = style;
+}
+
+void wxTableCell::SetSelected(bool selected)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setSelected:selected animated:NO];
+
+    m_selected = selected;
+}
+
+bool wxTableCell::GetSelected() const
+{
+    // Check if selected straight from the native widget
+    // as the local property might be off sync.
+    
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return false;
+    }
+    
+    return cell.selected;
+}
+
+// Property conversion helper
+UITableViewCellAccessoryType WxTableCellGetCocoaUITableViewCellAccessoryType(wxTableCell::wxTableCellAccessoryType accessoryType)
+{
+    UITableViewCellAccessoryType cocoaAccessoryType;
+    switch (accessoryType) {
+        case wxTableCell::AccessoryTypeNone:                      cocoaAccessoryType = UITableViewCellAccessoryNone;                   break;
+        case wxTableCell::AccessoryTypeDisclosureIndicator:       cocoaAccessoryType = UITableViewCellAccessoryDisclosureIndicator;    break;
+        case wxTableCell::AccessoryTypeDetailDisclosureButton:    cocoaAccessoryType = UITableViewCellAccessoryDetailDisclosureButton; break;
+        case wxTableCell::AccessoryTypeCheckmark:                 cocoaAccessoryType = UITableViewCellAccessoryCheckmark;              break;
+        default:                                                  cocoaAccessoryType = UITableViewCellAccessoryNone;                   break;
+    };
+    
+    return cocoaAccessoryType;
+}
+
 // Sets the accessory window
 void wxTableCell::SetAccessoryWindow(wxWindow* win)
 {
-    UIView *accessoryView = win->GetPeer()->GetWXWidget();
+    if ( !win ) {
+        return;
+    }
+    
+    wxOSXWidgetImpl* peer = win->GetPeer();
+    if ( !peer ) {
+        return;
+    }
+    
+    UIView *accessoryView = peer->GetWXWidget();
     if ( !accessoryView ) {
         return;
     }
@@ -325,7 +535,51 @@ void wxTableCell::SetAccessoryWindow(wxWindow* win)
 
 void wxTableCell::SetAccessoryType(wxTableCellAccessoryType accessoryType)
 {
-    // FIXME stub
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setAccessoryType:WxTableCellGetCocoaUITableViewCellAccessoryType(accessoryType)];    
+
+    m_accessoryType = accessoryType;
+}
+
+void wxTableCell::SetEditingAccessoryWindow(wxWindow* win)
+{
+    if ( !win ) {
+        return;
+    }
+    
+    wxOSXWidgetImpl* peer = win->GetPeer();
+    if ( !peer ) {
+        return;
+    }
+    
+    UIView *accessoryView = peer->GetWXWidget();
+    if ( !accessoryView ) {
+        return;
+    }
+    
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setEditingAccessoryView:accessoryView];
+    m_editingAccessoryWindow = win;
+}
+
+void wxTableCell::SetEditingAccessoryType(wxTableCellAccessoryType accessoryType)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+    
+    [cell setEditingAccessoryType:WxTableCellGetCocoaUITableViewCellAccessoryType(accessoryType)];
+    
+    m_editingAccessoryType = accessoryType;    
 }
 
 /// Sets the indentation level.
@@ -352,6 +606,111 @@ void wxTableCell::SetIndentationWidth(int indentationWidth)
     [cell setIndentationWidth:indentationWidth];
     
     m_indentationWidth = indentationWidth;
+}
+
+void wxTableCell::SetIndentWhileEditing(bool indent)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    [cell setShouldIndentWhileEditing:indent];
+    
+    m_shouldIndentWhileEditing = indent;
+}
+
+void wxTableCell::SetShowReorderingControl(bool show)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    [cell setShowsReorderControl:show];
+    
+    m_showReorderingButton = show;
+}
+
+bool wxTableCell::IsDeleteButtonShowing(wxTableCtrl* tableCtrl) const
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return false;
+    }
+
+    return [cell showingDeleteConfirmation];
+}
+
+bool wxTableCell::SetEditingMode(bool editingMode, bool animated)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return false;
+    }
+
+    [cell setEditing:editingMode
+            animated:animated];
+    
+    m_editingMode = editingMode;
+    
+    return true;
+}
+
+bool wxTableCell::IsEditing() const
+{
+    // Check if editing straight from the native widget
+    // as the local property might be off sync.
+
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return false;
+    }
+
+    return cell.editing;
+}
+
+wxTableCell::wxTableCellEditStyle wxTableCell::GetEditStyle() const
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return EditStyleNone;
+    }
+
+    UITableViewCellEditingStyle style = cell.editingStyle;
+    switch (style) {
+        case UITableViewCellEditingStyleNone:   return EditStyleNone;               break;
+        case UITableViewCellEditingStyleDelete: return EditStyleShowDeleteButton;   break;
+        case UITableViewCellEditingStyleInsert: return EditStyleShowInsertButton;   break;
+        default:                                return EditStyleNone;               break;
+    };
+}
+
+void wxTableCell::SetDetailWidth(float width)
+{
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return;
+    }
+
+    CGRect frame = cell.detailTextLabel.frame;
+    frame.size.width = width;
+    [cell.detailTextLabel setFrame:frame];
+    
+    m_detailWidth = width;
+}
+
+float wxTableCell::GetDetailWidth() const
+{
+    // Get detail width straight from the native widget
+    // as the local property might be off sync.
+
+    UITableViewCell *cell = (UITableViewCell *)m_widgetImpl->GetWXWidget();
+    if ( !cell ) {
+        return 0.0f;
+    }
+    
+    return cell.detailTextLabel.frame.size.width;
 }
 
 // Prepares the cell for reuse

@@ -122,14 +122,7 @@ public:
 
     /// Removes the selection at the given path.
     void Deselect(const wxTablePath& path);
-        
-    /// Get the edit style for a row
-    virtual wxTableCtrlBase::CellEditStyle GetCellEditStyle(wxTableCtrl* WXUNUSED(ctrl),
-                                                            const wxTablePath& WXUNUSED(path))
-    {
-        return wxTableCtrl::EditStyleShowDeleteButton;
-    }
-
+    
     /// Gets the selection, or NULL if there is none.
     wxTablePath* GetSelection() const;
 

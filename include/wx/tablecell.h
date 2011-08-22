@@ -125,6 +125,14 @@ public:
         CellStyleSubtitle
     };
     
+    /// Cell edit style
+    enum wxTableCellEditStyle {
+        EditStyleNone,
+        EditStyleShowDeleteButton,
+        EditStyleShowInsertButton
+    };
+    
+    
     /// Default constructor.
     wxTableCellBase() { }
     wxTableCellBase(const wxTableCell& cell) { Copy(cell); }
@@ -152,19 +160,7 @@ public:
     
     /// Gets the name used to identify this type of cell for reuse.
     virtual const wxString& GetReuseName() const { return m_reuseName; }
-    
-    /// Sets the cell font
-    virtual bool SetFont(const wxFont& font) { m_font = font; return true; }
-    
-    /// Gets the cell font
-    virtual wxFont GetFont() const { return m_font; }
-    
-    /// Sets the cell detail font
-    virtual void SetDetailFont(const wxFont& font) { m_detailFont = font; }
-    
-    /// Gets the cell detail font
-    virtual wxFont GetDetailFont() const { return m_detailFont; }
-    
+        
     /// Sets the main text for the cell.
     virtual void SetText(const wxString& text) { m_text = text; }
     
@@ -176,6 +172,18 @@ public:
     
     /// Gets the detail text for the cell.
     virtual const wxString& GetDetailText() const { return m_detailText; }
+    
+    /// Sets the cell font
+    virtual void SetTextFont(const wxFont& font) { m_font = font; }
+    
+    /// Gets the cell font
+    virtual wxFont GetTextFont() const { return m_font; }
+    
+    /// Sets the cell detail font
+    virtual void SetDetailTextFont(const wxFont& font) { m_detailFont = font; }
+    
+    /// Gets the cell detail font
+    virtual wxFont GetDetailTextFont() const { return m_detailFont; }
     
     /// Sets the text colour.
     virtual void SetTextColour(const wxColour& colour) { m_textColour = colour; }
@@ -266,14 +274,9 @@ public:
     
     // Gets the event handler for the cell.
     //wxEvtHandler* GetEventHandler() const { return m_eventHandler; }
-    
-    // Sets the edit style. This can be EditStyleNone,
-    // EditStyleShowDeleteButton, or
-    // EditStyleShowInsertButton.
-    // void SetEditStyle(int editStyle) { m_editStyle = editStyle; }
-    
+        
     // Gets the edit style.
-    // int GetEditStyle() const { return m_editStyle; }
+    wxTableCellEditStyle GetEditStyle() const { return EditStyleNone; }
     
     /// Sets editing mode (not yet implemented).
     virtual bool SetEditingMode(bool editingMode, bool animated = true) { m_editingMode = editingMode; }
@@ -296,8 +299,8 @@ public:
     /// Sets the width of the detail part of the cell.
     /// This isn't part of the Cocoa Touch API - need to find
     /// how this dimension is found.
-    virtual void SetDetailWidth(int width) { m_detailWidth = width; }
-    virtual int GetDetailWidth() const { return m_detailWidth; }
+    virtual void SetDetailWidth(float width) { m_detailWidth = width; }
+    virtual float GetDetailWidth() const { return m_detailWidth; }
     
     /// Sets the content window for the cell.
     virtual void SetContentWindow(wxTableCellContentWindow* win) { m_contentWindow = win; }
@@ -359,7 +362,7 @@ public:
     /// Returns true if the shows a reordering button in editing mode.
     virtual bool GetShowReorderingControl() const { return m_showReorderingButton; }
     
-    /// Is the delete confirmation button showing for this path? (not implemented)
+    /// Is the delete confirmation button showing for this path?
     virtual bool IsDeleteButtonShowing(wxTableCtrl* tableCtrl) const { return false; }
         
 protected:
@@ -384,10 +387,9 @@ protected:
     //wxEvtHandler*             m_eventHandler;
     wxTableCellAccessoryType  m_accessoryType;
     wxTableCellAccessoryType  m_editingAccessoryType;
-    //int                       m_editStyle;
     int                         m_indentationLevel;
     int                         m_indentationWidth;
-    int                         m_detailWidth;
+    float                         m_detailWidth;
     wxTableCellBase::wxTableCellStyle          m_cellStyle;
     bool                        m_editingMode;
     bool                        m_shouldIndentWhileEditing;

@@ -79,10 +79,37 @@ public:
     /// Creates the content window.
     virtual bool CreateContentWindow(wxTableCtrl* ctrl);
     
+    void SetText(const wxString& text);
+    void SetDetailText(const wxString& text);
+    void SetTextFont(const wxFont& font);
+    void SetDetailTextFont(const wxFont& font);
+    void SetTextColour(const wxColour& colour);
+    void SetDetailTextColour(const wxColour& colour);
+    void SetSelectedTextColour(const wxColour& colour);
+    void SetSelectedDetailTextColour(const wxColour& colour);
+    void SetTextAlignment(wxTableCellTextAlignment alignment);
+    void SetDetailTextAlignment(wxTableCellTextAlignment alignment);
+    void SetTextLineBreakMode(wxTableCellLineBreakMode lineBreakMode);
+    void SetDetailTextLineBreakMode(wxTableCellLineBreakMode lineBreakMode);
+    void SetBitmap(const wxBitmap& bitmap);
+    void SetSelectedBitmap(const wxBitmap& bitmap);
+    void SetSelectionStyle(wxTableCellSelectionStyle style);
     void SetAccessoryWindow(wxWindow* win);
     void SetAccessoryType(wxTableCellAccessoryType accessoryType);
     void SetIndentationLevel(int indentationLevel);
     void SetIndentationWidth(int indentationWidth);
+    void SetSelected(bool selected);
+    bool GetSelected() const;
+    bool SetEditingMode(bool editingMode, bool animated = true);
+    bool IsEditing() const;
+    void SetDetailWidth(float width);
+    float GetDetailWidth() const;
+    void SetEditingAccessoryType(wxTableCellAccessoryType accessoryType);
+    void SetEditingAccessoryWindow(wxWindow* win);
+    void SetIndentWhileEditing(bool indent);
+    void SetShowReorderingControl(bool show);
+    bool IsDeleteButtonShowing(wxTableCtrl* tableCtrl) const;
+    wxTableCellEditStyle GetEditStyle() const;
     
     // Variants of SetPeer()/GetPeer()
     void                SetCellWidgetImpl(wxOSXWidgetImpl* widgetImpl) { m_widgetImpl = widgetImpl; }

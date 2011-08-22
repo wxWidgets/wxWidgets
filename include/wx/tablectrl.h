@@ -246,20 +246,6 @@ public:
         RowAnimationBottom
     } RowAnimationStyle;
 
-    /// Edit style.
-    typedef enum {
-        EditStyleNone             = 0x00,
-        EditStyleShowDeleteButton = 0x01,
-        EditStyleShowInsertButton = 0x02
-    } CellEditStyle;
-
-    // Implementation only.
-    /*
-    enum { HitTestNone, HitTestAccessory, HitTestIndex, HitTestRow, HitTestAdd, HitTestDelete, HitTestConfirmDelete, HitTestReorder  };
-    enum { HitTestRegionUnknown, HitTestRegionTop, HitTestRegionBottom };
-    enum { MouseStatusNone, MouseStatusClicking, MouseStatusDraggingRow };
-    */
-
 
     /// Default constructor.
     wxTableCtrlBase() { Init(); };
@@ -591,13 +577,6 @@ public:
     /// Requests a move operation from 'from' to 'to'. The data should then reflect
     /// the new ordering. Return false if the reordering was not done.
     virtual bool MoveRow(wxTableCtrl* WXUNUSED(ctrl), const wxTablePath& WXUNUSED(pathFrom), const wxTablePath& WXUNUSED(pathTo)) { return false; }
-
-    /// Get the edit style for a row
-    virtual wxTableCtrlBase::CellEditStyle GetCellEditStyle(wxTableCtrl* WXUNUSED(ctrl),
-                                                            const wxTablePath& WXUNUSED(path))
-    {
-        return wxTableCtrlBase::EditStyleShowDeleteButton;
-    }
     
     /// Override to intercept row click; by default, sends an event to itself and then to control.
     virtual bool OnSelectRow(wxTableCtrl* ctrl,

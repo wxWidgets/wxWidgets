@@ -74,7 +74,9 @@ protected:
 class MobileTestsWxTableCtrlTestsDataSource: public wxTableDataSource {
     
 public:
-    /// Returns a table cell for the given location.
+    MobileTestsWxTableCtrlTestsDataSource(wxTableCell::wxTableCellStyle cellStyle = wxTableCell::CellStyleDefault) { m_cellStyle = cellStyle; }
+    
+    /// Returns a table cell for the give location.
     virtual wxTableCell* GetCell(wxTableCtrl* ctrl, const wxTablePath& path);
     
     /// Returns the number of sections in the table.
@@ -83,7 +85,16 @@ public:
     /// Returns the number of rows in a section.
     virtual int GetRowCount(wxTableCtrl* ctrl, int section) const;
     
+    /// Returns the number of rows in a section.
+    virtual wxArrayString GetSectionTitles(wxTableCtrl* ctrl) const;
+    
+    /// Returns an array of strings, each one corresponding to an index title to be shown
+    /// on the right hand side of a plain list.
+    virtual wxArrayString GetIndexTitles(wxTableCtrl* WXUNUSED(ctrl)) const;
+        
 protected:
+    wxTableCell::wxTableCellStyle m_cellStyle;
+
     DECLARE_EVENT_TABLE()
 };
 
