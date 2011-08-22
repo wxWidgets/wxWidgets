@@ -99,9 +99,9 @@ USE_GUI = 1
 USE_HTML = 1
 !endif
 
-# Build wxWeb library (USE_GUI must be 1)? [0,1]
-!ifndef USE_WEB
-USE_WEB = 1
+# Build wxWebView library (USE_GUI must be 1)? [0,1]
+!ifndef USE_WEBVIEW
+USE_WEBVIEW = 1
 !endif
 
 # Build multimedia library (USE_GUI must be 1)? [0,1]

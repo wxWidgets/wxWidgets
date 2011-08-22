@@ -19,7 +19,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 	UNICODE="$(UNICODE)" MSLU="$(MSLU)" BUILD="$(BUILD)" \
 	DEBUG_INFO="$(DEBUG_INFO)" DEBUG_FLAG="$(DEBUG_FLAG)" \
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" \
-	USE_WEB="$(USE_WEB)" USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" \
+	USE_WEBVIEW="$(USE_WEBVIEW)" USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" \
 	USE_AUI="$(USE_AUI)" USE_RIBBON="$(USE_RIBBON)" \
 	USE_PROPGRID="$(USE_PROPGRID)" USE_RICHTEXT="$(USE_RICHTEXT)" \
 	USE_STC="$(USE_STC)" USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
@@ -36,7 +36,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll web widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -115,7 +115,7 @@ clean:
 	$(MAKE) -C uiaction -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C validate -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C vscroll -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C web -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C webview -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) clean
@@ -344,8 +344,8 @@ validate:
 vscroll: 
 	$(MAKE) -C vscroll -f makefile.gcc $(MAKEARGS) all
 
-web: 
-	$(MAKE) -C web -f makefile.gcc $(MAKEARGS) all
+webview: 
+	$(MAKE) -C webview -f makefile.gcc $(MAKEARGS) all
 
 widgets: 
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) all
@@ -368,7 +368,7 @@ memcheck:
 	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
 	opengl ownerdrw popup power printing propgrid regtest render ribbon richtext \
 	sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder \
-	taskbar text thread toolbar treectrl typetest uiaction validate vscroll web \
+	taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview \
 	widgets wizard wrapsizer xrc memcheck
 
 

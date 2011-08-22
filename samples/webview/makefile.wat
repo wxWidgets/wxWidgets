@@ -137,10 +137,10 @@ __EXCEPTIONSFLAG_8 =
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG_8 = -xs
 !endif
-__WXLIB_WEB_p =
+__WXLIB_WEBVIEW_p =
 !ifeq MONOLITHIC 0
-__WXLIB_WEB_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web.lib
+__WXLIB_WEBVIEW_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
 !endif
 __WXLIB_STC_p =
 !ifeq MONOLITHIC 0
@@ -236,15 +236,15 @@ OBJS = &
 LIBDIRNAME = .\..\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-WEB_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
+WEBVIEW_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
 	-i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 -wcd=656 &
 	-wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH &
 	$(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
-WEB_OBJECTS =  &
-	$(OBJS)\web_web.obj
+WEBVIEW_OBJECTS =  &
+	$(OBJS)\webview_webview.obj
 
 
 all : $(OBJS)
@@ -253,7 +253,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\web.exe
+all : .SYMBOLIC $(OBJS)\webview.exe
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -261,23 +261,23 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\web.exe del $(OBJS)\web.exe
+	-if exist $(OBJS)\webview.exe del $(OBJS)\webview.exe
 
-$(OBJS)\web.exe :  $(WEB_OBJECTS) $(OBJS)\web_sample.res
-	@%create $(OBJS)\web.lbc
-	@%append $(OBJS)\web.lbc option quiet
-	@%append $(OBJS)\web.lbc name $^@
-	@%append $(OBJS)\web.lbc option caseexact
-	@%append $(OBJS)\web.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
-	@for %i in ($(WEB_OBJECTS)) do @%append $(OBJS)\web.lbc file %i
-	@for %i in ( $(__WXLIB_WEB_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  wxscintilla$(WXDEBUGFLAG).lib $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\web.lbc library %i
-	@%append $(OBJS)\web.lbc option resource=$(OBJS)\web_sample.res
-	@for %i in () do @%append $(OBJS)\web.lbc option stack=%i
-	wlink @$(OBJS)\web.lbc
+$(OBJS)\webview.exe :  $(WEBVIEW_OBJECTS) $(OBJS)\webview_sample.res
+	@%create $(OBJS)\webview.lbc
+	@%append $(OBJS)\webview.lbc option quiet
+	@%append $(OBJS)\webview.lbc name $^@
+	@%append $(OBJS)\webview.lbc option caseexact
+	@%append $(OBJS)\webview.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
+	@for %i in ($(WEBVIEW_OBJECTS)) do @%append $(OBJS)\webview.lbc file %i
+	@for %i in ( $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  wxscintilla$(WXDEBUGFLAG).lib $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\webview.lbc library %i
+	@%append $(OBJS)\webview.lbc option resource=$(OBJS)\webview_sample.res
+	@for %i in () do @%append $(OBJS)\webview.lbc option stack=%i
+	wlink @$(OBJS)\webview.lbc
 
-$(OBJS)\web_web.obj :  .AUTODEPEND .\web.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WEB_CXXFLAGS) $<
+$(OBJS)\webview_webview.obj :  .AUTODEPEND .\webview.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WEBVIEW_CXXFLAGS) $<
 
-$(OBJS)\web_sample.res :  .AUTODEPEND .\..\sample.rc
+$(OBJS)\webview_sample.res :  .AUTODEPEND .\..\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 

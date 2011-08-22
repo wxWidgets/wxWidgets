@@ -20,8 +20,8 @@ LIBDIRNAME = \
 	.\..\..\lib\$(COMPILER_PREFIX)$(DIR_SUFFIX_CPU)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-WEB_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
-	$(__DEBUGINFO_0) /Fd$(OBJS)\web.pdb $(____DEBUGRUNTIME_3_p) \
+WEBVIEW_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
+	$(__DEBUGINFO_0) /Fd$(OBJS)\webview.pdb $(____DEBUGRUNTIME_3_p) \
 	$(__OPTIMIZEFLAG_6) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
@@ -29,10 +29,10 @@ WEB_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
 	/I.\..\..\samples /DNOPCH $(__RTTIFLAG_11) $(__EXCEPTIONSFLAG_12) \
 	$(CPPFLAGS) $(CXXFLAGS)
-WEB_OBJECTS =  \
-	$(OBJS)\web_web.obj
-WEB_RESOURCES =  \
-	$(OBJS)\web_sample.res
+WEBVIEW_OBJECTS =  \
+	$(OBJS)\webview_webview.obj
+WEBVIEW_RESOURCES =  \
+	$(OBJS)\webview_sample.res
 
 ### Conditionally set variables: ###
 
@@ -292,8 +292,8 @@ __DLLFLAG_p = /DWXUSINGDLL
 __DLLFLAG_p_1 = /d WXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
-__WXLIB_WEB_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web.lib
+__WXLIB_WEBVIEW_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_STC_p = \
@@ -341,24 +341,24 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\web.exe
+all: $(OBJS)\webview.exe
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\web.exe del $(OBJS)\web.exe
-	-if exist $(OBJS)\web.ilk del $(OBJS)\web.ilk
-	-if exist $(OBJS)\web.pdb del $(OBJS)\web.pdb
+	-if exist $(OBJS)\webview.exe del $(OBJS)\webview.exe
+	-if exist $(OBJS)\webview.ilk del $(OBJS)\webview.ilk
+	-if exist $(OBJS)\webview.pdb del $(OBJS)\webview.pdb
 
-$(OBJS)\web.exe: $(WEB_OBJECTS) $(OBJS)\web_sample.res
-	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\web.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
-	$(WEB_OBJECTS) $(WEB_RESOURCES)  $(__WXLIB_WEB_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  wxscintilla$(WXDEBUGFLAG).lib $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
+$(OBJS)\webview.exe: $(WEBVIEW_OBJECTS) $(OBJS)\webview_sample.res
+	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\webview.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
+	$(WEBVIEW_OBJECTS) $(WEBVIEW_RESOURCES)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  wxscintilla$(WXDEBUGFLAG).lib $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
 <<
 
-$(OBJS)\web_web.obj: .\web.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WEB_CXXFLAGS) .\web.cpp
+$(OBJS)\webview_webview.obj: .\webview.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEW_CXXFLAGS) .\webview.cpp
 
-$(OBJS)\web_sample.res: .\..\sample.rc
+$(OBJS)\webview_sample.res: .\..\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\sample.rc
 

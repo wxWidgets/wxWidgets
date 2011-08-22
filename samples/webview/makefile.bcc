@@ -28,15 +28,15 @@ OBJS = \
 LIBDIRNAME = .\..\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-WEB_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
+WEBVIEW_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) $(__THREADSFLAG_6) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES_p) -I. $(__DLLFLAG_p) -I.\..\..\samples \
 	-DNOPCH $(CPPFLAGS) $(CXXFLAGS)
-WEB_OBJECTS =  \
-	$(OBJS)\web_web.obj
+WEBVIEW_OBJECTS =  \
+	$(OBJS)\webview_webview.obj
 
 ### Conditionally set variables: ###
 
@@ -167,8 +167,8 @@ __DLLFLAG_p = -DWXUSINGDLL
 __DLLFLAG_p_1 = -dWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
-__WXLIB_WEB_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web.lib
+__WXLIB_WEBVIEW_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_STC_p = \
@@ -228,27 +228,27 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\web.exe
+all: $(OBJS)\webview.exe
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.csm del $(OBJS)\*.csm
-	-if exist $(OBJS)\web.exe del $(OBJS)\web.exe
-	-if exist $(OBJS)\web.tds del $(OBJS)\web.tds
-	-if exist $(OBJS)\web.ilc del $(OBJS)\web.ilc
-	-if exist $(OBJS)\web.ild del $(OBJS)\web.ild
-	-if exist $(OBJS)\web.ilf del $(OBJS)\web.ilf
-	-if exist $(OBJS)\web.ils del $(OBJS)\web.ils
+	-if exist $(OBJS)\webview.exe del $(OBJS)\webview.exe
+	-if exist $(OBJS)\webview.tds del $(OBJS)\webview.tds
+	-if exist $(OBJS)\webview.ilc del $(OBJS)\webview.ilc
+	-if exist $(OBJS)\webview.ild del $(OBJS)\webview.ild
+	-if exist $(OBJS)\webview.ilf del $(OBJS)\webview.ilf
+	-if exist $(OBJS)\webview.ils del $(OBJS)\webview.ils
 
-$(OBJS)\web.exe: $(WEB_OBJECTS)  $(OBJS)\web_sample.res
+$(OBJS)\webview.exe: $(WEBVIEW_OBJECTS)  $(OBJS)\webview_sample.res
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @&&|
-	c0w32.obj $(WEB_OBJECTS),$@,, $(__WXLIB_WEB_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  wxscintilla$(WXDEBUGFLAG).lib $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\web_sample.res
+	c0w32.obj $(WEBVIEW_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  wxscintilla$(WXDEBUGFLAG).lib $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\webview_sample.res
 |
 
-$(OBJS)\web_web.obj: .\web.cpp
-	$(CXX) -q -c -P -o$@ $(WEB_CXXFLAGS) .\web.cpp
+$(OBJS)\webview_webview.obj: .\webview.cpp
+	$(CXX) -q -c -P -o$@ $(WEBVIEW_CXXFLAGS) .\webview.cpp
 
-$(OBJS)\web_sample.res: .\..\sample.rc
+$(OBJS)\webview_sample.res: .\..\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) -i. $(__DLLFLAG_p_1) -i.\..\..\samples -dNOPCH .\..\sample.rc
 

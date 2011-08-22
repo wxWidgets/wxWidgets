@@ -20,16 +20,17 @@ OBJS = \
 LIBDIRNAME = .\..\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-WEB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_p) -W \
-	-Wall -I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG_5) \
-	$(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
-WEB_OBJECTS =  \
-	$(OBJS)\web_web.o \
-	$(OBJS)\web_sample_rc.o
+WEBVIEW_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
+	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES_p) -W -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples -DNOPCH $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+WEBVIEW_OBJECTS =  \
+	$(OBJS)\webview_webview.o \
+	$(OBJS)\webview_sample_rc.o
 
 ### Conditionally set variables: ###
 
@@ -151,8 +152,8 @@ ifeq ($(SHARED),1)
 __DLLFLAG_p_1 = --define WXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_WEB_p = \
-	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web
+__WXLIB_WEBVIEW_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_STC_p = \
@@ -222,20 +223,20 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\web.exe
+all: $(OBJS)\webview.exe
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
-	-if exist $(OBJS)\web.exe del $(OBJS)\web.exe
+	-if exist $(OBJS)\webview.exe del $(OBJS)\webview.exe
 
-$(OBJS)\web.exe: $(WEB_OBJECTS) $(OBJS)\web_sample_rc.o
-	$(CXX) -o $@ $(WEB_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_WEB_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwxscintilla$(WXDEBUGFLAG) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+$(OBJS)\webview.exe: $(WEBVIEW_OBJECTS) $(OBJS)\webview_sample_rc.o
+	$(CXX) -o $@ $(WEBVIEW_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwxscintilla$(WXDEBUGFLAG) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
-$(OBJS)\web_web.o: ./web.cpp
-	$(CXX) -c -o $@ $(WEB_CXXFLAGS) $(CPPDEPS) $<
+$(OBJS)\webview_webview.o: ./webview.cpp
+	$(CXX) -c -o $@ $(WEBVIEW_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\web_sample_rc.o: ./../sample.rc
+$(OBJS)\webview_sample_rc.o: ./../sample.rc
 	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples --define NOPCH
 
 .PHONY: all clean

@@ -158,7 +158,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "web"=wx_web.dsp - Package Owner=<4>
+Project: "webview"=wx_webview.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

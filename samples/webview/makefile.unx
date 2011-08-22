@@ -50,10 +50,10 @@ WX_VERSION_MAJOR = $(shell echo $(WX_VERSION) | cut -c1,1)
 WX_VERSION_MINOR = $(shell echo $(WX_VERSION) | cut -c2,2)
 WX_CONFIG_FLAGS = $(WX_CONFIG_UNICODE_FLAG) $(WX_CONFIG_SHARED_FLAG) \
 	--toolkit=$(WX_PORT) --version=$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
-WEB_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
+WEBVIEW_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
 	$(CXXFLAGS)
-WEB_OBJECTS =  \
-	web_web.o
+WEBVIEW_OBJECTS =  \
+	webview_webview.o
 
 ### Conditionally set variables: ###
 
@@ -73,7 +73,7 @@ endif
 
 ### Targets: ###
 
-all: test_for_selected_wxbuild web
+all: test_for_selected_wxbuild webview
 
 install: 
 
@@ -82,16 +82,16 @@ uninstall:
 clean: 
 	rm -f ./*.o
 	rm -f ./*.d
-	rm -f web
+	rm -f webview
 
 test_for_selected_wxbuild: 
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
-web: $(WEB_OBJECTS)
-	$(CXX) -o $@ $(WEB_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs web,stc,adv,core,base`
+webview: $(WEBVIEW_OBJECTS)
+	$(CXX) -o $@ $(WEBVIEW_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs webview,stc,adv,core,base`
 
-web_web.o: ./web.cpp
-	$(CXX) -c -o $@ $(WEB_CXXFLAGS) $(CPPDEPS) $<
+webview_webview.o: ./webview.cpp
+	$(CXX) -c -o $@ $(WEBVIEW_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 

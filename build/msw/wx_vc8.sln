@@ -26,7 +26,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "media", "wx_vc8_media.vcpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "html", "wx_vc8_html.vcproj", "{32B18CFE-19C8-5F72-9759-CE03A314A875}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "web", "wx_vc8_web.vcproj", "{D05A7428-B474-5F05-8927-A919C8B5224A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webview", "wx_vc8_webview.vcproj", "{51173FB3-6227-51D7-8807-1FC9CD18781C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qa", "wx_vc8_qa.vcproj", "{6EA54780-4728-5F04-A501-3B3F4538874C}"
 EndProject
@@ -269,22 +269,22 @@ Global
 		{32B18CFE-19C8-5F72-9759-CE03A314A875}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
 		{32B18CFE-19C8-5F72-9759-CE03A314A875}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
 		{32B18CFE-19C8-5F72-9759-CE03A314A875}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.Debug|Win32.Build.0 = Debug|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.Release|Win32.ActiveCfg = Release|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.Release|Win32.Build.0 = Release|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.Universal Debug|Win32.ActiveCfg = Universal Debug|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.Universal Debug|Win32.Build.0 = Universal Debug|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.Universal Release|Win32.ActiveCfg = Universal Release|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.Universal Release|Win32.Build.0 = Universal Release|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.DLL Release|Win32.Build.0 = DLL Release|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.DLL Universal Debug|Win32.ActiveCfg = DLL Universal Debug|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
-		{D05A7428-B474-5F05-8927-A919C8B5224A}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.Debug|Win32.Build.0 = Debug|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.Release|Win32.ActiveCfg = Release|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.Release|Win32.Build.0 = Release|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.Universal Debug|Win32.ActiveCfg = Universal Debug|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.Universal Debug|Win32.Build.0 = Universal Debug|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.Universal Release|Win32.ActiveCfg = Universal Release|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.Universal Release|Win32.Build.0 = Universal Release|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.DLL Release|Win32.Build.0 = DLL Release|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.DLL Universal Debug|Win32.ActiveCfg = DLL Universal Debug|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
+		{51173FB3-6227-51D7-8807-1FC9CD18781C}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
 		{6EA54780-4728-5F04-A501-3B3F4538874C}.Debug|Win32.ActiveCfg = Debug|Win32
 		{6EA54780-4728-5F04-A501-3B3F4538874C}.Debug|Win32.Build.0 = Debug|Win32
 		{6EA54780-4728-5F04-A501-3B3F4538874C}.Release|Win32.ActiveCfg = Release|Win32

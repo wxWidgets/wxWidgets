@@ -43,14 +43,14 @@ DESTDIR =
 WX_RELEASE = 2.9
 WX_VERSION = $(WX_RELEASE).3
 LIBDIRNAME = $(wx_top_builddir)/lib
-WEB_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+WEBVIEW_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
-WEB_OBJECTS =  \
-	$(__web_os2_lib_res) \
-	web_web.o \
-	$(__web___win32rc)
+WEBVIEW_OBJECTS =  \
+	$(__webview_os2_lib_res) \
+	webview_webview.o \
+	$(__webview___win32rc)
 
 ### Conditionally set variables: ###
 
@@ -67,9 +67,9 @@ WEB_OBJECTS =  \
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
-@COND_PLATFORM_MAC_0@__web___mac_setfilecmd = @true
-@COND_PLATFORM_MAC_1@__web___mac_setfilecmd = \
-@COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL web$(EXEEXT)
+@COND_PLATFORM_MAC_0@__webview___mac_setfilecmd = @true
+@COND_PLATFORM_MAC_1@__webview___mac_setfilecmd = \
+@COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL webview$(EXEEXT)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 @COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
@@ -82,29 +82,29 @@ WEB_OBJECTS =  \
 @COND_USE_THREADS_0@__THREAD_DEFINE_p_2 = --define wxNO_THREADS
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
 @COND_SHARED_1@__DLLFLAG_p_2 = --define WXUSINGDLL
-COND_PLATFORM_OS2_1___web___os2_emxbindcmd = $(NM) web$(EXEEXT) | if grep -q \
-	pmwin.763 ; then emxbind -ep web$(EXEEXT) ; fi
-@COND_PLATFORM_OS2_1@__web___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___web___os2_emxbindcmd)
+COND_PLATFORM_OS2_1___webview___os2_emxbindcmd = $(NM) webview$(EXEEXT) | if \
+	grep -q pmwin.763 ; then emxbind -ep webview$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__webview___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___webview___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_PLATFORM_OS2_1@__web_os2_lib_res = \
+@COND_PLATFORM_OS2_1@__webview_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
-@COND_PLATFORM_MACOSX_1@__web_app_Contents_PkgInfo___depname \
-@COND_PLATFORM_MACOSX_1@	= web.app/Contents/PkgInfo
-@COND_PLATFORM_MACOSX_1@__web_bundle___depname = web_bundle
-@COND_TOOLKIT_MAC@____web_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	$(__web_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_OSX_CARBON@____web_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_OSX_CARBON@	= $(__web_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_OSX_COCOA@____web_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_OSX_COCOA@	= $(__web_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_OSX_IPHONE@____web_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_OSX_IPHONE@	= $(__web_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_COCOA@____web_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	$(__web_app_Contents_PkgInfo___depname)
-COND_MONOLITHIC_0___WXLIB_WEB_p = \
-	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_web-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_WEB_p = $(COND_MONOLITHIC_0___WXLIB_WEB_p)
+@COND_PLATFORM_MACOSX_1@__webview_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= webview.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@__webview_bundle___depname = webview_bundle
+@COND_TOOLKIT_MAC@____webview_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__webview_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_CARBON@____webview_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_CARBON@	= $(__webview_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_COCOA@____webview_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_COCOA@	= $(__webview_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_IPHONE@____webview_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_IPHONE@	= $(__webview_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_COCOA@____webview_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	$(__webview_app_Contents_PkgInfo___depname)
+COND_MONOLITHIC_0___WXLIB_WEBVIEW_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_WEBVIEW_p = $(COND_MONOLITHIC_0___WXLIB_WEBVIEW_p)
 COND_MONOLITHIC_0___WXLIB_STC_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_STC_p = $(COND_MONOLITHIC_0___WXLIB_STC_p)
@@ -117,7 +117,7 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__web___win32rc = web_sample_rc.o
+@COND_PLATFORM_WIN32_1@__webview___win32rc = webview_sample_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -140,7 +140,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: web$(EXEEXT) $(__web_bundle___depname)
+all: webview$(EXEEXT) $(__webview_bundle___depname)
 
 install: 
 
@@ -151,48 +151,48 @@ install-strip: install
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f web$(EXEEXT)
-	rm -rf web.app
+	rm -f webview$(EXEEXT)
+	rm -rf webview.app
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-web$(EXEEXT): $(WEB_OBJECTS) $(__web___win32rc)
-	$(CXX) -o $@ $(WEB_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_WEB_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
+	$(CXX) -o $@ $(WEBVIEW_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	
-	$(__web___mac_setfilecmd)
-	$(__web___os2_emxbindcmd)
+	$(__webview___mac_setfilecmd)
+	$(__webview___os2_emxbindcmd)
 
-@COND_PLATFORM_MACOSX_1@web.app/Contents/PkgInfo: web$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
-@COND_PLATFORM_MACOSX_1@	mkdir -p web.app/Contents
-@COND_PLATFORM_MACOSX_1@	mkdir -p web.app/Contents/MacOS
-@COND_PLATFORM_MACOSX_1@	mkdir -p web.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@webview.app/Contents/PkgInfo: webview$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p webview.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p webview.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p webview.app/Contents/Resources
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/web/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/webview/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >web.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >webview.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >web.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >webview.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f web$(EXEEXT) web.app/Contents/MacOS/web
+@COND_PLATFORM_MACOSX_1@	ln -f webview$(EXEEXT) webview.app/Contents/MacOS/webview
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns web.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns webview.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@web_bundle: $(____web_BUNDLE_TGT_REF_DEP)
+@COND_PLATFORM_MACOSX_1@webview_bundle: $(____webview_BUNDLE_TGT_REF_DEP)
 
-web_web.o: $(srcdir)/web.cpp
-	$(CXXC) -c -o $@ $(WEB_CXXFLAGS) $(srcdir)/web.cpp
+webview_webview.o: $(srcdir)/webview.cpp
+	$(CXXC) -c -o $@ $(WEBVIEW_CXXFLAGS) $(srcdir)/webview.cpp
 
-web_sample_rc.o: $(srcdir)/../sample.rc
+webview_sample_rc.o: $(srcdir)/../sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean web_bundle
+.PHONY: all install uninstall clean distclean webview_bundle
