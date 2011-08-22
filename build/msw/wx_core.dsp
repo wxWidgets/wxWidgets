@@ -3201,6 +3201,10 @@ SOURCE=..\..\src\generic\msgdlgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\navctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\numdlgg.cpp
 # End Source File
 # Begin Source File
@@ -3292,6 +3296,10 @@ SOURCE=..\..\src\generic\statusbr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\tablectrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\textdlgg.cpp
 # End Source File
 # Begin Source File
@@ -3317,6 +3325,10 @@ SOURCE=..\..\src\generic\vlbox.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\vscroll.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\wheelsctrl.cpp
 # End Source File
 # End Group
 # Begin Group "wxUniv Sources"

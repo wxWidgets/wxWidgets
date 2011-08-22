@@ -490,6 +490,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_logg.obj &
 	$(OBJS)\monodll_markuptext.obj &
 	$(OBJS)\monodll_msgdlgg.obj &
+	$(OBJS)\monodll_navctrl.obj &
 	$(OBJS)\monodll_numdlgg.obj &
 	$(OBJS)\monodll_panelg.obj &
 	$(OBJS)\monodll_progdlgg.obj &
@@ -503,13 +504,15 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_srchctlg.obj &
 	$(OBJS)\monodll_statbmpg.obj &
 	$(OBJS)\monodll_stattextg.obj &
+	$(OBJS)\monodll_tablectrl.obj &
 	$(OBJS)\monodll_textdlgg.obj &
 	$(OBJS)\monodll_tipwin.obj &
 	$(OBJS)\monodll_toolbkg.obj &
 	$(OBJS)\monodll_treectlg.obj &
 	$(OBJS)\monodll_treebkg.obj &
 	$(OBJS)\monodll_vlbox.obj &
-	$(OBJS)\monodll_vscroll.obj
+	$(OBJS)\monodll_vscroll.obj &
+	$(OBJS)\monodll_wheelsctrl.obj
 !endif
 !endif
 !ifeq USE_GUI 1
@@ -758,6 +761,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_logg.obj &
 	$(OBJS)\monodll_markuptext.obj &
 	$(OBJS)\monodll_msgdlgg.obj &
+	$(OBJS)\monodll_navctrl.obj &
 	$(OBJS)\monodll_numdlgg.obj &
 	$(OBJS)\monodll_panelg.obj &
 	$(OBJS)\monodll_progdlgg.obj &
@@ -771,13 +775,15 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_srchctlg.obj &
 	$(OBJS)\monodll_statbmpg.obj &
 	$(OBJS)\monodll_stattextg.obj &
+	$(OBJS)\monodll_tablectrl.obj &
 	$(OBJS)\monodll_textdlgg.obj &
 	$(OBJS)\monodll_tipwin.obj &
 	$(OBJS)\monodll_toolbkg.obj &
 	$(OBJS)\monodll_treectlg.obj &
 	$(OBJS)\monodll_treebkg.obj &
 	$(OBJS)\monodll_vlbox.obj &
-	$(OBJS)\monodll_vscroll.obj
+	$(OBJS)\monodll_vscroll.obj &
+	$(OBJS)\monodll_wheelsctrl.obj
 !endif
 !endif
 ____ADVANCED_SRC_FILENAMES_OBJECTS =
@@ -1265,6 +1271,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_logg.obj &
 	$(OBJS)\monolib_markuptext.obj &
 	$(OBJS)\monolib_msgdlgg.obj &
+	$(OBJS)\monolib_navctrl.obj &
 	$(OBJS)\monolib_numdlgg.obj &
 	$(OBJS)\monolib_panelg.obj &
 	$(OBJS)\monolib_progdlgg.obj &
@@ -1278,13 +1285,15 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_srchctlg.obj &
 	$(OBJS)\monolib_statbmpg.obj &
 	$(OBJS)\monolib_stattextg.obj &
+	$(OBJS)\monolib_tablectrl.obj &
 	$(OBJS)\monolib_textdlgg.obj &
 	$(OBJS)\monolib_tipwin.obj &
 	$(OBJS)\monolib_toolbkg.obj &
 	$(OBJS)\monolib_treectlg.obj &
 	$(OBJS)\monolib_treebkg.obj &
 	$(OBJS)\monolib_vlbox.obj &
-	$(OBJS)\monolib_vscroll.obj
+	$(OBJS)\monolib_vscroll.obj &
+	$(OBJS)\monolib_wheelsctrl.obj
 !endif
 !endif
 !ifeq USE_GUI 1
@@ -1533,6 +1542,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_logg.obj &
 	$(OBJS)\monolib_markuptext.obj &
 	$(OBJS)\monolib_msgdlgg.obj &
+	$(OBJS)\monolib_navctrl.obj &
 	$(OBJS)\monolib_numdlgg.obj &
 	$(OBJS)\monolib_panelg.obj &
 	$(OBJS)\monolib_progdlgg.obj &
@@ -1546,13 +1556,15 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_srchctlg.obj &
 	$(OBJS)\monolib_statbmpg.obj &
 	$(OBJS)\monolib_stattextg.obj &
+	$(OBJS)\monolib_tablectrl.obj &
 	$(OBJS)\monolib_textdlgg.obj &
 	$(OBJS)\monolib_tipwin.obj &
 	$(OBJS)\monolib_toolbkg.obj &
 	$(OBJS)\monolib_treectlg.obj &
 	$(OBJS)\monolib_treebkg.obj &
 	$(OBJS)\monolib_vlbox.obj &
-	$(OBJS)\monolib_vscroll.obj
+	$(OBJS)\monolib_vscroll.obj &
+	$(OBJS)\monolib_wheelsctrl.obj
 !endif
 !endif
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =
@@ -1944,6 +1956,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_logg.obj &
 	$(OBJS)\coredll_markuptext.obj &
 	$(OBJS)\coredll_msgdlgg.obj &
+	$(OBJS)\coredll_navctrl.obj &
 	$(OBJS)\coredll_numdlgg.obj &
 	$(OBJS)\coredll_panelg.obj &
 	$(OBJS)\coredll_progdlgg.obj &
@@ -1957,13 +1970,15 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_srchctlg.obj &
 	$(OBJS)\coredll_statbmpg.obj &
 	$(OBJS)\coredll_stattextg.obj &
+	$(OBJS)\coredll_tablectrl.obj &
 	$(OBJS)\coredll_textdlgg.obj &
 	$(OBJS)\coredll_tipwin.obj &
 	$(OBJS)\coredll_toolbkg.obj &
 	$(OBJS)\coredll_treectlg.obj &
 	$(OBJS)\coredll_treebkg.obj &
 	$(OBJS)\coredll_vlbox.obj &
-	$(OBJS)\coredll_vscroll.obj
+	$(OBJS)\coredll_vscroll.obj &
+	$(OBJS)\coredll_wheelsctrl.obj
 !endif
 !endif
 !ifeq USE_GUI 1
@@ -2212,6 +2227,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_logg.obj &
 	$(OBJS)\coredll_markuptext.obj &
 	$(OBJS)\coredll_msgdlgg.obj &
+	$(OBJS)\coredll_navctrl.obj &
 	$(OBJS)\coredll_numdlgg.obj &
 	$(OBJS)\coredll_panelg.obj &
 	$(OBJS)\coredll_progdlgg.obj &
@@ -2225,13 +2241,15 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_srchctlg.obj &
 	$(OBJS)\coredll_statbmpg.obj &
 	$(OBJS)\coredll_stattextg.obj &
+	$(OBJS)\coredll_tablectrl.obj &
 	$(OBJS)\coredll_textdlgg.obj &
 	$(OBJS)\coredll_tipwin.obj &
 	$(OBJS)\coredll_toolbkg.obj &
 	$(OBJS)\coredll_treectlg.obj &
 	$(OBJS)\coredll_treebkg.obj &
 	$(OBJS)\coredll_vlbox.obj &
-	$(OBJS)\coredll_vscroll.obj
+	$(OBJS)\coredll_vscroll.obj &
+	$(OBJS)\coredll_wheelsctrl.obj
 !endif
 !endif
 __corelib___depname =
@@ -2495,6 +2513,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_logg.obj &
 	$(OBJS)\corelib_markuptext.obj &
 	$(OBJS)\corelib_msgdlgg.obj &
+	$(OBJS)\corelib_navctrl.obj &
 	$(OBJS)\corelib_numdlgg.obj &
 	$(OBJS)\corelib_panelg.obj &
 	$(OBJS)\corelib_progdlgg.obj &
@@ -2508,13 +2527,15 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_srchctlg.obj &
 	$(OBJS)\corelib_statbmpg.obj &
 	$(OBJS)\corelib_stattextg.obj &
+	$(OBJS)\corelib_tablectrl.obj &
 	$(OBJS)\corelib_textdlgg.obj &
 	$(OBJS)\corelib_tipwin.obj &
 	$(OBJS)\corelib_toolbkg.obj &
 	$(OBJS)\corelib_treectlg.obj &
 	$(OBJS)\corelib_treebkg.obj &
 	$(OBJS)\corelib_vlbox.obj &
-	$(OBJS)\corelib_vscroll.obj
+	$(OBJS)\corelib_vscroll.obj &
+	$(OBJS)\corelib_wheelsctrl.obj
 !endif
 !endif
 !ifeq USE_GUI 1
@@ -2763,6 +2784,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_logg.obj &
 	$(OBJS)\corelib_markuptext.obj &
 	$(OBJS)\corelib_msgdlgg.obj &
+	$(OBJS)\corelib_navctrl.obj &
 	$(OBJS)\corelib_numdlgg.obj &
 	$(OBJS)\corelib_panelg.obj &
 	$(OBJS)\corelib_progdlgg.obj &
@@ -2776,13 +2798,15 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_srchctlg.obj &
 	$(OBJS)\corelib_statbmpg.obj &
 	$(OBJS)\corelib_stattextg.obj &
+	$(OBJS)\corelib_tablectrl.obj &
 	$(OBJS)\corelib_textdlgg.obj &
 	$(OBJS)\corelib_tipwin.obj &
 	$(OBJS)\corelib_toolbkg.obj &
 	$(OBJS)\corelib_treectlg.obj &
 	$(OBJS)\corelib_treebkg.obj &
 	$(OBJS)\corelib_vlbox.obj &
-	$(OBJS)\corelib_vscroll.obj
+	$(OBJS)\corelib_vscroll.obj &
+	$(OBJS)\corelib_wheelsctrl.obj
 !endif
 !endif
 ____wxcore_namedll_DEP =
@@ -8380,6 +8404,11 @@ $(OBJS)\monodll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_navctrl.obj :  .AUTODEPEND ..\..\src\generic\navctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8445,6 +8474,11 @@ $(OBJS)\monodll_stattextg.obj :  .AUTODEPEND ..\..\src\generic\stattextg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_tablectrl.obj :  .AUTODEPEND ..\..\src\generic\tablectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8476,6 +8510,11 @@ $(OBJS)\monodll_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_wheelsctrl.obj :  .AUTODEPEND ..\..\src\generic\wheelsctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -10730,6 +10769,11 @@ $(OBJS)\monolib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_navctrl.obj :  .AUTODEPEND ..\..\src\generic\navctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10795,6 +10839,11 @@ $(OBJS)\monolib_stattextg.obj :  .AUTODEPEND ..\..\src\generic\stattextg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_tablectrl.obj :  .AUTODEPEND ..\..\src\generic\tablectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10826,6 +10875,11 @@ $(OBJS)\monolib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_wheelsctrl.obj :  .AUTODEPEND ..\..\src\generic\wheelsctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -13074,6 +13128,11 @@ $(OBJS)\coredll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_navctrl.obj :  .AUTODEPEND ..\..\src\generic\navctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13139,6 +13198,11 @@ $(OBJS)\coredll_stattextg.obj :  .AUTODEPEND ..\..\src\generic\stattextg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_tablectrl.obj :  .AUTODEPEND ..\..\src\generic\tablectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13170,6 +13234,11 @@ $(OBJS)\coredll_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_wheelsctrl.obj :  .AUTODEPEND ..\..\src\generic\wheelsctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -14479,6 +14548,11 @@ $(OBJS)\corelib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_navctrl.obj :  .AUTODEPEND ..\..\src\generic\navctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_numdlgg.obj :  .AUTODEPEND ..\..\src\generic\numdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -14544,6 +14618,11 @@ $(OBJS)\corelib_stattextg.obj :  .AUTODEPEND ..\..\src\generic\stattextg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_tablectrl.obj :  .AUTODEPEND ..\..\src\generic\tablectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -14575,6 +14654,11 @@ $(OBJS)\corelib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_wheelsctrl.obj :  .AUTODEPEND ..\..\src\generic\wheelsctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

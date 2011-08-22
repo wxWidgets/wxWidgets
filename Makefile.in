@@ -4621,6 +4621,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_logg.o \
 	monodll_markuptext.o \
 	monodll_msgdlgg.o \
+	monodll_generic_navctrl.o \
 	monodll_numdlgg.o \
 	monodll_panelg.o \
 	monodll_progdlgg.o \
@@ -4634,13 +4635,15 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_srchctlg.o \
 	monodll_statbmpg.o \
 	monodll_stattextg.o \
+	monodll_generic_tablectrl.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_toolbkg.o \
 	monodll_treectlg.o \
 	monodll_treebkg.o \
 	monodll_vlbox.o \
-	monodll_vscroll.o
+	monodll_vscroll.o \
+	monodll_generic_wheelsctrl.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
@@ -4838,6 +4841,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_logg.o \
 	monodll_markuptext.o \
 	monodll_msgdlgg.o \
+	monodll_generic_navctrl.o \
 	monodll_numdlgg.o \
 	monodll_panelg.o \
 	monodll_progdlgg.o \
@@ -4851,13 +4855,15 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_srchctlg.o \
 	monodll_statbmpg.o \
 	monodll_stattextg.o \
+	monodll_generic_tablectrl.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_toolbkg.o \
 	monodll_treectlg.o \
 	monodll_treebkg.o \
 	monodll_vlbox.o \
-	monodll_vscroll.o
+	monodll_vscroll.o \
+	monodll_generic_wheelsctrl.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_hid.o monodll_utilsexc_cf.o
@@ -5562,19 +5568,35 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS) \
 	monodll_regiong.o \
 	monodll_generic_icon.o \
+	monodll_actionsheetdlg.o \
+	monodll_alertsheetdlg.o \
+	monodll_barbutton.o \
 	monodll_iphone_button.o \
 	monodll_iphone_checkbox.o \
 	monodll_iphone_dialog.o \
 	monodll_iphone_evtloop.o \
 	monodll_iphone_gauge.o \
+	monodll_glcanvas.o \
+	monodll_iphone_listbox.o \
 	monodll_iphone_msgdlg.o \
+	monodll_iphone_navctrl.o \
+	monodll_navitem.o \
 	monodll_iphone_nonownedwnd.o \
+	monodll_iphone_notebook.o \
+	monodll_pagectrl.o \
 	monodll_iphone_scrolbar.o \
+	monodll_segctrl.o \
 	monodll_iphone_slider.o \
+	monodll_iphone_srchctrl.o \
 	monodll_iphone_stattext.o \
+	monodll_tablecell.o \
+	monodll_iphone_tablectrl.o \
 	monodll_iphone_textctrl.o \
 	monodll_iphone_toolbar.o \
 	monodll_iphone_utils.o \
+	monodll_viewcontroller.o \
+	monodll_iphone_webkit.o \
+	monodll_iphone_wheelsctrl.o \
 	monodll_iphone_window.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
@@ -6543,6 +6565,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_logg.o \
 	monolib_markuptext.o \
 	monolib_msgdlgg.o \
+	monolib_generic_navctrl.o \
 	monolib_numdlgg.o \
 	monolib_panelg.o \
 	monolib_progdlgg.o \
@@ -6556,13 +6579,15 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_srchctlg.o \
 	monolib_statbmpg.o \
 	monolib_stattextg.o \
+	monolib_generic_tablectrl.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_toolbkg.o \
 	monolib_treectlg.o \
 	monolib_treebkg.o \
 	monolib_vlbox.o \
-	monolib_vscroll.o
+	monolib_vscroll.o \
+	monolib_generic_wheelsctrl.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
@@ -6760,6 +6785,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_logg.o \
 	monolib_markuptext.o \
 	monolib_msgdlgg.o \
+	monolib_generic_navctrl.o \
 	monolib_numdlgg.o \
 	monolib_panelg.o \
 	monolib_progdlgg.o \
@@ -6773,13 +6799,15 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_srchctlg.o \
 	monolib_statbmpg.o \
 	monolib_stattextg.o \
+	monolib_generic_tablectrl.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_toolbkg.o \
 	monolib_treectlg.o \
 	monolib_treebkg.o \
 	monolib_vlbox.o \
-	monolib_vscroll.o
+	monolib_vscroll.o \
+	monolib_generic_wheelsctrl.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_COCOA@	monolib_hid.o monolib_utilsexc_cf.o
@@ -7484,19 +7512,35 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_12) \
 	monolib_regiong.o \
 	monolib_generic_icon.o \
+	monolib_actionsheetdlg.o \
+	monolib_alertsheetdlg.o \
+	monolib_barbutton.o \
 	monolib_iphone_button.o \
 	monolib_iphone_checkbox.o \
 	monolib_iphone_dialog.o \
 	monolib_iphone_evtloop.o \
 	monolib_iphone_gauge.o \
+	monolib_glcanvas.o \
+	monolib_iphone_listbox.o \
 	monolib_iphone_msgdlg.o \
+	monolib_iphone_navctrl.o \
+	monolib_navitem.o \
 	monolib_iphone_nonownedwnd.o \
+	monolib_iphone_notebook.o \
+	monolib_pagectrl.o \
 	monolib_iphone_scrolbar.o \
+	monolib_segctrl.o \
 	monolib_iphone_slider.o \
+	monolib_iphone_srchctrl.o \
 	monolib_iphone_stattext.o \
+	monolib_tablecell.o \
+	monolib_iphone_tablectrl.o \
 	monolib_iphone_textctrl.o \
 	monolib_iphone_toolbar.o \
 	monolib_iphone_utils.o \
+	monolib_viewcontroller.o \
+	monolib_iphone_webkit.o \
+	monolib_iphone_wheelsctrl.o \
 	monolib_iphone_window.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
@@ -8649,6 +8693,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_logg.o \
 	coredll_markuptext.o \
 	coredll_msgdlgg.o \
+	coredll_generic_navctrl.o \
 	coredll_numdlgg.o \
 	coredll_panelg.o \
 	coredll_progdlgg.o \
@@ -8662,13 +8707,15 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_srchctlg.o \
 	coredll_statbmpg.o \
 	coredll_stattextg.o \
+	coredll_generic_tablectrl.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_toolbkg.o \
 	coredll_treectlg.o \
 	coredll_treebkg.o \
 	coredll_vlbox.o \
-	coredll_vscroll.o
+	coredll_vscroll.o \
+	coredll_generic_wheelsctrl.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
@@ -8866,6 +8913,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_logg.o \
 	coredll_markuptext.o \
 	coredll_msgdlgg.o \
+	coredll_generic_navctrl.o \
 	coredll_numdlgg.o \
 	coredll_panelg.o \
 	coredll_progdlgg.o \
@@ -8879,13 +8927,15 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_srchctlg.o \
 	coredll_statbmpg.o \
 	coredll_stattextg.o \
+	coredll_generic_tablectrl.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_toolbkg.o \
 	coredll_treectlg.o \
 	coredll_treebkg.o \
 	coredll_vlbox.o \
-	coredll_vscroll.o
+	coredll_vscroll.o \
+	coredll_generic_wheelsctrl.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_4 = \
 @COND_TOOLKIT_COCOA@	coredll_hid.o coredll_utilsexc_cf.o
@@ -9590,19 +9640,35 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_14) \
 	coredll_regiong.o \
 	coredll_generic_icon.o \
+	coredll_actionsheetdlg.o \
+	coredll_alertsheetdlg.o \
+	coredll_barbutton.o \
 	coredll_iphone_button.o \
 	coredll_iphone_checkbox.o \
 	coredll_iphone_dialog.o \
 	coredll_iphone_evtloop.o \
 	coredll_iphone_gauge.o \
+	coredll_glcanvas.o \
+	coredll_iphone_listbox.o \
 	coredll_iphone_msgdlg.o \
+	coredll_iphone_navctrl.o \
+	coredll_navitem.o \
 	coredll_iphone_nonownedwnd.o \
+	coredll_iphone_notebook.o \
+	coredll_pagectrl.o \
 	coredll_iphone_scrolbar.o \
+	coredll_segctrl.o \
 	coredll_iphone_slider.o \
+	coredll_iphone_srchctrl.o \
 	coredll_iphone_stattext.o \
+	coredll_tablecell.o \
+	coredll_iphone_tablectrl.o \
 	coredll_iphone_textctrl.o \
 	coredll_iphone_toolbar.o \
 	coredll_iphone_utils.o \
+	coredll_viewcontroller.o \
+	coredll_iphone_webkit.o \
+	coredll_iphone_wheelsctrl.o \
 	coredll_iphone_window.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
@@ -10233,6 +10299,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_logg.o \
 	corelib_markuptext.o \
 	corelib_msgdlgg.o \
+	corelib_generic_navctrl.o \
 	corelib_numdlgg.o \
 	corelib_panelg.o \
 	corelib_progdlgg.o \
@@ -10246,13 +10313,15 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_srchctlg.o \
 	corelib_statbmpg.o \
 	corelib_stattextg.o \
+	corelib_generic_tablectrl.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_toolbkg.o \
 	corelib_treectlg.o \
 	corelib_treebkg.o \
 	corelib_vlbox.o \
-	corelib_vscroll.o
+	corelib_vscroll.o \
+	corelib_generic_wheelsctrl.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
@@ -10450,6 +10519,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_logg.o \
 	corelib_markuptext.o \
 	corelib_msgdlgg.o \
+	corelib_generic_navctrl.o \
 	corelib_numdlgg.o \
 	corelib_panelg.o \
 	corelib_progdlgg.o \
@@ -10463,13 +10533,15 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_srchctlg.o \
 	corelib_statbmpg.o \
 	corelib_stattextg.o \
+	corelib_generic_tablectrl.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_toolbkg.o \
 	corelib_treectlg.o \
 	corelib_treebkg.o \
 	corelib_vlbox.o \
-	corelib_vscroll.o
+	corelib_vscroll.o \
+	corelib_generic_wheelsctrl.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_6 = \
 @COND_TOOLKIT_COCOA@	corelib_hid.o corelib_utilsexc_cf.o
@@ -11174,19 +11246,35 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_1_0) \
 	corelib_regiong.o \
 	corelib_generic_icon.o \
+	corelib_actionsheetdlg.o \
+	corelib_alertsheetdlg.o \
+	corelib_barbutton.o \
 	corelib_iphone_button.o \
 	corelib_iphone_checkbox.o \
 	corelib_iphone_dialog.o \
 	corelib_iphone_evtloop.o \
 	corelib_iphone_gauge.o \
+	corelib_glcanvas.o \
+	corelib_iphone_listbox.o \
 	corelib_iphone_msgdlg.o \
+	corelib_iphone_navctrl.o \
+	corelib_navitem.o \
 	corelib_iphone_nonownedwnd.o \
+	corelib_iphone_notebook.o \
+	corelib_pagectrl.o \
 	corelib_iphone_scrolbar.o \
+	corelib_segctrl.o \
 	corelib_iphone_slider.o \
+	corelib_iphone_srchctrl.o \
 	corelib_iphone_stattext.o \
+	corelib_tablecell.o \
+	corelib_iphone_tablectrl.o \
 	corelib_iphone_textctrl.o \
 	corelib_iphone_toolbar.o \
 	corelib_iphone_utils.o \
+	corelib_viewcontroller.o \
+	corelib_iphone_webkit.o \
+	corelib_iphone_wheelsctrl.o \
 	corelib_iphone_window.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
@@ -12955,7 +13043,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_textctrl_osx.o \
 	monodll_tglbtn_osx.o \
 	monodll_toolbar_osx.o \
-	monodll_webkit.o \
+	monodll_webkit_webkit.o \
 	monodll_colordlgosx.o \
 	monodll_fontdlgosx.o \
 	monodll_osx_accel.o \
@@ -13142,7 +13230,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_12 =  \
 	monolib_textctrl_osx.o \
 	monolib_tglbtn_osx.o \
 	monolib_toolbar_osx.o \
-	monolib_webkit.o \
+	monolib_webkit_webkit.o \
 	monolib_colordlgosx.o \
 	monolib_fontdlgosx.o \
 	monolib_osx_accel.o \
@@ -13329,7 +13417,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14 =  \
 	coredll_textctrl_osx.o \
 	coredll_tglbtn_osx.o \
 	coredll_toolbar_osx.o \
-	coredll_webkit.o \
+	coredll_webkit_webkit.o \
 	coredll_colordlgosx.o \
 	coredll_fontdlgosx.o \
 	coredll_osx_accel.o \
@@ -13426,7 +13514,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0 =  \
 	corelib_textctrl_osx.o \
 	corelib_tglbtn_osx.o \
 	corelib_toolbar_osx.o \
-	corelib_webkit.o \
+	corelib_webkit_webkit.o \
 	corelib_colordlgosx.o \
 	corelib_fontdlgosx.o \
 	corelib_osx_accel.o \
@@ -14595,7 +14683,7 @@ install-wxconfig:
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/config
 	$(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(libdir)/wx/config
-	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) ../lib/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
+	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) $(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
 
 locale_install: 
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/locale
@@ -16382,6 +16470,15 @@ monodll_osx_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(MONODLL_ODEP)
 monodll_osx_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
 
+monodll_actionsheetdlg.o: $(srcdir)/src/osx/iphone/actionsheetdlg.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/actionsheetdlg.mm
+
+monodll_alertsheetdlg.o: $(srcdir)/src/osx/iphone/alertsheetdlg.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/alertsheetdlg.mm
+
+monodll_barbutton.o: $(srcdir)/src/osx/iphone/barbutton.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/barbutton.mm
+
 monodll_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/button.mm
 
@@ -16397,20 +16494,50 @@ monodll_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(MONODLL_ODEP)
 monodll_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+monodll_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
+
+monodll_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 monodll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
+
+monodll_iphone_navctrl.o: $(srcdir)/src/osx/iphone/navctrl.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/navctrl.mm
+
+monodll_navitem.o: $(srcdir)/src/osx/iphone/navitem.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/navitem.mm
 
 monodll_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
 
+monodll_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
+
+monodll_pagectrl.o: $(srcdir)/src/osx/iphone/pagectrl.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/pagectrl.mm
+
 monodll_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
+
+monodll_segctrl.o: $(srcdir)/src/osx/iphone/segctrl.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/segctrl.mm
 
 monodll_iphone_slider.o: $(srcdir)/src/osx/iphone/slider.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/slider.mm
 
+monodll_iphone_srchctrl.o: $(srcdir)/src/osx/iphone/srchctrl.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/srchctrl.mm
+
 monodll_iphone_stattext.o: $(srcdir)/src/osx/iphone/stattext.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/stattext.mm
+
+monodll_tablecell.o: $(srcdir)/src/osx/iphone/tablecell.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/tablecell.mm
+
+monodll_iphone_tablectrl.o: $(srcdir)/src/osx/iphone/tablectrl.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/tablectrl.mm
 
 monodll_iphone_textctrl.o: $(srcdir)/src/osx/iphone/textctrl.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/textctrl.mm
@@ -16420,6 +16547,15 @@ monodll_iphone_toolbar.o: $(srcdir)/src/osx/iphone/toolbar.mm $(MONODLL_ODEP)
 
 monodll_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/utils.mm
+
+monodll_viewcontroller.o: $(srcdir)/src/osx/iphone/viewcontroller.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/viewcontroller.mm
+
+monodll_iphone_webkit.o: $(srcdir)/src/osx/iphone/webkit.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/webkit.mm
+
+monodll_iphone_wheelsctrl.o: $(srcdir)/src/osx/iphone/wheelsctrl.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/wheelsctrl.mm
 
 monodll_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
@@ -19499,13 +19635,13 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_toolbar_osx.o: $(srcdir)/src/osx/toolbar_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/toolbar_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_colordlgosx.o: $(srcdir)/src/osx/carbon/colordlgosx.mm $(MONODLL_ODEP)
@@ -20186,6 +20322,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
 
+@COND_USE_GUI_1@monodll_generic_navctrl.o: $(srcdir)/src/generic/navctrl.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/navctrl.cpp
+
 @COND_USE_GUI_1@monodll_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
@@ -20225,6 +20364,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_stattextg.o: $(srcdir)/src/generic/stattextg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/stattextg.cpp
 
+@COND_USE_GUI_1@monodll_generic_tablectrl.o: $(srcdir)/src/generic/tablectrl.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tablectrl.cpp
+
 @COND_USE_GUI_1@monodll_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
 
@@ -20245,6 +20387,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
+
+@COND_USE_GUI_1@monodll_generic_wheelsctrl.o: $(srcdir)/src/generic/wheelsctrl.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/wheelsctrl.cpp
 
 @COND_USE_GUI_1@monodll_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
@@ -21680,6 +21825,15 @@ monolib_osx_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(MONOLIB_ODEP)
 monolib_osx_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
 
+monolib_actionsheetdlg.o: $(srcdir)/src/osx/iphone/actionsheetdlg.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/actionsheetdlg.mm
+
+monolib_alertsheetdlg.o: $(srcdir)/src/osx/iphone/alertsheetdlg.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/alertsheetdlg.mm
+
+monolib_barbutton.o: $(srcdir)/src/osx/iphone/barbutton.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/barbutton.mm
+
 monolib_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/button.mm
 
@@ -21695,20 +21849,50 @@ monolib_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(MONOLIB_ODEP)
 monolib_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+monolib_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
+
+monolib_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 monolib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
+
+monolib_iphone_navctrl.o: $(srcdir)/src/osx/iphone/navctrl.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/navctrl.mm
+
+monolib_navitem.o: $(srcdir)/src/osx/iphone/navitem.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/navitem.mm
 
 monolib_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
 
+monolib_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
+
+monolib_pagectrl.o: $(srcdir)/src/osx/iphone/pagectrl.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/pagectrl.mm
+
 monolib_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
+
+monolib_segctrl.o: $(srcdir)/src/osx/iphone/segctrl.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/segctrl.mm
 
 monolib_iphone_slider.o: $(srcdir)/src/osx/iphone/slider.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/slider.mm
 
+monolib_iphone_srchctrl.o: $(srcdir)/src/osx/iphone/srchctrl.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/srchctrl.mm
+
 monolib_iphone_stattext.o: $(srcdir)/src/osx/iphone/stattext.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/stattext.mm
+
+monolib_tablecell.o: $(srcdir)/src/osx/iphone/tablecell.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/tablecell.mm
+
+monolib_iphone_tablectrl.o: $(srcdir)/src/osx/iphone/tablectrl.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/tablectrl.mm
 
 monolib_iphone_textctrl.o: $(srcdir)/src/osx/iphone/textctrl.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/textctrl.mm
@@ -21718,6 +21902,15 @@ monolib_iphone_toolbar.o: $(srcdir)/src/osx/iphone/toolbar.mm $(MONOLIB_ODEP)
 
 monolib_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/utils.mm
+
+monolib_viewcontroller.o: $(srcdir)/src/osx/iphone/viewcontroller.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/viewcontroller.mm
+
+monolib_iphone_webkit.o: $(srcdir)/src/osx/iphone/webkit.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/webkit.mm
+
+monolib_iphone_wheelsctrl.o: $(srcdir)/src/osx/iphone/wheelsctrl.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/wheelsctrl.mm
 
 monolib_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
@@ -24797,13 +24990,13 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_toolbar_osx.o: $(srcdir)/src/osx/toolbar_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/toolbar_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_colordlgosx.o: $(srcdir)/src/osx/carbon/colordlgosx.mm $(MONOLIB_ODEP)
@@ -25484,6 +25677,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
 
+@COND_USE_GUI_1@monolib_generic_navctrl.o: $(srcdir)/src/generic/navctrl.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/navctrl.cpp
+
 @COND_USE_GUI_1@monolib_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
@@ -25523,6 +25719,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_stattextg.o: $(srcdir)/src/generic/stattextg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/stattextg.cpp
 
+@COND_USE_GUI_1@monolib_generic_tablectrl.o: $(srcdir)/src/generic/tablectrl.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tablectrl.cpp
+
 @COND_USE_GUI_1@monolib_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
 
@@ -25543,6 +25742,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
+
+@COND_USE_GUI_1@monolib_generic_wheelsctrl.o: $(srcdir)/src/generic/wheelsctrl.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/wheelsctrl.cpp
 
 @COND_USE_GUI_1@monolib_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
@@ -27698,6 +27900,15 @@ coredll_osx_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(COREDLL_ODEP)
 coredll_osx_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
 
+coredll_actionsheetdlg.o: $(srcdir)/src/osx/iphone/actionsheetdlg.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/actionsheetdlg.mm
+
+coredll_alertsheetdlg.o: $(srcdir)/src/osx/iphone/alertsheetdlg.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/alertsheetdlg.mm
+
+coredll_barbutton.o: $(srcdir)/src/osx/iphone/barbutton.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/barbutton.mm
+
 coredll_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/button.mm
 
@@ -27713,20 +27924,50 @@ coredll_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(COREDLL_ODEP)
 coredll_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+coredll_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
+
+coredll_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 coredll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
+
+coredll_iphone_navctrl.o: $(srcdir)/src/osx/iphone/navctrl.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/navctrl.mm
+
+coredll_navitem.o: $(srcdir)/src/osx/iphone/navitem.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/navitem.mm
 
 coredll_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
 
+coredll_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
+
+coredll_pagectrl.o: $(srcdir)/src/osx/iphone/pagectrl.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/pagectrl.mm
+
 coredll_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
+
+coredll_segctrl.o: $(srcdir)/src/osx/iphone/segctrl.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/segctrl.mm
 
 coredll_iphone_slider.o: $(srcdir)/src/osx/iphone/slider.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/slider.mm
 
+coredll_iphone_srchctrl.o: $(srcdir)/src/osx/iphone/srchctrl.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/srchctrl.mm
+
 coredll_iphone_stattext.o: $(srcdir)/src/osx/iphone/stattext.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/stattext.mm
+
+coredll_tablecell.o: $(srcdir)/src/osx/iphone/tablecell.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/tablecell.mm
+
+coredll_iphone_tablectrl.o: $(srcdir)/src/osx/iphone/tablectrl.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/tablectrl.mm
 
 coredll_iphone_textctrl.o: $(srcdir)/src/osx/iphone/textctrl.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/textctrl.mm
@@ -27736,6 +27977,15 @@ coredll_iphone_toolbar.o: $(srcdir)/src/osx/iphone/toolbar.mm $(COREDLL_ODEP)
 
 coredll_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/utils.mm
+
+coredll_viewcontroller.o: $(srcdir)/src/osx/iphone/viewcontroller.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/viewcontroller.mm
+
+coredll_iphone_webkit.o: $(srcdir)/src/osx/iphone/webkit.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/webkit.mm
+
+coredll_iphone_wheelsctrl.o: $(srcdir)/src/osx/iphone/wheelsctrl.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/wheelsctrl.mm
 
 coredll_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
@@ -30275,13 +30525,13 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_toolbar_osx.o: $(srcdir)/src/osx/toolbar_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/toolbar_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_colordlgosx.o: $(srcdir)/src/osx/carbon/colordlgosx.mm $(COREDLL_ODEP)
@@ -30962,6 +31212,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
 
+@COND_USE_GUI_1@coredll_generic_navctrl.o: $(srcdir)/src/generic/navctrl.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/navctrl.cpp
+
 @COND_USE_GUI_1@coredll_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
@@ -31001,6 +31254,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_stattextg.o: $(srcdir)/src/generic/stattextg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/stattextg.cpp
 
+@COND_USE_GUI_1@coredll_generic_tablectrl.o: $(srcdir)/src/generic/tablectrl.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tablectrl.cpp
+
 @COND_USE_GUI_1@coredll_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
 
@@ -31021,6 +31277,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
+
+@COND_USE_GUI_1@coredll_generic_wheelsctrl.o: $(srcdir)/src/generic/wheelsctrl.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/wheelsctrl.cpp
 
 corelib_event.o: $(srcdir)/src/common/event.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
@@ -31679,6 +31938,15 @@ corelib_osx_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(CORELIB_ODEP)
 corelib_osx_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
 
+corelib_actionsheetdlg.o: $(srcdir)/src/osx/iphone/actionsheetdlg.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/actionsheetdlg.mm
+
+corelib_alertsheetdlg.o: $(srcdir)/src/osx/iphone/alertsheetdlg.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/alertsheetdlg.mm
+
+corelib_barbutton.o: $(srcdir)/src/osx/iphone/barbutton.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/barbutton.mm
+
 corelib_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/button.mm
 
@@ -31694,20 +31962,50 @@ corelib_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(CORELIB_ODEP)
 corelib_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+corelib_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
+
+corelib_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 corelib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
+
+corelib_iphone_navctrl.o: $(srcdir)/src/osx/iphone/navctrl.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/navctrl.mm
+
+corelib_navitem.o: $(srcdir)/src/osx/iphone/navitem.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/navitem.mm
 
 corelib_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
 
+corelib_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
+
+corelib_pagectrl.o: $(srcdir)/src/osx/iphone/pagectrl.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/pagectrl.mm
+
 corelib_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
+
+corelib_segctrl.o: $(srcdir)/src/osx/iphone/segctrl.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/segctrl.mm
 
 corelib_iphone_slider.o: $(srcdir)/src/osx/iphone/slider.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/slider.mm
 
+corelib_iphone_srchctrl.o: $(srcdir)/src/osx/iphone/srchctrl.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/srchctrl.mm
+
 corelib_iphone_stattext.o: $(srcdir)/src/osx/iphone/stattext.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/stattext.mm
+
+corelib_tablecell.o: $(srcdir)/src/osx/iphone/tablecell.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/tablecell.mm
+
+corelib_iphone_tablectrl.o: $(srcdir)/src/osx/iphone/tablectrl.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/tablectrl.mm
 
 corelib_iphone_textctrl.o: $(srcdir)/src/osx/iphone/textctrl.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/textctrl.mm
@@ -31717,6 +32015,15 @@ corelib_iphone_toolbar.o: $(srcdir)/src/osx/iphone/toolbar.mm $(CORELIB_ODEP)
 
 corelib_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/utils.mm
+
+corelib_viewcontroller.o: $(srcdir)/src/osx/iphone/viewcontroller.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/viewcontroller.mm
+
+corelib_iphone_webkit.o: $(srcdir)/src/osx/iphone/webkit.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/webkit.mm
+
+corelib_iphone_wheelsctrl.o: $(srcdir)/src/osx/iphone/wheelsctrl.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/wheelsctrl.mm
 
 corelib_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
@@ -34256,13 +34563,13 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_toolbar_osx.o: $(srcdir)/src/osx/toolbar_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/toolbar_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_webkit_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_colordlgosx.o: $(srcdir)/src/osx/carbon/colordlgosx.mm $(CORELIB_ODEP)
@@ -34943,6 +35250,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_msgdlgg.o: $(srcdir)/src/generic/msgdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/msgdlgg.cpp
 
+@COND_USE_GUI_1@corelib_generic_navctrl.o: $(srcdir)/src/generic/navctrl.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/navctrl.cpp
+
 @COND_USE_GUI_1@corelib_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
@@ -34982,6 +35292,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_stattextg.o: $(srcdir)/src/generic/stattextg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/stattextg.cpp
 
+@COND_USE_GUI_1@corelib_generic_tablectrl.o: $(srcdir)/src/generic/tablectrl.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tablectrl.cpp
+
 @COND_USE_GUI_1@corelib_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
 
@@ -35002,6 +35315,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
+
+@COND_USE_GUI_1@corelib_generic_wheelsctrl.o: $(srcdir)/src/generic/wheelsctrl.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/wheelsctrl.cpp
 
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_63) $(__DEBUG_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_ADV

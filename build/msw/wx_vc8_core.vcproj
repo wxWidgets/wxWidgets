@@ -3805,6 +3805,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\navctrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\numdlgg.cpp"
 				>
 			</File>
@@ -3913,6 +3917,10 @@
 				/>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\tablectrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\textdlgg.cpp"
 				>
 			</File>
@@ -3938,6 +3946,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\vscroll.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\wheelsctrl.cpp"
 				>
 			</File>
 		</Filter>

@@ -1939,6 +1939,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_markuptext.o \
 	$(OBJS)\monodll_msgdlgg.o \
+	$(OBJS)\monodll_navctrl.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
@@ -1952,13 +1953,15 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_srchctlg.o \
 	$(OBJS)\monodll_statbmpg.o \
 	$(OBJS)\monodll_stattextg.o \
+	$(OBJS)\monodll_tablectrl.o \
 	$(OBJS)\monodll_textdlgg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_toolbkg.o \
 	$(OBJS)\monodll_treectlg.o \
 	$(OBJS)\monodll_treebkg.o \
 	$(OBJS)\monodll_vlbox.o \
-	$(OBJS)\monodll_vscroll.o
+	$(OBJS)\monodll_vscroll.o \
+	$(OBJS)\monodll_wheelsctrl.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -2207,6 +2210,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_markuptext.o \
 	$(OBJS)\monodll_msgdlgg.o \
+	$(OBJS)\monodll_navctrl.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
@@ -2220,13 +2224,15 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_srchctlg.o \
 	$(OBJS)\monodll_statbmpg.o \
 	$(OBJS)\monodll_stattextg.o \
+	$(OBJS)\monodll_tablectrl.o \
 	$(OBJS)\monodll_textdlgg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_toolbkg.o \
 	$(OBJS)\monodll_treectlg.o \
 	$(OBJS)\monodll_treebkg.o \
 	$(OBJS)\monodll_vlbox.o \
-	$(OBJS)\monodll_vscroll.o
+	$(OBJS)\monodll_vscroll.o \
+	$(OBJS)\monodll_wheelsctrl.o
 endif
 endif
 ifeq ($(WXUNIV),0)
@@ -2709,6 +2715,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_markuptext.o \
 	$(OBJS)\monolib_msgdlgg.o \
+	$(OBJS)\monolib_navctrl.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
@@ -2722,13 +2729,15 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_srchctlg.o \
 	$(OBJS)\monolib_statbmpg.o \
 	$(OBJS)\monolib_stattextg.o \
+	$(OBJS)\monolib_tablectrl.o \
 	$(OBJS)\monolib_textdlgg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_toolbkg.o \
 	$(OBJS)\monolib_treectlg.o \
 	$(OBJS)\monolib_treebkg.o \
 	$(OBJS)\monolib_vlbox.o \
-	$(OBJS)\monolib_vscroll.o
+	$(OBJS)\monolib_vscroll.o \
+	$(OBJS)\monolib_wheelsctrl.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -2977,6 +2986,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_markuptext.o \
 	$(OBJS)\monolib_msgdlgg.o \
+	$(OBJS)\monolib_navctrl.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
@@ -2990,13 +3000,15 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_srchctlg.o \
 	$(OBJS)\monolib_statbmpg.o \
 	$(OBJS)\monolib_stattextg.o \
+	$(OBJS)\monolib_tablectrl.o \
 	$(OBJS)\monolib_textdlgg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_toolbkg.o \
 	$(OBJS)\monolib_treectlg.o \
 	$(OBJS)\monolib_treebkg.o \
 	$(OBJS)\monolib_vlbox.o \
-	$(OBJS)\monolib_vscroll.o
+	$(OBJS)\monolib_vscroll.o \
+	$(OBJS)\monolib_wheelsctrl.o
 endif
 endif
 ifeq ($(WXUNIV),0)
@@ -3377,6 +3389,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_markuptext.o \
 	$(OBJS)\coredll_msgdlgg.o \
+	$(OBJS)\coredll_navctrl.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
@@ -3390,13 +3403,15 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_srchctlg.o \
 	$(OBJS)\coredll_statbmpg.o \
 	$(OBJS)\coredll_stattextg.o \
+	$(OBJS)\coredll_tablectrl.o \
 	$(OBJS)\coredll_textdlgg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_toolbkg.o \
 	$(OBJS)\coredll_treectlg.o \
 	$(OBJS)\coredll_treebkg.o \
 	$(OBJS)\coredll_vlbox.o \
-	$(OBJS)\coredll_vscroll.o
+	$(OBJS)\coredll_vscroll.o \
+	$(OBJS)\coredll_wheelsctrl.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -3645,6 +3660,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_markuptext.o \
 	$(OBJS)\coredll_msgdlgg.o \
+	$(OBJS)\coredll_navctrl.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
@@ -3658,13 +3674,15 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_srchctlg.o \
 	$(OBJS)\coredll_statbmpg.o \
 	$(OBJS)\coredll_stattextg.o \
+	$(OBJS)\coredll_tablectrl.o \
 	$(OBJS)\coredll_textdlgg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_toolbkg.o \
 	$(OBJS)\coredll_treectlg.o \
 	$(OBJS)\coredll_treebkg.o \
 	$(OBJS)\coredll_vlbox.o \
-	$(OBJS)\coredll_vscroll.o
+	$(OBJS)\coredll_vscroll.o \
+	$(OBJS)\coredll_wheelsctrl.o
 endif
 endif
 ifeq ($(MONOLITHIC),0)
@@ -3926,6 +3944,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_markuptext.o \
 	$(OBJS)\corelib_msgdlgg.o \
+	$(OBJS)\corelib_navctrl.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
@@ -3939,13 +3958,15 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_srchctlg.o \
 	$(OBJS)\corelib_statbmpg.o \
 	$(OBJS)\corelib_stattextg.o \
+	$(OBJS)\corelib_tablectrl.o \
 	$(OBJS)\corelib_textdlgg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_toolbkg.o \
 	$(OBJS)\corelib_treectlg.o \
 	$(OBJS)\corelib_treebkg.o \
 	$(OBJS)\corelib_vlbox.o \
-	$(OBJS)\corelib_vscroll.o
+	$(OBJS)\corelib_vscroll.o \
+	$(OBJS)\corelib_wheelsctrl.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -4194,6 +4215,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_markuptext.o \
 	$(OBJS)\corelib_msgdlgg.o \
+	$(OBJS)\corelib_navctrl.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
@@ -4207,13 +4229,15 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_srchctlg.o \
 	$(OBJS)\corelib_statbmpg.o \
 	$(OBJS)\corelib_stattextg.o \
+	$(OBJS)\corelib_tablectrl.o \
 	$(OBJS)\corelib_textdlgg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_toolbkg.o \
 	$(OBJS)\corelib_treectlg.o \
 	$(OBJS)\corelib_treebkg.o \
 	$(OBJS)\corelib_vlbox.o \
-	$(OBJS)\corelib_vscroll.o
+	$(OBJS)\corelib_vscroll.o \
+	$(OBJS)\corelib_wheelsctrl.o
 endif
 endif
 ifeq ($(SHARED),1)
@@ -8121,6 +8145,11 @@ $(OBJS)\monodll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_navctrl.o: ../../src/generic/navctrl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_numdlgg.o: ../../src/generic/numdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8186,6 +8215,11 @@ $(OBJS)\monodll_stattextg.o: ../../src/generic/stattextg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_tablectrl.o: ../../src/generic/tablectrl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_textdlgg.o: ../../src/generic/textdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8217,6 +8251,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_vscroll.o: ../../src/generic/vscroll.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_wheelsctrl.o: ../../src/generic/wheelsctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10471,6 +10510,11 @@ $(OBJS)\monolib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_navctrl.o: ../../src/generic/navctrl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_numdlgg.o: ../../src/generic/numdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10536,6 +10580,11 @@ $(OBJS)\monolib_stattextg.o: ../../src/generic/stattextg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_tablectrl.o: ../../src/generic/tablectrl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_textdlgg.o: ../../src/generic/textdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10567,6 +10616,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_vscroll.o: ../../src/generic/vscroll.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_wheelsctrl.o: ../../src/generic/wheelsctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12815,6 +12869,11 @@ $(OBJS)\coredll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_navctrl.o: ../../src/generic/navctrl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_numdlgg.o: ../../src/generic/numdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12880,6 +12939,11 @@ $(OBJS)\coredll_stattextg.o: ../../src/generic/stattextg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_tablectrl.o: ../../src/generic/tablectrl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_textdlgg.o: ../../src/generic/textdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12911,6 +12975,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_vscroll.o: ../../src/generic/vscroll.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_wheelsctrl.o: ../../src/generic/wheelsctrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14220,6 +14289,11 @@ $(OBJS)\corelib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_navctrl.o: ../../src/generic/navctrl.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_numdlgg.o: ../../src/generic/numdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -14285,6 +14359,11 @@ $(OBJS)\corelib_stattextg.o: ../../src/generic/stattextg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_tablectrl.o: ../../src/generic/tablectrl.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_textdlgg.o: ../../src/generic/textdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -14316,6 +14395,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_vscroll.o: ../../src/generic/vscroll.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_wheelsctrl.o: ../../src/generic/wheelsctrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
