@@ -585,7 +585,7 @@ wxMacWindowServiceEventHandler(EventHandlerCallRef WXUNUSED(handler),
     return result ;
 }
 
-pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+WXDLLEXPORT pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
     wxWindowMac* focus = (wxWindowMac*) data ;
