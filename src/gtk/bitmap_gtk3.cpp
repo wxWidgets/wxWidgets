@@ -458,7 +458,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
     if (alpha != NULL || image.HasMask())
     {
         // create mask as CAIRO_FORMAT_A1 image surface
-
+        // You need to be very careful about the stride issue of a image.
         int stride = cairo_format_stride_for_width( CAIRO_FORMAT_A1, w );
         unsigned char *data = (unsigned char *)malloc( stride * h );
         memset(data, 0x00, stride*h);
@@ -477,12 +477,16 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
                         int move = x % 8;
                         data[byte_index] |= (1 << move);
                     }
-                    if ((x+1)%8 == 0)
+                    // When reach the byte boundary, increase the byte index
+                    if ((x+1)%8 == 0) 
                     {
                         // data[byte_index] ^= 0xff;
                         byte_index++;
                     }
                 }
+                // If the width of the image is not a multiple of a byte length(8bits)
+                // we need to increase the byte index when move to the next line of the
+                // image.
                 if (w%8 != 0) 
                 {
                     byte_index++;
