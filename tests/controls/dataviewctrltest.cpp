@@ -115,7 +115,7 @@ void DataViewCtrlTestCase::DeleteSelected()
     m_dvc->GetSelections(sel);
 
     // m_child1 and its children should be removed from the selection now
-    CPPUNIT_ASSERT( sel.size() == 1 );
+    CPPUNIT_ASSERT_EQUAL( 1, sel.size() );
     CPPUNIT_ASSERT( sel[0] == m_child2 );
 }
 
@@ -132,7 +132,7 @@ void DataViewCtrlTestCase::DeleteNotSelected()
     m_dvc->GetSelections(sel);
 
     // m_child1 and its children should be removed from the selection now
-    CPPUNIT_ASSERT( sel.size() == 2 );
+    CPPUNIT_ASSERT_EQUAL( 2, sel.size() );
     CPPUNIT_ASSERT( sel[0] == m_child1 );
     CPPUNIT_ASSERT( sel[1] == m_grandchild );
 }
