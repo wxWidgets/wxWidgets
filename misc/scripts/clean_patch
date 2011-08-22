@@ -1,2 +1,2 @@
 #!/bin/sh
-filterdiff -x '*/*.vcproj' -x '*/*.dsp' -x configure -x '*/makefile.*' -x '*Makefile.in' -x setup.h.in -x include/wx/msw/wince/setup.h -x '*/setup0.h' "$@"
+filterdiff -x '*/*.vcproj' -x '*/*.dsp' -x autoconf_inc.m4 -x configure -x '*/makefile.*' -x '*Makefile.in' -x setup.h.in -x include/wx/msw/wince/setup.h -x '*/setup0.h' "$@"
