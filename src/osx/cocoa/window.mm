@@ -298,9 +298,9 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     int eventType = [nsEvent type];
 
     wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
-    wxevent.m_controlDown = modifiers & NSControlKeyMask;
+    wxevent.m_rawControlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
-    wxevent.m_metaDown = modifiers & NSCommandKeyMask;
+    wxevent.m_controlDown = modifiers & NSCommandKeyMask;
 
     wxevent.m_rawCode = [nsEvent keyCode];
     wxevent.m_rawFlags = modifiers;
@@ -427,9 +427,9 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     wxevent.m_x = locationInViewWX.x;
     wxevent.m_y = locationInViewWX.y;
     wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
-    wxevent.m_controlDown = modifiers & NSControlKeyMask;
+    wxevent.m_rawControlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
-    wxevent.m_metaDown = modifiers & NSCommandKeyMask;
+    wxevent.m_controlDown = modifiers & NSCommandKeyMask;
     wxevent.SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
 
     UInt32 mouseChord = 0;
