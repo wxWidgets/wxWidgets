@@ -580,7 +580,8 @@ private:
 
     int RecalculateCount();
 
-    wxDataViewEvent SendExpanderEvent( wxEventType type, const wxDataViewItem & item );
+    // Return false only if the event was vetoed by its handler.
+    bool SendExpanderEvent(wxEventType type, const wxDataViewItem& item);
 
     wxDataViewTreeNode * FindNode( const wxDataViewItem & item );
 
@@ -2888,8 +2889,9 @@ wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) co
     return job.GetResult();
 }
 
-wxDataViewEvent wxDataViewMainWindow::SendExpanderEvent( wxEventType type,
-                                                         const wxDataViewItem & item )
+bool
+wxDataViewMainWindow::SendExpanderEvent(wxEventType type,
+                                        const wxDataViewItem& item)
 {
     wxWindow *parent = GetParent();
     wxDataViewEvent le(type, parent->GetId());
@@ -2898,8 +2900,7 @@ wxDataViewEvent wxDataViewMainWindow::SendExpanderEvent( wxEventType type,
     le.SetModel(GetOwner()->GetModel());
     le.SetItem( item );
 
-    parent->GetEventHandler()->ProcessEvent(le);
-    return le;
+    return !parent->ProcessWindowEvent(le) || le.IsAllowed();
 }
 
 bool wxDataViewMainWindow::IsExpanded( unsigned int row ) const
@@ -2955,12 +2956,11 @@ void wxDataViewMainWindow::Expand( unsigned int row )
 
             if (!node->IsOpen())
             {
-                wxDataViewEvent e =
-                    SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem());
-
-                // Check if the user prevent expanding
-                if( !e.IsAllowed() )
+                if ( !SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem()) )
+                {
+                    // Vetoed by the event handler.
                     return;
+                }
 
                 node->ToggleOpen();
 
@@ -3011,10 +3011,11 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
 
         if (node->IsOpen())
         {
-            wxDataViewEvent e =
-                SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,node->GetItem());
-            if( !e.IsAllowed() )
+            if ( !SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,node->GetItem()) )
+            {
+                // Vetoed by the event handler.
                 return;
+            }
 
             // Find out if there are selected items below the current node.
             bool selectCollapsingRow = false;
