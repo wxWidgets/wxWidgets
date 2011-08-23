@@ -188,7 +188,7 @@ protected:
 
     // return true if the tab has an associated image
     bool HasImage(int page) const
-        { return m_imageList && m_images[page] != -1; }
+        { return HasImageList() && m_images[page] != -1; }
 
     // get the part of the notebook reserved for the pages (slightly larger
     // than GetPageRect() as we draw a border and leave marginin between)
