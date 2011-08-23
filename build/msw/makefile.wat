@@ -138,6 +138,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_debugrpt.obj &
 	$(OBJS)\monodll_dbgrptg.obj &
 	$(OBJS)\monodll_xh_animatctrl.obj &
+	$(OBJS)\monodll_xh_bannerwindow.obj &
 	$(OBJS)\monodll_xh_bmp.obj &
 	$(OBJS)\monodll_xh_bmpcbox.obj &
 	$(OBJS)\monodll_xh_bmpbt.obj &
@@ -792,6 +793,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_hyperlnkcmn.obj &
 	$(OBJS)\monodll_odcombocmn.obj &
 	$(OBJS)\monodll_aboutdlgg.obj &
+	$(OBJS)\monodll_bannerwindow.obj &
 	$(OBJS)\monodll_bmpcboxg.obj &
 	$(OBJS)\monodll_calctrlg.obj &
 	$(OBJS)\monodll_commandlinkbuttong.obj &
@@ -836,6 +838,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_hyperlnkcmn.obj &
 	$(OBJS)\monodll_odcombocmn.obj &
 	$(OBJS)\monodll_aboutdlgg.obj &
+	$(OBJS)\monodll_bannerwindow.obj &
 	$(OBJS)\monodll_bmpcboxg.obj &
 	$(OBJS)\monodll_calctrlg.obj &
 	$(OBJS)\monodll_commandlinkbuttong.obj &
@@ -913,6 +916,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_debugrpt.obj &
 	$(OBJS)\monolib_dbgrptg.obj &
 	$(OBJS)\monolib_xh_animatctrl.obj &
+	$(OBJS)\monolib_xh_bannerwindow.obj &
 	$(OBJS)\monolib_xh_bmp.obj &
 	$(OBJS)\monolib_xh_bmpcbox.obj &
 	$(OBJS)\monolib_xh_bmpbt.obj &
@@ -1567,6 +1571,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_hyperlnkcmn.obj &
 	$(OBJS)\monolib_odcombocmn.obj &
 	$(OBJS)\monolib_aboutdlgg.obj &
+	$(OBJS)\monolib_bannerwindow.obj &
 	$(OBJS)\monolib_bmpcboxg.obj &
 	$(OBJS)\monolib_calctrlg.obj &
 	$(OBJS)\monolib_commandlinkbuttong.obj &
@@ -1611,6 +1616,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_hyperlnkcmn.obj &
 	$(OBJS)\monolib_odcombocmn.obj &
 	$(OBJS)\monolib_aboutdlgg.obj &
+	$(OBJS)\monolib_bannerwindow.obj &
 	$(OBJS)\monolib_bmpcboxg.obj &
 	$(OBJS)\monolib_calctrlg.obj &
 	$(OBJS)\monolib_commandlinkbuttong.obj &
@@ -2815,6 +2821,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_hyperlnkcmn.obj &
 	$(OBJS)\advdll_odcombocmn.obj &
 	$(OBJS)\advdll_aboutdlgg.obj &
+	$(OBJS)\advdll_bannerwindow.obj &
 	$(OBJS)\advdll_bmpcboxg.obj &
 	$(OBJS)\advdll_calctrlg.obj &
 	$(OBJS)\advdll_commandlinkbuttong.obj &
@@ -2859,6 +2866,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_hyperlnkcmn.obj &
 	$(OBJS)\advdll_odcombocmn.obj &
 	$(OBJS)\advdll_aboutdlgg.obj &
+	$(OBJS)\advdll_bannerwindow.obj &
 	$(OBJS)\advdll_bmpcboxg.obj &
 	$(OBJS)\advdll_calctrlg.obj &
 	$(OBJS)\advdll_commandlinkbuttong.obj &
@@ -2907,6 +2915,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_hyperlnkcmn.obj &
 	$(OBJS)\advlib_odcombocmn.obj &
 	$(OBJS)\advlib_aboutdlgg.obj &
+	$(OBJS)\advlib_bannerwindow.obj &
 	$(OBJS)\advlib_bmpcboxg.obj &
 	$(OBJS)\advlib_calctrlg.obj &
 	$(OBJS)\advlib_commandlinkbuttong.obj &
@@ -2951,6 +2960,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_hyperlnkcmn.obj &
 	$(OBJS)\advlib_odcombocmn.obj &
 	$(OBJS)\advlib_aboutdlgg.obj &
+	$(OBJS)\advlib_bannerwindow.obj &
 	$(OBJS)\advlib_bmpcboxg.obj &
 	$(OBJS)\advlib_calctrlg.obj &
 	$(OBJS)\advlib_commandlinkbuttong.obj &
@@ -4560,6 +4570,7 @@ XRCDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_dummy.obj &
 	$(OBJS)\xrcdll_xh_animatctrl.obj &
+	$(OBJS)\xrcdll_xh_bannerwindow.obj &
 	$(OBJS)\xrcdll_xh_bmp.obj &
 	$(OBJS)\xrcdll_xh_bmpcbox.obj &
 	$(OBJS)\xrcdll_xh_bmpbt.obj &
@@ -4634,6 +4645,7 @@ XRCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_dummy.obj &
 	$(OBJS)\xrclib_xh_animatctrl.obj &
+	$(OBJS)\xrclib_xh_bannerwindow.obj &
 	$(OBJS)\xrclib_xh_bmp.obj &
 	$(OBJS)\xrclib_xh_bmpcbox.obj &
 	$(OBJS)\xrclib_xh_bmpbt.obj &
@@ -7107,6 +7119,9 @@ $(OBJS)\monodll_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
 $(OBJS)\monodll_xh_animatctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_animatctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_bannerwindow.obj :  .AUTODEPEND ..\..\src\xrc\xh_bannerwindow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8526,6 +8541,11 @@ $(OBJS)\monodll_aboutdlgg.obj :  .AUTODEPEND ..\..\src\generic\aboutdlgg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_bannerwindow.obj :  .AUTODEPEND ..\..\src\generic\bannerwindow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -9456,6 +9476,9 @@ $(OBJS)\monolib_dbgrptg.obj :  .AUTODEPEND ..\..\src\generic\dbgrptg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_animatctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_animatctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_bannerwindow.obj :  .AUTODEPEND ..\..\src\xrc\xh_bannerwindow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
@@ -10873,6 +10896,11 @@ $(OBJS)\monolib_odcombocmn.obj :  .AUTODEPEND ..\..\src\common\odcombocmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_aboutdlgg.obj :  .AUTODEPEND ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_bannerwindow.obj :  .AUTODEPEND ..\..\src\generic\bannerwindow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -14634,6 +14662,9 @@ $(OBJS)\advdll_odcombocmn.obj :  .AUTODEPEND ..\..\src\common\odcombocmn.cpp
 $(OBJS)\advdll_aboutdlgg.obj :  .AUTODEPEND ..\..\src\generic\aboutdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_bannerwindow.obj :  .AUTODEPEND ..\..\src\generic\bannerwindow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -14758,6 +14789,9 @@ $(OBJS)\advlib_odcombocmn.obj :  .AUTODEPEND ..\..\src\common\odcombocmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_aboutdlgg.obj :  .AUTODEPEND ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_bannerwindow.obj :  .AUTODEPEND ..\..\src\generic\bannerwindow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_bmpcboxg.obj :  .AUTODEPEND ..\..\src\generic\bmpcboxg.cpp
@@ -15090,6 +15124,9 @@ $(OBJS)\xrcdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 $(OBJS)\xrcdll_xh_animatctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_animatctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_bannerwindow.obj :  .AUTODEPEND ..\..\src\xrc\xh_bannerwindow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -15280,6 +15317,9 @@ $(OBJS)\xrclib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_animatctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_animatctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_bannerwindow.obj :  .AUTODEPEND ..\..\src\xrc\xh_bannerwindow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_bmp.obj :  .AUTODEPEND ..\..\src\xrc\xh_bmp.cpp

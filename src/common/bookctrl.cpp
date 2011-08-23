@@ -55,8 +55,6 @@ void wxBookCtrlBase::Init()
 {
     m_selection = wxNOT_FOUND;
     m_bookctrl = NULL;
-    m_imageList = NULL;
-    m_ownsImageList = false;
     m_fitToCurrentPage = false;
 
 #if defined(__WXWINCE__)
@@ -87,39 +85,6 @@ wxBookCtrlBase::Create(wxWindow *parent,
                         wxDefaultValidator,
                         name
                      );
-}
-
-wxBookCtrlBase::~wxBookCtrlBase()
-{
-    if ( m_ownsImageList )
-    {
-        // may be NULL, ok
-        delete m_imageList;
-    }
-}
-
-// ----------------------------------------------------------------------------
-// image list
-// ----------------------------------------------------------------------------
-
-void wxBookCtrlBase::SetImageList(wxImageList *imageList)
-{
-    if ( m_ownsImageList )
-    {
-        // may be NULL, ok
-        delete m_imageList;
-
-        m_ownsImageList = false;
-    }
-
-    m_imageList = imageList;
-}
-
-void wxBookCtrlBase::AssignImageList(wxImageList* imageList)
-{
-    SetImageList(imageList);
-
-    m_ownsImageList = true;
 }
 
 // ----------------------------------------------------------------------------

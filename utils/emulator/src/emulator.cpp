@@ -534,7 +534,7 @@ wxBitmapType wxDetermineImageType(const wxString& filename)
     if (ext == wxT("pcx"))
         return wxBITMAP_TYPE_PCX;
     if (ext == wxT("tif") || ext == wxT("tiff"))
-        return wxBITMAP_TYPE_TIF;
+        return wxBITMAP_TYPE_TIFF;
 
     return wxBITMAP_TYPE_INVALID;
 }

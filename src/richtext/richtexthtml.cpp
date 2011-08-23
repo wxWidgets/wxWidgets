@@ -588,7 +588,7 @@ const wxChar* wxRichTextHTMLHandler::GetMimeType(int imageType)
     {
     case wxBITMAP_TYPE_BMP:
         return wxT("image/bmp");
-    case wxBITMAP_TYPE_TIF:
+    case wxBITMAP_TYPE_TIFF:
         return wxT("image/tiff");
     case wxBITMAP_TYPE_GIF:
         return wxT("image/gif");

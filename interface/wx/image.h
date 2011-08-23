@@ -522,7 +522,7 @@ public:
             @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
             @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
             @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-            @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+            @li wxBITMAP_TYPE_TIFF: Load a TIFF bitmap file.
             @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
             @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
             @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
@@ -1299,7 +1299,7 @@ public:
             @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
             @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
             @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-            @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+            @li wxBITMAP_TYPE_TIFF: Load a TIFF bitmap file.
             @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
             @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
             @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
@@ -1781,7 +1781,7 @@ public:
         @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
         @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
         @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-        @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+        @li wxBITMAP_TYPE_TIFF: Load a TIFF bitmap file.
         @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
         @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
         @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).

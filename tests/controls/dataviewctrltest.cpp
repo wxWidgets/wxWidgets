@@ -40,10 +40,19 @@ private:
     CPPUNIT_TEST_SUITE( DataViewCtrlTestCase );
         CPPUNIT_TEST( DeleteSelected );
         CPPUNIT_TEST( DeleteNotSelected );
+        CPPUNIT_TEST( GetSelectionForMulti );
+        CPPUNIT_TEST( GetSelectionForSingle );
     CPPUNIT_TEST_SUITE_END();
+
+    // Create wxDataViewTreeCtrl with the given style.
+    void Create(long style);
 
     void DeleteSelected();
     void DeleteNotSelected();
+    void GetSelectionForMulti();
+    void GetSelectionForSingle();
+
+    void TestSelectionFor0and1();
 
     // the dataview control itself
     wxDataViewTreeCtrl *m_dvc;
@@ -67,13 +76,13 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DataViewCtrlTestCase, "DataViewCtrlTestCa
 // test initialization
 // ----------------------------------------------------------------------------
 
-void DataViewCtrlTestCase::setUp()
+void DataViewCtrlTestCase::Create(long style)
 {
     m_dvc = new wxDataViewTreeCtrl(wxTheApp->GetTopWindow(),
                                    wxID_ANY,
                                    wxDefaultPosition,
                                    wxSize(400, 200),
-                                   wxDV_MULTIPLE);
+                                   style);
 
     m_root = m_dvc->AppendContainer(wxDataViewItem(), "The root");
       m_child1 = m_dvc->AppendContainer(m_root, "child1");
@@ -84,6 +93,11 @@ void DataViewCtrlTestCase::setUp()
     m_dvc->ExpandAncestors(m_root);
     m_dvc->Refresh();
     m_dvc->Update();
+}
+
+void DataViewCtrlTestCase::setUp()
+{
+    Create(wxDV_MULTIPLE);
 }
 
 void DataViewCtrlTestCase::tearDown()
@@ -115,7 +129,7 @@ void DataViewCtrlTestCase::DeleteSelected()
     m_dvc->GetSelections(sel);
 
     // m_child1 and its children should be removed from the selection now
-    CPPUNIT_ASSERT( sel.size() == 1 );
+    CPPUNIT_ASSERT_EQUAL( 1, sel.size() );
     CPPUNIT_ASSERT( sel[0] == m_child2 );
 }
 
@@ -131,10 +145,55 @@ void DataViewCtrlTestCase::DeleteNotSelected()
 
     m_dvc->GetSelections(sel);
 
-    // m_child1 and its children should be removed from the selection now
-    CPPUNIT_ASSERT( sel.size() == 2 );
+    // m_child1 and its children should be unaffected
+    CPPUNIT_ASSERT_EQUAL( 2, sel.size() );
     CPPUNIT_ASSERT( sel[0] == m_child1 );
     CPPUNIT_ASSERT( sel[1] == m_grandchild );
 }
 
-#endif //wxUSE_TREECTRL
+void DataViewCtrlTestCase::TestSelectionFor0and1()
+{
+    wxDataViewItemArray selections;
+
+    // Initially there is no selection.
+    CPPUNIT_ASSERT_EQUAL( 0, m_dvc->GetSelectedItemsCount() );
+    CPPUNIT_ASSERT( !m_dvc->HasSelection() );
+    CPPUNIT_ASSERT( !m_dvc->GetSelection().IsOk() );
+
+    CPPUNIT_ASSERT( !m_dvc->GetSelections(selections) );
+    CPPUNIT_ASSERT( selections.empty() );
+
+    // Select one item.
+    m_dvc->Select(m_child1);
+    CPPUNIT_ASSERT_EQUAL( 1, m_dvc->GetSelectedItemsCount() );
+    CPPUNIT_ASSERT( m_dvc->HasSelection() );
+    CPPUNIT_ASSERT( m_dvc->GetSelection().IsOk() );
+    CPPUNIT_ASSERT_EQUAL( 1, m_dvc->GetSelections(selections) );
+    CPPUNIT_ASSERT( selections[0] == m_child1 );
+}
+
+void DataViewCtrlTestCase::GetSelectionForMulti()
+{
+    wxDataViewItemArray selections;
+
+    TestSelectionFor0and1();
+
+    // Also test with more than one selected item.
+    m_dvc->Select(m_child2);
+
+    CPPUNIT_ASSERT_EQUAL( 2, m_dvc->GetSelectedItemsCount() );
+    CPPUNIT_ASSERT( m_dvc->HasSelection() );
+    CPPUNIT_ASSERT( !m_dvc->GetSelection().IsOk() );
+    CPPUNIT_ASSERT_EQUAL( 2, m_dvc->GetSelections(selections) );
+    CPPUNIT_ASSERT( selections[1] == m_child2 );
+}
+
+void DataViewCtrlTestCase::GetSelectionForSingle()
+{
+    delete m_dvc;
+    Create(0);
+
+    TestSelectionFor0and1();
+}
+
+#endif //wxUSE_DATAVIEWCTRL

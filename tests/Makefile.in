@@ -922,7 +922,17 @@ test_gui_xrctest.o: $(srcdir)/xml/xrctest.cpp $(TEST_GUI_ODEP)
 # warnings don't matter when we expect compilation to fail anyhow so we can
 # use this variable to enable the compilation of code which is supposed to
 # fail
-failtest:
+failtest: failtest_combobox failtest_evthandler
+
+failtest_combobox:
+	@$(RM) test_gui_comboboxtest.o
+	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_INVALID_COMBOBOX_ISEMPTY unexpectedly succeeded.">&2; \
+	    exit 1; \
+	fi; \
+	exit 0
+
+failtest_evthandler:
 	@$(RM) test_evthandler.o
 	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
 	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \

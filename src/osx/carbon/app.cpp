@@ -1570,10 +1570,10 @@ wxMouseState wxGetMouseState()
     ms.SetRightDown( (buttons & 0x02) != 0 );
 
     UInt32 modifiers = GetCurrentKeyModifiers();
-    ms.SetControlDown(modifiers & controlKey);
+    ms.SetRawControlDown(modifiers & controlKey);
     ms.SetShiftDown(modifiers & shiftKey);
     ms.SetAltDown(modifiers & optionKey);
-    ms.SetMetaDown(modifiers & cmdKey);
+    ms.SetControlDown(modifiers & cmdKey);
 
     return ms;
 }
@@ -1766,9 +1766,9 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     }
 
     event.m_shiftDown = modifiers & shiftKey;
-    event.m_controlDown = modifiers & controlKey;
+    event.m_rawControlDown = modifiers & controlKey;
     event.m_altDown = modifiers & optionKey;
-    event.m_metaDown = modifiers & cmdKey;
+    event.m_controlDown = modifiers & cmdKey;
     event.m_keyCode = keyval ;
 #if wxUSE_UNICODE
     event.m_uniChar = uniChar ;

@@ -34,6 +34,7 @@
 #include "wx/gtk/dcclient.h"
 
 #include "wx/gtk/private/gdkconv.h"
+#include "wx/gtk/private/list.h"
 using namespace wxGTKImpl;
 
 class wxGtkDataViewModelNotifier;
@@ -96,6 +97,26 @@ private:
     GtkTreePath *m_path;
 
     wxDECLARE_NO_COPY_CLASS(wxGtkTreePath);
+};
+
+// ----------------------------------------------------------------------------
+// wxGtkTreePathList: self-destroying list of GtkTreePath objects.
+// ----------------------------------------------------------------------------
+
+class wxGtkTreePathList : public wxGtkList
+{
+public:
+    // Ctor takes ownership of the list.
+    explicit wxGtkTreePathList(GList* list)
+        : wxGtkList(list)
+    {
+    }
+
+    ~wxGtkTreePathList()
+    {
+        // Delete the list contents, wxGtkList will delete the list itself.
+        g_list_foreach(m_list, (GFunc)gtk_tree_path_free, NULL);
+    }
 };
 
 // ----------------------------------------------------------------------------
@@ -1642,23 +1663,28 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
             GtkTreeView *widget = GTK_TREE_VIEW(ctrl->GtkGetTreeView());
             GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
 
-            // Get cell area
-            GtkTreeIter iter;
-            iter.stamp = wxgtk_model->stamp;
-            iter.user_data = (gpointer) item.GetID();
-            wxGtkTreePath path(wxgtk_tree_model_get_path(
-                GTK_TREE_MODEL(wxgtk_model), &iter ));
-            GdkRectangle cell_area;
-            gtk_tree_view_get_cell_area( widget, path, gcolumn, &cell_area );
+            // Don't attempt to refresh not yet realized tree, it is useless
+            // and results in GTK errors.
+            if ( gtk_widget_get_realized(ctrl->GtkGetTreeView()) )
+            {
+                // Get cell area
+                GtkTreeIter iter;
+                iter.stamp = wxgtk_model->stamp;
+                iter.user_data = (gpointer) item.GetID();
+                wxGtkTreePath path(wxgtk_tree_model_get_path(
+                    GTK_TREE_MODEL(wxgtk_model), &iter ));
+                GdkRectangle cell_area;
+                gtk_tree_view_get_cell_area( widget, path, gcolumn, &cell_area );
 
-            GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
-            double d = gtk_adjustment_get_value( hadjust );
-            int xdiff = (int) d;
+                GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
+                double d = gtk_adjustment_get_value( hadjust );
+                int xdiff = (int) d;
 
-            int ydiff = gtk_widget_get_allocated_height(gtk_tree_view_column_get_button(gcolumn));
-            // Redraw
-            gtk_widget_queue_draw_area( GTK_WIDGET(widget),
-                cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
+                int ydiff = gcolumn->button->allocation.height;
+                // Redraw
+                gtk_widget_queue_draw_area( GTK_WIDGET(widget),
+                    cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
+            }
 
             m_internal->ValueChanged( item, model_column );
 
@@ -4838,13 +4864,9 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 {
     GtkTreeViewColumn *gtk_column = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
 
-    GList *list = gtk_tree_view_get_columns( GTK_TREE_VIEW(m_treeview) );
+    wxGtkList list(gtk_tree_view_get_columns(GTK_TREE_VIEW(m_treeview)));
 
-    gint pos = g_list_index( list, (gconstpointer)  gtk_column );
-
-    g_list_free( list );
-
-    return pos;
+    return g_list_index( list, (gconstpointer)  gtk_column );
 }
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
@@ -4940,39 +4962,11 @@ void wxDataViewCtrl::StartEditor(const wxDataViewItem& item, unsigned int column
     gtk_tree_view_set_cursor(GTK_TREE_VIEW(m_treeview), path, gcolumn, TRUE);
 }
 
-wxDataViewItem wxDataViewCtrl::GetSelection() const
+int wxDataViewCtrl::GetSelectedItemsCount() const
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
-    if (m_windowStyle & wxDV_MULTIPLE)
-    {
-        // Report the first one
-        GtkTreeModel *model;
-        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
-
-        if (list)
-        {
-            GtkTreePath *path = (GtkTreePath*) list->data;
-            wxDataViewItem item(GTKPathToItem(path));
-
-            // delete list
-            g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
-            g_list_free( list );
-
-            return item;
-        }
-    }
-    else
-    {
-        GtkTreeIter iter;
-        if (gtk_tree_selection_get_selected( selection, NULL, &iter ))
-        {
-            wxDataViewItem item( iter.user_data );
-            return item;
-        }
-    }
-
-    return wxDataViewItem(0);
+    return gtk_tree_selection_count_selected_rows(selection);
 }
 
 int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
@@ -4983,38 +4977,25 @@ int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
     if (HasFlag(wxDV_MULTIPLE))
     {
         GtkTreeModel *model;
-        GList *list = gtk_tree_selection_get_selected_rows( selection, &model );
+        wxGtkTreePathList list(gtk_tree_selection_get_selected_rows(selection, &model));
 
-        int count = 0;
-        while (list)
+        for ( GList* current = list; current; current = g_list_next(current) )
         {
-            GtkTreePath *path = (GtkTreePath*) list->data;
+            GtkTreePath *path = (GtkTreePath*) current->data;
 
             sel.Add(GTKPathToItem(path));
-
-            list = g_list_next( list );
-            count++;
         }
-
-        // delete list
-        g_list_foreach( list, (GFunc) gtk_tree_path_free, NULL );
-        g_list_free( list );
-
-        return count;
     }
     else
     {
-        GtkTreeModel *model;
         GtkTreeIter iter;
-        gboolean has_selection = gtk_tree_selection_get_selected( selection, &model, &iter );
-        if (has_selection)
+        if (gtk_tree_selection_get_selected( selection, NULL, &iter ))
         {
-            sel.Add( wxDataViewItem( (void*) iter.user_data) );
-            return 1;
+            sel.Add( wxDataViewItem(iter.user_data) );
         }
     }
 
-    return 0;
+    return sel.size();
 }
 
 void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )

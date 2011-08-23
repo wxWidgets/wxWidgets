@@ -155,7 +155,7 @@ public:
 
     virtual wxDataViewColumn *GetSortingColumn() const;
 
-    virtual wxDataViewItem GetSelection() const;
+    virtual int GetSelectedItemsCount() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
     virtual void SetSelections( const wxDataViewItemArray & sel );
     virtual void Select( const wxDataViewItem & item );
@@ -224,8 +224,8 @@ private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
-    void InvalidateColBestWidths();
-    void InvalidateColBestWidth(int idx);
+    void UpdateColBestWidths();
+    void UpdateColBestWidth(int idx);
 
     wxDataViewColumnList      m_cols;
     // cached column best widths or 0 if not computed, values are for

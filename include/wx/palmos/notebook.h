@@ -127,7 +127,7 @@ public:
                     wxNotebookPage *pPage,
                     const wxString& strText,
                     bool bSelect = false,
-                    int imageId = -1);
+                    int imageId = NO_IMAGE);
 
     void AddPageInfo( wxNotebookPageInfo* info ) { AddPage( info->GetPage() , info->GetText() , info->GetSelected() , info->GetImageId() ) ; }
     const wxNotebookPageInfoList& GetPageInfos() const ;

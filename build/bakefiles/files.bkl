@@ -879,6 +879,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/helphtml.h
     wx/icon.h
     wx/infobar.h
+    wx/itemid.h
     wx/layout.h
     wx/listbox.h
     wx/mdi.h
@@ -920,6 +921,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/valnum.h
     wx/window.h
     wx/windowid.h
+    wx/withimages.h
     wx/wrapsizer.h
     wx/wupdlock.h
 
@@ -3138,6 +3140,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/hyperlnkcmn.cpp
     src/common/odcombocmn.cpp
     src/generic/aboutdlgg.cpp
+    src/generic/bannerwindow.cpp
     src/generic/bmpcboxg.cpp
     src/generic/calctrlg.cpp
     src/generic/commandlinkbuttong.cpp
@@ -3163,6 +3166,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_CMN_HDR" hints="files">
     wx/aboutdlg.h
     wx/animate.h
+    wx/bannerwindow.h
     wx/bmpcbox.h
     wx/calctrl.h
     wx/commandlinkbutton.h
@@ -3540,6 +3544,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="XRC_SRC" hints="files">
     src/xrc/xh_animatctrl.cpp
+    src/xrc/xh_bannerwindow.cpp
     src/xrc/xh_bmp.cpp
     src/xrc/xh_bmpcbox.cpp
     src/xrc/xh_bmpbt.cpp
@@ -3608,6 +3613,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="XRC_HDR" hints="files">
     wx/xrc/xh_all.h
     wx/xrc/xh_animatctrl.h
+    wx/xrc/xh_bannerwindow.h
     wx/xrc/xh_bmpbt.h
     wx/xrc/xh_bmp.h
     wx/xrc/xh_bmpcbox.h

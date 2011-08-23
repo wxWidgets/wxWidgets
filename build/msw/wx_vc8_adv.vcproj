@@ -1017,6 +1017,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\bannerwindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\bmpcboxg.cpp"
 				>
 			</File>
@@ -1442,6 +1446,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\animate.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\bannerwindow.h"
 				>
 			</File>
 			<File

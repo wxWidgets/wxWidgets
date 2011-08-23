@@ -277,8 +277,8 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     wxGtkNotebookPage* pageData = GetNotebookPage(page);
     if (image >= 0)
     {
-        wxCHECK_MSG(m_imageList, false, "invalid notebook imagelist");
-        const wxBitmap* bitmap = m_imageList->GetBitmapPtr(image);
+        wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
+        const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(image);
         if (bitmap == NULL)
             return false;
         if (pageData->m_image)
@@ -410,9 +410,9 @@ bool wxNotebook::InsertPage( size_t position,
     pageData->m_image = NULL;
     if (imageId != -1)
     {
-        if (m_imageList)
+        if (HasImageList())
         {
-            const wxBitmap* bitmap = m_imageList->GetBitmapPtr(imageId);
+            const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(imageId);
             pageData->m_image = gtk_image_new_from_pixbuf(bitmap->GetPixbuf());
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);

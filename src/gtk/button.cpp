@@ -19,6 +19,7 @@
 #include "wx/stockitem.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/list.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -252,13 +253,12 @@ GtkLabel *wxButton::GTKGetLabel() const
     {
         GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
         GtkLabel* label = NULL;
-        GList* list = gtk_container_get_children(GTK_CONTAINER(box));
+        wxGtkList list(gtk_container_get_children(GTK_CONTAINER(box)));
         for (GList* item = list; item; item = item->next)
         {
             if (GTK_IS_LABEL(item->data))
                 label = GTK_LABEL(item->data);
         }
-        g_list_free(list);
 
         return label;
     }
@@ -280,12 +280,11 @@ void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
         GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
         if ( GTK_IS_BOX(box) )
         {
-            GList* list = gtk_container_get_children(GTK_CONTAINER(box));
+            wxGtkList list(gtk_container_get_children(GTK_CONTAINER(box)));
             for (GList* item = list; item; item = item->next)
             {
                 gtk_widget_modify_style(GTK_WIDGET(item->data), style);
             }
-            g_list_free(list);
         }
     }
 }

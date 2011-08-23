@@ -368,6 +368,7 @@
 #define wxUSE_TIPWINDOW    0
 
 #define wxUSE_ANIMATIONCTRL 0
+#define wxUSE_BANNERWINDOW  0
 #define wxUSE_BUTTON        0
 #define wxUSE_BMPBUTTON     0
 #define wxUSE_CALENDARCTRL  0

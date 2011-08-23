@@ -96,6 +96,10 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxChoice,
                 ,const wxString&      rsName = wxComboBoxNameStr
                );
 
+    // See wxComboBoxBase discussion of IsEmpty().
+    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
+    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
+
     // resolve ambiguities among virtual functions inherited from both base
     // classes
     virtual void Clear();

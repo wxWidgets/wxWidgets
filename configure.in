@@ -877,6 +877,7 @@ dnl disabled
 if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_ACCEL=no
     DEFAULT_wxUSE_ANIMATIONCTRL=no
+    DEFAULT_wxUSE_BANNERWINDOW=no
     DEFAULT_wxUSE_BMPBUTTON=no
     DEFAULT_wxUSE_BUTTON=no
     DEFAULT_wxUSE_CALCTRL=no
@@ -940,6 +941,7 @@ WX_ARG_FEATURE(markup,      [  --enable-markup         support wxControl::SetLab
 dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_FEATURE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
+WX_ARG_FEATURE(bannerwindow,[  --enable-bannerwindow   use wxBannerWindow class], wxUSE_BANNERWINDOW)
 WX_ARG_FEATURE(artstd,      [  --enable-artstd         use standard XPM icons in wxArtProvider], wxUSE_ARTPROVIDER_STD)
 WX_ARG_FEATURE(arttango,    [  --enable-arttango       use Tango icons in wxArtProvider], wxUSE_ARTPROVIDER_TANGO)
 WX_ARG_FEATURE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
@@ -6828,6 +6830,10 @@ if test "$wxUSE_ANIMATIONCTRL" = "yes"; then
   AC_DEFINE(wxUSE_ANIMATIONCTRL)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS animate"
+fi
+
+if test "$wxUSE_BANNERWINDOW" = "yes"; then
+  AC_DEFINE(wxUSE_BANNERWINDOW)
 fi
 
 if test "$wxUSE_BUTTON" = "yes"; then

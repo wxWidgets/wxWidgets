@@ -94,7 +94,6 @@ wxRichTextFormattingDialogFactory* wxRichTextFormattingDialog::ms_FormattingDial
 
 void wxRichTextFormattingDialog::Init()
 {
-    m_imageList = NULL;
     m_styleDefinition = NULL;
     m_styleSheet = NULL;
     m_object = NULL;
@@ -102,7 +101,6 @@ void wxRichTextFormattingDialog::Init()
 
 wxRichTextFormattingDialog::~wxRichTextFormattingDialog()
 {
-    delete m_imageList;
     delete m_styleDefinition;
 }
 

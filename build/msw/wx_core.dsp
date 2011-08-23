@@ -5984,6 +5984,10 @@ SOURCE=..\..\include\wx\aui\auibook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\bannerwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\ribbon\bar.h
 # End Source File
 # Begin Source File
@@ -6441,6 +6445,10 @@ SOURCE=..\..\include\wx\imagxpm.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\infobar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\itemid.h
 # End Source File
 # Begin Source File
 
@@ -6960,6 +6968,10 @@ SOURCE=..\..\include\wx\windowid.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\withimages.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\wizard.h
 # End Source File
 # Begin Source File
@@ -6981,6 +6993,10 @@ SOURCE=..\..\include\wx\xrc\xh_all.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_animatctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_bannerwindow.h
 # End Source File
 # Begin Source File
 

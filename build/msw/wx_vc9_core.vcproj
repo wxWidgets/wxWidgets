@@ -6768,6 +6768,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\bannerwindow.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\ribbon\bar.h"
 				>
 			</File>
@@ -7225,6 +7229,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\infobar.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\itemid.h"
 				>
 			</File>
 			<File
@@ -7744,6 +7752,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\withimages.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\wizard.h"
 				>
 			</File>
@@ -7765,6 +7777,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_animatctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_bannerwindow.h"
 				>
 			</File>
 			<File

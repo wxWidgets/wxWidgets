@@ -124,6 +124,10 @@ wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
     {
         return wxSize(16, 16);
     }
+    else if (client == wxART_LIST)
+    {
+        return wxSize(16, 16);
+    }
 
     return wxDefaultSize;
 }

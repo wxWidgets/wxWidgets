@@ -2265,6 +2265,11 @@ void wxCocoaDataViewControl::SetCurrentItem(const wxDataViewItem& item)
     Select(item);
 }
 
+int wxCocoaDataViewControl::GetSelectedItemsCount() const
+{
+    return [m_OutlineView numberOfSelectedRows];
+}
+
 int wxCocoaDataViewControl::GetSelections(wxDataViewItemArray& sel) const
 {
     NSIndexSet* selectedRowIndexes([m_OutlineView selectedRowIndexes]);

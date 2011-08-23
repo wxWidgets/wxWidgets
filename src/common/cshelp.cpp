@@ -284,7 +284,7 @@ wxContextHelpButton::wxContextHelpButton(wxWindow* parent,
                                          long style)
 #if defined(__WXPM__)
                    : wxBitmapButton(parent, id, wxBitmap(wxCSQUERY_BITMAP
-                                                         ,wxBITMAP_TYPE_RESOURCE
+                                                         ,wxBITMAP_TYPE_BMP_RESOURCE
                                                         ),
                                     pos, size, style)
 #else

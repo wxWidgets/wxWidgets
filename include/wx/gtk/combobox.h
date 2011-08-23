@@ -97,7 +97,9 @@ public:
         wxItemContainer::Clear();
     }
 
-    bool IsEmpty() const { return wxItemContainer::IsEmpty(); }
+    // See wxComboBoxBase discussion of IsEmpty().
+    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
+    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
 
     void OnChar( wxKeyEvent &event );
 

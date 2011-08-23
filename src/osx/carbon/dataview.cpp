@@ -1107,6 +1107,23 @@ void wxMacDataViewDataBrowserListViewControl::SetCurrentItem(const wxDataViewIte
     wxFAIL_MSG( "unimplemented for Carbon" );
 }
 
+int wxMacDataViewDataBrowserListViewControl::GetSelectedItemsCount() const
+{
+  Handle handle(::NewHandle(0));
+
+  if ( GetItems(kDataBrowserNoItem,true,kDataBrowserItemIsSelected,handle) != noErr )
+  {
+      wxFAIL_MSG( "failed to get selected items" );
+      return 0;
+  }
+
+  size_t noOfItems = static_cast<size_t>(::GetHandleSize(handle)/sizeof(DataBrowserItemID));
+  HUnlock(handle);
+  DisposeHandle(handle);
+
+  return noOfItems;
+}
+
 int wxMacDataViewDataBrowserListViewControl::GetSelections(wxDataViewItemArray& sel) const
 {
   size_t noOfSelectedItems;

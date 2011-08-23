@@ -191,8 +191,8 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("invalid notebook page") );
 
-    wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), false,
-                 wxT("invalid image index in SetPageImage()") );
+    wxCHECK_MSG( HasImageList() && nImage < GetImageList()->GetImageCount(),
+                 false, wxT("invalid image index in SetPageImage()") );
 
     if ( nImage != m_images[nPage] )
     {
@@ -472,15 +472,15 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
         // used for wxUniversal under MSW
 #if 0 // def __WXMSW__    // FIXME
         int w, h;
-        m_imageList->GetSize(n, w, h);
+        GetImageList()->GetSize(n, w, h);
         bmp.Create(w, h);
         wxMemoryDC dc;
         dc.SelectObject(bmp);
         dc.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
-        m_imageList->Draw(image, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL, true);
+        GetImageList()->Draw(image, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL, true);
         dc.SelectObject(wxNullBitmap);
 #else
-        bmp = m_imageList->GetBitmap(image);
+        bmp = GetImageList()->GetBitmap(image);
 #endif
     }
 
@@ -829,7 +829,7 @@ wxSize wxNotebook::CalcTabSize(int page) const
     if ( HasImage(page) )
     {
         wxSize sizeImage;
-        m_imageList->GetSize(m_images[page], sizeImage.x, sizeImage.y);
+        GetImageList()->GetSize(m_images[page], sizeImage.x, sizeImage.y);
 
         size.x += sizeImage.x + 5; // FIXME: hard coded margin
 

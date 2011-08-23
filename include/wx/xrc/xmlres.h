@@ -558,6 +558,9 @@ protected:
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
                          wxWindow *windowToUse = NULL);
 
+    // Gets a direction, complains if the value is invalid.
+    wxDirection GetDirection(const wxString& param, wxDirection dir = wxLEFT);
+
     // Gets a bitmap.
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
                        const wxArtClient& defaultArtClient = wxART_OTHER,

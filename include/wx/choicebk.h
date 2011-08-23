@@ -68,7 +68,7 @@ public:
                             wxWindow *page,
                             const wxString& text,
                             bool bSelect = false,
-                            int imageId = -1);
+                            int imageId = NO_IMAGE);
     virtual int SetSelection(size_t n)
         { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) { return DoSetSelection(n); }

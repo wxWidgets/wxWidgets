@@ -518,7 +518,6 @@ public:
     unsigned int GetLastVisibleRow();
     unsigned int GetRowCount();
 
-    wxDataViewItem GetSelection() const;
     const wxDataViewSelection& GetSelections() const { return m_selection; }
     void SetSelections( const wxDataViewSelection & sel )
         { m_selection = sel; UpdateDisplay(); }
@@ -581,7 +580,8 @@ private:
 
     int RecalculateCount();
 
-    wxDataViewEvent SendExpanderEvent( wxEventType type, const wxDataViewItem & item );
+    // Return false only if the event was vetoed by its handler.
+    bool SendExpanderEvent(wxEventType type, const wxDataViewItem& item);
 
     wxDataViewTreeNode * FindNode( const wxDataViewItem & item );
 
@@ -1969,7 +1969,6 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
-    GetOwner()->InvalidateColBestWidths();
 
     if (IsVirtualList())
     {
@@ -2004,6 +2003,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         m_count = -1;
     }
 
+    GetOwner()->UpdateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2014,8 +2014,6 @@ static void DestroyTreeHelper( wxDataViewTreeNode * node);
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                                        const wxDataViewItem& item)
 {
-    GetOwner()->InvalidateColBestWidths();
-
     if (IsVirtualList())
     {
         wxDataViewVirtualListModel *list_model =
@@ -2026,29 +2024,35 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         {
             const int row = GetRowByItem(item);
 
+            int rowIndexInSelection = wxNOT_FOUND;
+
             const size_t selCount = m_selection.size();
             for ( size_t i = 0; i < selCount; i++ )
             {
-                if ( m_selection[i] > (unsigned)row )
+                if ( m_selection[i] == (unsigned)row )
+                    rowIndexInSelection = i;
+                else if ( m_selection[i] > (unsigned)row )
                     m_selection[i]--;
             }
 
-            int itemRow = m_selection.Index(row);
-            if ( itemRow != wxNOT_FOUND )
-                m_selection.RemoveAt(itemRow);
+            if ( rowIndexInSelection != wxNOT_FOUND )
+                m_selection.RemoveAt(rowIndexInSelection);
         }
 
     }
     else // general case
     {
         wxDataViewTreeNode * node = FindNode(parent);
-        int itemPosInNode = node ? node->GetChildren().Index(item.GetID()) : wxNOT_FOUND;
 
         // Notice that it is possible that the item being deleted is not in the
         // tree at all, for example we could be deleting a never shown (because
         // collapsed) item in a tree model. So it's not an error if we don't know
         // about this item, just return without doing anything then.
-        if ( !node || itemPosInNode == wxNOT_FOUND )
+        if ( !node )
+            return false;
+
+        int itemPosInNode = node->GetChildren().Index(item.GetID());
+        if ( itemPosInNode == wxNOT_FOUND )
             return false;
 
         bool isContainer = false;
@@ -2128,6 +2132,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     if( m_currentRow > GetRowCount() )
         ChangeCurrentRow(m_count - 1);
 
+    GetOwner()->UpdateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2135,10 +2140,10 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
 bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 {
-    GetOwner()->InvalidateColBestWidths();
-
     SortPrepare();
     g_model->Resort();
+
+    GetOwner()->UpdateColBestWidths();
 
     // Send event
     wxWindow *parent = GetParent();
@@ -2167,8 +2172,6 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     if (view_column == -1)
         return false;
 
-    GetOwner()->InvalidateColBestWidth(view_column);
-
     // NOTE: to be valid, we cannot use e.g. INT_MAX - 1
 /*#define MAX_VIRTUAL_WIDTH       100000
 
@@ -2180,6 +2183,8 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 */
     SortPrepare();
     g_model->Resort();
+
+    GetOwner()->UpdateColBestWidth(view_column);
 
     // Send event
     wxWindow *parent = GetParent();
@@ -2196,14 +2201,13 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 
 bool wxDataViewMainWindow::Cleared()
 {
-    GetOwner()->InvalidateColBestWidths();
-
     DestroyTree();
     m_selection.Clear();
 
     SortPrepare();
     BuildTree( GetOwner()->GetModel() );
 
+    GetOwner()->UpdateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2885,8 +2889,9 @@ wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) co
     return job.GetResult();
 }
 
-wxDataViewEvent wxDataViewMainWindow::SendExpanderEvent( wxEventType type,
-                                                         const wxDataViewItem & item )
+bool
+wxDataViewMainWindow::SendExpanderEvent(wxEventType type,
+                                        const wxDataViewItem& item)
 {
     wxWindow *parent = GetParent();
     wxDataViewEvent le(type, parent->GetId());
@@ -2895,8 +2900,7 @@ wxDataViewEvent wxDataViewMainWindow::SendExpanderEvent( wxEventType type,
     le.SetModel(GetOwner()->GetModel());
     le.SetItem( item );
 
-    parent->GetEventHandler()->ProcessEvent(le);
-    return le;
+    return !parent->ProcessWindowEvent(le) || le.IsAllowed();
 }
 
 bool wxDataViewMainWindow::IsExpanded( unsigned int row ) const
@@ -2952,12 +2956,11 @@ void wxDataViewMainWindow::Expand( unsigned int row )
 
             if (!node->IsOpen())
             {
-                wxDataViewEvent e =
-                    SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem());
-
-                // Check if the user prevent expanding
-                if( e.GetSkipped() )
+                if ( !SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem()) )
+                {
+                    // Vetoed by the event handler.
                     return;
+                }
 
                 node->ToggleOpen();
 
@@ -3008,10 +3011,11 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
 
         if (node->IsOpen())
         {
-            wxDataViewEvent e =
-                SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,node->GetItem());
-            if( e.GetSkipped() )
+            if ( !SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,node->GetItem()) )
+            {
+                // Vetoed by the event handler.
                 return;
+            }
 
             // Find out if there are selected items below the current node.
             bool selectCollapsingRow = false;
@@ -3586,8 +3590,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    // Test whether the mouse is hovered on the tree item button
+    // Test whether the mouse is hovering over the expander (a.k.a tree "+"
+    // button) and also determine the offset of the real cell start, skipping
+    // the indentation and the expander itself.
     bool hoverOverExpander = false;
+    int expanderOffset = 0;
     if ((!IsList()) && (GetOwner()->GetExpanderColumn() == col))
     {
         wxDataViewTreeNode * node = GetTreeNodeByRow(current);
@@ -3601,6 +3608,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             wxRect rect( xpos + indent,
                         GetLineStart( current ) + (GetLineHeight(current) - m_lineHeight)/2,
                         m_lineHeight, m_lineHeight);
+
+            expanderOffset = indent + m_lineHeight;
+
             if( rect.Contains(x, y) )
             {
                 // So the mouse is over the expander
@@ -3891,8 +3901,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             // notify cell about click
             cell->PrepareForItem(model, item, col->GetModelColumn());
 
-            wxRect cell_rect( xpos, GetLineStart( current ),
-                              col->GetWidth(), GetLineHeight( current ) );
+            wxRect cell_rect( xpos + expanderOffset,
+                              GetLineStart( current ),
+                              col->GetWidth() - expanderOffset,
+                              GetLineHeight( current ) );
 
             // Report position relative to the cell's custom area, i.e.
             // no the entire space as given by the control but the one
@@ -3954,14 +3966,6 @@ void wxDataViewMainWindow::OnKillFocus( wxFocusEvent &event )
         Refresh();
 
     event.Skip();
-}
-
-wxDataViewItem wxDataViewMainWindow::GetSelection() const
-{
-    if( m_selection.GetCount() != 1 )
-        return wxDataViewItem();
-
-    return GetItemByRow( m_selection.Item(0));
 }
 
 //-----------------------------------------------------------------------------
@@ -4402,7 +4406,7 @@ bool wxDataViewCtrl::ClearColumns()
     return true;
 }
 
-void wxDataViewCtrl::InvalidateColBestWidth(int idx)
+void wxDataViewCtrl::UpdateColBestWidth(int idx)
 {
     m_colsBestWidths[idx] = 0;
 
@@ -4410,7 +4414,7 @@ void wxDataViewCtrl::InvalidateColBestWidth(int idx)
         m_headerArea->UpdateColumn(idx);
 }
 
-void wxDataViewCtrl::InvalidateColBestWidths()
+void wxDataViewCtrl::UpdateColBestWidths()
 {
     m_colsBestWidths.clear();
     m_colsBestWidths.resize(m_cols.size());
@@ -4480,10 +4484,9 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     }
 }
 
-// Selection code with wxDataViewItem as parameters
-wxDataViewItem wxDataViewCtrl::GetSelection() const
+int wxDataViewCtrl::GetSelectedItemsCount() const
 {
-    return m_clientArea->GetSelection();
+    return m_clientArea->GetSelections().size();
 }
 
 int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const

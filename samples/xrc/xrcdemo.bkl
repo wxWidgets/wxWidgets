@@ -38,6 +38,7 @@
             objref.xrc objrefdlg.xpm
             uncenter.xrc update.gif variable.xpm variable.xrc
             throbber.gif stop.xpm
+            wxbanner.gif
         </files>
     </wx-data>
 

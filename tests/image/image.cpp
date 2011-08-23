@@ -50,7 +50,7 @@ struct testData {
     { "horse.pcx", wxBITMAP_TYPE_PCX, 8 },
     { "horse.pnm", wxBITMAP_TYPE_PNM, 24 },
     { "horse.tga", wxBITMAP_TYPE_TGA, 8 },
-    { "horse.tif", wxBITMAP_TYPE_TIF, 8 }
+    { "horse.tif", wxBITMAP_TYPE_TIFF, 8 }
 };
 
 
@@ -192,7 +192,7 @@ void ImageTestCase::LoadFromZipStream()
             case wxBITMAP_TYPE_GIF:
             case wxBITMAP_TYPE_PCX:
             case wxBITMAP_TYPE_TGA:
-            case wxBITMAP_TYPE_TIF:
+            case wxBITMAP_TYPE_TIFF:
             continue;       // skip testing those wxImageHandlers which cannot
                             // load data from non-seekable streams
 
@@ -1097,7 +1097,7 @@ static void TestTIFFImage(const wxString& option, int value)
     wxMemoryOutputStream memOut;
     image.SetOption(option, value);
 
-    CPPUNIT_ASSERT(image.SaveFile(memOut, wxBITMAP_TYPE_TIF));
+    CPPUNIT_ASSERT(image.SaveFile(memOut, wxBITMAP_TYPE_TIFF));
 
     wxMemoryInputStream memIn(memOut);
     CPPUNIT_ASSERT(memIn.IsOk());
