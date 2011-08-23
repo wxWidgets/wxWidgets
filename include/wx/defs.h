@@ -2584,7 +2584,7 @@ enum wxKeyModifier
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
-    wxMOD_RAW_CONTROL = wxMOD_META,
+    wxMOD_RAW_CONTROL = 0x0010,
 #else
     wxMOD_RAW_CONTROL = wxMOD_CONTROL,
 #endif
