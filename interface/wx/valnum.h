@@ -101,7 +101,7 @@ public:
 
         Calling this is equivalent to calling both SetMin() and SetMax().
      */
-    void SetRange(ValueType min, ValueType max)
+    void SetRange(ValueType min, ValueType max);
 
 
     /**
