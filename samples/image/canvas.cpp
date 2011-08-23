@@ -243,7 +243,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #if wxUSE_LIBTIFF
     image.Destroy();
 
-    if ( !image.LoadFile( dir + wxT("horse.tif"), wxBITMAP_TYPE_TIF ) )
+    if ( !image.LoadFile( dir + wxT("horse.tif"), wxBITMAP_TYPE_TIFF ) )
     {
         wxLogError(wxT("Can't load TIFF image"));
     }

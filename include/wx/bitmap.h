@@ -256,10 +256,10 @@ protected:
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
     #include "wx/x11/bitmap.h"
 #elif defined(__WXMGL__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_RESOURCE
+    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/mgl/bitmap.h"
 #elif defined(__WXDFB__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_RESOURCE
+    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/dfb/bitmap.h"
 #elif defined(__WXMAC__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_PICT_RESOURCE
