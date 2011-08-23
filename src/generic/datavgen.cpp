@@ -2959,7 +2959,7 @@ void wxDataViewMainWindow::Expand( unsigned int row )
                     SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem());
 
                 // Check if the user prevent expanding
-                if( e.GetSkipped() )
+                if( !e.IsAllowed() )
                     return;
 
                 node->ToggleOpen();
@@ -3013,7 +3013,7 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
         {
             wxDataViewEvent e =
                 SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,node->GetItem());
-            if( e.GetSkipped() )
+            if( !e.IsAllowed() )
                 return;
 
             // Find out if there are selected items below the current node.
