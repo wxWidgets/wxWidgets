@@ -35,7 +35,7 @@ const int MARGIN_Y = 5;
 
 } // anonymous namespace
 
-extern WXDLLEXPORT_DATA(const char) wxBannerWindowNameStr[] = "bannerwindow";
+const char wxBannerWindowNameStr[] = "bannerwindow";
 
 BEGIN_EVENT_TABLE(wxBannerWindow, wxWindow)
     EVT_SIZE(wxBannerWindow::OnSize)
