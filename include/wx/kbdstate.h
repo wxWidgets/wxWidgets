@@ -45,7 +45,9 @@ public:
         return (m_controlDown ? wxMOD_CONTROL : 0) |
                (m_shiftDown ? wxMOD_SHIFT : 0) |
                (m_metaDown ? wxMOD_META : 0) |
+#ifdef __WXOSX__
                (m_rawControlDown ? wxMOD_RAW_CONTROL : 0) |
+#endif
                (m_altDown ? wxMOD_ALT : 0);
     }
 
