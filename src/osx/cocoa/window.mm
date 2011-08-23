@@ -214,7 +214,7 @@ long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
         // command key
         case 54:
         case 55:
-            retval = WXK_COMMAND;
+            retval = WXK_CONTROL;
             break;
         // caps locks key
         case 57: // Capslock
@@ -233,7 +233,7 @@ long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
         // ctrl key
         case 59: // Left Ctrl
         case 62: // Right Ctrl
-            retval = WXK_CONTROL;
+            retval = WXK_RAW_CONTROL;
             break;
         // clear key
         case 71:
@@ -2141,6 +2141,7 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
             {
                 // eventually we could setup a doCommandBySelector catcher and retransform this into the wx key chars
                 wxKeyEvent wxevent2(wxevent) ;
+                wxevent2.SetEventType(wxEVT_CHAR);
                 wxevent2.m_keyCode = keycode;
                 result = GetWXPeer()->OSXHandleKeyEvent(wxevent2);
             }
