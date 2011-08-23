@@ -156,6 +156,12 @@ public:
     be restricted further by calling SetMin() and SetMax() or SetRange()
     methods inherited from the base class.
 
+    When the validator displays integers with thousands separators, the
+    character used for the separators (usually "." or ",") depends on the locale
+    set with wxLocale (note that you shouldn't change locale with setlocale()
+    as this can result in a mismatch between the thousands separator used by
+    wxLocale and the one used by the run-time library).
+
     A simple example of using this class:
     @code
         class MyDialog : public wxDialog
@@ -251,6 +257,12 @@ wxMakeIntegerValidator(T *value, int style = wxNUM_VAL_DEFAULT);
     used, e.g. 6 for @c float and 15 for @c double on a typical IEEE-754-based
     implementation. As with the range, the precision can be restricted after
     the validator creation if necessary.
+
+    When the validator displays numbers with decimal or thousands separators,
+    the characters used for the separators (usually "." or ",") depend on the
+    locale set with wxLocale (note that you shouldn't change locale with
+    setlocale() as this can result in a mismatch between the separators used by
+    wxLocale and the one used by the run-time library).
 
     A simple example of using this class:
     @code
