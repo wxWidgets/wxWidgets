@@ -338,7 +338,9 @@ const char* GetVirtualKeyCodeName(int keycode)
 
         WXK_(WINDOWS_LEFT)
         WXK_(WINDOWS_RIGHT)
-        WXK_(COMMAND)
+#ifdef __WXOSX__
+        WXK_(RAW_CONTROL)
+#endif
 #undef WXK_
 
     default:
