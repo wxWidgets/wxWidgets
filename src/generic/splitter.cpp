@@ -93,10 +93,7 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
-    if (size.x >= 0)
-        m_lastSize.x = size.x;
-    if (size.y >= 0)
-        m_lastSize.y = size.y;
+    m_lastSize = GetClientSize();
 
     m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
 
@@ -442,16 +439,22 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         int size = m_splitMode == wxSPLIT_VERTICAL ? w : h;
 
         int old_size = m_splitMode == wxSPLIT_VERTICAL ? m_lastSize.x : m_lastSize.y;
-        if ( old_size != 0 )
+
+        // Don't do anything if the size didn't really change. In particular,
+        // it is important that we don't reset our sash position because it's
+        // out of current range in this case as otherwise the really requested
+        // position would be lost and never set. Wait until we get a real size
+        // event with our non-initial size to do it.
+        if ( size == old_size )
+            return;
+
+        int delta = (int) ( (size - old_size)*m_sashGravity );
+        if ( delta != 0 )
         {
-            int delta = (int) ( (size - old_size)*m_sashGravity );
-            if ( delta != 0 )
-            {
-                int newPosition = m_sashPosition + delta;
-                if( newPosition < m_minimumPaneSize )
-                    newPosition = m_minimumPaneSize;
-                SetSashPositionAndNotify(newPosition);
-            }
+            int newPosition = m_sashPosition + delta;
+            if( newPosition < m_minimumPaneSize )
+                newPosition = m_minimumPaneSize;
+            SetSashPositionAndNotify(newPosition);
         }
 
         if ( m_sashPosition >= size - 5 )
