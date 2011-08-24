@@ -2548,7 +2548,12 @@ enum wxKeyCode
     WXK_WINDOWS_LEFT,
     WXK_WINDOWS_RIGHT,
     WXK_WINDOWS_MENU ,
-    WXK_COMMAND,
+#ifdef __WXOSX__
+    WXK_RAW_CONTROL,
+#else
+    WXK_RAW_CONTROL = WXK_CONTROL,
+#endif
+    WXK_COMMAND = WXK_CONTROL,
 
     /* Hardware-specific buttons */
     WXK_SPECIAL1 = 193,
