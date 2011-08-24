@@ -1319,8 +1319,8 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
             
         case WXK_SHIFT:       keycode = kVK_Shift; break;
         case WXK_ALT:         keycode = kVK_Option; break;
-        case WXK_CONTROL:     keycode = kVK_Control; break;
-        case WXK_COMMAND:     keycode = kVK_Command; break;
+        case WXK_RAW_CONTROL: keycode = kVK_Control; break;
+        case WXK_CONTROL:     keycode = kVK_Command; break;
             
         case WXK_CAPITAL:     keycode = kVK_CapsLock; break;
         case WXK_END:         keycode = kVK_End; break;
@@ -1530,6 +1530,7 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
     {
     case WXK_START:
     case WXK_MENU:
+    case WXK_COMMAND:
         return cmdKey;
 
     case WXK_SHIFT:
@@ -1541,7 +1542,7 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
     case WXK_ALT:
         return optionKey;
 
-    case WXK_CONTROL:
+    case WXK_RAW_CONTROL:
         return controlKey;
 
     default:
