@@ -58,15 +58,15 @@
 #endif
 
 #if wxUSE_DRAG_AND_DROP
-#include "wx/dnd.h"
+    #include "wx/dnd.h"
 #endif
 
 #include "wx/graphics.h"
 
 #if wxOSX_USE_CARBON
-#include "wx/osx/uma.h"
+    #include "wx/osx/uma.h"
 #else
-#include "wx/osx/private.h"
+    #include "wx/osx/private.h"
 #endif
 
 #define MAC_SCROLLBAR_SIZE 15
