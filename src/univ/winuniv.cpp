@@ -718,16 +718,6 @@ void wxWindow::OnSize(wxSizeEvent& event)
 #endif
 }
 
-wxSize wxWindow::DoGetBestSize() const
-{
-    return AdjustSize(DoGetBestClientSize());
-}
-
-wxSize wxWindow::DoGetBestClientSize() const
-{
-    return wxWindowNative::DoGetBestSize();
-}
-
 wxSize wxWindow::DoGetBorderSize() const
 {
     return AdjustSize(wxSize(0, 0));
