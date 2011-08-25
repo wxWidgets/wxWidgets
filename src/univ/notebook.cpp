@@ -1258,34 +1258,6 @@ void wxNotebook::ScrollLastTo(size_t page)
 // wxNotebook sizing/moving
 // ----------------------------------------------------------------------------
 
-wxSize wxNotebook::DoGetBestClientSize() const
-{
-    // calculate the max page size
-    wxSize size;
-
-    size_t count = GetPageCount();
-    if ( count )
-    {
-        for ( size_t n = 0; n < count; n++ )
-        {
-            wxSize sizePage = m_pages[n]->GetSize();
-
-            if ( size.x < sizePage.x )
-                size.x = sizePage.x;
-            if ( size.y < sizePage.y )
-                size.y = sizePage.y;
-        }
-    }
-    else // no pages
-    {
-        // use some arbitrary default size
-        size.x =
-        size.y = 100;
-    }
-
-    return GetSizeForPage(size);
-}
-
 void wxNotebook::DoMoveWindow(int x, int y, int width, int height)
 {
     wxControl::DoMoveWindow(x, y, width, height);

@@ -130,7 +130,6 @@ protected:
     void DoDrawTab(wxDC& dc, const wxRect& rect, size_t n);
 
     // resizing
-    virtual wxSize DoGetBestClientSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoSetSize(int x, int y,
                            int width, int height,
