@@ -176,7 +176,7 @@ protected:
 };
 
 #if defined(__WXUNIVERSAL__)
-    typedef wxAnyButtonBase wxAnyButton;
+    #include "wx/univ/anybutton.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/anybutton.h"
 //#elif defined(__WXMOTIF__)

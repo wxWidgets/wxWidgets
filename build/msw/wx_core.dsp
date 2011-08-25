@@ -5684,6 +5684,10 @@ SOURCE=..\..\include\wx\generic\wizard.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\include\wx\univ\anybutton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\univ\app.h
 # End Source File
 # Begin Source File

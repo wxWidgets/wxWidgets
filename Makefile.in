@@ -3797,6 +3797,7 @@ COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/generic/listctrl.h \
 	wx/generic/mdig.h \
 	wx/generic/statusbr.h \
+	wx/univ/anybutton.h \
 	wx/univ/app.h \
 	wx/univ/bmpbuttn.h \
 	wx/univ/button.h \

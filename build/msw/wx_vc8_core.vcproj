@@ -6470,6 +6470,10 @@
 			UniqueIdentifier="{46168D7C-2783-50F3-AE9D-A740D5FF0B44}"
 			>
 			<File
+				RelativePath="..\..\include\wx\univ\anybutton.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\univ\app.h"
 				>
 			</File>
