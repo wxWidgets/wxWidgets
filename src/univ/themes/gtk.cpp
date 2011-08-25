@@ -2267,12 +2267,13 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 #if wxUSE_SCROLLBAR
     if ( wxDynamicCast(window, wxScrollBar) )
     {
-        // we only set the width of vert scrollbars and height of the
-        // horizontal ones
-        if ( window->GetWindowStyle() & wxSB_HORIZONTAL )
-            size->y = m_sizeScrollbarArrow.x;
-        else
-            size->x = m_sizeScrollbarArrow.x;
+        /*
+        Don't adjust the size for a scrollbar as its DoGetBestClientSize
+        already has the correct size set. Any size changes here would get
+        added to the best size, making the scrollbar larger.
+        Also skip border width adjustments, they don't make sense for us.
+        */
+        return;
     }
     else
 #endif // wxUSE_SCROLLBAR
