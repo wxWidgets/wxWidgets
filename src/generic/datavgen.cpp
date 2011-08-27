@@ -291,7 +291,18 @@ public:
 
     ~wxDataViewTreeNode()
     {
-        delete m_branchData;
+        if ( m_branchData )
+        {
+            wxDataViewTreeNodes& nodes = m_branchData->children;
+            for ( wxDataViewTreeNodes::iterator i = nodes.begin();
+                  i != nodes.end();
+                  ++i )
+            {
+                delete *i;
+            }
+
+            delete m_branchData;
+        }
     }
 
     static wxDataViewTreeNode* CreateRootNode()
@@ -304,7 +315,7 @@ public:
 
     wxDataViewTreeNode * GetParent() const { return m_parent; }
 
-    wxDataViewTreeNodes& GetChildNodes()
+    const wxDataViewTreeNodes& GetChildNodes() const
     {
         wxASSERT( m_branchData != NULL );
         return m_branchData->children;
@@ -319,6 +330,12 @@ public:
         // TODO: insert into sorted array directly in O(log n) instead of resorting in O(n log n)
         if (g_column >= -1)
             m_branchData->children.Sort( &wxGenericTreeModelNodeCmp );
+    }
+
+    void RemoveChild(wxDataViewTreeNode *node)
+    {
+        wxCHECK_RET( m_branchData != NULL, "leaf node doesn't have children" );
+        m_branchData->children.Remove(node);
     }
 
     const wxDataViewItem & GetItem() const { return m_item; }
@@ -2012,8 +2029,6 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
     return true;
 }
 
-static void DestroyTreeHelper( wxDataViewTreeNode * node);
-
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                                        const wxDataViewItem& item)
 {
@@ -2089,8 +2104,8 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         // Delete the item from wxDataViewTreeNode representation:
         const int itemsDeleted = 1 + itemNode->GetSubTreeCount();
 
-        parentNode->GetChildNodes().Remove(itemNode);
-        ::DestroyTreeHelper(itemNode);
+        parentNode->RemoveChild(itemNode);
+        delete itemNode;
         parentNode->ChangeSubTreeCount(-itemsDeleted);
 
         // Make the row number invalid and get a new valid one when user call GetRowCount
@@ -3257,25 +3272,12 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
     m_count = -1;
 }
 
-static void DestroyTreeHelper( wxDataViewTreeNode * node )
-{
-    if ( node->HasChildren() )
-    {
-        wxDataViewTreeNodes& nodes = node->GetChildNodes();
-        const int len = nodes.size();
-        for (int i = 0; i < len; i++)
-            DestroyTreeHelper(nodes[i]);
-    }
-    delete node;
-}
-
 void wxDataViewMainWindow::DestroyTree()
 {
     if (!IsVirtualList())
     {
-        ::DestroyTreeHelper(m_root);
-            m_count = 0;
-            m_root = NULL;
+        wxDELETE(m_root);
+        m_count = 0;
     }
 }
 
