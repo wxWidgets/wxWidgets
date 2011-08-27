@@ -27,6 +27,7 @@ wxDirPickerCtrlXmlHandler::wxDirPickerCtrlXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxDIRP_USE_TEXTCTRL);
     XRC_ADD_STYLE(wxDIRP_DIR_MUST_EXIST);
     XRC_ADD_STYLE(wxDIRP_CHANGE_DIR);
+    XRC_ADD_STYLE(wxDIRP_SMALL);
     XRC_ADD_STYLE(wxDIRP_DEFAULT_STYLE);
     AddWindowStyles();
 }

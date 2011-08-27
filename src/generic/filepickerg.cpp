@@ -54,8 +54,24 @@ bool wxGenericFileDirButton::Create(wxWindow *parent,
 {
     m_pickerStyle = style;
 
+    // If the special wxPB_SMALL flag is used, ignore the provided label and
+    // use the shortest possible label and the smallest possible button fitting
+    // it.
+    long styleButton = 0;
+    wxString labelButton;
+    if ( m_pickerStyle & wxPB_SMALL )
+    {
+        labelButton = _("...");
+        styleButton = wxBU_EXACTFIT;
+    }
+    else
+    {
+        labelButton = label;
+    }
+
     // create this button
-    if ( !wxButton::Create(parent, id, label, pos, size, 0, validator, name) )
+    if ( !wxButton::Create(parent, id, labelButton,
+                           pos, size, styleButton, validator, name) )
     {
         wxFAIL_MSG( wxT("wxGenericFileButton creation failed") );
         return false;

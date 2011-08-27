@@ -37,6 +37,9 @@
            existing file.
     @style{wxFLP_CHANGE_DIR}
            Change current working directory on each user file selection change.
+    @style{wxFLP_SMALL}
+           Use smaller version of the control with a small "..." button instead
+           of the normal "Browse" one. This flag is new since wxWidgets 2.9.3.
     @endStyleTable
 
 
@@ -161,6 +164,9 @@ public:
            support its absence.
     @style{wxDIRP_CHANGE_DIR}
            Change current working directory on each user directory selection change.
+    @style{wxDIRP_SMALL}
+           Use smaller version of the control with a small "..." button instead
+           of the normal "Browse" one. This flag is new since wxWidgets 2.9.3.
     @endStyleTable
 
     @beginEventEmissionTable{wxFileDirPickerEvent}

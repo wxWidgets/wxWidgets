@@ -465,6 +465,7 @@ All (GUI):
 - Fix stock labels when not using mnemonics for Chinese (cw.ahbong).
 - Added wxComboBox::IsListEmpty() and IsTextEmpty().
 - Added wxDataViewCtrl::GetSelectedItemsCount() and HasSelection().
+- Added wxFLP_SMALL and wxDIRP_SMALL styles.
 
 OSX:
 

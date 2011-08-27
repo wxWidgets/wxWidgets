@@ -109,12 +109,14 @@ protected:
 #define wxFLP_OVERWRITE_PROMPT        0x1000
 #define wxFLP_FILE_MUST_EXIST         0x2000
 #define wxFLP_CHANGE_DIR              0x4000
+#define wxFLP_SMALL                   wxPB_SMALL
 
 // NOTE: wxMULTIPLE is not supported !
 
 
 #define wxDIRP_DIR_MUST_EXIST         0x0008
 #define wxDIRP_CHANGE_DIR             0x0010
+#define wxDIRP_SMALL                  wxPB_SMALL
 
 
 // map platform-dependent controls which implement the wxFileDirPickerWidgetBase
@@ -300,8 +302,13 @@ protected:
     // extracts the style for our picker from wxFileDirPickerCtrlBase's style
     long GetPickerStyle(long style) const
     {
-        return (style & (wxFLP_OPEN|wxFLP_SAVE|wxFLP_OVERWRITE_PROMPT|
-                            wxFLP_FILE_MUST_EXIST|wxFLP_CHANGE_DIR|wxFLP_USE_TEXTCTRL));
+        return style & (wxFLP_OPEN |
+                        wxFLP_SAVE |
+                        wxFLP_OVERWRITE_PROMPT |
+                        wxFLP_FILE_MUST_EXIST |
+                        wxFLP_CHANGE_DIR |
+                        wxFLP_USE_TEXTCTRL |
+                        wxFLP_SMALL);
     }
 
 private:
@@ -396,7 +403,12 @@ protected:
 
     // extracts the style for our picker from wxFileDirPickerCtrlBase's style
     long GetPickerStyle(long style) const
-        { return (style & (wxDIRP_DIR_MUST_EXIST|wxDIRP_CHANGE_DIR|wxDIRP_USE_TEXTCTRL)); }
+    {
+        return style & (wxDIRP_DIR_MUST_EXIST |
+                        wxDIRP_CHANGE_DIR |
+                        wxDIRP_USE_TEXTCTRL |
+                        wxDIRP_SMALL);
+    }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDirPickerCtrl)
