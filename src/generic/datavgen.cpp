@@ -3308,6 +3308,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
+        case WXK_SPACE:
             {
                 wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
                                    parent->GetId());
