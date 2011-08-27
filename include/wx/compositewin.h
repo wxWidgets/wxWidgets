@@ -110,7 +110,11 @@ private:
         {
             wxWindow * const child = *i;
 
-            (child->*func)(arg);
+            // Allow NULL elements in the list, this makes the code of derived
+            // composite controls which may have optionally shown children
+            // simpler and it doesn't cost us much here.
+            if ( child )
+                (child->*func)(arg);
         }
     }
 
