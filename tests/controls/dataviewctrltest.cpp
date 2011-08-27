@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        tests/controls/treectrltest.cpp
+// Name:        tests/controls/dataviewctrltest.cpp
 // Purpose:     wxDataViewCtrl unit test
 // Author:      Vaclav Slavik
 // Created:     2011-08-08
