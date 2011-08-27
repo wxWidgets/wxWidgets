@@ -183,7 +183,7 @@ void FilePickerWidgetsPage::CreateContent()
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
     m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
-    m_sizer->Add(m_filePicker, 0, wxALIGN_CENTER|wxALL, 5);
+    m_sizer->Add(m_filePicker, 0, wxEXPAND|wxALL, 5);
     m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
 
     // global pane
