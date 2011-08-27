@@ -475,7 +475,7 @@ public:
     }
 
     virtual void SetLogicalScale(double x, double y);
-    virtual void GetLogicalScale(double *x, double *y)
+    virtual void GetLogicalScale(double *x, double *y) const
     {
         if ( x ) *x = m_logicalScaleX;
         if ( y ) *y = m_logicalScaleY;
@@ -1020,7 +1020,7 @@ public:
 
     void SetLogicalScale(double x, double y)
         { m_pimpl->SetLogicalScale( x, y ); }
-    void GetLogicalScale(double *x, double *y)
+    void GetLogicalScale(double *x, double *y) const
         { m_pimpl->GetLogicalScale( x, y ); }
 
     void SetLogicalOrigin(wxCoord x, wxCoord y)

@@ -32,6 +32,8 @@ public:
 #if defined(__WXMSW__) && wxUSE_ENH_METAFILE
     wxGCDC( const wxEnhMetaFileDC& dc );
 #endif
+    wxGCDC(wxGraphicsContext* context);
+    
     wxGCDC();
     virtual ~wxGCDC();
 

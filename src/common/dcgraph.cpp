@@ -121,6 +121,12 @@ wxGCDC::wxGCDC(const wxEnhMetaFileDC& dc)
 }
 #endif
 
+wxGCDC::wxGCDC(wxGraphicsContext* context) :
+    wxDC( new wxGCDCImpl( this ) )
+{
+    SetGraphicsContext(context);
+}
+
 wxGCDC::wxGCDC() :
   wxDC( new wxGCDCImpl( this ) )
 {

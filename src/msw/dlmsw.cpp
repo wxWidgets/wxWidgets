@@ -27,6 +27,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/debughlp.h"
+#include "wx/filename.h"
 
 const wxString wxDynamicLibrary::ms_dllext(wxT(".dll"));
 
@@ -224,13 +225,37 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 // loading/unloading DLLs
 // ----------------------------------------------------------------------------
 
+#ifndef MAX_PATH
+    #define MAX_PATH 260        // from VC++ headers
+#endif
+
 /* static */
 wxDllType
 wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 {
-    return flags & wxDL_GET_LOADED
-            ? ::GetModuleHandle(libname.t_str())
-            : ::LoadLibrary(libname.t_str());
+    if (flags & wxDL_GET_LOADED)
+        return ::GetModuleHandle(libname.t_str());
+
+    // Explicitly look in the same path as where the main wx HINSTANCE module
+    // is located (usually the executable or the DLL that uses wx).  Normally
+    // this is automatically part of the default search path but in some cases
+    // it may not be, such as when the wxPython extension modules need to load
+    // a DLL, but the intperpreter executable is located elsewhere.  Doing
+    // this allows us to always be able to dynamically load a DLL that is
+    // located at the same place as the wx modules.
+    wxString modpath, path;
+    ::GetModuleFileName(wxGetInstance(),
+                        wxStringBuffer(modpath, MAX_PATH+1),
+                        MAX_PATH);
+    
+    wxFileName::SplitPath(modpath, &path, NULL, NULL);
+    ::SetDllDirectory(path.t_str());
+    
+    wxDllType handle = ::LoadLibrary(libname.t_str());
+
+    // reset the search path
+    ::SetDllDirectory(NULL);
+    return handle;
 }
 
 /* static */
