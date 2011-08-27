@@ -479,7 +479,7 @@ public:
                             const wxString &name = wxT("wxdataviewctrlmainwindow") );
     virtual ~wxDataViewMainWindow();
 
-    bool IsList() const { return GetOwner()->GetModel()->IsListModel(); }
+    bool IsList() const { return GetModel()->IsListModel(); }
     bool IsVirtualList() const { return m_root == NULL; }
 
     // notifications from wxDataViewModel
@@ -500,7 +500,7 @@ public:
 
     void SortPrepare()
     {
-        g_model = GetOwner()->GetModel();
+        g_model = GetModel();
         wxDataViewColumn* col = GetOwner()->GetSortingColumn();
         if( !col )
         {
@@ -519,6 +519,9 @@ public:
     void SetOwner( wxDataViewCtrl* owner ) { m_owner = owner; }
     wxDataViewCtrl *GetOwner() { return m_owner; }
     const wxDataViewCtrl *GetOwner() const { return m_owner; }
+
+    wxDataViewModel* GetModel() { return GetOwner()->GetModel(); }
+    const wxDataViewModel* GetModel() const { return GetOwner()->GetModel(); }
 
 #if wxUSE_DRAG_AND_DROP
     wxBitmap CreateItemBitmap( unsigned int row, int &indent );
@@ -1466,7 +1469,7 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x,
 
     wxDataViewItem item = GetItemByRow( row );
 
-    wxDataViewModel *model = GetOwner()->GetModel();
+    wxDataViewModel *model = GetModel();
 
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );
@@ -1509,7 +1512,7 @@ bool wxDataViewMainWindow::OnDrop( wxDataFormat format, wxCoord x, wxCoord y )
 
     wxDataViewItem item = GetItemByRow( row );
 
-    wxDataViewModel *model = GetOwner()->GetModel();
+    wxDataViewModel *model = GetModel();
 
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );
@@ -1538,7 +1541,7 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
 
     wxDataViewItem item = GetItemByRow( row );
 
-    wxDataViewModel *model = GetOwner()->GetModel();
+    wxDataViewModel *model = GetModel();
 
     wxCustomDataObject *obj = (wxCustomDataObject *) GetDropTarget()->GetDataObject();
 
@@ -1640,7 +1643,7 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
 
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
-    wxDataViewModel *model = GetOwner()->GetModel();
+    wxDataViewModel *model = GetModel();
     wxAutoBufferedPaintDC dc( this );
 
 #ifdef __WXMSW__
@@ -1981,7 +1984,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
     if (IsVirtualList())
     {
         wxDataViewVirtualListModel *list_model =
-            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+            (wxDataViewVirtualListModel*) GetModel();
         m_count = list_model->GetCount();
     }
     else
@@ -1994,7 +1997,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
             return false;
 
         wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
-        itemNode->SetHasChildren(GetOwner()->GetModel()->IsContainer(item));
+        itemNode->SetHasChildren(GetModel()->IsContainer(item));
 
         parentNode->SetHasChildren(true);
         parentNode->AddChild(itemNode);
@@ -2017,7 +2020,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     if (IsVirtualList())
     {
         wxDataViewVirtualListModel *list_model =
-            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+            (wxDataViewVirtualListModel*) GetModel();
         m_count = list_model->GetCount();
 
         if ( !m_selection.empty() )
@@ -2078,7 +2081,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
             // If this was the last child to be removed, it's possible the parent
             // node became a leaf. Let's ask the model about it.
             if ( parentNode->GetChildNodes().empty() )
-                parentNode->SetHasChildren(GetOwner()->GetModel()->IsContainer(parent));
+                parentNode->SetHasChildren(GetModel()->IsContainer(parent));
 
             return false;
         }
@@ -2096,7 +2099,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         // If this was the last child to be removed, it's possible the parent
         // node became a leaf. Let's ask the model about it.
         if ( parentNode->GetChildNodes().empty() )
-            parentNode->SetHasChildren(GetOwner()->GetModel()->IsContainer(parent));
+            parentNode->SetHasChildren(GetModel()->IsContainer(parent));
 
         // Update selection by removing 'item' and its entire children tree from the selection.
         if ( !m_selection.empty() )
@@ -2157,7 +2160,7 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
     wxWindow *parent = GetParent();
     wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, parent->GetId());
     le.SetEventObject(parent);
-    le.SetModel(GetOwner()->GetModel());
+    le.SetModel(GetModel());
     le.SetItem(item);
     parent->GetEventHandler()->ProcessEvent(le);
 
@@ -2198,7 +2201,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     wxWindow *parent = GetParent();
     wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, parent->GetId());
     le.SetEventObject(parent);
-    le.SetModel(GetOwner()->GetModel());
+    le.SetModel(GetModel());
     le.SetItem(item);
     le.SetColumn(view_column);
     le.SetDataViewColumn(GetOwner()->GetColumn(view_column));
@@ -2213,7 +2216,7 @@ bool wxDataViewMainWindow::Cleared()
     m_selection.Clear();
 
     SortPrepare();
-    BuildTree( GetOwner()->GetModel() );
+    BuildTree( GetModel() );
 
     GetOwner()->UpdateColBestWidths();
     UpdateDisplay();
@@ -2240,7 +2243,7 @@ void wxDataViewMainWindow::OnInternalIdle()
 
 void wxDataViewMainWindow::RecalculateDisplay()
 {
-    wxDataViewModel *model = GetOwner()->GetModel();
+    wxDataViewModel *model = GetModel();
     if (!model)
     {
         Refresh();
@@ -2468,7 +2471,7 @@ void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item
     wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, parent->GetId());
 
     le.SetEventObject(parent);
-    le.SetModel(GetOwner()->GetModel());
+    le.SetModel(GetModel());
     le.SetItem( item );
 
     parent->GetEventHandler()->ProcessEvent(le);
@@ -2582,7 +2585,7 @@ wxRect wxDataViewMainWindow::GetLineRect( unsigned int row ) const
 
 int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 {
-    const wxDataViewModel *model = GetOwner()->GetModel();
+    const wxDataViewModel *model = GetModel();
 
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
@@ -2632,7 +2635,7 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 
 int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 {
-    const wxDataViewModel *model = GetOwner()->GetModel();
+    const wxDataViewModel *model = GetModel();
 
     // check for the easy case first
     if ( !GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
@@ -2683,7 +2686,7 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 
 int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 {
-    const wxDataViewModel *model = GetOwner()->GetModel();
+    const wxDataViewModel *model = GetModel();
 
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
@@ -2810,7 +2813,7 @@ wxDataViewMainWindow::SendExpanderEvent(wxEventType type,
     wxDataViewEvent le(type, parent->GetId());
 
     le.SetEventObject(parent);
-    le.SetModel(GetOwner()->GetModel());
+    le.SetModel(GetModel());
     le.SetItem( item );
 
     return !parent->ProcessWindowEvent(le) || le.IsAllowed();
@@ -2872,7 +2875,7 @@ void wxDataViewMainWindow::Expand( unsigned int row )
                 if( node->GetChildNodes().empty() )
                 {
                     SortPrepare();
-                    ::BuildTreeHelper(GetOwner()->GetModel(), node->GetItem(), node);
+                    ::BuildTreeHelper(GetModel(), node->GetItem(), node);
                 }
 
                 // By expanding the node all row indices that are currently in the selection list
@@ -2974,7 +2977,7 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
 
 wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
 {
-    const wxDataViewModel * model = GetOwner()->GetModel();
+    const wxDataViewModel * model = GetModel();
     if( model == NULL )
         return NULL;
 
@@ -3124,7 +3127,7 @@ int wxDataViewMainWindow::RecalculateCount()
     if (IsVirtualList())
     {
         wxDataViewVirtualListModel *list_model =
-            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+            (wxDataViewVirtualListModel*) GetModel();
 
         return list_model->GetCount();
     }
@@ -3179,7 +3182,7 @@ private:
 
 int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
 {
-    const wxDataViewModel * model = GetOwner()->GetModel();
+    const wxDataViewModel * model = GetModel();
     if( model == NULL )
         return -1;
 
@@ -3239,7 +3242,7 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
 {
     DestroyTree();
 
-    if (GetOwner()->GetModel()->IsVirtualListModel())
+    if (GetModel()->IsVirtualListModel())
     {
         m_count = -1;
         return;
@@ -3308,7 +3311,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                                    parent->GetId());
                 le.SetItem( GetItemByRow(m_currentRow) );
                 le.SetEventObject(parent);
-                le.SetModel(GetOwner()->GetModel());
+                le.SetModel(GetModel());
 
                 parent->GetEventHandler()->ProcessEvent(le);
             }
@@ -3519,7 +3522,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         }
     }
 
-    wxDataViewModel *model = GetOwner()->GetModel();
+    wxDataViewModel *model = GetModel();
 
 #if wxUSE_DRAG_AND_DROP
     if (event.Dragging())
@@ -3613,7 +3616,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 le.SetColumn( col->GetModelColumn() );
                 le.SetDataViewColumn( col );
                 le.SetEventObject(parent);
-                le.SetModel(GetOwner()->GetModel());
+                le.SetModel(GetModel());
 
                 parent->GetEventHandler()->ProcessEvent(le);
             }
@@ -3687,7 +3690,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         le.SetColumn( col->GetModelColumn() );
         le.SetDataViewColumn( col );
         le.SetEventObject(parent);
-        le.SetModel(GetOwner()->GetModel());
+        le.SetModel(GetModel());
         le.SetValue(value);
         parent->GetEventHandler()->ProcessEvent(le);
     }
