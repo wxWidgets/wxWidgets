@@ -1588,12 +1588,14 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
         GTK_TREE_MODEL(wxgtk_model), &iter ));
 #else
     // so get the path from the parent
-    GtkTreeIter iter;
-    iter.stamp = wxgtk_model->stamp;
-    iter.user_data = (gpointer) parent.GetID();
-    wxGtkTreePath path(wxgtk_tree_model_get_path(
-        GTK_TREE_MODEL(wxgtk_model), &iter ));
+    GtkTreeIter parentIter;
+    parentIter.stamp = wxgtk_model->stamp;
+    parentIter.user_data = (gpointer) parent.GetID();
+    wxGtkTreePath parentPath(wxgtk_tree_model_get_path(
+        GTK_TREE_MODEL(wxgtk_model), &parentIter ));
+
     // and add the final index ourselves
+    wxGtkTreePath path(gtk_tree_path_copy(parentPath));
     int index = m_internal->GetIndexOf( parent, item );
     gtk_tree_path_append_index( path, index );
 #endif
@@ -1602,6 +1604,17 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
         GTK_TREE_MODEL(wxgtk_model), path );
 
     m_internal->ItemDeleted( parent, item );
+
+    // Did we remove the last child, causing 'parent' to become a leaf?
+    if ( !m_wx_model->IsContainer(parent) )
+    {
+        gtk_tree_model_row_has_child_toggled
+        (
+            GTK_TREE_MODEL(wxgtk_model),
+            parentPath,
+            &parentIter
+        );
+    }
 
     return true;
 }
