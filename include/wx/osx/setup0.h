@@ -842,6 +842,7 @@
 #define wxUSE_TEXTCTRL      1   // wxTextCtrl
 #define wxUSE_TOGGLEBTN     1   // requires wxButton
 #define wxUSE_TREECTRL      1   // wxTreeCtrl
+#define wxUSE_TREELISTCTRL  1   // wxTreeListCtrl
 
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
 // below either wxStatusBar95 or a generic wxStatusBar will be used.

@@ -5769,6 +5769,9 @@
 				RelativePath="..\..\include\wx\treectrl.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\treelist.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\uiaction.h">
 			</File>
 			<File

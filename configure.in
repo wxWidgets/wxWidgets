@@ -933,6 +933,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_TOOLTIPS=no
     DEFAULT_wxUSE_TREEBOOK=no
     DEFAULT_wxUSE_TREECTRL=no
+    DEFAULT_wxUSE_TREELISTCTRL=no
 fi
 
 dnl features affecting multiple controls
@@ -1005,6 +1006,7 @@ WX_ARG_FEATURE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxU
 WX_ARG_FEATURE(toolbook,    [  --enable-toolbook       use wxToolbook class], wxUSE_TOOLBOOK)
 WX_ARG_FEATURE(treebook,    [  --enable-treebook       use wxTreebook class], wxUSE_TREEBOOK)
 WX_ARG_FEATURE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
+WX_ARG_FEATURE(treelist,    [  --enable-treelist       use wxTreeListCtrl class], wxUSE_TREELISTCTRL)
 
 dnl ---------------------------------------------------------------------------
 dnl common dialogs
@@ -7139,6 +7141,11 @@ if test "$wxUSE_TREECTRL" = "yes"; then
     else
         AC_MSG_WARN([wxTreeCtrl requires wxImageList and won't be compiled without it])
     fi
+fi
+
+if test "$wxUSE_TREECTRL" = "yes"; then
+    AC_DEFINE(wxUSE_TREELISTCTRL)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then

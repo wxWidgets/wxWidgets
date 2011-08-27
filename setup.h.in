@@ -403,6 +403,7 @@
 #define wxUSE_TEXTCTRL      0
 #define wxUSE_TOGGLEBTN     0
 #define wxUSE_TREECTRL      0
+#define wxUSE_TREELISTCTRL  0
 
 #define wxUSE_STATUSBAR    0
 

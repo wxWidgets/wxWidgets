@@ -1873,6 +1873,7 @@ Optional Features:
   --enable-toolbook       use wxToolbook class
   --enable-treebook       use wxTreebook class
   --enable-treectrl       use wxTreeCtrl class
+  --enable-treelist       use wxTreeListCtrl class
   --enable-commondlg      use all common dialogs
   --enable-aboutdlg       use wxAboutBox
   --enable-choicedlg      use wxChoiceDialog
@@ -9910,6 +9911,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_TOOLTIPS=no
     DEFAULT_wxUSE_TREEBOOK=no
     DEFAULT_wxUSE_TREECTRL=no
+    DEFAULT_wxUSE_TREELISTCTRL=no
 fi
 
 
@@ -12856,6 +12858,50 @@ fi
             fi
           else
             result=$wxUSE_TREECTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-treelist" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-treelist... $ECHO_C" >&6; }
+          # Check whether --enable-treelist was given.
+if test "${enable_treelist+set}" = set; then
+  enableval=$enable_treelist;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_treelist='wxUSE_TREELISTCTRL=yes'
+                          else
+                            wx_cv_use_treelist='wxUSE_TREELISTCTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_treelist='wxUSE_TREELISTCTRL=${'DEFAULT_wxUSE_TREELISTCTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_treelist"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_TREELISTCTRL = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_TREELISTCTRL
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -47835,6 +47881,14 @@ _ACEOF
         { echo "$as_me:$LINENO: WARNING: wxTreeCtrl requires wxImageList and won't be compiled without it" >&5
 echo "$as_me: WARNING: wxTreeCtrl requires wxImageList and won't be compiled without it" >&2;}
     fi
+fi
+
+if test "$wxUSE_TREECTRL" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_TREELISTCTRL 1
+_ACEOF
+
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then

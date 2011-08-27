@@ -2263,6 +2263,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_tipdlg.o \
+	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
@@ -2308,6 +2309,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_tipdlg.o \
+	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
@@ -3036,6 +3038,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_tipdlg.o \
+	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
@@ -3081,6 +3084,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_tipdlg.o \
+	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
@@ -4270,6 +4274,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_sashwin.o \
 	$(OBJS)\advdll_splash.o \
 	$(OBJS)\advdll_tipdlg.o \
+	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
@@ -4315,6 +4320,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_sashwin.o \
 	$(OBJS)\advdll_splash.o \
 	$(OBJS)\advdll_tipdlg.o \
+	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
@@ -4362,6 +4368,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_sashwin.o \
 	$(OBJS)\advlib_splash.o \
 	$(OBJS)\advlib_tipdlg.o \
+	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
@@ -4407,6 +4414,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_sashwin.o \
 	$(OBJS)\advlib_splash.o \
 	$(OBJS)\advlib_tipdlg.o \
+	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
@@ -8382,6 +8390,11 @@ $(OBJS)\monodll_tipdlg.o: ../../src/generic/tipdlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_treelist.o: ../../src/generic/treelist.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_wizard.o: ../../src/generic/wizard.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10737,6 +10750,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_tipdlg.o: ../../src/generic/tipdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_treelist.o: ../../src/generic/treelist.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14463,6 +14481,9 @@ $(OBJS)\advdll_splash.o: ../../src/generic/splash.cpp
 $(OBJS)\advdll_tipdlg.o: ../../src/generic/tipdlg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_treelist.o: ../../src/generic/treelist.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14590,6 +14611,9 @@ $(OBJS)\advlib_splash.o: ../../src/generic/splash.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_tipdlg.o: ../../src/generic/tipdlg.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_treelist.o: ../../src/generic/treelist.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp

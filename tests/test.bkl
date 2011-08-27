@@ -180,6 +180,7 @@
             controls/toolbooktest.cpp
             controls/treebooktest.cpp
             controls/treectrltest.cpp
+            controls/treelistctrltest.cpp
             controls/virtlistctrltest.cpp
             controls/windowtest.cpp
             events/clone.cpp

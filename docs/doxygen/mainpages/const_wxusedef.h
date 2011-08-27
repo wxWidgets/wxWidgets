@@ -251,6 +251,7 @@ library:
 @itemdef{wxUSE_TOOLTIPS, Use wxToolTip class.}
 @itemdef{wxUSE_TREEBOOK, Use wxTreebook class.}
 @itemdef{wxUSE_TREECTRL, Use wxTreeCtrl class.}
+@itemdef{wxUSE_TREELISTCTRL, Use wxTreeListCtrl class.}
 @itemdef{wxUSE_TTM_WINDOWFROMPOINT, Obsolete, do not use.}
 @itemdef{wxUSE_URL, Use wxURL class.}
 @itemdef{wxUSE_URL_NATIVE, Use native support for some operations with wxURL.}

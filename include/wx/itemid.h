@@ -36,6 +36,9 @@ public:
     Type GetID() const { return m_pItem; }
     operator const Type() const { return m_pItem; }
 
+    // This is used for implementation purposes only.
+    Type operator->() const { return m_pItem; }
+
     void Unset() { m_pItem = NULL; }
 
     // This field is public *only* for compatibility with the old wxTreeItemId

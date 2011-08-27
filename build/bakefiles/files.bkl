@@ -2974,6 +2974,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/sashwin.cpp
     src/generic/splash.cpp
     src/generic/tipdlg.cpp
+    src/generic/treelist.cpp
     src/generic/wizard.cpp
 </set>
 
@@ -3021,6 +3022,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/splash.h
     wx/taskbar.h
     wx/tipdlg.h
+    wx/treelist.h
     wx/wizard.h
 </set>
 

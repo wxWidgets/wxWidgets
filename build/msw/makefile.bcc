@@ -2249,6 +2249,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sashwin.obj \
 	$(OBJS)\monodll_splash.obj \
 	$(OBJS)\monodll_tipdlg.obj \
+	$(OBJS)\monodll_treelist.obj \
 	$(OBJS)\monodll_wizard.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
@@ -2294,6 +2295,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sashwin.obj \
 	$(OBJS)\monodll_splash.obj \
 	$(OBJS)\monodll_tipdlg.obj \
+	$(OBJS)\monodll_treelist.obj \
 	$(OBJS)\monodll_wizard.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
@@ -3016,6 +3018,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sashwin.obj \
 	$(OBJS)\monolib_splash.obj \
 	$(OBJS)\monolib_tipdlg.obj \
+	$(OBJS)\monolib_treelist.obj \
 	$(OBJS)\monolib_wizard.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
@@ -3061,6 +3064,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sashwin.obj \
 	$(OBJS)\monolib_splash.obj \
 	$(OBJS)\monolib_tipdlg.obj \
+	$(OBJS)\monolib_treelist.obj \
 	$(OBJS)\monolib_wizard.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
@@ -4222,6 +4226,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_sashwin.obj \
 	$(OBJS)\advdll_splash.obj \
 	$(OBJS)\advdll_tipdlg.obj \
+	$(OBJS)\advdll_treelist.obj \
 	$(OBJS)\advdll_wizard.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
@@ -4267,6 +4272,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_sashwin.obj \
 	$(OBJS)\advdll_splash.obj \
 	$(OBJS)\advdll_tipdlg.obj \
+	$(OBJS)\advdll_treelist.obj \
 	$(OBJS)\advdll_wizard.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
@@ -4310,6 +4316,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_sashwin.obj \
 	$(OBJS)\advlib_splash.obj \
 	$(OBJS)\advlib_tipdlg.obj \
+	$(OBJS)\advlib_treelist.obj \
 	$(OBJS)\advlib_wizard.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
@@ -4355,6 +4362,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_sashwin.obj \
 	$(OBJS)\advlib_splash.obj \
 	$(OBJS)\advlib_tipdlg.obj \
+	$(OBJS)\advlib_treelist.obj \
 	$(OBJS)\advlib_wizard.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
@@ -8232,6 +8240,11 @@ $(OBJS)\monodll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_treelist.obj: ..\..\src\generic\treelist.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\treelist.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\wizard.cpp
 !endif
@@ -10588,6 +10601,11 @@ $(OBJS)\monolib_splash.obj: ..\..\src\generic\splash.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_treelist.obj: ..\..\src\generic\treelist.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\treelist.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -14313,6 +14331,9 @@ $(OBJS)\advdll_splash.obj: ..\..\src\generic\splash.cpp
 $(OBJS)\advdll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
 
+$(OBJS)\advdll_treelist.obj: ..\..\src\generic\treelist.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\treelist.cpp
+
 $(OBJS)\advdll_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\wizard.cpp
 
@@ -14441,6 +14462,9 @@ $(OBJS)\advlib_splash.obj: ..\..\src\generic\splash.cpp
 
 $(OBJS)\advlib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
+
+$(OBJS)\advlib_treelist.obj: ..\..\src\generic\treelist.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\treelist.cpp
 
 $(OBJS)\advlib_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\wizard.cpp

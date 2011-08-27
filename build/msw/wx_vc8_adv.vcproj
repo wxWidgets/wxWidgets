@@ -1097,6 +1097,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\treelist.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\wizard.cpp"
 				>
 			</File>
@@ -1534,6 +1538,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tipdlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\treelist.h"
 				>
 			</File>
 			<File

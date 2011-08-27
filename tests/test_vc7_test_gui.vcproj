@@ -836,6 +836,9 @@
 				RelativePath=".\controls\treectrltest.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\treelistctrltest.cpp">
+			</File>
+			<File
 				RelativePath=".\validators\valnum.cpp">
 			</File>
 			<File

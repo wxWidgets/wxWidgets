@@ -643,6 +643,10 @@ SOURCE=..\..\src\generic\tipdlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\treelist.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\wizard.cpp
 # End Source File
 # End Group
@@ -1101,6 +1105,10 @@ SOURCE=..\..\include\wx\taskbar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tipdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\treelist.h
 # End Source File
 # Begin Source File
 

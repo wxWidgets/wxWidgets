@@ -813,6 +813,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_sashwin.obj &
 	$(OBJS)\monodll_splash.obj &
 	$(OBJS)\monodll_tipdlg.obj &
+	$(OBJS)\monodll_treelist.obj &
 	$(OBJS)\monodll_wizard.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_aboutdlg.obj &
@@ -858,6 +859,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_sashwin.obj &
 	$(OBJS)\monodll_splash.obj &
 	$(OBJS)\monodll_tipdlg.obj &
+	$(OBJS)\monodll_treelist.obj &
 	$(OBJS)\monodll_wizard.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_aboutdlg.obj &
@@ -1591,6 +1593,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_sashwin.obj &
 	$(OBJS)\monolib_splash.obj &
 	$(OBJS)\monolib_tipdlg.obj &
+	$(OBJS)\monolib_treelist.obj &
 	$(OBJS)\monolib_wizard.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_aboutdlg.obj &
@@ -1636,6 +1639,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_sashwin.obj &
 	$(OBJS)\monolib_splash.obj &
 	$(OBJS)\monolib_tipdlg.obj &
+	$(OBJS)\monolib_treelist.obj &
 	$(OBJS)\monolib_wizard.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_aboutdlg.obj &
@@ -2841,6 +2845,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_sashwin.obj &
 	$(OBJS)\advdll_splash.obj &
 	$(OBJS)\advdll_tipdlg.obj &
+	$(OBJS)\advdll_treelist.obj &
 	$(OBJS)\advdll_wizard.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
 	$(OBJS)\advdll_aboutdlg.obj &
@@ -2886,6 +2891,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_sashwin.obj &
 	$(OBJS)\advdll_splash.obj &
 	$(OBJS)\advdll_tipdlg.obj &
+	$(OBJS)\advdll_treelist.obj &
 	$(OBJS)\advdll_wizard.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
 	$(OBJS)\advdll_aboutdlg.obj &
@@ -2935,6 +2941,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_sashwin.obj &
 	$(OBJS)\advlib_splash.obj &
 	$(OBJS)\advlib_tipdlg.obj &
+	$(OBJS)\advlib_treelist.obj &
 	$(OBJS)\advlib_wizard.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
 	$(OBJS)\advlib_aboutdlg.obj &
@@ -2980,6 +2987,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_sashwin.obj &
 	$(OBJS)\advlib_splash.obj &
 	$(OBJS)\advlib_tipdlg.obj &
+	$(OBJS)\advlib_treelist.obj &
 	$(OBJS)\advlib_wizard.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
 	$(OBJS)\advlib_aboutdlg.obj &
@@ -8641,6 +8649,11 @@ $(OBJS)\monodll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_treelist.obj :  .AUTODEPEND ..\..\src\generic\treelist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -10996,6 +11009,11 @@ $(OBJS)\monolib_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_treelist.obj :  .AUTODEPEND ..\..\src\generic\treelist.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -14722,6 +14740,9 @@ $(OBJS)\advdll_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
 $(OBJS)\advdll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_treelist.obj :  .AUTODEPEND ..\..\src\generic\treelist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -14849,6 +14870,9 @@ $(OBJS)\advlib_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_treelist.obj :  .AUTODEPEND ..\..\src\generic\treelist.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp

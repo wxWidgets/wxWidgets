@@ -179,6 +179,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_toolbooktest.obj \
 	$(OBJS)\test_gui_treebooktest.obj \
 	$(OBJS)\test_gui_treectrltest.obj \
+	$(OBJS)\test_gui_treelistctrltest.obj \
 	$(OBJS)\test_gui_virtlistctrltest.obj \
 	$(OBJS)\test_gui_windowtest.obj \
 	$(OBJS)\test_gui_clone.obj \
@@ -1009,6 +1010,9 @@ $(OBJS)\test_gui_treebooktest.obj: .\controls\treebooktest.cpp
 
 $(OBJS)\test_gui_treectrltest.obj: .\controls\treectrltest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\treectrltest.cpp
+
+$(OBJS)\test_gui_treelistctrltest.obj: .\controls\treelistctrltest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\treelistctrltest.cpp
 
 $(OBJS)\test_gui_virtlistctrltest.obj: .\controls\virtlistctrltest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\virtlistctrltest.cpp

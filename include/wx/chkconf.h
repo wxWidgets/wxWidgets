@@ -1133,6 +1133,14 @@
 #   endif
 #endif /* !defined(wxUSE_TREECTRL) */
 
+#ifndef wxUSE_TREELISTCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TREELISTCTRL must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_TREELISTCTRL 0
+#   endif
+#endif /* !defined(wxUSE_TREELISTCTRL) */
+
 #ifndef wxUSE_UIACTIONSIMULATOR
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_UIACTIONSIMULATOR must be defined, please read comment near the top of this file."
@@ -1463,7 +1471,8 @@
     wxUSE_STATUSBAR || \
     wxUSE_TEXTCTRL || \
     wxUSE_TOOLBAR || \
-    wxUSE_TREECTRL
+    wxUSE_TREECTRL || \
+    wxUSE_TREELISTCTRL
 #    if !wxUSE_CONTROLS
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "wxUSE_CONTROLS unset but some controls used"
@@ -2001,7 +2010,7 @@
 #endif
 
 #if !wxUSE_IMAGLIST
-#   if wxUSE_TREECTRL || wxUSE_NOTEBOOK || wxUSE_LISTCTRL
+#   if wxUSE_TREECTRL || wxUSE_NOTEBOOK || wxUSE_LISTCTRL || wxUSE_TREELISTCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxImageList must be compiled as well"
 #       else
@@ -2127,6 +2136,15 @@
 #       endif
 #   endif
 #endif /* wxUSE_VARIANT */
+
+#if wxUSE_TREELISTCTRL && !wxUSE_DATAVIEWCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TREELISTCTRL requires wxDataViewCtrl"
+#   else
+#       undef wxUSE_TREELISTCTRL
+#       define wxUSE_TREELISTCTRL 0
+#   endif
+#endif /* wxUSE_TREELISTCTRL */
 
 #endif /* wxUSE_GUI */
 

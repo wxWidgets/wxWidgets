@@ -3719,6 +3719,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/splash.h \
 	wx/taskbar.h \
 	wx/tipdlg.h \
+	wx/treelist.h \
 	wx/wizard.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
@@ -3767,6 +3768,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/splash.h \
 	wx/taskbar.h \
 	wx/tipdlg.h \
+	wx/treelist.h \
 	wx/wizard.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	wx/generic/animate.h
@@ -6100,6 +6102,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_sashwin.o \
 	monodll_splash.o \
 	monodll_tipdlg.o \
+	monodll_treelist.o \
 	monodll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
@@ -6133,6 +6136,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_sashwin.o \
 	monodll_splash.o \
 	monodll_tipdlg.o \
+	monodll_treelist.o \
 	monodll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
 	monodll_animateg.o
@@ -8033,6 +8037,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_sashwin.o \
 	monolib_splash.o \
 	monolib_tipdlg.o \
+	monolib_treelist.o \
 	monolib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_0) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
@@ -8066,6 +8071,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_sashwin.o \
 	monolib_splash.o \
 	monolib_tipdlg.o \
+	monolib_treelist.o \
 	monolib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_0) \
 	monolib_animateg.o
@@ -11808,6 +11814,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_sashwin.o \
 	advdll_splash.o \
 	advdll_tipdlg.o \
+	advdll_treelist.o \
 	advdll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
@@ -11841,6 +11848,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_sashwin.o \
 	advdll_splash.o \
 	advdll_tipdlg.o \
+	advdll_treelist.o \
 	advdll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8) \
 	advdll_animateg.o
@@ -11914,6 +11922,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_sashwin.o \
 	advlib_splash.o \
 	advlib_tipdlg.o \
+	advlib_treelist.o \
 	advlib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
@@ -11947,6 +11956,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_sashwin.o \
 	advlib_splash.o \
 	advlib_tipdlg.o \
+	advlib_treelist.o \
 	advlib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9) \
 	advlib_animateg.o
@@ -20421,6 +20431,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tipdlg.cpp
 
+@COND_USE_GUI_1@monodll_treelist.o: $(srcdir)/src/generic/treelist.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/treelist.cpp
+
 @COND_USE_GUI_1@monodll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
 
@@ -25751,6 +25764,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tipdlg.cpp
+
+@COND_USE_GUI_1@monolib_treelist.o: $(srcdir)/src/generic/treelist.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/treelist.cpp
 
 @COND_USE_GUI_1@monolib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
@@ -35292,6 +35308,9 @@ advdll_splash.o: $(srcdir)/src/generic/splash.cpp $(ADVDLL_ODEP)
 advdll_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/tipdlg.cpp
 
+advdll_treelist.o: $(srcdir)/src/generic/treelist.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/treelist.cpp
+
 advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
 
@@ -35648,6 +35667,9 @@ advlib_splash.o: $(srcdir)/src/generic/splash.cpp $(ADVLIB_ODEP)
 
 advlib_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/tipdlg.cpp
+
+advlib_treelist.o: $(srcdir)/src/generic/treelist.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/treelist.cpp
 
 advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp

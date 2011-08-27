@@ -6924,6 +6924,10 @@ SOURCE=..\..\include\wx\treectrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\treelist.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\uiaction.h
 # End Source File
 # Begin Source File

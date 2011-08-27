@@ -451,6 +451,7 @@ All:
 
 All (GUI):
 
+- Added wxTreeListCtrl class.
 - Added documented, public wxNavigationEnabled<> class.
 - Added wxTextCtrl::PositionToCoords() (Navaneeth).
 - Added support for wxHELP button to wxMessageDialog.

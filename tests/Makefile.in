@@ -199,6 +199,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_toolbooktest.o \
 	test_gui_treebooktest.o \
 	test_gui_treectrltest.o \
+	test_gui_treelistctrltest.o \
 	test_gui_virtlistctrltest.o \
 	test_gui_windowtest.o \
 	test_gui_clone.o \
@@ -843,6 +844,9 @@ test_gui_treebooktest.o: $(srcdir)/controls/treebooktest.cpp $(TEST_GUI_ODEP)
 
 test_gui_treectrltest.o: $(srcdir)/controls/treectrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/treectrltest.cpp
+
+test_gui_treelistctrltest.o: $(srcdir)/controls/treelistctrltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/treelistctrltest.cpp
 
 test_gui_virtlistctrltest.o: $(srcdir)/controls/virtlistctrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/virtlistctrltest.cpp
