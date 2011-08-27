@@ -2042,68 +2042,68 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     }
     else // general case
     {
-        wxDataViewTreeNode * node = FindNode(parent);
+        wxDataViewTreeNode * parentNode = FindNode(parent);
 
         // Notice that it is possible that the item being deleted is not in the
         // tree at all, for example we could be deleting a never shown (because
         // collapsed) item in a tree model. So it's not an error if we don't know
         // about this item, just return without doing anything then.
-        if ( !node )
+        if ( !parentNode )
             return false;
 
-        int itemPosInNode = node->GetChildren().Index(item.GetID());
+        int itemPosInNode = parentNode->GetChildren().Index(item.GetID());
         if ( itemPosInNode == wxNOT_FOUND )
             return false;
 
         bool isContainer = false;
         wxDataViewTreeNode *itemNode = NULL;
 
-        const wxDataViewTreeNodes nds = node->GetNodes();
-        for (size_t i = 0; i < nds.GetCount(); i ++)
+        const wxDataViewTreeNodes nodes = parentNode->GetNodes();
+        for (size_t i = 0; i < nodes.GetCount(); i ++)
         {
-            if (nds[i]->GetItem() == item)
+            if (nodes[i]->GetItem() == item)
             {
                 isContainer = true;
-                itemNode = nds[i];
+                itemNode = nodes[i];
                 break;
             }
         }
 
         // Delete the item from wxDataViewTreeNode representation:
         int itemsDeleted = 1;
-        node->GetChildren().Remove( item.GetID() );
+        parentNode->GetChildren().Remove( item.GetID() );
 
         if( isContainer )
         {
-            wxDataViewTreeNode *n = node->FindItemAsNode(item);
+            wxDataViewTreeNode *n = parentNode->FindItemAsNode(item);
 
             wxCHECK_MSG( n != NULL, false, "item not found" );
 
-            node->GetNodes().Remove( n );
+            parentNode->GetNodes().Remove( n );
             itemsDeleted += n->GetSubTreeCount();
             ::DestroyTreeHelper(n);
         }
 
         // Make the row number invalid and get a new valid one when user call GetRowCount
         m_count = -1;
-        node->ChangeSubTreeCount(-itemsDeleted);
+        parentNode->ChangeSubTreeCount(-itemsDeleted);
 
         // Update selection by removing 'item' and its entire children tree from the selection.
         if ( !m_selection.empty() )
         {
             // we can't call GetRowByItem() on 'item', as it's already deleted, so compute it from
-            // the parent ('node') and position in its list of children
+            // the parent ('parentNode') and position in its list of children
             int itemRow;
             if ( itemPosInNode == 0 )
             {
-                // 1st child, row number is that of the parent node + 1
-                itemRow = GetRowByItem(node->GetItem()) + 1;
+                // 1st child, row number is that of the parent parentNode + 1
+                itemRow = GetRowByItem(parentNode->GetItem()) + 1;
             }
             else
             {
                 // row number is that of the sibling above 'item' + its subtree if any + 1
-                const wxDataViewItem sibling = wxDataViewItem(node->GetChildren()[itemPosInNode - 1]);
-                const wxDataViewTreeNode *siblingNode = node->FindItemAsNode(sibling);
+                const wxDataViewItem sibling = wxDataViewItem(parentNode->GetChildren()[itemPosInNode - 1]);
+                const wxDataViewTreeNode *siblingNode = parentNode->FindItemAsNode(sibling);
 
                 itemRow = GetRowByItem(sibling);
                 if ( siblingNode )
