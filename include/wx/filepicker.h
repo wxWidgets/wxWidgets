@@ -253,13 +253,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxFLP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxFilePickerCtrlNameStr)
-    {
-        return wxFileDirPickerCtrlBase::CreateBase(parent, id, path,
-                                                   message, wildcard,
-                                                   pos, size, style,
-                                                   validator, name);
-    }
+                const wxString& name = wxFilePickerCtrlNameStr);
 
     void SetFileName(const wxFileName &filename)
         { SetPath(filename.GetFullPath()); }
@@ -358,14 +352,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDIRP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxDirPickerCtrlNameStr)
-    {
-        return wxFileDirPickerCtrlBase::CreateBase
-               (
-                    parent, id, path, message, wxEmptyString,
-                    pos, size, style, validator, name
-               );
-    }
+                const wxString& name = wxDirPickerCtrlNameStr);
 
     void SetDirName(const wxFileName &dirname)
         { SetPath(dirname.GetPath()); }

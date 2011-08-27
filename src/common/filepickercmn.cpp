@@ -183,6 +183,30 @@ void wxFileDirPickerCtrlBase::OnFileDirChange(wxFileDirPickerEvent &ev)
 
 IMPLEMENT_DYNAMIC_CLASS(wxFilePickerCtrl, wxPickerBase)
 
+bool wxFilePickerCtrl::Create(wxWindow *parent,
+                              wxWindowID id,
+                              const wxString& path,
+                              const wxString& message,
+                              const wxString& wildcard,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxValidator& validator,
+                              const wxString& name)
+{
+    if ( !wxFileDirPickerCtrlBase::CreateBase
+                                   (
+                                        parent, id, path, message, wildcard,
+                                        pos, size, style, validator, name
+                                   ) )
+        return false;
+
+    if ( HasTextCtrl() )
+        GetTextCtrl()->AutoCompleteFileNames();
+
+    return true;
+}
+
 bool wxFilePickerCtrl::CheckPath(const wxString& path) const
 {
     // if wxFLP_SAVE was given or wxFLP_FILE_MUST_EXIST has NOT been given we
@@ -206,6 +230,29 @@ wxString wxFilePickerCtrl::GetTextCtrlValue() const
 
 #if wxUSE_DIRPICKERCTRL
 IMPLEMENT_DYNAMIC_CLASS(wxDirPickerCtrl, wxPickerBase)
+
+bool wxDirPickerCtrl::Create(wxWindow *parent,
+                             wxWindowID id,
+                             const wxString& path,
+                             const wxString& message,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxValidator& validator,
+                             const wxString& name)
+{
+    if ( !wxFileDirPickerCtrlBase::CreateBase
+                                   (
+                                        parent, id, path, message, wxString(),
+                                        pos, size, style, validator, name
+                                   ) )
+        return false;
+
+    if ( HasTextCtrl() )
+        GetTextCtrl()->AutoCompleteDirectories();
+
+    return true;
+}
 
 bool wxDirPickerCtrl::CheckPath(const wxString& path) const
 {

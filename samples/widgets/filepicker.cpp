@@ -234,7 +234,7 @@ void FilePickerWidgetsPage::RecreatePicker()
 {
     m_sizer->Remove(1);
     CreatePicker();
-    m_sizer->Insert(1, m_filePicker, 0, wxALIGN_CENTER||wxALL, 5);
+    m_sizer->Insert(1, m_filePicker, 0, wxEXPAND|wxALL, 5);
 
     m_sizer->Layout();
 }
