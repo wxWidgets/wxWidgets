@@ -113,6 +113,27 @@ public:
     bool AutoCompleteFileNames();
 
     /**
+        Call this function to enable auto-completion of the text using the file
+        system directories.
+
+        Unlike AutoCompleteFileNames() which completes both file names and
+        directories, this function only completes the directory names.
+
+        Notice that currently this function is only implemented in wxMSW port
+        and does nothing under the other platforms.
+
+        @since 2.9.3
+
+        @return
+            @true if the auto-completion was enabled or @false if the operation
+            failed, typically because auto-completion is not supported by the
+            current platform.
+
+        @see AutoComplete()
+     */
+    bool AutoCompleteDirectories();
+
+    /**
         Returns @true if the selection can be copied to the clipboard.
     */
     virtual bool CanCopy() const;

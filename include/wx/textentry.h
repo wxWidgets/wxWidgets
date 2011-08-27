@@ -20,6 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCompleter;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
+#include "wx/filefn.h"              // for wxFILE and wxDIR only
 #include "wx/gdicmn.h"              // for wxPoint
 
 // ----------------------------------------------------------------------------
@@ -117,7 +118,10 @@ public:
         { return DoAutoCompleteStrings(choices); }
 
     bool AutoCompleteFileNames()
-        { return DoAutoCompleteFileNames(); }
+        { return DoAutoCompleteFileNames(wxFILE); }
+
+    bool AutoCompleteDirectories()
+        { return DoAutoCompleteFileNames(wxDIR); }
 
     // notice that we take ownership of the pointer and will delete it
     //
@@ -230,7 +234,8 @@ protected:
     // the other one(s)
     virtual bool DoAutoCompleteStrings(const wxArrayString& WXUNUSED(choices))
         { return false; }
-    virtual bool DoAutoCompleteFileNames() { return false; }
+    virtual bool DoAutoCompleteFileNames(int WXUNUSED(flags)) // wxFILE | wxDIR
+        { return false; }
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer);
 
 
