@@ -24,6 +24,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
 #endif // WX_PRECOMP
 
 #include "wx/treelist.h"
