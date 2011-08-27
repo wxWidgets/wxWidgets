@@ -323,10 +323,11 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     // is wrong when next another canvas is repainted.
     const wxSize ClientSize = GetClientSize();
 
+    TestGLContext& canvas = wxGetApp().GetContext(this);
     glViewport(0, 0, ClientSize.x, ClientSize.y);
 
     // Render the graphics and swap the buffers.
-    wxGetApp().GetContext(this).DrawRotatedCube(m_xangle, m_yangle);
+    canvas.DrawRotatedCube(m_xangle, m_yangle);
     SwapBuffers();
 }
 
