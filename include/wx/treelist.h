@@ -47,7 +47,10 @@ enum
 
     wxTL_DEFAULT_STYLE  = wxTL_SINGLE,
     wxTL_STYLE_MASK     = wxTL_SINGLE |
-                          wxTL_CHECKBOX
+                          wxTL_MULTIPLE |
+                          wxTL_CHECKBOX |
+                          wxTL_3STATE |
+                          wxTL_USER_3STATE
 };
 
 // ----------------------------------------------------------------------------

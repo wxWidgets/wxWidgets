@@ -499,7 +499,14 @@ const char* MyFrame::CheckedStateString(wxCheckBoxState state)
 
 void MyFrame::OnSelectionChanged(wxTreeListEvent& event)
 {
-    wxLogMessage("Selection changed to \"%s\"", DumpItem(event.GetItem()));
+    const char* msg;
+
+    if ( m_treelist->HasFlag(wxTL_MULTIPLE) )
+        msg = "Selection of the \"%s\" item changed.";
+    else
+        msg = "Selection changed, now is \"%s\".";
+
+    wxLogMessage(msg, DumpItem(event.GetItem()));
 }
 
 void MyFrame::OnItemExpanding(wxTreeListEvent& event)

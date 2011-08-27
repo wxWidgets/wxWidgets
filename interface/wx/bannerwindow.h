@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        interface.wx/bannerwindow.h
+// Name:        interface/wx/bannerwindow.h
 // Purpose:     wxBannerWindow class documentation
 // Author:      Vadim Zeitlin
 // Created:     2011-08-16
