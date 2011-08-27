@@ -1959,10 +1959,13 @@ public:
     virtual ~DoJob() { }
 
     // The return value control how the tree-walker tranverse the tree
-    // 0: Job done, stop tranverse and return
-    // 1: Ignore the current node's subtree and continue
-    // 2: Job not done, continue
-    enum  { OK = 0 , IGR = 1, CONT = 2 };
+    enum
+    {
+        DONE,          // Job done, stop traversing and return
+        SKIP_SUBTREE,  // Ignore the current node's subtree and continue
+        CONTINUE       // Job not done, continue
+    };
+
     virtual int operator() ( wxDataViewTreeNode * node ) = 0;
 };
 
@@ -1972,11 +1975,11 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
     switch( func( node ) )
     {
-        case DoJob::OK:
+        case DoJob::DONE:
             return true;
-        case DoJob::IGR:
+        case DoJob::SKIP_SUBTREE:
             return false;
-        case DoJob::CONT:
+        case DoJob::CONTINUE:
             break;
     }
 
@@ -2761,13 +2764,13 @@ public:
         if( current == static_cast<int>(row))
         {
             ret = node;
-            return DoJob::OK;
+            return DoJob::DONE;
         }
 
         if( node->GetSubTreeCount() + current < static_cast<int>(row) )
         {
             current += node->GetSubTreeCount();
-            return  DoJob::IGR;
+            return  DoJob::SKIP_SUBTREE;
         }
         else
         {
@@ -2781,10 +2784,10 @@ public:
             {
                 const int index = static_cast<int>(row) - current - 1;
                 ret = node->GetChildNodes()[index];
-                return DoJob::OK;
+                return DoJob::DONE;
             }
 
-            return DoJob::CONT;
+            return DoJob::CONTINUE;
         }
     }
 
@@ -3168,18 +3171,18 @@ public:
         ret ++;
         if( node->GetItem() == item )
         {
-            return DoJob::OK;
+            return DoJob::DONE;
         }
 
         if( node->GetItem() == *m_iter )
         {
             m_iter++;
-            return DoJob::CONT;
+            return DoJob::CONTINUE;
         }
         else
         {
             ret += node->GetSubTreeCount();
-            return DoJob::IGR;
+            return DoJob::SKIP_SUBTREE;
         }
 
     }
