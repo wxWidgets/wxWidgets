@@ -791,7 +791,8 @@ wxWindow* wxDataViewTextRenderer::CreateEditorCtrl( wxWindow *parent,
 {
     wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, value,
                                        wxPoint(labelRect.x,labelRect.y),
-                                       wxSize(labelRect.width,labelRect.height) );
+                                       wxSize(labelRect.width,labelRect.height),
+                                       wxTE_PROCESS_ENTER );
 
     // select the text in the control an place the cursor at the end
     ctrl->SetInsertionPointEnd();
@@ -1177,7 +1178,8 @@ wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect 
 
     wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, text,
                                        wxPoint(labelRect.x,labelRect.y),
-                                       wxSize(labelRect.width,labelRect.height) );
+                                       wxSize(labelRect.width,labelRect.height),
+                                       wxTE_PROCESS_ENTER );
 
     // select the text in the control an place the cursor at the end
     ctrl->SetInsertionPointEnd();
