@@ -342,7 +342,7 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 
     While all images have RGB data, not all images have an alpha channel. Before
     using wxImage::GetAlpha you should check if this image contains an alpha
-    channel with wxImage::HasAlpha. Currently the BMP, PNG, and TIFF format
+    channel with wxImage::HasAlpha. Currently the BMP, PNG, TGA, and TIFF format
     handlers have full alpha channel support for loading so if you want to use
     alpha you have to use one of these formats. If you initialize the image
     alpha channel yourself using wxImage::SetAlpha, you should save it in
