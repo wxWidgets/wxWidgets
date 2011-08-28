@@ -394,7 +394,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if ( hasAlpha )
         image->SetAlpha();
 
-    if (!TIFFReadRGBAImage( tif, w, h, raster, 0 ))
+    if (!TIFFReadRGBAImageOriented( tif, w, h, raster, ORIENTATION_TOPLEFT, 0 ))
     {
         if (verbose)
         {
@@ -409,11 +409,8 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
 
     unsigned char *ptr = image->GetData();
-    ptr += w*3*(h-1);
 
     unsigned char *alpha = image->GetAlpha();
-    if ( hasAlpha )
-        alpha += w*(h-1);
 
     uint32 pos = 0;
 
@@ -429,11 +426,6 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
             pos++;
         }
-
-        // subtract line we just added plus one line:
-        ptr -= 2*w*3;
-        if ( hasAlpha )
-            alpha -= 2*w;
     }
 
 
