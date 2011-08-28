@@ -330,19 +330,24 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     TIFFGetField( tif, TIFFTAG_IMAGEWIDTH, &w );
     TIFFGetField( tif, TIFFTAG_IMAGELENGTH, &h );
 
-    uint16 photometric;
-    uint16 samplesPerPixel;
+    uint16 samplesPerPixel = 0;
+    (void) TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel);
+
+    uint16 bitsPerSample = 0;
+    (void) TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample);
+
     uint16 extraSamples;
     uint16* samplesInfo;
-    TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel);
     TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
                           &extraSamples, &samplesInfo);
+
+    uint16 photometric;
     if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric))
     {
         photometric = PHOTOMETRIC_MINISWHITE;
     }
     const bool hasAlpha = (extraSamples >= 1
-        && ((samplesInfo[0] == EXTRASAMPLE_UNSPECIFIED && samplesPerPixel > 3)
+        && ((samplesInfo[0] == EXTRASAMPLE_UNSPECIFIED)
             || samplesInfo[0] == EXTRASAMPLE_ASSOCALPHA
             || samplesInfo[0] == EXTRASAMPLE_UNASSALPHA))
         || (extraSamples == 0 && samplesPerPixel == 4
@@ -399,13 +404,22 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
     bool ok = true;
     char msg[1024] = "";
-    if ( !TIFFRGBAImageOK(tif, msg)
-        && planarConfig == PLANARCONFIG_CONTIG
-        && samplesPerPixel == 2 && extraSamples == 1)
+    if
+    (
+        (planarConfig == PLANARCONFIG_CONTIG && samplesPerPixel == 2
+            && extraSamples == 1)
+        &&
+        (
+            ( !TIFFRGBAImageOK(tif, msg) )
+            || (bitsPerSample == 8)
+        )
+    )
     {
+        const bool isGreyScale = (bitsPerSample == 8);
         unsigned char *buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
         uint32 pos = 0;
-        const int minValue = (photometric == PHOTOMETRIC_MINISWHITE) ? 255 : 0;
+        const bool minIsWhite = (photometric == PHOTOMETRIC_MINISWHITE);
+        const int minValue =  minIsWhite ? 255 : 0;
         const int maxValue = 255 - minValue;
 
         /*
@@ -421,14 +435,28 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
                 break;
             }
 
-            for (uint32 x = 0; x < w; ++x)
+            if (isGreyScale)
             {
-                int mask = buf[x*2/8] << ((x*2)%8);
+                for (uint32 x = 0; x < w; ++x)
+                {
+                    uint8 val = minIsWhite ? 255 - buf[x*2] : buf[x*2];
+                    uint8 alpha = minIsWhite ? 255 - buf[x*2+1] : buf[x*2+1];
+                    raster[pos] = val + (val << 8) + (val << 16)
+                        + (alpha << 24);
+                    pos++;
+                }
+            }
+            else
+            {
+                for (uint32 x = 0; x < w; ++x)
+                {
+                    int mask = buf[x*2/8] << ((x*2)%8);
 
-                uint8 val = mask & 128 ? maxValue : minValue;
-                raster[pos] = val + (val << 8) + (val << 16)
-                    + ((mask & 64 ? maxValue : minValue) << 24);
-                pos++;
+                    uint8 val = mask & 128 ? maxValue : minValue;
+                    raster[pos] = val + (val << 8) + (val << 16)
+                        + ((mask & 64 ? maxValue : minValue) << 24);
+                    pos++;
+                }
             }
         }
 
@@ -478,19 +506,19 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
     image->SetOption(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, photometric);
 
-    uint16 spp, bps, compression;
+    uint16 compression;
     /*
-    Read some baseline TIFF tags which helps when re-saving a TIFF
+    Copy some baseline TIFF tags which helps when re-saving a TIFF
     to be similar to the original image.
     */
-    if ( TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &spp) )
+    if (samplesPerPixel)
     {
-        image->SetOption(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, spp);
+        image->SetOption(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, samplesPerPixel);
     }
 
-    if ( TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bps) )
+    if (bitsPerSample)
     {
-        image->SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, bps);
+        image->SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, bitsPerSample);
     }
 
     if ( TIFFGetFieldDefaulted(tif, TIFFTAG_COMPRESSION, &compression) )
