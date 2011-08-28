@@ -160,14 +160,26 @@ end readFilesList
 -- creates a new project file from the respective template
 on instantiateProject(theProject)
 	set projectName to projectName of theProject
-	set template to POSIX file (osxBuildFolder & projectName & "_in.xcodeproj")
-	set projectFile to POSIX file (osxBuildFolder & projectName & ".xcodeproj")
+	set template to (osxBuildFolder & projectName & "_in.xcodeproj")
+	set projectFile to (osxBuildFolder & projectName & ".xcodeproj")
 	tell application "Finder"
-		try
-			delete file projectFile
-		end try
-		set duplicateProject to duplicate template with replace
-		set name of duplicateProject to (projectName & ".xcodeproj")
+		if exists projectFile as POSIX file then
+			set templateContentFile to (osxBuildFolder & projectName & "_in.xcodeproj/project.pbxproj")
+			set projectContentFile to (osxBuildFolder & projectName & ".xcodeproj/project.pbxproj")
+			try
+				tell me
+					do shell script "rm -f " & quoted form of projectContentFile
+				end tell
+			end try
+			try
+				tell me
+					do shell script "cp " & quoted form of templateContentFile & " " & quoted form of projectContentFile
+				end tell
+			end try
+		else
+			set duplicateProject to duplicate (template as POSIX file) with replace
+			set name of duplicateProject to (projectName & ".xcodeproj")
+		end if
 	end tell
 end instantiateProject
 
