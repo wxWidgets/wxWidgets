@@ -369,6 +369,7 @@ public:
         (from F1 to F12) or one of the special characters listed in the table
         below (again, case doesn't matter):
         - @c DEL or @c DELETE: Delete key
+        - @c BACK : Backspace key
         - @c INS or @c INSERT: Insert key
         - @c ENTER or @c RETURN: Enter key
         - @c PGUP: PageUp key
