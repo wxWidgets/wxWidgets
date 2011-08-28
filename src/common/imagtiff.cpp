@@ -727,7 +727,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
             if (isColouredImage)
             {
                 // color image
-                memcpy(buf, ptr, image->GetWidth());
+                memcpy(buf, ptr, image->GetWidth() * 3);
             }
             else if (spp * bps == 8) // greyscale image
             {
