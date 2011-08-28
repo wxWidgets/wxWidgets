@@ -640,7 +640,9 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photometric);
     TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
 
-    // scanlinesize if determined by spp and bps
+    // scanlinesize is determined by spp and bps
+    const tsize_t linebytes =
+        (tsize_t)((image->GetWidth() * spp * bps + 7) / 8);
     tsize_t linebytes = (tsize_t)image->GetWidth() * spp * bps / 8;
 
     if ( (image->GetWidth() % 8 > 0) && (spp * bps < 8) )
