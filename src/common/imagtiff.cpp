@@ -643,10 +643,6 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     // scanlinesize is determined by spp and bps
     const tsize_t linebytes =
         (tsize_t)((image->GetWidth() * spp * bps + 7) / 8);
-    tsize_t linebytes = (tsize_t)image->GetWidth() * spp * bps / 8;
-
-    if ( (image->GetWidth() % 8 > 0) && (spp * bps < 8) )
-        linebytes+=1;
 
     unsigned char *buf;
 
@@ -671,6 +667,17 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
 
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (uint32) -1));
+
+    const int bitsPerPixel = spp * bps;
+    const int pixelsPerByte = 8 / bitsPerPixel;
+    int remainingPixelCount = 0;
+
+    if (pixelsPerByte)
+    {
+        // How many pixels to write in the last byte column?
+        remainingPixelCount = image->GetWidth() % pixelsPerByte;
+        if (!remainingPixelCount) remainingPixelCount = 8;
+    }
 
     const bool minIsWhite = (photometric == PHOTOMETRIC_MINISWHITE);
     unsigned char *ptr = image->GetData();
@@ -701,7 +708,10 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                 for ( int column = 0; column < linebytes; column++ )
                 {
                     uint8 reverse = 0;
-                    for ( int bp = 0; bp < 8; bp++ )
+                    int pixelsPerByteCount = (column + 1 != linebytes)
+                        ? pixelsPerByte
+                        : remainingPixelCount;
+                    for ( int bp = 0; bp < pixelsPerByteCount; bp++ )
                     {
                         if ( (ptr[column*24 + bp*3 + 1] <=127) == minIsWhite )
                         {
