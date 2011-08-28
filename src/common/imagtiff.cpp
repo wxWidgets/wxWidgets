@@ -411,7 +411,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     unsigned char *ptr = image->GetData();
     ptr += w*3*(h-1);
 
-    unsigned char *alpha = hasAlpha ? image->GetAlpha() : NULL;
+    unsigned char *alpha = image->GetAlpha();
     if ( hasAlpha )
         alpha += w*(h-1);
 
