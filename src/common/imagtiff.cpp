@@ -394,7 +394,54 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if ( hasAlpha )
         image->SetAlpha();
 
-    if (!TIFFReadRGBAImageOriented( tif, w, h, raster, ORIENTATION_TOPLEFT, 0 ))
+    uint16 planarConfig = PLANARCONFIG_CONTIG;
+    (void) TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &planarConfig);
+
+    bool ok = true;
+    char msg[1024] = "";
+    if ( !TIFFRGBAImageOK(tif, msg)
+        && planarConfig == PLANARCONFIG_CONTIG
+        && samplesPerPixel == 2 && extraSamples == 1)
+    {
+        unsigned char *buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
+        uint32 pos = 0;
+        const int minValue = (photometric == PHOTOMETRIC_MINISWHITE) ? 255 : 0;
+        const int maxValue = 255 - minValue;
+
+        /*
+        Decode to ABGR format as that is what the code, that converts to
+        wxImage, later on expects (normally TIFFReadRGBAImageOriented is
+        used to decode which uses an ABGR layout).
+        */
+        for (uint32 y = 0; y < h; ++y)
+        {
+            if (TIFFReadScanline(tif, buf, y, 0) != 1)
+            {
+                ok = false;
+                break;
+            }
+
+            for (uint32 x = 0; x < w; ++x)
+            {
+                int mask = buf[x*2/8] << ((x*2)%8);
+
+                uint8 val = mask & 128 ? maxValue : minValue;
+                raster[pos] = val + (val << 8) + (val << 16)
+                    + ((mask & 64 ? maxValue : minValue) << 24);
+                pos++;
+            }
+        }
+
+        _TIFFfree(buf);
+    }
+    else
+    {
+        ok = TIFFReadRGBAImageOriented( tif, w, h, raster,
+            ORIENTATION_TOPLEFT, 0 ) != 0;
+    }
+
+
+    if (!ok)
     {
         if (verbose)
         {
