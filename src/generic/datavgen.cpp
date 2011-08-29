@@ -3339,6 +3339,8 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                     }
                 }
 
+                bool activated = false;
+
                 if ( activatableCol )
                 {
                     const unsigned colIdx = activatableCol->GetModelColumn();
@@ -3346,9 +3348,10 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 
                     wxDataViewRenderer *cell = activatableCol->GetRenderer();
                     cell->PrepareForItem(GetModel(), item, colIdx);
-                    cell->WXOnActivate(cell_rect, GetModel(), item, colIdx);
+                    activated = cell->WXOnActivate(cell_rect, GetModel(), item, colIdx);
                 }
-                else
+
+                if ( !activated )
                 {
                     wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
                                        parent->GetId());
@@ -3642,6 +3645,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         }
         else if ( current == m_lineLastClicked )
         {
+            bool activated = false;
+
             if ((!ignore_other_columns) && (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
             {
                 const unsigned colIdx = col->GetModelColumn();
@@ -3650,9 +3655,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
                 wxRect cell_rect( xpos, GetLineStart( current ),
                                 col->GetWidth(), GetLineHeight( current ) );
-                cell->WXOnActivate( cell_rect, model, item, colIdx );
+                activated = cell->WXOnActivate( cell_rect, model, item, colIdx );
             }
-            else
+
+            if ( !activated )
             {
                 wxWindow *parent = GetParent();
                 wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
