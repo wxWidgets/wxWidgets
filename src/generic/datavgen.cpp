@@ -939,7 +939,7 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
 }
 
 bool wxDataViewToggleRenderer::WXOnLeftClick(const wxPoint& cursor,
-                                             const wxRect& WXUNUSED(cell),
+                                             const wxRect& cell,
                                              wxDataViewModel *model,
                                              const wxDataViewItem& item,
                                              unsigned int col)
@@ -948,6 +948,14 @@ bool wxDataViewToggleRenderer::WXOnLeftClick(const wxPoint& cursor,
     if (!wxRect(GetSize()).Contains(cursor))
         return false;
 
+    return WXOnActivate(cell, model, item, col);
+}
+
+bool wxDataViewToggleRenderer::WXOnActivate(const wxRect& WXUNUSED(cell),
+                                            wxDataViewModel *model,
+                                            const wxDataViewItem& item,
+                                            unsigned int col)
+{
     if (model->IsEnabled(item, col))
     {
         model->ChangeValue(!m_toggle, item, col);
