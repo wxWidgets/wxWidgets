@@ -908,7 +908,8 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
 
     const bool testAlpha = (properties & wxIMAGE_HAVE_ALPHA) != 0;
     if (testAlpha
-        && !(type == wxBITMAP_TYPE_PNG || type == wxBITMAP_TYPE_TGA) )
+        && !(type == wxBITMAP_TYPE_PNG || type == wxBITMAP_TYPE_TGA
+            || type == wxBITMAP_TYPE_TIFF) )
     {
         // don't test images with alpha if this handler doesn't support alpha
         return;
@@ -965,12 +966,28 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
     );
 }
 
+static void SetAlpha(wxImage *image)
+{
+    image->SetAlpha();
+
+    unsigned char *ptr = image->GetAlpha();
+    const int width = image->GetWidth();
+    const int height = image->GetHeight();
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            ptr[y*width + x] = (x*y) & wxIMAGE_ALPHA_OPAQUE;
+        }
+    }
+}
+
 void ImageTestCase::CompareSavedImage()
 {
     // FIXME-VC6: Pre-declare the loop variables for compatibility with
     // pre-standard compilers such as MSVC6 that don't implement proper scope
     // for the variables declared in the for loops.
-    int i, x, y;
+    int i;
 
     wxImage expected24("horse.png");
     CPPUNIT_ASSERT( expected24.IsOk() );
@@ -992,17 +1009,8 @@ void ImageTestCase::CompareSavedImage()
 
     // Create an image with alpha based on the loaded image
     wxImage expected32(expected24);
-    expected32.SetAlpha();
 
-    int width = expected32.GetWidth();
-    int height = expected32.GetHeight();
-    for (y = 0; y < height; ++y)
-    {
-        for (x = 0; x < width; ++x)
-        {
-            expected32.SetAlpha(x, y, (x*y) & wxIMAGE_ALPHA_OPAQUE);
-        }
-    }
+    SetAlpha(&expected32);
 
     const wxList& list = wxImage::GetHandlers();
     for ( wxList::compatibility_iterator node = list.GetFirst();
@@ -1090,9 +1098,19 @@ void ImageTestCase::SavePNG()
 
 }
 
-static void TestTIFFImage(const wxString& option, int value)
+static void TestTIFFImage(const wxString& option, int value,
+    const wxImage *compareImage = NULL)
 {
-    wxImage image("horse.png");
+    wxImage image;
+    if (compareImage)
+    {
+        image = *compareImage;
+    }
+    else
+    {
+        (void) image.LoadFile("horse.png");
+    }
+    CPPUNIT_ASSERT( image.IsOk() );
 
     wxMemoryOutputStream memOut;
     image.SetOption(option, value);
@@ -1110,6 +1128,8 @@ static void TestTIFFImage(const wxString& option, int value)
 
     WX_ASSERT_EQUAL_MESSAGE(("While testing for %s", option),
         value, savedImage.GetOptionInt(option));
+
+    WX_ASSERT_EQUAL_MESSAGE(("HasAlpha() not equal"), image.HasAlpha(), savedImage.HasAlpha());
 }
 
 void ImageTestCase::SaveTIFF()
@@ -1118,6 +1138,20 @@ void ImageTestCase::SaveTIFF()
     TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 1);
     TestTIFFImage(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, 0/*PHOTOMETRIC_MINISWHITE*/);
     TestTIFFImage(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, 1/*PHOTOMETRIC_MINISBLACK*/);
+
+    wxImage alphaImage("horse.png");
+    CPPUNIT_ASSERT( alphaImage.IsOk() );
+    SetAlpha(&alphaImage);
+
+    // RGB with alpha
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 4, &alphaImage);
+
+    // Grey with alpha
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 2, &alphaImage);
+
+    // B/W with alpha
+    alphaImage.SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, 1);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 2, &alphaImage);
 }
 
 void ImageTestCase::SaveAnimatedGIF()

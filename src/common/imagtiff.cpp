@@ -619,7 +619,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
         return false;
     }
 
-    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  (uint32)image->GetWidth());
+    const int imageWidth = image->GetWidth();
+    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  (uint32) imageWidth);
     TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32)image->GetHeight());
     TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
     TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
@@ -683,37 +684,62 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
             spp = 1;
         }
     }
-    else if (spp == 1)
+    else if (spp <= 2)
     {
         photometric = PHOTOMETRIC_MINISWHITE;
     }
+
+    const bool hasAlpha = image->HasAlpha();
+
+    int compression = image->GetOptionInt(wxIMAGE_OPTION_TIFF_COMPRESSION);
+    if ( !compression || (compression == COMPRESSION_JPEG && hasAlpha) )
+    {
+        // We can't use COMPRESSION_LZW because current version of libtiff
+        // doesn't implement it ("no longer implemented due to Unisys patent
+        // enforcement") and other compression methods are lossy so we
+        // shouldn't use them by default -- and the only remaining one is none.
+        // Also JPEG compression for alpha images is not a good idea (viewers
+        // not opening the image properly).
+        compression = COMPRESSION_NONE;
+    }
+
+    if
+    (
+        (photometric == PHOTOMETRIC_RGB && spp == 4)
+        || (photometric <= PHOTOMETRIC_MINISBLACK && spp == 2)
+    )
+    {
+        // Compensate for user passing a SamplesPerPixel that includes
+        // the alpha channel.
+        spp--;
+    }
+
+
+    int extraSamples = hasAlpha ? 1 : 0;
+
+    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp + extraSamples);
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photometric);
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
+
+    if (extraSamples)
+    {
+        uint16 extra[] = { EXTRASAMPLE_UNSPECIFIED };
+        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, (long) 1, &extra);
+    }
+
+    // scanlinesize is determined by spp+extraSamples and bps
+    const tsize_t linebytes =
+        (tsize_t)((imageWidth * (spp + extraSamples) * bps + 7) / 8);
+
+    unsigned char *buf;
 
     const bool isColouredImage = (spp > 1)
         && (photometric != PHOTOMETRIC_MINISWHITE)
         && (photometric != PHOTOMETRIC_MINISBLACK);
 
-    int compression = image->GetOptionInt(wxIMAGE_OPTION_TIFF_COMPRESSION);
-    if ( !compression )
-    {
-        // we can't use COMPRESSION_LZW because current version of libtiff
-        // doesn't implement it ("no longer implemented due to Unisys patent
-        // enforcement") and other compression methods are lossy so we
-        // shouldn't use them by default -- and the only remaining one is none
-        compression = COMPRESSION_NONE;
-    }
 
-    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp);
-    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps);
-    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photometric);
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
-
-    // scanlinesize is determined by spp and bps
-    const tsize_t linebytes =
-        (tsize_t)((image->GetWidth() * spp * bps + 7) / 8);
-
-    unsigned char *buf;
-
-    if (TIFFScanlineSize(tif) > linebytes || !isColouredImage)
+    if (TIFFScanlineSize(tif) > linebytes || !isColouredImage || hasAlpha)
     {
         buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
         if (!buf)
@@ -735,15 +761,16 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (uint32) -1));
 
-    const int bitsPerPixel = spp * bps;
+    const int bitsPerPixel = (spp + extraSamples) * bps;
+    const int bytesPerPixel = (bitsPerPixel + 7) / 8;
     const int pixelsPerByte = 8 / bitsPerPixel;
     int remainingPixelCount = 0;
 
     if (pixelsPerByte)
     {
         // How many pixels to write in the last byte column?
-        remainingPixelCount = image->GetWidth() % pixelsPerByte;
-        if (!remainingPixelCount) remainingPixelCount = 8;
+        remainingPixelCount = imageWidth % pixelsPerByte;
+        if (!remainingPixelCount) remainingPixelCount = pixelsPerByte;
     }
 
     const bool minIsWhite = (photometric == PHOTOMETRIC_MINISWHITE);
@@ -754,12 +781,25 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
         {
             if (isColouredImage)
             {
-                // color image
-                memcpy(buf, ptr, image->GetWidth() * 3);
+                // colour image
+                if (hasAlpha)
+                {
+                    for ( int column = 0; column < imageWidth; column++ )
+                    {
+                        buf[column*4    ] = ptr[column*3    ];
+                        buf[column*4 + 1] = ptr[column*3 + 1];
+                        buf[column*4 + 2] = ptr[column*3 + 2];
+                        buf[column*4 + 3] = image->GetAlpha(column, row);
+                    }
+                }
+                else
+                {
+                    memcpy(buf, ptr, imageWidth * 3);
+                }
             }
             else if (spp * bps == 8) // greyscale image
             {
-                for ( int column = 0; column < linebytes; column++ )
+                for ( int column = 0; column < imageWidth; column++ )
                 {
                     uint8 value = ptr[column*3 + 1];
                     if (minIsWhite)
@@ -767,7 +807,14 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                         value = 255 - value;
                     }
 
-                    buf[column] = value;
+                    buf[column * bytesPerPixel] = value;
+
+                    if (hasAlpha)
+                    {
+                        value = image->GetAlpha(column, row);
+                        buf[column*bytesPerPixel+1]
+                            = minIsWhite ? 255 - value : value;
+                    }
                 }
             }
             else // black and white image
@@ -780,10 +827,18 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                         : remainingPixelCount;
                     for ( int bp = 0; bp < pixelsPerByteCount; bp++ )
                     {
-                        if ( (ptr[column*24 + bp*3 + 1] <=127) == minIsWhite )
+                        if ( (ptr[column * 3 * pixelsPerByte + bp*3 + 1] <=127)
+                            == minIsWhite )
                         {
                             // check only green as this is sufficient
-                            reverse = (uint8)(reverse | 128 >> bp);
+                            reverse |= (uint8) (128 >> (bp * bitsPerPixel));
+                        }
+
+                        if (hasAlpha
+                            && (image->GetAlpha(column * pixelsPerByte + bp,
+                                    row) <= 127) == minIsWhite)
+                        {
+                            reverse |= (uint8) (64 >> (bp * bitsPerPixel));
                         }
                     }
 
@@ -806,7 +861,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
             return false;
         }
 
-        ptr += image->GetWidth()*3;
+        ptr += imageWidth * 3;
     }
 
     (void) TIFFClose(tif);
