@@ -15,6 +15,7 @@
 
 #if wxUSE_TREELISTCTRL
 
+#include "wx/containr.h"
 #include "wx/headercol.h"
 #include "wx/itemid.h"
 #include "wx/vector.h"
@@ -87,7 +88,7 @@ extern WXDLLIMPEXP_DATA_ADV(const wxTreeListItem) wxTLI_LAST;
 // with wxDataViewCtrl directly but doing this makes your unportable to possible
 // future non-wxDataViewCtrl-based implementations of this class.
 
-class WXDLLIMPEXP_ADV wxTreeListCtrl : public wxWindow,
+class WXDLLIMPEXP_ADV wxTreeListCtrl : public wxNavigationEnabled<wxWindow>,
                                        public wxWithImages
 {
 public:
