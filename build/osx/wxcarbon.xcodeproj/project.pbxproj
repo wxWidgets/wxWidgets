@@ -45,6 +45,8 @@
 		056E30EA43753A7CB1AF8C9F /* strvararg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EEAD9C3E180305D8899441E /* strvararg.cpp */; };
 		05814571E7A83F5DBFB6E4C4 /* msgout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E968913A9A593B258BD8EACB /* msgout.cpp */; };
 		05814571E7A83F5DBFB6E4C5 /* msgout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E968913A9A593B258BD8EACB /* msgout.cpp */; };
+		060E095718B03EF98C754799 /* treelist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5190E3E110443FD29F2474FC /* treelist.cpp */; };
+		060E095718B03EF98C75479A /* treelist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5190E3E110443FD29F2474FC /* treelist.cpp */; };
 		064908348009398C8EA8497C /* fontpickercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9D5CF9CC4553336916FB27B /* fontpickercmn.cpp */; };
 		064908348009398C8EA8497D /* fontpickercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9D5CF9CC4553336916FB27B /* fontpickercmn.cpp */; };
 		0654BCC3F0763C50A7949504 /* LexAPDL.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 497861EB7E623C68951D1AB2 /* LexAPDL.cxx */; };
@@ -689,6 +691,8 @@
 		6FA47EAACE613B039B6EC262 /* containr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3645350F572364BABF50238 /* containr.cpp */; };
 		700BBDECBE313E108BA99ABD /* toplvcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 861438BD294335D4B859EA71 /* toplvcmn.cpp */; };
 		700BBDECBE313E108BA99ABE /* toplvcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 861438BD294335D4B859EA71 /* toplvcmn.cpp */; };
+		702616D38A5B345D9CC87114 /* xh_bannerwindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3116006345D833509865FF7F /* xh_bannerwindow.cpp */; };
+		702616D38A5B345D9CC87115 /* xh_bannerwindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3116006345D833509865FF7F /* xh_bannerwindow.cpp */; };
 		70F898F8B129380BBECAC559 /* richtexthtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7969963AA93537FCA4F54DA7 /* richtexthtml.cpp */; };
 		70F898F8B129380BBECAC55A /* richtexthtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7969963AA93537FCA4F54DA7 /* richtexthtml.cpp */; };
 		7181709A030D3749AB355B74 /* xh_radbx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F43AF44465B335479752116D /* xh_radbx.cpp */; };
@@ -1375,6 +1379,8 @@
 		E05B06A7FEEE32D5AD87EA50 /* xh_editlbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05310A868F0B35999C568681 /* xh_editlbox.cpp */; };
 		E0E40333B61C33B58787078E /* LexMarkdown.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E78CBF86AAE637CB982B2EC0 /* LexMarkdown.cxx */; };
 		E0E40333B61C33B58787078F /* LexMarkdown.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E78CBF86AAE637CB982B2EC0 /* LexMarkdown.cxx */; };
+		E0FAB345D2933D42B62917A3 /* bannerwindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36296C259D023EAAA240FC79 /* bannerwindow.cpp */; };
+		E0FAB345D2933D42B62917A4 /* bannerwindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36296C259D023EAAA240FC79 /* bannerwindow.cpp */; };
 		E104017EE1A4357DAF84E1E6 /* auibook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A298576700C33F018616E7BD /* auibook.cpp */; };
 		E104017EE1A4357DAF84E1E7 /* auibook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A298576700C33F018616E7BD /* auibook.cpp */; };
 		E1A20811148F31D289AF98AF /* xh_sizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E855AB3AB08325980871AB4 /* xh_sizer.cpp */; };
@@ -1739,6 +1745,7 @@
 		30BBE92ADD8A37C992B4F919 /* LexGAP.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexGAP.cxx; path = ../../src/stc/scintilla/src/LexGAP.cxx; sourceTree = "<group>"; };
 		30C0FB3166DD31A893AE98E2 /* fontcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fontcmn.cpp; path = ../../src/common/fontcmn.cpp; sourceTree = "<group>"; };
 		30FD1048328234E59D319863 /* tif_fax3.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_fax3.c; path = ../../src/tiff/libtiff/tif_fax3.c; sourceTree = "<group>"; };
+		3116006345D833509865FF7F /* xh_bannerwindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_bannerwindow.cpp; path = ../../src/xrc/xh_bannerwindow.cpp; sourceTree = "<group>"; };
 		31F4B9B03D52339B8F82C114 /* variant.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = variant.cpp; path = ../../src/common/variant.cpp; sourceTree = "<group>"; };
 		326723AEB79A305F90D6B41D /* advprops.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = advprops.cpp; path = ../../src/propgrid/advprops.cpp; sourceTree = "<group>"; };
 		32B2BC8A91983DDA9CC46793 /* statbox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = statbox.cpp; path = ../../src/osx/carbon/statbox.cpp; sourceTree = "<group>"; };
@@ -1746,6 +1753,7 @@
 		346C68F0CCD23823B78267F0 /* tif_lzw.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_lzw.c; path = ../../src/tiff/libtiff/tif_lzw.c; sourceTree = "<group>"; };
 		3551A51B4A493090B67CA216 /* LexSmalltalk.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexSmalltalk.cxx; path = ../../src/stc/scintilla/src/LexSmalltalk.cxx; sourceTree = "<group>"; };
 		358D0A3AC73F322EA732D020 /* pngrutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pngrutil.c; path = ../../src/png/pngrutil.c; sourceTree = "<group>"; };
+		36296C259D023EAAA240FC79 /* bannerwindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bannerwindow.cpp; path = ../../src/generic/bannerwindow.cpp; sourceTree = "<group>"; };
 		36E1DBA275AD325DB759C180 /* fontenum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fontenum.cpp; path = ../../src/osx/core/fontenum.cpp; sourceTree = "<group>"; };
 		36F7955F8075343C8A9953DB /* LexPowerShell.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexPowerShell.cxx; path = ../../src/stc/scintilla/src/LexPowerShell.cxx; sourceTree = "<group>"; };
 		3720038D64CF3C0B8F642A90 /* tokenzr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tokenzr.cpp; path = ../../src/common/tokenzr.cpp; sourceTree = "<group>"; };
@@ -1821,6 +1829,7 @@
 		508B04B4FF913BECBC9DBFFB /* LexSpecman.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexSpecman.cxx; path = ../../src/stc/scintilla/src/LexSpecman.cxx; sourceTree = "<group>"; };
 		5145561C78303EEE9F827962 /* LexLua.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLua.cxx; path = ../../src/stc/scintilla/src/LexLua.cxx; sourceTree = "<group>"; };
 		5168ADF7BE39351F8F24E1E6 /* cfstring.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cfstring.cpp; path = ../../src/osx/core/cfstring.cpp; sourceTree = "<group>"; };
+		5190E3E110443FD29F2474FC /* treelist.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treelist.cpp; path = ../../src/generic/treelist.cpp; sourceTree = "<group>"; };
 		5219A792C6A736F193D4A82F /* ContractionState.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ContractionState.cxx; path = ../../src/stc/scintilla/src/ContractionState.cxx; sourceTree = "<group>"; };
 		5248A45AB113341EAC361910 /* notebook_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = notebook_osx.cpp; path = ../../src/osx/notebook_osx.cpp; sourceTree = "<group>"; };
 		52FE1599218730CC99A3F801 /* m_dflist.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_dflist.cpp; path = ../../src/html/m_dflist.cpp; sourceTree = "<group>"; };
@@ -2617,6 +2626,7 @@
 			isa = PBXGroup;
 			children = (
 				8C1E755F2408363288B2CE69 /* xh_animatctrl.cpp */,
+				3116006345D833509865FF7F /* xh_bannerwindow.cpp */,
 				07CDBBC10C8E37BBA8600DD6 /* xh_bmp.cpp */,
 				8826A683573F35EA9789612C /* xh_bmpcbox.cpp */,
 				11AE4D94B791344AB6BF6397 /* xh_bmpbt.cpp */,
@@ -2878,6 +2888,7 @@
 			isa = PBXGroup;
 			children = (
 				77D6E66F72443765A2FBE263 /* aboutdlgg.cpp */,
+				36296C259D023EAAA240FC79 /* bannerwindow.cpp */,
 				13FD4A890E9B3BAEBD568C3B /* bmpcboxg.cpp */,
 				496674699F173A5385EAFF07 /* calctrlg.cpp */,
 				E8BD1489D95E3FD78B200B1B /* commandlinkbuttong.cpp */,
@@ -2897,6 +2908,7 @@
 				917F2666B67E3D2EB84E74F8 /* sashwin.cpp */,
 				3F8836E29C5A370E80CE070E /* splash.cpp */,
 				B56A9BF7AE1E3F11A5848297 /* tipdlg.cpp */,
+				5190E3E110443FD29F2474FC /* treelist.cpp */,
 				8F08F70E1EF239999A4D2AC4 /* wizard.cpp */,
 				580AFC66F3003582B43043B1 /* animateg.cpp */,
 			);
@@ -4247,6 +4259,7 @@
 				7B4DA2F5F25B3E188CBAFE39 /* hyperlnkcmn.cpp in Sources */,
 				E6D18B2EDE353F67883085A0 /* odcombocmn.cpp in Sources */,
 				FEA741A9B6663A4C929893C3 /* aboutdlgg.cpp in Sources */,
+				E0FAB345D2933D42B62917A4 /* bannerwindow.cpp in Sources */,
 				B189DB62AE9F30A1B613756C /* bmpcboxg.cpp in Sources */,
 				2F50DBC14FE538A49823925B /* calctrlg.cpp in Sources */,
 				8A662992FFCB32E99D11950D /* commandlinkbuttong.cpp in Sources */,
@@ -4266,6 +4279,7 @@
 				3554C88010CE3D2A8970A136 /* sashwin.cpp in Sources */,
 				8AA341CCFB8E3F6AB3523596 /* splash.cpp in Sources */,
 				77BC918AF05C30E8A0BD27F9 /* tipdlg.cpp in Sources */,
+				060E095718B03EF98C75479A /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266701 /* wizard.cpp in Sources */,
 				D00AF125FCB63A7A8F9B87DF /* taskbarcmn.cpp in Sources */,
 				46F341B46F80376B962759F6 /* animateg.cpp in Sources */,
@@ -4306,6 +4320,7 @@
 				2A7640E4210334AC93366901 /* winpars.cpp in Sources */,
 				87AA9C5D887B3C31A2AFB49E /* htmllbox.cpp in Sources */,
 				FBE4DB30865D3177B3A9993C /* xh_animatctrl.cpp in Sources */,
+				702616D38A5B345D9CC87115 /* xh_bannerwindow.cpp in Sources */,
 				94E510619F433AE3AC884756 /* xh_bmp.cpp in Sources */,
 				8966F77CC97B3ED780C8F138 /* xh_bmpcbox.cpp in Sources */,
 				84B3625464F732C3A79E1315 /* xh_bmpbt.cpp in Sources */,
@@ -5046,6 +5061,7 @@
 				7B4DA2F5F25B3E188CBAFE38 /* hyperlnkcmn.cpp in Sources */,
 				E6D18B2EDE353F678830859F /* odcombocmn.cpp in Sources */,
 				FEA741A9B6663A4C929893C2 /* aboutdlgg.cpp in Sources */,
+				E0FAB345D2933D42B62917A3 /* bannerwindow.cpp in Sources */,
 				B189DB62AE9F30A1B613756B /* bmpcboxg.cpp in Sources */,
 				2F50DBC14FE538A49823925A /* calctrlg.cpp in Sources */,
 				8A662992FFCB32E99D11950C /* commandlinkbuttong.cpp in Sources */,
@@ -5065,6 +5081,7 @@
 				3554C88010CE3D2A8970A135 /* sashwin.cpp in Sources */,
 				8AA341CCFB8E3F6AB3523595 /* splash.cpp in Sources */,
 				77BC918AF05C30E8A0BD27F8 /* tipdlg.cpp in Sources */,
+				060E095718B03EF98C754799 /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266700 /* wizard.cpp in Sources */,
 				D00AF125FCB63A7A8F9B87DE /* taskbarcmn.cpp in Sources */,
 				46F341B46F80376B962759F5 /* animateg.cpp in Sources */,
@@ -5105,6 +5122,7 @@
 				2A7640E4210334AC93366900 /* winpars.cpp in Sources */,
 				87AA9C5D887B3C31A2AFB49D /* htmllbox.cpp in Sources */,
 				FBE4DB30865D3177B3A9993B /* xh_animatctrl.cpp in Sources */,
+				702616D38A5B345D9CC87114 /* xh_bannerwindow.cpp in Sources */,
 				94E510619F433AE3AC884755 /* xh_bmp.cpp in Sources */,
 				8966F77CC97B3ED780C8F137 /* xh_bmpcbox.cpp in Sources */,
 				84B3625464F732C3A79E1314 /* xh_bmpbt.cpp in Sources */,
@@ -5429,10 +5447,6 @@
 			baseConfigurationReference = B44B32437825326C84607AD8 /* wxcarbon.xcconfig */;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
-					WXUSINGDLL,
-				);
 				INSTALL_PATH = "@executable_path/../Frameworks/";
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
@@ -5462,10 +5476,6 @@
 			baseConfigurationReference = B44B32437825326C84607AD8 /* wxcarbon.xcconfig */;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(GCC_PREPROCESSOR_DEFINITIONS)",
-					WXUSINGDLL,
-				);
 				INSTALL_PATH = "@executable_path/../Frameworks/";
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
