@@ -3313,13 +3313,43 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
         case WXK_RETURN:
         case WXK_SPACE:
             {
-                wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
-                                   parent->GetId());
-                le.SetItem( GetItemByRow(m_currentRow) );
-                le.SetEventObject(parent);
-                le.SetModel(GetModel());
+                const wxDataViewItem item = GetItemByRow(m_currentRow);
 
-                parent->GetEventHandler()->ProcessEvent(le);
+                // Activate the first activatable column if there is any:
+                wxDataViewColumn *activatableCol = NULL;
+
+                const unsigned cols = GetOwner()->GetColumnCount();
+                for ( unsigned i = 0; i < cols; i++ )
+                {
+                    wxDataViewColumn *c = GetOwner()->GetColumnAt(i);
+                    if ( c->IsHidden() )
+                        continue;
+                    if ( c->GetRenderer()->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE )
+                    {
+                        activatableCol = c;
+                        break;
+                    }
+                }
+
+                if ( activatableCol )
+                {
+                    const unsigned colIdx = activatableCol->GetModelColumn();
+                    const wxRect cell_rect = GetOwner()->GetItemRect(item, activatableCol);
+
+                    wxDataViewRenderer *cell = activatableCol->GetRenderer();
+                    cell->PrepareForItem(GetModel(), item, colIdx);
+                    cell->WXOnActivate(cell_rect, GetModel(), item, colIdx);
+                }
+                else
+                {
+                    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
+                                       parent->GetId());
+                    le.SetItem(item);
+                    le.SetEventObject(parent);
+                    le.SetModel(GetModel());
+
+                    parent->GetEventHandler()->ProcessEvent(le);
+                }
             }
             break;
 
