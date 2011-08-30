@@ -305,7 +305,7 @@ wxMouseState wxGetMouseState()
     ms.SetMiddleDown( (buttons & 0x04) != 0 );
     ms.SetRightDown( (buttons & 0x02) != 0 );
     
-    ms.SetRealControlDown(modifiers & NSControlKeyMask);
+    ms.SetRawControlDown(modifiers & NSControlKeyMask);
     ms.SetShiftDown(modifiers & NSShiftKeyMask);
     ms.SetAltDown(modifiers & NSAlternateKeyMask);
     ms.SetControlDown(modifiers & NSCommandKeyMask);
