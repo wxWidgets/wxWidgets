@@ -249,12 +249,37 @@ wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
                         MAX_PATH);
     
     wxFileName::SplitPath(modpath, &path, NULL, NULL);
-    ::SetDllDirectory(path.t_str());
-    
+
+    typedef BOOL (WINAPI *SetDllDirectory_t)(LPCTSTR lpPathName);
+
+    static SetDllDirectory_t s_pfnSetDllDirectory = (SetDllDirectory_t) -1;
+
+    if ( s_pfnSetDllDirectory == (SetDllDirectory_t) -1 )
+    {
+        /*
+        Should wxLoadedDLL ever not be used here (or rather, the
+        wxDL_GET_LOADED flag isn't used), infinite recursion will take
+        place (unless s_pfnSetDllDirectory is set to NULL here right
+        before loading the DLL).
+        */
+        wxLoadedDLL dllKernel("kernel32.dll");
+
+        wxDL_INIT_FUNC_AW(s_pfn, SetDllDirectory, dllKernel);
+    }
+
+    if (s_pfnSetDllDirectory)
+    {
+        s_pfnSetDllDirectory(path.t_str());
+    }
+
     wxDllType handle = ::LoadLibrary(libname.t_str());
 
     // reset the search path
-    ::SetDllDirectory(NULL);
+    if (s_pfnSetDllDirectory)
+    {
+        s_pfnSetDllDirectory(NULL);
+    }
+
     return handle;
 }
 
