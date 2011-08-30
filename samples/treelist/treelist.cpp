@@ -56,6 +56,7 @@
 enum
 {
     Id_MultiSelect = 100,
+    Id_FlatList,
 
     Id_Checkboxes_Start,
     Id_NoCheckboxes = Id_Checkboxes_Start,
@@ -94,6 +95,7 @@ public:
 private:
     // Event handlers for the menu and wxTreeListCtrl events.
     void OnMultiSelect(wxCommandEvent& event);
+    void OnFlatList(wxCommandEvent& event);
     void OnCheckboxes(wxCommandEvent& event);
     void OnDumpSelection(wxCommandEvent& event);
     void OnCheckHTMLDocs(wxCommandEvent& event);
@@ -142,6 +144,8 @@ private:
 
     wxLog* m_oldLogTarget;
 
+    bool m_isFlat;
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -171,6 +175,7 @@ bool MyApp::OnInit()
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Id_MultiSelect, MyFrame::OnMultiSelect)
+    EVT_MENU(Id_FlatList, MyFrame::OnFlatList)
     EVT_MENU_RANGE(Id_Checkboxes_Start, Id_Checkboxes_End,
                    MyFrame::OnCheckboxes)
 
@@ -194,6 +199,8 @@ MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxWidgets tree/list control sample",
                  wxDefaultPosition, wxSize(600, 450))
 {
+    m_isFlat = false;
+
     // Create menus and status bar.
     SetIcon(wxICON(sample));
 
@@ -211,6 +218,8 @@ MyFrame::MyFrame()
                                "&3-state checkboxes\tCtrl-3");
     treeStyle->AppendRadioItem(Id_CheckboxesUser3State,
                                "&User-settable 3-state checkboxes\tCtrl-4");
+    treeStyle->AppendSeparator();
+    treeStyle->AppendCheckItem(Id_FlatList, "&Flat list");
 
     wxMenu* treeOper = new wxMenu;
     treeOper->Append(Id_DumpSelection, "&Dump selection\tCtrl-D");
@@ -312,7 +321,8 @@ wxTreeListCtrl* MyFrame::CreateTreeListCtrl(long style)
 
     // Define a shortcut to save on typing here.
     #define ADD_ITEM(item, parent, files, size) \
-        wxTreeListItem item = tree->AppendItem(parent, #item, \
+        wxTreeListItem item = tree->AppendItem(m_isFlat ? root : parent, \
+                                               #item, \
                                                Icon_FolderClosed, \
                                                Icon_FolderOpened); \
         tree->SetItemText(item, Col_Files, files); \
@@ -365,6 +375,13 @@ void MyFrame::OnMultiSelect(wxCommandEvent& event)
         style &= ~wxTL_MULTIPLE;
 
     RecreateTreeListCtrl(style);
+}
+
+void MyFrame::OnFlatList(wxCommandEvent& event)
+{
+    m_isFlat = event.IsChecked();
+
+    RecreateTreeListCtrl(m_treelist->GetWindowStyle());
 }
 
 void MyFrame::OnCheckboxes(wxCommandEvent& event)

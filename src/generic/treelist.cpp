@@ -342,6 +342,7 @@ public:
     virtual bool HasContainerColumns(const wxDataViewItem& item) const;
     virtual unsigned GetChildren(const wxDataViewItem& item,
                                  wxDataViewItemArray& children) const;
+    virtual bool IsListModel() const { return m_isFlat; }
 
 private:
     // The control we're associated with.
@@ -352,6 +353,11 @@ private:
 
     // Number of columns we maintain.
     unsigned m_numColumns;
+
+    // Set to false as soon as we have more than one level, i.e. as soon as any
+    // items with non-root item as parent are added (and currently never reset
+    // after this).
+    bool m_isFlat;
 };
 
 // ============================================================================
@@ -554,6 +560,7 @@ wxTreeListModel::wxTreeListModel(wxTreeListCtrl* treelist)
       m_root(new Node(NULL))
 {
     m_numColumns = 0;
+    m_isFlat = true;
 }
 
 wxTreeListModel::~wxTreeListModel()
@@ -589,6 +596,12 @@ wxTreeListModel::InsertItem(Node* parent,
 
     wxCHECK_MSG( previous, NULL,
                  "Must have a valid previous item (maybe wxTLI_FIRST/LAST?)" );
+
+    if ( m_isFlat && parent != m_root )
+    {
+        // Not flat any more, this is a second level child.
+        m_isFlat = false;
+    }
 
     wxScopedPtr<Node>
         newItem(new Node(parent, text, imageClosed, imageOpened, data));
