@@ -302,6 +302,9 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
         STOCKITEM(wxID_REPLACE,             wxACCEL_CTRL,'R')
         STOCKITEM(wxID_SAVE,                wxACCEL_CTRL,'S')
         STOCKITEM(wxID_UNDO,                wxACCEL_CTRL,'Z')
+#ifdef __WXOSX__
+        STOCKITEM(wxID_PREFERENCES,         wxACCEL_CTRL,',')
+#endif
 
         default:
             // set the wxAcceleratorEntry to return into an invalid state:

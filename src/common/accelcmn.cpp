@@ -342,7 +342,7 @@ wxString wxAcceleratorEntry::ToString() const
                  // build as they're only defined for the ASCII range (or EOF)
                  wxIsascii(code) &&
 #endif // ANSI
-                    wxIsalnum(code) )
+                    wxIsprint(code) )
             {
                 text << (wxChar)code;
             }
