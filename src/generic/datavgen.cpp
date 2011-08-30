@@ -3524,22 +3524,21 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     // button) and also determine the offset of the real cell start, skipping
     // the indentation and the expander itself.
     bool hoverOverExpander = false;
-    int expanderOffset = 0;
+    int itemOffset = 0;
     if ((!IsList()) && (GetOwner()->GetExpanderColumn() == col))
     {
         wxDataViewTreeNode * node = GetTreeNodeByRow(current);
-        if( node!=NULL && node->HasChildren() )
-        {
-            int indent = node->GetIndentLevel();
-            indent = GetOwner()->GetIndent()*indent;
 
+        int indent = node->GetIndentLevel();
+        itemOffset = GetOwner()->GetIndent()*indent;
+
+        if ( node->HasChildren() )
+        {
             // we make the rectangle we are looking in a bit bigger than the actual
             // visual expander so the user can hit that little thing reliably
-            wxRect rect( xpos + indent,
+            wxRect rect(itemOffset,
                         GetLineStart( current ) + (GetLineHeight(current) - m_lineHeight)/2,
                         m_lineHeight, m_lineHeight);
-
-            expanderOffset = indent + m_lineHeight;
 
             if( rect.Contains(x, y) )
             {
@@ -3558,6 +3557,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 m_underMouse = node;
             }
         }
+
+        // Account for the expander as well, even if this item doesn't have it,
+        // its parent does so it still counts for the offset.
+        itemOffset += m_lineHeight;
     }
     if (!hoverOverExpander)
     {
@@ -3832,9 +3835,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             // notify cell about click
             cell->PrepareForItem(model, item, col->GetModelColumn());
 
-            wxRect cell_rect( xpos + expanderOffset,
+            wxRect cell_rect( xpos + itemOffset,
                               GetLineStart( current ),
-                              col->GetWidth() - expanderOffset,
+                              col->GetWidth() - itemOffset,
                               GetLineHeight( current ) );
 
             // Report position relative to the cell's custom area, i.e.
