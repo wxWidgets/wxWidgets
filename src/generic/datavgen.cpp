@@ -321,12 +321,13 @@ public:
         return m_branchData->children;
     }
 
-    void AddChild( wxDataViewTreeNode * node )
+    void InsertChild(wxDataViewTreeNode *node, unsigned index)
     {
         if ( !m_branchData )
             m_branchData = new BranchNodeData;
 
-        m_branchData->children.Add( node );
+        m_branchData->children.Insert(node, index);
+
         // TODO: insert into sorted array directly in O(log n) instead of resorting in O(n log n)
         if (g_column >= -1)
             m_branchData->children.Sort( &wxGenericTreeModelNodeCmp );
@@ -2024,11 +2025,16 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         if ( !parentNode )
             return false;
 
+        wxDataViewItemArray siblings;
+        GetModel()->GetChildren(parent, siblings);
+        int itemPos = siblings.Index(item, /*fromEnd=*/true);
+        wxCHECK_MSG( itemPos != wxNOT_FOUND, false, "adding non-existent item?" );
+
         wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
         itemNode->SetHasChildren(GetModel()->IsContainer(item));
 
         parentNode->SetHasChildren(true);
-        parentNode->AddChild(itemNode);
+        parentNode->InsertChild(itemNode, itemPos);
         parentNode->ChangeSubTreeCount(+1);
 
         m_count = -1;
@@ -3257,7 +3263,7 @@ static void BuildTreeHelper( const wxDataViewModel * model,  const wxDataViewIte
         if( model->IsContainer(children[index]) )
             n->SetHasChildren( true );
 
-        node->AddChild(n);
+        node->InsertChild(n, index);
     }
 
     wxASSERT( node->IsOpen() );

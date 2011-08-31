@@ -352,7 +352,7 @@ public:
         }
     }
 
-    unsigned int AddNode( wxGtkTreeModelNode* child )
+    void AddNode( wxGtkTreeModelNode* child )
         {
             m_nodes.Add( child );
 
@@ -364,24 +364,50 @@ public:
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
-                return m_children.Index( id );
             }
-
-            return m_children.GetCount()-1;
         }
 
-    unsigned int AddLeave( void* id )
+    void InsertNode( wxGtkTreeModelNode* child, unsigned pos )
         {
-            m_children.Add( id );
+            if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
+            {
+                AddNode(child);
+                return;
+            }
+
+            void *id = child->GetItem().GetID();
+
+            // Insert into m_nodes so that the order of nodes in m_nodes is the
+            // same as the order of their corresponding IDs in m_children:
+            const unsigned int count = m_nodes.GetCount();
+            for (unsigned i = 0; i < count; i++)
+            {
+                wxGtkTreeModelNode *node = m_nodes[i];
+                int posInChildren = m_children.Index(node->GetItem().GetID());
+                if ( (unsigned)posInChildren >= pos )
+                {
+                    m_nodes.Insert(child, i);
+                    break;
+                }
+            }
+
+            m_children.Insert( id, pos );
+        }
+
+    void AddLeaf( void* id )
+        {
+            InsertLeaf(id, m_children.size());
+        }
+
+    void InsertLeaf( void* id, unsigned pos )
+        {
+            m_children.Insert( id, pos );
 
             if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
-                return m_children.Index( id );
             }
-
-            return m_children.GetCount()-1;
         }
 
     void DeleteChild( void* id )
@@ -3574,7 +3600,7 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
             if (m_wx_model->IsContainer( child ))
                 node->AddNode( new wxGtkTreeModelNode( node, child, this ) );
             else
-                node->AddLeave( child.GetID() );
+                node->AddLeaf( child.GetID() );
 
             // Don't send any events here
         }
@@ -3761,13 +3787,18 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
     if (!m_wx_model->IsVirtualListModel())
     {
         wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxASSERT_MSG(parent_node,
+        wxCHECK_MSG(parent_node, false,
             "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
+        wxDataViewItemArray siblings;
+        m_wx_model->GetChildren(parent, siblings);
+        int itemPos = siblings.Index(item, /*fromEnd=*/true);
+        wxCHECK_MSG( itemPos != wxNOT_FOUND, false, "adding non-existent item?" );
+
         if (m_wx_model->IsContainer( item ))
-            parent_node->AddNode( new wxGtkTreeModelNode( parent_node, item, this ) );
+            parent_node->InsertNode( new wxGtkTreeModelNode( parent_node, item, this ), itemPos );
         else
-            parent_node->AddLeave( item.GetID() );
+            parent_node->InsertLeaf( item.GetID(), itemPos );
     }
 
     ScheduleRefresh();
