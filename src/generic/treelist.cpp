@@ -160,6 +160,37 @@ public:
         }
     }
 
+    void OnDeleteColumn(unsigned col, unsigned numColumns)
+    {
+        wxASSERT_MSG( col, "Shouldn't be called for the first column" );
+
+        if ( !m_columnsTexts )
+            return;
+
+        wxScopedArray<wxString> oldTexts(m_columnsTexts);
+        m_columnsTexts = new wxString[numColumns - 2];
+        for ( unsigned n = 1, m = 1; n < numColumns - 1; n++, m++ )
+        {
+            if ( n == col )
+            {
+                n--;
+            }
+            else // Not the deleted column.
+            {
+                m_columnsTexts[n - 1] = oldTexts[m - 1];
+            }
+        }
+    }
+
+    void OnClearColumns()
+    {
+        if ( m_columnsTexts )
+        {
+            delete [] m_columnsTexts;
+            m_columnsTexts = NULL;
+        }
+    }
+
 
     // Functions for modifying the tree.
 
@@ -306,6 +337,8 @@ public:
 
     // Methods called by wxTreeListCtrl.
     void InsertColumn(unsigned col);
+    void DeleteColumn(unsigned col);
+    void ClearColumns();
 
     Node* InsertItem(Node* parent,
                      Node* previous,
@@ -580,6 +613,32 @@ void wxTreeListModel::InsertColumn(unsigned col)
     for ( Node* node = m_root->GetChild(); node; node = node->NextInTree() )
     {
         node->OnInsertColumn(col, m_numColumns);
+    }
+}
+
+void wxTreeListModel::DeleteColumn(unsigned col)
+{
+    wxCHECK_RET( col < m_numColumns, "Invalid column index" );
+
+    // Update all the items to remove the text for the non first columns.
+    if ( col > 0 )
+    {
+        for ( Node* node = m_root->GetChild(); node; node = node->NextInTree() )
+        {
+            node->OnDeleteColumn(col, m_numColumns);
+        }
+    }
+
+    m_numColumns--;
+}
+
+void wxTreeListModel::ClearColumns()
+{
+    m_numColumns = 0;
+
+    for ( Node* node = m_root->GetChild(); node; node = node->NextInTree() )
+    {
+        node->OnClearColumns();
     }
 }
 
@@ -1026,13 +1085,24 @@ bool wxTreeListCtrl::DeleteColumn(unsigned col)
 {
     wxCHECK_MSG( col < GetColumnCount(), false, "Invalid column index" );
 
-    return m_view->DeleteColumn(m_view->GetColumn(col));
+    if ( !m_view->DeleteColumn(m_view->GetColumn(col)) )
+        return false;
+
+    m_model->DeleteColumn(col);
+
+    return true;
 }
 
 void wxTreeListCtrl::ClearColumns()
 {
-    if ( m_view )
-        m_view->ClearColumns();
+    // Don't assert here, clearing columns of the control before it's created
+    // can be considered valid (just useless).
+    if ( !m_model )
+        return;
+
+    m_view->ClearColumns();
+
+    m_model->ClearColumns();
 }
 
 void wxTreeListCtrl::SetColumnWidth(unsigned col, int width)
