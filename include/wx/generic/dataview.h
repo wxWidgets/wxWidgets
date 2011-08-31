@@ -220,17 +220,23 @@ public:     // utility functions not part of the API
     // return the column displayed at the given position in the control
     wxDataViewColumn *GetColumnAt(unsigned int pos) const;
 
+    virtual void OnInternalIdle();
+
 private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
 
-    void UpdateColBestWidths();
-    void UpdateColBestWidth(int idx);
+    void InvalidateColBestWidths();
+    void InvalidateColBestWidth(int idx);
+    void UpdateColWidths();
 
     wxDataViewColumnList      m_cols;
     // cached column best widths or 0 if not computed, values are for
     // respective columns from m_cols and the arrays have same size
     wxVector<int>             m_colsBestWidths;
+    // m_colsBestWidths partially invalid, needs recomputing
+    bool                      m_colsDirty;
+
     wxDataViewModelNotifier  *m_notifier;
     wxDataViewMainWindow     *m_clientArea;
     wxDataViewHeaderWindow   *m_headerArea;

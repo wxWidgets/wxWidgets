@@ -2034,7 +2034,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         m_count = -1;
     }
 
-    GetOwner()->UpdateColBestWidths();
+    GetOwner()->InvalidateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2169,7 +2169,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     if( m_currentRow > GetRowCount() )
         ChangeCurrentRow(m_count - 1);
 
-    GetOwner()->UpdateColBestWidths();
+    GetOwner()->InvalidateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -2180,7 +2180,7 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
     SortPrepare();
     g_model->Resort();
 
-    GetOwner()->UpdateColBestWidths();
+    GetOwner()->InvalidateColBestWidths();
 
     // Send event
     wxWindow *parent = GetParent();
@@ -2221,7 +2221,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     SortPrepare();
     g_model->Resort();
 
-    GetOwner()->UpdateColBestWidth(view_column);
+    GetOwner()->InvalidateColBestWidth(view_column);
 
     // Send event
     wxWindow *parent = GetParent();
@@ -2244,7 +2244,7 @@ bool wxDataViewMainWindow::Cleared()
     SortPrepare();
     BuildTree( GetModel() );
 
-    GetOwner()->UpdateColBestWidths();
+    GetOwner()->InvalidateColBestWidths();
     UpdateDisplay();
 
     return true;
@@ -3931,6 +3931,8 @@ void wxDataViewCtrl::Init()
     m_sortingColumnIdx = wxNOT_FOUND;
 
     m_headerArea = NULL;
+
+    m_colsDirty = false;
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent,
@@ -4340,24 +4342,41 @@ bool wxDataViewCtrl::ClearColumns()
     return true;
 }
 
-void wxDataViewCtrl::UpdateColBestWidth(int idx)
+void wxDataViewCtrl::InvalidateColBestWidth(int idx)
 {
     m_colsBestWidths[idx] = 0;
-
-    if ( m_headerArea )
-        m_headerArea->UpdateColumn(idx);
+    m_colsDirty = true;
 }
 
-void wxDataViewCtrl::UpdateColBestWidths()
+void wxDataViewCtrl::InvalidateColBestWidths()
 {
     m_colsBestWidths.clear();
     m_colsBestWidths.resize(m_cols.size());
+    m_colsDirty = true;
+}
 
-    if ( m_headerArea )
+void wxDataViewCtrl::UpdateColWidths()
+{
+    if ( !m_headerArea )
+        return;
+
+    for ( wxVector<int>::const_iterator i = m_colsBestWidths.begin();
+          i != m_colsBestWidths.end();
+          ++i )
     {
-        const unsigned cols = m_headerArea->GetColumnCount();
-        for ( unsigned i = 0; i < cols; i++ )
-            m_headerArea->UpdateColumn(i);
+        if ( m_colsBestWidths[*i] == 0 )
+            m_headerArea->UpdateColumn(*i);
+    }
+}
+
+void wxDataViewCtrl::OnInternalIdle()
+{
+    wxDataViewCtrlBase::OnInternalIdle();
+
+    if ( m_colsDirty )
+    {
+        m_colsDirty = false;
+        UpdateColWidths();
     }
 }
 
