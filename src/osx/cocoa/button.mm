@@ -95,9 +95,16 @@ public:
     virtual void SetBitmap(const wxBitmap& bitmap)
     {
         // switch bezel style for plain pushbuttons
-        if ( bitmap.IsOk() && [GetNSButton() bezelStyle] == NSRoundedBezelStyle )
-            [GetNSButton() setBezelStyle:NSRegularSquareBezelStyle ];
-
+        if ( bitmap.IsOk() )
+        {
+            if ([GetNSButton() bezelStyle] == NSRoundedBezelStyle)
+                [GetNSButton() setBezelStyle:NSRegularSquareBezelStyle];
+        }
+        else
+        {
+            [GetNSButton() setBezelStyle:NSRoundedBezelStyle];
+        }
+        
         wxWidgetCocoaImpl::SetBitmap(bitmap);
     }
 
