@@ -1804,7 +1804,6 @@ Optional Features:
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
-  --enable-metafile       use win32 metafiles
   --disable-controls      disable compilation of all standard controls
   --enable-markup         support wxControl::SetLabelMarkup
   --enable-accel          use accelerators
@@ -1898,7 +1897,7 @@ Optional Features:
   --enable-busyinfo       use wxBusyInfo
   --enable-hotkey         use wxWindow::RegisterHotKey()
   --enable-joystick       use wxJoystick
-  --enable-metafiles      use wxMetaFile (Win32 only)
+  --enable-metafiles      use wxMetaFile
   --enable-dragimage      use wxDragImage
   --enable-accessibility  enable accessibility support
   --enable-uiactionsim    use wxUIActionSimulator (experimental)
@@ -2998,6 +2997,7 @@ DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_COMPILER_TLS=auto
 DEFAULT_wxUSE_HOTKEY=auto
+DEFAULT_wxUSE_METAFILE=auto
 
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
@@ -9757,50 +9757,6 @@ fi
             fi
           else
             result=$wxUSE_DRAG_AND_DROP
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-metafile" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-metafile... $ECHO_C" >&6; }
-          # Check whether --enable-metafile was given.
-if test "${enable_metafile+set}" = set; then
-  enableval=$enable_metafile;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_metafile='wxUSE_METAFILE=yes'
-                          else
-                            wx_cv_use_metafile='wxUSE_METAFILE=no'
-                          fi
-
-else
-
-                          wx_cv_use_metafile='wxUSE_METAFILE=${'DEFAULT_wxUSE_METAFILE":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_metafile"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_METAFILE = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_METAFILE
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -47120,6 +47076,23 @@ if test "$wxUSE_METAFILE" = "yes"; then
 echo "$as_me: WARNING: wxMetafile is not available on this system... disabled" >&2;}
         wxUSE_METAFILE=no
     fi
+elif test "$wxUSE_METAFILE" = "auto"; then
+    if test "$wxUSE_MSW" = 1 -o "$wxUSE_MAC" = 1 -o "$wxUSE_PM" = 1; then
+        wxUSE_METAFILE=yes
+    fi
+fi
+
+if test "$wxUSE_METAFILE" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_METAFILE 1
+_ACEOF
+
+    if test "$wxUSE_MSW" = 1; then
+                cat >>confdefs.h <<\_ACEOF
+#define wxUSE_ENH_METAFILE 1
+_ACEOF
+
+    fi
 fi
 
 
@@ -47255,18 +47228,6 @@ echo "$as_me: WARNING: Some features disabled because OLE headers not found" >&2
         wxUSE_DRAG_AND_DROP=no
         wxUSE_DATAOBJ=no
         wxUSE_OLE=no
-    fi
-
-    if test "$wxUSE_METAFILE" = "yes"; then
-        cat >>confdefs.h <<\_ACEOF
-#define wxUSE_METAFILE 1
-_ACEOF
-
-
-                cat >>confdefs.h <<\_ACEOF
-#define wxUSE_ENH_METAFILE 1
-_ACEOF
-
     fi
 fi
 
@@ -48259,13 +48220,6 @@ if test "$wxUSE_MENUS" = "yes"; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
-fi
-
-if test "$wxUSE_METAFILE" = "yes"; then
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_METAFILE 1
-_ACEOF
-
 fi
 
 if test "$wxUSE_MIMETYPE" = "yes"; then

@@ -396,6 +396,7 @@ DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_COMPILER_TLS=auto
 DEFAULT_wxUSE_HOTKEY=auto
+DEFAULT_wxUSE_METAFILE=auto
 
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
@@ -862,7 +863,6 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_FEATURE(clipboard,   [  --enable-clipboard      use wxClipboard class], wxUSE_CLIPBOARD)
 WX_ARG_FEATURE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
-WX_ARG_FEATURE(metafile,    [  --enable-metafile       use win32 metafiles], wxUSE_METAFILE)
 
 dnl ---------------------------------------------------------------------------
 dnl optional GUI controls (in alphabetical order except the first one)
@@ -1042,7 +1042,7 @@ WX_ARG_FEATURE(validators,  [  --enable-validators     use wxValidator and deriv
 WX_ARG_FEATURE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
 WX_ARG_FEATURE(hotkey,      [  --enable-hotkey         use wxWindow::RegisterHotKey()], wxUSE_HOTKEY)
 WX_ARG_FEATURE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JOYSTICK)
-WX_ARG_FEATURE(metafile,    [  --enable-metafiles      use wxMetaFile (Win32 only)], wxUSE_METAFILE)
+WX_ARG_FEATURE(metafile,    [  --enable-metafiles      use wxMetaFile], wxUSE_METAFILE)
 WX_ARG_FEATURE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
 WX_ARG_FEATURE(uiactionsim,  [  --enable-uiactionsim    use wxUIActionSimulator (experimental)], wxUSE_UIACTIONSIMULATOR)
@@ -6649,13 +6649,25 @@ if test "$wxUSE_SVG" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl wxMetafile availability
+dnl wxMetafile
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_METAFILE" = "yes"; then
     if test "$wxUSE_MSW" != 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_PM" != 1; then
         AC_MSG_WARN([wxMetafile is not available on this system... disabled])
         wxUSE_METAFILE=no
+    fi
+elif test "$wxUSE_METAFILE" = "auto"; then
+    if test "$wxUSE_MSW" = 1 -o "$wxUSE_MAC" = 1 -o "$wxUSE_PM" = 1; then
+        wxUSE_METAFILE=yes
+    fi
+fi
+
+if test "$wxUSE_METAFILE" = "yes"; then
+    AC_DEFINE(wxUSE_METAFILE)
+    if test "$wxUSE_MSW" = 1; then
+        dnl this one should probably be made separately configurable
+        AC_DEFINE(wxUSE_ENH_METAFILE)
     fi
 fi
 
@@ -6700,13 +6712,6 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
         wxUSE_DRAG_AND_DROP=no
         wxUSE_DATAOBJ=no
         wxUSE_OLE=no
-    fi
-
-    if test "$wxUSE_METAFILE" = "yes"; then
-        AC_DEFINE(wxUSE_METAFILE)
-
-        dnl this one should probably be made separately configurable
-        AC_DEFINE(wxUSE_ENH_METAFILE)
     fi
 fi
 
@@ -7329,10 +7334,6 @@ fi
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
-fi
-
-if test "$wxUSE_METAFILE" = "yes"; then
-    AC_DEFINE(wxUSE_METAFILE)
 fi
 
 if test "$wxUSE_MIMETYPE" = "yes"; then
