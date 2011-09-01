@@ -1896,6 +1896,7 @@ Optional Features:
   --enable-mousewheel     use mousewheel
   --enable-validators     use wxValidator and derived classes
   --enable-busyinfo       use wxBusyInfo
+  --enable-hotkey         use wxWindow::RegisterHotKey()
   --enable-joystick       use wxJoystick
   --enable-metafiles      use wxMetaFile (Win32 only)
   --enable-dragimage      use wxDragImage
@@ -2996,6 +2997,7 @@ DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_COMPILER_TLS=auto
+DEFAULT_wxUSE_HOTKEY=auto
 
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
@@ -13874,6 +13876,50 @@ fi
             fi
           else
             result=$wxUSE_BUSYINFO
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-hotkey" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-hotkey... $ECHO_C" >&6; }
+          # Check whether --enable-hotkey was given.
+if test "${enable_hotkey+set}" = set; then
+  enableval=$enable_hotkey;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_hotkey='wxUSE_HOTKEY=yes'
+                          else
+                            wx_cv_use_hotkey='wxUSE_HOTKEY=no'
+                          fi
+
+else
+
+                          wx_cv_use_hotkey='wxUSE_HOTKEY=${'DEFAULT_wxUSE_HOTKEY":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_hotkey"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_HOTKEY = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_HOTKEY
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -45119,6 +45165,24 @@ fi
 if test "$wxUSE_BUSYINFO" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_BUSYINFO 1
+_ACEOF
+
+fi
+
+if test "$wxUSE_HOTKEY" = "yes"; then
+  if test "$wxUSE_MSW" != 1 -a "$wxUSE_OSX_COCOA" != 1 -a "$wxUSE_OSX_CARBON" != 1; then
+    { echo "$as_me:$LINENO: WARNING: Hot keys not supported by the current toolkit, disabled" >&5
+echo "$as_me: WARNING: Hot keys not supported by the current toolkit, disabled" >&2;}
+    wxUSE_HOTKEY=no
+  fi
+elif test "$wxUSE_HOTKEY" = "auto"; then
+  if test "$wxUSE_MSW" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OSX_CARBON" = 1; then
+    wxUSE_HOTKEY=yes
+  fi
+fi
+if test "$wxUSE_HOTKEY" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_HOTKEY 1
 _ACEOF
 
 fi
