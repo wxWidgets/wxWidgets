@@ -547,6 +547,8 @@ public:
     void OnPaint( wxPaintEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnVerticalNavigation(unsigned int newCurrent, const wxKeyEvent& event);
+    void OnLeftKey();
+    void OnRightKey();
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
@@ -3334,53 +3336,13 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
         // Add the process for tree expanding/collapsing
         case WXK_LEFT:
-        {
-            if (IsList())
-               break;
-
-            wxDataViewTreeNode* node = GetTreeNodeByRow(m_currentRow);
-            if (!node)
-                break;
-
-            if (node->HasChildren() && node->IsOpen())
-            {
-                Collapse(m_currentRow);
-            }
-            else    // if the node is already closed we move the selection to its parent
-            {
-                wxDataViewTreeNode *parent_node = node->GetParent();
-
-                if (parent_node)
-                {
-                    int parent = GetRowByItem( parent_node->GetItem() );
-                    if ( parent >= 0 )
-                    {
-                        unsigned int row = m_currentRow;
-                        SelectRow( row, false);
-                        SelectRow( parent, true );
-                        ChangeCurrentRow( parent );
-                        GetOwner()->EnsureVisible( parent, -1 );
-                        SendSelectionChangedEvent( parent_node->GetItem() );
-                    }
-                }
-            }
+            OnLeftKey();
             break;
-        }
+
         case WXK_RIGHT:
-        {
-            if (!IsExpanded( m_currentRow ))
-                Expand( m_currentRow );
-            else
-            {
-                unsigned int row = m_currentRow;
-                SelectRow( row, false );
-                SelectRow( row + 1, true );
-                ChangeCurrentRow( row + 1 );
-                GetOwner()->EnsureVisible( row + 1, -1 );
-                SendSelectionChangedEvent( GetItemByRow(row+1) );
-            }
+            OnRightKey();
             break;
-        }
+
         case WXK_END:
         {
             if (!IsEmpty())
@@ -3480,6 +3442,54 @@ void wxDataViewMainWindow::OnVerticalNavigation(unsigned int newCurrent, const w
     }
 
     GetOwner()->EnsureVisible( m_currentRow, -1 );
+}
+
+void wxDataViewMainWindow::OnLeftKey()
+{
+    if (IsList())
+       return;
+
+    wxDataViewTreeNode* node = GetTreeNodeByRow(m_currentRow);
+    if (!node)
+        return;
+
+    if (node->HasChildren() && node->IsOpen())
+    {
+        Collapse(m_currentRow);
+    }
+    else    // if the node is already closed we move the selection to its parent
+    {
+        wxDataViewTreeNode *parent_node = node->GetParent();
+
+        if (parent_node)
+        {
+            int parent = GetRowByItem( parent_node->GetItem() );
+            if ( parent >= 0 )
+            {
+                unsigned int row = m_currentRow;
+                SelectRow( row, false);
+                SelectRow( parent, true );
+                ChangeCurrentRow( parent );
+                GetOwner()->EnsureVisible( parent, -1 );
+                SendSelectionChangedEvent( parent_node->GetItem() );
+            }
+        }
+    }
+}
+
+void wxDataViewMainWindow::OnRightKey()
+{
+    if (!IsExpanded( m_currentRow ))
+        Expand( m_currentRow );
+    else
+    {
+        unsigned int row = m_currentRow;
+        SelectRow( row, false );
+        SelectRow( row + 1, true );
+        ChangeCurrentRow( row + 1 );
+        GetOwner()->EnsureVisible( row + 1, -1 );
+        SendSelectionChangedEvent( GetItemByRow(row+1) );
+    }
 }
 
 void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
