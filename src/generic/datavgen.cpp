@@ -3325,10 +3325,26 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
-        case WXK_SPACE:
             {
+                // Enter activates the item, i.e. sends wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED to
+                // it. Only if that event is not handled do we activate column renderer (which
+                // is normally done by Space).
+
                 const wxDataViewItem item = GetItemByRow(m_currentRow);
 
+                wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
+                                   parent->GetId());
+                le.SetItem(item);
+                le.SetEventObject(parent);
+                le.SetModel(GetModel());
+
+                if ( parent->GetEventHandler()->ProcessEvent(le) )
+                    break;
+                // else: fall through to WXK_SPACE handling
+            }
+
+        case WXK_SPACE:
+            {
                 // Activate the first activatable column if there is any:
                 wxDataViewColumn *activatableCol = NULL;
 
@@ -3345,27 +3361,16 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                     }
                 }
 
-                bool activated = false;
-
                 if ( activatableCol )
                 {
+                    const wxDataViewItem item = GetItemByRow(m_currentRow);
+
                     const unsigned colIdx = activatableCol->GetModelColumn();
                     const wxRect cell_rect = GetOwner()->GetItemRect(item, activatableCol);
 
                     wxDataViewRenderer *cell = activatableCol->GetRenderer();
                     cell->PrepareForItem(GetModel(), item, colIdx);
-                    activated = cell->WXOnActivate(cell_rect, GetModel(), item, colIdx);
-                }
-
-                if ( !activated )
-                {
-                    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
-                                       parent->GetId());
-                    le.SetItem(item);
-                    le.SetEventObject(parent);
-                    le.SetModel(GetModel());
-
-                    parent->GetEventHandler()->ProcessEvent(le);
+                    cell->WXOnActivate(cell_rect, GetModel(), item, colIdx);
                 }
             }
             break;
