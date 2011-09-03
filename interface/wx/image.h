@@ -494,7 +494,7 @@ public:
     /**
         @overload
     */
-    wxImage(const wxSize& sz, unsigned char* data, unsigned char* data, unsigned char* alpha,
+    wxImage(const wxSize& sz, unsigned char* data, unsigned char* alpha,
             bool static_data = false);
 
     /**
@@ -1827,6 +1827,30 @@ public:
         Converts a color in HSV color space to RGB color space.
     */
     static wxImage::RGBValue HSVtoRGB(const wxImage::HSVValue& hsv);
+};
+
+
+class wxImageHistogram : public wxImageHistogramBase
+{
+public:
+    wxImageHistogram();
+
+    // get the key in the histogram for the given RGB values
+    static unsigned long MakeKey(unsigned char r,
+                                 unsigned char g,
+                                 unsigned char b);
+
+    // find first colour that is not used in the image and has higher
+    // RGB values than RGB(startR, startG, startB)
+    //
+    // returns true and puts this colour in r, g, b (each of which may be NULL)
+    // on success or returns false if there are no more free colours
+    bool FindFirstUnusedColour(unsigned char *r,
+                               unsigned char *g,
+                               unsigned char *b,
+                               unsigned char startR = 1,
+                               unsigned char startG = 0,
+                               unsigned char startB = 0 ) const;
 };
 
 /**

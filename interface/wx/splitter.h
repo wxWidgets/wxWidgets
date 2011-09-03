@@ -6,6 +6,20 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+enum wxSplitMode
+{
+    wxSPLIT_HORIZONTAL = 1,
+    wxSPLIT_VERTICAL
+};
+
+enum
+{
+    wxSPLIT_DRAG_NONE,
+    wxSPLIT_DRAG_DRAGGING,
+    wxSPLIT_DRAG_LEFT_DOWN
+};
+
 /**
     @class wxSplitterWindow
 

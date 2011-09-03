@@ -1581,6 +1581,11 @@ public:
         Note that this method does not trigger relayout.
     */
     void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
+    
+    virtual void RecalcSizes();
+    
+    virtual wxSize CalcMin();
+    
 };
 
 

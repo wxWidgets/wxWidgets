@@ -144,6 +144,330 @@ enum wxBorder
     wxBORDER_MASK   = 0x1f200000
 };
 
+/*  ---------------------------------------------------------------------------- */
+/*  Window style flags */
+/*  ---------------------------------------------------------------------------- */
+
+/*
+ * Values are chosen so they can be |'ed in a bit list.
+ * Some styles are used across more than one group,
+ * so the values mustn't clash with others in the group.
+ * Otherwise, numbers can be reused across groups.
+ */
+
+/*
+    Summary of the bits used by various styles.
+
+    High word, containing styles which can be used with many windows:
+
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  \_ wxFULL_REPAINT_ON_RESIZE
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  \____ wxPOPUP_WINDOW
+      |  |  |  |  |  |  |  |  |  |  |  |  |  \_______ wxWANTS_CHARS
+      |  |  |  |  |  |  |  |  |  |  |  |  \__________ wxTAB_TRAVERSAL
+      |  |  |  |  |  |  |  |  |  |  |  \_____________ wxTRANSPARENT_WINDOW
+      |  |  |  |  |  |  |  |  |  |  \________________ wxBORDER_NONE
+      |  |  |  |  |  |  |  |  |  \___________________ wxCLIP_CHILDREN
+      |  |  |  |  |  |  |  |  \______________________ wxALWAYS_SHOW_SB
+      |  |  |  |  |  |  |  \_________________________ wxBORDER_STATIC
+      |  |  |  |  |  |  \____________________________ wxBORDER_SIMPLE
+      |  |  |  |  |  \_______________________________ wxBORDER_RAISED
+      |  |  |  |  \__________________________________ wxBORDER_SUNKEN
+      |  |  |  \_____________________________________ wxBORDER_{DOUBLE,THEME}
+      |  |  \________________________________________ wxCAPTION/wxCLIP_SIBLINGS
+      |  \___________________________________________ wxHSCROLL
+      \______________________________________________ wxVSCROLL
+
+
+    Low word style bits is class-specific meaning that the same bit can have
+    different meanings for different controls (e.g. 0x10 is wxCB_READONLY
+    meaning that the control can't be modified for wxComboBox but wxLB_SORT
+    meaning that the control should be kept sorted for wxListBox, while
+    wxLB_SORT has a different value -- and this is just fine).
+ */
+
+/*
+ * Window (Frame/dialog/subwindow/panel item) style flags
+ */
+#define wxVSCROLL               0x80000000
+#define wxHSCROLL               0x40000000
+#define wxCAPTION               0x20000000
+
+/*  New styles (border styles are now in their own enum) */
+#define wxDOUBLE_BORDER         wxBORDER_DOUBLE
+#define wxSUNKEN_BORDER         wxBORDER_SUNKEN
+#define wxRAISED_BORDER         wxBORDER_RAISED
+#define wxBORDER                wxBORDER_SIMPLE
+#define wxSIMPLE_BORDER         wxBORDER_SIMPLE
+#define wxSTATIC_BORDER         wxBORDER_STATIC
+#define wxNO_BORDER             wxBORDER_NONE
+
+/*  wxALWAYS_SHOW_SB: instead of hiding the scrollbar when it is not needed, */
+/*  disable it - but still show (see also wxLB_ALWAYS_SB style) */
+/*  */
+/*  NB: as this style is only supported by wxUniversal and wxMSW so far */
+#define wxALWAYS_SHOW_SB        0x00800000
+
+/*  Clip children when painting, which reduces flicker in e.g. frames and */
+/*  splitter windows, but can't be used in a panel where a static box must be */
+/*  'transparent' (panel paints the background for it) */
+#define wxCLIP_CHILDREN         0x00400000
+
+/*  Note we're reusing the wxCAPTION style because we won't need captions */
+/*  for subwindows/controls */
+#define wxCLIP_SIBLINGS         0x20000000
+
+#define wxTRANSPARENT_WINDOW    0x00100000
+
+/*  Add this style to a panel to get tab traversal working outside of dialogs */
+/*  (on by default for wxPanel, wxDialog, wxScrolledWindow) */
+#define wxTAB_TRAVERSAL         0x00080000
+
+/*  Add this style if the control wants to get all keyboard messages (under */
+/*  Windows, it won't normally get the dialog navigation key events) */
+#define wxWANTS_CHARS           0x00040000
+
+/*  Make window retained (Motif only, see src/generic/scrolwing.cpp)
+ *  This is non-zero only under wxMotif, to avoid a clash with wxPOPUP_WINDOW
+ *  on other platforms
+ */
+
+#ifdef __WXMOTIF__
+#define wxRETAINED              0x00020000
+#else
+#define wxRETAINED              0x00000000
+#endif
+#define wxBACKINGSTORE          wxRETAINED
+
+/*  set this flag to create a special popup window: it will be always shown on */
+/*  top of other windows, will capture the mouse and will be dismissed when the */
+/*  mouse is clicked outside of it or if it loses focus in any other way */
+#define wxPOPUP_WINDOW          0x00020000
+
+/*  force a full repaint when the window is resized (instead of repainting just */
+/*  the invalidated area) */
+#define wxFULL_REPAINT_ON_RESIZE 0x00010000
+
+/*  obsolete: now this is the default behaviour */
+/*  */
+/*  don't invalidate the whole window (resulting in a PAINT event) when the */
+/*  window is resized (currently, makes sense for wxMSW only) */
+#define wxNO_FULL_REPAINT_ON_RESIZE 0
+
+/* A mask which can be used to filter (out) all wxWindow-specific styles.
+ */
+#define wxWINDOW_STYLE_MASK     \
+    (wxVSCROLL|wxHSCROLL|wxBORDER_MASK|wxALWAYS_SHOW_SB|wxCLIP_CHILDREN| \
+     wxCLIP_SIBLINGS|wxTRANSPARENT_WINDOW|wxTAB_TRAVERSAL|wxWANTS_CHARS| \
+     wxRETAINED|wxPOPUP_WINDOW|wxFULL_REPAINT_ON_RESIZE)
+
+/*
+ * Extra window style flags (use wxWS_EX prefix to make it clear that they
+ * should be passed to wxWindow::SetExtraStyle(), not SetWindowStyle())
+ */
+
+/*  by default, TransferDataTo/FromWindow() only work on direct children of the */
+/*  window (compatible behaviour), set this flag to make them recursively */
+/*  descend into all subwindows */
+#define wxWS_EX_VALIDATE_RECURSIVELY    0x00000001
+
+/*  wxCommandEvents and the objects of the derived classes are forwarded to the */
+/*  parent window and so on recursively by default. Using this flag for the */
+/*  given window allows to block this propagation at this window, i.e. prevent */
+/*  the events from being propagated further upwards. The dialogs have this */
+/*  flag on by default. */
+#define wxWS_EX_BLOCK_EVENTS            0x00000002
+
+/*  don't use this window as an implicit parent for the other windows: this must */
+/*  be used with transient windows as otherwise there is the risk of creating a */
+/*  dialog/frame with this window as a parent which would lead to a crash if the */
+/*  parent is destroyed before the child */
+#define wxWS_EX_TRANSIENT               0x00000004
+
+/*  don't paint the window background, we'll assume it will */
+/*  be done by a theming engine. This is not yet used but could */
+/*  possibly be made to work in the future, at least on Windows */
+#define wxWS_EX_THEMED_BACKGROUND       0x00000008
+
+/*  this window should always process idle events */
+#define wxWS_EX_PROCESS_IDLE            0x00000010
+
+/*  this window should always process UI update events */
+#define wxWS_EX_PROCESS_UI_UPDATES      0x00000020
+
+/*  Draw the window in a metal theme on Mac */
+#define wxFRAME_EX_METAL                0x00000040
+#define wxDIALOG_EX_METAL               0x00000040
+
+/*  Use this style to add a context-sensitive help to the window (currently for */
+/*  Win32 only and it doesn't work if wxMINIMIZE_BOX or wxMAXIMIZE_BOX are used) */
+#define wxWS_EX_CONTEXTHELP             0x00000080
+
+/* synonyms for wxWS_EX_CONTEXTHELP for compatibility */
+#define wxFRAME_EX_CONTEXTHELP          wxWS_EX_CONTEXTHELP
+#define wxDIALOG_EX_CONTEXTHELP         wxWS_EX_CONTEXTHELP
+
+/*  Create a window which is attachable to another top level window */
+#define wxFRAME_DRAWER          0x0020
+
+/*
+ * MDI parent frame style flags
+ * Can overlap with some of the above.
+ */
+
+#define wxFRAME_NO_WINDOW_MENU  0x0100
+
+/*
+ * wxMenuBar style flags
+ */
+/*  use native docking */
+#define wxMB_DOCKABLE       0x0001
+
+/*
+ * wxMenu style flags
+ */
+#define wxMENU_TEAROFF      0x0001
+
+/*
+ * Apply to all panel items
+ */
+#define wxCOLOURED          0x0800
+#define wxFIXED_LENGTH      0x0400
+
+/*
+ * Styles for wxListBox
+ */
+#define wxLB_SORT           0x0010
+#define wxLB_SINGLE         0x0020
+#define wxLB_MULTIPLE       0x0040
+#define wxLB_EXTENDED       0x0080
+/*  wxLB_OWNERDRAW is Windows-only */
+#define wxLB_NEEDED_SB      0x0000
+#define wxLB_OWNERDRAW      0x0100
+#define wxLB_ALWAYS_SB      0x0200
+#define wxLB_NO_SB          0x0400
+#define wxLB_HSCROLL        wxHSCROLL
+/*  always show an entire number of rows */
+#define wxLB_INT_HEIGHT     0x0800
+
+/*
+ * wxComboBox style flags
+ */
+#define wxCB_SIMPLE         0x0004
+#define wxCB_SORT           0x0008
+#define wxCB_READONLY       0x0010
+#define wxCB_DROPDOWN       0x0020
+
+/*
+ * wxRadioBox style flags
+ */
+/*  should we number the items from left to right or from top to bottom in a 2d */
+/*  radiobox? */
+#define wxRA_LEFTTORIGHT    0x0001
+#define wxRA_TOPTOBOTTOM    0x0002
+
+/*  New, more intuitive names to specify majorDim argument */
+#define wxRA_SPECIFY_COLS   wxHORIZONTAL
+#define wxRA_SPECIFY_ROWS   wxVERTICAL
+
+/*  Old names for compatibility */
+#define wxRA_HORIZONTAL     wxHORIZONTAL
+#define wxRA_VERTICAL       wxVERTICAL
+#define wxRA_USE_CHECKBOX   0x0010 /* alternative native subcontrols (wxPalmOS) */
+
+/*
+ * wxRadioButton style flag
+ */
+#define wxRB_GROUP          0x0004
+#define wxRB_SINGLE         0x0008
+#define wxRB_USE_CHECKBOX   0x0010 /* alternative native control (wxPalmOS) */
+
+/*
+ * wxScrollBar flags
+ */
+#define wxSB_HORIZONTAL      wxHORIZONTAL
+#define wxSB_VERTICAL        wxVERTICAL
+
+/*
+ * wxSpinButton flags.
+ * Note that a wxSpinCtrl is sometimes defined as a wxTextCtrl, and so the
+ * flags shouldn't overlap with wxTextCtrl flags that can be used for a single
+ * line controls (currently we reuse wxTE_CHARWRAP and wxTE_RICH2 neither of
+ * which makes sense for them).
+ */
+#define wxSP_HORIZONTAL       wxHORIZONTAL /*  4 */
+#define wxSP_VERTICAL         wxVERTICAL   /*  8 */
+#define wxSP_ARROW_KEYS       0x4000
+#define wxSP_WRAP             0x8000
+
+/*
+ * wxTabCtrl flags
+ */
+#define wxTC_RIGHTJUSTIFY     0x0010
+#define wxTC_FIXEDWIDTH       0x0020
+#define wxTC_TOP              0x0000    /*  default */
+#define wxTC_LEFT             0x0020
+#define wxTC_RIGHT            0x0040
+#define wxTC_BOTTOM           0x0080
+#define wxTC_MULTILINE        0x0200    /* == wxNB_MULTILINE */
+#define wxTC_OWNERDRAW        0x0400
+
+/*
+ * wxStaticBitmap flags
+ */
+#define wxBI_EXPAND           wxEXPAND
+
+/*
+ * wxStaticLine flags
+ */
+#define wxLI_HORIZONTAL         wxHORIZONTAL
+#define wxLI_VERTICAL           wxVERTICAL
+
+
+/*
+ * extended dialog specifiers. these values are stored in a different
+ * flag and thus do not overlap with other style flags. note that these
+ * values do not correspond to the return values of the dialogs (for
+ * those values, look at the wxID_XXX defines).
+ */
+
+/*  wxCENTRE already defined as  0x00000001 */
+#define wxYES                   0x00000002
+#define wxOK                    0x00000004
+#define wxNO                    0x00000008
+#define wxYES_NO                (wxYES | wxNO)
+#define wxCANCEL                0x00000010
+#define wxAPPLY                 0x00000020
+#define wxCLOSE                 0x00000040
+
+#define wxOK_DEFAULT            0x00000000  /* has no effect (default) */
+#define wxYES_DEFAULT           0x00000000  /* has no effect (default) */
+#define wxNO_DEFAULT            0x00000080  /* only valid with wxYES_NO */
+#define wxCANCEL_DEFAULT        0x80000000  /* only valid with wxCANCEL */
+
+#define wxICON_EXCLAMATION      0x00000100
+#define wxICON_HAND             0x00000200
+#define wxICON_WARNING          wxICON_EXCLAMATION
+#define wxICON_ERROR            wxICON_HAND
+#define wxICON_QUESTION         0x00000400
+#define wxICON_INFORMATION      0x00000800
+#define wxICON_STOP             wxICON_HAND
+#define wxICON_ASTERISK         wxICON_INFORMATION
+
+#define  wxFORWARD              0x00001000
+#define  wxBACKWARD             0x00002000
+#define  wxRESET                0x00004000
+#define  wxHELP                 0x00008000
+#define  wxMORE                 0x00010000
+#define  wxSETUP                0x00020000
+#define wxICON_NONE             0x00040000
+
+#define wxICON_MASK \
+    (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION|wxICON_NONE)
+
 
 /**
     Background styles.
@@ -845,6 +1169,24 @@ enum wxUpdateUI
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
+
+/**
+    Top level window styles common to wxFrame and wxDialog
+*/
+
+#define wxSTAY_ON_TOP           0x8000
+#define wxICONIZE               0x4000
+#define wxMINIMIZE              wxICONIZE
+#define wxMAXIMIZE              0x2000
+#define wxCLOSE_BOX             0x1000
+
+#define wxSYSTEM_MENU           0x0800
+#define wxMINIMIZE_BOX          0x0400
+#define wxMAXIMIZE_BOX          0x0200
+
+#define wxTINY_CAPTION          0x0080  // clashes with wxNO_DEFAULT
+#define wxRESIZE_BORDER         0x0040
+
 
 /**
     C99-like sized MIN/MAX constants for all integer types.
