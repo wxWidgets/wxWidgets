@@ -545,8 +545,8 @@ public:
     wxBitmap CreateItemBitmap( unsigned int row, int &indent );
 #endif // wxUSE_DRAG_AND_DROP
     void OnPaint( wxPaintEvent &event );
-    void OnArrowChar(unsigned int newCurrent, const wxKeyEvent& event);
     void OnChar( wxKeyEvent &event );
+    void OnVerticalNavigation(unsigned int newCurrent, const wxKeyEvent& event);
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
@@ -2552,58 +2552,6 @@ void wxDataViewMainWindow::RefreshRowsAfter( unsigned int firstRow )
     Refresh( true, &rect );
 }
 
-void wxDataViewMainWindow::OnArrowChar(unsigned int newCurrent, const wxKeyEvent& event)
-{
-    wxCHECK_RET( newCurrent < GetRowCount(),
-                wxT("invalid item index in OnArrowChar()") );
-
-    // if there is no selection, we cannot move it anywhere
-    if (!HasCurrentRow())
-        return;
-
-    unsigned int oldCurrent = m_currentRow;
-
-    // in single selection we just ignore Shift as we can't select several
-    // items anyhow
-    if ( event.ShiftDown() && !IsSingleSel() )
-    {
-        RefreshRow( oldCurrent );
-
-        ChangeCurrentRow( newCurrent );
-
-        // select all the items between the old and the new one
-        if ( oldCurrent > newCurrent )
-        {
-            newCurrent = oldCurrent;
-            oldCurrent = m_currentRow;
-        }
-
-        SelectRows( oldCurrent, newCurrent, true );
-        if (oldCurrent!=newCurrent)
-            SendSelectionChangedEvent(GetItemByRow(m_selection[0]));
-    }
-    else // !shift
-    {
-        RefreshRow( oldCurrent );
-
-        // all previously selected items are unselected unless ctrl is held
-        if ( !event.ControlDown() )
-            SelectAllRows(false);
-
-        ChangeCurrentRow( newCurrent );
-
-        if ( !event.ControlDown() )
-        {
-            SelectRow( m_currentRow, true );
-            SendSelectionChangedEvent(GetItemByRow(m_currentRow));
-        }
-        else
-            RefreshRow( m_currentRow );
-    }
-
-    GetOwner()->EnsureVisible( m_currentRow, -1 );
-}
-
 wxRect wxDataViewMainWindow::GetLineRect( unsigned int row ) const
 {
     wxRect rect;
@@ -3377,12 +3325,12 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_UP:
             if ( m_currentRow > 0 )
-                OnArrowChar( m_currentRow - 1, event );
+                OnVerticalNavigation( m_currentRow - 1, event );
             break;
 
         case WXK_DOWN:
             if ( m_currentRow + 1 < GetRowCount() )
-                OnArrowChar( m_currentRow + 1, event );
+                OnVerticalNavigation( m_currentRow + 1, event );
             break;
         // Add the process for tree expanding/collapsing
         case WXK_LEFT:
@@ -3436,12 +3384,12 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
         case WXK_END:
         {
             if (!IsEmpty())
-                OnArrowChar( GetRowCount() - 1, event );
+                OnVerticalNavigation( GetRowCount() - 1, event );
             break;
         }
         case WXK_HOME:
             if (!IsEmpty())
-                OnArrowChar( 0, event );
+                OnVerticalNavigation( 0, event );
             break;
 
         case WXK_PAGEUP:
@@ -3451,7 +3399,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                 if (index < 0)
                     index = 0;
 
-                OnArrowChar( index, event );
+                OnVerticalNavigation( index, event );
             }
             break;
 
@@ -3463,7 +3411,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                 if ( index >= count )
                     index = count - 1;
 
-                OnArrowChar( index, event );
+                OnVerticalNavigation( index, event );
             }
             break;
 
@@ -3480,6 +3428,58 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
         default:
             event.Skip();
     }
+}
+
+void wxDataViewMainWindow::OnVerticalNavigation(unsigned int newCurrent, const wxKeyEvent& event)
+{
+    wxCHECK_RET( newCurrent < GetRowCount(),
+                wxT("invalid item index in OnVerticalNavigation()") );
+
+    // if there is no selection, we cannot move it anywhere
+    if (!HasCurrentRow())
+        return;
+
+    unsigned int oldCurrent = m_currentRow;
+
+    // in single selection we just ignore Shift as we can't select several
+    // items anyhow
+    if ( event.ShiftDown() && !IsSingleSel() )
+    {
+        RefreshRow( oldCurrent );
+
+        ChangeCurrentRow( newCurrent );
+
+        // select all the items between the old and the new one
+        if ( oldCurrent > newCurrent )
+        {
+            newCurrent = oldCurrent;
+            oldCurrent = m_currentRow;
+        }
+
+        SelectRows( oldCurrent, newCurrent, true );
+        if (oldCurrent!=newCurrent)
+            SendSelectionChangedEvent(GetItemByRow(m_selection[0]));
+    }
+    else // !shift
+    {
+        RefreshRow( oldCurrent );
+
+        // all previously selected items are unselected unless ctrl is held
+        if ( !event.ControlDown() )
+            SelectAllRows(false);
+
+        ChangeCurrentRow( newCurrent );
+
+        if ( !event.ControlDown() )
+        {
+            SelectRow( m_currentRow, true );
+            SendSelectionChangedEvent(GetItemByRow(m_currentRow));
+        }
+        else
+            RefreshRow( m_currentRow );
+    }
+
+    GetOwner()->EnsureVisible( m_currentRow, -1 );
 }
 
 void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
