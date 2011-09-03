@@ -169,7 +169,7 @@ private:
 
         // for events created by wxDataViewHeaderWindow the
         // row / value fields are not valid
-        return owner->GetEventHandler()->ProcessEvent(event);
+        return owner->ProcessWindowEvent(event);
     }
 
     void OnClick(wxHeaderCtrlEvent& event)
@@ -2196,7 +2196,7 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
     le.SetEventObject(parent);
     le.SetModel(GetModel());
     le.SetItem(item);
-    parent->GetEventHandler()->ProcessEvent(le);
+    parent->ProcessWindowEvent(le);
 
     return true;
 }
@@ -2239,7 +2239,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     le.SetItem(item);
     le.SetColumn(view_column);
     le.SetDataViewColumn(GetOwner()->GetColumn(view_column));
-    parent->GetEventHandler()->ProcessEvent(le);
+    parent->ProcessWindowEvent(le);
 
     return true;
 }
@@ -2508,7 +2508,7 @@ void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item
     le.SetModel(GetModel());
     le.SetItem( item );
 
-    parent->GetEventHandler()->ProcessEvent(le);
+    parent->ProcessWindowEvent(le);
 }
 
 void wxDataViewMainWindow::RefreshRow( unsigned int row )
@@ -3288,7 +3288,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                 le.SetEventObject(parent);
                 le.SetModel(GetModel());
 
-                if ( parent->GetEventHandler()->ProcessEvent(le) )
+                if ( parent->ProcessWindowEvent(le) )
                     break;
                 // else: fall through to WXK_SPACE handling
             }
@@ -3692,7 +3692,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 le.SetEventObject(parent);
                 le.SetModel(GetModel());
 
-                parent->GetEventHandler()->ProcessEvent(le);
+                parent->ProcessWindowEvent(le);
             }
             return;
         }
@@ -3766,7 +3766,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         le.SetEventObject(parent);
         le.SetModel(GetModel());
         le.SetValue(value);
-        parent->GetEventHandler()->ProcessEvent(le);
+        parent->ProcessWindowEvent(le);
     }
     else if (event.MiddleDown())
     {
