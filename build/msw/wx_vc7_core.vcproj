@@ -5682,6 +5682,9 @@
 				RelativePath="..\..\include\wx\splash.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\persist\splitter.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\splitter.h">
 			</File>
 			<File

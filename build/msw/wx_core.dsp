@@ -6808,6 +6808,10 @@ SOURCE=..\..\include\wx\splash.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\persist\splitter.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\splitter.h
 # End Source File
 # Begin Source File

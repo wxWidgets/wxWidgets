@@ -998,6 +998,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/paper.h
     wx/persist.h
     wx/persist/bookctrl.h
+    wx/persist/splitter.h
     wx/persist/toplevel.h
     wx/persist/treebook.h
     wx/persist/window.h

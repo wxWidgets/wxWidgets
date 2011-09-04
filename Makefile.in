@@ -4030,6 +4030,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/paper.h \
 	wx/persist.h \
 	wx/persist/bookctrl.h \
+	wx/persist/splitter.h \
 	wx/persist/toplevel.h \
 	wx/persist/treebook.h \
 	wx/persist/window.h \
