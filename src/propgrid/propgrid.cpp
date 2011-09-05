@@ -6227,6 +6227,7 @@ void wxPropertyGridEvent::Init()
     m_column = 1;
     m_canVeto = false;
     m_wasVetoed = false;
+    m_pg = NULL;
 }
 
 // -----------------------------------------------------------------------
