@@ -4381,12 +4381,11 @@ void wxDataViewCtrl::UpdateColWidths()
     if ( !m_headerArea )
         return;
 
-    for ( wxVector<int>::const_iterator i = m_colsBestWidths.begin();
-          i != m_colsBestWidths.end();
-          ++i )
+    const unsigned len = m_colsBestWidths.size();
+    for ( unsigned i = 0; i < len; i++ )
     {
-        if ( m_colsBestWidths[*i] == 0 )
-            m_headerArea->UpdateColumn(*i);
+        if ( m_colsBestWidths[i] == 0 )
+            m_headerArea->UpdateColumn(i);
     }
 }
 
