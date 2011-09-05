@@ -3379,7 +3379,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_F2:
             {
-                if(m_selection.size() == 1)
+                if( !m_selection.empty() )
                 {
                     // TODO: we need to revise that when we have a concept for a 'current column'
                     GetOwner()->StartEditor(GetItemByRow(m_selection[0]), 0);
