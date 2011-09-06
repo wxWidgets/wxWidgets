@@ -3109,9 +3109,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
 
-        dnl disable GTK runtime type checks
-        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -DG_DISABLE_CAST_CHECKS"
-
         AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
@@ -5404,6 +5401,8 @@ if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     if test "$wxUSE_GTK" = 1 ; then
         if test "x$wxGTK_VERSION" = "x1" ; then
             CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
+        else
+            CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
         fi
     fi
 fi
