@@ -24801,13 +24801,11 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <sys/types.h> /* for off_t */
-     #include <stdio.h>
+#include <stdio.h>
 int
 main ()
 {
-int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
+return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
   ;
   return 0;
 }
@@ -24847,13 +24845,11 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #define _LARGEFILE_SOURCE 1
-#include <sys/types.h> /* for off_t */
-     #include <stdio.h>
+#include <stdio.h>
 int
 main ()
 {
-int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
+return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
   ;
   return 0;
 }
@@ -29722,7 +29718,6 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
-    WXGTK12=
     WXGTK127=
     WXGTK2=
     WXGPE=
@@ -30095,8 +30090,6 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
 
   rm -f conf.gtktest
 
-
-                                        GTK_LIBS="$GTK_LIBS -lX11"
                 fi
 
                                 if test -z "$wx_cv_lib_gtk"; then
@@ -30756,6 +30749,8 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
                 if test -z "$wx_cv_lib_gtk"; then
                                         wx_cv_lib_gtk=none
                 else
+                                        GTK_LIBS="$GTK_LIBS -lX11"
+
                                                             wx_cv_cflags_gtk=$GTK_CFLAGS
                     wx_cv_libs_gtk=$GTK_LIBS
                 fi
@@ -30774,10 +30769,8 @@ echo "${ECHO_T}$wx_cv_lib_gtk" >&6; }
                     TOOLKIT_VERSION=2
                     ;;
             1.2.7)  WXGTK127=1
-                    WXGTK12=1
                     ;;
-            1.2.3)  WXGTK12=1
-                    ;;
+            1.2*) ;;
             *)      { { echo "$as_me:$LINENO: error:
 The development files for GTK+ were not found. For GTK+ 2, please
 ensure that pkg-config is in the path and that gtk+-2.0.pc is
@@ -31184,9 +31177,6 @@ done
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
-
-                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -DG_DISABLE_CAST_CHECKS"
-
         AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
@@ -42971,14 +42961,6 @@ if test "$WXGTK2" = 1 ; then
 #define __WXGTK20__ $WXGTK2
 _ACEOF
 
-  WXGTK12=1
-fi
-
-if test "$WXGTK12" = 1 ; then
-  cat >>confdefs.h <<_ACEOF
-#define __WXGTK12__ $WXGTK12
-_ACEOF
-
 fi
 
 if test "$WXGTK127" = 1 ; then
@@ -43016,6 +42998,8 @@ if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     if test "$wxUSE_GTK" = 1 ; then
         if test "x$wxGTK_VERSION" = "x1" ; then
             CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
+        else
+            CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
         fi
     fi
 fi
@@ -47281,14 +47265,6 @@ _ACEOF
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
-    if test "$wxUSE_GTK" = 1; then
-        if test "$WXGTK12" != 1; then
-            { echo "$as_me:$LINENO: WARNING: Drag and drop is only supported under GTK+ 1.2... disabled" >&5
-echo "$as_me: WARNING: Drag and drop is only supported under GTK+ 1.2... disabled" >&2;}
-            wxUSE_DRAG_AND_DROP=no
-        fi
-    fi
-
     if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_MGL" = 1 -o \
             "$wxUSE_DFB" = 1; then
         { echo "$as_me:$LINENO: WARNING: Drag and drop not yet supported under $TOOLKIT... disabled" >&5

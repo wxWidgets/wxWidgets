@@ -2963,9 +2963,6 @@ if test "$wxUSE_GUI" = "yes"; then
                     esac
 
                     AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
-
-                    dnl we use symbols from X11 directly so we should link with it
-                    GTK_LIBS="$GTK_LIBS -lX11"
                 fi
 
                 dnl detect GTK1.x
@@ -2983,6 +2980,9 @@ if test "$wxUSE_GUI" = "yes"; then
                     dnl looks better in AC_MSG_RESULT
                     wx_cv_lib_gtk=none
                 else
+                    dnl we use symbols from X11 directly so we should link with it
+                    GTK_LIBS="$GTK_LIBS -lX11"
+
                     dnl we need to cache GTK_CFLAGS and GTK_LIBS for the
                     dnl subsequent runs
                     wx_cv_cflags_gtk=$GTK_CFLAGS
@@ -3108,7 +3108,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
-
         AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
