@@ -2899,7 +2899,6 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
-    WXGTK12=
     WXGTK127=
     WXGTK2=
     WXGPE=
@@ -3003,10 +3002,8 @@ if test "$wxUSE_GUI" = "yes"; then
                     TOOLKIT_VERSION=2
                     ;;
             1.2.7)  WXGTK127=1
-                    WXGTK12=1
                     ;;
-            1.2.3)  WXGTK12=1
-                    ;;
+            1.2*) ;;
             *)      AC_MSG_ERROR([
 The development files for GTK+ were not found. For GTK+ 2, please
 ensure that pkg-config is in the path and that gtk+-2.0.pc is
@@ -5371,11 +5368,6 @@ fi
 
 if test "$WXGTK2" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGTK20__,$WXGTK2)
-  WXGTK12=1
-fi
-
-if test "$WXGTK12" = 1 ; then
-  AC_DEFINE_UNQUOTED(__WXGTK12__,$WXGTK12)
 fi
 
 if test "$WXGTK127" = 1 ; then

@@ -53,9 +53,6 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
-/* Define this if your version of GTK+ is greater than 1.2 */
-#undef __WXGTK12__
-
 /* Define this if your version of GTK+ is greater than 1.2.7 */
 #undef __WXGTK127__
 
