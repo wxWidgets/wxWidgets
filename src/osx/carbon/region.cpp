@@ -16,6 +16,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/osx/private.h"
