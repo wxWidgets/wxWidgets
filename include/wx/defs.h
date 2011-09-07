@@ -3285,52 +3285,45 @@ typedef long            WXPixel; /* safety catch in src/motif/colour.cpp */
 #ifdef __WXGTK__
 
 /* Stand-ins for GLIB types */
-typedef char           gchar;
-typedef signed char    gint8;
-typedef int            gint;
-typedef unsigned       guint;
-typedef unsigned long  gulong;
-typedef void*          gpointer;
 typedef struct _GSList GSList;
 
 /* Stand-ins for GDK types */
 typedef struct _GdkColor        GdkColor;
-typedef struct _GdkColormap     GdkColormap;
-typedef struct _GdkFont         GdkFont;
-typedef struct _GdkGC           GdkGC;
-typedef struct _GdkVisual       GdkVisual;
-
-#ifdef __WXGTK20__
-typedef struct _GdkAtom        *GdkAtom;
-typedef struct _GdkDrawable     GdkWindow;
-typedef struct _GdkDrawable     GdkBitmap;
-typedef struct _GdkDrawable     GdkPixmap;
-#else /*  GTK+ 1.2 */
-typedef gulong                  GdkAtom;
-typedef struct _GdkWindow       GdkWindow;
-typedef struct _GdkWindow       GdkBitmap;
-typedef struct _GdkWindow       GdkPixmap;
-#endif /*  GTK+ 1.2/2.0 */
-
 typedef struct _GdkCursor       GdkCursor;
-typedef struct _GdkRegion       GdkRegion;
 typedef struct _GdkDragContext  GdkDragContext;
 
-#ifdef HAVE_XIM
-typedef struct _GdkIC           GdkIC;
-typedef struct _GdkICAttr       GdkICAttr;
+#if defined(__WXGTK20__)
+    typedef struct _GdkAtom* GdkAtom;
+#else
+    typedef unsigned long GdkAtom;
+#endif
+
+#if !defined(__WXGTK30__)
+    typedef struct _GdkColormap GdkColormap;
+    typedef struct _GdkFont GdkFont;
+    typedef struct _GdkGC GdkGC;
+    typedef struct _GdkRegion GdkRegion;
+#endif
+
+#if defined(__WXGTK30__)
+    typedef struct _GdkWindow GdkWindow;
+#elif defined(__WXGTK20__)
+    typedef struct _GdkDrawable GdkWindow;
+    typedef struct _GdkDrawable GdkPixmap;
+#else
+    typedef struct _GdkWindow GdkWindow;
+    typedef struct _GdkWindow GdkBitmap;
+    typedef struct _GdkWindow GdkPixmap;
 #endif
 
 /* Stand-ins for GTK types */
 typedef struct _GtkWidget         GtkWidget;
 typedef struct _GtkRcStyle        GtkRcStyle;
 typedef struct _GtkAdjustment     GtkAdjustment;
-typedef struct _GtkList           GtkList;
 typedef struct _GtkToolbar        GtkToolbar;
 typedef struct _GtkNotebook       GtkNotebook;
 typedef struct _GtkNotebookPage   GtkNotebookPage;
 typedef struct _GtkAccelGroup     GtkAccelGroup;
-typedef struct _GtkItemFactory    GtkItemFactory;
 typedef struct _GtkSelectionData  GtkSelectionData;
 typedef struct _GtkTextBuffer     GtkTextBuffer;
 typedef struct _GtkRange          GtkRange;

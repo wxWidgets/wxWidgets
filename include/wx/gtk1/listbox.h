@@ -12,6 +12,8 @@
 
 #include "wx/list.h"
 
+typedef struct _GtkList GtkList;
+
 class WXDLLIMPEXP_FWD_BASE wxSortedArrayString;
 
 //-----------------------------------------------------------------------------

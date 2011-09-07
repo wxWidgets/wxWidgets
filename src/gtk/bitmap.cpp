@@ -207,7 +207,7 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
     return true;
 }
 
-GdkBitmap *wxMask::GetBitmap() const
+GdkPixmap* wxMask::GetBitmap() const
 {
     return m_bitmap;
 }

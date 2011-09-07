@@ -23,9 +23,9 @@
 class WXDLLIMPEXP_FWD_CORE wxPen;
 
 #if defined(__WXGTK127__)
-typedef    gint8 wxGTKDash;
+typedef signed char wxGTKDash;
 #else
-typedef    gchar wxGTKDash;
+typedef char wxGTKDash;
 #endif
 
 //-----------------------------------------------------------------------------

@@ -20,7 +20,7 @@ typedef struct _GtkFrame GtkFrame;
 // C-linkage function pointer types for GetDefaultAttributesFromGTKWidget
 extern "C" {
     typedef GtkWidget* (*wxGtkWidgetNew_t)(void);
-    typedef GtkWidget* (*wxGtkWidgetNewFromStr_t)(const gchar*);
+    typedef GtkWidget* (*wxGtkWidgetNewFromStr_t)(const char*);
     typedef GtkWidget* (*wxGtkWidgetNewFromAdj_t)(GtkAdjustment*);
 }
 

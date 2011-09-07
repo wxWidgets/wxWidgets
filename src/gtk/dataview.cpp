@@ -2001,7 +2001,7 @@ wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
 }
 
 void
-wxDataViewRenderer::GtkOnTextEdited(const gchar *itempath, const wxString& str)
+wxDataViewRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
 {
     wxVariant value(str);
     if (!Validate( value ))
@@ -2764,7 +2764,7 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
 {
 }
 
-void wxDataViewChoiceByIndexRenderer::GtkOnTextEdited(const gchar *itempath, const wxString& str)
+void wxDataViewChoiceByIndexRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
 {
     wxVariant value( (long) GetChoices().Index( str ) );
 

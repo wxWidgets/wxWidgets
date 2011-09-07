@@ -50,13 +50,13 @@ public:
     GdkDragContext     *m_dragContext;
     GtkWidget          *m_dragWidget;
     GtkSelectionData   *m_dragData;
-    guint               m_dragTime;
+    unsigned            m_dragTime;
     bool                m_firstMotion;     // gdk has no "gdk_drag_enter" event
 
     void GTKSetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
     void GTKSetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
     void GTKSetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
-    void GTKSetDragTime( guint time ) { m_dragTime = time; }
+    void GTKSetDragTime(unsigned time) { m_dragTime = time; }
 };
 
 //-------------------------------------------------------------------------
