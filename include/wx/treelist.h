@@ -15,6 +15,7 @@
 
 #if wxUSE_TREELISTCTRL
 
+#include "wx/compositewin.h"
 #include "wx/containr.h"
 #include "wx/headercol.h"
 #include "wx/itemid.h"
@@ -88,8 +89,9 @@ extern WXDLLIMPEXP_DATA_ADV(const wxTreeListItem) wxTLI_LAST;
 // with wxDataViewCtrl directly but doing this makes your unportable to possible
 // future non-wxDataViewCtrl-based implementations of this class.
 
-class WXDLLIMPEXP_ADV wxTreeListCtrl : public wxNavigationEnabled<wxWindow>,
-                                       public wxWithImages
+class WXDLLIMPEXP_ADV wxTreeListCtrl
+    : public wxCompositeWindow< wxNavigationEnabled<wxWindow> >,
+      public wxWithImages
 {
 public:
     // Constructors and such
@@ -323,6 +325,9 @@ public:
 private:
     // Common part of all ctors.
     void Init();
+
+    // Pure virtual method inherited from wxCompositeWindow.
+    virtual wxWindowList GetCompositeWindowParts() const;
 
     // Implementation of AppendColumn().
     int DoInsertColumn(const wxString& title,

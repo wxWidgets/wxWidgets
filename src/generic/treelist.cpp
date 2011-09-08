@@ -1022,6 +1022,13 @@ wxTreeListCtrl::~wxTreeListCtrl()
         m_model->DecRef();
 }
 
+wxWindowList wxTreeListCtrl::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    parts.push_back(m_view);
+    return parts;
+}
+
 // ----------------------------------------------------------------------------
 // Columns
 // ----------------------------------------------------------------------------
