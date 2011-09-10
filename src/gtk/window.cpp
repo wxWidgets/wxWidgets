@@ -234,29 +234,6 @@ int          g_lastButtonNumber = 0;
 #define TRACE_FOCUS wxT("focus")
 
 //-----------------------------------------------------------------------------
-// missing gdk functions
-//-----------------------------------------------------------------------------
-
-void
-gdk_window_warp_pointer (GdkWindow      *window,
-                         gint            x,
-                         gint            y)
-{
-  if (!window)
-    window = gdk_get_default_root_window();
-
-  if (!GDK_WINDOW_DESTROYED(window))
-  {
-      XWarpPointer (GDK_WINDOW_XDISPLAY(window),
-                    None,              /* not source window -> move from anywhere */
-                    GDK_WINDOW_XID(window),  /* dest window */
-                    0, 0, 0, 0,        /* not source window -> move from anywhere */
-                    x, y );
-  }
-}
-
-
-//-----------------------------------------------------------------------------
 // "size_request" of m_widget
 //-----------------------------------------------------------------------------
 
@@ -3558,17 +3535,18 @@ void wxWindowGTK::WarpPointer( int x, int y )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    // We provide this function ourselves as it is
-    // missing in GDK (top of this file).
-
-    GdkWindow *window = NULL;
-    if (m_wxwindow)
-        window = gtk_widget_get_window(m_wxwindow);
-    else
-        window = gtk_widget_get_window(GetConnectWidget());
-
-    if (window)
-        gdk_window_warp_pointer( window, x, y );
+    ClientToScreen(&x, &y);
+    GdkDisplay* display = gtk_widget_get_display(m_widget);
+    GdkScreen* screen = gtk_widget_get_screen(m_widget);
+#ifdef __WXGTK30__
+    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+    gdk_device_warp(gdk_device_manager_get_client_pointer(manager), screen, x, y);
+#else
+    XWarpPointer(GDK_DISPLAY_XDISPLAY(display),
+        None,
+        GDK_WINDOW_XID(gdk_screen_get_root_window(screen)),
+        0, 0, 0, 0, x, y);
+#endif
 }
 
 wxWindowGTK::ScrollDir wxWindowGTK::ScrollDirFromRange(GtkRange *range) const
