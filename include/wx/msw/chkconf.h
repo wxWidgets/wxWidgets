@@ -408,6 +408,14 @@
 #           define wxUSE_MEDIACTRL 0
 #       endif
 #   endif
+#    if wxUSE_WEB
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxWebView requires wxActiveXContainer under MSW"
+#       else
+#           undef wxUSE_WEB
+#           define wxUSE_WEB 0
+#       endif
+#   endif
 #endif /* !wxUSE_ACTIVEX */
 
 #if !wxUSE_THREADS
@@ -420,6 +428,18 @@
 #       endif
 #   endif
 #endif /* !wxUSE_THREADS */
+
+
+#if !wxUSE_OLE_AUTOMATION
+#    if wxUSE_WEB
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxWebView requires wxUSE_OLE_AUTOMATION under MSW"
+#       else
+#           undef wxUSE_WEB
+#           define wxUSE_WEB 0
+#       endif
+#   endif
+#endif /* !wxUSE_OLE_AUTOMATION */
 
 #if defined(__WXUNIVERSAL__) && wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW && !wxUSE_POSTSCRIPT
 #   undef wxUSE_POSTSCRIPT

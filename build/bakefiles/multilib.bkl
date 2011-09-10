@@ -174,6 +174,30 @@
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">html=htmllib+htmldll</set>
 
     <!-- ================================================================ -->
+    <!--                               wxWEBVIEW                          -->
+    <!-- ================================================================ -->
+
+    <dll id="webviewdll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_WEBVIEW</define>
+        <sources>$(WEBVIEW_SRC)</sources>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="webviewlib" template="wx_lib"
+         cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
+        <sources>$(WEBVIEW_SRC)</sources>
+        <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+    </lib>
+
+    <wxshortcut id="wxwebview" cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">webview=webviewlib+webviewdll</set>
+
+    <!-- ================================================================ -->
     <!--                             OpenGL                               -->
     <!-- ================================================================ -->
 

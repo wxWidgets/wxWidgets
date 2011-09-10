@@ -850,6 +850,7 @@ WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUS
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
 WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
+WX_ARG_FEATURE(webview,     [  --enable-webview        use wxWebView library], wxUSE_WEBVIEW)
 
 dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 dnl can't be disabled, don't even provide an option to do it
@@ -1047,6 +1048,7 @@ WX_ARG_FEATURE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_D
 WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
 WX_ARG_FEATURE(uiactionsim,  [  --enable-uiactionsim    use wxUIActionSimulator (experimental)], wxUSE_UIACTIONSIMULATOR)
 WX_ARG_FEATURE(dctransform,  [  --enable-dctransform    use wxDC::SetTransformMatrix and related], wxUSE_DC_TRANSFORM_MATRIX)
+WX_ARG_FEATURE(webviewwebkit,[  --enable-webview-webkit use wxWebView WebKit backend], wxUSE_WEBVIEW_WEBKIT)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -1071,6 +1073,7 @@ WX_ARG_FEATURE(ps-in-msw,   [  --enable-ps-in-msw      use PS printing in wxMSW 
 WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)], wxUSE_OWNER_DRAWN)
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
+WX_ARG_FEATURE(webviewie,   [  --enable-webview-ie     use wxWebView IE backend (Win32 only)], wxUSE_WEBVIEW_IE)
 
 dnl this one is not really MSW-specific but it exists mainly to be turned off
 dnl under MSW, it should be off by default on the other platforms
@@ -7363,6 +7366,74 @@ if test "$wxUSE_RICHTEXT" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS richtext"
 fi
 
+USE_WEBVIEW=0
+if test "$wxUSE_WEBVIEW" = "yes"; then
+   AC_DEFINE(wxUSE_WEBVIEW)
+   USE_WEBVIEW=1
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
+
+   if test "$wxUSE_WEBVIEW_WEBKIT" = "yes" -a "$wxUSE_GTK" = 1; then
+       AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+       AC_MSG_CHECKING([for webkitgtk libraries])
+       WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],webkitgtk-1.0)
+       if test "$ac_find_libraries" != "" ; then
+           WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
+           if test "$ac_path_to_link" != " -L/usr/lib" ; then
+               LDFLAGS="$LDFLAGS $ac_path_to_link"
+           fi
+           GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwebkitgtk-1.0"
+           AC_MSG_RESULT([yes])
+       else
+           AC_MSG_RESULT([no])
+           AC_MSG_WARN([libwebkitgtk-1.0 not found; disabling webkit backend])
+           wxUSE_WEBVIEW_WEBKIT="no"
+       fi
+
+       AC_MSG_CHECKING(for webkitgtk includes)
+       WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /usr/include/webkit-1.0], webkit/webkit.h)
+       if test "$ac_find_includes" != "" ; then
+           AC_MSG_RESULT(found in $ac_find_includes)
+           WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
+           CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+       else
+           AC_MSG_RESULT([not found])
+       fi
+       dnl we also depend on libsoup
+       AC_MSG_CHECKING(for libsoup includes)
+       WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /usr/include/libsoup-2.4], libsoup/soup.h)
+       if test "$ac_find_includes" != "" ; then
+           AC_MSG_RESULT(found in $ac_find_includes)
+           WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
+           CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+       else
+           AC_MSG_RESULT([not found])
+       fi
+   fi
+
+    if test "$wxUSE_WEBVIEW_WEBKIT" = "yes" -a "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
+        old_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="-x objective-c++ $CPPFLAGS"
+        AC_CHECK_HEADER([WebKit/HIWebView.h],
+                        [
+                           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+                           WEBKIT_LINK="-framework WebKit"
+                        ],
+                        [
+                           AC_MSG_WARN([WebKit headers not found; disabling wxWebView WebKit])
+                           wxUSE_WEBVIEW_WEBKIT=no
+                        ],
+                        [
+                           #include <Carbon/Carbon.h>
+                           #include <WebKit/WebKit.h>
+                        ])
+        CPPFLAGS="$old_CPPFLAGS"
+    elif test "$wxUSE_OLD_COCOA" = 1; then
+        AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+    else
+        wxUSE_WEBVIEW_WEBKIT=no
+    fi
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl wxImage options
 dnl ---------------------------------------------------------------------------
@@ -7744,6 +7815,10 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_STC" = "yes" ; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_WEBVIEW" = "yes" ; then
+        STD_GUI_LIBS="web $STD_GUI_LIBS"
+        BUILT_WX_LIBS="web $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_XRC" = "yes" ; then
         STD_GUI_LIBS="xrc $STD_GUI_LIBS"

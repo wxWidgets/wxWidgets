@@ -39,12 +39,12 @@ def mk_wxid(id):
 
 
 # All libs that are part of the main library:
-MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net',
+MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net', 'webview',
              'media', 'qa', 'xrc', 'aui', 'ribbon', 'propgrid', 'richtext', 'stc']
 # List of library names/ids for categories with different names:
 LIBS_NOGUI = ['xml', 'net']
 LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'qa', 'xrc', 'media',
-              'aui', 'propgrid', 'richtext', 'stc', 'ribbon']
+              'aui', 'propgrid', 'richtext', 'stc', 'ribbon', 'webview']
 # Additional libraries that must be linked in:
 EXTRALIBS = {
     'gl' : '$(EXTRALIBS_OPENGL)',

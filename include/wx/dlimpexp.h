@@ -102,6 +102,7 @@
 #    define WXMAKINGDLL_RICHTEXT
 #    define WXMAKINGDLL_MEDIA
 #    define WXMAKINGDLL_STC
+#    define WXMAKINGDLL_WEBVIEW
 #endif /* WXMAKINGDLL */
 
 /*
@@ -274,6 +275,17 @@
 #    define WXDLLIMPEXP_DATA_STC(type) type
 #endif
 
+#ifdef WXMAKINGDLL_WEBVIEW
+#    define WXDLLIMPEXP_WEBVIEW WXEXPORT
+#    define WXDLLIMPEXP_DATA_WEBVIEW(type) WXEXPORT type
+#elif defined(WXUSINGDLL)
+#    define WXDLLIMPEXP_WEBVIEW WXIMPORT
+#    define WXDLLIMPEXP_DATA_WEBVIEW(type) WXIMPORT type
+#else /* not making nor using DLL */
+#    define WXDLLIMPEXP_WEBVIEW
+#    define WXDLLIMPEXP_DATA_WEBVIEW(type) type
+#endif
+
 /*
    GCC warns about using __attribute__ (and also __declspec in mingw32 case) on
    forward declarations while MSVC complains about forward declarations without
@@ -295,6 +307,7 @@
     #define WXDLLIMPEXP_FWD_RICHTEXT
     #define WXDLLIMPEXP_FWD_MEDIA
     #define WXDLLIMPEXP_FWD_STC
+    #define WXDLLIMPEXP_FWD_WEBVIEW
 #else
     #define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
     #define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
@@ -310,6 +323,7 @@
     #define WXDLLIMPEXP_FWD_RICHTEXT  WXDLLIMPEXP_RICHTEXT
     #define WXDLLIMPEXP_FWD_MEDIA     WXDLLIMPEXP_MEDIA
     #define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
+    #define WXDLLIMPEXP_FWD_WEBVIEW   WXDLLIMPEXP_WEBVIEW
 #endif
 
 /* for backwards compatibility, define suffix-less versions too */

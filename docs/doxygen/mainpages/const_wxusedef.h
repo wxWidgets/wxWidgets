@@ -257,6 +257,7 @@ library:
 @itemdef{wxUSE_URL_NATIVE, Use native support for some operations with wxURL.}
 @itemdef{wxUSE_VALIDATORS, Use wxValidator class.}
 @itemdef{wxUSE_VARIANT, Use wxVariant class.}
+@itemdef{wxUSE_WEBVIEW, Use wxWebView class.}
 @itemdef{wxUSE_WIZARDDLG, Use wxWizard class.}
 @itemdef{wxUSE_WXHTML_HELP, Use wxHtmlHelpController and related classes.}
 @itemdef{wxUSE_XML, Use XML parsing classes.}

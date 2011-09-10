@@ -200,6 +200,14 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
+    <option name="USE_WEBVIEW">
+        <values>0,1</values>
+        <default-value>1</default-value>
+        <description>
+            Build wxWebView library (USE_GUI must be 1)?
+        </description>
+    </option>
+    
     <option name="USE_MEDIA">
         <values>0,1</values>
         <default-value>1</default-value>
@@ -480,6 +488,7 @@ Set the version of your Mingw installation here.
         <set var="USE_RICHTEXT">1</set>
         <set var="USE_STC">1</set>
         <set var="USE_HTML">1</set>
+        <set var="USE_WEBVIEW">1</set>
         <set var="USE_MEDIA">1</set>
         <set var="USE_XRC">1</set>
         <set var="USE_OPENGL">1</set>

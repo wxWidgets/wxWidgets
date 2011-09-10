@@ -3353,7 +3353,40 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(MSW_HTML_HDR)
 </set>
 
+<!-- ====================================================================== -->
+<!--                                wxWEBVIEW                               -->
+<!-- ====================================================================== -->
 
+<set var="WEBVIEW_SRC_PLATFORM">
+    <if cond="TOOLKIT=='MSW'">src/msw/webview_ie.cpp</if>
+    <if cond="PLATFORM_UNIX=='1'">src/gtk/webview_webkit.cpp</if>
+    <if cond="PLATFORM_MACOSX=='1'">src/osx/webview_webkit.mm</if>
+</set>
+<set var="WEBVIEW_SRC" hints="files">
+    $(WEBVIEW_SRC_PLATFORM)
+    src/common/webview.cpp
+    src/common/webviewarchivehandler.cpp
+</set>
+
+<set var="WEBVIEW_HDR_PLATFORM" hints="files">
+    <if cond="TOOLKIT=='MSW'">
+        wx/msw/webviewhistoryitem_ie.h
+        wx/msw/webview_ie.h
+    </if>
+    <if cond="PLATFORM_UNIX=='1'">
+        wx/gtk/webviewhistoryitem_webkit.h
+        wx/gtk/webview_webkit.h
+    </if>
+    <if cond="PLATFORM_MACOSX=='1'">
+        wx/osx/webviewhistoryitem_webkit.h
+        wx/osx/webview_webkit.h
+    </if>
+</set>
+<set var="WEBVIEW_HDR" hints="files">
+    $(WEBVIEW_HDR_PLATFORM)
+    wx/webview.h
+    wx/webviewarchivehandler.h
+</set>
 
 <!-- ====================================================================== -->
 <!--                                wxXRC                                   -->
@@ -3958,7 +3991,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
             $(OPENGL_HDR) $(QA_HDR) $(XRC_HDR) $(AUI_HDR) $(PROPGRID_HDR)
-            $(RIBBON_HDR) $(RICHTEXT_HDR) $(STC_HDR)
+            $(RIBBON_HDR) $(RICHTEXT_HDR) $(STC_HDR) ${WEBVIEW_HDR}
         </if>
     </set>
 

@@ -4,9 +4,9 @@
 
     <set var="MONOLIB_GUI_SRC">
         <if cond="USE_GUI=='1'">
-            $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(QA_SRC)
-            $(XRC_SRC) $(AUI_SRC) $(PROPGRID_SRC) $(RIBBON_SRC) $(RICHTEXT_SRC)
-            $(STC_SRC)
+            $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(WEBVIEW_SRC)
+            $(QA_SRC) $(XRC_SRC) $(AUI_SRC) $(PROPGRID_SRC) $(RIBBON_SRC)
+            $(RICHTEXT_SRC) $(STC_SRC)
         </if>
     </set>
     <set var="MONOLIB_SRC">
