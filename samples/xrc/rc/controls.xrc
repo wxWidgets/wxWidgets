@@ -55,6 +55,68 @@
                 </object>
 
                 <object class="choicebookpage">
+                    <label>wxBannerWindow</label>
+                    <object class="wxPanel" name="bannerwindow">
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+
+                            <object class="sizeritem">
+                                <flag>wxEXPAND</flag>
+                                <object class="wxBannerWindow">
+                                    <title>Welcome to banner demo page!</title>
+                                    <message>This is a default wxLEFT banner with some text.\nThe banner on the top uses a bitmap.</message>
+                                </object>
+                            </object>
+
+                            <object class="sizeritem">
+                                <flag>wxEXPAND|wxLEFT|wxRIGHT</flag>
+                                <option>1</option>
+                                <border>15</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxVERTICAL</orient>
+
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxBannerWindow">
+                                            <direction>wxTOP</direction>
+                                            <bitmap>wxbanner.gif</bitmap>
+                                            <fg>yellow</fg>
+                                            <!-- Using spaces for indentation is ugly but will do for this simple example. -->
+                                            <title>                                                                                               Tip:</title>
+                                            <message>                                                                                                 You can also use text\n                                                                                                 and bitmap together.</message>
+                                        </object>
+                                    </object>
+
+                                    <object class="spacer">
+                                        <option>1</option>
+                                    </object>
+
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxBannerWindow">
+                                            <direction>wxBOTTOM</direction>
+                                            <title>A word of advice:</title>
+                                            <message>You probably shouldn't use banners\non all four sides at once.</message>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+
+                            <object class="sizeritem">
+                                <flag>wxEXPAND</flag>
+                                <object class="wxBannerWindow">
+                                    <direction>wxRIGHT</direction>
+                                    <title>Custom Banner</title>
+                                    <message>You can change the gradient colours.</message>
+                                    <gradient-start>#7f7f7f</gradient-start>
+                                    <gradient-end>#ffffff</gradient-end>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+
+                <object class="choicebookpage">
                     <label>wxButton</label>
                     <object class="wxPanel" name="button">
                         <object class="wxFlexGridSizer">

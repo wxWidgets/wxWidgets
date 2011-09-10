@@ -561,7 +561,7 @@ public:
     /**
         @overload
     */
-    void DrawRotatedText(const wxString& text, const wxPoint&,
+    void DrawRotatedText(const wxString& text, const wxPoint& point,
                          double angle);
 
     /**
@@ -715,7 +715,7 @@ public:
         @overload
     */
     bool FloodFill(const wxPoint& pt, const wxColour& col,
-                   int style = wxFLOOD_SURFACE);
+                   wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     /**
         Displays a cross hair using the current pen. This is a vertical and

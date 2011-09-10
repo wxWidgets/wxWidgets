@@ -75,6 +75,10 @@
     #define SHACF_FILESYS_ONLY 0x00000010
 #endif
 
+#ifndef SHACF_FILESYS_DIRS
+    #define SHACF_FILESYS_DIRS 0x00000020
+#endif
+
 namespace
 {
 
@@ -740,7 +744,7 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 
 #ifdef HAS_AUTOCOMPLETE
 
-bool wxTextEntry::DoAutoCompleteFileNames()
+bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 {
     typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
     static SHAutoComplete_t s_pfnSHAutoComplete = (SHAutoComplete_t)-1;
@@ -760,7 +764,18 @@ bool wxTextEntry::DoAutoCompleteFileNames()
     if ( !s_pfnSHAutoComplete )
         return false;
 
-    HRESULT hr = (*s_pfnSHAutoComplete)(GetEditHwnd(), SHACF_FILESYS_ONLY);
+    DWORD dwFlags = 0;
+    if ( flags & wxFILE )
+        dwFlags |= SHACF_FILESYS_ONLY;
+    else if ( flags & wxDIR )
+        dwFlags |= SHACF_FILESYS_DIRS;
+    else
+    {
+        wxFAIL_MSG(wxS("No flags for file name auto completion?"));
+        return false;
+    }
+
+    HRESULT hr = (*s_pfnSHAutoComplete)(GetEditHwnd(), dwFlags);
     if ( FAILED(hr) )
     {
         wxLogApiError(wxT("SHAutoComplete()"), hr);
@@ -833,9 +848,9 @@ bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
 
 // We still need to define stubs as we declared these overrides in the header.
 
-bool wxTextEntry::DoAutoCompleteFileNames()
+bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 {
-    return wxTextEntryBase::DoAutoCompleteFileNames();
+    return wxTextEntryBase::DoAutoCompleteFileNames(flags);
 }
 
 bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)

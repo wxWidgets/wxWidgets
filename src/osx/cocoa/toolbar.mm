@@ -1375,14 +1375,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 [v setButtonType: ( tool->CanBeToggled() ? NSToggleButton : NSMomentaryPushInButton )];
                 [v setImplementation:tool];
                 
-                if ( style & wxTB_NOICONS )
-                    [v setImagePosition:NSNoImage];
-                else if ( style & wxTB_TEXT )
-                    [v setImagePosition:NSImageAbove];
-                else
-                    [v setImagePosition:NSImageOnly];
-
-
                 controlHandle = v;
 
 #if wxOSX_USE_NATIVE_TOOLBAR
@@ -1399,6 +1391,13 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 tool->SetControlHandle( controlHandle );
                 tool->UpdateImages();
                 tool->UpdateLabel();
+
+                if ( style & wxTB_NOICONS )
+                    [v setImagePosition:NSNoImage];
+                else if ( style & wxTB_TEXT )
+                    [v setImagePosition:NSImageAbove];
+                else
+                    [v setImagePosition:NSImageOnly];
                 [v sizeToFit];
                 
 #if 0

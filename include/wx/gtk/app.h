@@ -75,7 +75,7 @@ private:
 #if wxUSE_THREADS
     wxMutex m_idleMutex;
 #endif
-    guint m_idleSourceId;
+    unsigned m_idleSourceId;
 
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     HildonProgram *m_hildonProgram;

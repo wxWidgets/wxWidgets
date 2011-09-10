@@ -2127,6 +2127,14 @@ WXHDC wxGCDC::AcquireHDC()
     if ( !gc )
         return NULL;
 
+#if wxUSE_CAIRO
+    // we can't get the HDC if it is not a GDI+ context
+    wxGraphicsRenderer* r1 = gc->GetRenderer();
+    wxGraphicsRenderer* r2 = wxGraphicsRenderer::GetCairoRenderer();
+    if (r1 == r2)
+        return NULL;
+#endif
+
     Graphics * const g = static_cast<Graphics *>(gc->GetNativeContext());
     return g ? g->GetHDC() : NULL;
 }
@@ -2138,6 +2146,14 @@ void wxGCDC::ReleaseHDC(WXHDC hdc)
 
     wxGraphicsContext * const gc = GetGraphicsContext();
     wxCHECK_RET( gc, "can't release HDC because there is no wxGraphicsContext" );
+
+#if wxUSE_CAIRO
+    // we can't get the HDC if it is not a GDI+ context
+    wxGraphicsRenderer* r1 = gc->GetRenderer();
+    wxGraphicsRenderer* r2 = wxGraphicsRenderer::GetCairoRenderer();
+    if (r1 == r2)
+        return;
+#endif
 
     Graphics * const g = static_cast<Graphics *>(gc->GetNativeContext());
     wxCHECK_RET( g, "can't release HDC because there is no Graphics" );

@@ -100,7 +100,8 @@ protected:
 
     wxCheckBox *m_chkDirTextCtrl,
                *m_chkDirChangeDir,
-               *m_chkDirMustExist;
+               *m_chkDirMustExist,
+               *m_chkSmall;
     wxBoxSizer *m_sizer;
 
 private:
@@ -148,6 +149,7 @@ void DirPickerWidgetsPage::CreateContent()
     m_chkDirTextCtrl = CreateCheckBoxAndAddToSizer(dirbox, wxT("With textctrl"), false);
     m_chkDirMustExist = CreateCheckBoxAndAddToSizer(dirbox, wxT("Dir must exist"), false);
     m_chkDirChangeDir = CreateCheckBoxAndAddToSizer(dirbox, wxT("Change working dir"), false);
+    m_chkSmall = CreateCheckBoxAndAddToSizer(dirbox, "&Small version", false);
     boxleft->Add(dirbox, 0, wxALL|wxGROW, 5);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),
@@ -162,7 +164,7 @@ void DirPickerWidgetsPage::CreateContent()
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
     m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
-    m_sizer->Add(m_dirPicker, 0, wxALIGN_CENTER|wxALL, 5);
+    m_sizer->Add(m_dirPicker, 0, wxEXPAND|wxALL, 5);
     m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
 
     // global pane
@@ -196,6 +198,9 @@ long DirPickerWidgetsPage::GetPickerStyle()
     if ( m_chkDirChangeDir->GetValue() )
         style |= wxDIRP_CHANGE_DIR;
 
+    if ( m_chkSmall->GetValue() )
+        style |= wxDIRP_SMALL;
+
     return style;
 }
 
@@ -203,7 +208,7 @@ void DirPickerWidgetsPage::RecreatePicker()
 {
     m_sizer->Remove(1);
     CreatePicker();
-    m_sizer->Insert(1, m_dirPicker, 0, wxALIGN_CENTER|wxALL, 5);
+    m_sizer->Insert(1, m_dirPicker, 0, wxEXPAND|wxALL, 5);
 
     m_sizer->Layout();
 }
@@ -213,6 +218,7 @@ void DirPickerWidgetsPage::Reset()
     m_chkDirTextCtrl->SetValue((wxDIRP_DEFAULT_STYLE & wxDIRP_USE_TEXTCTRL) != 0);
     m_chkDirMustExist->SetValue((wxDIRP_DEFAULT_STYLE & wxDIRP_DIR_MUST_EXIST) != 0);
     m_chkDirChangeDir->SetValue((wxDIRP_DEFAULT_STYLE & wxDIRP_CHANGE_DIR) != 0);
+    m_chkSmall->SetValue((wxFLP_DEFAULT_STYLE & wxDIRP_SMALL) != 0);
 }
 
 
@@ -236,7 +242,8 @@ void DirPickerWidgetsPage::OnCheckBox(wxCommandEvent &event)
 {
     if (event.GetEventObject() == m_chkDirTextCtrl ||
         event.GetEventObject() == m_chkDirChangeDir ||
-        event.GetEventObject() == m_chkDirMustExist)
+        event.GetEventObject() == m_chkDirMustExist ||
+        event.GetEventObject() == m_chkSmall)
         RecreatePicker();
 }
 

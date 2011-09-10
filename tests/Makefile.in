@@ -199,6 +199,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_toolbooktest.o \
 	test_gui_treebooktest.o \
 	test_gui_treectrltest.o \
+	test_gui_treelistctrltest.o \
 	test_gui_virtlistctrltest.o \
 	test_gui_webtest.o \
 	test_gui_windowtest.o \
@@ -342,7 +343,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data fr
+all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr
 
 install: 
 
@@ -407,6 +408,18 @@ data:
 	fi; \
 	case "$$x" in ?*) \
 	cp -pRf $(srcdir)/$$f . ;; \
+	esac; \
+	done
+
+data-images: 
+	@mkdir -p image
+	@for f in horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp; do \
+	if test ! -f image/$$f -a ! -d image/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/image/$$f -newer image/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/image/$$f image ;; \
 	esac; \
 	done
 
@@ -836,6 +849,9 @@ test_gui_treebooktest.o: $(srcdir)/controls/treebooktest.cpp $(TEST_GUI_ODEP)
 test_gui_treectrltest.o: $(srcdir)/controls/treectrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/treectrltest.cpp
 
+test_gui_treelistctrltest.o: $(srcdir)/controls/treelistctrltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/treelistctrltest.cpp
+
 test_gui_virtlistctrltest.o: $(srcdir)/controls/virtlistctrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/virtlistctrltest.cpp
 
@@ -917,7 +933,17 @@ test_gui_xrctest.o: $(srcdir)/xml/xrctest.cpp $(TEST_GUI_ODEP)
 # warnings don't matter when we expect compilation to fail anyhow so we can
 # use this variable to enable the compilation of code which is supposed to
 # fail
-failtest:
+failtest: failtest_combobox failtest_evthandler
+
+failtest_combobox:
+	@$(RM) test_gui_comboboxtest.o
+	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_INVALID_COMBOBOX_ISEMPTY unexpectedly succeeded.">&2; \
+	    exit 1; \
+	fi; \
+	exit 0
+
+failtest_evthandler:
 	@$(RM) test_evthandler.o
 	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
 	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
@@ -932,4 +958,4 @@ failtest:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean test_gui_bundle data fr
+.PHONY: all install uninstall clean distclean test_gui_bundle data data-images fr

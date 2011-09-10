@@ -3,7 +3,7 @@
 // Purpose:     wxCompositeWindow<> declaration
 // Author:      Vadim Zeitlin
 // Created:     2011-01-02
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,11 @@ private:
         {
             wxWindow * const child = *i;
 
-            (child->*func)(arg);
+            // Allow NULL elements in the list, this makes the code of derived
+            // composite controls which may have optionally shown children
+            // simpler and it doesn't cost us much here.
+            if ( child )
+                (child->*func)(arg);
         }
     }
 

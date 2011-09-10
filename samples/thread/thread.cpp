@@ -479,7 +479,7 @@ MyFrame::DoLogRecord(wxLogLevel level,
         wxDateTime(info.timestamp).FormatISOTime(),
         info.threadId == wxThread::GetMainId()
             ? wxString("main")
-            : wxString::Format("%x", info.threadId),
+            : wxString::Format("%lx", info.threadId),
         msg + "\n"
     );
 }

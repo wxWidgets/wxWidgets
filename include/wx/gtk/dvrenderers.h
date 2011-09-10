@@ -303,7 +303,7 @@ public:
     virtual bool GetValue( wxVariant &value ) const;
 
 private:
-    virtual void GtkOnTextEdited(const gchar *itempath, const wxString& str);
+    virtual void GtkOnTextEdited(const char *itempath, const wxString& str);
 };
 
 

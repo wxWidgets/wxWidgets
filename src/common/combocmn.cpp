@@ -2034,6 +2034,8 @@ void wxComboCtrlBase::OnCharEvent(wxKeyEvent& event)
 
 void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
+// On Mac, this leads to infinite recursion and eventually a crash 
+#ifndef __WXMAC__
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
         wxWindow* tc = GetTextCtrl();
@@ -2044,6 +2046,7 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
     }
 
     Refresh();
+#endif
 }
 
 void wxComboCtrlBase::OnIdleEvent( wxIdleEvent& WXUNUSED(event) )

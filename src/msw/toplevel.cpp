@@ -33,6 +33,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/frame.h"
+    #include "wx/menu.h"
     #include "wx/containr.h"        // wxSetFocusToChild()
     #include "wx/module.h"
 #endif //WX_PRECOMP
@@ -360,6 +361,10 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
 #endif // __SMARTPHONE__ || __POCKETPC__
 
         case WM_SYSCOMMAND:
+        // Keep the #ifdef block inside the case to fix a potential MSVC
+        // warning regarding switch statement containing no case or
+        // default labels (or a default only).
+#ifndef __WXUNIVERSAL__
             // We may need to generate events for the items added to the system
             // menu if it had been created (and presumably modified).
             if ( m_menuSystem )
@@ -381,6 +386,7 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
                         processed = true;
                 }
             }
+#endif // #ifndef __WXUNIVERSAL__
             break;
     }
 
@@ -1263,6 +1269,7 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 
 wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
 {
+#ifndef __WXUNIVERSAL__
     if ( !m_menuSystem )
     {
         HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE);
@@ -1288,6 +1295,7 @@ wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
         // correct but doesn't seem to have any serious drawbacks.
         m_menuSystem->SetInvokingWindow(self);
     }
+#endif // #ifndef __WXUNIVERSAL__
 
     return m_menuSystem;
 }

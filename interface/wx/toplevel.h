@@ -282,8 +282,8 @@ public:
         and will be only deleted when the window itself is destroyed.
 
         This function is not available in the other ports by design, any
-        occurrences of it in the portable code must be guarded by @code #ifdef
-        __WXMSW__ @endcode preprocessor guards.
+        occurrences of it in the portable code must be guarded by
+        @code #ifdef __WXMSW__ @endcode preprocessor guards.
 
         @since 2.9.3
      */

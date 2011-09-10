@@ -802,6 +802,7 @@
 //
 // Recommended setting: 1
 #define wxUSE_ANIMATIONCTRL 1   // wxAnimationCtrl
+#define wxUSE_BANNERWINDOW  1   // wxBannerWindow
 #define wxUSE_BUTTON        1   // wxButton
 #define wxUSE_BMPBUTTON     1   // wxBitmapButton
 #define wxUSE_CALENDARCTRL  1   // wxCalendarCtrl
@@ -839,6 +840,7 @@
 #define wxUSE_TEXTCTRL      1   // wxTextCtrl
 #define wxUSE_TOGGLEBTN     1   // requires wxButton
 #define wxUSE_TREECTRL      1   // wxTreeCtrl
+#define wxUSE_TREELISTCTRL  1   // wxTreeListCtrl
 
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
 // below either wxStatusBar95 or a generic wxStatusBar will be used.

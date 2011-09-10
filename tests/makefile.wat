@@ -428,6 +428,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_toolbooktest.obj &
 	$(OBJS)\test_gui_treebooktest.obj &
 	$(OBJS)\test_gui_treectrltest.obj &
+	$(OBJS)\test_gui_treelistctrltest.obj &
 	$(OBJS)\test_gui_virtlistctrltest.obj &
 	$(OBJS)\test_gui_webtest.obj &
 	$(OBJS)\test_gui_windowtest.obj &
@@ -461,7 +462,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data fr
+all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data data-images fr
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -501,6 +502,10 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
+data-images : .SYMBOLIC 
+	if not exist image mkdir image
+	for %f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp) do if not exist image\%f copy .\image\%f image
 
 fr : .SYMBOLIC 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
@@ -924,6 +929,9 @@ $(OBJS)\test_gui_treebooktest.obj :  .AUTODEPEND .\controls\treebooktest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_treectrltest.obj :  .AUTODEPEND .\controls\treectrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_treelistctrltest.obj :  .AUTODEPEND .\controls\treelistctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_virtlistctrltest.obj :  .AUTODEPEND .\controls\virtlistctrltest.cpp

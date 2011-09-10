@@ -50,7 +50,7 @@ struct testData {
     { "horse.pcx", wxBITMAP_TYPE_PCX, 8 },
     { "horse.pnm", wxBITMAP_TYPE_PNM, 24 },
     { "horse.tga", wxBITMAP_TYPE_TGA, 8 },
-    { "horse.tif", wxBITMAP_TYPE_TIF, 8 }
+    { "horse.tif", wxBITMAP_TYPE_TIFF, 8 }
 };
 
 
@@ -73,10 +73,12 @@ private:
         CPPUNIT_TEST( CompareLoadedImage );
         CPPUNIT_TEST( CompareSavedImage );
         CPPUNIT_TEST( SavePNG );
+        CPPUNIT_TEST( SaveTIFF );
         CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( ReadCorruptedTGA );
         CPPUNIT_TEST( GIFComment );
         CPPUNIT_TEST( DibPadding );
+        CPPUNIT_TEST( BMPFlippingAndRLECompression );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -86,10 +88,12 @@ private:
     void CompareLoadedImage();
     void CompareSavedImage();
     void SavePNG();
+    void SaveTIFF();
     void SaveAnimatedGIF();
     void ReadCorruptedTGA();
     void GIFComment();
     void DibPadding();
+    void BMPFlippingAndRLECompression();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -188,7 +192,7 @@ void ImageTestCase::LoadFromZipStream()
             case wxBITMAP_TYPE_GIF:
             case wxBITMAP_TYPE_PCX:
             case wxBITMAP_TYPE_TGA:
-            case wxBITMAP_TYPE_TIF:
+            case wxBITMAP_TYPE_TIFF:
             continue;       // skip testing those wxImageHandlers which cannot
                             // load data from non-seekable streams
 
@@ -904,21 +908,15 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
 
     const bool testAlpha = (properties & wxIMAGE_HAVE_ALPHA) != 0;
     if (testAlpha
-        && !(type == wxBITMAP_TYPE_PNG || type == wxBITMAP_TYPE_TGA) )
+        && !(type == wxBITMAP_TYPE_PNG || type == wxBITMAP_TYPE_TGA
+            || type == wxBITMAP_TYPE_TIFF) )
     {
         // don't test images with alpha if this handler doesn't support alpha
         return;
     }
 
-    if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */
-        || type == wxBITMAP_TYPE_TIF)
+    if (type == wxBITMAP_TYPE_JPEG /* skip lossy JPEG */)
     {
-        /*
-        TIFF is skipped because the memory stream can't be loaded. Libtiff
-        looks for a TIFF directory at offset 120008 while the memory
-        stream size is only 120008 bytes (when saving as a file
-        the file size is 120280 bytes).
-        */
         return;
     }
 
@@ -968,12 +966,28 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
     );
 }
 
+static void SetAlpha(wxImage *image)
+{
+    image->SetAlpha();
+
+    unsigned char *ptr = image->GetAlpha();
+    const int width = image->GetWidth();
+    const int height = image->GetHeight();
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            ptr[y*width + x] = (x*y) & wxIMAGE_ALPHA_OPAQUE;
+        }
+    }
+}
+
 void ImageTestCase::CompareSavedImage()
 {
     // FIXME-VC6: Pre-declare the loop variables for compatibility with
     // pre-standard compilers such as MSVC6 that don't implement proper scope
     // for the variables declared in the for loops.
-    int i, x, y;
+    int i;
 
     wxImage expected24("horse.png");
     CPPUNIT_ASSERT( expected24.IsOk() );
@@ -995,17 +1009,8 @@ void ImageTestCase::CompareSavedImage()
 
     // Create an image with alpha based on the loaded image
     wxImage expected32(expected24);
-    expected32.SetAlpha();
 
-    int width = expected32.GetWidth();
-    int height = expected32.GetHeight();
-    for (y = 0; y < height; ++y)
-    {
-        for (x = 0; x < width; ++x)
-        {
-            expected32.SetAlpha(x, y, (x*y) & wxIMAGE_ALPHA_OPAQUE);
-        }
-    }
+    SetAlpha(&expected32);
 
     const wxList& list = wxImage::GetHandlers();
     for ( wxList::compatibility_iterator node = list.GetFirst();
@@ -1091,6 +1096,62 @@ void ImageTestCase::SavePNG()
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG),
         expected8, wxIMAGE_HAVE_ALPHA);
 
+}
+
+static void TestTIFFImage(const wxString& option, int value,
+    const wxImage *compareImage = NULL)
+{
+    wxImage image;
+    if (compareImage)
+    {
+        image = *compareImage;
+    }
+    else
+    {
+        (void) image.LoadFile("horse.png");
+    }
+    CPPUNIT_ASSERT( image.IsOk() );
+
+    wxMemoryOutputStream memOut;
+    image.SetOption(option, value);
+
+    CPPUNIT_ASSERT(image.SaveFile(memOut, wxBITMAP_TYPE_TIFF));
+
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+
+    wxImage savedImage(memIn);
+    CPPUNIT_ASSERT(savedImage.IsOk());
+
+    WX_ASSERT_EQUAL_MESSAGE(("While checking for option %s", option),
+        true, savedImage.HasOption(option));
+
+    WX_ASSERT_EQUAL_MESSAGE(("While testing for %s", option),
+        value, savedImage.GetOptionInt(option));
+
+    WX_ASSERT_EQUAL_MESSAGE(("HasAlpha() not equal"), image.HasAlpha(), savedImage.HasAlpha());
+}
+
+void ImageTestCase::SaveTIFF()
+{
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, 1);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 1);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, 0/*PHOTOMETRIC_MINISWHITE*/);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, 1/*PHOTOMETRIC_MINISBLACK*/);
+
+    wxImage alphaImage("horse.png");
+    CPPUNIT_ASSERT( alphaImage.IsOk() );
+    SetAlpha(&alphaImage);
+
+    // RGB with alpha
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 4, &alphaImage);
+
+    // Grey with alpha
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 2, &alphaImage);
+
+    // B/W with alpha
+    alphaImage.SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, 1);
+    TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 2, &alphaImage);
 }
 
 void ImageTestCase::SaveAnimatedGIF()
@@ -1262,6 +1323,26 @@ void ImageTestCase::DibPadding()
     CPPUNIT_ASSERT( image.SaveFile(memOut, wxBITMAP_TYPE_ICO) );
 }
 
+static void CompareBMPImage(const wxString& file1, const wxString& file2)
+{
+    wxImage image1(file1);
+    CPPUNIT_ASSERT( image1.IsOk() );
+
+    wxImage image2(file2);
+    CPPUNIT_ASSERT( image2.IsOk() );
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP), image1, 0, &image2);
+}
+
+void ImageTestCase::BMPFlippingAndRLECompression()
+{
+    CompareBMPImage("image/horse_grey.bmp", "image/horse_grey_flipped.bmp");
+
+    CompareBMPImage("image/horse_rle8.bmp", "image/horse_grey.bmp");
+    CompareBMPImage("image/horse_rle8.bmp", "image/horse_rle8_flipped.bmp");
+
+    CompareBMPImage("image/horse_rle4.bmp", "image/horse_rle4_flipped.bmp");
+}
 #endif //wxUSE_IMAGE
 
 

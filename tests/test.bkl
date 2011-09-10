@@ -180,6 +180,7 @@
             controls/toolbooktest.cpp
             controls/treebooktest.cpp
             controls/treectrltest.cpp
+            controls/treelistctrltest.cpp
             controls/virtlistctrltest.cpp
             controls/webtest.cpp
             controls/windowtest.cpp
@@ -232,6 +233,14 @@
                horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
     </wx-data>
 
+    <wx-data id="data-images">
+        <srcdir>$(SRCDIR)/image</srcdir>
+        <dstdir>image</dstdir>
+        <files>horse_grey.bmp  horse_grey_flipped.bmp
+               horse_rle4.bmp  horse_rle4_flipped.bmp
+               horse_rle8.bmp  horse_rle8_flipped.bmp</files>
+    </wx-data>
+
     <template id="catalog">
         <dstdir>$(BUILDDIR)/intl/$(id)</dstdir>
         <srcdir>$(SRCDIR)/intl/$(id)</srcdir>
@@ -247,7 +256,17 @@
 # warnings don't matter when we expect compilation to fail anyhow so we can
 # use this variable to enable the compilation of code which is supposed to
 # fail
-failtest:
+failtest: failtest_combobox failtest_evthandler
+
+failtest_combobox:
+	@$(RM) test_gui_comboboxtest.o
+	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_INVALID_COMBOBOX_ISEMPTY unexpectedly succeeded.">&amp;2; \
+	    exit 1; \
+	fi; \
+	exit 0
+
+failtest_evthandler:
 	@$(RM) test_evthandler.o
 	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
 	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \

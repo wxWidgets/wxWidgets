@@ -62,12 +62,14 @@ private:
         CPPUNIT_TEST( PopDismiss );
         CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( ReadOnly );
+        CPPUNIT_TEST( IsEmpty );
     CPPUNIT_TEST_SUITE_END();
 
     void Size();
     void PopDismiss();
     void Sort();
     void ReadOnly();
+    void IsEmpty();
 
     wxComboBox *m_combo;
 
@@ -191,6 +193,29 @@ void ComboBoxTestCase::ReadOnly()
     m_combo->SetValue("ITEM 2");
 
     CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
+#endif
+}
+
+void ComboBoxTestCase::IsEmpty()
+{
+    CPPUNIT_ASSERT( m_combo->IsListEmpty() );
+    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+
+    m_combo->Append("foo");
+    CPPUNIT_ASSERT( !m_combo->IsListEmpty() );
+    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+
+    m_combo->SetValue("bar");
+    CPPUNIT_ASSERT( !m_combo->IsListEmpty() );
+    CPPUNIT_ASSERT( !m_combo->IsTextEmpty() );
+
+    m_combo->Clear();
+    CPPUNIT_ASSERT( m_combo->IsListEmpty() );
+    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+
+#ifdef TEST_INVALID_COMBOBOX_ISEMPTY
+    // Compiling this should fail, see failtest target definition in test.bkl.
+    m_combo->IsEmpty();
 #endif
 }
 

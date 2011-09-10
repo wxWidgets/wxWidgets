@@ -778,6 +778,9 @@
 				RelativePath="..\..\include\wx\xrc\xh_animatctrl.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_bannerwindow.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_bmp.h">
 			</File>
 			<File
@@ -964,6 +967,9 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
 				RelativePath="..\..\src\xrc\xh_animatctrl.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_bannerwindow.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_bmp.cpp">

@@ -137,7 +137,7 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (void)setImagePosition:(NSCellImagePosition)aPosition;
 @end
 
-long wxOSXTranslateCocoaKey( NSEvent* event )
+long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
 {
     long retval = 0;
 
@@ -147,54 +147,63 @@ long wxOSXTranslateCocoaKey( NSEvent* event )
         // backspace char reports as delete w/modifiers for some reason
         if ([s length] == 1)
         {
-            switch ( [s characterAtIndex:0] )
+            if ( eventType == wxEVT_CHAR && ([event modifierFlags] & NSControlKeyMask) && ( [s characterAtIndex:0] >= 'a' && [s characterAtIndex:0] <= 'z' ) )
             {
-                // backspace key
-                case 0x7F :
-                case 8 :
-                    retval = WXK_BACK;
-                    break;
-                case NSUpArrowFunctionKey :
-                    retval = WXK_UP;
-                    break;
-                case NSDownArrowFunctionKey :
-                    retval = WXK_DOWN;
-                    break;
-                case NSLeftArrowFunctionKey :
-                    retval = WXK_LEFT;
-                    break;
-                case NSRightArrowFunctionKey :
-                    retval = WXK_RIGHT;
-                    break;
-                case NSInsertFunctionKey  :
-                    retval = WXK_INSERT;
-                    break;
-                case NSDeleteFunctionKey  :
-                    retval = WXK_DELETE;
-                    break;
-                case NSHomeFunctionKey  :
-                    retval = WXK_HOME;
-                    break;
-        //        case NSBeginFunctionKey  :
-        //            retval = WXK_BEGIN;
-        //            break;
-                case NSEndFunctionKey  :
-                    retval = WXK_END;
-                    break;
-                case NSPageUpFunctionKey  :
-                    retval = WXK_PAGEUP;
-                    break;
-               case NSPageDownFunctionKey  :
-                    retval = WXK_PAGEDOWN;
-                    break;
-               case NSHelpFunctionKey  :
-                    retval = WXK_HELP;
-                    break;
-                default:
-                    int intchar = [s characterAtIndex: 0];
-                    if ( intchar >= NSF1FunctionKey && intchar <= NSF24FunctionKey )
-                        retval = WXK_F1 + (intchar - NSF1FunctionKey );
-                    break;
+                retval = WXK_CONTROL_A + ([s characterAtIndex:0] - 'a');
+            }
+            else
+            {
+                switch ( [s characterAtIndex:0] )
+                {
+                    // backspace key
+                    case 0x7F :
+                    case 8 :
+                        retval = WXK_BACK;
+                        break;
+                    case NSUpArrowFunctionKey :
+                        retval = WXK_UP;
+                        break;
+                    case NSDownArrowFunctionKey :
+                        retval = WXK_DOWN;
+                        break;
+                    case NSLeftArrowFunctionKey :
+                        retval = WXK_LEFT;
+                        break;
+                    case NSRightArrowFunctionKey :
+                        retval = WXK_RIGHT;
+                        break;
+                    case NSInsertFunctionKey  :
+                        retval = WXK_INSERT;
+                        break;
+                    case NSDeleteFunctionKey  :
+                        retval = WXK_DELETE;
+                        break;
+                    case NSHomeFunctionKey  :
+                        retval = WXK_HOME;
+                        break;
+            //        case NSBeginFunctionKey  :
+            //            retval = WXK_BEGIN;
+            //            break;
+                    case NSEndFunctionKey  :
+                        retval = WXK_END;
+                        break;
+                    case NSPageUpFunctionKey  :
+                        retval = WXK_PAGEUP;
+                        break;
+                   case NSPageDownFunctionKey  :
+                        retval = WXK_PAGEDOWN;
+                        break;
+                   case NSHelpFunctionKey  :
+                        retval = WXK_HELP;
+                        break;
+                    default:
+                        int intchar = [s characterAtIndex: 0];
+                        if ( intchar >= NSF1FunctionKey && intchar <= NSF24FunctionKey )
+                            retval = WXK_F1 + (intchar - NSF1FunctionKey );
+                        else if ( intchar > 0 && intchar < 32 )
+                            retval = intchar;
+                        break;
+                }
             }
         }
     }
@@ -207,7 +216,7 @@ long wxOSXTranslateCocoaKey( NSEvent* event )
         // command key
         case 54:
         case 55:
-            retval = WXK_COMMAND;
+            retval = WXK_CONTROL;
             break;
         // caps locks key
         case 57: // Capslock
@@ -226,7 +235,7 @@ long wxOSXTranslateCocoaKey( NSEvent* event )
         // ctrl key
         case 59: // Left Ctrl
         case 62: // Right Ctrl
-            retval = WXK_CONTROL;
+            retval = WXK_RAW_CONTROL;
             break;
         // clear key
         case 71:
@@ -298,9 +307,9 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     int eventType = [nsEvent type];
 
     wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
-    wxevent.m_controlDown = modifiers & NSControlKeyMask;
+    wxevent.m_rawControlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
-    wxevent.m_metaDown = modifiers & NSCommandKeyMask;
+    wxevent.m_controlDown = modifiers & NSCommandKeyMask;
 
     wxevent.m_rawCode = [nsEvent keyCode];
     wxevent.m_rawFlags = modifiers;
@@ -310,7 +319,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     wxString chars;
     if ( eventType != NSFlagsChanged )
     {
-        NSString* nschars = [nsEvent charactersIgnoringModifiers];
+        NSString* nschars = [[nsEvent charactersIgnoringModifiers] uppercaseString];
         if ( charString )
         {
             // if charString is set, it did not come from key up / key down
@@ -328,7 +337,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
 
     if (wxevent.GetEventType() != wxEVT_CHAR)
     {
-        keyval = wxOSXTranslateCocoaKey(nsEvent) ;
+        keyval = wxOSXTranslateCocoaKey(nsEvent, wxevent.GetEventType()) ;
         switch (eventType)
         {
             case NSKeyDown :
@@ -349,8 +358,8 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
                     case WXK_ALT:
                         wxevent.SetEventType( wxevent.m_altDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
                         break;
-                    case WXK_COMMAND:
-                        wxevent.SetEventType( wxevent.m_metaDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                    case WXK_RAW_CONTROL:
+                        wxevent.SetEventType( wxevent.m_rawControlDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
                         break;
                 }
                 break;
@@ -427,9 +436,9 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     wxevent.m_x = locationInViewWX.x;
     wxevent.m_y = locationInViewWX.y;
     wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
-    wxevent.m_controlDown = modifiers & NSControlKeyMask;
+    wxevent.m_rawControlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
-    wxevent.m_metaDown = modifiers & NSCommandKeyMask;
+    wxevent.m_controlDown = modifiers & NSCommandKeyMask;
     wxevent.SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
 
     UInt32 mouseChord = 0;
@@ -1946,7 +1955,11 @@ void wxWidgetCocoaImpl::SetBitmap( const wxBitmap& bitmap )
 {
     if (  [m_osxView respondsToSelector:@selector(setImage:)] )
     {
-        [m_osxView setImage:bitmap.GetNSImage()];
+        if (bitmap.IsOk())
+            [m_osxView setImage:bitmap.GetNSImage()];
+        else
+            [m_osxView setImage:nil];
+
         [m_osxView setNeedsDisplay:YES];
     }
 }
@@ -2128,11 +2141,14 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     {
         if ( IsUserPane() && [event type] == NSKeyDown)
         {
-            if ( wxevent.GetKeyCode() < WXK_SPACE || wxevent.GetKeyCode() == WXK_DELETE || wxevent.GetKeyCode() >= WXK_START )
+            long keycode = wxOSXTranslateCocoaKey( event, wxEVT_CHAR );
+            
+            if ( (keycode > 0 && keycode < WXK_SPACE) || keycode == WXK_DELETE || keycode >= WXK_START )
             {
                 // eventually we could setup a doCommandBySelector catcher and retransform this into the wx key chars
                 wxKeyEvent wxevent2(wxevent) ;
                 wxevent2.SetEventType(wxEVT_CHAR);
+                wxevent2.m_keyCode = keycode;
                 result = GetWXPeer()->OSXHandleKeyEvent(wxevent2);
             }
             else

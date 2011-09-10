@@ -138,8 +138,6 @@ END_EVENT_TABLE()
 // common part of all ctors
 void wxNotebook::Init()
 {
-    m_imageList = NULL;
-
 #if wxUSE_UXTHEME
     m_hbrBackground = NULL;
 #endif // wxUSE_UXTHEME

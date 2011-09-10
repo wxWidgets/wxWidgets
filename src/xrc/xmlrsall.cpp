@@ -38,6 +38,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_ANIMATIONCTRL
     AddHandler(new wxAnimationCtrlXmlHandler);
 #endif
+#if wxUSE_BANNERWINDOW
+    AddHandler(new wxBannerWindowXmlHandler);
+#endif
 #if wxUSE_BITMAPCOMBOBOX
     AddHandler(new wxBitmapComboBoxXmlHandler);
 #endif

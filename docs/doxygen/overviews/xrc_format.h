@@ -526,6 +526,27 @@ controls cannot have children.
 @endTable
 
 
+@subsubsection xrc_wxanimationctrl wxBannerWindow
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{direction, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
+    The side along which the banner will be positioned.}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap to use as the banner background.}
+@row3col{title, @ref overview_xrcformat_type_text,
+    Banner title, should be single line.}
+@row3col{message, @ref overview_xrcformat_type_text,
+    Possibly multi-line banner message.}
+@row3col{gradient-start, @ref overview_xrcformat_type_colour,
+    Starting colour of the gradient used as banner background. Can't be used if
+    a valid bitmap is specified.}
+@row3col{gradient-end, @ref overview_xrcformat_type_colour,
+    End colour of the gradient used as banner background. Can't be used if
+    a valid bitmap is specified.}
+@endTable
+
+
 @subsubsection xrc_wxbitmapbutton wxBitmapButton
 
 @beginTable

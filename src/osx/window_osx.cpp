@@ -58,15 +58,15 @@
 #endif
 
 #if wxUSE_DRAG_AND_DROP
-#include "wx/dnd.h"
+    #include "wx/dnd.h"
 #endif
 
 #include "wx/graphics.h"
 
 #if wxOSX_USE_CARBON
-#include "wx/osx/uma.h"
+    #include "wx/osx/uma.h"
 #else
-#include "wx/osx/private.h"
+    #include "wx/osx/private.h"
 #endif
 
 #define MAC_SCROLLBAR_SIZE 15
@@ -2667,9 +2667,9 @@ bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         mac_modifiers |= optionKey;
     if ( modifiers & wxMOD_SHIFT )
         mac_modifiers |= shiftKey;
-    if ( modifiers & wxMOD_CONTROL )
+    if ( modifiers & wxMOD_RAW_CONTROL )
         mac_modifiers |= controlKey;
-    if ( modifiers & wxMOD_META )
+    if ( modifiers & wxMOD_CONTROL )
         mac_modifiers |= cmdKey;
     
     EventHotKeyRef hotKeyRef;

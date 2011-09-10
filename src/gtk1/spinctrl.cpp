@@ -19,6 +19,7 @@
     #include "wx/utils.h"
     #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
     #include "wx/math.h"
+    #include "wx/crt.h"
 #endif
 
 #include "wx/gtk1/private.h"

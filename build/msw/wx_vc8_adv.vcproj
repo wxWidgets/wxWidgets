@@ -1017,6 +1017,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\bannerwindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\bmpcboxg.cpp"
 				>
 			</File>
@@ -1090,6 +1094,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\tipdlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\treelist.cpp"
 				>
 			</File>
 			<File
@@ -1445,6 +1453,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\bannerwindow.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\bmpcbox.h"
 				>
 			</File>
@@ -1526,6 +1538,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tipdlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\treelist.h"
 				>
 			</File>
 			<File

@@ -21,9 +21,11 @@
 #include "wx/variant.h"
 #include "wx/dynarray.h"
 #include "wx/icon.h"
+#include "wx/itemid.h"
 #include "wx/weakref.h"
 #include "wx/vector.h"
 #include "wx/dataobj.h"
+#include "wx/withimages.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -44,7 +46,6 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewItem;
 class WXDLLIMPEXP_FWD_ADV wxDataViewModel;
 class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
@@ -78,33 +79,13 @@ extern WXDLLIMPEXP_DATA_ADV(const char) wxDataViewCtrlNameStr[];
 // wxDataViewItem
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewItem
+// Make it a class and not a typedef to allow forward declaring it.
+class wxDataViewItem : public wxItemId<void*>
 {
 public:
-    wxDataViewItem() : m_id(NULL) {}
-    wxDataViewItem(const wxDataViewItem &item) : m_id(item.m_id) {}
-
-    wxEXPLICIT wxDataViewItem(void* id) : m_id(id) {}
-
-    bool IsOk() const                  { return m_id != NULL; }
-    void* GetID() const                { return m_id; }
-    operator const void* () const      { return m_id; }
-
-private:
-    void* m_id;
+    wxDataViewItem() : wxItemId<void*>() { }
+    wxEXPLICIT wxDataViewItem(void* pItem) : wxItemId<void*>(pItem) { }
 };
-
-inline
-bool operator==(const wxDataViewItem& left, const wxDataViewItem& right)
-{
-    return left.GetID() == right.GetID();
-}
-
-inline
-bool operator!=(const wxDataViewItem& left, const wxDataViewItem& right)
-{
-    return !(left == right);
-}
 
 WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 
@@ -682,7 +663,15 @@ public:
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
 
-    virtual wxDataViewItem GetSelection() const = 0;
+    // Selection: both GetSelection() and GetSelections() can be used for the
+    // controls both with and without wxDV_MULTIPLE style. For single selection
+    // controls GetSelections() is not very useful however. And for multi
+    // selection controls GetSelection() returns an invalid item if more than
+    // one item is selected. Use GetSelectedItemsCount() or HasSelection() to
+    // check if any items are selected at all.
+    virtual int GetSelectedItemsCount() const = 0;
+    bool HasSelection() const { return GetSelectedItemsCount() != 0; }
+    wxDataViewItem GetSelection() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const = 0;
     virtual void SetSelections( const wxDataViewItemArray & sel ) = 0;
     virtual void Select( const wxDataViewItem & item ) = 0;
@@ -1230,10 +1219,11 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl
+class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl,
+                                          public wxWithImages
 {
 public:
-    wxDataViewTreeCtrl() { Init(); }
+    wxDataViewTreeCtrl() { }
     wxDataViewTreeCtrl(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,
@@ -1241,12 +1231,8 @@ public:
                        long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
                        const wxValidator& validator = wxDefaultValidator)
     {
-        Init();
-
         Create(parent, id, pos, size, style, validator);
     }
-
-    virtual ~wxDataViewTreeCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -1263,24 +1249,21 @@ public:
     bool IsContainer( const wxDataViewItem& item ) const
         { return GetStore()->IsContainer(item); }
 
-    void SetImageList( wxImageList *imagelist );
-    wxImageList* GetImageList() { return m_imageList; }
-
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
-        const wxString &text, int icon = -1, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
     wxDataViewItem PrependItem( const wxDataViewItem& parent,
-        const wxString &text, int icon = -1, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
     wxDataViewItem InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, int icon = -1, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
 
     wxDataViewItem PrependContainer( const wxDataViewItem& parent,
-        const wxString &text, int icon = -1, int expanded = -1,
+        const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
         wxClientData *data = NULL );
     wxDataViewItem AppendContainer( const wxDataViewItem& parent,
-        const wxString &text, int icon = -1, int expanded = -1,
+        const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
         wxClientData *data = NULL );
     wxDataViewItem InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, int icon = -1, int expanded = -1,
+        const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
         wxClientData *data = NULL );
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const
@@ -1309,14 +1292,6 @@ public:
     void OnExpanded( wxDataViewEvent &event );
     void OnCollapsed( wxDataViewEvent &event );
     void OnSize( wxSizeEvent &event );
-
-private:
-    void Init()
-    {
-        m_imageList = NULL;
-    }
-
-    wxImageList *m_imageList;
 
 private:
     DECLARE_EVENT_TABLE()

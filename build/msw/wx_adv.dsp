@@ -563,6 +563,10 @@ SOURCE=..\..\src\generic\animateg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\bannerwindow.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\bmpcboxg.cpp
 # End Source File
 # Begin Source File
@@ -636,6 +640,10 @@ SOURCE=..\..\src\generic\splash.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\tipdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\treelist.cpp
 # End Source File
 # Begin Source File
 
@@ -1012,6 +1020,10 @@ SOURCE=..\..\include\wx\animate.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\bannerwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\bmpcbox.h
 # End Source File
 # Begin Source File
@@ -1093,6 +1105,10 @@ SOURCE=..\..\include\wx\taskbar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tipdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\treelist.h
 # End Source File
 # Begin Source File
 

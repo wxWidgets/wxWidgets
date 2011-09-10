@@ -36,6 +36,11 @@ public:
     wxGCDC( const wxPrinterDC& dc );
 
     /**
+       Construct a wxGCDC from an existing grtaphics context.
+    */
+    wxGCDC(wxGraphicsContext* context);
+
+    /**
        Constructs a wxGCDC from a wxEnhMetaFileDC.
 
        This constructor is only available in wxMSW port and when @c
@@ -46,9 +51,17 @@ public:
     */
     wxGCDC( const wxEnhMetaFileDC& dc );
 
+    wxGCDC();
+    virtual ~wxGCDC();
     /**
        Retrieves associated wxGraphicsContext
     */
     wxGraphicsContext* GetGraphicsContext() const;
+
+    /**
+       Set the grpahics context to be used for this wxGCDC.
+    */
+    void SetGraphicsContext( wxGraphicsContext* ctx );
+
 };
 

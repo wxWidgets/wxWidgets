@@ -174,6 +174,7 @@ def main(scriptName, args):
         "mac_framework" : (False, "Install the Mac build as a framework"),
         "mac_framework_prefix" 
                         : (defFwPrefix, "Prefix where the framework should be installed. Default: %s" % defFwPrefix),
+        "cairo"         : (False, "Enable dynamicly loading the Cairo lib for wxGraphicsContext on MSW"),
         "no_config"     : (False, "Turn off configure step on autoconf builds"),
         "config_only"   : (False, "Only run the configure step and then exit"),
         "rebake"        : (False, "Regenerate Bakefile and autoconf files"),
@@ -182,7 +183,6 @@ def main(scriptName, args):
         "cocoa"         : (False, "Build the old Mac Cooca port."),
         "osx_cocoa"     : (False, "Build the new Cocoa port"),
         "shared"        : (False, "Build wx as a dynamic library"),
-        "cairo"         : (False, "Build support for wxCairoContext (always true on GTK+)"),
         "extra_make"    : ("", "Extra args to pass on [n]make's command line."),
         "features"      : ("", "A comma-separated list of wxUSE_XYZ defines on Win, or a list of configure flags on unix."),
         "verbose"       : (False, "Print commands as they are run, (to aid with debugging this script)"),
@@ -343,6 +343,8 @@ def main(scriptName, args):
                 flags["wxUSE_UNICODE_MSLU"] = "1"
     
         if options.cairo:
+            if not os.environ.get("CAIRO_ROOT"):
+                print "WARNING: Expected CAIRO_ROOT set in the environment!"
             flags["wxUSE_CAIRO"] = "1"
     
         if options.wxpython:
@@ -361,7 +363,7 @@ def main(scriptName, args):
 
             if VERSION >= (2,9):
                 flags["wxUSE_UIACTIONSIMULATOR"] = "1"
-                
+
     
         mswIncludeDir = os.path.join(wxRootDir, "include", "wx", "msw")
         setup0File = os.path.join(mswIncludeDir, "setup0.h")
@@ -399,8 +401,11 @@ def main(scriptName, args):
                    
             if options.shared:
                 args.append("SHARED=1")
+
             if options.cairo:
-                args.append("USE_CAIRO=1")
+                args.append(
+                    "CPPFLAGS=/I%s" %
+                     os.path.join(os.environ.get("CAIRO_ROOT", ""), 'include\\cairo'))
     
             wxBuilder = builder.MSVCBuilder()
             

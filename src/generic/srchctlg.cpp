@@ -296,12 +296,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
                                         m_cancelBitmap);
 
     SetForegroundColour( m_text->GetForegroundColour() );
-    m_searchButton->SetForegroundColour( m_text->GetForegroundColour() );
-    m_cancelButton->SetForegroundColour( m_text->GetForegroundColour() );
-
     SetBackgroundColour( m_text->GetBackgroundColour() );
-    m_searchButton->SetBackgroundColour( m_text->GetBackgroundColour() );
-    m_cancelButton->SetBackgroundColour( m_text->GetBackgroundColour() );
 
     RecalcBitmaps();
 
@@ -500,6 +495,14 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
                             y + ICON_OFFSET - 1, sizeCancel.x, height);
 }
 
+wxWindowList wxSearchCtrl::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    parts.push_back(m_text);
+    parts.push_back(m_searchButton);
+    parts.push_back(m_cancelButton);
+    return parts;
+}
 
 // accessors
 // ---------
@@ -750,13 +753,25 @@ void wxSearchCtrl::SetEditable(bool editable)
 
 bool wxSearchCtrl::SetFont(const wxFont& font)
 {
-    bool result = wxSearchCtrlBase::SetFont(font);
-    if ( result && m_text )
-    {
-        result = m_text->SetFont(font);
-    }
+    if ( !wxSearchCtrlBase::SetFont(font) )
+        return false;
+
+    // Recreate the bitmaps as their size may have changed.
     RecalcBitmaps();
-    return result;
+
+    return true;
+}
+
+bool wxSearchCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxSearchCtrlBase::SetBackgroundColour(colour) )
+        return false;
+
+    // When the background changes, re-render the bitmaps so that the correct
+    // colour shows in their "transparent" area.
+    RecalcBitmaps();
+
+    return true;
 }
 
 // search control generic only

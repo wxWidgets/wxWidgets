@@ -89,7 +89,7 @@ public:
                      wxNotebookPage *win,
                      const wxString& strText,
                      bool bSelect = false,
-                     int imageId = -1 );
+                     int imageId = NO_IMAGE );
 
     // handler for tab navigation
     // --------------------------

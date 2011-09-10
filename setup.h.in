@@ -53,9 +53,6 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
-/* Define this if your version of GTK+ is greater than 1.2 */
-#undef __WXGTK12__
-
 /* Define this if your version of GTK+ is greater than 1.2.7 */
 #undef __WXGTK127__
 
@@ -371,6 +368,7 @@
 #define wxUSE_TIPWINDOW    0
 
 #define wxUSE_ANIMATIONCTRL 0
+#define wxUSE_BANNERWINDOW  0
 #define wxUSE_BUTTON        0
 #define wxUSE_BMPBUTTON     0
 #define wxUSE_CALENDARCTRL  0
@@ -408,6 +406,7 @@
 #define wxUSE_TEXTCTRL      0
 #define wxUSE_TOGGLEBTN     0
 #define wxUSE_TREECTRL      0
+#define wxUSE_TREELISTCTRL  0
 
 #define wxUSE_STATUSBAR    0
 

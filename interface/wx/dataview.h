@@ -1017,12 +1017,34 @@ public:
     wxDataViewModel* GetModel();
 
     /**
+        Returns the number of currently selected items.
+
+        This method may be called for both the controls with single and
+        multiple selections and returns the number of selected item, possibly
+        0, in any case.
+
+        @since 2.9.3
+     */
+    virtual int GetSelectedItemsCount() const;
+
+    /**
         Returns first selected item or an invalid item if none is selected.
+
+        This method may be called for both the controls with single and
+        multiple selections but returns an invalid item if more than one item
+        is selected in the latter case, use HasSelection() to determine if
+        there are any selected items when using multiple selection.
     */
     virtual wxDataViewItem GetSelection() const;
 
     /**
         Fills @a sel with currently selected items and returns their number.
+
+        This method may be called for both the controls with single and
+        multiple selections. In the single selection case it returns the array
+        with at most one element in it.
+
+        @see GetSelectedItemsCount()
     */
     virtual int GetSelections(wxDataViewItemArray& sel) const;
 
@@ -1031,6 +1053,20 @@ public:
         or @NULL if none has been selected.
     */
     virtual wxDataViewColumn* GetSortingColumn() const;
+
+    /**
+        Returns true if any items are currently selected.
+
+        This method may be called for both the controls with single and
+        multiple selections.
+
+        Calling this method is equivalent to calling GetSelectedItemsCount()
+        and comparing its result with 0 but is more clear and might also be
+        implemented more efficiently in the future.
+
+        @since 2.9.3
+     */
+    bool HasSelection() const;
 
     /**
         Hittest.

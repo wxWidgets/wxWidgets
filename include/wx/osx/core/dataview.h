@@ -89,6 +89,7 @@ public:
   virtual wxDataViewItem GetCurrentItem() const = 0;
   virtual void SetCurrentItem(const wxDataViewItem& item) = 0;
 
+  virtual int  GetSelectedItemsCount() const = 0;
   virtual int  GetSelections(wxDataViewItemArray& sel)   const = 0; // returns all selected items in the native control
   virtual bool IsSelected   (wxDataViewItem const& item) const = 0; // checks if the passed item is selected in the native control
   virtual void Select       (wxDataViewItem const& item)       = 0; // selects the passed item in the native control

@@ -2150,6 +2150,40 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param,
     return sx;
 }
 
+wxDirection
+wxXmlResourceHandler::GetDirection(const wxString& param, wxDirection dirDefault)
+{
+    wxDirection dir;
+
+    const wxString dirstr = GetParamValue(param);
+    if ( dirstr.empty() )
+        dir = dirDefault;
+    else if ( dirstr == "wxLEFT" )
+        dir = wxLEFT;
+    else if ( dirstr == "wxRIGHT" )
+        dir = wxRIGHT;
+    else if ( dirstr == "wxTOP" )
+        dir = wxTOP;
+    else if ( dirstr == "wxBOTTOM" )
+        dir = wxBOTTOM;
+    else
+    {
+        ReportError
+        (
+            GetParamNode(param),
+            wxString::Format
+            (
+                "Invalid direction \"%s\": must be one of "
+                "wxLEFT|wxRIGHT|wxTOP|wxBOTTOM.",
+                dirstr
+            )
+        );
+
+        dir = dirDefault;
+    }
+
+    return dir;
+}
 
 // Get system font index using indexname
 static wxFont GetSystemFont(const wxString& name)

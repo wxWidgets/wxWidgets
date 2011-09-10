@@ -199,6 +199,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   prevent the parent wxTopLevelWindow from interfering with the keyboard
   handling of the window that captured the mouse.
 
+- wxDataViewCtrl::GetSelection() now returns invalid item in all ports (this
+  behaved differently in wxMSW and wxGTK/wxOSX before) if more than one item
+  is selected in a control with wxDV_MULTIPLE style.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
@@ -333,6 +337,9 @@ Changes in behaviour which may result in compilation errors
 
 - wxST_MARKUP doesn't exist any more, use wxControl::SetLabelMarkup() instead.
 
+- wxComboBox::IsEmpty(), which was previously available in some ports (but not
+  wxMSW), doesn't exist any more, use either IsListEmpty() or IsTextEmpty().
+
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -444,15 +451,23 @@ All:
 
 All (GUI):
 
+- Added wxTreeListCtrl class.
 - Added documented, public wxNavigationEnabled<> class.
 - Added wxTextCtrl::PositionToCoords() (Navaneeth).
 - Added support for wxHELP button to wxMessageDialog.
+- Added wxBannerWindow class.
+- Added wxTextEntry::AutoCompleteDirectories().
 - Support float, double and file name values in wxGenericValidator (troelsk).
 - Fix keyboard navigation in wxGrid with hidden columns (ivan_14_32).
 - Add wxDataViewEvent::IsEditCancelled() (Allonii).
 - Allow marking wxTreeBook nodes to expand initially in XRC (RedTide).
 - Added customizable wxDocManager::OnMRUFileNotExist() virtual method.
 - Fix stock labels when not using mnemonics for Chinese (cw.ahbong).
+- Added wxComboBox::IsListEmpty() and IsTextEmpty().
+- Added wxDataViewCtrl::GetSelectedItemsCount() and HasSelection().
+- Added wxFLP_SMALL and wxDIRP_SMALL styles.
+- Added support for saving alpha with TIFF images.
+- Added wxPersistentSplitter.
 
 OSX:
 
@@ -470,6 +485,8 @@ MSW:
 
 - Added wxGCDC(wxEnhMetaFileDC) ctor (Marcin Wojdyr).
 - Added wxTopLevelWindow::MSWGetSystemMenu().
+- Multiline text controls no longer select all content when gaining focus from
+  the keyboard.
 
 
 2.9.2: (released 2011-07-05)

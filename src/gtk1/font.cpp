@@ -25,6 +25,7 @@
     #include "wx/settings.h"
     #include "wx/gdicmn.h"
     #include "wx/encinfo.h"
+    #include "wx/crt.h"
 #endif
 
 #include "wx/fontutil.h"

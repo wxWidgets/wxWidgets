@@ -276,7 +276,7 @@ public:
         In wxPerl use Wx::Bitmap->newFromBits(bits, width, height, depth).
         @endWxPerlOnly
     */
-    wxBitmap(const char bits[], int width, int height, int depth = 1);
+    wxBitmap(const char* bits[], int width, int height, int depth = 1);
 
     /**
         Creates a new bitmap. A depth of ::wxBITMAP_SCREEN_DEPTH indicates the

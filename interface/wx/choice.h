@@ -184,5 +184,15 @@ public:
                  anything under other platforms.
     */
     virtual void SetColumns(int n = 1);
+
+    virtual bool IsSorted() const;
+    
+    virtual unsigned int GetCount() const ;
+    virtual int GetSelection() const ;
+    virtual void SetSelection(int n);
+
+    virtual int FindString(const wxString& s, bool bCase = false) const;
+    virtual wxString GetString(unsigned int n) const ;
+    virtual void SetString(unsigned int pos, const wxString& s);
 };
 

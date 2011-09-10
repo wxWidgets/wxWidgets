@@ -453,6 +453,12 @@ public:
 class wxMenu : public wxEvtHandler
 {
 public:
+
+    /**
+        Constructs a wxMenu object.
+    */
+    wxMenu();
+    
     /**
         Constructs a wxMenu object.
 

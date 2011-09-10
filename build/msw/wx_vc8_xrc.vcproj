@@ -1059,6 +1059,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_bannerwindow.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_bmp.h"
 				>
 			</File>
@@ -1306,6 +1310,10 @@
 			>
 			<File
 				RelativePath="..\..\src\xrc\xh_animatctrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_bannerwindow.cpp"
 				>
 			</File>
 			<File

@@ -237,12 +237,6 @@ protected:
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);
 
-    // calculate the best size for the client area of the window: default
-    // implementation of DoGetBestSize() uses this method and adds the border
-    // width to the result
-    virtual wxSize DoGetBestClientSize() const;
-    virtual wxSize DoGetBestSize() const;
-
     // override the base class method to return the size of the window borders
     virtual wxSize DoGetBorderSize() const;
 

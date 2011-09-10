@@ -10,7 +10,7 @@
 #ifndef _WX_GTK_PEN_H_
 #define _WX_GTK_PEN_H_
 
-typedef    gint8 wxGTKDash;
+typedef signed char wxGTKDash;
 
 //-----------------------------------------------------------------------------
 // wxPen

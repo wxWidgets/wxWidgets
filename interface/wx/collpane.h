@@ -6,6 +6,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxCP_DEFAULT_STYLE          (wxTAB_TRAVERSAL | wxNO_BORDER)
+#define wxCP_NO_TLW_RESIZE          (0x0002)
+
 /**
     @class wxCollapsiblePaneEvent
 
@@ -41,7 +44,7 @@ public:
     void SetCollapsed(bool collapsed);
 };
 
-
+wxEventType wxEVT_COMMAND_COLLPANE_CHANGED;
 
 /**
     @class wxCollapsiblePane
@@ -179,4 +182,3 @@ public:
     */
     bool IsExpanded() const;
 };
-

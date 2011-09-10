@@ -191,6 +191,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxTextCtrl: Single or multiline text editing control
 @li wxToggleButton: A button which stays pressed when clicked by user.
 @li wxTreeCtrl: Tree (hierarchy) control
+@li wxTreeListCtrl: Multi-column tree control with simple interface
 @li wxStaticBitmap: A control to display a bitmap
 @li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code
     editing component for plain text editing.

@@ -30,6 +30,12 @@
 class wxBookCtrlBase : public wxControl
 {
 public:
+    enum
+    {
+        /// Symbolic constant indicating that no image should be used.
+        NO_IMAGE = -1
+    };
+
     /**
         Default ctor.
     */
@@ -243,7 +249,7 @@ public:
         @see InsertPage()
     */
     virtual bool AddPage(wxWindow* page, const wxString& text,
-                         bool select = false, int imageId = wxNOT_FOUND);
+                         bool select = false, int imageId = NO_IMAGE);
 
     /**
         Deletes all pages.
@@ -280,7 +286,7 @@ public:
                             wxWindow* page,
                             const wxString& text,
                             bool select = false,
-                            int imageId = wxNOT_FOUND) = 0;
+                            int imageId = NO_IMAGE) = 0;
 
     /**
         Deletes the specified page, without deleting the associated window.

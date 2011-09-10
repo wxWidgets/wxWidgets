@@ -370,7 +370,7 @@ protected:
     //
     // This is just a wrapper for g_signal_connect() and returns the handler id
     // just as it does.
-    gulong GTKConnectWidget(const char *signal, void (*callback)());
+    unsigned long GTKConnectWidget(const char *signal, void (*callback)());
 
     // Return true from here if PostCreation() should connect to size_request
     // signal: this is done by default but doesn't work for some native

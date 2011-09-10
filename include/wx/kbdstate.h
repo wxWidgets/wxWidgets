@@ -45,6 +45,9 @@ public:
         return (m_controlDown ? wxMOD_CONTROL : 0) |
                (m_shiftDown ? wxMOD_SHIFT : 0) |
                (m_metaDown ? wxMOD_META : 0) |
+#ifdef __WXOSX__
+               (m_rawControlDown ? wxMOD_RAW_CONTROL : 0) |
+#endif
                (m_altDown ? wxMOD_ALT : 0);
     }
 
@@ -53,6 +56,14 @@ public:
 
     // accessors for individual modifier keys
     bool ControlDown() const { return m_controlDown; }
+    bool RawControlDown() const 
+    { 
+#ifdef __WXOSX__
+        return m_rawControlDown; 
+#else
+        return m_controlDown;
+#endif
+    }
     bool ShiftDown() const { return m_shiftDown; }
     bool MetaDown() const { return m_metaDown; }
     bool AltDown() const { return m_altDown; }
@@ -64,17 +75,21 @@ public:
     // purpose under Mac)
     bool CmdDown() const
     {
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
-        return MetaDown();
-#else
         return ControlDown();
-#endif
     }
 
     // these functions are mostly used by wxWidgets itself
     // ---------------------------------------------------
 
     void SetControlDown(bool down) { m_controlDown = down; }
+    void SetRawControlDown(bool down) 
+    { 
+#ifdef __WXOSX__
+        m_rawControlDown = down; 
+#else
+        m_controlDown = down; 
+#endif
+    }
     void SetShiftDown(bool down)   { m_shiftDown = down; }
     void SetAltDown(bool down)     { m_altDown = down; }
     void SetMetaDown(bool down)    { m_metaDown = down; }
@@ -84,10 +99,13 @@ public:
     // members of wxKeyEvent directly, these variables are public, however you
     // should not use them in any new code, please use the accessors instead
 public:
-    bool m_controlDown : 1;
-    bool m_shiftDown   : 1;
-    bool m_altDown     : 1;
-    bool m_metaDown    : 1;
+    bool m_controlDown     : 1;
+    bool m_shiftDown       : 1;
+    bool m_altDown         : 1;
+    bool m_metaDown        : 1;
+#ifdef __WXOSX__
+    bool m_rawControlDown : 1;
+#endif
 };
 
 #endif // _WX_KBDSTATE_H_

@@ -3,7 +3,7 @@
 // Purpose:     wxAnyButtonBase class
 // Author:      Vadim Zetlin
 // Created:     2000-08-15 (extracted from button.h)
-// RCS-ID:      $Id: anybutton.h 65680 2010-09-30 11:44:45Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zetlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -175,9 +175,9 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxAnyButtonBase);
 };
 
-//#if defined(__WXUNIVERSAL__)
-//    #include "wx/univ/anybutton.h"
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/anybutton.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/anybutton.h"
 //#elif defined(__WXMOTIF__)
 //    #include "wx/motif/anybutton.h"

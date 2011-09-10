@@ -23,6 +23,7 @@
 #include "wx/window.h"  // for wxClientData
 #include "wx/event.h"
 #include "wx/dynarray.h"
+#include "wx/itemid.h"
 
 #if WXWIN_COMPATIBILITY_2_6
 
@@ -38,52 +39,18 @@ enum
 #endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
-// wxTreeItemId identifies an element of the tree. In this implementation, it's
-// just a trivial wrapper around Win32 HTREEITEM or a pointer to some private
-// data structure in the generic version. It's opaque for the application and
-// the only method which can be used by user code is IsOk().
+// wxTreeItemId identifies an element of the tree. It's opaque for the
+// application and the only method which can be used by user code is IsOk().
 // ----------------------------------------------------------------------------
 
-// Using this typedef removes an ambiguity when calling Remove()
-typedef void *wxTreeItemIdValue;
-
-class WXDLLIMPEXP_CORE wxTreeItemId
+// This is a class and not a typedef because existing code may forward declare
+// wxTreeItemId as a class and we don't want to break it without good reason.
+class wxTreeItemId : public wxItemId<void*>
 {
-    friend bool operator==(const wxTreeItemId&, const wxTreeItemId&);
 public:
-    // ctors
-        // 0 is invalid value for HTREEITEM
-    wxTreeItemId() { m_pItem = 0; }
-
-        // construct wxTreeItemId from the native item id
-    wxTreeItemId(void *pItem) { m_pItem = pItem; }
-
-        // default copy ctor/assignment operator are ok for us
-
-    // accessors
-        // is this a valid tree item?
-    bool IsOk() const { return m_pItem != 0; }
-        // return true if this item is not valid
-    bool operator!() const { return !IsOk(); }
-
-    // operations
-        // invalidate the item
-    void Unset() { m_pItem = 0; }
-
-    operator bool() const { return IsOk(); }
-
-    wxTreeItemIdValue m_pItem;
+    wxTreeItemId() : wxItemId<void*>() { }
+    wxTreeItemId(void* pItem) : wxItemId<void*>(pItem) { }
 };
-
-inline bool operator==(const wxTreeItemId& i1, const wxTreeItemId& i2)
-{
-    return i1.m_pItem == i2.m_pItem;
-}
-
-inline bool operator!=(const wxTreeItemId& i1, const wxTreeItemId& i2)
-{
-    return i1.m_pItem != i2.m_pItem;
-}
 
 // ----------------------------------------------------------------------------
 // wxTreeItemData is some (arbitrary) user class associated with some item. The
@@ -119,10 +86,12 @@ protected:
     wxTreeItemId m_pItem;
 };
 
+typedef void *wxTreeItemIdValue;
+
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxTreeItemIdValue, wxArrayTreeItemIdsBase);
 
 // this is a wrapper around the array class defined above which allow to wok
-// with vaue of natural wxTreeItemId type instead of using wxTreeItemIdValue
+// with values of natural wxTreeItemId type instead of using wxTreeItemIdValue
 // and does it without any loss of efficiency
 class WXDLLIMPEXP_CORE wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
 {

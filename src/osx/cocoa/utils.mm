@@ -53,6 +53,18 @@ void wxBell()
 
 - (void)applicationWillFinishLaunching:(NSNotification *)application {	
     wxUnusedVar(application);
+    
+    // we must install our handlers later than setting the app delegate, because otherwise our handlers
+    // get overwritten in the meantime
+
+    NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
+    
+    [appleEventManager setEventHandler:self andSelector:@selector(handleGetURLEvent:withReplyEvent:)
+                         forEventClass:kInternetEventClass andEventID:kAEGetURL];
+    
+    [appleEventManager setEventHandler:self andSelector:@selector(handleOpenAppEvent:withReplyEvent:)
+                         forEventClass:kCoreEventClass andEventID:kAEOpenApplication];
+    
 }
 
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)fileNames
@@ -67,13 +79,6 @@ void wxBell()
     }
 
     wxTheApp->MacOpenFiles(fileList);
-}
-
-- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender
-{
-    wxUnusedVar(sender);
-    wxTheApp->MacNewFile() ;
-    return NO;
 }
 
 - (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename
@@ -99,6 +104,13 @@ void wxBell()
     NSString* url = [[event descriptorAtIndex:1] stringValue];
     wxCFStringRef cf(wxCFRetain(url));
     wxTheApp->MacOpenURL(cf.AsString()) ;
+}
+
+- (void)handleOpenAppEvent:(NSAppleEventDescriptor *)event
+           withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+    wxUnusedVar(replyEvent);
+    wxTheApp->MacNewFile() ;
 }
 
 /*
@@ -239,10 +251,6 @@ bool wxApp::DoInitGui()
         wxNSAppController* controller = [[wxNSAppController alloc] init];
         [NSApp setDelegate:controller];
 
-        NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
-        [appleEventManager setEventHandler:controller andSelector:@selector(handleGetURLEvent:withReplyEvent:)
-            forEventClass:kInternetEventClass andEventID:kAEGetURL];
-   
         // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads
         // to the duplication of menus under 10.5 and a warning under 10.6
 #if 0
@@ -297,10 +305,10 @@ wxMouseState wxGetMouseState()
     ms.SetMiddleDown( (buttons & 0x04) != 0 );
     ms.SetRightDown( (buttons & 0x02) != 0 );
     
-    ms.SetControlDown(modifiers & NSControlKeyMask);
+    ms.SetRawControlDown(modifiers & NSControlKeyMask);
     ms.SetShiftDown(modifiers & NSShiftKeyMask);
     ms.SetAltDown(modifiers & NSAlternateKeyMask);
-    ms.SetMetaDown(modifiers & NSCommandKeyMask);
+    ms.SetControlDown(modifiers & NSCommandKeyMask);
     
     return ms;
 }

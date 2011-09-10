@@ -14,6 +14,8 @@
 #include "wx/icon.h"
 #include "wx/strconv.h"
 
+typedef struct _GdkVisual GdkVisual;
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -53,7 +55,7 @@ public:
 
     bool IsInAssert() const { return m_isInAssert; }
 
-    gint            m_idleTag;
+    int             m_idleTag;
     void RemoveIdleTag();
 
     unsigned char  *m_colorCube;

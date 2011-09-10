@@ -1808,11 +1808,11 @@ Optional Features:
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
-  --enable-metafile       use win32 metafiles
   --disable-controls      disable compilation of all standard controls
   --enable-markup         support wxControl::SetLabelMarkup
   --enable-accel          use accelerators
   --enable-animatectrl    use wxAnimationCtrl class
+  --enable-bannerwindow   use wxBannerWindow class
   --enable-artstd         use standard XPM icons in wxArtProvider
   --enable-arttango       use Tango icons in wxArtProvider
   --enable-bmpbutton      use wxBitmapButton class
@@ -1876,6 +1876,7 @@ Optional Features:
   --enable-toolbook       use wxToolbook class
   --enable-treebook       use wxTreebook class
   --enable-treectrl       use wxTreeCtrl class
+  --enable-treelist       use wxTreeListCtrl class
   --enable-commondlg      use all common dialogs
   --enable-aboutdlg       use wxAboutBox
   --enable-choicedlg      use wxChoiceDialog
@@ -1898,8 +1899,9 @@ Optional Features:
   --enable-mousewheel     use mousewheel
   --enable-validators     use wxValidator and derived classes
   --enable-busyinfo       use wxBusyInfo
+  --enable-hotkey         use wxWindow::RegisterHotKey()
   --enable-joystick       use wxJoystick
-  --enable-metafiles      use wxMetaFile (Win32 only)
+  --enable-metafiles      use wxMetaFile
   --enable-dragimage      use wxDragImage
   --enable-accessibility  enable accessibility support
   --enable-uiactionsim    use wxUIActionSimulator (experimental)
@@ -3000,6 +3002,8 @@ DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_COMPILER_TLS=auto
+DEFAULT_wxUSE_HOTKEY=auto
+DEFAULT_wxUSE_METAFILE=auto
 
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
@@ -9809,50 +9813,6 @@ fi
 echo "${ECHO_T}$result" >&6; }
 
 
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-metafile" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-metafile... $ECHO_C" >&6; }
-          # Check whether --enable-metafile was given.
-if test "${enable_metafile+set}" = set; then
-  enableval=$enable_metafile;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_metafile='wxUSE_METAFILE=yes'
-                          else
-                            wx_cv_use_metafile='wxUSE_METAFILE=no'
-                          fi
-
-else
-
-                          wx_cv_use_metafile='wxUSE_METAFILE=${'DEFAULT_wxUSE_METAFILE":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_metafile"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_METAFILE = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_METAFILE
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
 
 DEFAULT_wxUSE_CONTROLS=none
 
@@ -9903,6 +9863,7 @@ echo "${ECHO_T}$result" >&6; }
 if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_ACCEL=no
     DEFAULT_wxUSE_ANIMATIONCTRL=no
+    DEFAULT_wxUSE_BANNERWINDOW=no
     DEFAULT_wxUSE_BMPBUTTON=no
     DEFAULT_wxUSE_BUTTON=no
     DEFAULT_wxUSE_CALCTRL=no
@@ -9958,6 +9919,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_TOOLTIPS=no
     DEFAULT_wxUSE_TREEBOOK=no
     DEFAULT_wxUSE_TREECTRL=no
+    DEFAULT_wxUSE_TREELISTCTRL=no
 fi
 
 
@@ -10088,6 +10050,50 @@ fi
             fi
           else
             result=$wxUSE_ANIMATIONCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-bannerwindow" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-bannerwindow... $ECHO_C" >&6; }
+          # Check whether --enable-bannerwindow was given.
+if test "${enable_bannerwindow+set}" = set; then
+  enableval=$enable_bannerwindow;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_bannerwindow='wxUSE_BANNERWINDOW=yes'
+                          else
+                            wx_cv_use_bannerwindow='wxUSE_BANNERWINDOW=no'
+                          fi
+
+else
+
+                          wx_cv_use_bannerwindow='wxUSE_BANNERWINDOW=${'DEFAULT_wxUSE_BANNERWINDOW":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_bannerwindow"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_BANNERWINDOW = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_BANNERWINDOW
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -12866,6 +12872,50 @@ fi
 echo "${ECHO_T}$result" >&6; }
 
 
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-treelist" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-treelist... $ECHO_C" >&6; }
+          # Check whether --enable-treelist was given.
+if test "${enable_treelist+set}" = set; then
+  enableval=$enable_treelist;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_treelist='wxUSE_TREELISTCTRL=yes'
+                          else
+                            wx_cv_use_treelist='wxUSE_TREELISTCTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_treelist='wxUSE_TREELISTCTRL=${'DEFAULT_wxUSE_TREELISTCTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_treelist"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_TREELISTCTRL = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_TREELISTCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
 
 
           enablestring=
@@ -13832,6 +13882,50 @@ fi
             fi
           else
             result=$wxUSE_BUSYINFO
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-hotkey" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-hotkey... $ECHO_C" >&6; }
+          # Check whether --enable-hotkey was given.
+if test "${enable_hotkey+set}" = set; then
+  enableval=$enable_hotkey;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_hotkey='wxUSE_HOTKEY=yes'
+                          else
+                            wx_cv_use_hotkey='wxUSE_HOTKEY=no'
+                          fi
+
+else
+
+                          wx_cv_use_hotkey='wxUSE_HOTKEY=${'DEFAULT_wxUSE_HOTKEY":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_hotkey"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_HOTKEY = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_HOTKEY
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -24845,13 +24939,11 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <sys/types.h> /* for off_t */
-     #include <stdio.h>
+#include <stdio.h>
 int
 main ()
 {
-int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
+return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
   ;
   return 0;
 }
@@ -24891,13 +24983,11 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #define _LARGEFILE_SOURCE 1
-#include <sys/types.h> /* for off_t */
-     #include <stdio.h>
+#include <stdio.h>
 int
 main ()
 {
-int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
+return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
   ;
   return 0;
 }
@@ -29766,7 +29856,6 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
-    WXGTK12=
     WXGTK127=
     WXGTK2=
     WXGPE=
@@ -30139,8 +30228,6 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
 
   rm -f conf.gtktest
 
-
-                                        GTK_LIBS="$GTK_LIBS -lX11"
                 fi
 
                                 if test -z "$wx_cv_lib_gtk"; then
@@ -30800,6 +30887,8 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
                 if test -z "$wx_cv_lib_gtk"; then
                                         wx_cv_lib_gtk=none
                 else
+                                        GTK_LIBS="$GTK_LIBS -lX11"
+
                                                             wx_cv_cflags_gtk=$GTK_CFLAGS
                     wx_cv_libs_gtk=$GTK_LIBS
                 fi
@@ -30818,10 +30907,8 @@ echo "${ECHO_T}$wx_cv_lib_gtk" >&6; }
                     TOOLKIT_VERSION=2
                     ;;
             1.2.7)  WXGTK127=1
-                    WXGTK12=1
                     ;;
-            1.2.3)  WXGTK12=1
-                    ;;
+            1.2*) ;;
             *)      { { echo "$as_me:$LINENO: error:
 The development files for GTK+ were not found. For GTK+ 2, please
 ensure that pkg-config is in the path and that gtk+-2.0.pc is
@@ -31228,9 +31315,6 @@ done
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
-
-                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -DG_DISABLE_CAST_CHECKS"
-
         AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
@@ -43015,14 +43099,6 @@ if test "$WXGTK2" = 1 ; then
 #define __WXGTK20__ $WXGTK2
 _ACEOF
 
-  WXGTK12=1
-fi
-
-if test "$WXGTK12" = 1 ; then
-  cat >>confdefs.h <<_ACEOF
-#define __WXGTK12__ $WXGTK12
-_ACEOF
-
 fi
 
 if test "$WXGTK127" = 1 ; then
@@ -43060,6 +43136,8 @@ if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     if test "$wxUSE_GTK" = 1 ; then
         if test "x$wxGTK_VERSION" = "x1" ; then
             CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
+        else
+            CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
         fi
     fi
 fi
@@ -45169,6 +45247,24 @@ _ACEOF
 
 fi
 
+if test "$wxUSE_HOTKEY" = "yes"; then
+  if test "$wxUSE_MSW" != 1 -a "$wxUSE_OSX_COCOA" != 1 -a "$wxUSE_OSX_CARBON" != 1; then
+    { echo "$as_me:$LINENO: WARNING: Hot keys not supported by the current toolkit, disabled" >&5
+echo "$as_me: WARNING: Hot keys not supported by the current toolkit, disabled" >&2;}
+    wxUSE_HOTKEY=no
+  fi
+elif test "$wxUSE_HOTKEY" = "auto"; then
+  if test "$wxUSE_MSW" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OSX_CARBON" = 1; then
+    wxUSE_HOTKEY=yes
+  fi
+fi
+if test "$wxUSE_HOTKEY" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_HOTKEY 1
+_ACEOF
+
+fi
+
 if test "$wxUSE_STD_CONTAINERS" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_STD_CONTAINERS 1
@@ -47102,6 +47198,23 @@ if test "$wxUSE_METAFILE" = "yes"; then
 echo "$as_me: WARNING: wxMetafile is not available on this system... disabled" >&2;}
         wxUSE_METAFILE=no
     fi
+elif test "$wxUSE_METAFILE" = "auto"; then
+    if test "$wxUSE_MSW" = 1 -o "$wxUSE_MAC" = 1 -o "$wxUSE_PM" = 1; then
+        wxUSE_METAFILE=yes
+    fi
+fi
+
+if test "$wxUSE_METAFILE" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_METAFILE 1
+_ACEOF
+
+    if test "$wxUSE_MSW" = 1; then
+                cat >>confdefs.h <<\_ACEOF
+#define wxUSE_ENH_METAFILE 1
+_ACEOF
+
+    fi
 fi
 
 
@@ -47238,18 +47351,6 @@ echo "$as_me: WARNING: Some features disabled because OLE headers not found" >&2
         wxUSE_DATAOBJ=no
         wxUSE_OLE=no
     fi
-
-    if test "$wxUSE_METAFILE" = "yes"; then
-        cat >>confdefs.h <<\_ACEOF
-#define wxUSE_METAFILE 1
-_ACEOF
-
-
-                cat >>confdefs.h <<\_ACEOF
-#define wxUSE_ENH_METAFILE 1
-_ACEOF
-
-    fi
 fi
 
 if test "$wxUSE_IPC" = "yes"; then
@@ -47302,14 +47403,6 @@ _ACEOF
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
-    if test "$wxUSE_GTK" = 1; then
-        if test "$WXGTK12" != 1; then
-            { echo "$as_me:$LINENO: WARNING: Drag and drop is only supported under GTK+ 1.2... disabled" >&5
-echo "$as_me: WARNING: Drag and drop is only supported under GTK+ 1.2... disabled" >&2;}
-            wxUSE_DRAG_AND_DROP=no
-        fi
-    fi
-
     if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_MGL" = 1 -o \
             "$wxUSE_DFB" = 1; then
         { echo "$as_me:$LINENO: WARNING: Drag and drop not yet supported under $TOOLKIT... disabled" >&5
@@ -47391,6 +47484,13 @@ _ACEOF
 
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS animate"
+fi
+
+if test "$wxUSE_BANNERWINDOW" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_BANNERWINDOW 1
+_ACEOF
+
 fi
 
 if test "$wxUSE_BUTTON" = "yes"; then
@@ -47922,6 +48022,14 @@ echo "$as_me: WARNING: wxTreeCtrl requires wxImageList and won't be compiled wit
     fi
 fi
 
+if test "$wxUSE_TREECTRL" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_TREELISTCTRL 1
+_ACEOF
+
+    USES_CONTROLS=1
+fi
+
 if test "$wxUSE_POPUPWIN" = "yes"; then
     if test "$wxUSE_OLD_COCOA" = 1 ; then
         { echo "$as_me:$LINENO: WARNING: Popup window not yet supported under Mac OS X... disabled" >&5
@@ -48226,13 +48334,6 @@ if test "$wxUSE_MENUS" = "yes"; then
 _ACEOF
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
-fi
-
-if test "$wxUSE_METAFILE" = "yes"; then
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_METAFILE 1
-_ACEOF
-
 fi
 
 if test "$wxUSE_MIMETYPE" = "yes"; then

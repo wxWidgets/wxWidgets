@@ -3664,7 +3664,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
 
     switch ( event.GetModifiers() )
     {
-        case wxMOD_CMD:
+        case wxMOD_CONTROL:
             if ( m_selectedBlockCorner == wxGridNoCellCoords)
                 m_selectedBlockCorner = coords;
             UpdateBlockBeingSelected(m_selectedBlockCorner, coords);

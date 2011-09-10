@@ -43,6 +43,10 @@ class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 class WXDLLIMPEXP_FWD_CORE wxPrinterDC;
 class WXDLLIMPEXP_FWD_CORE wxPrintData;
 
+#if wxUSE_GRAPHICS_CONTEXT
+class WXDLLIMPEXP_FWD_CORE wxGraphicsContext;
+#endif
+
 //  Logical ops
 enum wxRasterOperationMode
 {
@@ -471,7 +475,7 @@ public:
     }
 
     virtual void SetLogicalScale(double x, double y);
-    virtual void GetLogicalScale(double *x, double *y)
+    virtual void GetLogicalScale(double *x, double *y) const
     {
         if ( x ) *x = m_logicalScaleX;
         if ( y ) *y = m_logicalScaleY;
@@ -639,6 +643,13 @@ public:
 
     virtual int GetResolution() const
         { return -1; }
+
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual wxGraphicsContext* GetGraphicsContext() const
+        { return NULL; }
+    virtual void SetGraphicsContext( wxGraphicsContext* WXUNUSED(ctx) )
+        {}
+#endif
 
 private:
     wxDC       *m_owner;
@@ -1009,7 +1020,7 @@ public:
 
     void SetLogicalScale(double x, double y)
         { m_pimpl->SetLogicalScale( x, y ); }
-    void GetLogicalScale(double *x, double *y)
+    void GetLogicalScale(double *x, double *y) const
         { m_pimpl->GetLogicalScale( x, y ); }
 
     void SetLogicalOrigin(wxCoord x, wxCoord y)
@@ -1328,6 +1339,17 @@ public:
     // GetTempHDC() also works for wxGCDC (but still not for wxPostScriptDC &c)
     TempHDC GetTempHDC() { return TempHDC(*this); }
 #endif // __WXMSW__
+
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual wxGraphicsContext* GetGraphicsContext() const
+    {
+        return m_pimpl->GetGraphicsContext();
+    }
+    virtual void SetGraphicsContext( wxGraphicsContext* ctx )
+    {
+        m_pimpl->SetGraphicsContext(ctx);
+    }
+#endif
 
 protected:
     // ctor takes ownership of the pointer

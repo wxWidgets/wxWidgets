@@ -437,6 +437,11 @@ wxRendererMSW::DoDrawFrameControl(UINT type,
         style |= DFCS_PUSHED;
     if ( flags & wxCONTROL_CURRENT )
         style |= DFCS_HOT;
+    if ( flags & wxCONTROL_UNDETERMINED )
+        // Using DFCS_BUTTON3STATE here doesn't work (as might be expected),
+        // use the following two styles to get the same look of a check box
+        // in the undetermined state.
+        style |= DFCS_INACTIVE | DFCS_CHECKED;
 
     ::DrawFrameControl(GetHdcOf(dc.GetTempHDC()), &r, type, style);
 }

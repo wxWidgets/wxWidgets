@@ -31,9 +31,10 @@ struct assertion_traits<wxImage>
 
     static std::string toString(const wxImage& image)
     {
-        return wxString::Format("image of size %d*%d",
+        return wxString::Format("image of size %d*%d with%s alpha",
                                 image.GetWidth(),
-                                image.GetHeight())
+                                image.GetHeight(),
+                                image.HasAlpha() ? "" : "out")
                 .ToStdString();
     }
 };

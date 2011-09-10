@@ -30,8 +30,8 @@ public:
     virtual ~wxMask();
 
     // implementation
-    GdkBitmap   *m_bitmap;
-    GdkBitmap *GetBitmap() const;
+    GdkPixmap* m_bitmap;
+    GdkPixmap* GetBitmap() const;
 
 protected:
     virtual void FreeData();

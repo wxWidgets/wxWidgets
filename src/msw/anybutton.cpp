@@ -3,7 +3,7 @@
 // Purpose:     wxAnyButton
 // Author:      Julian Smart
 // Created:     1998-01-04 (extracted from button.cpp)
-// RCS-ID:      $Id: anybutton.cpp 67384 2011-04-03 20:31:32Z DS $
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -387,11 +387,21 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
                                    const wxSize& sizeLabel,
                                    int flags)
 {
-    // FIXME: this is pure guesswork, need to retrieve the real button margins
     wxSize sizeBtn = sizeLabel;
 
-    sizeBtn.x += 3*win->GetCharWidth();
-    sizeBtn.y += win->GetCharHeight()/2;
+    // FIXME: The numbers here are pure guesswork, no idea how should the
+    //        button margins be really calculated.
+    if ( flags & Size_ExactFit )
+    {
+        // We still need some margin or the text would be overwritten, just
+        // make it as small as possible.
+        sizeBtn.x += (3*win->GetCharWidth())/2;
+    }
+    else
+    {
+        sizeBtn.x += 3*win->GetCharWidth();
+        sizeBtn.y += win->GetCharHeight()/2;
+    }
 
     // account for the shield UAC icon if we have it
     if ( flags & Size_AuthNeeded )
@@ -555,6 +565,8 @@ wxSize wxAnyButton::DoGetBestSize() const
     if ( ShowsLabel() )
     {
         int flags = 0;
+        if ( HasFlag(wxBU_EXACTFIT) )
+            flags |= wxMSWButton::Size_ExactFit;
         if ( DoGetAuthNeeded() )
             flags |= wxMSWButton::Size_AuthNeeded;
 

@@ -70,7 +70,7 @@ wxBitmap bmp(wxBITMAP(bmpname));
 
 // which is roughly equivalent to the following
 #if defined(__WXMSW__) || defined(__WXPM__)
-    wxBitmap bmp("bmpname", wxBITMAP_TYPE_RESOURCE);
+    wxBitmap bmp("bmpname", wxBITMAP_TYPE_BMP_RESOURCE);
 #else // Unix
     wxBitmap bmp(bmpname_xpm, wxBITMAP_TYPE_XPM);
 #endif

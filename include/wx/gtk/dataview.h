@@ -142,7 +142,7 @@ public:
 
     virtual wxDataViewColumn *GetSortingColumn() const;
 
-    virtual wxDataViewItem GetSelection() const;
+    virtual int GetSelectedItemsCount() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
     virtual void SetSelections( const wxDataViewItemArray & sel );
     virtual void Select( const wxDataViewItem & item );

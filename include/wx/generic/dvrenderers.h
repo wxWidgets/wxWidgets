@@ -126,6 +126,11 @@ public:
                                wxDataViewModel *model,
                                const wxDataViewItem& item,
                                unsigned int col);
+
+    virtual bool WXOnActivate(const wxRect& cell,
+                              wxDataViewModel *model,
+                              const wxDataViewItem& item,
+                              unsigned int col);
 private:
     bool    m_toggle;
 

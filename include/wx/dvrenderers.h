@@ -54,25 +54,27 @@ public:
     void SetIcon( const wxIcon &icon )   { m_icon = icon; }
     const wxIcon &GetIcon() const        { return m_icon; }
 
+    bool IsSameAs(const wxDataViewIconText& other) const
+    {
+        return m_text == other.m_text && m_icon.IsSameAs(other.m_icon);
+    }
+
+    bool operator==(const wxDataViewIconText& other) const
+    {
+        return IsSameAs(other);
+    }
+
+    bool operator!=(const wxDataViewIconText& other) const
+    {
+        return !IsSameAs(other);
+    }
+
 private:
     wxString    m_text;
     wxIcon      m_icon;
 
     DECLARE_DYNAMIC_CLASS(wxDataViewIconText)
 };
-
-inline
-bool operator==(const wxDataViewIconText& left, const wxDataViewIconText& right)
-{
-    return left.GetText() == right.GetText() &&
-             left.GetIcon().IsSameAs(right.GetIcon());
-}
-
-inline
-bool operator!=(const wxDataViewIconText& left, const wxDataViewIconText& right)
-{
-    return !(left == right);
-}
 
 DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 
@@ -171,8 +173,9 @@ protected:
     wxWeakRef<wxWindow>     m_editorCtrl;
     wxDataViewItem          m_item; // for m_editorCtrl
 
-    // internal utility:
-    const wxDataViewCtrl* GetView() const;
+    // internal utility, may be used anywhere the window associated with the
+    // renderer is required
+    wxDataViewCtrl* GetView() const;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRendererBase)

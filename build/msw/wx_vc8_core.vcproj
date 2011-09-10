@@ -6470,6 +6470,10 @@
 			UniqueIdentifier="{46168D7C-2783-50F3-AE9D-A740D5FF0B44}"
 			>
 			<File
+				RelativePath="..\..\include\wx\univ\anybutton.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\univ\app.h"
 				>
 			</File>
@@ -6769,6 +6773,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\auibook.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\bannerwindow.h"
 				>
 			</File>
 			<File
@@ -7232,6 +7240,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\itemid.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\joystick.h"
 				>
 			</File>
@@ -7584,6 +7596,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\persist\splitter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\splitter.h"
 				>
 			</File>
@@ -7700,6 +7716,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\treelist.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\uiaction.h"
 				>
 			</File>
@@ -7748,6 +7768,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\withimages.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\wizard.h"
 				>
 			</File>
@@ -7769,6 +7793,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_animatctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_bannerwindow.h"
 				>
 			</File>
 			<File

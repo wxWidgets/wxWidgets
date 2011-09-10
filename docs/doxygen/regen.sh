@@ -24,7 +24,7 @@ export WXWIDGETS=`cd ../.. && pwd`
 
 # prepare folders for the cp commands below
 mkdir -p out/html       # we need to copy files in this folder below
-mkdir -p out/html/wxmsw out/html/wxgtk out/html/wxmac
+mkdir -p out/html/generic out/html/wxmsw out/html/wxgtk out/html/wxmac
 
 # These are not automatically copied by Doxygen because they're not
 # used in doxygen documentation, only in our html footer and by our
@@ -35,6 +35,7 @@ cp images/tab_*.gif out/html
 cp images/wxmsw/*png out/html/wxmsw
 cp images/wxmac/*png out/html/wxmac
 cp images/wxgtk/*png out/html/wxgtk
+cp images/generic/*png out/html/generic
 cp wxwidgets.js out/html
 
 # these CSS are not automatically copied by Doxygen because they're

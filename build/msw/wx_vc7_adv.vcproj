@@ -738,6 +738,9 @@
 				RelativePath="..\..\src\generic\animateg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\bannerwindow.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\bmpcboxg.cpp">
 			</File>
 			<File
@@ -793,6 +796,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\tipdlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\treelist.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\wizard.cpp">
@@ -1068,6 +1074,9 @@
 				RelativePath="..\..\include\wx\animate.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\bannerwindow.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\bmpcbox.h">
 			</File>
 			<File
@@ -1129,6 +1138,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tipdlg.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\treelist.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\wizard.h">

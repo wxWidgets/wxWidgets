@@ -48,7 +48,7 @@ public:
     //
     // it validates the new value and notifies the model about the change by
     // calling GtkOnCellChanged() if it was accepted
-    virtual void GtkOnTextEdited(const gchar *itempath, const wxString& value);
+    virtual void GtkOnTextEdited(const char *itempath, const wxString& value);
 
     GtkCellRenderer* GetGtkHandle() { return m_renderer; }
     void GtkInitHandlers();

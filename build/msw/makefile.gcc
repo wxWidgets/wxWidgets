@@ -1164,6 +1164,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.o \
 	$(OBJS)\xrcdll_version_rc.o \
 	$(OBJS)\xrcdll_xh_animatctrl.o \
+	$(OBJS)\xrcdll_xh_bannerwindow.o \
 	$(OBJS)\xrcdll_xh_bmp.o \
 	$(OBJS)\xrcdll_xh_bmpcbox.o \
 	$(OBJS)\xrcdll_xh_bmpbt.o \
@@ -1237,6 +1238,7 @@ XRCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) 
 XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_dummy.o \
 	$(OBJS)\xrclib_xh_animatctrl.o \
+	$(OBJS)\xrclib_xh_bannerwindow.o \
 	$(OBJS)\xrclib_xh_bmp.o \
 	$(OBJS)\xrclib_xh_bmpcbox.o \
 	$(OBJS)\xrclib_xh_bmpbt.o \
@@ -1621,6 +1623,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_debugrpt.o \
 	$(OBJS)\monodll_dbgrptg.o \
 	$(OBJS)\monodll_xh_animatctrl.o \
+	$(OBJS)\monodll_xh_bannerwindow.o \
 	$(OBJS)\monodll_xh_bmp.o \
 	$(OBJS)\monodll_xh_bmpcbox.o \
 	$(OBJS)\monodll_xh_bmpbt.o \
@@ -2273,6 +2276,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_hyperlnkcmn.o \
 	$(OBJS)\monodll_odcombocmn.o \
 	$(OBJS)\monodll_aboutdlgg.o \
+	$(OBJS)\monodll_bannerwindow.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrlg.o \
 	$(OBJS)\monodll_commandlinkbuttong.o \
@@ -2292,6 +2296,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_tipdlg.o \
+	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
@@ -2317,6 +2322,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_hyperlnkcmn.o \
 	$(OBJS)\monodll_odcombocmn.o \
 	$(OBJS)\monodll_aboutdlgg.o \
+	$(OBJS)\monodll_bannerwindow.o \
 	$(OBJS)\monodll_bmpcboxg.o \
 	$(OBJS)\monodll_calctrlg.o \
 	$(OBJS)\monodll_commandlinkbuttong.o \
@@ -2336,6 +2342,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_splash.o \
 	$(OBJS)\monodll_tipdlg.o \
+	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
@@ -2394,6 +2401,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_debugrpt.o \
 	$(OBJS)\monolib_dbgrptg.o \
 	$(OBJS)\monolib_xh_animatctrl.o \
+	$(OBJS)\monolib_xh_bannerwindow.o \
 	$(OBJS)\monolib_xh_bmp.o \
 	$(OBJS)\monolib_xh_bmpcbox.o \
 	$(OBJS)\monolib_xh_bmpbt.o \
@@ -3046,6 +3054,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_hyperlnkcmn.o \
 	$(OBJS)\monolib_odcombocmn.o \
 	$(OBJS)\monolib_aboutdlgg.o \
+	$(OBJS)\monolib_bannerwindow.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrlg.o \
 	$(OBJS)\monolib_commandlinkbuttong.o \
@@ -3065,6 +3074,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_tipdlg.o \
+	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
@@ -3090,6 +3100,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_hyperlnkcmn.o \
 	$(OBJS)\monolib_odcombocmn.o \
 	$(OBJS)\monolib_aboutdlgg.o \
+	$(OBJS)\monolib_bannerwindow.o \
 	$(OBJS)\monolib_bmpcboxg.o \
 	$(OBJS)\monolib_calctrlg.o \
 	$(OBJS)\monolib_commandlinkbuttong.o \
@@ -3109,6 +3120,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_splash.o \
 	$(OBJS)\monolib_tipdlg.o \
+	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
@@ -4278,6 +4290,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_hyperlnkcmn.o \
 	$(OBJS)\advdll_odcombocmn.o \
 	$(OBJS)\advdll_aboutdlgg.o \
+	$(OBJS)\advdll_bannerwindow.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrlg.o \
 	$(OBJS)\advdll_commandlinkbuttong.o \
@@ -4297,6 +4310,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_sashwin.o \
 	$(OBJS)\advdll_splash.o \
 	$(OBJS)\advdll_tipdlg.o \
+	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
@@ -4322,6 +4336,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_hyperlnkcmn.o \
 	$(OBJS)\advdll_odcombocmn.o \
 	$(OBJS)\advdll_aboutdlgg.o \
+	$(OBJS)\advdll_bannerwindow.o \
 	$(OBJS)\advdll_bmpcboxg.o \
 	$(OBJS)\advdll_calctrlg.o \
 	$(OBJS)\advdll_commandlinkbuttong.o \
@@ -4341,6 +4356,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_sashwin.o \
 	$(OBJS)\advdll_splash.o \
 	$(OBJS)\advdll_tipdlg.o \
+	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
@@ -4368,6 +4384,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_hyperlnkcmn.o \
 	$(OBJS)\advlib_odcombocmn.o \
 	$(OBJS)\advlib_aboutdlgg.o \
+	$(OBJS)\advlib_bannerwindow.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrlg.o \
 	$(OBJS)\advlib_commandlinkbuttong.o \
@@ -4387,6 +4404,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_sashwin.o \
 	$(OBJS)\advlib_splash.o \
 	$(OBJS)\advlib_tipdlg.o \
+	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
@@ -4412,6 +4430,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_hyperlnkcmn.o \
 	$(OBJS)\advlib_odcombocmn.o \
 	$(OBJS)\advlib_aboutdlgg.o \
+	$(OBJS)\advlib_bannerwindow.o \
 	$(OBJS)\advlib_bmpcboxg.o \
 	$(OBJS)\advlib_calctrlg.o \
 	$(OBJS)\advlib_commandlinkbuttong.o \
@@ -4431,6 +4450,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_sashwin.o \
 	$(OBJS)\advlib_splash.o \
 	$(OBJS)\advlib_tipdlg.o \
+	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
@@ -6953,6 +6973,9 @@ $(OBJS)\monodll_dbgrptg.o: ../../src/generic/dbgrptg.cpp
 $(OBJS)\monodll_xh_animatctrl.o: ../../src/xrc/xh_animatctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_xh_bannerwindow.o: ../../src/xrc/xh_bannerwindow.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8372,6 +8395,11 @@ $(OBJS)\monodll_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_bannerwindow.o: ../../src/generic/bannerwindow.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8463,6 +8491,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_tipdlg.o: ../../src/generic/tipdlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_treelist.o: ../../src/generic/treelist.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9311,6 +9344,9 @@ $(OBJS)\monolib_dbgrptg.o: ../../src/generic/dbgrptg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_animatctrl.o: ../../src/xrc/xh_animatctrl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_xh_bannerwindow.o: ../../src/xrc/xh_bannerwindow.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
@@ -10732,6 +10768,11 @@ $(OBJS)\monolib_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_bannerwindow.o: ../../src/generic/bannerwindow.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10823,6 +10864,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_tipdlg.o: ../../src/generic/tipdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_treelist.o: ../../src/generic/treelist.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14489,6 +14535,9 @@ $(OBJS)\advdll_odcombocmn.o: ../../src/common/odcombocmn.cpp
 $(OBJS)\advdll_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_bannerwindow.o: ../../src/generic/bannerwindow.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14544,6 +14593,9 @@ $(OBJS)\advdll_splash.o: ../../src/generic/splash.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_tipdlg.o: ../../src/generic/tipdlg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advdll_treelist.o: ../../src/generic/treelist.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
@@ -14615,6 +14667,9 @@ $(OBJS)\advlib_odcombocmn.o: ../../src/common/odcombocmn.cpp
 $(OBJS)\advlib_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advlib_bannerwindow.o: ../../src/generic/bannerwindow.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advlib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14670,6 +14725,9 @@ $(OBJS)\advlib_splash.o: ../../src/generic/splash.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_tipdlg.o: ../../src/generic/tipdlg.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_treelist.o: ../../src/generic/treelist.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
@@ -14972,6 +15030,9 @@ $(OBJS)\xrcdll_version_rc.o: ../../src/msw/version.rc
 $(OBJS)\xrcdll_xh_animatctrl.o: ../../src/xrc/xh_animatctrl.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\xrcdll_xh_bannerwindow.o: ../../src/xrc/xh_bannerwindow.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\xrcdll_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15162,6 +15223,9 @@ $(OBJS)\xrclib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xh_animatctrl.o: ../../src/xrc/xh_animatctrl.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\xrclib_xh_bannerwindow.o: ../../src/xrc/xh_bannerwindow.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xh_bmp.o: ../../src/xrc/xh_bmp.cpp

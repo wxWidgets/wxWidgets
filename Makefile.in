@@ -1695,6 +1695,7 @@ XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 XRCDLL_OBJECTS =  \
 	$(__xrcdll___win32rc) \
 	xrcdll_xh_animatctrl.o \
+	xrcdll_xh_bannerwindow.o \
 	xrcdll_xh_bmp.o \
 	xrcdll_xh_bmpcbox.o \
 	xrcdll_xh_bmpbt.o \
@@ -1765,6 +1766,7 @@ XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_EXPAT_p) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	xrclib_xh_animatctrl.o \
+	xrclib_xh_bannerwindow.o \
 	xrclib_xh_bmp.o \
 	xrclib_xh_bmpcbox.o \
 	xrclib_xh_bmpbt.o \
@@ -3709,6 +3711,7 @@ COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_NATIVE_HDR =  \
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
 	wx/animate.h \
+	wx/bannerwindow.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/commandlinkbutton.h \
@@ -3749,6 +3752,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/splash.h \
 	wx/taskbar.h \
 	wx/tipdlg.h \
+	wx/treelist.h \
 	wx/wizard.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
@@ -3756,6 +3760,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
 	wx/animate.h \
+	wx/bannerwindow.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/commandlinkbutton.h \
@@ -3796,6 +3801,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/splash.h \
 	wx/taskbar.h \
 	wx/tipdlg.h \
+	wx/treelist.h \
 	wx/wizard.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	wx/generic/animate.h
@@ -3826,6 +3832,7 @@ COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/generic/listctrl.h \
 	wx/generic/mdig.h \
 	wx/generic/statusbr.h \
+	wx/univ/anybutton.h \
 	wx/univ/app.h \
 	wx/univ/bmpbuttn.h \
 	wx/univ/button.h \
@@ -3938,6 +3945,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/helphtml.h \
 	wx/icon.h \
 	wx/infobar.h \
+	wx/itemid.h \
 	wx/layout.h \
 	wx/listbox.h \
 	wx/mdi.h \
@@ -3979,6 +3987,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/valnum.h \
 	wx/window.h \
 	wx/windowid.h \
+	wx/withimages.h \
 	wx/wrapsizer.h \
 	wx/wupdlock.h \
 	wx/accel.h \
@@ -4054,6 +4063,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/paper.h \
 	wx/persist.h \
 	wx/persist/bookctrl.h \
+	wx/persist/splitter.h \
 	wx/persist/toplevel.h \
 	wx/persist/treebook.h \
 	wx/persist/window.h \
@@ -4118,6 +4128,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/debugrpt.h \
 	wx/xrc/xh_all.h \
 	wx/xrc/xh_animatctrl.h \
+	wx/xrc/xh_bannerwindow.h \
 	wx/xrc/xh_bmpbt.h \
 	wx/xrc/xh_bmp.h \
 	wx/xrc/xh_bmpcbox.h \
@@ -4429,6 +4440,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_debugrpt.o \
 	monodll_dbgrptg.o \
 	monodll_xh_animatctrl.o \
+	monodll_xh_bannerwindow.o \
 	monodll_xh_bmp.o \
 	monodll_xh_bmpcbox.o \
 	monodll_xh_bmpbt.o \
@@ -6108,6 +6120,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_hyperlnkcmn.o \
 	monodll_odcombocmn.o \
 	monodll_aboutdlgg.o \
+	monodll_bannerwindow.o \
 	monodll_bmpcboxg.o \
 	monodll_calctrlg.o \
 	monodll_commandlinkbuttong.o \
@@ -6127,6 +6140,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_sashwin.o \
 	monodll_splash.o \
 	monodll_tipdlg.o \
+	monodll_treelist.o \
 	monodll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
@@ -6140,6 +6154,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_hyperlnkcmn.o \
 	monodll_odcombocmn.o \
 	monodll_aboutdlgg.o \
+	monodll_bannerwindow.o \
 	monodll_bmpcboxg.o \
 	monodll_calctrlg.o \
 	monodll_commandlinkbuttong.o \
@@ -6159,6 +6174,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_sashwin.o \
 	monodll_splash.o \
 	monodll_tipdlg.o \
+	monodll_treelist.o \
 	monodll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
 	monodll_animateg.o
@@ -6367,6 +6383,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_debugrpt.o \
 	monolib_dbgrptg.o \
 	monolib_xh_animatctrl.o \
+	monolib_xh_bannerwindow.o \
 	monolib_xh_bmp.o \
 	monolib_xh_bmpcbox.o \
 	monolib_xh_bmpbt.o \
@@ -8046,6 +8063,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_hyperlnkcmn.o \
 	monolib_odcombocmn.o \
 	monolib_aboutdlgg.o \
+	monolib_bannerwindow.o \
 	monolib_bmpcboxg.o \
 	monolib_calctrlg.o \
 	monolib_commandlinkbuttong.o \
@@ -8065,6 +8083,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_sashwin.o \
 	monolib_splash.o \
 	monolib_tipdlg.o \
+	monolib_treelist.o \
 	monolib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_0) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
@@ -8078,6 +8097,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_hyperlnkcmn.o \
 	monolib_odcombocmn.o \
 	monolib_aboutdlgg.o \
+	monolib_bannerwindow.o \
 	monolib_bmpcboxg.o \
 	monolib_calctrlg.o \
 	monolib_commandlinkbuttong.o \
@@ -8097,6 +8117,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_sashwin.o \
 	monolib_splash.o \
 	monolib_tipdlg.o \
+	monolib_treelist.o \
 	monolib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_0) \
 	monolib_animateg.o
@@ -11824,6 +11845,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_hyperlnkcmn.o \
 	advdll_odcombocmn.o \
 	advdll_aboutdlgg.o \
+	advdll_bannerwindow.o \
 	advdll_bmpcboxg.o \
 	advdll_calctrlg.o \
 	advdll_commandlinkbuttong.o \
@@ -11843,6 +11865,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_sashwin.o \
 	advdll_splash.o \
 	advdll_tipdlg.o \
+	advdll_treelist.o \
 	advdll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
@@ -11856,6 +11879,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_hyperlnkcmn.o \
 	advdll_odcombocmn.o \
 	advdll_aboutdlgg.o \
+	advdll_bannerwindow.o \
 	advdll_bmpcboxg.o \
 	advdll_calctrlg.o \
 	advdll_commandlinkbuttong.o \
@@ -11875,6 +11899,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_sashwin.o \
 	advdll_splash.o \
 	advdll_tipdlg.o \
+	advdll_treelist.o \
 	advdll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8) \
 	advdll_animateg.o
@@ -11928,6 +11953,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_hyperlnkcmn.o \
 	advlib_odcombocmn.o \
 	advlib_aboutdlgg.o \
+	advlib_bannerwindow.o \
 	advlib_bmpcboxg.o \
 	advlib_calctrlg.o \
 	advlib_commandlinkbuttong.o \
@@ -11947,6 +11973,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_sashwin.o \
 	advlib_splash.o \
 	advlib_tipdlg.o \
+	advlib_treelist.o \
 	advlib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
@@ -11960,6 +11987,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_hyperlnkcmn.o \
 	advlib_odcombocmn.o \
 	advlib_aboutdlgg.o \
+	advlib_bannerwindow.o \
 	advlib_bmpcboxg.o \
 	advlib_calctrlg.o \
 	advlib_commandlinkbuttong.o \
@@ -11979,6 +12007,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_sashwin.o \
 	advlib_splash.o \
 	advlib_tipdlg.o \
+	advlib_treelist.o \
 	advlib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9) \
 	advlib_animateg.o
@@ -17355,6 +17384,9 @@ monodll_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONODLL_ODEP)
 monodll_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
 
+monodll_xh_bannerwindow.o: $(srcdir)/src/xrc/xh_bannerwindow.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bannerwindow.cpp
+
 monodll_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
 
@@ -20544,6 +20576,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
+@COND_USE_GUI_1@monodll_bannerwindow.o: $(srcdir)/src/generic/bannerwindow.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bannerwindow.cpp
+
 @COND_USE_GUI_1@monodll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
@@ -20600,6 +20635,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tipdlg.cpp
+
+@COND_USE_GUI_1@monodll_treelist.o: $(srcdir)/src/generic/treelist.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/treelist.cpp
 
 @COND_USE_GUI_1@monodll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
@@ -22694,6 +22732,9 @@ monolib_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONOLIB_ODEP)
 
 monolib_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
+
+monolib_xh_bannerwindow.o: $(srcdir)/src/xrc/xh_bannerwindow.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bannerwindow.cpp
 
 monolib_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
@@ -25884,6 +25925,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
+@COND_USE_GUI_1@monolib_bannerwindow.o: $(srcdir)/src/generic/bannerwindow.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bannerwindow.cpp
+
 @COND_USE_GUI_1@monolib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
@@ -25940,6 +25984,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tipdlg.cpp
+
+@COND_USE_GUI_1@monolib_treelist.o: $(srcdir)/src/generic/treelist.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/treelist.cpp
 
 @COND_USE_GUI_1@monolib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
@@ -35421,6 +35468,9 @@ advdll_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(ADVDLL_ODEP)
 advdll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
+advdll_bannerwindow.o: $(srcdir)/src/generic/bannerwindow.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/bannerwindow.cpp
+
 advdll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
@@ -35477,6 +35527,9 @@ advdll_splash.o: $(srcdir)/src/generic/splash.cpp $(ADVDLL_ODEP)
 
 advdll_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/tipdlg.cpp
+
+advdll_treelist.o: $(srcdir)/src/generic/treelist.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/treelist.cpp
 
 advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
@@ -35775,6 +35828,9 @@ advlib_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(ADVLIB_ODEP)
 advlib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
+advlib_bannerwindow.o: $(srcdir)/src/generic/bannerwindow.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/bannerwindow.cpp
+
 advlib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
@@ -35831,6 +35887,9 @@ advlib_splash.o: $(srcdir)/src/generic/splash.cpp $(ADVLIB_ODEP)
 
 advlib_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/tipdlg.cpp
+
+advlib_treelist.o: $(srcdir)/src/generic/treelist.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/treelist.cpp
 
 advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
@@ -36399,6 +36458,9 @@ xrcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(XRCDLL_ODEP)
 xrcdll_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
 
+xrcdll_xh_bannerwindow.o: $(srcdir)/src/xrc/xh_bannerwindow.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bannerwindow.cpp
+
 xrcdll_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp
 
@@ -36587,6 +36649,9 @@ xrcdll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCDLL_ODEP)
 
 xrclib_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
+
+xrclib_xh_bannerwindow.o: $(srcdir)/src/xrc/xh_bannerwindow.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bannerwindow.cpp
 
 xrclib_xh_bmp.o: $(srcdir)/src/xrc/xh_bmp.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bmp.cpp

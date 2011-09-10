@@ -73,7 +73,6 @@ END_EVENT_TABLE()
 //
 void wxNotebook::Init()
 {
-    m_imageList  = NULL;
     m_nTabSize   = 0;
 } // end of wxNotebook::Init
 
@@ -325,7 +324,7 @@ bool wxNotebook::SetPageImage (
 , int                               nImage
 )
 {
-    wxBitmap                        vBitmap = (wxBitmap)m_imageList->GetBitmap(nImage);
+    wxBitmap                        vBitmap = (wxBitmap)GetImageList()->GetBitmap(nImage);
 
     return (bool)::WinSendMsg( GetHWND()
                               ,BKM_SETTABBITMAP

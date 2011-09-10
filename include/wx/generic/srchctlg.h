@@ -191,6 +191,7 @@ public:
 
     // wxWindow overrides
     virtual bool SetFont(const wxFont& font);
+    virtual bool SetBackgroundColour(const wxColour& colour);
 
     // search control generic only
     void SetSearchBitmap( const wxBitmap& bitmap );
@@ -234,6 +235,9 @@ protected:
 
 private:
     friend class wxSearchButton;
+
+    // Implement pure virtual function inherited from wxCompositeWindow.
+    virtual wxWindowList GetCompositeWindowParts() const;
 
 #if wxUSE_MENUS
     void PopupSearchMenu();

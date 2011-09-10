@@ -77,17 +77,22 @@ public:
     bool HasModifiers() const;
 
     /**
-        Returns true if the Control key is pressed.
+        Returns true if the Control key or Apple/Command key under OS X is pressed.
 
         This function doesn't distinguish between right and left control keys.
-
-        In portable code you usually want to use CmdDown() to automatically
-        test for the more frequently used Command key (and not the rarely used
-        Control one) under Mac.
 
         Notice that GetModifiers() should usually be used instead of this one.
      */
     bool ControlDown() const;
+
+    /**
+        Returns true if the Control key (also under OS X).
+     
+        This function doesn't distinguish between right and left control keys.
+     
+        Notice that GetModifiers() should usually be used instead of this one.
+     */
+    bool RawControlDown() const;
 
     /**
         Returns true if the Shift key is pressed.
@@ -102,9 +107,7 @@ public:
         Returns true if the Meta/Windows/Apple key is pressed.
 
         This function tests the state of the key traditionally called Meta
-        under Unix systems, Windows keys under MSW and Apple, or Command, key
-        under Mac.
-
+        under Unix systems, Windows keys under MSW 
         Notice that GetModifiers() should usually be used instead of this one.
 
         @see CmdDown()
@@ -119,13 +122,8 @@ public:
     bool AltDown() const;
 
     /**
-        Returns true if the key used for command accelerators is pressed.
-
-        @c Cmd is a pseudo key which is Control for PC and Unix platforms but
-        Apple (or Command) key under Macs: it makes often sense to use it
-        instead of ControlDown() because @c Command key is used for the same
-        thing under Mac as @c Control elsewhere (even though @c Control still
-        exists, it is usually not used for the same purpose under Mac).
+        Returns true if the key used for command accelerators is pressed. Same as
+        ControlDown(). Deprecated.
 
         Notice that GetModifiers() should usually be used instead of this one.
      */
@@ -133,6 +131,7 @@ public:
 
     
     void SetControlDown(bool down);
+    void SetRawControlDown(bool down);
     void SetShiftDown(bool down);
     void SetAltDown(bool down);
     void SetMetaDown(bool down);

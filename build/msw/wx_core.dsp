@@ -5684,6 +5684,10 @@ SOURCE=..\..\include\wx\generic\wizard.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\include\wx\univ\anybutton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\univ\app.h
 # End Source File
 # Begin Source File
@@ -5981,6 +5985,10 @@ SOURCE=..\..\include\wx\aui\auibar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\aui\auibook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\bannerwindow.h
 # End Source File
 # Begin Source File
 
@@ -6444,6 +6452,10 @@ SOURCE=..\..\include\wx\infobar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\itemid.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\joystick.h
 # End Source File
 # Begin Source File
@@ -6796,6 +6808,10 @@ SOURCE=..\..\include\wx\splash.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\persist\splitter.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\splitter.h
 # End Source File
 # Begin Source File
@@ -6912,6 +6928,10 @@ SOURCE=..\..\include\wx\treectrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\treelist.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\uiaction.h
 # End Source File
 # Begin Source File
@@ -6960,6 +6980,10 @@ SOURCE=..\..\include\wx\windowid.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\withimages.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\wizard.h
 # End Source File
 # Begin Source File
@@ -6981,6 +7005,10 @@ SOURCE=..\..\include\wx\xrc\xh_all.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_animatctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_bannerwindow.h
 # End Source File
 # Begin Source File
 
