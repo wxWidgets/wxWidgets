@@ -47,6 +47,8 @@ public:
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() { wxGenericProgressDialog::Update(); }
 
+    virtual WXWidget GetHandle() const;
+
 private:
     // Performs common routines to Update() and Pulse(). Requires the
     // shared object to have been entered.

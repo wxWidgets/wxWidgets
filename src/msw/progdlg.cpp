@@ -518,6 +518,23 @@ void wxProgressDialog::Resume()
 #endif // wxHAS_MSW_TASKDIALOG
 }
 
+WXWidget wxProgressDialog::GetHandle() const 
+{ 
+#ifdef wxHAS_MSW_TASKDIALOG
+    if ( HasNativeTaskDialog() )
+    {
+        HWND hwnd;
+        {
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
+            m_sharedData->m_state = m_state;
+            hwnd = m_sharedData->m_hwnd;
+        }
+        return hwnd;
+    }
+#endif
+    return wxGenericProgressDialog::GetHandle();
+}
+
 int wxProgressDialog::GetValue() const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
