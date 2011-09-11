@@ -445,21 +445,21 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         // out of current range in this case as otherwise the really requested
         // position would be lost and never set. Wait until we get a real size
         // event with our non-initial size to do it.
-        if ( size == old_size )
-            return;
-
-        int delta = (int) ( (size - old_size)*m_sashGravity );
-        if ( delta != 0 )
+        if ( size != old_size )
         {
-            int newPosition = m_sashPosition + delta;
-            if( newPosition < m_minimumPaneSize )
-                newPosition = m_minimumPaneSize;
-            SetSashPositionAndNotify(newPosition);
-        }
+            int delta = (int) ( (size - old_size)*m_sashGravity );
+            if ( delta != 0 )
+            {
+                int newPosition = m_sashPosition + delta;
+                if( newPosition < m_minimumPaneSize )
+                    newPosition = m_minimumPaneSize;
+                SetSashPositionAndNotify(newPosition);
+            }
 
-        if ( m_sashPosition >= size - 5 )
-            SetSashPositionAndNotify(wxMax(10, size - 40));
-        m_lastSize = wxSize(w,h);
+            if ( m_sashPosition >= size - 5 )
+                SetSashPositionAndNotify(wxMax(10, size - 40));
+            m_lastSize = wxSize(w,h);
+        }
     }
 
     SizeWindows();
