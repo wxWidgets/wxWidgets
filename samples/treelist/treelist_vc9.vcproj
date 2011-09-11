@@ -18,7 +18,7 @@
 		/>
 	</Platforms>
 	<ToolFiles>
-
+		
 	</ToolFiles>
 	<Configurations>
 		<Configuration
@@ -767,7 +767,7 @@
 		</Configuration>
 	</Configurations>
 	<References>
-
+		
 	</References>
 	<Files>
 		<Filter
@@ -792,6 +792,7 @@
 		</Filter>
 	</Files>
 	<Globals>
-
+		
 	</Globals>
 </VisualStudioProject>
+

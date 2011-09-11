@@ -49,7 +49,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_richtext.lib  wxmsw29ud_media.lib  wxmsw29ud_xrc.lib  wxbase29ud_xml.lib  wxmsw29ud_adv.lib  wxmsw29ud_html.lib  wxmsw29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29ud_webview.lib  wxmsw29ud_richtext.lib  wxmsw29ud_media.lib  wxmsw29ud_xrc.lib  wxbase29ud_xml.lib  wxmsw29ud_adv.lib  wxmsw29ud_html.lib  wxmsw29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswud\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -114,7 +114,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_richtext.lib  wxmsw29u_media.lib  wxmsw29u_xrc.lib  wxbase29u_xml.lib  wxmsw29u_adv.lib  wxmsw29u_html.lib  wxmsw29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29u_webview.lib  wxmsw29u_richtext.lib  wxmsw29u_media.lib  wxmsw29u_xrc.lib  wxbase29u_xml.lib  wxmsw29u_adv.lib  wxmsw29u_html.lib  wxmsw29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswu\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -184,7 +184,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_richtext.lib  wxmswuniv29ud_media.lib  wxmswuniv29ud_xrc.lib  wxbase29ud_xml.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29ud_webview.lib  wxmswuniv29ud_richtext.lib  wxmswuniv29ud_media.lib  wxmswuniv29ud_xrc.lib  wxbase29ud_xml.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivud\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -249,7 +249,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_richtext.lib  wxmswuniv29u_media.lib  wxmswuniv29u_xrc.lib  wxbase29u_xml.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_html.lib  wxmswuniv29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29u_webview.lib  wxmswuniv29u_richtext.lib  wxmswuniv29u_media.lib  wxmswuniv29u_xrc.lib  wxbase29u_xml.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_html.lib  wxmswuniv29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivu\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -319,7 +319,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_richtext.lib  wxmsw29ud_media.lib  wxmsw29ud_xrc.lib  wxbase29ud_xml.lib  wxmsw29ud_adv.lib  wxmsw29ud_html.lib  wxmsw29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29ud_webview.lib  wxmsw29ud_richtext.lib  wxmsw29ud_media.lib  wxmsw29ud_xrc.lib  wxbase29ud_xml.lib  wxmsw29ud_adv.lib  wxmsw29ud_html.lib  wxmsw29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswuddll\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -384,7 +384,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_richtext.lib  wxmsw29u_media.lib  wxmsw29u_xrc.lib  wxbase29u_xml.lib  wxmsw29u_adv.lib  wxmsw29u_html.lib  wxmsw29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29u_webview.lib  wxmsw29u_richtext.lib  wxmsw29u_media.lib  wxmsw29u_xrc.lib  wxbase29u_xml.lib  wxmsw29u_adv.lib  wxmsw29u_html.lib  wxmsw29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswudll\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -454,7 +454,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_richtext.lib  wxmswuniv29ud_media.lib  wxmswuniv29ud_xrc.lib  wxbase29ud_xml.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29ud_webview.lib  wxmswuniv29ud_richtext.lib  wxmswuniv29ud_media.lib  wxmswuniv29ud_xrc.lib  wxbase29ud_xml.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_core.lib  wxbase29ud_net.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivuddll\test_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -519,7 +519,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_richtext.lib  wxmswuniv29u_media.lib  wxmswuniv29u_xrc.lib  wxbase29u_xml.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_html.lib  wxmswuniv29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29u_webview.lib  wxmswuniv29u_richtext.lib  wxmswuniv29u_media.lib  wxmswuniv29u_xrc.lib  wxbase29u_xml.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_html.lib  wxmswuniv29u_core.lib  wxbase29u_net.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivudll\test_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -843,6 +843,9 @@
 			</File>
 			<File
 				RelativePath=".\controls\virtlistctrltest.cpp">
+			</File>
+			<File
+				RelativePath=".\controls\webtest.cpp">
 			</File>
 			<File
 				RelativePath=".\controls\windowtest.cpp">

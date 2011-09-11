@@ -534,7 +534,7 @@
 		</Configuration>
 	</Configurations>
 	<References>
-
+		
 	</References>
 	<Files>
 		<Filter
@@ -555,6 +555,7 @@
 		</Filter>
 	</Files>
 	<Globals>
-
+		
 	</Globals>
 </VisualStudioProject>
+

@@ -7,16 +7,16 @@
 CFG=treelist - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE
+!MESSAGE 
 !MESSAGE NMAKE /f "treelist.mak".
-!MESSAGE
+!MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE
+!MESSAGE 
 !MESSAGE NMAKE /f "treelist.mak" CFG="treelist - Win32 Debug"
-!MESSAGE
+!MESSAGE 
 !MESSAGE Possible choices for configuration are:
-!MESSAGE
+!MESSAGE 
 !MESSAGE "treelist - Win32 DLL Universal Release" (based on "Win32 (x86) Application")
 !MESSAGE "treelist - Win32 DLL Universal Debug" (based on "Win32 (x86) Application")
 !MESSAGE "treelist - Win32 DLL Release" (based on "Win32 (x86) Application")
@@ -25,7 +25,7 @@ CFG=treelist - Win32 Debug
 !MESSAGE "treelist - Win32 Universal Debug" (based on "Win32 (x86) Application")
 !MESSAGE "treelist - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "treelist - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE
+!MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -261,3 +261,4 @@ SOURCE=.\treelist.cpp
 # End Group
 # End Target
 # End Project
+

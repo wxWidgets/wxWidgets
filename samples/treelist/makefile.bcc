@@ -65,10 +65,10 @@ LIBTYPE_SUFFIX = lib
 LIBTYPE_SUFFIX = dll
 !endif
 !if "$(MONOLITHIC)" == "0"
-EXTRALIBS_FOR_BASE =
+EXTRALIBS_FOR_BASE = 
 !endif
 !if "$(MONOLITHIC)" == "1"
-EXTRALIBS_FOR_BASE =
+EXTRALIBS_FOR_BASE =  
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG_2 = -Od
@@ -77,13 +77,13 @@ __OPTIMIZEFLAG_2 = -Od
 __OPTIMIZEFLAG_2 = -O2
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG_5 =
+__THREADSFLAG_5 = 
 !endif
 !if "$(USE_THREADS)" == "1"
 __THREADSFLAG_5 = mt
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG_6 =
+__THREADSFLAG_6 = 
 !endif
 !if "$(USE_THREADS)" == "1"
 __THREADSFLAG_6 = -tWM
@@ -92,13 +92,13 @@ __THREADSFLAG_6 = -tWM
 __RUNTIME_LIBS_7 = -tWR
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_7 =
+__RUNTIME_LIBS_7 = 
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_8 = i
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_8 =
+__RUNTIME_LIBS_8 = 
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -222,7 +222,7 @@ $(OBJS):
 
 all: $(OBJS)\treelist.exe
 
-clean:
+clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.csm del $(OBJS)\*.csm
@@ -243,3 +243,4 @@ $(OBJS)\treelist_sample.res: .\..\..\samples\sample.rc
 
 $(OBJS)\treelist_treelist.obj: .\treelist.cpp
 	$(CXX) -q -c -P -o$@ $(TREELIST_CXXFLAGS) .\treelist.cpp
+

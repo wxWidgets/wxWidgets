@@ -39,7 +39,7 @@ wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
 
-DESTDIR =
+DESTDIR = 
 WX_RELEASE = 2.9
 WX_VERSION = $(WX_RELEASE).3
 LIBDIRNAME = $(wx_top_builddir)/lib
@@ -66,7 +66,7 @@ TREELIST_OBJECTS =  \
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
-@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI =
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
 @COND_PLATFORM_MAC_0@__treelist___mac_setfilecmd = @true
 @COND_PLATFORM_MAC_1@__treelist___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL treelist$(EXEEXT)
@@ -136,13 +136,13 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 all: treelist$(EXEEXT) $(__treelist_bundle___depname)
 
-install:
+install: 
 
-uninstall:
+uninstall: 
 
 install-strip: install
 
-clean:
+clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f treelist$(EXEEXT)
@@ -153,7 +153,7 @@ distclean: clean
 
 treelist$(EXEEXT): $(TREELIST_OBJECTS) $(__treelist___win32rc)
 	$(CXX) -o $@ $(TREELIST_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
-
+	
 	$(__treelist___mac_setfilecmd)
 	$(__treelist___os2_emxbindcmd)
 
@@ -161,20 +161,20 @@ treelist$(EXEEXT): $(TREELIST_OBJECTS) $(__treelist___win32rc)
 @COND_PLATFORM_MACOSX_1@	mkdir -p treelist.app/Contents
 @COND_PLATFORM_MACOSX_1@	mkdir -p treelist.app/Contents/MacOS
 @COND_PLATFORM_MACOSX_1@	mkdir -p treelist.app/Contents/Resources
-@COND_PLATFORM_MACOSX_1@
-@COND_PLATFORM_MACOSX_1@
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/treelist/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >treelist.app/Contents/Info.plist
-@COND_PLATFORM_MACOSX_1@
-@COND_PLATFORM_MACOSX_1@
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >treelist.app/Contents/PkgInfo
-@COND_PLATFORM_MACOSX_1@
-@COND_PLATFORM_MACOSX_1@
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	ln -f treelist$(EXEEXT) treelist.app/Contents/MacOS/treelist
-@COND_PLATFORM_MACOSX_1@
-@COND_PLATFORM_MACOSX_1@
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns treelist.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@treelist_bundle: $(____treelist_BUNDLE_TGT_REF_DEP)

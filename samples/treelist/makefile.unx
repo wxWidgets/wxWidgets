@@ -10,19 +10,19 @@
 # These are configurable options:
 # -------------------------------------------------------------------------
 
-# C++ compiler
+# C++ compiler 
 CXX = `$(WX_CONFIG) --cxx`
 
-# Standard flags for C++
-CXXFLAGS ?=
+# Standard flags for C++ 
+CXXFLAGS ?= 
 
-# Standard preprocessor flags (common for CC and CXX)
-CPPFLAGS ?=
+# Standard preprocessor flags (common for CC and CXX) 
+CPPFLAGS ?= 
 
-# Standard linker flags
-LDFLAGS ?=
+# Standard linker flags 
+LDFLAGS ?= 
 
-# Location and arguments of wx-config script
+# Location and arguments of wx-config script 
 WX_CONFIG ?= wx-config
 
 # Port of the wx library to build against [gtk1,gtk2,msw,x11,motif,mgl,osx_cocoa,osx_carbon,dfb]
@@ -34,7 +34,7 @@ WX_SHARED ?= $(shell if test -z `$(WX_CONFIG) --query-linkage`; then echo 1; els
 # Compile Unicode build of wxWidgets? [0,1]
 WX_UNICODE ?= $(shell $(WX_CONFIG) --query-chartype | sed 's/unicode/1/;s/ansi/0/')
 
-# Version of the wx library to build against.
+# Version of the wx library to build against. 
 WX_VERSION ?= $(shell $(WX_CONFIG) --query-version | sed -e 's/\([0-9]*\)\.\([0-9]*\)/\1\2/')
 
 
@@ -75,16 +75,16 @@ endif
 
 all: test_for_selected_wxbuild treelist
 
-install:
+install: 
 
-uninstall:
+uninstall: 
 
-clean:
+clean: 
 	rm -f ./*.o
 	rm -f ./*.d
 	rm -f treelist
 
-test_for_selected_wxbuild:
+test_for_selected_wxbuild: 
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 treelist: $(TREELIST_OBJECTS)
