@@ -828,9 +828,7 @@ public:
 
         @onlyfor{wxosx}
     */
-    wxDEPRECATED_BUT_USED_INTERNALLY(
-        virtual void MacOpenFile(const wxString& fileName)
-    );
+    virtual void MacOpenFile(const wxString& fileName);
 
     /**
         Called in response of a "get-url" Apple event.

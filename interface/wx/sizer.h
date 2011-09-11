@@ -1225,6 +1225,8 @@ public:
     */
     void SetSpacer(const wxSize& size);
 
+    void SetUserData(wxObject* userData);
+
     /**
         Set the window to be tracked by this item.
         @deprecated @todo provide deprecation description

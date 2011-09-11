@@ -86,6 +86,39 @@ enum wxEllipsizeMode
 class wxControl : public wxWindow
 {
 public:
+
+    /**
+        Constructs a control.
+
+        @param parent
+            Pointer to a parent window.
+        @param id
+            Control identifier. If wxID_ANY, will automatically create an identifier.
+        @param pos
+            Control position. wxDefaultPosition indicates that wxWidgets
+            should generate a default position for the control.
+        @param size
+            Control size. wxDefaultSize indicates that wxWidgets should generate
+            a default size for the window. If no suitable size can  be found, the
+            window will be sized to 20x20 pixels so that the window is visible but
+            obviously not correctly sized.
+        @param style
+            Control style. For generic window styles, please see wxWindow.
+        @param name
+            Control name.
+    */
+   wxControl(wxWindow *parent, wxWindowID id,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize, long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxControlNameStr);
+             
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxControlNameStr);
+
     /**
         Simulates the effect of the user issuing a command to the item.
 

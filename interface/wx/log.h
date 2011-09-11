@@ -942,7 +942,7 @@ public:
 
         @since 2.9.1
      */
-    void LogRecord(wxLogLevel level, const wxString& msg, time_t timestamp);
+    void LogRecord(wxLogLevel level, const wxString& msg, const wxLogRecordInfo& info);
 
 protected:
     /**

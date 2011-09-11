@@ -135,7 +135,7 @@ public:
         context it returns a 2-element list (item, submenu).
         @endWxPerlOnly
     */
-    virtual wxMenuItem* FindItem(int id, wxMenu* menu = NULL) const;
+    virtual wxMenuItem* FindItem(int id, wxMenu** menu = NULL) const;
 
     /**
         Returns the index of the menu with the given @a title or @c wxNOT_FOUND if no

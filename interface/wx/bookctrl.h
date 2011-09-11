@@ -27,7 +27,7 @@
 
     @see @ref overview_bookctrl
 */
-class wxBookCtrlBase : public wxControl
+class wxBookCtrlBase : public wxControl, public wxWithImages
 {
 public:
     enum
@@ -71,32 +71,11 @@ public:
     */
     //@{
 
-    /**
-        Sets the image list for the page control and takes ownership of the list.
-
-        @see wxImageList, SetImageList()
-    */
-    void AssignImageList(wxImageList* imageList);
-
-    /**
-        Returns the associated image list.
-
-        @see wxImageList, SetImageList()
-    */
-    wxImageList* GetImageList() const;
 
     /**
         Returns the image index for the given page.
     */
     virtual int GetPageImage(size_t nPage) const = 0;
-
-    /**
-        Sets the image list for the page control.
-        It does not take ownership of the image list, you must delete it yourself.
-
-        @see wxImageList, AssignImageList()
-    */
-    virtual void SetImageList(wxImageList* imageList);
 
     /**
         Sets the image index for the given page. @a image is an index into

@@ -2410,7 +2410,7 @@ public:
 
         @see GetToolTip(), wxToolTip
     */
-    void SetToolTip(const wxString& tip);
+    void SetToolTip(const wxString& tipString);
 
     /**
         @overload
