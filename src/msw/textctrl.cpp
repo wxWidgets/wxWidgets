@@ -2107,9 +2107,17 @@ wxSize wxTextCtrl::DoGetBestSize() const
     }
     //else: for single line control everything is ok
 
-    // we have to add the adjustments for the control height only once, not
-    // once per line, so do it after multiplication above
-    hText += EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy) - cy;
+    // Text controls without border are special and have the same height as
+    // static labels (they also have the same appearance when they're disable
+    // and are often used as a sort of copyable to the clipboard label so it's
+    // important that they have the same height as the normal labels to not
+    // stand out).
+    if ( !HasFlag(wxBORDER_NONE) )
+    {
+        // we have to add the adjustments for the control height only once, not
+        // once per line, so do it after multiplication above
+        hText += EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy) - cy;
+    }
 
     return wxSize(wText, hText);
 }
