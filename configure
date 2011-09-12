@@ -49404,8 +49404,8 @@ if test "$wxUSE_GUI" = "yes"; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_WEBVIEW" = "yes" ; then
-        STD_GUI_LIBS="web $STD_GUI_LIBS"
-        BUILT_WX_LIBS="web $BUILT_WX_LIBS"
+        STD_GUI_LIBS="webview $STD_GUI_LIBS"
+        BUILT_WX_LIBS="webview $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_XRC" = "yes" ; then
         STD_GUI_LIBS="xrc $STD_GUI_LIBS"
