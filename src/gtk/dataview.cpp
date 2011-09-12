@@ -380,6 +380,7 @@ public:
             // Insert into m_nodes so that the order of nodes in m_nodes is the
             // same as the order of their corresponding IDs in m_children:
             const unsigned int count = m_nodes.GetCount();
+            bool inserted = false;
             for (unsigned i = 0; i < count; i++)
             {
                 wxGtkTreeModelNode *node = m_nodes[i];
@@ -387,9 +388,12 @@ public:
                 if ( (unsigned)posInChildren >= pos )
                 {
                     m_nodes.Insert(child, i);
+                    inserted = true;
                     break;
                 }
             }
+            if ( !inserted )
+                m_nodes.Add(child);
 
             m_children.Insert( id, pos );
         }
