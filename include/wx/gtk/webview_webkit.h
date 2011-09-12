@@ -12,7 +12,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
 #include "webkit/webkit.h"
 #include "wx/sharedptr.h"
@@ -154,6 +154,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 };
 
-#endif // wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
 #endif

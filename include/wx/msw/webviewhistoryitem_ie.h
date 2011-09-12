@@ -12,7 +12,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_IE && defined(__WXMSW__)
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {
@@ -26,6 +26,6 @@ private:
     wxString m_url, m_title;
 };
 
-#endif // wxUSE_WEBVIEW_IE && defined(__WXMSW__)
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)
 
 #endif // _WX_MSW_WEBVIEWHISTORYITEM_H_

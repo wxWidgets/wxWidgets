@@ -10,7 +10,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_WEBVIEW_WEBKIT
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT
 
 #include "wx/stockitem.h"
 #include "wx/gtk/webview_webkit.h"
@@ -930,4 +930,4 @@ wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 }
 
 
-#endif // wxHAVE_WEB_BACKEND_GTK_WEBKIT
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT

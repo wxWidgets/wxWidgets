@@ -12,7 +12,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
 #include "webkit/webkit.h"
 
@@ -31,6 +31,6 @@ private:
     WebKitWebHistoryItem* m_histItem;
 };
 
-#endif // wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
 #endif // _WX_GTK_WEBVIEWHISTORYITEM_H_

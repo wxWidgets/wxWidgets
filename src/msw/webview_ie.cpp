@@ -16,7 +16,7 @@
 
 #include "wx/msw/webview_ie.h"
 
-#if wxUSE_WEBVIEW_IE
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
 
 #include <olectl.h>
 #include <oleidl.h>
@@ -1134,4 +1134,4 @@ ULONG ClassFactory::Release(void)
 
 } 
 
-#endif
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE

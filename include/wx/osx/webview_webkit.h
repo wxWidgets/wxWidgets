@@ -15,8 +15,8 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
-                         ||  defined(__WXOSX_CARBON__))
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
+                                          ||  defined(__WXOSX_CARBON__))
 
 #include "wx/control.h"
 #include "wx/webview.h"
@@ -158,6 +158,6 @@ private:
     //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
 };
 
-#endif // wxUSE_WEBKIT
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT 
 
 #endif // _WX_WEBKIT_H_

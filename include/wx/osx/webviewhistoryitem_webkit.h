@@ -12,8 +12,8 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
-                         ||  defined(__WXOSX_CARBON__))
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
+                                          ||  defined(__WXOSX_CARBON__))
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {
@@ -30,6 +30,6 @@ private:
     struct objc_object *m_histItem;
 };
 
-#endif // wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX_MAC__)
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT 
 
 #endif // _WX_OSX_WEBVIEWHISTORYITEM_H_

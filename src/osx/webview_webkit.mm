@@ -14,8 +14,8 @@
 
 #include "wx/osx/webview_webkit.h"
 
-#if wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
-                         ||  defined(__WXOSX_CARBON__))
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
+                                          ||  defined(__WXOSX_CARBON__))
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -1315,4 +1315,4 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 @end
 
-#endif //wxUSE_WEBVIEW_WEBKIT
+#endif //wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT
