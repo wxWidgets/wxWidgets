@@ -8,10 +8,10 @@ PRODUCT_NAME = wx_osx_$(WXTOOLKIT)
 OTHER_CFLAGS = -Wall -Wundef -fno-strict-aliasing -fno-common -fvisibility=hidden 
 OTHER_CPLUSPLUSFLAGS = $(OTHER_CFLAGS) -fvisibility-inlines-hidden
 
-GCC_PREFIX_HEADER = $(WXROOT)/include/wx/wxprec.h
+GCC_PREFIX_HEADER = ../../include/wx/wxprec.h
 GCC_PRECOMPILE_PREFIX_HEADER = YES
-HEADER_SEARCH_PATHS = $(WXROOT)/src/tiff/libtiff
-USER_HEADER_SEARCH_PATHS = $(WXROOT)/include $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include $(WXROOT)/src/jpeg $(WXROOT)/src/png $(WXROOT)/src/regex $(WXROOT)/src/expat/lib $(WXROOT)/src/tiff/libtiff $(WXROOT)/src/stc/scintilla/src $(WXROOT)/src/stc/scintilla/include
+HEADER_SEARCH_PATHS = "$(WXROOT)/src/tiff/libtiff"
+USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include" "$(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include" "$(WXROOT)/src/jpeg" "$(WXROOT)/src/png" "$(WXROOT)/src/regex" "$(WXROOT)/src/expat/lib" "$(WXROOT)/src/tiff/libtiff" "$(WXROOT)/src/stc/scintilla/src" "$(WXROOT)/src/stc/scintilla/include"
 ALWAYS_SEARCH_USER_PATHS = NO
 GCC_PREPROCESSOR_DEFINITIONS = $(WX_PREPROCESSOR_DEFINITIONS) $(WXPLATFORM) __WX__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES MACOS_CLASSIC __WXMAC_XCODE__=1 SCI_LEXER WX_PRECOMP=1 wxUSE_UNICODE_UTF8=1
 GCC_PFE_FILE_C_DIALECTS = c++ objective-c++
