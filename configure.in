@@ -7386,7 +7386,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
        else
            AC_MSG_RESULT([no])
            AC_MSG_WARN([libwebkitgtk-1.0 not found; disabling webkit backend])
-           wxUSE_WEBVIEW_WEBKIT="no"
+           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
        fi
 
        AC_MSG_CHECKING(for webkitgtk includes)
@@ -7398,7 +7398,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
        else
            AC_MSG_RESULT([not found])
            AC_MSG_WARN([webkit includes not found; disabling webkit backend])
-           wxUSE_WEBVIEW_WEBKIT="no"
+           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
        fi
        dnl we also depend on libsoup
        AC_MSG_CHECKING(for libsoup includes)
@@ -7410,7 +7410,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
        else
            AC_MSG_RESULT([not found])
            AC_MSG_WARN([libsoup includes not found; disabling webkit backend])
-           wxUSE_WEBVIEW_WEBKIT="no"
+           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
        fi
    fi
 
@@ -7424,7 +7424,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                         ],
                         [
                            AC_MSG_WARN([WebKit headers not found; disabling wxWebView WebKit])
-                           wxUSE_WEBVIEW_WEBKIT=no
+                           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
                         ],
                         [
                            #include <Carbon/Carbon.h>
@@ -7434,7 +7434,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     elif test "$wxUSE_OLD_COCOA" = 1; then
         AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
     else
-        wxUSE_WEBVIEW_WEBKIT=no
+        AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
     fi
 fi
 

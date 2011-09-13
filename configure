@@ -48458,7 +48458,10 @@ echo "${ECHO_T}yes" >&6; }
 echo "${ECHO_T}no" >&6; }
            { echo "$as_me:$LINENO: WARNING: libwebkitgtk-1.0 not found; disabling webkit backend" >&5
 echo "$as_me: WARNING: libwebkitgtk-1.0 not found; disabling webkit backend" >&2;}
-           wxUSE_WEBVIEW_WEBKIT="no"
+           cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBVIEW_WEBKIT 0
+_ACEOF
+
        fi
 
        { echo "$as_me:$LINENO: checking for webkitgtk includes" >&5
@@ -48495,7 +48498,10 @@ echo "${ECHO_T}found in $ac_find_includes" >&6; }
 echo "${ECHO_T}not found" >&6; }
            { echo "$as_me:$LINENO: WARNING: webkit includes not found; disabling webkit backend" >&5
 echo "$as_me: WARNING: webkit includes not found; disabling webkit backend" >&2;}
-           wxUSE_WEBVIEW_WEBKIT="no"
+           cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBVIEW_WEBKIT 0
+_ACEOF
+
        fi
               { echo "$as_me:$LINENO: checking for libsoup includes" >&5
 echo $ECHO_N "checking for libsoup includes... $ECHO_C" >&6; }
@@ -48531,7 +48537,10 @@ echo "${ECHO_T}found in $ac_find_includes" >&6; }
 echo "${ECHO_T}not found" >&6; }
            { echo "$as_me:$LINENO: WARNING: libsoup includes not found; disabling webkit backend" >&5
 echo "$as_me: WARNING: libsoup includes not found; disabling webkit backend" >&2;}
-           wxUSE_WEBVIEW_WEBKIT="no"
+           cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBVIEW_WEBKIT 0
+_ACEOF
+
        fi
    fi
 
@@ -48597,7 +48606,10 @@ else
 
                            { echo "$as_me:$LINENO: WARNING: WebKit headers not found; disabling wxWebView WebKit" >&5
 echo "$as_me: WARNING: WebKit headers not found; disabling wxWebView WebKit" >&2;}
-                           wxUSE_WEBVIEW_WEBKIT=no
+                           cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBVIEW_WEBKIT 0
+_ACEOF
+
 
 fi
 
@@ -48609,7 +48621,10 @@ fi
 _ACEOF
 
     else
-        wxUSE_WEBVIEW_WEBKIT=no
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBVIEW_WEBKIT 0
+_ACEOF
+
     fi
 fi
 
