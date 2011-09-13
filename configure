@@ -48493,6 +48493,9 @@ echo "${ECHO_T}found in $ac_find_includes" >&6; }
        else
            { echo "$as_me:$LINENO: result: not found" >&5
 echo "${ECHO_T}not found" >&6; }
+           { echo "$as_me:$LINENO: WARNING: webkit includes not found; disabling webkit backend" >&5
+echo "$as_me: WARNING: webkit includes not found; disabling webkit backend" >&2;}
+           wxUSE_WEBVIEW_WEBKIT="no"
        fi
               { echo "$as_me:$LINENO: checking for libsoup includes" >&5
 echo $ECHO_N "checking for libsoup includes... $ECHO_C" >&6; }
@@ -48526,6 +48529,9 @@ echo "${ECHO_T}found in $ac_find_includes" >&6; }
        else
            { echo "$as_me:$LINENO: result: not found" >&5
 echo "${ECHO_T}not found" >&6; }
+           { echo "$as_me:$LINENO: WARNING: libsoup includes not found; disabling webkit backend" >&5
+echo "$as_me: WARNING: libsoup includes not found; disabling webkit backend" >&2;}
+           wxUSE_WEBVIEW_WEBKIT="no"
        fi
    fi
 

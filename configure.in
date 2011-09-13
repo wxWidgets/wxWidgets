@@ -7397,6 +7397,8 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
            CPPFLAGS="$ac_path_to_include $CPPFLAGS"
        else
            AC_MSG_RESULT([not found])
+           AC_MSG_WARN([webkit includes not found; disabling webkit backend])
+           wxUSE_WEBVIEW_WEBKIT="no"
        fi
        dnl we also depend on libsoup
        AC_MSG_CHECKING(for libsoup includes)
@@ -7407,6 +7409,8 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
            CPPFLAGS="$ac_path_to_include $CPPFLAGS"
        else
            AC_MSG_RESULT([not found])
+           AC_MSG_WARN([libsoup includes not found; disabling webkit backend])
+           wxUSE_WEBVIEW_WEBKIT="no"
        fi
    fi
 
