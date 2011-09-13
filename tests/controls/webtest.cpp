@@ -88,9 +88,9 @@ void WebTestCase::LoadUrl(int times)
     for(int i = 0; i < times; i++)
     {
         if(i % 2 == 1)
-            m_browser->LoadUrl("about:blank");
+            m_browser->LoadURL("about:blank");
         else
-            m_browser->LoadUrl("about:");
+            m_browser->LoadURL("about:");
         wxYield();
     }
 }
