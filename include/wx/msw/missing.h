@@ -563,14 +563,6 @@ typedef enum CommandStateChangeConstants {
 #endif
 
 // For Visual C++ 6 and MinGW32. Used by webview_ie.cpp
-
-#if defined (__MINGW32__) || (_MSC_VER < 1300)
-enum
-{
-    OLECMDID_OPTICAL_ZOOM = 63
-};
-#endif
-
 #ifndef INET_E_INVALID_CERTIFICATE
 #define INET_E_INVALID_CERTIFICATE 0x800C0019L
 #endif

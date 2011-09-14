@@ -235,7 +235,7 @@ void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
             wxFAIL;
     }
 
-    HRESULT result = m_webBrowser->ExecWB((OLECMDID)OLECMDID_OPTICAL_ZOOM,
+    HRESULT result = m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
                                           OLECMDEXECOPT_DODEFAULT,
                                           &zoomVariant,
                                           NULL);
@@ -248,7 +248,7 @@ wxWebViewZoom wxWebViewIE::GetIEOpticalZoom() const
     VariantInit (&zoomVariant);
     V_VT(&zoomVariant) = VT_I4;
 
-    HRESULT result = m_webBrowser->ExecWB((OLECMDID)OLECMDID_OPTICAL_ZOOM,
+    HRESULT result = m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
                                           OLECMDEXECOPT_DODEFAULT, NULL,
                                           &zoomVariant);
     wxASSERT(result == S_OK);
