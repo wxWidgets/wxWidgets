@@ -22,6 +22,10 @@
     #include "wx/wx.h"
 #endif
 
+#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_IE
+#error "A wxWebView backend is required by this sample"
+#endif
+
 #include "wx/artprov.h"
 #include "wx/notifmsg.h"
 #include "wx/settings.h"
