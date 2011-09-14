@@ -105,7 +105,7 @@ public:
     }
 
     // get the currently selected page or wxNOT_FOUND if none
-    int GetSelection() const { return m_selection; }
+    virtual int GetSelection() const { return m_selection; }
 
     // set/get the title of a page
     virtual bool SetPageText(size_t n, const wxString& strText) = 0;
