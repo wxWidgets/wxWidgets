@@ -7373,7 +7373,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
 
    if test "$wxUSE_WEBVIEW_WEBKIT" = "yes" -a "$wxUSE_GTK" = 1; then
-       AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+
        AC_MSG_CHECKING([for webkitgtk libraries])
        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],webkitgtk-1.0)
        if test "$ac_find_libraries" != "" ; then
@@ -7383,34 +7383,35 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
            fi
            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwebkitgtk-1.0"
            AC_MSG_RESULT([yes])
+           
+           AC_MSG_CHECKING(for webkitgtk includes)
+           WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /usr/include/webkit-1.0], webkit/webkit.h)
+           if test "$ac_find_includes" != "" ; then
+               AC_MSG_RESULT(found in $ac_find_includes)
+               WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
+               CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+               
+               dnl we also depend on libsoup
+               AC_MSG_CHECKING(for libsoup includes)
+               WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /usr/include/libsoup-2.4], libsoup/soup.h)
+               if test "$ac_find_includes" != "" ; then
+                   AC_MSG_RESULT(found in $ac_find_includes)
+                   WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
+                   CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+                   
+                   #if we have all the requirements then enable this backend
+                   AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+               else
+                   AC_MSG_RESULT([not found])
+                   AC_MSG_WARN([libsoup headers not found; disabling webkit backend])
+               fi
+           else
+               AC_MSG_RESULT([not found])
+               AC_MSG_WARN([webkit headers not found; disabling webkit backend])
+           fi
        else
            AC_MSG_RESULT([no])
-           AC_MSG_WARN([libwebkitgtk-1.0 not found; disabling webkit backend])
-           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
-       fi
-
-       AC_MSG_CHECKING(for webkitgtk includes)
-       WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /usr/include/webkit-1.0], webkit/webkit.h)
-       if test "$ac_find_includes" != "" ; then
-           AC_MSG_RESULT(found in $ac_find_includes)
-           WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
-           CPPFLAGS="$ac_path_to_include $CPPFLAGS"
-       else
-           AC_MSG_RESULT([not found])
-           AC_MSG_WARN([webkit includes not found; disabling webkit backend])
-           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
-       fi
-       dnl we also depend on libsoup
-       AC_MSG_CHECKING(for libsoup includes)
-       WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /usr/include/libsoup-2.4], libsoup/soup.h)
-       if test "$ac_find_includes" != "" ; then
-           AC_MSG_RESULT(found in $ac_find_includes)
-           WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
-           CPPFLAGS="$ac_path_to_include $CPPFLAGS"
-       else
-           AC_MSG_RESULT([not found])
-           AC_MSG_WARN([libsoup includes not found; disabling webkit backend])
-           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
+           AC_MSG_WARN([webkit libraries not found; disabling webkit backend])
        fi
    fi
 
@@ -7423,18 +7424,13 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                            WEBKIT_LINK="-framework WebKit"
                         ],
                         [
-                           AC_MSG_WARN([WebKit headers not found; disabling wxWebView WebKit])
-                           AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
+                           AC_MSG_WARN([webkit headers not found; disabling webkit backend])
                         ],
                         [
                            #include <Carbon/Carbon.h>
                            #include <WebKit/WebKit.h>
                         ])
         CPPFLAGS="$old_CPPFLAGS"
-    elif test "$wxUSE_OLD_COCOA" = 1; then
-        AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
-    else
-        AC_DEFINE(wxUSE_WEBVIEW_WEBKIT, 0)
     fi
 fi
 
