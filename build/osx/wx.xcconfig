@@ -8,7 +8,7 @@ PRODUCT_NAME = wx_osx_$(WXTOOLKIT)
 OTHER_CFLAGS = -Wall -Wundef -fno-strict-aliasing -fno-common -fvisibility=hidden 
 OTHER_CPLUSPLUSFLAGS = $(OTHER_CFLAGS) -fvisibility-inlines-hidden
 
-GCC_PREFIX_HEADER = ../../include/wx/wxprec.h
+GCC_PREFIX_HEADER = $(WXROOT)/include/wx/wxprec.h
 GCC_PRECOMPILE_PREFIX_HEADER = YES
 HEADER_SEARCH_PATHS = "$(WXROOT)/src/tiff/libtiff"
 USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include" "$(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include" "$(WXROOT)/src/jpeg" "$(WXROOT)/src/png" "$(WXROOT)/src/regex" "$(WXROOT)/src/expat/lib" "$(WXROOT)/src/tiff/libtiff" "$(WXROOT)/src/stc/scintilla/src" "$(WXROOT)/src/stc/scintilla/include"
