@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 12 September 2011                                                   *
+# Date : 15 September 2011                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -191,8 +191,6 @@ gtk2 : [.include.wx]setup.h
 	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	set default [-.thread]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.gtk]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
@@ -228,6 +226,8 @@ gtk2 : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.richedit]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
+	set default [-.thread]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [--]
 	@gnome$root:[000000]glib
 
