@@ -166,6 +166,13 @@ public:
     */
     void Deselect(int n);
 
+    virtual void SetSelection(int n);
+    
+    virtual int GetSelection() const;
+    
+    virtual bool SetStringSelection(const wxString& s, bool select);
+    virtual bool SetStringSelection(const wxString& s);
+
     /**
         Fill an array of ints with the positions of the currently selected items.
 
@@ -291,5 +298,17 @@ public:
             The string that should be visible.
     */
     void SetFirstItem(const wxString& string);
+    
+    virtual void EnsureVisible(int n);
+    
+    virtual bool IsSorted() const;
+    
+    // implement base class pure virtuals
+    virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL);
+    
+    virtual unsigned int GetCount() const;
+    virtual wxString GetString(unsigned int n) const;
+    virtual void SetString(unsigned int n, const wxString& s);
+    virtual int FindString(const wxString& s, bool bCase = false) const;
 };
 

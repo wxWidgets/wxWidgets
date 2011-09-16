@@ -469,6 +469,10 @@ enum wxBorder
     (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION|wxICON_NONE)
 
 
+/*  symbolic constant used by all Find()-like functions returning positive */
+/*  integer on success as failure indicator */
+#define wxNOT_FOUND       (-1)
+
 /**
     Background styles.
 
@@ -517,7 +521,14 @@ enum wxBackgroundStyle
         EVT_ERASE_BACKGROUND event will not be generated at all for windows
         with this style.
      */
-    wxBG_STYLE_PAINT
+    wxBG_STYLE_PAINT,
+    
+    /* this style is deprecated and doesn't do anything, don't use */
+    wxBG_STYLE_COLOUR,
+
+    /* this is a Mac-only style, don't use in portable code */
+    wxBG_STYLE_TRANSPARENT,
+
 };
 
 

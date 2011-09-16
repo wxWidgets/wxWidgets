@@ -36,9 +36,10 @@ enum wxFontFamily
     /// See also wxFont::IsFixedWidth() for an easy way to test for monospace property.
     wxFONTFAMILY_TELETYPE = wxTELETYPE,
 
+    wxFONTFAMILY_MAX,
     /// Invalid font family value, returned by wxFont::GetFamily() when the
     /// font is invalid for example.
-    wxFONTFAMILY_UNKNOWN
+    wxFONTFAMILY_UNKNOWN = wxFONTFAMILY_MAX
 };
 
 /**

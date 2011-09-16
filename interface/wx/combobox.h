@@ -305,5 +305,16 @@ public:
         @since 2.9.1
     */
     virtual void Dismiss();
+    
+    virtual int GetSelection() const;
+    virtual void GetSelection(long *from, long *to) const;
+    virtual void SetSelection(int n);
+    virtual void SetSelection(long from, long to);
+    virtual int FindString(const wxString& s, bool bCase = false) const;
+    virtual wxString GetString(unsigned int n) const;
+    virtual wxString GetStringSelection() const;
+    virtual void SetString(unsigned int n, const wxString& s);
+
+    virtual unsigned int GetCount() const;
 };
 

@@ -109,6 +109,25 @@ public:
                    const wxString& name = "listBox");
     //@}
 
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int nStrings = 0,
+                const wxString choices[] = NULL,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxListBoxNameStr);
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxListBoxNameStr);
+
     /**
         Destructor, destroying the list box.
     */
@@ -132,5 +151,6 @@ public:
             Index of item whose check status is to be returned.
     */
     bool IsChecked(unsigned int item) const;
+    
 };
 

@@ -442,7 +442,7 @@ public:
 
         @since 2.9.0
      */
-    virtual void SetHint(const wxString& hint);
+    virtual bool SetHint(const wxString& hint);
 
     /**
         Returns the current hint string.

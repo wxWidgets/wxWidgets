@@ -27,6 +27,16 @@
 class wxFileConfig : public wxConfigBase
 {
 public:
+
+    // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE or
+    // wxCONFIG_USE_GLOBAL_FILE to say which files should be used.
+    wxFileConfig(const wxString& appName = wxEmptyString,
+               const wxString& vendorName = wxEmptyString,
+               const wxString& localFilename = wxEmptyString,
+               const wxString& globalFilename = wxEmptyString,
+               long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE,
+               const wxMBConv& conv = wxConvAuto());
+
     /**
         Read the config data from the specified stream instead of the associated file,
         as usual.
@@ -57,6 +67,9 @@ public:
     */
     static wxFileName GetLocalFile(const wxString& basename, int style = 0);
 
+    static wxString GetGlobalFileName(const wxString& szFile);
+    static wxString GetLocalFileName(const wxString& szFile, int style = 0);
+
     /**
         Saves all config data to the given stream, returns @true if data was saved
         successfully or @false on error.
@@ -81,5 +94,29 @@ public:
         @see wxCHANGE_UMASK()
     */
     void SetUmask(int mode);
+    
+  // implement inherited pure virtual functions
+  virtual void SetPath(const wxString& strPath);
+  virtual const wxString& GetPath() const;
+
+  virtual bool GetFirstGroup(wxString& str, long& lIndex) const;
+  virtual bool GetNextGroup (wxString& str, long& lIndex) const;
+  virtual bool GetFirstEntry(wxString& str, long& lIndex) const;
+  virtual bool GetNextEntry (wxString& str, long& lIndex) const;
+
+  virtual size_t GetNumberOfEntries(bool bRecursive = false) const;
+  virtual size_t GetNumberOfGroups(bool bRecursive = false) const;
+
+  virtual bool HasGroup(const wxString& strName) const;
+  virtual bool HasEntry(const wxString& strName) const;
+
+  virtual bool Flush(bool bCurrentOnly = false);
+
+  virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
+  virtual bool RenameGroup(const wxString& oldName, const wxString& newName);
+
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true);
+  virtual bool DeleteGroup(const wxString& szKey);
+  virtual bool DeleteAll();
 };
 

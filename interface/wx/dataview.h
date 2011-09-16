@@ -631,6 +631,36 @@ public:
 };
 
 
+// ----------------------------------------------------------------------------
+// wxDataViewCtrl flags
+// ----------------------------------------------------------------------------
+
+// size of a wxDataViewRenderer without contents:
+#define wxDVC_DEFAULT_RENDERER_SIZE     20
+
+// the default width of new (text) columns:
+#define wxDVC_DEFAULT_WIDTH             80
+
+// the default width of new toggle columns:
+#define wxDVC_TOGGLE_DEFAULT_WIDTH      30
+
+// the default minimal width of the columns:
+#define wxDVC_DEFAULT_MINWIDTH          30
+
+// The default alignment of wxDataViewRenderers is to take
+// the alignment from the column it owns.
+#define wxDVR_DEFAULT_ALIGNMENT         -1
+
+#define wxDV_SINGLE                  0x0000     // for convenience
+#define wxDV_MULTIPLE                0x0001     // can select multiple items
+
+#define wxDV_NO_HEADER               0x0002     // column titles not visible
+#define wxDV_HORIZ_RULES             0x0004     // light horizontal rules between rows
+#define wxDV_VERT_RULES              0x0008     // light vertical rules between columns
+
+#define wxDV_ROW_LINES               0x0010     // alternating colour in rows
+#define wxDV_VARIABLE_LINE_HEIGHT    0x0020     // variable line height
+
 
 /**
     @class wxDataViewCtrl
