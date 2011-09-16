@@ -2608,6 +2608,10 @@ public:
         Returns the integer identifier corresponding to a listbox, choice or
         radiobox selection (only if the event was a selection, not a deselection),
         or a boolean value representing the value of a checkbox.
+
+        For a menu item, this method returns -1 if the item is not checkable or
+        a boolean value (true or false) for checkable items indicating the new
+        state of the item.
     */
     int GetInt() const;
 

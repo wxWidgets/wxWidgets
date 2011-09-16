@@ -271,6 +271,10 @@ bool wxFrameBase::ProcessCommand(wxMenuItem *item)
         // use the new value
         commandEvent.SetInt(item->IsChecked());
     }
+    else // Uncheckable item.
+    {
+        commandEvent.SetInt(-1);
+    }
 
     return HandleWindowEvent(commandEvent);
 }
