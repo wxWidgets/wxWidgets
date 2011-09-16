@@ -960,7 +960,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
         // Also notice that we must pass unsigned id_ and not sign-extended id
         // to ::GetMenuState() as this is what it expects.
         UINT menuState = ::GetMenuState(GetHmenu(), id_, MF_BYCOMMAND);
-        SendEvent(id, menuState & MF_CHECKED);
+        SendEvent(id, menuState & MF_CHECKED ? 1 : 0);
     }
 
     return true;
