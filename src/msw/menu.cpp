@@ -956,7 +956,10 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
 
         // get the status of the menu item: note that it has been just changed
         // by Toggle() above so here we already get the new state of the item
-        UINT menuState = ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND);
+        //
+        // Also notice that we must pass unsigned id_ and not sign-extended id
+        // to ::GetMenuState() as this is what it expects.
+        UINT menuState = ::GetMenuState(GetHmenu(), id_, MF_BYCOMMAND);
         SendEvent(id, menuState & MF_CHECKED);
     }
 
