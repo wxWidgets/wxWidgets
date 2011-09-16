@@ -1157,6 +1157,14 @@
 #   endif
 #endif /* !defined(wxUSE_VALIDATORS) */
 
+#ifndef wxUSE_WEBVIEW
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_WEBVIEW must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_WEBVIEW 0
+#   endif
+#endif /* !defined(wxUSE_WEBVIEW) */
+
 #ifndef wxUSE_WXHTML_HELP
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WXHTML_HELP must be defined, please read comment near the top of this file."
