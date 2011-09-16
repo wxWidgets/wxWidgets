@@ -279,7 +279,7 @@ protected:
     wxString GetMSWFaceName() const
     {
         ScreenHDC hdc;
-        SelectInHDC selectFont(hdc, m_hFont);
+        SelectInHDC selectFont(hdc, (HFONT)GetHFONT());
 
         UINT otmSize = GetOutlineTextMetrics(hdc, 0, NULL);
         if ( !otmSize )
