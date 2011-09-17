@@ -474,9 +474,9 @@ wxValidator* wxIntProperty::DoGetValidator() const
 #define wxPG_UINT_TEMPLATE_MAX 8
 
 static const wxChar* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
-    wxT("%x"),wxT("0x%x"),wxT("$%x"),
-    wxT("%X"),wxT("0x%X"),wxT("$%X"),
-    wxT("%u"),wxT("%o")
+    wxT("%lx"),wxT("0x%lx"),wxT("$%lx"),
+    wxT("%lX"),wxT("0x%lX"),wxT("$%lX"),
+    wxT("%lu"),wxT("%lo")
 };
 
 static const char* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
