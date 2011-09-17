@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TREELISTCTRL
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
 #endif // WX_PRECOMP
@@ -1563,3 +1565,5 @@ wxDEFINE_TREELIST_EVENT(ITEM_ACTIVATED);
 wxDEFINE_TREELIST_EVENT(ITEM_CONTEXT_MENU);
 
 #undef wxDEFINE_TREELIST_EVENT
+
+#endif // wxUSE_TREELISTCTRL
