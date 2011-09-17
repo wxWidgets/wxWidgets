@@ -29,7 +29,7 @@
            Allows multiple files and folders to be selected.
     @endStyleTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{ctrl}
     @appearance{genericdirctrl.png}
 */
