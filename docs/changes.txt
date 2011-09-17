@@ -481,6 +481,7 @@ OSX:
 GTK:
 
 - Generate events for two auxiliary mouse buttons in wxGTK (Marcin Wojdyr).
+- Fix conflict between wxDIALOG_NO_PARENT and wxICON_EXCLAMATION (David Hart).
 
 MSW:
 

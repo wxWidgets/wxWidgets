@@ -26,7 +26,7 @@ class wxTextSizerWrapper;
 
 // Also see the bit summary table in wx/toplevel.h.
 
-#define wxDIALOG_NO_PARENT      0x0100  // Don't make owned by apps top window
+#define wxDIALOG_NO_PARENT      0x00000020  // Don't make owned by apps top window
 
 #ifdef __WXWINCE__
 #define wxDEFAULT_DIALOG_STYLE  (wxCAPTION | wxMAXIMIZE | wxCLOSE_BOX | wxNO_BORDER)
