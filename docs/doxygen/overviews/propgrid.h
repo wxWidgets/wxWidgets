@@ -145,9 +145,9 @@ argument, using which you can refer to properties either by their pointer
 
 @code
     // Add a file selector property.
-    wxPGPropety* prop = pg->Append( new wxFileProperty("FileProperty",
-                                    wxPG_LABEL,
-                                    wxEmptyString) );
+    wxPGProperty* prop = pg->Append( new wxFileProperty("FileProperty",
+                                     wxPG_LABEL,
+                                     wxEmptyString) );
 
     // Valid: Set wild card by name
     pg->SetPropertyAttribute( "FileProperty",
@@ -578,7 +578,7 @@ iterator is limited to forward iteration.
 
     wxPGVIterator it;
 
-    for ( it = manager->GetVIterator();
+    for ( it = manager->GetVIterator(wxPG_ITERATE_ALL);
           !it.AtEnd();
           it.Next() )
     {
