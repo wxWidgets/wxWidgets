@@ -74,6 +74,55 @@ enum wxImagePNGType
     wxPNG_TYPE_PALETTE = 4      ///< Palette encoding.
 };
 
+
+/**
+   Image option names.
+*/
+#define wxIMAGE_OPTION_QUALITY                          wxString(wxT("quality"))
+#define wxIMAGE_OPTION_FILENAME                         wxString(wxT("FileName"))
+#define wxIMAGE_OPTION_RESOLUTION                       wxString(wxT("Resolution"))
+#define wxIMAGE_OPTION_RESOLUTIONX                      wxString(wxT("ResolutionX"))
+#define wxIMAGE_OPTION_RESOLUTIONY                      wxString(wxT("ResolutionY"))
+#define wxIMAGE_OPTION_RESOLUTIONUNIT                   wxString(wxT("ResolutionUnit"))
+#define wxIMAGE_OPTION_MAX_WIDTH                        wxString(wxT("MaxWidth"))
+#define wxIMAGE_OPTION_MAX_HEIGHT                       wxString(wxT("MaxHeight"))
+
+#define wxIMAGE_OPTION_BMP_FORMAT                       wxString(wxT("wxBMP_FORMAT"))
+#define wxIMAGE_OPTION_CUR_HOTSPOT_X                    wxString(wxT("HotSpotX"))
+#define wxIMAGE_OPTION_CUR_HOTSPOT_Y                    wxString(wxT("HotSpotY"))
+
+#define wxIMAGE_OPTION_GIF_COMMENT                      wxString(wxT("GifComment"))
+
+#define wxIMAGE_OPTION_PNG_FORMAT                       wxString(wxT("PngFormat"))
+#define wxIMAGE_OPTION_PNG_BITDEPTH                     wxString(wxT("PngBitDepth"))
+#define wxIMAGE_OPTION_PNG_FILTER                       wxString(wxT("PngF"))
+#define wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL            wxString(wxT("PngZL"))
+#define wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL        wxString(wxT("PngZM"))
+#define wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY         wxString(wxT("PngZS"))
+#define wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE      wxString(wxT("PngZB"))
+
+#define wxIMAGE_OPTION_TIFF_BITSPERSAMPLE               wxString(wxT("BitsPerSample"))
+#define wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL             wxString(wxT("SamplesPerPixel"))
+#define wxIMAGE_OPTION_TIFF_COMPRESSION                 wxString(wxT("Compression"))
+#define wxIMAGE_OPTION_TIFF_PHOTOMETRIC                 wxString(wxT("Photometric"))
+#define wxIMAGE_OPTION_TIFF_IMAGEDESCRIPTOR             wxString(wxT("ImageDescriptor"))
+
+
+enum
+{
+    wxBMP_24BPP        = 24, // default, do not need to set
+    //wxBMP_16BPP      = 16, // wxQuantize can only do 236 colors?
+    wxBMP_8BPP         =  8, // 8bpp, quantized colors
+    wxBMP_8BPP_GREY    =  9, // 8bpp, rgb averaged to greys
+    wxBMP_8BPP_GRAY    =  wxBMP_8BPP_GREY,
+    wxBMP_8BPP_RED     = 10, // 8bpp, red used as greyscale
+    wxBMP_8BPP_PALETTE = 11, // 8bpp, use the wxImage's palette
+    wxBMP_4BPP         =  4, // 4bpp, quantized colors
+    wxBMP_1BPP         =  1, // 1bpp, quantized "colors"
+    wxBMP_1BPP_BW      =  2  // 1bpp, black & white from red
+};
+
+
 /**
     @class wxImageHandler
 

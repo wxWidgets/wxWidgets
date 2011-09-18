@@ -6,6 +6,28 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+ * wxCheckBox style flags
+ * (Using wxCHK_* because wxCB_* is used by wxComboBox).
+ * Determine whether to use a 3-state or 2-state
+ * checkbox. 3-state enables to differentiate
+ * between 'unchecked', 'checked' and 'undetermined'.
+ *
+ * In addition to the styles here it is also possible to specify just 0 which
+ * is treated the same as wxCHK_2STATE for compatibility (but using explicit
+ * flag is preferred).
+ */
+#define wxCHK_2STATE           0x4000
+#define wxCHK_3STATE           0x1000
+
+/*
+ * If this style is set the user can set the checkbox to the
+ * undetermined state. If not set the undetermined set can only
+ * be set programmatically.
+ * This style can only be used with 3 state checkboxes.
+ */
+#define wxCHK_ALLOW_3RD_STATE_FOR_USER 0x2000
+
 /**
     The possible states of a 3-state wxCheckBox (Compatible with the 2-state
     wxCheckBox).
@@ -106,7 +128,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& = wxCheckBoxNameStr);
+                const wxString& name = wxCheckBoxNameStr);
 
     /**
         Gets the state of a 2-state checkbox.

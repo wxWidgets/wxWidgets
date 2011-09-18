@@ -112,7 +112,12 @@ public:
              const wxSize& size = wxDefaultSize, long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxControlNameStr);
-             
+
+    /**
+       Default constructor to allow 2-phase creation.
+    */
+    wxControl();
+    
     bool Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,

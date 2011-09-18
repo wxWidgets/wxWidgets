@@ -6,6 +6,19 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// Assumes the buffer bitmap covers the entire scrolled window,
+// and prepares the window DC accordingly
+#define wxBUFFER_VIRTUAL_AREA       0x01
+
+// Assumes the buffer bitmap only covers the client area;
+// does not prepare the window DC
+#define wxBUFFER_CLIENT_AREA        0x02
+
+// Set when not using specific buffer bitmap. Note that this
+// is private style and not returned by GetStyle.
+#define wxBUFFER_USES_SHARED_BUFFER 0x04
+
+
 /**
     @class wxBufferedDC
 
@@ -115,7 +128,7 @@ public:
     This wxDC derivative can be used inside of an @c EVT_PAINT() event handler
     to achieve double-buffered drawing. Just use this class instead of
     wxPaintDC and make sure wxWindow::SetBackgroundStyle() is called with
-    wxBG_STYLE_CUSTOM somewhere in the class initialization code, and that's
+    wxBG_STYLE_PAINT somewhere in the class initialization code, and that's
     all you have to do to (mostly) avoid flicker.
 
     The difference between wxBufferedPaintDC and this class is that this class
@@ -148,7 +161,7 @@ public:
     This is a subclass of wxBufferedDC which can be used inside of an
     @c EVT_PAINT() event handler to achieve double-buffered drawing. Just use
     this class instead of wxPaintDC and make sure
-    wxWindow::SetBackgroundStyle() is called with wxBG_STYLE_CUSTOM somewhere
+    wxWindow::SetBackgroundStyle() is called with wxBG_STYLE_PAINT somewhere
     in the class initialization code, and that's all you have to do to (mostly)
     avoid flicker. The only thing to watch out for is that if you are using
     this class together with wxScrolled, you probably do @b not want to call
