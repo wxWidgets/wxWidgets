@@ -7150,7 +7150,7 @@ if test "$wxUSE_TREECTRL" = "yes"; then
     fi
 fi
 
-if test "$wxUSE_TREECTRL" = "yes"; then
+if test "$wxUSE_TREELISTCTRL" = "yes"; then
     AC_DEFINE(wxUSE_TREELISTCTRL)
     USES_CONTROLS=1
 fi

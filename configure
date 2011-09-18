@@ -48026,7 +48026,7 @@ echo "$as_me: WARNING: wxTreeCtrl requires wxImageList and won't be compiled wit
     fi
 fi
 
-if test "$wxUSE_TREECTRL" = "yes"; then
+if test "$wxUSE_TREELISTCTRL" = "yes"; then
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_TREELISTCTRL 1
 _ACEOF
