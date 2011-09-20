@@ -69,4 +69,40 @@
     </steps>
 </build>
 
+<!-- These last three are ravnsgaard's job's moved here while it is down -->
+<build>
+    <name>Linux i386 wxGTK stable STL</name>
+    <builddir>brandt32_wxgtk_stable</builddir>
+    <scheduler>stable_quick</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--enable-stl"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux i386 wxGTK trunk no gui</name>
+    <builddir>brandt32_wxgtk_nogui</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-gui --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux i386 wxGTK trunk no features</name>
+    <builddir>brandt32_wxgtk_nofeatures</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-all-features --enable-debug"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
 </bot>

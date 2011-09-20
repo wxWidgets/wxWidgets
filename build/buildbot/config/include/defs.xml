@@ -27,6 +27,18 @@
 <xsl:template name="SNAPSHOT_URL">http://biolpc22.york.ac.uk/pub</xsl:template>
 
 <!--
+    disable - comment out a section.
+
+    Usage: <disable>
+                e.g. <build> ... etc.
+           </disable>
+
+    XML comments can't contain a double hyphen which tends to be used in
+    configure commands, so <disable> can be used instead. 
+-->
+<xsl:template name="disable"/>
+
+<!--
     checkout - build step for source checkout.
 
     Usage: as <svn> with defaults for <baseURL> and <defaultBranch>
