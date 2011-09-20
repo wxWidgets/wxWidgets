@@ -83,6 +83,30 @@ static wxDataViewModel* g_model;
 static int g_column = -2;
 static bool g_asending = true;
 
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Return the expander column or, if it is not set, the first column and also
+// set it as the expander one for the future.
+wxDataViewColumn* GetExpanderColumnOrFirstOne(wxDataViewCtrl* dataview)
+{
+    wxDataViewColumn* expander = dataview->GetExpanderColumn();
+    if (!expander)
+    {
+        // TODO-RTL: last column for RTL support
+        expander = dataview->GetColumnAt( 0 );
+        dataview->SetExpanderColumn(expander);
+    }
+
+    return expander;
+}
+
+} // anonymous namespace
+
 //-----------------------------------------------------------------------------
 // wxDataViewColumn
 //-----------------------------------------------------------------------------
@@ -1627,14 +1651,8 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
 
     wxDataViewModel *model = m_owner->GetModel();
 
-    wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
-    if (!expander)
-    {
-        // TODO-RTL: last column for RTL support
-        expander = GetOwner()->GetColumnAt( 0 );
-        GetOwner()->SetExpanderColumn(expander);
-    }
-
+    wxDataViewColumn * const
+        expander = GetExpanderColumnOrFirstOne(GetOwner());
 
     int x = 0;
     for (col = 0; col < cols; col++)
@@ -1818,13 +1836,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 #endif // wxUSE_DRAG_AND_DROP
 
-    wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
-    if (!expander)
-    {
-        // TODO-RTL: last column for RTL support
-        expander = GetOwner()->GetColumnAt( 0 );
-        GetOwner()->SetExpanderColumn(expander);
-    }
+    wxDataViewColumn * const
+        expander = GetExpanderColumnOrFirstOne(GetOwner());
 
     // redraw all cells for all rows which must be repainted and all columns
     wxRect cell_rect;
@@ -1854,7 +1867,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                 // Skip all columns of "container" rows except the expander
                 // column itself unless HasContainerColumns() overrides this.
-                if ( col != GetOwner()->GetExpanderColumn() &&
+                if ( col != expander &&
                         model->IsContainer(dataitem) &&
                             !model->HasContainerColumns(dataitem) )
                     continue;
@@ -3086,7 +3099,8 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
     // to get the correct x position where the actual text is
     int indent = 0;
     int row = GetRowByItem(item);
-    if (!IsList() && (column == 0 || GetOwner()->GetExpanderColumn() == column) )
+    if (!IsList() &&
+            (column == 0 || GetExpanderColumnOrFirstOne(GetOwner()) == column) )
     {
         wxDataViewTreeNode* node = GetTreeNodeByRow(row);
         indent = GetOwner()->GetIndent() * node->GetIndentLevel();
@@ -3541,12 +3555,15 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
+    wxDataViewColumn* const
+        expander = GetExpanderColumnOrFirstOne(GetOwner());
+
     // Test whether the mouse is hovering over the expander (a.k.a tree "+"
     // button) and also determine the offset of the real cell start, skipping
     // the indentation and the expander itself.
     bool hoverOverExpander = false;
     int itemOffset = 0;
-    if ((!IsList()) && (GetOwner()->GetExpanderColumn() == col))
+    if ((!IsList()) && (expander == col))
     {
         wxDataViewTreeNode * node = GetTreeNodeByRow(current);
 
@@ -3656,7 +3673,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     wxDataViewItem item = GetItemByRow(current);
     bool ignore_other_columns =
-        ((GetOwner()->GetExpanderColumn() != col) &&
+        ((expander != col) &&
         (model->IsContainer(item)) &&
         (!model->HasContainerColumns(item)));
 
