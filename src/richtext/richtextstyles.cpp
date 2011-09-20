@@ -337,7 +337,7 @@ wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxList& list, c
     for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
     {
         wxRichTextStyleDefinition* def = (wxRichTextStyleDefinition*) node->GetData();
-        if (def->GetName().Lower() == name.Lower())
+        if (def->GetName() == name)
             return def;
     }
 
