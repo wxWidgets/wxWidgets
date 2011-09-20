@@ -4357,6 +4357,7 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 
 bool wxDataViewCtrl::ClearColumns()
 {
+    SetExpanderColumn(NULL);
     m_cols.Clear();
     m_colsBestWidths.clear();
     OnColumnsCountChanged();
