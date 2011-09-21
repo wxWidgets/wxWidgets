@@ -664,6 +664,36 @@ public:
                                wxCheckBoxState state) const;
 
     //@}
+
+    /**
+        View window.
+
+        This control itself is entirely covered by the "view window" which is
+        currently a wxDataViewCtrl but if you want to avoid relying on this to
+        allow your code to work with later versions which might not be
+        wxDataViewCtrl-based, use GetView() function only and only use
+        GetDataView() if you really need to call wxDataViewCtrl methods on it.
+     */
+    //@{
+
+    /**
+        Return the view part of this control as a wxWindow.
+
+        This method always returns non-@NULL pointer once the window was
+        created.
+     */
+    wxWindow* GetView() const;
+
+    /**
+        Return the view part of this control as wxDataViewCtrl.
+
+        This method may return @NULL in the future, non wxDataViewCtrl-based,
+        versions of this class, use GetView() unless you really need to use
+        wxDataViewCtrl methods on the returned object.
+     */
+    wxDataViewCtrl* GetDataView() const;
+
+    //@}
 };
 
 /**

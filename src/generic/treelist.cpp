@@ -1548,6 +1548,15 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& event)
     }
 }
 
+wxWindow* wxTreeListCtrl::GetView() const
+{
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    return m_view->GetMainWindow();
+#else
+    return m_view;
+#endif
+}
+
 // ============================================================================
 // wxTreeListEvent implementation
 // ============================================================================

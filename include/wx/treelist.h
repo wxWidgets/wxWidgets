@@ -322,6 +322,18 @@ public:
                                wxCheckBoxState state) const;
 
 
+
+    // View window functions.
+    // ----------------------
+
+    // This control itself is entirely covered by the "view window" which is
+    // currently a wxDataViewCtrl but if you want to avoid relying on this to
+    // allow your code to work with later versions which might not be
+    // wxDataViewCtrl-based, use the first function only and only use the
+    // second one if you really need to call wxDataViewCtrl methods on it.
+    wxWindow* GetView() const;
+    wxDataViewCtrl* GetDataView() const { return m_view; }
+
 private:
     // Common part of all ctors.
     void Init();
