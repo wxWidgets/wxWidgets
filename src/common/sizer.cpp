@@ -909,6 +909,11 @@ wxSize wxSizer::ComputeFittingClientSize(wxWindow *window)
 
         sizeMax = wxDisplay(disp).GetClientArea().GetSize();
 
+        // If determining the display size failed, skip the max size checks as
+        // we really don't want to create windows of (0, 0) size.
+        if ( !sizeMax.x || !sizeMax.y )
+            return size;
+
         // space for decorations and toolbars etc.
         sizeMax = tlw->WindowToClientSize(sizeMax);
     }
