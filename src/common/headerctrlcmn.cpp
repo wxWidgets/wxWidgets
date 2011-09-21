@@ -443,7 +443,7 @@ void wxHeaderCtrlSimple::DoShowSortIndicator(unsigned int idx, bool ascending)
 {
     RemoveSortIndicator();
 
-    m_cols[idx].SetAsSortKey(ascending);
+    m_cols[idx].SetSortOrder(ascending);
     m_sortKey = idx;
 
     UpdateColumn(idx);

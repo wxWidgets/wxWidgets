@@ -2811,12 +2811,6 @@ bool wxDataViewColumn::IsHidden() const
 }
 
 
-void wxDataViewColumn::SetAsSortKey(bool WXUNUSED(sort))
-{
-    // see wxGTK native wxDataViewColumn implementation
-    wxFAIL_MSG( "not implemented" );
-}
-
 void wxDataViewColumn::SetNativeData(wxDataViewColumnNativeData* newNativeDataPtr)
 {
   delete m_NativeDataPtr;

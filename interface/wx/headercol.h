@@ -339,37 +339,25 @@ public:
 
 
     /**
-        Sets this column as the sort key for the associated control.
-
-        Calling this function with @true argument means that this column is
-        currently used for sorting the control contents and so should typically
-        display an arrow indicating it (the direction of the arrow depends on
-        IsSortOrderAscending() return value).
-
-        Don't confuse this function with SetSortable() which should be used to
-        indicate that the column @em may be used for sorting while this one is
-        used to indicate that it currently @em is used for sorting. Of course,
-        SetAsSortKey() can be only called for sortable columns.
-
-        @param sort
-            Sort (default) or don't sort the control contents by this column.
-     */
-    virtual void SetAsSortKey(bool sort = true) = 0;
-
-    /**
         Don't use this column for sorting.
 
-        This is equivalent to calling SetAsSortKey() with @false argument.
+        This is the reverse of SetSortOrder() and is called to indicate that
+        this column is not used for sorting any longer.
      */
     void UnsetAsSortKey();
 
     /**
-        Sets the sort order for this column.
+        Sets this column as the sort key for the associated control.
 
-        This only makes sense for sortable columns which are currently used as
-        sort key, i.e. for which IsSortKey() returns @true and is only taken
-        into account by the control in which this column is inserted, this
-        function just stores the sort order in the wxHeaderColumn object.
+        This function indicates that this column is currently used for sorting
+        the control and also sets the sorting direction. Notice that actual
+        sorting is only done in the control associated with the header, this
+        function doesn't do any sorting on its own.
+
+        Don't confuse this function with SetSortable() which should be used to
+        indicate that the column @em may be used for sorting while this one is
+        used to indicate that it currently @em is used for sorting. Of course,
+        SetSortOrder() can be only called for sortable columns.
 
         @param ascending
             If @true, sort in ascending order, otherwise in descending order.
@@ -444,7 +432,6 @@ public:
     virtual wxAlignment GetAlignment() const;
     virtual void SetFlags(int flags);
     virtual int GetFlags() const;
-    virtual void SetAsSortKey(bool sort = true);
     virtual bool IsSortKey() const;
     virtual void SetSortOrder(bool ascending);
     virtual bool IsSortOrderAscending() const;

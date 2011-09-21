@@ -44,7 +44,6 @@ public:
 
     virtual void SetSortable( bool sortable );
     virtual void SetSortOrder( bool ascending );
-    virtual void SetAsSortKey(bool sort = true);
 
     virtual void SetResizeable( bool resizable );
     virtual void SetHidden( bool hidden );

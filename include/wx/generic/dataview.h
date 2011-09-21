@@ -68,10 +68,17 @@ public:
     virtual void SetFlags(int flags) { m_flags = flags; UpdateDisplay(); }
     virtual int GetFlags() const { return m_flags; }
 
-    virtual void SetAsSortKey(bool sort = true) { m_sort = sort; UpdateDisplay(); }
     virtual bool IsSortKey() const { return m_sort; }
 
-    virtual void SetSortOrder(bool ascending) { m_sortAscending = ascending; UpdateDisplay(); }
+    virtual void UnsetAsSortKey() { m_sort = false; UpdateDisplay(); }
+
+    virtual void SetSortOrder(bool ascending)
+    {
+        m_sort = true;
+        m_sortAscending = ascending;
+        UpdateDisplay();
+    }
+
     virtual bool IsSortOrderAscending() const { return m_sortAscending; }
 
     virtual void SetBitmap( const wxBitmap& bitmap ) { wxDataViewColumnBase::SetBitmap(bitmap); UpdateDisplay(); }

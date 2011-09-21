@@ -3286,14 +3286,6 @@ bool wxDataViewColumn::IsSortable() const
     return gtk_tree_view_column_get_clickable( column );
 }
 
-void wxDataViewColumn::SetAsSortKey( bool WXUNUSED(sort) )
-{
-    // it might not make sense to have this function in wxHeaderColumn at
-    // all in fact, changing of the sort order should only be done using the
-    // associated control API
-    wxFAIL_MSG( "not implemented" );
-}
-
 bool wxDataViewColumn::IsSortKey() const
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);

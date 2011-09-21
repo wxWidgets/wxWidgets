@@ -65,7 +65,6 @@ public:
     virtual void SetSortOrder  (bool ascending);
     virtual void SetTitle      (wxString const& title);
     virtual void SetWidth      (int  width);
-    virtual void SetAsSortKey  (bool sort = true);
 
    // implementation only
     wxDataViewColumnNativeData* GetNativeData() const

@@ -230,7 +230,7 @@ private:
             }
 
             owner->SetSortingColumnIndex(idx);
-            col->SetAsSortKey();
+            col->SetSortOrder(true);
         }
 
         wxDataViewModel * const model = owner->GetModel();
