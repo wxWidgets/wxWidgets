@@ -735,7 +735,11 @@ public:
     @event{EVT_DATAVIEW_ITEM_VALUE_CHANGED(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_CONTEXT_MENU(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event
+           generated when the user right clicks inside the control. Notice that
+           this menu is generated even if the click didn't occur on any valid
+           item, in this case wxDataViewEvent::GetItem() simply returns an
+           invalid item.
     @event{EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICKED event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}

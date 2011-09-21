@@ -3555,6 +3555,37 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         }
         xpos += c->GetWidth();
     }
+
+    wxDataViewModel* const model = GetModel();
+
+    const unsigned int current = GetLineAt( y );
+    const wxDataViewItem item = GetItemByRow(current);
+
+    // Handle right clicking here, before everything else as context menu
+    // events should be sent even when we click outside of any item, unlike all
+    // the other ones.
+    if (event.RightUp())
+    {
+        wxWindow *parent = GetParent();
+        wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
+        le.SetEventObject(parent);
+        le.SetModel(model);
+
+        if ( item.IsOk() && col )
+        {
+            le.SetItem( item );
+            le.SetColumn( col->GetModelColumn() );
+            le.SetDataViewColumn( col );
+
+            wxVariant value;
+            model->GetValue( value, item, col->GetModelColumn() );
+            le.SetValue(value);
+        }
+
+        parent->ProcessWindowEvent(le);
+        return;
+    }
+
     if (!col)
     {
         event.Skip();
@@ -3562,7 +3593,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     }
 
     wxDataViewRenderer *cell = col->GetRenderer();
-    unsigned int current = GetLineAt( y );
     if ((current >= GetRowCount()) || (x > GetEndOfLastCol()))
     {
         // Unselect all if below the last row ?
@@ -3625,8 +3655,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         }
     }
 
-    wxDataViewModel *model = GetModel();
-
 #if wxUSE_DRAG_AND_DROP
     if (event.Dragging())
     {
@@ -3648,12 +3676,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             m_owner->CalcUnscrolledPosition( m_dragStart.x, m_dragStart.y,
                                              &m_dragStart.x, &m_dragStart.y );
             unsigned int drag_item_row = GetLineAt( m_dragStart.y );
-            wxDataViewItem item = GetItemByRow( drag_item_row );
+            wxDataViewItem itemDragged = GetItemByRow( drag_item_row );
 
             // Notify cell about drag
             wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
             event.SetEventObject( m_owner );
-            event.SetItem( item );
+            event.SetItem( itemDragged );
             event.SetModel( model );
             if (!m_owner->HandleWindowEvent( event ))
                 return;
@@ -3686,7 +3714,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         m_lastOnSame = false;
     }
 
-    wxDataViewItem item = GetItemByRow(current);
     bool ignore_other_columns =
         ((expander != col) &&
         (model->IsContainer(item)) &&
@@ -3785,20 +3812,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             RefreshRow(oldCurrent);
             SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
         }
-    }
-    else if (event.RightUp())
-    {
-        wxVariant value;
-        model->GetValue( value, item, col->GetModelColumn() );
-        wxWindow *parent = GetParent();
-        wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
-        le.SetItem( item );
-        le.SetColumn( col->GetModelColumn() );
-        le.SetDataViewColumn( col );
-        le.SetEventObject(parent);
-        le.SetModel(GetModel());
-        le.SetValue(value);
-        parent->ProcessWindowEvent(le);
     }
     else if (event.MiddleDown())
     {

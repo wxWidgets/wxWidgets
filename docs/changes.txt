@@ -460,6 +460,7 @@ All (GUI):
 - Support float, double and file name values in wxGenericValidator (troelsk).
 - Fix keyboard navigation in wxGrid with hidden columns (ivan_14_32).
 - Add wxDataViewEvent::IsEditCancelled() (Allonii).
+- Send EVT_DATAVIEW_ITEM_CONTEXT_MENU events even when not clicking on an item.
 - Allow marking wxTreeBook nodes to expand initially in XRC (RedTide).
 - Added customizable wxDocManager::OnMRUFileNotExist() virtual method.
 - Fix stock labels when not using mnemonics for Chinese (cw.ahbong).

@@ -4536,22 +4536,21 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         GtkTreeViewColumn *column = NULL;
         gint cell_x = 0;
         gint cell_y = 0;
-        if (gtk_tree_view_get_path_at_pos(
+        gtk_tree_view_get_path_at_pos
+        (
             GTK_TREE_VIEW(dv->GtkGetTreeView()),
             (int) gdk_event->x, (int) gdk_event->y,
             path.ByRef(),
             &column,
             &cell_x,
-            &cell_y))
-        {
-            if (path)
-            {
-                wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, dv->GetId() );
-                event.SetItem(dv->GTKPathToItem(path));
-                event.SetModel( dv->GetModel() );
-                return dv->HandleWindowEvent( event );
-             }
-        }
+            &cell_y
+        );
+
+        wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, dv->GetId() );
+        if (path)
+            event.SetItem(dv->GTKPathToItem(path));
+        event.SetModel( dv->GetModel() );
+        return dv->HandleWindowEvent( event );
     }
 
     return FALSE;
