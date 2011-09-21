@@ -72,12 +72,7 @@ public:
 
     virtual void UnsetAsSortKey() { m_sort = false; UpdateDisplay(); }
 
-    virtual void SetSortOrder(bool ascending)
-    {
-        m_sort = true;
-        m_sortAscending = ascending;
-        UpdateDisplay();
-    }
+    virtual void SetSortOrder(bool ascending);
 
     virtual bool IsSortOrderAscending() const { return m_sortAscending; }
 

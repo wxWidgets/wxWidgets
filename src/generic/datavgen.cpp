@@ -146,6 +146,30 @@ void wxDataViewColumn::UpdateDisplay()
     }
 }
 
+void wxDataViewColumn::SetSortOrder(bool ascending)
+{
+    if ( !m_owner )
+        return;
+
+    // First unset the old sort column if any.
+    int oldSortKey = m_owner->GetSortingColumnIndex();
+    if ( oldSortKey != wxNOT_FOUND )
+    {
+        m_owner->GetColumn(oldSortKey)->UnsetAsSortKey();
+    }
+
+    // Now set this one as the new sort column.
+    const int idx = m_owner->GetColumnIndex(this);
+    m_owner->SetSortingColumnIndex(idx);
+
+    m_sort = true;
+    m_sortAscending = ascending;
+
+    // Call this directly instead of using UpdateDisplay() as we already have
+    // the column index, no need to look it up again.
+    m_owner->OnColumnChange(idx);
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewHeaderWindow
 //-----------------------------------------------------------------------------
@@ -221,15 +245,6 @@ private:
         }
         else // not using this column for sorting yet
         {
-            // first unset the old sort column if any
-            int oldSortKey = owner->GetSortingColumnIndex();
-            if ( oldSortKey != wxNOT_FOUND )
-            {
-                owner->GetColumn(oldSortKey)->UnsetAsSortKey();
-                owner->OnColumnChange(oldSortKey);
-            }
-
-            owner->SetSortingColumnIndex(idx);
             col->SetSortOrder(true);
         }
 
