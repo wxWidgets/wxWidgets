@@ -31,6 +31,8 @@
 
 #include "wx/vscroll.h"
 
+#include "wx/utils.h"   // For wxMin/wxMax().
+
 // ============================================================================
 // wxVarScrollHelperEvtHandler declaration
 // ============================================================================
@@ -308,14 +310,17 @@ size_t wxVarScrollHelperBase::GetNewScrollPosition(wxScrollWinEvent& event) cons
     }
     else if ( evtType == wxEVT_SCROLLWIN_PAGEUP )
     {
-        return FindFirstVisibleFromLast(m_unitFirst);
+        // Page up should do at least as much as line up.
+        return wxMin(FindFirstVisibleFromLast(m_unitFirst),
+                    m_unitFirst ? m_unitFirst - 1 : 0);
     }
     else if ( evtType == wxEVT_SCROLLWIN_PAGEDOWN )
     {
+        // And page down should do at least as much as line down.
         if ( GetVisibleEnd() )
-            return GetVisibleEnd() - 1;
+            return wxMax(GetVisibleEnd() - 1, m_unitFirst + 1);
         else
-            return GetVisibleEnd();
+            return wxMax(GetVisibleEnd(), m_unitFirst + 1);
     }
     else if ( evtType == wxEVT_SCROLLWIN_THUMBRELEASE )
     {

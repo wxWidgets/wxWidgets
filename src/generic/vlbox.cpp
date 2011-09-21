@@ -249,7 +249,10 @@ bool wxVListBox::DoSetCurrent(int current)
         {
             // it is, indeed, only partly visible, so scroll it into view to
             // make it entirely visible
+            // BUT scrolling down when m_current is first visible makes it
+            // completely hidden, so that is even worse
             while ( (size_t)m_current + 1 == GetVisibleRowsEnd() &&
+                    (size_t)m_current != GetVisibleRowsBegin() &&
                     ScrollToRow(GetVisibleBegin() + 1) ) ;
 
             // but in any case refresh it as even if it was only partly visible
