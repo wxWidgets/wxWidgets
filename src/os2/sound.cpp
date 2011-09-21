@@ -42,7 +42,7 @@ wxSound::wxSound(const wxString& sFileName, bool isResource)
   Create(sFileName, isResource);
 }
 
-wxSound::wxSound(int size, const wxByte* data)
+wxSound::wxSound(size_t size, const void* data)
   : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)
 {
   Create(size, data);
@@ -108,7 +108,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
   }
 }
 
-bool wxSound::Create(int size, const wxByte* data)
+bool wxSound::Create(size_t size, const void* data)
 {
   Free();
   m_isResource = FALSE;
@@ -117,7 +117,7 @@ bool wxSound::Create(int size, const wxByte* data)
   if (!m_waveData)
      return FALSE;
 
-  for (int i=0; i<size; i++) m_waveData[i] = data[i];
+  memcpy(m_waveData, data, size);
   return TRUE;
 }
 

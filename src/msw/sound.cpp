@@ -58,7 +58,7 @@ class wxSoundDataMemory : public wxSoundData
 {
 public:
     // we copy the data
-    wxSoundDataMemory(int size, const wxByte *buf);
+    wxSoundDataMemory(size_t size, const void* buf);
 
     void *GetPtr() const { return m_waveDataPtr; }
 
@@ -101,7 +101,7 @@ private:
 // wxSoundData-derived classes
 // ----------------------------------------------------------------------------
 
-wxSoundDataMemory::wxSoundDataMemory(int size, const wxByte *buf)
+wxSoundDataMemory::wxSoundDataMemory(size_t size, const void* buf)
                  : m_waveData(size),
                    m_waveDataPtr(m_waveData)
 {
@@ -131,7 +131,7 @@ wxSound::wxSound(const wxString& filename, bool isResource)
     Create(filename, isResource);
 }
 
-wxSound::wxSound(int size, const wxByte *data)
+wxSound::wxSound(size_t size, const void* data)
 {
     Init();
     Create(size, data);
@@ -164,7 +164,7 @@ bool wxSound::Create(const wxString& filename, bool isResource)
     return CheckCreatedOk();
 }
 
-bool wxSound::Create(int size, const wxByte* data)
+bool wxSound::Create(size_t size, const void* data)
 {
     Free();
 

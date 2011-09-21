@@ -129,7 +129,7 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
     return true;
 }
 
-bool wxSound::Create(int WXUNUSED(size), const wxByte* WXUNUSED(data))
+bool wxSound::Create(size_t WXUNUSED(size), const void* WXUNUSED(data))
 {
     wxFAIL_MSG( "not implemented" );
 

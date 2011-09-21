@@ -20,14 +20,14 @@ class wxSound : public wxSoundBase
 public:
   wxSound();
   wxSound(const wxString& fileName, bool isResource = FALSE);
-  wxSound(int size, const wxByte* data);
+  wxSound(size_t size, const void* data);
   virtual ~wxSound();
 
 public:
   // Create from resource or file
   bool  Create(const wxString& fileName, bool isResource = FALSE);
   // Create from data
-  bool Create(int size, const wxByte* data);
+  bool Create(size_t size, const void* data);
 
   bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
 

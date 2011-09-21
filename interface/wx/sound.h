@@ -38,6 +38,16 @@ public:
     wxSound(const wxString& fileName, bool isResource = false);
 
     /**
+        Constructs a wave object from in-memory data.
+
+        @param size
+            Size of the buffer pointer to by @a data.
+        @param data
+            The buffer containing the sound data in WAV format.
+     */
+    wxSound(size_t size, const void* data);
+
+    /**
         Destroys the wxSound object.
     */
     virtual ~wxSound();

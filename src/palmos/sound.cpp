@@ -36,7 +36,7 @@ wxSound::wxSound(const wxString& sFileName, bool isResource)
 {
 }
 
-wxSound::wxSound(int size, const wxByte* data)
+wxSound::wxSound(size_t size, const void* data)
   : m_waveData(NULL), m_waveLength(0), m_isResource(false)
 {
 }
@@ -50,7 +50,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
     return false;
 }
 
-bool wxSound::Create(int size, const wxByte* data)
+bool wxSound::Create(size_t size, const void* data)
 {
     return false;
 }

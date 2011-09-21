@@ -101,7 +101,7 @@ wxSound::wxSound(const wxString& sFileName, bool isResource)
     Create(sFileName, isResource);
 }
 
-wxSound::wxSound(int size, const wxByte* data)
+wxSound::wxSound(size_t size, const void* data)
 {
     Init();
     Create( size, data );

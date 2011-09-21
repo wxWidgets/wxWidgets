@@ -25,7 +25,7 @@ public:
     wxSound(const wxString& fileName, bool isResource = false)
     :   m_cocoaNSSound(NULL)
     {   Create(fileName, isResource); }
-    wxSound(int size, const wxByte* data)
+    wxSound(size_t size, const void* data)
     :   m_cocoaNSSound(NULL)
     {   LoadWAV(data,size,true); }
     wxSound(const wxSound& sound); // why not?
@@ -43,7 +43,7 @@ public:
     {   return m_cocoaNSSound; }
 protected:
     bool DoPlay(unsigned flags) const;
-    bool LoadWAV(const wxUint8 *data, size_t length, bool copyData);
+    bool LoadWAV(const void* data, size_t length, bool copyData);
 private:
     WX_NSSound m_cocoaNSSound;
     static const wxObjcAutoRefFromAlloc<struct objc_object *> sm_cocoaDelegate;
