@@ -82,9 +82,7 @@
     #include "wx/dde.h"         // for WX_DDE hack in wxExecute
 #endif // wxUSE_IPC
 
-// implemented in utils.cpp
-extern "C" WXDLLIMPEXP_BASE HWND
-wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
+#include "wx/msw/private/hiddenwin.h"
 
 // ----------------------------------------------------------------------------
 // constants

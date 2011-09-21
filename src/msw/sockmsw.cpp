@@ -59,11 +59,9 @@ WX_DECLARE_HASH_MAP(int,bool,wxIntegerHash,wxIntegerEqual,SocketHash);
 #  pragma warning(default:4115) /* named type definition in parentheses */
 #endif
 
-#define CLASSNAME  TEXT("_wxSocket_Internal_Window_Class")
+#include "wx/msw/private/hiddenwin.h"
 
-/* implemented in utils.cpp */
-extern "C" WXDLLIMPEXP_BASE HWND
-wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
+#define CLASSNAME  TEXT("_wxSocket_Internal_Window_Class")
 
 /* Maximum number of different wxSocket objects at a given time.
  * This value can be modified at will, but it CANNOT be greater

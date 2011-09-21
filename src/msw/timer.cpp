@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/hiddenwin.h"
 
 // ----------------------------------------------------------------------------
 // private globals
@@ -75,11 +76,6 @@ UINT_PTR GetNewTimerId(wxMSWTimerImpl *t)
 
 LRESULT APIENTRY _EXPORT wxTimerWndProc(HWND hWnd, UINT message,
                                         WPARAM wParam, LPARAM lParam);
-
-// implemented in utils.cpp
-extern "C" WXDLLIMPEXP_BASE HWND
-wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
-
 
 // ----------------------------------------------------------------------------
 // wxTimerHiddenWindowModule: used to manage the hidden window used for

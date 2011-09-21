@@ -40,6 +40,7 @@
 #include "wx/generic/choicdgg.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/hiddenwin.h"
 #include "wx/dynlib.h"
 
 wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );
@@ -65,10 +66,6 @@ wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 #ifndef INTERNET_CONNECTION_PROXY
 #define INTERNET_CONNECTION_PROXY 4
 #endif
-
-// implemented in utils.cpp
-extern "C" WXDLLIMPEXP_BASE HWND
-wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 static const wxChar *
     wxMSWDIALUP_WNDCLASSNAME = wxT("_wxDialUpManager_Internal_Class");
