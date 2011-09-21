@@ -39,6 +39,64 @@ public:
 };
 
 /**
+    Class defining sort order for the items in wxTreeListCtrl.
+
+    @see wxTreeListCtrl
+
+    @library{wxadv}
+    @category{ctrl}
+
+    @since 2.9.3
+ */
+class wxTreeListItemComparator
+{
+public:
+    /**
+        Default constructor.
+
+        Notice that this class is not copyable, comparators are not passed by
+        value.
+     */
+    wxTreeListItemComparator();
+
+    /**
+        Pure virtual function which must be overridden to define sort order.
+
+        The comparison function should return negative, null or positive value
+        depending on whether the first item is less than, equal to or greater
+        than the second one. The items should be compared using their values
+        for the given column.
+
+        @param treelist
+            The control whose contents is being sorted.
+        @param column
+            The column of this control used for sorting.
+        @param first
+            First item to compare.
+        @param second
+            Second item to compare.
+        @return
+            A negative value if the first item is less than (i.e. should appear
+            above) the second one, zero if the two items are equal or a
+            positive value if the first item is greater than (i.e. should
+            appear below) the second one.
+     */
+    virtual int
+    Compare(wxTreeListCtrl* treelist,
+            unsigned column,
+            wxTreeListItem first,
+            wxTreeListItem second) = 0;
+
+    /**
+        Trivial but virtual destructor.
+
+        Although this class is not used polymorphically by wxWidgets itself,
+        provide virtual dtor in case it's used like this in the user code.
+     */
+    virtual ~wxTreeListItemComparator();
+};
+
+/**
     Container of multiple items.
  */
 typedef wxVector<wxTreeListItem> wxTreeListItems;
@@ -79,6 +137,19 @@ extern const wxTreeListItem wxTLI_LAST;
     the items. While only the text of the first column can be specified when
     adding them, you can use wxTreeListCtrl::SetItemText() to set the text of
     the other columns.
+
+
+    Unlike wxTreeCtrl or wxListCtrl this control can sort its items on its own.
+    To allow user to sort the control contents by clicking on some column you
+    should use wxCOL_SORTABLE flag when adding that column to the control. When
+    a column with this flag is clicked, the control resorts itself using the
+    values in this column. By default the sort is done using alphabetical order
+    comparison of the items text, which is not always correct (e.g. this
+    doesn't work for the numeric columns). To change this you may use
+    SetItemComparator() method to provide a custom comparator, i.e. simply an
+    object that implements comparison between the two items. The treelist
+    sample shows an example of doing this. And if you need to sort the control
+    programmatically, you can call SetSortColumn() method.
 
 
     Here are the styles supported by this control. Notice that using
@@ -132,6 +203,11 @@ extern const wxTreeListItem wxTLI_LAST;
     @event{EVT_TREELIST_ITEM_CONTEXT_MENU(id, func)}
         Process @c wxEVT_COMMAND_TREELIST_ITEM_CONTEXT_MENU event indicating
         that the popup menu for the given item should be displayed.
+    @event{EVT_TREELIST_COLUMN_SORTED(id, func)}
+        Process @c wxEVT_COMMAND_TREELIST_COLUMN_SORTED event indicating that
+        the control contents has just been resorted using the specified column.
+        The event doesn't carry the sort direction, use GetSortColumn() method
+        if you need to know it.
     @endEventTable
 
     @library{wxadv}
@@ -247,8 +323,9 @@ public:
         @param align
             Alignment of both the column header and its items.
         @param flags
-            Column flags, currently can only include wxCOL_RESIZABLE to allow
-            the user to resize the column.
+            Column flags, currently can include wxCOL_RESIZABLE to allow the
+            user to resize the column and wxCOL_SORTABLE to allow the user to
+            resort the control contents by clicking on this column.
         @return
             Index of the new column or -1 on failure.
      */
@@ -666,6 +743,71 @@ public:
     //@}
 
     /**
+        Sorting.
+
+        If some control columns were added with wxCOL_SORTABLE flag, clicking
+        on them will automatically resort the control using the custom
+        comparator set by SetItemComparator() or by doing alphabetical
+        comparison by default.
+
+        In any case, i.e. even if the user can't sort the control by clicking
+        on its header, you may call SetSortColumn() to sort it programmatically
+        and call GetSortColumn() to determine whether it's sorted now and, if
+        so, by which column and in which order.
+     */
+    //@{
+
+    /**
+        Set the column to use for sorting and the order in which to sort.
+
+        Calling this method resorts the control contents using the values of
+        the items in the specified column. Sorting uses custom comparator set
+        with SetItemComparator() or alphabetical comparison of items texts if
+        none was specified.
+
+        Notice that currently there is no way to reset sort order.
+
+        @param col
+            A valid column index.
+        @param ascendingOrder
+            Indicates whether the items should be sorted in ascending (A to Z)
+            or descending (Z to A) order.
+     */
+    void SetSortColumn(unsigned col, bool ascendingOrder = true);
+
+    /**
+        Return the column currently used for sorting, if any.
+
+        If the control is currently unsorted, the function simply returns
+        @false and doesn't modify any of its output parameters.
+
+        @param col
+            Receives the index of the column used for sorting if non-@NULL.
+        @param ascendingOrder
+            Receives @true or @false depending on whether the items are sorted
+            in ascending or descending order.
+        @return
+            @true if the control is sorted or @false if it isn't sorted at all.
+     */
+    bool GetSortColumn(unsigned* col, bool* ascendingOrder = NULL);
+
+    /**
+        Set the object to use for comparing the items.
+
+        This object will be used when the control is being sorted because the
+        user clicked on a sortable column or SetSortColumn() was called.
+
+        The provided pointer is stored by the control so the object it points
+        to must have a life-time equal or greater to that of the control
+        itself. In addition, the pointer can be @NULL to stop using custom
+        comparator and revert to the default alphabetical comparison.
+     */
+    void SetItemComparator(wxTreeListItemComparator* comparator);
+
+    //@}
+
+
+    /**
         View window.
 
         This control itself is entirely covered by the "view window" which is
@@ -722,6 +864,14 @@ public:
         wxTreeListCtrl::GetCheckedState().
      */
     wxCheckBoxState GetOldCheckedState() const;
+
+    /**
+        Return the column affected by the event.
+
+        This is currently only used with @c wxEVT_COMMAND_TREELIST_COLUMN_SORTED
+        event.
+     */
+    unsigned GetColumn() const;
 };
 
 

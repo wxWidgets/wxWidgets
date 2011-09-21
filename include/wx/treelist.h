@@ -28,6 +28,7 @@ class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxTreeListCtrlNameStr[];
 
+class wxTreeListCtrl;
 class wxTreeListModel;
 class wxTreeListModelNode;
 
@@ -76,6 +77,33 @@ typedef wxVector<wxTreeListItem> wxTreeListItems;
 // Some special "items" that can be used with InsertItem():
 extern WXDLLIMPEXP_DATA_ADV(const wxTreeListItem) wxTLI_FIRST;
 extern WXDLLIMPEXP_DATA_ADV(const wxTreeListItem) wxTLI_LAST;
+
+// ----------------------------------------------------------------------------
+// wxTreeListItemComparator: defines order of wxTreeListCtrl items.
+// ----------------------------------------------------------------------------
+
+class wxTreeListItemComparator
+{
+public:
+    wxTreeListItemComparator() { }
+
+    // The comparison function should return negative, null or positive value
+    // depending on whether the first item is less than, equal to or greater
+    // than the second one. The items should be compared using their values for
+    // the given column.
+    virtual int
+    Compare(wxTreeListCtrl* treelist,
+            unsigned column,
+            wxTreeListItem first,
+            wxTreeListItem second) = 0;
+
+    // Although this class is not used polymorphically by wxWidgets itself,
+    // provide virtual dtor in case it's used like this in the user code.
+    virtual ~wxTreeListItemComparator() { }
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxTreeListItemComparator);
+};
 
 // ----------------------------------------------------------------------------
 // wxTreeListCtrl: a control combining wxTree- and wxListCtrl features.
@@ -323,6 +351,34 @@ public:
 
 
 
+    // Sorting.
+    // --------
+
+    // Sort by the given column, either in ascending (default) or descending
+    // sort order.
+    //
+    // By default, simple alphabetical sorting is done by this column contents
+    // but SetItemComparator() may be called to perform comparison in some
+    // other way.
+    void SetSortColumn(unsigned col, bool ascendingOrder = true);
+
+    // If the control contents is sorted, return true and fill the output
+    // parameters with the column which is currently used for sorting and
+    // whether we sort using ascending or descending order. Otherwise, i.e. if
+    // the control contents is unsorted, simply return false.
+    bool GetSortColumn(unsigned* col, bool* ascendingOrder = NULL);
+
+    // Set the object to use for comparing the items. It will be called when
+    // the control is being sorted because the user clicked on a sortable
+    // column.
+    //
+    // The provided pointer is stored by the control so the object it points to
+    // must have a life-time equal or greater to that of the control itself. In
+    // addition, the pointer can be NULL to stop using custom comparator and
+    // revert to the default alphabetical comparison.
+    void SetItemComparator(wxTreeListItemComparator* comparator);
+
+
     // View window functions.
     // ----------------------
 
@@ -356,10 +412,14 @@ private:
                                 int imageOpened,
                                 wxClientData* data);
 
-    // Send wxTreeListEvent corresponding to the given wxDataViewEvent.
+    // Send wxTreeListEvent corresponding to the given wxDataViewEvent for an
+    // item (as opposed for column-oriented events).
     //
     // Also updates the original event "skipped" and "vetoed" flags.
-    void SendEvent(wxEventType evt, wxDataViewEvent& event);
+    void SendItemEvent(wxEventType evt, wxDataViewEvent& event);
+
+    // Send wxTreeListEvent corresponding to the given column wxDataViewEvent.
+    void SendColumnEvent(wxEventType evt, wxDataViewEvent& event);
 
 
     // Called by wxTreeListModel when an item is toggled by the user.
@@ -371,6 +431,7 @@ private:
     void OnItemExpanded(wxDataViewEvent& event);
     void OnItemActivated(wxDataViewEvent& event);
     void OnItemContextMenu(wxDataViewEvent& event);
+    void OnColumnSorted(wxDataViewEvent& event);
     void OnSize(wxSizeEvent& event);
 
     wxDECLARE_EVENT_TABLE();
@@ -378,6 +439,8 @@ private:
 
     wxDataViewCtrl* m_view;
     wxTreeListModel* m_model;
+
+    wxTreeListItemComparator* m_comparator;
 
 
     // It calls our inherited protected wxWithImages::GetImage() method.
@@ -393,12 +456,16 @@ private:
 class wxTreeListEvent : public wxNotifyEvent
 {
 public:
-    // The item affected by the event.
+    // The item affected by the event. Valid for all events except
+    // column-specific ones such as COLUMN_SORTED.
     wxTreeListItem GetItem() const { return m_item; }
 
     // The previous state of the item checkbox for ITEM_CHECKED events only.
     wxCheckBoxState GetOldCheckedState() const { return m_oldCheckedState; }
 
+    // The index of the column affected by the event. Currently only used by
+    // COLUMN_SORTED event.
+    unsigned GetColumn() const { return m_column; }
 
     virtual wxEvent* Clone() const { return new wxTreeListEvent(*this); }
 
@@ -411,6 +478,10 @@ private:
           m_item(item)
     {
         SetEventObject(treelist);
+
+        m_column = static_cast<unsigned>(-1);
+
+        m_oldCheckedState = wxCHK_UNDETERMINED;
     }
 
     // Set the checkbox state before this event for ITEM_CHECKED events.
@@ -419,10 +490,18 @@ private:
         m_oldCheckedState = state;
     }
 
+    // Set the column affected by this event for COLUMN_SORTED events.
+    void SetColumn(unsigned column)
+    {
+        m_column = column;
+    }
+
 
     const wxTreeListItem m_item;
 
     wxCheckBoxState m_oldCheckedState;
+
+    unsigned m_column;
 
     friend class wxTreeListCtrl;
 
@@ -467,6 +546,10 @@ wxDECLARE_TREELIST_EVENT(ITEM_ACTIVATED);
 wxDECLARE_TREELIST_EVENT(ITEM_CONTEXT_MENU);
 #define EVT_TREELIST_ITEM_CONTEXT_MENU(id, fn) \
     wxEVT_TREELIST_GENERIC(ITEM_CONTEXT_MENU, id, fn)
+
+wxDECLARE_TREELIST_EVENT(COLUMN_SORTED);
+#define EVT_TREELIST_COLUMN_SORTED(id, fn) \
+    wxEVT_TREELIST_GENERIC(COLUMN_SORTED, id, fn)
 
 #undef wxDECLARE_TREELIST_EVENT
 

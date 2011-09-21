@@ -50,9 +50,10 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// Constants for menu items
+// Constants
 // ----------------------------------------------------------------------------
 
+// Menu items.
 enum
 {
     Id_MultiSelect = 100,
@@ -70,6 +71,89 @@ enum
     Id_Uncheck_HTMLDocs,
     Id_Indet_HTMLDocs,
     Id_Select_HTMLDocs
+};
+
+// Tree list columns.
+enum
+{
+    Col_Component,
+    Col_Files,
+    Col_Size
+};
+
+// ----------------------------------------------------------------------------
+// Custom comparator for tree list items comparison
+// ----------------------------------------------------------------------------
+
+// This is a toy class as in a real program you would have the original numeric
+// data somewhere and wouldn't need to parse it back from strings presumably.
+// Nevertheless it shows how to implement a custom comparator which is needed
+// if you want to sort by a column with non-textual contents.
+class MyComparator : public wxTreeListItemComparator
+{
+public:
+    virtual int
+    Compare(wxTreeListCtrl* treelist,
+            unsigned column,
+            wxTreeListItem item1,
+            wxTreeListItem item2)
+    {
+        wxString text1 = treelist->GetItemText(item1, column),
+                 text2 = treelist->GetItemText(item2, column);
+
+        switch ( column )
+        {
+            case Col_Component:
+                // Simple alphabetical comparison is fine for those.
+                return text1.CmpNoCase(text2);
+
+            case Col_Files:
+                // Compare strings as numbers.
+                return GetNumFilesFromText(text1) - GetNumFilesFromText(text2);
+
+            case Col_Size:
+                // Compare strings as numbers but also take care of "KiB" and
+                // "MiB" suffixes.
+                return GetSizeFromText(text1) - GetSizeFromText(text2);
+        }
+
+        wxFAIL_MSG( "Sorting on unknown column?" );
+
+        return 0;
+    }
+
+private:
+    // Return the number of files handling special value "many". Notice that
+    // the returned value is signed to allow using it in subtraction above.
+    int GetNumFilesFromText(const wxString& text) const
+    {
+        unsigned long n;
+        if ( !text.ToULong(&n) )
+        {
+            if ( text == "many" )
+                n = 9999;
+            else
+                n = 0;
+        }
+
+        return n;
+    }
+
+    // Return the size in KiB from a string with either KiB or MiB suffix.
+    int GetSizeFromText(const wxString& text) const
+    {
+        wxString size;
+        unsigned factor = 1;
+        if ( text.EndsWith(" MiB", &size) )
+            factor = 1024;
+        else if ( !text.EndsWith(" KiB", &size) )
+            return 0;
+
+        unsigned long n = 0;
+        size.ToULong(&n);
+
+        return n*factor;
+    }
 };
 
 // ----------------------------------------------------------------------------
@@ -139,6 +223,8 @@ private:
     wxImageList* m_imageList;
 
     wxTreeListCtrl* m_treelist;
+
+    MyComparator m_comparator;
 
     wxTreeListItem m_itemHTMLDocs;
 
@@ -304,20 +390,18 @@ wxTreeListCtrl* MyFrame::CreateTreeListCtrl(long style)
                                   style);
     tree->SetImageList(m_imageList);
 
-    enum
-    {
-        Col_Component,
-        Col_Files,
-        Col_Size
-    };
-
-    tree->AppendColumn("Component");
+    tree->AppendColumn("Component",
+                       wxCOL_WIDTH_AUTOSIZE,
+                       wxALIGN_LEFT,
+                       wxCOL_RESIZABLE | wxCOL_SORTABLE);
     tree->AppendColumn("# Files",
                        tree->WidthFor("1,000,000"),
-                       wxALIGN_RIGHT);
+                       wxALIGN_RIGHT,
+                       wxCOL_RESIZABLE | wxCOL_SORTABLE);
     tree->AppendColumn("Size",
                        tree->WidthFor("1,000,000 KiB"),
-                       wxALIGN_RIGHT);
+                       wxALIGN_RIGHT,
+                       wxCOL_RESIZABLE | wxCOL_SORTABLE);
 
     // Define a shortcut to save on typing here.
     #define ADD_ITEM(item, parent, files, size) \
@@ -350,6 +434,9 @@ wxTreeListCtrl* MyFrame::CreateTreeListCtrl(long style)
 
     // Remember this one for subsequent tests.
     m_itemHTMLDocs = HTML;
+
+    // Set a custom comparator to compare strings containing numbers correctly.
+    tree->SetItemComparator(&m_comparator);
 
     return tree;
 }

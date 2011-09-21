@@ -378,6 +378,10 @@ public:
     virtual unsigned GetChildren(const wxDataViewItem& item,
                                  wxDataViewItemArray& children) const;
     virtual bool IsListModel() const { return m_isFlat; }
+    virtual int Compare(const wxDataViewItem& item1,
+                        const wxDataViewItem& item2,
+                        unsigned col,
+                        bool ascending) const;
 
 private:
     // The control we're associated with.
@@ -953,6 +957,27 @@ wxTreeListModel::GetChildren(const wxDataViewItem& item,
     return numChildren;
 }
 
+int
+wxTreeListModel::Compare(const wxDataViewItem& item1,
+                         const wxDataViewItem& item2,
+                         unsigned col,
+                         bool ascending) const
+{
+    // Compare using default alphabetical order if no custom comparator.
+    wxTreeListItemComparator* const comp = m_treelist->m_comparator;
+    if ( !comp )
+        return wxDataViewModel::Compare(item1, item2, col, ascending);
+
+    // Forward comparison to the comparator:
+    int result = comp->Compare(m_treelist, col, FromDVI(item1), FromDVI(item2));
+
+    // And adjust by the sort order if necessary.
+    if ( !ascending )
+        result = -result;
+
+    return result;
+}
+
 // ============================================================================
 // wxTreeListCtrl implementation
 // ============================================================================
@@ -963,6 +988,7 @@ BEGIN_EVENT_TABLE(wxTreeListCtrl, wxWindow)
     EVT_DATAVIEW_ITEM_EXPANDED(wxID_ANY, wxTreeListCtrl::OnItemExpanded)
     EVT_DATAVIEW_ITEM_ACTIVATED(wxID_ANY, wxTreeListCtrl::OnItemActivated)
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(wxID_ANY, wxTreeListCtrl::OnItemContextMenu)
+    EVT_DATAVIEW_COLUMN_SORTED(wxID_ANY, wxTreeListCtrl::OnColumnSorted)
 
     EVT_SIZE(wxTreeListCtrl::OnSize)
 END_EVENT_TABLE()
@@ -975,6 +1001,7 @@ void wxTreeListCtrl::Init()
 {
     m_view = NULL;
     m_model = NULL;
+    m_comparator = NULL;
 }
 
 bool wxTreeListCtrl::Create(wxWindow* parent,
@@ -1455,12 +1482,66 @@ wxTreeListCtrl::AreAllChildrenInState(wxTreeListItem item,
 }
 
 // ----------------------------------------------------------------------------
+// Sorting
+// ----------------------------------------------------------------------------
+
+void wxTreeListCtrl::SetSortColumn(unsigned col, bool ascendingOrder)
+{
+    wxCHECK_RET( col < m_view->GetColumnCount(), "Invalid column index" );
+
+    m_view->GetColumn(col)->SetSortOrder(ascendingOrder);
+}
+
+bool wxTreeListCtrl::GetSortColumn(unsigned* col, bool* ascendingOrder)
+{
+    const unsigned numColumns = m_view->GetColumnCount();
+    for ( unsigned n = 0; n < numColumns; n++ )
+    {
+        wxDataViewColumn* const column = m_view->GetColumn(n);
+        if ( column->IsSortKey() )
+        {
+            if ( col )
+                *col = n;
+
+            if ( ascendingOrder )
+                *ascendingOrder = column->IsSortOrderAscending();
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void wxTreeListCtrl::SetItemComparator(wxTreeListItemComparator* comparator)
+{
+    m_comparator = comparator;
+}
+
+// ----------------------------------------------------------------------------
 // Events
 // ----------------------------------------------------------------------------
 
-void wxTreeListCtrl::SendEvent(wxEventType evt, wxDataViewEvent& eventDV)
+void wxTreeListCtrl::SendItemEvent(wxEventType evt, wxDataViewEvent& eventDV)
 {
     wxTreeListEvent eventTL(evt, this, m_model->FromDVI(eventDV.GetItem()));
+
+    if ( !ProcessWindowEvent(eventTL) )
+    {
+        eventDV.Skip();
+        return;
+    }
+
+    if ( !eventTL.IsAllowed() )
+    {
+        eventDV.Veto();
+    }
+}
+
+void wxTreeListCtrl::SendColumnEvent(wxEventType evt, wxDataViewEvent& eventDV)
+{
+    wxTreeListEvent eventTL(evt, this, wxTreeListItem());
+    eventTL.SetColumn(eventDV.GetColumn());
 
     if ( !ProcessWindowEvent(eventTL) )
     {
@@ -1485,27 +1566,32 @@ wxTreeListCtrl::OnItemToggled(wxTreeListItem item, wxCheckBoxState stateOld)
 
 void wxTreeListCtrl::OnSelectionChanged(wxDataViewEvent& event)
 {
-    SendEvent(wxEVT_COMMAND_TREELIST_SELECTION_CHANGED, event);
+    SendItemEvent(wxEVT_COMMAND_TREELIST_SELECTION_CHANGED, event);
 }
 
 void wxTreeListCtrl::OnItemExpanding(wxDataViewEvent& event)
 {
-    SendEvent(wxEVT_COMMAND_TREELIST_ITEM_EXPANDING, event);
+    SendItemEvent(wxEVT_COMMAND_TREELIST_ITEM_EXPANDING, event);
 }
 
 void wxTreeListCtrl::OnItemExpanded(wxDataViewEvent& event)
 {
-    SendEvent(wxEVT_COMMAND_TREELIST_ITEM_EXPANDED, event);
+    SendItemEvent(wxEVT_COMMAND_TREELIST_ITEM_EXPANDED, event);
 }
 
 void wxTreeListCtrl::OnItemActivated(wxDataViewEvent& event)
 {
-    SendEvent(wxEVT_COMMAND_TREELIST_ITEM_ACTIVATED, event);
+    SendItemEvent(wxEVT_COMMAND_TREELIST_ITEM_ACTIVATED, event);
 }
 
 void wxTreeListCtrl::OnItemContextMenu(wxDataViewEvent& event)
 {
-    SendEvent(wxEVT_COMMAND_TREELIST_ITEM_CONTEXT_MENU, event);
+    SendItemEvent(wxEVT_COMMAND_TREELIST_ITEM_CONTEXT_MENU, event);
+}
+
+void wxTreeListCtrl::OnColumnSorted(wxDataViewEvent& event)
+{
+    SendColumnEvent(wxEVT_COMMAND_TREELIST_COLUMN_SORTED, event);
 }
 
 // ----------------------------------------------------------------------------
@@ -1572,6 +1658,7 @@ wxDEFINE_TREELIST_EVENT(ITEM_EXPANDED);
 wxDEFINE_TREELIST_EVENT(ITEM_CHECKED);
 wxDEFINE_TREELIST_EVENT(ITEM_ACTIVATED);
 wxDEFINE_TREELIST_EVENT(ITEM_CONTEXT_MENU);
+wxDEFINE_TREELIST_EVENT(COLUMN_SORTED);
 
 #undef wxDEFINE_TREELIST_EVENT
 
