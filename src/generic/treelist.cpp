@@ -1608,6 +1608,17 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& event)
         const wxRect rect = GetClientRect();
         m_view->SetSize(rect);
 
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+        // The generic implementation doesn't refresh itself immediately which
+        // is annoying during "live resizing", so do it forcefully here to
+        // ensure that the items are re-laid out and the focus rectangle is
+        // redrawn correctly (instead of leaving traces) while our size is
+        // being changed.
+        wxWindow* const view = GetView();
+        view->Refresh();
+        view->Update();
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
+
         // Resize the first column to take the remaining available space.
         const unsigned numColumns = GetColumnCount();
         if ( !numColumns )
