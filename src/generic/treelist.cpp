@@ -1608,29 +1608,27 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& event)
         const wxRect rect = GetClientRect();
         m_view->SetSize(rect);
 
-        // Resize the first column to take the remaining available space, if
-        // any.
+        // Resize the first column to take the remaining available space.
         const unsigned numColumns = GetColumnCount();
         if ( !numColumns )
             return;
 
         // There is a bug in generic wxDataViewCtrl: if the column width sums
         // up to the total size, horizontal scrollbar (unnecessarily) appears,
-        // so subtract 10 pixels to ensure this doesn't happen.
-        int remainingWidth = rect.width - 10;
+        // so subtract a bit to ensure this doesn't happen.
+        int remainingWidth = rect.width - 5;
         for ( unsigned n = 1; n < GetColumnCount(); n++ )
         {
             remainingWidth -= GetColumnWidth(n);
-            if ( remainingWidth < 0 )
-                break;
+            if ( remainingWidth <= 0 )
+            {
+                // There is not enough space, as we're not going to give the
+                // first column negative width anyhow, just don't do anything.
+                return;
+            }
         }
 
-        // We don't decrease the width of the first column, even if we had
-        // increased it ourselves, because we want to avoid changing its size
-        // if the user resized it. We might want to remember if this was the
-        // case or if we only ever adjusted it automatically in the future.
-        if ( remainingWidth > GetColumnWidth(0) )
-            SetColumnWidth(0, remainingWidth);
+        SetColumnWidth(0, remainingWidth);
     }
 }
 
