@@ -2251,7 +2251,7 @@ SEARCH_INCLUDE="\
 
 dnl try to find out the standard lib locations for the systems with multiple
 dnl ABIs
-AC_MSG_CHECKING([for libraries directory])
+AC_MSG_CHECKING([for libraries directories])
 
 case "${host}" in
     *-*-irix6* )
@@ -2273,9 +2273,6 @@ case "${host}" in
                         fi
                     done
                 done
-                if test "x$wx_cv_std_libpath" = "x"; then
-                    wx_cv_std_libpath="lib"
-                fi
             ]
         )
         ;;
@@ -2284,29 +2281,50 @@ case "${host}" in
         dnl use ../lib or ../lib/64 depending on the size of void*
         if test "$ac_cv_sizeof_void_p" = 8 -a -d "/usr/lib/64"; then
             wx_cv_std_libpath="lib/64"
-        else
-            wx_cv_std_libpath="lib"
         fi
         ;;
 
     *-*-linux* )
-        dnl use ../lib or ../lib64 depending on the size of void*
-        if test "$ac_cv_sizeof_void_p" = 8 -a \
-                -d "/usr/lib64" -a ! -h "/usr/lib64"; then
-            wx_cv_std_libpath="lib64"
+        dnl Recent Debian versions (as of 2011) use new approach to multiarch
+        dnl and put the libraries under /usr/lib/arch-linux-gnu. Annoyingly,
+        dnl "arch" here is not `uname -m` because it is "i386" even when uname
+        dnl returns e.g. "i686". So we need to test for it explicitly.
+        if test "$ac_cv_sizeof_void_p" = 8; then
+            if test -d "/usr/lib/`uname -m`-linux-gnu"; then
+                wx_cv_std_libfullpath="/usr/lib/`uname -m`-linux-gnu"
+            elif test -d "/usr/lib64" -a ! -h "/usr/lib64"; then
+                wx_cv_std_libpath="lib64"
+            fi
         else
-            wx_cv_std_libpath="lib"
+            case "${host}" in
+                i*86-*-linux* )
+                    if test -d '/usr/lib/i386-linux-gnu'; then
+                        wx_cv_std_libfullpath='/usr/lib/i386-linux-gnu'
+                    fi
+            esac
         fi
-        ;;
 
-    *)
-        wx_cv_std_libpath="lib";
+        dnl And on top of all this, some packages haven't been updated for
+        dnl full multiarch support yet so we still need to look in /usr/lib
+        dnl too as well.
+        if test -n "$wx_cv_std_libfullpath" -a -d "/usr/lib"; then
+            wx_cv_std_libfullpath="$wx_cv_std_libfullpath /usr/lib"
+        fi
         ;;
 esac
 
-AC_MSG_RESULT($wx_cv_std_libpath)
+if test -z "$wx_cv_std_libpath"; then
+    wx_cv_std_libpath="lib"
+fi
 
-SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g` /usr/$wx_cv_std_libpath"
+if test -z "$wx_cv_std_libfullpath"; then
+    wx_cv_std_libfullpath="/usr/$wx_cv_std_libpath"
+fi
+
+
+AC_MSG_RESULT($wx_cv_std_libfullpath)
+
+SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s@include@$wx_cv_std_libpath@g` $wx_cv_std_libfullpath"
 
 dnl Cross compiling with gcc?
 if test "$build" != "$host" -a "$GCC" = yes; then
