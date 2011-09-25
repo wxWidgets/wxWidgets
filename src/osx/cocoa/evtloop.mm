@@ -254,6 +254,7 @@ void wxGUIEventLoop::DoStop()
 
 void wxGUIEventLoop::WakeUp()
 {
+    wxMacAutoreleasePool autoreleasepool;
     NSEvent *event = [NSEvent otherEventWithType:NSApplicationDefined 
                                         location:NSMakePoint(0.0, 0.0) 
                                    modifierFlags:0 
