@@ -644,21 +644,8 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     AC_CHECK_TOOL(STRIP, strip, :)
     AC_CHECK_TOOL(NM, nm, :)
 
-    dnl This check is necessary because "install -d" doesn't exist on
-    dnl all platforms (e.g. HP/UX), see http://www.bakefile.org/ticket/80
-    AC_MSG_CHECKING([for command to install directories])
-    INSTALL_TEST_DIR=acbftest$$
-    $INSTALL -d $INSTALL_TEST_DIR > /dev/null 2>&1
-    if test $? = 0 -a -d $INSTALL_TEST_DIR; then
-        rmdir $INSTALL_TEST_DIR
-        dnl we must refer to makefile's $(INSTALL) variable and not
-        dnl current value of shell variable, hence the single quoting:
-        INSTALL_DIR='$(INSTALL) -d'
-        AC_MSG_RESULT([$INSTALL -d])
-    else
-        INSTALL_DIR="mkdir -p"
-        AC_MSG_RESULT([mkdir -p])
-    fi
+    dnl Don't use `install -d`, see http://trac.wxwidgets.org/ticket/13452
+    INSTALL_DIR="mkdir -p"
     AC_SUBST(INSTALL_DIR)
 
     LDFLAGS_GUI=
