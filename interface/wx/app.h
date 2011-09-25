@@ -221,6 +221,8 @@ public:
     //@}
 
 
+    bool Yield(bool onlyIfNeeded = false);
+
     /**
         Allows external code to modify global ::wxTheApp, but you should really
         know what you're doing if you call it.
@@ -249,7 +251,6 @@ public:
         the events from them would never be processed.
     */
     static bool IsMainLoopRunning();
-
 
     /**
         @name Callbacks for application-wide "events"

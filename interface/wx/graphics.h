@@ -116,12 +116,12 @@ public:
         @return @true if the point is within the path.
     */
     bool Contains(const wxPoint2DDouble& c,
-                  int fillStyle = wxODDEVEN_RULE) const;
+                  wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
     /**
         @return @true if the point is within the path.
     */
     virtual bool Contains(wxDouble x, wxDouble y,
-                          int fillStyle = wxODDEVEN_RULE) const;
+                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
 
     /**
         Gets the bounding box enclosing all points (possibly including control

@@ -23,17 +23,17 @@ public:
     /**
        Constructs a wxGCDC from a wxWindowDC.
     */
-    wxGCDC( const wxWindowDC& dc );
+    wxGCDC( const wxWindowDC& windowDC );
 
     /**
        Constructs a wxGCDC from a wxMemoryDC.
     */
-    wxGCDC( const wxMemoryDC& dc );
+    wxGCDC( const wxMemoryDC& memoryDC );
 
     /**
        Constructs a wxGCDC from a wxPrinterDC.
     */
-    wxGCDC( const wxPrinterDC& dc );
+    wxGCDC( const wxPrinterDC& printerDC );
 
     /**
        Construct a wxGCDC from an existing grtaphics context.
@@ -49,10 +49,11 @@ public:
 
        @since 2.9.3
     */
-    wxGCDC( const wxEnhMetaFileDC& dc );
+    wxGCDC( const wxEnhMetaFileDC& emfDC );
 
     wxGCDC();
     virtual ~wxGCDC();
+    
     /**
        Retrieves associated wxGraphicsContext
     */

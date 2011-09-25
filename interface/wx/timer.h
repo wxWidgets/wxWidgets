@@ -6,6 +6,15 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// generate notifications periodically until the timer is stopped (default)
+#define wxTIMER_CONTINUOUS false
+
+// only send the notification once and then stop the timer
+#define wxTIMER_ONE_SHOT true
+
+wxEventType wxEVT_TIMER;
+
+
 /**
     @class wxTimer
 
@@ -131,6 +140,19 @@ public:
 };
 
 
+/**
+   @class wxTimerRunner
+
+   Starts the timer in its ctor, stops in the dtor.
+*/ 
+class wxTimerRunner
+{
+public:
+    wxTimerRunner(wxTimer& timer);
+    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = false);
+    void Start(int milli, bool oneShot = false);
+    ~wxTimerRunner();
+};
 
 /**
     @class wxTimerEvent

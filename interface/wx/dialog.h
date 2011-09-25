@@ -673,3 +673,13 @@ public:
     virtual bool DoLayoutAdaptation(wxDialog* dialog) = 0;
 };
 
+
+class wxWindowModalDialogEvent  : public wxCommandEvent
+{
+public:
+    wxWindowModalDialogEvent (wxEventType commandType = wxEVT_NULL, int id = 0);
+
+    wxDialog *GetDialog() const;
+    int GetReturnCode() const;
+    virtual wxEvent *Clone() const;
+};
