@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 12 September 2011                                                  *
+ * Date : 26 September 2011                                                  *
  *                                                                           *
  *****************************************************************************/
 
@@ -356,7 +356,7 @@ typedef pid_t GPid;
 
 #define wxUSE_PROPGRID  1
 
-#define wxUSE_WEBVIEW 1
+#define wxUSE_WEBVIEW 0
 
 #define wxUSE_WEBVIEW_WEBKIT 0
 
