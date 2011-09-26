@@ -77,7 +77,7 @@ bool wxStaticText::Create(wxWindow *parent,
     {  
          if (justify == GTK_JUSTIFY_RIGHT)
             justify = GTK_JUSTIFY_LEFT;
-         if (justify == GTK_JUSTIFY_LEFT)
+         else if (justify == GTK_JUSTIFY_LEFT)
             justify = GTK_JUSTIFY_RIGHT;
     }
     
