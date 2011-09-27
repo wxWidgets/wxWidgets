@@ -145,6 +145,28 @@ enum wxBorder
 };
 
 /*  ---------------------------------------------------------------------------- */
+/*  Possible SetSize flags */
+/*  ---------------------------------------------------------------------------- */
+
+/*  Use internally-calculated width if -1 */
+#define wxSIZE_AUTO_WIDTH       0x0001
+/*  Use internally-calculated height if -1 */
+#define wxSIZE_AUTO_HEIGHT      0x0002
+/*  Use internally-calculated width and height if each is -1 */
+#define wxSIZE_AUTO             (wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT)
+/*  Ignore missing (-1) dimensions (use existing). */
+/*  For readability only: test for wxSIZE_AUTO_WIDTH/HEIGHT in code. */
+#define wxSIZE_USE_EXISTING     0x0000
+/*  Allow -1 as a valid position */
+#define wxSIZE_ALLOW_MINUS_ONE  0x0004
+/*  Don't do parent client adjustments (for implementation only) */
+#define wxSIZE_NO_ADJUSTMENTS   0x0008
+/*  Change the window position even if it seems to be already correct */
+#define wxSIZE_FORCE            0x0010
+/*  Emit size event even if size didn't change */
+#define wxSIZE_FORCE_EVENT      0x0020
+
+/*  ---------------------------------------------------------------------------- */
 /*  Window style flags */
 /*  ---------------------------------------------------------------------------- */
 

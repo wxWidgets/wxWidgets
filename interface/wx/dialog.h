@@ -16,6 +16,8 @@ enum wxDialogLayoutAdaptationMode
     wxDIALOG_ADAPTATION_MODE_DISABLED = 2   ///< Disable this dialog overriding global status.
 };
 
+#define wxDEFAULT_DIALOG_STYLE  (wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX)
+
 /**
     @class wxDialog
 
