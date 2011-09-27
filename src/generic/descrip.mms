@@ -244,7 +244,7 @@ icon.obj : icon.cpp
 imaglist.obj : imaglist.cpp
 laywin.obj : laywin.cpp
 listctrl.obj : listctrl.cpp
-	cxx $(CXXFLAGS)$(CXX_DEFINE)/warndisable=(INTTRUNCATED) listctrl.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(INTTRUNCATED) listctrl.cpp
 logg.obj : logg.cpp
 msgdlgg.obj : msgdlgg.cpp
 notebook.obj : notebook.cpp
