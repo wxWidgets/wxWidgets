@@ -33,8 +33,11 @@ struct Mapping
 
 Mapping sActionToWXMapping[] =
 {
+// as we don't have NSUndoManager support we must not use the native actions
+#if 0
     { wxID_UNDO, @selector(undo:) },
     { wxID_REDO, @selector(redo:) },
+#endif
     { wxID_CUT, @selector(cut:) },
     { wxID_COPY, @selector(copy:) },
     { wxID_PASTE, @selector(paste:) },
