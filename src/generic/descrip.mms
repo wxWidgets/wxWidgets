@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 29 August 2011                                                      *
+# Date : 27 September 2011                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -244,6 +244,7 @@ icon.obj : icon.cpp
 imaglist.obj : imaglist.cpp
 laywin.obj : laywin.cpp
 listctrl.obj : listctrl.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warndisable=(INTTRUNCATED) listctrl.cpp
 logg.obj : logg.cpp
 msgdlgg.obj : msgdlgg.cpp
 notebook.obj : notebook.cpp
