@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 16 June 2011                                                        *
+# Date : 27 September 2011                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -171,16 +171,16 @@ all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 .ifdef __WXUNIVERSAL__
 	library [--.lib]libwx_gtk_univ.olb $(OBJECTS)
-	library [--.lib]libwx_gtk_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk_univ.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXGTK2__
 	library [--.lib]libwx_gtk2.olb $(OBJECTS)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS0)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS0)
 .else
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS0)
 	library [--.lib]libwx_gtk.olb $(OBJECTS0)
 .endif

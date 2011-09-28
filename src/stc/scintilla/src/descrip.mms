@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 17 December 2010                                                    *
+# Date : 27 September 2011                                                   *
 #                                                                            *
 #*****************************************************************************
 
@@ -103,22 +103,22 @@ all : $(SOURCES)
 .ifdef __WXMOTIF__
 	library [----.lib]libwx_motif.olb $(OBJECTS)
 	library [----.lib]libwx_motif.olb $(OBJECTS1)
-	library [----.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [----.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXGTK__
 	library [----.lib]libwx_gtk.olb $(OBJECTS)
 	library [----.lib]libwx_gtk.olb $(OBJECTS1)
-	library [----.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [----.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXGTK2__
 	library [----.lib]libwx_gtk2.olb $(OBJECTS)
 	library [----.lib]libwx_gtk2.olb $(OBJECTS1)
-	library [----.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [----.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXX11__
 	library [----.lib]libwx_x11_univ.olb $(OBJECTS)
 	library [----.lib]libwx_x11_univ.olb $(OBJECTS1)
-	library [----.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [----.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 .endif
 .endif
 .endif

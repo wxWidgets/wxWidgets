@@ -10,6 +10,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
+
+#if defined( __VMS ) && define ( __ia64 )
+// Work around for a bug in the C++ compiler on OpenVMS IA64
+# include <time.h>
+#endif
+
 #include "wx/wxprec.h"
 
 #if wxUSE_SOCKETS
