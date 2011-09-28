@@ -579,6 +579,119 @@ typedef enum CommandStateChangeConstants {
 #define DISPID_NEWWINDOW3 273
 #endif
 
+//As MinGW is missing urlmon we replicate the definitions here for wxWebView
+#ifdef __MINGW32__
+
+EXTERN_C const IID CLSID_FileProtocol;    
+EXTERN_C const IID IID_IInternetProtocolRoot; 
+EXTERN_C const IID IID_IInternetProtocol; 
+
+DEFINE_GUID(IID_IInternetProtocolRoot,0x79eac9e3,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
+DEFINE_GUID(IID_IInternetProtocol,0x79eac9e4,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
+
+typedef enum __MIDL_IBindStatusCallback_0006 
+{   
+    BSCF_FIRSTDATANOTIFICATION      = 0x1, 
+    BSCF_INTERMEDIATEDATANOTIFICATION       = 0x2, 
+     BSCF_LASTDATANOTIFICATION       = 0x4, 
+     BSCF_DATAFULLYAVAILABLE = 0x8, 
+     BSCF_AVAILABLEDATASIZEUNKNOWN   = 0x10 
+}   BSCF; 
+
+typedef struct _tagPROTOCOLDATA 
+{ 
+    DWORD grfFlags; 
+    DWORD dwState; 
+    LPVOID pData; 
+    ULONG cbData; 
+}   PROTOCOLDATA; 
+
+typedef struct _tagBINDINFO
+{ 
+    ULONG cbSize; 
+    LPWSTR szExtraInfo; 
+    STGMEDIUM stgmedData; 
+    DWORD grfBindInfoF; 
+    DWORD dwBindVerb; 
+    LPWSTR szCustomVerb; 
+    DWORD cbstgmedData; 
+    DWORD dwOptions; 
+    DWORD dwOptionsFlags; 
+    DWORD dwCodePage; 
+    SECURITY_ATTRIBUTES securityAttributes; 
+    IID iid; 
+    IUnknown *pUnk; 
+    DWORD dwReserved; 
+}   BINDINFO; 
+
+class IInternetProtocolSink : public IUnknown 
+{ 
+public: 
+    virtual HRESULT STDMETHODCALLTYPE Switch(PROTOCOLDATA*) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE ReportProgress(ULONG, LPCWSTR) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE ReportData(DWORD, ULONG, ULONG) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE ReportResult(HRESULT, DWORD, LPCWSTR) = 0; 
+}; 
+
+class IInternetBindInfo : public IUnknown 
+{ 
+public: 
+    virtual HRESULT STDMETHODCALLTYPE GetBindInfo(DWORD*, BINDINFO*) = 0;        
+    virtual HRESULT STDMETHODCALLTYPE GetBindString(ULONG, LPOLESTR*, ULONG,
+                                                    ULONG*) = 0; 
+}; 
+
+class IInternetProtocolRoot : public IUnknown 
+{ 
+public: 
+    virtual HRESULT STDMETHODCALLTYPE Start(LPCWSTR, IInternetProtocolSink*,
+                                            IInternetBindInfo*, DWORD, 
+                                            HANDLE_PTR) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE Continue(PROTOCOLDATA*) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE Abort(HRESULT, DWORD) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE Terminate(DWORD) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE Suspend() = 0; 
+    virtual HRESULT STDMETHODCALLTYPE Resume() = 0; 
+}; 
+ 
+class IInternetProtocol : public IInternetProtocolRoot 
+{ 
+public: 
+    virtual HRESULT STDMETHODCALLTYPE Read(void*, ULONG, ULONG*) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER, DWORD, 
+                                           ULARGE_INTEGER*) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE LockRequest(DWORD) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE UnlockRequest() = 0; 
+}; 
+
+class IInternetSession : public IUnknown 
+{ 
+public: 
+    virtual HRESULT STDMETHODCALLTYPE RegisterNameSpace(IClassFactory*, 
+                                                        REFCLSID, LPCWSTR, 
+                                                        ULONG, const LPCWSTR*,
+                                                        DWORD) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE UnregisterNameSpace(IClassFactory*, 
+                                                          LPCWSTR) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE RegisterMimeFilter(IClassFactory*, 
+                                                         REFCLSID, 
+                                                         LPCWSTR) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE UnregisterMimeFilter(IClassFactory*, 
+                                                           LPCWSTR) = 0; 
+    virtual HRESULT STDMETHODCALLTYPE CreateBinding(LPBC, LPCWSTR, IUnknown*,
+                                                    IUnknown**, 
+                                                    IInternetProtocol**, 
+                                                    DWORD) = 0;   
+    virtual HRESULT STDMETHODCALLTYPE SetSessionOption(DWORD, LPVOID, DWORD, 
+                                                       DWORD) = 0;          
+    virtual HRESULT STDMETHODCALLTYPE GetSessionOption(DWORD, LPVOID, DWORD*,
+                                                       DWORD) = 0; 
+}; 
+
+STDAPI CoInternetGetSession(DWORD, IInternetSession**, DWORD);   
+
+#endif
+
  /*
   * In addition to the declarations for VC++, the following are required for WinCE
   */

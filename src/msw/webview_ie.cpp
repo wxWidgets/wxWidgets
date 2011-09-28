@@ -26,11 +26,9 @@
 #include "wx/msw/registry.h"
 #include "wx/msw/missing.h"
 #include "wx/filesys.h"
+#include "wx/dynlib.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
-
-//We link to urlmon as it is required for CoInternetGetSession
-#pragma comment(lib, "urlmon")
 
 BEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
     EVT_ACTIVEX(wxID_ANY, wxWebViewIE::onActiveXEvent)
@@ -82,7 +80,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
 void wxWebViewIE::LoadURL(const wxString& url)
 {
-    m_ie.CallMethod("Navigate", (BSTR) url.wc_str(), NULL, NULL, NULL, NULL);
+    m_ie.CallMethod("Navigate", (BSTR) url.wc_str());
 }
 
 void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
@@ -667,17 +665,29 @@ void wxWebViewIE::RunScript(const wxString& javascript)
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
-    ClassFactory* cf = new ClassFactory(handler);
-    IInternetSession* session;
-    if(FAILED(CoInternetGetSession(0, &session, 0)))
+    wxDynamicLibrary urlMon(wxT("urlmon.dll"));
+    if(urlMon.HasSymbol(wxT("CoInternetGetSession")))
     {
-        wxFAIL_MSG("Could not retrive internet session");
-    }
+        typedef HRESULT (WINAPI *CoInternetGetSession_t)(DWORD, IInternetSession**, DWORD);
+        wxDYNLIB_FUNCTION(CoInternetGetSession_t, CoInternetGetSession, urlMon);
 
-    HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, handler->GetName(), 0, NULL, 0);
-    if(FAILED(hr))
+        ClassFactory* cf = new ClassFactory(handler);
+        IInternetSession* session;
+        HRESULT res = (*pfnCoInternetGetSession)(0, &session, 0);
+        if(FAILED(res))
+        {
+            wxFAIL_MSG("Could not retrive internet session");
+        }
+
+        HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, handler->GetName(), 0, NULL, 0);
+        if(FAILED(hr))
+        {
+            wxFAIL_MSG("Could not register protocol");
+        }
+    }
+    else
     {
-        wxFAIL_MSG("Could not register protocol");
+        wxFAIL_MSG("urlmon does not contain CoInternetGetSession");
     }
 }
 
