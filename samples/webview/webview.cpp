@@ -67,6 +67,7 @@ class WebFrame : public wxFrame
 {
 public:
     WebFrame();
+    ~WebFrame();
 
     void OnAnimationTimer(wxTimerEvent& evt);
     void UpdateState();
@@ -355,6 +356,11 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnSelectAll),  NULL, this );
     Connect(loadscheme->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnLoadScheme),  NULL, this );
+}
+
+WebFrame::~WebFrame()
+{
+    delete m_tools_menu;
 }
 
 void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
