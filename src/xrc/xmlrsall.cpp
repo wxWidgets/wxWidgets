@@ -188,6 +188,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_TOGGLEBTN
     AddHandler(new wxToggleButtonXmlHandler);
 #endif
+#if wxUSE_TIMEPICKCTRL
+    AddHandler(new wxTimeCtrlXmlHandler);
+#endif
 #if wxUSE_TOOLBAR
     AddHandler(new wxToolBarXmlHandler);
 #endif

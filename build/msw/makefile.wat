@@ -195,6 +195,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_sttxt.obj &
 	$(OBJS)\monodll_xh_text.obj &
 	$(OBJS)\monodll_xh_tglbtn.obj &
+	$(OBJS)\monodll_xh_timectrl.obj &
 	$(OBJS)\monodll_xh_toolb.obj &
 	$(OBJS)\monodll_xh_toolbk.obj &
 	$(OBJS)\monodll_xh_tree.obj &
@@ -982,6 +983,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_sttxt.obj &
 	$(OBJS)\monolib_xh_text.obj &
 	$(OBJS)\monolib_xh_tglbtn.obj &
+	$(OBJS)\monolib_xh_timectrl.obj &
 	$(OBJS)\monolib_xh_toolb.obj &
 	$(OBJS)\monolib_xh_toolbk.obj &
 	$(OBJS)\monolib_xh_tree.obj &
@@ -4712,6 +4714,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_sttxt.obj &
 	$(OBJS)\xrcdll_xh_text.obj &
 	$(OBJS)\xrcdll_xh_tglbtn.obj &
+	$(OBJS)\xrcdll_xh_timectrl.obj &
 	$(OBJS)\xrcdll_xh_toolb.obj &
 	$(OBJS)\xrcdll_xh_toolbk.obj &
 	$(OBJS)\xrcdll_xh_tree.obj &
@@ -4787,6 +4790,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_sttxt.obj &
 	$(OBJS)\xrclib_xh_text.obj &
 	$(OBJS)\xrclib_xh_tglbtn.obj &
+	$(OBJS)\xrclib_xh_timectrl.obj &
 	$(OBJS)\xrclib_xh_toolb.obj &
 	$(OBJS)\xrclib_xh_toolbk.obj &
 	$(OBJS)\xrclib_xh_tree.obj &
@@ -7428,6 +7432,9 @@ $(OBJS)\monodll_xh_text.obj :  .AUTODEPEND ..\..\src\xrc\xh_text.cpp
 $(OBJS)\monodll_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_timectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_timectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -9810,6 +9817,9 @@ $(OBJS)\monolib_xh_text.obj :  .AUTODEPEND ..\..\src\xrc\xh_text.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_timectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_timectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
@@ -15519,6 +15529,9 @@ $(OBJS)\xrcdll_xh_text.obj :  .AUTODEPEND ..\..\src\xrc\xh_text.cpp
 $(OBJS)\xrcdll_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_timectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_timectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -15712,6 +15725,9 @@ $(OBJS)\xrclib_xh_text.obj :  .AUTODEPEND ..\..\src\xrc\xh_text.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_tglbtn.obj :  .AUTODEPEND ..\..\src\xrc\xh_tglbtn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_timectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_timectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_toolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_toolb.cpp

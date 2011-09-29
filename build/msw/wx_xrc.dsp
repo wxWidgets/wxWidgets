@@ -754,6 +754,10 @@ SOURCE=..\..\include\wx\xrc\xh_tglbtn.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_timectrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_toolb.h
 # End Source File
 # Begin Source File
@@ -1003,6 +1007,10 @@ SOURCE=..\..\src\xrc\xh_text.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_tglbtn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_timectrl.cpp
 # End Source File
 # Begin Source File
 

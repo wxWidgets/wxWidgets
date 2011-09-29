@@ -7240,6 +7240,10 @@ SOURCE=..\..\include\wx\xrc\xh_tglbtn.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_timectrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_toolb.h
 # End Source File
 # Begin Source File

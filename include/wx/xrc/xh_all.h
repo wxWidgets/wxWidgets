@@ -69,6 +69,7 @@
 #include "wx/xrc/xh_stlin.h"
 #include "wx/xrc/xh_text.h"
 #include "wx/xrc/xh_tglbtn.h"
+#include "wx/xrc/xh_timectrl.h"
 #include "wx/xrc/xh_toolb.h"
 #include "wx/xrc/xh_toolbk.h"
 #include "wx/xrc/xh_tree.h"

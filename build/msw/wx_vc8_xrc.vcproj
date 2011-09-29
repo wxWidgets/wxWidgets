@@ -1275,6 +1275,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_timectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_toolb.h"
 				>
 			</File>
@@ -1526,6 +1530,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_tglbtn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_timectrl.cpp"
 				>
 			</File>
 			<File

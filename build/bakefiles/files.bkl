@@ -3457,6 +3457,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_sttxt.cpp
     src/xrc/xh_text.cpp
     src/xrc/xh_tglbtn.cpp
+    src/xrc/xh_timectrl.cpp
     src/xrc/xh_toolb.cpp
     src/xrc/xh_toolbk.cpp
     src/xrc/xh_tree.cpp
@@ -3525,6 +3526,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_sttxt.h
     wx/xrc/xh_text.h
     wx/xrc/xh_tglbtn.h
+    wx/xrc/xh_timectrl.h
     wx/xrc/xh_toolb.h
     wx/xrc/xh_toolbk.h
     wx/xrc/xh_tree.h

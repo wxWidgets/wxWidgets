@@ -1219,6 +1219,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_sttxt.obj \
 	$(OBJS)\xrcdll_xh_text.obj \
 	$(OBJS)\xrcdll_xh_tglbtn.obj \
+	$(OBJS)\xrcdll_xh_timectrl.obj \
 	$(OBJS)\xrcdll_xh_toolb.obj \
 	$(OBJS)\xrcdll_xh_toolbk.obj \
 	$(OBJS)\xrcdll_xh_tree.obj \
@@ -1294,6 +1295,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_sttxt.obj \
 	$(OBJS)\xrclib_xh_text.obj \
 	$(OBJS)\xrclib_xh_tglbtn.obj \
+	$(OBJS)\xrclib_xh_timectrl.obj \
 	$(OBJS)\xrclib_xh_toolb.obj \
 	$(OBJS)\xrclib_xh_toolbk.obj \
 	$(OBJS)\xrclib_xh_tree.obj \
@@ -1666,6 +1668,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_sttxt.obj \
 	$(OBJS)\monodll_xh_text.obj \
 	$(OBJS)\monodll_xh_tglbtn.obj \
+	$(OBJS)\monodll_xh_timectrl.obj \
 	$(OBJS)\monodll_xh_toolb.obj \
 	$(OBJS)\monodll_xh_toolbk.obj \
 	$(OBJS)\monodll_xh_tree.obj \
@@ -2442,6 +2445,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_sttxt.obj \
 	$(OBJS)\monolib_xh_text.obj \
 	$(OBJS)\monolib_xh_tglbtn.obj \
+	$(OBJS)\monolib_xh_timectrl.obj \
 	$(OBJS)\monolib_xh_toolb.obj \
 	$(OBJS)\monolib_xh_toolbk.obj \
 	$(OBJS)\monolib_xh_tree.obj \
@@ -6989,6 +6993,9 @@ $(OBJS)\monodll_xh_text.obj: ..\..\src\xrc\xh_text.cpp
 $(OBJS)\monodll_xh_tglbtn.obj: ..\..\src\xrc\xh_tglbtn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_tglbtn.cpp
 
+$(OBJS)\monodll_xh_timectrl.obj: ..\..\src\xrc\xh_timectrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_timectrl.cpp
+
 $(OBJS)\monodll_xh_toolb.obj: ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_toolb.cpp
 
@@ -9372,6 +9379,9 @@ $(OBJS)\monolib_xh_text.obj: ..\..\src\xrc\xh_text.cpp
 
 $(OBJS)\monolib_xh_tglbtn.obj: ..\..\src\xrc\xh_tglbtn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_tglbtn.cpp
+
+$(OBJS)\monolib_xh_timectrl.obj: ..\..\src\xrc\xh_timectrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_timectrl.cpp
 
 $(OBJS)\monolib_xh_toolb.obj: ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_toolb.cpp
@@ -15080,6 +15090,9 @@ $(OBJS)\xrcdll_xh_text.obj: ..\..\src\xrc\xh_text.cpp
 $(OBJS)\xrcdll_xh_tglbtn.obj: ..\..\src\xrc\xh_tglbtn.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_tglbtn.cpp
 
+$(OBJS)\xrcdll_xh_timectrl.obj: ..\..\src\xrc\xh_timectrl.cpp
+	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_timectrl.cpp
+
 $(OBJS)\xrcdll_xh_toolb.obj: ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_toolb.cpp
 
@@ -15274,6 +15287,9 @@ $(OBJS)\xrclib_xh_text.obj: ..\..\src\xrc\xh_text.cpp
 
 $(OBJS)\xrclib_xh_tglbtn.obj: ..\..\src\xrc\xh_tglbtn.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_tglbtn.cpp
+
+$(OBJS)\xrclib_xh_timectrl.obj: ..\..\src\xrc\xh_timectrl.cpp
+	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_timectrl.cpp
 
 $(OBJS)\xrclib_xh_toolb.obj: ..\..\src\xrc\xh_toolb.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_toolb.cpp

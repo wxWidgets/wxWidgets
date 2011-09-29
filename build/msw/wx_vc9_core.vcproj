@@ -8024,6 +8024,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_timectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_toolb.h"
 				>
 			</File>

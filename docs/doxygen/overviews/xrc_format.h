@@ -1589,6 +1589,11 @@ No additional properties.
 @endTable
 
 
+@subsubsection xrc_wxtimepickerctrl wxTimePickerCtrl
+
+No additional properties.
+
+
 @subsubsection xrc_wxtogglebuttton wxToggleButton
 
 @beginTable
