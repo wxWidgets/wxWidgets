@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 15 December 2010                                                    *
+# Date : 28 September 2011                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -49,11 +49,8 @@ CC_DEFINE =
 CXXC=cxx
 
 TEST_OBJECTS =  \
-	test_test.obj,\
 	test_anytest.obj,\
 	test_archivetest.obj,\
-	test_ziptest.obj,\
-	test_tartest.obj,\
 	test_arrays.obj,\
 	test_base64.obj,\
 	test_cmdlinetest.obj,\
@@ -88,8 +85,9 @@ TEST_OBJECTS =  \
 	test_misctests.obj,\
 	test_module.obj,\
 	test_pathlist.obj,\
-	test_typeinfotest.obj,\
-	test_ipc.obj,\
+	test_typeinfotest.obj
+
+TEST_OBJECTS1=test_ipc.obj,\
 	test_socket.obj,\
 	test_regextest.obj,\
 	test_wxregextest.obj,\
@@ -130,9 +128,11 @@ TEST_OBJECTS =  \
 	test_xlocale.obj,\
 	test_xmltest.obj
 
+TEST_L_OBJs=test_ziptest.obj,\
+	test_tartest.obj
+
 TEST_GUI_OBJECTS =  \
 	test_gui_asserthelper.obj,\
-	test_gui_test.obj,\
 	test_gui_testableframe.obj,\
 	test_gui_rect.obj,\
 	test_gui_size.obj,\
@@ -145,8 +145,9 @@ TEST_GUI_OBJECTS =  \
 	test_gui_bitmapcomboboxtest.obj,\
 	test_gui_bitmaptogglebuttontest.obj,\
 	test_gui_bookctrlbasetest.obj,\
-	test_gui_buttontest.obj,\
-	test_gui_checkboxtest.obj,\
+	test_gui_buttontest.obj
+
+TEST_GUI_OBJECTS1=test_gui_checkboxtest.obj,\
 	test_gui_checklistboxtest.obj,\
 	test_gui_choicebooktest.obj,\
 	test_gui_choicetest.obj,\
@@ -169,8 +170,9 @@ TEST_GUI_OBJECTS =  \
 	test_gui_pickertest.obj,\
 	test_gui_radioboxtest.obj,\
 	test_gui_radiobuttontest.obj,\
-	test_gui_rearrangelisttest.obj,\
-	test_gui_richtextctrltest.obj,\
+	test_gui_rearrangelisttest.obj
+
+TEST_GUI_OBJECTS2=test_gui_richtextctrltest.obj,\
 	test_gui_slidertest.obj,\
 	test_gui_spinctrldbltest.obj,\
 	test_gui_spinctrltest.obj,\
@@ -207,12 +209,19 @@ TEST_GUI_OBJECTS =  \
 all : test_gtk.exe test_gui_gtk.exe
 	write sys$output "tests created"
 
-test_gtk.exe : $(TEST_OBJECTS)
-	cxxlink/exec=test_gtk.exe $(TEST_OBJECTS),\
+test_gtk.exe : test_test.obj $(TEST_OBJECTS) $(TEST_OBJECTS1) $(TEST_L_OBJS)
+	library/create temp.olb $(TEST_OBJECTS)
+	library temp.olb $(TEST_OBJECTS1)
+	cxxlink/exec=test_gtk.exe test_test.obj,$(TEST_L_OBJS),temp.olb/lib,\
 	sys$library:libcppunit.olb/lib,[-.lib]vms_gtk/opt
+	delete temp.olb;*
 
-test_gui_gtk.exe : $(TEST_GUI_OBJECTS)
-	cxxlink/exec=test_gui_gtk.exe $(TEST_GUI_OBJECTS),\
+test_gui_gtk.exe : test_gui_test.obj $(TEST_GUI_OBJECTS) $(TEST_GUI_OBJECTS1)\
+	$(TEST_GUI_OBJECTS2)
+	library/create temp.olb $(TEST_GUI_OBJECTS)
+	library temp.olb $(TEST_GUI_OBJECTS1)
+	library temp.olb $(TEST_GUI_OBJECTS2)
+	cxxlink/exec=test_gui_gtk.exe test_gui_test.obj,temp.olb/lib,\
 	sys$library:libcppunit.olb/lib,[-.lib]vms_gtk/opt
 .else
 .ifdef __WXX11__
