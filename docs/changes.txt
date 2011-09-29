@@ -98,7 +98,8 @@ All (GUI):
 - wxRTC: fixed wxRichTextCtrl::Replace() to use specified range instead of selection.
 - wxRTC: indent dialog no longer ignores first-line indent if no indent specified.
 - wxRTC: improved outline and line spacing controls, and added page break control.
-- wxRTC: added ability to deselect attributes in font formatting dialog
+- wxRTC: added ability to deselect attributes in font formatting dialog.
+- wxRTC: fixed caret sizing when navigating near a large object.
 - Fixed buffer overrun when saving ICO image with a width that's not a multiple of 4.
 - Fixed wxOwnerDrawnComboBox/wxBitmapComboBox client data corruption when
   wxCB_SORT is used.
