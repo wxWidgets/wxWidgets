@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 26 September 2011                                                  *
+ * Date : 29 September 2011                                                  *
  *                                                                           *
  *****************************************************************************/
 
@@ -358,9 +358,17 @@ typedef pid_t GPid;
 
 #define wxUSE_WEBVIEW 0
 
-#define wxUSE_WEBVIEW_WEBKIT 0
+#ifdef __WXMSW__
+#define wxUSE_WEBVIEW_IE 0
+#else
+#define wxUSE_WEBVIEW_IE 0
+#endif
 
-#define wxUSE_WEBVIEW_IE     0
+#if defined(__WXGTK__) || defined(__WXOSX__)
+#define wxUSE_WEBVIEW_WEBKIT 0
+#else
+#define wxUSE_WEBVIEW_WEBKIT 0
+#endif
 
 #ifdef _MSC_VER
 #   if _MSC_VER >= 1310
@@ -432,6 +440,7 @@ typedef pid_t GPid;
 #define wxUSE_STATTEXT     1
 #define wxUSE_STATBMP      1
 #define wxUSE_TEXTCTRL     1
+#define wxUSE_TIMEPICKCTRL  1
 #if defined (__WXMOTIF__) || defined( __WXGTK__ )
 #define wxUSE_TOGGLEBTN    1
 #else
@@ -697,6 +706,7 @@ typedef pid_t GPid;
 
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 
+#define wxUSE_TIMEPICKCTRL_GENERIC 0
 
 #define wxUSE_CRASHREPORT 0
 
