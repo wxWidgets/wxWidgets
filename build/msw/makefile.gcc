@@ -2310,6 +2310,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_commandlinkbutton.o \
 	$(OBJS)\monodll_datecontrols.o \
 	$(OBJS)\monodll_datectrl.o \
+	$(OBJS)\monodll_datetimectrl.o \
 	$(OBJS)\monodll_hyperlink.o
 endif
 ifeq ($(WXUNIV),1)
@@ -3088,6 +3089,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_commandlinkbutton.o \
 	$(OBJS)\monolib_datecontrols.o \
 	$(OBJS)\monolib_datectrl.o \
+	$(OBJS)\monolib_datetimectrl.o \
 	$(OBJS)\monolib_hyperlink.o
 endif
 ifeq ($(WXUNIV),1)
@@ -4324,6 +4326,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_commandlinkbutton.o \
 	$(OBJS)\advdll_datecontrols.o \
 	$(OBJS)\advdll_datectrl.o \
+	$(OBJS)\advdll_datetimectrl.o \
 	$(OBJS)\advdll_hyperlink.o
 endif
 ifeq ($(WXUNIV),1)
@@ -4418,6 +4421,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_commandlinkbutton.o \
 	$(OBJS)\advlib_datecontrols.o \
 	$(OBJS)\advlib_datectrl.o \
+	$(OBJS)\advlib_datetimectrl.o \
 	$(OBJS)\advlib_hyperlink.o
 endif
 ifeq ($(WXUNIV),1)
@@ -6862,6 +6866,9 @@ $(OBJS)\monodll_datecontrols.o: ../../src/msw/datecontrols.cpp
 $(OBJS)\monodll_datectrl.o: ../../src/msw/datectrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_datetimectrl.o: ../../src/msw/datetimectrl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9233,6 +9240,9 @@ $(OBJS)\monolib_datecontrols.o: ../../src/msw/datecontrols.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_datectrl.o: ../../src/msw/datectrl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_datetimectrl.o: ../../src/msw/datetimectrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_hyperlink.o: ../../src/msw/hyperlink.cpp
@@ -14508,6 +14518,9 @@ $(OBJS)\advdll_datecontrols.o: ../../src/msw/datecontrols.cpp
 $(OBJS)\advdll_datectrl.o: ../../src/msw/datectrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_datetimectrl.o: ../../src/msw/datetimectrl.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14638,6 +14651,9 @@ $(OBJS)\advlib_datecontrols.o: ../../src/msw/datecontrols.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_datectrl.o: ../../src/msw/datectrl.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_datetimectrl.o: ../../src/msw/datetimectrl.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_hyperlink.o: ../../src/msw/hyperlink.cpp

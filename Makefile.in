@@ -3698,6 +3698,7 @@ COND_TOOLKIT_MSW_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/msw/commandlinkbutton.h \
 	wx/msw/calctrl.h \
 	wx/msw/datectrl.h \
+	wx/msw/datetimectrl.h \
 	wx/msw/hyperlink.h
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_MSW_ADVANCED_PLATFORM_NATIVE_HDR)
 COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_NATIVE_HDR =  \
@@ -3706,6 +3707,7 @@ COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/msw/commandlinkbutton.h \
 	wx/msw/calctrl.h \
 	wx/msw/datectrl.h \
+	wx/msw/datetimectrl.h \
 	wx/msw/hyperlink.h
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_NATIVE_HDR)
 COND_WXUNIV_0_ADVANCED_HDR =  \
@@ -6194,6 +6196,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_commandlinkbutton.o \
 	monodll_datecontrols.o \
 	monodll_datectrl.o \
+	monodll_datetimectrl.o \
 	monodll_msw_hyperlink.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
@@ -6203,6 +6206,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_commandlinkbutton.o \
 	monodll_datecontrols.o \
 	monodll_datectrl.o \
+	monodll_datetimectrl.o \
 	monodll_msw_hyperlink.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = \
@@ -8137,6 +8141,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_commandlinkbutton.o \
 	monolib_datecontrols.o \
 	monolib_datectrl.o \
+	monolib_datetimectrl.o \
 	monolib_msw_hyperlink.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
@@ -8146,6 +8151,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_commandlinkbutton.o \
 	monolib_datecontrols.o \
 	monolib_datectrl.o \
+	monolib_datetimectrl.o \
 	monolib_msw_hyperlink.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
@@ -11919,6 +11925,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_commandlinkbutton.o \
 	advdll_datecontrols.o \
 	advdll_datectrl.o \
+	advdll_datetimectrl.o \
 	advdll_msw_hyperlink.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
@@ -11928,6 +11935,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_commandlinkbutton.o \
 	advdll_datecontrols.o \
 	advdll_datectrl.o \
+	advdll_datetimectrl.o \
 	advdll_msw_hyperlink.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_2 \
@@ -12027,6 +12035,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_commandlinkbutton.o \
 	advlib_datecontrols.o \
 	advlib_datectrl.o \
+	advlib_datetimectrl.o \
 	advlib_msw_hyperlink.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
@@ -12036,6 +12045,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_commandlinkbutton.o \
 	advlib_datecontrols.o \
 	advlib_datectrl.o \
+	advlib_datetimectrl.o \
 	advlib_msw_hyperlink.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_3 \
@@ -20885,6 +20895,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
@@ -26233,6 +26249,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
@@ -35777,6 +35799,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
+@COND_TOOLKIT_MSW_WXUNIV_0@advdll_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advdll_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
+
 @COND_TOOLKIT_MSW_WXUNIV_0@advdll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp
 
@@ -36136,6 +36164,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_WXUNIV_0@advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
+
+@COND_TOOLKIT_MSW_WXUNIV_0@advlib_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advlib_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advlib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/hyperlink.cpp

@@ -5800,6 +5800,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\datetimectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\dc.h"
 				>
 			</File>

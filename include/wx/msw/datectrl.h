@@ -43,30 +43,21 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxDatePickerCtrlNameStr);
 
-    // set/get the date
+    // Override this one to add date-specific (and time-ignoring) checks.
     virtual void SetValue(const wxDateTime& dt);
     virtual wxDateTime GetValue() const;
 
-    // set/get the allowed valid range for the dates, if either/both of them
-    // are invalid, there is no corresponding limit and if neither is set
-    // GetRange() returns false
+    // Implement the base class pure virtuals.
     virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2);
     virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const;
 
+    // Override MSW-specific functions used during control creation.
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-
-    // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const { return false; }
-
 protected:
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
-    virtual wxSize DoGetBestSize() const;
-
-    // the date currently shown by the control, may be invalid
-    wxDateTime m_date;
-
+    virtual wxLocaleInfo MSWGetFormat() const;
+    virtual bool MSWAllowsNone() const { return HasFlag(wxDP_ALLOWNONE); }
+    virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& dtch);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl)
 };

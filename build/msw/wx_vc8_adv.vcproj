@@ -948,6 +948,26 @@
 				/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\datetimectrl.cpp"
+				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\hyperlink.cpp"
 				>
 				<FileConfiguration
@@ -1240,6 +1260,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\datectrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\datetimectrl.h"
 				>
 			</File>
 			<File

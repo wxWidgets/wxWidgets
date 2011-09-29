@@ -3048,6 +3048,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/commandlinkbutton.cpp
     src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
+    src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
@@ -3056,6 +3057,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/commandlinkbutton.h
     wx/msw/calctrl.h
     wx/msw/datectrl.h
+    wx/msw/datetimectrl.h
     wx/msw/hyperlink.h
 </set>
 

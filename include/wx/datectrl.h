@@ -16,8 +16,7 @@
 
 #if wxUSE_DATEPICKCTRL
 
-#include "wx/control.h"         // the base class
-#include "wx/datetime.h"
+#include "wx/datetimectrl.h"    // the base class
 
 #define wxDatePickerCtrlNameStr wxT("datectrl")
 
@@ -46,7 +45,7 @@ enum
 // wxDatePickerCtrl: allow the user to enter the date
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDatePickerCtrlBase : public wxControl
+class WXDLLIMPEXP_ADV wxDatePickerCtrlBase : public wxDateTimePickerCtrl
 {
 public:
     /*
@@ -63,13 +62,16 @@ public:
                     const wxString& name = wxDatePickerCtrlNameStr);
      */
 
-    // set/get the date
-    virtual void SetValue(const wxDateTime& dt) = 0;
-    virtual wxDateTime GetValue() const = 0;
+    /*
+        We inherit the methods to set/get the date from the base class.
 
-    // set/get the allowed valid range for the dates, if either/both of them
-    // are invalid, there is no corresponding limit and if neither is set
-    // GetRange() returns false
+        virtual void SetValue(const wxDateTime& dt) = 0;
+        virtual wxDateTime GetValue() const = 0;
+    */
+
+    // And add methods to set/get the allowed valid range for the dates. If
+    // either/both of them are invalid, there is no corresponding limit and if
+    // neither is set, GetRange() returns false.
     virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) = 0;
     virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const = 0;
 };

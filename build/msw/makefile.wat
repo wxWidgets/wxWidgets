@@ -830,6 +830,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_commandlinkbutton.obj &
 	$(OBJS)\monodll_datecontrols.obj &
 	$(OBJS)\monodll_datectrl.obj &
+	$(OBJS)\monodll_datetimectrl.obj &
 	$(OBJS)\monodll_hyperlink.obj
 !endif
 !ifeq WXUNIV 1
@@ -1613,6 +1614,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_commandlinkbutton.obj &
 	$(OBJS)\monolib_datecontrols.obj &
 	$(OBJS)\monolib_datectrl.obj &
+	$(OBJS)\monolib_datetimectrl.obj &
 	$(OBJS)\monolib_hyperlink.obj
 !endif
 !ifeq WXUNIV 1
@@ -2865,6 +2867,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_commandlinkbutton.obj &
 	$(OBJS)\advdll_datecontrols.obj &
 	$(OBJS)\advdll_datectrl.obj &
+	$(OBJS)\advdll_datetimectrl.obj &
 	$(OBJS)\advdll_hyperlink.obj
 !endif
 !ifeq WXUNIV 1
@@ -2961,6 +2964,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_commandlinkbutton.obj &
 	$(OBJS)\advlib_datecontrols.obj &
 	$(OBJS)\advlib_datectrl.obj &
+	$(OBJS)\advlib_datetimectrl.obj &
 	$(OBJS)\advlib_hyperlink.obj
 !endif
 !ifeq WXUNIV 1
@@ -7133,6 +7137,9 @@ $(OBJS)\monodll_datecontrols.obj :  .AUTODEPEND ..\..\src\msw\datecontrols.cpp
 $(OBJS)\monodll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_datetimectrl.obj :  .AUTODEPEND ..\..\src\msw\datetimectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -9504,6 +9511,9 @@ $(OBJS)\monolib_datecontrols.obj :  .AUTODEPEND ..\..\src\msw\datecontrols.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_datetimectrl.obj :  .AUTODEPEND ..\..\src\msw\datetimectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
@@ -14779,6 +14789,9 @@ $(OBJS)\advdll_datecontrols.obj :  .AUTODEPEND ..\..\src\msw\datecontrols.cpp
 $(OBJS)\advdll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_datetimectrl.obj :  .AUTODEPEND ..\..\src\msw\datetimectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -14909,6 +14922,9 @@ $(OBJS)\advlib_datecontrols.obj :  .AUTODEPEND ..\..\src\msw\datecontrols.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_datetimectrl.obj :  .AUTODEPEND ..\..\src\msw\datetimectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp

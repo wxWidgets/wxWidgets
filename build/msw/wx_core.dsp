@@ -5025,6 +5025,10 @@ SOURCE=..\..\include\wx\msw\datectrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\datetimectrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\dc.h
 # End Source File
 # Begin Source File
