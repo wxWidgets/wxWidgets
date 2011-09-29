@@ -1101,6 +1101,14 @@
 #   endif
 #endif /* !defined(wxUSE_TEXTCTRL) */
 
+#ifndef wxUSE_TIMEPICKCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TIMEPICKCTRL must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_TIMEPICKCTRL 0
+#   endif
+#endif /* !defined(wxUSE_TIMEPICKCTRL) */
+
 #ifndef wxUSE_TIPWINDOW
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TIPWINDOW must be defined, please read comment near the top of this file."
@@ -1713,16 +1721,16 @@
 #   endif
 #endif /* wxUSE_CALENDARCTRL */
 
-#if wxUSE_DATEPICKCTRL
+#if wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
 #   if !wxUSE_DATETIME
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxDatePickerCtrl requires wxUSE_DATETIME"
+#           error "wxDatePickerCtrl and wxTimePickerCtrl requires wxUSE_DATETIME"
 #       else
 #           undef wxUSE_DATETIME
 #           define wxUSE_DATETIME 1
 #       endif
 #   endif
-#endif /* wxUSE_DATEPICKCTRL */
+#endif /* wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL */
 
 #if wxUSE_CHECKLISTBOX
 #   if !wxUSE_LISTBOX

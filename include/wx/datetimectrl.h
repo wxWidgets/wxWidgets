@@ -13,7 +13,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_DATEPICKCTRL
+#if wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
 
 #define wxNEEDS_DATETIMEPICKCTRL
 
@@ -43,6 +43,6 @@ public:
     typedef wxDateTimePickerCtrlBase wxDateTimePickerCtrl;
 #endif
 
-#endif // wxUSE_DATEPICKCTRL
+#endif // wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
 
 #endif // _WX_DATETIME_CTRL_H_

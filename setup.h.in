@@ -330,10 +330,17 @@
 
 #define wxUSE_WEBVIEW 0
 
+#ifdef __WXMSW__
+#define wxUSE_WEBVIEW_IE 0
+#else
+#define wxUSE_WEBVIEW_IE 0
+#endif
+
+#if defined(__WXGTK__) || defined(__WXOSX__)
 #define wxUSE_WEBVIEW_WEBKIT 0
-
-#define wxUSE_WEBVIEW_IE     0
-
+#else
+#define wxUSE_WEBVIEW_WEBKIT 0
+#endif
 
 
 #ifdef _MSC_VER
@@ -404,6 +411,7 @@
 #define wxUSE_STATTEXT      0
 #define wxUSE_STATBMP       0
 #define wxUSE_TEXTCTRL      0
+#define wxUSE_TIMEPICKCTRL  0
 #define wxUSE_TOGGLEBTN     0
 #define wxUSE_TREECTRL      0
 #define wxUSE_TREELISTCTRL  0
@@ -670,6 +678,8 @@
 
 
 #define wxUSE_DATEPICKCTRL_GENERIC 0
+
+#define wxUSE_TIMEPICKCTRL_GENERIC 0
 
 
 #define wxUSE_CRASHREPORT 0

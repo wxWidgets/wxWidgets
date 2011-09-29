@@ -2974,6 +2974,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/propdlg.cpp
     src/generic/sashwin.cpp
     src/generic/splash.cpp
+    src/generic/timectrl.cpp
     src/generic/tipdlg.cpp
     src/generic/treelist.cpp
     src/generic/wizard.cpp
@@ -3010,6 +3011,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/propdlg.h
     wx/generic/sashwin.h
     wx/generic/splash.h
+    wx/generic/timectrl.h
     wx/generic/wizard.h
     wx/grid.h
     wx/hyperlink.h
@@ -3022,6 +3024,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/sound.h
     wx/splash.h
     wx/taskbar.h
+    wx/timectrl.h
     wx/tipdlg.h
     wx/treelist.h
     wx/wizard.h
@@ -3050,6 +3053,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/datectrl.cpp
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
+    src/msw/timectrl.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
     wx/generic/animate.h
@@ -3059,6 +3063,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/datectrl.h
     wx/msw/datetimectrl.h
     wx/msw/hyperlink.h
+    wx/msw/timectrl.h
 </set>
 
 <!-- not built on WindowsCE: -->

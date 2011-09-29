@@ -927,6 +927,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_STATBOX=no
     DEFAULT_wxUSE_STATLINE=no
     DEFAULT_wxUSE_STATUSBAR=no
+    DEFAULT_wxUSE_TIMEPICKCTRL=no
     DEFAULT_wxUSE_TIPWINDOW=no
     DEFAULT_wxUSE_TOGGLEBTN=no
     DEFAULT_wxUSE_TOOLBAR=no
@@ -1002,6 +1003,7 @@ WX_ARG_FEATURE(statusbar,   [  --enable-statusbar      use wxStatusBar class], w
 WX_ARG_FEATURE(taskbaricon, [  --enable-taskbaricon    use wxTaskBarIcon class], wxUSE_TASKBARICON)
 WX_ARG_FEATURE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
 WX_ARG_FEATURE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
+WX_ARG_FEATURE(datepick,    [  --enable-timepick       use wxTimePickerCtrl class], wxUSE_TIMEPICKCTRL)
 WX_ARG_FEATURE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], wxUSE_TIPWINDOW)
 WX_ARG_FEATURE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
 WX_ARG_FEATURE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
@@ -7108,6 +7110,11 @@ if test "$wxUSE_TEXTCTRL" = "yes"; then
     dnl seem useful to allow disabling them
     AC_DEFINE(wxUSE_RICHEDIT)
     AC_DEFINE(wxUSE_RICHEDIT2)
+fi
+
+if test "$wxUSE_TIMEPICKCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_TIMEPICKCTRL)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then

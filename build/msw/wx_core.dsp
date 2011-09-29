@@ -5404,6 +5404,10 @@ SOURCE=..\..\include\wx\msw\tglbtn.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\timectrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\toolbar.h
 # End Source File
 # Begin Source File
@@ -5673,6 +5677,10 @@ SOURCE=..\..\include\wx\generic\statusbr.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\textdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\timectrl.h
 # End Source File
 # Begin Source File
 
@@ -6881,6 +6889,10 @@ SOURCE=..\..\include\wx\textwrapper.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tglbtn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\timectrl.h
 # End Source File
 # Begin Source File
 

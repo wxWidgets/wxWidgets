@@ -1004,6 +1004,58 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\timectrl.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud\adv\msw_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu\adv\msw_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll\adv\msw_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll\adv\msw_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\version.rc"
 				>
 				<FileConfiguration
@@ -1111,6 +1163,74 @@
 			<File
 				RelativePath="..\..\src\generic\splash.cpp"
 				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\timectrl.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud\adv\generic_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu\adv\generic_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswunivud\adv\generic_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswunivu\adv\generic_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll\adv\generic_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll\adv\generic_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswunivuddll\adv\generic_timectrl.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswunivudll\adv\generic_timectrl.obj"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\tipdlg.cpp"
@@ -1378,6 +1498,10 @@
 				RelativePath="..\..\include\wx\msw\taskbar.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\timectrl.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Generic Headers"
@@ -1457,6 +1581,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\splash.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\timectrl.h"
 				>
 			</File>
 			<File
@@ -1558,6 +1686,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\taskbar.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\timectrl.h"
 				>
 			</File>
 			<File

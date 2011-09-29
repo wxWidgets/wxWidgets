@@ -1870,6 +1870,7 @@ Optional Features:
   --enable-taskbaricon    use wxTaskBarIcon class
   --enable-tbarnative     use native wxToolBar class
   --enable-textctrl       use wxTextCtrl class
+  --enable-timepick       use wxTimePickerCtrl class
   --enable-tipwindow      use wxTipWindow class
   --enable-togglebtn      use wxToggleButton class
   --enable-toolbar        use wxToolBar class
@@ -9911,6 +9912,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_STATBOX=no
     DEFAULT_wxUSE_STATLINE=no
     DEFAULT_wxUSE_STATUSBAR=no
+    DEFAULT_wxUSE_TIMEPICKCTRL=no
     DEFAULT_wxUSE_TIPWINDOW=no
     DEFAULT_wxUSE_TOGGLEBTN=no
     DEFAULT_wxUSE_TOOLBAR=no
@@ -12602,6 +12604,50 @@ fi
             fi
           else
             result=$wxUSE_TEXTCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-datepick" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-datepick... $ECHO_C" >&6; }
+          # Check whether --enable-datepick was given.
+if test "${enable_datepick+set}" = set; then
+  enableval=$enable_datepick;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=yes'
+                          else
+                            wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=${'DEFAULT_wxUSE_TIMEPICKCTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_datepick"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_TIMEPICKCTRL = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_TIMEPICKCTRL
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -47953,6 +47999,14 @@ _ACEOF
 #define wxUSE_RICHEDIT2 1
 _ACEOF
 
+fi
+
+if test "$wxUSE_TIMEPICKCTRL" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_TIMEPICKCTRL 1
+_ACEOF
+
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then

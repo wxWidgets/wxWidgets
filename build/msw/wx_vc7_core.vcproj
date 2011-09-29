@@ -4625,6 +4625,9 @@
 				RelativePath="..\..\include\wx\msw\tglbtn.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\timectrl.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\toolbar.h">
 			</File>
 			<File
@@ -4828,6 +4831,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\textdlgg.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\timectrl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\treectlg.h">
@@ -5737,6 +5743,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tglbtn.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\timectrl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tipdlg.h">

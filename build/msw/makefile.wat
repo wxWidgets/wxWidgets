@@ -815,6 +815,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_propdlg.obj &
 	$(OBJS)\monodll_sashwin.obj &
 	$(OBJS)\monodll_splash.obj &
+	$(OBJS)\monodll_generic_timectrl.obj &
 	$(OBJS)\monodll_tipdlg.obj &
 	$(OBJS)\monodll_treelist.obj &
 	$(OBJS)\monodll_wizard.obj &
@@ -831,7 +832,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_datecontrols.obj &
 	$(OBJS)\monodll_datectrl.obj &
 	$(OBJS)\monodll_datetimectrl.obj &
-	$(OBJS)\monodll_hyperlink.obj
+	$(OBJS)\monodll_hyperlink.obj &
+	$(OBJS)\monodll_msw_timectrl.obj
 !endif
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
@@ -862,6 +864,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_propdlg.obj &
 	$(OBJS)\monodll_sashwin.obj &
 	$(OBJS)\monodll_splash.obj &
+	$(OBJS)\monodll_generic_timectrl.obj &
 	$(OBJS)\monodll_tipdlg.obj &
 	$(OBJS)\monodll_treelist.obj &
 	$(OBJS)\monodll_wizard.obj &
@@ -1599,6 +1602,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_propdlg.obj &
 	$(OBJS)\monolib_sashwin.obj &
 	$(OBJS)\monolib_splash.obj &
+	$(OBJS)\monolib_generic_timectrl.obj &
 	$(OBJS)\monolib_tipdlg.obj &
 	$(OBJS)\monolib_treelist.obj &
 	$(OBJS)\monolib_wizard.obj &
@@ -1615,7 +1619,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_datecontrols.obj &
 	$(OBJS)\monolib_datectrl.obj &
 	$(OBJS)\monolib_datetimectrl.obj &
-	$(OBJS)\monolib_hyperlink.obj
+	$(OBJS)\monolib_hyperlink.obj &
+	$(OBJS)\monolib_msw_timectrl.obj
 !endif
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
@@ -1646,6 +1651,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_propdlg.obj &
 	$(OBJS)\monolib_sashwin.obj &
 	$(OBJS)\monolib_splash.obj &
+	$(OBJS)\monolib_generic_timectrl.obj &
 	$(OBJS)\monolib_tipdlg.obj &
 	$(OBJS)\monolib_treelist.obj &
 	$(OBJS)\monolib_wizard.obj &
@@ -2852,6 +2858,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_propdlg.obj &
 	$(OBJS)\advdll_sashwin.obj &
 	$(OBJS)\advdll_splash.obj &
+	$(OBJS)\advdll_generic_timectrl.obj &
 	$(OBJS)\advdll_tipdlg.obj &
 	$(OBJS)\advdll_treelist.obj &
 	$(OBJS)\advdll_wizard.obj &
@@ -2868,7 +2875,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_datecontrols.obj &
 	$(OBJS)\advdll_datectrl.obj &
 	$(OBJS)\advdll_datetimectrl.obj &
-	$(OBJS)\advdll_hyperlink.obj
+	$(OBJS)\advdll_hyperlink.obj &
+	$(OBJS)\advdll_msw_timectrl.obj
 !endif
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
@@ -2899,6 +2907,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_propdlg.obj &
 	$(OBJS)\advdll_sashwin.obj &
 	$(OBJS)\advdll_splash.obj &
+	$(OBJS)\advdll_generic_timectrl.obj &
 	$(OBJS)\advdll_tipdlg.obj &
 	$(OBJS)\advdll_treelist.obj &
 	$(OBJS)\advdll_wizard.obj &
@@ -2949,6 +2958,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_propdlg.obj &
 	$(OBJS)\advlib_sashwin.obj &
 	$(OBJS)\advlib_splash.obj &
+	$(OBJS)\advlib_generic_timectrl.obj &
 	$(OBJS)\advlib_tipdlg.obj &
 	$(OBJS)\advlib_treelist.obj &
 	$(OBJS)\advlib_wizard.obj &
@@ -2965,7 +2975,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_datecontrols.obj &
 	$(OBJS)\advlib_datectrl.obj &
 	$(OBJS)\advlib_datetimectrl.obj &
-	$(OBJS)\advlib_hyperlink.obj
+	$(OBJS)\advlib_hyperlink.obj &
+	$(OBJS)\advlib_msw_timectrl.obj
 !endif
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
@@ -2996,6 +3007,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_propdlg.obj &
 	$(OBJS)\advlib_sashwin.obj &
 	$(OBJS)\advlib_splash.obj &
+	$(OBJS)\advlib_generic_timectrl.obj &
 	$(OBJS)\advlib_tipdlg.obj &
 	$(OBJS)\advlib_treelist.obj &
 	$(OBJS)\advlib_wizard.obj &
@@ -7143,6 +7155,9 @@ $(OBJS)\monodll_datetimectrl.obj :  .AUTODEPEND ..\..\src\msw\datetimectrl.cpp
 $(OBJS)\monodll_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_msw_timectrl.obj :  .AUTODEPEND ..\..\src\msw\timectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8768,6 +8783,11 @@ $(OBJS)\monodll_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_generic_timectrl.obj :  .AUTODEPEND ..\..\src\generic\timectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -9517,6 +9537,9 @@ $(OBJS)\monolib_datetimectrl.obj :  .AUTODEPEND ..\..\src\msw\datetimectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_timectrl.obj :  .AUTODEPEND ..\..\src\msw\timectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
@@ -11140,6 +11163,11 @@ $(OBJS)\monolib_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_generic_timectrl.obj :  .AUTODEPEND ..\..\src\generic\timectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -14795,6 +14823,9 @@ $(OBJS)\advdll_datetimectrl.obj :  .AUTODEPEND ..\..\src\msw\datetimectrl.cpp
 $(OBJS)\advdll_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_msw_timectrl.obj :  .AUTODEPEND ..\..\src\msw\timectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -14876,6 +14907,9 @@ $(OBJS)\advdll_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
 $(OBJS)\advdll_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_generic_timectrl.obj :  .AUTODEPEND ..\..\src\generic\timectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -14928,6 +14962,9 @@ $(OBJS)\advlib_datetimectrl.obj :  .AUTODEPEND ..\..\src\msw\datetimectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_hyperlink.obj :  .AUTODEPEND ..\..\src\msw\hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_msw_timectrl.obj :  .AUTODEPEND ..\..\src\msw\timectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
@@ -15009,6 +15046,9 @@ $(OBJS)\advlib_sashwin.obj :  .AUTODEPEND ..\..\src\generic\sashwin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_splash.obj :  .AUTODEPEND ..\..\src\generic\splash.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_generic_timectrl.obj :  .AUTODEPEND ..\..\src\generic\timectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp

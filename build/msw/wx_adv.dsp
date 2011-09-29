@@ -551,6 +551,41 @@ SOURCE=..\..\src\msw\taskbar.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\timectrl.cpp
+
+!IF  "$(CFG)" == "adv - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "adv - Win32 DLL Universal Release"
@@ -671,6 +706,10 @@ SOURCE=..\..\src\generic\sashwin.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\splash.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\timectrl.cpp
 # End Source File
 # Begin Source File
 
@@ -961,6 +1000,10 @@ SOURCE=..\..\include\wx\msw\sound.h
 
 SOURCE=..\..\include\wx\msw\taskbar.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\timectrl.h
+# End Source File
 # End Group
 # Begin Group "Generic Headers"
 
@@ -1040,6 +1083,10 @@ SOURCE=..\..\include\wx\generic\sashwin.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\splash.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\timectrl.h
 # End Source File
 # Begin Source File
 
@@ -1140,6 +1187,10 @@ SOURCE=..\..\include\wx\splash.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\taskbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\timectrl.h
 # End Source File
 # Begin Source File
 
