@@ -671,16 +671,20 @@ wxTreeListModel::InsertItem(Node* parent,
     wxScopedPtr<Node>
         newItem(new Node(parent, text, imageClosed, imageOpened, data));
 
+    // FIXME-VC6: This compiler refuses to compare "Node* previous" with
+    //            wxTLI_XXX without some help.
+    const wxTreeListItem previousItem(previous);
+
     // If we have no children at all, then inserting as last child is the same
     // as inserting as the first one so check for it here too.
-    if ( previous == wxTLI_FIRST ||
-            (previous == wxTLI_LAST && !parent->GetChild()) )
+    if ( previousItem == wxTLI_FIRST ||
+            (previousItem == wxTLI_LAST && !parent->GetChild()) )
     {
         parent->InsertChild(newItem.get());
     }
     else // Not the first item, find the previous one.
     {
-        if ( previous == wxTLI_LAST )
+        if ( previousItem == wxTLI_LAST )
         {
             previous = parent->GetChild();
 
@@ -1148,7 +1152,7 @@ void wxTreeListCtrl::SetColumnWidth(unsigned col, int width)
     wxDataViewColumn* const column = m_view->GetColumn(col);
     wxCHECK_RET( column, "No such column?" );
 
-    return column->SetWidth(width);
+    column->SetWidth(width);
 }
 
 int wxTreeListCtrl::GetColumnWidth(unsigned col) const
