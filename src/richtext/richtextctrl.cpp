@@ -3377,12 +3377,25 @@ void wxRichTextCtrl::PositionCaret(wxRichTextParagraphLayoutBox* container)
             if (GetCaret()->GetSize() != newSz)
                 GetCaret()->SetSize(newSz);
 
-            int halfSize = newSz.y/2;
-            // If the caret is beyond the margin, hide it by moving it out of the way
-            if (((pt.y + halfSize) < GetBuffer().GetTopMargin()) || ((pt.y + halfSize) > (GetClientSize().y - GetBuffer().GetBottomMargin())))
+            // Adjust size so the caret size and position doesn't appear in the margins
+            if (((pt.y + newSz.y) <= GetBuffer().GetTopMargin()) || (pt.y >= (GetClientSize().y - GetBuffer().GetBottomMargin())))
             {
                 pt.x = -200;
                 pt.y = -200;
+            }
+            else if (pt.y < GetBuffer().GetTopMargin() && (pt.y + newSz.y) > GetBuffer().GetTopMargin())
+            {
+                newSz.y -= (GetBuffer().GetTopMargin() - pt.y);
+                if (newSz.y > 0)
+                {
+                    pt.y = GetBuffer().GetTopMargin();
+                    GetCaret()->SetSize(newSz);
+                }
+            }
+            else if (pt.y < (GetClientSize().y - GetBuffer().GetBottomMargin()) && (pt.y + newSz.y) > (GetClientSize().y - GetBuffer().GetBottomMargin()))
+            {
+                newSz.y = GetClientSize().y - GetBuffer().GetBottomMargin() - pt.y;
+                GetCaret()->SetSize(newSz);
             }
 
             GetCaret()->Move(pt);
