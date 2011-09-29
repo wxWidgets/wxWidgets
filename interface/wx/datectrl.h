@@ -67,6 +67,11 @@ public:
                      const wxString& name = "datectrl");
 
     /**
+        Create the control window.
+
+        This method should only be used for objects created using default
+        constructor.
+
         @param parent
             Parent window, must not be non-@NULL.
         @param id
@@ -81,8 +86,8 @@ public:
             best size by using the height approximately equal to a text control
             and width large enough to show the date string fully.
         @param style
-            The window style, should be left at 0 as there are no special
-            styles for this control in this version.
+            The window style, see the description of the styles in the class
+            documentation.
         @param validator
             Validator which can be used for additional date checks.
         @param name
@@ -123,9 +128,10 @@ public:
     virtual bool GetRange(wxDateTime* dt1, wxDateTime* dt2) const = 0;
 
     /**
-        Returns the currently selected. If there is no selection or the
-        selection is outside of the current range, an invalid object is
-        returned.
+        Returns the currently entered date.
+
+        For a control with @c wxDP_ALLOWNONE style the returned value may be
+        invalid if no date is entered, otherwise it is always valid.
     */
     virtual wxDateTime GetValue() const = 0;
 
