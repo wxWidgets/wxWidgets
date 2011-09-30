@@ -1089,20 +1089,18 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     wxBitmap bmpSource = bmp;  // we need a non-const instance
     m_buffer = new unsigned char[bw*bh*4];
     wxUint32* data = (wxUint32*)m_buffer;
+    cairo_format_t bufferFormat;
 
     // Create a surface object and copy the bitmap pixel data to it.  if the
     // image has alpha (or a mask represented as alpha) then we'll use a
     // different format and iterator than if it doesn't...
-    if (bmpSource.HasAlpha() || (bmpSource.GetMask()
-#ifdef __WXMSW__
-        // this check is needed under wxMSW, but adding this condition to wxGTK 
-        // causes an assert when getting alpha pixel data, not sure about Mac.
-        && bmpSource.GetDepth() == 32
+    if (bmpSource.GetDepth() == 32 
+#ifdef __WXGTK__
+            || bmpSource.GetMask()
 #endif
-    ))
-    {
-        m_surface = cairo_image_surface_create_for_data(
-            m_buffer, CAIRO_FORMAT_ARGB32, bw, bh, bw*4);
+    )
+    {   // use the bitmap's alpha
+        bufferFormat = CAIRO_FORMAT_ARGB32;
         wxAlphaPixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
@@ -1133,8 +1131,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     }
     else  // no alpha
     {
-        m_surface = cairo_image_surface_create_for_data(
-            m_buffer, CAIRO_FORMAT_RGB24, bw, bh, bw*4);
+        bufferFormat = CAIRO_FORMAT_RGB24;
         wxNativePixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
@@ -1156,6 +1153,38 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             p.OffsetY(pixData, 1);
         }
     }
+#ifdef __WXMSW__
+    // if there is a mask, set the alpha bytes in the target buffer to 
+    // fully transparent or fully opaque
+    if (bmpSource.GetMask())
+    {
+        wxBitmap bmpMask = bmpSource.GetMaskBitmap();
+        bufferFormat = CAIRO_FORMAT_ARGB32;
+        data = (wxUint32*)m_buffer;
+        wxNativePixelData pixData(bmpMask, wxPoint(0,0), wxSize(bw, bh));
+        wxCHECK_RET( pixData, wxT("Failed to gain raw access to mask bitmap data."));
+
+        wxNativePixelData::Iterator p(pixData);
+        for (int y=0; y<bh; y++)
+        {
+            wxNativePixelData::Iterator rowStart = p;
+            for (int x=0; x<bw; x++)
+            {
+                if (p.Red()+p.Green()+p.Blue() == 0)
+                    *data = 0;
+                else
+                    *data = (wxALPHA_OPAQUE << 24) | (*data & 0x00FFFFFF);
+                ++data;
+                ++p;
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }
+    }
+#endif
+
+    m_surface = cairo_image_surface_create_for_data(
+                            m_buffer, bufferFormat, bw, bh, bw*4);
     m_pattern = cairo_pattern_create_for_surface(m_surface);
 #endif // wxHAS_RAW_BITMAP
 }
