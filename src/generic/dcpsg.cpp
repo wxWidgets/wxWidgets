@@ -1135,7 +1135,7 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
 
     if (!pen.IsOk()) return;
 
-    int oldStyle = m_pen.GetStyle();
+    int oldStyle = m_pen.IsOk() ? m_pen.GetStyle() : wxPENSTYLE_INVALID;
 
     m_pen = pen;
 
