@@ -42,7 +42,7 @@
         <if cond="SHARED=='1' and MONOLITHIC=='0'">WXUSINGDLL</if>
     </set>
 
-    <lib id="wxscintilla" template="3rdparty_lib,wxscintilla_cppflags"
+    <lib id="wxscintilla" template="3rdparty_lib,wxscintilla_cppflags,msvc_setup_h"
          cond="USE_STC=='1' and BUILDING_LIB=='1'">
         <if cond="FORMAT!='autoconf'">
             <include>$(SETUPHDIR)</include>
