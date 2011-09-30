@@ -200,7 +200,7 @@ WX_CPPUNIT_ALLOW_EQUALS_TO_INT(short)
 WX_CPPUNIT_ALLOW_EQUALS_TO_INT(unsigned)
 WX_CPPUNIT_ALLOW_EQUALS_TO_INT(unsigned long)
 
-#if defined( __VMS ) && define( __ia64 )
+#if defined( __VMS ) && defined( __ia64 )
 WX_CPPUNIT_ALLOW_EQUALS_TO_INT(std::basic_streambuf<char>::pos_type);
 #endif
 
