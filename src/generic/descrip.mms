@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 27 September 2011                                                   *
+# Date : 30 September 2011                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -95,7 +95,7 @@ OBJECTS = \
 		grideditors.obj,vlbox.obj,vscroll.obj,stattextg.obj,\
 		editlbox.obj,datavgen.obj,dbgrptg.obj,dragimgg.obj,\
 		richmsgdlgg.obj,commandlinkbuttong.obj,spinctlg.obj,\
-		markuptext.obj,bannerwindow.obj
+		markuptext.obj,bannerwindow.obj,timectrl.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -168,7 +168,7 @@ SOURCES = \
 		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp,editlbox.cpp,\
 		datavgen.cpp,dbgrptg.cpp,dragimgg.cpp,richmsgdlgg.cpp,\
 		commandlinkbuttong.cpp,spinctlg.cpp markuptext.cpp \
-		bannerwindow.cpp
+		bannerwindow.cpp,timectrl.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -307,3 +307,4 @@ commandlinkbuttong.obj : commandlinkbuttong.cpp
 spinctlg.obj : spinctlg.cpp
 markuptext.obj : markuptext.cpp
 bannerwindow.obj : bannerwindow.cpp
+timectrl.obj : timectrl.cpp
