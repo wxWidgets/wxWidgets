@@ -209,10 +209,8 @@ public:
 
 class ClassFactory : public IClassFactory
 {
-private:
-    ULONG m_refCount;
 public:
-    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler) {}
+    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler), m_refCount(0) {}
     //IUnknown
     ULONG STDMETHODCALLTYPE AddRef();
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
@@ -223,6 +221,7 @@ public:
                                              REFIID riid, void** ppvObject);
     HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
 private:
+    ULONG m_refCount;
     wxSharedPtr<wxWebViewHandler> m_handler;
 };
 
