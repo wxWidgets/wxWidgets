@@ -54,27 +54,24 @@
            With this style, tabs are drawn along the bottom of the notebook.
     @endStyleTable
 
-
     @beginEventEmissionTable{wxAuiNotebookEvent}
     @event{EVT_AUINOTEBOOK_PAGE_CLOSE(id, func)}
-        Provide description.
+        A page is about to be closed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE event.
     @event{EVT_AUINOTEBOOK_PAGE_CHANGED(id, func)}
-        Provide description.
+        The page selection was changed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED event.
     @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
-        Provide description.
+        The page selection is about to be changed. Processes a  @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
     @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
-        Provide description.
+        The window list button has been pressed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_BUTTON event.
     @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
-        Provide description.
+        Dragging is about to begin. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG event.
     @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}
-        Provide description.
+        Dragging has ended. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_END_DRAG event.
     @event{EVT_AUINOTEBOOK_DRAG_MOTION(id, func)}
-        Provide description.
+        Emitted during a drag and drop operation. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION event.
     @event{EVT_AUINOTEBOOK_ALLOW_DND(id, func)}
-        Provide description.
+        Whether to allow a tab to be dropped. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND event. This event must be specially allowed.
     @endEventTable
-
-    @todo provide description for the events above.
 
     @library{wxaui}
     @category{aui}
