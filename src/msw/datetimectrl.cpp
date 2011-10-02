@@ -28,6 +28,10 @@
 #ifdef wxNEEDS_DATETIMEPICKCTRL
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapwin.h"
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
+    #include "wx/msw/private.h"
+    #include "wx/dcclient.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private/datecontrols.h"
