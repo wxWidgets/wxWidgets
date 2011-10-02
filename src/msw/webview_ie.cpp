@@ -665,6 +665,7 @@ void wxWebViewIE::RunScript(const wxString& javascript)
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
+#ifndef __MINGW32__
     wxDynamicLibrary urlMon(wxT("urlmon.dll"));
     if(urlMon.HasSymbol(wxT("CoInternetGetSession")))
     {
@@ -689,6 +690,7 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     {
         wxFAIL_MSG("urlmon does not contain CoInternetGetSession");
     }
+#endif
 }
 
 bool wxWebViewIE::CanExecCommand(wxString command) const
@@ -975,6 +977,8 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
     evt.Skip();
 }
 
+#ifndef __MINGW32__
+
 VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler)
 {
     m_refCount = 0;
@@ -1143,5 +1147,7 @@ ULONG ClassFactory::Release(void)
     }
 
 } 
+
+#endif // __MINGW32__
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
