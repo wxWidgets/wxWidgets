@@ -72,7 +72,9 @@ public:
         // this is not currently supported by wxTextCtrl.
         m_text->SetCursor(wxCURSOR_ARROW);
 
-        m_btn = new wxSpinButton(ctrl);
+        m_btn = new wxSpinButton(ctrl, wxID_ANY,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxSP_VERTICAL | wxSP_WRAP);
 
         m_currentField = Field_Hour;
         m_isFirstDigit = true;
