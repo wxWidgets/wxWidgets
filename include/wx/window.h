@@ -1254,6 +1254,15 @@ public:
         // get the associated tooltip or NULL if none
     wxToolTip* GetToolTip() const { return m_tooltip; }
     wxString GetToolTipText() const;
+
+    // Use the same tool tip as the given one (which can be NULL to indicate
+    // that no tooltip should be used) for this window. This is currently only
+    // used by wxCompositeWindow::DoSetToolTip() implementation and is not part
+    // of the public wx API.
+    //
+    // Returns true if tip was valid and we copied it or false if it was NULL
+    // and we reset our own tooltip too.
+    bool CopyToolTip(wxToolTip *tip);
 #else // !wxUSE_TOOLTIPS
         // make it much easier to compile apps in an environment
         // that doesn't support tooltips, such as PocketPC

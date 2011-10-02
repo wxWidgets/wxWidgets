@@ -2121,6 +2121,13 @@ void wxWindowBase::DoSetToolTip(wxToolTip *tooltip)
     }
 }
 
+bool wxWindowBase::CopyToolTip(wxToolTip *tip)
+{
+    SetToolTip(tip ? new wxToolTip(tip->GetTip()) : NULL);
+
+    return tip != NULL;
+}
+
 #endif // wxUSE_TOOLTIPS
 
 // ----------------------------------------------------------------------------
