@@ -2604,15 +2604,18 @@ bool wxWindowMac::IsShownOnScreen() const
 
 #if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
 
-OSStatus wxHotKeyHandler(EventHandlerCallRef nextHandler,EventRef event, void *userData)
+OSStatus
+wxHotKeyHandler(EventHandlerCallRef WXUNUSED(nextHandler),
+                EventRef event,
+                void* WXUNUSED(userData))
 {
     EventHotKeyID hotKeyId;
 
     GetEventParameter( event, kEventParamDirectObject, typeEventHotKeyID, NULL, sizeof(hotKeyId), NULL, &hotKeyId);
 
-    for ( int i = 0; i < s_hotkeys.size(); ++i )
+    for ( unsigned i = 0; i < s_hotkeys.size(); ++i )
     {
-        if ( s_hotkeys[i].keyId == hotKeyId.id )
+        if ( s_hotkeys[i].keyId == static_cast<int>(hotKeyId.id) )
         {
             unsigned char charCode ;
             UInt32 keyCode ;
@@ -2641,7 +2644,7 @@ OSStatus wxHotKeyHandler(EventHandlerCallRef nextHandler,EventRef event, void *u
 
 bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
 {
-    for ( int i = 0; i < s_hotkeys.size(); ++i )
+    for ( unsigned i = 0; i < s_hotkeys.size(); ++i )
     {
         if ( s_hotkeys[i].keyId == hotkeyId )
         {
@@ -2700,7 +2703,7 @@ bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
 
 bool wxWindowMac::UnregisterHotKey(int hotkeyId)
 {
-    for ( int i = s_hotkeys.size()-1; i>=0; -- i )
+    for ( unsigned i = s_hotkeys.size()-1; i>=0; -- i )
     {
         if ( s_hotkeys[i].keyId == hotkeyId )
         {
