@@ -3,7 +3,7 @@
 // Purpose:     wxCompositeWindow<> declaration
 // Author:      Vadim Zeitlin
 // Created:     2011-01-02
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,6 +12,8 @@
 #define _WX_COMPOSITEWIN_H_
 
 #include "wx/window.h"
+
+class WXDLLIMPEXP_FWD_CORE wxToolTip;
 
 // NB: This is an experimental and, as for now, undocumented class used only by
 //     wxWidgets itself internally. Don't use it in your code until its API is
@@ -59,7 +61,7 @@ public:
         if ( !BaseWindowClass::SetForegroundColour(colour) )
             return false;
 
-        DoSetForAllParts(&wxWindowBase::SetForegroundColour, colour);
+        SetForAllParts(&wxWindowBase::SetForegroundColour, colour);
 
         return true;
     }
@@ -69,7 +71,7 @@ public:
         if ( !BaseWindowClass::SetBackgroundColour(colour) )
             return false;
 
-        DoSetForAllParts(&wxWindowBase::SetBackgroundColour, colour);
+        SetForAllParts(&wxWindowBase::SetBackgroundColour, colour);
 
         return true;
     }
@@ -79,7 +81,7 @@ public:
         if ( !BaseWindowClass::SetFont(font) )
             return false;
 
-        DoSetForAllParts(&wxWindowBase::SetFont, font);
+        SetForAllParts(&wxWindowBase::SetFont, font);
 
         return true;
     }
@@ -89,10 +91,19 @@ public:
         if ( !BaseWindowClass::SetCursor(cursor) )
             return false;
 
-        DoSetForAllParts(&wxWindowBase::SetCursor, cursor);
+        SetForAllParts(&wxWindowBase::SetCursor, cursor);
 
         return true;
     }
+
+#if wxUSE_TOOLTIPS
+    virtual void DoSetToolTip(wxToolTip *tip)
+    {
+        BaseWindowClass::DoSetToolTip(tip);
+
+        SetForAllParts(&wxWindowBase::CopyToolTip, tip);
+    }
+#endif // wxUSE_TOOLTIPS
 
 private:
     // Must be implemented by the derived class to return all children to which
@@ -100,7 +111,19 @@ private:
     virtual wxWindowList GetCompositeWindowParts() const = 0;
 
     template <class T>
-    void DoSetForAllParts(bool (wxWindowBase::*func)(const T&), const T& arg)
+    void SetForAllParts(bool (wxWindowBase::*func)(const T&), const T& arg)
+    {
+        DoSetForAllParts<const T&>(func, arg);
+    }
+
+    template <class T>
+    void SetForAllParts(bool (wxWindowBase::*func)(T*), T* arg)
+    {
+        DoSetForAllParts<T*>(func, arg);
+    }
+
+    template <class T>
+    void DoSetForAllParts(bool (wxWindowBase::*func)(T), T arg)
     {
         // Simply call the setters for all parts of this composite window.
         const wxWindowList parts = GetCompositeWindowParts();

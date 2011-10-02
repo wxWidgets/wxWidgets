@@ -472,6 +472,7 @@ All (GUI):
 - Added wxPersistentSplitter.
 - Added wxWebView library (Steven Lamerton & Auria, GSoC 2011 project).
 - Derive wxAuiNotebook from wxBookCtrlBase (Steven Lamerton)
+- Fix tooltips in wxSearchCtrl and other composite controls (Catalin Raceanu).
 
 OSX:
 
