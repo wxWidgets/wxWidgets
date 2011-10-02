@@ -24,7 +24,7 @@
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
-#include "wx/control.h"
+#include "wx/bookctrl.h"
 
 
 class wxAuiNotebook;
@@ -60,39 +60,27 @@ enum wxAuiNotebookOption
 
 // aui notebook event class
 
-class WXDLLIMPEXP_AUI wxAuiNotebookEvent : public wxNotifyEvent
+class WXDLLIMPEXP_AUI wxAuiNotebookEvent : public wxBookCtrlEvent
 {
 public:
     wxAuiNotebookEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0)
-          : wxNotifyEvent(command_type, win_id)
+          : wxBookCtrlEvent(command_type, win_id)
     {
-        old_selection = -1;
-        selection = -1;
         drag_source = NULL;
     }
 #ifndef SWIG
-    wxAuiNotebookEvent(const wxAuiNotebookEvent& c) : wxNotifyEvent(c)
+    wxAuiNotebookEvent(const wxAuiNotebookEvent& c) : wxBookCtrlEvent(c)
     {
-        old_selection = c.old_selection;
-        selection = c.selection;
         drag_source = c.drag_source;
     }
 #endif
     wxEvent *Clone() const { return new wxAuiNotebookEvent(*this); }
 
-    void SetSelection(int s) { selection = s; m_commandInt = s; }
-    int GetSelection() const { return selection; }
-
-    void SetOldSelection(int s) { old_selection = s; }
-    int GetOldSelection() const { return old_selection; }
-
     void SetDragSource(wxAuiNotebook* s) { drag_source = s; }
     wxAuiNotebook* GetDragSource() const { return drag_source; }
 
 public:
-    int old_selection;
-    int selection;
     wxAuiNotebook* drag_source;
 
 #ifndef SWIG
@@ -502,7 +490,7 @@ protected:
 
 
 
-class WXDLLIMPEXP_AUI wxAuiNotebook : public wxNavigationEnabled<wxControl>
+class WXDLLIMPEXP_AUI wxAuiNotebook : public wxNavigationEnabled<wxBookCtrlBase>
 {
 
 public:
@@ -558,7 +546,7 @@ public:
     bool SetPageBitmap(size_t page, const wxBitmap& bitmap);
     wxBitmap GetPageBitmap(size_t page_idx) const;
 
-    size_t SetSelection(size_t new_page);
+    int SetSelection(size_t new_page);
     int GetSelection() const;
 
     virtual void Split(size_t page, int direction);
@@ -598,6 +586,24 @@ public:
     // Redo sizing after thawing
     virtual void Thaw();
 
+    //wxBookCtrlBase functions
+
+    virtual void SetPageSize (const wxSize &size);
+    virtual int  HitTest (const wxPoint &pt, long *flags=NULL) const;
+
+    virtual int GetPageImage(size_t n) const;
+    virtual bool SetPageImage(size_t n, int imageId);
+
+    wxWindow* GetCurrentPage () const;
+
+    virtual int ChangeSelection(size_t n);
+
+    virtual bool AddPage(wxWindow *page, const wxString &text, bool select, 
+                         int imageId);
+    virtual bool DeleteAllPages();
+    virtual bool InsertPage(size_t index, wxWindow *page, const wxString &text,
+                            bool select=false, int imageId=NO_IMAGE);
+
 protected:
     // Common part of all ctors.
     void Init();
@@ -613,6 +619,12 @@ protected:
 
     virtual int CalculateTabCtrlHeight();
     virtual wxSize CalculateNewSplitSize();
+
+    // remove the page and return a pointer to it
+    virtual wxWindow *DoRemovePage(size_t WXUNUSED(page)) { return NULL; }
+
+    //A general selection function
+    virtual int DoModifySelection(size_t n, bool events);
 
 protected:
 

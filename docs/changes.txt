@@ -471,6 +471,7 @@ All (GUI):
 - Added support for saving alpha with TIFF images.
 - Added wxPersistentSplitter.
 - Added wxWebView library (Steven Lamerton & Auria, GSoC 2011 project).
+- Derive wxAuiNotebook from wxBookCtrlBase (Steven Lamerton)
 
 OSX:
 

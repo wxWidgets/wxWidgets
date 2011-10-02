@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 notebook: $(NOTEBOOK_OBJECTS)
-	$(CXX) -o $@ $(NOTEBOOK_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+	$(CXX) -o $@ $(NOTEBOOK_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs aui,core,base`
 
 notebook_notebook.o: ./notebook.cpp
 	$(CXX) -c -o $@ $(NOTEBOOK_CXXFLAGS) $(CPPDEPS) $<

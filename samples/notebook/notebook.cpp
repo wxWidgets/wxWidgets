@@ -271,6 +271,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TOOLBOOK_PAGE_CHANGED(wxID_ANY, MyFrame::OnToolbook)
     EVT_TOOLBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnToolbook)
 #endif
+#if wxUSE_AUI
+    EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, MyFrame::OnAuiNotebook)
+    EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnAuiNotebook)
+#endif
 
     // Update title in idle time
     EVT_IDLE(MyFrame::OnIdle)
@@ -293,6 +297,8 @@ MyFrame::MyFrame()
     m_type = Type_Treebook;
 #elif wxUSE_TOOLBOOK
     m_type = Type_Toolbook;
+#elif wxUSE_AUI
+    m_type = Type_Aui;
 #else
     #error "Don't use Notebook sample without any book enabled in wxWidgets build!"
 #endif
@@ -323,6 +329,9 @@ MyFrame::MyFrame()
 #endif
 #if wxUSE_TOOLBOOK
     menuType->AppendRadioItem(ID_BOOK_TOOLBOOK,   wxT("T&oolbook\tCtrl-5"));
+#endif
+#if wxUSE_AUI
+    menuType->AppendRadioItem(ID_BOOK_AUINOTEBOOK,   wxT("&AuiNotebook\tCtrl-6"));
 #endif
 
     menuType->Check(ID_BOOK_NOTEBOOK + m_type, true);
@@ -469,7 +478,13 @@ MyFrame::~MyFrame()
     #define CASE_TOOLBOOK(x)
 #endif
 
-#define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, toolb, after)                \
+#if wxUSE_AUI
+    #define CASE_AUINOTEBOOK(x) case Type_AuiNotebook: x; break;
+#else
+    #define CASE_AUINOTEBOOK(x)
+#endif
+
+#define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, toolb, aui, after)           \
     switch ( m_type )                                                         \
     {                                                                         \
         CASE_NOTEBOOK(before nb after)                                        \
@@ -477,16 +492,17 @@ MyFrame::~MyFrame()
         CASE_CHOICEBOOK(before cb after)                                      \
         CASE_TREEBOOK(before tb after)                                        \
         CASE_TOOLBOOK(before toolb after)                                     \
+        CASE_AUINOTEBOOK(before aui after)                                    \
                                                                               \
         default:                                                              \
             wxFAIL_MSG( wxT("unknown book control type") );                    \
     }
 
-int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk) const
+int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk, int aui) const
 {
     int flag = 0;
 
-    DISPATCH_ON_TYPE(flag =, nb,  lb,  chb,  tbk, toolbk, + 0);
+    DISPATCH_ON_TYPE(flag =, nb,  lb,  chb,  tbk, toolbk, aui, + 0);
 
     return flag;
 }
@@ -541,6 +557,7 @@ void MyFrame::RecreateBook()
                          wxChoicebook,
                          wxTreebook,
                          wxToolbook,
+                         wxAuiNotebook,
                      (m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags));
 
     if ( !m_bookCtrl )
@@ -965,6 +982,13 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
             wxT("wxToolbook")
         },
 #endif // wxUSE_TOOLBOOK
+#if wxUSE_AUI
+        {
+            wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED,
+            wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING,
+            wxT("wxAuiNotebook")
+        },
+#endif // wxUSE_AUI
     };
 
 

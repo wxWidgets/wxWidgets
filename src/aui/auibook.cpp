@@ -60,7 +60,7 @@ wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, wxAuiNotebookEvent);
 
 IMPLEMENT_CLASS(wxAuiNotebook, wxControl)
 IMPLEMENT_CLASS(wxAuiTabCtrl, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxBookCtrlEvent)
 
 
 
@@ -3400,78 +3400,9 @@ int wxAuiNotebook::GetSelection() const
 }
 
 // SetSelection() sets the currently active page
-size_t wxAuiNotebook::SetSelection(size_t new_page)
+int wxAuiNotebook::SetSelection(size_t new_page)
 {
-    wxWindow* wnd = m_tabs.GetWindowFromIdx(new_page);
-    if (!wnd)
-        return m_curpage;
-
-    // don't change the page unless necessary;
-    // however, clicking again on a tab should give it the focus.
-    if ((int)new_page == m_curpage)
-    {
-        wxAuiTabCtrl* ctrl;
-        int ctrl_idx;
-        if (FindTab(wnd, &ctrl, &ctrl_idx))
-        {
-            if (FindFocus() != ctrl)
-                ctrl->SetFocus();
-        }
-        return m_curpage;
-    }
-
-    wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
-    evt.SetSelection(new_page);
-    evt.SetOldSelection(m_curpage);
-    evt.SetEventObject(this);
-    if (!GetEventHandler()->ProcessEvent(evt) || evt.IsAllowed())
-    {
-        int old_curpage = m_curpage;
-        m_curpage = new_page;
-
-        // program allows the page change
-        evt.SetEventType(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED);
-        (void)GetEventHandler()->ProcessEvent(evt);
-
-
-        wxAuiTabCtrl* ctrl;
-        int ctrl_idx;
-        if (FindTab(wnd, &ctrl, &ctrl_idx))
-        {
-            m_tabs.SetActivePage(wnd);
-
-            ctrl->SetActivePage(ctrl_idx);
-            DoSizing();
-            ctrl->DoShowHide();
-
-            ctrl->MakeTabVisible(ctrl_idx, ctrl);
-
-            // set fonts
-            wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-            size_t i, pane_count = all_panes.GetCount();
-            for (i = 0; i < pane_count; ++i)
-            {
-                wxAuiPaneInfo& pane = all_panes.Item(i);
-                if (pane.name == wxT("dummy"))
-                    continue;
-                wxAuiTabCtrl* tabctrl = ((wxTabFrame*)pane.window)->m_tabs;
-                if (tabctrl != ctrl)
-                    tabctrl->SetSelectedFont(m_normal_font);
-                else
-                    tabctrl->SetSelectedFont(m_selected_font);
-                tabctrl->Refresh();
-            }
-
-            // Set the focus to the page if we're not currently focused on the tab.
-            // This is Firefox-like behaviour.
-            if (wnd->IsShownOnScreen() && FindFocus() != ctrl)
-                wnd->SetFocus();
-
-            return old_curpage;
-        }
-    }
-
-    return m_curpage;
+    return DoModifySelection(new_page, true);
 }
 
 void wxAuiNotebook::SetSelectionToWindow(wxWindow *win)
@@ -4543,5 +4474,162 @@ void wxAuiNotebook::Thaw()
 
     wxControl::Thaw();
 }
+
+void wxAuiNotebook::SetPageSize (const wxSize& WXUNUSED(size))
+{
+    wxFAIL_MSG("Not implemented for wxAuiNotebook");
+}
+
+int wxAuiNotebook::HitTest (const wxPoint& WXUNUSED(pt), long* WXUNUSED(flags)) const
+{
+    wxFAIL_MSG("Not implemented for wxAuiNotebook");
+    return wxNOT_FOUND;
+}
+
+int wxAuiNotebook::GetPageImage(size_t WXUNUSED(n)) const
+{
+    wxFAIL_MSG("Not implemented for wxAuiNotebook");
+    return -1;
+}
+
+bool wxAuiNotebook::SetPageImage(size_t n, int imageId)
+{
+    return SetPageBitmap(n, GetImageList()->GetBitmap(imageId));
+}
+
+wxWindow* wxAuiNotebook::GetCurrentPage () const
+{
+    return GetPage(GetSelection());
+}
+
+int wxAuiNotebook::ChangeSelection(size_t n)
+{
+    return DoModifySelection(n, false);
+}
+
+bool wxAuiNotebook::AddPage(wxWindow *page, const wxString &text, bool select, 
+                            int imageId)
+{
+    if(HasImageList()) 
+    {
+        return AddPage(page, text, select, GetImageList()->GetBitmap(imageId));
+    }
+    else
+    {
+        return AddPage(page, text, select, wxNullBitmap);
+    }
+}
+
+bool wxAuiNotebook::DeleteAllPages()
+{
+    size_t count = GetPageCount();
+    for(size_t i = 0; i < count; i++)
+    {
+        DeletePage(0);
+    }
+    return true;
+}
+
+bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page, 
+                               const wxString &text, bool select, 
+                               int imageId)
+{
+    if(HasImageList())
+    {
+        return InsertPage(index, page, text, select, 
+                          GetImageList()->GetBitmap(imageId));
+    }
+    else
+    {
+        return InsertPage(index, page, text, select, wxNullBitmap);
+    }
+}
+
+int wxAuiNotebook::DoModifySelection(size_t n, bool events)
+{
+   wxWindow* wnd = m_tabs.GetWindowFromIdx(n);
+    if (!wnd)
+        return m_curpage;
+
+    // don't change the page unless necessary;
+    // however, clicking again on a tab should give it the focus.
+    if ((int)n == m_curpage)
+    {
+        wxAuiTabCtrl* ctrl;
+        int ctrl_idx;
+        if (FindTab(wnd, &ctrl, &ctrl_idx))
+        {
+            if (FindFocus() != ctrl)
+                ctrl->SetFocus();
+        }
+        return m_curpage;
+    }
+
+    bool vetoed = false;
+
+    wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
+
+    if(events)
+    {
+        evt.SetSelection(n);
+        evt.SetOldSelection(m_curpage);
+        evt.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(evt);
+        vetoed = !evt.IsAllowed();
+    }
+
+    if (!vetoed)
+    {
+        int old_curpage = m_curpage;
+        m_curpage = n;
+
+        // program allows the page change
+        if(events)
+        {
+            evt.SetEventType(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED);
+            (void)GetEventHandler()->ProcessEvent(evt);
+        }
+
+
+        wxAuiTabCtrl* ctrl;
+        int ctrl_idx;
+        if (FindTab(wnd, &ctrl, &ctrl_idx))
+        {
+            m_tabs.SetActivePage(wnd);
+
+            ctrl->SetActivePage(ctrl_idx);
+            DoSizing();
+            ctrl->DoShowHide();
+
+            ctrl->MakeTabVisible(ctrl_idx, ctrl);
+
+            // set fonts
+            wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+            size_t i, pane_count = all_panes.GetCount();
+            for (i = 0; i < pane_count; ++i)
+            {
+                wxAuiPaneInfo& pane = all_panes.Item(i);
+                if (pane.name == wxT("dummy"))
+                    continue;
+                wxAuiTabCtrl* tabctrl = ((wxTabFrame*)pane.window)->m_tabs;
+                if (tabctrl != ctrl)
+                    tabctrl->SetSelectedFont(m_normal_font);
+                else
+                    tabctrl->SetSelectedFont(m_selected_font);
+                tabctrl->Refresh();
+            }
+
+            // Set the focus to the page if we're not currently focused on the tab.
+            // This is Firefox-like behaviour.
+            if (wnd->IsShownOnScreen() && FindFocus() != ctrl)
+                wnd->SetFocus();
+
+            return old_curpage;
+        }
+    }
+
+    return m_curpage;
+}
+
 
 #endif // wxUSE_AUI

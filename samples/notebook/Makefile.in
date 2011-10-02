@@ -101,6 +101,9 @@ COND_PLATFORM_OS2_1___notebook___os2_emxbindcmd = $(NM) notebook$(EXEEXT) | if \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__notebook_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_COCOA@____notebook_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_COCOA@	$(__notebook_app_Contents_PkgInfo___depname)
+COND_MONOLITHIC_0___WXLIB_AUI_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_AUI_p = $(COND_MONOLITHIC_0___WXLIB_AUI_p)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -147,7 +150,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 notebook$(EXEEXT): $(NOTEBOOK_OBJECTS) $(__notebook___win32rc)
-	$(CXX) -o $@ $(NOTEBOOK_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(NOTEBOOK_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_AUI_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	
 	$(__notebook___mac_setfilecmd)
 	$(__notebook___os2_emxbindcmd)
