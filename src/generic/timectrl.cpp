@@ -300,24 +300,16 @@ private:
         }
 
         ChangeCurrentField(field);
-
-        // As we don't skip the event, we also prevent the system from setting
-        // focus to this control as it does by default, so do it manually.
-        m_text->SetFocus();
     }
 
     void OnArrowUp(wxSpinEvent& WXUNUSED(event))
     {
         ChangeCurrentFieldBy1(Dir_Up);
-
-        m_text->SetFocus();
     }
 
     void OnArrowDown(wxSpinEvent& WXUNUSED(event))
     {
         ChangeCurrentFieldBy1(Dir_Down);
-
-        m_text->SetFocus();
     }
 
 
@@ -376,6 +368,8 @@ private:
     // Select the currently actively field.
     void HighlightCurrentField()
     {
+        m_text->SetFocus();
+
         const CharRange range = GetFieldRange(m_currentField);
 
         m_text->SetSelection(range.from, range.to);
