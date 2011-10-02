@@ -114,6 +114,32 @@ protected:
         m_search->GetEventHandler()->ProcessEvent(event);
     }
 
+#ifdef __WXMSW__
+    // We increase the text control height to be the same as for the controls
+    // with border as this is what we actually need here because even though
+    // this control itself is borderless, it's inside wxSearchCtrl which does
+    // have the border and so should have the same height as the normal text
+    // entries with border.
+    //
+    // This is a bit ugly and it would arguably be better to use whatever size
+    // the base class version returns and just centre the text vertically in
+    // the search control but I failed to modify the code in LayoutControls()
+    // to do this easily and as there is much in that code I don't understand
+    // (notably what is the logic for buttons sizing?) I prefer to not touch it
+    // at all.
+    virtual wxSize DoGetBestSize() const
+    {
+        const long flags = GetWindowStyleFlag();
+        wxSearchTextCtrl* const self = const_cast<wxSearchTextCtrl*>(this);
+
+        self->SetWindowStyleFlag((flags & ~wxBORDER_MASK) | wxBORDER_DEFAULT);
+        const wxSize size = wxTextCtrl::DoGetBestSize();
+        self->SetWindowStyleFlag(flags);
+
+        return size;
+    }
+#endif // __WXMSW__
+
 private:
     wxSearchCtrl* m_search;
 
