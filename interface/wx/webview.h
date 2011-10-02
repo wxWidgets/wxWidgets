@@ -171,8 +171,7 @@ public:
     changed with a registry setting, see 
     <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
     this</a> article for more information. This backend has full support for
-    custom schemes and virtual file systems, except when compiling under MinGW 
-    where they are disabled.
+    custom schemes and virtual file systems.
     
     @par wxWEB_VIEW_WEBKIT (GTK)
     

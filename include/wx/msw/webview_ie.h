@@ -161,8 +161,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
 
-#ifndef __MINGW32__
-
 class VirtualProtocol : public IInternetProtocol
 {
 protected:
@@ -226,8 +224,6 @@ private:
     ULONG m_refCount;
     wxSharedPtr<wxWebViewHandler> m_handler;
 };
-
-#endif // __MINGW32__
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)
 
