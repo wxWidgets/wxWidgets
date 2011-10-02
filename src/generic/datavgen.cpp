@@ -322,8 +322,8 @@ class wxDataViewTreeNode
 {
 public:
     wxDataViewTreeNode(wxDataViewTreeNode *parent, const wxDataViewItem& item)
-        : m_item(item),
-          m_parent(parent),
+        : m_parent(parent),
+          m_item(item),
           m_branchData(NULL)
     {
     }
