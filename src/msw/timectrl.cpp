@@ -25,6 +25,7 @@
 #if wxUSE_DATEPICKCTRL
 
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h"
 #endif
 
 #include "wx/timectrl.h"
