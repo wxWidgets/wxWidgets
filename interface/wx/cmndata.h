@@ -271,7 +271,6 @@ enum wxPrintBin
     long GetPrinterTranslateX() const ;
     long GetPrinterTranslateY() const ;
     // wxPRINT_MODE_PREVIEW, wxPRINT_MODE_FILE, wxPRINT_MODE_PRINTER
-    wxPrintMode GetPrintMode() const ;
 
     void SetPrinterCommand(const wxString& command) ;
     void SetPrinterOptions(const wxString& options) ;
@@ -284,7 +283,6 @@ enum wxPrintBin
     void SetPrinterTranslateX(long x) ;
     void SetPrinterTranslateY(long y) ;
     void SetPrinterTranslation(long x, long y) ;
-    void SetPrintMode(wxPrintMode printMode) ;
     @endcode
 
     @library{wxcore}
@@ -450,6 +448,9 @@ public:
 
     wxString GetFilename() const;
     void SetFilename( const wxString &filename );
+
+    wxPrintMode GetPrintMode() const ;
+    void SetPrintMode(wxPrintMode printMode) ;
 };
 
 
