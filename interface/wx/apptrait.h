@@ -97,7 +97,7 @@ public:
         The returned reference is to a @c wxStandardPathsBase class but you
         can consider it to be equivalent to wxStandardPaths (which is documented).
     */
-    virtual wxStandardPathsBase& GetStandardPaths();
+    virtual wxStandardPaths& GetStandardPaths();
 
     /**
         Returns the wxWidgets port ID used by the running program and eventually

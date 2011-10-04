@@ -446,6 +446,10 @@ public:
         Assigns print data to this object.
     */
     wxPrintData& operator =(const wxPrintData& data);
+
+
+    wxString GetFilename() const;
+    void SetFilename( const wxString &filename );
 };
 
 

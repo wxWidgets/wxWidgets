@@ -19,22 +19,12 @@
 class wxPostScriptDC : public wxDC
 {
 public:
+    wxPostScriptDC();
+
     /**
         Constructs a PostScript printer device context from a wxPrintData object.
     */
     wxPostScriptDC(const wxPrintData& printData);
 
-    /**
-        Return resolution used in PostScript output.
-
-        @see SetResolution()
-    */
-    virtual int GetResolution() const;
-
-    /**
-        Set resolution (in pixels per inch) that will be used in PostScript
-        output. Default is 720ppi.
-    */
-    virtual wxRect GetPaperRect() const;
 };
 
