@@ -360,6 +360,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
 
 WebFrame::~WebFrame()
 {
+    delete m_timer;
     delete m_tools_menu;
 }
 
