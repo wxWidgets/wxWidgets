@@ -50,6 +50,11 @@ wxWebViewArchiveHandler::wxWebViewArchiveHandler(const wxString& scheme) :
     m_fileSystem = new wxFileSystem();
 }
 
+wxWebViewArchiveHandler::~wxWebViewArchiveHandler()
+{
+    wxDELETE(m_fileSystem);
+}
+
 wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
 {
     //If there is a fragment at the end of the path then we need to strip it
