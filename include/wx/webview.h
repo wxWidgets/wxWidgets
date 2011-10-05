@@ -87,6 +87,7 @@ extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[];
 class WXDLLIMPEXP_WEBVIEW wxWebView : public wxControl
 {
 public:
+    virtual ~wxWebView() {}
 
     virtual bool Create(wxWindow* parent,
            wxWindowID id,

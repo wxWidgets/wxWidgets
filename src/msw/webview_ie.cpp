@@ -77,6 +77,13 @@ bool wxWebViewIE::Create(wxWindow* parent,
     return true;
 }
 
+wxWebViewIE::~wxWebViewIE()
+{
+    for(unsigned int i = 0; i < m_factories.size(); i++)
+    {
+        m_factories[i]->Release();
+    }
+}
 
 void wxWebViewIE::LoadURL(const wxString& url)
 {
@@ -684,6 +691,7 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         {
             wxFAIL_MSG("Could not register protocol");
         }
+        m_factories.push_back(cf);
     }
     else
     {

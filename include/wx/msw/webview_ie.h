@@ -24,6 +24,7 @@
 
 struct IHTMLDocument2;
 class wxFSFile;
+class ClassFactory;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
@@ -41,6 +42,8 @@ public:
    {
        Create(parent, id, url, pos, size, style, name);
    }
+
+    ~wxWebViewIE();
 
     bool Create(wxWindow* parent,
            wxWindowID id,
@@ -149,6 +152,7 @@ private:
     //an item from the history. The position is stored as an int, and reflects
     //where we are in the history list.
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
+    wxVector<ClassFactory*> m_factories;
     int m_historyPosition;
     bool m_historyLoadingFromList;
     bool m_historyEnabled;
