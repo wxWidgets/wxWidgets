@@ -157,12 +157,15 @@ wxString wxWebViewIE::GetPageSource() const
 
 wxWebViewZoom wxWebViewIE::GetZoom() const
 {
-    if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_LAYOUT)
-        return GetIEOpticalZoom();
-    else if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_TEXT)
-        return GetIETextZoom();
-    else
-        wxFAIL;
+    switch( m_zoomType )
+    {
+        case wxWEB_VIEW_ZOOM_TYPE_LAYOUT:
+            return GetIEOpticalZoom();
+        case wxWEB_VIEW_ZOOM_TYPE_TEXT:
+            return GetIETextZoom();
+        default:
+            wxFAIL;
+    }
 
     //Dummy return to stop compiler warnings
     return wxWEB_VIEW_ZOOM_MEDIUM;
@@ -171,12 +174,17 @@ wxWebViewZoom wxWebViewIE::GetZoom() const
 
 void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
 {
-    if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_LAYOUT)
-        SetIEOpticalZoom(zoom);
-    else if(m_zoomType == wxWEB_VIEW_ZOOM_TYPE_TEXT)
-        SetIETextZoom(zoom);
-    else
-        wxFAIL;
+    switch( m_zoomType )
+    {
+        case wxWEB_VIEW_ZOOM_TYPE_LAYOUT:
+            SetIEOpticalZoom(zoom);
+            break;
+        case wxWEB_VIEW_ZOOM_TYPE_TEXT:
+            SetIETextZoom(zoom);
+            break;
+        default:
+            wxFAIL;
+    }
 }
 
 void wxWebViewIE::SetIETextZoom(wxWebViewZoom level)
@@ -189,9 +197,12 @@ void wxWebViewIE::SetIETextZoom(wxWebViewZoom level)
     V_VT(&zoomVariant) = VT_I4;
     V_I4(&zoomVariant) = level;
 
-    HRESULT result = m_webBrowser->ExecWB(OLECMDID_ZOOM,
-                                          OLECMDEXECOPT_DONTPROMPTUSER,
-                                          &zoomVariant, NULL);
+#if wxDEBUG_LEVEL
+    HRESULT result =
+#endif
+            m_webBrowser->ExecWB(OLECMDID_ZOOM,
+                                 OLECMDEXECOPT_DONTPROMPTUSER,
+                                 &zoomVariant, NULL);
     wxASSERT(result == S_OK);
 }
 
@@ -201,9 +212,12 @@ wxWebViewZoom wxWebViewIE::GetIETextZoom() const
     VariantInit (&zoomVariant);
     V_VT(&zoomVariant) = VT_I4;
 
-    HRESULT result = m_webBrowser->ExecWB(OLECMDID_ZOOM,
-                                          OLECMDEXECOPT_DONTPROMPTUSER,
-                                          NULL, &zoomVariant);
+#if wxDEBUG_LEVEL
+    HRESULT result =
+#endif
+            m_webBrowser->ExecWB(OLECMDID_ZOOM,
+                                 OLECMDEXECOPT_DONTPROMPTUSER,
+                                 NULL, &zoomVariant);
     wxASSERT(result == S_OK);
 
     //We can safely cast here as we know that the range matches our enum
@@ -240,10 +254,13 @@ void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
             wxFAIL;
     }
 
-    HRESULT result = m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
-                                          OLECMDEXECOPT_DODEFAULT,
-                                          &zoomVariant,
-                                          NULL);
+#if wxDEBUG_LEVEL
+    HRESULT result =
+#endif
+            m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
+                                 OLECMDEXECOPT_DODEFAULT,
+                                 &zoomVariant,
+                                 NULL);
     wxASSERT(result == S_OK);
 }
 
@@ -253,9 +270,12 @@ wxWebViewZoom wxWebViewIE::GetIEOpticalZoom() const
     VariantInit (&zoomVariant);
     V_VT(&zoomVariant) = VT_I4;
 
-    HRESULT result = m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
-                                          OLECMDEXECOPT_DODEFAULT, NULL,
-                                          &zoomVariant);
+#if wxDEBUG_LEVEL
+    HRESULT result =
+#endif
+            m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
+                                 OLECMDEXECOPT_DODEFAULT, NULL,
+                                 &zoomVariant);
     wxASSERT(result == S_OK);
 
     const int zoom = V_I4(&zoomVariant);
@@ -432,9 +452,12 @@ void wxWebViewIE::SetOfflineMode(bool offline)
 {
     // FIXME: the wxWidgets docs do not really document what the return
     //        parameter of PutProperty is
-    const bool success = m_ie.PutProperty("Offline", (offline ?
-                                                      VARIANT_TRUE :
-                                                      VARIANT_FALSE));
+#if wxDEBUG_LEVEL
+    const bool success =
+#endif
+            m_ie.PutProperty("Offline", (offline ?
+                                         VARIANT_TRUE :
+                                         VARIANT_FALSE));
     wxASSERT(success);
 }
 

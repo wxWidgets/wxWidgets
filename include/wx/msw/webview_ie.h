@@ -214,7 +214,7 @@ public:
 class ClassFactory : public IClassFactory
 {
 public:
-    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler), m_refCount(0) {}
+    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_refCount(0), m_handler(handler) {}
     //IUnknown
     ULONG STDMETHODCALLTYPE AddRef();
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
