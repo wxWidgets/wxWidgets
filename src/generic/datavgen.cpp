@@ -3583,7 +3583,17 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             {
                 if( !m_selection.empty() )
                 {
-                    const wxDataViewItem item = GetItemByRow(m_selection[0]);
+                    // Mimic Windows 7 behavior: edit the item that has focus
+                    // if it is selected and the first selected item if focus
+                    // is out of selection.
+                    int sel;
+                    if ( m_selection.Index(m_currentRow) != wxNOT_FOUND )
+                        sel = m_currentRow;
+                    else
+                        sel = m_selection[0];
+
+
+                    const wxDataViewItem item = GetItemByRow(sel);
 
                     // Edit the current column. If not column is focused
                     // (typically because the user has full row selected), try
