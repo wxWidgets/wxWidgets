@@ -604,6 +604,7 @@ public:
     unsigned GetCurrentRow() const { return m_currentRow; }
     bool HasCurrentRow() { return m_currentRow != (unsigned int)-1; }
     void ChangeCurrentRow( unsigned int row );
+    bool TryAdvanceCurrentColumn(wxDataViewTreeNode *node, bool forward);
 
     bool IsSingleSel() const { return !GetParent()->HasFlag(wxDV_MULTIPLE); }
     bool IsEmpty() { return GetRowCount() == 0; }
@@ -673,6 +674,8 @@ public:
     void OnLeave();
 #endif // wxUSE_DRAG_AND_DROP
 
+    void OnColumnsCountChanged();
+
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
     // We did not need this temporarily
@@ -684,6 +687,8 @@ private:
     bool SendExpanderEvent(wxEventType type, const wxDataViewItem& item);
 
     wxDataViewTreeNode * FindNode( const wxDataViewItem & item );
+
+    wxDataViewColumn *FindColumnForEditing(const wxDataViewItem& item, wxDataViewCellMode mode);
 
 private:
     wxDataViewCtrl             *m_owner;
@@ -698,6 +703,8 @@ private:
     bool                        m_lastOnSame;
 
     bool                        m_hasFocus;
+    bool                        m_useCellFocus;
+    bool                        m_currentColSetByKeyboard;
 
 #if wxUSE_DRAG_AND_DROP
     int                         m_dragCount;
@@ -1445,6 +1452,8 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     // TODO: user better initial values/nothing selected
     m_currentCol = NULL;
+    m_currentColSetByKeyboard = false;
+    m_useCellFocus = false;
     m_currentRow = 0;
 
     m_lineHeight = wxMax( 17, GetCharHeight() + 2 ); // 17 = mini icon height + 1
@@ -1702,6 +1711,43 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
 #endif // wxUSE_DRAG_AND_DROP
 
 
+// Draw focus rect for individual cell. Unlike native focus rect, we render
+// this in foreground text color (typically white) to enhance contrast and
+// make it visible.
+static void DrawSelectedCellFocusRect(wxDC& dc, const wxRect& rect)
+{
+    // (This code is based on wxRendererGeneric::DrawFocusRect and modified.)
+
+    // draw the pixels manually because the "dots" in wxPen with wxDOT style
+    // may be short traits and not really dots
+    //
+    // note that to behave in the same manner as DrawRect(), we must exclude
+    // the bottom and right borders from the rectangle
+    wxCoord x1 = rect.GetLeft(),
+            y1 = rect.GetTop(),
+            x2 = rect.GetRight(),
+            y2 = rect.GetBottom();
+
+    wxDCPenChanger pen(dc, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+
+    wxCoord z;
+    for ( z = x1 + 1; z < x2; z += 2 )
+        dc.DrawPoint(z, rect.GetTop());
+
+    wxCoord shift = z == x2 ? 0 : 1;
+    for ( z = y1 + shift; z < y2; z += 2 )
+        dc.DrawPoint(x2, z);
+
+    shift = z == y2 ? 0 : 1;
+    for ( z = x2 - shift; z > x1; z -= 2 )
+        dc.DrawPoint(z, y2);
+
+    shift = z == x1 ? 0 : 1;
+    for ( z = y2 - shift; z > y1; z -= 2 )
+        dc.DrawPoint(x1, z);
+}
+
+
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxDataViewModel *model = GetModel();
@@ -1820,23 +1866,97 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     for (unsigned int item = item_start; item < item_last; item++)
     {
         bool selected = m_selection.Index( item ) != wxNOT_FOUND;
+
         if (selected || item == m_currentRow)
         {
-            int flags = selected ? (int)wxCONTROL_SELECTED : 0;
-            if (item == m_currentRow)
-                flags |= wxCONTROL_CURRENT;
-            if (m_hasFocus)
-                flags |= wxCONTROL_FOCUSED;
-
             wxRect rect( x_start, GetLineStart( item ),
                          x_last - x_start, GetLineHeight( item ) );
-            wxRendererNative::Get().DrawItemSelectionRect
-                                (
-                                    this,
-                                    dc,
-                                    rect,
-                                    flags
-                                );
+
+            // draw selection and whole-item focus:
+            if ( selected )
+            {
+                int flags = wxCONTROL_SELECTED;
+                if (m_hasFocus)
+                    flags |= wxCONTROL_FOCUSED;
+
+                wxRendererNative::Get().DrawItemSelectionRect
+                                    (
+                                        this,
+                                        dc,
+                                        rect,
+                                        flags
+                                    );
+            }
+
+            // draw keyboard focus rect if applicable
+            if ( item == m_currentRow && m_hasFocus )
+            {
+                bool renderColumnFocus = false;
+
+                if ( m_useCellFocus && m_currentCol && m_currentColSetByKeyboard )
+                {
+                    renderColumnFocus = true;
+
+                    // If this is container node without columns, render full-row focus:
+                    if ( !IsList() )
+                    {
+                        wxDataViewTreeNode *node = GetTreeNodeByRow(item);
+                        if ( node->HasChildren() && !model->HasContainerColumns(node->GetItem()) )
+                            renderColumnFocus = false;
+                    }
+                }
+
+                if ( renderColumnFocus )
+                {
+                    for ( unsigned int i = col_start; i < col_last; i++ )
+                    {
+                        wxDataViewColumn *col = GetOwner()->GetColumnAt(i);
+                        if ( col->IsHidden() )
+                            continue;
+
+                        rect.width = col->GetWidth();
+
+                        if ( col == m_currentCol )
+                        {
+                            // make the rect more visible by adding a small
+                            // margin around it:
+                            rect.Deflate(1, 1);
+
+                            if ( selected )
+                            {
+                                // DrawFocusRect() uses XOR and is all but
+                                // invisible against dark-blue background. Use
+                                // the same color used for selected text.
+                                DrawSelectedCellFocusRect(dc, rect);
+                            }
+                            else
+                            {
+                                wxRendererNative::Get().DrawFocusRect
+                                                    (
+                                                        this,
+                                                        dc,
+                                                        rect,
+                                                        0
+                                                );
+                            }
+                            break;
+                        }
+
+                        rect.x += rect.width;
+                    }
+                }
+                else
+                {
+                    // render focus rectangle for the whole row
+                    wxRendererNative::Get().DrawFocusRect
+                                        (
+                                            this,
+                                            dc,
+                                            rect,
+                                            selected ? (int)wxCONTROL_SELECTED : 0
+                                        );
+                }
+            }
         }
     }
 
@@ -3277,6 +3397,69 @@ void wxDataViewMainWindow::DestroyTree()
     }
 }
 
+wxDataViewColumn*
+wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataViewCellMode mode)
+{
+    // Edit the current column editable in 'mode'. If no column is focused
+    // (typically because the user has full row selected), try to find the
+    // first editable column (this would typically be a checkbox for
+    // wxDATAVIEW_CELL_ACTIVATABLE and we don't want to force the user to set
+    // focus on the checkbox column; or on the only editable text column).
+
+    wxDataViewColumn *candidate = m_currentCol;
+
+    if ( candidate &&
+         candidate->GetRenderer()->GetMode() != mode &&
+         !m_currentColSetByKeyboard )
+    {
+        // If current column was set by mouse to something not editable (in
+        // 'mode') and the user pressed Space/F2 to edit it, treat the
+        // situation as if there was whole-row focus, because that's what is
+        // visually indicated and the mouse click could very well be targeted
+        // on the row rather than on an individual cell.
+        //
+        // But if it was done by keyboard, respect that even if the column
+        // isn't editable, because focus is visually on that column and editing
+        // something else would be surprising.
+        candidate = NULL;
+    }
+
+    if ( !candidate )
+    {
+        const unsigned cols = GetOwner()->GetColumnCount();
+        for ( unsigned i = 0; i < cols; i++ )
+        {
+            wxDataViewColumn *c = GetOwner()->GetColumnAt(i);
+            if ( c->IsHidden() )
+                continue;
+
+            if ( c->GetRenderer()->GetMode() == mode )
+            {
+                candidate = c;
+                break;
+            }
+        }
+    }
+
+    // If on container item without columns, only the expander column
+    // may be directly editable:
+    if ( candidate &&
+         GetOwner()->GetExpanderColumn() != candidate &&
+         GetModel()->IsContainer(item) &&
+         !GetModel()->HasContainerColumns(item) )
+    {
+        candidate = GetOwner()->GetExpanderColumn();
+    }
+
+    if ( !candidate )
+       return NULL;
+
+   if ( candidate->GetRenderer()->GetMode() != mode )
+       return NULL;
+
+   return candidate;
+}
+
 void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 {
     wxWindow * const parent = GetParent();
@@ -3324,26 +3507,16 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_SPACE:
             {
-                // Activate the first activatable column if there is any:
-                wxDataViewColumn *activatableCol = NULL;
+                const wxDataViewItem item = GetItemByRow(m_currentRow);
 
-                const unsigned cols = GetOwner()->GetColumnCount();
-                for ( unsigned i = 0; i < cols; i++ )
-                {
-                    wxDataViewColumn *c = GetOwner()->GetColumnAt(i);
-                    if ( c->IsHidden() )
-                        continue;
-                    if ( c->GetRenderer()->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE )
-                    {
-                        activatableCol = c;
-                        break;
-                    }
-                }
+                // Activate the current activatable column. If not column is focused (typically
+                // because the user has full row selected), try to find the first activatable
+                // column (this would typically be a checkbox and we don't want to force the user
+                // to set focus on the checkbox column).
+                wxDataViewColumn *activatableCol = FindColumnForEditing(item, wxDATAVIEW_CELL_ACTIVATABLE);
 
                 if ( activatableCol )
                 {
-                    const wxDataViewItem item = GetItemByRow(m_currentRow);
-
                     const unsigned colIdx = activatableCol->GetModelColumn();
                     const wxRect cell_rect = GetOwner()->GetItemRect(item, activatableCol);
 
@@ -3410,8 +3583,15 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             {
                 if( !m_selection.empty() )
                 {
-                    // TODO: we need to revise that when we have a concept for a 'current column'
-                    GetOwner()->StartEditor(GetItemByRow(m_selection[0]), 0);
+                    const wxDataViewItem item = GetItemByRow(m_selection[0]);
+
+                    // Edit the current column. If not column is focused
+                    // (typically because the user has full row selected), try
+                    // to find the first editable column.
+                    wxDataViewColumn *editableCol = FindColumnForEditing(item, wxDATAVIEW_CELL_EDITABLE);
+
+                    if ( editableCol )
+                        GetOwner()->StartEditor(item, GetOwner()->GetColumnIndex(editableCol));
                 }
             }
             break;
@@ -3475,32 +3655,41 @@ void wxDataViewMainWindow::OnVerticalNavigation(unsigned int newCurrent, const w
 
 void wxDataViewMainWindow::OnLeftKey()
 {
-    if (IsList())
-       return;
-
-    wxDataViewTreeNode* node = GetTreeNodeByRow(m_currentRow);
-    if (!node)
-        return;
-
-    if (node->HasChildren() && node->IsOpen())
+    if ( IsList() )
     {
-        Collapse(m_currentRow);
+        TryAdvanceCurrentColumn(NULL, /*forward=*/false);
     }
-    else    // if the node is already closed we move the selection to its parent
+    else
     {
-        wxDataViewTreeNode *parent_node = node->GetParent();
+        wxDataViewTreeNode* node = GetTreeNodeByRow(m_currentRow);
 
-        if (parent_node)
+        if ( TryAdvanceCurrentColumn(node, /*forward=*/false) )
+            return;
+
+        // Because TryAdvanceCurrentColumn() return false, we are at the first
+        // column or using whole-row selection. In this situation, we can use
+        // the standard TreeView handling of the left key.
+        if (node->HasChildren() && node->IsOpen())
         {
-            int parent = GetRowByItem( parent_node->GetItem() );
-            if ( parent >= 0 )
+            Collapse(m_currentRow);
+        }
+        else
+        {
+            // if the node is already closed, we move the selection to its parent
+            wxDataViewTreeNode *parent_node = node->GetParent();
+
+            if (parent_node)
             {
-                unsigned int row = m_currentRow;
-                SelectRow( row, false);
-                SelectRow( parent, true );
-                ChangeCurrentRow( parent );
-                GetOwner()->EnsureVisible( parent, -1 );
-                SendSelectionChangedEvent( parent_node->GetItem() );
+                int parent = GetRowByItem( parent_node->GetItem() );
+                if ( parent >= 0 )
+                {
+                    unsigned int row = m_currentRow;
+                    SelectRow( row, false);
+                    SelectRow( parent, true );
+                    ChangeCurrentRow( parent );
+                    GetOwner()->EnsureVisible( parent, -1 );
+                    SendSelectionChangedEvent( parent_node->GetItem() );
+                }
             }
         }
     }
@@ -3508,17 +3697,84 @@ void wxDataViewMainWindow::OnLeftKey()
 
 void wxDataViewMainWindow::OnRightKey()
 {
-    if (!IsExpanded( m_currentRow ))
-        Expand( m_currentRow );
+    if ( IsList() )
+    {
+        TryAdvanceCurrentColumn(NULL, /*forward=*/true);
+    }
     else
     {
-        unsigned int row = m_currentRow;
-        SelectRow( row, false );
-        SelectRow( row + 1, true );
-        ChangeCurrentRow( row + 1 );
-        GetOwner()->EnsureVisible( row + 1, -1 );
-        SendSelectionChangedEvent( GetItemByRow(row+1) );
+        wxDataViewTreeNode* node = GetTreeNodeByRow(m_currentRow);
+
+        if ( node->HasChildren() )
+        {
+            if ( !node->IsOpen() )
+            {
+                Expand( m_currentRow );
+            }
+            else
+            {
+                // if the node is already open, we move the selection to the first child
+                unsigned int row = m_currentRow;
+                SelectRow( row, false );
+                SelectRow( row + 1, true );
+                ChangeCurrentRow( row + 1 );
+                GetOwner()->EnsureVisible( row + 1, -1 );
+                SendSelectionChangedEvent( GetItemByRow(row+1) );
+            }
+        }
+        else
+        {
+            TryAdvanceCurrentColumn(node, /*forward=*/true);
+        }
     }
+}
+
+bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, bool forward)
+{
+    if ( GetOwner()->GetColumnCount() == 0 )
+        return false;
+
+    if ( !m_useCellFocus )
+        return false;
+
+    if ( node )
+    {
+        // navigation shouldn't work in branch nodes without other columns:
+        if ( node->HasChildren() && !GetModel()->HasContainerColumns(node->GetItem()) )
+            return false;
+    }
+
+    if ( m_currentCol == NULL || !m_currentColSetByKeyboard )
+    {
+        if ( forward )
+        {
+            m_currentCol = GetOwner()->GetColumnAt(1);
+            m_currentColSetByKeyboard = true;
+            RefreshRow(m_currentRow);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    int idx = GetOwner()->GetColumnIndex(m_currentCol) + (forward ? +1 : -1);
+
+    if ( idx >= (int)GetOwner()->GetColumnCount() )
+        return false;
+
+    if ( idx < 1 )
+    {
+        // We are going to the left of the second column. Reset to whole-row
+        // focus (which means first column would be edited).
+        m_currentCol = NULL;
+        RefreshRow(m_currentRow);
+        return true;
+    }
+
+    m_currentCol = GetOwner()->GetColumnAt(idx);
+    m_currentColSetByKeyboard = true;
+    RefreshRow(m_currentRow);
+    return true;
 }
 
 void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
@@ -3891,6 +4147,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
         // Update selection here...
         m_currentCol = col;
+        m_currentColSetByKeyboard = false;
 
         m_lastOnSame = !simulateClick && ((col == oldCurrentCol) &&
                         (current == oldCurrentRow)) && oldWasSelected;
@@ -3966,6 +4223,25 @@ void wxDataViewMainWindow::OnKillFocus( wxFocusEvent &event )
         Refresh();
 
     event.Skip();
+}
+
+void wxDataViewMainWindow::OnColumnsCountChanged()
+{
+    int editableCount = 0;
+
+    const unsigned cols = GetOwner()->GetColumnCount();
+    for ( unsigned i = 0; i < cols; i++ )
+    {
+        wxDataViewColumn *c = GetOwner()->GetColumnAt(i);
+        if ( c->IsHidden() )
+            continue;
+        if ( c->GetRenderer()->GetMode() != wxDATAVIEW_CELL_INERT )
+            editableCount++;
+    }
+
+    m_useCellFocus = (editableCount > 1);
+
+    UpdateDisplay();
 }
 
 //-----------------------------------------------------------------------------
@@ -4188,7 +4464,7 @@ void wxDataViewCtrl::OnColumnsCountChanged()
     if (m_headerArea)
         m_headerArea->SetColumnCount(GetColumnCount());
 
-    m_clientArea->UpdateDisplay();
+    m_clientArea->OnColumnsCountChanged();
 }
 
 void wxDataViewCtrl::DoSetExpanderColumn()
