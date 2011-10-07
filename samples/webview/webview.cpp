@@ -597,8 +597,8 @@ void WebFrame::OnNewWindow(wxWebViewEvent& evt)
 
 void WebFrame::OnTitleChanged(wxWebViewEvent& evt)
 {
+    SetTitle(evt.GetString());
     wxLogMessage("%s", "Title changed; title='" + evt.GetString() + "'");
-    UpdateState();
 }
 
 /**
