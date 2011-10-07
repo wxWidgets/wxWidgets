@@ -562,7 +562,7 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
         m_symbolsCtrl->SetSelection(sel);
     }
 
-    UpdateSymbolDisplay();
+    UpdateSymbolDisplay(true, m_symbol.empty());
 
     m_dontUpdate = false;
 
