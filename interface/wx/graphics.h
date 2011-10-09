@@ -265,6 +265,24 @@ enum wxCompositionMode
     wxCOMPOSITION_ADD  /**< @e R = @e S + @e D */
 };
 
+/**
+    Represents a bitmap.
+
+    The objects of this class are not created directly but only via
+    wxGraphicsContext or wxGraphicsRenderer CreateBitmap() and
+    CreateSubBitmap() methods. They can subsequently be used with
+    wxGraphicsContext::DrawBitmap(). The only other operation is testing for
+    the bitmap validity which can be performed using IsNull() method inherited
+    from the base class.
+ */
+class wxGraphicsBitmap : public wxGraphicsObject
+{
+public:
+    /**
+        Default constructor creates an invalid bitmap.
+     */
+    wxGraphicsBitmap() {}
+};
 
 /**
     @class wxGraphicsContext
@@ -369,6 +387,23 @@ public:
     virtual void ConcatTransform(const wxGraphicsMatrix& matrix) = 0;
 
     /**
+        Creates wxGraphicsBitmap from an existing wxBitmap.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+     */
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+
+    /**
+        Extracts a sub-bitmap from an existing bitmap.
+
+        Currently this function is implemented in the native MSW and OS X
+        versions but not when using Cairo.
+     */
+    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
+                                             wxDouble x, wxDouble y,
+                                             wxDouble w, wxDouble h) = 0;
+
+    /**
         Creates a native brush from a wxBrush.
     */
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) const;
@@ -465,8 +500,14 @@ public:
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask
         and the current brushed is used for filling.
     */
-    virtual void DrawBitmap(const wxBitmap& bmp, wxDouble x, wxDouble y,
+    //@{
+    virtual void DrawBitmap(const wxGraphicsBitmap& bmp,
+                            wxDouble x, wxDouble y,
+                            wxDouble w, wxDouble h ) = 0;
+    virtual void DrawBitmap(const wxBitmap& bmp,
+                            wxDouble x, wxDouble y,
                             wxDouble w, wxDouble h) = 0;
+    //@}
 
     /**
         Draws an ellipse.
@@ -853,6 +894,22 @@ class wxGraphicsRenderer : public wxObject
 {
 public:
     /**
+        Creates wxGraphicsBitmap from an existing wxBitmap.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+     */
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+
+    /**
+        Creates wxGraphicsBitmap from a native bitmap handle.
+
+        @a bitmap meaning is platform-dependent. Currently it's a GDI+ @c
+        Bitmap pointer under MSW, @c CGImage pointer under OS X or a @c
+        cairo_surface_t pointer when using Cairo under any platform.
+     */
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) = 0;
+
+    /**
         Creates a wxGraphicsContext from a wxWindow.
     */
     virtual wxGraphicsContext* CreateContext(wxWindow* window) = 0;
@@ -951,6 +1008,16 @@ public:
                                                       wxDouble xc, wxDouble yc,
                                                       wxDouble radius,
                                                       const wxGraphicsGradientStops& stops) = 0;
+
+    /**
+        Extracts a sub-bitmap from an existing bitmap.
+
+        Currently this function is implemented in the native MSW and OS X
+        versions but not when using Cairo.
+     */
+    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
+                                             wxDouble x, wxDouble y,
+                                             wxDouble w, wxDouble h) = 0;
 
     /**
         Returns the default renderer on this platform. On OS X this is the Core
