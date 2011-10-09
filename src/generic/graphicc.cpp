@@ -318,6 +318,16 @@ public:
     virtual cairo_pattern_t* GetCairoPattern() { return m_pattern; }
     virtual wxSize GetSize() { return wxSize(m_width, m_height); }
 private :
+    // Allocate m_buffer for the bitmap of the given size in the given format.
+    //
+    // Returns the stride used for the buffer.
+    int InitBuffer(int width, int height, cairo_format_t format);
+
+    // Really create the surface using the buffer (which was supposed to be
+    // filled since InitBuffer() call).
+    void InitSurface(cairo_format_t format, int stride);
+
+
     cairo_surface_t* m_surface;
     cairo_pattern_t* m_pattern;
     int m_width;
@@ -1069,8 +1079,49 @@ void * wxCairoMatrixData::GetNativeMatrix() const
     return (void*) &m_matrix;
 }
 
+// ----------------------------------------------------------------------------
 // wxCairoBitmap implementation
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+int wxCairoBitmapData::InitBuffer(int width, int height, cairo_format_t format)
+{
+    wxUnusedVar(format); // Only really unused with Cairo < 1.6.
+
+    // Determine the stride: use cairo_format_stride_for_width() if available
+    // but fall back to 4*width for the earlier versions as this is what that
+    // function always returns, even in latest Cairo, anyhow.
+    int stride;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+    if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 6, 0) )
+    {
+        stride = cairo_format_stride_for_width(format, width);
+
+        // All our code would totally break if stride were not a multiple of 4
+        // so ensure this is the case.
+        if ( stride % 4 )
+        {
+            wxFAIL_MSG("Unexpected Cairo image surface stride.");
+
+            stride += 4 - stride % 4;
+        }
+    }
+    else
+#endif
+        stride = 4*width;
+
+    m_width = width;
+    m_height = height;
+    m_buffer = new unsigned char[height*stride];
+
+    return stride;
+}
+
+void wxCairoBitmapData::InitSurface(cairo_format_t format, int stride)
+{
+    m_surface = cairo_image_surface_create_for_data(
+                            m_buffer, format, m_width, m_height, stride);
+    m_pattern = cairo_pattern_create_for_surface(m_surface);
+}
 
 wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap ) :
     wxGraphicsObjectRefData( renderer )
@@ -1084,23 +1135,26 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
 
 #ifdef wxHAS_RAW_BITMAP
-    int bw = m_width = bmp.GetWidth();
-    int bh = m_height = bmp.GetHeight();
-    wxBitmap bmpSource = bmp;  // we need a non-const instance
-    m_buffer = new unsigned char[bw*bh*4];
-    wxUint32* data = (wxUint32*)m_buffer;
-    cairo_format_t bufferFormat;
-
     // Create a surface object and copy the bitmap pixel data to it.  if the
     // image has alpha (or a mask represented as alpha) then we'll use a
     // different format and iterator than if it doesn't...
-    if (bmpSource.GetDepth() == 32 
+    const cairo_format_t bufferFormat = bmp.GetDepth() == 32
 #ifdef __WXGTK__
-            || bmpSource.GetMask()
+                                            || bmp.GetMask()
 #endif
-    )
-    {   // use the bitmap's alpha
-        bufferFormat = CAIRO_FORMAT_ARGB32;
+                                        ? CAIRO_FORMAT_ARGB32
+                                        : CAIRO_FORMAT_RGB24;
+
+    int stride = InitBuffer(bmp.GetWidth(), bmp.GetHeight(), bufferFormat);
+
+    int bw = m_width;
+    int bh = m_height;
+    wxBitmap bmpSource = bmp;  // we need a non-const instance
+    wxUint32* data = (wxUint32*)m_buffer;
+
+    if ( bufferFormat == CAIRO_FORMAT_ARGB32 )
+    {
+        // use the bitmap's alpha
         wxAlphaPixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
@@ -1108,6 +1162,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         for (int y=0; y<bh; y++)
         {
             wxAlphaPixelData::Iterator rowStart = p;
+            wxUint32* const rowStartDst = data;
             for (int x=0; x<bw; x++)
             {
                 // Each pixel in CAIRO_FORMAT_ARGB32 is a 32-bit quantity,
@@ -1125,13 +1180,14 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                 ++data;
                 ++p;
             }
+
+            data = rowStartDst + stride / 4;
             p = rowStart;
             p.OffsetY(pixData, 1);
         }
     }
     else  // no alpha
     {
-        bufferFormat = CAIRO_FORMAT_RGB24;
         wxNativePixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
@@ -1139,6 +1195,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         for (int y=0; y<bh; y++)
         {
             wxNativePixelData::Iterator rowStart = p;
+            wxUint32* const rowStartDst = data;
             for (int x=0; x<bw; x++)
             {
                 // Each pixel in CAIRO_FORMAT_RGB24 is a 32-bit quantity, with
@@ -1149,6 +1206,8 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                 ++data;
                 ++p;
             }
+
+            data = rowStartDst + stride / 4;
             p = rowStart;
             p.OffsetY(pixData, 1);
         }
@@ -1168,6 +1227,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         for (int y=0; y<bh; y++)
         {
             wxNativePixelData::Iterator rowStart = p;
+            wxUint32* const rowStartDst = data;
             for (int x=0; x<bw; x++)
             {
                 if (p.Red()+p.Green()+p.Blue() == 0)
@@ -1177,15 +1237,15 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                 ++data;
                 ++p;
             }
+
+            data = rowStartDst + stride / 4;
             p = rowStart;
             p.OffsetY(pixData, 1);
         }
     }
 #endif
 
-    m_surface = cairo_image_surface_create_for_data(
-                            m_buffer, bufferFormat, bw, bh, bw*4);
-    m_pattern = cairo_pattern_create_for_surface(m_surface);
+    InitSurface(bufferFormat, stride);
 #endif // wxHAS_RAW_BITMAP
 }
 
