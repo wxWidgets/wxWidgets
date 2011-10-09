@@ -387,6 +387,20 @@ bool wxPopupTransientWindow::Show( bool show )
     return ret;
 }
 
+bool wxPopupTransientWindow::Destroy()
+{
+    // The popup window can be deleted at any moment, even while some events
+    // are still being processed for it, so delay its real destruction until
+    // the next idle time when we're sure that it's safe to really destroy it.
+
+    wxCHECK_MSG( !wxPendingDelete.Member(this), false,
+                 wxS("Shouldn't destroy the popup twice.") );
+
+    wxPendingDelete.Append(this);
+
+    return true;
+}
+
 void wxPopupTransientWindow::Dismiss()
 {
     Hide();

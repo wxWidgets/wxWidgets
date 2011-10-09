@@ -112,6 +112,9 @@ public:
     // Overridden to grab the input on some plaforms
     virtual bool Show( bool show = true );
 
+    // Override to implement delayed destruction of this window.
+    virtual bool Destroy();
+
 protected:
     // common part of all ctors
     void Init();
