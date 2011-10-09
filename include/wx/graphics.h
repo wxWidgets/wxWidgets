@@ -490,8 +490,12 @@ public:
                               wxDouble xc, wxDouble yc, wxDouble radius,
                               const wxGraphicsGradientStops& stops) const;
 
-    // sets the font
+    // creates a font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK) const;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) const;
@@ -829,6 +833,10 @@ public:
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK) = 0;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;

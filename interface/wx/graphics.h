@@ -454,6 +454,19 @@ public:
                                       const wxColour& col = *wxBLACK) const;
 
     /**
+        Creates a font object with the specified attributes.
+
+        The use of overload taking wxFont is preferred, see
+        wxGraphicsRenderer::CreateFont() for more details.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK) const;
+
+    /**
         Creates a wxGraphicsContext from a native context. This native context
         must be a CGContextRef for Core Graphics, a Graphics pointer for
         GDIPlus, or a cairo_t pointer for cairo.
@@ -1025,6 +1038,35 @@ public:
         Creates a native graphics font from a wxFont and a text colour.
     */
     virtual wxGraphicsFont CreateFont(const wxFont& font,
+                                      const wxColour& col = *wxBLACK) = 0;
+
+    /**
+        Creates a graphics font with the given characteristics.
+
+        If possible, the CreateFont() overload taking wxFont should be used
+        instead. The main advantage of this overload is that it can be used
+        without X server connection under Unix when using Cairo.
+
+        @param sizeInPixels
+            Height of the font in user space units, i.e. normally pixels.
+            Notice that this is different from the overload taking wxFont as
+            wxFont size is specified in points.
+        @param facename
+            The name of the font. The same font name might not be available
+            under all platforms so the font name can also be empty to use the
+            default platform font.
+        @param flags
+            Combination of wxFontFlag enum elements. Currently only
+            @c wxFONTFLAG_ITALIC and @c wxFONTFLAG_BOLD are supported. By
+            default the normal font version is used.
+        @param col
+            The font colour, black by default.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) = 0;
 
 

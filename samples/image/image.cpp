@@ -866,10 +866,11 @@ private:
         wxGraphicsBitmap gb(gc->CreateBitmapFromImage(m_image));
 
         gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
-
         gc->DrawText("Bitmap", 0, HEIGHT/2);
         gc->DrawBitmap(m_bitmap, 0, 0, WIDTH, HEIGHT);
 
+        wxGraphicsFont gf = gc->CreateFont(wxNORMAL_FONT->GetPixelSize().y, "");
+        gc->SetFont(gf);
         gc->DrawText("Graphics bitmap", 0, (3*HEIGHT)/2);
         gc->DrawBitmap(gb, 0, HEIGHT, WIDTH, HEIGHT);
     }

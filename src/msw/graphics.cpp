@@ -296,6 +296,11 @@ public:
     wxGDIPlusFontData( wxGraphicsRenderer* renderer,
                        const wxFont &font,
                        const wxColour& col );
+    wxGDIPlusFontData(wxGraphicsRenderer* renderer,
+                      const wxString& name,
+                      REAL sizeInPixels,
+                      int style,
+                      const wxColour& col);
     ~wxGDIPlusFontData();
 
     virtual Brush* GetGDIPlusBrush() { return m_textBrush; }
@@ -307,7 +312,8 @@ private :
     void Init(const wxString& name,
               REAL size,
               int style,
-              const wxColour& col);
+              const wxColour& col,
+              Unit fontUnit);
 
     Brush* m_textBrush;
     Font* m_font;
@@ -539,6 +545,11 @@ public :
 
     virtual wxGraphicsFont CreateFont( const wxFont& font,
                                        const wxColour& col);
+
+    virtual wxGraphicsFont CreateFont(double size,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK);
 
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
@@ -884,9 +895,10 @@ void
 wxGDIPlusFontData::Init(const wxString& name,
                         REAL size,
                         int style,
-                        const wxColour& col)
+                        const wxColour& col,
+                        Unit fontUnit)
 {
-    m_font = new Font(name, size, style, UnitPoint);
+    m_font = new Font(name, size, style, fontUnit);
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
@@ -904,7 +916,17 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    Init(font.GetFaceName(), font.GetPointSize(), style, col);
+    Init(font.GetFaceName(), font.GetPointSize(), style, col, UnitPoint);
+}
+
+wxGDIPlusFontData::wxGDIPlusFontData(wxGraphicsRenderer* renderer,
+                                     const wxString& name,
+                                     REAL sizeInPixels,
+                                     int style,
+                                     const wxColour& col) :
+    wxGraphicsObjectRefData(renderer)
+{
+    Init(name, sizeInPixels, style, col, UnitPixel);
 }
 
 wxGDIPlusFontData::~wxGDIPlusFontData()
@@ -2111,6 +2133,31 @@ wxGDIPlusRenderer::CreateFont( const wxFont &font,
     }
     else
         return wxNullGraphicsFont;
+}
+
+wxGraphicsFont
+wxGDIPlusRenderer::CreateFont(double size,
+                              const wxString& facename,
+                              int flags,
+                              const wxColour& col)
+{
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
+
+    // Convert wxFont flags to GDI+ style:
+    int style = FontStyleRegular;
+    if ( flags & wxFONTFLAG_ITALIC )
+        style |= FontStyleItalic;
+    if ( flags & wxFONTFLAG_UNDERLINED )
+        style |= FontStyleUnderline;
+    if ( flags & wxFONTFLAG_BOLD )
+        style |= FontStyleBold;
+    if ( flags & wxFONTFLAG_STRIKETHROUGH )
+        style |= FontStyleStrikeout;
+
+
+    wxGraphicsFont f;
+    f.SetRefData(new wxGDIPlusFontData(this, facename, size, style, col));
+    return f;
 }
 
 wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap &bitmap )

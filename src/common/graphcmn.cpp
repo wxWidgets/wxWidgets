@@ -837,10 +837,18 @@ wxGraphicsContext::CreateRadialGradientBrush(
                           );
 }
 
-// sets the font
 wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col ) const
 {
     return GetRenderer()->CreateFont(font,col);
+}
+
+wxGraphicsFont
+wxGraphicsContext::CreateFont(double size,
+                              const wxString& facename,
+                              int flags,
+                              const wxColour& col) const
+{
+    return GetRenderer()->CreateFont(size, facename, flags, col);
 }
 
 wxGraphicsBitmap wxGraphicsContext::CreateBitmap( const wxBitmap& bmp ) const

@@ -2829,6 +2829,10 @@ public :
 
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK);
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
@@ -3080,7 +3084,6 @@ wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
     return p;
 }
 
-// sets the font
 wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
     if ( font.IsOk() )
@@ -3091,6 +3094,32 @@ wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const
     }
     else
         return wxNullGraphicsFont;
+}
+
+wxGraphicsFont
+wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags,
+                                      const wxColour& col)
+{
+    // This implementation is not ideal as we don't support fractional font
+    // sizes right now, but it's the simplest one.
+    //
+    // Notice that under Mac we always use 72 DPI so the font size in pixels is
+    // the same as the font size in points and we can pass it directly to wxFont
+    // ctor.
+    wxFont font(wxRound(sizeInPixels),
+                wxFONTFAMILY_DEFAULT,
+                flags & wxFONTFLAG_ITALIC ? wxFONTSTYLE_ITALIC
+                                          : wxFONTSTYLE_NORMAL,
+                flags & wxFONTFLAG_BOLD ? wxFONTWEIGHT_BOLD
+                                        : wxFONTWEIGHT_NORMAL,
+                (flags & wxFONTFLAG_UNDERLINED) != 0,
+                facename);
+
+    wxGraphicsFont f;
+    f.SetRefData(new wxMacCoreGraphicsFontData(this, font, col));
+    return f;
 }
 
 //

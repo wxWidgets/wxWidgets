@@ -282,14 +282,24 @@ class wxCairoFontData : public wxGraphicsObjectRefData
 {
 public:
     wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
+    wxCairoFontData(wxGraphicsRenderer* renderer,
+                    double sizeInPixels,
+                    const wxString& facename,
+                    int flags,
+                    const wxColour& col);
     ~wxCairoFontData();
 
-    virtual void Apply( wxGraphicsContext* context );
+    virtual bool Apply( wxGraphicsContext* context );
 #ifdef __WXGTK__
     const PangoFontDescription* GetFont() const { return m_font; }
     bool GetUnderlined() const { return m_underlined; }
 #endif
 private :
+    void InitColour(const wxColour& col);
+    void InitFontComponents(const wxString& facename,
+                            cairo_font_slant_t slant,
+                            cairo_font_weight_t weight);
+
     double m_size;
     bool m_underlined;
     double m_red;
@@ -300,11 +310,21 @@ private :
     cairo_font_face_t *m_font;
 #elif defined(__WXGTK__)
     PangoFontDescription* m_font;
-#else
+#endif
+
+    // These members are used when the font is created from its face name and
+    // flags (and not from wxFont) and also even when creating it from wxFont
+    // on the platforms not covered above.
+    //
+    // Notice that we can't use cairo_font_face_t instead of storing those,
+    // even though it would be simpler and need less #ifdefs, because
+    // cairo_toy_font_face_create() that we'd need to create it is only
+    // available in Cairo 1.8 and we require just 1.2 currently. If we do drop
+    // support for < 1.8 versions in the future it would be definitely better
+    // to use cairo_toy_font_face_create() instead.
     wxCharBuffer m_fontName;
     cairo_font_slant_t m_slant;
     cairo_font_weight_t m_weight;
-#endif
 };
 
 class wxCairoBitmapData : public wxGraphicsObjectRefData
@@ -806,13 +826,29 @@ void wxCairoBrushData::Init()
 // wxCairoFontData implementation
 //-----------------------------------------------------------------------------
 
-wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font,
-                         const wxColour& col ) : wxGraphicsObjectRefData(renderer)
+void wxCairoFontData::InitColour(const wxColour& col)
 {
     m_red = col.Red()/255.0;
     m_green = col.Green()/255.0;
     m_blue = col.Blue()/255.0;
     m_alpha = col.Alpha()/255.0;
+}
+
+void
+wxCairoFontData::InitFontComponents(const wxString& facename,
+                                    cairo_font_slant_t slant,
+                                    cairo_font_weight_t weight)
+{
+    m_fontName = facename.mb_str(wxConvUTF8);
+    m_slant = slant;
+    m_weight = weight;
+}
+
+wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font,
+                         const wxColour& col ) : wxGraphicsObjectRefData(renderer)
+{
+    InitColour(col);
+
     m_size = font.GetPointSize();
     m_underlined = font.GetUnderlined();
 
@@ -821,35 +857,87 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
 #elif defined(__WXGTK__)
     m_font = pango_font_description_copy( font.GetNativeFontInfo()->description );
 #else
-    m_fontName = font.GetFaceName().mb_str(wxConvUTF8);
-    m_slant = font.GetStyle() == wxFONTSTYLE_ITALIC ? CAIRO_FONT_SLANT_ITALIC:CAIRO_FONT_SLANT_NORMAL;
-    m_weight = font.GetWeight() == wxFONTWEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD:CAIRO_FONT_WEIGHT_NORMAL;
+    InitFontComponents
+    (
+        font.GetFaceName(),
+        font.GetStyle() == wxFONTSTYLE_ITALIC ? CAIRO_FONT_SLANT_ITALIC
+                                              : CAIRO_FONT_SLANT_NORMAL,
+        font.GetWeight() == wxFONTWEIGHT_BOLD ? CAIRO_FONT_WEIGHT_BOLD
+                                              : CAIRO_FONT_WEIGHT_NORMAL
+    );
 #endif
+}
+
+wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
+                                 double sizeInPixels,
+                                 const wxString& facename,
+                                 int flags,
+                                 const wxColour& col) :
+    wxGraphicsObjectRefData(renderer)
+{
+    InitColour(col);
+
+    // Resolution for Cairo image surfaces is 72 DPI meaning that the sizes in
+    // points and pixels are identical, so we can just pass the size in pixels
+    // directly to cairo_set_font_size().
+    m_size = sizeInPixels;
+
+#if defined(__WXGTK__) || defined(__WXMAC__)
+    m_font = NULL;
+#endif
+
+    m_underlined = (flags & wxFONTFLAG_UNDERLINED) != 0;
+
+    InitFontComponents
+    (
+        facename,
+        flags & wxFONTFLAG_ITALIC ? CAIRO_FONT_SLANT_ITALIC
+                                  : CAIRO_FONT_SLANT_NORMAL,
+        flags & wxFONTFLAG_BOLD ? CAIRO_FONT_WEIGHT_BOLD
+                                : CAIRO_FONT_WEIGHT_NORMAL
+    );
 }
 
 wxCairoFontData::~wxCairoFontData()
 {
 #ifdef __WXMAC__
-    cairo_font_face_destroy( m_font );
+    if ( m_font )
+        cairo_font_face_destroy( m_font );
 #elif defined(__WXGTK__)
-    pango_font_description_free( m_font );
+    if ( m_font )
+        pango_font_description_free( m_font );
 #else
 #endif
 }
 
-void wxCairoFontData::Apply( wxGraphicsContext* context )
+bool wxCairoFontData::Apply( wxGraphicsContext* context )
 {
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     cairo_set_source_rgba(ctext,m_red,m_green, m_blue,m_alpha);
 #ifdef __WXGTK__
-    // the rest is done using Pango layouts
+    if ( m_font )
+    {
+        // Nothing to do, the caller uses Pango layout functions to do
+        // everything.
+        return true;
+    }
 #elif defined(__WXMAC__)
-    cairo_set_font_face(ctext, m_font);
-    cairo_set_font_size(ctext, m_size );
-#else
+    if ( m_font )
+    {
+        cairo_set_font_face(ctext, m_font);
+        cairo_set_font_size(ctext, m_size );
+        return true;
+    }
+#endif
+
+    // If we get here, we must be on a platform without native font support or
+    // we're using toy Cairo API even under wxGTK/wxMac.
     cairo_select_font_face(ctext, m_fontName, m_slant, m_weight );
     cairo_set_font_size(ctext, m_size );
-#endif
+
+    // Indicate that we don't use native fonts for the platforms which care
+    // about this (currently only wxGTK).
+    return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -1900,30 +1988,35 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( !data )
         return;
 
-    ((wxCairoFontData*)m_font.GetRefData())->Apply(this);
-
-#ifdef __WXGTK__
-    size_t datalen = strlen(data);
-
-    PangoLayout *layout = pango_cairo_create_layout (m_context);
-    wxCairoFontData* font_data = (wxCairoFontData*) m_font.GetRefData();
-    pango_layout_set_font_description( layout, font_data->GetFont());
-    pango_layout_set_text(layout, data, datalen);
-
-    if (font_data->GetUnderlined())
+    if ( ((wxCairoFontData*)m_font.GetRefData())->Apply(this) )
     {
-        PangoAttrList *attrs = pango_attr_list_new();
-        PangoAttribute *attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
-        pango_attr_list_insert(attrs, attr);
-        pango_layout_set_attributes(layout, attrs);
-        pango_attr_list_unref(attrs);
+#ifdef __WXGTK__
+        size_t datalen = strlen(data);
+
+        PangoLayout *layout = pango_cairo_create_layout (m_context);
+        wxCairoFontData* font_data = (wxCairoFontData*) m_font.GetRefData();
+        pango_layout_set_font_description( layout, font_data->GetFont());
+        pango_layout_set_text(layout, data, datalen);
+
+        if (font_data->GetUnderlined())
+        {
+            PangoAttrList *attrs = pango_attr_list_new();
+            PangoAttribute *attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
+            pango_attr_list_insert(attrs, attr);
+            pango_layout_set_attributes(layout, attrs);
+            pango_attr_list_unref(attrs);
+        }
+
+        cairo_move_to(m_context, x, y);
+        pango_cairo_show_layout (m_context, layout);
+
+        g_object_unref (layout);
+
+        // Don't use Cairo text API, we already did everything.
+        return;
+#endif
     }
 
-    cairo_move_to(m_context, x, y);
-    pango_cairo_show_layout (m_context, layout);
-
-    g_object_unref (layout);
-#else
     // Cairo's x,y for drawing text is at the baseline, so we need to adjust
     // the position we move to by the ascent.
     cairo_font_extents_t fe;
@@ -1931,7 +2024,6 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     cairo_move_to(m_context, x, y+fe.ascent);
 
     cairo_show_text(m_context, data);
-#endif
 }
 
 void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
@@ -1951,32 +2043,35 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     if ( str.empty())
         return;
 
+    if ( ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this) )
+    {
 #ifdef __WXGTK__
-    int w, h;
+        int w, h;
 
-    PangoLayout *layout = pango_cairo_create_layout (m_context);
-    pango_layout_set_font_description( layout, ((wxCairoFontData*)m_font.GetRefData())->GetFont());
-    const wxCharBuffer data = str.utf8_str();
-    if ( !data )
-    {
+        PangoLayout *layout = pango_cairo_create_layout (m_context);
+        pango_layout_set_font_description( layout, ((wxCairoFontData*)m_font.GetRefData())->GetFont());
+        const wxCharBuffer data = str.utf8_str();
+        if ( !data )
+        {
+            return;
+        }
+        pango_layout_set_text( layout, data, strlen(data) );
+        pango_layout_get_pixel_size (layout, &w, &h);
+        if ( width )
+            *width = w;
+        if ( height )
+            *height = h;
+        if (descent)
+        {
+            PangoLayoutIter *iter = pango_layout_get_iter(layout);
+            int baseline = pango_layout_iter_get_baseline(iter);
+            pango_layout_iter_free(iter);
+            *descent = h - PANGO_PIXELS(baseline);
+        }
+        g_object_unref (layout);
         return;
+#endif
     }
-    pango_layout_set_text( layout, data, strlen(data) );
-    pango_layout_get_pixel_size (layout, &w, &h);
-    if ( width )
-        *width = w;
-    if ( height )
-        *height = h;
-    if (descent)
-    {
-        PangoLayoutIter *iter = pango_layout_get_iter(layout);
-        int baseline = pango_layout_iter_get_baseline(iter);
-        pango_layout_iter_free(iter);
-        *descent = h - PANGO_PIXELS(baseline);
-    }
-    g_object_unref (layout);
-#else
-    ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this);
 
     if (width)
     {
@@ -2009,7 +2104,6 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
         if ( externalLeading )
             *externalLeading = wxMax(0, fe.height - (fe.ascent + fe.descent));
     }
-#endif
 }
 
 void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
@@ -2187,6 +2281,10 @@ public :
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK);
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
@@ -2403,7 +2501,6 @@ wxCairoRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
     return p;
 }
 
-// sets the font
 wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
@@ -2415,6 +2512,19 @@ wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour 
     }
     else
         return wxNullGraphicsFont;
+}
+
+wxGraphicsFont
+wxCairoRenderer::CreateFont(double sizeInPixels,
+                            const wxString& facename,
+                            int flags,
+                            const wxColour& col)
+{
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
+
+    wxGraphicsFont font;
+    font.SetRefData(new wxCairoFontData(this, sizeInPixels, facename, flags, col));
+    return font;
 }
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
