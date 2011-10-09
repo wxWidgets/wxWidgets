@@ -309,7 +309,7 @@ public:
     wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height );
     wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd );
     wxGDIPlusContext( wxGraphicsRenderer* renderer, Graphics* gr);
-    wxGDIPlusContext();
+    wxGDIPlusContext(wxGraphicsRenderer* renderer);
 
     virtual ~wxGDIPlusContext();
 
@@ -377,10 +377,11 @@ protected:
 
     wxDouble m_fontScaleRatio;
 
-private:
-    void    Init();
-    void    SetDefaults();
+    // Used from ctors (including those in the derived classes) and takes
+    // ownership of the graphics pointer that must be non-NULL.
+    void Init(Graphics* graphics, int width, int height);
 
+private:
     virtual void DoDrawText(const wxString& str, wxDouble x, wxDouble y)
         { DoDrawFilledText(str, x, y, wxNullGraphicsBrush); }
     virtual void DoDrawFilledText(const wxString& str, wxDouble x, wxDouble y,
@@ -398,9 +399,6 @@ class wxGDIPlusMeasuringContext : public wxGDIPlusContext
 {
 public:
     wxGDIPlusMeasuringContext( wxGraphicsRenderer* renderer ) : wxGDIPlusContext( renderer , m_hdc = GetDC(NULL), 1000, 1000 )
-    {
-    }
-    wxGDIPlusMeasuringContext()
     {
     }
 
@@ -1269,66 +1267,50 @@ public :
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height   )
     : wxGraphicsContext(renderer)
 {
-    Init();
-    m_context = new Graphics( hdc);
-    m_width = width;
-    m_height = height;
-    SetDefaults();
+    Init(new Graphics(hdc), width, height);
 }
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc )
     : wxGraphicsContext(renderer)
 {
-    Init();
-
     wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
     HDC hdc = (HDC) msw->GetHDC();
-
-    m_context = new Graphics(hdc);
     wxSize sz = dc.GetSize();
-    m_width = sz.x;
-    m_height = sz.y;
 
-    SetDefaults();
+    Init(new Graphics(hdc), sz.x, sz.y);
 }
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd  )
     : wxGraphicsContext(renderer)
 {
-    Init();
-    m_enableOffset = true;
-    m_context = new Graphics( hwnd);
     RECT rect = wxGetWindowRect(hwnd);
-    m_width = rect.right - rect.left;
-    m_height = rect.bottom - rect.top;
-    SetDefaults();
+    Init(new Graphics(hwnd), rect.right - rect.left, rect.bottom - rect.top);
+    m_enableOffset = true;
 }
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, Graphics* gr  )
     : wxGraphicsContext(renderer)
 {
-    Init();
-    m_context = gr;
-    SetDefaults();
+    Init(gr, 0, 0);
 }
 
-wxGDIPlusContext::wxGDIPlusContext() : wxGraphicsContext(NULL)
+wxGDIPlusContext::wxGDIPlusContext(wxGraphicsRenderer* renderer)
+    : wxGraphicsContext(renderer)
 {
-    Init();
-}
-
-void wxGDIPlusContext::Init()
-{
+    // Derived class must call Init() later but just set m_context to NULL for
+    // safety to avoid crashing in our dtor if Init() ends up not being called.
     m_context = NULL;
-    m_state1 = 0;
-    m_state2= 0;
-    m_height = 0;
-    m_width = 0;
-    m_fontScaleRatio = 1.0;
 }
 
-void wxGDIPlusContext::SetDefaults()
+void wxGDIPlusContext::Init(Graphics* graphics, int width, int height)
 {
+    m_context = graphics;
+    m_state1 = 0;
+    m_state2 = 0;
+    m_width = width;
+    m_height = height;
+    m_fontScaleRatio = 1.0;
+
     m_context->SetTextRenderingHint(TextRenderingHintSystemDefault);
     m_context->SetPixelOffsetMode(PixelOffsetModeHalf);
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
