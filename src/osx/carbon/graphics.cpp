@@ -978,6 +978,14 @@ public:
 
     virtual CGImageRef GetBitmap() { return m_bitmap; }
     bool IsMonochrome() { return m_monochrome; }
+
+#if wxUSE_IMAGE
+    wxImage ConvertToImage() const
+    {
+        return wxBitmap(m_bitmap).ConvertToImage();
+    }
+#endif // wxUSE_IMAGE
+
 private :
     CGImageRef m_bitmap;
     bool m_monochrome;
@@ -992,6 +1000,18 @@ wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
 {
     CGImageRelease( m_bitmap );
 }
+
+#if wxUSE_IMAGE
+
+wxImage wxGraphicsBitmap::ConvertToImage() const
+{
+    wxMacCoreGraphicsBitmapData* const
+        data = static_cast<wxMacCoreGraphicsBitmapData*>(GetRefData());
+
+    return data ? data->ConvertToImage() : wxNullImage;
+}
+
+#endif // wxUSE_IMAGE
 
 //
 // Graphics Matrix

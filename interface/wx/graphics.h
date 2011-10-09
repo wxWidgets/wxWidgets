@@ -282,6 +282,20 @@ public:
         Default constructor creates an invalid bitmap.
      */
     wxGraphicsBitmap() {}
+
+    /**
+        Return the contents of this bitmap as wxImage.
+
+        Using this method is more efficient than converting wxGraphicsBitmap to
+        wxBitmap first and then to wxImage and can be useful if, for example,
+        you want to save wxGraphicsBitmap as a disk file in a format not
+        directly supported by wxBitmap.
+
+        Invalid image is returned if the bitmap is invalid.
+
+        @since 2.9.3
+     */
+    wxImage ConvertToImage() const;
 };
 
 /**

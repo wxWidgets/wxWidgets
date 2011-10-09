@@ -19,6 +19,7 @@
 #include "wx/geometry.h"
 #include "wx/dynarray.h"
 #include "wx/dc.h"
+#include "wx/image.h"
 #include "wx/vector.h"
 
 enum wxAntialiasMode
@@ -166,6 +167,14 @@ class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
 public:
     wxGraphicsBitmap() {}
     virtual ~wxGraphicsBitmap() {}
+
+    // Convert bitmap to wxImage: this is more efficient than converting to
+    // wxBitmap first and then to wxImage and also works without X server
+    // connection under Unix that wxBitmap requires.
+#if wxUSE_IMAGE
+    wxImage ConvertToImage() const;
+#endif // wxUSE_IMAGE
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGraphicsBitmap)
 };

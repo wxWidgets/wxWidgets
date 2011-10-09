@@ -317,6 +317,11 @@ public:
     virtual cairo_surface_t* GetCairoSurface() { return m_surface; }
     virtual cairo_pattern_t* GetCairoPattern() { return m_pattern; }
     virtual wxSize GetSize() { return wxSize(m_width, m_height); }
+
+#if wxUSE_IMAGE
+    wxImage ConvertToImage() const;
+#endif // wxUSE_IMAGE
+
 private :
     // Allocate m_buffer for the bitmap of the given size in the given format.
     //
@@ -1249,6 +1254,166 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 #endif // wxHAS_RAW_BITMAP
 }
 
+#if wxUSE_IMAGE
+
+// Helper functions for dealing with alpha pre-multiplication.
+namespace
+{
+
+inline unsigned char Premultiply(unsigned char alpha, unsigned char data)
+{
+    return alpha ? (data * alpha)/0xff : data;
+}
+
+inline unsigned char Unpremultiply(unsigned char alpha, unsigned char data)
+{
+    return alpha ? (data * 0xff)/alpha : data;
+}
+
+} // anonymous namespace
+
+wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
+                                     const wxImage& image)
+    : wxGraphicsObjectRefData(renderer)
+{
+    const cairo_format_t bufferFormat = image.HasAlpha()
+                                            ? CAIRO_FORMAT_ARGB32
+                                            : CAIRO_FORMAT_RGB24;
+
+    InitBuffer(image.GetWidth(), image.GetHeight(), bufferFormat);
+
+    // Copy wxImage data into the buffer. Notice that we work with wxUint32
+    // values and not bytes becase Cairo always works with buffers in native
+    // endianness.
+    wxUint32* dst = reinterpret_cast<wxUint32*>(m_buffer);
+    const unsigned char* src = image.GetData();
+
+    if ( bufferFormat == CAIRO_FORMAT_ARGB32 )
+    {
+        const unsigned char* alpha = image.GetAlpha();
+
+        for ( int y = 0; y < m_height; y++ )
+        {
+            for ( int x = 0; x < m_width; x++ )
+            {
+                const unsigned char a = *alpha++;
+
+                *dst++ = a                      << 24 |
+                         Premultiply(a, src[0]) << 16 |
+                         Premultiply(a, src[1]) <<  8 |
+                         Premultiply(a, src[2]);
+                src += 3;
+            }
+        }
+    }
+    else // RGB
+    {
+        for ( int y = 0; y < m_height; y++ )
+        {
+            for ( int x = 0; x < m_width; x++ )
+            {
+                *dst++ = src[0] << 16 |
+                         src[1] <<  8 |
+                         src[2];
+                src += 3;
+            }
+        }
+    }
+
+    InitSurface(bufferFormat);
+}
+
+wxImage wxCairoBitmapData::ConvertToImage() const
+{
+    wxImage image(m_width, m_height, false /* don't clear */);
+
+    // Get the surface type and format.
+    wxCHECK_MSG( cairo_surface_get_type(m_surface) == CAIRO_SURFACE_TYPE_IMAGE,
+                 wxNullImage,
+                 wxS("Can't convert non-image surface to image.") );
+
+    switch ( cairo_image_surface_get_format(m_surface) )
+    {
+        case CAIRO_FORMAT_ARGB32:
+            image.SetAlpha();
+            break;
+
+        case CAIRO_FORMAT_RGB24:
+            // Nothing to do, we don't use alpha by default.
+            break;
+
+        case CAIRO_FORMAT_A8:
+        case CAIRO_FORMAT_A1:
+            wxFAIL_MSG(wxS("Unsupported Cairo image surface type."));
+            return wxNullImage;
+
+        default:
+            wxFAIL_MSG(wxS("Unknown Cairo image surface type."));
+            return wxNullImage;
+    }
+
+    // Prepare for copying data.
+    const wxUint32* src = (wxUint32*)cairo_image_surface_get_data(m_surface);
+    wxCHECK_MSG( src, wxNullImage, wxS("Failed to get Cairo surface data.") );
+
+    int stride = cairo_image_surface_get_stride(m_surface);
+    wxCHECK_MSG( stride > 0, wxNullImage,
+                 wxS("Failed to get Cairo surface stride.") );
+
+    // As we work with wxUint32 pointers and not char ones, we need to adjust
+    // the stride accordingly. This should be lossless as the stride must be a
+    // multiple of pixel size.
+    wxASSERT_MSG( !(stride % sizeof(wxUint32)), wxS("Unexpected stride.") );
+    stride /= sizeof(wxUint32);
+
+    unsigned char* dst = image.GetData();
+    unsigned char *alpha = image.GetAlpha();
+    if ( alpha )
+    {
+        // We need to also copy alpha and undo the pre-multiplication as Cairo
+        // stores pre-multiplied values in this format while wxImage does not.
+        for ( int y = 0; y < m_height; y++ )
+        {
+            const wxUint32* const rowStart = src;
+            for ( int x = 0; x < m_width; x++ )
+            {
+                const wxUint32 argb = *src++;
+
+                *alpha++ = (argb & 0xff000000) >> 24;
+
+                // Copy the RGB data undoing the pre-multiplication.
+                *dst++ = Unpremultiply(*alpha, (argb & 0x00ff0000) >> 16);
+                *dst++ = Unpremultiply(*alpha, (argb & 0x0000ff00) >>  8);
+                *dst++ = Unpremultiply(*alpha, (argb & 0x000000ff));
+            }
+
+            src = rowStart + stride;
+        }
+    }
+    else // RGB
+    {
+        // Things are pretty simple in this case, just copy RGB bytes.
+        for ( int y = 0; y < m_height; y++ )
+        {
+            const wxUint32* const rowStart = src;
+            for ( int x = 0; x < m_width; x++ )
+            {
+                const wxUint32 argb = *src++;
+
+                *dst++ = (argb & 0x00ff0000) >> 16;
+                *dst++ = (argb & 0x0000ff00) >>  8;
+                *dst++ = (argb & 0x000000ff);
+            }
+
+            src = rowStart + stride;
+        }
+    }
+
+    return image;
+}
+
+#endif // wxUSE_IMAGE
+
 wxCairoBitmapData::~wxCairoBitmapData()
 {
     if (m_pattern)
@@ -1260,7 +1425,21 @@ wxCairoBitmapData::~wxCairoBitmapData()
     delete [] m_buffer;
 }
 
+// ----------------------------------------------------------------------------
+// wxGraphicsBitmap implementation
+// ----------------------------------------------------------------------------
 
+#if wxUSE_IMAGE
+
+wxImage wxGraphicsBitmap::ConvertToImage() const
+{
+    const wxCairoBitmapData* const
+        data = static_cast<wxCairoBitmapData*>(GetGraphicsData());
+
+    return data ? data->ConvertToImage() : wxNullImage;
+}
+
+#endif // wxUSE_IMAGE
 
 //-----------------------------------------------------------------------------
 // wxCairoContext implementation
