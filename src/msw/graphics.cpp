@@ -294,7 +294,6 @@ class wxGDIPlusFontData : public wxGraphicsObjectRefData
 {
 public:
     wxGDIPlusFontData( wxGraphicsRenderer* renderer,
-                       const wxGDIPlusContext* gc,
                        const wxFont &font,
                        const wxColour& col );
     ~wxGDIPlusFontData();
@@ -308,8 +307,7 @@ private :
     void Init(const wxString& name,
               REAL size,
               int style,
-              const wxColour& col,
-              Unit fontUnit = UnitPixel);
+              const wxColour& col);
 
     Brush* m_textBrush;
     Font* m_font;
@@ -374,9 +372,6 @@ public:
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void PushState();
     virtual void PopState();
-
-    // sets the font of this context
-    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
 
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading ) const;
@@ -542,15 +537,8 @@ public :
     virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
 #endif // wxUSE_IMAGE
 
-    // stub: should not be called directly
-    virtual wxGraphicsFont CreateFont( const wxFont& WXUNUSED(font),
-                                       const wxColour& WXUNUSED(col) )
-        { wxFAIL; return wxNullGraphicsFont; }
-
-    // this is used to really create the font
-    wxGraphicsFont CreateGDIPlusFont( const wxGDIPlusContext* gc,
-                                      const wxFont &font,
-                                      const wxColour &col );
+    virtual wxGraphicsFont CreateFont( const wxFont& font,
+                                       const wxColour& col);
 
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
@@ -896,20 +884,14 @@ void
 wxGDIPlusFontData::Init(const wxString& name,
                         REAL size,
                         int style,
-                        const wxColour& col,
-                        Unit fontUnit)
+                        const wxColour& col)
 {
-    // This scaling is needed when we use unit other than the
-    // default UnitPoint. It works for both display and printing.
-    size *= 100.0f / 72.0f;
-
-    m_font = new Font(name, size, style, fontUnit);
+    m_font = new Font(name, size, style, UnitPoint);
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
 
 wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
-                                      const wxGDIPlusContext* gc,
                                       const wxFont &font,
                                       const wxColour& col )
     : wxGraphicsObjectRefData( renderer )
@@ -922,17 +904,7 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    Graphics* context = gc->GetGraphics();
-
-    Unit fontUnit = context->GetPageUnit();
-    // if fontUnit is UnitDisplay, then specify UnitPixel, otherwise
-    // you'll get a "InvalidParameter" from GDI+
-    if ( fontUnit == UnitDisplay )
-        fontUnit = UnitPixel;
-
-    // NB: font unit should match context's unit. We can use UnitPixel,
-    //     as that is what the print context should use.
-    Init(font.GetFaceName(), font.GetPointSize(), style, col, fontUnit);
+    Init(font.GetFaceName(), font.GetPointSize(), style, col);
 }
 
 wxGDIPlusFontData::~wxGDIPlusFontData()
@@ -1719,14 +1691,6 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     DeleteObject(iconInfo.hbmMask);
 }
 
-wxGraphicsFont wxGDIPlusContext::CreateFont( const wxFont &font,
-                                             const wxColour &col ) const
-{
-    wxGDIPlusRenderer* renderer =
-        static_cast<wxGDIPlusRenderer*>(GetRenderer());
-    return renderer->CreateGDIPlusFont(this, font, col);
-}
-
 void wxGDIPlusContext::DoDrawFilledText(const wxString& str,
                                         wxDouble x, wxDouble y,
                                         const wxGraphicsBrush& brush)
@@ -2135,15 +2099,14 @@ wxGDIPlusRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 }
 
 wxGraphicsFont
-wxGDIPlusRenderer::CreateGDIPlusFont( const wxGDIPlusContext* gc,
-                                      const wxFont &font,
-                                      const wxColour &col )
+wxGDIPlusRenderer::CreateFont( const wxFont &font,
+                               const wxColour &col )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
     if ( font.IsOk() )
     {
         wxGraphicsFont p;
-        p.SetRefData(new wxGDIPlusFontData( this, gc, font, col ));
+        p.SetRefData(new wxGDIPlusFontData( this, font, col ));
         return p;
     }
     else
