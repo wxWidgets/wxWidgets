@@ -297,7 +297,16 @@ public:
 
     virtual Brush* GetGDIPlusBrush() { return m_textBrush; }
     virtual Font* GetGDIPlusFont() { return m_font; }
+
 private :
+    // Common part of all ctors, flags here is a combination of values of
+    // FontStyle GDI+ enum.
+    void Init(const wxString& name,
+              REAL size,
+              int style,
+              const wxColour& col,
+              Unit fontUnit = UnitPixel);
+
     Brush* m_textBrush;
     Font* m_font;
 };
@@ -840,13 +849,28 @@ wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 // wxGDIPlusFont implementation
 //-----------------------------------------------------------------------------
 
+void
+wxGDIPlusFontData::Init(const wxString& name,
+                        REAL size,
+                        int style,
+                        const wxColour& col,
+                        Unit fontUnit)
+{
+    // This scaling is needed when we use unit other than the
+    // default UnitPoint. It works for both display and printing.
+    size *= 100.0f / 72.0f;
+
+    m_font = new Font(name, size, style, fontUnit);
+
+    m_textBrush = new SolidBrush(wxColourToColor(col));
+}
+
 wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
                                       const wxGDIPlusContext* gc,
                                       const wxFont &font,
                                       const wxColour& col )
     : wxGraphicsObjectRefData( renderer )
 {
-    wxWCharBuffer s = font.GetFaceName().wc_str( *wxConvUI );
     int style = FontStyleRegular;
     if ( font.GetStyle() == wxFONTSTYLE_ITALIC )
         style |= FontStyleItalic;
@@ -863,17 +887,9 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( fontUnit == UnitDisplay )
         fontUnit = UnitPixel;
 
-    REAL points = font.GetPointSize();
-
-    // This scaling is needed when we use unit other than the
-    // default UnitPoint. It works for both display and printing.
-    REAL size = points * (100.0 / 72.0);
-
     // NB: font unit should match context's unit. We can use UnitPixel,
     //     as that is what the print context should use.
-    m_font = new Font( s, size, style, fontUnit );
-
-    m_textBrush = new SolidBrush(wxColourToColor(col));
+    Init(font.GetFaceName(), font.GetPointSize(), style, col, fontUnit);
 }
 
 wxGDIPlusFontData::~wxGDIPlusFontData()
