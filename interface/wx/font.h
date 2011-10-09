@@ -264,7 +264,6 @@ enum wxFontEncoding
 };
 
 
-
 /**
     @class wxFont
 
@@ -402,7 +401,12 @@ public:
         If @a fontdesc is invalid the font remains uninitialized, i.e. its IsOk() method
         will return @false.
      */
-    wxFont(const wxString& fontdesc);
+    wxFont(const wxString& nativeInfoString);
+
+    /**
+       Construct font from a native font info structure.
+    */
+    wxFont(const wxNativeFontInfo& nativeInfo);
 
     /**
         Destructor.
@@ -486,6 +490,8 @@ public:
         @see SetNativeFontInfoUserDesc(), GetNativeFontInfoDesc()
     */
     wxString GetNativeFontInfoUserDesc() const;
+
+    const wxNativeFontInfo *GetNativeFontInfo() const;
 
     /**
         Gets the point size.
@@ -775,6 +781,8 @@ public:
     */
     bool SetNativeFontInfoUserDesc(const wxString& info);
 
+    void SetNativeFontInfo(const wxNativeFontInfo& info);
+        
     /**
         Sets the point size.
 
@@ -923,6 +931,11 @@ public:
                        int flags = wxFONTFLAG_DEFAULT,
                        const wxString& faceName = wxEmptyString,
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+    
+    static wxFont *New(const wxNativeFontInfo& nativeInfo);
+    static wxFont *New(const wxString& nativeInfoString);
+
     //@}
 };
 

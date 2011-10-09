@@ -319,6 +319,29 @@ public:
 
 
 /**
+   Helper class to temporarily change an event to not propagate.
+*/
+class wxPropagationDisabler
+{
+public:
+    wxPropagationDisabler(wxEvent& event);
+    ~wxPropagationDisabler();
+};
+
+
+/**
+   Helper class to temporarily lower propagation level.
+*/
+class wxPropagateOnce
+{
+public:
+    wxPropagateOnce(wxEvent& event);
+    ~wxPropagateOnce();
+};
+
+
+
+/**
     @class wxEvtHandler
 
     A class that can handle events from the windowing system.
