@@ -2234,7 +2234,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         // collapsed) item in a tree model. So it's not an error if we don't know
         // about this item, just return without doing anything then.
         if ( !parentNode )
-            return false;
+            return true;
 
         wxCHECK_MSG( parentNode->HasChildren(), false, "parent node doesn't have children?" );
         const wxDataViewTreeNodes& parentsChildren = parentNode->GetChildNodes();
@@ -2265,7 +2265,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
             if ( parentNode->GetChildNodes().empty() )
                 parentNode->SetHasChildren(GetModel()->IsContainer(parent));
 
-            return false;
+            return true;
         }
 
         // Delete the item from wxDataViewTreeNode representation:
