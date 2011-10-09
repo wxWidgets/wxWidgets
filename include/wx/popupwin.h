@@ -132,7 +132,9 @@ protected:
     // get alerted when child gets deleted from under us
     void OnDestroy(wxWindowDestroyEvent& event);
 
-#if defined( __WXMSW__ ) || defined( __WXMAC__)
+    // wxOSX/Carbon doesn't generate mouse capture loss events currently so
+    // poll for the capture loss ourselves.
+#if wxOSX_USE_CARBON
     // check if the mouse needs captured or released
     void OnIdle(wxIdleEvent& event);
 #endif

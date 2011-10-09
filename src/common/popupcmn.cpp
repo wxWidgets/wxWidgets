@@ -76,6 +76,7 @@ public:
 protected:
     // event handlers
     void OnLeftDown(wxMouseEvent& event);
+    void OnCaptureLost(wxMouseCaptureLostEvent& event);
 
 private:
     wxPopupTransientWindow *m_popup;
@@ -106,6 +107,7 @@ private:
 
 BEGIN_EVENT_TABLE(wxPopupWindowHandler, wxEvtHandler)
     EVT_LEFT_DOWN(wxPopupWindowHandler::OnLeftDown)
+    EVT_MOUSE_CAPTURE_LOST(wxPopupWindowHandler::OnCaptureLost)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
@@ -114,7 +116,7 @@ BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
-#if defined( __WXMSW__ ) || ( defined( __WXMAC__ ) && wxOSX_USE_CARBON )
+#if wxOSX_USE_CARBON
     EVT_IDLE(wxPopupTransientWindow::OnIdle)
 #endif
 END_EVENT_TABLE()
@@ -424,7 +426,7 @@ bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
     return false;
 }
 
-#if defined( __WXMSW__ ) || ( defined( __WXMAC__ ) && wxOSX_USE_CARBON )
+#if wxOSX_USE_CARBON
 void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
 {
     event.Skip();
@@ -450,7 +452,7 @@ void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
         }
     }
 }
-#endif // __WXMSW__
+#endif // wxOSX/Carbon
 
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
@@ -598,6 +600,15 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
         (void)sbar->GetEventHandler()->ProcessEvent(event2);
     }
 #endif // __WXUNIVERSAL__ && wxUSE_SCROLLBAR
+}
+
+void
+wxPopupWindowHandler::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    m_popup->DismissAndNotify();
+
+    // There is no need to skip the event here, normally we've already dealt
+    // with the focus loss.
 }
 
 // ----------------------------------------------------------------------------
