@@ -301,7 +301,6 @@ private :
                             cairo_font_weight_t weight);
 
     double m_size;
-    bool m_underlined;
     double m_red;
     double m_green;
     double m_blue;
@@ -310,6 +309,7 @@ private :
     cairo_font_face_t *m_font;
 #elif defined(__WXGTK__)
     PangoFontDescription* m_font;
+    bool m_underlined;
 #endif
 
     // These members are used when the font is created from its face name and
@@ -850,12 +850,12 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
     InitColour(col);
 
     m_size = font.GetPointSize();
-    m_underlined = font.GetUnderlined();
 
 #ifdef __WXMAC__
     m_font = cairo_quartz_font_face_create_for_cgfont( font.OSXGetCGFont() );
 #elif defined(__WXGTK__)
     m_font = pango_font_description_copy( font.GetNativeFontInfo()->description );
+    m_underlined = font.GetUnderlined();
 #else
     InitFontComponents
     (
@@ -886,7 +886,8 @@ wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
     m_font = NULL;
 #endif
 
-    m_underlined = (flags & wxFONTFLAG_UNDERLINED) != 0;
+    // There is no need to set m_underlined under wxGTK in this case, it can
+    // only be used if m_font != NULL.
 
     InitFontComponents
     (
