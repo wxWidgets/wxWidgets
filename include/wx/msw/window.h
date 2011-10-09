@@ -467,7 +467,13 @@ public:
     // This should be overridden to return true for the controls which have
     // themed background that should through their children. Currently only
     // wxNotebook uses this.
-    virtual bool MSWHasInheritableBackground() const { return false; }
+    //
+    // The base class version already returns true if we have a solid
+    // background colour that should be propagated to our children.
+    virtual bool MSWHasInheritableBackground() const
+    {
+        return InheritsBackgroundColour();
+    }
 
 #if !defined(__WXWINCE__) && !defined(__WXUNIVERSAL__)
     #define wxHAS_MSW_BACKGROUND_ERASE_HOOK
