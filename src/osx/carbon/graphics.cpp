@@ -1404,8 +1404,6 @@ public:
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer);
 
-    wxMacCoreGraphicsContext();
-
     ~wxMacCoreGraphicsContext();
 
     void Init();
@@ -1517,7 +1515,7 @@ public:
 
     void SetNativeContext( CGContextRef cg );
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsContext)
+    wxDECLARE_NO_COPY_CLASS(wxMacCoreGraphicsContext);
 
 private:
     bool EnsureIsValid();
@@ -1555,8 +1553,6 @@ private:
 //-----------------------------------------------------------------------------
 // wxMacCoreGraphicsContext implementation
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsContext, wxGraphicsContext)
 
 class wxQuartzOffsetHelper
 {
@@ -1660,12 +1656,6 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer) : wxGraphicsContext(renderer)
 {
     Init();
-}
-
-wxMacCoreGraphicsContext::wxMacCoreGraphicsContext() : wxGraphicsContext(NULL)
-{
-    Init();
-    wxLogDebug(wxT("Illegal Constructor called"));
 }
 
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()

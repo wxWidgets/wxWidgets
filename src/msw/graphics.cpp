@@ -391,7 +391,7 @@ private:
     GraphicsState m_state1;
     GraphicsState m_state2;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusContext)
+    wxDECLARE_NO_COPY_CLASS(wxGDIPlusContext);
 };
 
 class wxGDIPlusMeasuringContext : public wxGDIPlusContext
@@ -411,7 +411,6 @@ public:
 
 private:
     HDC m_hdc ;
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusMeasuringContext)
 } ;
 
 class wxGDIPlusPrintingContext : public wxGDIPlusContext
@@ -1246,9 +1245,6 @@ void * wxGDIPlusMatrixData::GetNativeMatrix() const
 //-----------------------------------------------------------------------------
 // wxGDIPlusContext implementation
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusContext,wxGraphicsContext)
-IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusMeasuringContext,wxGDIPlusContext)
 
 class wxGDIPlusOffsetHelper
 {
