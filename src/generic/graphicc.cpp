@@ -1276,23 +1276,22 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
     int stride = InitBuffer(bmp.GetWidth(), bmp.GetHeight(), bufferFormat);
 
-    int bw = m_width;
-    int bh = m_height;
     wxBitmap bmpSource = bmp;  // we need a non-const instance
     wxUint32* data = (wxUint32*)m_buffer;
 
     if ( bufferFormat == CAIRO_FORMAT_ARGB32 )
     {
         // use the bitmap's alpha
-        wxAlphaPixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
+        wxAlphaPixelData
+            pixData(bmpSource, wxPoint(0, 0), wxSize(m_width, m_height));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
         wxAlphaPixelData::Iterator p(pixData);
-        for (int y=0; y<bh; y++)
+        for (int y=0; y<m_height; y++)
         {
             wxAlphaPixelData::Iterator rowStart = p;
             wxUint32* const rowStartDst = data;
-            for (int x=0; x<bw; x++)
+            for (int x=0; x<m_width; x++)
             {
                 // Each pixel in CAIRO_FORMAT_ARGB32 is a 32-bit quantity,
                 // with alpha in the upper 8 bits, then red, then green, then
@@ -1317,15 +1316,16 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     }
     else  // no alpha
     {
-        wxNativePixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
+        wxNativePixelData
+            pixData(bmpSource, wxPoint(0, 0), wxSize(m_width, m_height));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
         wxNativePixelData::Iterator p(pixData);
-        for (int y=0; y<bh; y++)
+        for (int y=0; y<m_height; y++)
         {
             wxNativePixelData::Iterator rowStart = p;
             wxUint32* const rowStartDst = data;
-            for (int x=0; x<bw; x++)
+            for (int x=0; x<m_width; x++)
             {
                 // Each pixel in CAIRO_FORMAT_RGB24 is a 32-bit quantity, with
                 // the upper 8 bits unused. Red, Green, and Blue are stored in
@@ -1349,15 +1349,16 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         wxBitmap bmpMask = bmpSource.GetMaskBitmap();
         bufferFormat = CAIRO_FORMAT_ARGB32;
         data = (wxUint32*)m_buffer;
-        wxNativePixelData pixData(bmpMask, wxPoint(0,0), wxSize(bw, bh));
-        wxCHECK_RET( pixData, wxT("Failed to gain raw access to mask bitmap data."));
+        wxNativePixelData
+            pixData(bmpMask, wxPoint(0, 0), wxSize(m_width, m_height));
+        wxCHECK_RET( pixData, wxT("Failed to gain raw access to mask data."));
 
         wxNativePixelData::Iterator p(pixData);
-        for (int y=0; y<bh; y++)
+        for (int y=0; y<m_height; y++)
         {
             wxNativePixelData::Iterator rowStart = p;
             wxUint32* const rowStartDst = data;
-            for (int x=0; x<bw; x++)
+            for (int x=0; x<m_width; x++)
             {
                 if (p.Red()+p.Green()+p.Blue() == 0)
                     *data = 0;
