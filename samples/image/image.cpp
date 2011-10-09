@@ -24,9 +24,11 @@
 #include "wx/image.h"
 #include "wx/file.h"
 #include "wx/filename.h"
+#include "wx/graphics.h"
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
+#include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
 #include "wx/versioninfo.h"
 
@@ -83,6 +85,9 @@ public:
 #ifdef wxHAVE_RAW_BITMAP
     void OnTestRawBitmap( wxCommandEvent &event );
 #endif // wxHAVE_RAW_BITMAP
+#if wxUSE_GRAPHICS_CONTEXT
+    void OnTestGraphics(wxCommandEvent& event);
+#endif // wxUSE_GRAPHICS_CONTEXT
     void OnQuit( wxCommandEvent &event );
 
 #if wxUSE_CLIPBOARD
@@ -617,6 +622,7 @@ enum
     ID_NEW = 100,
     ID_INFO,
     ID_SHOWRAW,
+    ID_GRAPHICS,
     ID_SHOWTHUMBNAIL
 };
 
@@ -630,6 +636,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #ifdef wxHAVE_RAW_BITMAP
     EVT_MENU    (ID_SHOWRAW, MyFrame::OnTestRawBitmap)
 #endif
+#if wxUSE_GRAPHICS_CONTEXT
+    EVT_MENU    (ID_GRAPHICS, MyFrame::OnTestGraphics)
+#endif // wxUSE_GRAPHICS_CONTEXT
 #if wxUSE_CLIPBOARD
     EVT_MENU(wxID_COPY, MyFrame::OnCopy)
     EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
@@ -651,6 +660,10 @@ MyFrame::MyFrame()
     menuImage->AppendSeparator();
     menuImage->Append( ID_SHOWRAW, wxT("Test &raw bitmap...\tCtrl-R"));
 #endif
+#if wxUSE_GRAPHICS_CONTEXT
+    menuImage->AppendSeparator();
+    menuImage->Append(ID_GRAPHICS, "Test &graphics context...\tCtrl-G");
+#endif // wxUSE_GRAPHICS_CONTEXT
     menuImage->AppendSeparator();
     menuImage->Append( ID_SHOWTHUMBNAIL, wxT("Test &thumbnail...\tCtrl-T"),
                         "Test scaling the image during load (try with JPEG)");
@@ -795,6 +808,84 @@ void MyFrame::OnTestRawBitmap( wxCommandEvent &WXUNUSED(event) )
 }
 
 #endif // wxHAVE_RAW_BITMAP
+
+#if wxUSE_GRAPHICS_CONTEXT
+
+class MyGraphicsFrame : public wxFrame
+{
+public:
+    enum
+    {
+        WIDTH = 256,
+        HEIGHT = 90
+    };
+
+    MyGraphicsFrame(wxWindow* parent) :
+        wxFrame(parent, wxID_ANY, "Graphics context test"),
+        m_image(WIDTH, HEIGHT, false)
+    {
+        // Create a test image: it has 3 horizontal primary colour bands with
+        // alpha increasing from left to right.
+        m_image.SetAlpha();
+        unsigned char* alpha = m_image.GetAlpha();
+        unsigned char* data = m_image.GetData();
+
+        for ( int y = 0; y < HEIGHT; y++ )
+        {
+            unsigned char r = 0,
+                          g = 0,
+                          b = 0;
+            if ( y < HEIGHT/3 )
+                r = 0xff;
+            else if ( y < (2*HEIGHT)/3 )
+                g = 0xff;
+            else
+                b = 0xff;
+
+            for ( int x = 0; x < WIDTH; x++ )
+            {
+                *alpha++ = x;
+                *data++ = r;
+                *data++ = g;
+                *data++ = b;
+            }
+        }
+
+        m_bitmap = wxBitmap(m_image);
+
+        Connect(wxEVT_PAINT, wxPaintEventHandler(MyGraphicsFrame::OnPaint));
+
+        Show();
+    }
+
+private:
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
+    {
+        wxPaintDC dc(this);
+        wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
+        wxGraphicsBitmap gb(gc->CreateBitmapFromImage(m_image));
+
+        gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
+
+        gc->DrawText("Bitmap", 0, HEIGHT/2);
+        gc->DrawBitmap(m_bitmap, 0, 0, WIDTH, HEIGHT);
+
+        gc->DrawText("Graphics bitmap", 0, (3*HEIGHT)/2);
+        gc->DrawBitmap(gb, 0, HEIGHT, WIDTH, HEIGHT);
+    }
+
+    wxImage m_image;
+    wxBitmap m_bitmap;
+
+    wxDECLARE_NO_COPY_CLASS(MyGraphicsFrame);
+};
+
+void MyFrame::OnTestGraphics(wxCommandEvent& WXUNUSED(event))
+{
+    new MyGraphicsFrame(this);
+}
+
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 #if wxUSE_CLIPBOARD
 

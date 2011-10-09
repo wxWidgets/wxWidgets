@@ -473,6 +473,7 @@ All (GUI):
 - Added wxPersistentSplitter.
 - Derive wxAuiNotebook from wxBookCtrlBase (Steven Lamerton).
 - Fix tooltips in wxSearchCtrl and other composite controls (Catalin Raceanu).
+- Allow converting to and from wxGraphicsBitmap and wxImage directly.
 
 OSX:
 

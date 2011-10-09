@@ -281,6 +281,10 @@ public:
 
     virtual Bitmap* GetGDIPlusBitmap() { return m_bitmap; }
 
+#if wxUSE_IMAGE
+    wxImage ConvertToImage() const;
+#endif // wxUSE_IMAGE
+
 private :
     Bitmap* m_bitmap;
     Bitmap* m_helper;
@@ -404,6 +408,38 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGDIPlusContext);
 };
 
+#if wxUSE_IMAGE
+
+class wxGDIPlusImageContext : public wxGDIPlusContext
+{
+public:
+    wxGDIPlusImageContext(wxGraphicsRenderer* renderer, wxImage& image) :
+        wxGDIPlusContext(renderer),
+        m_image(image),
+        m_bitmap(renderer, image)
+    {
+        Init
+        (
+            new Graphics(m_bitmap.GetGDIPlusBitmap()),
+            image.GetWidth(),
+            image.GetHeight()
+        );
+    }
+
+    virtual ~wxGDIPlusImageContext()
+    {
+        m_image = m_bitmap.ConvertToImage();
+    }
+
+private:
+    wxImage& m_image;
+    wxGDIPlusBitmapData m_bitmap;
+
+    wxDECLARE_NO_COPY_CLASS(wxGDIPlusImageContext);
+};
+
+#endif // wxUSE_IMAGE
+
 class wxGDIPlusMeasuringContext : public wxGDIPlusContext
 {
 public:
@@ -469,6 +505,10 @@ public :
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
 
+#if wxUSE_IMAGE
+    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image);
+#endif // wxUSE_IMAGE
+
     virtual wxGraphicsContext * CreateMeasuringContext();
 
     // Path
@@ -498,6 +538,9 @@ public :
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
+#if wxUSE_IMAGE
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+#endif // wxUSE_IMAGE
 
     // stub: should not be called directly
     virtual wxGraphicsFont CreateFont( const wxFont& WXUNUSED(font),
@@ -1013,11 +1056,49 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
         m_bitmap = image;
 }
 
+#if wxUSE_IMAGE
+
+wxImage wxGDIPlusBitmapData::ConvertToImage() const
+{
+    // We could use Bitmap::LockBits() and convert to wxImage directly but
+    // passing by wxBitmap is easier. It would be nice to measure performance
+    // of the two methods but for this the second one would need to be written
+    // first...
+    HBITMAP hbmp;
+    if ( m_bitmap->GetHBITMAP(Color(0xffffffff), &hbmp) != Gdiplus::Ok )
+        return wxNullImage;
+
+    wxBitmap bmp;
+    bmp.SetWidth(m_bitmap->GetWidth());
+    bmp.SetHeight(m_bitmap->GetHeight());
+    bmp.SetHBITMAP(hbmp);
+    bmp.SetDepth(IsAlphaPixelFormat(m_bitmap->GetPixelFormat()) ? 32 : 24);
+    return bmp.ConvertToImage();
+}
+
+#endif // wxUSE_IMAGE
+
 wxGDIPlusBitmapData::~wxGDIPlusBitmapData()
 {
     delete m_bitmap;
     delete m_helper;
 }
+
+// ----------------------------------------------------------------------------
+// wxGraphicsBitmap implementation
+// ----------------------------------------------------------------------------
+
+#if wxUSE_IMAGE
+
+wxImage wxGraphicsBitmap::ConvertToImage() const
+{
+    const wxGDIPlusBitmapData* const
+        data = static_cast<wxGDIPlusBitmapData*>(GetGraphicsData());
+
+    return data ? data->ConvertToImage() : wxNullImage;
+}
+
+#endif // wxUSE_IMAGE
 
 //-----------------------------------------------------------------------------
 // wxGDIPlusPath implementation
@@ -1939,6 +2020,17 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
     return context;
 }
 
+#if wxUSE_IMAGE
+wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromImage(wxImage& image)
+{
+    ENSURE_LOADED_OR_RETURN(NULL);
+    wxGDIPlusContext* context = new wxGDIPlusImageContext(this, image);
+    context->EnableOffset(true);
+    return context;
+}
+
+#endif // wxUSE_IMAGE
+
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
 {
     ENSURE_LOADED_OR_RETURN(NULL);
@@ -2070,6 +2162,29 @@ wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap &bitmap )
     else
         return wxNullGraphicsBitmap;
 }
+
+#if wxUSE_IMAGE
+
+wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmapFromImage(const wxImage& image)
+{
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsBitmap);
+    if ( image.IsOk() )
+    {
+        // Notice that we rely on conversion from wxImage to wxBitmap here but
+        // we could probably do it more efficiently by converting from wxImage
+        // to GDI+ Bitmap directly, i.e. copying wxImage pixels to the buffer
+        // returned by Bitmap::LockBits(). However this would require writing
+        // code specific for this task while like this we can reuse existing
+        // code (see also wxGDIPlusBitmapData::ConvertToImage()).
+        wxGraphicsBitmap gb;
+        gb.SetRefData(new wxGDIPlusBitmapData(this, image));
+        return gb;
+    }
+    else
+        return wxNullGraphicsBitmap;
+}
+
+#endif // wxUSE_IMAGE
 
 wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmapFromNativeBitmap( void *bitmap )
 {

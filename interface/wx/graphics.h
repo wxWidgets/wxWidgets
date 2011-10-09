@@ -269,11 +269,11 @@ enum wxCompositionMode
     Represents a bitmap.
 
     The objects of this class are not created directly but only via
-    wxGraphicsContext or wxGraphicsRenderer CreateBitmap() and
-    CreateSubBitmap() methods. They can subsequently be used with
-    wxGraphicsContext::DrawBitmap(). The only other operation is testing for
-    the bitmap validity which can be performed using IsNull() method inherited
-    from the base class.
+    wxGraphicsContext or wxGraphicsRenderer CreateBitmap(),
+    CreateBitmapFromImage() or CreateSubBitmap() methods. They can subsequently
+    be used with wxGraphicsContext::DrawBitmap(). The only other operation is
+    testing for the bitmap validity which can be performed using IsNull()
+    method inherited from the base class.
  */
 class wxGraphicsBitmap : public wxGraphicsObject
 {
@@ -385,6 +385,19 @@ public:
     static wxGraphicsContext* Create(const wxEnhMetaFileDC& dc);
 
     /**
+        Creates a wxGraphicsContext associated with a wxImage.
+
+        The image specifies the size of the context as well as whether alpha is
+        supported (if wxImage::HasAlpha()) or not and the initial contents of
+        the context. The @a image object must have a life time greater than
+        that of the new context as the context copies its contents back to the
+        image when it is destroyed.
+
+        @since 2.9.3
+     */
+    static wxGraphicsContext* Create(wxImage& image);
+
+    /**
         Clips drawings to the specified region.
     */
     virtual void Clip(const wxRegion& region) = 0;
@@ -406,6 +419,18 @@ public:
         Returns an invalid wxNullGraphicsBitmap on failure.
      */
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+
+    /**
+        Creates wxGraphicsBitmap from an existing wxImage.
+
+        This method is more efficient than converting wxImage to wxBitmap first
+        and then calling CreateBitmap() but otherwise has the same effect.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
 
     /**
         Extracts a sub-bitmap from an existing bitmap.
@@ -915,6 +940,18 @@ public:
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
 
     /**
+        Creates wxGraphicsBitmap from an existing wxImage.
+
+        This method is more efficient than converting wxImage to wxBitmap first
+        and then calling CreateBitmap() but otherwise has the same effect.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) = 0;
+
+    /**
         Creates wxGraphicsBitmap from a native bitmap handle.
 
         @a bitmap meaning is platform-dependent. Currently it's a GDI+ @c
@@ -950,6 +987,16 @@ public:
         under MSW.
     */
     virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& dc) = 0;
+
+    /**
+        Creates a wxGraphicsContext associated with a wxImage.
+
+        This function is used by wxContext::CreateFromImage() and is not
+        normally called directly.
+
+        @since 2.9.3
+     */
+    static wxGraphicsContext* CreateContextFromImage(wxImage& image);
 
     /**
         Creates a native brush from a wxBrush.

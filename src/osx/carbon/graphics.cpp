@@ -2724,6 +2724,49 @@ wxGraphicsMatrix wxMacCoreGraphicsContext::GetTransform() const
     return m;
 }
 
+
+#if wxUSE_IMAGE
+
+// ----------------------------------------------------------------------------
+// wxMacCoreGraphicsImageContext
+// ----------------------------------------------------------------------------
+
+// This is a GC that can be used to draw on wxImage. In this implementation we
+// simply draw on a wxBitmap using wxMemoryDC and then convert it to wxImage in
+// the end so it's not especially interesting and exists mainly for
+// compatibility with the other platforms.
+class wxMacCoreGraphicsImageContext : public wxMacCoreGraphicsContext
+{
+public:
+    wxMacCoreGraphicsImageContext(wxGraphicsRenderer* renderer,
+                                  wxImage& image) :
+        wxMacCoreGraphicsContext(renderer),
+        m_image(image),
+        m_bitmap(image),
+        m_memDC(m_bitmap)
+    {
+        SetNativeContext
+        (
+            (CGContextRef)(m_memDC.GetGraphicsContext()->GetNativeContext())
+        );
+        m_width = image.GetWidth();
+        m_height = image.GetHeight();
+    }
+
+    virtual ~wxMacCoreGraphicsImageContext()
+    {
+        m_memDC.SelectObject(wxNullBitmap);
+        m_image = m_bitmap.ConvertToImage();
+    }
+
+private:
+    wxImage& m_image;
+    wxBitmap m_bitmap;
+    wxMemoryDC m_memDC;
+};
+
+#endif // wxUSE_IMAGE
+
 //
 // Renderer
 //
@@ -2752,6 +2795,10 @@ public :
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
+
+#if wxUSE_IMAGE
+    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image);
+#endif // wxUSE_IMAGE
 
     virtual wxGraphicsContext * CreateMeasuringContext();
 
@@ -2785,6 +2832,10 @@ public :
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
+
+#if wxUSE_IMAGE
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+#endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
@@ -2895,6 +2946,16 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateMeasuringContext()
     return new wxMacCoreGraphicsContext(this);
 }
 
+#if wxUSE_IMAGE
+
+wxGraphicsContext*
+wxMacCoreGraphicsRenderer::CreateContextFromImage(wxImage& image)
+{
+    return new wxMacCoreGraphicsImageContext(this, image);
+}
+
+#endif // wxUSE_IMAGE
+
 // Path
 
 wxGraphicsPath wxMacCoreGraphicsRenderer::CreatePath()
@@ -2952,6 +3013,20 @@ wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
     else
         return wxNullGraphicsBitmap;
 }
+
+#if wxUSE_IMAGE
+
+wxGraphicsBitmap
+wxMacCoreGraphicsRenderer::CreateBitmapFromImage(const wxImage& image)
+{
+    // We don't have any direct way to convert wxImage to CGImage so pass by
+    // wxBitmap. This makes this function pretty useless in this implementation
+    // but it allows to have the same API as with Cairo backend where we can
+    // convert wxImage to a Cairo surface directly, bypassing wxBitmap.
+    return CreateBitmap(wxBitmap(image));
+}
+
+#endif // wxUSE_IMAGE
 
 wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
 {

@@ -848,6 +848,13 @@ wxGraphicsBitmap wxGraphicsContext::CreateBitmap( const wxBitmap& bmp ) const
     return GetRenderer()->CreateBitmap(bmp);
 }
 
+#if wxUSE_IMAGE
+wxGraphicsBitmap wxGraphicsContext::CreateBitmapFromImage(const wxImage& image) const
+{
+    return GetRenderer()->CreateBitmapFromImage(image);
+}
+#endif // wxUSE_IMAGE
+
 wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h   ) const
 {
     return GetRenderer()->CreateSubBitmap(bmp,x,y,w,h);
@@ -893,6 +900,13 @@ wxGraphicsContext* wxGraphicsContext::Create( wxWindow* window )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(window);
 }
+
+#if wxUSE_IMAGE
+/* static */ wxGraphicsContext* wxGraphicsContext::Create(wxImage& image)
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromImage(image);
+}
+#endif // wxUSE_IMAGE
 
 wxGraphicsContext* wxGraphicsContext::Create()
 {

@@ -434,6 +434,13 @@ public:
 
     static wxGraphicsContext* Create( wxWindow* window );
 
+#if wxUSE_IMAGE
+    // Create a context for drawing onto a wxImage. The image life time must be
+    // greater than that of the context itself as when the context is destroyed
+    // it will copy its contents to the specified image.
+    static wxGraphicsContext* Create(wxImage& image);
+#endif // wxUSE_IMAGE
+
     // create a context that can be used for measuring texts only, no drawing allowed
     static wxGraphicsContext * Create();
 
@@ -488,6 +495,9 @@ public:
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) const;
+#if wxUSE_IMAGE
+    wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) const;
+#endif // wxUSE_IMAGE
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) const;
@@ -781,6 +791,10 @@ public:
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window ) = 0;
 
+#if wxUSE_IMAGE
+    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) = 0;
+#endif // wxUSE_IMAGE
+
     // create a context that can be used for measuring texts only, no drawing allowed
     virtual wxGraphicsContext * CreateMeasuringContext() = 0;
 
@@ -818,6 +832,9 @@ public:
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+#if wxUSE_IMAGE
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) = 0;
+#endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) = 0;

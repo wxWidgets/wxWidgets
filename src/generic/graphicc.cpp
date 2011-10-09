@@ -311,6 +311,9 @@ class wxCairoBitmapData : public wxGraphicsObjectRefData
 {
 public:
     wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp );
+#if wxUSE_IMAGE
+    wxCairoBitmapData(wxGraphicsRenderer* renderer, const wxImage& image);
+#endif // wxUSE_IMAGE
     wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap );
     ~wxCairoBitmapData();
 
@@ -427,15 +430,44 @@ public:
 protected:
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
 
-private:
     void Init(cairo_t *context);
 
+private:
     cairo_t* m_context;
 
     wxVector<float> m_layerOpacities;
 
     wxDECLARE_NO_COPY_CLASS(wxCairoContext);
 };
+
+#if wxUSE_IMAGE
+// ----------------------------------------------------------------------------
+// wxCairoImageContext: context associated with a wxImage.
+// ----------------------------------------------------------------------------
+
+class wxCairoImageContext : public wxCairoContext
+{
+public:
+    wxCairoImageContext(wxGraphicsRenderer* renderer, wxImage& image) :
+        wxCairoContext(renderer),
+        m_image(image),
+        m_data(renderer, image)
+    {
+        Init(cairo_create(m_data.GetCairoSurface()));
+    }
+
+    virtual ~wxCairoImageContext()
+    {
+        m_image = m_data.ConvertToImage();
+    }
+
+private:
+    wxImage& m_image;
+    wxCairoBitmapData m_data;
+
+    wxDECLARE_NO_COPY_CLASS(wxCairoImageContext);
+};
+#endif // wxUSE_IMAGE
 
 //-----------------------------------------------------------------------------
 // wxCairoPenData implementation
@@ -1283,7 +1315,7 @@ wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
                                             ? CAIRO_FORMAT_ARGB32
                                             : CAIRO_FORMAT_RGB24;
 
-    InitBuffer(image.GetWidth(), image.GetHeight(), bufferFormat);
+    int stride = InitBuffer(image.GetWidth(), image.GetHeight(), bufferFormat);
 
     // Copy wxImage data into the buffer. Notice that we work with wxUint32
     // values and not bytes becase Cairo always works with buffers in native
@@ -1297,6 +1329,8 @@ wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
 
         for ( int y = 0; y < m_height; y++ )
         {
+            wxUint32* const rowStartDst = dst;
+
             for ( int x = 0; x < m_width; x++ )
             {
                 const unsigned char a = *alpha++;
@@ -1307,12 +1341,16 @@ wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
                          Premultiply(a, src[2]);
                 src += 3;
             }
+
+            dst = rowStartDst + stride / 4;
         }
     }
     else // RGB
     {
         for ( int y = 0; y < m_height; y++ )
         {
+            wxUint32* const rowStartDst = dst;
+
             for ( int x = 0; x < m_width; x++ )
             {
                 *dst++ = src[0] << 16 |
@@ -1320,10 +1358,12 @@ wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
                          src[2];
                 src += 3;
             }
+
+            dst = rowStartDst + stride / 4;
         }
     }
 
-    InitSurface(bufferFormat);
+    InitSurface(bufferFormat, stride);
 }
 
 wxImage wxCairoBitmapData::ConvertToImage() const
@@ -2108,6 +2148,9 @@ public :
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
+#if wxUSE_IMAGE
+    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image);
+#endif // wxUSE_IMAGE
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window );
 
@@ -2147,6 +2190,9 @@ public :
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
+#if wxUSE_IMAGE
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+#endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
@@ -2256,6 +2302,13 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * windo
     return NULL;
 #endif
 }
+
+#if wxUSE_IMAGE
+wxGraphicsContext * wxCairoRenderer::CreateContextFromImage(wxImage& image)
+{
+    return new wxCairoImageContext(this, image);
+}
+#endif // wxUSE_IMAGE
 
 wxGraphicsContext * wxCairoRenderer::CreateMeasuringContext()
 {
@@ -2376,6 +2429,24 @@ wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
     else
         return wxNullGraphicsBitmap;
 }
+
+#if wxUSE_IMAGE
+
+wxGraphicsBitmap wxCairoRenderer::CreateBitmapFromImage(const wxImage& image)
+{
+    wxGraphicsBitmap bmp;
+
+    ENSURE_LOADED_OR_RETURN(bmp);
+
+    if ( image.IsOk() )
+    {
+        bmp.SetRefData(new wxCairoBitmapData(this, image));
+    }
+
+    return bmp;
+}
+
+#endif // wxUSE_IMAGE
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
 {
