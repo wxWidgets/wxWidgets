@@ -354,7 +354,10 @@ public:
 #endif
     wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context );
     wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window);
-    wxCairoContext();
+
+    // If this ctor is used, Init() must be called by the derived class later.
+    wxCairoContext( wxGraphicsRenderer* renderer );
+
     virtual ~wxCairoContext();
 
     virtual bool ShouldOffset() const
@@ -1658,6 +1661,12 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     Init(cairo_create(m_mswSurface));
 #endif
 
+}
+
+wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
+    wxGraphicsContext(renderer)
+{
+    m_context = NULL;
 }
 
 wxCairoContext::~wxCairoContext()
