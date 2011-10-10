@@ -12,15 +12,35 @@
 #ifndef _WX_NONOWNEDWND_H_
 #define _WX_NONOWNEDWND_H_
 
+#include "wx/window.h"
+
+// ----------------------------------------------------------------------------
+// wxNonOwnedWindow: a window that is not a child window of another one.
+// ----------------------------------------------------------------------------
+
+class wxNonOwnedWindowBase : public wxWindow
+{
+public:
+    // Set the shape of the window to the given region.
+    // Returns true if the platform supports this feature (and the
+    // operation is successful.)
+    virtual bool SetShape(const wxRegion& WXUNUSED(region)) { return false; }
+
+};
+
 #if defined(__WXDFB__)
     #include "wx/dfb/nonownedwnd.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/nonownedwnd.h"
+#elif defined(__WXMSW__)
+    #include "wx/msw/nonownedwnd.h"
 #else
-    // other ports can derive both wxTLW and wxPopupWindow directly
-    // from wxWindow:
-    #include "wx/window.h"
-    typedef wxWindow wxNonOwnedWindow;
+    // No special class needed in other ports, they can derive both wxTLW and
+    // wxPopupWindow directly from wxWindow and don't implement SetShape() (at
+    // least at this level, wxGTK does do it in wxTLW).
+    class wxNonOwnedWindow : public wxNonOwnedWindowBase
+    {
+    };
 #endif
 
 #endif // _WX_NONOWNEDWND_H_

@@ -2652,6 +2652,7 @@ COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
 	wx/x11/region.h
 @COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = $(COND_TOOLKIT_MOTIF_LOWLEVEL_HDR)
 COND_TOOLKIT_MSW_LOWLEVEL_HDR =  \
+	wx/msw/nonownedwnd.h \
 	wx/msw/ole/activex.h \
 	wx/msw/popupwin.h \
 	wx/msw/uxtheme.h \
@@ -2665,6 +2666,7 @@ COND_TOOLKIT_MSW_LOWLEVEL_HDR =  \
 @COND_TOOLKIT_OSX_IPHONE@LOWLEVEL_HDR = 
 @COND_TOOLKIT_PM@LOWLEVEL_HDR = 
 COND_TOOLKIT_WINCE_LOWLEVEL_HDR =  \
+	wx/msw/nonownedwnd.h \
 	wx/msw/ole/activex.h \
 	wx/msw/popupwin.h \
 	wx/msw/uxtheme.h \
@@ -5127,6 +5129,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_icon.o \
 	monodll_msw_imaglist.o \
 	monodll_msw_minifram.o \
+	monodll_msw_nonownedwnd.o \
 	monodll_ole_dataobj.o \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
@@ -5186,6 +5189,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_icon.o \
 	monodll_msw_imaglist.o \
 	monodll_msw_minifram.o \
+	monodll_msw_nonownedwnd.o \
 	monodll_ole_dataobj.o \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
@@ -6007,6 +6011,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_icon.o \
 	monodll_msw_imaglist.o \
 	monodll_msw_minifram.o \
+	monodll_msw_nonownedwnd.o \
 	monodll_ole_dataobj.o \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
@@ -6066,6 +6071,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_icon.o \
 	monodll_msw_imaglist.o \
 	monodll_msw_minifram.o \
+	monodll_msw_nonownedwnd.o \
 	monodll_ole_dataobj.o \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
@@ -7077,6 +7083,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_icon.o \
 	monolib_msw_imaglist.o \
 	monolib_msw_minifram.o \
+	monolib_msw_nonownedwnd.o \
 	monolib_ole_dataobj.o \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
@@ -7136,6 +7143,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_icon.o \
 	monolib_msw_imaglist.o \
 	monolib_msw_minifram.o \
+	monolib_msw_nonownedwnd.o \
 	monolib_ole_dataobj.o \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
@@ -7957,6 +7965,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_icon.o \
 	monolib_msw_imaglist.o \
 	monolib_msw_minifram.o \
+	monolib_msw_nonownedwnd.o \
 	monolib_ole_dataobj.o \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
@@ -8016,6 +8025,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_icon.o \
 	monolib_msw_imaglist.o \
 	monolib_msw_minifram.o \
+	monolib_msw_nonownedwnd.o \
 	monolib_ole_dataobj.o \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
@@ -9206,6 +9216,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_icon.o \
 	coredll_msw_imaglist.o \
 	coredll_msw_minifram.o \
+	coredll_msw_nonownedwnd.o \
 	coredll_ole_dataobj.o \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
@@ -9265,6 +9276,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_icon.o \
 	coredll_msw_imaglist.o \
 	coredll_msw_minifram.o \
+	coredll_msw_nonownedwnd.o \
 	coredll_ole_dataobj.o \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
@@ -10086,6 +10098,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_icon.o \
 	coredll_msw_imaglist.o \
 	coredll_msw_minifram.o \
+	coredll_msw_nonownedwnd.o \
 	coredll_ole_dataobj.o \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
@@ -10145,6 +10158,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_icon.o \
 	coredll_msw_imaglist.o \
 	coredll_msw_minifram.o \
+	coredll_msw_nonownedwnd.o \
 	coredll_ole_dataobj.o \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
@@ -10796,6 +10810,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_icon.o \
 	corelib_msw_imaglist.o \
 	corelib_msw_minifram.o \
+	corelib_msw_nonownedwnd.o \
 	corelib_ole_dataobj.o \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
@@ -10855,6 +10870,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_icon.o \
 	corelib_msw_imaglist.o \
 	corelib_msw_minifram.o \
+	corelib_msw_nonownedwnd.o \
 	corelib_ole_dataobj.o \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
@@ -11676,6 +11692,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_icon.o \
 	corelib_msw_imaglist.o \
 	corelib_msw_minifram.o \
+	corelib_msw_nonownedwnd.o \
 	corelib_ole_dataobj.o \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
@@ -11735,6 +11752,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_icon.o \
 	corelib_msw_imaglist.o \
 	corelib_msw_minifram.o \
+	corelib_msw_nonownedwnd.o \
 	corelib_ole_dataobj.o \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
@@ -18393,6 +18411,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_minifram.o: $(srcdir)/src/msw/minifram.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/minifram.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_nonownedwnd.o: $(srcdir)/src/msw/nonownedwnd.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/nonownedwnd.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_nonownedwnd.o: $(srcdir)/src/msw/nonownedwnd.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/nonownedwnd.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_ole_dataobj.o: $(srcdir)/src/msw/ole/dataobj.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/dataobj.cpp
 
@@ -23759,6 +23783,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_minifram.o: $(srcdir)/src/msw/minifram.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/minifram.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_nonownedwnd.o: $(srcdir)/src/msw/nonownedwnd.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/nonownedwnd.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_nonownedwnd.o: $(srcdir)/src/msw/nonownedwnd.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/nonownedwnd.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_ole_dataobj.o: $(srcdir)/src/msw/ole/dataobj.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/dataobj.cpp
@@ -29286,6 +29316,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_msw_minifram.o: $(srcdir)/src/msw/minifram.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/minifram.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_nonownedwnd.o: $(srcdir)/src/msw/nonownedwnd.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/nonownedwnd.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_msw_nonownedwnd.o: $(srcdir)/src/msw/nonownedwnd.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/nonownedwnd.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_ole_dataobj.o: $(srcdir)/src/msw/ole/dataobj.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/dataobj.cpp
 
@@ -33293,6 +33329,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_msw_minifram.o: $(srcdir)/src/msw/minifram.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/minifram.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_nonownedwnd.o: $(srcdir)/src/msw/nonownedwnd.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/nonownedwnd.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_msw_nonownedwnd.o: $(srcdir)/src/msw/nonownedwnd.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/nonownedwnd.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_ole_dataobj.o: $(srcdir)/src/msw/ole/dataobj.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/dataobj.cpp

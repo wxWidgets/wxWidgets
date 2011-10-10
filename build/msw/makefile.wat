@@ -275,6 +275,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_minifram.obj &
+	$(OBJS)\monodll_nonownedwnd.obj &
 	$(OBJS)\monodll_dataobj.obj &
 	$(OBJS)\monodll_dropsrc.obj &
 	$(OBJS)\monodll_droptgt.obj &
@@ -549,6 +550,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_imaglist.obj &
 	$(OBJS)\monodll_minifram.obj &
+	$(OBJS)\monodll_nonownedwnd.obj &
 	$(OBJS)\monodll_dataobj.obj &
 	$(OBJS)\monodll_dropsrc.obj &
 	$(OBJS)\monodll_droptgt.obj &
@@ -1063,6 +1065,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_minifram.obj &
+	$(OBJS)\monolib_nonownedwnd.obj &
 	$(OBJS)\monolib_dataobj.obj &
 	$(OBJS)\monolib_dropsrc.obj &
 	$(OBJS)\monolib_droptgt.obj &
@@ -1337,6 +1340,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_imaglist.obj &
 	$(OBJS)\monolib_minifram.obj &
+	$(OBJS)\monolib_nonownedwnd.obj &
 	$(OBJS)\monolib_dataobj.obj &
 	$(OBJS)\monolib_dropsrc.obj &
 	$(OBJS)\monolib_droptgt.obj &
@@ -1750,6 +1754,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_minifram.obj &
+	$(OBJS)\coredll_nonownedwnd.obj &
 	$(OBJS)\coredll_dataobj.obj &
 	$(OBJS)\coredll_dropsrc.obj &
 	$(OBJS)\coredll_droptgt.obj &
@@ -2024,6 +2029,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_imaglist.obj &
 	$(OBJS)\coredll_minifram.obj &
+	$(OBJS)\coredll_nonownedwnd.obj &
 	$(OBJS)\coredll_dataobj.obj &
 	$(OBJS)\coredll_dropsrc.obj &
 	$(OBJS)\coredll_droptgt.obj &
@@ -2302,6 +2308,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_minifram.obj &
+	$(OBJS)\corelib_nonownedwnd.obj &
 	$(OBJS)\corelib_dataobj.obj &
 	$(OBJS)\corelib_dropsrc.obj &
 	$(OBJS)\corelib_droptgt.obj &
@@ -2576,6 +2583,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_imaglist.obj &
 	$(OBJS)\corelib_minifram.obj &
+	$(OBJS)\corelib_nonownedwnd.obj &
 	$(OBJS)\corelib_dataobj.obj &
 	$(OBJS)\corelib_dropsrc.obj &
 	$(OBJS)\corelib_droptgt.obj &
@@ -7720,6 +7728,11 @@ $(OBJS)\monodll_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_nonownedwnd.obj :  .AUTODEPEND ..\..\src\msw\nonownedwnd.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_dataobj.obj :  .AUTODEPEND ..\..\src\msw\ole\dataobj.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -10107,6 +10120,11 @@ $(OBJS)\monolib_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_nonownedwnd.obj :  .AUTODEPEND ..\..\src\msw\nonownedwnd.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_dataobj.obj :  .AUTODEPEND ..\..\src\msw\ole\dataobj.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -12464,6 +12482,11 @@ $(OBJS)\coredll_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_nonownedwnd.obj :  .AUTODEPEND ..\..\src\msw\nonownedwnd.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_dataobj.obj :  .AUTODEPEND ..\..\src\msw\ole\dataobj.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13868,6 +13891,11 @@ $(OBJS)\corelib_imaglist.obj :  .AUTODEPEND ..\..\src\msw\imaglist.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_minifram.obj :  .AUTODEPEND ..\..\src\msw\minifram.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_nonownedwnd.obj :  .AUTODEPEND ..\..\src\msw\nonownedwnd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

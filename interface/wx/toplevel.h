@@ -68,7 +68,7 @@ enum
 
     @see wxDialog, wxFrame
 */
-class wxTopLevelWindow : public wxWindow
+class wxTopLevelWindow : public wxNonOwnedWindow
 {
 public:
     /**
@@ -397,15 +397,6 @@ public:
     void SetRightMenu(int id = wxID_ANY,
                       const wxString& label = wxEmptyString,
                       wxMenu* subMenu = NULL);
-
-    /**
-        If the platform supports it, sets the shape of the window to that
-        depicted by @a region. The system will not display or respond to any
-        mouse event for the pixels that lie outside of the region. To reset the
-        window to the normal rectangular shape simply call SetShape() again with
-        an empty wxRegion. Returns @true if the operation is successful.
-    */
-    virtual bool SetShape(const wxRegion& region);
 
     /**
         Allows specification of minimum and maximum window sizes, and window

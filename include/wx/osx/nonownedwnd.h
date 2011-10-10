@@ -30,7 +30,7 @@
 
 class wxNonOwnedWindowImpl;
 
-class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxWindow
+class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxNonOwnedWindowBase
 {
 public:
     // constructors and such
@@ -79,7 +79,7 @@ public:
     // implementation from now on
     // --------------------------
 
-    virtual bool DoSetShape(const wxRegion& region);
+    virtual bool SetShape(const wxRegion& region);
     const wxRegion& GetShape() const { return m_shape; }
 
     // activation hooks only necessary for MDI Implementation

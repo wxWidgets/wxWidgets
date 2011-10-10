@@ -1686,6 +1686,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/icon.cpp
     src/msw/imaglist.cpp
     src/msw/minifram.cpp
+    src/msw/nonownedwnd.cpp
     src/msw/ole/dataobj.cpp
     src/msw/ole/dropsrc.cpp
     src/msw/ole/droptgt.cpp
@@ -1706,6 +1707,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/window.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
+    wx/msw/nonownedwnd.h
     wx/msw/ole/activex.h
     wx/msw/popupwin.h
     wx/msw/uxtheme.h

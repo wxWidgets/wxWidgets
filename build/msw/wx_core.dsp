@@ -2034,6 +2034,10 @@ SOURCE=..\..\src\msw\nativewin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\nonownedwnd.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\notebook.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -5277,6 +5281,10 @@ SOURCE=..\..\include\wx\msw\msgdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\msvcrt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\nonownedwnd.h
 # End Source File
 # Begin Source File
 

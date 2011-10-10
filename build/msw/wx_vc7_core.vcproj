@@ -1895,6 +1895,9 @@
 					ExcludedFromBuild="TRUE"/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\nonownedwnd.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\notebook.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -4530,6 +4533,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\msvcrt.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\nonownedwnd.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\notebook.h">

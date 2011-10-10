@@ -498,7 +498,7 @@ WXWindow wxNonOwnedWindow::GetWXWindow() const
 // ---------------------------------------------------------------------------
 
 
-bool wxNonOwnedWindow::DoSetShape(const wxRegion& region)
+bool wxNonOwnedWindow::SetShape(const wxRegion& region)
 {
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
                  wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
@@ -514,7 +514,7 @@ bool wxNonOwnedWindow::DoSetShape(const wxRegion& region)
         if ( rgn.IsEmpty() )
             return false ;
         else
-            return DoSetShape(rgn);
+            return SetShape(rgn);
     }
 
     return m_nowpeer->SetShape(region);

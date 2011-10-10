@@ -2556,6 +2556,10 @@
 				/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\nonownedwnd.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\notebook.cpp"
 				>
 				<FileConfiguration
@@ -6057,6 +6061,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\msvcrt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\nonownedwnd.h"
 				>
 			</File>
 			<File
