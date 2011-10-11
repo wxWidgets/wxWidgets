@@ -24,27 +24,11 @@ class wxNativeFontInfo
 public:
     wxNativeFontInfo();
     wxNativeFontInfo(const wxNativeFontInfo& info);
-    wxNativeFontInfo( int size,
-                      wxFontFamily family,
-                      wxFontStyle style,
-                      wxFontWeight weight,
-                      bool underlined,
-                      const wxString& faceName,
-                      wxFontEncoding encoding);
     ~wxNativeFontInfo();
 
     wxNativeFontInfo& operator=(const wxNativeFontInfo& info);
 
     void Init();
-    void Init(const wxNativeFontInfo& info);
-    void Init(int size,
-                  wxFontFamily family,
-                  wxFontStyle style,
-                  wxFontWeight weight,
-                  bool underlined,
-                  const wxString& faceName ,
-                  wxFontEncoding encoding);
-
     void InitFromFont(const wxFont& font);
     
     int GetPointSize() const;
