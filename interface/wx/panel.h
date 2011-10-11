@@ -125,21 +125,6 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     /**
-        Set the background bitmap for this panel.
-
-        If @a bmp is a valid bitmap, this bitmap will be tiled over the panel
-        background and show through any of its transparent children. Passing an
-        invalid bitmap reverts to the default background appearance.
-
-        Notice that you must not prevent the base class EVT_ERASE_BACKGROUND
-        handler from running (i.e. not to handle this event yourself) for this
-        to work.
-
-        @since 2.9.2
-    */
-    void SetBackgroundBitmap(const wxBitmap& bmp);
-
-    /**
         Overrides wxWindow::SetFocus().
 
         This method uses the (undocumented) mix-in class wxControlContainer which manages

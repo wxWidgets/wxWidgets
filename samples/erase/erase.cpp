@@ -30,6 +30,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/custombgwin.h"
 #include "wx/dcbuffer.h"
 
 // ----------------------------------------------------------------------------
@@ -52,7 +53,7 @@ public:
 };
 
 
-class MyCanvas : public wxScrolledWindow
+class MyCanvas : public wxCustomBackgroundWindow<wxScrolledWindow>
 {
 public:
     MyCanvas(wxFrame *parent);
@@ -310,8 +311,9 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxFrame *parent)
-        : wxScrolledWindow(parent, wxID_ANY)
 {
+    Create(parent, wxID_ANY);
+
     m_useBuffer = false;
     m_useBgBmp = false;
     m_eraseBgInPaint = false;

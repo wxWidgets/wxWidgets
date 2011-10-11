@@ -44,13 +44,6 @@ public:
     )
 #endif // WXWIN_COMPATIBILITY_2_8
 
-protected:
-    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp)
-    {
-        // We have support for background bitmap even at the base class level.
-        SetBackground(bmp, wxALIGN_NOT, wxTILE);
-    }
-
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel);
 };

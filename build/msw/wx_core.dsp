@@ -3244,10 +3244,6 @@ SOURCE=..\..\src\generic\numdlgg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\panelg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\printps.cpp
 # End Source File
 # Begin Source File
@@ -5013,6 +5009,10 @@ SOURCE=..\..\include\wx\msw\cursor.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\custombgwin.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\ole\dataform.h
 # End Source File
 # Begin Source File
@@ -5504,6 +5504,10 @@ SOURCE=..\..\include\wx\generic\ctrlsub.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\custombgwin.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\dataview.h
 # End Source File
 # Begin Source File
@@ -5745,6 +5749,10 @@ SOURCE=..\..\include\wx\univ\combobox.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\univ\control.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\custombgwin.h
 # End Source File
 # Begin Source File
 
@@ -6149,6 +6157,10 @@ SOURCE=..\..\include\wx\ctrlsub.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\cursor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\custombgwin.h
 # End Source File
 # Begin Source File
 

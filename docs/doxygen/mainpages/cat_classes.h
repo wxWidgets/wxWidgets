@@ -255,7 +255,7 @@ The following are a variety of classes that are derived from wxWindow.
     arrangement
 @li wxWizardPage: A base class for the page in wizard dialog.
 @li wxWizardPageSimple: A page in wizard dialog.
-
+@li wxCustomBackgroundWindow: A window allowing to set a custom bitmap.
 
 
 @section page_class_cat_aui Window Docking (wxAUI)

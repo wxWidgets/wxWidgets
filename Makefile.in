@@ -2990,6 +2990,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/control.h \
 	wx/msw/ctrlsub.h \
 	wx/msw/cursor.h \
+	wx/msw/custombgwin.h \
 	wx/msw/dc.h \
 	wx/msw/dcclient.h \
 	wx/msw/dcmemory.h \
@@ -3519,6 +3520,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/control.h \
 	wx/msw/ctrlsub.h \
 	wx/msw/cursor.h \
+	wx/msw/custombgwin.h \
 	wx/msw/dc.h \
 	wx/msw/dcclient.h \
 	wx/msw/dcmemory.h \
@@ -3855,6 +3857,7 @@ COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/univ/colschem.h \
 	wx/univ/combobox.h \
 	wx/univ/control.h \
+	wx/univ/custombgwin.h \
 	wx/univ/dialog.h \
 	wx/univ/frame.h \
 	wx/univ/gauge.h \
@@ -3907,6 +3910,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/control.h \
 	wx/ctrlsub.h \
 	wx/cursor.h \
+	wx/custombgwin.h \
 	wx/dc.h \
 	wx/dcclient.h \
 	wx/dcgraph.h \
@@ -3928,6 +3932,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/choicdgg.h \
 	wx/generic/colrdlgg.h \
 	wx/generic/combo.h \
+	wx/generic/custombgwin.h \
 	wx/generic/dcpsg.h \
 	wx/generic/dirctrlg.h \
 	wx/generic/dragimgg.h \
@@ -4700,7 +4705,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_markuptext.o \
 	monodll_msgdlgg.o \
 	monodll_numdlgg.o \
-	monodll_panelg.o \
 	monodll_progdlgg.o \
 	monodll_printps.o \
 	monodll_renderg.o \
@@ -4917,7 +4921,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_markuptext.o \
 	monodll_msgdlgg.o \
 	monodll_numdlgg.o \
-	monodll_panelg.o \
 	monodll_progdlgg.o \
 	monodll_printps.o \
 	monodll_renderg.o \
@@ -6654,7 +6657,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_markuptext.o \
 	monolib_msgdlgg.o \
 	monolib_numdlgg.o \
-	monolib_panelg.o \
 	monolib_progdlgg.o \
 	monolib_printps.o \
 	monolib_renderg.o \
@@ -6871,7 +6873,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_markuptext.o \
 	monolib_msgdlgg.o \
 	monolib_numdlgg.o \
-	monolib_panelg.o \
 	monolib_progdlgg.o \
 	monolib_printps.o \
 	monolib_renderg.o \
@@ -8787,7 +8788,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_markuptext.o \
 	coredll_msgdlgg.o \
 	coredll_numdlgg.o \
-	coredll_panelg.o \
 	coredll_progdlgg.o \
 	coredll_printps.o \
 	coredll_renderg.o \
@@ -9004,7 +9004,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_markuptext.o \
 	coredll_msgdlgg.o \
 	coredll_numdlgg.o \
-	coredll_panelg.o \
 	coredll_progdlgg.o \
 	coredll_printps.o \
 	coredll_renderg.o \
@@ -10381,7 +10380,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_markuptext.o \
 	corelib_msgdlgg.o \
 	corelib_numdlgg.o \
-	corelib_panelg.o \
 	corelib_progdlgg.o \
 	corelib_printps.o \
 	corelib_renderg.o \
@@ -10598,7 +10596,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_markuptext.o \
 	corelib_msgdlgg.o \
 	corelib_numdlgg.o \
-	corelib_panelg.o \
 	corelib_progdlgg.o \
 	corelib_printps.o \
 	corelib_renderg.o \
@@ -20559,9 +20556,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
-@COND_USE_GUI_1@monodll_panelg.o: $(srcdir)/src/generic/panelg.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/panelg.cpp
-
 @COND_USE_GUI_1@monodll_progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/progdlgg.cpp
 
@@ -25931,9 +25925,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
-
-@COND_USE_GUI_1@monolib_panelg.o: $(srcdir)/src/generic/panelg.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/panelg.cpp
 
 @COND_USE_GUI_1@monolib_progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/progdlgg.cpp
@@ -31464,9 +31455,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
 
-@COND_USE_GUI_1@coredll_panelg.o: $(srcdir)/src/generic/panelg.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/panelg.cpp
-
 @COND_USE_GUI_1@coredll_progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/progdlgg.cpp
 
@@ -35477,9 +35465,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_numdlgg.o: $(srcdir)/src/generic/numdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/numdlgg.cpp
-
-@COND_USE_GUI_1@corelib_panelg.o: $(srcdir)/src/generic/panelg.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/panelg.cpp
 
 @COND_USE_GUI_1@corelib_progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/progdlgg.cpp

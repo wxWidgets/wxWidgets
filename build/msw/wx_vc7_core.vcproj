@@ -2850,9 +2850,6 @@
 				RelativePath="..\..\src\generic\numdlgg.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\generic\panelg.cpp">
-			</File>
-			<File
 				RelativePath="..\..\src\generic\printps.cpp">
 			</File>
 			<File
@@ -4322,6 +4319,9 @@
 				RelativePath="..\..\include\wx\msw\cursor.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\custombgwin.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\ole\dataform.h">
 			</File>
 			<File
@@ -4701,6 +4701,9 @@
 				RelativePath="..\..\include\wx\generic\ctrlsub.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\custombgwin.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\dataview.h">
 			</File>
 			<File
@@ -4883,6 +4886,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\univ\control.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\univ\custombgwin.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\univ\dialog.h">
@@ -5188,6 +5194,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\cursor.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\custombgwin.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\dataobj.h">

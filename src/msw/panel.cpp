@@ -24,19 +24,12 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/bitmap.h"
-    #include "wx/brush.h"
     #include "wx/panel.h"
 #endif // WX_PRECOMP
 
 // ============================================================================
 // implementation
 // ============================================================================
-
-wxPanel::~wxPanel()
-{
-    delete m_backgroundBrush;
-}
 
 bool wxPanel::HasTransparentBackground()
 {
@@ -52,21 +45,3 @@ bool wxPanel::HasTransparentBackground()
     return false;
 }
 
-void wxPanel::DoSetBackgroundBitmap(const wxBitmap& bmp)
-{
-    delete m_backgroundBrush;
-    m_backgroundBrush = bmp.IsOk() ? new wxBrush(bmp) : NULL;
-
-    // Our transparent children should use our background if we have it,
-    // otherwise try to restore m_inheritBgCol to some reasonable value: true
-    // if we also have non-default background colour or false otherwise.
-    m_inheritBgCol = bmp.IsOk() || UseBgCol();
-}
-
-WXHBRUSH wxPanel::MSWGetCustomBgBrush()
-{
-    if ( m_backgroundBrush )
-        return (WXHBRUSH)m_backgroundBrush->GetResourceHandle();
-
-    return wxPanelBase::MSWGetCustomBgBrush();
-}

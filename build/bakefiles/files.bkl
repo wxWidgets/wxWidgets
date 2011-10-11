@@ -789,7 +789,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/markuptext.cpp
     src/generic/msgdlgg.cpp
     src/generic/numdlgg.cpp
-    src/generic/panelg.cpp
     src/generic/progdlgg.cpp
     src/generic/printps.cpp
     src/generic/renderg.cpp
@@ -829,6 +828,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/control.h
     wx/ctrlsub.h
     wx/cursor.h
+    wx/custombgwin.h
     wx/dc.h
     wx/dcclient.h
     wx/dcgraph.h
@@ -850,6 +850,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/choicdgg.h
     wx/generic/colrdlgg.h
     wx/generic/combo.h
+    wx/generic/custombgwin.h
     wx/generic/dcpsg.h
     wx/generic/dirctrlg.h
     wx/generic/dragimgg.h
@@ -1808,6 +1809,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/control.h
     wx/msw/ctrlsub.h
     wx/msw/cursor.h
+    wx/msw/custombgwin.h
     wx/msw/dc.h
     wx/msw/dcclient.h
     wx/msw/dcmemory.h
@@ -2911,6 +2913,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/univ/colschem.h
     wx/univ/combobox.h
     wx/univ/control.h
+    wx/univ/custombgwin.h
     wx/univ/dialog.h
     wx/univ/frame.h
     wx/univ/gauge.h

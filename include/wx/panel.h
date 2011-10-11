@@ -52,25 +52,10 @@ public:
                 const wxString& name = wxPanelNameStr);
 
 
-    // Use the given bitmap to tile the background of this panel. This bitmap
-    // will show through any transparent children.
-    //
-    // Notice that you must not prevent the base class EVT_ERASE_BACKGROUND
-    // handler from running (i.e. not to handle this event yourself) for this
-    // to work.
-    void SetBackgroundBitmap(const wxBitmap& bmp)
-    {
-        DoSetBackgroundBitmap(bmp);
-    }
-
-
     // implementation from now on
     // --------------------------
 
     virtual void InitDialog();
-
-protected:
-    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxPanelBase);

@@ -444,6 +444,11 @@ Major new features in this release
 2.9.3:
 ------
 
+INCOMPATIBLE CHANGES SINCE 2.9.2
+
+- wxPanel::SetBackgroundBitmap() was removed, derive your class from
+  wxCustomBackgroundWindow and use its method with the same name instead.
+
 All:
 
 - Fix parsing of negated long options in wxCmdLineParser (roed_bis).
