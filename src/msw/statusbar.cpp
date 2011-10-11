@@ -176,10 +176,6 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
     // this is a Windows limitation
     wxASSERT_MSG( (nFields > 0) && (nFields < 255), "too many fields" );
 
-    wxStatusBarBase::SetFieldsCount(nFields, widths);
-
-    MSWUpdateFieldsWidths();
-
     // keep in synch also our m_tooltips array
 
     // reset all current tooltips
@@ -189,7 +185,11 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
     }
 
     // shrink/expand the array:
-    m_tooltips.resize(m_panes.GetCount(), NULL);
+    m_tooltips.resize(nFields, NULL);
+
+    wxStatusBarBase::SetFieldsCount(nFields, widths);
+
+    MSWUpdateFieldsWidths();
 }
 
 void wxStatusBar::SetStatusWidths(int n, const int widths[])
@@ -233,6 +233,8 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     {
         nCurPos += widthsAbs[i] + extraWidth;
         pWidths[i] = nCurPos;
+
+        DoUpdateStatusText(i);
     }
 
     // The total width of the panes passed to Windows must be equal to the
@@ -246,9 +248,6 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     }
 
     delete [] pWidths;
-
-
-    // FIXME: we may want to call DoUpdateStatusText() here since we may need to (de)ellipsize status texts
 }
 
 void wxStatusBar::DoUpdateStatusText(int nField)
