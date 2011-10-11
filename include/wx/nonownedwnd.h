@@ -18,7 +18,7 @@
 // wxNonOwnedWindow: a window that is not a child window of another one.
 // ----------------------------------------------------------------------------
 
-class wxNonOwnedWindowBase : public wxWindow
+class WXDLLIMPEXP_CORE wxNonOwnedWindowBase : public wxWindow
 {
 public:
     // Set the shape of the window to the given region.
