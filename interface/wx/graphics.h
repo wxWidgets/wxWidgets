@@ -1009,7 +1009,7 @@ public:
 
         @since 2.9.3
      */
-    static wxGraphicsContext* CreateContextFromImage(wxImage& image);
+    wxGraphicsContext* CreateContextFromImage(wxImage& image);
 
     /**
         Creates a native brush from a wxBrush.
