@@ -330,7 +330,7 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
         SetIcons(icons);
 
     if (HasFlag(wxFRAME_SHAPED))
-        SetShape(win->m_shape); // it will really set the window shape now
+        SetShape(m_shape); // it will really set the window shape now
 }
 
 //-----------------------------------------------------------------------------
