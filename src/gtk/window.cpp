@@ -1914,29 +1914,38 @@ gtk_scrollbar_button_release_event(GtkRange* range, GdkEventButton*, wxWindow* w
 //-----------------------------------------------------------------------------
 
 static void
-gtk_window_realized_callback(GtkWidget* widget, wxWindow* win)
+gtk_window_realized_callback(GtkWidget* WXUNUSED(widget), wxWindow* win)
 {
-    if (win->m_imData)
+    win->GTKHandleRealized();
+}
+
+void wxWindowGTK::GTKHandleRealized()
+{
+    if (m_imData)
     {
-        gtk_im_context_set_client_window( win->m_imData->context,
-            win->m_wxwindow ? win->GTKGetDrawingWindow() : gtk_widget_get_window(widget));
+        gtk_im_context_set_client_window
+        (
+            m_imData->context,
+            m_wxwindow ? GTKGetDrawingWindow()
+                       : gtk_widget_get_window(m_widget)
+        );
     }
 
     // We cannot set colours and fonts before the widget
     // been realized, so we do this directly after realization
     // or otherwise in idle time
 
-    if (win->m_needsStyleChange)
+    if (m_needsStyleChange)
     {
-        win->SetBackgroundStyle(win->GetBackgroundStyle());
-        win->m_needsStyleChange = false;
+        SetBackgroundStyle(GetBackgroundStyle());
+        m_needsStyleChange = false;
     }
 
-    wxWindowCreateEvent event( win );
-    event.SetEventObject( win );
-    win->GTKProcessEvent( event );
+    wxWindowCreateEvent event( this );
+    event.SetEventObject( this );
+    GTKProcessEvent( event );
 
-    win->GTKUpdateCursor(true, false);
+    GTKUpdateCursor(true, false);
 }
 
 //-----------------------------------------------------------------------------

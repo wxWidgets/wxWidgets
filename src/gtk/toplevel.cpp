@@ -308,31 +308,29 @@ gtk_frame_configure_callback( GtkWidget* widget,
 // we cannot the WM hints and icons before the widget has been realized,
 // so we do this directly after realization
 
-extern "C" {
-static void
-gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
-                             wxTopLevelWindowGTK *win )
+void wxTopLevelWindowGTK::GTKHandleRealized()
 {
-    gdk_window_set_decorations(gtk_widget_get_window(win->m_widget),
-                               (GdkWMDecoration)win->m_gdkDecor);
-    gdk_window_set_functions(gtk_widget_get_window(win->m_widget),
-                               (GdkWMFunction)win->m_gdkFunc);
+    wxNonOwnedWindow::GTKHandleRealized();
+
+    gdk_window_set_decorations(gtk_widget_get_window(m_widget),
+                               (GdkWMDecoration)m_gdkDecor);
+    gdk_window_set_functions(gtk_widget_get_window(m_widget),
+                               (GdkWMFunction)m_gdkFunc);
 
     // GTK's shrinking/growing policy
-    if ( !(win->m_gdkFunc & GDK_FUNC_RESIZE) )
-        gtk_window_set_resizable(GTK_WINDOW(win->m_widget), FALSE);
+    if ( !(m_gdkFunc & GDK_FUNC_RESIZE) )
+        gtk_window_set_resizable(GTK_WINDOW(m_widget), FALSE);
 #if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
     else
-        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+        gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
 #endif
 
-    const wxIconBundle& icons = win->GetIcons();
+    const wxIconBundle& icons = GetIcons();
     if (icons.GetIconCount())
-        win->SetIcons(icons);
+        SetIcons(icons);
 
     if (win->HasFlag(wxFRAME_SHAPED))
         win->SetShape(win->m_shape); // it will really set the window shape now
-}
 }
 
 //-----------------------------------------------------------------------------
@@ -631,11 +629,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if ((m_x != -1) || (m_y != -1))
         gtk_widget_set_uposition( m_widget, m_x, m_y );
 #endif
-
-    //  we cannot set MWM hints and icons before the widget has
-    //  been realized, so we do this directly after realization
-    g_signal_connect (m_widget, "realize",
-                      G_CALLBACK (gtk_frame_realized_callback), this);
 
     // for some reported size corrections
     g_signal_connect (m_widget, "map_event",

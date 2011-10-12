@@ -187,6 +187,10 @@ public:
     void GTKHandleFocusOutNoDeferring();
     static void GTKHandleDeferredFocusOut();
 
+    // Called when m_widget becomes realized. Derived classes must call the
+    // base class method if they override it.
+    virtual void GTKHandleRealized();
+
 protected:
     // for controls composed of multiple GTK widgets, return true to eliminate
     // spurious focus events if the focus changes between GTK+ children within

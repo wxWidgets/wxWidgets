@@ -95,6 +95,8 @@ public:
     // GTK callbacks
     virtual void OnInternalIdle();
 
+    virtual void GTKHandleRealized();
+
     // do *not* call this to iconize the frame, this is a private function!
     void SetIconizeState(bool iconic);
 
