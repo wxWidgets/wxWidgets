@@ -57,11 +57,6 @@
    global features
  */
 
-/* GUI build by default */
-#if !defined(wxUSE_GUI)
-#   define wxUSE_GUI 1
-#endif /* !defined(wxUSE_GUI) */
-
 /*
     If we're compiling without support for threads/exceptions we have to
     disable the corresponding features.

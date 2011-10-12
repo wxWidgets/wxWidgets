@@ -14,6 +14,11 @@
 #ifndef _WX_PLATFORM_H_
 #define _WX_PLATFORM_H_
 
+/* GUI build by default */
+#if !defined(wxUSE_GUI)
+#   define wxUSE_GUI 1
+#endif /* !defined(wxUSE_GUI) */
+
 
 /*
     Codewarrior doesn't define any Windows symbols until some headers
