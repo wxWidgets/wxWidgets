@@ -2311,10 +2311,16 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
         CTFontRef font = fref->OSXGetCTFont();
         CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
+#if 0
+        // right now there's no way to get continuous underlines, only words, so we emulate it
         CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
         wxCFRef<CFNumberRef> underlined( CFNumberCreate(NULL, kCFNumberSInt32Type, &ustyle) );
          CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName, kCTUnderlineStyleAttributeName };
         CFTypeRef values[] = { font, col, underlined };
+#else
+        CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName };
+        CFTypeRef values[] = { font, col };
+#endif
         wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
                                                         WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
         wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
@@ -2327,6 +2333,19 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         CGContextScaleCTM(m_cgContext, 1, -1);
         CGContextSetTextPosition(m_cgContext, 0, 0);
         CTLineDraw( line, m_cgContext );
+        
+        if ( fref->GetUnderlined() ) {
+            //AKT: draw horizontal line 1 pixel thick and with 1 pixel gap under baseline
+            CGFloat width = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
+
+            CGPoint points[] = { {0.0, -2.0},  {width, -2.0} };
+            
+            CGContextSetStrokeColorWithColor(m_cgContext, col);
+            CGContextSetShouldAntialias(m_cgContext, false);
+            CGContextSetLineWidth(m_cgContext, 1.0);
+            CGContextStrokeLineSegments(m_cgContext, points, 2);
+        }
+        
         CGContextRestoreGState(m_cgContext);
         CFRelease( col );
         return;
