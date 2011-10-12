@@ -329,8 +329,8 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
     if (icons.GetIconCount())
         SetIcons(icons);
 
-    if (win->HasFlag(wxFRAME_SHAPED))
-        win->SetShape(win->m_shape); // it will really set the window shape now
+    if (HasFlag(wxFRAME_SHAPED))
+        SetShape(win->m_shape); // it will really set the window shape now
 }
 
 //-----------------------------------------------------------------------------
