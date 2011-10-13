@@ -156,7 +156,7 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
     paths.Empty();
 
     wxString dir(m_dir);
-    if ( m_dir.Last() != wxT('\\') )
+    if ( m_dir.empty() || m_dir.Last() != wxT('\\') )
         dir += wxT('\\');
 
     size_t count = m_fileNames.GetCount();
