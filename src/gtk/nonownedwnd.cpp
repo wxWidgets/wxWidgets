@@ -24,7 +24,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/string.h"
+    #include "wx/frame.h"           // Just for wxFRAME_SHAPED.
+    #include "wx/nonownedwnd.h"
+    #include "wx/region.h"
 #endif // WX_PRECOMP
 
 #include "wx/gtk/private.h"
