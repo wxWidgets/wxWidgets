@@ -356,14 +356,14 @@ public:
 
         @see wxGraphicsRenderer::CreateContext()
     */
-    static wxGraphicsContext* Create(const wxWindowDC& dc);
+    static wxGraphicsContext* Create(const wxWindowDC& windowDC);
 
     /**
         Creates a wxGraphicsContext from a wxMemoryDC
 
         @see wxGraphicsRenderer::CreateContext()
     */
-    static wxGraphicsContext* Create(const wxMemoryDC& dc);
+    static wxGraphicsContext* Create(const wxMemoryDC& memoryDC);
 
     /**
         Creates a wxGraphicsContext from a wxPrinterDC. Under GTK+, this will
@@ -372,7 +372,7 @@ public:
 
         @see wxGraphicsRenderer::CreateContext(), @ref overview_unixprinting
     */
-    static wxGraphicsContext* Create(const wxPrinterDC& dc);
+    static wxGraphicsContext* Create(const wxPrinterDC& printerDC);
 
     /**
         Creates a wxGraphicsContext from a wxEnhMetaFileDC.
@@ -382,7 +382,7 @@ public:
 
         @see wxGraphicsRenderer::CreateContext()
     */
-    static wxGraphicsContext* Create(const wxEnhMetaFileDC& dc);
+    static wxGraphicsContext* Create(const wxEnhMetaFileDC& metaFileDC);
 
     /**
         Creates a wxGraphicsContext associated with a wxImage.
@@ -806,6 +806,11 @@ public:
     */
     virtual wxCompositionMode GetCompositionMode() const;
 
+
+    virtual void EnableOffset(bool enable = true);
+    void DisableOffset();
+    bool OffsetEnabled();
+
 };
 
 /**
@@ -981,17 +986,17 @@ public:
     /**
         Creates a wxGraphicsContext from a wxWindowDC
     */
-    virtual wxGraphicsContext* CreateContext(const wxWindowDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxWindowDC& windowDC) = 0 ;
 
     /**
         Creates a wxGraphicsContext from a wxMemoryDC
     */
-    virtual wxGraphicsContext* CreateContext(const wxMemoryDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxMemoryDC& memoryDC) = 0 ;
 
     /**
         Creates a wxGraphicsContext from a wxPrinterDC
     */
-    virtual wxGraphicsContext* CreateContext(const wxPrinterDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxPrinterDC& printerDC) = 0 ;
 
     /**
         Creates a wxGraphicsContext from a wxEnhMetaFileDC.
@@ -999,7 +1004,7 @@ public:
         This function, as wxEnhMetaFileDC class itself, is only available only
         under MSW.
     */
-    virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& dc) = 0;
+    virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& metaFileDC) = 0;
 
     /**
         Creates a wxGraphicsContext associated with a wxImage.
@@ -1128,6 +1133,8 @@ public:
         on GTK we currently default to the cairo renderer.
     */
     static wxGraphicsRenderer* GetDefaultRenderer();
+    static wxGraphicsRenderer* GetCairoRenderer();
+
 };
 
 
@@ -1283,3 +1290,10 @@ public:
     virtual void Translate(wxDouble dx, wxDouble dy);
 };
 
+
+const wxGraphicsPen     wxNullGraphicsPen;
+const wxGraphicsBrush   wxNullGraphicsBrush;
+const wxGraphicsFont    wxNullGraphicsFont;
+const wxGraphicsBitmap  wxNullGraphicsBitmap;
+const wxGraphicsMatrix  wxNullGraphicsMatrix;
+const wxGraphicsPath    wxNullGraphicsPath;
