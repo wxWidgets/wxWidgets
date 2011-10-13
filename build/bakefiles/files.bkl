@@ -1094,6 +1094,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/font.cpp
     src/gtk/sockgtk.cpp
     src/gtk/minifram.cpp
+    src/gtk/nonownedwnd.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
     src/gtk/private.cpp
@@ -1131,6 +1132,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/font.h
     wx/gtk/filehistory.h
     wx/gtk/minifram.h
+    wx/gtk/nonownedwnd.h
     wx/gtk/pen.h
     wx/gtk/popupwin.h
     wx/gtk/private/win_gtk.h

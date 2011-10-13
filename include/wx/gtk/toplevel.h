@@ -57,8 +57,6 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; };
 
-    virtual bool SetShape(const wxRegion& region);
-
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     virtual void SetWindowStyleFlag( long style );
@@ -112,9 +110,6 @@ public:
 
     // size of WM decorations
     wxSize m_decorSize;
-
-    // shape of the frame
-    wxRegion m_shape;
 
     // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.

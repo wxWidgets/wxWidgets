@@ -328,9 +328,6 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
     const wxIconBundle& icons = GetIcons();
     if (icons.GetIconCount())
         SetIcons(icons);
-
-    if (HasFlag(wxFRAME_SHAPED))
-        SetShape(m_shape); // it will really set the window shape now
 }
 
 //-----------------------------------------------------------------------------
@@ -1320,48 +1317,6 @@ void wxTopLevelWindowGTK::RemoveGrab()
     }
 }
 
-
-// helper
-static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
-{
-    if (window)
-    {
-        if (region.IsEmpty())
-        {
-            gdk_window_shape_combine_mask(window, NULL, 0, 0);
-        }
-        else
-        {
-            gdk_window_shape_combine_region(window, region.GetRegion(), 0, 0);
-            return true;
-        }
-    }
-    return false;
-}
-
-
-bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
-{
-    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
-                 wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
-
-    if ( gtk_widget_get_realized(m_widget) )
-    {
-        if ( m_wxwindow )
-            do_shape_combine_region(gtk_widget_get_window(m_wxwindow), region);
-
-        return do_shape_combine_region(gtk_widget_get_window(m_widget), region);
-    }
-    else // not realized yet
-    {
-        // store the shape to set, it will be really set once we're realized
-        m_shape = region;
-
-        // we don't know if we're going to succeed or fail, be optimistic by
-        // default
-        return true;
-    }
-}
 
 bool wxTopLevelWindowGTK::IsActive()
 {

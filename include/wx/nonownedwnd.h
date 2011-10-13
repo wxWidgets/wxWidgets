@@ -30,14 +30,15 @@ public:
 
 #if defined(__WXDFB__)
     #include "wx/dfb/nonownedwnd.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk/nonownedwnd.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/nonownedwnd.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/nonownedwnd.h"
 #else
     // No special class needed in other ports, they can derive both wxTLW and
-    // wxPopupWindow directly from wxWindow and don't implement SetShape() (at
-    // least at this level, wxGTK does do it in wxTLW).
+    // wxPopupWindow directly from wxWindow and don't implement SetShape().
     class wxNonOwnedWindow : public wxNonOwnedWindowBase
     {
     };

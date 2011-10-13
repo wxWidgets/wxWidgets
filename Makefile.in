@@ -2607,6 +2607,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/font.h \
 	wx/gtk/filehistory.h \
 	wx/gtk/minifram.h \
+	wx/gtk/nonownedwnd.h \
 	wx/gtk/pen.h \
 	wx/gtk/popupwin.h \
 	wx/gtk/private/win_gtk.h \
@@ -5042,6 +5043,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk_font.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
+	monodll_gtk_nonownedwnd.o \
 	monodll_gtk_pen.o \
 	monodll_gtk_popupwin.o \
 	monodll_private.o \
@@ -5924,6 +5926,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk_font.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
+	monodll_gtk_nonownedwnd.o \
 	monodll_gtk_pen.o \
 	monodll_gtk_popupwin.o \
 	monodll_private.o \
@@ -6994,6 +6997,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk_font.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
+	monolib_gtk_nonownedwnd.o \
 	monolib_gtk_pen.o \
 	monolib_gtk_popupwin.o \
 	monolib_private.o \
@@ -7876,6 +7880,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk_font.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
+	monolib_gtk_nonownedwnd.o \
 	monolib_gtk_pen.o \
 	monolib_gtk_popupwin.o \
 	monolib_private.o \
@@ -9125,6 +9130,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk_font.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
+	coredll_gtk_nonownedwnd.o \
 	coredll_gtk_pen.o \
 	coredll_gtk_popupwin.o \
 	coredll_private.o \
@@ -10007,6 +10013,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk_font.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
+	coredll_gtk_nonownedwnd.o \
 	coredll_gtk_pen.o \
 	coredll_gtk_popupwin.o \
 	coredll_private.o \
@@ -10717,6 +10724,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk_font.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
+	corelib_gtk_nonownedwnd.o \
 	corelib_gtk_pen.o \
 	corelib_gtk_popupwin.o \
 	corelib_private.o \
@@ -11599,6 +11607,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk_font.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
+	corelib_gtk_nonownedwnd.o \
 	corelib_gtk_pen.o \
 	corelib_gtk_popupwin.o \
 	corelib_private.o \
@@ -18081,6 +18090,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_minifram.o: $(srcdir)/src/gtk/minifram.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/minifram.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_nonownedwnd.o: $(srcdir)/src/gtk/nonownedwnd.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/nonownedwnd.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_pen.o: $(srcdir)/src/gtk/pen.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/pen.cpp
 
@@ -23450,6 +23462,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_minifram.o: $(srcdir)/src/gtk/minifram.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/minifram.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_nonownedwnd.o: $(srcdir)/src/gtk/nonownedwnd.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/nonownedwnd.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_pen.o: $(srcdir)/src/gtk/pen.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/pen.cpp
@@ -28980,6 +28995,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_minifram.o: $(srcdir)/src/gtk/minifram.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/minifram.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_nonownedwnd.o: $(srcdir)/src/gtk/nonownedwnd.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/nonownedwnd.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_pen.o: $(srcdir)/src/gtk/pen.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/pen.cpp
 
@@ -32990,6 +33008,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_minifram.o: $(srcdir)/src/gtk/minifram.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/minifram.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_nonownedwnd.o: $(srcdir)/src/gtk/nonownedwnd.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/nonownedwnd.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_pen.o: $(srcdir)/src/gtk/pen.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/pen.cpp
