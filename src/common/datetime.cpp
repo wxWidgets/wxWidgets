@@ -437,8 +437,15 @@ wxString CallStrftime(const wxString& format, const tm* tm)
 
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, tm) )
     {
-        // if the format is valid, buffer must be too small?
-        wxFAIL_MSG(wxT("strftime() failed"));
+        // There is one special case in which strftime() can return 0 without
+        // indicating an error: "%p" may give empty string depending on the
+        // locale, so check for it explicitly. Apparently it's really the only
+        // exception.
+        if ( format != wxS("%p") )
+        {
+            // if the format is valid, buffer must be too small?
+            wxFAIL_MSG(wxT("strftime() failed"));
+        }
 
         buf[0] = '\0';
     }
