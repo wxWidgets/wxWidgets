@@ -395,7 +395,7 @@ public:
     @library{wxcore}
     @category{ctrl}
  */
-class wxHeaderColumnSimple : public wxHeaderColumn
+class wxHeaderColumnSimple : public wxSettableHeaderColumn
 {
 public:
     //@{
@@ -411,7 +411,7 @@ public:
                          int flags = wxCOL_DEFAULT_FLAGS);
 
     wxHeaderColumnSimple(const wxBitmap &bitmap,
-                         int width = wxDVC_DEFAULT_WIDTH,
+                         int width = wxCOL_WIDTH_DEFAULT,
                          wxAlignment align = wxALIGN_CENTER,
                          int flags = wxCOL_DEFAULT_FLAGS);
     //@}
