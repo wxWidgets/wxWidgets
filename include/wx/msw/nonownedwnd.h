@@ -18,9 +18,7 @@
 class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxNonOwnedWindowBase
 {
 public:
-#ifndef __WXWINCE__
     virtual bool SetShape(const wxRegion& region);
-#endif // !__WXWINCE__
 };
 
 #endif // _WX_MSW_NONOWNEDWND_H_

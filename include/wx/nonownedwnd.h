@@ -34,7 +34,7 @@ public:
     #include "wx/gtk/nonownedwnd.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/nonownedwnd.h"
-#elif defined(__WXMSW__)
+#elif defined(__WXMSW__) && !defined(__WXWINCE__)
     #include "wx/msw/nonownedwnd.h"
 #else
     // No special class needed in other ports, they can derive both wxTLW and

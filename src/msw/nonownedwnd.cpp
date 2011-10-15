@@ -23,6 +23,9 @@
     #pragma hdrstop
 #endif
 
+// This class can't be implemented and hence is not used under Win CE.
+#ifndef __WXWINCE__
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"       // Only for wxFRAME_SHAPED.
     #include "wx/region.h"
@@ -34,8 +37,6 @@
 // ============================================================================
 // wxNonOwnedWindow implementation
 // ============================================================================
-
-#ifndef __WXWINCE__
 
 bool wxNonOwnedWindow::SetShape(const wxRegion& region)
 {
