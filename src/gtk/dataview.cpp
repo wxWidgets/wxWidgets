@@ -4613,6 +4613,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     m_treeview = gtk_tree_view_new();
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
 
+    m_focusWidget = GTK_WIDGET(m_treeview);
+
     g_signal_connect (m_treeview, "size_allocate",
                      G_CALLBACK (gtk_dataviewctrl_size_callback), this);
 
