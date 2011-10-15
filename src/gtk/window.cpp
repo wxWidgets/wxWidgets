@@ -1106,7 +1106,6 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
                                          wxMouseEvent& event,
                                          T *gdk_event)
 {
-    event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
