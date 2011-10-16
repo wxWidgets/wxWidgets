@@ -819,9 +819,9 @@ void DrawButtonText(HDC hdc,
         // now center this rect inside the entire button area
         const LONG w = rc.right - rc.left;
         const LONG h = rc.bottom - rc.top;
-        rc.left = (pRect->right - pRect->left)/2 - w/2;
+        rc.left = pRect->left + (pRect->right - pRect->left)/2 - w/2;
         rc.right = rc.left+w;
-        rc.top = (pRect->bottom - pRect->top)/2 - h/2;
+        rc.top = pRect->top + (pRect->bottom - pRect->top)/2 - h/2;
         rc.bottom = rc.top+h;
 
         ::DrawText(hdc, text.wx_str(), text.length(), &rc, flags);
