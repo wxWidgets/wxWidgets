@@ -1598,15 +1598,11 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
     GetPeer()->GetSize( tw, th );
     GetPeer()->GetPosition( tx, ty );
 
-    Rect rect  = { ty,tx, ty+th, tx+tw };
-
 #if wxOSX_USE_COCOA_OR_CARBON
 
-    InsetRect( &rect, -1 , -1 ) ;
-
     {
-        CGRect cgrect = CGRectMake( rect.left , rect.top , rect.right - rect.left ,
-            rect.bottom - rect.top ) ;
+        CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
+            th+2 ) ;
 
         CGContextRef cgContext = (CGContextRef) GetParent()->MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
