@@ -254,7 +254,7 @@ void wxNonOwnedWindowCarbonImpl::MacSetUnifiedAppearance( bool set )
 
 static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 message, SInt32 param);
 
-void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent );
+WXDLLEXPORT void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent );
 
 // ---------------------------------------------------------------------------
 // Carbon Events
@@ -425,7 +425,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 EventMouseButton g_lastButton = 0 ;
 bool g_lastButtonWasFakeRight = false ;
 
-void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
+WXDLLEXPORT void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
 {
     UInt32 modifiers = cEvent.GetParameter<UInt32>(kEventParamKeyModifiers, typeUInt32) ;
     Point screenMouseLocation = cEvent.GetParameter<Point>(kEventParamMouseLocation) ;
