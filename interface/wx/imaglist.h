@@ -7,6 +7,25 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+   Flag values for Set/GetImageList
+*/
+enum
+{
+    wxIMAGE_LIST_NORMAL, // Normal icons
+    wxIMAGE_LIST_SMALL,  // Small icons
+    wxIMAGE_LIST_STATE   // State icons: unimplemented (see WIN32 documentation)
+};
+
+/**
+   Flags for Draw
+*/
+#define wxIMAGELIST_DRAW_NORMAL         0x0001
+#define wxIMAGELIST_DRAW_TRANSPARENT    0x0002
+#define wxIMAGELIST_DRAW_SELECTED       0x0004
+#define wxIMAGELIST_DRAW_FOCUSED        0x0008
+
+
+/**
     @class wxImageList
 
     A wxImageList contains a list of images, which are stored in an unspecified

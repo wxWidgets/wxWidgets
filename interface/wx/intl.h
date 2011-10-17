@@ -27,7 +27,7 @@ enum wxLayoutDirection
     - Wx::LanguageInfo->new(language, canonicalName, WinLang, WinSubLang, Description)
     @endWxPerlOnly
 */
-struct WXDLLIMPEXP_BASE wxLanguageInfo
+struct wxLanguageInfo
 {
     /// ::wxLanguage id.
     /// It should be greater than @c wxLANGUAGE_USER_DEFINED when defining your own
