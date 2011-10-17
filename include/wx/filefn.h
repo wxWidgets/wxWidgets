@@ -368,7 +368,13 @@ enum wxPosixPermissions
     #define   wxCRT_MkDirA      wxPOSIX_IDENT(mkdir)
     #define   wxCRT_RmDirA      wxPOSIX_IDENT(rmdir)
     #ifdef wxHAS_HUGE_FILES
-        #define   wxCRT_StatA       wxPOSIX_IDENT(stati64)
+        // MinGW-64 provides underscore-less versions of all file functions
+        // except for this one.
+        #ifdef __MINGW64__
+            #define   wxCRT_StatA       _stati64
+        #else
+            #define   wxCRT_StatA       wxPOSIX_IDENT(stati64)
+        #endif
     #else
         // Unfortunately Watcom is not consistent
         #if defined(__OS2__) && defined(__WATCOMC__)
