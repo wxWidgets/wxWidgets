@@ -91,6 +91,7 @@ private:
     void OnShowShaped(wxCommandEvent& event);
     void OnShowTransparent(wxCommandEvent& event);
     void OnShowEffect(wxCommandEvent& event);
+    void OnExit(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
@@ -244,6 +245,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(Show_Shaped, MainFrame::OnShowShaped)
     EVT_MENU(Show_Transparent, MainFrame::OnShowTransparent)
     EVT_MENU_RANGE(Show_Effect_First, Show_Effect_Last, MainFrame::OnShowEffect)
+    EVT_MENU(wxID_EXIT, MainFrame::OnExit)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame()
@@ -348,6 +350,11 @@ void MainFrame::OnShowEffect(wxCommandEvent& event)
     }
 
     new EffectFrame(this,  eff, 1000);
+}
+
+void MainFrame::OnExit(wxCommandEvent& WXUNUSED(event))
+{
+    Close();
 }
 
 // ----------------------------------------------------------------------------

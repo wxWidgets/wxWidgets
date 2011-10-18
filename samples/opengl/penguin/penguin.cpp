@@ -153,9 +153,6 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent,
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext(this);
 
-    // Make the new context current (activate it for use) with this canvas.
-    SetCurrent(*m_glRC);
-
     m_gldata.initialized = false;
 
     // initialize view matrix
@@ -303,6 +300,9 @@ void TestGLCanvas::InitGL()
 
 void TestGLCanvas::ResetProjectionMode()
 {
+    if ( !IsShownOnScreen() )
+        return;
+
     // This is normally only necessary if there is more than one wxGLCanvas
     // or more than one wxGLContext in the application.
     SetCurrent(*m_glRC);

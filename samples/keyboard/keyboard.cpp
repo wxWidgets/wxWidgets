@@ -132,7 +132,7 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 
     m_inputWin = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(-1, 50),
-                              wxRAISED_BORDER),
+                              wxRAISED_BORDER);
     m_inputWin->SetBackgroundColour(*wxBLUE);
 
     wxTextCtrl *headerText = new wxTextCtrl(this, wxID_ANY, "",
@@ -338,7 +338,9 @@ const char* GetVirtualKeyCodeName(int keycode)
 
         WXK_(WINDOWS_LEFT)
         WXK_(WINDOWS_RIGHT)
-        WXK_(COMMAND)
+#ifdef __WXOSX__
+        WXK_(RAW_CONTROL)
+#endif
 #undef WXK_
 
     default:
