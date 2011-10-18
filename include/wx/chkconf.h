@@ -974,7 +974,7 @@
 #   else
 #       define wxUSE_RICHMSGDLG 0
 #   endif
-#endif /* !defined(wxUSE_RIBBON) */
+#endif /* !defined(wxUSE_RICHMSGDLG) */
 
 #ifndef wxUSE_SASH
 #   ifdef wxABORT_ON_CONFIG_ERROR
