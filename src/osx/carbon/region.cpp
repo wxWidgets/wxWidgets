@@ -68,14 +68,6 @@ public:
 // wxRegion
 //-----------------------------------------------------------------------------
 
-/*!
- * Create an empty region.
- */
-wxRegion::wxRegion()
-{
-    m_refData = new wxRegionRefData();
-}
-
 wxRegion::wxRegion(WXHRGN hRegion )
 {
     wxCFRef< HIShapeRef > shape( (HIShapeRef) hRegion );
@@ -204,6 +196,30 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 {
     wxCHECK_MSG( region.IsOk(), false, wxT("invalid wxRegion") );
+
+    // Handle the special case of not initialized (e.g. default constructed)
+    // region as we can't use HIShape functions if we don't have any shape.
+    if ( !m_refData )
+    {
+        switch ( op )
+        {
+            case wxRGN_COPY:
+            case wxRGN_OR:
+            case wxRGN_XOR:
+                // These operations make sense with a null region.
+                *this = region;
+                return true;
+
+            case wxRGN_AND:
+            case wxRGN_DIFF:
+                // Those ones don't really make sense so just leave this region
+                // empty/invalid.
+                return false;
+        }
+
+        wxFAIL_MSG( wxT("Unknown region operation") );
+        return false;
+    }
 
     AllocExclusive();
 

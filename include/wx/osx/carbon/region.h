@@ -17,12 +17,12 @@
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionWithCombine
 {
 public:
+    wxRegion() { }
     wxRegion(long x, long y, long w, long h);
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
     wxRegion( WXHRGN hRegion );
     wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
-    wxRegion();
 #if wxUSE_IMAGE
     wxRegion(const wxBitmap& bmp)
     {
