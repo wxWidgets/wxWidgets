@@ -344,7 +344,7 @@ void wxClipboard::GTKOnSelectionReceived(const GtkSelectionData& sel)
     wxLogTrace(TRACE_CLIPBOARD, wxT("Received selection %s"),
                format.GetId().c_str());
 
-    if ( !m_receivedData->IsSupportedFormat(format) )
+    if ( !m_receivedData->IsSupportedFormat(format, wxDataObject::Set) )
         return;
 
     m_receivedData->SetData(format,
