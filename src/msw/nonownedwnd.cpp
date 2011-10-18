@@ -64,14 +64,9 @@ bool wxNonOwnedWindow::SetShape(const wxRegion& region)
     delete[] (char*) rgnData;
 
     // SetWindowRgn expects the region to be in coordinates
-    // relative to the window, not the client area.  Figure
-    // out the offset, if any.
-    RECT rect;
-    DWORD dwStyle =   ::GetWindowLong(GetHwnd(), GWL_STYLE);
-    DWORD dwExStyle = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
-    ::GetClientRect(GetHwnd(), &rect);
-    ::AdjustWindowRectEx(&rect, dwStyle, ::GetMenu(GetHwnd()) != NULL, dwExStyle);
-    ::OffsetRgn(hrgn, -rect.left, -rect.top);
+    // relative to the window, not the client area.
+    const wxPoint clientOrigin = GetClientAreaOrigin();
+    ::OffsetRgn(hrgn, -clientOrigin.x, -clientOrigin.y);
 
     // Now call the shape API with the new region.
     if (::SetWindowRgn(GetHwnd(), hrgn, TRUE) == 0)
