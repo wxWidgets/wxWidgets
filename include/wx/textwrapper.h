@@ -98,7 +98,9 @@ public:
 protected:
     virtual wxWindow *OnCreateLine(const wxString& line)
     {
-        return new wxStaticText(m_win, wxID_ANY, line);
+        wxStaticText* const win = new wxStaticText(m_win, wxID_ANY, "");
+        win->SetLabelText(line);
+        return win;
     }
 
     virtual void OnOutputLine(const wxString& line)
