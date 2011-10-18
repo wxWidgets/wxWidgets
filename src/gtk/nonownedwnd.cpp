@@ -24,6 +24,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/nonownedwnd.h"
     #include "wx/region.h"
 #endif // WX_PRECOMP
