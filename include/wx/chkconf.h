@@ -976,6 +976,14 @@
 #   endif
 #endif /* !defined(wxUSE_RICHMSGDLG) */
 
+#ifndef wxUSE_RICHTOOLTIP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_RICHTOOLTIP must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_RICHTOOLTIP 0
+#   endif
+#endif /* !defined(wxUSE_RICHTOOLTIP) */
+
 #ifndef wxUSE_SASH
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SASH must be defined, please read comment near the top of this file."

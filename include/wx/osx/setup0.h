@@ -1088,6 +1088,14 @@
 // Recommended setting: 1
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
+// wxRichToolTip is a customizable tooltip class which has more functionality
+// than the stock (but native, unlike this class) wxToolTip.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be safely set to 0 if you don't need it)
+#define wxUSE_RICHTOOLTIP 1
+
 // Use wxSashWindow class.
 //
 // Default is 1.

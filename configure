@@ -1854,6 +1854,7 @@ Optional Features:
   --enable-radiobox       use wxRadioBox class
   --enable-radiobtn       use wxRadioButton class
   --enable-richmsgdlg     use wxRichMessageDialog class
+  --enable-richtooltip    use wxRichToolTip class
   --enable-rearrangectrl  use wxRearrangeList/Ctrl/Dialog
   --enable-sash           use wxSashWindow class
   --enable-scrollbar      use wxScrollBar class and scrollable windows
@@ -9900,6 +9901,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_RADIOBOX=no
     DEFAULT_wxUSE_RADIOBTN=no
     DEFAULT_wxUSE_RICHMSGDLG=no
+    DEFAULT_wxUSE_RICHTOOLTIP=no
     DEFAULT_wxUSE_REARRANGECTRL=no
     DEFAULT_wxUSE_SASH=no
     DEFAULT_wxUSE_SCROLLBAR=no
@@ -11900,6 +11902,50 @@ fi
             fi
           else
             result=$wxUSE_RICHMSGDLG
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-richtooltip" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-richtooltip... $ECHO_C" >&6; }
+          # Check whether --enable-richtooltip was given.
+if test "${enable_richtooltip+set}" = set; then
+  enableval=$enable_richtooltip;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_richtooltip='wxUSE_RICHTOOLTIP=yes'
+                          else
+                            wx_cv_use_richtooltip='wxUSE_RICHTOOLTIP=no'
+                          fi
+
+else
+
+                          wx_cv_use_richtooltip='wxUSE_RICHTOOLTIP=${'DEFAULT_wxUSE_RICHTOOLTIP":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_richtooltip"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_RICHTOOLTIP = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_RICHTOOLTIP
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -47880,6 +47926,13 @@ _ACEOF
 
 fi
 
+if test "$wxUSE_RICHTOOLTIP" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_RICHTOOLTIP 1
+_ACEOF
+
+fi
+
 if test "$wxUSE_SASH" = "yes"; then
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_SASH 1
@@ -50447,7 +50500,7 @@ else
 fi
 
 
-    INSTALL_DIR="mkdir -p"
+        INSTALL_DIR="mkdir -p"
 
 
     LDFLAGS_GUI=

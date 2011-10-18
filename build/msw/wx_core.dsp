@@ -6792,6 +6792,10 @@ SOURCE=..\..\include\wx\richtext\richtextxml.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtooltip.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\sashwin.h
 # End Source File
 # Begin Source File

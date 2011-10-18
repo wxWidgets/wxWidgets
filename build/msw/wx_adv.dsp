@@ -278,6 +278,10 @@ SOURCE=..\..\src\common\odcombocmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\richtooltipcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\taskbarcmn.cpp
 # End Source File
 # End Group
@@ -543,6 +547,10 @@ SOURCE=..\..\src\msw\notifmsg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\richtooltip.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\sound.cpp
 # End Source File
 # Begin Source File
@@ -698,6 +706,10 @@ SOURCE=..\..\src\generic\odcombo.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\propdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\richtooltip.cpp
 # End Source File
 # Begin Source File
 
@@ -1171,6 +1183,10 @@ SOURCE=..\..\include\wx\odcombo.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\propdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\richtooltip.h
 # End Source File
 # Begin Source File
 

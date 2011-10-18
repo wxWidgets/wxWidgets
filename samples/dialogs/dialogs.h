@@ -465,6 +465,10 @@ public:
     void OnNotifMsgHide(wxCommandEvent& event);
 #endif // wxUSE_NOTIFICATION_MESSAGE
 
+#if wxUSE_RICHTOOLTIP
+    void OnRichTipDialog(wxCommandEvent& event);
+#endif // wxUSE_RICHTOOLTIP
+
     void OnStandardButtonsSizerDialog(wxCommandEvent& event);
 
     void OnTestDefaultActionDialog(wxCommandEvent& event);
@@ -576,6 +580,7 @@ enum
     DIALOGS_NOTIFY_AUTO,
     DIALOGS_NOTIFY_SHOW,
     DIALOGS_NOTIFY_HIDE,
+    DIALOGS_RICHTIP_DIALOG,
     DIALOGS_PROPERTY_SHEET,
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,
     DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,

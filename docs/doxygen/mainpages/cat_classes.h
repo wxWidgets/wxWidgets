@@ -243,6 +243,7 @@ The following are a variety of classes that are derived from wxWindow.
     variable sizes.
 @li wxGrid: A grid (table) window
 @li wxInfoBar: An information bar usually shown on top of the main window.
+@li wxRichToolTip: A customizable tooltip.
 @li wxSplitterWindow: Window which can be split vertically or horizontally
 @li wxStatusBar: Implements the status bar on a frame
 @li wxToolBar: Toolbar class

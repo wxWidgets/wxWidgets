@@ -32,5 +32,28 @@ public:
         This method is available in this class only since wxWidgets 2.9.3,
         previous versions only provided it in wxTopLevelWindow.
     */
-    virtual bool SetShape(const wxRegion& region);
+    bool SetShape(const wxRegion& region);
+
+    /**
+        Set the window shape to the given path.
+
+        Set the window shape to the interior of the given path and also draw
+        the window border along the specified path.
+
+        For example, to make a clock-like circular window you could use
+        @code
+            wxSize size = GetSize();
+            wxGraphicsPath
+                path = wxGraphicsRenderer::GetDefaultRenderer()->CreatePath();
+            path.AddCircle(size.x/2, size.y/2, 30);
+            SetShape(path);
+        @endcode
+
+        As the overload above, this method is not guaranteed to work on all
+        platforms but currently does work in wxMSW, wxOSX/Cocoa and wxGTK (with
+        the appropriate but almost always present X11 extensions) ports.
+
+        @since 2.9.3
+     */
+    bool SetShape(const wxGraphicsPath& path);
 };

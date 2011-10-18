@@ -2961,6 +2961,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/gridcmn.cpp
     src/common/hyperlnkcmn.cpp
     src/common/odcombocmn.cpp
+    src/common/richtooltipcmn.cpp
     src/generic/aboutdlgg.cpp
     src/generic/bannerwindow.cpp
     src/generic/bmpcboxg.cpp
@@ -2979,6 +2980,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/notifmsgg.cpp
     src/generic/odcombo.cpp
     src/generic/propdlg.cpp
+    src/generic/richtooltip.cpp
     src/generic/sashwin.cpp
     src/generic/splash.cpp
     src/generic/timectrl.cpp
@@ -3027,6 +3029,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/notifmsg.h
     wx/odcombo.h
     wx/propdlg.h
+    wx/richtooltip.h
     wx/sashwin.h
     wx/sound.h
     wx/splash.h
@@ -3041,6 +3044,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
     src/msw/notifmsg.cpp
+    src/msw/richtooltip.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>

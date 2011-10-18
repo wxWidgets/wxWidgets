@@ -38,6 +38,7 @@
 #endif
 
 #include "wx/dcclient.h"
+#include "wx/graphics.h"
 #include "wx/image.h"
 
 #ifndef __WXMSW__
@@ -114,7 +115,16 @@ public:
     void OnPaint(wxPaintEvent& evt);
 
 private:
-    bool     m_hasShape;
+    enum ShapeKind
+    {
+        Shape_None,
+        Shape_Star,
+#if wxUSE_GRAPHICS_CONTEXT
+        Shape_Circle,
+#endif // wxUSE_GRAPHICS_CONTEXT
+        Shape_Max
+    } m_shapeKind;
+
     wxBitmap m_bmp;
     wxPoint  m_delta;
 
@@ -382,29 +392,46 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
                   | wxSTAY_ON_TOP
             )
 {
-    m_hasShape = false;
+    m_shapeKind = Shape_None;
     m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-    SetToolTip(wxT("Right-click to close"));
+    SetToolTip(wxT("Right-click to close, double click to cycle shape"));
     SetWindowShape();
 }
 
 void ShapedFrame::SetWindowShape()
 {
-    wxRegion region(m_bmp, *wxWHITE);
-    m_hasShape = SetShape(region);
+    switch ( m_shapeKind )
+    {
+        case Shape_None:
+            SetShape(wxRegion());
+            break;
+
+        case Shape_Star:
+            SetShape(wxRegion(m_bmp, *wxWHITE));
+            break;
+
+#if wxUSE_GRAPHICS_CONTEXT
+        case Shape_Circle:
+            {
+                wxGraphicsPath
+                    path = wxGraphicsRenderer::GetDefaultRenderer()->CreatePath();
+                path.AddCircle(m_bmp.GetWidth()/2, m_bmp.GetHeight()/2, 30);
+                SetShape(path);
+            }
+            break;
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+        case Shape_Max:
+            wxFAIL_MSG( "invalid shape kind" );
+            break;
+    }
 }
 
 void ShapedFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
 {
-    if (m_hasShape)
-    {
-        wxRegion region;
-        SetShape(region);
-        m_hasShape = false;
-    }
-    else
-        SetWindowShape();
+    m_shapeKind = static_cast<ShapeKind>((m_shapeKind + 1) % Shape_Max);
+    SetWindowShape();
 }
 
 void ShapedFrame::OnLeftDown(wxMouseEvent& evt)

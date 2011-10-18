@@ -7580,6 +7580,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtooltip.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\sashwin.h"
 				>
 			</File>

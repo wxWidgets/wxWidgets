@@ -81,9 +81,8 @@ public:
     // implementation from now on
     // --------------------------
 
-    virtual bool SetShape(const wxRegion& region);
+    // These accessors are Mac-specific and don't exist in other ports.
     const wxRegion& GetShape() const { return m_shape; }
-
 #if wxUSE_GRAPHICS_CONTEXT
     const wxGraphicsPath& GetShapePath() { return m_shapePath; }
 #endif // wxUSE_GRAPHICS_CONTEXT

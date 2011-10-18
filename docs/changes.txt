@@ -459,10 +459,12 @@ All (GUI):
 - Added wxWebView library (Steven Lamerton & Auria, GSoC 2011 project).
 - Added wxTreeListCtrl class.
 - Added wxTimePickerCtrl class.
+- Added wxRichToolTip class.
 - Added documented, public wxNavigationEnabled<> class.
 - Added wxTextCtrl::PositionToCoords() (Navaneeth).
 - Added support for wxHELP button to wxMessageDialog.
 - Added wxBannerWindow class.
+- Allow setting window shape to arbitrary wxGraphicsPath.
 - Added wxTextEntry::AutoCompleteDirectories().
 - Support float, double and file name values in wxGenericValidator (troelsk).
 - Fix keyboard navigation in wxGrid with hidden columns (ivan_14_32).

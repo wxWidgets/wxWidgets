@@ -3759,6 +3759,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/notifmsg.h \
 	wx/odcombo.h \
 	wx/propdlg.h \
+	wx/richtooltip.h \
 	wx/sashwin.h \
 	wx/sound.h \
 	wx/splash.h \
@@ -3810,6 +3811,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/notifmsg.h \
 	wx/odcombo.h \
 	wx/propdlg.h \
+	wx/richtooltip.h \
 	wx/sashwin.h \
 	wx/sound.h \
 	wx/splash.h \
@@ -6143,6 +6145,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridcmn.o \
 	monodll_hyperlnkcmn.o \
 	monodll_odcombocmn.o \
+	monodll_richtooltipcmn.o \
 	monodll_aboutdlgg.o \
 	monodll_bannerwindow.o \
 	monodll_bmpcboxg.o \
@@ -6161,6 +6164,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_notifmsgg.o \
 	monodll_odcombo.o \
 	monodll_propdlg.o \
+	monodll_generic_richtooltip.o \
 	monodll_sashwin.o \
 	monodll_splash.o \
 	monodll_generic_timectrl.o \
@@ -6178,6 +6182,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridcmn.o \
 	monodll_hyperlnkcmn.o \
 	monodll_odcombocmn.o \
+	monodll_richtooltipcmn.o \
 	monodll_aboutdlgg.o \
 	monodll_bannerwindow.o \
 	monodll_bmpcboxg.o \
@@ -6196,6 +6201,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_notifmsgg.o \
 	monodll_odcombo.o \
 	monodll_propdlg.o \
+	monodll_generic_richtooltip.o \
 	monodll_sashwin.o \
 	monodll_splash.o \
 	monodll_generic_timectrl.o \
@@ -8097,6 +8103,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridcmn.o \
 	monolib_hyperlnkcmn.o \
 	monolib_odcombocmn.o \
+	monolib_richtooltipcmn.o \
 	monolib_aboutdlgg.o \
 	monolib_bannerwindow.o \
 	monolib_bmpcboxg.o \
@@ -8115,6 +8122,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_notifmsgg.o \
 	monolib_odcombo.o \
 	monolib_propdlg.o \
+	monolib_generic_richtooltip.o \
 	monolib_sashwin.o \
 	monolib_splash.o \
 	monolib_generic_timectrl.o \
@@ -8132,6 +8140,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridcmn.o \
 	monolib_hyperlnkcmn.o \
 	monolib_odcombocmn.o \
+	monolib_richtooltipcmn.o \
 	monolib_aboutdlgg.o \
 	monolib_bannerwindow.o \
 	monolib_bmpcboxg.o \
@@ -8150,6 +8159,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_notifmsgg.o \
 	monolib_odcombo.o \
 	monolib_propdlg.o \
+	monolib_generic_richtooltip.o \
 	monolib_sashwin.o \
 	monolib_splash.o \
 	monolib_generic_timectrl.o \
@@ -11893,6 +11903,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridcmn.o \
 	advdll_hyperlnkcmn.o \
 	advdll_odcombocmn.o \
+	advdll_richtooltipcmn.o \
 	advdll_aboutdlgg.o \
 	advdll_bannerwindow.o \
 	advdll_bmpcboxg.o \
@@ -11911,6 +11922,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_notifmsgg.o \
 	advdll_odcombo.o \
 	advdll_propdlg.o \
+	advdll_generic_richtooltip.o \
 	advdll_sashwin.o \
 	advdll_splash.o \
 	advdll_generic_timectrl.o \
@@ -11928,6 +11940,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridcmn.o \
 	advdll_hyperlnkcmn.o \
 	advdll_odcombocmn.o \
+	advdll_richtooltipcmn.o \
 	advdll_aboutdlgg.o \
 	advdll_bannerwindow.o \
 	advdll_bmpcboxg.o \
@@ -11946,6 +11959,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_notifmsgg.o \
 	advdll_odcombo.o \
 	advdll_propdlg.o \
+	advdll_generic_richtooltip.o \
 	advdll_sashwin.o \
 	advdll_splash.o \
 	advdll_generic_timectrl.o \
@@ -12007,6 +12021,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridcmn.o \
 	advlib_hyperlnkcmn.o \
 	advlib_odcombocmn.o \
+	advlib_richtooltipcmn.o \
 	advlib_aboutdlgg.o \
 	advlib_bannerwindow.o \
 	advlib_bmpcboxg.o \
@@ -12025,6 +12040,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_notifmsgg.o \
 	advlib_odcombo.o \
 	advlib_propdlg.o \
+	advlib_generic_richtooltip.o \
 	advlib_sashwin.o \
 	advlib_splash.o \
 	advlib_generic_timectrl.o \
@@ -12042,6 +12058,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridcmn.o \
 	advlib_hyperlnkcmn.o \
 	advlib_odcombocmn.o \
+	advlib_richtooltipcmn.o \
 	advlib_aboutdlgg.o \
 	advlib_bannerwindow.o \
 	advlib_bmpcboxg.o \
@@ -12060,6 +12077,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_notifmsgg.o \
 	advlib_odcombo.o \
 	advlib_propdlg.o \
+	advlib_generic_richtooltip.o \
 	advlib_sashwin.o \
 	advlib_splash.o \
 	advlib_generic_timectrl.o \
@@ -13348,6 +13366,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_msw_aboutdlg.o \
 	monodll_msw_notifmsg.o \
+	monodll_msw_richtooltip.o \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o \
 	monodll_msw_joystick.o
@@ -13386,6 +13405,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_msw_aboutdlg.o \
 	monodll_msw_notifmsg.o \
+	monodll_msw_richtooltip.o \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS)
@@ -13534,6 +13554,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_msw_aboutdlg.o \
 	monolib_msw_notifmsg.o \
+	monolib_msw_richtooltip.o \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o \
 	monolib_msw_joystick.o
@@ -13572,6 +13593,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_msw_aboutdlg.o \
 	monolib_msw_notifmsg.o \
+	monolib_msw_richtooltip.o \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_0)
@@ -13818,6 +13840,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_msw_aboutdlg.o \
 	advdll_msw_notifmsg.o \
+	advdll_msw_richtooltip.o \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o \
 	advdll_msw_joystick.o
@@ -13856,6 +13879,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_msw_aboutdlg.o \
 	advdll_msw_notifmsg.o \
+	advdll_msw_richtooltip.o \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_8)
@@ -13906,6 +13930,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_msw_aboutdlg.o \
 	advlib_msw_notifmsg.o \
+	advlib_msw_richtooltip.o \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o \
 	advlib_msw_joystick.o
@@ -13944,6 +13969,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_msw_aboutdlg.o \
 	advlib_msw_notifmsg.o \
+	advlib_msw_richtooltip.o \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_SRC_OBJECTS_9)
@@ -20643,6 +20669,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/odcombocmn.cpp
 
+@COND_USE_GUI_1@monodll_richtooltipcmn.o: $(srcdir)/src/common/richtooltipcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/richtooltipcmn.cpp
+
 @COND_USE_GUI_1@monodll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
@@ -20696,6 +20725,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_propdlg.o: $(srcdir)/src/generic/propdlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/propdlg.cpp
+
+@COND_USE_GUI_1@monodll_generic_richtooltip.o: $(srcdir)/src/generic/richtooltip.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/richtooltip.cpp
 
 @COND_USE_GUI_1@monodll_sashwin.o: $(srcdir)/src/generic/sashwin.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/sashwin.cpp
@@ -20756,6 +20788,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_richtooltip.o: $(srcdir)/src/msw/richtooltip.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/richtooltip.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_richtooltip.o: $(srcdir)/src/msw/richtooltip.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/richtooltip.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
@@ -26016,6 +26054,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/odcombocmn.cpp
 
+@COND_USE_GUI_1@monolib_richtooltipcmn.o: $(srcdir)/src/common/richtooltipcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/richtooltipcmn.cpp
+
 @COND_USE_GUI_1@monolib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
@@ -26069,6 +26110,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_propdlg.o: $(srcdir)/src/generic/propdlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/propdlg.cpp
+
+@COND_USE_GUI_1@monolib_generic_richtooltip.o: $(srcdir)/src/generic/richtooltip.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/richtooltip.cpp
 
 @COND_USE_GUI_1@monolib_sashwin.o: $(srcdir)/src/generic/sashwin.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/sashwin.cpp
@@ -26129,6 +26173,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_richtooltip.o: $(srcdir)/src/msw/richtooltip.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/richtooltip.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_richtooltip.o: $(srcdir)/src/msw/richtooltip.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/richtooltip.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
@@ -35586,6 +35636,9 @@ advdll_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(ADVDLL_ODEP)
 advdll_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/odcombocmn.cpp
 
+advdll_richtooltipcmn.o: $(srcdir)/src/common/richtooltipcmn.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/richtooltipcmn.cpp
+
 advdll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
@@ -35639,6 +35692,9 @@ advdll_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(ADVDLL_ODEP)
 
 advdll_propdlg.o: $(srcdir)/src/generic/propdlg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/propdlg.cpp
+
+advdll_generic_richtooltip.o: $(srcdir)/src/generic/richtooltip.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/richtooltip.cpp
 
 advdll_sashwin.o: $(srcdir)/src/generic/sashwin.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/sashwin.cpp
@@ -35699,6 +35755,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_WINCE@advdll_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
+
+@COND_TOOLKIT_MSW@advdll_msw_richtooltip.o: $(srcdir)/src/msw/richtooltip.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/richtooltip.cpp
+
+@COND_TOOLKIT_WINCE@advdll_msw_richtooltip.o: $(srcdir)/src/msw/richtooltip.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/richtooltip.cpp
 
 @COND_TOOLKIT_MSW@advdll_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
@@ -35961,6 +36023,9 @@ advlib_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(ADVLIB_ODEP)
 advlib_odcombocmn.o: $(srcdir)/src/common/odcombocmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/odcombocmn.cpp
 
+advlib_richtooltipcmn.o: $(srcdir)/src/common/richtooltipcmn.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/richtooltipcmn.cpp
+
 advlib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
@@ -36014,6 +36079,9 @@ advlib_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(ADVLIB_ODEP)
 
 advlib_propdlg.o: $(srcdir)/src/generic/propdlg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/propdlg.cpp
+
+advlib_generic_richtooltip.o: $(srcdir)/src/generic/richtooltip.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/richtooltip.cpp
 
 advlib_sashwin.o: $(srcdir)/src/generic/sashwin.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/sashwin.cpp
@@ -36074,6 +36142,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_WINCE@advlib_msw_notifmsg.o: $(srcdir)/src/msw/notifmsg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/notifmsg.cpp
+
+@COND_TOOLKIT_MSW@advlib_msw_richtooltip.o: $(srcdir)/src/msw/richtooltip.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/richtooltip.cpp
+
+@COND_TOOLKIT_WINCE@advlib_msw_richtooltip.o: $(srcdir)/src/msw/richtooltip.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/richtooltip.cpp
 
 @COND_TOOLKIT_MSW@advlib_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
