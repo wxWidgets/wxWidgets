@@ -34,27 +34,27 @@
 
 #include "wx/nonownedwnd.h"
 
+#include "wx/msw/wrapgdip.h"
+#include "wx/graphics.h"
+#include "wx/scopedptr.h"
+
 // ============================================================================
 // wxNonOwnedWindow implementation
 // ============================================================================
 
-bool wxNonOwnedWindow::SetShape(const wxRegion& region)
+bool wxNonOwnedWindow::DoClearShape()
 {
-    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
-                 wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
-
-    // The empty region signifies that the shape should be removed from the
-    // window.
-    if ( region.IsEmpty() )
+    if (::SetWindowRgn(GetHwnd(), NULL, TRUE) == 0)
     {
-        if (::SetWindowRgn(GetHwnd(), NULL, TRUE) == 0)
-        {
-            wxLogLastError(wxT("SetWindowRgn"));
-            return false;
-        }
-        return true;
+        wxLogLastError(wxT("SetWindowRgn"));
+        return false;
     }
 
+    return true;
+}
+
+bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
+{
     // Windows takes ownership of the region, so
     // we'll have to make a copy of the region to give to it.
     DWORD noBytes = ::GetRegionData(GetHrgnOf(region), 0, NULL);
@@ -76,5 +76,105 @@ bool wxNonOwnedWindow::SetShape(const wxRegion& region)
     }
     return true;
 }
+
+#if wxUSE_GRAPHICS_CONTEXT
+
+#include "wx/msw/wrapgdip.h"
+
+// This class contains data used only when SetPath(wxGraphicsPath) is called.
+//
+// Notice that it derives from wxEvtHandler solely to allow Connect()-ing its
+// OnPaint() method to the window, we could get rid of this inheritance once
+// Bind() can be used in wx sources.
+class wxNonOwnedWindowShapeImpl : public wxEvtHandler
+{
+public:
+    wxNonOwnedWindowShapeImpl(wxNonOwnedWindow* win, const wxGraphicsPath& path) :
+        m_win(win),
+        m_path(path)
+    {
+        // Create the region corresponding to this path and set it as windows
+        // shape.
+        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(win));
+        Region gr(static_cast<GraphicsPath*>(m_path.GetNativePath()));
+        win->SetShape(
+            wxRegion(
+                gr.GetHRGN(static_cast<Graphics*>(context->GetNativeContext()))
+            )
+        );
+
+
+        // Connect to the paint event to draw the border.
+        //
+        // TODO: Do this only optionally?
+        m_win->Connect
+               (
+                wxEVT_PAINT,
+                wxPaintEventHandler(wxNonOwnedWindowShapeImpl::OnPaint),
+                NULL,
+                this
+               );
+    }
+
+    virtual ~wxNonOwnedWindowShapeImpl()
+    {
+        m_win->Disconnect
+               (
+                wxEVT_PAINT,
+                wxPaintEventHandler(wxNonOwnedWindowShapeImpl::OnPaint),
+                NULL,
+                this
+               );
+    }
+
+private:
+    void OnPaint(wxPaintEvent& event)
+    {
+        event.Skip();
+
+        wxPaintDC dc(m_win);
+        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
+        context->SetPen(wxPen(*wxLIGHT_GREY, 2));
+        context->StrokePath(m_path);
+    }
+
+    wxNonOwnedWindow* const m_win;
+    wxGraphicsPath m_path;
+
+    wxDECLARE_NO_COPY_CLASS(wxNonOwnedWindowShapeImpl);
+};
+
+wxNonOwnedWindow::wxNonOwnedWindow()
+{
+    m_shapeImpl = NULL;
+}
+
+wxNonOwnedWindow::~wxNonOwnedWindow()
+{
+    delete m_shapeImpl;
+}
+
+bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
+{
+    delete m_shapeImpl;
+    m_shapeImpl = new wxNonOwnedWindowShapeImpl(this, path);
+
+    return true;
+}
+
+#else // !wxUSE_GRAPHICS_CONTEXT
+
+// Trivial ctor and dtor as we don't have anything to do when wxGraphicsContext
+// is not used but still define them here to avoid adding even more #if checks
+// to the header, it it doesn't do any harm even though it's not needed.
+wxNonOwnedWindow::wxNonOwnedWindow()
+{
+}
+
+wxNonOwnedWindow::~wxNonOwnedWindow()
+{
+}
+
+#endif // wxUSE_GRAPHICS_CONTEXT/!wxUSE_GRAPHICS_CONTEXT
 
 #endif // !__WXWINCE__

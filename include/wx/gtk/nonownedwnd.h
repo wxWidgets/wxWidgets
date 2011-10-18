@@ -11,6 +11,8 @@
 #ifndef _WX_GTK_NONOWNEDWND_H_
 #define _WX_GTK_NONOWNEDWND_H_
 
+class wxNonOwnedWindowShapeImpl;
+
 // ----------------------------------------------------------------------------
 // wxNonOwnedWindow contains code common to wx{Popup,TopLevel}Window in wxGTK.
 // ----------------------------------------------------------------------------
@@ -18,16 +20,23 @@
 class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxNonOwnedWindowBase
 {
 public:
-    wxNonOwnedWindow() { }
-
-    virtual bool SetShape(const wxRegion& region);
+    wxNonOwnedWindow() { m_shapeImpl = NULL; }
+    virtual ~wxNonOwnedWindow();
 
     // Overridden to actually set the shape when the window becomes realized.
     virtual void GTKHandleRealized();
 
+protected:
+    virtual bool DoClearShape();
+    virtual bool DoSetRegionShape(const wxRegion& region);
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual bool DoSetPathShape(const wxGraphicsPath& path);
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+
 private:
-    // If valid, defines the custom shape of the window.
-    wxRegion m_shape;
+    // If non-NULL, contains information about custom window shape.
+    wxNonOwnedWindowShapeImpl* m_shapeImpl;
 
     wxDECLARE_NO_COPY_CLASS(wxNonOwnedWindow);
 };

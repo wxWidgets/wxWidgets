@@ -14,6 +14,11 @@
 
 #include "wx/window.h"
 
+// Styles that can be used with any wxNonOwnedWindow:
+#define wxFRAME_SHAPED          0x0010  // Create a window that is able to be shaped
+
+class WXDLLIMPEXP_FWD_CORE wxGraphicsPath;
+
 // ----------------------------------------------------------------------------
 // wxNonOwnedWindow: a window that is not a child window of another one.
 // ----------------------------------------------------------------------------
@@ -24,8 +29,52 @@ public:
     // Set the shape of the window to the given region.
     // Returns true if the platform supports this feature (and the
     // operation is successful.)
-    virtual bool SetShape(const wxRegion& WXUNUSED(region)) { return false; }
+    bool SetShape(const wxRegion& region)
+    {
+        // This style is in fact only needed by wxOSX/Carbon so once we don't
+        // use this port any more, we could get rid of this requirement, but
+        // for now you must specify wxFRAME_SHAPED for SetShape() to work on
+        // all platforms.
+        wxCHECK_MSG
+        (
+            HasFlag(wxFRAME_SHAPED), false,
+            wxS("Shaped windows must be created with the wxFRAME_SHAPED style.")
+        );
 
+        return region.IsEmpty() ? DoClearShape() : DoSetRegionShape(region);
+    }
+
+#if wxUSE_GRAPHICS_CONTEXT
+    // Set the shape using the specified path.
+    bool SetShape(const wxGraphicsPath& path)
+    {
+        wxCHECK_MSG
+        (
+            HasFlag(wxFRAME_SHAPED), false,
+            wxS("Shaped windows must be created with the wxFRAME_SHAPED style.")
+        );
+
+        return DoSetPathShape(path);
+    }
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+protected:
+    virtual bool DoClearShape()
+    {
+        return false;
+    }
+
+    virtual bool DoSetRegionShape(const wxRegion& WXUNUSED(region))
+    {
+        return false;
+    }
+
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual bool DoSetPathShape(const wxGraphicsPath& WXUNUSED(path))
+    {
+        return false;
+    }
+#endif // wxUSE_GRAPHICS_CONTEXT
 };
 
 #if defined(__WXDFB__)

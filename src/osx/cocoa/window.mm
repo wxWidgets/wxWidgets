@@ -1288,6 +1288,19 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
             dc.SetDeviceClippingRegion(clearRgn);
             dc.Clear();
         }
+
+#if wxUSE_GRAPHICS_CONTEXT
+        // If the window shape is defined by a path, stroke the path to show
+        // the window border.
+        const wxGraphicsPath& path = tlwParent->GetShapePath();
+        if ( !path.IsNull() )
+        {
+            CGContextSetLineWidth(context, 1);
+            CGContextSetStrokeColorWithColor(context, wxLIGHT_GREY->GetCGColor());
+            CGContextAddPath(context, (CGPathRef) path.GetNativePath());
+            CGContextStrokePath(context);
+        }
+#endif // wxUSE_GRAPHICS_CONTEXT
     }
 
     wxpeer->MacPaintChildrenBorders();

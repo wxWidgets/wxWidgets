@@ -14,6 +14,8 @@
 
 #include "wx/window.h"
 
+#include "wx/graphics.h"
+
 #if wxUSE_SYSTEM_OPTIONS
     #define wxMAC_WINDOW_PLAIN_TRANSITION wxT("mac.window-plain-transition")
 #endif
@@ -82,6 +84,10 @@ public:
     virtual bool SetShape(const wxRegion& region);
     const wxRegion& GetShape() const { return m_shape; }
 
+#if wxUSE_GRAPHICS_CONTEXT
+    const wxGraphicsPath& GetShapePath() { return m_shapePath; }
+#endif // wxUSE_GRAPHICS_CONTEXT
+
     // activation hooks only necessary for MDI Implementation
     static void MacDelayedDeactivation(long timestamp);
     virtual void MacActivate( long timestamp , bool inIsActivating ) ;
@@ -125,6 +131,12 @@ protected:
                                    wxShowEffect effect,
                                    unsigned timeout);
 
+    virtual bool DoClearShape();
+    virtual bool DoSetRegionShape(const wxRegion& region);
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual bool DoSetPathShape(const wxGraphicsPath& path);
+#endif // wxUSE_GRAPHICS_CONTEXT
+
     virtual void WillBeDestroyed();
 
     wxNonOwnedWindowImpl* m_nowpeer ;
@@ -135,6 +147,9 @@ protected:
 
 private :
     wxRegion m_shape;
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsPath m_shapePath;
+#endif // wxUSE_GRAPHICS_CONTEXT
 };
 
 // list of all frames and modeless dialogs
