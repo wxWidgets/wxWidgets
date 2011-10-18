@@ -183,15 +183,13 @@ bool wxRegion::DoUnionWithRegion( const wxRegion& region )
 
     if (!m_refData)
     {
-        m_refData = new wxRegionRefData();
-        M_REGIONDATA->m_region = gdk_region_new();
+        m_refData = new wxRegionRefData(*M_REGIONDATA_OF(region));
     }
     else
     {
         AllocExclusive();
+        gdk_region_union( M_REGIONDATA->m_region, region.GetRegion() );
     }
-
-    gdk_region_union( M_REGIONDATA->m_region, region.GetRegion() );
 
     return true;
 }
@@ -236,20 +234,23 @@ bool wxRegion::DoXor( const wxRegion& region )
 
     if (!m_refData)
     {
-        return false;
+        // XOR-ing with an invalid region is the same as XOR-ing with an empty
+        // one, i.e. it is simply a copy.
+        m_refData = new wxRegionRefData(*M_REGIONDATA_OF(region));
     }
+    else
+    {
+        AllocExclusive();
 
-    AllocExclusive();
-
-    gdk_region_xor( M_REGIONDATA->m_region, region.GetRegion() );
+        gdk_region_xor( M_REGIONDATA->m_region, region.GetRegion() );
+    }
 
     return true;
 }
 
 bool wxRegion::DoOffset( wxCoord x, wxCoord y )
 {
-    if (!m_refData)
-        return false;
+    wxCHECK_MSG( m_refData, false, wxS("invalid region") );
 
     AllocExclusive();
 

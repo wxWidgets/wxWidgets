@@ -782,6 +782,9 @@
 				RelativePath=".\geometry\rect.cpp">
 			</File>
 			<File
+				RelativePath=".\geometry\region.cpp">
+			</File>
+			<File
 				RelativePath=".\controls\richtextctrltest.cpp">
 			</File>
 			<File

@@ -380,6 +380,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_rect.obj &
 	$(OBJS)\test_gui_size.obj &
 	$(OBJS)\test_gui_point.obj &
+	$(OBJS)\test_gui_region.obj &
 	$(OBJS)\test_gui_bitmap.obj &
 	$(OBJS)\test_gui_colour.obj &
 	$(OBJS)\test_gui_ellipsization.obj &
@@ -785,6 +786,9 @@ $(OBJS)\test_gui_size.obj :  .AUTODEPEND .\geometry\size.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_point.obj :  .AUTODEPEND .\geometry\point.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_region.obj :  .AUTODEPEND .\geometry\region.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_bitmap.obj :  .AUTODEPEND .\graphics\bitmap.cpp

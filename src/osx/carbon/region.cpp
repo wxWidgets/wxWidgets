@@ -178,7 +178,7 @@ void wxRegion::Clear()
 // Move the region
 bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 {
-    wxCHECK_MSG( M_REGION, false, wxT("invalid wxRegion") );
+    wxCHECK_MSG( m_refData, false, wxT("invalid wxRegion") );
 
     if ( !x && !y )
         // nothing to do

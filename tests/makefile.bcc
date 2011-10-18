@@ -136,6 +136,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_rect.obj \
 	$(OBJS)\test_gui_size.obj \
 	$(OBJS)\test_gui_point.obj \
+	$(OBJS)\test_gui_region.obj \
 	$(OBJS)\test_gui_bitmap.obj \
 	$(OBJS)\test_gui_colour.obj \
 	$(OBJS)\test_gui_ellipsization.obj \
@@ -745,6 +746,9 @@ $(OBJS)\test_gui_size.obj: .\geometry\size.cpp
 
 $(OBJS)\test_gui_point.obj: .\geometry\point.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\geometry\point.cpp
+
+$(OBJS)\test_gui_region.obj: .\geometry\region.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\geometry\region.cpp
 
 $(OBJS)\test_gui_bitmap.obj: .\graphics\bitmap.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\graphics\bitmap.cpp

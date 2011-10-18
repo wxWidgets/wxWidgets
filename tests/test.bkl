@@ -132,6 +132,7 @@
             geometry/rect.cpp
             geometry/size.cpp
             geometry/point.cpp
+            geometry/region.cpp
             graphics/bitmap.cpp
             graphics/colour.cpp
             graphics/ellipsization.cpp

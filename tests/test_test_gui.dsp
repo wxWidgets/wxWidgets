@@ -461,6 +461,10 @@ SOURCE=.\geometry\rect.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\geometry\region.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\richtextctrltest.cpp
 # End Source File
 # Begin Source File
