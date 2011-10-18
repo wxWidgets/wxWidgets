@@ -1201,13 +1201,28 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
         updateRgn.Offset( wxpeer->MacGetLeftBorderSize() , wxpeer->MacGetTopBorderSize() );
     }
     
-    if ( wxpeer->MacGetTopLevelWindow()->GetWindowStyle() & wxFRAME_SHAPED )
+    // Restrict the update region to the shape of the window, if any, and also
+    // remember the region that we need to clear later.
+    wxNonOwnedWindow* const tlwParent = wxpeer->MacGetTopLevelWindow();
+    const bool isTopLevel = tlwParent == wxpeer;
+    wxRegion clearRgn;
+    if ( tlwParent->GetWindowStyle() & wxFRAME_SHAPED )
     {
+        if ( isTopLevel )
+            clearRgn = updateRgn;
+
         int xoffset = 0, yoffset = 0;
-        wxRegion rgn = wxpeer->MacGetTopLevelWindow()->GetShape();
+        wxRegion rgn = tlwParent->GetShape();
         wxpeer->MacRootWindowToWindow( &xoffset, &yoffset );
         rgn.Offset( xoffset, yoffset );
         updateRgn.Intersect(rgn);
+
+        if ( isTopLevel )
+        {
+            // Exclude the window shape from the region to be cleared below.
+            rgn.Xor(wxpeer->GetSize());
+            clearRgn.Intersect(rgn);
+        }
     }
     
     wxpeer->GetUpdateRegion() = updateRgn;
@@ -1259,6 +1274,22 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
         CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
         CGContextScaleCTM( context, 1, -1 );
     }
+
+    if ( isTopLevel )
+    {
+        // We also need to explicitly draw the part of the top level window
+        // outside of its region with transparent colour to ensure that it is
+        // really transparent.
+        if ( clearRgn.IsOk() )
+        {
+            wxMacCGContextStateSaver saveState(context);
+            wxWindowDC dc(wxpeer);
+            dc.SetBackground(wxBrush(wxTransparentColour));
+            dc.SetDeviceClippingRegion(clearRgn);
+            dc.Clear();
+        }
+    }
+
     wxpeer->MacPaintChildrenBorders();
     wxpeer->MacSetCGContextRef( NULL );
     CGContextRestoreGState( context );
