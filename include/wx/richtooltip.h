@@ -11,9 +11,12 @@
 #ifndef _WX_RICHTOOLTIP_H_
 #define _WX_RICHTOOLTIP_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_RICHTOOLTIP
 
-class WXDLLIMPEXP_FWD_CORE wxColour;
+#include "wx/colour.h"
+
 class WXDLLIMPEXP_FWD_CORE wxFont;
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
