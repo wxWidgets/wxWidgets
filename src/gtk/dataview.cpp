@@ -25,7 +25,6 @@
 #endif
 
 #include "wx/stockitem.h"
-#include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/listimpl.cpp"
 
@@ -2796,108 +2795,6 @@ bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
     value = (long) GetChoices().Index( string_value.GetString() );
     return true;
 }
-
-// ---------------------------------------------------------
-// wxDataViewDateRenderer
-// ---------------------------------------------------------
-
-class wxDataViewDateRendererPopupTransient: public wxPopupTransientWindow
-{
-public:
-    wxDataViewDateRendererPopupTransient( wxWindow* parent, wxDateTime *value,
-        wxDataViewModel *model, const wxDataViewItem &item, unsigned int col ) :
-        wxPopupTransientWindow( parent, wxBORDER_SIMPLE )
-    {
-        m_model = model;
-        m_item = item;
-        m_col = col;
-        m_cal = new wxCalendarCtrl( this, -1, *value );
-        wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
-        sizer->Add( m_cal, 1, wxGROW );
-        SetSizer( sizer );
-        sizer->Fit( this );
-    }
-
-    virtual void OnDismiss()
-    {
-    }
-
-    void OnCalendar( wxCalendarEvent &event );
-
-    wxCalendarCtrl   *m_cal;
-    wxDataViewModel  *m_model;
-    wxDataViewItem    m_item;
-    unsigned int      m_col;
-
-private:
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(wxDataViewDateRendererPopupTransient,wxPopupTransientWindow)
-    EVT_CALENDAR( -1, wxDataViewDateRendererPopupTransient::OnCalendar )
-END_EVENT_TABLE()
-
-void wxDataViewDateRendererPopupTransient::OnCalendar( wxCalendarEvent &event )
-{
-    m_model->ChangeValue( event.GetDate(), m_item, m_col );
-    DismissAndNotify();
-}
-
-IMPLEMENT_CLASS(wxDataViewDateRenderer, wxDataViewCustomRenderer)
-
-wxDataViewDateRenderer::wxDataViewDateRenderer( const wxString &varianttype,
-                        wxDataViewCellMode mode, int align ) :
-    wxDataViewCustomRenderer( varianttype, mode, align )
-{
-    SetMode(mode);
-    SetAlignment(align);
-}
-
-bool wxDataViewDateRenderer::SetValue( const wxVariant &value )
-{
-    m_date = value.GetDateTime();
-
-    return true;
-}
-
-bool wxDataViewDateRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
-{
-    return false;
-}
-
-bool wxDataViewDateRenderer::Render( wxRect cell, wxDC *dc, int state )
-{
-    dc->SetFont( GetOwner()->GetOwner()->GetFont() );
-    wxString tmp = m_date.FormatDate();
-    RenderText( tmp, 0, cell, dc, state );
-    return true;
-}
-
-wxSize wxDataViewDateRenderer::GetSize() const
-{
-    wxString tmp = m_date.FormatDate();
-    wxCoord x,y,d;
-    GetView()->GetTextExtent( tmp, &x, &y, &d );
-    return wxSize(x,y+d);
-}
-
-bool wxDataViewDateRenderer::Activate( const wxRect& WXUNUSED(cell), wxDataViewModel *model,
-                                       const wxDataViewItem &item, unsigned int col )
-{
-    wxVariant variant;
-    model->GetValue( variant, item, col );
-    wxDateTime value = variant.GetDateTime();
-
-    wxDataViewDateRendererPopupTransient *popup = new wxDataViewDateRendererPopupTransient(
-        GetOwner()->GetOwner()->GetParent(), &value, model, item, col );
-    wxPoint pos = wxGetMousePosition();
-    popup->Move( pos );
-    popup->Layout();
-    popup->Popup( popup->m_cal );
-
-    return true;
-}
-
 
 // ---------------------------------------------------------
 // wxDataViewIconTextRenderer

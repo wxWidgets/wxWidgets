@@ -386,6 +386,37 @@ public:
 
 #endif // generic or Carbon versions
 
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXGTK__)
+
+// ----------------------------------------------------------------------------
+// wxDataViewDateRenderer
+// ----------------------------------------------------------------------------
+
+#if wxUSE_DATEPICKCTRL
+class WXDLLIMPEXP_ADV wxDataViewDateRenderer: public wxDataViewCustomRenderer
+{
+public:
+    wxDataViewDateRenderer(const wxString &varianttype = wxT("datetime"),
+                           wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                           int align = wxDVR_DEFAULT_ALIGNMENT);
+
+    virtual bool HasEditorCtrl() const { return true; }
+    virtual wxWindow *CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant &value);
+    virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant &value);
+    virtual bool SetValue(const wxVariant &value);
+    virtual bool GetValue(wxVariant& value) const;
+    virtual bool Render( wxRect cell, wxDC *dc, int state );
+    virtual wxSize GetSize() const;
+
+private:
+    wxDateTime    m_date;
+};
+#else // !wxUSE_DATEPICKCTRL
+typedef wxDataViewTextRenderer wxDataViewDateRenderer;
+#endif
+
+#endif // generic or GTK+ versions
+
 // this class is obsolete, its functionality was merged in
 // wxDataViewTextRenderer itself now, don't use it any more
 #define wxDataViewTextRendererAttr wxDataViewTextRenderer

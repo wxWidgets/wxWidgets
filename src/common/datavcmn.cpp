@@ -26,6 +26,7 @@
     #include "wx/crt.h"
 #endif
 
+#include "wx/datectrl.h"
 #include "wx/spinctrl.h"
 #include "wx/choice.h"
 #include "wx/imaglist.h"
@@ -1608,6 +1609,64 @@ bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
 }
 
 #endif
+
+// ---------------------------------------------------------
+// wxDataViewDateRenderer
+// ---------------------------------------------------------
+
+#if (defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXGTK__)) && wxUSE_DATEPICKCTRL
+
+wxDataViewDateRenderer::wxDataViewDateRenderer(const wxString& varianttype,
+                                              wxDataViewCellMode mode, int align)
+    : wxDataViewCustomRenderer(varianttype, mode, align)
+{
+}
+
+wxWindow *
+wxDataViewDateRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
+{
+    return new wxDatePickerCtrl
+               (
+                   parent,
+                   wxID_ANY,
+                   value.GetDateTime(),
+                   labelRect.GetTopLeft(),
+                   labelRect.GetSize()
+               );
+}
+
+bool wxDataViewDateRenderer::GetValueFromEditorCtrl(wxWindow *editor, wxVariant& value)
+{
+    wxDatePickerCtrl *ctrl = static_cast<wxDatePickerCtrl*>(editor);
+    value = ctrl->GetValue();
+    return true;
+}
+
+bool wxDataViewDateRenderer::SetValue(const wxVariant& value)
+{
+    m_date = value.GetDateTime();
+    return true;
+}
+
+bool wxDataViewDateRenderer::GetValue(wxVariant& value) const
+{
+    value = m_date;
+    return true;
+}
+
+bool wxDataViewDateRenderer::Render(wxRect cell, wxDC* dc, int state)
+{
+    wxString tmp = m_date.FormatDate();
+    RenderText( tmp, 0, cell, dc, state );
+    return true;
+}
+
+wxSize wxDataViewDateRenderer::GetSize() const
+{
+    return GetTextExtent(m_date.FormatDate());
+}
+
+#endif // (defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXGTK__)) && wxUSE_DATEPICKCTRL
 
 //-----------------------------------------------------------------------------
 // wxDataViewListStore

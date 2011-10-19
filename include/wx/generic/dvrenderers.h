@@ -193,36 +193,5 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
 };
 
-// ---------------------------------------------------------
-// wxDataViewDateRenderer
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewDateRenderer: public wxDataViewRenderer
-{
-public:
-    wxDataViewDateRenderer( const wxString &varianttype = wxT("datetime"),
-                            wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-                            int align = wxDVR_DEFAULT_ALIGNMENT );
-
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant& value ) const;
-
-    virtual bool Render( wxRect cell, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
-
-    // Implementation only, don't use nor override
-    virtual bool WXOnActivate(const wxRect& cell,
-                              wxDataViewModel *model,
-                              const wxDataViewItem& item,
-                              unsigned int col);
-
-private:
-    wxDateTime    m_date;
-
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer)
-};
-
-
 #endif // _WX_GENERIC_DVRENDERERS_H_
 
