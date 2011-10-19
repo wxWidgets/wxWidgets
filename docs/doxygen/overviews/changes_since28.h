@@ -177,10 +177,14 @@ Finally, a few structure fields, notable @c wxCmdLineEntryDesc::shortName,
   available for the scroll target as function of the main window size, please
   see the documentation of this method for more details.
 
-- Signatures of wxDataViewCustomRenderer::Activate(),
-  wxDataViewCustomRenderer::LeftClick() and
-  wxDataViewCustomRenderer::StartDrag() virtual methods changed.  You will need
-  to change them in your derived renderer class too if you override them.
+- Signature of wxDataViewCustomRenderer::StartDrag() virtual method changed.
+  You will need to change it in your derived renderer class too if you override
+  it.
+
+- wxDataViewCustomRenderer::Activate() and
+  wxDataViewCustomRenderer::LeftClick() were replaced with the new
+  wxDataViewCustomRenderer::ActivateCell() method. You will need to change it
+  in your derived renderer class accordingly.
 
 */
 

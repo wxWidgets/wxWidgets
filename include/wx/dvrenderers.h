@@ -228,23 +228,39 @@ public:
     // Return the size of the item appropriate to its current value.
     virtual wxSize GetSize() const = 0;
 
-    // Define virtual function which are called when the item is activated
-    // (double-clicked or Enter is pressed on it), clicked or the user starts
-    // to drag it: by default they all simply return false indicating that the
-    // events are not handled
+    // Define virtual function which are called when a key is pressed on the
+    // item, clicked or the user starts to drag it: by default they all simply
+    // return false indicating that the events are not handled
 
-    virtual bool Activate(const wxRect& WXUNUSED(cell),
-                          wxDataViewModel *WXUNUSED(model),
-                          const wxDataViewItem & WXUNUSED(item),
-                          unsigned int WXUNUSED(col))
-        { return false; }
+    virtual bool ActivateCell(const wxRect& cell,
+                              wxDataViewModel *model,
+                              const wxDataViewItem & item,
+                              unsigned int col,
+                              const wxMouseEvent* mouseEvent)
+    {
+        // Compatibility code
+        if ( mouseEvent )
+            return LeftClick(mouseEvent->GetPosition(), cell, model, item, col);
+        else
+            return Activate(cell, model, item, col);
+    }
 
-    virtual bool LeftClick(const wxPoint& WXUNUSED(cursor),
-                           const wxRect& WXUNUSED(cell),
-                           wxDataViewModel *WXUNUSED(model),
-                           const wxDataViewItem & WXUNUSED(item),
-                           unsigned int WXUNUSED(col) )
-        { return false; }
+    // Deprecated, use (and override) ActivateCell() instead
+    wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
+        virtual bool Activate(wxRect WXUNUSED(cell),
+                              wxDataViewModel *WXUNUSED(model),
+                              const wxDataViewItem & WXUNUSED(item),
+                              unsigned int WXUNUSED(col)),
+                          return false; )
+
+    // Deprecated, use (and override) ActivateCell() instead
+    wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
+        virtual bool LeftClick(wxPoint WXUNUSED(cursor),
+                               wxRect WXUNUSED(cell),
+                               wxDataViewModel *WXUNUSED(model),
+                               const wxDataViewItem & WXUNUSED(item),
+                               unsigned int WXUNUSED(col)),
+                          return false; )
 
     virtual bool StartDrag(const wxPoint& WXUNUSED(cursor),
                            const wxRect& WXUNUSED(cell),

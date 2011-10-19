@@ -34,6 +34,7 @@
 
 #include "wx/gtk/private/gdkconv.h"
 #include "wx/gtk/private/list.h"
+#include "wx/gtk/private/event.h"
 using namespace wxGTKImpl;
 
 class wxGtkDataViewModelNotifier;
@@ -1209,7 +1210,6 @@ struct _GtkWxCellRenderer
 
   /*< private >*/
   wxDataViewCustomRenderer *cell;
-  guint32 last_click;
 };
 
 struct _GtkWxCellRendererClass
@@ -1294,7 +1294,6 @@ static void
 gtk_wx_cell_renderer_init (GtkWxCellRenderer *cell)
 {
     cell->cell = NULL;
-    cell->last_click = 0;
 }
 
 static void
@@ -1510,37 +1509,27 @@ gtk_wx_cell_renderer_activate(
 
     unsigned int model_col = cell->GetOwner()->GetModelColumn();
 
-    if (!event)
+    if ( !event )
     {
-        bool ret = false;
-
         // activated by <ENTER>
-        if (cell->Activate( renderrect, model, item, model_col ))
-                    ret = true;
-
-        return ret;
+        return cell->ActivateCell(renderrect, model, item, model_col, NULL);
     }
-    else if (event->type == GDK_BUTTON_PRESS)
+    else if ( event->type == GDK_BUTTON_PRESS )
     {
-        GdkEventButton *button_event = (GdkEventButton*) event;
-        wxPoint pt( ((int) button_event->x) - renderrect.x,
-                    ((int) button_event->y) - renderrect.y );
-
-        bool ret = false;
-        if (button_event->button == 1)
+        GdkEventButton *button_event = (GdkEventButton*)event;
+        if ( button_event->button == 1 )
         {
-            if (cell->LeftClick( pt, renderrect, model, item, model_col ))
-                ret = true;
-            // TODO: query system double-click time
-            if (button_event->time - wxrenderer->last_click < 400)
-                if (cell->Activate( renderrect, model, item, model_col ))
-                    ret = true;
-        }
-        wxrenderer->last_click = button_event->time;
+            wxMouseEvent mouse_event(wxEVT_LEFT_DOWN);
+            InitMouseEvent(ctrl, mouse_event, button_event);
 
-        return ret;
+            mouse_event.m_x -= renderrect.x;
+            mouse_event.m_y -= renderrect.y;
+
+            return cell->ActivateCell(renderrect, model, item, model_col, &mouse_event);
+        }
     }
 
+    wxLogDebug("unexpected event type in gtk_wx_cell_renderer_activate()");
     return false;
 }
 

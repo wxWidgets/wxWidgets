@@ -184,9 +184,13 @@ Changes in behaviour not resulting in compilation errors, please read this!
   wxAutomationInstance_SilentIfNone flag to prevent the error message if no
   currently running instances of this object are available.
 
-- Signatures of wxDataViewCustomRenderer::Activate(), LeftClick() and
-  StartDrag() virtual methods changed.  You will need to change them in your
-  derived renderer class too if you override them.
+- Signature of wxDataViewCustomRenderer::StartDrag() virtual method changed.
+  You will need to change it in your derived renderer class too if you override
+  it.
+
+- wxDataViewCustomRenderer::Activate() and LeftClick() were replaced with the
+  new ActivateCell() method. You will need to change it in your derived
+  renderer class accordingly.
 
 - wxThread::Wait() and wxThread::Delete() used to dispatch the events while
   waiting for the thread to exit in wxMSW. They still do it in default build
@@ -482,6 +486,7 @@ All (GUI):
 - Fix tooltips in wxSearchCtrl and other composite controls (Catalin Raceanu).
 - Allow converting to and from wxGraphicsBitmap and wxImage directly.
 - Allow wxGraphicsFont creation without passing by wxFont.
+- Added wxDataViewCustomRenderer::ActivateCell().
 
 OSX:
 

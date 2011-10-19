@@ -986,31 +986,24 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::WXOnLeftClick(const wxPoint& cursor,
-                                             const wxRect& cell,
-                                             wxDataViewModel *model,
-                                             const wxDataViewItem& item,
-                                             unsigned int col)
+bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& WXUNUSED(cell),
+                                              wxDataViewModel *model,
+                                              const wxDataViewItem& item,
+                                              unsigned int col,
+                                              const wxMouseEvent *mouseEvent)
 {
-    // only react to clicks directly on the checkbox, not elsewhere in the same cell:
-    if (!wxRect(GetSize()).Contains(cursor))
+    if ( !model->IsEnabled(item, col) )
         return false;
 
-    return WXOnActivate(cell, model, item, col);
-}
-
-bool wxDataViewToggleRenderer::WXOnActivate(const wxRect& WXUNUSED(cell),
-                                            wxDataViewModel *model,
-                                            const wxDataViewItem& item,
-                                            unsigned int col)
-{
-    if (model->IsEnabled(item, col))
+    if ( mouseEvent )
     {
-        model->ChangeValue(!m_toggle, item, col);
-        return true;
+        // only react to clicks directly on the checkbox, not elsewhere in the same cell:
+        if ( !wxRect(GetSize()).Contains(mouseEvent->GetPosition()) )
+            return false;
     }
 
-    return false;
+    model->ChangeValue(!m_toggle, item, col);
+    return true;
 }
 
 wxSize wxDataViewToggleRenderer::GetSize() const
@@ -3414,7 +3407,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 
                     wxDataViewRenderer *cell = activatableCol->GetRenderer();
                     cell->PrepareForItem(GetModel(), item, colIdx);
-                    cell->WXOnActivate(cell_rect, GetModel(), item, colIdx);
+                    cell->WXActivateCell(cell_rect, GetModel(), item, colIdx, NULL);
                 }
             }
             break;
@@ -3886,31 +3879,15 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         }
         else if ( current == m_lineLastClicked )
         {
-            bool activated = false;
+            wxWindow *parent = GetParent();
+            wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
+            le.SetItem( item );
+            le.SetColumn( col->GetModelColumn() );
+            le.SetDataViewColumn( col );
+            le.SetEventObject(parent);
+            le.SetModel(GetModel());
 
-            if ((!ignore_other_columns) && (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
-            {
-                const unsigned colIdx = col->GetModelColumn();
-
-                cell->PrepareForItem(model, item, colIdx);
-
-                wxRect cell_rect( xpos, GetLineStart( current ),
-                                col->GetWidth(), GetLineHeight( current ) );
-                activated = cell->WXOnActivate( cell_rect, model, item, colIdx );
-            }
-
-            if ( !activated )
-            {
-                wxWindow *parent = GetParent();
-                wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
-                le.SetItem( item );
-                le.SetColumn( col->GetModelColumn() );
-                le.SetDataViewColumn( col );
-                le.SetEventObject(parent);
-                le.SetModel(GetModel());
-
-                parent->ProcessWindowEvent(le);
-            }
+            parent->ProcessWindowEvent(le);
             return;
         }
         else
@@ -4054,7 +4031,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         m_lastOnSame = !simulateClick && ((col == oldCurrentCol) &&
                         (current == oldCurrentRow)) && oldWasSelected;
 
-        // Call LeftClick after everything else as under GTK+
+        // Call ActivateCell() after everything else as under GTK+
         if (cell->GetMode() & wxDATAVIEW_CELL_ACTIVATABLE)
         {
             // notify cell about click
@@ -4095,14 +4072,19 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 }
             }
 
-            wxPoint pos( event.GetPosition() );
-            pos.x -= rectItem.x;
-            pos.y -= rectItem.y;
+            wxMouseEvent event2(event);
+            event2.m_x -= rectItem.x;
+            event2.m_y -= rectItem.y;
+            m_owner->CalcUnscrolledPosition(event2.m_x, event2.m_y, &event2.m_x, &event2.m_y);
 
-            m_owner->CalcUnscrolledPosition( pos.x, pos.y, &pos.x, &pos.y );
-
-             /* ignore ret */ cell->WXOnLeftClick( pos, cell_rect,
-                              model, item, col->GetModelColumn());
+             /* ignore ret */ cell->WXActivateCell
+                                    (
+                                        cell_rect,
+                                        model,
+                                        item,
+                                        col->GetModelColumn(),
+                                        &event2
+                                    );
         }
     }
 }

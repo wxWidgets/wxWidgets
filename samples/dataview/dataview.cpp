@@ -189,22 +189,18 @@ public:
         return true;
     }
 
-    virtual bool Activate( const wxRect& WXUNUSED(cell),
-                           wxDataViewModel *WXUNUSED(model),
-                           const wxDataViewItem &WXUNUSED(item),
-                           unsigned int WXUNUSED(col) )
+    virtual bool ActivateCell(const wxRect& WXUNUSED(cell),
+                              wxDataViewModel *WXUNUSED(model),
+                              const wxDataViewItem &WXUNUSED(item),
+                              unsigned int WXUNUSED(col),
+                              const wxMouseEvent *mouseEvent)
     {
-        wxLogMessage( "MyCustomRenderer Activate()" );
-        return false;
-    }
-
-    virtual bool LeftClick(const wxPoint& cursor,
-                           const wxRect& WXUNUSED(cell),
-                           wxDataViewModel *WXUNUSED(model),
-                           const wxDataViewItem &WXUNUSED(item),
-                           unsigned int WXUNUSED(col) )
-    {
-        wxLogMessage( "MyCustomRenderer LeftClick( %d, %d )", cursor.x, cursor.y );
+        wxString position;
+        if ( mouseEvent )
+            position = wxString::Format("via mouse at %d, %d", mouseEvent->m_x, mouseEvent->m_y);
+        else
+            position = "from keyboard";
+        wxLogMessage("MyCustomRenderer ActivateCell() %s", position);
         return false;
     }
 

@@ -26,21 +26,13 @@ public:
 
     // see the explanation of the following WXOnXXX() methods in wx/generic/dvrenderer.h
 
-    virtual bool WXOnActivate(const wxRect& cell,
-                              wxDataViewModel *model,
-                              const wxDataViewItem& item,
-                              unsigned int col)
+    virtual bool WXActivateCell(const wxRect& cell,
+                                wxDataViewModel *model,
+                                const wxDataViewItem& item,
+                                unsigned int col,
+                                const wxMouseEvent *mouseEvent)
     {
-        return Activate(cell, model, item, col);
-    }
-
-    virtual bool WXOnLeftClick(const wxPoint& cursor,
-                               const wxRect& cell,
-                               wxDataViewModel *model,
-                               const wxDataViewItem &item,
-                               unsigned int col)
-    {
-        return LeftClick(cursor, cell, model, item, col);
+        return ActivateCell(cell, model, item, col, mouseEvent);
     }
 
 private:
@@ -121,16 +113,11 @@ public:
     wxSize GetSize() const;
 
     // Implementation only, don't use nor override
-    virtual bool WXOnLeftClick(const wxPoint& cursor,
-                               const wxRect& cell,
-                               wxDataViewModel *model,
-                               const wxDataViewItem& item,
-                               unsigned int col);
-
-    virtual bool WXOnActivate(const wxRect& cell,
-                              wxDataViewModel *model,
-                              const wxDataViewItem& item,
-                              unsigned int col);
+    virtual bool WXActivateCell(const wxRect& cell,
+                                wxDataViewModel *model,
+                                const wxDataViewItem& item,
+                                unsigned int col,
+                                const wxMouseEvent *mouseEvent);
 private:
     bool    m_toggle;
 

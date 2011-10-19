@@ -1322,18 +1322,54 @@ public:
 */
 enum wxDataViewCellMode
 {
+    /**
+        The cell only displays information and cannot be manipulated or
+        otherwise interacted with in any way.
+
+        Note that this doesn't mean that the row being drawn can't be selected,
+        just that a particular element of it cannot be individually modified.
+     */
     wxDATAVIEW_CELL_INERT,
 
     /**
-        Indicates that the user can double click the cell and something will
-        happen (e.g. a window for editing a date will pop up).
+        Indicates that the cell can be @em activated by clicking it or using
+        keyboard.
+
+        Activating a cell is an alternative to showing inline editor when the
+        value can be edited in a simple way that doesn't warrant full editor
+        control. The most typical use of cell activation is toggling the
+        checkbox in wxDataViewToggleRenderer; others would be e.g. an embedded
+        volume slider or a five-star rating column.
+
+        The exact means of activating a cell are platform-dependent, but they
+        are usually similar to those used for inline editing of values.
+        Typically, a cell would be activated by Space or Enter keys or by left
+        mouse click.
+
+        @note Do not confuse this with item activation in wxDataViewCtrl
+              and the wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event. That one is
+              used for activating the item (or, to put it differently, the
+              entire row) similarly to analogous messages in wxTreeCtrl and
+              wxListCtrl, and the effect differs (play a song, open a file
+              etc.). Cell activation, on the other hand, is all about
+              interacting with the individual cell.
+
+        @see wxDataViewCustomRenderer::ActivateCell()
     */
     wxDATAVIEW_CELL_ACTIVATABLE,
 
     /**
-        Indicates that the user can edit the data in-place, i.e. an control
-        will show up after a slow click on the cell. This behaviour is best
-        known from changing the filename in most file managers etc.
+        Indicates that the user can edit the data in-place in an inline editor
+        control that will show up when the user wants to edit the cell.
+
+        A typical example of this behaviour is changing the filename in a file
+        managers.
+
+        Editing is typically triggered by slowly double-clicking the cell or by
+        a platform-dependent keyboard shortcut (F2 is typical on Windows, Space
+        and/or Enter is common elsewhere and supported on Windows too).
+
+        @see wxDataViewCustomRenderer::CreateEditorCtrl()
     */
     wxDATAVIEW_CELL_EDITABLE
 };
@@ -1692,20 +1728,72 @@ public:
     virtual ~wxDataViewCustomRenderer();
 
     /**
-        Override this to react to double clicks or ENTER.
-        This method will only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
+        Override this to react to cell @em activation. Activating a cell is an
+        alternative to showing inline editor when the value can be edited in a
+        simple way that doesn't warrant full editor control. The most typical
+        use of cell activation is toggling the checkbox in
+        wxDataViewToggleRenderer; others would be e.g. an embedded volume
+        slider or a five-star rating column.
+
+        The exact means of activating a cell are platform-dependent, but they
+        are usually similar to those used for inline editing of values.
+        Typically, a cell would be activated by Space or Enter keys or by left
+        mouse click.
+
+        This method will only be called if the cell has the
+        wxDATAVIEW_CELL_ACTIVATABLE mode.
+
+        @param cell
+            Coordinates of the activated cell's area.
+        @param model
+            The model to manipulate in response.
+        @param item
+            Activated item.
+        @param col
+            Activated column of @a item.
+        @param mouseEvent
+            If the activation was triggered by mouse click, contains the
+            corresponding event. Is @NULL otherwise (for keyboard activation).
+            Mouse coordinates are adjusted to be relative to the cell.
+
+        @since 2.9.3
+
+        @note Do not confuse this method with item activation in wxDataViewCtrl
+              and the wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event. That one is
+              used for activating the item (or, to put it differently, the
+              entire row) similarly to analogous messages in wxTreeCtrl and
+              wxListCtrl, and the effect differs (play a song, open a file
+              etc.). Cell activation, on the other hand, is all about
+              interacting with the individual cell.
+
+        @see CreateEditorCtrl()
     */
-    virtual bool Activate( const wxRect& cell,
-                           wxDataViewModel* model,
-                           const wxDataViewItem & item,
-                           unsigned int col );
+    virtual bool ActivateCell(const wxRect& cell,
+                              wxDataViewModel* model,
+                              const wxDataViewItem & item,
+                              unsigned int col,
+                              const wxMouseEvent *mouseEvent);
 
     /**
         Override this to create the actual editor control once editing
         is about to start.
 
-        @a parent is the parent of the editor control, @a labelRect indicates the
-        position and size of the editor control and @a value is its initial value:
+        This method will only be called if the cell has the
+        wxDATAVIEW_CELL_EDITABLE mode. Editing is typically triggered by slowly
+        double-clicking the cell or by a platform-dependent keyboard shortcut
+        (F2 is typical on Windows, Space and/or Enter is common elsewhere and
+        supported on Windows too).
+
+        @param parent
+            The parent of the editor control.
+        @param labelRect
+            Indicates the position and size of the editor control. The control
+            should be created in place of the cell and @a labelRect should be
+            respected as much as possible.
+        @param value
+            Initial value of the editor.
+
+        An example:
         @code
         {
             long l = value;
@@ -1713,6 +1801,8 @@ public:
                         labelRect.GetTopLeft(), labelRect.GetSize(), 0, 0, 100, l );
         }
         @endcode
+
+        @see ActivateCell()
     */
     virtual wxWindow* CreateEditorCtrl(wxWindow* parent,
                                        wxRect labelRect,
