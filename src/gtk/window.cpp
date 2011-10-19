@@ -3170,6 +3170,7 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
 
     wxFocusEvent event( wxEVT_KILL_FOCUS, GetId() );
     event.SetEventObject( this );
+    event.SetWindow( FindFocus() );
     GTKProcessEvent( event );
 }
 
