@@ -2407,10 +2407,18 @@ void wxWindowGTK::PostCreation()
 
     ConnectWidget( connect_widget );
 
-    /* We cannot set colours, fonts and cursors before the widget has
-       been realized, so we do this directly after realization */
-    g_signal_connect (connect_widget, "realize",
-                      G_CALLBACK (gtk_window_realized_callback), this);
+    // We cannot set colours, fonts and cursors before the widget has been
+    // realized, so we do this directly after realization -- unless the widget
+    // was in fact realized already.
+    if ( gtk_widget_get_realized(connect_widget) )
+    {
+        gtk_window_realized_callback(connect_widget, this);
+    }
+    else
+    {
+        g_signal_connect (connect_widget, "realize",
+                          G_CALLBACK (gtk_window_realized_callback), this);
+    }
 
     if (!IsTopLevel())
     {
