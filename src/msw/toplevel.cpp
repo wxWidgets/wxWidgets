@@ -445,6 +445,13 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     }
 #endif // !__WXWINCE__
 
+    if ( !title.empty() )
+    {
+        ::SetWindowText(GetHwnd(), title.wx_str());
+    }
+
+    SubclassWin(m_hWnd);
+
 #if !defined(__WXWINCE__) || defined(__WINCE_STANDARDSDK__)
     // move the dialog to its initial position without forcing repainting
     int x, y, w, h;
@@ -465,13 +472,6 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         }
     }
 #endif // !__WXWINCE__
-
-    if ( !title.empty() )
-    {
-        ::SetWindowText(GetHwnd(), title.wx_str());
-    }
-
-    SubclassWin(m_hWnd);
 
 #ifdef __SMARTPHONE__
     // Work around title non-display glitch
