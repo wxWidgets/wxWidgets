@@ -12,6 +12,7 @@
 #define _WX_COMPOSITEWIN_H_
 
 #include "wx/window.h"
+#include "wx/containr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxToolTip;
 
@@ -19,16 +20,6 @@ class WXDLLIMPEXP_FWD_CORE wxToolTip;
 //     wxWidgets itself internally. Don't use it in your code until its API is
 //     officially stabilized unless you are ready to change it with the next
 //     wxWidgets release.
-
-// FIXME-VC6: This compiler can't compile DoSetForAllParts() template function,
-// it can't determine whether the deduced type should be "T" or "const T&". And
-// without this function wxCompositeWindow is pretty useless so simply disable
-// this code for it, this does mean that setting colours/fonts/... for
-// composite controls won't work in the library compiled with it but so far
-// this only affects the generic wxDatePickerCtrl which is not used by default
-// under MSW anyhow so it doesn't seem to be worth it to spend time and uglify
-// the code to fix it.
-#ifndef __VISUALC6__
 
 // ----------------------------------------------------------------------------
 // wxCompositeWindow is a helper for implementing composite windows: to define
@@ -44,7 +35,25 @@ public:
     typedef W BaseWindowClass;
 
     // Default ctor doesn't do anything.
-    wxCompositeWindow() { }
+    wxCompositeWindow()
+    {
+        this->Connect
+              (
+                  wxEVT_CREATE,
+                  wxWindowCreateEventHandler(wxCompositeWindow::OnWindowCreate)
+              );
+
+    }
+
+#ifndef __VISUALC6__
+    // FIXME-VC6: This compiler can't compile DoSetForAllParts() template function,
+    // it can't determine whether the deduced type should be "T" or "const T&". And
+    // without this function wxCompositeWindow is pretty useless so simply disable
+    // this code for it, this does mean that setting colours/fonts/... for
+    // composite controls won't work in the library compiled with it but so far
+    // this only affects the generic wxDatePickerCtrl which is not used by default
+    // under MSW anyhow so it doesn't seem to be worth it to spend time and uglify
+    // the code to fix it.
 
     // Override all wxWindow methods which must be forwarded to the composite
     // window parts.
@@ -105,11 +114,84 @@ public:
     }
 #endif // wxUSE_TOOLTIPS
 
+#endif // !__VISUALC6__
+
+    virtual void SetFocus()
+    {
+        wxSetFocusToChild(this, NULL);
+    }
+
 private:
     // Must be implemented by the derived class to return all children to which
     // the public methods we override should forward to.
     virtual wxWindowList GetCompositeWindowParts() const = 0;
 
+    void OnWindowCreate(wxWindowCreateEvent& event)
+    {
+        event.Skip();
+
+        // Attach a few event handlers to all parts of the composite window.
+        // This makes the composite window behave more like a simple control
+        // and allows other code (such as wxDataViewCtrl's inline editing
+        // support) to hook into its event processing.
+
+        wxWindow *child = event.GetWindow();
+        if ( child == this )
+            return; // not a child, we don't want to Connect() to ourselves
+
+        // Always capture wxEVT_KILL_FOCUS:
+        child->Connect(wxEVT_KILL_FOCUS,
+                       wxFocusEventHandler(wxCompositeWindow::OnKillFocus),
+                       NULL, this);
+
+        // Some events should be only handled for non-toplevel children. For
+        // example, we want to close the control in wxDataViewCtrl when Enter
+        // is pressed in the inline editor, but not when it's pressed in a
+        // popup dialog it opens.
+        wxWindow *win = child;
+        while ( win && win != this )
+        {
+            if ( win->IsTopLevel() )
+                return;
+            win = win->GetParent();
+        }
+
+        child->Connect(wxEVT_CHAR,
+                       wxKeyEventHandler(wxCompositeWindow::OnChar),
+                       NULL, this);
+    }
+
+    void OnChar(wxKeyEvent& event)
+    {
+        if ( !this->ProcessWindowEvent(event) )
+            event.Skip();
+    }
+
+    void OnKillFocus(wxFocusEvent& event)
+    {
+        // Ignore focus changes within the composite control:
+        wxWindow *win = event.GetWindow();
+        while ( win )
+        {
+            if ( win == this )
+            {
+                event.Skip();
+                return;
+            }
+
+            // Note that we don't use IsTopLevel() check here, because we do
+            // want to ignore focus changes going to toplevel window that have
+            // the composite control as its parent; these would typically be
+            // some kind of control's popup window.
+            win = win->GetParent();
+        }
+
+        // The event shouldn't be ignored, forward it to the main control:
+        if ( !this->ProcessWindowEvent(event) )
+            event.Skip();
+    }
+
+#ifndef __VISUALC6__
     template <class T>
     void SetForAllParts(bool (wxWindowBase::*func)(const T&), const T& arg)
     {
@@ -140,17 +222,9 @@ private:
                 (child->*func)(arg);
         }
     }
+#endif // !__VISUALC6__
 
     wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxCompositeWindow, W);
 };
-
-#else // __VISUALC6__
-
-template <class W>
-class wxCompositeWindow : public W
-{
-};
-
-#endif // !__VISUALC6__/__VISUALC6__
 
 #endif // _WX_COMPOSITEWIN_H_

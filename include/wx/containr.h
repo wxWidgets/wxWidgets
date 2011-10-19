@@ -148,7 +148,7 @@ protected:
 #endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
 
 // this function is for wxWidgets internal use only
-extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
+extern WXDLLIMPEXP_CORE bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 
 // ----------------------------------------------------------------------------
 // wxNavigationEnabled: Derive from this class to support keyboard navigation
