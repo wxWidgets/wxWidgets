@@ -207,8 +207,21 @@
         (cairo_t *cr), (cr), NULL ) \
     m( cairo_surface_t*, cairo_surface_create_similar, \
         (cairo_surface_t *other, cairo_content_t content, int width, int height), (other, content, width, height), NULL) \
+    m( int, cairo_format_stride_for_width, \
+       (cairo_format_t format, int width), (format, width), 0)  \
+    m( int, cairo_version, \
+       (), (), 0)  \
+    m( int, cairo_image_surface_get_stride, \
+       (cairo_surface_t *surface), (surface), 0) \
+    m( unsigned char *, cairo_image_surface_get_data, \
+       (cairo_surface_t *surface), (surface), NULL) \
+    m( cairo_format_t, cairo_image_surface_get_format, \
+       (cairo_surface_t *surface), (surface), CAIRO_FORMAT_INVALID) \
+    m( cairo_surface_type_t, cairo_surface_get_type, \
+       (cairo_surface_t *surface), (surface), -1) \
     wxCAIRO_PLATFORM_METHODS(m)
 
+    
 #if wxUSE_PANGO
 #define wxFOR_ALL_PANGO_CAIRO_VOIDMETHODS(m) \
     m( pango_cairo_update_layout, \
@@ -226,6 +239,7 @@
    
 wxFOR_ALL_CAIRO_VOIDMETHODS(wxCAIRO_DECLARE_VOIDTYPE)
 wxFOR_ALL_CAIRO_METHODS(wxCAIRO_DECLARE_TYPE)
+
 
 class wxCairo
 {
