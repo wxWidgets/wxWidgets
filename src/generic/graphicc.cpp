@@ -1267,7 +1267,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // Create a surface object and copy the bitmap pixel data to it.  if the
     // image has alpha (or a mask represented as alpha) then we'll use a
     // different format and iterator than if it doesn't...
-    const cairo_format_t bufferFormat = bmp.GetDepth() == 32
+    cairo_format_t bufferFormat = bmp.GetDepth() == 32
 #ifdef __WXGTK__
                                             || bmp.GetMask()
 #endif
@@ -1557,22 +1557,6 @@ wxCairoBitmapData::~wxCairoBitmapData()
 
     delete [] m_buffer;
 }
-
-// ----------------------------------------------------------------------------
-// wxGraphicsBitmap implementation
-// ----------------------------------------------------------------------------
-
-#if wxUSE_IMAGE
-
-wxImage wxGraphicsBitmap::ConvertToImage() const
-{
-    const wxCairoBitmapData* const
-        data = static_cast<wxCairoBitmapData*>(GetGraphicsData());
-
-    return data ? data->ConvertToImage() : wxNullImage;
-}
-
-#endif // wxUSE_IMAGE
 
 //-----------------------------------------------------------------------------
 // wxCairoContext implementation
@@ -2292,6 +2276,7 @@ public :
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
 #if wxUSE_IMAGE
     virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp);
 #endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
@@ -2558,7 +2543,18 @@ wxGraphicsBitmap wxCairoRenderer::CreateBitmapFromImage(const wxImage& image)
     return bmp;
 }
 
+wxImage wxCairoRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
+{
+    ENSURE_LOADED_OR_RETURN(wxNullImage);
+
+    const wxCairoBitmapData* const
+        data = static_cast<wxCairoBitmapData*>(bmp.GetGraphicsData());
+
+    return data ? data->ConvertToImage() : wxNullImage;
+}
+
 #endif // wxUSE_IMAGE
+
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
 {

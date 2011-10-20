@@ -970,6 +970,13 @@ public:
     virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) = 0;
 
     /**
+       Creates a wxImage from a wxGraphicsBitmap.
+
+       This method is used by the more convenient wxGraphicsBitmap::ConvertToImage.
+    */
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) = 0;
+
+    /**
         Creates wxGraphicsBitmap from a native bitmap handle.
 
         @a bitmap meaning is platform-dependent. Currently it's a GDI+ @c

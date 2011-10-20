@@ -541,6 +541,7 @@ public :
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
 #if wxUSE_IMAGE
     virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp);
 #endif // wxUSE_IMAGE
 
     virtual wxGraphicsFont CreateFont( const wxFont& font,
@@ -1077,22 +1078,6 @@ wxGDIPlusBitmapData::~wxGDIPlusBitmapData()
     delete m_bitmap;
     delete m_helper;
 }
-
-// ----------------------------------------------------------------------------
-// wxGraphicsBitmap implementation
-// ----------------------------------------------------------------------------
-
-#if wxUSE_IMAGE
-
-wxImage wxGraphicsBitmap::ConvertToImage() const
-{
-    const wxGDIPlusBitmapData* const
-        data = static_cast<wxGDIPlusBitmapData*>(GetGraphicsData());
-
-    return data ? data->ConvertToImage() : wxNullImage;
-}
-
-#endif // wxUSE_IMAGE
 
 //-----------------------------------------------------------------------------
 // wxGDIPlusPath implementation
@@ -2194,7 +2179,18 @@ wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmapFromImage(const wxImage& image)
         return wxNullGraphicsBitmap;
 }
 
+
+wxImage wxGDIPlusRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
+{
+    ENSURE_LOADED_OR_RETURN(wxNullImage);
+    const wxGDIPlusBitmapData* const
+        data = static_cast<wxGDIPlusBitmapData*>(bmp.GetGraphicsData());
+
+    return data ? data->ConvertToImage() : wxNullImage;
+}
+
 #endif // wxUSE_IMAGE
+
 
 wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmapFromNativeBitmap( void *bitmap )
 {

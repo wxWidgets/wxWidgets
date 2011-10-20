@@ -842,6 +842,7 @@ public:
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
 #if wxUSE_IMAGE
     virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) = 0;
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) = 0;
 #endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
@@ -855,6 +856,16 @@ private:
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)
 };
 
-#endif
+
+#if wxUSE_IMAGE
+inline
+wxImage wxGraphicsBitmap::ConvertToImage() const
+{
+    wxGraphicsRenderer* renderer = GetRenderer();
+    return renderer ? renderer->CreateImageFromBitmap(*this) : wxNullImage;
+}
+#endif // wxUSE_IMAGE
+
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 #endif // _WX_GRAPHICS_H_

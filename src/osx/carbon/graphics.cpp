@@ -1001,17 +1001,6 @@ wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
     CGImageRelease( m_bitmap );
 }
 
-#if wxUSE_IMAGE
-
-wxImage wxGraphicsBitmap::ConvertToImage() const
-{
-    wxMacCoreGraphicsBitmapData* const
-        data = static_cast<wxMacCoreGraphicsBitmapData*>(GetRefData());
-
-    return data ? data->ConvertToImage() : wxNullImage;
-}
-
-#endif // wxUSE_IMAGE
 
 //
 // Graphics Matrix
@@ -2858,6 +2847,7 @@ public :
 
 #if wxUSE_IMAGE
     virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp);
 #endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
@@ -3047,6 +3037,14 @@ wxMacCoreGraphicsRenderer::CreateBitmapFromImage(const wxImage& image)
     // but it allows to have the same API as with Cairo backend where we can
     // convert wxImage to a Cairo surface directly, bypassing wxBitmap.
     return CreateBitmap(wxBitmap(image));
+}
+
+wxImage wxMacCoreGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
+{
+    wxMacCoreGraphicsBitmapData* const
+        data = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
+
+    return data ? data->ConvertToImage() : wxNullImage;
 }
 
 #endif // wxUSE_IMAGE
