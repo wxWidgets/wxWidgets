@@ -78,6 +78,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
             kind = wxITEM_CHECK;
         }
+
 #if wxUSE_MENUS
         // check whether we have dropdown tag inside
         wxMenu *menu = NULL; // menu for drop down items
@@ -137,6 +138,23 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
         if ( GetBool(wxT("disabled")) )
             m_toolbar->EnableTool(GetID(), false);
+
+        if ( GetBool(wxS("checked")) )
+        {
+            if ( kind == wxITEM_NORMAL )
+            {
+                ReportParamError
+                (
+                    "checked",
+                    "only <radio> nor <toggle> tools can be checked"
+                );
+            }
+            else
+            {
+                m_toolbar->ToggleTool(GetID(), true);
+            }
+        }
+
 #if wxUSE_MENUS
         if ( menu )
             tool->SetDropdownMenu(menu);

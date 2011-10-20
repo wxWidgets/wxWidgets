@@ -487,6 +487,7 @@ All (GUI):
 - Allow converting to and from wxGraphicsBitmap and wxImage directly.
 - Allow wxGraphicsFont creation without passing by wxFont.
 - Added wxDataViewCustomRenderer::ActivateCell().
+- Add "checked" property for toolbar tool elements in XRC.
 
 OSX:
 

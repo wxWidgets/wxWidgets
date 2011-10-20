@@ -1654,6 +1654,8 @@ properties:
     Help text shown in statusbar when the mouse is on the tool (default: none).}
 @row3col{disabled, @ref overview_xrcformat_type_bool,
      Is the tool initially disabled (default: 0)?}
+@row3col{checked, @ref overview_xrcformat_type_bool,
+     Is the tool initially checked (default: 0)? (only available since wxWidgets 2.9.3)}
 @endTable
 
 The presence of a @c dropdown property indicates that the tool is of type
