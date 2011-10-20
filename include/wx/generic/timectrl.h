@@ -55,29 +55,6 @@ protected:
 
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
-    // This is a really ugly hack but to compile this class in wxMSW we must
-    // define these functions even though they are never called because they're
-    // only used by the native implementation.
-#ifdef __WXMSW__
-    virtual wxLocaleInfo MSWGetFormat() const
-    {
-        wxFAIL_MSG( "Unreachable" );
-        return wxLOCALE_TIME_FMT;
-    }
-
-    virtual bool MSWAllowsNone() const
-    {
-        wxFAIL_MSG( "Unreachable" );
-        return false;
-    }
-
-    virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& WXUNUSED(dtch))
-    {
-        wxFAIL_MSG( "Unreachable" );
-        return false;
-    }
-#endif // __WXMSW__
-
 private:
     void Init();
 

@@ -47,15 +47,37 @@ protected:
                                  const wxValidator& validator,
                                  const wxString& name);
 
+    // Notice that the methods below must be overridden in all native MSW
+    // classes inheriting from this one but they can't be pure virtual because
+    // the generic implementations, not needing nor able to implement them, is
+    // also derived from this class currently. The real problem is, of course,
+    // this wrong class structure because the generic classes also inherit the
+    // wrong implementations of Set/GetValue() and DoGetBestSize() but as they
+    // override these methods anyhow, it does work -- but is definitely ugly
+    // and need to be changed (but how?) in the future.
+
     // Override to return the date/time format used by this control.
-    virtual wxLocaleInfo MSWGetFormat() const = 0;
+    virtual wxLocaleInfo MSWGetFormat() const /* = 0 */
+    {
+        wxFAIL_MSG( "Unreachable" );
+        return wxLOCALE_TIME_FMT;
+    }
 
     // Override to indicate whether we can have no date at all.
-    virtual bool MSWAllowsNone() const = 0;
+    virtual bool MSWAllowsNone() const /* = 0 */
+    {
+        wxFAIL_MSG( "Unreachable" );
+        return false;
+    }
 
     // Override to update m_date and send the event when the control contents
     // changes, return true if the event was handled.
-    virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& dtch) = 0;
+    virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& dtch) /* = 0 */
+    {
+        wxUnusedVar(dtch);
+        wxFAIL_MSG( "Unreachable" );
+        return false;
+    }
 
 
     // the date currently shown by the control, may be invalid
