@@ -26,12 +26,39 @@
 #if wxUSE_RICHTOOLTIP
 
 #ifndef WX_PRECOMP
+    #include "wx/treectrl.h"
 #endif // WX_PRECOMP
 
 #include "wx/private/richtooltip.h"
 #include "wx/generic/private/richtooltip.h"
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
+
+// Provide definitions missing from some compilers SDK headers.
+
+#ifndef TTI_NONE
+enum
+{
+    TTI_NONE,
+    TTI_INFO,
+    TTI_WARNING,
+    TTI_ERROR
+};
+#endif // !defined(TTI_XXX)
+
+#ifndef Edit_ShowBalloonTip
+struct EDITBALLOONTIP
+{
+    DWORD cbStruct;
+    LPCWSTR pszTitle;
+    LPCWSTR pszText;
+    int ttiIcon;
+};
+
+#define Edit_ShowBalloonTip(hwnd, pebt) \
+    (BOOL)::SendMessage((hwnd), 0x1503 /* EM_SHOWBALLOONTIP */, 0, (LPARAM)(pebt))
+
+#endif // !defined(Edit_ShowBalloonTip)
 
 // ============================================================================
 // wxRichToolTipMSWImpl: the real implementation.
