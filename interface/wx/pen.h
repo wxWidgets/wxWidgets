@@ -329,7 +329,7 @@ public:
     //@}
 
     /**
-        Associates an array of pointers to dashes (defined as @c char in X, @c DWORD under
+        Associates an array of dash values (defined as @c char in X, @c DWORD under
         Windows) with the pen.
 
         The array is not deallocated by wxPen, but neither must it be deallocated by
