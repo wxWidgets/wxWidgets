@@ -216,6 +216,20 @@ public:
         clicked unlike wxMessageBox() function.
     */
     virtual int ShowModal();
+
+
+    wxString GetCaption() const;
+    wxString GetMessage() const;
+    wxString GetExtendedMessage() const;
+    long GetMessageDialogStyle() const;
+    bool HasCustomLabels() const;
+    wxString GetYesLabel() const;
+    wxString GetNoLabel() const;
+    wxString GetOKLabel() const;
+    wxString GetCancelLabel() const;
+    wxString GetHelpLabel() const;
+    long GetEffectiveIcon() const;
+
 };
 
 
