@@ -1268,34 +1268,46 @@ public:
 
     /**
         Called by owning model.
+
+        @return Always return @true from this function in derived classes.
     */
     virtual bool ItemAdded(const wxDataViewItem& parent,
                            const wxDataViewItem& item) = 0;
 
     /**
         Called by owning model.
+
+        @return Always return @true from this function in derived classes.
     */
     virtual bool ItemChanged(const wxDataViewItem& item) = 0;
 
     /**
         Called by owning model.
+
+        @return Always return @true from this function in derived classes.
     */
     virtual bool ItemDeleted(const wxDataViewItem& parent,
                              const wxDataViewItem& item) = 0;
 
     /**
         Called by owning model.
+
+        @return Always return @true from this function in derived classes.
     */
     virtual bool ItemsAdded(const wxDataViewItem& parent,
                             const wxDataViewItemArray& items);
 
     /**
         Called by owning model.
+
+        @return Always return @true from this function in derived classes.
     */
     virtual bool ItemsChanged(const wxDataViewItemArray& items);
 
     /**
         Called by owning model.
+
+        @return Always return @true from this function in derived classes.
     */
     virtual bool ItemsDeleted(const wxDataViewItem& parent,
                               const wxDataViewItemArray& items);
@@ -1312,6 +1324,8 @@ public:
 
     /**
         Called by owning model.
+
+        @return Always return @true from this function in derived classes.
     */
     virtual bool ValueChanged(const wxDataViewItem& item, unsigned int col) = 0;
 };
