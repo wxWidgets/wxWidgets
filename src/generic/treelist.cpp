@@ -549,23 +549,17 @@ public:
     }
 
     // Event handlers toggling the items checkbox if it was clicked.
-    virtual bool Activate(const wxRect& WXUNUSED(cell),
-                          wxDataViewModel* model,
-                          const wxDataViewItem& item,
-                          unsigned int WXUNUSED(col))
+    virtual bool ActivateCell(const wxRect& WXUNUSED(cell),
+                              wxDataViewModel *model,
+                              const wxDataViewItem & item,
+                              unsigned int WXUNUSED(col),
+                              const wxMouseEvent *mouseEvent)
     {
-        static_cast<wxTreeListModel*>(model)->ToggleItem(item);
-        return true;
-    }
-
-    virtual bool LeftClick(const wxPoint& pos,
-                           const wxRect& WXUNUSED(cell),
-                           wxDataViewModel* model,
-                           const wxDataViewItem& item,
-                           unsigned int WXUNUSED(col))
-    {
-        if ( !wxRect(GetCheckSize()).Contains(pos) )
-            return false;
+        if ( mouseEvent )
+        {
+            if ( !wxRect(GetCheckSize()).Contains(mouseEvent->GetPosition()) )
+                return false;
+        }
 
         static_cast<wxTreeListModel*>(model)->ToggleItem(item);
         return true;
