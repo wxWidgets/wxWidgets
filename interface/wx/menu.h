@@ -394,7 +394,12 @@ public:
         @remarks Only exists on Mac, other platforms do not have this method. 
     */
     static wxMenuBar* MacGetCommonMenuBar();
-    
+
+    wxFrame *GetFrame() const;
+    bool IsAttached() const;
+    virtual void Attach(wxFrame *frame);
+    virtual void Detach();
+
 };
 
 
@@ -994,5 +999,18 @@ public:
         but the application may call it at other times if required.
     */
     void UpdateUI(wxEvtHandler* source = NULL);
+
+    
+    void SetInvokingWindow(wxWindow *win);
+    wxWindow *GetInvokingWindow() const;
+    wxWindow *GetWindow() const;
+    long GetStyle() const;
+    void SetParent(wxMenu *parent);
+    wxMenu *GetParent() const;
+
+    virtual void Attach(wxMenuBar *menubar);
+    virtual void Detach();
+    bool IsAttached() const;
+
 };
 

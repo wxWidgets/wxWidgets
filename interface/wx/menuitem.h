@@ -157,7 +157,7 @@ public:
         
         @onlyfor{wxmsw}
     */
-    wxColour GetBackgroundColour() const;
+    wxColour& GetBackgroundColour() const;
 
     /**
         Returns the checked or unchecked bitmap.
@@ -171,7 +171,7 @@ public:
         
         @onlyfor{wxmsw}
     */
-    wxFont GetFont() const;
+    wxFont& GetFont() const;
 
     /**
         Returns the help string associated with the menu item.
@@ -257,7 +257,7 @@ public:
         
         @onlyfor{wxmsw}
     */
-    wxColour GetTextColour() const;
+    wxColour& GetTextColour() const;
     
     //@}
     
