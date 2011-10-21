@@ -236,14 +236,7 @@ public:
                               wxDataViewModel *model,
                               const wxDataViewItem & item,
                               unsigned int col,
-                              const wxMouseEvent* mouseEvent)
-    {
-        // Compatibility code
-        if ( mouseEvent )
-            return LeftClick(mouseEvent->GetPosition(), cell, model, item, col);
-        else
-            return Activate(cell, model, item, col);
-    }
+                              const wxMouseEvent* mouseEvent);
 
     // Deprecated, use (and override) ActivateCell() instead
     wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
