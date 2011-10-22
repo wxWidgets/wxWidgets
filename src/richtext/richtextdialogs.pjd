@@ -1805,7 +1805,7 @@
                   <bool name="proxy-wxALIGN_RIGHT">0</bool>
                   <bool name="proxy-wxCHK_2STATE">0</bool>
                   <bool name="proxy-wxCHK_3STATE">1</bool>
-                  <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">0</bool>
+                  <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">1</bool>
                   <bool name="proxy-wxWANTS_CHARS">0</bool>
                   <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                   <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -1870,7 +1870,7 @@
                   <bool name="proxy-wxALIGN_RIGHT">0</bool>
                   <bool name="proxy-wxCHK_2STATE">0</bool>
                   <bool name="proxy-wxCHK_3STATE">1</bool>
-                  <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">0</bool>
+                  <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">1</bool>
                   <bool name="proxy-wxWANTS_CHARS">0</bool>
                   <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                   <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -1935,7 +1935,7 @@
                   <bool name="proxy-wxALIGN_RIGHT">0</bool>
                   <bool name="proxy-wxCHK_2STATE">0</bool>
                   <bool name="proxy-wxCHK_3STATE">1</bool>
-                  <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">0</bool>
+                  <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">1</bool>
                   <bool name="proxy-wxWANTS_CHARS">0</bool>
                   <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                   <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -2000,7 +2000,7 @@
                   <bool name="proxy-wxALIGN_RIGHT">0</bool>
                   <bool name="proxy-wxCHK_2STATE">0</bool>
                   <bool name="proxy-wxCHK_3STATE">1</bool>
-                  <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">0</bool>
+                  <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">1</bool>
                   <bool name="proxy-wxWANTS_CHARS">0</bool>
                   <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                   <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>

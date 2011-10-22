@@ -245,28 +245,28 @@ void wxRichTextFontPage::CreateControls()
     wxBoxSizer* itemBoxSizer30 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer3->Add(itemBoxSizer30, 0, wxGROW, 5);
 
-    m_strikethroughCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL, _("&Strikethrough"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+    m_strikethroughCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL, _("&Strikethrough"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
     m_strikethroughCtrl->SetValue(false);
     m_strikethroughCtrl->SetHelpText(_("Check to show a line through the text."));
     if (wxRichTextFontPage::ShowToolTips())
         m_strikethroughCtrl->SetToolTip(_("Check to show a line through the text."));
     itemBoxSizer30->Add(m_strikethroughCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_capitalsCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_CAPSCTRL, _("Ca&pitals"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+    m_capitalsCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_CAPSCTRL, _("Ca&pitals"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
     m_capitalsCtrl->SetValue(false);
     m_capitalsCtrl->SetHelpText(_("Check to show the text in capitals."));
     if (wxRichTextFontPage::ShowToolTips())
         m_capitalsCtrl->SetToolTip(_("Check to show the text in capitals."));
     itemBoxSizer30->Add(m_capitalsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_superscriptCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_SUPERSCRIPT, _("Supe&rscript"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+    m_superscriptCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_SUPERSCRIPT, _("Supe&rscript"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
     m_superscriptCtrl->SetValue(false);
     m_superscriptCtrl->SetHelpText(_("Check to show the text in superscript."));
     if (wxRichTextFontPage::ShowToolTips())
         m_superscriptCtrl->SetToolTip(_("Check to show the text in superscript."));
     itemBoxSizer30->Add(m_superscriptCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_subscriptCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_SUBSCRIPT, _("Subscrip&t"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
+    m_subscriptCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_SUBSCRIPT, _("Subscrip&t"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
     m_subscriptCtrl->SetValue(false);
     m_subscriptCtrl->SetHelpText(_("Check to show the text in subscript."));
     if (wxRichTextFontPage::ShowToolTips())
