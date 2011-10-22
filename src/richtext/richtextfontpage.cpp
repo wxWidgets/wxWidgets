@@ -400,6 +400,11 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         else
             attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
     }
+    else
+    {
+        attr->SetTextEffectFlags(attr->GetTextEffectFlags() & ~wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
+        attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
+    }
 
     if (m_capitalsCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
     {
@@ -409,6 +414,11 @@ bool wxRichTextFontPage::TransferDataFromWindow()
             attr->SetTextEffects(attr->GetTextEffects() | wxTEXT_ATTR_EFFECT_CAPITALS);
         else
             attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_CAPITALS);
+    }
+    else
+    {
+        attr->SetTextEffectFlags(attr->GetTextEffectFlags() & ~wxTEXT_ATTR_EFFECT_CAPITALS);
+        attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_CAPITALS);
     }
 
     if (m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
@@ -428,6 +438,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         // If they are undetermined, we don't want to include these flags in the text effects - the objects
         // should retain their original style.
         attr->SetTextEffectFlags(attr->GetTextEffectFlags() & ~(wxTEXT_ATTR_EFFECT_SUBSCRIPT|wxTEXT_ATTR_EFFECT_SUPERSCRIPT) );
+        attr->SetTextEffects(attr->GetTextEffects() & ~(wxTEXT_ATTR_EFFECT_SUBSCRIPT|wxTEXT_ATTR_EFFECT_SUPERSCRIPT) );
     }
 
     return true;
