@@ -1491,6 +1491,11 @@ public:
     virtual bool IsSelectionUnderlined();
 
     /**
+        Returns @true if all of the selection, or the current caret position, has the supplied wxTextAttrEffects flag(s).
+    */
+    virtual bool DoesSelectionHaveTextEffectFlag(int flag);
+
+    /**
         Returns @true if all of the selection is aligned according to the specified flag.
     */
     virtual bool IsSelectionAligned(wxTextAttrAlignment alignment);
@@ -1509,6 +1514,12 @@ public:
         Applies underline to the selection (undoable).
     */
     virtual bool ApplyUnderlineToSelection();
+
+    /**
+        Applies one or more wxTextAttrEffects flags to the selection (undoable).
+        If there's no selection, it's is applied to the current caret position
+    */
+    virtual bool ApplyTextEffectToSelection(int flags);
 
     /**
         Applies the given alignment to the selection (undoable).

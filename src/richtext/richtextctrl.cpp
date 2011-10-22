@@ -3510,7 +3510,7 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
     return true;
 }
 
-/// Is all of the selection bold?
+/// Is all of the selection, or the current caret position, bold?
 bool wxRichTextCtrl::IsSelectionBold()
 {
     if (HasSelection())
@@ -3540,7 +3540,7 @@ bool wxRichTextCtrl::IsSelectionBold()
     return false;
 }
 
-/// Is all of the selection italics?
+/// Is all of the selection, or the current caret position, italics?
 bool wxRichTextCtrl::IsSelectionItalics()
 {
     if (HasSelection())
@@ -3570,7 +3570,7 @@ bool wxRichTextCtrl::IsSelectionItalics()
     return false;
 }
 
-/// Is all of the selection underlined?
+/// Is all of the selection, or the current caret position, underlined?
 bool wxRichTextCtrl::IsSelectionUnderlined()
 {
     if (HasSelection())
@@ -3595,6 +3595,33 @@ bool wxRichTextCtrl::IsSelectionUnderlined()
             if (IsDefaultStyleShowing())
                 wxRichTextApplyStyle(attr, GetDefaultStyleEx());
             return attr.GetFontUnderlined();
+        }
+    }
+    return false;
+}
+
+/// Does all of the selection, or the current caret position, have this wxTextAttrEffects flag(s)?
+bool wxRichTextCtrl::DoesSelectionHaveTextEffectFlag(int flag)
+{
+    wxRichTextAttr attr;
+    attr.SetFlags(wxTEXT_ATTR_EFFECTS);
+    attr.SetTextEffectFlags(flag);
+    attr.SetTextEffects(flag);
+
+    if (HasSelection())
+    {
+        return HasCharacterAttributes(GetSelectionRange(), attr);
+    }
+    else
+    {
+        // If no selection, then we need to combine current style with default style
+        // to see what the effect would be if we started typing.
+        long pos = GetAdjustedCaretPosition(GetCaretPosition());
+        if (GetStyle(pos, attr))
+        {
+            if (IsDefaultStyleShowing())
+                wxRichTextApplyStyle(attr, GetDefaultStyleEx());
+            return (attr.GetTextEffectFlags() & flag);
         }
     }
     return false;
@@ -3642,6 +3669,28 @@ bool wxRichTextCtrl::ApplyUnderlineToSelection()
     wxRichTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_FONT_UNDERLINE);
     attr.SetFontUnderlined(!IsSelectionUnderlined());
+
+    if (HasSelection())
+        return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
+    else
+    {
+        wxRichTextAttr current = GetDefaultStyleEx();
+        current.Apply(attr);
+        SetAndShowDefaultStyle(current);
+    }
+    return true;
+}
+
+/// Apply the wxTextAttrEffects flag(s) to the selection, or the current caret position if there's no selection
+bool wxRichTextCtrl::ApplyTextEffectToSelection(int flags)
+{
+    wxRichTextAttr attr;
+    attr.SetFlags(wxTEXT_ATTR_EFFECTS);
+    attr.SetTextEffectFlags(flags);
+    if (!DoesSelectionHaveTextEffectFlag(flags))
+        attr.SetTextEffects(flags);
+     else
+        attr.SetTextEffects(attr.GetTextEffectFlags() & ~flags);
 
     if (HasSelection())
         return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);

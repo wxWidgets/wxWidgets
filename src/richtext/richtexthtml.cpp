@@ -234,6 +234,16 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxRichTextAttr& curre
 
     if (thisStyle.HasURL())
         str << wxT("<a href=\"") << thisStyle.GetURL() << wxT("\">");
+
+    if (thisStyle.HasTextEffects())
+    {
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
+            str << wxT("<del>");
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT)
+            str << wxT("<sup>");
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT)
+            str << wxT("<sub>");
+    }
 }
 
 void wxRichTextHTMLHandler::EndCharacterFormatting(const wxRichTextAttr& WXUNUSED(currentStyle), const wxRichTextAttr& thisStyle, const wxRichTextAttr& WXUNUSED(paraStyle), wxTextOutputStream& stream)
@@ -247,6 +257,16 @@ void wxRichTextHTMLHandler::EndCharacterFormatting(const wxRichTextAttr& WXUNUSE
         stream << wxT("</i>");
     if (thisStyle.GetFontWeight() == wxBOLD)
         stream << wxT("</b>");
+
+    if (thisStyle.HasTextEffects())
+    {
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
+            stream << wxT("</del>");
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT)
+            stream << wxT("</sup>");
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT)
+            stream << wxT("</sub>");
+    }
 
     if (m_font)
     {

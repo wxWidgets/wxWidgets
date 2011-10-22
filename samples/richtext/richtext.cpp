@@ -131,9 +131,16 @@ public:
     void OnItalic(wxCommandEvent& event);
     void OnUnderline(wxCommandEvent& event);
 
+    void OnStrikethrough(wxCommandEvent& event);
+    void OnSuperscript(wxCommandEvent& event);
+    void OnSubscript(wxCommandEvent& event);
+
     void OnUpdateBold(wxUpdateUIEvent& event);
     void OnUpdateItalic(wxUpdateUIEvent& event);
     void OnUpdateUnderline(wxUpdateUIEvent& event);
+    void OnUpdateStrikethrough(wxUpdateUIEvent& event);
+    void OnUpdateSuperscript(wxUpdateUIEvent& event);
+    void OnUpdateSubscript(wxUpdateUIEvent& event);
 
     void OnAlignLeft(wxCommandEvent& event);
     void OnAlignCentre(wxCommandEvent& event);
@@ -215,6 +222,9 @@ enum
     ID_FORMAT_BOLD = 100,
     ID_FORMAT_ITALIC,
     ID_FORMAT_UNDERLINE,
+    ID_FORMAT_STRIKETHROUGH,
+    ID_FORMAT_SUPERSCRIPT,
+    ID_FORMAT_SUBSCRIPT,
     ID_FORMAT_FONT,
     ID_FORMAT_IMAGE,
     ID_FORMAT_PARAGRAPH,
@@ -280,9 +290,17 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_FORMAT_ITALIC,  MyFrame::OnItalic)
     EVT_MENU(ID_FORMAT_UNDERLINE,  MyFrame::OnUnderline)
 
+    EVT_MENU(ID_FORMAT_STRIKETHROUGH,  MyFrame::OnStrikethrough)
+    EVT_MENU(ID_FORMAT_SUPERSCRIPT,  MyFrame::OnSuperscript)
+    EVT_MENU(ID_FORMAT_SUBSCRIPT,  MyFrame::OnSubscript)
+
     EVT_UPDATE_UI(ID_FORMAT_BOLD,  MyFrame::OnUpdateBold)
     EVT_UPDATE_UI(ID_FORMAT_ITALIC,  MyFrame::OnUpdateItalic)
     EVT_UPDATE_UI(ID_FORMAT_UNDERLINE,  MyFrame::OnUpdateUnderline)
+
+    EVT_UPDATE_UI(ID_FORMAT_STRIKETHROUGH,  MyFrame::OnUpdateStrikethrough)
+    EVT_UPDATE_UI(ID_FORMAT_SUPERSCRIPT,  MyFrame::OnUpdateSuperscript)
+    EVT_UPDATE_UI(ID_FORMAT_SUBSCRIPT,  MyFrame::OnUpdateSubscript)
 
     EVT_MENU(ID_FORMAT_ALIGN_LEFT,  MyFrame::OnAlignLeft)
     EVT_MENU(ID_FORMAT_ALIGN_CENTRE,  MyFrame::OnAlignCentre)
@@ -616,6 +634,10 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->AppendCheckItem(ID_FORMAT_ITALIC, _("&Italic\tCtrl+I"));
     formatMenu->AppendCheckItem(ID_FORMAT_UNDERLINE, _("&Underline\tCtrl+U"));
     formatMenu->AppendSeparator();
+    formatMenu->AppendCheckItem(ID_FORMAT_STRIKETHROUGH, _("Stri&kethrough"));
+    formatMenu->AppendCheckItem(ID_FORMAT_SUPERSCRIPT, _("Superscrip&t"));
+    formatMenu->AppendCheckItem(ID_FORMAT_SUBSCRIPT, _("Subscrip&t"));
+    formatMenu->AppendSeparator();
     formatMenu->AppendCheckItem(ID_FORMAT_ALIGN_LEFT, _("L&eft Align"));
     formatMenu->AppendCheckItem(ID_FORMAT_ALIGN_RIGHT, _("&Right Align"));
     formatMenu->AppendCheckItem(ID_FORMAT_ALIGN_CENTRE, _("&Centre"));
@@ -759,7 +781,6 @@ void MyFrame::WriteInitialText()
 
     r.Freeze();
 
-#if 1
     r.BeginParagraphSpacing(0, 20);
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
@@ -791,6 +812,7 @@ void MyFrame::WriteInitialText()
     imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_LEFT);
     r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
     r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, imageAttr);
+
     imageAttr.GetTextBoxAttr().GetTop().SetValue(200);
     imageAttr.GetTextBoxAttr().GetTop().SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
     imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_RIGHT);
@@ -953,14 +975,13 @@ void MyFrame::WriteInitialText()
     r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!\n"));
 
     r.EndParagraphSpacing();
-#endif
 #if 1
 
     {
         // Add a text box
 
         r.Newline();
-        
+
         wxRichTextAttr attr;
         attr.GetTextBoxAttr().GetMargins().GetLeft().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
         attr.GetTextBoxAttr().GetMargins().GetTop().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
@@ -985,7 +1006,7 @@ void MyFrame::WriteInitialText()
         // Add a table
 
         r.Newline();
-        
+
         wxRichTextAttr attr;
         attr.GetTextBoxAttr().GetMargins().GetLeft().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
         attr.GetTextBoxAttr().GetMargins().GetTop().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
@@ -1016,6 +1037,7 @@ void MyFrame::WriteInitialText()
         r.SetInsertionPointEnd();
     }
 #endif
+
     r.Thaw();
 
     r.EndSuppressUndo();
@@ -1164,6 +1186,21 @@ void MyFrame::OnUnderline(wxCommandEvent& WXUNUSED(event))
     m_richTextCtrl->ApplyUnderlineToSelection();
 }
 
+void MyFrame::OnStrikethrough(wxCommandEvent& WXUNUSED(event))
+{
+    m_richTextCtrl->ApplyTextEffectToSelection(wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
+}
+
+void MyFrame::OnSuperscript(wxCommandEvent& WXUNUSED(event))
+{
+    m_richTextCtrl->ApplyTextEffectToSelection(wxTEXT_ATTR_EFFECT_SUPERSCRIPT);
+}
+
+void MyFrame::OnSubscript(wxCommandEvent& WXUNUSED(event))
+{
+    m_richTextCtrl->ApplyTextEffectToSelection(wxTEXT_ATTR_EFFECT_SUBSCRIPT);
+}
+
 
 void MyFrame::OnUpdateBold(wxUpdateUIEvent& event)
 {
@@ -1178,6 +1215,21 @@ void MyFrame::OnUpdateItalic(wxUpdateUIEvent& event)
 void MyFrame::OnUpdateUnderline(wxUpdateUIEvent& event)
 {
     event.Check(m_richTextCtrl->IsSelectionUnderlined());
+}
+
+void MyFrame::OnUpdateStrikethrough(wxUpdateUIEvent& event)
+{
+    event.Check(m_richTextCtrl->DoesSelectionHaveTextEffectFlag(wxTEXT_ATTR_EFFECT_STRIKETHROUGH));
+}
+
+void MyFrame::OnUpdateSuperscript(wxUpdateUIEvent& event)
+{
+    event.Check(m_richTextCtrl->DoesSelectionHaveTextEffectFlag(wxTEXT_ATTR_EFFECT_SUPERSCRIPT));
+}
+
+void MyFrame::OnUpdateSubscript(wxUpdateUIEvent& event)
+{
+    event.Check(m_richTextCtrl->DoesSelectionHaveTextEffectFlag(wxTEXT_ATTR_EFFECT_SUBSCRIPT));
 }
 
 void MyFrame::OnAlignLeft(wxCommandEvent& WXUNUSED(event))

@@ -127,7 +127,8 @@ enum wxTextAttrBulletStyle
 /**
     Styles for wxTextAttr::SetTextEffects(). They can be combined together as a bitlist.
 
-    Of these, only wxTEXT_ATTR_EFFECT_CAPITALS and wxTEXT_ATTR_EFFECT_STRIKETHROUGH are implemented.
+    Of these, only wxTEXT_ATTR_EFFECT_CAPITALS, wxTEXT_ATTR_EFFECT_STRIKETHROUGH,
+    wxTEXT_ATTR_EFFECT_SUPERSCRIPT and wxTEXT_ATTR_EFFECT_SUBSCRIPT are implemented.
 */
 enum wxTextAttrEffects
 {
@@ -807,8 +808,8 @@ public:
         Sets the text effects, a bit list of styles.
         The ::wxTextAttrEffects enumeration values can be used.
 
-        Of these, only wxTEXT_ATTR_EFFECT_CAPITALS and wxTEXT_ATTR_EFFECT_STRIKETHROUGH
-        are implemented.
+        Of these, only wxTEXT_ATTR_EFFECT_CAPITALS, wxTEXT_ATTR_EFFECT_STRIKETHROUGH,
+        wxTEXT_ATTR_EFFECT_SUPERSCRIPT and wxTEXT_ATTR_EFFECT_SUBSCRIPT are implemented.
 
         wxTEXT_ATTR_EFFECT_CAPITALS capitalises text when displayed (leaving the case
         of the actual buffer text unchanged), and wxTEXT_ATTR_EFFECT_STRIKETHROUGH draws
