@@ -108,7 +108,11 @@ inline void wxFontSetPointSize(wxFont& font, int pointSize)
 {
     if (font.Ok() && font.GetPointSize() != pointSize)
     {
+#ifdef __WXMSW__
+        wxFont tempFont(* wxTheFontList->FindOrCreateFont(pointSize, font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding()));
+#else
         wxFont tempFont(pointSize, font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
+#endif
         font = tempFont;
     }
 }
@@ -117,7 +121,11 @@ inline void wxFontSetStyle(wxFont& font, int fontStyle)
 {
     if (font.Ok() && font.GetStyle() != fontStyle)
     {
+#ifdef __WXMSW__
+        wxFont tempFont(* wxTheFontList->FindOrCreateFont(font.GetPointSize(), font.GetFamily(), fontStyle, font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding()));
+#else
         wxFont tempFont(font.GetPointSize(), font.GetFamily(), fontStyle, font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
+#endif
         font = tempFont;
     }
 }
@@ -126,7 +134,11 @@ inline void wxFontSetWeight(wxFont& font, int fontWeight)
 {
     if (font.Ok() && font.GetWeight() != fontWeight)
     {
+#ifdef __WXMSW__
+        wxFont tempFont(* wxTheFontList->FindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), fontWeight, font.GetUnderlined(), font.GetFaceName(), font.GetEncoding()));
+#else
         wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), fontWeight, font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
+#endif
         font = tempFont;
     }
 }
@@ -135,7 +147,11 @@ inline void wxFontSetUnderlined(wxFont& font, bool underlined)
 {
     if (font.Ok() && font.GetUnderlined() != underlined)
     {
+#ifdef __WXMSW__
+        wxFont tempFont(* wxTheFontList->FindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), underlined, font.GetFaceName(), font.GetEncoding()));
+#else
         wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), underlined, font.GetFaceName(), font.GetEncoding());
+#endif
         font = tempFont;
     }
 }
@@ -144,7 +160,11 @@ inline void wxFontSetFaceName(wxFont& font, const wxString& faceName)
 {
     if (font.Ok() && font.GetFaceName() != faceName)
     {
+#ifdef __WXMSW__
+        wxFont tempFont(* wxTheFontList->FindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), faceName, font.GetEncoding()));
+#else
         wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), faceName, font.GetEncoding());
+#endif
         font = tempFont;
     }
 }
@@ -8110,7 +8130,11 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
 
         int oldFlags = destStyle.GetFlags();
 
+#ifdef __WXMSW__
+        destStyle.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
+#else
         destStyle.SetFont(wxFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
+#endif
         destStyle.SetFlags(oldFlags);
     }
 
@@ -8216,8 +8240,13 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
     // it recreates the font each time.
     if (((style.GetFlags() & (wxTEXT_ATTR_FONT)) == (wxTEXT_ATTR_FONT)) && !compareWith)
     {
+#ifdef __WXMSW__
+        destStyle.SetFont(* wxTheFontList->FindOrCreateFont(style.GetFontSize(), destStyle.GetFont().Ok() ? destStyle.GetFont().GetFamily() : wxDEFAULT,
+            style.GetFontStyle(), style.GetFontWeight(), style.GetFontUnderlined(), style.GetFontFaceName()));
+#else
         destStyle.SetFont(wxFont(style.GetFontSize(), destStyle.GetFont().Ok() ? destStyle.GetFont().GetFamily() : wxDEFAULT,
             style.GetFontStyle(), style.GetFontWeight(), style.GetFontUnderlined(), style.GetFontFaceName()));
+#endif
     }
     else if (style.GetFlags() & (wxTEXT_ATTR_FONT))
     {
@@ -8301,7 +8330,11 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             }
         }
 
+#ifdef __WXMSW__
+        wxFont font(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
+#else
         wxFont font(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName);
+#endif
 
         if (font != destStyle.GetFont())
         {
@@ -8776,7 +8809,11 @@ bool wxRichTextAttr::operator== (const wxRichTextAttr& attr) const
 // Create font from font attributes.
 wxFont wxRichTextAttr::CreateFont() const
 {
+#ifdef __WXMSW__
+    wxFont font(* wxTheFontList->FindOrCreateFont(m_fontSize, wxDEFAULT, m_fontStyle, m_fontWeight, m_fontUnderlined, m_fontFaceName));
+#else
     wxFont font(m_fontSize, wxDEFAULT, m_fontStyle, m_fontWeight, m_fontUnderlined, m_fontFaceName);
+#endif
     return font;
 }
 
