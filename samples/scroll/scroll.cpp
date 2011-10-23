@@ -1314,7 +1314,7 @@ void MyAutoScrollingWindow::OnMouseMove(wxMouseEvent& event)
         // set the new cursor position
         m_cursor = DeviceCoordsToGraphicalChars(event.GetPosition());
         // draw/erase selection
-        // MyRefresh();
+        MyRefresh();
         // capture mouse to activate auto-scrolling
         if (!HasCapture()) {
             CaptureMouse();
