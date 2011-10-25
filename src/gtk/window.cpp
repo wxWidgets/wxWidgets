@@ -1883,6 +1883,16 @@ gtk_window_realized_callback(GtkWidget* WXUNUSED(widget), wxWindow* win)
     win->GTKHandleRealized();
 }
 
+//-----------------------------------------------------------------------------
+// "unrealize" from m_wxwindow
+//-----------------------------------------------------------------------------
+
+static void unrealize(GtkWidget*, wxWindowGTK* win)
+{
+    if (win->m_imData)
+        gtk_im_context_set_client_window(win->m_imData->context, NULL);
+}
+
 void wxWindowGTK::GTKHandleRealized()
 {
     if (m_imData)
@@ -2270,6 +2280,7 @@ wxWindowGTK::~wxWindowGTK()
 
     // delete before the widgets to avoid a crash on solaris
     delete m_imData;
+    m_imData = NULL;
 
     // avoid problem with GTK+ 2.18 where a frozen window causes the whole
     // TLW to be frozen, and if the window is then destroyed, nothing ever
@@ -2333,6 +2344,7 @@ void wxWindowGTK::PostCreation()
 
         g_signal_connect (m_imData->context, "commit",
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
+        g_signal_connect(m_wxwindow, "unrealize", G_CALLBACK(unrealize), this);
     }
 
     // focus handling
