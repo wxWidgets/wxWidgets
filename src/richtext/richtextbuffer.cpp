@@ -47,6 +47,13 @@ WX_DEFINE_LIST(wxRichTextLineList)
 // Switch off if the platform doesn't like it for some reason
 #define wxRICHTEXT_USE_OPTIMIZED_DRAWING 1
 
+// Switch off if the platform doesn't like resuse of fonts
+#ifdef __WXGTK__
+#define wxRICHTEXT_USE_OPTIMIZED_FONTS 0
+#else
+#define wxRICHTEXT_USE_OPTIMIZED_FONTS 1
+#endif
+
 const wxChar wxRichTextLineBreakChar = (wxChar) 29;
 
 // Use GetPartialTextExtents for platforms that support it natively
@@ -58,6 +65,217 @@ wxArrayInt g_GlobalPartialTextExtents;
 bool       g_UseGlobalPartialTextExtents = false;
 #endif
 
+#if wxRICHTEXT_USE_OPTIMIZED_FONTS
+
+/*
+ * wxRichTextFontTableInternal
+ * Manages quick access to a pool of fonts for rendering rich text.
+ * Maintaining a list of fonts means that costly creation of the same font
+ * over and over again does not happen. On Windows this can cause exhaustion of GDI memory.
+ */
+
+/**
+    @class wxRichTextFontTableInternal
+    Manages quick access to a pool of fonts for rendering rich text.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextBuffer, wxRichTextCtrl
+*/
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextFontTableInternal: public wxObject
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxRichTextFontTableInternal();
+
+    /**
+        Copy constructor.
+    */
+    wxRichTextFontTableInternal(const wxRichTextFontTableInternal& table);
+    virtual ~wxRichTextFontTableInternal();
+
+    /**
+        Returns @true if the font table is valid.
+    */
+    bool IsOk() const { return m_refData != NULL; }
+
+    /**
+        Finds a font for the given attribute object.
+    */
+    wxFont FindFont(const wxRichTextAttr& fontSpec);
+
+    wxFont FindFont(int pointSize, int family, int style, int weight,
+                             bool underline = false,
+                             const wxString& face = wxEmptyString,
+                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+    /**
+        Clears the font table.
+    */
+    void Clear();
+
+    /**
+        Assignment operator.
+    */
+    void operator= (const wxRichTextFontTableInternal& table);
+
+    /**
+        Equality operator.
+    */
+    bool operator == (const wxRichTextFontTableInternal& table) const;
+
+    /**
+        Inequality operator.
+    */
+    bool operator != (const wxRichTextFontTableInternal& table) const { return !(*this == table); }
+
+protected:
+
+    DECLARE_DYNAMIC_CLASS(wxRichTextFontTableInternal)
+};
+
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxFont, wxRichTextFontTableInternalHashMap, class WXDLLIMPEXP_RICHTEXT);
+
+class wxRichTextFontTableInternalData: public wxObjectRefData
+{
+public:
+    wxRichTextFontTableInternalData() {}
+
+    wxFont FindFont(const wxRichTextAttr& fontSpec);
+    wxFont FindFont(int pointSize, int family, int style, int weight,
+                             bool underline = false,
+                             const wxString& face = wxEmptyString,
+                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    wxRichTextFontTableInternalHashMap  m_hashMap;
+};
+
+wxFont wxRichTextFontTableInternalData::FindFont(const wxRichTextAttr& fontSpec)
+{
+    wxString facename(fontSpec.GetFontFaceName());
+    wxString spec(wxString::Format(wxT("%d-%d-%d-%d-%s-%d"), fontSpec.GetFontSize(), fontSpec.GetFontStyle(), fontSpec.GetFontWeight(), (int) fontSpec.GetFontUnderlined(), facename.c_str(), (int) wxFONTENCODING_DEFAULT));
+    wxRichTextFontTableInternalHashMap::iterator entry = m_hashMap.find(spec);
+
+    if ( entry == m_hashMap.end() )
+    {
+        wxFont font(fontSpec.GetFontSize(), wxDEFAULT, fontSpec.GetFontStyle(), fontSpec.GetFontWeight(), fontSpec.GetFontUnderlined(), facename.c_str());
+        m_hashMap[spec] = font;
+        return font;
+    }
+    else
+    {
+        return entry->second;
+    }
+}
+
+wxFont wxRichTextFontTableInternalData::FindFont(int pointSize, int WXUNUSED(family), int style, int weight,
+                             bool underline, const wxString& face, wxFontEncoding encoding)
+{
+    wxString spec(wxString::Format(wxT("%d-%d-%d-%d-%s-%d"), pointSize, style, weight, underline, face.c_str(), (int) encoding));
+    wxRichTextFontTableInternalHashMap::iterator entry = m_hashMap.find(spec);
+
+    if ( entry == m_hashMap.end() )
+    {
+        wxFont font(pointSize, wxDEFAULT, style, weight, underline, face.c_str(), encoding);
+        m_hashMap[spec] = font;
+        return font;
+    }
+    else
+    {
+        return entry->second;
+    }
+}
+
+IMPLEMENT_DYNAMIC_CLASS(wxRichTextFontTableInternal, wxObject)
+
+wxRichTextFontTableInternal* gs_RichTextFontTable = NULL;
+
+wxRichTextFontTableInternal::wxRichTextFontTableInternal()
+{
+    m_refData = new wxRichTextFontTableInternalData;
+}
+
+wxRichTextFontTableInternal::wxRichTextFontTableInternal(const wxRichTextFontTableInternal& table)
+    : wxObject()
+{
+    (*this) = table;
+}
+
+wxRichTextFontTableInternal::~wxRichTextFontTableInternal()
+{
+    UnRef();
+}
+
+bool wxRichTextFontTableInternal::operator == (const wxRichTextFontTableInternal& table) const
+{
+    return (m_refData == table.m_refData);
+}
+
+void wxRichTextFontTableInternal::operator= (const wxRichTextFontTableInternal& table)
+{
+    Ref(table);
+}
+
+wxFont wxRichTextFontTableInternal::FindFont(const wxRichTextAttr& fontSpec)
+{
+    wxRichTextFontTableInternalData* data = (wxRichTextFontTableInternalData*) m_refData;
+    if (data)
+        return data->FindFont(fontSpec);
+    else
+        return wxFont();
+}
+
+wxFont wxRichTextFontTableInternal::FindFont(int pointSize, int family, int style, int weight,
+                             bool underline, const wxString& face, wxFontEncoding encoding)
+{
+    wxRichTextFontTableInternalData* data = (wxRichTextFontTableInternalData*) m_refData;
+    if (data)
+        return data->FindFont(pointSize, family, style, weight, underline, face, encoding);
+    else
+        return wxFont();
+}
+
+void wxRichTextFontTableInternal::Clear()
+{
+    wxRichTextFontTableInternalData* data = (wxRichTextFontTableInternalData*) m_refData;
+    if (data)
+        data->m_hashMap.clear();
+}
+
+#endif
+    // wxRICHTEXT_USE_OPTIMIZED_FONTS
+
+// If font optimization is on, find the font in the table or add a font to the table.
+wxFont wxRichTextFindOrCreateFont(int pointSize, int family, int style, int weight,
+                             bool underline = false,
+                             const wxString& face = wxEmptyString,
+                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+{
+#if wxRICHTEXT_USE_OPTIMIZED_FONTS
+    if (gs_RichTextFontTable)
+    {
+        return gs_RichTextFontTable->FindFont(pointSize, family, style, weight, underline, face, encoding);
+    }
+    else
+        return wxFont();
+#else
+    return wxFont(pointSize, family, style, weight, underline, face, encoding);
+#endif
+}
+
+// Clears the font table.
+void wxRichTextClearFontTable()
+{
+#if wxRICHTEXT_USE_OPTIMIZED_FONTS
+    if (gs_RichTextFontTable)
+    {
+        gs_RichTextFontTable->Clear();
+    }
+#endif
+}
 
 // Helpers for efficiency
 
@@ -108,12 +326,7 @@ inline void wxFontSetPointSize(wxFont& font, int pointSize)
 {
     if (font.Ok() && font.GetPointSize() != pointSize)
     {
-#ifdef __WXMSW__
-        wxFont tempFont(* wxTheFontList->FindOrCreateFont(pointSize, font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding()));
-#else
-        wxFont tempFont(pointSize, font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
-#endif
-        font = tempFont;
+        font = wxRichTextFindOrCreateFont(pointSize, font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
     }
 }
 
@@ -121,12 +334,7 @@ inline void wxFontSetStyle(wxFont& font, int fontStyle)
 {
     if (font.Ok() && font.GetStyle() != fontStyle)
     {
-#ifdef __WXMSW__
-        wxFont tempFont(* wxTheFontList->FindOrCreateFont(font.GetPointSize(), font.GetFamily(), fontStyle, font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding()));
-#else
-        wxFont tempFont(font.GetPointSize(), font.GetFamily(), fontStyle, font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
-#endif
-        font = tempFont;
+        font = wxRichTextFindOrCreateFont(font.GetPointSize(), font.GetFamily(), fontStyle, font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
     }
 }
 
@@ -134,12 +342,7 @@ inline void wxFontSetWeight(wxFont& font, int fontWeight)
 {
     if (font.Ok() && font.GetWeight() != fontWeight)
     {
-#ifdef __WXMSW__
-        wxFont tempFont(* wxTheFontList->FindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), fontWeight, font.GetUnderlined(), font.GetFaceName(), font.GetEncoding()));
-#else
-        wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), fontWeight, font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
-#endif
-        font = tempFont;
+        font = wxRichTextFindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), fontWeight, font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
     }
 }
 
@@ -147,12 +350,7 @@ inline void wxFontSetUnderlined(wxFont& font, bool underlined)
 {
     if (font.Ok() && font.GetUnderlined() != underlined)
     {
-#ifdef __WXMSW__
-        wxFont tempFont(* wxTheFontList->FindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), underlined, font.GetFaceName(), font.GetEncoding()));
-#else
-        wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), underlined, font.GetFaceName(), font.GetEncoding());
-#endif
-        font = tempFont;
+        font = wxRichTextFindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), underlined, font.GetFaceName(), font.GetEncoding());
     }
 }
 
@@ -160,12 +358,7 @@ inline void wxFontSetFaceName(wxFont& font, const wxString& faceName)
 {
     if (font.Ok() && font.GetFaceName() != faceName)
     {
-#ifdef __WXMSW__
-        wxFont tempFont(* wxTheFontList->FindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), faceName, font.GetEncoding()));
-#else
-        wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), faceName, font.GetEncoding());
-#endif
-        font = tempFont;
+        font = wxRichTextFindOrCreateFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), faceName, font.GetEncoding());
     }
 }
 
@@ -7010,9 +7203,9 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
         wxFont font;
         if ((attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_SYMBOL) && !attr.GetBulletFont().IsEmpty() && attr.GetFont().Ok())
         {
-            font = (*wxTheFontList->FindOrCreateFont(attr.GetFont().GetPointSize(), attr.GetFont().GetFamily(),
+            font = wxRichTextFindOrCreateFont(attr.GetFont().GetPointSize(), attr.GetFont().GetFamily(),
                         attr.GetFont().GetStyle(), attr.GetFont().GetWeight(), attr.GetFont().GetUnderlined(),
-                        attr.GetBulletFont()));
+                        attr.GetBulletFont());
         }
         else if (attr.GetFont().Ok())
             font = attr.GetFont();
@@ -7084,6 +7277,10 @@ public:
         wxRichTextBuffer::SetRenderer(new wxRichTextStdRenderer);
         wxRichTextBuffer::InitStandardHandlers();
         wxRichTextParagraph::InitDefaultTabs();
+
+#if wxRICHTEXT_USE_OPTIMIZED_FONTS
+        gs_RichTextFontTable = new wxRichTextFontTableInternal;
+#endif
         return true;
     }
     void OnExit()
@@ -7093,6 +7290,11 @@ public:
         wxRichTextParagraph::ClearDefaultTabs();
         wxRichTextCtrl::ClearAvailableFontNames();
         wxRichTextBuffer::SetRenderer(NULL);
+
+#if wxRICHTEXT_USE_OPTIMIZED_FONTS
+        delete gs_RichTextFontTable;
+        gs_RichTextFontTable = NULL;
+#endif
     }
 };
 
@@ -8130,11 +8332,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
 
         int oldFlags = destStyle.GetFlags();
 
-#ifdef __WXMSW__
-        destStyle.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
-#else
-        destStyle.SetFont(wxFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
-#endif
+        destStyle.SetFont(wxRichTextFindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
         destStyle.SetFlags(oldFlags);
     }
 
@@ -8240,13 +8438,8 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
     // it recreates the font each time.
     if (((style.GetFlags() & (wxTEXT_ATTR_FONT)) == (wxTEXT_ATTR_FONT)) && !compareWith)
     {
-#ifdef __WXMSW__
-        destStyle.SetFont(* wxTheFontList->FindOrCreateFont(style.GetFontSize(), destStyle.GetFont().Ok() ? destStyle.GetFont().GetFamily() : wxDEFAULT,
+        destStyle.SetFont(wxRichTextFindOrCreateFont(style.GetFontSize(), destStyle.GetFont().Ok() ? destStyle.GetFont().GetFamily() : wxDEFAULT,
             style.GetFontStyle(), style.GetFontWeight(), style.GetFontUnderlined(), style.GetFontFaceName()));
-#else
-        destStyle.SetFont(wxFont(style.GetFontSize(), destStyle.GetFont().Ok() ? destStyle.GetFont().GetFamily() : wxDEFAULT,
-            style.GetFontStyle(), style.GetFontWeight(), style.GetFontUnderlined(), style.GetFontFaceName()));
-#endif
     }
     else if (style.GetFlags() & (wxTEXT_ATTR_FONT))
     {
@@ -8330,11 +8523,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             }
         }
 
-#ifdef __WXMSW__
-        wxFont font(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
-#else
-        wxFont font(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName);
-#endif
+        wxFont font(wxRichTextFindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
 
         if (font != destStyle.GetFont())
         {
@@ -8809,11 +8998,7 @@ bool wxRichTextAttr::operator== (const wxRichTextAttr& attr) const
 // Create font from font attributes.
 wxFont wxRichTextAttr::CreateFont() const
 {
-#ifdef __WXMSW__
-    wxFont font(* wxTheFontList->FindOrCreateFont(m_fontSize, wxDEFAULT, m_fontStyle, m_fontWeight, m_fontUnderlined, m_fontFaceName));
-#else
-    wxFont font(m_fontSize, wxDEFAULT, m_fontStyle, m_fontWeight, m_fontUnderlined, m_fontFaceName);
-#endif
+    wxFont font(wxRichTextFindOrCreateFont(m_fontSize, wxDEFAULT, m_fontStyle, m_fontWeight, m_fontUnderlined, m_fontFaceName));
     return font;
 }
 

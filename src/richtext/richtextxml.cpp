@@ -33,6 +33,11 @@
 #include "wx/tokenzr.h"
 #include "wx/xml/xml.h"
 
+extern wxFont wxRichTextFindOrCreateFont(int pointSize, int family, int style, int weight,
+                             bool underline = false,
+                             const wxString& face = wxEmptyString,
+                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler)
 
 #if wxUSE_STREAMS
@@ -1193,11 +1198,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
     // FindOrCreateFont is an expensive operation on GTK+ (because pango functions are called)
     // so only use it on other platforms
     if (attr.HasFlag(wxTEXT_ATTR_FONT))
-#ifdef __WXGTK__
-        attr.SetFont(wxFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
-#else
-        attr.SetFont(* wxTheFontList->FindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
-#endif
+        attr.SetFont(wxRichTextFindOrCreateFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFacename));
 
     // Restore correct font flags
     attr.SetFlags(fontFlags);
