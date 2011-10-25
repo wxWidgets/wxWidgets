@@ -352,8 +352,6 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     if ( !client )
         return NULL;
 
-    gtk_widget_unrealize( client->m_widget );
-
     // we don't need to unparent the client->m_widget; GTK+ will do
     // that for us (and will throw a warning if we do it!)
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
