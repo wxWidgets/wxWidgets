@@ -716,7 +716,6 @@
 		EDD5725CF41336EFA7FB3009 /* framecmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A54B80C17F823CB5900AD2E8 /* framecmn.cpp */; };
 		EDD92822EBD93E86AE5A2ED0 /* slidercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8072CA67D19346ABF4D465F /* slidercmn.cpp */; };
 		EE0EA850822E35F596B5EBBA /* artprov.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29387393C07C39DB8FF1663B /* artprov.cpp */; };
-		EE9194D6C4C138BF9DAB8633 /* panelg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9C35AF6C39A53DAF994CAC97 /* panelg.cpp */; };
 		EEB0B28903693C7E9D07192F /* glcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E08A51FA8D8A361681B07295 /* glcmn.cpp */; };
 		F016C51053373E658ED4C9A9 /* helpext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF376BC55EA73F5FB7328142 /* helpext.cpp */; };
 		F07D84D124F23E7FA11CF148 /* extended.c in Sources */ = {isa = PBXBuildFile; fileRef = 033B94A9AC8A3370A794503F /* extended.c */; };
@@ -1228,7 +1227,6 @@
 		9AFCEB1FFA3037458F132CAB /* xh_mdi.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_mdi.cpp; path = ../../src/xrc/xh_mdi.cpp; sourceTree = "<group>"; };
 		9B862D1027C4367BBF44420F /* slider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = slider.mm; path = ../../src/osx/iphone/slider.mm; sourceTree = "<group>"; };
 		9BB9CE48AE853C47A1D157AE /* ScintillaBase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScintillaBase.cxx; path = ../../src/stc/scintilla/src/ScintillaBase.cxx; sourceTree = "<group>"; };
-		9C35AF6C39A53DAF994CAC97 /* panelg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = panelg.cpp; path = ../../src/generic/panelg.cpp; sourceTree = "<group>"; };
 		9C87B071E3593A889704F512 /* statbar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = statbar.cpp; path = ../../src/common/statbar.cpp; sourceTree = "<group>"; };
 		9CAA325362C73AC8BE20FAA7 /* pngpread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pngpread.c; path = ../../src/png/pngpread.c; sourceTree = "<group>"; };
 		9CC7C6FFD67233788EEDFC5E /* LexYAML.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexYAML.cxx; path = ../../src/stc/scintilla/src/LexYAML.cxx; sourceTree = "<group>"; };
@@ -1945,7 +1943,6 @@
 				D4FC6F0AB2AC34D2B26F8ED8 /* markuptext.cpp */,
 				A1CB6A4171D4343BB0A9858A /* msgdlgg.cpp */,
 				69A7F3F58B1E3812A055C84F /* numdlgg.cpp */,
-				9C35AF6C39A53DAF994CAC97 /* panelg.cpp */,
 				BEA102FF0FFC33DEAEF2FE14 /* progdlgg.cpp */,
 				AF76670146413EEFA005206A /* printps.cpp */,
 				49CABA38E78D34DFA260AA06 /* renderg.cpp */,
@@ -3272,7 +3269,6 @@
 				633DD2E870263F42A8DBF9BF /* markuptext.cpp in Sources */,
 				745C39E90E8C3C08A887B51C /* msgdlgg.cpp in Sources */,
 				1AF2B2346C9639DAA4D15F30 /* numdlgg.cpp in Sources */,
-				EE9194D6C4C138BF9DAB8633 /* panelg.cpp in Sources */,
 				4D0BA8B9F72C3C31BC170CE2 /* progdlgg.cpp in Sources */,
 				DEB35F871F8E3B90AD207AEE /* printps.cpp in Sources */,
 				96927C5A21FD3ACF936CDF6C /* renderg.cpp in Sources */,
