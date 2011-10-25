@@ -112,6 +112,10 @@ CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
     return wxCFEventLoop::CFGetCurrentRunLoop();
 }
 
+void wxGUIEventLoop::WakeUp()
+{
+    return wxCFEventLoop::WakeUp();
+}
 
 // TODO move into a evtloop_osx.cpp
 
