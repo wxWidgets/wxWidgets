@@ -55,7 +55,7 @@ wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p )
 
 @end
 
-@interface wxUIContentView : wxUIView
+@interface wxUIContentView : UIView
 {
     wxUIContentViewController* _controller;
 }
@@ -372,6 +372,16 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     return _controller;
 }
 
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXIPhoneClassAddWXMethods( self );
+    }
+}
+ 
 @end
 
 @implementation wxUIContentViewController
