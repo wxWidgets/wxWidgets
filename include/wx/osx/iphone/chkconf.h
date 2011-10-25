@@ -66,6 +66,11 @@
 #define wxUSE_DATAVIEWCTRL 0
 #endif
 
+#if wxUSE_TREELISTCTRL
+#undef wxUSE_TREELISTCTRL
+#define wxUSE_TREELISTCTRL 0
+#endif
+
 #if wxUSE_DRAG_AND_DROP
 #undef wxUSE_DRAG_AND_DROP
 #define wxUSE_DRAG_AND_DROP 0
