@@ -118,6 +118,7 @@ public:
 
     void OnActivate( wxActivateEvent& event );
     void OnMenuHighlight( wxMenuEvent& event );
+    virtual void GTKHandleRealized();
 
     wxMenuBar         *m_menuBar;
     bool               m_justInserted;

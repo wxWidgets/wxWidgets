@@ -294,6 +294,12 @@ wxMDIChildFrame::~wxMDIChildFrame()
         gtk_widget_queue_draw(m_parent->m_widget);
 }
 
+void wxMDIChildFrame::GTKHandleRealized()
+{
+    // since m_widget is not a GtkWindow, must bypass wxTopLevelWindowGTK
+    wxTopLevelWindowBase::GTKHandleRealized();
+}
+
 void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 {
     wxASSERT_MSG( m_menuBar == NULL, "Only one menubar allowed" );
