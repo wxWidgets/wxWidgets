@@ -89,6 +89,9 @@ public:
     void OnRadioButton( wxCommandEvent& event ) ;
 
 protected:
+    // resolve ambiguity in base classes
+    virtual wxBorder GetDefaultBorder() const { return wxRadioBoxBase::GetDefaultBorder(); }
+
     wxRadioButton    *m_radioButtonCycle;
 
     unsigned int      m_noItems;
