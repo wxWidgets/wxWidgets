@@ -47,7 +47,7 @@ WX_DEFINE_LIST(wxRichTextLineList)
 // Switch off if the platform doesn't like it for some reason
 #define wxRICHTEXT_USE_OPTIMIZED_DRAWING 1
 
-// Switch off if the platform doesn't like resuse of fonts
+// Switch off if the platform doesn't like reuse of fonts
 #ifdef __WXGTK__
 #define wxRICHTEXT_USE_OPTIMIZED_FONTS 0
 #else
