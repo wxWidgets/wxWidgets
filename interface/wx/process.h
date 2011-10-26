@@ -321,3 +321,6 @@ public:
     int GetPid();
 };
 
+
+wxEventType wxEVT_END_PROCESS;
+

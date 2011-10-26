@@ -181,7 +181,7 @@ public:
     /**
         Initializes the object using given values.
     */
-    wxPlatformInfo(wxPortId pid = wxPORT_UNKNOWN,
+    wxPlatformInfo(wxPortId pid,
                    int tkMajor = -1,
                    int tkMinor = -1,
                    wxOperatingSystemId id = wxOS_UNKNOWN,

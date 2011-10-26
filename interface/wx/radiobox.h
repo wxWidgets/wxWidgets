@@ -326,4 +326,13 @@ public:
 
     */
     virtual bool Show(unsigned int item, bool show = true);
+
+
+    // pure virtuals that have implementations here
+    virtual unsigned int GetCount() const;
+    virtual wxString GetString(unsigned int n) const;
+    virtual void SetString(unsigned int n, const wxString& string);
+    virtual void SetSelection(int n);
+    virtual int GetSelection() const;
+
 };
