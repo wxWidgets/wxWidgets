@@ -45,13 +45,15 @@ ac_cv_func_which_gethostbyname_r=unknown
 # assuming an implicit prototype. In which case, we're out of luck.
 #
 AC_COMPILE_IFELSE(
-    AC_LANG_PROGRAM(
-	[[#include <netdb.h>]],
-	[[
-	    char *name = "www.gnu.org";
-	    (void)gethostbyname_r(name) /* ; */
-	]]),
-    ac_cv_func_which_gethostbyname_r=no)
+    [AC_LANG_PROGRAM(
+        [[#include <netdb.h>]],
+        [[
+            char *name = "www.gnu.org";
+            (void)gethostbyname_r(name) /* ; */
+        ]]
+    )],
+    ac_cv_func_which_gethostbyname_r=no
+    )
 
 #
 # SIX ARGUMENTS
@@ -61,17 +63,19 @@ AC_COMPILE_IFELSE(
 if test "$ac_cv_func_which_gethostbyname_r" = "unknown"; then
 
 AC_COMPILE_IFELSE(
-    AC_LANG_PROGRAM(
-	[[#include <netdb.h>]],
-	[[
-	    char *name = "www.gnu.org";
-	    struct hostent ret, *retp;
-	    char buf@<:@1024@:>@;
-	    int buflen = 1024;
-	    int my_h_errno;
-	    (void)gethostbyname_r(name, &ret, buf, buflen, &retp, &my_h_errno) /* ; */
-	]]),
-    ac_cv_func_which_gethostbyname_r=six)
+    [AC_LANG_PROGRAM(
+        [[#include <netdb.h>]],
+        [[
+            char *name = "www.gnu.org";
+            struct hostent ret, *retp;
+            char buf@<:@1024@:>@;
+            int buflen = 1024;
+            int my_h_errno;
+            (void)gethostbyname_r(name, &ret, buf, buflen, &retp, &my_h_errno) /* ; */
+        ]]
+    )],
+    ac_cv_func_which_gethostbyname_r=six
+    )
 
 fi
 
@@ -83,17 +87,19 @@ fi
 if test "$ac_cv_func_which_gethostbyname_r" = "unknown"; then
 
 AC_COMPILE_IFELSE(
-    AC_LANG_PROGRAM(
+    [AC_LANG_PROGRAM(
 	[[#include <netdb.h>]],
-	[[
-	    char *name = "www.gnu.org";
-	    struct hostent ret;
-	    char buf@<:@1024@:>@;
-	    int buflen = 1024;
-	    int my_h_errno;
-	    (void)gethostbyname_r(name, &ret, buf, buflen, &my_h_errno) /* ; */
-	]]),
-    ac_cv_func_which_gethostbyname_r=five)
+        [[
+            char *name = "www.gnu.org";
+            struct hostent ret;
+            char buf@<:@1024@:>@;
+            int buflen = 1024;
+            int my_h_errno;
+            (void)gethostbyname_r(name, &ret, buf, buflen, &my_h_errno) /* ; */
+        ]]
+    )],
+    ac_cv_func_which_gethostbyname_r=five
+    )
 
 fi
 
@@ -105,15 +111,17 @@ fi
 if test "$ac_cv_func_which_gethostbyname_r" = "unknown"; then
 
 AC_COMPILE_IFELSE(
-    AC_LANG_PROGRAM(
-	[[#include <netdb.h>]],
-	[[
-	    char *name = "www.gnu.org";
-	    struct hostent ret;
-	    struct hostent_data data;
-	    (void)gethostbyname_r(name, &ret, &data) /* ; */
-	]]),
-    ac_cv_func_which_gethostbyname_r=three)
+    [AC_LANG_PROGRAM(
+        [[#include <netdb.h>]],
+        [[
+            char *name = "www.gnu.org";
+            struct hostent ret;
+            struct hostent_data data;
+            (void)gethostbyname_r(name, &ret, &data) /* ; */
+        ]]
+    )],
+    ac_cv_func_which_gethostbyname_r=three
+    )
 
 fi
 

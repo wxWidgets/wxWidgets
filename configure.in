@@ -1709,20 +1709,22 @@ AC_CACHE_CHECK([for va_copy],
     [
         AC_LANG_PUSH(C++)
         AC_LINK_IFELSE([
-            #include <stdarg.h>
-            void foo(char *f, ...)
-            {
-                va_list ap1, ap2;
-                va_start(ap1, f);
-                va_copy(ap2, ap1);
-                va_end(ap2);
-                va_end(ap1);
-            }
-            int main()
-            {
-                foo("hi", 17);
-                return 0;
-            }],
+            AC_LANG_SOURCE([
+                #include <stdarg.h>
+                void foo(char *f, ...)
+                {
+                    va_list ap1, ap2;
+                    va_start(ap1, f);
+                    va_copy(ap2, ap1);
+                    va_end(ap2);
+                    va_end(ap1);
+                }
+                int main()
+                {
+                    foo("hi", 17);
+                    return 0;
+                }])
+            ],
             wx_cv_func_va_copy=yes,
             wx_cv_func_va_copy=no
         )
@@ -1738,22 +1740,24 @@ else
         wx_cv_type_va_list_lvalue,
         [
             AC_RUN_IFELSE([
-                #include <stdarg.h>
-                int foo(char *f, ...)
-                {
-                    va_list ap1, ap2;
-                    va_start(ap1, f);
-                    ap2 = ap1;
-                    if ( va_arg(ap1, int) != 17 || va_arg(ap2, int) != 17 )
-                        return 1;
-                    va_end(ap2);
-                    va_end(ap1);
-                    return 0;
-                }
-                int main()
-                {
-                    return foo("hi", 17);
-                }],
+                AC_LANG_SOURCE([
+                    #include <stdarg.h>
+                    int foo(char *f, ...)
+                    {
+                        va_list ap1, ap2;
+                        va_start(ap1, f);
+                        ap2 = ap1;
+                        if ( va_arg(ap1, int) != 17 || va_arg(ap2, int) != 17 )
+                            return 1;
+                        va_end(ap2);
+                        va_end(ap1);
+                        return 0;
+                    }
+                    int main()
+                    {
+                        return foo("hi", 17);
+                    }])
+                ],
                 wx_cv_type_va_list_lvalue=yes,
                 wx_cv_type_va_list_lvalue=no,
                 dnl assume most common case for cross-compiling...
@@ -1782,7 +1786,7 @@ AC_CACHE_CHECK(
         dnl C compiler might support variadic macros when C++ one doesn't
         dnl (happens with gcc/g++ 2.95.4), so must use C++ one explicitly
         AC_LANG_PUSH(C++)
-        AC_COMPILE_IFELSE(
+        AC_COMPILE_IFELSE([
             AC_LANG_PROGRAM(
                 [
                     #include <stdio.h>
@@ -1791,7 +1795,7 @@ AC_CACHE_CHECK(
                 [
                     test("%s %d %p", "test", 1, 0);
                 ]
-            ),
+            )],
             [wx_cv_have_variadic_macros=yes],
             [wx_cv_have_variadic_macros=no]
             )
@@ -2268,7 +2272,9 @@ case "${host}" in
                         if test -f $libc; then
                             save_LIBS="$LIBS"
                             LIBS="$libc"
-                            AC_LINK_IFELSE([int main() { return 0; }],
+                            AC_LINK_IFELSE([
+                                    AC_LANG_SOURCE([int main() { return 0; }])
+                                ],
                                 wx_cv_std_libpath=`echo $d | sed s@/usr/@@`)
                             LIBS="$save_LIBS"
                             if test "x$wx_cv_std_libpath" != "x"; then

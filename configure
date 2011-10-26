@@ -24550,20 +24550,27 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
         cat >conftest.$ac_ext <<_ACEOF
 
-            #include <stdarg.h>
-            void foo(char *f, ...)
-            {
-                va_list ap1, ap2;
-                va_start(ap1, f);
-                va_copy(ap2, ap1);
-                va_end(ap2);
-                va_end(ap1);
-            }
-            int main()
-            {
-                foo("hi", 17);
-                return 0;
-            }
+            /* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                #include <stdarg.h>
+                void foo(char *f, ...)
+                {
+                    va_list ap1, ap2;
+                    va_start(ap1, f);
+                    va_copy(ap2, ap1);
+                    va_end(ap2);
+                    va_end(ap1);
+                }
+                int main()
+                {
+                    foo("hi", 17);
+                    return 0;
+                }
+
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
 if { (ac_try="$ac_link"
@@ -24624,22 +24631,29 @@ else
 else
   cat >conftest.$ac_ext <<_ACEOF
 
-                #include <stdarg.h>
-                int foo(char *f, ...)
-                {
-                    va_list ap1, ap2;
-                    va_start(ap1, f);
-                    ap2 = ap1;
-                    if ( va_arg(ap1, int) != 17 || va_arg(ap2, int) != 17 )
-                        return 1;
-                    va_end(ap2);
-                    va_end(ap1);
-                    return 0;
-                }
-                int main()
-                {
-                    return foo("hi", 17);
-                }
+                /* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                    #include <stdarg.h>
+                    int foo(char *f, ...)
+                    {
+                        va_list ap1, ap2;
+                        va_start(ap1, f);
+                        ap2 = ap1;
+                        if ( va_arg(ap1, int) != 17 || va_arg(ap2, int) != 17 )
+                            return 1;
+                        va_end(ap2);
+                        va_end(ap1);
+                        return 0;
+                    }
+                    int main()
+                    {
+                        return foo("hi", 17);
+                    }
+
 _ACEOF
 rm -f conftest$ac_exeext
 if { (ac_try="$ac_link"
@@ -24703,7 +24717,8 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
         cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
+
+            /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
@@ -27107,7 +27122,14 @@ else
                             save_LIBS="$LIBS"
                             LIBS="$libc"
                             cat >conftest.$ac_ext <<_ACEOF
+
+                                    /* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
 int main() { return 0; }
+
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
 if { (ac_try="$ac_link"
@@ -42532,8 +42554,9 @@ int
 main ()
 {
 
-	    char *name = "www.gnu.org";
-	    (void)gethostbyname_r(name) /* ; */
+            char *name = "www.gnu.org";
+            (void)gethostbyname_r(name) /* ; */
+
 
   ;
   return 0;
@@ -42557,6 +42580,7 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
   ac_cv_func_which_gethostbyname_r=no
+
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
@@ -42584,12 +42608,13 @@ int
 main ()
 {
 
-	    char *name = "www.gnu.org";
-	    struct hostent ret, *retp;
-	    char buf[1024];
-	    int buflen = 1024;
-	    int my_h_errno;
-	    (void)gethostbyname_r(name, &ret, buf, buflen, &retp, &my_h_errno) /* ; */
+            char *name = "www.gnu.org";
+            struct hostent ret, *retp;
+            char buf[1024];
+            int buflen = 1024;
+            int my_h_errno;
+            (void)gethostbyname_r(name, &ret, buf, buflen, &retp, &my_h_errno) /* ; */
+
 
   ;
   return 0;
@@ -42613,6 +42638,7 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
   ac_cv_func_which_gethostbyname_r=six
+
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
@@ -42642,12 +42668,13 @@ int
 main ()
 {
 
-	    char *name = "www.gnu.org";
-	    struct hostent ret;
-	    char buf[1024];
-	    int buflen = 1024;
-	    int my_h_errno;
-	    (void)gethostbyname_r(name, &ret, buf, buflen, &my_h_errno) /* ; */
+            char *name = "www.gnu.org";
+            struct hostent ret;
+            char buf[1024];
+            int buflen = 1024;
+            int my_h_errno;
+            (void)gethostbyname_r(name, &ret, buf, buflen, &my_h_errno) /* ; */
+
 
   ;
   return 0;
@@ -42671,6 +42698,7 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
   ac_cv_func_which_gethostbyname_r=five
+
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
@@ -42700,10 +42728,11 @@ int
 main ()
 {
 
-	    char *name = "www.gnu.org";
-	    struct hostent ret;
-	    struct hostent_data data;
-	    (void)gethostbyname_r(name, &ret, &data) /* ; */
+            char *name = "www.gnu.org";
+            struct hostent ret;
+            struct hostent_data data;
+            (void)gethostbyname_r(name, &ret, &data) /* ; */
+
 
   ;
   return 0;
@@ -42727,6 +42756,7 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
   ac_cv_func_which_gethostbyname_r=three
+
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
