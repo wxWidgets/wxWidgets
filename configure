@@ -696,6 +696,18 @@ PANGOFT2_CFLAGS
 PANGOFT2_LIBS
 PANGOXFT_CFLAGS
 PANGOXFT_LIBS
+Xinerama_CFLAGS
+Xinerama_LIBS
+Xxf86vm_CFLAGS
+Xxf86vm_LIBS
+SM_CFLAGS
+SM_LIBS
+GL_CFLAGS
+GL_LIBS
+GLU_CFLAGS
+GLU_LIBS
+MesaGL_CFLAGS
+MesaGL_LIBS
 CFLAGS_VISIBILITY
 CXXFLAGS_VISIBILITY
 LIBICONV
@@ -1082,6 +1094,18 @@ PANGOFT2_CFLAGS
 PANGOFT2_LIBS
 PANGOXFT_CFLAGS
 PANGOXFT_LIBS
+Xinerama_CFLAGS
+Xinerama_LIBS
+Xxf86vm_CFLAGS
+Xxf86vm_LIBS
+SM_CFLAGS
+SM_LIBS
+GL_CFLAGS
+GL_LIBS
+GLU_CFLAGS
+GLU_LIBS
+MesaGL_CFLAGS
+MesaGL_LIBS
 GTKPRINT_CFLAGS
 GTKPRINT_LIBS
 LIBGNOMEPRINTUI_CFLAGS
@@ -2016,6 +2040,23 @@ Some influential environment variables:
               C compiler flags for PANGOXFT, overriding pkg-config
   PANGOXFT_LIBS
               linker flags for PANGOXFT, overriding pkg-config
+  Xinerama_CFLAGS
+              C compiler flags for Xinerama, overriding pkg-config
+  Xinerama_LIBS
+              linker flags for Xinerama, overriding pkg-config
+  Xxf86vm_CFLAGS
+              C compiler flags for Xxf86vm, overriding pkg-config
+  Xxf86vm_LIBS
+              linker flags for Xxf86vm, overriding pkg-config
+  SM_CFLAGS   C compiler flags for SM, overriding pkg-config
+  SM_LIBS     linker flags for SM, overriding pkg-config
+  GL_CFLAGS   C compiler flags for GL, overriding pkg-config
+  GL_LIBS     linker flags for GL, overriding pkg-config
+  GLU_CFLAGS  C compiler flags for GLU, overriding pkg-config
+  GLU_LIBS    linker flags for GLU, overriding pkg-config
+  MesaGL_CFLAGS
+              C compiler flags for MesaGL, overriding pkg-config
+  MesaGL_LIBS linker flags for MesaGL, overriding pkg-config
   GTKPRINT_CFLAGS
               C compiler flags for GTKPRINT, overriding pkg-config
   GTKPRINT_LIBS
@@ -34676,8 +34717,263 @@ fi
 USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
         if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
-        { echo "$as_me:$LINENO: checking for Xinerama" >&5
+
+  ac_find_libraries=
+
+    fl_pkgname=`echo "Xinerama" | tr [:upper:] [:lower:]`
+
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
+echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&5
+echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	{ echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
+echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+	else
+		{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+		PKG_CONFIG=""
+	fi
+
+fi 6> /dev/null
+
+pkg_failed=no
+{ echo "$as_me:$LINENO: checking for Xinerama" >&5
 echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$Xinerama_CFLAGS"; then
+        pkg_cv_Xinerama_CFLAGS="$Xinerama_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_Xinerama_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$Xinerama_LIBS"; then
+        pkg_cv_Xinerama_LIBS="$Xinerama_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_Xinerama_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        Xinerama_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+        else
+	        Xinerama_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$Xinerama_PKG_ERRORS" >&5
+
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xXineramaQueryScreens" != "x"; then
+          { echo "$as_me:$LINENO: checking for XineramaQueryScreens in -lXinerama" >&5
+echo $ECHO_N "checking for XineramaQueryScreens in -lXinerama... $ECHO_C" >&6; }
+if test "${ac_cv_lib_Xinerama_XineramaQueryScreens+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lXinerama  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char XineramaQueryScreens ();
+int
+main ()
+{
+return XineramaQueryScreens ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_Xinerama_XineramaQueryScreens=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_Xinerama_XineramaQueryScreens=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_Xinerama_XineramaQueryScreens" >&5
+echo "${ECHO_T}$ac_cv_lib_Xinerama_XineramaQueryScreens" >&6; }
+if test $ac_cv_lib_Xinerama_XineramaQueryScreens = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB
@@ -34690,7 +34986,133 @@ echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
     done
   done
 
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+elif test $pkg_failed = untried; then
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xXineramaQueryScreens" != "x"; then
+          { echo "$as_me:$LINENO: checking for XineramaQueryScreens in -lXinerama" >&5
+echo $ECHO_N "checking for XineramaQueryScreens in -lXinerama... $ECHO_C" >&6; }
+if test "${ac_cv_lib_Xinerama_XineramaQueryScreens+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lXinerama  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char XineramaQueryScreens ();
+int
+main ()
+{
+return XineramaQueryScreens ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_Xinerama_XineramaQueryScreens=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_Xinerama_XineramaQueryScreens=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_Xinerama_XineramaQueryScreens" >&5
+echo "${ECHO_T}$ac_cv_lib_Xinerama_XineramaQueryScreens" >&6; }
+if test $ac_cv_lib_Xinerama_XineramaQueryScreens = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXinerama.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+else
+	Xinerama_CFLAGS=$pkg_cv_Xinerama_CFLAGS
+	Xinerama_LIBS=$pkg_cv_Xinerama_LIBS
+        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+            ac_find_libraries="std"
+
+                                                eval ac_find_cflags=\$Xinerama_CFLAGS
+      eval fl_libs=\$Xinerama_LIBS
+
+                  for fl_path in $fl_libs
+      do
+        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
+                              ac_find_libraries=`echo "$fl_path" | cut -c 3-`
+        fi
+      done
+
+fi
+
         if test "$ac_find_libraries" != "" ; then
+            if test "$ac_find_libraries" != "std" ; then
 
     if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
@@ -34704,16 +35126,13 @@ echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
     fi
   fi
 
-            if test "$ac_path_to_link" != " -L/usr/lib" ; then
-                LDFLAGS="$LDFLAGS $ac_path_to_link"
+              if test "$ac_path_to_link" != " -L/usr/lib" ; then
+                  LDFLAGS="$LDFLAGS $ac_path_to_link"
+              fi
             fi
             USE_XINERAMA=1
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
-            { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
         else
-            { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
             { echo "$as_me:$LINENO: WARNING: Xinerama not found; disabling wxDisplay" >&5
 echo "$as_me: WARNING: Xinerama not found; disabling wxDisplay" >&2;}
             wxUSE_DISPLAY="no"
@@ -34770,8 +35189,263 @@ fi
 
 if test "$wxUSE_DISPLAY" = "yes"; then
         if test "$USE_XINERAMA" = 1 -o "$wxUSE_GTK" = 1; then
-        { echo "$as_me:$LINENO: checking for Xxf86vm extension" >&5
-echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+
+    fl_pkgname=`echo "Xxf86vm" | tr [:upper:] [:lower:]`
+
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
+echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&5
+echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	{ echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
+echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+	else
+		{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+		PKG_CONFIG=""
+	fi
+
+fi 6> /dev/null
+
+pkg_failed=no
+{ echo "$as_me:$LINENO: checking for Xxf86vm" >&5
+echo $ECHO_N "checking for Xxf86vm... $ECHO_C" >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$Xxf86vm_CFLAGS"; then
+        pkg_cv_Xxf86vm_CFLAGS="$Xxf86vm_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_Xxf86vm_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$Xxf86vm_LIBS"; then
+        pkg_cv_Xxf86vm_LIBS="$Xxf86vm_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_Xxf86vm_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        Xxf86vm_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+        else
+	        Xxf86vm_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$Xxf86vm_PKG_ERRORS" >&5
+
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xXF86VidModeQueryExtension" != "x"; then
+          { echo "$as_me:$LINENO: checking for XF86VidModeQueryExtension in -lXxf86vm" >&5
+echo $ECHO_N "checking for XF86VidModeQueryExtension in -lXxf86vm... $ECHO_C" >&6; }
+if test "${ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lXxf86vm  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char XF86VidModeQueryExtension ();
+int
+main ()
+{
+return XF86VidModeQueryExtension ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension" >&5
+echo "${ECHO_T}$ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension" >&6; }
+if test $ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB
@@ -34784,9 +35458,132 @@ echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6; }
     done
   done
 
-        if test "$ac_find_libraries" != "" ; then
-            { echo "$as_me:$LINENO: result: yes" >&5
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+elif test $pkg_failed = untried; then
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xXF86VidModeQueryExtension" != "x"; then
+          { echo "$as_me:$LINENO: checking for XF86VidModeQueryExtension in -lXxf86vm" >&5
+echo $ECHO_N "checking for XF86VidModeQueryExtension in -lXxf86vm... $ECHO_C" >&6; }
+if test "${ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lXxf86vm  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char XF86VidModeQueryExtension ();
+int
+main ()
+{
+return XF86VidModeQueryExtension ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension" >&5
+echo "${ECHO_T}$ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension" >&6; }
+if test $ac_cv_lib_Xxf86vm_XF86VidModeQueryExtension = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+else
+	Xxf86vm_CFLAGS=$pkg_cv_Xxf86vm_CFLAGS
+	Xxf86vm_LIBS=$pkg_cv_Xxf86vm_LIBS
+        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+            ac_find_libraries="std"
+
+                                                eval ac_find_cflags=\$Xxf86vm_CFLAGS
+      eval fl_libs=\$Xxf86vm_LIBS
+
+                  for fl_path in $fl_libs
+      do
+        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
+                              ac_find_libraries=`echo "$fl_path" | cut -c 3-`
+        fi
+      done
+
+fi
+
+        if test "$ac_find_libraries" != "" ; then
 
 for ac_header in X11/extensions/xf86vmode.h
 do
@@ -34851,17 +35648,269 @@ fi
 
 done
 
-        else
-            { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
         fi
     fi
 fi
 
 if test "$wxUSE_DETECT_SM" = "yes"; then
     if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
-        { echo "$as_me:$LINENO: checking for -lSM - X11 session management" >&5
-echo $ECHO_N "checking for -lSM - X11 session management... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+
+    fl_pkgname=`echo "SM" | tr [:upper:] [:lower:]`
+
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
+echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&5
+echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	{ echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
+echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+	else
+		{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+		PKG_CONFIG=""
+	fi
+
+fi 6> /dev/null
+
+pkg_failed=no
+{ echo "$as_me:$LINENO: checking for SM" >&5
+echo $ECHO_N "checking for SM... $ECHO_C" >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$SM_CFLAGS"; then
+        pkg_cv_SM_CFLAGS="$SM_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_SM_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$SM_LIBS"; then
+        pkg_cv_SM_LIBS="$SM_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_SM_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        SM_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+        else
+	        SM_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$SM_PKG_ERRORS" >&5
+
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xSmcOpenConnection" != "x"; then
+          { echo "$as_me:$LINENO: checking for SmcOpenConnection in -lSM" >&5
+echo $ECHO_N "checking for SmcOpenConnection in -lSM... $ECHO_C" >&6; }
+if test "${ac_cv_lib_SM_SmcOpenConnection+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSM  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char SmcOpenConnection ();
+int
+main ()
+{
+return SmcOpenConnection ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_SM_SmcOpenConnection=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_SM_SmcOpenConnection=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_SM_SmcOpenConnection" >&5
+echo "${ECHO_T}$ac_cv_lib_SM_SmcOpenConnection" >&6; }
+if test $ac_cv_lib_SM_SmcOpenConnection = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB
@@ -34874,7 +35923,133 @@ echo $ECHO_N "checking for -lSM - X11 session management... $ECHO_C" >&6; }
     done
   done
 
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+elif test $pkg_failed = untried; then
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xSmcOpenConnection" != "x"; then
+          { echo "$as_me:$LINENO: checking for SmcOpenConnection in -lSM" >&5
+echo $ECHO_N "checking for SmcOpenConnection in -lSM... $ECHO_C" >&6; }
+if test "${ac_cv_lib_SM_SmcOpenConnection+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSM  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char SmcOpenConnection ();
+int
+main ()
+{
+return SmcOpenConnection ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_SM_SmcOpenConnection=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_SM_SmcOpenConnection=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_SM_SmcOpenConnection" >&5
+echo "${ECHO_T}$ac_cv_lib_SM_SmcOpenConnection" >&6; }
+if test $ac_cv_lib_SM_SmcOpenConnection = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libSM.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+else
+	SM_CFLAGS=$pkg_cv_SM_CFLAGS
+	SM_LIBS=$pkg_cv_SM_LIBS
+        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+            ac_find_libraries="std"
+
+                                                eval ac_find_cflags=\$SM_CFLAGS
+      eval fl_libs=\$SM_LIBS
+
+                  for fl_path in $fl_libs
+      do
+        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
+                              ac_find_libraries=`echo "$fl_path" | cut -c 3-`
+        fi
+      done
+
+fi
+
         if test "$ac_find_libraries" != "" ; then
+            if test "$ac_find_libraries" != "std" ; then
 
     if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
@@ -34888,15 +36063,12 @@ echo $ECHO_N "checking for -lSM - X11 session management... $ECHO_C" >&6; }
     fi
   fi
 
-            if test "$ac_path_to_link" != " -L/usr/lib" ; then
+              if test "$ac_path_to_link" != " -L/usr/lib" ; then
                 LDFLAGS="$LDFLAGS $ac_path_to_link"
+              fi
             fi
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lSM"
-            { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
         else
-            { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
             { echo "$as_me:$LINENO: WARNING: libSM not found; disabling session management detection" >&5
 echo "$as_me: WARNING: libSM not found; disabling session management detection" >&2;}
             wxUSE_DETECT_SM="no"
@@ -35046,8 +36218,263 @@ if test $ac_cv_header_GL_glu_h = yes; then
 
                 found_gl=0
 
-                { echo "$as_me:$LINENO: checking for -lGL" >&5
-echo $ECHO_N "checking for -lGL... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+
+    fl_pkgname=`echo "GL" | tr [:upper:] [:lower:]`
+
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
+echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&5
+echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	{ echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
+echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+	else
+		{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+		PKG_CONFIG=""
+	fi
+
+fi 6> /dev/null
+
+pkg_failed=no
+{ echo "$as_me:$LINENO: checking for GL" >&5
+echo $ECHO_N "checking for GL... $ECHO_C" >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GL_CFLAGS"; then
+        pkg_cv_GL_CFLAGS="$GL_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GL_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GL_LIBS"; then
+        pkg_cv_GL_LIBS="$GL_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GL_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+        else
+	        GL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GL_PKG_ERRORS" >&5
+
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xglBegin" != "x"; then
+          { echo "$as_me:$LINENO: checking for glBegin in -lGL" >&5
+echo $ECHO_N "checking for glBegin in -lGL... $ECHO_C" >&6; }
+if test "${ac_cv_lib_GL_glBegin+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGL  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char glBegin ();
+int
+main ()
+{
+return glBegin ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_GL_glBegin=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_GL_glBegin=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_GL_glBegin" >&5
+echo "${ECHO_T}$ac_cv_lib_GL_glBegin" >&6; }
+if test $ac_cv_lib_GL_glBegin = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib
@@ -35060,10 +36487,133 @@ echo $ECHO_N "checking for -lGL... $ECHO_C" >&6; }
     done
   done
 
-                if test "$ac_find_libraries" != "" ; then
-                    { echo "$as_me:$LINENO: result: found in $ac_find_libraries" >&5
-echo "${ECHO_T}found in $ac_find_libraries" >&6; }
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
 
+elif test $pkg_failed = untried; then
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xglBegin" != "x"; then
+          { echo "$as_me:$LINENO: checking for glBegin in -lGL" >&5
+echo $ECHO_N "checking for glBegin in -lGL... $ECHO_C" >&6; }
+if test "${ac_cv_lib_GL_glBegin+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGL  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char glBegin ();
+int
+main ()
+{
+return glBegin ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_GL_glBegin=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_GL_glBegin=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_GL_glBegin" >&5
+echo "${ECHO_T}$ac_cv_lib_GL_glBegin" >&6; }
+if test $ac_cv_lib_GL_glBegin = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libGL.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+else
+	GL_CFLAGS=$pkg_cv_GL_CFLAGS
+	GL_LIBS=$pkg_cv_GL_LIBS
+        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+            ac_find_libraries="std"
+
+                                                eval ac_find_cflags=\$GL_CFLAGS
+      eval fl_libs=\$GL_LIBS
+
+                  for fl_path in $fl_libs
+      do
+        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
+                              ac_find_libraries=`echo "$fl_path" | cut -c 3-`
+        fi
+      done
+
+fi
+
+                if test "$ac_find_libraries" != "" ; then
+                    if test "$ac_find_libraries" != "std" ; then
 
     if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
@@ -35077,12 +36627,268 @@ echo "${ECHO_T}found in $ac_find_libraries" >&6; }
     fi
   fi
 
-                    if test "$ac_path_to_link" != " -L/usr/lib" ; then
+                      if test "$ac_path_to_link" != " -L/usr/lib" ; then
                         LDFLAGS_GL="$ac_path_to_link"
+                      fi
                     fi
 
-                                                                                { echo "$as_me:$LINENO: checking for -lGLU" >&5
-echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+
+    fl_pkgname=`echo "GLU" | tr [:upper:] [:lower:]`
+
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
+echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&5
+echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	{ echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
+echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+	else
+		{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+		PKG_CONFIG=""
+	fi
+
+fi 6> /dev/null
+
+pkg_failed=no
+{ echo "$as_me:$LINENO: checking for GLU" >&5
+echo $ECHO_N "checking for GLU... $ECHO_C" >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GLU_CFLAGS"; then
+        pkg_cv_GLU_CFLAGS="$GLU_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GLU_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GLU_LIBS"; then
+        pkg_cv_GLU_LIBS="$GLU_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GLU_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GLU_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+        else
+	        GLU_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GLU_PKG_ERRORS" >&5
+
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xgluBeginCurve" != "x"; then
+          { echo "$as_me:$LINENO: checking for gluBeginCurve in -lGLU" >&5
+echo $ECHO_N "checking for gluBeginCurve in -lGLU... $ECHO_C" >&6; }
+if test "${ac_cv_lib_GLU_gluBeginCurve+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGLU  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gluBeginCurve ();
+int
+main ()
+{
+return gluBeginCurve ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_GLU_gluBeginCurve=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_GLU_gluBeginCurve=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_GLU_gluBeginCurve" >&5
+echo "${ECHO_T}$ac_cv_lib_GLU_gluBeginCurve" >&6; }
+if test $ac_cv_lib_GLU_gluBeginCurve = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB
@@ -35095,7 +36901,133 @@ echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6; }
     done
   done
 
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+elif test $pkg_failed = untried; then
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xgluBeginCurve" != "x"; then
+          { echo "$as_me:$LINENO: checking for gluBeginCurve in -lGLU" >&5
+echo $ECHO_N "checking for gluBeginCurve in -lGLU... $ECHO_C" >&6; }
+if test "${ac_cv_lib_GLU_gluBeginCurve+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGLU  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gluBeginCurve ();
+int
+main ()
+{
+return gluBeginCurve ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_GLU_gluBeginCurve=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_GLU_gluBeginCurve=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_GLU_gluBeginCurve" >&5
+echo "${ECHO_T}$ac_cv_lib_GLU_gluBeginCurve" >&6; }
+if test $ac_cv_lib_GLU_gluBeginCurve = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libGLU.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+else
+	GLU_CFLAGS=$pkg_cv_GLU_CFLAGS
+	GLU_LIBS=$pkg_cv_GLU_LIBS
+        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+            ac_find_libraries="std"
+
+                                                eval ac_find_cflags=\$GLU_CFLAGS
+      eval fl_libs=\$GLU_LIBS
+
+                  for fl_path in $fl_libs
+      do
+        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
+                              ac_find_libraries=`echo "$fl_path" | cut -c 3-`
+        fi
+      done
+
+fi
+
                     if test "$ac_find_libraries" != "" ; then
+                      if test "$ac_find_libraries" != "std" ; then
 
     if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
@@ -35110,26 +37042,274 @@ echo $ECHO_N "checking for -lGLU... $ECHO_C" >&6; }
   fi
 
                         if test "$ac_path_to_link" != " -L/usr/lib" -a \
-                                    "$ac_path_to_link" != "$LDFLAGS_GL"; then
-                            LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                                "$ac_path_to_link" != "$LDFLAGS_GL" ; then
+                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
                         fi
+                      fi
 
                         found_gl=1
                         OPENGL_LIBS="-lGL -lGLU"
-                        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-                    else
-                        { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
                     fi
-                else
-                    { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
                 fi
 
                 if test "$found_gl" != 1; then
-                    { echo "$as_me:$LINENO: checking for -lMesaGL" >&5
-echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+
+    fl_pkgname=`echo "MesaGL" | tr [:upper:] [:lower:]`
+
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
+echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&5
+echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	{ echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
+echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+	else
+		{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+		PKG_CONFIG=""
+	fi
+
+fi 6> /dev/null
+
+pkg_failed=no
+{ echo "$as_me:$LINENO: checking for MesaGL" >&5
+echo $ECHO_N "checking for MesaGL... $ECHO_C" >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$MesaGL_CFLAGS"; then
+        pkg_cv_MesaGL_CFLAGS="$MesaGL_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_MesaGL_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$MesaGL_LIBS"; then
+        pkg_cv_MesaGL_LIBS="$MesaGL_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\"") >&5
+  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_MesaGL_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        MesaGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+        else
+	        MesaGL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$MesaGL_PKG_ERRORS" >&5
+
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xglEnable" != "x"; then
+          { echo "$as_me:$LINENO: checking for glEnable in -lMesaGL" >&5
+echo $ECHO_N "checking for glEnable in -lMesaGL... $ECHO_C" >&6; }
+if test "${ac_cv_lib_MesaGL_glEnable+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lMesaGL  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char glEnable ();
+int
+main ()
+{
+return glEnable ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_MesaGL_glEnable=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_MesaGL_glEnable=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_MesaGL_glEnable" >&5
+echo "${ECHO_T}$ac_cv_lib_MesaGL_glEnable" >&6; }
+if test $ac_cv_lib_MesaGL_glEnable = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
   for ac_dir in $SEARCH_LIB
@@ -35142,7 +37322,133 @@ echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6; }
     done
   done
 
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+elif test $pkg_failed = untried; then
+
+      if test "x$ac_find_libraries" = "x"; then
+                if test "xglEnable" != "x"; then
+          { echo "$as_me:$LINENO: checking for glEnable in -lMesaGL" >&5
+echo $ECHO_N "checking for glEnable in -lMesaGL... $ECHO_C" >&6; }
+if test "${ac_cv_lib_MesaGL_glEnable+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lMesaGL  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char glEnable ();
+int
+main ()
+{
+return glEnable ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_MesaGL_glEnable=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_MesaGL_glEnable=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_MesaGL_glEnable" >&5
+echo "${ECHO_T}$ac_cv_lib_MesaGL_glEnable" >&6; }
+if test $ac_cv_lib_MesaGL_glEnable = yes; then
+  ac_find_libraries="std"
+fi
+
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+                        { echo "$as_me:$LINENO: checking elsewhere" >&5
+echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libMesaGL.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "x$ac_find_libraries" != "x"; then
+          { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+        else
+          { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
+      fi
+
+else
+	MesaGL_CFLAGS=$pkg_cv_MesaGL_CFLAGS
+	MesaGL_LIBS=$pkg_cv_MesaGL_LIBS
+        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+            ac_find_libraries="std"
+
+                                                eval ac_find_cflags=\$MesaGL_CFLAGS
+      eval fl_libs=\$MesaGL_LIBS
+
+                  for fl_path in $fl_libs
+      do
+        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
+                              ac_find_libraries=`echo "$fl_path" | cut -c 3-`
+        fi
+      done
+
+fi
+
                     if test "$ac_find_libraries" != "" ; then
+                      if test "$ac_find_libraries" != "std" ; then
 
     if test "$ac_find_libraries" = "default location"; then
     ac_path_to_link=""
@@ -35156,13 +37462,11 @@ echo $ECHO_N "checking for -lMesaGL... $ECHO_C" >&6; }
     fi
   fi
 
-                        LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
-                        OPENGL_LIBS="-lMesaGL -lMesaGLU"
-                        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-                    else
-                        { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+                        if test "$ac_path_to_link" != " -L/usr/lib" ; then
+                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                        fi
+                      fi
+                      OPENGL_LIBS="-lMesaGL -lMesaGLU"
                     fi
                 fi
 
@@ -54383,23 +56687,23 @@ PANGOFT2_CFLAGS!$PANGOFT2_CFLAGS$ac_delim
 PANGOFT2_LIBS!$PANGOFT2_LIBS$ac_delim
 PANGOXFT_CFLAGS!$PANGOXFT_CFLAGS$ac_delim
 PANGOXFT_LIBS!$PANGOXFT_LIBS$ac_delim
+Xinerama_CFLAGS!$Xinerama_CFLAGS$ac_delim
+Xinerama_LIBS!$Xinerama_LIBS$ac_delim
+Xxf86vm_CFLAGS!$Xxf86vm_CFLAGS$ac_delim
+Xxf86vm_LIBS!$Xxf86vm_LIBS$ac_delim
+SM_CFLAGS!$SM_CFLAGS$ac_delim
+SM_LIBS!$SM_LIBS$ac_delim
+GL_CFLAGS!$GL_CFLAGS$ac_delim
+GL_LIBS!$GL_LIBS$ac_delim
+GLU_CFLAGS!$GLU_CFLAGS$ac_delim
+GLU_LIBS!$GLU_LIBS$ac_delim
+MesaGL_CFLAGS!$MesaGL_CFLAGS$ac_delim
+MesaGL_LIBS!$MesaGL_LIBS$ac_delim
 CFLAGS_VISIBILITY!$CFLAGS_VISIBILITY$ac_delim
 CXXFLAGS_VISIBILITY!$CXXFLAGS_VISIBILITY$ac_delim
 LIBICONV!$LIBICONV$ac_delim
 GXX_VERSION!$GXX_VERSION$ac_delim
 SDL_CONFIG!$SDL_CONFIG$ac_delim
-SDL_CFLAGS!$SDL_CFLAGS$ac_delim
-SDL_LIBS!$SDL_LIBS$ac_delim
-GTKPRINT_CFLAGS!$GTKPRINT_CFLAGS$ac_delim
-GTKPRINT_LIBS!$GTKPRINT_LIBS$ac_delim
-LIBGNOMEPRINTUI_CFLAGS!$LIBGNOMEPRINTUI_CFLAGS$ac_delim
-LIBGNOMEPRINTUI_LIBS!$LIBGNOMEPRINTUI_LIBS$ac_delim
-GNOMEVFS_CFLAGS!$GNOMEVFS_CFLAGS$ac_delim
-GNOMEVFS_LIBS!$GNOMEVFS_LIBS$ac_delim
-HILDON_CFLAGS!$HILDON_CFLAGS$ac_delim
-HILDON_LIBS!$HILDON_LIBS$ac_delim
-HILDON2_CFLAGS!$HILDON2_CFLAGS$ac_delim
-HILDON2_LIBS!$HILDON2_LIBS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -54441,6 +56745,18 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+SDL_CFLAGS!$SDL_CFLAGS$ac_delim
+SDL_LIBS!$SDL_LIBS$ac_delim
+GTKPRINT_CFLAGS!$GTKPRINT_CFLAGS$ac_delim
+GTKPRINT_LIBS!$GTKPRINT_LIBS$ac_delim
+LIBGNOMEPRINTUI_CFLAGS!$LIBGNOMEPRINTUI_CFLAGS$ac_delim
+LIBGNOMEPRINTUI_LIBS!$LIBGNOMEPRINTUI_LIBS$ac_delim
+GNOMEVFS_CFLAGS!$GNOMEVFS_CFLAGS$ac_delim
+GNOMEVFS_LIBS!$GNOMEVFS_LIBS$ac_delim
+HILDON_CFLAGS!$HILDON_CFLAGS$ac_delim
+HILDON_LIBS!$HILDON_LIBS$ac_delim
+HILDON2_CFLAGS!$HILDON2_CFLAGS$ac_delim
+HILDON2_LIBS!$HILDON2_LIBS$ac_delim
 PYTHON!$PYTHON$ac_delim
 COND_PYTHON!$COND_PYTHON$ac_delim
 CAIRO_CFLAGS!$CAIRO_CFLAGS$ac_delim
@@ -54526,18 +56842,6 @@ SHARED_LD_MODULE_CC!$SHARED_LD_MODULE_CC$ac_delim
 SHARED_LD_MODULE_CXX!$SHARED_LD_MODULE_CXX$ac_delim
 PIC_FLAG!$PIC_FLAG$ac_delim
 WINDOWS_IMPLIB!$WINDOWS_IMPLIB$ac_delim
-USE_SOVERSION!$USE_SOVERSION$ac_delim
-USE_SOVERLINUX!$USE_SOVERLINUX$ac_delim
-USE_SOVERSOLARIS!$USE_SOVERSOLARIS$ac_delim
-USE_SOVERCYGWIN!$USE_SOVERCYGWIN$ac_delim
-USE_MACVERSION!$USE_MACVERSION$ac_delim
-USE_SOTWOSYMLINKS!$USE_SOTWOSYMLINKS$ac_delim
-SONAME_FLAG!$SONAME_FLAG$ac_delim
-DEPS_TRACKING!$DEPS_TRACKING$ac_delim
-BK_DEPS!$BK_DEPS$ac_delim
-WINDRES!$WINDRES$ac_delim
-REZ!$REZ$ac_delim
-SETFILE!$SETFILE$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -54579,6 +56883,18 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+USE_SOVERSION!$USE_SOVERSION$ac_delim
+USE_SOVERLINUX!$USE_SOVERLINUX$ac_delim
+USE_SOVERSOLARIS!$USE_SOVERSOLARIS$ac_delim
+USE_SOVERCYGWIN!$USE_SOVERCYGWIN$ac_delim
+USE_MACVERSION!$USE_MACVERSION$ac_delim
+USE_SOTWOSYMLINKS!$USE_SOTWOSYMLINKS$ac_delim
+SONAME_FLAG!$SONAME_FLAG$ac_delim
+DEPS_TRACKING!$DEPS_TRACKING$ac_delim
+BK_DEPS!$BK_DEPS$ac_delim
+WINDRES!$WINDRES$ac_delim
+REZ!$REZ$ac_delim
+SETFILE!$SETFILE$ac_delim
 OBJCXXFLAGS!$OBJCXXFLAGS$ac_delim
 GCC_PCH!$GCC_PCH$ac_delim
 ICC_PCH!$ICC_PCH$ac_delim
@@ -54664,18 +56980,6 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1!$COND_PLATFORM_MACOSX_1_TOOLK
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0!$COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0$ac_delim
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1!$COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1$ac_delim
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0!$COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0$ac_delim
-COND_PLATFORM_MACOSX_1_USE_GUI_1!$COND_PLATFORM_MACOSX_1_USE_GUI_1$ac_delim
-COND_PLATFORM_MACOSX_1_USE_OPENGL_1!$COND_PLATFORM_MACOSX_1_USE_OPENGL_1$ac_delim
-COND_PLATFORM_MACOSX_1_USE_SOVERSION_1!$COND_PLATFORM_MACOSX_1_USE_SOVERSION_1$ac_delim
-COND_PLATFORM_MACOS_1!$COND_PLATFORM_MACOS_1$ac_delim
-COND_PLATFORM_MAC_0!$COND_PLATFORM_MAC_0$ac_delim
-COND_PLATFORM_MAC_1!$COND_PLATFORM_MAC_1$ac_delim
-COND_PLATFORM_MSDOS_0!$COND_PLATFORM_MSDOS_0$ac_delim
-COND_PLATFORM_MSDOS_1!$COND_PLATFORM_MSDOS_1$ac_delim
-COND_PLATFORM_OS2_1!$COND_PLATFORM_OS2_1$ac_delim
-COND_PLATFORM_UNIX_0!$COND_PLATFORM_UNIX_0$ac_delim
-COND_PLATFORM_UNIX_1!$COND_PLATFORM_UNIX_1$ac_delim
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -54717,6 +57021,18 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_PLATFORM_MACOSX_1_USE_GUI_1!$COND_PLATFORM_MACOSX_1_USE_GUI_1$ac_delim
+COND_PLATFORM_MACOSX_1_USE_OPENGL_1!$COND_PLATFORM_MACOSX_1_USE_OPENGL_1$ac_delim
+COND_PLATFORM_MACOSX_1_USE_SOVERSION_1!$COND_PLATFORM_MACOSX_1_USE_SOVERSION_1$ac_delim
+COND_PLATFORM_MACOS_1!$COND_PLATFORM_MACOS_1$ac_delim
+COND_PLATFORM_MAC_0!$COND_PLATFORM_MAC_0$ac_delim
+COND_PLATFORM_MAC_1!$COND_PLATFORM_MAC_1$ac_delim
+COND_PLATFORM_MSDOS_0!$COND_PLATFORM_MSDOS_0$ac_delim
+COND_PLATFORM_MSDOS_1!$COND_PLATFORM_MSDOS_1$ac_delim
+COND_PLATFORM_OS2_1!$COND_PLATFORM_OS2_1$ac_delim
+COND_PLATFORM_UNIX_0!$COND_PLATFORM_UNIX_0$ac_delim
+COND_PLATFORM_UNIX_1!$COND_PLATFORM_UNIX_1$ac_delim
+COND_PLATFORM_UNIX_1_TOOLKIT_MGL!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL$ac_delim
 COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1$ac_delim
 COND_PLATFORM_UNIX_1_USE_GUI_1!$COND_PLATFORM_UNIX_1_USE_GUI_1$ac_delim
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0!$COND_PLATFORM_UNIX_1_USE_PLUGINS_0$ac_delim
@@ -54802,18 +57118,6 @@ COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1!$COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1$a
 COND_USE_SOVERLINUX_1!$COND_USE_SOVERLINUX_1$ac_delim
 COND_USE_SOVERSION_0!$COND_USE_SOVERSION_0$ac_delim
 COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1!$COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1$ac_delim
-COND_USE_SOVERSOLARIS_1!$COND_USE_SOVERSOLARIS_1$ac_delim
-COND_USE_STC_1!$COND_USE_STC_1$ac_delim
-COND_USE_THREADS_0!$COND_USE_THREADS_0$ac_delim
-COND_USE_THREADS_1!$COND_USE_THREADS_1$ac_delim
-COND_USE_XRC_1!$COND_USE_XRC_1$ac_delim
-COND_WINDOWS_IMPLIB_1!$COND_WINDOWS_IMPLIB_1$ac_delim
-COND_WITH_PLUGIN_SDL_1!$COND_WITH_PLUGIN_SDL_1$ac_delim
-COND_WXUNIV_0!$COND_WXUNIV_0$ac_delim
-COND_WXUNIV_1!$COND_WXUNIV_1$ac_delim
-COND_WXUSE_EXPAT_BUILTIN!$COND_WXUSE_EXPAT_BUILTIN$ac_delim
-COND_WXUSE_LIBJPEG_BUILTIN!$COND_WXUSE_LIBJPEG_BUILTIN$ac_delim
-COND_WXUSE_LIBPNG_BUILTIN!$COND_WXUSE_LIBPNG_BUILTIN$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -54855,6 +57159,18 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_USE_SOVERSOLARIS_1!$COND_USE_SOVERSOLARIS_1$ac_delim
+COND_USE_STC_1!$COND_USE_STC_1$ac_delim
+COND_USE_THREADS_0!$COND_USE_THREADS_0$ac_delim
+COND_USE_THREADS_1!$COND_USE_THREADS_1$ac_delim
+COND_USE_XRC_1!$COND_USE_XRC_1$ac_delim
+COND_WINDOWS_IMPLIB_1!$COND_WINDOWS_IMPLIB_1$ac_delim
+COND_WITH_PLUGIN_SDL_1!$COND_WITH_PLUGIN_SDL_1$ac_delim
+COND_WXUNIV_0!$COND_WXUNIV_0$ac_delim
+COND_WXUNIV_1!$COND_WXUNIV_1$ac_delim
+COND_WXUSE_EXPAT_BUILTIN!$COND_WXUSE_EXPAT_BUILTIN$ac_delim
+COND_WXUSE_LIBJPEG_BUILTIN!$COND_WXUSE_LIBJPEG_BUILTIN$ac_delim
+COND_WXUSE_LIBPNG_BUILTIN!$COND_WXUSE_LIBPNG_BUILTIN$ac_delim
 COND_WXUSE_LIBTIFF_BUILTIN!$COND_WXUSE_LIBTIFF_BUILTIN$ac_delim
 COND_WXUSE_REGEX_BUILTIN!$COND_WXUSE_REGEX_BUILTIN$ac_delim
 COND_WXUSE_ZLIB_BUILTIN!$COND_WXUSE_ZLIB_BUILTIN$ac_delim
@@ -54911,7 +57227,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 54; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 66; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
