@@ -95,7 +95,7 @@ AC_DEFUN([WX_INCLUDE_PATH_EXIST],
 dnl ---------------------------------------------------------------------------
 dnl Usage: WX_LINK_PATH_EXIST(path, libpath)
 dnl
-dnl Set ac_path_to_link to nothing if path is already in libpath of to -Lpath
+dnl Set ac_path_to_link to nothing if path is already in libpath, or to -Lpath
 dnl if it is not, so that libpath can be set to "$libpath$ac_path_to_link"
 dnl after calling this function
 dnl ---------------------------------------------------------------------------
@@ -124,7 +124,7 @@ dnl WX_CPP_NEW_HEADERS checks whether the compiler has "new" <iostream> header
 dnl or only the old <iostream.h> one - it may be generally assumed that if
 dnl <iostream> exists, the other "new" headers (without .h) exist too.
 dnl
-dnl call WX_CPP_NEW_HEADERS(actiof-if-true, action-if-false)
+dnl call WX_CPP_NEW_HEADERS(action-if-true, action-if-false)
 dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([WX_CPP_NEW_HEADERS],
