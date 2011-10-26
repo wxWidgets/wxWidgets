@@ -432,6 +432,20 @@ public:
             }
         }
 
+    // returns position of child node for given item in children list or wxNOT_FOUND
+    int FindChildByItem(const wxDataViewItem& item) const
+    {
+        const void* itemId = item.GetID();
+        const wxGtkTreeModelChildren& nodes = m_children;
+        const int len = nodes.size();
+        for ( int i = 0; i < len; i++ )
+        {
+            if ( nodes[i] == itemId )
+                return i;
+        }
+        return wxNOT_FOUND;
+    }
+
     wxGtkTreeModelNode* GetParent()
         { return m_parent; }
     wxGtkTreeModelNodes &GetNodes()
@@ -3672,15 +3686,56 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
         wxCHECK_MSG(parent_node, false,
             "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
-        wxDataViewItemArray siblings;
-        m_wx_model->GetChildren(parent, siblings);
-        int itemPos = siblings.Index(item, /*fromEnd=*/true);
-        wxCHECK_MSG( itemPos != wxNOT_FOUND, false, "adding non-existent item?" );
+        wxDataViewItemArray modelSiblings;
+        m_wx_model->GetChildren(parent, modelSiblings);
+        const int modelSiblingsSize = modelSiblings.size();
+
+        int posInModel = modelSiblings.Index(item, /*fromEnd=*/true);
+        wxCHECK_MSG( posInModel != wxNOT_FOUND, false, "adding non-existent item?" );
+
+        const wxGtkTreeModelChildren& nodeSiblings = parent_node->GetChildren();
+        const int nodeSiblingsSize = nodeSiblings.size();
+
+        int nodePos = 0;
+
+        if ( posInModel == modelSiblingsSize - 1 )
+        {
+            nodePos = nodeSiblingsSize;
+        }
+        else if ( modelSiblingsSize == nodeSiblingsSize + 1 )
+        {
+            // This is the simple case when our node tree already matches the
+            // model and only this one item is missing.
+            nodePos = posInModel;
+        }
+        else
+        {
+            // It's possible that a larger discrepancy between the model and
+            // our realization exists. This can happen e.g. when adding a bunch
+            // of items to the model and then calling ItemsAdded() just once
+            // afterwards. In this case, we must find the right position by
+            // looking at sibling items.
+
+            // append to the end if we won't find a better position:
+            nodePos = nodeSiblingsSize;
+
+            for ( int nextItemPos = posInModel + 1;
+                  nextItemPos < modelSiblingsSize;
+                  nextItemPos++ )
+            {
+                int nextNodePos = parent_node->FindChildByItem(modelSiblings[nextItemPos]);
+                if ( nextNodePos != wxNOT_FOUND )
+                {
+                    nodePos = nextNodePos;
+                    break;
+                }
+            }
+        }
 
         if (m_wx_model->IsContainer( item ))
-            parent_node->InsertNode( new wxGtkTreeModelNode( parent_node, item, this ), itemPos );
+            parent_node->InsertNode( new wxGtkTreeModelNode( parent_node, item, this ), nodePos );
         else
-            parent_node->InsertLeaf( item.GetID(), itemPos );
+            parent_node->InsertLeaf( item.GetID(), nodePos );
     }
 
     ScheduleRefresh();

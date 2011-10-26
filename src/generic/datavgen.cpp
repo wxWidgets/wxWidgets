@@ -377,6 +377,22 @@ public:
         m_branchData->children.Remove(node);
     }
 
+    // returns position of child node for given item in children list or wxNOT_FOUND
+    int FindChildByItem(const wxDataViewItem& item) const
+    {
+        if ( !m_branchData )
+            return wxNOT_FOUND;
+
+        const wxDataViewTreeNodes& nodes = m_branchData->children;
+        const int len = nodes.size();
+        for ( int i = 0; i < len; i++ )
+        {
+            if ( nodes[i]->m_item == item )
+                return i;
+        }
+        return wxNOT_FOUND;
+    }
+
     const wxDataViewItem & GetItem() const { return m_item; }
     void SetItem( const wxDataViewItem & item ) { m_item = item; }
 
@@ -2060,17 +2076,59 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         if ( !parentNode )
             return false;
 
-        wxDataViewItemArray siblings;
-        GetModel()->GetChildren(parent, siblings);
-        int itemPos = siblings.Index(item, /*fromEnd=*/true);
-        wxCHECK_MSG( itemPos != wxNOT_FOUND, false, "adding non-existent item?" );
+        wxDataViewItemArray modelSiblings;
+        GetModel()->GetChildren(parent, modelSiblings);
+        const int modelSiblingsSize = modelSiblings.size();
+
+        int posInModel = modelSiblings.Index(item, /*fromEnd=*/true);
+        wxCHECK_MSG( posInModel != wxNOT_FOUND, false, "adding non-existent item?" );
 
         wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
         itemNode->SetHasChildren(GetModel()->IsContainer(item));
 
         parentNode->SetHasChildren(true);
-        parentNode->InsertChild(itemNode, itemPos);
+
+        const wxDataViewTreeNodes& nodeSiblings = parentNode->GetChildNodes();
+        const int nodeSiblingsSize = nodeSiblings.size();
+
+        int nodePos = 0;
+
+        if ( posInModel == modelSiblingsSize - 1 )
+        {
+            nodePos = nodeSiblingsSize;
+        }
+        else if ( modelSiblingsSize == nodeSiblingsSize + 1 )
+        {
+            // This is the simple case when our node tree already matches the
+            // model and only this one item is missing.
+            nodePos = posInModel;
+        }
+        else
+        {
+            // It's possible that a larger discrepancy between the model and
+            // our realization exists. This can happen e.g. when adding a bunch
+            // of items to the model and then calling ItemsAdded() just once
+            // afterwards. In this case, we must find the right position by
+            // looking at sibling items.
+
+            // append to the end if we won't find a better position:
+            nodePos = nodeSiblingsSize;
+
+            for ( int nextItemPos = posInModel + 1;
+                  nextItemPos < modelSiblingsSize;
+                  nextItemPos++ )
+            {
+                int nextNodePos = parentNode->FindChildByItem(modelSiblings[nextItemPos]);
+                if ( nextNodePos != wxNOT_FOUND )
+                {
+                    nodePos = nextNodePos;
+                    break;
+                }
+            }
+        }
+
         parentNode->ChangeSubTreeCount(+1);
+        parentNode->InsertChild(itemNode, nodePos);
 
         m_count = -1;
     }
