@@ -2601,9 +2601,6 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
     }
     else
     {
-        wxAuiToolBarItem* hit_item;
-        hit_item = FindToolByPosition(evt.GetX(), evt.GetY());
-
         if (m_action_item && hit_item == m_action_item)
         {
             UnsetToolTip();
