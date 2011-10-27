@@ -18,6 +18,13 @@ struct wxGtkIMData;
 
 WX_DEFINE_EXPORTED_ARRAY_PTR(GdkWindow *, wxArrayGdkWindows);
 
+extern "C"
+{
+
+typedef void (*wxGTKCallback)();
+
+}
+
 //-----------------------------------------------------------------------------
 // wxWindowGTK
 //-----------------------------------------------------------------------------
@@ -374,7 +381,7 @@ protected:
     //
     // This is just a wrapper for g_signal_connect() and returns the handler id
     // just as it does.
-    unsigned long GTKConnectWidget(const char *signal, void (*callback)());
+    unsigned long GTKConnectWidget(const char *signal, wxGTKCallback callback);
 
     // Return true from here if PostCreation() should connect to size_request
     // signal: this is done by default but doesn't work for some native

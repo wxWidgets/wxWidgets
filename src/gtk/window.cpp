@@ -2444,7 +2444,8 @@ void wxWindowGTK::PostCreation()
         gtk_widget_show( m_widget );
 }
 
-unsigned long wxWindowGTK::GTKConnectWidget(const char *signal, void (*callback)())
+unsigned long
+wxWindowGTK::GTKConnectWidget(const char *signal, wxGTKCallback callback)
 {
     return g_signal_connect(m_widget, signal, callback, this);
 }
