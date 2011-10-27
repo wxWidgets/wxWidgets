@@ -457,7 +457,7 @@ namespace wxPrivate
 template<typename T>
 struct wxVectorComparator
 {
-    static int wxCMPFUNC_CONV
+    static int
     Compare(const void* pitem1, const void* pitem2, const void* )
     {
         const T& item1 = *reinterpret_cast<const T*>(pitem1);

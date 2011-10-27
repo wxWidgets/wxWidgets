@@ -496,19 +496,19 @@ void wxPostDelete(wxObject* object);
 
     @header{wx/utils.h}
 */
-extern "C"
-{
-typedef int (wxCMPFUNC_CONV *CMPFUNCDATA)(const void* pItem1, const void* pItem2, const void* user_data);
-}
+typedef int (*wxSortCallback)(const void* pItem1, const void* pItem2, const void* user_data);
 
 /**
-    Function for performing a qsort operation including a user data
-    parameter.
+    Function implementing quick sort algorithm.
+
+    This function sorts @a total_elems objects of size @a size located at @a
+    pbase. It uses @a cmp function for comparing them and passes @a user_data
+    pointer to the comparison function each time it's called.
 
     @header{wx/utils.h}
 */
-void wxQsort(void *const pbase, size_t total_elems,
-             size_t size, CMPFUNCDATA cmp, const void* user_data);
+void wxQsort(void* pbase, size_t total_elems,
+             size_t size, wxSortCallback cmp, const void* user_data);
 
 
 /**

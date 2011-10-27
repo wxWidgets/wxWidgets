@@ -815,7 +815,7 @@ typedef struct
       stack size is needed (actually O(1) in this case)!  */
 
 void wxQsort(void *const pbase, size_t total_elems,
-                             size_t size, CMPFUNCDATA cmp, const void* user_data)
+             size_t size, wxSortCallback cmp, const void* user_data)
 {
   register char *base_ptr = (char *) pbase;
   const size_t max_thresh = MAX_THRESH * size;
