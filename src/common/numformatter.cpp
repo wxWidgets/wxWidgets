@@ -21,9 +21,7 @@
 #include "wx/numformatter.h"
 #include "wx/intl.h"
 
-#if !wxUSE_STD_STRING
-    #include <locale.h> // for setlocale and LC_ALL
-#endif
+#include <locale.h> // for setlocale and LC_ALL
 
 // ----------------------------------------------------------------------------
 // local helpers
