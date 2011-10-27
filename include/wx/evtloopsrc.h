@@ -49,7 +49,7 @@ enum
     wxEVENT_SOURCE_EXCEPTION = 0x04,
     wxEVENT_SOURCE_ALL = wxEVENT_SOURCE_INPUT |
                          wxEVENT_SOURCE_OUTPUT |
-                         wxEVENT_SOURCE_EXCEPTION,
+                         wxEVENT_SOURCE_EXCEPTION
 };
 
 // wxEventLoopSource itself is an ABC and can't be created directly, currently

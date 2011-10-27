@@ -36,7 +36,7 @@ enum wxRibbonBarOption
     wxRIBBON_BAR_FOLDBAR_STYLE =  wxRIBBON_BAR_FLOW_VERTICAL
                                 | wxRIBBON_BAR_SHOW_PAGE_ICONS
                                 | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
-                                | wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS,
+                                | wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
