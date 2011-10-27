@@ -4042,7 +4042,7 @@ void wxAuiNotebook::OnTabCancelDrag(wxAuiNotebookEvent& command_evt)
     m_mgr.HideHint();
 
     wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
-    wxCHECK_RET( src_tabs, _T("no source object?") );
+    wxCHECK_RET( src_tabs, wxT("no source object?") );
 
     src_tabs->SetCursor(wxCursor(wxCURSOR_ARROW));
 }
