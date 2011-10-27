@@ -81,7 +81,6 @@ private:
     IFFImage *m_image;        // image data
     wxInputStream *m_f;       // input stream
     unsigned char *databuf;
-    unsigned char *picptr;
     unsigned char *decomp_mem;
 
     void Destroy();
@@ -546,7 +545,7 @@ int wxIFFDecoder::ReadIFF()
         }
 
         m_image->p = new byte[bmhd_width * bmhd_height * 3];
-            byte *picptr = m_image->p;
+        byte *picptr = m_image->p;
         if (!picptr) {
         Destroy();
         return wxIFF_MEMERR;
