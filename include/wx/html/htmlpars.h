@@ -28,10 +28,10 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlEntitiesParser;
 class wxHtmlTextPieces;
 class wxHtmlParserState;
 
-WX_DECLARE_HASH_SET_WITH_DECL(wxHtmlTagHandler*,
-                              wxPointerHash, wxPointerEqual,
-                              wxHtmlTagHandlersSet,
-                              class WXDLLIMPEXP_HTML);
+WX_DECLARE_HASH_SET_WITH_DECL_PTR(wxHtmlTagHandler*,
+                                  wxPointerHash, wxPointerEqual,
+                                  wxHtmlTagHandlersSet,
+                                  class WXDLLIMPEXP_HTML);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxHtmlTagHandler*,
                                      wxHtmlTagHandlersHash,
                                      class WXDLLIMPEXP_HTML);

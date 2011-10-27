@@ -127,7 +127,9 @@ protected:
     }
 };
 
-#define _WX_DECLARE_HASHTABLE( VALUE_T, KEY_T, HASH_T, KEY_EX_T, KEY_EQ_T, CLASSNAME, CLASSEXP, SHOULD_GROW, SHOULD_SHRINK ) \
+#define _WX_DECLARE_HASHTABLE( VALUE_T, KEY_T, HASH_T, KEY_EX_T, KEY_EQ_T,\
+                               PTROPERATOR, CLASSNAME, CLASSEXP, \
+                               SHOULD_GROW, SHOULD_SHRINK ) \
 CLASSEXP CLASSNAME : protected _wxHashTableBase2 \
 { \
 public: \
@@ -217,7 +219,7 @@ public: \
         iterator& operator++() { PlusPlus(); return *this; } \
         iterator operator++(int) { iterator it=*this;PlusPlus();return it; } \
         reference operator *() const { return m_node->m_value; } \
-        pointer operator ->() const { return &(m_node->m_value); } \
+        PTROPERATOR(pointer) \
     }; \
  \
     CLASSEXP const_iterator : public Iterator \
@@ -230,7 +232,7 @@ public: \
         const_iterator& operator++() { PlusPlus();return *this; } \
         const_iterator operator++(int) { const_iterator it=*this;PlusPlus();return it; } \
         const_reference operator *() const { return m_node->m_value; } \
-        const_pointer operator ->() const { return &(m_node->m_value); } \
+        PTROPERATOR(const_pointer) \
     }; \
  \
     CLASSNAME( size_type sz = 10, const hasher& hfun = hasher(), \
@@ -632,10 +634,16 @@ public:
 
 #ifdef wxNEEDS_WX_HASH_MAP
 
+#define wxPTROP_NORMAL(pointer) \
+    pointer operator ->() const { return &(m_node->m_value); }
+#define wxPTROP_NOP(pointer)
+
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
 _WX_DECLARE_PAIR( KEY_T, VALUE_T, CLASSNAME##_wxImplementation_Pair, CLASSEXP ) \
 _WX_DECLARE_HASH_MAP_KEY_EX( KEY_T, CLASSNAME##_wxImplementation_Pair, CLASSNAME##_wxImplementation_KeyEx, CLASSEXP ) \
-_WX_DECLARE_HASHTABLE( CLASSNAME##_wxImplementation_Pair, KEY_T, HASH_T, CLASSNAME##_wxImplementation_KeyEx, KEY_EQ_T, CLASSNAME##_wxImplementation_HashTable, CLASSEXP, grow_lf70, never_shrink ) \
+_WX_DECLARE_HASHTABLE( CLASSNAME##_wxImplementation_Pair, KEY_T, HASH_T, \
+    CLASSNAME##_wxImplementation_KeyEx, KEY_EQ_T, wxPTROP_NORMAL, \
+    CLASSNAME##_wxImplementation_HashTable, CLASSEXP, grow_lf70, never_shrink ) \
 CLASSEXP CLASSNAME:public CLASSNAME##_wxImplementation_HashTable \
 { \
 public: \
@@ -676,7 +684,7 @@ public: \
  \
     size_type erase( const key_type& k ) \
         { return CLASSNAME##_wxImplementation_HashTable::erase( k ); } \
-    void erase( const iterator& it ) { erase( it->first ); } \
+    void erase( const iterator& it ) { erase( (*it).first ); } \
  \
     /* count() == 0 | 1 */ \
     size_type count( const const_key_type& key ) \

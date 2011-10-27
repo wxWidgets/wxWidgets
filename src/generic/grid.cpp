@@ -72,8 +72,8 @@ const char wxGridNameStr[] = "grid";
 // Required for wxIs... functions
 #include <ctype.h>
 
-WX_DECLARE_HASH_SET_WITH_DECL(int, wxIntegerHash, wxIntegerEqual,
-                              wxGridFixedIndicesSet, class WXDLLIMPEXP_ADV);
+WX_DECLARE_HASH_SET_WITH_DECL_PTR(int, wxIntegerHash, wxIntegerEqual,
+                                  wxGridFixedIndicesSet, class WXDLLIMPEXP_ADV);
 
 
 // ----------------------------------------------------------------------------

@@ -103,7 +103,7 @@ class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
     // this is a class so that it can be forward-declared
 };
 
-WX_DECLARE_HASH_SET(int, wxIntegerHash, wxIntegerEqual, wxHashSetInt);
+WX_DECLARE_HASH_SET_PTR(int, wxIntegerHash, wxIntegerEqual, wxHashSetInt);
 
 class wxIdRange // Holds data for a particular rangename
 {
