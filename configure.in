@@ -2366,7 +2366,7 @@ if test "$build" != "$host" -a "$GCC" = yes; then
             x_includes=$ac_find_includes
         fi
         if test -z "$x_libraries" -o "$x_libraries" = NONE; then
-            WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xt)
+            WX_PATH_FIND_LIBRARIES(Xt)
             x_libraries=$ac_find_libraries
         fi
     fi
@@ -3146,7 +3146,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         dnl test for external libxpm if we're configured to use it
         if test "$wxUSE_GPE" = "yes"; then
             AC_MSG_CHECKING(for gpewidget library)
-            WX_PATH_FIND_LIBRARIES($SEARCH_LIB,gpewidget)
+            WX_PATH_FIND_LIBRARIES(gpewidget)
             if test "$ac_find_libraries" != "" ; then
                 WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
                 dnl -lgpewidget must be before all GTK libs and
@@ -3159,7 +3159,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             fi
 
             dnl AC_MSG_CHECKING(for gpe library)
-            dnl WX_PATH_FIND_LIBRARIES($SEARCH_LIB,gpe)
+            dnl WX_PATH_FIND_LIBRARIES(gpe)
             dnl if test "$ac_find_libraries" != "" ; then
             dnl     WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
             dnl     GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lgpe"
@@ -3405,7 +3405,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
 
         AC_MSG_CHECKING(for Motif/Lesstif library)
-        WX_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+        WX_PATH_FIND_LIBRARIES(Xm)
 
         if test "x$ac_find_libraries" != "x" ; then
             AC_MSG_RESULT(found in $ac_find_libraries)
@@ -3544,7 +3544,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         dnl test for external libxpm if we're configured to use it
         if test "$wxUSE_LIBXPM" = "sys"; then
             AC_MSG_CHECKING(for Xpm library)
-            WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+            WX_PATH_FIND_LIBRARIES(Xpm)
             if test "$ac_find_libraries" != "" ; then
                 WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
@@ -3772,7 +3772,7 @@ USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
     dnl Xinerama is used for wxGTK1/wxX11/wxMotif only
     if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
-        WX_FIND_LIB([$SEARCH_LIB], Xinerama, XineramaQueryScreens)
+        WX_FIND_LIB(Xinerama, XineramaQueryScreens)
         if test "$ac_find_libraries" != "" ; then
             if test "$ac_find_libraries" != "std" ; then
               WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
@@ -3795,7 +3795,7 @@ fi
 if test "$wxUSE_DISPLAY" = "yes"; then
     dnl wxGTK2 needs Xxf86vm as well as Xinerama-using ports from above
     if test "$USE_XINERAMA" = 1 -o "$wxUSE_GTK" = 1; then
-        WX_FIND_LIB([$SEARCH_LIB], Xxf86vm, XF86VidModeQueryExtension)
+        WX_FIND_LIB(Xxf86vm, XF86VidModeQueryExtension)
         if test "$ac_find_libraries" != "" ; then
             AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
                              [
@@ -3816,7 +3816,7 @@ dnl X11 session management
 dnl ---------------------------------------------------------------------------
 if test "$wxUSE_DETECT_SM" = "yes"; then
     if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
-        WX_FIND_LIB([$SEARCH_LIB], SM, SmcOpenConnection)
+        WX_FIND_LIB(SM, SmcOpenConnection)
         if test "$ac_find_libraries" != "" ; then
             if test "$ac_find_libraries" != "std" ; then
               WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
@@ -3866,7 +3866,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
             AC_CHECK_HEADER(GL/glu.h, [
                 found_gl=0
 
-                WX_FIND_LIB([$SEARCH_LIB /opt/graphics/OpenGL/lib], GL, glBegin)
+                WX_FIND_LIB(GL, glBegin, [/opt/graphics/OpenGL/lib])
                 if test "$ac_find_libraries" != "" ; then
                     if test "$ac_find_libraries" != "std" ; then
                       WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
@@ -3878,7 +3878,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                     dnl don't suppose that libGL and libGLU are always in the
                     dnl same directory -- this is not true for some common
                     dnl distributions
-                    WX_FIND_LIB([$SEARCH_LIB], GLU, gluBeginCurve)
+                    WX_FIND_LIB(GLU, gluBeginCurve, [/opt/graphics/OpenGL/lib])
                     if test "$ac_find_libraries" != "" ; then
                       if test "$ac_find_libraries" != "std" ; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
@@ -3894,7 +3894,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                 fi
 
                 if test "$found_gl" != 1; then
-                    WX_FIND_LIB([$SEARCH_LIB], MesaGL, glEnable)
+                    WX_FIND_LIB(MesaGL, glEnable, [/opt/graphics/OpenGL/lib])
                     if test "$ac_find_libraries" != "" ; then
                       if test "$ac_find_libraries" != "std" ; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
@@ -7397,7 +7397,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
             AC_MSG_CHECKING([for webkitgtk libraries])
-            WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],webkitgtk-1.0)
+            WX_PATH_FIND_LIBRARIES(webkitgtk-1.0)
             if test "$ac_find_libraries" != "" ; then
                 WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                 if test "$ac_path_to_link" != " -L/usr/lib" ; then

@@ -43,16 +43,17 @@ for ac_dir in $1 /usr/include
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl call WX_PATH_FIND_LIBRARIES(search path, lib name), sets ac_find_libraries
-dnl to the full name of the file that was found or leaves it empty if not found
+dnl call WX_PATH_FIND_LIBRARIES(lib name, [optional extra search paths])
+dnl sets ac_find_libraries to the full name of the file that was found
+dnl or leaves it empty if not found
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 [
   ac_find_libraries=
-  for ac_dir in $1
+  for ac_dir in $2 $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/lib$2.$ac_extension"; then
+      if test -f "$ac_dir/lib$1.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
       fi
@@ -116,7 +117,7 @@ AC_DEFUN([WX_LINK_PATH_EXIST],
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl Usage: WX_FIND_LIB(search-path, lib-name, [lib-function to test])
+dnl Usage: WX_FIND_LIB(lib-name, [lib-function to test], [extra search paths])
 dnl
 dnl Tests in a variety of ways for the presence of lib-name
 dnl
@@ -129,23 +130,23 @@ AC_DEFUN([WX_FIND_LIB],
   ac_find_libraries=
 
   dnl Try with pkg-config first. It requires its lib-name parameter lowercase
-  fl_pkgname=`echo "$2" | tr [[:upper:]] [[:lower:]]`
+  fl_pkgname=`echo "$1" | tr [[:upper:]] [[:lower:]]`
   dnl suppress PKG_PROG_PKG_CONFIG output; we don't want to keep seeing it
   PKG_PROG_PKG_CONFIG() AS_MESSAGE_FD> /dev/null
-  PKG_CHECK_MODULES([$2], [$fl_pkgname],
+  PKG_CHECK_MODULES([$1], [$fl_pkgname],
     [
       dnl Start by assuming there are no novel lib paths
       ac_find_libraries="std"
 
-      dnl A simple copy of the internal vars $2_CFLAGS $2_LIBS doesn't work
+      dnl A simple copy of the internal vars $1_CFLAGS $1_LIBS doesn't work
       dnl inside the macro
       dnl
       dnl TODO: When we stop being autoconf 2.61 compatible, the next 2 lines
       dnl should become:
-      dnl AS_VAR_COPY([ac_find_cflags], [$2_CFLAGS])
-      dnl AS_VAR_COPY([fl_libs], [$2_LIBS])
-      eval ac_find_cflags=\$$2_CFLAGS
-      eval fl_libs=\$$2_LIBS
+      dnl AS_VAR_COPY([ac_find_cflags], [$1_CFLAGS])
+      dnl AS_VAR_COPY([fl_libs], [$1_LIBS])
+      eval ac_find_cflags=\$$1_CFLAGS
+      eval fl_libs=\$$1_LIBS
 
       dnl fl_libs may now contain -Lfoopath -lfoo (only non-standard paths are
       dnl added) We only want the path bit, not the lib names
@@ -161,8 +162,8 @@ AC_DEFUN([WX_FIND_LIB],
     [
       if test "x$ac_find_libraries" = "x"; then
         dnl Next with AC_CHECK_LIB, if a test function was provided
-        if test "x$3" != "x"; then
-          AC_CHECK_LIB([$2], [$3], [ac_find_libraries="std"])
+        if test "x$2" != "x"; then
+          AC_CHECK_LIB([$1], [$2], [ac_find_libraries="std"])
         fi
       fi
 
@@ -170,7 +171,8 @@ AC_DEFUN([WX_FIND_LIB],
         dnl Finally try the search path
         dnl Output a message again, as AC_CHECK_LIB will just have said "no"
         AC_MSG_CHECKING([elsewhere])
-        WX_PATH_FIND_LIBRARIES([$1],[$2])
+        dnl $3 will occasionally hold extra path(s) to search
+        WX_PATH_FIND_LIBRARIES([$1], [$3])
         if test "x$ac_find_libraries" != "x"; then
           AC_MSG_RESULT([yes])
         else

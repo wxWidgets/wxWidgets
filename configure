@@ -27285,7 +27285,7 @@ for ac_dir in $SEARCH_INCLUDE /usr/include
         if test -z "$x_libraries" -o "$x_libraries" = NONE; then
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXt.$ac_extension"; then
@@ -31495,7 +31495,7 @@ done
 echo $ECHO_N "checking for gpewidget library... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libgpewidget.$ac_extension"; then
@@ -33785,7 +33785,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 echo $ECHO_N "checking for Motif/Lesstif library... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXm.$ac_extension"; then
@@ -34189,7 +34189,7 @@ _ACEOF
 echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXpm.$ac_extension"; then
@@ -34976,7 +34976,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXinerama.$ac_extension"; then
@@ -35072,7 +35072,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXinerama.$ac_extension"; then
@@ -35448,7 +35448,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
@@ -35544,7 +35544,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
@@ -35913,7 +35913,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libSM.$ac_extension"; then
@@ -36009,7 +36009,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libSM.$ac_extension"; then
@@ -36477,7 +36477,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib
+  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGL.$ac_extension"; then
@@ -36573,7 +36573,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB /opt/graphics/OpenGL/lib
+  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGL.$ac_extension"; then
@@ -36891,7 +36891,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGLU.$ac_extension"; then
@@ -36987,7 +36987,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libGLU.$ac_extension"; then
@@ -37312,7 +37312,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libMesaGL.$ac_extension"; then
@@ -37408,7 +37408,7 @@ fi
 echo $ECHO_N "checking elsewhere... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libMesaGL.$ac_extension"; then
@@ -50866,7 +50866,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
 echo $ECHO_N "checking for webkitgtk libraries... $ECHO_C" >&6; }
 
   ac_find_libraries=
-  for ac_dir in $SEARCH_LIB
+  for ac_dir in  $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
       if test -f "$ac_dir/libwebkitgtk-1.0.$ac_extension"; then
