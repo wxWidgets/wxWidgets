@@ -44,7 +44,7 @@ public:
     long state;
 };
 
-WX_DEFINE_ARRAY(wxRibbonToolBarToolBase*, wxArrayRibbonToolBarToolBase);
+WX_DEFINE_ARRAY_PTR(wxRibbonToolBarToolBase*, wxArrayRibbonToolBarToolBase);
 
 class wxRibbonToolBarToolGroup
 {

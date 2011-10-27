@@ -20,7 +20,7 @@
 
 class wxRibbonGalleryItem;
 
-WX_DEFINE_USER_EXPORTED_ARRAY(wxRibbonGalleryItem*, wxArrayRibbonGalleryItem, class WXDLLIMPEXP_RIBBON);
+WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonGalleryItem*, wxArrayRibbonGalleryItem, class WXDLLIMPEXP_RIBBON);
 
 class WXDLLIMPEXP_RIBBON wxRibbonGallery : public wxRibbonControl
 {

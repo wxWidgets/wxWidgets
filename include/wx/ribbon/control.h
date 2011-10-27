@@ -71,7 +71,7 @@ private:
 #endif
 };
 
-WX_DEFINE_USER_EXPORTED_ARRAY(wxRibbonControl*, wxArrayRibbonControl, class WXDLLIMPEXP_RIBBON);
+WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonControl*, wxArrayRibbonControl, class WXDLLIMPEXP_RIBBON);
 
 #endif // wxUSE_RIBBON
 

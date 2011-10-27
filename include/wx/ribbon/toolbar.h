@@ -20,7 +20,7 @@
 
 class wxRibbonToolBarToolBase;
 class wxRibbonToolBarToolGroup;
-WX_DEFINE_USER_EXPORTED_ARRAY(wxRibbonToolBarToolGroup*, wxArrayRibbonToolBarToolGroup, class WXDLLIMPEXP_RIBBON);
+WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonToolBarToolGroup*, wxArrayRibbonToolBarToolGroup, class WXDLLIMPEXP_RIBBON);
 
 enum wxRibbonToolBarToolState
 {
