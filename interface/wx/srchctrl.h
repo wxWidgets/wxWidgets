@@ -102,6 +102,15 @@ public:
     */
     virtual ~wxSearchCtrl();
 
+    
+    bool Create(wxWindow* parent, wxWindowID id,
+                 const wxString& value = wxEmptyString,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxSearchCtrlNameStr);
+
     /**
         Returns a pointer to the search control's menu object or @NULL if there is no
         menu attached.
@@ -117,6 +126,11 @@ public:
     */
     virtual bool IsSearchButtonVisible() const;
 
+    /**
+       Returns the cancel button's visibility state.
+    */
+    virtual bool IsCancelButtonVisible() const;
+    
     /**
         Sets the search control's menu object.
         If there is already a menu associated with the search control it is deleted.
@@ -139,5 +153,19 @@ public:
         This has no effect in Mac OS X v10.3
     */
     virtual void ShowSearchButton(bool show);
+
+    /**
+       Set the text to be displayed in the search control when the user has
+       not yet typed anything in it.
+    */
+    void        SetDescriptiveText(const wxString& text);
+
+    /**
+       Return the text displayed when there is not yet any user input.
+    */
+    wxString    GetDescriptiveText() const;
 };
 
+
+wxEventType  wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN;
+wxEventType  wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN;

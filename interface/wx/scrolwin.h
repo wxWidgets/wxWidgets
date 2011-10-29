@@ -493,6 +493,22 @@ public:
         method must be overridden.
     */
     void SetTargetWindow(wxWindow *window);
+    wxWindow *GetTargetWindow() const;
+
+    
+    void SetTargetRect(const wxRect& rect);
+    wxRect GetTargetRect() const;
+
+    int GetScrollPageSize(int orient) const;
+    void SetScrollPageSize(int orient, int pageSize);
+    int GetScrollLines( int orient ) const;
+    void SetScale(double xs, double ys);
+    double GetScaleX() const;
+    double GetScaleY() const;
+
+    virtual void AdjustScrollbars();
+    bool IsAutoScrolling() const;
+    void StopAutoScrolling();
 
 protected:
     /**
