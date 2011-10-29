@@ -163,6 +163,8 @@ protected:
     virtual WXHRGN MSWGetRegionWithoutChildren();
 #endif // __WXWINCE__
 
+    // resolve ambiguity in base classes
+    virtual wxBorder GetDefaultBorder() const { return wxRadioBoxBase::GetDefaultBorder(); }
 
     // the buttons we contain
     wxSubwindows *m_radioButtons;
