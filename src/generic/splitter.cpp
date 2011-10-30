@@ -461,9 +461,10 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
                 SetSashPositionAndNotify(newPosition);
             }
 
-            if ( m_sashPosition >= size - 5 )
-                SetSashPositionAndNotify(wxMax(10, size - 40));
-            m_lastSize = wxSize(w,h);
+            // Also check if the second window became too small.
+            int adjustedPosition = AdjustSashPosition(m_sashPosition);
+            if ( adjustedPosition != m_sashPosition )
+                SetSashPositionAndNotify(adjustedPosition);
         }
     }
 
