@@ -3621,7 +3621,7 @@ bool wxRichTextCtrl::DoesSelectionHaveTextEffectFlag(int flag)
         {
             if (IsDefaultStyleShowing())
                 wxRichTextApplyStyle(attr, GetDefaultStyleEx());
-            return (attr.GetTextEffectFlags() & flag);
+            return (attr.GetTextEffectFlags() & flag) != 0;
         }
     }
     return false;
