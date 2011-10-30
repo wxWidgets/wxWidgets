@@ -435,6 +435,8 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         return;
     }
 
+    const wxSize curSize = event.GetSize();
+
     // Update the sash position if needed.
     //
     // Notice that we shouldn't do this if the sash position requested by user
@@ -442,10 +444,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
     // modified it before this happens.
     if ( m_windowTwo && m_requestedSashPosition == INT_MAX )
     {
-        int w, h;
-        GetClientSize(&w, &h);
-
-        int size = m_splitMode == wxSPLIT_VERTICAL ? w : h;
+        int size = m_splitMode == wxSPLIT_VERTICAL ? curSize.x : curSize.y;
 
         int old_size = m_splitMode == wxSPLIT_VERTICAL ? m_lastSize.x : m_lastSize.y;
 
@@ -467,6 +466,8 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
             m_lastSize = wxSize(w,h);
         }
     }
+
+    m_lastSize = curSize;
 
     SizeWindows();
 }
