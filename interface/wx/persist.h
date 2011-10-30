@@ -25,7 +25,25 @@ class wxPersistenceManager
 {
 public:
     /**
+        Set the global persistence manager to use.
+
+        Call this method to specify a non-default persistence manager to use.
+        It should usually be called very early (e.g. in wxApp-derived class
+        constructor or in the beginning of overridden wxApp::OnInit()) to
+        affect creation of all persistent controls and the object passed to it
+        must have a lifetime long enough to be still alive when the persistent
+        controls are destroyed and need it to save their state so typically
+        this would be a global or a wxApp member.
+
+        @since 2.9.3
+     */
+    static void Set(wxPersistenceManager& manager);
+
+    /**
         Returns the unique persistence manager object.
+
+        If Set() hadn't been called before, a default persistence manager
+        implementation is returned.
      */
     static wxPersistenceManager& Get();
 
@@ -142,6 +160,46 @@ public:
 
     bool RegisterAndRestore(void *obj, wxPersistentObject *po);
     //@}
+
+protected:
+    /**
+        Protected default constructor.
+
+        This constructor is only provided for the derived classes, to use an
+        object of this class static Get() method should be called.
+     */
+    wxPersistenceManager();
+
+    /**
+        Return the config object to use.
+
+        By default the global wxConfig, returned by wxConfigBase::Get(), is
+        used but a derived class could override this function to return a
+        different one if necessary.
+
+        @since 2.9.3
+     */
+    virtual wxConfigBase *GetConfig() const;
+
+    /**
+        Return the path to use for saving the setting with the given name for
+        the specified object.
+
+        Notice that the @a name argument is the name of the setting, not the
+        name of the object itself which can be retrieved with its GetName()
+        method.
+
+        This method can be overridden by a derived class to change where in
+        wxConfig the different options are stored. By default, all settings of
+        the persistent controls are stored under "Persistent_Options" group and
+        grouped by control type (e.g. "Window" for top level windows or
+        "Splitter") and name, so that the position of a splitter called "sep"
+        could be stored under "Persistent_Options/Splitter/sep/Position" key.
+
+        @since 2.9.3
+     */
+    virtual wxString GetKey(const wxPersistentObject& who,
+                            const wxString& name) const;
 };
 
 /**
