@@ -244,7 +244,6 @@ class WXDLLIMPEXP_AUI wxAuiMDIClientWindow : public wxAuiNotebook
 public:
     wxAuiMDIClientWindow();
     wxAuiMDIClientWindow(wxAuiMDIParentFrame *parent, long style = 0);
-    ~wxAuiMDIClientWindow();
 
     virtual bool CreateClient(wxAuiMDIParentFrame *parent,
                               long style = wxVSCROLL | wxHSCROLL);
