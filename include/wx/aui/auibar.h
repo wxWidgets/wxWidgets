@@ -577,6 +577,9 @@ public:
     wxSize GetHintSize(int dockDirection) const;
     bool IsPaneValid(const wxAuiPaneInfo& pane) const;
 
+    // Override to call DoIdleUpdate().
+    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+
 protected:
 
     virtual void OnCustomRender(wxDC& WXUNUSED(dc),

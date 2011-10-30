@@ -2338,9 +2338,17 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
             }
         }
     }
-
-    DoIdleUpdate();
     evt.Skip();
+}
+
+void wxAuiToolBar::UpdateWindowUI(long flags)
+{
+    if ( flags & wxUPDATE_UI_FROMIDLE )
+    {
+        DoIdleUpdate();
+    }
+
+    wxControl::UpdateWindowUI(flags);
 }
 
 void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
