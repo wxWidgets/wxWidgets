@@ -33,7 +33,7 @@ class WXDLLIMPEXP_AUI wxAuiFloatingFrame : public wxAuiFloatingFrameBaseClass
 {
 public:
     wxAuiFloatingFrame(wxWindow* parent,
-                   wxAuiManager* owner_mgr,
+                   wxAuiManager* ownerMgr,
                    const wxAuiPaneInfo& pane,
                    wxWindowID id = wxID_ANY,
                    long style = wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
@@ -46,7 +46,7 @@ public:
 
 protected:
     virtual void OnMoveStart();
-    virtual void OnMoving(const wxRect& window_rect, wxDirection dir);
+    virtual void OnMoving(const wxRect& windowRect, wxDirection dir);
     virtual void OnMoveFinished();
 
 private:
@@ -58,16 +58,16 @@ private:
     static bool isMouseDown();
 
 private:
-    wxWindow* m_pane_window;    // pane window being managed
-    bool m_solid_drag;          // true if system uses solid window drag
+    wxWindow* m_paneWindow;    // pane window being managed
+    bool m_solidDrag;          // true if system uses solid window drag
     bool m_moving;
-    wxRect m_last_rect;
-    wxRect m_last2_rect;
-    wxRect m_last3_rect;
-    wxSize m_last_size;
+    wxRect m_lastRect;
+    wxRect m_last2Rect;
+    wxRect m_last3Rect;
+    wxSize m_lastSize;
     wxDirection m_lastDirection;
 
-    wxWeakRef<wxAuiManager> m_owner_mgr;
+    wxWeakRef<wxAuiManager> m_ownerMgr;
     wxAuiManager m_mgr;
 
 #ifndef SWIG

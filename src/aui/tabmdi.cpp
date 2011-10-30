@@ -409,7 +409,7 @@ wxAuiMDIChildFrame::wxAuiMDIChildFrame(wxAuiMDIParentFrame *parent,
     // is, but those are the expected symantics.  No style flag is passed
     // onto the panel underneath.
     if (style & wxMINIMIZE)
-        m_activate_on_create = false;
+        m_activateOnCreate = false;
 
     Create(parent, id, title, wxDefaultPosition, size, 0, name);
 }
@@ -451,7 +451,7 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
 
     // see comment in constructor
     if (style & wxMINIMIZE)
-        m_activate_on_create = false;
+        m_activateOnCreate = false;
 
     wxSize cli_size = pClientWindow->GetClientSize();
 
@@ -471,7 +471,7 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
 
     m_title = title;
 
-    pClientWindow->AddPage(this, title, m_activate_on_create);
+    pClientWindow->AddPage(this, title, m_activateOnCreate);
     pClientWindow->Refresh();
 
     return true;
@@ -565,12 +565,12 @@ void wxAuiMDIChildFrame::SetIcons(const wxIconBundle& icons)
 {
     // get icon with the system icon size
     SetIcon(icons.GetIcon(-1));
-    m_icon_bundle = icons;
+    m_iconBundle = icons;
 }
 
 const wxIconBundle& wxAuiMDIChildFrame::GetIcons() const
 {
-    return m_icon_bundle;
+    return m_iconBundle;
 }
 
 void wxAuiMDIChildFrame::SetIcon(const wxIcon& icon)
@@ -658,7 +658,7 @@ wxAuiMDIParentFrame* wxAuiMDIChildFrame::GetMDIParentFrame() const
 
 void wxAuiMDIChildFrame::Init()
 {
-    m_activate_on_create = true;
+    m_activateOnCreate = true;
     m_pMDIParentFrame = NULL;
 #if wxUSE_MENUS
     m_pMenuBar = NULL;
@@ -667,7 +667,7 @@ void wxAuiMDIChildFrame::Init()
 
 bool wxAuiMDIChildFrame::Show(bool show)
 {
-    m_activate_on_create = show;
+    m_activateOnCreate = show;
 
     // do nothing
     return true;
@@ -680,7 +680,7 @@ void wxAuiMDIChildFrame::DoShow(bool show)
 
 void wxAuiMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    m_mdi_newrect = wxRect(x, y, width, height);
+    m_mdiNewRect = wxRect(x, y, width, height);
 #ifdef __WXGTK__
     wxPanel::DoSetSize(x,y,width, height, sizeFlags);
 #else
@@ -690,16 +690,16 @@ void wxAuiMDIChildFrame::DoSetSize(int x, int y, int width, int height, int size
 
 void wxAuiMDIChildFrame::DoMoveWindow(int x, int y, int width, int height)
 {
-    m_mdi_newrect = wxRect(x, y, width, height);
+    m_mdiNewRect = wxRect(x, y, width, height);
 }
 
 void wxAuiMDIChildFrame::ApplyMDIChildFrameRect()
 {
-    if (m_mdi_currect != m_mdi_newrect)
+    if (m_mdiCurRect != m_mdiNewRect)
     {
-        wxPanel::DoMoveWindow(m_mdi_newrect.x, m_mdi_newrect.y,
-                              m_mdi_newrect.width, m_mdi_newrect.height);
-        m_mdi_currect = m_mdi_newrect;
+        wxPanel::DoMoveWindow(m_mdiNewRect.x, m_mdiNewRect.y,
+                              m_mdiNewRect.width, m_mdiNewRect.height);
+        m_mdiCurRect = m_mdiNewRect;
     }
 }
 
