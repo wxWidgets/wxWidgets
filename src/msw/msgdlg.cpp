@@ -454,12 +454,16 @@ int wxMessageDialog::ShowMessageBox()
 #if wxUSE_INTL
     // native message box always uses the current user locale but the program
     // may be using a different one and in this case we need to manually
-    // translate the button labels to avoid mismatch between the language of
-    // the message box text and its buttons
+    // translate the default button labels (if they're non default we have no
+    // way to translate them and so we must assume they were already
+    // translated) to avoid mismatch between the language of the message box
+    // text and its buttons
     wxLocale * const loc = wxGetLocale();
     if ( loc && loc->GetLanguage() != wxLocale::GetSystemLanguage() )
     {
-        if ( m_dialogStyle & wxYES_NO )
+        if ( m_dialogStyle & wxYES_NO &&
+                (GetCustomYesLabel().empty() && GetCustomNoLabel().empty()) )
+
         {
             // use the strings with mnemonics here as the native message box
             // does
@@ -475,7 +479,8 @@ int wxMessageDialog::ShowMessageBox()
         // native message box (which probably doesn't use them because
         // Enter/Esc keys can be already used to dismiss the message box
         // using keyboard)
-        SetOKCancelLabels(_("OK"), _("Cancel"));
+        if ( GetCustomOKLabel().empty() && GetCustomCancelLabel().empty() )
+            SetOKCancelLabels(_("OK"), _("Cancel"));
     }
 #endif // wxUSE_INTL
 
