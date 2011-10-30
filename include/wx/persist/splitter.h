@@ -47,15 +47,15 @@ public:
     virtual bool Restore()
     {
         int pos;
-        if ( RestoreValue(wxPERSIST_SPLITTER_POSITION, &pos) )
-        {
-            if ( pos == -1 )
-                Get()->Unsplit();
-            else
-                Get()->SetSashPosition(pos);
-        }
+        if ( !RestoreValue(wxPERSIST_SPLITTER_POSITION, &pos) )
+            return false;
 
-        return false;
+        if ( pos == -1 )
+            Get()->Unsplit();
+        else
+            Get()->SetSashPosition(pos);
+
+        return true;
     }
 
     virtual wxString GetKind() const { return wxPERSIST_SPLITTER_KIND; }
