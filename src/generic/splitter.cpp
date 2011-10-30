@@ -451,20 +451,23 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         // Don't do anything if the size didn't really change.
         if ( size != old_size )
         {
+            int newPosition = -1;
+
             // Apply gravity if we use it.
             int delta = (int) ( (size - old_size)*m_sashGravity );
             if ( delta != 0 )
             {
-                int newPosition = m_sashPosition + delta;
+                newPosition = m_sashPosition + delta;
                 if( newPosition < m_minimumPaneSize )
                     newPosition = m_minimumPaneSize;
-                SetSashPositionAndNotify(newPosition);
             }
 
             // Also check if the second window became too small.
-            int adjustedPosition = AdjustSashPosition(m_sashPosition);
-            if ( adjustedPosition != m_sashPosition )
-                SetSashPositionAndNotify(adjustedPosition);
+            newPosition = AdjustSashPosition(newPosition == -1
+                                                 ? m_sashPosition
+                                                 : newPosition);
+            if ( newPosition != m_sashPosition )
+                SetSashPositionAndNotify(newPosition);
         }
     }
 
