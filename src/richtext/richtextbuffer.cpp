@@ -1914,6 +1914,20 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
     // A way to force speedy rest-of-buffer layout (the 'else' below)
     bool forceQuickLayout = false;
 
+    // First get the size of the paragraphs we won't be laying out
+    wxRichTextObjectList::compatibility_iterator n = m_children.GetFirst();
+    while (n && n != node)
+    {
+        wxRichTextParagraph* child = wxDynamicCast(n->GetData(), wxRichTextParagraph);
+        if (child)
+        {
+            maxWidth = wxMax(maxWidth, child->GetCachedSize().x);
+            maxMinWidth = wxMax(maxMinWidth, child->GetMinSize().x);
+            maxMaxWidth = wxMax(maxMaxWidth, child->GetMaxSize().x);
+        }
+        n = n->GetNext();
+    }
+
     while (node)
     {
         // Assume this box only contains paragraphs
