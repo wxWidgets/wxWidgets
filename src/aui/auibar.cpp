@@ -2679,15 +2679,12 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
 
     if (m_actionItem && hitItem == m_actionItem)
     {
-        if (hitItem->m_kind == wxITEM_NORMAL)
-        {
-            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, m_actionItem->m_toolId);
-            e.SetEventObject(this);
-            e.SetToolId(m_actionItem->m_toolId);
-            e.SetClickPoint(m_actionPos);
-            GetEventHandler()->ProcessEvent(e);
-            DoIdleUpdate();
-        }
+        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, m_actionItem->m_toolId);
+        e.SetEventObject(this);
+        e.SetToolId(m_actionItem->m_toolId);
+        e.SetClickPoint(m_actionPos);
+        GetEventHandler()->ProcessEvent(e);
+        DoIdleUpdate();
     }
     else
     {
