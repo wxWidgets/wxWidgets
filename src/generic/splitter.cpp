@@ -435,7 +435,12 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         return;
     }
 
-    if ( m_windowTwo )
+    // Update the sash position if needed.
+    //
+    // Notice that we shouldn't do this if the sash position requested by user
+    // couldn't be set yet as it would never be taken into account at all if we
+    // modified it before this happens.
+    if ( m_windowTwo && m_requestedSashPosition == INT_MAX )
     {
         int w, h;
         GetClientSize(&w, &h);
@@ -444,13 +449,10 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
 
         int old_size = m_splitMode == wxSPLIT_VERTICAL ? m_lastSize.x : m_lastSize.y;
 
-        // Don't do anything if the size didn't really change. In particular,
-        // it is important that we don't reset our sash position because it's
-        // out of current range in this case as otherwise the really requested
-        // position would be lost and never set. Wait until we get a real size
-        // event with our non-initial size to do it.
+        // Don't do anything if the size didn't really change.
         if ( size != old_size )
         {
+            // Apply gravity if we use it.
             int delta = (int) ( (size - old_size)*m_sashGravity );
             if ( delta != 0 )
             {
