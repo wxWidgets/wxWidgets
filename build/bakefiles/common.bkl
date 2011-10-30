@@ -162,7 +162,7 @@
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
     </set>
     <set var="WXLIB_WEBVIEW">
-        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('webview')))</if>
+        <if cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'">$(mk.evalExpr(wxwin.mkLibName('webview')))</if>
     </set>
     <set var="WXLIB_MONO">
         <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>

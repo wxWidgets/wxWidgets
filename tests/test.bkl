@@ -213,7 +213,13 @@
             window/setsize.cpp
             xml/xrctest.cpp
         </sources>
-        <wx-lib>webview</wx-lib>
+        <!--
+            Can't use <wx-lib> here as it doesn't work with conditionally
+            defined variables, so fall back <sys-lib> as we must not link with
+            inexisting webview library to be able to run tests even if
+            wxWebView is not available.
+         -->
+        <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
