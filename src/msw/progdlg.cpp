@@ -236,6 +236,11 @@ void PerformNotificationUpdates(HWND hwnd,
             body.assign(title, posNL + numNLs, wxString::npos);
             title.erase(posNL);
         }
+        else // A single line
+        {
+            // Don't use title without the body, this doesn't make sense.
+            title.swap(body);
+        }
 
         ::SendMessage( hwnd,
                        TDM_SET_ELEMENT_TEXT,
