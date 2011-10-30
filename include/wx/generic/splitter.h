@@ -211,9 +211,6 @@ public:
     // Resizes subwindows
     virtual void SizeWindows();
 
-    void SetNeedUpdating(bool needUpdating) { m_needUpdating = needUpdating; }
-    bool GetNeedUpdating() const { return m_needUpdating ; }
-
 #ifdef __WXMAC__
     virtual bool MacClipGrandChildren() const { return true ; }
 #endif

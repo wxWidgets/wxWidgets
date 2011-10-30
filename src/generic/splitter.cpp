@@ -203,7 +203,10 @@ void wxSplitterWindow::OnInternalIdle()
     }
 
     if (m_needUpdating)
+    {
+        m_needUpdating = false;
         SizeWindows();
+    }
 }
 
 void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
@@ -709,8 +712,6 @@ void wxSplitterWindow::SizeWindows()
 
     wxClientDC dc(this);
     DrawSash(dc);
-
-    SetNeedUpdating(false);
 }
 
 // Set pane for unsplit window
