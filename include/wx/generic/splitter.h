@@ -294,7 +294,6 @@ protected:
     bool        m_needUpdating:1;
     bool        m_permitUnsplitAlways:1;
     bool        m_isHot:1;
-    bool        m_checkRequestedSashPosition:1;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSplitterWindow)

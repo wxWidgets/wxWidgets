@@ -118,10 +118,10 @@ void wxSplitterWindow::Init()
     m_oldX = 0;
     m_oldY = 0;
     m_sashStart = 0;
-    m_sashPosition = m_requestedSashPosition = 0;
+    m_sashPosition = 0;
+    m_requestedSashPosition = INT_MAX;
     m_sashGravity = 0.0;
     m_lastSize = wxSize(0,0);
-    m_checkRequestedSashPosition = false;
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = wxCursor(wxCURSOR_SIZENS);
@@ -193,20 +193,21 @@ void wxSplitterWindow::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
 
-    // if this is the first idle time after a sash position has potentially
-    // been set, allow SizeWindows to check for a requested size.
-    if (!m_checkRequestedSashPosition)
-    {
-        m_checkRequestedSashPosition = true;
-        SizeWindows();
-        return; // it won't needUpdating in this case
-    }
-
-    if (m_needUpdating)
+    // We may need to update the children sizes in two cases: either because
+    // we're in the middle of a live update as indicated by m_needUpdating or
+    // because we have a requested but not yet set sash position as indicated
+    // by m_requestedSashPosition having a valid value.
+    if ( m_needUpdating )
     {
         m_needUpdating = false;
-        SizeWindows();
     }
+    else if ( m_requestedSashPosition == INT_MAX )
+    {
+        // We don't need to resize the children.
+        return;
+    }
+
+    SizeWindows();
 }
 
 void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
@@ -646,7 +647,7 @@ void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
 void wxSplitterWindow::SizeWindows()
 {
     // check if we have delayed setting the real sash position
-    if ( m_checkRequestedSashPosition && m_requestedSashPosition != INT_MAX )
+    if ( m_requestedSashPosition != INT_MAX )
     {
         int newSashPosition = ConvertSashPosition(m_requestedSashPosition);
         if ( newSashPosition != m_sashPosition )
@@ -847,7 +848,6 @@ void wxSplitterWindow::SetSashPosition(int position, bool redraw)
     // remember the sash position we want to set for later if we can't set it
     // right now (e.g. because the window is too small)
     m_requestedSashPosition = position;
-    m_checkRequestedSashPosition = false;
 
     DoSetSashPosition(ConvertSashPosition(position));
 
@@ -862,9 +862,7 @@ void wxSplitterWindow::SetSashPosition(int position, bool redraw)
 // window is shown, if you know the overall size is correct.
 void wxSplitterWindow::UpdateSize()
 {
-    m_checkRequestedSashPosition = true;
     SizeWindows();
-    m_checkRequestedSashPosition = false;
 }
 
 bool wxSplitterWindow::DoSendEvent(wxSplitterEvent& event)
