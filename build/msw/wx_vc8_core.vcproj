@@ -6968,6 +6968,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\datetimectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\dc.h"
 				>
 			</File>

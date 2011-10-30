@@ -1773,6 +1773,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\datetimectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\dcbuffer.h"
 				>
 			</File>

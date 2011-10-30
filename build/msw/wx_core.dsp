@@ -6180,6 +6180,10 @@ SOURCE=..\..\include\wx\dateevt.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\datetimectrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\dc.h
 # End Source File
 # Begin Source File

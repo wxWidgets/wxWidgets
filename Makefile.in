@@ -3729,6 +3729,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/dataview.h \
 	wx/datectrl.h \
 	wx/dateevt.h \
+	wx/datetimectrl.h \
 	wx/dcbuffer.h \
 	wx/dvrenderers.h \
 	wx/editlbox.h \
@@ -3781,6 +3782,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/dataview.h \
 	wx/datectrl.h \
 	wx/dateevt.h \
+	wx/datetimectrl.h \
 	wx/dcbuffer.h \
 	wx/dvrenderers.h \
 	wx/editlbox.h \

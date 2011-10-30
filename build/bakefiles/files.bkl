@@ -2999,6 +2999,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dataview.h
     wx/datectrl.h
     wx/dateevt.h
+    wx/datetimectrl.h
     wx/dcbuffer.h
     wx/dvrenderers.h
     wx/editlbox.h
