@@ -1654,7 +1654,7 @@ wxWindow* wxTreeListCtrl::GetView() const
 // wxTreeListEvent implementation
 // ============================================================================
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxTreeListEvent, wxNotifyEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxTreeListEvent, wxNotifyEvent)
 
 #define wxDEFINE_TREELIST_EVENT(name) \
     wxDEFINE_EVENT(wxEVT_COMMAND_TREELIST_##name, wxTreeListEvent)

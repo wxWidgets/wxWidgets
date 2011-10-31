@@ -456,6 +456,9 @@ private:
 class wxTreeListEvent : public wxNotifyEvent
 {
 public:
+    // Default ctor is provided for wxRTTI needs only but should never be used.
+    wxTreeListEvent() { Init(); }
+
     // The item affected by the event. Valid for all events except
     // column-specific ones such as COLUMN_SORTED.
     wxTreeListItem GetItem() const { return m_item; }
@@ -470,6 +473,14 @@ public:
     virtual wxEvent* Clone() const { return new wxTreeListEvent(*this); }
 
 private:
+    // Common part of all ctors.
+    void Init()
+    {
+        m_column = static_cast<unsigned>(-1);
+
+        m_oldCheckedState = wxCHK_UNDETERMINED;
+    }
+
     // Ctor is private, only wxTreeListCtrl can create events of this type.
     wxTreeListEvent(wxEventType evtType,
                     wxTreeListCtrl* treelist,
@@ -479,9 +490,7 @@ private:
     {
         SetEventObject(treelist);
 
-        m_column = static_cast<unsigned>(-1);
-
-        m_oldCheckedState = wxCHK_UNDETERMINED;
+        Init();
     }
 
     // Set the checkbox state before this event for ITEM_CHECKED events.
@@ -505,7 +514,7 @@ private:
 
     friend class wxTreeListCtrl;
 
-    wxDECLARE_ABSTRACT_CLASS(wxTreeListEvent);
+    wxDECLARE_DYNAMIC_CLASS(wxTreeListEvent);
 };
 
 // Event types and event table macros.
