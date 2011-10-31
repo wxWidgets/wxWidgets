@@ -1134,10 +1134,14 @@ public:
     void SetName(const wxString& name);
 
     /**
-        Sets the full path.
+        Sets the path.
 
-        The @a path argument includes both the path (and the volume, if
-        supported by @a format) and the name and extension.
+        The @a path argument includes both the path and the volume, if
+        supported by @a format.
+
+        Calling this function doesn't affect the name and extension components,
+        to change them as well you can use Assign() or just an assignment
+        operator.
 
         @see GetPath()
      */
