@@ -62,9 +62,15 @@ of lines conversions. To use it you need to run
 Uploading
 ---------
 
-Upload the files to SourceForge (the simplest is to scp them to
-sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z) and to
-ftp.wxwidgets.org (ask Chris to do it).
+Upload the files to SourceForge. This can be done via the web interface or just
+scp to sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
+You will need to use the web interface to mark the latest uploaded files as
+being "default downloads" for the appropriate platforms (.zip or .exe for MSW,
+.tar.bz2 for everything else) as otherwise SourceForge would continue to suggest
+people to download old files.
+
+Also upload the files to the FTP mirror at ftp.wxwidgets.org (ask Chris for
+access if you don't have it).
 
 Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 
