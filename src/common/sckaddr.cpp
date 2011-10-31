@@ -144,7 +144,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #ifdef HAVE_FUNC_GETSERVBYNAME_R_4
     struct wxGetservBuf : servent_data
     {
-        wxGethostBuf()
+        wxGetservBuf()
         {
             memset(this, 0, sizeof(servent_data));
         }
