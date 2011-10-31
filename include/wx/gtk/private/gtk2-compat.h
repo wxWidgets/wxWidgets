@@ -339,6 +339,25 @@ static inline GdkWindow* wx_gtk_entry_get_text_window(GtkEntry* entry)
 }
 #define gtk_entry_get_text_window wx_gtk_entry_get_text_window
 
+// ----------------------------------------------------------------------------
+// the following were introduced in GTK+ 2.24
+
+static inline gint wx_gdk_window_get_height(GdkWindow* window)
+{
+    int h;
+    gdk_drawable_get_size(window, NULL, &h);
+    return h;
+}
+#define gdk_window_get_height wx_gdk_window_get_height
+
+static inline gint wx_gdk_window_get_width(GdkWindow* window)
+{
+    int w;
+    gdk_drawable_get_size(window, &w, NULL);
+    return w;
+}
+#define gdk_window_get_width wx_gdk_window_get_width
+
 #endif // !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
 
 
