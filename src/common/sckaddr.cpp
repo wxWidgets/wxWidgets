@@ -273,8 +273,8 @@ hostent *wxGethostbyname_r(const char *hostname,
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
     he = gethostbyname_r(hostname, h, buffer, size, err);
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
-    he = gethostbyname_r(hostname, h,  &buffer);
-    *err = h_errno;
+    *err = gethostbyname_r(hostname, h,  &buffer);
+    he = h;
 #elif defined(HAVE_GETHOSTBYNAME)
     wxLOCK_GETBY_MUTEX(name);
 
@@ -304,8 +304,8 @@ hostent *wxGethostbyaddr_r(const char *addr_buf,
 #elif defined(HAVE_FUNC_GETHOSTBYADDR_R_5)
     he = gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer, size, err);
 #elif defined(HAVE_FUNC_GETHOSTBYADDR_R_3)
-    he = gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer);
-    *err = h_errno;
+    *err = gethostbyaddr_r(addr_buf, buf_size, proto, h, &buffer);
+    he = h;
 #elif defined(HAVE_GETHOSTBYADDR)
     wxLOCK_GETBY_MUTEX(addr);
 
