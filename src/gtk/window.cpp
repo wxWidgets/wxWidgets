@@ -339,7 +339,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 
 extern "C" {
 static void
-parent_set(GtkWidget* widget, GtkObject* old_parent, wxWindow* win)
+parent_set(GtkWidget* widget, GtkWidget* old_parent, wxWindow* win)
 {
     if (old_parent)
     {
