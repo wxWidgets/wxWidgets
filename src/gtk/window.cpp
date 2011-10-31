@@ -3593,43 +3593,28 @@ bool wxWindowGTK::ScrollPages(int pages)
 void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
                           const wxRect *rect)
 {
-    if ( !m_widget )
-    {
-        // it is valid to call Refresh() for a window which hasn't been created
-        // yet, it simply doesn't do anything in this case
+    if (m_widget == NULL || !gtk_widget_get_mapped(m_widget))
         return;
-    }
 
-    if (!m_wxwindow)
+    if (m_wxwindow)
     {
-        if (rect)
-            gtk_widget_queue_draw_area( m_widget, rect->x, rect->y, rect->width, rect->height );
-        else
-            gtk_widget_queue_draw( m_widget );
-    }
-    else
-    {
-        // Just return if the widget or one of its ancestors isn't mapped
-        GtkWidget *w;
-        for (w = m_wxwindow; w != NULL; w = gtk_widget_get_parent(w))
-            if (!gtk_widget_get_mapped (w))
-                return;
-
-        GdkWindow* window = GTKGetDrawingWindow();
+        GdkWindow* window = gtk_widget_get_window(m_wxwindow);
         if (rect)
         {
-            int x = rect->x;
+            GdkRectangle r = { rect->x, rect->y, rect->width, rect->height };
             if (GetLayoutDirection() == wxLayout_RightToLeft)
-                x = GetClientSize().x - x - rect->width;
-            GdkRectangle r;
-            r.x = rect->x;
-            r.y = rect->y;
-            r.width = rect->width;
-            r.height = rect->height;
+                r.x = gdk_window_get_width(window) - r.x - rect->width;
             gdk_window_invalidate_rect(window, &r, true);
         }
         else
             gdk_window_invalidate_rect(window, NULL, true);
+    }
+    else
+    {
+        if (rect)
+            gtk_widget_queue_draw_area(m_widget, rect->x, rect->y, rect->width, rect->height);
+        else
+            gtk_widget_queue_draw(m_widget);
     }
 }
 
