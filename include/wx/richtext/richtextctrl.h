@@ -1476,53 +1476,53 @@ public:
     }
 
     /**
-        Returns @true if all of the selection is bold.
+        Returns @true if all of the selection, or the content at the caret position, is bold.
     */
     virtual bool IsSelectionBold();
 
     /**
-        Returns @true if all of the selection is italic.
+        Returns @true if all of the selection, or the content at the caret position, is italic.
     */
     virtual bool IsSelectionItalics();
 
     /**
-        Returns @true if all of the selection is underlined.
+        Returns @true if all of the selection, or the content at the caret position, is underlined.
     */
     virtual bool IsSelectionUnderlined();
 
     /**
-        Returns @true if all of the selection, or the current caret position, has the supplied wxTextAttrEffects flag(s).
+        Returns @true if all of the selection, or the content at the current caret position, has the supplied wxTextAttrEffects flag(s).
     */
     virtual bool DoesSelectionHaveTextEffectFlag(int flag);
 
     /**
-        Returns @true if all of the selection is aligned according to the specified flag.
+        Returns @true if all of the selection, or the content at the caret position, is aligned according to the specified flag.
     */
     virtual bool IsSelectionAligned(wxTextAttrAlignment alignment);
 
     /**
-        Apples bold to the selection (undoable).
+        Apples bold to the selection or default style (undoable).
     */
     virtual bool ApplyBoldToSelection();
 
     /**
-        Applies italic to the selection (undoable).
+        Applies italic to the selection or default style (undoable).
     */
     virtual bool ApplyItalicToSelection();
 
     /**
-        Applies underline to the selection (undoable).
+        Applies underline to the selection or default style (undoable).
     */
     virtual bool ApplyUnderlineToSelection();
 
     /**
         Applies one or more wxTextAttrEffects flags to the selection (undoable).
-        If there's no selection, it's is applied to the current caret position
+        If there is no selection, it is applied to the default style.
     */
     virtual bool ApplyTextEffectToSelection(int flags);
 
     /**
-        Applies the given alignment to the selection (undoable).
+        Applies the given alignment to the selection or the default style (undoable).
         For alignment values, see wxTextAttr.
     */
     virtual bool ApplyAlignmentToSelection(wxTextAttrAlignment alignment);
