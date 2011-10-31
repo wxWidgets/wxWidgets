@@ -80,36 +80,42 @@ static int gs_requestFrameExtentsStatus;
 // RequestUserAttention related functions
 //-----------------------------------------------------------------------------
 
-extern "C" {
+#ifndef __WXGTK30__
 static void wxgtk_window_set_urgency_hint (GtkWindow *win,
                                            gboolean setting)
 {
-    GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(win));
-    wxASSERT_MSG(window, "wxgtk_window_set_urgency_hint: GdkWindow not realized");
-    XWMHints *wm_hints;
-
-    wm_hints = XGetWMHints(GDK_WINDOW_XDISPLAY(window), GDK_WINDOW_XWINDOW(window));
-
-    if (!wm_hints)
-        wm_hints = XAllocWMHints();
-
-    if (setting)
-        wm_hints->flags |= XUrgencyHint;
-    else
-        wm_hints->flags &= ~XUrgencyHint;
-
-    XSetWMHints(GDK_WINDOW_XDISPLAY(window), GDK_WINDOW_XWINDOW(window), wm_hints);
-    XFree(wm_hints);
-}
-
-static gboolean gtk_frame_urgency_timer_callback( wxTopLevelWindowGTK *win )
-{
 #if GTK_CHECK_VERSION(2,7,0)
-    if(!gtk_check_version(2,7,0))
-        gtk_window_set_urgency_hint(GTK_WINDOW( win->m_widget ), FALSE);
+    if (gtk_check_version(2,7,0) == NULL)
+        gtk_window_set_urgency_hint(win, setting);
     else
 #endif
-        wxgtk_window_set_urgency_hint(GTK_WINDOW( win->m_widget ), FALSE);
+    {
+        GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(win));
+        wxCHECK_RET(window, "wxgtk_window_set_urgency_hint: GdkWindow not realized");
+
+        Display* dpy = GDK_WINDOW_XDISPLAY(window);
+        Window xid = GDK_WINDOW_XID(window);
+        XWMHints* wm_hints = XGetWMHints(dpy, xid);
+
+        if (!wm_hints)
+            wm_hints = XAllocWMHints();
+
+        if (setting)
+            wm_hints->flags |= XUrgencyHint;
+        else
+            wm_hints->flags &= ~XUrgencyHint;
+
+        XSetWMHints(dpy, xid, wm_hints);
+        XFree(wm_hints);
+    }
+}
+#define gtk_window_set_urgency_hint wxgtk_window_set_urgency_hint
+#endif
+
+extern "C" {
+static gboolean gtk_frame_urgency_timer_callback( wxTopLevelWindowGTK *win )
+{
+    gtk_window_set_urgency_hint(GTK_WINDOW(win->m_widget), false);
 
     win->m_urgency_hint = -2;
     return FALSE;
@@ -151,15 +157,7 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
             g_source_remove( win->m_urgency_hint );
             // no break, fallthrough to remove hint too
         case -1:
-#if GTK_CHECK_VERSION(2,7,0)
-            if(!gtk_check_version(2,7,0))
-                gtk_window_set_urgency_hint(GTK_WINDOW( widget ), FALSE);
-            else
-#endif
-            {
-                wxgtk_window_set_urgency_hint(GTK_WINDOW( widget ), FALSE);
-            }
-
+            gtk_window_set_urgency_hint(GTK_WINDOW(widget), false);
             win->m_urgency_hint = -2;
             break;
 
@@ -1317,7 +1315,6 @@ void wxTopLevelWindowGTK::RemoveGrab()
     }
 }
 
-
 bool wxTopLevelWindowGTK::IsActive()
 {
     return (this == (wxTopLevelWindowGTK*)g_activeFrame);
@@ -1351,12 +1348,7 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
         }
     }
 
-#if GTK_CHECK_VERSION(2,7,0)
-    if(!gtk_check_version(2,7,0))
-        gtk_window_set_urgency_hint(GTK_WINDOW( m_widget ), new_hint_value);
-    else
-#endif
-        wxgtk_window_set_urgency_hint(GTK_WINDOW( m_widget ), new_hint_value);
+    gtk_window_set_urgency_hint(GTK_WINDOW(m_widget), new_hint_value);
 }
 
 void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
