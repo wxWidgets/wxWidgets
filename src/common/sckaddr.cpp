@@ -273,6 +273,7 @@ hostent *wxGethostbyname_r(const char *hostname,
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
     he = gethostbyname_r(hostname, h, buffer, size, err);
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+    wxUnusedVar(var);
     *err = gethostbyname_r(hostname, h,  &buffer);
     he = h;
 #elif defined(HAVE_GETHOSTBYNAME)
@@ -304,6 +305,7 @@ hostent *wxGethostbyaddr_r(const char *addr_buf,
 #elif defined(HAVE_FUNC_GETHOSTBYADDR_R_5)
     he = gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer, size, err);
 #elif defined(HAVE_FUNC_GETHOSTBYADDR_R_3)
+    wxUnusedVar(size);
     *err = gethostbyaddr_r(addr_buf, buf_size, proto, h, &buffer);
     he = h;
 #elif defined(HAVE_GETHOSTBYADDR)
@@ -397,6 +399,7 @@ servent *wxGetservbyname_r(const char *port,
 #elif defined(HAVE_FUNC_GETSERVBYNAME_R_5)
     se = getservbyname_r(port, protocol, serv, buffer, size);
 #elif defined(HAVE_FUNC_GETSERVBYNAME_R_4)
+    wxUnusedVar(size);
     if ( getservbyname_r(port, protocol, serv, &buffer) != 0 )
         return NULL;
 #elif defined(HAVE_GETSERVBYNAME)
