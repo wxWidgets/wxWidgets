@@ -2523,12 +2523,15 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
     wxASSERT_MSG( (m_parent != NULL), wxT("wxWindowGTK::SetSize requires parent.\n") );
 
-    int currentX, currentY;
-    GetPosition(&currentX, &currentY);
-    if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        x = currentX;
-    if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        y = currentY;
+    if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0 && (x == -1 || y == -1))
+    {
+        int currentX, currentY;
+        GetPosition(&currentX, &currentY);
+        if (x == -1)
+            x = currentX;
+        if (y == -1)
+            y = currentY;
+    }
     AdjustForParentClientOrigin(x, y, sizeFlags);
 
     // calculate the best size if we should auto size the window
