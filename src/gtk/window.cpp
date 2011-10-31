@@ -1893,35 +1893,6 @@ static void unrealize(GtkWidget*, wxWindowGTK* win)
         gtk_im_context_set_client_window(win->m_imData->context, NULL);
 }
 
-void wxWindowGTK::GTKHandleRealized()
-{
-    if (m_imData)
-    {
-        gtk_im_context_set_client_window
-        (
-            m_imData->context,
-            m_wxwindow ? GTKGetDrawingWindow()
-                       : gtk_widget_get_window(m_widget)
-        );
-    }
-
-    // We cannot set colours and fonts before the widget
-    // been realized, so we do this directly after realization
-    // or otherwise in idle time
-
-    if (m_needsStyleChange)
-    {
-        SetBackgroundStyle(GetBackgroundStyle());
-        m_needsStyleChange = false;
-    }
-
-    wxWindowCreateEvent event( this );
-    event.SetEventObject( this );
-    GTKProcessEvent( event );
-
-    GTKUpdateCursor(true, false);
-}
-
 //-----------------------------------------------------------------------------
 // "size_allocate" from m_wxwindow or m_widget
 //-----------------------------------------------------------------------------
@@ -1999,6 +1970,35 @@ void gtk_window_style_set_callback( GtkWidget *WXUNUSED(widget),
 }
 
 } // extern "C"
+
+void wxWindowGTK::GTKHandleRealized()
+{
+    if (m_imData)
+    {
+        gtk_im_context_set_client_window
+        (
+            m_imData->context,
+            m_wxwindow ? GTKGetDrawingWindow()
+                       : gtk_widget_get_window(m_widget)
+        );
+    }
+
+    // We cannot set colours and fonts before the widget
+    // been realized, so we do this directly after realization
+    // or otherwise in idle time
+
+    if (m_needsStyleChange)
+    {
+        SetBackgroundStyle(GetBackgroundStyle());
+        m_needsStyleChange = false;
+    }
+
+    wxWindowCreateEvent event( this );
+    event.SetEventObject( this );
+    GTKProcessEvent( event );
+
+    GTKUpdateCursor(true, false);
+}
 
 // ----------------------------------------------------------------------------
 // this wxWindowBase function is implemented here (in platform-specific file)
