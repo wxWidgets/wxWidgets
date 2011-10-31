@@ -544,7 +544,10 @@ void wxChoice::DoSetSize(int x, int y,
     const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
     int heightWithItems = 0;
     if (!HasFlag(wxCB_SIMPLE))
-        heightWithItems = height + hItem*nItems;
+        // The extra item (" + 1") is required to prevent a vertical
+        // scrollbar from appearing with comctl32.dll versions earlier
+        // than 6.0 (such as found in Win2k).
+        heightWithItems = height + hItem*(nItems + 1);
     else
         heightWithItems = SetHeightSimpleComboBox(nItems);
 
