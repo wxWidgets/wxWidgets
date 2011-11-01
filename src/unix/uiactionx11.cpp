@@ -17,6 +17,7 @@
 
 #include "wx/uiaction.h"
 
+#include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
 #include "wx/unix/utilsx11.h"
