@@ -1384,10 +1384,21 @@ dnl ------------------------------------------------------------------------
 dnl Platform specific tests
 dnl ------------------------------------------------------------------------
 
-dnl xlC needs -qunique under AIX so that one source file can be
-dnl compiled to multiple object files and safely linked together.
-if test "x$XLCXX" = "xyes" -a "x$USE_AIX" = "x1"; then
-    CXXFLAGS="-qunique $CXXFLAGS"
+if test "x$USE_AIX" = "x1"; then
+    dnl xlC needs -qunique under AIX so that one source file can be
+    dnl compiled to multiple object files and safely linked together.
+    if test "x$XLCXX" = "xyes"; then
+        CXXFLAGS="-qunique $CXXFLAGS"
+    fi
+
+    dnl AIX sys/timer.h header #defines func_data as t_union.data breaking the
+    dnl compilation of GTK+ headers that use func_data as parameter name in
+    dnl several places. We could work around this by inserting "#undef
+    dnl func_data" in the code but IBM provides a possibility to disable this
+    dnl #define by pre-defining the symbol below and this seems to be simpler.
+    dnl And if we have any problems because of it we can always remove it and
+    dnl use the #undef approach.
+    CPPFLAGS="-D_LINUX_SOURCE_COMPAT $CPPFLAGS"
 fi
 
 dnl This case is for PowerPC OS X vs. everything else

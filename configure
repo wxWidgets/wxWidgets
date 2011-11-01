@@ -19583,8 +19583,12 @@ case "${host}" in
 esac
 
 
-if test "x$XLCXX" = "xyes" -a "x$USE_AIX" = "x1"; then
-    CXXFLAGS="-qunique $CXXFLAGS"
+if test "x$USE_AIX" = "x1"; then
+            if test "x$XLCXX" = "xyes"; then
+        CXXFLAGS="-qunique $CXXFLAGS"
+    fi
+
+                                CPPFLAGS="-D_LINUX_SOURCE_COMPAT $CPPFLAGS"
 fi
 
 case "${host}" in
