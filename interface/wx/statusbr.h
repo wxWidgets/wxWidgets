@@ -6,6 +6,22 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// wxStatusBar styles
+#define wxSTB_SIZEGRIP         0x0010
+#define wxSTB_SHOW_TIPS        0x0020
+
+#define wxSTB_ELLIPSIZE_START   0x0040
+#define wxSTB_ELLIPSIZE_MIDDLE  0x0080
+#define wxSTB_ELLIPSIZE_END     0x0100
+
+#define wxSTB_DEFAULT_STYLE    (wxSTB_SIZEGRIP|wxSTB_ELLIPSIZE_END|wxSTB_SHOW_TIPS|wxFULL_REPAINT_ON_RESIZE)
+
+// style flags for wxStatusBar fields
+#define wxSB_NORMAL    0x0000
+#define wxSB_FLAT      0x0001
+#define wxSB_RAISED    0x0002
+
+
 /**
     @class wxStatusBarPane
 
