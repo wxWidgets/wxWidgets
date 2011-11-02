@@ -57,7 +57,7 @@ msgstr " Vorschau"
 
 #: ../src/msw/aboutdlg.cpp:52
 msgid " Version "
-msgstr "Version"
+msgstr " Version "
 
 #: ../src/common/fontcmn.cpp:619
 msgid " bold"
@@ -1041,7 +1041,7 @@ msgstr "ASCII"
 #: ../src/generic/aboutdlgg.cpp:106
 #: ../src/msw/aboutdlg.cpp:61
 msgid "About "
-msgstr "Über"
+msgstr "Über "
 
 #: ../src/common/stockitem.cpp:111
 msgid "Add"
@@ -1304,7 +1304,7 @@ msgstr "&Löschen"
 
 #: ../src/generic/fontdlgg.cpp:313
 msgid "C&olour:"
-msgstr "&Farbe: "
+msgstr "&Farbe:"
 
 #: ../src/common/paper.cpp:125
 msgid "C3 Envelope, 324 x 458 mm"
@@ -1379,7 +1379,7 @@ msgstr "Kann Thread %x nicht fortsetzen."
 
 #: ../src/msw/thread.cpp:525
 msgid "Cannot start thread: error writing TLS."
-msgstr "Kann Thread nicht starten: Fehler beim  Beschreiben des TLS."
+msgstr "Kann Thread nicht starten: Fehler beim Beschreiben des TLS."
 
 #: ../src/os2/thread.cpp:502
 #, c-format
@@ -1485,7 +1485,7 @@ msgstr "Kann das komprimieren der zlib-Daten nicht initialisieren"
 #: ../src/common/image.cpp:2057
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
-msgstr "Kann Bild aus Datei '%s' nicht laden : Datei ist nicht vorhanden."
+msgstr "Kann Bild aus Datei '%s' nicht laden: Datei ist nicht vorhanden."
 
 #: ../src/msw/registry.cpp:393
 #, c-format
@@ -1601,7 +1601,7 @@ msgstr "Kann OLE nicht initialisieren"
 
 #: ../src/mgl/app.cpp:283
 msgid "Cannot initialize SciTech MGL!"
-msgstr "Kann SciTech MGL nicht initialisieren !"
+msgstr "Kann SciTech MGL nicht initialisieren!"
 
 #: ../src/mgl/window.cpp:547
 msgid "Cannot initialize display."
@@ -1615,7 +1615,7 @@ msgstr "Kann das Icon nicht von \"%s\" laden."
 #: ../src/xrc/xmlres.cpp:478
 #, c-format
 msgid "Cannot load resources from file '%s'."
-msgstr "Kann die Resourcen nicht aus der Datei '%s'  laden."
+msgstr "Kann die Resourcen nicht aus der Datei '%s' laden."
 
 #: ../src/html/htmlfilt.cpp:158
 #, c-format
@@ -1669,17 +1669,17 @@ msgstr "Leere Seite kann nicht gedruckt werden."
 #: ../src/msw/volume.cpp:490
 #, c-format
 msgid "Cannot read typename from '%s'!"
-msgstr "Kann die Typnamen nicht aus '%s' lesen !"
+msgstr "Kann die Typnamen nicht aus '%s' lesen!"
 
 # ????
-# Regeln für die Zeitplanung von Threads 
+# Regeln für die Zeitplanung von Threads
 #: ../src/unix/threadpsx.cpp:1109
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "Kann Regeln für die Taktung der Threads nicht abrufen."
 
 #: ../src/unix/threadpsx.cpp:732
 msgid "Cannot start thread: error writing TLS"
-msgstr "Kann 'Thread' nicht starten : Fehler beim 'TLS' schreiben"
+msgstr "Kann 'Thread' nicht starten: Fehler beim 'TLS' schreiben"
 
 #: ../src/mac/carbon/mpthread.cpp:972
 msgid "Cannot wait for thread termination."
@@ -2562,7 +2562,7 @@ msgstr "Esperanto (ISO-8859-3)"
 
 #: ../src/generic/progdlgg.cpp:198
 msgid "Estimated time : "
-msgstr "Geschätzte Zeit :"
+msgstr "Geschätzte Zeit: "
 
 #: ../src/generic/dbgrptg.cpp:230
 msgid "Executable files (*.exe)|*.exe|All files (*.*)|*.*||"
@@ -2662,11 +2662,11 @@ msgstr "Konnte das Display \"%s\" nicht schließen"
 
 #: ../src/msw/dialup.cpp:827
 msgid "Failed to connect: missing username/password."
-msgstr "Verbindung fehlgeschlagen : Es fehlt der Username bzw. das Passwort"
+msgstr "Verbindung fehlgeschlagen: Es fehlt der Username bzw. das Passwort"
 
 #: ../src/msw/dialup.cpp:773
 msgid "Failed to connect: no ISP to dial."
-msgstr "Verbindungs-Versuch gescheitert : kein anwählbares ISP."
+msgstr "Verbindungs-Versuch gescheitert: kein anwählbares ISP."
 
 #: ../src/common/textfile.cpp:177
 #, c-format
@@ -2767,7 +2767,7 @@ msgstr "Aufbau einer 'advise Schleife\" mit dem DDE Server gescheitert"
 #: ../src/msw/dialup.cpp:659
 #, c-format
 msgid "Failed to establish dialup connection: %s"
-msgstr "Aufbau der DFÜ-Verbindung gescheitert : %s"
+msgstr "Aufbau der DFÜ-Verbindung gescheitert: %s"
 
 #: ../src/unix/utilsunx.cpp:509
 #: ../src/unix/utilsunx.cpp:525
@@ -2962,7 +2962,7 @@ msgstr "Konnte Fehlerberichtsdatei \"%s\" nicht entfernen."
 #: ../src/unix/snglinst.cpp:323
 #, c-format
 msgid "Failed to remove lock file '%s'"
-msgstr "Konnte  Sperr-Datei '%s' nicht löschen."
+msgstr "Konnte Sperr-Datei '%s' nicht löschen."
 
 #: ../src/unix/snglinst.cpp:289
 #, c-format
@@ -3200,7 +3200,7 @@ msgstr "Forward hrefs werden nicht unterstützt"
 #: ../contrib/src/deprecated/resource.cpp:1968
 #: ../contrib/src/deprecated/resource.cpp:3070
 msgid "Found "
-msgstr "Gefunden"
+msgstr "Gefunden "
 
 #: ../src/html/helpwnd.cpp:891
 #, c-format
@@ -3923,7 +3923,7 @@ msgstr "%s-Datei laden"
 
 #: ../src/html/htmlwin.cpp:548
 msgid "Loading : "
-msgstr "Laden : "
+msgstr "Laden: "
 
 #: ../src/unix/snglinst.cpp:247
 #, c-format
@@ -4134,7 +4134,7 @@ msgstr "Keine Schriftarten in %s gefunden."
 #: ../src/xrc/xmlres.cpp:715
 #, c-format
 msgid "No handler found for XML node '%s', class '%s'!"
-msgstr "XML-Knoten '%s', Klasse '%s' kann nicht bearbeitet werden !\""
+msgstr "XML-Knoten '%s', Klasse '%s' kann nicht bearbeitet werden!\""
 
 #: ../src/generic/animateg.cpp:144
 msgid "No handler found for animation type."
@@ -4705,7 +4705,7 @@ msgstr "Letzte Aktion wiederholen"
 #: ../src/xrc/xmlres.cpp:681
 #, c-format
 msgid "Referenced object node with ref=\"%s\" not found!"
-msgstr "Der angesprochene Objekt-Knoten mit ref=\"%s\" wurde nicht gefunden !"
+msgstr "Der angesprochene Objekt-Knoten mit ref=\"%s\" wurde nicht gefunden!"
 
 #: ../src/common/stockitem.cpp:148
 msgid "Refresh"
@@ -4748,7 +4748,7 @@ msgstr "Relevante Einträge:"
 
 #: ../src/generic/progdlgg.cpp:206
 msgid "Remaining time : "
-msgstr "Verbleibende Zeit : "
+msgstr "Verbleibende Zeit: "
 
 #: ../src/common/stockitem.cpp:149
 msgid "Remove"
@@ -5180,7 +5180,7 @@ msgstr "Stil:"
 #: ../src/xrc/xmlres.cpp:788
 #, c-format
 msgid "Subclass '%s' not found for resource '%s', not subclassing!"
-msgstr "Unterklasse '%s' für Resource '%s' nicht gefunden, keine Unterklasse erstellt !"
+msgstr "Unterklasse '%s' für Ressource '%s' nicht gefunden, keine Unterklasse erstellt!"
 
 #: ../src/richtext/richtextfontpage.cpp:246
 msgid "Subscrip&t"
@@ -5449,7 +5449,7 @@ msgid ""
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
 "Der Fehlerbericht enthält die unten aufgelisteten Dateien. Bitte stellen Sie sicher, dass alle Dateien,\n"
-" die vertrauliche Informationen enthalten, nicht ausgewählt sind; sie werden dann aus dem Fehlerbericht entfernt.\n"
+"die vertrauliche Informationen enthalten, nicht ausgewählt sind; sie werden dann aus dem Fehlerbericht entfernt.\n"
 
 #: ../src/common/cmdline.cpp:903
 #, c-format
@@ -5599,7 +5599,7 @@ msgstr "Beim Versuch, die Datei '%s' aus dem VFS-Speicher zu entfernen, wurde fe
 #: ../src/common/sckaddr.cpp:144
 #: ../src/common/sckaddr.cpp:247
 msgid "Trying to solve a NULL hostname: giving up"
-msgstr "Beim Versuch, einen  NULL-Hostnamen aufzulösen, gebe ich auf"
+msgstr "Beim Versuch, einen NULL-Hostnamen aufzulösen, gebe ich auf"
 
 #: ../src/common/fmapbase.cpp:114
 msgid "Turkish (ISO-8859-9)"
@@ -6025,7 +6025,7 @@ msgstr "Fehler beim Lesen des XML: '%s' in Zeile %d"
 
 #: ../src/common/xpmdecod.cpp:794
 msgid "XPM: Malformed pixel data!"
-msgstr "XPM: Pixel-Daten in falscher Form !"
+msgstr "XPM: Pixel-Daten in falscher Form!"
 
 #: ../src/common/xpmdecod.cpp:709
 #, c-format
@@ -6256,7 +6256,7 @@ msgstr "Kann Datei '%s' nicht anlegen."
 #: ../src/common/fileconf.cpp:1204
 #, c-format
 msgid "can't delete user configuration file '%s'"
-msgstr "Kann  Konfigurations-Datei '%s' nicht löschen."
+msgstr "Kann Konfigurations-Datei '%s' nicht löschen."
 
 #: ../src/common/file.cpp:450
 #, c-format
@@ -6867,7 +6867,7 @@ msgstr "Gestern"
 #: ../src/common/zstream.cpp:413
 #, c-format
 msgid "zlib error %d"
-msgstr " zlib-Fehler %d"
+msgstr "zlib-Fehler %d"
 
 #: ../src/common/prntbase.cpp:1124
 msgid "|<<"
