@@ -176,12 +176,12 @@ msgstr "%s Nachricht"
 #: ../contrib/src/deprecated/resource.cpp:2400
 #, c-format
 msgid "%s not a bitmap resource specification."
-msgstr "%s gibt keine Quelle für eine Bitmap-Graphik an."
+msgstr "%s gibt keine Quelle für eine Bitmap-Grafik an."
 
 #: ../contrib/src/deprecated/resource.cpp:2554
 #, c-format
 msgid "%s not an icon resource specification."
-msgstr "%s gibt keine Quelle für eine Icon-Graphik an."
+msgstr "%s gibt keine Quelle für eine Icon-Grafik an."
 
 #: ../contrib/src/deprecated/resource.cpp:1901
 #: ../contrib/src/deprecated/resource.cpp:2030
@@ -285,7 +285,7 @@ msgstr "&Kopieren"
 
 #: ../src/generic/hyperlink.cpp:160
 msgid "&Copy URL"
-msgstr "URL &Kopieren"
+msgstr "URL &kopieren"
 
 #: ../src/generic/dbgrptg.cpp:330
 msgid "&Debug report preview:"
@@ -431,7 +431,7 @@ msgstr "&Weiter >"
 
 #: ../src/generic/tipdlg.cpp:274
 msgid "&Next Tip"
-msgstr "&Nächster Tip"
+msgstr "&Nächster Tipp"
 
 #: ../src/richtext/richtextstylepage.cpp:122
 msgid "&Next style:"
@@ -525,7 +525,7 @@ msgstr "&Wiederholen "
 
 #: ../src/richtext/richtextstyledlg.cpp:243
 msgid "&Rename Style..."
-msgstr "Stil &Umbenennen..."
+msgstr "Stil &umbenennen..."
 
 #: ../src/generic/fdrepdlg.cpp:178
 msgid "&Replace"
@@ -576,7 +576,7 @@ msgstr "&Zeichenabstand (Zehntel-mm)"
 
 #: ../src/common/stockitem.cpp:154
 msgid "&Stop"
-msgstr "&Stop"
+msgstr "&Stopp"
 
 #: ../src/richtext/richtextfontpage.cpp:225
 msgid "&Strikethrough"
@@ -1049,7 +1049,7 @@ msgstr "Hinzufügen"
 
 #: ../src/html/helpwnd.cpp:425
 msgid "Add current page to bookmarks"
-msgstr "Aktuelle HTLM-Seite den Lesezeichen hinzufügen"
+msgstr "Aktuelle HTML-Seite den Lesezeichen hinzufügen"
 
 #: ../src/generic/colrdlgg.cpp:291
 msgid "Add to custom colours"
@@ -1615,7 +1615,7 @@ msgstr "Kann das Icon nicht von \"%s\" laden."
 #: ../src/xrc/xmlres.cpp:478
 #, c-format
 msgid "Cannot load resources from file '%s'."
-msgstr "Kann die Resourcen nicht aus der Datei '%s' laden."
+msgstr "Kann die Ressourcen nicht aus der Datei '%s' laden."
 
 #: ../src/html/htmlfilt.cpp:158
 #, c-format
@@ -1687,7 +1687,7 @@ msgstr "Kann nicht auf Beendigung des Threads warten."
 
 #: ../src/mac/carbon/mpthread.cpp:888
 msgid "Cant create the thread event queue"
-msgstr "Kann Ereigns-Queue des Threads nicht erzeugen"
+msgstr "Kann Ereignis-Queue des Threads nicht erzeugen"
 
 #: ../src/html/helpwnd.cpp:532
 msgid "Case sensitive"
@@ -1788,7 +1788,7 @@ msgstr "Klicken um eine Linie durch den Text zu ziehen."
 #: ../src/richtext/richtextfontpage.cpp:234
 #: ../src/richtext/richtextfontpage.cpp:236
 msgid "Check to show the text in capitals."
-msgstr "Klicken um den text in Kapitalien anzuzeigen."
+msgstr "Klicken um den Text in Kapitalien anzuzeigen."
 
 #: ../src/richtext/richtextfontpage.cpp:248
 #: ../src/richtext/richtextfontpage.cpp:250
@@ -1864,7 +1864,7 @@ msgstr "Klicken um die Farbe der Schriftart zu ändern."
 #: ../src/richtext/richtextfontpage.cpp:217
 #: ../src/richtext/richtextfontpage.cpp:219
 msgid "Click to change the text colour."
-msgstr "Klicken um des Textes zu ändern."
+msgstr "Klicken um die Textfarbe zu ändern."
 
 #: ../src/richtext/richtextliststylepage.cpp:194
 #: ../src/richtext/richtextliststylepage.cpp:196
@@ -1906,7 +1906,7 @@ msgstr "Klicken um einen neuen Listenstil zu erzeugen."
 #: ../src/richtext/richtextstyledlg.cpp:224
 #: ../src/richtext/richtextstyledlg.cpp:226
 msgid "Click to create a new paragraph style."
-msgstr "Klicken um einen neuen Abstatzstil zu erzeugen."
+msgstr "Klicken um einen neuen Absatzstil zu erzeugen."
 
 #: ../src/richtext/richtexttabspage.cpp:136
 #: ../src/richtext/richtexttabspage.cpp:138
@@ -2426,7 +2426,7 @@ msgstr "Nicht speichern"
 #: ../src/html/htmlwin.cpp:583
 #: ../src/msw/frame.cpp:195
 msgid "Done"
-msgstr "fertig"
+msgstr "Fertig"
 
 #: ../src/generic/progdlgg.cpp:418
 msgid "Done."
@@ -2695,7 +2695,7 @@ msgstr "Kopieren des Registry-Schlüssels von '%s' in '%s' gescheitert"
 
 #: ../src/msw/dde.cpp:984
 msgid "Failed to create DDE string"
-msgstr "Erstellung des DDE-Zeichenkette gescheitert"
+msgstr "Erstellung der DDE-Zeichenkette gescheitert"
 
 #: ../src/msw/mdi.cpp:463
 msgid "Failed to create MDI parent frame."
@@ -2716,7 +2716,7 @@ msgstr "Konnte keine anonyme Unix-Pipe erstellen"
 #: ../src/msw/dde.cpp:442
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
-msgstr "Aufbau der Verbindung zur Server '%s' 'on topic' '%s' gescheitert"
+msgstr "Aufbau der Verbindung zum Server '%s' 'on topic' '%s' gescheitert"
 
 #: ../src/msw/cursor.cpp:213
 msgid "Failed to create cursor."
@@ -2934,11 +2934,11 @@ msgstr "Lesen der Konfigurationsoptionen fehlgeschlagen."
 
 #: ../src/unix/utilsunx.cpp:599
 msgid "Failed to redirect child process input/output"
-msgstr "Umleitung des Ein/Ausgabe des Unterprozesses gescheitert"
+msgstr "Umleitung der Ein-/Ausgabe des Unterprozesses gescheitert"
 
 #: ../src/msw/utilsexc.cpp:651
 msgid "Failed to redirect the child process IO"
-msgstr "Umleitung des Ein/Ausgabe des Unterprozesses gescheitert"
+msgstr "Umleitung der Ein-/Ausgabe des Unterprozesses gescheitert"
 
 #: ../src/msw/dde.cpp:292
 #, c-format
@@ -3580,7 +3580,7 @@ msgstr "Ungültiger Index des TIFF-Bilds."
 #: ../src/xrc/xmlres.cpp:485
 #, c-format
 msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
-msgstr "Ungültige XRC-Resource '%s': Kein Wurzel-Knoten 'resource'."
+msgstr "Ungültige XRC-Ressource '%s': Kein Wurzel-Knoten 'resource'."
 
 #: ../src/common/appcmn.cpp:290
 #, c-format
@@ -3979,7 +3979,7 @@ msgstr "Groß- und Kleinschreibung beachten"
 #: ../src/common/fs_mem.cpp:178
 #, c-format
 msgid "Memory VFS already contains file '%s'!"
-msgstr "VFS-Speicher beinhaltet bereits der Datei '%s'!"
+msgstr "VFS-Speicher beinhaltet bereits die Datei '%s'!"
 
 #: ../src/msw/frame.cpp:415
 msgid "Menu"
@@ -4611,7 +4611,7 @@ msgstr "Druckersteuerung"
 
 #: ../src/html/helpwnd.cpp:689
 msgid "Print this page"
-msgstr "Diese Seite Drucken"
+msgstr "Diese Seite drucken"
 
 #: ../src/generic/prntdlgg.cpp:184
 msgid "Print to File"
@@ -4662,7 +4662,7 @@ msgstr "Drucke..."
 #: ../src/common/debugrpt.cpp:552
 #, c-format
 msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
-msgstr "Bearbeitung des Fehlerberichts fehlgeschlagen, belasse die Dateien im Ornder \"%s\"."
+msgstr "Bearbeitung des Fehlerberichts fehlgeschlagen, belasse die Dateien im Ordner \"%s\"."
 
 #: ../src/common/log.cpp:458
 msgid "Program aborted."
@@ -4756,7 +4756,7 @@ msgstr "Entferne"
 
 #: ../src/html/helpwnd.cpp:426
 msgid "Remove current page from bookmarks"
-msgstr "Aktuelle HTLM-Seite als Lesezeichen entfernen"
+msgstr "Aktuelle HTML-Seite als Lesezeichen entfernen"
 
 #: ../src/common/rendcmn.cpp:196
 #, c-format
@@ -4884,7 +4884,7 @@ msgstr "Logtexte in Datei speichern"
 
 #: ../src/generic/fontdlgg.cpp:232
 msgid "Script"
-msgstr "Script"
+msgstr "Skript"
 
 #: ../src/html/helpwnd.cpp:534
 #: ../src/html/helpwnd.cpp:549
@@ -4987,7 +4987,7 @@ msgstr "Einstellungen..."
 
 #: ../src/msw/dialup.cpp:568
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr "Mehrere aktive DFÜ-Verbindungen gefunden, wähle einer davon aus."
+msgstr "Mehrere aktive DFÜ-Verbindungen gefunden, wähle eine davon aus."
 
 #: ../src/common/menucmn.cpp:318
 msgid "Shift-"
@@ -5019,7 +5019,7 @@ msgstr "Versteckte Verzeichnisse anzeigen"
 
 #: ../src/html/helpwnd.cpp:656
 msgid "Show/hide navigation panel"
-msgstr "Suchbaum Ein-/Ausschalten"
+msgstr "Suchbaum ein-/ausschalten"
 
 #: ../src/richtext/richtextsymboldlg.cpp:420
 #: ../src/richtext/richtextsymboldlg.cpp:422
@@ -5099,7 +5099,7 @@ msgstr "Bedauere, diese Datei konnte nicht gesichert werden."
 
 #: ../contrib/src/fl/controlbar.cpp:384
 msgid "Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
-msgstr "Entschuldigung, Andocken wird nicht unterstützt für Portierungen ausser wxMSW, wxMac und wxGTK"
+msgstr "Entschuldigung, Andocken wird nicht unterstützt für Portierungen außer wxMSW, wxMac und wxGTK"
 
 #: ../src/common/prntbase.cpp:1495
 msgid "Sorry, not enough memory to create a preview."
@@ -5385,7 +5385,7 @@ msgstr "Die Schriftart aus der das Symbol entnommen wurde."
 #: ../src/generic/fontdlgg.cpp:341
 #: ../src/generic/fontdlgg.cpp:343
 msgid "The font point size."
-msgstr "Die Schriftgröße in Punkten."
+msgstr "Die Schriftgröße in Punkt."
 
 #: ../src/mac/carbon/fontdlg.cpp:466
 #: ../src/mac/carbon/fontdlg.cpp:468
@@ -5528,7 +5528,7 @@ msgstr "Dieses System unterstützt nicht die Komponente zur Darstellung der Datum
 
 #: ../src/msw/thread.cpp:1268
 msgid "Thread module initialization failed: cannot store value in thread local storage"
-msgstr "Thread-Modul-Initialisierung gescheitert: Kann den Wert nicht im lokalen Speicherbereich des Thread gespeichert werden"
+msgstr "Thread-Modul-Initialisierung gescheitert: Wert konnte nicht im lokalen Speicherbereich des Thread gespeichert werden"
 
 #: ../src/unix/threadpsx.cpp:1618
 msgid "Thread module initialization failed: failed to create thread key"
@@ -5594,7 +5594,7 @@ msgstr "Übersetzer"
 #: ../src/common/fs_mem.cpp:230
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr "Beim Versuch, die Datei '%s' aus dem VFS-Speicher zu entfernen, wurde festgestellt, daß sie gar nicht geladen war!"
+msgstr "Beim Versuch, die Datei '%s' aus dem VFS-Speicher zu entfernen, wurde festgestellt, dass sie gar nicht geladen war!"
 
 #: ../src/common/sckaddr.cpp:144
 #: ../src/common/sckaddr.cpp:247
@@ -6188,7 +6188,7 @@ msgstr "Ein interner Aufruf zur 'PostMessage'-Funktion ist gescheitert. "
 
 #: ../src/msw/dde.cpp:1079
 msgid "an internal error has occurred in the DDEML."
-msgstr "Ein interne Fehler ist im DDMEL aufgetreten."
+msgstr "Ein interne Fehler ist im DDEML aufgetreten."
 
 #: ../src/msw/dde.cpp:1085
 msgid ""
@@ -6379,7 +6379,7 @@ msgstr "Fehler beim Komprimieren"
 
 #: ../src/common/regex.cpp:235
 msgid "conversion to 8-bit encoding failed"
-msgstr "Umwandlung in 8-Bit Codierung fehlgeschlagen"
+msgstr "Umwandlung in 8-Bit-Kodierung fehlgeschlagen"
 
 #: ../src/common/menucmn.cpp:197
 msgid "ctrl"
@@ -6702,7 +6702,7 @@ msgstr "zehnte"
 
 #: ../src/msw/dde.cpp:1037
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
-msgstr "das Ergebnis zur Transaktion hat der 'DDE_FBUSY'-Bit gesetzt."
+msgstr "das Ergebnis zur Transaktion hat das 'DDE_FBUSY'-Bit gesetzt."
 
 #: ../src/common/datetime.cpp:4015
 msgid "third"
