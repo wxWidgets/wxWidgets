@@ -327,3 +327,6 @@ public:
     */
     void SetValue(double value);
 };
+
+wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
+wxEventType wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED;

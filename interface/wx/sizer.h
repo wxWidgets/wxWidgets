@@ -290,6 +290,8 @@ public:
                      int border = 0,
                      wxObject* userData = NULL);
 
+    wxSizerItem* Add(wxSizerItem* item);
+    
     /**
         This base function adds non-stretchable space to both the horizontal
         and vertical orientation of the sizer.
@@ -406,6 +408,14 @@ public:
     */
     void FitInside(wxWindow* window);
 
+    /**
+       Inform sizer about the first direction that has been decided (by
+       parent item).  Returns true if it made use of the informtion (and
+       recalculated min size).
+    */
+    virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
+
+    
     //@{
     /**
         Returns the list of the items in this sizer.
@@ -568,6 +578,8 @@ public:
                         int border = 0,
                         wxObject* userData = NULL);
 
+    wxSizerItem* Insert(size_t index, wxSizerItem* item);
+    
     /**
         Inserts non-stretchable space to the sizer.
         More readable way of calling wxSizer::Insert(index, size, size).
@@ -656,6 +668,8 @@ public:
                          int border = 0,
                          wxObject* userData = NULL);
 
+    wxSizerItem* Prepend(wxSizerItem* item);
+    
     /**
         Prepends non-stretchable space to the sizer.
         More readable way of calling wxSizer::Prepend(size, size, 0).
@@ -967,6 +981,9 @@ public:
         outlined above.
     */
     void SetNegativeButton(wxButton* button);
+
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
 };
 
 
@@ -1007,7 +1024,7 @@ public:
     /**
         Construct a sizer item for tracking a subsizer.
     */
-    wxSizerItem(wxSizer* window, const wxSizerFlags& flags);
+    wxSizerItem(wxSizer* sizer, const wxSizerFlags& flags);
     wxSizerItem(wxSizer* sizer, int proportion, int flag,
                 int border,
                 wxObject* userData);
@@ -1039,7 +1056,7 @@ public:
         Old spacer, if any, is deleted.
     */
     void AssignSpacer(const wxSize& size);
-    void AssignSpacer(int w, int h) { AssignSpacer(wxSize(w, h)); }
+    void AssignSpacer(int w, int h);
     //@}
 
     /**
@@ -1585,7 +1602,6 @@ public:
     void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
     
     virtual void RecalcSizes();
-    
     virtual wxSize CalcMin();
     
 };
@@ -1710,6 +1726,9 @@ public:
         Sets the vertical gap (in pixels) between the cells in the sizer.
     */
     void SetVGap(int gap);
+
+    virtual wxSize CalcMin();
+    virtual void RecalcSizes();
 };
 
 
@@ -1770,6 +1789,9 @@ public:
         Returns the static box associated with the sizer.
     */
     wxStaticBox* GetStaticBox() const;
+
+    virtual wxSize CalcMin();
+    virtual void RecalcSizes();
 };
 
 
@@ -1834,6 +1856,6 @@ public:
         It is used internally only and must not be called by the user
         (call Layout() if you want to resize). Documented for information.
     */
-    void RecalcSizes();
+    virtual void RecalcSizes();
 };
 

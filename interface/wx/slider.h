@@ -6,6 +6,23 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+#define wxSL_HORIZONTAL      wxHORIZONTAL /* 0x0004 */
+#define wxSL_VERTICAL        wxVERTICAL   /* 0x0008 */
+
+#define wxSL_TICKS           0x0010
+#define wxSL_AUTOTICKS       wxSL_TICKS // we don't support manual ticks
+#define wxSL_LEFT            0x0040
+#define wxSL_TOP             0x0080
+#define wxSL_RIGHT           0x0100
+#define wxSL_BOTTOM          0x0200
+#define wxSL_BOTH            0x0400
+#define wxSL_SELRANGE        0x0800
+#define wxSL_INVERSE         0x1000
+#define wxSL_MIN_MAX_LABELS  0x2000
+#define wxSL_VALUE_LABEL     0x4000
+#define wxSL_LABELS          (wxSL_MIN_MAX_LABELS|wxSL_VALUE_LABEL)
+
 /**
     @class wxSlider
 

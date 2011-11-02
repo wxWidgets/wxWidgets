@@ -7,6 +7,18 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+#define wxSP_NOBORDER         0x0000
+#define wxSP_THIN_SASH        0x0000    // NB: the default is 3D sash
+#define wxSP_NOSASH           0x0010
+#define wxSP_PERMIT_UNSPLIT   0x0040
+#define wxSP_LIVE_UPDATE      0x0080
+#define wxSP_3DSASH           0x0100
+#define wxSP_3DBORDER         0x0200
+#define wxSP_NO_XP_THEME      0x0400
+#define wxSP_BORDER           wxSP_3DBORDER
+#define wxSP_3D               (wxSP_3DBORDER | wxSP_3DSASH)
+
+
 enum wxSplitMode
 {
     wxSPLIT_HORIZONTAL = 1,
@@ -503,3 +515,8 @@ public:
     void SetSashPosition(int pos);
 };
 
+
+wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED;
+wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING;
+wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED;
+wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT;
