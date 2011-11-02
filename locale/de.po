@@ -685,7 +685,7 @@ msgstr "'%s' sollte numerisch sein."
 #: ../src/common/valtext.cpp:135
 #, c-format
 msgid "'%s' should only contain ASCII characters."
-msgstr "'%s' sollte ausschließlich ASCII Zeichen enthalten."
+msgstr "'%s' sollte ausschließlich ASCII-Zeichen enthalten."
 
 #: ../src/common/valtext.cpp:141
 #, c-format
@@ -1337,7 +1337,7 @@ msgstr "KAPITALIEN"
 #: ../src/html/chm.cpp:797
 #: ../src/html/chm.cpp:856
 msgid "CHM handler currently supports only local files!"
-msgstr "CHM Handler unterstützt derzeit nur lokale Dateien."
+msgstr "CHM-Handler unterstützt derzeit nur lokale Dateien."
 
 #: ../src/common/menucmn.cpp:85
 msgid "CLEAR"
@@ -1988,7 +1988,7 @@ msgstr "Kommandozeilenargument %d konnte nicht nach Unicode konvertiert werden u
 
 #: ../src/html/helpwnd.cpp:1552
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
-msgstr "Komprimierte HTML Hilfedatei (*.chm)|*.chm|"
+msgstr "Komprimierte HTML-Hilfedatei (*.chm)|*.chm|"
 
 #: ../src/generic/dirctrlg.cpp:606
 msgid "Computer"
@@ -2147,7 +2147,7 @@ msgstr "Konnte PNG-Bild nicht laden - Datei ist beschädigt oder der Speicher rei
 #: ../src/unix/sound.cpp:471
 #, c-format
 msgid "Couldn't load sound data from '%s'."
-msgstr "Kann die Klang Daten nicht von '%s' laden."
+msgstr "Kann die Klangdaten nicht von '%s' laden."
 
 # Tonkanal??
 #: ../src/unix/sound_sdl.cpp:228
@@ -2238,23 +2238,23 @@ msgstr "ENTFERNEN"
 
 #: ../src/common/imagbmp.cpp:918
 msgid "DIB Header: Encoding doesn't match bitdepth."
-msgstr "DIB Header: Kodierung entspricht der Bittiefe nicht."
+msgstr "DIB-Header: Kodierung entspricht der Bittiefe nicht."
 
 #: ../src/common/imagbmp.cpp:880
 msgid "DIB Header: Image height > 32767 pixels for file."
-msgstr "DIB Header: Bildhöhe > 32767 pixels."
+msgstr "DIB-Header: Bildhöhe > 32767 pixels."
 
 #: ../src/common/imagbmp.cpp:874
 msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "DIB Header: Bildbreite > 32767 pixels."
+msgstr "DIB-Header: Bildbreite > 32767 pixels."
 
 #: ../src/common/imagbmp.cpp:894
 msgid "DIB Header: Unknown bitdepth in file."
-msgstr "DIB Header: Unbekannte Bittiefe."
+msgstr "DIB-Header: Unbekannte Bittiefe."
 
 #: ../src/common/imagbmp.cpp:904
 msgid "DIB Header: Unknown encoding in file."
-msgstr "DIB Header: Unbekannte Kodierung."
+msgstr "DIB-Header: Unbekannte Kodierung."
 
 #: ../src/common/menucmn.cpp:98
 msgid "DIVIDE"
@@ -2287,7 +2287,7 @@ msgstr "Dekorativ"
 
 #: ../src/common/fmapbase.cpp:661
 msgid "Default encoding"
-msgstr "Standard Kodierung"
+msgstr "Standardkodierung"
 
 #: ../src/generic/prntdlgg.cpp:508
 msgid "Default printer"
@@ -2356,7 +2356,7 @@ msgstr "Wussten Sie schon..."
 #: ../src/dfb/wrapdfb.cpp:59
 #, c-format
 msgid "DirectFB error %d occured."
-msgstr "DirectFB Fehler %d aufgetreten."
+msgstr "DirectFB-Fehler %d aufgetreten."
 
 #: ../src/motif/filedlg.cpp:216
 msgid "Directories"
@@ -2744,7 +2744,7 @@ msgstr "Konnte keinen Registrierungs-Eintrag für '%s'-Dateien erstellen."
 #: ../src/msw/fdrepdlg.cpp:475
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
-msgstr "Konnte keinen Standard Finden/Ersetzen-Dialog erstellen (Fehler %d)"
+msgstr "Konnte keinen Standard-Finden/Ersetzen-Dialog erstellen (Fehler %d)"
 
 #: ../src/html/winpars.cpp:798
 #, c-format
@@ -2762,7 +2762,7 @@ msgstr "Auflisten der Video-Modi gescheitert"
 
 #: ../src/msw/dde.cpp:646
 msgid "Failed to establish an advise loop with DDE server"
-msgstr "Aufbau einer 'advise Schleife\" mit dem DDE Server gescheitert"
+msgstr "Aufbau einer 'advise Schleife' mit dem DDE-Server gescheitert"
 
 #: ../src/msw/dialup.cpp:659
 #, c-format
@@ -2815,7 +2815,7 @@ msgstr "Konnte keine Übereinstimmung mit regulärem Ausdruck %s finden"
 #: ../src/msw/dialup.cpp:725
 #, c-format
 msgid "Failed to get ISP names: %s"
-msgstr "Konnte ISP Namen '%s' nicht ermitteln"
+msgstr "Konnte ISP-Namen '%s' nicht ermitteln"
 
 #: ../src/mac/classic/clipbrd.cpp:136
 msgid "Failed to get clipboard data."
@@ -2839,7 +2839,7 @@ msgstr "Konnte GUI nicht initialisieren: kein Thema gefunden."
 
 #: ../src/msw/helpchm.cpp:64
 msgid "Failed to initialize MS HTML Help."
-msgstr "Konnte MS HTML-Hilfe nicht initialisieren."
+msgstr "Konnte MS-HTML-Hilfe nicht initialisieren."
 
 #: ../src/msw/glcanvas.cpp:653
 msgid "Failed to initialize OpenGL"
@@ -3269,7 +3269,7 @@ msgstr "Vorherige HTML-Seite zeigen"
 
 #: ../src/html/helpwnd.cpp:664
 msgid "Go forward"
-msgstr "Nächste HTLM Seite zeigen"
+msgstr "Nächste HTML-Seite zeigen"
 
 #: ../src/html/helpwnd.cpp:669
 msgid "Go one level up in document hierarchy"
@@ -3299,7 +3299,7 @@ msgstr "Griechisch (ISO-8859-7)"
 #: ../src/common/zstream.cpp:149
 #: ../src/common/zstream.cpp:302
 msgid "Gzip not supported by this version of zlib"
-msgstr "Gzip wird nicht für diese zlib Version unterstützt"
+msgstr "Gzip wird nicht von dieser zlib-Version unterstützt"
 
 #: ../src/common/menucmn.cpp:93
 msgid "HELP"
@@ -3324,7 +3324,7 @@ msgstr "HTML-Dateien (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/html/htmprint.cpp:379
 msgid "HTML pagination algorithm generated more than the allowed maximum number of pages and it can't continue any longer!"
-msgstr "Der Algorithmus zur HTML Seitengenerierung hat mehr als die maximal erlaubten Seiten erzeugt und kann nicht fortfahren!"
+msgstr "Der Algorithmus zur HTML-Seitengenerierung hat mehr als die maximal erlaubten Seiten erzeugt und kann nicht fortfahren!"
 
 #: ../src/common/fmapbase.cpp:113
 msgid "Hebrew (ISO-8859-8)"
@@ -3386,7 +3386,7 @@ msgstr "I64"
 
 #: ../src/common/imagbmp.cpp:940
 msgid "ICO: Error in reading mask DIB."
-msgstr "ICO: Fehler beim Lesen der DIB Maske."
+msgstr "ICO: Fehler beim Lesen der DIB-Maske."
 
 #: ../src/common/imagbmp.cpp:1045
 #: ../src/common/imagbmp.cpp:1104
@@ -3416,7 +3416,7 @@ msgstr "IFF: Datei scheint unvollständig zu sein."
 
 #: ../src/common/imagiff.cpp:750
 msgid "IFF: error in IFF image format."
-msgstr "IFF: Fehler im IFF Bildformat."
+msgstr "IFF: Fehler im IFF-Bildformat."
 
 #: ../src/common/imagiff.cpp:753
 msgid "IFF: not enough memory."
@@ -3966,7 +3966,7 @@ msgstr "MENÜ"
 
 #: ../src/msw/helpchm.cpp:57
 msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
-msgstr "Die MS HTML-Hilfe funktioniert nicht, da die MS-HTML-Hilfe-Bibliothek nicht installiert ist. Bitte installieren Sie sie."
+msgstr "Die MS-HTML-Hilfe funktioniert nicht, da die MS-HTML-Hilfe-Bibliothek nicht installiert ist. Bitte installieren Sie sie."
 
 #: ../src/univ/themes/win32.cpp:3740
 msgid "Ma&ximize"
@@ -4075,7 +4075,7 @@ msgstr "Weiter"
 
 #: ../src/html/helpwnd.cpp:675
 msgid "Next page"
-msgstr "Nächste HTLM Seite zeigen"
+msgstr "Nächste HTML-Seite zeigen"
 
 #: ../src/motif/msgdlg.cpp:203
 #: ../src/mac/classic/msgdlg.cpp:59
@@ -4092,7 +4092,7 @@ msgstr "Keine Möglickeit mit XBM umzugehen!"
 
 #: ../contrib/src/deprecated/resource.cpp:2677
 msgid "No XPM icon facility available!"
-msgstr "Keine Möglichkeit mit XPM Icons umzugehen!"
+msgstr "Keine Möglichkeit mit XPM-Icons umzugehen!"
 
 #: ../src/generic/animateg.cpp:156
 #, c-format
@@ -4237,7 +4237,7 @@ msgstr "Datei öffnen"
 #: ../src/html/helpwnd.cpp:683
 #: ../src/html/helpwnd.cpp:1555
 msgid "Open HTML document"
-msgstr "Öffne HTLM Dokument"
+msgstr "Öffne HTML-Dokument"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -5024,7 +5024,7 @@ msgstr "Suchbaum Ein-/Ausschalten"
 #: ../src/richtext/richtextsymboldlg.cpp:420
 #: ../src/richtext/richtextsymboldlg.cpp:422
 msgid "Shows a Unicode subset."
-msgstr "Zeigt einen Unicode Teilzeichensatz."
+msgstr "Zeigt einen Unicode-Teilzeichensatz."
 
 #: ../src/richtext/richtextliststylepage.cpp:474
 #: ../src/richtext/richtextliststylepage.cpp:476
@@ -5123,12 +5123,12 @@ msgstr "Bedauere, das Format dieser Datei ist unbekannt."
 
 #: ../src/unix/sound.cpp:493
 msgid "Sound data are in unsupported format."
-msgstr "Klang Daten haben ein nicht unterstütztes Format."
+msgstr "Klangdaten haben ein nicht unterstütztes Format."
 
 #: ../src/unix/sound.cpp:478
 #, c-format
 msgid "Sound file '%s' is in unsupported format."
-msgstr "Klang Datei '%s' besitzt ein nicht unterstütztes Format."
+msgstr "Klangdatei '%s' besitzt ein nicht unterstütztes Format."
 
 #: ../src/richtext/richtextliststylepage.cpp:469
 msgid "Spacing"
@@ -5280,7 +5280,7 @@ msgstr "Der FTP-Server unterstützt den passiven Transfermodus nicht."
 
 #: ../src/common/ftp.cpp:692
 msgid "The FTP server doesn't support the PORT command."
-msgstr "Der FTP-Server unterstützt nicht das PORT Kommando."
+msgstr "Der FTP-Server unterstützt nicht das PORT-Kommando."
 
 #: ../src/richtext/richtextliststylepage.cpp:214
 #: ../src/richtext/richtextliststylepage.cpp:216
@@ -5540,7 +5540,7 @@ msgstr "Thread-Modul-Initialisierung gescheitert: Index konnte nicht im lokalen 
 
 #: ../src/unix/threadpsx.cpp:1136
 msgid "Thread priority setting is ignored."
-msgstr "Thread Prioritätseinstellung wird ignoriert"
+msgstr "Thread-Prioritätseinstellung wird ignoriert"
 
 #: ../src/msw/mdi.cpp:172
 msgid "Tile &Horizontally"
@@ -5826,7 +5826,7 @@ msgstr "Benutze die aktuellen Einstellungen für die Ausrichtung."
 
 #: ../src/common/valtext.cpp:177
 msgid "Validation conflict"
-msgstr "Verifizierungs Konflikt"
+msgstr "Verifizierungs-Konflikt"
 
 #: ../src/mac/carbon/aboutdlg.cpp:73
 #, c-format
@@ -6050,24 +6050,24 @@ msgstr "XPM: abgeschnittene Bilddaten in Zeile %d!"
 #: ../src/xrc/xmlres.cpp:606
 #, c-format
 msgid "XRC resource '%s' (class '%s') not found!"
-msgstr "XRC Resource '%s' (Klasse '%s') nicht gefunden !"
+msgstr "XRC-Ressource '%s' (Klasse '%s') nicht gefunden!"
 
 #: ../src/xrc/xmlres.cpp:1152
 #: ../src/xrc/xmlres.cpp:1164
 #, c-format
 msgid "XRC resource: Cannot create animation from '%s'."
-msgstr "XRC Resource: Kann aus '%s' keine Animation erstellen."
+msgstr "XRC-Ressource: Kann aus '%s' keine Animation erstellen."
 
 #: ../src/xrc/xmlres.cpp:1120
 #: ../src/xrc/xmlres.cpp:1132
 #, c-format
 msgid "XRC resource: Cannot create bitmap from '%s'."
-msgstr "XRC Resource: Kann aus '%s' keine Bitmap erstellen."
+msgstr "XRC-Ressource: Kann aus '%s' keine Bitmap erstellen."
 
 #: ../src/xrc/xmlres.cpp:1078
 #, c-format
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
-msgstr "XRC Resource: Falsche Farb-Angabe '%s' für Eigenschaft '%s'."
+msgstr "XRC-Ressource: Falsche Farb-Angabe '%s' für Eigenschaft '%s'."
 
 #: ../src/motif/msgdlg.cpp:203
 #: ../src/mac/classic/msgdlg.cpp:60
@@ -6116,7 +6116,7 @@ msgid ""
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
-"Eine DDEML-Funktion wurde aufgerufen, ohne vorher die Deinitialisierungs- Funktion aufzurufen,\n"
+"Eine DDEML-Funktion wurde aufgerufen, ohne vorher die Deinitialisierungs-Funktion aufzurufen,\n"
 "oder ein ungültiger 'instance identifier'\n"
 "wurde an eine DDEML-Funktion übergeben."
 
@@ -6543,7 +6543,7 @@ msgstr "einleiten"
 
 #: ../src/common/tarstrm.cpp:989
 msgid "invalid data in extended tar header"
-msgstr "ungültige Daten in erweitertem tar Kopfeintrag"
+msgstr "ungültige Daten in erweitertem tar-Kopfeintrag"
 
 #: ../src/common/file.cpp:452
 msgid "invalid eof() return value."
