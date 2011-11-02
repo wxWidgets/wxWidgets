@@ -210,7 +210,7 @@ msgstr "&Nach einem Absatz:"
 #: ../src/richtext/richtextliststylepage.cpp:318
 #: ../src/richtext/richtextindentspage.cpp:138
 msgid "&Alignment"
-msgstr "$Ausrichtung"
+msgstr "&Ausrichtung"
 
 #: ../src/common/stockitem.cpp:112
 msgid "&Apply"
@@ -1257,7 +1257,7 @@ msgstr "Baltisch (alt) (ISO-8859-4)"
 
 #: ../src/richtext/richtextliststylepage.cpp:431
 msgid "Before a paragraph:"
-msgstr "Vor einem Absatz"
+msgstr "Vor einem Absatz:"
 
 #: ../src/richtext/richtextliststylepage.cpp:491
 #: ../src/richtext/richtextbulletspage.cpp:289
@@ -2977,12 +2977,12 @@ msgstr "Umbenennen des Registrieungswertes '%s' in '%s' gescheitert"
 #: ../src/common/filefn.cpp:1175
 #, c-format
 msgid "Failed to rename the file '%s' to '%s' because the destination file already exists."
-msgstr "Umbenennen des datei '%s' nach '%s' fehlgeschlagen da die Zieldatei bereitsexistiert."
+msgstr "Umbenennen der Datei '%s' nach '%s' fehlgeschlagen, da die Zieldatei bereits existiert."
 
 #: ../src/msw/registry.cpp:574
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
-msgstr "Umbenennen des Registrieungsschlüssels von '%s' in '%s' gescheitert"
+msgstr "Umbenennen des Registrieungsschlüssels von '%s' in '%s' gescheitert."
 
 #: ../src/msw/clipbrd.cpp:497
 msgid "Failed to retrieve data from the clipboard."
@@ -3070,7 +3070,7 @@ msgstr "Konnte die Sperrung von Datei '%s' nicht aufheben"
 #: ../src/msw/dde.cpp:313
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "Versuch gescheitert, den DDE-Server '%s' zu entregistrieren."
+msgstr "Versuch gescheitert, den DDE-Server '%s' zu entregistrieren"
 
 #: ../src/common/fileconf.cpp:1066
 msgid "Failed to update user configuration file."
@@ -3169,7 +3169,7 @@ msgstr "Schriftart"
 
 #: ../src/richtext/richtextfontpage.cpp:187
 msgid "Font &weight:"
-msgstr "Schrift$dicke:"
+msgstr "Schrift&dicke:"
 
 #: ../src/html/helpwnd.cpp:1216
 msgid "Font size:"
@@ -3480,11 +3480,11 @@ msgstr "Ungültige Anzahl Parameter für Create-Methode"
 #: ../src/generic/filedlgg.cpp:830
 #: ../src/generic/dirctrlg.cpp:708
 msgid "Illegal directory name."
-msgstr "Ungültiger Verzeichnisname"
+msgstr "Ungültiger Verzeichnisname."
 
 #: ../src/generic/filedlgg.cpp:1420
 msgid "Illegal file specification."
-msgstr "Ungültige Dateiangabe"
+msgstr "Ungültige Dateiangabe."
 
 #: ../src/common/image.cpp:1847
 msgid "Image and mask have different sizes."
@@ -3604,7 +3604,7 @@ msgstr "Ungültige oder Null Objekt-ID an GetObjectClassInfo übergeben"
 
 #: ../src/common/xtistrm.cpp:391
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
-msgstr "\"Ungültige oder Null Objekt-ID an HasObjectClassInfo übergeben\""
+msgstr "Ungültige oder Null Objekt-ID an HasObjectClassInfo übergeben"
 
 #: ../src/common/regex.cpp:304
 #, c-format
@@ -4143,7 +4143,7 @@ msgstr "Kein Handler für den Animationstyp gefunden."
 #: ../src/common/image.cpp:2177
 #: ../src/common/image.cpp:2220
 msgid "No handler found for image type."
-msgstr "Dieses Bild-Format wird nicht unterstützt"
+msgstr "Dieses Bild-Format wird nicht unterstützt."
 
 #: ../src/common/image.cpp:2273
 #, c-format
@@ -4249,7 +4249,7 @@ msgstr "Öffne Datei \"%s\""
 #: ../src/generic/filedlgg.cpp:862
 #: ../src/generic/dirctrlg.cpp:737
 msgid "Operation not permitted."
-msgstr "Ausführung nicht erlaubt"
+msgstr "Ausführung nicht erlaubt."
 
 #: ../src/common/cmdline.cpp:716
 #, c-format
@@ -4303,12 +4303,12 @@ msgstr "PCX: ungültiges Bild"
 
 #: ../src/common/imagpcx.cpp:442
 msgid "PCX: this is not a PCX file."
-msgstr "PCX: dies ist keine PCX Datei."
+msgstr "PCX: dies ist keine PCX-Datei."
 
 #: ../src/common/imagpcx.cpp:458
 #: ../src/common/imagpcx.cpp:480
 msgid "PCX: unknown error !!!"
-msgstr "PCX: unbekannter Fehler !!!"
+msgstr "PCX: unbekannter Fehler!"
 
 #: ../src/common/imagpcx.cpp:457
 msgid "PCX: version number too low"
@@ -4494,7 +4494,7 @@ msgstr "Ein bereits registriertes Objekt wurde an SetObjectname übergeben"
 #: ../src/common/xtistrm.cpp:432
 #: ../src/common/xtistrm.cpp:652
 msgid "Passing an unkown object to GetObject"
-msgstr "Ein unbekanntes Objekt wurde an GetObject übergeben\""
+msgstr "Ein unbekanntes Objekt wurde an GetObject übergeben"
 
 #: ../src/richtext/richtextctrl.cpp:2220
 msgid "Paste"
@@ -4789,11 +4789,11 @@ msgstr "Ersetzen durch:"
 
 #: ../src/xrc/xmlres.cpp:504
 msgid "Resource files must have same version number!"
-msgstr "Resource-Datei muss die gleiche Versionsnummer haben!"
+msgstr "Ressourcen-Datei muss die gleiche Versionsnummer haben!"
 
 #: ../src/common/stockitem.cpp:150
 msgid "Revert to Saved"
-msgstr "Rückgängig auf Gespeichertes."
+msgstr "Rückgängig auf Gespeichertes"
 
 #: ../src/richtext/richtextliststylepage.cpp:250
 #: ../src/richtext/richtextbulletspage.cpp:199
@@ -5508,7 +5508,7 @@ msgstr "Der Text konnte nicht gesichert werden."
 #: ../src/common/cmdline.cpp:881
 #, c-format
 msgid "The value for the option '%s' must be specified."
-msgstr "Der Wert für die Option '%s' muss angegeben werden"
+msgstr "Der Wert für die Option '%s' muss angegeben werden."
 
 #: ../src/msw/dialup.cpp:456
 #, c-format
@@ -5557,7 +5557,7 @@ msgstr "Timeout beim Warten auf eine Verbindung zum FTP-Server, versuchen Sie pa
 #: ../src/os2/timer.cpp:130
 #: ../src/msw/timer.cpp:111
 msgid "Timer creation failed."
-msgstr "Konnte Zeitgeber nicht anlegen"
+msgstr "Konnte Zeitgeber nicht anlegen."
 
 #: ../src/generic/tipdlg.cpp:218
 msgid "Tip of the Day"
@@ -5744,7 +5744,7 @@ msgstr "Unbekanntes Objekt an GetObjectClassInfo übergeben"
 
 #: ../src/unix/dlunix.cpp:339
 msgid "Unknown dynamic library error"
-msgstr "Unbekannter Fehler bei der Behandlung von dynamischer Bibliothek."
+msgstr "Unbekannter Fehler bei der Behandlung von dynamischer Bibliothek"
 
 #: ../src/common/fmapbase.cpp:675
 #, c-format
@@ -6246,17 +6246,17 @@ msgstr "Kann Dateibeschreibung '%d' nicht schließen"
 #: ../src/common/file.cpp:544
 #, c-format
 msgid "can't commit changes to file '%s'"
-msgstr "Kann Änderungen in Datei '%s' nicht sichern."
+msgstr "Kann Änderungen in Datei '%s' nicht sichern"
 
 #: ../src/common/file.cpp:212
 #, c-format
 msgid "can't create file '%s'"
-msgstr "Kann Datei '%s' nicht anlegen."
+msgstr "Kann Datei '%s' nicht anlegen"
 
 #: ../src/common/fileconf.cpp:1204
 #, c-format
 msgid "can't delete user configuration file '%s'"
-msgstr "Kann Konfigurations-Datei '%s' nicht löschen."
+msgstr "Kann Konfigurations-Datei '%s' nicht löschen"
 
 #: ../src/common/file.cpp:450
 #, c-format
@@ -6319,11 +6319,11 @@ msgstr "Kann Benutzer-Konfigurations-Datei nicht öffnen."
 
 #: ../src/common/zipstrm.cpp:528
 msgid "can't re-initialize zlib deflate stream"
-msgstr "Kann den zlib deflate-stream nicht reinitialisieren,"
+msgstr "Kann den zlib deflate-stream nicht reinitialisieren"
 
 #: ../src/common/zipstrm.cpp:553
 msgid "can't re-initialize zlib inflate stream"
-msgstr "Kann den zlib inflate-stream nicht reinitialisieren,"
+msgstr "Kann den zlib inflate-stream nicht reinitialisieren"
 
 #: ../src/common/file.cpp:302
 #, c-format
@@ -6333,7 +6333,7 @@ msgstr "Kann Dateibeschreibung '%d' nicht lesen"
 #: ../src/common/file.cpp:539
 #, c-format
 msgid "can't remove file '%s'"
-msgstr "Kann Datei '%s' nicht löschen."
+msgstr "Kann Datei '%s' nicht löschen"
 
 #: ../src/common/file.cpp:555
 #, c-format
@@ -6446,12 +6446,12 @@ msgstr "Fehler beim Lesen des Zentralverzeichnisses im Zip"
 
 #: ../src/common/zipstrm.cpp:1664
 msgid "error reading zip local header"
-msgstr "Fehler beim Lesen des lokalen Headers in Zipdatei."
+msgstr "Fehler beim Lesen des lokalen Headers in Zipdatei"
 
 #: ../src/common/zipstrm.cpp:2383
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
-msgstr "Fehler beim Schreiben von Zip-Eintrag '%s': Falsche Prüfsumme oder Länge."
+msgstr "Fehler beim Schreiben von Zip-Eintrag '%s': Falsche Prüfsumme oder Länge"
 
 #: ../src/msw/dialup.cpp:888
 msgid "establish"
@@ -6551,11 +6551,11 @@ msgstr "ungültiger 'eof()'-Rückgabewert."
 
 #: ../src/generic/logg.cpp:1185
 msgid "invalid message box return value"
-msgstr "ungültiger 'message box'-Rückgabewert."
+msgstr "ungültiger 'message box'-Rückgabewert"
 
 #: ../src/common/zipstrm.cpp:1444
 msgid "invalid zip file"
-msgstr "Ungültige Zip-Datei."
+msgstr "Ungültige Zip-Datei"
 
 #: ../src/common/fontcmn.cpp:701
 msgid "italic"
@@ -6589,7 +6589,7 @@ msgstr "neunte"
 
 #: ../src/msw/dde.cpp:1030
 msgid "no DDE error."
-msgstr "kein DDE-Fehler"
+msgstr "kein DDE-Fehler."
 
 #: ../src/html/chm.cpp:328
 msgid "no error"
@@ -6613,11 +6613,11 @@ msgstr "Objekte können keine XML-Text-Knoten haben"
 
 #: ../src/html/chm.cpp:340
 msgid "out of memory"
-msgstr "nicht genug Speicher."
+msgstr "nicht genug Speicher"
 
 #: ../src/common/debugrpt.cpp:506
 msgid "process context description"
-msgstr "Bearbeite Kontextbeschreibung."
+msgstr "Bearbeite Kontextbeschreibung"
 
 #: ../src/html/chm.cpp:334
 msgid "read error"
@@ -6630,16 +6630,16 @@ msgstr "Lesen"
 #: ../src/common/zipstrm.cpp:1876
 #, c-format
 msgid "reading zip stream (entry %s): bad crc"
-msgstr "Beim Lesen von Zipstream (Eintrag %s): Falsche Prüfsumme."
+msgstr "Beim Lesen von Zipstream (Eintrag %s): Falsche Prüfsumme"
 
 #: ../src/common/zipstrm.cpp:1873
 #, c-format
 msgid "reading zip stream (entry %s): bad length"
-msgstr "Beim Lesen von Zipstream (Eintrag %s): Falsche Länge."
+msgstr "Beim Lesen von Zipstream (Eintrag %s): Falsche Länge"
 
 #: ../src/msw/dde.cpp:1073
 msgid "reentrancy problem."
-msgstr "Probleme beim Wiedereintreten"
+msgstr "Probleme beim Wiedereintreten."
 
 #: ../src/common/datetime.cpp:4014
 msgid "second"
@@ -6683,7 +6683,7 @@ msgstr "geben Sie das zu benutzende Thema an"
 
 #: ../src/common/zipstrm.cpp:1779
 msgid "stored file length not in Zip header"
-msgstr "Länger der mit 'store' gespeicherten Datei nicht im Zip-Header."
+msgstr "Länge der mit 'store' gespeicherten Datei nicht im Zip-Header"
 
 #: ../src/common/cmdline.cpp:1107
 msgid "str"
