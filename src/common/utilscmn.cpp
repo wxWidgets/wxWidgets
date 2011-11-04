@@ -814,7 +814,7 @@ typedef struct
       smaller partition.  This *guarantees* no more than log (n)
       stack size is needed (actually O(1) in this case)!  */
 
-void wxQsort(void *const pbase, size_t total_elems,
+void wxQsort(void* pbase, size_t total_elems,
              size_t size, wxSortCallback cmp, const void* user_data)
 {
   register char *base_ptr = (char *) pbase;
