@@ -439,14 +439,18 @@ public:
             switch ( which )
             {
                 case wxTreeItemIcon_SelectedExpanded:
-                    image = GetImage(wxTreeItemIcon_Expanded);
+                    // We consider that expanded icon is more important than
+                    // selected so test for it first.
+                    image = m_images[wxTreeItemIcon_Expanded];
+                    if ( image == -1 )
+                        image = m_images[wxTreeItemIcon_Selected];
                     if ( image != -1 )
                         break;
                     //else: fall through
 
                 case wxTreeItemIcon_Selected:
                 case wxTreeItemIcon_Expanded:
-                    image = GetImage(wxTreeItemIcon_Normal);
+                    image = m_images[wxTreeItemIcon_Normal];
                     break;
 
                 case wxTreeItemIcon_Normal:
