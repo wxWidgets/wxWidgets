@@ -28,7 +28,7 @@
 
     @see wxCheckBox, wxButton, wxBitmapToggleButton
 */
-class wxToggleButton : public wxControl
+class wxToggleButton : public wxAnyButton
 {
 public:
     /**
@@ -126,7 +126,7 @@ public:
     @category{ctrl}
     @appearance{bitmaptogglebutton.png}
 */
-class wxBitmapToggleButton : public wxControl
+class wxBitmapToggleButton : public wxToggleButton
 {
 public:
     /**

@@ -198,6 +198,9 @@ public:
 class wxTimerEvent : public wxEvent
 {
 public:
+    wxTimerEvent();
+    wxTimerEvent(wxTimer& timer);
+
     /**
         Returns the interval of the timer which generated this event.
     */
