@@ -8,6 +8,13 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    wxTextPos is a position in the text
+*/
+typedef long wxTextPos;
+
+
 /**
     @class wxTextEntry
 
