@@ -2147,7 +2147,7 @@ Whether a range has positive or negative IDs, [start] is always a smaller
 number than [end]; so code like this works as expected:
 
 @code
-for (int n=XRCID("foo[start]"); n < XRCID("foo[end]"); ++n)
+for (int n=XRCID("foo[start]"); n <= XRCID("foo[end]"); ++n)
     ...
 @endcode
 
