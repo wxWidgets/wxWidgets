@@ -151,7 +151,7 @@ public:                                                             \
                                        e = rend();                  \
           for ( const_reverse_iterator i = b; i != e; ++i )         \
               if ( *i == item )                                     \
-                  return (int)(i - b);                              \
+                  return (int)(e - i - 1);                          \
       }                                                             \
       else                                                          \
       {                                                             \
