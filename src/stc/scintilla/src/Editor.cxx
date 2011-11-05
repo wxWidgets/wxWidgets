@@ -689,14 +689,14 @@ void Editor::SetRectangularRange() {
 		if (sel.selType == Selection::selThin) {
 			xCaret = xAnchor;
 		}
-		int lineAnchor = pdoc->LineFromPosition(sel.Rectangular().anchor.Position());
+		int lineAnchorRect = pdoc->LineFromPosition(sel.Rectangular().anchor.Position());
 		int lineCaret = pdoc->LineFromPosition(sel.Rectangular().caret.Position());
-		int increment = (lineCaret > lineAnchor) ? 1 : -1;
-		for (int line=lineAnchor; line != lineCaret+increment; line += increment) {
+		int increment = (lineCaret > lineAnchorRect) ? 1 : -1;
+		for (int line=lineAnchorRect; line != lineCaret+increment; line += increment) {
 			SelectionRange range(SPositionFromLineX(line, xCaret), SPositionFromLineX(line, xAnchor));
 			if ((virtualSpaceOptions & SCVS_RECTANGULARSELECTION) == 0)
 				range.ClearVirtualSpace();
-			if (line == lineAnchor)
+			if (line == lineAnchorRect)
 				sel.SetSelection(range);
 			else
 				sel.AddSelection(range);
