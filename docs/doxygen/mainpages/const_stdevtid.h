@@ -30,6 +30,7 @@ identifiers are all in the range between @c wxID_LOWEST and
 @c wxID_HIGHEST and, accordingly, the user code should avoid defining its
 own constants in this range (e.g. by using wxNewId()).
 
-Refer to ::wxStockID enumeration values for the reference of these IDs.
+Refer to @ref page_stockitems "the list of stock items" for the subset of standard IDs 
+which are stock IDs as well.
 
 */

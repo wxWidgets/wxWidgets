@@ -65,61 +65,61 @@ typedef class wxString wxArtID;
 
     <table>
     <tr><td>
-     @li wxART_ERROR
-     @li wxART_QUESTION
-     @li wxART_WARNING
-     @li wxART_INFORMATION
-     @li wxART_ADD_BOOKMARK
-     @li wxART_DEL_BOOKMARK
-     @li wxART_HELP_SIDE_PANEL
-     @li wxART_HELP_SETTINGS
-     @li wxART_HELP_BOOK
-     @li wxART_HELP_FOLDER
-     @li wxART_HELP_PAGE
-     @li wxART_GO_BACK
-     @li wxART_GO_FORWARD
-     @li wxART_GO_UP
-     @li wxART_GO_DOWN
-     @li wxART_GO_TO_PARENT
-     @li wxART_GO_HOME
-     @li wxART_GOTO_FIRST (since 2.9.2)
+     @li @c wxART_ERROR
+     @li @c wxART_QUESTION
+     @li @c wxART_WARNING
+     @li @c wxART_INFORMATION
+     @li @c wxART_ADD_BOOKMARK
+     @li @c wxART_DEL_BOOKMARK
+     @li @c wxART_HELP_SIDE_PANEL
+     @li @c wxART_HELP_SETTINGS
+     @li @c wxART_HELP_BOOK
+     @li @c wxART_HELP_FOLDER
+     @li @c wxART_HELP_PAGE
+     @li @c wxART_GO_BACK
+     @li @c wxART_GO_FORWARD
+     @li @c wxART_GO_UP
+     @li @c wxART_GO_DOWN
+     @li @c wxART_GO_TO_PARENT
+     @li @c wxART_GO_HOME
+     @li @c wxART_GOTO_FIRST (since 2.9.2)
      </td><td>
-     @li wxART_GOTO_LAST (since 2.9.2)
-     @li wxART_PRINT
-     @li wxART_HELP
-     @li wxART_TIP
-     @li wxART_REPORT_VIEW
-     @li wxART_LIST_VIEW
-     @li wxART_NEW_DIR
-     @li wxART_FOLDER
-     @li wxART_FOLDER_OPEN
-     @li wxART_GO_DIR_UP
-     @li wxART_EXECUTABLE_FILE
-     @li wxART_NORMAL_FILE
-     @li wxART_TICK_MARK
-     @li wxART_CROSS_MARK
-     @li wxART_MISSING_IMAGE
-     @li wxART_NEW
-     @li wxART_FILE_OPEN
-     @li wxART_FILE_SAVE
+     @li @c wxART_GOTO_LAST (since 2.9.2)
+     @li @c wxART_PRINT
+     @li @c wxART_HELP
+     @li @c wxART_TIP
+     @li @c wxART_REPORT_VIEW
+     @li @c wxART_LIST_VIEW
+     @li @c wxART_NEW_DIR
+     @li @c wxART_FOLDER
+     @li @c wxART_FOLDER_OPEN
+     @li @c wxART_GO_DIR_UP
+     @li @c wxART_EXECUTABLE_FILE
+     @li @c wxART_NORMAL_FILE
+     @li @c wxART_TICK_MARK
+     @li @c wxART_CROSS_MARK
+     @li @c wxART_MISSING_IMAGE
+     @li @c wxART_NEW
+     @li @c wxART_FILE_OPEN
+     @li @c wxART_FILE_SAVE
      </td><td>
-     @li wxART_FILE_SAVE_AS
-     @li wxART_DELETE
-     @li wxART_COPY
-     @li wxART_CUT
-     @li wxART_PASTE
-     @li wxART_UNDO
-     @li wxART_REDO
-     @li wxART_PLUS (since 2.9.2)
-     @li wxART_MINUS (since 2.9.2)
-     @li wxART_CLOSE
-     @li wxART_QUIT
-     @li wxART_FIND
-     @li wxART_FIND_AND_REPLACE
-     @li wxART_HARDDISK
-     @li wxART_FLOPPY
-     @li wxART_CDROM
-     @li wxART_REMOVABLE
+     @li @c wxART_FILE_SAVE_AS
+     @li @c wxART_DELETE
+     @li @c wxART_COPY
+     @li @c wxART_CUT
+     @li @c wxART_PASTE
+     @li @c wxART_UNDO
+     @li @c wxART_REDO
+     @li @c wxART_PLUS (since 2.9.2)
+     @li @c wxART_MINUS (since 2.9.2)
+     @li @c wxART_CLOSE
+     @li @c wxART_QUIT
+     @li @c wxART_FIND
+     @li @c wxART_FIND_AND_REPLACE
+     @li @c wxART_HARDDISK
+     @li @c wxART_FLOPPY
+     @li @c wxART_CDROM
+     @li @c wxART_REMOVABLE
     </td></tr>
     </table>
 
@@ -151,14 +151,14 @@ typedef class wxString wxArtID;
     The @e client is the entity that calls wxArtProvider's GetBitmap() or GetIcon() function.
     It is represented by wxClientID type and can have one of these values:
 
-    @li wxART_TOOLBAR
-    @li wxART_MENU
-    @li wxART_BUTTON
-    @li wxART_FRAME_ICON
-    @li wxART_CMN_DIALOG
-    @li wxART_HELP_BROWSER
-    @li wxART_MESSAGE_BOX
-    @li wxART_OTHER (used for all requests that don't fit into any of the
+    @li @c wxART_TOOLBAR
+    @li @c wxART_MENU
+    @li @c wxART_BUTTON
+    @li @c wxART_FRAME_ICON
+    @li @c wxART_CMN_DIALOG
+    @li @c wxART_HELP_BROWSER
+    @li @c wxART_MESSAGE_BOX
+    @li @c wxART_OTHER (used for all requests that don't fit into any of the
         categories above)
 
     Client ID serve as a hint to wxArtProvider that is supposed to help it to
@@ -171,7 +171,8 @@ typedef class wxString wxArtID;
     @library{wxcore}
     @category{misc}
 
-    @see the @ref page_samples_artprov for an example of wxArtProvider usage.
+    @see @ref page_samples_artprov for an example of wxArtProvider usage;
+         @ref page_stockitems "stock ID list"
 */
 class wxArtProvider : public wxObject
 {
