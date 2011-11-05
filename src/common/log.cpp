@@ -252,7 +252,16 @@ wxLog::~wxLog()
     {
         wxMessageOutputDebug().Printf
         (
-            wxS("Last repeated message (\"%s\", %lu times) wasn't output"),
+#if wxUSE_INTL
+            wxPLURAL
+            (
+                "Last repeated message (\"%s\", %lu time) wasn't output",
+                "Last repeated message (\"%s\", %lu times) wasn't output",
+                gs_prevLog.numRepeated
+            ),
+#else
+            wxS("Last repeated message (\"%s\", %lu time(s)) wasn't output"),
+#endif
             gs_prevLog.msg,
             gs_prevLog.numRepeated
         );
