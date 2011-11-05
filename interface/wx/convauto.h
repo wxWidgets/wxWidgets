@@ -148,6 +148,26 @@ public:
     wxBOM GetBOM() const;
 
     /**
+        Return a pointer to the characters that makes up this BOM.
+
+        The returned character count is 2, 3 or 4, or undefined if the return
+        value is NULL.
+
+        @param bom
+            A valid BOM type, i.e. not wxBOM_Unknown or wxBOM_None.
+        @param count
+            A non-@NULL pointer receiving the number of characters in this BOM.
+        @return
+            Pointer to characters composing the BOM or @NULL if BOM is unknown
+            or invalid. Notice that the returned string is not NUL-terminated
+            and may contain embedded NULs so @a count must be used to handle it
+            correctly.
+
+        @since 2.9.3
+    */
+    const char* GetBOMChars(wxBOM bom, size_t* count);
+
+    /**
         Disable the use of the fall back encoding: if the input doesn't have a
         BOM and is not valid UTF-8, the conversion will fail.
     */

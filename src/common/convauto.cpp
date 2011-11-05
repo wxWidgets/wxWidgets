@@ -31,6 +31,17 @@
 // seem to be a good idea and there is no other reasonable alternative
 wxFontEncoding wxConvAuto::ms_defaultMBEncoding = wxFONTENCODING_ISO8859_1;
 
+namespace
+{
+
+const char BOM_UTF32BE[] = { '\x00', '\x00', '\xFE', '\xFF' };
+const char BOM_UTF32LE[] = { '\xFF', '\xFE', '\x00', '\x00' };
+const char BOM_UTF16BE[] = { '\xFE', '\xFF'                 };
+const char BOM_UTF16LE[] = { '\xFF', '\xFE'                 };
+const char BOM_UTF8[]    = { '\xEF', '\xBB', '\xBF'         };
+
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -42,6 +53,28 @@ void wxConvAuto::SetFallbackEncoding(wxFontEncoding enc)
                   wxT("wxFONTENCODING_DEFAULT doesn't make sense here") );
 
     ms_defaultMBEncoding = enc;
+}
+
+/* static */
+const char* wxConvAuto::GetBOMChars(wxBOM bom, size_t* count)
+{
+    wxCHECK_MSG( count , NULL, wxS("count pointer must be provided") );
+
+    switch ( bom )
+    {
+        case wxBOM_UTF32BE: *count = WXSIZEOF(BOM_UTF32BE); return BOM_UTF32BE;
+        case wxBOM_UTF32LE: *count = WXSIZEOF(BOM_UTF32LE); return BOM_UTF32LE;
+        case wxBOM_UTF16BE: *count = WXSIZEOF(BOM_UTF16BE); return BOM_UTF16BE;
+        case wxBOM_UTF16LE: *count = WXSIZEOF(BOM_UTF16LE); return BOM_UTF16LE;
+        case wxBOM_UTF8   : *count = WXSIZEOF(BOM_UTF8   ); return BOM_UTF8;
+        case wxBOM_Unknown:
+        case wxBOM_None:
+            wxFAIL_MSG( wxS("Invalid BOM type") );
+            return NULL;
+    }
+
+    wxFAIL_MSG( wxS("Unknown BOM type") );
+    return NULL;
 }
 
 /* static */
