@@ -16,31 +16,6 @@
     It may be placed on a @ref wxDialog "dialog box" or on a @ref wxPanel panel,
     or indeed on almost any other window.
 
-    @beginStyleTable
-    @style{wxBU_LEFT}
-        Left-justifies the label. Windows and GTK+ only.
-    @style{wxBU_TOP}
-        Aligns the label to the top of the button. Windows and GTK+ only.
-    @style{wxBU_RIGHT}
-        Right-justifies the bitmap label. Windows and GTK+ only.
-    @style{wxBU_BOTTOM}
-        Aligns the label to the bottom of the button. Windows and GTK+ only.
-    @style{wxBU_EXACTFIT}
-        Creates the button as small as possible instead of making it of the
-        standard size (which is the default behaviour ).
-    @style{wxBU_NOTEXT}
-        Disables the display of the text label in the button even if it has one
-        or its id is one of the standard stock ids with an associated label:
-        without using this style a button which is only supposed to show a
-        bitmap but uses a standard id would display a label too.
-    @style{wxBORDER_NONE}
-        Creates a button without border. This is currently implemented in MSW,
-        GTK2 and OSX/Carbon ports but in the latter only applies to buttons
-        with bitmaps and using bitmap of one of the standard sizes only, namely
-        128*128, 48*48, 24*24 or 16*16. In all the other cases wxBORDER_NONE is
-        ignored under OSX.
-    @endStyleTable
-
     By default, i.e. if none of the alignment styles are specified, the label
     is centered both horizontally and vertically. If the button has both a
     label and a bitmap, the alignment styles above specify the location of the
@@ -48,12 +23,6 @@
     set with wxButton::SetBitmapPosition() defines the relative position of the
     bitmap with respect to the label (however currently non-default alignment
     combinations are not implemented on all platforms).
-
-    @beginEventEmissionTable{wxCommandEvent}
-    @event{EVT_BUTTON(id, func)}
-           Process a @c wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.
-    @endEventTable
-
 
     Since version 2.9.1 wxButton supports showing both text and an image
     (currently only when using wxMSW, wxGTK or wxOSX/Cocoa ports), see
@@ -88,10 +57,40 @@
     The position of the image inside the button be configured using
     SetBitmapPosition(). By default the image is on the left of the text.
 
-    Please also notice that GTK+ uses a global setting called @c
-    gtk-button-images to determine if the images should be shown in the buttons
+    Please also notice that GTK+ uses a global setting called @c gtk-button-images 
+    to determine if the images should be shown in the buttons
     at all. If it is off (which is the case in e.g. Gnome 2.28 by default), no
     images will be shown, consistently with the native behaviour.
+
+    @beginStyleTable
+    @style{wxBU_LEFT}
+        Left-justifies the label. Windows and GTK+ only.
+    @style{wxBU_TOP}
+        Aligns the label to the top of the button. Windows and GTK+ only.
+    @style{wxBU_RIGHT}
+        Right-justifies the bitmap label. Windows and GTK+ only.
+    @style{wxBU_BOTTOM}
+        Aligns the label to the bottom of the button. Windows and GTK+ only.
+    @style{wxBU_EXACTFIT}
+        Creates the button as small as possible instead of making it of the
+        standard size (which is the default behaviour ).
+    @style{wxBU_NOTEXT}
+        Disables the display of the text label in the button even if it has one
+        or its id is one of the standard stock ids with an associated label:
+        without using this style a button which is only supposed to show a
+        bitmap but uses a standard id would display a label too.
+    @style{wxBORDER_NONE}
+        Creates a button without border. This is currently implemented in MSW,
+        GTK2 and OSX/Carbon ports but in the latter only applies to buttons
+        with bitmaps and using bitmap of one of the standard sizes only, namely
+        128*128, 48*48, 24*24 or 16*16. In all the other cases wxBORDER_NONE is
+        ignored under OSX.
+    @endStyleTable
+
+    @beginEventEmissionTable{wxCommandEvent}
+    @event{EVT_BUTTON(id, func)}
+           Process a @c wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.
+    @endEventTable
 
     @library{wxcore}
     @category{ctrl}
@@ -127,7 +126,7 @@ public:
         @param parent
             Parent window. Must not be @NULL.
         @param id
-            Button identifier. A value of wxID_ANY indicates a default value.
+            Button identifier. A value of @c wxID_ANY indicates a default value.
         @param label
             Text to be displayed on the button.
         @param pos
@@ -218,7 +217,7 @@ public:
 
         @remarks Under Windows, only dialog box buttons respond to this function.
 
-        @return the old default item (possibly NULL)
+        @return the old default item (possibly @NULL)
     */
     virtual wxWindow* SetDefault();
 
