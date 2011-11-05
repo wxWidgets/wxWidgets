@@ -255,6 +255,8 @@
 
     @library{wxbase}
     @category{cfg}
+    
+    @see wxConfigPathChanger
 */
 class wxConfigBase : public wxObject
 {
@@ -352,7 +354,9 @@ public:
     /**
         Set current path: if the first character is '/', it is the absolute
         path, otherwise it is a relative path. '..' is supported. If @a strPath
-        doesn't exist it is created.
+        doesn't exist, it is created.
+        
+        @see wxConfigPathChanger
     */
     virtual void SetPath(const wxString& strPath) = 0;
 
@@ -889,5 +893,81 @@ public:
         @NULL).
     */
     static wxConfigBase* Set(wxConfigBase* pConfig);
+};
+
+
+/**
+    @class wxConfigPathChanger
+
+    A handy little class which changes the current path in a wxConfig object and restores it in dtor.
+    Declaring a local variable of this type, it's possible to work in a specific directory 
+    and ensure that the path is automatically restored when the function returns.
+
+    For example:
+    @code
+    // this function loads somes settings from the given wxConfig object;
+    // the path selected inside it is left unchanged
+    bool LoadMySettings(wxConfigBase* cfg)
+    {
+        wxConfigPathChanger changer(cfg, "/Foo/Data/SomeString");
+        wxString str;
+        if ( !config->Read("SomeString", &str) ) {
+            wxLogError("Couldn't read SomeString!");
+            return false;     
+                // NOTE: without wxConfigPathChanger it would be easy to forget to
+                //       set the old path back into the wxConfig object before this return!
+        }
+        
+        // do something useful with SomeString...
+        
+        return true;    // again: wxConfigPathChanger dtor will restore the original wxConfig path
+    }
+    @endcode
+
+    @library{wxbase}
+    @category{cfg}
+*/
+class WXDLLIMPEXP_BASE wxConfigPathChanger
+{
+public:
+
+    /**
+        Changes the path of the given wxConfigBase object so that the key @a strEntry is accessible
+        (for read or write).
+        
+        In other words, the ctor uses wxConfigBase::SetPath() with everything which precedes the 
+        last slash of @a strEntry, so that:
+        @code
+        wxConfigPathChanger(wxConfigBase::Get(), "/MyProgram/SomeKeyName");
+        @endcode        
+        has the same effect of:
+        @code
+        wxConfigPathChanger(wxConfigBase::Get(), "/MyProgram/");
+        @endcode        
+    */
+    wxConfigPathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
+
+    /**
+        Restores the path selected, inside the wxConfig object passed to the ctor, to the path which was 
+        selected when the wxConfigPathChanger ctor was called.
+    */
+    ~wxConfigPathChanger();
+
+    /**
+        Returns the name of the key which was passed to the ctor.
+        The "name" is just anything which follows the last slash of the string given to the ctor.
+    */
+    const wxString& Name() const { return m_strName; }
+
+    /**
+        This method must be called if the original path inside the wxConfig object 
+        (i.e. the current path at the moment of creation of this wxConfigPathChanger object) 
+        could have been deleted, thus preventing wxConfigPathChanger from restoring the not 
+        existing (any more) path.
+
+        If the original path doesn't exist any more, the path will be restored to
+        the deepest still existing component of the old path.
+    */
+    void UpdateIfDeleted();
 };
 
