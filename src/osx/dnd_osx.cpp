@@ -79,7 +79,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
             for (size_t i = 0; !supported && i < formatcount; i++)
             {
                 wxDataFormat format = array[i];
-                if ( m_dataObject->IsSupported( format ) )
+                if ( m_dataObject->IsSupported( format, wxDataObject::Set ) )
                 {
                     supported = true;
                     break;
@@ -119,7 +119,7 @@ bool wxDropTarget::GetData()
             for (size_t i = 0; !transferred && i < formatcount; i++)
             {
                 wxDataFormat format = array[i];
-                if ( m_dataObject->IsSupported( format ) )
+                if ( m_dataObject->IsSupported( format, wxDataObject::Set ) )
                 {
                     int size = data->GetDataSize( format );
                     transferred = true;
