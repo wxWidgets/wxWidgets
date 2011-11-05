@@ -216,12 +216,24 @@ unsigned wxLog::LogLastRepeatIfNeeded()
     {
         wxString msg;
 #if wxUSE_INTL
-        msg.Printf(wxPLURAL("The previous message repeated once.",
-                            "The previous message repeated %lu times.",
-                            gs_prevLog.numRepeated),
-                   gs_prevLog.numRepeated);
+        if ( gs_prevLog.numRepeated == 1 )
+        {
+            // We use a separate message for this case as "repeated 1 time"
+            // looks somewhat strange.
+            msg = _("The previous message repeated once.");
+        }
+        else
+        {
+            // Notice that we still use wxPLURAL() to ensure that multiple
+            // numbers of times are correctly formatted, even though we never
+            // actually use the singular string.
+            msg.Printf(wxPLURAL("The previous message repeated %lu time.",
+                                "The previous message repeated %lu times.",
+                                gs_prevLog.numRepeated),
+                       gs_prevLog.numRepeated);
+        }
 #else
-        msg.Printf(wxS("The previous message was repeated %lu times."),
+        msg.Printf(wxS("The previous message was repeated %lu time(s)."),
                    gs_prevLog.numRepeated);
 #endif
         gs_prevLog.numRepeated = 0;
