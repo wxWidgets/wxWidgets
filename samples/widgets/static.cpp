@@ -41,6 +41,7 @@
 
 #include "wx/statline.h"
 #include "wx/generic/stattextg.h"
+#include "wx/wupdlock.h"
 
 #include "widgets.h"
 #include "icons/statbox.xpm"
@@ -376,6 +377,8 @@ void StaticWidgetsPage::Reset()
 
 void StaticWidgetsPage::CreateStatic()
 {
+    wxWindowUpdateLocker lock(this);
+
     bool isVert = m_chkVert->GetValue();
 
     if ( m_sizerStatBox )
