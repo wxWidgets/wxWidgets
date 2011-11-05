@@ -1145,6 +1145,8 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
         {
             // skip the next char too as we decoded a surrogate
             wp++;
+            if ( srcLen != wxNO_LEN )
+                srcLen--;
         }
 #else // wchar_t is UTF-32
         code = *wp & 0x7fffffff;
