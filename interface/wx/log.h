@@ -9,7 +9,7 @@
 
 /**
     Different standard log levels (you may also define your own) used with
-    by standard wxLog functions wxLogError(), wxLogWarning(), etc...
+    by standard wxLog functions wxLogGeneric(), wxLogError(), wxLogWarning(), etc...
 */
 enum wxLogLevelValues
 {
@@ -1112,6 +1112,18 @@ unsigned long wxSysErrorCode();
 */
 const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
 
+//@}
+
+/** @addtogroup group_funcmacro_log */
+//@{
+/**
+    Logs a message with the given wxLogLevel.
+    E.g. using @c wxLOG_Message as first argument, this function behaves like wxLogMessage().
+
+    @header{wx/log.h}
+*/
+void wxLogGeneric(wxLogLevel level, const char* formatString, ... );
+void wxVLogGeneric(wxLogLevel level, const char* formatString, va_list argPtr);
 //@}
 
 /** @addtogroup group_funcmacro_log */
