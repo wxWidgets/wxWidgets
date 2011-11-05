@@ -15,7 +15,7 @@ for your own code. While it does nothing very useful, it introduces a couple of
 important concepts and explains how to write a working wxWidgets application.
 
 First, you have to include wxWidgets' header files, of course. This can
-be done on a file by file basis (such as @c wx/window.h</tt>) or using one
+be done on a file by file basis (such as @c wx/window.h) or using one
 global include (@c wx/wx.h) which includes most of the commonly needed headers
 (although not all of them as there are simply too many wxWidgets headers to
 pull in all of them). For the platforms with support for precompiled headers,

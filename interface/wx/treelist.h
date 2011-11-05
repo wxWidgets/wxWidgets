@@ -888,5 +888,3 @@ public:
  */
 #define wxTreeListEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxTreeListEventFunction, func)
-
-#endif // _WX_TREELIST_H_

@@ -1293,7 +1293,7 @@ void wxVLogStatus(const char* formatString, va_list argPtr);
 /**
     Mostly used by wxWidgets itself, but might be handy for logging errors
     after system call (API function) failure. It logs the specified message
-    text as well as the last system error code (@e errno or @e ::GetLastError()
+    text as well as the last system error code (@e errno or @e GetLastError()
     depending on the platform) and the corresponding error message. The second
     form of this function takes the error code explicitly as the first
     argument.
