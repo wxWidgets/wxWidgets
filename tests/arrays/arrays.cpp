@@ -173,6 +173,7 @@ private:
         CPPUNIT_TEST( Alloc );
         CPPUNIT_TEST( Clear );
         CPPUNIT_TEST( Swap );
+        CPPUNIT_TEST( IndexFromEnd );
     CPPUNIT_TEST_SUITE_END();
 
     void wxStringArrayTest();
@@ -188,6 +189,7 @@ private:
     void Alloc();
     void Clear();
     void Swap();
+    void IndexFromEnd();
 
     DECLARE_NO_COPY_CLASS(ArraysTestCase)
 };
@@ -306,6 +308,13 @@ void ArraysTestCase::wxStringArrayTest()
     CPPUNIT_ASSERT( a1.Index( wxT("condor") ) == 2 );
     CPPUNIT_ASSERT( a1.Index( wxT("thermit") ) == 3 );
     CPPUNIT_ASSERT( a1.Index( wxT("alligator") ) == 4 );
+
+    CPPUNIT_ASSERT( a1.Index( wxT("dog"), /*bCase=*/true, /*fromEnd=*/true ) == 0 );
+    CPPUNIT_ASSERT( a1.Index( wxT("human"), /*bCase=*/true, /*fromEnd=*/true ) == 1 );
+    CPPUNIT_ASSERT( a1.Index( wxT("humann"), /*bCase=*/true, /*fromEnd=*/true ) == wxNOT_FOUND );
+    CPPUNIT_ASSERT( a1.Index( wxT("condor"), /*bCase=*/true, /*fromEnd=*/true ) == 2 );
+    CPPUNIT_ASSERT( a1.Index( wxT("thermit"), /*bCase=*/true, /*fromEnd=*/true ) == 3 );
+    CPPUNIT_ASSERT( a1.Index( wxT("alligator"), /*bCase=*/true, /*fromEnd=*/true ) == 4 );
 
     wxArrayString a5;
 
@@ -705,4 +714,19 @@ void ArraysTestCase::TestSTL()
     items.push_back(new Item(17));
     CPPUNIT_ASSERT_EQUAL( 17, (*(items.rbegin()))->n );
     CPPUNIT_ASSERT_EQUAL( 17, (**items.begin()).n );
+}
+
+void ArraysTestCase::IndexFromEnd()
+{
+    wxArrayInt a;
+    a.push_back(10);
+    a.push_back(1);
+    a.push_back(42);
+
+    CPPUNIT_ASSERT_EQUAL( 0, a.Index(10) );
+    CPPUNIT_ASSERT_EQUAL( 1, a.Index(1) );
+    CPPUNIT_ASSERT_EQUAL( 2, a.Index(42) );
+    CPPUNIT_ASSERT_EQUAL( 0, a.Index(10, /*bFromEnd=*/true) );
+    CPPUNIT_ASSERT_EQUAL( 1, a.Index(1, /*bFromEnd=*/true) );
+    CPPUNIT_ASSERT_EQUAL( 2, a.Index(42, /*bFromEnd=*/true) );
 }
