@@ -326,27 +326,42 @@ HTML_FOOTER            = htmlfooter.inc
 HTML_STYLESHEET        =
 HTML_ALIGN_MEMBERS     = YES
 HTML_DYNAMIC_SECTIONS  = YES
-GENERATE_DOCSET        = NO # Only change in format output configs
-DOCSET_FEEDNAME        = "wxWidgets 2.9"
-DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx29
-DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
-DOCSET_PUBLISHER_NAME  = wxWidgets Team
+DISABLE_INDEX          = NO
+ENUM_VALUES_PER_LINE   = 1
+GENERATE_TREEVIEW      = NONE
+TREEVIEW_WIDTH         = 250
+FORMULA_FONTSIZE       = 10
+
+#---------------------------------------------------------------------------
+# configuration options related to the CHM output
+#---------------------------------------------------------------------------
+
 GENERATE_HTMLHELP      = NO # Only change in format output configs
 CHM_FILE               = ..\wx.chm # NOTE: Windows style separator needed
 HHC_LOCATION           = hhc.exe # Don't modify, see Doxyfile_chm for info
 GENERATE_CHI           = NO
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
-GENERATE_QHP           = NO
+
+#---------------------------------------------------------------------------
+# configuration options related to the Qt Help Project output
+#---------------------------------------------------------------------------
+
+GENERATE_QHP           = NO # Only change in format output configs
 QCH_FILE               =
 QHP_NAMESPACE          = org.wxwidgets.doxygen
 QHP_VIRTUAL_FOLDER     = doc
 QHG_LOCATION           =
-DISABLE_INDEX          = NO
-ENUM_VALUES_PER_LINE   = 1
-GENERATE_TREEVIEW      = NONE
-TREEVIEW_WIDTH         = 250
-FORMULA_FONTSIZE       = 10
+
+#---------------------------------------------------------------------------
+# configuration options related to the Docset output
+#---------------------------------------------------------------------------
+
+GENERATE_DOCSET        = NO # Only change in format output configs
+DOCSET_FEEDNAME        = "wxWidgets 2.9"
+DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx29
+DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
+DOCSET_PUBLISHER_NAME  = wxWidgets Team
 
 #---------------------------------------------------------------------------
 # LaTeX Output Options
