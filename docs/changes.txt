@@ -489,6 +489,7 @@ All (GUI):
 - Added wxDataViewCustomRenderer::ActivateCell().
 - Add "checked" property for toolbar tool elements in XRC.
 - Allow customization of the locations where persistent settings are stored.
+- Restore support for reusing ids more than 254 times (Armel Asselin).
 
 OSX:
 
