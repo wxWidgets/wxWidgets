@@ -326,10 +326,8 @@ void StaticWidgetsPage::CreateContent()
     sizerMiddle->Add(m_textLabelWithMarkup, 0, wxEXPAND|wxALL, 5);
     sizerMiddle->Add(b3, 0, wxLEFT|wxBOTTOM, 5);
 
-    m_chkGreen = CreateCheckBoxAndAddToSizer(sizerLeft,
+    m_chkGreen = CreateCheckBoxAndAddToSizer(sizerMiddle,
                                              "Decorated label on g&reen");
-
-    sizerMiddle->Add(m_chkGreen, 0, wxALL, 5);
 #endif // wxUSE_MARKUP
 
     // final initializations
