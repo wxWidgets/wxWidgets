@@ -342,7 +342,7 @@ int GetTimeZone()
     {
         // just call wxLocaltime_r() instead of figuring out whether this
         // system supports tzset(), _tzset() or something else
-        time_t t = 0;
+        time_t t = time(NULL);
         struct tm tm;
 
         wxLocaltime_r(&t, &tm);
@@ -352,6 +352,12 @@ int GetTimeZone()
         // consistent results in both WX_GMTOFF_IN_TM and !WX_GMTOFF_IN_TM
         // cases we have to negate it
         gmtoffset = -tm.tm_gmtoff;
+
+        // this function is supposed to return the same value whether DST is
+        // enabled or not, so we need to use an additional offset if DST is on
+        // as tm_gmtoff already does include it
+        if ( tm.tm_isdst )
+            gmtoffset += 3600;
     }
     return (int)gmtoffset;
 #elif defined(__DJGPP__) || defined(__WINE__)
