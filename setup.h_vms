@@ -502,7 +502,11 @@ typedef pid_t GPid;
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
+#if defined (__WXMOTIF__)
+#define wxUSE_RICHTOOLTIP 0
+#else
 #define wxUSE_RICHTOOLTIP 1
+#endif
 
 #define wxUSE_SASH          1
 

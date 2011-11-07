@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 27 September 2011                                                   *
+# Date : 4 November 2011                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -223,7 +223,8 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		statlinecmn.obj,radiobtncmn.obj,bmpbtncmn.obj,checklstcmn.obj,\
 		statbmpcmn.obj,dirctrlcmn.obj,gridcmn.obj,odcombocmn.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
-		valnum.obj,numformatter.obj,markupparser.obj,affinematrix2d.obj
+		valnum.obj,numformatter.obj,markupparser.obj,\
+		affinematrix2d.obj,richtooltipcmn.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -426,7 +427,8 @@ SOURCES = \
 		statboxcmn.cpp,slidercmn.cpp,statlinecmn.cpp,radiobtncmn.cpp,\
 		bmpbtncmn.cpp,checklstcmn.cpp,statbmpcmn.cpp,dirctrlcmn.cpp,\
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
-		colourdata.cpp,fontdata.cpp affinematrix2d.cpp
+		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
+		richtooltipcmn.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -708,3 +710,4 @@ valnum.obj : valnum.cpp
 numformatter.obj : numformatter.cpp
 markupparser.obj : markupparser.cpp
 affinematrix2d.obj : affinematrix2d.cpp
+richtooltipcmn.obj : richtooltipcmn.cpp
