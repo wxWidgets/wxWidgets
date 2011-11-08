@@ -44,7 +44,9 @@ GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
 
     /* add a stock icon inside it */
     GtkWidget *image = gtk_image_new_from_stock (stock, GTK_ICON_SIZE_BUTTON);
+#if GTK_CHECK_VERSION(2,6,0)
     gtk_button_set_image (GTK_BUTTON (button), image);
+#endif
 
     /* add to the given (container) widget */
     if (box)

@@ -55,13 +55,16 @@ static inline gpointer wx_g_object_ref_sink(gpointer object)
 #define g_object_ref_sink wx_g_object_ref_sink
 
 // ----------------------------------------------------------------------------
-// the following were introduced in GTK+ 2.12
+// the following were introduced in GTK+ 2.12 and GtkAboutDialog itself is not
+// in 2.4 so skip this if we don't have it.
+#if GTK_CHECK_VERSION(2,6,0)
 
 static inline void wx_gtk_about_dialog_set_program_name(GtkAboutDialog* about, const gchar* name)
 {
     gtk_about_dialog_set_name(about, name);
 }
 #define gtk_about_dialog_set_program_name wx_gtk_about_dialog_set_program_name
+#endif // 2.6.0
 
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.14
