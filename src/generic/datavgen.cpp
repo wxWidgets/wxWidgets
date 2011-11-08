@@ -3433,7 +3433,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             {
                 // Enter activates the item, i.e. sends wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED to
                 // it. Only if that event is not handled do we activate column renderer (which
-                // is normally done by Space).
+                // is normally done by Space) or even inline editing.
 
                 const wxDataViewItem item = GetItemByRow(m_currentRow);
 
@@ -3450,6 +3450,11 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_SPACE:
             {
+                // Space toggles activatable items or -- if not activatable --
+                // starts inline editing (this is normally done using F2 on
+                // Windows, but Space is common everywhere else, so use it too
+                // for greater cross-platform compatibility).
+
                 const wxDataViewItem item = GetItemByRow(m_currentRow);
 
                 // Activate the current activatable column. If not column is focused (typically
@@ -3466,6 +3471,35 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                     wxDataViewRenderer *cell = activatableCol->GetRenderer();
                     cell->PrepareForItem(GetModel(), item, colIdx);
                     cell->WXActivateCell(cell_rect, GetModel(), item, colIdx, NULL);
+
+                    break;
+                }
+                // else: fall through to WXK_F2 handling
+            }
+
+        case WXK_F2:
+            {
+                if( !m_selection.empty() )
+                {
+                    // Mimic Windows 7 behavior: edit the item that has focus
+                    // if it is selected and the first selected item if focus
+                    // is out of selection.
+                    int sel;
+                    if ( m_selection.Index(m_currentRow) != wxNOT_FOUND )
+                        sel = m_currentRow;
+                    else
+                        sel = m_selection[0];
+
+
+                    const wxDataViewItem item = GetItemByRow(sel);
+
+                    // Edit the current column. If no column is focused
+                    // (typically because the user has full row selected), try
+                    // to find the first editable column.
+                    wxDataViewColumn *editableCol = FindColumnForEditing(item, wxDATAVIEW_CELL_EDITABLE);
+
+                    if ( editableCol )
+                        GetOwner()->StartEditor(item, GetOwner()->GetColumnIndex(editableCol));
                 }
             }
             break;
@@ -3519,33 +3553,6 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                     index = count - 1;
 
                 OnVerticalNavigation( index, event );
-            }
-            break;
-
-        case WXK_F2:
-            {
-                if( !m_selection.empty() )
-                {
-                    // Mimic Windows 7 behavior: edit the item that has focus
-                    // if it is selected and the first selected item if focus
-                    // is out of selection.
-                    int sel;
-                    if ( m_selection.Index(m_currentRow) != wxNOT_FOUND )
-                        sel = m_currentRow;
-                    else
-                        sel = m_selection[0];
-
-
-                    const wxDataViewItem item = GetItemByRow(sel);
-
-                    // Edit the current column. If not column is focused
-                    // (typically because the user has full row selected), try
-                    // to find the first editable column.
-                    wxDataViewColumn *editableCol = FindColumnForEditing(item, wxDATAVIEW_CELL_EDITABLE);
-
-                    if ( editableCol )
-                        GetOwner()->StartEditor(item, GetOwner()->GetColumnIndex(editableCol));
-                }
             }
             break;
 
