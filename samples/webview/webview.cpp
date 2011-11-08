@@ -803,7 +803,7 @@ void WebFrame::OnError(wxWebViewEvent& evt)
         break;
     }
 
-    wxLogMessage("Error; url='" + evt.GetURL() + "', error='" + errorCategory + "' (" + evt.GetString() + ")");
+    wxLogMessage("%s", "Error; url='" + evt.GetURL() + "', error='" + errorCategory + "' (" + evt.GetString() + ")");
 
     //Show the info bar with an error
     m_info->ShowMessage(_("An error occurred loading ") + evt.GetURL() + "\n" +
