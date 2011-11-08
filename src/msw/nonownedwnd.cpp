@@ -35,8 +35,11 @@
 
 #include "wx/nonownedwnd.h"
 
-#include "wx/msw/wrapgdip.h"
-#include "wx/graphics.h"
+#if wxUSE_GRAPHICS_CONTEXT
+    #include "wx/msw/wrapgdip.h"
+    #include "wx/graphics.h"
+#endif // wxUSE_GRAPHICS_CONTEXT
+
 #include "wx/scopedptr.h"
 
 // ============================================================================
