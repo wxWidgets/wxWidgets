@@ -765,8 +765,17 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
             wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
                                  GetId(), url, target);
-            event.SetEventObject(this);
-            HandleWindowEvent(event);
+
+            //skip empty javascript events.
+            if(url == "javascript:\"\"" && target.IsEmpty())
+            {
+                event.Veto();
+            }
+            else
+            {
+                event.SetEventObject(this);
+                HandleWindowEvent(event);
+            }
 
             if (!event.IsAllowed())
             {
