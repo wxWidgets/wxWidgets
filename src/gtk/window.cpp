@@ -47,29 +47,6 @@ using namespace wxGTKImpl;
 #include <gdk/gdkkeysyms-compat.h>
 #endif
 
-#if !GTK_CHECK_VERSION(2,10,0)
-    // GTK+ can reliably detect Meta key state only since 2.10 when
-    // GDK_META_MASK was introduced -- there wasn't any way to detect it
-    // in older versions. wxGTK used GDK_MOD2_MASK for this purpose, but
-    // GDK_MOD2_MASK is documented as:
-    //
-    //     the fifth modifier key (it depends on the modifier mapping of the X
-    //     server which key is interpreted as this modifier)
-    //
-    // In other words, it isn't guaranteed to map to Meta. This is a real
-    // problem: it is common to map NumLock to it (in fact, it's an exception
-    // if the X server _doesn't_ use it for NumLock).  So the old code caused
-    // wxKeyEvent::MetaDown() to always return true as long as NumLock was on
-    // on many systems, which broke all applications using
-    // wxKeyEvent::GetModifiers() to check modifiers state (see e.g.  here:
-    // http://tinyurl.com/56lsk2).
-    //
-    // Because of this, it's better to not detect Meta key state at all than
-    // to detect it incorrectly. Hence the following #define, which causes
-    // m_metaDown to be always set to false.
-    #define GDK_META_MASK 0
-#endif
-
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
