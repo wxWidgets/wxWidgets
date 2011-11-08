@@ -421,7 +421,8 @@ void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
     }
     
     m_modalEventLoop = (wxEventLoop*)wxEventLoopBase::GetActive();
-    m_modalEventLoop->BeginModalSession(winToSkip);
+    if (m_modalEventLoop)
+        m_modalEventLoop->BeginModalSession(winToSkip);
 }
 
 wxWindowDisabler::~wxWindowDisabler()
@@ -429,7 +430,8 @@ wxWindowDisabler::~wxWindowDisabler()
     if ( !m_disabled )
         return;
     
-    m_modalEventLoop->EndModalSession();
+    if (m_modalEventLoop)
+        m_modalEventLoop->EndModalSession();
     
     wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
