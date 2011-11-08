@@ -850,6 +850,9 @@ public:
 #ifdef __WXMSW__
         lv->Show();
 #endif
+#ifdef __WXOSX_COCOA__
+        SetBackgroundColour(wxColour(0xC0, 0xC0, 0xC0));
+#endif
     }
 
 
@@ -908,10 +911,20 @@ public:
     void OnSize(wxSizeEvent& event) {
         // resize the child to fill the popup
         wxSize sz = GetClientSize();
-        lv->SetSize(0, 0, sz.x, sz.y);
+        int x, y, w, h;
+        x = y = 0;
+        w = sz.x;
+        h = sz.y;
+#ifdef __WXOSX_COCOA__
+        // make room for the parent's bg color to show, to act as a border
+        x = y = 1;
+        w -= 2;
+        h -= 2;
+#endif
+        lv->SetSize(x, y, w, h);
         // reset the column widths
         lv->SetColumnWidth(0, IconWidth()+4);
-        lv->SetColumnWidth(1, sz.x - 2 - lv->GetColumnWidth(0) -
+        lv->SetColumnWidth(1, w - 2 - lv->GetColumnWidth(0) -
                            wxSystemSettings::GetMetric(wxSYS_VSCROLL_X));
         event.Skip();
     }
