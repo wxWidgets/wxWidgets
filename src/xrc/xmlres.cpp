@@ -75,7 +75,7 @@ wxDateTime GetXRCFileModTime(const wxString& filename)
 
 // Assign the given value to the specified entry or add a new value with this
 // name.
-static void XRCID_Assign(const char *str_id, int value);
+static void XRCID_Assign(const wxString& str_id, int value);
 
 class wxXmlResourceDataRecord
 {
@@ -2491,15 +2491,16 @@ static inline unsigned XRCIdHash(const char *str_id)
     return index;
 }
 
-static void XRCID_Assign(const char *str_id, int value)
+static void XRCID_Assign(const wxString& str_id, int value)
 {
-    const unsigned index = XRCIdHash(str_id);
+    wxScopedCharBuffer buf_id(str_id.mb_str());
+    const unsigned index = XRCIdHash(buf_id);
 
 
     XRCID_record *oldrec = NULL;
     for (XRCID_record *rec = XRCID_Records[index]; rec; rec = rec->next)
     {
-        if (wxStrcmp(rec->key, str_id) == 0)
+        if (wxStrcmp(rec->key, buf_id) == 0)
         {
             rec->id = value;
             return;
