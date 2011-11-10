@@ -2317,7 +2317,8 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         // than the wxWidgets fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
 #if wxUSE_SYSTEM_OPTIONS
-        if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
+        static bool s_maskBltAllowed = wxSystemOptions::GetOptionInt("no-maskblt") == 0;
+        if ( s_maskBltAllowed )
 #endif
         {
             if ( dstWidth == srcWidth && dstHeight == srcHeight )
