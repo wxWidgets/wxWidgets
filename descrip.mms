@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 27 September 2011                                                   *
+# Date : 10 November 2011                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -151,6 +151,8 @@ gtk : [.include.wx]setup.h
 	set default [-.thread]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.xrc]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.widgets]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.tests]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)/ignore=warning
@@ -348,6 +350,8 @@ motif : [.include.wx]setup.h
 	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.thread]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.widgets]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--]
 

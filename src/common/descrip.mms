@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 November 2011                                                     *
+# Date : 10 November 2011                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -224,7 +224,7 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		statbmpcmn.obj,dirctrlcmn.obj,gridcmn.obj,odcombocmn.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
 		valnum.obj,numformatter.obj,markupparser.obj,\
-		affinematrix2d.obj,richtooltipcmn.obj
+		affinematrix2d.obj,richtooltipcmn.obj,persist.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -428,7 +428,7 @@ SOURCES = \
 		bmpbtncmn.cpp,checklstcmn.cpp,statbmpcmn.cpp,dirctrlcmn.cpp,\
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
 		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
-		richtooltipcmn.cpp
+		richtooltipcmn.cpp persist.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -711,3 +711,4 @@ numformatter.obj : numformatter.cpp
 markupparser.obj : markupparser.cpp
 affinematrix2d.obj : affinematrix2d.cpp
 richtooltipcmn.obj : richtooltipcmn.cpp
+persist.obj : persist.cpp
