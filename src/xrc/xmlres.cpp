@@ -2493,7 +2493,7 @@ static inline unsigned XRCIdHash(const char *str_id)
 
 static void XRCID_Assign(const wxString& str_id, int value)
 {
-    wxScopedCharBuffer buf_id(str_id.mb_str());
+    const wxCharBuffer buf_id(str_id.mb_str());
     const unsigned index = XRCIdHash(buf_id);
 
 
