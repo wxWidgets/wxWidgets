@@ -1225,7 +1225,9 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         // to be able to switch this on and off at runtime.
         bool ok = false;
 #if wxUSE_SYSTEM_OPTIONS
-        if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
+        // Don't query the value of the option every time as it can affect performance.
+        static bool s_maskBltAllowed = wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0;
+        if ( s_maskBltAllowed )
 #endif
         {
             HDC cdc = GetHdc();
@@ -2150,7 +2152,9 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         // than the wxWidgets fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
 #if wxUSE_SYSTEM_OPTIONS
-        if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
+        // Don't query the value of the option every time as it can affect performance.
+        static bool s_maskBltAllowed = wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0;
+        if ( s_maskBltAllowed )
 #endif
         {
            success = ::MaskBlt

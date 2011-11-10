@@ -108,6 +108,7 @@ wxMSW:
 
 - Multiline text controls no longer select all content when gaining focus from
   the keyboard.
+- Backported Blit optimization from trunk (avoid repeated system option calls).
 
 wxGTK:
 
