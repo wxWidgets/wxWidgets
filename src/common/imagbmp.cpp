@@ -478,6 +478,14 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     else
         cmap = NULL;
 
+    bool isUpsideDown = true;
+
+    if (height < 0)
+    {
+        isUpsideDown = false;
+        height = -height;
+    }
+
     // destroy existing here instead of:
     image->Destroy();
     image->Create(width, height);
@@ -630,9 +638,10 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
 
     int linesize = ((width * bpp + 31) / 32) * 4;
 
-    /* BMPs are stored upside down */
-    for ( int line = (height - 1); line >= 0; line-- )
+    for ( int row = 0; row < height; row++ )
     {
+        int line = isUpsideDown ? height - 1 - row : row;
+
         int linepos = 0;
         for ( int column = 0; column < width ; )
         {
@@ -662,21 +671,24 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                         {
                             if ( aByte == 0 )
                             {
-                                if ( column > 0 )
-                                    column = width;
+                                // end of scanline marker
+                                column = width;
+                                row--;
                             }
                             else if ( aByte == 1 )
                             {
+                                // end of RLE data marker, stop decoding
                                 column = width;
-                                line = -1;
+                                row = height;
                             }
                             else if ( aByte == 2 )
                             {
+                                // delta marker, move in image
                                 aByte = stream.GetC();
                                 column += aByte;
                                 linepos = column * bpp / 4;
                                 aByte = stream.GetC();
-                                line -= aByte; // upside down
+                                row += aByte; // upside down
                             }
                             else
                             {
@@ -745,20 +757,24 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                         {
                             if ( aByte == 0 )
                             {
-                                /* column = width; */
+                                // end of scanline marker
+                                column = width;
+                                row--;
                             }
                             else if ( aByte == 1 )
                             {
+                                // end of RLE data marker, stop decoding
                                 column = width;
-                                line = -1;
+                                row = height;
                             }
                             else if ( aByte == 2 )
                             {
+                                // delta marker, move in image
                                 aByte = stream.GetC();
                                 column += aByte;
                                 linepos = column * bpp / 8;
                                 aByte = stream.GetC();
-                                line += aByte;
+                                row -= aByte;
                             }
                             else
                             {
