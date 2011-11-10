@@ -2570,11 +2570,13 @@ void wxDataViewProgressRenderer::GTKSetLabel()
 
     // Take care to not use GetOwner() here if the label is empty, we can be
     // called from ctor when GetOwner() is still NULL in this case.
-    g_value_set_string( &gvalue,
-                        m_label.empty() ? ""
-                                        : wxGTK_CONV_FONT(m_label,
-                                            GetOwner()->GetOwner()->GetFont())
-                      );
+    wxScopedCharBuffer buf;
+    if ( m_label.empty() )
+        buf = wxScopedCharBuffer::CreateNonOwned("");
+    else
+        buf = wxGTK_CONV_FONT(m_label, GetOwner()->GetOwner()->GetFont());
+
+    g_value_set_string( &gvalue, buf);
     g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
 

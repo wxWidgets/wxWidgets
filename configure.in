@@ -8398,9 +8398,9 @@ case "${host}" in
         dnl system packages are compiled with Sun CC and so pkg-config outputs
         dnl CC-specific "-mt" flag, remove it when using gcc
         if test "$GCC" = yes; then
-            CPPFLAGS=`echo $CPPFLAGS | sed 's/-mt//'`
-            LIBS=`echo $LIBS | sed 's/-mt//'`
-            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-mt//'`
+            CPPFLAGS=`echo $CPPFLAGS | sed 's/-mt//g'`
+            LIBS=`echo $LIBS | sed 's/-mt//g'`
+            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-mt//g'`
         fi
         ;;
 
@@ -8408,9 +8408,9 @@ case "${host}" in
         dnl OTOH when using Sun CC under Linux, the flags contain gcc-specific
         dnl -pthreads which Sun CC doesn't know about
         if test "x$SUNCXX" = xyes; then
-            CPPFLAGS=`echo $CPPFLAGS | sed 's/-pthread//'`
-            LIBS=`echo $LIBS | sed 's/-pthread//'`
-            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-pthread//'`
+            CPPFLAGS=`echo $CPPFLAGS | sed 's/-pthread//g'`
+            LIBS=`echo $LIBS | sed 's/-pthread//g'`
+            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-pthread//g'`
         fi
         ;;
 esac
