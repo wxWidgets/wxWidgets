@@ -1753,7 +1753,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     // Obtain a copy of the default attributes
     GtkTextAttributes * const
         pattr = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(m_text));
-    wxON_BLOCK_EXIT1( g_free, pattr );
+    wxON_BLOCK_EXIT1(gtk_text_attributes_unref, pattr);
 
     // And query GTK for the attributes at the given position using it as base
     if ( !gtk_text_iter_get_attributes(&positioni, pattr) )
