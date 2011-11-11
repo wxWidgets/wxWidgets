@@ -1780,8 +1780,19 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                     // fall through
 
                 case 0:
-                    if ( IsMultiLine() && vkey == VK_RETURN )
-                        return false;
+                    switch ( vkey )
+                    {
+                        case VK_RETURN:
+                            // This one is only special for multi line controls.
+                            if ( !IsMultiLine() )
+                                break;
+                            // fall through
+
+                        case VK_DELETE:
+                        case VK_HOME:
+                        case VK_END:
+                            return false;
+                    }
                     // fall through
                 case 2:
                     break;
