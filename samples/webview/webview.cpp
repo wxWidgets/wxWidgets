@@ -69,8 +69,8 @@ public:
     WebFrame();
     ~WebFrame();
 
-    void OnAnimationTimer(wxTimerEvent& evt);
     void UpdateState();
+    void OnIdle(wxIdleEvent& evt);
     void OnUrl(wxCommandEvent& evt);
     void OnBack(wxCommandEvent& evt);
     void OnForward(wxCommandEvent& evt);
@@ -133,9 +133,6 @@ private:
     wxMenuItem* m_selection_clear;
     wxMenuItem* m_selection_delete;
 
-    wxTimer* m_timer;
-    int m_animation_angle;
-
     wxInfoBar *m_info;
     wxStaticText* m_info_text;
 
@@ -173,10 +170,6 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     // set the frame icon
     SetIcon(wxICON(sample));
     SetTitle("wxWebView Sample");
-
-    m_timer = NULL;
-    m_animation_angle = 0;
-
 
     wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
 
@@ -356,46 +349,14 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
             wxCommandEventHandler(WebFrame::OnSelectAll),  NULL, this );
     Connect(loadscheme->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnLoadScheme),  NULL, this );
+
+    //Connect the idle events
+    Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(WebFrame::OnIdle), NULL, this);
 }
 
 WebFrame::~WebFrame()
 {
-    delete m_timer;
     delete m_tools_menu;
-}
-
-void WebFrame::OnAnimationTimer(wxTimerEvent& WXUNUSED(evt))
-{
-    m_animation_angle += 15;
-    if (m_animation_angle > 360) m_animation_angle -= 360;
-
-    wxBitmap image(24, 24);
-    {
-        wxMemoryDC dc;
-        dc.SelectObject(image);
-        dc.SetBackground(wxBrush(wxColour(255,0,255)));
-        dc.Clear();
-
-        if (m_animation_angle >= 0 && m_animation_angle <= 180)
-        {
-            dc.SetBrush(*wxYELLOW_BRUSH);
-            dc.SetPen(*wxYELLOW_PEN);
-            dc.DrawCircle(16 - int(sin(m_animation_angle*0.01745f /* convert to radians */)*14.0f),
-            16 + int(cos(m_animation_angle*0.01745f /* convert to radians */)*14.0f), 3 );
-        }
-
-        dc.DrawBitmap(wxBitmap(wxlogo_xpm), 0, 0, true);
-
-        if (m_animation_angle > 180)
-        {
-            dc.SetBrush(*wxYELLOW_BRUSH);
-            dc.SetPen(*wxYELLOW_PEN);
-            dc.DrawCircle(16 - int(sin(m_animation_angle*0.01745f /* convert to radians */)*14.0f),
-            16 + int(cos(m_animation_angle*0.01745f /* convert to radians */)*14.0f), 3 );
-        }
-    }
-    image.SetMask(new wxMask(image, wxColour(255,0,255)));
-    m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), image);
 }
 
 /**
@@ -409,24 +370,29 @@ void WebFrame::UpdateState()
 
     if (m_browser->IsBusy())
     {
-        if (m_timer == NULL)
-        {
-            m_timer = new wxTimer(this);
-            this->Connect(wxEVT_TIMER, wxTimerEventHandler(WebFrame::OnAnimationTimer), NULL, this);
-        }
-        m_timer->Start(100); // start animation timer
-
         m_toolbar->EnableTool( m_toolbar_stop->GetId(), true );
     }
     else
     {
-        if (m_timer != NULL) m_timer->Stop(); // stop animation timer
-        m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), wxBitmap(wxlogo_xpm));
         m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );
     }
 
     SetTitle( m_browser->GetCurrentTitle() );
     m_url->SetValue( m_browser->GetCurrentURL() );
+}
+
+void WebFrame::OnIdle(wxIdleEvent& evt)
+{
+    if(m_browser->IsBusy())
+    {
+        wxSetCursor(wxCURSOR_ARROWWAIT);
+        m_toolbar->EnableTool(m_toolbar_stop->GetId(), true);
+    }
+    else
+    {
+        wxSetCursor(wxNullCursor);
+        m_toolbar->EnableTool(m_toolbar_stop->GetId(), false);
+    }
 }
 
 /**
@@ -548,8 +514,6 @@ void WebFrame::OnNavigationRequest(wxWebViewEvent& evt)
     if(!m_tools_handle_navigation->IsChecked())
     {
         evt.Veto();
-        if (m_timer != NULL) m_timer->Stop(); // stop animation timer
-        m_toolbar->SetToolNormalBitmap(m_toolbar_tools->GetId(), wxBitmap(wxlogo_xpm));
         m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );
     }
     else
