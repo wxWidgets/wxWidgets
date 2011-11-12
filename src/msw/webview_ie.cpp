@@ -87,7 +87,7 @@ wxWebViewIE::~wxWebViewIE()
 
 void wxWebViewIE::LoadURL(const wxString& url)
 {
-    m_ie.CallMethod("Navigate", (BSTR) url.wc_str());
+    m_ie.CallMethod("Navigate", wxConvertStringToOle(url));
 }
 
 void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
