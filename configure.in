@@ -7475,7 +7475,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             AC_MSG_WARN([WebKit not available, disabling wxWebView])
         fi
     elif test "$wxUSE_MSW" = 1; then
-        if test "wxUSE_WEBVIEW_IE" = "yes"; then
+        if test "$wxUSE_WEBVIEW_IE" = "yes"; then
             dnl TODO: Check for the required headers/libraries under Windows
             dnl       too and do the right thing automatically there too.
             wxUSE_WEBVIEW="yes"

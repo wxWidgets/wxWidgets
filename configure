@@ -51060,7 +51060,7 @@ _ACEOF
 echo "$as_me: WARNING: WebKit not available, disabling wxWebView" >&2;}
         fi
     elif test "$wxUSE_MSW" = 1; then
-        if test "wxUSE_WEBVIEW_IE" = "yes"; then
+        if test "$wxUSE_WEBVIEW_IE" = "yes"; then
                                     wxUSE_WEBVIEW="yes"
             cat >>confdefs.h <<\_ACEOF
 #define wxUSE_WEBVIEW_IE 1
