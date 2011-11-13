@@ -381,7 +381,7 @@ void WebFrame::UpdateState()
     m_url->SetValue( m_browser->GetCurrentURL() );
 }
 
-void WebFrame::OnIdle(wxIdleEvent& evt)
+void WebFrame::OnIdle(wxIdleEvent& WXUNUSED(evt))
 {
     if(m_browser->IsBusy())
     {
@@ -401,6 +401,7 @@ void WebFrame::OnIdle(wxIdleEvent& evt)
 void WebFrame::OnUrl(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->LoadURL( m_url->GetValue() );
+    m_browser->SetFocus();
     UpdateState();
 }
 
