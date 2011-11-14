@@ -518,13 +518,6 @@ typedef struct
 
 //Various defines that will be needed by mingw and possibly VC++6
 //Used by the webview library
-#ifdef __MINGW32__
-typedef enum CommandStateChangeConstants {
-    CSC_UPDATECOMMANDS = (int) 0xFFFFFFFF,
-    CSC_NAVIGATEFORWARD = 0x1,
-    CSC_NAVIGATEBACK = 0x2
-} CommandStateChangeConstants;
-#endif
 
 #ifndef DISPID_COMMANDSTATECHANGE
 #define DISPID_COMMANDSTATECHANGE 105
@@ -654,15 +647,32 @@ typedef enum CommandStateChangeConstants {
 #define INET_E_CODE_INSTALL_SUPPRESSED 0x800C0400L
 #endif
 
-//We need to check if we are using MinGW which doesn't inlcude the urlmon
-//defintions as opposed to MinGW-64 which does
+//We need to check if we are using MinGW or mingw-w64 as their
+//definitions are different
 
 #ifdef __MINGW32__
 #include <_mingw.h>
 #endif
 
+#if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
+typedef enum CommandStateChangeConstants {
+    CSC_UPDATECOMMANDS = (int) 0xFFFFFFFF,
+    CSC_NAVIGATEFORWARD = 0x1,
+    CSC_NAVIGATEBACK = 0x2
+} CommandStateChangeConstants;
+#endif
+
 //Definitions from w64 mingw-runtime package, in the public domain
 //Used by webview
+
+//The GUIDs are currently not defined in either mingw or mingw-w64
+
+#ifdef __MINGW32__
+DEFINE_GUID(IID_IInternetProtocolRoot,0x79eac9e3,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
+DEFINE_GUID(IID_IInternetProtocol,0x79eac9e4,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
+#endif
+
+
 #if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
 
 #define REFRESH_NORMAL 0
@@ -670,10 +680,8 @@ typedef enum CommandStateChangeConstants {
 
 EXTERN_C const IID CLSID_FileProtocol;
 
-DEFINE_GUID(IID_IInternetProtocolRoot,0x79eac9e3,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
-DEFINE_GUID(IID_IInternetProtocol,0x79eac9e4,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
 
-typedef enum __MIDL_IBindStatusCallback_0006 
+typedef enum __MIDL_IBindStatusCallback_0006
 {
     BSCF_FIRSTDATANOTIFICATION = 0x1,
     BSCF_INTERMEDIATEDATANOTIFICATION = 0x2,
