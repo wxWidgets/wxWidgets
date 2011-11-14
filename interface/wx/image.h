@@ -86,6 +86,8 @@ enum wxImagePNGType
 #define wxIMAGE_OPTION_RESOLUTIONUNIT                   wxString(wxT("ResolutionUnit"))
 #define wxIMAGE_OPTION_MAX_WIDTH                        wxString(wxT("MaxWidth"))
 #define wxIMAGE_OPTION_MAX_HEIGHT                       wxString(wxT("MaxHeight"))
+#define wxIMAGE_OPTION_ORIGINAL_WIDTH                   wxString(wxT("OriginalWidth"))
+#define wxIMAGE_OPTION_ORIGINAL_HEIGHT                  wxString(wxT("OriginalHeight"))
 
 #define wxIMAGE_OPTION_BMP_FORMAT                       wxString(wxT("wxBMP_FORMAT"))
 #define wxIMAGE_OPTION_CUR_HOTSPOT_X                    wxString(wxT("HotSpotX"))
@@ -1181,6 +1183,12 @@ public:
             rescaling it later (if these options are not supported by the
             handler, this is still what happens however). These options must be
             set before calling LoadFile() to have any effect.
+
+        @li @c wxIMAGE_OPTION_ORIGINAL_WIDTH and @c wxIMAGE_OPTION_ORIGINAL_HEIGHT:
+            These options will return the original size of the image if either
+            @c wxIMAGE_OPTION_MAX_WIDTH or @c wxIMAGE_OPTION_MAX_HEIGHT is
+            specified.
+            @since 2.9.3
 
         @li @c wxIMAGE_OPTION_QUALITY: JPEG quality used when saving. This is an
             integer in 0..100 range with 0 meaning very poor and 100 excellent

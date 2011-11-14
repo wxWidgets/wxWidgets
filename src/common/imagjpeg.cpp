@@ -334,6 +334,13 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, cinfo.density_unit);
     }
 
+    if ( cinfo.image_width != cinfo.output_width || cinfo.image_height != cinfo.output_height )
+    {
+        // save the original image size
+        image->SetOption(wxIMAGE_OPTION_ORIGINAL_WIDTH, cinfo.image_width);
+        image->SetOption(wxIMAGE_OPTION_ORIGINAL_HEIGHT, cinfo.image_height);
+    }
+
     jpeg_finish_decompress( &cinfo );
     jpeg_destroy_decompress( &cinfo );
     return true;

@@ -2450,7 +2450,17 @@ bool wxImage::DoLoad(wxImageHandler& handler, wxInputStream& stream, int index)
         }
 
         if ( width != widthOrig || height != heightOrig )
+        {
+            // get the original size if it was set by the image handler
+            // but also in order to restore it after Rescale
+            int widthOrigOption = GetOptionInt(wxIMAGE_OPTION_ORIGINAL_WIDTH),
+                heightOrigOption = GetOptionInt(wxIMAGE_OPTION_ORIGINAL_HEIGHT);
+
             Rescale(width, height, wxIMAGE_QUALITY_HIGH);
+
+            SetOption(wxIMAGE_OPTION_ORIGINAL_WIDTH, widthOrigOption ? widthOrigOption : widthOrig);
+            SetOption(wxIMAGE_OPTION_ORIGINAL_HEIGHT, heightOrigOption ? heightOrigOption : heightOrig);
+        }
     }
 
     // Set this after Rescale, which currently does not preserve it

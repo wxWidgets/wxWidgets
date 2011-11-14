@@ -944,10 +944,14 @@ void MyFrame::OnThumbnail( wxCommandEvent &WXUNUSED(event) )
         return;
     }
 
+    int origWidth = image.GetOptionInt( wxIMAGE_OPTION_ORIGINAL_WIDTH );
+    int origHeight = image.GetOptionInt( wxIMAGE_OPTION_ORIGINAL_HEIGHT );
+
     const long loadTime = sw.Time();
 
     MyImageFrame * const frame = new MyImageFrame(this, filename, image);
-    wxLogStatus(frame, "Loaded \"%s\" in %ldms", filename, loadTime);
+    wxLogStatus(frame, "Loaded \"%s\" in %ldms; original size was (%d, %d)",
+                filename, loadTime, origWidth, origHeight);
 #else
     wxLogError( wxT("Couldn't create file selector dialog") );
     return;

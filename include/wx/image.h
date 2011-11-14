@@ -40,6 +40,9 @@
 #define wxIMAGE_OPTION_MAX_WIDTH             wxString(wxT("MaxWidth"))
 #define wxIMAGE_OPTION_MAX_HEIGHT            wxString(wxT("MaxHeight"))
 
+#define wxIMAGE_OPTION_ORIGINAL_WIDTH        wxString(wxT("OriginalWidth"))
+#define wxIMAGE_OPTION_ORIGINAL_HEIGHT       wxString(wxT("OriginalHeight"))
+
 // constants used with wxIMAGE_OPTION_RESOLUTIONUNIT
 //
 // NB: don't change these values, they correspond to libjpeg constants
