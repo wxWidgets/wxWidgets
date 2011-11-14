@@ -496,11 +496,13 @@ void wxWidgetIPhoneImpl::SetLabel(const wxString& title, wxFontEncoding encoding
         wxCFStringRef cf( title , encoding );
         [m_osxView setTitle:cf.AsNSString() forState:UIControlStateNormal ];
     }
+#if 0 // nonpublic API problems
     else if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
     {
         wxCFStringRef cf( title , encoding );
         [m_osxView setStringValue:cf.AsNSString()];
     }
+#endif
 }
 
 
