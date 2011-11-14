@@ -79,10 +79,6 @@ public:
     {
         switch ( but )
         {
-            default:
-                wxFAIL_MSG(wxT("invalid parameter in wxMouseState::ButtonIsDown"));
-                // fall through
-
             case wxMOUSE_BTN_ANY:
                 return LeftIsDown() || MiddleIsDown() || RightIsDown() ||
                             Aux1IsDown() || Aux2IsDown();
@@ -101,6 +97,15 @@ public:
 
             case wxMOUSE_BTN_AUX2:
                 return Aux2IsDown();
+
+            case wxMOUSE_BTN_NONE:
+            case wxMOUSE_BTN_MAX:
+                wxFAIL_MSG(wxS("invalid parameter"));
+                return false;
+
+            default:
+                wxFAIL_MSG(wxS("unknown parameter"));
+                return false;
         }
     }
 
