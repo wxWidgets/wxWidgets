@@ -923,6 +923,9 @@ WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
 extern HCURSOR wxGetCurrentBusyCursor();    // from msw/utils.cpp
 extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 
+// GetCursorPos can fail without populating the POINT. This falls back to GetMessagePos.
+WXDLLIMPEXP_CORE void wxGetCursorPosMSW(POINT* pt);
+
 WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
 WXDLLIMPEXP_CORE void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
 WXDLLIMPEXP_CORE wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);

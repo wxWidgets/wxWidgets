@@ -3645,7 +3645,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case NM_RCLICK:
             {
                 TV_HITTESTINFO tvhti;
-                ::GetCursorPos(&tvhti.pt);
+                wxGetCursorPosMSW(&tvhti.pt);
                 ::ScreenToClient(GetHwnd(), &tvhti.pt);
                 if ( TreeView_HitTest(GetHwnd(), &tvhti) )
                 {

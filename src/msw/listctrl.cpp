@@ -1905,9 +1905,8 @@ int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
     }
     else
 #endif //__WXWINCE__
-    if ( !::GetCursorPos(ptClick) )
     {
-        wxLogLastError(wxT("GetCursorPos"));
+       wxGetCursorPosMSW(ptClick);
     }
 
     // we need to use listctrl coordinates for the event point so this is what
@@ -2323,7 +2322,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 else
 #endif //__WXWINCE__
                 {
-                    ::GetCursorPos(&(lvhti.pt));
+                    wxGetCursorPosMSW(&(lvhti.pt));
                 }
 
                 ::ScreenToClient(GetHwnd(), &lvhti.pt);

@@ -49,7 +49,7 @@ DWORD EventTypeForMouseButton(int button, bool isDown)
 bool wxUIActionSimulator::MouseDown(int button)
 {
     POINT p;
-    GetCursorPos(&p);
+    wxGetCursorPosMSW(&p);
     mouse_event(EventTypeForMouseButton(button, true), p.x, p.y, 0, 0);
     return true;
 }
@@ -71,7 +71,7 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
 bool wxUIActionSimulator::MouseUp(int button)
 {
     POINT p;
-    GetCursorPos(&p);
+    wxGetCursorPosMSW(&p);
     mouse_event(EventTypeForMouseButton(button, false), p.x, p.y, 0, 0);
     return true;
 }

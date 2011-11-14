@@ -113,7 +113,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 void wxGetMousePosition( int* x, int* y )
 {
     POINT pt;
-    GetCursorPos( & pt );
+    wxGetCursorPosMSW( & pt );
     if ( x ) *x = pt.x;
     if ( y ) *y = pt.y;
 }
