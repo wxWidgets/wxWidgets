@@ -229,12 +229,11 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     int *pWidths = new int[count];
 
     int nCurPos = 0;
-    for ( int i = 0; i < count; i++ )
+    int i;
+    for ( i = 0; i < count; i++ )
     {
         nCurPos += widthsAbs[i] + extraWidth;
         pWidths[i] = nCurPos;
-
-        DoUpdateStatusText(i);
     }
 
     // The total width of the panes passed to Windows must be equal to the
@@ -245,6 +244,12 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     if ( !StatusBar_SetParts(GetHwnd(), count, pWidths) )
     {
         wxLogLastError("StatusBar_SetParts");
+    }
+
+    // Now that all parts have been created, set their text.
+    for ( i = 0; i < count; i++ )
+    {
+        DoUpdateStatusText(i);
     }
 
     delete [] pWidths;
