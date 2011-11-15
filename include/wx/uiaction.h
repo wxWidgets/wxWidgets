@@ -58,8 +58,8 @@ public:
         { return Key(keycode, modifiers, false); }
 
     // Higher level methods for generating both the key press and release for a
-    // single key or for all characters in the ASCII string "text" which can
-    // currently contain letters only (no digits, no punctuation).
+    // single key or for all characters in the ASCII string "text" which can currently
+    // contain letters, digits and characters for the definition of numbers [+-., ].
     bool Char(int keycode, int modifiers = wxMOD_NONE);
 
     bool Text(const char *text);

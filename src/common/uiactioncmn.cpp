@@ -80,6 +80,51 @@ void wxUIActionSimulator::SimulateModifiers(int modifiers, bool isDown)
 
 bool wxUIActionSimulator::Char(int keycode, int modifiers)
 {
+    switch(keycode)
+    {
+    case '0':
+        keycode = WXK_NUMPAD0;
+        break;
+    case '1':
+        keycode = WXK_NUMPAD1;
+        break;
+    case '2':
+        keycode = WXK_NUMPAD2;
+        break;
+    case '3':
+        keycode = WXK_NUMPAD3;
+        break;
+    case '4':
+        keycode = WXK_NUMPAD4;
+        break;
+    case '5':
+        keycode = WXK_NUMPAD5;
+        break;
+    case '6':
+        keycode = WXK_NUMPAD6;
+        break;
+    case '7':
+        keycode = WXK_NUMPAD7;
+        break;
+    case '8':
+        keycode = WXK_NUMPAD8;
+        break;
+    case '9':
+        keycode = WXK_NUMPAD9;
+        break;
+    case '+':
+        keycode = WXK_NUMPAD_ADD;
+        break;
+    case '-':
+        keycode = WXK_NUMPAD_SUBTRACT;
+        break;
+    case '.':
+        keycode = WXK_NUMPAD_DECIMAL;
+        break;
+    default:
+        break;
+    };
+
     Key(keycode, modifiers, true);
     Key(keycode, modifiers, false);
 
@@ -91,9 +136,6 @@ bool wxUIActionSimulator::Text(const char *s)
     while ( *s != '\0' )
     {
         const char ch = *s++;
-
-        wxASSERT_MSG( ch, "Only letters are allowed" );
-
         if ( !Char(ch, isupper(ch) ? wxMOD_SHIFT : 0) )
             return false;
     }

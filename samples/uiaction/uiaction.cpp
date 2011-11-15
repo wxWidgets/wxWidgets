@@ -184,6 +184,9 @@ void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
     sim.Char(WXK_RETURN);
     sim.Text("aAbBcC");
     sim.Char(WXK_RETURN);
+    sim.Text("1 234.57e-8");
+    sim.Char(WXK_RETURN);
+
 }
 
 void MyFrame::OnButtonPressed(wxCommandEvent& WXUNUSED(event))
