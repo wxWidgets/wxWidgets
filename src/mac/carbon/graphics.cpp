@@ -741,7 +741,7 @@ private :
 
 wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) : wxGraphicsObjectRefData( renderer )
 #if !wxUSE_UNICODE
-    , m_conv( font.GetEncoding() == wxFONTENCODING_DEFAULT ? wxFONTENCODING_SYSTEM : font.GetEncoding() )
+    , m_conv( font.GetEncoding() == wxFONTENCODING_DEFAULT ? wxFont::GetDefaultEncoding() : font.GetEncoding() )
 #endif
 {
     m_macATSUIStyle = NULL;

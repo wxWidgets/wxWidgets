@@ -195,7 +195,10 @@ void wxFontRefData::Init(int pointSize,
     m_weight = weight;
     m_underlined = underlined;
     m_faceName = faceName;
-    m_encoding = encoding;
+    if ( encoding == wxFONTENCODING_DEFAULT )
+        m_encoding = wxFont::GetDefaultEncoding();
+    else
+        m_encoding = encoding;
 #ifdef __LP64__
     m_macUIFontType = kCTFontNoFontType;
     m_macFontRef = 0;
