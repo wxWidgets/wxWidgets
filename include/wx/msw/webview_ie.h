@@ -22,6 +22,132 @@
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 
+/* Classes and definitions from urlmon.h vary in their
+ * completeness between compilers and versions of compilers.
+ * We implement our own versions here which should work
+ * for all compilers. The definitions are taken from the
+ * mingw-w64 headers which are public domain.
+ */
+
+#ifndef REFRESH_NORMAL
+#define REFRESH_NORMAL 0
+#endif
+
+#ifndef REFRESH_COMPLETELY
+#define REFRESH_COMPLETELY 3
+#endif
+
+typedef enum __wxMIDL_IBindStatusCallback_0006
+{
+    wxBSCF_FIRSTDATANOTIFICATION = 0x1,
+    wxBSCF_INTERMEDIATEDATANOTIFICATION = 0x2,
+    wxBSCF_LASTDATANOTIFICATION = 0x4,
+    wxBSCF_DATAFULLYAVAILABLE = 0x8,
+    wxBSCF_AVAILABLEDATASIZEUNKNOWN = 0x10
+}   wxBSCF;
+
+EXTERN_C const IID CLSID_FileProtocol;
+
+typedef struct _tagwxBINDINFO
+{
+    ULONG cbSize;
+    LPWSTR szExtraInfo;
+    STGMEDIUM stgmedData;
+    DWORD grfBindInfoF;
+    DWORD dwBindVerb;
+    LPWSTR szCustomVerb;
+    DWORD cbstgmedData;
+    DWORD dwOptions;
+    DWORD dwOptionsFlags;
+    DWORD dwCodePage;
+    SECURITY_ATTRIBUTES securityAttributes;
+    IID iid;
+    IUnknown *pUnk;
+    DWORD dwReserved;
+}   wxBINDINFO;
+
+typedef struct _tagwxPROTOCOLDATA
+{
+    DWORD grfFlags;
+    DWORD dwState;
+    LPVOID pData;
+    ULONG cbData;
+}   wxPROTOCOLDATA;
+
+class wxIInternetBindInfo : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL GetBindInfo(DWORD *grfBINDF,wxBINDINFO *pbindinfo) = 0;
+    virtual HRESULT wxSTDCALL GetBindString(ULONG ulStringType,LPOLESTR *ppwzStr,
+                                         ULONG cEl,ULONG *pcElFetched) = 0;
+};
+
+class wxIInternetProtocolSink : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL Switch(wxPROTOCOLDATA *pProtocolData) = 0;
+    virtual HRESULT wxSTDCALL ReportProgress(ULONG ulStatusCode,
+                                          LPCWSTR szStatusText) = 0;
+    virtual HRESULT wxSTDCALL ReportData(DWORD grfBSCF,ULONG ulProgress,
+                                      ULONG ulProgressMax) = 0;
+    virtual HRESULT wxSTDCALL ReportResult(HRESULT hrResult,DWORD dwError,
+                                        LPCWSTR szResult) = 0;
+};
+
+class wxIInternetProtocolRoot : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL Start(LPCWSTR szUrl,wxIInternetProtocolSink *pOIProtSink,
+                                 wxIInternetBindInfo *pOIBindInfo,DWORD grfPI,
+                                 HANDLE_PTR dwReserved) = 0;
+    virtual HRESULT wxSTDCALL Continue(wxPROTOCOLDATA *pProtocolData) = 0;
+    virtual HRESULT wxSTDCALL Abort(HRESULT hrReason,DWORD dwOptions) = 0;
+    virtual HRESULT wxSTDCALL Terminate(DWORD dwOptions) = 0;
+    virtual HRESULT wxSTDCALL Suspend(void) = 0;
+    virtual HRESULT wxSTDCALL Resume(void) = 0;
+};
+
+
+class wxIInternetProtocol : public wxIInternetProtocolRoot
+{
+public:
+    virtual HRESULT wxSTDCALL Read(void *pv,ULONG cb,ULONG *pcbRead) = 0;
+    virtual HRESULT wxSTDCALL Seek(LARGE_INTEGER dlibMove,DWORD dwOrigin,
+                                ULARGE_INTEGER *plibNewPosition) = 0;
+    virtual HRESULT wxSTDCALL LockRequest(DWORD dwOptions) = 0;
+    virtual HRESULT wxSTDCALL UnlockRequest(void) = 0;
+};
+
+
+class wxIInternetSession : public IUnknown
+{
+  public:
+    virtual HRESULT wxSTDCALL RegisterNameSpace(IClassFactory *pCF,REFCLSID rclsid,
+                                             LPCWSTR pwzProtocol,
+                                             ULONG cPatterns,
+                                             const LPCWSTR *ppwzPatterns,
+                                             DWORD dwReserved) = 0;
+    virtual HRESULT wxSTDCALL UnregisterNameSpace(IClassFactory *pCF,
+                                               LPCWSTR pszProtocol) = 0;
+    virtual HRESULT wxSTDCALL RegisterMimeFilter(IClassFactory *pCF,
+                                              REFCLSID rclsid,
+                                              LPCWSTR pwzType) = 0;
+    virtual HRESULT wxSTDCALL UnregisterMimeFilter(IClassFactory *pCF,
+                                                LPCWSTR pwzType) = 0;
+    virtual HRESULT wxSTDCALL CreateBinding(LPBC pBC,LPCWSTR szUrl,
+                                         IUnknown *pUnkOuter,IUnknown **ppUnk,
+                                         wxIInternetProtocol **ppOInetProt,
+                                         DWORD dwOption) = 0;
+    virtual HRESULT wxSTDCALL SetSessionOption(DWORD dwOption,LPVOID pBuffer,
+                                            DWORD dwBufferLength,
+                                            DWORD dwReserved) = 0;
+    virtual HRESULT wxSTDCALL GetSessionOption(DWORD dwOption,LPVOID pBuffer,
+                                            DWORD *pdwBufferLength,
+                                            DWORD dwReserved) = 0;
+};
+
+/* END OF URLMON.H implementation */
+
 struct IHTMLDocument2;
 class wxFSFile;
 class ClassFactory;
@@ -165,11 +291,11 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
 
-class VirtualProtocol : public IInternetProtocol
+class VirtualProtocol : public wxIInternetProtocol
 {
 protected:
     ULONG m_refCount;
-    IInternetProtocolSink* m_protocolSink;
+    wxIInternetProtocolSink* m_protocolSink;
     wxString m_html;
     VOID * fileP;
 
@@ -189,12 +315,12 @@ public:
     HRESULT STDMETHODCALLTYPE Abort(HRESULT WXUNUSED(hrReason), 
                                     DWORD WXUNUSED(dwOptions))
                                    { return E_NOTIMPL; }
-    HRESULT STDMETHODCALLTYPE Continue(PROTOCOLDATA *WXUNUSED(pProtocolData))
+    HRESULT STDMETHODCALLTYPE Continue(wxPROTOCOLDATA *WXUNUSED(pProtocolData))
                                        { return S_OK; }
     HRESULT STDMETHODCALLTYPE Resume() { return S_OK; }
     HRESULT STDMETHODCALLTYPE Start(LPCWSTR szUrl, 
-                                    IInternetProtocolSink *pOIProtSink,
-                                    IInternetBindInfo *pOIBindInfo, 
+                                    wxIInternetProtocolSink *pOIProtSink,
+                                    wxIInternetBindInfo *pOIBindInfo,
                                     DWORD grfPI, 
                                     HANDLE_PTR dwReserved);
     HRESULT STDMETHODCALLTYPE Suspend() { return S_OK; }

@@ -27,6 +27,18 @@
 #include "wx/msw/missing.h"
 #include "wx/filesys.h"
 #include "wx/dynlib.h"
+#include <initguid.h>
+
+/* These GUID definitions are our own implementation to support interfaces
+ * normally in urlmon.h. See include/wx/msw/webview_ie.h
+ */
+
+namespace {
+
+DEFINE_GUID(wxIID_IInternetProtocolRoot,0x79eac9e3,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
+DEFINE_GUID(wxIID_IInternetProtocol,0x79eac9e4,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
+
+}
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
 
@@ -698,11 +710,11 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     wxDynamicLibrary urlMon(wxT("urlmon.dll"));
     if(urlMon.HasSymbol(wxT("CoInternetGetSession")))
     {
-        typedef HRESULT (WINAPI *CoInternetGetSession_t)(DWORD, IInternetSession**, DWORD);
+        typedef HRESULT (WINAPI *CoInternetGetSession_t)(DWORD, wxIInternetSession**, DWORD);
         wxDYNLIB_FUNCTION(CoInternetGetSession_t, CoInternetGetSession, urlMon);
 
         ClassFactory* cf = new ClassFactory(handler);
-        IInternetSession* session;
+        wxIInternetSession* session;
         HRESULT res = (*pfnCoInternetGetSession)(0, &session, 0);
         if(FAILED(res))
         {
@@ -1034,10 +1046,10 @@ ULONG VirtualProtocol::AddRef()
 
 HRESULT VirtualProtocol::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if(riid == IID_IUnknown || riid == IID_IInternetProtocolRoot || 
-       riid == IID_IInternetProtocol)
+    if(riid == IID_IUnknown || riid == wxIID_IInternetProtocolRoot ||
+       riid == wxIID_IInternetProtocol)
     {
-        *ppvObject = (IInternetProtocol*)this;
+        *ppvObject = (wxIInternetProtocol*)this;
         AddRef();
         return S_OK;
     }
@@ -1062,8 +1074,8 @@ ULONG VirtualProtocol::Release()
     }
 }
 
-HRESULT VirtualProtocol::Start(LPCWSTR szUrl, IInternetProtocolSink *pOIProtSink,
-                               IInternetBindInfo *pOIBindInfo, DWORD grfPI, 
+HRESULT VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProtocolSink *pOIProtSink,
+                               wxIInternetBindInfo *pOIBindInfo, DWORD grfPI,
                                HANDLE_PTR dwReserved)
 {
     wxUnusedVar(szUrl);
@@ -1082,9 +1094,9 @@ HRESULT VirtualProtocol::Start(LPCWSTR szUrl, IInternetProtocolSink *pOIProtSink
     //We return the stream length for current and total size as we can always
     //read the whole file from the stream
     wxFileOffset length = m_file->GetStream()->GetLength();
-    m_protocolSink->ReportData(BSCF_FIRSTDATANOTIFICATION | 
-                               BSCF_DATAFULLYAVAILABLE |
-                               BSCF_LASTDATANOTIFICATION,
+    m_protocolSink->ReportData(wxBSCF_FIRSTDATANOTIFICATION |
+                               wxBSCF_DATAFULLYAVAILABLE |
+                               wxBSCF_LASTDATANOTIFICATION,
                                length, length);
     return S_OK; 
 }
