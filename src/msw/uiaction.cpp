@@ -15,6 +15,10 @@
 
 #if wxUSE_UIACTIONSIMULATOR
 
+#ifndef WX_PRECOMP
+    #include "wx/msw/private.h"             // For wxGetCursorPosMSW()
+#endif
+
 #include "wx/uiaction.h"
 #include "wx/msw/wrapwin.h"
 
