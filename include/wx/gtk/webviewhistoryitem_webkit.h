@@ -14,8 +14,6 @@
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
-#include "webkit/webkit.h"
-
 class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {
 public:
@@ -28,7 +26,7 @@ public:
 
 private:
     wxString m_url, m_title;
-    WebKitWebHistoryItem* m_histItem;
+    void* m_histItem;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)

@@ -18,7 +18,7 @@
 #include "wx/gtk/private.h"
 #include "wx/filesys.h"
 #include "wx/base64.h"
-#include "webkit/webkit.h"
+#include <webkit/webkit.h>
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -598,7 +598,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory(
 
 void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
 {
-    WebKitWebHistoryItem* gtkitem = item->m_histItem;
+    WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)item->m_histItem;
     if(gtkitem)
     {
         WebKitWebBackForwardList* history;

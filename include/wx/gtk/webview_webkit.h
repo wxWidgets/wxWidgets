@@ -14,7 +14,6 @@
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
-#include "webkit/webkit.h"
 #include "wx/sharedptr.h"
 #include "wx/webview.h"
 
@@ -147,7 +146,7 @@ private:
     void GTKOnFocus(wxFocusEvent& event);
 
     GtkWidget *web_view;
-    gint m_historyLimit;
+    int m_historyLimit;
 
     wxVector<wxSharedPtr<wxWebViewHandler> > m_handlerList;
 
