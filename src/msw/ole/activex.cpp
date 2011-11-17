@@ -1178,7 +1178,7 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
     posRect.right = w;
     posRect.bottom = h;
 
-    if (w <= 0 && h <= 0)
+    if (w <= 0 || h <= 0)
         return;
 
     // extents are in HIMETRIC units
