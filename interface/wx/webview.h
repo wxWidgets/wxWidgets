@@ -146,7 +146,7 @@ public:
     /**
         @return The name of the scheme, as passed to the constructor.
     */
-    virtual wxString GetName() const = 0;
+    virtual wxString GetName() const;
 };
 
 /**
@@ -257,11 +257,11 @@ public:
     */
     virtual bool Create(wxWindow* parent,
                         wxWindowID id,
-                        const wxString& url,
-                        const wxPoint& pos,
-                        const wxSize& size,
-                        long style,
-                        const wxString& name) = 0;
+                        const wxString& url = wxWebViewDefaultURLStr,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxWebViewNameStr) = 0;
 
     /**
         Factory function to create a new wxWebView for two-step creation
@@ -649,3 +649,11 @@ public:
     */
     const wxString& GetURL() const;
 };
+
+
+wxEventType wxEVT_COMMAND_WEB_VIEW_NAVIGATING;
+wxEventType wxEVT_COMMAND_WEB_VIEW_NAVIGATED;
+wxEventType wxEVT_COMMAND_WEB_VIEW_LOADED;
+wxEventType wxEVT_COMMAND_WEB_VIEW_ERROR;
+wxEventType wxEVT_COMMAND_WEB_VIEW_NEWWINDOW;
+wxEventType wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED;

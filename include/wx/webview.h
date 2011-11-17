@@ -91,11 +91,11 @@ public:
 
     virtual bool Create(wxWindow* parent,
            wxWindowID id,
-           const wxString& url,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name) = 0;
+           const wxString& url = wxWebViewDefaultURLStr,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = 0,
+           const wxString& name = wxWebViewNameStr) = 0;
 
     static wxWebView* New(wxWebViewBackend backend = wxWEB_VIEW_BACKEND_DEFAULT);
     static wxWebView* New(wxWindow* parent,
