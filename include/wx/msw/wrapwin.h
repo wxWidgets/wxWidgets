@@ -80,6 +80,7 @@
 #if (!defined(_MSC_VER) || (_MSC_VER < 1300)) && !defined(__WIN64__)
     #define UINT_PTR unsigned int
     #define INT_PTR int
+    #define HANDLE_PTR unsigned long
     #define LONG_PTR long
     #define ULONG_PTR unsigned long
     #define DWORD_PTR unsigned long

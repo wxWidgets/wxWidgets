@@ -18,6 +18,7 @@
 #include "wx/webview.h"
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/ole/activex.h"
+#include "wx/msw/wrapwin.h"
 #include "wx/msw/missing.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
