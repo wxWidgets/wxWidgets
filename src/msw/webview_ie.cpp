@@ -83,8 +83,6 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     m_container = new wxActiveXContainer(this, IID_IWebBrowser2, m_webBrowser);
 
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
-    SetDoubleBuffered(true);
     LoadURL(url);
     return true;
 }
