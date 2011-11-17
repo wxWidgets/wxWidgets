@@ -34,5 +34,9 @@ public:
         @false otherwise.
     */
     bool IsOk() const;
+
+    void SetFileName(const wxString& filename);
+    const wxString& GetFileName() const;
+
 };
 

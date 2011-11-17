@@ -50,7 +50,7 @@
     @see @ref overview_bitmap, @ref overview_bitmap_supportedformats,
          wxDC::DrawIcon, wxCursor
 */
-class wxIcon : public wxBitmap
+class wxIcon : public wxGDIObject
 {
 public:
     /**

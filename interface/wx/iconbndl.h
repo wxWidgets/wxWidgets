@@ -106,6 +106,16 @@ public:
     wxIcon GetIconOfExactSize(const wxSize& size) const;
 
     /**
+       return the number of available icons
+    */
+    size_t GetIconCount() const;
+
+    /**
+       return the icon at index (must be < GetIconCount())
+    */
+    wxIcon GetIconByIndex(size_t n) const;
+
+    /**
         Returns @true if the bundle doesn't contain any icons, @false otherwise
         (in which case a call to GetIcon() with default parameter should return
         a valid icon).
@@ -117,15 +127,6 @@ public:
     */
     wxIconBundle& operator=(const wxIconBundle& ic);
 
-    /**
-        Equality operator. This returns @true if two icon bundles are equal.
-    */
-    bool operator ==(const wxIconBundle& ic);
-
-    /**
-        Inequality operator. This returns true if two icon bundles are not equal.
-    */
-    bool operator !=(const wxIconBundle& ic);
 };
 
 
