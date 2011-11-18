@@ -472,7 +472,7 @@ void wxWebViewIE::SetOfflineMode(bool offline)
 }
 
 bool wxWebViewIE::IsBusy() const
-{ 
+{
     if (m_isBusy) return true;
 
     wxVariant out = m_ie.GetProperty("Busy");
@@ -834,12 +834,12 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
             //As we are complete we also add to the history list, but not if the
             //page is not the main page, ie it is a subframe
-            //We also have to check if we are loading a file:// url, if so we 
+            //We also have to check if we are loading a file:// url, if so we
             //need to change the comparison as ie passes back a different style
             //of url
-            if(m_historyEnabled && !m_historyLoadingFromList && 
-              (url == GetCurrentURL() || 
-              (GetCurrentURL().substr(0, 4) == "file" && 
+            if(m_historyEnabled && !m_historyLoadingFromList &&
+              (url == GetCurrentURL() ||
+              (GetCurrentURL().substr(0, 4) == "file" &&
                wxFileSystem::URLToFileName(GetCurrentURL()).GetFullPath() == url)))
             {
                 //If we are not at the end of the list, then erase everything
@@ -1081,7 +1081,7 @@ HRESULT VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProtocolSink *pOIProtSi
     wxUnusedVar(grfPI);
     wxUnusedVar(dwReserved);
     m_protocolSink = pOIProtSink;
-    
+
     //We get the file itself from the protocol handler
     m_file = m_handler->GetFile(szUrl);
 
@@ -1096,13 +1096,13 @@ HRESULT VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProtocolSink *pOIProtSi
                                wxBSCF_DATAFULLYAVAILABLE |
                                wxBSCF_LASTDATANOTIFICATION,
                                length, length);
-    return S_OK; 
+    return S_OK;
 }
 
 HRESULT VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
 {
     //If the file is null we return false to indicte it is finished
-    if(!m_file) 
+    if(!m_file)
         return S_FALSE;
 
     wxStreamError err = m_file->GetStream()->Read(pv, cb).GetLastError();
@@ -1141,7 +1141,7 @@ HRESULT VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
 HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
                                      void ** ppvObject)
 {
-    if (pUnkOuter) 
+    if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
     VirtualProtocol* vp = new VirtualProtocol(m_handler);
     vp->AddRef();
@@ -1149,7 +1149,7 @@ HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
     vp->Release();
     return hr;
 
-} 
+}
 
 STDMETHODIMP ClassFactory::LockServer(BOOL fLock)
 {
@@ -1192,6 +1192,6 @@ ULONG ClassFactory::Release(void)
         return 0;
     }
 
-} 
+}
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE

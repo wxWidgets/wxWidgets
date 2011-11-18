@@ -274,7 +274,7 @@ private:
      *  Busy property is false but should be true.
      */
     bool m_isBusy;
-    //We manage our own history, the history list contains the history items 
+    //We manage our own history, the history list contains the history items
     //which are added as documentcomplete events arrive, unless we are loading
     //an item from the history. The position is stored as an int, and reflects
     //where we are in the history list.
@@ -313,27 +313,27 @@ public:
     ULONG STDMETHODCALLTYPE Release();
 
     //IInternetProtocolRoot
-    HRESULT STDMETHODCALLTYPE Abort(HRESULT WXUNUSED(hrReason), 
+    HRESULT STDMETHODCALLTYPE Abort(HRESULT WXUNUSED(hrReason),
                                     DWORD WXUNUSED(dwOptions))
                                    { return E_NOTIMPL; }
     HRESULT STDMETHODCALLTYPE Continue(wxPROTOCOLDATA *WXUNUSED(pProtocolData))
                                        { return S_OK; }
     HRESULT STDMETHODCALLTYPE Resume() { return S_OK; }
-    HRESULT STDMETHODCALLTYPE Start(LPCWSTR szUrl, 
+    HRESULT STDMETHODCALLTYPE Start(LPCWSTR szUrl,
                                     wxIInternetProtocolSink *pOIProtSink,
                                     wxIInternetBindInfo *pOIBindInfo,
-                                    DWORD grfPI, 
+                                    DWORD grfPI,
                                     HANDLE_PTR dwReserved);
     HRESULT STDMETHODCALLTYPE Suspend() { return S_OK; }
     HRESULT STDMETHODCALLTYPE Terminate(DWORD WXUNUSED(dwOptions)) { return S_OK; }
 
     //IInternetProtocol
-    HRESULT STDMETHODCALLTYPE LockRequest(DWORD WXUNUSED(dwOptions)) 
+    HRESULT STDMETHODCALLTYPE LockRequest(DWORD WXUNUSED(dwOptions))
                                           { return S_OK; }
     HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead);
-    HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER WXUNUSED(dlibMove), 
-                                   DWORD WXUNUSED(dwOrigin), 
-                                   ULARGE_INTEGER* WXUNUSED(plibNewPosition)) 
+    HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER WXUNUSED(dlibMove),
+                                   DWORD WXUNUSED(dwOrigin),
+                                   ULARGE_INTEGER* WXUNUSED(plibNewPosition))
                                    { return E_FAIL; }
     HRESULT STDMETHODCALLTYPE UnlockRequest() { return S_OK; }
 };
@@ -348,7 +348,7 @@ public:
     ULONG STDMETHODCALLTYPE Release();
 
     //IClassFactory
-    HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown* pUnkOuter, 
+    HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown* pUnkOuter,
                                              REFIID riid, void** ppvObject);
     HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
 private:
