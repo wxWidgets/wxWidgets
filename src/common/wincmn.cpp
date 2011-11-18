@@ -3328,9 +3328,7 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
 
 bool wxWindowBase::HasFocus() const
 {
-    wxWindowBase *win = DoFindFocus();
-    return win == this ||
-           win == wxConstCast(this, wxWindowBase)->GetMainWindowOfCompositeControl();
+    return FindFocus() == this;
 }
 
 // ----------------------------------------------------------------------------
