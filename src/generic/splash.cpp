@@ -42,6 +42,13 @@ BEGIN_EVENT_TABLE(wxSplashScreen, wxFrame)
     EVT_CLOSE(wxSplashScreen::OnCloseWindow)
 END_EVENT_TABLE()
 
+void wxSplashScreen::Init()
+{
+    m_window = NULL;
+
+    wxEvtHandler::AddFilter(this);
+}
+
 /* Note that unless we pass a non-default size to the frame, SetClientSize
  * won't work properly under Windows, and the splash screen frame is sized
  * slightly too small.
@@ -53,6 +60,8 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
     : wxFrame(parent, id, wxEmptyString, wxPoint(0,0), wxSize(100, 100),
               style | wxFRAME_TOOL_WINDOW | wxFRAME_NO_TASKBAR)
 {
+    Init();
+
     // splash screen must not be used as parent by the other windows because it
     // is going to disappear soon, indicate it by giving it this special style
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
@@ -62,7 +71,6 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
                              GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
 #endif
 
-    m_window = NULL;
     m_splashStyle = splashStyle;
     m_milliseconds = milliseconds;
 
@@ -95,6 +103,20 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
 wxSplashScreen::~wxSplashScreen()
 {
     m_timer.Stop();
+
+    wxEvtHandler::RemoveFilter(this);
+}
+
+int wxSplashScreen::FilterEvent(wxEvent& event)
+{
+    const wxEventType t = event.GetEventType();
+    if ( t == wxEVT_KEY_DOWN ||
+            t == wxEVT_LEFT_DOWN ||
+                t == wxEVT_RIGHT_DOWN ||
+                    t == wxEVT_MIDDLE_DOWN )
+        Close(true);
+
+    return -1;
 }
 
 void wxSplashScreen::OnNotify(wxTimerEvent& WXUNUSED(event))
@@ -117,8 +139,6 @@ BEGIN_EVENT_TABLE(wxSplashScreenWindow, wxWindow)
     EVT_PAINT(wxSplashScreenWindow::OnPaint)
 #endif
     EVT_ERASE_BACKGROUND(wxSplashScreenWindow::OnEraseBackground)
-    EVT_CHAR(wxSplashScreenWindow::OnChar)
-    EVT_MOUSE_EVENTS(wxSplashScreenWindow::OnMouseEvent)
 END_EVENT_TABLE()
 
 wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* parent,
@@ -188,19 +208,6 @@ void wxSplashScreenWindow::OnEraseBackground(wxEraseEvent& event)
         if (m_bitmap.IsOk())
             wxDrawSplashBitmap(dc, m_bitmap, 0, 0);
     }
-}
-
-void wxSplashScreenWindow::OnMouseEvent(wxMouseEvent& event)
-{
-    if (event.LeftDown() || event.RightDown())
-        GetParent()->Close(true);
-    else
-        event.Skip();
-}
-
-void wxSplashScreenWindow::OnChar(wxKeyEvent& WXUNUSED(event))
-{
-    GetParent()->Close(true);
 }
 
 #endif // wxUSE_SPLASH
