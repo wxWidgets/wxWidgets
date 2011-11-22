@@ -144,6 +144,7 @@ void wxNotebook::Init()
 
 #if USE_NOTEBOOK_ANTIFLICKER
     m_hasSubclassedUpdown = false;
+    m_doneUpdateHack = false;
 #endif // USE_NOTEBOOK_ANTIFLICKER
 }
 
@@ -977,6 +978,21 @@ void wxNotebook::OnSize(wxSizeEvent& event)
                 break;
             }
         }
+    }
+
+    // Probably because of the games we play above to avoid flicker sometimes
+    // the text controls inside notebook pages are not shown correctly (they
+    // don't have their borders) when the notebook is shown for the first time.
+    // It's not really clear why does this happen and maybe the bug is in
+    // wxTextCtrl itself and not here but updating the page when it's about to
+    // be shown doesn't cost much and works around the problem so do it here
+    // for now.
+    if ( !m_doneUpdateHack && IsShownOnScreen() )
+    {
+        m_doneUpdateHack = true;
+        wxWindow* const page = GetCurrentPage();
+        if ( page )
+            page->Update();
     }
 #endif // USE_NOTEBOOK_ANTIFLICKER
 
