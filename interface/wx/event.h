@@ -3971,6 +3971,10 @@ public:
     size of the window, you may need to clear the DC explicitly and repaint the whole window.
     In which case, you may need to call wxWindow::Refresh to invalidate the entire window.
 
+    @b Important : Sizers ( see @ref overview_sizer ) rely on size events to function
+    correctly. Therefore, in a sizer-based layout, do not forget to call Skip on all
+    size events you catch (and don't catch size events at all when you don't need to).
+ 
     @beginEventTable{wxSizeEvent}
     @event{EVT_SIZE(func)}
         Process a @c wxEVT_SIZE event.
