@@ -457,6 +457,7 @@ All:
 
 - Fix parsing of negated long options in wxCmdLineParser (roed_bis).
 - Fix crash in wxArray::insert() overload taking iterator range (wsu).
+- Added wxEventFilter class and wxEvtHandler::{Add,Remove}Filter().
 
 All (GUI):
 

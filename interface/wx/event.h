@@ -1088,6 +1088,40 @@ public:
 
     //@}
 
+    /**
+        @name Global event filters.
+
+        Methods for working with the global list of event filters.
+
+        Event filters can be defined to pre-process all the events that happen
+        in an application, see wxEventFilter documentation for more information.
+     */
+    //@{
+
+    /**
+        Add an event filter whose FilterEvent() method will be called for each
+        and every event processed by wxWidgets.
+
+        The filters are called in LIFO order and wxApp is registered as an
+        event filter by default. The pointer must remain valid until it's
+        removed with RemoveFilter() and is not deleted by wxEvtHandler.
+
+        @since 2.9.3
+     */
+    static void AddFilter(wxEventFilter* filter);
+
+    /**
+        Remove a filter previously installed with AddFilter().
+
+        It's an error to remove a filter that hadn't been previously added or
+        was already removed.
+
+        @since 2.9.3
+     */
+    static void RemoveFilter(wxEventFilter* filter);
+
+    //@}
+
 protected:
     /**
         Method called by ProcessEvent() before examining this object event

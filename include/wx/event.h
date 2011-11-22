@@ -39,6 +39,7 @@
 
 class WXDLLIMPEXP_FWD_BASE wxList;
 class WXDLLIMPEXP_FWD_BASE wxEvent;
+class WXDLLIMPEXP_FWD_BASE wxEventFilter;
 #if wxUSE_GUI
     class WXDLLIMPEXP_FWD_CORE wxDC;
     class WXDLLIMPEXP_FWD_CORE wxMenu;
@@ -3013,6 +3014,19 @@ public:
     bool IsUnlinked() const;
 
 
+    // Global event filters
+    // --------------------
+
+    // Add an event filter whose FilterEvent() method will be called for each
+    // and every event processed by wxWidgets. The filters are called in LIFO
+    // order and wxApp is registered as an event filter by default. The pointer
+    // must remain valid until it's removed with RemoveFilter() and is not
+    // deleted by wxEvtHandler.
+    static void AddFilter(wxEventFilter* filter);
+
+    // Remove a filter previously installed with AddFilter().
+    static void RemoveFilter(wxEventFilter* filter);
+
 
     // Event queuing and processing
     // ----------------------------
@@ -3359,6 +3373,9 @@ private:
 
     // try to process events in all handlers chained to this one
     bool DoTryChain(wxEvent& event);
+
+    // Head of the event filter linked list.
+    static wxEventFilter* ms_filterList;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEvtHandler)
 };

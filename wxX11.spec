@@ -152,6 +152,7 @@ wx/dynlib.h
 wx/dynload.h
 wx/encconv.h
 wx/event.h
+wx/eventfilter.h
 wx/evtloop.h
 wx/except.h
 wx/features.h

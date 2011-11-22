@@ -37,7 +37,8 @@
 
     @see @ref overview_app, wxApp, wxAppTraits, wxEventLoopBase
 */
-class wxAppConsole : public wxEvtHandler
+class wxAppConsole : public wxEvtHandler,
+                     public wxEventFilter
 {
 protected:
     /**
@@ -81,13 +82,14 @@ public:
     virtual void ExitMainLoop();
 
     /**
-        This function is called before processing any event and allows the application
-        to preempt the processing of some events.
+        Overridden wxEventFilter method.
 
-        If this method returns -1 the event is processed normally, otherwise either
-        @true or @false should be returned and the event processing stops immediately
-        considering that the event had been already processed (for the former return
-        value) or that it is not going to be processed at all (for the latter one).
+        This function is called before processing any event and allows the application
+        to preempt the processing of some events, see wxEventFilter
+        documentation for more information.
+
+        wxApp implementation of this method always return -1 indicating that
+        the event should be processed normally.
     */
     virtual int FilterEvent(wxEvent& event);
 

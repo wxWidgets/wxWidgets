@@ -1231,6 +1231,10 @@ SOURCE=..\..\include\wx\event.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\eventfilter.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\evtloop.h
 # End Source File
 # Begin Source File

@@ -1814,6 +1814,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\eventfilter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\evtloop.h"
 				>
 			</File>

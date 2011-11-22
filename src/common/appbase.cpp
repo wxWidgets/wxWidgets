@@ -150,10 +150,14 @@ wxAppConsoleBase::wxAppConsoleBase()
     wxDELETE(m_traits);
 #endif
 #endif
+
+    wxEvtHandler::AddFilter(this);
 }
 
 wxAppConsoleBase::~wxAppConsoleBase()
 {
+    wxEvtHandler::RemoveFilter(this);
+
     // we're being destroyed and using this object from now on may not work or
     // even crash so don't leave dangling pointers to it
     ms_appInstance = NULL;
@@ -401,7 +405,7 @@ bool wxAppConsoleBase::IsMainLoopRunning()
 int wxAppConsoleBase::FilterEvent(wxEvent& WXUNUSED(event))
 {
     // process the events normally by default
-    return -1;
+    return Event_Skip;
 }
 
 void wxAppConsoleBase::DelayPendingEventHandler(wxEvtHandler* toDelay)

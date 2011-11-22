@@ -18,6 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/event.h"       // for the base class
+#include "wx/eventfilter.h" // (and another one)
 #include "wx/build.h"
 #include "wx/cmdargs.h"     // for wxCmdLineArgsArray used by wxApp::argv
 #include "wx/init.h"        // we must declare wxEntry()
@@ -70,7 +71,8 @@ extern WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
 // wxAppConsoleBase: wxApp for non-GUI applications
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxAppConsoleBase : public wxEvtHandler
+class WXDLLIMPEXP_BASE wxAppConsoleBase : public wxEvtHandler,
+                                          public wxEventFilter
 {
 public:
     // ctor and dtor
@@ -238,13 +240,8 @@ public:
     // event processing functions
     // --------------------------
 
-    // this method allows to filter all the events processed by the program, so
-    // you should try to return quickly from it to avoid slowing down the
-    // program to the crawl
-    //
-    // return value should be -1 to continue with the normal event processing,
-    // or TRUE or FALSE to stop further processing and pretend that the event
-    // had been already processed or won't be processed at all, respectively
+    // Implement the inherited wxEventFilter method but just return -1 from it
+    // to indicate that default processing should take place.
     virtual int FilterEvent(wxEvent& event);
 
     // return true if we're running event loop, i.e. if the events can
