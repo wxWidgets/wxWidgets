@@ -183,12 +183,25 @@ public:
     void AddSwitch(const wxString& name, const wxString& lng = wxEmptyString,
                    const wxString& desc = wxEmptyString,
                    int flags = 0);
+    void AddLongSwitch(const wxString& lng,
+                       const wxString& desc = wxEmptyString,
+                       int flags = 0)
+    {
+        AddSwitch(wxString(), lng, desc, flags);
+    }
 
     // an option taking a value of the given type
     void AddOption(const wxString& name, const wxString& lng = wxEmptyString,
                    const wxString& desc = wxEmptyString,
                    wxCmdLineParamType type = wxCMD_LINE_VAL_STRING,
                    int flags = 0);
+    void AddLongOption(const wxString& lng,
+                       const wxString& desc = wxEmptyString,
+                       wxCmdLineParamType type = wxCMD_LINE_VAL_STRING,
+                       int flags = 0)
+    {
+        AddOption(wxString(), lng, desc, type, flags);
+    }
 
     // a parameter
     void AddParam(const wxString& desc = wxEmptyString,

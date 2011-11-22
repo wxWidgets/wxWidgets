@@ -337,6 +337,32 @@ public:
     ~wxCmdLineParser();
 
     /**
+        Adds an option with only long form.
+
+        This is just a convenient wrapper for AddOption() passing an empty
+        string as short option name.
+
+        @since 2.9.3
+     */
+    void AddLongOption(const wxString& lng,
+                       const wxString& desc = wxEmptyString,
+                       wxCmdLineParamType type = wxCMD_LINE_VAL_STRING,
+                       int flags = 0);
+
+    /**
+        Adds a switch with only long form.
+
+        This is just a convenient wrapper for AddSwitch() passing an empty
+        string as short switch name.
+
+        @since 2.9.3
+     */
+
+    void AddLongSwitch(const wxString& lng,
+                       const wxString& desc = wxEmptyString,
+                       int flags = 0);
+
+    /**
         Add an option @a name with an optional long name @a lng (no long name
         if it is empty, which is default) taking a value of the given type
         (string by default) to the command line description.
