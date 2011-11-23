@@ -2346,14 +2346,7 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-#ifdef __WXGTK20__
-    const wxDCImpl *impl = dc.GetImpl();
-    cairo_t* context = (cairo_t*) impl->GetCairoContext();
-    if (context)
-       return new wxCairoContext(this,dc);
-    else
-#endif
-       return new wxCairoContext(this,dc);
+    return new wxCairoContext(this, dc);
 }
 
 #ifdef __WXMSW__
