@@ -758,7 +758,12 @@ const wxString& wxTreeListModel::GetItemText(Node* item, unsigned col) const
     // empty string we can return reference to.
     wxCHECK_MSG( item, m_root->m_text, "Invalid item" );
 
-    return col == 0 ? item->m_text : item->GetColumnText(col);
+    // Notice that asking for the text of a column of an item that doesn't have
+    // any column texts is not an error so we simply return an empty string in
+    // this case.
+    return col == 0 ? item->m_text
+                    : item->HasColumnsTexts() ? item->GetColumnText(col)
+                                              : m_root->m_text;
 }
 
 void wxTreeListModel::SetItemText(Node* item, unsigned col, const wxString& text)
