@@ -1357,7 +1357,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_useCellFocus = false;
     m_currentRow = 0;
 
-    m_lineHeight = wxMax( 17, GetCharHeight() + 2 ); // 17 = mini icon height + 1
+    m_lineHeight = wxMax( 17, GetCharHeight() + 4 ); // 17 = mini icon height + 1
 
 #if wxUSE_DRAG_AND_DROP
     m_dragCount = 0;
