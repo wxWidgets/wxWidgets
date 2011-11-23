@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: $Id: it.po 69691 2011-11-06 12:07:35Z VZ $\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-06 12:55+0100\n"
-"PO-Revision-Date: 2011-11-12 16:30+0100\n"
-"Last-Translator: Luther Stickell <l.stickell@yahoo.it>\n"
+"PO-Revision-Date: 2011-11-23 15:23+0100\n"
+"Last-Translator: bovirus <bovirus@live.it>\n"
 "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -114,17 +114,17 @@ msgstr "%s (o %s)"
 #: ../src/generic/logg.cpp:239
 #, c-format
 msgid "%s Error"
-msgstr "%s Errore"
+msgstr "%s errore"
 
 #: ../src/generic/logg.cpp:251
 #, c-format
 msgid "%s Information"
-msgstr "%s: Informazione"
+msgstr "%s: informazione"
 
 #: ../src/generic/logg.cpp:243
 #, c-format
 msgid "%s Warning"
-msgstr "%s: Avviso"
+msgstr "%s: avviso"
 
 #: ../src/common/tarstrm.cpp:1320
 #, c-format
@@ -144,7 +144,7 @@ msgstr "Inform&azioni su..."
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
-msgstr "Dimensione &Attuale"
+msgstr "Dimensione &attuale"
 
 #: ../src/richtext/richtextindentspage.cpp:287
 msgid "&After a paragraph:"
@@ -439,7 +439,7 @@ msgstr "&Sinistra:"
 
 #: ../src/richtext/richtextliststylepage.cpp:184
 msgid "&List level:"
-msgstr "&Livello lista:"
+msgstr "&Livello elenco:"
 
 #: ../src/generic/logg.cpp:529
 msgid "&Log"
@@ -475,11 +475,11 @@ msgstr "&Successivo >"
 
 #: ../src/richtext/richtextsizepage.cpp:350
 msgid "&Next Paragraph"
-msgstr "&Prossimo Paragrafo"
+msgstr "&Prossimo paragrafo"
 
 #: ../src/generic/tipdlg.cpp:277
 msgid "&Next Tip"
-msgstr "&Prossimo Suggerimento"
+msgstr "&Prossimo suggerimento"
 
 #: ../src/richtext/richtextstylepage.cpp:124
 msgid "&Next style:"
@@ -517,7 +517,7 @@ msgstr "&Livello contorno:"
 
 #: ../src/richtext/richtextindentspage.cpp:318
 msgid "&Page Break"
-msgstr "Interruzione di &Pagina"
+msgstr "Interruzione di &pagina"
 
 #: ../src/richtext/richtextctrl.cpp:312
 #: ../src/osx/textctrl_osx.cpp:587
@@ -554,7 +554,7 @@ msgstr "&Precedente"
 
 #: ../src/richtext/richtextsizepage.cpp:344
 msgid "&Previous Paragraph"
-msgstr "&Paragrafo Precedente"
+msgstr "&Paragrafo precedente"
 
 #: ../src/common/stockitem.cpp:184
 msgid "&Print..."
@@ -628,11 +628,11 @@ msgstr "&Salva..."
 
 #: ../include/wx/richmsgdlg.h:30
 msgid "&See details"
-msgstr "&Vedi dettagli"
+msgstr "&Visualizza dettagli"
 
 #: ../src/generic/tipdlg.cpp:271
 msgid "&Show tips at startup"
-msgstr "Mo&stra suggerimenti all'avvio"
+msgstr "Vi&sualizza suggerimenti all'avvio"
 
 #: ../src/univ/themes/win32.cpp:3772
 msgid "&Size"
@@ -653,7 +653,7 @@ msgstr "&Spaziatura (decimi di millimetro)"
 
 #: ../src/common/stockitem.cpp:198
 msgid "&Spell Check"
-msgstr "&Controllo Ortografia"
+msgstr "&Controllo ortografia"
 
 #: ../src/common/stockitem.cpp:199
 msgid "&Stop"
@@ -1224,7 +1224,7 @@ msgstr "Informazioni su..."
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"
-msgstr "Dimensione Attuale"
+msgstr "Dimensione attuale"
 
 #: ../src/common/stockitem.cpp:141
 msgid "Add"
@@ -1971,7 +1971,7 @@ msgstr "&Scegli..."
 
 #: ../src/richtext/richtextbuffer.cpp:3734
 msgid "Change List Style"
-msgstr "Modifica lo stile della lista"
+msgstr "Modifica lo stile dell'elenco"
 
 #: ../src/richtext/richtextbuffer.cpp:3265
 msgid "Change Object Style"
@@ -2164,42 +2164,42 @@ msgstr "Click per creare un nuovo stile di carattere"
 #: ../src/richtext/richtextstyledlg.cpp:233
 #: ../src/richtext/richtextstyledlg.cpp:235
 msgid "Click to create a new list style."
-msgstr "Click per creare un nuovo stile di lista"
+msgstr "Clic per creare un nuovo stile di elenco"
 
 #: ../src/richtext/richtextstyledlg.cpp:227
 #: ../src/richtext/richtextstyledlg.cpp:229
 msgid "Click to create a new paragraph style."
-msgstr "Click per creare un nuovo stile di paragrafo"
+msgstr "Clic per creare un nuovo stile di paragrafo"
 
 #: ../src/richtext/richtexttabspage.cpp:138
 #: ../src/richtext/richtexttabspage.cpp:140
 msgid "Click to create a new tab position."
-msgstr "Click per creare un nuovo punto di tabulazione."
+msgstr "Clic per creare un nuovo punto di tabulazione."
 
 #: ../src/richtext/richtexttabspage.cpp:150
 #: ../src/richtext/richtexttabspage.cpp:152
 msgid "Click to delete all tab positions."
-msgstr "Click per eliminare tutti i punti di tabulazione."
+msgstr "Clic per eliminare tutti i punti di tabulazione."
 
 #: ../src/richtext/richtextstyledlg.cpp:259
 #: ../src/richtext/richtextstyledlg.cpp:261
 msgid "Click to delete the selected style."
-msgstr "Click per eliminare lo stile selezionato"
+msgstr "Clic per eliminare lo stile selezionato"
 
 #: ../src/richtext/richtexttabspage.cpp:144
 #: ../src/richtext/richtexttabspage.cpp:146
 msgid "Click to delete the selected tab position."
-msgstr "Click per eliminare il punto di tabulazione selezionato."
+msgstr "Clic per eliminare il punto di tabulazione selezionato."
 
 #: ../src/richtext/richtextstyledlg.cpp:253
 #: ../src/richtext/richtextstyledlg.cpp:255
 msgid "Click to edit the selected style."
-msgstr "Click per modificare lo stile selezionato."
+msgstr "Clic per modificare lo stile selezionato."
 
 #: ../src/richtext/richtextstyledlg.cpp:247
 #: ../src/richtext/richtextstyledlg.cpp:249
 msgid "Click to rename the selected style."
-msgstr "Click per rinominare lo stile selezionato."
+msgstr "Clic per rinominare lo stile selezionato."
 
 #: ../src/generic/dbgrptg.cpp:94
 #: ../src/generic/progdlgg.cpp:794
@@ -2431,7 +2431,7 @@ msgstr "Impossibile impostare indicatori proprietà."
 
 #: ../src/common/prntbase.cpp:1953
 msgid "Could not start document preview."
-msgstr "Impossibile mostrare l'anteprima del documento."
+msgstr "Impossibile visualizzare l'anteprima del documento."
 
 #: ../src/generic/printps.cpp:179
 #: ../src/msw/printwin.cpp:206
@@ -2454,7 +2454,7 @@ msgstr "Impossibile acquisire il lock del mutex"
 #: ../src/msw/dragimag.cpp:156
 #: ../src/msw/dragimag.cpp:195
 msgid "Couldn't add an image to the image list."
-msgstr "Impossibile aggiungere un'immagine alla lista."
+msgstr "Impossibile aggiungere un'immagine all'elenco."
 
 #: ../src/msw/timer.cpp:135
 #: ../src/os2/timer.cpp:114
@@ -2785,7 +2785,7 @@ msgstr "Visualizza tutte le voci dell'indice contenenti un dato testo. La ricerc
 
 #: ../src/html/helpwnd.cpp:690
 msgid "Display options dialog"
-msgstr "Mostra riquadro di dialogo per le opzioni"
+msgstr "Visualizza riquadro di dialogo per le opzioni"
 
 #: ../src/html/helpwnd.cpp:329
 msgid "Displays help as you browse the books on the left."
@@ -2921,7 +2921,7 @@ msgstr "Immetti il nome dello stile di carattere"
 
 #: ../src/richtext/richtextstyledlg.cpp:780
 msgid "Enter a list style name"
-msgstr "Immetti il nome dello stile di lista"
+msgstr "Immetti il nome dello stile dell'eelnco"
 
 #: ../src/richtext/richtextstyledlg.cpp:853
 msgid "Enter a new style name"
@@ -3206,7 +3206,7 @@ msgstr "Impossibile creare coda risveglio usato da un loop evento."
 #: ../src/html/winpars.cpp:733
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
-msgstr "Impossibile mostrare la pagina HTML con la codifica %s"
+msgstr "Impossibile visualizzare la pagina HTML con la codifica %s"
 
 #: ../src/msw/clipbrd.cpp:127
 msgid "Failed to empty the clipboard."
@@ -4516,11 +4516,11 @@ msgstr "Il collegamnto conteneva '//', è stato convertito a un collegamento ass
 
 #: ../src/richtext/richtextformatdlg.cpp:346
 msgid "List Style"
-msgstr "Stile di lista"
+msgstr "Stile elenco"
 
 #: ../src/richtext/richtextstyles.cpp:1035
 msgid "List styles"
-msgstr "Stili di lista"
+msgstr "Stili elenco"
 
 #: ../src/richtext/richtextfontpage.cpp:173
 #: ../src/richtext/richtextfontpage.cpp:175
@@ -4855,7 +4855,7 @@ msgstr "Nuovo stile di &carattere..."
 
 #: ../src/richtext/richtextstyledlg.cpp:232
 msgid "New &List Style..."
-msgstr "Nuovo stile di &lista..."
+msgstr "Nuovo stile di e&lenco..."
 
 #: ../src/richtext/richtextstyledlg.cpp:226
 msgid "New &Paragraph Style..."
@@ -5743,7 +5743,7 @@ msgstr "Renderizzazione fallita."
 
 #: ../src/richtext/richtextbuffer.cpp:3898
 msgid "Renumber List"
-msgstr "Rinumera la lista"
+msgstr "Rinumera l'elenco"
 
 #: ../src/common/stockitem.cpp:189
 msgid "Rep&lace"
@@ -6431,7 +6431,7 @@ msgstr "L'interlinea"
 #: ../src/richtext/richtextbulletspage.cpp:269
 #: ../src/richtext/richtextbulletspage.cpp:271
 msgid "The list item number."
-msgstr "Il numero della voce della lista."
+msgstr "Il numero della voce dell'elenco."
 
 #: ../src/msw/ole/automtn.cpp:635
 msgid "The locale ID is unknown."
@@ -7184,7 +7184,7 @@ msgstr "Vedi i file - dettagli"
 
 #: ../src/generic/filedlgg.cpp:216
 msgid "View files as a list view"
-msgstr "Vedi i file - lista"
+msgstr "Vedi i file - elenco"
 
 #: ../src/common/docview.cpp:1930
 msgid "Views"
@@ -8084,7 +8084,7 @@ msgstr "shift"
 
 #: ../src/common/appbase.cpp:669
 msgid "show this help message"
-msgstr "mostra questo messaggio di aiuto"
+msgstr "visualizza questo messaggio di aiuto"
 
 #: ../src/common/datetimefmt.cpp:1780
 msgid "sixteenth"
@@ -8290,187 +8290,6 @@ msgstr "errore zlib %d"
 msgid "~"
 msgstr "~"
 
-#~ msgid "%s"
-#~ msgstr "%s"
-
-#~ msgid "&Goto..."
-#~ msgstr "&Vai a..."
-
-#~ msgid "<<"
-#~ msgstr "<<"
-
-#~ msgid ">>"
-#~ msgstr ">>"
-
-#~ msgid ">>|"
-#~ msgstr ">>|"
-
-#~ msgid "Added item is invalid."
-#~ msgstr "Elemento aggiunto non valido."
-
-#~ msgid "BIG5"
-#~ msgstr "BIG5"
-
-#~ msgid "Can't check image format of file '%s': file does not exist."
-#~ msgstr ""
-#~ "Impossibile verificare il formato del file immagine '%s': file non "
-#~ "esistente."
-
-#~ msgid "Can't load image from file '%s': file does not exist."
-#~ msgstr "Impossibile caricare l'immagine dal file '%s': file non esistente."
-
-#~ msgid "Cannot open file '%s'."
-#~ msgstr "Impossibile aprire il file '%s'."
-
-#~ msgid "Changed item is invalid."
-#~ msgstr "Elemento modificato non valido."
-
-#~ msgid "Click to cancel this window."
-#~ msgstr "Click per annullare questa finestra."
-
-#~ msgid "Click to confirm your selection."
-#~ msgstr "Click per confermare la selezione."
-
-#~ msgid "Column could not be added to native control."
-#~ msgstr "La colonna non può essere aggiunta al controllo nativo."
-
-#~ msgid "Column does not have a renderer."
-#~ msgstr "La colonna non ha un renderizzatore."
-
-#~ msgid "Column pointer must not be NULL."
-#~ msgstr "Puntatore colonna non può essere NULL."
-
-#~ msgid "Column's model column has no equivalent in the associated model."
-#~ msgstr "Il modello colonna non ha un equivalente del modello associato."
-
-#~ msgid "Could not add column to internal structures."
-#~ msgstr "Potresti aggiungere la colonna alle strutture interne."
-
-#~ msgid "Elapsed time:"
-#~ msgstr "Tempo trascorso: "
-
-#~ msgid "Enter a page number between %d and %d:"
-#~ msgstr "Immettere un numero di pagina compreso tra %d e %d:"
-
-#~ msgid "Estimated time:"
-#~ msgstr "Tempo stimato: "
-
-#~ msgid "Failed to create a status bar."
-#~ msgstr "Impossibile creare la barra di stato."
-
-#~ msgid "GB-2312"
-#~ msgstr "GB-2312"
-
-#~ msgid "Goto Page"
-#~ msgstr "Vai alla pagina"
-
-#~ msgid ""
-#~ "HTML pagination algorithm generated more than the allowed maximum number "
-#~ "of pages and it can't continue any longer!"
-#~ msgstr ""
-#~ "L'algoritmo di paginazione HTML ha generato un numero di pagine maggiore "
-#~ "di quello consentito e non è in grado di proseguire!"
-
-#~ msgid "I64"
-#~ msgstr "I64"
-
-#~ msgid "Internal error, illegal wxCustomTypeInfo"
-#~ msgstr "Errore interno, wxCustomTypeInfo non consentito"
-
-#~ msgid "Model pointer not initialized."
-#~ msgstr "Puntatore modello non inzializzato"
-
-#~ msgid "No image handler for type %ld defined."
-#~ msgstr "Gestore non disponibile per il formato di immagine %ld."
-
-#~ msgid "No model associated with control."
-#~ msgstr "Nessun modello associato con il controllo."
-
-#~ msgid "Owner not initialized."
-#~ msgstr "Proprietario non inizializzato"
-
-#~ msgid "Passed item is invalid."
-#~ msgstr "Elemento passato non valido."
-
-#~ msgid "Passing a already registered object to SetObjectName"
-#~ msgstr "Passato un oggetto già registrato a SetObjectName"
-
-#~ msgid "Passing an unknown object to GetObject"
-#~ msgstr "Passato un oggetto sconosciuto a GetObject"
-
-#~ msgid "Pointer to dataview control must not be NULL"
-#~ msgstr "Il puntatore al controllo vista dati non può essere NULL."
-
-#~ msgid "Pointer to native control must not be NULL."
-#~ msgstr "il puntatore al controllo nativo non può essere NULL."
-
-#~ msgid "Print previe&w"
-#~ msgstr "Ante&prima di stampa"
-
-#~ msgid "Remaining time:"
-#~ msgstr "Tempo rimanente : "
-
-#~ msgid "SHIFT-JIS"
-#~ msgstr "SHIFT-JIS"
-
-#~ msgid "Save &As..."
-#~ msgstr "Salva con n&ome..."
-
-#~ msgid ""
-#~ "Streaming delegates for not already streamed objects not yet supported"
-#~ msgstr "Streaming con oggetti non stream non ancora supportato"
-
-#~ msgid ""
-#~ "The data format for the GET-direction of the to be added data object "
-#~ "already exists"
-#~ msgstr ""
-#~ "Il formato dati per la direzione-GET dell'oggetto dati aggiunto esiste già"
-
-#~ msgid ""
-#~ "The data format for the SET-direction of the to be added data object "
-#~ "already exists"
-#~ msgstr ""
-#~ "Il formato dati per la direzione-SET dell'oggetto dati aggiunto esiste già"
-
-#~ msgid "The file '%s' couldn't be opened."
-#~ msgstr "Il file '%s' non può essere aperto."
-
-#~ msgid "The file '%s' doesn't exist and couldn't be opened."
-#~ msgstr "Il file '%s' non esiste e non può essere aperto."
-
-#~ msgid "The path '%s' contains too many \"..\"!"
-#~ msgstr "Il percorso '%s' contiene troppi \"..\"!"
-
-#~ msgid "To be deleted item is invalid."
-#~ msgstr "L'elemento ad eliminare non è valido"
-
-#~ msgid "Update"
-#~ msgstr "Aggiorna"
-
-#~ msgid "Value must be %lld or higher"
-#~ msgstr "Il valore deve essere %lld o superiore"
-
-#~ msgid "Value must be %llu or higher"
-#~ msgstr "Il valore deve essere %llu o superiore"
-
-#~ msgid "Value must be %llu or less"
-#~ msgstr "Il valore deve essere %llu o inferiore"
-
-#~ msgid "Warning"
-#~ msgstr "Avviso"
-
-#~ msgid "Windows 2000 (build %lu"
-#~ msgstr "Windows 2000 (build %lu"
-
-#~ msgid "delegate has no type info"
-#~ msgstr "Delegato non type info"
-
-#~ msgid "wxSearchEngine::LookFor must be called before scanning!"
-#~ msgstr "wxSearchEngine::LookFor deve essere chiamato prima della scansione!"
-
-#~ msgid "|<<"
-#~ msgstr "|<<"
-
 #~ msgid "\t%s: %s\n"
 #~ msgstr "\t%s: %s\n"
 
@@ -8492,6 +8311,9 @@ msgstr "~"
 #~ msgid "%.*f kB"
 #~ msgstr "%.*f KiB"
 
+#~ msgid "%s"
+#~ msgstr "%s"
+
 #~ msgid "%s not a bitmap resource specification."
 #~ msgstr "%s non è la specifica di una risorsa bitmap."
 
@@ -8503,6 +8325,9 @@ msgstr "~"
 
 #~ msgid "&About"
 #~ msgstr "&Informazioni su"
+
+#~ msgid "&Goto..."
+#~ msgstr "&Vai a..."
 
 #~ msgid "&Open"
 #~ msgstr "&Apri"
@@ -8517,11 +8342,34 @@ msgstr "~"
 #~ ", atteso static, #include o #define\n"
 #~ "durante l'analisi delle risorse."
 
+#~ msgid "<<"
+#~ msgstr "<<"
+
+#~ msgid ">>"
+#~ msgstr ">>"
+
+#~ msgid ">>|"
+#~ msgstr ">>|"
+
+#~ msgid "Added item is invalid."
+#~ msgstr "Elemento aggiunto non valido."
+
 #~ msgid "Archive doesnt contain #SYSTEM file"
 #~ msgstr "L'archivio non contiene il file #SYSTEM"
 
+#~ msgid "BIG5"
+#~ msgstr "BIG5"
+
 #~ msgid "Bitmap resource specification %s not found."
 #~ msgstr "Specifica della risorsa di tipo bitmap %s non trovata."
+
+#~ msgid "Can't check image format of file '%s': file does not exist."
+#~ msgstr ""
+#~ "Impossibile verificare il formato del file immagine '%s': file non "
+#~ "esistente."
+
+#~ msgid "Can't load image from file '%s': file does not exist."
+#~ msgstr "Impossibile caricare l'immagine dal file '%s': file non esistente."
 
 #~ msgid "Cannot convert dialog units: dialog unknown."
 #~ msgstr ""
@@ -8538,6 +8386,9 @@ msgstr "~"
 #~ msgid "Cannot find font node '%s'."
 #~ msgstr "Impossibile trovare il nodo di tipo font '%s'."
 
+#~ msgid "Cannot open file '%s'."
+#~ msgstr "Impossibile aprire il file '%s'."
+
 #~ msgid "Cannot parse coordinates from '%s'."
 #~ msgstr "Formato scorretto nella specifica di coordinate '%s'."
 
@@ -8547,8 +8398,32 @@ msgstr "~"
 #~ msgid "Cant create the thread event queue"
 #~ msgstr "Impossibile creare la coda di eventi per il thread"
 
+#~ msgid "Changed item is invalid."
+#~ msgstr "Elemento modificato non valido."
+
+#~ msgid "Click to cancel this window."
+#~ msgstr "Click per annullare questa finestra."
+
+#~ msgid "Click to confirm your selection."
+#~ msgstr "Click per confermare la selezione."
+
 #~ msgid "Closes the dialog without inserting a symbol."
 #~ msgstr "Chiude la finestra di dialogo senza inserire il simbolo."
+
+#~ msgid "Column could not be added to native control."
+#~ msgstr "La colonna non può essere aggiunta al controllo nativo."
+
+#~ msgid "Column does not have a renderer."
+#~ msgstr "La colonna non ha un renderizzatore."
+
+#~ msgid "Column pointer must not be NULL."
+#~ msgstr "Puntatore colonna non può essere NULL."
+
+#~ msgid "Column's model column has no equivalent in the associated model."
+#~ msgstr "Il modello colonna non ha un equivalente del modello associato."
+
+#~ msgid "Could not add column to internal structures."
+#~ msgstr "Potresti aggiungere la colonna alle strutture interne."
 
 #~ msgid ""
 #~ "Could not resolve control class or id '%s'. Use (non-zero) integer "
@@ -8573,6 +8448,15 @@ msgstr "~"
 #~ msgid "Couldn't end the context on the overlay window"
 #~ msgstr "Impossibile finalizzare il contesto della finestra di overlay"
 
+#~ msgid "Elapsed time:"
+#~ msgstr "Tempo trascorso: "
+
+#~ msgid "Enter a page number between %d and %d:"
+#~ msgstr "Immettere un numero di pagina compreso tra %d e %d:"
+
+#~ msgid "Estimated time:"
+#~ msgstr "Tempo stimato: "
+
 #~ msgid "Expected '*' while parsing resource."
 #~ msgstr "Atteso '*' durante l'analisi della risorsa."
 
@@ -8584,6 +8468,9 @@ msgstr "~"
 
 #~ msgid "Failed to %s dialup connection: %s"
 #~ msgstr "Impossibile %s la connessione: %s"
+
+#~ msgid "Failed to create a status bar."
+#~ msgstr "Impossibile creare la barra di stato."
 
 #~ msgid ""
 #~ "Failed to find XBM resource %s.\n"
@@ -8624,6 +8511,22 @@ msgstr "~"
 #~ msgid "Found "
 #~ msgstr "Trovato"
 
+#~ msgid "GB-2312"
+#~ msgstr "GB-2312"
+
+#~ msgid "Goto Page"
+#~ msgstr "Vai alla pagina"
+
+#~ msgid ""
+#~ "HTML pagination algorithm generated more than the allowed maximum number "
+#~ "of pages and it can't continue any longer!"
+#~ msgstr ""
+#~ "L'algoritmo di paginazione HTML ha generato un numero di pagine maggiore "
+#~ "di quello consentito e non è in grado di proseguire!"
+
+#~ msgid "I64"
+#~ msgstr "I64"
+
 #~ msgid "Icon resource specification %s not found."
 #~ msgstr "Specifica della risorsa icona %s non trovata."
 
@@ -8633,6 +8536,9 @@ msgstr "~"
 #~ msgid "Inserts the chosen symbol."
 #~ msgstr "Inserisce il simbolo scelto"
 
+#~ msgid "Internal error, illegal wxCustomTypeInfo"
+#~ msgstr "Errore interno, wxCustomTypeInfo non consentito"
+
 #~ msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
 #~ msgstr ""
 #~ "Risorsa XRC '%s' non valida: il nodo radice deve essere di tipo "
@@ -8641,14 +8547,44 @@ msgstr "~"
 #~ msgid "Long Conversions not supported"
 #~ msgstr "Long conversion non supportata"
 
+#~ msgid "Model pointer not initialized."
+#~ msgstr "Puntatore modello non inzializzato"
+
 #~ msgid "No XPM icon facility available!"
 #~ msgstr "Funzionalità per icone XPM non disponibili!"
 
 #~ msgid "No handler found for XML node '%s', class '%s'!"
 #~ msgstr "Impossibile trovare l'handler per il nodo XML '%s', classe '%s'!"
 
+#~ msgid "No image handler for type %ld defined."
+#~ msgstr "Gestore non disponibile per il formato di immagine %ld."
+
+#~ msgid "No model associated with control."
+#~ msgstr "Nessun modello associato con il controllo."
+
 #~ msgid "Option '%s' requires a value, '=' expected."
 #~ msgstr "L'opzione '%s' richiede un valore, atteso '='."
+
+#~ msgid "Owner not initialized."
+#~ msgstr "Proprietario non inizializzato"
+
+#~ msgid "Passed item is invalid."
+#~ msgstr "Elemento passato non valido."
+
+#~ msgid "Passing a already registered object to SetObjectName"
+#~ msgstr "Passato un oggetto già registrato a SetObjectName"
+
+#~ msgid "Passing an unknown object to GetObject"
+#~ msgstr "Passato un oggetto sconosciuto a GetObject"
+
+#~ msgid "Pointer to dataview control must not be NULL"
+#~ msgstr "Il puntatore al controllo vista dati non può essere NULL."
+
+#~ msgid "Pointer to native control must not be NULL."
+#~ msgstr "il puntatore al controllo nativo non può essere NULL."
+
+#~ msgid "Print previe&w"
+#~ msgstr "Ante&prima di stampa"
 
 #~ msgid "Program aborted."
 #~ msgstr "Programma terminato."
@@ -8656,8 +8592,17 @@ msgstr "~"
 #~ msgid "Referenced object node with ref=\"%s\" not found!"
 #~ msgstr "Impossibile trovare il nodo oggetto referenziaro con ref=\"%s\"."
 
+#~ msgid "Remaining time:"
+#~ msgstr "Tempo rimanente : "
+
 #~ msgid "Resource files must have same version number!"
 #~ msgstr "I file di risorsa devono avere la stessa versione!"
+
+#~ msgid "SHIFT-JIS"
+#~ msgstr "SHIFT-JIS"
+
+#~ msgid "Save &As..."
+#~ msgstr "Salva con n&ome..."
 
 #~ msgid "Select a file"
 #~ msgstr "Scegliere un file"
@@ -8684,6 +8629,10 @@ msgstr "~"
 #~ msgid "Status: "
 #~ msgstr "Stato: "
 
+#~ msgid ""
+#~ "Streaming delegates for not already streamed objects not yet supported"
+#~ msgstr "Streaming con oggetti non stream non ancora supportato"
+
 #~ msgid "String conversions not supported"
 #~ msgstr "Conversione a stringa non supportata"
 
@@ -8701,6 +8650,30 @@ msgstr "~"
 #~ msgid "TIFF library warning."
 #~ msgstr "messaggio di avviso della libreria TIFF."
 
+#~ msgid ""
+#~ "The data format for the GET-direction of the to be added data object "
+#~ "already exists"
+#~ msgstr ""
+#~ "Il formato dati per la direzione-GET dell'oggetto dati aggiunto esiste già"
+
+#~ msgid ""
+#~ "The data format for the SET-direction of the to be added data object "
+#~ "already exists"
+#~ msgstr ""
+#~ "Il formato dati per la direzione-SET dell'oggetto dati aggiunto esiste già"
+
+#~ msgid "The file '%s' couldn't be opened."
+#~ msgstr "Il file '%s' non può essere aperto."
+
+#~ msgid "The file '%s' doesn't exist and couldn't be opened."
+#~ msgstr "Il file '%s' non esiste e non può essere aperto."
+
+#~ msgid "The path '%s' contains too many \"..\"!"
+#~ msgstr "Il percorso '%s' contiene troppi \"..\"!"
+
+#~ msgid "To be deleted item is invalid."
+#~ msgstr "L'elemento da eliminare non è valido"
+
 #~ msgid "Trying to solve a NULL hostname: giving up"
 #~ msgstr "Abbandonata la tentata risoluzione di un nome di host NULL"
 
@@ -8713,15 +8686,33 @@ msgstr "~"
 #~ msgid "Unrecognized style %s while parsing resource."
 #~ msgstr "Stile %s sconosciuto durante l'analisi delle risorse."
 
+#~ msgid "Update"
+#~ msgstr "Aggiorna"
+
+#~ msgid "Value must be %lld or higher"
+#~ msgstr "Il valore deve essere %lld o superiore"
+
+#~ msgid "Value must be %llu or higher"
+#~ msgstr "Il valore deve essere %llu o superiore"
+
+#~ msgid "Value must be %llu or less"
+#~ msgstr "Il valore deve essere %llu o inferiore"
+
 #~ msgid "Version %s"
 #~ msgstr "Versione %s"
 
 #~ msgid "Video Output"
 #~ msgstr "Uscita video"
 
+#~ msgid "Warning"
+#~ msgstr "Avviso"
+
 #~ msgid "Warning: attempt to remove HTML tag handler from empty stack."
 #~ msgstr ""
 #~ "Avviso: tentata la rimozione di un handler di tag HTML da uno stack vuoto."
+
+#~ msgid "Windows 2000 (build %lu"
+#~ msgstr "Windows 2000 (build %lu"
 
 #~ msgid "XRC resource '%s' (class '%s') not found!"
 #~ msgstr "Risorsa XRC '%s' (classe '%s') non trovata!"
@@ -8741,6 +8732,9 @@ msgstr "~"
 
 #~ msgid "catalog file for domain '%s' not found."
 #~ msgstr "file di catalogo non trovato per il dominio '%s'."
+
+#~ msgid "delegate has no type info"
+#~ msgstr "Delegato non type info"
 
 #~ msgid "encoding %i"
 #~ msgstr "codifica %i"
@@ -8775,8 +8769,14 @@ msgstr "~"
 #~ msgid "wxRichTextStylePage"
 #~ msgstr "wxRichTextStylePage"
 
+#~ msgid "wxSearchEngine::LookFor must be called before scanning!"
+#~ msgstr "wxSearchEngine::LookFor deve essere chiamato prima della scansione!"
+
 #~ msgid "wxSocket: invalid signature in ReadMsg."
 #~ msgstr "wxSocket: signature non valida in ReadMsg."
 
 #~ msgid "wxSocket: unknown event!."
 #~ msgstr "wxSocket: evento sconosciuto!."
+
+#~ msgid "|<<"
+#~ msgstr "|<<"
