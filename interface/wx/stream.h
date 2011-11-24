@@ -680,7 +680,7 @@ protected:
         reached or an error occurred (in this last case the internal @c m_lasterror
         variable should be set accordingly as well).
     */
-    size_t OnSysRead(void* buffer, size_t bufsize);
+    size_t OnSysRead(void* buffer, size_t bufsize) = 0;
 };
 
 
