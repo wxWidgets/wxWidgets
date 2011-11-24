@@ -300,16 +300,6 @@ public:
 };
 
 
-/**
-    Type of stream enumeration; used by wxArchiveClassFactory methods.
-*/
-enum wxStreamProtocolType
-{
-    wxSTREAM_PROTOCOL,  //!< wxFileSystem protocol (should be only one)
-    wxSTREAM_MIMETYPE,  //!< MIME types the stream handles
-    wxSTREAM_ENCODING,  //!< Not used for archives
-    wxSTREAM_FILEEXT    //!< File extensions the stream handles
-};
 
 /**
     @class wxArchiveClassFactory
