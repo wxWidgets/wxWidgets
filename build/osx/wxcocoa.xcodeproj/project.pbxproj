@@ -333,6 +333,8 @@
 		2FA1A8FE3644325ABAD273A5 /* fmapbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BBBFE664736D5978420C6 /* fmapbase.cpp */; };
 		2FAE979E6FE23D088C768B7D /* gridcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDD3CE34439B3D2BBD9DC8D3 /* gridcmn.cpp */; };
 		2FAE979E6FE23D088C768B7E /* gridcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDD3CE34439B3D2BBD9DC8D3 /* gridcmn.cpp */; };
+		2FE10EA678C73523836FCC1C /* richtooltipcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A1CE0B28CB73F90AE92B5AB /* richtooltipcmn.cpp */; };
+		2FE10EA678C73523836FCC1D /* richtooltipcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A1CE0B28CB73F90AE92B5AB /* richtooltipcmn.cpp */; };
 		30493B486DFF35AF80D12C49 /* stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FFDD414DBCC73D0FB6C2C5FD /* stream.cpp */; };
 		30493B486DFF35AF80D12C4A /* stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FFDD414DBCC73D0FB6C2C5FD /* stream.cpp */; };
 		30509A33ED9C35D4ADEF6BBC /* KeyWords.cxx in Sources */ = {isa = PBXBuildFile; fileRef = EA2FCFA3723C3B1FBAB47F4C /* KeyWords.cxx */; };
@@ -519,6 +521,8 @@
 		5116CE330E333724A66982E4 /* rearrangectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 972BC9B2B0D438EFB12BCE1E /* rearrangectrl.cpp */; };
 		51437DC2AD7B3BEB9A53CE1A /* cmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE1C531185131A89EFF7FAF /* cmdline.cpp */; };
 		51437DC2AD7B3BEB9A53CE1B /* cmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE1C531185131A89EFF7FAF /* cmdline.cpp */; };
+		519C0347809C35C4A0EAE78F /* richtooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6250D8C14273608831D3B46 /* richtooltip.cpp */; };
+		519C0347809C35C4A0EAE790 /* richtooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6250D8C14273608831D3B46 /* richtooltip.cpp */; };
 		51D133EC44F830588FEEAEC0 /* LexHaskell.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 10EADF7E7DC032CA8522C1F8 /* LexHaskell.cxx */; };
 		51D133EC44F830588FEEAEC1 /* LexHaskell.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 10EADF7E7DC032CA8522C1F8 /* LexHaskell.cxx */; };
 		522E6CF2A62F34259BCE2DE2 /* tif_flush.c in Sources */ = {isa = PBXBuildFile; fileRef = 305614D19CF23CB2B14A5B2E /* tif_flush.c */; };
@@ -1959,6 +1963,7 @@
 		7906BD74118A3B4DAC515BC2 /* odcombo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = odcombo.cpp; path = ../../src/generic/odcombo.cpp; sourceTree = "<group>"; };
 		7925E38823563BCDB5565DCF /* treebkg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treebkg.cpp; path = ../../src/generic/treebkg.cpp; sourceTree = "<group>"; };
 		7969963AA93537FCA4F54DA7 /* richtexthtml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtexthtml.cpp; path = ../../src/richtext/richtexthtml.cpp; sourceTree = "<group>"; };
+		7A1CE0B28CB73F90AE92B5AB /* richtooltipcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtooltipcmn.cpp; path = ../../src/common/richtooltipcmn.cpp; sourceTree = "<group>"; };
 		7A34C5BBBA543DC0A50DE1B6 /* event.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = event.cpp; path = ../../src/common/event.cpp; sourceTree = "<group>"; };
 		7A3F26F539473705AA82411D /* combobox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = combobox.cpp; path = ../../src/osx/carbon/combobox.cpp; sourceTree = "<group>"; };
 		7AF8F8A78A5130DCB4D46729 /* LexCmake.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCmake.cxx; path = ../../src/stc/scintilla/src/LexCmake.cxx; sourceTree = "<group>"; };
@@ -2310,6 +2315,7 @@
 		E4E16323A43E36DC8024EDF1 /* textctrl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = textctrl.mm; path = ../../src/osx/cocoa/textctrl.mm; sourceTree = "<group>"; };
 		E5357E76650035639844D15B /* stringimpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringimpl.cpp; path = ../../src/common/stringimpl.cpp; sourceTree = "<group>"; };
 		E5A9B63746753EDFB2EC48D3 /* xh_frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_frame.cpp; path = ../../src/xrc/xh_frame.cpp; sourceTree = "<group>"; };
+		E6250D8C14273608831D3B46 /* richtooltip.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtooltip.cpp; path = ../../src/generic/richtooltip.cpp; sourceTree = "<group>"; };
 		E6AB648BC5173104A96CAE66 /* xml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xml.cpp; path = ../../src/xml/xml.cpp; sourceTree = "<group>"; };
 		E6CC2B05353C3284B37B2DD7 /* settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cpp; path = ../../src/osx/carbon/settings.cpp; sourceTree = "<group>"; };
 		E72CF5F9C1E53BCFAA2BC253 /* KeyMap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KeyMap.cxx; path = ../../src/stc/scintilla/src/KeyMap.cxx; sourceTree = "<group>"; };
@@ -2834,6 +2840,7 @@
 				924AA3A156F834BCA1A57976 /* notifmsgg.cpp */,
 				7906BD74118A3B4DAC515BC2 /* odcombo.cpp */,
 				6BC93D1DE277395592610085 /* propdlg.cpp */,
+				E6250D8C14273608831D3B46 /* richtooltip.cpp */,
 				917F2666B67E3D2EB84E74F8 /* sashwin.cpp */,
 				3F8836E29C5A370E80CE070E /* splash.cpp */,
 				D05DAB233D8538A484CF8698 /* timectrl.cpp */,
@@ -3535,6 +3542,7 @@
 				FDD3CE34439B3D2BBD9DC8D3 /* gridcmn.cpp */,
 				8A7D521FE5B437D7AD5F4B54 /* hyperlnkcmn.cpp */,
 				6F23140777B733679D2FAAFC /* odcombocmn.cpp */,
+				7A1CE0B28CB73F90AE92B5AB /* richtooltipcmn.cpp */,
 				4692909E4B823F71822B13F8 /* taskbarcmn.cpp */,
 			);
 			name = src/common;
@@ -4250,6 +4258,7 @@
 				2FAE979E6FE23D088C768B7E /* gridcmn.cpp in Sources */,
 				7B4DA2F5F25B3E188CBAFE39 /* hyperlnkcmn.cpp in Sources */,
 				E6D18B2EDE353F67883085A0 /* odcombocmn.cpp in Sources */,
+				2FE10EA678C73523836FCC1D /* richtooltipcmn.cpp in Sources */,
 				FEA741A9B6663A4C929893C3 /* aboutdlgg.cpp in Sources */,
 				E0FAB345D2933D42B62917A4 /* bannerwindow.cpp in Sources */,
 				B189DB62AE9F30A1B613756C /* bmpcboxg.cpp in Sources */,
@@ -4268,6 +4277,7 @@
 				CEE0D7A7D5D8323B9957A781 /* notifmsgg.cpp in Sources */,
 				1E17F95DD433379E8C18298D /* odcombo.cpp in Sources */,
 				6A10511265493FA2BB79CE4E /* propdlg.cpp in Sources */,
+				519C0347809C35C4A0EAE790 /* richtooltip.cpp in Sources */,
 				3554C88010CE3D2A8970A136 /* sashwin.cpp in Sources */,
 				8AA341CCFB8E3F6AB3523596 /* splash.cpp in Sources */,
 				2E80D643C6B43AAFB7EFF14E /* timectrl.cpp in Sources */,
@@ -5049,6 +5059,7 @@
 				2FAE979E6FE23D088C768B7D /* gridcmn.cpp in Sources */,
 				7B4DA2F5F25B3E188CBAFE38 /* hyperlnkcmn.cpp in Sources */,
 				E6D18B2EDE353F678830859F /* odcombocmn.cpp in Sources */,
+				2FE10EA678C73523836FCC1C /* richtooltipcmn.cpp in Sources */,
 				FEA741A9B6663A4C929893C2 /* aboutdlgg.cpp in Sources */,
 				E0FAB345D2933D42B62917A3 /* bannerwindow.cpp in Sources */,
 				B189DB62AE9F30A1B613756B /* bmpcboxg.cpp in Sources */,
@@ -5067,6 +5078,7 @@
 				CEE0D7A7D5D8323B9957A780 /* notifmsgg.cpp in Sources */,
 				1E17F95DD433379E8C18298C /* odcombo.cpp in Sources */,
 				6A10511265493FA2BB79CE4D /* propdlg.cpp in Sources */,
+				519C0347809C35C4A0EAE78F /* richtooltip.cpp in Sources */,
 				3554C88010CE3D2A8970A135 /* sashwin.cpp in Sources */,
 				8AA341CCFB8E3F6AB3523595 /* splash.cpp in Sources */,
 				2E80D643C6B43AAFB7EFF14D /* timectrl.cpp in Sources */,
