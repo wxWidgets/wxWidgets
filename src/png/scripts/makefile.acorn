@@ -43,8 +43,15 @@ Test: @.pngtest
 .c.o:
 	cc $(ccflags) -o $@ $<
 
+# See scripts.mak.libpngconf for how to generate this:
+@.h.libpngconf: @.scripts.h.libpngconf
+	copy @.scripts.h.libpngconf $@
 
 # Static dependencies:
+@.o.png @.o.pngerror @.o.pngrio @.o.pngwio @.o.pngmem \
+@.o.pngpread @.o.pngset @.o.pngget @.o.pngread @.o.pngrtran \
+@.o.pngrutil @.o.pngtrans @.o.pngwrite @.o.pngwtran @.o.pngwutil \
+@.o.pngtest: @.h.libpngconf
 
 
 # Dynamic dependencies:

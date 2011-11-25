@@ -37,9 +37,9 @@ To use:
 
 This project builds the libpng binaries as follows:
 
-* Win32_DLL_Release\libpng14.dll      DLL build
-* Win32_DLL_Debug\libpng14d.dll       DLL build (debug version)
-* Win32_DLL_VB\libpng14vb.dll         DLL build for Visual Basic, using stdcall
+* Win32_DLL_Release\libpng15.dll      DLL build
+* Win32_DLL_Debug\libpng15d.dll       DLL build (debug version)
+* Win32_DLL_VB\libpng15vb.dll         DLL build for Visual Basic, using stdcall
 * Win32_LIB_Release\libpng.lib        static build
 * Win32_LIB_Debug\libpngd.lib         static build (debug version)
 

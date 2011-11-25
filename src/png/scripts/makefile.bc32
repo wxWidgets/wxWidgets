@@ -109,22 +109,27 @@ test: pngtest.exe
 
 ## Minor Targets
 
-png.obj: png.c png.h pngconf.h pngpriv.h
-pngerror.obj: pngerror.c png.h pngconf.h pngpriv.h
-pngget.obj: pngget.c png.h pngconf.h pngpriv.h
-pngmem.obj: pngmem.c png.h pngconf.h pngpriv.h
-pngpread.obj: pngpread.c png.h pngconf.h pngpriv.h
-pngread.obj: pngread.c png.h pngconf.h pngpriv.h
-pngrio.obj: pngrio.c png.h pngconf.h pngpriv.h
-pngrtran.obj: pngrtran.c png.h pngconf.h pngpriv.h
-pngrutil.obj: pngrutil.c png.h pngconf.h pngpriv.h
-pngset.obj: pngset.c png.h pngconf.h pngpriv.h
-pngtrans.obj: pngtrans.c png.h pngconf.h pngpriv.h
-pngwio.obj: pngwio.c png.h pngconf.h pngpriv.h
-pngwrite.obj: pngwrite.c png.h pngconf.h pngpriv.h
-pngwtran.obj: pngwtran.c png.h pngconf.h pngpriv.h
-pngwutil.obj: pngwutil.c png.h pngconf.h pngpriv.h
-pngtest.obj: pngtest.c png.h pngconf.h
+# see scripts\pnglibconf.mak for how to make this file
+# with different options
+pnglibconf.h: scripts\pnglibconf.h.prebuilt
+	copy scripts\pnglibconf.h.prebuilt $@
+
+png.obj: png.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngerror.obj: pngerror.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngget.obj: pngget.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngmem.obj: pngmem.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngpread.obj: pngpread.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngread.obj: pngread.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngrio.obj: pngrio.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngrtran.obj: pngrtran.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngrutil.obj: pngrutil.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngset.obj: pngset.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngtrans.obj: pngtrans.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngwio.obj: pngwio.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngwrite.obj: pngwrite.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngwtran.obj: pngwtran.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngwutil.obj: pngwutil.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
+pngtest.obj: pngtest.c png.h pngconf.h pnglibconf.h
 
 $(LIBNAME): $(OBJS)
 	-del $(LIBNAME)
@@ -134,6 +139,7 @@ $(LIBOBJS), libpng
 
 # Cleanup
 clean:
+	-del pnglibconf.h
 	-del *.obj
 	-del $(LIBNAME)
 	-del pngtest.exe

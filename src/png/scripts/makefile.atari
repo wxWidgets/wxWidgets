@@ -38,6 +38,11 @@ all: $(LBR) pngtest.ttp
 
 $(LBR): $(OBJS)
 
+$(OBJS): pngpriv.h png.h pngconf.h pnglibconf.h pnginfo.h pngstruct.h pngdebug.h
+
+pnglibconf.h: scripts/pnglibconf.h.prebuilt
+	cp scripts/pnglibconf.h.prebuilt pnglibconf.h
+
 pngtest.ttp: pngtest.o $(LBR)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o$@ pngtest.o
 
@@ -47,9 +52,12 @@ install: libpng.a
 	-@mkdir $(DESTDIR)$(LIBPATH)
 	-@rm -f $(DESTDIR)$(INCPATH)/png.h
 	-@rm -f $(DESTDIR)$(INCPATH)/pngconf.h
+	-@rm -f $(DESTDIR)$(INCPATH)/pnglibconf.h
 	cp png.h $(DESTDIR)$(INCPATH)/libpng
 	cp pngconf.h $(DESTDIR)$(INCPATH)/libpng
+	cp pnglibconf.h $(DESTDIR)$(INCPATH)/libpng
 	chmod 644 $(DESTDIR)$(INCPATH)/libpng/png.h
 	chmod 644 $(DESTDIR)$(INCPATH)/libpng/pngconf.h
+	chmod 644 $(DESTDIR)$(INCPATH)/libpng/pnglibconf.h
 	(cd $(DESTDIR)$(INCPATH); ln -f -s $(LIBNAME) libpng; \
 	ln -f -s $(LIBNAME)/* .)

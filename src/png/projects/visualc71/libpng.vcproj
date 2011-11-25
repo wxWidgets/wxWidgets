@@ -17,35 +17,35 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..;..\..\scripts;..\..\..\zlib"
+				AdditionalIncludeDirectories="..\..;..\..\..\zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;PNG_BUILD_DLL;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="png.h"
+				PrecompiledHeaderThrough="pngpriv.h"
 				WarningLevel="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/libpng14.dll"
-				LinkIncremental="1"
-				ModuleDefinitionFile="..\..\scripts\pngwin.def"/>
+				OutputFile="$(OutDir)/libpng15.dll"
+				LinkIncremental="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCPreBuildEventTool"
+				CommandLine="copy ..\..\scripts\pnglibconf.h.prebuilt ..\..\pnglibconf.h"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..;..\..\scripts;..\..\..\zlib;$(IntDir)"/>
+				AdditionalIncludeDirectories="..\..;..\..\..\zlib;$(IntDir)"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -65,12 +65,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..;..\..\scripts;..\..\..\zlib"
+				AdditionalIncludeDirectories="..\..;..\..\..\zlib"
 				PreprocessorDefinitions="WIN32;_DEBUG;DEBUG;PNG_DEBUG=1;PNG_BUILD_DLL;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="png.h"
+				PrecompiledHeaderThrough="pngpriv.h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
@@ -78,22 +78,22 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/libpng14d.dll"
-				ModuleDefinitionFile="..\..\scripts\pngwin.def"
+				OutputFile="$(OutDir)/libpng15d.dll"
 				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCPreBuildEventTool"
+				CommandLine="copy ..\..\scripts\pnglibconf.h.prebuilt ..\..\pnglibconf.h"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG,PNG_DEBUG=1"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..;..\..\scripts;..\..\..\zlib;$(IntDir)"/>
+				AdditionalIncludeDirectories="..\..;..\..\..\zlib;$(IntDir)"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -113,27 +113,28 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..;..\..\scripts;..\..\..\zlib"
+				AdditionalIncludeDirectories="..\..;..\..\..\zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;PNG_BUILD_DLL;ZLIB_DLL;PNGAPI=__stdcall;PNG_NO_MODULEDEF;PNG_LIBPNG_SPECIALBUILD;PNG_USER_PRIVATEBUILD;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="png.h"
+				PrecompiledHeaderThrough="pngpriv.h"
 				WarningLevel="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/libpng14vb.dll"
+				OutputFile="$(OutDir)/libpng15vb.dll"
 				LinkIncremental="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCPreBuildEventTool"
+				CommandLine="copy ..\..\scripts\pnglibconf.h.prebuilt ..\..\pnglibconf.h"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -141,7 +142,7 @@
 				AdditionalOptions="/d PNG_NO_PEDANTIC_WARNINGS /d PNG_LIBPNG_DLLFNAME_POSTFIX=&quot;&quot;&quot;&quot;VB&quot;&quot;&quot;&quot; /d PNG_LIBPNG_SPECIALBUILD=&quot;&quot;&quot;&quot;__stdcall calling convention used for exported functions&quot;&quot;&quot;&quot;"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..;..\..\scripts;..\..\..\zlib;$(IntDir)"/>
+				AdditionalIncludeDirectories="..\..;..\..\..\zlib;$(IntDir)"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -161,13 +162,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..;..\..\scripts;..\..\..\zlib"
+				AdditionalIncludeDirectories="..\..;..\..\..\zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="png.h"
+				PrecompiledHeaderThrough="pngpriv.h"
 				WarningLevel="3"
 				CompileAs="0"/>
 			<Tool
@@ -180,7 +181,8 @@
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCPreBuildEventTool"
+				CommandLine="copy ..\..\scripts\pnglibconf.h.prebuilt ..\..\pnglibconf.h"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -202,12 +204,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..;..\..\scripts;..\..\..\zlib"
+				AdditionalIncludeDirectories="..\..;..\..\..\zlib"
 				PreprocessorDefinitions="WIN32;_DEBUG;DEBUG;PNG_DEBUG=1;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="png.h"
+				PrecompiledHeaderThrough="pngpriv.h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 				CompileAs="0"/>
@@ -221,7 +223,8 @@
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCPreBuildEventTool"
+				CommandLine="copy ..\..\scripts\pnglibconf.h.prebuilt ..\..\pnglibconf.h"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -334,27 +337,6 @@
 			</File>
 			<File
 				RelativePath="..\..\pngtrans.c">
-			</File>
-			<File
-				RelativePath="..\..\scripts\pngwin.def">
-				<FileConfiguration
-					Name="DLL VB|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="LIB Release|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="LIB Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\pngwio.c">

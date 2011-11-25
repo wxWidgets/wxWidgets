@@ -104,8 +104,8 @@ while test $# -gt 0; do
         ;;
 
     --ldopts)
-    	echo ${ldopts}
-	;;
+        echo ${ldopts}
+        ;;
 
     --ldflags)
         echo ${ldopts} ${L_opts} ${R_opts} ${libs}
@@ -113,7 +113,7 @@ while test $# -gt 0; do
 
     --static)
         R_opts=""
-	libs=${all_libs}
+        libs=${all_libs}
         ;;
 
     *)

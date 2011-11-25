@@ -1,5 +1,4 @@
-
-Libpng 1.4.4 - September 23, 2010
+Libpng 1.5.6 - November 3, 2011
 
 This is a public release of libpng, intended for use in production codes.
 
@@ -8,58 +7,81 @@ Files available for download:
 Source files with LF line endings (for Unix/Linux) and with a
 "configure" script
 
-   libpng-1.4.4.tar.xz (LZMA-compressed, recommended)
-   libpng-1.4.4.tar.gz
-   libpng-1.4.4.tar.bz2
+   libpng-1.5.6.tar.xz (LZMA-compressed, recommended)
+   libpng-1.5.6.tar.gz
+   libpng-1.5.6.tar.bz2
 
 Source files with CRLF line endings (for Windows), without the
 "configure" script
 
-   lpng144.zip
-   lpng144.7z
+   lpng156.7z  (LZMA-compressed, recommended)
+   lpng156.zip
 
 Other information:
 
-   libpng-1.4.4-README.txt
-   libpng-1.4.4-LICENSE.txt
+   libpng-1.5.6-README.txt
+   libpng-1.5.6-LICENSE.txt
 
-Changes since the last public release (1.4.3):
-  Removed extraneous new_push_process_row.c file.
-  Revised the "SEE ALSO" style of libpng.3, libpngpf.3, and png.5
-  Removed some newly-added TAB characters from pngpread.c.
-  Fixed some indentation in pngpread.c and pngrutil.c
-  Changed "extern PNG_EXPORT" to "PNG_EXPORT" in png.h (Jan Nijtmans)
-  Changed "extern" to "PNG_EXTERN" in pngpriv.h (except for the 'extern "C" {')
-  Put "#ifndef PNG_EXTERN, #endif" around "#define PNG_EXTERN" in pngpriv.h
-  Added -DNO_PNG_SNPRINTF to CFLAGS in scripts/makefile.dj2
-  Moved the definition of png_snprintf() outside of the enclosing
-    #ifdef blocks in pngconf.h
-  Made a special case "#define PNGAPI" in pngconf.h for WATCOM.
-  Removed reference to cbuilder5/* from Makefile.in and Makefile.am
-  Updated the read macros and functions from 1.5.0beta38.
-  Updated projects/visualc71 so it can find scripts/pnglibconf.h
-  Removed unused png_mem_* defines from pngconf.h.
-  Correct use of _WINDOWS_ in pngconf.h
-  Don't try to use version-script with cygwin/mingw.
-  Revised contrib/gregbook to work under cygwin/mingw.
-  Updated prebuilt aclocal.m4 and ltmain.sh
-  Add .dll.a to the list of extensions to be symlinked by Makefile.am (Yaakov)
-  Updated CMakelists.txt to use CMAKE_INSTALL_LIBDIR variable; useful for
-    installing libpng in /usr/lib64 (Funda Wang).
-  Revised CMakeLists.txt to put the man pages in share/man/man* not man/man*
-  Revised CMakeLists.txt to make symlinks instead of copies when installing.
-  Moved "#include pngusr.h" ahead of PNG_USER_PRIVATEBUILD test in pngconf.h
-  Eliminated a deprecated reference to png_ptr->io_ptr in pngtest.c
-  Eliminated new unnecessary #if tests regarding the sCAL chunk from pngrutil.c
-  Updated the xcode project to work with libpng-1.4.x and added iOS targets
-    for simulator and device (Philippe Hausler).
-  Revised autogen.sh to recognize and use $AUTOCONF, $AUTOMAKE, $AUTOHEADER,
-    $AUTOPOINT, $ACLOCAL and $LIBTOOLIZE
-  Rebuilt configure scripts with automake-1.11.1 instead of automake-1.11.
-  Removed unused mkinstalldirs file.
+Changes since the last public release (1.5.5):
 
-Send comments/corrections/commendations to glennrp at users.sourceforge.net
-or to png-mng-implement at lists.sf.net (subscription required; visit
-https://lists.sourceforge.net/lists/listinfo/png-mng-implement).
+  Fixed some 64-bit type conversion warnings in pngrtran.c
+  Moved row_info from png_struct to a local variable.
+  The various interlace mask arrays have been made into arrays of
+    bytes and made PNG_CONST and static (previously some arrays were
+    marked PNG_CONST and some weren't).
+  Additional checks have been added to the transform code to validate the
+    pixel depths after the transforms on both read and write.
+  Removed some redundant code from pngwrite.c, in png_desgtroy_write_struct().
+  Changed chunk reading/writing code to use png_uint_32 instead of png_byte[4].
+    This removes the need to allocate temporary strings for chunk names on
+    the stack in the read/write code.  Unknown chunk handling still uses the
+    string form because this is exposed in the API.
+  Added a note in the manual the png_read_update_info() must be called only
+    once with a particular info_ptr.
+  Revised test-pngtest.sh to report FAIL when pngtest fails.
+  Added "--strict" option to pngtest, to report FAIL when the failure is
+    only because the resulting valid files are different.
+  Revised CMakeLists.txt to work with mingw and removed some material from
+    CMakeLists.txt that is no longer useful in libpng-1.5.
+  Fixed typo in Makefile.in and Makefile.am ("-M Wl" should be "-M -Wl")."
+  Speed up png_combine_row() for interlaced images. This reduces the generality
+    of the code, allowing it to be optimized for Adam7 interlace.  The masks
+    passed to png_combine_row() are now generated internally, avoiding
+    some code duplication and localizing the interlace handling somewhat.
+  Align png_struct::row_buf - previously it was always unaligned, caused by
+    a bug in the code that attempted to align it; the code needs to subtract
+    one from the pointer to take account of the filter byte prepended to
+    each row.
+  Optimized png_combine_row() when rows are aligned. This gains a small
+    percentage for 16-bit and 32-bit pixels in the typical case where the
+    output row buffers are appropriately aligned. The optimization was not
+    previously possible because the png_struct buffer was always misaligned.
+  Removed two redundant tests for unitialized row.
+  Fixed a relatively harmless memory overwrite in compressed text writing
+    with a 1 byte zlib buffer.
+  Add ability to call png_read_update_info multiple times to pngvalid.c
+  Fixes for multiple calls to png_read_update_info. These fixes attend to
+    most of the errors revealed in pngvalid, however doing the gamma work
+    twice results in inaccuracies that can't be easily fixed.  There is now
+    a warning in the code if this is going to happen.
+  Turned on multiple png_read_update_info in pngvalid transform tests.
+  Prevent libpng from overwriting unused bits at the end of the image when
+    it is not byte aligned, while reading. Prior to libpng-1.5.6 libpng would
+    overwrite the partial byte at the end of each row if the row width was not
+    an exact multiple of 8 bits and the image is not interlaced.
+  Made png_ptr->prev_row an aligned pointer into png_ptr->big_prev_row
+    (Mans Rullgard).
+  Changed misleading "Missing PLTE before cHRM" warning to "Out of place cHRM"
+  Added PNG_LSR() and PNG_LSL() macros to defend against buggy compilers that
+    evaluate non-taken code branches and complain about out-of-range shifts. 
+  Renamed the local variable 'byte' because it appears in a MSYS header
+    file.
+  Added #define PNG_ALIGN_TYPE PNG_ALIGN_NONE to contrib/pngminim/*/pngusr.h
+
+Send comments/corrections/commendations to png-mng-implement at lists.sf.net
+(subscription required; visit
+https://lists.sourceforge.net/lists/listinfo/png-mng-implement
+to subscribe)
+or to glennrp at users.sourceforge.net
 
 Glenn R-P

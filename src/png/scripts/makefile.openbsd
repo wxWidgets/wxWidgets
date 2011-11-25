@@ -10,25 +10,30 @@ PREFIX?= /usr/local
 LIBDIR=	${PREFIX}/lib
 MANDIR= ${PREFIX}/man/cat
 
-SHLIB_MAJOR=	0
-SHLIB_MINOR=	1.4.4
+SHLIB_MAJOR=	15
+SHLIB_MINOR=	1.5.6
 
 LIB=	png
 SRCS=	png.c pngerror.c pngget.c pngmem.c pngpread.c \
 	pngread.c pngrio.c pngrtran.c pngrutil.c pngset.c pngtrans.c \
 	pngwio.c pngwrite.c pngwtran.c pngwutil.c
 
-HDRS=	png.h pngconf.h
+HDRS=	png.h pngconf.h pnglibconf.h
 
 CFLAGS+= -W -Wall
 CPPFLAGS+= -I${.CURDIR}
 
 NOPROFILE= Yes
 
-CLEANFILES+= pngtest.o pngtest
+CLEANFILES+= pngtest.o pngtest pnglibconf.h
 
 MAN=	libpng.3 libpngpf.3 png.5
-DOCS = ANNOUNCE CHANGES INSTALL KNOWNBUG LICENSE README TODO Y2KINFO libpng.txt
+DOCS = ANNOUNCE CHANGES INSTALL KNOWNBUG LICENSE README TODO Y2KINFO \
+       libpng-manual.txt
+
+# see scripts/pnglibconf.mak for more options
+pnglibconf.h: scripts/pnglibconf.h.prebuilt
+	cp scripts/pnglibconf.h.prebuilt $@
 
 pngtest.o:	pngtest.c
 	${CC} ${CPPFLAGS} ${CFLAGS} -c ${.ALLSRC} -o ${.TARGET}
@@ -65,6 +70,7 @@ afterinstall:
 	@rm -f ${DESTDIR}${LIBDIR}/debug/libpng.a
 	@rm -f ${DESTDIR}${PREFIX}/include/png.h
 	@rm -f ${DESTDIR}${PREFIX}/include/pngconf.h
+	@rm -f ${DESTDIR}${PREFIX}/include/pnglibconf.h
 	@rmdir ${DESTDIR}${LIBDIR}/debug 2>/dev/null || true
 	${INSTALL} ${INSTALL_COPY} -o ${SHAREOWN} -g ${SHAREGRP} \
 		-m ${NONBINMODE} ${HDRS} ${DESTDIR}${PREFIX}/include

@@ -1,6 +1,6 @@
 # makefile for libpng
 # Copyright (C) 1998 Tim Wegner
-# Copyright (C) 2006,2009 Glenn Randers-Pehrson
+# Copyright (C) 2006,2009,2011 Glenn Randers-Pehrson
 #
 # This code is released under the libpng license.
 # For conditions of distribution and use, see the disclaimer
@@ -15,7 +15,7 @@
 CC = cl
 LD = link
 AR = lib
-CFLAGS  = -nologo -MD -O2 -W3 -I..\zlib
+CFLAGS  = -nologo -D_CRT_SECURE_NO_DEPRECATE -MD -O2 -W3 -I..\zlib
 LDFLAGS = -nologo
 ARFLAGS = -nologo
 RM = del
@@ -35,56 +35,60 @@ OBJS  = $(OBJS1) $(OBJS2) $(OBJS3)
 # Targets
 all: libpng.lib
 
-png$(O): png.h pngconf.h pngpriv.h
+# see scripts/pnglibconf.mak for more options
+pnglibconf.h: scripts\pnglibconf.h.prebuilt
+       copy scripts\pnglibconf.h.prebuilt $@
+
+png$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngset$(O): png.h pngconf.h pngpriv.h
+pngset$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngget$(O): png.h pngconf.h pngpriv.h
+pngget$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngread$(O): png.h pngconf.h pngpriv.h
+pngread$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngpread$(O): png.h pngconf.h pngpriv.h
+pngpread$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngrtran$(O): png.h pngconf.h pngpriv.h
+pngrtran$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngrutil$(O): png.h pngconf.h pngpriv.h
+pngrutil$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngerror$(O): png.h pngconf.h pngpriv.h
+pngerror$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngmem$(O): png.h pngconf.h pngpriv.h
+pngmem$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngrio$(O): png.h pngconf.h pngpriv.h
+pngrio$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngwio$(O): png.h pngconf.h pngpriv.h
+pngwio$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngtrans$(O): png.h pngconf.h pngpriv.h
+pngtrans$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngwrite$(O): png.h pngconf.h pngpriv.h
+pngwrite$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngwtran$(O): png.h pngconf.h pngpriv.h
+pngwtran$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
-pngwutil$(O): png.h pngconf.h pngpriv.h
+pngwutil$(O): png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
 libpng.lib: $(OBJS)
 	-$(RM) $@
 	$(AR) $(ARFLAGS) -out:$@ $(OBJS) $(ERRFILE)
 
-pngtest$(O): png.h pngconf.h
+pngtest$(O): png.h pngconf.h pnglibconf.h
 	$(CC) -c $(CFLAGS) $*.c $(ERRFILE)
 
 pngtest.exe: pngtest$(O) libpng.lib
@@ -96,6 +100,7 @@ test: pngtest.exe
 clean:
 	-$(RM) *$(O)
 	-$(RM) libpng.lib
+	-$(RM) pnglibconf.h
 	-$(RM) pngtest.exe
 	-$(RM) pngout.png
 

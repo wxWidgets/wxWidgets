@@ -2,15 +2,15 @@
 #if 0 /* in case someone actually tries to compile this */
 
 /* example.c - an example of using libpng
- * Last changed in libpng 1.4.2 [May 6, 2010]
+ * Last changed in libpng 1.5.6 [November 3, 2011]
  * This file has been placed in the public domain by the authors.
- * Maintained 1998-2010 Glenn Randers-Pehrson
+ * Maintained 1998-2011 Glenn Randers-Pehrson
  * Maintained 1996, 1997 Andreas Dilger)
  * Written 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  */
 
 /* This is an example of how to use libpng to read and write PNG files.
- * The file libpng.txt is much more verbose then this.  If you have not
+ * The file libpng-manual.txt is much more verbose then this.  If you have not
  * read it, do so first.  This was designed to be a starting point of an
  * implementation.  This is not officially part of libpng, is hereby placed
  * in the public domain, and therefore does not require a copyright notice.
@@ -22,6 +22,10 @@
  * see also the programs in the contrib directory.
  */
 
+#define _POSIX_SOURCE 1  /* libpng and zlib are POSIX-compliant.  You may
+                          * change this if your application uses non-POSIX
+                          * extensions. */
+
 #include "png.h"
 
  /* The png_jmpbuf() macro, used in error handling, became available in
@@ -31,7 +35,7 @@
   */
 
 #ifndef png_jmpbuf
-#  define png_jmpbuf(png_ptr) ((png_ptr)->jmpbuf)
+#  define png_jmpbuf(png_ptr) ((png_ptr)->png_jmpbuf)
 #endif
 
 /* Check to see if a file is a PNG file using png_sig_cmp().  png_sig_cmp()
@@ -183,8 +187,15 @@ void read_png(FILE *fp, unsigned int sig_read)  /* File is already open */
     * are mutually exclusive.
     */
 
-   /* Tell libpng to strip 16 bit/color files down to 8 bits/color */
+   /* Tell libpng to strip 16 bit/color files down to 8 bits/color.
+    * Use accurate scaling if it's available, otherwise just chop off the
+    * low byte.
+    */
+#ifdef PNG_READ_SCALE_16_TO_8_SUPPORTED
+    png_set_scale_16(png_ptr);
+#else
    png_set_strip_16(png_ptr);
+#endif
 
    /* Strip alpha bytes from the input data without combining with the
     * background (not recommended).
@@ -286,7 +297,6 @@ void read_png(FILE *fp, unsigned int sig_read)  /* File is already open */
          /* An array of colors to which the image should be quantized */
          png_color std_color_cube[MAX_SCREEN_COLORS];
 
-         /* Prior to libpng-1.4.2, this was png_set_dither(). */
          png_set_quantize(png_ptr, std_color_cube, MAX_SCREEN_COLORS,
             MAX_SCREEN_COLORS, NULL, 0);
       }
@@ -331,11 +341,16 @@ void read_png(FILE *fp, unsigned int sig_read)  /* File is already open */
    /* Add filler (or alpha) byte (before/after each RGB triplet) */
    png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
 
+#ifdef PNG_READ_INTERLACING_SUPPORTED
    /* Turn on interlace handling.  REQUIRED if you are not using
     * png_read_image().  To see how to handle interlacing passes,
     * see the png_read_row() method below:
     */
    number_passes = png_set_interlace_handling(png_ptr);
+#else
+   number_passes = 1;
+#endif /* PNG_READ_INTERLACING_SUPPORTED */
+
 
    /* Optional call to gamma correct and add the background to the palette
     * and update info structure.  REQUIRED if you are expecting libpng to
@@ -517,6 +532,7 @@ row_callback(png_structp png_ptr, png_bytep new_row,
     */
    png_bytep old_row = ((png_bytep *)our_data)[row_num];
 
+#ifdef PNG_READ_INTERLACING_SUPPORTED
    /* If both rows are allocated then copy the new row
     * data to the corresponding row data.
     */
@@ -545,6 +561,7 @@ row_callback(png_structp png_ptr, png_bytep new_row,
     * to pass the current row as new_row, and the function will combine
     * the old row and the new row.
     */
+#endif /* PNG_READ_INTERLACING_SUPPORTED */
 }
 
 end_callback(png_structp png_ptr, png_infop info)
@@ -656,14 +673,18 @@ void write_png(char *file_name /* , ... other image information ... */)
 
    /* Optional significant bit (sBIT) chunk */
    png_color_8 sig_bit;
+
    /* If we are dealing with a grayscale image then */
    sig_bit.gray = true_bit_depth;
+
    /* Otherwise, if we are dealing with a color image then */
    sig_bit.red = true_red_bit_depth;
    sig_bit.green = true_green_bit_depth;
    sig_bit.blue = true_blue_bit_depth;
+
    /* If the image has an alpha channel then */
    sig_bit.alpha = true_alpha_bit_depth;
+
    png_set_sBIT(png_ptr, info_ptr, &sig_bit);
 
 
@@ -676,20 +697,21 @@ void write_png(char *file_name /* , ... other image information ... */)
    text_ptr[0].key = "Title";
    text_ptr[0].text = "Mona Lisa";
    text_ptr[0].compression = PNG_TEXT_COMPRESSION_NONE;
+   text_ptr[0].itxt_length = 0;
+   text_ptr[0].lang = NULL;
+   text_ptr[0].lang_key = NULL;
    text_ptr[1].key = "Author";
    text_ptr[1].text = "Leonardo DaVinci";
    text_ptr[1].compression = PNG_TEXT_COMPRESSION_NONE;
+   text_ptr[1].itxt_length = 0;
+   text_ptr[1].lang = NULL;
+   text_ptr[1].lang_key = NULL;
    text_ptr[2].key = "Description";
    text_ptr[2].text = "<long text>";
    text_ptr[2].compression = PNG_TEXT_COMPRESSION_zTXt;
-#ifdef PNG_iTXt_SUPPORTED
-   text_ptr[0].lang = NULL;
-   text_ptr[0].lang_key = NULL;
-   text_ptr[1].lang = NULL;
-   text_ptr[1].lang_key = NULL;
+   text_ptr[2].itxt_length = 0;
    text_ptr[2].lang = NULL;
    text_ptr[2].lang_key = NULL;
-#endif
    png_set_text(png_ptr, info_ptr, text_ptr, 3);
 
    /* Other optional chunks like cHRM, bKGD, tRNS, tIME, oFFs, pHYs */
@@ -754,6 +776,7 @@ void write_png(char *file_name /* , ... other image information ... */)
    /* Turn on interlace handling if you are not using png_write_image() */
    if (interlacing)
       number_passes = png_set_interlace_handling(png_ptr);
+
    else
       number_passes = 1;
 

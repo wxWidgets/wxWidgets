@@ -54,40 +54,40 @@ $ if make.eqs.""
 $  then
 $   dele pngtest.obj;*
 $   CALL MAKE png.OBJ "cc ''CCOPT' png" -
-	png.c png.h pngconf.h pngpriv.h
+	png.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngset.OBJ "cc ''CCOPT' pngset" -
-	pngset.c png.h pngconf.h pngpriv.h
+	pngset.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngget.OBJ "cc ''CCOPT' pngget" -
-	pngget.c png.h pngconf.h pngpriv.h
+	pngget.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngread.OBJ "cc ''CCOPT' pngread" -
-	pngread.c png.h pngconf.h pngpriv.h
+	pngread.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngpread.OBJ "cc ''CCOPT' pngpread" -
-	pngpread.c png.h pngconf.h pngpriv.h
+	pngpread.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngrtran.OBJ "cc ''CCOPT' pngrtran" -
-	pngrtran.c png.h pngconf.h pngpriv.h
+	pngrtran.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngrutil.OBJ "cc ''CCOPT' pngrutil" -
-	pngrutil.c png.h pngconf.h pngpriv.h
+	pngrutil.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngerror.OBJ "cc ''CCOPT' pngerror" -
-	pngerror.c png.h pngconf.h pngpriv.h
+	pngerror.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngmem.OBJ "cc ''CCOPT' pngmem" -
-	pngmem.c png.h pngconf.h pngpriv.h
+	pngmem.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngrio.OBJ "cc ''CCOPT' pngrio" -
-	pngrio.c png.h pngconf.h pngpriv.h
+	pngrio.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngwio.OBJ "cc ''CCOPT' pngwio" -
-	pngwio.c png.h pngconf.h pngpriv.h
+	pngwio.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngtrans.OBJ "cc ''CCOPT' pngtrans" -
-	pngtrans.c png.h pngconf.h pngpriv.h
+	pngtrans.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngwrite.OBJ "cc ''CCOPT' pngwrite" -
-	pngwrite.c png.h pngconf.h pngpriv.h
+	pngwrite.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngwtran.OBJ "cc ''CCOPT' pngwtran" -
-	pngwtran.c png.h pngconf.h pngpriv.h
+	pngwtran.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   CALL MAKE pngwutil.OBJ "cc ''CCOPT' pngwutil" -
-	pngwutil.c png.h pngconf.h pngpriv.h
+	pngwutil.c png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 $   write sys$output "Building Libpng ..."
 $   CALL MAKE libpng.OLB "lib/crea libpng.olb *.obj" *.OBJ
 $   write sys$output "Building pngtest..."
 $   CALL MAKE pngtest.OBJ "cc ''CCOPT' pngtest" -
-	pngtest.c png.h pngconf.h
+	pngtest.c png.h pngconf.h pnglibconf.h
 $   call make pngtest.exe -
 	"LINK pngtest,libpng.olb/lib,''zlibsrc'libz.olb/lib" -
 	pngtest.obj libpng.olb

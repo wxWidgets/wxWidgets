@@ -6,7 +6,7 @@
 # and license in png.h
 
 PREFIX?=        /usr/local
-SHLIB_VER?=     14
+SHLIB_VER?=     15
 
 LIB=		png
 SHLIB_MAJOR=	${SHLIB_VER}
@@ -17,13 +17,14 @@ NOOBJ=          YES
 # where make install puts libpng.a and png.h
 DESTDIR=	${PREFIX}
 LIBDIR=		/lib
-INCS=		png.h pngconf.h pngpriv.h
+INCS=		png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
 INCSDIR=	/include/libpng
 INCDIR=		${INCSDIR}		# for 4.x bsd.lib.mk
 MAN=		libpng.3 libpngpf.3 png.5
 MANDIR=		/man/man
 SYMLINKS=       libpng/png.h ${INCSDIR}/../png.h \
-		libpng/pngconf.h ${INCSDIR}/../pngconf.h
+		libpng/pngconf.h ${INCSDIR}/../pngconf.h \
+		libpng/pnglibconf.h ${INCSDIR}/../pnglibconf.h
 LDADD+=         -lm -lz
 DPADD+=         ${LIBM} ${LIBZ}
 
@@ -40,6 +41,10 @@ CLEANFILES= pngtest pngtest.o pngout.png
 
 test: pngtest
 	./pngtest
+
+# see scripts/pnglibconf.mak for more options
+pnglibconf.h: scripts/pnglibconf.h.prebuilt
+	cp scripts/pnglibconf.h.prebuilt $@
 
 DOCS = ANNOUNCE CHANGES INSTALL KNOWNBUG LICENSE README TODO Y2KINFO
 writelock:

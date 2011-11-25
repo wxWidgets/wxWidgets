@@ -33,20 +33,20 @@ clean :
 
 
 # Other dependencies.
-png.obj : png.h, pngconf.h, pngpriv.h
-pngpread.obj : png.h, pngconf.h, pngpriv.h
-pngset.obj : png.h, pngconf.h, pngpriv.h
-pngget.obj : png.h, pngconf.h, pngpriv.h
-pngread.obj : png.h, pngconf.h, pngpriv.h
-pngrtran.obj : png.h, pngconf.h, pngpriv.h
-pngrutil.obj : png.h, pngconf.h, pngpriv.h
-pngerror.obj : png.h, pngconf.h, pngpriv.h
-pngmem.obj : png.h, pngconf.h, pngpriv.h
-pngrio.obj : png.h, pngconf.h, pngpriv.h
-pngwio.obj : png.h, pngconf.h, pngpriv.h
-pngtrans.obj : png.h, pngconf.h, pngpriv.h
-pngwrite.obj : png.h, pngconf.h, pngpriv.h
-pngwtran.obj : png.h, pngconf.h, pngpriv.h
-pngwutil.obj : png.h, pngconf.h, pngpriv.h
+png.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngpread.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngset.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngget.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngread.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngrtran.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngrutil.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngerror.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngmem.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngrio.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngwio.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngtrans.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngwrite.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngwtran.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
+pngwutil.obj : png.h, pngconf.h, pnglibconf.h, pngpriv.h, pngstruct.h, pnginfo.h, pngdebug.h
 
 pngtest.obj : png.h, pngconf.h

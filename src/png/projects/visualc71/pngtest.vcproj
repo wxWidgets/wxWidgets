@@ -130,7 +130,7 @@ $(TargetPath) ..\..\pngtest.png $(IntDir)\pngout.png"
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/pngtest.exe"
 				LinkIncremental="1"
-				IgnoreDefaultLibraryNames="$(IntDir)\libpng14b.lib"
+				IgnoreDefaultLibraryNames="$(IntDir)\libpng15b.lib"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool

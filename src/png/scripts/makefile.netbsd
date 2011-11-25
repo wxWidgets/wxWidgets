@@ -8,7 +8,7 @@
 # For conditions of distribution and use, see the disclaimer
 # and license in png.h
 
-# You should also run makefile.ne14bsd
+# You should also run makefile.ne15bsd
 
 LOCALBASE?=/usr/local
 LIBDIR=	${LOCALBASE}/lib
@@ -16,12 +16,12 @@ MANDIR= ${LOCALBASE}/man
 INCSDIR=${LOCALBASE}/include
 
 LIB=	png
-SHLIB_MAJOR=	3
-SHLIB_MINOR=	1.4.4
+SHLIB_MAJOR=	15
+SHLIB_MINOR=	1.5.6
 SRCS=	png.c pngset.c pngget.c pngrutil.c pngtrans.c pngwutil.c \
 	pngread.c pngrio.c pngwio.c pngwrite.c pngrtran.c \
 	pngwtran.c pngmem.c pngerror.c pngpread.c
-INCS=	png.h pngconf.h
+INCS=	png.h pngconf.h pnglibconf.h
 MAN=	libpng.3 libpngpf.3 png.5
 
 CPPFLAGS+=-I${.CURDIR}
@@ -32,7 +32,11 @@ CPPFLAGS+=-I${.CURDIR}
 #   MKLINT= no
 # .endif
 
-CLEANFILES+=pngtest.o pngtest
+CLEANFILES+=pngtest.o pngtest pnglibconf.h
+
+# see scripts/pnglibconf.mak for more options
+pnglibconf.h: scripts/pnglibconf.h.prebuilt
+	cp scripts/pnglibconf.h.prebuilt $@
 
 pngtest.o:	pngtest.c
 	${CC} -c ${CPPFLAGS} ${CFLAGS} ${.ALLSRC} -o ${.TARGET}
