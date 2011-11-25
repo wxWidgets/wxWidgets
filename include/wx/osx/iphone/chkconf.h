@@ -358,6 +358,11 @@
 #define wxUSE_TIMEPICKCTRL 0
 #endif
 
+#if wxUSE_RICHTOOLTIP
+#undef wxUSE_RICHTOOLTIP
+#define wxUSE_RICHTOOLTIP 0
+#endif
+
 #endif
     /* _WX_OSX_IPHONE_CHKCONF_H_ */
 
