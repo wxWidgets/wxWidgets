@@ -662,10 +662,15 @@ public:
     int GetLineAt( unsigned int y ) const;       // y / m_lineHeight in fixed mode
 
     void SetRowHeight( int lineHeight ) { m_lineHeight = lineHeight; }
+    int GetRowHeight() const { return m_lineHeight; }
 
     // Some useful functions for row and item mapping
     wxDataViewItem GetItemByRow( unsigned int row ) const;
     int GetRowByItem( const wxDataViewItem & item ) const;
+
+    wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
+    // We did not need this temporarily
+    // wxDataViewTreeNode * GetTreeNodeByItem( const wxDataViewItem & item );
 
     // Methods for building the mapping tree
     void BuildTree( wxDataViewModel  * model );
@@ -692,10 +697,6 @@ public:
     void OnColumnsCountChanged();
 
 private:
-    wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
-    // We did not need this temporarily
-    // wxDataViewTreeNode * GetTreeNodeByItem( const wxDataViewItem & item );
-
     int RecalculateCount();
 
     // Return false only if the event was vetoed by its handler.
@@ -4481,16 +4482,25 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
     class MaxWidthCalculator
     {
     public:
-        MaxWidthCalculator(wxDataViewMainWindow *clientArea,
+        MaxWidthCalculator(const wxDataViewCtrl *dvc,
+                           wxDataViewMainWindow *clientArea,
                            wxDataViewRenderer *renderer,
                            const wxDataViewModel *model,
-                           unsigned column)
+                           unsigned column,
+                           int expanderSize)
             : m_width(0),
+              m_dvc(dvc),
               m_clientArea(clientArea),
               m_renderer(renderer),
               m_model(model),
-              m_column(column)
+              m_column(column),
+              m_expanderSize(expanderSize)
+
         {
+            m_isExpanderCol =
+                !clientArea->IsList() &&
+                (column == 0 ||
+                 GetExpanderColumnOrFirstOne(const_cast<wxDataViewCtrl*>(dvc)) == dvc->GetColumnAt(column));
         }
 
         void UpdateWithWidth(int width)
@@ -4500,23 +4510,40 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
 
         void UpdateWithRow(int row)
         {
-            wxDataViewItem item = m_clientArea->GetItemByRow(row);
+            int indent = 0;
+            wxDataViewItem item;
+
+            if ( m_isExpanderCol )
+            {
+                wxDataViewTreeNode *node = m_clientArea->GetTreeNodeByRow(row);
+                item = node->GetItem();
+                indent = m_dvc->GetIndent() * node->GetIndentLevel() + m_expanderSize;
+            }
+            else
+            {
+                item = m_clientArea->GetItemByRow(row);
+            }
+
             m_renderer->PrepareForItem(m_model, item, m_column);
-            m_width = wxMax(m_width, m_renderer->GetSize().x);
+            m_width = wxMax(m_width, m_renderer->GetSize().x + indent);
         }
 
         int GetMaxWidth() const { return m_width; }
 
     private:
         int m_width;
+        const wxDataViewCtrl *m_dvc;
         wxDataViewMainWindow *m_clientArea;
         wxDataViewRenderer *m_renderer;
         const wxDataViewModel *m_model;
         unsigned m_column;
+        bool m_isExpanderCol;
+        int m_expanderSize;
     };
 
-    MaxWidthCalculator calculator(m_clientArea, renderer,
-                                  GetModel(), column->GetModelColumn());
+    MaxWidthCalculator calculator(this, m_clientArea, renderer,
+                                  GetModel(), column->GetModelColumn(),
+                                  m_clientArea->GetRowHeight());
 
     if ( m_headerArea )
     {
