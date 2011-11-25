@@ -465,12 +465,7 @@ wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
     if ( m_numRects )
     {
         m_rects = new wxRect[m_numRects];
-        for ( int n = 0; n < m_numRects; n++ )
-            m_rects[n] = ri.m_rects[n];
-    }
-    else
-    {
-        m_rects = NULL;
+        memcpy(m_rects, ri.m_rects, m_numRects * sizeof m_rects[0]);
     }
 
     return *this;
