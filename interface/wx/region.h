@@ -159,7 +159,7 @@ public:
         Default constructor.
 
         This constructor creates an invalid, or null, object, i.e. calling
-        IsOk() on it returns @false and IsNull() returns @true.
+        IsOk() on it returns @false and IsEmpty() returns @true.
     */
     wxRegion();
     /**
