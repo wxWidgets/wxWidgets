@@ -122,13 +122,11 @@ private:
     void Init();
     void CreateRects( const wxRegion& r );
 
-    size_t   m_current;
     wxRegion m_region;
-
     wxRect *m_rects;
-    size_t  m_numRects;
+    int m_numRects;
+    int m_current;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxRegionIterator)
 };
 

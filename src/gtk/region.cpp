@@ -370,15 +370,13 @@ void wxRegionIterator::CreateRects( const wxRegion& region )
     if (!gdkregion)
         return;
 
-    GdkRectangle *gdkrects = NULL;
-    gint numRects = 0;
-    gdk_region_get_rectangles( gdkregion, &gdkrects, &numRects );
+    GdkRectangle* gdkrects;
+    gdk_region_get_rectangles(gdkregion, &gdkrects, &m_numRects);
 
-    m_numRects = numRects;
-    if (numRects)
+    if (m_numRects)
     {
         m_rects = new wxRect[m_numRects];
-        for (size_t i=0; i < m_numRects; ++i)
+        for (int i = 0; i < m_numRects; ++i)
         {
             GdkRectangle &gr = gdkrects[i];
             wxRect &wr = m_rects[i];
@@ -467,7 +465,7 @@ wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
     if ( m_numRects )
     {
         m_rects = new wxRect[m_numRects];
-        for ( unsigned int n = 0; n < m_numRects; n++ )
+        for ( int n = 0; n < m_numRects; n++ )
             m_rects[n] = ri.m_rects[n];
     }
     else
