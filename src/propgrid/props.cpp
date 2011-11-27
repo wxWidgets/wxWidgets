@@ -1703,7 +1703,7 @@ bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty
                       property->GetAttribute(wxS("DialogTitle"), _("Choose a file")),
                       property->GetAttribute(wxS("InitialPath"), path),
                       wxEmptyString,
-                      property->GetAttribute(wxPG_FILE_WILDCARD, _("All files (*.*)|*.*")),
+                      property->GetAttribute(wxPG_FILE_WILDCARD, wxALL_FILES),
                       0,
                       wxDefaultPosition );
 
@@ -1732,7 +1732,7 @@ wxFileProperty::wxFileProperty( const wxString& label, const wxString& name,
 {
     m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
     m_indFilter = -1;
-    SetAttribute( wxPG_FILE_WILDCARD, _("All files (*.*)|*.*") );
+    SetAttribute( wxPG_FILE_WILDCARD, wxALL_FILES);
 
     SetValue(value);
 }

@@ -1557,7 +1557,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
 #if wxUSE_LIBMSPACK
                     _("Compressed HTML Help file (*.chm)|*.chm|") +
 #endif
-                    _("All files (*.*)|*");
+                    wxALL_FILES;
                 wxString s = wxFileSelector(_("Open HTML document"),
                                             wxEmptyString,
                                             wxEmptyString,

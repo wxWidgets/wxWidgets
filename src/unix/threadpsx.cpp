@@ -815,7 +815,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
     int rc = pthread_setspecific(gs_keySelf, thread);
     if ( rc != 0 )
     {
-        wxLogSysError(rc, _("Cannot start thread: error writing TLS"));
+        wxLogSysError(rc, _("Cannot start thread: error writing TLS."));
 
         return (void *)-1;
     }

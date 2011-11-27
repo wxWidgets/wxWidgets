@@ -521,7 +521,7 @@ wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTi
     wxMenuBar *pMenuBar = new wxMenuBar;
     wxMenu *pMenu = new wxMenu;
 #if CAN_SAVE_FILES
-    pMenu->Append(Menu_Save,  _("&Save..."), _("Save log contents to file"));
+    pMenu->Append(Menu_Save,  _("Save &As..."), _("Save log contents to file"));
 #endif // CAN_SAVE_FILES
     pMenu->Append(Menu_Clear, _("C&lear"), _("Clear the log contents"));
     pMenu->AppendSeparator();

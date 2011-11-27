@@ -3775,7 +3775,7 @@ void wxWin32FrameInputHandler::PopupSystemMenu(wxTopLevelWindow *window) const
     if ( window->GetWindowStyle() & wxMAXIMIZE_BOX )
         menu.Append(wxID_MAXIMIZE_FRAME , _("Ma&ximize"));
     menu.AppendSeparator();
-    menu.Append(wxID_CLOSE_FRAME, _("Close\tAlt-F4"));
+    menu.Append(wxID_CLOSE_FRAME, _("&Close") + _T("\t") + _("Alt+") + _T("F4"));
 
     if ( window->GetWindowStyle() & wxMAXIMIZE_BOX )
     {
