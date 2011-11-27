@@ -95,50 +95,70 @@
 
 #if wxUSE_STOPWATCH
 
+#ifdef __WXMSW__
+
+namespace
+{
+
+struct PerfCounter
+{
+    PerfCounter()
+    {
+        init = false;
+    }
+
+    bool CanBeUsed() const
+    {
+        return freq.QuadPart != 0;
+    }
+
+    wxCriticalSection cs;
+    LARGE_INTEGER freq;
+    bool init;
+} gs_perfCounter;
+
+} // anonymous namespace
+
+#endif // __WXMSW__
+
 void wxStopWatch::Start(long t)
 {
-#if 0
-// __WXMSW__
-    LARGE_INTEGER frequency_li;
-    ::QueryPerformanceFrequency( &frequency_li );
-    m_frequency = frequency_li.QuadPart;
-    if (m_frequency == 0)
+#ifdef __WXMSW__
+    if ( !gs_perfCounter.init )
+    {
+        wxCriticalSectionLocker lock(gs_perfCounter.cs);
+        ::QueryPerformanceFrequency(&gs_perfCounter.freq);
+        gs_perfCounter.init = true;
+    }
+
+    LARGE_INTEGER counter;
+    if ( gs_perfCounter.CanBeUsed() && ::QueryPerformanceCounter(&counter) )
+    {
+        m_t0 = counter.QuadPart - t*gs_perfCounter.freq.QuadPart/1000;
+    }
+    else // Fall back to the generic code below.
+#endif // __WXMSW__
     {
         m_t0 = wxGetLocalTimeMillis() - t;
     }
-    else
-    {
-        LARGE_INTEGER counter_li;
-        ::QueryPerformanceCounter( &counter_li );
-        wxLongLong counter = counter_li.QuadPart;
-        m_t0 = (counter * 10000 / m_frequency) - t*10;
-    }
-#else
-    m_t0 = wxGetLocalTimeMillis() - t;
-#endif
+
     m_pause = 0;
     m_pauseCount = 0;
 }
 
 long wxStopWatch::GetElapsedTime() const
 {
-#if 0
-//__WXMSW__
-    if (m_frequency == 0)
+#ifdef __WXMSW__
+    LARGE_INTEGER counter;
+    if ( gs_perfCounter.CanBeUsed() && ::QueryPerformanceCounter(&counter) )
     {
-        return (wxGetLocalTimeMillis() - m_t0).GetLo();
+        wxLongLong delta(counter.QuadPart);
+        delta -= m_t0;
+
+        return ((delta*1000)/gs_perfCounter.freq.QuadPart).GetLo();
     }
-    else
-    {
-        LARGE_INTEGER counter_li;
-        ::QueryPerformanceCounter( &counter_li );
-        wxLongLong counter = counter_li.QuadPart;
-        wxLongLong res = (counter * 10000 / m_frequency) - m_t0;
-        return res.GetLo() / 10;
-    }
-#else
-    return (wxGetLocalTimeMillis() - m_t0).GetLo();
 #endif
+    return (wxGetLocalTimeMillis() - m_t0).GetLo();
 }
 
 long wxStopWatch::Time() const
