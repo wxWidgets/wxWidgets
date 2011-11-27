@@ -134,12 +134,6 @@ private:
     static wxTimerScheduler *ms_instance;
 };
 
-// this helper function currently only exists for Unix platforms but could be
-// moved to wx/stopwatch.h if it turns out to be useful elsewhere
-//
-// returns the number of microseconds since the Epoch
-extern wxUsecClock_t wxGetLocalTimeUsec();
-
 #endif // wxUSE_TIMER
 
 #endif // _WX_UNIX_PRIVATE_TIMER_H_
