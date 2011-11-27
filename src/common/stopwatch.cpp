@@ -112,8 +112,15 @@ wxLongLong wxStopWatch::GetClockFreq() const
         return gs_perfCounter.freq.QuadPart;
 #endif // __WXMSW__
 
+#ifdef HAVE_GETTIMEOFDAY
+    // With gettimeofday() we can have nominally microsecond precision and
+    // while this is not the case in practice, it's still better than
+    // millisecond.
+    return MICROSECONDS_PER_SECOND;
+#else // !HAVE_GETTIMEOFDAY
     // Currently milliseconds are used everywhere else.
     return MILLISECONDS_PER_SECOND;
+#endif // HAVE_GETTIMEOFDAY/!HAVE_GETTIMEOFDAY
 }
 
 void wxStopWatch::Start(long t0)
@@ -134,7 +141,11 @@ wxLongLong wxStopWatch::GetCurrentClockValue() const
     }
 #endif // __WXMSW__
 
+#ifdef HAVE_GETTIMEOFDAY
+    return wxGetUTCTimeUSec();
+#else // !HAVE_GETTIMEOFDAY
     return wxGetUTCTimeMillis();
+#endif // HAVE_GETTIMEOFDAY/!HAVE_GETTIMEOFDAY
 }
 
 wxLongLong wxStopWatch::TimeInMicro() const

@@ -459,7 +459,8 @@ All:
 - Fix crash in wxArray::insert() overload taking iterator range (wsu).
 - Added wxEventFilter class and wxEvtHandler::{Add,Remove}Filter().
 - Added convenient wxCmdLineParser::AddLong{Option,Switch}() wrappers.
-- Added wxStopWatch::TimeInMicro() and wxGetUTCTimeUSec().
+- Added wxStopWatch::TimeInMicro() and wxGetUTCTimeUSec() and improved
+  wxStopWatch precision.
 - Made wxGetLocalTimeMillis() really return local time, added
   wxGetUTCTimeMillis() returning what this function used to return.
 
