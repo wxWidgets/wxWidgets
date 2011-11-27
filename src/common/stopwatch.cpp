@@ -95,10 +95,10 @@
 
 #if wxUSE_STOPWATCH
 
-#ifdef __WXMSW__
-
 namespace
 {
+
+#ifdef __WXMSW__
 
 struct PerfCounter
 {
@@ -117,53 +117,79 @@ struct PerfCounter
     bool init;
 } gs_perfCounter;
 
-} // anonymous namespace
-
 #endif // __WXMSW__
 
-void wxStopWatch::Start(long t)
+const int MILLISECONDS_PER_SECOND = 1000;
+const int MICROSECONDS_PER_SECOND = 1000*1000;
+
+} // anonymous namespace
+
+void wxStopWatch::DoStart()
 {
 #ifdef __WXMSW__
     if ( !gs_perfCounter.init )
     {
         wxCriticalSectionLocker lock(gs_perfCounter.cs);
         ::QueryPerformanceFrequency(&gs_perfCounter.freq);
+
+        // Just a sanity check: it's not supposed to happen but verify that
+        // ::QueryPerformanceCounter() succeeds so that we can really use it.
+        LARGE_INTEGER counter;
+        if ( !::QueryPerformanceCounter(&counter) )
+        {
+            wxLogDebug("QueryPerformanceCounter() unexpected failed (%s), "
+                       "will not use it.", wxSysErrorMsg());
+
+            gs_perfCounter.freq.QuadPart = 0;
+        }
+
         gs_perfCounter.init = true;
     }
-
-    LARGE_INTEGER counter;
-    if ( gs_perfCounter.CanBeUsed() && ::QueryPerformanceCounter(&counter) )
-    {
-        m_t0 = counter.QuadPart - t*gs_perfCounter.freq.QuadPart/1000;
-    }
-    else // Fall back to the generic code below.
 #endif // __WXMSW__
-    {
-        m_t0 = wxGetLocalTimeMillis() - t;
-    }
 
-    m_pause = 0;
-    m_pauseCount = 0;
+    m_t0 = GetCurrentClockValue();
 }
 
-long wxStopWatch::GetElapsedTime() const
+wxLongLong wxStopWatch::GetClockFreq() const
 {
 #ifdef __WXMSW__
-    LARGE_INTEGER counter;
-    if ( gs_perfCounter.CanBeUsed() && ::QueryPerformanceCounter(&counter) )
-    {
-        wxLongLong delta(counter.QuadPart);
-        delta -= m_t0;
+    // Under MSW we use the high resolution performance counter timer which has
+    // its own frequency (usually related to the CPU clock speed).
+    if ( gs_perfCounter.CanBeUsed() )
+        return gs_perfCounter.freq.QuadPart;
+#endif // __WXMSW__
 
-        return ((delta*1000)/gs_perfCounter.freq.QuadPart).GetLo();
-    }
-#endif
-    return (wxGetLocalTimeMillis() - m_t0).GetLo();
+    // Currently milliseconds are used everywhere else.
+    return MILLISECONDS_PER_SECOND;
 }
 
-long wxStopWatch::Time() const
+void wxStopWatch::Start(long t0)
 {
-    return m_pauseCount ? m_pause : GetElapsedTime();
+    DoStart();
+
+    m_t0 -= (wxLongLong(t0)*GetClockFreq())/MILLISECONDS_PER_SECOND;
+}
+
+wxLongLong wxStopWatch::GetCurrentClockValue() const
+{
+#ifdef __WXMSW__
+    if ( gs_perfCounter.CanBeUsed() )
+    {
+        LARGE_INTEGER counter;
+        ::QueryPerformanceCounter(&counter);
+        return counter.QuadPart;
+    }
+#endif // __WXMSW__
+
+    return wxGetLocalTimeMillis();
+}
+
+wxLongLong wxStopWatch::TimeInMicro() const
+{
+    const wxLongLong elapsed(m_pauseCount ? m_elapsedBeforePause
+                                          : GetCurrentClockValue() - m_t0);
+
+    return (elapsed*MICROSECONDS_PER_SECOND)/GetClockFreq();
 }
 
 #endif // wxUSE_STOPWATCH

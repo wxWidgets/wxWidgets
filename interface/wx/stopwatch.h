@@ -67,8 +67,21 @@ public:
     /**
         Returns the time in milliseconds since the start (or restart) or the last
         call of Pause().
+
+        @see TimeInMicro()
     */
     long Time() const;
+
+    /**
+        Returns elapsed time in microseconds.
+
+        This method is similar to Time() but returns the elapsed time in
+        microseconds and not milliseconds. Notice that not all platforms really
+        can measure times with this precision.
+
+        @since 2.9.3
+     */
+    wxLongLong TimeInMicro() const;
 };
 
 

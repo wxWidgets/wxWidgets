@@ -55,12 +55,21 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( StopWatchTestCase, "StopWatchTestCase" );
 
 void StopWatchTestCase::Misc()
 {
-    static const long tolerance = 100;  // in ms
+    static const long tolerance = 10;  // in ms
 
     wxStopWatch sw;
     long t;
+    wxLongLong usec;
 
     sw.Pause();         // pause it immediately
+
+    // verify that almost no time elapsed
+    usec = sw.TimeInMicro();
+    WX_ASSERT_MESSAGE
+    (
+        ("Elapsed time was %" wxLongLongFmtSpec "dus", usec),
+        usec < tolerance*1000
+    );
 
     wxSleep(1);
     t = sw.Time();

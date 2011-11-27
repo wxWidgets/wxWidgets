@@ -459,6 +459,7 @@ All:
 - Fix crash in wxArray::insert() overload taking iterator range (wsu).
 - Added wxEventFilter class and wxEvtHandler::{Add,Remove}Filter().
 - Added convenient wxCmdLineParser::AddLong{Option,Switch}() wrappers.
+- Added wxStopWatch::TimeInMicro().
 
 All (GUI):
 
