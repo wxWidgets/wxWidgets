@@ -57,6 +57,7 @@
 #endif
 
 #include "wx/datetime.h"
+#include "wx/time.h"
 
 // ============================================================================
 // implementation of wxDateTime
@@ -67,8 +68,6 @@
 // ----------------------------------------------------------------------------
 
 extern void InitTm(struct tm& tm);
-
-extern int GetTimeZone();
 
 extern wxString CallStrftime(const wxString& format, const tm* tm);
 
@@ -329,7 +328,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
         // use strftime()
         struct tm tmstruct;
         struct tm *tm;
-        if ( tz.GetOffset() == -GetTimeZone() )
+        if ( tz.GetOffset() == -wxGetTimeZone() )
         {
             // we are working with local time
             tm = wxLocaltime_r(&time, &tmstruct);

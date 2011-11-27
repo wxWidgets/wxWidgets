@@ -439,6 +439,7 @@ ALL_BASE_HEADERS =  \
 	wx/textfile.h \
 	wx/thread.h \
 	wx/thrimpl.cpp \
+	wx/time.h \
 	wx/timer.h \
 	wx/tls.h \
 	wx/tokenzr.h \
@@ -618,6 +619,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/textfile.h \
 	wx/thread.h \
 	wx/thrimpl.cpp \
+	wx/time.h \
 	wx/timer.h \
 	wx/tls.h \
 	wx/tokenzr.h \
@@ -785,6 +787,7 @@ ALL_BASE_SOURCES =  \
 	src/common/tarstrm.cpp \
 	src/common/textbuf.cpp \
 	src/common/textfile.cpp \
+	src/common/time.cpp \
 	src/common/timercmn.cpp \
 	src/common/timerimpl.cpp \
 	src/common/tokenzr.cpp \
@@ -984,6 +987,7 @@ MONODLL_OBJECTS =  \
 	monodll_tarstrm.o \
 	monodll_textbuf.o \
 	monodll_textfile.o \
+	monodll_common_time.o \
 	monodll_timercmn.o \
 	monodll_timerimpl.o \
 	monodll_tokenzr.o \
@@ -1117,6 +1121,7 @@ MONOLIB_OBJECTS =  \
 	monolib_tarstrm.o \
 	monolib_textbuf.o \
 	monolib_textfile.o \
+	monolib_common_time.o \
 	monolib_timercmn.o \
 	monolib_timerimpl.o \
 	monolib_tokenzr.o \
@@ -1245,6 +1250,7 @@ BASEDLL_OBJECTS =  \
 	basedll_tarstrm.o \
 	basedll_textbuf.o \
 	basedll_textfile.o \
+	basedll_common_time.o \
 	basedll_timercmn.o \
 	basedll_timerimpl.o \
 	basedll_tokenzr.o \
@@ -1356,6 +1362,7 @@ BASELIB_OBJECTS =  \
 	baselib_tarstrm.o \
 	baselib_textbuf.o \
 	baselib_textfile.o \
+	baselib_common_time.o \
 	baselib_timercmn.o \
 	baselib_timerimpl.o \
 	baselib_tokenzr.o \
@@ -4419,7 +4426,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fswatcher.o \
 	$(__BASE_WINCE_SRC_OBJECTS)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
-@COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS = monodll_time.o
+@COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS = monodll_wince_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_WIN32_1@	= monodll_msw_evtloop.o monodll_msw_main.o \
@@ -6377,7 +6384,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fswatcher.o \
 	$(__BASE_WINCE_SRC_OBJECTS_1)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
-@COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_1 = monolib_time.o
+@COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_1 = monolib_wince_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_WIN32_1@	= monolib_msw_evtloop.o monolib_msw_main.o \
@@ -8388,7 +8395,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fswatcher.o \
 	$(__BASE_WINCE_SRC_OBJECTS_2)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
-@COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_2 = basedll_time.o
+@COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_2 = basedll_wince_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_WIN32_1@	= basedll_evtloop.o basedll_main.o basedll_mslu.o \
@@ -8488,7 +8495,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fswatcher.o \
 	$(__BASE_WINCE_SRC_OBJECTS_3)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
-@COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_3 = baselib_time.o
+@COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_3 = baselib_wince_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_WIN32_1@	= baselib_evtloop.o baselib_main.o baselib_mslu.o \
@@ -15877,6 +15884,9 @@ monodll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONODLL_ODEP)
 monodll_textfile.o: $(srcdir)/src/common/textfile.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+monodll_common_time.o: $(srcdir)/src/common/time.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/time.cpp
+
 monodll_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
 
@@ -15994,7 +16004,7 @@ monodll_msw_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(MONODLL_ODEP)
 monodll_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
-monodll_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONODLL_ODEP)
+monodll_wince_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
 
 monodll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONODLL_ODEP)
@@ -21262,6 +21272,9 @@ monolib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONOLIB_ODEP)
 monolib_textfile.o: $(srcdir)/src/common/textfile.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+monolib_common_time.o: $(srcdir)/src/common/time.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/time.cpp
+
 monolib_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
 
@@ -21379,7 +21392,7 @@ monolib_msw_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(MONOLIB_ODEP)
 monolib_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
-monolib_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONOLIB_ODEP)
+monolib_wince_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
 
 monolib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONOLIB_ODEP)
@@ -26647,6 +26660,9 @@ basedll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASEDLL_ODEP)
 basedll_textfile.o: $(srcdir)/src/common/textfile.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+basedll_common_time.o: $(srcdir)/src/common/time.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/time.cpp
+
 basedll_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
 
@@ -26764,7 +26780,7 @@ basedll_msw_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(BASEDLL_ODEP)
 basedll_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
-basedll_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASEDLL_ODEP)
+basedll_wince_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
 
 basedll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASEDLL_ODEP)
@@ -27151,6 +27167,9 @@ baselib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASELIB_ODEP)
 baselib_textfile.o: $(srcdir)/src/common/textfile.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+baselib_common_time.o: $(srcdir)/src/common/time.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/time.cpp
+
 baselib_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
 
@@ -27268,7 +27287,7 @@ baselib_msw_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(BASELIB_ODEP)
 baselib_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
-baselib_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASELIB_ODEP)
+baselib_wince_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
 
 baselib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASELIB_ODEP)

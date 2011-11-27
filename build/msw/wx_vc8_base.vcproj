@@ -1151,6 +1151,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\time.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\timercmn.cpp"
 				>
 			</File>
@@ -2147,6 +2151,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\thread.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\time.h"
 				>
 			</File>
 			<File

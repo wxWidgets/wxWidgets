@@ -232,6 +232,7 @@ wx/textbuf.h
 wx/textfile.h
 wx/thread.h
 wx/thrimpl.cpp
+wx/time.h
 wx/timer.h
 wx/tls.h
 wx/tokenzr.h

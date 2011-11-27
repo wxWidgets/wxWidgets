@@ -3911,6 +3911,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_tarstrm.obj &
 	$(OBJS)\monodll_textbuf.obj &
 	$(OBJS)\monodll_textfile.obj &
+	$(OBJS)\monodll_time.obj &
 	$(OBJS)\monodll_timercmn.obj &
 	$(OBJS)\monodll_timerimpl.obj &
 	$(OBJS)\monodll_tokenzr.obj &
@@ -4058,6 +4059,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_tarstrm.obj &
 	$(OBJS)\monolib_textbuf.obj &
 	$(OBJS)\monolib_textfile.obj &
+	$(OBJS)\monolib_time.obj &
 	$(OBJS)\monolib_timercmn.obj &
 	$(OBJS)\monolib_timerimpl.obj &
 	$(OBJS)\monolib_tokenzr.obj &
@@ -4203,6 +4205,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_tarstrm.obj &
 	$(OBJS)\basedll_textbuf.obj &
 	$(OBJS)\basedll_textfile.obj &
+	$(OBJS)\basedll_time.obj &
 	$(OBJS)\basedll_timercmn.obj &
 	$(OBJS)\basedll_timerimpl.obj &
 	$(OBJS)\basedll_tokenzr.obj &
@@ -4333,6 +4336,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_tarstrm.obj &
 	$(OBJS)\baselib_textbuf.obj &
 	$(OBJS)\baselib_textfile.obj &
+	$(OBJS)\baselib_time.obj &
 	$(OBJS)\baselib_timercmn.obj &
 	$(OBJS)\baselib_timerimpl.obj &
 	$(OBJS)\baselib_tokenzr.obj &
@@ -6683,6 +6687,9 @@ $(OBJS)\monodll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_time.obj :  .AUTODEPEND ..\..\src\common\time.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_timercmn.obj :  .AUTODEPEND ..\..\src\common\timercmn.cpp
@@ -9087,6 +9094,9 @@ $(OBJS)\monolib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 $(OBJS)\monolib_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_time.obj :  .AUTODEPEND ..\..\src\common\time.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_timercmn.obj :  .AUTODEPEND ..\..\src\common\timercmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -11489,6 +11499,9 @@ $(OBJS)\basedll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 $(OBJS)\basedll_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_time.obj :  .AUTODEPEND ..\..\src\common\time.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_timercmn.obj :  .AUTODEPEND ..\..\src\common\timercmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -11823,6 +11836,9 @@ $(OBJS)\baselib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_time.obj :  .AUTODEPEND ..\..\src\common\time.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_timercmn.obj :  .AUTODEPEND ..\..\src\common\timercmn.cpp

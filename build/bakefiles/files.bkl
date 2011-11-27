@@ -382,6 +382,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/tarstrm.cpp
     src/common/textbuf.cpp
     src/common/textfile.cpp
+    src/common/time.cpp
     src/common/timercmn.cpp
     src/common/timerimpl.cpp
     src/common/tokenzr.cpp
@@ -527,6 +528,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/textfile.h
     wx/thread.h
     wx/thrimpl.cpp
+    wx/time.h
     wx/timer.h
     wx/tls.h
     wx/tokenzr.h

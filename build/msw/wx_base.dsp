@@ -531,6 +531,10 @@ SOURCE=..\..\src\common\textfile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\time.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\timercmn.cpp
 # End Source File
 # Begin Source File
@@ -1560,6 +1564,10 @@ SOURCE=..\..\include\wx\textfile.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\thread.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\time.h
 # End Source File
 # Begin Source File
 
