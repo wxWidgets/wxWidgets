@@ -105,7 +105,11 @@ long wxGetLocalTime();
 /**
     Returns the number of milliseconds since local time 00:00:00 Jan 1st 1970.
 
-    @see wxDateTime::Now(), wxLongLong
+    The use of wxGetUTCTimeMillis() is preferred as it provides a usually
+    (except for changes to the system time) monotonic clock which the local
+    time also changes whenever DST begins or ends.
+
+    @see wxDateTime::Now(), wxGetUTCTimeMillis(), wxGetUTCTimeUSec()
 
     @header{wx/stopwatch.h}
 */
@@ -119,6 +123,20 @@ wxLongLong wxGetLocalTimeMillis();
     @header{wx/stopwatch.h}
 */
 long wxGetUTCTime();
+
+/**
+    Returns the number of milliseconds since GMT 00:00:00 Jan 1st 1970.
+
+    @since 2.9.3
+ */
+wxLongLong wxGetUTCTimeMillis();
+
+/**
+    Returns the number of microseconds since GMT 00:00:00 Jan 1st 1970.
+
+    @since 2.9.3
+ */
+wxLongLong wxGetUTCTimeUSec();
 
 //@}
 

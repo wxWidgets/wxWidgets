@@ -1,10 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/stopwatch.h
 // Purpose:     wxStopWatch and global time-related functions
-// Author:      Julian Smart (wxTimer), Sylvain Bougnoux (wxStopWatch)
+// Author:      Julian Smart (wxTimer), Sylvain Bougnoux (wxStopWatch),
+//              Vadim Zeitlin (time functions, current wxStopWatch)
 // Created:     26.06.03 (extracted from wx/timer.h)
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998-2003 Julian Smart, Sylvain Bougnoux
+//              (c) 2011 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,6 +15,11 @@
 
 #include "wx/defs.h"
 #include "wx/longlong.h"
+
+// Time-related functions are also available via this header for compatibility
+// but you should include wx/time.h directly if you need only them and not
+// wxStopWatch itself.
+#include "wx/time.h"
 
 // ----------------------------------------------------------------------------
 // wxStopWatch: measure time intervals with up to 1ms resolution
@@ -115,6 +122,14 @@ extern long WXDLLIMPEXP_BASE wxGetUTCTime();
 
 // Get number of milliseconds since local time 00:00:00 Jan 1st 1970
 extern wxMilliClock_t WXDLLIMPEXP_BASE wxGetLocalTimeMillis();
+
+#if wxUSE_LONGLONG
+
+// Get the number of milliseconds or microseconds since the Epoch.
+wxLongLong WXDLLIMPEXP_BASE wxGetUTCTimeMillis();
+wxLongLong WXDLLIMPEXP_BASE wxGetUTCTimeUSec();
+
+#endif // wxUSE_LONGLONG
 
 #define wxGetCurrentTime() wxGetLocalTime()
 

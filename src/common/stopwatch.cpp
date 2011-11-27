@@ -42,10 +42,6 @@
 // System headers
 // ----------------------------------------------------------------------------
 
-#if defined(__WIN32__) && !defined(HAVE_FTIME) && !defined(__MWERKS__) && !defined(__WXWINCE__)
-    #define HAVE_FTIME
-#endif
-
 #if defined(__VISAGECPP__) && !defined(HAVE_FTIME)
     #define HAVE_FTIME
 #  if __IBMCPP__ >= 400
@@ -120,6 +116,7 @@ struct PerfCounter
 #endif // __WXMSW__
 
 const int MILLISECONDS_PER_SECOND = 1000;
+const int MICROSECONDS_PER_MILLISECOND = 1000;
 const int MICROSECONDS_PER_SECOND = 1000*1000;
 
 } // anonymous namespace
@@ -265,14 +262,43 @@ long wxGetUTCTime()
 
 #if wxUSE_LONGLONG
 
+wxLongLong wxGetUTCTimeUSec()
+{
+#if defined(__WXMSW__)
+    FILETIME ft;
+    ::GetSystemTimeAsFileTime(&ft);
+
+    // FILETIME is in 100ns or 0.1us since 1601-01-01, transform to us since
+    // 1970-01-01.
+    wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
+    t /= 10;
+    t -= wxLL(11644473600000000); // Unix - Windows epochs difference in us.
+    return t;
+#else // non-MSW
+
+#ifdef HAVE_GETTIMEOFDAY
+    timeval tv;
+    if ( wxGetTimeOfDay(&tv) != -1 )
+    {
+        wxLongLong val(tv.tv_sec);
+        val *= MICROSECONDS_PER_SECOND;
+        val += tv.tv_usec;
+        return val;
+    }
+#endif // HAVE_GETTIMEOFDAY
+
+    // Fall back to lesser precision function.
+    return wxGetUTCTimeMillis()*1000;
+#endif // MSW/!MSW
+}
+
 // Get local time as milliseconds since 00:00:00, Jan 1st 1970
-wxLongLong wxGetLocalTimeMillis()
+wxLongLong wxGetUTCTimeMillis()
 {
     wxLongLong val = 1000l;
 
     // If possible, use a function which avoids conversions from
     // broken-up time structures to milliseconds
-
 #if defined(__WXPALMOS__)
     DateTimeType thenst;
     thenst.second  = 0;
@@ -285,23 +311,16 @@ wxLongLong wxGetLocalTimeMillis()
     uint32_t now = TimGetSeconds();
     uint32_t then = TimDateTimeToSeconds (&thenst);
     return SysTimeToMilliSecs(SysTimeInSecs(now - then));
-#elif defined(__WXMSW__) && (defined(__WINE__) || defined(__MWERKS__))
-    // This should probably be the way all WXMSW compilers should do it
-    // Go direct to the OS for time
+#elif defined(__WXMSW__)
+    FILETIME ft;
+    ::GetSystemTimeAsFileTime(&ft);
 
-    SYSTEMTIME thenst = { 1970, 1, 4, 1, 0, 0, 0, 0 };  // 00:00:00 Jan 1st 1970
-    FILETIME thenft;
-    SystemTimeToFileTime( &thenst, &thenft );
-    wxLongLong then( thenft.dwHighDateTime, thenft.dwLowDateTime );   // time in 100 nanoseconds
-
-    SYSTEMTIME nowst;
-    GetLocalTime( &nowst );
-    FILETIME nowft;
-    SystemTimeToFileTime( &nowst, &nowft );
-    wxLongLong now( nowft.dwHighDateTime, nowft.dwLowDateTime );   // time in 100 nanoseconds
-
-    return ( now - then ) / 10000.0;  // time from 00:00:00 Jan 1st 1970 to now in milliseconds
-
+    // FILETIME is expressed in 100ns (or 0.1us) units since 1601-01-01,
+    // transform them to ms since 1970-01-01.
+    wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
+    t /= 10000;
+    t -= wxLL(11644473600000); // Unix - Windows epochs difference in ms.
+    return t;
 #elif defined(HAVE_GETTIMEOFDAY)
     struct timeval tp;
     if ( wxGetTimeOfDay(&tp) != -1 )
@@ -323,32 +342,6 @@ wxLongLong wxGetLocalTimeMillis()
     val *= tp.time;
     return (val + tp.millitm);
 #else // no gettimeofday() nor ftime()
-    // We use wxGetLocalTime() to get the seconds since
-    // 00:00:00 Jan 1st 1970 and then whatever is available
-    // to get millisecond resolution.
-    //
-    // NOTE that this might lead to a problem if the clocks
-    // use different sources, so this approach should be
-    // avoided where possible.
-
-    val *= wxGetLocalTime();
-
-// GRG: This will go soon as all WIN32 seem to have ftime
-// JACS: unfortunately not. WinCE doesn't have it.
-#if defined (__WIN32__)
-    // If your platform/compiler needs to use two different functions
-    // to get ms resolution, please do NOT just shut off these warnings,
-    // drop me a line instead at <guille@iies.es>
-
-    // FIXME
-#ifndef __WXWINCE__
-    #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
-#endif
-
-    SYSTEMTIME st;
-    ::GetLocalTime(&st);
-    val += st.wMilliseconds;
-#else // !Win32
     // If your platform/compiler does not support ms resolution please
     // do NOT just shut off these warnings, drop me a line instead at
     // <guille@iies.es>
@@ -360,11 +353,15 @@ wxLongLong wxGetLocalTimeMillis()
     #else
         #warning "wxStopWatch will be up to second resolution!"
     #endif // compiler
-#endif
 
+    val *= wxGetUTCTime();
     return val;
-
 #endif // time functions
+}
+
+wxLongLong wxGetLocalTimeMillis()
+{
+    return wxGetUTCTimeMillis() - wxGetTimeZone()*MILLISECONDS_PER_SECOND;
 }
 
 #else // !wxUSE_LONGLONG
