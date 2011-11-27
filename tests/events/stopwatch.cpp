@@ -62,7 +62,7 @@ void StopWatchTestCase::Misc()
 
     sw.Pause();         // pause it immediately
 
-    wxSleep(2);
+    wxSleep(1);
     t = sw.Time();
 
     // check that the stop watch doesn't advance while paused
@@ -72,27 +72,31 @@ void StopWatchTestCase::Misc()
         t >= 0 && t < tolerance
     );
 
+    static const int sleepTime = 500;
     sw.Resume();
-    wxSleep(3);
+    wxMilliSleep(sleepTime);
     t = sw.Time();
-    // check that it did advance now by ~3s
+    // check that it did advance now by ~1.5s
     WX_ASSERT_MESSAGE
     (
         ("Actual time value is %ld", t),
-        t > 3000 - tolerance && t < 3000 + tolerance
+        t > sleepTime - tolerance && t < sleepTime + tolerance
     );
 
     sw.Pause();
+
+    // check that this sleep won't be taken into account below
+    wxMilliSleep(sleepTime);
     sw.Resume();
 
-    wxSleep(2);
+    wxMilliSleep(sleepTime);
     t = sw.Time();
 
     // and it should advance again
     WX_ASSERT_MESSAGE
     (
         ("Actual time value is %ld", t),
-        t > 5000 - tolerance && t < 5000 + tolerance
+        t > 2*sleepTime - tolerance && t < 2*sleepTime + tolerance
     );
 }
 
