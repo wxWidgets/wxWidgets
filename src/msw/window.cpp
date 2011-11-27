@@ -6316,6 +6316,9 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
             // don't use ChooseNormalOrExtended() here as the keys are reversed
             // here: numpad enter is the extended one
             wxk = HIWORD(lParam) & KF_EXTENDED ? WXK_NUMPAD_ENTER : WXK_RETURN;
+
+            if ( uc )
+                *uc = WXK_RETURN;
             break;
 
         default:
