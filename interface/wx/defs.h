@@ -479,12 +479,12 @@ enum wxBorder
 #define wxICON_STOP             wxICON_HAND
 #define wxICON_ASTERISK         wxICON_INFORMATION
 
-#define  wxFORWARD              0x00001000
-#define  wxBACKWARD             0x00002000
-#define  wxRESET                0x00004000
-#define  wxHELP                 0x00008000
-#define  wxMORE                 0x00010000
-#define  wxSETUP                0x00020000
+#define wxHELP                  0x00001000
+#define wxFORWARD               0x00002000
+#define wxBACKWARD              0x00004000
+#define wxRESET                 0x00008000
+#define wxMORE                  0x00010000
+#define wxSETUP                 0x00020000
 #define wxICON_NONE             0x00040000
 
 #define wxICON_MASK \

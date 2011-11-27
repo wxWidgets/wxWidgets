@@ -70,14 +70,14 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 #define wxICONIZE               0x4000
 #define wxMINIMIZE              wxICONIZE
 #define wxMAXIMIZE              0x2000
-#define wxCLOSE_BOX             0x1000
+#define wxCLOSE_BOX             0x1000  // == wxHELP so can't be used with it
 
 #define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
 
 #define wxTINY_CAPTION          0x0080  // clashes with wxNO_DEFAULT
-#define wxRESIZE_BORDER         0x0040
+#define wxRESIZE_BORDER         0x0040  // == wxCLOSE
 
 #if WXWIN_COMPATIBILITY_2_8
     // HORIZ and VERT styles are equivalent anyhow so don't use different names
