@@ -132,7 +132,7 @@
     };
 
     #define wxTLS_TYPE(T) wxTlsValue<T>
-    #define wxTLS_PTR(var) (var)
+    #define wxTLS_PTR(var) ((var).Get())
     #define wxTLS_VALUE(var) (*(var))
 #endif // wxHAS_COMPILER_TLS/!wxHAS_COMPILER_TLS
 
