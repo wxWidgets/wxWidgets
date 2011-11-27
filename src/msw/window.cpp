@@ -3153,6 +3153,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     case VK_OEM_5:
                     case VK_OEM_6:
                     case VK_OEM_7:
+                    case VK_OEM_102:
                     case VK_OEM_PLUS:
                     case VK_OEM_COMMA:
                     case VK_OEM_MINUS:
@@ -6238,6 +6239,7 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
         case VK_OEM_5:
         case VK_OEM_6:
         case VK_OEM_7:
+        case VK_OEM_102:
             // MapVirtualKey() returns 0 if it fails to convert the virtual
             // key which nicely corresponds to our WXK_NONE.
             wxk = ::MapVirtualKey(vk, MAPVK_VK_TO_CHAR);

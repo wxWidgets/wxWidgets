@@ -94,6 +94,7 @@
     #define VK_OEM_5        0xDC
     #define VK_OEM_6        0xDD
     #define VK_OEM_7        0xDE
+    #define VK_OEM_102      0xE2
 #endif
 
 #ifndef VK_OEM_COMMA
