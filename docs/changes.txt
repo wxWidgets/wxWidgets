@@ -517,6 +517,7 @@ MSW:
 - Added wxTopLevelWindow::MSWGetSystemMenu().
 - Multiline text controls no longer select all content when gaining focus from
   the keyboard.
+- Implement wxStackWalker for x86-64 (Artur Bać).
 
 
 2.9.2: (released 2011-07-05)

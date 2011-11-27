@@ -2,7 +2,7 @@
 // Name:        src/msw/stackwalk.cpp
 // Purpose:     wxStackWalker implementation for Win32
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Artur Bac 2010-10-01 AMD64 Port
 // Created:     2005-01-08
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwindows.org>
@@ -253,7 +253,16 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
     STACKFRAME sf;
     wxZeroMemory(sf);
 
-#ifdef _M_IX86
+#if defined(_M_AMD64)
+    sf.AddrPC.Offset       = ctx.Rip;
+    sf.AddrPC.Mode         = AddrModeFlat;
+    sf.AddrStack.Offset    = ctx.Rsp;
+    sf.AddrStack.Mode      = AddrModeFlat;
+    sf.AddrFrame.Offset    = ctx.Rbp;
+    sf.AddrFrame.Mode      = AddrModeFlat;
+
+    dwMachineType = IMAGE_FILE_MACHINE_AMD64;
+#elif  defined(_M_IX86)
     sf.AddrPC.Offset       = ctx.Eip;
     sf.AddrPC.Mode         = AddrModeFlat;
     sf.AddrStack.Offset    = ctx.Esp;

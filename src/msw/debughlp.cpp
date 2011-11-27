@@ -50,7 +50,8 @@ static wxString gs_errMsg;
 // static members
 // ----------------------------------------------------------------------------
 
-#define DEFINE_SYM_FUNCTION(func) wxDbgHelpDLL::func ## _t wxDbgHelpDLL::func = 0
+#define DEFINE_SYM_FUNCTION(func, name) \
+    wxDbgHelpDLL::func ## _t wxDbgHelpDLL::func = 0
 
 wxDO_FOR_ALL_SYM_FUNCS(DEFINE_SYM_FUNCTION);
 
@@ -64,12 +65,12 @@ wxDO_FOR_ALL_SYM_FUNCS(DEFINE_SYM_FUNCTION);
 
 static bool BindDbgHelpFunctions(const wxDynamicLibrary& dllDbgHelp)
 {
-    #define LOAD_SYM_FUNCTION(name)                                           \
-        wxDbgHelpDLL::name = (wxDbgHelpDLL::name ## _t)                       \
-                                dllDbgHelp.GetSymbol(wxT(#name));              \
-        if ( !wxDbgHelpDLL::name )                                            \
+    #define LOAD_SYM_FUNCTION(func, name)                                     \
+        wxDbgHelpDLL::func = (wxDbgHelpDLL::func ## _t)                       \
+            dllDbgHelp.GetSymbol(wxT(#name));                                 \
+        if ( !wxDbgHelpDLL::func )                                            \
         {                                                                     \
-            gs_errMsg += wxT("Function ") wxT(#name) wxT("() not found.\n");     \
+            gs_errMsg += wxT("Function ") wxT(#name) wxT("() not found.\n");  \
             return false;                                                     \
         }
 
@@ -281,7 +282,7 @@ wxDbgHelpDLL::DumpBaseType(BasicType bt, DWORD64 length, PVOID pAddress)
         }
         else // opaque 64 bit value
         {
-            s.Printf("%#" wxLongLongFmtSpec "x", *(PDWORD *)pAddress);
+            s.Printf("%#" wxLongLongFmtSpec "x", *(wxLongLong_t *)pAddress);
         }
     }
 

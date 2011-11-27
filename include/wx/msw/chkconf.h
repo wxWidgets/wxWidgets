@@ -224,11 +224,6 @@
  */
 #ifdef __WIN64__
 #   if wxUSE_STACKWALKER
-        /* this is not currently supported under Win64, volunteers needed to
-           make it work */
-#       undef wxUSE_STACKWALKER
-#       define wxUSE_STACKWALKER 0
-
 #       undef wxUSE_CRASHREPORT
 #       define wxUSE_CRASHREPORT 0
 #   endif
