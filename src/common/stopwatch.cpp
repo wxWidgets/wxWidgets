@@ -134,7 +134,7 @@ wxLongLong wxStopWatch::GetCurrentClockValue() const
     }
 #endif // __WXMSW__
 
-    return wxGetLocalTimeMillis();
+    return wxGetUTCTimeMillis();
 }
 
 wxLongLong wxStopWatch::TimeInMicro() const
@@ -158,14 +158,14 @@ static wxLongLong wxStartTime = 0l;
 // starts the global timer
 void wxStartTimer()
 {
-    wxStartTime = wxGetLocalTimeMillis();
+    wxStartTime = wxGetUTCTimeMillis();
 }
 
 // Returns elapsed time in milliseconds
 long wxGetElapsedTime(bool resetTimer)
 {
     wxLongLong oldTime = wxStartTime;
-    wxLongLong newTime = wxGetLocalTimeMillis();
+    wxLongLong newTime = wxGetUTCTimeMillis();
 
     if ( resetTimer )
         wxStartTime = newTime;
