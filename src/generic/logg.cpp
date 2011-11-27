@@ -73,7 +73,7 @@
     #include <wtime.h>
 #endif
 
-#include "wx/datetime.h"
+#include "wx/time.h"
 
 // the suffix we add to the button to show that the dialog can be expanded
 #define EXPAND_SUFFIX wxT(" >>")
@@ -90,7 +90,6 @@
 // allows to exclude the usage of wxDateTime
 static wxString TimeStamp(const wxString& format, time_t t)
 {
-#if wxUSE_DATETIME
     wxChar buf[4096];
     struct tm tm;
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, wxLocaltime_r(&t, &tm)) )
@@ -99,9 +98,6 @@ static wxString TimeStamp(const wxString& format, time_t t)
         wxFAIL_MSG(wxT("strftime() failed"));
     }
     return wxString(buf);
-#else // !wxUSE_DATETIME
-    return wxEmptyString;
-#endif // wxUSE_DATETIME/!wxUSE_DATETIME
 }
 
 
