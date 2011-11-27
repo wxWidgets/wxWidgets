@@ -1184,8 +1184,6 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
     // extents are in HIMETRIC units
     if (m_oleObject.IsOk())
     {
-        m_oleObject->DoVerb(OLEIVERB_HIDE, 0, m_clientSite, 0,
-            (HWND)m_realparent->GetHWND(), &posRect);
 
         SIZEL sz = {w, h};
         PixelsToHimetric(sz);
@@ -1196,8 +1194,6 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
         if (sz2.cx !=  sz.cx || sz.cy != sz2.cy)
             m_oleObject->SetExtent(DVASPECT_CONTENT, &sz);
 
-        m_oleObject->DoVerb(OLEIVERB_SHOW, 0, m_clientSite, 0,
-            (HWND)m_realparent->GetHWND(), &posRect);
     }
 
     if (m_oleInPlaceObject.IsOk())
