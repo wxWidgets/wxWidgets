@@ -8713,7 +8713,7 @@ bool wxRichTextBitlistsEqPartial(int valueA, int valueB, int flags)
 {
     int relevantBitsA = valueA & flags;
     int relevantBitsB = valueB & flags;
-    return (relevantBitsA != relevantBitsB);
+    return (relevantBitsA == relevantBitsB);
 }
 
 /// Split into paragraph and character styles
