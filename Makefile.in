@@ -2125,6 +2125,14 @@ COND_USE_STC_1___wxscintilla___depname = \
 @COND_TOOLKIT_WINCE@	wx/msw/wince/chkconf.h
 @COND_TOOLKIT_WINCE@NET_WINCE_SRC = src/msw/wince/net.cpp
 @COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
+@COND_PLATFORM_MACOSX_1@WEBVIEW_HDR_PLATFORM = \
+@COND_PLATFORM_MACOSX_1@	wx/osx/webviewhistoryitem_webkit.h \
+@COND_PLATFORM_MACOSX_1@	wx/osx/webview_webkit.h
+@COND_PLATFORM_UNIX_1@WEBVIEW_HDR_PLATFORM = \
+@COND_PLATFORM_UNIX_1@	wx/gtk/webviewhistoryitem_webkit.h \
+@COND_PLATFORM_UNIX_1@	wx/gtk/webview_webkit.h
+@COND_TOOLKIT_MSW@WEBVIEW_HDR_PLATFORM = \
+@COND_TOOLKIT_MSW@	wx/msw/webviewhistoryitem_ie.h wx/msw/webview_ie.h
 @COND_TOOLKIT_OSX_CARBON@OPENGL_HDR_PLATFORM = wx/osx/glcanvas.h
 @COND_TOOLKIT_OSX_COCOA@OPENGL_HDR_PLATFORM = wx/osx/glcanvas.h
 @COND_TOOLKIT_COCOA@OPENGL_HDR_PLATFORM = wx/cocoa/glcanvas.h
@@ -4261,7 +4269,9 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/richtext/richtextuicustomization.h \
 	wx/richtext/richtextxml.h \
 	wx/stc/stc.h \
-	${WEBVIEW_HDR}
+	$(WEBVIEW_HDR_PLATFORM) \
+	wx/webview.h \
+	wx/webviewarchivehandler.h
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
 COND_MONOLITHIC_1_SHARED_1___monodll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)

@@ -5444,6 +5444,14 @@ SOURCE=..\..\include\wx\msw\uxthemep.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\webview_ie.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\webviewhistoryitem_ie.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\window.h
 # End Source File
 # End Group
@@ -7009,6 +7017,14 @@ SOURCE=..\..\include\wx\vms_x_fix.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\vscroll.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\webview.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\webviewarchivehandler.h
 # End Source File
 # Begin Source File
 

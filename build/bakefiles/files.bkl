@@ -4013,7 +4013,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
             $(OPENGL_HDR) $(QA_HDR) $(XRC_HDR) $(AUI_HDR) $(PROPGRID_HDR)
-            $(RIBBON_HDR) $(RICHTEXT_HDR) $(STC_HDR) ${WEBVIEW_HDR}
+            $(RIBBON_HDR) $(RICHTEXT_HDR) $(STC_HDR) $(WEBVIEW_HDR)
         </if>
     </set>
 

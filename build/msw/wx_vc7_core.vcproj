@@ -4655,6 +4655,12 @@
 				RelativePath="..\..\include\wx\msw\uxthemep.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\webview_ie.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\webviewhistoryitem_ie.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\window.h">
 			</File>
 		</Filter>
@@ -5833,6 +5839,12 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\vscroll.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\webview.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\webviewarchivehandler.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\persist\window.h">
