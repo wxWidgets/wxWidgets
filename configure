@@ -47219,15 +47219,25 @@ fi
 	echo "$LIBGNOMEPRINTUI_PKG_ERRORS" >&5
 
 
-                        { echo "$as_me:$LINENO: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
+                        if test "$wxUSE_GTKPRINT" = yes; then
+                            { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+                        else
+                            { echo "$as_me:$LINENO: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
 echo "$as_me: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&2;}
+                        fi
                         wxUSE_LIBGNOMEPRINT="no"
 
 
 elif test $pkg_failed = untried; then
 
-                        { echo "$as_me:$LINENO: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
+                        if test "$wxUSE_GTKPRINT" = yes; then
+                            { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+                        else
+                            { echo "$as_me:$LINENO: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
 echo "$as_me: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&2;}
+                        fi
                         wxUSE_LIBGNOMEPRINT="no"
 
 

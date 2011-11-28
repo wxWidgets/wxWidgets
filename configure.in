@@ -5839,7 +5839,11 @@ if test "$WXGTK2" = 1; then
                         AC_DEFINE(wxUSE_LIBGNOMEPRINT)
                     ],
                     [
-                        AC_MSG_WARN([libgnomeprintui not found, library will use standard PostScript printing])
+                        if test "$wxUSE_GTKPRINT" = yes; then
+                            AC_MSG_RESULT(no)
+                        else
+                            AC_MSG_WARN([libgnomeprintui not found, library will use standard PostScript printing])
+                        fi
                         wxUSE_LIBGNOMEPRINT="no"
                     ]
                 )
