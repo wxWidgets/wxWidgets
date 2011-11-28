@@ -466,11 +466,11 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
     {
         // since GTK>=2.6, we can use the glib_check_version() symbol...
 
-        // check whether GLib version is greater than 2.6 but also lower than 2.19
+        // check whether GLib version is greater than 2.6 but also lower than 2.31
         // because, as we use the undocumented _GOptionGroup struct, we don't want
-        // to run this code with future versions which might change it (2.19 is the
+        // to run this code with future versions which might change it (2.30 is the
         // latest one at the time of this writing)
-        if (!glib_check_version(2,6,0) && glib_check_version(2,20,0))
+        if (glib_check_version(2,6,0) == NULL && glib_check_version(2,31,0))
         {
             usage << _("The following standard GTK+ options are also supported:\n");
 
