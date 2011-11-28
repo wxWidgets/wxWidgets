@@ -186,6 +186,8 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
                 accelFlags |= wxACCEL_ALT;
             else if ( CompareAccelString(current, wxTRANSLATE("shift")) )
                 accelFlags |= wxACCEL_SHIFT;
+            else if ( CompareAccelString(current, wxTRANSLATE("rawctrl")) )
+                accelFlags |= wxACCEL_RAW_CTRL;
             else // not a recognized modifier name
             {
                 // we may have "Ctrl-+", for example, but we still want to
@@ -311,7 +313,11 @@ wxString wxAcceleratorEntry::ToString() const
         text += _("Ctrl+");
     if ( flags & wxACCEL_SHIFT )
         text += _("Shift+");
-
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
+    if ( flags & wxACCEL_RAW_CTRL )
+        text += _("RawCtrl+");
+#endif
+    
     const int code = GetKeyCode();
 
     if ( code >= WXK_F1 && code <= WXK_F12 )
