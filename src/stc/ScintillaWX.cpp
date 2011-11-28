@@ -919,6 +919,14 @@ void ScintillaWX::DoAddChar(int key) {
 int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
 {
     int key = evt.GetKeyCode();
+    if (key == WXK_NONE) {
+        // This is a Unicode character not representable in Latin-1 or some key
+        // without key code at all (e.g. dead key or VK_PROCESSKEY under MSW).
+        if ( consumed )
+            *consumed = false;
+        return 0;
+    }
+
     bool shift = evt.ShiftDown(),
          ctrl  = evt.ControlDown(),
          alt   = evt.AltDown();
