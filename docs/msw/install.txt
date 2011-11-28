@@ -24,17 +24,21 @@ fixing the problems so this ensures that your report will be
 addressed sooner.
 
 
-Unarchiving
-===========
+Table of Contents:
+ - Installation
+ - Building wxWidgets
+ - Configuring the Build
+ - Building Applications Using wxWidgets
+
+
+Installation
+============
 
 Please simply uncompress the .zip file manually into any directory.
 However we advise avoiding using directories with spaces in their
 names (notably "C:\Program Files") as this risks creating problems
 with makefiles and other command-line tools.
 
-
-Configuration
-=============
 
 In the majority of cases, you don't need to change the default
 library build configuration. If you wish to change some of the build
@@ -50,13 +54,21 @@ Notice that this file is later copied into a directory under lib for
 each of the build configurations which allows to have different
 build options for different configurations too.
 
+See "Configuring the Build" section for more information.
 
-Compilation
-===========
+
+Building wxWidgets
+==================
 
 The following sections explain how to compile wxWidgets with each supported
-compiler. Search for one of Microsoft/Borland/Watcom/Symantec/Metrowerks/
-Cygwin/Mingw32 to quickly locate the instructions for your compiler.
+compiler, see the "Building Applications" section about the instructions for
+building your application using wxWidgets.
+
+Search for one of Microsoft/Borland/Watcom/Symantec/Metrowerks/Cygwin/Mingw32
+to quickly locate the instructions for your compiler. Notice that the primary
+compilers for wxWidgets under MSW are Microsoft Visual C++ and GNU g++, other
+compilers are more rarely tested and might not work so please consider using
+one of these two if possible.
 
 All makefiles and project are located in build\msw directory.
 
@@ -874,10 +886,40 @@ you to have two static debug builds, one with wxUSE_SOCKETS=0 and one with socke
 enabled (without CFG, both of them would be put into same directory and there
 would be conflicts between the files).
 
-General Notes
-=================================================================
 
-- Debugging: under Windows 95, debugging output isn't output in
-  the same way that it is under NT or Windows 3.1.
-  Please see DebugView available from http://www.sysinternals.com.
+Building Applications Using wxWidgets
+=====================================
 
+NB: The makefiles and project files provided with wxWidgets samples show which
+    flags should be used when building applications using wxWidgets so in case
+    of a problem, e.g. if the instructions here are out of date, you can always
+    simply copy a makefile or project file from samples\minimal or some other
+    sample and adapt it to your application.
+
+Independently of the compiler and make/IDE you are using you must do the
+following to use wxWidgets:
+
+* Add $WXWIN/include to the
+  - compiler
+  - resource compiler
+  include paths.
+* Define the following symbols for the preprocessor:
+  - __WXMSW__ to ensure you use the correct wxWidgets port.
+  - _UNICODE unless you want to use deprecated ANSI build of wxWidgets.
+  - NDEBUG if you want to build in release mode, i.e. disable asserts.
+  - WXUSINGDLL if you are using DLL build of wxWidgets.
+* Add $WXWIN/lib/prefix_lib-or-dll to the libraries path. The prefix depends
+  on the compiler, by default it is "vc" for MSVC, "gcc" for g++ and so on.
+* Add the list of libraries to link with to the linker input. The exact list
+  depends on which libraries you use and whether you built wxWidgets in
+  monolithic or default multlib mode and basically should include all the
+  relevant libraries from the directory above, e.g. "wxmsw29ud_core.lib
+  wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
+  wxexpatd.lib" for a debug build of an application using the core library only
+  (all wxWidgets applications use the base library).
+
+
+Microsoft Visual C++ users can simplify the linker setup by prepending the
+directory $WXWIN/msvc to the include path (it must come before $WXWIN/include
+directory!) and omitting the last step: the required libraries will be linked
+in automatically using the "#pragma comment(lib)" feature of this compiler.
