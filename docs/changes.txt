@@ -477,6 +477,7 @@ All (GUI):
 - Allow setting window shape to arbitrary wxGraphicsPath.
 - Added wxTextEntry::AutoCompleteDirectories().
 - Support float, double and file name values in wxGenericValidator (troelsk).
+- Add support for custom numeric formats to wxGrid (Kinaou Hervé).
 - Fix keyboard navigation in wxGrid with hidden columns (ivan_14_32).
 - Add wxDataViewEvent::IsEditCancelled() (Allonii).
 - Send EVT_DATAVIEW_ITEM_CONTEXT_MENU events even when not clicking on an item.

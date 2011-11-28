@@ -179,6 +179,31 @@ public:
 };
 
 /**
+    Specifier used to format the data to string for the numbers handled by
+    wxGridCellFloatRenderer and wxGridCellFloatEditor.
+
+    @since 2.9.3
+*/
+enum wxGridCellFloatFormat
+{
+    /// Decimal floating point (%f).
+    wxGRID_FLOAT_FORMAT_FIXED       = 0x0010,
+
+    /// Scientific notation (mantise/exponent) using e character (%e).
+    wxGRID_FLOAT_FORMAT_SCIENTIFIC  = 0x0020,
+
+    /// Use the shorter of %e or %f (%g).
+    wxGRID_FLOAT_FORMAT_COMPACT     = 0x0040,
+
+    /// To use in combination with one of the above formats for the upper
+    /// case version (%F/%E/%G)
+    wxGRID_FLOAT_FORMAT_UPPER       = 0x0080,
+
+    /// The format used by default (wxGRID_FLOAT_FORMAT_FIXED).
+    wxGRID_FLOAT_FORMAT_DEFAULT     = wxGRID_FLOAT_FORMAT_FIXED
+};
+
+/**
     @class wxGridCellFloatRenderer
 
     This class may be used to format floating point data in a cell.
@@ -201,8 +226,22 @@ public:
             Minimum number of characters to be shown.
         @param precision
             Number of digits after the decimal dot.
+        @param format
+            The format used to display the string, must be a combination of
+            wxGridCellFloatFormat enum elements. This parameter is only
+            available since wxWidgets 2.9.3.
     */
-    wxGridCellFloatRenderer(int width = -1, int precision = -1);
+    wxGridCellFloatRenderer(int width = -1, int precision = -1,
+                            int format = wxGRID_FLOAT_FORMAT_DEFAULT);
+
+    /**
+        Returns the specifier used to format the data to string.
+
+        The returned value is a combination of wxGridCellFloatFormat elements.
+
+        @since 2.9.3
+    */
+    int GetFormat() const;
 
     /**
         Returns the precision.
@@ -215,7 +254,18 @@ public:
     int GetWidth() const;
 
     /**
-        Parameters string format is "width[,precision]".
+        Set the format to use for display the number.
+
+        @param format
+            Must be a combination of wxGridCellFloatFormat enum elements.
+
+        @since 2.9.3
+    */
+    void SetFormat(int format);
+
+    /**
+        The parameters string format is "width[,precision[,format]]" where
+        @c format should be choosen beween f|e|g|E|G (f is used by default)
     */
     virtual void SetParameters(const wxString& params);
 
@@ -596,11 +646,17 @@ public:
             Minimum number of characters to be shown.
         @param precision
             Number of digits after the decimal dot.
+        @param format
+            The format to use for displaying the number, a combination of
+            wxGridCellFloatFormat enum elements. This parameter is only
+            available since wxWidgets 2.9.3.
     */
-    wxGridCellFloatEditor(int width = -1, int precision = -1);
+    wxGridCellFloatEditor(int width = -1, int precision = -1,
+                          int format = wxGRID_FLOAT_FORMAT_DEFAULT);
 
     /**
-        Parameters string format is "width,precision"
+        The parameters string format is "width[,precision[,format]]" where
+        @c format should be choosen beween f|e|g|E|G (f is used by default)
     */
     virtual void SetParameters(const wxString& params);
 };

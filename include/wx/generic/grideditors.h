@@ -154,11 +154,38 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGridCellNumberEditor);
 };
 
+
+enum wxGridCellFloatFormat
+{
+    // Decimal floating point (%f)
+    wxGRID_FLOAT_FORMAT_FIXED      = 0x0010,
+
+    // Scientific notation (mantise/exponent) using e character (%e)
+    wxGRID_FLOAT_FORMAT_SCIENTIFIC = 0x0020,
+
+    // Use the shorter of %e or %f (%g)
+    wxGRID_FLOAT_FORMAT_COMPACT    = 0x0040,
+
+    // To use in combination with one of the above formats (%F/%E/%G)
+    wxGRID_FLOAT_FORMAT_UPPER      = 0x0080,
+
+    // Format used by default.
+    wxGRID_FLOAT_FORMAT_DEFAULT    = wxGRID_FLOAT_FORMAT_FIXED,
+
+    // A mask to extract format from the combination of flags.
+    wxGRID_FLOAT_FORMAT_MASK       = wxGRID_FLOAT_FORMAT_FIXED |
+                                     wxGRID_FLOAT_FORMAT_SCIENTIFIC |
+                                     wxGRID_FLOAT_FORMAT_COMPACT |
+                                     wxGRID_FLOAT_FORMAT_UPPER
+};
+
 // the editor for floating point numbers (double) data
 class WXDLLIMPEXP_ADV wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
-    wxGridCellFloatEditor(int width = -1, int precision = -1);
+    wxGridCellFloatEditor(int width = -1,
+                          int precision = -1,
+                          int format = wxGRID_FLOAT_FORMAT_DEFAULT);
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -176,17 +203,21 @@ public:
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellFloatEditor(m_width, m_precision); }
 
-    // parameters string format is "width,precision"
+    // parameters string format is "width[,precision[,format]]"
+    // format to choose beween f|e|g|E|G (f is used by default)
     virtual void SetParameters(const wxString& params);
 
 protected:
     // string representation of our value
-    wxString GetString() const;
+    wxString GetString();
 
 private:
     int m_width,
         m_precision;
     double m_value;
+
+    int m_style;
+    wxString m_format;
 
     wxDECLARE_NO_COPY_CLASS(wxGridCellFloatEditor);
 };

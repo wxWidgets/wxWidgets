@@ -862,10 +862,13 @@ wxString wxGridCellNumberEditor::GetValue() const
 // wxGridCellFloatEditor
 // ----------------------------------------------------------------------------
 
-wxGridCellFloatEditor::wxGridCellFloatEditor(int width, int precision)
+wxGridCellFloatEditor::wxGridCellFloatEditor(int width,
+                                             int precision,
+                                             int format)
 {
     m_width = width;
     m_precision = precision;
+    m_style = format;
 }
 
 void wxGridCellFloatEditor::Create(wxWindow* parent,
@@ -988,51 +991,113 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
         // reset to default
         m_width =
         m_precision = -1;
+        m_style = wxGRID_FLOAT_FORMAT_DEFAULT;
+        m_format.clear();
     }
     else
     {
-        long tmp;
-        if ( params.BeforeFirst(wxT(',')).ToLong(&tmp) )
+        wxString rest;
+        wxString tmp = params.BeforeFirst(wxT(','), &rest);
+        if ( !tmp.empty() )
         {
-            m_width = (int)tmp;
-
-            if ( params.AfterFirst(wxT(',')).ToLong(&tmp) )
+            long width;
+            if ( tmp.ToLong(&width) )
             {
-                m_precision = (int)tmp;
-
-                // skip the error message below
-                return;
+                m_width = (int)width;
+            }
+            else
+            {
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params.c_str());
             }
         }
 
-        wxLogDebug(wxT("Invalid wxGridCellFloatEditor parameter string '%s' ignored"), params.c_str());
+        tmp = rest.BeforeFirst(wxT(','));
+        if ( !tmp.empty() )
+        {
+            long precision;
+            if ( tmp.ToLong(&precision) )
+            {
+                m_precision = (int)precision;
+            }
+            else
+            {
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
+            }
+        }
+
+        tmp = rest.AfterFirst(wxT(','));
+        if ( !tmp.empty() )
+        {
+            if ( tmp[0] == wxT('f') )
+            {
+                m_style = wxGRID_FLOAT_FORMAT_FIXED;
+            }
+            else if ( tmp[0] == wxT('e') )
+            {
+                m_style = wxGRID_FLOAT_FORMAT_SCIENTIFIC;
+            }
+            else if ( tmp[0] == wxT('g') )
+            {
+                m_style = wxGRID_FLOAT_FORMAT_COMPACT;
+            }
+            else if ( tmp[0] == wxT('E') )
+            {
+                m_style = wxGRID_FLOAT_FORMAT_SCIENTIFIC |
+                          wxGRID_FLOAT_FORMAT_UPPER;
+            }
+            else if ( tmp[0] == wxT('F') )
+            {
+                m_style = wxGRID_FLOAT_FORMAT_FIXED |
+                          wxGRID_FLOAT_FORMAT_UPPER;
+            }
+            else if ( tmp[0] == wxT('G') )
+            {
+                m_style = wxGRID_FLOAT_FORMAT_COMPACT |
+                          wxGRID_FLOAT_FORMAT_UPPER;
+            }
+            else
+            {
+                wxLogDebug("Invalid wxGridCellFloatRenderer format "
+                           "parameter string '%s ignored", params);
+            }
+        }
     }
 }
 
-wxString wxGridCellFloatEditor::GetString() const
+wxString wxGridCellFloatEditor::GetString()
 {
-    wxString fmt;
-    if ( m_precision == -1 && m_width != -1)
+    if ( !m_format )
     {
-        // default precision
-        fmt.Printf(wxT("%%%d.f"), m_width);
-    }
-    else if ( m_precision != -1 && m_width == -1)
-    {
-        // default width
-        fmt.Printf(wxT("%%.%df"), m_precision);
-    }
-    else if ( m_precision != -1 && m_width != -1 )
-    {
-        fmt.Printf(wxT("%%%d.%df"), m_width, m_precision);
-    }
-    else
-    {
-        // default width/precision
-        fmt = wxT("%f");
+        if ( m_precision == -1 && m_width != -1)
+        {
+            // default precision
+            m_format.Printf(wxT("%%%d."), m_width);
+        }
+        else if ( m_precision != -1 && m_width == -1)
+        {
+            // default width
+            m_format.Printf(wxT("%%.%d"), m_precision);
+        }
+        else if ( m_precision != -1 && m_width != -1 )
+        {
+            m_format.Printf(wxT("%%%d.%d"), m_width, m_precision);
+        }
+        else
+        {
+            // default width/precision
+            m_format = wxT("%");
+        }
+
+        bool isUpper = (m_style & wxGRID_FLOAT_FORMAT_UPPER) != 0;
+        if ( m_style & wxGRID_FLOAT_FORMAT_SCIENTIFIC )
+            m_format += isUpper ? wxT('E') : wxT('e');
+        else if ( m_style & wxGRID_FLOAT_FORMAT_COMPACT )
+            m_format += isUpper ? wxT('G') : wxT('g');
+        else
+            m_format += wxT('f');
     }
 
-    return wxString::Format(fmt, m_value);
+    return wxString::Format(m_format, m_value);
 }
 
 bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)

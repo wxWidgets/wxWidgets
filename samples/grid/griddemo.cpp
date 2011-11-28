@@ -439,22 +439,33 @@ GridFrame::GridFrame()
     grid->SetCellValue(5, 8, wxT("Bg from row attr\nText col from cell attr"));
     grid->SetCellValue(5, 5, wxT("Bg from row attr Text col from col attr and this text is so long that it covers over many many empty cells but is broken by one that isn't"));
 
+    // Some numeric columns with different formatting.
     grid->SetColFormatFloat(6);
-    grid->SetCellValue(0, 6, wxString::Format(wxT("%g"), 3.1415));
-    grid->SetCellValue(1, 6, wxString::Format(wxT("%g"), 1415.0));
-    grid->SetCellValue(2, 6, wxString::Format(wxT("%g"), 12345.67890));
+    grid->SetCellValue(0, 6, "Default\nfloat format");
+    grid->SetCellValue(1, 6, wxString::Format(wxT("%g"), 3.1415));
+    grid->SetCellValue(2, 6, wxString::Format(wxT("%g"), 1415.0));
+    grid->SetCellValue(3, 6, wxString::Format(wxT("%g"), 12345.67890));
 
     grid->SetColFormatFloat(7, 6, 2);
-    grid->SetCellValue(0, 7, wxString::Format(wxT("%g"), 3.1415));
-    grid->SetCellValue(1, 7, wxString::Format(wxT("%g"), 1415.0));
-    grid->SetCellValue(2, 7, wxString::Format(wxT("%g"), 12345.67890));
+    grid->SetCellValue(0, 7, "Width 6\nprecision 2");
+    grid->SetCellValue(1, 7, wxString::Format(wxT("%g"), 3.1415));
+    grid->SetCellValue(2, 7, wxString::Format(wxT("%g"), 1415.0));
+    grid->SetCellValue(3, 7, wxString::Format(wxT("%g"), 12345.67890));
 
-    grid->SetColFormatNumber(8);
-    grid->SetCellValue(0, 8, "17");
-    grid->SetCellValue(1, 8, "0");
-    grid->SetCellValue(2, 8, "-666");
-    grid->SetCellAlignment(2, 8, wxALIGN_CENTRE, wxALIGN_TOP);
-    grid->SetCellValue(2, 9, "<- This numeric cell should be centred");
+    grid->SetColFormatCustom(8,
+            wxString::Format("%s:%i,%i,%s", wxGRID_VALUE_FLOAT, -1, 4, "g"));
+    grid->SetCellValue(0, 8, "Compact\nformat");
+    grid->SetCellValue(1, 8, wxT("31415e-4"));
+    grid->SetCellValue(2, 8, wxT("1415"));
+    grid->SetCellValue(3, 8, wxT("123456789e-4"));
+
+    grid->SetColFormatNumber(9);
+    grid->SetCellValue(0, 9, "Integer\ncolumn");
+    grid->SetCellValue(1, 9, "17");
+    grid->SetCellValue(2, 9, "0");
+    grid->SetCellValue(3, 9, "-666");
+    grid->SetCellAlignment(3, 9, wxALIGN_CENTRE, wxALIGN_TOP);
+    grid->SetCellValue(3, 10, "<- This numeric cell should be centred");
 
     const wxString choices[] =
     {
