@@ -79,6 +79,8 @@ void wxBannerWindow::SetBitmap(const wxBitmap& bmp)
 {
     m_bitmap = bmp;
 
+    m_colBitmapBg = wxColour();
+
     InvalidateBestSize();
 
     Refresh();
@@ -202,30 +204,110 @@ void wxBannerWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 }
 
-void wxBannerWindow::DrawBitmapBackground(wxDC& dc)
+wxColour wxBannerWindow::GetBitmapBg()
 {
+    if ( m_colBitmapBg.IsOk() )
+        return m_colBitmapBg;
+
+    // Determine the colour to use to extend the bitmap. It's the colour of the
+    // bitmap pixels at the edge closest to the area where it can be extended.
+    wxImage image(m_bitmap.ConvertToImage());
+
+    // The point we get the colour from. The choice is arbitrary and in general
+    // the bitmap should have the same colour on the entire edge of this point
+    // for extending it to look good.
+    wxPoint p;
+
+    wxSize size = image.GetSize();
+    size.x--;
+    size.y--;
+
     switch ( m_direction )
     {
         case wxTOP:
         case wxBOTTOM:
-        case wxRIGHT:
-            // Draw the bitmap normally, its rightmost or bottom part could be
-            // truncated, as it's meant to be.
-            dc.DrawBitmap(m_bitmap, 0, 0);
+            // The bitmap will be extended to the right.
+            p.x = size.x;
+            p.y = 0;
             break;
 
         case wxLEFT:
-            // The top most part of the bitmap may be truncated but its bottom
-            // must be always visible so intentionally draw it possibly partly
-            // outside of the window.
-            dc.DrawBitmap(m_bitmap,
-                          0, GetClientSize().y - m_bitmap.GetHeight());
+            // The bitmap will be extended from the top.
+            p.x = 0;
+            p.y = 0;
+            break;
+
+        case wxRIGHT:
+            // The bitmap will be extended to the bottom.
+            p.x = 0;
+            p.y = size.y;
             break;
 
         // This case is there only to prevent g++ warnings about not handling
         // some enum elements in the switch, it can't really happen.
         case wxALL:
             wxFAIL_MSG( wxS("Unreachable") );
+    }
+
+    m_colBitmapBg.Set(image.GetRed(p.x, p.y),
+                      image.GetGreen(p.x, p.y),
+                      image.GetBlue(p.x, p.y));
+
+    return m_colBitmapBg;
+}
+
+void wxBannerWindow::DrawBitmapBackground(wxDC& dc)
+{
+    // We may need to fill the part of the background not covered by the bitmap
+    // with the solid colour extending the bitmap, this rectangle will hold the
+    // area to be filled (which could be empty if the bitmap is big enough).
+    wxRect rectSolid;
+
+    const wxSize size = GetClientSize();
+
+    switch ( m_direction )
+    {
+        case wxTOP:
+        case wxBOTTOM:
+            // Draw the bitmap at the origin, its rightmost could be truncated,
+            // as it's meant to be.
+            dc.DrawBitmap(m_bitmap, 0, 0);
+
+            rectSolid.x = m_bitmap.GetWidth();
+            rectSolid.width = size.x - rectSolid.x;
+            rectSolid.height = size.y;
+            break;
+
+        case wxLEFT:
+            // The top most part of the bitmap may be truncated but its bottom
+            // must be always visible so intentionally draw it possibly partly
+            // outside of the window.
+            rectSolid.width = size.x;
+            rectSolid.height = size.y - m_bitmap.GetHeight();
+            dc.DrawBitmap(m_bitmap, 0, rectSolid.height);
+            break;
+
+        case wxRIGHT:
+            // Draw the bitmap at the origin, possibly truncating its
+            // bottommost part.
+            dc.DrawBitmap(m_bitmap, 0, 0);
+
+            rectSolid.y = m_bitmap.GetHeight();
+            rectSolid.height = size.y - rectSolid.y;
+            rectSolid.width = size.x;
+            break;
+
+        // This case is there only to prevent g++ warnings about not handling
+        // some enum elements in the switch, it can't really happen.
+        case wxALL:
+            wxFAIL_MSG( wxS("Unreachable") );
+    }
+
+    if ( rectSolid.width > 0 && rectSolid.height > 0 )
+    {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(GetBitmapBg());
+        dc.DrawRectangle(rectSolid);
     }
 }
 

@@ -113,14 +113,20 @@ public:
     /**
         Provide the bitmap to use as background.
 
-        Notice that the bitmap should be big enough to always cover the entire
-        banner, e.g. for a horizontal banner with wxTOP style its width should
-        be bigger than any reasonable window size.
+        Notice that ideally the bitmap should be big enough to always cover the
+        entire banner, e.g. for a horizontal banner with wxTOP style its width
+        should be bigger than any reasonable window size. Otherwise the bitmap
+        is extended to cover the entire window area with a solid colour taken
+        from the bitmap pixel on the edge in which direction the extension
+        occurs so all bitmap pixels on this edge (top for wxLEFT, right for
+        wxTOP and wxBOTTOM and bottom for wxRIGHT) should have the same colour
+        to avoid jarring discontinuity.
 
-        For wxLEFT orientation the bitmap is truncated from the top, for wxTOP
-        and wxBOTTOM -- from the right and for wxRIGHT -- from the bottom, so
-        put the most important part of the bitmap information in the opposite
-        direction.
+        If, on the other hand, the bitmap is bigger than the window size, then
+        it is truncated. For wxLEFT orientation the bitmap is truncated from
+        the top, for wxTOP and wxBOTTOM -- from the right and for wxRIGHT --
+        from the bottom, so put the most important part of the bitmap
+        information in the opposite direction where it will never be truncated.
 
         If no valid background bitmap is specified, the banner draws gradient
         background but if a valid bitmap is given here, the gradient is not
