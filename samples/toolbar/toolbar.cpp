@@ -925,12 +925,12 @@ void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnToolbarStyle(wxCommandEvent& event)
 {
     long style = GetToolBar()->GetWindowStyle();
-    style &= ~(wxTB_NOICONS | wxTB_TEXT);
+    style &= ~(wxTB_NOICONS | wxTB_HORZ_TEXT);
 
     switch ( event.GetId() )
     {
         case IDM_TOOLBAR_SHOW_TEXT:
-            style |= wxTB_NOICONS | wxTB_TEXT;
+            style |= wxTB_NOICONS | (m_horzText ? wxTB_HORZ_TEXT : wxTB_TEXT);
             break;
 
         case IDM_TOOLBAR_SHOW_ICONS:
@@ -938,7 +938,7 @@ void MyFrame::OnToolbarStyle(wxCommandEvent& event)
             break;
 
         case IDM_TOOLBAR_SHOW_BOTH:
-            style |= wxTB_TEXT;
+            style |= (m_horzText ? wxTB_HORZ_TEXT : wxTB_TEXT);
     }
 
     GetToolBar()->SetWindowStyle(style);
