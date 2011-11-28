@@ -168,6 +168,7 @@ public:
     void OnPaint(wxPaintEvent&);
     void OnSetFocus(wxFocusEvent&);
     void OnKillFocus(wxFocusEvent&);
+    virtual bool MSWTranslateMessage(WXMSG* pMsg);
 
 protected:
     friend class FrameSite;

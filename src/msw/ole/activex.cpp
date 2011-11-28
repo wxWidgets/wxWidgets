@@ -1260,4 +1260,20 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+//---------------------------------------------------------------------------
+// wxActiveXContainer::MSWTranslateMessage
+//
+// Called for every message that needs to be translated.
+// Some controls might need more keyboard keys to process (CTRL-C, CTRL-A ect),
+// In that case TranslateAccelerator should always be called first.
+//---------------------------------------------------------------------------
+bool wxActiveXContainer::MSWTranslateMessage(WXMSG* pMsg)
+{
+    if(m_oleInPlaceActiveObject.IsOk() && m_oleInPlaceActiveObject->TranslateAccelerator(pMsg) == S_OK)
+    {
+        return true;
+    }
+    return wxWindow::MSWTranslateMessage(pMsg);
+}
+
 #endif // wxUSE_ACTIVEX
