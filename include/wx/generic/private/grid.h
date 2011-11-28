@@ -301,6 +301,8 @@ public:
         m_owner = owner;
     }
 
+    virtual wxWindow *GetMainWindowOfCompositeControl() { return m_owner; }
+
     virtual bool AcceptsFocus() const { return false; }
 
     wxGrid *GetOwner() { return m_owner; }
