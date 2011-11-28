@@ -947,6 +947,8 @@
 		9836B3D336963795928FE5A2 /* m_dflist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52FE1599218730CC99A3F801 /* m_dflist.cpp */; };
 		9881E3FB23ED3283B6CC71A2 /* filepickercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFA50405234C30EEA3F77F17 /* filepickercmn.cpp */; };
 		9881E3FB23ED3283B6CC71A3 /* filepickercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFA50405234C30EEA3F77F17 /* filepickercmn.cpp */; };
+		98AD7D0478BA36249B03C623 /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9586328A1F3C4BA0390AA5 /* time.cpp */; };
+		98AD7D0478BA36249B03C624 /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9586328A1F3C4BA0390AA5 /* time.cpp */; };
 		98DF13E96160304EBB905E73 /* jcmainct.c in Sources */ = {isa = PBXBuildFile; fileRef = 810EB7316DF3344197C78EC0 /* jcmainct.c */; };
 		98DF13E96160304EBB905E74 /* jcmainct.c in Sources */ = {isa = PBXBuildFile; fileRef = 810EB7316DF3344197C78EC0 /* jcmainct.c */; };
 		99E7A46106C03484BA70D29E /* tif_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F8259CC99380CB8217DEF /* tif_unix.c */; };
@@ -1865,6 +1867,7 @@
 		5AACC1EC2E2A33B3ABF5EDCA /* xh_radbt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_radbt.cpp; path = ../../src/xrc/xh_radbt.cpp; sourceTree = "<group>"; };
 		5AFB85719CBC3D60BA2EDC2E /* CharClassify.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CharClassify.cxx; path = ../../src/stc/scintilla/src/CharClassify.cxx; sourceTree = "<group>"; };
 		5B32A13D5B3336098B1B9765 /* pngtrans.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pngtrans.c; path = ../../src/png/pngtrans.c; sourceTree = "<group>"; };
+		5B9586328A1F3C4BA0390AA5 /* time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = ../../src/common/time.cpp; sourceTree = "<group>"; };
 		5BD6231188AB329CAA5E1171 /* evtloop_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = evtloop_cf.cpp; path = ../../src/osx/core/evtloop_cf.cpp; sourceTree = "<group>"; };
 		5BEC6B3CAFB532CBB9F95D74 /* jutils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jutils.c; path = ../../src/jpeg/jutils.c; sourceTree = "<group>"; };
 		5C85865D28DC31649440A921 /* imagxpm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagxpm.cpp; path = ../../src/common/imagxpm.cpp; sourceTree = "<group>"; };
@@ -3355,6 +3358,7 @@
 				C0F7BBD216853E718C9F23D9 /* tarstrm.cpp */,
 				701B84EE7C043B539FF5195A /* textbuf.cpp */,
 				0903EE9B3793303285FF96E3 /* textfile.cpp */,
+				5B9586328A1F3C4BA0390AA5 /* time.cpp */,
 				7195E665E0F233839B967FC9 /* timercmn.cpp */,
 				0401B7302088357BB6B7F16F /* timerimpl.cpp */,
 				3720038D64CF3C0B8F642A90 /* tokenzr.cpp */,
@@ -3909,6 +3913,7 @@
 				9FB1E1763EFA334CA0C07C4A /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5423 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2E /* textfile.cpp in Sources */,
+				98AD7D0478BA36249B03C624 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002E /* timercmn.cpp in Sources */,
 				729091CC33C73C989B4E071A /* timerimpl.cpp in Sources */,
 				BF8C33B7CB3A3ECE814A95FC /* tokenzr.cpp in Sources */,
@@ -4710,6 +4715,7 @@
 				9FB1E1763EFA334CA0C07C49 /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5422 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2D /* textfile.cpp in Sources */,
+				98AD7D0478BA36249B03C623 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002D /* timercmn.cpp in Sources */,
 				729091CC33C73C989B4E0719 /* timerimpl.cpp in Sources */,
 				BF8C33B7CB3A3ECE814A95FB /* tokenzr.cpp in Sources */,
