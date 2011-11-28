@@ -508,7 +508,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     // the changes
     toolBar->Realize();
 
-    toolBar->SetRows(!(toolBar->IsVertical()) ? m_rows : 10 / m_rows);
+    toolBar->SetRows(toolBar->IsVertical() ? toolBar->GetToolsCount() / m_rows
+                                           : m_rows);
 }
 
 // ----------------------------------------------------------------------------
@@ -762,7 +763,9 @@ void MyFrame::OnToggleToolbarRows(wxCommandEvent& WXUNUSED(event))
     // m_rows may be only 1 or 2
     m_rows = 3 - m_rows;
 
-    GetToolBar()->SetRows(!(GetToolBar()->IsVertical()) ? m_rows : 10 / m_rows);
+    wxToolBar* const toolBar = GetToolBar();
+    toolBar->SetRows(toolBar->IsVertical() ? toolBar->GetToolsCount() / m_rows
+                                           : m_rows);
 
     //RecreateToolbar(); -- this is unneeded
 }
