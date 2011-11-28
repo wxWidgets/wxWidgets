@@ -1855,7 +1855,7 @@ gtk_scrollbar_button_release_event(GtkRange* range, GdkEventButton*, wxWindow* w
 //-----------------------------------------------------------------------------
 
 static void
-gtk_window_realized_callback(GtkWidget* WXUNUSED(widget), wxWindow* win)
+gtk_window_realized_callback(GtkWidget* WXUNUSED(widget), wxWindowGTK* win)
 {
     win->GTKHandleRealized();
 }
@@ -1970,7 +1970,7 @@ void wxWindowGTK::GTKHandleRealized()
         m_needsStyleChange = false;
     }
 
-    wxWindowCreateEvent event( this );
+    wxWindowCreateEvent event(static_cast<wxWindow*>(this));
     event.SetEventObject( this );
     GTKProcessEvent( event );
 
