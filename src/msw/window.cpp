@@ -113,10 +113,6 @@
     #include <windowsx.h>
 #endif
 
-#if !defined __WXWINCE__ && !defined NEED_PBT_H
-    #include <pbt.h>
-#endif
-
 #if defined(__WXWINCE__)
     #include "wx/msw/wince/missing.h"
 #ifdef __POCKETPC__

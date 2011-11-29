@@ -2931,9 +2931,6 @@ if test "$USE_WIN32" = 1 ; then
 
     dnl install Win32-specific files in "make install"
     WIN32INSTALL=win32install
-
-    dnl pbt.h is missing on Wine at least
-    AC_CHECK_HEADER([pbt.h],, [AC_DEFINE(NEED_PBT_H)], [ ])
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
