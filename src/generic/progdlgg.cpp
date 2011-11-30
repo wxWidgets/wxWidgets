@@ -153,9 +153,12 @@ void wxGenericProgressDialog::Create( const wxString& title,
                                       wxWindow *parent,
                                       int style )
 {
-    wxDialog::Create(GetParentForModalDialog(parent, style), wxID_ANY, title);
+    // Notice that GetParentForModalDialog() needs the dialog window style, not
+    // our wxProgressDialog-specific style.
+    wxWindow* const
+        realParent = GetParentForModalDialog(parent, GetWindowStyle());
+    wxDialog::Create(realParent, wxID_ANY, title);
 
-    SetParent( GetParentForModalDialog(parent, style) );
     SetTitle( title );
 
     SetMaximum(maximum);
