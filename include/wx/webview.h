@@ -20,9 +20,15 @@
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 
-#include "wx/osx/webviewhistoryitem_webkit.h"
-#include "wx/gtk/webviewhistoryitem_webkit.h"
-#include "wx/msw/webviewhistoryitem_ie.h"
+#if defined(__WXOSX__)
+    #include "wx/osx/webviewhistoryitem_webkit.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk/webviewhistoryitem_webkit.h"
+#elif defined(__WXMSW__)
+    #include "wx/msw/webviewhistoryitem_ie.h"
+#else
+    #error "wxWebView not implemented on this platform."
+#endif
 
 class wxFSFile;
 class wxFileSystem;
