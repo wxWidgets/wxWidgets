@@ -50,7 +50,12 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
         //with a custom scheme.
         if(WEBKIT_IS_WEB_HISTORY_ITEM(item) && webkit_web_history_item_get_uri(item) != url)
         {
-            WebKitWebHistoryItem* newitem = webkit_web_history_item_new_with_data(url, webKitCtrl->GetCurrentTitle());
+            WebKitWebHistoryItem*
+                newitem = webkit_web_history_item_new_with_data
+                          (
+                            url.utf8_str(),
+                            webKitCtrl->GetCurrentTitle().utf8_str()
+                          );
             webkit_web_back_forward_list_add_item(hist, newitem);
         }
 
@@ -368,7 +373,7 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
             wxString mime = file->GetMimeType();
             wxString path = "data:" + mime + ";base64," + data;
             //Then we can redirect the call
-            webkit_network_request_set_uri(request, path);
+            webkit_network_request_set_uri(request, path.utf8_str());
         }
         
     }
@@ -437,7 +442,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     PostCreation(size);
 
     /* Open a webpage */
-    webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
+    webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url.utf8_str());
 
     //Get the initial history limit so we can enable and disable it later
     WebKitWebBackForwardList* history;
