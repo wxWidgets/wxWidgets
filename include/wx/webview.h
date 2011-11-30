@@ -10,7 +10,7 @@
 #ifndef _WX_WEB_VIEW_H_
 #define _WX_WEB_VIEW_H_
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_WEBVIEW
 
