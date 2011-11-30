@@ -405,7 +405,18 @@ const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
 
 void wxStatusBar::SetMinHeight(int height)
 {
-    SendMessage(GetHwnd(), SB_SETMINHEIGHT, height + 2*GetBorderY(), 0);
+    // It looks like we need to count the border twice to really make the
+    // controls taking exactly height pixels fully fit in the status bar:
+    // at least under Windows 7 the checkbox in the custom status bar of the
+    // statbar sample gets truncated otherwise.
+    height += 4*GetBorderY();
+
+    // We need to set the size and not the size to reflect the height because
+    // wxFrame uses our size and not the minimal size as it assumes that the
+    // size of a status bar never changes anyhow.
+    SetSize(-1, height);
+
+    SendMessage(GetHwnd(), SB_SETMINHEIGHT, height, 0);
 
     // we have to send a (dummy) WM_SIZE to redraw it now
     SendMessage(GetHwnd(), WM_SIZE, 0, 0);
@@ -475,11 +486,10 @@ wxSize wxStatusBar::DoGetBestSize() const
         width = 2*DEFAULT_FIELD_WIDTH;
     }
 
-    // calculate height
-    int height;
-    wxGetCharSize(GetHWND(), NULL, &height, GetFont());
-    height = EDIT_HEIGHT_FROM_CHAR_HEIGHT(height);
-    height += borders.vert;
+    // calculate height: by default it should be just big enough to show text
+    // (see SetMinHeight() for the explanation of 4 factor)
+    int height = GetCharHeight();
+    height += 4*borders.vert;
 
     wxSize best(width, height);
     CacheBestSize(best);
