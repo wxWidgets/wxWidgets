@@ -127,6 +127,12 @@ public:
     virtual bool CanUndo() const;
 
     /**
+        Returns @true if the currently-active command can be redone, @false
+        otherwise.
+    */
+    virtual bool CanRedo() const;
+
+    /**
         Deletes all commands in the list and sets the current command pointer
         to @NULL.
     */
@@ -136,6 +142,11 @@ public:
         Returns the list of commands.
     */
     wxList& GetCommands();
+
+    /**
+        Returns the current command.
+    */
+    wxCommand *GetCurrentCommand() const;
 
     /**
         Returns the edit menu associated with the command processor.
@@ -234,6 +245,12 @@ public:
             history list.
     */
     virtual bool Submit(wxCommand* command, bool storeIt = true);
+
+    /**
+        Just store the command without executing it. The command is stored in the
+        history list, and the associated edit menu (if any) updated appropriately.
+    */
+    virtual void Store(wxCommand *command);
 
     /**
         Undoes the last command executed.
