@@ -34,9 +34,10 @@ class WXDLLIMPEXP_HTML wxHtmlSelection
 public:
     wxHtmlSelection()
         : m_fromPos(wxDefaultPosition), m_toPos(wxDefaultPosition),
-          m_fromPrivPos(wxDefaultPosition), m_toPrivPos(wxDefaultPosition),
+          m_fromCharacterPos(-1), m_toCharacterPos(-1),
           m_fromCell(NULL), m_toCell(NULL) {}
 
+    // this version is used for the user selection defined with the mouse
     void Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
              const wxPoint& toPos, const wxHtmlCell *toCell);
     void Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell);
@@ -49,11 +50,13 @@ public:
     const wxPoint& GetToPos() const { return m_toPos; }
 
     // these are From/ToCell's private data
-    const wxPoint& GetFromPrivPos() const { return m_fromPrivPos; }
-    const wxPoint& GetToPrivPos() const { return m_toPrivPos; }
-    void SetFromPrivPos(const wxPoint& pos) { m_fromPrivPos = pos; }
-    void SetToPrivPos(const wxPoint& pos) { m_toPrivPos = pos; }
-    void ClearPrivPos() { m_toPrivPos = m_fromPrivPos = wxDefaultPosition; }
+    void ClearFromToCharacterPos() { m_toCharacterPos = m_fromCharacterPos = -1; }
+    bool AreFromToCharacterPosSet() const { return m_toCharacterPos != -1 && m_fromCharacterPos != -1; }
+
+    void SetFromCharacterPos (wxCoord pos) { m_fromCharacterPos = pos; }
+    void SetToCharacterPos (wxCoord pos) { m_toCharacterPos = pos; }
+    wxCoord GetFromCharacterPos () const { return m_fromCharacterPos; }
+    wxCoord GetToCharacterPos () const { return m_toCharacterPos; }
 
     bool IsEmpty() const
         { return m_fromPos == wxDefaultPosition &&
@@ -61,7 +64,7 @@ public:
 
 private:
     wxPoint m_fromPos, m_toPos;
-    wxPoint m_fromPrivPos, m_toPrivPos;
+    wxCoord m_fromCharacterPos, m_toCharacterPos;
     const wxHtmlCell *m_fromCell, *m_toCell;
 };
 

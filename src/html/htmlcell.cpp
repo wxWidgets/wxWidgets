@@ -476,17 +476,10 @@ void wxHtmlWordCell::SetSelectionPrivPos(const wxDC& dc, wxHtmlSelection *s) con
           this == s->GetToCell() ? s->GetToPos() : wxDefaultPosition,
           p1, p2);
 
-    wxPoint p(0, m_Word.length());
-
     if ( this == s->GetFromCell() )
-        p.x = p1; // selection starts here
+        s->SetFromCharacterPos (p1); // selection starts here
     if ( this == s->GetToCell() )
-        p.y = p2; // selection ends here
-
-    if ( this == s->GetFromCell() )
-        s->SetFromPrivPos(p);
-    if ( this == s->GetToCell() )
-        s->SetToPrivPos(p);
+        s->SetToCharacterPos (p2); // selection ends here
 }
 
 
@@ -533,23 +526,18 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         int w, h;
         int ofs = 0;
 
-        wxPoint priv = (this == s->GetFromCell()) ?
-                           s->GetFromPrivPos() : s->GetToPrivPos();
-
         // NB: this is quite a hack: in order to compute selection boundaries
         //     (in word's characters) we must know current font, which is only
         //     possible inside rendering code. Therefore we update the
         //     information here and store it in wxHtmlSelection so that
         //     ConvertToText can use it later:
-        if ( priv == wxDefaultPosition )
+        if ( !s->AreFromToCharacterPosSet () )
         {
             SetSelectionPrivPos(dc, s);
-            priv = (this == s->GetFromCell()) ?
-                    s->GetFromPrivPos() : s->GetToPrivPos();
         }
 
-        int part1 = priv.x;
-        int part2 = priv.y;
+        int part1 = s->GetFromCell()==this ? s->GetFromCharacterPos() : 0;
+        int part2 = s->GetToCell()==this   ? s->GetToCharacterPos()   : m_Word.Length();
 
         if ( part1 > 0 )
         {
@@ -634,9 +622,6 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
 {
     if ( s && (this == s->GetFromCell() || this == s->GetToCell()) )
     {
-        wxPoint priv = this == s->GetFromCell() ? s->GetFromPrivPos()
-                                                : s->GetToPrivPos();
-
         // VZ: we may be called before we had a chance to re-render ourselves
         //     and in this case GetFrom/ToPrivPos() is not set yet -- assume
         //     that this only happens in case of a double/triple click (which
@@ -644,10 +629,10 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
         //     entire contents of the cell in this case
         //
         // TODO: but this really needs to be fixed in some better way later...
-        if ( priv != wxDefaultPosition )
+        if ( s->AreFromToCharacterPosSet() )
         {
-            const int part1 = priv.x;
-            const int part2 = priv.y;
+            const int part1 = s->GetFromCell()==this ? s->GetFromCharacterPos() : 0;
+            const int part2 = s->GetToCell()==this   ? s->GetToCharacterPos()   : m_Word.Length();
             if ( part1 == part2 )
                 return wxEmptyString;
             return GetPartAsText(part1, part2);

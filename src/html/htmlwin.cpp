@@ -1214,7 +1214,7 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
     {
         m_selection->Set(m_selection->GetFromCell(),
                          m_selection->GetToCell());
-        m_selection->ClearPrivPos();
+        m_selection->ClearFromToCharacterPos();
     }
 
     Refresh();
@@ -1415,7 +1415,7 @@ void wxHtmlWindow::OnInternalIdle()
                         m_selection->Set(wxPoint(x,y), selcell,
                                          m_tmpSelFromPos, m_tmpSelFromCell);
                     }
-                    m_selection->ClearPrivPos();
+                    m_selection->ClearFromToCharacterPos();
                     Refresh();
                 }
             }
