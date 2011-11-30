@@ -606,8 +606,6 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)item->m_histItem;
     if(gtkitem)
     {
-        WebKitWebBackForwardList* history;
-        history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
         webkit_web_view_go_to_back_forward_item(WEBKIT_WEB_VIEW(web_view), 
                                                 WEBKIT_WEB_HISTORY_ITEM(gtkitem));
     }
