@@ -121,6 +121,11 @@ void wxCriticalSection::Enter()
     MPEnterCriticalRegion( (MPCriticalRegionID) m_critRegion, kDurationForever );
 }
 
+bool wxCriticalSection::TryEnter()
+{
+    return MPEnterCriticalRegion( (MPCriticalRegionID) m_critRegion, kDurationImmediate ) == noErr;
+}
+
 void wxCriticalSection::Leave()
 {
     MPExitCriticalRegion( (MPCriticalRegionID) m_critRegion );

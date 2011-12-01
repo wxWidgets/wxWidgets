@@ -585,6 +585,14 @@ public:
     void Enter();
 
     /**
+        Try to enter the critical section (same as trying to lock a mutex).
+        If it can't, immediately returns false.
+
+        @since 2.9.3
+    */
+    bool TryEnter();
+
+    /**
         Leave the critical section allowing other threads use the global data
         protected by it. There is no error return for this function.
     */

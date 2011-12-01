@@ -463,6 +463,7 @@ All:
   wxStopWatch precision.
 - Made wxGetLocalTimeMillis() really return local time, added
   wxGetUTCTimeMillis() returning what this function used to return.
+- Added wxCriticalSection::TryEnter() (Catalin Raceanu).
 
 All (GUI):
 

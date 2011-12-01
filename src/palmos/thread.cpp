@@ -146,6 +146,11 @@ void wxCriticalSection::Enter()
 {
 }
 
+bool wxCriticalSection::TryEnter()
+{
+    return false;
+}
+
 void wxCriticalSection::Leave()
 {
 }
