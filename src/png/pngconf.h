@@ -373,7 +373,7 @@
 #      define PNG_NORETURN   __declspec(noreturn)
 #    endif
 #    ifndef PNG_ALLOCATED
-#      if defined(_MSC_VER)  && (_MSC_VER >= 1300)
+#      if defined(_MSC_VER)  && (_MSC_VER >= 1400)
 #        define PNG_ALLOCATED __declspec(restrict)
 #      endif
 #    endif
