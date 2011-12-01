@@ -85,6 +85,7 @@ private:
         CPPUNIT_TEST( Count );
         CPPUNIT_TEST( Labels );
         CPPUNIT_TEST( RadioItems );
+        CPPUNIT_TEST( RemoveAdd );
     CPPUNIT_TEST_SUITE_END();
 
     void CreateFrame();
@@ -94,6 +95,7 @@ private:
     void Count();
     void Labels();
     void RadioItems();
+    void RemoveAdd();
 
     wxFrame* m_frame;
 
@@ -358,4 +360,24 @@ void MenuTestCase::RadioItems()
     // Check that the last radio group still works as expected.
     menu->Check(MenuTestCase_First + 4, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
+}
+
+void MenuTestCase::RemoveAdd()
+{
+    wxMenuBar* bar = m_frame->GetMenuBar();
+
+    wxMenu* menu0 = bar->GetMenu(0);
+    wxMenu* menu1 = bar->GetMenu(1);
+    wxMenuItem* item = new wxMenuItem(menu0, MenuTestCase_Foo + 100, "t&ext\tCtrl-E");
+    menu0->Insert(0, item);
+    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) == item );
+    menu0->Remove(item);
+    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) != item );
+    menu1->Insert(0, item);
+    CPPUNIT_ASSERT( menu1->FindItemByPosition(0) == item );
+    menu1->Remove(item);
+    CPPUNIT_ASSERT( menu1->FindItemByPosition(0) != item );
+    menu0->Insert(0, item);
+    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) == item );
+    menu0->Delete(item);
 }
