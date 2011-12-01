@@ -1664,8 +1664,9 @@ wxSize wxAuiToolBar::GetHintSize(int dock_direction) const
         case wxAUI_DOCK_LEFT:
             return m_vertHintSize;
         default:
-            wxCHECK_MSG(false, wxDefaultSize, "invalid dock location value");
+            wxFAIL_MSG("invalid dock location value");
     }
+    return wxDefaultSize;
 }
 
 bool wxAuiToolBar::IsPaneValid(const wxAuiPaneInfo& pane) const
