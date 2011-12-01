@@ -1030,6 +1030,17 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         {
             wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
             superimpl(slf, (SEL)_cmd, event);
+            
+            // super of built-ins keeps the mouse up, as wx expects this event, we have to synthesize it
+            
+            if ( [ event type]  == NSLeftMouseDown )
+            {
+                wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+                SetupMouseEvent(wxevent , event) ;
+                wxevent.SetEventType(wxEVT_LEFT_UP);
+                
+                GetWXPeer()->HandleWindowEvent(wxevent);
+            }
         }
     }
 }
@@ -1718,14 +1729,126 @@ bool wxWidgetCocoaImpl::ShowWithEffect(bool show,
     return ShowViewOrWindowWithEffect(m_wxPeer, show, effect, timeout);
 }
 
+/* note that the drawing order between siblings is not defined under 10.4 */
+/* only starting from 10.5 the subview order is respected */
+
+/* NSComparisonResult is typedef'd as an enum pre-Leopard but typedef'd as
+ * NSInteger post-Leopard.  Pre-Leopard the Cocoa toolkit expects a function
+ * returning int and not NSComparisonResult.  Post-Leopard the Cocoa toolkit
+ * expects a function returning the new non-enum NSComparsionResult.
+ * Hence we create a typedef named CocoaWindowCompareFunctionResult.
+ */
+#if defined(NSINTEGER_DEFINED)
+typedef NSComparisonResult CocoaWindowCompareFunctionResult;
+#else
+typedef int CocoaWindowCompareFunctionResult;
+#endif
+
+class CocoaWindowCompareContext
+{
+    wxDECLARE_NO_COPY_CLASS(CocoaWindowCompareContext);
+public:
+    CocoaWindowCompareContext(); // Not implemented
+    CocoaWindowCompareContext(NSView *target, NSArray *subviews)
+    {
+        m_target = target;
+        // Cocoa sorts subviews in-place.. make a copy
+        m_subviews = [subviews copy];
+    }
+    
+    ~CocoaWindowCompareContext()
+    {   // release the copy
+        [m_subviews release];
+    }
+    NSView* target()
+    {   return m_target; }
+    
+    NSArray* subviews()
+    {   return m_subviews; }
+    
+    /* Helper function that returns the comparison based off of the original ordering */
+    CocoaWindowCompareFunctionResult CompareUsingOriginalOrdering(id first, id second)
+    {
+        NSUInteger firstI = [m_subviews indexOfObjectIdenticalTo:first];
+        NSUInteger secondI = [m_subviews indexOfObjectIdenticalTo:second];
+        // NOTE: If either firstI or secondI is NSNotFound then it will be NSIntegerMax and thus will
+        // likely compare higher than the other view which is reasonable considering the only way that
+        // can happen is if the subview was added after our call to subviews but before the call to
+        // sortSubviewsUsingFunction:context:.  Thus we don't bother checking.  Particularly because
+        // that case should never occur anyway because that would imply a multi-threaded GUI call
+        // which is a big no-no with Cocoa.
+		
+        // Subviews are ordered from back to front meaning one that is already lower will have an lower index.
+        NSComparisonResult result = (firstI < secondI)
+		?   NSOrderedAscending /* -1 */
+		:   (firstI > secondI)
+		?   NSOrderedDescending /* 1 */
+		:   NSOrderedSame /* 0 */;
+		
+        return result;
+    }
+private:
+    /* The subview we are trying to Raise or Lower */
+    NSView *m_target;
+    /* A copy of the original array of subviews */
+    NSArray *m_subviews;
+};
+
+/* Causes Cocoa to raise the target view to the top of the Z-Order by telling the sort function that
+ * the target view is always higher than every other view.  When comparing two views neither of
+ * which is the target, it returns the correct response based on the original ordering
+ */
+static CocoaWindowCompareFunctionResult CocoaRaiseWindowCompareFunction(id first, id second, void *ctx)
+{
+    CocoaWindowCompareContext *compareContext = (CocoaWindowCompareContext*)ctx;
+    // first should be ordered higher
+    if(first==compareContext->target())
+        return NSOrderedDescending;
+    // second should be ordered higher
+    if(second==compareContext->target())
+        return NSOrderedAscending;
+    return compareContext->CompareUsingOriginalOrdering(first,second);
+}
+
 void wxWidgetCocoaImpl::Raise()
 {
-    // Not implemented
+	NSView* nsview = m_osxView;
+	
+    NSView *superview = [nsview superview];
+    CocoaWindowCompareContext compareContext(nsview, [superview subviews]);
+	
+    [superview sortSubviewsUsingFunction:
+	 CocoaRaiseWindowCompareFunction
+								 context: &compareContext];
+	
+}
+
+/* Causes Cocoa to lower the target view to the bottom of the Z-Order by telling the sort function that
+ * the target view is always lower than every other view.  When comparing two views neither of
+ * which is the target, it returns the correct response based on the original ordering
+ */
+static CocoaWindowCompareFunctionResult CocoaLowerWindowCompareFunction(id first, id second, void *ctx)
+{
+    CocoaWindowCompareContext *compareContext = (CocoaWindowCompareContext*)ctx;
+    // first should be ordered lower
+    if(first==compareContext->target())
+        return NSOrderedAscending;
+    // second should be ordered lower
+    if(second==compareContext->target())
+        return NSOrderedDescending;
+    return compareContext->CompareUsingOriginalOrdering(first,second);
 }
 
 void wxWidgetCocoaImpl::Lower()
 {
-    // Not implemented
+	NSView* nsview = m_osxView;
+	
+    NSView *superview = [nsview superview];
+    CocoaWindowCompareContext compareContext(nsview, [superview subviews]);
+	
+    [superview sortSubviewsUsingFunction:
+	 CocoaLowerWindowCompareFunction
+								 context: &compareContext];
 }
 
 void wxWidgetCocoaImpl::ScrollRect( const wxRect *WXUNUSED(rect), int WXUNUSED(dx), int WXUNUSED(dy) )
