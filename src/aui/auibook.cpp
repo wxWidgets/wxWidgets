@@ -1935,7 +1935,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 }
 
 // Is the tab visible?
-bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd)
+bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* /*wnd*/)
 {
     if (!dc || !dc->IsOk())
         return false;
@@ -2021,9 +2021,6 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     // See if the given page is visible at the given tab offset (effectively scroll position)
     for (i = tabOffset; i < page_count; ++i)
     {
-        wxAuiNotebookPage& page = m_pages.Item(i);
-        wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
-
         rect.x = offset;
         rect.width = m_rect.width - right_buttons_width - offset - 2;
 
@@ -2031,14 +2028,6 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
             return false; // haven't found the tab, and we've run out of space, so return false
 
         int x_extent = 0;
-        wxSize size = m_art->GetTabSize(*dc,
-                            wnd,
-                            page.caption,
-                            page.bitmap,
-                            page.active,
-                            tab_button.curState,
-                            &x_extent);
-
         offset += x_extent;
 
         if (i == (size_t) tabPage)

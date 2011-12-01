@@ -8152,15 +8152,11 @@ bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, int style)
     }
 
     // Get internal padding
-    int paddingLeft = 0, paddingRight = 0, paddingTop = 0, paddingBottom = 0;
+    int paddingLeft = 0, paddingTop = 0;
     if (GetAttributes().GetTextBoxAttr().GetPadding().GetLeft().IsValid())
         paddingLeft = converter.GetPixels(GetAttributes().GetTextBoxAttr().GetPadding().GetLeft());
-    if (GetAttributes().GetTextBoxAttr().GetPadding().GetRight().IsValid())
-        paddingRight = converter.GetPixels(GetAttributes().GetTextBoxAttr().GetPadding().GetRight());
     if (GetAttributes().GetTextBoxAttr().GetPadding().GetTop().IsValid())
         paddingTop = converter.GetPixels(GetAttributes().GetTextBoxAttr().GetPadding().GetTop());
-    if (GetAttributes().GetTextBoxAttr().GetPadding().GetLeft().IsValid())
-        paddingBottom = converter.GetPixels(GetAttributes().GetTextBoxAttr().GetPadding().GetBottom());
 
     // Assume that left and top padding are also used for inter-cell padding.
     int paddingX = paddingLeft;

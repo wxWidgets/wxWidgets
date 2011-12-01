@@ -655,14 +655,13 @@ void wxAuiDefaultToolBarArt::DrawGripper(wxDC& dc,
 }
 
 void wxAuiDefaultToolBarArt::DrawOverflowButton(wxDC& dc,
-                                          wxWindow* wnd,
+                                          wxWindow* /*wnd*/,
                                           const wxRect& rect,
                                           int state)
 {
     if (state & wxAUI_BUTTON_STATE_HOVER ||
         state & wxAUI_BUTTON_STATE_PRESSED)
     {
-        wxRect cli_rect = wnd->GetClientRect();
         wxColor light_gray_bg = m_highlightColour.ChangeLightness(170);
 
         if (m_flags & wxAUI_TB_VERTICAL)
