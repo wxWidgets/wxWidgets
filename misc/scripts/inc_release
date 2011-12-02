@@ -86,6 +86,11 @@ run_sed build/osx/wxvers.xcconfig \
 run_sed build/tools/bld_chm_exe.bat \
     "/^SET WXW_VER=/s/$ver_for_sed/$ver_string_new/"
 
+run_sed docs/readme.txt \
+    "/wxWidgets /s/$ver_for_sed/$ver_string_new/" \
+    "/\//s/$ver_for_sed/$ver_string_new/" \
+    "/naming: while/s/$ver_for_sed/$ver_string_new/" 
+
 run_sed docs/doxygen/Doxyfile_inc \
     "/^PROJECT_NUMBER/s/$ver_for_sed/$ver_string_new/"
 
