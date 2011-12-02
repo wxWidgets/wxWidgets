@@ -2299,6 +2299,18 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );
+
+    // Generate wxEVT_CHAR_HOOK before sending any other events but only when
+    // the key is pressed, not when it's released (the type of wxevent is
+    // changed by SetupKeyEvent() so it can be wxEVT_KEY_UP too by now).
+    if ( wxevent.GetEventType() == wxEVT_KEY_DOWN )
+    {
+        wxKeyEvent eventHook(wxevent);
+        eventHook.SetEventType(wxEVT_CHAR_HOOK);
+        if ( wxGetTopLevelParent(GetWXPeer())->OSXHandleKeyEvent(eventHook) )
+            return true;
+    }
+
     bool result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
 
     // this will fire higher level events, like insertText, to help

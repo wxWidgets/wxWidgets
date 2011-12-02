@@ -507,6 +507,7 @@ OSX:
 - wxGetOsVersion() now returns more sensible version numbers, e.g. 10 and 6
   for OS X 10.6.
 - Added wxApp::MacOpenFiles and deprecated wxApp::MacOpenFile.
+- Implement wxEVT_CHAR_HOOK event generation in wxOSX/Cocoa.
 
 GTK:
 
