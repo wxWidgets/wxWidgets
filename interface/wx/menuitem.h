@@ -307,7 +307,7 @@ public:
         
         @onlyfor{wxmsw}
     */
-    void SetBackgroundColour(const wxColour& colour) const;
+    void SetBackgroundColour(const wxColour& colour);
 
     /**
         Sets the bitmap for the menu item.
@@ -402,7 +402,7 @@ public:
         
         @onlyfor{wxmsw}
     */
-    void SetMarginWidth(int width) const;
+    void SetMarginWidth(int width);
 
     /**
         Sets the parent menu which will contain this menu item.
