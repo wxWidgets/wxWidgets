@@ -1616,20 +1616,16 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
 
 #if wxOSX_USE_CARBON
     long keyval = event.m_keyCode ;
-    wxNonOwnedWindow *tlw = focus->MacGetTopLevelWindow() ;
 
-    if (tlw)
     {
-        event.SetEventType( wxEVT_CHAR_HOOK );
-        handled = tlw->HandleWindowEvent( event );
-        if ( handled && event.GetSkipped() )
+        wxKeyEvent eventCharHook(wxEVT_CHAR_HOOK, event);
+        handled = focus->HandleWindowEvent( eventCharHook );
+        if ( handled && eventCharHook.GetSkipped() )
             handled = false ;
     }
 
     if ( !handled )
     {
-        event.SetEventType( wxEVT_CHAR );
-        event.Skip( false ) ;
         handled = focus->HandleWindowEvent( event ) ;
     }
 

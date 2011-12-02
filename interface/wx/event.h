@@ -1365,17 +1365,21 @@ enum wxKeyCategoryFlags
     @event{EVT_CHAR(func)}
         Process a @c wxEVT_CHAR event.
     @event{EVT_CHAR_HOOK(func)}
-        Process a @c wxEVT_CHAR_HOOK event which is sent to the active
-        wxTopLevelWindow (i.e. the one containing the currently focused window)
-        or wxApp global object if there is no active window before any other
-        keyboard events are generated giving the parent window the opportunity
-        to intercept all the keyboard entry. If the event is handled, i.e. the
-        handler doesn't call wxEvent::Skip(), neither @c wxEVT_KEY_DOWN nor @c
-        wxEVT_CHAR events will be generated (although @c wxEVT_KEY_UP still
-        will be). Notice that this event is not generated when the mouse is
-        captured as it is considered that the window which has the capture
-        should receive all the keyboard events too without allowing its parent
-        wxTopLevelWindow to interfere with their processing.
+        Process a @c wxEVT_CHAR_HOOK event. Unlike all the other key events,
+        this event is propagated upwards the window hierarchy which allows
+        intercepting it in the parent window of the focused window to which it
+        is sent initially (if there is no focused window, this event is sent to
+        the wxApp global object). It is also generated before any other key
+        events and so gives the parent window an opportunity to modify the
+        keyboard handling of its children, e.g. it is used internally by
+        wxWidgets in some ports to intercept pressing Esc key in any child of a
+        dialog to close the dialog itself when it's pressed. If the event is
+        handled, i.e. the handler doesn't call wxEvent::Skip(), neither @c
+        wxEVT_KEY_DOWN nor @c wxEVT_CHAR events will be generated (although @c
+        wxEVT_KEY_UP still will be). Notice that this event is not generated
+        when the mouse is captured as it is considered that the window which
+        has the capture should receive all the keyboard events too without
+        allowing its parent wxTopLevelWindow to interfere with their processing.
     @endEventTable
 
     @see wxKeyboardState

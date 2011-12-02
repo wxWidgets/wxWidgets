@@ -2305,9 +2305,8 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     // changed by SetupKeyEvent() so it can be wxEVT_KEY_UP too by now).
     if ( wxevent.GetEventType() == wxEVT_KEY_DOWN )
     {
-        wxKeyEvent eventHook(wxevent);
-        eventHook.SetEventType(wxEVT_CHAR_HOOK);
-        if ( wxGetTopLevelParent(GetWXPeer())->OSXHandleKeyEvent(eventHook) )
+        wxKeyEvent eventHook(wxEVT_CHAR_HOOK, wxevent);
+        if ( GetWXPeer()->OSXHandleKeyEvent(eventHook) )
             return true;
     }
 

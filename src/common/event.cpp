@@ -735,6 +735,8 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
 #if wxUSE_UNICODE
     m_uniChar = WXK_NONE;
 #endif
+
+    InitPropagation();
 }
 
 wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
@@ -742,6 +744,8 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
             wxKeyboardState(evt)
 {
     DoAssignMembers(evt);
+
+    InitPropagation();
 }
 
 wxKeyEvent::wxKeyEvent(wxEventType eventType, const wxKeyEvent& evt)
@@ -751,6 +755,8 @@ wxKeyEvent::wxKeyEvent(wxEventType eventType, const wxKeyEvent& evt)
     DoAssignMembers(evt);
 
     m_eventType = eventType;
+
+    InitPropagation();
 }
 
 bool wxKeyEvent::IsKeyInCategory(int category) const

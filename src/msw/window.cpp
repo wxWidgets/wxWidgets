@@ -6622,7 +6622,14 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
 #endif // wxUSE_UNICODE
                     )
             {
-                const wxWindow * const win = wxGetActiveWindow();
+                wxWindow const* win = wxWindow::DoFindFocus();
+                if ( !win )
+                {
+                    // Even if the focus got lost somehow, still send the event
+                    // to the top level parent to allow a wxDialog to always
+                    // close on Escape.
+                    win = wxGetActiveWindow();
+                }
 
                 wxKeyEvent event(wxEVT_CHAR_HOOK);
                 MSWInitAnyKeyEvent(event, wParam, lParam, win);

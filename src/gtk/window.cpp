@@ -834,22 +834,15 @@ namespace
 // if it was processed (and not skipped).
 bool SendCharHookEvent(const wxKeyEvent& event, wxWindow *win)
 {
-    // wxEVT_CHAR_HOOK must be sent to the top level parent window to allow it
+    // wxEVT_CHAR_HOOK must be sent to allow the parent windows (e.g. a dialog
+    // which typically closes when Esc key is pressed in any of its controls)
     // to handle key events in all of its children unless the mouse is captured
     // in which case we consider that the keyboard should be "captured" too.
     if ( !g_captureWindow )
     {
-        wxWindow * const parent = wxGetTopLevelParent(win);
-        if ( parent )
-        {
-            // We need to make a copy of the event object because it is
-            // modified while it's handled, notably its WasProcessed() flag
-            // is set after it had been processed once.
-            wxKeyEvent eventCharHook(event);
-            eventCharHook.SetEventType(wxEVT_CHAR_HOOK);
-            if ( parent->HandleWindowEvent(eventCharHook) )
-                return true;
-        }
+        wxKeyEvent eventCharHook(wxEVT_CHAR_HOOK, event);
+        if ( win->HandleWindowEvent(eventCharHook) )
+            return true;
     }
 
     return false;

@@ -1744,6 +1744,14 @@ public:
     wxUint32      m_rawFlags;
 
 private:
+    // Set the event to propagate if necessary, i.e. if it's of wxEVT_CHAR_HOOK
+    // type. This is used by all ctors.
+    void InitPropagation()
+    {
+        if ( m_eventType == wxEVT_CHAR_HOOK )
+            m_propagationLevel = wxEVENT_PROPAGATE_MAX;
+    }
+
     // Copy only the event data present in this class, this is used by
     // AssignKeyData() and copy ctor.
     void DoAssignMembers(const wxKeyEvent& evt)
