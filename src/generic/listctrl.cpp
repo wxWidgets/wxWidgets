@@ -1462,6 +1462,12 @@ bool wxListTextCtrlWrapper::AcceptChanges()
 
 void wxListTextCtrlWrapper::OnChar( wxKeyEvent &event )
 {
+    if ( !CheckForEndEditKey(event) )
+        event.Skip();
+}
+
+bool wxListTextCtrlWrapper::CheckForEndEditKey(const wxKeyEvent& event)
+{
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
@@ -1473,8 +1479,10 @@ void wxListTextCtrlWrapper::OnChar( wxKeyEvent &event )
             break;
 
         default:
-            event.Skip();
+            return false;
     }
+
+    return true;
 }
 
 void wxListTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
@@ -1518,6 +1526,7 @@ void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 BEGIN_EVENT_TABLE(wxListMainWindow, wxWindow)
   EVT_PAINT          (wxListMainWindow::OnPaint)
   EVT_MOUSE_EVENTS   (wxListMainWindow::OnMouse)
+  EVT_CHAR_HOOK      (wxListMainWindow::OnCharHook)
   EVT_CHAR           (wxListMainWindow::OnChar)
   EVT_KEY_DOWN       (wxListMainWindow::OnKeyDown)
   EVT_KEY_UP         (wxListMainWindow::OnKeyUp)
@@ -2709,6 +2718,22 @@ void wxListMainWindow::OnKeyUp( wxKeyEvent &event )
     wxKeyEvent ke(event);
     if (parent->GetEventHandler()->ProcessEvent( ke ))
         return;
+
+    event.Skip();
+}
+
+void wxListMainWindow::OnCharHook( wxKeyEvent &event )
+{
+    if ( m_textctrlWrapper )
+    {
+        // When an in-place editor is active we should ensure that it always
+        // gets the key events that are special to it.
+        if ( m_textctrlWrapper->CheckForEndEditKey(event) )
+        {
+            // Skip the call to wxEvent::Skip() below.
+            return;
+        }
+    }
 
     event.Skip();
 }

@@ -48,6 +48,7 @@
 #include "wx/headerctrl.h"
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
+#include "wx/weakref.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -599,6 +600,7 @@ public:
     wxBitmap CreateItemBitmap( unsigned int row, int &indent );
 #endif // wxUSE_DRAG_AND_DROP
     void OnPaint( wxPaintEvent &event );
+    void OnCharHook( wxKeyEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnVerticalNavigation(unsigned int newCurrent, const wxKeyEvent& event);
     void OnLeftKey();
@@ -696,6 +698,10 @@ public:
 
     void OnColumnsCountChanged();
 
+    // Called by wxDataViewCtrl and our own OnRenameTimer() to start edit the
+    // specified item in the given column.
+    void StartEditing(const wxDataViewItem& item, const wxDataViewColumn* col);
+
 private:
     int RecalculateCount();
 
@@ -752,6 +758,12 @@ private:
 
     // This is the tree node under the cursor
     wxDataViewTreeNode * m_underMouse;
+
+    // The control used for editing or NULL.
+    wxWeakRef<wxWindow> m_editorCtrl;
+
+    // Id m_editorCtrl is non-NULL, pointer to the associated renderer.
+    wxDataViewRenderer* m_editorRenderer;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
@@ -1338,6 +1350,7 @@ BEGIN_EVENT_TABLE(wxDataViewMainWindow,wxWindow)
     EVT_MOUSE_EVENTS  (wxDataViewMainWindow::OnMouse)
     EVT_SET_FOCUS     (wxDataViewMainWindow::OnSetFocus)
     EVT_KILL_FOCUS    (wxDataViewMainWindow::OnKillFocus)
+    EVT_CHAR_HOOK     (wxDataViewMainWindow::OnCharHook)
     EVT_CHAR          (wxDataViewMainWindow::OnChar)
 END_EVENT_TABLE()
 
@@ -1348,6 +1361,8 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
 {
     SetOwner( parent );
+
+    m_editorRenderer = NULL;
 
     m_lastOnSame = false;
     m_renameTimer = new wxDataViewRenameTimer( this );
@@ -2005,9 +2020,25 @@ void wxDataViewMainWindow::OnRenameTimer()
 
     wxDataViewItem item = GetItemByRow( m_currentRow );
 
-    wxRect labelRect = GetItemRect(item, m_currentCol);
+    StartEditing( item, m_currentCol );
+}
 
-    m_currentCol->GetRenderer()->StartEditing( item, labelRect );
+void
+wxDataViewMainWindow::StartEditing(const wxDataViewItem& item,
+                                   const wxDataViewColumn* col)
+{
+    wxDataViewRenderer* renderer = col->GetRenderer();
+    if (renderer->GetMode() != wxDATAVIEW_CELL_EDITABLE)
+        return;
+
+    const wxRect itemRect = GetItemRect(item, col);
+    if ( renderer->StartEditing(item, itemRect) )
+    {
+        // Save the renderer to be able to finish/cancel editing it later and
+        // save the control to be able to detect if we're still editing it.
+        m_editorRenderer = renderer;
+        m_editorCtrl = renderer->GetEditorCtrl();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -3402,6 +3433,27 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
        return NULL;
 
    return candidate;
+}
+
+void wxDataViewMainWindow::OnCharHook(wxKeyEvent& event)
+{
+    if ( m_editorCtrl )
+    {
+        // Handle any keys special for the in-place editor and return without
+        // calling Skip() below.
+        switch ( event.GetKeyCode() )
+        {
+            case WXK_ESCAPE:
+                m_editorRenderer->CancelEditing();
+                return;
+
+            case WXK_RETURN:
+                m_editorRenderer->FinishEditing();
+                return;
+        }
+    }
+
+    event.Skip();
 }
 
 void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
@@ -4939,12 +4991,7 @@ void wxDataViewCtrl::StartEditor( const wxDataViewItem & item, unsigned int colu
     if (!col)
         return;
 
-    wxDataViewRenderer* renderer = col->GetRenderer();
-    if (renderer->GetMode() != wxDATAVIEW_CELL_EDITABLE)
-        return;
-
-    const wxRect itemRect = GetItemRect(item, col);
-    renderer->StartEditing(item, itemRect);
+    m_clientArea->StartEditing(item, col);
 }
 
 #endif // !wxUSE_GENERICDATAVIEWCTRL

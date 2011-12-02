@@ -179,6 +179,8 @@ wxTreeCtrlBase::wxTreeCtrlBase()
 
     // quick DoGetBestSize calculation
     m_quickBestSize = true;
+
+    Connect(wxEVT_CHAR_HOOK, wxKeyEventHandler(wxTreeCtrlBase::OnCharHook));
 }
 
 wxTreeCtrlBase::~wxTreeCtrlBase()
@@ -347,6 +349,28 @@ void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item)
 bool wxTreeCtrlBase::IsEmpty() const
 {
     return !GetRootItem().IsOk();
+}
+
+void wxTreeCtrlBase::OnCharHook(wxKeyEvent& event)
+{
+    if ( GetEditControl() )
+    {
+        bool discardChanges = false;
+        switch ( event.GetKeyCode() )
+        {
+            case WXK_ESCAPE:
+                discardChanges = true;
+                // fall through
+
+            case WXK_RETURN:
+                EndEditLabel(GetSelection(), discardChanges);
+
+                // Do not call Skip() below.
+                return;
+        }
+    }
+
+    event.Skip();
 }
 
 #endif // wxUSE_TREECTRL

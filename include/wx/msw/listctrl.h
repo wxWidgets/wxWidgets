@@ -466,6 +466,10 @@ private:
     // destroy m_textCtrl if it's currently valid and reset it to NULL
     void DeleteEditControl();
 
+    // Intercept Escape and Enter keys to avoid them being stolen from our
+    // in-place editor control.
+    void OnCharHook(wxKeyEvent& event);
+
 
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
     DECLARE_EVENT_TABLE()

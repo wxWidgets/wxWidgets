@@ -228,6 +228,7 @@ public:
 
 BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
     EVT_PAINT(wxListCtrl::OnPaint)
+    EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -2971,6 +2972,27 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             }
         }
     }
+}
+
+void wxListCtrl::OnCharHook(wxKeyEvent& event)
+{
+    if ( GetEditControl() )
+    {
+        // We need to ensure that Escape is not stolen from the in-place editor
+        // by the containing dialog.
+        //
+        // Notice that we don't have to care about Enter key here as we return
+        // false from MSWShouldPreProcessMessage() for it.
+        if ( event.GetKeyCode() == WXK_ESCAPE )
+        {
+            EndEditLabel(true /* cancel */);
+
+            // Don't call Skip() below.
+            return;
+        }
+    }
+
+    event.Skip();
 }
 
 WXLRESULT
