@@ -830,11 +830,9 @@ struct wxGtkIMData
 namespace
 {
 
-// Send wxEVT_CHAR_HOOK event to the parent of the window and if it wasn't
-// processed, send wxEVT_CHAR to the window itself. Return true if either of
-// them was handled.
-bool
-SendCharHookAndCharEvents(const wxKeyEvent& event, wxWindow *win)
+// Send wxEVT_CHAR_HOOK event to the parent of the window and return true only
+// if it was processed (and not skipped).
+bool SendCharHookEvent(const wxKeyEvent& event, wxWindow *win)
 {
     // wxEVT_CHAR_HOOK must be sent to the top level parent window to allow it
     // to handle key events in all of its children unless the mouse is captured
@@ -854,10 +852,7 @@ SendCharHookAndCharEvents(const wxKeyEvent& event, wxWindow *win)
         }
     }
 
-    // As above, make a copy of the event first.
-    wxKeyEvent eventChar(event);
-    eventChar.SetEventType(wxEVT_CHAR);
-    return win->HandleWindowEvent(eventChar);
+    return false;
 }
 
 } // anonymous namespace
@@ -879,6 +874,13 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
     if( wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
+        // Send the CHAR_HOOK event first
+        if ( SendCharHookEvent(event, win) )
+        {
+            // Don't do anything at all with this event any more.
+            return TRUE;
+        }
+
         // Emit KEY_DOWN event
         ret = win->HandleWindowEvent( event );
     }
@@ -962,25 +964,27 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
         if ( key_code )
         {
+            wxKeyEvent eventChar(wxEVT_CHAR, event);
+
             wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), key_code);
 
-            event.m_keyCode = key_code;
+            eventChar.m_keyCode = key_code;
 
             // To conform to the docs we need to translate Ctrl-alpha
             // characters to values in the range 1-26.
-            if ( event.ControlDown() &&
+            if ( eventChar.ControlDown() &&
                  ( wxIsLowerChar(key_code) || wxIsUpperChar(key_code) ))
             {
                 if ( wxIsLowerChar(key_code) )
-                    event.m_keyCode = key_code - 'a' + 1;
+                    eventChar.m_keyCode = key_code - 'a' + 1;
                 if ( wxIsUpperChar(key_code) )
-                    event.m_keyCode = key_code - 'A' + 1;
+                    eventChar.m_keyCode = key_code - 'A' + 1;
 #if wxUSE_UNICODE
-                event.m_uniChar = event.m_keyCode;
+                eventChar.m_uniChar = event.m_keyCode;
 #endif
             }
 
-            ret = SendCharHookAndCharEvents(event, win);
+            ret = win->HandleWindowEvent(eventChar);
         }
     }
 
@@ -994,7 +998,7 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
                         const gchar  *str,
                         wxWindow     *window)
 {
-    wxKeyEvent event( wxEVT_KEY_DOWN );
+    wxKeyEvent event( wxEVT_CHAR );
 
     // take modifiers, cursor position, timestamp etc. from the last
     // key_press_event that was fed into Input Method:
@@ -1039,7 +1043,7 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
 #endif
         }
 
-        SendCharHookAndCharEvents(event, window);
+        window->HandleWindowEvent(event);
     }
 }
 }

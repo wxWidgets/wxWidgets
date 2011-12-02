@@ -1357,7 +1357,9 @@ enum wxKeyCategoryFlags
 
     @beginEventTable{wxKeyEvent}
     @event{EVT_KEY_DOWN(func)}
-        Process a @c wxEVT_KEY_DOWN event (any key has been pressed).
+        Process a @c wxEVT_KEY_DOWN event (any key has been pressed). If this
+        event is handled and not skipped, @c wxEVT_CHAR will not be generated
+        at all for this key press (but @c wxEVT_KEY_UP will be).
     @event{EVT_KEY_UP(func)}
         Process a @c wxEVT_KEY_UP event (any key has been released).
     @event{EVT_CHAR(func)}
@@ -1368,8 +1370,9 @@ enum wxKeyCategoryFlags
         or wxApp global object if there is no active window before any other
         keyboard events are generated giving the parent window the opportunity
         to intercept all the keyboard entry. If the event is handled, i.e. the
-        handler doesn't call wxEvent::Skip(), no further keyboard events are
-        generated. Notice that this event is not generated when the mouse is
+        handler doesn't call wxEvent::Skip(), neither @c wxEVT_KEY_DOWN nor @c
+        wxEVT_CHAR events will be generated (although @c wxEVT_KEY_UP still
+        will be). Notice that this event is not generated when the mouse is
         captured as it is considered that the window which has the capture
         should receive all the keyboard events too without allowing its parent
         wxTopLevelWindow to interfere with their processing.
