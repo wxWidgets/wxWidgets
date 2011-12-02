@@ -228,7 +228,7 @@ public:
             Number of digits after the decimal dot.
         @param format
             The format used to display the string, must be a combination of
-            wxGridCellFloatFormat enum elements. This parameter is only
+            ::wxGridCellFloatFormat enum elements. This parameter is only
             available since wxWidgets 2.9.3.
     */
     wxGridCellFloatRenderer(int width = -1, int precision = -1,
@@ -237,7 +237,7 @@ public:
     /**
         Returns the specifier used to format the data to string.
 
-        The returned value is a combination of wxGridCellFloatFormat elements.
+        The returned value is a combination of ::wxGridCellFloatFormat elements.
 
         @since 2.9.3
     */
@@ -257,7 +257,7 @@ public:
         Set the format to use for display the number.
 
         @param format
-            Must be a combination of wxGridCellFloatFormat enum elements.
+            Must be a combination of ::wxGridCellFloatFormat enum elements.
 
         @since 2.9.3
     */
@@ -648,7 +648,7 @@ public:
             Number of digits after the decimal dot.
         @param format
             The format to use for displaying the number, a combination of
-            wxGridCellFloatFormat enum elements. This parameter is only
+            ::wxGridCellFloatFormat enum elements. This parameter is only
             available since wxWidgets 2.9.3.
     */
     wxGridCellFloatEditor(int width = -1, int precision = -1,
