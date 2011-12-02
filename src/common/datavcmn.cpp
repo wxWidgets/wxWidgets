@@ -760,9 +760,9 @@ bool wxDataViewRendererBase::FinishEditing()
 
     wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
 
-    dv_ctrl->GetMainWindow()->SetFocus();
-
     DestroyEditControl();
+
+    dv_ctrl->GetMainWindow()->SetFocus();
 
     bool isValid = Validate(value);
     unsigned int col = GetOwner()->GetModelColumn();
