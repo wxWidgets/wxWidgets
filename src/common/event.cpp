@@ -744,6 +744,15 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
     DoAssignMembers(evt);
 }
 
+wxKeyEvent::wxKeyEvent(wxEventType eventType, const wxKeyEvent& evt)
+          : wxEvent(evt),
+            wxKeyboardState(evt)
+{
+    DoAssignMembers(evt);
+
+    m_eventType = eventType;
+}
+
 bool wxKeyEvent::IsKeyInCategory(int category) const
 {
     switch ( GetKeyCode() )

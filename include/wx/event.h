@@ -1661,7 +1661,12 @@ class WXDLLIMPEXP_CORE wxKeyEvent : public wxEvent,
 {
 public:
     wxKeyEvent(wxEventType keyType = wxEVT_NULL);
+
+    // Normal copy ctor and a ctor creating a new event for the same key as the
+    // given one but a different event type (this is used in implementation
+    // code only, do not use outside of the library).
     wxKeyEvent(const wxKeyEvent& evt);
+    wxKeyEvent(wxEventType eventType, const wxKeyEvent& evt);
 
     // get the key code: an ASCII7 char or an element of wxKeyCode enum
     int GetKeyCode() const { return (int)m_keyCode; }
