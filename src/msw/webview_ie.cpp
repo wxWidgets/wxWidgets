@@ -699,7 +699,7 @@ void wxWebViewIE::RunScript(const wxString& javascript)
         VariantInit(&level);
         V_VT(&level) = VT_EMPTY;
         window->execScript(SysAllocString(javascript.wc_str()),
-                           SysAllocString(language).wc_str(),
+                           SysAllocString(language.wc_str()),
                            &level);
     }
     document->Release();
