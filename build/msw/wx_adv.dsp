@@ -709,7 +709,7 @@ SOURCE=..\..\src\generic\propdlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\richtooltip.cpp
+SOURCE=..\..\src\generic\richtooltipg.cpp
 # End Source File
 # Begin Source File
 

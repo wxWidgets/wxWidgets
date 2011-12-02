@@ -726,54 +726,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\richtooltip.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\adv\msw_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\adv\msw_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\adv\msw_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\adv\msw_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\adv\msw_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\adv\msw_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\adv\msw_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\adv\msw_richtooltip.obj"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\sound.cpp">
@@ -897,55 +849,7 @@
 				RelativePath="..\..\src\generic\propdlg.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\generic\richtooltip.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\adv\generic_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\adv\generic_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\adv\generic_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\adv\generic_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\adv\generic_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\adv\generic_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\adv\generic_richtooltip.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\adv\generic_richtooltip.obj"/>
-				</FileConfiguration>
+				RelativePath="..\..\src\generic\richtooltipg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\sashwin.cpp">

@@ -2286,7 +2286,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_notifmsgg.obj \
 	$(OBJS)\monodll_odcombo.obj \
 	$(OBJS)\monodll_propdlg.obj \
-	$(OBJS)\monodll_generic_richtooltip.obj \
+	$(OBJS)\monodll_richtooltipg.obj \
 	$(OBJS)\monodll_sashwin.obj \
 	$(OBJS)\monodll_splash.obj \
 	$(OBJS)\monodll_generic_timectrl.obj \
@@ -2296,7 +2296,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
 	$(OBJS)\monodll_notifmsg.obj \
-	$(OBJS)\monodll_msw_richtooltip.obj \
+	$(OBJS)\monodll_richtooltip.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_joystick.obj \
@@ -2338,7 +2338,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_notifmsgg.obj \
 	$(OBJS)\monodll_odcombo.obj \
 	$(OBJS)\monodll_propdlg.obj \
-	$(OBJS)\monodll_generic_richtooltip.obj \
+	$(OBJS)\monodll_richtooltipg.obj \
 	$(OBJS)\monodll_sashwin.obj \
 	$(OBJS)\monodll_splash.obj \
 	$(OBJS)\monodll_generic_timectrl.obj \
@@ -2348,7 +2348,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
 	$(OBJS)\monodll_notifmsg.obj \
-	$(OBJS)\monodll_msw_richtooltip.obj \
+	$(OBJS)\monodll_richtooltip.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_joystick.obj \
@@ -3069,7 +3069,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_notifmsgg.obj \
 	$(OBJS)\monolib_odcombo.obj \
 	$(OBJS)\monolib_propdlg.obj \
-	$(OBJS)\monolib_generic_richtooltip.obj \
+	$(OBJS)\monolib_richtooltipg.obj \
 	$(OBJS)\monolib_sashwin.obj \
 	$(OBJS)\monolib_splash.obj \
 	$(OBJS)\monolib_generic_timectrl.obj \
@@ -3079,7 +3079,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
 	$(OBJS)\monolib_notifmsg.obj \
-	$(OBJS)\monolib_msw_richtooltip.obj \
+	$(OBJS)\monolib_richtooltip.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_joystick.obj \
@@ -3121,7 +3121,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_notifmsgg.obj \
 	$(OBJS)\monolib_odcombo.obj \
 	$(OBJS)\monolib_propdlg.obj \
-	$(OBJS)\monolib_generic_richtooltip.obj \
+	$(OBJS)\monolib_richtooltipg.obj \
 	$(OBJS)\monolib_sashwin.obj \
 	$(OBJS)\monolib_splash.obj \
 	$(OBJS)\monolib_generic_timectrl.obj \
@@ -3131,7 +3131,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
 	$(OBJS)\monolib_notifmsg.obj \
-	$(OBJS)\monolib_msw_richtooltip.obj \
+	$(OBJS)\monolib_richtooltip.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_joystick.obj \
@@ -4287,7 +4287,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_notifmsgg.obj \
 	$(OBJS)\advdll_odcombo.obj \
 	$(OBJS)\advdll_propdlg.obj \
-	$(OBJS)\advdll_generic_richtooltip.obj \
+	$(OBJS)\advdll_richtooltipg.obj \
 	$(OBJS)\advdll_sashwin.obj \
 	$(OBJS)\advdll_splash.obj \
 	$(OBJS)\advdll_generic_timectrl.obj \
@@ -4297,7 +4297,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
 	$(OBJS)\advdll_notifmsg.obj \
-	$(OBJS)\advdll_msw_richtooltip.obj \
+	$(OBJS)\advdll_richtooltip.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
 	$(OBJS)\advdll_joystick.obj \
@@ -4339,7 +4339,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_notifmsgg.obj \
 	$(OBJS)\advdll_odcombo.obj \
 	$(OBJS)\advdll_propdlg.obj \
-	$(OBJS)\advdll_generic_richtooltip.obj \
+	$(OBJS)\advdll_richtooltipg.obj \
 	$(OBJS)\advdll_sashwin.obj \
 	$(OBJS)\advdll_splash.obj \
 	$(OBJS)\advdll_generic_timectrl.obj \
@@ -4349,7 +4349,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
 	$(OBJS)\advdll_notifmsg.obj \
-	$(OBJS)\advdll_msw_richtooltip.obj \
+	$(OBJS)\advdll_richtooltip.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
 	$(OBJS)\advdll_joystick.obj \
@@ -4387,7 +4387,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_notifmsgg.obj \
 	$(OBJS)\advlib_odcombo.obj \
 	$(OBJS)\advlib_propdlg.obj \
-	$(OBJS)\advlib_generic_richtooltip.obj \
+	$(OBJS)\advlib_richtooltipg.obj \
 	$(OBJS)\advlib_sashwin.obj \
 	$(OBJS)\advlib_splash.obj \
 	$(OBJS)\advlib_generic_timectrl.obj \
@@ -4397,7 +4397,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
 	$(OBJS)\advlib_notifmsg.obj \
-	$(OBJS)\advlib_msw_richtooltip.obj \
+	$(OBJS)\advlib_richtooltip.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
 	$(OBJS)\advlib_joystick.obj \
@@ -4439,7 +4439,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_notifmsgg.obj \
 	$(OBJS)\advlib_odcombo.obj \
 	$(OBJS)\advlib_propdlg.obj \
-	$(OBJS)\advlib_generic_richtooltip.obj \
+	$(OBJS)\advlib_richtooltipg.obj \
 	$(OBJS)\advlib_sashwin.obj \
 	$(OBJS)\advlib_splash.obj \
 	$(OBJS)\advlib_generic_timectrl.obj \
@@ -4449,7 +4449,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
 	$(OBJS)\advlib_notifmsg.obj \
-	$(OBJS)\advlib_msw_richtooltip.obj \
+	$(OBJS)\advlib_richtooltip.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
 	$(OBJS)\advlib_joystick.obj \
@@ -8377,8 +8377,8 @@ $(OBJS)\monodll_propdlg.obj: ..\..\src\generic\propdlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_generic_richtooltip.obj: ..\..\src\generic\richtooltip.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\richtooltip.cpp
+$(OBJS)\monodll_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -8427,7 +8427,7 @@ $(OBJS)\monodll_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_msw_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
+$(OBJS)\monodll_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
 !endif
 
@@ -10782,8 +10782,8 @@ $(OBJS)\monolib_propdlg.obj: ..\..\src\generic\propdlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_generic_richtooltip.obj: ..\..\src\generic\richtooltip.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\richtooltip.cpp
+$(OBJS)\monolib_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -10832,7 +10832,7 @@ $(OBJS)\monolib_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_msw_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
+$(OBJS)\monolib_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
 !endif
 
@@ -14545,8 +14545,8 @@ $(OBJS)\advdll_odcombo.obj: ..\..\src\generic\odcombo.cpp
 $(OBJS)\advdll_propdlg.obj: ..\..\src\generic\propdlg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\propdlg.cpp
 
-$(OBJS)\advdll_generic_richtooltip.obj: ..\..\src\generic\richtooltip.cpp
-	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\richtooltip.cpp
+$(OBJS)\advdll_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
 
 $(OBJS)\advdll_sashwin.obj: ..\..\src\generic\sashwin.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\sashwin.cpp
@@ -14575,7 +14575,7 @@ $(OBJS)\advdll_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
 $(OBJS)\advdll_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
 
-$(OBJS)\advdll_msw_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
+$(OBJS)\advdll_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
 
 $(OBJS)\advdll_sound.obj: ..\..\src\msw\sound.cpp
@@ -14695,8 +14695,8 @@ $(OBJS)\advlib_odcombo.obj: ..\..\src\generic\odcombo.cpp
 $(OBJS)\advlib_propdlg.obj: ..\..\src\generic\propdlg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\propdlg.cpp
 
-$(OBJS)\advlib_generic_richtooltip.obj: ..\..\src\generic\richtooltip.cpp
-	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\richtooltip.cpp
+$(OBJS)\advlib_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
 
 $(OBJS)\advlib_sashwin.obj: ..\..\src\generic\sashwin.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\sashwin.cpp
@@ -14725,7 +14725,7 @@ $(OBJS)\advlib_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
 $(OBJS)\advlib_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
 
-$(OBJS)\advlib_msw_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
+$(OBJS)\advlib_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
 
 $(OBJS)\advlib_sound.obj: ..\..\src\msw\sound.cpp

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/generic/richtooltip.cpp
+// Name:        src/generic/richtooltipg.cpp
 // Purpose:     Implementation of wxRichToolTip.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-07
