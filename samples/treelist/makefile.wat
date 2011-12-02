@@ -63,10 +63,10 @@ LIBTYPE_SUFFIX = dll
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
-EXTRALIBS_FOR_BASE = 
+EXTRALIBS_FOR_BASE =
 !endif
 !ifeq MONOLITHIC 1
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =
 !endif
 __DEBUGINFO_0 =
 !ifeq BUILD debug
@@ -93,11 +93,11 @@ __DEBUGINFO_1 = debug all
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = 
+__DEBUGINFO_1 =
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_1 = 
+__DEBUGINFO_1 =
 !endif
 !ifeq DEBUG_INFO 1
 __DEBUGINFO_1 = debug all
@@ -111,7 +111,7 @@ __OPTIMIZEFLAG_2 = -ot -ox
 !endif
 __THREADSFLAG_5 =
 !ifeq USE_THREADS 0
-__THREADSFLAG_5 = 
+__THREADSFLAG_5 =
 !endif
 !ifeq USE_THREADS 1
 __THREADSFLAG_5 = -bm
@@ -121,18 +121,18 @@ __RUNTIME_LIBS_6 =
 __RUNTIME_LIBS_6 = -br
 !endif
 !ifeq RUNTIME_LIBS static
-__RUNTIME_LIBS_6 = 
+__RUNTIME_LIBS_6 =
 !endif
 __RTTIFLAG_7 =
 !ifeq USE_RTTI 0
-__RTTIFLAG_7 = 
+__RTTIFLAG_7 =
 !endif
 !ifeq USE_RTTI 1
 __RTTIFLAG_7 = -xr
 !endif
 __EXCEPTIONSFLAG_8 =
 !ifeq USE_EXCEPTIONS 0
-__EXCEPTIONSFLAG_8 = 
+__EXCEPTIONSFLAG_8 =
 !endif
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG_8 = -xs
@@ -245,7 +245,7 @@ $(OBJS) :
 
 all : .SYMBOLIC $(OBJS)\treelist.exe
 
-clean : .SYMBOLIC 
+clean : .SYMBOLIC
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
@@ -270,4 +270,3 @@ $(OBJS)\treelist_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 
 $(OBJS)\treelist_treelist.obj :  .AUTODEPEND .\treelist.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TREELIST_CXXFLAGS) $<
-

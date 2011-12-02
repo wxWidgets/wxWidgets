@@ -62,10 +62,10 @@ ifeq ($(SHARED),1)
 LIBTYPE_SUFFIX = dll
 endif
 ifeq ($(MONOLITHIC),0)
-EXTRALIBS_FOR_BASE = 
+EXTRALIBS_FOR_BASE =
 endif
 ifeq ($(MONOLITHIC),1)
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG_2 = -O0
@@ -77,13 +77,13 @@ ifeq ($(USE_RTTI),0)
 __RTTIFLAG_5 = -fno-rtti
 endif
 ifeq ($(USE_RTTI),1)
-__RTTIFLAG_5 = 
+__RTTIFLAG_5 =
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONSFLAG_6 = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG_6 = 
+__EXCEPTIONSFLAG_6 =
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -192,17 +192,17 @@ endif
 endif
 ifeq ($(BUILD),release)
 ifeq ($(DEBUG_INFO),default)
-__DEBUGINFO = 
+__DEBUGINFO =
 endif
 endif
 ifeq ($(DEBUG_INFO),0)
-__DEBUGINFO = 
+__DEBUGINFO =
 endif
 ifeq ($(DEBUG_INFO),1)
 __DEBUGINFO = -g
 endif
 ifeq ($(USE_THREADS),0)
-__THREADSFLAG = 
+__THREADSFLAG =
 endif
 ifeq ($(USE_THREADS),1)
 __THREADSFLAG = -mthreads
@@ -217,7 +217,7 @@ $(OBJS):
 
 all: $(OBJS)\treelist.exe
 
-clean: 
+clean:
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\treelist.exe del $(OBJS)\treelist.exe
