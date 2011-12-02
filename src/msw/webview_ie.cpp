@@ -698,7 +698,9 @@ void wxWebViewIE::RunScript(const wxString& javascript)
         VARIANT level;
         VariantInit(&level);
         V_VT(&level) = VT_EMPTY;
-        window->execScript(SysAllocString(javascript), SysAllocString(language), &level);
+        window->execScript(SysAllocString(javascript.wc_str()),
+                           SysAllocString(language).wc_str(),
+                           &level);
     }
     document->Release();
 }
@@ -719,7 +721,9 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
             wxFAIL_MSG("Could not retrive internet session");
         }
 
-        HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol, handler->GetName(), 0, NULL, 0);
+        HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol,
+                                                handler->GetName().wc_str(),
+                                                0, NULL, 0);
         if(FAILED(hr))
         {
             wxFAIL_MSG("Could not register protocol");

@@ -899,7 +899,7 @@ wxGDIPlusFontData::Init(const wxString& name,
                         const wxColour& col,
                         Unit fontUnit)
 {
-    m_font = new Font(name, size, style, fontUnit);
+    m_font = new Font(name.wc_str(), size, style, fontUnit);
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
