@@ -682,7 +682,7 @@ wxDialUpManagerImpl::CheckIfconfig()
     defined(__SOLARIS__) || defined (__SUNOS__)
         // need to add -a flag
         cmd << wxT(" -a");
-#elif defined(__LINUX__) || defined(__SGI__)
+#elif defined(__LINUX__) || defined(__SGI__) || defined(__OPENBSD__)
         // nothing to be added to ifconfig
 #elif defined(__FREEBSD__) || defined(__DARWIN__) || defined(__QNX__)
         // add -l flag
@@ -723,7 +723,8 @@ wxDialUpManagerImpl::CheckIfconfig()
                     // dialup device under SunOS/Solaris
                     hasModem = strstr(output.fn_str(),"ipdptp") != NULL;
                     hasLAN = strstr(output.fn_str(), "hme") != NULL;
-#elif defined(__LINUX__) || defined (__FREEBSD__) || defined (__QNX__)
+#elif defined(__LINUX__) || defined (__FREEBSD__) || defined (__QNX__) || \
+      defined(__OPENBSD__)
                     hasModem = strstr(output.fn_str(),"ppp")    // ppp
                         || strstr(output.fn_str(),"sl")  // slip
                         || strstr(output.fn_str(),"pl"); // plip

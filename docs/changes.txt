@@ -464,6 +464,7 @@ All:
 - Made wxGetLocalTimeMillis() really return local time, added
   wxGetUTCTimeMillis() returning what this function used to return.
 - Added wxCriticalSection::TryEnter() (Catalin Raceanu).
+- Add support for OpenBSD to wxDialUpManager (brad0).
 
 All (GUI):
 
