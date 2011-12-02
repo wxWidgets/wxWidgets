@@ -741,16 +741,7 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
           : wxEvent(evt),
             wxKeyboardState(evt)
 {
-    m_x = evt.m_x;
-    m_y = evt.m_y;
-
-    m_keyCode = evt.m_keyCode;
-    m_rawCode = evt.m_rawCode;
-    m_rawFlags = evt.m_rawFlags;
-
-#if wxUSE_UNICODE
-    m_uniChar = evt.m_uniChar;
-#endif
+    DoAssignMembers(evt);
 }
 
 bool wxKeyEvent::IsKeyInCategory(int category) const

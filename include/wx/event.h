@@ -1717,16 +1717,7 @@ public:
             // implicitly defined operator=() so need to do it this way:
             *static_cast<wxKeyboardState *>(this) = evt;
 
-            m_x = evt.m_x;
-            m_y = evt.m_y;
-
-            m_keyCode = evt.m_keyCode;
-
-            m_rawCode = evt.m_rawCode;
-            m_rawFlags = evt.m_rawFlags;
-#if wxUSE_UNICODE
-            m_uniChar = evt.m_uniChar;
-#endif
+            DoAssignMembers(evt);
         }
         return *this;
     }
@@ -1748,6 +1739,22 @@ public:
     wxUint32      m_rawFlags;
 
 private:
+    // Copy only the event data present in this class, this is used by
+    // AssignKeyData() and copy ctor.
+    void DoAssignMembers(const wxKeyEvent& evt)
+    {
+        m_x = evt.m_x;
+        m_y = evt.m_y;
+
+        m_keyCode = evt.m_keyCode;
+
+        m_rawCode = evt.m_rawCode;
+        m_rawFlags = evt.m_rawFlags;
+#if wxUSE_UNICODE
+        m_uniChar = evt.m_uniChar;
+#endif
+    }
+
     DECLARE_DYNAMIC_CLASS(wxKeyEvent)
 };
 
