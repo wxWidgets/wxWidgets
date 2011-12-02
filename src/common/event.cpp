@@ -413,11 +413,6 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
 // wxCommandEvent
 // ----------------------------------------------------------------------------
 
-#ifdef __VISUALC__
-    // 'this' : used in base member initializer list (for m_commandString)
-    #pragma warning(disable:4355)
-#endif
-
 wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
               : wxEvent(theId, commandType)
 {
@@ -428,10 +423,6 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
     // the command events are propagated upwards by default
     m_propagationLevel = wxEVENT_PROPAGATE_MAX;
 }
-
-#ifdef __VISUALC__
-    #pragma warning(default:4355)
-#endif
 
 wxString wxCommandEvent::GetString() const
 {
