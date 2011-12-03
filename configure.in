@@ -7191,6 +7191,7 @@ fi
 if test "$wxUSE_TREELISTCTRL" = "yes"; then
     AC_DEFINE(wxUSE_TREELISTCTRL)
     USES_CONTROLS=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treelist"
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
