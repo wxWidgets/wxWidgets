@@ -61,6 +61,10 @@ public:
 
     /**
         (Re)starts the stop watch with a given initial value.
+
+        The stopwatch will always be running after calling Start(), even if
+        Pause() had been called before and even if it had been called multiple
+        times.
     */
     void Start(long milliseconds = 0);
 

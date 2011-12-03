@@ -26,6 +26,14 @@
 #include "wx/stopwatch.h"
 #include "wx/utils.h"
 
+namespace
+{
+
+const long tolerance = 10;  // in ms
+const int sleepTime = 500;
+
+} // anonymous namespace
+
 // --------------------------------------------------------------------------
 // test class
 // --------------------------------------------------------------------------
@@ -39,10 +47,12 @@ private:
     CPPUNIT_TEST_SUITE( StopWatchTestCase );
         CPPUNIT_TEST( Misc );
         CPPUNIT_TEST( BackwardsClockBug );
+        CPPUNIT_TEST( RestartBug );
     CPPUNIT_TEST_SUITE_END();
 
     void Misc();
     void BackwardsClockBug();
+    void RestartBug();
 
     DECLARE_NO_COPY_CLASS(StopWatchTestCase)
 };
@@ -55,8 +65,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( StopWatchTestCase, "StopWatchTestCase" );
 
 void StopWatchTestCase::Misc()
 {
-    static const long tolerance = 10;  // in ms
-
     wxStopWatch sw;
     long t;
     wxLongLong usec;
@@ -81,7 +89,6 @@ void StopWatchTestCase::Misc()
         t >= 0 && t < tolerance
     );
 
-    static const int sleepTime = 500;
     sw.Resume();
     wxMilliSleep(sleepTime);
     t = sw.Time();
@@ -123,4 +130,23 @@ void StopWatchTestCase::BackwardsClockBug()
             CPPUNIT_ASSERT ( sw.Time() >= 0 && sw2.Time() >= 0 );
         }
     }
+}
+
+void StopWatchTestCase::RestartBug()
+{
+    wxStopWatch sw;
+    sw.Pause();
+
+    // Calling Start() should resume the stopwatch if it was paused.
+    static const int offset = 5000;
+    sw.Start(offset);
+    wxMilliSleep(sleepTime);
+
+    long t = sw.Time();
+    WX_ASSERT_MESSAGE
+    (
+        ("Actual time value is %ld", t),
+        t > offset + sleepTime - tolerance &&
+            t < offset + sleepTime + tolerance
+    );
 }

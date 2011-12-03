@@ -125,6 +125,10 @@ wxLongLong wxStopWatch::GetClockFreq() const
 
 void wxStopWatch::Start(long t0)
 {
+    // Calling Start() makes the stop watch run however many times it was
+    // paused before.
+    m_pauseCount = 0;
+
     DoStart();
 
     m_t0 -= (wxLongLong(t0)*GetClockFreq())/MILLISECONDS_PER_SECOND;
