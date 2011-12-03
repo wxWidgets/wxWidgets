@@ -51,7 +51,7 @@ Source: "{#INNODIR}\docs\msw\install.txt"; DestDir: "{app}\docs\msw";  Flags: ig
 Filename: "{app}\wx.url"; Section: "InternetShortcut"; Key: "URL"; String: "http://www.wxwidgets.org"
 
 [Icons]
-Name: "{group}\{cm:ProgramOnTheWeb,wxWidgets {#WX_VERSION}}"; Filename: "{app}\wx.url"
+Name: "{group}\{cm:ProgramOnTheWeb,wxWidgets}"; Filename: "{app}\wx.url"
 Name: {group}\wxWidgets Manual; Filename: {app}\docs\htmlhelp\wx.chm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
 Name: {group}\Changes; Filename: {app}\docs\changes.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
 Name: {group}\Readme; Filename: {app}\docs\readme.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
