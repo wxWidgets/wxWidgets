@@ -31,6 +31,7 @@ InfoBeforeFile={#INNODIR}\docs\readme.txt
 InfoAfterFile={#INFOFILE}
 OutputDir=c:\daily
 OutputBaseFilename={#SETUPFILENAME}
+PrivilegesRequired=none
 SetupIconFile={#INNODIR}\art\wxwin.ico
 Compression=lzma
 SolidCompression=yes
