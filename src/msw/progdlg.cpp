@@ -307,7 +307,7 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
                                     int maximum,
                                     wxWindow *parent,
                                     int style )
-    : wxGenericProgressDialog(parent, style),
+    : wxGenericProgressDialog(),
       m_taskDialogRunner(NULL),
       m_sharedData(NULL),
       m_message(message),
@@ -317,6 +317,7 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
     if ( HasNativeTaskDialog() )
     {
         SetParent(GetParentForModalDialog(parent, GetWindowStyle()));
+        SetPDStyle(style);
         SetMaximum(maximum);
 
         Show();

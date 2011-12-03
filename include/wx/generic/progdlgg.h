@@ -27,12 +27,19 @@ class WXDLLIMPEXP_FWD_CORE wxWindowDisabler;
 class WXDLLIMPEXP_CORE wxGenericProgressDialog : public wxDialog
 {
 public:
+    wxGenericProgressDialog();
     wxGenericProgressDialog(const wxString& title, const wxString& message,
                             int maximum = 100,
                             wxWindow *parent = NULL,
                             int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
 
     virtual ~wxGenericProgressDialog();
+
+    bool Create(const wxString& title,
+                const wxString& message,
+                int maximum = 100,
+                wxWindow *parent = NULL,
+                int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
 
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
@@ -67,15 +74,6 @@ public:
     };
 
 protected:
-    // This ctor is used by the native MSW implementation only.
-    wxGenericProgressDialog(wxWindow *parent, int style);
-
-    void Create(const wxString& title,
-                const wxString& message,
-                int maximum,
-                wxWindow *parent,
-                int style);
-
     // Update just the m_maximum field, this is used by public SetRange() but,
     // unlike it, doesn't update the controls state. This makes it useful for
     // both this class and its derived classes that don't use m_gauge to
@@ -95,7 +93,7 @@ protected:
 
     // Return the progress dialog style. Prefer to use HasPDFlag() if possible.
     int GetPDStyle() const { return m_pdStyle; }
-
+    void SetPDStyle(int pdStyle) { m_pdStyle = pdStyle; }
 
     // Updates estimated times from a given progress bar value and stores the
     // results in provided arguments.
@@ -151,7 +149,7 @@ private:
     static void SetTimeLabel(unsigned long val, wxStaticText *label);
 
     // common part of all ctors
-    void Init(wxWindow *parent, int style);
+    void Init();
 
     // create the label with given text and another one to show the time nearby
     // as the next windows in the sizer, returns the created control
