@@ -583,8 +583,17 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
 
     // Both POSIX and Single UNIX Specification say that this variable must
     // exist but not that it must be declared anywhere and, indeed, it's not
-    // declared in several common systems (some BSDs, Solaris with native CC).
+    // declared in several common systems (some BSDs, Solaris with native CC)
+    // so we (re)declare it ourselves to deal with these cases. However we do
+    // not do this under MSW where there can be DLL-related complications, i.e.
+    // the variable might be DLL-imported or not. Luckily we don't have to
+    // worry about this as all MSW compilers do seem to define it in their
+    // standard headers anyhow so we can just rely on already having the
+    // correct declaration. And if this turns out to be wrong, we can always
+    // add a configure test checking whether it is declared later.
+#ifndef __WXMSW__
     extern char **environ;
+#endif // !__WXMSW__
 
     char **env = environ;
 #endif
