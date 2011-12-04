@@ -664,7 +664,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxCHECK_MSG( model, nil, "Valid model in data source does not exist." );
 
-    wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
+    wxDataViewColumn* col(static_cast<wxDataViewColumn*>([(wxPointerObject*)[tableColumn identifier] pointer]));
     const unsigned colIdx = col->GetModelColumn();
 
     wxDataViewItem dataViewItem(wxDataViewItemFromItem(item));
@@ -687,7 +687,7 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
-    wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
+    wxDataViewColumn* col(static_cast<wxDataViewColumn*>([(wxPointerObject*)[tableColumn identifier] pointer]));
 
     col->GetRenderer()->
         OSXOnCellChanged(object, wxDataViewItemFromItem(item), col->GetModelColumn());
@@ -1624,7 +1624,7 @@ outlineView:(NSOutlineView*)outlineView
 //
 -(void) outlineView:(NSOutlineView*)outlineView mouseDownInHeaderOfTableColumn:(NSTableColumn*)tableColumn
 {
-    wxDataViewColumn* const col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
+    wxDataViewColumn* const col(static_cast<wxDataViewColumn*>([(wxPointerObject*)[tableColumn identifier] pointer]));
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -1719,11 +1719,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCtrl * const dvc = implementation->GetDataViewCtrl();
     wxDataViewModel * const model = dvc->GetModel();
 
-    wxDataViewColumn * const
-        dvCol(static_cast<wxDataViewColumn*>(
-                    [[tableColumn identifier] pointer]
-                    )
-             );
+    wxDataViewColumn* const dvCol(static_cast<wxDataViewColumn*>([(wxPointerObject*)[tableColumn identifier] pointer]));
     const unsigned colIdx = dvCol->GetModelColumn();
 
     wxDataViewItem dvItem(wxDataViewItemFromItem(item));
@@ -1760,7 +1756,7 @@ outlineView:(NSOutlineView*)outlineView
 {
     int const newColumnPosition = [[[notification userInfo] objectForKey:@"NSNewColumn"] intValue];
 
-    wxDataViewColumn* const col(static_cast<wxDataViewColumn*>([[[[self tableColumns] objectAtIndex:newColumnPosition] identifier] pointer]));
+    wxDataViewColumn* const col(static_cast<wxDataViewColumn*>([(wxPointerObject*)[[[self tableColumns] objectAtIndex:newColumnPosition] identifier] pointer]));
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -1829,7 +1825,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewColumn* const col =
         static_cast<wxDataViewColumn*>(
-                [[[[self tableColumns] objectAtIndex:currentlyEditedColumn] identifier] pointer]);
+                [(wxPointerObject*)[[[self tableColumns] objectAtIndex:currentlyEditedColumn] identifier] pointer]);
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -1867,7 +1863,7 @@ outlineView:(NSOutlineView*)outlineView
     {
         wxDataViewColumn* const col =
             static_cast<wxDataViewColumn*>(
-                    [[[[self tableColumns] objectAtIndex:currentlyEditedColumn] identifier] pointer]);
+                    [(wxPointerObject*)[[[self tableColumns] objectAtIndex:currentlyEditedColumn] identifier] pointer]);
 
         wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -1979,7 +1975,7 @@ void wxCocoaDataViewControl::DoSetExpanderColumn(const wxDataViewColumn *columnP
 
 wxDataViewColumn* wxCocoaDataViewControl::GetColumn(unsigned int pos) const
 {
-    return static_cast<wxDataViewColumn*>([[[[m_OutlineView tableColumns] objectAtIndex:pos] identifier] pointer]);
+    return static_cast<wxDataViewColumn*>([(wxPointerObject*)[[[m_OutlineView tableColumns] objectAtIndex:pos] identifier] pointer]);
 }
 
 int wxCocoaDataViewControl::GetColumnPosition(const wxDataViewColumn *columnPtr) const
@@ -2328,7 +2324,7 @@ wxDataViewColumn* wxCocoaDataViewControl::GetSortingColumn() const
 
     for (UInt32 i=0; i<noOfColumns; ++i)
         if ([[columns objectAtIndex:i] sortDescriptorPrototype] != nil)
-            return static_cast<wxDataViewColumn*>([[[columns objectAtIndex:i] identifier] pointer]);
+            return static_cast<wxDataViewColumn*>([(wxPointerObject*)[[columns objectAtIndex:i] identifier] pointer]);
     return NULL;
 }
 
@@ -2363,7 +2359,7 @@ void wxCocoaDataViewControl::HitTest(const wxPoint& point, wxDataViewItem& item,
     indexRow    = [m_OutlineView rowAtPoint:   nativePoint];
     if ((indexColumn >= 0) && (indexRow >= 0))
     {
-        columnPtr = static_cast<wxDataViewColumn*>([[[[m_OutlineView tableColumns] objectAtIndex:indexColumn] identifier] pointer]);
+        columnPtr = static_cast<wxDataViewColumn*>([(wxPointerObject*)[[[m_OutlineView tableColumns] objectAtIndex:indexColumn] identifier] pointer]);
         item      = wxDataViewItem([[m_OutlineView itemAtRow:indexRow] pointer]);
     }
     else

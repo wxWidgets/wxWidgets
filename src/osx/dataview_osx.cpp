@@ -20,6 +20,9 @@
     #include "wx/dcclient.h"
     #include "wx/icon.h"
 #endif
+#if wxOSX_USE_CARBON
+#include "wx/osx/carbon/dataview.h"
+#endif
 
 #include "wx/osx/core/dataview.h"
 #include "wx/osx/private.h"
@@ -706,11 +709,10 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
 {
     event.Skip();
 
+#if wxOSX_USE_CARBON
     if (GetModel() == NULL)
         return;
 
-#if 0
-    // Doesn't compile anymore
     wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(m_peer));
 
     int NoOfChildren;
@@ -750,7 +752,6 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
        }
 
     }
-
     SetCursor( *wxSTANDARD_CURSOR );
 #endif
 }
