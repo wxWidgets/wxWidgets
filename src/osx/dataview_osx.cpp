@@ -713,7 +713,7 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
     if (GetModel() == NULL)
         return;
 
-    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(m_peer));
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(GetPeer()));
 
     int NoOfChildren;
     wxDataViewItemArray items;
@@ -738,7 +738,7 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
 
            Rect itemrect;
            ::GetDataBrowserItemPartBounds( MacDataViewListCtrlPtr->GetControlRef(),
-              reinterpret_cast<DataBrowserItemID>(firstChild.GetID()), column->GetPropertyID(),
+              reinterpret_cast<DataBrowserItemID>(firstChild.GetID()), column->GetNativeData()->GetPropertyID(),
               kDataBrowserPropertyEnclosingPart, &itemrect );
 
            if (abs( event.GetX() - itemrect.right) < 3)
