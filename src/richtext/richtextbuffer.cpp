@@ -864,7 +864,7 @@ bool wxRichTextObject::GetBoxRects(wxDC& dc, wxRichTextBuffer* buffer, const wxR
         marginRight = converter.GetPixels(attr.GetTextBoxAttr().GetMargins().GetRight());
     if (attr.GetTextBoxAttr().GetMargins().GetTop().IsValid())
         marginTop = converter.GetPixels(attr.GetTextBoxAttr().GetMargins().GetTop());
-    if (attr.GetTextBoxAttr().GetMargins().GetLeft().IsValid())
+    if (attr.GetTextBoxAttr().GetMargins().GetBottom().IsValid())
         marginBottom = converter.GetPixels(attr.GetTextBoxAttr().GetMargins().GetBottom());
 
     if (attr.GetTextBoxAttr().GetBorder().GetLeft().GetWidth().IsValid())
@@ -873,7 +873,7 @@ bool wxRichTextObject::GetBoxRects(wxDC& dc, wxRichTextBuffer* buffer, const wxR
         borderRight = converter.GetPixels(attr.GetTextBoxAttr().GetBorder().GetRight().GetWidth());
     if (attr.GetTextBoxAttr().GetBorder().GetTop().GetWidth().IsValid())
         borderTop = converter.GetPixels(attr.GetTextBoxAttr().GetBorder().GetTop().GetWidth());
-    if (attr.GetTextBoxAttr().GetBorder().GetLeft().GetWidth().IsValid())
+    if (attr.GetTextBoxAttr().GetBorder().GetBottom().GetWidth().IsValid())
         borderBottom = converter.GetPixels(attr.GetTextBoxAttr().GetBorder().GetBottom().GetWidth());
 
     if (attr.GetTextBoxAttr().GetPadding().GetLeft().IsValid())
