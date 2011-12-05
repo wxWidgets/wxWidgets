@@ -75,7 +75,7 @@ public :
     void GetLayoutInset(int &left , int &top , int &right, int &bottom) const
     {
         left = top = right = bottom = 0;
-        NSControlSize size = size = [(wxNSProgressIndicator*)m_osxView controlSize];
+        NSControlSize size = [(wxNSProgressIndicator*)m_osxView controlSize];
 
         switch( size )
         {
