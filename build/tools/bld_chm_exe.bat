@@ -59,15 +59,15 @@ call regen chm
 
 
 cd %WXWIN%\docs\doxygen\out
-zip wxWidgets-%WXW_VER%-chm.zip wx.chm
-copy wxWidgets-%WXW_VER%-chm.zip %DAILY%
+zip wxWidgets-%WXW_VER%-docs-chm.zip wx.chm
+copy wxWidgets-%WXW_VER%-docs-chm.zip %DAILY%
 cd html
 del *.dot
 del *.md5
 zip -r wx.htb *.*
-copy wx.htb %DAILY%\wxWidgets-%WXW_VER%-html.zip
-zip wxWidgets-%WXW_VER%-htb.zip wx.htb
-copy wxWidgets-%WXW_VER%-htb.zip %DAILY%
+copy wx.htb %DAILY%\wxWidgets-%WXW_VER%-docs-html.zip
+zip wxWidgets-%WXW_VER%-docs-htb.zip wx.htb
+copy wxWidgets-%WXW_VER%-docs-htb.zip %DAILY%
 
 
 mkdir %INNO%\docs\htmlhelp
