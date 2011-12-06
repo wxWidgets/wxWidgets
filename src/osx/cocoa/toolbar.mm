@@ -1100,8 +1100,15 @@ bool wxToolBar::Realize()
                     NSString *nsItemId;
                     if (tool->GetStyle() == wxTOOL_STYLE_SEPARATOR)
                     {
-                        nsItemId = tool->IsStretchable() ? NSToolbarFlexibleSpaceItemIdentifier
-                        : NSToolbarSeparatorItemIdentifier;
+                        if ( tool->IsStretchable() )
+                            nsItemId = NSToolbarFlexibleSpaceItemIdentifier;
+                        else 
+                        {
+                            if ( UMAGetSystemVersion() < 0x1070 )
+                                nsItemId = NSToolbarSeparatorItemIdentifier;
+                            else
+                                nsItemId = NSToolbarSpaceItemIdentifier;
+                        }
                     }
                     else
                     {
@@ -1350,8 +1357,18 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 #if wxOSX_USE_NATIVE_TOOLBAR
                 if (m_macToolbar != NULL)
                 {
-                    NSString * nsItemId = tool->IsStretchable() ? NSToolbarFlexibleSpaceItemIdentifier
-                                                         : NSToolbarSeparatorItemIdentifier;
+                    NSString * nsItemId = nil;
+                    
+                    if ( tool->IsStretchable() )
+                        nsItemId = NSToolbarFlexibleSpaceItemIdentifier;
+                    else 
+                    {
+                        if ( UMAGetSystemVersion() < 0x1070 )
+                            nsItemId = NSToolbarSeparatorItemIdentifier;
+                        else
+                            nsItemId = NSToolbarSpaceItemIdentifier;
+                    }
+
                     NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:nsItemId];
                     tool->SetToolbarItemRef( item );
                 }
