@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 10 November 2011                                                    *
+# Date : 6 December 2011                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -94,7 +94,7 @@ OBJECTS = \
 		grideditors.obj,vlbox.obj,vscroll.obj,stattextg.obj,\
 		editlbox.obj,datavgen.obj,dbgrptg.obj,dragimgg.obj,\
 		richmsgdlgg.obj,commandlinkbuttong.obj,spinctlg.obj,\
-		markuptext.obj,bannerwindow.obj,timectrl.obj,richtooltip.obj,\
+		markuptext.obj,bannerwindow.obj,timectrl.obj,richtooltipg.obj,\
 		statbmpg.obj
 
 SOURCES = \
@@ -167,7 +167,7 @@ SOURCES = \
 		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp,editlbox.cpp,\
 		datavgen.cpp,dbgrptg.cpp,dragimgg.cpp,richmsgdlgg.cpp,\
 		commandlinkbuttong.cpp,spinctlg.cpp markuptext.cpp \
-		bannerwindow.cpp timectrl.cpp richtooltip.cpp statbmpg.cpp
+		bannerwindow.cpp timectrl.cpp richtooltipg.cpp statbmpg.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -306,5 +306,5 @@ spinctlg.obj : spinctlg.cpp
 markuptext.obj : markuptext.cpp
 bannerwindow.obj : bannerwindow.cpp
 timectrl.obj : timectrl.cpp
-richtooltip.obj : richtooltip.cpp
+richtooltipg.obj : richtooltipg.cpp
 statbmpg.obj : statbmpg.cpp
