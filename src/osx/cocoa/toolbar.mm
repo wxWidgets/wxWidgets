@@ -192,6 +192,10 @@ public:
         if ( IsButton() )
             [(NSButton*)m_controlHandle setTitle:l.AsNSString()];
 
+        if ( m_controlHandle )
+        {
+            [m_controlHandle setToolTip:sh.AsNSString()];
+        }
     }
 
     void Action()
