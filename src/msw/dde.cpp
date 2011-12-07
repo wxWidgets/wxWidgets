@@ -593,6 +593,10 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
         realSize = conv->ToWChar((wchar_t *)realData, realSize, text, len);
         if ( realSize == wxCONV_FAILED )
             return false;
+
+        // We need to pass the size of the buffer to DdeClientTransaction() and
+        // not the length of the string.
+        realSize *= sizeof(wchar_t);
     }
 #else // !wxUSE_UNICODE
     if ( format == wxIPC_UNICODETEXT )
@@ -635,7 +639,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
 
     DWORD result;
     bool ok = DdeClientTransaction(realData,
-                                   realSize*sizeof(wxChar),
+                                   realSize,
                                    GetHConv(),
                                    NULL,
                                    // MSDN: if the transaction specified by
