@@ -863,10 +863,6 @@ typedef pid_t GPid;
 #define wxUSE_DC_TRANSFORM_MATRIX 1
 
 /*
- * Have glibc2
- */
-#define wxHAVE_GLIBC2 0
-/*
  * Use libXpm
  */
 #define wxHAVE_LIB_XPM 1

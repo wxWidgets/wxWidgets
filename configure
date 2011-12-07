@@ -19583,6 +19583,13 @@ case "${host}" in
 esac
 
 
+if test "$USE_LINUX" = 1 -o "$USE_GNU" = 1; then
+                    cat >>confdefs.h <<\_ACEOF
+#define _GNU_SOURCE 1
+_ACEOF
+
+fi
+
 if test "x$USE_AIX" = "x1"; then
             if test "x$XLCXX" = "xyes"; then
         CXXFLAGS="-qunique $CXXFLAGS"
@@ -27378,84 +27385,6 @@ echo "$as_me: not updating unwritable cache $cache_file" >&6;}
   fi
 fi
 rm -f confcache
-
-if test "$USE_LINUX" = 1 -o "$USE_GNU" = 1; then
-    { echo "$as_me:$LINENO: checking for glibc 2.1 or later" >&5
-echo $ECHO_N "checking for glibc 2.1 or later... $ECHO_C" >&6; }
-if test "${wx_cv_lib_glibc21+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <features.h>
-int
-main ()
-{
-
-                #if (__GLIBC__ < 2) || (__GLIBC_MINOR__ < 1)
-                not glibc 2.1
-                #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-
-                wx_cv_lib_glibc21=yes
-
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-                wx_cv_lib_glibc21=no
-
-
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-{ echo "$as_me:$LINENO: result: $wx_cv_lib_glibc21" >&5
-echo "${ECHO_T}$wx_cv_lib_glibc21" >&6; }
-    if test "$wx_cv_lib_glibc21" = "yes"; then
-        cat >>confdefs.h <<\_ACEOF
-#define wxHAVE_GLIBC2 1
-_ACEOF
-
-    fi
-fi
-
-if test "x$wx_cv_lib_glibc21" = "xyes"; then
-    if test "$wxUSE_UNICODE" = "yes" -o "$wxUSE_THREADS" = "yes"; then
-        cat >>confdefs.h <<\_ACEOF
-#define _GNU_SOURCE 1
-_ACEOF
-
-    fi
-fi
 
 have_cos=0
 have_floor=0

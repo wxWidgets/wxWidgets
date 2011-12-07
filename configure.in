@@ -1384,6 +1384,14 @@ dnl ------------------------------------------------------------------------
 dnl Platform specific tests
 dnl ------------------------------------------------------------------------
 
+if test "$USE_LINUX" = 1 -o "$USE_GNU" = 1; then
+    dnl While g++ predefines _GNU_SOURCE by default, gcc does not, so do it
+    dnl explicitly to ensure that the tests done below using C compiler
+    dnl succeed, otherwise things like pthread_mutexattr_settype() (and many
+    dnl others) wouldn't be detected.
+    AC_DEFINE(_GNU_SOURCE)
+fi
+
 if test "x$USE_AIX" = "x1"; then
     dnl xlC needs -qunique under AIX so that one source file can be
     dnl compiled to multiple object files and safely linked together.
@@ -2389,45 +2397,6 @@ dnl ------------------------------------------------------------------------
 
 dnl flush the cache because checking for libraries below might abort
 AC_CACHE_SAVE
-
-dnl check for glibc version
-dnl
-dnl VZ: I have no idea why had this check been there originally, but now
-dnl     we could probably do without it by just always adding _GNU_SOURCE
-if test "$USE_LINUX" = 1 -o "$USE_GNU" = 1; then
-    AC_CACHE_CHECK([for glibc 2.1 or later], wx_cv_lib_glibc21,[
-        AC_TRY_COMPILE([#include <features.h>],
-            [
-                #if (__GLIBC__ < 2) || (__GLIBC_MINOR__ < 1)
-                not glibc 2.1
-                #endif
-            ],
-            [
-                wx_cv_lib_glibc21=yes
-            ],
-            [
-                wx_cv_lib_glibc21=no
-            ]
-        )
-    ])
-    if test "$wx_cv_lib_glibc21" = "yes"; then
-        AC_DEFINE(wxHAVE_GLIBC2)
-    fi
-fi
-
-dnl we may need _GNU_SOURCE for 2 things:
-dnl
-dnl  1. to get PTHREAD_MUTEX_RECURSIVE with glibc 2.1+ (strictly speaking we
-dnl  only need _XOPEN_SOURCE=500 but just defining this disables _BSD_SOURCE
-dnl  which breaks libtiff compilation, so it is simpler to just define
-dnl  _GNU_SOURCE to get everything)
-dnl
-dnl  2. for Unicode functions
-if test "x$wx_cv_lib_glibc21" = "xyes"; then
-    if test "$wxUSE_UNICODE" = "yes" -o "$wxUSE_THREADS" = "yes"; then
-        AC_DEFINE(_GNU_SOURCE)
-    fi
-fi
 
 dnl Only add the -lm library if floating point functions cannot be used
 dnl without it.  This check is important on cygwin because of the bizarre

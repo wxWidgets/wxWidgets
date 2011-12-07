@@ -819,10 +819,6 @@
  */
 #define wxUSE_LIBHILDON2 0
 /*
- * Have glibc2
- */
-#define wxHAVE_GLIBC2 0
-/*
  * Use libXpm
  */
 #define wxHAVE_LIB_XPM 0
