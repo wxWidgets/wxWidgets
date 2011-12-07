@@ -108,8 +108,14 @@
    If this is defined, wxEvtHandler::Bind<>() is available (not all compilers
    have the required template support for this and in particular under Windows
    where only g++ and MSVC >= 7 currently support it.
+
+   Recent Sun CC versions support this but perhaps older ones can compile this
+   code too, adjust the version check if this is the case (unfortunately we
+   can't easily test for the things used in wx/event.h in configure so we have
+   to maintain these checks manually).
  */
-#if wxCHECK_GCC_VERSION(3, 2) || wxCHECK_VISUALC_VERSION(7)
+#if wxCHECK_GCC_VERSION(3, 2) || wxCHECK_VISUALC_VERSION(7) \
+        || (defined(__SUNCC__) && __SUNCC__ >= 0x5100)
     #define wxHAS_EVENT_BIND
 #endif
 
