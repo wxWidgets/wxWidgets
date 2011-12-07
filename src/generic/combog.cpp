@@ -46,7 +46,6 @@
 // meaningless if LEFT_MARGIN_CAN_BE_SET set to 1 in combocmn.cpp
 #define TEXTCTRLXADJUST                 0
 
-#define TEXTCTRLYADJUST                 0
 #define TEXTXADJUST                     0 // how much is read-only text's x adjusted
 #define DEFAULT_DROPBUTTON_WIDTH        19
 
@@ -56,7 +55,6 @@
 // meaningless if LEFT_MARGIN_CAN_BE_SET set to 1 in combocmn.cpp
 #define TEXTCTRLXADJUST                 2
 
-#define TEXTCTRLYADJUST                 3
 #define TEXTXADJUST                     0 // how much is read-only text's x adjusted
 #define DEFAULT_DROPBUTTON_WIDTH        17
 
@@ -66,7 +64,6 @@
 // meaningless if LEFT_MARGIN_CAN_BE_SET set to 1 in combocmn.cpp
 #define TEXTCTRLXADJUST                 -1
 
-#define TEXTCTRLYADJUST                 0
 #define TEXTXADJUST                     1 // how much is read-only text's x adjusted
 #define DEFAULT_DROPBUTTON_WIDTH        23
 
@@ -76,7 +73,6 @@
 // meaningless if LEFT_MARGIN_CAN_BE_SET set to 1 in combocmn.cpp
 #define TEXTCTRLXADJUST                 0
 
-#define TEXTCTRLYADJUST                 0
 #define TEXTXADJUST                     0 // how much is read-only text's x adjusted
 #define DEFAULT_DROPBUTTON_WIDTH        22
 
@@ -86,7 +82,6 @@
 // meaningless if LEFT_MARGIN_CAN_BE_SET set to 1 in combocmn.cpp
 #define TEXTCTRLXADJUST                 0
 
-#define TEXTCTRLYADJUST                 0
 #define TEXTXADJUST                     0 // how much is read-only text's x adjusted
 #define DEFAULT_DROPBUTTON_WIDTH        19
 
@@ -235,7 +230,7 @@ void wxGenericComboCtrl::OnResize()
 #endif
 
     // Move textctrl, if any, accordingly
-    PositionTextCtrl( TEXTCTRLXADJUST, TEXTCTRLYADJUST );
+    PositionTextCtrl( TEXTCTRLXADJUST );
 }
 
 void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
