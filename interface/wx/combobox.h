@@ -285,10 +285,11 @@ public:
     /**
         Shows the list box portion of the combo box.
 
-        Currently only implemented in wxMSW and wxGTK.
+        Currently this method is implemented in wxMSW, wxGTK and wxOSX/Cocoa.
 
         Notice that calling this function will generate a
-        @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event.
+        @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event except under wxOSX where
+        generation of this event is not supported at all.
 
         @since 2.9.1
     */
@@ -297,15 +298,16 @@ public:
     /**
         Hides the list box portion of the combo box.
 
-        Currently only implemented in wxMSW and wxGTK.
+        Currently this method is implemented in wxMSW, wxGTK and wxOSX/Cocoa.
 
         Notice that calling this function will generate a
-        @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+        @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event except under wxOSX where
+        generation of this event is not supported at all.
 
         @since 2.9.1
     */
     virtual void Dismiss();
-    
+
     virtual int GetSelection() const;
     virtual void GetSelection(long *from, long *to) const;
     virtual void SetSelection(int n);

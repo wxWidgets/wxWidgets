@@ -165,6 +165,18 @@ int wxNSComboBoxControl::FindString(const wxString& text) const
     return result;
 }
 
+void wxNSComboBoxControl::Popup()
+{
+    id ax = NSAccessibilityUnignoredDescendant(m_comboBox);
+    [ax accessibilitySetValue: [NSNumber numberWithBool: YES] forAttribute: NSAccessibilityExpandedAttribute];
+}
+
+void wxNSComboBoxControl::Dismiss()
+{
+    id ax = NSAccessibilityUnignoredDescendant(m_comboBox);
+    [ax accessibilitySetValue: [NSNumber numberWithBool: NO] forAttribute: NSAccessibilityExpandedAttribute];
+}
+
 wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer, 
                                     wxWindowMac* WXUNUSED(parent), 
                                     wxWindowID WXUNUSED(id), 

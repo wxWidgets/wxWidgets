@@ -105,6 +105,9 @@ public :
     virtual wxString GetStringAtIndex(int pos) const;
 
     virtual int FindString(const wxString& text) const;
+    virtual void Popup();
+    virtual void Dismiss();
+
 private:
     NSComboBox* m_comboBox;
 };

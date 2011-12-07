@@ -215,4 +215,14 @@ wxComboWidgetImpl* wxComboBox::GetComboPeer() const
     return dynamic_cast<wxComboWidgetImpl*> (GetPeer());
 }
 
+void wxComboBox::Popup()
+{
+    GetComboPeer()->Popup();
+}
+
+void wxComboBox::Dismiss()
+{
+    GetComboPeer()->Dismiss();
+}
+
 #endif // wxUSE_COMBOBOX && wxOSX_USE_COCOA

@@ -509,6 +509,7 @@ OSX:
   for OS X 10.6.
 - Added wxApp::MacOpenFiles and deprecated wxApp::MacOpenFile.
 - Implement wxEVT_CHAR_HOOK event generation in wxOSX/Cocoa.
+- Implemented wxComboBox::Popup() and Dismiss() in wxOSX/Cocoa (joostn).
 
 GTK:
 

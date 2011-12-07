@@ -690,6 +690,8 @@ public :
     virtual void RemoveItem(int WXUNUSED(pos)) {}
 
     virtual void Clear() {}
+    virtual void Popup() {}
+    virtual void Dismiss() {}
 
     virtual wxString GetStringAtIndex(int WXUNUSED(pos)) const { return wxEmptyString; }
 
