@@ -1035,6 +1035,41 @@ ldlibs_adv="@EXTRALIBS_SDL@"
 ldlibs_stc="@EXTRALIBS_STC@"
 
 
+# Order the libraries passed to us correctly for static linking.
+#
+# While the libraries order doesn't matter when linking dynamically, we must
+# put the libraries depending on other libraries in front of their dependencies
+# when linking statically or the dependencies wouldn't be resolved by the
+# standard UNIX linkers.
+order_libs()
+{
+    if is_static; then
+        for lib do
+            # Distinguish between the libraries that may need to be moved to
+            # the end of the list (because other ones may depend on them) and
+            # those that can be output immediately because no other libraries
+            # depend on them.
+            case "$lib" in
+                base|core|html|xml|adv) eval "use_$lib=1" ;;
+                *)                      libs="$libs $lib" ;;
+            esac
+        done
+
+        # Add the libraries that we postponed adding above.
+        # Order of the checks here is important.
+        [ -z $use_html ] || libs="$libs html"
+        [ -z $use_adv ] || libs="$libs adv"
+        [ -z $use_core ] || libs="$libs core"
+        [ -z $use_xml ] || libs="$libs xml"
+        [ -z $use_base ] || libs="$libs base"
+    else
+        # No need to order them.
+        libs="$@"
+    fi
+
+    echo $libs
+}
+
 # lib_flags_for _liblist
 # This function returns a list of flags suitable to return with the
 # output of --libs for all of the libraries in _liblist.  You can
@@ -1174,6 +1209,7 @@ if is_monolithic; then
             wx_libs=`remove_field $i $wx_libs`
         done
 
+        wx_libs=`order_libs $wx_libs`
         wx_libs="@WXCONFIG_LDFLAGS_GUI@ `lib_flags_for $wx_libs`"
 
         # We still need the core lib deps for a static build though
@@ -1220,6 +1256,7 @@ else    # MONOLITHIC = 0
     if is_static; then
         link_deps=`link_deps_for $wx_libs`
     fi
+    wx_libs=`order_libs $wx_libs`
     wx_libs="$_guildflags `lib_flags_for $wx_libs`"
 fi
 
