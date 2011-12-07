@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.9.3-rc1
+SET WXW_VER=2.9.3-rc2
 if (%WXW_VER%)==() SET WXW_VER=SVN
 
 echo docs building for %WXW_VER%
@@ -17,7 +17,7 @@ set INNO=c:\wx\inno\wxWidgets
 
 rem svn already in my path...
 set PATH=%PATH%;c:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1;c:\wx\doxygen\bin
-
+set PATH=%PATH%;C:\wx\Graphviz\bin
 echo %PATH% >>  c:\temp.log
 
 
