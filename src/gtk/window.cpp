@@ -3568,28 +3568,31 @@ bool wxWindowGTK::ScrollPages(int pages)
 void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
                           const wxRect *rect)
 {
-    if (m_widget == NULL || !gtk_widget_get_mapped(m_widget))
-        return;
-
     if (m_wxwindow)
     {
-        GdkWindow* window = gtk_widget_get_window(m_wxwindow);
-        if (rect)
+        if (gtk_widget_get_mapped(m_wxwindow))
         {
-            GdkRectangle r = { rect->x, rect->y, rect->width, rect->height };
-            if (GetLayoutDirection() == wxLayout_RightToLeft)
-                r.x = gdk_window_get_width(window) - r.x - rect->width;
-            gdk_window_invalidate_rect(window, &r, true);
+            GdkWindow* window = gtk_widget_get_window(m_wxwindow);
+            if (rect)
+            {
+                GdkRectangle r = { rect->x, rect->y, rect->width, rect->height };
+                if (GetLayoutDirection() == wxLayout_RightToLeft)
+                    r.x = gdk_window_get_width(window) - r.x - rect->width;
+                gdk_window_invalidate_rect(window, &r, true);
+            }
+            else
+                gdk_window_invalidate_rect(window, NULL, true);
         }
-        else
-            gdk_window_invalidate_rect(window, NULL, true);
     }
-    else
+    else if (m_widget)
     {
-        if (rect)
-            gtk_widget_queue_draw_area(m_widget, rect->x, rect->y, rect->width, rect->height);
-        else
-            gtk_widget_queue_draw(m_widget);
+        if (gtk_widget_get_mapped(m_widget))
+        {
+            if (rect)
+                gtk_widget_queue_draw_area(m_widget, rect->x, rect->y, rect->width, rect->height);
+            else
+                gtk_widget_queue_draw(m_widget);
+        }
     }
 }
 
