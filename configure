@@ -19588,6 +19588,9 @@ if test "$USE_LINUX" = 1 -o "$USE_GNU" = 1; then
 #define _GNU_SOURCE 1
 _ACEOF
 
+
+            GNU_SOURCE_FLAG="-D_GNU_SOURCE"
+    CFLAGS="$GNU_SOURCE_FLAG $CFLAGS"
 fi
 
 if test "x$USE_AIX" = "x1"; then
@@ -25604,7 +25607,7 @@ _ACEOF
 
 
 if test "x$SUNCXX" = xyes; then
-    CXXFLAGS="-features=tmplife $CXXFLAGS"
+    CXXFLAGS="-features=tmplife $GNU_SOURCE_FLAG $CXXFLAGS"
 fi
 
 if test "x$SUNCC" = xyes; then

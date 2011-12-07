@@ -1390,6 +1390,11 @@ if test "$USE_LINUX" = 1 -o "$USE_GNU" = 1; then
     dnl succeed, otherwise things like pthread_mutexattr_settype() (and many
     dnl others) wouldn't be detected.
     AC_DEFINE(_GNU_SOURCE)
+
+    dnl For non-g++ compilers (including gcc, as mentioned above) we need to
+    dnl add this flag explicitly when building our own code later too.
+    GNU_SOURCE_FLAG="-D_GNU_SOURCE"
+    CFLAGS="$GNU_SOURCE_FLAG $CFLAGS"
 fi
 
 if test "x$USE_AIX" = "x1"; then
@@ -1904,7 +1909,7 @@ WX_CPP_EXPLICIT
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.
 if test "x$SUNCXX" = xyes; then
-    CXXFLAGS="-features=tmplife $CXXFLAGS"
+    CXXFLAGS="-features=tmplife $GNU_SOURCE_FLAG $CXXFLAGS"
 fi
 
 dnl Sun X11 headers are (still, in 2005!) non-ANSI and the best they could do
