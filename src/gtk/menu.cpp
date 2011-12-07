@@ -878,7 +878,21 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         return NULL;
 
     GtkWidget * const mitem = item->GetMenuItem();
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
+    if (!gtk_check_version(2,12,0))
+    {
+        // gtk_menu_item_remove_submenu() is deprecated since 2.12, but
+        // gtk_menu_item_set_submenu() can now be used with NULL submenu now so
+        // just do use it.
+        gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
+    }
+    else // GTK+ < 2.12
+    {
+        // In 2.10 calling gtk_menu_item_set_submenu() with NULL submenu
+        // results in critical GTK+ error messages so use the old function
+        // instead.
+        gtk_menu_item_remove_submenu(GTK_MENU_ITEM(mitem));
+    }
+
     gtk_widget_destroy(mitem);
     item->SetMenuItem(NULL);
 
