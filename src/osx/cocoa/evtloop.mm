@@ -311,7 +311,7 @@ void wxModalEventLoop::DoRun()
 
 void wxModalEventLoop::DoStop()
 {
-    [NSApp stopModal];
+    [NSApp abortModal];
 }
 
 void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
