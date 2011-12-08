@@ -876,6 +876,16 @@ enum
     wxEXEC_NOEVENTS = 16,
 
     /**
+        Hide child process console under MSW.
+
+        Under MSW, hide the console of the child process if it has one,
+        even if its IO is not redirected.
+
+        This flag is ignored under the other platforms.
+     */
+    wxEXEC_HIDE_CONSOLE = 32,
+
+    /**
         Convenient synonym for flags given system()-like behaviour.
      */
     wxEXEC_BLOCK = wxEXEC_SYNC | wxEXEC_NOEVENTS
@@ -911,12 +921,15 @@ enum
     wxProcess::OnTerminate() will be called when the process finishes.
     Specifying this parameter also allows you to redirect the standard input
     and/or output of the process being launched by calling
-    wxProcess::Redirect(). If the child process IO is redirected, under Windows
-    the process window is not shown by default (this avoids having to flush an
-    unnecessary console for the processes which don't create any windows
-    anyhow) but a @c wxEXEC_NOHIDE flag can be used to prevent this from
-    happening, i.e. with this flag the child process window will be shown
-    normally.
+    wxProcess::Redirect().
+
+    Under Windows, when launching a console process its console is shown by
+    default but hidden if its IO is redirected. Both of these default
+    behaviours may be overridden: if ::wxEXEC_HIDE_CONSOLE is specified, the
+    console will never be shown. If ::wxEXEC_SHOW_CONSOLE is used, the console
+    will be shown even if the child process IO is redirected. Neither of these
+    flags affect non-console Windows applications or does anything under the
+    other systems.
 
     Under Unix the flag @c wxEXEC_MAKE_GROUP_LEADER may be used to ensure that
     the new process is a group leader (this will create a new session if
@@ -940,9 +953,9 @@ enum
         string, i.e. "emacs file.txt".
     @param flags
         Must include either wxEXEC_ASYNC or wxEXEC_SYNC and can also include
-        wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
-        wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
-        their combination, in wxEXEC_SYNC case.
+        wxEXEC_SHOW_CONSOLE, wxEXEC_HIDE_CONSOLE, wxEXEC_MAKE_GROUP_LEADER (in
+        either case) or wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK,
+        which is equal to their combination, in wxEXEC_SYNC case.
     @param callback
         An optional pointer to wxProcess.
     @param env

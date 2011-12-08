@@ -108,7 +108,6 @@ public:
     void OnEndBusyCursor(wxCommandEvent& event);
 
     void OnSyncExec(wxCommandEvent& event);
-    void OnSyncNoEventsExec(wxCommandEvent& event);
     void OnAsyncExec(wxCommandEvent& event);
     void OnShell(wxCommandEvent& event);
     void OnExecWithRedirect(wxCommandEvent& event);
@@ -140,6 +139,8 @@ private:
     void ShowOutput(const wxString& cmd,
                     const wxArrayString& output,
                     const wxString& title);
+
+    int GetExecFlags() const;
 
     void DoAsyncExec(const wxString& cmd);
 
@@ -313,7 +314,6 @@ enum
     Exec_BeginBusyCursor,
     Exec_EndBusyCursor,
     Exec_SyncExec = 200,
-    Exec_SyncNoEventsExec,
     Exec_AsyncExec,
     Exec_Shell,
     Exec_POpen,
@@ -324,6 +324,9 @@ enum
     Exec_DDERequest,
     Exec_Redirect,
     Exec_Pipe,
+    Exec_Flags_HideConsole,
+    Exec_Flags_ShowConsole,
+    Exec_Flags_NoEvents,
     Exec_About = wxID_ABOUT,
 
     // control ids
@@ -350,7 +353,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_EndBusyCursor,  MyFrame::OnEndBusyCursor)
 
     EVT_MENU(Exec_SyncExec, MyFrame::OnSyncExec)
-    EVT_MENU(Exec_SyncNoEventsExec, MyFrame::OnSyncNoEventsExec)
     EVT_MENU(Exec_AsyncExec, MyFrame::OnAsyncExec)
     EVT_MENU(Exec_Shell, MyFrame::OnShell)
     EVT_MENU(Exec_Redirect, MyFrame::OnExecWithRedirect)
@@ -457,11 +459,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->AppendSeparator();
     menuFile->Append(Exec_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
+    wxMenu *flagsMenu = new wxMenu;
+    flagsMenu->AppendCheckItem(Exec_Flags_HideConsole, "Always &hide console");
+    flagsMenu->AppendCheckItem(Exec_Flags_ShowConsole, "Always &show console");
+    flagsMenu->AppendCheckItem(Exec_Flags_NoEvents, "Disable &events",
+                               "This flag is valid for sync execution only");
+
     wxMenu *execMenu = new wxMenu;
+    execMenu->AppendSubMenu(flagsMenu, "Execution flags");
+    execMenu->AppendSeparator();
     execMenu->Append(Exec_SyncExec, wxT("Sync &execution...\tCtrl-E"),
                      wxT("Launch a program and return when it terminates"));
-    execMenu->Append(Exec_SyncNoEventsExec, wxT("Sync execution and &block...\tCtrl-B"),
-                     wxT("Launch a program and block until it terminates"));
     execMenu->Append(Exec_AsyncExec, wxT("&Async execution...\tCtrl-A"),
                      wxT("Launch a program and return immediately"));
     execMenu->Append(Exec_Shell, wxT("Execute &shell command...\tCtrl-S"),
@@ -812,10 +820,26 @@ static bool QueryExec(wxString& cmd, wxExecuteEnv& env)
 // event handlers: exec menu
 // ----------------------------------------------------------------------------
 
+int MyFrame::GetExecFlags() const
+{
+    wxMenuBar* const mbar = GetMenuBar();
+
+    int flags = 0;
+
+    if ( mbar->IsChecked(Exec_Flags_HideConsole) )
+        flags |= wxEXEC_HIDE_CONSOLE;
+    if ( mbar->IsChecked(Exec_Flags_ShowConsole) )
+        flags |= wxEXEC_SHOW_CONSOLE;
+    if ( mbar->IsChecked(Exec_Flags_NoEvents) )
+        flags |= wxEXEC_NOEVENTS;
+
+    return flags;
+}
+
 void MyFrame::DoAsyncExec(const wxString& cmd)
 {
     MyProcess * const process = new MyProcess(this, cmd);
-    m_pidLast = wxExecute(cmd, wxEXEC_ASYNC, process);
+    m_pidLast = wxExecute(cmd, wxEXEC_ASYNC | GetExecFlags(), process);
     if ( !m_pidLast )
     {
         wxLogError(wxT("Execution of '%s' failed."), cmd.c_str());
@@ -843,26 +867,7 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 
     wxLogStatus( wxT("'%s' is running please wait..."), cmd.c_str() );
 
-    int code = wxExecute(cmd, wxEXEC_SYNC, NULL, &env);
-
-    wxLogStatus(wxT("Process '%s' terminated with exit code %d."),
-        cmd.c_str(), code);
-
-    m_cmdLast = cmd;
-}
-
-void MyFrame::OnSyncNoEventsExec(wxCommandEvent& WXUNUSED(event))
-{
-    wxString cmd = wxGetTextFromUser(wxT("Enter the command: "),
-                                     DIALOG_TITLE,
-                                     m_cmdLast);
-
-    if ( !cmd )
-        return;
-
-    wxLogStatus( wxT("'%s' is running please wait..."), cmd.c_str() );
-
-    int code = wxExecute(cmd, wxEXEC_BLOCK);
+    int code = wxExecute(cmd, wxEXEC_SYNC | GetExecFlags(), NULL, &env);
 
     wxLogStatus(wxT("Process '%s' terminated with exit code %d."),
         cmd.c_str(), code);

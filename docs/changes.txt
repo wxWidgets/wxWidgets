@@ -465,6 +465,7 @@ All:
   wxGetUTCTimeMillis() returning what this function used to return.
 - Added wxCriticalSection::TryEnter() (Catalin Raceanu).
 - Add support for OpenBSD to wxDialUpManager (brad0).
+- Added wxEXEC_HIDE_CONSOLE flag.
 
 All (GUI):
 

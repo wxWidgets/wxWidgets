@@ -334,7 +334,11 @@ enum
 
     // under Windows, don't hide the child even if it's IO is redirected (this
     // is done by default)
-    wxEXEC_NOHIDE   = 2,
+    wxEXEC_SHOW_CONSOLE   = 2,
+
+    // deprecated synonym for wxEXEC_SHOW_CONSOLE, use the new name as it's
+    // more clear
+    wxEXEC_NOHIDE = wxEXEC_SHOW_CONSOLE,
 
     // under Unix, if the process is the group leader then passing wxKILL_CHILDREN to wxKill
     // kills all children as well as pid
@@ -349,6 +353,10 @@ enum
     // to complete and this flag can be used to simply block the main process
     // until the child process finishes
     wxEXEC_NOEVENTS = 16,
+
+    // under Windows, hide the console of the child process if it has one, even
+    // if its IO is not redirected
+    wxEXEC_HIDE_CONSOLE = 32,
 
     // convenient synonym for flags given system()-like behaviour
     wxEXEC_BLOCK = wxEXEC_SYNC | wxEXEC_NOEVENTS
