@@ -974,7 +974,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                 if ( wxIsUpperChar(key_code) )
                     eventChar.m_keyCode = key_code - 'A' + 1;
 #if wxUSE_UNICODE
-                eventChar.m_uniChar = event.m_keyCode;
+                eventChar.m_uniChar = eventChar.m_keyCode;
 #endif
             }
 
