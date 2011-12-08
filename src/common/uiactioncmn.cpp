@@ -83,43 +83,43 @@ bool wxUIActionSimulator::Char(int keycode, int modifiers)
     switch(keycode)
     {
     case '0':
-        keycode = WXK_NUMPAD0;
+        keycode = '0';
         break;
     case '1':
-        keycode = WXK_NUMPAD1;
+        keycode = '1';
         break;
     case '2':
-        keycode = WXK_NUMPAD2;
+        keycode = '2';
         break;
     case '3':
-        keycode = WXK_NUMPAD3;
+        keycode = '3';
         break;
     case '4':
-        keycode = WXK_NUMPAD4;
+        keycode = '4';
         break;
     case '5':
-        keycode = WXK_NUMPAD5;
+        keycode = '5';
         break;
     case '6':
-        keycode = WXK_NUMPAD6;
+        keycode = '6';
         break;
     case '7':
-        keycode = WXK_NUMPAD7;
+        keycode = '7';
         break;
     case '8':
-        keycode = WXK_NUMPAD8;
+        keycode = '8';
         break;
     case '9':
-        keycode = WXK_NUMPAD9;
+        keycode = '9';
         break;
     case '+':
-        keycode = WXK_NUMPAD_ADD;
+        keycode = '+';
         break;
     case '-':
-        keycode = WXK_NUMPAD_SUBTRACT;
+        keycode = '-';
         break;
     case '.':
-        keycode = WXK_NUMPAD_DECIMAL;
+        keycode = '.';
         break;
     default:
         break;
