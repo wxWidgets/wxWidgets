@@ -4820,6 +4820,10 @@ bool wxGenericListCtrl::DeleteColumn( int col )
     // if we don't have the header any longer, we need to relayout the window
     // if ( !GetColumnCount() )
 
+
+    // Ensure that the non-existent columns are really removed from display.
+    Refresh();
+
     return true;
 }
 
