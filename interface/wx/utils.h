@@ -817,6 +817,70 @@ struct wxExecuteEnv
 };
 
 /**
+    Bit flags that can be used with wxExecute().
+ */
+enum
+{
+    /**
+        Execute the process asynchronously.
+
+        Notice that, due to its value, this is the default.
+     */
+    wxEXEC_ASYNC    = 0,
+
+    /**
+        Execute the process synchronously.
+     */
+    wxEXEC_SYNC     = 1,
+
+    /**
+        Always show the child process console under MSW.
+
+        The child console is hidden by default if the child IO is redirected,
+        this flag allows to change this and show it nevertheless.
+
+        This flag is ignored under the other platforms.
+     */
+    wxEXEC_SHOW_CONSOLE   = 2,
+
+    /**
+        Make the new process a group leader.
+
+        Under Unix, if the process is the group leader then passing
+        wxKILL_CHILDREN to wxKill() kills all children as well as pid.
+
+        This flag is currently ignored under MSW.
+     */
+    wxEXEC_MAKE_GROUP_LEADER = 4,
+
+    /**
+        Don't disable the program UI while running the child synchronously.
+
+        By default synchronous execution disables all program windows to avoid
+        that the user interacts with the program while the child process is
+        running, you can use this flag to prevent this from happening.
+
+        This flag can only be used with ::wxEXEC_SYNC.
+     */
+    wxEXEC_NODISABLE = 8,
+
+    /**
+        Don't dispatch events while the child process is executed.
+
+        By default, the event loop is run while waiting for synchronous
+        execution to complete and this flag can be used to simply block the
+        main process until the child process finishes
+
+        This flag can only be used with ::wxEXEC_SYNC.
+     */
+    wxEXEC_NOEVENTS = 16,
+
+    /**
+        Convenient synonym for flags given system()-like behaviour.
+     */
+    wxEXEC_BLOCK = wxEXEC_SYNC | wxEXEC_NOEVENTS
+};
+/**
     Executes another program in Unix or Windows.
 
     In the overloaded versions of this function, if @a flags parameter contains
@@ -914,10 +978,7 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
         additional ones are the command parameters and the array must be
         terminated with a @NULL pointer.
     @param flags
-        Must include either wxEXEC_ASYNC or wxEXEC_SYNC and can also include
-        wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
-        wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
-        their combination, in wxEXEC_SYNC case.
+        Same as for wxExecute(const wxString&,int,wxProcess*) overload.
     @param callback
         An optional pointer to wxProcess.
     @param env
@@ -959,9 +1020,7 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
     @param output
         The string array where the stdout of the executed process is saved.
     @param flags
-        May include wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
-        wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
-        their combination. wxEXEC_SYNC is always implicitly added to the flags.
+        Combination of flags to which ::wxEXEC_SYNC is always implicitly added.
     @param env
         An optional pointer to additional parameters for the child process,
         such as its initial working directory and environment variables. This
@@ -997,9 +1056,7 @@ long wxExecute(const wxString& command, wxArrayString& output, int flags = 0,
     @param errors
         The string array where the stderr of the executed process is saved.
     @param flags
-        May include wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
-        wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
-        their combination. wxEXEC_SYNC is always implicitly added to the flags.
+        Combination of flags to which ::wxEXEC_SYNC is always implicitly added.
     @param env
         An optional pointer to additional parameters for the child process,
         such as its initial working directory and environment variables. This
