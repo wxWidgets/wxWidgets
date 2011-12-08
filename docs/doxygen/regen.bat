@@ -24,11 +24,6 @@ copy images\wxmsw\*.png out\html\wxmsw 2>&1 >NUL
 copy images\wxmac\*.png out\html\wxmac 2>&1 >NUL
 copy wxwidgets.js out\html 2>&1 >NUL
 
-REM these CSS are not automatically copied by Doxygen because they're
-REM included by our custom html header...
-copy wxwidgets.css out\html 2>&1 >NUL
-copy wxtabs.css out\html 2>&1 >NUL
-
 REM set cfgfile variable to the right doxyfile to use,
 REM using MS broken batch scripting
 setlocal enableextensions

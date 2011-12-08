@@ -13,6 +13,8 @@
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
 PROJECT_NUMBER         = 2.9.3
+PROJECT_BRIEF          =
+PROJECT_LOGO           = logo.png
 OUTPUT_DIRECTORY       = out
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -321,16 +323,24 @@ IGNORE_PREFIX          = wx
 GENERATE_HTML          = NO # Only change in format output configs
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
-HTML_HEADER            = htmlheader.inc
-HTML_FOOTER            = htmlfooter.inc
-HTML_STYLESHEET        =
+HTML_HEADER            = custom_header.html
+HTML_FOOTER            = custom_footer.html
+HTML_STYLESHEET        = custom_stylesheet.css
+HTML_EXTRA_FILES       =
+HTML_COLORSTYLE_HUE    =
+HTML_COLORSTYLE_SAT    = 255
+HTML_COLORSTYLE_GAMMA  = 100
+HTML_TIMESTAMP         = YES
 HTML_ALIGN_MEMBERS     = YES
 HTML_DYNAMIC_SECTIONS  = YES
 DISABLE_INDEX          = NO
 ENUM_VALUES_PER_LINE   = 1
-GENERATE_TREEVIEW      = NONE
+GENERATE_TREEVIEW      = NO
+USE_INLINE_TREES       = NO
 TREEVIEW_WIDTH         = 250
+EXT_LINKS_IN_WINDOW    = YES
 FORMULA_FONTSIZE       = 10
+FORMULA_TRANSPARENT    = YES
 
 #---------------------------------------------------------------------------
 # configuration options related to the CHM output

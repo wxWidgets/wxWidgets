@@ -31,55 +31,17 @@ function setCookie(c_name,value,expiredays)
   ((expiredays==null) ? '' : ';expires='+exdate.toGMTString());
 }
 
-// Reimplementation of changeDisplayState
-function mychangeDisplayState( e )
-{
-  var num=this.id.replace(/[^[0-9]/g,'');
-  var button=this.firstChild;
-  var sectionDiv=document.getElementById('dynsection'+num);
-  if (sectionDiv.style.display=='none'||sectionDiv.style.display==''){
-    sectionDiv.style.display='block';
-    button.src='open.gif';
-  }else{
-    sectionDiv.style.display='none';
-    button.src='closed.gif';
+$(function() {
+
+  var display = getCookie('sectionDiv.style.display');
+  if ( display == '' || display == 'block' ) {
+    $('div.dynheader').each(function() { toggleVisibility(this); });
+    setCookie('sectionDiv.style.display', 'block');
   }
 
-  setCookie( 'sectionDiv.style.display', sectionDiv.style.display );
+  $('div.dynheader').click(function() {
+    var display = $('#' + $(this).attr('id') + '-content').css('display');
+    setCookie('sectionDiv.style.display', display);
+  });
 
-}
-
-window.onload = function myinitDynSections()
-{
-  var divs=document.getElementsByTagName('div');
-  var sectionCounter=1;
-  for(var i=0;i<divs.length-1;i++){
-    if(divs[i].className=='dynheader'&&divs[i+1].className=='dynsection'){
-      var header=divs[i];
-      var section=divs[i+1];
-      var button=header.firstChild;
-      if (button!='IMG'){
-        divs[i].insertBefore(document.createTextNode(' '),divs[i].firstChild);
-        button=document.createElement('img');
-        divs[i].insertBefore(button,divs[i].firstChild);
-      }
-      header.style.cursor='pointer';
-      header.onclick=mychangeDisplayState;
-      header.id='dynheader'+sectionCounter;
-      section.id='dynsection'+sectionCounter;
-
-      var display = getCookie( 'sectionDiv.style.display' );
-      if ( display == '' || display == 'block' ){
-        section.style.display='block'; // default
-        button.src='open.gif';
-      }else{
-        section.style.display='none';
-        button.src='closed.gif';
-      }
-      setCookie( 'sectionDiv.style.display', section.style.display );
-
-      section.style.marginLeft='14px';
-      sectionCounter++;
-    }
-  }
-}
+});

@@ -38,11 +38,6 @@ cp images/wxgtk/*png out/html/wxgtk
 cp images/generic/*png out/html/generic
 cp wxwidgets.js out/html
 
-# these CSS are not automatically copied by Doxygen because they're
-# included by our custom html header...
-cp wxwidgets.css out/html
-cp wxtabs.css out/html
-
 # which configuration should we use?
 if [[ -z "$1" ]]; then
     cfgfile="Doxyfile_all"
@@ -146,10 +141,8 @@ fi
 # more readable
 currpath=`pwd`/
 interfacepath=`cd ../../interface && pwd`/
-cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" >temp
-
-# Doxygen warnings are not completely sorted for filename; enforce correct sorting:
-cat temp | sort >doxygen.log
+cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" > temp
+cat temp > doxygen.log
 rm temp
 
 # return to the original folder from which this script was launched
