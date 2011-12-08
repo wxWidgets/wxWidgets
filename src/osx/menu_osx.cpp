@@ -210,6 +210,17 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
+    if ( m_startRadioGroup != -1 )
+    {
+        // Check if we're removing the item starting the radio group
+        if ( GetMenuItems().Item(m_startRadioGroup)->GetData() == item )
+        {
+            // Yes, we do, so reset its index as the next item added shouldn't
+            // count as part of the same radio group anyhow.
+            m_startRadioGroup = -1;
+        }
+    }
+
 /*
     // we need to find the items position in the child list
     size_t pos;
