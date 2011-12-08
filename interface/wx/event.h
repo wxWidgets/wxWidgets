@@ -2852,12 +2852,8 @@ public:
     To intercept this event, use the EVT_ERASE_BACKGROUND macro in an event table
     definition.
 
-    You must call wxEraseEvent::GetDC and use the returned device context if it is
-    non-@NULL. If it is @NULL, create your own temporary wxClientDC object.
-
-    @remarks
-        Use the device context returned by GetDC to draw on, don't create
-        a wxPaintDC in the event handler.
+    You must use the device context returned by GetDC() to draw on, don't create
+    a wxPaintDC in the event handler.
 
     @beginEventTable{wxEraseEvent}
     @event{EVT_ERASE_BACKGROUND(func)}
@@ -2879,6 +2875,8 @@ public:
 
     /**
         Returns the device context associated with the erase event to draw on.
+
+        The returned pointer is never @NULL.
     */
     wxDC* GetDC() const;
 };
