@@ -338,18 +338,6 @@ parent_set(GtkWidget* widget, GtkWidget* old_parent, wxWindow* win)
 // "key_press_event" from any window
 //-----------------------------------------------------------------------------
 
-// These are used when transforming Ctrl-alpha to ascii values 1-26
-inline bool wxIsLowerChar(int code)
-{
-    return (code >= 'a' && code <= 'z' );
-}
-
-inline bool wxIsUpperChar(int code)
-{
-    return (code >= 'A' && code <= 'Z' );
-}
-
-
 // set WXTRACE to this to see the key event codes on the console
 #define TRACE_KEYS  wxT("keyevent")
 
@@ -849,6 +837,41 @@ bool SendCharHookEvent(const wxKeyEvent& event, wxWindow *win)
     return false;
 }
 
+// Adjust wxEVT_CHAR event key code fields. This function takes care of two
+// conventions:
+// (a) Ctrl-letter key presses generate key codes in range 1..26
+// (b) Unicode key codes are same as key codes for the codes in 1..255 range
+void AdjustCharEventKeyCodes(wxKeyEvent& event)
+{
+    const int code = event.m_keyCode;
+
+    // Check for (a) above.
+    if ( event.ControlDown() )
+    {
+        // We intentionally don't use isupper/lower() here, we really need
+        // ASCII letters only as it doesn't make sense to translate any other
+        // ones into this range which has only 26 slots.
+        if ( code >= 'a' && code <= 'z' )
+            event.m_keyCode = code - 'a' + 1;
+        else if ( code >= 'A' && code <= 'Z' )
+            event.m_keyCode = code - 'A' + 1;
+
+#if wxUSE_UNICODE
+        // Adjust the Unicode equivalent in the same way too.
+        if ( event.m_keyCode != code )
+            event.m_uniChar = event.m_keyCode;
+#endif // wxUSE_UNICODE
+    }
+
+#if wxUSE_UNICODE
+    // Check for (b) from above.
+    //
+    // FIXME: Should we do it for key codes up to 255?
+    if ( !event.m_uniChar && code < WXK_DELETE )
+        event.m_uniChar = code;
+#endif // wxUSE_UNICODE
+}
+
 } // anonymous namespace
 
 extern "C" {
@@ -964,19 +987,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
             eventChar.m_keyCode = key_code;
 
-            // To conform to the docs we need to translate Ctrl-alpha
-            // characters to values in the range 1-26.
-            if ( eventChar.ControlDown() &&
-                 ( wxIsLowerChar(key_code) || wxIsUpperChar(key_code) ))
-            {
-                if ( wxIsLowerChar(key_code) )
-                    eventChar.m_keyCode = key_code - 'a' + 1;
-                if ( wxIsUpperChar(key_code) )
-                    eventChar.m_keyCode = key_code - 'A' + 1;
-#if wxUSE_UNICODE
-                eventChar.m_uniChar = eventChar.m_keyCode;
-#endif
-            }
+            AdjustCharEventKeyCodes(eventChar);
 
             ret = win->HandleWindowEvent(eventChar);
         }
@@ -1021,21 +1032,7 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
         event.m_keyCode = (char)*pstr;
 #endif  // wxUSE_UNICODE
 
-        // To conform to the docs we need to translate Ctrl-alpha
-        // characters to values in the range 1-26.
-        if ( event.ControlDown() &&
-             ( wxIsLowerChar(*pstr) || wxIsUpperChar(*pstr) ))
-        {
-            if ( wxIsLowerChar(*pstr) )
-                event.m_keyCode = *pstr - 'a' + 1;
-            if ( wxIsUpperChar(*pstr) )
-                event.m_keyCode = *pstr - 'A' + 1;
-
-            event.m_keyCode = *pstr - 'a' + 1;
-#if wxUSE_UNICODE
-            event.m_uniChar = event.m_keyCode;
-#endif
-        }
+        AdjustCharEventKeyCodes(event);
 
         window->HandleWindowEvent(event);
     }
