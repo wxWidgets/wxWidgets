@@ -139,8 +139,10 @@ class WXDLLIMPEXP_CORE wxComboBox :
     virtual wxTextWidgetImpl* GetTextPeer() const;
 #endif // wxOSX_USE_CARBON
 
+#if wxOSX_USE_COCOA
     virtual void Popup();
     virtual void Dismiss();
+#endif // wxOSX_USE_COCOA
 
 
     // osx specific event handling common for all osx-ports
