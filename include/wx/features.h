@@ -112,10 +112,12 @@
    Recent Sun CC versions support this but perhaps older ones can compile this
    code too, adjust the version check if this is the case (unfortunately we
    can't easily test for the things used in wx/event.h in configure so we have
-   to maintain these checks manually).
+   to maintain these checks manually). The same applies to xlC 7: perhaps
+   earlier versions can compile this code too but they were not tested.
  */
 #if wxCHECK_GCC_VERSION(3, 2) || wxCHECK_VISUALC_VERSION(7) \
-        || (defined(__SUNCC__) && __SUNCC__ >= 0x5100)
+        || (defined(__SUNCC__) && __SUNCC__ >= 0x5100) \
+        || (defined(__xlC__) && __xlC__ >= 0x700)
     #define wxHAS_EVENT_BIND
 #endif
 
