@@ -1057,11 +1057,11 @@ order_libs()
 
         # Add the libraries that we postponed adding above.
         # Order of the checks here is important.
-        [ -z $use_html ] || libs="$libs html"
-        [ -z $use_adv ] || libs="$libs adv"
-        [ -z $use_core ] || libs="$libs core"
-        [ -z $use_xml ] || libs="$libs xml"
-        [ -z $use_base ] || libs="$libs base"
+        [ -z "$use_html" ] || libs="$libs html"
+        [ -z "$use_adv" ] || libs="$libs adv"
+        [ -z "$use_core" ] || libs="$libs core"
+        [ -z "$use_xml" ] || libs="$libs xml"
+        [ -z "$use_base" ] || libs="$libs base"
     else
         # No need to order them.
         libs="$@"
