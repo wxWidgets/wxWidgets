@@ -170,7 +170,7 @@ public:
         Layout();
     }
 
-    void SetBackground(wxColour colStart, wxColour colEnd)
+    void SetBackgroundColours(wxColour colStart, wxColour colEnd)
     {
         if ( !colStart.IsOk() )
         {
@@ -651,7 +651,7 @@ void wxRichToolTipGenericImpl::ShowFor(wxWindow* win)
                                             m_titleFont
                                           );
 
-    popup->SetBackground(m_colStart, m_colEnd);
+    popup->SetBackgroundColours(m_colStart, m_colEnd);
 
     popup->DoShow();
 
