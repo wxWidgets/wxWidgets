@@ -807,7 +807,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         {
             // remove this argument
             --argc;
-            memmove(argv + 1, argv + 2, argc * sizeof(char *));
+            memmove(argv + 1, argv + 2, argc * sizeof(wxChar*));
         }
     }
 
@@ -832,8 +832,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
             // Only eat this option if it has an argument
             if( (i + 1) < argc )
             {
+                memmove(argv + i, argv + i + 2, (argc-i-1)*sizeof(wxChar*));
                 argc -= 2;
-                memmove(argv + i, argv + i + 2, argc * sizeof(char *));
                 // drop back one position so the next run through the loop
                 // reprocesses the argument at our current index.
                 --i;
