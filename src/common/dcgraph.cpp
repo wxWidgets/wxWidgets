@@ -382,7 +382,10 @@ void wxGCDCImpl::SetTextForeground( const wxColour &col )
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::SetTextForeground - invalid DC") );
 
-    if ( col != m_textForegroundColour )
+    // don't set m_textForegroundColour to an invalid colour as we'd crash
+    // later then (we use m_textForegroundColour.GetColor() without checking
+    // in a few places)
+    if ( col.IsOk() && col != m_textForegroundColour )
     {
         m_textForegroundColour = col;
         m_graphicContext->SetFont( m_font, m_textForegroundColour );
