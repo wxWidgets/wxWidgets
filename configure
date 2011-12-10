@@ -48191,20 +48191,7 @@ else
 fi
 
 
-            echo "$as_me:$LINENO: checking for command to install directories" >&5
-echo $ECHO_N "checking for command to install directories... $ECHO_C" >&6
-    INSTALL_TEST_DIR=acbftest$$
-    $INSTALL -d $INSTALL_TEST_DIR > /dev/null 2>&1
-    if test $? = 0 -a -d $INSTALL_TEST_DIR; then
-        rmdir $INSTALL_TEST_DIR
-                        INSTALL_DIR='$(INSTALL) -d'
-        echo "$as_me:$LINENO: result: $INSTALL -d" >&5
-echo "${ECHO_T}$INSTALL -d" >&6
-    else
         INSTALL_DIR="mkdir -p"
-        echo "$as_me:$LINENO: result: mkdir -p" >&5
-echo "${ECHO_T}mkdir -p" >&6
-    fi
 
 
     LDFLAGS_GUI=
