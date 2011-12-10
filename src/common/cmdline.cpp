@@ -951,7 +951,7 @@ void wxCmdLineParser::Usage()
 wxString wxCmdLineParser::GetUsageString()
 {
     wxString appname;
-    if ( wxTheApp )
+    if ( wxTheApp && wxTheApp->argc )
     {
         appname = wxFileName(wxTheApp->argv[0]).GetFullName();
     }
