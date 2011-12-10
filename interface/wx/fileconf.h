@@ -27,9 +27,21 @@
 class wxFileConfig : public wxConfigBase
 {
 public:
+    /**
+        Constructor allowing to choose the file names to use.
 
-    // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE or
-    // wxCONFIG_USE_GLOBAL_FILE to say which files should be used.
+        If @a localFilename and/or @a globalFilename are explicitly specified,
+        they are used as the names of the user and system-wide configuration
+        files (the latter is only read by the program while the former is read
+        from and written to). Otherwise the behaviour depends on @a style
+        parameter. If it includes ::wxCONFIG_USE_LOCAL_FILE, then the local
+        file name is constructed from the information in @a appName and @a
+        vendorName arguments in a system-dependent way. If
+        ::wxCONFIG_USE_GLOBAL_FILE is not specified at all (and @a
+        globalFilename is empty) then the system-wide file is not used at all.
+        Otherwise its name and path are also constructed in the way appropriate
+        for the current platform from the application and vendor names.
+     */
     wxFileConfig(const wxString& appName = wxEmptyString,
                const wxString& vendorName = wxEmptyString,
                const wxString& localFilename = wxEmptyString,
