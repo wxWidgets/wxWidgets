@@ -32,6 +32,7 @@
         *wxRichTextCtrl*SetFullLayoutRequired*;
         *wxRichTextCtrl*SetFullLayoutSavedPosition*;
         *wxRichTextCtrl*SetFullLayoutTime*;
+        *wxXmlNode*DeleteAttribute*;
 };
 
 # public symbols added in 2.8.12 (please keep in alphabetical order):

@@ -179,6 +179,13 @@ public:
     }
 #endif // wx >= 2.8.11
 
+#if wxABI_VERSION >= 20813
+    bool DeleteAttribute(const wxString& name)
+    {
+        return DeleteProperty(name);
+    }
+#endif // wx >= 2.8.13
+
 private:
     wxXmlNodeType m_type;
     wxString m_name;
