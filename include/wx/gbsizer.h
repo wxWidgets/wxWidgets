@@ -115,26 +115,26 @@ public:
     wxGBSizerItem( int width,
                    int height,
                    const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData);
+                   const wxGBSpan& span=wxDefaultSpan,
+                   int flag=0,
+                   int border=0,
+                   wxObject* userData=NULL);
 
     // window
     wxGBSizerItem( wxWindow *window,
                    const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData );
+                   const wxGBSpan& span=wxDefaultSpan,
+                   int flag=0,
+                   int border=0,
+                   wxObject* userData=NULL );
 
     // subsizer
     wxGBSizerItem( wxSizer *sizer,
                    const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData );
+                   const wxGBSpan& span=wxDefaultSpan,
+                   int flag=0,
+                   int border=0,
+                   wxObject* userData=NULL );
 
     // default ctor
     wxGBSizerItem();

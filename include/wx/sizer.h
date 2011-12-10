@@ -251,10 +251,10 @@ class WXDLLIMPEXP_CORE wxSizerItem : public wxObject
 public:
     // window
     wxSizerItem( wxWindow *window,
-                 int proportion,
-                 int flag,
-                 int border,
-                 wxObject* userData );
+                 int proportion=0,
+                 int flag=0,
+                 int border=0,
+                 wxObject* userData=NULL );
 
     // window with flags
     wxSizerItem(wxWindow *window, const wxSizerFlags& flags)
@@ -266,10 +266,10 @@ public:
 
     // subsizer
     wxSizerItem( wxSizer *sizer,
-                 int proportion,
-                 int flag,
-                 int border,
-                 wxObject* userData );
+                 int proportion=0,
+                 int flag=0,
+                 int border=0,
+                 wxObject* userData=NULL );
 
     // sizer with flags
     wxSizerItem(wxSizer *sizer, const wxSizerFlags& flags)
@@ -282,10 +282,10 @@ public:
     // spacer
     wxSizerItem( int width,
                  int height,
-                 int proportion,
-                 int flag,
-                 int border,
-                 wxObject* userData);
+                 int proportion=0,
+                 int flag=0,
+                 int border=0,
+                 wxObject* userData=NULL);
 
     // spacer with flags
     wxSizerItem(int width, int height, const wxSizerFlags& flags)

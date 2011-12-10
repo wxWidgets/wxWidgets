@@ -1007,17 +1007,17 @@ public:
     /**
         Construct a sizer item for tracking a spacer.
     */
-    wxSizerItem(int width, int height, int proportion, int flag,
-                int border, wxObject* userData);
+    wxSizerItem(int width, int height, int proportion=0, int flag=0,
+                int border=0, wxObject* userData=NULL);
 
     //@{
     /**
         Construct a sizer item for tracking a window.
     */
     wxSizerItem(wxWindow* window, const wxSizerFlags& flags);
-    wxSizerItem(wxWindow* window, int proportion, int flag,
-                int border,
-                wxObject* userData);
+    wxSizerItem(wxWindow* window, int proportion=0, int flag=0,
+                int border=0,
+                wxObject* userData=NULL);
     //@}
 
     //@{
@@ -1025,9 +1025,9 @@ public:
         Construct a sizer item for tracking a subsizer.
     */
     wxSizerItem(wxSizer* sizer, const wxSizerFlags& flags);
-    wxSizerItem(wxSizer* sizer, int proportion, int flag,
-                int border,
-                wxObject* userData);
+    wxSizerItem(wxSizer* sizer, int proportion=0, int flag=0,
+                int border=0,
+                wxObject* userData=NULL);
     //@}
 
     /**
