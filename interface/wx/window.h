@@ -1697,13 +1697,18 @@ public:
 
     /**
         Sets the background colour of the window.
+
+        Notice that as with SetForegroundColour(), setting the background
+        colour of a native control may not affect the entire control and could
+        be not supported at all depending on the control and platform.
+
         Please see InheritAttributes() for explanation of the difference between
         this method and SetOwnBackgroundColour().
 
         @param colour
             The colour to be used as the background colour; pass
             wxNullColour to reset to the default colour.
-            Note that you may want to use wxSystemSettings::GetColour() to retrieve 
+            Note that you may want to use wxSystemSettings::GetColour() to retrieve
             a suitable colour to use rather than setting an hard-coded one.
 
         @remarks The background colour is usually painted by the default
@@ -1780,15 +1785,19 @@ public:
 
     /**
         Sets the foreground colour of the window.
+
+        The meaning of foreground colour varies according to the window class;
+        it may be the text colour or other colour, or it may not be used at
+        all. Additionally, not all native controls support changing their
+        foreground colour so this method may change their colour only partially
+        or even not at all.
+
         Please see InheritAttributes() for explanation of the difference between
         this method and SetOwnForegroundColour().
 
         @param colour
             The colour to be used as the foreground colour; pass
             wxNullColour to reset to the default colour.
-
-        @remarks The meaning of foreground colour varies according to the window class;
-                 it may be the text colour or other colour, or it may not be used at all.
 
         @return @true if the colour was really changed, @false if it was already set
                 to this colour and nothing was done.
