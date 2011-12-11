@@ -18,9 +18,13 @@
 
 #include "wx/webview.h"
 
+#if defined(__WXOSX_COCOA__) || defined(__WXOSX_CARBON__)
 #include "wx/osx/webview_webkit.h"
+#elif defined(__WXGTK__)
 #include "wx/gtk/webview_webkit.h"
+#elif defined(__WXMSW__)
 #include "wx/msw/webview_ie.h"
+#endif
 
 // DLL options compatibility check:
 #include "wx/app.h"
