@@ -2149,8 +2149,8 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
     {
         // scale the font and apply it
         PangoFontDescription *desc = theFont->GetNativeFontInfo()->description;
-        float size = pango_font_description_get_size(desc);
-        size = size * GetFontPointSizeAdjustment(72.0);
+        oldSize = pango_font_description_get_size(desc);
+        const float size = oldSize * GetFontPointSizeAdjustment(72.0);
         pango_font_description_set_size(desc, (gint)size);
 
         pango_layout_set_font_description(m_layout, desc);
