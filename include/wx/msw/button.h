@@ -77,6 +77,9 @@ private:
         m_authNeeded = false;
     }
 
+    void OnCharHook(wxKeyEvent& event);
+
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
 

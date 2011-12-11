@@ -2306,7 +2306,8 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     if ( wxevent.GetEventType() == wxEVT_KEY_DOWN )
     {
         wxKeyEvent eventHook(wxEVT_CHAR_HOOK, wxevent);
-        if ( GetWXPeer()->OSXHandleKeyEvent(eventHook) )
+        if ( GetWXPeer()->OSXHandleKeyEvent(eventHook)
+                && !eventHook.IsNextEventAllowed() )
             return true;
     }
 

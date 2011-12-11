@@ -1373,13 +1373,19 @@ enum wxKeyCategoryFlags
         events and so gives the parent window an opportunity to modify the
         keyboard handling of its children, e.g. it is used internally by
         wxWidgets in some ports to intercept pressing Esc key in any child of a
-        dialog to close the dialog itself when it's pressed. If the event is
-        handled, i.e. the handler doesn't call wxEvent::Skip(), neither @c
-        wxEVT_KEY_DOWN nor @c wxEVT_CHAR events will be generated (although @c
-        wxEVT_KEY_UP still will be). Notice that this event is not generated
-        when the mouse is captured as it is considered that the window which
-        has the capture should receive all the keyboard events too without
-        allowing its parent wxTopLevelWindow to interfere with their processing.
+        dialog to close the dialog itself when it's pressed. By default, if
+        this event is handled, i.e. the handler doesn't call wxEvent::Skip(),
+        neither @c wxEVT_KEY_DOWN nor @c wxEVT_CHAR events will be generated
+        (although @c wxEVT_KEY_UP still will be), i.e. it replaces the normal
+        key events. However by calling the special DoAllowNextEvent() method
+        you can handle @c wxEVT_CHAR_HOOK and still allow normal events
+        generation. This is something that is rarely useful but can be required
+        if you need to prevent a parent @c wxEVT_CHAR_HOOK handler from running
+        without suppressing the normal key events. Finally notice that this
+        event is not generated when the mouse is captured as it is considered
+        that the window which has the capture should receive all the keyboard
+        events too without allowing its parent wxTopLevelWindow to interfere
+        with their processing.
     @endEventTable
 
     @see wxKeyboardState
@@ -1522,6 +1528,34 @@ public:
         Returns the Y position (in client coordinates) of the event.
     */
     wxCoord GetY() const;
+
+    /**
+        Allow normal key events generation.
+
+        Can be called from @c wxEVT_CHAR_HOOK handler to indicate that the
+        generation of normal events should @em not be suppressed, as it happens
+        by default when this event is handled.
+
+        The intended use of this method is to allow some window object to
+        prevent @c wxEVT_CHAR_HOOK handler in its parent window from running by
+        defining its own handler for this event. Without calling this method,
+        this would result in not generating @c wxEVT_KEY_DOWN nor @c wxEVT_CHAR
+        events at all but by calling it you can ensure that these events would
+        still be generated, even if @c wxEVT_CHAR_HOOK event was handled.
+
+        @since 2.9.3
+     */
+    void DoAllowNextEvent();
+
+    /**
+        Returns @true if DoAllowNextEvent() had been called, @false by default.
+
+        This method is used by wxWidgets itself to determine whether the normal
+        key events should be generated after @c wxEVT_CHAR_HOOK processing.
+
+        @since 2.9.3
+     */
+    bool IsNextEventAllowed() const;
 };
 
 

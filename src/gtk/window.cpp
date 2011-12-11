@@ -830,7 +830,8 @@ bool SendCharHookEvent(const wxKeyEvent& event, wxWindow *win)
     if ( !g_captureWindow )
     {
         wxKeyEvent eventCharHook(wxEVT_CHAR_HOOK, event);
-        if ( win->HandleWindowEvent(eventCharHook) )
+        if ( win->HandleWindowEvent(eventCharHook)
+                && !event.IsNextEventAllowed() )
             return true;
     }
 

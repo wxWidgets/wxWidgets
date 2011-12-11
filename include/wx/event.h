@@ -1707,6 +1707,15 @@ public:
     // Get Y position
     wxCoord GetY() const { return m_y; }
 
+    // Can be called from wxEVT_CHAR_HOOK handler to allow generation of normal
+    // key events even though the event had been handled (by default they would
+    // not be generated in this case).
+    void DoAllowNextEvent() { m_allowNext = true; }
+
+    // Return the value of the "allow next" flag, for internal use only.
+    bool IsNextEventAllowed() const { return m_allowNext; }
+
+
     virtual wxEvent *Clone() const { return new wxKeyEvent(*this); }
     virtual wxEventCategory GetEventCategory() const { return wxEVT_CATEGORY_USER_INPUT; }
 
@@ -1750,6 +1759,8 @@ private:
     {
         if ( m_eventType == wxEVT_CHAR_HOOK )
             m_propagationLevel = wxEVENT_PROPAGATE_MAX;
+
+        m_allowNext = false;
     }
 
     // Copy only the event data present in this class, this is used by
@@ -1767,6 +1778,11 @@ private:
         m_uniChar = evt.m_uniChar;
 #endif
     }
+
+    // If this flag is true, the normal key events should still be generated
+    // even if wxEVT_CHAR_HOOK had been handled. By default it is false as
+    // handling wxEVT_CHAR_HOOK suppresses all the subsequent events.
+    bool m_allowNext;
 
     DECLARE_DYNAMIC_CLASS(wxKeyEvent)
 };

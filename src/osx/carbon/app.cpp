@@ -1650,7 +1650,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
     {
         wxKeyEvent eventCharHook(wxEVT_CHAR_HOOK, event);
         handled = focus->HandleWindowEvent( eventCharHook );
-        if ( handled && eventCharHook.GetSkipped() )
+        if ( handled && eventCharHook.IsNextEventAllowed() )
             handled = false ;
     }
 

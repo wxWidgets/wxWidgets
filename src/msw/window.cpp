@@ -6644,8 +6644,11 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
 
                 if ( handler && handler->ProcessEvent(event) )
                 {
-                    // processed
-                    return 1;
+                    if ( !event.IsNextEventAllowed() )
+                    {
+                        // Stop processing of this event.
+                        return 1;
+                    }
                 }
             }
         }
