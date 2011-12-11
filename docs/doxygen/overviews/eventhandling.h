@@ -141,7 +141,7 @@ private:
     // obligation to do that; this one is an event handler too:
     void DoTest(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE()
 };
 @endcode
 
@@ -225,7 +225,7 @@ events.
 
 The possibilities of handling events in this way are rather different.
 Let us start by looking at the syntax: the first obvious difference is that you
-need not use DECLARE_EVENT_TABLE() nor BEGIN_EVENT_TABLE() and the
+need not use wxDECLARE_EVENT_TABLE() nor wxBEGIN_EVENT_TABLE() and the
 associated macros. Instead, in any place in your code, but usually in
 the code of the class defining the handler itself (and definitely not in the
 global scope as with the event tables), call its Bind<>() method like this:
@@ -621,16 +621,16 @@ wxDECLARE_EVENT(MY_EVENT, wxCommandEvent);
 wxDEFINE_EVENT(MY_EVENT, wxCommandEvent);
 
 // example of code handling the event with event tables
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU    (wxID_EXIT, MyFrame::OnExit)
     ...
     EVT_COMMAND (ID_MY_WINDOW, MY_EVENT, MyFrame::OnMyEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void MyFrame::OnMyEvent(wxCommandEvent& event)
 {
     // do something
-    wxString text = event.GetText();
+    wxString text = event.GetString();
 }
 
 // example of code handling the event with Bind<>():
@@ -646,7 +646,7 @@ void MyWindow::SendEvent()
     event.SetEventObject(this);
 
     // Give it some contents
-    event.SetText("Hello");
+    event.SetString("Hello");
 
     // Do send it
     ProcessWindowEvent(event);
@@ -711,9 +711,9 @@ typedef void (wxEvtHandler::*MyPlotEventFunction)(MyPlotEvent&);
 
 // example of code handling the event (you will use one of these methods, not
 // both, of course):
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_PLOT(ID_MY_WINDOW, MyFrame::OnPlot)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
 {
