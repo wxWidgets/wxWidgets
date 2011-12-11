@@ -325,7 +325,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 }
 
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
- forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
+ forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger*)index
 {
     NSMutableArray* matches = NULL;
 
