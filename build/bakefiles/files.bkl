@@ -2986,7 +2986,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/richtooltipg.cpp
     src/generic/sashwin.cpp
     src/generic/splash.cpp
-    src/generic/timectrl.cpp
+    src/generic/timectrlg.cpp
     src/generic/tipdlg.cpp
     src/generic/treelist.cpp
     src/generic/wizard.cpp

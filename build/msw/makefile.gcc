@@ -2304,7 +2304,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtooltipg.o \
 	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_splash.o \
-	$(OBJS)\monodll_generic_timectrl.o \
+	$(OBJS)\monodll_timectrlg.o \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
@@ -2323,7 +2323,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datectrl.o \
 	$(OBJS)\monodll_datetimectrl.o \
 	$(OBJS)\monodll_hyperlink.o \
-	$(OBJS)\monodll_msw_timectrl.o
+	$(OBJS)\monodll_timectrl.o
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
@@ -2356,7 +2356,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtooltipg.o \
 	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_splash.o \
-	$(OBJS)\monodll_generic_timectrl.o \
+	$(OBJS)\monodll_timectrlg.o \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
@@ -3093,7 +3093,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtooltipg.o \
 	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_splash.o \
-	$(OBJS)\monolib_generic_timectrl.o \
+	$(OBJS)\monolib_timectrlg.o \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
@@ -3112,7 +3112,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datectrl.o \
 	$(OBJS)\monolib_datetimectrl.o \
 	$(OBJS)\monolib_hyperlink.o \
-	$(OBJS)\monolib_msw_timectrl.o
+	$(OBJS)\monolib_timectrl.o
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
@@ -3145,7 +3145,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtooltipg.o \
 	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_splash.o \
-	$(OBJS)\monolib_generic_timectrl.o \
+	$(OBJS)\monolib_timectrlg.o \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
@@ -4339,7 +4339,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_richtooltipg.o \
 	$(OBJS)\advdll_sashwin.o \
 	$(OBJS)\advdll_splash.o \
-	$(OBJS)\advdll_generic_timectrl.o \
+	$(OBJS)\advdll_timectrlg.o \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
@@ -4358,7 +4358,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datectrl.o \
 	$(OBJS)\advdll_datetimectrl.o \
 	$(OBJS)\advdll_hyperlink.o \
-	$(OBJS)\advdll_msw_timectrl.o
+	$(OBJS)\advdll_timectrl.o
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
@@ -4391,7 +4391,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_richtooltipg.o \
 	$(OBJS)\advdll_sashwin.o \
 	$(OBJS)\advdll_splash.o \
-	$(OBJS)\advdll_generic_timectrl.o \
+	$(OBJS)\advdll_timectrlg.o \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
@@ -4443,7 +4443,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_richtooltipg.o \
 	$(OBJS)\advlib_sashwin.o \
 	$(OBJS)\advlib_splash.o \
-	$(OBJS)\advlib_generic_timectrl.o \
+	$(OBJS)\advlib_timectrlg.o \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
@@ -4462,7 +4462,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datectrl.o \
 	$(OBJS)\advlib_datetimectrl.o \
 	$(OBJS)\advlib_hyperlink.o \
-	$(OBJS)\advlib_msw_timectrl.o
+	$(OBJS)\advlib_timectrl.o
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
@@ -4495,7 +4495,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_richtooltipg.o \
 	$(OBJS)\advlib_sashwin.o \
 	$(OBJS)\advlib_splash.o \
-	$(OBJS)\advlib_generic_timectrl.o \
+	$(OBJS)\advlib_timectrlg.o \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
@@ -6919,7 +6919,7 @@ $(OBJS)\monodll_datetimectrl.o: ../../src/msw/datetimectrl.cpp
 $(OBJS)\monodll_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_msw_timectrl.o: ../../src/msw/timectrl.cpp
+$(OBJS)\monodll_timectrl.o: ../../src/msw/timectrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
@@ -8560,7 +8560,7 @@ $(OBJS)\monodll_splash.o: ../../src/generic/splash.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_generic_timectrl.o: ../../src/generic/timectrl.cpp
+$(OBJS)\monodll_timectrlg.o: ../../src/generic/timectrlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9324,7 +9324,7 @@ $(OBJS)\monolib_datetimectrl.o: ../../src/msw/datetimectrl.cpp
 $(OBJS)\monolib_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_msw_timectrl.o: ../../src/msw/timectrl.cpp
+$(OBJS)\monolib_timectrl.o: ../../src/msw/timectrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
@@ -10965,7 +10965,7 @@ $(OBJS)\monolib_splash.o: ../../src/generic/splash.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_generic_timectrl.o: ../../src/generic/timectrl.cpp
+$(OBJS)\monolib_timectrlg.o: ../../src/generic/timectrlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14632,7 +14632,7 @@ $(OBJS)\advdll_datetimectrl.o: ../../src/msw/datetimectrl.cpp
 $(OBJS)\advdll_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_msw_timectrl.o: ../../src/msw/timectrl.cpp
+$(OBJS)\advdll_timectrl.o: ../../src/msw/timectrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_animatecmn.o: ../../src/common/animatecmn.cpp
@@ -14722,7 +14722,7 @@ $(OBJS)\advdll_sashwin.o: ../../src/generic/sashwin.cpp
 $(OBJS)\advdll_splash.o: ../../src/generic/splash.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_generic_timectrl.o: ../../src/generic/timectrl.cpp
+$(OBJS)\advdll_timectrlg.o: ../../src/generic/timectrlg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_tipdlg.o: ../../src/generic/tipdlg.cpp
@@ -14782,7 +14782,7 @@ $(OBJS)\advlib_datetimectrl.o: ../../src/msw/datetimectrl.cpp
 $(OBJS)\advlib_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advlib_msw_timectrl.o: ../../src/msw/timectrl.cpp
+$(OBJS)\advlib_timectrl.o: ../../src/msw/timectrl.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_animatecmn.o: ../../src/common/animatecmn.cpp
@@ -14872,7 +14872,7 @@ $(OBJS)\advlib_sashwin.o: ../../src/generic/sashwin.cpp
 $(OBJS)\advlib_splash.o: ../../src/generic/splash.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advlib_generic_timectrl.o: ../../src/generic/timectrl.cpp
+$(OBJS)\advlib_timectrlg.o: ../../src/generic/timectrlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_tipdlg.o: ../../src/generic/tipdlg.cpp

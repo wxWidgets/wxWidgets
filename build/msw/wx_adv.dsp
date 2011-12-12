@@ -721,7 +721,7 @@ SOURCE=..\..\src\generic\splash.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\timectrl.cpp
+SOURCE=..\..\src\generic\timectrlg.cpp
 # End Source File
 # Begin Source File
 
