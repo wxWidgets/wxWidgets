@@ -451,15 +451,12 @@ void wxDataViewIndexListModel::RowDeleted( unsigned int row )
     m_ordered = false;
 
     wxDataViewItem item( m_hash[row] );
-    /* wxDataViewModel:: */ ItemDeleted( wxDataViewItem(0), item );
     m_hash.RemoveAt( row );
+    /* wxDataViewModel:: */ ItemDeleted( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
 {
-    wxArrayInt sorted = rows;
-    sorted.Sort( my_sort );
-
     m_ordered = false;
 
     wxDataViewItemArray array;
@@ -469,10 +466,13 @@ void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
             wxDataViewItem item( m_hash[rows[i]] );
             array.Add( item );
     }
-    /* wxDataViewModel:: */ ItemsDeleted( wxDataViewItem(0), array );
 
+    wxArrayInt sorted = rows;
+    sorted.Sort( my_sort );
     for (i = 0; i < sorted.GetCount(); i++)
            m_hash.RemoveAt( sorted[i] );
+
+    /* wxDataViewModel:: */ ItemsDeleted( wxDataViewItem(0), array );
 }
 
 void wxDataViewIndexListModel::RowChanged( unsigned int row )
