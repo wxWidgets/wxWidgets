@@ -1185,6 +1185,7 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
     return true;
   }
   // Give up
+  wxLogSysError(_("File '%s' couldn't be renamed '%s'"), file1, file2);
   return false;
 }
 
@@ -1205,7 +1206,10 @@ bool wxRemoveFile(const wxString& file)
 #else
     int res = unlink(file.fn_str());
 #endif
-
+    if ( res )
+    {
+        wxLogSysError(_("File '%s' couldn't be removed"), file);
+    }
     return res == 0;
 }
 
@@ -1537,6 +1541,7 @@ wxString wxGetCwd()
 
 bool wxSetWorkingDirectory(const wxString& d)
 {
+    bool success = false;
 #if defined(__OS2__)
     if (d[1] == ':')
     {
@@ -1546,18 +1551,17 @@ bool wxSetWorkingDirectory(const wxString& d)
     if (d.length() == 2)
         return true;
     }
-    return (::DosSetCurrentDir(d.c_str()) == 0);
+    success = (::DosSetCurrentDir(d.c_str()) == 0);
 #elif defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
-    return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
+    success = (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__
 #ifdef __WXWINCE__
     // No equivalent in WinCE
     wxUnusedVar(d);
-    return false;
 #else
-    return (bool)(SetCurrentDirectory(d.fn_str()) != 0);
+    success = (SetCurrentDirectory(d.fn_str()) != 0);
 #endif
 #else
     // Must change drive, too.
@@ -1578,12 +1582,15 @@ bool wxSetWorkingDirectory(const wxString& d)
             _dos_setdrive(driveNo, &noDrives);
         }
     }
-    bool success = (chdir(WXSTRINGCAST d) == 0);
+    success = (chdir(WXSTRINGCAST d) == 0);
+#endif
 
+#endif
+    if ( !success )
+    {
+       wxLogSysError(_("Could not set current working directory"));
+    }
     return success;
-#endif
-
-#endif
 }
 
 // Get the OS directory if appropriate (such as the Windows directory).
