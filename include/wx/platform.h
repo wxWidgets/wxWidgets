@@ -14,10 +14,6 @@
 #ifndef _WX_PLATFORM_H_
 #define _WX_PLATFORM_H_
 
-/* GUI build by default */
-#if !defined(wxUSE_GUI)
-#   define wxUSE_GUI 1
-#endif /* !defined(wxUSE_GUI) */
 
 
 /*
@@ -37,126 +33,6 @@
 #    include <TargetConditionals.h>
 #    include <AvailabilityMacros.h>
 #    include "wx/osx/config_xcode.h"
-#endif
-
-/*
- Handle Darwin gcc universal compilation.  Don't do this in an Apple-
- specific case since no sane compiler should be defining either
- __BIG_ENDIAN__ or __LITTLE_ENDIAN__ unless it really is generating
- code that will be hosted on a machine with the appropriate endianness.
- If a compiler defines neither, assume the user or configure set
- WORDS_BIGENDIAN appropriately.
- */
-#if defined(__BIG_ENDIAN__)
-#    undef WORDS_BIGENDIAN
-#    define WORDS_BIGENDIAN 1
-#elif defined(__LITTLE_ENDIAN__)
-#    undef WORDS_BIGENDIAN
-#elif defined(__WXMAC__) && !defined(WORDS_BIGENDIAN)
-/*  According to Stefan even ancient Mac compilers defined __BIG_ENDIAN__ */
-#    warning "Compiling wxMac with probably wrong endianness"
-#endif
-/* also the 32/64 bit universal builds must be handled accordingly */
-#ifdef __DARWIN__
-#    ifdef __LP64__
-#        undef SIZEOF_VOID_P
-#        undef SIZEOF_LONG
-#        undef SIZEOF_SIZE_T
-#        define SIZEOF_VOID_P 8
-#        define SIZEOF_LONG 8
-#        define SIZEOF_SIZE_T 8
-#    else
-#        undef SIZEOF_VOID_P
-#        undef SIZEOF_LONG
-#        undef SIZEOF_SIZE_T
-#        define SIZEOF_VOID_P 4
-#        define SIZEOF_LONG 4
-#        define SIZEOF_SIZE_T 4
-#    endif
-#endif
-
-/*
- Define various OS X symbols before including wx/chkconf.h which uses them.
- 
- __WXOSX_MAC__ means Mac OS X, non embedded
- __WXOSX_IPHONE__ means OS X iPhone
- */
-
-/*
- Normally all of __WXOSX_XXX__, __WXOSX__ and __WXMAC__ are defined by
- configure but ensure that we also define them if configure was not used for
- whatever reason.
- 
- The primary symbol remains __WXOSX_XXX__ one, __WXOSX__ exists to allow
- checking for any OS X port (Carbon and Cocoa) and __WXMAC__ is an old name
- for it.
- */
-#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__) \
-|| (defined(__DARWIN__) && !wxUSE_GUI)
-#   ifndef __WXOSX__
-#       define __WXOSX__ 1
-#   endif
-#   ifndef __WXMAC__
-#       define __WXMAC__ 1
-#   endif
-#endif
-
-#ifdef __WXOSX__
-/* setup precise defines according to sdk used */
-#   include <TargetConditionals.h>
-#   if defined(__WXOSX_IPHONE__)
-#       if !( defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE )
-#           error "incorrect SDK for an iPhone build"
-#       endif
-#   else
-#       if wxUSE_GUI && !(defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__))
-#           error "one of __WXOSX_IPHONE__, __WXOSX_CARBON__ or __WXOSX_COCOA__ must be defined for the GUI build"
-#       endif
-#       if !( defined(TARGET_OS_MAC) && TARGET_OS_MAC )
-#           error "incorrect SDK for a Mac OS X build"
-#       endif
-#       define __WXOSX_MAC__ 1
-#   endif
-#endif
-
-#ifdef __WXOSX_MAC__
-#    if defined(__MACH__)
-#        include <AvailabilityMacros.h>
-#        ifndef MAC_OS_X_VERSION_10_4
-#           define MAC_OS_X_VERSION_10_4 1040
-#        endif
-#        ifndef MAC_OS_X_VERSION_10_5
-#           define MAC_OS_X_VERSION_10_5 1050
-#        endif
-#        ifndef MAC_OS_X_VERSION_10_6
-#           define MAC_OS_X_VERSION_10_6 1060
-#        endif
-#    else
-#        error "only mach-o configurations are supported"
-#    endif
-#endif
-
-/*
- __WXOSX_OR_COCOA__ is a common define to wxOSX (Carbon or Cocoa) and wxCocoa ports under OS X.
- 
- DO NOT use this define in base library code.  Although wxMac has its own
- private base library (and thus __WXOSX_OR_COCOA__,__WXMAC__ and related defines are
- valid there), wxCocoa shares its library with other ports like wxGTK and wxX11.
- 
- To keep wx authors from screwing this up, only enable __WXOSX_OR_COCOA__ for wxCocoa when
- not compiling the base library.  We determine this by first checking if
- wxUSE_BASE is not defined.  If it is not defined, then we're not buildling
- the base library, and possibly not building wx at all (but actually building
- user code that's using wx). If it is defined then we must check to make sure
- it is not true.  If it is true, we're building base.
- 
- If you want it in the common darwin base library then use __DARWIN__.  You
- can use any Darwin-available libraries like CoreFoundation but please avoid
- using OS X libraries like Carbon or CoreServices.
- 
- */
-#if defined(__WXOSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
-#   define __WXOSX_OR_COCOA__ 1
 #endif
 
 /*
@@ -740,6 +616,125 @@
     #define wxCHECK_SUNCC_VERSION(maj, min) (0)
 #endif
 
+/*
+    Handle Darwin gcc universal compilation.  Don't do this in an Apple-
+    specific case since no sane compiler should be defining either
+    __BIG_ENDIAN__ or __LITTLE_ENDIAN__ unless it really is generating
+    code that will be hosted on a machine with the appropriate endianness.
+    If a compiler defines neither, assume the user or configure set
+    WORDS_BIGENDIAN appropriately.
+ */
+#if defined(__BIG_ENDIAN__)
+#    undef WORDS_BIGENDIAN
+#    define WORDS_BIGENDIAN 1
+#elif defined(__LITTLE_ENDIAN__)
+#    undef WORDS_BIGENDIAN
+#elif defined(__WXMAC__) && !defined(WORDS_BIGENDIAN)
+/*  According to Stefan even ancient Mac compilers defined __BIG_ENDIAN__ */
+#    warning "Compiling wxMac with probably wrong endianness"
+#endif
+/* also the 32/64 bit universal builds must be handled accordingly */
+#ifdef __DARWIN__
+#    ifdef __LP64__
+#        undef SIZEOF_VOID_P
+#        undef SIZEOF_LONG
+#        undef SIZEOF_SIZE_T
+#        define SIZEOF_VOID_P 8
+#        define SIZEOF_LONG 8
+#        define SIZEOF_SIZE_T 8
+#    else
+#        undef SIZEOF_VOID_P
+#        undef SIZEOF_LONG
+#        undef SIZEOF_SIZE_T
+#        define SIZEOF_VOID_P 4
+#        define SIZEOF_LONG 4
+#        define SIZEOF_SIZE_T 4
+#    endif
+#endif
+
+/*
+    Define various OS X symbols before including wx/chkconf.h which uses them.
+
+    __WXOSX_MAC__ means Mac OS X, non embedded
+    __WXOSX_IPHONE__ means OS X iPhone
+ */
+
+/*
+    Normally all of __WXOSX_XXX__, __WXOSX__ and __WXMAC__ are defined by
+    configure but ensure that we also define them if configure was not used for
+    whatever reason.
+
+    The primary symbol remains __WXOSX_XXX__ one, __WXOSX__ exists to allow
+    checking for any OS X port (Carbon and Cocoa) and __WXMAC__ is an old name
+    for it.
+ */
+#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__) \
+        || (defined(__DARWIN__) && !wxUSE_GUI)
+#   ifndef __WXOSX__
+#       define __WXOSX__ 1
+#   endif
+#   ifndef __WXMAC__
+#       define __WXMAC__ 1
+#   endif
+#endif
+
+#ifdef __WXOSX__
+/* setup precise defines according to sdk used */
+#   include <TargetConditionals.h>
+#   if defined(__WXOSX_IPHONE__)
+#       if !( defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE )
+#           error "incorrect SDK for an iPhone build"
+#       endif
+#   else
+#       if wxUSE_GUI && !(defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__))
+#           error "one of __WXOSX_IPHONE__, __WXOSX_CARBON__ or __WXOSX_COCOA__ must be defined for the GUI build"
+#       endif
+#       if !( defined(TARGET_OS_MAC) && TARGET_OS_MAC )
+#           error "incorrect SDK for a Mac OS X build"
+#       endif
+#       define __WXOSX_MAC__ 1
+#   endif
+#endif
+
+#ifdef __WXOSX_MAC__
+#    if defined(__MACH__)
+#        include <AvailabilityMacros.h>
+#        ifndef MAC_OS_X_VERSION_10_4
+#           define MAC_OS_X_VERSION_10_4 1040
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_5
+#           define MAC_OS_X_VERSION_10_5 1050
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_6
+#           define MAC_OS_X_VERSION_10_6 1060
+#        endif
+#    else
+#        error "only mach-o configurations are supported"
+#    endif
+#endif
+
+/*
+    __WXOSX_OR_COCOA__ is a common define to wxOSX (Carbon or Cocoa) and wxCocoa ports under OS X.
+
+    DO NOT use this define in base library code.  Although wxMac has its own
+    private base library (and thus __WXOSX_OR_COCOA__,__WXMAC__ and related defines are
+    valid there), wxCocoa shares its library with other ports like wxGTK and wxX11.
+
+    To keep wx authors from screwing this up, only enable __WXOSX_OR_COCOA__ for wxCocoa when
+    not compiling the base library.  We determine this by first checking if
+    wxUSE_BASE is not defined.  If it is not defined, then we're not buildling
+    the base library, and possibly not building wx at all (but actually building
+    user code that's using wx). If it is defined then we must check to make sure
+    it is not true.  If it is true, we're building base.
+
+    If you want it in the common darwin base library then use __DARWIN__.  You
+    can use any Darwin-available libraries like CoreFoundation but please avoid
+    using OS X libraries like Carbon or CoreServices.
+
+ */
+#if defined(__WXOSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
+#   define __WXOSX_OR_COCOA__ 1
+#endif
 
 /*
    check the consistency of the settings in setup.h: note that this must be
