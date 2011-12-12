@@ -315,8 +315,6 @@
 		2DF74933A90E34129F1BEF73 /* dnd_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA72410F615B3A78A6340532 /* dnd_osx.cpp */; };
 		2E4747E0736B30569ACD5422 /* textbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701B84EE7C043B539FF5195A /* textbuf.cpp */; };
 		2E4747E0736B30569ACD5423 /* textbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701B84EE7C043B539FF5195A /* textbuf.cpp */; };
-		2E80D643C6B43AAFB7EFF14D /* timectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D05DAB233D8538A484CF8698 /* timectrl.cpp */; };
-		2E80D643C6B43AAFB7EFF14E /* timectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D05DAB233D8538A484CF8698 /* timectrl.cpp */; };
 		2E8440A2BDD53BE7B01547C2 /* uri.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E1DC1869C6327C80D2F5F4 /* uri.cpp */; };
 		2E8440A2BDD53BE7B01547C3 /* uri.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E1DC1869C6327C80D2F5F4 /* uri.cpp */; };
 		2E930206397C3EDCBD8206FC /* gridctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A1BD6BCA15430CA8A4869EF /* gridctrl.cpp */; };
@@ -949,6 +947,8 @@
 		98AD7D0478BA36249B03C624 /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9586328A1F3C4BA0390AA5 /* time.cpp */; };
 		98DF13E96160304EBB905E73 /* jcmainct.c in Sources */ = {isa = PBXBuildFile; fileRef = 810EB7316DF3344197C78EC0 /* jcmainct.c */; };
 		98DF13E96160304EBB905E74 /* jcmainct.c in Sources */ = {isa = PBXBuildFile; fileRef = 810EB7316DF3344197C78EC0 /* jcmainct.c */; };
+		98F52D5224B438DFA8887E06 /* timectrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 741578B590AF3F2CABE615EB /* timectrlg.cpp */; };
+		98F52D5224B438DFA8887E07 /* timectrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 741578B590AF3F2CABE615EB /* timectrlg.cpp */; };
 		99E7A46106C03484BA70D29E /* tif_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F8259CC99380CB8217DEF /* tif_unix.c */; };
 		99E7A46106C03484BA70D29F /* tif_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F8259CC99380CB8217DEF /* tif_unix.c */; };
 		99F7D7BFBB543A04AB728375 /* m_hline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECA4A44BEC2F3AED8CF0C911 /* m_hline.cpp */; };
@@ -1951,6 +1951,7 @@
 		727F25F832AD32D4B12D8E39 /* m_span.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_span.cpp; path = ../../src/html/m_span.cpp; sourceTree = "<group>"; };
 		72869747E68E37998CB0A07E /* jdhuff.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdhuff.c; path = ../../src/jpeg/jdhuff.c; sourceTree = "<group>"; };
 		72D7AF345E563587941BD868 /* longlong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = longlong.cpp; path = ../../src/common/longlong.cpp; sourceTree = "<group>"; };
+		741578B590AF3F2CABE615EB /* timectrlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = timectrlg.cpp; path = ../../src/generic/timectrlg.cpp; sourceTree = "<group>"; };
 		743EF8DB16CE371DA5C66623 /* statline.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = statline.mm; path = ../../src/osx/cocoa/statline.mm; sourceTree = "<group>"; };
 		757B31FCCA1F381C95B30DF8 /* app.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = app.cpp; path = ../../src/osx/carbon/app.cpp; sourceTree = "<group>"; };
 		75BF90BEF2F83BF28EC0458D /* stdpbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdpbase.cpp; path = ../../src/common/stdpbase.cpp; sourceTree = "<group>"; };
@@ -2256,7 +2257,6 @@
 		CF4F4F5211933057824B5621 /* button_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = button_osx.cpp; path = ../../src/osx/button_osx.cpp; sourceTree = "<group>"; };
 		CF6511DE2CB43534A5566403 /* menuitem_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = menuitem_osx.cpp; path = ../../src/osx/menuitem_osx.cpp; sourceTree = "<group>"; };
 		D037EA567C253DEEA17E822B /* mousemanager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mousemanager.cpp; path = ../../src/common/mousemanager.cpp; sourceTree = "<group>"; };
-		D05DAB233D8538A484CF8698 /* timectrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = timectrl.cpp; path = ../../src/generic/timectrl.cpp; sourceTree = "<group>"; };
 		D0817D6A1AF83608B050EBC3 /* fontmap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fontmap.cpp; path = ../../src/common/fontmap.cpp; sourceTree = "<group>"; };
 		D0B70966E9423F198C8CBE65 /* xh_cmdlinkbn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_cmdlinkbn.cpp; path = ../../src/xrc/xh_cmdlinkbn.cpp; sourceTree = "<group>"; };
 		D0B9C41A4D12345AAA764CAD /* stc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stc.cpp; path = ../../src/stc/stc.cpp; sourceTree = "<group>"; };
@@ -2846,7 +2846,7 @@
 				54710DA2AC4F3262A8A1EA63 /* richtooltipg.cpp */,
 				917F2666B67E3D2EB84E74F8 /* sashwin.cpp */,
 				3F8836E29C5A370E80CE070E /* splash.cpp */,
-				D05DAB233D8538A484CF8698 /* timectrl.cpp */,
+				741578B590AF3F2CABE615EB /* timectrlg.cpp */,
 				B56A9BF7AE1E3F11A5848297 /* tipdlg.cpp */,
 				5190E3E110443FD29F2474FC /* treelist.cpp */,
 				8F08F70E1EF239999A4D2AC4 /* wizard.cpp */,
@@ -4285,7 +4285,7 @@
 				C67EAE20657E36839BF86691 /* richtooltipg.cpp in Sources */,
 				3554C88010CE3D2A8970A136 /* sashwin.cpp in Sources */,
 				8AA341CCFB8E3F6AB3523596 /* splash.cpp in Sources */,
-				2E80D643C6B43AAFB7EFF14E /* timectrl.cpp in Sources */,
+				98F52D5224B438DFA8887E07 /* timectrlg.cpp in Sources */,
 				77BC918AF05C30E8A0BD27F9 /* tipdlg.cpp in Sources */,
 				060E095718B03EF98C75479A /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266701 /* wizard.cpp in Sources */,
@@ -5087,7 +5087,7 @@
 				C67EAE20657E36839BF86690 /* richtooltipg.cpp in Sources */,
 				3554C88010CE3D2A8970A135 /* sashwin.cpp in Sources */,
 				8AA341CCFB8E3F6AB3523595 /* splash.cpp in Sources */,
-				2E80D643C6B43AAFB7EFF14D /* timectrl.cpp in Sources */,
+				98F52D5224B438DFA8887E06 /* timectrlg.cpp in Sources */,
 				77BC918AF05C30E8A0BD27F8 /* tipdlg.cpp in Sources */,
 				060E095718B03EF98C754799 /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266700 /* wizard.cpp in Sources */,
