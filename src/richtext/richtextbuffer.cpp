@@ -9921,7 +9921,7 @@ bool wxRichTextImage::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichT
     if (!LoadImageCache(dc))
         return false;
 
-    DrawBoxAttributes(dc, GetBuffer(), GetAttributes(), wxRect(GetPosition(), GetCachedSize()));
+    DrawBoxAttributes(dc, GetBuffer(), GetAttributes(), wxRect(rect.GetPosition(), GetCachedSize()));
 
 #if 0
     int y = rect.y + (rect.height - m_imageCache.GetHeight());
