@@ -445,7 +445,7 @@ Major new features in this release
   was added.
 
 
-2.9.3:
+2.9.3: (released 2011-12-14)
 ------
 
 INCOMPATIBLE CHANGES SINCE 2.9.2
