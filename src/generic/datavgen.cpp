@@ -2433,7 +2433,7 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
     int x, y;
     m_owner->GetScrollPixelsPerUnit( &x, &y );
     int sy = GetLineStart( rows )/y;
-    int sx = 0;
+    int sx = -1;
     if( column != -1 )
     {
         wxRect rect = GetClientRect();
@@ -3774,6 +3774,8 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, boo
 
     if ( idx >= (int)GetOwner()->GetColumnCount() )
         return false;
+
+    GetOwner()->EnsureVisible(m_currentRow, idx);
 
     if ( idx < 1 )
     {
