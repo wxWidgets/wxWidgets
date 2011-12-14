@@ -3775,6 +3775,8 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, boo
     if ( idx >= (int)GetOwner()->GetColumnCount() )
         return false;
 
+    GetOwner()->EnsureVisible(m_currentRow, idx);
+
     if ( idx < 1 )
     {
         // We are going to the left of the second column. Reset to whole-row
