@@ -742,8 +742,6 @@ void wxDataViewRendererBase::DestroyEditControl()
 
     wxPendingDelete.Append(handler);
     wxPendingDelete.Append(m_editorCtrl);
-
-    m_editorCtrl = NULL;
 }
 
 void wxDataViewRendererBase::CancelEditing()
