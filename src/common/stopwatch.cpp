@@ -37,6 +37,7 @@
         #include "wx/msw/wrapwin.h"
     #endif
     #include "wx/log.h"
+    #include "wx/thread.h"
 #endif //WX_PRECOMP
 
 // ============================================================================
@@ -64,7 +65,7 @@ struct PerfCounter
         return freq.QuadPart != 0;
     }
 
-    wxCriticalSection cs;
+    wxCRIT_SECT_DECLARE_MEMBER(cs);
     LARGE_INTEGER freq;
     bool init;
 } gs_perfCounter;
@@ -82,7 +83,7 @@ void wxStopWatch::DoStart()
 #ifdef __WXMSW__
     if ( !gs_perfCounter.init )
     {
-        wxCriticalSectionLocker lock(gs_perfCounter.cs);
+        wxCRIT_SECT_LOCKER(lock, gs_perfCounter.cs);
         ::QueryPerformanceFrequency(&gs_perfCounter.freq);
 
         // Just a sanity check: it's not supposed to happen but verify that
