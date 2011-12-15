@@ -348,6 +348,7 @@ void wxPropertyGrid::Init1()
     m_eventObject = this;
     m_curFocused = NULL;
     m_processedEvent = NULL;
+    m_tlp = NULL;
     m_sortFunction = NULL;
     m_inDoPropertyChanged = false;
     m_inCommitChangesFromEditor = false;
@@ -465,7 +466,6 @@ void wxPropertyGrid::Init2()
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
     // Hook the top-level parent
-    m_tlp = NULL;
     m_tlpClosed = NULL;
     m_tlpClosedTime = 0;
 
