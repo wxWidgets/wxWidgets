@@ -35,6 +35,16 @@
 #include "wx/fontenum.h"
 #include "wx/accel.h"
 
+#if defined (__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
+#define wxHAVE_PRIMARY_SELECTION 1
+#else
+#define wxHAVE_PRIMARY_SELECTION 0
+#endif
+
+#if wxUSE_CLIPBOARD && wxHAVE_PRIMARY_SELECTION
+#include "wx/clipbrd.h"
+#endif
+
 // DLL options compatibility check:
 #include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxRichTextCtrl")
@@ -639,6 +649,19 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
             }
         }
     }
+
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && wxHAVE_PRIMARY_SELECTION
+    if (HasSelection() && GetFocusObject() && GetFocusObject()->GetBuffer())
+    {
+        // Put the selection in PRIMARY, if it exists
+        wxTheClipboard->UsePrimarySelection(true);
+
+        wxRichTextRange range = GetInternalSelectionRange();
+        GetFocusObject()->GetBuffer()->CopyToClipboard(range);
+
+        wxTheClipboard->UsePrimarySelection(false);
+    }
+#endif
 }
 
 /// Left-click
@@ -839,6 +862,13 @@ void wxRichTextCtrl::OnMiddleClick(wxMouseEvent& event)
 
     if (!GetEventHandler()->ProcessEvent(cmdEvent))
         event.Skip();
+
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && wxHAVE_PRIMARY_SELECTION
+    // Paste any PRIMARY selection, if it exists
+    wxTheClipboard->UsePrimarySelection(true);
+    Paste();
+    wxTheClipboard->UsePrimarySelection(false);
+#endif
 }
 
 /// Key press
