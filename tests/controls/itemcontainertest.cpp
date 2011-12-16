@@ -244,13 +244,16 @@ void ItemContainerTestCase::SetString()
 
     container->Append(testitems);
 
+    container->SetSelection(0);
     container->SetString(0, "new item 0");
+    CPPUNIT_ASSERT_EQUAL("new item 0", container->GetString(0));
+
+    // Modifying the item shouldn't deselect it.
+    CPPUNIT_ASSERT_EQUAL(0, container->GetSelection());
+
+    // wxOSX doesn't support having empty items in some containers.
 #ifndef __WXOSX__
     container->SetString(2, "");
-#endif
-
-    CPPUNIT_ASSERT_EQUAL("new item 0", container->GetString(0));
-#ifndef __WXOSX__
     CPPUNIT_ASSERT_EQUAL("", container->GetString(2));
 #endif
 }

@@ -358,6 +358,10 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     else if ( HasClientObjectData() )
         oldObjData = GetClientObject(n);
 
+    // and also the selection if we're going to delete the item that was
+    // selected
+    const bool wasSelected = static_cast<int>(n) == GetSelection();
+
     ::SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
     ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LPARAM)s.wx_str() );
 
@@ -367,6 +371,11 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     else if ( oldObjData )
         SetClientObject(n, oldObjData);
 
+    // and the selection
+    if ( wasSelected )
+        SetSelection(n);
+
+    // the width could have changed so the best size needs to be recomputed
     InvalidateBestSize();
 }
 
