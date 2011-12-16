@@ -147,6 +147,19 @@ wxSize wxCheckBox::DoGetBestSize() const
         dc.GetMultiLineTextExtent(GetLabelText(str), &wCheckbox, &hCheckbox);
         wCheckbox += s_checkSize + GetCharWidth();
 
+        if ( ::GetWindowLong(GetHwnd(), GWL_STYLE) & BS_MULTILINE )
+        {
+            // We need to make the checkbox even wider in this case because
+            // otherwise it wraps lines automatically and not only on "\n"s as
+            // we need and this makes the size computed here wrong resulting in
+            // checkbox contents being truncated when it's actually displayed.
+            // Without this hack simple checkbox with "Some thing\n and more"
+            // label appears on 3 lines, not 2, under Windows 2003 using
+            // classic look and feel (although it works fine under Windows 7,
+            // with or without themes).
+            wCheckbox += s_checkSize;
+        }
+
         if ( hCheckbox < s_checkSize )
             hCheckbox = s_checkSize;
     }
