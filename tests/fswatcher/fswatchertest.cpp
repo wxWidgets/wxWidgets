@@ -335,19 +335,6 @@ public:
 
         const wxFileSystemWatcherEvent * const e = m_events.front();
 
-        WX_ASSERT_EQUAL_MESSAGE
-        (
-            (
-                "Extra events received, first is of type %x, for path=\"%s\","
-                "last is of type %x, path=\"%s\"",
-                e->GetChangeType(),
-                e->GetPath().GetFullPath(),
-                m_events.back()->GetChangeType(),
-                m_events.back()->GetPath().GetFullPath()
-            ),
-            1, m_events.size()
-        );
-
         // this is our "reference event"
         const wxFileSystemWatcherEvent expected = ExpectedEvent();
 
@@ -360,6 +347,20 @@ public:
 
         CPPUNIT_ASSERT_EQUAL(expected.GetPath(), e->GetPath());
         CPPUNIT_ASSERT_EQUAL(expected.GetNewPath(), e->GetNewPath());
+
+        WX_ASSERT_EQUAL_MESSAGE
+        (
+            (
+                "Extra events received, last one is of type %x, path=\"%s\" "
+                "(the original event was for \"%s\" (\"%s\")",
+                m_events.back()->GetChangeType(),
+                m_events.back()->GetPath().GetFullPath(),
+                e->GetPath().GetFullPath(),
+                e->GetNewPath().GetFullPath()
+            ),
+            1, m_events.size()
+        );
+
     }
 
     virtual void GenerateEvent() = 0;
