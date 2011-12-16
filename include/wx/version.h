@@ -28,9 +28,9 @@
 /*  NB: this file is parsed by automatic tools so don't change its format! */
 #define wxMAJOR_VERSION      2
 #define wxMINOR_VERSION      9
-#define wxRELEASE_NUMBER     3
+#define wxRELEASE_NUMBER     4
 #define wxSUBRELEASE_NUMBER  0
-#define wxVERSION_STRING   wxT("wxWidgets 2.9.3")
+#define wxVERSION_STRING   wxT("wxWidgets 2.9.4")
 
 /*  nothing to update below this line when updating the version */
 /*  ---------------------------------------------------------------------------- */

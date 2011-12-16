@@ -51,7 +51,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleGetInfoString</key>
-	<string>$(PRODUCT_NAME) version 2.9.3, (c) 2005-2011 wxWidgets</string>
+	<string>$(PRODUCT_NAME) version 2.9.4, (c) 2005-2011 wxWidgets</string>
 	<key>CFBundleIconFile</key>
 	<string>doc</string>
 	<key>CFBundleIdentifier</key>
@@ -66,17 +66,17 @@
 		<string>it</string>
 	</array>
 	<key>CFBundleLongVersionString</key>
-	<string>2.9.3, (c) 2005-2011 wxWidgets</string>
+	<string>2.9.4, (c) 2005-2011 wxWidgets</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.9.3</string>
+	<string>2.9.4</string>
 	<key>CFBundleSignature</key>
 	<string>WXMA</string>
 	<key>CFBundleVersion</key>
-	<string>2.9.3</string>
+	<string>2.9.4</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>LSRequiresCarbon</key>
