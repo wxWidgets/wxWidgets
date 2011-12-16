@@ -4499,6 +4499,8 @@ else
 
 fi
 
+{ echo "$as_me:$LINENO: result: ${enable_debug-default}" >&5
+echo "${ECHO_T}${enable_debug-default}" >&6; }
 
 case "$wxUSE_DEBUG" in
     yes)
