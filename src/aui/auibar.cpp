@@ -2150,7 +2150,7 @@ void wxAuiToolBar::DoIdleUpdate()
             {
                 bool is_enabled;
                 if (item.m_window)
-                    is_enabled = item.m_window->IsEnabled();
+                    is_enabled = item.m_window->IsThisEnabled();
                 else
                     is_enabled = (item.m_state & wxAUI_BUTTON_STATE_DISABLED) ? false : true;
 
