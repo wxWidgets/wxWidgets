@@ -390,7 +390,7 @@ void TextCtrlTestCase::Lines()
 {
     delete m_text;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxSize(400, 200), wxTE_MULTILINE | wxTE_DONTWRAP);
+                            wxDefaultPosition, wxSize(400, 200), wxTE_MULTILINE);
 
     m_text->SetValue("line1\nline2\nlong long line 3");
     m_text->Refresh();
