@@ -19,13 +19,13 @@ class WXDLLIMPEXP_CORE wxPalette : public wxPaletteBase
 public:
     wxPalette() { }
     wxPalette(int n,
-              unsigned char *red, unsigned char *green, unsigned char *blue)
+              const unsigned char *red, const unsigned char *green, const unsigned char *blue)
     {
         Create(n, red, green, blue);
     }
 
     bool Create(int n,
-                unsigned char *red, unsigned char *green, unsigned char *blue);
+                const unsigned char *red, const unsigned char *green, const unsigned char *blue);
 
     virtual int GetColoursCount() const;
 
