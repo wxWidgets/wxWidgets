@@ -142,6 +142,7 @@ bool wxImage::Create(const char* const* xpmData)
     (*this) = decoder.ReadData(xpmData);
     return IsOk();
 #else
+    wxUnusedVar(xpmData);
     return false;
 #endif
 }
