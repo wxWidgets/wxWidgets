@@ -211,7 +211,7 @@ public:
     wxWebFileHandler is provided to allow the navigation of pages inside a zip
     archive. It overrides the @c file scheme and provides support for the 
     standard @c file syntax as well as paths to archives of the form 
-    @c file:///C:/exmaple/docs.zip;protocol=zip/main.htm 
+    @c file:///C:/example/docs.zip;protocol=zip/main.htm
   
     @beginEventEmissionTable{wxWebViewEvent}
     @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
