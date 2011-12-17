@@ -228,7 +228,7 @@ public:
        Process a @c wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
        is fully loaded and displayed. Note that if the displayed HTML document has 
        several frames, one such event will be generated per frame.
-    @event{EVT_WEB_VIEW_ERRROR(id, func)}
+    @event{EVT_WEB_VIEW_ERROR(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
        error occurs.
        The integer associated with this event will be a wxWebNavigationError item.
@@ -609,7 +609,7 @@ public:
        Process a @c wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
        is fully loaded and displayed. Note that if the displayed HTML document has 
        several frames, one such event will be generated per frame.
-    @event{EVT_WEB_VIEW_ERRROR(id, func)}
+    @event{EVT_WEB_VIEW_ERROR(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
        error occurs.
        The integer associated with this event will be a wxWebNavigationError item.

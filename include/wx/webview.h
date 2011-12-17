@@ -225,7 +225,7 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_LOADED, id, \
                      wxWebViewEventHandler(fn))
 
-#define EVT_WEB_VIEW_ERRROR(id, fn) \
+#define EVT_WEB_VIEW_ERROR(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_ERROR, id, \
                      wxWebViewEventHandler(fn))
 
