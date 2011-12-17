@@ -462,7 +462,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         // Let the system position the window, just set its size.
         ::SetWindowPos(GetHwnd(), 0,
                        0, 0, w, h,
-                       SWP_NOMOVE | SWP_NOZORDER);
+                       SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
     }
     else // Move the window to the desired location and set its size too.
     {
