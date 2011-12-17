@@ -258,6 +258,16 @@ int wxBitmapComboBox::Insert(const wxString& item,
 }
 
 int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
+                             unsigned int pos, void *clientData)
+{
+    OnAddBitmap(bitmap);
+    const int n = wxComboBox::Insert(item, pos, clientData);
+    if ( n != wxNOT_FOUND )
+        DoSetItemBitmap(n, bitmap);
+    return n;
+}
+
+int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
                              unsigned int pos, wxClientData *clientData)
 {
     OnAddBitmap(bitmap);
