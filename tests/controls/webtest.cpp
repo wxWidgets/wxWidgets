@@ -44,6 +44,7 @@ private:
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( Zoom );
         CPPUNIT_TEST( RunScript );
+        CPPUNIT_TEST( SetPage );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -56,6 +57,7 @@ private:
     void Selection();
     void Zoom();
     void RunScript();
+    void SetPage();
     void LoadUrl(int times = 1);
 
     wxWebView* m_browser;
@@ -242,6 +244,15 @@ void WebTestCase::RunScript()
 {
     m_browser->RunScript("document.write(\"Hello World!\");");
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
+}
+
+void WebTestCase::SetPage()
+{
+    m_browser->SetPage("<html><body>text</body></html>", "");
+    CPPUNIT_ASSERT_EQUAL("text", m_browser->GetPageText());
+
+    m_browser->SetPage("<html><body>other text</body></html>", "");
+    CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
 }
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)
