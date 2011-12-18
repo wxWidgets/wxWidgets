@@ -28,6 +28,8 @@
 
 #include "wx/filepicker.h"
 
+#include "wx/scopedptr.h"
+
 
 // ============================================================================
 // implementation
@@ -92,18 +94,16 @@ bool wxGenericFileDirButton::Create(wxWindow *parent,
 
 void wxGenericFileDirButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 {
-    wxDialog *p = CreateDialog();
+    wxScopedPtr<wxDialog> p(CreateDialog());
     if (p->ShowModal() == wxID_OK)
     {
         // save updated path in m_path
-        UpdatePathFromDialog(p);
+        UpdatePathFromDialog(p.get());
 
         // fire an event
         wxFileDirPickerEvent event(GetEventType(), this, GetId(), m_path);
         GetEventHandler()->ProcessEvent(event);
     }
-
-    wxDELETE(p);
 }
 
 #endif      // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
