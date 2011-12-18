@@ -31,6 +31,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/artprov.h"
@@ -52,7 +53,8 @@
 enum
 {
     PickerPage_Reset = wxID_HIGHEST,
-    PickerPage_Dir
+    PickerPage_Dir,
+    PickerPage_SetDir
 };
 
 
@@ -90,6 +92,8 @@ protected:
     void OnDirChange(wxFileDirPickerEvent &ev);
     void OnCheckBox(wxCommandEvent &ev);
     void OnButtonReset(wxCommandEvent &ev);
+    void OnButtonSetDir(wxCommandEvent &ev);
+
 
     // the picker
     wxDirPickerCtrl *m_dirPicker;
@@ -102,6 +106,8 @@ protected:
                *m_chkDirChangeDir,
                *m_chkDirMustExist,
                *m_chkSmall;
+    wxTextCtrl *m_textInitialDir;
+
     wxBoxSizer *m_sizer;
 
 private:
@@ -115,6 +121,7 @@ private:
 
 BEGIN_EVENT_TABLE(DirPickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(PickerPage_Reset, DirPickerWidgetsPage::OnButtonReset)
+    EVT_BUTTON(PickerPage_SetDir, DirPickerWidgetsPage::OnButtonSetDir)
 
     EVT_DIRPICKER_CHANGED(PickerPage_Dir, DirPickerWidgetsPage::OnDirChange)
 
@@ -151,6 +158,16 @@ void DirPickerWidgetsPage::CreateContent()
     m_chkDirChangeDir = CreateCheckBoxAndAddToSizer(dirbox, wxT("Change working dir"), false);
     m_chkSmall = CreateCheckBoxAndAddToSizer(dirbox, "&Small version", false);
     boxleft->Add(dirbox, 0, wxALL|wxGROW, 5);
+
+    boxleft->Add(CreateSizerWithTextAndButton
+                 (
+                    PickerPage_SetDir,
+                    "&Initial directory",
+                    wxID_ANY,
+                    &m_textInitialDir
+                 ), wxSizerFlags().Expand().Border());
+
+    boxleft->AddSpacer(10);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -225,6 +242,11 @@ void DirPickerWidgetsPage::Reset()
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
+
+void DirPickerWidgetsPage::OnButtonSetDir(wxCommandEvent& WXUNUSED(event))
+{
+    m_dirPicker->SetInitialDirectory(m_textInitialDir->GetValue());
+}
 
 void DirPickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 {

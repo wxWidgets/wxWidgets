@@ -31,6 +31,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/artprov.h"
@@ -58,7 +59,8 @@ enum
 enum
 {
     PickerPage_Reset = wxID_HIGHEST,
-    PickerPage_File
+    PickerPage_File,
+    PickerPage_SetDir
 };
 
 
@@ -99,6 +101,7 @@ protected:
     void OnFileChange(wxFileDirPickerEvent &ev);
     void OnCheckBox(wxCommandEvent &ev);
     void OnButtonReset(wxCommandEvent &ev);
+    void OnButtonSetDir(wxCommandEvent &ev);
 
 
     // the picker
@@ -114,6 +117,7 @@ protected:
                *m_chkFileChangeDir,
                *m_chkSmall;
     wxRadioBox *m_radioFilePickerMode;
+    wxTextCtrl *m_textInitialDir;
 
     wxBoxSizer *m_sizer;
 
@@ -128,6 +132,7 @@ private:
 
 BEGIN_EVENT_TABLE(FilePickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(PickerPage_Reset, FilePickerWidgetsPage::OnButtonReset)
+    EVT_BUTTON(PickerPage_SetDir, FilePickerWidgetsPage::OnButtonSetDir)
 
     EVT_FILEPICKER_CHANGED(PickerPage_File, FilePickerWidgetsPage::OnFileChange)
 
@@ -173,6 +178,16 @@ void FilePickerWidgetsPage::CreateContent()
     m_chkSmall = CreateCheckBoxAndAddToSizer(filebox, "&Small version", false);
 
     boxleft->Add(filebox, 0, wxALL|wxGROW, 5);
+
+    boxleft->Add(CreateSizerWithTextAndButton
+                 (
+                    PickerPage_SetDir,
+                    "&Initial directory",
+                    wxID_ANY,
+                    &m_textInitialDir
+                 ), wxSizerFlags().Expand().Border());
+
+    boxleft->AddSpacer(10);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -279,6 +294,11 @@ void FilePickerWidgetsPage::UpdateFilePickerMode()
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
+
+void FilePickerWidgetsPage::OnButtonSetDir(wxCommandEvent& WXUNUSED(event))
+{
+    m_filePicker->SetInitialDirectory(m_textInitialDir->GetValue());
+}
 
 void FilePickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 {

@@ -445,6 +445,14 @@ Major new features in this release
   was added.
 
 
+2.9.4:
+------
+
+All (GUI):
+
+- Added wxFilePickerCtrl::SetInitialDirectory().
+
+
 2.9.3: (released 2011-12-14)
 ------
 

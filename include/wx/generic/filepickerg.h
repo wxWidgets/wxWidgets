@@ -58,6 +58,8 @@ public:     // overridable
 
     virtual wxEventType GetEventType() const = 0;
 
+    virtual void SetInitialDirectory(const wxString& dir);
+
 public:
 
     bool Create(wxWindow *parent, wxWindowID id,
@@ -81,6 +83,9 @@ protected:
     // wxButton as some of our bits can conflict with wxButton styles and it
     // just doesn't make sense to use picker styles for wxButton anyhow
     long m_pickerStyle;
+
+    // Initial directory set by SetInitialDirectory() call or empty.
+    wxString m_initialDir;
 
 private:
     // common part of all ctors
@@ -140,16 +145,7 @@ public:     // overridable
         return filedlgstyle;
     }
 
-    virtual wxDialog *CreateDialog()
-    {
-        wxFileDialog *p = new wxFileDialog(GetDialogParent(), m_message,
-                                    wxEmptyString, wxEmptyString,
-                                    m_wildcard, GetDialogStyle());
-
-        // this sets both the default folder and the default file of the dialog
-        p->SetPath(m_path);
-        return p;
-    }
+    virtual wxDialog *CreateDialog();
 
     wxEventType GetEventType() const
         { return wxEVT_COMMAND_FILEPICKER_CHANGED; }
@@ -159,6 +155,10 @@ protected:
         { wxStaticCast(p, wxFileDialog)->SetPath(m_path); }
     void UpdatePathFromDialog(wxDialog *p)
         { m_path = wxStaticCast(p, wxFileDialog)->GetPath(); }
+
+    // Set the initial directory for the dialog but without overriding the
+    // directory of the currently selected file, if any.
+    void DoSetInitialDirectory(wxFileDialog* dialog, const wxString& dir);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGenericFileButton)
@@ -204,11 +204,7 @@ public:     // overridable
         return dirdlgstyle;
     }
 
-    virtual wxDialog *CreateDialog()
-    {
-        return new wxDirDialog(GetDialogParent(), m_message, m_path,
-                                   GetDialogStyle());
-    }
+    virtual wxDialog *CreateDialog();
 
     wxEventType GetEventType() const
         { return wxEVT_COMMAND_DIRPICKER_CHANGED; }

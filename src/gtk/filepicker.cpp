@@ -129,6 +129,14 @@ void wxFileButton::SetPath(const wxString &str)
         UpdateDialogPath(m_dialog);
 }
 
+void wxFileButton::SetInitialDirectory(const wxString& dir)
+{
+    if (m_dialog)
+        DoSetInitialDirectory(static_cast<wxFileDialog*>(m_dialog), dir);
+    else
+        wxGenericFileButton::SetInitialDirectory(dir);
+}
+
 #endif      // wxUSE_FILEPICKERCTRL && defined(__WXGTK26__)
 
 
@@ -272,6 +280,17 @@ void wxDirButton::SetPath(const wxString& str)
 
     if (m_dialog)
         UpdateDialogPath(m_dialog);
+}
+
+void wxDirButton::SetInitialDirectory(const wxString& dir)
+{
+    if (m_dialog)
+    {
+        if (m_path.empty())
+            static_cast<wxDirDialog*>(m_dialog)->SetPath(dir);
+    }
+    else
+        wxGenericDirButton::SetInitialDirectory(dir);
 }
 
 #endif      // wxUSE_DIRPICKERCTRL && defined(__WXGTK26__)

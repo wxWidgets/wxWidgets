@@ -87,8 +87,12 @@ public:
     wxFileDirPickerWidgetBase() {  }
     virtual ~wxFileDirPickerWidgetBase() {  }
 
+    // Path here is the name of the selected file or directory.
     wxString GetPath() const { return m_path; }
     virtual void SetPath(const wxString &str) { m_path=str; }
+
+    // Set the directory to open the file browse dialog at initially.
+    virtual void SetInitialDirectory(const wxString& dir) = 0;
 
     // returns the picker widget cast to wxControl
     virtual wxControl *AsControl() = 0;
@@ -164,6 +168,12 @@ public:         // public API
 
     wxString GetPath() const;
     void SetPath(const wxString &str);
+
+    // Set the directory to open the file browse dialog at initially.
+    void SetInitialDirectory(const wxString& dir)
+    {
+        m_pickerIface->SetInitialDirectory(dir);
+    }
 
 public:        // internal functions
 

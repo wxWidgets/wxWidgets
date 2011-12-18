@@ -131,6 +131,20 @@ public:
     void SetFileName(const wxFileName& filename);
 
     /**
+        Set the directory to show when starting to browse for files.
+
+        This function is mostly useful for the file picker controls which have
+        no selection initially to configure the directory that should be shown
+        if the user starts browsing for files as otherwise the directory of
+        initially selected file is used, which is usually the desired
+        behaviour and so the directory specified by this function is ignored in
+        this case.
+
+        @since 2.9.4
+     */
+    void SetInitialDirectory(const wxString& dir);
+
+    /**
         Sets the absolute path of the currently selected file.
         This must be a valid file if the @c wxFLP_FILE_MUST_EXIST style was given.
     */
@@ -251,6 +265,20 @@ public:
         Just like SetPath() but this function takes a wxFileName object.
     */
     void SetDirName(const wxFileName& dirname);
+
+    /**
+        Set the directory to show when starting to browse for directories.
+
+        This function is mostly useful for the directory picker controls which
+        have no selection initially to configure the directory that should be
+        shown if the user starts browsing for directories as otherwise the
+        initially selected directory is used, which is usually the desired
+        behaviour and so the directory specified by this function is ignored in
+        this case.
+
+        @since 2.9.4
+     */
+    void SetInitialDirectory(const wxString& dir);
 
     /**
         Sets the absolute path of  (the default converter uses current locale's

@@ -101,6 +101,7 @@ public:     // overrides
     void OnDialogOK(wxCommandEvent &);
 
     virtual void SetPath(const wxString &str);
+    virtual void SetInitialDirectory(const wxString& dir);
 
     // see macro defined above
     FILEDIRBTN_OVERRIDES
@@ -171,6 +172,7 @@ public:     // overrides
     }
 
     virtual void SetPath(const wxString &str);
+    virtual void SetInitialDirectory(const wxString& dir);
 
     // see macro defined above
     FILEDIRBTN_OVERRIDES

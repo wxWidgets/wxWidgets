@@ -26,6 +26,7 @@
 
 #if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
+#include "wx/filename.h"
 #include "wx/filepicker.h"
 
 #include "wx/scopedptr.h"
@@ -104,6 +105,65 @@ void wxGenericFileDirButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
         wxFileDirPickerEvent event(GetEventType(), this, GetId(), m_path);
         GetEventHandler()->ProcessEvent(event);
     }
+}
+
+void wxGenericFileDirButton::SetInitialDirectory(const wxString& dir)
+{
+    m_initialDir = dir;
+}
+
+// ----------------------------------------------------------------------------
+// wxGenericFileutton
+// ----------------------------------------------------------------------------
+
+void
+wxGenericFileButton::DoSetInitialDirectory(wxFileDialog* dialog,
+                                           const wxString& dir)
+{
+    if ( m_path.find_first_of(wxFileName::GetPathSeparators()) ==
+            wxString::npos )
+    {
+        dialog->SetDirectory(dir);
+    }
+}
+
+wxDialog *wxGenericFileButton::CreateDialog()
+{
+    wxFileDialog* const dialog = new wxFileDialog
+                                     (
+                                        GetDialogParent(),
+                                        m_message,
+                                        wxEmptyString,
+                                        wxEmptyString,
+                                        m_wildcard,
+                                        GetDialogStyle()
+                                     );
+
+    // this sets both the default folder and the default file of the dialog
+    dialog->SetPath(m_path);
+
+    // If there is no default file or if it doesn't have any path, use the
+    // explicitly set initial directory.
+    if ( !m_initialDir.empty() )
+        DoSetInitialDirectory(dialog, m_initialDir);
+
+    return dialog;
+}
+
+// ----------------------------------------------------------------------------
+// wxGenericDirButton
+// ----------------------------------------------------------------------------
+
+wxDialog *wxGenericDirButton::CreateDialog()
+{
+    wxDirDialog* const dialog = new wxDirDialog
+                                    (
+                                        GetDialogParent(),
+                                        m_message,
+                                        m_path.empty() ? m_initialDir : m_path,
+                                        GetDialogStyle()
+                                    );
+    return dialog;
 }
 
 #endif      // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
