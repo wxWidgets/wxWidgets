@@ -117,3 +117,5 @@ run_sed samples/minimal/Info_cocoa.plist \
 run_sed samples/docview/Info.plist \
     "/versionon/s/$ver_for_sed/$ver_string_new/" \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
+
+msg "Don't forget to change the C:R:A triplet in build/bakefiles/version.bkl now!"
