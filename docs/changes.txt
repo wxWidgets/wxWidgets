@@ -454,6 +454,10 @@ All (GUI):
 - Added wxDataViewItemAttr::SetBackgroundColour() and implemented it in generic
   wxDataViewCtrl (Andrew Xu).
 
+MSW:
+
+- Added support for wxEXEC_MAKE_GROUP_LEADER to wxExecute (tteras).
+
 
 2.9.3: (released 2011-12-14)
 ------

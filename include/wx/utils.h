@@ -342,6 +342,9 @@ enum
 
     // under Unix, if the process is the group leader then passing wxKILL_CHILDREN to wxKill
     // kills all children as well as pid
+    // under Windows (NT family only), sets the CREATE_NEW_PROCESS_GROUP flag,
+    // which allows to target Ctrl-Break signal to the spawned process.
+    // applies to console processes only.
     wxEXEC_MAKE_GROUP_LEADER = 4,
 
     // by default synchronous execution disables all program windows to avoid

@@ -849,7 +849,12 @@ enum
         Under Unix, if the process is the group leader then passing
         wxKILL_CHILDREN to wxKill() kills all children as well as pid.
 
-        This flag is currently ignored under MSW.
+        Under MSW, applies only to console applications and is only supported
+        under NT family (i.e. not under Windows 9x). It corresponds to the
+        native @c CREATE_NEW_PROCESS_GROUP and, in particular, ensures that
+        Ctrl-Break signals will be sent to all children of this process as well
+        to the process itself. Support for this flag under MSW was added in
+        version 2.9.4 of wxWidgets.
      */
     wxEXEC_MAKE_GROUP_LEADER = 4,
 
@@ -935,7 +940,8 @@ enum
     the new process is a group leader (this will create a new session if
     needed). Calling wxKill() passing wxKILL_CHILDREN will kill this process as
     well as all of its children (except those which have started their own
-    session).
+    session). Under MSW, this flag can be used with console processes only and
+    corresponds to the native @c CREATE_NEW_PROCESS_GROUP flag.
 
     The @c wxEXEC_NOEVENTS flag prevents processing of any events from taking
     place while the child process is running. It should be only used for very
