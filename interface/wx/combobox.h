@@ -311,7 +311,6 @@ public:
     virtual int GetSelection() const;
     virtual void GetSelection(long *from, long *to) const;
     virtual void SetSelection(int n);
-    virtual void SetSelection(long from, long to);
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual wxString GetString(unsigned int n) const;
     virtual wxString GetStringSelection() const;

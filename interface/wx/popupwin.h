@@ -23,6 +23,11 @@ class wxPopupWindow: public wxNonOwnedWindow
 public:
 
     /**
+      Default constructor
+    */
+    wxPopupWindow();
+    
+    /**
       Constructor
     */
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
@@ -68,6 +73,11 @@ class wxPopupTransientWindow : public wxPopupWindow
 {
 public:
     /**
+        Default constructor.
+    */
+    wxPopupTransientWindow();
+
+    /**
         Constructor.
     */
     wxPopupTransientWindow(wxWindow *parent, int flags = wxBORDER_NONE);
@@ -96,4 +106,12 @@ public:
         (which consists in dismissing it if the mouse is clicked outside it).
     */
     virtual bool ProcessLeftDown(wxMouseEvent& event);
+
+protected:
+    /**
+       This is called when the popup is disappeared because of anything
+       else but direct call to Dismiss().
+    */
+    virtual void OnDismiss();
+    
 };

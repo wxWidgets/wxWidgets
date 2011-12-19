@@ -40,9 +40,9 @@ public:
             default.
         @param copyright Copyright string, none by default.
     */
-    wxVersionInfo(const wxString& name,
-                  int major,
-                  int minor,
+    wxVersionInfo(const wxString& name = wxString(),
+                  int major = 0,
+                  int minor = 0,
                   int micro = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString());
