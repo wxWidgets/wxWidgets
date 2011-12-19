@@ -290,6 +290,9 @@ public:
     // platform-specific classes.
     virtual wxDC *GetDC() = 0;
 
+    // To draw background use the background colour in wxDataViewItemAttr
+    virtual void RenderBackground(wxDC* dc, const wxRect& rect);
+
     // Prepare DC to use attributes and call Render().
     void WXCallRender(wxRect rect, wxDC *dc, int state);
 

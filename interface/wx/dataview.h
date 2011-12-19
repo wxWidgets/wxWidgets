@@ -581,6 +581,16 @@ public:
     void SetColour(const wxColour& colour);
 
     /**
+        Call this to set the background colour to use.
+
+        Currently this attribute is only supported in the generic version of
+        wxDataViewCtrl and ignored by the native GTK+ and OS X implementations.
+
+        @since 2.9.4
+    */
+    void SetBackgroundColour(const wxColour& colour);
+
+    /**
         Call this to indicate that the item shall be displayed in italic text.
     */
     void SetItalic(bool set);

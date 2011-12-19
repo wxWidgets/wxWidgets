@@ -712,6 +712,8 @@ private:
 
     wxDataViewColumn *FindColumnForEditing(const wxDataViewItem& item, wxDataViewCellMode mode);
 
+    void DrawCellBackground( wxDataViewRenderer* cell, wxDC& dc, const wxRect& rect );
+
 private:
     wxDataViewCtrl             *m_owner;
     int                         m_lineHeight;
@@ -1935,6 +1937,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             cell_rect.y = GetLineStart( item );
             cell_rect.height = GetLineHeight( item );
 
+            // draw the background
+            bool selected = m_selection.Index( item ) != wxNOT_FOUND;
+            if ( !selected )
+                DrawCellBackground( cell, dc, cell_rect );
+
             // deal with the expander
             int indent = 0;
             if ((!IsList()) && (col == expander))
@@ -1988,7 +1995,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 continue;
 
             int state = 0;
-            if (m_hasFocus && (m_selection.Index(item) != wxNOT_FOUND))
+            if (m_hasFocus && selected)
                 state |= wxDATAVIEW_CELL_SELECTED;
 
             // TODO: it would be much more efficient to create a clipping
@@ -2005,6 +2012,28 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         cell_rect.x += cell_rect.width;
     }
+}
+
+
+void wxDataViewMainWindow::DrawCellBackground( wxDataViewRenderer* cell, wxDC& dc, const wxRect& rect )
+{
+    wxRect rectBg( rect );
+
+    // don't overlap the horizontal rules
+    if ( m_owner->HasFlag(wxDV_HORIZ_RULES) )
+    {
+        rectBg.x++;
+        rectBg.width--;
+    }
+
+    // don't overlap the vertical rules
+    if ( m_owner->HasFlag(wxDV_VERT_RULES) )
+    {
+        rectBg.y++;
+        rectBg.height--;
+    }
+
+    cell->RenderBackground(&dc, rectBg);
 }
 
 void wxDataViewMainWindow::OnRenameTimer()

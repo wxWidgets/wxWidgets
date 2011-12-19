@@ -451,6 +451,8 @@ Major new features in this release
 All (GUI):
 
 - Added wxFilePickerCtrl::SetInitialDirectory().
+- Added wxDataViewItemAttr::SetBackgroundColour() and implemented it in generic
+  wxDataViewCtrl (Andrew Xu).
 
 
 2.9.3: (released 2011-12-14)

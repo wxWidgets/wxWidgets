@@ -143,6 +143,7 @@ public:
     void SetColour(const wxColour& colour) { m_colour = colour; }
     void SetBold( bool set ) { m_bold = set; }
     void SetItalic( bool set ) { m_italic = set; }
+    void SetBackgroundColour(const wxColour& colour)  { m_bgColour = colour; }
 
     // accessors
     bool HasColour() const { return m_colour.IsOk(); }
@@ -152,7 +153,10 @@ public:
     bool GetBold() const { return m_bold; }
     bool GetItalic() const { return m_italic; }
 
-    bool IsDefault() const { return !(HasColour() || HasFont()); }
+    bool HasBackgroundColour() const { return m_bgColour.IsOk(); }
+    const wxColour& GetBackgroundColour() const { return m_bgColour; }
+
+    bool IsDefault() const { return !(HasColour() || HasFont() || HasBackgroundColour()); }
 
     // Return the font based on the given one with this attribute applied to it.
     wxFont GetEffectiveFont(const wxFont& font) const;
@@ -161,6 +165,7 @@ private:
     wxColour m_colour;
     bool     m_bold;
     bool     m_italic;
+    wxColour m_bgColour;
 };
 
 

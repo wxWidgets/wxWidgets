@@ -822,6 +822,18 @@ bool wxDataViewCustomRendererBase::ActivateCell(const wxRect& cell,
         return Activate(cell, model, item, col);
 }
 
+void wxDataViewCustomRendererBase::RenderBackground(wxDC* dc, const wxRect& rect)
+{
+    if ( !m_attr.HasBackgroundColour() )
+        return;
+
+    const wxColour& colour = m_attr.GetBackgroundColour();
+    wxDCPenChanger changePen(*dc, colour);
+    wxDCBrushChanger changeBrush(*dc, colour);
+
+    dc->DrawRectangle(rect);
+}
+
 void
 wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
 {
