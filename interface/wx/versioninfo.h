@@ -92,7 +92,7 @@ public:
 
         @return The version string in the form "name major.minor[.micro]".
     */
-    wxString GetVersionString() const
+    wxString GetVersionString() const;
 
     /**
         Return @true if a description string has been specified.
