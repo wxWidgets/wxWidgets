@@ -465,11 +465,13 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
                     holdBottomWidth, labelHeight);
             }
             if ( HasFlag(wxSL_VALUE_LABEL) )
+            {
                 labelOffset = longestLabelWidth + HGAP;
                 DoMoveSibling((HWND)(*m_labels)[SliderLabel_Value],
                 x,
                 y + (height - labelHeight)/2,
                 longestLabelWidth, labelHeight);
+            }
         }
 
         // position the slider itself along the left/right edge
