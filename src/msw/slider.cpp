@@ -371,6 +371,11 @@ int wxSlider::GetLabelsSize(int *widthMin, int *widthMax) const
     {
         *widthMin = GetTextExtent(Format(m_rangeMin)).x;
         *widthMax = GetTextExtent(Format(m_rangeMax)).x;
+
+        if ( HasFlag(wxSL_INVERSE) )
+        {
+            wxSwap(*widthMin, *widthMax);
+        }
     }
 
     return HasFlag(wxSL_LABELS) ? GetCharHeight() : 0;
@@ -420,11 +425,10 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
             {
                 holdTopX = xLabel;
                 holdTopWidth = minLabelWidth;
-                holdBottomX = xLabel - ((maxLabelWidth - minLabelWidth) / 2);
+                holdBottomX = xLabel - (abs(maxLabelWidth - minLabelWidth) / 2);
                 holdBottomWidth = maxLabelWidth;
                 if ( HasFlag(wxSL_INVERSE) )
                 {
-                    wxSwap(holdTopWidth, holdBottomWidth);
                     wxSwap(holdTopX, holdBottomX);
                 }
                 DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
@@ -446,13 +450,12 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         {
             if ( HasFlag(wxSL_MIN_MAX_LABELS) )
             {
-                holdTopX = xLabel + longestLabelWidth + ((maxLabelWidth - minLabelWidth) / 2);
+                holdTopX = xLabel + longestLabelWidth + (abs(maxLabelWidth - minLabelWidth) / 2);
                 holdTopWidth = minLabelWidth;
                 holdBottomX = xLabel + longestLabelWidth;
                 holdBottomWidth = maxLabelWidth;
                 if ( HasFlag(wxSL_INVERSE) )
                 {
-                    wxSwap(holdTopWidth, holdBottomWidth);
                     wxSwap(holdTopX, holdBottomX);
                 }
                 DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
@@ -515,11 +518,6 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
                 holdLeftWidth = minLabelWidth;
                 holdRightX = x + width - maxLabelWidth;
                 holdRightWidth = maxLabelWidth;
-                if ( HasFlag(wxSL_INVERSE) )
-                {
-                    wxSwap(holdLeftWidth, holdRightWidth);
-                    wxSwap(holdLeftX, holdRightX);
-                }
                 DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
                     holdLeftX,
                     yLabelMinMax,
@@ -546,11 +544,6 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
                 holdLeftWidth = minLabelWidth;
                 holdRightX = x + width - maxLabelWidth;
                 holdRightWidth = maxLabelWidth;
-                if ( HasFlag(wxSL_INVERSE) )
-                {
-                    wxSwap(holdLeftWidth, holdRightWidth);
-                    wxSwap(holdLeftX, holdRightX);
-                }
                 DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
                     holdLeftX,
                     yLabelMinMax,
