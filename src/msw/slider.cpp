@@ -563,8 +563,6 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         }
 
         // position the slider itself along the top/bottom edge
-        if ( HasFlag(wxSL_MIN_MAX_LABELS) || HasFlag(wxSL_VALUE_LABEL) )
-            labelOffset = labelHeight;
         wxSliderBase::DoMoveWindow(
             x + minLabelWidth + VGAP,
             ySlider,
