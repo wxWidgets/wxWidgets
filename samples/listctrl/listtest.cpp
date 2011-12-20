@@ -571,8 +571,14 @@ void MyFrame::InitWithIconItems(bool withText, bool sameIcon)
 
         if ( withText )
         {
-            m_listCtrl->InsertItem(i, wxString::Format(wxT("Label %d"), i),
-                                   image);
+            // Make labels of different widths to test the layout.
+            wxString label;
+            if ( !(i % 5) )
+                label.Printf("Longer label %d", i);
+            else
+                label.Printf("Label %d", i);
+
+            m_listCtrl->InsertItem(i, label, image);
         }
         else
         {

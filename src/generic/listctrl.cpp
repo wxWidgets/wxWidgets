@@ -3629,6 +3629,9 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
 
                 int x = EXTRA_BORDER_X;
                 int y = EXTRA_BORDER_Y;
+
+                // Note that "row" here is vertical, i.e. what is called
+                // "column" in many other places in wxWidgets.
                 int maxWidthInThisRow = 0;
 
                 m_linesPerPage = 0;
@@ -3650,8 +3653,20 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                     if (currentlyVisibleLines > m_linesPerPage)
                         m_linesPerPage = currentlyVisibleLines;
 
-                    if ( y + sizeLine.y >= clientHeight )
+                    // Have we reached the end of the row either because no
+                    // more items would fit or because there are simply no more
+                    // items?
+                    if ( y + sizeLine.y >= clientHeight
+                            || i == count - 1)
                     {
+                        // Adjust all items in this row to have the same
+                        // width to ensure that they all align horizontally.
+                        size_t firstRowLine = i - currentlyVisibleLines + 1;
+                        for (size_t j = firstRowLine; j <= i; j++)
+                        {
+                            GetLine(j)->m_gi->ExtendWidth(maxWidthInThisRow);
+                        }
+
                         currentlyVisibleLines = 0;
                         y = EXTRA_BORDER_Y;
                         maxWidthInThisRow += MARGIN_BETWEEN_ROWS;
@@ -3659,10 +3674,6 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                         entireWidth += maxWidthInThisRow;
                         maxWidthInThisRow = 0;
                     }
-
-                    // We have reached the last item.
-                    if ( i == count - 1 )
-                        entireWidth += maxWidthInThisRow;
 
                     if ( (tries == 0) &&
                             (entireWidth + SCROLL_UNIT_X > clientWidth) )

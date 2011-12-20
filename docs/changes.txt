@@ -453,6 +453,7 @@ All (GUI):
 - Added wxFilePickerCtrl::SetInitialDirectory().
 - Added wxDataViewItemAttr::SetBackgroundColour() and implemented it in generic
   wxDataViewCtrl (Andrew Xu).
+- Fix item alignment in icon view in the generic wxListCtrl.
 
 MSW:
 
