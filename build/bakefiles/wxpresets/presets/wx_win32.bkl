@@ -174,6 +174,7 @@
     <define-wxlib-name>propgrid</define-wxlib-name>
     <define-wxlib-name>stc</define-wxlib-name>
     <define-wxlib-name>richtext</define-wxlib-name>
+    <define-wxlib-name>webview</define-wxlib-name>
 
     <!-- NOTE: The GL lib is not part of the monolithic build; treat it as a contrib! -->
 
@@ -214,6 +215,7 @@
         <if cond="value=='ribbon'"><sys-lib>$(WXLIB_RIBBON_NAME)</sys-lib></if>
         <if cond="value=='propgrid'"><sys-lib>$(WXLIB_PROPGRID_NAME)</sys-lib></if>
         <if cond="value=='richtext'"><sys-lib>$(WXLIB_RICHTEXT_NAME)</sys-lib></if>
+        <if cond="value=='webview'"><sys-lib>$(WXLIB_WEBVIEW_NAME)</sys-lib></if>
 
         <!-- The GL lib isn't part of the monolithic build, treat it as a contrib: -->
         <if cond="value=='gl'">
