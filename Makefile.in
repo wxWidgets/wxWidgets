@@ -3691,11 +3691,14 @@ COND_TOOLKIT_OSX_CARBON_ADVANCED_PLATFORM_HDR =  \
 COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/osx/dataview.h \
+	wx/osx/datectrl.h \
+	wx/osx/datetimectrl.h \
 	wx/osx/dvrenderer.h \
 	wx/osx/dvrenderers.h \
 	wx/osx/joystick.h \
 	wx/osx/sound.h \
 	wx/osx/taskbarosx.h \
+	wx/osx/timectrl.h \
 	wx/osx/core/joystick.h \
 	wx/osx/cocoa/dataview.h
 @COND_TOOLKIT_OSX_COCOA@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR)
@@ -6247,7 +6250,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_commandlinkbutton.o \
 	monodll_datecontrols.o \
 	monodll_datectrl.o \
-	monodll_datetimectrl.o \
+	monodll_msw_datetimectrl.o \
 	monodll_msw_hyperlink.o \
 	monodll_timectrl.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
@@ -6258,7 +6261,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_commandlinkbutton.o \
 	monodll_datecontrols.o \
 	monodll_datectrl.o \
-	monodll_datetimectrl.o \
+	monodll_msw_datetimectrl.o \
 	monodll_msw_hyperlink.o \
 	monodll_timectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
@@ -8205,7 +8208,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_commandlinkbutton.o \
 	monolib_datecontrols.o \
 	monolib_datectrl.o \
-	monolib_datetimectrl.o \
+	monolib_msw_datetimectrl.o \
 	monolib_msw_hyperlink.o \
 	monolib_timectrl.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
@@ -8216,7 +8219,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_commandlinkbutton.o \
 	monolib_datecontrols.o \
 	monolib_datectrl.o \
-	monolib_datetimectrl.o \
+	monolib_msw_datetimectrl.o \
 	monolib_msw_hyperlink.o \
 	monolib_timectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
@@ -12005,7 +12008,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_commandlinkbutton.o \
 	advdll_datecontrols.o \
 	advdll_datectrl.o \
-	advdll_datetimectrl.o \
+	advdll_msw_datetimectrl.o \
 	advdll_msw_hyperlink.o \
 	advdll_timectrl.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
@@ -12016,7 +12019,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_commandlinkbutton.o \
 	advdll_datecontrols.o \
 	advdll_datectrl.o \
-	advdll_datetimectrl.o \
+	advdll_msw_datetimectrl.o \
 	advdll_msw_hyperlink.o \
 	advdll_timectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
@@ -12123,7 +12126,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_commandlinkbutton.o \
 	advlib_datecontrols.o \
 	advlib_datectrl.o \
-	advlib_datetimectrl.o \
+	advlib_msw_datetimectrl.o \
 	advlib_msw_hyperlink.o \
 	advlib_timectrl.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
@@ -12134,7 +12137,7 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_commandlinkbutton.o \
 	advlib_datecontrols.o \
 	advlib_datectrl.o \
-	advlib_datetimectrl.o \
+	advlib_msw_datetimectrl.o \
 	advlib_msw_hyperlink.o \
 	advlib_timectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
@@ -13407,12 +13410,16 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_animateg.o \
+	monodll_datetimectrl_osx.o \
+	monodll_datectrl_osx.o \
 	monodll_sound_osx.o \
+	monodll_timectrl_osx.o \
 	monodll_carbon_sound.o \
 	monodll_core_sound.o \
 	monodll_cocoa_aboutdlg.o \
 	monodll_dataview_osx.o \
 	monodll_cocoa_dataview.o \
+	monodll_cocoa_datetimectrl.o \
 	monodll_osx_cocoa_taskbar.o \
 	monodll_hidjoystick.o
 @COND_TOOLKIT_OSX_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS)
@@ -13595,12 +13602,16 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_animateg.o \
+	monolib_datetimectrl_osx.o \
+	monolib_datectrl_osx.o \
 	monolib_sound_osx.o \
+	monolib_timectrl_osx.o \
 	monolib_carbon_sound.o \
 	monolib_core_sound.o \
 	monolib_cocoa_aboutdlg.o \
 	monolib_dataview_osx.o \
 	monolib_cocoa_dataview.o \
+	monolib_cocoa_datetimectrl.o \
 	monolib_osx_cocoa_taskbar.o \
 	monolib_hidjoystick.o
 @COND_TOOLKIT_OSX_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_0)
@@ -13881,12 +13892,16 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_animateg.o \
+	advdll_datetimectrl_osx.o \
+	advdll_datectrl_osx.o \
 	advdll_sound_osx.o \
+	advdll_timectrl_osx.o \
 	advdll_carbon_sound.o \
 	advdll_core_sound.o \
 	advdll_cocoa_aboutdlg.o \
 	advdll_dataview_osx.o \
 	advdll_cocoa_dataview.o \
+	advdll_cocoa_datetimectrl.o \
 	advdll_osx_cocoa_taskbar.o \
 	advdll_hidjoystick.o
 @COND_TOOLKIT_OSX_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8)
@@ -13971,12 +13986,16 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_animateg.o \
+	advlib_datetimectrl_osx.o \
+	advlib_datectrl_osx.o \
 	advlib_sound_osx.o \
+	advlib_timectrl_osx.o \
 	advlib_carbon_sound.o \
 	advlib_core_sound.o \
 	advlib_cocoa_aboutdlg.o \
 	advlib_dataview_osx.o \
 	advlib_cocoa_dataview.o \
+	advlib_cocoa_datetimectrl.o \
 	advlib_osx_cocoa_taskbar.o \
 	advlib_hidjoystick.o
 @COND_TOOLKIT_OSX_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9)
@@ -20906,6 +20925,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@monodll_hidjoystick.o: $(srcdir)/src/osx/core/hidjoystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/hidjoystick.cpp
 
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_datetimectrl_osx.o: $(srcdir)/src/osx/datetimectrl_osx.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/datetimectrl_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_datectrl_osx.o: $(srcdir)/src/osx/datectrl_osx.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/datectrl_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_timectrl_osx.o: $(srcdir)/src/osx/timectrl_osx.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/timectrl_osx.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
 
@@ -20917,6 +20945,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_cocoa_dataview.o: $(srcdir)/src/osx/cocoa/dataview.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dataview.mm
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_cocoa_datetimectrl.o: $(srcdir)/src/osx/cocoa/datetimectrl.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/datetimectrl.mm
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
@@ -21020,10 +21051,10 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONODLL_ODEP)
@@ -26294,6 +26325,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@monolib_hidjoystick.o: $(srcdir)/src/osx/core/hidjoystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/hidjoystick.cpp
 
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_datetimectrl_osx.o: $(srcdir)/src/osx/datetimectrl_osx.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/datetimectrl_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_datectrl_osx.o: $(srcdir)/src/osx/datectrl_osx.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/datectrl_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_timectrl_osx.o: $(srcdir)/src/osx/timectrl_osx.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/timectrl_osx.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
 
@@ -26305,6 +26345,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_cocoa_dataview.o: $(srcdir)/src/osx/cocoa/dataview.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dataview.mm
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_cocoa_datetimectrl.o: $(srcdir)/src/osx/cocoa/datetimectrl.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/datetimectrl.mm
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
@@ -26408,10 +26451,10 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(MONOLIB_ODEP)
@@ -35882,6 +35925,15 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_COCOA@advdll_hidjoystick.o: $(srcdir)/src/osx/core/hidjoystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/core/hidjoystick.cpp
 
+@COND_TOOLKIT_OSX_COCOA@advdll_datetimectrl_osx.o: $(srcdir)/src/osx/datetimectrl_osx.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/datetimectrl_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA@advdll_datectrl_osx.o: $(srcdir)/src/osx/datectrl_osx.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/datectrl_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA@advdll_timectrl_osx.o: $(srcdir)/src/osx/timectrl_osx.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/timectrl_osx.cpp
+
 @COND_TOOLKIT_OSX_COCOA@advdll_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
 
@@ -35893,6 +35945,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA@advdll_cocoa_dataview.o: $(srcdir)/src/osx/cocoa/dataview.mm $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dataview.mm
+
+@COND_TOOLKIT_OSX_COCOA@advdll_cocoa_datetimectrl.o: $(srcdir)/src/osx/cocoa/datetimectrl.mm $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/datetimectrl.mm
 
 @COND_TOOLKIT_OSX_COCOA@advdll_osx_cocoa_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
@@ -35996,10 +36051,10 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
-@COND_TOOLKIT_MSW_WXUNIV_0@advdll_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@advdll_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
-@COND_TOOLKIT_WINCE_WXUNIV_0@advdll_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@advdll_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advdll_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVDLL_ODEP)
@@ -36269,6 +36324,15 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_COCOA@advlib_hidjoystick.o: $(srcdir)/src/osx/core/hidjoystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/core/hidjoystick.cpp
 
+@COND_TOOLKIT_OSX_COCOA@advlib_datetimectrl_osx.o: $(srcdir)/src/osx/datetimectrl_osx.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/datetimectrl_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA@advlib_datectrl_osx.o: $(srcdir)/src/osx/datectrl_osx.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/datectrl_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA@advlib_timectrl_osx.o: $(srcdir)/src/osx/timectrl_osx.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/timectrl_osx.cpp
+
 @COND_TOOLKIT_OSX_COCOA@advlib_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
 
@@ -36280,6 +36344,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA@advlib_cocoa_dataview.o: $(srcdir)/src/osx/cocoa/dataview.mm $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dataview.mm
+
+@COND_TOOLKIT_OSX_COCOA@advlib_cocoa_datetimectrl.o: $(srcdir)/src/osx/cocoa/datetimectrl.mm $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/datetimectrl.mm
 
 @COND_TOOLKIT_OSX_COCOA@advlib_osx_cocoa_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
@@ -36383,10 +36450,10 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
-@COND_TOOLKIT_MSW_WXUNIV_0@advlib_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@advlib_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
-@COND_TOOLKIT_WINCE_WXUNIV_0@advlib_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@advlib_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advlib_msw_hyperlink.o: $(srcdir)/src/msw/hyperlink.cpp $(ADVLIB_ODEP)

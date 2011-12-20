@@ -3118,12 +3118,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_OSX_COCOA_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/generic/animateg.cpp
+    src/osx/datetimectrl_osx.cpp
+    src/osx/datectrl_osx.cpp
     src/osx/sound_osx.cpp
+    src/osx/timectrl_osx.cpp
     src/osx/carbon/sound.cpp
     src/osx/core/sound.cpp
     src/osx/cocoa/aboutdlg.mm
     src/osx/dataview_osx.cpp
     src/osx/cocoa/dataview.mm
+    src/osx/cocoa/datetimectrl.mm
     src/osx/cocoa/taskbar.mm
     src/osx/core/hidjoystick.cpp
 </set>
@@ -3131,11 +3135,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_OSX_COCOA_HDR" hints="files">
     wx/generic/animate.h
     wx/osx/dataview.h
+    wx/osx/datectrl.h
+    wx/osx/datetimectrl.h
     wx/osx/dvrenderer.h
     wx/osx/dvrenderers.h
     wx/osx/joystick.h
     wx/osx/sound.h
     wx/osx/taskbarosx.h
+    wx/osx/timectrl.h
     wx/osx/core/joystick.h
     wx/osx/cocoa/dataview.h
 </set>

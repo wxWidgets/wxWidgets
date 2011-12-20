@@ -460,6 +460,10 @@ MSW:
 - Fixed regression with initial focus in the dialogs in 2.9.3.
 - Added support for wxEXEC_MAKE_GROUP_LEADER to wxExecute (tteras).
 
+OSX:
+
+- Provide native implementations of wxDatePickerCtrl and wxTimePickerCtrl.
+
 
 2.9.3: (released 2011-12-14)
 ------

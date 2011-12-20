@@ -25,20 +25,28 @@
            style is not supported by the generic version.
     @style{wxDP_DROPDOWN}
            Creates a control with a month calendar drop-down part from which
-           the user can select a date.
+           the user can select a date. This style is not supported in OSX/Cocoa
+           native version.
     @style{wxDP_DEFAULT}
            Creates a control with the style that is best supported for the
-           current platform (currently wxDP_SPIN under Windows and
-           wxDP_DROPDOWN elsewhere).
+           current platform (currently wxDP_SPIN under Windows and OSX/Cocoa
+           and wxDP_DROPDOWN elsewhere).
     @style{wxDP_ALLOWNONE}
            With this style, the control allows the user to not enter any valid
            date at all. Without it - the default - the control always has some
-           valid date.
+           valid date. This style is not supported in OSX/Cocoa native version.
     @style{wxDP_SHOWCENTURY}
            Forces display of the century in the default date format. Without
            this style the century could be displayed, or not, depending on the
-           default date representation in the system.
+           default date representation in the system. This style is not
+           supported in OSX/Cocoa native version currently.
     @endStyleTable
+
+    As can be seen from the remarks above, most of the control style are only
+    supported in the native MSW implementation. In portable code it's
+    recommended to use @c wxDP_DEFAULT style only, possibly combined with @c
+    wxDP_SHOWCENTURY (this is also the style used by default if none is
+    specified).
 
     @beginEventEmissionTable{wxDateEvent}
     @event{EVT_DATE_CHANGED(id, func)}

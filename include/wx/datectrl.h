@@ -84,6 +84,10 @@ public:
     #include "wx/msw/datectrl.h"
 
     #define wxHAS_NATIVE_DATEPICKCTRL
+#elif defined(__WXOSX_COCOA__) && !defined(__WXUNIVERSAL__)
+    #include "wx/osx/datectrl.h"
+
+    #define wxHAS_NATIVE_DATEPICKCTRL
 #else
     #include "wx/generic/datectrl.h"
 

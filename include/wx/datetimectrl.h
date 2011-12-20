@@ -35,10 +35,10 @@ public:
     virtual wxDateTime GetValue() const = 0;
 };
 
-// Only MSW currently has any code to share between wxDatePickerCtrl and
-// wxTimePickerCtrl, under the other platforms this class is trivial.
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/datetimectrl.h"
+#elif defined(__WXOSX_COCOA__) && !defined(__WXUNIVERSAL__)
+    #include "wx/osx/datetimectrl.h"
 #else
     typedef wxDateTimePickerCtrlBase wxDateTimePickerCtrl;
 #endif
