@@ -309,6 +309,9 @@ bool wxRegion::IsEmpty() const
 
 WXHRGN wxRegion::GetWXHRGN() const
 {
+    if ( !m_refData )
+        return NULL;
+
     return M_REGION ;
 }
 
