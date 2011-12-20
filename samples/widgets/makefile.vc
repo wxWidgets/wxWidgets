@@ -56,6 +56,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_static.obj \
 	$(OBJS)\widgets_statbmp.obj \
 	$(OBJS)\widgets_textctrl.obj \
+	$(OBJS)\widgets_timepick.obj \
 	$(OBJS)\widgets_toggle.obj \
 	$(OBJS)\widgets_widgets.obj
 WIDGETS_RESOURCES =  \
@@ -452,6 +453,9 @@ $(OBJS)\widgets_statbmp.obj: .\statbmp.cpp
 
 $(OBJS)\widgets_textctrl.obj: .\textctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) .\textctrl.cpp
+
+$(OBJS)\widgets_timepick.obj: .\timepick.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) .\timepick.cpp
 
 $(OBJS)\widgets_toggle.obj: .\toggle.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) .\toggle.cpp

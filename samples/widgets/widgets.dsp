@@ -360,6 +360,10 @@ SOURCE=.\textctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\timepick.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\toggle.cpp
 # End Source File
 # Begin Source File

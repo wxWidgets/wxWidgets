@@ -79,6 +79,7 @@ WIDGETS_OBJECTS =  \
 	widgets_static.o \
 	widgets_statbmp.o \
 	widgets_textctrl.o \
+	widgets_timepick.o \
 	widgets_toggle.o \
 	widgets_widgets.o
 
@@ -193,6 +194,9 @@ widgets_statbmp.o: ./statbmp.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_textctrl.o: ./textctrl.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+widgets_timepick.o: ./timepick.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_toggle.o: ./toggle.cpp

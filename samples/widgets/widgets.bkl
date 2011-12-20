@@ -32,6 +32,7 @@
             static.cpp
             statbmp.cpp
             textctrl.cpp
+            timepick.cpp
             toggle.cpp
             widgets.cpp
         </sources>

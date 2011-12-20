@@ -880,6 +880,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\timepick.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\toggle.cpp"
 				>
 			</File>

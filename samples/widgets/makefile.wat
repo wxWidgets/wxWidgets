@@ -260,6 +260,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_static.obj &
 	$(OBJS)\widgets_statbmp.obj &
 	$(OBJS)\widgets_textctrl.obj &
+	$(OBJS)\widgets_timepick.obj &
 	$(OBJS)\widgets_toggle.obj &
 	$(OBJS)\widgets_widgets.obj
 
@@ -368,6 +369,9 @@ $(OBJS)\widgets_statbmp.obj :  .AUTODEPEND .\statbmp.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_textctrl.obj :  .AUTODEPEND .\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_timepick.obj :  .AUTODEPEND .\timepick.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_toggle.obj :  .AUTODEPEND .\toggle.cpp

@@ -75,6 +75,7 @@ WIDGETS_OBJECTS =  \
 	widgets_static.o \
 	widgets_statbmp.o \
 	widgets_textctrl.o \
+	widgets_timepick.o \
 	widgets_toggle.o \
 	widgets_widgets.o \
 	$(__widgets___win32rc)
@@ -283,6 +284,9 @@ widgets_statbmp.o: $(srcdir)/statbmp.cpp
 
 widgets_textctrl.o: $(srcdir)/textctrl.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/textctrl.cpp
+
+widgets_timepick.o: $(srcdir)/timepick.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/timepick.cpp
 
 widgets_toggle.o: $(srcdir)/toggle.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/toggle.cpp

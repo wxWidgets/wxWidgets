@@ -211,7 +211,6 @@ void DatePickerWidgetsPage::CreateContent()
     sizerRight->Add(0, 0, 1, wxCENTRE);
     sizerRight->Add(m_datePicker, 1, wxCENTRE);
     sizerRight->Add(0, 0, 1, wxCENTRE);
-    sizerRight->SetMinSize(150, 0);
     m_sizerDatePicker = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
