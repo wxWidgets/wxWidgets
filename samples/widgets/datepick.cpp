@@ -42,6 +42,7 @@
 #endif
 
 #include "wx/datectrl.h"
+#include "wx/dateevt.h"
 
 #include "widgets.h"
 
@@ -55,10 +56,8 @@
 enum
 {
     DatePickerPage_Reset = wxID_HIGHEST,
-    DatePickerPage_Day,
-    DatePickerPage_Month,
-    DatePickerPage_Year,
     DatePickerPage_Set,
+    DatePickerPage_SetRange,
     DatePickerPage_Picker
 };
 
@@ -80,8 +79,10 @@ public:
 
 protected:
     // event handlers
-    void OnButtonSet(wxCommandEvent& event);
+    void OnDateChanged(wxDateEvent& event);
 
+    void OnButtonSet(wxCommandEvent& event);
+    void OnButtonSetRange(wxCommandEvent& event);
     void OnButtonReset(wxCommandEvent& event);
 
     // reset the date picker parameters
@@ -97,9 +98,13 @@ protected:
     wxDatePickerCtrl *m_datePicker;
     wxSizer *m_sizerDatePicker;
 
-    wxTextCtrl *m_day;
-    wxTextCtrl *m_month;
-    wxTextCtrl *m_year;
+    wxTextCtrl *m_textCur;
+    wxTextCtrl *m_textMin;
+    wxTextCtrl *m_textMax;
+
+    wxRadioBox* m_radioKind;
+    wxCheckBox* m_chkStyleCentury;
+    wxCheckBox* m_chkStyleAllowNone;
 
     // the text entries for command parameters
     wxTextCtrl *m_textLabel;
@@ -116,6 +121,9 @@ private:
 BEGIN_EVENT_TABLE(DatePickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(DatePickerPage_Reset, DatePickerWidgetsPage::OnButtonReset)
     EVT_BUTTON(DatePickerPage_Set, DatePickerWidgetsPage::OnButtonSet)
+    EVT_BUTTON(DatePickerPage_SetRange, DatePickerWidgetsPage::OnButtonSetRange)
+
+    EVT_DATE_CHANGED(wxID_ANY, DatePickerWidgetsPage::OnDateChanged)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -142,24 +150,60 @@ void DatePickerWidgetsPage::CreateContent()
 {
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
-    // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, wxT("Date details"));
+    // left pane: style
+    wxSizer* const sizerLeft = new wxBoxSizer(wxVERTICAL);
 
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
+    static const wxString kinds[] = { "&Default", "&Spin", "Drop do&wn" };
+    m_radioKind = new wxRadioBox(this, wxID_ANY, "&Kind",
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(kinds), kinds,
+                                 1, wxRA_SPECIFY_COLS);
+    sizerLeft->Add(m_radioKind, wxSizerFlags().Expand().Border());
 
-    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Day:"), DatePickerPage_Day , &m_day ),
-                    0, wxALL | wxALIGN_RIGHT , 5 );
+    wxSizer* const sizerStyle = new wxStaticBoxSizer(wxVERTICAL, this, "&Style");
+    m_chkStyleCentury = CreateCheckBoxAndAddToSizer(sizerStyle, "Show &century");
+    m_chkStyleAllowNone = CreateCheckBoxAndAddToSizer(sizerStyle, "Allow &no value");
 
-    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Month:"), DatePickerPage_Month , &m_month ),
-                    0, wxALL | wxALIGN_RIGHT , 5 );
+    sizerLeft->Add(sizerStyle, wxSizerFlags().Expand().Border());
 
-    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Year:"), DatePickerPage_Year , &m_year ),
-                    0, wxALL | wxALIGN_RIGHT , 5 );
+    sizerLeft->Add(new wxButton(this, DatePickerPage_Reset, "&Recreate"),
+                   wxSizerFlags().Centre().Border());
 
-    sizerLeft->Add( new wxButton( this, DatePickerPage_Set, wxT("&Set date") ),
-                    0, wxALL , 5 );
 
-    // right pane
+    // middle pane: operations
+    wxSizer* const sizerMiddle = new wxBoxSizer(wxVERTICAL);
+    sizerMiddle->Add(CreateSizerWithTextAndButton
+                     (
+                        DatePickerPage_Set,
+                        "&Set date",
+                        wxID_ANY,
+                        &m_textCur
+                     ),
+                     wxSizerFlags().Expand().Border());
+
+    m_textCur->SetMinSize(wxSize(GetTextExtent("  9999-99-99  ").x, -1));
+
+    sizerMiddle->AddSpacer(10);
+
+    sizerMiddle->Add(CreateSizerWithTextAndLabel
+                     (
+                        "&Min date",
+                        wxID_ANY,
+                        &m_textMin
+                     ),
+                     wxSizerFlags().Expand().Border());
+    sizerMiddle->Add(CreateSizerWithTextAndLabel
+                     (
+                        "Ma&x date",
+                        wxID_ANY,
+                        &m_textMax
+                     ),
+                     wxSizerFlags().Expand().Border());
+    sizerMiddle->Add(new wxButton(this, DatePickerPage_SetRange, "Set &range"),
+                     wxSizerFlags().Centre().Border());
+
+
+    // right pane: control itself
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
 
     m_datePicker = new wxDatePickerCtrl(this, DatePickerPage_Picker);
@@ -172,9 +216,11 @@ void DatePickerWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, (wxALL & ~wxLEFT), 10);
+    sizerTop->Add(sizerMiddle, 0, (wxTOP | wxBOTTOM), 10);
     sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
+    m_chkStyleCentury->SetValue(true);
     Reset();
 
     SetSizer(sizerTop);
@@ -185,9 +231,7 @@ void DatePickerWidgetsPage::Reset()
     const wxDateTime today = wxDateTime::Today();
 
     m_datePicker->SetValue(today);
-    m_day->SetValue(wxString::Format(wxT("%d"), today.GetDay()));
-    m_month->SetValue(wxString::Format(wxT("%d"), today.GetMonth() + 1));
-    m_year->SetValue(wxString::Format(wxT("%d"), today.GetYear()));
+    m_textCur->SetValue(today.FormatISODate());
 }
 
 void DatePickerWidgetsPage::CreateDatePicker()
@@ -202,7 +246,30 @@ void DatePickerWidgetsPage::CreateDatePicker()
 
     delete m_datePicker;
 
-    m_datePicker = new wxDatePickerCtrl(this, DatePickerPage_Picker, value);
+    long style = 0;
+    switch ( m_radioKind->GetSelection() )
+    {
+        case 0:
+            style = wxDP_DEFAULT;
+            break;
+
+        case 1:
+            style = wxDP_SPIN;
+            break;
+
+        case 2:
+            style = wxDP_DROPDOWN;
+            break;
+    }
+
+    if ( m_chkStyleCentury->GetValue() )
+        style |= wxDP_SHOWCENTURY;
+    if ( m_chkStyleAllowNone->GetValue() )
+        style |= wxDP_ALLOWNONE;
+
+    m_datePicker = new wxDatePickerCtrl(this, DatePickerPage_Picker, value,
+                                        wxDefaultPosition, wxDefaultSize,
+                                        style);
 
     m_sizerDatePicker->Add(0, 0, 1, wxCENTRE);
     m_sizerDatePicker->Add(m_datePicker, 1, wxCENTRE);
@@ -221,29 +288,56 @@ void DatePickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
     CreateDatePicker();
 }
 
+static bool GetDateFromTextControl(wxDateTime& dt, const wxTextCtrl* text)
+{
+    const wxString& value = text->GetValue();
+    if ( !value.empty() )
+    {
+        wxString::const_iterator end;
+        if ( !dt.ParseDate(value, &end) || end != value.end() )
+        {
+            wxLogError("Invalid date \"%s\"");
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void DatePickerWidgetsPage::OnButtonSet(wxCommandEvent& WXUNUSED(event))
 {
-    long day = 0,
-         month = 0,
-         year = 0;
-    if ( m_day->GetValue().ToLong(&day) &&
-         m_month->GetValue().ToLong(&month) &&
-         m_year->GetValue().ToLong(&year) )
+    wxDateTime dt;
+    if ( GetDateFromTextControl(dt, m_textCur) )
+        m_datePicker->SetValue(dt);
+}
+
+void DatePickerWidgetsPage::OnButtonSetRange(wxCommandEvent& WXUNUSED(event))
+{
+    wxDateTime dt1, dt2;
+    if ( !GetDateFromTextControl(dt1, m_textMin) ||
+           !GetDateFromTextControl(dt2, m_textMax) )
+        return;
+
+    m_datePicker->SetRange(dt1, dt2);
+
+    if ( !m_datePicker->GetRange(&dt1, &dt2) )
     {
-        const wxDateTime someDay(day, wxDateTime::Month(month - 1), year);
-        if ( someDay.IsValid() )
-        {
-            m_datePicker->SetValue(someDay);
-        }
-        else
-        {
-            wxLogError(wxT("Date is invalid"));
-        }
+        wxLogMessage("No range set");
     }
     else
     {
-        wxLogError(wxT("One of inputs is not number"));
+        m_textMin->SetValue(dt1.IsValid() ? dt1.FormatISODate() : wxString());
+        m_textMax->SetValue(dt2.IsValid() ? dt2.FormatISODate() : wxString());
+
+        wxLogMessage("Date picker range updated");
     }
+}
+
+void DatePickerWidgetsPage::OnDateChanged(wxDateEvent& event)
+{
+    wxLogMessage("Date changed, now is %s (control value is %s).",
+                 event.GetDate().FormatISOCombined(),
+                 m_datePicker->GetValue().FormatISOCombined());
 }
 
 #endif // wxUSE_DATEPICKCTRL
