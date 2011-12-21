@@ -3660,11 +3660,15 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                             || i == count - 1)
                     {
                         // Adjust all items in this row to have the same
-                        // width to ensure that they all align horizontally.
-                        size_t firstRowLine = i - currentlyVisibleLines + 1;
-                        for (size_t j = firstRowLine; j <= i; j++)
+                        // width to ensure that they all align horizontally in
+                        // icon view.
+                        if ( HasFlag(wxLC_ICON) || HasFlag(wxLC_SMALL_ICON) )
                         {
-                            GetLine(j)->m_gi->ExtendWidth(maxWidthInThisRow);
+                            size_t firstRowLine = i - currentlyVisibleLines + 1;
+                            for (size_t j = firstRowLine; j <= i; j++)
+                            {
+                                GetLine(j)->m_gi->ExtendWidth(maxWidthInThisRow);
+                            }
                         }
 
                         currentlyVisibleLines = 0;
