@@ -225,10 +225,14 @@
 		205520440CD13C0AB9E8915A /* anidecod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE959EC7BFDD3A628E856404 /* anidecod.cpp */; };
 		20BEEFFA08F3396791596870 /* dlunix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA2D9F325F833C408657E7B7 /* dlunix.cpp */; };
 		20BEEFFA08F3396791596871 /* dlunix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA2D9F325F833C408657E7B7 /* dlunix.cpp */; };
+		20D05D14BFAD3F969666D03B /* timectrl_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FA0840034F1386F94D17639 /* timectrl_osx.cpp */; };
+		20D05D14BFAD3F969666D03C /* timectrl_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FA0840034F1386F94D17639 /* timectrl_osx.cpp */; };
 		20F10669703137E68318C6FD /* cmndata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0510EE0FB3FF36EF8670ABD1 /* cmndata.cpp */; };
 		20F10669703137E68318C6FE /* cmndata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0510EE0FB3FF36EF8670ABD1 /* cmndata.cpp */; };
 		2102C23970FB3F22AB46A59A /* LexTADS3.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A284E855892F3A9E9E19E854 /* LexTADS3.cxx */; };
 		2102C23970FB3F22AB46A59B /* LexTADS3.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A284E855892F3A9E9E19E854 /* LexTADS3.cxx */; };
+		219304C9DDA33E9AADB515DC /* datetimectrl_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D049F49C75043592B7E318B3 /* datetimectrl_osx.cpp */; };
+		219304C9DDA33E9AADB515DD /* datetimectrl_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D049F49C75043592B7E318B3 /* datetimectrl_osx.cpp */; };
 		21F74D4D4D84375AB155FD5B /* stattext.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95186FEF3DEF39D8B1157BD5 /* stattext.mm */; };
 		21F74D4D4D84375AB155FD5C /* stattext.mm in Sources */ = {isa = PBXBuildFile; fileRef = 95186FEF3DEF39D8B1157BD5 /* stattext.mm */; };
 		221DC4F6678A3EC5ACDDEA4F /* statbox_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F16A18CD9C23410B18592FD /* statbox_osx.cpp */; };
@@ -359,6 +363,8 @@
 		32486A808EBC3E088598D51D /* jcprepct.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FE0455EBDC63D82B2D88587 /* jcprepct.c */; };
 		32FECED7A7633C4D8C1BFBB3 /* toolbkg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24DF23D67E693D999B875101 /* toolbkg.cpp */; };
 		32FECED7A7633C4D8C1BFBB4 /* toolbkg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24DF23D67E693D999B875101 /* toolbkg.cpp */; };
+		3316A16628B03D5E88529EA7 /* datetimectrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = A0A63980677D371C85A60B75 /* datetimectrl.mm */; };
+		3316A16628B03D5E88529EA8 /* datetimectrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = A0A63980677D371C85A60B75 /* datetimectrl.mm */; };
 		3357BD0518F538E9A949F886 /* xh_tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21A697F65B1E31168F0A7BD7 /* xh_tree.cpp */; };
 		3357BD0518F538E9A949F887 /* xh_tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21A697F65B1E31168F0A7BD7 /* xh_tree.cpp */; };
 		335DD610974A33D4B6581E2A /* colourdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3BD03BCE953D1B964EDB7A /* colourdata.cpp */; };
@@ -513,6 +519,8 @@
 		4E140367282F38C8A904A005 /* utilsexc_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81390F96937631078EFCD891 /* utilsexc_base.cpp */; };
 		4E396D8D2E9138D797F320C6 /* tif_aux.c in Sources */ = {isa = PBXBuildFile; fileRef = D0CDADAF2D893E32A38351E4 /* tif_aux.c */; };
 		4E396D8D2E9138D797F320C7 /* tif_aux.c in Sources */ = {isa = PBXBuildFile; fileRef = D0CDADAF2D893E32A38351E4 /* tif_aux.c */; };
+		4F99EB97F65330C28EB4D077 /* datectrl_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B4B2890C3A372DAB8DC7BA /* datectrl_osx.cpp */; };
+		4F99EB97F65330C28EB4D078 /* datectrl_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B4B2890C3A372DAB8DC7BA /* datectrl_osx.cpp */; };
 		50D7E093424138C88BB50D27 /* jcsample.c in Sources */ = {isa = PBXBuildFile; fileRef = 53D06E47477B3E32BB6B915E /* jcsample.c */; };
 		50D7E093424138C88BB50D28 /* jcsample.c in Sources */ = {isa = PBXBuildFile; fileRef = 53D06E47477B3E32BB6B915E /* jcsample.c */; };
 		5116CE330E333724A66982E3 /* rearrangectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 972BC9B2B0D438EFB12BCE1E /* rearrangectrl.cpp */; };
@@ -1640,6 +1648,7 @@
 		0E8036758CEC3296B555E4DF /* notebook.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = notebook.mm; path = ../../src/osx/cocoa/notebook.mm; sourceTree = "<group>"; };
 		0EB91E8407CB3300A19F387D /* ctrlcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctrlcmn.cpp; path = ../../src/common/ctrlcmn.cpp; sourceTree = "<group>"; };
 		0EEAD9C3E180305D8899441E /* strvararg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = strvararg.cpp; path = ../../src/common/strvararg.cpp; sourceTree = "<group>"; };
+		0FA0840034F1386F94D17639 /* timectrl_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = timectrl_osx.cpp; path = ../../src/osx/timectrl_osx.cpp; sourceTree = "<group>"; };
 		108517BCD39230E7A89BC943 /* jerror.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jerror.c; path = ../../src/jpeg/jerror.c; sourceTree = "<group>"; };
 		1094F7D0E7A93B0CAC949001 /* tif_dumpmode.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_dumpmode.c; path = ../../src/tiff/libtiff/tif_dumpmode.c; sourceTree = "<group>"; };
 		1098499A317A3DEEA4D16D0D /* LexVHDL.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexVHDL.cxx; path = ../../src/stc/scintilla/src/LexVHDL.cxx; sourceTree = "<group>"; };
@@ -2055,6 +2064,7 @@
 		950D51915EF83B57B5E8306F /* xh_spin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_spin.cpp; path = ../../src/xrc/xh_spin.cpp; sourceTree = "<group>"; };
 		95186FEF3DEF39D8B1157BD5 /* stattext.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = stattext.mm; path = ../../src/osx/cocoa/stattext.mm; sourceTree = "<group>"; };
 		95A156A823B536DE8476E4F9 /* appbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appbase.cpp; path = ../../src/common/appbase.cpp; sourceTree = "<group>"; };
+		95B4B2890C3A372DAB8DC7BA /* datectrl_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datectrl_osx.cpp; path = ../../src/osx/datectrl_osx.cpp; sourceTree = "<group>"; };
 		95DEEF60B1E9358A8CCCC67E /* datavcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datavcmn.cpp; path = ../../src/common/datavcmn.cpp; sourceTree = "<group>"; };
 		95E2B80B2D7033808504DA8D /* utilsexc_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_cf.cpp; path = ../../src/osx/core/utilsexc_cf.cpp; sourceTree = "<group>"; };
 		9660AE8FEB7B3EDB857B9238 /* lboxcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lboxcmn.cpp; path = ../../src/common/lboxcmn.cpp; sourceTree = "<group>"; };
@@ -2094,6 +2104,7 @@
 		9FDDE855D9F83E4891362EB4 /* bar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bar.cpp; path = ../../src/ribbon/bar.cpp; sourceTree = "<group>"; };
 		9FEB8204E530329FA085E5B8 /* strconv.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = strconv.cpp; path = ../../src/common/strconv.cpp; sourceTree = "<group>"; };
 		A06AB1974DB93EE2999EC75C /* pngrio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pngrio.c; path = ../../src/png/pngrio.c; sourceTree = "<group>"; };
+		A0A63980677D371C85A60B75 /* datetimectrl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = datetimectrl.mm; path = ../../src/osx/cocoa/datetimectrl.mm; sourceTree = "<group>"; };
 		A0DCC5EF59143640BE13AD73 /* jidctfst.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jidctfst.c; path = ../../src/jpeg/jidctfst.c; sourceTree = "<group>"; };
 		A1276C0E5D48337489DEE8DF /* LexErlang.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexErlang.cxx; path = ../../src/stc/scintilla/src/LexErlang.cxx; sourceTree = "<group>"; };
 		A1A53EC3A3463EFDB7614E93 /* bitmap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap.cpp; path = ../../src/osx/core/bitmap.cpp; sourceTree = "<group>"; };
@@ -2257,6 +2268,7 @@
 		CF4F4F5211933057824B5621 /* button_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = button_osx.cpp; path = ../../src/osx/button_osx.cpp; sourceTree = "<group>"; };
 		CF6511DE2CB43534A5566403 /* menuitem_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = menuitem_osx.cpp; path = ../../src/osx/menuitem_osx.cpp; sourceTree = "<group>"; };
 		D037EA567C253DEEA17E822B /* mousemanager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mousemanager.cpp; path = ../../src/common/mousemanager.cpp; sourceTree = "<group>"; };
+		D049F49C75043592B7E318B3 /* datetimectrl_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datetimectrl_osx.cpp; path = ../../src/osx/datetimectrl_osx.cpp; sourceTree = "<group>"; };
 		D0817D6A1AF83608B050EBC3 /* fontmap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fontmap.cpp; path = ../../src/common/fontmap.cpp; sourceTree = "<group>"; };
 		D0B70966E9423F198C8CBE65 /* xh_cmdlinkbn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_cmdlinkbn.cpp; path = ../../src/xrc/xh_cmdlinkbn.cpp; sourceTree = "<group>"; };
 		D0B9C41A4D12345AAA764CAD /* stc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stc.cpp; path = ../../src/stc/stc.cpp; sourceTree = "<group>"; };
@@ -3644,7 +3656,10 @@
 		F494694AB1FD30DEA2087AFC /* src/osx */ = {
 			isa = PBXGroup;
 			children = (
+				D049F49C75043592B7E318B3 /* datetimectrl_osx.cpp */,
+				95B4B2890C3A372DAB8DC7BA /* datectrl_osx.cpp */,
 				A9B2316B32653DA0939A372D /* sound_osx.cpp */,
+				0FA0840034F1386F94D17639 /* timectrl_osx.cpp */,
 				5E53DC332DA23DF4B9BFCDE3 /* dataview_osx.cpp */,
 			);
 			name = src/osx;
@@ -3710,6 +3725,7 @@
 			children = (
 				207F0F88390138B6B41183EB /* aboutdlg.mm */,
 				DB6963739198360DB3DBCC6C /* dataview.mm */,
+				A0A63980677D371C85A60B75 /* datetimectrl.mm */,
 				2A4D36DE66EC3EB09E883D6B /* taskbar.mm */,
 			);
 			name = src/osx/cocoa;
@@ -4291,12 +4307,16 @@
 				82FA4AA043213728AC266701 /* wizard.cpp in Sources */,
 				D00AF125FCB63A7A8F9B87DF /* taskbarcmn.cpp in Sources */,
 				46F341B46F80376B962759F6 /* animateg.cpp in Sources */,
+				219304C9DDA33E9AADB515DD /* datetimectrl_osx.cpp in Sources */,
+				4F99EB97F65330C28EB4D078 /* datectrl_osx.cpp in Sources */,
 				CE2C937117FE3AB599DD30BA /* sound_osx.cpp in Sources */,
+				20D05D14BFAD3F969666D03C /* timectrl_osx.cpp in Sources */,
 				61FEDBF2D47A3B4E861F8297 /* sound.cpp in Sources */,
 				61FEDBF2D47A3B4E861F8299 /* sound.cpp in Sources */,
 				14DEBD7C01FC358B917FDAF3 /* aboutdlg.mm in Sources */,
 				0723C4E8B52C39FDBC2158B7 /* dataview_osx.cpp in Sources */,
 				049052C49B0B3810BE0179CA /* dataview.mm in Sources */,
+				3316A16628B03D5E88529EA8 /* datetimectrl.mm in Sources */,
 				25C5C1713C0B39AC8EB6A38F /* taskbar.mm in Sources */,
 				C1DCF69200593986A8C606A7 /* hidjoystick.cpp in Sources */,
 				DEC5F4B34BC037169D3E5F2B /* mediactrlcmn.cpp in Sources */,
@@ -5093,12 +5113,16 @@
 				82FA4AA043213728AC266700 /* wizard.cpp in Sources */,
 				D00AF125FCB63A7A8F9B87DE /* taskbarcmn.cpp in Sources */,
 				46F341B46F80376B962759F5 /* animateg.cpp in Sources */,
+				219304C9DDA33E9AADB515DC /* datetimectrl_osx.cpp in Sources */,
+				4F99EB97F65330C28EB4D077 /* datectrl_osx.cpp in Sources */,
 				CE2C937117FE3AB599DD30B9 /* sound_osx.cpp in Sources */,
+				20D05D14BFAD3F969666D03B /* timectrl_osx.cpp in Sources */,
 				61FEDBF2D47A3B4E861F8296 /* sound.cpp in Sources */,
 				61FEDBF2D47A3B4E861F8298 /* sound.cpp in Sources */,
 				14DEBD7C01FC358B917FDAF2 /* aboutdlg.mm in Sources */,
 				0723C4E8B52C39FDBC2158B6 /* dataview_osx.cpp in Sources */,
 				049052C49B0B3810BE0179C9 /* dataview.mm in Sources */,
+				3316A16628B03D5E88529EA7 /* datetimectrl.mm in Sources */,
 				25C5C1713C0B39AC8EB6A38E /* taskbar.mm in Sources */,
 				C1DCF69200593986A8C606A6 /* hidjoystick.cpp in Sources */,
 				DEC5F4B34BC037169D3E5F2A /* mediactrlcmn.cpp in Sources */,
