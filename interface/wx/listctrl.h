@@ -643,6 +643,11 @@ public:
     long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
 
     /**
+        Returns true if the control is currently using ::wxLC_REPORT style.
+     */
+    bool InReportView() const;
+
+    /**
         For report view mode (only), inserts a column. For more details, see SetItem().
     */
     long InsertColumn(long col, wxListItem& info);
@@ -706,6 +711,11 @@ public:
     */
     long InsertItem(long index, const wxString& label,
                     int imageIndex);
+
+    /**
+        Returns true if the control is currently in virtual report view.
+     */
+    bool IsVirtual() const;
 
     /**
         Redraws the given @e item.
