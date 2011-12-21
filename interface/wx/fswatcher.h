@@ -185,20 +185,66 @@ public:
 
 /**
     These are the possible types of file system change events.
-    All of these events are reported on all supported platforms.
+
+    Not all of these events are reported on all platforms currently.
 
     @since 2.9.1
  */
 enum wxFSWFlags
 {
-    wxFSW_EVENT_CREATE = 0x01,  ///< File or directory was created
-    wxFSW_EVENT_DELETE = 0x02,  ///< File or directory was deleted
-    wxFSW_EVENT_RENAME = 0x04,  ///< File or directory was renamed
-    wxFSW_EVENT_MODIFY = 0x08,  ///< File or directory was modified
-    wxFSW_EVENT_ACCESS = 0x10,  ///< File or directory was accessed
+    /// File or directory was created.
+    wxFSW_EVENT_CREATE = 0x01,
 
-    wxFSW_EVENT_WARNING = 0x20, ///< A warning condition arose.
-    wxFSW_EVENT_ERROR = 0x40,   ///< An error condition arose.
+    /// File or directory was deleted.
+    wxFSW_EVENT_DELETE = 0x02,
+
+    /**
+        File or directory was renamed.
+
+        Notice that under MSW this event is sometimes -- although not always --
+        followed by a ::wxFSW_EVENT_MODIFY for the new file.
+
+        Under OS X this event is currently not detected and instead separate
+        ::wxFSW_EVENT_CREATE and ::wxFSW_EVENT_DELETE events are.
+     */
+    wxFSW_EVENT_RENAME = 0x04,
+
+    /**
+        File or directory was modified.
+
+        Depending on the program doing the file modification, multiple such
+        events can be reported for a single logical file update.
+
+        Under OS X this event is currently not detected.
+     */
+    wxFSW_EVENT_MODIFY = 0x08,
+
+    /**
+        File or directory was accessed.
+
+        This event is currently only detected under Linux.
+     */
+    wxFSW_EVENT_ACCESS = 0x10,
+
+    /**
+        A warning condition arose.
+
+        This is something that probably needs to be shown to the user in an
+        interactive program as it can indicate a relatively serious problem,
+        e.g. some events could have been missed because of an overflow. But
+        more events will still be coming in the future, unlike for the error
+        condition below.
+     */
+    wxFSW_EVENT_WARNING = 0x20,
+
+    /**
+        An error condition arose.
+
+        Errors are fatal, i.e. no more events will be reported after an error
+        and the program can stop watching the directories currently being
+        monitored.
+    */
+    wxFSW_EVENT_ERROR = 0x40,
 
     wxFSW_EVENT_ALL = wxFSW_EVENT_CREATE | wxFSW_EVENT_DELETE |
                          wxFSW_EVENT_RENAME | wxFSW_EVENT_MODIFY |
