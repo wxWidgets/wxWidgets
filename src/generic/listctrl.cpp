@@ -3847,6 +3847,21 @@ void wxListMainWindow::DeleteColumn( int col )
         for ( size_t i = 0; i < m_lines.GetCount(); i++ )
         {
             wxListLineData * const line = GetLine(i);
+
+            // In the following atypical but possible scenario it can be
+            // legal to call DeleteColumn() but the items may not have any
+            // values for it:
+            //  1. In report view, insert a second column.
+            //  2. Still in report view, add an item with 2 values.
+            //  3. Switch to an icon (or list) view.
+            //  4. Add an item -- necessarily with 1 value only.
+            //  5. Switch back to report view.
+            //  6. Call DeleteColumn().
+            // So we need to check for this as otherwise we would simply crash
+            // if this happens.
+            if ( line->m_items.GetCount() <= static_cast<unsigned>(col) )
+                continue;
+
             wxListItemDataList::compatibility_iterator n = line->m_items.Item( col );
             delete n->GetData();
             line->m_items.Erase(n);
