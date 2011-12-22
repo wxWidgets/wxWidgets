@@ -448,6 +448,10 @@ Major new features in this release
 2.9.4:
 ------
 
+All:
+
+- Added wxLogFormatter to allow customizing wxLog output (Sébastien Gallou).
+
 All (GUI):
 
 - Added wxFilePickerCtrl::SetInitialDirectory().

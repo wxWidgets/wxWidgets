@@ -310,6 +310,34 @@ struct wxLogRecord
 };
 
 // ----------------------------------------------------------------------------
+// Derive from this class to customize format of log messages.
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxLogFormatter
+{
+public:
+    // Default constructor.
+    wxLogFormatter() { }
+
+    // Trivial but virtual destructor for the base class.
+    virtual ~wxLogFormatter() { }
+
+
+    // Override this method to implement custom formatting of the given log
+    // record. The default implementation simply prepends a level-dependent
+    // prefix to the message and optionally adds a time stamp.
+    virtual wxString Format(wxLogLevel level,
+                            const wxString& msg,
+                            const wxLogRecordInfo& info) const;
+
+protected:
+    // Override this method to change just the time stamp formatting. It is
+    // called by default Format() implementation.
+    virtual wxString FormatTime(time_t t) const;
+};
+
+
+// ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages
 // normally, only a single instance of this class exists but it's not enforced
 // ----------------------------------------------------------------------------
@@ -318,7 +346,7 @@ class WXDLLIMPEXP_BASE wxLog
 {
 public:
     // ctor
-    wxLog() { }
+    wxLog() : m_formatter(new wxLogFormatter) { }
 
     // make dtor virtual for all derived classes
     virtual ~wxLog();
@@ -455,6 +483,26 @@ public:
     // call AddTraceMask() concurrently
     static const wxArrayString& GetTraceMasks();
 
+    // is this trace mask in the list?
+    static bool IsAllowedTraceMask(const wxString& mask);
+
+
+    // log formatting
+    // -----------------
+
+    // Change wxLogFormatter object used by wxLog to format the log messages.
+    //
+    // wxLog takes ownership of the pointer passed in but the caller is
+    // responsible for deleting the returned pointer.
+    wxLogFormatter* SetFormatter(wxLogFormatter* formatter);
+
+
+    // All the time stamp related functions below only work when the default
+    // wxLogFormatter is being used. Defining a custom formatter overrides them
+    // as it could use its own time stamp format or format messages without
+    // using time stamp at all.
+
+
     // sets the time stamp string format: this is used as strftime() format
     // string for the log targets which add time stamps to the messages; set
     // it to empty string to disable time stamping completely.
@@ -464,9 +512,6 @@ public:
     static void DisableTimestamp() { SetTimestamp(wxEmptyString); }
 
 
-    // is this trace mask in the list?
-    static bool IsAllowedTraceMask(const wxString& mask);
-
     // get the current timestamp format string (maybe empty)
     static const wxString& GetTimestamp() { return ms_timestamp; }
 
@@ -475,9 +520,10 @@ public:
     // helpers: all functions in this section are mostly for internal use only,
     // don't call them from your code even if they are not formally deprecated
 
-    // put the time stamp into the string if ms_timestamp != NULL (don't
-    // change it otherwise)
+    // put the time stamp into the string if ms_timestamp is not empty (don't
+    // change it otherwise); the first overload uses the current time.
     static void TimeStamp(wxString *str);
+    static void TimeStamp(wxString *str, time_t t);
 
     // these methods should only be called from derived classes DoLogRecord(),
     // DoLogTextAtLevel() and DoLogText() implementations respectively and
@@ -619,6 +665,12 @@ private:
     void CallDoLogNow(wxLogLevel level,
                       const wxString& msg,
                       const wxLogRecordInfo& info);
+
+
+    // variables
+    // ----------------
+
+    wxLogFormatter    *m_formatter; // We own this pointer.
 
 
     // static variables

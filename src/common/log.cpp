@@ -205,6 +205,61 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
 }
 
 // ----------------------------------------------------------------------------
+// wxLogFormatter class implementation
+// ----------------------------------------------------------------------------
+
+wxString
+wxLogFormatter::Format(wxLogLevel level,
+                       const wxString& msg,
+                       const wxLogRecordInfo& info) const
+{
+    wxString prefix = FormatTime(info.timestamp);
+
+    switch ( level )
+    {
+    case wxLOG_Error:
+        prefix += _("Error: ");
+        break;
+
+    case wxLOG_Warning:
+        prefix += _("Warning: ");
+        break;
+
+        // don't prepend "debug/trace" prefix under MSW as it goes to the debug
+        // window anyhow and so can't be confused with something else
+#ifndef __WXMSW__
+    case wxLOG_Debug:
+        // this prefix (as well as the one below) is intentionally not
+        // translated as nobody translates debug messages anyhow
+        prefix += "Debug: ";
+        break;
+
+    case wxLOG_Trace:
+        prefix += "Trace: ";
+        break;
+#endif // !__WXMSW__
+    }
+
+    return prefix + msg;
+}
+
+wxString
+wxLogFormatter::FormatTime(time_t t) const
+{
+    wxString str;
+
+    // don't time stamp debug messages under MSW as debug viewers usually
+    // already have an option to do it
+#ifdef __WXMSW__
+    if ( level != wxLOG_Debug && level != wxLOG_Trace )
+#endif // __WXMSW__
+        wxLog::TimeStamp(&str, t);
+
+    return str;
+}
+
+
+// ----------------------------------------------------------------------------
 // wxLog class implementation
 // ----------------------------------------------------------------------------
 
@@ -266,6 +321,8 @@ wxLog::~wxLog()
             gs_prevLog.numRepeated
         );
     }
+
+    delete m_formatter;
 }
 
 // ----------------------------------------------------------------------------
@@ -404,47 +461,8 @@ void wxLog::DoLogRecord(wxLogLevel level,
     wxUnusedVar(info);
 #endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
 
-
-    // TODO: it would be better to extract message formatting in a separate
-    //       wxLogFormatter class but for now we hard code formatting here
-
-    wxString prefix;
-
-    // don't time stamp debug messages under MSW as debug viewers usually
-    // already have an option to do it
-#ifdef __WXMSW__
-    if ( level != wxLOG_Debug && level != wxLOG_Trace )
-#endif // __WXMSW__
-        TimeStamp(&prefix);
-
-    // TODO: use the other wxLogRecordInfo fields
-
-    switch ( level )
-    {
-        case wxLOG_Error:
-            prefix += _("Error: ");
-            break;
-
-        case wxLOG_Warning:
-            prefix += _("Warning: ");
-            break;
-
-        // don't prepend "debug/trace" prefix under MSW as it goes to the debug
-        // window anyhow and so can't be confused with something else
-#ifndef __WXMSW__
-        case wxLOG_Debug:
-            // this prefix (as well as the one below) is intentionally not
-            // translated as nobody translates debug messages anyhow
-            prefix += "Debug: ";
-            break;
-
-        case wxLOG_Trace:
-            prefix += "Trace: ";
-            break;
-#endif // !__WXMSW__
-    }
-
-    DoLogTextAtLevel(level, prefix + msg);
+    // Use wxLogFormatter to format the message
+    DoLogTextAtLevel(level, m_formatter->Format (level, msg, info));
 }
 
 void wxLog::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
@@ -692,16 +710,37 @@ void wxLog::ClearTraceMasks()
 // wxLog miscellaneous other methods
 // ----------------------------------------------------------------------------
 
+#if wxUSE_DATETIME
+
 void wxLog::TimeStamp(wxString *str)
 {
-#if wxUSE_DATETIME
     if ( !ms_timestamp.empty() )
     {
         *str = wxDateTime::UNow().Format(ms_timestamp);
         *str += wxS(": ");
     }
-#endif // wxUSE_DATETIME
 }
+
+void wxLog::TimeStamp(wxString *str, time_t t)
+{
+    if ( !ms_timestamp.empty() )
+    {
+        *str = wxDateTime(t).Format(ms_timestamp);
+        *str += wxS(": ");
+    }
+}
+
+#else // !wxUSE_DATETIME
+
+void wxLog::TimeStamp(wxString*)
+{
+}
+
+void wxLog::TimeStamp(wxString*, time_t)
+{
+}
+
+#endif // wxUSE_DATETIME/!wxUSE_DATETIME
 
 #if wxUSE_THREADS
 
@@ -744,6 +783,14 @@ bool wxLog::EnableThreadLogging(bool enable)
 }
 
 #endif // wxUSE_THREADS
+
+wxLogFormatter *wxLog::SetFormatter(wxLogFormatter* formatter)
+{
+    wxLogFormatter* formatterOld = m_formatter;
+    m_formatter = formatter ? formatter : new wxLogFormatter;
+
+    return formatterOld;
+}
 
 void wxLog::Flush()
 {
