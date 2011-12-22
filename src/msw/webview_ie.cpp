@@ -1051,50 +1051,17 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
 VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler)
 {
-    m_refCount = 0;
     m_file = NULL;
     m_handler = handler;
 }
 
-VirtualProtocol::~VirtualProtocol()
-{
-}
+BEGIN_IID_TABLE(VirtualProtocol)
+    ADD_IID(Unknown)
+    ADD_RAW_IID(wxIID_IInternetProtocolRoot)
+    ADD_RAW_IID(wxIID_IInternetProtocol)
+END_IID_TABLE;
 
-ULONG VirtualProtocol::AddRef()
-{
-    m_refCount++;
-    return m_refCount;
-}
-
-HRESULT VirtualProtocol::QueryInterface(REFIID riid, void **ppvObject)
-{
-    if(riid == IID_IUnknown || riid == wxIID_IInternetProtocolRoot ||
-       riid == wxIID_IInternetProtocol)
-    {
-        *ppvObject = (wxIInternetProtocol*)this;
-        AddRef();
-        return S_OK;
-    }
-    else
-    {
-        *ppvObject = NULL;
-        return E_POINTER;
-    }
-}
-
-ULONG VirtualProtocol::Release()
-{
-    m_refCount--;
-    if (m_refCount > 0)
-    {
-        return m_refCount;
-    }
-    else
-    {
-        delete this;
-        return 0;
-    }
-}
+IMPLEMENT_IUNKNOWN_METHODS(VirtualProtocol)
 
 HRESULT VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProtocolSink *pOIProtSink,
                                wxIInternetBindInfo *pOIBindInfo, DWORD grfPI,
@@ -1162,6 +1129,13 @@ HRESULT VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
     }
 }
 
+BEGIN_IID_TABLE(ClassFactory)
+    ADD_IID(Unknown)
+    ADD_IID(ClassFactory)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(ClassFactory)
+
 HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
                                      void ** ppvObject)
 {
@@ -1179,43 +1153,6 @@ STDMETHODIMP ClassFactory::LockServer(BOOL fLock)
 {
     wxUnusedVar(fLock);
     return S_OK;
-}
-
-ULONG ClassFactory::AddRef(void)
-{
-    m_refCount++;
-    return m_refCount;
-}
-
-HRESULT ClassFactory::QueryInterface(REFIID riid, void **ppvObject)
-{
-    if ((riid == IID_IUnknown) || (riid == IID_IClassFactory))
-    {
-        *ppvObject = this;
-        AddRef();
-        return S_OK;
-    }
-    else
-    {
-        *ppvObject = NULL;
-        return E_POINTER;
-    }
-
-}
-
-ULONG ClassFactory::Release(void)
-{
-    m_refCount--;
-    if (m_refCount > 0)
-    {
-        return m_refCount;
-    }
-    else
-    {
-        delete this;
-        return 0;
-    }
-
 }
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE

@@ -18,6 +18,7 @@
 #include "wx/webview.h"
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/ole/activex.h"
+#include "wx/msw/ole/oleutils.h"
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/missing.h"
 #include "wx/sharedptr.h"
@@ -295,7 +296,6 @@ private:
 class VirtualProtocol : public wxIInternetProtocol
 {
 protected:
-    ULONG m_refCount;
     wxIInternetProtocolSink* m_protocolSink;
     wxString m_html;
     VOID * fileP;
@@ -305,12 +305,10 @@ protected:
 
 public:
     VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler);
-    ~VirtualProtocol();
+    ~VirtualProtocol() {};
 
     //IUnknown
-    ULONG STDMETHODCALLTYPE AddRef();
-    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
-    ULONG STDMETHODCALLTYPE Release();
+    DECLARE_IUNKNOWN_METHODS;
 
     //IInternetProtocolRoot
     HRESULT STDMETHODCALLTYPE Abort(HRESULT WXUNUSED(hrReason),
@@ -341,18 +339,17 @@ public:
 class ClassFactory : public IClassFactory
 {
 public:
-    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_refCount(0), m_handler(handler) {}
-    //IUnknown
-    ULONG STDMETHODCALLTYPE AddRef();
-    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
-    ULONG STDMETHODCALLTYPE Release();
+    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler) {}
 
     //IClassFactory
     HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown* pUnkOuter,
                                              REFIID riid, void** ppvObject);
     HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
+
+    //IUnknown
+    DECLARE_IUNKNOWN_METHODS;
+
 private:
-    ULONG m_refCount;
     wxSharedPtr<wxWebViewHandler> m_handler;
 };
 
