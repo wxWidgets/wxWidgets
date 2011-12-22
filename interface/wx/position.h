@@ -69,16 +69,16 @@ public:
 
         @{
     */
-    bool operator ==(const wxPosition& p) const;
-    bool operator !=(const wxPosition& p) const;
-    wxPosition& operator +=(const wxPosition& p) const;
-    wxPosition& operator -=(const wxPosition& p) const;
-    wxPosition& operator +=(const wxSize& s) const;
-    wxPosition& operator -=(const wxSize& s) const;
-    wxPosition& operator +(const wxPosition& p) const;
-    wxPosition& operator -(const wxPosition& p) const;
-    wxPosition& operator +(const wxSize& s) const;
-    wxPosition& operator -(const wxSize& s) const;
+    bool operator ==(const wxPosition& pos) const;
+    bool operator !=(const wxPosition& pos) const;
+    wxPosition& operator +=(const wxPosition& pos) const;
+    wxPosition& operator -=(const wxPosition& pos) const;
+    wxPosition& operator +=(const wxSize& size) const;
+    wxPosition& operator -=(const wxSize& size) const;
+    wxPosition operator +(const wxPosition& pos) const;
+    wxPosition operator -(const wxPosition& pos) const;
+    wxPosition operator +(const wxSize& size) const;
+    wxPosition operator -(const wxSize& size) const;
     //@}
 };
 

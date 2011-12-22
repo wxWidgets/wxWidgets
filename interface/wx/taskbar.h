@@ -167,3 +167,14 @@ protected:
     virtual wxMenu* CreatePopupMenu();
 };
 
+
+wxEventType wxEVT_TASKBAR_MOVE;
+wxEventType wxEVT_TASKBAR_LEFT_DOWN;
+wxEventType wxEVT_TASKBAR_LEFT_UP;
+wxEventType wxEVT_TASKBAR_RIGHT_DOWN;
+wxEventType wxEVT_TASKBAR_RIGHT_UP;
+wxEventType wxEVT_TASKBAR_LEFT_DCLICK;
+wxEventType wxEVT_TASKBAR_RIGHT_DCLICK;
+wxEventType wxEVT_TASKBAR_CLICK;
+wxEventType wxEVT_TASKBAR_BALLOON_TIMEOUT;
+wxEventType wxEVT_TASKBAR_BALLOON_CLICK;
