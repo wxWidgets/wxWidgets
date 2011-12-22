@@ -3181,10 +3181,14 @@ void wxListMainWindow::SetItem( wxListItem &item )
         }
     }
 
-    // update the item on screen
-    wxRect rectItem;
-    GetItemRect(id, rectItem);
-    RefreshRect(rectItem);
+    // update the item on screen unless we're going to update everything soon
+    // anyhow
+    if ( !m_dirty )
+    {
+        wxRect rectItem;
+        GetItemRect(id, rectItem);
+        RefreshRect(rectItem);
+    }
 }
 
 void wxListMainWindow::SetItemStateAll(long state, long stateMask)
