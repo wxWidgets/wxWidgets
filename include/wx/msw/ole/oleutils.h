@@ -143,6 +143,7 @@ private:
 // NB: you should write ADD_INTERFACE(Foo) and not ADD_INTERFACE(IID_IFoo)!
 #define BEGIN_IID_TABLE(cname)  const IID *cname::ms_aIids[] = {
 #define ADD_IID(iid)                                             &IID_I##iid,
+#define ADD_RAW_IID(iid)                                         &::iid,
 #define END_IID_TABLE                                          }
 
 // implementation is as straightforward as possible
