@@ -58,7 +58,7 @@
 // ============================================================================
 
 // return true if the iid is in the array
-bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
+WXDLLEXPORT bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
 {
   for ( size_t i = 0; i < nCount; i++ ) {
     if ( riid == *aIids[i] )
@@ -512,18 +512,18 @@ static wxString GetIidName(REFIID riid)
 #endif
 }
 
-void wxLogQueryInterface(const wxChar *szInterface, REFIID riid)
+WXDLLEXPORT void wxLogQueryInterface(const wxChar *szInterface, REFIID riid)
 {
   wxLogTrace(wxTRACE_OleCalls, wxT("%s::QueryInterface (iid = %s)"),
              szInterface, GetIidName(riid).c_str());
 }
 
-void wxLogAddRef(const wxChar *szInterface, ULONG cRef)
+WXDLLEXPORT void wxLogAddRef(const wxChar *szInterface, ULONG cRef)
 {
   wxLogTrace(wxTRACE_OleCalls, wxT("After %s::AddRef: m_cRef = %d"), szInterface, cRef + 1);
 }
 
-void wxLogRelease(const wxChar *szInterface, ULONG cRef)
+WXDLLEXPORT void wxLogRelease(const wxChar *szInterface, ULONG cRef)
 {
   wxLogTrace(wxTRACE_OleCalls, wxT("After %s::Release: m_cRef = %d"), szInterface, cRef - 1);
 }
