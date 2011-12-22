@@ -213,7 +213,14 @@ wxLogFormatter::Format(wxLogLevel level,
                        const wxString& msg,
                        const wxLogRecordInfo& info) const
 {
-    wxString prefix = FormatTime(info.timestamp);
+    wxString prefix;
+
+    // don't time stamp debug messages under MSW as debug viewers usually
+    // already have an option to do it
+#ifdef __WXMSW__
+    if ( level != wxLOG_Debug && level != wxLOG_Trace )
+#endif // __WXMSW__
+        prefix = FormatTime(info.timestamp);
 
     switch ( level )
     {
@@ -247,13 +254,7 @@ wxString
 wxLogFormatter::FormatTime(time_t t) const
 {
     wxString str;
-
-    // don't time stamp debug messages under MSW as debug viewers usually
-    // already have an option to do it
-#ifdef __WXMSW__
-    if ( level != wxLOG_Debug && level != wxLOG_Trace )
-#endif // __WXMSW__
-        wxLog::TimeStamp(&str, t);
+    wxLog::TimeStamp(&str, t);
 
     return str;
 }
