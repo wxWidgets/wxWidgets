@@ -2613,14 +2613,6 @@ void wxWindowGTK::OnInternalIdle()
         RealizeTabOrder();
     }
 
-    // Update style if the window was not yet realized when
-    // SetBackgroundStyle() was called
-    if (m_needsStyleChange)
-    {
-        SetBackgroundStyle(GetBackgroundStyle());
-        m_needsStyleChange = false;
-    }
-
     wxWindowBase::OnInternalIdle();
 }
 
@@ -3972,7 +3964,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
         }
         else // window not realized yet
         {
-            // Do in OnIdle, because the window is not yet available
+            // Do when window is realized
             m_needsStyleChange = true;
         }
 
