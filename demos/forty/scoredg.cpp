@@ -167,7 +167,7 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     list->SetColLabelValue(1, wxT("Wins"));
     list->SetColLabelValue(2, wxT("Games"));
     list->SetColLabelValue(3, wxT("Score"));
-    list->SetEditable(false);
+    list->EnableEditing(false);
     list->AutoSizeColumns();
     list->AutoSizeRows();
     list->SetRowLabelSize(0);
