@@ -128,12 +128,15 @@ void WebTestCase::History()
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
 
     m_browser->GoBack();
+    wxYield();
 
     CPPUNIT_ASSERT(m_browser->CanGoBack());
     CPPUNIT_ASSERT(m_browser->CanGoForward());
 
     m_browser->GoBack();
+    wxYield();
     m_browser->GoBack();
+    wxYield();
 
     //We should now be at the start of the history
     CPPUNIT_ASSERT(!m_browser->CanGoBack());
@@ -175,11 +178,13 @@ void WebTestCase::HistoryList()
 {
     LoadUrl(2);
     m_browser->GoBack();
+    wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, m_browser->GetBackwardHistory().size());
     CPPUNIT_ASSERT_EQUAL(1, m_browser->GetForwardHistory().size());
 
     m_browser->LoadHistoryItem(m_browser->GetForwardHistory()[0]);
+    wxYield();
 
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
     CPPUNIT_ASSERT_EQUAL(2, m_browser->GetBackwardHistory().size());
