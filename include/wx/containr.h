@@ -258,7 +258,7 @@ protected:
 // look at them.
 // ----------------------------------------------------------------------------
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
 
 // common part of WX_DECLARE_CONTROL_CONTAINER in the native and generic cases,
 // it should be used in the wxWindow-derived class declaration

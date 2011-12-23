@@ -986,7 +986,7 @@ wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
 
 // these flags are not used anywhere by wxWidgets and kept only for an unlikely
 // case of existing user code using them for its own purposes
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
 enum
 {
     wxDOC_SDI = 1,

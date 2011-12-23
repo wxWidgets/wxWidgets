@@ -277,7 +277,7 @@ public:
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
     // this doesn't do anything and is kept for compatibility only
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_INLINE(void SetNoAntiAliasing(bool no = true), wxUnusedVar(no););
     wxDEPRECATED_INLINE(bool GetNoAntiAliasing() const, return false;)
 #endif // WXWIN_COMPATIBILITY_2_8

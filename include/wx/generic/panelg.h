@@ -30,7 +30,7 @@ public:
         Create(parent, winid, pos, size, style, name);
     }
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_CONSTRUCTOR(
     wxPanel(wxWindow *parent,
             int x, int y, int width, int height,

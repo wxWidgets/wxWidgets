@@ -3349,7 +3349,7 @@ protected:
     // base class implementation passes the event to wxTheApp
     virtual bool TryAfter(wxEvent& event);
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     // deprecated method: override TryBefore() instead of this one
     wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
         virtual bool TryValidator(wxEvent& WXUNUSED(event)), return false; )

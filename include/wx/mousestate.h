@@ -128,7 +128,7 @@ public:
     // version of wxMouseState but their names are confusing as wxMouseEvent
     // has methods with the same names which do something quite different so
     // don't use them any more
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_INLINE(bool LeftDown() const, return LeftIsDown(); )
     wxDEPRECATED_INLINE(bool MiddleDown() const, return MiddleIsDown(); )
     wxDEPRECATED_INLINE(bool RightDown() const, return RightIsDown(); )

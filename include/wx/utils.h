@@ -113,7 +113,7 @@ wxClip(T1 a, T2 b, T3 c)
 // String functions (deprecated, use wxString)
 // ----------------------------------------------------------------------------
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
 // A shorter way of using strcmp
 wxDEPRECATED_INLINE(inline bool wxStringEq(const char *s1, const char *s2),
     return wxCRT_StrcmpA(s1, s2) == 0; )

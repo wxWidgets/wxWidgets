@@ -1637,7 +1637,7 @@ public:
     // unset any existing sorting column
     void UnsetSortingColumn() { SetSortingColumn(wxNOT_FOUND); }
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     // ------ For compatibility with previous wxGrid only...
     //
     //  ************************************************

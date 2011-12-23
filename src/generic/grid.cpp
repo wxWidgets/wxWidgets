@@ -8151,10 +8151,12 @@ void wxGrid::Fit()
     AutoSize();
 }
 
+#if WXWIN_COMPATIBILITY_2_8
 wxPen& wxGrid::GetDividerPen() const
 {
     return wxNullPen;
 }
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // cell value accessor functions
