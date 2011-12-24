@@ -41,7 +41,7 @@ public:
     {
         if ( array != m_array )
         {
-            delete m_array;
+            delete [] m_array;
             m_array = array;
         }
     }
