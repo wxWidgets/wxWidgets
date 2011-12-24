@@ -644,11 +644,13 @@ void GridTestCase::CellFormatting()
 
     CPPUNIT_ASSERT_EQUAL(back, m_grid->GetCellTextColour(0, 0));
 
-    m_grid->SetCellAlignment(0, 0, wxALIGN_CENTRE);
+#if WXWIN_COMPATIBILITY_2_8
+    m_grid->SetCellAlignment(wxALIGN_CENTRE, 0, 0);
     m_grid->GetCellAlignment(0, 0, &cellhoriz, &cellvert);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(wxALIGN_CENTRE), cellhoriz);
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(wxALIGN_CENTRE), cellvert);
+#endif // WXWIN_COMPATIBILITY_2_8
 
     m_grid->SetCellAlignment(0, 0, wxALIGN_LEFT, wxALIGN_BOTTOM);
     m_grid->GetCellAlignment(0, 0, &cellhoriz, &cellvert);
@@ -656,12 +658,12 @@ void GridTestCase::CellFormatting()
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(wxALIGN_LEFT), cellhoriz);
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(wxALIGN_BOTTOM), cellvert);
 
-    m_grid->SetCellTextColour(0, 0, *wxRED);
-
+#if WXWIN_COMPATIBILITY_2_8
+    m_grid->SetCellTextColour(*wxRED, 0, 0);
     CPPUNIT_ASSERT_EQUAL(*wxRED, m_grid->GetCellTextColour(0, 0));
+#endif // WXWIN_COMPATIBILITY_2_8
 
     m_grid->SetCellTextColour(0, 0, *wxGREEN);
-
     CPPUNIT_ASSERT_EQUAL(*wxGREEN, m_grid->GetCellTextColour(0, 0));
 }
 
