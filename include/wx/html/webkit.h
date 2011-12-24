@@ -232,7 +232,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNew
             wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_NEW_WINDOW, \
                             wxID_ANY, \
                             wxID_ANY, \
-                            wxWebKitNewWindowEventFunction( func ), \
+                            wxWebKitNewWindowEventHandler( func ), \
                             NULL ),
 #endif // wxUSE_WEBKIT
 
