@@ -143,7 +143,7 @@ private:
 // NB: ADD_IID prepends IID_I whereas ADD_RAW_IID does not
 #define BEGIN_IID_TABLE(cname)  const IID *cname::ms_aIids[] = {
 #define ADD_IID(iid)                                             &IID_I##iid,
-#define ADD_RAW_IID(iid)                                         &##iid,
+#define ADD_RAW_IID(iid)                                         &iid,
 #define END_IID_TABLE                                          }
 
 // implementation is as straightforward as possible
