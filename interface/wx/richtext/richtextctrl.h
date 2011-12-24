@@ -2061,7 +2061,7 @@ private:
         Process a @c wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK event, generated when the user
         releases the middle mouse button over an object.
     @event{EVT_RICHTEXT_LEFT_DCLICK(id, func)}
-        Process a @c wxEVT_COMMAND_RICHTEXT_DLEFT_CLICK event, generated when the user
+        Process a @c wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK event, generated when the user
         double-clicks an object.
     @event{EVT_RICHTEXT_RETURN(id, func)}
         Process a @c wxEVT_COMMAND_RICHTEXT_RETURN event, generated when the user
