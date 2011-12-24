@@ -184,6 +184,8 @@ typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
 #define wxFileSystemWatcherEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxFileSystemWatcherEventFunction, func)
 
+#define EVT_FSWATCHER(winid, func) \
+    wx__DECLARE_EVT1(wxEVT_FSWATCHER, winid, wxFileSystemWatcherEventHandler(func))
 
 // ----------------------------------------------------------------------------
 // wxFileSystemWatcherBase: interface for wxFileSystemWatcher
