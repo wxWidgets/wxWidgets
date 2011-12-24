@@ -459,6 +459,10 @@ All (GUI):
   wxDataViewCtrl (Andrew Xu).
 - Fix item alignment in icon view in the generic wxListCtrl.
 
+GTK:
+
+- Fix wxNotebook best size calculation.
+
 MSW:
 
 - Fixed regression with initial focus in the dialogs in 2.9.3.

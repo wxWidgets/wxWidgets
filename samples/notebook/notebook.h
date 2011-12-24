@@ -52,6 +52,8 @@ public:
     void OnNextPage(wxCommandEvent& event);
     void OnChangeSelection(wxCommandEvent &event);
     void OnSetSelection(wxCommandEvent &event);
+    void OnGetPageSize(wxCommandEvent &event);
+    void OnSetPageSize(wxCommandEvent &event);
 
     void OnAddSubPage(wxCommandEvent& event);
     void OnAddPageBefore(wxCommandEvent& event);
@@ -167,6 +169,8 @@ enum ID_COMMANDS
     ID_ADD_SUB_PAGE,
     ID_CHANGE_SELECTION,
     ID_SET_SELECTION,
+    ID_GET_PAGE_SIZE,
+    ID_SET_PAGE_SIZE,
 
 #if wxUSE_HELP
     ID_CONTEXT_HELP,

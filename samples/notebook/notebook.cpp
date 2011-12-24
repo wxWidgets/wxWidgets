@@ -239,6 +239,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NEXT_PAGE, MyFrame::OnNextPage)
     EVT_MENU(ID_CHANGE_SELECTION, MyFrame::OnChangeSelection)
     EVT_MENU(ID_SET_SELECTION, MyFrame::OnSetSelection)
+    EVT_MENU(ID_GET_PAGE_SIZE, MyFrame::OnGetPageSize)
+    EVT_MENU(ID_SET_PAGE_SIZE, MyFrame::OnSetPageSize)
 
 #if wxUSE_HELP
     EVT_MENU(ID_CONTEXT_HELP, MyFrame::OnContextHelp)
@@ -369,6 +371,9 @@ MyFrame::MyFrame()
     menuPageOperations->AppendSeparator();
     menuPageOperations->Append(ID_CHANGE_SELECTION, wxT("&Change selection to 0\tCtrl-0"));
     menuPageOperations->Append(ID_SET_SELECTION, wxT("&Set selection to 0\tShift-Ctrl-0"));
+    menuPageOperations->AppendSeparator();
+    menuPageOperations->Append(ID_GET_PAGE_SIZE, "Sho&w page size");
+    menuPageOperations->Append(ID_SET_PAGE_SIZE, "Set &page size");
 
     wxMenu *menuOperations = new wxMenu;
 #if wxUSE_HELP
@@ -906,6 +911,33 @@ void MyFrame::OnSetSelection(wxCommandEvent& WXUNUSED(event))
 
     if ( currBook )
         currBook->SetSelection(0);
+}
+
+void MyFrame::OnGetPageSize(wxCommandEvent& WXUNUSED(event))
+{
+    wxBookCtrlBase* const currBook = GetCurrentBook();
+    if ( !currBook )
+        return;
+
+    const wxSize sizePage = currBook->GetPage(0)->GetSize();
+    const wxSize sizeBook = currBook->GetSize();
+
+    wxLogMessage("Page size is (%d, %d), book size (%d, %d)",
+                 sizePage.x, sizePage.y,
+                 sizeBook.x, sizeBook.y);
+}
+
+void MyFrame::OnSetPageSize(wxCommandEvent& WXUNUSED(event))
+{
+    wxBookCtrlBase* const currBook = GetCurrentBook();
+    if ( !currBook )
+        return;
+
+    const wxSize sizePage(300, 300);
+    currBook->SetPageSize(sizePage);
+
+    wxLogMessage("Page size set to (%d, %d)",
+                 sizePage.x, sizePage.y);
 }
 
 void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )

@@ -304,9 +304,34 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     return true;
 }
 
-void wxNotebook::SetPageSize( const wxSize &WXUNUSED(size) )
+wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    wxFAIL_MSG( wxT("wxNotebook::SetPageSize not implemented") );
+    // Compute the max size of the tab labels.
+    wxSize sizeTabMax;
+    const size_t pageCount = GetPageCount();
+    for ( size_t n = 0; n < pageCount; n++ )
+    {
+        GtkRequisition req;
+        gtk_widget_size_request(GetNotebookPage(n)->m_box, &req);
+        sizeTabMax.IncTo(wxSize(req.width, req.height));
+    }
+
+    // Unfortunately this doesn't account for the real tab size and I don't
+    // know how to find it, e.g. where do the margins below come from.
+    const int PAGE_MARGIN = 3;
+    const int TAB_MARGIN = 4;
+
+    sizeTabMax.IncBy(3*TAB_MARGIN);
+
+    wxSize sizeFull(sizePage);
+    if ( IsVertical() )
+        sizeFull.y += sizeTabMax.y;
+    else
+        sizeFull.x += sizeTabMax.x;
+
+    sizeFull.IncBy(2*PAGE_MARGIN);
+
+    return sizeFull;
 }
 
 void wxNotebook::SetPadding( const wxSize &padding )

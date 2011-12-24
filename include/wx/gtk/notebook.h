@@ -68,13 +68,13 @@ public:
   bool SetPageImage(size_t nPage, int nImage);
 
   // control the appearance of the notebook pages
-    // set the size (the same for all pages)
-  void SetPageSize(const wxSize& size);
     // set the padding between tabs (in pixels)
   void SetPadding(const wxSize& padding);
     // sets the size of the tabs (assumes all tabs are the same size)
   void SetTabSize(const wxSize& sz);
 
+  // geometry
+  virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
   virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
 
   // operations
