@@ -92,7 +92,7 @@ LINK_TARGET_CPU = /MACHINE:IA64
 EXTRALIBS_FOR_BASE = 
 !endif
 !if "$(MONOLITHIC)" == "1"
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_0 = /Zi

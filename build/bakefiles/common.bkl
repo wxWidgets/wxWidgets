@@ -482,7 +482,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
              The variables below are defined so that all libs are used
              in monolithic build, but not in multilib one. -->
     <set var="EXTRALIBS_FOR_BASE">
-        <if cond="MONOLITHIC=='1'">$(EXTRALIBS) $(EXTRALIBS_GUI)</if>
+        <if cond="MONOLITHIC=='1'">$(EXTRALIBS) $(EXTRALIBS_XML) $(EXTRALIBS_GUI)</if>
         <if cond="MONOLITHIC=='0'">$(EXTRALIBS)</if>
     </set>
     <set var="EXTRALIBS_FOR_GUI">

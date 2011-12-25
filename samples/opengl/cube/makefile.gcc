@@ -64,7 +64,7 @@ ifeq ($(MONOLITHIC),0)
 EXTRALIBS_FOR_BASE = 
 endif
 ifeq ($(MONOLITHIC),1)
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 endif
 ifeq ($(USE_OPENGL),1)
 __cube___depname = $(OBJS)\cube.exe

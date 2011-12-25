@@ -66,7 +66,7 @@ ifeq ($(MONOLITHIC),0)
 EXTRALIBS_FOR_BASE = 
 endif
 ifeq ($(MONOLITHIC),1)
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG_2 = -O0

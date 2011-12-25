@@ -66,7 +66,7 @@ EXTRALIBS_FOR_BASE =
 EXTRALIBS_FOR_BASE = 
 !endif
 !ifeq MONOLITHIC 1
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 !endif
 __ipcclient___depname =
 !ifeq USE_GUI 1

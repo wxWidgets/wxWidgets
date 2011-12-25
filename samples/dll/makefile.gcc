@@ -78,7 +78,7 @@ ifeq ($(MONOLITHIC),0)
 EXTRALIBS_FOR_BASE = 
 endif
 ifeq ($(MONOLITHIC),1)
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 endif
 ifeq ($(SHARED),0)
 __wx_exe___depname = $(OBJS)\wx_exe.exe

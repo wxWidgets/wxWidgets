@@ -1572,7 +1572,7 @@ __wxscintilla_usingdll_p = -DWXUSINGDLL
 EXTRALIBS_FOR_BASE = 
 !endif
 !if "$(MONOLITHIC)" == "1"
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 !endif
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "1"
 __monodll___depname = \

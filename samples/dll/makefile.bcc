@@ -81,7 +81,7 @@ LIBTYPE_SUFFIX = dll
 EXTRALIBS_FOR_BASE = 
 !endif
 !if "$(MONOLITHIC)" == "1"
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 !endif
 !if "$(SHARED)" == "0"
 __wx_exe___depname = $(OBJS)\wx_exe.exe

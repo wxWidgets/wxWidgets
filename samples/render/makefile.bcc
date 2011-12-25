@@ -77,7 +77,7 @@ LIBTYPE_SUFFIX = dll
 EXTRALIBS_FOR_BASE = 
 !endif
 !if "$(MONOLITHIC)" == "1"
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p_1 = -d__WXUNIVERSAL__

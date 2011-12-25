@@ -91,7 +91,7 @@ EXTRALIBS_FOR_BASE =
 EXTRALIBS_FOR_BASE = 
 !endif
 !ifeq MONOLITHIC 1
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 !endif
 __monodll___depname =
 !ifeq MONOLITHIC 1

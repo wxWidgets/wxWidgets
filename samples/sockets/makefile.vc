@@ -122,7 +122,7 @@ LINK_TARGET_CPU = /MACHINE:IA64
 EXTRALIBS_FOR_BASE = 
 !endif
 !if "$(MONOLITHIC)" == "1"
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =   
 !endif
 !if "$(USE_GUI)" == "1"
 __client___depname = $(OBJS)\client.exe
