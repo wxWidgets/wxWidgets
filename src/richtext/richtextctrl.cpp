@@ -1162,6 +1162,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             SetDefaultStyleToCursorStyle();
         }
 
+        ScrollIntoView(m_caretPosition, WXK_LEFT);
+
         wxRichTextEvent cmdEvent(
             wxEVT_COMMAND_RICHTEXT_DELETE,
             GetId());
