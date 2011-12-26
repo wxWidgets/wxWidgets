@@ -29,7 +29,7 @@
 namespace
 {
 
-const long tolerance = 10;  // in ms
+const long tolerance = 50;  // in ms
 const int sleepTime = 500;
 
 } // anonymous namespace
