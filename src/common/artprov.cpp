@@ -407,7 +407,7 @@ bool wxArtProvider::HasNativeProvider()
 
 /* static */ void wxArtProvider::InsertProvider(wxArtProvider *provider)
 {
-    Insert(provider);
+    PushBack(provider);
 }
 
 /* static */ bool wxArtProvider::PopProvider()
