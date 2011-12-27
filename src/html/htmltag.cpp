@@ -464,6 +464,7 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
         { "width",              "WIDTH"         },
         { "vertical-align",     "VALIGN"        },
         { "background",         "BGCOLOR"       },
+        { "background-color",   "BGCOLOR"       },
     };
 
     wxHtmlStyleParams styleParams(*this);
