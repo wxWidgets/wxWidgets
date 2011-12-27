@@ -279,7 +279,7 @@ public:
     // item can be deleted already in the model
     int GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item );
 
-    virtual void OnInternalIdle();
+    void OnInternalIdle();
 
 protected:
     void InitTree();
