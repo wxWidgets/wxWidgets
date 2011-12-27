@@ -1107,7 +1107,7 @@ void wxWindowX11::DoGetTextExtent(const wxString& string,
     PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
     pango_layout_set_font_description(layout, desc);
 
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string.wc_str() );
     pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
 
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
