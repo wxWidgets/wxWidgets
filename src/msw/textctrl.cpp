@@ -30,6 +30,7 @@
     #include "wx/textctrl.h"
     #include "wx/settings.h"
     #include "wx/brush.h"
+    #include "wx/dcclient.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
