@@ -2740,7 +2740,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
 
     LOGFONT lf;
-    lf.lfHeight = cf.yHeight;
+    // Convert the height from the units of 1/20th of the point in which
+    // CHARFORMAT stores it to pixel-based units used by LOGFONT.
+    const wxCoord ppi = wxClientDC(this).GetPPI().y;
+    lf.lfHeight = -MulDiv(cf.yHeight/2, ppi, 72);
     lf.lfWidth = 0;
     lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
     lf.lfClipPrecision = 0;
