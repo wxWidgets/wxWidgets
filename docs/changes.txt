@@ -473,6 +473,11 @@ OSX:
 
 - Provide native implementations of wxDatePickerCtrl and wxTimePickerCtrl.
 
+Univ:
+
+- Fix regression with read-only wxComboBox appearance (Jason Erb).
+
+
 
 2.9.3: (released 2011-12-14)
 ------

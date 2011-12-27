@@ -273,13 +273,15 @@ wxComboBox::~wxComboBox()
 
 wxString wxComboBox::DoGetValue() const
 {
-    return GetTextCtrl() ? GetTextCtrl()->GetValue() : wxString();
+    return GetTextCtrl() ? GetTextCtrl()->GetValue() : m_valueString;
 }
 
 void wxComboBox::SetValue(const wxString& value)
 {
     if ( GetTextCtrl() )
         GetTextCtrl()->SetValue(value);
+    else
+        m_valueString = value;
 }
 
 void wxComboBox::WriteText(const wxString& value)
@@ -358,7 +360,7 @@ void wxComboBox::SetEditable(bool editable)
 void wxComboBox::DoClear()
 {
     GetLBox()->Clear();
-    if ( GetTextCtrl() ) GetTextCtrl()->SetValue(wxEmptyString);
+    SetValue(wxEmptyString);
 }
 
 void wxComboBox::DoDeleteOneItem(unsigned int n)
@@ -366,7 +368,7 @@ void wxComboBox::DoDeleteOneItem(unsigned int n)
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxComboBox::Delete") );
 
     if (GetSelection() == (int)n)
-        if ( GetTextCtrl() ) GetTextCtrl()->SetValue(wxEmptyString);
+        SetValue(wxEmptyString);
 
     GetLBox()->Delete(n);
 }
