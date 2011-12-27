@@ -3814,7 +3814,7 @@ gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path 
 
         iter->stamp = m_gtk_model->stamp;
         // user_data is just the index +1
-        iter->user_data = (gpointer) (i+1);
+        iter->user_data = wxUIntToPtr(i+1);
 
         return TRUE;
     }
@@ -3917,7 +3917,7 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
         }
 
         // user_data is just the index +1 (+2 because we need the next)
-        iter->user_data = (gpointer) (n+2);
+        iter->user_data = wxUIntToPtr(n+2);
     }
     else
     {
@@ -4071,7 +4071,7 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
 
         iter->stamp = m_gtk_model->stamp;
         // user_data is just the index +1
-        iter->user_data = (gpointer) (n+1);
+        iter->user_data = wxUIntToPtr(n+1);
 
         return TRUE;
     }
