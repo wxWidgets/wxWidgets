@@ -581,8 +581,14 @@ UL
 
 wxHTML doesn't really have CSS support but it does support a few simple styles:
 you can use @c "text-align", @c "width", @c "vertical-align" and @c
-"background" with all elements and for @c SPAN elements the @c "color", @c
-"font-size" and @c "font-weight" are additionally recognized.
+"background" with all elements and for @c SPAN elements a few other styles are
+additionally recognized:
+    - @c color
+    - @c font-family
+    - @c font-size (only in point units)
+    - @c font-style (only "oblique", "italic" and "normal" values are supported)
+    - @c font-weight (only "bold" and "normal" values are supported)
+    - @c text-decoration (only "underline" value is supported)
 
 */
 
