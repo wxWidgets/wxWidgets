@@ -50,7 +50,7 @@ protected:
 
 /* static */ void wxArtProvider::InitNativeProvider()
 {
-    wxArtProvider::Push(new wxMacArtProvider);
+    PushBack(new wxMacArtProvider);
 }
 
 #if wxOSX_USE_COCOA_OR_CARBON

@@ -45,7 +45,7 @@ protected:
 
 /*static*/ void wxArtProvider::InitStdProvider()
 {
-    wxArtProvider::Push(new wxDefaultArtProvider);
+    wxArtProvider::PushBack(new wxDefaultArtProvider);
 }
 
 // ----------------------------------------------------------------------------

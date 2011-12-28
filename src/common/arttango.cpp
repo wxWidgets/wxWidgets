@@ -322,7 +322,7 @@ wxTangoArtProvider::CreateBitmap(const wxArtID& id,
 /* static */
 void wxArtProvider::InitTangoProvider()
 {
-    wxArtProvider::Push(new wxTangoArtProvider);
+    wxArtProvider::PushBack(new wxTangoArtProvider);
 }
 
 #endif // wxUSE_ARTPROVIDER_TANGO

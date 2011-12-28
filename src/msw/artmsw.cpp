@@ -91,7 +91,7 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
 
 /*static*/ void wxArtProvider::InitNativeProvider()
 {
-    Push(new wxWindowsArtProvider);
+    PushBack(new wxWindowsArtProvider);
 }
 
 // ----------------------------------------------------------------------------
