@@ -25,6 +25,7 @@
 #include "wx/imaglist.h"
 #include "wx/artprov.h"
 #include "wx/cshelp.h"
+#include "wx/gbsizer.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -731,6 +732,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_book->SetImageList(imagelist);
 #endif
 
+    // ------------------------------------------------------------------------
+    // listbox page
+    // ------------------------------------------------------------------------
     wxPanel *panel = new wxPanel(m_book);
     m_listbox = new wxListBox( panel, ID_LISTBOX,
                                wxPoint(10,10), wxSize(120,70),
@@ -761,6 +765,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
     m_book->AddPage(panel, wxT("wxListBox"), true, Image_List);
 
+    // ------------------------------------------------------------------------
+    // choice page
+    // ------------------------------------------------------------------------
 #if wxUSE_CHOICE
     panel = new wxPanel(m_book);
     m_choice = new MyChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,wxDefaultCoord), 5, choices );
@@ -782,6 +789,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_book->AddPage(panel, wxT("wxChoice"), false, Image_Choice);
 #endif // wxUSE_CHOICE
 
+    // ------------------------------------------------------------------------
+    // combo page
+    // ------------------------------------------------------------------------
     panel = new wxPanel(m_book);
     (void)new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
                            wxPoint(5, 5), wxSize(150, 100));
@@ -800,6 +810,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxCheckBox( panel, ID_COMBO_ENABLE, wxT("&Disable"), wxPoint(20,130), wxSize(140,30) );
     m_book->AddPage(panel, wxT("wxComboBox"), false, Image_Combo);
 
+    // ------------------------------------------------------------------------
+    // radio box
+    // ------------------------------------------------------------------------
     wxString choices2[] =
     {
         wxT("First"), wxT("Second"),
@@ -809,18 +822,24 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     };
 
     panel = new wxPanel(m_book);
-    new MyRadioBox(panel, ID_RADIOBOX2, wxT("&That"),
-                   wxPoint(10,160), wxDefaultSize,
-                   WXSIZEOF(choices2), choices2,
-                   1, wxRA_SPECIFY_ROWS );
+    wxGridBagSizer* radio_page_sizer = new wxGridBagSizer(5, 5);
+
     m_radio = new wxRadioBox(panel, ID_RADIOBOX, wxT("T&his"),
                              wxPoint(10,10), wxDefaultSize,
                              WXSIZEOF(choices), choices,
                              1, wxRA_SPECIFY_COLS );
+    MyRadioBox* mybox = new MyRadioBox(panel, ID_RADIOBOX2, wxT("&That"),
+                                       wxPoint(10,160), wxDefaultSize,
+                                       WXSIZEOF(choices2), choices2,
+                                       1, wxRA_SPECIFY_ROWS );
+
+    radio_page_sizer->Add( m_radio, wxGBPosition(0,0), wxGBSpan(2,1) );
+    radio_page_sizer->Add( mybox,   wxGBPosition(2,0), wxGBSpan(2,1) );
 
 #if wxUSE_HELP
-    for( unsigned int item = 0; item < WXSIZEOF(choices); ++item )
-        m_radio->SetItemHelpText( item, wxString::Format( wxT("Help text for \"%s\""), choices[item].c_str() ) );
+    for (unsigned int item = 0; item < WXSIZEOF(choices); ++item)
+        m_radio->SetItemHelpText( item, wxString::Format( wxT("Help text for \"%s\""),
+                                  choices[item].c_str() ) );
 
     // erase help text for the second item
     m_radio->SetItemHelpText( 1, wxT("") );
@@ -828,26 +847,42 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_radio->SetHelpText( wxT("Default helptext for wxRadioBox") );
 #endif // wxUSE_HELP
 
-    (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, wxT("Select #&2"), wxPoint(180,30), wxSize(140,30) );
-    (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, wxT("&Select 'This'"), wxPoint(180,80), wxSize(140,30) );
-    m_fontButton = new wxButton( panel, ID_SET_FONT, wxT("Set &more Italic font"), wxPoint(340,30), wxSize(140,30) );
-    (void)new wxButton( panel, ID_RADIOBOX_FONT, wxT("Set &Italic font"), wxPoint(340,80), wxSize(140,30) );
-    (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, wxT("&Disable"), wxPoint(340,130), wxDefaultSize );
-
-    wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, wxT("Radiobutton1"), wxPoint(210,170), wxDefaultSize, wxRB_GROUP );
+    wxButton* select_two   = new wxButton  ( panel, ID_RADIOBOX_SEL_NUM, wxT("Select #&2") );
+    wxButton* select_this  = new wxButton  ( panel, ID_RADIOBOX_SEL_STR, wxT("&Select 'This'") );
+    m_fontButton           = new wxButton  ( panel, ID_SET_FONT,         wxT("Set &more Italic font") );
+    wxButton* set_italic   = new wxButton  ( panel, ID_RADIOBOX_FONT,    wxT("Set &Italic font") );
+    wxCheckBox* disable_cb = new wxCheckBox( panel, ID_RADIOBOX_ENABLE,  wxT("&Disable") );
+    wxRadioButton *rb      = new wxRadioButton( panel, ID_RADIOBUTTON_1, wxT("Radiobutton1"),
+                                                wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+    wxRadioButton *rb2     = new wxRadioButton( panel, ID_RADIOBUTTON_2, wxT("&Radiobutton2"),
+                                                wxDefaultPosition, wxDefaultSize );
     rb->SetValue( false );
-    (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, wxT("&Radiobutton2"), wxPoint(340,170), wxDefaultSize );
+
+    radio_page_sizer->Add( select_two,   wxGBPosition(0, 1), wxDefaultSpan, wxALL           , 10 );
+    radio_page_sizer->Add( select_this,  wxGBPosition(1, 1), wxDefaultSpan, wxALL           , 10 );
+    radio_page_sizer->Add( m_fontButton, wxGBPosition(0, 2), wxDefaultSpan, wxALL           , 10 );
+    radio_page_sizer->Add( set_italic,   wxGBPosition(1, 2), wxDefaultSpan, wxALL           , 10 );
+    radio_page_sizer->Add( disable_cb,   wxGBPosition(2, 2), wxDefaultSpan, wxLEFT | wxRIGHT, 10 );
+    radio_page_sizer->Add( rb,           wxGBPosition(3, 1), wxDefaultSpan, wxLEFT | wxRIGHT, 10 );
+    radio_page_sizer->Add( rb2,          wxGBPosition(3, 2), wxDefaultSpan, wxLEFT | wxRIGHT, 10 );
+
+    panel->SetSizer( radio_page_sizer );
+
     m_book->AddPage(panel, wxT("wxRadioBox"), false, Image_Radio);
 
+    // ------------------------------------------------------------------------
+    // gauge and slider
+    // ------------------------------------------------------------------------
 
 #if wxUSE_SLIDER && wxUSE_GAUGE
     panel = new wxPanel(m_book);
 
-    wxBoxSizer *main_sizer = new wxBoxSizer( wxHORIZONTAL );
-    panel->SetSizer( main_sizer );
+    wxBoxSizer *gauge_page_vsizer = new wxBoxSizer( wxVERTICAL );
+
+    wxBoxSizer *gauge_page_first_row_sizer = new wxBoxSizer( wxHORIZONTAL );
 
     wxStaticBoxSizer *gauge_sizer = new wxStaticBoxSizer( wxHORIZONTAL, panel, wxT("&wxGauge and wxSlider") );
-    main_sizer->Add( gauge_sizer, 0, wxALL, 5 );
+    gauge_page_first_row_sizer->Add( gauge_sizer, 0, wxALL, 5 );
     wxBoxSizer *sz = new wxBoxSizer( wxVERTICAL );
     gauge_sizer->Add( sz );
     m_gauge = new wxGauge( panel, wxID_ANY, 200, wxDefaultPosition, wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
@@ -868,7 +903,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxStaticBox *sb = new wxStaticBox( panel, wxID_ANY, wxT("&Explanation"),
                            wxDefaultPosition, wxDefaultSize ); //, wxALIGN_CENTER );
     wxStaticBoxSizer *wrapping_sizer = new wxStaticBoxSizer( sb, wxVERTICAL );
-    main_sizer->Add( wrapping_sizer, 0, wxALL, 5 );
+    gauge_page_first_row_sizer->Add( wrapping_sizer, 0, wxALL, 5 );
 
 #ifdef __WXMOTIF__
     // No wrapping text in wxStaticText yet :-(
@@ -892,7 +927,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wrapping_sizer->Add( m_wrappingText );
 
     wxStaticBoxSizer *non_wrapping_sizer = new wxStaticBoxSizer( wxVERTICAL, panel, wxT("Non-wrapping") );
-    main_sizer->Add( non_wrapping_sizer, 0, wxALL, 5 );
+    gauge_page_first_row_sizer->Add( non_wrapping_sizer, 0, wxALL, 5 );
 
     m_nonWrappingText = new wxStaticText( panel, wxID_ANY,
                             wxT("This static text has two lines.\nThey do not wrap."),
@@ -901,32 +936,50 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                           );
     non_wrapping_sizer->Add( m_nonWrappingText );
 
-    (void)new wxButton( panel, ID_BTNNEWTEXT, wxT("New text"), wxPoint(450, 160) );
+    gauge_page_vsizer->Add( gauge_page_first_row_sizer, 1 );
+    wxBoxSizer *gauge_page_second_row_sizer = new wxBoxSizer( wxHORIZONTAL );
+
 
     int initialSpinValue = -5;
     wxString s;
     s << initialSpinValue;
-    m_spintext = new wxTextCtrl( panel, wxID_ANY, s, wxPoint(20,160), wxSize(80,wxDefaultCoord) );
+    m_spintext = new wxTextCtrl( panel, wxID_ANY, s );
+    gauge_page_second_row_sizer->Add( m_spintext, 0, wxALL, 5 );
+
 #if wxUSE_SPINBTN
-    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(-1, m_spintext->GetSize().y) );
+    m_spinbutton = new wxSpinButton( panel, ID_SPIN );
     m_spinbutton->SetRange(-40,30);
     m_spinbutton->SetValue(initialSpinValue);
-
-#if wxUSE_PROGRESSDLG
-    m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, wxT("&Show progress dialog"),
-                                  wxPoint(300, 160) );
-#endif // wxUSE_PROGRESSDLG
+    gauge_page_second_row_sizer->Add( m_spinbutton, 0, wxALL, 5 );
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
-    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, wxEmptyString, wxPoint(200, 160), wxSize(80, wxDefaultCoord) );
+    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, wxEmptyString );
     m_spinctrl->SetRange(-10,30);
     m_spinctrl->SetValue(15);
+    gauge_page_second_row_sizer->Add( m_spinctrl, 0, wxALL, 5 );
 #endif // wxUSE_SPINCTRL
+
+#if wxUSE_SPINBTN
+#if wxUSE_PROGRESSDLG
+    m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, wxT("&Show progress dialog") );
+    gauge_page_second_row_sizer->Add( m_btnProgress, 0, wxALL, 5 );
+#endif // wxUSE_PROGRESSDLG
+#endif // wxUSE_SPINBTN
+
+    wxButton* newTextButton = new wxButton( panel, ID_BTNNEWTEXT, wxT("New text"));
+    gauge_page_second_row_sizer->Add( newTextButton, 0, wxALL, 5 );
+
+    gauge_page_vsizer->Add(gauge_page_second_row_sizer, 1);
+    panel->SetSizer( gauge_page_vsizer );
 
     m_book->AddPage(panel, wxT("wxGauge"), false, Image_Gauge);
 #endif // wxUSE_SLIDER && wxUSE_GAUGE
 
+
+    // ------------------------------------------------------------------------
+    // wxBitmapXXX
+    // ------------------------------------------------------------------------
 
     panel = new wxPanel(m_book);
 
@@ -988,7 +1041,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_book->AddPage(panel, wxT("wxBitmapXXX"));
 
-    // sizer
+    // ------------------------------------------------------------------------
+    // sizer page
+    // ------------------------------------------------------------------------
+
     panel = new wxPanel(m_book);
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );

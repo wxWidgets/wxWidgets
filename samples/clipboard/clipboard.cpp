@@ -131,7 +131,7 @@ MyFrame::MyFrame(const wxString& title)
     wxPanel *panel = new wxPanel( this, -1 );
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
-    main_sizer->Add( new wxButton( panel, ID_Write, "Get clipboard text" ) );
+    main_sizer->Add( new wxButton( panel, ID_Write, "Get clipboard text" ), 0, wxALL, 5 );
     m_textctrl = new wxTextCtrl( panel, ID_Text, "", wxDefaultPosition,
       wxDefaultSize, wxTE_MULTILINE );
     main_sizer->Add( m_textctrl, 1, wxGROW );

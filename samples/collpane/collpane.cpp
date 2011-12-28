@@ -198,11 +198,16 @@ MyFrame::MyFrame()
     m_collPane = new wxCollapsiblePane(this, -1, wxT("test!"));
     wxWindow *win = m_collPane->GetPane();
 
-    m_paneSizer = new wxBoxSizer( wxVERTICAL );
-    m_paneSizer->Add( new wxStaticText(win, -1, wxT("Static text") ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxStaticText(win, -1, wxT("Yet another one!") ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, wxT("Text control"), wxDefaultPosition, wxSize(80,-1) ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxButton(win, PANE_BUTTON, wxT("Press to align right") ), 0, wxALIGN_LEFT );
+    m_paneSizer = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer* paneSubSizer = new wxBoxSizer( wxVERTICAL );
+    m_paneSizer->AddSpacer( 20 );
+    m_paneSizer->Add( paneSubSizer, 1 );
+
+    paneSubSizer->Add( new wxStaticText(win, -1, wxT("Static text") ), 0, wxALIGN_LEFT | wxALL, 3 );
+    paneSubSizer->Add( new wxStaticText(win, -1, wxT("Yet another one!") ), 0, wxALIGN_LEFT | wxALL, 3 );
+    paneSubSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, wxT("Text control"), wxDefaultPosition, wxSize(80,-1) ), 0, wxALIGN_LEFT | wxALL, 3 );
+    paneSubSizer->Add( new wxButton(win, PANE_BUTTON, wxT("Press to align right") ), 0, wxALIGN_LEFT | wxALL, 3 );
+
     win->SetSizer( m_paneSizer );
 }
 

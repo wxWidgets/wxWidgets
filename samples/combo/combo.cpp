@@ -927,7 +927,7 @@ MyFrame::MyFrame(const wxString& title)
     panel->SetSizer( topSizer );
     topSizer->SetSizeHints( panel );
 
-    SetSize(740,400);
+    Fit();
     Centre();
 }
 
