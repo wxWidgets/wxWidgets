@@ -855,27 +855,38 @@ wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU WXUNUSED(hMenu))
     return false;
 }
 
-bool wxFrame::HandleMenuPopup(wxEventType evtType, WXHMENU hMenu)
+bool
+wxFrame::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup)
 {
-    // we don't have the menu id here, so we use the id to specify if the event
-    // was from a popup menu or a normal one
-
-    int menuid = 0;
-    wxMenu* menu = NULL;
-    if (GetMenuBar())
-    {
-        menu = GetMenuBar()->MSWGetMenu(hMenu);
-    }
-    else if ( wxCurrentPopupMenu && wxCurrentPopupMenu->GetHMenu() == hMenu )
-    {
-        menu = wxCurrentPopupMenu;
-        menuid = wxID_ANY;
-    }
-
-    wxMenuEvent event(evtType, menuid, menu);
+    wxMenuEvent event(evtType, popup ? wxID_ANY : 0, menu);
     event.SetEventObject(this);
 
     return HandleWindowEvent(event);
+}
+
+bool wxFrame::HandleExitMenuLoop(WXWORD isPopup)
+{
+    return DoSendMenuOpenCloseEvent(wxEVT_MENU_CLOSE,
+                                    isPopup ? wxCurrentPopupMenu : NULL,
+                                    isPopup != 0);
+}
+
+bool wxFrame::HandleMenuPopup(wxEventType evtType, WXHMENU hMenu)
+{
+    bool isPopup = false;
+    wxMenu* menu = NULL;
+    if ( wxCurrentPopupMenu && wxCurrentPopupMenu->GetHMenu() == hMenu )
+    {
+        menu = wxCurrentPopupMenu;
+        isPopup = true;
+    }
+    else if ( GetMenuBar() )
+    {
+        menu = GetMenuBar()->MSWGetMenu(hMenu);
+    }
+
+
+    return DoSendMenuOpenCloseEvent(evtType, menu, isPopup);
 }
 
 #endif // wxUSE_MENUS
@@ -933,6 +944,16 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 
                 processed = HandleMenuSelect(item, flags, hmenu);
             }
+            break;
+
+        case WM_EXITMENULOOP:
+            // Under Windows 98 and 2000 and later we're going to get
+            // WM_UNINITMENUPOPUP which will be used to generate this event
+            // with more information (notably the menu that was closed) so we
+            // only need this one under old Windows systems where the newer
+            // event is never sent.
+            if ( wxGetWinVersion() < wxWinVersion_98 )
+                processed = HandleExitMenuLoop(wParam);
             break;
 
         case WM_UNINITMENUPOPUP:

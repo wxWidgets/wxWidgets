@@ -132,8 +132,17 @@ protected:
     // wxMDIChildFrame
     bool MSWDoTranslateMessage(wxFrame *frame, WXMSG *msg);
 
+#if wxUSE_MENUS
+    // handle WM_EXITMENULOOP message for Win95 only
+    bool HandleExitMenuLoop(WXWORD isPopup);
+
     // handle WM_(UN)INITMENUPOPUP message to generate wxEVT_MENU_OPEN/CLOSE
     bool HandleMenuPopup(wxEventType evtType, WXHMENU hMenu);
+
+    // Command part of HandleMenuPopup() and HandleExitMenuLoop().
+    bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup);
+#endif // wxUSE_MENUS
+
 
     virtual bool IsMDIChild() const { return false; }
 
