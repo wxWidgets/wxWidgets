@@ -468,6 +468,7 @@ MSW:
 
 - Fixed regression with initial focus in the dialogs in 2.9.3.
 - Added support for wxEXEC_MAKE_GROUP_LEADER to wxExecute (tteras).
+- Set wxMenu being closed in wxEVT_MENU_CLOSE events (Marcin Malich).
 
 OSX:
 

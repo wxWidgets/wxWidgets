@@ -3870,9 +3870,12 @@ public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0, wxMenu* menu = NULL);
 
     /**
-        Returns the menu which is being opened or closed. This method should only be
-        used with the @c OPEN and @c CLOSE events and even for them the
-        returned pointer may be @NULL in some ports.
+        Returns the menu which is being opened or closed.
+
+        This method can only be used with the @c OPEN and @c CLOSE events.
+
+        The returned value is never @NULL in the ports implementing this
+        function, which currently includes all the major ones.
     */
     wxMenu* GetMenu() const;
 

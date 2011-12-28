@@ -452,16 +452,25 @@ void wxMenu::HandleMenuItemHighlighted( wxMenuItem* item )
     DoHandleMenuEvent( wxevent );
 }
 
+void wxMenu::DoHandleMenuOpenedOrClosed(wxEventType evtType)
+{
+    // Popup menu being currently shown or NULL, defined in wincmn.cpp.
+    extern wxMenu *wxCurrentPopupMenu;
+
+    // Set the id to allow wxMenuEvent::IsPopup() to work correctly.
+    int menuid = this == wxCurrentPopupMenu ? wxID_ANY : 0;
+    wxMenuEvent wxevent(evtType, menuid, this);
+    DoHandleMenuEvent( wxevent );
+}
+
 void wxMenu::HandleMenuOpened()
 {
-    wxMenuEvent wxevent(wxEVT_MENU_OPEN, 0, this);
-    DoHandleMenuEvent( wxevent );
+    DoHandleMenuOpenedOrClosed(wxEVT_MENU_OPEN);
 }
 
 void wxMenu::HandleMenuClosed()
 {
-    wxMenuEvent wxevent(wxEVT_MENU_CLOSE, 0, this);
-    DoHandleMenuEvent( wxevent );
+    DoHandleMenuOpenedOrClosed(wxEVT_MENU_CLOSE);
 }
 
 bool wxMenu::DoHandleMenuEvent(wxEvent& wxevent)

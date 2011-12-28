@@ -83,6 +83,10 @@ private:
     // terminate the current radio group, if any
     void EndRadioGroup();
 
+    // Common part of HandleMenu{Opened,Closed}().
+    void DoHandleMenuOpenedOrClosed(wxEventType evtType);
+
+
     // if TRUE, insert a breal before appending the next item
     bool m_doBreak;
 

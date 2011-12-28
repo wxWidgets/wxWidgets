@@ -79,7 +79,6 @@ public:
     bool HandleSize(int x, int y, WXUINT flag);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
     bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
-    bool HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup);
 
     // tooltip management
 #if wxUSE_TOOLTIPS
@@ -133,8 +132,8 @@ protected:
     // wxMDIChildFrame
     bool MSWDoTranslateMessage(wxFrame *frame, WXMSG *msg);
 
-    // handle WM_INITMENUPOPUP message to generate wxEVT_MENU_OPEN
-    bool HandleInitMenuPopup(WXHMENU hMenu);
+    // handle WM_(UN)INITMENUPOPUP message to generate wxEVT_MENU_OPEN/CLOSE
+    bool HandleMenuPopup(wxEventType evtType, WXHMENU hMenu);
 
     virtual bool IsMDIChild() const { return false; }
 

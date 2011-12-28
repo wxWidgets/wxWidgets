@@ -61,9 +61,9 @@
 // globals
 // ----------------------------------------------------------------------------
 
-#if wxUSE_MENUS_NATIVE
+#if wxUSE_MENUS || wxUSE_MENUS_NATIVE
     extern wxMenu *wxCurrentPopupMenu;
-#endif // wxUSE_MENUS_NATIVE
+#endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -849,25 +849,24 @@ wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU WXUNUSED(hMenu))
     return false;
 }
 
-bool wxFrame::HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup)
+bool wxFrame::HandleMenuPopup(wxEventType evtType, WXHMENU hMenu)
 {
     // we don't have the menu id here, so we use the id to specify if the event
     // was from a popup menu or a normal one
-    wxMenuEvent event(evtType, isPopup ? -1 : 0);
-    event.SetEventObject(this);
 
-    return HandleWindowEvent(event);
-}
-
-bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
-{
+    int menuid = 0;
     wxMenu* menu = NULL;
     if (GetMenuBar())
     {
         menu = GetMenuBar()->MSWGetMenu(hMenu);
     }
+    else if ( wxCurrentPopupMenu && wxCurrentPopupMenu->GetHMenu() == hMenu )
+    {
+        menu = wxCurrentPopupMenu;
+        menuid = wxID_ANY;
+    }
 
-    wxMenuEvent event(wxEVT_MENU_OPEN, 0, menu);
+    wxMenuEvent event(evtType, menuid, menu);
     event.SetEventObject(this);
 
     return HandleWindowEvent(event);
@@ -917,7 +916,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 #if wxUSE_MENUS
         case WM_INITMENUPOPUP:
-            processed = HandleInitMenuPopup((WXHMENU) wParam);
+            processed = HandleMenuPopup(wxEVT_MENU_OPEN, (WXHMENU)wParam);
             break;
 
         case WM_MENUSELECT:
@@ -930,8 +929,8 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
             }
             break;
 
-        case WM_EXITMENULOOP:
-            processed = HandleMenuLoop(wxEVT_MENU_CLOSE, (WXWORD)wParam);
+        case WM_UNINITMENUPOPUP:
+            processed = HandleMenuPopup(wxEVT_MENU_CLOSE, (WXHMENU)wParam);
             break;
 #endif // wxUSE_MENUS
 
