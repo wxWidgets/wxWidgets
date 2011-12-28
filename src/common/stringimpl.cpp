@@ -681,7 +681,11 @@ bool wxStringImpl::AssignCopy(size_t nSrcLen,
       // allocation failure handled by caller
       return false;
     }
-    memcpy(m_pchData, pszSrcData, nSrcLen*sizeof(wxStringCharType));
+
+    // use memmove() and not memcpy() here as we might be copying from our own
+    // buffer in case of assignment such as "s = s.c_str()" (see #11294)
+    memmove(m_pchData, pszSrcData, nSrcLen*sizeof(wxStringCharType));
+
     GetStringData()->nDataLength = nSrcLen;
     m_pchData[nSrcLen] = wxT('\0');
   }
