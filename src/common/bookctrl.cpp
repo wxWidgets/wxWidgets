@@ -105,8 +105,13 @@ void wxBookCtrlBase::DoInvalidateBestSize()
 
 wxSize wxBookCtrlBase::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    // we need to add the size of the choice control and the border between
-    const wxSize sizeController = GetControllerSize();
+    // We need to add the size of the controller and the border between if it's
+    // shown. Notice that we don't use GetControllerSize() here as it returns
+    // the actual size while we want the best size here.
+    if ( !m_bookctrl || !m_bookctrl->IsShown() )
+        return sizePage;
+
+    const wxSize sizeController = m_bookctrl->GetBestSize();
 
     wxSize size = sizePage;
     if ( IsVertical() )
