@@ -61,7 +61,7 @@ public:
     void SetValue(int nPos);
 
     inline virtual bool AcceptsFocus(void) const { return FALSE; }
-    inline virtual void Command(wxCommandEvent& WXUNUSED(rEvent)) {};
+    inline virtual void Command(wxCommandEvent& WXUNUSED(rEvent)) {}
 
 protected:
     int                             m_nRangeMax;

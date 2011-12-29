@@ -113,7 +113,7 @@ class WXDLLEXPORT wxMetafileDataObject : public wxDataObjectSimple
 public:
   // ctors
   wxMetafileDataObject() 
-    : wxDataObjectSimple(wxDF_METAFILE) {  };
+    : wxDataObjectSimple(wxDF_METAFILE) {  }
   wxMetafileDataObject(const wxMetafile& metafile)
     : wxDataObjectSimple(wxDF_METAFILE), m_metafile(metafile) { }
 

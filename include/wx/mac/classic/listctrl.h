@@ -395,7 +395,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   bool Update(long item);
 */
 
-  void Command(wxCommandEvent& event) { ProcessCommand(event); };
+  void Command(wxCommandEvent& event) { ProcessCommand(event); }
 
 protected:
   wxTextCtrl*       m_textCtrl;        // The control used for editing a label

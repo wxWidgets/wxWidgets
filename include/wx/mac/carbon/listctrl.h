@@ -314,10 +314,10 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   bool Update(long item);
 */
 
-  void Command(wxCommandEvent& event) { ProcessCommand(event); };
+  void Command(wxCommandEvent& event) { ProcessCommand(event); }
 
-  wxListCtrlCompare GetCompareFunc() { return m_compareFunc; };
-  long GetCompareFuncData() { return m_compareFuncData; };
+  wxListCtrlCompare GetCompareFunc() { return m_compareFunc; }
+  long GetCompareFuncData() { return m_compareFuncData; }
 
   
   // public overrides needed for pimpl approach  

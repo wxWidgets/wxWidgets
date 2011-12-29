@@ -59,7 +59,7 @@ public:
 
     virtual bool Play(wxDC *dc);
     inline bool Ok() const { return IsOk(); }
-    inline bool IsOk(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
+    inline bool IsOk(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); }
 
     // Implementation
     inline WXHANDLE GetHMETAFILE(void) { return M_METAFILEDATA->m_metafile; }
@@ -111,7 +111,7 @@ private:
                                         ,long*           externalLeading = NULL
                                         ,wxFont*         theFont = NULL
                                        ) const
-    { GetTextExtent( string, width, height, descent, externalLeading, theFont, false);};
+    { GetTextExtent( string, width, height, descent, externalLeading, theFont, false);}
 #endif
 };
 
@@ -148,7 +148,7 @@ class WXDLLEXPORT wxMetafileDataObject : public wxDataObject
 {
 public:
     // ctors
-    wxMetafileDataObject() { m_width = 0; m_height = 0; };
+    wxMetafileDataObject() { m_width = 0; m_height = 0; }
     wxMetafileDataObject(const wxMetafile& metafile, int width = 0,int height = 0)
                         :m_metafile(metafile)
                         ,m_width(width)

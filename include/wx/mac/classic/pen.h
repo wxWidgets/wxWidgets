@@ -71,16 +71,16 @@ public:
   void SetJoin(int join)  ;
   void SetCap(int cap)  ;
 
-  inline wxColour& GetColour() const { return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); };
-  inline int GetWidth() const { return (M_PENDATA ? M_PENDATA->m_width : 0); };
-  inline int GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
-  inline int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
-  inline int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
+  inline wxColour& GetColour() const { return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); }
+  inline int GetWidth() const { return (M_PENDATA ? M_PENDATA->m_width : 0); }
+  inline int GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); }
+  inline int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); }
+  inline int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); }
   inline int GetDashes(wxDash **ptr) const {
      *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
   }
 
-  inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };
+  inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); }
 
 // Implementation
 

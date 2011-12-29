@@ -59,7 +59,7 @@ public:
 
     virtual bool Play(wxDC *dc);
     inline bool Ok() const { return IsOk(); }
-    inline bool IsOk(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
+    inline bool IsOk(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); }
 
     wxSize GetSize() const;
     int GetWidth() const { return GetSize().x; }
@@ -125,7 +125,7 @@ class WXDLLEXPORT wxMetafileDataObject : public wxDataObjectSimple
 public:
   // ctors
   wxMetafileDataObject() 
-    : wxDataObjectSimple(wxDF_METAFILE) {  };
+    : wxDataObjectSimple(wxDF_METAFILE) {  }
   wxMetafileDataObject(const wxMetafile& metafile)
     : wxDataObjectSimple(wxDF_METAFILE), m_metafile(metafile) { }
 

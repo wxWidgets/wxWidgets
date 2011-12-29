@@ -650,7 +650,7 @@ private:
                          ,int                 nImage
                          ,int                 nImageSel
                         );
-    void DeleteTextCtrl() { };
+    void DeleteTextCtrl() { }
 
     //
     // support for additional item images which we implement using

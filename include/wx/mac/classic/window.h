@@ -164,7 +164,7 @@ public:
     WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
 
     // MSW only: true if this control is part of the main control
-    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; };
+    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; }
 
     // Setup background and foreground colours correctly
     virtual void SetupColours();

@@ -30,7 +30,7 @@ public:
   // Create from data
   bool Create(int size, const wxByte* data);
 
-  bool  IsOk() const { return (m_waveData ? true : false); };
+  bool  IsOk() const { return (m_waveData ? true : false); }
 
   static void Stop();
 

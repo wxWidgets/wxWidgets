@@ -29,7 +29,7 @@ public:
   // Create from data
   bool Create(int size, const wxByte* data);
 
-  bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
+  bool  IsOk() const { return (m_waveData ? TRUE : FALSE); }
 
 protected:
   bool  Free();

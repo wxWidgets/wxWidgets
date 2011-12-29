@@ -29,7 +29,7 @@ class wxWebKitCtrl : public wxControl
 public:
     DECLARE_DYNAMIC_CLASS(wxWebKitCtrl)
 
-    wxWebKitCtrl() {};
+    wxWebKitCtrl() {}
     wxWebKitCtrl(wxWindow *parent,
                     wxWindowID winID,
                     const wxString& strURL,
@@ -39,7 +39,7 @@ public:
                     const wxString& name = wxT("webkitctrl"))
     {
         Create(parent, winID, strURL, pos, size, style, validator, name);
-    };
+    }
     bool Create(wxWindow *parent,
                 wxWindowID winID,
                 const wxString& strURL,
@@ -60,9 +60,9 @@ public:
     bool CanGetPageSource();
     wxString GetPageSource();
     void SetPageSource(const wxString& source, const wxString& baseUrl = wxEmptyString);
-	wxString GetPageURL(){ return m_currentURL; }
+    wxString GetPageURL(){ return m_currentURL; }
     void SetPageTitle(const wxString& title) { m_pageTitle = title; }
-	wxString GetPageTitle(){ return m_pageTitle; }
+    wxString GetPageTitle(){ return m_pageTitle; }
     
     // since these worked in 2.6, add wrappers
     void SetTitle(const wxString& title) { SetPageTitle(title); }

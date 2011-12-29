@@ -222,7 +222,7 @@ public:
     bool SortChildren(long item);
     bool EnsureVisible(long item);
 
-    void Command(wxCommandEvent& event) { ProcessCommand(event); };
+    void Command(wxCommandEvent& event) { ProcessCommand(event); }
 
 protected:
     wxTextCtrl*  m_textCtrl;

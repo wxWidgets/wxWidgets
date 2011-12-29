@@ -66,7 +66,7 @@ public:
     wxMDIChildFrame *GetActiveChild() const ;
 
     // Get the client window
-    wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; };
+    wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; }
 
     // Create the client window class (don't Create the window,
     // just return a new class)
@@ -161,8 +161,8 @@ public:
 
     // MDI operations
     virtual void Maximize();
-    virtual void Maximize(bool WXUNUSED(maximize)) { };
-    inline void Minimize() { Iconize(true); };
+    virtual void Maximize(bool WXUNUSED(maximize)) { }
+    inline void Minimize() { Iconize(true); }
     virtual void Iconize(bool iconize);
     virtual void Restore();
     virtual void Activate();
@@ -176,9 +176,9 @@ public:
 
     bool Show(bool show);
 
-    WXWidget GetMainWidget() const { return m_mainWidget; };
-    WXWidget GetTopWidget() const { return m_mainWidget; };
-    WXWidget GetClientWidget() const { return m_mainWidget; };
+    WXWidget GetMainWidget() const { return m_mainWidget; }
+    WXWidget GetTopWidget() const { return m_mainWidget; }
+    WXWidget GetClientWidget() const { return m_mainWidget; }
 
     /*
     virtual void OnRaise();

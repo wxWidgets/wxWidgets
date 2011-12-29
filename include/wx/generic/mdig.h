@@ -57,7 +57,7 @@ public:
                  const wxString& name = wxFrameNameStr );
 
 #if wxUSE_MENUS
-    wxMenu* GetWindowMenu() const { return m_pWindowMenu; };
+    wxMenu* GetWindowMenu() const { return m_pWindowMenu; }
     void SetWindowMenu(wxMenu* pMenu);
 
     virtual void SetMenuBar(wxMenuBar *pMenuBar);

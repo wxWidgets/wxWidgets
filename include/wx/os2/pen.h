@@ -100,21 +100,21 @@ public:
     void SetCap(int nCap);
     void SetPS(HPS hPS);
 
-    inline wxColour& GetColour(void) const { return (M_PENDATA ? M_PENDATA->m_vColour : wxNullColour); };
-    inline int       GetWidth(void) const { return (M_PENDATA ? M_PENDATA->m_nWidth : 0); };
-    inline int       GetStyle(void) const { return (M_PENDATA ? M_PENDATA->m_nStyle : 0); };
-    inline int       GetJoin(void) const { return (M_PENDATA ? M_PENDATA->m_nJoin : 0); };
-    inline int       GetCap(void) const { return (M_PENDATA ? M_PENDATA->m_nCap : 0); };
-    inline int       GetPS(void) const { return (M_PENDATA ? M_PENDATA->m_hPen : 0); };
+    inline wxColour& GetColour(void) const { return (M_PENDATA ? M_PENDATA->m_vColour : wxNullColour); }
+    inline int       GetWidth(void) const { return (M_PENDATA ? M_PENDATA->m_nWidth : 0); }
+    inline int       GetStyle(void) const { return (M_PENDATA ? M_PENDATA->m_nStyle : 0); }
+    inline int       GetJoin(void) const { return (M_PENDATA ? M_PENDATA->m_nJoin : 0); }
+    inline int       GetCap(void) const { return (M_PENDATA ? M_PENDATA->m_nCap : 0); }
+    inline int       GetPS(void) const { return (M_PENDATA ? M_PENDATA->m_hPen : 0); }
     inline int       GetDashes(wxDash **ptr) const
     {
         *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
         return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
     }
-    inline wxDash*   GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*)NULL); };
-    inline int       GetDashCount() const { return (M_PENDATA ? M_PENDATA->m_nbDash : 0); };
+    inline wxDash*   GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*)NULL); }
+    inline int       GetDashCount() const { return (M_PENDATA ? M_PENDATA->m_nbDash : 0); }
 
-    inline wxBitmap* GetStipple(void) const { return (M_PENDATA ? (& M_PENDATA->m_vStipple) : (wxBitmap*) NULL); };
+    inline wxBitmap* GetStipple(void) const { return (M_PENDATA ? (& M_PENDATA->m_vStipple) : (wxBitmap*) NULL); }
 
     //
     // Implementation

@@ -63,10 +63,10 @@ public:
     virtual void SetStyle(int nStyle)  ;
     virtual void SetStipple(const wxBitmap& rStipple);
 
-    inline wxColour& GetColour(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_vColour : wxNullColour); };
-    virtual int      GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : 0); };
-    inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : 0); };
-    inline int       GetPS(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_hBrush : 0); };
+    inline wxColour& GetColour(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_vColour : wxNullColour); }
+    virtual int      GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : 0); }
+    inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : 0); }
+    inline int       GetPS(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_hBrush : 0); }
 
     inline virtual bool Ok() const { return IsOk(); }
     inline virtual bool IsOk(void) const { return (m_refData != NULL) ; }

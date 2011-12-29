@@ -281,7 +281,7 @@ public:
 #endif
     bool            CanSelectForUpdate(void);
 #if wxODBC_BACKWARD_COMPATABILITY
-    bool            CanUpdByROWID(void) { return CanUpdateByRowID(); };
+    bool            CanUpdByROWID(void) { return CanUpdateByRowID(); }
 #endif
     bool            CanUpdateByROWID(void);
     void            ClearMemberVar(UWORD colNumber, bool setToNull=false);
@@ -324,8 +324,8 @@ public:
     typedef     enum  { WX_ROW_MODE_QUERY , WX_ROW_MODE_INDIVIDUAL } rowmode_t;
     virtual     void         SetRowMode(const rowmode_t rowmode);
 #if wxODBC_BACKWARD_COMPATABILITY
-    virtual     wxVariant    GetCol(const int colNumber) const { return GetColumn(colNumber); };
-    virtual     void         SetCol(const int colNumber, const wxVariant value)  { return SetColumn(colNumber, value); };
+    virtual     wxVariant    GetCol(const int colNumber) const { return GetColumn(colNumber); }
+    virtual     void         SetCol(const int colNumber, const wxVariant value)  { return SetColumn(colNumber, value); }
 #endif
     virtual     wxVariant    GetColumn(const int colNumber) const ;
     virtual     void         SetColumn(const int colNumber, const wxVariant value);

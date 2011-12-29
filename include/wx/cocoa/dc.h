@@ -78,10 +78,10 @@ public:
     virtual void Clear();
 
     virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return true; }
-    virtual void EndDoc(void) {};
+    virtual void EndDoc(void) {}
 
-    virtual void StartPage(void) {};
-    virtual void EndPage(void) {};
+    virtual void StartPage(void) {}
+    virtual void EndPage(void) {}
 
     virtual void SetFont(const wxFont& font);
     virtual void SetPen(const wxPen& pen);

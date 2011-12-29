@@ -120,7 +120,7 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
 
     void SetFocus();
-    void SetLabelFont(const wxFont& WXUNUSED(font)) {};
+    void SetLabelFont(const wxFont& WXUNUSED(font)) {}
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 
     virtual void Refresh( bool eraseBackground = true,

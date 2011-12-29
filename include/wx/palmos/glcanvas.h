@@ -93,7 +93,7 @@ public:
     void SetCurrent();
 
 #ifdef __WXUNIVERSAL__
-    virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); };
+    virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); }
 #endif
 
     void SetColour(const wxChar *colour);

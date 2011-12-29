@@ -63,7 +63,7 @@ public:
   wxMDIChildFrame *GetActiveChild() const ;
 
   // Get the client window
-  inline wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; };
+  inline wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; }
   // Get rect to be used to center top-level children
   virtual void GetRectForTopLevelChildren(int *x, int *y, int *w, int *h);
 

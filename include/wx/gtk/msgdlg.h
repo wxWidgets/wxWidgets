@@ -30,7 +30,7 @@ public:
     virtual ~wxMessageDialog();
 
     int ShowModal();
-    virtual bool Show( bool WXUNUSED(show) = true ) { return false; };
+    virtual bool Show( bool WXUNUSED(show) = true ) { return false; }
 
 protected:
     // implement some base class methods to do nothing to avoid asserts and

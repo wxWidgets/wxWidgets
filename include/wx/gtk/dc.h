@@ -73,7 +73,7 @@ public:
     virtual ~wxDC() { }
 
 #if wxUSE_PALETTE
-    void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
+    void SetColourMap( const wxPalette& palette ) { SetPalette(palette); }
 #endif // wxUSE_PALETTE
 
     // Resolution in pixels per logical inch
