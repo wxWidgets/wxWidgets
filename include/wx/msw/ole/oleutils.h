@@ -82,7 +82,7 @@ inline void ReleaseInterface(IUnknown *pIUnk)
 #define   RELEASE_AND_NULL(p)   if ( (p) != NULL ) { p->Release(); p = NULL; };
 
 // return true if the iid is in the array
-WXDLLIMPEXP_CORE extern bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
+extern WXDLLIMPEXP_CORE bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 
 // ============================================================================
 // IUnknown implementation helpers
