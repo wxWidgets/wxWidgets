@@ -2111,7 +2111,7 @@ static wxString FilterOutEntryName(const wxString& str)
 #if !wxUSE_UNICODE
             ((unsigned char)c < 127) &&
 #endif // ANSI
-         !wxIsalnum(c) && !wxStrchr(wxT("@_/-!.*%"), c) )
+         !wxIsalnum(c) && !wxStrchr(wxT("@_/-!.*%()"), c) )
     {
       strResult += wxT('\\');
     }
