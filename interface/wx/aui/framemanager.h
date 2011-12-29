@@ -23,20 +23,31 @@ enum wxAuiManagerDock
 
 
 /**
-    @todo wxAuiManager behaviour style flags.
+    wxAuiManager behaviour and visual effects style flags.
 */
 enum wxAuiManagerOption
 {
+    /// Allow a pane to be undocked to take the form of a wxMiniFrame.
     wxAUI_MGR_ALLOW_FLOATING           = 1 << 0,
+    /// Change the color of the title bar of the pane when it is activated.
     wxAUI_MGR_ALLOW_ACTIVE_PANE        = 1 << 1,
+    /// Make the pane transparent during its movement.
     wxAUI_MGR_TRANSPARENT_DRAG         = 1 << 2,
+    /// The possible location for docking is indicated by a translucent area.
     wxAUI_MGR_TRANSPARENT_HINT         = 1 << 3,
+    /// The possible location for docking is indicated by a gradually appearing
+    /// partially transparent area.
     wxAUI_MGR_VENETIAN_BLINDS_HINT     = 1 << 4,
+    /// The possible location for docking is indicated by a rectangular outline.
     wxAUI_MGR_RECTANGLE_HINT           = 1 << 5,
+    /// The translucent area where the pane could be docked appears gradually.
     wxAUI_MGR_HINT_FADE                = 1 << 6,
+    /// Used in complement of wxAUI_MGR_VENETIAN_BLINDS_HINT to show the hint immediately.
     wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
+    /// When a docked pane is resized, its content is refreshed in live (instead of moving
+    /// the border alone and refreshing the content at the end).
     wxAUI_MGR_LIVE_RESIZE              = 1 << 8,
-
+    /// Default behavior.
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
                         wxAUI_MGR_HINT_FADE |
@@ -110,6 +121,33 @@ enum wxAuiManagerOption
         in a lower level yield to panes in higher levels. The best way to
         understand layers is by running the wxAUI sample.
 
+    @beginStyleTable
+    @style{wxAUI_MGR_ALLOW_FLOATING}
+           Allow a pane to be undocked to take the form of a wxMiniFrame.
+    @style{wxAUI_MGR_ALLOW_ACTIVE_PANE}
+           Change the color of the title bar of the pane when it is activated.
+    @style{wxAUI_MGR_TRANSPARENT_DRAG}
+           Make the pane transparent during its movement.
+    @style{wxAUI_MGR_TRANSPARENT_HINT}
+           The possible location for docking is indicated by a translucent area.
+    @style{wxAUI_MGR_VENETIAN_BLINDS_HINT}
+           The possible location for docking is indicated by gradually
+           appearing partially transparent hint.
+    @style{wxAUI_MGR_RECTANGLE_HINT}
+           The possible location for docking is indicated by a rectangular
+           outline.
+    @style{wxAUI_MGR_HINT_FADE}
+           The translucent area where the pane could be docked appears gradually.
+    @style{wxAUI_MGR_NO_VENETIAN_BLINDS_FADE}
+           Used in complement of wxAUI_MGR_VENETIAN_BLINDS_HINT to show the
+           docking hint immediately.
+    @style{wxAUI_MGR_LIVE_RESIZE}
+           When a docked pane is resized, its content is refreshed in live (instead of moving
+           the border alone and refreshing the content at the end).
+    @style{wxAUI_MGR_DEFAULT}
+           Default behavior, combines: wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT |
+           wxAUI_MGR_HINT_FADE | wxAUI_MGR_NO_VENETIAN_BLINDS_FADE.
+    @endStyleTable
 
     @beginEventEmissionTable{wxAuiManagerEvent}
     @event{EVT_AUI_PANE_BUTTON(func)}
@@ -135,8 +173,8 @@ class wxAuiManager : public wxEvtHandler
 public:
     /**
         Constructor. @a managed_wnd specifies the wxFrame which should be managed.
-        @a flags  specifies options which allow the frame management behaviour
-        to be modified.
+        @a flags  specifies the frame management behaviour and visual effects
+        with the wxAuiManagerOption's style flags.
     */
     wxAuiManager(wxWindow* managed_wnd = NULL,
                  unsigned int flags = wxAUI_MGR_DEFAULT);
@@ -188,7 +226,7 @@ public:
     void GetDockSizeConstraint(double* widthpct, double* heightpct) const;
 
     /**
-        Returns the current manager's flags.
+        Returns the current wxAuiManagerOption's flags.
     */
     unsigned int GetFlags() const;
 
@@ -298,7 +336,7 @@ public:
     void SetDockSizeConstraint(double widthpct, double heightpct);
 
     /**
-        This method is used to specify wxAuiManager's settings flags. @a flags
+        This method is used to specify wxAuiManagerOption's flags. @a flags
         specifies options which allow the frame management behaviour to be modified.
     */
     void SetFlags(unsigned int flags);
