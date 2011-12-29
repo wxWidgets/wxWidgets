@@ -1591,6 +1591,7 @@ void wxDC::DoDrawBitmap(
                 {
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
+                    delete[] pucBits;
                     return;
                 }
                 if ((lScans = ::GpiQueryBitmapBits( hPS
@@ -1602,6 +1603,7 @@ void wxDC::DoDrawBitmap(
                 {
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
+                    delete[] pucBits;
                     return;
                 }
                 unsigned char           cOldRedFore   = (unsigned char)(lOldForeGround >> 16);
@@ -1656,6 +1658,7 @@ void wxDC::DoDrawBitmap(
                 {
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
+                    delete [] pucBits;
                     return;
                 }
                 delete [] pucBits;
