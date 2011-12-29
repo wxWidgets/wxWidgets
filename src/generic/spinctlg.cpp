@@ -283,15 +283,23 @@ void wxSpinCtrlGenericBase::SetFocus()
         m_textCtrl->SetFocus();
 }
 
+#ifdef __WXMSW__
+
+void wxSpinCtrlGenericBase::DoEnable(bool enable)
+{
+    // We never enable this control itself, it must stay disabled to avoid
+    // interfering with the siblings event handling (see e.g. #12045 for the
+    // kind of problems which arise otherwise).
+    if ( !enable )
+        wxSpinCtrlBase::DoEnable(enable);
+}
+
+#endif // __WXMSW__
+
 bool wxSpinCtrlGenericBase::Enable(bool enable)
 {
-    // Notice that we never enable this control itself, it must stay disabled
-    // to avoid interfering with the siblings event handling (see e.g. #12045
-    // for the kind of problems which arise otherwise).
-    if ( enable == m_isEnabled )
+    if ( !wxSpinCtrlBase::Enable(enable) )
         return false;
-
-    m_isEnabled = enable;
 
     m_spinButton->Enable(enable);
     m_textCtrl->Enable(enable);

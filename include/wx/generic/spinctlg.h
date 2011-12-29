@@ -108,6 +108,11 @@ protected:
     virtual wxSize DoGetBestSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
+#ifdef __WXMSW__
+    // and, for MSW, enabling this window itself
+    virtual void DoEnable(bool enable);
+#endif // __WXMSW__
+
     // generic double valued functions
     double DoGetValue() const { return m_value; }
     bool DoSetValue(double val);
