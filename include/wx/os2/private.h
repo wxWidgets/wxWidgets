@@ -18,11 +18,14 @@
 #define INCL_PM
 #define INCL_GPI
 #define INCL_WINSYS
-#define INCL_SHLERRORS
 #define INCL_GPIERRORS
 #define INCL_DOS
-#define INCL_WINATOM
+#define INCL_DOSPROCESS
+#define INCL_DOSERRORS
 #define INCL_WIN
+#define INCL_WINATOM
+#define INCL_SHLERRORS
+
 #include <os2.h>
 
 #if wxONLY_WATCOM_EARLIER_THAN(1,4)
