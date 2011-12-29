@@ -84,6 +84,49 @@ public:
                 const wxString& help_string = wxEmptyString,
                 wxObject* client_data = NULL);
 
+    virtual wxRibbonButtonBarButtonBase* InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string,
+                wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
+
+    virtual wxRibbonButtonBarButtonBase* InsertDropdownButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    virtual wxRibbonButtonBarButtonBase* InsertHybridButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    virtual wxRibbonButtonBarButtonBase* InsertToggleButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    virtual wxRibbonButtonBarButtonBase* InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
+                wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
+                const wxString& help_string = wxEmptyString,
+                wxObject* client_data = NULL);
+
+    virtual size_t GetButtonCount() const;
+
     virtual bool Realize();
     virtual void ClearButtons();
     virtual bool DeleteButton(int button_id);

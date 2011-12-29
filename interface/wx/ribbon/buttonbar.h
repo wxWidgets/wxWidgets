@@ -253,6 +253,131 @@ public:
                 wxObject* client_data = NULL);
 
     /**
+        Inserts a button to the button bar (simple version) at the given position.
+
+        @see AddButton()
+
+        @since 2.9.4
+    */
+    virtual wxRibbonButtonBarButtonBase* InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string,
+                wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL);
+
+    /**
+        Inserts a dropdown button to the button bar (simple version) at the
+            given position.
+
+        @see InsertButton()
+        @see AddDropdownButton()
+        @see AddButton()
+
+        @since 2.9.4
+    */
+    virtual wxRibbonButtonBarButtonBase* InsertDropdownButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    /**
+        Inserts a hybrid button to the button bar (simple version) at the given
+            position.
+
+        @see InsertButton()
+        @see AddHybridButton()
+        @see AddButton()
+
+        @since 2.9.4
+    */
+    virtual wxRibbonButtonBarButtonBase* InsertHybridButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    /**
+        Inserts a toggle button to the button bar (simple version) at the given
+            position.
+
+        @see InsertButton()
+        @see AddToggleButton()
+        @see AddButton()
+
+        @since 2.9.4
+    */
+    virtual wxRibbonButtonBarButtonBase* InsertToggleButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    /**
+        Insert a button to the button bar at the given position.
+
+        @param pos
+            Position of the new button in the button bar.
+        @param button_id
+            ID of the new button (used for event callbacks).
+        @param label
+            Label of the new button.
+        @param bitmap
+            Large bitmap of the new button. Must be the same size as all other
+            large bitmaps used on the button bar.
+        @param bitmap_small
+            Small bitmap of the new button. If left as null, then a small
+            bitmap will be automatically generated. Must be the same size as
+            all other small bitmaps used on the button bar.
+        @param bitmap_disabled
+            Large bitmap of the new button when it is disabled. If left as
+            null, then a bitmap will be automatically generated from @a bitmap.
+        @param bitmap_small_disabled
+            Small bitmap of the new button when it is disabled. If left as
+            null, then a bitmap will be automatically generated from @a
+            bitmap_small.
+        @param kind
+            The kind of button to add.
+        @param help_string
+            The UI help string to associate with the new button.
+        @param client_data
+            Client data to associate with the new button.
+
+        @return An opaque pointer which can be used only with other button bar
+            methods.
+
+        @see InsertDropdownButton()
+        @see InsertHybridButton()
+        @see InsertToggleButton()
+        @see AddButton()
+
+        @since 2.9.4
+    */
+    virtual wxRibbonButtonBarButtonBase* InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
+                wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL,
+                const wxString& help_string = wxEmptyString,
+                wxObject* client_data = NULL);
+
+    /**
+        Returns the number of buttons in this button bar.
+
+        @since 2.9.4
+    */
+    virtual size_t GetButtonCount() const;
+
+    /**
         Calculate button layouts and positions.
         
         Must be called after buttons are added to the button bar, as otherwise

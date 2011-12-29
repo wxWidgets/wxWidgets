@@ -280,6 +280,23 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
                 const wxString& help_string,
                 wxObject* client_data)
 {
+    return InsertButton(GetButtonCount(), button_id, label, bitmap,
+        bitmap_small, bitmap_disabled,bitmap_small_disabled, kind, help_string,
+        client_data);
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small,
+                const wxBitmap& bitmap_disabled,
+                const wxBitmap& bitmap_small_disabled,
+                wxRibbonButtonKind kind,
+                const wxString& help_string,
+                wxObject* client_data)
+{
     wxASSERT(bitmap.IsOk() || bitmap_small.IsOk());
     if(m_buttons.IsEmpty())
     {
@@ -348,10 +365,54 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
 
-    // TODO
-    m_buttons.Add(base);
+    m_buttons.Insert(base, pos);
     m_layouts_valid = false;
     return base;
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string,
+                wxRibbonButtonKind kind)
+{
+    return InsertButton(pos, button_id, label, bitmap, wxNullBitmap,
+        wxNullBitmap, wxNullBitmap, kind, help_string);
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertDropdownButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string)
+{
+    return InsertButton(pos, button_id, label, bitmap, help_string,
+        wxRIBBON_BUTTON_DROPDOWN);
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertToggleButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string)
+{
+    return InsertButton(pos, button_id, label, bitmap, help_string,
+        wxRIBBON_BUTTON_TOGGLE);
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertHybridButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string)
+{
+    return InsertButton(pos, button_id, label, bitmap, help_string,
+        wxRIBBON_BUTTON_HYBRID);
 }
 
 void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
@@ -380,6 +441,11 @@ wxBitmap wxRibbonButtonBar::MakeDisabledBitmap(const wxBitmap& original)
 {
     wxImage img(original.ConvertToImage());
     return wxBitmap(img.ConvertToGreyscale());
+}
+
+size_t wxRibbonButtonBar::GetButtonCount() const
+{
+    return m_buttons.GetCount();
 }
 
 bool wxRibbonButtonBar::Realize()
