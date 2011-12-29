@@ -459,6 +459,7 @@ All (GUI):
   wxDataViewCtrl (Andrew Xu).
 - Fix item alignment in icon view in the generic wxListCtrl.
 - Support font-family/style, text-decoration in wxHtmlWindow (Blake Oleander).
+- Show ribbon tools help strings in tooltips (John Roberts).
 
 GTK:
 

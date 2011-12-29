@@ -581,6 +581,15 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
         }
     }
 
+    if(new_hover)
+    {
+        SetToolTip(new_hover->help_string);
+    }
+    else if(GetToolTip())
+    {
+        UnsetToolTip();
+    }
+
     if(new_hover != m_hover_tool)
     {
         if(m_hover_tool)

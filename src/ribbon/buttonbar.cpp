@@ -875,6 +875,11 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         }
     }
 
+    if(new_hovered == NULL && GetToolTip())
+    {
+        UnsetToolTip();
+    }
+
     if(new_hovered != m_hovered_button || (m_hovered_button != NULL &&
         new_hovered_state != m_hovered_button->base->state))
     {
@@ -886,6 +891,7 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         if(m_hovered_button != NULL)
         {
             m_hovered_button->base->state = new_hovered_state;
+            SetToolTip(m_hovered_button->base->help_string);
         }
         Refresh(false);
     }
