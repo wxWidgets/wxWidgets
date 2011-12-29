@@ -19,7 +19,7 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}
-        Handles a toggle button click event.
+        Handles a wxEVT_COMMAND_TOGGLEBUTTON_CLICKED event.
     @endEventTable
 
     @library{wxcore}
@@ -119,7 +119,7 @@ public:
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}
-        Handles a toggle button click event.
+        Handles a wxEVT_COMMAND_TOGGLEBUTTON_CLICKED event.
     @endEventTable
 
     @library{wxcore}
