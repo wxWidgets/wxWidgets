@@ -587,16 +587,9 @@ void GridTestCase::SelectionMode()
     m_grid->SetSelectionMode(wxGrid::wxGridSelectRows);
     m_grid->SelectBlock(3, 1, 3, 1);
 
-    wxGridCellCoordsArray topleft = m_grid->GetSelectionBlockTopLeft();
-    wxGridCellCoordsArray bottomright = m_grid->GetSelectionBlockBottomRight();
-
-    CPPUNIT_ASSERT_EQUAL(1, topleft.Count());
-    CPPUNIT_ASSERT_EQUAL(1, bottomright.Count());
-
-    CPPUNIT_ASSERT_EQUAL(0, topleft.Item(0).GetCol());
-    CPPUNIT_ASSERT_EQUAL(3, topleft.Item(0).GetRow());
-    CPPUNIT_ASSERT_EQUAL(1, bottomright.Item(0).GetCol());
-    CPPUNIT_ASSERT_EQUAL(3, bottomright.Item(0).GetRow());
+    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+    CPPUNIT_ASSERT_EQUAL(1, selectedRows.Count());
+    CPPUNIT_ASSERT_EQUAL(3, selectedRows[0]);
 
     CPPUNIT_ASSERT_EQUAL(wxGrid::wxGridSelectRows,
                          m_grid->GetSelectionMode());
@@ -607,16 +600,9 @@ void GridTestCase::SelectionMode()
     m_grid->SetSelectionMode(wxGrid::wxGridSelectColumns);
     m_grid->SelectBlock(3, 1, 3, 1);
 
-    topleft = m_grid->GetSelectionBlockTopLeft();
-    bottomright = m_grid->GetSelectionBlockBottomRight();
-
-    CPPUNIT_ASSERT_EQUAL(1, topleft.Count());
-    CPPUNIT_ASSERT_EQUAL(1, bottomright.Count());
-
-    CPPUNIT_ASSERT_EQUAL(1, topleft.Item(0).GetCol());
-    CPPUNIT_ASSERT_EQUAL(0, topleft.Item(0).GetRow());
-    CPPUNIT_ASSERT_EQUAL(1, bottomright.Item(0).GetCol());
-    CPPUNIT_ASSERT_EQUAL(9, bottomright.Item(0).GetRow());
+    wxArrayInt selectedCols = m_grid->GetSelectedCols();
+    CPPUNIT_ASSERT_EQUAL(1, selectedCols.Count());
+    CPPUNIT_ASSERT_EQUAL(1, selectedCols[0]);
 
     CPPUNIT_ASSERT_EQUAL(wxGrid::wxGridSelectColumns,
                          m_grid->GetSelectionMode());
