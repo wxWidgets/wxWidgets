@@ -461,6 +461,7 @@ All (GUI):
 - Support font-family/style, text-decoration in wxHtmlWindow (Blake Oleander).
 - Show ribbon tools help strings in tooltips (John Roberts).
 - Improve row/column selection modes in wxGrid (joostn).
+- Allow using wxEVT_UPDATE_UI with wxRibbonButtonBar (Emilien Kia).
 
 GTK:
 

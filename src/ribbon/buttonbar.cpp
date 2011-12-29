@@ -598,6 +598,42 @@ wxSize wxRibbonButtonBar::DoGetNextLargerSize(wxOrientation direction,
     return result;
 }
 
+void wxRibbonButtonBar::UpdateWindowUI(long flags)
+{
+    wxWindowBase::UpdateWindowUI(flags);
+
+    // don't waste time updating state of tools in a hidden toolbar
+    if ( !IsShown() )
+        return;
+
+    size_t btn_count = m_buttons.size();
+    bool rerealize = false;
+    for ( size_t btn_i = 0; btn_i < btn_count; ++btn_i )
+    {
+        wxRibbonButtonBarButtonBase& btn = *m_buttons.Item(btn_i);
+        int id = btn.id;
+
+        wxUpdateUIEvent event(id);
+        event.SetEventObject(this);
+
+        if ( ProcessWindowEvent(event) )
+        {
+            if ( event.GetSetEnabled() )
+                EnableButton(id, event.GetEnabled());
+            if ( event.GetSetChecked() )
+                ToggleButton(id, event.GetChecked());
+            if ( event.GetSetText() )
+            {
+                btn.label = event.GetText();
+                rerealize = true;
+            }
+        }
+    }
+
+    if ( rerealize )
+        Realize();
+}
+
 void wxRibbonButtonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 {
     // All painting done in main paint handler to minimise flicker

@@ -120,6 +120,7 @@ protected:
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         wxRibbonButtonBarButtonState size, wxDC& dc);
+    virtual void UpdateWindowUI(long flags);
 
     wxArrayRibbonButtonBarLayout m_layouts;
     wxArrayRibbonButtonBarButtonBase m_buttons;

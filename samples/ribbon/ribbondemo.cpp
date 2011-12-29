@@ -72,9 +72,26 @@ public:
         ID_POSITION_LEFT,
         ID_POSITION_LEFT_LABELS,
         ID_POSITION_LEFT_BOTH,
-        ID_TOGGLE_PANELS
+        ID_TOGGLE_PANELS,
+        ID_ENABLE,
+        ID_DISABLE,
+        ID_DISABLED,
+        ID_UI_ENABLE_UPDATED,
+        ID_CHECK,
+        ID_UI_CHECK_UPDATED,
+        ID_CHANGE_TEXT1,
+        ID_CHANGE_TEXT2,
+        ID_UI_CHANGE_TEXT_UPDATED
     };
 
+    void OnEnableUpdateUI(wxUpdateUIEvent& evt);
+    void OnCheckUpdateUI(wxUpdateUIEvent& evt);
+    void OnChangeTextUpdateUI(wxUpdateUIEvent& evt);
+    void OnCheck(wxRibbonButtonBarEvent& evt);
+    void OnEnable(wxRibbonButtonBarEvent& evt);
+    void OnDisable(wxRibbonButtonBarEvent& evt);
+    void OnChangeText1(wxRibbonButtonBarEvent& evt);
+    void OnChangeText2(wxRibbonButtonBarEvent& evt);
     void OnCircleButton(wxRibbonButtonBarEvent& evt);
     void OnCrossButton(wxRibbonButtonBarEvent& evt);
     void OnTriangleButton(wxRibbonButtonBarEvent& evt);
@@ -133,6 +150,9 @@ protected:
     wxColour m_default_secondary;
     wxColour m_default_tertiary;
     wxMemoryDC m_bitmap_creation_dc;
+    bool m_bEnabled;
+    bool m_bChecked;
+    wxString m_new_text;
 
     DECLARE_EVENT_TABLE()
 };
@@ -151,6 +171,14 @@ bool MyApp::OnInit()
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_ENABLE, MyFrame::OnEnable)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_DISABLE, MyFrame::OnDisable)
+EVT_UPDATE_UI(ID_UI_ENABLE_UPDATED, MyFrame::OnEnableUpdateUI)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_CHECK, MyFrame::OnCheck)
+EVT_UPDATE_UI(ID_UI_CHECK_UPDATED, MyFrame::OnCheckUpdateUI)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_CHANGE_TEXT1, MyFrame::OnChangeText1)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_CHANGE_TEXT2, MyFrame::OnChangeText2)
+EVT_UPDATE_UI(ID_UI_CHANGE_TEXT_UPDATED, MyFrame::OnChangeTextUpdateUI)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_DEFAULT_PROVIDER, MyFrame::OnDefaultProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_AUI_PROVIDER, MyFrame::OnAUIProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_MSW_PROVIDER, MyFrame::OnMSWProvider)
@@ -314,6 +342,29 @@ MyFrame::MyFrame()
             wxT("Secondary Colour"), colours_xpm);
         m_secondary_gallery = PopulateColoursPanel(secondary_panel,
             m_default_secondary, ID_SECONDARY_COLOUR);
+    }
+    {
+        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("UI Updated"), ribbon_xpm);
+        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, wxT("Enable/Disable"), ribbon_xpm);
+        wxRibbonButtonBar *bar = new wxRibbonButtonBar(panel, wxID_ANY);
+        bar->AddButton(ID_DISABLED, wxT("Disabled"), ribbon_xpm);
+        bar->AddButton(ID_ENABLE,   wxT("Enable"), ribbon_xpm);
+        bar->AddButton(ID_DISABLE,  wxT("Disable"), ribbon_xpm);
+        bar->AddButton(ID_UI_ENABLE_UPDATED, wxT("Enable UI updated"), ribbon_xpm);
+        bar->EnableButton(ID_DISABLED, false);
+        m_bEnabled = true;
+
+        panel = new wxRibbonPanel(page, wxID_ANY, wxT("Toggle"), ribbon_xpm);
+        bar = new wxRibbonButtonBar(panel, wxID_ANY);
+        bar->AddButton(ID_CHECK, wxT("Toggle"), ribbon_xpm);
+        bar->AddToggleButton(ID_UI_CHECK_UPDATED, wxT("Toggled UI updated"), ribbon_xpm);
+        m_bChecked = true;
+
+        panel = new wxRibbonPanel(page, wxID_ANY, wxT("Change text"), ribbon_xpm);
+        bar = new wxRibbonButtonBar(panel, wxID_ANY);
+        bar->AddButton(ID_CHANGE_TEXT1, wxT("One"), ribbon_xpm);
+        bar->AddButton(ID_CHANGE_TEXT2, wxT("Two"), ribbon_xpm);
+        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, wxT("Zero"), ribbon_xpm);
     }
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Empty Page"), empty_xpm);
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Another Page"), empty_xpm);
@@ -504,6 +555,50 @@ void MyFrame::ResetGalleryArtProviders()
     {
         delete m_secondary_gallery->GetArtProvider();
         m_secondary_gallery->SetArtProvider(m_ribbon->GetArtProvider());
+    }
+}
+
+void MyFrame::OnChangeText1(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_new_text = wxT("One");
+}
+
+void MyFrame::OnChangeText2(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_new_text = wxT("Two");
+}
+
+void MyFrame::OnEnable(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_bEnabled = true;
+}
+
+void MyFrame::OnDisable(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_bEnabled = false;
+}
+
+void MyFrame::OnCheck(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_bChecked = !m_bChecked;
+}
+
+void MyFrame::OnEnableUpdateUI(wxUpdateUIEvent& evt)
+{
+    evt.Enable(m_bEnabled);
+}
+
+void MyFrame::OnCheckUpdateUI(wxUpdateUIEvent& evt)
+{
+    evt.Check(m_bChecked);
+}
+
+void MyFrame::OnChangeTextUpdateUI(wxUpdateUIEvent& evt)
+{
+    if ( !m_new_text.IsEmpty() )
+    {
+        evt.SetText(m_new_text);
+        m_new_text = wxT("");
     }
 }
 
