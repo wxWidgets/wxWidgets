@@ -42,10 +42,10 @@ public:
 
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
-    CGColorRef GetPixel() const { return m_cgColour; };
+    CGColorRef GetPixel() const { return m_cgColour; }
 
-    CGColorRef GetCGColor() const { return m_cgColour; };
-    CGColorRef CreateCGColor() const { return wxCFRetain( (CGColorRef)m_cgColour ); };
+    CGColorRef GetCGColor() const { return m_cgColour; }
+    CGColorRef CreateCGColor() const { return wxCFRetain( (CGColorRef)m_cgColour ); }
 
 #if wxOSX_USE_COCOA_OR_CARBON
     void GetRGBColor( RGBColor *col ) const;

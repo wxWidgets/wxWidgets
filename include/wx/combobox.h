@@ -53,8 +53,8 @@ public:
     virtual int GetSelection() const = 0;
     virtual void GetSelection(long *from, long *to) const = 0;
 
-    virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); };
-    virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); };
+    virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); }
+    virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); }
 
     // may return value different from GetSelection() when the combobox
     // dropdown is shown and the user selected, but not yet accepted, a value

@@ -81,7 +81,7 @@ public:
 #if wxUSE_MENUS
     // return the pointer to the current window menu or NULL if we don't have
     // because of wxFRAME_NO_WINDOW_MENU style
-    wxMenu* GetWindowMenu() const { return m_windowMenu; };
+    wxMenu* GetWindowMenu() const { return m_windowMenu; }
 
     // use the given menu instead of the default window menu
     //

@@ -118,7 +118,7 @@ public:
                                  );
 
     inline HWND                   GetScrollBarHorz(void) const {return m_hWndScrollBarHorz;}
-    inline HWND                   GetScrollBarVert(void) const {return m_hWndScrollBarVert;};
+    inline HWND                   GetScrollBarVert(void) const {return m_hWndScrollBarVert;}
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget(wxDropTarget* pDropTarget);
 #endif // wxUSE_DRAG_AND_DROP
@@ -182,7 +182,7 @@ public:
                                     );
 
     // PM only: true if this control is part of the main control
-    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; };
+    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; }
 
     // translate wxWidgets style flags for this control into the PM style
     // and optional extended style for the corresponding native control

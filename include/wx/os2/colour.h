@@ -49,7 +49,7 @@ public:
 
     bool operator != (const wxColour& rColour) const { return !(*this == rColour); }
 
-    WXCOLORREF GetPixel(void) const { return m_vPixel; };
+    WXCOLORREF GetPixel(void) const { return m_vPixel; }
 
 
 private:

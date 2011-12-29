@@ -32,7 +32,7 @@ class WXDLLIMPEXP_CORE wxWebKitCtrl : public wxControl
 public:
     DECLARE_DYNAMIC_CLASS(wxWebKitCtrl)
 
-    wxWebKitCtrl() {};
+    wxWebKitCtrl() {}
     wxWebKitCtrl(wxWindow *parent,
                     wxWindowID winID,
                     const wxString& strURL,
@@ -42,7 +42,7 @@ public:
                     const wxString& name = wxWebKitCtrlNameStr)
     {
         Create(parent, winID, strURL, pos, size, style, validator, name);
-    };
+    }
     bool Create(wxWindow *parent,
                 wxWindowID winID,
                 const wxString& strURL,

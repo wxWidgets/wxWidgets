@@ -22,7 +22,7 @@ public:
 * Public interface
     */
 
-    wxJoystick(int joystick = wxJOYSTICK1) { m_joystick = joystick; };
+    wxJoystick(int joystick = wxJOYSTICK1) { m_joystick = joystick; }
 
     // Attributes
     ////////////////////////////////////////////////////////////////////////////

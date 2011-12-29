@@ -143,7 +143,7 @@ public:
 
 #ifdef __WXUNIVERSAL__
     // resolve the conflict with wxWindowUniv::SetCurrent()
-    virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); };
+    virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); }
 #endif
 
 protected:

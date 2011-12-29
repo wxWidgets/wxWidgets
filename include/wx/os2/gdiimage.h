@@ -54,7 +54,7 @@ public:
         { m_nWidth = nW; m_nHeight = nH; }
 
     // free the ressources we allocated
-    virtual void Free() { };
+    virtual void Free() { }
 
     // for compatibility, the member fields are public
 

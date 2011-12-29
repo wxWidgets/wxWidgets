@@ -104,20 +104,20 @@ public:
     void SetJoin(wxPenJoin join);
     void SetCap(wxPenCap cap);
 
-    wxColour& GetColour() const { return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); };
-    int GetWidth() const { return (M_PENDATA ? M_PENDATA->m_width : 0); };
-    wxPenStyle GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
-    wxPenJoin GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
-    wxPenCap GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
+    wxColour& GetColour() const { return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); }
+    int GetWidth() const { return (M_PENDATA ? M_PENDATA->m_width : 0); }
+    wxPenStyle GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); }
+    wxPenJoin GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); }
+    wxPenCap GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); }
     int GetDashes(wxDash **ptr) const
     {
         *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : NULL);
         return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
     }
-    wxDash* GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : NULL); };
-    inline int GetDashCount() const { return (M_PENDATA ? M_PENDATA->m_nbDash : 0); };
+    wxDash* GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : NULL); }
+    inline int GetDashCount() const { return (M_PENDATA ? M_PENDATA->m_nbDash : 0); }
 
-    inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : NULL); };
+    inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : NULL); }
 
     // Internal
     bool RealizeResource();

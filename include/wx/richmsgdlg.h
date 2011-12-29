@@ -45,7 +45,7 @@ public:
 
     wxString GetDetailedText() const { return m_detailedText; }
 
-    virtual bool IsCheckBoxChecked() const { return m_checkBoxValue; };
+    virtual bool IsCheckBoxChecked() const { return m_checkBoxValue; }
 
 protected:
     const wxString m_detailsExpanderCollapsedLabel;

@@ -172,7 +172,7 @@ class WXDLLIMPEXP_CORE wxMetafileDataObject : public wxDataObject
 {
 public:
     // ctors
-    wxMetafileDataObject() { m_width = 0; m_height = 0; };
+    wxMetafileDataObject() { m_width = 0; m_height = 0; }
     wxMetafileDataObject(const wxMetafile& metafile, int width = 0,int height = 0)
                         :m_metafile(metafile)
                         ,m_width(width)

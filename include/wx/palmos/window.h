@@ -139,7 +139,7 @@ public:
     wxWindow *FindItemByWinHandle(WXWINHANDLE handle, bool controlOnly = false) const;
 
     // Palm only: true if this control is part of the main control
-    virtual bool ContainsWinHandle(WXWINHANDLE WXUNUSED(handle)) const { return false; };
+    virtual bool ContainsWinHandle(WXWINHANDLE WXUNUSED(handle)) const { return false; }
 
     // translate wxWidgets style flags for this control into the Windows style
     // and optional extended style for the corresponding native control

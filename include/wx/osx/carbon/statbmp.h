@@ -39,8 +39,8 @@ class WXDLLIMPEXP_CORE wxStaticBitmap: public wxStaticBitmapBase
 
   virtual void SetBitmap(const wxBitmap& bitmap);
 
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+  virtual void Command(wxCommandEvent& WXUNUSED(event)) {}
+  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {}
   void         OnPaint( wxPaintEvent &event ) ;
 
   wxBitmap GetBitmap() const { return m_bitmap; }

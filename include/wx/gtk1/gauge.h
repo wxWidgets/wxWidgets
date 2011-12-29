@@ -45,8 +45,8 @@ public:
     void SetBezelFace( int WXUNUSED(w) ) { }
     void SetRange( int r );
     void SetValue( int pos );
-    int GetShadowWidth() const { return 0; };
-    int GetBezelFace() const { return 0; };
+    int GetShadowWidth() const { return 0; }
+    int GetBezelFace() const { return 0; }
     int GetRange() const;
     int GetValue() const;
 

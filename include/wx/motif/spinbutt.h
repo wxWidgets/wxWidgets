@@ -53,7 +53,7 @@ public:
 
     // Implementation
     virtual void Command(wxCommandEvent& event)
-        { (void)ProcessCommand(event); };
+        { (void)ProcessCommand(event); }
     virtual void ChangeFont(bool keepOriginalSize = true);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();

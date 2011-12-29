@@ -966,7 +966,7 @@ public:
     }
 
     /** Gets a unsigned number identifying this list. */
-    wxPGChoicesId GetId() const { return (wxPGChoicesId) m_data; };
+    wxPGChoicesId GetId() const { return (wxPGChoicesId) m_data; }
 
     const wxString& GetLabel( unsigned int ind ) const
     {

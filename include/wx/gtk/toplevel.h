@@ -55,7 +55,7 @@ public:
 
     virtual void ShowWithoutActivating();
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual bool IsFullScreen() const { return m_fsIsShowing; };
+    virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 

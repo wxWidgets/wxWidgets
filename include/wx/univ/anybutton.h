@@ -20,7 +20,7 @@ class WXDLLIMPEXP_CORE wxAnyButton : public wxAnyButtonBase
 public:
     wxAnyButton() {}
 
-    virtual ~wxAnyButton() {};
+    virtual ~wxAnyButton() {}
 
 protected:
     // choose the default border for this window

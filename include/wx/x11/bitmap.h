@@ -117,7 +117,7 @@ public:
 
     wxPalette *GetPalette() const;
     wxPalette *GetColourMap() const
-        { return GetPalette(); };
+        { return GetPalette(); }
     virtual void SetPalette(const wxPalette& palette);
 
     // implementation

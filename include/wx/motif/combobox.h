@@ -106,8 +106,8 @@ public:
     WXWidget GetMainWidget() const { return m_mainWidget; }
 
    //Copied from wxComboBoxBase because for wxMOTIF wxComboBox does not inherit from it.
-    virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); };
-    virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); };
+    virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); }
+    virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); }
 
 protected:
     virtual wxSize DoGetBestSize() const;

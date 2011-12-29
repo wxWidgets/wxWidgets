@@ -25,7 +25,7 @@ public:
     SetName(wxT("PNG bitmap file"));
     SetExtension(wxT("bmp"));
     SetType(wxBITMAP_TYPE_PNG);
-  };
+  }
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
       int desiredWidth, int desiredHeight);

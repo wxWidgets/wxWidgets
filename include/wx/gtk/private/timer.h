@@ -21,7 +21,7 @@
 class WXDLLIMPEXP_CORE wxGTKTimerImpl : public wxTimerImpl
 {
 public:
-    wxGTKTimerImpl(wxTimer* timer) : wxTimerImpl(timer) { m_sourceId = 0; };
+    wxGTKTimerImpl(wxTimer* timer) : wxTimerImpl(timer) { m_sourceId = 0; }
 
     virtual bool Start( int millisecs = -1, bool oneShot = false );
     virtual void Stop();

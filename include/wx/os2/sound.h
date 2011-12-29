@@ -29,7 +29,7 @@ public:
   // Create from data
   bool Create(size_t size, const void* data);
 
-  bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
+  bool  IsOk() const { return (m_waveData ? TRUE : FALSE); }
 
 protected:
   bool  Free();

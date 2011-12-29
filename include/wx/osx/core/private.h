@@ -680,10 +680,10 @@ public :
 
     virtual ~wxComboWidgetImpl() {}
 
-    virtual int GetSelectedItem() const { return -1; };
-    virtual void SetSelectedItem(int WXUNUSED(item)) {};
+    virtual int GetSelectedItem() const { return -1; }
+    virtual void SetSelectedItem(int WXUNUSED(item)) {}
 
-    virtual int GetNumberOfItems() const { return -1; };
+    virtual int GetNumberOfItems() const { return -1; }
 
     virtual void InsertItem(int WXUNUSED(pos), const wxString& WXUNUSED(item)) {}
 

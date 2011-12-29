@@ -93,9 +93,9 @@ public:
 
     // TODO: should this go into a wxFrameworkSettings class perhaps?
     static void UseNativeStatusBar(bool bUseNative)
-        { m_bUseNativeStatusBar = bUseNative; };
+        { m_bUseNativeStatusBar = bUseNative; }
     static bool UsesNativeStatusBar()
-        { return m_bUseNativeStatusBar; };
+        { return m_bUseNativeStatusBar; }
 #endif // wxUSE_STATUSBAR
 
     WXHMENU GetWinMenu() const { return m_hMenu; }

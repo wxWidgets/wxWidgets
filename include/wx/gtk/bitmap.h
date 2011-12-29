@@ -94,7 +94,7 @@ public:
 #if wxUSE_PALETTE
     wxPalette *GetPalette() const;
     void SetPalette(const wxPalette& palette);
-    wxPalette *GetColourMap() const { return GetPalette(); };
+    wxPalette *GetColourMap() const { return GetPalette(); }
 #endif // wxUSE_PALETTE
 
     static void InitStandardHandlers();

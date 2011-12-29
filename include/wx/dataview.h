@@ -1210,7 +1210,7 @@ public:
     virtual bool HasDefaultCompare() const
         { return true; }
     virtual unsigned int GetColumnCount() const
-        { return 1; };
+        { return 1; }
     virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const
         { return wxT("wxDataViewIconText"); }
 

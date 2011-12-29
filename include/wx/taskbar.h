@@ -32,7 +32,7 @@ public:
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
     static bool IsAvailable();
 #else
-    static bool IsAvailable() { return true; };
+    static bool IsAvailable() { return true; }
 #endif
 
     // Operations:
