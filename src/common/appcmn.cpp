@@ -349,7 +349,10 @@ bool wxAppBase::ProcessIdle()
     while (node)
     {
         wxWindow* win = node->GetData();
-        if (win->SendIdleEvents(event))
+
+        // Don't send idle events to the windows that are about to be destroyed
+        // anyhow, this is wasteful and unexpected.
+        if ( !wxPendingDelete.Member(win) && win->SendIdleEvents(event) )
             needMore = true;
         node = node->GetNext();
     }

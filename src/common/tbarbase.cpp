@@ -701,12 +701,6 @@ void wxToolBarBase::UpdateWindowUI(long flags)
     if ( !IsShown() )
         return;
 
-    // There is no sense in updating the toolbar UI
-    // if the parent window is about to get destroyed
-    wxWindow *tlw = wxGetTopLevelParent( this );
-    if (tlw && wxPendingDelete.Member( tlw ))
-        return;
-
     wxEvtHandler* evtHandler = GetEventHandler() ;
 
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();

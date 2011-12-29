@@ -598,14 +598,6 @@ wxMenuItem* wxMenuBase::FindItemByPosition(size_t position) const
 void wxMenuBase::UpdateUI(wxEvtHandler* source)
 {
     wxWindow * const win = GetWindow();
-    if ( win )
-    {
-        // Don't update menus if the parent
-        // frame is about to get deleted
-        wxWindow *tlw = wxGetTopLevelParent(win);
-        if (tlw && wxPendingDelete.Member(tlw))
-            return;
-    }
 
     if ( !source && win )
         source = win->GetEventHandler();
