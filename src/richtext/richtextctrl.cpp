@@ -4142,6 +4142,9 @@ bool wxRichTextCtrl::SetFocusObject(wxRichTextParagraphLayoutBox* obj, bool setC
     wxRichTextParagraphLayoutBox* oldContainer = GetFocusObject();
     bool changingContainer = (m_focusObject != obj);
 
+    if (changingContainer && HasSelection())
+        SelectNone();
+
     m_focusObject = obj;
 
     if (!obj)
