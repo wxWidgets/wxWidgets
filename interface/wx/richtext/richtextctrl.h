@@ -1537,6 +1537,17 @@ public:
     */
     bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = NULL);
 
+    /**
+        Shows the given context menu, optionally adding appropriate property-editing commands for the current position in the object hierarchy.
+    */
+    virtual bool ShowContextMenu(wxMenu* menu, const wxPoint& pt, bool addPropertyCommands);
+
+    /**
+        Prepares the context menu, optionally adding appropriate property-editing commands.
+        Returns the number of property commands added.
+    */
+    virtual int PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool addPropertyCommands);
+
 // Command handlers
 
     /**

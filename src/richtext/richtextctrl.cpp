@@ -3200,45 +3200,97 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
         return;
     }
 
+    ShowContextMenu(m_contextMenu, event.GetPosition());
+}
+
+// Prepares the context menu, adding appropriate property-editing commands.
+// Returns the number of property commands added.
+int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool addPropertyCommands)
+{
     wxClientDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
-    long position = 0;
-    wxPoint pt = event.GetPosition();
-    wxPoint logicalPt = GetLogicalPoint(ScreenToClient(pt));
-    wxRichTextObject* hitObj = NULL;
-    wxRichTextObject* contextObj = NULL;
-    int hit = GetFocusObject()->HitTest(dc, logicalPt, position, & hitObj, & contextObj);
-
     m_contextMenuPropertiesInfo.Clear();
 
-    if (hit == wxRICHTEXT_HITTEST_ON || hit == wxRICHTEXT_HITTEST_BEFORE || hit == wxRICHTEXT_HITTEST_AFTER)
+    long position = 0;
+    wxRichTextObject* hitObj = NULL;
+    wxRichTextObject* contextObj = NULL;
+    if (pt != wxDefaultPosition)
     {
-        wxRichTextParagraphLayoutBox* actualContainer = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
-        if (hitObj && actualContainer)
-        {
-            if (actualContainer->AcceptsFocus())
-            {
-                SetFocusObject(actualContainer, false /* don't set caret position yet */);
-                SetCaretPositionAfterClick(actualContainer, position, hit);
-            }
+        wxPoint logicalPt = GetLogicalPoint(ScreenToClient(pt));
+        int hit = GetBuffer().HitTest(dc, logicalPt, position, & hitObj, & contextObj);
 
-            m_contextMenuPropertiesInfo.AddItems(actualContainer, hitObj);
+        if (hit == wxRICHTEXT_HITTEST_ON || hit == wxRICHTEXT_HITTEST_BEFORE || hit == wxRICHTEXT_HITTEST_AFTER)
+        {
+            wxRichTextParagraphLayoutBox* actualContainer = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
+            if (hitObj && actualContainer)
+            {
+                if (actualContainer->AcceptsFocus())
+                {
+                    SetFocusObject(actualContainer, false /* don't set caret position yet */);
+                    SetCaretPositionAfterClick(actualContainer, position, hit);
+                }
+
+                if (addPropertyCommands)
+                    m_contextMenuPropertiesInfo.AddItems(actualContainer, hitObj);
+            }
+            else
+            {
+                if (addPropertyCommands)
+                    m_contextMenuPropertiesInfo.AddItems(GetFocusObject(), NULL);
+            }
         }
         else
-            m_contextMenuPropertiesInfo.AddItems(GetFocusObject(), NULL);
+        {
+            if (addPropertyCommands)
+                m_contextMenuPropertiesInfo.AddItems(GetFocusObject(), NULL);
+        }
     }
     else
     {
-        m_contextMenuPropertiesInfo.AddItems(GetFocusObject(), NULL);
+        // Invoked from the keyboard, so don't set the caret position and don't use the event
+        // position
+        hitObj = GetFocusObject()->GetLeafObjectAtPosition(m_caretPosition+1);
+        if (hitObj)
+            contextObj = hitObj->GetParentContainer();
+        else
+            contextObj = GetFocusObject();
+
+        wxRichTextParagraphLayoutBox* actualContainer = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
+        if (hitObj && actualContainer)
+        {
+            if (addPropertyCommands)
+                m_contextMenuPropertiesInfo.AddItems(actualContainer, hitObj);
+        }
+        else
+        {
+            if (addPropertyCommands)
+                m_contextMenuPropertiesInfo.AddItems(GetFocusObject(), NULL);
+        }
     }
 
-    if (m_contextMenu)
+    if (menu)
     {
-        m_contextMenuPropertiesInfo.AddMenuItems(m_contextMenu);
-        PopupMenu(m_contextMenu);
+        if (addPropertyCommands)
+            m_contextMenuPropertiesInfo.AddMenuItems(menu);
+        return m_contextMenuPropertiesInfo.GetCount();
     }
+    else
+        return 0;
+}
+
+// Shows the context menu, adding appropriate property-editing commands
+bool wxRichTextCtrl::ShowContextMenu(wxMenu* menu, const wxPoint& pt, bool addPropertyCommands)
+{
+    if (menu)
+    {
+        PrepareContextMenu(menu, pt, addPropertyCommands);
+        PopupMenu(menu);
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxRichTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
@@ -4279,12 +4331,11 @@ bool wxRichTextContextMenuPropertiesInfo::AddItem(const wxString& label, wxRichT
 int wxRichTextContextMenuPropertiesInfo::AddMenuItems(wxMenu* menu, int startCmd) const
 {
     wxMenuItem* item = menu->FindItem(startCmd);
-    // If none of the standard properties identifiers are in the menu, assume it's
-    // a custom menu without properties commands, and don't add them.
-    if (item)
+    // If none of the standard properties identifiers are in the menu, add them if necessary.
+    // If no items to add, just set the text to something generic
+    if (GetCount() == 0)
     {
-        // If no items, to add just set the text to something generic
-        if (GetCount() == 0)
+        if (item)
         {
             menu->SetLabel(startCmd, _("&Properties"));
 
@@ -4298,48 +4349,57 @@ int wxRichTextContextMenuPropertiesInfo::AddMenuItems(wxMenu* menu, int startCmd
                 }
             }
         }
-        else
+    }
+    else
+    {
+        int i;
+        int pos = -1;
+        // Find the position of the first properties item
+        for (i = 0; i < (int) menu->GetMenuItemCount(); i++)
         {
-            int i;
-            int pos = -1;
-            // Find the position of the first properties item
-            for (i = 0; i < (int) menu->GetMenuItemCount(); i++)
+            wxMenuItem* item = menu->FindItemByPosition(i);
+            if (item && item->GetId() == startCmd)
             {
-                wxMenuItem* item = menu->FindItemByPosition(i);
-                if (item && item->GetId() == startCmd)
+                pos = i;
+                break;
+            }
+        }
+
+        if (pos != -1)
+        {
+            int insertBefore = pos+1;
+            for (i = startCmd; i < startCmd+GetCount(); i++)
+            {
+                if (menu->FindItem(i))
                 {
-                    pos = i;
-                    break;
+                    menu->SetLabel(i, m_labels[i - startCmd]);
                 }
+                else
+                {
+                    if (insertBefore >= (int) menu->GetMenuItemCount())
+                        menu->Append(i, m_labels[i - startCmd]);
+                    else
+                        menu->Insert(insertBefore, i, m_labels[i - startCmd]);
+                }
+                insertBefore ++;
             }
 
-            if (pos != -1)
+            // Delete any old items still left on the menu
+            for (i = startCmd + GetCount(); i < startCmd+3; i++)
             {
-                int insertBefore = pos+1;
-                for (i = startCmd; i < startCmd+GetCount(); i++)
+                if (menu->FindItem(i))
                 {
-                    if (menu->FindItem(i))
-                    {
-                        menu->SetLabel(i, m_labels[i - startCmd]);
-                    }
-                    else
-                    {
-                        if (insertBefore >= (int) menu->GetMenuItemCount())
-                            menu->Append(i, m_labels[i - startCmd]);
-                        else
-                            menu->Insert(insertBefore, i, m_labels[i - startCmd]);
-                    }
-                    insertBefore ++;
+                    menu->Delete(i);
                 }
-
-                // Delete any old items still left on the menu
-                for (i = startCmd + GetCount(); i < startCmd+3; i++)
-                {
-                    if (menu->FindItem(i))
-                    {
-                        menu->Delete(i);
-                    }
-                }
+            }
+        }
+        else
+        {
+            // No existing property identifiers were found, so append to the end of the menu.
+            menu->AppendSeparator();
+            for (i = startCmd; i < startCmd+GetCount(); i++)
+            {
+                menu->Append(i, m_labels[i - startCmd]);
             }
         }
     }

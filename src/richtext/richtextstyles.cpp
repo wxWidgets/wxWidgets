@@ -1209,8 +1209,8 @@ END_EVENT_TABLE()
 bool wxRichTextStyleComboPopup::Create( wxWindow* parent )
 {
     int borderStyle = GetDefaultBorder();
-    if (borderStyle == wxBORDER_SUNKEN)
-        borderStyle = wxBORDER_SIMPLE;
+    if (borderStyle == wxBORDER_SUNKEN || borderStyle == wxBORDER_NONE)
+        borderStyle = wxBORDER_THEME;
 
     return wxRichTextStyleListBox::Create(parent, wxID_ANY,
                                   wxPoint(0,0), wxDefaultSize,
