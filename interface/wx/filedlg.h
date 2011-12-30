@@ -17,6 +17,8 @@ enum
     wxFD_PREVIEW           = 0x0100
 };
 
+#define wxFD_DEFAULT_STYLE      wxFD_OPEN
+
 /**
     @class wxFileDialog
 

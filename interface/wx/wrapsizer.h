@@ -6,6 +6,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// flags for wxWrapSizer
+enum
+{
+    wxEXTEND_LAST_ON_EACH_LINE,
+    wxREMOVE_LEADING_SPACES,
+    wxWRAPSIZER_DEFAULT_FLAGS
+};
+
 /**
     @class wxWrapSizer
 

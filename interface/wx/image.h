@@ -350,6 +350,9 @@ const unsigned char wxIMAGE_ALPHA_TRANSPARENT = 0;
 */
 const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 
+const unsigned char wxIMAGE_ALPHA_THRESHOLD = 0x80;
+
+
 /**
     @class wxImage
 

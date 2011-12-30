@@ -52,6 +52,8 @@
 #define wxTE_RICH2          0x8000
 
 
+#define wxTEXT_TYPE_ANY     0
+
 
 /**
    wxTextCoord is a line or row number

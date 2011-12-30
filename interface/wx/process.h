@@ -6,41 +6,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-/**
-    Signal constants used by wxProcess.
-*/
-enum wxSignal
-{
-    wxSIGNONE = 0,  //!< verify if the process exists under Unix
-    wxSIGHUP,
-    wxSIGINT,
-    wxSIGQUIT,
-    wxSIGILL,
-    wxSIGTRAP,
-    wxSIGABRT,
-    wxSIGEMT,
-    wxSIGFPE,
-    wxSIGKILL,      //!< forcefully kill, dangerous!
-    wxSIGBUS,
-    wxSIGSEGV,
-    wxSIGSYS,
-    wxSIGPIPE,
-    wxSIGALRM,
-    wxSIGTERM       //!< terminate the process gently
-};
-
-/**
-    Return values for wxProcess::Kill.
-*/
-enum wxKillError
-{
-    wxKILL_OK,              //!< no error
-    wxKILL_BAD_SIGNAL,      //!< no such signal
-    wxKILL_ACCESS_DENIED,   //!< permission denied
-    wxKILL_NO_PROCESS,      //!< no such process
-    wxKILL_ERROR            //!< another, unspecified error
-};
-
 
 /**
     @class wxProcess

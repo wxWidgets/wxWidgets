@@ -7,6 +7,56 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Signal constants used by wxProcess.
+*/
+enum wxSignal
+{
+    wxSIGNONE = 0,  //!< verify if the process exists under Unix
+    wxSIGHUP,
+    wxSIGINT,
+    wxSIGQUIT,
+    wxSIGILL,
+    wxSIGTRAP,
+    wxSIGABRT,
+    wxSIGEMT,
+    wxSIGFPE,
+    wxSIGKILL,      //!< forcefully kill, dangerous!
+    wxSIGBUS,
+    wxSIGSEGV,
+    wxSIGSYS,
+    wxSIGPIPE,
+    wxSIGALRM,
+    wxSIGTERM       //!< terminate the process gently
+};
+
+/**
+    Return values for wxProcess::Kill.
+*/
+enum wxKillError
+{
+    wxKILL_OK,              //!< no error
+    wxKILL_BAD_SIGNAL,      //!< no such signal
+    wxKILL_ACCESS_DENIED,   //!< permission denied
+    wxKILL_NO_PROCESS,      //!< no such process
+    wxKILL_ERROR            //!< another, unspecified error
+};
+
+enum wxKillFlags
+{
+    wxKILL_NOCHILDREN = 0,  //!< don't kill children
+    wxKILL_CHILDREN = 1     //!< kill children
+};
+
+enum wxShutdownFlags
+{
+    wxSHUTDOWN_FORCE    = 1, //!< can be combined with other flags (MSW-only)
+    wxSHUTDOWN_POWEROFF = 2, //!< power off the computer
+    wxSHUTDOWN_REBOOT   = 4, //!< shutdown and reboot
+    wxSHUTDOWN_LOGOFF   = 8  //!< close session (currently MSW-only)
+};
+
+
+/**
     @class wxWindowDisabler
 
     This class disables all windows of the application (may be with the
@@ -522,6 +572,22 @@ void wxQsort(void* pbase, size_t total_elems,
     @header{wx/utils.h}
 */
 void wxSetDisplayName(const wxString& displayName);
+
+
+/**
+   flags for wxStripMenuCodes
+*/
+enum
+{
+    // strip '&' characters
+    wxStrip_Mnemonics = 1,
+
+    // strip everything after '\t'
+    wxStrip_Accel = 2,
+
+    // strip everything (this is the default)
+    wxStrip_All = wxStrip_Mnemonics | wxStrip_Accel
+};
 
 /**
     Strips any menu codes from @a str and returns the result.

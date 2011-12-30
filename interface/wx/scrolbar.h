@@ -240,5 +240,10 @@ public:
         @see GetThumbPosition()
     */
     virtual void SetThumbPosition(int viewStart);
+
+    /**
+       Returns @true for scrollbars that have the vertical style set.
+    */
+    bool IsVertical() const;
 };
 

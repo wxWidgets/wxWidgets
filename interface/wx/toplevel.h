@@ -34,6 +34,14 @@ enum
                           wxFULLSCREEN_NOCAPTION
 };
 
+#define wxDEFAULT_FRAME_STYLE (wxSYSTEM_MENU |          \
+                               wxRESIZE_BORDER |        \
+                               wxMINIMIZE_BOX |         \
+                               wxMAXIMIZE_BOX |         \
+                               wxCLOSE_BOX |            \
+                               wxCAPTION |              \
+                               wxCLIP_CHILDREN)
+
 /**
     @class wxTopLevelWindow
 
