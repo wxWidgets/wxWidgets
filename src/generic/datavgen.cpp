@@ -712,6 +712,8 @@ private:
 
     wxDataViewColumn *FindColumnForEditing(const wxDataViewItem& item, wxDataViewCellMode mode);
 
+    bool IsCellEditableInMode(const wxDataViewItem& item, const wxDataViewColumn *col, wxDataViewCellMode mode) const;
+
     void DrawCellBackground( wxDataViewRenderer* cell, wxDC& dc, const wxRect& rect );
 
 private:
@@ -1023,9 +1025,6 @@ bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& WXUNUSED(cell),
                                               unsigned int col,
                                               const wxMouseEvent *mouseEvent)
 {
-    if ( !model->IsEnabled(item, col) )
-        return false;
-
     if ( mouseEvent )
     {
         // only react to clicks directly on the checkbox, not elsewhere in the same cell:
@@ -2057,7 +2056,7 @@ wxDataViewMainWindow::StartEditing(const wxDataViewItem& item,
                                    const wxDataViewColumn* col)
 {
     wxDataViewRenderer* renderer = col->GetRenderer();
-    if (renderer->GetMode() != wxDATAVIEW_CELL_EDITABLE)
+    if ( !IsCellEditableInMode(item, col, wxDATAVIEW_CELL_EDITABLE) )
         return;
 
     const wxRect itemRect = GetItemRect(item, col);
@@ -3413,7 +3412,7 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
     wxDataViewColumn *candidate = m_currentCol;
 
     if ( candidate &&
-         candidate->GetRenderer()->GetMode() != mode &&
+         !IsCellEditableInMode(item, candidate, mode) &&
          !m_currentColSetByKeyboard )
     {
         // If current column was set by mouse to something not editable (in
@@ -3437,7 +3436,7 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
             if ( c->IsHidden() )
                 continue;
 
-            if ( c->GetRenderer()->GetMode() == mode )
+            if ( IsCellEditableInMode(item, c, mode) )
             {
                 candidate = c;
                 break;
@@ -3458,10 +3457,23 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
     if ( !candidate )
        return NULL;
 
-   if ( candidate->GetRenderer()->GetMode() != mode )
+   if ( !IsCellEditableInMode(item, candidate, mode) )
        return NULL;
 
    return candidate;
+}
+
+bool wxDataViewMainWindow::IsCellEditableInMode(const wxDataViewItem& item,
+                                                const wxDataViewColumn *col,
+                                                wxDataViewCellMode mode) const
+{
+    if ( col->GetRenderer()->GetMode() != mode )
+        return false;
+
+    if ( !GetModel()->IsEnabled(item, col->GetModelColumn()) )
+        return false;
+
+    return true;
 }
 
 void wxDataViewMainWindow::OnCharHook(wxKeyEvent& event)
@@ -4062,7 +4074,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         if (m_lastOnSame && !ignore_other_columns)
         {
             if ((col == m_currentCol) && (current == m_currentRow) &&
-                (cell->GetMode() & wxDATAVIEW_CELL_EDITABLE) )
+                IsCellEditableInMode(item, col, wxDATAVIEW_CELL_EDITABLE) )
             {
                 m_renameTimer->Start( 100, true );
             }
@@ -4181,7 +4193,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                         (current == oldCurrentRow)) && oldWasSelected;
 
         // Call ActivateCell() after everything else as under GTK+
-        if (cell->GetMode() & wxDATAVIEW_CELL_ACTIVATABLE)
+        if ( IsCellEditableInMode(item, col, wxDATAVIEW_CELL_ACTIVATABLE) )
         {
             // notify cell about click
             cell->PrepareForItem(model, item, col->GetModelColumn());
