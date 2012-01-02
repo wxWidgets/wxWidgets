@@ -260,13 +260,20 @@ def main(scriptName, args):
         # developer.  TODO: there should be a command line option to set
         # the SDK...
         if sys.platform.startswith("darwin"):
+            sdks = [
+                "/Developer/SDKs/MacOSX10.5.sdk",
+                "/Developer/SDKs/MacOSX10.6.sdk",
+                "/Developer/SDKs/MacOSX10.7.sdk",
+            ]
             if not options.osx_cocoa:
-                wxpy_configure_opts.append(
-                    "--with-macosx-sdk=/Developer/SDKs/MacOSX10.4u.sdk")
-            else:
-                wxpy_configure_opts.append(
-                    "--with-macosx-sdk=/Developer/SDKs/MacOSX10.5.sdk")
-
+                sdks.insert(0, "/Developer/SDKs/MacOSX10.4u.sdk")
+            
+            # use the lowest available sdk
+            for sdk in sdks:
+                if os.path.exists(sdk):
+                    wxpy_configure_opts.append(
+                        "--with-macosx-sdk=%s" % sdk)
+                    break
 
         if not options.mac_framework:
             if installDir and not prefixDir:
