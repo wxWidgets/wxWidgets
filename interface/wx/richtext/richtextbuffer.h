@@ -1217,6 +1217,21 @@ public:
     wxTextAttrDimension& GetHeight() { return m_size.m_height; }
     const wxTextAttrDimension& GetHeight() const { return m_size.m_height; }
 
+    /**
+        Returns the box style name.
+    */
+    const wxString& GetBoxStyleName() const { return m_boxStyleName; }
+
+    /**
+        Sets the box style name.
+    */
+    void SetBoxStyleName(const wxString& name) { m_boxStyleName = name; AddFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME); }
+
+    /**
+        Returns @true if the box style name is present.
+    */
+    bool HasBoxStyleName() const { return HasFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME); }
+
 public:
 
     int                             m_flags;
@@ -1234,6 +1249,7 @@ public:
     wxTextBoxAttrClearStyle         m_clearMode;
     wxTextBoxAttrCollapseMode       m_collapseMode;
     wxTextBoxAttrVerticalAlignment  m_verticalAlignment;
+    wxString                        m_boxStyleName;
 };
 
 /**

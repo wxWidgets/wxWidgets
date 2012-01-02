@@ -273,7 +273,8 @@ enum wxTextBoxAttrFlags
     wxTEXT_BOX_ATTR_FLOAT                   = 0x00000001,
     wxTEXT_BOX_ATTR_CLEAR                   = 0x00000002,
     wxTEXT_BOX_ATTR_COLLAPSE_BORDERS        = 0x00000004,
-    wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT      = 0x00000008
+    wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT      = 0x00000008,
+    wxTEXT_BOX_ATTR_BOX_STYLE_NAME          = 0x00000010
 };
 
 /**
@@ -1332,6 +1333,21 @@ public:
     wxTextAttrDimension& GetHeight() { return m_size.m_height; }
     const wxTextAttrDimension& GetHeight() const { return m_size.m_height; }
 
+    /**
+        Returns the box style name.
+    */
+    const wxString& GetBoxStyleName() const { return m_boxStyleName; }
+
+    /**
+        Sets the box style name.
+    */
+    void SetBoxStyleName(const wxString& name) { m_boxStyleName = name; AddFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME); }
+
+    /**
+        Returns @true if the box style name is present.
+    */
+    bool HasBoxStyleName() const { return HasFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME); }
+
 public:
 
     int                             m_flags;
@@ -1349,6 +1365,7 @@ public:
     wxTextBoxAttrClearStyle         m_clearMode;
     wxTextBoxAttrCollapseMode       m_collapseMode;
     wxTextBoxAttrVerticalAlignment  m_verticalAlignment;
+    wxString                        m_boxStyleName;
 };
 
 /**

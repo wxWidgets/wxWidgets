@@ -1162,6 +1162,9 @@ wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool is
         if (!attr.GetListStyleName().empty())
             AddAttribute(str, wxT("liststyle"), AttributeToXML(attr.GetListStyleName()));
 
+        if (!attr.GetTextBoxAttr().GetBoxStyleName().empty())
+            AddAttribute(str, wxT("boxstyle"), AttributeToXML(attr.GetTextBoxAttr().GetBoxStyleName()));
+
         if (attr.HasTabs())
         {
             wxString strTabs;
@@ -1450,6 +1453,9 @@ bool wxRichTextXMLHandler::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, 
 
         if (!attr.GetListStyleName().empty())
             node->AddAttribute(wxT("liststyle"), attr.GetListStyleName());
+
+        if (!attr.GetTextBoxAttr().GetBoxStyleName().empty())
+            node->AddAttribute(wxT("boxstyle"), attr.GetTextBoxAttr().GetBoxStyleName());
 
         if (attr.HasTabs())
         {
@@ -1802,6 +1808,13 @@ bool wxRichTextXMLHandler::ImportStyle(wxRichTextAttr& attr, wxXmlNode* node, bo
                 if (!value.empty())
                 {
                     attr.SetListStyleName(value);
+                }
+            }
+            else if (name == wxT("boxstyle"))
+            {
+                if (!value.empty())
+                {
+                    attr.GetTextBoxAttr().SetBoxStyleName(value);
                 }
             }
             else if (name == wxT("tabs"))

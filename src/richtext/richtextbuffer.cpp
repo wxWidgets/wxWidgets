@@ -10746,6 +10746,7 @@ void wxTextBoxAttr::Reset()
     m_clearMode = wxTEXT_BOX_ATTR_CLEAR_NONE;
     m_collapseMode = wxTEXT_BOX_ATTR_COLLAPSE_NONE;
     m_verticalAlignment = wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_NONE;
+    m_boxStyleName = wxEmptyString;
 
     m_margins.Reset();
     m_padding.Reset();
@@ -10774,7 +10775,9 @@ bool wxTextBoxAttr::operator== (const wxTextBoxAttr& attr) const
         m_size == attr.m_size &&
 
         m_border == attr.m_border &&
-        m_outline == attr.m_outline
+        m_outline == attr.m_outline &&
+
+        m_boxStyleName == attr.m_boxStyleName
         );
 }
 
@@ -10791,6 +10794,9 @@ bool wxTextBoxAttr::EqPartial(const wxTextBoxAttr& attr) const
         return false;
 
     if (attr.HasVerticalAlignment() && HasVerticalAlignment() && (attr.GetVerticalAlignment() != GetVerticalAlignment()))
+        return false;
+
+    if (attr.HasBoxStyleName() && HasBoxStyleName() && (attr.GetBoxStyleName() != GetBoxStyleName()))
         return false;
 
     // Position
@@ -10850,6 +10856,12 @@ bool wxTextBoxAttr::Apply(const wxTextBoxAttr& attr, const wxTextBoxAttr* compar
             SetVerticalAlignment(attr.GetVerticalAlignment());
     }
 
+    if (attr.HasBoxStyleName())
+    {
+        if (!(compareWith && compareWith->HasBoxStyleName() && compareWith->GetBoxStyleName() == attr.GetBoxStyleName()))
+            SetBoxStyleName(attr.GetBoxStyleName());
+    }
+
     m_margins.Apply(attr.m_margins, compareWith ? (& attr.m_margins) : (const wxTextAttrDimensions*) NULL);
     m_padding.Apply(attr.m_padding, compareWith ? (& attr.m_padding) : (const wxTextAttrDimensions*) NULL);
     m_position.Apply(attr.m_position, compareWith ? (& attr.m_position) : (const wxTextAttrDimensions*) NULL);
@@ -10876,6 +10888,12 @@ bool wxTextBoxAttr::RemoveStyle(const wxTextBoxAttr& attr)
 
     if (attr.HasVerticalAlignment())
         RemoveFlag(wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT);
+
+    if (attr.HasBoxStyleName())
+    {
+        SetBoxStyleName(wxEmptyString);
+        RemoveFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME);
+    }
 
     m_margins.RemoveStyle(attr.m_margins);
     m_padding.RemoveStyle(attr.m_padding);
@@ -10968,6 +10986,25 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
     }
     else
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT);
+
+    if (attr.HasBoxStyleName())
+    {
+        if (!clashingAttr.HasBoxStyleName() && !absentAttr.HasBoxStyleName())
+        {
+            if (HasBoxStyleName())
+            {
+                if (GetBoxStyleName() != attr.GetBoxStyleName())
+                {
+                    clashingAttr.AddFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME);
+                    RemoveFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME);
+                }
+            }
+            else
+                SetBoxStyleName(attr.GetBoxStyleName());
+        }
+    }
+    else
+        absentAttr.AddFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME);
 
     m_margins.CollectCommonAttributes(attr.m_margins, clashingAttr.m_margins, absentAttr.m_margins);
     m_padding.CollectCommonAttributes(attr.m_padding, clashingAttr.m_padding, absentAttr.m_padding);
