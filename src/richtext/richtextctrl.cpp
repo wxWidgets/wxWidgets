@@ -564,7 +564,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 
 #if wxUSE_DRAG_AND_DROP
     // If there's no selection, or we're not inside it, this isn't an attempt to initiate Drag'n'Drop
-    if (HasSelection() && GetSelectionRange().ToInternal().Contains(position))
+    if (IsEditable() && HasSelection() && GetSelectionRange().ToInternal().Contains(position))
     {
         // This might be an attempt at initiating Drag'n'Drop. So set the time & flags
         m_preDrag = true;
