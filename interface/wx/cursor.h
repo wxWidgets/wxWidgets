@@ -178,8 +178,7 @@ public:
         foreground and background. In any case, the cursor will be displayed
         at the size of the image.
 
-        In wxMac, if the cursor is larger than 16x16 it is resized and
-        currently only shown as black/white (mask respected).
+        Under wxMac (Cocoa), large cursors are supported.
     */
     wxCursor(const wxImage& image);
 
