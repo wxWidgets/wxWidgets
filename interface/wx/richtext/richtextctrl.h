@@ -392,24 +392,44 @@ public:
     void SetCaretAtLineStart(bool atStart) { m_caretAtLineStart = atStart; }
 
     /**
-        Returns @true if we are dragging a selection.
+        Returns @true if we are extending a selection.
     */
     bool GetDragging() const { return m_dragging; }
 
     /**
-        Sets a flag to remember if we are dragging a selection.
+        Sets a flag to remember if we are extending a selection.
     */
     void SetDragging(bool dragging) { m_dragging = dragging; }
 
     /**
-        Returns the drag start position.
+        Are we trying to start Drag'n'Drop?
     */
-    const wxPoint& GetDragStart() const { return m_dragStart; }
+    bool GetPreDrag() const { return m_preDrag; }
 
     /**
-        Sets the drag start position.
+        Set if we're trying to start Drag'n'Drop
     */
-    void SetDragStart(const wxPoint& pt) { m_dragStart = pt; }
+    void SetPreDrag(bool pd) { m_preDrag = pd; }
+
+    /**
+        Get the possible Drag'n'Drop start point
+    */
+    const wxPoint GetDragStartPoint() const { return m_dragStartPoint; }
+
+    /**
+        Set the possible Drag'n'Drop start point
+    */
+    void SetDragStartPoint(wxPoint sp) { m_dragStartPoint = sp; }
+
+    /**
+        Get the possible Drag'n'Drop start time
+    */
+    const wxDateTime GetDragStartTime() const { return m_dragStartTime; }
+
+    /**
+        Set the possible Drag'n'Drop start time
+    */
+    void SetDragStartTime(wxDateTime st) { m_dragStartTime = st; }
 
 #if wxRICHTEXT_BUFFERED_PAINTING
     //@{
@@ -472,7 +492,14 @@ public:
     wxRichTextParagraphLayoutBox* GetFocusObject() const { return m_focusObject; }
 
     /**
+        Setter for m_focusObject.
+    */
+    void StoreFocusObject(wxRichTextParagraphLayoutBox* obj);
+
+    /**
         Sets the wxRichTextObject object that currently has the editing focus.
+        @param setCaretPosition
+            Optionally set the caret position.
     */
     bool SetFocusObject(wxRichTextParagraphLayoutBox* obj, bool setCaretPosition = true);
 
@@ -813,6 +840,11 @@ public:
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
                                             wxTextCoord *row) const;
+
+    /**
+        Finds the container at the given point, which is assumed to be in client coordinates.
+    */
+    wxRichTextParagraphLayoutBox* FindContainerAtPoint(const wxPoint pt, long& position, int& hit, wxRichTextObject* hitObj, int flags = 0);
     //@}
 
 // Clipboard operations
@@ -1991,7 +2023,7 @@ protected:
 
 
 // Data members
-private:
+protected:
 #if wxRICHTEXT_BUFFERED_PAINTING
     /// Buffer bitmap
     wxBitmap                m_bufferBitmap;
@@ -2032,9 +2064,6 @@ private:
 
     /// Are we dragging a selection?
     bool                    m_dragging;
-
-    /// Start position for drag
-    wxPoint                 m_dragStart;
 
     /// Do we need full layout in idle?
     bool                    m_fullLayoutRequired;

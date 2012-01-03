@@ -227,6 +227,8 @@ wxRichTextCtrl::wxRichTextCtrl(wxWindow* parent,
 {
     Init();
     Create(parent, id, value, pos, size, style, validator, name);
+
+    SetDropTarget(new wxRichTextDropTarget(this));
 }
 
 /// Creation
@@ -349,6 +351,7 @@ void wxRichTextCtrl::Init()
     m_editable = true;
     m_caretAtLineStart = false;
     m_dragging = false;
+    m_preDrag = false;
     m_fullLayoutRequired = false;
     m_fullLayoutTime = 0;
     m_fullLayoutSavedPosition = 0;
@@ -559,6 +562,26 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
     wxRichTextObject* contextObj = NULL;
     int hit = GetBuffer().HitTest(dc, event.GetLogicalPosition(dc), position, & hitObj, & contextObj);
 
+#if wxUSE_DRAG_AND_DROP
+    // If there's no selection, or we're not inside it, this isn't an attempt to initiate Drag'n'Drop
+    if (HasSelection() && GetSelectionRange().ToInternal().Contains(position))
+    {
+        // This might be an attempt at initiating Drag'n'Drop. So set the time & flags
+        m_preDrag = true;
+        m_dragStartPoint = event.GetPosition();   // No need to worry about logical positions etc, we only care about the distance from the original pt
+
+#if wxUSE_DATETIME
+        m_dragStartTime = wxDateTime::UNow();
+#endif // wxUSE_DATETIME
+
+        // Preserve behaviour of clicking on an object within the selection
+        if (hit != wxRICHTEXT_HITTEST_NONE && hitObj)
+            m_dragging = true;
+
+        return; // Don't skip the event, else the selection will be lost
+    }
+#endif // wxUSE_DRAG_AND_DROP
+
     if (hit != wxRICHTEXT_HITTEST_NONE && hitObj)
     {
         wxRichTextParagraphLayoutBox* oldFocusObject = GetFocusObject();
@@ -568,7 +591,6 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
             SetFocusObject(container, false /* don't set caret position yet */);
         }
 
-        m_dragStart = event.GetLogicalPosition(dc);
         m_dragging = true;
         CaptureMouse();
 
@@ -606,6 +628,36 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
         wxRichTextObject* contextObj = NULL;
         // Only get objects at this level, not nested, because otherwise we couldn't swipe text at a single level.
         int hit = GetFocusObject()->HitTest(dc, logicalPt, position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS);
+
+#if wxUSE_DRAG_AND_DROP
+        if (m_preDrag)
+        {
+            // Preserve the behaviour that would have happened without drag-and-drop detection, in OnLeftClick
+            m_preDrag = false; // Tell DnD not to happen now: we are processing Left Up ourselves.
+
+            // Do the actions that would have been done in OnLeftClick if we hadn't tried to drag
+            long position = 0;
+            wxRichTextObject* hitObj = NULL;
+            wxRichTextObject* contextObj = NULL;
+            int hit = GetBuffer().HitTest(dc, event.GetLogicalPosition(dc), position, & hitObj, & contextObj);
+            wxRichTextParagraphLayoutBox* oldFocusObject = GetFocusObject();
+            wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
+            if (container && container != GetFocusObject() && container->AcceptsFocus())
+            {
+                SetFocusObject(container, false /* don't set caret position yet */);
+            }
+
+            long oldCaretPos = m_caretPosition;
+
+            SetCaretPositionAfterClick(container, position, hit);
+
+            // For now, don't handle shift-click when we're selecting multiple objects.
+            if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
+                ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
+            else
+                SelectNone();
+        }
+#endif
 
         if ((hit != wxRICHTEXT_HITTEST_NONE) && !(hit & wxRICHTEXT_HITTEST_OUTSIDE))
         {
@@ -650,6 +702,10 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
         }
     }
 
+#if wxUSE_DRAG_AND_DROP
+    m_preDrag = false;
+#endif // wxUSE_DRAG_AND_DROP
+
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && wxHAVE_PRIMARY_SELECTION
     if (HasSelection() && GetFocusObject() && GetFocusObject()->GetBuffer())
     {
@@ -664,9 +720,77 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
 #endif
 }
 
-/// Left-click
+/// Mouse-movements
 void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 {
+#if wxUSE_DRAG_AND_DROP
+    // See if we're starting Drag'n'Drop
+    if (m_preDrag)
+    {
+        int x = m_dragStartPoint.x - event.GetPosition().x;
+        int y = m_dragStartPoint.y - event.GetPosition().y;
+        size_t distance = abs(x) + abs(y);
+#if wxUSE_DATETIME
+        wxTimeSpan diff = wxDateTime::UNow() - m_dragStartTime;
+#endif
+        if ((distance > 10)
+#if wxUSE_DATETIME
+             && (diff.GetMilliseconds() > 100)
+#endif
+           )
+        {
+            m_dragging = false;
+
+            // Start drag'n'drop
+            wxRichTextRange range = GetInternalSelectionRange();
+            if (range == wxRICHTEXT_NONE)
+            {
+              // Don't try to drag an empty range
+              m_preDrag = false;
+              return;
+            }
+
+            // Cache the current situation, to be restored if Drag'n'Drop is cancelled
+            long oldPos = GetCaretPosition();
+            wxRichTextParagraphLayoutBox* oldFocus = GetFocusObject();
+
+            wxDataObjectComposite* compositeObject = new wxDataObjectComposite();
+            wxString text = GetFocusObject()->GetTextForRange(range);
+#ifdef __WXMSW__
+            text = wxTextFile::Translate(text, wxTextFileType_Dos);
+#endif
+            compositeObject->Add(new wxTextDataObject(text), false /* not preferred */);
+
+            wxRichTextBuffer* richTextBuf = new wxRichTextBuffer;
+            GetFocusObject()->CopyFragment(range, *richTextBuf);
+            compositeObject->Add(new wxRichTextBufferDataObject(richTextBuf), true /* preferred */);
+
+            wxRichTextDropSource source(*compositeObject, this);
+            // Use wxDrag_DefaultMove, not because it's the likelier choice but because pressing Ctrl for Copy obeys the principle of least surprise
+            // The alternative, wxDrag_DefaultCopy, requires the user to know that Move needs the Shift key pressed
+            BeginBatchUndo(_("Drag"));
+            switch (source.DoDragDrop(wxDrag_AllowMove | wxDrag_DefaultMove))
+            {
+                case wxDragMove:
+                case wxDragCopy:  break;
+
+                case wxDragError:
+                    wxLogError(wxT("An error occurred during drag and drop operation"));
+                case wxDragNone:
+                case wxDragCancel:
+                    Refresh(); // This is needed in wxMSW, otherwise resetting the position doesn't 'take'
+                    SetCaretPosition(oldPos);
+                    SetFocusObject(oldFocus, false);
+                default: break;
+            }
+            EndBatchUndo();
+
+            m_preDrag = false;
+            return;
+        }
+    }
+#endif // wxUSE_DRAG_AND_DROP
+
     wxClientDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
@@ -717,7 +841,11 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         return;
     }
 
-    if (m_dragging)
+    if (m_dragging
+#if wxUSE_DRAG_AND_DROP
+        && !m_preDrag
+#endif
+        )
     {
         wxRichTextParagraphLayoutBox* commonAncestor = NULL;
         wxRichTextParagraphLayoutBox* otherContainer = NULL;
@@ -790,7 +918,11 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         }
     }
 
-    if (hitObj && m_dragging && hit != wxRICHTEXT_HITTEST_NONE && m_selectionState == wxRichTextCtrlSelectionState_Normal)
+    if (hitObj && m_dragging && hit != wxRICHTEXT_HITTEST_NONE && m_selectionState == wxRichTextCtrlSelectionState_Normal
+#if wxUSE_DRAG_AND_DROP
+        && !m_preDrag
+#endif
+        )
     {
         // TODO: test closeness
         SetCaretPositionAfterClick(container, position, hit, true /* extend selection */);
@@ -2592,6 +2724,23 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
     return wxTE_HT_UNKNOWN;
 }
 
+wxRichTextParagraphLayoutBox*
+wxRichTextCtrl::FindContainerAtPoint(const wxPoint pt, long& position, int& hit, wxRichTextObject* hitObj, int flags/* = 0*/)
+{
+    wxClientDC dc(this);
+    PrepareDC(dc);
+    dc.SetFont(GetFont());
+
+    wxPoint logicalPt = GetLogicalPoint(pt);
+
+    wxRichTextObject* contextObj = NULL;
+    hit = GetBuffer().HitTest(dc, logicalPt, position, &hitObj, &contextObj, flags);
+    wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
+
+    return container;
+}
+
+
 // ----------------------------------------------------------------------------
 // set/get the controls text
 // ----------------------------------------------------------------------------
@@ -4175,6 +4324,85 @@ bool wxRichTextCtrl::SetFocusObject(wxRichTextParagraphLayoutBox* obj, bool setC
     }
     return true;
 }
+
+#if wxUSE_DRAG_AND_DROP
+void wxRichTextCtrl::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResult def, wxDataObject* DataObj)
+{
+    m_preDrag = false;
+
+    if ((def != wxDragCopy) && (def != wxDragMove))
+    {
+        return;
+    }
+
+    if (!GetSelection().IsValid())
+    {
+        return;
+    }
+
+    wxRichTextParagraphLayoutBox* originContainer = GetSelection().GetContainer();
+    wxRichTextParagraphLayoutBox* destContainer = GetFocusObject(); // This will be the drop container, not necessarily the same as the origin one
+
+
+    wxRichTextBuffer* richTextBuffer = ((wxRichTextBufferDataObject*)DataObj)->GetRichTextBuffer();
+    if (richTextBuffer)
+    {
+        long position = GetCaretPosition();
+        wxRichTextRange selectionrange = GetInternalSelectionRange();
+        if (selectionrange.Contains(position) && (def == wxDragMove))
+        {
+            // It doesn't make sense to move onto itself
+            return;
+        }
+
+        // If we're moving, and the data is being moved forward, we need to drop first, then delete the selection
+        // If moving backwards, we need to delete then drop. If we're copying (or doing nothing) we don't delete anyway
+        bool DeleteAfter = (def == wxDragMove) && (position > selectionrange.GetEnd());
+        if ((def == wxDragMove) && !DeleteAfter)
+        {
+            // We can't use e.g. DeleteSelectedContent() as it uses the focus container
+            originContainer->DeleteRangeWithUndo(selectionrange, this, &GetBuffer());
+        }
+
+        destContainer->InsertParagraphsWithUndo(position+1, *richTextBuffer, this, &GetBuffer(), 0);
+        ShowPosition(position + richTextBuffer->GetOwnRange().GetEnd());
+
+        delete richTextBuffer;
+
+        if (DeleteAfter)
+        {
+            // We can't use e.g. DeleteSelectedContent() as it uses the focus container
+            originContainer->DeleteRangeWithUndo(selectionrange, this, &GetBuffer());
+        }
+
+
+        SelectNone();
+        Refresh();
+    }
+}
+#endif // wxUSE_DRAG_AND_DROP
+
+
+#if wxUSE_DRAG_AND_DROP
+bool wxRichTextDropSource::GiveFeedback(wxDragResult WXUNUSED(effect))
+{
+    wxCHECK_MSG(m_rtc, false, wxT("NULL m_rtc"));
+
+    long position = 0;
+    int hit = 0;
+    wxRichTextObject* hitObj = NULL;
+    wxRichTextParagraphLayoutBox* container = m_rtc->FindContainerAtPoint(m_rtc->ScreenToClient(wxGetMousePosition()), position, hit, hitObj);
+
+    if (!(hit & wxRICHTEXT_HITTEST_NONE) && container && container->AcceptsFocus())
+    {
+        m_rtc->StoreFocusObject(container);
+        m_rtc->SetCaretPositionAfterClick(container, position, hit);
+    }
+
+    return false;  // so that the base-class sets a cursor
+}
+#endif // wxUSE_DRAG_AND_DROP
+
 
 #if wxRICHTEXT_USE_OWN_CARET
 

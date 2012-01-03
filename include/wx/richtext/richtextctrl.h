@@ -21,6 +21,10 @@
 
 #include "wx/textctrl.h"
 
+#if wxUSE_DRAG_AND_DROP
+#include "wx/dnd.h"
+#endif
+
 #if !defined(__WXGTK__) && !defined(__WXMAC__)
 #define wxRICHTEXT_BUFFERED_PAINTING 1
 #else
@@ -428,15 +432,40 @@ public:
     */
     void SetDragging(bool dragging) { m_dragging = dragging; }
 
+#if wxUSE_DRAG_AND_DROP
     /**
-        Returns the drag start position.
+        Are we trying to start Drag'n'Drop?
     */
-    const wxPoint& GetDragStart() const { return m_dragStart; }
+    bool GetPreDrag() const { return m_preDrag; }
 
     /**
-        Sets the drag start position.
+        Set if we're trying to start Drag'n'Drop
     */
-    void SetDragStart(const wxPoint& pt) { m_dragStart = pt; }
+    void SetPreDrag(bool pd) { m_preDrag = pd; }
+
+    /**
+        Get the possible Drag'n'Drop start point
+    */
+    const wxPoint GetDragStartPoint() const { return m_dragStartPoint; }
+
+    /**
+        Set the possible Drag'n'Drop start point
+    */
+    void SetDragStartPoint(wxPoint sp) { m_dragStartPoint = sp; }
+
+#if wxUSE_DATETIME
+    /**
+        Get the possible Drag'n'Drop start time
+    */
+    const wxDateTime GetDragStartTime() const { return m_dragStartTime; }
+
+    /**
+        Set the possible Drag'n'Drop start time
+    */
+    void SetDragStartTime(wxDateTime st) { m_dragStartTime = st; }
+#endif // wxUSE_DATETIME
+
+#endif // wxUSE_DRAG_AND_DROP
 
 #if wxRICHTEXT_BUFFERED_PAINTING
     //@{
@@ -497,6 +526,11 @@ public:
         If there are no composite objects, this will be the top-level buffer.
     */
     wxRichTextParagraphLayoutBox* GetFocusObject() const { return m_focusObject; }
+
+    /**
+        Sets m_focusObject without making any alterations.
+    */
+    void StoreFocusObject(wxRichTextParagraphLayoutBox* obj) { m_focusObject = obj; }
 
     /**
         Sets the wxRichTextObject object that currently has the editing focus.
@@ -840,7 +874,19 @@ public:
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
                                             wxTextCoord *row) const;
+
+    /**
+        Finds the container at the given point, which is in screen coordinates.
+    */
+    wxRichTextParagraphLayoutBox* FindContainerAtPoint(const wxPoint pt, long& position, int& hit, wxRichTextObject* hitObj, int flags = 0);
     //@}
+
+#if wxUSE_DRAG_AND_DROP
+    /**
+        Does the 'drop' of Drag'n'Drop.
+    */
+    void OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResult def, wxDataObject* DataObj);
+#endif
 
 // Clipboard operations
 
@@ -2018,7 +2064,7 @@ protected:
 
 
 // Data members
-private:
+protected:
 #if wxRICHTEXT_BUFFERED_PAINTING
     /// Buffer bitmap
     wxBitmap                m_bufferBitmap;
@@ -2057,11 +2103,21 @@ private:
     /// instead of at the end of the previous one?
     bool                    m_caretAtLineStart;
 
-    /// Are we dragging a selection?
+    /// Are we dragging (i.e. extending) a selection?
     bool                    m_dragging;
 
-    /// Start position for drag
-    wxPoint                 m_dragStart;
+#if wxUSE_DRAG_AND_DROP
+    /// Are we trying to start Drag'n'Drop?
+    bool m_preDrag;
+
+    /// Initial position when starting Drag'n'Drop
+    wxPoint m_dragStartPoint;
+
+#if wxUSE_DATETIME
+    /// Initial time when starting Drag'n'Drop
+  wxDateTime m_dragStartTime;
+#endif // wxUSE_DATETIME
+#endif // wxUSE_DRAG_AND_DROP
 
     /// Do we need full layout in idle?
     bool                    m_fullLayoutRequired;
@@ -2082,6 +2138,38 @@ private:
     /// The object that currently has the editing focus
     wxRichTextParagraphLayoutBox* m_focusObject;
 };
+
+#if wxUSE_DRAG_AND_DROP
+class WXDLLIMPEXP_RICHTEXT wxRichTextDropSource : public wxDropSource
+{
+public:
+    wxRichTextDropSource(wxDataObject& data, wxRichTextCtrl* tc)
+        : wxDropSource(data, tc), m_rtc(tc) {}
+
+protected:
+    bool GiveFeedback(wxDragResult effect);
+
+    wxRichTextCtrl* m_rtc;
+};
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextDropTarget : public wxDropTarget
+{
+public:
+  wxRichTextDropTarget(wxRichTextCtrl* tc)
+    : wxDropTarget(new wxRichTextBufferDataObject(new wxRichTextBuffer)), m_rtc(tc) {}
+
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
+    {
+        if ( !GetData() )
+            return wxDragNone;
+        m_rtc->OnDrop(x, y, def, m_dataObject);
+        return def;
+    }
+
+protected:
+    wxRichTextCtrl* m_rtc;
+};
+#endif // wxUSE_DRAG_AND_DROP
 
 /**
     @class wxRichTextEvent
