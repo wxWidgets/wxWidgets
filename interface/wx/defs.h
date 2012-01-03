@@ -886,7 +886,19 @@ enum wxKeyCode
     WXK_CLEAR,
     WXK_SHIFT,
     WXK_ALT,
+    /** Note that under Mac OS X, to improve compatibility with other
+      * systems, 'WXK_CONTROL' represents the 'Command' key. Use this
+      * constant to work with keyboard shortcuts. See 'WXK_RAW_CONTROL'
+      * to get the state of the actual 'Control' key.
+      */
     WXK_CONTROL,
+    /** Under Mac OS X, where the 'Command' key is mapped to 'Control'
+      * to improve compatibility with other systems, WXK_RAW_CONTROL may
+      * be used to obtain the state of the actual 'Control' key
+      * ('WXK_CONTROL' would obtain the status of the 'Command' key).
+      * Under Windows/Linux/Others, this is equivalent to WXK_RAW_CONTROL
+      */
+    WXK_RAW_CONTROL,
     WXK_MENU,
     WXK_PAUSE,
     WXK_CAPITAL,
@@ -977,6 +989,11 @@ enum wxKeyCode
     WXK_WINDOWS_LEFT,
     WXK_WINDOWS_RIGHT,
     WXK_WINDOWS_MENU ,
+    
+    /** This special key code was used to represent the key used for keyboard shortcuts. Under Mac OS X,
+      * this key maps to the 'Command' (aka logo or 'Apple') key, whereas on Linux/Windows/others
+      * this is the Control key, with the new semantic of WXK_CONTROL, WXK_COMMAND is not needed anymore
+      */
     WXK_COMMAND,
 
     /** Hardware-specific buttons */
