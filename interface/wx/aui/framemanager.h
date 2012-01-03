@@ -172,9 +172,13 @@ class wxAuiManager : public wxEvtHandler
 {
 public:
     /**
-        Constructor. @a managed_wnd specifies the wxFrame which should be managed.
-        @a flags  specifies the frame management behaviour and visual effects
-        with the wxAuiManagerOption's style flags.
+        Constructor.
+
+        @param managed_wnd
+            Specifies the wxFrame which should be managed.
+        @param flags
+            Specifies the frame management behaviour and visual effects
+            with the ::wxAuiManagerOption's style flags.
     */
     wxAuiManager(wxWindow* managed_wnd = NULL,
                  unsigned int flags = wxAUI_MGR_DEFAULT);
@@ -226,7 +230,7 @@ public:
     void GetDockSizeConstraint(double* widthpct, double* heightpct) const;
 
     /**
-        Returns the current wxAuiManagerOption's flags.
+        Returns the current ::wxAuiManagerOption's flags.
     */
     unsigned int GetFlags() const;
 
@@ -336,7 +340,7 @@ public:
     void SetDockSizeConstraint(double widthpct, double heightpct);
 
     /**
-        This method is used to specify wxAuiManagerOption's flags. @a flags
+        This method is used to specify ::wxAuiManagerOption's flags. @a flags
         specifies options which allow the frame management behaviour to be modified.
     */
     void SetFlags(unsigned int flags);
