@@ -2054,7 +2054,8 @@ wxGenericTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item,
     if (crt_item==last_item)
         return true;
 
-    if (crt_item->HasChildren())
+    // We should leave the not shown children of collapsed items alone.
+    if (crt_item->HasChildren() && crt_item->IsExpanded())
     {
         wxArrayGenericTreeItems& children = crt_item->GetChildren();
         size_t count = children.GetCount();

@@ -463,6 +463,7 @@ All (GUI):
 - Improve row/column selection modes in wxGrid (joostn).
 - Allow using wxEVT_UPDATE_UI with wxRibbonButtonBar (Emilien Kia).
 - Add wxRibbonButtonBar::InsertXXXButton() methods (Emilien Kia).
+- Fix multiple item selection in generic wxTreeCtrl (Igor Korot).
 
 GTK:
 
