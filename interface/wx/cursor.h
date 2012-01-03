@@ -179,6 +179,14 @@ public:
         at the size of the image.
 
         Under wxMac (Cocoa), large cursors are supported.
+
+        Notice that the @a image can define the cursor hot spot. To set it you
+        need to use wxImage::SetOption() with @c wxIMAGE_OPTION_CUR_HOTSPOT_X
+        or @c wxIMAGE_OPTION_CUR_HOTSPOT_Y, e.g.
+        @code
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX);
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotY);
+        @endcode
     */
     wxCursor(const wxImage& image);
 
