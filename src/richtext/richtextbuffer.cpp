@@ -11016,6 +11016,13 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
     m_outline.CollectCommonAttributes(attr.m_outline, clashingAttr.m_outline, absentAttr.m_outline);
 }
 
+bool wxTextBoxAttr::IsDefault() const
+{
+    return GetFlags() == 0 && !m_border.IsValid() && !m_outline.IsValid() &&
+        !m_size.GetWidth().IsValid() && !m_size.GetHeight().IsValid() &&
+        !m_position.IsValid() && !m_padding.IsValid() && !m_margins.IsValid();
+}
+
 // wxRichTextAttr
 
 void wxRichTextAttr::Copy(const wxRichTextAttr& attr)

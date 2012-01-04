@@ -401,6 +401,12 @@ public:
     const wxTextAttrDimension& GetBottom() const { return m_bottom; }
     wxTextAttrDimension& GetBottom() { return m_bottom; }
 
+    /**
+        Are all dimensions valid?
+
+    */
+    bool IsValid() const { return m_left.IsValid() && m_top.IsValid() && m_right.IsValid() && m_bottom.IsValid(); }
+
     wxTextAttrDimension         m_left;
     wxTextAttrDimension         m_top;
     wxTextAttrDimension         m_right;
