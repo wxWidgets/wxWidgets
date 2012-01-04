@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 December 2011                                                     *
+# Date : 3 January 2012                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -94,8 +94,8 @@ OBJECTS = \
 		grideditors.obj,vlbox.obj,vscroll.obj,stattextg.obj,\
 		editlbox.obj,datavgen.obj,dbgrptg.obj,dragimgg.obj,\
 		richmsgdlgg.obj,commandlinkbuttong.obj,spinctlg.obj,\
-		markuptext.obj,bannerwindow.obj,timectrl.obj,richtooltipg.obj,\
-		statbmpg.obj
+		markuptext.obj,bannerwindow.obj,timectrlg.obj,richtooltipg.obj\
+		,statbmpg.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -167,7 +167,7 @@ SOURCES = \
 		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp,editlbox.cpp,\
 		datavgen.cpp,dbgrptg.cpp,dragimgg.cpp,richmsgdlgg.cpp,\
 		commandlinkbuttong.cpp,spinctlg.cpp markuptext.cpp \
-		bannerwindow.cpp timectrl.cpp richtooltipg.cpp statbmpg.cpp
+		bannerwindow.cpp timectrlg.cpp richtooltipg.cpp statbmpg.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -305,6 +305,6 @@ commandlinkbuttong.obj : commandlinkbuttong.cpp
 spinctlg.obj : spinctlg.cpp
 markuptext.obj : markuptext.cpp
 bannerwindow.obj : bannerwindow.cpp
-timectrl.obj : timectrl.cpp
+timectrlg.obj : timectrlg.cpp
 richtooltipg.obj : richtooltipg.cpp
 statbmpg.obj : statbmpg.cpp
