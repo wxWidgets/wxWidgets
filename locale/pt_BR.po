@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 2.9.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-06 12:55+0100\n"
-"PO-Revision-Date: 2011-12-18 19:51-0300\n"
+"PO-Revision-Date: 2012-01-04 13:41-0300\n"
 "Last-Translator: Felipe <felipefpl@ig.com.br>\n"
 "Language-Team: Felipe <felipefpl@ig.com.br>\n"
 "MIME-Version: 1.0\n"
@@ -2642,7 +2642,7 @@ msgstr "PARA_BAIXO"
 
 #: ../src/richtext/richtextborderspage.cpp:545
 msgid "Dashed"
-msgstr ""
+msgstr "Tracejado"
 
 #: ../src/osx/carbon/dataview.cpp:1916
 msgid "Data object has invalid data format"
@@ -3849,7 +3849,7 @@ msgstr "Grego (ISO-8859-7)"
 
 #: ../src/richtext/richtextborderspage.cpp:547
 msgid "Groove"
-msgstr ""
+msgstr "Ranhura"
 
 #: ../src/common/zstream.cpp:151
 #: ../src/common/zstream.cpp:311
@@ -4014,7 +4014,7 @@ msgstr "Renderizador de ícone & texto não pode renderizar o valor; tipo de val
 
 #: ../src/html/htmprint.cpp:283
 msgid "If possible, try changing the layout parameters to make the printout more narrow."
-msgstr ""
+msgstr "Se possível, tente mudar os parâmetros do layout pra tornar a impressão mais restrita."
 
 #: ../src/generic/dbgrptg.cpp:355
 msgid ""
@@ -4100,7 +4100,7 @@ msgstr "Impossível definir as permissões para o arquivo '%s'"
 #: ../src/common/gifdecod.cpp:819
 #, c-format
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
-msgstr ""
+msgstr "Tamanho do frame do GIF incorreto (%u, %d) para o frame #%u"
 
 #: ../src/msw/ole/automtn.cpp:606
 msgid "Incorrect number of arguments."
@@ -4211,7 +4211,7 @@ msgstr "Expressão regular '%s' inválida: %s"
 #: ../src/common/config.cpp:229
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
-msgstr ""
+msgstr "Valor inválido %ld para uma chave boolean \"%s\" no arquivo config."
 
 #: ../src/generic/fontdlgg.cpp:330
 #: ../src/richtext/richtextfontpage.cpp:293
@@ -4429,8 +4429,8 @@ msgstr "Última página"
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "A última mensagens repetida (tempo \"%s\", %lu) não era da saída de dados"
+msgstr[1] "As últimas mensagens repetidas (tempo \"%s\", %lu) não eram da saída de dados"
 
 #: ../src/common/paper.cpp:105
 msgid "Ledger, 17 x 11 in"
@@ -4602,7 +4602,7 @@ msgstr "Bengalês"
 
 #: ../src/common/fmapbase.cpp:214
 msgid "MacBurmese"
-msgstr ""
+msgstr "Birmanês"
 
 #: ../src/common/fmapbase.cpp:233
 msgid "MacCeltic"
@@ -4610,7 +4610,7 @@ msgstr "Celta"
 
 #: ../src/common/fmapbase.cpp:224
 msgid "MacCentralEurRoman"
-msgstr ""
+msgstr "CentralEurRoman"
 
 #: ../src/common/fmapbase.cpp:220
 msgid "MacChineseSimp"
@@ -4630,11 +4630,11 @@ msgstr "Cirílico"
 
 #: ../src/common/fmapbase.cpp:204
 msgid "MacDevanagari"
-msgstr ""
+msgstr "Devanagari"
 
 #: ../src/common/fmapbase.cpp:228
 msgid "MacDingbats"
-msgstr ""
+msgstr "Dingbats"
 
 #: ../src/common/fmapbase.cpp:223
 msgid "MacEthiopic"
@@ -4658,11 +4658,11 @@ msgstr "Grego"
 
 #: ../src/common/fmapbase.cpp:206
 msgid "MacGujarati"
-msgstr ""
+msgstr "Guzerate"
 
 #: ../src/common/fmapbase.cpp:205
 msgid "MacGurmukhi"
-msgstr ""
+msgstr "Gurmukhi"
 
 #: ../src/common/fmapbase.cpp:201
 msgid "MacHebrew"
@@ -4678,11 +4678,11 @@ msgstr "Japonês"
 
 #: ../src/common/fmapbase.cpp:211
 msgid "MacKannada"
-msgstr ""
+msgstr "Kannada"
 
 #: ../src/common/fmapbase.cpp:235
 msgid "MacKeyboardGlyphs"
-msgstr ""
+msgstr "Glifos do Teclado"
 
 #: ../src/common/fmapbase.cpp:215
 msgid "MacKhmer"
@@ -4694,7 +4694,7 @@ msgstr "Coreano"
 
 #: ../src/common/fmapbase.cpp:217
 msgid "MacLaotian"
-msgstr ""
+msgstr "Lao"
 
 #: ../src/common/fmapbase.cpp:212
 msgid "MacMalayalam"
@@ -4706,7 +4706,7 @@ msgstr "Mongol"
 
 #: ../src/common/fmapbase.cpp:207
 msgid "MacOriya"
-msgstr ""
+msgstr "Oriá"
 
 #: ../src/common/fmapbase.cpp:196
 msgid "MacRoman"
@@ -4726,11 +4726,11 @@ msgstr "Símbolo"
 
 #: ../src/common/fmapbase.cpp:209
 msgid "MacTamil"
-msgstr ""
+msgstr "Tâmil"
 
 #: ../src/common/fmapbase.cpp:210
 msgid "MacTelugu"
-msgstr ""
+msgstr "Telugu"
 
 #: ../src/common/fmapbase.cpp:216
 msgid "MacThai"
@@ -5159,11 +5159,11 @@ msgstr "Contorno"
 
 #: ../src/richtext/richtextborderspage.cpp:550
 msgid "Outset"
-msgstr ""
+msgstr "Começo"
 
 #: ../src/msw/ole/automtn.cpp:627
 msgid "Overflow while coercing argument values."
-msgstr ""
+msgstr "Sobrecarga enquanto força os valores do argumento."
 
 #: ../src/common/accelcmn.cpp:85
 msgid "PAGEDOWN"
@@ -5773,7 +5773,7 @@ msgstr "Substituir por:"
 
 #: ../src/common/valtext.cpp:162
 msgid "Required information entry is empty."
-msgstr ""
+msgstr "O espaço da informação requerida está vazio."
 
 #: ../src/common/translation.cpp:1804
 #, c-format
@@ -5786,7 +5786,7 @@ msgstr "Reverter ao Salvo"
 
 #: ../src/richtext/richtextborderspage.cpp:548
 msgid "Ridge"
-msgstr ""
+msgstr "Cordilheira"
 
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextbulletspage.cpp:202
@@ -6122,7 +6122,7 @@ msgstr "Espaçamento"
 
 #: ../src/common/stockitem.cpp:198
 msgid "Spell Check"
-msgstr ""
+msgstr "Verificação da Escrita"
 
 #: ../src/richtext/richtextliststylepage.cpp:491
 #: ../src/richtext/richtextbulletspage.cpp:296
@@ -6221,7 +6221,7 @@ msgstr "TIFF: Erro ao gravar imagem."
 
 #: ../src/common/imagtiff.cpp:363
 msgid "TIFF: Image size is abnormally big."
-msgstr ""
+msgstr "TiFF: o tamanho da imagem é anormalmente grande."
 
 #: ../src/richtext/richtextbuffer.cpp:9155
 msgid "Table Properties"
@@ -6343,6 +6343,9 @@ msgid ""
 "\n"
 "Would you like to proceed with printing it nevertheless?"
 msgstr ""
+"O documento \"%s\" não se encaixa na página horizontalmente e será truncado se impresso.\n"
+"\n"
+"Você gostaria de prosseguir com a impressão apesar disso?"
 
 #: ../src/common/docview.cpp:1175
 #, c-format
@@ -6590,7 +6593,7 @@ msgstr "Houve um problema durante a configuração da página: talvez você prec
 
 #: ../src/html/htmprint.cpp:256
 msgid "This document doesn't fit on the page horizontally and will be truncated when it is printed."
-msgstr ""
+msgstr "Este documento não se encaixa na página horizontalmente e será truncado quando for impresso."
 
 #: ../src/common/image.cpp:2506
 #, c-format
@@ -6706,7 +6709,7 @@ msgstr "Digite um tamanho em pontos."
 #: ../src/msw/ole/automtn.cpp:647
 #, c-format
 msgid "Type mismatch in argument %u."
-msgstr ""
+msgstr "Mal combinação do tipo no argumento %u."
 
 #: ../src/common/xtixml.cpp:357
 #: ../src/common/xtixml.cpp:510
@@ -6717,7 +6720,7 @@ msgstr "O tipo precisa ter conversão enum - long"
 #: ../src/propgrid/propgridiface.cpp:383
 #, c-format
 msgid "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT \"%s\"."
-msgstr ""
+msgstr "A operação do tipo \"%s\" falhou: A propriedade rotulada \"%s\" é do tipo \"%s\", NÃO \"%s\"."
 
 #: ../src/common/accelcmn.cpp:59
 msgid "UP"
