@@ -111,9 +111,14 @@ wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
     [v setMaxValue: maximum];
     [v setIntValue: value];
 
-    if ( style & wxSP_WRAP )
-        [v setValueWraps:YES];
+    if ( style & wxSP_HORIZONTAL )
+        [v rotateByAngle:90.0];
 
+    BOOL wrap = NO;
+    if ( style & wxSP_WRAP )
+        wrap = YES;
+    [v setValueWraps:wrap];
+    
     wxWidgetCocoaImpl* c = new wxSpinButtonCocoaImpl( wxpeer, v );
     return c;
 }
