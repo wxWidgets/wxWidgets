@@ -125,6 +125,9 @@ public:
 
     void Notify();
 
+    bool GetRefreshEnabled() const { return m_refreshEnabled; }
+    void EnableRefresh(bool b) { m_refreshEnabled = b; }
+
 protected:
     virtual void DoShow();
     virtual void DoHide();
@@ -144,6 +147,7 @@ private:
     bool          m_flashOn;
     wxRichTextCaretTimer m_timer;
     wxRichTextCtrl* m_richTextCtrl;
+    bool          m_refreshEnabled;
 };
 #endif
 
@@ -406,6 +410,11 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #if !wxRICHTEXT_USE_OWN_CARET
     if (GetCaret() && !IsFrozen())
         GetCaret()->Hide();
+#else
+    // Stop the caret refreshing the control from within the
+    // paint handler
+    if (GetCaret())
+        ((wxRichTextCaret*) GetCaret())->EnableRefresh(false);
 #endif
 
     {
@@ -460,6 +469,7 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #if wxRICHTEXT_USE_OWN_CARET
         if (GetCaret()->IsVisible())
         {
+            PositionCaret();
             ((wxRichTextCaret*) GetCaret())->DoDraw(& dc);
         }
 #endif
@@ -470,10 +480,8 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         GetCaret()->Show();
     PositionCaret();
 #else
-#if !defined(__WXMAC__)
-    // Causes caret dropouts on Mac
-    PositionCaret();
-#endif
+    if (GetCaret())
+        ((wxRichTextCaret*) GetCaret())->EnableRefresh(true);
 #endif
 }
 
@@ -4413,6 +4421,7 @@ bool wxRichTextDropSource::GiveFeedback(wxDragResult WXUNUSED(effect))
 void wxRichTextCaret::Init()
 {
     m_hasFocus = true;
+    m_refreshEnabled = true;
 
     m_xOld =
     m_yOld = -1;
@@ -4457,7 +4466,7 @@ void wxRichTextCaret::DoMove()
 
         if (m_xOld != -1 && m_yOld != -1)
         {
-            if (m_richTextCtrl)
+            if (m_richTextCtrl && m_refreshEnabled)
             {
                 wxRect rect(GetPosition(), GetSize());
                 m_richTextCtrl->RefreshRect(rect, false);
@@ -4508,7 +4517,7 @@ void wxRichTextCaret::OnKillFocus()
 
 void wxRichTextCaret::Refresh()
 {
-    if (m_richTextCtrl)
+    if (m_richTextCtrl && m_refreshEnabled)
     {
         wxRect rect(GetPosition(), GetSize());
         m_richTextCtrl->RefreshRect(rect, false);
