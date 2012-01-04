@@ -696,7 +696,7 @@ bool wxRichTextObject::DrawBoxAttributes(wxDC& dc, wxRichTextBuffer* buffer, con
 
         dc.SetPen(pen);
         dc.SetBrush(brush);
-        dc.DrawRectangle(marginRect);
+        dc.DrawRectangle(borderRect);
     }
 
     if (flags & wxRICHTEXT_DRAW_GUIDELINES)
