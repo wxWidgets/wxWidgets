@@ -451,6 +451,7 @@ Major new features in this release
 All:
 
 - Added wxLogFormatter to allow customizing wxLog output (Sébastien Gallou).
+- Added "%z" support to wxDateTime::Format() and Parse() (Armel Asselin).
 
 All (GUI):
 

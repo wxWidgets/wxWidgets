@@ -319,11 +319,17 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     format.Replace("%X",wxLocale::GetInfo(wxLOCALE_TIME_FMT));
 #endif
     // we have to use our own implementation if the date is out of range of
-    // strftime() or if we use non standard specifiers
+    // strftime() or if we use non standard specifiers (notice that "%z" is
+    // special because it is de facto standard under Unix but is not supported
+    // under Windows)
 #ifdef wxHAS_STRFTIME
     time_t time = GetTicks();
 
-    if ( (time != (time_t)-1) && !wxStrstr(format, wxT("%l")) )
+    if ( (time != (time_t)-1) && !wxStrstr(format, wxT("%l"))
+#ifdef __WXMSW__
+            && !wxStrstr(format, wxT("%z"))
+#endif
+       )
     {
         // use strftime()
         struct tm tmstruct;
@@ -397,6 +403,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
         switch ( (*++p).GetValue() )
         {
             case wxT('Y'):               // year has 4 digits
+            case wxT('z'):               // time zone as well
                 fmt = wxT("%04d");
                 break;
 
@@ -637,6 +644,25 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 
                 case wxT('Y'):       // year with century
                     res += wxString::Format(fmt, tm.year);
+                    break;
+
+                case wxT('z'):       // time zone as [-+]HHMM
+                    {
+                        int ofs = tz.GetOffset();
+                        if ( ofs < 0 )
+                        {
+                            res += '-';
+                            ofs = -ofs;
+                        }
+                        else
+                        {
+                            res += '+';
+                        }
+
+                        // Converts seconds to HHMM representation.
+                        res += wxString::Format(fmt,
+                                                100*(ofs/3600) + (ofs/60)%60);
+                    }
                     break;
 
                 case wxT('Z'):       // timezone name
@@ -929,6 +955,8 @@ wxDateTime::ParseFormat(const wxString& date,
     bool hourIsIn12hFormat = false, // or in 24h one?
          isPM = false;              // AM by default
 
+    bool haveTimeZone = false;
+
     // and the value of the items we have (init them to get rid of warnings)
     wxDateTime_t msec = 0,
                  sec = 0,
@@ -939,6 +967,7 @@ wxDateTime::ParseFormat(const wxString& date,
                  mday = 0;
     wxDateTime::Month mon = Inv_Month;
     int year = 0;
+    long timeZone = 0;  // time zone in seconds as expected in Tm structure
 
     wxString::const_iterator input = date.begin();
     const wxString::const_iterator end = date.end();
@@ -1377,6 +1406,36 @@ wxDateTime::ParseFormat(const wxString& date,
                 year = (wxDateTime_t)num;
                 break;
 
+            case wxT('z'):
+                {
+                    bool minusFound;
+                    if ( *input == wxT('-') )
+                        minusFound = true;
+                    else if ( *input == wxT('+') )
+                        minusFound = false;
+                    else
+                        return false;   // no match
+
+                    // here should follow 4 digits HHMM
+                    ++input;
+                    unsigned long tzHourMin;
+                    if ( !GetNumericToken(4, input, end, &tzHourMin) )
+                        return false;   // no match
+
+                    const unsigned hours = tzHourMin / 100;
+                    const unsigned minutes = tzHourMin % 100;
+
+                    if ( hours > 12 || minutes > 59 )
+                        return false;   // bad format
+
+                    timeZone = 3600*hours + 60*minutes;
+                    if ( minusFound )
+                        timeZone = -timeZone;
+
+                    haveTimeZone = true;
+                }
+                break;
+
             case wxT('Z'):       // timezone name
                 // FIXME: currently we just ignore everything that looks like a
                 //        time zone here
@@ -1481,6 +1540,14 @@ wxDateTime::ParseFormat(const wxString& date,
         tm.msec = msec;
 
     Set(tm);
+
+    // If a time zone was specified and it is not the local time zone, we need
+    // to shift the time accordingly.
+    //
+    // Note that avoiding the call to MakeFromTimeZone is necessary to avoid
+    // DST problems.
+    if ( haveTimeZone && timeZone != -wxGetTimeZone() )
+        MakeFromTimezone(timeZone);
 
     // finally check that the week day is consistent -- if we had it
     if ( haveWDay && GetWeekDay() != wday )

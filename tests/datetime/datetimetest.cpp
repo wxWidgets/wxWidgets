@@ -666,6 +666,18 @@ void DateTimeTestCase::TestTimeFormat()
        { CompareTime, "Time is %H:%M:%S or %I:%M:%S %p" },
        { CompareNone, "The day of year: %j, the week of year: %W" },
        { CompareDate, "ISO date without separators: %Y%m%d" },
+       { CompareBoth, "RFC 2822 string: %Y-%m-%d %H:%M:%S.%l %z" },
+
+    };
+
+    const long timeZonesOffsets[] =
+    {
+        wxDateTime::TimeZone(wxDateTime::Local).GetOffset(),
+
+        // Fictitious TimeZone offsets to ensure time zone formating and
+        // interpretation works
+        -(3600 + 2*60),
+        3*3600 + 30*60
     };
 
     static const Date formatTestDates[] =
@@ -686,78 +698,110 @@ void DateTimeTestCase::TestTimeFormat()
 #endif
     };
 
-    for ( size_t d = 0; d < WXSIZEOF(formatTestDates); d++ )
+    for ( unsigned idxtz = 0; idxtz < WXSIZEOF(timeZonesOffsets); ++idxtz )
     {
-        wxDateTime dt = formatTestDates[d].DT();
-        for ( unsigned n = 0; n < WXSIZEOF(formatTestFormats); n++ )
+        wxDateTime::TimeZone tz(timeZonesOffsets[idxtz]);
+        const bool isLocalTz = tz.GetOffset() == -wxGetTimeZone();
+
+        for ( size_t d = 0; d < WXSIZEOF(formatTestDates); d++ )
         {
-            const char *fmt = formatTestFormats[n].format;
-
-            // skip the check with %p for those locales which have empty AM/PM strings:
-            // for those locales it's impossible to pass the test with %p...
-            wxString am, pm;
-            wxDateTime::GetAmPmStrings(&am, &pm);
-            if (am.empty() && pm.empty() && wxStrstr(fmt, "%p") != NULL)
-                continue;
-
-            wxString s = dt.Format(fmt);
-
-            // what can we recover?
-            CompareKind kind = formatTestFormats[n].compareKind;
-
-            // convert back
-            wxDateTime dt2;
-            const char *result = dt2.ParseFormat(s, fmt);
-            if ( !result )
+            wxDateTime dt = formatTestDates[d].DT();
+            for ( unsigned n = 0; n < WXSIZEOF(formatTestFormats); n++ )
             {
-                // conversion failed - should it have?
-                WX_ASSERT_MESSAGE(
-                    ("Test #%u failed: failed to parse \"%s\"", n, s),
-                    kind == CompareNone
-                );
-            }
-            else // conversion succeeded
-            {
-                // currently ParseFormat() doesn't support "%Z" and so is
-                // incapable of parsing time zone part used at the end of date
-                // representations in many (but not "C") locales, compensate
-                // for it ourselves by simply consuming and ignoring it
-                while ( *result && (*result >= 'A' && *result <= 'Z') )
-                    result++;
+                const char *fmt = formatTestFormats[n].format;
 
-                WX_ASSERT_MESSAGE(
-                    ("Test #%u failed: \"%s\" was left unparsed in \"%s\"",
-                     n, result, s),
-                    !*result
-                );
+                // skip the check with %p for those locales which have empty AM/PM strings:
+                // for those locales it's impossible to pass the test with %p...
+                wxString am, pm;
+                wxDateTime::GetAmPmStrings(&am, &pm);
+                if (am.empty() && pm.empty() && wxStrstr(fmt, "%p") != NULL)
+                    continue;
 
-                switch ( kind )
+                // what can we recover?
+                CompareKind kind = formatTestFormats[n].compareKind;
+
+                // When using a different time zone we must perform a time zone
+                // conversion below which doesn't always work correctly, check
+                // for the cases when it doesn't.
+                if ( !isLocalTz )
                 {
-                    case CompareYear:
-                        if ( dt2.GetCentury() != dt.GetCentury() )
-                        {
-                            CPPUNIT_ASSERT_EQUAL(dt.GetYear() % 100,
-                                                 dt2.GetYear() % 100);
+                    // DST computation doesn't work correctly for dates above
+                    // 2038 currently on the systems with 32 bit time_t.
+                    if ( dt.GetYear() >= 2038 )
+                        continue;
 
-                            dt2.SetYear(dt.GetYear());
-                        }
-                        // fall through and compare everything
+                    // We can't compare just dates nor just times when doing TZ
+                    // conversion as both are affected by the DST: for the
+                    // dates, the DST can switch midnight to 23:00 of the
+                    // previous day while for the times DST can be different
+                    // for the original date and today.
+                    if ( kind == CompareDate || kind == CompareTime )
+                        continue;
+                }
 
-                    case CompareBoth:
-                        CPPUNIT_ASSERT_EQUAL( dt, dt2 );
-                        break;
+                // do convert date to string
+                wxString s = dt.Format(fmt, tz);
 
-                    case CompareDate:
-                        CPPUNIT_ASSERT( dt.IsSameDate(dt2) );
-                        break;
+                // convert back
+                wxDateTime dt2;
+                const char *result = dt2.ParseFormat(s, fmt);
+                if ( !result )
+                {
+                    // conversion failed - should it have?
+                    WX_ASSERT_MESSAGE(
+                        ("Test #%u failed: failed to parse \"%s\"", n, s),
+                        kind == CompareNone
+                    );
+                }
+                else // conversion succeeded
+                {
+                    // currently ParseFormat() doesn't support "%Z" and so is
+                    // incapable of parsing time zone part used at the end of date
+                    // representations in many (but not "C") locales, compensate
+                    // for it ourselves by simply consuming and ignoring it
+                    while ( *result && (*result >= 'A' && *result <= 'Z') )
+                        result++;
 
-                    case CompareTime:
-                        CPPUNIT_ASSERT( dt.IsSameTime(dt2) );
-                        break;
+                    WX_ASSERT_MESSAGE(
+                        ("Test #%u failed: \"%s\" was left unparsed in \"%s\"",
+                         n, result, s),
+                        !*result
+                    );
 
-                    case CompareNone:
-                        wxFAIL_MSG( wxT("unexpected") );
-                        break;
+                    // Without "%z" we can't recover the time zone used in the
+                    // call to Format() so we need to call MakeFromTimezone()
+                    // explicitly.
+                    if ( !strstr(fmt, "%z") && !isLocalTz )
+                        dt2.MakeFromTimezone(tz);
+
+                    switch ( kind )
+                    {
+                        case CompareYear:
+                            if ( dt2.GetCentury() != dt.GetCentury() )
+                            {
+                                CPPUNIT_ASSERT_EQUAL(dt.GetYear() % 100,
+                                                     dt2.GetYear() % 100);
+
+                                dt2.SetYear(dt.GetYear());
+                            }
+                            // fall through and compare everything
+
+                        case CompareBoth:
+                            CPPUNIT_ASSERT_EQUAL( dt, dt2 );
+                            break;
+
+                        case CompareDate:
+                            CPPUNIT_ASSERT( dt.IsSameDate(dt2) );
+                            break;
+
+                        case CompareTime:
+                            CPPUNIT_ASSERT( dt.IsSameTime(dt2) );
+                            break;
+
+                        case CompareNone:
+                            wxFAIL_MSG( wxT("unexpected") );
+                            break;
+                    }
                 }
             }
         }
@@ -1095,6 +1139,12 @@ void DateTimeTestCase::TestDateTimeParse()
             "bloordyblop",
             {  1, wxDateTime::Jan, 9999,  0,  0,  0},
             false
+        },
+
+        {
+            "2012-01-01 10:12:05 +0100",
+            {  1, wxDateTime::Jan, 2012,  10,  12,  5, -1 },
+            false // ParseDateTime does know yet +0100
         },
     };
 
