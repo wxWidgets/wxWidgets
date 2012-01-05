@@ -2032,6 +2032,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                 GetParent()->GetId());
             evCache.SetEventObject( GetParent() );
             evCache.m_oldItemIndex = visibleFrom;
+            evCache.m_item.m_itemId =
             evCache.m_itemIndex = visibleTo;
             GetParent()->GetEventHandler()->ProcessEvent( evCache );
         }
@@ -2162,6 +2163,7 @@ void wxListMainWindow::SendNotify( size_t line,
     wxListEvent le( command, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
 
+    le.m_item.m_itemId =
     le.m_itemIndex = line;
 
     // set only for events which have position
@@ -2209,6 +2211,7 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
 
     wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
+    le.m_item.m_itemId =
     le.m_itemIndex = item;
     wxListLineData *data = GetLine(itemEdit);
     wxCHECK_MSG( data, NULL, wxT("invalid index in EditLabel()") );
@@ -2251,6 +2254,7 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
 {
     wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
+    le.m_item.m_itemId =
     le.m_itemIndex = itemEdit;
 
     wxListLineData *data = GetLine(itemEdit);
@@ -2271,6 +2275,7 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
     le.SetEditCanceled(true);
 
     le.SetEventObject( GetParent() );
+    le.m_item.m_itemId =
     le.m_itemIndex = itemEdit;
 
     wxListLineData *data = GetLine(itemEdit);
@@ -2375,6 +2380,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
         wxListEvent le( command, GetParent()->GetId() );
         le.SetEventObject( GetParent() );
+        le.m_item.m_itemId =
         le.m_itemIndex = m_lineLastClicked;
         le.m_pointDrag = m_dragStart;
         GetParent()->GetEventHandler()->ProcessEvent( le );
@@ -2699,6 +2705,7 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
 
     // send a list event
     wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, parent->GetId() );
+    le.m_item.m_itemId =
     le.m_itemIndex = m_current;
     if (HasCurrent())
         GetLine(m_current)->GetItem( 0, le.m_item );
