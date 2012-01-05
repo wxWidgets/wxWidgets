@@ -6624,11 +6624,11 @@ wxRichTextStyleSheet* wxRichTextBuffer::PopStyleSheet()
 /// Submit command to insert paragraphs
 bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, int flags)
 {
-    return ctrl->GetFocusObject()->InsertParagraphsWithUndo(pos, paragraphs, ctrl, this, flags);
+    return ctrl->GetFocusObject()->InsertParagraphsWithUndo(this, pos, paragraphs, ctrl, flags);
 }
 
 /// Submit command to insert paragraphs
-bool wxRichTextParagraphLayoutBox::InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int WXUNUSED(flags))
+bool wxRichTextParagraphLayoutBox::InsertParagraphsWithUndo(wxRichTextBuffer* buffer, long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, int WXUNUSED(flags))
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, buffer, this, ctrl, false);
 
@@ -6651,11 +6651,11 @@ bool wxRichTextParagraphLayoutBox::InsertParagraphsWithUndo(long pos, const wxRi
 /// Submit command to insert the given text
 bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, int flags)
 {
-    return ctrl->GetFocusObject()->InsertTextWithUndo(pos, text, ctrl, this, flags);
+    return ctrl->GetFocusObject()->InsertTextWithUndo(this, pos, text, ctrl, flags);
 }
 
 /// Submit command to insert the given text
-bool wxRichTextParagraphLayoutBox::InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags)
+bool wxRichTextParagraphLayoutBox::InsertTextWithUndo(wxRichTextBuffer* buffer, long pos, const wxString& text, wxRichTextCtrl* ctrl, int flags)
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, buffer, this, ctrl, false);
 
@@ -6695,11 +6695,11 @@ bool wxRichTextParagraphLayoutBox::InsertTextWithUndo(long pos, const wxString& 
 /// Submit command to insert the given text
 bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int flags)
 {
-    return ctrl->GetFocusObject()->InsertNewlineWithUndo(pos, ctrl, this, flags);
+    return ctrl->GetFocusObject()->InsertNewlineWithUndo(this, pos, ctrl, flags);
 }
 
 /// Submit command to insert the given text
-bool wxRichTextParagraphLayoutBox::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags)
+bool wxRichTextParagraphLayoutBox::InsertNewlineWithUndo(wxRichTextBuffer* buffer, long pos, wxRichTextCtrl* ctrl, int flags)
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, buffer, this, ctrl, false);
 
@@ -6775,12 +6775,12 @@ bool wxRichTextParagraphLayoutBox::InsertNewlineWithUndo(long pos, wxRichTextCtr
 bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags,
                                             const wxRichTextAttr& textAttr)
 {
-    return ctrl->GetFocusObject()->InsertImageWithUndo(pos, imageBlock, ctrl, this, flags, textAttr);
+    return ctrl->GetFocusObject()->InsertImageWithUndo(this, pos, imageBlock, ctrl, flags, textAttr);
 }
 
 /// Submit command to insert the given image
-bool wxRichTextParagraphLayoutBox::InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock,
-                                                        wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags,
+bool wxRichTextParagraphLayoutBox::InsertImageWithUndo(wxRichTextBuffer* buffer, long pos, const wxRichTextImageBlock& imageBlock,
+                                                        wxRichTextCtrl* ctrl, int flags,
                                                         const wxRichTextAttr& textAttr)
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Image"), wxRICHTEXT_INSERT, buffer, this, ctrl, false);
@@ -6821,11 +6821,11 @@ bool wxRichTextParagraphLayoutBox::InsertImageWithUndo(long pos, const wxRichTex
 // Insert an object with no change of it
 wxRichTextObject* wxRichTextBuffer::InsertObjectWithUndo(long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, int flags)
 {
-    return ctrl->GetFocusObject()->InsertObjectWithUndo(pos, object, ctrl, this, flags);
+    return ctrl->GetFocusObject()->InsertObjectWithUndo(this, pos, object, ctrl, flags);
 }
 
 // Insert an object with no change of it
-wxRichTextObject* wxRichTextParagraphLayoutBox::InsertObjectWithUndo(long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags)
+wxRichTextObject* wxRichTextParagraphLayoutBox::InsertObjectWithUndo(wxRichTextBuffer* buffer, long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, int flags)
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Object"), wxRICHTEXT_INSERT, buffer, this, ctrl, false);
 
@@ -7593,7 +7593,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 wxRichTextBuffer* richTextBuffer = data.GetRichTextBuffer();
                 if (richTextBuffer)
                 {
-                    container->InsertParagraphsWithUndo(position+1, *richTextBuffer, GetRichTextCtrl(), this, 0);
+                    container->InsertParagraphsWithUndo(this, position+1, *richTextBuffer, GetRichTextCtrl(), 0);
                     if (GetRichTextCtrl())
                         GetRichTextCtrl()->ShowPosition(position + richTextBuffer->GetOwnRange().GetEnd());
                     delete richTextBuffer;
@@ -7621,7 +7621,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
 #else
                 wxString text2 = text;
 #endif
-                container->InsertTextWithUndo(position+1, text2, GetRichTextCtrl(), this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+                container->InsertTextWithUndo(this, position+1, text2, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
                 if (GetRichTextCtrl())
                     GetRichTextCtrl()->ShowPosition(position + text2.Length());

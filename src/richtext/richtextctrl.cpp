@@ -1186,12 +1186,12 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         {
             wxString text;
             text = wxRichTextLineBreakChar;
-            GetFocusObject()->InsertTextWithUndo(newPos+1, text, this, & GetBuffer());
+            GetFocusObject()->InsertTextWithUndo(& GetBuffer(), newPos+1, text, this);
             m_caretAtLineStart = true;
             PositionCaret();
         }
         else
-            GetFocusObject()->InsertNewlineWithUndo(newPos+1, this, & GetBuffer(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE|wxRICHTEXT_INSERT_INTERACTIVE);
+            GetFocusObject()->InsertNewlineWithUndo(& GetBuffer(), newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE|wxRICHTEXT_INSERT_INTERACTIVE);
 
         EndBatchUndo();
         SetDefaultStyleToCursorStyle();
@@ -1386,7 +1386,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 #else
                 wxString str = (wxChar) event.GetKeyCode();
 #endif
-                GetFocusObject()->InsertTextWithUndo(newPos+1, str, this, & GetBuffer(), 0);
+                GetFocusObject()->InsertTextWithUndo(& GetBuffer(), newPos+1, str, this, 0);
 
                 EndBatchUndo();
 
@@ -2810,7 +2810,7 @@ void wxRichTextCtrl::DoWriteText(const wxString& value, int flags)
 {
     wxString valueUnix = wxTextFile::Translate(value, wxTextFileType_Unix);
 
-    GetFocusObject()->InsertTextWithUndo(m_caretPosition+1, valueUnix, this, & GetBuffer(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+    GetFocusObject()->InsertTextWithUndo(& GetBuffer(), m_caretPosition+1, valueUnix, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
     if ( flags & SetValue_SendEvent )
         wxTextCtrl::SendTextUpdatedEvent(this);
@@ -2848,7 +2848,7 @@ bool wxRichTextCtrl::WriteImage(const wxString& filename, wxBitmapType bitmapTyp
 
 bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock, const wxRichTextAttr& textAttr)
 {
-    return GetFocusObject()->InsertImageWithUndo(m_caretPosition+1, imageBlock, this, & GetBuffer(), 0, textAttr);
+    return GetFocusObject()->InsertImageWithUndo(& GetBuffer(), m_caretPosition+1, imageBlock, this, 0, textAttr);
 }
 
 bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType, const wxRichTextAttr& textAttr)
@@ -2876,7 +2876,7 @@ wxRichTextBox* wxRichTextCtrl::WriteTextBox(const wxRichTextAttr& textAttr)
 
     // The object returned is the one actually inserted into the buffer,
     // while the original one is deleted.
-    wxRichTextObject* obj = GetFocusObject()->InsertObjectWithUndo(m_caretPosition+1, textBox, this, & GetBuffer(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+    wxRichTextObject* obj = GetFocusObject()->InsertObjectWithUndo(& GetBuffer(), m_caretPosition+1, textBox, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
     wxRichTextBox* box = wxDynamicCast(obj, wxRichTextBox);
     return box;
 }
@@ -2908,7 +2908,7 @@ wxRichTextTable* wxRichTextCtrl::WriteTable(int rows, int cols, const wxRichText
 
     // The object returned is the one actually inserted into the buffer,
     // while the original one is deleted.
-    wxRichTextObject* obj = GetFocusObject()->InsertObjectWithUndo(m_caretPosition+1, table, this, & GetBuffer(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+    wxRichTextObject* obj = GetFocusObject()->InsertObjectWithUndo(& GetBuffer(), m_caretPosition+1, table, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
     wxRichTextTable* tableResult = wxDynamicCast(obj, wxRichTextTable);
     return tableResult;
 }
@@ -2917,7 +2917,7 @@ wxRichTextTable* wxRichTextCtrl::WriteTable(int rows, int cols, const wxRichText
 /// Insert a newline (actually paragraph) at the current insertion point.
 bool wxRichTextCtrl::Newline()
 {
-    return GetFocusObject()->InsertNewlineWithUndo(m_caretPosition+1, this, & GetBuffer(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+    return GetFocusObject()->InsertNewlineWithUndo(& GetBuffer(), m_caretPosition+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 }
 
 /// Insert a line break at the current insertion point.
@@ -2925,7 +2925,7 @@ bool wxRichTextCtrl::LineBreak()
 {
     wxString text;
     text = wxRichTextLineBreakChar;
-    return GetFocusObject()->InsertTextWithUndo(m_caretPosition+1, text, this, & GetBuffer());
+    return GetFocusObject()->InsertTextWithUndo(& GetBuffer(), m_caretPosition+1, text, this);
 }
 
 // ----------------------------------------------------------------------------
@@ -4384,7 +4384,7 @@ void wxRichTextCtrl::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResu
             originContainer->DeleteRangeWithUndo(selectionrange, this, &GetBuffer());
         }
 
-        destContainer->InsertParagraphsWithUndo(position+1, *richTextBuffer, this, &GetBuffer(), 0);
+        destContainer->InsertParagraphsWithUndo(&GetBuffer(), position+1, *richTextBuffer, this, 0);
         ShowPosition(position + richTextBuffer->GetOwnRange().GetEnd());
 
         delete richTextBuffer;

@@ -2731,24 +2731,23 @@ public:
     /**
         Submits a command to insert paragraphs.
     */
-    bool InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags = 0);
+    bool InsertParagraphsWithUndo(wxRichTextBuffer* buffer, long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, int flags = 0);
 
     /**
         Submits a command to insert the given text.
     */
-    bool InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags = 0);
+    bool InsertTextWithUndo(wxRichTextBuffer* buffer, long pos, const wxString& text, wxRichTextCtrl* ctrl, int flags = 0);
 
     /**
         Submits a command to insert the given text.
     */
-    bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags = 0);
+    bool InsertNewlineWithUndo(wxRichTextBuffer* buffer, long pos, wxRichTextCtrl* ctrl, int flags = 0);
 
     /**
         Submits a command to insert the given image.
     */
-    bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock,
-                                                        wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags,
-                                                        const wxRichTextAttr& textAttr);
+    bool InsertImageWithUndo(wxRichTextBuffer* buffer, long pos, const wxRichTextImageBlock& imageBlock,
+                                                        wxRichTextCtrl* ctrl, int flags, const wxRichTextAttr& textAttr);
 
     /**
         Returns the style that is appropriate for a new paragraph at this position.
@@ -2760,7 +2759,7 @@ public:
     /**
         Inserts an object.
     */
-    wxRichTextObject* InsertObjectWithUndo(long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, wxRichTextBuffer* buffer, int flags = 0);
+    wxRichTextObject* InsertObjectWithUndo(wxRichTextBuffer* buffer, long pos, wxRichTextObject *object, wxRichTextCtrl* ctrl, int flags = 0);
 
     /**
         Submits a command to delete this range.

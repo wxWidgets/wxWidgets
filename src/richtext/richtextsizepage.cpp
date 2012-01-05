@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtextsizepage.cpp
-// Purpose:     
+// Purpose:
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     20/10/2010 10:23:24
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/richtext/richtextsizepage.h"
@@ -134,7 +134,7 @@ void wxRichTextSizePage::Init()
  */
 
 void wxRichTextSizePage::CreateControls()
-{    
+{
 ////@begin wxRichTextSizePage content construction
     wxRichTextSizePage* itemRichTextDialogPage1 = this;
 
@@ -527,10 +527,10 @@ void wxRichTextSizePage::OnRichtextParaUpClick( wxCommandEvent& WXUNUSED(event) 
     wxRichTextFormattingDialog* dialog = wxRichTextFormattingDialog::GetDialog(this);
     if (!dialog || !dialog->GetObject())
         return;
-        
+
     // Make sure object attributes are up-to-date
     dialog->TransferDataFromWindow();
-        
+
     wxRichTextBuffer* buffer = dialog->GetObject()->GetBuffer();
     wxRichTextParagraphLayoutBox* container = dialog->GetObject()->GetParentContainer();
     wxRichTextObject* parent = dialog->GetObject()->GetParent();
@@ -562,7 +562,7 @@ void wxRichTextSizePage::OnRichtextParaUpClick( wxCommandEvent& WXUNUSED(event) 
 
     container->DeleteRangeWithUndo(range, buffer->GetRichTextCtrl(), buffer);
 
-    wxRichTextObject* obj2 = container->InsertObjectWithUndo(rg.GetStart(), tempObj, buffer->GetRichTextCtrl(), buffer, 0);
+    wxRichTextObject* obj2 = container->InsertObjectWithUndo(buffer, rg.GetStart(), tempObj, buffer->GetRichTextCtrl(), 0);
     dialog->SetObject(obj2);
 }
 
@@ -575,10 +575,10 @@ void wxRichTextSizePage::OnRichtextParaDownClick( wxCommandEvent& WXUNUSED(event
     wxRichTextFormattingDialog* dialog = wxRichTextFormattingDialog::GetDialog(this);
     if (!dialog || !dialog->GetObject())
         return;
-        
+
     // Make sure object attributes are up-to-date
     dialog->TransferDataFromWindow();
-        
+
     wxRichTextBuffer* buffer = dialog->GetObject()->GetBuffer();
     wxRichTextParagraphLayoutBox* container = dialog->GetObject()->GetParentContainer();
     wxRichTextObject* parent = dialog->GetObject()->GetParent();
@@ -611,7 +611,7 @@ void wxRichTextSizePage::OnRichtextParaDownClick( wxCommandEvent& WXUNUSED(event
     container->DeleteRangeWithUndo(range, buffer->GetRichTextCtrl(), buffer);
 
     // Minus one because we deleted an object
-    wxRichTextObject* obj2 = container->InsertObjectWithUndo(rg.GetStart()-1, tempObj, buffer->GetRichTextCtrl(), buffer, 0);
+    wxRichTextObject* obj2 = container->InsertObjectWithUndo(buffer, rg.GetStart()-1, tempObj, buffer->GetRichTextCtrl(), 0);
     dialog->SetObject(obj2);
 }
 
