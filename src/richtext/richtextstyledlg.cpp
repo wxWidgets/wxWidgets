@@ -538,25 +538,14 @@ bool wxRichTextStyleOrganiserDialog::ApplyStyle(wxRichTextCtrl* ctrl)
         ctrl = GetRichTextCtrl();
     if (!ctrl)
         return false;
-    if (!ctrl->HasSelection())
-        return false;
-
 
     wxRichTextStyleDefinition* def = m_stylesListBox->GetStyleListBox()->GetStyle(sel);
     wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
-    wxRichTextBoxStyleDefinition* boxDef = wxDynamicCast(def, wxRichTextBoxStyleDefinition);
 
-    if (listDef && m_restartNumberingCtrl->GetValue())
+    if (listDef && m_restartNumberingCtrl->GetValue() && ctrl->HasSelection())
     {
         wxRichTextRange range = ctrl->GetSelectionRange();
         return ctrl->SetListStyle(range, listDef, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
-    }
-    else if (boxDef)
-    {
-        if (!ctrl->GetFocusObject() || (ctrl->GetFocusObject() && (ctrl->GetFocusObject() == & ctrl->GetBuffer())))
-            return false;
-        ctrl->SetStyle(ctrl->GetFocusObject(), def->GetStyleMergedWithBase(m_stylesListBox->GetStyleSheet()));
-        return true;
     }
     else
     {

@@ -4014,10 +4014,22 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
         // to change its style independently.
         flags |= wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY;
     }
-    else
+    else if (def->IsKindOf(CLASSINFO(wxRichTextCharacterStyleDefinition)))
         attr.SetCharacterStyleName(def->GetName());
+    else if (def->IsKindOf(CLASSINFO(wxRichTextBoxStyleDefinition)))
+        attr.GetTextBoxAttr().SetBoxStyleName(def->GetName());
 
-    if (HasSelection())
+    if (def->IsKindOf(CLASSINFO(wxRichTextBoxStyleDefinition)))
+    {
+        if (GetFocusObject() && (GetFocusObject() != & GetBuffer()))
+        {
+            SetStyle(GetFocusObject(), attr);
+            return true;
+        }
+        else
+            return false;
+    }
+    else if (HasSelection())
         return SetStyleEx(GetSelectionRange(), attr, flags);
     else
     {

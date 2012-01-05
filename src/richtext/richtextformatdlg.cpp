@@ -141,13 +141,11 @@ bool wxRichTextFormattingDialog::ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTe
 }
 
 // Apply attributes to the object being edited, if any
-bool wxRichTextFormattingDialog::ApplyStyle(wxRichTextCtrl* WXUNUSED(ctrl), int flags)
+bool wxRichTextFormattingDialog::ApplyStyle(wxRichTextCtrl* ctrl, int WXUNUSED(flags))
 {
     if (GetObject())
     {
-        wxRichTextParagraphLayoutBox* parentContainer = GetObject()->GetParentContainer();
-        if (parentContainer)
-            parentContainer->SetStyle(GetObject(), m_attributes, flags);
+        ctrl->SetStyle(GetObject(), m_attributes);
         return true;
     }
     else
