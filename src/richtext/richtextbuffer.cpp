@@ -2690,7 +2690,7 @@ bool wxRichTextParagraphLayoutBox::CopyFragment(const wxRichTextRange& range, wx
             topTailRange.SetEnd(fragment.GetOwnRange().GetEnd());
         }
 
-        if (topTailRange.GetStart() < (lastPara->GetRange().GetEnd()-1))
+        if (topTailRange.GetStart() < lastPara->GetRange().GetEnd())
         {
             lastPara->DeleteRange(topTailRange);
 
