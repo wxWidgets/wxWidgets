@@ -354,7 +354,7 @@ protected:
     void Init()
     {
         m_mask = 0;
-        m_itemId = 0;
+        m_itemId = -1;
         m_col = 0;
         m_state = 0;
         m_stateMask = 0;
