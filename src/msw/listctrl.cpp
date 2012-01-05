@@ -2528,7 +2528,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     // fill in the item before passing it to the event handler if we do have a
     // valid item index and haven't filled it yet (e.g. for LVN_ITEMCHANGED)
-    if ( event.m_itemIndex != -1 && !event.m_item.GetMask() )
+    // and we're not using a virtual control as in this case the program
+    // already has the data anyhow and we don't want to call GetItem() for
+    // potentially many items
+    if ( event.m_itemIndex != -1 && !event.m_item.GetMask()
+            && !IsVirtual() )
     {
         wxListItem& item = event.m_item;
 
