@@ -17,10 +17,11 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif // WX_PRECOMP
-
 #if wxUSE_DATETIME
+
+#ifndef WX_PRECOMP
+    #include "wx/time.h"    // wxGetTimeZone()
+#endif // WX_PRECOMP
 
 #include "wx/wxcrt.h"       // for wxStrstr()
 
