@@ -152,10 +152,10 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
             dc.SetPen(*wxBLACK_PEN);
             dc.DrawLine(xpos, ypos, pt.x, pt.y);
         }
-    }
 
-    xpos = pt.x;
-    ypos = pt.y;
+        xpos = pt.x;
+        ypos = pt.y;
+    }
 
 #if wxUSE_STATUSBAR
     wxString buf;
