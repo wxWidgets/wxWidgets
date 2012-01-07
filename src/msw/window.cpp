@@ -3023,8 +3023,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case MM_JOY1BUTTONUP:
         case MM_JOY2BUTTONUP:
             processed = HandleJoystickEvent(message,
-                                            GET_X_LPARAM(lParam),
-                                            GET_Y_LPARAM(lParam),
+                                            LOWORD(lParam),
+                                            HIWORD(lParam),
                                             wParam);
             break;
 #endif // __WXMICROWIN__
