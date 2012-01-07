@@ -383,6 +383,10 @@ class WXDLLIMPEXP_CORE wxListCtrlBase : public wxControl
 {
 public:
     wxListCtrlBase() { }
+
+    // Convenient functions for testing the list control mode:
+    bool InReportView() const { return HasFlag(wxLC_REPORT); }
+    bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 };
 
 // ----------------------------------------------------------------------------

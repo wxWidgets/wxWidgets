@@ -160,11 +160,6 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
   // list or report view
   long GetTopItem() const ;
 
-  // are we in report mode?
-  bool InReportView() const { return HasFlag(wxLC_REPORT); }
-
-  bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
-
   // Add or remove a single window style
   void SetSingleStyle(long style, bool add = true) ;
 

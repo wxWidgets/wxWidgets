@@ -140,12 +140,6 @@ public:
     bool ScrollList( int dx, int dy );
     bool SortItems( wxListCtrlCompare fn, wxIntPtr data );
 
-    // are we in report mode?
-    bool InReportView() const { return HasFlag(wxLC_REPORT); }
-
-    // are we in virtual report mode?
-    bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
-
     // do we have a header window?
     bool HasHeader() const
         { return InReportView() && !HasFlag(wxLC_NO_HEADER); }
