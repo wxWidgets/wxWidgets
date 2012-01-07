@@ -1662,11 +1662,15 @@ public:
 
     /**
         Returns the x, y position of the joystick event.
+
+        These coordinates are valid for all the events except wxEVT_JOY_ZMOVE.
     */
     wxPoint GetPosition() const;
 
     /**
         Returns the z position of the joystick event.
+
+        This method can only be used for wxEVT_JOY_ZMOVE events.
     */
     int GetZPosition() const;
 

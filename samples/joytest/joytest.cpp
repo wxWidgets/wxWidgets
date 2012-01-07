@@ -119,35 +119,39 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 {
-    wxClientDC dc(this);
-
-    wxPoint pt(event.GetPosition());
-
-    // if negative positions are possible then shift everything up
-    int xmin = wxGetApp().m_minX;
-    int xmax = wxGetApp().m_maxX;
-    int ymin = wxGetApp().m_minY;
-    int ymax = wxGetApp().m_maxY;
-    if (xmin < 0) {
-        xmax += abs(xmin);
-        pt.x += abs(xmin);
-    }
-    if (ymin < 0) {
-        ymax += abs(ymin);
-        pt.y += abs(ymin);
-    }
-
-    // Scale to canvas size
-    int cw, ch;
-    GetSize(&cw, &ch);
-
-    pt.x = (long) (((double)pt.x/(double)xmax) * cw);
-    pt.y = (long) (((double)pt.y/(double)ymax) * ch);
-
-    if (xpos > -1 && ypos > -1 && event.IsMove() && event.ButtonIsDown())
+    // We don't have valid (x, y) coordinates for z-move events.
+    if ( !event.IsZMove() )
     {
-        dc.SetPen(*wxBLACK_PEN);
-        dc.DrawLine(xpos, ypos, pt.x, pt.y);
+        wxClientDC dc(this);
+
+        wxPoint pt(event.GetPosition());
+
+        // if negative positions are possible then shift everything up
+        int xmin = wxGetApp().m_minX;
+        int xmax = wxGetApp().m_maxX;
+        int ymin = wxGetApp().m_minY;
+        int ymax = wxGetApp().m_maxY;
+        if (xmin < 0) {
+            xmax += abs(xmin);
+            pt.x += abs(xmin);
+        }
+        if (ymin < 0) {
+            ymax += abs(ymin);
+            pt.y += abs(ymin);
+        }
+
+        // Scale to canvas size
+        int cw, ch;
+        GetSize(&cw, &ch);
+
+        pt.x = (long) (((double)pt.x/(double)xmax) * cw);
+        pt.y = (long) (((double)pt.y/(double)ymax) * ch);
+
+        if (xpos > -1 && ypos > -1 && event.IsMove() && event.ButtonIsDown())
+        {
+            dc.SetPen(*wxBLACK_PEN);
+            dc.DrawLine(xpos, ypos, pt.x, pt.y);
+        }
     }
 
     xpos = pt.x;
@@ -156,9 +160,9 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 #if wxUSE_STATUSBAR
     wxString buf;
     if (event.ButtonDown())
-        buf.Printf(wxT("Joystick (%d, %d) #%i Fire!"), pt.x, pt.y, event.GetButtonChange());
+        buf.Printf(wxT("Joystick (%d, %d) #%i Fire!"), xpos, ypos, event.GetButtonChange());
     else
-        buf.Printf(wxT("Joystick (%d, %d)  "), pt.x, pt.y);
+        buf.Printf(wxT("Joystick (%d, %d)  "), xpos, ypos);
 
 /*
     for(int i = 0; i < nButtons; ++i)

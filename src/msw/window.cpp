@@ -5950,7 +5950,10 @@ bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
     }
 
     wxJoystickEvent event(eventType, buttons, joystick, change);
-    event.SetPosition(wxPoint(x, y));
+    if ( eventType == wxEVT_JOY_ZMOVE )
+        event.SetZPosition(x);
+    else
+        event.SetPosition(wxPoint(x, y));
     event.SetEventObject(this);
 
     return HandleWindowEvent(event);
