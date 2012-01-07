@@ -16,6 +16,7 @@
 #include "wx/font.h"
 #include "wx/gdicmn.h"
 #include "wx/event.h"
+#include "wx/control.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
