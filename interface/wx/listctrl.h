@@ -198,6 +198,19 @@ public:
     virtual ~wxListCtrl();
 
     /**
+        Adds a new column to the list control in report view mode.
+
+        This is just a convenient wrapper for InsertColumn() which adds the new
+        column after all the existing ones without having to specify its
+        position explicitly.
+
+        @since 2.9.4
+     */
+    long AppendColumn(const wxString& heading,
+                      int format = wxLIST_FORMAT_LEFT,
+                      int width = -1);
+
+    /**
         Arranges the items in icon or small icon view.
         This only has effect on Win32. @a flag is one of:
         - wxLIST_ALIGN_DEFAULT: Default alignment.

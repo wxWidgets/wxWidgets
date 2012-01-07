@@ -137,6 +137,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 // ----------------------------------------------------------------------------
 
 long
+wxListCtrlBase::AppendColumn(const wxString& heading,
+                             int format,
+                             int width)
+{
+    return InsertColumn(GetColumnCount(), heading, format, width);
+}
+
+long
 wxListCtrlBase::InsertColumn(long col,
                              const wxString& heading,
                              int format,

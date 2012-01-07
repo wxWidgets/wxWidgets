@@ -410,6 +410,13 @@ public:
 
     // All these methods can only be used in report view mode.
 
+    // Appends a new column.
+    //
+    // Returns the index of the newly inserted column or -1 on error.
+    long AppendColumn(const wxString& heading,
+                      int format = wxLIST_FORMAT_LEFT,
+                      int width = -1);
+
     // Add a new column to the control at the position "col".
     //
     // Returns the index of the newly inserted column or -1 on error.
