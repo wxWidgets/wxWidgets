@@ -575,7 +575,6 @@ public:
 
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height ) const;
-    int GetTextLength( const wxString &s ) const;
 
     void SetImageList( wxImageList *imageList, int which );
     void SetItemSpacing( int spacing, bool isSmall = false );
@@ -792,6 +791,10 @@ private:
 
     // delete all items but don't refresh: called from dtor
     void DoDeleteAllItems();
+
+    // Compute the minimal width needed to fully display the column header.
+    int ComputeMinHeaderWidth(const wxListHeaderData* header) const;
+
 
     // the height of one line using the current font
     wxCoord m_lineHeight;

@@ -2964,17 +2964,6 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
     }
 }
 
-int wxListMainWindow::GetTextLength( const wxString &s ) const
-{
-    wxClientDC dc( wxConstCast(this, wxListMainWindow) );
-    dc.SetFont( GetFont() );
-
-    wxCoord lw;
-    dc.GetTextExtent( s, &lw, NULL );
-
-    return lw + AUTOSIZE_COL_MARGIN;
-}
-
 void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
 {
     m_dirty = true;
@@ -3017,6 +3006,30 @@ int wxListMainWindow::GetItemSpacing( bool isSmall )
 // columns
 // ----------------------------------------------------------------------------
 
+int
+wxListMainWindow::ComputeMinHeaderWidth(const wxListHeaderData* column) const
+{
+    wxClientDC dc(const_cast<wxListMainWindow*>(this));
+
+    int width = dc.GetTextExtent(column->GetText()).x + AUTOSIZE_COL_MARGIN;
+
+    width += 2*EXTRA_WIDTH;
+
+    // check for column header's image availability
+    const int image = column->GetImage();
+    if ( image != -1 )
+    {
+        if ( m_small_image_list )
+        {
+            int ix = 0, iy = 0;
+            m_small_image_list->GetSize(image, ix, iy);
+            width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
+        }
+    }
+
+    return width;
+}
+
 void wxListMainWindow::SetColumn( int col, const wxListItem &item )
 {
     wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
@@ -3027,7 +3040,7 @@ void wxListMainWindow::SetColumn( int col, const wxListItem &item )
     column->SetItem( item );
 
     if ( item.m_width == wxLIST_AUTOSIZE_USEHEADER )
-        column->SetWidth(GetTextLength( item.m_text ));
+        column->SetWidth(ComputeMinHeaderWidth(column));
 
     wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
     if ( headerWin )
@@ -3062,29 +3075,13 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
 
     if (width == wxLIST_AUTOSIZE_USEHEADER)
     {
-        width = GetTextLength(column->GetText());
-        width += 2*EXTRA_WIDTH;
-
-        // check for column header's image availability
-        const int image = column->GetImage();
-        if ( image != -1 )
-        {
-            if ( m_small_image_list )
-            {
-                int ix = 0, iy = 0;
-                m_small_image_list->GetSize(image, ix, iy);
-                width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
-            }
-        }
+        width = ComputeMinHeaderWidth(column);
     }
     else if ( width == wxLIST_AUTOSIZE )
     {
-        if ( IsVirtual() )
-        {
-            // TODO: determine the max width somehow...
-            width = WIDTH_COL_DEFAULT;
-        }
-        else // !virtual
+        width = ComputeMinHeaderWidth(column);
+
+        if ( !IsVirtual() )
         {
             wxClientDC dc(this);
             dc.SetFont( GetFont() );
@@ -3114,8 +3111,9 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
                 m_aColWidths.Item(col)->nMaxWidth = max;
             }
 
-            max = m_aColWidths.Item(col)->nMaxWidth;
-            width = max + AUTOSIZE_COL_MARGIN;
+            max = m_aColWidths.Item(col)->nMaxWidth + AUTOSIZE_COL_MARGIN;
+            if ( width < max )
+                width = max;
         }
     }
 
@@ -4129,7 +4127,7 @@ void wxListMainWindow::InsertColumn( long col, const wxListItem &item )
     {
         wxListHeaderData *column = new wxListHeaderData( item );
         if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
-            column->SetWidth(GetTextLength( item.m_text ));
+            column->SetWidth(ComputeMinHeaderWidth(column));
 
         wxColWidthInfo *colWidthInfo = new wxColWidthInfo();
 
