@@ -424,7 +424,7 @@ public:
     long InsertColumn(long col,
                       const wxString& heading,
                       int format = wxLIST_FORMAT_LEFT,
-                      int width = -1);
+                      int width = wxLIST_AUTOSIZE);
 
     // Delete the given or all columns.
     virtual bool DeleteColumn(int col) = 0;

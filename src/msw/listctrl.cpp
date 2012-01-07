@@ -1735,7 +1735,14 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
     LV_COLUMN lvCol;
     wxConvertToMSWListCol(GetHwnd(), col, item, lvCol);
 
-    if ( !(lvCol.mask & LVCF_WIDTH) )
+    // LVSCW_AUTOSIZE_USEHEADER is not supported when inserting new column,
+    // we'll deal with it below instead. Plain LVSCW_AUTOSIZE is not supported
+    // neither but it doesn't need any special handling as we use fixed value
+    // for it here, both because we can't do anything else (there are no items
+    // with values in this column to compute the size from yet) and for
+    // compatibility as wxLIST_AUTOSIZE == -1 and -1 as InsertColumn() width
+    // parameter used to mean "arbitrary fixed width".
+    if ( !(lvCol.mask & LVCF_WIDTH) || lvCol.cx < 0 )
     {
         // always give some width to the new column: this one is compatible
         // with the generic version
@@ -1744,14 +1751,20 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
     }
 
     long n = ListView_InsertColumn(GetHwnd(), col, &lvCol);
-    if ( n != -1 )
-    {
-        m_colCount++;
-    }
-    else // failed to insert?
+    if ( n == -1 )
     {
         wxLogDebug(wxT("Failed to insert the column '%s' into listview!"),
                    lvCol.pszText);
+        return -1;
+    }
+
+    m_colCount++;
+
+    // Now adjust the new column size.
+    if ( (item.GetMask() & wxLIST_MASK_WIDTH) &&
+            (item.GetWidth() == wxLIST_AUTOSIZE_USEHEADER) )
+    {
+        SetColumnWidth(n, wxLIST_AUTOSIZE_USEHEADER);
     }
 
     return n;

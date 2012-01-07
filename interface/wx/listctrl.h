@@ -661,16 +661,48 @@ public:
     bool InReportView() const;
 
     /**
-        For report view mode (only), inserts a column. For more details, see SetItem().
+        For report view mode (only), inserts a column.
+
+        For more details, see SetItem(). Also see InsertColumn(long, const
+        wxString&, int, int) overload for a usually more convenient
+        alternative to this method and the description of how the item width
+        is interpreted by this method.
     */
-    long InsertColumn(long col, wxListItem& info);
+    long InsertColumn(long col, const wxListItem& info);
 
     /**
-        For report view mode (only), inserts a column. For more details, see SetItem().
+        For report view mode (only), inserts a column.
+
+        Insert a new column in the list control in report view mode at the
+        given position specifying its most common attributes.
+
+        Notice that to set the image for the column you need to use
+        Insert(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
+        in the item mask.
+
+        @param col
+            The index where the column should be inserted. Valid indices are
+            from 0 up to GetColumnCount() inclusive and the latter can be used
+            to append the new column after the last existing one.
+        @param heading
+            The string specifying the column heading.
+        @param format
+            The flags specifying the control heading text alignment.
+        @param width
+            If positive, the width of the column in pixels. Otherwise it can be
+            @c wxLIST_AUTOSIZE to choose the default size for the column or @c
+            wxLIST_AUTOSIZE_USEHEADER to fit the column width to @a heading or
+            to extend to fill all the remaining space for the last column.
+            Notice that in case of @c wxLIST_AUTOSIZE fixed width is used as
+            there are no items in this column to use for determining its best
+            size yet. If you want to fit the column to its contents, use
+            SetColumnWidth() after adding the items with values in this column.
+        @return
+            The index of the inserted column or -1 if adding it failed.
     */
     long InsertColumn(long col, const wxString& heading,
                       int format = wxLIST_FORMAT_LEFT,
-                      int width = -1);
+                      int width = wxLIST_AUTOSIZE);
 
     /**
         Inserts an item, returning the index of the new item if successful, -1 otherwise.
