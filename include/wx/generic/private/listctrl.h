@@ -581,7 +581,7 @@ public:
     void SetItemSpacing( int spacing, bool isSmall = false );
     int GetItemSpacing( bool isSmall = false );
 
-    void SetColumn( int col, wxListItem &item );
+    void SetColumn( int col, const wxListItem &item );
     void SetColumnWidth( int col, int width );
     void GetColumn( int col, wxListItem &item ) const;
     int GetColumnWidth( int col ) const;
@@ -645,7 +645,7 @@ public:
     long FindItem( const wxPoint& pt );
     long HitTest( int x, int y, int &flags ) const;
     void InsertItem( wxListItem &item );
-    void InsertColumn( long col, wxListItem &item );
+    void InsertColumn( long col, const wxListItem &item );
     int GetItemWidthWithImage(wxListItem * item);
     void SortItems( wxListCtrlCompare fn, wxIntPtr data );
 

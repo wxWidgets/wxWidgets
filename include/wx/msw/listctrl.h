@@ -16,7 +16,6 @@
 #include "wx/dynarray.h"
 #include "wx/vector.h"
 
-class WXDLLIMPEXP_FWD_CORE wxImageList;
 class wxMSWListItemData;
 
 // define this symbol to indicate the availability of SetColumnsOrder() and
@@ -320,14 +319,6 @@ public:
     // Insert an image/string item
     long InsertItem(long index, const wxString& label, int imageIndex);
 
-    // For list view mode (only), inserts a column.
-    long InsertColumn(long col, const wxListItem& info);
-
-    long InsertColumn(long col,
-                      const wxString& heading,
-                      int format = wxLIST_FORMAT_LEFT,
-                      int width = -1);
-
     // set the number of items in a virtual list control
     void SetItemCount(long count);
 
@@ -392,6 +383,9 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    // Implement base class pure virtual methods.
+    long DoInsertColumn(long col, const wxListItem& info);
 
     // free memory taken by all internal data
     void FreeAllInternalData();

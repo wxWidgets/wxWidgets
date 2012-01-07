@@ -252,12 +252,6 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
   // Insert an image/string item
   long InsertItem(long index, const wxString& label, int imageIndex);
 
-  // For list view mode (only), inserts a column.
-  long InsertColumn(long col, wxListItem& info);
-
-  long InsertColumn(long col, const wxString& heading, int format = wxLIST_FORMAT_LEFT,
-    int width = -1);
-
   // Scrolls the list control. If in icon, small icon or report view mode,
   // x specifies the number of pixels to scroll. If in list view mode, x
   // specifies the number of columns to scroll.
@@ -371,13 +365,13 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
   GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
+  // Implement base class pure virtual methods.
+  long DoInsertColumn(long col, const wxListItem& info);
 
   // protected overrides needed for pimpl approach
   virtual void DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags = wxSIZE_AUTO);
-
-  virtual wxSize DoGetBestSize() const;
 
   long               m_current;
   wxListCtrlTextCtrlWrapper *m_textctrlWrapper;

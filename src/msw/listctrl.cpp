@@ -1730,7 +1730,7 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 }
 
 // For list view mode (only), inserts a column.
-long wxListCtrl::InsertColumn(long col, const wxListItem& item)
+long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
 {
     LV_COLUMN lvCol;
     wxConvertToMSWListCol(GetHwnd(), col, item, lvCol);
@@ -1755,24 +1755,6 @@ long wxListCtrl::InsertColumn(long col, const wxListItem& item)
     }
 
     return n;
-}
-
-long wxListCtrl::InsertColumn(long col,
-                              const wxString& heading,
-                              int format,
-                              int width)
-{
-    wxListItem item;
-    item.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_FORMAT;
-    item.m_text = heading;
-    if ( width > -1 )
-    {
-        item.m_mask |= wxLIST_MASK_WIDTH;
-        item.m_width = width;
-    }
-    item.m_format = format;
-
-    return InsertColumn(col, item);
 }
 
 // scroll the control by the given number of pixels (exception: in list view,

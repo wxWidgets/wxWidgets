@@ -14,8 +14,6 @@
 #include "wx/scrolwin.h"
 #include "wx/textctrl.h"
 
-class WXDLLIMPEXP_FWD_CORE wxImageList;
-
 #if wxUSE_DRAG_AND_DROP
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 #endif
@@ -66,7 +64,7 @@ public:
                  const wxString &name = wxListCtrlNameStr);
 
     bool GetColumn( int col, wxListItem& item ) const;
-    bool SetColumn( int col, wxListItem& item );
+    bool SetColumn( int col, const wxListItem& item );
     int GetColumnWidth( int col ) const;
     bool SetColumnWidth( int col, int width);
     int GetCountPerPage() const; // not the same in wxGLC as in Windows, I think
@@ -134,9 +132,6 @@ public:
     long InsertItem( long index, const wxString& label );
     long InsertItem( long index, int imageIndex );
     long InsertItem( long index, const wxString& label, int imageIndex );
-    long InsertColumn( long col, wxListItem& info );
-    long InsertColumn( long col, const wxString& heading,
-                       int format = wxLIST_FORMAT_LEFT, int width = -1 );
     bool ScrollList( int dx, int dy );
     bool SortItems( wxListCtrlCompare fn, wxIntPtr data );
 
@@ -208,6 +203,10 @@ public:
     wxListMainWindow    *m_mainWin;
 
 protected:
+    // Implement base class pure virtual methods.
+    long DoInsertColumn(long col, const wxListItem& info);
+
+
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 
     // take into account the coordinates difference between the container

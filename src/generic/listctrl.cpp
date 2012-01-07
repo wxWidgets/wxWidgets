@@ -3017,17 +3017,17 @@ int wxListMainWindow::GetItemSpacing( bool isSmall )
 // columns
 // ----------------------------------------------------------------------------
 
-void wxListMainWindow::SetColumn( int col, wxListItem &item )
+void wxListMainWindow::SetColumn( int col, const wxListItem &item )
 {
     wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
 
     wxCHECK_RET( node, wxT("invalid column index in SetColumn") );
 
-    if ( item.m_width == wxLIST_AUTOSIZE_USEHEADER )
-        item.m_width = GetTextLength( item.m_text );
-
     wxListHeaderData *column = node->GetData();
     column->SetItem( item );
+
+    if ( item.m_width == wxLIST_AUTOSIZE_USEHEADER )
+        column->SetWidth(GetTextLength( item.m_text ));
 
     wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
     if ( headerWin )
@@ -4122,15 +4122,15 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     RefreshLines(id, GetItemCount() - 1);
 }
 
-void wxListMainWindow::InsertColumn( long col, wxListItem &item )
+void wxListMainWindow::InsertColumn( long col, const wxListItem &item )
 {
     m_dirty = true;
     if ( InReportView() )
     {
-        if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
-            item.m_width = GetTextLength( item.m_text );
-
         wxListHeaderData *column = new wxListHeaderData( item );
+        if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
+            column->SetWidth(GetTextLength( item.m_text ));
+
         wxColWidthInfo *colWidthInfo = new wxColWidthInfo();
 
         bool insert = (col >= 0) && ((size_t)col < m_columns.GetCount());
@@ -4528,7 +4528,7 @@ bool wxGenericListCtrl::GetColumn(int col, wxListItem &item) const
     return true;
 }
 
-bool wxGenericListCtrl::SetColumn( int col, wxListItem& item )
+bool wxGenericListCtrl::SetColumn( int col, const wxListItem& item )
 {
     m_mainWin->SetColumn( col, item );
     return true;
@@ -4945,7 +4945,7 @@ long wxGenericListCtrl::InsertItem( long index, const wxString &label, int image
     return InsertItem( info );
 }
 
-long wxGenericListCtrl::InsertColumn( long col, wxListItem &item )
+long wxGenericListCtrl::DoInsertColumn( long col, const wxListItem &item )
 {
     wxCHECK_MSG( InReportView(), -1, wxT("can't add column in non report mode") );
 
@@ -4957,23 +4957,6 @@ long wxGenericListCtrl::InsertColumn( long col, wxListItem &item )
         m_headerWin->Refresh();
 
     return 0;
-}
-
-long wxGenericListCtrl::InsertColumn( long col, const wxString &heading,
-                               int format, int width )
-{
-    wxListItem item;
-    item.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_FORMAT;
-    item.m_text = heading;
-    if (width >= -2)
-    {
-        item.m_mask |= wxLIST_MASK_WIDTH;
-        item.m_width = width;
-    }
-
-    item.m_format = format;
-
-    return InsertColumn( col, item );
 }
 
 bool wxGenericListCtrl::ScrollList( int dx, int dy )

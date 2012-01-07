@@ -801,11 +801,6 @@ void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     }
 }
 
-wxSize wxListCtrl::DoGetBestSize() const
-{
-    return wxWindow::DoGetBestSize();
-}
-
 bool wxListCtrl::SetFont(const wxFont& font)
 {
     bool rv = true;
@@ -2161,7 +2156,7 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 }
 
 // For list view mode (only), inserts a column.
-long wxListCtrl::InsertColumn(long col, wxListItem& item)
+long wxListCtrl::DoInsertColumn(long col, wxListItem& item)
 {
     if (m_genericImpl)
         return m_genericImpl->InsertColumn(col, item);
@@ -2212,27 +2207,6 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
     }
 
     return col;
-}
-
-long wxListCtrl::InsertColumn(long col,
-                              const wxString& heading,
-                              int format,
-                              int width)
-{
-    if (m_genericImpl)
-        return m_genericImpl->InsertColumn(col, heading, format, width);
-
-    wxListItem item;
-    item.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_FORMAT;
-    item.m_text = heading;
-    if ( width > -1 )
-    {
-        item.m_mask |= wxLIST_MASK_WIDTH;
-        item.m_width = width;
-    }
-    item.m_format = format;
-
-    return InsertColumn(col, item);
 }
 
 // scroll the control by the given number of pixels (exception: in list view,
