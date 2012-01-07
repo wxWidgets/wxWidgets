@@ -775,7 +775,7 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 
 void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    wxControl::DoSetSize(x, y, width, height, sizeFlags);
+    wxListCtrlBase::DoSetSize(x, y, width, height, sizeFlags);
 
     if (m_genericImpl)
         m_genericImpl->SetSize(0, 0, width, height, sizeFlags);
@@ -809,7 +809,7 @@ wxSize wxListCtrl::DoGetBestSize() const
 bool wxListCtrl::SetFont(const wxFont& font)
 {
     bool rv = true;
-    rv = wxControl::SetFont(font);
+    rv = wxListCtrlBase::SetFont(font);
     if (m_genericImpl)
         rv = m_genericImpl->SetFont(font);
     return rv;
@@ -849,21 +849,21 @@ void wxListCtrl::Freeze ()
 {
     if (m_genericImpl)
         m_genericImpl->Freeze();
-    wxControl::Freeze();
+    wxListCtrlBase::Freeze();
 }
 
 void wxListCtrl::Thaw ()
 {
     if (m_genericImpl)
         m_genericImpl->Thaw();
-    wxControl::Thaw();
+    wxListCtrlBase::Thaw();
 }
 
 void wxListCtrl::Update ()
 {
     if (m_genericImpl)
         m_genericImpl->Update();
-    wxControl::Update();
+    wxListCtrlBase::Update();
 }
 
 // ----------------------------------------------------------------------------

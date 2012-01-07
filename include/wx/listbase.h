@@ -372,6 +372,20 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// wxListCtrlBase: the base class for the main control itself.
+// ----------------------------------------------------------------------------
+
+// Unlike other base classes, this class doesn't currently define the API of
+// the real control class but is just used for implementation convenience. We
+// should define the public class functions as pure virtual here in the future
+// however.
+class WXDLLIMPEXP_CORE wxListCtrlBase : public wxControl
+{
+public:
+    wxListCtrlBase() { }
+};
+
+// ----------------------------------------------------------------------------
 // wxListEvent - the event class for the wxListCtrl notifications
 // ----------------------------------------------------------------------------
 

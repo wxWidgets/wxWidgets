@@ -31,7 +31,7 @@ class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 // wxListCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxControl,
+class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxListCtrlBase,
                                           public wxScrollHelper
 {
 public:

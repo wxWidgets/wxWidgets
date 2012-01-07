@@ -4300,7 +4300,7 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericListCtrl, wxControl)
 
-BEGIN_EVENT_TABLE(wxGenericListCtrl,wxControl)
+BEGIN_EVENT_TABLE(wxGenericListCtrl,wxListCtrlBase)
   EVT_SIZE(wxGenericListCtrl::OnSize)
   EVT_SCROLLWIN(wxGenericListCtrl::OnScroll)
 END_EVENT_TABLE()
@@ -4380,7 +4380,9 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     wxASSERT_MSG( (style & wxLC_MASK_TYPE),
                   wxT("wxListCtrl style should have exactly one mode bit set") );
 
-    if ( !wxControl::Create( parent, id, pos, size, style|wxVSCROLL|wxHSCROLL, validator, name ) )
+    if ( !wxListCtrlBase::Create( parent, id, pos, size,
+                                  style | wxVSCROLL | wxHSCROLL,
+                                  validator, name ) )
         return false;
 
 #ifdef __WXGTK__
@@ -4418,7 +4420,7 @@ WXLRESULT wxGenericListCtrl::MSWWindowProc(WXUINT nMsg,
                                        WXWPARAM wParam,
                                        WXLPARAM lParam)
 {
-    WXLRESULT rc = wxControl::MSWWindowProc(nMsg, wParam, lParam);
+    WXLRESULT rc = wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 
     // we need to process arrows ourselves for scrolling
     if ( nMsg == WM_GETDLGCODE )
@@ -5145,7 +5147,7 @@ void wxGenericListCtrl::DoClientToScreen( int *x, int *y ) const
     if ( m_mainWin )
         m_mainWin->DoClientToScreen(x, y);
     else
-        wxControl::DoClientToScreen(x, y);
+        wxListCtrlBase::DoClientToScreen(x, y);
 }
 
 void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
@@ -5155,7 +5157,7 @@ void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
     if ( m_mainWin )
         m_mainWin->DoScreenToClient(x, y);
     else
-        wxControl::DoScreenToClient(x, y);
+        wxListCtrlBase::DoScreenToClient(x, y);
 }
 
 void wxGenericListCtrl::SetFocus()

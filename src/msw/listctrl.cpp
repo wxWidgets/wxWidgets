@@ -226,7 +226,7 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
 };
 
-BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
+BEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
 END_EVENT_TABLE()
@@ -309,7 +309,7 @@ void wxListCtrl::MSWSetExListStyles()
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
-    WXDWORD wstyle = wxControl::MSWGetStyle(style, exstyle);
+    WXDWORD wstyle = wxListCtrlBase::MSWGetStyle(style, exstyle);
 
     wstyle |= LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
 
@@ -478,7 +478,7 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 {
     if ( flag != m_windowStyle )
     {
-        wxControl::SetWindowStyleFlag(flag);
+        wxListCtrlBase::SetWindowStyleFlag(flag);
 
         UpdateStyle();
 
@@ -1862,7 +1862,7 @@ bool wxListCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
             return false;
         }
     }
-    return wxControl::MSWShouldPreProcessMessage(msg);
+    return wxListCtrlBase::MSWShouldPreProcessMessage(msg);
 }
 
 bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id_)
@@ -2047,7 +2047,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         }
 
         if ( ignore )
-            return wxControl::MSWOnNotify(idCtrl, lParam, result);
+            return wxListCtrlBase::MSWOnNotify(idCtrl, lParam, result);
     }
     else
 #endif // defined(HDN_BEGINTRACKA)
@@ -2275,7 +2275,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case NM_DBLCLK:
                 // if the user processes it in wxEVT_COMMAND_LEFT_CLICK(), don't do
                 // anything else
-                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
+                if ( wxListCtrlBase::MSWOnNotify(idCtrl, lParam, result) )
                 {
                     return true;
                 }
@@ -2300,7 +2300,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case NM_RCLICK:
                 // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(),
                 // don't do anything else
-                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
+                if ( wxListCtrlBase::MSWOnNotify(idCtrl, lParam, result) )
                 {
                     return true;
                 }
@@ -2513,7 +2513,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         }
 
         if ( !processed )
-            return wxControl::MSWOnNotify(idCtrl, lParam, result);
+            return wxListCtrlBase::MSWOnNotify(idCtrl, lParam, result);
     }
     else
     {
@@ -2903,7 +2903,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
     wxPaintDC dc(this);
 
-    wxControl::OnPaint(event);
+    wxListCtrlBase::OnPaint(event);
 
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
@@ -3022,7 +3022,7 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             //else: break
     }
 
-    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+    return wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------
