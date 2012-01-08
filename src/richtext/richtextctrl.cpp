@@ -4086,7 +4086,15 @@ bool wxRichTextCtrl::SetDefaultStyleToCursorStyle()
     // If at the start of a paragraph, use the next position.
     long pos = GetAdjustedCaretPosition(GetCaretPosition());
 
-    if (GetUncombinedStyle(pos, attr))
+    wxRichTextObject* obj = GetFocusObject()->GetLeafObjectAtPosition(pos);
+    if (obj && obj->IsTopLevel())
+    {
+        // Don't use the attributes of a top-level object, since they might apply
+        // to content of the object, e.g. background colour.
+        SetDefaultStyle(wxRichTextAttr());
+        return true;
+    }
+    else if (GetUncombinedStyle(pos, attr))
     {
         SetDefaultStyle(attr);
         return true;

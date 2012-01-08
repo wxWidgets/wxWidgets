@@ -442,7 +442,7 @@ bool wxRichTextStyleSheet::AddListStyle(wxRichTextListStyleDefinition* def)
 /// Add a definition to the box style list
 bool wxRichTextStyleSheet::AddBoxStyle(wxRichTextBoxStyleDefinition* def)
 {
-    def->GetStyle().SetParagraphStyleName(def->GetName());
+    def->GetStyle().GetTextBoxAttr().SetBoxStyleName(def->GetName());
     return AddStyle(m_boxStyleDefinitions, def);
 }
 
