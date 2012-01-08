@@ -63,8 +63,7 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
   bool GetColumn(int col, wxListItem& item) const;
 
   // Sets information about this column
-  // TODO: NOT const to be compatible with wxGenericListCtrl API
-  bool SetColumn(int col, wxListItem& item) ;
+  bool SetColumn(int col, const wxListItem& item) ;
 
   // Gets the column width
   int GetColumnWidth(int col) const;

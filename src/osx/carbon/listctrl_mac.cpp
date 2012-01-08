@@ -898,7 +898,7 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
 }
 
 // Sets information about this column
-bool wxListCtrl::SetColumn(int col, wxListItem& item)
+bool wxListCtrl::SetColumn(int col, const wxListItem& item)
 {
     if (m_genericImpl)
         return m_genericImpl->SetColumn(col, item);
