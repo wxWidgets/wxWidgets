@@ -516,7 +516,6 @@ static void         wxgtk_tree_model_sortable_init   (GtkTreeSortableIface    *i
 static void         wxgtk_tree_model_drag_source_init(GtkTreeDragSourceIface  *iface);
 static void         wxgtk_tree_model_drag_dest_init  (GtkTreeDragDestIface    *iface);
 
-static void         wxgtk_tree_model_finalize        (GObject           *object);
 static GtkTreeModelFlags wxgtk_tree_model_get_flags  (GtkTreeModel      *tree_model);
 static gint         wxgtk_tree_model_get_n_columns   (GtkTreeModel      *tree_model);
 static GType        wxgtk_tree_model_get_column_type (GtkTreeModel      *tree_model,
@@ -662,8 +661,6 @@ static void
 wxgtk_tree_model_class_init (GtkWxTreeModelClass *klass)
 {
     list_parent_class = (GObjectClass*) g_type_class_peek_parent (klass);
-    GObjectClass *object_class = (GObjectClass*) klass;
-    object_class->finalize = wxgtk_tree_model_finalize;
 }
 
 static void
@@ -713,13 +710,6 @@ wxgtk_tree_model_init (GtkWxTreeModel *tree_model)
 {
     tree_model->internal = NULL;
     tree_model->stamp = g_random_int();
-}
-
-static void
-wxgtk_tree_model_finalize (GObject *object)
-{
-    /* must chain up */
-    (* list_parent_class->finalize) (object);
 }
 
 } // extern "C"
@@ -1094,8 +1084,6 @@ static void gtk_wx_cell_renderer_text_init (
                         GtkWxCellRendererText      *cell );
 static void gtk_wx_cell_renderer_text_class_init(
                         GtkWxCellRendererTextClass *klass );
-static void gtk_wx_cell_renderer_text_finalize (
-                        GObject                *object );
 static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
                         GtkCellRenderer         *cell,
                         GdkEvent                *event,
@@ -1146,21 +1134,11 @@ gtk_wx_cell_renderer_text_init (GtkWxCellRendererText *cell)
 static void
 gtk_wx_cell_renderer_text_class_init (GtkWxCellRendererTextClass *klass)
 {
-    GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
 
     text_cell_parent_class = (GObjectClass*) g_type_class_peek_parent (klass);
 
-    object_class->finalize = gtk_wx_cell_renderer_text_finalize;
-
     cell_class->start_editing = gtk_wx_cell_renderer_text_start_editing;
-}
-
-static void
-gtk_wx_cell_renderer_text_finalize (GObject *object)
-{
-    /* must chain up */
-    (* G_OBJECT_CLASS (text_cell_parent_class)->finalize) (object);
 }
 
 GtkWxCellRendererText*
@@ -1237,8 +1215,6 @@ static void gtk_wx_cell_renderer_init (
                         GtkWxCellRenderer      *cell );
 static void gtk_wx_cell_renderer_class_init(
                         GtkWxCellRendererClass *klass );
-static void gtk_wx_cell_renderer_finalize (
-                        GObject                *object );
 static void gtk_wx_cell_renderer_get_size (
                         GtkCellRenderer         *cell,
                         GtkWidget               *widget,
@@ -1313,24 +1289,14 @@ gtk_wx_cell_renderer_init (GtkWxCellRenderer *cell)
 static void
 gtk_wx_cell_renderer_class_init (GtkWxCellRendererClass *klass)
 {
-    GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
 
     cell_parent_class = (GObjectClass*) g_type_class_peek_parent (klass);
-
-    object_class->finalize = gtk_wx_cell_renderer_finalize;
 
     cell_class->get_size = gtk_wx_cell_renderer_get_size;
     cell_class->render = gtk_wx_cell_renderer_render;
     cell_class->activate = gtk_wx_cell_renderer_activate;
     cell_class->start_editing = gtk_wx_cell_renderer_start_editing;
-}
-
-static void
-gtk_wx_cell_renderer_finalize (GObject *object)
-{
-    /* must chain up */
-    (* G_OBJECT_CLASS (cell_parent_class)->finalize) (object);
 }
 
 GtkCellRenderer*
