@@ -183,7 +183,8 @@ protected :
 class wxMenuCarbonImpl : public wxMenuImpl
 {
 public :
-    wxMenuCarbonImpl( wxMenu* peer , MenuRef menu) : wxMenuImpl(peer), m_osxMenu(menu)
+    wxMenuCarbonImpl( wxMenu* peer , MenuRef menu , MenuRef oldMenu , SInt16 menuId)
+        : wxMenuImpl(peer), m_osxMenu(menu), m_oldMenuRef(oldMenu), m_menuId(menuId)
     {
     }
 
@@ -280,6 +281,8 @@ public :
     static wxMenuImpl* CreateRootMenu( wxMenu* peer );
 protected :
     wxCFRef<MenuRef> m_osxMenu;
+    MenuRef m_oldMenuRef;
+    SInt16 m_menuId;
 } ;
 
 // static const short kwxMacAppleMenuId = 1 ;
@@ -325,21 +328,35 @@ void wxRemoveMacMenuAssociation(wxMenu *menu)
 wxMenuCarbonImpl::~wxMenuCarbonImpl()
 {
     wxRemoveMacMenuAssociation( GetWXPeer() );
+    // restore previous menu
+    m_osxMenu.reset();
+    if ( m_menuId > 0 )
+        MacDeleteMenu(m_menuId);
+    if ( m_oldMenuRef )
+        MacInsertMenu(m_oldMenuRef, -1);
 }
 
 wxMenuImpl* wxMenuImpl::Create( wxMenu* peer, const wxString& title )
 {
     // create the menu
     static SInt16 s_macNextMenuId = 3;
+    SInt16 menuId = s_macNextMenuId++;
+    // save existing menu in case we're embedding into an application
+    // or sharing outside UI elements.
+    WXHMENU oldMenu = GetMenuHandle(menuId);
+    if ( oldMenu )
+        MacDeleteMenu(menuId);
     WXHMENU menu = NULL;
-    CreateNewMenu( s_macNextMenuId++ , 0 , &menu ) ;
+    CreateNewMenu( menuId , 0 , &menu ) ;
     if ( !menu )
     {
         wxLogLastError(wxT("CreateNewMenu failed"));
+        if ( oldMenu )
+            MacInsertMenu(oldMenu, -1);
         return NULL;
     }
 
-    wxMenuImpl* c = new wxMenuCarbonImpl( peer, menu );
+    wxMenuImpl* c = new wxMenuCarbonImpl( peer, menu, oldMenu, menuId );
     c->SetTitle(title);
     wxAssociateMenuWithMacMenu( menu , peer ) ;
     return c;
