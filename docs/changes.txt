@@ -462,8 +462,9 @@ All (GUI):
 - Support font-family/style, text-decoration in wxHtmlWindow (Blake Oleander).
 - Show ribbon tools help strings in tooltips (John Roberts).
 - Improve row/column selection modes in wxGrid (joostn).
-- Allow using wxEVT_UPDATE_UI with wxRibbonButtonBar (Emilien Kia).
-- Add wxRibbonButtonBar::InsertXXXButton() methods (Emilien Kia).
+- Send wxEVT_UPDATE_UI for wxRibbonButtonBar and wxRibbonToolBar (Emilien Kia).
+- Add InsertXXXButton() to wxRibbonButtonBar and wxRibbonToolBar (Emilien Kia).
+- Allow enabling/disabling and toggling tools in wxRibbonToolBar (Emilien Kia).
 - Fix multiple item selection in generic wxTreeCtrl (Igor Korot).
 - Implement best size calculation for report mode wxListCtrl.
 

@@ -35,7 +35,8 @@ enum wxRibbonToolBarToolState
     wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE   = 1 << 6,
     wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK       = wxRIBBON_TOOLBAR_TOOL_NORMAL_ACTIVE | wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE,
     wxRIBBON_TOOLBAR_TOOL_DISABLED          = 1 << 7,
-    wxRIBBON_TOOLBAR_TOOL_STATE_MASK        = 0xF8
+    wxRIBBON_TOOLBAR_TOOL_TOGGLED           = 1 << 8,
+    wxRIBBON_TOOLBAR_TOOL_STATE_MASK        = 0x1F8
 };
 
 
@@ -74,6 +75,11 @@ public:
                 const wxBitmap& bitmap,
                 const wxString& help_string = wxEmptyString);
 
+    virtual wxRibbonToolBarToolBase* AddToggleTool(
+                int tool_id,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
     virtual wxRibbonToolBarToolBase* AddTool(
                 int tool_id,
                 const wxBitmap& bitmap,
@@ -84,10 +90,70 @@ public:
 
     virtual wxRibbonToolBarToolBase* AddSeparator();
 
+    virtual wxRibbonToolBarToolBase* InsertTool(
+                size_t pos,
+                int tool_id,
+                const wxBitmap& bitmap,
+                const wxString& help_string,
+                wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
+
+    virtual wxRibbonToolBarToolBase* InsertDropdownTool(
+                size_t pos,
+                int tool_id,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    virtual wxRibbonToolBarToolBase* InsertHybridTool(
+                size_t pos,
+                int tool_id,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    virtual wxRibbonToolBarToolBase* InsertToggleTool(
+                size_t pos,
+                int tool_id,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+
+    virtual wxRibbonToolBarToolBase* InsertTool(
+                size_t pos,
+                int tool_id,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxString& help_string = wxEmptyString,
+                wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
+                wxObject* client_data = NULL);
+
+    virtual wxRibbonToolBarToolBase* InsertSeparator(size_t pos);
+
+    virtual void ClearTools();
+    virtual bool DeleteTool(int tool_id);
+    virtual bool DeleteToolByPos(size_t pos);
+
+    virtual wxRibbonToolBarToolBase* FindById(int tool_id)const;
+    virtual wxRibbonToolBarToolBase* GetToolByPos(size_t pos)const;
+    virtual size_t GetToolCount() const;
+    virtual int GetToolId(const wxRibbonToolBarToolBase* tool)const;
+
+    virtual wxObject* GetToolClientData(int tool_id)const;
+    virtual bool GetToolEnabled(int tool_id)const;
+    virtual wxString GetToolHelpString(int tool_id)const;
+    virtual wxRibbonButtonKind GetToolKind(int tool_id)const;
+    virtual int GetToolPos(int tool_id)const;
+    virtual bool GetToolState(int tool_id)const;
+
     virtual bool Realize();
     virtual void SetRows(int nMin, int nMax = -1);
 
+    virtual void SetToolClientData(int tool_id, wxObject* clientData);
+    virtual void SetToolDisabledBitmap(int tool_id, const wxBitmap &bitmap);
+    virtual void SetToolHelpString(int tool_id, const wxString& helpString);
+    virtual void SetToolNormalBitmap(int tool_id, const wxBitmap &bitmap);
+
     virtual bool IsSizingContinuous() const;
+
+    virtual void EnableTool(int tool_id, bool enable = true);
+    virtual void ToggleTool(int tool_id, bool checked);
 
 protected:
     friend class wxRibbonToolBarEvent;
@@ -110,6 +176,8 @@ protected:
 
     void CommonInit(long style);
     void AppendGroup();
+    wxRibbonToolBarToolGroup* InsertGroup(size_t pos);
+    virtual void UpdateWindowUI(long flags);
 
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
 

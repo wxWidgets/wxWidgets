@@ -2262,6 +2262,12 @@ void wxRibbonMSWArtProvider::DrawTool(
                 wxRibbonButtonKind kind,
                 long state)
 {
+    if(kind == wxRIBBON_BUTTON_TOGGLE)
+    {
+        if(state & wxRIBBON_TOOLBAR_TOOL_TOGGLED)
+            state ^= wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
+    }
+
     wxRect bg_rect(rect);
     bg_rect.Deflate(1);
     if((state & wxRIBBON_TOOLBAR_TOOL_LAST) == 0)
@@ -2332,7 +2338,7 @@ void wxRibbonMSWArtProvider::DrawTool(
 
     // Foreground
     int avail_width = bg_rect.GetWidth();
-    if(kind != wxRIBBON_BUTTON_NORMAL)
+    if(kind & wxRIBBON_BUTTON_DROPDOWN)
     {
         avail_width -= 8;
         if(is_split_hybrid)
@@ -2782,7 +2788,7 @@ wxSize wxRibbonMSWArtProvider::GetToolSize(
     size.IncBy(7, 6);
     if(is_last)
         size.IncBy(1, 0);
-    if(kind != wxRIBBON_BUTTON_NORMAL)
+    if(kind & wxRIBBON_BUTTON_DROPDOWN)
     {
         size.IncBy(8, 0);
         if(dropdown_region)

@@ -108,6 +108,8 @@ public:
     void OnDefaultProvider(wxRibbonButtonBarEvent& evt);
     void OnAUIProvider(wxRibbonButtonBarEvent& evt);
     void OnMSWProvider(wxRibbonButtonBarEvent& evt);
+    void OnJustify(wxRibbonToolBarEvent& evt);
+    void OnJustifyUpdateUI(wxUpdateUIEvent& evt);
     void OnNew(wxRibbonToolBarEvent& evt);
     void OnNewDropdown(wxRibbonToolBarEvent& evt);
     void OnPrint(wxRibbonToolBarEvent& evt);
@@ -195,6 +197,12 @@ EVT_RIBBONGALLERY_HOVER_CHANGED(ID_PRIMARY_COLOUR, MyFrame::OnHoveredColourChang
 EVT_RIBBONGALLERY_HOVER_CHANGED(ID_SECONDARY_COLOUR, MyFrame::OnHoveredColourChange)
 EVT_RIBBONGALLERY_SELECTED(ID_PRIMARY_COLOUR, MyFrame::OnPrimaryColourSelect)
 EVT_RIBBONGALLERY_SELECTED(ID_SECONDARY_COLOUR, MyFrame::OnSecondaryColourSelect)
+EVT_RIBBONTOOLBAR_CLICKED(wxID_JUSTIFY_LEFT, MyFrame::OnJustify)
+EVT_RIBBONTOOLBAR_CLICKED(wxID_JUSTIFY_CENTER, MyFrame::OnJustify)
+EVT_RIBBONTOOLBAR_CLICKED(wxID_JUSTIFY_RIGHT, MyFrame::OnJustify)
+EVT_UPDATE_UI(wxID_JUSTIFY_LEFT, MyFrame::OnJustifyUpdateUI)
+EVT_UPDATE_UI(wxID_JUSTIFY_CENTER, MyFrame::OnJustifyUpdateUI)
+EVT_UPDATE_UI(wxID_JUSTIFY_RIGHT, MyFrame::OnJustifyUpdateUI)
 EVT_RIBBONTOOLBAR_CLICKED(wxID_NEW, MyFrame::OnNew)
 EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(wxID_NEW, MyFrame::OnNewDropdown)
 EVT_RIBBONTOOLBAR_CLICKED(wxID_PRINT, MyFrame::OnPrint)
@@ -250,14 +258,17 @@ MyFrame::MyFrame()
                                             wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
                                             wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
-        toolbar->AddTool(wxID_ANY, align_left_xpm);
-        toolbar->AddTool(wxID_ANY, align_center_xpm);
-        toolbar->AddTool(wxID_ANY, align_right_xpm);
+        toolbar->AddToggleTool(wxID_JUSTIFY_LEFT, align_left_xpm);
+        toolbar->AddToggleTool(wxID_JUSTIFY_CENTER , align_center_xpm);
+        toolbar->AddToggleTool(wxID_JUSTIFY_RIGHT, align_right_xpm);
         toolbar->AddSeparator();
         toolbar->AddHybridTool(wxID_NEW, wxArtProvider::GetBitmap(wxART_NEW, wxART_OTHER, wxSize(16, 15)));
-        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, wxSize(16, 15)));
-        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_FILE_SAVE, wxART_OTHER, wxSize(16, 15)));
-        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddTool(wxID_OPEN, wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, wxSize(16, 15)), "Open something");
+        toolbar->AddTool(wxID_SAVE, wxArtProvider::GetBitmap(wxART_FILE_SAVE, wxART_OTHER, wxSize(16, 15)), "Save something");
+        toolbar->AddTool(wxID_SAVEAS, wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_OTHER, wxSize(16, 15)), "Save something as ...");
+        toolbar->EnableTool(wxID_OPEN, false);
+        toolbar->EnableTool(wxID_SAVE, false);
+        toolbar->EnableTool(wxID_SAVEAS, false);
         toolbar->AddSeparator();
         toolbar->AddDropdownTool(wxID_UNDO, wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddDropdownTool(wxID_REDO, wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16, 15)));
@@ -658,6 +669,40 @@ void MyFrame::OnPolygonDropdown(wxRibbonButtonBarEvent& evt)
     menu.Append(wxID_ANY, wxT("Decagon (10 sided)"));
 
     evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnJustify(wxRibbonToolBarEvent& evt)
+{
+    long style = m_logwindow->GetWindowStyle() &
+        ~(wxTE_LEFT | wxTE_CENTER | wxTE_RIGHT);
+    switch(evt.GetId())
+    {
+        case wxID_JUSTIFY_LEFT:
+            m_logwindow->SetWindowStyle(style | wxTE_LEFT);
+            break;
+        case wxID_JUSTIFY_CENTER:
+            m_logwindow->SetWindowStyle(style | wxTE_CENTER);
+            break;
+        case wxID_JUSTIFY_RIGHT:
+            m_logwindow->SetWindowStyle(style | wxTE_RIGHT);
+            break;
+    }
+}
+
+void MyFrame::OnJustifyUpdateUI(wxUpdateUIEvent& evt)
+{
+    switch(evt.GetId())
+    {
+        case wxID_JUSTIFY_LEFT:
+            evt.Check(!m_logwindow->HasFlag(wxTE_CENTER | wxTE_RIGHT));
+            break;
+        case wxID_JUSTIFY_CENTER:
+            evt.Check(m_logwindow->HasFlag(wxTE_CENTER));
+            break;
+        case wxID_JUSTIFY_RIGHT:
+            evt.Check(m_logwindow->HasFlag(wxTE_RIGHT));
+            break;
+    }
 }
 
 void MyFrame::OnNew(wxRibbonToolBarEvent& WXUNUSED(evt))
