@@ -499,12 +499,12 @@ struct _GtkWxTreeModel
 };
 
 static GtkWxTreeModel *wxgtk_tree_model_new          (void);
-static void         wxgtk_tree_model_init            (GtkWxTreeModel       *tree_model);
+static void         wxgtk_tree_model_init            (GTypeInstance* instance, void*);
 
-static void         wxgtk_tree_model_tree_model_init (GtkTreeModelIface       *iface);
-static void         wxgtk_tree_model_sortable_init   (GtkTreeSortableIface    *iface);
-static void         wxgtk_tree_model_drag_source_init(GtkTreeDragSourceIface  *iface);
-static void         wxgtk_tree_model_drag_dest_init  (GtkTreeDragDestIface    *iface);
+static void         wxgtk_tree_model_tree_model_init (void* g_iface, void*);
+static void         wxgtk_tree_model_sortable_init   (void* g_iface, void*);
+static void         wxgtk_tree_model_drag_source_init(void* g_iface, void*);
+static void         wxgtk_tree_model_drag_dest_init  (void* g_iface, void*);
 
 static GtkTreeModelFlags wxgtk_tree_model_get_flags  (GtkTreeModel      *tree_model);
 static gint         wxgtk_tree_model_get_n_columns   (GtkTreeModel      *tree_model);
@@ -586,33 +586,33 @@ gtk_wx_tree_model_get_type (void)
             NULL,   /* class_data */
             sizeof (GtkWxTreeModel),
             0,
-            (GInstanceInitFunc) wxgtk_tree_model_init,
+            wxgtk_tree_model_init,
         };
 
         static const GInterfaceInfo tree_model_iface_info =
         {
-            (GInterfaceInitFunc) wxgtk_tree_model_tree_model_init,
+            wxgtk_tree_model_tree_model_init,
             NULL,
             NULL
         };
 
         static const GInterfaceInfo sortable_iface_info =
         {
-            (GInterfaceInitFunc) wxgtk_tree_model_sortable_init,
+            wxgtk_tree_model_sortable_init,
             NULL,
             NULL
         };
 
         static const GInterfaceInfo drag_source_iface_info =
         {
-            (GInterfaceInitFunc) wxgtk_tree_model_drag_source_init,
+            wxgtk_tree_model_drag_source_init,
             NULL,
             NULL
         };
 
         static const GInterfaceInfo drag_dest_iface_info =
         {
-            (GInterfaceInitFunc) wxgtk_tree_model_drag_dest_init,
+            wxgtk_tree_model_drag_dest_init,
             NULL,
             NULL
         };
@@ -645,8 +645,9 @@ wxgtk_tree_model_new(void)
 }
 
 static void
-wxgtk_tree_model_tree_model_init (GtkTreeModelIface *iface)
+wxgtk_tree_model_tree_model_init(void* g_iface, void*)
 {
+    GtkTreeModelIface* iface = static_cast<GtkTreeModelIface*>(g_iface);
     iface->get_flags = wxgtk_tree_model_get_flags;
     iface->get_n_columns = wxgtk_tree_model_get_n_columns;
     iface->get_column_type = wxgtk_tree_model_get_column_type;
@@ -662,8 +663,9 @@ wxgtk_tree_model_tree_model_init (GtkTreeModelIface *iface)
 }
 
 static void
-wxgtk_tree_model_sortable_init (GtkTreeSortableIface *iface)
+wxgtk_tree_model_sortable_init(void* g_iface, void*)
 {
+    GtkTreeSortableIface* iface = static_cast<GtkTreeSortableIface*>(g_iface);
     iface->get_sort_column_id = wxgtk_tree_model_get_sort_column_id;
     iface->set_sort_column_id = wxgtk_tree_model_set_sort_column_id;
     iface->set_sort_func = wxgtk_tree_model_set_sort_func;
@@ -672,23 +674,26 @@ wxgtk_tree_model_sortable_init (GtkTreeSortableIface *iface)
 }
 
 static void
-wxgtk_tree_model_drag_source_init(GtkTreeDragSourceIface  *iface)
+wxgtk_tree_model_drag_source_init(void* g_iface, void*)
 {
+    GtkTreeDragSourceIface* iface = static_cast<GtkTreeDragSourceIface*>(g_iface);
     iface->row_draggable = wxgtk_tree_model_row_draggable;
     iface->drag_data_delete = wxgtk_tree_model_drag_data_delete;
     iface->drag_data_get = wxgtk_tree_model_drag_data_get;
 }
 
 static void
-wxgtk_tree_model_drag_dest_init  (GtkTreeDragDestIface    *iface)
+wxgtk_tree_model_drag_dest_init(void* g_iface, void*)
 {
+    GtkTreeDragDestIface* iface = static_cast<GtkTreeDragDestIface*>(g_iface);
     iface->drag_data_received = wxgtk_tree_model_drag_data_received;
     iface->row_drop_possible = wxgtk_tree_model_row_drop_possible;
 }
 
 static void
-wxgtk_tree_model_init (GtkWxTreeModel *tree_model)
+wxgtk_tree_model_init(GTypeInstance* instance, void*)
 {
+    GtkWxTreeModel* tree_model = GTK_WX_TREE_MODEL(instance);
     tree_model->internal = NULL;
     tree_model->stamp = g_random_int();
 }
@@ -1053,7 +1058,7 @@ struct _GtkWxCellRendererText
 
 static GtkWxCellRendererText *gtk_wx_cell_renderer_text_new   (void);
 static void gtk_wx_cell_renderer_text_init (
-                        GtkWxCellRendererText      *cell );
+                        GTypeInstance* instance, void*);
 static void gtk_wx_cell_renderer_text_class_init(
                         void* klass, void*);
 static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
@@ -1087,7 +1092,7 @@ gtk_wx_cell_renderer_text_get_type (void)
             NULL, /* class_data */
             sizeof (GtkWxCellRendererText),
             0,          /* n_preallocs */
-            (GInstanceInitFunc) gtk_wx_cell_renderer_text_init,
+            gtk_wx_cell_renderer_text_init,
         };
 
         cell_wx_type = g_type_register_static( GTK_TYPE_CELL_RENDERER_TEXT,
@@ -1098,8 +1103,9 @@ gtk_wx_cell_renderer_text_get_type (void)
 }
 
 static void
-gtk_wx_cell_renderer_text_init (GtkWxCellRendererText *cell)
+gtk_wx_cell_renderer_text_init(GTypeInstance* instance, void*)
 {
+    GtkWxCellRendererText* cell = GTK_WX_CELL_RENDERER_TEXT(instance);
     cell->wx_renderer = NULL;
 }
 
@@ -1175,7 +1181,7 @@ struct _GtkWxCellRenderer
 
 static GtkCellRenderer *gtk_wx_cell_renderer_new   (void);
 static void gtk_wx_cell_renderer_init (
-                        GtkWxCellRenderer      *cell );
+                        GTypeInstance* instance, void*);
 static void gtk_wx_cell_renderer_class_init(
                         void* klass, void*);
 static void gtk_wx_cell_renderer_get_size (
@@ -1230,7 +1236,7 @@ gtk_wx_cell_renderer_get_type (void)
             NULL, /* class_data */
             sizeof (GtkWxCellRenderer),
             0,          /* n_preallocs */
-            (GInstanceInitFunc) gtk_wx_cell_renderer_init,
+            gtk_wx_cell_renderer_init,
         };
 
         cell_wx_type = g_type_register_static( GTK_TYPE_CELL_RENDERER,
@@ -1241,8 +1247,9 @@ gtk_wx_cell_renderer_get_type (void)
 }
 
 static void
-gtk_wx_cell_renderer_init (GtkWxCellRenderer *cell)
+gtk_wx_cell_renderer_init(GTypeInstance* instance, void*)
 {
+    GtkWxCellRenderer* cell = GTK_WX_CELL_RENDERER(instance);
     cell->cell = NULL;
 }
 
