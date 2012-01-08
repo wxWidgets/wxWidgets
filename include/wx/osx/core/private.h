@@ -863,6 +863,8 @@ public :
     virtual void SetModified(bool WXUNUSED(modified)) { }
     virtual bool IsModified() const { return false; }
 
+    virtual void SetRepresentedFilename(const wxString& WXUNUSED(filename)) { }
+
 #if wxOSX_USE_IPHONE
     virtual CGFloat GetWindowLevel() const { return 0.0; }
 #else

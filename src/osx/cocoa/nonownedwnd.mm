@@ -990,6 +990,11 @@ bool wxNonOwnedWindowCocoaImpl::IsModified() const
     return [m_macWindow isDocumentEdited];
 }
 
+void wxNonOwnedWindowCocoaImpl::SetRepresentedFilename(const wxString& filename)
+{
+    [m_macWindow setRepresentedFilename:wxCFStringRef(filename).AsNSString()];
+}
+
 void wxNonOwnedWindowCocoaImpl::RestoreWindowLevel()
 {
     if ( [m_macWindow level] != m_macWindowLevel )

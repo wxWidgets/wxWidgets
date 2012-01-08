@@ -544,6 +544,7 @@ All (GUI):
 - Allow customization of the locations where persistent settings are stored.
 - Restore support for reusing ids more than 254 times (Armel Asselin).
 - Added wxIMAGE_OPTION_ORIGINAL_{WIDTH,HEIGHT} (Catalin Raceanu).
+- Add wxTopLevelWindow::SetRepresentedFilename() (Andrej Vodopivec).
 
 OSX:
 

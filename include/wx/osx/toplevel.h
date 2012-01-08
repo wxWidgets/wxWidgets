@@ -77,6 +77,8 @@ public:
     virtual void OSXSetModified(bool modified);
     virtual bool OSXIsModified() const;
 
+    virtual void SetRepresentedFilename(const wxString& filename);
+
 protected:
     // common part of all ctors
     void Init();

@@ -504,6 +504,20 @@ public:
     virtual bool OSXIsModified() const;
 
     /**
+        Sets the file name represented by this wxTopLevelWindow.
+
+        Under OS X, this file name is used to set the "proxy icon", which
+        appears in the window title bar near its title, corresponding to this
+        file name. Under other platforms it currently doesn't do anything but
+        it is harmless to call it now and it might be implemented to do
+        something useful in the future so you're encouraged to use it for any
+        window representing a file-based document.
+
+        @since 2.9.4
+    */
+    virtual void SetRepresentedFilename(const wxString& filename);
+
+    /**
         Depending on the value of @a show parameter the window is either shown
         full screen or restored to its normal state. @a style is a bit list
         containing some or all of the following values, which indicate what

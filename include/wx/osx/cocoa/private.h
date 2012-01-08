@@ -239,6 +239,8 @@ public :
     virtual void SetModified(bool modified);
     virtual bool IsModified() const;
 
+    virtual void SetRepresentedFilename(const wxString& filename);
+
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
     
     CGWindowLevel   GetWindowLevel() const { return m_macWindowLevel; }

@@ -213,3 +213,8 @@ bool wxTopLevelWindowMac::OSXIsModified() const
 {
     return m_nowpeer->IsModified();
 }
+
+void wxTopLevelWindowMac::SetRepresentedFilename(const wxString& filename)
+{
+    m_nowpeer->SetRepresentedFilename(filename);
+}
