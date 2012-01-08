@@ -2360,38 +2360,19 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
     }
 
+    // Update drag events counter first as we must do it even if the mouse is
+    // not on any item right now as we must keep count in case we started
+    // dragging from the empty control area but continued to do it over a valid
+    // item -- in this situation we must not start dragging this item.
     if (event.Dragging())
-    {
-        if (m_dragCount == 0)
-        {
-            // we have to report the raw, physical coords as we want to be
-            // able to call HitTest(event.m_pointDrag) from the user code to
-            // get the item being dragged
-            m_dragStart = event.GetPosition();
-        }
-
         m_dragCount++;
-
-        if (m_dragCount != 3)
-            return;
-
-        int command = event.RightIsDown() ? wxEVT_COMMAND_LIST_BEGIN_RDRAG
-                                          : wxEVT_COMMAND_LIST_BEGIN_DRAG;
-
-        wxListEvent le( command, GetParent()->GetId() );
-        le.SetEventObject( GetParent() );
-        le.m_item.m_itemId =
-        le.m_itemIndex = m_lineLastClicked;
-        le.m_pointDrag = m_dragStart;
-        GetParent()->GetEventHandler()->ProcessEvent( le );
-
-        return;
-    }
     else
-    {
         m_dragCount = 0;
-    }
 
+    // The only mouse event that can be generated without any valid item is
+    // wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK as it can be useful to have a global
+    // popup menu for the list control itself which should be shown even when
+    // the user clicks outside of any item.
     if ( !hitResult )
     {
         // outside of any item
@@ -2411,6 +2392,32 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             // reset the selection and bail out
             HighlightAll(false);
         }
+
+        return;
+    }
+
+    if ( event.Dragging() )
+    {
+        if (m_dragCount == 1)
+        {
+            // we have to report the raw, physical coords as we want to be
+            // able to call HitTest(event.m_pointDrag) from the user code to
+            // get the item being dragged
+            m_dragStart = event.GetPosition();
+        }
+
+        if (m_dragCount != 3)
+            return;
+
+        int command = event.RightIsDown() ? wxEVT_COMMAND_LIST_BEGIN_RDRAG
+                                          : wxEVT_COMMAND_LIST_BEGIN_DRAG;
+
+        wxListEvent le( command, GetParent()->GetId() );
+        le.SetEventObject( GetParent() );
+        le.m_item.m_itemId =
+        le.m_itemIndex = m_lineLastClicked;
+        le.m_pointDrag = m_dragStart;
+        GetParent()->GetEventHandler()->ProcessEvent( le );
 
         return;
     }
