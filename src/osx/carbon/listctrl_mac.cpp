@@ -2156,7 +2156,7 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 }
 
 // For list view mode (only), inserts a column.
-long wxListCtrl::DoInsertColumn(long col, wxListItem& item)
+long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
 {
     if (m_genericImpl)
         return m_genericImpl->InsertColumn(col, item);
