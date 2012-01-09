@@ -355,7 +355,7 @@ public:
         if ( m_toString ) 
             (*m_toString)( data, result ); 
         else 
-            wxLogError( wxGetTranslation(_T("String conversions not supported")) ); 
+            wxLogError( wxGetTranslation(wxT("String conversions not supported")) ); 
     }
 
     // convert a string into a wxAny holding the corresponding data in this type
@@ -364,7 +364,7 @@ public:
         if( m_fromString ) 
             (*m_fromString)( data, result ); 
         else 
-            wxLogError( wxGetTranslation(_T("String conversions not supported")) ); 
+            wxLogError( wxGetTranslation(wxT("String conversions not supported")) ); 
     }
 
     // statics:
@@ -428,7 +428,7 @@ public:
         if( m_toLong ) 
             (*m_toLong)( data, result ); 
         else 
-            wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ); 
+            wxLogError( wxGetTranslation(wxT("Long Conversions not supported")) ); 
     }
 
     // convert a long into a wxAny holding the corresponding data in this type
@@ -437,7 +437,7 @@ public:
         if( m_fromLong ) 
             (*m_fromLong)( data, result ); 
         else 
-            wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ); 
+            wxLogError( wxGetTranslation(wxT("Long Conversions not supported")) ); 
     }
 
 private:

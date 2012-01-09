@@ -162,7 +162,7 @@ inline void wxDisableAsserts() { wxSetAssertHandler(NULL); }
 
 /*
     wxOnAssert() is used by the debugging macros defined below. Different
-    overloads are needed because these macros can be used with or without _T().
+    overloads are needed because these macros can be used with or without wxT().
 
     All of them are implemented in src/common/appcmn.cpp and unconditionally
     call wxTheAssertHandler so the caller must check that it is non-NULL
@@ -172,7 +172,7 @@ inline void wxDisableAsserts() { wxSetAssertHandler(NULL); }
 #if wxUSE_UNICODE
 
 // these overloads are the ones typically used by debugging macros: we have to
-// provide wxChar* msg version because it's common to use _T() in the macros
+// provide wxChar* msg version because it's common to use wxT() in the macros
 // and finally, we can't use const wx(char)* msg = NULL, because that would
 // be ambiguous
 //
