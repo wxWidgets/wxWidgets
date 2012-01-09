@@ -117,18 +117,12 @@ public:
                             wxDC *dc,
                             int state);
 
+    struct GTKRenderParams;
+
     // store GTK render call parameters for possible later use
-    void GTKStashRenderParams(GdkWindow *window,
-                              GtkWidget *widget,
-                              GdkRectangle *background_area,
-                              GdkRectangle *expose_area,
-                              int flags)
+    void GTKSetRenderParams(GTKRenderParams* renderParams)
     {
-        m_renderParams.window = window;
-        m_renderParams.widget = widget;
-        m_renderParams.background_area = background_area;
-        m_renderParams.expose_area = expose_area;
-        m_renderParams.flags = flags;
+        m_renderParams = renderParams;
     }
 
     // we may or not support attributes, as we don't know it, return true to
@@ -157,14 +151,7 @@ private:
 
     // parameters of the original render() call stored so that we could pass
     // them forward to m_text_renderer if our RenderText() is called
-    struct GTKRenderParams
-    {
-        GdkWindow            *window;
-        GtkWidget            *widget;
-        GdkRectangle         *background_area;
-        GdkRectangle         *expose_area;
-        int                   flags;
-    } m_renderParams;
+    GTKRenderParams* m_renderParams;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
 };

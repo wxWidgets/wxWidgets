@@ -1371,6 +1371,15 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
         *height = calc_height;
 }
 
+struct wxDataViewCustomRenderer::GTKRenderParams
+{
+    GdkWindow* window;
+    GdkRectangle* expose_area;
+    GtkWidget* widget;
+    GdkRectangle* background_area;
+    int flags;
+};
+
 static void
 gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
                              GdkWindow            *window,
@@ -1384,8 +1393,13 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
 
-    cell->GTKStashRenderParams(window, widget,
-                               background_area, expose_area, flags);
+    wxDataViewCustomRenderer::GTKRenderParams renderParams;
+    renderParams.window = window;
+    renderParams.expose_area = expose_area;
+    renderParams.widget = widget;
+    renderParams.background_area = background_area;
+    renderParams.flags = flags;
+    cell->GTKSetRenderParams(&renderParams);
 
     wxRect rect(wxRectFromGDKRect(cell_area));
     int xpad, ypad;
@@ -1416,6 +1430,8 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     if (flags & GTK_CELL_RENDERER_FOCUSED)
         state |= wxDATAVIEW_CELL_FOCUSED;
     cell->WXCallRender( rect, dc, state );
+
+    cell->GTKSetRenderParams(NULL);
 }
 
 static gboolean
@@ -2354,6 +2370,7 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
 {
     m_dc = NULL;
     m_text_renderer = NULL;
+    m_renderParams = NULL;
 
     if (no_init)
         m_renderer = NULL;
@@ -2403,12 +2420,12 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text,
     cell_area.width -= xoffset;
 
     gtk_cell_renderer_render( GTK_CELL_RENDERER(textRenderer),
-        m_renderParams.window,
-        m_renderParams.widget,
-        m_renderParams.background_area,
+        m_renderParams->window,
+        m_renderParams->widget,
+        m_renderParams->background_area,
         &cell_area,
-        m_renderParams.expose_area,
-        (GtkCellRendererState) m_renderParams.flags );
+        m_renderParams->expose_area,
+        GtkCellRendererState(m_renderParams->flags));
 }
 
 bool wxDataViewCustomRenderer::Init(wxDataViewCellMode mode, int align)
