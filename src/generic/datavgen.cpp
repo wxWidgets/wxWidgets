@@ -623,6 +623,9 @@ public:
     void ChangeCurrentRow( unsigned int row );
     bool TryAdvanceCurrentColumn(wxDataViewTreeNode *node, bool forward);
 
+    wxDataViewColumn *GetCurrentColumn() const { return m_currentCol; }
+    void ClearCurrentColumn() { m_currentCol = NULL; }
+
     bool IsSingleSel() const { return !GetParent()->HasFlag(wxDV_MULTIPLE); }
     bool IsEmpty() { return GetRowCount() == 0; }
 
@@ -4742,6 +4745,10 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 
     m_colsBestWidths.erase(m_colsBestWidths.begin() + GetColumnIndex(column));
     m_cols.Erase(ret);
+
+    if ( m_clientArea->GetCurrentColumn() == column )
+        m_clientArea->ClearCurrentColumn();
+
     OnColumnsCountChanged();
 
     return true;
@@ -4752,7 +4759,11 @@ bool wxDataViewCtrl::ClearColumns()
     SetExpanderColumn(NULL);
     m_cols.Clear();
     m_colsBestWidths.clear();
+
+    m_clientArea->ClearCurrentColumn();
+
     OnColumnsCountChanged();
+
     return true;
 }
 
