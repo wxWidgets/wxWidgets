@@ -52,6 +52,19 @@ for f in $changed_sources; do
          echo "Please remove TABs from $f before committing." >&2
          rc=1
      fi
+
+     case $f in
+        */wx/chartype.h)
+            # This file defines _T() for compatibility so don't check it.
+            ;;
+
+        *)
+            if  svnl cat $f | fgrep -qw '_T'; then
+                echo "Please use wxT() instead of _T() in $f." >&2
+                rc=1
+            fi
+            ;;
+    esac
 done
 
 for f in $changed_text_files; do
