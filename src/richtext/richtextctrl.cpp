@@ -232,7 +232,9 @@ wxRichTextCtrl::wxRichTextCtrl(wxWindow* parent,
     Init();
     Create(parent, id, value, pos, size, style, validator, name);
 
+#if wxUSE_DRAG_AND_DROP
     SetDropTarget(new wxRichTextDropTarget(this));
+#endif
 }
 
 /// Creation
@@ -355,7 +357,9 @@ void wxRichTextCtrl::Init()
     m_editable = true;
     m_caretAtLineStart = false;
     m_dragging = false;
+#if wxUSE_DRAG_AND_DROP
     m_preDrag = false;
+#endif
     m_fullLayoutRequired = false;
     m_fullLayoutTime = 0;
     m_fullLayoutSavedPosition = 0;
