@@ -1894,9 +1894,11 @@ public:
 
     /**
         Lay the item out at the specified position with the given size constraint.
-        Layout must set the cached size.
+        Layout must set the cached size. @rect is the available space for the object,
+        and @a parentRect is the container that is used to determine a relative size
+        or position (for example if a text box must be 50% of the parent text box).
     */
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style) = 0;
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style) = 0;
 
     /**
         Hit-testing: returns a flag indicating hit test details, plus
@@ -2230,10 +2232,15 @@ public:
 
     /**
         Lays out the object first with a given amount of space, and then if no width was specified in attr,
-        lays out the object again using the minimum size
+        lays out the object again using the minimum size. @a availableParentSpace is the maximum space
+        for the object, whereas @a availableContainerSpace is the container with which relative positions and
+        sizes should be computed. For example, a text box whose space has already been constrained
+        in a previous layout pass to @a availableParentSpace, but should have a width of 50% of @a availableContainerSpace.
+        (If these two rects were the same, a 2nd pass could see the object getting too small.)
     */
     virtual bool LayoutToBestSize(wxDC& dc, wxRichTextBuffer* buffer,
-                    const wxRichTextAttr& parentAttr, const wxRichTextAttr& attr, const wxRect& availableParentSpace, int style);
+                    const wxRichTextAttr& parentAttr, const wxRichTextAttr& attr,
+                    const wxRect& availableParentSpace, const wxRect& availableContainerSpace, int style);
 
     /**
         Sets the object's attributes.
@@ -2384,8 +2391,11 @@ public:
     /**
         Returns the rectangle which the child has available to it given restrictions specified in the
         child attribute, e.g. 50% width of the parent, 400 pixels, x position 20% of the parent, etc.
+        availableContainerSpace might be a parent that the cell has to compute its width relative to.
+        E.g. a cell that's 50% of its parent.
     */
-    static wxRect AdjustAvailableSpace(wxDC& dc, wxRichTextBuffer* buffer, const wxRichTextAttr& parentAttr, const wxRichTextAttr& childAttr, const wxRect& availableParentSpace);
+    static wxRect AdjustAvailableSpace(wxDC& dc, wxRichTextBuffer* buffer, const wxRichTextAttr& parentAttr, const wxRichTextAttr& childAttr,
+        const wxRect& availableParentSpace, const wxRect& availableContainerSpace);
 
 protected:
     wxSize                  m_size;
@@ -2553,7 +2563,7 @@ public:
 
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
 
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
@@ -3309,7 +3319,7 @@ public:
 
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
 
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
@@ -3480,7 +3490,7 @@ public:
 
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
 
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
@@ -3756,7 +3766,7 @@ public:
 
     virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
 
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
@@ -4604,7 +4614,7 @@ public:
 
     virtual wxString GetXMLNodeName() const { return wxT("table"); }
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
 
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 

@@ -67,7 +67,7 @@ void wxRichTextPrintout::OnPreparePrinting()
     {
         GetRichTextBuffer()->Invalidate(wxRICHTEXT_ALL);
 
-        GetRichTextBuffer()->Layout(*GetDC(), rect, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
+        GetRichTextBuffer()->Layout(*GetDC(), rect, rect, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
 
         // Now calculate the page breaks
 
@@ -115,18 +115,18 @@ void wxRichTextPrintout::OnPreparePrinting()
                         lastLine = line;
 
                         m_numPages ++;
-                        
+
                         // Now create page breaks for the rest of the line, if it's larger than the page height
                         int contentLeft = line->GetSize().y - rect.GetHeight();
                         while (contentLeft >= 0)
                         {
                             yOffset += rect.GetHeight();
                             contentLeft -= rect.GetHeight();
-                            
+
                             m_pageBreaksStart.Add(lastStartPos);
                             m_pageBreaksEnd.Add(lastLine->GetAbsoluteRange().GetEnd());
                             m_pageYOffsets.Add(yOffset);
-                        }                        
+                        }
                     }
 
                     lastLine = line;
@@ -286,7 +286,7 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
     }
 
     wxRichTextRange rangeToDraw(m_pageBreaksStart[page-1], m_pageBreaksEnd[page-1]);
-    
+
     wxPoint oldOrigin = dc->GetLogicalOrigin();
     double scaleX, scaleY;
     dc->GetUserScale(& scaleX, & scaleY);
@@ -294,7 +294,7 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
     int yOffset = 0;
     if (page > 1)
         yOffset = m_pageYOffsets[page-2];
-        
+
     if (yOffset != oldOrigin.y)
         dc->SetLogicalOrigin(oldOrigin.x, oldOrigin.y + yOffset);
 

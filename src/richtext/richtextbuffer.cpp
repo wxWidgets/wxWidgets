@@ -953,14 +953,16 @@ bool wxRichTextObject::GetTotalMargin(wxDC& dc, wxRichTextBuffer* buffer, const 
 
 // Returns the rectangle which the child has available to it given restrictions specified in the
 // child attribute, e.g. 50% width of the parent, 400 pixels, x position 20% of the parent, etc.
-wxRect wxRichTextObject::AdjustAvailableSpace(wxDC& dc, wxRichTextBuffer* buffer, const wxRichTextAttr& WXUNUSED(parentAttr), const wxRichTextAttr& childAttr, const wxRect& availableParentSpace)
+// availableContainerSpace might be a parent that the cell has to compute its width relative to.
+// E.g. a cell that's 50% of its parent.
+wxRect wxRichTextObject::AdjustAvailableSpace(wxDC& dc, wxRichTextBuffer* buffer, const wxRichTextAttr& WXUNUSED(parentAttr), const wxRichTextAttr& childAttr, const wxRect& availableParentSpace, const wxRect& availableContainerSpace)
 {
     wxRect rect = availableParentSpace;
     double scale = 1.0;
     if (buffer)
         scale = buffer->GetScale();
 
-    wxTextAttrDimensionConverter converter(dc, scale, availableParentSpace.GetSize());
+    wxTextAttrDimensionConverter converter(dc, scale, availableContainerSpace.GetSize());
 
     if (childAttr.GetTextBoxAttr().GetWidth().IsValid())
         rect.width = converter.GetPixels(childAttr.GetTextBoxAttr().GetWidth());
@@ -978,7 +980,7 @@ wxRect wxRichTextObject::AdjustAvailableSpace(wxDC& dc, wxRichTextBuffer* buffer
     {
         int x = converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetRight());
         if (childAttr.GetTextBoxAttr().GetPosition().GetRight().GetPosition() == wxTEXT_BOX_ATTR_POSITION_RELATIVE)
-            rect.x = availableParentSpace.x + availableParentSpace.width - rect.width;
+            rect.x = availableContainerSpace.x + availableContainerSpace.width - rect.width;
         else
             rect.x += x;
     }
@@ -991,10 +993,13 @@ wxRect wxRichTextObject::AdjustAvailableSpace(wxDC& dc, wxRichTextBuffer* buffer
     {
         int y = converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetBottom());
         if (childAttr.GetTextBoxAttr().GetPosition().GetBottom().GetPosition() == wxTEXT_BOX_ATTR_POSITION_RELATIVE)
-            rect.y = availableParentSpace.y + availableParentSpace.height - rect.height;
+            rect.y = availableContainerSpace.y + availableContainerSpace.height - rect.height;
         else
             rect.y += y;
     }
+
+    if (rect.GetWidth() > availableParentSpace.GetWidth())
+        rect.SetWidth(availableParentSpace.GetWidth());
 
     return rect;
 }
@@ -1054,18 +1059,19 @@ int wxRichTextObject::HitTest(wxDC& WXUNUSED(dc), const wxPoint& pt, long& textP
 // Lays out the object first with a given amount of space, and then if no width was specified in attr,
 // lays out the object again using the maximum ('best') size
 bool wxRichTextObject::LayoutToBestSize(wxDC& dc, wxRichTextBuffer* buffer,
-    const wxRichTextAttr& parentAttr, const wxRichTextAttr& attr, const wxRect& availableParentSpace,
+    const wxRichTextAttr& parentAttr, const wxRichTextAttr& attr,
+    const wxRect& availableParentSpace, const wxRect& availableContainerSpace,
     int style)
 {
-    wxRect availableChildRect = AdjustAvailableSpace(dc, buffer, parentAttr, attr, availableParentSpace);
+    wxRect availableChildRect = AdjustAvailableSpace(dc, buffer, parentAttr, attr, availableParentSpace, availableContainerSpace);
     wxRect originalAvailableRect = availableChildRect;
-    Layout(dc, availableChildRect, style);
+    Layout(dc, availableChildRect, availableContainerSpace, style);
 
     wxSize maxSize = GetMaxSize();
 
     // Don't ignore if maxSize.x is zero, since we need to redo the paragraph's lines
     // on this basis
-    if (!attr.GetTextBoxAttr().GetWidth().IsValid() && maxSize.x < availableChildRect.width /* && maxSize.x > 0 */)
+    if (!attr.GetTextBoxAttr().GetWidth().IsValid() && maxSize.x < availableChildRect.width)
     {
         // Redo the layout with a fixed, minimum size this time.
         Invalidate(wxRICHTEXT_ALL);
@@ -1073,7 +1079,7 @@ bool wxRichTextObject::LayoutToBestSize(wxDC& dc, wxRichTextBuffer* buffer,
         newAttr.GetTextBoxAttr().GetWidth().SetValue(maxSize.x, wxTEXT_ATTR_UNITS_PIXELS);
         newAttr.GetTextBoxAttr().GetWidth().SetPosition(wxTEXT_BOX_ATTR_POSITION_ABSOLUTE);
 
-        availableChildRect = AdjustAvailableSpace(dc, buffer, parentAttr, newAttr, availableParentSpace);
+        availableChildRect = AdjustAvailableSpace(dc, buffer, parentAttr, newAttr, availableParentSpace, availableContainerSpace);
 
         // If a paragraph, align the whole paragraph.
         // Problem with this: if we're limited by a floating object, a line may be centered
@@ -1091,7 +1097,7 @@ bool wxRichTextObject::LayoutToBestSize(wxDC& dc, wxRichTextBuffer* buffer,
             }
         }
 
-        Layout(dc, availableChildRect, style);
+        Layout(dc, availableChildRect, availableContainerSpace, style);
     }
 
     /*
@@ -1816,7 +1822,7 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, const wxRichTextRange& range, 
 }
 
 /// Lay the item out
-bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int style)
+bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style)
 {
     SetPosition(rect.GetPosition());
 
@@ -1947,7 +1953,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
                 // Lays out the object first with a given amount of space, and then if no width was specified in attr,
                 // lays out the object again using the minimum size
                 child->LayoutToBestSize(dc, GetBuffer(),
-                        GetAttributes(), child->GetAttributes(), availableSpace, style&~wxRICHTEXT_LAYOUT_SPECIFIED_RECT);
+                        GetAttributes(), child->GetAttributes(), availableSpace, rect, style&~wxRICHTEXT_LAYOUT_SPECIFIED_RECT);
 
                 // Layout must set the cached size
                 availableSpace.y += child->GetCachedSize().y;
@@ -1981,7 +1987,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
                             // Lays out the object first with a given amount of space, and then if no width was specified in attr,
                             // lays out the object again using the minimum size
                             child->LayoutToBestSize(dc, GetBuffer(),
-                                        GetAttributes(), child->GetAttributes(), availableSpace, style&~wxRICHTEXT_LAYOUT_SPECIFIED_RECT);
+                                        GetAttributes(), child->GetAttributes(), availableSpace, rect, style&~wxRICHTEXT_LAYOUT_SPECIFIED_RECT);
 
                             //child->Layout(dc, availableChildRect, style);
                         }
@@ -2007,11 +2013,21 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
     if (node && node->GetData()->IsShown())
     {
         wxRichTextObject* child = node->GetData();
-        // maxHeight = (child->GetPosition().y - GetPosition().y) + child->GetCachedSize().y;
         maxHeight = child->GetPosition().y - (GetPosition().y + topMargin) + child->GetCachedSize().y;
     }
     else
         maxHeight = 0; // topMargin + bottomMargin;
+
+    if (GetAttributes().GetTextBoxAttr().GetSize().GetWidth().IsValid())
+    {
+        wxRect r = AdjustAvailableSpace(dc, GetBuffer(), wxRichTextAttr() /* not used */, GetAttributes(), parentRect, parentRect);
+        int w = r.GetWidth();
+
+        // Convert external to content rect
+        w = w - leftMargin - rightMargin;
+        maxWidth = wxMax(maxWidth, w);
+        maxMaxWidth = wxMax(maxMaxWidth, w);
+    }
 
     // TODO: (also in para layout) should set the
     // object's size to an absolute one if specified,
@@ -3884,7 +3900,9 @@ bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, co
             levels[i] = -1; // start from the number we found, if any
     }
 
+#if wxDEBUG_LEVEL
     wxASSERT(!specifyLevel || (specifyLevel && (specifiedLevel >= 0)));
+#endif
 
     // If we are associated with a control, make undoable; otherwise, apply immediately
     // to the data.
@@ -4329,7 +4347,7 @@ static int wxRichTextGetRangeWidth(const wxRichTextParagraph& para, const wxRich
 }
 
 /// Lay the item out
-bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
+bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style)
 {
     // Deal with floating objects firstly before the normal layout
     wxRichTextBuffer* buffer = GetBuffer();
@@ -4469,7 +4487,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
             // The position will be determined by its location in its line,
             // and not by the child's actual position.
             child->LayoutToBestSize(dc, buffer,
-                    GetAttributes(), child->GetAttributes(), availableRect, style);
+                    GetAttributes(), child->GetAttributes(), availableRect, parentRect, style);
 
             if (oldSize != child->GetCachedSize())
             {
@@ -4553,7 +4571,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
                     // lays out the object again using the minimum size
                     child->Invalidate(wxRICHTEXT_ALL);
                     child->LayoutToBestSize(dc, buffer,
-                                GetAttributes(), child->GetAttributes(), availableRect, style);
+                                GetAttributes(), child->GetAttributes(), availableRect, parentRect, style);
                     childSize = child->GetCachedSize();
                     childDescent = child->GetDescent();
                     //child->SetPosition(availableRect.GetPosition());
@@ -6223,7 +6241,7 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr,
 }
 
 /// Lay the item out
-bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXUNUSED(style))
+bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), const wxRect& WXUNUSED(parentRect), int WXUNUSED(style))
 {
     // Only lay out if we haven't already cached the size
     if (m_size.x == -1)
@@ -8120,7 +8138,7 @@ WX_DEFINE_OBJARRAY(wxRichTextRectArray);
 // layout to a particular size, or it could be the total space available in the
 // parent. rect is the overall size, so we must subtract margins and padding.
 // to get the actual available space.
-bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, int style)
+bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, const wxRect& WXUNUSED(parentRect), int style)
 {
     SetPosition(rect.GetPosition());
 
@@ -8181,16 +8199,21 @@ bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, int style)
     }
 
     // The final calculated widths
-    wxArrayInt colWidths(m_colCount);
+    wxArrayInt colWidths;
+    colWidths.Add(0, m_colCount);
 
-    wxArrayInt absoluteColWidths(m_colCount);
+    wxArrayInt absoluteColWidths;
+    absoluteColWidths.Add(0, m_colCount);
     // wxArrayInt absoluteColWidthsSpanning(m_colCount);
-    wxArrayInt percentageColWidths(m_colCount);
+    wxArrayInt percentageColWidths;
+    percentageColWidths.Add(0, m_colCount);
     // wxArrayInt percentageColWidthsSpanning(m_colCount);
     // These are only relevant when the first column contains spanning information.
     // wxArrayInt columnSpans(m_colCount); // Each contains 1 for non-spanning cell, > 1 for spanning cell.
-    wxArrayInt maxColWidths(m_colCount);
-    wxArrayInt minColWidths(m_colCount);
+    wxArrayInt maxColWidths;
+    maxColWidths.Add(0, m_colCount);
+    wxArrayInt minColWidths;
+    minColWidths.Add(0, m_colCount);
 
     wxSize tableSize(tableWidth, 0);
 
@@ -8332,7 +8355,7 @@ bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, int style)
 
                 // Lay out cell to find min/max widths
                 cell->Invalidate(wxRICHTEXT_ALL);
-                cell->Layout(dc, availableSpace, style);
+                cell->Layout(dc, availableSpace, availableSpace, style);
 
                 if (colSpan == 1)
                 {
@@ -8623,7 +8646,8 @@ bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, int style)
         int maxCellHeight = 0;
         int maxSpecifiedCellHeight = 0;
 
-        wxArrayInt actualWidths(m_colCount);
+        wxArrayInt actualWidths;
+        actualWidths.Add(0, m_colCount);
 
         wxTextAttrDimensionConverter converter(dc, scale);
         for (i = 0; i < m_colCount; i++)
@@ -8670,7 +8694,7 @@ bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, int style)
 
                     // Lay out cell
                     cell->Invalidate(wxRICHTEXT_ALL);
-                    cell->Layout(dc, availableCellSpace, style);
+                    cell->Layout(dc, availableCellSpace, availableSpace, style);
 
                     // TODO: use GetCachedSize().x to compute 'natural' size
 
@@ -8691,7 +8715,7 @@ bool wxRichTextTable::Layout(wxDC& dc, const wxRect& rect, int style)
                 wxRect availableCellSpace = wxRect(cell->GetPosition(), wxSize(actualWidths[i], maxCellHeight));
                 // Lay out cell with new height
                 cell->Invalidate(wxRICHTEXT_ALL);
-                cell->Layout(dc, availableCellSpace, style);
+                cell->Layout(dc, availableCellSpace, availableSpace, style);
 
                 // Make sure the cell size really is the appropriate size,
                 // not the calculated box size
@@ -9949,7 +9973,7 @@ bool wxRichTextImage::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichT
 }
 
 /// Lay the item out
-bool wxRichTextImage::Layout(wxDC& dc, const wxRect& rect, int WXUNUSED(style))
+bool wxRichTextImage::Layout(wxDC& dc, const wxRect& rect, const wxRect& WXUNUSED(parentRect), int WXUNUSED(style))
 {
     if (!LoadImageCache(dc))
         return false;
