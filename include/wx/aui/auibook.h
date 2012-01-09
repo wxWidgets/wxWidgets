@@ -602,7 +602,7 @@ public:
                          int imageId);
     virtual bool DeleteAllPages();
     virtual bool InsertPage(size_t index, wxWindow *page, const wxString &text,
-                            bool select=false, int imageId=NO_IMAGE);
+                            bool select, int imageId);
 
 protected:
     // Common part of all ctors.
