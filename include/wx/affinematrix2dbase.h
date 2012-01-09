@@ -4,7 +4,7 @@
 // Author:       Catalin Raceanu
 // Created:      2011-04-06
 // Copyright:    (c) wxWidgets team
-// Licence:      wxWidgets licence
+// Licence:      wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_AFFINEMATRIX2DBASE_H_

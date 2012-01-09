@@ -198,7 +198,7 @@ work. Here are some examples, using a wxString object @c s and some integer @c
 n:
 
  - Writing @code switch ( s[n] ) @endcode doesn't work because the argument of
-   the switch statement must an integer expression so you need to replace
+   the switch statement must be an integer expression so you need to replace
    @c s[n] with @code s[n].GetValue() @endcode. You may also force the
    conversion to @c char or @c wchar_t by using an explicit cast but beware that
    converting the value to char uses the conversion to current locale and may

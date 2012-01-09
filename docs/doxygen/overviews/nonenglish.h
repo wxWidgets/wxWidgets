@@ -110,7 +110,7 @@ wxLocale::GetSystemEncodingName) by the user's operating system.
 By convention, you should only use characters without diacritics (i.e. 7-bit
 ASCII strings) for msgids in the source code and write them in English.
 
-If you port software to wxWindows, you may be confronted with legacy source
+If you port software to wxWidgets, you may be confronted with legacy source
 code containing non-English string literals. Instead of translating the strings
 in the source code to English and putting the original strings into message
 catalog, you may configure wxWidgets to use non-English msgids and translate to

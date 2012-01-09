@@ -896,7 +896,7 @@ enum wxKeyCode
       * to improve compatibility with other systems, WXK_RAW_CONTROL may
       * be used to obtain the state of the actual 'Control' key
       * ('WXK_CONTROL' would obtain the status of the 'Command' key).
-      * Under Windows/Linux/Others, this is equivalent to WXK_RAW_CONTROL
+      * Under Windows/Linux/Others, this is equivalent to WXK_CONTROL
       */
     WXK_RAW_CONTROL,
     WXK_MENU,

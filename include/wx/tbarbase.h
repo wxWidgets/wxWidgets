@@ -473,7 +473,7 @@ public:
         { return GetToolBitmapSize(); }
 
     // returns a (non separator) tool containing the point (x, y) or NULL if
-    // there is no tool at this point (corrdinates are client)
+    // there is no tool at this point (coordinates are client)
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x,
                                                    wxCoord y) const = 0;
 

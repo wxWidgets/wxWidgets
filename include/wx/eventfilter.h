@@ -3,7 +3,7 @@
 // Purpose:     wxEventFilter class declaration.
 // Author:      Vadim Zeitlin
 // Created:     2011-11-21
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ public:
 
     // This method allows to filter all the events processed by the program, so
     // you should try to return quickly from it to avoid slowing down the
-    // program to the crawl.
+    // program to a crawl.
     //
     // Return value should be -1 to continue with the normal event processing,
     // or true or false to stop further processing and pretend that the event

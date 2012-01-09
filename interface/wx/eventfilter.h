@@ -121,7 +121,7 @@ public:
 
         This method allows to filter all the events processed by the program,
         so you should try to return quickly from it to avoid slowing down the
-        program to the crawl.
+        program to a crawl.
 
         Although the return type of this method is @c int, this is only due to
         backwards compatibility concerns and the actual return value must be

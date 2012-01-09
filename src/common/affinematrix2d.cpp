@@ -4,7 +4,7 @@
 // Author:      Based on wxTransformMatrix by Chris Breeze, Julian Smart
 // Created:     2011-04-05
 // Copyright:   (c) wxWidgets team
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"

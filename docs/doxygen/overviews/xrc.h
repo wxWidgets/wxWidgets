@@ -31,7 +31,7 @@ There are several advantages to using XRC resources:
 @li The XRC format uses sizers for flexibility, allowing dialogs to be
     resizable and highly portable.
 @li The XRC format is a wxWidgets standard, and can be generated or
-    postprocessed by any program that understands it. As it is basedon the XML
+    postprocessed by any program that understands it. As it is based on the XML
     standard, existing XML editors can be used for simple editing purposes.
 
 XRC was written by Vaclav Slavik.
