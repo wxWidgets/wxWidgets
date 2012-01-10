@@ -1006,6 +1006,15 @@ bool wxAssertIsEqual(int x, int y)
     return x == y;
 }
 
+void wxAbort()
+{
+#ifdef __WXWINCE__
+    ExitThread(3);
+#else
+    abort();
+#endif
+}
+
 #if wxDEBUG_LEVEL
 
 // break into the debugger

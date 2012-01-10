@@ -10,6 +10,17 @@
 //@{
 
 /**
+    Exits the program immediately.
+
+    This is a simple wrapper for the standard abort() function which is not
+    available under all platforms (currently only Windows CE doesn't provide
+    it).
+
+    @since 2.9.4
+ */
+void wxAbort();
+
+/**
     @def wxDEBUG_LEVEL
 
     Preprocessor symbol defining the level of debug support available.

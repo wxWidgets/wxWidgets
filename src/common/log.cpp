@@ -355,11 +355,7 @@ wxLog::OnLog(wxLogLevel level,
     {
         wxSafeShowMessage(wxS("Fatal Error"), msg);
 
-#ifdef __WXWINCE__
-        ExitThread(3);
-#else
-        abort();
-#endif
+        wxAbort();
     }
 
     wxLog *logger;

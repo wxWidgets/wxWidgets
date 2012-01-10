@@ -299,6 +299,13 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
     #define wxASSERT_LEVEL_2(cond)
 #endif
 
+// This is simply a wrapper for the standard abort() which is not available
+// under all platforms.
+//
+// It isn't really debug-related but there doesn't seem to be any better place
+// for it, so declare it here and define it in appbase.cpp, together with
+// wxTrap().
+extern void WXDLLIMPEXP_BASE wxAbort();
 
 /*
     wxCHECK macros always check their conditions, setting debug level to 0 only
