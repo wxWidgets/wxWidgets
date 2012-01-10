@@ -76,8 +76,10 @@ protected:
     // used by DoUpdateStatusText()
     wxClientDC *m_pDC;
 
+#if wxUSE_TOOLTIPS
     // the tooltips used when wxSTB_SHOW_TIPS is given
     wxVector<wxToolTip*> m_tooltips;
+#endif
 
 private:
     struct MSWBorders

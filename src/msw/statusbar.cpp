@@ -153,11 +153,13 @@ wxStatusBar::~wxStatusBar()
     // occupy
     PostSizeEventToParent();
 
+#if wxUSE_TOOLTIPS
     // delete existing tooltips
     for (size_t i=0; i<m_tooltips.size(); i++)
     {
         wxDELETE(m_tooltips[i]);
     }
+#endif // wxUSE_TOOLTIPS
 
     wxDELETE(m_pDC);
 }
@@ -178,6 +180,7 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
 
     // keep in synch also our m_tooltips array
 
+#if wxUSE_TOOLTIPS
     // reset all current tooltips
     for (size_t i=0; i<m_tooltips.size(); i++)
     {
@@ -186,6 +189,7 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
 
     // shrink/expand the array:
     m_tooltips.resize(nFields, NULL);
+#endif // wxUSE_TOOLTIPS
 
     wxStatusBarBase::SetFieldsCount(nFields, widths);
 
@@ -318,6 +322,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
         wxLogLastError("StatusBar_SetText");
     }
 
+#if wxUSE_TOOLTIPS
     if (HasFlag(wxSTB_SHOW_TIPS))
     {
         wxASSERT(m_tooltips.size() == m_panes.GetCount());
@@ -346,6 +351,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
             //else: leave m_tooltips[nField]==NULL
         }
     }
+#endif // wxUSE_TOOLTIPS
 }
 
 wxStatusBar::MSWBorders wxStatusBar::MSWGetBorders() const
@@ -388,12 +394,14 @@ const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
         // into account to make sure the text drawn by user fits inside the
         // pane. Notice that it's not the value returned by SB_GETBORDERS
         // which, at least on this Windows 2003 system, returns {0, 2, 2}
+#if wxUSE_UXTHEME
         if ( wxUxThemeEngine::GetIfActive() )
         {
             s_metrics.gripWidth = 20;
             s_metrics.textMargin = 8;
         }
         else // classic/unthemed look
+#endif // wxUSE_UXTHEME
         {
             s_metrics.gripWidth = 18;
             s_metrics.textMargin = 4;
