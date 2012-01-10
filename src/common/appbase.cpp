@@ -1041,7 +1041,7 @@ wxDefaultAssertHandler(const wxString& file,
 {
     // If this option is set, we should abort immediately when assert happens.
     if ( wxSystemOptions::GetOptionInt("exit-on-assert") )
-        abort();
+        wxAbort();
 
     // FIXME MT-unsafe
     static int s_bInAssert = 0;
