@@ -175,7 +175,7 @@ bool wxSlider::Create(wxWindow *parent,
     // and initialize everything
     SetRange(minValue, maxValue);
     SetValue(value);
-    SetPageSize((maxValue - minValue)/10);
+    SetPageSize( wxMax(1, (maxValue - minValue)/10) );
 
     // we need to position the labels correctly if we have them and if
     // SetSize() hadn't been called before (when best size was determined by
