@@ -2754,6 +2754,18 @@ void wxListMainWindow::OnCharHook( wxKeyEvent &event )
 
 void wxListMainWindow::OnChar( wxKeyEvent &event )
 {
+#ifdef __WXGTK__
+    // Under GTK we get some keys (notably cursor arrows) even while the in
+    // place editing control is shown. Processing them here results in UI
+    // problems, e.g. we could change the current item on WXK_DOWN press but
+    // the edit control would remain on the item above. So we need to either
+    // cancel in-place editing or ignore any such keys while it's active. To
+    // avoid aggravating the user by losing his changes just because a cursor
+    // arrow key was mistakenly pressed, do nothing in this case.
+    if ( m_textctrlWrapper )
+        return;
+#endif // __WXGTK__
+
     wxWindow *parent = GetParent();
 
     // propagate the char event upwards
