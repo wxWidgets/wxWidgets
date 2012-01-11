@@ -94,7 +94,9 @@ public:
 
     virtual void Raise();
 
+#if wxUSE_DIALOG_SIZEGRIP
     virtual void SetWindowStyleFlag(long style);
+#endif // wxUSE_DIALOG_SIZEGRIP
 
 #ifdef __POCKETPC__
     // Responds to the OK button in a PocketPC titlebar. This
