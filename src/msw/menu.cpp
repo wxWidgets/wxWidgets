@@ -407,7 +407,9 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
             GetMenuBar()->RebuildAccelTable();
         }
 
+#if wxUSE_OWNER_DRAW
         ResetMaxAccelWidth();
+#endif
     }
     //else: it is a separator, they can't have accels, nothing to do
 }
@@ -436,6 +438,7 @@ HBITMAP GetHBitmapForMenu(wxMenuItem *pItem, bool checked = true)
 #if wxUSE_IMAGE
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
+#if wxUSE_OWNER_DRAW
         wxBitmap bmp = pItem->GetBitmap(checked);
         if ( bmp.IsOk() )
         {
@@ -449,6 +452,7 @@ HBITMAP GetHBitmapForMenu(wxMenuItem *pItem, bool checked = true)
 
             return GetHbitmapOf(pItem->GetBitmap(checked));
         }
+#endif // wxUSE_OWNER_DRAW
         //else: bitmap is not set
 
         return NULL;
@@ -790,7 +794,9 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
         m_accels.RemoveAt(n);
 
+#if wxUSE_OWNER_DRAW
         ResetMaxAccelWidth();
+#endif
     }
     //else: this item doesn't have an accel, nothing to do
 #endif // wxUSE_ACCEL
@@ -974,6 +980,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
 }
 
 // get the menu with given handle (recursively)
+#if wxUSE_OWNER_DRAW
 wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
 {
     // check self
@@ -996,6 +1003,7 @@ wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
     // unknown hMenu
     return NULL;
 }
+#endif // wxUSE_OWNER_DRAW
 
 // ---------------------------------------------------------------------------
 // Menu Bar
@@ -1585,6 +1593,7 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu)
     wxCHECK_MSG( GetHMenu() != hMenu, NULL,
                  wxT("wxMenuBar::MSWGetMenu(): menu handle is wxMenuBar, not wxMenu") );
 
+#if wxUSE_OWNER_DRAW
     // query all menus
     for ( size_t n = 0 ; n < GetMenuCount(); ++n )
     {
@@ -1592,6 +1601,7 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu)
         if ( menu )
             return menu;
     }
+#endif
 
     // unknown hMenu
     return NULL;
