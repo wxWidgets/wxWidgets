@@ -188,8 +188,8 @@ public:
         This constructor requires that you must call SetData() later.
 
         Note that the type of @a iconCopy and subsequent parameters
-        differs between different ports: these are cursors under Windows but
-        icons for GTK. You should use the macro wxDROP_ICON() in portable
+        differs between different ports: these are cursors under Windows and OS
+        X but icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
 
         @onlyfor{wxmsw,wxosx}
@@ -204,16 +204,16 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = NULL,
-                 const wxIcon& iconCopy = wxNullIcon,
-                 const wxIcon& iconMove = wxNullIcon,
-                 const wxIcon& iconNone = wxNullIcon);
+                 const wxCursor& iconCopy = wxNullIcon,
+                 const wxCursor& iconMove = wxNullIcon,
+                 const wxCursor& iconNone = wxNullIcon);
 
     /**
-        The constructor for wxDataObject.
+        The constructor taking a wxDataObject.
 
         Note that the type of @a iconCopy and subsequent parameters
-        differs between different ports: these are cursors under Windows but
-        icons for GTK. You should use the macro wxDROP_ICON() in portable
+        differs between different ports: these are cursors under Windows and OS
+        X but icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
 
         @onlyfor{wxmsw,wxosx}
@@ -230,17 +230,15 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxDataObject& data, wxWindow* win = NULL,
-                 const wxIcon& iconCopy = wxNullIcon,
-                 const wxIcon& iconMove = wxNullIcon,
-                 const wxIcon& iconNone = wxNullIcon);
+                 const wxCursor& iconCopy = wxNullIcon,
+                 const wxCursor& iconMove = wxNullIcon,
+                 const wxCursor& iconNone = wxNullIcon);
 
     /**
         This constructor requires that you must call SetData() later.
 
-        Note that the type of @a iconCopy and subsequent parameters
-        differs between different ports: these are cursors under Windows but
-        icons for GTK. You should use the macro wxDROP_ICON() in portable
-        programs instead of directly using either of these types.
+        This is the wxGTK-specific version of the constructor taking wxIcon
+        instead of wxCursor as the other ports.
 
         @onlyfor{wxgtk}
 
@@ -254,17 +252,15 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = NULL,
-                 const wxCursor& iconCopy = wxNullCursor,
-                 const wxCursor& iconMove = wxNullCursor,
-                 const wxCursor& iconNone = wxNullCursor);
+                 const wxIcon& iconCopy = wxNullCursor,
+                 const wxIcon& iconMove = wxNullCursor,
+                 const wxIcon& iconNone = wxNullCursor);
 
     /**
-        The constructor for wxDataObject.
+        The constructor taking a wxDataObject.
 
-        Note that the type of @a iconCopy and subsequent parameters
-        differs between different ports: these are cursors under Windows but
-        icons for GTK. You should use the macro wxDROP_ICON() in portable
-        programs instead of directly using either of these types.
+        This is the wxGTK-specific version of the constructor taking wxIcon
+        instead of wxCursor as the other ports.
 
         @onlyfor{wxgtk}
 
@@ -280,14 +276,9 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxDataObject& data, wxWindow* win = NULL,
-                 const wxCursor& iconCopy = wxNullCursor,
-                 const wxCursor& iconMove = wxNullCursor,
-                 const wxCursor& iconNone = wxNullCursor);
-
-    /**
-        Default constructor.
-    */
-    virtual ~wxDropSource();
+                 const wxIcon& iconCopy = wxNullCursor,
+                 const wxIcon& iconMove = wxNullCursor,
+                 const wxIcon& iconNone = wxNullCursor);
 
     /**
         Starts the drag-and-drop operation which will terminate when the user
