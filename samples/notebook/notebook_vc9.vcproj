@@ -44,7 +44,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;_WINDOWS;NOPCH"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
@@ -52,7 +52,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;_WINDOWS;NOPCH"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;_WINDOWS;NOPCH"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples"
 			/>
@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_aui.lib  wxmsw29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29ud_aui.lib  wxmsw29ud_html.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud_xml.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswud\notebook.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
@@ -145,7 +145,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;.;.\..\..\samples"
-				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -160,7 +160,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;.;.\..\..\samples"
 			/>
@@ -170,7 +170,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_aui.lib  wxmsw29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29u_aui.lib  wxmsw29u_html.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u_xml.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswu\notebook.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -230,7 +230,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_WINDOWS;NOPCH"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswunivud;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
@@ -238,7 +238,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswunivud;.\..\..\include;.;.\..\..\samples"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_WINDOWS;NOPCH"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -255,7 +255,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_WINDOWS;NOPCH"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswunivud;.\..\..\include;.;.\..\..\samples"
 			/>
@@ -265,7 +265,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_aui.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29ud_aui.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud_xml.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivud\notebook.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -323,7 +323,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswunivu;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
@@ -331,7 +331,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswunivu;.\..\..\include;.;.\..\..\samples"
-				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -346,7 +346,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_WINDOWS;NOPCH"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswunivu;.\..\..\include;.;.\..\..\samples"
 			/>
@@ -356,7 +356,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_aui.lib  wxmswuniv29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29u_aui.lib  wxmswuniv29u_html.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u_xml.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivu\notebook.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -416,7 +416,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
@@ -424,7 +424,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;.;.\..\..\samples"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -441,7 +441,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;.;.\..\..\samples"
 			/>
@@ -451,7 +451,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_aui.lib  wxmsw29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29ud_aui.lib  wxmsw29ud_html.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud_xml.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswuddll\notebook.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -509,7 +509,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
@@ -517,7 +517,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;.;.\..\..\samples"
-				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -532,7 +532,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;.;.\..\..\samples"
 			/>
@@ -542,7 +542,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_aui.lib  wxmsw29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw29u_aui.lib  wxmsw29u_html.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u_xml.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswudll\notebook.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -602,7 +602,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswunivud;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
@@ -610,7 +610,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswunivud;.\..\..\include;.;.\..\..\samples"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -627,7 +627,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswunivud;.\..\..\include;.;.\..\..\samples"
 			/>
@@ -637,7 +637,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_aui.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29ud_aui.lib  wxmswuniv29ud_html.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud_xml.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivuddll\notebook.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -695,7 +695,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswunivu;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
@@ -703,7 +703,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswunivu;.\..\..\include;.;.\..\..\samples"
-				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -718,7 +718,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_WINDOWS;NOPCH"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswunivu;.\..\..\include;.;.\..\..\samples"
 			/>
@@ -728,7 +728,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_aui.lib  wxmswuniv29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmswuniv29u_aui.lib  wxmswuniv29u_html.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u_xml.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswunivudll\notebook.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
