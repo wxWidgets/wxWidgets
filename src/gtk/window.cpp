@@ -1068,6 +1068,20 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
 }
 }
 
+//-----------------------------------------------------------------------------
+// "key_press_event"/"key_release_event", after, from m_widget
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean key_event_after(GtkWidget* widget, GdkEventKey*, wxWindow*)
+{
+    // If a widget does not handle a key event, GTK+ sends it up the parent
+    // chain until it is handled. Key events are not supposed to propagate in
+    // wxWidgets, so prevent it unless widget is in a native container.
+    return WX_IS_PIZZA(gtk_widget_get_parent(widget));
+}
+}
+
 // ============================================================================
 // the mouse events
 // ============================================================================
@@ -2356,6 +2370,10 @@ void wxWindowGTK::PostCreation()
     GtkWidget *connect_widget = GetConnectWidget();
 
     ConnectWidget( connect_widget );
+
+    // connect handler to prevent key events from propagating up parent chain
+    g_signal_connect_after(m_widget, "key_press_event", G_CALLBACK(key_event_after), this);
+    g_signal_connect_after(m_widget, "key_release_event", G_CALLBACK(key_event_after), this);
 
     // We cannot set colours, fonts and cursors before the widget has been
     // realized, so we do this directly after realization -- unless the widget
