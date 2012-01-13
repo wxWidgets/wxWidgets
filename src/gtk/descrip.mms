@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 14 November 2011                                                    *
+# Date : 13 January 2012                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -254,6 +254,7 @@ toplevel.obj : toplevel.cpp
 utilsgtk.obj : utilsgtk.cpp
 window.obj : window.cpp
 treeentry_gtk.obj : treeentry_gtk.c
+	cc $(CFLAGS)$(CC_DEFINE)/warn=disab=CHAROVERFL $(MMS$TARGET_NAME).c
 textentry.obj : textentry.cpp
 filectrl.obj : filectrl.cpp
 print.obj : print.cpp
