@@ -407,7 +407,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
             // Step 1:
             // Allocate a buffer of the correct size.
             dwNeeded = DocumentProperties( NULL,
-                printer,         // Handle to our printer.
+                *printer,        // Handle to our printer.
                 szPrinterName,   // Name of the printer.
                 NULL,            // Asking for size, so
                 NULL,            // these are not used.
@@ -418,7 +418,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
             // Step 2:
             // Get the default DevMode for the printer
             dwRet = DocumentProperties( NULL,
-                printer,
+                *printer,
                 szPrinterName,
                 tempDevMode,     // The address of the buffer to fill.
                 NULL,            // Not using the input buffer.
