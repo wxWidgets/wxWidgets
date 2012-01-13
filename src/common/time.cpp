@@ -223,15 +223,22 @@ int wxGetTimeZone()
     #else // VC++ < 8
         return timezone;
     #endif
-#elif defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
-    return WX_TIMEZONE;
-#elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
-    return _timezone;
-#elif defined(__MWERKS__)
-    return 28800;
-#else // unknown platform -- assume it has timezone
-    return timezone;
-#endif // WX_GMTOFF_IN_TM/!WX_GMTOFF_IN_TM
+#else // Use some kind of time zone variable.
+    // In any case we must initialize the time zone before using it.
+    tzset();
+
+    #if defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
+        return WX_TIMEZONE;
+    #elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
+        return _timezone;
+    #elif defined(__MWERKS__)
+        // This is just plain wrong but apparently MetroWerks runtime didn't have
+        // any way to get the time zone.
+        return 28800;
+    #else // unknown platform -- assume it has timezone
+        return timezone;
+    #endif // different time zone variables
+#endif // different ways to determine time zone
 }
 
 // Get local time as seconds since 00:00:00, Jan 1st 1970
