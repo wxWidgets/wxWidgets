@@ -150,7 +150,7 @@ public:
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxDataViewCtrlNameStr);
 
-  virtual wxControl* GetMainWindow() // not used for the native implementation
+  virtual wxWindow* GetMainWindow() // not used for the native implementation
   {
     return this;
   }
