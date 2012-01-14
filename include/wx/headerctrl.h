@@ -154,6 +154,8 @@ public:
     // specified) and if the control has wxHD_ALLOW_REORDER style as well
     bool ShowCustomizeDialog();
 
+    // compute column title width
+    int GetColumnTitleWidth(const wxHeaderColumn& col);
 
     // implementation only from now on
     // -------------------------------

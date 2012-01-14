@@ -374,6 +374,13 @@ public:
      */
     bool ShowCustomizeDialog();
 
+    /**
+        Returns width needed for given column's title.
+
+        @since 2.9.4
+     */
+    int GetColumnTitleWidth(const wxHeaderColumn& col);
+
 protected:
     /**
         Method to be implemented by the derived classes to return the

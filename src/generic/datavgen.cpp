@@ -4647,13 +4647,7 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
                                   m_clientArea->GetRowHeight());
 
     if ( m_headerArea )
-    {
-        int header_width = m_headerArea->GetTextExtent(column->GetTitle()).x;
-        // Labels on native MSW header are indented on both sides
-        header_width +=
-            wxRendererNative::Get().GetHeaderButtonMargin(m_headerArea);
-        calculator.UpdateWithWidth(header_width);
-    }
+        calculator.UpdateWithWidth(m_headerArea->GetColumnTitleWidth(*column));
 
     // The code below deserves some explanation. For very large controls, we
     // simply can't afford to calculate sizes for all items, it takes too
