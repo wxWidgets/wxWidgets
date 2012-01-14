@@ -478,6 +478,7 @@ MSW:
 - Added support for wxEXEC_MAKE_GROUP_LEADER to wxExecute (tteras).
 - Set wxMenu being closed in wxEVT_MENU_CLOSE events (Marcin Malich).
 - Fix coordinates and Z-position for joystick events (Markus Juergens).
+- Fix size of the font returned by wxTextCtrl::GetStyle() (Igor Korot).
 
 OSX:
 

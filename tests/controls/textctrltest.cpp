@@ -57,6 +57,7 @@ private:
         //WXUISIM_TEST( ProcessEnter );
         WXUISIM_TEST( Url );
         CPPUNIT_TEST( Style );
+        CPPUNIT_TEST( FontStyle );
         CPPUNIT_TEST( Lines );
         CPPUNIT_TEST( LogTextCtrl );
         CPPUNIT_TEST( PositionToCoords );
@@ -72,6 +73,7 @@ private:
     //void ProcessEnter();
     void Url();
     void Style();
+    void FontStyle();
     void Lines();
     void LogTextCtrl();
     void PositionToCoords();
@@ -384,6 +386,62 @@ void TextCtrlTestCase::Style()
         CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour(), *wxWHITE);
     }
 #endif
+}
+
+void TextCtrlTestCase::FontStyle()
+{
+    // We need wxTE_RICH under MSW and wxTE_MULTILINE under GTK for style
+    // support so recreate the control with these styles.
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize,
+                            wxTE_MULTILINE | wxTE_RICH);
+
+    // Check that we get back the same font from GetStyle() after setting it
+    // with SetDefaultStyle().
+    wxFont fontIn(14,
+                  wxFONTFAMILY_DEFAULT,
+                  wxFONTSTYLE_NORMAL,
+                  wxFONTWEIGHT_NORMAL);
+    wxTextAttr attrIn;
+    attrIn.SetFont(fontIn);
+    if ( !m_text->SetDefaultStyle(attrIn) )
+    {
+        // Skip the test if the styles are not supported.
+        return;
+    }
+
+    m_text->AppendText("Default font size 14");
+
+    wxTextAttr attrOut;
+    m_text->GetStyle(5, attrOut);
+
+    CPPUNIT_ASSERT( attrOut.HasFont() );
+
+    wxFont fontOut = attrOut.GetFont();
+#ifdef __WXMSW__
+    // Under MSW we get back an encoding in the font even though we hadn't
+    // specified it originally. It's not really a problem but we need this hack
+    // to prevent the assert below from failing because of it.
+    fontOut.SetEncoding(fontIn.GetEncoding());
+#endif
+    CPPUNIT_ASSERT_EQUAL( fontIn, fontOut );
+
+
+    // Also check the same for SetStyle().
+    fontIn.SetPointSize(10);
+    fontIn.SetWeight(wxFONTWEIGHT_BOLD);
+    attrIn.SetFont(fontIn);
+    m_text->SetStyle(0, 6, attrIn);
+
+    m_text->GetStyle(4, attrOut);
+    CPPUNIT_ASSERT( attrOut.HasFont() );
+
+    fontOut = attrOut.GetFont();
+#ifdef __WXMSW__
+    fontOut.SetEncoding(fontIn.GetEncoding());
+#endif
+    CPPUNIT_ASSERT_EQUAL( fontIn, fontOut );
 }
 
 void TextCtrlTestCase::Lines()
