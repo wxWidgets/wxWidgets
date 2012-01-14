@@ -520,6 +520,8 @@ bool wxNotebook::OSXHandleClicked( double WXUNUSED(timestampsec) )
                 newSel, m_selection );
             event.SetEventObject( this );
             HandleWindowEvent( event );
+
+            m_selection = newSel;
         }
         else
         {
