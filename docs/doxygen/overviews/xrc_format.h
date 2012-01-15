@@ -607,7 +607,7 @@ Example:
 @endcode
 
 
-@subsubsection xrc_wxbitmaptogglebuttton wxBitmapToggleButton
+@subsubsection xrc_wxbitmaptogglebutton wxBitmapToggleButton
 
 @beginTable
 @hdr3col{property, type, description}
@@ -1594,7 +1594,7 @@ No additional properties.
 No additional properties.
 
 
-@subsubsection xrc_wxtogglebuttton wxToggleButton
+@subsubsection xrc_wxtogglebutton wxToggleButton
 
 @beginTable
 @hdr3col{property, type, description}
