@@ -89,6 +89,18 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_HEIGHT
     void OnRichtextHeightUpdate( wxUpdateUIEvent& event );
 
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_MIN_WIDTH
+    void OnRichtextMinWidthUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_MIN_HEIGHT
+    void OnRichtextMinHeightUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_MAX_WIDTH
+    void OnRichtextMaxWidthUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_MAX_HEIGHT
+    void OnRichtextMaxHeightUpdate( wxUpdateUIEvent& event );
+
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX
     void OnRichtextVerticalAlignmentComboboxUpdate( wxUpdateUIEvent& event );
 
@@ -125,6 +137,18 @@ public:
     wxCheckBox* m_heightCheckbox;
     wxTextCtrl* m_height;
     wxComboBox* m_unitsH;
+    wxCheckBox* m_minWidthCheckbox;
+    wxTextCtrl* m_minWidth;
+    wxComboBox* m_unitsMinW;
+    wxCheckBox* m_minHeightCheckbox;
+    wxTextCtrl* m_minHeight;
+    wxComboBox* m_unitsMinH;
+    wxCheckBox* m_maxWidthCheckbox;
+    wxTextCtrl* m_maxWidth;
+    wxComboBox* m_unitsMaxW;
+    wxCheckBox* m_maxHeightCheckbox;
+    wxTextCtrl* m_maxHeight;
+    wxComboBox* m_unitsMaxH;
     wxBoxSizer* m_alignmentControls;
     wxCheckBox* m_verticalAlignmentCheckbox;
     wxComboBox* m_verticalAlignmentComboBox;
@@ -144,6 +168,18 @@ public:
         ID_RICHTEXT_HEIGHT_CHECKBOX = 10705,
         ID_RICHTEXT_HEIGHT = 10706,
         ID_RICHTEXT_UNITS_H = 10707,
+        ID_RICHTEXT_MIN_WIDTH_CHECKBOX = 10715,
+        ID_RICHTEXT_MIN_WIDTH = 10716,
+        ID_RICHTEXT_UNITS_MIN_W = 10717,
+        ID_RICHTEXT_MIN_HEIGHT_CHECKBOX = 10718,
+        ID_RICHTEXT_MIN_HEIGHT = 10719,
+        ID_RICHTEXT_UNITS_MIN_H = 10720,
+        ID_RICHTEXT_MAX_WIDTH_CHECKBOX = 10721,
+        ID_RICHTEXT_MAX_WIDTH = 10722,
+        ID_RICHTEXT_UNITS_MAX_W = 10723,
+        ID_RICHTEXT_MAX_HEIGHT_CHECKBOX = 10724,
+        ID_RICHTEXT_MAX_HEIGHT = 10725,
+        ID_RICHTEXT_UNITS_MAX_H = 10726,
         ID_RICHTEXT_VERTICAL_ALIGNMENT_CHECKBOX = 10708,
         ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX = 10709,
         ID_RICHTEXT_OFFSET_CHECKBOX = 10710,

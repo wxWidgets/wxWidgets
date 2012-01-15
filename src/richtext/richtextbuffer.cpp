@@ -10777,6 +10777,8 @@ void wxTextBoxAttr::Reset()
     m_position.Reset();
 
     m_size.Reset();
+    m_minSize.Reset();
+    m_maxSize.Reset();
 
     m_border.Reset();
     m_outline.Reset();
@@ -10797,6 +10799,8 @@ bool wxTextBoxAttr::operator== (const wxTextBoxAttr& attr) const
         m_position == attr.m_position &&
 
         m_size == attr.m_size &&
+        m_minSize == attr.m_minSize &&
+        m_maxSize == attr.m_maxSize &&
 
         m_border == attr.m_border &&
         m_outline == attr.m_outline &&
@@ -10826,6 +10830,15 @@ bool wxTextBoxAttr::EqPartial(const wxTextBoxAttr& attr) const
     // Position
 
     if (!m_position.EqPartial(attr.m_position))
+        return false;
+
+    // Size
+
+    if (!m_size.EqPartial(attr.m_size))
+        return false;
+    if (!m_minSize.EqPartial(attr.m_minSize))
+        return false;
+    if (!m_maxSize.EqPartial(attr.m_maxSize))
         return false;
 
     // Margins
@@ -10891,6 +10904,8 @@ bool wxTextBoxAttr::Apply(const wxTextBoxAttr& attr, const wxTextBoxAttr* compar
     m_position.Apply(attr.m_position, compareWith ? (& attr.m_position) : (const wxTextAttrDimensions*) NULL);
 
     m_size.Apply(attr.m_size, compareWith ? (& attr.m_size) : (const wxTextAttrSize*) NULL);
+    m_minSize.Apply(attr.m_minSize, compareWith ? (& attr.m_minSize) : (const wxTextAttrSize*) NULL);
+    m_maxSize.Apply(attr.m_maxSize, compareWith ? (& attr.m_maxSize) : (const wxTextAttrSize*) NULL);
 
     m_border.Apply(attr.m_border, compareWith ? (& attr.m_border) : (const wxTextAttrBorders*) NULL);
     m_outline.Apply(attr.m_outline, compareWith ? (& attr.m_outline) : (const wxTextAttrBorders*) NULL);
@@ -10924,6 +10939,8 @@ bool wxTextBoxAttr::RemoveStyle(const wxTextBoxAttr& attr)
     m_position.RemoveStyle(attr.m_position);
 
     m_size.RemoveStyle(attr.m_size);
+    m_minSize.RemoveStyle(attr.m_minSize);
+    m_maxSize.RemoveStyle(attr.m_maxSize);
 
     m_border.RemoveStyle(attr.m_border);
     m_outline.RemoveStyle(attr.m_outline);
@@ -11035,6 +11052,8 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
     m_position.CollectCommonAttributes(attr.m_position, clashingAttr.m_position, absentAttr.m_position);
 
     m_size.CollectCommonAttributes(attr.m_size, clashingAttr.m_size, absentAttr.m_size);
+    m_minSize.CollectCommonAttributes(attr.m_minSize, clashingAttr.m_minSize, absentAttr.m_minSize);
+    m_maxSize.CollectCommonAttributes(attr.m_maxSize, clashingAttr.m_maxSize, absentAttr.m_maxSize);
 
     m_border.CollectCommonAttributes(attr.m_border, clashingAttr.m_border, absentAttr.m_border);
     m_outline.CollectCommonAttributes(attr.m_outline, clashingAttr.m_outline, absentAttr.m_outline);
@@ -11043,7 +11062,7 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
 bool wxTextBoxAttr::IsDefault() const
 {
     return GetFlags() == 0 && !m_border.IsValid() && !m_outline.IsValid() &&
-        !m_size.GetWidth().IsValid() && !m_size.GetHeight().IsValid() &&
+        !m_size.IsValid() && !m_minSize.IsValid() && !m_maxSize.IsValid() &&
         !m_position.IsValid() && !m_padding.IsValid() && !m_margins.IsValid();
 }
 

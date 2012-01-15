@@ -3340,8 +3340,8 @@ void wxRichTextCtrl::OnProperties(wxCommandEvent& event)
     if (idx >= 0 && idx < m_contextMenuPropertiesInfo.GetCount())
     {
         wxRichTextObject* obj = m_contextMenuPropertiesInfo.GetObject(idx);
-        if (obj && obj->CanEditProperties())
-            obj->EditProperties(this, & GetBuffer());
+        if (obj && CanEditProperties(obj))
+            EditProperties(obj, this);
 
         m_contextMenuPropertiesInfo.Clear();
     }
@@ -3394,18 +3394,18 @@ int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool add
                 }
 
                 if (addPropertyCommands)
-                    m_contextMenuPropertiesInfo.AddItems(actualContainer, hitObj);
+                    m_contextMenuPropertiesInfo.AddItems(this, actualContainer, hitObj);
             }
             else
             {
                 if (addPropertyCommands)
-                    m_contextMenuPropertiesInfo.AddItems(GetFocusObject(), NULL);
+                    m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), NULL);
             }
         }
         else
         {
             if (addPropertyCommands)
-                m_contextMenuPropertiesInfo.AddItems(GetFocusObject(), NULL);
+                m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), NULL);
         }
     }
     else
@@ -3422,12 +3422,12 @@ int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool add
         if (hitObj && actualContainer)
         {
             if (addPropertyCommands)
-                m_contextMenuPropertiesInfo.AddItems(actualContainer, hitObj);
+                m_contextMenuPropertiesInfo.AddItems(this, actualContainer, hitObj);
         }
         else
         {
             if (addPropertyCommands)
-                m_contextMenuPropertiesInfo.AddItems(GetFocusObject(), NULL);
+                m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), NULL);
         }
     }
 
@@ -4375,7 +4375,6 @@ void wxRichTextCtrl::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResu
     wxRichTextParagraphLayoutBox* originContainer = GetSelection().GetContainer();
     wxRichTextParagraphLayoutBox* destContainer = GetFocusObject(); // This will be the drop container, not necessarily the same as the origin one
 
-
     wxRichTextBuffer* richTextBuffer = ((wxRichTextBufferDataObject*)DataObj)->GetRichTextBuffer();
     if (richTextBuffer)
     {
@@ -4406,7 +4405,6 @@ void wxRichTextCtrl::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResu
             // We can't use e.g. DeleteSelectedContent() as it uses the focus container
             originContainer->DeleteRangeWithUndo(selectionrange, this, &GetBuffer());
         }
-
 
         SelectNone();
         Refresh();
@@ -4673,16 +4671,16 @@ int wxRichTextContextMenuPropertiesInfo::AddMenuItems(wxMenu* menu, int startCmd
 
 // Add appropriate menu items for the current container and clicked on object
 // (and container's parent, if appropriate).
-int wxRichTextContextMenuPropertiesInfo::AddItems(wxRichTextObject* container, wxRichTextObject* obj)
+int wxRichTextContextMenuPropertiesInfo::AddItems(wxRichTextCtrl* ctrl, wxRichTextObject* container, wxRichTextObject* obj)
 {
     Clear();
-    if (obj && obj->CanEditProperties())
+    if (obj && ctrl->CanEditProperties(obj))
         AddItem(obj->GetPropertiesMenuLabel(), obj);
 
-    if (container && container != obj && container->CanEditProperties() && m_labels.Index(container->GetPropertiesMenuLabel()) == wxNOT_FOUND)
+    if (container && container != obj && ctrl->CanEditProperties(container) && m_labels.Index(container->GetPropertiesMenuLabel()) == wxNOT_FOUND)
         AddItem(container->GetPropertiesMenuLabel(), container);
 
-    if (container && container->GetParent() && container->GetParent()->CanEditProperties() && m_labels.Index(container->GetParent()->GetPropertiesMenuLabel()) == wxNOT_FOUND)
+    if (container && container->GetParent() && ctrl->CanEditProperties(container->GetParent()) && m_labels.Index(container->GetParent()->GetPropertiesMenuLabel()) == wxNOT_FOUND)
         AddItem(container->GetParent()->GetPropertiesMenuLabel(), container->GetParent());
 
     return GetCount();

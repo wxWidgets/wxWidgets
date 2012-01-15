@@ -588,10 +588,12 @@ public:
         Sets the width.
     */
     void SetWidth(int value, wxTextAttrDimensionFlags flags) { m_width.SetValue(value, flags); }
+
     /**
         Sets the width.
     */
     void SetWidth(int value, wxTextAttrUnits units) { m_width.SetValue(value, units); }
+
     /**
         Sets the width.
     */
@@ -607,14 +609,21 @@ public:
         Sets the height.
     */
     void SetHeight(int value, wxTextAttrDimensionFlags flags) { m_height.SetValue(value, flags); }
+
     /**
         Sets the height.
     */
     void SetHeight(int value, wxTextAttrUnits units) { m_height.SetValue(value, units); }
+
     /**
         Sets the height.
     */
     void SetHeight(const wxTextAttrDimension& dim) { m_height.SetValue(dim); }
+
+    /**
+        Is the size valid?
+    */
+    bool IsValid() const { return m_width.IsValid() && m_height.IsValid(); }
 
     wxTextAttrDimension         m_width;
     wxTextAttrDimension         m_height;
@@ -1323,9 +1332,33 @@ public:
     const wxTextAttrSize& GetSize() const { return m_size; }
 
     /**
+        Returns the object minimum size.
+    */
+
+    wxTextAttrSize& GetMinSize() { return m_minSize; }
+    const wxTextAttrSize& GetMinSize() const { return m_minSize; }
+
+    /**
+        Returns the object maximum size.
+    */
+
+    wxTextAttrSize& GetMaxSize() { return m_maxSize; }
+    const wxTextAttrSize& GetMaxSize() const { return m_maxSize; }
+
+    /**
         Sets the object size.
     */
     void SetSize(const wxTextAttrSize& sz) { m_size = sz; }
+
+    /**
+        Sets the object minimum size.
+    */
+    void SetMinSize(const wxTextAttrSize& sz) { m_minSize = sz; }
+
+    /**
+        Sets the object maximum size.
+    */
+    void SetMaxSize(const wxTextAttrSize& sz) { m_maxSize = sz; }
 
     /**
         Returns the object width.
@@ -1363,6 +1396,8 @@ public:
     wxTextAttrDimensions            m_position;
 
     wxTextAttrSize                  m_size;
+    wxTextAttrSize                  m_minSize;
+    wxTextAttrSize                  m_maxSize;
 
     wxTextAttrBorders               m_border;
     wxTextAttrBorders               m_outline;

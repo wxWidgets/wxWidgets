@@ -111,7 +111,7 @@ public:
         Adds appropriate menu items for the current container and clicked on object
         (and container's parent, if appropriate).
     */
-    int AddItems(wxRichTextObject* container, wxRichTextObject* obj);
+    int AddItems(wxRichTextCtrl* ctrl, wxRichTextObject* container, wxRichTextObject* obj);
 
     /**
         Clears the items.
@@ -1579,6 +1579,16 @@ public:
         Returns the number of property commands added.
     */
     virtual int PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool addPropertyCommands);
+
+    /**
+        Returns @true if we can edit the object's properties via a GUI.
+    */
+    virtual bool CanEditProperties(wxRichTextObject* obj) const { return obj->CanEditProperties(); }
+
+    /**
+        Edits the object's properties via a GUI.
+    */
+    virtual bool EditProperties(wxRichTextObject* obj, wxWindow* parent) { return obj->EditProperties(parent, & GetBuffer()); }
 
 // Command handlers
 

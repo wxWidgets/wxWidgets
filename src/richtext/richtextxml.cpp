@@ -1193,6 +1193,10 @@ wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool is
     AddAttribute(str, wxT("outline"), attr.GetTextBoxAttr().GetOutline());
     AddAttribute(str, wxT("width"), attr.GetTextBoxAttr().GetWidth());
     AddAttribute(str, wxT("height"), attr.GetTextBoxAttr().GetHeight());
+    AddAttribute(str, wxT("minwidth"), attr.GetTextBoxAttr().GetMinSize().GetWidth());
+    AddAttribute(str, wxT("minheight"), attr.GetTextBoxAttr().GetMinSize().GetHeight());
+    AddAttribute(str, wxT("maxwidth"), attr.GetTextBoxAttr().GetMaxSize().GetWidth());
+    AddAttribute(str, wxT("maxheight"), attr.GetTextBoxAttr().GetMaxSize().GetHeight());
 
     if (attr.GetTextBoxAttr().HasVerticalAlignment())
     {
@@ -1484,6 +1488,10 @@ bool wxRichTextXMLHandler::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, 
     AddAttribute(node, wxT("outline"), attr.GetTextBoxAttr().GetOutline());
     AddAttribute(node, wxT("width"), attr.GetTextBoxAttr().GetWidth());
     AddAttribute(node, wxT("height"), attr.GetTextBoxAttr().GetHeight());
+    AddAttribute(node, wxT("minwidth"), attr.GetTextBoxAttr().GetMinSize().GetWidth());
+    AddAttribute(node, wxT("minheight"), attr.GetTextBoxAttr().GetMinSize().GetHeight());
+    AddAttribute(node, wxT("maxwidth"), attr.GetTextBoxAttr().GetMaxSize().GetWidth());
+    AddAttribute(node, wxT("maxheight"), attr.GetTextBoxAttr().GetMaxSize().GetHeight());
 
     if (attr.GetTextBoxAttr().HasVerticalAlignment())
     {
@@ -1862,6 +1870,22 @@ bool wxRichTextXMLHandler::ImportStyle(wxRichTextAttr& attr, wxXmlNode* node, bo
             else if (name == wxT("height"))
             {
                 attr.GetTextBoxAttr().GetHeight().SetValue(wxRichTextParseDimension(value));
+            }
+            else if (name == wxT("minwidth"))
+            {
+                attr.GetTextBoxAttr().GetMinSize().GetWidth().SetValue(wxRichTextParseDimension(value));
+            }
+            else if (name == wxT("minheight"))
+            {
+                attr.GetTextBoxAttr().GetMinSize().GetHeight().SetValue(wxRichTextParseDimension(value));
+            }
+            else if (name == wxT("maxwidth"))
+            {
+                attr.GetTextBoxAttr().GetMaxSize().GetWidth().SetValue(wxRichTextParseDimension(value));
+            }
+            else if (name == wxT("maxheight"))
+            {
+                attr.GetTextBoxAttr().GetMaxSize().GetHeight().SetValue(wxRichTextParseDimension(value));
             }
 
             else if (name == wxT("verticalalignment"))
