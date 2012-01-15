@@ -407,7 +407,7 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
             GetMenuBar()->RebuildAccelTable();
         }
 
-#if wxUSE_OWNER_DRAW
+#if wxUSE_OWNER_DRAWN
         ResetMaxAccelWidth();
 #endif
     }
@@ -438,7 +438,7 @@ HBITMAP GetHBitmapForMenu(wxMenuItem *pItem, bool checked = true)
 #if wxUSE_IMAGE
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
-#if wxUSE_OWNER_DRAW
+#if wxUSE_OWNER_DRAWN
         wxBitmap bmp = pItem->GetBitmap(checked);
         if ( bmp.IsOk() )
         {
@@ -452,7 +452,7 @@ HBITMAP GetHBitmapForMenu(wxMenuItem *pItem, bool checked = true)
 
             return GetHbitmapOf(pItem->GetBitmap(checked));
         }
-#endif // wxUSE_OWNER_DRAW
+#endif // wxUSE_OWNER_DRAWN
         //else: bitmap is not set
 
         return NULL;
@@ -794,7 +794,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
         m_accels.RemoveAt(n);
 
-#if wxUSE_OWNER_DRAW
+#if wxUSE_OWNER_DRAWN
         ResetMaxAccelWidth();
 #endif
     }
@@ -980,7 +980,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
 }
 
 // get the menu with given handle (recursively)
-#if wxUSE_OWNER_DRAW
+#if wxUSE_OWNER_DRAWN
 wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
 {
     // check self
@@ -1003,7 +1003,7 @@ wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
     // unknown hMenu
     return NULL;
 }
-#endif // wxUSE_OWNER_DRAW
+#endif // wxUSE_OWNER_DRAWN
 
 // ---------------------------------------------------------------------------
 // Menu Bar
@@ -1593,7 +1593,7 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu)
     wxCHECK_MSG( GetHMenu() != hMenu, NULL,
                  wxT("wxMenuBar::MSWGetMenu(): menu handle is wxMenuBar, not wxMenu") );
 
-#if wxUSE_OWNER_DRAW
+#if wxUSE_OWNER_DRAWN
     // query all menus
     for ( size_t n = 0 ; n < GetMenuCount(); ++n )
     {
