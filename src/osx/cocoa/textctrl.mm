@@ -107,6 +107,55 @@ protected :
 
 NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
+// a minimal NSFormatter that just avoids getting too long entries
+@interface wxMaximumLengthFormatter : NSFormatter
+{
+    int maxLength;
+}
+
+@end
+
+@implementation wxMaximumLengthFormatter
+
+- (id)init 
+{
+    [super init];
+    maxLength = 0;
+    return self;
+}
+
+- (void) setMaxLength:(int) maxlen 
+{
+    maxLength = maxlen;
+}
+
+- (NSString *)stringForObjectValue:(id)anObject 
+{
+    if(![anObject isKindOfClass:[NSString class]])
+        return nil;
+    return [NSString stringWithString:anObject];
+}
+
+- (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString  **)error 
+{
+    *obj = [NSString stringWithString:string];
+    return YES;
+}
+
+- (BOOL)isPartialStringValid:(NSString **)partialStringPtr proposedSelectedRange:(NSRangePointer)proposedSelRangePtr 
+              originalString:(NSString *)origString originalSelectedRange:(NSRange)origSelRange errorDescription:(NSString **)error
+{
+    int len = [*partialStringPtr length];
+    if ( maxLength > 0 && len > maxLength )
+    {
+        // TODO wxEVT_COMMAND_TEXT_MAXLEN
+        return NO;
+    }
+    return YES;
+}
+
+@end
+
 @implementation wxNSSecureTextField
 
 + (void)initialize
@@ -686,6 +735,13 @@ void wxNSTextFieldControl::SetStringValue( const wxString &str)
 {
     wxMacEditHelper helper(m_textField);
     [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+}
+
+void wxNSTextFieldControl::SetMaxLength(unsigned long len)
+{
+    wxMaximumLengthFormatter* formatter = [[[wxMaximumLengthFormatter alloc] init] autorelease];
+    [formatter setMaxLength:len];
+    [m_textField setFormatter:formatter];
 }
 
 void wxNSTextFieldControl::Copy()
