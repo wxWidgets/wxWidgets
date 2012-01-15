@@ -28,6 +28,9 @@ public :
     wxNSTextFieldControl( wxWindow *wxPeer, wxTextEntry *entry, WXWidget w );
     virtual ~wxNSTextFieldControl();
 
+    virtual bool CanClipMaxLength() const { return true; }
+    virtual void SetMaxLength(unsigned long len);
+        
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
     virtual void Copy() ;

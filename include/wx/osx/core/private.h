@@ -631,6 +631,9 @@ public :
     virtual void GetSelection( long* from, long* to ) const = 0 ;
     virtual void WriteText( const wxString& str ) = 0 ;
 
+    virtual bool CanClipMaxLength() const { return false; }
+    virtual void SetMaxLength(unsigned long WXUNUSED(len)) {}
+    
     virtual bool GetStyle( long position, wxTextAttr& style);
     virtual void SetStyle( long start, long end, const wxTextAttr& style ) ;
     virtual void Copy() ;
