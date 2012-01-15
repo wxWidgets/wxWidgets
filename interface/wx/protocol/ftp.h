@@ -54,7 +54,7 @@ enum TransferMode
             wxLogError("Couldn't get the file size for \"%s\"", filename);
         }
 
-        wxInputStream *i = ftp.GetInputStream(filename);
+        wxInputStream *in = ftp.GetInputStream(filename);
         if ( !in )
         {
             wxLogError("Couldn't get the file");
