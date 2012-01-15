@@ -45,7 +45,7 @@
 
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{ctrl}
     @appearance{filectrl.png}
 
