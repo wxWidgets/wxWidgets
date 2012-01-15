@@ -169,6 +169,7 @@ public:
     void OnSetFocus(wxFocusEvent&);
     void OnKillFocus(wxFocusEvent&);
     virtual bool MSWTranslateMessage(WXMSG* pMsg);
+    virtual bool QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc);
 
 protected:
     friend class FrameSite;

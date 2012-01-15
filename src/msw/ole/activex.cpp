@@ -633,6 +633,10 @@ public:
         return S_OK;
     }
 
+    friend bool QueryClientSiteInterface(FrameSite *self, REFIID iid, void **_interface, const char *&desc)
+    {
+        return self->m_window->QueryClientSiteInterface(iid,_interface,desc);
+    }
 
 protected:
     wxActiveXContainer * m_window;
@@ -670,6 +674,7 @@ DEFINE_OLE_TABLE(FrameSite)
     OLE_IINTERFACE(IOleDocumentSite)
     OLE_IINTERFACE(IAdviseSink)
     OLE_IINTERFACE(IOleControlSite)
+    OLE_INTERFACE_CUSTOM(QueryClientSiteInterface)
 END_OLE_TABLE
 
 
@@ -1274,6 +1279,19 @@ bool wxActiveXContainer::MSWTranslateMessage(WXMSG* pMsg)
         return true;
     }
     return wxWindow::MSWTranslateMessage(pMsg);
+}
+
+//---------------------------------------------------------------------------
+// wxActiveXContainer::QueryClientSiteInterface
+//
+// Called in the host's site's query method for other interfaces.
+//---------------------------------------------------------------------------
+bool wxActiveXContainer::QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc)
+{
+    wxUnusedVar(iid);
+    wxUnusedVar(_interface);
+    wxUnusedVar(desc);
+    return false;
 }
 
 #endif // wxUSE_ACTIVEX
