@@ -214,7 +214,7 @@ For example, "my_dlg" in this snippet:
 <object_ref ref="template" name="my_dlg">
     <title>My dialog</title>
     <centered>1</centered>
-</object>
+</object_ref>
 @endcode
 is identical to:
 @code
@@ -526,7 +526,7 @@ controls cannot have children.
 @endTable
 
 
-@subsubsection xrc_wxanimationctrl wxBannerWindow
+@subsubsection xrc_wxbannerwindow wxBannerWindow
 
 @beginTable
 @hdr3col{property, type, description}
