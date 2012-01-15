@@ -1091,6 +1091,7 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
         wxEvtHandler * const handler = m_wxPeer->GetEventHandler();
         
         wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+        command_event.SetEventObject( wxevent.GetEventObject() );
         handled = handler->ProcessEvent( command_event );
         
         if ( !handled )
