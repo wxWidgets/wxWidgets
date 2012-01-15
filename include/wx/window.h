@@ -1842,9 +1842,6 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowX11 wxWindow
     #endif // wxUniv
     #include "wx/x11/window.h"
-#elif defined(__WXMGL__)
-    #define wxWindowNative wxWindowMGL
-    #include "wx/mgl/window.h"
 #elif defined(__WXDFB__)
     #define wxWindowNative wxWindowDFB
     #include "wx/dfb/window.h"

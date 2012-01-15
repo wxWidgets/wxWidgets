@@ -40,7 +40,7 @@
     <subproject id="samples">
         <installable>no</installable>
         <dir cond="FORMAT=='autoconf'">samples</dir>
-        <dir cond="FORMAT!='autoconf' and TOOLKIT in ['PM','MSW','MGL','MOTIF']">../../samples</dir>
+        <dir cond="FORMAT!='autoconf' and TOOLKIT in ['PM','MSW','MOTIF']">../../samples</dir>
     </subproject>
 
     <if cond="FORMAT=='autoconf'">
@@ -178,7 +178,7 @@
 
 
     <!-- copy setup.h on DOS/OS2/Windows if the format supports it: -->
-    <if cond="FORMAT!='autoconf' and IS_MSVC_PRJ=='0' and TOOLKIT in ['PM','MSW','MGL','MOTIF']">
+    <if cond="FORMAT!='autoconf' and IS_MSVC_PRJ=='0' and TOOLKIT in ['PM','MSW','MOTIF']">
         <mkdir id="libdir">
             <dir>$(LIBDIRNAME)</dir>
         </mkdir>

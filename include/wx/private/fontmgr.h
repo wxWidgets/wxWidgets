@@ -192,9 +192,7 @@ protected:
 
 
 
-#if defined(__WXMGL__)
-    #include "wx/mgl/private/fontmgr.h"
-#elif defined(__WXDFB__)
+#if defined(__WXDFB__)
     #include "wx/dfb/private/fontmgr.h"
 #endif
 

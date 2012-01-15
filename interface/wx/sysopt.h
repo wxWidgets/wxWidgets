@@ -128,16 +128,6 @@
     @endFlagTable
 
 
-    @section sysopt_mgl MGL
-
-    @beginFlagTable
-    @flag{mgl.aa-threshold}
-        Set this integer option to point size below which fonts are not antialiased. Default: 10.
-    @flag{mgl.screen-refresh}
-        Screen refresh rate in Hz. A reasonable default is used if not specified.
-    @endFlagTable
-
-
     @section sysopt_motif Motif
 
     @beginFlagTable

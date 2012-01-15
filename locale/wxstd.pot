@@ -1741,14 +1741,6 @@ msgstr ""
 msgid "Cannot initialize OLE"
 msgstr ""
 
-#: ../src/mgl/app.cpp:224
-msgid "Cannot initialize SciTech MGL!"
-msgstr ""
-
-#: ../src/mgl/window.cpp:547
-msgid "Cannot initialize display."
-msgstr ""
-
 #: ../src/common/socket.cpp:844
 msgid "Cannot initialize sockets"
 msgstr ""
@@ -2361,10 +2353,6 @@ msgstr ""
 msgid "Couldn't create a timer"
 msgstr ""
 
-#: ../src/mgl/cursor.cpp:132 ../src/mgl/cursor.cpp:153
-msgid "Couldn't create cursor."
-msgstr ""
-
 #: ../src/osx/carbon/overlay.cpp:123
 msgid "Couldn't create the overlay window"
 msgstr ""
@@ -2654,11 +2642,6 @@ msgstr ""
 #: ../src/common/filefn.cpp:1278
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
-msgstr ""
-
-#: ../src/mgl/dirmgl.cpp:200
-#, c-format
-msgid "Directory '%s' doesn't exist!"
 msgstr ""
 
 #: ../src/generic/dirdlgg.cpp:234
@@ -3507,11 +3490,6 @@ msgstr ""
 #: ../src/common/docview.cpp:642
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
-msgstr ""
-
-#: ../src/mgl/bitmap.cpp:439
-#, c-format
-msgid "File %s does not exist."
 msgstr ""
 
 #: ../src/gtk/filedlg.cpp:53
@@ -4640,11 +4618,6 @@ msgstr ""
 
 #: ../src/msw/ole/automtn.cpp:639
 msgid "Missing a required parameter."
-msgstr ""
-
-#: ../src/mgl/app.cpp:114
-#, c-format
-msgid "Mode %ix%i-%i not available."
 msgstr ""
 
 #: ../src/generic/fontdlgg.cpp:325

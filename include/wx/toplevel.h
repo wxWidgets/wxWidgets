@@ -367,9 +367,6 @@ protected:
 #elif defined(__WXX11__)
     #include "wx/x11/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowX11
-#elif defined(__WXMGL__)
-    #include "wx/mgl/toplevel.h"
-    #define wxTopLevelWindowNative wxTopLevelWindowMGL
 #elif defined(__WXDFB__)
     #include "wx/dfb/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowDFB

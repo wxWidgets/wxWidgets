@@ -29,7 +29,6 @@ GTKDIR   = $(WXDIR)/src/gtk
 GTK1DIR  = $(WXDIR)/src/gtk1
 X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
-MGLDIR   = $(WXDIR)/src/mgl
 MOTIFDIR = $(WXDIR)/src/motif
 MSDOSDIR = $(WXDIR)/src/msdos
 MSWDIR   = $(WXDIR)/src/msw
@@ -496,16 +495,6 @@ UNIV_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/wx/univ/setup0.h $(DISTDIR)/include/wx/univ/setup.h
 	$(CP_P) $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
 	$(CP_P) $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
-
-MGL_DIST: UNIV_DIST
-	$(CP_P) $(WXDIR)/wxMGL.spec $(DISTDIR)
-	$(CP_P) $(INCDIR)/wx/mgl/*.h $(DISTDIR)/include/wx/mgl
-	mkdir $(DISTDIR)/include/wx/msdos
-	$(CP_P) $(INCDIR)/wx/msdos/*.h $(DISTDIR)/include/wx/msdos
-	$(CP_P) $(SRCDIR)/mgl/make* $(DISTDIR)/src/mgl
-	$(CP_P) $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
-	mkdir $(DISTDIR)/src/msdos
-	$(CP_P) $(SRCDIR)/msdos/*.cpp $(DISTDIR)/src/msdos
 
 DEMOS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/demos

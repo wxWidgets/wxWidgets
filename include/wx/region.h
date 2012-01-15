@@ -220,8 +220,6 @@ protected:
     #include "wx/gtk1/region.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
     #include "wx/x11/region.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/region.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/region.h"
 #elif defined(__WXMAC__)

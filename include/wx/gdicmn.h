@@ -176,9 +176,6 @@ enum wxStockCursor
 #elif defined(__WXPM__)
     // Load from a resource
     #define wxICON(X) wxIcon(wxT(#X))
-#elif defined(__WXMGL__)
-    // Initialize from an included XPM
-    #define wxICON(X) wxIcon( X##_xpm )
 #elif defined(__WXDFB__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( X##_xpm )
@@ -209,7 +206,6 @@ enum wxStockCursor
       defined(__WXMOTIF__) || \
       defined(__WXX11__)   || \
       defined(__WXMAC__)   || \
-      defined(__WXMGL__)   || \
       defined(__WXDFB__)   || \
       defined(__WXCOCOA__)
     // Initialize from an included XPM

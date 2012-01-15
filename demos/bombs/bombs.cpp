@@ -30,7 +30,7 @@
 #endif
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) \
-    || defined(__WXMAC__) || defined(__WXMGL__)
+    || defined(__WXMAC__)
 #   include "bombs.xpm"
 #endif
 

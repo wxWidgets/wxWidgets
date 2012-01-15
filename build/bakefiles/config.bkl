@@ -430,7 +430,6 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='win32'">MSW</if>
             <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='win32'">MSW</if>
             <if cond="FORMAT not in ['msevc4prj','msvs2005prj','msvs2008prj'] and PLATFORM_WIN32=='1'">MSW</if>
-            <if cond="PLATFORM_MSDOS=='1'">MGL</if>
             <if cond="PLATFORM_OS2=='1'">PM</if>
         </set>
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
@@ -530,13 +529,6 @@ Set the version of your Mingw installation here.
             <set var="USE_RTTI">0</set>
             <set var="USE_EXCEPTIONS">0</set>
         </if>
-    </if>
-
-    <!-- Need for wxUniv within wxMGL: -->
-    <if cond="FORMAT!='autoconf' and TOOLKIT=='MGL'">
-        <set var="WXUNIV">1</set>
-        <set var="USE_THREADS">0</set>
-        <set var="RUNTIME_LIBS">static</set>
     </if>
 
 </makefile>

@@ -34,8 +34,6 @@ public:
     #include "wx/x11/palette.h"
 #elif defined(__WXGTK__) || defined(__WXCOCOA__)
     #include "wx/generic/paletteg.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/palette.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/palette.h"
 #elif defined(__WXPM__)

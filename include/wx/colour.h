@@ -221,8 +221,6 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
     #include "wx/gtk/colour.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/colour.h"
-#elif defined(__WXMGL__)
-    #include "wx/generic/colour.h"
 #elif defined(__WXDFB__)
     #include "wx/generic/colour.h"
 #elif defined(__WXX11__)

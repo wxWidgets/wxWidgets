@@ -78,8 +78,6 @@ public:
     #include "wx/gtk/brush.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/brush.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/brush.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/brush.h"
 #elif defined(__WXMAC__)

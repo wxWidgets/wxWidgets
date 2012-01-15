@@ -57,8 +57,8 @@ class WidgetsPageInfo;
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
 enum
 {
-    // On wxUniversal-based build (wxX11, wxMGL, wxMSWUniv, wxGTKUniv, etc.)
-    // 'native' means 'made with wxUniv port renderer'
+    // In wxUniversal-based builds 'native' means 'made with wxUniv port
+    // renderer'
     NATIVE_PAGE = 0,
     UNIVERSAL_PAGE = NATIVE_PAGE,
     GENERIC_PAGE,

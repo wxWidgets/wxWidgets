@@ -85,7 +85,7 @@ wxBrush::wxBrush(const wxBitmap &stippleBitmap)
 
 bool wxBrush::operator==(const wxBrush& brush) const
 {
-#warning "this is incorrect (MGL too)"
+#warning "this is incorrect"
     return m_refData == brush.m_refData;
 }
 

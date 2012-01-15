@@ -351,8 +351,6 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     #include "wx/gtk1/font.h"
 #elif defined(__WXX11__)
     #include "wx/x11/font.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/font.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/font.h"
 #elif defined(__WXMAC__)

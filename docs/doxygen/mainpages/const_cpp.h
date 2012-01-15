@@ -48,7 +48,6 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WXMAC__, old define for Mac OS X}
 @itemdef{__WXMOTIF__, Motif}
 @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
-@itemdef{__WXMGL__, SciTech Soft MGL (__WXUNIVERSAL__ will be also defined)}
 @itemdef{__WXMSW__, Any Windows}
 @itemdef{__WXOSX__, any OS X}
 @itemdef{__WXOSX_IPHONE__, OS X iPhone}
@@ -95,7 +94,6 @@ symbols, although this has not always been followed.
 @itemdef{__DARWIN__, Mac OS X using the BSD Unix C library
                     (as opposed to using the Metrowerks MSL C/C++ library)}
 @itemdef{__DATA_GENERAL__, DG-UX}
-@itemdef{__DOS_GENERAL__, DOS (used with wxMGL only)}
 @itemdef{__FREEBSD__, FreeBSD}
 @itemdef{__HPUX__, HP-UX (Unix)}
 @itemdef{__GNU__, GNU Hurd}

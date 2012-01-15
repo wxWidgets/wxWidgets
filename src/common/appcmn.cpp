@@ -196,10 +196,10 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
         },
 #endif // __WXUNIVERSAL__
 
-#if defined(__WXMGL__)
-        // VS: this is not specific to wxMGL, all fullscreen (framebuffer) ports
+#if defined(__WXDFB__)
+        // VS: this is not specific to wxDFB, all fullscreen (framebuffer) ports
         //     should provide this option. That's why it is in common/appcmn.cpp
-        //     and not mgl/app.cpp
+        //     and not dfb/app.cpp
         {
             wxCMD_LINE_OPTION,
             NULL,
@@ -208,7 +208,7 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
             wxCMD_LINE_VAL_STRING,
             0x0
         },
-#endif // __WXMGL__
+#endif // __WXDFB__
 
         // terminator
         wxCMD_LINE_DESC_END
@@ -236,7 +236,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
     }
 #endif // __WXUNIVERSAL__
 
-#if defined(__WXMGL__)
+#if defined(__WXDFB__)
     wxString modeDesc;
     if ( parser.Found(OPTION_MODE, &modeDesc) )
     {
@@ -250,7 +250,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         if ( !SetDisplayMode(wxVideoMode(w, h, bpp)) )
             return false;
     }
-#endif // __WXMGL__
+#endif // __WXDFB__
 
     return wxAppConsole::OnCmdLineParsed(parser);
 }

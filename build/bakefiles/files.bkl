@@ -1936,69 +1936,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 <!-- ====================================================================== -->
-<!--                                wxMGL                                   -->
-<!-- ====================================================================== -->
-
-<set var="MGL_LOWLEVEL_SRC" hints="files">
-    src/common/fontmgrcmn.cpp
-    src/generic/caret.cpp
-    src/generic/colour.cpp
-    src/generic/icon.cpp
-    src/generic/imaglist.cpp
-    src/generic/mask.cpp
-    src/generic/timer.cpp
-    src/mgl/app.cpp
-    src/mgl/bitmap.cpp
-    src/mgl/brush.cpp
-    src/mgl/clipbrd.cpp
-    src/mgl/cursor.cpp
-    src/mgl/data.cpp
-    src/mgl/dc.cpp
-    src/mgl/dcclient.cpp
-    src/mgl/dcmemory.cpp
-    src/mgl/dcscreen.cpp
-    src/mgl/dirmgl.cpp
-    src/mgl/evtloop.cpp
-    src/mgl/font.cpp
-    src/mgl/fontenum.cpp
-    src/mgl/fontmgr.cpp
-    src/mgl/fontutil.cpp
-    src/mgl/palette.cpp
-    src/mgl/pen.cpp
-    src/mgl/region.cpp
-    src/mgl/settings.cpp
-    src/mgl/toplevel.cpp
-    src/mgl/utils.cpp
-    src/mgl/window.cpp
-</set>
-<set var="MGL_LOWLEVEL_HDR" hints="files">
-    wx/generic/caret.h
-    wx/generic/colour.h
-    wx/generic/icon.h
-    wx/generic/imaglist.h
-    wx/generic/mask.h
-    wx/mgl/app.h
-    wx/mgl/bitmap.h
-    wx/mgl/brush.h
-    wx/mgl/chkconf.h
-    wx/mgl/clipbrd.h
-    wx/mgl/cursor.h
-    wx/mgl/dc.h
-    wx/mgl/dcclient.h
-    wx/mgl/dcmemory.h
-    wx/mgl/dcscreen.h
-    wx/mgl/font.h
-    wx/mgl/palette.h
-    wx/mgl/pen.h
-    wx/mgl/popupwin.h
-    wx/mgl/private.h
-    wx/mgl/region.h
-    wx/mgl/toplevel.h
-    wx/mgl/window.h
-</set>
-
-
-<!-- ====================================================================== -->
 <!--                                wxDFB                                   -->
 <!-- ====================================================================== -->
 
@@ -3840,7 +3777,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(OS2_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
     </set>
     <set var="LOWLEVEL_HDR" hints="files">
@@ -3855,7 +3791,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(OS2_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
-        <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_HDR)</if>
     </set>
 
@@ -3910,7 +3845,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
-        <if cond="TOOLKIT=='MGL' and PLATFORM_UNIX=='1'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
@@ -3924,7 +3858,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
-        <if cond="TOOLKIT=='MGL' and PLATFORM_UNIX=='1'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>
 

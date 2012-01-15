@@ -635,7 +635,7 @@ public:
 
     /**
         Get display mode that is used use. This is only used in framebuffer
-        wxWidgets ports (such as wxMGL or wxDFB).
+        wxWidgets ports such as wxDFB.
     */
     virtual wxVideoMode GetDisplayMode() const;
 
@@ -727,7 +727,7 @@ public:
 
     /**
         Set display mode to use. This is only used in framebuffer wxWidgets
-        ports (such as wxMGL or wxDFB).
+        ports such as wxDFB.
     */
     virtual bool SetDisplayMode(const wxVideoMode& info);
 

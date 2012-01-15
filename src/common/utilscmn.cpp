@@ -390,10 +390,6 @@ bool wxPlatform::Is(int platform)
     if (platform == wxOS_UNIX)
         return true;
 #endif
-#ifdef __WXMGL__
-    if (platform == wxPORT_MGL)
-        return true;
-#endif
 #ifdef __OS2__
     if (platform == wxOS_OS2)
         return true;

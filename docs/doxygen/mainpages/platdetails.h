@@ -21,7 +21,6 @@ and ports.
 @li @ref page_port_wxgtk
 @li @ref page_port_wxosx
 @li @ref page_port_wxos2
-@li @ref page_port_wxmgl
 @li @ref page_port_wxx11
 @li @ref page_port_wxmotif
 @li @ref page_port_wxmsw
@@ -119,32 +118,6 @@ in the distribution.
 wxCocoa, which was implemented totally with Cocoa API unlike the OSX/Cocoa port
 which uses OS X C APIs to share code, and while it is no longer being actively 
 developed, docs for it are available in @c docs/cocoa in the distribution.
-
-
-
-@section page_port_wxmgl wxMGL
-
-wxMGL is a port of wxWidgets using the MGL library available
-from SciTech as the underlying graphics backend. wxMGL draws
-its widgets using the wxUniversal widget set which is part
-of wxWidgets. MGL itself runs on a variety of platforms
-including DOS, Linux hardware (similar to the Linux framebuffer)
-and various graphics systems such as Win32, X11 and OS/2.
-Note that currently MGL for Linux runs only on x86-based systems.
-
-You will MGL 5.0 or higher which is available from
-
-http://www.scitechsoft.com/products/product_download.html
-
-In order to configure wxWidgets to compile wxMGL you will
-need to type:
-
-@verbatim configure --with-mgl --with-universal @endverbatim
-
-Under DOS, wxMGL uses a dmake based make system.
-
-For further information, please see the files in @c docs/mgl
-in the distribution.
 
 
 

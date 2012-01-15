@@ -75,13 +75,12 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxMSW"),
     wxT("wxMotif"),
     wxT("wxGTK"),
-    wxT("wxMGL"),
+    wxT("wxDFB"),
     wxT("wxX11"),
     wxT("wxOS2"),
     wxT("wxMac"),
     wxT("wxCocoa"),
     wxT("wxWinCE"),
-    wxT("wxDFB")
 };
 
 static const wxChar* const wxArchitectureNames[] =

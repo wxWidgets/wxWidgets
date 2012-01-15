@@ -123,8 +123,8 @@ wxFontBundleBase::GetFaceForFont(const wxFontMgrFontRefData& font) const
         type |= FaceType_Bold;
 
     // FIXME -- this should read "if ( font->GetStyle() == wxITALIC )",
-    // but since MGL neither DFB supports slant, we try to display it with
-    // italic face (better than nothing...)
+    // but since DFB doesn't support slant, we try to display it with italic
+    // face (better than nothing...)
     if ( font.GetStyle() == wxITALIC || font.GetStyle() == wxSLANT )
     {
         if ( HasFace((FaceType)(type | FaceType_Italic)) )

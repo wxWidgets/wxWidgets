@@ -84,7 +84,7 @@ wxPen::wxPen(const wxBitmap& WXUNUSED(stipple), int WXUNUSED(width))
 
 bool wxPen::operator==(const wxPen& pen) const
 {
-#warning "this is incorrect (MGL too)"
+#warning "this is incorrect"
     return m_refData == pen.m_refData;
 }
 

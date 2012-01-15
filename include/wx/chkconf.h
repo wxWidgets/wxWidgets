@@ -1213,8 +1213,6 @@
 #  include "wx/osx/chkconf.h"
 #elif defined(__OS2__)
 #  include "wx/os2/chkconf.h"
-#elif defined(__WXMGL__)
-#  include "wx/mgl/chkconf.h"
 #elif defined(__WXDFB__)
 #  include "wx/dfb/chkconf.h"
 #elif defined(__WXMOTIF__)

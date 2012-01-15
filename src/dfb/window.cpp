@@ -2,7 +2,7 @@
 // Name:        src/dfb/window.cpp
 // Purpose:     wxWindow
 // Author:      Vaclav Slavik
-//              (based on GTK, MSW, MGL implementations)
+//              (based on GTK, MSW implementations)
 // Created:     2006-80-10
 // RCS-ID:      $Id$
 // Copyright:   (c) 2006 REA Elektronik GmbH

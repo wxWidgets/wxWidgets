@@ -48,11 +48,7 @@ extern "C"
 #include "wx/wfstream.h"
 
 #ifndef TIFFLINKAGEMODE
-    #if defined(__WATCOMC__) && defined(__WXMGL__)
-        #define TIFFLINKAGEMODE cdecl
-    #else
-        #define TIFFLINKAGEMODE LINKAGEMODE
-    #endif
+    #define TIFFLINKAGEMODE LINKAGEMODE
 #endif
 
 // ============================================================================

@@ -116,7 +116,6 @@ protected:
     #include "wx/cocoa/dirdlg.h"    // Native Cocoa
 #elif defined(__WXMOTIF__) || \
       defined(__WXX11__)   || \
-      defined(__WXMGL__)   || \
       defined(__WXCOCOA__) || \
       defined(__WXPM__)
     #include "wx/generic/dirdlgg.h"     // Other ports use generic implementation

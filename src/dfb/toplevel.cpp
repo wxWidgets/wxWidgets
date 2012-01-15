@@ -74,7 +74,6 @@ bool wxTopLevelWindowDFB::Create(wxWindow *parent,
 // showing and hiding
 // ----------------------------------------------------------------------------
 
-#warning "FIXME: the rest of this file is almost same as for MGL, merge it"
 bool wxTopLevelWindowDFB::ShowFullScreen(bool show, long style)
 {
     if ( show == m_fsIsShowing )

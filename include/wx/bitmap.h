@@ -68,8 +68,7 @@ protected:
     virtual bool InitFromMonoBitmap(const wxBitmap& bitmap) = 0;
 };
 
-#if defined(__WXMGL__) || \
-    defined(__WXDFB__) || \
+#if defined(__WXDFB__) || \
     defined(__WXMAC__) || \
     defined(__WXGTK__) || \
     defined(__WXCOCOA__) || \
@@ -252,9 +251,6 @@ protected:
 #elif defined(__WXX11__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
     #include "wx/x11/bitmap.h"
-#elif defined(__WXMGL__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
-    #include "wx/mgl/bitmap.h"
 #elif defined(__WXDFB__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/dfb/bitmap.h"
@@ -284,7 +280,7 @@ ConvertToDisabled(unsigned char brightness) const
 #endif // wxUSE_IMAGE
 
 // we must include generic mask.h after wxBitmap definition
-#if defined(__WXMGL__) || defined(__WXDFB__)
+#if defined(__WXDFB__)
     #define wxUSE_GENERIC_MASK 1
 #else
     #define wxUSE_GENERIC_MASK 0

@@ -493,13 +493,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="MONOLITHIC=='0'">$(EXTRALIBS_GUI)</if>
     </set>
 
-    <if cond="TOOLKIT=='MGL' and FORMAT=='watcom'">
-        <set var="MGLLIBPATH">$(DOLLAR)(%SCITECH)/lib/$(BUILD)/dos32/ow10</set>
-        <set var="MGLPMLIBPATH">
-            <if cond="DOS32=='DOS4GW'">dos4gw</if>
-        </set>
-    </if>
-
     <template id="wx" template="common_settings">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
@@ -515,10 +508,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
-        <if cond="TOOLKIT=='MGL' and FORMAT=='watcom'">
-            <lib-path>$(MGLLIBPATH)</lib-path>
-            <lib-path>$(MGLLIBPATH)/$(MGLPMLIBPATH)</lib-path>
-        </if>
 
         <warnings>max</warnings>
         <cxxflags cond="FORMAT=='autoconf'">$(CXXWARNINGS)</cxxflags>
@@ -547,13 +536,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <if cond="FORMAT=='watcom'">
                 <sys-lib>upm32</sys-lib>
             </if>
-        </if>
-
-        <!-- system libraries on mgl: -->
-        <if cond="FORMAT=='watcom' and TOOLKIT=='MGL'">
-            <sys-lib>mgl</sys-lib>
-            <sys-lib>mglcpp</sys-lib>
-            <sys-lib>pm</sys-lib>
         </if>
 
         <!-- system libraries on windows: -->
@@ -632,7 +614,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <define>WXBUILDING</define>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
-            <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL','PM','WINCE']">
+            <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','PM','WINCE']">
                 <sources>$(WXTOPDIR)src/common/dummy.cpp</sources>
                 <precomp-headers-gen>
                     $(WXTOPDIR)src/common/dummy.cpp
@@ -705,9 +687,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     </template>
 
     <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'">
-        <if cond="FORMAT=='watcom' and TOOLKIT=='MGL'">
-            <include>$(DOLLAR)(%SCITECH)/include</include>
-        </if>
         <include>$(INC_TIFF_BUILD)</include>
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>

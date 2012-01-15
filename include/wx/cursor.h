@@ -49,9 +49,6 @@ public:
 #elif defined(__WXX11__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
     #include "wx/x11/cursor.h"
-#elif defined(__WXMGL__)
-    #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
-    #include "wx/mgl/cursor.h"
 #elif defined(__WXDFB__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
     #include "wx/dfb/cursor.h"

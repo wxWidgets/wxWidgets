@@ -918,8 +918,6 @@ COND_PLATFORM_MSDOS_1
 COND_PLATFORM_OS2_1
 COND_PLATFORM_UNIX_0
 COND_PLATFORM_UNIX_1
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1
 COND_PLATFORM_UNIX_1_USE_GUI_1
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0
 COND_PLATFORM_WIN32_0
@@ -954,8 +952,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_USE_GUI_1
 COND_TOOLKIT_MAC
-COND_TOOLKIT_MGL
-COND_TOOLKIT_MGL_USE_GUI_1
 COND_TOOLKIT_MOTIF
 COND_TOOLKIT_MOTIF_USE_GUI_1
 COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0
@@ -1980,7 +1976,6 @@ Optional Packages:
   --with-wine             use Wine
   --with-msw              use MS-Windows
   --with-pm               use OS/2 Presentation Manager
-  --with-mgl              use SciTech MGL
   --with-directfb         use DirectFB
   --with-microwin         use MicroWindows
   --with-x11              use X11
@@ -2679,14 +2674,13 @@ USE_ALPHA=
 
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
-ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MGL MICROWIN MOTIF MSW PM X11 DFB"
+ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW PM X11 DFB"
 
 DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_wxUSE_MGL=0
 DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
@@ -2699,7 +2693,6 @@ DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_DEFAULT_wxUSE_MGL=0
 DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
@@ -2936,7 +2929,6 @@ _ACEOF
 _ACEOF
 
     PROGRAM_EXT=".exe"
-    DEFAULT_DEFAULT_wxUSE_MGL=1
   ;;
 
   *-pc-os2_emx | *-pc-os2-emx )
@@ -3488,12 +3480,6 @@ if test "${with_pm+set}" = set; then
 fi
 
 
-# Check whether --with-mgl was given.
-if test "${with_mgl+set}" = set; then
-  withval=$with_mgl; wxUSE_MGL="$withval" wxUSE_UNIVERSAL="yes" CACHE_MGL=1 TOOLKIT_GIVEN=1
-fi
-
-
 # Check whether --with-directfb was given.
 if test "${with_directfb+set}" = set; then
   withval=$with_directfb; wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1
@@ -3653,7 +3639,7 @@ echo "$as_me: error: BeOS GUI is not supported yet, use --disable-gui" >&2;}
     fi
 
             NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
-                  + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} \
+                  + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
         case "${host}" in
@@ -28373,27 +28359,20 @@ if test "$wxUSE_LIBPNG" != "no" ; then
 _ACEOF
 
 
-    if test "$wxUSE_MGL" = 1 -a "$wxUSE_LIBPNG" = "builtin" ; then
-        { echo "$as_me:$LINENO: WARNING: wxMGL doesn't work with builtin png library, will use MGL one instead" >&5
-echo "$as_me: WARNING: wxMGL doesn't work with builtin png library, will use MGL one instead" >&2;}
-        wxUSE_LIBPNG=sys
-    fi
-
-                if test "$wxUSE_MGL" != 1 -a "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
+            if test "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
         { echo "$as_me:$LINENO: WARNING: system png library doesn't work without system zlib, will use built-in instead" >&5
 echo "$as_me: WARNING: system png library doesn't work without system zlib, will use built-in instead" >&2;}
         wxUSE_LIBPNG=builtin
     fi
 
-    if test "$wxUSE_MGL" != 1 ; then
-                if test "$wxUSE_LIBPNG" = "sys" -o "$wxUSE_LIBPNG" = "yes" ; then
-                                    { echo "$as_me:$LINENO: checking for png.h > 0.90" >&5
+    if test "$wxUSE_LIBPNG" = "sys" -o "$wxUSE_LIBPNG" = "yes" ; then
+                        { echo "$as_me:$LINENO: checking for png.h > 0.90" >&5
 echo $ECHO_N "checking for png.h > 0.90... $ECHO_C" >&6; }
 if test "${ac_cv_header_png_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   if test "$cross_compiling" = yes; then
-                      unset ac_cv_header_png_h
+                  unset ac_cv_header_png_h
 
 else
   cat >conftest.$ac_ext <<_ACEOF
@@ -28403,17 +28382,17 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                        #include <png.h>
-                        #include <stdio.h>
+                    #include <png.h>
+                    #include <stdio.h>
 
-                        int main()
-                        {
-                            FILE *f=fopen("conftestval", "w");
-                            if (!f) exit(1);
-                            fprintf(f, "%s",
-                                     PNG_LIBPNG_VER > 90 ? "yes" : "no");
-                            exit(0);
-                        }
+                    int main()
+                    {
+                        FILE *f=fopen("conftestval", "w");
+                        if (!f) exit(1);
+                        fprintf(f, "%s",
+                                 PNG_LIBPNG_VER > 90 ? "yes" : "no");
+                        exit(0);
+                    }
 
 _ACEOF
 rm -f conftest$ac_exeext
@@ -28453,7 +28432,7 @@ fi
 fi
 { echo "$as_me:$LINENO: result: $ac_cv_header_png_h" >&5
 echo "${ECHO_T}$ac_cv_header_png_h" >&6; }
-            { echo "$as_me:$LINENO: checking for png.h" >&5
+        { echo "$as_me:$LINENO: checking for png.h" >&5
 echo $ECHO_N "checking for png.h... $ECHO_C" >&6; }
 if test "${ac_cv_header_png_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -28500,8 +28479,8 @@ echo "${ECHO_T}$ac_cv_header_png_h" >&6; }
 
 
 
-            if test "$ac_cv_header_png_h" = "yes"; then
-                { echo "$as_me:$LINENO: checking for png_sig_cmp in -lpng" >&5
+        if test "$ac_cv_header_png_h" = "yes"; then
+            { echo "$as_me:$LINENO: checking for png_sig_cmp in -lpng" >&5
 echo $ECHO_N "checking for png_sig_cmp in -lpng... $ECHO_C" >&6; }
 if test "${ac_cv_lib_png_png_sig_cmp+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -28566,21 +28545,20 @@ if test $ac_cv_lib_png_png_sig_cmp = yes; then
   PNG_LINK=" -lpng -lz"
 fi
 
-            fi
+        fi
 
-            if test "x$PNG_LINK" = "x" ; then
-                if test "$wxUSE_LIBPNG" = "sys" ; then
-                    { { echo "$as_me:$LINENO: error: system png library not found or too old! Use --with-libpng=builtin to use built-in version" >&5
+        if test "x$PNG_LINK" = "x" ; then
+            if test "$wxUSE_LIBPNG" = "sys" ; then
+                { { echo "$as_me:$LINENO: error: system png library not found or too old! Use --with-libpng=builtin to use built-in version" >&5
 echo "$as_me: error: system png library not found or too old! Use --with-libpng=builtin to use built-in version" >&2;}
    { (exit 1); exit 1; }; }
-                else
-                    { echo "$as_me:$LINENO: WARNING: system png library not found or too old, will use built-in instead" >&5
-echo "$as_me: WARNING: system png library not found or too old, will use built-in instead" >&2;}
-                    wxUSE_LIBPNG=builtin
-                fi
             else
-                                wxUSE_LIBPNG=sys
+                { echo "$as_me:$LINENO: WARNING: system png library not found or too old, will use built-in instead" >&5
+echo "$as_me: WARNING: system png library not found or too old, will use built-in instead" >&2;}
+                wxUSE_LIBPNG=builtin
             fi
+        else
+                        wxUSE_LIBPNG=sys
         fi
     fi
 fi
@@ -28593,17 +28571,10 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
 _ACEOF
 
 
-    if test "$wxUSE_MGL" = 1 -a "$wxUSE_LIBJPEG" = "builtin" ; then
-        { echo "$as_me:$LINENO: WARNING: wxMGL doesn't work with builtin jpeg library, will use MGL one instead" >&5
-echo "$as_me: WARNING: wxMGL doesn't work with builtin jpeg library, will use MGL one instead" >&2;}
-        wxUSE_LIBJPEG=sys
-    fi
-
-    if test "$wxUSE_MGL" != 1 ; then
-                if test "$wxUSE_LIBJPEG" = "sys" -o "$wxUSE_LIBJPEG" = "yes" ; then
-                                                { echo "$as_me:$LINENO: checking for jpeglib.h" >&5
+    if test "$wxUSE_LIBJPEG" = "sys" -o "$wxUSE_LIBJPEG" = "yes" ; then
+                                { echo "$as_me:$LINENO: checking for jpeglib.h" >&5
 echo $ECHO_N "checking for jpeglib.h... $ECHO_C" >&6; }
-            if test "${ac_cv_header_jpeglib_h+set}" = set; then
+        if test "${ac_cv_header_jpeglib_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   cat >conftest.$ac_ext <<_ACEOF
@@ -28613,9 +28584,9 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                        #undef HAVE_STDLIB_H
-                        #include <stdio.h>
-                        #include <jpeglib.h>
+                    #undef HAVE_STDLIB_H
+                    #include <stdio.h>
+                    #include <jpeglib.h>
 
 int
 main ()
@@ -28656,11 +28627,11 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 
-            { echo "$as_me:$LINENO: result: $ac_cv_header_jpeglib_h" >&5
+        { echo "$as_me:$LINENO: result: $ac_cv_header_jpeglib_h" >&5
 echo "${ECHO_T}$ac_cv_header_jpeglib_h" >&6; }
 
-            if test "$ac_cv_header_jpeglib_h" = "yes"; then
-                { echo "$as_me:$LINENO: checking for jpeg_read_header in -ljpeg" >&5
+        if test "$ac_cv_header_jpeglib_h" = "yes"; then
+            { echo "$as_me:$LINENO: checking for jpeg_read_header in -ljpeg" >&5
 echo $ECHO_N "checking for jpeg_read_header in -ljpeg... $ECHO_C" >&6; }
 if test "${ac_cv_lib_jpeg_jpeg_read_header+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -28725,23 +28696,23 @@ if test $ac_cv_lib_jpeg_jpeg_read_header = yes; then
   JPEG_LINK=" -ljpeg"
 fi
 
-            fi
+        fi
 
-            if test "x$JPEG_LINK" = "x" ; then
-                if test "$wxUSE_LIBJPEG" = "sys" ; then
-                    { { echo "$as_me:$LINENO: error: system jpeg library not found! Use --with-libjpeg=builtin to use built-in version" >&5
+        if test "x$JPEG_LINK" = "x" ; then
+            if test "$wxUSE_LIBJPEG" = "sys" ; then
+                { { echo "$as_me:$LINENO: error: system jpeg library not found! Use --with-libjpeg=builtin to use built-in version" >&5
 echo "$as_me: error: system jpeg library not found! Use --with-libjpeg=builtin to use built-in version" >&2;}
    { (exit 1); exit 1; }; }
-                else
-                    { echo "$as_me:$LINENO: WARNING: system jpeg library not found, will use built-in instead" >&5
-echo "$as_me: WARNING: system jpeg library not found, will use built-in instead" >&2;}
-                    wxUSE_LIBJPEG=builtin
-                fi
             else
-                                wxUSE_LIBJPEG=sys
+                { echo "$as_me:$LINENO: WARNING: system jpeg library not found, will use built-in instead" >&5
+echo "$as_me: WARNING: system jpeg library not found, will use built-in instead" >&2;}
+                wxUSE_LIBJPEG=builtin
+            fi
+        else
+                        wxUSE_LIBJPEG=sys
 
-                if test "$wxUSE_MSW" = 1; then
-                                                                                                    { echo "$as_me:$LINENO: checking for boolean" >&5
+            if test "$wxUSE_MSW" = 1; then
+                                                                                { echo "$as_me:$LINENO: checking for boolean" >&5
 echo $ECHO_N "checking for boolean... $ECHO_C" >&6; }
 if test "${ac_cv_type_boolean+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -28802,7 +28773,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-                            { echo "$as_me:$LINENO: checking for boolean" >&5
+                        { echo "$as_me:$LINENO: checking for boolean" >&5
 echo $ECHO_N "checking for boolean... $ECHO_C" >&6; }
 if test "${ac_cv_type_boolean+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -28814,9 +28785,9 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                                    #undef HAVE_BOOLEAN
-                                    #include <stdio.h>
-                                    #include <jpeglib.h>
+                                #undef HAVE_BOOLEAN
+                                #include <stdio.h>
+                                #include <jpeglib.h>
 
 
 typedef boolean ac__type_new_;
@@ -28879,9 +28850,9 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                                    #undef HAVE_BOOLEAN
-                                    #include <stdio.h>
-                                    #include <jpeglib.h>
+                                #undef HAVE_BOOLEAN
+                                #include <stdio.h>
+                                #include <jpeglib.h>
 
 
    typedef boolean ac__type_sizeof_;
@@ -28921,9 +28892,9 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                                    #undef HAVE_BOOLEAN
-                                    #include <stdio.h>
-                                    #include <jpeglib.h>
+                                #undef HAVE_BOOLEAN
+                                #include <stdio.h>
+                                #include <jpeglib.h>
 
 
    typedef boolean ac__type_sizeof_;
@@ -28980,9 +28951,9 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                                    #undef HAVE_BOOLEAN
-                                    #include <stdio.h>
-                                    #include <jpeglib.h>
+                                #undef HAVE_BOOLEAN
+                                #include <stdio.h>
+                                #include <jpeglib.h>
 
 
    typedef boolean ac__type_sizeof_;
@@ -29022,9 +28993,9 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                                    #undef HAVE_BOOLEAN
-                                    #include <stdio.h>
-                                    #include <jpeglib.h>
+                                #undef HAVE_BOOLEAN
+                                #include <stdio.h>
+                                #include <jpeglib.h>
 
 
    typedef boolean ac__type_sizeof_;
@@ -29091,9 +29062,9 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                                    #undef HAVE_BOOLEAN
-                                    #include <stdio.h>
-                                    #include <jpeglib.h>
+                                #undef HAVE_BOOLEAN
+                                #include <stdio.h>
+                                #include <jpeglib.h>
 
 
    typedef boolean ac__type_sizeof_;
@@ -29154,9 +29125,9 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                                    #undef HAVE_BOOLEAN
-                                    #include <stdio.h>
-                                    #include <jpeglib.h>
+                                #undef HAVE_BOOLEAN
+                                #include <stdio.h>
+                                #include <jpeglib.h>
 
 
    typedef boolean ac__type_sizeof_;
@@ -29242,14 +29213,13 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-                            cat >>confdefs.h <<_ACEOF
+                        cat >>confdefs.h <<_ACEOF
 #define wxHACK_BOOLEAN wxInt`expr 8 \* $ac_cv_sizeof_boolean`
 _ACEOF
 
 
 fi
 
-                fi
             fi
         fi
     fi
@@ -31412,81 +31382,6 @@ echo "${ECHO_T}not found" >&6; }
             fi
 
                                                                                                                     fi
-    fi
-
-    if test "$wxUSE_MGL" = 1; then
-       { echo "$as_me:$LINENO: checking for SciTech MGL library" >&5
-echo $ECHO_N "checking for SciTech MGL library... $ECHO_C" >&6; }
-        if test "x$MGL_ROOT" = x ; then
-            { echo "$as_me:$LINENO: result: not found" >&5
-echo "${ECHO_T}not found" >&6; }
-            { { echo "$as_me:$LINENO: error: Cannot find MGL library. Make sure MGL_ROOT is set." >&5
-echo "$as_me: error: Cannot find MGL library. Make sure MGL_ROOT is set." >&2;}
-   { (exit 1); exit 1; }; }
-        else
-            { echo "$as_me:$LINENO: result: $MGL_ROOT" >&5
-echo "${ECHO_T}$MGL_ROOT" >&6; }
-        fi
-
-        { echo "$as_me:$LINENO: checking for libmgl location" >&5
-echo $ECHO_N "checking for libmgl location... $ECHO_C" >&6; }
-                                case "${host}" in
-            *-*-linux* )
-                                          if test "x$wxUSE_SHARED" = xyes ; then
-                  mgl_os_candidates="linux/gcc/x86/so linux/gcc/x86/a linux/gcc/glibc.so linux/gcc/glibc"
-              else
-                  mgl_os_candidates="linux/gcc/x86/a linux/gcc/x86/so linux/gcc/glibc linux/gcc/glibc.so"
-              fi
-              ;;
-            *-pc-msdosdjgpp )
-              mgl_os_candidates="dos32/dj2"
-              ;;
-            *)
-              { { echo "$as_me:$LINENO: error: This system type ${host} is not yet supported by wxMGL." >&5
-echo "$as_me: error: This system type ${host} is not yet supported by wxMGL." >&2;}
-   { (exit 1); exit 1; }; }
-        esac
-
-        mgl_lib_type=""
-        mgl_os=""
-
-        for mgl_os_i in $mgl_os_candidates ; do
-            if test "x$mgl_os" = x ; then
-                if test "$wxUSE_DEBUG_FLAG" = yes ; then
-                    if test -f $MGL_ROOT/lib/debug/$mgl_os_i/libmgl.a -o \
-                            -f $MGL_ROOT/lib/debug/$mgl_os_i/libmgl.so; then
-                        mgl_lib_type=debug
-                        mgl_os=$mgl_os_i
-                    fi
-                fi
-                if test "x$mgl_lib_type" = x ; then
-                    if test -f $MGL_ROOT/lib/release/$mgl_os_i/libmgl.a -o \
-                            -f $MGL_ROOT/lib/release/$mgl_os_i/libmgl.so; then
-                        mgl_lib_type=release
-                        mgl_os=$mgl_os_i
-                    fi
-                fi
-            fi
-        done
-
-        if test "x$mgl_os" = x ; then
-            { echo "$as_me:$LINENO: result: not found" >&5
-echo "${ECHO_T}not found" >&6; }
-            { { echo "$as_me:$LINENO: error: Cannot find MGL libraries, make sure they are compiled." >&5
-echo "$as_me: error: Cannot find MGL libraries, make sure they are compiled." >&2;}
-   { (exit 1); exit 1; }; }
-        fi
-        { echo "$as_me:$LINENO: result: \"$MGL_ROOT/lib/$mgl_lib_type/$mgl_os\"" >&5
-echo "${ECHO_T}\"$MGL_ROOT/lib/$mgl_lib_type/$mgl_os\"" >&6; }
-
-        wxUSE_UNIVERSAL="yes"
-
-        TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
-        GUI_TK_LIBRARY="-L$MGL_ROOT/lib/$mgl_lib_type/$mgl_os -lmgl -lmglcpp -lpm"
-
-        AFMINSTALL=afminstall
-        TOOLKIT=MGL
-        GUIDIST=MGL_DIST
     fi
 
     if test "$wxUSE_DFB" = 1; then
@@ -46358,28 +46253,27 @@ _ACEOF
 fi
 
 if test "$USE_UNIX" = 1 ; then
-        if test "$wxUSE_MGL" != 1; then
-                                { echo "$as_me:$LINENO: checking for SNDCTL_DSP_SPEED in sys/soundcard.h" >&5
+                { echo "$as_me:$LINENO: checking for SNDCTL_DSP_SPEED in sys/soundcard.h" >&5
 echo $ECHO_N "checking for SNDCTL_DSP_SPEED in sys/soundcard.h... $ECHO_C" >&6; }
 if test "${ac_cv_header_sys_soundcard+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-            cat >conftest.$ac_ext <<_ACEOF
+        cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                    #include <sys/ioctl.h>
-                    #include <sys/soundcard.h>
+                #include <sys/ioctl.h>
+                #include <sys/soundcard.h>
 
 int
 main ()
 {
 
-                    ioctl(0, SNDCTL_DSP_SPEED, 0);
+                ioctl(0, SNDCTL_DSP_SPEED, 0);
 
   ;
   return 0;
@@ -46409,23 +46303,23 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                    saveLibs="$LIBS"
-                    LIBS="$saveLibs -lossaudio"
-                    cat >conftest.$ac_ext <<_ACEOF
+                saveLibs="$LIBS"
+                LIBS="$saveLibs -lossaudio"
+                cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                            #include <sys/ioctl.h>
-                            #include <sys/soundcard.h>
+                        #include <sys/ioctl.h>
+                        #include <sys/soundcard.h>
 
 int
 main ()
 {
 
-                            ioctl(0, SNDCTL_DSP_SPEED, 0);
+                        ioctl(0, SNDCTL_DSP_SPEED, 0);
 
   ;
   return 0;
@@ -46455,8 +46349,8 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                            LIBS="$saveLibs"
-                            ac_cv_header_sys_soundcard=no
+                        LIBS="$saveLibs"
+                        ac_cv_header_sys_soundcard=no
 
 
 fi
@@ -46473,7 +46367,6 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
 fi
 { echo "$as_me:$LINENO: result: $ac_cv_header_sys_soundcard" >&5
 echo "${ECHO_T}$ac_cv_header_sys_soundcard" >&6; }
-    fi
 
     if test "$ac_cv_header_sys_soundcard" = "yes"; then
         cat >>confdefs.h <<\_ACEOF
@@ -46804,12 +46697,6 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1
       fi
-    fi
-  else
-        if test "$wxUSE_MGL" = 1; then
-        { echo "$as_me:$LINENO: WARNING: wxSound not supported in MGL under DOS... disabled" >&5
-echo "$as_me: WARNING: wxSound not supported in MGL under DOS... disabled" >&2;}
-        wxUSE_SOUND="no"
     fi
   fi
 fi
@@ -48486,14 +48373,6 @@ fi
 
 
 if test "$wxUSE_SOCKETS" = "yes"; then
-    if test "$wxUSE_MGL" = 1; then
-        { echo "$as_me:$LINENO: WARNING: wxSocket not yet supported under MGL... disabled" >&5
-echo "$as_me: WARNING: wxSocket not yet supported under MGL... disabled" >&2;}
-        wxUSE_SOCKETS="no"
-    fi
-fi
-
-if test "$wxUSE_SOCKETS" = "yes"; then
         if test "$TOOLKIT" != "MSW"; then
                 { echo "$as_me:$LINENO: checking for socket" >&5
 echo $ECHO_N "checking for socket... $ECHO_C" >&6; }
@@ -49247,7 +49126,6 @@ echo "${ECHO_T}$wxUSE_JOYSTICK" >&6; }
         fi
 
         else
-                if test "$wxUSE_MGL" != 1; then
 
 for ac_header in linux/joystick.h
 do
@@ -49306,7 +49184,6 @@ fi
 
 done
 
-        fi
     fi
 
     if test "$wxUSE_JOYSTICK" = "yes"; then
@@ -49705,16 +49582,10 @@ _ACEOF
 fi
 
 if test "$wxUSE_DATAOBJ" = "yes"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
-        { echo "$as_me:$LINENO: WARNING: wxDataObject not yet supported under $TOOLKIT... disabled" >&5
-echo "$as_me: WARNING: wxDataObject not yet supported under $TOOLKIT... disabled" >&2;}
-        wxUSE_DATAOBJ=no
-    else
-        cat >>confdefs.h <<\_ACEOF
+    cat >>confdefs.h <<\_ACEOF
 #define wxUSE_DATAOBJ 1
 _ACEOF
 
-    fi
 else
     { echo "$as_me:$LINENO: WARNING: Clipboard and drag-and-drop require wxDataObject -- disabled" >&5
 echo "$as_me: WARNING: Clipboard and drag-and-drop require wxDataObject -- disabled" >&2;}
@@ -49723,7 +49594,7 @@ echo "$as_me: WARNING: Clipboard and drag-and-drop require wxDataObject -- disab
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
+    if test "$wxUSE_DFB" = 1; then
         { echo "$as_me:$LINENO: WARNING: Clipboard not yet supported under $TOOLKIT... disabled" >&5
 echo "$as_me: WARNING: Clipboard not yet supported under $TOOLKIT... disabled" >&2;}
         wxUSE_CLIPBOARD=no
@@ -49738,8 +49609,7 @@ _ACEOF
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
-    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_MGL" = 1 -o \
-            "$wxUSE_DFB" = 1; then
+    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_DFB" = 1; then
         { echo "$as_me:$LINENO: WARNING: Drag and drop not yet supported under $TOOLKIT... disabled" >&5
 echo "$as_me: WARNING: Drag and drop not yet supported under $TOOLKIT... disabled" >&2;}
         wxUSE_DRAG_AND_DROP=no
@@ -49976,7 +49846,7 @@ _ACEOF
 fi
 
 if test "$wxUSE_DISPLAY" = "yes"; then
-    if test "$wxUSE_DFB" = 1 -o "$wxUSE_MGL" = 1; then
+    if test "$wxUSE_DFB" = 1; then
         { echo "$as_me:$LINENO: WARNING: wxDisplay not yet supported under $TOOLKIT... disabled" >&5
 echo "$as_me: WARNING: wxDisplay not yet supported under $TOOLKIT... disabled" >&2;}
         wxUSE_DISPLAY=no
@@ -50402,7 +50272,7 @@ _ACEOF
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1 -o "$wxUSE_MGL" = 1; then
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
         { echo "$as_me:$LINENO: WARNING: Dialup manager not supported on this platform... disabled" >&5
 echo "$as_me: WARNING: Dialup manager not supported on this platform... disabled" >&2;}
     else
@@ -54838,16 +54708,6 @@ EOF
         COND_PLATFORM_UNIX_1=""
     fi
 
-    COND_PLATFORM_UNIX_1_TOOLKIT_MGL="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xMGL" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_MGL=""
-    fi
-
-    COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xMGL" -a "x$USE_GUI" = "x1" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1=""
-    fi
-
     COND_PLATFORM_UNIX_1_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_USE_GUI_1=""
@@ -55016,16 +54876,6 @@ EOF
     COND_TOOLKIT_MAC="#"
     if test "x$TOOLKIT" = "xMAC" ; then
         COND_TOOLKIT_MAC=""
-    fi
-
-    COND_TOOLKIT_MGL="#"
-    if test "x$TOOLKIT" = "xMGL" ; then
-        COND_TOOLKIT_MGL=""
-    fi
-
-    COND_TOOLKIT_MGL_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xMGL" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_MGL_USE_GUI_1=""
     fi
 
     COND_TOOLKIT_MOTIF="#"
@@ -56926,8 +56776,6 @@ COND_PLATFORM_MSDOS_1!$COND_PLATFORM_MSDOS_1$ac_delim
 COND_PLATFORM_OS2_1!$COND_PLATFORM_OS2_1$ac_delim
 COND_PLATFORM_UNIX_0!$COND_PLATFORM_UNIX_0$ac_delim
 COND_PLATFORM_UNIX_1!$COND_PLATFORM_UNIX_1$ac_delim
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL$ac_delim
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1$ac_delim
 COND_PLATFORM_UNIX_1_USE_GUI_1!$COND_PLATFORM_UNIX_1_USE_GUI_1$ac_delim
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0!$COND_PLATFORM_UNIX_1_USE_PLUGINS_0$ac_delim
 COND_PLATFORM_WIN32_0!$COND_PLATFORM_WIN32_0$ac_delim
@@ -56962,8 +56810,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1!$COND_TOOLKIT_GTK_TOOLKIT_VERSION__U
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0$ac_delim
 COND_TOOLKIT_GTK_USE_GUI_1!$COND_TOOLKIT_GTK_USE_GUI_1$ac_delim
 COND_TOOLKIT_MAC!$COND_TOOLKIT_MAC$ac_delim
-COND_TOOLKIT_MGL!$COND_TOOLKIT_MGL$ac_delim
-COND_TOOLKIT_MGL_USE_GUI_1!$COND_TOOLKIT_MGL_USE_GUI_1$ac_delim
 COND_TOOLKIT_MOTIF!$COND_TOOLKIT_MOTIF$ac_delim
 COND_TOOLKIT_MOTIF_USE_GUI_1!$COND_TOOLKIT_MOTIF_USE_GUI_1$ac_delim
 COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0$ac_delim
@@ -57012,6 +56858,10 @@ COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1!$COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1$a
 COND_USE_SOVERLINUX_1!$COND_USE_SOVERLINUX_1$ac_delim
 COND_USE_SOVERSION_0!$COND_USE_SOVERSION_0$ac_delim
 COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1!$COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1$ac_delim
+COND_USE_SOVERSOLARIS_1!$COND_USE_SOVERSOLARIS_1$ac_delim
+COND_USE_STC_1!$COND_USE_STC_1$ac_delim
+COND_USE_THREADS_0!$COND_USE_THREADS_0$ac_delim
+COND_USE_THREADS_1!$COND_USE_THREADS_1$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -57053,10 +56903,6 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-COND_USE_SOVERSOLARIS_1!$COND_USE_SOVERSOLARIS_1$ac_delim
-COND_USE_STC_1!$COND_USE_STC_1$ac_delim
-COND_USE_THREADS_0!$COND_USE_THREADS_0$ac_delim
-COND_USE_THREADS_1!$COND_USE_THREADS_1$ac_delim
 COND_USE_XRC_1!$COND_USE_XRC_1$ac_delim
 COND_WINDOWS_IMPLIB_1!$COND_WINDOWS_IMPLIB_1$ac_delim
 COND_WITH_PLUGIN_SDL_1!$COND_WITH_PLUGIN_SDL_1$ac_delim
@@ -57121,7 +56967,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 66; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 62; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

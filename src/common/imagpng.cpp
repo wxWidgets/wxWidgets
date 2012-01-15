@@ -116,11 +116,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 //     First, let me describe what's the problem: libpng uses jmp_buf in
 //     its png_struct structure. Unfortunately, this structure is
 //     compiler-specific and may vary in size, so if you use libpng compiled
-//     as DLL with another compiler than the main executable, it may not work
-//     (this is for example the case with wxMGL port and SciTech MGL library
-//     that provides custom runtime-loadable libpng implementation with jmpbuf
-//     disabled altogether). Luckily, it is still possible to use setjmp() &
-//     longjmp() as long as the structure is not part of png_struct.
+//     as DLL with another compiler than the main executable, it may not work.
+//     Luckily, it is still possible to use setjmp() & longjmp() as long as the
+//     structure is not part of png_struct.
 //
 //     Sadly, there's no clean way to attach user-defined data to png_struct.
 //     There is only one customizable place, png_struct.io_ptr, which is meant

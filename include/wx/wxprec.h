@@ -54,11 +54,6 @@
 #   include "wx/os2/private.h"
 #endif
 
-// include mgl headers
-#ifdef __WXMGL__
-#   include "wx/mgl/private.h"
-#endif
-
 // include the most common wx headers
 #include "wx/wx.h"
 

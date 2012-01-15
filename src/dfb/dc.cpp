@@ -675,9 +675,7 @@ void wxDFBDCImpl::DoDrawSubBitmap(const wxBitmap &bmp,
 
     if ( useMask && bmp.GetMask() )
     {
-        // FIXME_DFB: see MGL sources for a way to do it, but it's not directly
-        //            applicable because DirectFB doesn't implement ROPs; OTOH,
-        //            it has blitting modes that can be useful; finally, see
+        // FIXME_DFB: Could use blitting modes for this; also see
         //            DFB's SetSrcBlendFunction() and SetSrcColorKey()
         wxFAIL_MSG( "drawing bitmaps with masks not implemented" );
         return;

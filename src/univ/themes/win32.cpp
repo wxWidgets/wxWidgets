@@ -2212,7 +2212,6 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
         }
         rectInt.Deflate(2);
 
-#if !defined(__WXMGL__)
         static const char *stipple_xpm[] = {
             /* columns rows colors chars-per-pixel */
             "2 2 2 1",
@@ -2222,24 +2221,6 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
             "w ",
             " w",
         };
-#else
-        // VS: MGL can only do 8x8 stipple brushes
-        static const char *stipple_xpm[] = {
-            /* columns rows colors chars-per-pixel */
-            "8 8 2 1",
-            "  c None",
-            "w c white",
-            /* pixels */
-            "w w w w ",
-            " w w w w",
-            "w w w w ",
-            " w w w w",
-            "w w w w ",
-            " w w w w",
-            "w w w w ",
-            " w w w w",
-        };
-#endif
         dc.SetBrush(wxBrush(stipple_xpm));
 
         dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, SHADOW_HIGHLIGHT));

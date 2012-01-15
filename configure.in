@@ -103,7 +103,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MGL MICROWIN MOTIF MSW PM X11 DFB"
+ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW PM X11 DFB"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -112,7 +112,6 @@ DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_wxUSE_MGL=0
 DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
@@ -128,7 +127,6 @@ DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_DEFAULT_wxUSE_MGL=0
 DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
@@ -286,7 +284,6 @@ case "${host}" in
     USE_DOS=1
     AC_DEFINE(__DOS__)
     PROGRAM_EXT=".exe"
-    DEFAULT_DEFAULT_wxUSE_MGL=1
   ;;
 
   *-pc-os2_emx | *-pc-os2-emx )
@@ -487,7 +484,6 @@ AC_ARG_WITH(old_cocoa,     [  --with-old_cocoa        use old, deprecated, Cocoa
 AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" wxUSE_UNIVERSAL="yes" CACHE_MGL=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
@@ -546,7 +542,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
-                  + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} \
+                  + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
@@ -2592,63 +2588,54 @@ PNG_LINK=
 if test "$wxUSE_LIBPNG" != "no" ; then
     AC_DEFINE(wxUSE_LIBPNG)
 
-    if test "$wxUSE_MGL" = 1 -a "$wxUSE_LIBPNG" = "builtin" ; then
-        AC_MSG_WARN([wxMGL doesn't work with builtin png library, will use MGL one instead])
-        wxUSE_LIBPNG=sys
-    fi
-
     dnl for the check below to have a chance to succeed, we must already have
-    dnl libz somewhere (don't do this when bulding wxMGL since its libpng
-    dnl doesn't depend on zlib)
-    if test "$wxUSE_MGL" != 1 -a "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
+    dnl libz somewhere
+    if test "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
         AC_MSG_WARN([system png library doesn't work without system zlib, will use built-in instead])
         wxUSE_LIBPNG=builtin
     fi
 
-    if test "$wxUSE_MGL" != 1 ; then
-        dnl Don't check for libpng when building wxMGL, libmgl contains it
-        if test "$wxUSE_LIBPNG" = "sys" -o "$wxUSE_LIBPNG" = "yes" ; then
-            dnl libpng version 0.9 is known to not work, if an even newer
-            dnl version is required, just bump it up in the test below
-            AC_CACHE_CHECK([for png.h > 0.90], ac_cv_header_png_h,
-                [AC_TRY_RUN(
-                    dnl png.h defines PNG_LIBPNG_VER=number
-                    [
-                        #include <png.h>
-                        #include <stdio.h>
+    if test "$wxUSE_LIBPNG" = "sys" -o "$wxUSE_LIBPNG" = "yes" ; then
+        dnl libpng version 0.9 is known to not work, if an even newer
+        dnl version is required, just bump it up in the test below
+        AC_CACHE_CHECK([for png.h > 0.90], ac_cv_header_png_h,
+            [AC_TRY_RUN(
+                dnl png.h defines PNG_LIBPNG_VER=number
+                [
+                    #include <png.h>
+                    #include <stdio.h>
 
-                        int main()
-                        {
-                            FILE *f=fopen("conftestval", "w");
-                            if (!f) exit(1);
-                            fprintf(f, "%s",
-                                     PNG_LIBPNG_VER > 90 ? "yes" : "no");
-                            exit(0);
-                        }
-                    ],
-                    ac_cv_header_png_h=`cat conftestval`,
-                    ac_cv_header_png_h=no,
-                    dnl cross-compiling: test (later) if we have any png.h
-                    unset ac_cv_header_png_h
-                )]
-            )
-            AC_CHECK_HEADER(png.h,,, [ ])
+                    int main()
+                    {
+                        FILE *f=fopen("conftestval", "w");
+                        if (!f) exit(1);
+                        fprintf(f, "%s",
+                                 PNG_LIBPNG_VER > 90 ? "yes" : "no");
+                        exit(0);
+                    }
+                ],
+                ac_cv_header_png_h=`cat conftestval`,
+                ac_cv_header_png_h=no,
+                dnl cross-compiling: test (later) if we have any png.h
+                unset ac_cv_header_png_h
+            )]
+        )
+        AC_CHECK_HEADER(png.h,,, [ ])
 
-            if test "$ac_cv_header_png_h" = "yes"; then
-                AC_CHECK_LIB(png, png_sig_cmp, PNG_LINK=" -lpng -lz", , [-lz -lm])
-            fi
+        if test "$ac_cv_header_png_h" = "yes"; then
+            AC_CHECK_LIB(png, png_sig_cmp, PNG_LINK=" -lpng -lz", , [-lz -lm])
+        fi
 
-            if test "x$PNG_LINK" = "x" ; then
-                if test "$wxUSE_LIBPNG" = "sys" ; then
-                    AC_MSG_ERROR([system png library not found or too old! Use --with-libpng=builtin to use built-in version])
-                else
-                    AC_MSG_WARN([system png library not found or too old, will use built-in instead])
-                    wxUSE_LIBPNG=builtin
-                fi
+        if test "x$PNG_LINK" = "x" ; then
+            if test "$wxUSE_LIBPNG" = "sys" ; then
+                AC_MSG_ERROR([system png library not found or too old! Use --with-libpng=builtin to use built-in version])
             else
-                dnl we are using the system library
-                wxUSE_LIBPNG=sys
+                AC_MSG_WARN([system png library not found or too old, will use built-in instead])
+                wxUSE_LIBPNG=builtin
             fi
+        else
+            dnl we are using the system library
+            wxUSE_LIBPNG=sys
         fi
     fi
 fi
@@ -2663,71 +2650,63 @@ JPEG_LINK=
 if test "$wxUSE_LIBJPEG" != "no" ; then
     AC_DEFINE(wxUSE_LIBJPEG)
 
-    if test "$wxUSE_MGL" = 1 -a "$wxUSE_LIBJPEG" = "builtin" ; then
-        AC_MSG_WARN([wxMGL doesn't work with builtin jpeg library, will use MGL one instead])
-        wxUSE_LIBJPEG=sys
-    fi
-
-    if test "$wxUSE_MGL" != 1 ; then
-        dnl Don't check for libjpeg when building wxMGL, libmgl contains it
-        if test "$wxUSE_LIBJPEG" = "sys" -o "$wxUSE_LIBJPEG" = "yes" ; then
-            dnl can't use AC_CHECK_HEADER as jconfig.h defines things like
-            dnl HAVE_STDLIB_H which are already defined and this provokes
-            dnl a compiler warning which configure considers as an error...
-            AC_MSG_CHECKING(for jpeglib.h)
-            AC_CACHE_VAL(ac_cv_header_jpeglib_h,
-                AC_TRY_COMPILE(
-                    [
-                        #undef HAVE_STDLIB_H
-                        #include <stdio.h>
-                        #include <jpeglib.h>
-                    ],
-                    [
-                    ],
-                    ac_cv_header_jpeglib_h=yes,
-                    ac_cv_header_jpeglib_h=no
-                )
+    if test "$wxUSE_LIBJPEG" = "sys" -o "$wxUSE_LIBJPEG" = "yes" ; then
+        dnl can't use AC_CHECK_HEADER as jconfig.h defines things like
+        dnl HAVE_STDLIB_H which are already defined and this provokes
+        dnl a compiler warning which configure considers as an error...
+        AC_MSG_CHECKING(for jpeglib.h)
+        AC_CACHE_VAL(ac_cv_header_jpeglib_h,
+            AC_TRY_COMPILE(
+                [
+                    #undef HAVE_STDLIB_H
+                    #include <stdio.h>
+                    #include <jpeglib.h>
+                ],
+                [
+                ],
+                ac_cv_header_jpeglib_h=yes,
+                ac_cv_header_jpeglib_h=no
             )
-            AC_MSG_RESULT($ac_cv_header_jpeglib_h)
+        )
+        AC_MSG_RESULT($ac_cv_header_jpeglib_h)
 
-            if test "$ac_cv_header_jpeglib_h" = "yes"; then
-                AC_CHECK_LIB(jpeg, jpeg_read_header, JPEG_LINK=" -ljpeg")
-            fi
+        if test "$ac_cv_header_jpeglib_h" = "yes"; then
+            AC_CHECK_LIB(jpeg, jpeg_read_header, JPEG_LINK=" -ljpeg")
+        fi
 
-            if test "x$JPEG_LINK" = "x" ; then
-                if test "$wxUSE_LIBJPEG" = "sys" ; then
-                    AC_MSG_ERROR([system jpeg library not found! Use --with-libjpeg=builtin to use built-in version])
-                else
-                    AC_MSG_WARN([system jpeg library not found, will use built-in instead])
-                    wxUSE_LIBJPEG=builtin
-                fi
+        if test "x$JPEG_LINK" = "x" ; then
+            if test "$wxUSE_LIBJPEG" = "sys" ; then
+                AC_MSG_ERROR([system jpeg library not found! Use --with-libjpeg=builtin to use built-in version])
             else
-                dnl we are using the system library
-                wxUSE_LIBJPEG=sys
+                AC_MSG_WARN([system jpeg library not found, will use built-in instead])
+                wxUSE_LIBJPEG=builtin
+            fi
+        else
+            dnl we are using the system library
+            wxUSE_LIBJPEG=sys
 
-                if test "$wxUSE_MSW" = 1; then
-                    dnl boolean is defined by the jpeg headers and also by the
-                    dnl Windows headers of some compilers. This type has been
-                    dnl renamed in the builtin, so it is only an issue when
-                    dnl using an external jpeg lib on Windows.
-                    AC_CHECK_TYPES(
-                        [boolean],
-                        [
-                            AC_CHECK_SIZEOF(
-                                [boolean],
-                                [],
-                                [
-                                    #undef HAVE_BOOLEAN
-                                    #include <stdio.h>
-                                    #include <jpeglib.h>
-                                ])
-                            AC_DEFINE_UNQUOTED(
-                                [wxHACK_BOOLEAN],
-                                [wxInt`expr 8 \* $ac_cv_sizeof_boolean`])
-                        ],
-                        [],
-                        [#include <windows.h>])
-                fi
+            if test "$wxUSE_MSW" = 1; then
+                dnl boolean is defined by the jpeg headers and also by the
+                dnl Windows headers of some compilers. This type has been
+                dnl renamed in the builtin, so it is only an issue when
+                dnl using an external jpeg lib on Windows.
+                AC_CHECK_TYPES(
+                    [boolean],
+                    [
+                        AC_CHECK_SIZEOF(
+                            [boolean],
+                            [],
+                            [
+                                #undef HAVE_BOOLEAN
+                                #include <stdio.h>
+                                #include <jpeglib.h>
+                            ])
+                        AC_DEFINE_UNQUOTED(
+                            [wxHACK_BOOLEAN],
+                            [wxInt`expr 8 \* $ac_cv_sizeof_boolean`])
+                    ],
+                    [],
+                    [#include <windows.h>])
             fi
         fi
     fi
@@ -3151,74 +3130,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl     AC_MSG_RESULT(not found)
             dnl fi
         fi
-    fi
-
-    if test "$wxUSE_MGL" = 1; then
-       AC_MSG_CHECKING(for SciTech MGL library)
-        if test "x$MGL_ROOT" = x ; then
-            AC_MSG_RESULT(not found)
-            AC_MSG_ERROR([Cannot find MGL library. Make sure MGL_ROOT is set.])
-        else
-            AC_MSG_RESULT($MGL_ROOT)
-        fi
-
-        AC_MSG_CHECKING(for libmgl location)
-        dnl Find MGL library that we want
-        dnl FIXME_MGL - test for MGL variants for freebsd etc.;
-        dnl             and for non-x86 versions
-        case "${host}" in
-            *-*-linux* )
-              dnl glibc.so, glibc are for older versions of MGL,
-              dnl x86/a, x86/so are used by >= 5.0 R11
-              if test "x$wxUSE_SHARED" = xyes ; then
-                  mgl_os_candidates="linux/gcc/x86/so linux/gcc/x86/a linux/gcc/glibc.so linux/gcc/glibc"
-              else
-                  mgl_os_candidates="linux/gcc/x86/a linux/gcc/x86/so linux/gcc/glibc linux/gcc/glibc.so"
-              fi
-              ;;
-            *-pc-msdosdjgpp )
-              mgl_os_candidates="dos32/dj2"
-              ;;
-            *)
-              AC_MSG_ERROR(This system type ${host} is not yet supported by wxMGL.)
-        esac
-
-        mgl_lib_type=""
-        mgl_os=""
-
-        for mgl_os_i in $mgl_os_candidates ; do
-            if test "x$mgl_os" = x ; then
-                if test "$wxUSE_DEBUG_FLAG" = yes ; then
-                    if test -f $MGL_ROOT/lib/debug/$mgl_os_i/libmgl.a -o \
-                            -f $MGL_ROOT/lib/debug/$mgl_os_i/libmgl.so; then
-                        mgl_lib_type=debug
-                        mgl_os=$mgl_os_i
-                    fi
-                fi
-                if test "x$mgl_lib_type" = x ; then
-                    if test -f $MGL_ROOT/lib/release/$mgl_os_i/libmgl.a -o \
-                            -f $MGL_ROOT/lib/release/$mgl_os_i/libmgl.so; then
-                        mgl_lib_type=release
-                        mgl_os=$mgl_os_i
-                    fi
-                fi
-            fi
-        done
-
-        if test "x$mgl_os" = x ; then
-            AC_MSG_RESULT(not found)
-            AC_MSG_ERROR([Cannot find MGL libraries, make sure they are compiled.])
-        fi
-        AC_MSG_RESULT("$MGL_ROOT/lib/$mgl_lib_type/$mgl_os")
-
-        wxUSE_UNIVERSAL="yes"
-
-        TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
-        GUI_TK_LIBRARY="-L$MGL_ROOT/lib/$mgl_lib_type/$mgl_os -lmgl -lmglcpp -lpm"
-
-        AFMINSTALL=afminstall
-        TOOLKIT=MGL
-        GUIDIST=MGL_DIST
     fi
 
     if test "$wxUSE_DFB" = 1; then
@@ -5710,40 +5621,37 @@ fi
 dnl Unix implementation needs additional checks because audio support
 dnl comes in many favours:
 if test "$USE_UNIX" = 1 ; then
-    dnl mmedia doesn't compile with wxMGL, remove this if this is ever fixed
-    if test "$wxUSE_MGL" != 1; then
-        dnl it's not enough to check for just the header because OSS under NetBSD
-        dnl redefines ioctl as oss_ioctrl inside it and so we also need to test
-        dnl whether we need -lossaudio at link-time
-        AC_CACHE_CHECK([for SNDCTL_DSP_SPEED in sys/soundcard.h], ac_cv_header_sys_soundcard, [
-            AC_TRY_LINK([
-                    #include <sys/ioctl.h>
-                    #include <sys/soundcard.h>
-                ],
-                [
-                    ioctl(0, SNDCTL_DSP_SPEED, 0);
-                ],
-                ac_cv_header_sys_soundcard=yes,
-                [
-                    saveLibs="$LIBS"
-                    LIBS="$saveLibs -lossaudio"
-                    AC_TRY_LINK([
-                            #include <sys/ioctl.h>
-                            #include <sys/soundcard.h>
-                        ],
-                        [
-                            ioctl(0, SNDCTL_DSP_SPEED, 0);
-                        ],
-                        ac_cv_header_sys_soundcard=yes,
-                        [
-                            LIBS="$saveLibs"
-                            ac_cv_header_sys_soundcard=no
-                        ]
-                    )
-                ]
-            )
-        ])
-    fi
+    dnl it's not enough to check for just the header because OSS under NetBSD
+    dnl redefines ioctl as oss_ioctrl inside it and so we also need to test
+    dnl whether we need -lossaudio at link-time
+    AC_CACHE_CHECK([for SNDCTL_DSP_SPEED in sys/soundcard.h], ac_cv_header_sys_soundcard, [
+        AC_TRY_LINK([
+                #include <sys/ioctl.h>
+                #include <sys/soundcard.h>
+            ],
+            [
+                ioctl(0, SNDCTL_DSP_SPEED, 0);
+            ],
+            ac_cv_header_sys_soundcard=yes,
+            [
+                saveLibs="$LIBS"
+                LIBS="$saveLibs -lossaudio"
+                AC_TRY_LINK([
+                        #include <sys/ioctl.h>
+                        #include <sys/soundcard.h>
+                    ],
+                    [
+                        ioctl(0, SNDCTL_DSP_SPEED, 0);
+                    ],
+                    ac_cv_header_sys_soundcard=yes,
+                    [
+                        LIBS="$saveLibs"
+                        ac_cv_header_sys_soundcard=no
+                    ]
+                )
+            ]
+        )
+    ])
 
     if test "$ac_cv_header_sys_soundcard" = "yes"; then
         AC_DEFINE(HAVE_SYS_SOUNDCARD_H)
@@ -5765,12 +5673,6 @@ if test "$wxUSE_SOUND" = "yes"; then
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1
       fi
-    fi
-  else
-    dnl wxMGL doesn't support sound under DOS, only under Unix
-    if test "$wxUSE_MGL" = 1; then
-        AC_MSG_WARN([wxSound not supported in MGL under DOS... disabled])
-        wxUSE_SOUND="no"
     fi
   fi
 fi
@@ -6264,14 +6166,6 @@ dnl ------------------------------------------------------------------------
 dnl wxSocket
 dnl ------------------------------------------------------------------------
 
-dnl VZ: the GUI hooks wxSocket needs are not implemented yet in some toolkits
-if test "$wxUSE_SOCKETS" = "yes"; then
-    if test "$wxUSE_MGL" = 1; then
-        AC_MSG_WARN([wxSocket not yet supported under MGL... disabled])
-        wxUSE_SOCKETS="no"
-    fi
-fi
-
 if test "$wxUSE_SOCKETS" = "yes"; then
     dnl under MSW we always have sockets
     if test "$TOOLKIT" != "MSW"; then
@@ -6526,16 +6420,13 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
 
     dnl joystick support is only for Linux 2.1.x or greater
     else
-        dnl wxJoystick not supported by wxMGL at all
-        if test "$wxUSE_MGL" != 1; then
-            dnl notice the dummy includes argument: without it, AC_CHECK_HEADER
-            dnl checks only whether the header can be preprocessed, not that it
-            dnl can be compiled and in Linux 2.6.16 joystick.h is present but
-            dnl can't be compiled because of an error and with the default
-            dnl AC_CHECK_HEADER semantics we'd still detect it in this case and
-            dnl build would fail later
-            AC_CHECK_HEADERS([linux/joystick.h], [wxUSE_JOYSTICK=yes],, [AC_INCLUDES_DEFAULT()])
-        fi
+        dnl notice the dummy includes argument: without it, AC_CHECK_HEADER
+        dnl checks only whether the header can be preprocessed, not that it
+        dnl can be compiled and in Linux 2.6.16 joystick.h is present but
+        dnl can't be compiled because of an error and with the default
+        dnl AC_CHECK_HEADER semantics we'd still detect it in this case and
+        dnl build would fail later
+        AC_CHECK_HEADERS([linux/joystick.h], [wxUSE_JOYSTICK=yes],, [AC_INCLUDES_DEFAULT()])
     fi
 
     if test "$wxUSE_JOYSTICK" = "yes"; then
@@ -6725,12 +6616,7 @@ if test "$wxUSE_IPC" = "yes"; then
 fi
 
 if test "$wxUSE_DATAOBJ" = "yes"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
-        AC_MSG_WARN([wxDataObject not yet supported under $TOOLKIT... disabled])
-        wxUSE_DATAOBJ=no
-    else
-        AC_DEFINE(wxUSE_DATAOBJ)
-    fi
+    AC_DEFINE(wxUSE_DATAOBJ)
 else
     AC_MSG_WARN([Clipboard and drag-and-drop require wxDataObject -- disabled])
     wxUSE_CLIPBOARD=no
@@ -6738,7 +6624,7 @@ else
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
+    if test "$wxUSE_DFB" = 1; then
         AC_MSG_WARN([Clipboard not yet supported under $TOOLKIT... disabled])
         wxUSE_CLIPBOARD=no
     fi
@@ -6749,8 +6635,7 @@ if test "$wxUSE_CLIPBOARD" = "yes"; then
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
-    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_MGL" = 1 -o \
-            "$wxUSE_DFB" = 1; then
+    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_DFB" = 1; then
         AC_MSG_WARN([Drag and drop not yet supported under $TOOLKIT... disabled])
         wxUSE_DRAG_AND_DROP=no
     fi
@@ -6908,7 +6793,7 @@ if test "$wxUSE_FONTPICKERCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_DISPLAY" = "yes"; then
-    if test "$wxUSE_DFB" = 1 -o "$wxUSE_MGL" = 1; then
+    if test "$wxUSE_DFB" = 1; then
         AC_MSG_WARN([wxDisplay not yet supported under $TOOLKIT... disabled])
         wxUSE_DISPLAY=no
     else
@@ -7185,7 +7070,7 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1 -o "$wxUSE_MGL" = 1; then
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
         AC_MSG_WARN([Dialup manager not supported on this platform... disabled])
     else
         AC_DEFINE(wxUSE_DIALUP_MANAGER)

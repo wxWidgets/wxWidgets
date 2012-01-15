@@ -40,7 +40,6 @@
          !defined(__WXOSX_IPHONE__)   && \
          !defined(__WXCOCOA__) && \
          !defined(__X__)       && \
-         !defined(__WXMGL__)   && \
          !defined(__WXDFB__)   && \
          !defined(__WXX11__)   && \
           wxUSE_GUI
@@ -3276,10 +3275,6 @@ typedef struct _PangoContext         PangoContext;
 typedef struct _PangoLayout          PangoLayout;
 typedef struct _PangoFontDescription PangoFontDescription;
 #endif
-
-#ifdef __WXMGL__
-typedef struct window_t *WXWidget;
-#endif /*  MGL */
 
 #ifdef __WXDFB__
 /* DirectFB doesn't have the concept of non-TLW window, so use

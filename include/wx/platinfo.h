@@ -72,15 +72,14 @@ enum wxPortId
     wxPORT_MSW      = 1 << 1,       // wxMSW, native toolkit is Windows API
     wxPORT_MOTIF    = 1 << 2,       // wxMotif, using [Open]Motif or Lesstif
     wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
-    wxPORT_MGL      = 1 << 4,       // wxMGL, using wxUniversal
+    wxPORT_DFB      = 1 << 4,       // wxDFB, using wxUniversal
     wxPORT_X11      = 1 << 5,       // wxX11, using wxUniversal
     wxPORT_PM       = 1 << 6,       // wxOS2, using OS/2 Presentation Manager
     wxPORT_OS2      = wxPORT_PM,    // wxOS2, using OS/2 Presentation Manager
     wxPORT_MAC      = 1 << 7,       // wxOSX (former wxMac), using Cocoa, Carbon or iPhone API
     wxPORT_OSX      = wxPORT_MAC,   // wxOSX, using Cocoa, Carbon or iPhone API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
-    wxPORT_DFB      = 1 << 10       // wxDFB, using wxUniversal
+    wxPORT_WINCE    = 1 << 9        // wxWinCE, toolkit is WinCE SDK API
 };
 
 // architecture of the operating system
@@ -362,7 +361,6 @@ protected:
     #define wxWIN32S                wxOS_WINDOWS_9X
 
     #define wxOS2                   wxPORT_OS2
-    #define wxMGL                   wxPORT_MGL
     #define wxCocoa                 wxPORT_MAC
     #define wxMac                   wxPORT_MAC
     #define wxMotif                 wxPORT_MOTIF

@@ -2620,31 +2620,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/toplevel.h \
 	wx/gtk/window.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@LOWLEVEL_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR)
-COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
-	wx/generic/caret.h \
-	wx/generic/colour.h \
-	wx/generic/icon.h \
-	wx/generic/imaglist.h \
-	wx/generic/mask.h \
-	wx/mgl/app.h \
-	wx/mgl/bitmap.h \
-	wx/mgl/brush.h \
-	wx/mgl/chkconf.h \
-	wx/mgl/clipbrd.h \
-	wx/mgl/cursor.h \
-	wx/mgl/dc.h \
-	wx/mgl/dcclient.h \
-	wx/mgl/dcmemory.h \
-	wx/mgl/dcscreen.h \
-	wx/mgl/font.h \
-	wx/mgl/palette.h \
-	wx/mgl/pen.h \
-	wx/mgl/popupwin.h \
-	wx/mgl/private.h \
-	wx/mgl/region.h \
-	wx/mgl/toplevel.h \
-	wx/mgl/window.h
-@COND_TOOLKIT_MGL@LOWLEVEL_HDR = $(COND_TOOLKIT_MGL_LOWLEVEL_HDR)
 COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/imaglist.h \
@@ -3635,9 +3610,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/wince/textctrlce.h \
 	wx/msw/wince/resources.h
 @COND_TOOLKIT_WINCE@GUI_HDR = $(COND_TOOLKIT_WINCE_GUI_HDR)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@ADVANCED_PLATFORM_HDR \
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	= wx/unix/joystick.h wx/unix/sound.h \
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	wx/unix/taskbarx11.h
 @COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_COCOA@	wx/cocoa/taskbar.h wx/generic/animate.h \
 @COND_TOOLKIT_COCOA@	wx/osx/core/joystick.h
@@ -4974,7 +4946,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_dfb_evtloop.o \
 	monodll_dfb_font.o \
 	monodll_dfb_fontenum.o \
-	monodll_dfb_fontmgr.o \
+	monodll_fontmgr.o \
 	monodll_dfb_nonownedwnd.o \
 	monodll_dfb_overlay.o \
 	monodll_dfb_pen.o \
@@ -5070,38 +5042,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk_win_gtk.o \
 	monodll_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS)
-COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
-	monodll_fontmgrcmn.o \
-	monodll_generic_caret.o \
-	monodll_generic_colour.o \
-	monodll_generic_icon.o \
-	monodll_generic_imaglist.o \
-	monodll_mask.o \
-	monodll_generic_timer.o \
-	monodll_mgl_app.o \
-	monodll_mgl_bitmap.o \
-	monodll_mgl_brush.o \
-	monodll_mgl_clipbrd.o \
-	monodll_mgl_cursor.o \
-	monodll_mgl_data.o \
-	monodll_mgl_dc.o \
-	monodll_mgl_dcclient.o \
-	monodll_mgl_dcmemory.o \
-	monodll_mgl_dcscreen.o \
-	monodll_dirmgl.o \
-	monodll_mgl_evtloop.o \
-	monodll_mgl_font.o \
-	monodll_mgl_fontenum.o \
-	monodll_mgl_fontmgr.o \
-	monodll_mgl_fontutil.o \
-	monodll_mgl_palette.o \
-	monodll_mgl_pen.o \
-	monodll_mgl_region.o \
-	monodll_mgl_settings.o \
-	monodll_mgl_toplevel.o \
-	monodll_mgl_utils.o \
-	monodll_mgl_window.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
 	monodll_generic_imaglist.o \
@@ -5857,7 +5797,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_dfb_evtloop.o \
 	monodll_dfb_font.o \
 	monodll_dfb_fontenum.o \
-	monodll_dfb_fontmgr.o \
+	monodll_fontmgr.o \
 	monodll_dfb_nonownedwnd.o \
 	monodll_dfb_overlay.o \
 	monodll_dfb_pen.o \
@@ -5953,38 +5893,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk_win_gtk.o \
 	monodll_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1)
-COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_1 =  \
-	monodll_fontmgrcmn.o \
-	monodll_generic_caret.o \
-	monodll_generic_colour.o \
-	monodll_generic_icon.o \
-	monodll_generic_imaglist.o \
-	monodll_mask.o \
-	monodll_generic_timer.o \
-	monodll_mgl_app.o \
-	monodll_mgl_bitmap.o \
-	monodll_mgl_brush.o \
-	monodll_mgl_clipbrd.o \
-	monodll_mgl_cursor.o \
-	monodll_mgl_data.o \
-	monodll_mgl_dc.o \
-	monodll_mgl_dcclient.o \
-	monodll_mgl_dcmemory.o \
-	monodll_mgl_dcscreen.o \
-	monodll_dirmgl.o \
-	monodll_mgl_evtloop.o \
-	monodll_mgl_font.o \
-	monodll_mgl_fontenum.o \
-	monodll_mgl_fontmgr.o \
-	monodll_mgl_fontutil.o \
-	monodll_mgl_palette.o \
-	monodll_mgl_pen.o \
-	monodll_mgl_region.o \
-	monodll_mgl_settings.o \
-	monodll_mgl_toplevel.o \
-	monodll_mgl_utils.o \
-	monodll_mgl_window.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_generic_caret.o \
 	monodll_generic_imaglist.o \
@@ -6932,7 +6840,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_dfb_evtloop.o \
 	monolib_dfb_font.o \
 	monolib_dfb_fontenum.o \
-	monolib_dfb_fontmgr.o \
+	monolib_fontmgr.o \
 	monolib_dfb_nonownedwnd.o \
 	monolib_dfb_overlay.o \
 	monolib_dfb_pen.o \
@@ -7028,38 +6936,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk_win_gtk.o \
 	monolib_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2)
-COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_2 =  \
-	monolib_fontmgrcmn.o \
-	monolib_generic_caret.o \
-	monolib_generic_colour.o \
-	monolib_generic_icon.o \
-	monolib_generic_imaglist.o \
-	monolib_mask.o \
-	monolib_generic_timer.o \
-	monolib_mgl_app.o \
-	monolib_mgl_bitmap.o \
-	monolib_mgl_brush.o \
-	monolib_mgl_clipbrd.o \
-	monolib_mgl_cursor.o \
-	monolib_mgl_data.o \
-	monolib_mgl_dc.o \
-	monolib_mgl_dcclient.o \
-	monolib_mgl_dcmemory.o \
-	monolib_mgl_dcscreen.o \
-	monolib_dirmgl.o \
-	monolib_mgl_evtloop.o \
-	monolib_mgl_font.o \
-	monolib_mgl_fontenum.o \
-	monolib_mgl_fontmgr.o \
-	monolib_mgl_fontutil.o \
-	monolib_mgl_palette.o \
-	monolib_mgl_pen.o \
-	monolib_mgl_region.o \
-	monolib_mgl_settings.o \
-	monolib_mgl_toplevel.o \
-	monolib_mgl_utils.o \
-	monolib_mgl_window.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_generic_caret.o \
 	monolib_generic_imaglist.o \
@@ -7815,7 +7691,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_dfb_evtloop.o \
 	monolib_dfb_font.o \
 	monolib_dfb_fontenum.o \
-	monolib_dfb_fontmgr.o \
+	monolib_fontmgr.o \
 	monolib_dfb_nonownedwnd.o \
 	monolib_dfb_overlay.o \
 	monolib_dfb_pen.o \
@@ -7911,38 +7787,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk_win_gtk.o \
 	monolib_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3)
-COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_3 =  \
-	monolib_fontmgrcmn.o \
-	monolib_generic_caret.o \
-	monolib_generic_colour.o \
-	monolib_generic_icon.o \
-	monolib_generic_imaglist.o \
-	monolib_mask.o \
-	monolib_generic_timer.o \
-	monolib_mgl_app.o \
-	monolib_mgl_bitmap.o \
-	monolib_mgl_brush.o \
-	monolib_mgl_clipbrd.o \
-	monolib_mgl_cursor.o \
-	monolib_mgl_data.o \
-	monolib_mgl_dc.o \
-	monolib_mgl_dcclient.o \
-	monolib_mgl_dcmemory.o \
-	monolib_mgl_dcscreen.o \
-	monolib_dirmgl.o \
-	monolib_mgl_evtloop.o \
-	monolib_mgl_font.o \
-	monolib_mgl_fontenum.o \
-	monolib_mgl_fontmgr.o \
-	monolib_mgl_fontutil.o \
-	monolib_mgl_palette.o \
-	monolib_mgl_pen.o \
-	monolib_mgl_region.o \
-	monolib_mgl_settings.o \
-	monolib_mgl_toplevel.o \
-	monolib_mgl_utils.o \
-	monolib_mgl_window.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_generic_caret.o \
 	monolib_generic_imaglist.o \
@@ -9069,7 +8913,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_dfb_evtloop.o \
 	coredll_dfb_font.o \
 	coredll_dfb_fontenum.o \
-	coredll_dfb_fontmgr.o \
+	coredll_fontmgr.o \
 	coredll_dfb_nonownedwnd.o \
 	coredll_dfb_overlay.o \
 	coredll_dfb_pen.o \
@@ -9165,38 +9009,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk_win_gtk.o \
 	coredll_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4)
-COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_4 =  \
-	coredll_fontmgrcmn.o \
-	coredll_generic_caret.o \
-	coredll_generic_colour.o \
-	coredll_generic_icon.o \
-	coredll_generic_imaglist.o \
-	coredll_mask.o \
-	coredll_generic_timer.o \
-	coredll_mgl_app.o \
-	coredll_mgl_bitmap.o \
-	coredll_mgl_brush.o \
-	coredll_mgl_clipbrd.o \
-	coredll_mgl_cursor.o \
-	coredll_mgl_data.o \
-	coredll_mgl_dc.o \
-	coredll_mgl_dcclient.o \
-	coredll_mgl_dcmemory.o \
-	coredll_mgl_dcscreen.o \
-	coredll_dirmgl.o \
-	coredll_mgl_evtloop.o \
-	coredll_mgl_font.o \
-	coredll_mgl_fontenum.o \
-	coredll_mgl_fontmgr.o \
-	coredll_mgl_fontutil.o \
-	coredll_mgl_palette.o \
-	coredll_mgl_pen.o \
-	coredll_mgl_region.o \
-	coredll_mgl_settings.o \
-	coredll_mgl_toplevel.o \
-	coredll_mgl_utils.o \
-	coredll_mgl_window.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_generic_caret.o \
 	coredll_generic_imaglist.o \
@@ -9952,7 +9764,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_dfb_evtloop.o \
 	coredll_dfb_font.o \
 	coredll_dfb_fontenum.o \
-	coredll_dfb_fontmgr.o \
+	coredll_fontmgr.o \
 	coredll_dfb_nonownedwnd.o \
 	coredll_dfb_overlay.o \
 	coredll_dfb_pen.o \
@@ -10048,38 +9860,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk_win_gtk.o \
 	coredll_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5)
-COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_5 =  \
-	coredll_fontmgrcmn.o \
-	coredll_generic_caret.o \
-	coredll_generic_colour.o \
-	coredll_generic_icon.o \
-	coredll_generic_imaglist.o \
-	coredll_mask.o \
-	coredll_generic_timer.o \
-	coredll_mgl_app.o \
-	coredll_mgl_bitmap.o \
-	coredll_mgl_brush.o \
-	coredll_mgl_clipbrd.o \
-	coredll_mgl_cursor.o \
-	coredll_mgl_data.o \
-	coredll_mgl_dc.o \
-	coredll_mgl_dcclient.o \
-	coredll_mgl_dcmemory.o \
-	coredll_mgl_dcscreen.o \
-	coredll_dirmgl.o \
-	coredll_mgl_evtloop.o \
-	coredll_mgl_font.o \
-	coredll_mgl_fontenum.o \
-	coredll_mgl_fontmgr.o \
-	coredll_mgl_fontutil.o \
-	coredll_mgl_palette.o \
-	coredll_mgl_pen.o \
-	coredll_mgl_region.o \
-	coredll_mgl_settings.o \
-	coredll_mgl_toplevel.o \
-	coredll_mgl_utils.o \
-	coredll_mgl_window.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_generic_caret.o \
 	coredll_generic_imaglist.o \
@@ -10663,7 +10443,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_dfb_evtloop.o \
 	corelib_dfb_font.o \
 	corelib_dfb_fontenum.o \
-	corelib_dfb_fontmgr.o \
+	corelib_fontmgr.o \
 	corelib_dfb_nonownedwnd.o \
 	corelib_dfb_overlay.o \
 	corelib_dfb_pen.o \
@@ -10759,38 +10539,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk_win_gtk.o \
 	corelib_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6)
-COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_6 =  \
-	corelib_fontmgrcmn.o \
-	corelib_generic_caret.o \
-	corelib_generic_colour.o \
-	corelib_generic_icon.o \
-	corelib_generic_imaglist.o \
-	corelib_mask.o \
-	corelib_generic_timer.o \
-	corelib_mgl_app.o \
-	corelib_mgl_bitmap.o \
-	corelib_mgl_brush.o \
-	corelib_mgl_clipbrd.o \
-	corelib_mgl_cursor.o \
-	corelib_mgl_data.o \
-	corelib_mgl_dc.o \
-	corelib_mgl_dcclient.o \
-	corelib_mgl_dcmemory.o \
-	corelib_mgl_dcscreen.o \
-	corelib_dirmgl.o \
-	corelib_mgl_evtloop.o \
-	corelib_mgl_font.o \
-	corelib_mgl_fontenum.o \
-	corelib_mgl_fontmgr.o \
-	corelib_mgl_fontutil.o \
-	corelib_mgl_palette.o \
-	corelib_mgl_pen.o \
-	corelib_mgl_region.o \
-	corelib_mgl_settings.o \
-	corelib_mgl_toplevel.o \
-	corelib_mgl_utils.o \
-	corelib_mgl_window.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_generic_caret.o \
 	corelib_generic_imaglist.o \
@@ -11546,7 +11294,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_dfb_evtloop.o \
 	corelib_dfb_font.o \
 	corelib_dfb_fontenum.o \
-	corelib_dfb_fontmgr.o \
+	corelib_fontmgr.o \
 	corelib_dfb_nonownedwnd.o \
 	corelib_dfb_overlay.o \
 	corelib_dfb_pen.o \
@@ -11642,38 +11390,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk_win_gtk.o \
 	corelib_gtk_window.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7)
-COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_7 =  \
-	corelib_fontmgrcmn.o \
-	corelib_generic_caret.o \
-	corelib_generic_colour.o \
-	corelib_generic_icon.o \
-	corelib_generic_imaglist.o \
-	corelib_mask.o \
-	corelib_generic_timer.o \
-	corelib_mgl_app.o \
-	corelib_mgl_bitmap.o \
-	corelib_mgl_brush.o \
-	corelib_mgl_clipbrd.o \
-	corelib_mgl_cursor.o \
-	corelib_mgl_data.o \
-	corelib_mgl_dc.o \
-	corelib_mgl_dcclient.o \
-	corelib_mgl_dcmemory.o \
-	corelib_mgl_dcscreen.o \
-	corelib_dirmgl.o \
-	corelib_mgl_evtloop.o \
-	corelib_mgl_font.o \
-	corelib_mgl_fontenum.o \
-	corelib_mgl_fontmgr.o \
-	corelib_mgl_fontutil.o \
-	corelib_mgl_palette.o \
-	corelib_mgl_pen.o \
-	corelib_mgl_region.o \
-	corelib_mgl_settings.o \
-	corelib_mgl_toplevel.o \
-	corelib_mgl_utils.o \
-	corelib_mgl_window.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_generic_caret.o \
 	corelib_generic_imaglist.o \
@@ -13336,12 +13052,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_core_timer.o \
 	monodll_utilsexc_cf.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS)
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS =  \
-	monodll_taskbarcmn.o \
-	monodll_unix_joystick.o \
-	monodll_unix_sound.o \
-	monodll_taskbarx11.o
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_src_cocoa_taskbar.o \
 	monodll_taskbarcmn.o \
@@ -13528,12 +13238,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_27 =  \
 	monolib_core_timer.o \
 	monolib_utilsexc_cf.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_27 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_27)
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
-	monolib_taskbarcmn.o \
-	monolib_unix_joystick.o \
-	monolib_unix_sound.o \
-	monolib_taskbarx11.o
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_src_cocoa_taskbar.o \
 	monolib_taskbarcmn.o \
@@ -13818,12 +13522,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_2_2 =  \
 	corelib_core_timer.o \
 	corelib_utilsexc_cf.o
 @COND_PLATFORM_MACOSX_1@__OSX_LOWLEVEL_SRC_OBJECTS_2_2 = $(COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_2_2)
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
-	advdll_taskbarcmn.o \
-	advdll_unix_joystick.o \
-	advdll_unix_sound.o \
-	advdll_taskbarx11.o
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_8)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_src_cocoa_taskbar.o \
 	advdll_taskbarcmn.o \
@@ -13912,12 +13610,6 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_unix_sound.o \
 	advdll_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_8)
-COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
-	advlib_taskbarcmn.o \
-	advlib_unix_joystick.o \
-	advlib_unix_sound.o \
-	advlib_taskbarx11.o
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_9)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_src_cocoa_taskbar.o \
 	advlib_taskbarcmn.o \
@@ -17960,9 +17652,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
@@ -17983,9 +17672,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
@@ -18073,9 +17759,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -18809,9 +18492,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_x11_app.o: $(srcdir)/src/x11/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/app.cpp
 
@@ -18872,92 +18552,14 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_x11_window.o: $(srcdir)/src/x11/window.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/window.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mask.o: $(srcdir)/src/generic/mask.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_mask.o: $(srcdir)/src/generic/mask.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_app.o: $(srcdir)/src/mgl/app.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/app.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/bitmap.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_brush.o: $(srcdir)/src/mgl/brush.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/brush.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_clipbrd.o: $(srcdir)/src/mgl/clipbrd.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/clipbrd.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_cursor.o: $(srcdir)/src/mgl/cursor.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/cursor.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_data.o: $(srcdir)/src/mgl/data.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/data.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_dc.o: $(srcdir)/src/mgl/dc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dc.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_dcclient.o: $(srcdir)/src/mgl/dcclient.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dcclient.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dcmemory.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_dcscreen.o: $(srcdir)/src/mgl/dcscreen.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dcscreen.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_font.o: $(srcdir)/src/mgl/font.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/font.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_fontenum.o: $(srcdir)/src/mgl/fontenum.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/fontenum.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_fontmgr.o: $(srcdir)/src/mgl/fontmgr.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/fontmgr.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_palette.o: $(srcdir)/src/mgl/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_pen.o: $(srcdir)/src/mgl/pen.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/pen.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_region.o: $(srcdir)/src/mgl/region.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/region.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_settings.o: $(srcdir)/src/mgl/settings.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/settings.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_toplevel.o: $(srcdir)/src/mgl/toplevel.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/toplevel.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_utils.o: $(srcdir)/src/mgl/utils.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/utils.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_mgl_window.o: $(srcdir)/src/mgl/window.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/window.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_dfb_app.o: $(srcdir)/src/dfb/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
@@ -18992,7 +18594,7 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_dfb_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@monodll_dfb_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_dfb_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(MONODLL_ODEP)
@@ -20804,9 +20406,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
 
@@ -20954,9 +20553,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
@@ -20969,9 +20565,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
@@ -20983,9 +20576,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
@@ -23360,9 +22950,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
@@ -23383,9 +22970,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
@@ -23473,9 +23057,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -24209,9 +23790,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_x11_app.o: $(srcdir)/src/x11/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/app.cpp
 
@@ -24272,92 +23850,14 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_x11_window.o: $(srcdir)/src/x11/window.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/window.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mask.o: $(srcdir)/src/generic/mask.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_mask.o: $(srcdir)/src/generic/mask.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_app.o: $(srcdir)/src/mgl/app.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/app.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/bitmap.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_brush.o: $(srcdir)/src/mgl/brush.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/brush.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_clipbrd.o: $(srcdir)/src/mgl/clipbrd.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/clipbrd.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_cursor.o: $(srcdir)/src/mgl/cursor.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/cursor.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_data.o: $(srcdir)/src/mgl/data.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/data.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_dc.o: $(srcdir)/src/mgl/dc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dc.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_dcclient.o: $(srcdir)/src/mgl/dcclient.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dcclient.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dcmemory.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_dcscreen.o: $(srcdir)/src/mgl/dcscreen.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dcscreen.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_font.o: $(srcdir)/src/mgl/font.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/font.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_fontenum.o: $(srcdir)/src/mgl/fontenum.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/fontenum.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_fontmgr.o: $(srcdir)/src/mgl/fontmgr.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/fontmgr.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_palette.o: $(srcdir)/src/mgl/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_pen.o: $(srcdir)/src/mgl/pen.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/pen.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_region.o: $(srcdir)/src/mgl/region.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/region.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_settings.o: $(srcdir)/src/mgl/settings.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/settings.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_toplevel.o: $(srcdir)/src/mgl/toplevel.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/toplevel.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_utils.o: $(srcdir)/src/mgl/utils.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/utils.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_mgl_window.o: $(srcdir)/src/mgl/window.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/window.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_dfb_app.o: $(srcdir)/src/dfb/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
@@ -24392,7 +23892,7 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_dfb_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@monolib_dfb_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_dfb_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(MONOLIB_ODEP)
@@ -26204,9 +25704,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
 
@@ -26354,9 +25851,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
@@ -26369,9 +25863,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
@@ -26383,9 +25874,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
@@ -28922,9 +28410,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
@@ -28945,9 +28430,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
@@ -29035,9 +28517,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -29771,9 +29250,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_x11_app.o: $(srcdir)/src/x11/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/app.cpp
 
@@ -29834,92 +29310,14 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_x11_window.o: $(srcdir)/src/x11/window.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/window.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mask.o: $(srcdir)/src/generic/mask.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_mask.o: $(srcdir)/src/generic/mask.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_app.o: $(srcdir)/src/mgl/app.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/app.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/bitmap.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_brush.o: $(srcdir)/src/mgl/brush.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/brush.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_clipbrd.o: $(srcdir)/src/mgl/clipbrd.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/clipbrd.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_cursor.o: $(srcdir)/src/mgl/cursor.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/cursor.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_data.o: $(srcdir)/src/mgl/data.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/data.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_dc.o: $(srcdir)/src/mgl/dc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dc.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_dcclient.o: $(srcdir)/src/mgl/dcclient.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dcclient.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dcmemory.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_dcscreen.o: $(srcdir)/src/mgl/dcscreen.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dcscreen.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_font.o: $(srcdir)/src/mgl/font.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/font.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_fontenum.o: $(srcdir)/src/mgl/fontenum.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/fontenum.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_fontmgr.o: $(srcdir)/src/mgl/fontmgr.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/fontmgr.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_palette.o: $(srcdir)/src/mgl/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_pen.o: $(srcdir)/src/mgl/pen.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/pen.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_region.o: $(srcdir)/src/mgl/region.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/region.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_settings.o: $(srcdir)/src/mgl/settings.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/settings.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_toplevel.o: $(srcdir)/src/mgl/toplevel.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/toplevel.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_utils.o: $(srcdir)/src/mgl/utils.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/utils.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_mgl_window.o: $(srcdir)/src/mgl/window.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/window.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_dfb_app.o: $(srcdir)/src/dfb/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
@@ -29954,7 +29352,7 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_dfb_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@coredll_dfb_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_dfb_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(COREDLL_ODEP)
@@ -32936,9 +32334,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
@@ -32959,9 +32354,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
@@ -33049,9 +32441,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -33785,9 +33174,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_x11_app.o: $(srcdir)/src/x11/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/app.cpp
 
@@ -33848,92 +33234,14 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_x11_window.o: $(srcdir)/src/x11/window.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/window.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mask.o: $(srcdir)/src/generic/mask.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_mask.o: $(srcdir)/src/generic/mask.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_app.o: $(srcdir)/src/mgl/app.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/app.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/bitmap.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_brush.o: $(srcdir)/src/mgl/brush.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/brush.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_clipbrd.o: $(srcdir)/src/mgl/clipbrd.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/clipbrd.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_cursor.o: $(srcdir)/src/mgl/cursor.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/cursor.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_data.o: $(srcdir)/src/mgl/data.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/data.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_dc.o: $(srcdir)/src/mgl/dc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dc.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_dcclient.o: $(srcdir)/src/mgl/dcclient.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dcclient.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_dcmemory.o: $(srcdir)/src/mgl/dcmemory.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dcmemory.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_dcscreen.o: $(srcdir)/src/mgl/dcscreen.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dcscreen.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_font.o: $(srcdir)/src/mgl/font.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/font.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_fontenum.o: $(srcdir)/src/mgl/fontenum.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/fontenum.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_fontmgr.o: $(srcdir)/src/mgl/fontmgr.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/fontmgr.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_palette.o: $(srcdir)/src/mgl/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_pen.o: $(srcdir)/src/mgl/pen.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/pen.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_region.o: $(srcdir)/src/mgl/region.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/region.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_settings.o: $(srcdir)/src/mgl/settings.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/settings.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_toplevel.o: $(srcdir)/src/mgl/toplevel.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/toplevel.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_utils.o: $(srcdir)/src/mgl/utils.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/utils.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_mgl_window.o: $(srcdir)/src/mgl/window.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/window.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_dfb_app.o: $(srcdir)/src/dfb/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/app.cpp
@@ -33968,7 +33276,7 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_dfb_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@corelib_dfb_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_dfb_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(CORELIB_ODEP)
@@ -35804,9 +35112,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
-
 @COND_TOOLKIT_MSW@advdll_msw_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
 
@@ -35954,9 +35259,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@advdll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
-
 @COND_TOOLKIT_MOTIF@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
@@ -35969,9 +35271,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
-
 @COND_TOOLKIT_MOTIF@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
@@ -35983,9 +35282,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_X11@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
@@ -36203,9 +35499,6 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
-
 @COND_TOOLKIT_MSW@advlib_msw_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
 
@@ -36353,9 +35646,6 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@advlib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
-
 @COND_TOOLKIT_MOTIF@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
@@ -36368,9 +35658,6 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
-
 @COND_TOOLKIT_MOTIF@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
@@ -36382,9 +35669,6 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_X11@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
@@ -37555,7 +36839,6 @@ GTKDIR   = $(WXDIR)/src/gtk
 GTK1DIR  = $(WXDIR)/src/gtk1
 X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
-MGLDIR   = $(WXDIR)/src/mgl
 MOTIFDIR = $(WXDIR)/src/motif
 MSDOSDIR = $(WXDIR)/src/msdos
 MSWDIR   = $(WXDIR)/src/msw
@@ -38022,16 +37305,6 @@ UNIV_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/wx/univ/setup0.h $(DISTDIR)/include/wx/univ/setup.h
 	$(CP_P) $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
 	$(CP_P) $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
-
-MGL_DIST: UNIV_DIST
-	$(CP_P) $(WXDIR)/wxMGL.spec $(DISTDIR)
-	$(CP_P) $(INCDIR)/wx/mgl/*.h $(DISTDIR)/include/wx/mgl
-	mkdir $(DISTDIR)/include/wx/msdos
-	$(CP_P) $(INCDIR)/wx/msdos/*.h $(DISTDIR)/include/wx/msdos
-	$(CP_P) $(SRCDIR)/mgl/make* $(DISTDIR)/src/mgl
-	$(CP_P) $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
-	mkdir $(DISTDIR)/src/msdos
-	$(CP_P) $(SRCDIR)/msdos/*.cpp $(DISTDIR)/src/msdos
 
 DEMOS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/demos

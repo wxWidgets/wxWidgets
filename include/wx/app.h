@@ -592,10 +592,10 @@ public:
     // ------------------------------------------------------------------------
 
         // Get display mode that is used use. This is only used in framebuffer
-        // wxWin ports (such as wxMGL or wxDFB).
+        // wxWin ports such as wxDFB.
     virtual wxVideoMode GetDisplayMode() const;
         // Set display mode to use. This is only used in framebuffer wxWin
-        // ports (such as wxMGL or wxDFB). This method should be called from
+        // ports such as wxDFB. This method should be called from
         // wxApp::OnInitGui
     virtual bool SetDisplayMode(const wxVideoMode& WXUNUSED(info)) { return true; }
 
@@ -685,8 +685,6 @@ protected:
     #include "wx/msw/app.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/app.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/app.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/app.h"
 #elif defined(__WXGTK20__)
