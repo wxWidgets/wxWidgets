@@ -1554,7 +1554,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
         // like "&File..." -- this is illegal in XML, so we use "_File..."):
         if ( *dt == amp_char )
         {
-            if ( *(++dt) == amp_char )
+            if ( dt+1 == str1.end() || *(++dt) == amp_char )
                 str2 << amp_char;
             else
                 str2 << wxT('&') << *dt;

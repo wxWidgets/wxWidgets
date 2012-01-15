@@ -896,7 +896,9 @@ static wxString ConvertText(const wxString& str)
     {
         if (*dt == wxT('_'))
         {
-            if ( *(++dt) == wxT('_') )
+            if ( *(dt+1) == 0 )
+                str2 << wxT('_');
+            else if ( *(++dt) == wxT('_') )
                 str2 << wxT('_');
             else
                 str2 << wxT('&') << *dt;
