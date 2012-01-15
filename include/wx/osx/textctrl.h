@@ -75,10 +75,6 @@ public:
     virtual void MarkDirty();
     virtual void DiscardEdits();
 
-    // set the max number of characters which may be entered
-    // in a single line text control
-    virtual void SetMaxLength(unsigned long len);
-
     // set the grayed out hint text
     virtual bool SetHint(const wxString& hint);
     virtual wxString GetHint() const;
