@@ -305,8 +305,6 @@ for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
         defined when compiling code which uses wxWidgets as a DLL/shared library}
 @itemdef{WXBUILDING,
         defined when building wxWidgets itself, whether as a static or shared library}
-@itemdef{wxNO_T,
-        may be predefined to prevent the library from defining _T() macro}
 @endDefList
 
 */
