@@ -15,9 +15,7 @@
 #include "wx/chartype.h"
 #include "wx/wxcrtbase.h"
 
-#ifndef __WXPALMOS5__
 #include <stdlib.h>             // malloc() and free()
-#endif // ! __WXPALMOS5__
 
 class WXDLLIMPEXP_FWD_BASE wxCStrData;
 

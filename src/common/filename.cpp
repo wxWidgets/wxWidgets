@@ -601,9 +601,7 @@ bool wxFileName::FileExists() const
 /* static */
 bool wxFileName::FileExists( const wxString &filePath )
 {
-#if defined(__WXPALMOS__)
-    return false;
-#elif defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // we must use GetFileAttributes() instead of the ANSI C functions because
     // it can cope with network (UNC) paths unlike them
     DWORD ret = ::GetFileAttributes(filePath.t_str());
@@ -659,9 +657,7 @@ bool wxFileName::DirExists( const wxString &dirPath )
         strPath << wxT('.');
 #endif
 
-#if defined(__WXPALMOS__)
-    return false;
-#elif defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // stat() can't cope with network paths
     DWORD ret = ::GetFileAttributes(strPath.t_str());
 
@@ -950,7 +946,7 @@ static wxString wxCreateTempImpl(
     }
 #else // !HAVE_MKTEMP (includes __DOS__)
     // generate the unique file name ourselves
-    #if !defined(__DOS__) && !defined(__PALMOS__) && (!defined(__MWERKS__) || defined(__DARWIN__) )
+    #if !defined(__DOS__) && (!defined(__MWERKS__) || defined(__DARWIN__) )
     path << (unsigned int)getpid();
     #endif
 
@@ -2643,10 +2639,7 @@ wxULongLong wxFileName::GetSize(const wxString &filename)
     if (!wxFileExists(filename))
         return wxInvalidSize;
 
-#if defined(__WXPALMOS__)
-    // TODO
-    return wxInvalidSize;
-#elif defined(__WIN32__)
+#if defined(__WIN32__)
     wxFileHandle f(filename, wxFileHandle::ReadAttr);
     if (!f.IsOk())
         return wxInvalidSize;

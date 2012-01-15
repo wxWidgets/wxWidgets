@@ -49,11 +49,6 @@
     #include "wx/msw/missing.h"
 #endif
 
-// include all PalmOS headers at once
-#ifdef __WXPALMOS__
-#   include <PalmOS.h>
-#endif
-
 // include <os2.h>
 #ifdef __OS2__
 #   include "wx/os2/private.h"

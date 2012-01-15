@@ -232,9 +232,6 @@ wxSaveFileSelector(const wxString& what,
     #include "wx/cocoa/filedlg.h"
 #elif defined(__WXPM__)
     #include "wx/os2/filedlg.h"
-#elif defined(__WXPALMOS__)
-    #define wxHAS_GENERIC_FILEDIALOG
-    #include "wx/generic/filedlgg.h"
 #endif
 
 #endif // wxUSE_FILEDLG

@@ -213,9 +213,7 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
 
 
 
-#if defined(__WXPALMOS__)
-    #include "wx/generic/colour.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/colour.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/colour.h"

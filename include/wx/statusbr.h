@@ -234,9 +234,6 @@ protected:
 #if defined(__WXUNIVERSAL__)
     #define wxStatusBarUniv wxStatusBar
     #include "wx/univ/statusbr.h"
-#elif defined(__WXPALMOS__)
-    #define wxStatusBarPalm wxStatusBar
-    #include "wx/palmos/statusbr.h"
 #elif defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
     #include "wx/msw/statusbar.h"
 #elif defined(__WXMAC__)

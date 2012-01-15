@@ -25,9 +25,6 @@
            siblings trigger a hang bug in Windows (only). If this happens, add
            this style to mark the button as not belonging to a group, and
            implement the mutually-exclusive group behaviour yourself.
-    @style{wxRB_USE_CHECKBOX}
-           Use a checkbox button instead of radio button (currently supported
-           only on PalmOS).
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}

@@ -191,8 +191,6 @@ protected:
 //    #include "wx/cocoa/anybutton.h"
 //#elif defined(__WXPM__)
 //    #include "wx/os2/anybutton.h"
-//#elif defined(__WXPALMOS__)
-//    #include "wx/palmos/anybutton.h"
 #else
     typedef wxAnyButtonBase wxAnyButton;
 #endif

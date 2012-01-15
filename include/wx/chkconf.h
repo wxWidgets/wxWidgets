@@ -748,7 +748,7 @@
 #endif /* !defined(wxUSE_HTML) */
 
 #ifndef wxUSE_LIBMSPACK
-#   if !defined(__UNIX__) || defined(__WXPALMOS__)
+#   if !defined(__UNIX__)
         /* set to 0 on platforms that don't have libmspack */
 #       define wxUSE_LIBMSPACK 0
 #   else
@@ -1201,9 +1201,7 @@
    checks use wxUSE_XXX symbols in #if tests.
  */
 
-#if defined(__WXPALMOS__)
-#  include "wx/palmos/chkconf.h"
-#elif defined(__WXWINCE__)
+#if defined(__WXWINCE__)
 #  include "wx/msw/wince/chkconf.h"
 #elif defined(__WXMSW__)
 #  include "wx/msw/chkconf.h"
@@ -1634,9 +1632,7 @@
 #ifndef wxUSE_NATIVE_STATUSBAR
 #   define wxUSE_NATIVE_STATUSBAR 0
 #elif wxUSE_NATIVE_STATUSBAR
-#   if defined(__WXUNIVERSAL__) || !( defined(__WXMSW__) || \
-                                      defined(__WXMAC__) || \
-                                      defined(__WXPALMOS__) )
+#   if defined(__WXUNIVERSAL__) || !(defined(__WXMSW__) || defined(__WXMAC__))
 #       undef wxUSE_NATIVE_STATUSBAR
 #       define wxUSE_NATIVE_STATUSBAR 0
 #   endif
@@ -1987,7 +1983,7 @@
 #endif /* wxUSE_FILEDLG */
 
 #if !wxUSE_GAUGE || !wxUSE_BUTTON
-#   if wxUSE_PROGRESSDLG && !defined(__WXPALMOS__)
+#   if wxUSE_PROGRESSDLG
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "Generic progress dialog requires wxUSE_GAUGE and wxUSE_BUTTON"
 #       else
@@ -2048,7 +2044,7 @@
 #            define wxUSE_RADIOBTN 1
 #        endif
 #   endif
-#   if !wxUSE_STATBOX && !defined(__WXPALMOS__)
+#   if !wxUSE_STATBOX
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "wxUSE_RADIOBOX requires wxUSE_STATBOX"
 #        else

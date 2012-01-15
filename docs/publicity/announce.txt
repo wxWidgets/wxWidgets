@@ -16,7 +16,6 @@ The following platforms are supported:
 - Mac OS X using Cocoa (beta)
 - OS/2 (beta)
 - MGL for Linux and DOS
-- Palm OS (alpha)
 
 To get wxWidgets, please go to the Download page at:
 

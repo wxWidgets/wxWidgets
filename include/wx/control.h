@@ -221,8 +221,6 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/control.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/control.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/control.h"
 #elif defined(__WXMOTIF__)

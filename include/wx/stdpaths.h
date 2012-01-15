@@ -184,9 +184,6 @@ protected:
     #elif defined(__UNIX__)
         #include "wx/unix/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
-    #elif defined(__PALMOS__)
-        #include "wx/palmos/stdpaths.h"
-        #define wxHAS_NATIVE_STDPATHS
     #endif
 #endif
 

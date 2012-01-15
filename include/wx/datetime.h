@@ -19,7 +19,7 @@
 
 #ifdef __WXWINCE__
     #include "wx/msw/wince/time.h"
-#elif !defined(__WXPALMOS5__)
+#else
     #include <time.h>
 #endif // OS
 

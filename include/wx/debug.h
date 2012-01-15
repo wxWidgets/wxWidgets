@@ -11,7 +11,7 @@
 #ifndef _WX_DEBUG_H_
 #define _WX_DEBUG_H_
 
-#if !defined(__WXPALMOS5__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     #include  <assert.h>
 #endif // systems without assert.h
 

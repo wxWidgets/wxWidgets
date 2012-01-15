@@ -25,9 +25,7 @@
 #  undef __BSEXCPT__
 #endif
 
-#ifndef __WXPALMOS5__
 #include <stdlib.h>
-#endif // ! __WXPALMOS5__
 
 class WXDLLIMPEXP_FWD_BASE wxString;
 

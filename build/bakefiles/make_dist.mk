@@ -303,7 +303,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/osx/carbon
 	mkdir $(DISTDIR)/include/wx/osx/core
 	mkdir $(DISTDIR)/include/wx/os2
-	mkdir $(DISTDIR)/include/wx/palmos
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/osx
 	mkdir $(DISTDIR)/src/osx/core
@@ -311,7 +310,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	mkdir $(DISTDIR)/src/os2
-	mkdir $(DISTDIR)/src/palmos
 	$(CP_P) $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	$(CP_P) $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	list='$(ALL_PORTS_BASE_HEADERS)'; for p in $$list; do \

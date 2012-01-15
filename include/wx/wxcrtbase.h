@@ -32,17 +32,11 @@
 
  */
 
-#if !defined(__WXPALMOS5__)
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#if defined(__WXPALMOS__)
-    #include <wchar.h>
-#else
-    #include <wctype.h>
-#endif
+#include <wctype.h>
 #include <time.h>
-#endif
 
 #if defined(__WINDOWS__) && !defined(__WXWINCE__)
     #include <io.h>
@@ -179,7 +173,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrstrW    wcsstr
 
 /* these functions are not defined under CE, at least in VC8 CRT */
-#if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
+#if !defined(__WXWINCE__)
     #define wxCRT_StrcollA   strcoll
     #define wxCRT_StrxfrmA   strxfrm
 
@@ -274,12 +268,6 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
         defined(__EMX__) || defined(__DJGPP__)
     #define wxCRT_StricmpA stricmp
     #define wxCRT_StrnicmpA strnicmp
-#elif defined(__WXPALMOS__)
-    /* FIXME: There is no equivalent to strnicmp in the Palm OS API.  This
-     * quick hack should do until one can be written.
-     */
-    #define wxCRT_StricmpA StrCaselessCompare
-    #define wxCRT_StrnicmpA StrNCaselessCompare
 #elif defined(__SYMANTEC__) || defined(__VISUALC__) || \
         (defined(__MWERKS__) && defined(__INTEL__))
     #define wxCRT_StricmpA _stricmp
@@ -459,7 +447,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
                                   stdio.h
    ------------------------------------------------------------------------- */
 
-#if defined(__UNIX__) || defined(__WXMAC__) || defined(__WXPALMOS__)
+#if defined(__UNIX__) || defined(__WXMAC__)
     #define wxMBFILES 1
 #else
     #define wxMBFILES 0
@@ -619,9 +607,6 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
 #if defined(__MWERKS__) && defined(__MSL__)
     #define wxNEED_WX_MBSTOWCS
 #endif
-#if defined(__WXPALMOS__)
-    #define wxNEED_WX_MBSTOWCS
-#endif
 
 #ifdef __DARWIN__
     #if !defined(__WXOSX_IPHONE__) && MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2
@@ -668,15 +653,13 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     #define wxCRT_StrftimeW _xpg5_wcsftime
 #else
     /*
-        Assume it's always available under non-Unix systems with the
-        exception of Palm OS, this does seem to be the case for now. And
-        under Unix we trust configure to detect it (except for SGI special
-        case above).
+        Assume it's always available under non-Unix systems as this does seem
+        to be the case for now. And under Unix we trust configure to detect it
+        (except for SGI special case above).
      */
-    #if defined(HAVE_WCSFTIME) || \
-        !(defined(__UNIX__) || defined(__WXPALMOS__))
+    #if defined(HAVE_WCSFTIME) || !defined(__UNIX__)
         #define wxCRT_StrftimeW  wcsftime
-    #endif /* ! __WXPALMOS__ */
+    #endif
 #endif
 
 #ifndef wxCRT_StrftimeW

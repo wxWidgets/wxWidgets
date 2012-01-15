@@ -40,14 +40,12 @@
     extern "C" int vswscanf(const wchar_t *, const wchar_t *, va_list);
 #endif
 
-#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
     #include <time.h>
     #include <locale.h>
 #else
     #include "wx/msw/wince/time.h"
 #endif
-#endif // !__WXPALMOS5__
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"

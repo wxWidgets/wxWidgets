@@ -31,11 +31,8 @@
 /*  Make sure the environment is set correctly */
 #   if defined(__WXMSW__) && defined(__X__)
 #       error "Target can't be both X and Windows"
-#   elif defined(__WXMSW__) && defined(__PALMOS__)
-#       error "Target can't be both PalmOS and Windows"
 #   elif !defined(__WXMOTIF__) && \
          !defined(__WXMSW__)   && \
-         !defined(__WXPALMOS__)&& \
          !defined(__WXGTK__)   && \
          !defined(__WXPM__)    && \
          !defined(__WXOSX_CARBON__)   && \
@@ -403,11 +400,9 @@ typedef short int WXTYPE;
 
 #ifndef HAVE_WOSTREAM
     /*
-        Mingw <= 3.4 and all versions of Cygwin as well as any gcc version (so
-        far) targeting PalmOS don't have std::wostream
+        Mingw <= 3.4 and all versions of Cygwin don't have std::wostream
      */
-    #if defined(__PALMOS__) || \
-        (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0)) || \
+    #if (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0)) || \
         defined(__CYGWIN__)
         #define wxNO_WOSTREAM
     #endif
@@ -579,7 +574,7 @@ typedef short int WXTYPE;
 /*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
 /*  it must not be defined as "(void *)0" which is standard for C but completely */
 /*  breaks C++ code) */
-#if !defined(__HANDHELDPC__) && !defined(__PALMOS__)
+#if !defined(__HANDHELDPC__)
 #include <stddef.h>
 #endif
 
@@ -782,7 +777,7 @@ enum {  wxDefaultCoord = -1 };
 /*  define fixed length types */
 /*  ---------------------------------------------------------------------------- */
 
-#if defined(__WXPALMOS__) || defined(__MINGW32__)
+#if defined(__MINGW32__)
   #if !defined(__MWERKS__)
     #include <sys/types.h>
   #endif
@@ -834,19 +829,7 @@ typedef wxUint16 wxWord;
  */
 
 /*  32bit */
-#ifdef __PALMOS__
-    typedef int wxInt32;
-    typedef unsigned int wxUint32;
-    #define SIZEOF_INT 4
-    #define SIZEOF_LONG 4
-    #define SIZEOF_WCHAR_T 2
-    #define SIZEOF_SIZE_T 4
-    #ifdef __WXPALMOS6__
-        #define wxSIZE_T_IS_UINT
-    #endif
-    #define SIZEOF_VOID_P 4
-    #define SIZEOF_SIZE_T 4
-#elif defined(__WINDOWS__)
+#if defined(__WINDOWS__)
     #if defined(__WIN32__)
         typedef int wxInt32;
         typedef unsigned int wxUint32;
@@ -1033,14 +1016,6 @@ typedef wxUint32 wxDword;
         #error "The 64 bit integer support in CodeWarrior has been disabled."
         #error "See the documentation on the 'longlong' pragma."
     #endif
-#elif defined(__WXPALMOS__)
-    #if defined(__WXPALMOS6__)
-        #define wxLongLong_t int64_t
-    #else
-        #define wxLongLong_t long long
-    #endif /* __WXPALMOS6__ */
-    #define wxLongLongSuffix ll
-    #define wxLongLongFmtSpec "ll"
 #elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
     #define wxLongLong_t long long
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
@@ -1060,16 +1035,7 @@ typedef wxUint32 wxDword;
 
 
 #ifdef wxLongLong_t
-
-    #ifdef __WXPALMOS__
-    #if defined(__WXPALMOS6__)
-        #define wxULongLong_t uint64_t
-    #else
-        #define wxULongLong_t unsigned long long
-    #endif /* __WXPALMOS6__ */
-    #else
-        #define wxULongLong_t unsigned wxLongLong_t
-    #endif
+    #define wxULongLong_t unsigned wxLongLong_t
 
     /*
         wxLL() and wxULL() macros allow to define 64 bit constants in a
@@ -1119,8 +1085,6 @@ typedef wxUint32 wxDword;
     #if defined(_SSIZE_T_) || defined(_SSIZE_T_DEFINED)
         #define HAVE_SSIZE_T
     #endif
-#elif defined(__PALMOS__)
-    #define HAVE_SSIZE_T
 #elif wxCHECK_WATCOM_VERSION(1,4)
     #define HAVE_SSIZE_T
 #endif
@@ -1871,14 +1835,12 @@ enum wxBorder
 /*  Old names for compatibility */
 #define wxRA_HORIZONTAL     wxHORIZONTAL
 #define wxRA_VERTICAL       wxVERTICAL
-#define wxRA_USE_CHECKBOX   0x0010 /* alternative native subcontrols (wxPalmOS) */
 
 /*
  * wxRadioButton style flag
  */
 #define wxRB_GROUP          0x0004
 #define wxRB_SINGLE         0x0008
-#define wxRB_USE_CHECKBOX   0x0010 /* alternative native control (wxPalmOS) */
 
 /*
  * wxScrollBar flags
@@ -3041,41 +3003,6 @@ typedef WX_NSString* WXGLPixelFormat;
 #endif
 
 #endif /* __WXMAC__ */
-
-#if defined(__WXPALMOS__)
-
-typedef void *          WXHWND;
-typedef void *          WXHANDLE;
-typedef void *          WXHICON;
-typedef void *          WXHFONT;
-typedef void *          WXHMENU;
-typedef void *          WXHPEN;
-typedef void *          WXHBRUSH;
-typedef void *          WXHPALETTE;
-typedef void *          WXHCURSOR;
-typedef void *          WXHRGN;
-typedef void *          WXHACCEL;
-typedef void *          WXHINSTANCE;
-typedef void *          WXHBITMAP;
-typedef void *          WXHIMAGELIST;
-typedef void *          WXHGLOBAL;
-typedef void *          WXHDC;
-typedef unsigned int    WXUINT;
-typedef unsigned long   WXDWORD;
-typedef unsigned short  WXWORD;
-
-typedef unsigned long   WXCOLORREF;
-typedef struct tagMSG   WXMSG;
-
-typedef WXHWND          WXWINHANDLE; /* WinHandle of PalmOS */
-typedef WXWINHANDLE     WXWidget;
-
-typedef void *          WXFORMPTR;
-typedef void *          WXEVENTPTR;
-typedef void *          WXRECTANGLEPTR;
-
-#endif /* __WXPALMOS__ */
-
 
 /* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */
 #if defined(__WIN32__)

@@ -36,7 +36,7 @@
 #ifndef WX_GMTOFF_IN_TM
     // Define it for some systems which don't (always) use configure but are
     // known to have tm_gmtoff field.
-    #if defined(__WXPALMOS__) || defined(__DARWIN__)
+    #if defined(__DARWIN__)
         #define WX_GMTOFF_IN_TM
     #endif
 #endif
@@ -53,14 +53,12 @@
 #   undef HAVE_GETTIMEOFDAY
 #endif
 
-#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
 #include <time.h>
 #else
 #include "wx/msw/private.h"
 #include "wx/msw/wince/time.h"
 #endif
-#endif // __WXPALMOS5__
 
 
 #if !defined(__WXMAC__) && !defined(__WXWINCE__)
@@ -72,12 +70,6 @@
     #include <unistd.h>
 #elif defined(HAVE_FTIME)
     #include <sys/timeb.h>
-#endif
-
-#ifdef __WXPALMOS__
-    #include <DateTime.h>
-    #include <TimeMgr.h>
-    #include <SystemMgr.h>
 #endif
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
@@ -317,19 +309,7 @@ wxLongLong wxGetUTCTimeMillis()
 
     // If possible, use a function which avoids conversions from
     // broken-up time structures to milliseconds
-#if defined(__WXPALMOS__)
-    DateTimeType thenst;
-    thenst.second  = 0;
-    thenst.minute  = 0;
-    thenst.hour    = 0;
-    thenst.day     = 1;
-    thenst.month   = 1;
-    thenst.year    = 1970;
-    thenst.weekDay = 5;
-    uint32_t now = TimGetSeconds();
-    uint32_t then = TimDateTimeToSeconds (&thenst);
-    return SysTimeToMilliSecs(SysTimeInSecs(now - then));
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     FILETIME ft;
     ::GetSystemTimeAsFileTime(&ft);
 

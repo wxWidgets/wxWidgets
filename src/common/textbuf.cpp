@@ -40,7 +40,7 @@
 //   - Mac when compiling with CodeWarrior (__WXMAC__)
 
 const wxTextFileType wxTextBuffer::typeDefault =
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__PALMOS__)
+#if defined(__WINDOWS__) || defined(__DOS__)
   wxTextFileType_Dos;
 #elif defined(__UNIX__)
   wxTextFileType_Unix;

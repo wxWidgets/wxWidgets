@@ -48,7 +48,7 @@ public:
         Set the delay after which the tooltip disappears or how long a tooltip
         remains visible.
 
-        @note May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).
+        @note May not be supported on all platforms (eg. wxCocoa, GTK).
     */
     static void SetAutoPop(long msecs);
 
@@ -77,7 +77,7 @@ public:
     /**
         Set the delay between subsequent tooltips to appear.
 
-        @note May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).
+        @note May not be supported on all platforms (eg. wxCocoa, GTK).
     */
     static void SetReshow(long msecs);
 

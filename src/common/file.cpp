@@ -80,8 +80,6 @@
     char* mktemp( char * path ) { return path ;}
     #include <stat.h>
     #include <unistd.h>
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/missing.h"
 #else
     #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX

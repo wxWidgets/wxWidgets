@@ -1812,14 +1812,7 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
 // ----------------------------------------------------------------------------
 
 // include the declaration of the platform-specific class
-#if defined(__WXPALMOS__)
-    #ifdef __WXUNIVERSAL__
-        #define wxWindowNative wxWindowPalm
-    #else // !wxUniv
-        #define wxWindowPalm wxWindow
-    #endif // wxUniv/!wxUniv
-    #include "wx/palmos/window.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowMSW
     #else // !wxUniv

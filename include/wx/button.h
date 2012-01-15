@@ -63,8 +63,6 @@ protected:
     #include "wx/cocoa/button.h"
 #elif defined(__WXPM__)
     #include "wx/os2/button.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/button.h"
 #endif
 
 #endif // wxUSE_BUTTON

@@ -42,7 +42,7 @@ enum
 #define wxIMAGELIST_DRAW_SELECTED       0x0004
 #define wxIMAGELIST_DRAW_FOCUSED        0x0008
 
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXPALMOS__)
+#if defined(__WXMSW__) || defined(__WXMAC__)
     #define wxHAS_NATIVE_IMAGELIST
 #endif
 
@@ -52,8 +52,6 @@ enum
     #include "wx/msw/imaglist.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/imaglist.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/imaglist.h"
 #endif
 
 #endif // _WX_IMAGLIST_H_BASE_

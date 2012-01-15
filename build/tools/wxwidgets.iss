@@ -38,7 +38,7 @@ SolidCompression=yes
 
 [Files]
 ; source files
-Source: "{#INNODIR}\*"; DestDir: "{app}"; Excludes: ".cvsignore,cocoa,dfb,mac,gtk,gtk1,mgl,motif,msdos,os2,palmos,wxWindows.xcod*,x11,debian,distrib,docs,misc,tests,wxPython,*.pch,*.pch++,*.pchmm"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#INNODIR}\*"; DestDir: "{app}"; Excludes: ".cvsignore,cocoa,dfb,mac,gtk,gtk1,mgl,motif,msdos,os2,wxWindows.xcod*,x11,debian,distrib,docs,misc,tests,wxPython,*.pch,*.pch++,*.pchmm"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; docs and helpfile
 Source: "{#INNODIR}\docs\htmlhelp\*"; DestDir: "{app}\docs\htmlhelp\";  Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#INNODIR}\docs\licence.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs

@@ -700,12 +700,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/fswatcher.h \
 	$(BASE_WINCE_HDR) \
 	$(BASE_OSX_HDR) \
-	wx/palmos/apptbase.h \
-	wx/palmos/apptrait.h \
-	wx/palmos/chkconf.h \
-	wx/palmos/mimetype.h \
-	wx/palmos/missing.h \
-	wx/palmos/stdpaths.h \
 	wx/msdos/mimetype.h \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
@@ -859,14 +853,6 @@ ALL_BASE_SOURCES =  \
 	src/msdos/dir.cpp \
 	src/msdos/mimetype.cpp \
 	src/msdos/utilsdos.cpp \
-	src/palmos/base.cpp \
-	src/palmos/dir.cpp \
-	src/palmos/prefconf.cpp \
-	src/palmos/snglinst.cpp \
-	src/palmos/stdall.c \
-	src/palmos/thread.cpp \
-	src/palmos/utils.cpp \
-	src/palmos/utilsexc.cpp \
 	src/common/event.cpp \
 	src/common/fs_mem.cpp \
 	src/common/msgout.cpp \
@@ -37843,7 +37829,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/osx/carbon
 	mkdir $(DISTDIR)/include/wx/osx/core
 	mkdir $(DISTDIR)/include/wx/os2
-	mkdir $(DISTDIR)/include/wx/palmos
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/osx
 	mkdir $(DISTDIR)/src/osx/core
@@ -37851,7 +37836,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	mkdir $(DISTDIR)/src/os2
-	mkdir $(DISTDIR)/src/palmos
 	$(CP_P) $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	$(CP_P) $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	list='$(ALL_PORTS_BASE_HEADERS)'; for p in $$list; do \

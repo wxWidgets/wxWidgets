@@ -778,8 +778,6 @@ protected:
     #include "wx/cocoa/textctrl.h"
 #elif defined(__WXPM__)
     #include "wx/os2/textctrl.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/textctrl.h"
 #endif
 
 // ----------------------------------------------------------------------------

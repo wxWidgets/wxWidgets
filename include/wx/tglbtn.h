@@ -89,8 +89,6 @@ protected:
 #elif defined(__WXMAC__)
     #include "wx/osx/tglbtn.h"
     #define wxHAS_BITMAPTOGGLEBUTTON
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/tglbtn.h"
 #elif defined(__WXPM__)
     #include "wx/os2/tglbtn.h"
 #endif

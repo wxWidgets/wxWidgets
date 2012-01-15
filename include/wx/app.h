@@ -681,9 +681,7 @@ protected:
 // now include the declaration of the real class
 // ----------------------------------------------------------------------------
 
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/app.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/app.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/app.h"

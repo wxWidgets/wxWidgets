@@ -57,7 +57,6 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WXOSX_MAC__, Mac OS X (Carbon or Cocoa)}
 @itemdef{__WXOSX_OR_COCOA__, Any Mac OS X port (wxOSX-Carbon, wxOSX-Cocoa or 
                         wxCocoa)}
-@itemdef{__WXPALMOS__, PalmOS}
 @itemdef{__WXPM__, OS/2 native Presentation Manager}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
@@ -104,7 +103,6 @@ symbols, although this has not always been followed.
 @itemdef{__MACH__, Mach-O Architecture (Mac OS X only builds)}
 @itemdef{__OSF__, OSF/1}
 @itemdef{__QNX__, QNX Neutrino RTOS}
-@itemdef{__PALMOS__, PalmOS}
 @itemdef{__SGI__, IRIX}
 @itemdef{__SOLARIS__, Solaris}
 @itemdef{__SUN__, Any Sun}

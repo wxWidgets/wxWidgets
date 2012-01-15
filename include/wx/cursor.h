@@ -34,10 +34,7 @@ public:
 
 */
 
-#if defined(__WXPALMOS__)
-    #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
-    #include "wx/palmos/cursor.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
     #include "wx/msw/cursor.h"
 #elif defined(__WXMOTIF__)

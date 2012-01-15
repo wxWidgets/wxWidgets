@@ -65,8 +65,6 @@ wxConfigBase *wxAppTraitsBase::CreateConfig()
     return new
     #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
         wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-    #elif defined(__WXPALMOS__) && wxUSE_CONFIG_NATIVE
-        wxPrefConfig(wxTheApp->GetAppName());
     #else // either we're under Unix or wish to use files even under Windows
         wxFileConfig(wxTheApp->GetAppName());
     #endif

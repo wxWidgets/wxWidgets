@@ -19,9 +19,6 @@
     @style{wxRA_SPECIFY_COLS}
            The major dimension parameter refers to the maximum number of
            columns.
-    @style{wxRA_USE_CHECKBOX}
-           Use of the checkbox controls instead of radio buttons (currently
-           supported only on PalmOS)
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}

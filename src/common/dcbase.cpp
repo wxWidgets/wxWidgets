@@ -90,12 +90,6 @@
     #include "wx/dfb/dcscreen.h"
 #endif
 
-#ifdef __WXPALMOS__
-    #include "wx/palmos/dcclient.h"
-    #include "wx/palmos/dcmemory.h"
-    #include "wx/palmos/dcscreen.h"
-#endif
-
 //----------------------------------------------------------------------------
 // wxDCFactory
 //----------------------------------------------------------------------------

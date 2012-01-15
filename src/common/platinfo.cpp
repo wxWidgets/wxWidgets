@@ -67,9 +67,6 @@ static const wxChar* const wxOperatingSystemIdNames[] =
 
     wxT("DOS"),
     wxT("OS/2"),
-
-    wxT("PalmOS"),
-    wxT("PalmOS(Over Linux)"),
 };
 
 static const wxChar* const wxPortIdNames[] =
@@ -84,7 +81,6 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxMac"),
     wxT("wxCocoa"),
     wxT("wxWinCE"),
-    wxT("wxPalmOS"),
     wxT("wxDFB")
 };
 

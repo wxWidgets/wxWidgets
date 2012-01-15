@@ -184,8 +184,6 @@ private:
 #elif defined(__WXPM__)
     #undef wxHAS_3STATE_CHECKBOX
     #include "wx/os2/checkbox.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/checkbox.h"
 #endif
 
 #endif // wxUSE_CHECKBOX

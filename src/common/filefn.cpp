@@ -998,8 +998,7 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
 }
 
 // helper of generic implementation of wxCopyFile()
-#if !(defined(__WIN32__) || defined(__OS2__) || defined(__PALMOS__)) && \
-    wxUSE_FILE
+#if !(defined(__WIN32__) || defined(__OS2__)) && wxUSE_FILE
 
 static bool
 wxDoCopyFile(wxFile& fileIn,
@@ -1061,9 +1060,6 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 #elif defined(__OS2__)
     if ( ::DosCopy(file1.c_str(), file2.c_str(), overwrite ? DCPY_EXISTING : 0) != 0 )
         return false;
-#elif defined(__PALMOS__)
-    // TODO with http://www.palmos.com/dev/support/docs/protein_books/Memory_Databases_Files/
-    return false;
 #elif wxUSE_FILE // !Win32
 
     wxStructStat fbuf;
@@ -1173,7 +1169,7 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 
-#if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
+#if !defined(__WXWINCE__)
     // Normal system call
   if ( wxRename (file1, file2) == 0 )
     return true;
@@ -1200,9 +1196,6 @@ bool wxRemoveFile(const wxString& file)
     int res = wxRemove(file);
 #elif defined(__WXMAC__)
     int res = unlink(file.fn_str());
-#elif defined(__WXPALMOS__)
-    int res = 1;
-    // TODO with VFSFileDelete()
 #else
     int res = unlink(file.fn_str());
 #endif
@@ -1215,9 +1208,6 @@ bool wxRemoveFile(const wxString& file)
 
 bool wxMkdir(const wxString& dir, int perm)
 {
-#if defined(__WXPALMOS__)
-    return false;
-#else
 #if defined(__WXMAC__) && !defined(__UNIX__)
     if ( mkdir(dir.fn_str(), 0) != 0 )
 
@@ -1260,16 +1250,12 @@ bool wxMkdir(const wxString& dir, int perm)
     }
 
     return true;
-#endif // PALMOS/!PALMOS
 }
 
 bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 {
 #if defined(__VMS__)
     return false; //to be changed since rmdir exists in VMS7.x
-#elif defined(__WXPALMOS__)
-    // TODO with VFSFileRename()
-    return false;
 #else
   #if defined(__OS2__)
     if ( ::DosDeleteDir(dir.c_str()) != 0 )
@@ -1284,7 +1270,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
     }
 
     return true;
-#endif // PALMOS/!PALMOS
+#endif
 }
 
 // does the path exists? (may have or not '/' or '\\' at the end)
@@ -1303,12 +1289,7 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
         return NULL;
 
     if ( buf )
-#ifdef _PACC_VER
-        // work around the PalmOS pacc compiler bug
-        wxStrcpy(buf, filename.data());
-#else
         wxStrcpy(buf, filename);
-#endif
     else
         buf = MYcopystring(filename);
 
@@ -1398,11 +1379,7 @@ wxString wxFindNextFile()
 
 wxChar *wxDoGetCwd(wxChar *buf, int sz)
 {
-#if defined(__WXPALMOS__)
-    // TODO
-    if(buf && sz>0) buf[0] = wxT('\0');
-    return buf;
-#elif defined(__WXWINCE__)
+#if defined(__WXWINCE__)
     // TODO
     if(buf && sz>0) buf[0] = wxT('\0');
     return buf;

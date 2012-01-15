@@ -22,10 +22,6 @@
 */
 #ifdef __MWERKS__
 #   include <stddef.h>
-
-#  if !defined(__WXMAC__) && !defined(__WINDOWS__) && !defined(WIN32) && !defined(_WIN32_WCE)
-#    define __PALMOS__ 0x05000000
-#  endif
 #endif
 
 #ifdef __WXMAC_XCODE__
@@ -49,33 +45,6 @@
 #    ifndef __WXMSW__
 #        define __WXMSW__
 #    endif
-#endif
-
-#if defined(__PALMOS__)
-#   if __PALMOS__ == 0x06000000
-#       define __WXPALMOS6__ 1
-#   endif
-#   if __PALMOS__ == 0x05000000
-#       define __WXPALMOS5__ 1
-#   endif
-#   ifndef __WXPALMOS__
-#       define __WXPALMOS__ 1
-#   endif
-#   ifdef __WXMSW__
-#       undef __WXMSW__
-#   endif
-#   ifdef __WINDOWS__
-#       undef __WINDOWS__
-#   endif
-#   ifdef __WIN32__
-#       undef __WIN32__
-#   endif
-#   ifdef WIN32
-#       undef WIN32
-#   endif
-#   ifdef _WIN32
-#       undef _WIN32
-#   endif
 #endif
 
 #if defined(_WIN64)
@@ -449,20 +418,6 @@
 #    define wxSIZE_T_IS_UINT
 
 /*
-   OS: Palm OS
- */
-#elif defined(__PALMOS__)
-#    ifdef __WIN32__
-#        error "__WIN32__ should not be defined for PalmOS"
-#    endif
-#    ifdef __WINDOWS__
-#        error "__WINDOWS__ should not be defined for PalmOS"
-#    endif
-#    ifdef __WXMSW__
-#        error "__WXMSW__ should not be defined for PalmOS"
-#    endif
-
-/*
    OS: Otherwise it must be Windows
  */
 #else   /* Windows */
@@ -600,8 +555,7 @@
     !defined(__WXPM__) && \
     !defined(__WXMOTIF__) && \
     !defined(__WXGTK__) && \
-    !defined(__WXX11__) && \
-    !defined(__WXPALMOS__)
+    !defined(__WXX11__)
 #    include "wx/msw/gccpriv.h"
 #else
 #    undef wxCHECK_W32API_VERSION
@@ -831,31 +785,6 @@
 #if !defined(wxUSE_WXDIB) && defined(__WXMSW__)
 #    define wxUSE_WXDIB 1
 #endif
-
-#if defined (__WXPALMOS__)
-#include "wx/palmos/missing.h"
-#endif /* __WXPALMOS__ */
-
-#if !defined (__WXPALMOS5__)
-#define POSSEC_APPBASE
-#define POSSEC_ARCHIVE
-#define POSSEC_CLNTDATA
-#define POSSEC_CMDLINE
-#define POSSEC_CONFIG
-#define POSSEC_DATETIME
-#define POSSEC_DATETIME2
-#define POSSEC_DATSTRM
-#define POSSEC_DIRCMN
-#define POSSEC_DYNARRAY
-#define POSSEC_DYNLIB
-#define POSSEC_DYNLOAD
-#define POSSEC_ENCCONV
-#define POSSEC_EXTENDED
-#define POSSEC_FFILE
-#define POSSEC_FILE
-#define POSSEC_FILECONF
-#define POSSEC_FILEFN
-#endif /* __WXPALMOS5__ */
 
 /*
     Optionally supported C++ features.

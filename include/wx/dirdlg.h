@@ -118,7 +118,6 @@ protected:
       defined(__WXX11__)   || \
       defined(__WXMGL__)   || \
       defined(__WXCOCOA__) || \
-      defined(__WXPALMOS__) || \
       defined(__WXPM__)
     #include "wx/generic/dirdlgg.h"     // Other ports use generic implementation
     #define wxDirDialog wxGenericDirDialog

@@ -341,9 +341,7 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     wxFont Scaled(float x) const
 
 // include the real class declaration
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/font.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/font.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/font.h"

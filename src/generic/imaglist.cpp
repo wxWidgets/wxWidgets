@@ -16,8 +16,6 @@
 
 #if wxUSE_IMAGLIST && !defined(wxHAS_NATIVE_IMAGELIST)
 
-#ifndef __WXPALMOS__
-
 #include "wx/imaglist.h"
 
 #ifndef WX_PRECOMP
@@ -272,7 +270,5 @@ bool wxGenericImageList::Draw( int index, wxDC &dc, int x, int y,
 
     return true;
 }
-
-#endif // __WXPALMOS__
 
 #endif // wxUSE_IMAGLIST

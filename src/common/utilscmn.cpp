@@ -76,24 +76,20 @@
     #include "wx/statusbr.h"
 #endif // wxUSE_GUI
 
-#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
     #include <time.h>
 #else
     #include "wx/msw/wince/time.h"
 #endif
-#endif // ! __WXPALMOS5__
 
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
 #endif
 
-#ifndef __WXPALMOS5__
 #if !defined(__MWERKS__) && !defined(__WXWINCE__)
     #include <sys/types.h>
     #include <sys/stat.h>
 #endif
-#endif // ! __WXPALMOS5__
 
 #if defined(__WXMSW__)
     #include "wx/msw/private.h"

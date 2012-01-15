@@ -13,8 +13,7 @@
     is a relatively big control, wxDatePickerCtrl is implemented as a small
     window showing the currently selected date. The control can be edited using
     the keyboard, and can also display a popup window for more user-friendly
-    date selection, depending on the styles used and the platform, except
-    PalmOS where date is selected using native dialog.
+    date selection, depending on the styles used and the platform.
 
     It is only available if @c wxUSE_DATEPICKCTRL is set to 1.
 

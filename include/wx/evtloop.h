@@ -233,9 +233,7 @@ private:
 // integration with MFC) but currently this is not done for all ports yet (e.g.
 // wxX11) so fall back to the old wxGUIEventLoop definition below for them
 
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/evtloop.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     // this header defines both console and GUI loops for MSW
     #include "wx/msw/evtloop.h"
 #elif defined(__WXOSX__)

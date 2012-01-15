@@ -290,8 +290,6 @@ private:
     #define wxMessageDialog wxGenericMessageDialog
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/msgdlg.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/msgdlg.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/msgdlg.h"
 #elif defined(__WXMOTIF__)

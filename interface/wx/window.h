@@ -3042,7 +3042,7 @@ public:
     /**
         Returns the platform-specific handle of the physical window.
         Cast it to an appropriate handle, such as @b HWND for Windows,
-        @b Widget for Motif, @b GtkWidget for GTK or @b WinHandle for PalmOS.
+        @b Widget for Motif or @b GtkWidget for GTK.
 
         @beginWxPerlOnly
         This method will return an integer in wxPerl.

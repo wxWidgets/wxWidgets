@@ -58,11 +58,7 @@ enum wxOperatingSystemId
     // 1<<13 and 1<<14 available for other Unix flavours
 
     wxOS_DOS            = 1 << 15,      // Microsoft DOS
-    wxOS_OS2            = 1 << 16,       // OS/2
-
-    wxOS_PALM_OS        = 1 << 17,       // Pure Palm OS
-    wxOS_PALM_LINUX     = 1 << 18,       // Palm over linux
-    wxOS_PALM = wxOS_PALM_OS | wxOS_PALM_LINUX
+    wxOS_OS2            = 1 << 16       // OS/2
 };
 
 // list of wxWidgets ports - some of them can be used with more than
@@ -84,8 +80,7 @@ enum wxPortId
     wxPORT_OSX      = wxPORT_MAC,   // wxOSX, using Cocoa, Carbon or iPhone API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
     wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
-    wxPORT_PALMOS   = 1 << 10,      // wxPalmOS, toolkit is PalmOS API
-    wxPORT_DFB      = 1 << 11       // wxDFB, using wxUniversal
+    wxPORT_DFB      = 1 << 10       // wxDFB, using wxUniversal
 };
 
 // architecture of the operating system
@@ -366,7 +361,6 @@ protected:
     #define wxWinCE                 wxOS_WINDOWS_CE
     #define wxWIN32S                wxOS_WINDOWS_9X
 
-    #define wxPalmOS                wxPORT_PALMOS
     #define wxOS2                   wxPORT_OS2
     #define wxMGL                   wxPORT_MGL
     #define wxCocoa                 wxPORT_MAC

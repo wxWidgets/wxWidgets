@@ -189,8 +189,6 @@ inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); 
 #else // !wxUSE_BASE_CLASSES_ONLY
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/menuitem.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/menuitem.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/menuitem.h"
 #elif defined(__WXMOTIF__)

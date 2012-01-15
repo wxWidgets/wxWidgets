@@ -52,13 +52,11 @@
     #include <typeinfo>
 #endif
 
-#ifndef __WXPALMOS5__
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
 
 #include <locale.h>
-#endif // ! __WXPALMOS5__
 
 #if wxUSE_FONTMAP
     #include "wx/fontmap.h"
@@ -181,7 +179,6 @@ bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 wxString wxAppConsoleBase::GetAppName() const
 {
     wxString name = m_appName;
-#ifndef __WXPALMOS__
     if ( name.empty() )
     {
         if ( argv )
@@ -190,7 +187,6 @@ wxString wxAppConsoleBase::GetAppName() const
             wxFileName::SplitPath(argv[0], NULL, &name, NULL);
         }
     }
-#endif // !__WXPALMOS__
     return name;
 }
 

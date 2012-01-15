@@ -398,14 +398,12 @@ enum wxBorder
 /*  Old names for compatibility */
 #define wxRA_HORIZONTAL     wxHORIZONTAL
 #define wxRA_VERTICAL       wxVERTICAL
-#define wxRA_USE_CHECKBOX   0x0010 /* alternative native subcontrols (wxPalmOS) */
 
 /*
  * wxRadioButton style flag
  */
 #define wxRB_GROUP          0x0004
 #define wxRB_SINGLE         0x0008
-#define wxRB_USE_CHECKBOX   0x0010 /* alternative native control (wxPalmOS) */
 
 /*
  * wxScrollBar flags

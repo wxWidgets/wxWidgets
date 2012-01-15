@@ -84,9 +84,9 @@ protected:
 #define wxBITMAP_SCREEN_DEPTH       (-1)
 
 
-// All ports except wxMSW,wxOS2,wxPalmOS use wxBitmapHandler and wxBitmapBase as base class
-// for wxBitmapHandler; wxMSW,wxOS2,wxPalmOS use wxGDIImageHandler as base class
-// since it allows some code reuse there.
+// All ports except wxMSW and wxOS2 use wxBitmapHandler and wxBitmapBase as
+// base class for wxBitmapHandler; wxMSW and wxOS2 use wxGDIImageHandler as
+// base class since it allows some code reuse there.
 #if wxUSE_BITMAP_BASE
 
 // ----------------------------------------------------------------------------
@@ -237,10 +237,7 @@ protected:
 
 // the wxBITMAP_DEFAULT_TYPE constant defines the default argument value
 // for wxBitmap's ctor and wxBitmap::LoadFile() functions.
-#if defined(__WXPALMOS__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
-    #include "wx/palmos/bitmap.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/msw/bitmap.h"
 #elif defined(__WXMOTIF__)

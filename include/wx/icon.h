@@ -23,10 +23,7 @@
 // constant defines the default argument value for wxIcon ctor and wxIcon::LoadFile()
 // functions.
 
-#if defined(__WXPALMOS__)
-  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
-  #include "wx/generic/icon.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
   #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_ICO_RESOURCE
   #include "wx/msw/icon.h"
 #elif defined(__WXMOTIF__)

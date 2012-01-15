@@ -61,9 +61,7 @@ private:
 // now include the actual class declaration
 // ----------------------------------------------------------------------------
 
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/taskbar.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/taskbar.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/taskbar.h"

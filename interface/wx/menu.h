@@ -422,7 +422,6 @@ public:
     and have a special meaning since entries using these IDs will be taken out
     of the normal menus under MacOS X and will be inserted into the system menu
     (following the appropriate MacOS X interface guideline).
-    On PalmOS @e wxID_EXIT is disabled according to Palm OS Companion guidelines.
 
     Menu items may be either @e normal items, @e check items or @e radio items.
     Normal items don't have any special properties while the check items have a

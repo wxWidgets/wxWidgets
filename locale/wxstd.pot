@@ -23,7 +23,7 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 
-#: ../src/palmos/utils.cpp:265 ../src/richtext/richtextstyledlg.cpp:205
+#: ../src/richtext/richtextstyledlg.cpp:205
 #: ../src/richtext/richtextstyledlg.cpp:217
 msgid " "
 msgstr ""
@@ -1988,7 +1988,7 @@ msgstr ""
 msgid "Choose a file"
 msgstr ""
 
-#: ../src/palmos/colordlg.cpp:73 ../src/generic/colrdlgg.cpp:145
+#: ../src/generic/colrdlgg.cpp:145
 #: ../src/gtk/colordlg.cpp:60
 msgid "Choose colour"
 msgstr ""

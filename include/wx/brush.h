@@ -70,9 +70,7 @@ public:
     }
 };
 
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/brush.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/brush.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
     #include "wx/x11/brush.h"

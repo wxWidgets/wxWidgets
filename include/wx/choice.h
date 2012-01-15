@@ -84,8 +84,6 @@ private:
     #include "wx/cocoa/choice.h"
 #elif defined(__WXPM__)
     #include "wx/os2/choice.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/choice.h"
 #endif
 
 #endif // wxUSE_CHOICE
