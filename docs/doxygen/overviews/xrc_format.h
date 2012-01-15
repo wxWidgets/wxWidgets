@@ -607,7 +607,7 @@ Example:
 @endcode
 
 
-@subsubsection xrc_wxtogglebuttton wxBitmapToggleButton
+@subsubsection xrc_wxbitmaptogglebuttton wxBitmapToggleButton
 
 @beginTable
 @hdr3col{property, type, description}
