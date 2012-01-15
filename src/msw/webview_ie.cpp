@@ -37,6 +37,7 @@ namespace {
 
 DEFINE_GUID(wxIID_IInternetProtocolRoot,0x79eac9e3,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
 DEFINE_GUID(wxIID_IInternetProtocol,0x79eac9e4,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
+DEFINE_GUID(wxIID_IDocHostUIHandler, 0xbd3f23c0, 0xd43e, 0x11cf, 0x89, 0x3b, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x1a);
 
 }
 
@@ -81,7 +82,10 @@ bool wxWebViewIE::Create(wxWindow* parent,
     m_webBrowser->put_RegisterAsBrowser(VARIANT_TRUE);
     m_webBrowser->put_RegisterAsDropTarget(VARIANT_TRUE);
 
-    m_container = new wxActiveXContainer(this, IID_IWebBrowser2, m_webBrowser);
+    m_uiHandler = new DocHostUIHandler;
+    m_uiHandler->AddRef();
+
+    m_container = new wxIEContainer(this, IID_IWebBrowser2, m_webBrowser, m_uiHandler);
 
     LoadURL(url);
     return true;
@@ -93,6 +97,8 @@ wxWebViewIE::~wxWebViewIE()
     {
         m_factories[i]->Release();
     }
+
+    m_uiHandler->Release();
 }
 
 void wxWebViewIE::LoadURL(const wxString& url)
@@ -112,7 +118,7 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
         param->bstrVal = bstr;
 
         hr = SafeArrayUnaccessData(psaStrings);
-        
+
         IHTMLDocument2* document = GetDocument();
         document->write(psaStrings);
         document->close();
@@ -1154,5 +1160,170 @@ STDMETHODIMP ClassFactory::LockServer(BOOL fLock)
     wxUnusedVar(fLock);
     return S_OK;
 }
+
+wxIEContainer::wxIEContainer(wxWindow *parent, REFIID iid, IUnknown *pUnk, 
+                             DocHostUIHandler* uiHandler) :
+    wxActiveXContainer(parent,iid,pUnk)
+{
+    m_uiHandler = uiHandler;
+}
+
+wxIEContainer::~wxIEContainer()
+{
+}
+
+bool wxIEContainer::QueryClientSiteInterface(REFIID iid, void **_interface, 
+                                             const char *&desc)
+{
+    if (m_uiHandler && IsEqualIID(iid, wxIID_IDocHostUIHandler))
+    {
+        *_interface = (IUnknown *) (wxIDocHostUIHandler *) m_uiHandler;
+        desc = "IDocHostUIHandler";
+        return true;
+    }
+    return false;
+}
+
+HRESULT DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, 
+                                          IUnknown *pcmdtReserved, 
+                                          IDispatch *pdispReserved)
+{
+    wxUnusedVar(dwID);
+    wxUnusedVar(ppt);
+    wxUnusedVar(pcmdtReserved);
+    wxUnusedVar(pdispReserved);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
+{
+    //don't show 3d border and ebales themes.
+    pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_THEME;
+    return S_OK;
+}
+
+HRESULT DocHostUIHandler::ShowUI(DWORD dwID,
+                                 IOleInPlaceActiveObject *pActiveObject, 
+                                 IOleCommandTarget *pCommandTarget,
+                                 IOleInPlaceFrame *pFrame,
+                                 IOleInPlaceUIWindow *pDoc)
+{
+    wxUnusedVar(dwID);
+    wxUnusedVar(pActiveObject);
+    wxUnusedVar(pCommandTarget);
+    wxUnusedVar(pFrame);
+    wxUnusedVar(pDoc);
+    return S_FALSE;
+}
+
+HRESULT DocHostUIHandler::HideUI(void)
+{
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::UpdateUI(void)
+{
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::EnableModeless(BOOL fEnable)
+{
+    wxUnusedVar(fEnable);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::OnDocWindowActivate(BOOL fActivate)
+{
+    wxUnusedVar(fActivate);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::OnFrameWindowActivate(BOOL fActivate)
+{
+    wxUnusedVar(fActivate);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::ResizeBorder(LPCRECT prcBorder, 
+                                       IOleInPlaceUIWindow *pUIWindow,
+                                       BOOL fFrameWindow)
+{
+    wxUnusedVar(prcBorder);
+    wxUnusedVar(pUIWindow);
+    wxUnusedVar(fFrameWindow);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg, 
+                                               const GUID *pguidCmdGroup,
+                                               DWORD nCmdID)
+{
+    if(lpMsg && lpMsg->message == WM_KEYDOWN)
+    {
+        //control is down?
+        if((GetKeyState(VK_CONTROL) & 0x8000 ))
+        {
+            //skip CTRL-N, CTRL-F and CTRL-P
+            if(lpMsg->wParam == 'N' || lpMsg->wParam == 'P' || lpMsg->wParam == 'F')
+            {
+                return S_OK;
+            }
+        }
+        //skip F5
+        if(lpMsg->wParam == VK_F5)
+        {
+            return S_OK;
+        }
+    }
+
+    wxUnusedVar(pguidCmdGroup);
+    wxUnusedVar(nCmdID);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::GetOptionKeyPath(LPOLESTR *pchKey,DWORD dw)
+{
+    wxUnusedVar(pchKey);
+    wxUnusedVar(dw);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::GetDropTarget(IDropTarget *pDropTarget,
+                                        IDropTarget **ppDropTarget)
+{
+    wxUnusedVar(pDropTarget);
+    wxUnusedVar(ppDropTarget);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::GetExternal(IDispatch **ppDispatch)
+{
+    wxUnusedVar(ppDispatch);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::TranslateUrl(DWORD dwTranslate,
+                                       OLECHAR *pchURLIn,
+                                       OLECHAR **ppchURLOut)
+{
+    wxUnusedVar(dwTranslate);
+    wxUnusedVar(pchURLIn);
+    wxUnusedVar(ppchURLOut);
+    return E_NOTIMPL;
+}
+
+HRESULT DocHostUIHandler::FilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
+{
+    wxUnusedVar(pDO);
+    wxUnusedVar(ppDORet);
+    return E_NOTIMPL;
+}
+
+BEGIN_IID_TABLE(DocHostUIHandler)
+    ADD_IID(Unknown)
+    ADD_RAW_IID(wxIID_IDocHostUIHandler)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(DocHostUIHandler)
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE

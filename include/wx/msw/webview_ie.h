@@ -150,9 +150,103 @@ class wxIInternetSession : public IUnknown
 
 /* END OF URLMON.H implementation */
 
+/* Same goes for the mshtmhst.h, these are also taken
+ * from mingw-w64 headers.
+ */
+
+typedef enum _tagwxDOCHOSTUIFLAG
+{
+    DOCHOSTUIFLAG_DIALOG = 0x1,
+    DOCHOSTUIFLAG_DISABLE_HELP_MENU = 0x2,
+    DOCHOSTUIFLAG_NO3DBORDER = 0x4,
+    DOCHOSTUIFLAG_SCROLL_NO = 0x8,
+    DOCHOSTUIFLAG_DISABLE_SCRIPT_INACTIVE = 0x10,
+    DOCHOSTUIFLAG_OPENNEWWIN = 0x20,
+    DOCHOSTUIFLAG_DISABLE_OFFSCREEN = 0x40,
+    DOCHOSTUIFLAG_FLAT_SCROLLBAR = 0x80,
+    DOCHOSTUIFLAG_DIV_BLOCKDEFAULT = 0x100,
+    DOCHOSTUIFLAG_ACTIVATE_CLIENTHIT_ONLY = 0x200,
+    DOCHOSTUIFLAG_OVERRIDEBEHAVIORFACTORY = 0x400,
+    DOCHOSTUIFLAG_CODEPAGELINKEDFONTS = 0x800,
+    DOCHOSTUIFLAG_URL_ENCODING_DISABLE_UTF8 = 0x1000,
+    DOCHOSTUIFLAG_URL_ENCODING_ENABLE_UTF8 = 0x2000,
+    DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE = 0x4000,
+    DOCHOSTUIFLAG_ENABLE_INPLACE_NAVIGATION = 0x10000,
+    DOCHOSTUIFLAG_IME_ENABLE_RECONVERSION = 0x20000,
+    DOCHOSTUIFLAG_THEME = 0x40000,
+    DOCHOSTUIFLAG_NOTHEME = 0x80000,
+    DOCHOSTUIFLAG_NOPICS = 0x100000,
+    DOCHOSTUIFLAG_NO3DOUTERBORDER = 0x200000,
+    DOCHOSTUIFLAG_DISABLE_EDIT_NS_FIXUP = 0x400000,
+    DOCHOSTUIFLAG_LOCAL_MACHINE_ACCESS_CHECK = 0x800000,
+    DOCHOSTUIFLAG_DISABLE_UNTRUSTEDPROTOCOL = 0x1000000
+} DOCHOSTUIFLAG;
+
+typedef struct _tagwxDOCHOSTUIINFO
+{
+    ULONG cbSize;
+    DWORD dwFlags;
+    DWORD dwDoubleClick;
+    OLECHAR *pchHostCss;
+    OLECHAR *pchHostNS;
+} DOCHOSTUIINFO;
+
+class wxIDocHostUIHandler : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL ShowContextMenu(DWORD dwID, POINT *ppt,
+                                              IUnknown *pcmdtReserved,
+                                              IDispatch *pdispReserved) = 0;
+
+    virtual HRESULT wxSTDCALL GetHostInfo(DOCHOSTUIINFO *pInfo) = 0;
+
+    virtual HRESULT wxSTDCALL ShowUI(DWORD dwID, 
+                                     IOleInPlaceActiveObject *pActiveObject,
+                                     IOleCommandTarget *pCommandTarget,
+                                     IOleInPlaceFrame *pFrame,
+                                     IOleInPlaceUIWindow *pDoc) = 0;
+
+    virtual HRESULT wxSTDCALL HideUI(void) = 0;
+
+    virtual HRESULT wxSTDCALL UpdateUI(void) = 0;
+    
+    virtual HRESULT wxSTDCALL EnableModeless(BOOL fEnable) = 0;
+
+    virtual HRESULT wxSTDCALL OnDocWindowActivate(BOOL fActivate) = 0;
+
+    virtual HRESULT wxSTDCALL OnFrameWindowActivate(BOOL fActivate) = 0;
+
+    virtual HRESULT wxSTDCALL ResizeBorder(LPCRECT prcBorder,
+                                           IOleInPlaceUIWindow *pUIWindow,
+                                           BOOL fRameWindow) = 0;
+
+    virtual HRESULT wxSTDCALL TranslateAccelerator(LPMSG lpMsg, 
+                                                   const GUID *pguidCmdGroup,
+                                                   DWORD nCmdID) = 0;
+
+    virtual HRESULT wxSTDCALL GetOptionKeyPath(__out  LPOLESTR *pchKey, 
+                                               DWORD dw) = 0;
+
+    virtual HRESULT wxSTDCALL GetDropTarget(IDropTarget *pDropTarget,
+                                            IDropTarget **ppDropTarget) = 0;
+
+    virtual HRESULT wxSTDCALL GetExternal(IDispatch **ppDispatch) = 0;
+
+    virtual HRESULT wxSTDCALL TranslateUrl(DWORD dwTranslate,
+                                           __in __nullterminated  OLECHAR *pchURLIn,
+                                           __out  OLECHAR **ppchURLOut) = 0;
+
+    virtual HRESULT wxSTDCALL FilterDataObject(IDataObject *pDO,
+                                               IDataObject **ppDORet) = 0;
+};
+
+/* END OF MSHTMHST.H implementation */
+
 struct IHTMLDocument2;
 class wxFSFile;
 class ClassFactory;
+class wxIEContainer;
+class DocHostUIHandler;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
@@ -262,10 +356,11 @@ public:
     DECLARE_EVENT_TABLE();
 
 private:
-    wxActiveXContainer* m_container;
+    wxIEContainer* m_container;
     wxAutomationObject m_ie;
     IWebBrowser2* m_webBrowser;
     DWORD m_dwCookie;
+    DocHostUIHandler* m_uiHandler;
 
     //We store the current zoom type;
     wxWebViewZoomType m_zoomType;
@@ -351,6 +446,69 @@ public:
 
 private:
     wxSharedPtr<wxWebViewHandler> m_handler;
+};
+
+class wxIEContainer : public wxActiveXContainer
+{
+public:
+    wxIEContainer(wxWindow *parent, REFIID iid, IUnknown *pUnk, DocHostUIHandler* uiHandler = NULL);
+    virtual ~wxIEContainer();
+    virtual bool QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc);
+private:
+    DocHostUIHandler* m_uiHandler;
+};
+
+class DocHostUIHandler : public wxIDocHostUIHandler
+{
+public:
+    DocHostUIHandler() {};
+    ~DocHostUIHandler() {};
+    virtual HRESULT wxSTDCALL ShowContextMenu(DWORD dwID, POINT *ppt,
+                                              IUnknown *pcmdtReserved,
+                                              IDispatch *pdispReserved);
+    
+    virtual HRESULT wxSTDCALL GetHostInfo(DOCHOSTUIINFO *pInfo);
+
+    virtual HRESULT wxSTDCALL ShowUI(DWORD dwID,
+                                     IOleInPlaceActiveObject *pActiveObject,
+                                     IOleCommandTarget *pCommandTarget,
+                                     IOleInPlaceFrame *pFrame,
+                                     IOleInPlaceUIWindow *pDoc);
+
+    virtual HRESULT wxSTDCALL HideUI(void);
+
+    virtual HRESULT wxSTDCALL UpdateUI(void);
+
+    virtual HRESULT wxSTDCALL EnableModeless(BOOL fEnable);
+
+    virtual HRESULT wxSTDCALL OnDocWindowActivate(BOOL fActivate);
+
+    virtual HRESULT wxSTDCALL OnFrameWindowActivate(BOOL fActivate);
+
+    virtual HRESULT wxSTDCALL ResizeBorder(LPCRECT prcBorder,
+                                           IOleInPlaceUIWindow *pUIWindow,
+                                           BOOL fRameWindow);
+
+    virtual HRESULT wxSTDCALL TranslateAccelerator(LPMSG lpMsg,
+                                                   const GUID *pguidCmdGroup,
+                                                   DWORD nCmdID);
+
+    virtual HRESULT wxSTDCALL GetOptionKeyPath(__out  LPOLESTR *pchKey, 
+                                               DWORD dw);
+
+    virtual HRESULT wxSTDCALL GetDropTarget(IDropTarget *pDropTarget,
+                                            IDropTarget **ppDropTarget);
+
+    virtual HRESULT wxSTDCALL GetExternal(IDispatch **ppDispatch);
+
+    virtual HRESULT wxSTDCALL TranslateUrl(DWORD dwTranslate,
+                                           __in __nullterminated  OLECHAR *pchURLIn,
+                                           __out  OLECHAR **ppchURLOut);
+
+    virtual HRESULT wxSTDCALL FilterDataObject(IDataObject *pDO,
+                                               IDataObject **ppDORet);
+    //IUnknown
+    DECLARE_IUNKNOWN_METHODS;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)
