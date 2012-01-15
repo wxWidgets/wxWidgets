@@ -82,6 +82,7 @@ private:
     CPPUNIT_TEST_SUITE( MenuTestCase );
         CPPUNIT_TEST( FindInMenubar );
         CPPUNIT_TEST( FindInMenu );
+        CPPUNIT_TEST( EnableTop );
         CPPUNIT_TEST( Count );
         CPPUNIT_TEST( Labels );
         CPPUNIT_TEST( RadioItems );
@@ -92,6 +93,7 @@ private:
 
     void FindInMenubar();
     void FindInMenu();
+    void EnableTop();
     void Count();
     void Labels();
     void RadioItems();
@@ -256,6 +258,16 @@ void MenuTestCase::FindInMenu()
             CPPUNIT_ASSERT( item->GetSubMenu() == submenu );
         }
     }
+}
+
+void MenuTestCase::EnableTop()
+{
+    wxMenuBar* const bar = m_frame->GetMenuBar();
+    CPPUNIT_ASSERT( bar->IsEnabledTop(0) );
+    bar->EnableTop( 0, false );
+    CPPUNIT_ASSERT( !bar->IsEnabledTop(0) );
+    bar->EnableTop( 0, true );
+    CPPUNIT_ASSERT( bar->IsEnabledTop(0) );
 }
 
 void MenuTestCase::Count()

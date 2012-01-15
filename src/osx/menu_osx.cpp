@@ -833,6 +833,17 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
     Refresh();
 }
 
+bool wxMenuBar::IsEnabledTop(size_t pos) const
+{
+    wxCHECK_MSG( IsAttached(), true,
+                 wxT("doesn't work with unattached menubars") );
+
+    wxMenuItem* const item = m_rootMenu->FindItemByPosition(pos+firstMenuPos);
+    wxCHECK_MSG( item, false, wxT("invalid menu index") );
+
+    return item->IsEnabled();
+}
+
 bool wxMenuBar::Enable(bool enable)
 {
     wxCHECK_MSG( IsAttached(), false, wxT("doesn't work with unattached menubars") );

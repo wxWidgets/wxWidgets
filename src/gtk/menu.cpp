@@ -416,6 +416,15 @@ void wxMenuBar::EnableTop( size_t pos, bool flag )
         gtk_widget_set_sensitive( menu->m_owner, flag );
 }
 
+bool wxMenuBar::IsEnabledTop(size_t pos) const
+{
+    wxMenuList::compatibility_iterator node = m_menus.Item( pos );
+    wxCHECK_MSG( node, false, wxS("invalid index in IsEnabledTop") );
+    wxMenu* const menu = node->GetData();
+    wxCHECK_MSG( menu->m_owner, true, wxS("no menu owner?") );
+    return gtk_widget_get_sensitive( menu->m_owner );
+}
+
 wxString wxMenuBar::GetMenuLabel( size_t pos ) const
 {
     wxMenuList::compatibility_iterator node = m_menus.Item( pos );

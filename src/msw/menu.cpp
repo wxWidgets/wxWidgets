@@ -1221,6 +1221,19 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
     Refresh();
 }
 
+bool wxMenuBar::IsEnabledTop(size_t pos) const
+{
+    wxCHECK_MSG( pos < GetMenuCount(), false, wxS("invalid menu index") );
+    WinStruct<MENUITEMINFO> mii;
+    mii.fMask = MIIM_STATE;
+    if ( !::GetMenuItemInfo(GetHmenu(), pos, TRUE, &mii) )
+    {
+        wxLogLastError(wxS("GetMenuItemInfo(menubar)"));
+    }
+
+    return !(mii.fState & MFS_GRAYED);
+}
+
 void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
     wxCHECK_RET( pos < GetMenuCount(), wxT("invalid menu index") );

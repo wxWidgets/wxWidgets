@@ -131,6 +131,7 @@ public:
     virtual wxMenu *Remove(size_t pos);
 
     virtual void EnableTop( size_t pos, bool flag );
+    virtual bool IsEnabledTop(size_t pos) const;
     virtual void SetMenuLabel( size_t pos, const wxString& label );
     virtual wxString GetMenuLabel( size_t pos ) const;
     virtual bool Enable( bool enable = true );

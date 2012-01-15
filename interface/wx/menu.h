@@ -108,6 +108,16 @@ public:
     void Enable(int id, bool enable);
 
     /**
+        Returns true if the menu with the given index is enabled.
+
+        @param pos
+            The menu position (0-based)
+
+        @since 2.9.4
+    */
+    bool IsEnabledTop(size_t pos) const;
+
+    /**
         Enables or disables a whole menu.
 
         @param pos
