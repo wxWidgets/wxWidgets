@@ -1245,7 +1245,6 @@ public:
     void SetMaxSize(const wxTextAttrSize& sz) { m_maxSize = sz; }
 
     /**
-    /**
         Returns the object width.
     */
     wxTextAttrDimension& GetWidth() { return m_size.m_width; }
