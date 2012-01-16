@@ -2412,12 +2412,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         int command = event.RightIsDown() ? wxEVT_COMMAND_LIST_BEGIN_RDRAG
                                           : wxEVT_COMMAND_LIST_BEGIN_DRAG;
 
-        wxListEvent le( command, GetParent()->GetId() );
-        le.SetEventObject( GetParent() );
-        le.m_item.m_itemId =
-        le.m_itemIndex = m_lineLastClicked;
-        le.m_pointDrag = m_dragStart;
-        GetParent()->GetEventHandler()->ProcessEvent( le );
+        SendNotify( m_lineLastClicked, command, m_dragStart );
 
         return;
     }
