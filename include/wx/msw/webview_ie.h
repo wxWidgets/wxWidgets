@@ -493,7 +493,7 @@ public:
                                                    const GUID *pguidCmdGroup,
                                                    DWORD nCmdID);
 
-    virtual HRESULT wxSTDCALL GetOptionKeyPath(__out  LPOLESTR *pchKey, 
+    virtual HRESULT wxSTDCALL GetOptionKeyPath(LPOLESTR *pchKey, 
                                                DWORD dw);
 
     virtual HRESULT wxSTDCALL GetDropTarget(IDropTarget *pDropTarget,
@@ -502,8 +502,8 @@ public:
     virtual HRESULT wxSTDCALL GetExternal(IDispatch **ppDispatch);
 
     virtual HRESULT wxSTDCALL TranslateUrl(DWORD dwTranslate,
-                                           __in __nullterminated  OLECHAR *pchURLIn,
-                                           __out  OLECHAR **ppchURLOut);
+                                           OLECHAR *pchURLIn,
+                                           OLECHAR **ppchURLOut);
 
     virtual HRESULT wxSTDCALL FilterDataObject(IDataObject *pDO,
                                                IDataObject **ppDORet);
