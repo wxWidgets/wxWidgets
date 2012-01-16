@@ -342,12 +342,23 @@ bool wxListHeaderData::IsHit( int x, int y ) const
 
 void wxListHeaderData::GetItem( wxListItem& item )
 {
-    item.m_mask = m_mask;
-    item.m_text = m_text;
-    item.m_image = m_image;
-    item.m_format = m_format;
-    item.m_width = m_width;
-    item.m_state = m_state;
+    long mask = item.m_mask;
+    if ( !mask )
+    {
+        // by default, get everything for backwards compatibility
+        mask = -1;
+    }
+
+    if ( mask & wxLIST_MASK_STATE )
+        item.m_state = m_state;
+    if ( mask & wxLIST_MASK_TEXT )
+        item.m_text = m_text;
+    if ( mask & wxLIST_MASK_IMAGE )
+        item.m_image = m_image;
+    if ( mask & wxLIST_MASK_WIDTH )
+        item.m_width = m_width;
+    if ( mask & wxLIST_MASK_FORMAT )
+        item.m_format = m_format;
 }
 
 int wxListHeaderData::GetImage() const
