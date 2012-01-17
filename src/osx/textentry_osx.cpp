@@ -77,6 +77,8 @@ void wxTextEntry::GetSelection(long* from, long* to) const
 
 void wxTextEntry::SetMaxLength(unsigned long len)
 {
+    if ( GetTextPeer()->CanClipMaxLength() )
+        GetTextPeer()->SetMaxLength(len);
     m_maxLength = len ;
 }
 
