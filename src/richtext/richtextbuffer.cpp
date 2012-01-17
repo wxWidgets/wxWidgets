@@ -3516,6 +3516,163 @@ bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange&
     return foundCount == matchingCount && foundCount != 0;
 }
 
+/// Set character or paragraph properties
+bool wxRichTextParagraphLayoutBox::SetProperties(const wxRichTextRange& range, const wxRichTextProperties& properties, int flags)
+{
+    wxRichTextBuffer* buffer = GetBuffer();
+
+    bool withUndo = ((flags & wxRICHTEXT_SETPROPERTIES_WITH_UNDO) != 0);
+    bool parasOnly = ((flags & wxRICHTEXT_SETPROPERTIES_PARAGRAPHS_ONLY) != 0);
+    bool charactersOnly = ((flags & wxRICHTEXT_SETPROPERTIES_CHARACTERS_ONLY) != 0);
+    bool resetExistingProperties = ((flags & wxRICHTEXT_SETPROPERTIES_RESET) != 0);
+    bool removeProperties = ((flags & wxRICHTEXT_SETPROPERTIES_REMOVE) != 0);
+
+    // If we are associated with a control, make undoable; otherwise, apply immediately
+    // to the data.
+
+    bool haveControl = (buffer->GetRichTextCtrl() != NULL);
+
+    wxRichTextAction* action = NULL;
+
+    if (haveControl && withUndo)
+    {
+        action = new wxRichTextAction(NULL, _("Change Properties"), wxRICHTEXT_CHANGE_PROPERTIES, buffer, this, buffer->GetRichTextCtrl());
+        action->SetRange(range);
+        action->SetPosition(buffer->GetRichTextCtrl()->GetCaretPosition());
+    }
+
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+        // wxASSERT (para != NULL);
+
+        if (para && para->GetChildCount() > 0)
+        {
+            // Stop searching if we're beyond the range of interest
+            if (para->GetRange().GetStart() > range.GetEnd())
+                break;
+
+            if (!para->GetRange().IsOutside(range))
+            {
+                // We'll be using a copy of the paragraph to make style changes,
+                // not updating the buffer directly.
+                wxRichTextParagraph* newPara wxDUMMY_INITIALIZE(NULL);
+
+                if (haveControl && withUndo)
+                {
+                    newPara = new wxRichTextParagraph(*para);
+                    action->GetNewParagraphs().AppendChild(newPara);
+
+                    // Also store the old ones for Undo
+                    action->GetOldParagraphs().AppendChild(new wxRichTextParagraph(*para));
+                }
+                else
+                    newPara = para;
+
+                if (parasOnly)
+                {
+                    if (removeProperties)
+                    {
+                        // Removes the given style from the paragraph
+                        // TODO
+                        newPara->GetProperties().RemoveProperties(properties);
+                    }
+                    else if (resetExistingProperties)
+                        newPara->GetProperties() = properties;
+                    else
+                        newPara->GetProperties().MergeProperties(properties);
+                }
+
+                // When applying paragraph styles dynamically, don't change the text objects' attributes
+                // since they will computed as needed. Only apply the character styling if it's _only_
+                // character styling. This policy is subject to change and might be put under user control.
+
+                // Hm. we might well be applying a mix of paragraph and character styles, in which
+                // case we _do_ want to apply character styles regardless of what para styles are set.
+                // But if we're applying a paragraph style, which has some character attributes, but
+                // we only want the paragraphs to hold this character style, then we _don't_ want to
+                // apply the character style. So we need to be able to choose.
+
+                if (!parasOnly && charactersOnly && range.GetStart() != newPara->GetRange().GetEnd())
+                {
+                    wxRichTextRange childRange(range);
+                    childRange.LimitTo(newPara->GetRange());
+
+                    // Find the starting position and if necessary split it so
+                    // we can start applying different properties.
+                    // TODO: check that the properties actually change or are different
+                    // from properties outside of range
+                    wxRichTextObject* firstObject wxDUMMY_INITIALIZE(NULL);
+                    wxRichTextObject* lastObject wxDUMMY_INITIALIZE(NULL);
+
+                    if (childRange.GetStart() == newPara->GetRange().GetStart())
+                        firstObject = newPara->GetChildren().GetFirst()->GetData();
+                    else
+                        firstObject = newPara->SplitAt(range.GetStart());
+
+                    // Increment by 1 because we're apply the style one _after_ the split point
+                    long splitPoint = childRange.GetEnd();
+                    if (splitPoint != newPara->GetRange().GetEnd())
+                        splitPoint ++;
+
+                    // Find last object
+                    if (splitPoint == newPara->GetRange().GetEnd())
+                        lastObject = newPara->GetChildren().GetLast()->GetData();
+                    else
+                        // lastObject is set as a side-effect of splitting. It's
+                        // returned as the object before the new object.
+                        (void) newPara->SplitAt(splitPoint, & lastObject);
+
+                    wxASSERT(firstObject != NULL);
+                    wxASSERT(lastObject != NULL);
+
+                    if (!firstObject || !lastObject)
+                        continue;
+
+                    wxRichTextObjectList::compatibility_iterator firstNode = newPara->GetChildren().Find(firstObject);
+                    wxRichTextObjectList::compatibility_iterator lastNode = newPara->GetChildren().Find(lastObject);
+
+                    wxASSERT(firstNode);
+                    wxASSERT(lastNode);
+
+                    wxRichTextObjectList::compatibility_iterator node2 = firstNode;
+
+                    while (node2)
+                    {
+                        wxRichTextObject* child = node2->GetData();
+
+                        if (removeProperties)
+                        {
+                            // Removes the given properties from the paragraph
+                            child->GetProperties().RemoveProperties(properties);
+                        }
+                        else if (resetExistingProperties)
+                            child->GetProperties() = properties;
+                        else
+                        {
+                            child->GetProperties().MergeProperties(properties);
+                        }
+
+                        if (node2 == lastNode)
+                            break;
+
+                        node2 = node2->GetNext();
+                    }
+                }
+            }
+        }
+
+        node = node->GetNext();
+    }
+
+    // Do action, or delay it until end of batch.
+    if (haveControl && withUndo)
+        buffer->SubmitAction(action);
+
+    return true;
+}
+
 void wxRichTextParagraphLayoutBox::Reset()
 {
     Clear();
@@ -9466,6 +9623,7 @@ bool wxRichTextAction::Do()
             break;
         }
     case wxRICHTEXT_CHANGE_STYLE:
+    case wxRICHTEXT_CHANGE_PROPERTIES:
         {
             ApplyParagraphs(GetNewParagraphs());
 
@@ -9476,7 +9634,7 @@ bool wxRichTextAction::Do()
             UpdateAppearance(GetPosition());
 
             wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED,
+                m_cmdId == wxRICHTEXT_CHANGE_STYLE ? wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED : wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());
@@ -9619,6 +9777,7 @@ bool wxRichTextAction::Undo()
             break;
         }
     case wxRICHTEXT_CHANGE_STYLE:
+    case wxRICHTEXT_CHANGE_PROPERTIES:
         {
             ApplyParagraphs(GetOldParagraphs());
             // InvalidateHierarchy goes up the hierarchy as well as down, otherwise with a nested object,
@@ -9628,7 +9787,7 @@ bool wxRichTextAction::Undo()
             UpdateAppearance(GetPosition());
 
             wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED,
+                m_cmdId == wxRICHTEXT_CHANGE_STYLE ? wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED : wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());
@@ -11946,6 +12105,18 @@ int wxRichTextProperties::Find(const wxString& name) const
     return -1;
 }
 
+bool wxRichTextProperties::Remove(const wxString& name)
+{
+    int idx = Find(name);
+    if (idx != -1)
+    {
+        m_properties.RemoveAt(idx);
+        return true;
+    }
+    else
+        return false;
+}
+
 wxVariant* wxRichTextProperties::FindOrCreateProperty(const wxString& name)
 {
     int idx = Find(name);
@@ -12032,6 +12203,26 @@ void wxRichTextProperties::SetProperty(const wxString& name, double value)
 void wxRichTextProperties::SetProperty(const wxString& name, bool value)
 {
     SetProperty(name, wxVariant(value, name));
+}
+
+void wxRichTextProperties::RemoveProperties(const wxRichTextProperties& properties)
+{
+    size_t i;
+    for (i = 0; i < properties.GetCount(); i++)
+    {
+        wxString name = properties.GetProperties()[i].GetName();
+        if (HasProperty(name))
+            Remove(name);
+    }
+}
+
+void wxRichTextProperties::MergeProperties(const wxRichTextProperties& properties)
+{
+    size_t i;
+    for (i = 0; i < properties.GetCount(); i++)
+    {
+        SetProperty(properties.GetProperties()[i]);
+    }
 }
 
 wxRichTextObject* wxRichTextObjectAddress::GetObject(wxRichTextParagraphLayoutBox* topLevelContainer) const

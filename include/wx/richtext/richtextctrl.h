@@ -845,6 +845,28 @@ public:
     //@}
 
     /**
+        Sets the properties for the given range, passing flags to determine how the
+        attributes are set. You can merge properties or replace them.
+
+        The end point of range is specified as the last character position of the span
+        of text, plus one. So, for example, to set the properties for a character at
+        position 5, use the range (5,6).
+
+        @a flags may contain a bit list of the following values:
+        - wxRICHTEXT_SETSPROPERTIES_NONE: no flag.
+        - wxRICHTEXT_SETPROPERTIES_WITH_UNDO: specifies that this operation should be
+          undoable.
+        - wxRICHTEXT_SETPROPERTIES_PARAGRAPHS_ONLY: specifies that the properties should only be
+          applied to paragraphs, and not the content.
+        - wxRICHTEXT_SETPROPERTIES_CHARACTERS_ONLY: specifies that the properties should only be
+          applied to characters, and not the paragraph.
+        - wxRICHTEXT_SETPROPERTIES_RESET: resets (clears) the existing properties before applying
+          the new properties.
+        - wxRICHTEXT_SETPROPERTIES_REMOVE: removes the specified properties.
+    */
+    virtual bool SetProperties(const wxRichTextRange& range, const wxRichTextProperties& properties, int flags = wxRICHTEXT_SETPROPERTIES_WITH_UNDO);
+
+    /**
         Deletes the content within the given range.
     */
     virtual bool Delete(const wxRichTextRange& range);
@@ -1631,6 +1653,11 @@ public:
     */
     virtual bool EditProperties(wxRichTextObject* obj, wxWindow* parent) { return obj->EditProperties(parent, & GetBuffer()); }
 
+    /**
+        Gets the object's properties menu label.
+    */
+    virtual wxString GetPropertiesMenuLabel(wxRichTextObject* obj) { return obj->GetPropertiesMenuLabel(); }
+
 // Command handlers
 
     /**
@@ -2023,6 +2050,11 @@ public:
                                                    bool& caretLineStart);
 
     /**
+        Processes mouse movement in order to change the cursor
+    */
+    virtual bool ProcessMouseMovement(wxRichTextParagraphLayoutBox* container, wxRichTextObject* obj, long position, const wxPoint& pos);
+
+    /**
         Font names take a long time to retrieve, so cache them (on demand).
     */
     static const wxArrayString& GetAvailableFontNames();
@@ -2404,6 +2436,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEE
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED, wxRichTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED, wxRichTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED, wxRichTextEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED, wxRichTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED, wxRichTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_BUFFER_RESET, wxRichTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_FOCUS_OBJECT_CHANGED, wxRichTextEvent );
@@ -2429,6 +2462,7 @@ typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
 #define EVT_RICHTEXT_CONTENT_INSERTED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED, id, -1, wxRichTextEventHandler( fn ), NULL ),
 #define EVT_RICHTEXT_CONTENT_DELETED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED, id, -1, wxRichTextEventHandler( fn ), NULL ),
 #define EVT_RICHTEXT_STYLE_CHANGED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED, id, -1, wxRichTextEventHandler( fn ), NULL ),
+#define EVT_RICHTEXT_PROPERTIES_CHANGED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED, id, -1, wxRichTextEventHandler( fn ), NULL ),
 #define EVT_RICHTEXT_SELECTION_CHANGED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED, id, -1, wxRichTextEventHandler( fn ), NULL ),
 #define EVT_RICHTEXT_BUFFER_RESET(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_BUFFER_RESET, id, -1, wxRichTextEventHandler( fn ), NULL ),
 #define EVT_RICHTEXT_FOCUS_OBJECT_CHANGED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_FOCUS_OBJECT_CHANGED, id, -1, wxRichTextEventHandler( fn ), NULL ),

@@ -65,6 +65,7 @@ wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED, wxRichTextEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_BUFFER_RESET, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_FOCUS_OBJECT_CHANGED, wxRichTextEvent );
@@ -231,10 +232,6 @@ wxRichTextCtrl::wxRichTextCtrl(wxWindow* parent,
 {
     Init();
     Create(parent, id, value, pos, size, style, validator, name);
-
-#if wxUSE_DRAG_AND_DROP
-    SetDropTarget(new wxRichTextDropTarget(this));
-#endif
 }
 
 /// Creation
@@ -333,6 +330,10 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     m_contextMenu->Append(wxID_SELECTALL, _("Select &All"));
     m_contextMenu->AppendSeparator();
     m_contextMenu->Append(wxID_RICHTEXT_PROPERTIES1, _("&Properties"));
+
+#if wxUSE_DRAG_AND_DROP
+    SetDropTarget(new wxRichTextDropTarget(this));
+#endif
 
     return true;
 }
@@ -830,18 +831,8 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         if (hit != wxRICHTEXT_HITTEST_NONE && !(hit & wxRICHTEXT_HITTEST_OUTSIDE) && hitObj)
         {
             wxRichTextParagraphLayoutBox* actualContainer = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
-            wxRichTextAttr attr;
-            if (actualContainer && GetStyle(position, attr, actualContainer))
-            {
-                if (attr.HasFlag(wxTEXT_ATTR_URL))
-                {
-                    SetCursor(m_urlCursor);
-                }
-                else if (!attr.HasFlag(wxTEXT_ATTR_URL))
-                {
-                    SetCursor(m_textCursor);
-                }
-            }
+            if (actualContainer)
+                ProcessMouseMovement(actualContainer, hitObj, position, logicalPt);
         }
         else
             SetCursor(m_textCursor);
@@ -1404,6 +1395,25 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             }
         }
     }
+}
+
+bool wxRichTextCtrl::ProcessMouseMovement(wxRichTextParagraphLayoutBox* container, wxRichTextObject* obj, long position, const wxPoint& pos)
+{
+    wxRichTextAttr attr;
+    if (container && GetStyle(position, attr, container))
+    {
+        if (attr.HasFlag(wxTEXT_ATTR_URL))
+        {
+            SetCursor(m_urlCursor);
+        }
+        else if (!attr.HasFlag(wxTEXT_ATTR_URL))
+        {
+            SetCursor(m_textCursor);
+        }
+        return true;
+    }
+    else
+        return false;
 }
 
 /// Delete content if there is a selection, e.g. when pressing a key.
@@ -3569,6 +3579,11 @@ bool wxRichTextCtrl::GetUncombinedStyle(long position, wxRichTextAttr& style, wx
     return container->GetUncombinedStyle(position, style);
 }
 
+bool wxRichTextCtrl::SetProperties(const wxRichTextRange& range, const wxRichTextProperties& properties, int flags)
+{
+    return GetFocusObject()->SetProperties(range.ToInternal(), properties, flags);
+}
+
 /// Set font, and also the buffer attributes
 bool wxRichTextCtrl::SetFont(const wxFont& font)
 {
@@ -4675,13 +4690,13 @@ int wxRichTextContextMenuPropertiesInfo::AddItems(wxRichTextCtrl* ctrl, wxRichTe
 {
     Clear();
     if (obj && ctrl->CanEditProperties(obj))
-        AddItem(obj->GetPropertiesMenuLabel(), obj);
+        AddItem(ctrl->GetPropertiesMenuLabel(obj), obj);
 
-    if (container && container != obj && ctrl->CanEditProperties(container) && m_labels.Index(container->GetPropertiesMenuLabel()) == wxNOT_FOUND)
-        AddItem(container->GetPropertiesMenuLabel(), container);
+    if (container && container != obj && ctrl->CanEditProperties(container) && m_labels.Index(ctrl->GetPropertiesMenuLabel(container)) == wxNOT_FOUND)
+        AddItem(ctrl->GetPropertiesMenuLabel(container), container);
 
-    if (container && container->GetParent() && ctrl->CanEditProperties(container->GetParent()) && m_labels.Index(container->GetParent()->GetPropertiesMenuLabel()) == wxNOT_FOUND)
-        AddItem(container->GetParent()->GetPropertiesMenuLabel(), container->GetParent());
+    if (container && container->GetParent() && ctrl->CanEditProperties(container->GetParent()) && m_labels.Index(ctrl->GetPropertiesMenuLabel(container->GetParent())) == wxNOT_FOUND)
+        AddItem(ctrl->GetPropertiesMenuLabel(container->GetParent()), container->GetParent());
 
     return GetCount();
 }

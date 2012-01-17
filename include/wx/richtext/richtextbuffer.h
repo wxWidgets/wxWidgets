@@ -242,6 +242,29 @@ enum wxRichTextHitTestFlags
 #define wxRICHTEXT_SETSTYLE_REMOVE          0x80
 
 /**
+    Flags for SetProperties.
+ */
+
+#define wxRICHTEXT_SETPROPERTIES_NONE            0x00
+
+// Specifies that this operation should be undoable
+#define wxRICHTEXT_SETPROPERTIES_WITH_UNDO       0x01
+
+// Specifies that the properties should only be applied to paragraphs,
+// and not the content.
+#define wxRICHTEXT_SETPROPERTIES_PARAGRAPHS_ONLY 0x02
+
+// Specifies that the properties should only be applied to characters,
+// and not the paragraph.
+#define wxRICHTEXT_SETPROPERTIES_CHARACTERS_ONLY 0x04
+
+// Resets the existing properties before applying the new properties.
+#define wxRICHTEXT_SETPROPERTIES_RESET           0x08
+
+// Removes the given properties instead of applying them.
+#define wxRICHTEXT_SETPROPERTIES_REMOVE          0x10
+
+/**
     Flags for object insertion.
  */
 
@@ -1589,6 +1612,11 @@ public:
     int Find(const wxString& name) const;
 
     /**
+        Removes the given property.
+    */
+    bool Remove(const wxString& name);
+
+    /**
         Gets the property variant by name.
     */
     const wxVariant& GetProperty(const wxString& name) const;
@@ -1647,6 +1675,16 @@ public:
         Sets  property by name and boolean value.
     */
     void SetProperty(const wxString& name, bool value);
+
+    /**
+        Removes the given properties from these properties.
+    */
+    void RemoveProperties(const wxRichTextProperties& properties);
+
+    /**
+        Merges the given properties with these properties.
+    */
+    void MergeProperties(const wxRichTextProperties& properties);
 
 protected:
     wxRichTextVariantArray  m_properties;
@@ -3105,6 +3143,28 @@ public:
         Fills in the attributes for numbering a paragraph after previousParagraph.
     */
     virtual bool FindNextParagraphNumber(wxRichTextParagraph* previousParagraph, wxRichTextAttr& attr) const;
+
+    /**
+        Sets the properties for the given range, passing flags to determine how the
+        attributes are set. You can merge properties or replace them.
+
+        The end point of range is specified as the last character position of the span
+        of text, plus one. So, for example, to set the properties for a character at
+        position 5, use the range (5,6).
+
+        @a flags may contain a bit list of the following values:
+        - wxRICHTEXT_SETPROPERTIES_NONE: no flag.
+        - wxRICHTEXT_SETPROPERTIES_WITH_UNDO: specifies that this operation should be
+          undoable.
+        - wxRICHTEXT_SETPROPERTIES_PARAGRAPHS_ONLY: specifies that the properties should only be
+          applied to paragraphs, and not the content.
+        - wxRICHTEXT_SETPROPERTIES_CHARACTERS_ONLY: specifies that the properties should only be
+          applied to characters, and not the paragraph.
+        - wxRICHTEXT_SETPROPERTIES_RESET: resets (clears) the existing properties before applying
+          the new properties.
+        - wxRICHTEXT_SETPROPERTIES_REMOVE: removes the specified properties.
+    */
+    virtual bool SetProperties(const wxRichTextRange& range, const wxRichTextProperties& properties, int flags = wxRICHTEXT_SETPROPERTIES_WITH_UNDO);
 
     /**
         Test if this whole range has character attributes of the specified kind. If any
@@ -4925,6 +4985,7 @@ enum wxRichTextCommandId
     wxRICHTEXT_DELETE,
     wxRICHTEXT_CHANGE_ATTRIBUTES,
     wxRICHTEXT_CHANGE_STYLE,
+    wxRICHTEXT_CHANGE_PROPERTIES,
     wxRICHTEXT_CHANGE_OBJECT
 };
 

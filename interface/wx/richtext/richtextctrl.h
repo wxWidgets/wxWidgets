@@ -811,6 +811,28 @@ public:
     //@}
 
     /**
+        Sets the properties for the given range, passing flags to determine how the
+        attributes are set. You can merge properties or replace them.
+
+        The end point of range is specified as the last character position of the span
+        of text, plus one. So, for example, to set the properties for a character at
+        position 5, use the range (5,6).
+
+        @a flags may contain a bit list of the following values:
+        - wxRICHTEXT_SETSPROPERTIES_NONE: no flag.
+        - wxRICHTEXT_SETPROPERTIES_WITH_UNDO: specifies that this operation should be
+          undoable.
+        - wxRICHTEXT_SETPROPERTIES_PARAGRAPHS_ONLY: specifies that the properties should only be
+          applied to paragraphs, and not the content.
+        - wxRICHTEXT_SETPROPERTIES_CHARACTERS_ONLY: specifies that the properties should only be
+          applied to characters, and not the paragraph.
+        - wxRICHTEXT_SETPROPERTIES_RESET: resets (clears) the existing properties before applying
+          the new properties.
+        - wxRICHTEXT_SETPROPERTIES_REMOVE: removes the specified properties.
+    */
+    virtual bool SetProperties(const wxRichTextRange& range, const wxRichTextProperties& properties, int flags = wxRICHTEXT_SETPROPERTIES_WITH_UNDO);
+
+    /**
         Deletes the content within the given range.
     */
     virtual bool Delete(const wxRichTextRange& range);
@@ -1583,12 +1605,17 @@ public:
     /**
         Returns @true if we can edit the object's properties via a GUI.
     */
-    virtual bool CanEditProperties(wxRichTextObject* obj) const { return obj->CanEditProperties(); }
+    virtual bool CanEditProperties(wxRichTextObject* obj) const;
 
     /**
         Edits the object's properties via a GUI.
     */
-    virtual bool EditProperties(wxRichTextObject* obj, wxWindow* parent) { return obj->EditProperties(parent, & GetBuffer()); }
+    virtual bool EditProperties(wxRichTextObject* obj, wxWindow* parent);
+
+    /**
+        Gets the object's properties menu label.
+    */
+    virtual wxString GetPropertiesMenuLabel(wxRichTextObject* obj);
 
 // Command handlers
 
@@ -1982,6 +2009,11 @@ public:
                                                    bool& caretLineStart);
 
     /**
+        Processes mouse movement in order to change the cursor
+    */
+    virtual bool ProcessMouseMovement(wxRichTextParagraphLayoutBox* container, wxRichTextObject* obj, long position, const wxPoint& pos);
+
+    /**
         Font names take a long time to retrieve, so cache them (on demand).
     */
     static const wxArrayString& GetAvailableFontNames();
@@ -2142,6 +2174,9 @@ protected:
         when the control's stylesheet has been replaced, for example when a file
         is loaded into the control.
         Valid event functions: GetOldStyleSheet, GetNewStyleSheet.
+    @event{EVT_RICHTEXT_PROPERTIES_CHANGED(id, func)}
+        Process a @c wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED event, generated when
+        properties have been applied to the control. Valid event functions: GetPosition, GetRange.
     @event{EVT_RICHTEXT_CONTENT_INSERTED(id, func)}
         Process a @c wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when
         content has been inserted into the control.
