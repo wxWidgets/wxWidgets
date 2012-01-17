@@ -997,7 +997,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 #endif
 
     if ( !wxControl::Create( parent, id, pos, size,
-                             style|wxHSCROLL|wxVSCROLL,
+                             style|wxHSCROLL|wxVSCROLL|wxWANTS_CHARS,
                              validator,
                              name ) )
         return false;
