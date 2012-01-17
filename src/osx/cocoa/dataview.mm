@@ -2287,6 +2287,14 @@ wxDataViewItem wxCocoaDataViewControl::GetCurrentItem() const
     return wxDataViewItem([[m_OutlineView itemAtRow:[m_OutlineView selectedRow]] pointer]);
 }
 
+wxDataViewColumn *wxCocoaDataViewControl::GetCurrentColumn() const
+{
+    int col = [m_OutlineView selectedColumn];
+    if ( col == -1 )
+        return NULL;
+    return GetColumn(col);
+}
+
 void wxCocoaDataViewControl::SetCurrentItem(const wxDataViewItem& item)
 {
     // We can't have unselected current item in a NSTableView, as the

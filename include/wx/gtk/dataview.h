@@ -169,6 +169,8 @@ public:
     virtual bool EnableDragSource( const wxDataFormat &format );
     virtual bool EnableDropTarget( const wxDataFormat &format );
 
+    virtual wxDataViewColumn *GetCurrentColumn() const;
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 

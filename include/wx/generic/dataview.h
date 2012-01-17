@@ -222,6 +222,8 @@ public:     // utility functions not part of the API
     // return the column displayed at the given position in the control
     wxDataViewColumn *GetColumnAt(unsigned int pos) const;
 
+    virtual wxDataViewColumn *GetCurrentColumn() const;
+
     virtual void OnInternalIdle();
 
 private:

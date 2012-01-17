@@ -256,6 +256,8 @@ public:
     m_Deleting = deleting;
   }
 
+  virtual wxDataViewColumn *GetCurrentColumn() const;
+
   virtual wxVisualAttributes GetDefaultAttributes() const
   {
       return GetClassDefaultAttributes(GetWindowVariant());

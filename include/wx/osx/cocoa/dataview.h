@@ -474,6 +474,7 @@ public:
     //
     virtual wxDataViewItem GetCurrentItem() const;
     virtual void SetCurrentItem(const wxDataViewItem& item);
+    virtual wxDataViewColumn *GetCurrentColumn() const;
     virtual int  GetSelectedItemsCount() const;
     virtual int  GetSelections(wxDataViewItemArray& sel)   const;
     virtual bool IsSelected(const wxDataViewItem& item) const;

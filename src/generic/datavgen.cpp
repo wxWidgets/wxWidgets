@@ -4858,6 +4858,11 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     }
 }
 
+wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
+{
+    return m_clientArea->GetCurrentColumn();
+}
+
 int wxDataViewCtrl::GetSelectedItemsCount() const
 {
     return m_clientArea->GetSelections().size();

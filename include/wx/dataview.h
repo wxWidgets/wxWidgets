@@ -668,6 +668,9 @@ public:
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
 
+    // Currently focused column of the current item or NULL if no column has focus
+    virtual wxDataViewColumn *GetCurrentColumn() const = 0;
+
     // Selection: both GetSelection() and GetSelections() can be used for the
     // controls both with and without wxDV_MULTIPLE style. For single selection
     // controls GetSelections() is not very useful however. And for multi

@@ -1102,6 +1102,12 @@ wxDataViewItem wxMacDataViewDataBrowserListViewControl::GetCurrentItem() const
     return wxDataViewItem();
 }
 
+wxDataViewColumn *wxMacDataViewDataBrowserListViewControl::GetCurrentColumn() const
+{
+    wxFAIL_MSG( "unimplemented for Carbon" );
+    return NULL;
+}
+
 void wxMacDataViewDataBrowserListViewControl::SetCurrentItem(const wxDataViewItem& WXUNUSED(item))
 {
     wxFAIL_MSG( "unimplemented for Carbon" );

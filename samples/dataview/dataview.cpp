@@ -943,6 +943,17 @@ void MyFrame::OnShowCurrent(wxCommandEvent& WXUNUSED(event))
     {
         wxLogMessage("There is no current item.");
     }
+
+    wxDataViewColumn *col = m_ctrl[0]->GetCurrentColumn();
+    if ( col )
+    {
+        wxLogMessage("Current column: %d",
+                     m_ctrl[0]->GetColumnPosition(col));
+    }
+    else
+    {
+        wxLogMessage("There is no current column.");
+    }
 }
 
 void MyFrame::OnSetNinthCurrent(wxCommandEvent& WXUNUSED(event))

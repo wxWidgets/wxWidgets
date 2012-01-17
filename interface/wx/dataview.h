@@ -1060,11 +1060,26 @@ public:
         item may be selected or not but under OS X the current item is always
         selected.
 
-        @see SetCurrentItem()
+        @see SetCurrentItem(), GetCurrentColumn()
 
         @since 2.9.2
      */
     wxDataViewItem GetCurrentItem() const;
+
+    /**
+        Returns the column that currently has focus.
+
+        If the focus is set to individual cell within the currently focused
+        item (as opposed to being on the item as a whole), then this is the
+        column that the focus is on.
+
+        Returns NULL if no column currently has focus.
+
+        @see GetCurrentItem()
+
+        @since 2.9.4
+     */
+    wxDataViewColumn *GetCurrentColumn() const;
 
     /**
         Returns indentation.

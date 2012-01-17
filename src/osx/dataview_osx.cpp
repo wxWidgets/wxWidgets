@@ -530,6 +530,11 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     GetDataViewPeer()->SetCurrentItem(item);
 }
 
+wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
+{
+    return GetDataViewPeer()->GetCurrentColumn();
+}
+
 wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const
 {
   if (item.IsOk() && (columnPtr != NULL))

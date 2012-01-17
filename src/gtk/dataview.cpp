@@ -4840,6 +4840,19 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     gtk_tree_view_set_cursor(GTK_TREE_VIEW(m_treeview), path, NULL, FALSE);
 }
 
+wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
+{
+    // The tree doesn't have any current item if it hadn't been created yet but
+    // it's arguably not an error to call this function in this case so just
+    // return NULL without asserting.
+    if ( !m_treeview )
+        return NULL;
+
+    GtkTreeViewColumn *col;
+    gtk_tree_view_get_cursor(GTK_TREE_VIEW(m_treeview), NULL, &col);
+    return FromGTKColumn(col);
+}
+
 void wxDataViewCtrl::StartEditor(const wxDataViewItem& item, unsigned int column)
 {
     wxCHECK_RET( m_treeview,
