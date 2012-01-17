@@ -4803,7 +4803,6 @@ void wxDataViewCtrl::OnInternalIdle()
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 {
-#if 1
     unsigned int len = GetColumnCount();
     for ( unsigned int i = 0; i < len; i++ )
     {
@@ -4813,25 +4812,6 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
     }
 
     return wxNOT_FOUND;
-#else
-    // This returns the position in pixels which is not what we want.
-    int ret = 0,
-        dummy = 0;
-    unsigned int len = GetColumnCount();
-    for ( unsigned int i = 0; i < len; i++ )
-    {
-        wxDataViewColumn * col = GetColumnAt(i);
-        if (col->IsHidden())
-            continue;
-        ret += col->GetWidth();
-        if (column==col)
-        {
-            CalcScrolledPosition( ret, dummy, &ret, &dummy );
-            break;
-        }
-    }
-    return ret;
-#endif
 }
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
