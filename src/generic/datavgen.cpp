@@ -3599,7 +3599,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                     wxDataViewColumn *editableCol = FindColumnForEditing(item, wxDATAVIEW_CELL_EDITABLE);
 
                     if ( editableCol )
-                        GetOwner()->StartEditor(item, GetOwner()->GetColumnIndex(editableCol));
+                        GetOwner()->EditItem(item, editableCol);
                 }
             }
             break;
@@ -5021,13 +5021,12 @@ bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
     return false;
 }
 
-void wxDataViewCtrl::StartEditor( const wxDataViewItem & item, unsigned int column )
+void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn *column)
 {
-    wxDataViewColumn* col = GetColumn( column );
-    if (!col)
-        return;
+    wxCHECK_RET( item.IsOk(), "invalid item" );
+    wxCHECK_RET( column, "no column provided" );
 
-    m_clientArea->StartEditing(item, col);
+    m_clientArea->StartEditing(item, column);
 }
 
 #endif // !wxUSE_GENERICDATAVIEWCTRL

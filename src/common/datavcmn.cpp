@@ -1418,6 +1418,11 @@ wxDataViewCtrlBase::InsertColumn( unsigned int WXUNUSED(pos), wxDataViewColumn *
     return true;
 }
 
+void wxDataViewCtrlBase::StartEditor(const wxDataViewItem& item, unsigned int column)
+{
+    EditItem(item, GetColumn(column));
+}
+
 // ---------------------------------------------------------
 // wxDataViewEvent
 // ---------------------------------------------------------

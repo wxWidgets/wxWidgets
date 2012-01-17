@@ -4853,18 +4853,18 @@ wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
     return FromGTKColumn(col);
 }
 
-void wxDataViewCtrl::StartEditor(const wxDataViewItem& item, unsigned int column)
+void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn *column)
 {
     wxCHECK_RET( m_treeview,
                  "Current item can't be set before creating the control." );
+    wxCHECK_RET( item.IsOk(), "invalid item" );
+    wxCHECK_RET( column, "no column provided" );
 
     // We need to make sure the model knows about this item or the path would
     // be invalid and gtk_tree_view_set_cursor() would silently do nothing.
     ExpandAncestors(item);
-    
-    wxDataViewColumn *dvcolumn = GetColumn(column);
-    wxASSERT_MSG(dvcolumn, "Could not retrieve column");
-    GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(dvcolumn->GetGtkHandle());
+
+    GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
 
     // We also need to preserve the existing selection from changing.
     // Unfortunately the only way to do it seems to use our own selection

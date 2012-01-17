@@ -701,9 +701,10 @@ public:
 
     virtual bool SetRowHeight( int WXUNUSED(rowHeight) ) { return false; }
 
-    virtual void StartEditor( const wxDataViewItem & WXUNUSED(item),
-                              unsigned int WXUNUSED(column) )
-        { }
+    virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column) = 0;
+
+    // Use EditItem() instead
+    wxDEPRECATED( void StartEditor(const wxDataViewItem& item, unsigned int column) );
 
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))

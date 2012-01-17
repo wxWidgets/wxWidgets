@@ -160,7 +160,7 @@ public:
 
     virtual bool SetRowHeight( int rowHeight );
 
-    virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
+    virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column);
 
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );

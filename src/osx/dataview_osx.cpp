@@ -635,9 +635,9 @@ void wxDataViewCtrl::AddChildren(wxDataViewItem const& parentItem)
   (void) GetModel()->ItemsAdded(parentItem,items);
 }
 
-void wxDataViewCtrl::StartEditor( const wxDataViewItem & item, unsigned int column )
+void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn *column)
 {
-    GetDataViewPeer()->StartEditor(item, column);
+    GetDataViewPeer()->StartEditor(item, GetColumnPosition(column));
 }
 
 void wxDataViewCtrl::FinishCustomItemEditing()

@@ -189,7 +189,7 @@ public:
 
     virtual wxBorder GetDefaultBorder() const;
 
-    virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
+    virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column);
 
 protected:
     virtual void EnsureVisible( int row, int column );

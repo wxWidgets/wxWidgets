@@ -998,6 +998,17 @@ public:
     virtual bool DeleteColumn(wxDataViewColumn* column);
 
     /**
+        Programmatically starts editing given cell of @a item.
+
+        Doesn't do anything if the item or this column is not editable.
+
+        @note Currently not implemented in wxOSX/Carbon.
+
+        @since 2.9.4
+    */
+    virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column);
+
+    /**
        Enable drag operations using the given @a format.
     */
     virtual bool EnableDragSource( const wxDataFormat &format );
@@ -1212,14 +1223,6 @@ public:
         Sets the selection to the array of wxDataViewItems.
     */
     virtual void SetSelections(const wxDataViewItemArray& sel);
-
-    /** 
-        Programmatically starts editing the given item on the given column.
-        Currently not implemented on wxOSX Carbon.
-        @since 2.9.2
-    */
-    
-    virtual void StartEditor(const wxDataViewItem & item, unsigned int column);
 
     /**
         Unselect the given item.
