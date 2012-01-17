@@ -97,20 +97,21 @@ public:
                 const wxString& name = wxRadioButtonNameStr);
 
     /**
-        Returns @true if the radio button is depressed, @false otherwise.
+        Returns @true if the radio button is checked, @false otherwise.
     */
     virtual bool GetValue() const;
 
     /**
-        Sets the radio button to selected or deselected status. This does not cause a
+        Sets the radio button to checked or unchecked status. This does not cause a
         @c wxEVT_COMMAND_RADIOBUTTON_SELECTED event to get emitted.
-        
-        If the radio button belongs to a group you can only select a radio button
-        (which will deselect the previously selected button) and you therefore
-        must not call this method with value set to @false in that case.
+
+        If the radio button belongs to a radio group exactly one button in the
+        group may be checked and so this method can be only called with @a
+        value set to @true. To uncheck a radio button in a group you must check
+        another button in the same group.
 
         @param value
-            @true to select, @false to deselect.
+            @true to check, @false to uncheck.
     */
     virtual void SetValue(bool value);
 };
