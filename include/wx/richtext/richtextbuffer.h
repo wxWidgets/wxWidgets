@@ -130,6 +130,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObjectList;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextLine;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextParagraph;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextFileHandler;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextDrawingHandler;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextStyleSheet;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextListStyleDefinition;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextEvent;
@@ -2052,6 +2053,52 @@ public:
 };
 
 /**
+    @class wxRichTextDrawingContext
+
+    A class for passing information to drawing and measuring functions.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextBuffer, wxRichTextCtrl
+*/
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextDrawingContext: public wxObject
+{
+    DECLARE_CLASS(wxRichTextDrawingContext)
+public:
+
+    /**
+        Pass the buffer to the context so the context can retrieve information
+        such as virtual attributes.
+    */
+    wxRichTextDrawingContext(wxRichTextBuffer* buffer) { Init(); m_buffer = buffer; }
+
+    void Init() { m_buffer = NULL; }
+
+    /**
+        Does this object have virtual attributes?
+        Virtual attributes can be provided for visual cues without
+        affecting the actual styling.
+    */
+    bool HasVirtualAttributes(wxRichTextObject* obj) const;
+
+    /**
+        Returns the virtual attributes for this object.
+        Virtual attributes can be provided for visual cues without
+        affecting the actual styling.
+    */
+    wxRichTextAttr GetVirtualAttributes(wxRichTextObject* obj) const;
+
+    /**
+        Applies any virtual attributes relevant to this object.
+    */
+    bool ApplyVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const;
+
+    wxRichTextBuffer*   m_buffer;
+};
+
+/**
     @class wxRichTextObject
 
     This is the base for drawable rich text objects.
@@ -2079,7 +2126,7 @@ public:
         Draw the item, within the given range. Some objects may ignore the range (for
         example paragraphs) while others must obey it (lines, to implement wrapping)
     */
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style) = 0;
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style) = 0;
 
     /**
         Lay the item out at the specified position with the given size constraint.
@@ -2087,7 +2134,7 @@ public:
         and @a parentRect is the container that is used to determine a relative size
         or position (for example if a text box must be 50% of the parent text box).
     */
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style) = 0;
+    virtual bool Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style) = 0;
 
     /**
         Hit-testing: returns a flag indicating hit test details, plus
@@ -2106,12 +2153,12 @@ public:
         @return One of the ::wxRichTextHitTestFlags values.
     */
 
-    virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
+    virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
     /**
         Finds the absolute position and row height for the given character position.
     */
-    virtual bool FindPosition(wxDC& WXUNUSED(dc), long WXUNUSED(index), wxPoint& WXUNUSED(pt), int* WXUNUSED(height), bool WXUNUSED(forceLineStart)) { return false; }
+    virtual bool FindPosition(wxDC& WXUNUSED(dc), wxRichTextDrawingContext& WXUNUSED(context), long WXUNUSED(index), wxPoint& WXUNUSED(pt), int* WXUNUSED(height), bool WXUNUSED(forceLineStart)) { return false; }
 
     /**
         Returns the best size, i.e. the ideal starting size for this object irrespective
@@ -2125,7 +2172,7 @@ public:
         is invalid for this object.
     */
 
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const  = 0;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const  = 0;
 
     /**
         Do a split from @a pos, returning an object containing the second part, and setting
@@ -2421,7 +2468,7 @@ public:
         Calculates the available content space in the given rectangle, given the
         margins, border and padding specified in the object's attributes.
     */
-    virtual wxRect GetAvailableContentArea(wxDC& dc, const wxRect& outerRect) const;
+    virtual wxRect GetAvailableContentArea(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& outerRect) const;
 
     /**
         Lays out the object first with a given amount of space, and then if no width was specified in attr,
@@ -2431,7 +2478,7 @@ public:
         in a previous layout pass to @a availableParentSpace, but should have a width of 50% of @a availableContainerSpace.
         (If these two rects were the same, a 2nd pass could see the object getting too small.)
     */
-    virtual bool LayoutToBestSize(wxDC& dc, wxRichTextBuffer* buffer,
+    virtual bool LayoutToBestSize(wxDC& dc, wxRichTextDrawingContext& context, wxRichTextBuffer* buffer,
                     const wxRichTextAttr& parentAttr, const wxRichTextAttr& attr,
                     const wxRect& availableParentSpace, const wxRect& availableContainerSpace, int style);
 
@@ -2637,9 +2684,9 @@ public:
 
 // Overridables
 
-    virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
+    virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
-    virtual bool FindPosition(wxDC& dc, long index, wxPoint& pt, int* height, bool forceLineStart);
+    virtual bool FindPosition(wxDC& dc, wxRichTextDrawingContext& context, long index, wxPoint& pt, int* height, bool forceLineStart);
 
     virtual void CalculateRange(long start, long& end);
 
@@ -2647,7 +2694,7 @@ public:
 
     virtual wxString GetTextForRange(const wxRichTextRange& range) const;
 
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
     virtual void Dump(wxTextOutputStream& stream);
 
@@ -2752,13 +2799,13 @@ public:
 
 // Overridables
 
-    virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
+    virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
+    virtual bool Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style);
 
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
     virtual bool DeleteRange(const wxRichTextRange& range);
 
@@ -2852,7 +2899,7 @@ public:
     /**
         Draws the floating objects in this buffer.
     */
-    void DrawFloats(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+    void DrawFloats(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
     /**
         Moves an anchored object to another paragraph.
@@ -3344,7 +3391,7 @@ public:
 
 // Overridables
 
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
     virtual wxString GetXMLNodeName() const { return wxT("textbox"); }
 
@@ -3531,15 +3578,15 @@ public:
 
 // Overridables
 
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
+    virtual bool Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style);
 
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
-    virtual bool FindPosition(wxDC& dc, long index, wxPoint& pt, int* height, bool forceLineStart);
+    virtual bool FindPosition(wxDC& dc, wxRichTextDrawingContext& context, long index, wxPoint& pt, int* height, bool forceLineStart);
 
-    virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
+    virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
     virtual void CalculateRange(long start, long& end);
 
@@ -3604,7 +3651,7 @@ public:
         Finds a suitable wrap position. @a wrapPosition is the last position in the line to the left
         of the split.
     */
-    bool FindWrapPosition(const wxRichTextRange& range, wxDC& dc, int availableSpace, long& wrapPosition, wxArrayInt* partialExtents);
+    bool FindWrapPosition(const wxRichTextRange& range, wxDC& dc, wxRichTextDrawingContext& context, int availableSpace, long& wrapPosition, wxArrayInt* partialExtents);
 
     /**
         Finds the object at the given position.
@@ -3660,7 +3707,7 @@ public:
     /**
         Lays out the floating objects.
     */
-    void LayoutFloat(wxDC& dc, const wxRect& rect, int style, wxRichTextFloatCollector* floatCollector);
+    void LayoutFloat(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, int style, wxRichTextFloatCollector* floatCollector);
 
 protected:
 
@@ -3702,11 +3749,11 @@ public:
 
 // Overridables
 
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
+    virtual bool Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style);
 
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
     virtual wxString GetTextForRange(const wxRichTextRange& range) const;
 
@@ -3978,11 +4025,11 @@ public:
 
 // Overridables
 
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
+    virtual bool Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style);
 
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
     /**
         Returns the 'natural' size for this object - the image size.
@@ -4526,7 +4573,7 @@ public:
 
 // Implementation
 
-    virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
+    virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
     /**
         Copies the buffer.
@@ -4652,6 +4699,36 @@ public:
     static void InitStandardHandlers();
 
     /**
+        Returns the drawing handlers.
+    */
+    static wxList& GetDrawingHandlers() { return sm_drawingHandlers; }
+
+    /**
+        Adds a drawing handler to the end.
+    */
+    static void AddDrawingHandler(wxRichTextDrawingHandler *handler);
+
+    /**
+        Inserts a drawing handler at the front.
+    */
+    static void InsertDrawingHandler(wxRichTextDrawingHandler *handler);
+
+    /**
+        Removes a drawing handler.
+    */
+    static bool RemoveDrawingHandler(const wxString& name);
+
+    /**
+        Finds a drawing handler by name.
+    */
+    static wxRichTextDrawingHandler *FindDrawingHandler(const wxString& name);
+
+    /**
+        Clean up drawing handlers.
+    */
+    static void CleanUpDrawingHandlers();
+
+    /**
         Returns the renderer object.
     */
     static wxRichTextRenderer* GetRenderer() { return sm_renderer; }
@@ -4734,6 +4811,9 @@ protected:
     /// File handlers
     static wxList           sm_handlers;
 
+    /// Drawing handlers
+    static wxList           sm_drawingHandlers;
+
     /// Renderer
     static wxRichTextRenderer* sm_renderer;
 
@@ -4773,7 +4853,7 @@ public:
 
 // Overridables
 
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
     virtual wxString GetXMLNodeName() const { return wxT("cell"); }
 
@@ -4824,13 +4904,13 @@ public:
 
 // Overridables
 
-    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
     virtual wxString GetXMLNodeName() const { return wxT("table"); }
 
-    virtual bool Layout(wxDC& dc, const wxRect& rect, const wxRect& parentRect, int style);
+    virtual bool Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style);
 
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
     virtual bool DeleteRange(const wxRichTextRange& range);
 
@@ -4848,7 +4928,7 @@ public:
     virtual bool ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler);
 #endif
 
-    virtual bool FindPosition(wxDC& dc, long index, wxPoint& pt, int* height, bool forceLineStart);
+    virtual bool FindPosition(wxDC& dc, wxRichTextDrawingContext& context, long index, wxPoint& pt, int* height, bool forceLineStart);
 
     virtual void CalculateRange(long start, long& end);
 
@@ -5511,6 +5591,54 @@ protected:
     virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
 #endif
 
+};
+
+/**
+    @class wxRichTextDrawingHandler
+
+    The base class for custom drawing handlers.
+    Currently, drawing handlers can provide virtual handlers.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextBuffer, wxRichTextCtrl
+*/
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextDrawingHandler: public wxObject
+{
+    DECLARE_CLASS(wxRichTextDrawingHandler)
+public:
+    /**
+        Creates a drawing handler object.
+    */
+    wxRichTextDrawingHandler(const wxString& name = wxEmptyString)
+        : m_name(name)
+        { }
+
+    /**
+        Returns @true if this object has virtual attributes that we can provide.
+    */
+    virtual bool HasVirtualAttributes(wxRichTextObject* obj) const = 0;
+
+    /**
+        Provides virtual attributes that we can provide.
+    */
+    virtual bool GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const = 0;
+
+    /**
+        Sets the name of the nandler.
+    */
+    void SetName(const wxString& name) { m_name = name; }
+
+    /**
+        Returns the name of the nandler.
+    */
+    wxString GetName() const { return m_name; }
+
+protected:
+
+    wxString  m_name;
 };
 
 #if wxUSE_DATAOBJ

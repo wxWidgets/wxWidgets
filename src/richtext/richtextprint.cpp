@@ -67,7 +67,8 @@ void wxRichTextPrintout::OnPreparePrinting()
     {
         GetRichTextBuffer()->Invalidate(wxRICHTEXT_ALL);
 
-        GetRichTextBuffer()->Layout(*GetDC(), rect, rect, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
+        wxRichTextDrawingContext context(GetRichTextBuffer());
+        GetRichTextBuffer()->Layout(*GetDC(), context, rect, rect, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
 
         // Now calculate the page breaks
 
@@ -300,7 +301,8 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
 
     dc->SetClippingRegion(wxRect(textRect.x, textRect.y + yOffset, textRect.width, textRect.height));
 
-    GetRichTextBuffer()->Draw(*dc, rangeToDraw, wxRichTextSelection(), textRect, 0 /* descent */, wxRICHTEXT_DRAW_IGNORE_CACHE|wxRICHTEXT_DRAW_PRINT /* flags */);
+    wxRichTextDrawingContext context(GetRichTextBuffer());
+    GetRichTextBuffer()->Draw(*dc, context, rangeToDraw, wxRichTextSelection(), textRect, 0 /* descent */, wxRICHTEXT_DRAW_IGNORE_CACHE|wxRICHTEXT_DRAW_PRINT /* flags */);
 
     dc->DestroyClippingRegion();
 
