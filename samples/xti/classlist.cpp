@@ -155,7 +155,7 @@ void ClassListDialog::CreateControls()
 
     itemBoxSizer5->Add(m_pChoiceBook, 0, wxGROW|wxALL, 5);
 
-    m_pTextCtrl = new wxTextCtrl( this, ID_TEXTCTRL, _T(""), wxDefaultPosition, wxSize(500, -1), wxTE_MULTILINE|wxTE_READONLY );
+    m_pTextCtrl = new wxTextCtrl( this, ID_TEXTCTRL, wxT(""), wxDefaultPosition, wxSize(500, -1), wxTE_MULTILINE|wxTE_READONLY );
     itemBoxSizer5->Add(m_pTextCtrl, 3, wxGROW|wxALL, 5);
 
     wxStdDialogButtonSizer* itemStdDialogButtonSizer17 = new wxStdDialogButtonSizer;
@@ -242,7 +242,7 @@ void ClassListDialog::InitControls()
             m_pSizeListBox->Append(arr[i]);
 
     // add root item to parent-mode treectrl
-    wxTreeItemId id = m_pParentTreeCtrl->AddRoot(_T("wxObject"));
+    wxTreeItemId id = m_pParentTreeCtrl->AddRoot(wxT("wxObject"));
 
     // recursively add all leaves to the treectrl
     int count = AddClassesWithParent(CLASSINFO(wxObject), id);
@@ -288,7 +288,7 @@ void ClassListDialog::UpdateFilterText()
 
 void ClassListDialog::UpdateClassInfo(const wxString &itemName)
 {
-    wxString classname = itemName.BeforeFirst(_T(' '));
+    wxString classname = itemName.BeforeFirst(wxT(' '));
     wxCheckBox *cb = wx_static_cast(wxCheckBox*, FindWindow(ID_SHOW_PROPERTIES_RECURSIVELY));
 
     m_pTextCtrl->SetValue(
@@ -375,61 +375,61 @@ wxString DumpStr(const wxString &str)
 wxString DumpTypeInfo(const wxTypeInfo *ti)
 {
     if (!ti)
-        return _T("none");
+        return wxT("none");
 
     return DumpStr(ti->GetTypeName());
 }
 
 wxString DumpPropertyAccessor(const wxPropertyAccessor *acc, int indent)
 {
-    wxString ind = _T("\n") + wxString(indent, wxT(' '));
+    wxString ind = wxT("\n") + wxString(indent, wxT(' '));
     wxString infostr;
 
     if (!acc)
-        return ind + _T("no property accessors");
+        return ind + wxT("no property accessors");
     
     if (acc->HasSetter())
-        infostr << ind << _T("setter name: ") << acc->GetSetterName();
+        infostr << ind << wxT("setter name: ") << acc->GetSetterName();
     if (acc->HasCollectionGetter())
-        infostr << ind << _T("collection getter name: ") << acc->GetCollectionGetterName();
+        infostr << ind << wxT("collection getter name: ") << acc->GetCollectionGetterName();
     if (acc->HasGetter())
-        infostr << ind << _T("getter name: ") << acc->GetGetterName();
+        infostr << ind << wxT("getter name: ") << acc->GetGetterName();
     if (acc->HasAdder())
-        infostr << ind << _T("adder name: ") << acc->GetAdderName();
+        infostr << ind << wxT("adder name: ") << acc->GetAdderName();
 
     return infostr;
 }
 
 wxString DumpPropertyInfo(const wxPropertyInfo *prop, int indent)
 {
-    wxString ind = _T("\n") + wxString(indent, wxT(' '));
+    wxString ind = wxT("\n") + wxString(indent, wxT(' '));
     wxString infostr;
 
     if (!prop)
-        return ind + _T("none");
+        return ind + wxT("none");
 
-    infostr << ind << _T("flags: ");
+    infostr << ind << wxT("flags: ");
     if (prop->GetFlags() & wxPROP_DEPRECATED)
-        infostr << _T("wxPROP_DEPRECATED,");
+        infostr << wxT("wxPROP_DEPRECATED,");
     if (prop->GetFlags() & wxPROP_OBJECT_GRAPH)
-        infostr << _T("wxPROP_OBJECT_GRAPH,");
+        infostr << wxT("wxPROP_OBJECT_GRAPH,");
     if (prop->GetFlags() & wxPROP_ENUM_STORE_LONG)
-        infostr << _T("wxPROP_ENUM_STORE_LONG,");
+        infostr << wxT("wxPROP_ENUM_STORE_LONG,");
     if (prop->GetFlags() & wxPROP_DONT_STREAM)
-        infostr << _T("wxPROP_DONT_STREAM,");
+        infostr << wxT("wxPROP_DONT_STREAM,");
 
     if (prop->GetFlags() == 0)
-        infostr << _T("none");
+        infostr << wxT("none");
     else
         infostr.RemoveLast();       // remove last comma
 
-    infostr << ind << _T("help string: ") << DumpStr(prop->GetHelpString());
-    infostr << ind << _T("group string: ") << DumpStr(prop->GetGroupString());
+    infostr << ind << wxT("help string: ") << DumpStr(prop->GetHelpString());
+    infostr << ind << wxT("group string: ") << DumpStr(prop->GetGroupString());
 
-    infostr << ind << _T("collection element type: ") << DumpTypeInfo(prop->GetCollectionElementTypeInfo());
-    infostr << ind << _T("type: ") << DumpTypeInfo(prop->GetTypeInfo());
+    infostr << ind << wxT("collection element type: ") << DumpTypeInfo(prop->GetCollectionElementTypeInfo());
+    infostr << ind << wxT("type: ") << DumpTypeInfo(prop->GetTypeInfo());
 
-    infostr << ind << _T("default value: ") << DumpStr(wxAnyGetAsString(prop->GetDefaultValue()));
+    infostr << ind << wxT("default value: ") << DumpStr(wxAnyGetAsString(prop->GetDefaultValue()));
     infostr << DumpPropertyAccessor(prop->GetAccessor(), indent+1);
 
     return infostr;
@@ -437,13 +437,13 @@ wxString DumpPropertyInfo(const wxPropertyInfo *prop, int indent)
 
 wxString DumpHandlerInfo(const wxHandlerInfo *phdlr, int indent)
 {
-    wxString ind = _T("\n") + wxString(indent, wxT(' '));
+    wxString ind = wxT("\n") + wxString(indent, wxT(' '));
     wxString infostr;
 
     if (!phdlr)
-        return ind + _T("none");
+        return ind + wxT("none");
 
-    infostr << ind << _T("event class: ") << 
+    infostr << ind << wxT("event class: ") << 
         (phdlr->GetEventClassInfo() ? phdlr->GetEventClassInfo()->GetClassName() : wxT("none"));
 
     return infostr;
@@ -457,12 +457,12 @@ int DumpProperties(const wxClassInfo *info, wxString& infostr, bool recursive)
          prop;
          prop = prop->GetNext(), pcount++)
     {
-        infostr << _T("\n\n  [") << pcount+1 << _T("] Property: ") << prop->GetName();
+        infostr << wxT("\n\n  [") << pcount+1 << wxT("] Property: ") << prop->GetName();
         infostr << DumpPropertyInfo(prop, 4);
     }
 
     if (pcount == 0)
-        infostr << _T("\n None");
+        infostr << wxT("\n None");
 
     if (recursive)
     {
@@ -475,7 +475,7 @@ int DumpProperties(const wxClassInfo *info, wxString& infostr, bool recursive)
             if (ppcount)
             {
                 pcount += ppcount;
-                infostr << _T("\n\n  ") << parent[i]->GetClassName() << _T(" PARENT'S PROPERTIES:");
+                infostr << wxT("\n\n  ") << parent[i]->GetClassName() << wxT(" PARENT'S PROPERTIES:");
                 infostr << str;
             }
         }
@@ -492,12 +492,12 @@ int DumpHandlers(const wxClassInfo *info, wxString& infostr, bool recursive)
          h;
          h = h->GetNext(), hcount++)
     {
-        infostr << _T("\n\n  [") << hcount+1 << _T("] Handler: ") << h->GetName();
+        infostr << wxT("\n\n  [") << hcount+1 << wxT("] Handler: ") << h->GetName();
         infostr << DumpHandlerInfo(h, 4);
     }
 
     if (hcount == 0)
-        infostr << _T("\n None");
+        infostr << wxT("\n None");
 
     if (recursive)
     {
@@ -510,7 +510,7 @@ int DumpHandlers(const wxClassInfo *info, wxString& infostr, bool recursive)
             if (hhcount)
             {
                 hcount += hhcount;
-                infostr << _T("\n\n  ") << parent[i]->GetClassName() << _T(" PARENT'S HANDLERS:");
+                infostr << wxT("\n\n  ") << parent[i]->GetClassName() << wxT(" PARENT'S HANDLERS:");
                 infostr << str;
             }
         }
@@ -528,32 +528,32 @@ wxString DumpClassInfo(const wxClassInfo *info, bool recursive)
 
     // basic stuff:
 
-    infostr << _T("\n BASIC RTTI INFO ABOUT ") << info->GetClassName();
-    infostr << _T("\n =================================================");
-    infostr << _T("\n  Base class #1: ") << DumpStr(info->GetBaseClassName1());
-    infostr << _T("\n  Base class #2: ") << DumpStr(info->GetBaseClassName2());
-    infostr << _T("\n  Include file: ") << DumpStr(info->GetIncludeName());
-    infostr << _T("\n  Size: ") << info->GetSize();
-    infostr << _T("\n  Dynamic: ") << (info->IsDynamic() ? _T("true") : _T("false"));
+    infostr << wxT("\n BASIC RTTI INFO ABOUT ") << info->GetClassName();
+    infostr << wxT("\n =================================================");
+    infostr << wxT("\n  Base class #1: ") << DumpStr(info->GetBaseClassName1());
+    infostr << wxT("\n  Base class #2: ") << DumpStr(info->GetBaseClassName2());
+    infostr << wxT("\n  Include file: ") << DumpStr(info->GetIncludeName());
+    infostr << wxT("\n  Size: ") << info->GetSize();
+    infostr << wxT("\n  Dynamic: ") << (info->IsDynamic() ? wxT("true") : wxT("false"));
 
 
     // advanced stuff:
 
-    infostr << _T("\n\n\n ADVANCED RTTI INFO ABOUT ") << info->GetClassName();
-    infostr << _T("\n =================================================\n");
-    infostr << _T("\n PROPERTIES");
-    infostr << _T("\n -----------------------------------------");
+    infostr << wxT("\n\n\n ADVANCED RTTI INFO ABOUT ") << info->GetClassName();
+    infostr << wxT("\n =================================================\n");
+    infostr << wxT("\n PROPERTIES");
+    infostr << wxT("\n -----------------------------------------");
     int pcount = DumpProperties(info, infostr, recursive);
-    infostr << _T("\n\n HANDLERS");
-    infostr << _T("\n -----------------------------------------");
+    infostr << wxT("\n\n HANDLERS");
+    infostr << wxT("\n -----------------------------------------");
     int hcount = DumpHandlers(info, infostr, recursive);
 
     if (pcount+hcount == 0)
-        infostr << _T("\n\n no advanced info\n");
+        infostr << wxT("\n\n no advanced info\n");
     else
     {
-        infostr << _T("\n\n Total count of properties: ") << pcount;
-        infostr << _T("\n Total count of handlers: ") << hcount << _T("\n");
+        infostr << wxT("\n\n Total count of properties: ") << pcount;
+        infostr << wxT("\n Total count of handlers: ") << hcount << wxT("\n");
     }
 
     return infostr;

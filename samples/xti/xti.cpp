@@ -141,7 +141,7 @@ bool MyApp::OnInit()
     RegisterFrameRTTI();
 
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("Extended RTTI sample"));
+    MyFrame *frame = new MyFrame(wxT("Extended RTTI sample"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -169,24 +169,24 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(Minimal_About, wxT("&About...\tF1"), wxT("Show about dialog"));
 
-    fileMenu->Append(Minimal_Persist, _T("Persist a wxFrame to XML..."), 
-                    _T("Creates a wxFrame using wxXTI and saves its description as XML"));
-    fileMenu->Append(Minimal_Depersist, _T("Depersist XML file..."), 
-                    _T("Loads the description of wxFrame from XML"));
-    fileMenu->Append(Minimal_GenerateCode, _T("Generate code for a wxFrame saved to XML..."), 
-                    _T("Generates the C++ code which belong to a persisted wxFrame"));
+    fileMenu->Append(Minimal_Persist, wxT("Persist a wxFrame to XML..."), 
+                    wxT("Creates a wxFrame using wxXTI and saves its description as XML"));
+    fileMenu->Append(Minimal_Depersist, wxT("Depersist XML file..."), 
+                    wxT("Loads the description of wxFrame from XML"));
+    fileMenu->Append(Minimal_GenerateCode, wxT("Generate code for a wxFrame saved to XML..."), 
+                    wxT("Generates the C++ code which belong to a persisted wxFrame"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(Minimal_DumpClasses, _T("Dump registered classes..."), 
-                    _T("Dumps the description of all wxWidgets classes registered in XTI"));
+    fileMenu->Append(Minimal_DumpClasses, wxT("Dump registered classes..."), 
+                    wxT("Dumps the description of all wxWidgets classes registered in XTI"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(Minimal_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    fileMenu->Append(Minimal_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(fileMenu, _T("&File"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(fileMenu, wxT("&File"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -195,7 +195,7 @@ MyFrame::MyFrame(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWidgets!"));
+    SetStatusText(wxT("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 }
 
@@ -735,12 +735,12 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(wxString::Format(
-                    _T("Welcome to %s!\n")
-                    _T("\n")
-                    _T("This sample demonstrates wxWidgets eXtended RTTI (XTI) system."),
+                    wxT("Welcome to %s!\n")
+                    wxT("\n")
+                    wxT("This sample demonstrates wxWidgets eXtended RTTI (XTI) system."),
                     wxVERSION_STRING
                 ),
-                _T("About wxWidgets XTI sample"),
+                wxT("About wxWidgets XTI sample"),
                 wxOK | wxICON_INFORMATION,
                 this);
 }
