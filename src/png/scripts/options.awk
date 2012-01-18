@@ -1,7 +1,7 @@
 #!/bin/awk -f
 # scripts/options.awk - library build configuration control
 #
-# last changed in libpng version 1.5.0 - January 6, 2011
+# last changed in libpng version 1.5.7 - December 15, 2011
 #
 # Copyright (c) 1998-2011 Glenn Randers-Pehrson
 #
@@ -32,16 +32,19 @@
 BEGIN{
    out="/dev/null"              # intermediate, preprocessed, file
    pre=-1                       # preprocess (first line)
+   version="libpng version unknown" # version information
+   version_file=""              # where to find the version
    err=0                        # in-line exit sets this
    start="PNG_DEFN_MAGIC-"      # Arbitrary start
    end="-PNG_DEFN_END"          # Arbitrary end
-   cx= "/@@@*"                  # Open C comment for output file
+   ct="PNG_JOIN"                # Join two tokens
+   cx= "/" ct "*"               # Open C comment for output file
    comment=start cx             # Comment start
    cend="*/" end                # Comment end
-   def=start "#define PNG_@@@"  # Arbitrary define
-   sup="@@@_SUPPORTED" end      # end supported option
-   und=comment "#undef PNG_@@@" # Unsupported option
-   une="@@@_SUPPORTED" cend     # end unsupported option
+   def=start "#define PNG_" ct  # Arbitrary define
+   sup=ct "_SUPPORTED" end      # end supported option
+   und=comment "#undef PNG_" ct # Unsupported option
+   une=ct "_SUPPORTED" cend     # end unsupported option
    error=start "ERROR:"         # error message
 
    # Variables
@@ -85,6 +88,28 @@ pre == -1{
    }
 }
 
+# While pre-processing if version is set to "search" look for a version string
+# in the following file.
+pre && version == "search" && version_file == ""{
+   version_file = FILENAME
+}
+
+pre && version == "search" && version_file != FILENAME{
+   print "version string not found in", version_file
+   err = 1
+   exit 1
+}
+
+pre && version == "search" && $0 ~ /^ \* libpng version/{
+   version = substr($0, 4)
+   print "version =", version >out
+   next
+}
+
+pre && FILENAME == version_file{
+   next
+}
+
 # variable=value
 #   Sets the given variable to the given value (the syntax is fairly
 #   free form, except for deb (you are expected to understand how to
@@ -94,6 +119,11 @@ pre == -1{
 #   rest of the actions, so the variable settings happen during
 #   preprocessing but are recorded in the END action too.  This
 #   allows them to be set on the command line too.
+$0 ~ /^[ 	]*version[ 	]*=/{
+   sub(/^[  ]*version[  ]*=[  ]*/, "")
+   version = $0
+   next
+}
 $0 ~ /^[ 	]*everything[ 	=]*off[ 	]*$/{
    everything = "off"
    next
@@ -162,6 +192,19 @@ $1 == "com"{
       print comment, $0, cend >out
    } else
       print start end >out
+   next
+}
+
+# version
+#   Inserts a version comment
+$1 == "version" && NF == 1{
+   if (version == "") {
+      print "ERROR: no version string set"
+      err = 1 # prevent END{} running
+      exit 1
+   }
+
+   print comment, version, cend >out
    next
 }
 

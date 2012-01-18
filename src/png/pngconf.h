@@ -1,7 +1,7 @@
 
 /* pngconf.h - machine configurable file for libpng
  *
- * libpng version 1.5.6 - November 3, 2011
+ * libpng version 1.5.7 - December 15, 2011
  *
  * Copyright (c) 1998-2011 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
@@ -370,10 +370,10 @@
 #      define PNG_USE_RESULT /* not supported */
 #    endif
 #    ifndef PNG_NORETURN
-#      define PNG_NORETURN   __declspec(noreturn)
+#      define PNG_NORETURN __declspec(noreturn)
 #    endif
 #    ifndef PNG_ALLOCATED
-#      if defined(_MSC_VER)  && (_MSC_VER >= 1400)
+#      if (_MSC_VER >= 1400)
 #        define PNG_ALLOCATED __declspec(restrict)
 #      endif
 #    endif

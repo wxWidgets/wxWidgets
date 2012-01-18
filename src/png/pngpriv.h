@@ -5,7 +5,7 @@
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
- * Last changed in libpng 1.5.6 [November 3, 2011]
+ * Last changed in libpng 1.5.7 [December 15, 2011]
  *
  * This code is released under the libpng license.
  * For conditions of distribution and use, see the disclaimer
@@ -195,6 +195,23 @@ typedef PNG_CONST png_uint_16p FAR * png_const_uint_16pp;
 #   define PNG_STATIC static
 #endif
 
+/* C99 restrict is used where possible, to do this 'restrict' is defined as
+ * empty if we can't be sure it is supported.  configure builds have already
+ * done this work.
+ */
+#ifdef PNG_CONFIGURE_LIBPNG
+#  define PNG_RESTRICT restrict
+#else
+   /* Modern compilers support restrict, but assume not for anything not
+    * recognized here:
+    */
+#  if defined __GNUC__ || defined _MSC_VER || defined __WATCOMC__
+#     define PNG_RESTRICT restrict
+#  else
+#     define PNG_RESTRICT
+#  endif
+#endif
+
 /* If warnings or errors are turned off the code is disabled or redirected here.
  * From 1.5.4 functions have been added to allow very limited formatting of
  * error and warning messages - this code will also be disabled here.
@@ -216,15 +233,28 @@ typedef PNG_CONST png_uint_16p FAR * png_const_uint_16pp;
 #  define png_fixed_error(s1,s2) png_err(s1)
 #endif
 
+/* C allows up-casts from (void*) to any pointer and (const void*) to any
+ * pointer to a const object.  C++ regards this as a type error and requires an
+ * explicit, static, cast and provides the static_cast<> rune to ensure that
+ * const is not cast away.
+ */
+#ifdef __cplusplus
+#  define png_voidcast(type, value) static_cast<type>(value)
+#else
+#  define png_voidcast(type, value) (value)
+#endif /* __cplusplus */
+
 #ifndef PNG_EXTERN
 /* The functions exported by PNG_EXTERN are internal functions, which
  * aren't usually used outside the library (as far as I know), so it is
  * debatable if they should be exported at all.  In the future, when it
  * is possible to have run-time registry of chunk-handling functions,
  * some of these might be made available again.
-#  define PNG_EXTERN extern
+ *
+ * 1.5.7: turned the use of 'extern' back on, since it is localized to pngpriv.h
+ * it should be safe now (it is unclear why it was turned off.)
  */
-#  define PNG_EXTERN
+#  define PNG_EXTERN extern
 #endif
 
 /* Some fixed point APIs are still required even if not exported because
@@ -921,8 +951,23 @@ PNG_EXTERN void png_do_write_interlace PNGARG((png_row_infop row_info,
 /* Unfilter a row: check the filter value before calling this, there is no point
  * calling it for PNG_FILTER_VALUE_NONE.
  */
-PNG_EXTERN void png_read_filter_row PNGARG((png_row_infop row_info,
+PNG_EXTERN void png_read_filter_row PNGARG((png_structp pp, png_row_infop row_info,
     png_bytep row, png_const_bytep prev_row, int filter));
+
+PNG_EXTERN void png_read_filter_row_up_neon PNGARG((png_row_infop row_info,
+    png_bytep row, png_const_bytep prev_row));
+PNG_EXTERN void png_read_filter_row_sub3_neon PNGARG((png_row_infop row_info,
+    png_bytep row, png_const_bytep prev_row));
+PNG_EXTERN void png_read_filter_row_sub4_neon PNGARG((png_row_infop row_info,
+    png_bytep row, png_const_bytep prev_row));
+PNG_EXTERN void png_read_filter_row_avg3_neon PNGARG((png_row_infop row_info,
+    png_bytep row, png_const_bytep prev_row));
+PNG_EXTERN void png_read_filter_row_avg4_neon PNGARG((png_row_infop row_info,
+    png_bytep row, png_const_bytep prev_row));
+PNG_EXTERN void png_read_filter_row_paeth3_neon PNGARG((png_row_infop row_info,
+    png_bytep row, png_const_bytep prev_row));
+PNG_EXTERN void png_read_filter_row_paeth4_neon PNGARG((png_row_infop row_info,
+    png_bytep row, png_const_bytep prev_row));
 
 /* Choose the best filter to use and filter the row data */
 PNG_EXTERN void png_write_find_filter PNGARG((png_structp png_ptr,
@@ -1573,7 +1618,6 @@ PNG_EXTERN void png_build_gamma_table PNGARG((png_structp png_ptr,
 #endif
 
 /* Maintainer: Put new private prototypes here ^ and in libpngpf.3 */
-
 
 #include "pngdebug.h"
 

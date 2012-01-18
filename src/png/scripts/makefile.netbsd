@@ -17,7 +17,7 @@ INCSDIR=${LOCALBASE}/include
 
 LIB=	png
 SHLIB_MAJOR=	15
-SHLIB_MINOR=	1.5.6
+SHLIB_MINOR=	1.5.7
 SRCS=	png.c pngset.c pngget.c pngrutil.c pngtrans.c pngwutil.c \
 	pngread.c pngrio.c pngwio.c pngwrite.c pngrtran.c \
 	pngwtran.c pngmem.c pngerror.c pngpread.c

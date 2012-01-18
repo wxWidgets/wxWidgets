@@ -1,6 +1,6 @@
 libpng-manual.txt - A description on how to use and modify libpng
 
- libpng version 1.5.6 - November 3, 2011
+ libpng version 1.5.7 - December 15, 2011
  Updated and distributed by Glenn Randers-Pehrson
  <glennrp at users.sourceforge.net>
  Copyright (c) 1998-2011 Glenn Randers-Pehrson
@@ -11,7 +11,7 @@ libpng-manual.txt - A description on how to use and modify libpng
 
  Based on:
 
- libpng versions 0.97, January 1998, through 1.5.6 - November 3, 2011
+ libpng versions 0.97, January 1998, through 1.5.7 - December 15, 2011
  Updated and distributed by Glenn Randers-Pehrson
  Copyright (c) 1998-2011 Glenn Randers-Pehrson
 
@@ -1265,10 +1265,13 @@ pointer into the info_ptr is returned for any complex types.
                          (empty string for unknown).
 
     Note that the itxt_length, lang, and lang_key
-    members of the text_ptr structure only exist
-    when the library is built with iTXt chunk support.
-    Prior to libpng-1.4.0, the default build was
-    without iTXt chunk support.
+    members of the text_ptr structure only exist when the
+    library is built with iTXt chunk support.  Prior to
+    libpng-1.4.0 the library was built by default without
+    iTXt support. Also note that when iTXt is supported,
+    they contain NULL pointers when the "compression"
+    field contains PNG_TEXT_COMPRESSION_NONE or
+    PNG_TEXT_COMPRESSION_zTXt.
 
     num_text       - number of comments (same as
                      num_comments; you can put NULL here
@@ -2849,11 +2852,15 @@ width, height, bit_depth, and color_type must be the same in each call.
                          empty for unknown).
     text_ptr[i].translated_keyword  - keyword in UTF-8 (NULL
                          or empty for unknown).
+
     Note that the itxt_length, lang, and lang_key
-    members of the text_ptr structure only exist
-    when the library is built with iTXt chunk support.
-    Prior to libpng-1.4.0 the library was built by default
-    without iTXt support.
+    members of the text_ptr structure only exist when the
+    library is built with iTXt chunk support.  Prior to
+    libpng-1.4.0 the library was built by default without
+    iTXt support. Also note that when iTXt is supported,
+    they contain NULL pointers when the "compression"
+    field contains PNG_TEXT_COMPRESSION_NONE or
+    PNG_TEXT_COMPRESSION_zTXt.
 
     num_text       - number of comments
 
@@ -4566,13 +4573,13 @@ Other rules can be inferred by inspecting the libpng source.
 
 XIV. Y2K Compliance in libpng
 
-November 3, 2011
+December 15, 2011
 
 Since the PNG Development group is an ad-hoc body, we can't make
 an official declaration.
 
 This is your unofficial assurance that libpng from version 0.71 and
-upward through 1.5.6 are Y2K compliant.  It is my belief that earlier
+upward through 1.5.7 are Y2K compliant.  It is my belief that earlier
 versions were also Y2K compliant.
 
 Libpng only has three year fields.  One is a 2-byte unsigned integer that

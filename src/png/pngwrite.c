@@ -1,7 +1,7 @@
 
 /* pngwrite.c - general routines to write a PNG file
  *
- * Last changed in libpng 1.5.6 [November 3, 2011]
+ * Last changed in libpng 1.5.7 [December 15, 2011]
  * Copyright (c) 1998-2011 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -490,8 +490,9 @@ png_create_write_struct_2,(png_const_charp user_png_ver, png_voidp error_ptr,
 
 #ifdef PNG_SETJMP_SUPPORTED
 /* Applications that neglect to set up their own setjmp() and then
-   encounter a png_error() will longjmp here.  Since the jmpbuf is
-   then meaningless we abort instead of returning. */
+ * encounter a png_error() will longjmp here.  Since the jmpbuf is
+ * then meaningless we abort instead of returning.
+ */
 #ifdef USE_FAR_KEYWORD
    if (setjmp(tmp_jmpbuf))
 #else

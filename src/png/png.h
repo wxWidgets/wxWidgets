@@ -1,7 +1,7 @@
 
 /* png.h - header file for PNG reference library
  *
- * libpng version 1.5.6 - November 3, 2011
+ * libpng version 1.5.7 - December 15, 2011
  * Copyright (c) 1998-2011 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -11,7 +11,7 @@
  * Authors and maintainers:
  *   libpng versions 0.71, May 1995, through 0.88, January 1996: Guy Schalnat
  *   libpng versions 0.89c, June 1996, through 0.96, May 1997: Andreas Dilger
- *   libpng versions 0.97, January 1998, through 1.5.6 - November 3, 2011: Glenn
+ *   libpng versions 0.97, January 1998, through 1.5.7 - December 15, 2011: Glenn
  *   See also "Contributing Authors", below.
  *
  * Note about libpng version numbers:
@@ -163,6 +163,9 @@
  *    1.5.6beta01-07          15    10506  15.so.15.6[.0]
  *    1.5.6rc01-03            15    10506  15.so.15.6[.0]
  *    1.5.6                   15    10506  15.so.15.6[.0]
+ *    1.5.7beta01-05          15    10507  15.so.15.7[.0]
+ *    1.5.7rc01-03            15    10507  15.so.15.7[.0]
+ *    1.5.7                   15    10507  15.so.15.7[.0]
  *
  *   Henceforth the source version will match the shared-library major
  *   and minor numbers; the shared-library major version number will be
@@ -194,7 +197,7 @@
  *
  * This code is released under the libpng license.
  *
- * libpng versions 1.2.6, August 15, 2004, through 1.5.6, November 3, 2011, are
+ * libpng versions 1.2.6, August 15, 2004, through 1.5.7, December 15, 2011, are
  * Copyright (c) 2004, 2006-2011 Glenn Randers-Pehrson, and are
  * distributed according to the same disclaimer and license as libpng-1.2.5
  * with the following individual added to the list of Contributing Authors:
@@ -306,13 +309,13 @@
  * Y2K compliance in libpng:
  * =========================
  *
- *    November 3, 2011
+ *    December 15, 2011
  *
  *    Since the PNG Development group is an ad-hoc body, we can't make
  *    an official declaration.
  *
  *    This is your unofficial assurance that libpng from version 0.71 and
- *    upward through 1.5.6 are Y2K compliant.  It is my belief that
+ *    upward through 1.5.7 are Y2K compliant.  It is my belief that
  *    earlier versions were also Y2K compliant.
  *
  *    Libpng only has two year fields.  One is a 2-byte unsigned integer
@@ -364,12 +367,15 @@
  * describes how to use libpng, and the file example.c summarizes it
  * with some code on which to build.  This file is useful for looking
  * at the actual function definitions and structure components.
+ *
+ * If you just need to read a PNG file and don't want to read the documentation
+ * skip to the end of this file and read the section entitled 'simplified API'.
  */
 
 /* Version information for png.h - this should match the version in png.c */
-#define PNG_LIBPNG_VER_STRING "1.5.6"
+#define PNG_LIBPNG_VER_STRING "1.5.7"
 #define PNG_HEADER_VERSION_STRING \
-     " libpng version 1.5.6 - November 3, 2011\n"
+     " libpng version 1.5.7 - December 15, 2011\n"
 
 #define PNG_LIBPNG_VER_SONUM   15
 #define PNG_LIBPNG_VER_DLLNUM  15
@@ -377,7 +383,8 @@
 /* These should match the first 3 components of PNG_LIBPNG_VER_STRING: */
 #define PNG_LIBPNG_VER_MAJOR   1
 #define PNG_LIBPNG_VER_MINOR   5
-#define PNG_LIBPNG_VER_RELEASE 6
+#define PNG_LIBPNG_VER_RELEASE 7
+
 /* This should match the numeric part of the final component of
  * PNG_LIBPNG_VER_STRING, omitting any leading zero:
  */
@@ -407,7 +414,7 @@
  * version 1.0.0 was mis-numbered 100 instead of 10000).  From
  * version 1.0.1 it's    xxyyzz, where x=major, y=minor, z=release
  */
-#define PNG_LIBPNG_VER 10506 /* 1.5.6 */
+#define PNG_LIBPNG_VER 10507 /* 1.5.7 */
 
 /* Library configuration: these options cannot be changed after
  * the library has been built.
@@ -529,7 +536,7 @@ extern "C" {
 /* This triggers a compiler error in png.c, if png.c and png.h
  * do not agree upon the version number.
  */
-typedef char* png_libpng_version_1_5_6;
+typedef char* png_libpng_version_1_5_7;
 
 /* Three color definitions.  The order of the red, green, and blue, (and the
  * exact size) is not important, although the size of the fields need to
@@ -604,11 +611,20 @@ typedef png_sPLT_t FAR * FAR * png_sPLT_tpp;
 #ifdef PNG_TEXT_SUPPORTED
 /* png_text holds the contents of a text/ztxt/itxt chunk in a PNG file,
  * and whether that contents is compressed or not.  The "key" field
- * points to a regular zero-terminated C string.  The "text", "lang", and
- * "lang_key" fields can be regular C strings, empty strings, or NULL pointers.
+ * points to a regular zero-terminated C string.  The "text" fields can be a
+ * regular C string, an empty string, or a NULL pointer.
  * However, the structure returned by png_get_text() will always contain
- * regular zero-terminated C strings (possibly empty), never NULL pointers,
- * so they can be safely used in printf() and other string-handling functions.
+ * the "text" field as a regular zero-terminated C string (possibly
+ * empty), never a NULL pointer, so it can be safely used in printf() and
+ * other string-handling functions.  Note that the "itxt_length", "lang", and
+ * "lang_key" members of the structure only exist when the library is built
+ * with iTXt chunk support.  Prior to libpng-1.4.0 the library was built by
+ * default without iTXt support. Also note that when iTXt *is* supported,
+ * the "lang" and "lang_key" fields contain NULL pointers when the
+ * "compression" field contains * PNG_TEXT_COMPRESSION_NONE or
+ * PNG_TEXT_COMPRESSION_zTXt. Note that the "compression value" is not the
+ * same as what appears in the PNG tEXt/zTXt/iTXt chunk's "compression flag"
+ * which is always 0 or 1, or its "compression method" which is always 0.
  */
 typedef struct png_text_struct
 {
@@ -1123,6 +1139,11 @@ PNG_EXPORT(31, void, png_set_gray_to_rgb, (png_structp png_ptr));
 
 #ifdef PNG_READ_RGB_TO_GRAY_SUPPORTED
 /* Reduce RGB to grayscale. */
+#define PNG_ERROR_ACTION_NONE  1
+#define PNG_ERROR_ACTION_WARN  2
+#define PNG_ERROR_ACTION_ERROR 3
+#define PNG_RGB_TO_GRAY_DEFAULT (-1)/*for red/green coefficients*/
+
 PNG_FP_EXPORT(32, void, png_set_rgb_to_gray, (png_structp png_ptr,
     int error_action, double red, double green));
 PNG_FIXED_EXPORT(33, void, png_set_rgb_to_gray_fixed, (png_structp png_ptr,

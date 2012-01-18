@@ -1,4 +1,5 @@
-Libpng 1.5.6 - November 3, 2011
+
+Libpng 1.5.7 - December 15, 2011
 
 This is a public release of libpng, intended for use in production codes.
 
@@ -7,76 +8,86 @@ Files available for download:
 Source files with LF line endings (for Unix/Linux) and with a
 "configure" script
 
-   libpng-1.5.6.tar.xz (LZMA-compressed, recommended)
-   libpng-1.5.6.tar.gz
-   libpng-1.5.6.tar.bz2
+   libpng-1.5.7.tar.xz (LZMA-compressed, recommended)
+   libpng-1.5.7.tar.gz
+   libpng-1.5.7.tar.bz2
 
 Source files with CRLF line endings (for Windows), without the
 "configure" script
 
-   lpng156.7z  (LZMA-compressed, recommended)
-   lpng156.zip
+   lpng157.7z  (LZMA-compressed, recommended)
+   lpng157.zip
 
 Other information:
 
-   libpng-1.5.6-README.txt
-   libpng-1.5.6-LICENSE.txt
+   libpng-1.5.7-README.txt
+   libpng-1.5.7-LICENSE.txt
 
-Changes since the last public release (1.5.5):
-
-  Fixed some 64-bit type conversion warnings in pngrtran.c
-  Moved row_info from png_struct to a local variable.
-  The various interlace mask arrays have been made into arrays of
-    bytes and made PNG_CONST and static (previously some arrays were
-    marked PNG_CONST and some weren't).
-  Additional checks have been added to the transform code to validate the
-    pixel depths after the transforms on both read and write.
-  Removed some redundant code from pngwrite.c, in png_desgtroy_write_struct().
-  Changed chunk reading/writing code to use png_uint_32 instead of png_byte[4].
-    This removes the need to allocate temporary strings for chunk names on
-    the stack in the read/write code.  Unknown chunk handling still uses the
-    string form because this is exposed in the API.
-  Added a note in the manual the png_read_update_info() must be called only
-    once with a particular info_ptr.
-  Revised test-pngtest.sh to report FAIL when pngtest fails.
-  Added "--strict" option to pngtest, to report FAIL when the failure is
-    only because the resulting valid files are different.
-  Revised CMakeLists.txt to work with mingw and removed some material from
-    CMakeLists.txt that is no longer useful in libpng-1.5.
-  Fixed typo in Makefile.in and Makefile.am ("-M Wl" should be "-M -Wl")."
-  Speed up png_combine_row() for interlaced images. This reduces the generality
-    of the code, allowing it to be optimized for Adam7 interlace.  The masks
-    passed to png_combine_row() are now generated internally, avoiding
-    some code duplication and localizing the interlace handling somewhat.
-  Align png_struct::row_buf - previously it was always unaligned, caused by
-    a bug in the code that attempted to align it; the code needs to subtract
-    one from the pointer to take account of the filter byte prepended to
-    each row.
-  Optimized png_combine_row() when rows are aligned. This gains a small
-    percentage for 16-bit and 32-bit pixels in the typical case where the
-    output row buffers are appropriately aligned. The optimization was not
-    previously possible because the png_struct buffer was always misaligned.
-  Removed two redundant tests for unitialized row.
-  Fixed a relatively harmless memory overwrite in compressed text writing
-    with a 1 byte zlib buffer.
-  Add ability to call png_read_update_info multiple times to pngvalid.c
-  Fixes for multiple calls to png_read_update_info. These fixes attend to
-    most of the errors revealed in pngvalid, however doing the gamma work
-    twice results in inaccuracies that can't be easily fixed.  There is now
-    a warning in the code if this is going to happen.
-  Turned on multiple png_read_update_info in pngvalid transform tests.
-  Prevent libpng from overwriting unused bits at the end of the image when
-    it is not byte aligned, while reading. Prior to libpng-1.5.6 libpng would
-    overwrite the partial byte at the end of each row if the row width was not
-    an exact multiple of 8 bits and the image is not interlaced.
-  Made png_ptr->prev_row an aligned pointer into png_ptr->big_prev_row
-    (Mans Rullgard).
-  Changed misleading "Missing PLTE before cHRM" warning to "Out of place cHRM"
-  Added PNG_LSR() and PNG_LSL() macros to defend against buggy compilers that
-    evaluate non-taken code branches and complain about out-of-range shifts. 
-  Renamed the local variable 'byte' because it appears in a MSYS header
-    file.
-  Added #define PNG_ALIGN_TYPE PNG_ALIGN_NONE to contrib/pngminim/*/pngusr.h
+Changes since the last public release (1.5.6):
+  Added support for ARM processor (Mans Rullgard)
+  Fixed bug in pngvalid on early allocation failure; fixed type cast in
+    pngmem.c; pngvalid would attempt to call png_error() if the allocation
+    of a png_struct or png_info failed. This would probably have led to a
+    crash.  The pngmem.c implementation of png_malloc() included a cast
+    to png_size_t which would fail on large allocations on 16-bit systems.
+  Fix for the preprocessor of the Intel C compiler. The preprocessor
+    splits adjacent @ signs with a space; this changes the concatentation
+    token from @-@-@ to PNG_JOIN; that should work with all compiler
+    preprocessors.
+  Paeth filter speed improvements from work by Siarhei Siamashka. This
+    changes the 'Paeth' reconstruction function to improve the GCC code
+    generation on x86. The changes are only part of the suggested ones;
+    just the changes that definitely improve speed and remain simple.
+    The changes also slightly increase the clarity of the code.
+  Check compression_type parameter in png_get_iCCP and remove spurious
+    casts. The compression_type parameter is always assigned to, so must
+    be non-NULL. The cast of the profile length potentially truncated the
+    value unnecessarily on a 16-bit int system, so the cast of the (byte)
+    compression type to (int) is specified by ANSI-C anyway.
+  Fixed FP division by zero in pngvalid.c; the 'test_pixel' code left
+    the sBIT fields in the test pixel as 0, which resulted in a floating
+    point division by zero which was irrelevant but causes systems where
+    FP exceptions cause a crash. Added code to pngvalid to turn on FP
+    exceptions if the appropriate glibc support is there to ensure this is
+    tested in the future.
+  Added versioning to pnglibconf.h comments.
+  Installed more accurate linear to sRGB conversion tables. The slightly
+    modified tables reduce the number of 16-bit values that
+    convert to an off-by-one 8-bit value.  The "makesRGB.c" code that was used
+    to generate the tables is now in a contrib/sRGBtables sub-directory.
+  Added run-time detection of NEON support.
+  Multiple transform bug fixes plus a work-round for double gamma correction.
+    libpng does not support more than one transform that requires linear data
+    at once - if this is tried typically the results is double gamma
+    correction. Since the simplified APIs can need rgb to gray combined with
+    a compose operation it is necessary to do one of these outside the main
+    libpng transform code. This check-in also contains fixes to various bugs
+    in compose and rgb to gray (on palette).
+  Fixes for C++ compilation using g++ When libpng source is compiled
+    using g++. The compiler imposes C++ rules on the C source; thus it
+    is desireable to make the source work with either C or C++ rules
+    without throwing away useful error information.  This change adds
+    png_voidcast to allow C semantic (void*) cases or the corresponding
+    C++ static_cast operation, as appropriate.
+  Added --noexecstack to assembler file compilation. GCC does not set
+    this on assembler compilation, even though it does on C compilation.
+    This creates security issues if assembler code is enabled; the
+    work-around is to set it by default in the flags for $(CCAS)
+  Removed "zTXt" from warning in generic chunk decompression function.
+  Validate time settings passed to pngset() and png_convert_to_rfc1123()
+    (Frank Busse).
+  Added MINGW support to CMakeLists.txt
+  Reject invalid compression flag or method when reading the iTXt chunk.
+  Moved pngvalid.c into contrib/libtests
+  Rebuilt Makefile.in, configure, etc., with autoconf-2.68
+  Replaced an "#if" with "#ifdef" in pngrtran.c
+  Revised #if PNG_DO_BC block in png.c (use #ifdef and add #else)
+  Revised pngconf.h to use " __declspec(restrict)" only when MSC_VER >= 1400,
+    as in libpng-1.5.4.
+  Put CRLF line endings in the owatcom project files.
+  Updated CMakeLists.txt to account for the relocation of pngvalid.c
+  Minor fixes to pngvalid.c for gcc 4.6.2 compatibility to remove warnings
+    reported by earlier versions.
 
 Send comments/corrections/commendations to png-mng-implement at lists.sf.net
 (subscription required; visit

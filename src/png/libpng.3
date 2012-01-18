@@ -1,6 +1,6 @@
-.TH LIBPNG 3 "November 3, 2011"
+.TH LIBPNG 3 "December 15, 2011"
 .SH NAME
-libpng \- Portable Network Graphics (PNG) Reference Library 1.5.6
+libpng \- Portable Network Graphics (PNG) Reference Library 1.5.7
 .SH SYNOPSIS
 \fI\fB
 
@@ -977,7 +977,7 @@ Following is a copy of the libpng-manual.txt file that accompanies libpng.
 .SH LIBPNG.TXT
 libpng-manual.txt - A description on how to use and modify libpng
 
- libpng version 1.5.6 - November 3, 2011
+ libpng version 1.5.7 - December 15, 2011
  Updated and distributed by Glenn Randers-Pehrson
  <glennrp at users.sourceforge.net>
  Copyright (c) 1998-2011 Glenn Randers-Pehrson
@@ -988,7 +988,7 @@ libpng-manual.txt - A description on how to use and modify libpng
 
  Based on:
 
- libpng versions 0.97, January 1998, through 1.5.6 - November 3, 2011
+ libpng versions 0.97, January 1998, through 1.5.7 - December 15, 2011
  Updated and distributed by Glenn Randers-Pehrson
  Copyright (c) 1998-2011 Glenn Randers-Pehrson
 
@@ -2242,10 +2242,13 @@ pointer into the info_ptr is returned for any complex types.
                          (empty string for unknown).
 
     Note that the itxt_length, lang, and lang_key
-    members of the text_ptr structure only exist
-    when the library is built with iTXt chunk support.
-    Prior to libpng-1.4.0, the default build was
-    without iTXt chunk support.
+    members of the text_ptr structure only exist when the
+    library is built with iTXt chunk support.  Prior to
+    libpng-1.4.0 the library was built by default without
+    iTXt support. Also note that when iTXt is supported,
+    they contain NULL pointers when the "compression"
+    field contains PNG_TEXT_COMPRESSION_NONE or
+    PNG_TEXT_COMPRESSION_zTXt.
 
     num_text       - number of comments (same as
                      num_comments; you can put NULL here
@@ -3826,11 +3829,15 @@ width, height, bit_depth, and color_type must be the same in each call.
                          empty for unknown).
     text_ptr[i].translated_keyword  - keyword in UTF-8 (NULL
                          or empty for unknown).
+
     Note that the itxt_length, lang, and lang_key
-    members of the text_ptr structure only exist
-    when the library is built with iTXt chunk support.
-    Prior to libpng-1.4.0 the library was built by default
-    without iTXt support.
+    members of the text_ptr structure only exist when the
+    library is built with iTXt chunk support.  Prior to
+    libpng-1.4.0 the library was built by default without
+    iTXt support. Also note that when iTXt is supported,
+    they contain NULL pointers when the "compression"
+    field contains PNG_TEXT_COMPRESSION_NONE or
+    PNG_TEXT_COMPRESSION_zTXt.
 
     num_text       - number of comments
 
@@ -5544,13 +5551,13 @@ Other rules can be inferred by inspecting the libpng source.
 
 .SH XIV. Y2K Compliance in libpng
 
-November 3, 2011
+December 15, 2011
 
 Since the PNG Development group is an ad-hoc body, we can't make
 an official declaration.
 
 This is your unofficial assurance that libpng from version 0.71 and
-upward through 1.5.6 are Y2K compliant.  It is my belief that earlier
+upward through 1.5.7 are Y2K compliant.  It is my belief that earlier
 versions were also Y2K compliant.
 
 Libpng only has three year fields.  One is a 2-byte unsigned integer that
@@ -5752,6 +5759,9 @@ the first widely used release:
  1.5.6beta01-07      15    10506  15.so.15.6[.0]
  1.5.6rc01-03        15    10506  15.so.15.6[.0]
  1.5.6               15    10506  15.so.15.6[.0]
+ 1.5.7beta01-05      15    10507  15.so.15.7[.0]
+ 1.5.7rc01-03        15    10507  15.so.15.7[.0]
+ 1.5.7               15    10507  15.so.15.7[.0]
 
 Henceforth the source version will match the shared-library minor
 and patch numbers; the shared-library major version number will be
@@ -5808,7 +5818,7 @@ possible without all of you.
 
 Thanks to Frank J. T. Wojcik for helping with the documentation.
 
-Libpng version 1.5.6 - November 3, 2011:
+Libpng version 1.5.7 - December 15, 2011:
 Initially created in 1995 by Guy Eric Schalnat, then of Group 42, Inc.
 Currently maintained by Glenn Randers-Pehrson (glennrp at users.sourceforge.net).
 
@@ -5831,7 +5841,7 @@ this sentence.
 
 This code is released under the libpng license.
 
-libpng versions 1.2.6, August 15, 2004, through 1.5.6, November 3, 2011, are
+libpng versions 1.2.6, August 15, 2004, through 1.5.7, December 15, 2011, are
 Copyright (c) 2004,2006-2007 Glenn Randers-Pehrson, and are
 distributed according to the same disclaimer and license as libpng-1.2.5
 with the following individual added to the list of Contributing Authors
@@ -5930,7 +5940,7 @@ certification mark of the Open Source Initiative.
 
 Glenn Randers-Pehrson
 glennrp at users.sourceforge.net
-November 3, 2011
+December 15, 2011
 
 .\" end of man page
 

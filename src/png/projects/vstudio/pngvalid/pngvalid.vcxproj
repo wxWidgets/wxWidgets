@@ -204,14 +204,13 @@
     </Link>
     <CustomBuildStep>
       <Message>Executing PNG validation program</Message>
-      <Command>$(OutDir)pngvalid.exe ..\..\..\pngvalid.png $(IntDir)pngout.png</Command>
       <Command>"$(OutDir)pngvalid.exe" --touch "$(IntDir)pngvalid.out"</Command>
       <Outputs>$(IntDir)pngvalid.out</Outputs>
       <Inputs>$(OutDir)pngvalid.exe</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\pngvalid.c" />
+    <ClCompile Include="..\..\..\contrib\libtests\pngvalid.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,7 +6,7 @@
 #
 com pnglibconf.h - library build configuration
 com
-com libpng version 1.5.3 -  July 7, 2011
+version
 com
 com Copyright (c) 1998-2011 Glenn Randers-Pehrson
 com
@@ -296,7 +296,7 @@ option READ enables READ_INTERLACING
 # processing after that has happened.  You need to be sure to enable
 # READ_SCALE_16_TO_8 or READ_STRIP_16_TO_8 when you disable READ_16BIT for
 # this to work properly.  You should disable the other option if you need to
-# ensure a particular convertion (otherwise the app can chose.)
+# ensure a particular conversion (otherwise the app can chose.)
 
 option READ_16BIT requires READ enables 16BIT
 

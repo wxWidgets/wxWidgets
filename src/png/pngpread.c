@@ -1,7 +1,7 @@
 
 /* pngpread.c - read a png file in push mode
  *
- * Last changed in libpng 1.5.6 [November 3, 2011]
+ * Last changed in libpng 1.5.7 [December 15, 2011]
  * Copyright (c) 1998-2011 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -985,7 +985,7 @@ png_push_process_row(png_structp png_ptr)
    if (png_ptr->row_buf[0] > PNG_FILTER_VALUE_NONE)
    {
       if (png_ptr->row_buf[0] < PNG_FILTER_VALUE_LAST)
-         png_read_filter_row(&row_info, png_ptr->row_buf + 1,
+         png_read_filter_row(png_ptr, &row_info, png_ptr->row_buf + 1,
             png_ptr->prev_row + 1, png_ptr->row_buf[0]);
       else
          png_error(png_ptr, "bad adaptive filter value");

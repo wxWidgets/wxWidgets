@@ -57,9 +57,9 @@ instructions consult and edit projects/openwatcom/pngconfig.dfa
 <<
  $(DELETE) dfn.c dfn1.out dfn2.out
 
-pnglibconf.dfn: ..\..\scripts\pnglibconf.dfa ..\..\scripts\options.awk pngconfig.dfa
+pnglibconf.dfn: ..\..\scripts\pnglibconf.dfa ..\..\scripts\options.awk pngconfig.dfa ..\..\pngconf.h
  $(DELETE) $@ dfn1.out dfn2.out
- $(AWK) -f ..\..\scripts\options.awk out=dfn1.out ..\..\scripts\pnglibconf.dfa pngconfig.dfa $(DFA_XTRA) 1>&2
+ $(AWK) -f ..\..\scripts\options.awk out=dfn1.out version=search ..\..\pngconf.h ..\..\scripts\pnglibconf.dfa pngconfig.dfa $(DFA_XTRA) 1>&2
  $(AWK) -f ..\..\scripts\options.awk out=dfn2.out dfn1.out 1>&2
  $(COPY) dfn2.out $@
  $(DELETE) dfn1.out dfn2.out

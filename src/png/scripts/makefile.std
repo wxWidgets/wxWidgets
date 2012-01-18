@@ -50,9 +50,9 @@ all: libpng.a pngtest
 
 # The standard pnglibconf.h exists as scripts/pnglibconf.h.prebuilt,
 # copy this if the following doesn't work.
-pnglibconf.dfn: scripts/pnglibconf.dfa scripts/options.awk
+pnglibconf.dfn: scripts/pnglibconf.dfa scripts/options.awk pngconf.h
 	$(RM_F) $@ dfn?.out
-	$(AWK) -f scripts/options.awk out=dfn1.out\
+	$(AWK) -f scripts/options.awk out=dfn1.out version=search pngconf.h\
 	    scripts/pnglibconf.dfa $(DFA_XTRA) 1>&2
 	$(AWK) -f scripts/options.awk out=dfn2.out dfn1.out 1>&2
 	cp dfn2.out $@
@@ -62,9 +62,9 @@ pnglibconf.h: pnglibconf.dfn
 	$(RM_F) $@ dfn.c dfn?.out
 	$(ECHO) '#include "pnglibconf.dfn"' >dfn.c
 	$(CPP) $(DFNFLAGS) dfn.c >dfn1.out
-	$(SED) -n -e 's|^.*PNG_DEFN_MAGIC-\(.*\)-PNG_DEFN_END.*$$|\1|p'\
+	$(SED) -n -e 's|^.*PNG_DEFN_MAGIC *-\(.*\)- *PNG_DEFN_END.*$$|\1|p'\
 	    dfn1.out >dfn2.out
-	$(SED) -e 's| *@@@ *||g' -e 's| *$$||' dfn2.out >dfn3.out
+	$(SED) -e 's| *PNG_JOIN *||g' -e 's| *$$||' dfn2.out >dfn3.out
 	cp dfn3.out $@
 	$(RM_F) dfn.c dfn?.out
 

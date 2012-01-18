@@ -2,11 +2,10 @@
 #if 0 /* in case someone actually tries to compile this */
 
 /* example.c - an example of using libpng
- * Last changed in libpng 1.5.6 [November 3, 2011]
- * This file has been placed in the public domain by the authors.
+ * Last changed in libpng 1.5.7 [December 15, 2011]
  * Maintained 1998-2011 Glenn Randers-Pehrson
- * Maintained 1996, 1997 Andreas Dilger)
- * Written 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
+ * Maintained 1996, 1997 Andreas Dilger
+ * Written 1995, 1996 Guy Eric Schalnat, Group 42, Inc.
  */
 
 /* This is an example of how to use libpng to read and write PNG files.
@@ -14,6 +13,8 @@
  * read it, do so first.  This was designed to be a starting point of an
  * implementation.  This is not officially part of libpng, is hereby placed
  * in the public domain, and therefore does not require a copyright notice.
+ * To the extent possible under law, the authors have waived all copyright and
+ * related or neighboring rights to this file.
  *
  * This file does not currently compile, because it is missing certain
  * parts, like allocating memory to hold an image.  You will have to

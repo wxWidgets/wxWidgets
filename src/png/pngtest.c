@@ -1163,6 +1163,10 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
       if (png_get_text(read_ptr, read_info_ptr, &text_ptr, &num_text) > 0)
       {
          pngtest_debug1("Handling %d iTXt/tEXt/zTXt chunks", num_text);
+
+         if (verbose)
+            printf("\nText compression=%d\n", text_ptr->compression);
+
          png_set_text(write_ptr, write_info_ptr, text_ptr, num_text);
       }
    }
@@ -1813,4 +1817,4 @@ main(int argc, char *argv[])
 }
 
 /* Generate a compiler error if there is an old png.h in the search path. */
-typedef png_libpng_version_1_5_6 Your_png_h_is_not_version_1_5_6;
+typedef png_libpng_version_1_5_7 Your_png_h_is_not_version_1_5_7;

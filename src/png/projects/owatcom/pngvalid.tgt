@@ -192,8 +192,8 @@ WVList
 0
 47
 MItem
-16
-..\..\pngvalid.c
+33
+..\..\contrib\libtests\pngvalid.c
 48
 WString
 4

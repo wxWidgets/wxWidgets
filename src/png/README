@@ -1,4 +1,4 @@
-README for libpng version 1.5.6 - November 3, 2011 (shared library 15.0)
+README for libpng version 1.5.7 - December 15, 2011 (shared library 15.0)
 See the note about version numbers near the top of png.h
 
 See INSTALL for instructions on how to install libpng.

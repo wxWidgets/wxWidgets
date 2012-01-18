@@ -1,7 +1,7 @@
 
 /* pngrtran.c - transforms the data in a row for PNG readers
  *
- * Last changed in libpng 1.5.6 [November 3, 2011]
+ * Last changed in libpng 1.5.7 [December 15, 2011]
  * Copyright (c) 1998-2011 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -936,15 +936,15 @@ png_set_rgb_to_gray_fixed(png_structp png_ptr, int error_action,
 
    switch(error_action)
    {
-      case 1:
+      case PNG_ERROR_ACTION_NONE:
          png_ptr->transformations |= PNG_RGB_TO_GRAY;
          break;
 
-      case 2:
+      case PNG_ERROR_ACTION_WARN:
          png_ptr->transformations |= PNG_RGB_TO_GRAY_WARN;
          break;
 
-      case 3:
+      case PNG_ERROR_ACTION_ERROR:
          png_ptr->transformations |= PNG_RGB_TO_GRAY_ERR;
          break;
 
@@ -1465,6 +1465,28 @@ png_init_read_transformations(png_structp png_ptr)
    }
 #endif /* PNG_READ_BACKGROUND_SUPPORTED && PNG_READ_EXPAND_16_SUPPORTED */
 
+#if defined(PNG_READ_BACKGROUND_SUPPORTED) && \
+   (defined(PNG_READ_SCALE_16_TO_8_SUPPORTED) || \
+   defined(PNG_READ_STRIP_16_TO_8_SUPPORTED))
+   if ((png_ptr->transformations & (PNG_16_TO_8|PNG_SCALE_16_TO_8)) &&
+      (png_ptr->transformations & PNG_COMPOSE) &&
+      !(png_ptr->transformations & PNG_BACKGROUND_EXPAND) &&
+      png_ptr->bit_depth == 16)
+   {
+      /* On the other hand, if a 16-bit file is to be reduced to 8-bits per
+       * component this will also happen after PNG_COMPOSE and so the background
+       * color must be pre-expanded here.
+       *
+       * TODO: fix this too.
+       */
+      png_ptr->background.red = (png_uint_16)(png_ptr->background.red * 257);
+      png_ptr->background.green =
+         (png_uint_16)(png_ptr->background.green * 257);
+      png_ptr->background.blue = (png_uint_16)(png_ptr->background.blue * 257);
+      png_ptr->background.gray = (png_uint_16)(png_ptr->background.gray * 257);
+   }
+#endif
+
    /* NOTE: below 'PNG_READ_ALPHA_MODE_SUPPORTED' is presumed to also enable the
     * background support (see the comments in scripts/pnglibconf.dfa), this
     * allows pre-multiplication of the alpha channel to be implemented as
@@ -1512,6 +1534,16 @@ png_init_read_transformations(png_structp png_ptr)
 #ifdef PNG_READ_BACKGROUND_SUPPORTED
       if (png_ptr->transformations & PNG_COMPOSE)
       {
+         /* Issue a warning about this combination: because RGB_TO_GRAY is
+          * optimized to do the gamma transform if present yet do_background has
+          * to do the same thing if both options are set a
+          * double-gamma-correction happens.  This is true in all versions of
+          * libpng to date.
+          */
+         if (png_ptr->transformations & PNG_RGB_TO_GRAY)
+            png_warning(png_ptr,
+               "libpng does not support gamma+background+rgb_to_gray");
+
          if (png_ptr->color_type == PNG_COLOR_TYPE_PALETTE)
          {
             /* We don't get to here unless there is a tRNS chunk with non-opaque
@@ -1726,7 +1758,13 @@ png_init_read_transformations(png_structp png_ptr)
       else
       /* Transformation does not include PNG_BACKGROUND */
 #endif /* PNG_READ_BACKGROUND_SUPPORTED */
-      if (png_ptr->color_type == PNG_COLOR_TYPE_PALETTE)
+      if (png_ptr->color_type == PNG_COLOR_TYPE_PALETTE
+#ifdef PNG_READ_RGB_TO_GRAY_SUPPORTED
+         /* RGB_TO_GRAY needs to have non-gamma-corrected values! */
+         && ((png_ptr->transformations & PNG_EXPAND) == 0 ||
+         (png_ptr->transformations & PNG_RGB_TO_GRAY) == 0)
+#endif
+         )
       {
          png_colorp palette = png_ptr->palette;
          int num_palette = png_ptr->num_palette;
@@ -1918,7 +1956,7 @@ png_read_transform_info(png_structp png_ptr, png_infop info_ptr)
          info_ptr->bit_depth = 8;
 #     else
 
-#        if PNG_READ_SCALE_16_TO_8_SUPPORTED
+#        ifdef PNG_READ_SCALE_16_TO_8_SUPPORTED
             png_ptr->transformations |= PNG_SCALE_16_TO_8;
             info_ptr->bit_depth = 8;
 #        else
@@ -2165,12 +2203,22 @@ png_do_read_transformations(png_structp png_ptr, png_row_infop row_info)
 
 #ifdef PNG_READ_GAMMA_SUPPORTED
    if ((png_ptr->transformations & PNG_GAMMA) &&
+#ifdef PNG_READ_RGB_TO_GRAY_SUPPORTED
+      /* Because RGB_TO_GRAY does the gamma transform. */
+      !(png_ptr->transformations & PNG_RGB_TO_GRAY) &&
+#endif
 #if (defined PNG_READ_BACKGROUND_SUPPORTED) ||\
    (defined PNG_READ_ALPHA_MODE_SUPPORTED)
+      /* Because PNG_COMPOSE does the gamma transform if there is something to
+       * do (if there is an alpha channel or transparency.)
+       */
        !((png_ptr->transformations & PNG_COMPOSE) &&
        ((png_ptr->num_trans != 0) ||
        (png_ptr->color_type & PNG_COLOR_MASK_ALPHA))) &&
 #endif
+      /* Because png_init_read_transformations transforms the palette, unless
+       * RGB_TO_GRAY will do the transform.
+       */
        (png_ptr->color_type != PNG_COLOR_TYPE_PALETTE))
       png_do_gamma(row_info, png_ptr->row_buf + 1, png_ptr);
 #endif
@@ -2562,7 +2610,7 @@ png_do_scale_16_to_8(png_row_infop row_info, png_bytep row)
    if (row_info->bit_depth == 16)
    {
       png_bytep sp = row; /* source */
-      png_bytep dp = row; /* destinaton */
+      png_bytep dp = row; /* destination */
       png_bytep ep = sp + row_info->rowbytes; /* end+1 */
 
       while (sp < ep)
@@ -2623,7 +2671,7 @@ png_do_chop(png_row_infop row_info, png_bytep row)
    if (row_info->bit_depth == 16)
    {
       png_bytep sp = row; /* source */
-      png_bytep dp = row; /* destinaton */
+      png_bytep dp = row; /* destination */
       png_bytep ep = sp + row_info->rowbytes; /* end+1 */
 
       while (sp < ep)
@@ -3331,7 +3379,7 @@ png_do_rgb_to_gray(png_structp png_ptr, png_row_infop row_info, png_bytep row)
                if (red != green || red != blue)
                   rgb_error |= 1;
 
-               /* From 1.5.5 in the 16 bit case do the accurate convertion even
+               /* From 1.5.5 in the 16 bit case do the accurate conversion even
                 * in the 'fast' case - this is because this is where the code
                 * ends up when handling linear 16 bit data.
                 */
