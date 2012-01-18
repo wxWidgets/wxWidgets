@@ -1723,7 +1723,7 @@ WXHBITMAP wxMask::GetHBITMAP() const
 
 class WXDLLEXPORT wxBundleResourceHandler: public wxBitmapHandler
 {
-    DECLARE_ABSTRACT_CLASS(wxPNGResourceHandler)
+    DECLARE_ABSTRACT_CLASS(wxBundleResourceHandler)
     
 public:
     inline wxBundleResourceHandler()
