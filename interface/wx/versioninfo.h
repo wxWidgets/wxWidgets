@@ -17,8 +17,8 @@
     that you use.
 
     @library{wxbase}
+
     @category{data}
-    @header{wx/versioninfo.h}
 
     @since 2.9.2
 */
