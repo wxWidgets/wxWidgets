@@ -1282,7 +1282,8 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
 #endif // wxUSE_CLIPBOARD
 
     wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
-    wxHtmlWindowMouseHelper::HandleMouseClick(m_Cell, pos, event);
+    if ( !wxHtmlWindowMouseHelper::HandleMouseClick(m_Cell, pos, event) )
+        event.Skip();
 }
 
 #if wxUSE_CLIPBOARD
