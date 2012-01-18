@@ -277,6 +277,7 @@ public:
         for @a x and @a y to let the system position the window.
     @param y
         Vertical dialog position (ignored under MSW).
+
     @header{wx/msgdlg.h}
 */
 int wxMessageBox(const wxString& message,
