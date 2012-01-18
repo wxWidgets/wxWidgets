@@ -147,7 +147,7 @@ void wxSetFromString(const wxString &s, wxBitset<e> &data )
     {
         flag = array[i];
         int ivalue;
-        if ( edata->HasEnumMemberValue( flag, &ivalue ) )
+        if ( edata->HasEnumMemberValue( flag.c_str(), &ivalue ) )
         {
             data.set( (e) ivalue );
         }
