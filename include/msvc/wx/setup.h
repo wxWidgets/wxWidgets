@@ -114,8 +114,11 @@
 #define wxBASE_LIB_NAME(name) wxWX_LIB_NAME("base", "_" name)
 #define wxMSW_LIB_NAME(name) wxWX_LIB_NAME("msw", "_" name)
 
-// this one is for 3rd party libraries: they don't have the version number
+// This one is for 3rd party libraries: they don't have the version number
 // in their names and usually exist in ANSI version only (except for regex)
+//
+// 3rd party libraries are also are not linked in when using DLLs as they're
+// embedded inside our own DLLs and don't need to be linked with the user code.
 #define wx3RD_PARTY_LIB_NAME(name) "wx" name wxSUFFIX_DEBUG
 
 // special version for regex as it does have a Unicode version
@@ -129,24 +132,24 @@
 #ifndef wxNO_XML_LIB
     #pragma comment(lib, wxBASE_LIB_NAME("xml"))
 #endif
-#if wxUSE_REGEX && !defined(wxNO_REGEX_LIB)
+#if wxUSE_REGEX && !defined(wxNO_REGEX_LIB) && !defined(WXUSINGDLL)
     #pragma comment(lib, wx3RD_PARTY_LIB_NAME_U("regex"))
 #endif
 
 #if wxUSE_GUI
-    #if wxUSE_XML && !defined(wxNO_EXPAT_LIB)
+    #if wxUSE_XML && !defined(wxNO_EXPAT_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("expat"))
     #endif
-    #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB)
+    #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("jpeg"))
     #endif
-    #if wxUSE_LIBPNG && !defined(wxNO_PNG_LIB)
+    #if wxUSE_LIBPNG && !defined(wxNO_PNG_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("png"))
     #endif
-    #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB)
+    #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("tiff"))
     #endif
-    #if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB)
+    #if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
     #endif
 
@@ -185,7 +188,9 @@
     #endif
     #if wxUSE_STC && !defined(wxNO_STC_LIB)
         #pragma comment(lib, wxMSW_LIB_NAME("stc"))
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
+        #ifndef WXUSINGDLL
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
+        #endif
     #endif
 #endif // wxUSE_GUI
 
