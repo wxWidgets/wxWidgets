@@ -156,9 +156,7 @@ void wxScrollBar::SetThumbPosition(int viewStart)
 
 int wxScrollBar::GetThumbPosition(void) const
 {
-    SCROLLINFO scrollInfo;
-    wxZeroMemory(scrollInfo);
-    scrollInfo.cbSize = sizeof(SCROLLINFO);
+    WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.fMask = SIF_POS;
 
     if ( !::GetScrollInfo(GetHwnd(), SB_CTL, &scrollInfo) )

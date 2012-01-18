@@ -190,9 +190,7 @@ void SetDefaultMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
                         UINT WXUNUSED_IN_WINCE(id))
 {
 #ifndef __WXWINCE__
-    MENUITEMINFO mii;
-    wxZeroMemory(mii);
-    mii.cbSize = sizeof(MENUITEMINFO);
+    WinStruct<MENUITEMINFO> mii;
     mii.fMask = MIIM_STATE;
     mii.fState = MFS_DEFAULT;
 
@@ -210,9 +208,7 @@ void SetOwnerDrawnMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
                            BOOL WXUNUSED_IN_WINCE(byPositon = FALSE))
 {
 #ifndef __WXWINCE__
-    MENUITEMINFO mii;
-    wxZeroMemory(mii);
-    mii.cbSize = sizeof(MENUITEMINFO);
+    WinStruct<MENUITEMINFO> mii;
     mii.fMask = MIIM_FTYPE | MIIM_DATA;
     mii.fType = MFT_OWNERDRAW;
     mii.dwItemData = data;
@@ -230,9 +226,7 @@ void SetOwnerDrawnMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
 #ifdef __WXWINCE__
 UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
 {
-    MENUITEMINFO info;
-    wxZeroMemory(info);
-    info.cbSize = sizeof(info);
+    WinStruct<MENUITEMINFO> info;
     info.fMask = MIIM_STATE;
     // MF_BYCOMMAND is zero so test MF_BYPOSITION
     if ( !::GetMenuItemInfo(hMenu, id, flags & MF_BYPOSITION ? TRUE : FALSE , & info) )
@@ -913,9 +907,7 @@ void wxMenu::SetTitle(const wxString& label)
         {
             // modify the title
 #ifdef __WXWINCE__
-            MENUITEMINFO info;
-            wxZeroMemory(info);
-            info.cbSize = sizeof(info);
+            WinStruct<MENUITEMINFO> info;
             info.fMask = MIIM_TYPE;
             info.fType = MFT_STRING;
             info.cch = m_title.length();
@@ -1269,9 +1261,7 @@ void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
     }
 
 #ifdef __WXWINCE__
-    MENUITEMINFO info;
-    wxZeroMemory(info);
-    info.cbSize = sizeof(info);
+    WinStruct<MENUITEMINFO> info;
     info.fMask = MIIM_TYPE;
     info.fType = MFT_STRING;
     info.cch = label.length();

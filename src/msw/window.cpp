@@ -5794,9 +5794,7 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
 #ifndef __WXWINCE__
     const HMENU hmenu = (HMENU)lParam;
 
-    MENUITEMINFO mii;
-    wxZeroMemory(mii);
-    mii.cbSize = sizeof(MENUITEMINFO);
+    WinStruct<MENUITEMINFO> mii;
 
     // we could use MIIM_FTYPE here as we only need to know if the item is
     // ownerdrawn or not and not dwTypeData which MIIM_TYPE also returns, but

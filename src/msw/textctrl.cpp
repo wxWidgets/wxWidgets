@@ -2397,9 +2397,7 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
     if ( IsRich() )
     {
         // change the colour of everything
-        CHARFORMAT cf;
-        wxZeroMemory(cf);
-        cf.cbSize = sizeof(cf);
+        WinStruct<CHARFORMAT> cf;
         cf.dwMask = CFM_COLOR;
         cf.crTextColor = wxColourToRGB(colour);
         ::SendMessage(GetHwnd(), EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
