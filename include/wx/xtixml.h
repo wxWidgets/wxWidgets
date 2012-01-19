@@ -19,6 +19,7 @@
 #include "wx/string.h"
 #include "wx/xtistrm.h"
 
+/*
 class WXDLLIMPEXP_XML wxXmlNode;
 class WXDLLIMPEXP_BASE wxPropertyInfo;
 class WXDLLIMPEXP_BASE wxObject;
@@ -26,6 +27,7 @@ class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxAnyList;
 class WXDLLIMPEXP_BASE wxHandlerInfo;
 class WXDLLIMPEXP_BASE wxObjectWriterCallback;
+*/
 
 class WXDLLIMPEXP_XML wxObjectXmlWriter: public wxObjectWriter
 {
