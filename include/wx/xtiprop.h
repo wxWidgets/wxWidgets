@@ -445,8 +445,19 @@ private:
     // when the component is dropped on the container.
 };
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMap, 
+// stl is giving problems when forwarding declarations, therefore we define it as a subclass
+
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMapBase, 
                                       class WXDLLIMPEXP_BASE );
+
+class WXDLLIMPEXP_BASE wxPropertyInfoMap : public wxPropertyInfoMapBase {
+};
+
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxAny, wxStringToAnyHashMapBase,
+                                     class WXDLLIMPEXP_BASE );
+
+class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBase {
+};
 
 #define wxBEGIN_PROPERTIES_TABLE(theClass)                      \
     wxPropertyInfo *theClass::GetPropertiesStatic()             \
@@ -545,9 +556,6 @@ private:                                                \
 public:                                                 \
   void  Set##name( type const & p) { m_##name = p; }    \
   type const & Get##name() const  { return m_##name; }
-
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxAny, wxStringToAnyHashMap,
-    class WXDLLIMPEXP_BASE );
 
 #endif      // wxUSE_EXTENDED_RTTI
 #endif      // _XTIPROP_H_
