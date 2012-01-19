@@ -11,6 +11,10 @@
 
 #include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+#include "wx/object.h"
+#endif
+
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/dnd.h"

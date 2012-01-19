@@ -13,12 +13,11 @@
 
 #if wxUSE_TOOLBAR
 
-#include "wx/toolbar.h"
-
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
 
+#include "wx/toolbar.h"
 #include "wx/app.h"
 #include "wx/osx/private.h"
 #include "wx/geometry.h"

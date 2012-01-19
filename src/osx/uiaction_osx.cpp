@@ -11,7 +11,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+#include "wx/object.h"
+#endif
 
 #if wxUSE_UIACTIONSIMULATOR
 
