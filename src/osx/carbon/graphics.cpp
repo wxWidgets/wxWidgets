@@ -165,6 +165,7 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
     }
 
 #endif
+    wxASSERT(retval != NULL);
     return retval;
 }
 
