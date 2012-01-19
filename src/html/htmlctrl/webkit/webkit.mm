@@ -164,9 +164,9 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
                 wxKeyEvent event(wxEVT_KEY_DOWN);
 
                 event.m_shiftDown = modifiers & shiftKey;
-                event.m_controlDown = modifiers & controlKey;
+                event.m_rawControlDown = modifiers & controlKey;
                 event.m_altDown = modifiers & optionKey;
-                event.m_metaDown = modifiers & cmdKey;
+                event.m_controlDown = modifiers & cmdKey;
                 event.m_x = point.h;
                 event.m_y = point.v;
 
@@ -179,7 +179,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
 
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & controlKey )
                 {
-                    event.m_keyCode = WXK_CONTROL ;
+                    event.m_keyCode = WXK_RAW_CONTROL ;
                     event.SetEventType( ( modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
@@ -197,7 +197,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
                 }
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & cmdKey )
                 {
-                    event.m_keyCode = WXK_COMMAND ;
+                    event.m_keyCode = WXK_CONTROL ;
                     event.SetEventType( ( modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
