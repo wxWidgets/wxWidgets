@@ -191,25 +191,25 @@ wxPoint wxJoystick::GetPosition() const
 int wxJoystick::GetZPosition() const
 {
     if (m_thread)
-        return m_thread->m_axe[wxJS_AXIS_Z];
+        return m_thread->m_axe[wxJS_AXIS_Z-wxJS_AXIS_X];
     return 0;
 }
 int wxJoystick::GetRudderPosition() const
 {
     if (m_thread)
-        return m_thread->m_axe[wxJS_AXIS_RUDDER];
+        return m_thread->m_axe[wxJS_AXIS_RUDDER-wxJS_AXIS_X];
     return 0;
 }
 int wxJoystick::GetUPosition() const
 {
     if (m_thread)
-        return m_thread->m_axe[wxJS_AXIS_U];
+        return m_thread->m_axe[wxJS_AXIS_U-wxJS_AXIS_X];
     return 0;
 }
 int wxJoystick::GetVPosition() const
 {
     if (m_thread)
-        return m_thread->m_axe[wxJS_AXIS_V];
+        return m_thread->m_axe[wxJS_AXIS_V-wxJS_AXIS_X];
     return 0;
 }
 
