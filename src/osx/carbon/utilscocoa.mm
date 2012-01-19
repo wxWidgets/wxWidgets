@@ -11,6 +11,10 @@
 
 #include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+#include "wx/object.h"
+#endif
+
 #if wxOSX_USE_COCOA_OR_CARBON
 #include <Cocoa/Cocoa.h>
 #else
