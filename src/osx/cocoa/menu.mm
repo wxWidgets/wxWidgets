@@ -18,15 +18,15 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/menu.h"
-
 #ifndef WX_PRECOMP
-    #include "wx/log.h"
-    #include "wx/app.h"
-    #include "wx/utils.h"
-    #include "wx/frame.h"
-    #include "wx/menuitem.h"
+#include "wx/log.h"
+#include "wx/app.h"
+#include "wx/utils.h"
+#include "wx/frame.h"
+#include "wx/menuitem.h"
 #endif
+
+#include "wx/menu.h"
 
 #include "wx/osx/private.h"
 
@@ -55,12 +55,20 @@
 
 @end
 
+// this is more compatible, as it is also called for command-key shortcuts
+// and under 10.4, we are not getting a 'close' event however...
+#define wxOSX_USE_NEEDSUPDATE_HOOK 1
+
 @interface wxNSMenuController : NSObject wxOSX_10_6_AND_LATER(<NSMenuDelegate>)
 {
 }
 
+#if wxOSX_USE_NEEDSUPDATE_HOOK
+- (void)menuNeedsUpdate:(NSMenu*)smenu;
+#else
 - (void)menuWillOpen:(NSMenu *)menu;
 - (void)menuDidClose:(NSMenu *)menu;
+#endif
 - (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)item;
 
 @end
@@ -73,6 +81,19 @@
     return self;
 }
 
+#if wxOSX_USE_NEEDSUPDATE_HOOK
+- (void)menuNeedsUpdate:(NSMenu*)smenu
+{
+    wxNSMenu* menu = (wxNSMenu*) smenu;
+    wxMenuImpl* menuimpl = [menu implementation];
+    if ( menuimpl )
+    {
+        wxMenu* wxpeer = (wxMenu*) menuimpl->GetWXPeer();
+        if ( wxpeer )
+            wxpeer->HandleMenuOpened();
+    }
+}
+#else
 - (void)menuWillOpen:(NSMenu *)smenu
 {
     wxNSMenu* menu = (wxNSMenu*) smenu;
@@ -96,6 +117,7 @@
             wxpeer->HandleMenuClosed();
     }
 }
+#endif
 
 - (void)menu:(NSMenu *)smenu willHighlightItem:(NSMenuItem *)item
 {
@@ -133,6 +155,7 @@ public :
         }
         [menu setDelegate:controller];
         [m_osxMenu setImplementation:this];
+        [menu setAutoenablesItems:NO];
         // gc aware
         if ( m_osxMenu )
             CFRetain(m_osxMenu);
