@@ -1478,6 +1478,26 @@
 /* --- end common options --- */
 
 // ----------------------------------------------------------------------------
+// Unix-specific options settings
+// ----------------------------------------------------------------------------
+
+// use wxSelectDispatcher class
+#define wxUSE_SELECT_DISPATCHER 1
+
+// use wxEpollDispatcher class (Linux only)
+#define wxUSE_EPOLL_DISPATCHER 0
+
+/*
+ Use GStreamer for Unix.
+ 
+ Default is 0 as this requires a lot of dependencies which might not be
+ available.
+ 
+ Recommended setting: 1 (wxMediaCtrl won't work by default without it).
+ */
+#define wxUSE_GSTREAMER 0
+
+// ----------------------------------------------------------------------------
 // Mac-specific settings
 // ----------------------------------------------------------------------------
 
