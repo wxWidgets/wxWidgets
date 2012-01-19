@@ -20,9 +20,11 @@
 #include "wx/xti.h"
 #include "wx/any.h"
 
+/*
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+*/
 class WXDLLIMPEXP_BASE wxHashTable;
 class WXDLLIMPEXP_BASE wxHashTable_Node;
 class WXDLLIMPEXP_BASE wxEvent;
@@ -302,7 +304,7 @@ enum
 
 class WXDLLIMPEXP_BASE wxPropertyInfo
 {
-    friend class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+    friend class /* WXDLLIMPEXP_BASE */ wxDynamicClassInfo;
 
 public:
     wxPropertyInfo(wxPropertyInfo* &iter,

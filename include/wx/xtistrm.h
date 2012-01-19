@@ -38,14 +38,16 @@ const int wxNullObjectID = -3;
 // or modify the value before it is streamed-out.
 // ----------------------------------------------------------------------------
 
+/*
+ class WXDLLIMPEXP_BASE wxClassInfo;
+ class WXDLLIMPEXP_BASE wxAnyList;
+ class WXDLLIMPEXP_BASE wxPropertyInfo;
+ class WXDLLIMPEXP_BASE wxAny;
+ class WXDLLIMPEXP_BASE wxHandlerInfo;
+ */
+
 class WXDLLIMPEXP_BASE wxObjectWriter;
 class WXDLLIMPEXP_BASE wxObjectReader;
-class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxAnyList;
-class WXDLLIMPEXP_BASE wxPropertyInfo;
-class WXDLLIMPEXP_BASE wxAny;
-class WXDLLIMPEXP_BASE wxObjectWriter;
-class WXDLLIMPEXP_BASE wxHandlerInfo;
 
 class WXDLLIMPEXP_BASE wxObjectWriterCallback
 {
