@@ -336,7 +336,7 @@ void ImageView::OnDraw(wxDC* dc)
     wxImage image = GetDocument()->GetImage();
     if ( image.IsOk() )
     {
-        dc->DrawBitmap(wxBitmap(image), 0, 0);
+        dc->DrawBitmap(wxBitmap(image), 0, 0, true /* use mask */);
     }
 }
 
