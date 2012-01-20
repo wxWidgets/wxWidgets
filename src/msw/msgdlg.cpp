@@ -54,6 +54,12 @@
     #include "wx/msw/wince/missing.h"
 #endif
 
+// Interestingly, this symbol currently seems to be absent from Platform SDK
+// headers but it is documented at MSDN.
+#ifndef TDF_SIZE_TO_CONTENT
+    #define TDF_SIZE_TO_CONTENT 0x1000000
+#endif
+
 using namespace wxMSWMessageDialog;
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
@@ -680,7 +686,15 @@ wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
 
 void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 {
-    tdc.dwFlags = TDF_EXPAND_FOOTER_AREA | TDF_POSITION_RELATIVE_TO_WINDOW;
+    // Use TDF_SIZE_TO_CONTENT to try to prevent Windows from truncating or
+    // ellipsizing the message text. This doesn't always work as Windows will
+    // still do it if the message contains too long "words" (i.e. runs of the
+    // text without spaces) but at least it ensures that the message text is
+    // fully shown for reasonably-sized words whereas without it using almost
+    // any file system path in a message box would result in truncation.
+    tdc.dwFlags = TDF_EXPAND_FOOTER_AREA |
+                  TDF_POSITION_RELATIVE_TO_WINDOW |
+                  TDF_SIZE_TO_CONTENT;
     tdc.hInstance = wxGetInstance();
     tdc.pszWindowTitle = caption.wx_str();
 
