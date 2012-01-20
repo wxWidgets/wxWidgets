@@ -596,8 +596,7 @@ public:
     /**
         Reads a float value, returning @true if the value was found.
 
-        With the second overload, if the value was not found, @a defaultVal is
-        used instead.
+        If the value was not found, @a f is not changed.
 
         Notice that the value is read as a double but must be in a valid range
         for floats for the function to return @true.
@@ -608,13 +607,25 @@ public:
         Not supported by wxPerl.
         @endWxPerlOnly
     */
-    //@{
     bool Read(const wxString& key, float* f) const;
+    /**
+        Reads a float value, returning @true if the value was found.
+
+        If the value was not found, @a defaultVal is used instead.
+
+        Notice that the value is read as a double but must be in a valid range
+        for floats for the function to return @true.
+
+        @since 2.9.1
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
     bool Read(const wxString& key, float* f, float defaultVal) const;
-    //@}
 
     /**
-        Reads a float value, returning @true if the value was found. If the
+        Reads a boolean value, returning @true if the value was found. If the
         value was not found, @a b is not changed.
 
         @since 2.9.1
@@ -625,7 +636,7 @@ public:
     */
     bool Read(const wxString& key, bool* b) const;
     /**
-        Reads a bool value, returning @true if the value was found. If the
+        Reads a boolean value, returning @true if the value was found. If the
         value was not found, @a defaultVal is used instead.
 
         @beginWxPerlOnly
