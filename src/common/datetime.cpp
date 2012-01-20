@@ -1102,7 +1102,7 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
 // return the current time with ms precision
 /* static */ wxDateTime wxDateTime::UNow()
 {
-    return wxDateTime(wxGetLocalTimeMillis());
+    return wxDateTime(wxGetUTCTimeMillis());
 }
 
 // the values in the tm structure contain the local time

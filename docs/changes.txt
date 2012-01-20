@@ -453,6 +453,7 @@ All:
 - Added wxLogFormatter to allow customizing wxLog output (Sébastien Gallou).
 - Added "%z" support to wxDateTime::Format() and Parse() (Armel Asselin).
 - Add wxHTTP::SetPostBuffer(wxMemoryBuffer) and SetPostText() (Eran Ifrah).
+- Fix wrong time zone used in wxDateTime::UNow().
 
 All (GUI):
 
