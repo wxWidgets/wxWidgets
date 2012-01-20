@@ -417,7 +417,7 @@ void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
 void* wxChoice::DoGetItemClientData(unsigned int n) const
 {
     LPARAM rc = SendMessage(GetHwnd(), CB_GETITEMDATA, n, 0);
-    if ( rc == CB_ERR )
+    if ( rc == CB_ERR && GetLastError() != ERROR_SUCCESS )
     {
         wxLogLastError(wxT("CB_GETITEMDATA"));
 
