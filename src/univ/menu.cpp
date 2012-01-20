@@ -1207,6 +1207,10 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
 void wxMenu::Detach()
 {
+    // After the menu is detached from the menu bar, it shouldn't send its
+    // events to it.
+    SetNextHandler(NULL);
+
     wxMenuBase::Detach();
 }
 
