@@ -251,7 +251,7 @@ MyFrame::MyFrame()
                        wxT("You need to configure a web server accepting debug report uploads to use this function"));
 
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(DebugRpt_About, wxT("&About...\tF1"));
+    menuHelp->Append(DebugRpt_About, wxT("&About\tF1"));
 
     wxMenuBar *mbar = new wxMenuBar();
     mbar->Append(menuFile, wxT("&File"));

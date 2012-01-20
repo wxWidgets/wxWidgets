@@ -597,7 +597,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ID_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(ID_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     fileMenu->Append(wxID_OPEN, wxT("&Open\tCtrl+O"), wxT("Open a file"));
     fileMenu->Append(wxID_SAVE, wxT("&Save\tCtrl+S"), wxT("Save a file"));

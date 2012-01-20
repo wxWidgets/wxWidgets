@@ -133,8 +133,8 @@ msgstr "%s 形式 (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "詳細 (&A) ..."
+msgid "&About"
+msgstr "詳細 (&A)"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1178,8 +1178,8 @@ msgstr "%s について"
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "詳細 (&A) ..."
+msgid "About"
+msgstr "詳細 (&A)"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

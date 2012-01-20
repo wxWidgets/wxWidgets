@@ -19,8 +19,8 @@ msgid "International wxWindows App"
 msgstr "Интернациональное приложение wxWindows"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:136
-msgid "&About..."
-msgstr "&О программе..."
+msgid "&About"
+msgstr "&О программе"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:138
 msgid "E&xit"

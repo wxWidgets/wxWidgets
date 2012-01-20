@@ -274,7 +274,7 @@ wxEmulatorFrame::wxEmulatorFrame(const wxString& title,
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Emulator_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Emulator_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     menuFile->Append(Emulator_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 

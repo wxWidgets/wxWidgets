@@ -156,7 +156,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuFile = new wxMenu;
 
     menuFile->Append(OleAuto_Test, wxT("&Test Excel Automation..."));
-    menuFile->Append(OleAuto_About, wxT("&About..."));
+    menuFile->Append(OleAuto_About, wxT("&About"));
     menuFile->AppendSeparator();
     menuFile->Append(OleAuto_Quit, wxT("E&xit"));
 

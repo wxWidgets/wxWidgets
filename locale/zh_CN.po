@@ -142,7 +142,7 @@ msgstr "%s 文件 (%s)|%s"
 #: ../src/common/stockitem.cpp:140
 #: ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
+msgid "&About"
 msgstr "关于(&A)"
 
 #: ../src/common/stockitem.cpp:208
@@ -1227,8 +1227,8 @@ msgid "About %s"
 msgstr "关于 %s"
 
 #: ../src/common/stockitem.cpp:140
-msgid "About..."
-msgstr "关于..."
+msgid "About"
+msgstr "关于"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"

@@ -6,7 +6,7 @@
       <label>_File</label>
       <style>wxMENU_TEAROFF</style>
       <object class="wxMenuItem" name="menu_about">
-        <label>_About...</label>
+        <label>_About</label>
         <bitmap>filesave.gif</bitmap>
       </object>
       <object class="separator"/>

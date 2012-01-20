@@ -138,8 +138,8 @@ msgstr "%s файлів (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "&Про програму…"
+msgid "&About"
+msgstr "&Про програму"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1166,8 +1166,8 @@ msgid "About %s"
 msgstr "Про %s"
 
 #: ../src/common/stockitem.cpp:140
-msgid "About..."
-msgstr "Про програму…"
+msgid "About"
+msgstr "Про програму"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"

@@ -211,7 +211,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
 
   // Make menus
   m_menuFile = new wxMenu();
-  m_menuFile->Append(CLIENT_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
+  m_menuFile->Append(CLIENT_ABOUT, _("&About\tCtrl-A"), _("Show about dialog"));
   m_menuFile->AppendSeparator();
   m_menuFile->Append(CLIENT_QUIT, _("E&xit\tAlt-X"), _("Quit client"));
 

@@ -84,7 +84,7 @@
 
         <!-- we use wxID_ABOUT name here to get the default menu item stock icon -->
         <object class="wxMenuItem" name="wxID_ABOUT">
-            <label>_About...</label>
+            <label>_About</label>
             <help>About this application</help>
         </object>
     </object>

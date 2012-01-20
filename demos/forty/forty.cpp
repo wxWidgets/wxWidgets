@@ -177,7 +177,7 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos
 
     wxMenu* helpMenu = new wxMenu;
     helpMenu->Append(wxID_HELP_CONTENTS, wxT("&Help Contents"), wxT("Displays information about playing the game"));
-    helpMenu->Append(wxID_ABOUT, wxT("&About..."), wxT("About Forty Thieves"));
+    helpMenu->Append(wxID_ABOUT, wxT("&About"), wxT("About Forty Thieves"));
 
     m_menuBar = new wxMenuBar;
     m_menuBar->Append(gameMenu,    wxT("&Game"));

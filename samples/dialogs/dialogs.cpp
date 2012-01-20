@@ -670,7 +670,7 @@ MyFrame::MyFrame(const wxString& title)
         // satisfy this condition and need to define and connect a separate id.
         static const int DIALOGS_SYSTEM_ABOUT = 0x4010;
 
-        menu->Append(DIALOGS_SYSTEM_ABOUT, "&About...");
+        menu->Append(DIALOGS_SYSTEM_ABOUT, "&About");
         Connect(DIALOGS_SYSTEM_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
                 wxCommandEventHandler(MyFrame::ShowSimpleAboutDialog));
     }

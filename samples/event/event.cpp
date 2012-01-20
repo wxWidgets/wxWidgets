@@ -365,7 +365,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Event_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(Event_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(Event_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 

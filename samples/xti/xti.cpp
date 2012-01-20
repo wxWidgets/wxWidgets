@@ -169,7 +169,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Minimal_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     fileMenu->Append(Minimal_Persist, wxT("Persist a wxFrame to XML..."), 
                     wxT("Creates a wxFrame using wxXTI and saves its description as XML"));

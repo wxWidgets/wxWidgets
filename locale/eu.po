@@ -137,8 +137,8 @@ msgstr "%s agiri (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "&Honi buruz..."
+msgid "&About"
+msgstr "&Honi buruz"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1182,8 +1182,8 @@ msgstr "%s-ri buruz"
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "&Honi buruz..."
+msgid "About"
+msgstr "&Honi buruz"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

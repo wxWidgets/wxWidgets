@@ -216,7 +216,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Caret_SetFontSize, wxT("&Font size...\tCtrl-S"));
     menuFile->Append(Caret_Move, wxT("&Move caret\tCtrl-C"));
     menuFile->AppendSeparator();
-    menuFile->Append(Caret_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(Caret_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(Caret_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 

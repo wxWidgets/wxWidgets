@@ -136,8 +136,8 @@ msgstr "%s failus (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "P&ar..."
+msgid "&About"
+msgstr "P&ar"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy
@@ -1222,8 +1222,8 @@ msgstr "P&ar..."
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "P&ar..."
+msgid "About"
+msgstr "P&ar"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

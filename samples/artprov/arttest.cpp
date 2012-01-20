@@ -157,7 +157,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(wxID_ABOUT, wxT("&About\tF1"), wxT("Show about dialog"));
 
     menuFile->AppendCheckItem(ID_PlugProvider, wxT("&Plug-in art provider"), wxT("Enable custom art provider"));
     menuFile->AppendSeparator();

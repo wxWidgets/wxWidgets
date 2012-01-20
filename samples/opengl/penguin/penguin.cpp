@@ -87,7 +87,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     fileMenu->Append(wxID_EXIT, wxT("E&xit\tALT-X"));
     // Make the "Help" menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP, wxT("&About..."));
+    helpMenu->Append(wxID_HELP, wxT("&About"));
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(fileMenu, wxT("&File"));
@@ -124,7 +124,7 @@ void MyFrame::OnMenuFileExit( wxCommandEvent& WXUNUSED(event) )
     Close(true);
 }
 
-// Help|About... command
+// Help|About command
 void MyFrame::OnMenuHelpAbout( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageBox(wxT("OpenGL Penguin Sample (c) Robert Roebling, Sandro Sigala et al"));

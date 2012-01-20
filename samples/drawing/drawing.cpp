@@ -1772,7 +1772,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
     menuFile->Append(File_Save, wxT("&Save...\tCtrl-S"), wxT("Save drawing to file"));
     menuFile->AppendSeparator();
-    menuFile->Append(File_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(File_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(File_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 

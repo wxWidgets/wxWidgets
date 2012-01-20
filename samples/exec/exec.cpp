@@ -496,7 +496,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
 
     wxMenu *helpMenu = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
-    helpMenu->Append(Exec_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Exec_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();

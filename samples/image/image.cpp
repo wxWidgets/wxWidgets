@@ -668,7 +668,7 @@ MyFrame::MyFrame()
     menuImage->Append( ID_SHOWTHUMBNAIL, wxT("Test &thumbnail...\tCtrl-T"),
                         "Test scaling the image during load (try with JPEG)");
     menuImage->AppendSeparator();
-    menuImage->Append( ID_ABOUT, wxT("&About...\tF1"));
+    menuImage->Append( ID_ABOUT, wxT("&About\tF1"));
     menuImage->AppendSeparator();
     menuImage->Append( ID_QUIT, wxT("E&xit\tCtrl-Q"));
     menu_bar->Append(menuImage, wxT("&Image"));

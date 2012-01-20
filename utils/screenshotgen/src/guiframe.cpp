@@ -93,7 +93,7 @@ void GUIFrame::AddMenuBar()
     //Help Menu
     helpMenu = new wxMenu();
     wxMenuItem* m_menuHelpAbout;
-    m_menuHelpAbout = new wxMenuItem( helpMenu, wxID_ABOUT, wxString( _("&About...") ) + wxT('\t') + wxT("F1"), _("Shows info about this application."), wxITEM_NORMAL );
+    m_menuHelpAbout = new wxMenuItem( helpMenu, wxID_ABOUT, wxString( _("&About") ) + wxT('\t') + wxT("F1"), _("Shows info about this application."), wxITEM_NORMAL );
     helpMenu->Append( m_menuHelpAbout );
 
     mbar->Append( helpMenu, _("&Help") );

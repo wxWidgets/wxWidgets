@@ -115,7 +115,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ID_About, "&About...\tF1", "Show about dialog");
+    helpMenu->Append(ID_About, "&About\tF1", "Show about dialog");
 
     fileMenu->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
 

@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ..\internat.cpp:180
-msgid "&About..."
+msgid "&About"
 msgstr "wxウィンドウズについて"
 
 #: ..\internat.cpp:182

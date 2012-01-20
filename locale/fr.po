@@ -134,8 +134,8 @@ msgstr "%s fichiers (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "À &propos..."
+msgid "&About"
+msgstr "À &propos"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1206,8 +1206,8 @@ msgstr "À propos"
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "À &propos..."
+msgid "About"
+msgstr "À &propos"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

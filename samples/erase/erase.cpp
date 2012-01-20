@@ -249,7 +249,7 @@ MyFrame::MyFrame()
 
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Erase_Menu_About, "&About...\tCtrl-A", "Show about dialog");
+    helpMenu->Append(Erase_Menu_About, "&About\tCtrl-A", "Show about dialog");
 
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");

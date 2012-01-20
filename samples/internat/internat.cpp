@@ -295,7 +295,7 @@ MyFrame::MyFrame(wxLocale& locale)
 
     // since wxID_ABOUT and wxID_EXIT are stock IDs they will automatically get
     // translated help strings; nice isn't it?
-    file_menu->Append(wxID_ABOUT, _("&About..."));
+    file_menu->Append(wxID_ABOUT, _("&About"));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, _("E&xit"));
 

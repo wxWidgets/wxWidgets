@@ -138,7 +138,7 @@ msgstr "%s filer (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
+msgid "&About"
 msgstr "%Om"
 
 #: ../src/common/stockitem.cpp:208
@@ -1238,7 +1238,7 @@ msgstr "%Om"
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
+msgid "About"
 msgstr "%Om"
 
 #: ../src/common/stockitem.cpp:208

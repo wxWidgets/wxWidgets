@@ -367,7 +367,7 @@ MyFrame::MyFrame()
     menuFile->Append(Except_Quit, wxT("E&xit\tCtrl-Q"), wxT("Quit this program"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Except_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Except_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();

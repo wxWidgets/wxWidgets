@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: $Id: it.po 69691 2011-11-06 12:07:35Z VZ $\n"
+"Project-Id-Version: $Id$\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-06 12:55+0100\n"
 "PO-Revision-Date: 2011-11-23 15:23+0100\n"
@@ -139,8 +139,8 @@ msgstr "%s file (%s)|%s"
 #: ../src/common/stockitem.cpp:140
 #: ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "Inform&azioni su..."
+msgid "&About"
+msgstr "Inform&azioni su"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1219,8 +1219,8 @@ msgid "About %s"
 msgstr "Informazioni su %s"
 
 #: ../src/common/stockitem.cpp:140
-msgid "About..."
-msgstr "Informazioni su..."
+msgid "About"
+msgstr "Informazioni su"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"

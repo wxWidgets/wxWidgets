@@ -228,7 +228,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     file_menu->Append(TreeTest_ClearLog, wxT("&Clear log\tCtrl-L"));
     file_menu->AppendSeparator();
-    file_menu->Append(TreeTest_About, wxT("&About..."));
+    file_menu->Append(TreeTest_About, wxT("&About"));
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, wxT("E&xit\tAlt-X"));
 
@@ -1606,7 +1606,7 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
 
 #if wxUSE_MENUS
     wxMenu menu(title);
-    menu.Append(TreeTest_About, wxT("&About..."));
+    menu.Append(TreeTest_About, wxT("&About"));
     menu.AppendSeparator();
     menu.Append(TreeTest_Highlight, wxT("&Highlight item"));
     menu.Append(TreeTest_Dump, wxT("&Dump"));

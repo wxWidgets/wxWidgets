@@ -378,7 +378,7 @@ RegFrame::RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, in
     wxMenu *pMenuFile = new wxMenu;
     pMenuFile->Append(Menu_Test, wxT("Te&st"), wxT("Test key creation"));
     pMenuFile->AppendSeparator();
-    pMenuFile->Append(Menu_About, wxT("&About..."), wxT("Show an extraordinarly beautiful dialog"));
+    pMenuFile->Append(Menu_About, wxT("&About"), wxT("Show an extraordinarly beautiful dialog"));
     pMenuFile->AppendSeparator();
     pMenuFile->Append(Menu_Quit,  wxT("E&xit"), wxT("Quit this program"));
 

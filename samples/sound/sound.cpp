@@ -213,7 +213,7 @@ MyFrame::MyFrame(const wxString& title)
     playMenu->Append(Sound_PlayBell, wxT("Play system bell"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Sound_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Sound_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();

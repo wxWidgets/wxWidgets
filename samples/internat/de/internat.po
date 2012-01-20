@@ -19,8 +19,8 @@ msgid "International wxWindows App"
 msgstr "Internationales wxWindows Programm"
 
 #: ../internat.cpp:128
-msgid "&About..."
-msgstr "Ü&ber..."
+msgid "&About"
+msgstr "Ü&ber"
 
 #: ../internat.cpp:130
 msgid "E&xit"

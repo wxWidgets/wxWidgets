@@ -513,7 +513,7 @@ VarScrollFrame::VarScrollFrame()
 
     // the "About" item should be in the help menu
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(VScroll_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    menuHelp->Append(VScroll_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
 #ifdef wxHAS_RADIO_MENU_ITEMS
     menuMode->AppendRadioItem(VScroll_VScrollMode, wxT("&Vertical\tAlt-V"),

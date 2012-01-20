@@ -132,8 +132,8 @@ msgstr "%s lêers (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "&Aangaande..."
+msgid "&About"
+msgstr "&Aangaande"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1248,8 +1248,8 @@ msgstr "&Aangaande..."
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "&Aangaande..."
+msgid "About"
+msgstr "&Aangaande"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"

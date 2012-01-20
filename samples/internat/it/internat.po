@@ -47,8 +47,8 @@ msgid "&Test locale availability...\tCtrl-T"
 msgstr "&Verifica la disponibilità del locale...\tCtrl-T"
 
 #: ../internat.cpp:261 ../internat.cpp:292
-msgid "&About..."
-msgstr "&Informazioni su..."
+msgid "&About"
+msgstr "&Informazioni su"
 
 #: ../internat.cpp:263 ../internat.cpp:294
 msgid "E&xit"

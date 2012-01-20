@@ -140,9 +140,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     fileMenu->Append(wxID_CLOSE, _("&Close"));
 
     wxMenu* helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, _("&About..."));
+    helpMenu->Append(wxID_ABOUT, _("&About"));
     // Ensures we don't get an empty help menu
-    helpMenu->Append(wxID_HELP_CONTENTS, _("&About..."));
+    helpMenu->Append(wxID_HELP_CONTENTS, _("&About"));
 
     menuBar->Append(fileMenu,_("&File"));
     menuBar->Append(helpMenu,_("&Help"));

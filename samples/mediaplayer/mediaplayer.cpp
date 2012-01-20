@@ -535,7 +535,7 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
                      wxT("Select a backend manually"));
 
     helpMenu->Append(wxID_ABOUT,
-                     wxT("&About...\tF1"),
+                     wxT("&About\tF1"),
                      wxT("Show about dialog"));
 
 

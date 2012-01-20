@@ -234,7 +234,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(NetTest_EnumISP, wxT("&Enumerate ISPs...\tCtrl-E"));
     menuFile->Append(NetTest_Check, wxT("&Check connection status...\tCtrl-C"));
     menuFile->AppendSeparator();
-    menuFile->Append(NetTest_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(NetTest_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(NetTest_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 

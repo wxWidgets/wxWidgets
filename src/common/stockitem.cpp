@@ -137,7 +137,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
 
     switch (id)
     {
-        STOCKITEM(wxID_ABOUT,               _("&About..."),           _("About..."));
+        STOCKITEM(wxID_ABOUT,               _("&About"),           _("About"));
         STOCKITEM(wxID_ADD,                 _("Add"),                 _("Add"));
         STOCKITEM(wxID_APPLY,               _("&Apply"),              _("Apply"));
         STOCKITEM(wxID_BACKWARD,            _("&Back"),               _("Back"));

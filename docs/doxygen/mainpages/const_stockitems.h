@@ -19,7 +19,7 @@ Also note that you can retrieve stock bitmaps using wxArtProvider.
 
 @beginDefList
 @row3col{<b>Stock ID</b>, <b>GTK icon</b>, <b>Stock label</b>}
-@stock{wxID_ABOUT,about,&About...}
+@stock{wxID_ABOUT,about,&About}
 @stock{wxID_ADD,add,Add}
 @stock{wxID_APPLY,apply,&Apply}
 @stock{wxID_BACKWARD,go-back-ltr,&Back}

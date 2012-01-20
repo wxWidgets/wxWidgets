@@ -133,8 +133,8 @@ msgstr "%s dosyaları (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "&Hakkında..."
+msgid "&About"
+msgstr "&Hakkında"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1200,8 +1200,8 @@ msgstr "%s Hakkında "
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "&Hakkında..."
+msgid "About"
+msgstr "&Hakkında"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

@@ -140,8 +140,8 @@ msgstr "%s ficheiros (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "&Sobre..."
+msgid "&About"
+msgstr "&Sobre"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1211,8 +1211,8 @@ msgstr "Sobre "
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "&Sobre..."
+msgid "About"
+msgstr "&Sobre"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

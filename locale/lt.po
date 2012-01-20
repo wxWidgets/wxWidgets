@@ -139,8 +139,8 @@ msgstr "%s files (%s)|%s"
 #: ../src/common/stockitem.cpp:140
 #: ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "&About..."
+msgid "&About"
+msgstr "&About"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -270,8 +270,8 @@ msgid "&Copy URL"
 msgstr "&Copy URL"
 
 #: ../src/common/headerctrlcmn.cpp:314
-msgid "&Customize..."
-msgstr "&Pritaikyti..."
+msgid "&Customize"
+msgstr "&Pritaikyti"
 
 #: ../src/generic/dbgrptg.cpp:331
 msgid "&Debug report preview:"
@@ -1219,8 +1219,8 @@ msgid "About %s"
 msgstr "About %s"
 
 #: ../src/common/stockitem.cpp:140
-msgid "About..."
-msgstr "Apie..."
+msgid "About"
+msgstr "Apie"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"

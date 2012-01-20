@@ -2024,7 +2024,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     wxMenu *menuTools2 = new wxMenu;
     wxMenu *menuHelp = new wxMenu;
 
-    menuHelp->Append(ID_ABOUT, wxT("&About..."), wxT("Show about dialog") );
+    menuHelp->Append(ID_ABOUT, wxT("&About"), wxT("Show about dialog") );
 
     menuTools1->Append(ID_APPENDPROP, wxT("Append New Property") );
     menuTools1->Append(ID_APPENDCAT, wxT("Append New Category\tCtrl-S") );

@@ -281,7 +281,7 @@ MyFrame::MyFrame()
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(HtmlLbox_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(HtmlLbox_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();

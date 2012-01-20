@@ -132,7 +132,7 @@ msgstr "Fitxers (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
+msgid "&About"
 msgstr ""
 
 #: ../src/common/stockitem.cpp:208
@@ -1247,7 +1247,7 @@ msgid "About %s"
 msgstr ""
 
 #: ../src/common/stockitem.cpp:140
-msgid "About..."
+msgid "About"
 msgstr ""
 
 #: ../src/common/stockitem.cpp:208

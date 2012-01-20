@@ -187,7 +187,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   m_menuFile->Append(SERVER_WAITFORACCEPT, "&Wait for connection\tCtrl-W");
   m_menuFile->Append(SERVER_UDPTEST, "&UDP test\tCtrl-U");
   m_menuFile->AppendSeparator();
-  m_menuFile->Append(SERVER_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
+  m_menuFile->Append(SERVER_ABOUT, _("&About\tCtrl-A"), _("Show about dialog"));
   m_menuFile->AppendSeparator();
   m_menuFile->Append(SERVER_QUIT, _("E&xit\tAlt-X"), _("Quit server"));
 

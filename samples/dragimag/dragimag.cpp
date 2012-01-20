@@ -318,7 +318,7 @@ MyFrame::MyFrame()
           wxPoint(20,20), wxSize(470,360) )
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( wxID_ABOUT, wxT("&About..."));
+    file_menu->Append( wxID_ABOUT, wxT("&About"));
     file_menu->AppendCheckItem( TEST_USE_SCREEN, wxT("&Use whole screen for dragging"), wxT("Use whole screen"));
     file_menu->Append( wxID_EXIT, wxT("E&xit"));
 

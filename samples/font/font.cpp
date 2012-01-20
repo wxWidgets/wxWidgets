@@ -311,7 +311,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Font_ViewMsg, wxT("&View...\tCtrl-V"),
                      wxT("View an email message file"));
     menuFile->AppendSeparator();
-    menuFile->Append(Font_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(Font_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(Font_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 

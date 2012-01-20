@@ -386,7 +386,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenuBar *menuBar = new wxMenuBar;
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(Calendar_File_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(Calendar_File_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(Calendar_File_ClearLog, wxT("&Clear log\tCtrl-L"));
     menuFile->AppendSeparator();

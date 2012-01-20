@@ -140,8 +140,8 @@ msgstr "%s फ़ाइलें (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "के बारे में (&A)..."
+msgid "&About"
+msgstr "के बारे में (&A)"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1217,8 +1217,8 @@ msgstr "के बारे में"
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "के बारे में (&A)..."
+msgid "About"
+msgstr "के बारे में (&A)"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

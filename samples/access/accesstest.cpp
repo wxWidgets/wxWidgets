@@ -337,7 +337,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(AccessTest_About, wxT("&About..."), wxT("Show about dialog"));
+    helpMenu->Append(AccessTest_About, wxT("&About"), wxT("Show about dialog"));
 
     menuFile->Append(AccessTest_Query, wxT("Query"), wxT("Query the window hierarchy"));
     menuFile->AppendSeparator();

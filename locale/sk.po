@@ -136,8 +136,8 @@ msgstr "%s súborov (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "&O aplikácii..."
+msgid "&About"
+msgstr "&O aplikácii"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1207,8 +1207,8 @@ msgstr "O aplikácii"
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "&O aplikácii..."
+msgid "About"
+msgstr "&O aplikácii"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

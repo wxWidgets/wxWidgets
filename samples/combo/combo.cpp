@@ -624,7 +624,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ComboCtrl_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(ComboCtrl_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     fileMenu->Append(ComboCtrl_Compare, wxT("&Compare against wxComboBox..."),
         wxT("Show some wxOwnerDrawnComboBoxes side-by-side with native wxComboBoxes."));

@@ -412,7 +412,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                         wxT("Toggle status bar format"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(StatusBar_About, wxT("&About...\tCtrl-A"),
+    helpMenu->Append(StatusBar_About, wxT("&About\tCtrl-A"),
                      wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...

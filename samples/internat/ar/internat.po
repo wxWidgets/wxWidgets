@@ -17,8 +17,8 @@ msgstr ""
 "POT-Creation-Date: \n"
 
 #: ../internat.cpp:200
-msgid "&About..."
-msgstr "&عن البرنامج..."
+msgid "&About"
+msgstr "&عن البرنامج"
 
 #: ../internat.cpp:202
 msgid "E&xit"

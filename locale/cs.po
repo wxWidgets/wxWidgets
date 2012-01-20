@@ -141,8 +141,8 @@ msgstr "%s souborů (%s)|%s"
 #: ../src/common/stockitem.cpp:140
 #: ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "O &aplikaci..."
+msgid "&About"
+msgstr "O &aplikaci"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1221,8 +1221,8 @@ msgid "About %s"
 msgstr "O %s"
 
 #: ../src/common/stockitem.cpp:140
-msgid "About..."
-msgstr "O..."
+msgid "About"
+msgstr "O"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"

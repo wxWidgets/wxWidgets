@@ -135,8 +135,8 @@ msgstr "%s bestanden (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "In&fo..."
+msgid "&About"
+msgstr "In&fo"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1202,8 +1202,8 @@ msgstr "Over %s"
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "In&fo..."
+msgid "About"
+msgstr "In&fo"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy

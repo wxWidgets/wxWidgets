@@ -378,7 +378,7 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(THREAD_SHOWCPUS, wxT("&Show CPU count"));
     menuHelp->AppendSeparator();
-    menuHelp->Append(THREAD_ABOUT, wxT("&About..."));
+    menuHelp->Append(THREAD_ABOUT, wxT("&About"));
     menuBar->Append(menuHelp, wxT("&Help"));
 
     SetMenuBar(menuBar);

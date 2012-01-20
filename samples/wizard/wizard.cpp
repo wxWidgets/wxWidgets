@@ -450,7 +450,7 @@ MyFrame::MyFrame(const wxString& title)
     menuOptions->AppendCheckItem(Wizard_ExpandBitmap, wxT("Si&ze Bitmap To Page"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Wizard_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Wizard_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();

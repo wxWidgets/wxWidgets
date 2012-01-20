@@ -134,8 +134,8 @@ msgstr "%s 파일 (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
-msgid "&About..."
-msgstr "이 프로그램은...(&A)"
+msgid "&About"
+msgstr "이 프로그램은(&A)"
 
 #: ../src/common/stockitem.cpp:208
 msgid "&Actual Size"
@@ -1201,8 +1201,8 @@ msgstr "%s 정보"
 
 #: ../src/common/stockitem.cpp:140
 #, fuzzy
-msgid "About..."
-msgstr "이 프로그램은...(&A)"
+msgid "About"
+msgstr "이 프로그램은(&A)"
 
 #: ../src/common/stockitem.cpp:208
 #, fuzzy
