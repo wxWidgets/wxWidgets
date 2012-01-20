@@ -1039,4 +1039,18 @@ void StringTestCase::ScopedBuffers()
     wxCharBuffer buf2 = sbuf;
     CPPUNIT_ASSERT( buf2.data() != literal );
     CPPUNIT_ASSERT_EQUAL( literal, buf.data() );
+
+    // Check that extending the buffer keeps it NUL-terminated.
+    size_t len = 10;
+
+    wxCharBuffer buf3(len);
+    CPPUNIT_ASSERT_EQUAL('\0', buf3.data()[len]);
+
+    wxCharBuffer buf4;
+    buf4.extend(len);
+    CPPUNIT_ASSERT_EQUAL('\0', buf4.data()[len]);
+
+    wxCharBuffer buf5(5);
+    buf5.extend(len);
+    CPPUNIT_ASSERT_EQUAL('\0', buf5.data()[len]);
 }

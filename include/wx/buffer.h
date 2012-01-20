@@ -312,6 +312,10 @@ public:
         if ( !str )
             return false;
 
+        // For consistency with the ctor taking just the length, NUL-terminate
+        // the buffer.
+        str[len] = (CharType)0;
+
         if ( this->m_data == this->GetNullData() )
         {
             this->m_data = new Data(str, len);
