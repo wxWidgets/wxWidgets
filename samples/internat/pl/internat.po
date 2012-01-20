@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2004-05-12 12:57+0200\n"
 "PO-Revision-Date: 2004-05-12 13:50+0100\n"
-"Last-Translator: W³odzimierz ABX Skiba <abx@abx.art.pl>\n"
+"Last-Translator: WÅ‚odzimierz ABX Skiba <abx@abx.art.pl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n>1 && n<5 ? 1 : 2;\n"
 
@@ -21,15 +21,15 @@ msgstr "Inform&acje..."
 
 #: ../internat.cpp:202
 msgid "E&xit"
-msgstr "Zakoñ&cz"
+msgstr "ZakoÅ„&cz"
 
 #: ../internat.cpp:205
 msgid "&Open bogus file"
-msgstr "&Otwórz nieistniej±cy plik"
+msgstr "&OtwÃ³rz nieistniejÄ…cy plik"
 
 #: ../internat.cpp:206
 msgid "&Play a game"
-msgstr "&Pobaw siê"
+msgstr "&Pobaw siÄ™"
 
 #: ../internat.cpp:208
 msgid "&1 _() (gettext)"
@@ -53,7 +53,7 @@ msgstr "&Test"
 
 #: ../internat.cpp:232
 msgid "International wxWindows App"
-msgstr "Wielojêzyczna aplikacja wxWindows"
+msgstr "WielojÄ™zyczna aplikacja wxWindows"
 
 #: ../internat.cpp:252
 msgid ""
@@ -62,17 +62,17 @@ msgid ""
 "%s\n"
 "Canonical locale name: %s\n"
 msgstr ""
-"Jêzyk: %s\n"
-"Jêzykowe ustawienia systemu:\n"
+"JÄ™zyk: %s\n"
+"JÄ™zykowe ustawienia systemu:\n"
 "%s\n"
-"Wybrany jêzyk: %s\n"
+"Wybrany jÄ™zyk: %s\n"
 
 #: ../internat.cpp:258
 msgid ""
 "I18n sample\n"
 "(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
 msgstr ""
-"Przyk³ad programu I18n\n"
+"PrzykÅ‚ad programu I18n\n"
 "(c) 1998, 1999 Vadim Zeitlin i Julian Smart"
 
 #: ../internat.cpp:261
@@ -81,24 +81,24 @@ msgstr "Informacje o programie Internat"
 
 #: ../internat.cpp:270
 msgid "Enter your number:"
-msgstr "Wprowad¼ liczbê"
+msgstr "WprowadÅº liczbÄ™"
 
 #: ../internat.cpp:271
 msgid "Try to guess my number!"
-msgstr "Spróbuj odgadn±æ moj± liczbê!"
+msgstr "SprÃ³buj odgadnÄ…Ä‡ mojÄ… liczbÄ™!"
 
 #: ../internat.cpp:285
 msgid "You've probably entered an invalid number."
-msgstr "Najprawdopodobniej wprowadzono b³êdn± liczbê."
+msgstr "Najprawdopodobniej wprowadzono bÅ‚Ä™dnÄ… liczbÄ™."
 
 #: ../internat.cpp:299
 msgid "Congratulations! you've won. Here is the magic phrase:"
-msgstr "Gratulacje! wygra³e¶. Oto magiczna formu³a:"
+msgstr "Gratulacje! wygraÅ‚eÅ›. Oto magiczna formuÅ‚a:"
 
 #: ../internat.cpp:300
 #, c-format
 msgid "cannot create fifo `%s'"
-msgstr "nie mo¿na utworzyæ struktury fifo `%s'"
+msgstr "nie moÅ¼na utworzyÄ‡ struktury fifo `%s'"
 
 #: ../internat.cpp:311
 msgid "Result"
@@ -110,7 +110,7 @@ msgstr "Test _() (gettext)"
 
 #: ../internat.cpp:324
 msgid "Please enter text to translate"
-msgstr "Wprowad¼ tekst do przet³umaczenia"
+msgstr "WprowadÅº tekst do przetÅ‚umaczenia"
 
 #: ../internat.cpp:338
 msgid "Testing _N() (ngettext)"
@@ -118,7 +118,7 @@ msgstr "Test _N() (ngettext)"
 
 #: ../internat.cpp:340
 msgid "Please enter range for plural forms of \"n files deleted\" phrase"
-msgstr "Wprowad¼ zakres dla form liczby mnogiej wyra¿enia \"sn plików usuniêtych\""
+msgstr "WprowadÅº zakres dla form liczby mnogiej wyraÅ¼enia \"sn plikÃ³w usuniÄ™tych\""
 
 #: ../internat.cpp:366
 msgid "Testing wxTRANSLATE() (gettext_noop)"
@@ -126,11 +126,11 @@ msgstr "Test wxTRANSLATE() (gettext_noop)"
 
 #: ../internat.cpp:310
 msgid "Bad luck! try again..."
-msgstr "Pud³o! spróbuj jeszcze raz..."
+msgstr "PudÅ‚o! sprÃ³buj jeszcze raz..."
 
 #: ../internat.cpp:327
 msgid "default value"
-msgstr "warto¶æ domy¶lna"
+msgstr "wartoÅ›Ä‡ domyÅ›lna"
 
 #: ../internat.cpp:364
 msgid "line 1"
@@ -147,6 +147,6 @@ msgstr "wiersz 3"
 #: ../internat.cpp:353
 msgid "file deleted"
 msgid_plural "files deleted"
-msgstr[0] "plik usuniêty"
-msgstr[1] "pliki usuniête"
-msgstr[2] "plików usuniêtych"
+msgstr[0] "plik usuniÄ™ty"
+msgstr[1] "pliki usuniÄ™te"
+msgstr[2] "plikÃ³w usuniÄ™tych"

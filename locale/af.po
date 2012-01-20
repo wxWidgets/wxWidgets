@@ -7,7 +7,7 @@ msgstr ""
 "Last-Translator: Petri Jooste <rkwjpj@puknet.puk.ac.za>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/common/debugrpt.cpp:582
@@ -128,7 +128,7 @@ msgstr ""
 #: ../src/common/fldlgcmn.cpp:107
 #, c-format
 msgid "%s files (%s)|%s"
-msgstr "%s lêers (%s)|%s"
+msgstr "%s lÃªers (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
@@ -313,7 +313,7 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:158 ../src/html/helpfrm.cpp:147
 msgid "&File"
-msgstr "&Lêer"
+msgstr "&LÃªer"
 
 #: ../src/common/stockitem.cpp:159
 msgid "&Find"
@@ -779,7 +779,7 @@ msgstr ""
 #: ../src/common/config.cpp:526 ../src/msw/regconf.cpp:259
 #, c-format
 msgid "'%s' has extra '..', ignored."
-msgstr "'%s' het ekstra '..', geïgnoreer"
+msgstr "'%s' het ekstra '..', geÃ¯gnoreer"
 
 #: ../src/common/valtext.cpp:250 ../src/common/valtext.cpp:252
 #: ../src/common/valtext.cpp:254 ../src/common/valtext.cpp:256
@@ -800,7 +800,7 @@ msgstr "'%s' is nie 'n geldige boodskapkatalogus."
 #: ../src/common/textbuf.cpp:245
 #, c-format
 msgid "'%s' is probably a binary buffer."
-msgstr "'%s' is waarskynlik 'n binêre buffer."
+msgstr "'%s' is waarskynlik 'n binÃªre buffer."
 
 #: ../src/common/valtext.cpp:248
 #, c-format
@@ -1018,7 +1018,7 @@ msgstr "11 x 17 duim"
 
 #: ../src/html/htmprint.cpp:432
 msgid ": file does not exist!"
-msgstr ": lêer bestaan nie!"
+msgstr ": lÃªer bestaan nie!"
 
 #: ../src/common/fontmap.cpp:198
 msgid ": unknown charset"
@@ -1116,7 +1116,7 @@ msgstr ""
 
 #: ../src/common/xtixml.cpp:419
 msgid "A non empty collection must consist of 'element' nodes"
-msgstr "'n Nie-leë versameling moet bestaan uit 'element'-nodes"
+msgstr "'n Nie-leÃ« versameling moet bestaan uit 'element'-nodes"
 
 #: ../src/richtext/richtextliststylepage.cpp:305
 #: ../src/richtext/richtextliststylepage.cpp:307
@@ -1313,20 +1313,20 @@ msgstr "Alles"
 #: ../src/generic/filectrlg.cpp:1195 ../src/common/fldlgcmn.cpp:90
 #, c-format
 msgid "All files (%s)|%s"
-msgstr "Alle lêers (%s)|%s"
+msgstr "Alle lÃªers (%s)|%s"
 
 #: ../include/wx/defs.h:2809
 msgid "All files (*)|*"
-msgstr "Alle lêers (*)|*"
+msgstr "Alle lÃªers (*)|*"
 
 #: ../src/html/helpwnd.cpp:1560
 msgid "All files (*.*)|*"
-msgstr "Alle lêers (*.*)|*"
+msgstr "Alle lÃªers (*.*)|*"
 
 #: ../include/wx/defs.h:2806 ../src/propgrid/props.cpp:1706
 #: ../src/propgrid/props.cpp:1735
 msgid "All files (*.*)|*.*"
-msgstr "Alle lêers (*.*)|*.*"
+msgstr "Alle lÃªers (*.*)|*.*"
 
 #: ../src/richtext/richtextstyles.cpp:1032
 msgid "All styles"
@@ -1356,12 +1356,12 @@ msgstr ""
 #: ../src/generic/animateg.cpp:163
 #, fuzzy, c-format
 msgid "Animation file is not of type %ld."
-msgstr "Beeldlêer is nie van die tipe %d."
+msgstr "BeeldlÃªer is nie van die tipe %d."
 
 #: ../src/generic/logg.cpp:1040
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
-msgstr "Voeg log by lêer '%s' (kies [Nee] om te oorskryf)?"
+msgstr "Voeg log by lÃªer '%s' (kies [Nee] om te oorskryf)?"
 
 #: ../src/common/stockitem.cpp:142
 msgid "Apply"
@@ -1379,7 +1379,7 @@ msgstr "Arabies (ISO-8859-6)"
 #: ../src/msw/ole/automtn.cpp:643
 #, fuzzy, c-format
 msgid "Argument %u not found."
-msgstr "katalogus-lêer vir domein '%s' nie gevind nie."
+msgstr "katalogus-lÃªer vir domein '%s' nie gevind nie."
 
 #: ../src/generic/aboutdlgg.cpp:185
 msgid "Artists"
@@ -1473,11 +1473,11 @@ msgstr "BMP: kon nie data skryf nie"
 
 #: ../src/common/imagbmp.cpp:240
 msgid "BMP: Couldn't write the file (Bitmap) header."
-msgstr "BMP: kon nie die lêerkopreëls (Bitmap) skryf nie"
+msgstr "BMP: kon nie die lÃªerkopreÃ«ls (Bitmap) skryf nie"
 
 #: ../src/common/imagbmp.cpp:263
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
-msgstr "BMP: kon nie die lêerkopreëls skryf nie."
+msgstr "BMP: kon nie die lÃªerkopreÃ«ls skryf nie."
 
 #: ../src/common/imagbmp.cpp:134
 msgid "BMP: wxImage doesn't have own wxPalette."
@@ -1620,7 +1620,7 @@ msgstr ""
 
 #: ../src/html/chm.cpp:818 ../src/html/chm.cpp:877
 msgid "CHM handler currently supports only local files!"
-msgstr "CHM-hanteerder ondersteun tans slegs plaaslike lêers!"
+msgstr "CHM-hanteerder ondersteun tans slegs plaaslike lÃªers!"
 
 #: ../src/common/accelcmn.cpp:68
 msgid "CLEAR"
@@ -1674,7 +1674,7 @@ msgstr "Kan sleutel '%s' nie verwyder nie"
 #: ../src/msw/iniconf.cpp:459 ../src/os2/iniconf.cpp:472
 #, c-format
 msgid "Can't delete the INI file '%s'"
-msgstr "Kan INI-lêer '%s' nie uitvee nie"
+msgstr "Kan INI-lÃªer '%s' nie uitvee nie"
 
 #: ../src/msw/registry.cpp:805
 #, c-format
@@ -1699,7 +1699,7 @@ msgstr "Kan geen waardes van nie-ondersteunde tipe %d kopieer nie."
 #: ../src/common/ffile.cpp:235
 #, c-format
 msgid "Can't find current position in file '%s'"
-msgstr "Kan nie huidige posisie in lêer '%s' vind nie"
+msgstr "Kan nie huidige posisie in lÃªer '%s' vind nie"
 
 #: ../src/msw/registry.cpp:417
 #, c-format
@@ -1753,11 +1753,11 @@ msgstr "Kan waarde van sleutel '%s' nie lees nie"
 #: ../src/common/image.cpp:2283
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
-msgstr "Kan beeld nie stoor na lêer '%s': Onbekende uitgang."
+msgstr "Kan beeld nie stoor na lÃªer '%s': Onbekende uitgang."
 
 #: ../src/generic/logg.cpp:587 ../src/generic/logg.cpp:1002
 msgid "Can't save log contents to file."
-msgstr "Boekstawing kan nie in lêer gestoor word nie."
+msgstr "Boekstawing kan nie in lÃªer gestoor word nie."
 
 #: ../src/msw/thread.cpp:631 ../src/os2/thread.cpp:478
 msgid "Can't set thread priority"
@@ -1797,12 +1797,12 @@ msgstr ""
 #: ../src/common/filefn.cpp:1348
 #, c-format
 msgid "Cannot enumerate files '%s'"
-msgstr "Kan lêers in gids '%s' nie opsom nie"
+msgstr "Kan lÃªers in gids '%s' nie opsom nie"
 
 #: ../src/msw/dir.cpp:211
 #, c-format
 msgid "Cannot enumerate files in directory '%s'"
-msgstr "Kan lêers in gids '%s' nie opsom nie"
+msgstr "Kan lÃªers in gids '%s' nie opsom nie"
 
 #: ../src/msw/dialup.cpp:543
 #, c-format
@@ -1811,7 +1811,7 @@ msgstr "Kan geen actiewe inbelverbinding vind nie: %s"
 
 #: ../src/msw/dialup.cpp:850
 msgid "Cannot find the location of address book file"
-msgstr "Kan stoorplek van adresboeklêer nie vind nie"
+msgstr "Kan stoorplek van adresboeklÃªer nie vind nie"
 
 #: ../src/msw/ole/automtn.cpp:554
 #, fuzzy, c-format
@@ -1861,12 +1861,12 @@ msgstr "Kan ikoon nie laai van '%s'."
 #: ../src/xrc/xmlres.cpp:362
 #, fuzzy, c-format
 msgid "Cannot load resources from '%s'."
-msgstr "Kan hulpbronne nie uit lêer '%s' laai nie."
+msgstr "Kan hulpbronne nie uit lÃªer '%s' laai nie."
 
 #: ../src/xrc/xmlres.cpp:745
 #, c-format
 msgid "Cannot load resources from file '%s'."
-msgstr "Kan hulpbronne nie uit lêer '%s' laai nie."
+msgstr "Kan hulpbronne nie uit lÃªer '%s' laai nie."
 
 #: ../src/html/htmlfilt.cpp:138
 #, c-format
@@ -1876,30 +1876,30 @@ msgstr "Kan HTML-dokument '%s' nie oopmaak nie"
 #: ../src/html/helpdata.cpp:651
 #, c-format
 msgid "Cannot open HTML help book: %s"
-msgstr "Kan HTML-hulplêer '%s' nie oopmaak nie"
+msgstr "Kan HTML-hulplÃªer '%s' nie oopmaak nie"
 
 #: ../src/html/helpdata.cpp:298
 #, c-format
 msgid "Cannot open contents file: %s"
-msgstr "Kan inhoudsopgawe-lêer nie oopmaak nie: %s"
+msgstr "Kan inhoudsopgawe-lÃªer nie oopmaak nie: %s"
 
 #: ../src/generic/dcpsg.cpp:1719
 msgid "Cannot open file for PostScript printing!"
-msgstr "Kan lêer vir PostScript-drukwerk nie oopmaak nie!"
+msgstr "Kan lÃªer vir PostScript-drukwerk nie oopmaak nie!"
 
 #: ../src/html/helpdata.cpp:312
 #, c-format
 msgid "Cannot open index file: %s"
-msgstr "Kan indekslêer nie oopmaak nie: %s"
+msgstr "Kan indekslÃªer nie oopmaak nie: %s"
 
 #: ../src/xrc/xmlres.cpp:727
 #, fuzzy, c-format
 msgid "Cannot open resources file '%s'."
-msgstr "Kan hulpbronne nie uit lêer '%s' laai nie."
+msgstr "Kan hulpbronne nie uit lÃªer '%s' laai nie."
 
 #: ../src/html/helpwnd.cpp:1541
 msgid "Cannot print empty page."
-msgstr "Kan nie leë bladsy druk nie."
+msgstr "Kan nie leÃ« bladsy druk nie."
 
 #: ../src/msw/volume.cpp:508
 #, c-format
@@ -1945,7 +1945,7 @@ msgstr "Kan uitvoerdraad %x nie opskort nie"
 
 #: ../src/msw/thread.cpp:809
 msgid "Cannot wait for thread termination"
-msgstr "Kan nie wag vir uitvoerdraad-beëindiging nie"
+msgstr "Kan nie wag vir uitvoerdraad-beÃ«indiging nie"
 
 #: ../src/html/helpwnd.cpp:544
 msgid "Case sensitive"
@@ -2273,7 +2273,7 @@ msgstr ""
 #: ../src/osx/carbon/dataview.cpp:901
 #, fuzzy
 msgid "Column could not be added."
-msgstr "Lêer kon nie gelaai word nie."
+msgstr "LÃªer kon nie gelaai word nie."
 
 #: ../src/osx/carbon/dataview.cpp:900
 msgid "Column description could not be initialized."
@@ -2282,7 +2282,7 @@ msgstr ""
 #: ../src/osx/carbon/dataview.cpp:1533 ../src/osx/carbon/dataview.cpp:1554
 #, fuzzy
 msgid "Column index not found."
-msgstr "katalogus-lêer vir domein '%s' nie gevind nie."
+msgstr "katalogus-lÃªer vir domein '%s' nie gevind nie."
 
 #: ../src/osx/carbon/dataview.cpp:1609
 msgid "Column width could not be determined"
@@ -2306,7 +2306,7 @@ msgstr "Uitvoering van opdrag '%s' het misluk met foutboodskap: %ul"
 
 #: ../src/html/helpwnd.cpp:1558
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
-msgstr "Saamgeperste HTML-hulplêer (*.chm)|*.chm|"
+msgstr "Saamgeperste HTML-hulplÃªer (*.chm)|*.chm|"
 
 #: ../src/generic/dirctrlg.cpp:536
 msgid "Computer"
@@ -2350,7 +2350,7 @@ msgstr "Gekopieer na knipbord:\"%s\""
 
 #: ../src/generic/prntdlgg.cpp:253
 msgid "Copies:"
-msgstr "Kopieë:"
+msgstr "KopieÃ«:"
 
 #: ../src/common/stockitem.cpp:151 ../src/stc/stc_i18n.cpp:19
 #, fuzzy
@@ -2365,7 +2365,7 @@ msgstr "Seksies"
 #: ../src/html/chm.cpp:721
 #, c-format
 msgid "Could not create temporary file '%s'"
-msgstr "Kon nie tydelike lêer '%s'skep nie"
+msgstr "Kon nie tydelike lÃªer '%s'skep nie"
 
 #: ../src/osx/carbon/dataview.cpp:1280 ../src/osx/carbon/dataview.cpp:1667
 #, fuzzy
@@ -2379,12 +2379,12 @@ msgstr ""
 #: ../src/osx/carbon/dataview.cpp:844
 #, fuzzy
 msgid "Could not determine number of columns."
-msgstr "Kon nie lêer '%s' opspoor nie."
+msgstr "Kon nie lÃªer '%s' opspoor nie."
 
 #: ../src/osx/carbon/dataview.cpp:976
 #, fuzzy
 msgid "Could not determine number of items"
-msgstr "Kon nie lêer '%s' opspoor nie."
+msgstr "Kon nie lÃªer '%s' opspoor nie."
 
 #: ../src/html/chm.cpp:274
 #, c-format
@@ -2405,22 +2405,22 @@ msgstr "Kon nie begin met drukwerk nie."
 #: ../src/osx/carbon/dataview.cpp:1164 ../src/osx/carbon/dataview.cpp:1190
 #, fuzzy
 msgid "Could not get items."
-msgstr "Kon nie lêer '%s' opspoor nie."
+msgstr "Kon nie lÃªer '%s' opspoor nie."
 
 #: ../src/osx/carbon/dataview.cpp:2654 ../src/osx/carbon/dataview.cpp:2719
 #, fuzzy
 msgid "Could not get property flags."
-msgstr "Kon nie tydelike lêer '%s'skep nie"
+msgstr "Kon nie tydelike lÃªer '%s'skep nie"
 
 #: ../src/osx/carbon/dataview.cpp:727
 #, fuzzy
 msgid "Could not get selected items."
-msgstr "Kon nie lêer '%s' opspoor nie."
+msgstr "Kon nie lÃªer '%s' opspoor nie."
 
 #: ../src/html/chm.cpp:445
 #, c-format
 msgid "Could not locate file '%s'."
-msgstr "Kon nie lêer '%s' opspoor nie."
+msgstr "Kon nie lÃªer '%s' opspoor nie."
 
 #: ../src/osx/carbon/dataview.cpp:846
 #, fuzzy
@@ -2430,7 +2430,7 @@ msgstr "Kon nie 'n wyser skep nie"
 #: ../src/osx/carbon/dataview.cpp:643
 #, fuzzy
 msgid "Could not retrieve number of items"
-msgstr "Kon nie tydelike lêer '%s'skep nie"
+msgstr "Kon nie tydelike lÃªer '%s'skep nie"
 
 #: ../src/osx/carbon/dataview.cpp:2567
 #, fuzzy
@@ -2506,7 +2506,7 @@ msgstr "Kon nie 'n tydhouer skep nie"
 #: ../src/common/translation.cpp:1853
 #, fuzzy
 msgid "Couldn't enumerate translations"
-msgstr "Kon uitvoerdraad nie beëindig nie"
+msgstr "Kon uitvoerdraad nie beÃ«indig nie"
 
 #: ../src/common/dynlib.cpp:157
 #, c-format
@@ -2533,7 +2533,7 @@ msgstr "Kan nie zlib-afblaasstroom inisialiseer nie."
 
 #: ../src/common/imagpng.cpp:660
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr "Kon PNG-beeld nie laai nie: lêer is korrup of geheue is onvoldoende."
+msgstr "Kon PNG-beeld nie laai nie: lÃªer is korrup of geheue is onvoldoende."
 
 #: ../src/unix/sound.cpp:471
 #, c-format
@@ -2566,7 +2566,7 @@ msgstr "Kon PNG-beeld nie stoor nie."
 
 #: ../src/msw/thread.cpp:694
 msgid "Couldn't terminate thread"
-msgstr "Kon uitvoerdraad nie beëindig nie"
+msgstr "Kon uitvoerdraad nie beÃ«indig nie"
 
 #: ../src/common/xtistrm.cpp:171
 #, fuzzy, c-format
@@ -2645,19 +2645,19 @@ msgstr "DIB Opskrif: Kodering kom nie ooreen met bis-diepte nie."
 
 #: ../src/common/imagbmp.cpp:1000
 msgid "DIB Header: Image height > 32767 pixels for file."
-msgstr "DIB Opskrif: Beeldhoogte > 32767 pixels in lêer."
+msgstr "DIB Opskrif: Beeldhoogte > 32767 pixels in lÃªer."
 
 #: ../src/common/imagbmp.cpp:992
 msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "DIB Opskrif: Beeldbreedte > 32767 pixels in lêer."
+msgstr "DIB Opskrif: Beeldbreedte > 32767 pixels in lÃªer."
 
 #: ../src/common/imagbmp.cpp:1016
 msgid "DIB Header: Unknown bitdepth in file."
-msgstr "DIB Opskrif: Onbekende bisdiepte in lêer."
+msgstr "DIB Opskrif: Onbekende bisdiepte in lÃªer."
 
 #: ../src/common/imagbmp.cpp:1028
 msgid "DIB Header: Unknown encoding in file."
-msgstr "DIB Opskrif: Onbekende kodering in lêer."
+msgstr "DIB Opskrif: Onbekende kodering in lÃªer."
 
 #: ../src/common/accelcmn.cpp:81
 #, fuzzy
@@ -2755,7 +2755,7 @@ msgstr "Verwyder item"
 #: ../src/unix/snglinst.cpp:296
 #, c-format
 msgid "Deleted stale lock file '%s'."
-msgstr "Verouderde slot-lêer '%s' is verwyder."
+msgstr "Verouderde slot-lÃªer '%s' is verwyder."
 
 #: ../src/common/module.cpp:125
 #, c-format
@@ -2785,7 +2785,7 @@ msgid ""
 "not installed on this machine. Please install it."
 msgstr ""
 "Inbel-funksies is nie beskikbaar nie omdat die afstandtoegangsdiens (RAS) "
-"nie op hierdie masjien geïnstalleer is nie. Installeer dit asb."
+"nie op hierdie masjien geÃ¯nstalleer is nie. Installeer dit asb."
 
 #: ../src/generic/tipdlg.cpp:231
 msgid "Did you know..."
@@ -2852,7 +2852,7 @@ msgid ""
 "New value is \n"
 "%s %1"
 msgstr ""
-"Wil jy die '%s'-bevel wat gebruik word vir lêers met uitgang \"%s\" "
+"Wil jy die '%s'-bevel wat gebruik word vir lÃªers met uitgang \"%s\" "
 "verander?\n"
 "Huidige waarde is \n"
 "%s, \n"
@@ -2922,7 +2922,7 @@ msgstr ""
 #: ../src/unix/fswatcher_inotify.cpp:335
 #, fuzzy
 msgid "EOF while reading from inotify descriptor"
-msgstr "kan nie lees van lêeretiket %d"
+msgstr "kan nie lees van lÃªeretiket %d"
 
 #: ../src/common/accelcmn.cpp:65
 msgid "ESC"
@@ -2990,7 +2990,7 @@ msgstr ""
 #: ../src/generic/dbgrptg.cpp:171
 #, fuzzy, c-format
 msgid "Enter command to open file \"%s\":"
-msgstr "kan lêer '%s' nie oopmaak nie"
+msgstr "kan lÃªer '%s' nie oopmaak nie"
 
 #: ../src/generic/helpext.cpp:464
 msgid "Entries found"
@@ -3116,12 +3116,12 @@ msgstr "Nuwe gids"
 
 #: ../src/unix/snglinst.cpp:270
 msgid "Failed to access lock file."
-msgstr "Toegang na slotlêer het misluk."
+msgstr "Toegang na slotlÃªer het misluk."
 
 #: ../src/unix/epolldispatcher.cpp:117
 #, fuzzy, c-format
 msgid "Failed to add descriptor %d to epoll descriptor %d"
-msgstr "kan nie skryf na lêeretiket %d nie"
+msgstr "kan nie skryf na lÃªeretiket %d nie"
 
 #: ../src/msw/dib.cpp:551
 #, fuzzy, c-format
@@ -3140,7 +3140,7 @@ msgstr "Videomodus kon nie verander word nie"
 #: ../src/common/image.cpp:2932
 #, fuzzy, c-format
 msgid "Failed to check format of image file \"%s\"."
-msgstr "Die bitmap-beeld kon nie is lêer \"%s\" gestoor word nie."
+msgstr "Die bitmap-beeld kon nie is lÃªer \"%s\" gestoor word nie."
 
 #: ../src/common/debugrpt.cpp:243
 #, fuzzy, c-format
@@ -3149,12 +3149,12 @@ msgstr "Die gids %s/.gnome kon nie geskep word nie."
 
 #: ../src/common/filename.cpp:216
 msgid "Failed to close file handle"
-msgstr "Toemaak van lêer het misluk."
+msgstr "Toemaak van lÃªer het misluk."
 
 #: ../src/unix/snglinst.cpp:335
 #, c-format
 msgid "Failed to close lock file '%s'"
-msgstr "Toemaak van slotlêer '%s' het misluk"
+msgstr "Toemaak van slotlÃªer '%s' het misluk"
 
 #: ../src/msw/clipbrd.cpp:115
 msgid "Failed to close the clipboard."
@@ -3176,7 +3176,7 @@ msgstr "Verbinding het misluk: geen ISP om te bel."
 #: ../src/common/textfile.cpp:201
 #, fuzzy, c-format
 msgid "Failed to convert file \"%s\" to Unicode."
-msgstr "Toemaak van lêer het misluk."
+msgstr "Toemaak van lÃªer het misluk."
 
 #: ../src/generic/logg.cpp:982
 #, fuzzy
@@ -3186,17 +3186,17 @@ msgstr "Opening van knipbord het misluk."
 #: ../src/msw/registry.cpp:692
 #, c-format
 msgid "Failed to copy registry value '%s'"
-msgstr "Kopiëring van registerwaarde '%s' het misluk"
+msgstr "KopiÃ«ring van registerwaarde '%s' het misluk"
 
 #: ../src/msw/registry.cpp:701
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
-msgstr "Kopiëring van registersleutel '%s' na '%s' het misluk."
+msgstr "KopiÃ«ring van registersleutel '%s' na '%s' het misluk."
 
 #: ../src/common/filefn.cpp:1056
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
-msgstr "Kopiëring van lêer '%s' na '%s' het misluk"
+msgstr "KopiÃ«ring van lÃªer '%s' na '%s' het misluk"
 
 #: ../src/msw/registry.cpp:679
 #, fuzzy, c-format
@@ -3213,7 +3213,7 @@ msgstr "Skepping van MDI-hoofvenster het misluk."
 
 #: ../src/common/filename.cpp:981
 msgid "Failed to create a temporary file name"
-msgstr "'n Tydelyke lêernaam kon nie geskep word nie"
+msgstr "'n Tydelyke lÃªernaam kon nie geskep word nie"
 
 #: ../src/msw/utilsexc.cpp:271
 msgid "Failed to create an anonymous pipe"
@@ -3256,7 +3256,7 @@ msgstr "Wyser kon nie geskep word nie."
 #: ../src/msw/mimetype.cpp:199
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
-msgstr "Die registersleutel vir '%s'-lêers kon nie geskep word nie."
+msgstr "Die registersleutel vir '%s'-lÃªers kon nie geskep word nie."
 
 #: ../src/msw/fdrepdlg.cpp:443
 #, c-format
@@ -3308,7 +3308,7 @@ msgstr "Opening van '%s' vir %s het misluk"
 #: ../src/common/regex.cpp:435 ../src/common/regex.cpp:483
 #, fuzzy, c-format
 msgid "Failed to find match for regular expression: %s"
-msgstr "'%s' kon nie in reëlmatige uitdrukking '%s' gevind word nie"
+msgstr "'%s' kon nie in reÃ«lmatige uitdrukking '%s' gevind word nie"
 
 #: ../src/msw/dialup.cpp:717
 #, c-format
@@ -3357,12 +3357,12 @@ msgstr "Die werkgids kon nie verkry word nie"
 #: ../src/unix/snglinst.cpp:242
 #, fuzzy, c-format
 msgid "Failed to inspect the lock file '%s'"
-msgstr "Sluiting van die slotlêer '%s' het misluk"
+msgstr "Sluiting van die slotlÃªer '%s' het misluk"
 
 #: ../src/unix/appunix.cpp:90
 #, fuzzy
 msgid "Failed to install signal handler"
-msgstr "Toemaak van lêer het misluk."
+msgstr "Toemaak van lÃªer het misluk."
 
 #: ../src/unix/threadpsx.cpp:1010
 msgid ""
@@ -3370,7 +3370,7 @@ msgid ""
 "program"
 msgstr ""
 "Aansluiting by 'n uitvoerdraad het misluk, moontlik 'n geheuelekkasie "
-"teëgekom - herbegin die programma asb."
+"teÃ«gekom - herbegin die programma asb."
 
 #: ../src/msw/utils.cpp:747
 #, c-format
@@ -3380,22 +3380,22 @@ msgstr "Process %d kon nie doodgemaak word nie"
 #: ../src/common/iconbndl.cpp:183
 #, fuzzy, c-format
 msgid "Failed to load image %%d from file '%s'."
-msgstr "Laaiing van beeld %d vanuit lêer '%s' het misluk."
+msgstr "Laaiing van beeld %d vanuit lÃªer '%s' het misluk."
 
 #: ../src/common/iconbndl.cpp:191
 #, fuzzy, c-format
 msgid "Failed to load image %d from stream."
-msgstr "Laaiing van beeld %d vanuit lêer '%s' het misluk."
+msgstr "Laaiing van beeld %d vanuit lÃªer '%s' het misluk."
 
 #: ../src/common/image.cpp:2250 ../src/common/image.cpp:2269
 #, fuzzy, c-format
 msgid "Failed to load image from file \"%s\"."
-msgstr "Laaiing van beeld %d vanuit lêer '%s' het misluk."
+msgstr "Laaiing van beeld %d vanuit lÃªer '%s' het misluk."
 
 #: ../src/msw/enhmeta.cpp:98
 #, fuzzy, c-format
 msgid "Failed to load metafile from file \"%s\"."
-msgstr "Laaiing van beeld %d vanuit lêer '%s' het misluk."
+msgstr "Laaiing van beeld %d vanuit lÃªer '%s' het misluk."
 
 #: ../src/msw/volume.cpp:328
 msgid "Failed to load mpr.dll."
@@ -3404,7 +3404,7 @@ msgstr "Laaiing van mpr.dll het misluk."
 #: ../src/msw/utils.cpp:1128
 #, fuzzy, c-format
 msgid "Failed to load resource \"%s\"."
-msgstr "Laaiing van beeld %d vanuit lêer '%s' het misluk."
+msgstr "Laaiing van beeld %d vanuit lÃªer '%s' het misluk."
 
 #: ../src/common/dynlib.cpp:105
 #, c-format
@@ -3414,12 +3414,12 @@ msgstr "Laaiing van gedeelde biblioteek '%s' het misluk"
 #: ../src/msw/utils.cpp:1135
 #, fuzzy, c-format
 msgid "Failed to lock resource \"%s\"."
-msgstr "Sluiting van die slotlêer '%s' het misluk"
+msgstr "Sluiting van die slotlÃªer '%s' het misluk"
 
 #: ../src/unix/snglinst.cpp:199
 #, c-format
 msgid "Failed to lock the lock file '%s'"
-msgstr "Sluiting van die slotlêer '%s' het misluk"
+msgstr "Sluiting van die slotlÃªer '%s' het misluk"
 
 #: ../src/unix/epolldispatcher.cpp:137
 #, c-format
@@ -3429,7 +3429,7 @@ msgstr ""
 #: ../src/common/filename.cpp:2531
 #, c-format
 msgid "Failed to modify file times for '%s'"
-msgstr "Verandering van lêertye van '%s' het misluk"
+msgstr "Verandering van lÃªertye van '%s' het misluk"
 
 #: ../src/common/selectdispatcher.cpp:253
 msgid "Failed to monitor I/O channels"
@@ -3467,7 +3467,7 @@ msgstr "Opening van '%s' vir %s het misluk"
 
 #: ../src/common/filename.cpp:1016
 msgid "Failed to open temporary file."
-msgstr "Opening van tydelyk lêer het misluk."
+msgstr "Opening van tydelyk lÃªer het misluk."
 
 #: ../src/msw/clipbrd.cpp:94
 msgid "Failed to open the clipboard."
@@ -3484,7 +3484,7 @@ msgstr "Stoor van data op knipbord het misluk"
 
 #: ../src/unix/snglinst.cpp:279
 msgid "Failed to read PID from lock file."
-msgstr "Inlees van PID vanuit slotlêer het misluk."
+msgstr "Inlees van PID vanuit slotlÃªer het misluk."
 
 #: ../src/common/fileconf.cpp:465
 #, fuzzy
@@ -3494,17 +3494,17 @@ msgstr "Fout met lees van konfigurasie-opsies."
 #: ../src/common/docview.cpp:677
 #, fuzzy, c-format
 msgid "Failed to read document from the file \"%s\"."
-msgstr "Laaiing van beeld %d vanuit lêer '%s' het misluk."
+msgstr "Laaiing van beeld %d vanuit lÃªer '%s' het misluk."
 
 #: ../src/dfb/evtloop.cpp:99
 #, fuzzy
 msgid "Failed to read event from DirectFB pipe"
-msgstr "Inlees van PID vanuit slotlêer het misluk."
+msgstr "Inlees van PID vanuit slotlÃªer het misluk."
 
 #: ../src/unix/evtloopunix.cpp:136
 #, fuzzy
 msgid "Failed to read from wake-up pipe"
-msgstr "Inlees van PID vanuit slotlêer het misluk."
+msgstr "Inlees van PID vanuit slotlÃªer het misluk."
 
 #: ../src/unix/utilsunx.cpp:608
 msgid "Failed to redirect child process input/output"
@@ -3527,17 +3527,17 @@ msgstr "Die kodering vir karakterstel '%s' kon nie onthou word nie."
 #: ../src/common/debugrpt.cpp:226
 #, fuzzy, c-format
 msgid "Failed to remove debug report file \"%s\""
-msgstr "Verwydering van slotlêer '%s' het misluk"
+msgstr "Verwydering van slotlÃªer '%s' het misluk"
 
 #: ../src/unix/snglinst.cpp:323
 #, c-format
 msgid "Failed to remove lock file '%s'"
-msgstr "Verwydering van slotlêer '%s' het misluk"
+msgstr "Verwydering van slotlÃªer '%s' het misluk"
 
 #: ../src/unix/snglinst.cpp:289
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr "Verwydering van verouderd slotlêer '%s' het misluk."
+msgstr "Verwydering van verouderd slotlÃªer '%s' het misluk."
 
 #: ../src/msw/registry.cpp:529
 #, c-format
@@ -3563,7 +3563,7 @@ msgstr "Onttrekking van data uit knipbord het misluk"
 #: ../src/common/filename.cpp:2625
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
-msgstr "Verkryging van lêertye vir '%s' het misluk"
+msgstr "Verkryging van lÃªertye vir '%s' het misluk"
 
 #: ../src/msw/dialup.cpp:488
 msgid "Failed to retrieve text of RAS error message"
@@ -3576,12 +3576,12 @@ msgstr "Verkryging van ondersteunde knipbord-formate het misluk"
 #: ../src/common/docview.cpp:648
 #, fuzzy, c-format
 msgid "Failed to save document to the file \"%s\"."
-msgstr "Die bitmap-beeld kon nie is lêer \"%s\" gestoor word nie."
+msgstr "Die bitmap-beeld kon nie is lÃªer \"%s\" gestoor word nie."
 
 #: ../src/msw/dib.cpp:329
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
-msgstr "Die bitmap-beeld kon nie is lêer \"%s\" gestoor word nie."
+msgstr "Die bitmap-beeld kon nie is lÃªer \"%s\" gestoor word nie."
 
 #: ../src/msw/dde.cpp:765
 msgid "Failed to send DDE advise notification"
@@ -3599,11 +3599,11 @@ msgstr "Opstelling van knipborddata het misluk."
 #: ../src/unix/snglinst.cpp:182
 #, fuzzy, c-format
 msgid "Failed to set permissions on lock file '%s'"
-msgstr "Onmoontlik om magtigings vir lêer '%s' op te stel"
+msgstr "Onmoontlik om magtigings vir lÃªer '%s' op te stel"
 
 #: ../src/common/file.cpp:551
 msgid "Failed to set temporary file permissions"
-msgstr "Opstelling van magtigings van tydelyke lêer het misluk"
+msgstr "Opstelling van magtigings van tydelyke lÃªer het misluk"
 
 #: ../src/gtk/textctrl.cpp:1029
 #, fuzzy
@@ -3634,11 +3634,11 @@ msgstr ""
 
 #: ../src/unix/threadpsx.cpp:1525
 msgid "Failed to terminate a thread."
-msgstr "Beëindiging van uitvoerdraad het misluk."
+msgstr "BeÃ«indiging van uitvoerdraad het misluk."
 
 #: ../src/msw/dde.cpp:743
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr "Beëindiging van advies-lus met die DDE-server het misluk"
+msgstr "BeÃ«indiging van advies-lus met die DDE-server het misluk"
 
 #: ../src/msw/dialup.cpp:961
 #, c-format
@@ -3648,12 +3648,12 @@ msgstr "Verbreking van inbelverbinding het misluk: %s"
 #: ../src/common/filename.cpp:2546
 #, c-format
 msgid "Failed to touch the file '%s'"
-msgstr "Aanraking van lêer '%s' het misluk"
+msgstr "Aanraking van lÃªer '%s' het misluk"
 
 #: ../src/unix/snglinst.cpp:329
 #, c-format
 msgid "Failed to unlock lock file '%s'"
-msgstr "Oopsluit van die slotlêer '%s' het misluk"
+msgstr "Oopsluit van die slotlÃªer '%s' het misluk"
 
 #: ../src/msw/dde.cpp:315
 #, c-format
@@ -3668,7 +3668,7 @@ msgstr "Onttrekking van data uit knipbord het misluk"
 #: ../src/common/fileconf.cpp:1038
 #, fuzzy
 msgid "Failed to update user configuration file."
-msgstr "kan gebruikers-konfigurasielêer nie oopmaak nie."
+msgstr "kan gebruikers-konfigurasielÃªer nie oopmaak nie."
 
 #: ../src/common/debugrpt.cpp:713
 #, fuzzy, c-format
@@ -3679,12 +3679,12 @@ msgstr ""
 #: ../src/unix/snglinst.cpp:169
 #, c-format
 msgid "Failed to write to lock file '%s'"
-msgstr "Skryfbewerking na slotlêer '%s' het misluk"
+msgstr "Skryfbewerking na slotlÃªer '%s' het misluk"
 
 #: ../src/propgrid/propgrid.cpp:173
 #, fuzzy
 msgid "False"
-msgstr "&Lêer"
+msgstr "&LÃªer"
 
 #: ../src/propgrid/advprops.cpp:659
 #, fuzzy
@@ -3694,7 +3694,7 @@ msgstr "Lettertipe-grootte:"
 #: ../src/common/stockitem.cpp:158 ../src/msw/wince/filedlgwce.cpp:119
 #, fuzzy
 msgid "File"
-msgstr "&Lêer"
+msgstr "&LÃªer"
 
 #: ../src/common/docview.cpp:665
 #, fuzzy, c-format
@@ -3709,12 +3709,12 @@ msgstr "Opening van '%s' vir %s het misluk"
 #: ../src/mgl/bitmap.cpp:439
 #, c-format
 msgid "File %s does not exist."
-msgstr "Lêer %s bestaan nie."
+msgstr "LÃªer %s bestaan nie."
 
 #: ../src/gtk/filedlg.cpp:53
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
-msgstr "Lêer '%s' bestaan al. Moet dit oorskryf word?"
+msgstr "LÃªer '%s' bestaan al. Moet dit oorskryf word?"
 
 #: ../src/os2/filedlg.cpp:308
 #, c-format
@@ -3722,12 +3722,12 @@ msgid ""
 "File '%s' already exists.\n"
 "Do you want to replace it?"
 msgstr ""
-"Lêer '%s' bestaan al.\n"
+"LÃªer '%s' bestaan al.\n"
 "Wil jy dit vervang?"
 
 #: ../src/richtext/richtextctrl.cpp:2381 ../src/common/textcmn.cpp:853
 msgid "File couldn't be loaded."
-msgstr "Lêer kon nie gelaai word nie."
+msgstr "LÃªer kon nie gelaai word nie."
 
 #: ../src/msw/filedlg.cpp:355
 #, fuzzy, c-format
@@ -3736,11 +3736,11 @@ msgstr "Uitvoering van opdrag '%s' het misluk met foutboodskap: %ul"
 
 #: ../src/common/docview.cpp:1749
 msgid "File error"
-msgstr "Lêerfout"
+msgstr "LÃªerfout"
 
 #: ../src/generic/dirctrlg.cpp:680 ../src/generic/filectrlg.cpp:799
 msgid "File name exists already."
-msgstr "Lêernaam bestaan al."
+msgstr "LÃªernaam bestaan al."
 
 #: ../src/unix/fswatcher_inotify.cpp:413
 msgid "File system containing watched object was unmounted"
@@ -3749,17 +3749,17 @@ msgstr ""
 #: ../src/motif/filedlg.cpp:219
 #, fuzzy
 msgid "Files"
-msgstr "&Lêer"
+msgstr "&LÃªer"
 
 #: ../src/common/filefn.cpp:1772
 #, fuzzy, c-format
 msgid "Files (%s)"
-msgstr "Lêers (%s)|%s"
+msgstr "LÃªers (%s)|%s"
 
 #: ../src/motif/filedlg.cpp:217
 #, fuzzy
 msgid "Filter"
-msgstr "&Lêer"
+msgstr "&LÃªer"
 
 #: ../src/common/stockitem.cpp:159 ../src/html/helpwnd.cpp:498
 msgid "Find"
@@ -3857,7 +3857,7 @@ msgstr "GIF: datastroom lyk afgekap."
 
 #: ../src/common/imaggif.cpp:135
 msgid "GIF: error in GIF image format."
-msgstr "GIF: fout in GIF-lêerformaat."
+msgstr "GIF: fout in GIF-lÃªerformaat."
 
 #: ../src/common/imaggif.cpp:138
 msgid "GIF: not enough memory."
@@ -3874,7 +3874,7 @@ msgstr "GTK+ tema"
 #: ../src/common/prntbase.cpp:244
 #, fuzzy
 msgid "Generic PostScript"
-msgstr "PostScript-lêer"
+msgstr "PostScript-lÃªer"
 
 #: ../src/common/paper.cpp:137
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
@@ -3906,7 +3906,7 @@ msgstr "Gaan vorentoe"
 
 #: ../src/html/helpwnd.cpp:674
 msgid "Go one level up in document hierarchy"
-msgstr "Gaan een vlak hoër in dokument-hiërargie"
+msgstr "Gaan een vlak hoÃ«r in dokument-hiÃ«rargie"
 
 #: ../src/generic/filedlgg.cpp:225 ../src/generic/dirdlgg.cpp:137
 msgid "Go to home directory"
@@ -3951,7 +3951,7 @@ msgstr "HTML-anker %s bestaan nie."
 
 #: ../src/html/helpwnd.cpp:1554
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
-msgstr "HTML-lêers (*.html;*.htm)|*.html;*.htm|"
+msgstr "HTML-lÃªers (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/common/stockitem.cpp:163
 msgid "Harddisk"
@@ -3995,7 +3995,7 @@ msgstr ""
 #: ../src/generic/helpext.cpp:280
 #, fuzzy, c-format
 msgid "Help file \"%s\" not found."
-msgstr "katalogus-lêer vir domein '%s' nie gevind nie."
+msgstr "katalogus-lÃªer vir domein '%s' nie gevind nie."
 
 #: ../src/html/helpctrl.cpp:53
 #, c-format
@@ -4058,7 +4058,7 @@ msgstr "IFFF: datastroom lyk afgekap."
 
 #: ../src/common/imagiff.cpp:744
 msgid "IFF: error in IFF image format."
-msgstr "IFF: fout in IFF lêerformaat."
+msgstr "IFF: fout in IFF lÃªerformaat."
 
 #: ../src/common/imagiff.cpp:747
 msgid "IFF: not enough memory."
@@ -4127,7 +4127,7 @@ msgstr "Ongeldige gidsnaam."
 
 #: ../src/generic/filectrlg.cpp:1370
 msgid "Illegal file specification."
-msgstr "Ongeldige lêerspesifikasie."
+msgstr "Ongeldige lÃªerspesifikasie."
 
 #: ../src/common/image.cpp:2053
 #, fuzzy
@@ -4137,12 +4137,12 @@ msgstr "Beeld en masker het verskillende groottes"
 #: ../src/common/image.cpp:2409
 #, fuzzy, c-format
 msgid "Image file is not of type %d."
-msgstr "Beeldlêer is nie van die tipe %d."
+msgstr "BeeldlÃªer is nie van die tipe %d."
 
 #: ../src/common/image.cpp:2529
 #, fuzzy, c-format
 msgid "Image is not of type %s."
-msgstr "Beeldlêer is nie van die tipe %d."
+msgstr "BeeldlÃªer is nie van die tipe %d."
 
 #: ../src/msw/textctrl.cpp:398
 msgid ""
@@ -4159,17 +4159,17 @@ msgstr "Onmoontlik om subproses-toevoer te verkry"
 #: ../src/common/filefn.cpp:1075
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
-msgstr "Onmoontlik om magtigings vir lêer '%s' te kry"
+msgstr "Onmoontlik om magtigings vir lÃªer '%s' te kry"
 
 #: ../src/common/filefn.cpp:1089
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
-msgstr "Onmoontlik om lêer '%s' te oorskryf"
+msgstr "Onmoontlik om lÃªer '%s' te oorskryf"
 
 #: ../src/common/filefn.cpp:1143
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
-msgstr "Onmoontlik om magtigings vir lêer '%s' op te stel"
+msgstr "Onmoontlik om magtigings vir lÃªer '%s' op te stel"
 
 #: ../src/common/gifdecod.cpp:819
 #, c-format
@@ -4263,7 +4263,7 @@ msgstr "Ongeldige geometrie-spesifikasie '%s'"
 #: ../src/unix/snglinst.cpp:307
 #, c-format
 msgid "Invalid lock file '%s'."
-msgstr "Ongeldig slotlêer '%s'."
+msgstr "Ongeldig slotlÃªer '%s'."
 
 #: ../src/common/translation.cpp:955
 #, fuzzy
@@ -4281,7 +4281,7 @@ msgstr "Ongeldige- of Null-objek ID is aangestuur vir HasObjectClassInfo"
 #: ../src/common/regex.cpp:314
 #, c-format
 msgid "Invalid regular expression '%s': %s"
-msgstr "Ongeldige reëlmatige uitdrukking '%s': %s"
+msgstr "Ongeldige reÃ«lmatige uitdrukking '%s': %s"
 
 #: ../src/common/config.cpp:229
 #, c-format
@@ -4299,7 +4299,7 @@ msgstr "Koevert 'Italy', 110 x 230 mm"
 
 #: ../src/common/imagjpeg.cpp:256
 msgid "JPEG: Couldn't load - file is probably corrupted."
-msgstr "JPEG: kon nie laai nie - lêer is waarskynlik korrup."
+msgstr "JPEG: kon nie laai nie - lÃªer is waarskynlik korrup."
 
 #: ../src/common/imagjpeg.cpp:428
 msgid "JPEG: Couldn't save image."
@@ -4619,7 +4619,7 @@ msgstr "Wenke is nie beskikbaar nie, jammer!"
 #: ../src/common/fldlgcmn.cpp:326
 #, c-format
 msgid "Load %s file"
-msgstr "Laai %s-lêer"
+msgstr "Laai %s-lÃªer"
 
 #: ../src/html/htmlwin.cpp:571
 msgid "Loading : "
@@ -4628,7 +4628,7 @@ msgstr "Besig met inlaai: "
 #: ../src/unix/snglinst.cpp:247
 #, fuzzy, c-format
 msgid "Lock file '%s' has incorrect owner."
-msgstr "Klanklêer '%s' se formaat word nie ondersteun nie."
+msgstr "KlanklÃªer '%s' se formaat word nie ondersteun nie."
 
 #: ../src/unix/snglinst.cpp:252
 #, c-format
@@ -4638,7 +4638,7 @@ msgstr ""
 #: ../src/generic/logg.cpp:590
 #, c-format
 msgid "Log saved to the file '%s'."
-msgstr "Boekstawing geskryf na lêer '%s'."
+msgstr "Boekstawing geskryf na lÃªer '%s'."
 
 #: ../src/richtext/richtextliststylepage.cpp:485
 #: ../src/richtext/richtextbulletspage.cpp:290
@@ -4664,7 +4664,7 @@ msgid ""
 "not installed on this machine. Please install it."
 msgstr ""
 "MS HTML Help funksies wees nie beskikbaar omdat die MS HTML Help biblioteek "
-"nie op hierdie machine is geïnstalleerd. Installeer het asb."
+"nie op hierdie machine is geÃ¯nstalleerd. Installeer het asb."
 
 #: ../src/univ/themes/win32.cpp:3776
 msgid "Ma&ximize"
@@ -4850,7 +4850,7 @@ msgstr "Kassensitief"
 #: ../src/common/fs_mem.cpp:176
 #, c-format
 msgid "Memory VFS already contains file '%s'!"
-msgstr "VFS in geheue bevat reeds die lêer '%s'!"
+msgstr "VFS in geheue bevat reeds die lÃªer '%s'!"
 
 #: ../src/msw/frame.cpp:353
 #, fuzzy
@@ -5149,7 +5149,7 @@ msgstr "Nee"
 #: ../src/osx/carbon/dataview.cpp:903
 #, fuzzy
 msgid "Number of columns could not be determined."
-msgstr "Lêer kon nie gelaai word nie."
+msgstr "LÃªer kon nie gelaai word nie."
 
 #: ../src/richtext/richtextliststylepage.cpp:488
 #: ../src/richtext/richtextbulletspage.cpp:293
@@ -5178,11 +5178,11 @@ msgstr ""
 
 #: ../src/common/xtixml.cpp:265
 msgid "Objects must have an id attribute"
-msgstr "Objekte moet elkeen 'n id-attribuut hê"
+msgstr "Objekte moet elkeen 'n id-attribuut hÃª"
 
 #: ../src/common/docview.cpp:1733 ../src/common/docview.cpp:1775
 msgid "Open File"
-msgstr "Open Lêer"
+msgstr "Open LÃªer"
 
 #: ../src/html/helpwnd.cpp:682 ../src/html/helpwnd.cpp:1561
 msgid "Open HTML document"
@@ -5191,7 +5191,7 @@ msgstr "Maak HTML-dokument oop"
 #: ../src/generic/dbgrptg.cpp:160
 #, fuzzy, c-format
 msgid "Open file \"%s\""
-msgstr "Open Lêer"
+msgstr "Open LÃªer"
 
 #: ../src/common/stockitem.cpp:180
 #, fuzzy
@@ -5229,7 +5229,7 @@ msgstr "Opstellings"
 
 #: ../src/generic/prntdlgg.cpp:621 ../src/generic/prntdlgg.cpp:875
 msgid "Orientation"
-msgstr "Oriëntasie"
+msgstr "OriÃ«ntasie"
 
 #: ../src/common/windowid.cpp:260
 msgid "Out of window IDs.  Recommend shutting down application."
@@ -5266,7 +5266,7 @@ msgstr "PCX: kon geen geheue reserveer"
 
 #: ../src/common/imagpcx.cpp:457
 msgid "PCX: image format unsupported"
-msgstr "PCX: lêerformaat word nie ondersteun nie"
+msgstr "PCX: lÃªerformaat word nie ondersteun nie"
 
 #: ../src/common/imagpcx.cpp:480
 msgid "PCX: invalid image"
@@ -5274,7 +5274,7 @@ msgstr "PCX: ongeldige beeld"
 
 #: ../src/common/imagpcx.cpp:443
 msgid "PCX: this is not a PCX file."
-msgstr "PCX: dit is nie 'n PCX-lêer nie."
+msgstr "PCX: dit is nie 'n PCX-lÃªer nie."
 
 #: ../src/common/imagpcx.cpp:460 ../src/common/imagpcx.cpp:482
 msgid "PCX: unknown error !!!"
@@ -5298,12 +5298,12 @@ msgstr "PNM: kon nie geheue reserveer nie."
 
 #: ../src/common/imagpnm.cpp:74
 msgid "PNM: File format is not recognized."
-msgstr "PNM: lêerformaat onbekend"
+msgstr "PNM: lÃªerformaat onbekend"
 
 #: ../src/common/imagpnm.cpp:113 ../src/common/imagpnm.cpp:135
 #: ../src/common/imagpnm.cpp:157
 msgid "PNM: File seems truncated."
-msgstr "PNM: lêer lyk afgekap."
+msgstr "PNM: lÃªer lyk afgekap."
 
 #: ../src/common/paper.cpp:189
 msgid "PRC 16K 146 x 215 mm"
@@ -5518,12 +5518,12 @@ msgstr "Kies asb. 'n geldige lettertipe."
 
 #: ../src/gtk/filedlg.cpp:68
 msgid "Please choose an existing file."
-msgstr "Kies asb. 'n bestaande lêer."
+msgstr "Kies asb. 'n bestaande lÃªer."
 
 #: ../src/html/helpwnd.cpp:814
 #, fuzzy
 msgid "Please choose the page to display:"
-msgstr "Kies asb. 'n bestaande lêer."
+msgstr "Kies asb. 'n bestaande lÃªer."
 
 #: ../src/msw/dialup.cpp:786
 msgid "Please choose which ISP do you want to connect to"
@@ -5581,7 +5581,7 @@ msgstr "Vraag"
 
 #: ../src/generic/prntdlgg.cpp:304
 msgid "PostScript file"
-msgstr "PostScript-lêer"
+msgstr "PostScript-lÃªer"
 
 #: ../src/common/stockitem.cpp:182
 msgid "Preferences"
@@ -5653,7 +5653,7 @@ msgstr "Druk hierdie bladsy"
 
 #: ../src/generic/prntdlgg.cpp:191
 msgid "Print to File"
-msgstr "Druk na 'n lêer"
+msgstr "Druk na 'n lÃªer"
 
 #: ../src/common/stockitem.cpp:184
 #, fuzzy
@@ -5767,7 +5767,7 @@ msgstr ""
 #: ../src/common/ffile.cpp:114 ../src/common/ffile.cpp:133
 #, c-format
 msgid "Read error on file '%s'"
-msgstr "Leesfout by lêer '%s'"
+msgstr "Leesfout by lÃªer '%s'"
 
 #: ../src/common/prntbase.cpp:258
 #, fuzzy
@@ -5949,7 +5949,7 @@ msgstr "&Stoor..."
 #: ../src/common/fldlgcmn.cpp:328
 #, c-format
 msgid "Save %s file"
-msgstr "Stoor %s-lêer"
+msgstr "Stoor %s-lÃªer"
 
 #: ../src/common/docview.cpp:362
 msgid "Save As"
@@ -5971,7 +5971,7 @@ msgstr ""
 
 #: ../src/generic/logg.cpp:524
 msgid "Save log contents to file"
-msgstr "Stoor boekstawing-inhoud na lêer"
+msgstr "Stoor boekstawing-inhoud na lÃªer"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Script"
@@ -5988,7 +5988,7 @@ msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
 "above"
 msgstr ""
-"Soek in inhoudsopgawe van hulplêer(s) vir alle plekke waar die teks wat jy "
+"Soek in inhoudsopgawe van hulplÃªer(s) vir alle plekke waar die teks wat jy "
 "hierbo getik het, voorkom."
 
 #: ../src/generic/fdrepdlg.cpp:161
@@ -6014,7 +6014,7 @@ msgstr "Seksies"
 #: ../src/common/ffile.cpp:219
 #, c-format
 msgid "Seek error on file '%s'"
-msgstr "Soekfout by lêer '%s'"
+msgstr "Soekfout by lÃªer '%s'"
 
 #: ../src/common/ffile.cpp:209
 #, c-format
@@ -6104,7 +6104,7 @@ msgstr "Wys verborge gidse"
 #: ../src/generic/filectrlg.cpp:993
 #, fuzzy
 msgid "Show &hidden files"
-msgstr "Wys verborge lêers"
+msgstr "Wys verborge lÃªers"
 
 #: ../src/osx/menu_osx.cpp:541
 #, fuzzy
@@ -6197,7 +6197,7 @@ msgstr "Vet"
 
 #: ../src/common/docview.cpp:1751
 msgid "Sorry, could not open this file."
-msgstr "Jammer, hierdie lêer kon nie oopgemaak word nie."
+msgstr "Jammer, hierdie lÃªer kon nie oopgemaak word nie."
 
 #: ../src/common/prntbase.cpp:1995 ../src/common/prntbase.cpp:2003
 msgid "Sorry, not enough memory to create a preview."
@@ -6212,7 +6212,7 @@ msgstr ""
 
 #: ../src/common/docview.cpp:1774
 msgid "Sorry, the format for this file is unknown."
-msgstr "Jammer, die lêer het 'n onbekende formaat."
+msgstr "Jammer, die lÃªer het 'n onbekende formaat."
 
 #: ../src/unix/sound.cpp:493
 msgid "Sound data are in unsupported format."
@@ -6221,7 +6221,7 @@ msgstr "Klankdata se formaat word nie ondersteun nie."
 #: ../src/unix/sound.cpp:478
 #, c-format
 msgid "Sound file '%s' is in unsupported format."
-msgstr "Klanklêer '%s' se formaat word nie ondersteun nie."
+msgstr "KlanklÃªer '%s' se formaat word nie ondersteun nie."
 
 #: ../src/richtext/richtextliststylepage.cpp:468
 #, fuzzy
@@ -6467,8 +6467,8 @@ msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
 "It has been removed from the most recently used files list."
 msgstr ""
-"Die lêer '%s' bestaan nie en kon nie oopgemaak word nie.\n"
-"Dit is verwyder van die lys van 'onlangse lêers'."
+"Die lÃªer '%s' bestaan nie en kon nie oopgemaak word nie.\n"
+"Dit is verwyder van die lys van 'onlangse lÃªers'."
 
 #: ../src/richtext/richtextindentspage.cpp:221
 #: ../src/richtext/richtextindentspage.cpp:223
@@ -6725,7 +6725,7 @@ msgstr ""
 #: ../src/common/image.cpp:2506
 #, fuzzy, c-format
 msgid "This is not a %s."
-msgstr "PCX: dit is nie 'n PCX-lêer nie."
+msgstr "PCX: dit is nie 'n PCX-lÃªer nie."
 
 #: ../src/msw/datecontrols.cpp:60
 msgid ""
@@ -6757,15 +6757,15 @@ msgstr ""
 
 #: ../src/unix/threadpsx.cpp:1216
 msgid "Thread priority setting is ignored."
-msgstr "Uitvoerdraad-prioriteitstelling is geïgnoreer."
+msgstr "Uitvoerdraad-prioriteitstelling is geÃ¯gnoreer."
 
 #: ../src/msw/mdi.cpp:165
 msgid "Tile &Horizontally"
-msgstr "Teël &horisontaal"
+msgstr "TeÃ«l &horisontaal"
 
 #: ../src/msw/mdi.cpp:166
 msgid "Tile &Vertically"
-msgstr "Teël &vertikaal"
+msgstr "TeÃ«l &vertikaal"
 
 #: ../src/common/ftp.cpp:205
 #, fuzzy
@@ -6827,7 +6827,7 @@ msgstr ""
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr ""
-"Poging om lêer '%s' uit geheue VFS te verwyder, maar dit is nie gelaai nie!"
+"Poging om lÃªer '%s' uit geheue VFS te verwyder, maar dit is nie gelaai nie!"
 
 #: ../src/common/fmapbase.cpp:155
 msgid "Turkish (ISO-8859-9)"
@@ -6892,22 +6892,22 @@ msgstr ""
 #: ../include/wx/msw/private/fswatcher.h:126
 #, fuzzy
 msgid "Unable to close I/O completion port handle"
-msgstr "Toemaak van lêer het misluk."
+msgstr "Toemaak van lÃªer het misluk."
 
 #: ../src/unix/fswatcher_inotify.cpp:98
 #, fuzzy
 msgid "Unable to close inotify instance"
-msgstr "Toemaak van lêer het misluk."
+msgstr "Toemaak van lÃªer het misluk."
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:75
 #, fuzzy, c-format
 msgid "Unable to close path '%s'"
-msgstr "Toemaak van slotlêer '%s' het misluk"
+msgstr "Toemaak van slotlÃªer '%s' het misluk"
 
 #: ../include/wx/msw/private/fswatcher.h:49
 #, fuzzy, c-format
 msgid "Unable to close the handle for '%s'"
-msgstr "Toemaak van lêer het misluk."
+msgstr "Toemaak van lÃªer het misluk."
 
 #: ../include/wx/msw/private/fswatcher.h:241
 #, fuzzy
@@ -6971,7 +6971,7 @@ msgstr ""
 #: ../src/unix/fswatcher_inotify.cpp:330
 #, fuzzy
 msgid "Unable to read from inotify descriptor"
-msgstr "kan nie lees van lêeretiket %d"
+msgstr "kan nie lees van lÃªeretiket %d"
 
 #: ../src/unix/fswatcher_inotify.cpp:133
 msgid "Unable to remove inotify watch"
@@ -6984,7 +6984,7 @@ msgstr ""
 #: ../src/msw/fswatcher.cpp:169
 #, fuzzy, c-format
 msgid "Unable to set up watch for '%s'"
-msgstr "Aanraking van lêer '%s' het misluk"
+msgstr "Aanraking van lÃªer '%s' het misluk"
 
 #: ../src/msw/fswatcher.cpp:92
 msgid "Unable to start IOCP worker thread"
@@ -7032,7 +7032,7 @@ msgstr ""
 #: ../src/msw/fswatcher.cpp:71
 #, fuzzy
 msgid "Ungraceful worker thread termination"
-msgstr "Kan nie wag vir uitvoerdraad-beëindiging nie"
+msgstr "Kan nie wag vir uitvoerdraad-beÃ«indiging nie"
 
 #: ../src/richtext/richtextsymboldlg.cpp:456
 #: ../src/richtext/richtextsymboldlg.cpp:457
@@ -7162,7 +7162,7 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:255
 #, fuzzy
 msgid "Units for the top margin."
-msgstr "Kan nie wag vir uitvoerdraad-beëindiging nie"
+msgstr "Kan nie wag vir uitvoerdraad-beÃ«indiging nie"
 
 #: ../src/richtext/richtextborderspage.cpp:487
 #: ../src/richtext/richtextborderspage.cpp:489
@@ -7339,11 +7339,11 @@ msgstr "Kon nie begin met drukwerk nie."
 
 #: ../src/generic/filedlgg.cpp:218
 msgid "View files as a detailed view"
-msgstr "Wys lêers in detail-aansig"
+msgstr "Wys lÃªers in detail-aansig"
 
 #: ../src/generic/filedlgg.cpp:216
 msgid "View files as a list view"
-msgstr "Wys lêers in lys-aansig"
+msgstr "Wys lÃªers in lys-aansig"
 
 #: ../src/common/docview.cpp:1930
 msgid "Views"
@@ -7364,7 +7364,7 @@ msgstr ""
 #: ../src/unix/epolldispatcher.cpp:214
 #, fuzzy, c-format
 msgid "Waiting for IO on epoll descriptor %d failed"
-msgstr "Kon nie wag vir beëindiging van subproses nie"
+msgstr "Kon nie wag vir beÃ«indiging van subproses nie"
 
 #: ../src/common/log.cpp:429
 msgid "Warning: "
@@ -7546,7 +7546,7 @@ msgstr "Windows Cyrillies (CP 1251)"
 #: ../src/common/ffile.cpp:147
 #, c-format
 msgid "Write error on file '%s'"
-msgstr "Skryffout by lêer '%s'"
+msgstr "Skryffout by lÃªer '%s'"
 
 #: ../src/xml/xml.cpp:837
 #, c-format
@@ -7642,7 +7642,7 @@ msgstr ""
 
 #: ../src/msw/dde.cpp:1147
 msgid "a client's attempt to establish a conversation has failed."
-msgstr "Kliënt se poging om 'n gesprek te begin, het misluk."
+msgstr "KliÃ«nt se poging om 'n gesprek te begin, het misluk."
 
 #: ../src/msw/dde.cpp:1144
 msgid "a memory allocation failed."
@@ -7671,7 +7671,7 @@ msgstr "'n versoek vir 'n sinkrone 'poke'-transaksie se tyd is verstreke."
 #: ../src/msw/dde.cpp:1168
 msgid "a request to end an advise transaction has timed out."
 msgstr ""
-"'n versoek vir beëindiging van 'n advies-transaksie se tyd is verstreke."
+"'n versoek vir beÃ«indiging van 'n advies-transaksie se tyd is verstreke."
 
 #: ../src/msw/dde.cpp:1162
 msgid ""
@@ -7680,7 +7680,7 @@ msgid ""
 "terminated before completing a transaction."
 msgstr ""
 "vanaf die bediener is gepoog om 'n transaksie op die gesprek uit te voer\n"
-"wat deur die kliënt beëindig is of deur die bediener laat vaar is\n"
+"wat deur die kliÃ«nt beÃ«indig is of deur die bediener laat vaar is\n"
 "voordat die transaksie voltooi is."
 
 #: ../src/msw/dde.cpp:1150
@@ -7727,7 +7727,7 @@ msgstr ""
 #: ../src/common/fileconf.cpp:1878
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
-msgstr "poging tot wysiging van onveranderbare sleutel '%s' geïgnoreer."
+msgstr "poging tot wysiging van onveranderbare sleutel '%s' geÃ¯gnoreer."
 
 #: ../src/html/chm.cpp:330
 msgid "bad arguments to library function"
@@ -7743,7 +7743,7 @@ msgstr ""
 
 #: ../src/common/ftp.cpp:408
 msgid "binary"
-msgstr "binêr"
+msgstr "binÃªr"
 
 #: ../src/common/fontcmn.cpp:951
 msgid "bold"
@@ -7761,32 +7761,32 @@ msgstr ""
 #: ../src/common/ffile.cpp:80
 #, c-format
 msgid "can't close file '%s'"
-msgstr "kan lêer '%s' nie toemaak nie"
+msgstr "kan lÃªer '%s' nie toemaak nie"
 
 #: ../src/common/file.cpp:281
 #, c-format
 msgid "can't close file descriptor %d"
-msgstr "kan lêeretiket %d nie toemaak nie"
+msgstr "kan lÃªeretiket %d nie toemaak nie"
 
 #: ../src/common/file.cpp:579
 #, c-format
 msgid "can't commit changes to file '%s'"
-msgstr "kan verandering nie deurvoer na lêer '%s' nie"
+msgstr "kan verandering nie deurvoer na lÃªer '%s' nie"
 
 #: ../src/common/file.cpp:215
 #, c-format
 msgid "can't create file '%s'"
-msgstr "kan lêer '%s' nie maak nie"
+msgstr "kan lÃªer '%s' nie maak nie"
 
 #: ../src/common/fileconf.cpp:1177
 #, c-format
 msgid "can't delete user configuration file '%s'"
-msgstr "kan lêer met gebruikersopstelling '%s' nie uitvee nie"
+msgstr "kan lÃªer met gebruikersopstelling '%s' nie uitvee nie"
 
 #: ../src/common/file.cpp:482
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
-msgstr "kan nie bepaal of lêereinde bereik is vir lêeretiket %d nie"
+msgstr "kan nie bepaal of lÃªereinde bereik is vir lÃªeretiket %d nie"
 
 #: ../src/msdos/utilsdos.cpp:311 ../src/msdos/utilsdos.cpp:476
 #, fuzzy, c-format
@@ -7796,12 +7796,12 @@ msgstr "Uitvoering van '%s' het misluk\n"
 #: ../src/common/zipstrm.cpp:1491
 #, fuzzy
 msgid "can't find central directory in zip"
-msgstr "Kan nie huidige posisie in lêer '%s' vind nie"
+msgstr "Kan nie huidige posisie in lÃªer '%s' vind nie"
 
 #: ../src/common/file.cpp:452
 #, c-format
 msgid "can't find length of file on file descriptor %d"
-msgstr "kan lêerlengte nie vind vir lêeretiket %d nie"
+msgstr "kan lÃªerlengte nie vind vir lÃªeretiket %d nie"
 
 #: ../src/msw/utils.cpp:376
 msgid "can't find user's HOME, using current directory."
@@ -7810,12 +7810,12 @@ msgstr "kan gebruiker se tuisgids nie vind nie, gebruik dus huidige gids."
 #: ../src/common/file.cpp:353
 #, c-format
 msgid "can't flush file descriptor %d"
-msgstr "kan lêeretiket %d nie leegmaak nie"
+msgstr "kan lÃªeretiket %d nie leegmaak nie"
 
 #: ../src/common/file.cpp:409 ../src/msw/wince/filefnwce.cpp:199
 #, c-format
 msgid "can't get seek position on file descriptor %d"
-msgstr "kan nie soekposisie verkry by lêeretiket %d nie"
+msgstr "kan nie soekposisie verkry by lÃªeretiket %d nie"
 
 #: ../src/common/fontmap.cpp:324
 msgid "can't load any font, aborting"
@@ -7824,21 +7824,21 @@ msgstr "kan geen lettertipe laai nie, besig om te laat vaar"
 #: ../src/common/file.cpp:267 ../src/common/ffile.cpp:64
 #, c-format
 msgid "can't open file '%s'"
-msgstr "kan lêer '%s' nie oopmaak nie"
+msgstr "kan lÃªer '%s' nie oopmaak nie"
 
 #: ../src/common/fileconf.cpp:352
 #, c-format
 msgid "can't open global configuration file '%s'."
-msgstr "kan globale konfigurasielêer '%s' nie oopmaak nie."
+msgstr "kan globale konfigurasielÃªer '%s' nie oopmaak nie."
 
 #: ../src/common/fileconf.cpp:368
 #, c-format
 msgid "can't open user configuration file '%s'."
-msgstr "kan gebruikers-konfigurasielêer '%s' nie oopmaak nie."
+msgstr "kan gebruikers-konfigurasielÃªer '%s' nie oopmaak nie."
 
 #: ../src/common/fileconf.cpp:1018
 msgid "can't open user configuration file."
-msgstr "kan gebruikers-konfigurasielêer nie oopmaak nie."
+msgstr "kan gebruikers-konfigurasielÃªer nie oopmaak nie."
 
 #: ../src/common/zipstrm.cpp:528
 #, fuzzy
@@ -7853,22 +7853,22 @@ msgstr "Kan nie zlib-opblaasstroom inisialiseer nie."
 #: ../src/common/file.cpp:305
 #, c-format
 msgid "can't read from file descriptor %d"
-msgstr "kan nie lees van lêeretiket %d"
+msgstr "kan nie lees van lÃªeretiket %d"
 
 #: ../src/common/file.cpp:574
 #, c-format
 msgid "can't remove file '%s'"
-msgstr "kan lêer '%s' nie uitvee nie"
+msgstr "kan lÃªer '%s' nie uitvee nie"
 
 #: ../src/common/file.cpp:591
 #, c-format
 msgid "can't remove temporary file '%s'"
-msgstr "kan tydelike lêer '%s' nie uitvee nie"
+msgstr "kan tydelike lÃªer '%s' nie uitvee nie"
 
 #: ../src/common/file.cpp:395 ../src/msw/wince/filefnwce.cpp:185
 #, c-format
 msgid "can't seek on file descriptor %d"
-msgstr "kan nie 'n soekbewerking doen op lêeretiket %d nie"
+msgstr "kan nie 'n soekbewerking doen op lÃªeretiket %d nie"
 
 #: ../src/common/textfile.cpp:300
 #, c-format
@@ -7878,11 +7878,11 @@ msgstr "kan buffer '%s' nie na skyf skryf nie."
 #: ../src/common/file.cpp:321
 #, c-format
 msgid "can't write to file descriptor %d"
-msgstr "kan nie skryf na lêeretiket %d nie"
+msgstr "kan nie skryf na lÃªeretiket %d nie"
 
 #: ../src/common/fileconf.cpp:1032
 msgid "can't write user configuration file."
-msgstr "kan gebruikers-konfigurasielêer nie skryf nie."
+msgstr "kan gebruikers-konfigurasielÃªer nie skryf nie."
 
 #: ../src/html/chm.cpp:346
 msgid "checksum error"
@@ -7961,7 +7961,7 @@ msgstr "elfde"
 #: ../src/common/fileconf.cpp:1864
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
-msgstr "inskrywing '%s' kom meer as één keer voor in groep '%s'"
+msgstr "inskrywing '%s' kom meer as Ã©Ã©n keer voor in groep '%s'"
 
 #: ../src/html/chm.cpp:344
 msgid "error in data format"
@@ -7970,11 +7970,11 @@ msgstr "fout in dataformaat."
 #: ../src/msdos/utilsdos.cpp:414
 #, fuzzy, c-format
 msgid "error opening '%s'"
-msgstr "fout tydens oopmaak van lêer"
+msgstr "fout tydens oopmaak van lÃªer"
 
 #: ../src/html/chm.cpp:332
 msgid "error opening file"
-msgstr "fout tydens oopmaak van lêer"
+msgstr "fout tydens oopmaak van lÃªer"
 
 #: ../src/common/zipstrm.cpp:1577
 #, fuzzy
@@ -7993,7 +7993,7 @@ msgstr ""
 #: ../src/common/ffile.cpp:169
 #, c-format
 msgid "failed to flush the file '%s'"
-msgstr "leegmaak van lêer '%s' het misluk"
+msgstr "leegmaak van lÃªer '%s' het misluk"
 
 #: ../src/common/datetimefmt.cpp:1779
 msgid "fifteenth"
@@ -8006,32 +8006,32 @@ msgstr "vyfde"
 #: ../src/common/fileconf.cpp:611
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
-msgstr "lêer '%s', reël %d: '%s' geïgnoreer na groepkopstuk."
+msgstr "lÃªer '%s', reÃ«l %d: '%s' geÃ¯gnoreer na groepkopstuk."
 
 #: ../src/common/fileconf.cpp:640
 #, c-format
 msgid "file '%s', line %d: '=' expected."
-msgstr "lêer '%s', reël %d: '=' verwag."
+msgstr "lÃªer '%s', reÃ«l %d: '=' verwag."
 
 #: ../src/common/fileconf.cpp:663
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
-msgstr "lêer '%s', reël %d: sleutel '%s' is eerste gevind op reël %d."
+msgstr "lÃªer '%s', reÃ«l %d: sleutel '%s' is eerste gevind op reÃ«l %d."
 
 #: ../src/common/fileconf.cpp:653
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
-msgstr "lêer '%s', reël %d: waarde vir onveranderbare sleutel '%s' geïgnoreer."
+msgstr "lÃªer '%s', reÃ«l %d: waarde vir onveranderbare sleutel '%s' geÃ¯gnoreer."
 
 #: ../src/common/fileconf.cpp:575
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
-msgstr "lêer '%s': onverwagte teken %c in reël %d."
+msgstr "lÃªer '%s': onverwagte teken %c in reÃ«l %d."
 
 #: ../src/richtext/richtextbuffer.cpp:7449
 #, fuzzy
 msgid "files"
-msgstr "&Lêer"
+msgstr "&LÃªer"
 
 #: ../src/common/datetimefmt.cpp:1765
 msgid "first"
@@ -8081,7 +8081,7 @@ msgstr "ongeldige teruggee-waarde van boodskapvenster"
 #: ../src/common/zipstrm.cpp:1446
 #, fuzzy
 msgid "invalid zip file"
-msgstr "Ongeldig slotlêer '%s'."
+msgstr "Ongeldig slotlÃªer '%s'."
 
 #: ../src/common/fontcmn.cpp:956
 msgid "italic"
@@ -8332,7 +8332,7 @@ msgstr "vandag"
 
 #: ../src/common/datetimefmt.cpp:1573
 msgid "tomorrow"
-msgstr "môre"
+msgstr "mÃ´re"
 
 #: ../src/common/fileconf.cpp:1975
 #, c-format
@@ -8471,10 +8471,10 @@ msgstr ""
 #~ msgstr ">>|"
 
 #~ msgid "Can't check image format of file '%s': file does not exist."
-#~ msgstr "Kan beeldstipe van lêer '%s' nie bepaal nie: lêer bestaan nie."
+#~ msgstr "Kan beeldstipe van lÃªer '%s' nie bepaal nie: lÃªer bestaan nie."
 
 #~ msgid "Can't load image from file '%s': file does not exist."
-#~ msgstr "Kan geen beeld laai uit lêer '%s': lêer bestaan nie."
+#~ msgstr "Kan geen beeld laai uit lÃªer '%s': lÃªer bestaan nie."
 
 #~ msgid "Cannot convert dialog units: dialog unknown."
 #~ msgstr "Dialoogeenhede kan nie omgeskakel word nie: dialoog is onbekend."
@@ -8489,10 +8489,10 @@ msgstr ""
 #~ msgstr "Kan lettertipenode '%s' nie vind nie."
 
 #~ msgid "Cannot open file '%s'."
-#~ msgstr "Kan lêer '%s' nie oopmaak nie."
+#~ msgstr "Kan lÃªer '%s' nie oopmaak nie."
 
 #~ msgid "Cannot parse coordinates from '%s'."
-#~ msgstr "Kan koördinate van '%s' nie ontleed nie."
+#~ msgstr "Kan koÃ¶rdinate van '%s' nie ontleed nie."
 
 #~ msgid "Cannot parse dimension from '%s'."
 #~ msgstr "Kan dimensie van '%s' nie ontleed nie."
@@ -8511,7 +8511,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Elapsed time:"
-#~ msgstr "Tydsduur sovêr: "
+#~ msgstr "Tydsduur sovÃªr: "
 
 #, fuzzy
 #~ msgid "Estimated time:"
@@ -8580,7 +8580,7 @@ msgstr ""
 #~ msgstr "Oorblywende tyd: "
 
 #~ msgid "Resource files must have same version number!"
-#~ msgstr "Hulpbronlêers moet dieselfde weergawenommer hê!"
+#~ msgstr "HulpbronlÃªers moet dieselfde weergawenommer hÃª!"
 
 #, fuzzy
 #~ msgid "Save &As..."
@@ -8591,14 +8591,14 @@ msgstr ""
 #~ msgstr "Soek"
 
 #~ msgid "Sorry, could not open this file for saving."
-#~ msgstr "Jammer, hierdie lêer kon nie gestoor word nie."
+#~ msgstr "Jammer, hierdie lÃªer kon nie gestoor word nie."
 
 #~ msgid "Sorry, could not save this file."
-#~ msgstr "Jammer, hierdie lêer kon nie gestoor word nie."
+#~ msgstr "Jammer, hierdie lÃªer kon nie gestoor word nie."
 
 #~ msgid "Sorry, print preview needs a printer to be installed."
 #~ msgstr ""
-#~ "Jammer, 'n drukker moet geïnstalleer wees om 'n drukvoorskou te kan doen."
+#~ "Jammer, 'n drukker moet geÃ¯nstalleer wees om 'n drukvoorskou te kan doen."
 
 #~ msgid "Status: "
 #~ msgstr "Status: "
@@ -8610,14 +8610,14 @@ msgstr ""
 #~ "The file '%s' couldn't be opened.\n"
 #~ "It has been removed from the most recently used files list."
 #~ msgstr ""
-#~ "Die lêer '%s' kon nie oopgemaak word nie.\n"
-#~ "Dit is verwyder van die lys van 'onlangse lêers'."
+#~ "Die lÃªer '%s' kon nie oopgemaak word nie.\n"
+#~ "Dit is verwyder van die lys van 'onlangse lÃªers'."
 
 #~ msgid "The path '%s' contains too many \"..\"!"
 #~ msgstr "Die pad '%s' bevat te veel \"..\"!"
 
 #~ msgid "Trying to solve a NULL hostname: giving up"
-#~ msgstr "Poging om 'n leë masjiennaam te vind: besig om op te gee"
+#~ msgstr "Poging om 'n leÃ« masjiennaam te vind: besig om op te gee"
 
 #~ msgid "Unknown style flag "
 #~ msgstr "Onbekende stylvlag"
@@ -8644,7 +8644,7 @@ msgstr ""
 #~ msgstr "[LEEG]"
 
 #~ msgid "catalog file for domain '%s' not found."
-#~ msgstr "katalogus-lêer vir domein '%s' nie gevind nie."
+#~ msgstr "katalogus-lÃªer vir domein '%s' nie gevind nie."
 
 #~ msgid "delegate has no type info"
 #~ msgstr "afgevaardigde het geen tipe-inligting nie"
@@ -8722,7 +8722,7 @@ msgstr ""
 
 #~ msgid "Warning: attempt to remove HTML tag handler from empty stack."
 #~ msgstr ""
-#~ "Waarskuwing: poging om HTML-merkerhanteerder van leë stapel te verwyder."
+#~ "Waarskuwing: poging om HTML-merkerhanteerder van leÃ« stapel te verwyder."
 
 #~ msgid "establish"
 #~ msgstr "Maak"
@@ -8734,7 +8734,7 @@ msgstr ""
 #~ msgstr "ongeldige eof() teruggee-waarde."
 
 #~ msgid "unknown line terminator"
-#~ msgstr "onbekende reëltermineerder"
+#~ msgstr "onbekende reÃ«ltermineerder"
 
 #~ msgid "writing"
 #~ msgstr "besig om te skryf"
@@ -8755,13 +8755,13 @@ msgstr ""
 #~ msgstr "Die gids %s/.mime-info kon nie geskep word nie."
 
 #~ msgid "Mailcap file %s, line %d: incomplete entry ignored."
-#~ msgstr "Mailcap-lêer %s, reël %d: onvolledige inskrywing geïgnoreer."
+#~ msgstr "Mailcap-lÃªer %s, reÃ«l %d: onvolledige inskrywing geÃ¯gnoreer."
 
 #~ msgid "Mime.types file %s, line %d: unterminated quoted string."
-#~ msgstr "Mime.types-lêer %s, reël %d: onafgeslote aangehalingsteken."
+#~ msgstr "Mime.types-lÃªer %s, reÃ«l %d: onafgeslote aangehalingsteken."
 
 #~ msgid "Unknown field in file %s, line %d: '%s'."
-#~ msgstr "Onbekende veld in lêer %s, reël %d: '%s''. "
+#~ msgstr "Onbekende veld in lÃªer %s, reÃ«l %d: '%s''. "
 
 #~ msgid "bold "
 #~ msgstr "vet"
@@ -8783,26 +8783,26 @@ msgstr ""
 
 #~ msgid "Loading Grey Ascii PNM image is not yet implemented."
 #~ msgstr ""
-#~ "Laaiing van Ascii PNM-beeld met grysvlakke is nog nie geïmplementeer nie."
+#~ "Laaiing van Ascii PNM-beeld met grysvlakke is nog nie geÃ¯mplementeer nie."
 
 #~ msgid "Loading Grey Raw PNM image is not yet implemented."
 #~ msgstr ""
-#~ "Laaiing van Raw PNM-beeld met grysvlakke is nog nie geïmplementeer nie."
+#~ "Laaiing van Raw PNM-beeld met grysvlakke is nog nie geÃ¯mplementeer nie."
 
 #, fuzzy
 #~ msgid "Cannot wait on thread to exit."
-#~ msgstr "Kan nie wag vir uitvoerdraad-beëindiging nie"
+#~ msgstr "Kan nie wag vir uitvoerdraad-beÃ«indiging nie"
 
 #~ msgid "Could not load Rich Edit DLL '%s'"
 #~ msgstr "Kon Rich Edit dll '%s' nie laai nie"
 
 #~ msgid "ZIP handler currently supports only local files!"
-#~ msgstr "ZIP-hanteerder ondersteun tans slegs plaaslike lêers!"
+#~ msgstr "ZIP-hanteerder ondersteun tans slegs plaaslike lÃªers!"
 
 #, fuzzy
 #~ msgid ""
 #~ "can't seek on file descriptor %d, large files support is not enabled."
-#~ msgstr "kan nie 'n soekbewerking doen op lêeretiket %d nie"
+#~ msgstr "kan nie 'n soekbewerking doen op lÃªeretiket %d nie"
 
 #~ msgid "More..."
 #~ msgstr "Meer..."

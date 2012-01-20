@@ -9,121 +9,121 @@ msgstr ""
 "Last-Translator: Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>\n"
 "Language-Team: <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:128
 msgid "International wxWindows App"
-msgstr "Интернациональное приложение wxWindows"
+msgstr "п≤п╫я┌п╣я─п╫п╟я├п╦п╬п╫п╟п╩я▄п╫п╬п╣ п©я─п╦п╩п╬п╤п╣п╫п╦п╣ wxWindows"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:136
 msgid "&About..."
-msgstr "&О программе..."
+msgstr "&п· п©я─п╬пЁя─п╟п╪п╪п╣..."
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:138
 msgid "E&xit"
-msgstr "&Выйти"
+msgstr "&п▓я▀п╧я┌п╦"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:141
 msgid "&Open bogus file"
-msgstr "&Открыть файл"
+msgstr "&п·я┌п╨я─я▀я┌я▄ я└п╟п╧п╩"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:142
 msgid "&Play a game"
-msgstr "&Поиграть в игру"
+msgstr "&п÷п╬п╦пЁя─п╟я┌я▄ п╡ п╦пЁя─я┐"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:145
 msgid "&File"
-msgstr "&Файл"
+msgstr "&п╓п╟п╧п╩"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:146
 msgid "&Test"
-msgstr "&Тест"
+msgstr "&п╒п╣я│я┌"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:169
 msgid ""
 "I18n sample\n"
-"▐║╘ 1998, 1999 Vadim Zeitlin and Julian Smart"
+"Б√░Б∙▒Б∙≤ 1998, 1999 Vadim Zeitlin and Julian Smart"
 msgstr ""
-"Пример i18n\n"
-"▐║╘ 1998, 1999 Вадим Зейтлин и Джулиан Смарт"
+"п÷я─п╦п╪п╣я─ i18n\n"
+"Б√░Б∙▒Б∙≤ 1998, 1999 п▓п╟п╢п╦п╪ п≈п╣п╧я┌п╩п╦п╫ п╦ п■п╤я┐п╩п╦п╟п╫ п║п╪п╟я─я┌"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:171
 msgid "About Internat"
-msgstr "Про Internat"
+msgstr "п÷я─п╬ Internat"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:176
 msgid "Enter your number:"
-msgstr "Введи свое число:"
+msgstr "п▓п╡п╣п╢п╦ я│п╡п╬п╣ я┤п╦я│п╩п╬:"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:177
 msgid "Try to guess my number!"
-msgstr "Попробуй угадать мое число!"
+msgstr "п÷п╬п©я─п╬п╠я┐п╧ я┐пЁп╟п╢п╟я┌я▄ п╪п╬п╣ я┤п╦я│п╩п╬!"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:185
 msgid "You've probably entered an invalid number."
-msgstr "Наверно ты ввел недопустимое число."
+msgstr "п²п╟п╡п╣я─п╫п╬ я┌я▀ п╡п╡п╣п╩ п╫п╣п╢п╬п©я┐я│я┌п╦п╪п╬п╣ я┤п╦я│п╩п╬."
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:193
 msgid "Congratulations! you've won. Here is the magic phrase:"
-msgstr "Поздравляю! Вы выиграли. А вот магическая фраза: "
+msgstr "п÷п╬п╥п╢я─п╟п╡п╩я▐я▌! п▓я▀ п╡я▀п╦пЁя─п╟п╩п╦. п░ п╡п╬я┌ п╪п╟пЁп╦я┤п╣я│п╨п╟я▐ я└я─п╟п╥п╟: "
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:194
 #, c-format
 msgid "cannot create fifo `%s'"
-msgstr "не могу создать fifo `%s'"
+msgstr "п╫п╣ п╪п╬пЁя┐ я│п╬п╥п╢п╟я┌я▄ fifo `%s'"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:197
 msgid "Result"
-msgstr "Результат"
+msgstr "п═п╣п╥я┐п╩я▄я┌п╟я┌"
 
 msgid "Bad luck! try again..."
-msgstr "Не везет! Попробуй снова..."
+msgstr "п²п╣ п╡п╣п╥п╣я┌! п÷п╬п©я─п╬п╠я┐п╧ я│п╫п╬п╡п╟..."
 
 #: i18n.cpp:163
 msgid "file deleted"
 msgid_plural "files deleted"
-msgstr[0] "файл удален"
-msgstr[1] "файла удалено"
-msgstr[2] "файлов удалено"
+msgstr[0] "я└п╟п╧п╩ я┐п╢п╟п╩п╣п╫"
+msgstr[1] "я└п╟п╧п╩п╟ я┐п╢п╟п╩п╣п╫п╬"
+msgstr[2] "я└п╟п╧п╩п╬п╡ я┐п╢п╟п╩п╣п╫п╬"
 
 #: i18n.cpp:174
 msgid "line 1"
-msgstr "строчка 1"
+msgstr "я│я┌я─п╬я┤п╨п╟ 1"
 
 #: i18n.cpp:175
 msgid "line 2"
-msgstr "строчка 2"
+msgstr "я│я┌я─п╬я┤п╨п╟ 2"
 
 #: i18n.cpp:176
 msgid "line 3"
-msgstr "строчка 3"
+msgstr "я│я┌я─п╬я┤п╨п╟ 3"
 
 #: i18n.cpp:178
 msgid "Testing N_() (gettext_noop)"
-msgstr "Проверяется N_() (gettext_noop)"
+msgstr "п÷я─п╬п╡п╣я─я▐п╣я┌я│я▐ N_() (gettext_noop)"
 
 #: i18n.cpp:139
 msgid "Testing _() (gettext)"
-msgstr "Проверяется _() (gettext)"
+msgstr "п÷я─п╬п╡п╣я─я▐п╣я┌я│я▐ _() (gettext)"
 
 #: i18n.cpp:140
 msgid "Please enter text to translate"
-msgstr "Пожалуйста, введите текст для перевода"
+msgstr "п÷п╬п╤п╟п╩я┐п╧я│я┌п╟, п╡п╡п╣п╢п╦я┌п╣ я┌п╣п╨я│я┌ п╢п╩я▐ п©п╣я─п╣п╡п╬п╢п╟"
 
 #: i18n.cpp:141
 msgid "default value"
-msgstr "значение по умолчанию"
+msgstr "п╥п╫п╟я┤п╣п╫п╦п╣ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: i18n.cpp:153
 msgid "Testing _N() (ngettext)"
-msgstr "Проверяется _N() (ngettext)"
+msgstr "п÷я─п╬п╡п╣я─я▐п╣я┌я│я▐ _N() (ngettext)"
 
 #: i18n.cpp:155
 msgid "Please enter range for plural forms of \"n files deleted\" phrase"
-msgstr "Пожалуста, введите диапазон для множественных форм фразы \"n файлов удалено\""
+msgstr "п÷п╬п╤п╟п╩я┐я│я┌п╟, п╡п╡п╣п╢п╦я┌п╣ п╢п╦п╟п©п╟п╥п╬п╫ п╢п╩я▐ п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫я▀я┘ я└п╬я─п╪ я└я─п╟п╥я▀ \"n я└п╟п╧п╩п╬п╡ я┐п╢п╟п╩п╣п╫п╬\""
 
 #: i18n.cpp:102
 msgid "&1 _() (gettext)"

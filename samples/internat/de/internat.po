@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../internat.cpp:120
@@ -20,15 +20,15 @@ msgstr "Internationales wxWindows Programm"
 
 #: ../internat.cpp:128
 msgid "&About..."
-msgstr "Ü&ber..."
+msgstr "Ãœ&ber..."
 
 #: ../internat.cpp:130
 msgid "E&xit"
-msgstr "&Schließen"
+msgstr "&SchlieÃŸen"
 
 #: ../internat.cpp:133
 msgid "&Open bogus file"
-msgstr "Ö&ffne Unsinn-Datei"
+msgstr "Ã–&ffne Unsinn-Datei"
 
 #: ../internat.cpp:134
 msgid "&Play a game"
@@ -45,13 +45,13 @@ msgstr "&Test"
 #: ../internat.cpp:161
 msgid ""
 "I18n sample\n"
-"© 1998, 1999 Vadim Zeitlin and Julian Smart"
+"Â© 1998, 1999 Vadim Zeitlin and Julian Smart"
 msgstr "I18n Beispiel\n"
-"© 1998, 1999 Vadim Zeitlin and Julian Smart"
+"Â© 1998, 1999 Vadim Zeitlin and Julian Smart"
 
 #: ../internat.cpp:163
 msgid "About Internat"
-msgstr "Ü&ber Internat"
+msgstr "Ãœ&ber Internat"
 
 #: ../internat.cpp:168
 msgid "Enter your number:"
@@ -63,11 +63,11 @@ msgstr "Versuchen Sie, die Nummer zu raten"
 
 #: ../internat.cpp:177
 msgid "You've probably entered an invalid number."
-msgstr "Sie haben wahrscheinlich eine ungültige Nummer eingegeben"
+msgstr "Sie haben wahrscheinlich eine ungÃ¼ltige Nummer eingegeben"
 
 #: ../internat.cpp:185
 msgid "Congratulations! you've won. Here is the magic phrase:"
-msgstr "Herzlichen Glückwunsch, Sie haben gewonnen. Hier ist der magische Satz:"
+msgstr "Herzlichen GlÃ¼ckwunsch, Sie haben gewonnen. Hier ist der magische Satz:"
 
 #: ../internat.cpp:186
 #, c-format

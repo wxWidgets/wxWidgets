@@ -9,7 +9,7 @@ msgstr ""
 "Last-Translator: Mike Wetherell <mike.wetherell@ntlworld.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 # The help menu is called just '?' on Italian versions of Windows

@@ -5,81 +5,81 @@ msgstr ""
 "PO-Revision-Date: 2003-02-03 23:45+0100\n"
 "Last-Translator: James Bishop\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=eucJP\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ..\internat.cpp:180
 msgid "&About..."
-msgstr "wx¥¦¥£¥ó¥É¥¦¥º¤Ë¤Ä¤¤¤Æ"
+msgstr "wxã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚ºã«ã¤ã„ã¦"
 
 #: ..\internat.cpp:182
 msgid "E&xit"
-msgstr "½ªÎ»"
+msgstr "çµ‚äº†"
 
 #: ..\internat.cpp:189
 msgid "&File"
-msgstr "¥Õ¥¡¥¤¥ë"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«"
 
 #: ..\internat.cpp:233
 msgid "About Internat"
-msgstr "¥¤¥ó¥¿¡¼¥Ê¥Ã¥È¤Ë¤Ä¤¤¤Æ"
+msgstr "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒŠãƒƒãƒˆã«ã¤ã„ã¦"
 
 #: ..\internat.cpp:185
 msgid "&Open bogus file"
-msgstr "¥Ü¡¼¥¬¥¹ ¥Õ¥¡¥¤¥ë¤ò³«¤¯"
+msgstr "ãƒœãƒ¼ã‚¬ã‚¹ ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã"
 
 #: ..\internat.cpp:186
 msgid "&Play a game"
-msgstr "¥²¡¼¥à¤ò¤¹¤ë"
+msgstr "ã‚²ãƒ¼ãƒ ã‚’ã™ã‚‹"
 
 #: ..\internat.cpp:190
 msgid "&Test"
-msgstr "¥Æ¥¹¥È"
+msgstr "ãƒ†ã‚¹ãƒˆ"
 
 #: ..\internat.cpp:208
 msgid "International wxWindows App"
-msgstr "¹ñºİ wx¥¦¥£¥ó¥É¥¦¥º ¥¢¥×¥ê¥±¡¼¥·¥ç¥ó"
+msgstr "å›½éš› wxã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚º ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³"
 
 #: ..\internat.cpp:228
 #, c-format
-msgid "c-¥Õ¥©¡¼¥Ş¥Ã¥È"
+msgid "c-ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ"
 "Language: %s\n"
 "System locale name: %s\n"
 "Canonical locale name: %s\n"
-msgstr "¸À¸ì: %s\n"
-       "¥·¥¹¥Æ¥à ¥í¡¼¥«¥ëÌ¾: %s\n"
-       "°ìÈÌÅªÌ¾: %s\n"
+msgstr "è¨€èª: %s\n"
+       "ã‚·ã‚¹ãƒ†ãƒ  ãƒ­ãƒ¼ã‚«ãƒ«å: %s\n"
+       "ä¸€èˆ¬çš„å: %s\n"
 
 #: ..\internat.cpp:231
-msgid "¥¤¥ó¥¿¡¼¥Ê¥Ã¥È.cpp:231"
+msgid "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒŠãƒƒãƒˆ.cpp:231"
 "I18n sample\n"
 "(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
-msgstr "I18n ¥µ¥ó¥×¥ë\n"
+msgstr "I18n ã‚µãƒ³ãƒ—ãƒ«\n"
        "(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
 #: ..\internat.cpp:238
 msgid "Enter your number:"
-msgstr "¿ô»ú¤òÆşÎÏ¤·¤Æ²¼¤µ¤¤¡£"
+msgstr "æ•°å­—ã‚’å…¥åŠ›ã—ã¦ä¸‹ã•ã„ã€‚"
 
 #: ..\internat.cpp:239
 msgid "Try to guess my number!"
-msgstr "»ä¤Î¿ô»ú¤òÅö¤Æ¤Æ¤ß¤Æ²¼¤µ¤¤¡ª"
+msgstr "ç§ã®æ•°å­—ã‚’å½“ã¦ã¦ã¿ã¦ä¸‹ã•ã„ï¼"
 
 #: ..\internat.cpp:246
 msgid "You've probably entered an invalid number."
-msgstr "ÆşÎÏ¤·¤¿¿ô»ú¤ÏÂ¿Ê¬Ìµ¸ú¤Ç¤¹¡£"
+msgstr "å…¥åŠ›ã—ãŸæ•°å­—ã¯å¤šåˆ†ç„¡åŠ¹ã§ã™ã€‚"
 
 #: ..\internat.cpp:255
 msgid "Congratulations! you've won. Here is the magic phrase:"
-msgstr "¤ª¤á¤Ç¤È¤¦¤´¤¶¤¤¤Ş¤¹¡ª ¤¢¤Ê¤¿¤Î¾¡¡£ ¤³¤ì¤¬ËâË¡¤Î¸ÀÍÕ¤Ç¤¹¡£¡§"
+msgstr "ãŠã‚ã§ã¨ã†ã”ã–ã„ã¾ã™ï¼ ã‚ãªãŸã®å‹ã€‚ ã“ã‚ŒãŒé­”æ³•ã®è¨€è‘‰ã§ã™ã€‚ï¼š"
 
 #: ..\internat.cpp:256
 #, c-format
 msgid "cannot create fifo `%s'"
-msgstr "fifo ¤Ïºî¤ì¤Ş¤»¤ó¤Ç¤·¤¿¡£"
+msgstr "fifo ã¯ä½œã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚"
 
 #: ..\internat.cpp:259
 msgid "Result"
-msgstr "·ë²Ì"
+msgstr "çµæœ"
 
 msgid "Bad luck! try again..."
 msgstr ""
