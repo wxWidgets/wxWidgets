@@ -220,6 +220,13 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 
     CentreOnParent();
 
+#if !wxUSE_MODAL_ABOUT_DIALOG
+    Connect(wxEVT_CLOSE_WINDOW,
+            wxCloseEventHandler(wxGenericAboutDialog::OnCloseWindow));
+    Connect(wxID_OK, wxEVT_COMMAND_BUTTON_CLICKED,
+            wxCommandEventHandler(wxGenericAboutDialog::OnOK));
+#endif // !wxUSE_MODAL_ABOUT_DIALOG
+
     return true;
 }
 
@@ -265,13 +272,31 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
     m_sizerText->Add(pane, wxSizerFlags(0).Expand().Border(wxBOTTOM));
 }
 
+#if !wxUSE_MODAL_ABOUT_DIALOG
+
+void wxGenericAboutDialog::OnCloseWindow(wxCloseEvent& event)
+{
+    Destroy();
+
+    event.Skip();
+}
+
+void wxGenericAboutDialog::OnOK(wxCommandEvent& WXUNUSED(event))
+{
+    // By default a modeless dialog would be just hidden, destroy this one
+    // instead.
+    Destroy();
+}
+
+#endif // !wxUSE_MODAL_ABOUT_DIALOG
+
 // ----------------------------------------------------------------------------
 // public functions
 // ----------------------------------------------------------------------------
 
 void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {
-#if !defined(__WXGTK__) && !defined(__WXMAC__)
+#if wxUSE_MODAL_ABOUT_DIALOG
     wxGenericAboutDialog dlg(info, parent);
     dlg.ShowModal();
 #else
