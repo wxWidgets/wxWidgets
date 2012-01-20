@@ -110,12 +110,51 @@ public:
     bool HasCookies() const;
 
     /**
-        Set the data to be posted to the server.
+        Set the binary data to be posted to the server.
 
-        If a non-empty string is passed to this method, the next request will
-        be an HTTP @c POST instead of the default HTTP @c GET and the data from
-        @a post_buf will be posted as the body of this request.
+        If a non-empty buffer is passed to this method, the next request will
+        be an HTTP @c POST instead of the default HTTP @c GET and the given @a
+        data will be posted as the body of this request.
+
+        For textual data a more convenient SetPostText() can be used instead.
+
+        @param contentType
+            The value of HTTP "Content-Type" header, e.g. "image/png".
+        @param data
+            The data to post.
+        @return
+            @true if any data was passed in or @false if the buffer was empty.
+
+        @since 2.9.4
      */
-    void SetPostBuffer(const wxString& post_buf);
+    bool SetPostBuffer(const wxString& contentType, const wxMemoryBuffer& data);
+
+    /**
+        Set the text to be posted to the server.
+
+        After a successful call to this method, the request will use HTTP @c
+        POST instead of the default @c GET when it's executed.
+
+        Use SetPostBuffer() if you need to post non-textual data.
+
+        @param contentType
+            The value of HTTP "Content-Type" header, e.g. "text/html;
+            charset=UTF-8".
+        @param data
+            The data to post.
+        @param conv
+            The conversion to use to convert @a data contents to a byte stream.
+            Its value should be consistent with the charset parameter specified
+            in @a contentType.
+        @return
+            @true if string was non-empty and was successfully converted using
+            the given @a conv or @false otherwise (in this case this request
+            won't be @c POST'ed correctly).
+
+        @since 2.9.4
+     */
+    bool SetPostText(const wxString& contentType,
+                     const wxString& data,
+                     const wxMBConv& conv = wxConvUTF8);
 };
 
