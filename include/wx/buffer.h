@@ -535,12 +535,16 @@ public:
     size_t GetBufSize() const { return m_bufdata->m_size; }
     size_t GetDataLen() const { return m_bufdata->m_len; }
 
+    bool IsEmpty() const { return GetDataLen() == 0; }
+
     void   SetBufSize(size_t size) { m_bufdata->ResizeIfNeeded(size); }
     void   SetDataLen(size_t len)
     {
         wxASSERT(len <= m_bufdata->m_size);
         m_bufdata->m_len = len;
     }
+
+    void Clear() { SetDataLen(0); }
 
     // Ensure the buffer is big enough and return a pointer to it
     void *GetWriteBuf(size_t sizeNeeded)

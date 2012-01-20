@@ -310,6 +310,17 @@ public:
     void AppendData(const void *data, size_t len);
 
     /**
+        Clear the buffer contents.
+
+        The buffer won't contain any data after this method is called.
+
+        @see IsEmpty()
+
+        @since 2.9.4
+     */
+    void Clear();
+
+    /**
         Ensure that the buffer is big enough and return a pointer to the start
         of the empty space in the buffer. This pointer can be used to directly
         write data into the buffer, this new data will be appended to the
@@ -342,6 +353,15 @@ public:
         up to @a sizeNeeded bytes.
     */
     void* GetWriteBuf(size_t sizeNeeded);
+
+    /**
+        Returns true if the buffer contains no data.
+
+        @see Clear()
+
+        @since 2.9.4
+     */
+    bool IsEmpty() const;
 
     /**
         Ensures the buffer has at least @a size bytes available.
