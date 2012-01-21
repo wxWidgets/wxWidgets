@@ -75,7 +75,7 @@ msgstr "おめでとうございます！ あなたの勝。 これが魔法の�
 #: ..\internat.cpp:256
 #, c-format
 msgid "cannot create fifo `%s'"
-msgstr "fifo は作れませんでした。"
+msgstr "fifo %s を作ることができませんでした"
 
 #: ..\internat.cpp:259
 msgid "Result"
