@@ -323,17 +323,6 @@ bool wxSpinCtrlGenericBase::Show(bool show)
     return true;
 }
 
-bool wxSpinCtrlGenericBase::Reparent(wxWindowBase *newParent)
-{
-    if ( m_spinButton )
-    {
-        m_spinButton->Reparent(newParent);
-        m_textCtrl->Reparent(newParent);
-    }
-
-    return true;
-}
-
 #if wxUSE_TOOLTIPS
 void wxSpinCtrlGenericBase::DoSetToolTip(wxToolTip *tip)
 {
