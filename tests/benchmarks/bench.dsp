@@ -255,6 +255,10 @@ SOURCE=.\ipcclient.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\log.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbconv.cpp
 # End Source File
 # Begin Source File

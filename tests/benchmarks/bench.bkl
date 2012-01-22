@@ -15,6 +15,7 @@
             htmlparser/htmlpars.cpp
             htmlparser/htmltag.cpp
             ipcclient.cpp
+            log.cpp
             mbconv.cpp
             strings.cpp
             tls.cpp

@@ -557,6 +557,9 @@
 				RelativePath=".\ipcclient.cpp">
 			</File>
 			<File
+				RelativePath=".\log.cpp">
+			</File>
+			<File
 				RelativePath=".\mbconv.cpp">
 			</File>
 			<File
