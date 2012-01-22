@@ -343,7 +343,7 @@ wxPMDCImpl::wxPMDCImpl( wxDC *owner, WXHDC hDC ) :
     m_hDC          = hDC;
 } // end of wxPMDCImpl::wxPMDCImpl
 
-wxPMDCImpl::~wxPMDCImpl(void)
+wxPMDCImpl::~wxPMDCImpl()
 {
     if ( m_hDC != 0 )
     {
@@ -459,7 +459,7 @@ void wxPMDCImpl::DoSetDeviceClippingRegion(
     DO_SET_CLIPPING_BOX()
 } // end of wxPMDCImpl::DoSetDeviceClippingRegion
 
-void wxPMDCImpl::DestroyClippingRegion(void)
+void wxPMDCImpl::DestroyClippingRegion()
 {
     if (m_clipping && m_hPS)
     {
@@ -910,7 +910,7 @@ void wxPMDCImpl::DoDrawLines(
 {
     POINTL                          vPoint;
 
-    if (vXoffset != 0L || vXoffset != 0L)
+    if (vXoffset != 0L || vYoffset != 0L)
     {
         int                             i;
 
