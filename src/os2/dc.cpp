@@ -922,7 +922,7 @@ void wxDC::DoDrawLines(
 {
     POINTL                          vPoint;
 
-    if (vXoffset != 0L || vXoffset != 0L)
+    if (vXoffset != 0L || vYoffset != 0L)
     {
         int                             i;
 
@@ -2190,8 +2190,8 @@ void wxDC::DoGetTextExtent(
        vErrorCode = ::WinGetLastError(wxGetInstance());
        sError = wxPMErrorToStr(vErrorCode);
        // DEBUG
-       wxSprintf(zMsg, _T("GpiQueryTextBox for %s: failed with Error: %lx - %s"), rsString.c_str(), vErrorCode, sError.c_str());
-       (void)wxMessageBox( _T("wxWidgets Menu sample")
+       wxSprintf(zMsg, wxT("GpiQueryTextBox for %s: failed with Error: %lx - %s"), rsString.c_str(), vErrorCode, sError.c_str());
+       (void)wxMessageBox( wxT("wxWidgets DoGetTextExtent")
                           ,zMsg
                           ,wxICON_INFORMATION
                          );
