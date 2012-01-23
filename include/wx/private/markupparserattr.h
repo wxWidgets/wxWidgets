@@ -78,8 +78,8 @@ public:
     virtual void OnUnderlinedStart() { DoChangeFont(&wxFont::Underlined); }
     virtual void OnUnderlinedEnd() { DoEndAttr(); }
 
-    virtual void OnStrikethroughStart() { } // TODO: No support in wxFont yet.
-    virtual void OnStrikethroughEnd() { }
+    virtual void OnStrikethroughStart() { DoChangeFont(&wxFont::Strikethrough); }
+    virtual void OnStrikethroughEnd() { DoEndAttr(); }
 
     virtual void OnBigStart() { DoChangeFont(&wxFont::Larger); }
     virtual void OnBigEnd() { DoEndAttr(); }
