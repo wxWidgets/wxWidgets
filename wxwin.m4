@@ -605,10 +605,10 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
                     dnl PORT must be one of the allowed values
                     if test "$TOOLKIT" != "gtk1" -a "$TOOLKIT" != "gtk2" -a \
                             "$TOOLKIT" != "msw" -a "$TOOLKIT" != "motif" -a \
-                            "$TOOLKIT" != "x11" -a "$TOOLKIT" != "mac" -a \
-                            -a "$TOOLKIT" != "dfb" ; then
+                            "$TOOLKIT" != "osx_carbon" -a "$TOOLKIT" != "osx_cocoa" -a \
+                            "$TOOLKIT" != "dfb" -a "$TOOLKIT" != "x11"; then
                         AC_MSG_ERROR([
-    Unrecognized option value (allowed values: auto, gtk1, gtk2, msw, motif, x11, mac, dfb)
+    Unrecognized option value (allowed values: auto, gtk1, gtk2, msw, motif, osx_carbon, osx_cocoa, dfb, x11)
                         ])
                     fi
 
