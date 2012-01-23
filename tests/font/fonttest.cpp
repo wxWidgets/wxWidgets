@@ -37,11 +37,13 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( FontTestCase );
+        CPPUNIT_TEST( Construct );
         CPPUNIT_TEST( GetSet );
         CPPUNIT_TEST( NativeFontInfo );
         CPPUNIT_TEST( NativeFontInfoUserDesc );
     CPPUNIT_TEST_SUITE_END();
 
+    void Construct();
     void GetSet();
     void NativeFontInfo();
     void NativeFontInfoUserDesc();
@@ -91,6 +93,26 @@ wxString DumpFont(const wxFont *font)
              font->GetEncoding());
 
     return s;
+}
+
+void FontTestCase::Construct()
+{
+    // The main purpose of this test is to verify that the font ctors below
+    // compile because it's easy to introduce ambiguities due to the number of
+    // overloaded wxFont ctors.
+
+    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT).IsOk() );
+    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT,
+                               wxFONTFLAG_DEFAULT).IsOk() );
+    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT,
+                               wxFONTSTYLE_NORMAL,
+                               wxFONTWEIGHT_NORMAL).IsOk() );
+
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    // Tests relying on the soon-to-be-deprecated ctor taking ints and not
+    // wxFontXXX enum elements.
+    CPPUNIT_ASSERT( wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL).IsOk() );
+#endif // FUTURE_WXWIN_COMPATIBILITY_3_0
 }
 
 void FontTestCase::GetSet()
