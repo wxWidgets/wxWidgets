@@ -931,7 +931,7 @@ void wxMenu::SetTitle(const wxString& label)
     // put the title string in bold face
     if ( !m_title.empty() )
     {
-        SetDefaultMenuItem(GetHmenu(), (UINT_PTR)idMenuTitle);
+        SetDefaultMenuItem(GetHmenu(), (UINT)idMenuTitle);
     }
 #endif // Win32
 }
