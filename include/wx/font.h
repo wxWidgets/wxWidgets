@@ -227,6 +227,7 @@ public:
     virtual wxFontStyle GetStyle() const = 0;
     virtual wxFontWeight GetWeight() const = 0;
     virtual bool GetUnderlined() const = 0;
+    virtual bool GetStrikethrough() const { return false; }
     virtual wxString GetFaceName() const = 0;
     virtual wxFontEncoding GetEncoding() const = 0;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const = 0;
@@ -244,6 +245,7 @@ public:
     virtual void SetWeight( wxFontWeight weight ) = 0;
 
     virtual void SetUnderlined( bool underlined ) = 0;
+    virtual void SetStrikethrough( bool WXUNUSED(strikethrough) ) {}
     virtual void SetEncoding(wxFontEncoding encoding) = 0;
     virtual bool SetFaceName( const wxString& faceName );
     void SetNativeFontInfo(const wxNativeFontInfo& info)
@@ -356,6 +358,7 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     wxFont& MakeBold(); \
     wxFont& MakeItalic(); \
     wxFont& MakeUnderlined(); \
+    wxFont& MakeStrikethrough(); \
     wxFont& MakeLarger() { return Scale(1.2f); } \
     wxFont& MakeSmaller() { return Scale(1/1.2f); } \
     wxFont& Scale(float x); \
@@ -363,6 +366,7 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     wxFont Bold() const; \
     wxFont Italic() const; \
     wxFont Underlined() const; \
+    wxFont Strikethrough() const; \
     wxFont Larger() const { return Scaled(1.2f); } \
     wxFont Smaller() const { return Scaled(1/1.2f); } \
     wxFont Scaled(float x) const

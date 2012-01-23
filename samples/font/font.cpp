@@ -107,6 +107,7 @@ public:
     void OnSlant(wxCommandEvent& event);
 
     void OnUnderline(wxCommandEvent& event);
+    void OnStrikethrough(wxCommandEvent& event);
 
     void OnwxPointerFont(wxCommandEvent& event);
     void OnwxSystemSettingsFont(wxCommandEvent& event);
@@ -178,6 +179,7 @@ enum
     Font_Slant,
 
     Font_Underlined,
+    Font_Strikethrough,
 
     // standard global wxFont objects:
     Font_wxNORMAL_FONT,
@@ -231,6 +233,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Slant, MyFrame::OnSlant)
 
     EVT_MENU(Font_Underlined, MyFrame::OnUnderline)
+    EVT_MENU(Font_Strikethrough, MyFrame::OnStrikethrough)
 
     EVT_MENU(Font_wxNORMAL_FONT, MyFrame::OnwxPointerFont)
     EVT_MENU(Font_wxSMALL_FONT, MyFrame::OnwxPointerFont)
@@ -330,6 +333,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->AppendSeparator();
     menuFont->AppendCheckItem(Font_Underlined, wxT("&Underlined\tCtrl-U"),
                               wxT("Toggle underlined state"));
+    menuFont->AppendCheckItem(Font_Strikethrough, wxT("&Strikethrough"),
+                              wxT("Toggle strikethrough state"));
 
     menuFont->AppendSeparator();
     menuFont->Append(Font_SetNativeDesc,
@@ -735,6 +740,13 @@ void MyFrame::OnUnderline(wxCommandEvent& event)
     DoChangeFont(font);
 }
 
+void MyFrame::OnStrikethrough(wxCommandEvent& event)
+{
+    wxFont font = m_canvas->GetTextFont();
+    font.SetStrikethrough(event.IsChecked());
+    DoChangeFont(font);
+}
+
 void MyFrame::OnwxPointerFont(wxCommandEvent& event)
 {
     wxFont font;
@@ -813,6 +825,7 @@ void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
     m_textctrl->SetFont(font);
     if ( col.IsOk() )
         m_textctrl->SetForegroundColour(col);
+    m_textctrl->Refresh();
 
     // update the state of the bold/italic/underlined menu items
     wxMenuBar *mbar = GetMenuBar();
@@ -827,6 +840,7 @@ void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
 #endif
 
         mbar->Check(Font_Underlined, font.GetUnderlined());
+        mbar->Check(Font_Strikethrough, font.GetStrikethrough());
     }
 }
 

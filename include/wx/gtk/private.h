@@ -111,6 +111,21 @@ GtkWidget *GetSplitterWidget();
 GtkWidget *GetTextEntryWidget();
 GtkWidget *GetTreeWidget();
 
+// Set Pango attributes corresponding to the given font for the span 0..len (or
+// without any bounds if len == 0) in the specified layout. Currently only
+// underlined and strike-through attributes are handled by this function.
+//
+// Special "addDummyAttrs" parameter is used to work around a bug in old Pango
+// versions in wxWindowDCImpl::DoDrawText(), see comment there.
+//
+// If neither of them is specified, returns false, otherwise sets up the
+// attributes and returns true.
+//
+// This function is implemented in src/gtk/dcclient.cpp.
+bool
+SetPangoAttrsForFont(const wxFont& font, PangoLayout* layout, size_t len = 0,
+                     bool addDummyAttrs = false);
+
 } // wxGTKPrivate
 
 #endif // _WX_GTK_PRIVATE_H_

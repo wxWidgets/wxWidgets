@@ -1738,24 +1738,13 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     angle = -angle;
 
-    bool underlined = m_font.IsOk() && m_font.GetUnderlined();
-
     const wxScopedCharBuffer data = text.utf8_str();
 
     size_t datalen = strlen(data);
     pango_layout_set_text( m_layout, data, datalen);
 
-    if (underlined)
-    {
-        PangoAttrList *attrs = pango_attr_list_new();
-        PangoAttribute *a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
-        a->start_index = 0;
-        a->end_index = datalen;
-        pango_attr_list_insert(attrs, a);
-        pango_layout_set_attributes(m_layout, attrs);
-        pango_attr_list_unref(attrs);
-    }
-
+    const bool
+      setAttrs = wxGTKPrivate::SetPangoAttrsForFont(m_font, m_layout, datalen);
     if (m_textForegroundColour.IsOk())
     {
         unsigned char red = m_textForegroundColour.Red();
@@ -1816,7 +1805,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     cairo_restore( m_cairo );
 
-    if (underlined)
+    if (setAttrs)
     {
         // Undo underline attributes setting
         pango_layout_set_attributes(m_layout, NULL);

@@ -113,6 +113,8 @@ wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, (wxFontWeight)wxNORMAL, 
            wxT("Helpstring"), wxT("group")) // wxFontWeight
 wxPROPERTY( Underlined, bool, SetUnderlined, GetUnderlined, false, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
+wxPROPERTY( Strikethrough, bool, SetStrikethrough, GetStrikethrough, false, 0, \
+                   wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Face, wxString, SetFaceName, GetFaceName, wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Encoding, wxFontEncoding, SetEncoding, GetEncoding, \
@@ -307,6 +309,7 @@ void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
     SetStyle(info.style);
     SetWeight(info.weight);
     SetUnderlined(info.underlined);
+    SetStrikethrough(info.strikethrough);
     SetFaceName(info.faceName);
     SetEncoding(info.encoding);
 #else
@@ -394,6 +397,7 @@ bool wxFontBase::operator==(const wxFont& font) const
             GetStyle() == font.GetStyle() &&
             GetWeight() == font.GetWeight() &&
             GetUnderlined() == font.GetUnderlined() &&
+            GetStrikethrough() == font.GetStrikethrough() &&
             GetFaceName().IsSameAs(font.GetFaceName(), false) &&
             GetEncoding() == font.GetEncoding()
            );
@@ -533,6 +537,19 @@ wxFont wxFont::Underlined() const
     return font;
 }
 
+wxFont wxFont::Strikethrough() const
+{
+    wxFont font(*this);
+    font.MakeStrikethrough();
+    return font;
+}
+
+wxFont& wxFont::MakeStrikethrough()
+{
+    SetStrikethrough(true);
+    return *this;
+}
+
 wxFont& wxFont::Scale(float x)
 {
     SetPointSize(int(x*GetPointSize() + 0.5));
@@ -577,19 +594,22 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 
 // These are the generic forms of FromString()/ToString.
 //
-// convert to/from the string representation: format is
-//      version;pointsize;family;style;weight;underlined;facename;encoding
+// convert to/from the string representation: the general format is
+// "version;the rest..." with currently defined versions being:
+//
+//      0;pointsize;family;style;weight;underlined;facename;encoding
+//      1;pointsize;family;style;weight;underlined;strikethrough;facename;encoding
 
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
     long l;
+    short version;
 
     wxStringTokenizer tokenizer(s, wxT(";"));
 
     wxString token = tokenizer.GetNextToken();
-    //
-    //  Ignore the version for now
-    //
+    if ( !token.ToLong(&version) || version < 0 || version > 1 )
+        return false;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -616,6 +636,14 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
     underlined = l != 0;
 
+    if ( version == 1 )
+    {
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        strikethrough = l != 0;
+    }
+
     faceName = tokenizer.GetNextToken();
 
 #ifndef __WXMAC__
@@ -635,13 +663,14 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%d;%d;%d;%d;%d;%s;%d"),
-             0,                                 // version
+    s.Printf(wxT("%d;%d;%d;%d;%d;%d;%d;%s;%d"),
+             1,                                 // version
              pointSize,
              family,
              (int)style,
              (int)weight,
              underlined,
+             strikethrough,
              faceName.GetData(),
              (int)encoding);
 
@@ -655,6 +684,7 @@ void wxNativeFontInfo::Init()
     style = wxFONTSTYLE_NORMAL;
     weight = wxFONTWEIGHT_NORMAL;
     underlined = false;
+    strikethrough = false;
     faceName.clear();
     encoding = wxFONTENCODING_DEFAULT;
 }
@@ -677,6 +707,11 @@ wxFontWeight wxNativeFontInfo::GetWeight() const
 bool wxNativeFontInfo::GetUnderlined() const
 {
     return underlined;
+}
+
+bool wxNativeFontInfo::GetStrikethrough() const
+{
+    return strikethrough;
 }
 
 wxString wxNativeFontInfo::GetFaceName() const
@@ -714,6 +749,11 @@ void wxNativeFontInfo::SetUnderlined(bool underlined_)
     underlined = underlined_;
 }
 
+void wxNativeFontInfo::SetStrikethrough(bool strikethrough_)
+{
+    strikethrough = strikethrough_;
+}
+
 bool wxNativeFontInfo::SetFaceName(const wxString& facename_)
 {
     faceName = facename_;
@@ -748,6 +788,11 @@ wxString wxNativeFontInfo::ToUserString() const
     if ( GetUnderlined() )
     {
         desc << _("underlined");
+    }
+
+    if ( GetStrikethrough() )
+    {
+        desc << _("strikethrough");
     }
 
     switch ( GetWeight() )
@@ -921,6 +966,10 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         if ( token == wxT("underlined") || token == _("underlined") )
         {
             SetUnderlined(true);
+        }
+        else if ( token == wxT("strikethrough") || token == _("strikethrough") )
+        {
+            SetStrikethrough(true);
         }
         else if ( token == wxT("light") || token == _("light") )
         {

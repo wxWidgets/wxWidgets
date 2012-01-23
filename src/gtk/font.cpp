@@ -52,6 +52,7 @@ public:
                   wxFontStyle style = wxFONTSTYLE_NORMAL,
                   wxFontWeight weight = wxFONTWEIGHT_NORMAL,
                   bool underlined = false,
+                  bool strikethrough = false,
                   const wxString& faceName = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
@@ -69,6 +70,7 @@ public:
     void SetStyle(wxFontStyle style);
     void SetWeight(wxFontWeight weight);
     void SetUnderlined(bool underlined);
+    void SetStrikethrough(bool strikethrough);
     bool SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
@@ -82,6 +84,7 @@ protected:
               wxFontStyle style,
               wxFontWeight weight,
               bool underlined,
+              bool strikethrough,
               const wxString& faceName,
               wxFontEncoding encoding);
 
@@ -90,7 +93,7 @@ protected:
 
 private:
     bool            m_underlined;
-
+    bool            m_strikethrough;
     // The native font info: basically a PangoFontDescription
     wxNativeFontInfo m_nativeFontInfo;
 
@@ -108,6 +111,7 @@ void wxFontRefData::Init(int pointSize,
                          wxFontStyle style,
                          wxFontWeight weight,
                          bool underlined,
+                         bool strikethrough,
                          const wxString& faceName,
                          wxFontEncoding WXUNUSED(encoding))
 {
@@ -115,6 +119,7 @@ void wxFontRefData::Init(int pointSize,
         family = wxFONTFAMILY_SWISS;
 
     m_underlined = underlined;
+    m_strikethrough = strikethrough;
 
     // Create native font info
     m_nativeFontInfo.description = pango_font_description_new();
@@ -149,12 +154,14 @@ void wxFontRefData::InitFromNative()
 
     // Pango description are never underlined
     m_underlined = false;
+    m_strikethrough = false;
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
              : wxGDIRefData()
 {
     m_underlined = data.m_underlined;
+    m_strikethrough = data.m_strikethrough;
 
     // Forces a copy of the internal data.  wxNativeFontInfo should probably
     // have a copy ctor and assignment operator to fix this properly but that
@@ -163,11 +170,11 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
 }
 
 wxFontRefData::wxFontRefData(int size, wxFontFamily family, wxFontStyle style,
-                             wxFontWeight weight, bool underlined,
+                             wxFontWeight weight, bool underlined, bool strikethrough,
                              const wxString& faceName,
                              wxFontEncoding encoding)
 {
-    Init(size, family, style, weight, underlined, faceName, encoding);
+    Init(size, family, style, weight, underlined, strikethrough, faceName, encoding);
 }
 
 wxFontRefData::wxFontRefData(const wxString& nativeFontInfoString)
@@ -244,6 +251,11 @@ void wxFontRefData::SetUnderlined(bool underlined)
     // here we just need to save the underlined attribute
 }
 
+void wxFontRefData::SetStrikethrough(bool strikethrough)
+{
+    m_strikethrough = strikethrough;
+}
+
 bool wxFontRefData::SetFaceName(const wxString& facename)
 {
     return m_nativeFontInfo.SetFaceName(facename);
@@ -287,7 +299,7 @@ wxFont::wxFont(int pointSize,
                                   GetStyleFromFlags(flags),
                                   GetWeightFromFlags(flags),
                                   GetUnderlinedFromFlags(flags),
-                                  face, encoding);
+                                  false, face, encoding);
 }
 
 bool wxFont::Create( int pointSize,
@@ -301,7 +313,7 @@ bool wxFont::Create( int pointSize,
     UnRef();
 
     m_refData = new wxFontRefData(pointSize, family, style, weight,
-                                  underlined, face, encoding);
+                                  underlined, false, face, encoding);
 
     return true;
 }
@@ -367,6 +379,13 @@ bool wxFont::GetUnderlined() const
     wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
     return M_FONTDATA->m_underlined;
+}
+
+bool wxFont::GetStrikethrough() const
+{
+    wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
+
+    return M_FONTDATA->m_strikethrough;
 }
 
 wxFontEncoding wxFont::GetEncoding() const
@@ -436,6 +455,13 @@ void wxFont::SetUnderlined(bool underlined)
     AllocExclusive();
 
     M_FONTDATA->SetUnderlined(underlined);
+}
+
+void wxFont::SetStrikethrough(bool strikethrough)
+{
+    AllocExclusive();
+
+    M_FONTDATA->SetStrikethrough(strikethrough);
 }
 
 void wxFont::SetEncoding(wxFontEncoding encoding)

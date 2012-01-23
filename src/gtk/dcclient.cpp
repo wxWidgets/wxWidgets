@@ -26,6 +26,8 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/object.h"
 
+using wxGTKPrivate::SetPangoAttrsForFont;
+
 //-----------------------------------------------------------------------------
 // local defines
 //-----------------------------------------------------------------------------
@@ -1408,33 +1410,8 @@ void wxWindowDCImpl::DoDrawText(const wxString& text,
     }
 
     pango_layout_set_text(m_layout, data, datalen);
-
-    if (underlined)
-    {
-        PangoAttrList *attrs = pango_attr_list_new();
-        PangoAttribute *a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
-        a->start_index = 0;
-        a->end_index = datalen;
-        pango_attr_list_insert(attrs, a);
-
-        if (needshack)
-        {
-            // dummy colour for the leading space
-            a = pango_attr_foreground_new (0x0057, 0x52A9, 0xD614);
-            a->start_index = 0;
-            a->end_index = 1;
-            pango_attr_list_insert(attrs, a);
-
-            // dummy colour for the trailing space
-            a = pango_attr_foreground_new (0x0057, 0x52A9, 0xD614);
-            a->start_index = datalen - 1;
-            a->end_index = datalen;
-            pango_attr_list_insert(attrs, a);
-        }
-
-        pango_layout_set_attributes(m_layout, attrs);
-        pango_attr_list_unref(attrs);
-    }
+    const bool
+        setAttrs = SetPangoAttrsForFont(m_font, m_layout, datalen, needshack);
 
     int oldSize = 0;
     const bool isScaled = fabs(m_scaleY - 1.0) > 0.00001;
@@ -1473,7 +1450,7 @@ void wxWindowDCImpl::DoDrawText(const wxString& text,
          // actually apply unscaled font
          pango_layout_set_font_description( m_layout, m_fontdesc );
     }
-    if (underlined)
+    if (setAttrs)
     {
         // undo underline attributes setting:
         pango_layout_set_attributes(m_layout, NULL);
@@ -1499,16 +1476,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
         y = YLOG2DEV(y);
 
         pango_layout_set_text(m_layout, wxGTK_CONV(text), -1);
-
-        if (m_font.GetUnderlined())
-        {
-            PangoAttrList *attrs = pango_attr_list_new();
-            PangoAttribute *a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
-            pango_attr_list_insert(attrs, a);
-            pango_layout_set_attributes(m_layout, attrs);
-            pango_attr_list_unref(attrs);
-        }
-
+        SetPangoAttrsForFont( m_font, m_layout );
         int oldSize = 0;
         const bool isScaled = fabs(m_scaleY - 1.0) > 0.00001;
         if (isScaled)
@@ -1561,7 +1529,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
         gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x+minX, y+minY,
                                     m_layout, NULL, bg_col);
 
-        if (m_font.GetUnderlined())
+        if (m_font.GetUnderlined() || m_font.GetStrikethrough())
             pango_layout_set_attributes(m_layout, NULL);
 
         // clean up the transformation matrix
@@ -2304,6 +2272,62 @@ int wxWindowDCImpl::GetDepth() const
     return gdk_drawable_get_depth(m_gdkwindow);
 }
 
+bool
+wxGTKPrivate::SetPangoAttrsForFont(const wxFont& font,
+                                   PangoLayout *layout,
+                                   size_t len,
+                                   bool addDummyAttrs)
+{
+    if ( !font.IsOk() || !(font.GetUnderlined() || font.GetStrikethrough()) )
+        return false;
+
+    PangoAttrList* attrs = pango_attr_list_new();
+
+    if ( font.GetUnderlined() )
+    {
+        PangoAttribute *a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
+        if ( len )
+        {
+            a->start_index = 0;
+            a->end_index = len;
+        }
+        pango_attr_list_insert(attrs, a);
+
+        // Add dummy attributes (use colour as it's invisible anyhow for 0
+        // width spaces) to ensure that the spaces in the beginning/end of the
+        // string are underlined too.
+        if ( addDummyAttrs )
+        {
+            wxASSERT_MSG( len > 2, "Must have 0-width spaces at string ends" );
+
+            a = pango_attr_foreground_new (0x0057, 0x52A9, 0xD614);
+            a->start_index = 0;
+            a->end_index = 1;
+            pango_attr_list_insert(attrs, a);
+
+            a = pango_attr_foreground_new (0x0057, 0x52A9, 0xD614);
+            a->start_index = len - 1;
+            a->end_index = len;
+            pango_attr_list_insert(attrs, a);
+        }
+    }
+
+    if ( font.GetStrikethrough() )
+    {
+        PangoAttribute *a = pango_attr_strikethrough_new( TRUE );
+        if ( len )
+        {
+            a->start_index = 0;
+            a->end_index = len;
+        }
+        pango_attr_list_insert(attrs, a);
+    }
+
+    pango_layout_set_attributes(layout, attrs);
+    pango_attr_list_unref(attrs);
+
+    return true;
+}
 
 //-----------------------------------------------------------------------------
 // wxClientDCImpl

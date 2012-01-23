@@ -457,6 +457,7 @@ All:
 
 All (GUI):
 
+- Added strike-through support to wxFont (Igor Korot).
 - Added wxFilePickerCtrl::SetInitialDirectory().
 - Added wxDataViewItemAttr::SetBackgroundColour() and implemented it in generic
   wxDataViewCtrl (Andrew Xu).

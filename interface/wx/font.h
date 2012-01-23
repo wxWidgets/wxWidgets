@@ -112,8 +112,10 @@ enum wxFontFlag
     wxFONTFLAG_ANTIALIASED      = 1 << 4,
     wxFONTFLAG_NOT_ANTIALIASED  = 1 << 5,
 
-    /// underlined/strikethrough flags (default: no lines)
+    /// Underlined style (not underlined by default).
     wxFONTFLAG_UNDERLINED       = 1 << 6,
+
+    /// Strike-through style (only supported in wxMSW and wxGTK currently).
     wxFONTFLAG_STRIKETHROUGH    = 1 << 7,
 
     /// the mask of all currently used flags
@@ -404,6 +406,9 @@ public:
         The meaning of the remaining arguments is the same as in the other
         constructors, please see their documentation for details.
 
+        Notice that this constructor provides the only way of creating fonts
+        with strike-through style.
+
         @since 2.9.4
      */
     wxFont(int pointSize, wxFontFamily family, int flags,
@@ -542,6 +547,15 @@ public:
     virtual bool GetUnderlined() const;
 
     /**
+        Returns @true if the font is stricken-through, @false otherwise.
+
+        @see SetStrikethrough()
+
+        @since 2.9.4
+     */
+    virtual bool GetStrikethrough() const;
+
+    /**
         Gets the font weight. See ::wxFontWeight for a list of valid weight identifiers.
 
         @see SetWeight()
@@ -628,6 +642,17 @@ public:
     wxFont Underlined() const;
 
     /**
+        Returns stricken-through version of this font.
+
+        Currently stricken-through fonts are only supported in wxMSW and wxGTK.
+
+        @see MakeStrikethrough()
+
+        @since 2.9.4
+     */
+    wxFont Strikethrough() const;
+
+    /**
         Changes this font to be bold.
 
         @see Bold()
@@ -677,6 +702,17 @@ public:
         @since 2.9.2
      */
     wxFont& MakeUnderlined();
+
+    /**
+        Changes this font to be stricken-through.
+
+        Currently stricken-through fonts are only supported in wxMSW and wxGTK.
+
+        @see Strikethrough()
+
+        @since 2.9.4
+    */
+    wxFont& MakeStrikethrough();
 
     /**
         Changes the size of this font.
@@ -868,6 +904,20 @@ public:
         @see GetUnderlined()
     */
     virtual void SetUnderlined(bool underlined);
+
+    /**
+        Sets strike-through attribute of the font.
+
+        Currently stricken-through fonts are only supported in wxMSW and wxGTK.
+
+        @param strikethrough
+            @true to add strike-through style, @false to remove it.
+
+        @see GetStrikethrough()
+
+        @since 2.9.4
+    */
+    virtual void SetStrikethrough(bool strikethrough);
 
     /**
         Sets the font weight.

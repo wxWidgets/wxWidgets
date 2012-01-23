@@ -403,6 +403,10 @@ wxFont wxTextAttr::GetFont() const
     if (HasFontUnderlined())
         underlined = GetFontUnderlined();
 
+    bool strikethrough = false;
+    if ( HasFontStrikethrough() )
+        strikethrough = GetFontStrikethrough();
+
     wxString fontFaceName;
     if (HasFontFaceName())
         fontFaceName = GetFontFaceName();
@@ -416,6 +420,8 @@ wxFont wxTextAttr::GetFont() const
         fontFamily = GetFontFamily();
 
     wxFont font(fontSize, fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
+    if ( strikethrough )
+        font.SetStrikethrough( true );
     return font;
 }
 
@@ -436,6 +442,9 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
 
     if (flags & wxTEXT_ATTR_FONT_UNDERLINE)
         m_fontUnderlined = font.GetUnderlined();
+
+    if (flags & wxTEXT_ATTR_FONT_STRIKETHROUGH)
+        m_fontStrikethrough = font.GetStrikethrough();
 
     if (flags & wxTEXT_ATTR_FONT_FACE)
         m_fontFaceName = font.GetFaceName();
@@ -498,6 +507,12 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
     {
         if (!(compareWith && compareWith->HasFontUnderlined() && compareWith->GetFontUnderlined() == style.GetFontUnderlined()))
             destStyle.SetFontUnderlined(style.GetFontUnderlined());
+    }
+
+    if (style.HasFontStrikethrough())
+    {
+        if (!(compareWith && compareWith->HasFontStrikethrough() && compareWith->GetFontStrikethrough() == style.GetFontStrikethrough()))
+            destStyle.SetFontStrikethrough(style.GetFontStrikethrough());
     }
 
     if (style.HasFontFaceName())

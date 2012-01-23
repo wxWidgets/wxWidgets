@@ -110,6 +110,18 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                                                   NULL );
             gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
         }
+        if ( font.GetStrikethrough() )
+        {
+            g_snprintf(buf, sizeof(buf), "WXFONTSTRIKETHROUGH");
+            tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                             buf );
+            if (!tag)
+                tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                                  "strikethrough-set", TRUE,
+                                                  "strikethrough", TRUE,
+                                                  NULL );
+            gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+        }
     }
 
     if (attr.HasTextColour())
