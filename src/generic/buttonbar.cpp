@@ -140,7 +140,10 @@ bool wxButtonToolBar::Create(wxWindow *parent,
 
     // wxColour lightBackground(244, 244, 244);
 
-    wxFont font(wxSMALL_FONT->GetPointSize(), wxNORMAL_FONT->GetFamily(), wxNORMAL_FONT->GetStyle(), wxNORMAL);
+    wxFont font(wxSMALL_FONT->GetPointSize(),
+                wxNORMAL_FONT->GetFamily(),
+                wxNORMAL_FONT->GetStyle(),
+                wxFONTWEIGHT_NORMAL);
     SetFont(font);
 
     // Calculate the label height if necessary
