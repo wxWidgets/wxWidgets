@@ -385,16 +385,17 @@ void wxScrollHelperBase::SetScrollbars(int pixelsPerUnitX,
                                        int yPos,
                                        bool noRefresh)
 {
-    int xpos, ypos;
+    // Convert positions expressed in scroll units to positions in pixels.
+    int xPosInPixels = (xPos + m_xScrollPosition)*m_xScrollPixelsPerLine,
+        yPosInPixels = (yPos + m_yScrollPosition)*m_yScrollPixelsPerLine;
 
-    CalcUnscrolledPosition(xPos, yPos, &xpos, &ypos);
     bool do_refresh =
     (
       (noUnitsX != 0 && m_xScrollLines == 0) ||
-      (noUnitsX < m_xScrollLines && xpos > pixelsPerUnitX * noUnitsX) ||
+      (noUnitsX < m_xScrollLines && xPosInPixels > pixelsPerUnitX * noUnitsX) ||
 
       (noUnitsY != 0 && m_yScrollLines == 0) ||
-      (noUnitsY < m_yScrollLines && ypos > pixelsPerUnitY * noUnitsY) ||
+      (noUnitsY < m_yScrollLines && yPosInPixels > pixelsPerUnitY * noUnitsY) ||
       (xPos != m_xScrollPosition) ||
       (yPos != m_yScrollPosition)
     );
