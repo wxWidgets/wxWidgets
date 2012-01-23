@@ -1217,6 +1217,12 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return m_encoding;
 }
 
+bool wxNativeFontInfo::GetStrikethrough() const
+{
+    return false;
+}
+
+
 // changing the font descriptor
 
 void wxNativeFontInfo::SetPointSize(int pointsize)
@@ -1281,3 +1287,9 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
     m_encoding = encoding_;
     // not reflected in native descriptors
 }
+
+void wxNativeFontInfo::SetStrikethrough(bool WXUNUSED(strikethrough))
+{
+}
+
+
