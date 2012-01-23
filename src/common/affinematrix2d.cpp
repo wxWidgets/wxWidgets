@@ -106,10 +106,13 @@ bool wxAffineMatrix2D::IsEqual(const wxAffineMatrix2DBase& t) const
 //
 
 // add the translation to this matrix
+// |  1   0   0 |   | m_11  m_12   0 |
+// |  0   1   0 | x | m_21  m_22   0 |
+// | dx  dy   1 |   | m_tx  m_ty   1 |
 void wxAffineMatrix2D::Translate(wxDouble dx, wxDouble dy)
 {
-    m_tx += dx;
-    m_ty += dy;
+    m_tx += m_11 * dx + m_21 * dy;
+    m_ty += m_12 * dx + m_22 * dy;
 }
 
 // add the scale to this matrix

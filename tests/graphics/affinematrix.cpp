@@ -112,7 +112,7 @@ void AffineTransformTestCase::VMirrorAndTranslate()
 
         wxAffineMatrix2D matrix;
         matrix.Mirror(wxVERTICAL);
-        matrix.Translate(0, m_bmpOrig.GetHeight() - 1);
+        matrix.Translate(0, -m_bmpOrig.GetHeight() + 1);
         dc.SetTransformMatrix(matrix);
         dc.DrawBitmap(m_bmpOrig, 0, 0);
     }
@@ -134,7 +134,7 @@ void AffineTransformTestCase::Rotate90Clockwise()
 
         wxAffineMatrix2D matrix;
         matrix.Rotate(-0.5 * M_PI);
-        matrix.Translate(m_bmpOrig.GetHeight(), 0);
+        matrix.Translate(0, -m_bmpOrig.GetHeight());
         dc.SetTransformMatrix(matrix);
         dc.DrawBitmap(m_bmpOrig, 0, 0);
     }
