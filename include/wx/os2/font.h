@@ -63,6 +63,19 @@ public:
         SetPixelSize(pixelSize);
     }
 
+    wxFont(int pointSize,
+           wxFontFamily family,
+           int flags = wxFONTFLAG_DEFAULT,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        Create(pointSize, family,
+               GetStyleFromFlags(flags),
+               GetWeightFromFlags(flags),
+               GetUnderlinedFromFlags(flags),
+               face, encoding);
+    }
+
     bool Create(int size,
                 wxFontFamily family,
                 wxFontStyle style,

@@ -303,7 +303,7 @@ public:
     wxFont(const wxFont& font);
 
     /**
-        Creates a font object with the specified attributes.
+        Creates a font object with the specified attributes and size in points.
 
         @param pointSize
             Size in points. See SetPointSize() for more info.
@@ -349,7 +349,7 @@ public:
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     /**
-        Creates a font object with the specified attributes.
+        Creates a font object with the specified attributes and size in pixels.
 
         @param pixelSize
             Size in pixels. See SetPixelSize() for more info.
@@ -391,6 +391,22 @@ public:
     wxFont(const wxSize& pixelSize, wxFontFamily family,
            wxFontStyle style, wxFontWeight weight,
            bool underline = false,
+           const wxString& faceName = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+    /**
+        Creates a font object using font flags.
+
+        This constructor is similar to the constructors above except it
+        specifies the font styles such as underlined, italic, bold, ... in a
+        single @a flags argument instead of using separate arguments for them.
+        This parameter can be a combination of ::wxFontFlag enum elements.
+        The meaning of the remaining arguments is the same as in the other
+        constructors, please see their documentation for details.
+
+        @since 2.9.4
+     */
+    wxFont(int pointSize, wxFontFamily family, int flags,
            const wxString& faceName = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 

@@ -290,6 +290,33 @@ protected:
     // wxFONTFAMILY_UNKNOWN unlike the public method (see comment there).
     virtual wxFontFamily DoGetFamily() const = 0;
 
+
+    // Helper functions to recover wxFONTSTYLE/wxFONTWEIGHT and underlined flg
+    // values from flags containing a combination of wxFONTFLAG_XXX.
+    static wxFontStyle GetStyleFromFlags(int flags)
+    {
+        return flags & wxFONTFLAG_ITALIC
+                        ? wxFONTSTYLE_ITALIC
+                        : flags & wxFONTFLAG_SLANT
+                            ? wxFONTSTYLE_SLANT
+                            : wxFONTSTYLE_NORMAL;
+    }
+
+    static wxFontWeight GetWeightFromFlags(int flags)
+    {
+        return flags & wxFONTFLAG_LIGHT
+                        ? wxFONTWEIGHT_LIGHT
+                        : flags & wxFONTFLAG_BOLD
+                            ? wxFONTWEIGHT_BOLD
+                            : wxFONTWEIGHT_NORMAL;
+    }
+
+    static bool GetUnderlinedFromFlags(int flags)
+    {
+        return (flags & wxFONTFLAG_UNDERLINED) != 0;
+    }
+
+
 private:
     // the currently default encoding: by default, it's the default system
     // encoding, but may be changed by the application using

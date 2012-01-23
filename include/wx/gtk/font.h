@@ -63,6 +63,12 @@ public:
         SetPixelSize(pixelSize);
     }
 
+    wxFont(int pointSize,
+           wxFontFamily family,
+           int flags = wxFONTFLAG_DEFAULT,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
     bool Create(int size,
                 wxFontFamily family,
                 wxFontStyle style,

@@ -129,33 +129,6 @@ wxEMPTY_HANDLERS_TABLE(wxFont)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// helper functions
-// ----------------------------------------------------------------------------
-
-static inline int flags2Style(int flags)
-{
-    return flags & wxFONTFLAG_ITALIC
-                    ? wxFONTSTYLE_ITALIC
-                    : flags & wxFONTFLAG_SLANT
-                        ? wxFONTSTYLE_SLANT
-                        : wxFONTSTYLE_NORMAL;
-}
-
-static inline int flags2Weight(int flags)
-{
-    return flags & wxFONTFLAG_LIGHT
-                    ? wxFONTWEIGHT_LIGHT
-                    : flags & wxFONTFLAG_BOLD
-                        ? wxFONTWEIGHT_BOLD
-                        : wxFONTWEIGHT_NORMAL;
-}
-
-static inline bool flags2Underlined(int flags)
-{
-    return (flags & wxFONTFLAG_UNDERLINED) != 0;
-}
-
-// ----------------------------------------------------------------------------
 // wxFontBase
 // ----------------------------------------------------------------------------
 
@@ -209,8 +182,11 @@ wxFont *wxFontBase::New(int pointSize,
                         const wxString& face,
                         wxFontEncoding encoding)
 {
-    return New(pointSize, family, flags2Style(flags), flags2Weight(flags),
-               flags2Underlined(flags), face, encoding);
+    return New(pointSize, family,
+               GetStyleFromFlags(flags),
+               GetWeightFromFlags(flags),
+               GetUnderlinedFromFlags(flags),
+               face, encoding);
 }
 
 /* static */
@@ -220,8 +196,11 @@ wxFont *wxFontBase::New(const wxSize& pixelSize,
                         const wxString& face,
                         wxFontEncoding encoding)
 {
-    return New(pixelSize, family, flags2Style(flags), flags2Weight(flags),
-               flags2Underlined(flags), face, encoding);
+    return New(pixelSize, family,
+               GetStyleFromFlags(flags),
+               GetWeightFromFlags(flags),
+               GetUnderlinedFromFlags(flags),
+               face, encoding);
 }
 
 /* static */

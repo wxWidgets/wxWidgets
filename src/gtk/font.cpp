@@ -277,6 +277,19 @@ wxFont::wxFont(const wxNativeFontInfo& info)
             info.GetEncoding() );
 }
 
+wxFont::wxFont(int pointSize,
+               wxFontFamily family,
+               int flags,
+               const wxString& face,
+               wxFontEncoding encoding)
+{
+    m_refData = new wxFontRefData(pointSize, family,
+                                  GetStyleFromFlags(flags),
+                                  GetWeightFromFlags(flags),
+                                  GetUnderlinedFromFlags(flags),
+                                  face, encoding);
+}
+
 bool wxFont::Create( int pointSize,
                      wxFontFamily family,
                      wxFontStyle style,

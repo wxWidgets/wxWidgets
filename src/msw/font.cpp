@@ -778,6 +778,20 @@ wxFont::wxFont(const wxString& fontdesc)
         (void)Create(info);
 }
 
+wxFont::wxFont(int pointSize,
+               wxFontFamily family,
+               int flags,
+               const wxString& face,
+               wxFontEncoding encoding)
+{
+    m_refData = new wxFontRefData(pointSize, wxDefaultSize, false,
+                                  family,
+                                  GetStyleFromFlags(flags),
+                                  GetWeightFromFlags(flags),
+                                  GetUnderlinedFromFlags(flags),
+                                  face, encoding);
+}
+
 bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
 {
     UnRef();
