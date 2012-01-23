@@ -125,6 +125,13 @@
 */
 #define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
 
+/** Specific to wxFileProperty and derivatives, long, default is 0.
+    Sets a specific wxFileDialog style for the file dialog, e.g. ::wxFD_SAVE.
+
+    @since 2.9.4
+*/
+#define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
+
 /** Specific to wxDirProperty, wxString, default is empty.
     Sets a specific message for the dir dialog.
 */

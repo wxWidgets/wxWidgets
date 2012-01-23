@@ -650,6 +650,11 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 */
 #define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
 
+/** Specific to wxFileProperty and derivatives, long, default is 0.
+    Sets a specific wxFileDialog style for the file dialog.
+*/
+#define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
+
 /** Specific to wxDirProperty, wxString, default is empty.
     Sets a specific message for the dir dialog.
 */

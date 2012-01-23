@@ -1704,7 +1704,7 @@ bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty
                       property->GetAttribute(wxS("InitialPath"), path),
                       wxEmptyString,
                       property->GetAttribute(wxPG_FILE_WILDCARD, wxALL_FILES),
-                      0,
+                      property->GetAttributeAsLong(wxPG_FILE_DIALOG_STYLE, 0),
                       wxDefaultPosition );
 
     if ( indFilter >= 0 )
