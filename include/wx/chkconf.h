@@ -1751,6 +1751,17 @@
 #   endif
 #endif /* wxUSE_CHOICEDLG */
 
+#if wxUSE_FILECTRL
+#   if !wxUSE_DATETIME
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxFileCtrl requires wxDateTime"
+#       else
+#           undef wxUSE_DATETIME
+#           define wxUSE_DATETIME 1
+#       endif
+#   endif
+#endif /* wxUSE_FILECTRL */
+
 #if wxUSE_HELP
 #   if !wxUSE_BMPBUTTON
 #       ifdef wxABORT_ON_CONFIG_ERROR
