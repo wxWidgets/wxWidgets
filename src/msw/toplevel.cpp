@@ -1100,18 +1100,7 @@ bool wxTopLevelWindowMSW::DoSelectAndSetIcon(const wxIconBundle& icons,
 {
     const wxSize size(::GetSystemMetrics(smX), ::GetSystemMetrics(smY));
 
-    // Try the exact size first.
-    wxIcon icon = icons.GetIconOfExactSize(size);
-
-    if ( !icon.IsOk() )
-    {
-        // If we didn't find any, set at least some icon: it will look scaled
-        // and ugly but in practice it's impossible to prevent this because not
-        // everyone can provide the icons in all sizes used by all versions of
-        // Windows in all DPIs (this would include creating them in at least
-        // 14, 16, 22, 32, 48, 64 and 128 pixel sizes).
-        icon = icons.GetIcon(size);
-    }
+    wxIcon icon = icons.GetIcon(size, wxIconBundle::FALLBACK_NEAREST_LARGER);
 
     if ( !icon.IsOk() )
         return false;

@@ -22,6 +22,28 @@ class wxIconBundle : public wxGDIObject
 {
 public:
     /**
+        The elements of this enum determine what happens if GetIcon() doesn't
+        find the icon of exactly the requested size.
+
+        @since 2.9.4
+     */
+    enum
+    {
+        /// Return invalid icon if exact size is not found.
+        FALLBACK_NONE = 0,
+
+        /// Return the icon of the system icon size if exact size is not found.
+        /// May be combined with other non-NONE enum elements to determine what
+        /// happens if the system icon size is not found neither.
+        FALLBACK_SYSTEM = 1,
+
+        /// Return the icon of closest larger size or, if there is no icon of
+        /// larger size in the bundle, the closest icon of smaller size.
+        FALLBACK_NEAREST_LARGER = 2
+    };
+
+
+    /**
         Default ctor.
     */
     wxIconBundle();
@@ -85,19 +107,31 @@ public:
     void AddIcon(const wxIcon& icon);
 
     /**
-        Returns the icon with the given size; if no such icon exists, returns
-        the icon with size @c wxSYS_ICON_X and @c wxSYS_ICON_Y; if no such icon
-        exists, returns the first icon in the bundle.
+        Returns the icon with the given size.
 
-        If size = wxDefaultSize, returns the icon with size @c wxSYS_ICON_X and
-        @c wxSYS_ICON_Y.
+        If @a size is ::wxDefaultSize, it is interpreted as the standard system
+        icon size, i.e. the size returned by wxSystemSettings::GetMetric() for
+        @c wxSYS_ICON_X and @c wxSYS_ICON_Y.
+
+        If the bundle contains an icon with exactly the requested size, it's
+        always returned. Otherwise, the behaviour depends on the flags. If only
+        ::FALLBACK_NONE is given, the function returns an invalid icon. If
+        ::FALLBACK_SYSTEM is given, it tries to find the icon of standard
+        system size, regardless of the size passed as parameter. Otherwise, or
+        if the icon system size is not found neither, but
+        ::FALLBACK_NEAREST_LARGER flag is specified, the function returns the
+        smallest icon of the size larger than the requested one or, if this
+        fails too, just the icon closest to the specified size.
+
+        The @a flags parameter is available only since wxWidgets 2.9.4.
     */
-    wxIcon GetIcon(const wxSize& size) const;
+    wxIcon GetIcon(const wxSize& size, int flags = FALLBACK_SYSTEM) const;
 
     /**
         Same as @code GetIcon( wxSize( size, size ) ) @endcode.
     */
-    wxIcon GetIcon(wxCoord size = wxDefaultCoord) const;
+    wxIcon GetIcon(wxCoord size = wxDefaultCoord,
+                   int flags = FALLBACK_SYSTEM) const;
 
     /**
         Returns the icon with exactly the given size or ::wxNullIcon if this

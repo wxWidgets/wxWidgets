@@ -471,6 +471,7 @@ All (GUI):
 - Fix multiple item selection in generic wxTreeCtrl (Igor Korot).
 - Implement wxMenuBar::IsEnabledTop() for all major ports (Igor Korot).
 - Implement best size calculation for report mode wxListCtrl.
+- Fix setting of the frame icon when using non-standard icon sizes (vid).
 
 GTK:
 
