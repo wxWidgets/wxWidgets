@@ -293,6 +293,7 @@ public:
 #ifdef __WXGTK__
     const PangoFontDescription* GetFont() const { return m_font; }
     bool GetUnderlined() const { return m_underlined; }
+    bool GetStrikethrough() const { return m_strikethrough; }
 #endif
 private :
     void InitColour(const wxColour& col);
@@ -310,6 +311,7 @@ private :
 #elif defined(__WXGTK__)
     PangoFontDescription* m_font;
     bool m_underlined;
+    bool m_strikethrough;
 #endif
 
     // These members are used when the font is created from its face name and
@@ -856,6 +858,7 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
 #elif defined(__WXGTK__)
     m_font = pango_font_description_copy( font.GetNativeFontInfo()->description );
     m_underlined = font.GetUnderlined();
+    m_strikethrough = font.GetStrikethrough();
 #else
     InitFontComponents
     (
@@ -1984,11 +1987,22 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
         pango_layout_set_font_description( layout, font_data->GetFont());
         pango_layout_set_text(layout, data, datalen);
 
+        PangoAttrList* attrs = NULL;
         if (font_data->GetUnderlined())
         {
-            PangoAttrList *attrs = pango_attr_list_new();
+            attrs = pango_attr_list_new();
             PangoAttribute *attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
             pango_attr_list_insert(attrs, attr);
+        }
+        if (font_data->GetStrikethrough())
+        {
+            if (attrs == NULL)
+                attrs = pango_attr_list_new();
+            PangoAttribute* attr = pango_attr_strikethrough_new(true);
+            pango_attr_list_insert(attrs, attr);
+        }
+        if (attrs)
+        {
             pango_layout_set_attributes(layout, attrs);
             pango_attr_list_unref(attrs);
         }
