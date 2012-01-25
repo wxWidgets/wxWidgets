@@ -1395,7 +1395,10 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
 
     size_t len = 0;
 
-    while ((srcLen == wxNO_LEN ? *psz : srcLen--) && ((!buf) || (len < n)))
+    // The length can be either given explicitly or computed implicitly for the
+    // NUL-terminated strings.
+    const bool isNulTerminated = srcLen == wxNO_LEN;
+    while ((isNulTerminated ? *psz : srcLen--) && ((!buf) || (len < n)))
     {
         wxUint32 cc;
 
@@ -1463,10 +1466,17 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
         }
     }
 
-    if (srcLen == wxNO_LEN && buf && (len < n))
-        *buf = 0;
+    if ( isNulTerminated )
+    {
+        // Add the trailing NUL in this case if we have a large enough buffer.
+        if ( buf && (len < n) )
+            *buf = 0;
 
-    return len + 1;
+        // And count it in any case.
+        len++;
+    }
+
+    return len;
 }
 
 // ============================================================================
