@@ -330,12 +330,26 @@ void wxCommandProcessor::ClearCommands()
 
 bool wxCommandProcessor::IsDirty() const
 {
-    if ( !m_currentCommand )
+    if ( m_commands.empty() )
+    {
+        // If we have never been modified, we can't be dirty.
         return false;
+    }
 
     if ( !m_lastSavedCommand )
+    {
+        // If we have been modified but have never been saved, we're dirty.
         return true;
+    }
 
-    return m_lastSavedCommand != m_currentCommand;
+    if ( !m_currentCommand )
+    {
+        // This only happens if all commands were undone after saving the
+        // document: we're dirty then.
+        return true;
+    }
+
+    // Finally if both iterators are valid, we may just compare them.
+    return m_currentCommand != m_lastSavedCommand;
 }
 
