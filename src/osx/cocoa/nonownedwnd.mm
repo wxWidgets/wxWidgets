@@ -532,30 +532,10 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     if ( style & wxFRAME_TOOL_WINDOW )
     {
         windowstyle |= NSUtilityWindowMask;
-        if ( ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
-            ( style & wxCLOSE_BOX ) || ( style & wxSYSTEM_MENU ) )
-        {
-            windowstyle |= NSTitledWindowMask ;
-        }
     }
     else if ( ( style & wxPOPUP_WINDOW ) )
     {
         level = kCGPopUpMenuWindowLevel;
-        /*
-        if ( ( style & wxBORDER_NONE ) )
-        {
-            wclass = kHelpWindowClass ;   // has no border
-            attr |= kWindowNoShadowAttribute;
-        }
-        else
-        {
-            wclass = kPlainWindowClass ;  // has a single line border, it will have to do for now
-        }
-        */
-    }
-    else if ( ( style & wxCAPTION ) )
-    {
-        windowstyle |= NSTitledWindowMask ;
     }
     else if ( ( style & wxFRAME_DRAWER ) )
     {
@@ -563,40 +543,24 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         wclass = kDrawerWindowClass;
         */
     }
-    else
+ 
+    if ( ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
+        ( style & wxCLOSE_BOX ) || ( style & wxSYSTEM_MENU ) || ( style & wxCAPTION ) )
     {
-        // set these even if we have no title, otherwise the controls won't be visible
-        if ( ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
-            ( style & wxCLOSE_BOX ) || ( style & wxSYSTEM_MENU ) )
-        {
-            windowstyle |= NSTitledWindowMask ;
-        }
-        /*
-        else if ( ( style & wxNO_BORDER ) )
-        {
-            wclass = kSimpleWindowClass ;
-        }
-        else
-        {
-            wclass = kPlainWindowClass ;
-        }
-        */
-    }
-
-    if ( windowstyle & NSTitledWindowMask )
-    {
+        windowstyle |= NSTitledWindowMask ;
         if ( ( style & wxMINIMIZE_BOX ) )
             windowstyle |= NSMiniaturizableWindowMask ;
-
+        
         if ( ( style & wxMAXIMIZE_BOX ) )
-            windowstyle |= NSResizableWindowMask ; // TODO showing ZOOM ?
-
-        if ( ( style & wxRESIZE_BORDER ) )
             windowstyle |= NSResizableWindowMask ;
-
+        
         if ( ( style & wxCLOSE_BOX) )
             windowstyle |= NSClosableWindowMask ;
     }
+    
+    if ( ( style & wxRESIZE_BORDER ) )
+        windowstyle |= NSResizableWindowMask ;
+
     if ( extraStyle & wxFRAME_EX_METAL)
         windowstyle |= NSTexturedBackgroundWindowMask;
 
@@ -615,7 +579,16 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         backing:NSBackingStoreBuffered
         defer:NO
         ];
-
+    
+    // if we just have a title bar with no buttons needed, hide them
+    if ( (windowstyle & NSTitledWindowMask) && 
+        !(style & wxCLOSE_BOX) && !(style & wxMAXIMIZE_BOX) && !(style & wxMINIMIZE_BOX) )
+    {
+        [[m_macWindow standardWindowButton:NSWindowZoomButton] setHidden:YES];
+        [[m_macWindow standardWindowButton:NSWindowCloseButton] setHidden:YES];
+        [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
+    }
+    
     // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
     // to be in kCGUtilityWindowLevel and not kCGFloatingWindowLevel to stay
     // above the parent.
