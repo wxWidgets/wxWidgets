@@ -397,6 +397,9 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     if ( !DoSaveDocument(file) )
         return false;
 
+    if ( m_commandProcessor )
+        m_commandProcessor->MarkAsSaved();
+
     Modify(false);
     SetFilename(file);
     SetDocumentSaved(true);
