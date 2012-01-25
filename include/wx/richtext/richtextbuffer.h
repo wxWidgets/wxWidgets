@@ -3232,6 +3232,12 @@ public:
     virtual wxRichTextObject* Clone() const { return new wxRichTextParagraphLayoutBox(*this); }
 
     /**
+        Prepares the content just before insertion (or after buffer reset).
+        Currently is only called if undo mode is on.
+    */
+    virtual void PrepareContent(wxRichTextParagraphLayoutBox& container);
+
+    /**
         Insert fragment into this box at the given position. If partialParagraph is true,
         it is assumed that the last (or only) paragraph is just a piece of data with no paragraph
         marker.

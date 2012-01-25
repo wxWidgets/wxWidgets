@@ -1113,11 +1113,25 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         // Must process this before translation, otherwise it's translated into a WXK_DELETE event.
         if (event.CmdDown() && event.GetKeyCode() == WXK_BACK)
         {
+            if (!IsEditable())
+            {
+                return;
+            }
+
+            if (HasSelection() && !CanDeleteRange(* GetFocusObject(), GetSelectionRange()))
+            {
+                return;
+            }
+
             BeginBatchUndo(_("Delete Text"));
 
             long newPos = m_caretPosition;
 
             bool processed = DeleteSelectedContent(& newPos);
+
+            int deletions = 0;
+            if (processed)
+                deletions ++;
 
             // Submit range in character positions, which are greater than caret positions,
             // so subtract 1 for deleted character and add 1 for conversion to character position.
@@ -1128,13 +1142,25 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     long pos = wxRichTextCtrl::FindNextWordPosition(-1);
                     if (pos < newPos)
                     {
-                        GetFocusObject()->DeleteRangeWithUndo(wxRichTextRange(pos+1, newPos), this, & GetBuffer());
+                        wxRichTextRange range(pos+1, newPos);
+                        if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
+                        {
+                            GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
+                            deletions ++;
+                        }
                         processed = true;
                     }
                 }
 
                 if (!processed)
-                    GetFocusObject()->DeleteRangeWithUndo(wxRichTextRange(newPos, newPos), this, & GetBuffer());
+                {
+                    wxRichTextRange range(newPos, newPos);
+                    if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
+                    {
+                        GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
+                        deletions ++;
+                    }
+                }
             }
 
             EndBatchUndo();
@@ -1150,14 +1176,17 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
             ScrollIntoView(m_caretPosition, WXK_LEFT);
 
-            wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_DELETE,
-                GetId());
-            cmdEvent.SetEventObject(this);
-            cmdEvent.SetFlags(flags);
-            cmdEvent.SetPosition(m_caretPosition+1);
-            cmdEvent.SetContainer(GetFocusObject());
-            GetEventHandler()->ProcessEvent(cmdEvent);
+            if (deletions > 0)
+            {
+                wxRichTextEvent cmdEvent(
+                    wxEVT_COMMAND_RICHTEXT_DELETE,
+                    GetId());
+                cmdEvent.SetEventObject(this);
+                cmdEvent.SetFlags(flags);
+                cmdEvent.SetPosition(m_caretPosition+1);
+                cmdEvent.SetContainer(GetFocusObject());
+                GetEventHandler()->ProcessEvent(cmdEvent);
+            }
 
             Update();
         }
@@ -1177,9 +1206,17 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
     if (event.GetKeyCode() == WXK_RETURN)
     {
-        BeginBatchUndo(_("Insert Text"));
+        if (!CanInsertContent(* GetFocusObject(), m_caretPosition+1))
+            return;
 
         long newPos = m_caretPosition;
+
+        if (HasSelection() && !CanDeleteRange(* GetFocusObject(), GetSelectionRange()))
+        {
+            return;
+        }
+
+        BeginBatchUndo(_("Insert Text"));
 
         DeleteSelectedContent(& newPos);
 
@@ -1219,11 +1256,20 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
     }
     else if (event.GetKeyCode() == WXK_BACK)
     {
-        BeginBatchUndo(_("Delete Text"));
-
         long newPos = m_caretPosition;
 
+        if (HasSelection() && !CanDeleteRange(* GetFocusObject(), GetSelectionRange()))
+        {
+            return;
+        }
+
+        BeginBatchUndo(_("Delete Text"));
+
         bool processed = DeleteSelectedContent(& newPos);
+
+        int deletions = 0;
+        if (processed)
+            deletions ++;
 
         // Submit range in character positions, which are greater than caret positions,
         // so subtract 1 for deleted character and add 1 for conversion to character position.
@@ -1234,13 +1280,25 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 long pos = wxRichTextCtrl::FindNextWordPosition(-1);
                 if (pos < newPos)
                 {
-                    GetFocusObject()->DeleteRangeWithUndo(wxRichTextRange(pos+1, newPos), this, & GetBuffer());
+                    wxRichTextRange range(pos+1, newPos);
+                    if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
+                    {
+                        GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
+                        deletions ++;
+                    }
                     processed = true;
                 }
             }
 
             if (!processed)
-                GetFocusObject()->DeleteRangeWithUndo(wxRichTextRange(newPos, newPos), this, & GetBuffer());
+            {
+                wxRichTextRange range(newPos, newPos);
+                if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
+                {
+                    GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
+                    deletions ++;
+                }
+            }
         }
 
         EndBatchUndo();
@@ -1256,24 +1314,36 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         ScrollIntoView(m_caretPosition, WXK_LEFT);
 
-        wxRichTextEvent cmdEvent(
-            wxEVT_COMMAND_RICHTEXT_DELETE,
-            GetId());
-        cmdEvent.SetEventObject(this);
-        cmdEvent.SetFlags(flags);
-        cmdEvent.SetPosition(m_caretPosition+1);
-        cmdEvent.SetContainer(GetFocusObject());
-        GetEventHandler()->ProcessEvent(cmdEvent);
+        if (deletions > 0)
+        {
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_DELETE,
+                GetId());
+            cmdEvent.SetEventObject(this);
+            cmdEvent.SetFlags(flags);
+            cmdEvent.SetPosition(m_caretPosition+1);
+            cmdEvent.SetContainer(GetFocusObject());
+            GetEventHandler()->ProcessEvent(cmdEvent);
+        }
 
         Update();
     }
     else if (event.GetKeyCode() == WXK_DELETE)
     {
-        BeginBatchUndo(_("Delete Text"));
-
         long newPos = m_caretPosition;
 
+        if (HasSelection() && !CanDeleteRange(* GetFocusObject(), GetSelectionRange()))
+        {
+            return;
+        }
+
+        BeginBatchUndo(_("Delete Text"));
+
         bool processed = DeleteSelectedContent(& newPos);
+
+        int deletions = 0;
+        if (processed)
+            deletions ++;
 
         // Submit range in character positions, which are greater than caret positions,
         if (newPos < GetFocusObject()->GetOwnRange().GetEnd()+1)
@@ -1283,13 +1353,25 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 long pos = wxRichTextCtrl::FindNextWordPosition(1);
                 if (pos != -1 && (pos > newPos))
                 {
-                    GetFocusObject()->DeleteRangeWithUndo(wxRichTextRange(newPos+1, pos), this, & GetBuffer());
+                    wxRichTextRange range(newPos+1, pos);
+                    if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
+                    {
+                        GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
+                        deletions ++;
+                    }
                     processed = true;
                 }
             }
 
             if (!processed && newPos < (GetLastPosition()-1))
-                GetFocusObject()->DeleteRangeWithUndo(wxRichTextRange(newPos+1, newPos+1), this, & GetBuffer());
+            {
+                wxRichTextRange range(newPos+1, newPos+1);
+                if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
+                {
+                    GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
+                    deletions ++;
+                }
+            }
         }
 
         EndBatchUndo();
@@ -1305,14 +1387,17 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         ScrollIntoView(m_caretPosition, WXK_LEFT);
 
-        wxRichTextEvent cmdEvent(
-            wxEVT_COMMAND_RICHTEXT_DELETE,
-            GetId());
-        cmdEvent.SetEventObject(this);
-        cmdEvent.SetFlags(flags);
-        cmdEvent.SetPosition(m_caretPosition+1);
-        cmdEvent.SetContainer(GetFocusObject());
-        GetEventHandler()->ProcessEvent(cmdEvent);
+        if (deletions > 0)
+        {
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_DELETE,
+                GetId());
+            cmdEvent.SetEventObject(this);
+            cmdEvent.SetFlags(flags);
+            cmdEvent.SetPosition(m_caretPosition+1);
+            cmdEvent.SetContainer(GetFocusObject());
+            GetEventHandler()->ProcessEvent(cmdEvent);
+        }
 
         Update();
     }
@@ -1376,6 +1461,12 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                         return;
                     }
                 }
+
+                if (!CanInsertContent(* GetFocusObject(), m_caretPosition+1))
+                    return;
+
+                if (HasSelection() && !CanDeleteRange(* GetFocusObject(), GetSelectionRange()))
+                    return;
 
                 BeginBatchUndo(_("Insert Text"));
 
@@ -3018,12 +3109,12 @@ bool wxRichTextCtrl::CanCopy() const
 
 bool wxRichTextCtrl::CanCut() const
 {
-    return HasSelection() && IsEditable();
+    return CanDeleteSelection();
 }
 
 bool wxRichTextCtrl::CanPaste() const
 {
-    if ( !IsEditable() )
+    if ( !IsEditable() || !GetFocusObject() || !CanInsertContent(* GetFocusObject(), m_caretPosition+1))
         return false;
 
     return GetBuffer().CanPasteFromClipboard();
@@ -3031,7 +3122,7 @@ bool wxRichTextCtrl::CanPaste() const
 
 bool wxRichTextCtrl::CanDeleteSelection() const
 {
-    return HasSelection() && IsEditable();
+    return HasSelection() && IsEditable() && CanDeleteRange(* GetFocusObject(), GetSelectionRange());
 }
 
 
@@ -4459,6 +4550,16 @@ bool wxRichTextDropSource::GiveFeedback(wxDragResult WXUNUSED(effect))
     return false;  // so that the base-class sets a cursor
 }
 #endif // wxUSE_DRAG_AND_DROP
+
+bool wxRichTextCtrl::CanDeleteRange(wxRichTextParagraphLayoutBox& WXUNUSED(container), const wxRichTextRange& WXUNUSED(range)) const
+{
+    return true;
+}
+
+bool wxRichTextCtrl::CanInsertContent(wxRichTextParagraphLayoutBox& WXUNUSED(container), long WXUNUSED(pos)) const
+{
+    return true;
+}
 
 
 #if wxRICHTEXT_USE_OWN_CARET

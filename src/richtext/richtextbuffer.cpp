@@ -3524,6 +3524,14 @@ bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange&
     return foundCount == matchingCount && foundCount != 0;
 }
 
+void wxRichTextParagraphLayoutBox::PrepareContent(wxRichTextParagraphLayoutBox& container)
+{
+    wxRichTextBuffer* buffer = GetBuffer();
+    if (buffer && buffer->GetRichTextCtrl())
+        buffer->GetRichTextCtrl()->PrepareContent(container);
+}
+
+
 /// Set character or paragraph properties
 bool wxRichTextParagraphLayoutBox::SetProperties(const wxRichTextRange& range, const wxRichTextProperties& properties, int flags)
 {
@@ -3696,6 +3704,8 @@ void wxRichTextParagraphLayoutBox::Reset()
     }
 
     AddParagraph(wxEmptyString);
+
+    PrepareContent(*this);
 
     InvalidateHierarchy(wxRICHTEXT_ALL);
 }
@@ -7201,6 +7211,9 @@ bool wxRichTextBuffer::EndBatchUndo()
 /// Submit immediately, or delay according to whether collapsing is on
 bool wxRichTextBuffer::SubmitAction(wxRichTextAction* action)
 {
+    if (action && !action->GetNewParagraphs().IsEmpty())
+        PrepareContent(action->GetNewParagraphs());
+
     if (BatchingUndo() && m_batchedCommand && !SuppressingUndo())
     {
         wxRichTextCommand* cmd = new wxRichTextCommand(action->GetName());

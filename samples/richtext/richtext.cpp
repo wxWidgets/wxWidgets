@@ -90,6 +90,49 @@
 // ----------------------------------------------------------------------------
 
 // Define a new application type, each program should derive a class from wxApp
+class MyRichTextCtrl: public wxRichTextCtrl
+{
+public:
+    MyRichTextCtrl( wxWindow* parent, wxWindowID id = -1, const wxString& value = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+        long style = wxRE_MULTILINE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr):
+      wxRichTextCtrl(parent, id, value, pos, size, style, validator, name)
+    {
+        m_lockId = 0;
+        m_locked = false;
+    }
+
+    void SetLockId(long id) { m_lockId = id; }
+    long GetLockId() const { return m_lockId; }
+
+    void BeginLock() { m_lockId ++; m_locked = true; }
+    void EndLock() { m_locked = false; }
+    bool IsLocked() const { return m_locked; }
+
+    static void SetEnhancedDrawingHandler();
+
+    /**
+        Prepares the content just before insertion (or after buffer reset). Called by the same function in wxRichTextBuffer.
+        Currently is only called if undo mode is on.
+    */
+    virtual void PrepareContent(wxRichTextParagraphLayoutBox& container);
+
+    /**
+        Can we delete this range?
+        Sends an event to the control.
+    */
+    virtual bool CanDeleteRange(wxRichTextParagraphLayoutBox& container, const wxRichTextRange& range) const;
+
+    /**
+        Can we insert content at this position?
+        Sends an event to the control.
+    */
+    virtual bool CanInsertContent(wxRichTextParagraphLayoutBox& container, long pos) const;
+
+    long    m_lockId;
+    bool    m_locked;
+};
+
+// Define a new application type, each program should derive a class from wxApp
 class MyApp : public wxApp
 {
 public:
@@ -205,7 +248,7 @@ private:
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 
-    wxRichTextCtrl*         m_richTextCtrl;
+    MyRichTextCtrl*         m_richTextCtrl;
 };
 
 // ----------------------------------------------------------------------------
@@ -386,6 +429,8 @@ bool MyApp::OnInit()
     m_printing->SetFooterText(wxT("Page @PAGENUM@"), wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_RIGHT);
 
     CreateStyles();
+
+    MyRichTextCtrl::SetEnhancedDrawingHandler();
 
     // Add extra handlers (plain text is automatically added)
     wxRichTextBuffer::AddHandler(new wxRichTextXMLHandler);
@@ -736,7 +781,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
-    m_richTextCtrl = new wxRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxWANTS_CHARS);
+    m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxWANTS_CHARS);
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
 
     m_richTextCtrl->SetFont(font);
@@ -773,9 +818,26 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 // Write text
 void MyFrame::WriteInitialText()
 {
-    wxRichTextCtrl& r = *m_richTextCtrl;
+    MyRichTextCtrl& r = *m_richTextCtrl;
 
     r.SetDefaultStyle(wxRichTextAttr());
+
+    // Add some locked content first - needs Undo to be enabled
+    {
+        r.BeginLock();
+        r.WriteText(wxString(wxT("This is a locked object.")));
+        r.EndLock();
+
+        r.WriteText(wxString(wxT(" This is unlocked text. ")));
+
+        r.BeginLock();
+        r.WriteText(wxString(wxT("More locked content.")));
+        r.EndLock();
+        r.Newline();
+
+        // Flush the Undo buffer
+        r.GetCommandProcessor()->ClearCommands();
+    }
 
     r.BeginSuppressUndo();
 
@@ -1806,4 +1868,108 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
     dialog.ShowModal();
 
 //    wxGetApp().GetPrinting()->PageSetup();
+}
+
+void MyRichTextCtrl::PrepareContent(wxRichTextParagraphLayoutBox& container)
+{
+    if (IsLocked())
+    {
+        // Lock all content that's about to be added to the control
+        wxRichTextObjectList::compatibility_iterator node = container.GetChildren().GetFirst();
+        while (node)
+        {
+            wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+            if (para)
+            {
+                wxRichTextObjectList::compatibility_iterator childNode = para->GetChildren().GetFirst();
+                while (childNode)
+                {
+                    wxRichTextObject* obj = childNode->GetData();
+                    obj->GetProperties().SetProperty(wxT("Lock"), m_lockId);
+
+                    childNode = childNode->GetNext();
+                }
+            }
+            node = node->GetNext();
+        }
+    }
+}
+
+bool MyRichTextCtrl::CanDeleteRange(wxRichTextParagraphLayoutBox& container, const wxRichTextRange& range) const
+{
+    long i;
+    for (i = range.GetStart(); i < range.GetEnd(); i++)
+    {
+        wxRichTextObject* obj = container.GetLeafObjectAtPosition(i);
+        if (obj && obj->GetProperties().HasProperty(wxT("Lock")))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool MyRichTextCtrl::CanInsertContent(wxRichTextParagraphLayoutBox& container, long pos) const
+{
+    wxRichTextObject* child1 = container.GetLeafObjectAtPosition(pos);
+    wxRichTextObject* child2 = container.GetLeafObjectAtPosition(pos-1);
+
+    long lock1 = -1, lock2 = -1;
+
+    if (child1 && child1->GetProperties().HasProperty(wxT("Lock")))
+        lock1 = child1->GetProperties().GetPropertyLong(wxT("Lock"));
+    if (child2 && child2->GetProperties().HasProperty(wxT("Lock")))
+        lock2 = child2->GetProperties().GetPropertyLong(wxT("Lock"));
+
+    if (lock1 != -1 && lock1 == lock2)
+        return false;
+
+    // Don't allow insertion before a locked object if it's at the beginning of the buffer.
+    if (pos == 0 && lock1 != -1)
+        return false;
+
+    return true;
+}
+
+
+class wxRichTextEnhancedDrawingHandler: public wxRichTextDrawingHandler
+{
+public:
+    wxRichTextEnhancedDrawingHandler()
+    {
+        SetName(wxT("enhanceddrawing"));
+        m_lockBackgroundColour = wxColour(220, 220, 220);
+    }
+
+    /**
+        Returns @true if this object has virtual attributes that we can provide.
+    */
+    virtual bool HasVirtualAttributes(wxRichTextObject* obj) const;
+
+    /**
+        Provides virtual attributes that we can provide.
+    */
+    virtual bool GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const;
+
+    wxColour    m_lockBackgroundColour;
+};
+
+bool wxRichTextEnhancedDrawingHandler::HasVirtualAttributes(wxRichTextObject* obj) const
+{
+    return obj->GetProperties().HasProperty(wxT("Lock"));
+}
+
+bool wxRichTextEnhancedDrawingHandler::GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const
+{
+    if (obj->GetProperties().HasProperty(wxT("Lock")))
+    {
+        attr.SetBackgroundColour(m_lockBackgroundColour);
+        return true;
+    }
+    return false;
+}
+
+void MyRichTextCtrl::SetEnhancedDrawingHandler()
+{
+    wxRichTextBuffer::AddDrawingHandler(new wxRichTextEnhancedDrawingHandler);
 }

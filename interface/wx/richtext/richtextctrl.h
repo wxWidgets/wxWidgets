@@ -1617,6 +1617,24 @@ public:
     */
     virtual wxString GetPropertiesMenuLabel(wxRichTextObject* obj);
 
+    /**
+        Prepares the content just before insertion (or after buffer reset). Called by the same function in wxRichTextBuffer.
+        Currently is only called if undo mode is on.
+    */
+    virtual void PrepareContent(wxRichTextParagraphLayoutBox& WXUNUSED(container)) {}
+
+    /**
+        Can we delete this range?
+        Sends an event to the control.
+    */
+    virtual bool CanDeleteRange(wxRichTextParagraphLayoutBox& container, const wxRichTextRange& range) const;
+
+    /**
+        Can we insert content at this position?
+        Sends an event to the control.
+    */
+    virtual bool CanInsertContent(wxRichTextParagraphLayoutBox& container, long pos) const;
+
 // Command handlers
 
     /**
