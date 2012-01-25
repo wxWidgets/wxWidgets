@@ -328,4 +328,14 @@ void wxCommandProcessor::ClearCommands()
     m_lastSavedCommand = wxList::compatibility_iterator();
 }
 
+bool wxCommandProcessor::IsDirty() const
+{
+    if ( !m_currentCommand )
+        return false;
+
+    if ( !m_lastSavedCommand )
+        return true;
+
+    return m_lastSavedCommand != m_currentCommand;
+}
 
