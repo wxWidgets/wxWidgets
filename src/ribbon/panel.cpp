@@ -775,6 +775,7 @@ bool wxRibbonPanel::ShowExpanded()
 
     m_expanded_panel->Realize();
     Refresh();
+    container->SetMinClientSize(size);
     container->Show();
     m_expanded_panel->SetFocus();
 
