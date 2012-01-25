@@ -5030,7 +5030,8 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
     // gtk_tree_view_get_path_at_pos() is the wrong function. It doesn't mind the header but returns column.
     // See http://mail.gnome.org/archives/gtkmm-list/2005-January/msg00080.html
     // So we have to use both of them.
-    // Friedrich Haase 2010-9-20
+    item = wxDataViewItem(0);
+    column = NULL;
     wxGtkTreePath path, pathScratch;
     GtkTreeViewColumn* GtkColumn = NULL;
     GtkTreeViewDropPosition pos = GTK_TREE_VIEW_DROP_INTO_OR_AFTER;
@@ -5038,8 +5039,8 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
     gint cell_y = 0;
     
     // cannot directly call GtkGetTreeView(), HitTest is const and so is this pointer
-    wxDataViewCtrl* ctrl = (wxDataViewCtrl*)this; // ugly workaround, ctrl is NOT const
-    GtkTreeView* treeView = GTK_TREE_VIEW(ctrl->GtkGetTreeView());
+    wxDataViewCtrl* self = const_cast<wxDataViewCtrl *>(this); // ugly workaround, self is NOT const
+    GtkTreeView* treeView = GTK_TREE_VIEW(self->GtkGetTreeView());
     
     // is there possibly a better suited function to get the column?
     gtk_tree_view_get_path_at_pos(                // and this is the wrong call but it delivers the column
