@@ -28,6 +28,15 @@
 #    include <unistd.h>
 #    include <TargetConditionals.h>
 #    include <AvailabilityMacros.h>
+#    ifndef MAC_OS_X_VERSION_10_4
+#       define MAC_OS_X_VERSION_10_4 1040
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_5
+#       define MAC_OS_X_VERSION_10_5 1050
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_6
+#       define MAC_OS_X_VERSION_10_6 1060
+#    endif
 #    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
@@ -757,7 +766,7 @@
  * Presently, only Windows and GTK+ support wxEVT_MENU_OPEN.
  */
 #ifndef wxUSE_IDLEMENUUPDATES
-#    if (defined(__WXMSW__) || defined(__WXGTK__)) && !defined(__WXUNIVERSAL__)
+#    if (defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX__)) && !defined(__WXUNIVERSAL__)
 #        define wxUSE_IDLEMENUUPDATES 0
 #    else
 #        define wxUSE_IDLEMENUUPDATES 1
