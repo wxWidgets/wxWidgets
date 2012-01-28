@@ -552,21 +552,17 @@ void wxMenuBar::Init()
     }
 
     // standard menu items, handled in wxMenu::HandleCommandProcess(), see above:
-    wxString hideLabel(_("Hide"));
-    if ( wxTheApp )
-        hideLabel << ' ' << wxTheApp->GetAppDisplayName();
-    hideLabel << "\tCtrl+H";
-    m_appleMenu->Append( wxID_OSX_HIDE, hideLabel );    
+    wxString hideLabel;
+    hideLabel = wxString::Format(_("Hide %s"), wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
+    m_appleMenu->Append( wxID_OSX_HIDE, hideLabel + "\tCtrl+H" );    
     m_appleMenu->Append( wxID_OSX_HIDEOTHERS, _("Hide Others")+"\tAlt+Ctrl+H" );    
     m_appleMenu->Append( wxID_OSX_SHOWALL, _("Show All") );    
     m_appleMenu->AppendSeparator();
     
     // Do always add "Quit" item unconditionally however, it can't be disabled.
-    wxString quitLabel(_("Quit"));
-    if ( wxTheApp )
-        quitLabel << ' ' << wxTheApp->GetAppDisplayName();
-    quitLabel << "\tCtrl+Q";
-    m_appleMenu->Append( wxApp::s_macExitMenuItemId, quitLabel );
+    wxString quitLabel;
+    quitLabel = wxString::Format(_("Quit %s"), wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
+    m_appleMenu->Append( wxApp::s_macExitMenuItemId, quitLabel + "\tCtrl+Q" );
 #endif // !wxOSX_USE_CARBON
 
     m_rootMenu->AppendSubMenu(m_appleMenu, "\x14") ;
