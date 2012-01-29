@@ -1594,11 +1594,8 @@ void wxGnomePrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wx
 
     const wxScopedCharBuffer data(text.utf8_str());
 
-    size_t datalen = strlen(data);
-    pango_layout_set_text( m_layout, data, datalen);
-
-    const bool
-      setAttrs = wxGTKPrivate::SetPangoAttrsForFont(m_font, m_layout, datalen);
+    pango_layout_set_text(m_layout, data, data.length());
+    const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
 
     if (m_textForegroundColour.IsOk())
     {
