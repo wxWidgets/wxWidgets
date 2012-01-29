@@ -291,9 +291,7 @@ public:
 
     virtual bool Apply( wxGraphicsContext* context );
 #ifdef __WXGTK__
-    const PangoFontDescription* GetFont() const { return m_font; }
-    bool GetUnderlined() const { return m_underlined; }
-    bool GetStrikethrough() const { return m_strikethrough; }
+    const wxFont& GetFont() const { return m_wxfont; }
 #endif
 private :
     void InitColour(const wxColour& col);
@@ -309,9 +307,7 @@ private :
 #ifdef __WXMAC__
     cairo_font_face_t *m_font;
 #elif defined(__WXGTK__)
-    PangoFontDescription* m_font;
-    bool m_underlined;
-    bool m_strikethrough;
+    wxFont m_wxfont;
 #endif
 
     // These members are used when the font is created from its face name and
@@ -847,7 +843,11 @@ wxCairoFontData::InitFontComponents(const wxString& facename,
 }
 
 wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &font,
-                         const wxColour& col ) : wxGraphicsObjectRefData(renderer)
+                         const wxColour& col )
+    : wxGraphicsObjectRefData(renderer)
+#ifdef __WXGTK__
+    , m_wxfont(font)
+#endif
 {
     InitColour(col);
 
@@ -856,9 +856,6 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
 #ifdef __WXMAC__
     m_font = cairo_quartz_font_face_create_for_cgfont( font.OSXGetCGFont() );
 #elif defined(__WXGTK__)
-    m_font = pango_font_description_copy( font.GetNativeFontInfo()->description );
-    m_underlined = font.GetUnderlined();
-    m_strikethrough = font.GetStrikethrough();
 #else
     InitFontComponents
     (
@@ -885,7 +882,7 @@ wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
     // directly to cairo_set_font_size().
     m_size = sizeInPixels;
 
-#if defined(__WXGTK__) || defined(__WXMAC__)
+#if defined(__WXMAC__)
     m_font = NULL;
 #endif
 
@@ -907,10 +904,6 @@ wxCairoFontData::~wxCairoFontData()
 #ifdef __WXMAC__
     if ( m_font )
         cairo_font_face_destroy( m_font );
-#elif defined(__WXGTK__)
-    if ( m_font )
-        pango_font_description_free( m_font );
-#else
 #endif
 }
 
@@ -919,7 +912,7 @@ bool wxCairoFontData::Apply( wxGraphicsContext* context )
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     cairo_set_source_rgba(ctext,m_red,m_green, m_blue,m_alpha);
 #ifdef __WXGTK__
-    if ( m_font )
+    if (m_wxfont.IsOk())
     {
         // Nothing to do, the caller uses Pango layout functions to do
         // everything.
@@ -1980,32 +1973,11 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( ((wxCairoFontData*)m_font.GetRefData())->Apply(this) )
     {
 #ifdef __WXGTK__
-        size_t datalen = strlen(data);
-
         PangoLayout *layout = pango_cairo_create_layout (m_context);
-        wxCairoFontData* font_data = (wxCairoFontData*) m_font.GetRefData();
-        pango_layout_set_font_description( layout, font_data->GetFont());
-        pango_layout_set_text(layout, data, datalen);
-
-        PangoAttrList* attrs = NULL;
-        if (font_data->GetUnderlined())
-        {
-            attrs = pango_attr_list_new();
-            PangoAttribute *attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
-            pango_attr_list_insert(attrs, attr);
-        }
-        if (font_data->GetStrikethrough())
-        {
-            if (attrs == NULL)
-                attrs = pango_attr_list_new();
-            PangoAttribute* attr = pango_attr_strikethrough_new(true);
-            pango_attr_list_insert(attrs, attr);
-        }
-        if (attrs)
-        {
-            pango_layout_set_attributes(layout, attrs);
-            pango_attr_list_unref(attrs);
-        }
+        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
+        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
+        pango_layout_set_text(layout, data, data.length());
+        font.GTKSetPangoAttrs(layout);
 
         cairo_move_to(m_context, x, y);
         pango_cairo_show_layout (m_context, layout);
@@ -2049,13 +2021,14 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
         int w, h;
 
         PangoLayout *layout = pango_cairo_create_layout (m_context);
-        pango_layout_set_font_description( layout, ((wxCairoFontData*)m_font.GetRefData())->GetFont());
+        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
+        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         const wxCharBuffer data = str.utf8_str();
         if ( !data )
         {
             return;
         }
-        pango_layout_set_text( layout, data, strlen(data) );
+        pango_layout_set_text(layout, data, data.length());
         pango_layout_get_pixel_size (layout, &w, &h);
         if ( width )
             *width = w;
