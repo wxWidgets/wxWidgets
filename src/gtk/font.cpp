@@ -487,3 +487,57 @@ wxGDIRefData* wxFont::CloneGDIRefData(const wxGDIRefData* data) const
 {
     return new wxFontRefData(*static_cast<const wxFontRefData*>(data));
 }
+
+bool wxFont::GTKSetPangoAttrs(PangoLayout* layout, size_t len, bool addDummyAttrs) const
+{
+    if (!IsOk() || !(GetUnderlined() || GetStrikethrough()))
+        return false;
+
+    PangoAttrList* attrs = pango_attr_list_new();
+    PangoAttribute* a;
+
+    if (GetUnderlined())
+    {
+        a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
+        if (len)
+        {
+            a->start_index = 0;
+            a->end_index = len;
+        }
+        pango_attr_list_insert(attrs, a);
+
+        // Add dummy attributes (use colour as it's invisible anyhow for 0
+        // width spaces) to ensure that the spaces in the beginning/end of the
+        // string are underlined too.
+        if ( addDummyAttrs )
+        {
+            wxASSERT_MSG( len > 2, "Must have 0-width spaces at string ends" );
+
+            a = pango_attr_foreground_new(0x0057, 0x52A9, 0xD614);
+            a->start_index = 0;
+            a->end_index = 1;
+            pango_attr_list_insert(attrs, a);
+
+            a = pango_attr_foreground_new(0x0057, 0x52A9, 0xD614);
+            a->start_index = len - 1;
+            a->end_index = len;
+            pango_attr_list_insert(attrs, a);
+        }
+    }
+
+    if (GetStrikethrough())
+    {
+        a = pango_attr_strikethrough_new(true);
+        if (len)
+        {
+            a->start_index = 0;
+            a->end_index = len;
+        }
+        pango_attr_list_insert(attrs, a);
+    }
+
+    pango_layout_set_attributes(layout, attrs);
+    pango_attr_list_unref(attrs);
+
+    return true;
+}

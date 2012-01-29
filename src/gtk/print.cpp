@@ -31,7 +31,6 @@
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/gtk/private.h"
 #include "wx/dynlib.h"
 #include "wx/paper.h"
 
@@ -1740,11 +1739,9 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     const wxScopedCharBuffer data = text.utf8_str();
 
-    size_t datalen = strlen(data);
-    pango_layout_set_text( m_layout, data, datalen);
+    pango_layout_set_text(m_layout, data, data.length());
 
-    const bool
-      setAttrs = wxGTKPrivate::SetPangoAttrsForFont(m_font, m_layout, datalen);
+    const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
     if (m_textForegroundColour.IsOk())
     {
         unsigned char red = m_textForegroundColour.Red();
