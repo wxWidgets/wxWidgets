@@ -104,16 +104,12 @@ public:
 
     wxDECLARE_COMMON_FONT_METHODS();
 
-    // Set Pango attributes for the span 0..len (or
-    // without any bounds if len == 0) in the specified layout. Currently only
+    // Set Pango attributes in the specified layout. Currently only
     // underlined and strike-through attributes are handled by this function.
-    //
-    // Special "addDummyAttrs" parameter is used to work around a bug in old Pango
-    // versions in wxWindowDCImpl::DoDrawText(), see comment there.
     //
     // If neither of them is specified, returns false, otherwise sets up the
     // attributes and returns true.
-    bool GTKSetPangoAttrs(PangoLayout* layout, size_t len = 0, bool addDummyAttrs = false) const;
+    bool GTKSetPangoAttrs(PangoLayout* layout) const;
 
     // implementation from now on
     void Unshare();

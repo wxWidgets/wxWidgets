@@ -488,7 +488,7 @@ wxGDIRefData* wxFont::CloneGDIRefData(const wxGDIRefData* data) const
     return new wxFontRefData(*static_cast<const wxFontRefData*>(data));
 }
 
-bool wxFont::GTKSetPangoAttrs(PangoLayout* layout, size_t len, bool addDummyAttrs) const
+bool wxFont::GTKSetPangoAttrs(PangoLayout* layout) const
 {
     if (!IsOk() || !(GetUnderlined() || GetStrikethrough()))
         return false;
@@ -496,43 +496,52 @@ bool wxFont::GTKSetPangoAttrs(PangoLayout* layout, size_t len, bool addDummyAttr
     PangoAttrList* attrs = pango_attr_list_new();
     PangoAttribute* a;
 
-    if (GetUnderlined())
+    if (wx_pango_version_check(1,16,0))
     {
-        a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
-        if (len)
-        {
-            a->start_index = 0;
-            a->end_index = len;
-        }
-        pango_attr_list_insert(attrs, a);
+        // a PangoLayout which has leading/trailing spaces with underlined font
+        // is not correctly drawn by this pango version: Pango won't underline the spaces.
+        // This can be a problem; e.g. wxHTML rendering of underlined text relies on
+        // this behaviour. To workaround this problem, we use a special hack here
+        // suggested by pango maintainer Behdad Esfahbod: we prepend and append two
+        // empty space characters and give them a dummy colour attribute.
+        // This will force Pango to underline the leading/trailing spaces, too.
 
-        // Add dummy attributes (use colour as it's invisible anyhow for 0
-        // width spaces) to ensure that the spaces in the beginning/end of the
-        // string are underlined too.
-        if ( addDummyAttrs )
+        const char* text = pango_layout_get_text(layout);
+        const size_t n = strlen(text);
+        if ((n > 0 && text[0] == ' ') || (n > 1 && text[n - 1] == ' '))
         {
-            wxASSERT_MSG( len > 2, "Must have 0-width spaces at string ends" );
+            wxCharBuffer buf(n + 6);
+            // copy the leading U+200C ZERO WIDTH NON-JOINER encoded in UTF8 format
+            memcpy(buf.data(), "\342\200\214", 3);
+            // copy the user string
+            memcpy(buf.data() + 3, text, n);
+            // copy the trailing U+200C ZERO WIDTH NON-JOINER encoded in UTF8 format
+            memcpy(buf.data() + 3 + n, "\342\200\214", 3);
 
+            pango_layout_set_text(layout, buf, n + 6);
+
+            // Add dummy attributes (use colour as it's invisible anyhow for 0
+            // width spaces) to ensure that the spaces in the beginning/end of the
+            // string are underlined too.
             a = pango_attr_foreground_new(0x0057, 0x52A9, 0xD614);
             a->start_index = 0;
-            a->end_index = 1;
+            a->end_index = 3;
             pango_attr_list_insert(attrs, a);
 
             a = pango_attr_foreground_new(0x0057, 0x52A9, 0xD614);
-            a->start_index = len - 1;
-            a->end_index = len;
+            a->start_index = n + 3;
+            a->end_index = n + 6;
             pango_attr_list_insert(attrs, a);
         }
     }
-
+    if (GetUnderlined())
+    {
+        a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
+        pango_attr_list_insert(attrs, a);
+    }
     if (GetStrikethrough())
     {
         a = pango_attr_strikethrough_new(true);
-        if (len)
-        {
-            a->start_index = 0;
-            a->end_index = len;
-        }
         pango_attr_list_insert(attrs, a);
     }
 

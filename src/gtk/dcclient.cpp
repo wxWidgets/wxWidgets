@@ -1372,44 +1372,12 @@ void wxWindowDCImpl::DoDrawText(const wxString& text,
 
     gdk_pango_context_set_colormap( m_context, m_cmap );  // not needed in gtk+ >= 2.6
 
-    bool underlined = m_font.IsOk() && m_font.GetUnderlined();
-
     wxCharBuffer data = wxGTK_CONV(text);
     if ( !data )
         return;
-    size_t datalen = strlen(data);
 
-    // in Pango >= 1.16 the "underline of leading/trailing spaces" bug
-    // has been fixed and thus the hack implemented below should never be used
-    static bool pangoOk = !wx_pango_version_check(1, 16, 0);
-
-    bool needshack = underlined && !pangoOk;
-
-    if (needshack)
-    {
-        // a PangoLayout which has leading/trailing spaces with underlined font
-        // is not correctly drawn by this pango version: Pango won't underline the spaces.
-        // This can be a problem; e.g. wxHTML rendering of underlined text relies on
-        // this behaviour. To workaround this problem, we use a special hack here
-        // suggested by pango maintainer Behdad Esfahbod: we prepend and append two
-        // empty space characters and give them a dummy colour attribute.
-        // This will force Pango to underline the leading/trailing spaces, too.
-
-        wxCharBuffer data_tmp(datalen + 6);
-        // copy the leading U+200C ZERO WIDTH NON-JOINER encoded in UTF8 format
-        memcpy(data_tmp.data(), "\342\200\214", 3);
-        // copy the user string
-        memcpy(data_tmp.data() + 3, data, datalen);
-        // copy the trailing U+200C ZERO WIDTH NON-JOINER encoded in UTF8 format
-        memcpy(data_tmp.data() + 3 + datalen, "\342\200\214", 3);
-
-        data = data_tmp;
-        datalen += 6;
-    }
-
-    pango_layout_set_text(m_layout, data, datalen);
-    const bool
-        setAttrs = m_font.GTKSetPangoAttrs(m_layout, datalen, needshack);
+    pango_layout_set_text(m_layout, data, data.length());
+    const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
 
     int oldSize = 0;
     const bool isScaled = fabs(m_scaleY - 1.0) > 0.00001;
@@ -1474,7 +1442,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
         y = YLOG2DEV(y);
 
         pango_layout_set_text(m_layout, wxGTK_CONV(text), -1);
-        m_font.GTKSetPangoAttrs(m_layout);
+        const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
         int oldSize = 0;
         const bool isScaled = fabs(m_scaleY - 1.0) > 0.00001;
         if (isScaled)
@@ -1527,7 +1495,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
         gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x+minX, y+minY,
                                     m_layout, NULL, bg_col);
 
-        if (m_font.GetUnderlined() || m_font.GetStrikethrough())
+        if (setAttrs)
             pango_layout_set_attributes(m_layout, NULL);
 
         // clean up the transformation matrix
