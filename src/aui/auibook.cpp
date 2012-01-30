@@ -2301,7 +2301,9 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
         m_pressedButton = m_hoverButton;
         m_pressedButton->curState = wxAUI_BUTTON_STATE_PRESSED;
         Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         Update();
+#endif
     }
 }
 
@@ -2352,7 +2354,9 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
         }
 
         Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         Update();
+#endif
 
         if (!(m_pressedButton->curState & wxAUI_BUTTON_STATE_DISABLED))
         {
@@ -2444,14 +2448,18 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
             m_hoverButton->curState = wxAUI_BUTTON_STATE_NORMAL;
             m_hoverButton = NULL;
             Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
             Update();
+#endif
         }
 
         if (button->curState != wxAUI_BUTTON_STATE_HOVER)
         {
             button->curState = wxAUI_BUTTON_STATE_HOVER;
             Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
             Update();
+#endif
             m_hoverButton = button;
             return;
         }
@@ -2463,7 +2471,9 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
             m_hoverButton->curState = wxAUI_BUTTON_STATE_NORMAL;
             m_hoverButton = NULL;
             Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
             Update();
+#endif
         }
     }
 
@@ -2505,7 +2515,9 @@ void wxAuiTabCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
         m_hoverButton->curState = wxAUI_BUTTON_STATE_NORMAL;
         m_hoverButton = NULL;
         Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         Update();
+#endif
     }
 }
 
@@ -2521,14 +2533,18 @@ void wxAuiTabCtrl::OnButton(wxAuiNotebookEvent& event)
             {
                 SetTabOffset(GetTabOffset()-1);
                 Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
                 Update();
+#endif
             }
         }
         else
         {
             SetTabOffset(GetTabOffset()+1);
             Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
             Update();
+#endif
         }
     }
     else if (button == wxAUI_BUTTON_WINDOWLIST)
@@ -2755,7 +2771,9 @@ public:
         // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
 
         m_tabs->Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         m_tabs->Update();
+#endif
 
         wxAuiNotebookPageArray& pages = m_tabs->GetPages();
         size_t i, page_count = pages.GetCount();
@@ -3116,7 +3134,9 @@ void wxAuiNotebook::SetWindowStyleFlag(long style)
             tabctrl->SetFlags(m_flags);
             tabframe->DoSizing();
             tabctrl->Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
             tabctrl->Update();
+#endif
         }
     }
 }
@@ -3339,7 +3359,9 @@ bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
         wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
         info.caption = text;
         ctrl->Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         ctrl->Update();
+#endif
     }
 
     return true;
@@ -3376,7 +3398,9 @@ bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmap& bitmap)
         wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
         info.bitmap = bitmap;
         ctrl->Refresh();
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         ctrl->Update();
+#endif
     }
 
     return true;

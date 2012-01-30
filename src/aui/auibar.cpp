@@ -1284,7 +1284,9 @@ void wxAuiToolBar::SetToolSticky(int tool_id, bool sticky)
     item->m_sticky = sticky;
 
     Refresh(false);
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
     Update();
+#endif
 }
 
 bool wxAuiToolBar::GetToolSticky(int tool_id) const
@@ -1425,7 +1427,9 @@ void wxAuiToolBar::SetHoverItem(wxAuiToolBarItem* pitem)
     if (former_hover != pitem)
     {
         Refresh(false);
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         Update();
+#endif
     }
 }
 
@@ -1451,7 +1455,9 @@ void wxAuiToolBar::SetPressedItem(wxAuiToolBarItem* pitem)
     if (former_item != pitem)
     {
         Refresh(false);
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         Update();
+#endif
     }
 }
 
@@ -1485,7 +1491,9 @@ void wxAuiToolBar::RefreshOverflowState()
     {
         m_overflowState = overflow_state;
         Refresh(false);
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         Update();
+#endif
     }
 
     m_overflowState = overflow_state;
@@ -2241,7 +2249,9 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     m_sizer->SetDimension(0, 0, x, y);
 
     Refresh(false);
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
     Update();
+#endif
 
     // idle events aren't sent while user is resizing frame (why?),
     // but resizing toolbar here causes havoc,
@@ -2624,7 +2634,9 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
                 // repaint immediately
                 Refresh(false);
+#ifdef TODO_REMOVE_IF_NO_PROBLEMS
                 Update();
+#endif
 
                 e.SetInt(toggle);
             }
