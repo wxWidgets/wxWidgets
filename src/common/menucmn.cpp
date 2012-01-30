@@ -1038,18 +1038,13 @@ wxString wxMenuBarBase::GetHelpString(int itemid) const
 
 void wxMenuBarBase::UpdateMenus()
 {
-    wxEvtHandler* source;
     wxMenu* menu;
     int nCount = GetMenuCount();
     for (int n = 0; n < nCount; n++)
     {
         menu = GetMenu( n );
         if (menu != NULL)
-        {
-            source = menu->GetEventHandler();
-            if (source != NULL)
-                menu->UpdateUI( source );
-        }
+            menu->UpdateUI( NULL );
     }
 }
 
