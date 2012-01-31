@@ -2655,7 +2655,10 @@ void wxAuiManager::Update()
             if (p.rect != old_pane_rects[i])
             {
                 p.window->Refresh();
-#ifdef TODO_REMOVE_IF_NO_PROBLEMS
+
+                // under OSX the repaint events occurs almost immediately
+                // for the other platforms we issue an immediate repaint
+#ifndef __WXOSX__
                 p.window->Update();
 #endif
             }
@@ -3895,7 +3898,7 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#ifdef __WXMAC__
+#ifdef __WXMAC__ */
     if ( dc == NULL )
     {
         m_frame->Refresh() ;
