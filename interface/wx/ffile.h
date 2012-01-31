@@ -147,6 +147,15 @@ public:
     wxFileKind GetKind() const;
 
     /**
+        Returns the file name.
+
+        This is the name that was specified when the object was constructed or
+        to the last call to Open(). Notice that it may be empty if Attach() was
+        called without specifying the name.
+     */
+    const wxString& GetName() const;
+
+    /**
         Returns @true if the file is opened.
 
         Most of the methods of this class may only be used for an opened file.
