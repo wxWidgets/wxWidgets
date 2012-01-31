@@ -4407,12 +4407,6 @@ void wxWindowGTK::GTKScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
     }
 }
 
-void wxWindowGTK::SetWindowStyleFlag( long style )
-{
-    // Updates the internal variable. NB: Now m_windowStyle bits carry the _new_ style values already
-    wxWindowBase::SetWindowStyleFlag(style);
-}
-
 // Find the wxWindow at the current mouse position, also returning the mouse
 // position.
 wxWindow* wxFindWindowAtPointer(wxPoint& pt)
