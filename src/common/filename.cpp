@@ -805,7 +805,7 @@ static bool wxTempOpen(wxFFile *file, const wxString& path, bool *deleteOnClose)
     int fd = wxTempOpen(path, deleteOnClose);
     if (fd == -1)
         return false;
-    file->Attach(wx_fdopen(fd, "w+b"));
+    file->Attach(wx_fdopen(fd, "w+b"), path);
     return file->IsOpened();
 #endif // wx_fdopen
 }
@@ -916,7 +916,7 @@ static wxString wxCreateTempImpl(
         if ( ffileTemp )
         {
         #ifdef wx_fdopen
-            ffileTemp->Attach(wx_fdopen(fdTemp, "r+b"));
+            ffileTemp->Attach(wx_fdopen(fdTemp, "r+b"), path);
         #else
             ffileTemp->Open(path, wxT("r+b"));
             close(fdTemp);
