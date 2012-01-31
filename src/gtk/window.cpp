@@ -4425,31 +4425,18 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 // Get the current mouse position.
 wxPoint wxGetMousePosition()
 {
-  /* This crashes when used within wxHelpContext,
-     so we have to use the X-specific implementation below.
-    gint x, y;
-    GdkModifierType *mask;
-    (void) gdk_window_get_pointer(NULL, &x, &y, mask);
-
-    return wxPoint(x, y);
-  */
+    wxWindow* tlw = NULL;
+    if (!wxTopLevelWindows.empty())
+        tlw = wxTopLevelWindows.front();
+    GdkDisplay* display;
+    if (tlw && tlw->m_widget)
+        display = gtk_widget_get_display(tlw->m_widget);
+    else
+        display = gdk_display_get_default();
 
     int x, y;
-    GdkWindow* windowAtPtr = gdk_window_at_pointer(& x, & y);
-
-    Display *display = windowAtPtr ? GDK_WINDOW_XDISPLAY(windowAtPtr) : GDK_DISPLAY();
-    Window rootWindow = RootWindowOfScreen (DefaultScreenOfDisplay(display));
-    Window rootReturn, childReturn;
-    int rootX, rootY, winX, winY;
-    unsigned int maskReturn;
-
-    XQueryPointer (display,
-           rootWindow,
-           &rootReturn,
-                   &childReturn,
-                   &rootX, &rootY, &winX, &winY, &maskReturn);
-    return wxPoint(rootX, rootY);
-
+    gdk_display_get_pointer(display, NULL, &x, &y, NULL);
+    return wxPoint(x, y);
 }
 
 GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
