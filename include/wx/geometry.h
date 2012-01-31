@@ -88,11 +88,8 @@ inline wxPoint2DInt operator+(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
 inline wxPoint2DInt operator-(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2);
 inline wxPoint2DInt operator*(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2);
 inline wxPoint2DInt operator*(wxInt32 n , const wxPoint2DInt& pt);
-inline wxPoint2DInt operator*(wxInt32 n , const wxPoint2DInt& pt);
-inline wxPoint2DInt operator*(const wxPoint2DInt& pt , wxInt32 n);
 inline wxPoint2DInt operator*(const wxPoint2DInt& pt , wxInt32 n);
 inline wxPoint2DInt operator/(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2);
-inline wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n);
 inline wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n);
 
 inline wxPoint2DInt::wxPoint2DInt()
