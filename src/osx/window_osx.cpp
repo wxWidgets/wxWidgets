@@ -2099,6 +2099,11 @@ bool wxWindowMac::MacDoRedraw( long time )
     }
 
     m_updateRegion = formerUpdateRgn;
+
+    wxNonOwnedWindow* top = MacGetTopLevelWindow();
+    if (top)
+        top->WindowWasPainted() ;
+    
     return handled;
 }
 

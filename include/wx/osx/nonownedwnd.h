@@ -114,6 +114,8 @@ public:
     virtual void HandleResized( double timestampsec );
     virtual void HandleMoved( double timestampsec );
     virtual void HandleResizing( double timestampsec, wxRect* rect );
+    
+    void WindowWasPainted();
 
     virtual bool Destroy();
 
@@ -145,6 +147,8 @@ protected:
     static wxNonOwnedWindow *s_macDeactivateWindow;
 
 private :
+    static clock_t s_lastFlush;
+    
     wxRegion m_shape;
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsPath m_shapePath;

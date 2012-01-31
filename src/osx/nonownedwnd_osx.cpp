@@ -39,6 +39,8 @@
 
 wxWindow* g_MacLastWindow = NULL ;
 
+clock_t wxNonOwnedWindow::s_lastFlush = 0;
+
 // unified title and toolbar constant - not in Tiger headers, so we duplicate it here
 #define kWindowUnifiedTitleAndToolbarAttribute (1 << 7)
 
@@ -483,10 +485,18 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
        *height = h ;
 }
 
+void wxNonOwnedWindow::WindowWasPainted()
+{
+    s_lastFlush = clock();
+}
 
 void wxNonOwnedWindow::Update()
 {
-    m_nowpeer->Update();
+    if ( clock() - s_lastFlush > CLOCKS_PER_SEC / 30 )
+    {
+        s_lastFlush = clock();
+        m_nowpeer->Update();
+    }
 }
 
 WXWindow wxNonOwnedWindow::GetWXWindow() const
