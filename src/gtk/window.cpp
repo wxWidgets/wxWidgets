@@ -1950,10 +1950,18 @@ void gtk_window_style_set_callback( GtkWidget *WXUNUSED(widget),
 {
     if (win && previous_style)
     {
-        wxSysColourChangedEvent event;
-        event.SetEventObject(win);
-
-        win->GTKProcessEvent( event );
+        if (win->IsTopLevel())
+        {
+            wxSysColourChangedEvent event;
+            event.SetEventObject(win);
+            win->GTKProcessEvent(event);
+        }
+        else
+        {
+            // Border width could change, which will change client size.
+            // Make sure size event occurs for this
+            win->m_oldClientWidth = 0;
+        }
     }
 }
 
@@ -2479,7 +2487,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
     g_signal_connect (widget, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
 
-    if (IsTopLevel() && m_wxwindow)
+    if (m_wxwindow && (IsTopLevel() || HasFlag(wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME)))
         g_signal_connect (m_wxwindow, "style_set",
                               G_CALLBACK (gtk_window_style_set_callback), this);
 }
