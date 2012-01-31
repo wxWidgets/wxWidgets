@@ -218,12 +218,20 @@ wxHTTP::SetPostText(const wxString& contentType,
                     const wxString& data,
                     const wxMBConv& conv)
 {
+#if wxUSE_UNICODE
     wxScopedCharBuffer scb = data.mb_str(conv);
-    if ( !scb.length() )
+    const size_t len = scb.length();
+    const char* const buf = scb.data();
+#else // !wxUSE_UNICODE
+    const size_t len = data.length();
+    const char* const buf = data.mb_str(conv);
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
+    if ( !len )
         return false;
 
     m_postBuffer.Clear();
-    m_postBuffer.AppendData(scb.data(), scb.length());
+    m_postBuffer.AppendData(buf, len);
     m_contentType = contentType;
 
     return true;
