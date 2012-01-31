@@ -35,31 +35,6 @@ public:
     typedef value_type& reference;
 
     /**
-        Reverse iterator interface
-    */
-    class reverse_iterator
-    {
-    public:
-        reverse_iterator();
-        explicit reverse_iterator(iterator it);
-        reverse_iterator(const reverse_iterator& it);
-        reference operator*() const;
-        pointer operator->() const;
-        iterator base() const;
-        reverse_iterator& operator++();
-        reverse_iterator operator++(int);
-        reverse_iterator& operator--();
-        reverse_iterator operator--(int);
-        reverse_iterator operator+(difference_type n) const;
-        reverse_iterator& operator+=(difference_type n);
-        reverse_iterator operator-(difference_type n) const;
-        reverse_iterator& operator-=(difference_type n);
-        reference operator[](difference_type n) const;
-        bool operator ==(const reverse_iterator& it) const;
-        bool operator !=(const reverse_iterator& it) const;
-    };
-
-    /**
         Constructor.
     */
     wxVector();
