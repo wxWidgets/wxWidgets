@@ -2655,12 +2655,7 @@ void wxAuiManager::Update()
             if (p.rect != old_pane_rects[i])
             {
                 p.window->Refresh();
-
-                // under OSX the repaint events occurs almost immediately
-                // for the other platforms we issue an immediate repaint
-#ifndef __WXOSX__
                 p.window->Update();
-#endif
             }
         }
     }
@@ -3342,9 +3337,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             // remove the last hint rectangle
             m_lastHint = rect;
             m_frame->Refresh();
-#ifdef TODO_REMOVE_IF_NO_PROBLEMS
             m_frame->Update();
-#endif
         }
 
         wxScreenDC screendc;
@@ -3412,9 +3405,7 @@ void wxAuiManager::HideHint()
     if (!m_lastHint.IsEmpty())
     {
         m_frame->Refresh();
-#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         m_frame->Update();
-#endif
         m_lastHint = wxRect();
     }
 }
@@ -3688,9 +3679,7 @@ void wxAuiManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
 
 
     // reduces flicker
-#ifdef TODO_REMOVE_IF_NO_PROBLEMS
     m_frame->Update();
-#endif
 }
 
 void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
@@ -3898,13 +3887,11 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#ifdef __WXMAC__ */
+#ifdef __WXMAC__ 
     if ( dc == NULL )
     {
         m_frame->Refresh() ;
-#ifdef TODO_REMOVE_IF_NO_PROBLEMS
         m_frame->Update() ;
-#endif
         return ;
     }
 #endif
