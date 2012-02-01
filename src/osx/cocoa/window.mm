@@ -1984,7 +1984,8 @@ bool wxWidgetCocoaImpl::SetFocus()
     if ( !CanFocus() )
         return false;
 
-    [[m_osxView window] makeKeyAndOrderFront:nil] ;
+    // TODO remove if no issues arise: should not raise the window, only assign focus
+    //[[m_osxView window] makeKeyAndOrderFront:nil] ;
     [[m_osxView window] makeFirstResponder: m_osxView] ;
     return true;
 }
