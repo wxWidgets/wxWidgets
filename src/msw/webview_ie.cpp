@@ -87,6 +87,8 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     m_container = new wxIEContainer(this, IID_IWebBrowser2, m_webBrowser, m_uiHandler);
 
+    EnableControlFeature(21 /* FEATURE_DISABLE_NAVIGATION_SOUNDS */);
+
     LoadURL(url);
     return true;
 }
@@ -788,6 +790,44 @@ IHTMLDocument2* wxWebViewIE::GetDocument() const
     wxASSERT(document);
 
     return document;
+}
+
+bool wxWebViewIE::EnableControlFeature(long flag, bool enable)
+{
+#if wxUSE_DYNLIB_CLASS
+
+    wxDynamicLibrary urlMon(wxT("urlmon.dll"));
+    if( urlMon.IsLoaded() && 
+        urlMon.HasSymbol("CoInternetSetFeatureEnabled") && 
+        urlMon.HasSymbol("CoInternetIsFeatureEnabled"))
+    {
+        typedef HRESULT (WINAPI *CoInternetSetFeatureEnabled_t)(DWORD, DWORD, BOOL);
+        typedef HRESULT (WINAPI *CoInternetIsFeatureEnabled_t)(DWORD, DWORD);
+
+        wxDYNLIB_FUNCTION(CoInternetSetFeatureEnabled_t, CoInternetSetFeatureEnabled, urlMon);
+        wxDYNLIB_FUNCTION(CoInternetIsFeatureEnabled_t, CoInternetIsFeatureEnabled, urlMon);
+
+        HRESULT hr = (*pfnCoInternetIsFeatureEnabled)(flag,
+                                                      0x2 /* SET_FEATURE_ON_PROCESS */);
+        if((hr == S_OK && enable) || (hr == S_FALSE && !enable))
+            return true;
+
+        hr = (*pfnCoInternetSetFeatureEnabled)(flag,
+                                               0x2/* SET_FEATURE_ON_PROCESS */,
+                                               (enable ? TRUE : FALSE));
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxT("CoInternetSetFeatureEnabled"), hr);
+            return false;
+        }
+        return true;
+    }
+    return false;
+#else
+    wxUnusedVar(flag);
+    wxUnusedVar(enable);
+    return false;
+#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 }
 
 void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)

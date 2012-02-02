@@ -384,6 +384,8 @@ private:
     bool CanExecCommand(wxString command) const;
     void ExecCommand(wxString command);
     IHTMLDocument2* GetDocument() const;
+    //Toggles control features see INTERNETFEATURELIST for values.
+    bool EnableControlFeature(long flag, bool enable = true);
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
