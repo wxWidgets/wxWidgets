@@ -174,7 +174,8 @@ public:
   virtual bool IsExpanded(const wxDataViewItem & item) const;
 
   virtual unsigned int GetCount() const;
-  virtual wxRect GetItemRect(const wxDataViewItem& item, const wxDataViewColumn* columnPtr) const;
+  virtual wxRect GetItemRect(const wxDataViewItem& item,
+                             const wxDataViewColumn* columnPtr = NULL) const;
   virtual int GetSelectedItemsCount() const;
   virtual int GetSelections(wxDataViewItemArray& sel) const;
 
