@@ -202,6 +202,11 @@ wxFontDialog::wxFontDialog()
 {
 }
 
+wxFontDialog::wxFontDialog(wxWindow *parent)
+{
+    Create(parent);
+}
+
 wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData&  data)
 {
     Create(parent, data);
@@ -211,10 +216,15 @@ wxFontDialog::~wxFontDialog()
 {
 }
 
-bool wxFontDialog::Create(wxWindow *WXUNUSED(parent), const wxFontData& data)
+bool wxFontDialog::Create(wxWindow *WXUNUSED(parent))
+{
+    return true ;
+}
+
+bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 {
     m_fontData = data;
-    return true ;
+    return Create(parent) ;
 }
 
 int wxFontDialog::ShowModal()

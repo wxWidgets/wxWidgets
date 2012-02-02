@@ -35,9 +35,11 @@ class WXDLLIMPEXP_CORE wxFontDialog : public wxDialog
 {
 public:
     wxFontDialog();
+    wxFontDialog(wxWindow *parent);
     wxFontDialog(wxWindow *parent, const wxFontData& data);
     virtual ~wxFontDialog();
 
+    bool Create(wxWindow *parent);
     bool Create(wxWindow *parent, const wxFontData& data);
 
     int ShowModal();

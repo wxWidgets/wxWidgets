@@ -351,6 +351,11 @@ wxFontDialog::wxFontDialog()
 {
 }
 
+wxFontDialog::wxFontDialog(wxWindow *parent)
+{
+    Create(parent);
+}
+
 wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData&  data)
 {
     Create(parent, data);
@@ -360,10 +365,20 @@ wxFontDialog::~wxFontDialog()
 {
 }
 
+bool wxFontDialog::Create(wxWindow *parent)
+{
+    return Create(parent);
+}
+
 bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 {
     m_fontData = data;
 
+    return Create(parent);
+}
+
+bool wxFontDialog::Create(wxWindow *parent)
+{
     //autorelease pool - req'd for carbon
     NSAutoreleasePool *thePool;
     thePool = [[NSAutoreleasePool alloc] init];
