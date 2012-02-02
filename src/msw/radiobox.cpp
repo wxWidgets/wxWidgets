@@ -252,6 +252,10 @@ bool wxRadioBox::Create(wxWindow *parent,
     // Now that we have items determine what is the best size and set it.
     SetInitialSize(size);
 
+    // And update all the buttons positions to match it.
+    const wxSize actualSize = GetSize();
+    PositionAllButtons(pos.x, pos.y, actualSize.x, actualSize.y);
+
     return true;
 }
 
@@ -625,6 +629,12 @@ void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
 {
     wxStaticBox::DoMoveWindow(x, y, width, height);
 
+    PositionAllButtons(x, y, width, height);
+}
+
+void
+wxRadioBox::PositionAllButtons(int x, int y, int width, int WXUNUSED(height))
+{
     wxSize maxSize = GetMaxButtonSize();
     int maxWidth = maxSize.x,
         maxHeight = maxSize.y;

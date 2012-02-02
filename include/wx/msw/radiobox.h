@@ -149,6 +149,9 @@ protected:
     // get the total size occupied by the radio box buttons
     wxSize GetTotalButtonSize(const wxSize& sizeBtn) const;
 
+    // Adjust all the buttons to the new window size.
+    void PositionAllButtons(int x, int y, int width, int height);
+
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
