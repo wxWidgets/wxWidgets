@@ -87,7 +87,7 @@
           Processes a @c wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT event type.
     @event{EVT_TREE_END_LABEL_EDIT(id, func)}
           Finish editing a label. This can be prevented by calling Veto().
-          Processes a @c wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT event type.
+          Processes a @c wxEVT_COMMAND_TREE_END_LABEL_EDIT event type.
     @event{EVT_TREE_DELETE_ITEM(id, func)}
           An item was deleted.
           Processes a @c wxEVT_COMMAND_TREE_DELETE_ITEM event type.
