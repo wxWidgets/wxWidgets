@@ -115,6 +115,9 @@ wxCFEventLoop::AddSourceForFD(int fd,
     CFRunLoopRef cfloop = CFGetCurrentRunLoop();
     CFRunLoopAddSource(cfloop, cfsrc, kCFRunLoopDefaultMode);
 
+    // Enable the callbacks initially.
+    EnableDescriptorCallBacks(cffd, source->GetFlags());
+
     source->SetFileDescriptor(cffd.release());
 
     return source.release();
