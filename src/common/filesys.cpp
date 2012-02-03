@@ -639,7 +639,7 @@ wxFileName wxFileSystem::URLToFileName(const wxString& url)
     // file urls either start with a forward slash (local harddisk),
     // otherwise they have a servername/sharename notation,
     // which only exists on msw and corresponds to a unc
-    if ( path[0u] == wxT('/') && path [1u] != wxT('/'))
+    if ( path.length() > 1 && (path[0u] == wxT('/') && path [1u] != wxT('/')) )
     {
         path = path.Mid(1);
     }
