@@ -4292,9 +4292,8 @@ protected:
 
     bool                m_lastKeyDownConsumed;
 
-    // the timestamp that consists of the last wheel event
-    // added to the time taken to process that event.
-    long m_lastWheelTimestamp;
+    // Time until when we should ignore any new mouse wheel events.
+    wxLongLong m_timeToBlockWheelEventsUntil;
 
     friend class ScintillaWX;
     friend class Platform;

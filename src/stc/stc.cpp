@@ -199,7 +199,7 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
     m_lastKeyDownConsumed = false;
-    m_lastWheelTimestamp = 0;
+    m_timeToBlockWheelEventsUntil = 0;
     m_vScrollBar = NULL;
     m_hScrollBar = NULL;
 #if wxUSE_UNICODE
@@ -4264,18 +4264,24 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
-    // prevent having an event queue with wheel events that cannot be processed
-    // reasonably fast (see ticket #9057)
-    if ( m_lastWheelTimestamp <= evt.GetTimestamp() )
+    // Prevent having an event queue with wheel events that cannot be processed
+    // reasonably fast (see ticket #9057) by ignoring all of them that happen
+    // during the time interval corresponding to the time it took us to handle
+    // the last one.
+    //
+    // Notice the use of TimeInMicro() instead of Time() to avoid overflow in
+    // long running programs.
+    if ( m_timeToBlockWheelEventsUntil <= m_stopWatch.TimeInMicro() )
     {
-        m_lastWheelTimestamp = m_stopWatch.Time();
+        const wxLongLong beforeMouseWheel = m_stopWatch.TimeInMicro();
         m_swx->DoMouseWheel(evt.GetWheelRotation(),
                             evt.GetWheelDelta(),
                             evt.GetLinesPerAction(),
                             evt.ControlDown(),
                             evt.IsPageScroll());
-        m_lastWheelTimestamp = m_stopWatch.Time() - m_lastWheelTimestamp;
-        m_lastWheelTimestamp += evt.GetTimestamp();
+        const wxLongLong afterMouseWheel = m_stopWatch.TimeInMicro();
+        m_timeToBlockWheelEventsUntil = afterMouseWheel;
+        m_timeToBlockWheelEventsUntil += afterMouseWheel - beforeMouseWheel;
     }
 }
 
