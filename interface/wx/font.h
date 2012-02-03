@@ -1016,25 +1016,25 @@ wxFont wxNullFont;
 
     @see wxSystemSettings
 */
-wxFont wxNORMAL_FONT;
+wxFont* wxNORMAL_FONT;
 
 /**
     A font using the @c wxFONTFAMILY_SWISS family and 2 points smaller than
     ::wxNORMAL_FONT.
 */
-wxFont wxSMALL_FONT;
+wxFont* wxSMALL_FONT;
 
 /**
     A font using the @c wxFONTFAMILY_ROMAN family and @c wxFONTSTYLE_ITALIC style and
     of the same size of ::wxNORMAL_FONT.
 */
-wxFont wxITALIC_FONT;
+wxFont* wxITALIC_FONT;
 
 /**
     A font identic to ::wxNORMAL_FONT except for the family used which is
     @c wxFONTFAMILY_SWISS.
 */
-wxFont wxSWISS_FONT;
+wxFont* wxSWISS_FONT;
 
 
 /**
