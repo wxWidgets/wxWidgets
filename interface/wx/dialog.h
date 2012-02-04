@@ -104,8 +104,8 @@ enum wxDialogLayoutAdaptationMode
     @style{wxSTAY_ON_TOP}
            The dialog stays on top of all other windows.
     @style{wxNO_3D}
-           Under Windows, specifies that the child controls should not have 3D
-           borders unless specified in the control.
+           This style is obsolete and doesn't do anything any more, don't use
+           it in any new code.
     @style{wxDIALOG_NO_PARENT}
            By default, a dialog created with a @NULL parent window will be
            given the @ref wxApp::GetTopWindow() "application's top level window"
