@@ -502,7 +502,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                     break;
                 case wxITEM_RADIO:
                     radioGroup = GetRadioGroup(pos);
-                    if (radioGroup)
+                    if (!radioGroup)
                     {
                         // this is the first button in the radio button group,
                         // it will be toggled automatically by GTK so bring the
