@@ -181,7 +181,16 @@ protected:
     bool                  m_fsIsMaximized;
     bool                  m_fsIsShowing;
 
-    // the last focused child: we restore focus to it on activation
+    // Save the current focus to m_winLastFocused if we're not iconized (the
+    // focus is always NULL when we're iconized).
+    void DoSaveLastFocus();
+
+    // Restore focus to m_winLastFocused if possible and needed.
+    void DoRestoreLastFocus();
+
+    // The last focused child: we remember it when we're deactivated and
+    // restore focus to it when we're activated (this is done here) or restored
+    // from iconic state (done by wxFrame).
     wxWindow             *m_winLastFocused;
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)

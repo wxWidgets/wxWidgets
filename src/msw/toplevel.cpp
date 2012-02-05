@@ -361,13 +361,6 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
 #endif // __SMARTPHONE__ || __POCKETPC__
 
         case WM_SYSCOMMAND:
-        // Keep the #ifdef block inside the case to fix a potential MSVC
-        // warning regarding switch statement containing no case or
-        // default labels (or a default only).
-#ifndef __WXUNIVERSAL__
-            // We may need to generate events for the items added to the system
-            // menu if it had been created (and presumably modified).
-            if ( m_menuSystem )
             {
                 // From MSDN:
                 //
@@ -378,15 +371,48 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
                 //      using the bitwise AND operator.
                 unsigned id = wParam & 0xfff0;
 
-                // SC_SIZE is the first of the system-defined commands and we
-                // leave those to DefWindowProc().
-                if ( id < SC_SIZE )
+                // Preserve the focus when minimizing/restoring the window: we
+                // need to do it manually as DefWindowProc() doesn't appear to
+                // do this for us for some reason (perhaps because we don't use
+                // WM_NEXTDLGCTL for setting focus?). Moreover, our code in
+                // OnActivate() doesn't work in this case as we receive the
+                // deactivation event too late when the window is being
+                // minimized and the focus is already NULL by then. Similarly,
+                // we receive the activation event too early and restoring
+                // focus in it fails because the window is still minimized. So
+                // we need to do it here.
+                if ( id == SC_MINIMIZE )
+                {
+                    // For minimization, it's simple enough: just save the
+                    // focus as usual. The important thing is that we're not
+                    // minimized yet, so this works correctly.
+                    DoSaveLastFocus();
+                }
+                else if ( id == SC_RESTORE )
+                {
+                    // For restoring, it's trickier as DefWindowProc() sets
+                    // focus to the window itself. So run it first and restore
+                    // our saved focus only afterwards.
+                    processed = true;
+                    rc = wxTopLevelWindowBase::MSWWindowProc(message,
+                                                             wParam, lParam);
+
+                    DoRestoreLastFocus();
+                }
+
+#ifndef __WXUNIVERSAL__
+                // We need to generate events for the custom items added to the
+                // system menu if it had been created (and presumably modified).
+                // As SC_SIZE is the first of the system-defined commands, we
+                // only do this for the custom commands before it and leave
+                // SC_SIZE and everything after it to DefWindowProc().
+                if ( m_menuSystem && id < SC_SIZE )
                 {
                     if ( m_menuSystem->MSWCommand(0 /* unused anyhow */, id) )
                         processed = true;
                 }
-            }
 #endif // #ifndef __WXUNIVERSAL__
+            }
             break;
     }
 
@@ -1338,47 +1364,60 @@ void wxTopLevelWindowMSW::DoThaw()
 // wxTopLevelWindow event handling
 // ----------------------------------------------------------------------------
 
-// Default activation behaviour - set the focus for the first child
-// subwindow found.
+void wxTopLevelWindowMSW::DoSaveLastFocus()
+{
+    if ( m_iconized )
+        return;
+
+    // remember the last focused child if it is our child
+    m_winLastFocused = FindFocus();
+
+    if ( m_winLastFocused )
+    {
+        // and don't remember it if it's a child from some other frame
+        if ( wxGetTopLevelParent(m_winLastFocused) != this )
+        {
+            m_winLastFocused = NULL;
+        }
+    }
+}
+
+void wxTopLevelWindowMSW::DoRestoreLastFocus()
+{
+    wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
+                                        : NULL;
+    if ( !parent )
+    {
+        parent = this;
+    }
+
+    wxSetFocusToChild(parent, &m_winLastFocused);
+}
+
 void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 {
     if ( event.GetActive() )
     {
+        // We get WM_ACTIVATE before being restored from iconized state, so we
+        // can be still iconized here. In this case, avoid restoring the focus
+        // as it doesn't work anyhow and we will do when we're really restored.
+        if ( m_iconized )
+        {
+            event.Skip();
+            return;
+        }
+
         // restore focus to the child which was last focused unless we already
         // have it
         wxLogTrace(wxT("focus"), wxT("wxTLW %p activated."), m_hWnd);
 
         wxWindow *winFocus = FindFocus();
         if ( !winFocus || wxGetTopLevelParent(winFocus) != this )
-        {
-            wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
-                                                : NULL;
-            if ( !parent )
-            {
-                parent = this;
-            }
-
-            wxSetFocusToChild(parent, &m_winLastFocused);
-        }
+            DoRestoreLastFocus();
     }
     else // deactivating
     {
-        // remember the last focused child if it is our child
-        m_winLastFocused = FindFocus();
-
-        if ( m_winLastFocused )
-        {
-            // let it know that it doesn't have focus any more
-            // But this will already be done via WM_KILLFOCUS, so we'll get two kill
-            // focus events if we call it explicitly.
-            // m_winLastFocused->HandleKillFocus((WXHWND)NULL);
-
-            // and don't remember it if it's a child from some other frame
-            if ( wxGetTopLevelParent(m_winLastFocused) != this )
-            {
-                m_winLastFocused = NULL;
-            }
-        }
+        DoSaveLastFocus();
 
         wxLogTrace(wxT("focus"),
                    wxT("wxTLW %p deactivated, last focused: %p."),
