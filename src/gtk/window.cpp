@@ -3991,10 +3991,6 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
             // Make sure GDK/X11 doesn't refresh the window
             // automatically.
             gdk_window_set_back_pixmap( window, None, False );
-#ifdef __X__
-            Display* display = GDK_WINDOW_DISPLAY(window);
-            XFlush(display);
-#endif
             m_needsStyleChange = false;
         }
         else // window not realized yet
