@@ -47,6 +47,18 @@ protected:
     virtual int uflow();
     virtual int pbackfail(int c = EOF);
 
+    // Special work around for VC8/9 (this bug was fixed in VC10 and later):
+    // these versions have non-standard _Xsgetn_s() that it being called from
+    // the stream code instead of xsgetn() and so our overridden implementation
+    // never actually gets used. To work around this, forward to it explicitly.
+#if defined(__VISUALC8__) || defined(__VISUALC9__)
+    virtual std::streamsize
+    _Xsgetn_s(char *s, size_t WXUNUSED(size), std::streamsize n)
+    {
+        return xsgetn(s, n);
+    }
+#endif // VC8 or VC9
+
     wxInputStream& m_stream;
     int m_lastChar;
 };
