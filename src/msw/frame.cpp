@@ -239,11 +239,6 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 // wxFrame: various geometry-related functions
 // ----------------------------------------------------------------------------
 
-void wxFrame::Raise()
-{
-    ::SetForegroundWindow(GetHwnd());
-}
-
 // generate an artificial resize event
 void wxFrame::SendSizeEvent(int flags)
 {

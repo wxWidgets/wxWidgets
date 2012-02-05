@@ -194,11 +194,6 @@ bool wxDialog::Show(bool show)
     return true;
 }
 
-void wxDialog::Raise()
-{
-    ::SetForegroundWindow(GetHwnd());
-}
-
 // show dialog modally
 int wxDialog::ShowModal()
 {

@@ -92,8 +92,6 @@ public:
     // override some base class virtuals
     virtual bool Show(bool show = true);
 
-    virtual void Raise();
-
 #if wxUSE_DIALOG_SIZEGRIP
     virtual void SetWindowStyleFlag(long style);
 #endif // wxUSE_DIALOG_SIZEGRIP

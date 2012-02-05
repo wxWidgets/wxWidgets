@@ -727,6 +727,11 @@ bool wxTopLevelWindowMSW::Show(bool show)
     return true;
 }
 
+void wxTopLevelWindowMSW::Raise()
+{
+    ::SetForegroundWindow(GetHwnd());
+}
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW maximize/minimize
 // ----------------------------------------------------------------------------

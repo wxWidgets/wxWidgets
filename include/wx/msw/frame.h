@@ -42,7 +42,6 @@ public:
 
     // implement base class pure virtuals
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual void Raise();
 
     // implementation only from now on
     // -------------------------------

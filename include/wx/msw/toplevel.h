@@ -60,6 +60,7 @@ public:
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     virtual bool Show(bool show = true);
+    virtual void Raise();
 
     virtual void ShowWithoutActivating();
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
