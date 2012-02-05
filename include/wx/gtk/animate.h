@@ -42,7 +42,7 @@ public:
     // unfortunately GdkPixbufAnimation does not expose these info:
 
     virtual unsigned int GetFrameCount() const { return 0; }
-    virtual wxImage GetFrame(unsigned int frame) const;
+    virtual wxImage GetFrame(unsigned int WXUNUSED(frame)) const;
 
     // we can retrieve the delay for a frame only after building
     // a GdkPixbufAnimationIter...
