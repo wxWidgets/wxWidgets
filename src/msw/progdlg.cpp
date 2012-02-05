@@ -316,7 +316,7 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
-        SetParent(GetParentForModalDialog(parent, GetWindowStyle()));
+        SetTopParent(parent);
         SetPDStyle(style);
         SetMaximum(maximum);
 

@@ -146,12 +146,19 @@ wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
     Create( title, message, maximum, parent, style );
 }
 
+void wxGenericProgressDialog::SetTopParent(wxWindow* parent)
+{
+    m_parentTop = GetParentForModalDialog(parent, GetWindowStyle());
+}
+
 bool wxGenericProgressDialog::Create( const wxString& title,
                                       const wxString& message,
                                       int maximum,
                                       wxWindow *parent,
                                       int style )
 {
+    SetTopParent(parent);
+
     m_parentTop = wxGetTopLevelParent(parent);
     m_pdStyle = style;
 

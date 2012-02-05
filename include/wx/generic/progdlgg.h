@@ -121,6 +121,10 @@ protected:
     // the dialog was shown
     void ReenableOtherWindows();
 
+    // Set the top level parent we store from the parent window provided when
+    // creating the dialog.
+    void SetTopParent(wxWindow* parent);
+
     // return the top level parent window of this dialog (may be NULL)
     wxWindow *GetTopParent() const { return m_parentTop; }
 
