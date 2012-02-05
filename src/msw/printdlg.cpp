@@ -990,38 +990,34 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
         return false;
 
     pd = new PAGESETUPDLG;
-    pd->hDevMode = NULL;
-    pd->hDevNames = NULL;
     m_pageDlg = (void *)pd;
 
-    // Pass the devmode data (created in m_printData.ConvertToNative)
-    // to the PRINTDLG structure, since it'll
-    // be needed when PrintDlg is called.
-
-    if (pd->hDevMode)
+    // We must not set hDevMode and hDevNames when using PSD_RETURNDEFAULT,
+    // otherwise the call to PageSetupDlg() would fail.
+    if ( data.GetDefaultInfo() )
     {
-        GlobalFree(pd->hDevMode);
         pd->hDevMode = NULL;
-    }
-    pd->hDevMode = (HGLOBAL) native_data->GetDevMode();
-    native_data->SetDevMode(NULL);
-
-    // Shouldn't assert; we should be able to test Ok-ness at a higher level
-    //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
-
-    // Pass the devnames data (created in m_printData.ConvertToNative)
-    // to the PRINTDLG structure, since it'll
-    // be needed when PrintDlg is called.
-
-    if (pd->hDevNames)
-    {
-        GlobalFree(pd->hDevNames);
         pd->hDevNames = NULL;
     }
-    pd->hDevNames = (HGLOBAL) native_data->GetDevNames();
-    native_data->SetDevNames(NULL);
+    else
+    {
+        // Pass the devmode data (created in m_printData.ConvertToNative)
+        // to the PRINTDLG structure, since it'll
+        // be needed when PrintDlg is called.
 
-//        pd->hDevMode = GlobalAlloc(GMEM_MOVEABLE, sizeof(DEVMODE));
+        pd->hDevMode = (HGLOBAL) native_data->GetDevMode();
+        native_data->SetDevMode(NULL);
+
+        // Shouldn't assert; we should be able to test Ok-ness at a higher level
+        //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+
+        // Pass the devnames data (created in m_printData.ConvertToNative)
+        // to the PRINTDLG structure, since it'll
+        // be needed when PrintDlg is called.
+
+        pd->hDevNames = (HGLOBAL) native_data->GetDevNames();
+        native_data->SetDevNames(NULL);
+    }
 
     pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
 
@@ -1066,17 +1062,6 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     pd->hPageSetupTemplate = NULL;
     pd->lpPageSetupTemplateName = NULL;
 
-/*
-    if ( pd->hDevMode )
-    {
-        DEVMODE *devMode = (DEVMODE*) GlobalLock(pd->hDevMode);
-        memset(devMode, 0, sizeof(DEVMODE));
-        devMode->dmSize = sizeof(DEVMODE);
-        devMode->dmOrientation = m_orientation;
-        devMode->dmFields = DM_ORIENTATION;
-        GlobalUnlock(pd->hDevMode);
-    }
-*/
     return true;
 }
 
