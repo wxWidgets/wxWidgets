@@ -56,8 +56,8 @@
     #define wxPG_NAT_BUTTON_BORDER_X            1
     #define wxPG_NAT_BUTTON_BORDER_Y            1
 
-    // If 1 then controls are refreshed after selected was drawn.
-    #define wxPG_REFRESH_CONTROLS_AFTER_REPAINT 0
+    // If 1 then controls are refreshed explicitly in a few places
+    #define wxPG_REFRESH_CONTROLS 0
 
 #elif defined(__WXGTK__)
 
@@ -90,7 +90,7 @@
     #define wxPG_NAT_BUTTON_BORDER_Y        1
 
     // If 1 then controls are refreshed after selected was drawn.
-    #define wxPG_REFRESH_CONTROLS_AFTER_REPAINT 1
+    #define wxPG_REFRESH_CONTROLS 1
 
 #elif defined(__WXMAC__)
 
@@ -121,7 +121,7 @@
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
     // If 1 then controls are refreshed after selected was drawn.
-    #define wxPG_REFRESH_CONTROLS_AFTER_REPAINT 0
+    #define wxPG_REFRESH_CONTROLS 0
 
 #else // defaults
 
@@ -152,7 +152,7 @@
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
     // If 1 then controls are refreshed after selected was drawn.
-    #define wxPG_REFRESH_CONTROLS_AFTER_REPAINT 1
+    #define wxPG_REFRESH_CONTROLS 0
 #endif // platform
 
 

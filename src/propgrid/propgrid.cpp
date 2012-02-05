@@ -668,9 +668,7 @@ void wxPropertyGrid::Thaw()
     {
         wxControl::Thaw();
         RecalculateVirtualSize();
-    #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
         Refresh();
-    #endif
 
         // Force property re-selection
         // NB: We must copy the selection.
@@ -2139,10 +2137,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     const wxPropertyGridPageState* state = m_pState;
     const wxArrayInt& colWidths = state->m_colWidths;
 
-#if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
-    bool wasSelectedPainted = false;
-#endif
-
     // TODO: Only render columns that are within clipping region.
 
     dc.SetFont(normalFont);
@@ -2270,11 +2264,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         }
         else
         {
-#if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
-            if ( p == firstSelected )
-                wasSelectedPainted = true;
-#endif
-
             renderFlags |= wxPGCellRenderer::Selected;
 
             if ( !p->IsCategory() )
@@ -2511,18 +2500,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         y += rowHeight;
     }
 
-    // Refresh editor controls (seems not needed on msw)
-    // NOTE: This code is mandatory for GTK!
-#if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
-    if ( wasSelectedPainted )
-    {
-        if ( m_wndEditor )
-            m_wndEditor->Refresh();
-        if ( m_wndEditor2 )
-            m_wndEditor2->Refresh();
-    }
-#endif
-
     return y;
 }
 
@@ -2662,7 +2639,7 @@ void wxPropertyGrid::Refresh( bool WXUNUSED(eraseBackground),
 
     wxWindow::Refresh(false, rect);
 
-#if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
+#if wxPG_REFRESH_CONTROLS
     // I think this really helps only GTK+1.2
     if ( m_wndEditor ) m_wndEditor->Refresh();
     if ( m_wndEditor2 ) m_wndEditor2->Refresh();
@@ -3429,7 +3406,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     }
     else
     {
-#if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
+#if wxPG_REFRESH_CONTROLS
         if ( m_wndEditor ) m_wndEditor->Refresh();
         if ( m_wndEditor2 ) m_wndEditor2->Refresh();
 #endif
@@ -4876,7 +4853,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                             m_draggedSplitter = splitterHit;
                             m_dragOffset = splitterHitOffset;
 
-                        #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
+                        #if wxPG_REFRESH_CONTROLS
                             // Fixes button disappearance bug
                             if ( m_wndEditor2 )
                                 m_wndEditor2->Show ( false );
@@ -5241,7 +5218,7 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
             m_wndEditor->Show ( true );
         }
 
-    #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
+    #if wxPG_REFRESH_CONTROLS
         // Fixes button disappearance bug
         if ( m_wndEditor2 )
             m_wndEditor2->Show ( true );
