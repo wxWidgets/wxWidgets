@@ -170,7 +170,7 @@ public:
             An array of strings, or a string list, containing the choices.
         @param clientData
             An array of client data to be associated with the items. See
-            GetSelectionClientData().
+            GetSelectionData().
         @param style
             A dialog style (bitlist) containing flags chosen from standard
             dialog styles and the ones listed below. The default value is
@@ -222,7 +222,7 @@ public:
             An array of strings, or a string list, containing the choices.
         @param clientData
             An array of client data to be associated with the items. See
-            GetSelectionClientData().
+            GetSelectionData().
         @param style
             A dialog style (bitlist) containing flags chosen from standard
             dialog styles and the ones listed below. The default value is
@@ -270,8 +270,10 @@ public:
 
     /**
         Returns the client data associated with the selection.
+
+        @since 2.9.4
     */
-    char* GetSelectionClientData() const;
+    void* GetSelectionData() const;
 
     /**
         Returns the selected string.

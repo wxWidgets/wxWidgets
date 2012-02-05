@@ -344,6 +344,11 @@ Changes in behaviour which may result in compilation errors
 - wxComboBox::IsEmpty(), which was previously available in some ports (but not
   wxMSW), doesn't exist any more, use either IsListEmpty() or IsTextEmpty().
 
+- wxSingleChoiceDialog ctors and Create() now have 2 overloaded versions: one
+  taking void** client data and the deprecated one taking char**. This can
+  result in compilation errors due to an ambiguity between them if you pass
+  NULL as client data. To fix this, cast NULL explicitly to "void**".
+
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -412,6 +417,11 @@ Deprecated methods and their replacements
 - Second parameter of wxSlider::SetTickFreq(int n, int pos) is deprecated,
   simply remove it from your code and use wxSlider::SetTickFreq(int n) as it
   was never used anyhow.
+- wxSingleChoiceDialog ctor and Create() take "void**" client data pointer
+  instead of "char**". As the client data is typically untyped, you should
+  simply remove the casts to "char**" which you probably have in your code if
+  you use these functions.
+
 
 Major new features in this release
 ----------------------------------

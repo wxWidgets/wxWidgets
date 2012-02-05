@@ -106,39 +106,112 @@ public:
                          const wxString& caption,
                          int n,
                          const wxString *choices,
-                         char **clientData = (char **)NULL,
+                         void **clientData = NULL,
                          long style = wxCHOICEDLG_STYLE,
-                         const wxPoint& pos = wxDefaultPosition);
+                         const wxPoint& pos = wxDefaultPosition)
+    {
+        Create(parent, message, caption, n, choices, clientData, style, pos);
+    }
+
     wxSingleChoiceDialog(wxWindow *parent,
                          const wxString& message,
                          const wxString& caption,
                          const wxArrayString& choices,
-                         char **clientData = (char **)NULL,
+                         void **clientData = NULL,
                          long style = wxCHOICEDLG_STYLE,
-                         const wxPoint& pos = wxDefaultPosition);
+                         const wxPoint& pos = wxDefaultPosition)
+    {
+        Create(parent, message, caption, choices, clientData, style, pos);
+    }
 
     bool Create(wxWindow *parent,
                 const wxString& message,
                 const wxString& caption,
                 int n,
                 const wxString *choices,
-                char **clientData = (char **)NULL,
+                void **clientData = NULL,
                 long style = wxCHOICEDLG_STYLE,
                 const wxPoint& pos = wxDefaultPosition);
     bool Create(wxWindow *parent,
                 const wxString& message,
                 const wxString& caption,
                 const wxArrayString& choices,
-                char **clientData = (char **)NULL,
+                void **clientData = NULL,
                 long style = wxCHOICEDLG_STYLE,
                 const wxPoint& pos = wxDefaultPosition);
 
     void SetSelection(int sel);
     int GetSelection() const { return m_selection; }
     wxString GetStringSelection() const { return m_stringSelection; }
+    void* GetSelectionData() { return m_clientData; }
 
-    // obsolete function (NB: no need to make it return wxChar, it's untyped)
-    char *GetSelectionClientData() const { return (char *)m_clientData; }
+#if WXWIN_COMPATIBILITY_2_8
+    // Deprecated overloads taking "char**" client data.
+    wxDEPRECATED_CONSTRUCTOR
+    (
+        wxSingleChoiceDialog(wxWindow *parent,
+                             const wxString& message,
+                             const wxString& caption,
+                             int n,
+                             const wxString *choices,
+                             char **clientData,
+                             long style = wxCHOICEDLG_STYLE,
+                             const wxPoint& pos = wxDefaultPosition)
+    )
+    {
+        Create(parent, message, caption, n, choices,
+               (void**)clientData, style, pos);
+    }
+
+    wxDEPRECATED_CONSTRUCTOR
+    (
+        wxSingleChoiceDialog(wxWindow *parent,
+                             const wxString& message,
+                             const wxString& caption,
+                             const wxArrayString& choices,
+                             char **clientData,
+                             long style = wxCHOICEDLG_STYLE,
+                             const wxPoint& pos = wxDefaultPosition)
+    )
+    {
+        Create(parent, message, caption, choices,
+               (void**)clientData, style, pos);
+    }
+
+    wxDEPRECATED_INLINE
+    (
+        bool Create(wxWindow *parent,
+                    const wxString& message,
+                    const wxString& caption,
+                    int n,
+                    const wxString *choices,
+                    char **clientData,
+                    long style = wxCHOICEDLG_STYLE,
+                    const wxPoint& pos = wxDefaultPosition),
+        return Create(parent, message, caption, n, choices,
+                      (void**)clientData, style, pos);
+    )
+
+    wxDEPRECATED_INLINE
+    (
+        bool Create(wxWindow *parent,
+                    const wxString& message,
+                    const wxString& caption,
+                    const wxArrayString& choices,
+                    char **clientData,
+                    long style = wxCHOICEDLG_STYLE,
+                    const wxPoint& pos = wxDefaultPosition),
+        return Create(parent, message, caption, choices,
+                      (void**)clientData, style, pos);
+    )
+
+    // NB: no need to make it return wxChar, it's untyped
+    wxDEPRECATED_ACCESSOR
+    (
+        char* GetSelectionClientData(),
+        (char*)GetClientData()
+    )
+#endif // WXWIN_COMPATIBILITY_2_8
 
     // implementation from now on
     void OnOK(wxCommandEvent& event);
