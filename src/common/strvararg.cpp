@@ -161,6 +161,19 @@ public:
         {
             if ( CopyFmtChar(*format++) == wxT('%') )
             {
+#if wxUSE_PRINTF_POS_PARAMS
+                if ( *format >= '0' && *format <= '9' )
+                {
+                    SkipDigits(&format);
+                    if ( *format == '$' )
+                    {
+                        // It was a positional argument specification.
+                        CopyFmtChar(*format++);
+                    }
+                    //else: it was a width specification, nothing else to do.
+                }
+#endif // wxUSE_PRINTF_POS_PARAMS
+
                 // skip any flags
                 while ( IsFlagChar(*format) )
                     CopyFmtChar(*format++);

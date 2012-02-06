@@ -501,6 +501,7 @@ MSW:
 OSX:
 
 - Provide native implementations of wxDatePickerCtrl and wxTimePickerCtrl.
+- Fix handling of positional parameters in wxPrintf() &c (David Connet).
 
 Univ:
 

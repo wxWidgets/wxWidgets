@@ -165,6 +165,13 @@ void StringTestCase::Format()
         wxString s(wxT('Z'), len);
         CPPUNIT_ASSERT_EQUAL( len, wxString::Format(wxT("%s"), s.c_str()).length());
     }
+
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "two one",
+        wxString::Format(wxT("%2$s %1$s"), wxT("one"), wxT("two"))
+    );
 }
 
 void StringTestCase::Constructors()
