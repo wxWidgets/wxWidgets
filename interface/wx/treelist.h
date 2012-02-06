@@ -193,7 +193,7 @@ extern const wxTreeListItem wxTLI_LAST;
         the expansion of the given branch. This event is sent after the
         expansion occurs and can't be vetoed.
     @event{EVT_TREELIST_ITEM_CHECKED(id, func)}
-        Process @c wxEVT_COMMAND_TREELIST_ITEM_CHeCKED event notifying about
+        Process @c wxEVT_COMMAND_TREELIST_ITEM_CHECKED event notifying about
         the user checking or unchecking the item. You can use
         wxTreeListCtrl::GetCheckedState() to retrieve the new item state and
         wxTreeListEvent::GetOldCheckedState() to get the previous one.
@@ -862,7 +862,7 @@ public:
     /**
         Return the previous state of the item checkbox.
 
-        This method can be used with @c wxEVT_COMMAND_TREELIST_ITEM_CHeCKED
+        This method can be used with @c wxEVT_COMMAND_TREELIST_ITEM_CHECKED
         events only.
 
         Notice that the new state of the item can be retrieved using
