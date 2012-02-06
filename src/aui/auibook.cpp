@@ -4500,7 +4500,9 @@ bool wxAuiNotebook::SetPageImage(size_t n, int imageId)
 
 wxWindow* wxAuiNotebook::GetCurrentPage () const
 {
-    return GetPage(GetSelection());
+    const int sel = GetSelection();
+
+    return sel == wxNOT_FOUND ? NULL : GetPage(sel);
 }
 
 int wxAuiNotebook::ChangeSelection(size_t n)
