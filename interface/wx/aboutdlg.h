@@ -98,7 +98,7 @@ public:
         @return Name of the program
         @see SetName()
     */
-    const wxString& GetName() const;
+    wxString GetName() const;
 
     /**
         Returns @true if a description string has been specified.
