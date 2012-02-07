@@ -586,9 +586,11 @@ bool wxStyledTextCtrl::GetUseAntiAliasing() {
 
 
 
-void wxStyledTextCtrl::AddTextRaw(const char* text)
+void wxStyledTextCtrl::AddTextRaw(const char* text, int length)
 {
-    SendMsg(SCI_ADDTEXT, strlen(text), (sptr_t)text);
+    if (length == -1)
+        length = strlen(text);
+    SendMsg(SCI_ADDTEXT, length, (sptr_t)text);
 }
 
 void wxStyledTextCtrl::InsertTextRaw(int pos, const char* text)
@@ -676,9 +678,11 @@ wxCharBuffer wxStyledTextCtrl::GetTextRaw()
     return buf;
 }
 
-void wxStyledTextCtrl::AppendTextRaw(const char* text)
+void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
 {
-    SendMsg(SCI_APPENDTEXT, strlen(text), (sptr_t)text);
+    if (length == -1)
+        length = strlen(text);
+    SendMsg(SCI_APPENDTEXT, length, (sptr_t)text);
 }
 
 

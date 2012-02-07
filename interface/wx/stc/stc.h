@@ -360,14 +360,9 @@ public:
     void AddText(const wxString& text);
 
     /**
-        The following methods are nearly equivalent to their similarly named
-        cousins above.  The difference is that these methods bypass wxString
-        and always use a char* even if used in a unicode build of wxWidgets.
-        In that case the character data will be utf-8 encoded since that is
-        what is used internally by Scintilla in unicode builds.
-        Add text to the document at current position.
+        Add raw text to the document at current position.
     */
-    void AddTextRaw(const char* text);
+    void AddTextRaw(const char* text, int length=-1);
 
     /**
         Enlarge the document to a particular size of text bytes.
@@ -382,7 +377,7 @@ public:
     /**
         Append a string to the end of the document without changing the selection.
     */
-    void AppendTextRaw(const char* text);
+    void AppendTextRaw(const char* text, int length=-1);
 
     /**
         Is there an auto-completion list visible?

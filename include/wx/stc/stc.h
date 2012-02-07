@@ -4049,7 +4049,7 @@ public:
     // what is used internally by Scintilla in unicode builds.
 
     // Add text to the document at current position.
-    void AddTextRaw(const char* text);
+    void AddTextRaw(const char* text, int length=-1);
 
     // Insert string at a position.
     void InsertTextRaw(int pos, const char* text);
@@ -4078,7 +4078,7 @@ public:
     wxCharBuffer GetTextRaw();
 
     // Append a string to the end of the document without changing the selection.
-    void AppendTextRaw(const char* text);
+    void AppendTextRaw(const char* text, int length=-1);
 
 #ifdef SWIG
     %pythoncode "_stc_utf8_methods.py"
