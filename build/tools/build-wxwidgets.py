@@ -55,6 +55,12 @@ def numCPUs():
     return 1 # Default
 
 
+def getXcodePath():
+    p = subprocess.Popen("xcode-select -print-path", shell=True, stdout=subprocess.PIPE)
+    output = p.stdout.read()
+    return output.strip()
+
+
 def exitIfError(code, msg):
     if code != 0:
         print msg
@@ -260,13 +266,14 @@ def main(scriptName, args):
         # developer.  TODO: there should be a command line option to set
         # the SDK...
         if sys.platform.startswith("darwin"):
+            xcodePath = getXcodePath()
             sdks = [
-                "/Developer/SDKs/MacOSX10.5.sdk",
-                "/Developer/SDKs/MacOSX10.6.sdk",
-                "/Developer/SDKs/MacOSX10.7.sdk",
+                xcodePath+"/SDKs/MacOSX10.5.sdk",
+                xcodePath+"/SDKs/MacOSX10.6.sdk",
+                xcodePath+"/SDKs/MacOSX10.7.sdk",
             ]
             if not options.osx_cocoa:
-                sdks.insert(0, "/Developer/SDKs/MacOSX10.4u.sdk")
+                sdks.insert(0, xcodePath+"/SDKs/MacOSX10.4u.sdk")
             
             # use the lowest available sdk
             for sdk in sdks:
@@ -592,7 +599,7 @@ def main(scriptName, args):
         os.makedirs(packagedir)
         basename = os.path.basename(prefixDir.split(".")[0])
         packageName = basename + "-" + getWxRelease()
-        packageMakerPath = "/Developer/usr/bin/packagemaker "
+        packageMakerPath = getXcodePath()+"/usr/bin/packagemaker "
         args = []
         args.append("--root %s" % options.installdir)
         args.append("--id org.wxwidgets.%s" % basename.lower())
