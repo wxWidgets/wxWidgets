@@ -319,7 +319,7 @@
             <cppflags>$(EXTRACFLAGS)</cppflags>
         </if>
         <!-- Suppress deprecation warnings for standard library calls -->
-        <if cond="FORMAT in ['msvs2005prj','msvs2008prj']">
+        <if cond="FORMAT in ['msvc','msvs2005prj','msvs2008prj']">
             <define>_CRT_SECURE_NO_DEPRECATE=1</define>
             <define>_CRT_NON_CONFORMING_SWPRINTFS=1</define>
             <define>_SCL_SECURE_NO_WARNINGS=1</define>

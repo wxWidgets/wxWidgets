@@ -22,13 +22,14 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 NATIVDLG_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\nativdlg.pdb $(____DEBUGRUNTIME_3_p) \
-	$(__OPTIMIZEFLAG_6) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
-	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\samples /DNOPCH $(__RTTIFLAG_11) $(__EXCEPTIONSFLAG_12) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__OPTIMIZEFLAG_6) /D_CRT_SECURE_NO_DEPRECATE=1 \
+	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
+	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	/I$(SETUPHDIR) /I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. \
+	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG_11) \
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 NATIVDLG_OBJECTS =  \
 	$(OBJS)\nativdlg_nativdlg.obj
 NATIVDLG_RESOURCES =  \
@@ -348,5 +349,5 @@ $(OBJS)\nativdlg_nativdlg.obj: .\nativdlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NATIVDLG_CXXFLAGS) .\nativdlg.cpp
 
 $(OBJS)\nativdlg_nativdlg.res: .\nativdlg.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\nativdlg.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\nativdlg.rc
 
