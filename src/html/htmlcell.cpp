@@ -221,7 +221,7 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
 
 
 bool wxHtmlCell::AdjustPagebreak(int *pagebreak,
-                                 wxArrayInt& WXUNUSED(known_pagebreaks)) const
+                                 const wxArrayInt& WXUNUSED(known_pagebreaks)) const
 {
     if ((!m_CanLiveOnPagebreak) &&
                 m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak)
@@ -775,7 +775,7 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 
 
 bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
-                                          wxArrayInt& known_pagebreaks) const
+                                          const wxArrayInt& known_pagebreaks) const
 {
     if (!m_CanLiveOnPagebreak)
         return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks);

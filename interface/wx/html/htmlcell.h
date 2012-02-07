@@ -107,7 +107,7 @@ public:
         @endcode
     */
     virtual bool AdjustPagebreak(int* pagebreak,
-                                 wxArrayInt& known_pagebreaks) const;
+                                 const wxArrayInt& known_pagebreaks) const;
 
     /**
         Renders the cell.
