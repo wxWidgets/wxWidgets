@@ -126,6 +126,20 @@ bool shouldHandleSelector(SEL selector)
             ((wxWidgetCocoaImpl*)cw->GetPeer())->DoHandleMouseEvent( event);
             handled = true;
         }
+        else if ( [event type] == NSMouseMoved )
+        {
+            NSPoint nsPoint = [event locationInWindow];
+            if ( [event window] != nil )
+                nsPoint = [[event window] convertBaseToScreen:nsPoint];
+
+            wxPoint pt = wxFromNSPoint(NULL, nsPoint);
+            wxWindow* mw = ::wxFindWindowAtPoint(pt);
+            if ( mw )
+            {
+                ((wxWidgetCocoaImpl*)mw->GetPeer())->DoHandleMouseEvent( event);
+                handled = true;
+            }
+        }
     }
     return handled;
 }
