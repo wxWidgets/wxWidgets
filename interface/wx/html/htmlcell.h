@@ -95,19 +95,33 @@ public:
 
     /**
         This method is used to adjust pagebreak position.
-        The parameter is variable that contains y-coordinate of page break
+        The first parameter is a variable that contains the y-coordinate of the page break
         (= horizontal line that should not be crossed by words, images etc.).
         If this cell cannot be divided into two pieces (each one on another page)
-        then it moves the pagebreak few pixels up.
+        then it either moves the pagebreak a few pixels up, if possible, or, if
+        the cell cannot fit on the page at all, then the cell is forced to
+        split unconditionally.
+
         Returns @true if pagebreak was modified, @false otherwise.
+
+        @param pagebreak
+            position in pixel of the pagebreak.
+
+        @param known_pagebreaks
+            the list of the previous pagebreaks
+
+        @param pageHeight
+            the height in pixel of the page drawable area
 
         Usage:
         @code
-        while (container->AdjustPagebreak(&p)) {}
+        while (container->AdjustPagebreak(&p, kp, ph)) {}
         @endcode
+
     */
     virtual bool AdjustPagebreak(int* pagebreak,
-                                 const wxArrayInt& known_pagebreaks) const;
+                                 const wxArrayInt& known_pagebreaks,
+                                 int pageHeight) const;
 
     /**
         Renders the cell.

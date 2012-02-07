@@ -220,11 +220,16 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
 }
 
 
-bool wxHtmlCell::AdjustPagebreak(int *pagebreak,
-                                 const wxArrayInt& WXUNUSED(known_pagebreaks)) const
+bool
+wxHtmlCell::AdjustPagebreak(int *pagebreak,
+                            const wxArrayInt& WXUNUSED(known_pagebreaks),
+                            int pageHeight) const
 {
-    if ((!m_CanLiveOnPagebreak) &&
-                m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak)
+    // Notice that we always break the cells bigger than the page height here
+    // as otherwise we wouldn't be able to break them at all.
+    if ( m_Height <= pageHeight &&
+            (!m_CanLiveOnPagebreak &&
+                m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak) )
     {
         *pagebreak = m_PosY;
         return true;
@@ -774,11 +779,13 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 }
 
 
-bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
-                                          const wxArrayInt& known_pagebreaks) const
+bool
+wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
+                                     const wxArrayInt& known_pagebreaks,
+                                     int pageHeight) const
 {
     if (!m_CanLiveOnPagebreak)
-        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks);
+        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks, pageHeight);
 
     wxHtmlCell *c = GetFirstChild();
     bool rt = false;
@@ -786,7 +793,7 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
 
     while (c)
     {
-        if (c->AdjustPagebreak(&pbrk, known_pagebreaks))
+        if (c->AdjustPagebreak(&pbrk, known_pagebreaks, pageHeight))
             rt = true;
         c = c->GetNext();
     }

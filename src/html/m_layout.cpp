@@ -71,7 +71,8 @@ public:
     wxHtmlPageBreakCell() {}
 
     bool AdjustPagebreak(int* pagebreak,
-                         const wxArrayInt& known_pagebreaks) const;
+                         const wxArrayInt& known_pagebreaks,
+                         int pageHeight) const;
 
     void Draw(wxDC& WXUNUSED(dc),
               int WXUNUSED(x), int WXUNUSED(y),
@@ -82,7 +83,10 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxHtmlPageBreakCell);
 };
 
-bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, const wxArrayInt& known_pagebreaks) const
+bool
+wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak,
+                                     const wxArrayInt& known_pagebreaks,
+                                     int WXUNUSED(pageHeight)) const
 {
     // When we are counting pages, 'known_pagebreaks' is non-NULL.
     // That's the only time we change 'pagebreak'. Otherwise, pages

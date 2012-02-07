@@ -469,6 +469,8 @@ All:
 All (GUI):
 
 - Added strike-through support to wxFont (Igor Korot).
+- Fix infinite loop in wxHtmlEasyPrinting when trying to page break images
+  taller than the page height in wxHtmlEasyPrinting (Laurent Poujoulat).
 - Added wxFilePickerCtrl::SetInitialDirectory().
 - Added wxDataViewItemAttr::SetBackgroundColour() and implemented it in generic
   wxDataViewCtrl (Andrew Xu).

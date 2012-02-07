@@ -151,7 +151,7 @@ int wxHtmlDCRenderer::Render(int x, int y,
     int pbreak, hght;
 
     pbreak = (int)(from + m_Height);
-    while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks)) {}
+    while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks, m_Height)) {}
     hght = pbreak - from;
     if(to < hght)
         hght = to;
