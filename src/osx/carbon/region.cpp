@@ -91,63 +91,41 @@ wxRegion::wxRegion(const wxRect& rect)
     m_refData = new wxRegionRefData(rect.x , rect.y , rect.width , rect.height);
 }
 
-wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode WXUNUSED(fillStyle))
+wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
 {
-    wxUnusedVar(n);
-    wxUnusedVar(points);
-
-#if 0
-    // no non-QD APIs available
-    // TODO : remove ?
-    // OS X somehow does not collect the region invisibly as before, so sometimes things
-    // get drawn on screen instead of just being combined into a region, therefore we allocate a temp gworld now
-
-    GWorldPtr gWorld = NULL;
-    GWorldPtr oldWorld;
-    GDHandle oldGDHandle;
-    OSStatus err;
-    Rect destRect = { 0, 0, 1, 1 };
-
-    ::GetGWorld( &oldWorld, &oldGDHandle );
-    err = ::NewGWorld( &gWorld, 32, &destRect, NULL, NULL, 0 );
-    if ( err == noErr )
-    {
-        ::SetGWorld( gWorld, GetGDevice() );
-
-        OpenRgn();
-
-        wxCoord x1, x2 , y1 , y2 ;
-        x2 = x1 = points[0].x ;
-        y2 = y1 = points[0].y ;
-
-        ::MoveTo( x1, y1 );
-        for (size_t i = 1; i < n; i++)
-        {
-            x2 = points[i].x ;
-            y2 = points[i].y ;
-            ::LineTo( x2, y2 );
-        }
-
-        // close the polyline if necessary
-        if ( x1 != x2 || y1 != y2 )
-            ::LineTo( x1, y1 ) ;
-
-        RgnHandle tempRgn = NewRgn();
-        CloseRgn( tempRgn ) ;
-
-        ::SetGWorld( oldWorld, oldGDHandle );
-        wxCFRef<HIShapeRef> tempShape( HIShapeCreateWithQDRgn(tempRgn ) );
-        m_refData = new wxRegionRefData(tempShape);
-        DisposeRgn( tempRgn );
-    }
-    else
-    {
-        m_refData = new wxRegionRefData;
-    }
-#else
-    wxFAIL_MSG( "not implemented" );
-    m_refData = NULL;
-#endif
+    // Set the region to a polygon shape generically using a bitmap with the 
+    // polygon drawn on it. 
+ 
+    m_refData = new wxRegionRefData(); 
+     
+    wxCoord mx = 0; 
+    wxCoord my = 0; 
+    wxPoint p; 
+    size_t idx;     
+     
+    // Find the max size needed to draw the polygon 
+    for (idx=0; idx<n; idx++) 
+    { 
+        wxPoint pt = points[idx]; 
+        if (pt.x > mx) 
+            mx = pt.x; 
+        if (pt.y > my) 
+            my = pt.y; 
+    } 
+ 
+    // Make the bitmap 
+    wxBitmap bmp(mx, my); 
+    wxMemoryDC dc(bmp); 
+    dc.SetBackground(*wxBLACK_BRUSH); 
+    dc.Clear(); 
+    dc.SetPen(*wxWHITE_PEN); 
+    dc.SetBrush(*wxWHITE_BRUSH); 
+    dc.DrawPolygon(n, (wxPoint*)points, 0, 0, fillStyle); 
+    dc.SelectObject(wxNullBitmap); 
+    bmp.SetMask(new wxMask(bmp, *wxBLACK)); 
+ 
+    // Use it to set this region 
+    Union(bmp); 
 }
 
 wxRegion::~wxRegion()
