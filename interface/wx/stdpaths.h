@@ -237,7 +237,8 @@ public:
         - Mac: @c ~/Library/Preferences
 
         Only use this method if you have a single configuration file to put in this
-        directory, otherwise GetUserDataDir() is more appropriate.
+        directory, otherwise GetUserDataDir() is more appropriate as the latter
+        adds @c appinfo to the path, unlike this function.
     */
     virtual wxString GetUserConfigDir() const;
 
