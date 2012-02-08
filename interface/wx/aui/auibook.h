@@ -26,7 +26,8 @@
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}
            Defined as wxAUI_NB_TOP | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
-           wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ACTIVE_TAB.
+           wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ACTIVE_TAB |
+           wxAUI_NB_MIDDLE_CLICK_CLOSE.
     @style{wxAUI_NB_TAB_SPLIT}
            Allows the tab control to be split by dragging a tab.
     @style{wxAUI_NB_TAB_MOVE}
@@ -45,6 +46,8 @@
            With this style, the close button is visible on the active tab.
     @style{wxAUI_NB_CLOSE_ON_ALL_TABS}
            With this style, the close button is visible on all tabs.
+    @style{wxAUI_NB_MIDDLE_CLICK_CLOSE}
+           With this style, middle click on a tab closes the tab.
     @style{wxAUI_NB_TOP}
            With this style, tabs are drawn along the top of the notebook.
     @style{wxAUI_NB_BOTTOM}
