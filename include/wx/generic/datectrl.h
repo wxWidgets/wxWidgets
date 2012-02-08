@@ -82,6 +82,10 @@ private:
     void OnSize(wxSizeEvent& event);
     void OnFocus(wxFocusEvent& event);
 
+#ifdef __WXOSX_COCOA__
+    virtual void OSXGenerateEvent(const wxDateTime& dt) {}
+#endif
+
     wxComboCtrl* m_combo;
     wxCalendarComboPopup* m_popup;
 
