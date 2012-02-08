@@ -6,6 +6,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/// Represents an invalid position.
+#define wxSTC_INVALID_POSITION -1
+
 /**
     @class wxStyledTextEvent
 
@@ -548,7 +551,7 @@ public:
     void BraceHighlight(int pos1, int pos2);
 
     /**
-        Find the position of a matching brace or INVALID_POSITION if no match.
+        Find the position of a matching brace or wxSTC_INVALID_POSITION if no match.
     */
     int BraceMatch(int pos);
 
@@ -1084,13 +1087,13 @@ public:
 
     /**
         Retrieve the position of the end of the selection at the given line
-        (INVALID_POSITION if no selection on this line).
+        (wxSTC_INVALID_POSITION if no selection on this line).
     */
     int GetLineSelEndPosition(int line);
 
     /**
         Retrieve the position of the start of the selection at the given line
-        (INVALID_POSITION if no selection on this line).
+        (wxSTC_INVALID_POSITION if no selection on this line).
     */
     int GetLineSelStartPosition(int line);
 
@@ -1804,7 +1807,7 @@ public:
 
     /**
         Find the position from a point within the window but return
-        INVALID_POSITION if not close to text.
+        wxSTC_INVALID_POSITION if not close to text.
     */
     int PositionFromPointClose(int x, int y);
 
@@ -2985,7 +2988,7 @@ public:
 
     /**
        Find the position of a character from a point within the window.
-       Return INVALID_POSITION if not close to text.
+       Return wxSTC_INVALID_POSITION if not close to text.
     */
     int CharPositionFromPointClose(int x, int y);
 
