@@ -807,6 +807,23 @@ public:
     virtual wxCompositionMode GetCompositionMode() const;
 
 
+    /**
+       Push the current state of the context's transformation matrix on a
+       stack.
+
+       @see wxGraphicsContext::PopState
+    */
+    virtual void PushState() = 0;
+
+    /**
+       Pops a stored state from the stack and sets the current transformation
+       matrix to that state.
+
+       @see wxGraphicsContext::PopState
+    */
+    virtual void PopState() = 0;
+
+
     virtual void EnableOffset(bool enable = true);
     void DisableOffset();
     bool OffsetEnabled();

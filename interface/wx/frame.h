@@ -234,7 +234,7 @@ public:
     */
     virtual wxStatusBar* CreateStatusBar(int number = 1, long style = wxSTB_DEFAULT_STYLE,
                                          wxWindowID id = 0,
-                                         const wxString& name = wxStatusLineNameStr);
+                                         const wxString& name = wxStatusBarNameStr);
 
     /**
         Creates a toolbar at the top or left of the frame.
