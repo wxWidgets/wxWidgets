@@ -4021,6 +4021,9 @@ public:
     @event{EVT_MOVE_START(func)}
         Process a @c wxEVT_MOVE_START event, which is generated when the user starts
         to move or size a window. wxMSW only.
+    @event{EVT_MOVING(func)}
+        Process a @c wxEVT_MOVING event, which is generated while the user is
+        moving the window. wxMSW only.
     @event{EVT_MOVE_END(func)}
         Process a @c wxEVT_MOVE_END event, which is generated when the user stops
         moving or sizing a window. wxMSW only.
