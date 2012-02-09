@@ -1462,7 +1462,7 @@ HTML markup. Note that the markup has to be escaped:
 @row3col{max, integer,
     Maximum allowed value (default: 100).}
 @row3col{pagesize, integer,
-    Line size; number of steps the slider moves when the user moves
+    Page size; number of steps the slider moves when the user moves
     pages up or down (default: unset).}
 @row3col{linesize, integer,
     Line size; number of steps the slider moves when the user moves it
