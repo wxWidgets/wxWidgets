@@ -133,6 +133,11 @@ bool wxNativeFontInfo::GetUnderlined() const
     return false;
 }
 
+bool wxNativeFontInfo::GetStrikethrough() const
+{
+    return false;
+}
+
 wxString wxNativeFontInfo::GetFaceName() const
 {
     // the Pango "family" is the wx "face name"
@@ -813,6 +818,11 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
 {
     // can't do this under X
+}
+
+void wxNativeFontInfo::SetStrikethrough(bool WXUNUSED(strikethrough))
+{
+    // this is not supported by Pango fonts neither
 }
 
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
