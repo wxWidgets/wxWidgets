@@ -30,4 +30,13 @@
 #   endif
 #endif
 
+#if wxUSE_DATAOBJ
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxDataObject not supported in wxDFB"
+#   else
+#       undef wxUSE_DATAOBJ
+#       define wxUSE_DATAOBJ 0
+#   endif
+#endif
+
 #endif /* _WX_DFB_CHKCONF_H_ */
