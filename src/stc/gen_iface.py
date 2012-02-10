@@ -89,7 +89,7 @@ methodOverrideMap = {
 
                  '''void %s(const wxString& text) {
                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                    SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);''',
+                    SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
                  0),
 
     'AddStyledText' : (0,
@@ -104,7 +104,7 @@ methodOverrideMap = {
 
                  '''void %s(const wxString& text) {
                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                    SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);''',
+                    SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
                  0),
 
     'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0, 0),
@@ -597,7 +597,7 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);''',
+         return SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
      0),
 
     'ReplaceTargetRE' :
@@ -607,7 +607,7 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);''',
+         return SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
      0),
 
     'SearchInTarget' :
@@ -617,7 +617,7 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);''',
+         return SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
      0),
 
     # not sure what to do about these yet
