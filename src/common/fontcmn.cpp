@@ -603,12 +603,12 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
     long l;
-    short version;
+    unsigned long version;
 
     wxStringTokenizer tokenizer(s, wxT(";"));
 
     wxString token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&version) || version < 0 || version > 1 )
+    if ( !token.ToULong(&version) || version > 1 )
         return false;
 
     token = tokenizer.GetNextToken();
