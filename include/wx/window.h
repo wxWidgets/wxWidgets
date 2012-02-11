@@ -1029,8 +1029,7 @@ public:
     wxColour GetForegroundColour() const;
 
         // Set/get the background style.
-    virtual bool SetBackgroundStyle(wxBackgroundStyle style)
-        { m_backgroundStyle = style; return true; }
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style);
     wxBackgroundStyle GetBackgroundStyle() const
         { return m_backgroundStyle; }
 
@@ -1038,6 +1037,13 @@ public:
         // wxStaticText and wxCheckBox and the background should be adapted
         // from a parent window
     virtual bool HasTransparentBackground() { return false; }
+
+        // Returns true if background transparency is supported for this
+        // window, i.e. if calling SetBackgroundStyle(wxBG_STYLE_TRANSPARENT)
+        // has a chance of succeeding. If reason argument is non-NULL, returns a
+        // user-readable explanation of why it isn't supported if the return
+        // value is false.
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const;
 
         // set/retrieve the font for the window (SetFont() returns true if the
         // font really changed)

@@ -32,6 +32,7 @@
 
 #include "wx/custombgwin.h"
 #include "wx/dcbuffer.h"
+#include "wx/artprov.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -146,13 +147,28 @@ public:
     ControlWithTransparency(wxWindow *parent,
                             const wxPoint& pos,
                             const wxSize& size)
-        : wxWindow(parent, wxID_ANY, pos, size, wxBORDER_NONE)
     {
+        wxString reason;
+        if ( parent->IsTransparentBackgroundSupported(&reason) )
+        {
+            SetBackgroundStyle (wxBG_STYLE_TRANSPARENT);
+            m_message = "This is custom control with transparency";
+        }
+        else
+        {
+            m_message = "Transparency not supported, check tooltip.";
+        }
+
+        Create (parent, wxID_ANY, pos, size, wxBORDER_NONE);
         Connect(wxEVT_PAINT,
                 wxPaintEventHandler(ControlWithTransparency::OnPaint));
-    }
 
-    virtual bool HasTransparentBackground() { return true; }
+        if ( !reason.empty() )
+        {
+            // This can be only done now, after creating the window.
+            SetToolTip(reason);
+        }
+    }
 
 private:
     void OnPaint( wxPaintEvent& WXUNUSED(event) )
@@ -165,8 +181,17 @@ private:
 
         dc.SetTextForeground(*wxBLUE);
         dc.SetBackgroundMode(wxTRANSPARENT);
-        dc.DrawText("This is custom control with transparency", 0, 2);
+        dc.DrawText(m_message, 0, 2);
+
+        // Draw some bitmap/icon to ensure transparent bitmaps are indeed
+        //  transparent on transparent windows
+        wxBitmap bmp(wxArtProvider::GetBitmap(wxART_WARNING, wxART_MENU));
+        wxIcon icon(wxArtProvider::GetIcon(wxART_GOTO_LAST, wxART_MENU));
+        dc.DrawBitmap (bmp, GetSize().x - 1 - bmp.GetWidth(), 2);
+        dc.DrawIcon(icon, GetSize().x - 1 - bmp.GetWidth()-icon.GetWidth(), 2);
     }
+
+    wxString m_message;
 };
 
 // ----------------------------------------------------------------------------
@@ -329,7 +354,7 @@ MyCanvas::MyCanvas(wxFrame *parent)
                      "right one drawn directly",
                      wxPoint(150, 20));
 
-    new ControlWithTransparency(this, wxPoint(65, 125), wxSize(300, 22));
+    new ControlWithTransparency(this, wxPoint(65, 125), wxSize(350, 22));
 
     SetFocusIgnoringChildren();
     SetBackgroundColour(*wxCYAN);

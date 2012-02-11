@@ -81,6 +81,7 @@ public:
     virtual bool SetFont( const wxFont &font );
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) ;
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const;
 
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
@@ -398,7 +399,6 @@ private:
     // are already at the end)
     bool DoScrollByUnits(ScrollDir dir, ScrollUnit unit, int units);
     virtual void AddChildGTK(wxWindowGTK* child);
-
 
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
     wxDECLARE_NO_COPY_CLASS(wxWindowGTK);

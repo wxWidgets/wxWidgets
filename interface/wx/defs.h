@@ -546,9 +546,14 @@ enum wxBackgroundStyle
     /* this style is deprecated and doesn't do anything, don't use */
     wxBG_STYLE_COLOUR,
 
-    /* this is a Mac-only style, don't use in portable code */
-    wxBG_STYLE_TRANSPARENT,
+    /**
+        Indicates that the window background is not erased, letting the parent
+        window show through.
 
+        Currently this style is only supported in wxOSX and wxGTK with
+        compositing available, see wxWindow::IsTransparentBackgroundSupported().
+     */
+    wxBG_STYLE_TRANSPARENT,
 };
 
 

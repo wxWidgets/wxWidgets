@@ -1553,6 +1553,39 @@ wxColour wxWindowBase::GetForegroundColour() const
         return m_foregroundColour;
 }
 
+bool wxWindowBase::SetBackgroundStyle(wxBackgroundStyle style)
+{
+    // The checks below shouldn't be triggered if we're not really changing the
+    // style.
+    if ( style == m_backgroundStyle )
+        return true;
+
+    // Transparent background style can be only set before creation because of
+    // wxGTK limitation.
+    wxCHECK_MSG( (style != wxBG_STYLE_TRANSPARENT) || !GetHandle(),
+                 false,
+                 "wxBG_STYLE_TRANSPARENT style can only be set before "
+                 "Create()-ing the window." );
+
+    // And once it is set, wxBG_STYLE_TRANSPARENT can't be unset.
+    wxCHECK_MSG( (m_backgroundStyle != wxBG_STYLE_TRANSPARENT) ||
+                 (style == wxBG_STYLE_TRANSPARENT),
+                 false,
+                 "wxBG_STYLE_TRANSPARENT can't be unset once it was set." );
+
+    m_backgroundStyle = style;
+
+    return true;
+}
+
+bool wxWindowBase::IsTransparentBackgroundSupported(wxString *reason) const
+{
+    if ( reason )
+        *reason = _("This platform does not support background transparency.");
+
+    return false;
+}
+
 bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
 {
     if ( colour == m_backgroundColour )

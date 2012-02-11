@@ -1755,10 +1755,56 @@ public:
         @c wxBG_STYLE_PAINT is a simpler and more efficient solution to the same
         problem.
 
+
+        Under wxGTK and wxOSX, you can use ::wxBG_STYLE_TRANSPARENT to obtain
+        full transparency of the window background. Note that wxGTK supports
+        this only since GTK 2.12 with a compositing manager enabled, call
+        IsTransparentBackgroundSupported() to check whether this is the case.
+
+        Also, on order for @c SetBackgroundStyle(wxBG_STYLE_TRANSPARENT) to
+        work, it must be called before Create(). If you're using your own
+        wxWindow-derived class you should write your code in the following way:
+        @code
+            class MyWidget : public wxWindow
+            {
+            public:
+                MyWidget(wxWindow* parent, ...)
+                    : wxWindow() // Use default ctor here!
+                {
+                    // Do this first:
+                    SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+
+                    // And really create the window afterwards:
+                    Create(parent, ...);
+                }
+            };
+        @endcode
+
         @see SetBackgroundColour(), GetForegroundColour(),
-             SetTransparent()
+             SetTransparent(), IsTransparentBackgroundSupported()
     */
     virtual bool SetBackgroundStyle(wxBackgroundStyle style);
+
+    /**
+        Checks whether using transparent background might work.
+
+        If this function returns @false, calling SetBackgroundStyle() with
+        ::wxBG_STYLE_TRANSPARENT is not going to work. If it returns @true,
+        setting transparent style should normally succeed.
+
+        Notice that this function would typically be called on the parent of a
+        window you want to set transparent background style for as the window
+        for which this method is called must be fully created.
+
+        @param reason
+            If not @NULL, a reason message is provided if transparency is not
+            supported.
+
+        @return @true if background transparency is supported.
+
+        @since 2.9.4
+    */
+    virtual bool IsTransparentBackgroundSupported(wxString *reason = NULL) const;
 
     /**
         Sets the font for this window. This function should not be called for the

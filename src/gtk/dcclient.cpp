@@ -129,7 +129,11 @@ enum wxPoolGCType
    wxTEXT_SCREEN,
    wxBG_SCREEN,
    wxPEN_SCREEN,
-   wxBRUSH_SCREEN
+   wxBRUSH_SCREEN,
+   wxTEXT_COLOUR_ALPHA,
+   wxBG_COLOUR_ALPHA,
+   wxPEN_COLOUR_ALPHA,
+   wxBRUSH_COLOUR_ALPHA
 };
 
 struct wxGC
@@ -374,6 +378,13 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
             m_brushGC = wxGetPoolGC( m_gdkwindow, wxBRUSH_SCREEN );
             m_textGC = wxGetPoolGC( m_gdkwindow, wxTEXT_SCREEN );
             m_bgGC = wxGetPoolGC( m_gdkwindow, wxBG_SCREEN );
+        }
+        else if (m_cmap == gdk_screen_get_rgba_colormap(gdk_colormap_get_screen(m_cmap)))
+        {
+            m_penGC = wxGetPoolGC( m_gdkwindow, wxPEN_COLOUR_ALPHA );
+            m_brushGC = wxGetPoolGC( m_gdkwindow, wxBRUSH_COLOUR_ALPHA );
+            m_textGC = wxGetPoolGC( m_gdkwindow, wxTEXT_COLOUR_ALPHA );
+            m_bgGC = wxGetPoolGC( m_gdkwindow, wxBG_COLOUR_ALPHA );
         }
         else
         {

@@ -48,6 +48,15 @@ using namespace wxGTKImpl;
 #include <gdk/gdkkeysyms-compat.h>
 #endif
 
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/graphics.h"
+#include "wx/scopedptr.h"
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+// gdk_window_set_composited() is only supported since 2.12
+#define wxGTK_VERSION_REQUIRED_FOR_COMPOSITING 2,12,0
+#define wxGTK_HAS_COMPOSITING_SUPPORT GTK_CHECK_VERSION(2,12,0)
+
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
@@ -1979,6 +1988,25 @@ void wxWindowGTK::GTKHandleRealized()
         );
     }
 
+    // Use composited window if background is transparent, if supported.
+    if (m_backgroundStyle == wxBG_STYLE_TRANSPARENT)
+    {
+#if wxGTK_HAS_COMPOSITING_SUPPORT
+        if (IsTransparentBackgroundSupported())
+        {
+            GdkWindow* const window = GTKGetDrawingWindow();
+            if (window)
+                gdk_window_set_composited(window, true);
+        }
+        else
+#endif // wxGTK_HAS_COMPOSITING_SUPPORT
+        {
+            // We revert to erase mode if transparency is not supported
+            m_backgroundStyle = wxBG_STYLE_ERASE;
+        }
+    }
+
+
     // We cannot set colours and fonts before the widget
     // been realized, so we do this directly after realization
     // or otherwise in idle time
@@ -2318,6 +2346,21 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
 void wxWindowGTK::PostCreation()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
+
+#if wxGTK_HAS_COMPOSITING_SUPPORT
+    // Set RGBA visual as soon as possible to minimize the possibility that
+    // somebody uses the wrong one.
+    if ( m_backgroundStyle == wxBG_STYLE_TRANSPARENT &&
+            IsTransparentBackgroundSupported() )
+    {
+        GdkScreen *screen = gtk_widget_get_screen (m_widget);
+
+        GdkColormap *rgba_colormap = gdk_screen_get_rgba_colormap (screen);
+
+        if (rgba_colormap)
+            gtk_widget_set_colormap(m_widget, rgba_colormap);
+    }
+#endif // wxGTK_HAS_COMPOSITING_SUPPORT
 
     if (m_wxwindow)
     {
@@ -3692,6 +3735,24 @@ void wxWindowGTK::GtkSendPaintEvents()
 
     switch ( GetBackgroundStyle() )
     {
+#if wxUSE_GRAPHICS_CONTEXT
+        case wxBG_STYLE_TRANSPARENT:
+            {
+                // Set a transparent background, so that overlaying in parent
+                // might indeed let see through where this child did not
+                // explicitly paint.
+                // NB: it works also for top level windows (but this is the
+                // windows manager which then does the compositing job)
+                wxScopedPtr<wxGraphicsContext> gc (wxGraphicsContext::Create( this ));
+                cairo_t *cairo_context = (cairo_t *)gc->GetNativeContext();
+
+                gc->Clip (m_nativeUpdateRegion);
+                cairo_set_operator (cairo_context, CAIRO_OPERATOR_CLEAR);
+                cairo_paint (cairo_context);
+                break;
+            }
+#endif // wxUSE_GRAPHICS_CONTEXT
+
         case wxBG_STYLE_ERASE:
             {
                 wxWindowDC dc( (wxWindow*)this );
@@ -3767,6 +3828,39 @@ void wxWindowGTK::GtkSendPaintEvents()
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
     HandleWindowEvent( paint_event );
+
+#if wxUSE_GRAPHICS_CONTEXT
+    { // now composite children which need it
+        wxScopedPtr<wxGraphicsContext> gc (wxGraphicsContext::Create( this ));
+        cairo_t *cairo_context = (cairo_t *)gc->GetNativeContext();
+
+        // Overlay all our composite children on top of the painted area
+        wxWindowList::compatibility_iterator node;
+        for ( node = m_children.GetFirst(); node ; node = node->GetNext() )
+        {
+            wxWindow *compositeChild = node->GetData();
+            if (compositeChild->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT)
+            {
+                GtkWidget *child = compositeChild->m_wxwindow;
+
+                // The source data is the (composited) child
+                gdk_cairo_set_source_pixmap (cairo_context, child->window,
+                                            child->allocation.x,
+                                            child->allocation.y);
+
+                // Draw no more than our expose event intersects our child
+                gc->Clip (m_nativeUpdateRegion);
+                gc->Clip (child->allocation.x, child->allocation.y,
+                    child->allocation.width, child->allocation.height);
+
+                cairo_set_operator (cairo_context, CAIRO_OPERATOR_OVER);
+                cairo_paint (cairo_context);
+
+                gc->ResetClip ();
+            }
+        }
+    }
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     m_clipPaintRegion = false;
 
@@ -3971,21 +4065,24 @@ void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 
 bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 {
-    wxWindowBase::SetBackgroundStyle(style);
+    if (!wxWindowBase::SetBackgroundStyle(style))
+        return false;
 
-    if ( style == wxBG_STYLE_PAINT )
+    GdkWindow *window;
+    if ( m_wxwindow )
     {
-        GdkWindow *window;
-        if ( m_wxwindow )
-        {
-            window = GTKGetDrawingWindow();
-        }
-        else
-        {
-            GtkWidget * const w = GetConnectWidget();
-            window = w ? gtk_widget_get_window(w) : NULL;
-        }
+        window = GTKGetDrawingWindow();
+    }
+    else
+    {
+        GtkWidget * const w = GetConnectWidget();
+        window = w ? gtk_widget_get_window(w) : NULL;
+    }
 
+    bool wantNoBackPixmap = style == wxBG_STYLE_PAINT || style == wxBG_STYLE_TRANSPARENT;
+
+    if ( wantNoBackPixmap )
+    {
         if (window)
         {
             // Make sure GDK/X11 doesn't refresh the window
@@ -4009,6 +4106,55 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
     }
 
     return true;
+}
+
+bool wxWindowGTK::IsTransparentBackgroundSupported(wxString* reason) const
+{
+#if wxGTK_HAS_COMPOSITING_SUPPORT && wxUSE_GRAPHICS_CONTEXT
+    if (gtk_check_version(wxGTK_VERSION_REQUIRED_FOR_COMPOSITING) != NULL)
+    {
+        if (reason)
+        {
+            *reason = _("GTK+ installed on this machine is too old to "
+                        "support screen compositing, please install "
+                        "GTK+ 2.12 or later.");
+        }
+
+        return false;
+    }
+
+    // NB: We don't check here if the particular kind of widget supports
+    // transparency, we check only if it would be possible for a generic window
+
+    wxCHECK_MSG ( m_widget, false, "Window must be created first" );
+
+    if (!gdk_screen_is_composited(gtk_widget_get_screen(m_widget)))
+    {
+        if (reason)
+        {
+            *reason = _("Compositing not supported by this system, "
+                        "please enable it in your Window Manager.");
+        }
+
+        return false;
+    }
+
+    return true;
+#elif !wxGTK_HAS_COMPOSITING_SUPPORT
+    if (reason)
+    {
+        *reason = _("This program was compiled with a too old version of GTK+, "
+                    "please rebuild with GTK+ 2.12 or newer.");
+    }
+#elif !wxUSE_GRAPHICS_CONTEXT
+    if (reason)
+    {
+        *reason = _("wxUSE_GRAPHICS_CONTEXT required for compositing window, "
+                    "please rebuild wxWidgets with support for it.");
+    }
+#endif // wxGTK_HAS_COMPOSITING_SUPPORT/!wxGTK_HAS_COMPOSITING_SUPPORT
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------
