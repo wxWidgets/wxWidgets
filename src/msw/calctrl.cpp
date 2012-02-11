@@ -120,8 +120,8 @@ wxCalendarCtrl::Create(wxWindow *parent,
 
     SetDate(dt.IsValid() ? dt : wxDateTime::Today());
 
-    if ( SetHolidayAttrs() )
-        UpdateMarks();
+    SetHolidayAttrs();
+    UpdateMarks();
 
     Connect(wxEVT_LEFT_DOWN,
             wxMouseEventHandler(wxCalendarCtrl::MSWOnClick));
@@ -462,8 +462,8 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     {
                         // month changed, need to update the holidays if we use
                         // them
-                        if ( SetHolidayAttrs() )
-                            UpdateMarks();
+                        SetHolidayAttrs();
+                        UpdateMarks();
                     }
                 }
             }
