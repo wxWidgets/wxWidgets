@@ -361,6 +361,14 @@ static inline gint wx_gdk_window_get_width(GdkWindow* window)
 }
 #define gdk_window_get_width wx_gdk_window_get_width
 
+#if GTK_CHECK_VERSION(2,10,0)
+static inline void wx_gdk_cairo_set_source_window(cairo_t* cr, GdkWindow* window, gdouble x, gdouble y)
+{
+    gdk_cairo_set_source_pixmap(cr, window, x, y);
+}
+#define gdk_cairo_set_source_window wx_gdk_cairo_set_source_window
+#endif
+
 #endif // !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
 
 

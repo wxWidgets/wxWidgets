@@ -48,11 +48,6 @@ using namespace wxGTKImpl;
 #include <gdk/gdkkeysyms-compat.h>
 #endif
 
-#if wxUSE_GRAPHICS_CONTEXT
-#include "wx/graphics.h"
-#include "wx/scopedptr.h"
-#endif // wxUSE_GRAPHICS_CONTEXT
-
 // gdk_window_set_composited() is only supported since 2.12
 #define wxGTK_VERSION_REQUIRED_FOR_COMPOSITING 2,12,0
 #define wxGTK_HAS_COMPOSITING_SUPPORT GTK_CHECK_VERSION(2,12,0)
@@ -3703,7 +3698,9 @@ void wxWindowGTK::GtkSendPaintEvents()
         m_updateRegion.Clear();
         return;
     }
-
+#if wxGTK_HAS_COMPOSITING_SUPPORT
+    cairo_t* cr = NULL;
+#endif
     // Clip to paint region in wxClientDC
     m_clipPaintRegion = true;
 
@@ -3735,23 +3732,26 @@ void wxWindowGTK::GtkSendPaintEvents()
 
     switch ( GetBackgroundStyle() )
     {
-#if wxUSE_GRAPHICS_CONTEXT
         case wxBG_STYLE_TRANSPARENT:
+#if wxGTK_HAS_COMPOSITING_SUPPORT
+            if (IsTransparentBackgroundSupported())
             {
                 // Set a transparent background, so that overlaying in parent
                 // might indeed let see through where this child did not
                 // explicitly paint.
                 // NB: it works also for top level windows (but this is the
                 // windows manager which then does the compositing job)
-                wxScopedPtr<wxGraphicsContext> gc (wxGraphicsContext::Create( this ));
-                cairo_t *cairo_context = (cairo_t *)gc->GetNativeContext();
+                cr = gdk_cairo_create(m_wxwindow->window);
+                gdk_cairo_region(cr, m_nativeUpdateRegion.GetRegion());
+                cairo_clip(cr);
 
-                gc->Clip (m_nativeUpdateRegion);
-                cairo_set_operator (cairo_context, CAIRO_OPERATOR_CLEAR);
-                cairo_paint (cairo_context);
-                break;
+                cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
+                cairo_paint(cr);
+                cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+                cairo_surface_flush(cairo_get_target(cr));
             }
-#endif // wxUSE_GRAPHICS_CONTEXT
+#endif // wxGTK_HAS_COMPOSITING_SUPPORT
+            break;
 
         case wxBG_STYLE_ERASE:
             {
@@ -3829,11 +3829,9 @@ void wxWindowGTK::GtkSendPaintEvents()
     paint_event.SetEventObject( this );
     HandleWindowEvent( paint_event );
 
-#if wxUSE_GRAPHICS_CONTEXT
+#if wxGTK_HAS_COMPOSITING_SUPPORT
+    if (IsTransparentBackgroundSupported())
     { // now composite children which need it
-        wxScopedPtr<wxGraphicsContext> gc (wxGraphicsContext::Create( this ));
-        cairo_t *cairo_context = (cairo_t *)gc->GetNativeContext();
-
         // Overlay all our composite children on top of the painted area
         wxWindowList::compatibility_iterator node;
         for ( node = m_children.GetFirst(); node ; node = node->GetNext() )
@@ -3841,26 +3839,28 @@ void wxWindowGTK::GtkSendPaintEvents()
             wxWindow *compositeChild = node->GetData();
             if (compositeChild->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT)
             {
+                if (cr == NULL)
+                {
+                    cr = gdk_cairo_create(m_wxwindow->window);
+                    gdk_cairo_region(cr, m_nativeUpdateRegion.GetRegion());
+                    cairo_clip(cr);
+                }
+
                 GtkWidget *child = compositeChild->m_wxwindow;
+                GtkAllocation alloc;
+                gtk_widget_get_allocation(child, &alloc);
 
                 // The source data is the (composited) child
-                gdk_cairo_set_source_pixmap (cairo_context, child->window,
-                                            child->allocation.x,
-                                            child->allocation.y);
+                gdk_cairo_set_source_window(
+                    cr, gtk_widget_get_window(child), alloc.x, alloc.y);
 
-                // Draw no more than our expose event intersects our child
-                gc->Clip (m_nativeUpdateRegion);
-                gc->Clip (child->allocation.x, child->allocation.y,
-                    child->allocation.width, child->allocation.height);
-
-                cairo_set_operator (cairo_context, CAIRO_OPERATOR_OVER);
-                cairo_paint (cairo_context);
-
-                gc->ResetClip ();
+                cairo_paint(cr);
             }
         }
+        if (cr)
+            cairo_destroy(cr);
     }
-#endif // wxUSE_GRAPHICS_CONTEXT
+#endif // wxGTK_HAS_COMPOSITING_SUPPORT
 
     m_clipPaintRegion = false;
 
@@ -4110,7 +4110,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
 bool wxWindowGTK::IsTransparentBackgroundSupported(wxString* reason) const
 {
-#if wxGTK_HAS_COMPOSITING_SUPPORT && wxUSE_GRAPHICS_CONTEXT
+#if wxGTK_HAS_COMPOSITING_SUPPORT
     if (gtk_check_version(wxGTK_VERSION_REQUIRED_FOR_COMPOSITING) != NULL)
     {
         if (reason)
@@ -4140,17 +4140,11 @@ bool wxWindowGTK::IsTransparentBackgroundSupported(wxString* reason) const
     }
 
     return true;
-#elif !wxGTK_HAS_COMPOSITING_SUPPORT
+#else
     if (reason)
     {
         *reason = _("This program was compiled with a too old version of GTK+, "
                     "please rebuild with GTK+ 2.12 or newer.");
-    }
-#elif !wxUSE_GRAPHICS_CONTEXT
-    if (reason)
-    {
-        *reason = _("wxUSE_GRAPHICS_CONTEXT required for compositing window, "
-                    "please rebuild wxWidgets with support for it.");
     }
 #endif // wxGTK_HAS_COMPOSITING_SUPPORT/!wxGTK_HAS_COMPOSITING_SUPPORT
 
