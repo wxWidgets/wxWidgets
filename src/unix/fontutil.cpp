@@ -272,6 +272,11 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
     wxFAIL_MSG( "not implemented" );
 }
 
+void wxNativeFontInfo::SetStrikethrough(bool WXUNUSED(strikethrough))
+{
+    wxFAIL_MSG( "not implemented" );
+}
+
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     pango_font_description_set_family(description, wxPANGO_CONV(facename));
