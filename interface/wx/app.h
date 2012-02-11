@@ -854,17 +854,6 @@ public:
     */
     virtual void MacReopenApp();
 
-
-    static long GetMacAboutMenuItemId();
-    static long GetMacPreferencesMenuItemId();
-    static long GetMacExitMenuItemId();
-    static wxString GetMacHelpMenuTitleName();
-
-    static void SetMacAboutMenuItemId(long val);
-    static void SetMacPreferencesMenuItemId(long val);
-    static void SetMacExitMenuItemId(long val);
-    static void SetMacHelpMenuTitleName(const wxString& val);
-
     //@}
 
 };
