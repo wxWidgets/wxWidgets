@@ -191,6 +191,11 @@ public:
 
     virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column);
 
+    // These methods are specific to generic wxDataViewCtrl implementation and
+    // should not be used in portable code.
+    wxColour GetAlternateRowColour() const { return m_alternateRowColour; }
+    void SetAlternateRowColour(const wxColour& colour);
+
 protected:
     virtual void EnsureVisible( int row, int column );
 
@@ -244,6 +249,9 @@ private:
     wxDataViewModelNotifier  *m_notifier;
     wxDataViewMainWindow     *m_clientArea;
     wxDataViewHeaderWindow   *m_headerArea;
+
+    // user defined color to draw row lines, may be invalid
+    wxColour m_alternateRowColour;
 
     // the index of the column currently used for sorting or -1
     int m_sortingColumnIdx;

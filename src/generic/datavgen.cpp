@@ -1745,6 +1745,37 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         x_last += col->GetWidth();
     }
 
+    // Draw background of alternate rows specially if required
+    if ( m_owner->HasFlag(wxDV_ROW_LINES) )
+    {
+        wxColour altRowColour = m_owner->m_alternateRowColour;
+        if ( !altRowColour.IsOk() )
+        {
+            // Determine the alternate rows colour automatically from the
+            // background colour.
+            const wxColour bgColour = m_owner->GetBackgroundColour();
+
+            // Depending on the background, alternate row color
+            // will be 3% more dark or 50% brighter.
+            int alpha = bgColour.GetRGB() > 0x808080 ? 97 : 150;
+            altRowColour = bgColour.ChangeLightness(alpha);
+        }
+
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(wxBrush(altRowColour));
+
+        for (unsigned int item = item_start; item < item_last; item++)
+        {
+            if ( item % 2 )
+            {
+                dc.DrawRectangle(x_start,
+                                 GetLineStart(item),
+                                 GetClientSize().GetWidth(),
+                                 GetLineHeight(item));
+            }
+        }
+    }
+
     // Draw horizontal rules if required
     if ( m_owner->HasFlag(wxDV_HORIZ_RULES) )
     {
@@ -4929,6 +4960,11 @@ bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
         return m_clientArea->IsRowSelected(row);
     }
     return false;
+}
+
+void wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)
+{
+    m_alternateRowColour = colour;
 }
 
 void wxDataViewCtrl::SelectAll()
