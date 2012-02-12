@@ -824,12 +824,6 @@ public:
     virtual void SetValue(const wxString& value);
 
     /**
-        Same as SetValue(), but also sends wxCommandEvent of type
-        @c wxEVT_COMMAND_TEXT_UPDATED if @a withEvent is @true.
-    */
-    void SetValueWithEvent(const wxString& value, bool withEvent = true);
-
-    /**
         Show the popup.
 
         @deprecated Use Popup() instead.
