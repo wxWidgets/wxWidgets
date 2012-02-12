@@ -1170,7 +1170,7 @@ void MyFrame::OnAddTreeItem(wxCommandEvent& WXUNUSED(event))
     if (ctrl->IsContainer(selected)) {
         wxDataViewItem newitem = ctrl->AppendItem( selected, "Item", 0 );
         ctrl->Select(newitem);
-        ctrl->StartEditor(newitem, 0);
+        ctrl->EditItem(newitem, ctrl->GetColumn(0));
     }
 }
 

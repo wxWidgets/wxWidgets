@@ -421,6 +421,8 @@ Deprecated methods and their replacements
   instead of "char**". As the client data is typically untyped, you should
   simply remove the casts to "char**" which you probably have in your code if
   you use these functions.
+- wxDataViewCtrl::StartEditor(item, n) taking column index is now deprecated,
+  use EditItem(item, GetColumn(n)), which takes the column itself, instead.
 
 
 Major new features in this release
