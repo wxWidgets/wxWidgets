@@ -28,6 +28,9 @@ public:
           m_shiftDown(shiftDown),
           m_altDown(altDown),
           m_metaDown(metaDown)
+#ifdef __WXOSX__
+          ,m_rawControlDown(false)
+#endif
     {
     }
 
