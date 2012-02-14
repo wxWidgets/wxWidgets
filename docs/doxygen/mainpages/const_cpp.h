@@ -35,6 +35,7 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WINDOWS__, any Windows, you may also use __WXMSW__}
 @itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
 @itemdef{__WIN32__, Win32 API}
+@itemdef{__WIN64__, Win64 (mostly same as Win32 but data type sizes are different)}
 @itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
 @itemdef{__WXCOCOA__, OS X using wxCocoa Port}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
