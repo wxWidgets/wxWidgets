@@ -482,22 +482,19 @@ public:
 
 
 /**
-    @class wxMBConvFile
-
-    This class used to define the class instance @b wxConvFileName, but
-    nowadays @b wxConvFileName is either of type wxConvLibc (on most platforms)
-    or wxConvUTF8 (on MacOS X).
+    Conversion object used for converting file names from their external
+    representation to the one used inside the program.
 
     @b wxConvFileName converts filenames between filesystem multibyte encoding
     and Unicode. @b wxConvFileName can also be set to a something else at
-    run-time which is used e.g. by wxGTK to use a class which checks the
+    run-time which is used e.g. by wxGTK to use an object which checks the
     environment variable @b G_FILESYSTEM_ENCODING indicating that filenames
     should not be interpreted as UTF8 and also for converting invalid UTF8
     characters (e.g. if there is a filename in iso8859_1) to strings with octal
     values.
 
     Since some platforms (such as Win32) use Unicode in the filenames,
-    and others (such as Unix) use multibyte encodings, this class should only
+    and others (such as Unix) use multibyte encodings, this object should only
     be used directly if wxMBFILES is defined to 1. A convenience macro,
     @c wxFNCONV, is defined to @c wxConvFileName->cWX2MB in this case. You
     could use it like this:
@@ -508,7 +505,7 @@ public:
     @endcode
 
     (although it would be better to just use wxFopen(name, "r") in this
-    particular case, you only need to use this class for functions taking file
+    particular case, you only need to use this object for functions taking file
     names not wrapped by wxWidgets.)
 
     @library{wxbase}
@@ -516,7 +513,4 @@ public:
 
     @see @ref overview_mbconv
 */
-class wxMBConvFile : public wxMBConv
-{
-public:
-};
+extern wxMBConv* wxConvFileName;
