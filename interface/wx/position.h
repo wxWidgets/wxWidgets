@@ -71,10 +71,10 @@ public:
     */
     bool operator ==(const wxPosition& pos) const;
     bool operator !=(const wxPosition& pos) const;
-    wxPosition& operator +=(const wxPosition& pos) const;
-    wxPosition& operator -=(const wxPosition& pos) const;
-    wxPosition& operator +=(const wxSize& size) const;
-    wxPosition& operator -=(const wxSize& size) const;
+    wxPosition& operator +=(const wxPosition& pos);
+    wxPosition& operator -=(const wxPosition& pos);
+    wxPosition& operator +=(const wxSize& size);
+    wxPosition& operator -=(const wxSize& size);
     wxPosition operator +(const wxPosition& pos) const;
     wxPosition operator -(const wxPosition& pos) const;
     wxPosition operator +(const wxSize& size) const;
