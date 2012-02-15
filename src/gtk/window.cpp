@@ -1141,7 +1141,7 @@ static void AdjustEventButtonState(wxMouseEvent& event)
     }
 }
 
-// find the window to send the mouse event too
+// find the window to send the mouse event to
 static
 wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 {
@@ -1191,6 +1191,8 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
         else
         {
             if ((child->m_wxwindow == NULL) &&
+                !gtk_widget_get_has_window(child->m_widget) &&
+                win->IsClientAreaChild(child) &&
                 (child->m_x <= xx) &&
                 (child->m_y <= yy) &&
                 (child->m_x+child->m_width  >= xx) &&
