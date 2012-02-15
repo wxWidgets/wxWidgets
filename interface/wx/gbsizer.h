@@ -48,9 +48,9 @@ public:
     void SetRow(int row);
 
     /**
-        Checks if the position is valid. An invalid position is (-1,-1).
+        Compare inequality of two wxGBPositions.
     */
-    bool operator!(const wxGBPosition& p) const;
+    bool operator!=(const wxGBPosition& p) const;
 
     /**
         Compare equality of two wxGBPositions.
@@ -342,9 +342,9 @@ public:
     void SetRowspan(int rowspan);
 
     /**
-        Checks if the span is valid. An invalid span is (-1,-1).
+        Compare inequality of two wxGBSpans.
     */
-    bool operator!(const wxGBSpan& o) const;
+    bool operator!=(const wxGBSpan& o) const;
 
     /**
         Compare equality of two wxGBSpans.
