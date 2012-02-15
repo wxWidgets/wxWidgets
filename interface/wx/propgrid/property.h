@@ -1198,9 +1198,6 @@ public:
     */
     void DeleteChoice( int index );
 
-    /** Deletes all child properties. */
-    void Empty();
-
     /**
         Enables or disables the property. Disabled property usually appears
         as having grey text.
@@ -1758,6 +1755,10 @@ public:
         Returns @true if containing grid uses wxPG_EX_AUTO_UNSPECIFIED_VALUES.
     */
     bool UsesAutoUnspecified() const;
+
+protected:
+    /** Deletes all child properties. */
+    void Empty();
 };
 
 
@@ -1879,9 +1880,6 @@ public:
     */
     void Add( const wxChar** labels, const ValArrItem* values = NULL );
 
-    /** Version that works with wxArrayString. */
-    void Add( const wxArrayString& arr, const ValArrItem* values = NULL );
-
     /** Version that works with wxArrayString and wxArrayInt. */
     void Add( const wxArrayString& arr, const wxArrayInt& arrint );
 
@@ -1946,15 +1944,6 @@ public:
     */
     wxArrayInt GetIndicesForStrings( const wxArrayString& strings,
                                      wxArrayString* unmatched = NULL ) const;
-
-    /** Returns property at given virtual y coordinate.
-    */
-    wxPGProperty* GetItemAtY( unsigned int y ) const;
-
-    /**
-        Returns @true if item at given index has a valid value;
-    */
-    bool HasValue( unsigned int i ) const;
 
     /**
         Returns index of item with given label.
