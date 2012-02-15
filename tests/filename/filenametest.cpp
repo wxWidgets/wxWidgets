@@ -657,13 +657,16 @@ void FileNameTestCase::TestExists()
 
     CPPUNIT_ASSERT( fn.FileExists() );
     CPPUNIT_ASSERT( !wxFileName::DirExists(fn.GetFullPath()) );
+    CPPUNIT_ASSERT( fn.Exists() );
 
     wxFileName dirTemp(wxFileName::DirName(wxFileName::GetTempDir()));
     CPPUNIT_ASSERT( !dirTemp.FileExists() );
     CPPUNIT_ASSERT( dirTemp.DirExists() );
+    CPPUNIT_ASSERT( dirTemp.Exists() );
 
 #ifdef __UNIX__
     CPPUNIT_ASSERT( !wxFileName::FileExists("/dev/null") );
     CPPUNIT_ASSERT( !wxFileName::DirExists("/dev/null") );
+    CPPUNIT_ASSERT( wxFileName::Exists("/dev/null") );
 #endif // __UNIX__
 }

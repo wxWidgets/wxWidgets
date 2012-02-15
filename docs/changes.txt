@@ -467,6 +467,7 @@ All:
 - Add wxHTTP::SetPostBuffer(wxMemoryBuffer) and SetPostText() (Eran Ifrah).
 - Fix wrong time zone used in wxDateTime::UNow().
 - Fix performance of wxStdInputStream with MSVC8/9 (wsu).
+- Added wxFileName::Exists().
 
 All (GUI):
 

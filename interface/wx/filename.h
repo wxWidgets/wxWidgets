@@ -452,11 +452,19 @@ public:
 
     /**
         Returns @true if the directory with this name exists.
+
+        Notice that this function tests the directory part of this object,
+        i.e. the string returned by GetPath(), and not the full path returned
+        by GetFullPath().
+
+        @see FileExists(), Exists()
     */
     bool DirExists() const;
 
     /**
         Returns @true if the directory with name @a dir exists.
+
+        @see FileExists(), Exists()
     */
     static bool DirExists(const wxString& dir);
 
@@ -468,16 +476,39 @@ public:
                               wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Calls the static overload of this function with the full path of this
+        object.
+
+        @since 2.9.4
+     */
+    bool Exists() const;
+
+    /**
+        Returns @true if either a file or a directory or something else with
+        this name exists in the file system.
+
+        This method is equivalent to @code FileExists() || DirExists() @endcode
+        under most systems but under Unix it also returns true if the file
+        identifies a special file system object such as a device, a socket or a
+        FIFO.
+
+        @since 2.9.4
+
+        @see FileExists(), DirExists()
+     */
+    static bool Exists(const wxString& path);
+
+    /**
         Returns @true if the file with this name exists.
 
-        @see DirExists()
+        @see DirExists(), Exists()
     */
     bool FileExists() const;
 
     /**
         Returns @true if the file with name @a file exists.
 
-        @see DirExists()
+        @see DirExists(), Exists()
     */
     static bool FileExists(const wxString& file);
 

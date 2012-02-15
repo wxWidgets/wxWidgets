@@ -214,13 +214,19 @@ public:
                 !m_ext.empty() || m_hasExt;
     }
 
-        // does the file with this name exists?
+        // does the file with this name exist?
     bool FileExists() const;
     static bool FileExists( const wxString &file );
 
-        // does the directory with this name exists?
+        // does the directory with this name exist?
     bool DirExists() const;
     static bool DirExists( const wxString &dir );
+
+        // does anything at all with this name (i.e. file, directory or some
+        // other file system object such as a device, socket, ...) exist?
+    bool Exists() const { return Exists(GetFullPath()); }
+    static bool Exists(const wxString& path);
+
 
         // checks on most common flags for files/directories;
         // more platform-specific features (like e.g. Unix permissions) are not

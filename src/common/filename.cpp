@@ -732,6 +732,12 @@ bool wxFileName::DirExists( const wxString &dirPath )
     return wxFileSystemObjectExists(dirPath, wxFileSystemObject_Dir);
 }
 
+/* static */
+bool wxFileName::Exists(const wxString& path)
+{
+    return wxFileSystemObjectExists(path, wxFileSystemObject_Any);
+}
+
 // ----------------------------------------------------------------------------
 // CWD and HOME stuff
 // ----------------------------------------------------------------------------
