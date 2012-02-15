@@ -566,24 +566,6 @@ public:
     wxList& GetTemplates();
 
     /**
-        Create the frame used for print preview.
-
-        This method can be overridden if you need to change the behaviour or
-        appearance of the preview window. By default, a standard wxPreviewFrame
-        is created.
-
-        @since 2.9.1
-
-        @param preview The associated preview object.
-        @param parent The parent window for the frame.
-        @param title The suggested title for the print preview frame.
-        @return A new print preview frame, must not return @NULL.
-    */
-    virtual wxPreviewFrame* CreatePreviewFrame(wxPrintPreviewBase* preview,
-                                               wxWindow* parent,
-                                               const wxString& title);
-
-    /**
         Initializes data; currently just calls OnCreateFileHistory().
 
         Some data cannot always be initialized in the constructor because the
@@ -778,6 +760,23 @@ protected:
      */
     virtual void OnMRUFileNotExist(unsigned n, const wxString& filename);
 
+    /**
+        Create the frame used for print preview.
+
+        This method can be overridden if you need to change the behaviour or
+        appearance of the preview window. By default, a standard wxPreviewFrame
+        is created.
+
+        @since 2.9.1
+
+        @param preview The associated preview object.
+        @param parent The parent window for the frame.
+        @param title The suggested title for the print preview frame.
+        @return A new print preview frame, must not return @NULL.
+    */
+    virtual wxPreviewFrame* CreatePreviewFrame(wxPrintPreviewBase* preview,
+                                               wxWindow* parent,
+                                               const wxString& title);
 
     /**
         The currently active view.
