@@ -100,7 +100,7 @@ public:
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          int n = 0,
-                         const wxString[] choices = NULL,
+                         const wxString choices[] = NULL,
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = "comboBox");
