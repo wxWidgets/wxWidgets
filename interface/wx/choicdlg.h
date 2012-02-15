@@ -123,7 +123,7 @@ public:
     /**
         Returns array with indexes of selected items.
     */
-    wxArrayInt GetSelection() const;
+    wxArrayInt GetSelections() const;
 
     /**
         Sets selected items from the array of selected items' indexes.
