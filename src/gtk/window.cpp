@@ -1191,7 +1191,6 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
         else
         {
             if ((child->m_wxwindow == NULL) &&
-                !gtk_widget_get_has_window(child->m_widget) &&
                 win->IsClientAreaChild(child) &&
                 (child->m_x <= xx) &&
                 (child->m_y <= yy) &&
