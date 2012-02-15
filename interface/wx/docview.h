@@ -1014,6 +1014,13 @@ public:
     and cooperates with the wxView, wxDocument, wxDocManager and wxDocTemplate
     classes.
 
+    Notice that this class handles ::wxEVT_ACTIVATE event and activates the
+    child view on receiving it. Don't intercept this event unless you want to
+    prevent from this happening.
+
+    The same remark applies to ::wxEVT_CLOSE_WINDOW, as wxDocParentFrame the
+    frame handles this event by trying to close the associated view.
+
     @library{wxcore}
     @category{docview}
 
@@ -1048,18 +1055,6 @@ public:
     wxView* GetView() const;
 
     /**
-        Sets the currently active view to be the frame's view. You may need to
-        override (but still call) this function in order to set the keyboard
-        focus for your subwindow.
-    */
-    void OnActivate(wxActivateEvent& event);
-
-    /**
-        Closes and deletes the current view and document.
-    */
-    void OnCloseWindow(wxCloseEvent& event);
-
-    /**
         Sets the document for this frame.
     */
     void SetDocument(wxDocument* doc);
@@ -1091,6 +1086,12 @@ public:
 
     It cooperates with the wxView, wxDocument, wxDocManager and wxDocTemplate
     classes.
+
+    Notice that this class processes ::wxEVT_CLOSE_WINDOW event and tries to
+    close all open views from its handler. If all the views can be closed, i.e.
+    if none of them contains unsaved changes or the user decides to not save
+    them, the window is destroyed. Don't intercept this event in your code
+    unless you want to replace this logic.
 
     @library{wxcore}
     @category{docview}
@@ -1131,26 +1132,6 @@ public:
         Returns the associated document manager object.
     */
     wxDocManager* GetDocumentManager() const;
-
-    /**
-        Deletes all views and documents. If no user input cancelled the
-        operation, the frame will be destroyed and the application will exit.
-        Since understanding how document/view clean-up takes place can be
-        difficult, the implementation of this function is shown below:
-
-        @code
-        void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
-        {
-            if (m_docManager->Clear(!event.CanVeto()))
-            {
-                this->Destroy();
-            }
-            else
-                event.Veto();
-        }
-        @endcode
-    */
-    void OnCloseWindow(wxCloseEvent& event);
 };
 
 
