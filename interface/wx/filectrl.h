@@ -90,7 +90,7 @@ public:
     wxFileCtrl(wxWindow* parent, wxWindowID id,
                const wxString& defaultDirectory = wxEmptyString,
                const wxString& defaultFilename = wxEmptyString,
-               const wxPoint& wildCard = wxFileSelectorDefaultWildcardStr,
+               const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                long style = wxFC_DEFAULT_STYLE,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
