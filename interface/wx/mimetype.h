@@ -222,6 +222,35 @@ private:
 
 public:
     /**
+        Class representing message parameters.
+
+        An object of this class may be passed to wxFileType::GetOpenCommand()
+        and GetPrintCommand() if more than the file name needs to be specified.
+     */
+    class MessageParameters
+    {
+    public:
+        /// Constructor
+        MessageParameters() { }
+
+        /// Constructor taking a filename and a mime type.
+        MessageParameters(const wxString& filename,
+                          const wxString& mimetype = wxEmptyString);
+
+        /// Return the filename.
+        const wxString& GetFileName() const;
+
+        /// Return the MIME type.
+        const wxString& GetMimeType() const;
+
+        /// Overridable method for derived classes. Returns empty string by default.
+        virtual wxString GetParamValue(const wxString& name) const;
+
+        /// Trivial but virtual dtor as this class can be inherited from.
+        virtual ~MessageParameters() { }
+    };
+
+    /**
         Copy ctor.
     */
     wxFileType(const wxFileTypeInfo& ftInfo);
