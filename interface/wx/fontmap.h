@@ -180,14 +180,6 @@ public:
     static wxFontMapper* Set(wxFontMapper* mapper);
 
     /**
-        Set the config object to use (may be @NULL to use default).
-        By default, the global one (from wxConfigBase::Get() will be used)
-        and the default root path for the config settings is the string returned
-        by GetDefaultConfigPath().
-    */
-    void SetConfig(wxConfigBase* config);
-
-    /**
         Set the root config path to use (should be an absolute path).
     */
     void SetConfigPath(const wxString& prefix);
