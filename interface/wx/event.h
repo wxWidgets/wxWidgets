@@ -3472,11 +3472,19 @@ enum wxIdleMode
     (and especially the first one) increase the system load and so should be avoided
     if possible.
 
-    By default, idle events are sent to all windows (and also wxApp, as usual).
-    If this is causing a significant overhead in your application, you can call
-    wxIdleEvent::SetMode with the value wxIDLE_PROCESS_SPECIFIED, and set the
-    wxWS_EX_PROCESS_IDLE extra window style for every window which should receive
-    idle events.
+    By default, idle events are sent to all windows, including even the hidden
+    ones because they may be shown if some condition is met from their @c
+    wxEVT_IDLE (or related @c wxEVT_UPDATE_UI) handler. The children of hidden
+    windows do not receive idle events however as they can't change their state
+    in any way noticeable by the user. Finally, the global wxApp object also
+    receives these events, as usual, so it can be used for any global idle time
+    processing.
+
+    If sending idle events to all windows is causing a significant overhead in
+    your application, you can call wxIdleEvent::SetMode with the value
+    wxIDLE_PROCESS_SPECIFIED, and set the wxWS_EX_PROCESS_IDLE extra window
+    style for every window which should receive idle events, all the other ones
+    will not receive them in this case.
 
     @beginEventTable{wxIdleEvent}
     @event{EVT_IDLE(func)}
