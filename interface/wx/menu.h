@@ -392,6 +392,8 @@ public:
             The menubar to set.
             
         @remarks Only exists on Mac, other platforms do not have this method. 
+
+        @onlyfor{wxosx}
     */
     static void MacSetCommonMenuBar(wxMenuBar* menubar);
     
@@ -402,6 +404,8 @@ public:
         @return The global menubar.
             
         @remarks Only exists on Mac, other platforms do not have this method. 
+
+        @onlyfor{wxosx}
     */
     static wxMenuBar* MacGetCommonMenuBar();
 
