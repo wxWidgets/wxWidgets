@@ -14,7 +14,7 @@
     used by wxTreebook, in addition to saving and restoring the selection as
     implemented by the base wxPersistentBookCtrl class.
  */
-class wxPersistentTreeBook : public wxPersistentBookCtrl
+class wxPersistentTreeBookCtrl : public wxPersistentBookCtrl
 {
 public:
     /**
@@ -23,7 +23,7 @@ public:
         @param book
             The associated tree book control.
      */
-    wxPersistentTreeBook(wxTreebook *book);
+    wxPersistentTreeBookCtrl(wxTreebook *book);
 
     /**
         Save the currently opened branches.
