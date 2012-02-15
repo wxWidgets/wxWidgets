@@ -291,8 +291,8 @@ public:
     to the native behaviour but it doesn't give the user any possibility to
     copy or save the message (except for the recent Windows versions where @c
     Ctrl-C may be pressed in the message box to copy its contents to the
-    clipboard) so you may want to override DoShowSingleMessage() to customize
-    wxLogGui -- the dialogs sample shows how to do this.
+    clipboard) so you may want to override DoShowSingleLogMessage() to
+    customize wxLogGui -- the dialogs sample shows how to do this.
 
     @library{wxcore}
     @category{logging}
@@ -340,51 +340,6 @@ protected:
         again.
      */
     void Clear();
-
-
-    /**
-        Method called by Flush() to show a single log message.
-
-        This function can be overridden to show the message in a different way.
-        By default a simple wxMessageBox() call is used.
-
-        @param message
-            The message to show (it can contain multiple lines).
-        @param title
-            The suggested title for the dialog showing the message, see
-            GetTitle().
-        @param style
-            One of @c wxICON_XXX constants, see GetSeverityIcon().
-     */
-    virtual void DoShowSingleLogMessage(const wxString& message,
-                                        const wxString& title,
-                                        int style);
-
-    /**
-        Method called by Flush() to show multiple log messages.
-
-        This function can be overridden to show the messages in a different way.
-        By default a special log dialog showing the most recent message and
-        allowing the user to expand it to view the previously logged ones is
-        used.
-
-        @param messages
-            Array of messages to show; it contains more than one element.
-        @param severities
-            Array of message severities containing @c wxLOG_XXX values.
-        @param times
-            Array of time_t values indicating when each message was logged.
-        @param title
-            The suggested title for the dialog showing the message, see
-            GetTitle().
-        @param style
-            One of @c wxICON_XXX constants, see GetSeverityIcon().
-     */
-    virtual void DoShowMultipleLogMessages(const wxArrayString& messages,
-                                           const wxArrayInt& severities,
-                                           const wxArrayLong& times,
-                                           const wxString& title,
-                                           int style);
 
 
     /**
@@ -436,6 +391,51 @@ protected:
         array hasn't been emptied yet.
      */
     bool m_bHasMessages;
+
+private:
+    /**
+        Method called by Flush() to show a single log message.
+
+        This function can be overridden to show the message in a different way.
+        By default a simple wxMessageBox() call is used.
+
+        @param message
+            The message to show (it can contain multiple lines).
+        @param title
+            The suggested title for the dialog showing the message, see
+            GetTitle().
+        @param style
+            One of @c wxICON_XXX constants, see GetSeverityIcon().
+     */
+    virtual void DoShowSingleLogMessage(const wxString& message,
+                                        const wxString& title,
+                                        int style);
+
+    /**
+        Method called by Flush() to show multiple log messages.
+
+        This function can be overridden to show the messages in a different way.
+        By default a special log dialog showing the most recent message and
+        allowing the user to expand it to view the previously logged ones is
+        used.
+
+        @param messages
+            Array of messages to show; it contains more than one element.
+        @param severities
+            Array of message severities containing @c wxLOG_XXX values.
+        @param times
+            Array of time_t values indicating when each message was logged.
+        @param title
+            The suggested title for the dialog showing the message, see
+            GetTitle().
+        @param style
+            One of @c wxICON_XXX constants, see GetSeverityIcon().
+     */
+    virtual void DoShowMultipleLogMessages(const wxArrayString& messages,
+                                           const wxArrayInt& severities,
+                                           const wxArrayLong& times,
+                                           const wxString& title,
+                                           int style);
 };
 
 
