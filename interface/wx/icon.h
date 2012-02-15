@@ -180,7 +180,14 @@ public:
     virtual ~wxIcon();
 
     /**
-        Returns disabled (dimmed) version of the icon. MSW only.
+        Returns disabled (dimmed) version of the icon.
+
+        This method is available in wxIcon only under wxMSW, other ports only
+        have it in wxBitmap. You can always use wxImage::ConvertToDisabled()
+        and create the icon from wxImage manually however.
+
+        @onlyfor{wxmsw}
+
         @since 2.9.0
     */
     wxIcon ConvertToDisabled(unsigned char brightness = 255) const;
