@@ -878,6 +878,8 @@ public:
 
     /**
         On Mac OS, gets the common type and creator for the given extension.
+
+        @onlyfor{wxosx}
     */
     static bool MacFindDefaultTypeAndCreator(const wxString& ext,
                                             wxUint32* type,
@@ -886,6 +888,8 @@ public:
     /**
         On Mac OS, registers application defined extensions and their default type
         and creator.
+
+        @onlyfor{wxosx}
     */
     static void MacRegisterDefaultTypeAndCreator(const wxString& ext,
                                                 wxUint32 type,
@@ -894,6 +898,8 @@ public:
     /**
         On Mac OS, looks up the appropriate type and creator from the registration
         and then sets it.
+
+        @onlyfor{wxosx}
     */
     bool MacSetDefaultTypeAndCreator();
 
