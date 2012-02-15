@@ -868,7 +868,7 @@ public:
 
         @see GetColumnsOrder()
     */
-    bool SetColumnsOrder(const wxArrayInt& orders) const;
+    bool SetColumnsOrder(const wxArrayInt& orders);
 
     /**
         Sets the image list associated with the control.
