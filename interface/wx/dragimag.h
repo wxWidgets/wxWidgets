@@ -56,11 +56,8 @@ public:
             Bitmap to be used as the drag image. The bitmap can have a mask.
         @param cursor
             Optional cursor to combine with the image.
-        @param cursorHotspot
-            This parameter is deprecated.
     */
-    wxDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor,
-                const wxPoint& cursorHotspot = wxPoint(0, 0));
+    wxDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor);
     /**
         Constructs a drag image from an icon and optional cursor.
 
@@ -68,15 +65,12 @@ public:
             Icon to be used as the drag image.
         @param cursor
             Optional cursor to combine with the image.
-        @param cursorHotspot
-            This parameter is deprecated.
 
         @beginWxPythonOnly
         This constructor is called wxDragIcon in wxPython.
         @endWxPythonOnly
     */
-    wxDragImage(const wxIcon& image, const wxCursor& cursor = wxNullCursor,
-                const wxPoint& cursorHotspot = wxPoint(0, 0));
+    wxDragImage(const wxIcon& image, const wxCursor& cursor = wxNullCursor);
     /**
         Constructs a drag image from a text string and optional cursor.
 
@@ -84,15 +78,12 @@ public:
             Text used to construct a drag image.
         @param cursor
             Optional cursor to combine with the image.
-        @param cursorHotspot
-            This parameter is deprecated.
 
         @beginWxPythonOnly
         This constructor is called wxDragString in wxPython.
         @endWxPythonOnly
     */
-    wxDragImage(const wxString& text, const wxCursor& cursor = wxNullCursor,
-                const wxPoint& cursorHotspot = wxPoint(0, 0));
+    wxDragImage(const wxString& text, const wxCursor& cursor = wxNullCursor);
     /**
         Constructs a drag image from the text in the given tree control item,
         and optional cursor.
@@ -121,19 +112,6 @@ public:
         @endWxPythonOnly
     */
     wxDragImage(const wxListCtrl& listCtrl, long id);
-    /**
-        Constructs a drag image an optional cursor. This constructor is only
-        available for wxGenericDragImage, and can be used when the application
-        supplies DoDrawImage() and GetImageRect().
-
-        @param cursor
-            Optional cursor to combine with the image.
-        @param cursorHotspot
-            This parameter is deprecated.
-    */
-    wxDragImage(const wxCursor& cursor = wxNullCursor,
-                const wxPoint& cursorHotspot = wxPoint(0, 0));
-
     /**
         Start dragging the image, in a window or full screen.
 
