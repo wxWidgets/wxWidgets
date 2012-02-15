@@ -287,9 +287,9 @@ public:
         Create a new buffer.
 
         @param size
-            size of the new buffer.
+            size of the new buffer, 1KiB by default.
     */
-    wxMemoryBuffer(size_t size = DefBufSize);
+    wxMemoryBuffer(size_t size = 1024);
 
     /**
         Append a single byte to the buffer.
