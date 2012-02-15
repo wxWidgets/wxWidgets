@@ -16,6 +16,10 @@
 
 #if wxUSE_PROPGRID
 
+class WXDLLIMPEXP_FWD_PROPGRID wxPGCell;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGProperty;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
+
 // -----------------------------------------------------------------------
 // wxPGWindowList contains list of editor windows returned by CreateControls.
 
