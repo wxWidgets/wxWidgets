@@ -7,16 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    Transfer modes used by wxFTP.
-*/
-enum TransferMode
-{
-    NONE,       //!< not set by user explicitly.
-    ASCII,
-    BINARY
-};
-
-/**
     @class wxFTP
 
     wxFTP can be used to establish a connection to an FTP server and perform all the
@@ -100,6 +90,16 @@ enum TransferMode
 class wxFTP : public wxProtocol
 {
 public:
+    /**
+        Transfer modes used by wxFTP.
+    */
+    enum TransferMode
+    {
+        NONE,       //!< not set by user explicitly.
+        ASCII,
+        BINARY
+    };
+
     /**
         Default constructor.
     */
