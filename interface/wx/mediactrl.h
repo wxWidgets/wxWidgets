@@ -304,7 +304,7 @@ public:
 
         @return zero on failure.
     */
-    double GetPlaybackrate();
+    double GetPlaybackRate();
 
     /**
         Obtains the state the playback of the media is in -
