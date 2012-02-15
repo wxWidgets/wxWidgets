@@ -134,6 +134,7 @@ private:
         CPPUNIT_TEST( TestVolumeUniqueName );
         CPPUNIT_TEST( TestCreateTempFileName );
         CPPUNIT_TEST( TestGetTimes );
+        CPPUNIT_TEST( TestExists );
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -151,6 +152,7 @@ private:
     void TestVolumeUniqueName();
     void TestCreateTempFileName();
     void TestGetTimes();
+    void TestExists();
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -646,4 +648,22 @@ void FileNameTestCase::TestGetTimes()
     CPPUNIT_ASSERT(dtCreate.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
     CPPUNIT_ASSERT(dtMod.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
     CPPUNIT_ASSERT(dtAccess.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+}
+
+void FileNameTestCase::TestExists()
+{
+    wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
+    CPPUNIT_ASSERT( fn.IsOk() );
+
+    CPPUNIT_ASSERT( fn.FileExists() );
+    CPPUNIT_ASSERT( !wxFileName::DirExists(fn.GetFullPath()) );
+
+    wxFileName dirTemp(wxFileName::DirName(wxFileName::GetTempDir()));
+    CPPUNIT_ASSERT( !dirTemp.FileExists() );
+    CPPUNIT_ASSERT( dirTemp.DirExists() );
+
+#ifdef __UNIX__
+    CPPUNIT_ASSERT( !wxFileName::FileExists("/dev/null") );
+    CPPUNIT_ASSERT( !wxFileName::DirExists("/dev/null") );
+#endif // __UNIX__
 }
