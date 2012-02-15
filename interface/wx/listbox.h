@@ -260,30 +260,6 @@ public:
     virtual bool IsSelected(int n) const;
 
     /**
-        Clears the list box and adds the given strings to it.
-
-        @param n
-            The number of strings to set.
-        @param choices
-            An array of strings to set.
-        @param clientData
-            Options array of client data pointers
-    */
-    void Set(unsigned int n, const wxString* choices, void *clientData);
-
-    /**
-        Clears the list box and adds the given strings to it.
-        You may free the array from the calling program after this method
-        has been called.
-
-        @param choices
-            An array of strings to set.
-        @param clientData
-            Options array of client data pointers
-    */
-    void Set(const wxArrayString& choices, void *clientData);
-
-    /**
         Set the specified item to be the first visible item.
 
         @param n
@@ -298,17 +274,24 @@ public:
             The string that should be visible.
     */
     void SetFirstItem(const wxString& string);
-    
+
+    /**
+        Ensure that the item with the given index is currently shown.
+
+        Scroll the listbox if necessary.
+
+        This method is currently only implemented in wxGTK and wxOSX and does
+        nothing in other ports.
+
+        @see SetFirstItem()
+     */
     virtual void EnsureVisible(int n);
-    
+
+    /**
+        Return true if the listbox has ::wxLB_SORT style.
+
+        This method is mostly meant for internal use only.
+     */
     virtual bool IsSorted() const;
-    
-    // implement base class pure virtuals
-    virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL);
-    
-    virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const;
-    virtual void SetString(unsigned int n, const wxString& s);
-    virtual int FindString(const wxString& s, bool bCase = false) const;
 };
 
