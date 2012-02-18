@@ -1220,11 +1220,6 @@ msgstr ""
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "&Tentang..."
-
 #: ../src/generic/aboutdlgg.cpp:141
 #, fuzzy
 msgid "About "
@@ -8725,10 +8720,6 @@ msgstr ""
 
 #~ msgid "%s: ill-formed resource file syntax."
 #~ msgstr "%s: bentuk sintaksis file sesumber tidak baik."
-
-#, fuzzy
-#~ msgid "&About"
-#~ msgstr "&Tentang..."
 
 #~ msgid "&Open"
 #~ msgstr "&Buka"

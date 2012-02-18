@@ -1154,10 +1154,6 @@ msgstr "ADD"
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-msgid "About"
-msgstr "關於"
-
 #: ../src/generic/aboutdlgg.cpp:141
 msgid "About "
 msgstr "關於 "
@@ -8371,10 +8367,6 @@ msgstr "~"
 
 #~ msgid "%s: ill-formed resource file syntax."
 #~ msgstr "%s: 不良資源檔案語法。"
-
-#, fuzzy
-#~ msgid "&About"
-#~ msgstr "關於(&A)..."
 
 #~ msgid "&Open"
 #~ msgstr "開啟(&O)"

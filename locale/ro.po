@@ -1169,11 +1169,6 @@ msgstr "ADD"
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "Despre "
-
 #: ../src/generic/aboutdlgg.cpp:141
 msgid "About "
 msgstr "Despre "

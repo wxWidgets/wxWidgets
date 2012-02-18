@@ -1205,11 +1205,6 @@ msgstr ""
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "P&ar..."
-
 #: ../src/generic/aboutdlgg.cpp:141
 #, fuzzy
 msgid "About "
@@ -8265,10 +8260,6 @@ msgstr ""
 
 #~ msgid "#define %s must be an integer."
 #~ msgstr "#define %s ir jābūt skaitlim."
-
-#, fuzzy
-#~ msgid "&About"
-#~ msgstr "P&ar..."
 
 #~ msgid "&Open"
 #~ msgstr "&Atvērt"

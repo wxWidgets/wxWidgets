@@ -1191,11 +1191,6 @@ msgstr "PRIDAŤ"
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "O aplikácii"
-
 #: ../src/generic/aboutdlgg.cpp:141
 msgid "About "
 msgstr "O aplikácii"
@@ -8525,9 +8520,6 @@ msgstr "~"
 
 #~ msgid "%s: ill-formed resource file syntax."
 #~ msgstr "%s: syntaktická chyba v súbore zdrojov."
-
-#~ msgid "&About"
-#~ msgstr "&O aplikácii"
 
 #~ msgid "&Open"
 #~ msgstr "&Otvoriť"

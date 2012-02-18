@@ -1231,11 +1231,6 @@ msgstr ""
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "&Aangaande..."
-
 #: ../src/generic/aboutdlgg.cpp:141
 #, fuzzy
 msgid "About "
@@ -8668,10 +8663,6 @@ msgstr ""
 #, fuzzy
 #~ msgid " Couldn't create the UnicodeConverter"
 #~ msgstr "Kon nie 'n tydhouer skep nie"
-
-#, fuzzy
-#~ msgid "&About"
-#~ msgstr "&Aangaande..."
 
 #, fuzzy
 #~ msgid "&Open"

@@ -1216,11 +1216,6 @@ msgstr ""
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "&Περί..."
-
 #: ../src/generic/aboutdlgg.cpp:141
 #, fuzzy
 msgid "About "
@@ -8797,10 +8792,6 @@ msgstr ""
 
 #~ msgid "%s: ill-formed resource file syntax."
 #~ msgstr "%s: κακή (ill-formed) σύνταξη αρχείου πόρων. ( resource file )"
-
-#, fuzzy
-#~ msgid "&About"
-#~ msgstr "&Περί..."
 
 #~ msgid "&Open"
 #~ msgstr "&Ανοιγμα"

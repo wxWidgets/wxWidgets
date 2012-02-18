@@ -1194,11 +1194,6 @@ msgstr "ADD"
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "Perihal"
-
 #: ../src/generic/aboutdlgg.cpp:141
 msgid "About "
 msgstr "Perihal"
@@ -8634,9 +8629,6 @@ msgstr "~"
 
 #~ msgid "%s: ill-formed resource file syntax."
 #~ msgstr "%s: Sintaks fail sumber salah-bentuk"
-
-#~ msgid "&About"
-#~ msgstr "Perih&al"
 
 #~ msgid "&Open"
 #~ msgstr "B&uka"

@@ -1201,11 +1201,6 @@ msgstr "ADD"
 msgid "ASCII"
 msgstr "आस्की (ASCII)"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "के बारे में (&A)..."
-
 #: ../src/generic/aboutdlgg.cpp:141
 msgid "About "
 msgstr "के बारे में"

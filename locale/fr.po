@@ -1190,11 +1190,6 @@ msgstr "AJOUTER"
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "À propos"
-
 #: ../src/generic/aboutdlgg.cpp:141
 msgid "About "
 msgstr "À propos"
@@ -8694,9 +8689,6 @@ msgstr "~"
 
 #~ msgid "%s: ill-formed resource file syntax."
 #~ msgstr "%s : syntaxe du fichier de ressource malformée."
-
-#~ msgid "&About"
-#~ msgstr "À &propos..."
 
 #~ msgid "&Open"
 #~ msgstr "&Ouvrir"

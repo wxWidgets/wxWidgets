@@ -1185,11 +1185,6 @@ msgstr "DODAJ"
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:517
-#, fuzzy
-msgid "About"
-msgstr "O"
-
 #: ../src/generic/aboutdlgg.cpp:141
 msgid "About "
 msgstr "O"
@@ -8690,10 +8685,6 @@ msgstr "~"
 
 #~ msgid "%s: ill-formed resource file syntax."
 #~ msgstr "%s: błędna składnia pliku zasobu."
-
-#, fuzzy
-#~ msgid "&About"
-#~ msgstr "Inform&acje..."
 
 #~ msgid "&Open"
 #~ msgstr "&Otwórz"

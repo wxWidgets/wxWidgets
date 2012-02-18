@@ -44,6 +44,11 @@ allmo:
 force-update:
 	$(RM) wxstd.pot
 
+check:
+	@for t in $(WX_LINGUAS); do \
+	    $(MSGFMT) -c -o /dev/null $$t.po 2>/dev/null || echo "$$t.po is BROKEN."; \
+	done
+
 # print out the percentage of the translated strings
 stats: FORCE
 	@for i in $(WX_LINGUAS); do \
