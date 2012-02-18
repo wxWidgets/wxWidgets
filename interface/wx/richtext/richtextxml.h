@@ -50,18 +50,10 @@ public:
     virtual bool CanSave() const;
 
     /**
-        Creates XML code for a given character or paragraph style.
-    */
-    wxString CreateStyle(const wxTextAttr& attr, bool isPara = false);
-
-    /**
         Recursively exports an object to the stream.
     */
-    bool ExportXML(wxOutputStream& stream, wxMBConv* convMem,
-                   wxMBConv* convFile,
-                   wxRichTextObject& obj,
-                   int level);
-
+    bool ExportXML(wxOutputStream& stream, wxRichTextObject& obj, int level);
+    
     /**
         Helper function: gets node context.
     */
@@ -78,12 +70,6 @@ public:
     wxString GetParamValue(wxXmlNode* node, const wxString& param);
 
     /**
-        Helper function: gets style parameters from the given XML node.
-    */
-    bool GetStyle(wxTextAttr& attr, wxXmlNode* node,
-                  bool isPara = false);
-
-    /**
         Helper function: gets text from the node.
     */
     wxString GetText(wxXmlNode* node,
@@ -98,7 +84,7 @@ public:
     /**
         Recursively imports an object.
     */
-    bool ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node);
+    bool ImportXML(wxRichTextBuffer* buffer, wxRichTextObject* obj, wxXmlNode* node);
 
 protected:
 
