@@ -491,7 +491,8 @@ public:
         If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
-    wxTextAttr GetCombinedStyleLevel(int level,
+
+    wxTextAttr GetCombinedStyleForLevel(int level,
                                      wxRichTextStyleSheet* styleSheet = NULL) const;
 
     /**
