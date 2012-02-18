@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    Zoom levels availiable in wxWebView
+    Zoom levels available in wxWebView
 */
 enum wxWebViewZoom
 {
@@ -640,7 +640,7 @@ public:
     /**
         Get the name of the target frame which the url of this event
         has been or will be loaded into. This may return an emptry string
-        if the frame is not avaliable.
+        if the frame is not available.
     */
     const wxString& GetTarget() const;
 
