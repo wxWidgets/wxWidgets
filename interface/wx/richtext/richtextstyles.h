@@ -296,11 +296,6 @@ public:
     void OnLeftDown(wxMouseEvent& event);
 
     /**
-        Reacts to selection.
-    */
-    void OnSelect(wxCommandEvent& event);
-
-    /**
         If @a applyOnSelection is @true, clicking on a style name in the list will
         immediately apply the style to the associated rich text control.
     */
