@@ -89,12 +89,12 @@
 //=============================================================================
 
 //-----------------------------------------------------------------------------
-//  GStreamer (most version compatability) macros
+//  GStreamer (most version compatibility) macros
 //-----------------------------------------------------------------------------
 
 // In 0.9 there was a HUGE change to GstQuery and the
 // gst_element_query function changed dramatically and split off
-// into two seperate ones
+// into two separate ones
 #if GST_VERSION_MAJOR == 0 && GST_VERSION_MINOR <= 8
 #    define wxGst_element_query_duration(e, f, p) \
                 gst_element_query(e, GST_QUERY_TOTAL, f, p)
@@ -214,7 +214,7 @@ public:
 // wxGStreamerMediaEventHandler
 //
 // OK, this will take an explanation - basically gstreamer callbacks
-// are issued in a seperate thread, and in this thread we may not set
+// are issued in a separate thread, and in this thread we may not set
 // the state of the playbin, so we need to send a wx event in that
 // callback so that we set the state of the media and other stuff
 // like GUI calls.
@@ -265,7 +265,7 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
 
     GdkWindow* window = gtk_widget_get_window(widget);
 
-    // I've seen this reccommended somewhere...
+    // I've seen this recommended somewhere...
     // TODO: Is this needed? Maybe it is just cruft...
     // gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
     //                              GDK_WINDOW_XWINDOW( window ) );

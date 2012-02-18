@@ -724,7 +724,7 @@ int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
     if ( nIndex == wxNOT_FOUND )
     {
         // We put MIME types containing  "application" at the end, so that
-        // if the MIME type for the extention "htm" is searched for, it will
+        // if the MIME type for the extension "htm" is searched for, it will
         // rather find "text/html" than "application/x-mozilla-bookmarks".
         if (mimeType.Find( "application" ) == 0)
         {
