@@ -15,12 +15,9 @@ rc=0
 
 # exclude all third-party files from consideration, we don't want to do any
 # checks for them
-#
-# also exclude message catalog files as they may be not in UTF-8
 all_changed_files=`svnl changed | \
                     grep "^[AU]" | \
                     sed 's/^....//' | \
-                    egrep -v "locale/.*\.po$" | \
                     egrep -v "src/(tiff|regex|jpeg|stc/scintilla)" | \
                     egrep -v "_wrap.cpp" | \
                     egrep -v "wxPython/.*/docs/.*\.html$"`
