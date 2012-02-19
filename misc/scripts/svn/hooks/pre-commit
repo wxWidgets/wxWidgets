@@ -15,9 +15,12 @@ rc=0
 
 # exclude all third-party files from consideration, we don't want to do any
 # checks for them
+#
+# Also don't impose any constraints on commits to previous 2.x branches.
 all_changed_files=`svnl changed | \
                     grep "^[AU]" | \
                     sed 's/^....//' | \
+                    egrep -v "branches/WX_2_" | \
                     egrep -v "src/(tiff|regex|jpeg|stc/scintilla)" | \
                     egrep -v "_wrap.cpp" | \
                     egrep -v "wxPython/.*/docs/.*\.html$"`
