@@ -396,7 +396,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
     // to activate the 'next' button first (create the next button before the back button).
     // The reason is: The user will repeatedly enter information in the wizard pages and then wants to
     // press 'next'. If a user uses mostly the keyboard, he would have to skip the 'back' button
-    // everytime. This is annoying. There is a second reason: RETURN acts as TAB. If the 'next'
+    // every time. This is annoying. There is a second reason: RETURN acts as TAB. If the 'next'
     // button comes first in the TAB order, the user can enter information very fast using the RETURN
     // key to TAB to the next entry field and page. This would not be possible, if the 'back' button
     // was created before the 'next' button.
@@ -782,7 +782,7 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
     wxCHECK_RET( m_page, wxT("should have a valid current page") );
 
     // ask the current page first: notice that we do it before calling
-    // GetNext/Prev() because the data transfered from the controls of the page
+    // GetNext/Prev() because the data transferred from the controls of the page
     // may change the value returned by these methods
     if ( !m_page->Validate() || !m_page->TransferDataFromWindow() )
     {

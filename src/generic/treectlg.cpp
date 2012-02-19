@@ -2879,7 +2879,7 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
                 yOrigin = abs(yOrigin);
                 GetClientSize(&width, &height);
 
-                // Move end points to the begining/end of the view?
+                // Move end points to the beginning/end of the view?
                 if (y_mid < yOrigin)
                     y_mid = yOrigin;
                 if (oldY > yOrigin + height)

@@ -375,7 +375,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar keychar
 
     // The m_combo->SetValue() call above sets m_value to the index of this
     // string. But if there are more identical string, the index is of the
-    // first occurence, which may be wrong, so set the index explicitly here,
+    // first occurrence, which may be wrong, so set the index explicitly here,
     // _after_ the SetValue() call.
     m_value = value;
 
