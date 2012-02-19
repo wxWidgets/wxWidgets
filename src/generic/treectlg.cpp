@@ -198,14 +198,14 @@ public:
 
     int GetTextHeight() const
     {
-        wxASSERT_MSG( m_heightText != -1, _T("must call CalculateSize() first") );
+        wxASSERT_MSG( m_heightText != -1, wxT("must call CalculateSize() first") );
 
         return m_heightText;
     }
 
     int GetTextWidth() const
     {
-        wxASSERT_MSG( m_widthText != -1, _T("must call CalculateSize() first") );
+        wxASSERT_MSG( m_widthText != -1, wxT("must call CalculateSize() first") );
 
         return m_widthText;
     }
@@ -439,7 +439,7 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
         }
         else
         {
-            wxFAIL_MSG(_T("you must create an image list to use images!"));
+            wxFAIL_MSG(wxT("you must create an image list to use images!"));
         }
     }
 
@@ -545,7 +545,7 @@ void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
         wxPoint myPos = GetPosition();
         wxSize mySize = GetSize();
         int sx, sy;
-        GetTextExtent(GetValue() + _T("M"), &sx, &sy);
+        GetTextExtent(GetValue() + wxT("M"), &sx, &sy);
         if (myPos.x + sx > parentSize.x)
             sx = parentSize.x - myPos.x;
         if (mySize.x > sx)
@@ -1777,9 +1777,9 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
 {
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
-    wxCHECK_RET( item, _T("invalid item in wxGenericTreeCtrl::Expand") );
+    wxCHECK_RET( item, wxT("invalid item in wxGenericTreeCtrl::Expand") );
     wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(),
-                 _T("can't expand hidden root") );
+                 wxT("can't expand hidden root") );
 
     if ( !item->HasPlus() )
         return;
@@ -1807,7 +1807,7 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
 {
     wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(),
-                 _T("can't collapse hidden root") );
+                 wxT("can't collapse hidden root") );
 
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
@@ -2667,7 +2667,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                 yOrigin = abs(yOrigin);
                 GetClientSize(&width, &height);
 
-                // Move end points to the begining/end of the view?
+                // Move end points to the beginning/end of the view?
                 if (y_mid < yOrigin)
                     y_mid = yOrigin;
                 if (oldY > yOrigin + height)
@@ -2709,7 +2709,7 @@ void wxGenericTreeCtrl::DrawDropEffect(wxGenericTreeItem *item)
 
 void wxGenericTreeCtrl::DrawBorder(const wxTreeItemId &item)
 {
-    wxCHECK_RET( item.IsOk(), _T("invalid item in wxGenericTreeCtrl::DrawLine") );
+    wxCHECK_RET( item.IsOk(), wxT("invalid item in wxGenericTreeCtrl::DrawLine") );
 
     wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
 
@@ -2726,7 +2726,7 @@ void wxGenericTreeCtrl::DrawBorder(const wxTreeItemId &item)
 
 void wxGenericTreeCtrl::DrawLine(const wxTreeItemId &item, bool below)
 {
-    wxCHECK_RET( item.IsOk(), _T("invalid item in wxGenericTreeCtrl::DrawLine") );
+    wxCHECK_RET( item.IsOk(), wxT("invalid item in wxGenericTreeCtrl::DrawLine") );
 
     wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
 
@@ -3113,7 +3113,7 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
                                         wxRect& rect,
                                         bool textOnly) const
 {
-    wxCHECK_MSG( item.IsOk(), false, _T("invalid item in wxGenericTreeCtrl::GetBoundingRect") );
+    wxCHECK_MSG( item.IsOk(), false, wxT("invalid item in wxGenericTreeCtrl::GetBoundingRect") );
 
     wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
 
@@ -3151,7 +3151,7 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
 wxTextCtrl *wxGenericTreeCtrl::EditLabel(const wxTreeItemId& item,
                                   wxClassInfo * WXUNUSED(textCtrlClass))
 {
-    wxCHECK_MSG( item.IsOk(), NULL, _T("can't edit an invalid item") );
+    wxCHECK_MSG( item.IsOk(), NULL, wxT("can't edit an invalid item") );
 
     wxGenericTreeItem *itemEdit = (wxGenericTreeItem *)item.m_pItem;
 
@@ -3191,7 +3191,7 @@ wxTextCtrl* wxGenericTreeCtrl::GetEditControl() const
 void wxGenericTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item),
                                      bool discardChanges)
 {
-    wxCHECK_RET( m_textCtrl, _T("not editing label") );
+    wxCHECK_RET( m_textCtrl, wxT("not editing label") );
 
     m_textCtrl->EndEdit(discardChanges);
 }
@@ -3699,7 +3699,7 @@ void wxGenericTreeCtrl::Freeze()
 
 void wxGenericTreeCtrl::Thaw()
 {
-    wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen tree control?") );
+    wxCHECK_RET( m_freezeCount > 0, wxT("thawing unfrozen tree control?") );
 
     if ( --m_freezeCount == 0 )
     {

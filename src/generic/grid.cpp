@@ -878,7 +878,7 @@ void wxGridCellTextEditor::SetParameters(const wxString& params)
         }
         else
         {
-            wxLogDebug( _T("Invalid wxGridCellTextEditor parameter string '%s' ignored"), params.c_str() );
+            wxLogDebug( wxT("Invalid wxGridCellTextEditor parameter string '%s' ignored"), params.c_str() );
         }
     }
 }
@@ -940,7 +940,7 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
         wxString sValue = table->GetValue(row, col);
         if (! sValue.ToLong(&m_valueOld) && ! sValue.empty())
         {
-            wxFAIL_MSG( _T("this cell doesn't have numeric value") );
+            wxFAIL_MSG( wxT("this cell doesn't have numeric value") );
             return;
         }
     }
@@ -1073,11 +1073,11 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
     else
     {
         long tmp;
-        if ( params.BeforeFirst(_T(',')).ToLong(&tmp) )
+        if ( params.BeforeFirst(wxT(',')).ToLong(&tmp) )
         {
             m_min = (int)tmp;
 
-            if ( params.AfterFirst(_T(',')).ToLong(&tmp) )
+            if ( params.AfterFirst(wxT(',')).ToLong(&tmp) )
             {
                 m_max = (int)tmp;
 
@@ -1086,7 +1086,7 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
             }
         }
 
-        wxLogDebug(_T("Invalid wxGridCellNumberEditor parameter string '%s' ignored"), params.c_str());
+        wxLogDebug(wxT("Invalid wxGridCellNumberEditor parameter string '%s' ignored"), params.c_str());
     }
 }
 
@@ -1148,7 +1148,7 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
         {
             if ( !value.ToDouble(&m_valueOld) )
             {
-                wxFAIL_MSG( _T("this cell doesn't have float value") );
+                wxFAIL_MSG( wxT("this cell doesn't have float value") );
                 return;
             }
         }
@@ -1208,7 +1208,7 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
     bool is_decimal_point = ( strbuf ==
        wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER) );
 #else
-    bool is_decimal_point = ( strbuf == _T(".") );
+    bool is_decimal_point = ( strbuf == wxT(".") );
 #endif
 
     if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
@@ -1234,11 +1234,11 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
     else
     {
         long tmp;
-        if ( params.BeforeFirst(_T(',')).ToLong(&tmp) )
+        if ( params.BeforeFirst(wxT(',')).ToLong(&tmp) )
         {
             m_width = (int)tmp;
 
-            if ( params.AfterFirst(_T(',')).ToLong(&tmp) )
+            if ( params.AfterFirst(wxT(',')).ToLong(&tmp) )
             {
                 m_precision = (int)tmp;
 
@@ -1247,7 +1247,7 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
             }
         }
 
-        wxLogDebug(_T("Invalid wxGridCellFloatEditor parameter string '%s' ignored"), params.c_str());
+        wxLogDebug(wxT("Invalid wxGridCellFloatEditor parameter string '%s' ignored"), params.c_str());
     }
 }
 
@@ -1257,21 +1257,21 @@ wxString wxGridCellFloatEditor::GetString() const
     if ( m_precision == -1 && m_width != -1)
     {
         // default precision
-        fmt.Printf(_T("%%%d.f"), m_width);
+        fmt.Printf(wxT("%%%d.f"), m_width);
     }
     else if ( m_precision != -1 && m_width == -1)
     {
         // default width
-        fmt.Printf(_T("%%.%df"), m_precision);
+        fmt.Printf(wxT("%%.%df"), m_precision);
     }
     else if ( m_precision != -1 && m_width != -1 )
     {
-        fmt.Printf(_T("%%%d.%df"), m_width, m_precision);
+        fmt.Printf(wxT("%%%d.%df"), m_width, m_precision);
     }
     else
     {
         // default width/precision
-        fmt = _T("%f");
+        fmt = wxT("%f");
     }
 
     return wxString::Format(fmt, m_valueOld);
@@ -1293,7 +1293,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
             const wxString decimalPoint =
                 wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
 #else
-            const wxString decimalPoint(_T('.'));
+            const wxString decimalPoint(wxT('.'));
 #endif
 
             // accept digits, 'e' as in '1e+6', also '-', '+', and '.'
@@ -1320,7 +1320,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 // ----------------------------------------------------------------------------
 
 // the default values for GetValue()
-wxString wxGridCellBoolEditor::ms_stringValues[2] = { _T(""), _T("1") };
+wxString wxGridCellBoolEditor::ms_stringValues[2] = { wxT(""), wxT("1") };
 
 void wxGridCellBoolEditor::Create(wxWindow* parent,
                                   wxWindowID id,
@@ -1438,7 +1438,7 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
             // because we'll still overwrite it with something different and
             // this risks to be very surprising for the user code, let them
             // know about it
-            wxFAIL_MSG( _T("invalid value for a cell with bool editor!") );
+            wxFAIL_MSG( wxT("invalid value for a cell with bool editor!") );
         }
     }
 
@@ -1674,7 +1674,7 @@ void wxGridCellChoiceEditor::SetParameters(const wxString& params)
 
     m_choices.Empty();
 
-    wxStringTokenizer tk(params, _T(','));
+    wxStringTokenizer tk(params, wxT(','));
     while ( tk.HasMoreTokens() )
     {
         m_choices.Add(tk.GetNextToken());
@@ -1943,7 +1943,7 @@ wxSize wxGridCellStringRenderer::DoGetBestSize(const wxGridCellAttr& attr,
 {
     wxCoord x = 0, y = 0, max_x = 0;
     dc.SetFont(attr.GetFont());
-    wxStringTokenizer tk(text, _T('\n'));
+    wxStringTokenizer tk(text, wxT('\n'));
     while ( tk.HasMoreTokens() )
     {
         dc.GetTextExtent(tk.GetNextToken(), &x, &y);
@@ -2072,7 +2072,7 @@ wxString wxGridCellNumberRenderer::GetString(const wxGrid& grid, int row, int co
     wxString text;
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
     {
-        text.Printf(_T("%ld"), table->GetValueAsLong(row, col));
+        text.Printf(wxT("%ld"), table->GetValueAsLong(row, col));
     }
     else
     {
@@ -2159,21 +2159,21 @@ wxString wxGridCellFloatRenderer::GetString(const wxGrid& grid, int row, int col
                 if ( m_precision == -1 )
                 {
                     // default width/precision
-                    m_format = _T("%f");
+                    m_format = wxT("%f");
                 }
                 else
                 {
-                    m_format.Printf(_T("%%.%df"), m_precision);
+                    m_format.Printf(wxT("%%.%df"), m_precision);
                 }
             }
             else if ( m_precision == -1 )
             {
                 // default precision
-                m_format.Printf(_T("%%%d.f"), m_width);
+                m_format.Printf(wxT("%%%d.f"), m_width);
             }
             else
             {
-                m_format.Printf(_T("%%%d.%df"), m_width, m_precision);
+                m_format.Printf(wxT("%%%d.%df"), m_width, m_precision);
             }
         }
 
@@ -2225,7 +2225,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
     }
     else
     {
-        wxString tmp = params.BeforeFirst(_T(','));
+        wxString tmp = params.BeforeFirst(wxT(','));
         if ( !tmp.empty() )
         {
             long width;
@@ -2235,11 +2235,11 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
             }
             else
             {
-                wxLogDebug(_T("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params.c_str());
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer width parameter string '%s ignored"), params.c_str());
             }
         }
 
-        tmp = params.AfterFirst(_T(','));
+        tmp = params.AfterFirst(wxT(','));
         if ( !tmp.empty() )
         {
             long precision;
@@ -2249,7 +2249,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
             }
             else
             {
-                wxLogDebug(_T("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
+                wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
             }
         }
     }
@@ -2484,7 +2484,7 @@ void wxGridCellAttr::SetSize(int num_rows, int num_cols)
     wxASSERT_MSG( (!((num_rows > 0) && (num_cols <= 0)) ||
                   !((num_rows <= 0) && (num_cols > 0)) ||
                   !((num_rows == 0) && (num_cols == 0))),
-                  wxT("wxGridCellAttr::SetSize only takes two postive values or negative/zero values"));
+                  wxT("wxGridCellAttr::SetSize only takes two positive values or negative/zero values"));
 
     m_sizeRows = num_rows;
     m_sizeCols = num_cols;
@@ -3155,7 +3155,7 @@ int wxGridTypeRegistry::FindOrCloneDataType(const wxString& typeName)
     {
         // the first part of the typename is the "real" type, anything after ':'
         // are the parameters for the renderer
-        index = FindDataType(typeName.BeforeFirst(_T(':')));
+        index = FindDataType(typeName.BeforeFirst(wxT(':')));
         if ( index == wxNOT_FOUND )
         {
             return wxNOT_FOUND;
@@ -3172,7 +3172,7 @@ int wxGridTypeRegistry::FindOrCloneDataType(const wxString& typeName)
         editorOld->DecRef();
 
         // do it even if there are no parameters to reset them to defaults
-        wxString params = typeName.AfterFirst(_T(':'));
+        wxString params = typeName.AfterFirst(wxT(':'));
         renderer->SetParameters(params);
         editor->SetParameters(params);
 
@@ -3360,7 +3360,7 @@ wxString wxGridTableBase::GetColLabelValue( int col )
     unsigned int i, n;
     for ( n = 1; ; n++ )
     {
-        s += (wxChar) (_T('A') + (wxChar)(col % 26));
+        s += (wxChar) (wxT('A') + (wxChar)(col % 26));
         col = col / 26 - 1;
         if ( col < 0 )
             break;
@@ -3505,7 +3505,7 @@ wxString wxGridStringTable::GetValue( int row, int col )
 {
     wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
                  wxEmptyString,
-                 _T("invalid row or column index in wxGridStringTable") );
+                 wxT("invalid row or column index in wxGridStringTable") );
 
     return m_data[row][col];
 }
@@ -3513,7 +3513,7 @@ wxString wxGridStringTable::GetValue( int row, int col )
 void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 {
     wxCHECK_RET( (row < GetNumberRows()) && (col < GetNumberCols()),
-                 _T("invalid row or column index in wxGridStringTable") );
+                 wxT("invalid row or column index in wxGridStringTable") );
 
     m_data[row][col] = value;
 }
@@ -3522,7 +3522,7 @@ bool wxGridStringTable::IsEmptyCell( int row, int col )
 {
     wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
                  true,
-                  _T("invalid row or column index in wxGridStringTable") );
+                  wxT("invalid row or column index in wxGridStringTable") );
 
     return (m_data[row][col] == wxEmptyString);
 }
@@ -4355,7 +4355,7 @@ wxGrid::~wxGrid()
 
 #ifdef DEBUG_ATTR_CACHE
     size_t total = gs_nAttrCacheHits + gs_nAttrCacheMisses;
-    wxPrintf(_T("wxGrid attribute cache statistics: "
+    wxPrintf(wxT("wxGrid attribute cache statistics: "
                 "total: %u, hits: %u (%u%%)\n"),
              total, gs_nAttrCacheHits,
              total ? (gs_nAttrCacheHits*100) / total : 0);
@@ -5993,19 +5993,19 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
 #ifdef __WXDEBUG__
     static const wxChar *cursorModes[] =
     {
-        _T("SELECT_CELL"),
-        _T("RESIZE_ROW"),
-        _T("RESIZE_COL"),
-        _T("SELECT_ROW"),
-        _T("SELECT_COL"),
-        _T("MOVE_COL"),
+        wxT("SELECT_CELL"),
+        wxT("RESIZE_ROW"),
+        wxT("RESIZE_COL"),
+        wxT("SELECT_ROW"),
+        wxT("SELECT_COL"),
+        wxT("MOVE_COL"),
     };
 
-    wxLogTrace(_T("grid"),
-               _T("wxGrid cursor mode (mouse capture for %s): %s -> %s"),
-               win == m_colLabelWin ? _T("colLabelWin")
-                                    : win ? _T("rowLabelWin")
-                                          : _T("gridWin"),
+    wxLogTrace(wxT("grid"),
+               wxT("wxGrid cursor mode (mouse capture for %s): %s -> %s"),
+               win == m_colLabelWin ? wxT("colLabelWin")
+                                    : win ? wxT("rowLabelWin")
+                                          : wxT("gridWin"),
                cursorModes[m_cursorMode], cursorModes[mode]);
 #endif
 
@@ -8454,7 +8454,7 @@ void wxGrid::EnableCellEditControl( bool enable )
                 return;
 
             // this should be checked by the caller!
-            wxASSERT_MSG( CanEnableCellControl(), _T("can't enable editing for this cell!") );
+            wxASSERT_MSG( CanEnableCellControl(), wxT("can't enable editing for this cell!") );
 
             // do it before ShowCellEditControl()
             m_cellEditCtrlEnabled = enable;
@@ -8802,7 +8802,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
     while ( i_max - i_min > 0 )
     {
         wxCHECK_MSG(BorderArray[i_min] <= coord && coord < BorderArray[i_max],
-                    0, _T("wxGrid: internal error in CoordToRowOrCol"));
+                    0, wxT("wxGrid: internal error in CoordToRowOrCol"));
         if (coord >=  BorderArray[ i_max - 1])
             return i_max;
         else
@@ -8869,7 +8869,7 @@ int wxGrid::XToCol( int x, bool clipToMinMax )
     while ( maxPos - minPos > 0 )
     {
         wxCHECK_MSG(m_colRights[GetColAt( minPos )] <= x && x < m_colRights[GetColAt( maxPos )],
-                    0, _T("wxGrid: internal error in XToCol"));
+                    0, wxT("wxGrid: internal error in XToCol"));
 
         if (x >=  m_colRights[GetColAt( maxPos - 1 )])
             return GetColAt( maxPos );
@@ -9908,7 +9908,7 @@ int wxGrid::GetDefaultRowSize()
 
 int wxGrid::GetRowSize( int row )
 {
-    wxCHECK_MSG( row >= 0 && row < m_numRows, 0, _T("invalid row index") );
+    wxCHECK_MSG( row >= 0 && row < m_numRows, 0, wxT("invalid row index") );
 
     return GetRowHeight(row);
 }
@@ -9920,7 +9920,7 @@ int wxGrid::GetDefaultColSize()
 
 int wxGrid::GetColSize( int col )
 {
-    wxCHECK_MSG( col >= 0 && col < m_numCols, 0, _T("invalid column index") );
+    wxCHECK_MSG( col >= 0 && col < m_numCols, 0, wxT("invalid column index") );
 
     return GetColWidth(col);
 }
@@ -10200,8 +10200,8 @@ wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
     wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
     bool canHave = ((wxGrid*)this)->CanHaveAttributes();
 
-    wxCHECK_MSG( canHave, attr, _T("Cell attributes not allowed"));
-    wxCHECK_MSG( m_table, attr, _T("must have a table") );
+    wxCHECK_MSG( canHave, attr, wxT("Cell attributes not allowed"));
+    wxCHECK_MSG( m_table, attr, wxT("must have a table") );
 
     attr = m_table->GetAttr(row, col, wxGridCellAttr::Cell);
     if ( !attr )
@@ -10235,7 +10235,7 @@ void wxGrid::SetColFormatFloat(int col, int width, int precision)
     wxString typeName = wxGRID_VALUE_FLOAT;
     if ( (width != -1) || (precision != -1) )
     {
-        typeName << _T(':') << width << _T(',') << precision;
+        typeName << wxT(':') << width << wxT(',') << precision;
     }
 
     SetColFormatCustom(col, typeName);
@@ -10534,7 +10534,7 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 
 void wxGrid::SetRowSize( int row, int height )
 {
-    wxCHECK_RET( row >= 0 && row < m_numRows, _T("invalid row index") );
+    wxCHECK_RET( row >= 0 && row < m_numRows, wxT("invalid row index") );
 
     // if < 0 then calculate new height from label
     if ( height < 0 )
@@ -10591,7 +10591,7 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
 
 void wxGrid::SetColSize( int col, int width )
 {
-    wxCHECK_RET( col >= 0 && col < m_numCols, _T("invalid column index") );
+    wxCHECK_RET( col >= 0 && col < m_numCols, wxT("invalid column index") );
 
     // if < 0 then calculate new width from label
     if ( width < 0 )

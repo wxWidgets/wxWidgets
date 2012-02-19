@@ -246,10 +246,10 @@ wxSize wxWizardSizer::GetMaxChildSize()
 #ifdef __WXDEBUG__
     if ( m_childSize.IsFullySpecified() && m_childSize != maxOfMin )
     {
-        wxFAIL_MSG( _T("Size changed in wxWizard::GetPageAreaSizer()")
-                    _T("after RunWizard().\n")
-                    _T("Did you forget to call GetSizer()->Fit(this) ")
-                    _T("for some page?")) ;
+        wxFAIL_MSG( wxT("Size changed in wxWizard::GetPageAreaSizer()")
+                    wxT("after RunWizard().\n")
+                    wxT("Did you forget to call GetSizer()->Fit(this) ")
+                    wxT("for some page?")) ;
 
         return m_childSize;
     }
@@ -392,8 +392,8 @@ void wxWizard::AddStaticLine(wxBoxSizer *mainColumn)
 void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
 {
     wxASSERT_MSG( m_btnNext && m_btnPrev,
-                  _T("You must create the buttons before calling ")
-                  _T("wxWizard::AddBackNextPair") );
+                  wxT("You must create the buttons before calling ")
+                  wxT("wxWizard::AddBackNextPair") );
 
     // margin between Back and Next buttons
 #ifdef __WXMAC__
@@ -425,7 +425,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
     // to activate the 'next' button first (create the next button before the back button).
     // The reason is: The user will repeatedly enter information in the wizard pages and then wants to
     // press 'next'. If a user uses mostly the keyboard, he would have to skip the 'back' button
-    // everytime. This is annoying. There is a second reason: RETURN acts as TAB. If the 'next'
+    // every time. This is annoying. There is a second reason: RETURN acts as TAB. If the 'next'
     // button comes first in the TAB order, the user can enter information very fast using the RETURN
     // key to TAB to the next entry field and page. This would not be possible, if the 'back' button
     // was created before the 'next' button.
@@ -786,10 +786,10 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
                   (event.GetEventObject() == m_btnPrev),
                   wxT("unknown button") );
 
-    wxCHECK_RET( m_page, _T("should have a valid current page") );
+    wxCHECK_RET( m_page, wxT("should have a valid current page") );
 
     // ask the current page first: notice that we do it before calling
-    // GetNext/Prev() because the data transfered from the controls of the page
+    // GetNext/Prev() because the data transferred from the controls of the page
     // may change the value returned by these methods
     if ( !m_page->Validate() || !m_page->TransferDataFromWindow() )
     {
