@@ -1319,10 +1319,14 @@ void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)
     wxCommandProcessor * const cmdproc = GetCurrentCommandProcessor();
     if ( !cmdproc )
     {
-        event.Enable(false);
+        // If we don't have any document at all, the menu item should really be
+        // disabled.
+        if ( !GetCurrentDocument() )
+            event.Enable(false);
+        else // But if we do have it, it might handle wxID_UNDO on its own
+            event.Skip();
         return;
     }
-
     event.Enable(cmdproc->CanUndo());
     cmdproc->SetMenuStrings();
 }
@@ -1332,10 +1336,13 @@ void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
     wxCommandProcessor * const cmdproc = GetCurrentCommandProcessor();
     if ( !cmdproc )
     {
-        event.Enable(false);
+        // Use same logic as in OnUpdateUndo() above.
+        if ( !GetCurrentDocument() )
+            event.Enable(false);
+        else
+            event.Skip();
         return;
     }
-
     event.Enable(cmdproc->CanRedo());
     cmdproc->SetMenuStrings();
 }
