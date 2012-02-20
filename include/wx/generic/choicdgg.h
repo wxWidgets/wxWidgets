@@ -143,7 +143,7 @@ public:
     void SetSelection(int sel);
     int GetSelection() const { return m_selection; }
     wxString GetStringSelection() const { return m_stringSelection; }
-    void* GetSelectionData() { return m_clientData; }
+    void* GetSelectionData() const { return m_clientData; }
 
 #if WXWIN_COMPATIBILITY_2_8
     // Deprecated overloads taking "char**" client data.
@@ -208,8 +208,8 @@ public:
     // NB: no need to make it return wxChar, it's untyped
     wxDEPRECATED_ACCESSOR
     (
-        char* GetSelectionClientData(),
-        (char*)GetClientData()
+        char* GetSelectionClientData() const,
+        (char*)GetSelectionData()
     )
 #endif // WXWIN_COMPATIBILITY_2_8
 
