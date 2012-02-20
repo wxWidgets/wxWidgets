@@ -454,23 +454,6 @@ public:
     virtual bool IsModal() const;
 
     /**
-        The default handler for @c wxEVT_SYS_COLOUR_CHANGED.
-
-        @param event
-            The colour change event.
-
-        @remarks Changes the dialog's colour to conform to the current settings
-                 (Windows only). Add an event table entry for your dialog class
-                 if you wish the behaviour to be different (such as keeping a
-                 user-defined background colour). If you do override this
-                 function, call wxEvent::Skip() to propagate the notification
-                 to child windows and controls.
-
-        @see wxSysColourChangedEvent
-    */
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    /**
         Sets the identifier to be used as OK button. When the button with this
         identifier is pressed, the dialog calls wxWindow::Validate() and
         wxWindow::TransferDataFromWindow() and, if they both return @true,
