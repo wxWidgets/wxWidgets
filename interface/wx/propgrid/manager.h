@@ -256,7 +256,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxPGMAN_DEFAULT_STYLE,
-                 const wxChar* name = wxPropertyGridManagerNameStr );
+                 const wxString& name = wxPropertyGridManagerNameStr );
 
     /**
         Enables or disables (shows/hides) categories according to parameter enable.
@@ -340,11 +340,11 @@ public:
     /** Returns index to currently selected page. */
     int GetSelectedPage() const;
 
-    /** Shortcut for GetGrid()->GetSelection(). */
+    /** Alias for GetSelection(). */
     wxPGProperty* GetSelectedProperty() const;
 
-    /** Synonyme for GetSelectedPage. */
-    int GetSelection() const;
+    /** Shortcut for GetGrid()->GetSelection(). */
+    wxPGProperty* GetSelection() const;
 
     /**
         Returns a pointer to the toolbar currently associated with the
@@ -489,9 +489,6 @@ public:
                  ones present in wxPropertyGrid or wxPropertyGridPage.
     */
     void SetSplitterPosition( int pos, int column = 0 );
-
-    /** Synonyme for SelectPage(name). */
-    void SetStringSelection( const wxChar* name );
 
     /**
         Show or hide the property grid header control. It is hidden
