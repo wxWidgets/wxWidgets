@@ -153,8 +153,8 @@ public:
         @param newFrameEachTime
             @true if a new frame is drawn with each invocation.
     */
-    virtual wxFrame* GetFrameParameters(const wxSize* size = NULL,
-                                        const wxPoint* pos = NULL,
+    virtual wxFrame* GetFrameParameters(wxSize* size = NULL,
+                                        wxPoint* pos = NULL,
                                         bool* newFrameEachTime = NULL);
 
     /**
@@ -211,7 +211,7 @@ public:
         Overridable member called when this application's viewer is quit by the user.
         This does not work for all help controllers.
     */
-    virtual bool OnQuit();
+    virtual void OnQuit();
 
     /**
         If the viewer is running, quits it by disconnecting.
