@@ -481,7 +481,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxPG_DEFAULT_STYLE,
-                    const wxChar* name = wxPropertyGridNameStr );
+                    const wxString& name = wxPropertyGridNameStr );
 
     /** Destructor */
     virtual ~wxPropertyGrid();
@@ -597,7 +597,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxPG_DEFAULT_STYLE,
-                const wxChar* name = wxPropertyGridNameStr );
+                const wxString& name = wxPropertyGridNameStr );
 
     /**
         Dedicates a specific keycode to wxPropertyGrid. This means that such
@@ -892,12 +892,16 @@ public:
     */
     virtual void RefreshProperty( wxPGProperty* p );
 
+
+    /** Forwards to DoRegisterEditorClass with empty name. */
+    static wxPGEditor* RegisterEditorClass( wxPGEditor* editor,
+                                            bool noDefCheck = false );
     /**
         Registers a new editor class.
 
         @return Returns pointer  to the editor class instance that should be used.
     */
-    static wxPGEditor* RegisterEditorClass( wxPGEditor* editor,
+    static wxPGEditor* DoRegisterEditorClass( wxPGEditor* editor,
                                             const wxString& name,
                                             bool noDefCheck = false );
 
@@ -945,14 +949,6 @@ public:
         @see wxPropertyGridInterface::ClearSelection()
     */
     bool SelectProperty( wxPGPropArg id, bool focus = false );
-
-    /**
-        Changes keyboard shortcut to push the editor button.
-
-        @remarks You can set default with keycode 0. Good value for the platform
-                is guessed, but don't expect it to be very accurate.
-    */
-    void SetButtonShortcut( int keycode, bool ctrlDown = false, bool altDown = false );
 
     /**
         Sets category caption background colour.
