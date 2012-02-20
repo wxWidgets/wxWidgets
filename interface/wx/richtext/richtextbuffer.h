@@ -4479,7 +4479,7 @@ public:
     /**
         Submits a command to insert paragraphs.
     */
-    bool InsertParagraphsWithUndo(wxRichTextCtrl* ctrl, long pos, const wxRichTextParagraphLayoutBox& paragraphs, int flags = 0);
+    bool InsertParagraphsWithUndo(long pos, const wxRichTextParagraphLayoutBox& paragraphs, wxRichTextCtrl* ctrl, int flags = 0);
 
     /**
         Submits a command to insert the given text.
