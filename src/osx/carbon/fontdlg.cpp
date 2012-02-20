@@ -514,7 +514,7 @@ void wxFontDialog::CreateControls()
     itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_RIGHT|wxALIGN_TOP|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxVERTICAL);
-    itemFlexGridSizer4->Add(itemBoxSizer6, 0, wxGROW|wxGROW, 5);
+    itemFlexGridSizer4->Add(itemBoxSizer6, 0, wxGROW, 5);
 
     wxString* m_facenameCtrlStrings = NULL;
     m_facenameCtrl = new wxListBox( itemDialog1, wxID_FONTDIALOG_FACENAME, wxDefaultPosition, wxSize(320, 100), 0, m_facenameCtrlStrings, wxLB_SINGLE );
