@@ -82,6 +82,39 @@ class wxMessageDialog : public wxDialog
 {
 public:
     /**
+        Helper class allowing to use either stock id or string labels.
+
+        This class should never be used explicitly and is not really part of
+        wxWidgets API but rather is just an implementation helper allowing the
+        methods such as SetYesNoLabels() and SetOKCancelLabels() below to be
+        callable with either stock ids (e.g. ::wxID_CLOSE) or strings
+        ("&Close").
+     */
+    class ButtonLabel
+    {
+    public:
+        /// Construct the label from a stock id.
+        ButtonLabel(int stockId);
+
+        /// Construct the label from the specified string.
+        ButtonLabel(const wxString& label);
+
+        /**
+            Return the associated label as string.
+
+            Get the string label, whether it was originally specified directly
+            or as a stock id -- this is only useful for platforms without native
+            stock items id support
+         */
+        wxString GetAsString() const;
+
+        /**
+            Return the stock id or wxID_NONE if this is not a stock label.
+         */
+        int GetStockId() const;
+    };
+
+    /**
         Constructor specifying the message box properties.
         Use ShowModal() to show the dialog.
 
