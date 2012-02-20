@@ -288,7 +288,7 @@ public:
     /**
         Returns @true if any subkeys exist.
     */
-    bool HasSubKeys() const;
+    bool HasSubkeys() const;
 
     /**
         Returns @true if the value exists.
