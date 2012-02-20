@@ -1283,14 +1283,14 @@ bool wxRichTextXMLHandler::WriteProperties(wxOutputStream& stream, const wxRichT
                 OutputString(stream, wxT("<property name=\"") + name +
                     wxT("\" type=\"") + var.GetType() + wxT("\" value=\""));
                 OutputStringEnt(stream, value);
-                OutputString(stream, wxT("\"/>\n"));
+                OutputString(stream, wxT("\"/>"));
             }
         }
 
         level --;
 
         OutputIndentation(stream, level);
-        OutputString(stream, wxT("</properties>\n"));
+        OutputString(stream, wxT("</properties>"));
 
         level --;
     }
