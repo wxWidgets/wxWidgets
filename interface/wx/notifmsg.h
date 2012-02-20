@@ -24,6 +24,13 @@
 class wxNotificationMessage : public wxEvtHandler
 {
 public:
+    /// Possible values for Show() timeout.
+    enum
+    {
+        Timeout_Auto = -1,  ///< Notification will be hidden automatically.
+        Timeout_Never = 0   ///< Notification will never time out.
+    };
+
     /**
         Default constructor, use SetParent(), SetTitle() and SetMessage() to
         initialize the object before showing it.
