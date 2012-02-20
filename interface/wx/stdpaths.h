@@ -165,7 +165,10 @@ public:
         value, otherwise tries to determine it automatically (Linux only right now)
         and finally returns the default @c /usr/local value if it failed.
 
-        @note This function is only available under Unix.
+        @note This function is only available under Unix platforms (but not limited
+        to wxGTK mentioned below).
+
+        @onlyfor{wxos2,wxgtk}
     */
     wxString GetInstallPrefix() const;
 
@@ -335,7 +338,10 @@ public:
         is set during program configuration if using GNU autotools and so it is enough
         to pass its value defined in @c config.h to this function.
 
-        @note This function is only available under Unix.
+        @note This function is only available under Unix platforms (but not limited
+        to wxGTK mentioned below).
+
+        @onlyfor{wxos2,wxgtk}
     */
     void SetInstallPrefix(const wxString& prefix);
 
