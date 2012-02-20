@@ -152,9 +152,13 @@ void IntlTestCase::DateTimeFmtFrench()
         return;
 
 #ifdef __GLIBC__
-    // glibc also uses dots for French locale separator for some reason (the
-    // standard format uses slashes)
+    // Versions of glibc up to 2.7 wrongly used periods for French locale
+    // separator.
+#if __GLIBC__ > 2 || __GLIBC_MINOR__ >= 8
+    static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
+#else
     static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
+#endif
     static const char *FRENCH_LONG_DATE_FMT = "%a %d %b %Y";
     static const char *FRENCH_DATE_TIME_FMT = "%a %d %b %Y %H:%M:%S %Z";
 #else
