@@ -669,7 +669,11 @@ public:
 
     /**
         Sets the bitmap resource identifier for specifying tool bitmaps as
-        indices into a custom bitmap. Windows CE only.
+        indices into a custom bitmap.
+
+        This is a Windows CE-specific method not available in the other ports.
+
+        @onlyfor{wxWinCE}
     */
     void SetBitmapResource(int resourceId);
 
