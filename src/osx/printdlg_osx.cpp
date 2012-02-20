@@ -80,13 +80,13 @@ wxDC *wxMacPrintDialog::GetPrintDC()
 
 IMPLEMENT_CLASS(wxMacPageSetupDialog, wxPageSetupDialogBase)
 
-wxMacPageSetupDialog::wxMacPageSetupDialog( wxWindow *p, wxPageSetupData *data )
+wxMacPageSetupDialog::wxMacPageSetupDialog( wxWindow *p, wxPageSetupDialogData *data )
     : wxPageSetupDialogBase()
 {
     Create( p, data );
 }
 
-bool wxMacPageSetupDialog::Create( wxWindow *p, wxPageSetupData *data )
+bool wxMacPageSetupDialog::Create( wxWindow *p, wxPageSetupDialogData *data )
 {
     m_dialogParent = p;
 
@@ -100,14 +100,14 @@ wxMacPageSetupDialog::~wxMacPageSetupDialog()
 {
 }
 
-wxPageSetupData& wxMacPageSetupDialog::GetPageSetupDialogData()
+wxPageSetupDialogData& wxMacPageSetupDialog::GetPageSetupDialogData()
 {
     return m_pageSetupData;
 }
 
 IMPLEMENT_CLASS(wxMacPageMarginsDialog, wxDialog)
 
-wxMacPageMarginsDialog::wxMacPageMarginsDialog(wxFrame *parent, wxPageSetupData *data) :
+wxMacPageMarginsDialog::wxMacPageMarginsDialog(wxFrame *parent, wxPageSetupDialogData *data) :
   wxDialog(parent, wxID_ANY, wxString(wxT("Page Margins"))),
   m_pageSetupDialogData(data)
   {

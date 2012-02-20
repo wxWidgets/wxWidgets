@@ -34,7 +34,7 @@ class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxComboBox;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
 class WXDLLIMPEXP_FWD_CORE wxRadioBox;
-class WXDLLIMPEXP_FWD_CORE wxPageSetupData;
+class WXDLLIMPEXP_FWD_CORE wxPageSetupDialogData;
 
 // ----------------------------------------------------------------------------
 // constants

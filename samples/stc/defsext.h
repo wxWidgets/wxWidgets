@@ -101,7 +101,7 @@ extern wxString *g_appname;
 
 //! global print data, to remember settings during the session
 extern wxPrintData *g_printData;
-extern wxPageSetupData *g_pageSetupData;
+extern wxPageSetupDialogData *g_pageSetupData;
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 

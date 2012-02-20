@@ -460,14 +460,14 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
     return true ;
 }
 
-void wxOSXPrintData::TransferFrom( wxPageSetupData *WXUNUSED(data) )
+void wxOSXPrintData::TransferFrom( wxPageSetupDialogData *WXUNUSED(data) )
 {
     // should we setup the page rect here ?
     // since MacOS sometimes has two same paper rects with different
     // page rects we could make it roundtrip safe perhaps
 }
 
-void wxOSXPrintData::TransferTo( wxPageSetupData* data )
+void wxOSXPrintData::TransferTo( wxPageSetupDialogData* data )
 {
 #if wxOSX_USE_COCOA
     UpdateToPMState();

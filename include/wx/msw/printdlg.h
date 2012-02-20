@@ -107,7 +107,7 @@ public:
     bool ConvertToNative( wxPageSetupDialogData &data );
     bool ConvertFromNative( wxPageSetupDialogData &data );
 
-    virtual wxPageSetupData& GetPageSetupDialogData() { return m_pageSetupData; }
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() { return m_pageSetupData; }
 
 private:
     wxPageSetupDialogData   m_pageSetupData;

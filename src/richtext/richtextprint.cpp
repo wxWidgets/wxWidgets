@@ -477,7 +477,7 @@ void wxRichTextPrinting::SetPrintData(const wxPrintData& printData)
     (*GetPrintData()) = printData;
 }
 
-void wxRichTextPrinting::SetPageSetupData(const wxPageSetupData& pageSetupData)
+void wxRichTextPrinting::SetPageSetupData(const wxPageSetupDialogData& pageSetupData)
 {
     (*GetPageSetupData()) = pageSetupData;
 }

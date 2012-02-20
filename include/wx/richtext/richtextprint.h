@@ -202,7 +202,7 @@ public:
 
     /// Set print and page setup data
     void SetPrintData(const wxPrintData& printData);
-    void SetPageSetupData(const wxPageSetupData& pageSetupData);
+    void SetPageSetupData(const wxPageSetupDialogData& pageSetupData);
 
     /// Set the rich text buffer pointer, deleting the existing object if present
     void SetRichTextBufferPreview(wxRichTextBuffer* buf);

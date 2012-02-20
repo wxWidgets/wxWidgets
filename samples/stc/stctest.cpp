@@ -79,7 +79,7 @@ wxString *g_appname = NULL;
 
 //! global print data, to remember settings during the session
 wxPrintData *g_printData = (wxPrintData*) NULL;
-wxPageSetupData *g_pageSetupData = (wxPageSetupData*) NULL;
+wxPageSetupDialogData *g_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 

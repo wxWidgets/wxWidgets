@@ -58,16 +58,16 @@ private:
 class WXDLLIMPEXP_CORE wxMacPageSetupDialog: public wxPageSetupDialogBase
 {
 public:
-    wxMacPageSetupDialog(wxWindow *parent, wxPageSetupData *data = NULL);
+    wxMacPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
     virtual ~wxMacPageSetupDialog();
 
-    virtual wxPageSetupData& GetPageSetupDialogData();
+    virtual wxPageSetupDialogData& GetPageSetupDialogData();
 
-    bool Create(wxWindow *parent, wxPageSetupData *data = NULL);
+    bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
     virtual int ShowModal();
 
 private:
-    wxPageSetupData   m_pageSetupData;
+    wxPageSetupDialogData   m_pageSetupData;
     wxWindow*               m_dialogParent;
 
 private:
@@ -85,14 +85,14 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_CORE wxMacPageMarginsDialog : public wxDialog
 {
 public:
-    wxMacPageMarginsDialog(wxFrame* parent, wxPageSetupData* data);
+    wxMacPageMarginsDialog(wxFrame* parent, wxPageSetupDialogData* data);
     bool TransferToWindow();
     bool TransferDataFromWindow();
 
-    virtual wxPageSetupData& GetPageSetupDialogData() { return *m_pageSetupDialogData; }
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() { return *m_pageSetupDialogData; }
 
 private:
-    wxPageSetupData* m_pageSetupDialogData;
+    wxPageSetupDialogData* m_pageSetupDialogData;
 
     wxPoint m_MinMarginTopLeft;
     wxPoint m_MinMarginBottomRight;
