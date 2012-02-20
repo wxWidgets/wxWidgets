@@ -1266,7 +1266,7 @@ bool wxRichTextXMLHandler::WriteProperties(wxOutputStream& stream, const wxRichT
         level ++;
 
         OutputIndentation(stream, level);
-        OutputString(stream, wxT("<properties"));
+        OutputString(stream, wxT("<properties>"));
 
         level ++;
 
