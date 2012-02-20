@@ -183,13 +183,6 @@ public:
     void SetBookCtrl(wxBookCtrlBase* bookCtrl);
 
     /**
-        Sets the inner sizer that contains the book control and button sizer.
-
-        You will normally not need to use this.
-    */
-    void SetInnerSizer(wxSizer* sizer);
-
-    /**
         You can customize the look and feel of the dialog by setting the sheet style.
         It is a bit list of the ::wxPropertySheetDialogFlags values.
     */
