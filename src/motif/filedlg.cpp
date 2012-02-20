@@ -113,7 +113,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
              :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
-    m_filterIndex = 1;
 }
 
 static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
