@@ -726,8 +726,7 @@ bool wxSetWMDecorations(Window w, long style)
         wmProp.flags |= GR_WM_FLAGS_PROPS ;
     }
 
-    if (((style & wxBORDER) != wxBORDER) && ((style & wxRESIZE_BORDER) != wxRESIZE_BORDER)
-        && ((style & wxRESIZE_BORDER) != wxRESIZE_BORDER))
+    if ( !(style & wxBORDER) && !(style & wxRESIZE_BORDER) )
     {
         wmProp.props |= GR_WM_PROPS_NODECORATE ;
         wmProp.flags |= GR_WM_FLAGS_PROPS ;
