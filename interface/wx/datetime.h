@@ -488,6 +488,7 @@ public:
             Input, Windows SYSTEMTIME reference
         @since 2.9.0
         @remarks MSW only
+        @onlyfor{wxmsw}
     */
     wxDateTime(const struct _SYSTEMTIME& st);
 
@@ -623,6 +624,7 @@ public:
             Input, Windows SYSTEMTIME reference
         @since 2.9.0
         @remarks MSW only
+        @onlyfor{wxmsw}
     */
     wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME& st);
 
@@ -632,6 +634,7 @@ public:
             Output, pointer to Windows SYSTEMTIME
         @since 2.9.0
         @remarks MSW only
+        @onlyfor{wxmsw}
     */
     void GetAsMSWSysTime(struct _SYSTEMTIME* st) const;
 
@@ -904,7 +907,7 @@ public:
     /**
         Adds the given date span to this object.
     */
-    wxDateTime operator+=(const wxDateSpan& diff);
+    wxDateTime& operator+=(const wxDateSpan& diff);
     /**
         Subtracts the given date span from this object.
     */
