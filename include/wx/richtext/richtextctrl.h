@@ -2278,6 +2278,9 @@ protected:
         when the control's stylesheet has been replaced, for example when a file
         is loaded into the control.
         Valid event functions: GetOldStyleSheet, GetNewStyleSheet.
+    @event{EVT_RICHTEXT_PROPERTIES_CHANGED(id, func)}
+        Process a @c wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED event, generated when
+        properties have been applied to the control. Valid event functions: GetPosition, GetRange.
     @event{EVT_RICHTEXT_CONTENT_INSERTED(id, func)}
         Process a @c wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when
         content has been inserted into the control.

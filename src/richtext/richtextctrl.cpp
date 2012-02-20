@@ -861,7 +861,6 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         // Check for dragging across multiple containers
         long position2 = 0;
         wxRichTextObject* hitObj2 = NULL, *contextObj2 = NULL;
-        wxRichTextDrawingContext context(& GetBuffer());
         int hit2 = GetBuffer().HitTest(dc, context, logicalPt, position2, & hitObj2, & contextObj2, 0);
         if (hit2 != wxRICHTEXT_HITTEST_NONE && !(hit2 & wxRICHTEXT_HITTEST_OUTSIDE) && hitObj2 && hitObj != hitObj2)
         {
