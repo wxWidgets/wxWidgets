@@ -72,7 +72,12 @@ public:
 
     /**
         Returns @true if a sound is played at the moment.
-        This method is currently not implemented under Windows.
+
+        This method is currently not available under Windows and may not be
+        always implemented in Unix ports depending on the compilation options
+        used (in this case it just always returns @false).
+
+        @onlyfor{wxgtk,wxosx}
     */
     static bool IsPlaying();
 
