@@ -98,6 +98,10 @@ public:
         The page has been just changed (this event cannot be vetoed).
     @event{EVT_WIZARD_PAGE_CHANGING(id, func)}
         The page is being changed (this event can be vetoed).
+    @event{EVT_WIZARD_BEFORE_PAGE_CHANGED(id, func)}
+        Called after Next is clicked but before GetNext is called. Unlike EVT_WIZARD_CHANGING,
+        the handler for this function can change state that might affect the return value of
+        GetNext. This event can be vetoed.
     @event{EVT_WIZARD_PAGE_SHOWN(id, func)}
         The page was shown and laid out (this event cannot be vetoed).
     @event{EVT_WIZARD_CANCEL(id, func)}
@@ -231,6 +235,10 @@ public:
         The page has just been changed (this event cannot be vetoed).
     @event{EVT_WIZARD_PAGE_CHANGING(id, func)}
         The page is being changed (this event can be vetoed).
+    @event{EVT_WIZARD_BEFORE_PAGE_CHANGED(id, func)}
+        Called after Next is clicked but before GetNext is called. Unlike EVT_WIZARD_CHANGING,
+        the handler for this function can change state that might affect the return value of
+        GetNext. This event can be vetoed.
     @event{EVT_WIZARD_PAGE_SHOWN(id, func)}
         The page was shown and laid out (this event cannot be vetoed).
     @event{EVT_WIZARD_CANCEL(id, func)}

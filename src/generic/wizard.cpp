@@ -83,6 +83,7 @@ private:
 
 wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGED, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGING, wxWizardEvent );
+wxDEFINE_EVENT( wxEVT_WIZARD_BEFORE_PAGE_CHANGED, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_CANCEL, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_FINISHED, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_HELP, wxWizardEvent );
@@ -791,6 +792,13 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
     }
 
     bool forward = event.GetEventObject() == m_btnNext;
+
+    // Give the application a chance to set state which may influence GetNext()/GetPrev()
+    wxWizardEvent eventPreChanged(wxEVT_WIZARD_BEFORE_PAGE_CHANGED, GetId(), forward, m_page);
+    (void)m_page->GetEventHandler()->ProcessEvent(eventPreChanged);
+
+    if (!eventPreChanged.IsAllowed())
+        return;
 
     wxWizardPage *page;
     if ( forward )
