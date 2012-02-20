@@ -2576,6 +2576,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
     if ( !handler )
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
+        return false;
     }
 
     return DoSave(*handler, stream);
