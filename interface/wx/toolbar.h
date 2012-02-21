@@ -673,7 +673,7 @@ public:
 
         This is a Windows CE-specific method not available in the other ports.
 
-        @onlyfor{wxWinCE}
+        @onlyfor{wxmsw_wince}
     */
     void SetBitmapResource(int resourceId);
 
