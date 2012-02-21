@@ -733,23 +733,45 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
 void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
     paintState = painting;
-    Surface* surfaceWindow = Surface::Allocate();
-    surfaceWindow->Init(dc, wMain.GetID());
-    rcPaint = PRectangleFromwxRect(rect);
-    PRectangle rcClient = GetClientRectangle();
-    paintingAllText = rcPaint.Contains(rcClient);
+    AutoSurface surfaceWindow(dc, this);
+    if (surfaceWindow) {
+        rcPaint = PRectangleFromwxRect(rect);
+        PRectangle rcClient = GetClientRectangle();
+        paintingAllText = rcPaint.Contains(rcClient);
 
-    ClipChildren(*dc, rcPaint);
-    Paint(surfaceWindow, rcPaint);
+        ClipChildren(*dc, rcPaint);
+        Paint(surfaceWindow, rcPaint);
+        surfaceWindow->Release();
+    }
 
-    delete surfaceWindow;
     if (paintState == paintAbandoned) {
         // Painting area was insufficient to cover new styling or brace
         // highlight positions
-        FullPaint();
+        FullPaintDC(dc);
     }
     paintState = notPainting;
 }
+
+
+// Force the whole window to be repainted
+void ScintillaWX::FullPaint() {
+    wxClientDC dc(stc);
+    FullPaintDC(&dc);
+}
+
+
+void ScintillaWX::FullPaintDC(wxDC* dc) {
+    paintState = painting;
+    rcPaint = GetClientRectangle();
+    paintingAllText = true;
+    AutoSurface surfaceWindow(dc, this);
+    if (surfaceWindow) {
+        Paint(surfaceWindow, rcPaint);
+        surfaceWindow->Release();
+    }
+    paintState = notPainting;
+}
+
 
 
 void ScintillaWX::DoHScroll(int type, int pos) {
@@ -1079,13 +1101,6 @@ void ScintillaWX::DoDragLeave() {
 }
 #endif // wxUSE_DRAG_AND_DROP
 //----------------------------------------------------------------------
-
-// Force the whole window to be repainted
-void ScintillaWX::FullPaint() {
-    stc->Refresh(false);
-    stc->Update();
-}
-
 
 void ScintillaWX::DoScrollToLine(int line) {
     ScrollTo(line);

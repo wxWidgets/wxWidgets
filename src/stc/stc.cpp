@@ -210,7 +210,7 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     SetInitialSize(size);
 
     // Reduces flicker on GTK+/X11
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     // Make sure it can take the focus
     SetCanFocus(true);
