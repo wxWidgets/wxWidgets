@@ -1252,6 +1252,9 @@ wxString wxWindowMac::GetLabel() const
 
 bool wxWindowMac::Show(bool show)
 {
+    if ( !show )
+        MacInvalidateBorders();
+    
     if ( !wxWindowBase::Show(show) )
         return false;
 
