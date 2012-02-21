@@ -20,7 +20,12 @@ me=$(basename $0)
 path=${0%%/$me}        # path from which the script has been launched
 current=$(pwd)
 cd $path
-export WXWIDGETS=`cd ../.. && pwd`
+if [ "$WXWIDGETS" = "" ]; then
+    export WXWIDGETS=`cd ../.. && pwd`
+    if [ "$OSTYPE" = "cygwin" ]; then
+        export WXWIDGETS=`cygpath -w $WXWIDGETS`
+    fi
+fi
 
 # prepare folders for the cp commands below
 mkdir -p out/html       # we need to copy files in this folder below
