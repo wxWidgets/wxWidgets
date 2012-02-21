@@ -1261,6 +1261,9 @@ bool wxWindowMac::Show(bool show)
     if ( GetPeer() )
         GetPeer()->SetVisibility( show ) ;
 
+    if ( show )
+        MacInvalidateBorders();
+
 #ifdef __WXOSX_IPHONE__
     // only when there's no native event support
     if ( !IsTopLevel() )
