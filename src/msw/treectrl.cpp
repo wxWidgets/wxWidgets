@@ -791,6 +791,8 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 
 wxTreeCtrl::~wxTreeCtrl()
 {
+    m_isBeingDeleted = true;
+
     // delete any attributes
     if ( m_hasAnyAttr )
     {
@@ -3468,7 +3470,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             //
             // to avoid such surprises, we force the generation of focus events
             // now, before we generate the selection change ones
-            if ( !m_changingSelection )
+            if ( !m_changingSelection && !m_isBeingDeleted )
                 SetFocus();
             break;
 
