@@ -619,8 +619,6 @@ wxGtkPrintDialog::~wxGtkPrintDialog()
 // This is called even if we actually don't want the dialog to appear.
 int wxGtkPrintDialog::ShowModal()
 {
-    GtkPrintOperationResult response;
-
     // We need to restore the settings given in the constructor.
     wxPrintData data = m_printDialogData.GetPrintData();
     wxGtkPrintNativeData *native =
@@ -654,10 +652,17 @@ int wxGtkPrintDialog::ShowModal()
 
     // Show the dialog if needed.
     GError* gError = NULL;
-    if (GetShowDialog())
-        response = gtk_print_operation_run (printOp, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget) ), &gError);
-    else
-        response = gtk_print_operation_run (printOp, GTK_PRINT_OPERATION_ACTION_PRINT, GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget)), &gError);
+    GtkPrintOperationResult response = gtk_print_operation_run
+                                       (
+                                           printOp,
+                                           GetShowDialog()
+                                            ? GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG
+                                            : GTK_PRINT_OPERATION_ACTION_PRINT,
+                                           m_parent
+                                            ? GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget))
+                                            : NULL,
+                                           &gError
+                                       );
 
     // Does everything went well?
     if (response == GTK_PRINT_OPERATION_RESULT_CANCEL)
@@ -770,7 +775,9 @@ int wxGtkPageSetupDialog::ShowModal()
         title = _("Page Setup");
     GtkWidget *
         dlg = gtk_page_setup_unix_dialog_new(title.utf8_str(),
-                                             GTK_WINDOW(m_parent->m_widget));
+                                             m_parent
+                                                ? GTK_WINDOW(m_parent->m_widget)
+                                                : NULL);
 
     gtk_page_setup_unix_dialog_set_print_settings(
         GTK_PAGE_SETUP_UNIX_DIALOG(dlg), nativeData);
