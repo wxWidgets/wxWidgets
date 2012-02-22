@@ -186,6 +186,39 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     }
 }
 
+- (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
+{
+    wxUnusedVar(textView);
+    
+    BOOL handled = NO;
+    
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( control );
+    if ( impl  )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer )
+        {
+            if (commandSelector == @selector(insertNewline:))
+            {
+                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(wxpeer), wxTopLevelWindow);
+                if ( tlw && tlw->GetDefaultItem() )
+                {
+                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                    if ( def && def->IsEnabled() )
+                    {
+                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        event.SetEventObject(def);
+                        def->Command(event);
+                        handled = YES;
+                    }
+                }
+            }
+        }
+    }
+    
+    return handled;
+}
+
 @end
 
 @interface wxNSTextScrollView : NSScrollView
