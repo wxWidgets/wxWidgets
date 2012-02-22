@@ -517,7 +517,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     wxDateTime property. Default editor is DatePickerCtrl, although TextCtrl
     should work as well. wxPG_DATE_FORMAT attribute can be used to change
     string wxDateTime::Format uses (although default is recommended as it is
-    locale-dependant), and wxPG_DATE_PICKER_STYLE allows changing window
+    locale-dependent), and wxPG_DATE_PICKER_STYLE allows changing window
     style given to DatePickerCtrl (default is wxDP_DEFAULT|wxDP_SHOWCENTURY).
     Using wxDP_ALLOWNONE will enable better unspecified value support.
 

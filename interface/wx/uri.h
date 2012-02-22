@@ -49,7 +49,7 @@ enum wxURIHostType
     @endcode
 
     @note On URIs with a "file" scheme wxURI does not parse the userinfo,
-          server, or port portion. This is to keep compatability with
+          server, or port portion. This is to keep compatibility with
           wxFileSystem, the old wxURL, and older url specifications.
 
     @library{wxbase}

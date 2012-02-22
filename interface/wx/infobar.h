@@ -52,7 +52,7 @@
 
     void MyFrame::SomeMethod()
     {
-        m_infoBar->ShowMessage("Something happend", wxICON_INFORMATION);
+        m_infoBar->ShowMessage("Something happened", wxICON_INFORMATION);
     }
     @endcode
 

@@ -301,7 +301,7 @@ public:
         default colours of the art provider.
         Note that if SetColour() is called, then GetColourScheme() does not try
         and return a colour scheme similar to colours being used - it's return
-        values are dependant upon the last values given to SetColourScheme(),
+        values are dependent upon the last values given to SetColourScheme(),
         as described above.
         
         @param[out] primary

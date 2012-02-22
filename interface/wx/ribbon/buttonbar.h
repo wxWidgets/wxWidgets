@@ -20,19 +20,19 @@
 enum wxRibbonButtonBarButtonState
 {
     /**
-        Button is small (the interpretation of small is dependant upon the art
+        Button is small (the interpretation of small is dependent upon the art
         provider, but it will be smaller than medium).
     */
     wxRIBBON_BUTTONBAR_BUTTON_SMALL     = 0 << 0,
     
     /**
-        Button is medium sized (the interpretation of medium is dependant upon
+        Button is medium sized (the interpretation of medium is dependent upon
         the art provider, but it will be between small and large).
     */
     wxRIBBON_BUTTONBAR_BUTTON_MEDIUM    = 1 << 0,
     
     /**
-        Button is large (the interpretation of large is dependant upon the art
+        Button is large (the interpretation of large is dependent upon the art
         provider, but it will be larger than medium).
     */
     wxRIBBON_BUTTONBAR_BUTTON_LARGE     = 2 << 0,

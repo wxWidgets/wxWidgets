@@ -2693,7 +2693,7 @@ public:
     wxClientData* GetClientObject() const;
 
     /**
-        Returns extra information dependant on the event objects type.
+        Returns extra information dependent on the event objects type.
 
         If the event comes from a listbox selection, it is a boolean
         determining whether the event was a selection (@true) or a

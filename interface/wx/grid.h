@@ -265,7 +265,7 @@ public:
 
     /**
         The parameters string format is "width[,precision[,format]]" where
-        @c format should be choosen beween f|e|g|E|G (f is used by default)
+        @c format should be chosen between f|e|g|E|G (f is used by default)
     */
     virtual void SetParameters(const wxString& params);
 
@@ -656,7 +656,7 @@ public:
 
     /**
         The parameters string format is "width[,precision[,format]]" where
-        @c format should be choosen beween f|e|g|E|G (f is used by default)
+        @c format should be chosen between f|e|g|E|G (f is used by default)
     */
     virtual void SetParameters(const wxString& params);
 };

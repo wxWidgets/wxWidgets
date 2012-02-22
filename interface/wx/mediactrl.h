@@ -85,7 +85,7 @@ public:
     want to render, catch the @c EVT_MEDIA_LOADED event, and then call Play()
     to show the video/audio of the media in that event.
 
-    More complex operations are generally more heavily dependant on the capabilities
+    More complex operations are generally more heavily dependent on the capabilities
     of the backend. For example, QuickTime cannot set the playback rate of certain
     streaming media - while DirectShow is slightly more flexible in that regard.
 
@@ -337,7 +337,7 @@ public:
 
     /**
         Loads the location that uri refers to. Note that this is very
-        implementation-dependant, although HTTP URI/URLs are generally
+        implementation-dependent, although HTTP URI/URLs are generally
         supported, for example. Returns @false if loading fails.
     */
     bool Load(const wxURI& uri);
