@@ -753,11 +753,17 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
     // add the details pane
 #ifndef __SMARTPHONE__
+
+#if wxUSE_COLLPANE
     wxCollapsiblePane * const
         collpane = new wxCollapsiblePane(this, wxID_ANY, ms_details);
     sizerTop->Add(collpane, wxSizerFlags(1).Expand().Border());
 
     wxWindow *win = collpane->GetPane();
+#else
+    wxPanel* win = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                               wxBORDER_NONE);
+#endif
     wxSizer * const paneSz = new wxBoxSizer(wxVERTICAL);
 
     CreateDetailsControls(win);

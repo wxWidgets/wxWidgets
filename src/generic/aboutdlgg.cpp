@@ -249,6 +249,7 @@ void wxGenericAboutDialog::AddText(const wxString& text)
         AddControl(new wxStaticText(this, wxID_ANY, text));
 }
 
+#if wxUSE_COLLPANE
 void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
                                               const wxString& text)
 {
@@ -271,6 +272,7 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
     // NB: all the wxCollapsiblePanes must be added with a null proportion value
     m_sizerText->Add(pane, wxSizerFlags(0).Expand().Border(wxBOTTOM));
 }
+#endif
 
 #if !wxUSE_MODAL_ABOUT_DIALOG
 
