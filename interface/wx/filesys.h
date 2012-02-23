@@ -243,7 +243,7 @@ public:
 
     /**
         Detaches the stream from the wxFSFile object. That is, the
-        stream obtained with GetStream() will continue its existance
+        stream obtained with GetStream() will continue its existence
         after the wxFSFile object is deleted.
 
         You will have to delete the stream yourself.

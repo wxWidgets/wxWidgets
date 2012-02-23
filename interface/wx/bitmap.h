@@ -165,7 +165,7 @@ public:
     If you need direct access the bitmap data instead going through
     drawing to it using wxMemoryDC you need to use the wxPixelData
     class (either wxNativePixelData for RGB bitmaps or wxAlphaPixelData
-    for bitmaps with an additionaly alpha channel).
+    for bitmaps with an additionally alpha channel).
 
     Note that many wxBitmap functions take a @e type parameter, which is a 
     value of the ::wxBitmapType enumeration.

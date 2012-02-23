@@ -51,7 +51,7 @@ public:
     If the function returns true, the initialization was successful and the
     global wxApp object ::wxTheApp has been created. Moreover, wxEntryCleanup()
     must be called afterwards. If the function returns false, a catastrophic
-    initialization error occured and (at least the GUI part of) the library
+    initialization error occurred and (at least the GUI part of) the library
     can't be used at all.
 
     Notice that parameters @c argc and @c argv may be modified by this

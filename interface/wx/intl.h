@@ -19,7 +19,7 @@ enum wxLayoutDirection
 };
 
 /**
-    Encapsulates a ::wxLanguage indentifier together with OS-specific information
+    Encapsulates a ::wxLanguage identifier together with OS-specific information
     related to that language.
 
     @beginWxPerlOnly

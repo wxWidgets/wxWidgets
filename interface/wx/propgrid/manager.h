@@ -147,7 +147,7 @@ public:
     acquire the internal grid (GetGrid()) or wxPropertyGridPage object (GetPage()).
 
     wxPropertyGridManager constructor has exact same format as wxPropertyGrid
-    constructor, and basicly accepts same extra window style flags (albeit also
+    constructor, and basically accepts same extra window style flags (albeit also
     has some extra ones).
 
     Here's some example code for creating and populating a wxPropertyGridManager:

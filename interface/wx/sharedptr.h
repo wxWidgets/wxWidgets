@@ -9,7 +9,7 @@
 /**
     A smart pointer with non-intrusive reference counting.
 
-    It is modeled after @c boost::shared_ptr<> and can be used with STL
+    It is modelled after @c boost::shared_ptr<> and can be used with STL
     containers and wxVector<T> unlike @c std::auto_ptr<> and wxScopedPtr<T>.
 
     @library{wxbase}

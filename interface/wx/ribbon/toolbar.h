@@ -218,7 +218,7 @@ public:
 
         @param pos
             Position of the new tool (number of tools and separators from the
-            begining of the toolbar).
+            beginning of the toolbar).
         @param tool_id
             ID of the new tool (used for event callbacks).
         @param bitmap
@@ -284,7 +284,7 @@ public:
     /**
         This function behaves like DeleteTool() but it deletes the tool at the
         specified position and not the one with the given id.
-        Usefull to delete separators.
+        Useful to delete separators.
 
         @since 2.9.4
     */

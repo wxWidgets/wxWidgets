@@ -581,7 +581,7 @@ public:
         any prologue nodes, but IsOk() will return @false since the root entity
         will be missing.
 
-        Note that the caller is reponsible for deleting the returned node in order
+        Note that the caller is responsible for deleting the returned node in order
         to avoid memory leaks.
     */
     wxXmlNode* DetachRoot();
