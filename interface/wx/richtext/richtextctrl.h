@@ -1635,6 +1635,16 @@ public:
     */
     virtual bool CanInsertContent(wxRichTextParagraphLayoutBox& container, long pos) const;
 
+    /**
+        Enable or disable the vertical scrollbar.
+    */
+    virtual void EnableVerticalScrollbar(bool enable);
+
+    /**
+        Returns @true if the vertical scrollbar is enabled.
+    */
+    virtual bool GetVerticalScrollbarEnabled() const;
+
 // Command handlers
 
     /**

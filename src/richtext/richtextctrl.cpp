@@ -356,6 +356,7 @@ void wxRichTextCtrl::Init()
     m_selectionAnchorObject = NULL;
     m_selectionState = wxRichTextCtrlSelectionState_Normal;
     m_editable = true;
+    m_verticalScrollbarEnabled = true;
     m_caretAtLineStart = false;
     m_dragging = false;
 #if wxUSE_DRAG_AND_DROP
@@ -2555,7 +2556,7 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop)
     if (IsFrozen())
         return;
 
-    if (GetBuffer().IsEmpty())
+    if (GetBuffer().IsEmpty() || !m_verticalScrollbarEnabled)
     {
         SetScrollbars(0, 0, 0, 0, 0, 0);
         return;
@@ -4558,6 +4559,12 @@ bool wxRichTextCtrl::CanDeleteRange(wxRichTextParagraphLayoutBox& WXUNUSED(conta
 bool wxRichTextCtrl::CanInsertContent(wxRichTextParagraphLayoutBox& WXUNUSED(container), long WXUNUSED(pos)) const
 {
     return true;
+}
+
+void wxRichTextCtrl::EnableVerticalScrollbar(bool enable)
+{
+    m_verticalScrollbarEnabled = enable;
+    SetupScrollbars();
 }
 
 

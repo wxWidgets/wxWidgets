@@ -1676,6 +1676,16 @@ public:
     */
     virtual bool CanInsertContent(wxRichTextParagraphLayoutBox& container, long pos) const;
 
+    /**
+        Enable or disable the vertical scrollbar.
+    */
+    virtual void EnableVerticalScrollbar(bool enable);
+
+    /**
+        Returns @true if the vertical scrollbar is enabled.
+    */
+    virtual bool GetVerticalScrollbarEnabled() const { return m_verticalScrollbarEnabled; }
+
 // Command handlers
 
     /**
@@ -2158,6 +2168,9 @@ protected:
 
     /// Are we editable?
     bool                    m_editable;
+
+    /// Is the vertical scrollbar enabled?
+    bool                    m_verticalScrollbarEnabled;
 
     /// Are we showing the caret position at the start of a line
     /// instead of at the end of the previous one?
