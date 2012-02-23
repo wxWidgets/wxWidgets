@@ -403,7 +403,7 @@ au_check_word( GtkTextIter *s, GtkTextIter *e )
     for( n = 0; n < WXSIZEOF(URIPrefixes); ++n )
     {
         prefix_len = strlen(URIPrefixes[n]);
-        if((len > prefix_len) && !strncasecmp(text, URIPrefixes[n], prefix_len))
+        if((len > prefix_len) && !wxStrnicmp(text, URIPrefixes[n], prefix_len))
             break;
     }
 

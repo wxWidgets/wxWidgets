@@ -159,9 +159,9 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 
     // Check for some common fonts, to salvage what we can from the current
     // win32 centric wxFont API:
-    if (strncasecmp( family_text, "monospace", 9 ) == 0)
+    if (wxStrnicmp( family_text, "monospace", 9 ) == 0)
         ret = wxFONTFAMILY_TELETYPE;    // begins with "Monospace"
-    else if (strncasecmp( family_text, "courier", 7 ) == 0)
+    else if (wxStrnicmp( family_text, "courier", 7 ) == 0)
         ret = wxFONTFAMILY_TELETYPE;    // begins with "Courier"
 #if defined(__WXGTK20__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
     else
@@ -209,9 +209,9 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
             ret = wxFONTFAMILY_SWISS;       // contains "Sans"
         else if (strstr( family_text, "serif" ) != NULL || strstr( family_text, "Serif" ) != NULL)
             ret = wxFONTFAMILY_ROMAN;       // contains "Serif"
-        else if (strncasecmp( family_text, "times", 5 ) == 0)
+        else if (wxStrnicmp( family_text, "times", 5 ) == 0)
             ret = wxFONTFAMILY_ROMAN;       // begins with "Times"
-        else if (strncasecmp( family_text, "old", 3 ) == 0)
+        else if (wxStrnicmp( family_text, "old", 3 ) == 0)
             ret = wxFONTFAMILY_DECORATIVE;  // begins with "Old" - "Old English", "Old Town"
     }
 
