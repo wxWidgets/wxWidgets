@@ -480,7 +480,23 @@ wxString wxFindNextFile();
 wxString wxFindFirstFile(const wxString& spec, int flags = 0);
 
 /**
+    Parameter indicating how file offset should be interpreted.
+
+    This is used by wxFFile::Seek() and wxFile::Seek().
+
+    @header{wx/filefn.h}
+*/
+enum wxSeekMode
+{
+    wxFromStart,        ///< Seek from the file beginning.
+    wxFromCurrent,      ///< Seek from the current position.
+    wxFromEnd           ///< Seek from end of the file.
+};
+
+/**
     File kind enumerations returned from wxGetFileKind().
+
+    Also used by wxFFile::GetKind() and wxFile::GetKind().
 
     @header{wx/filefn.h}
 */

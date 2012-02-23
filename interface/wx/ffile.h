@@ -7,31 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-
-/**
-    Values used for both wxFile and wxFFile.
-
-    @todo make the value names uppercase
-*/
-enum wxSeekMode
-{
-  wxFromStart,
-  wxFromCurrent,
-  wxFromEnd
-};
-
-/**
-    See wxFFile::GetKind().
-*/
-enum wxFileKind
-{
-  wxFILE_KIND_UNKNOWN,
-  wxFILE_KIND_DISK,     /**< A file supporting seeking to arbitrary offsets. */
-  wxFILE_KIND_TERMINAL, /**< A terminal. */
-  wxFILE_KIND_PIPE      /**< A pipe. */
-};
-
-
 /**
     @class wxFFile
 
