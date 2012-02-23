@@ -12441,6 +12441,7 @@ wxRichTextAttr wxRichTextDrawingContext::GetVirtualAttributes(wxRichTextObject* 
         {
             bool success = handler->GetVirtualAttributes(attr, obj);
             wxASSERT(success);
+            wxUnusedVar(success);
         }
 
         node = node->GetNext();
