@@ -1794,8 +1794,16 @@ bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
     if ( fn1.GetFullPath() == fn2.GetFullPath() )
         return true;
 
-    // TODO: compare inodes for Unix, this works even when filenames are
-    //       different but files are the same (symlinks) (VZ)
+#if defined(__UNIX__)
+    wxStructStat st1, st2;
+    if ( wxStat(fn1.GetFullPath(), &st1) == 0 &&
+            wxStat(fn2.GetFullPath(), &st2) == 0 )
+    {
+        if ( st1.st_ino == st2.st_ino && st1.st_dev == st2.st_dev )
+            return true;
+    }
+    //else: It's not an error if one or both files don't exist.
+#endif // defined __UNIX__
 
     return false;
 }

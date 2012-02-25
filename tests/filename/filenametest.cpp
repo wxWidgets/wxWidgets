@@ -30,6 +30,10 @@
     #include "wx/msw/registry.h"
 #endif // __WXMSW__
 
+#ifdef __UNIX__
+    #include <unistd.h>
+#endif // __UNIX__
+
 #include "testfile.h"
 
 // ----------------------------------------------------------------------------
@@ -136,6 +140,7 @@ private:
         CPPUNIT_TEST( TestCreateTempFileName );
         CPPUNIT_TEST( TestGetTimes );
         CPPUNIT_TEST( TestExists );
+        CPPUNIT_TEST( TestIsSame );
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -154,6 +159,7 @@ private:
     void TestCreateTempFileName();
     void TestGetTimes();
     void TestExists();
+    void TestIsSame();
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -671,5 +677,53 @@ void FileNameTestCase::TestExists()
     CPPUNIT_ASSERT( !wxFileName::FileExists("/dev/null") );
     CPPUNIT_ASSERT( !wxFileName::DirExists("/dev/null") );
     CPPUNIT_ASSERT( wxFileName::Exists("/dev/null") );
+#endif // __UNIX__
+}
+
+void FileNameTestCase::TestIsSame()
+{
+    wxFileName fn1( wxFileName::CreateTempFileName( "filenametest1" ) );
+    CPPUNIT_ASSERT( fn1.IsOk() );
+    wxON_BLOCK_EXIT1( wxRemoveFile, fn1.GetFullPath() );
+
+    wxFileName fn2( wxFileName::CreateTempFileName( "filenametest2" ) );
+    CPPUNIT_ASSERT( fn2.IsOk() );
+    wxON_BLOCK_EXIT1( wxRemoveFile, fn2.GetFullPath() );
+
+    CPPUNIT_ASSERT( fn1.SameAs( fn1 ) );
+    CPPUNIT_ASSERT( !fn1.SameAs( fn2 ) );
+
+#if defined(__UNIX__)
+    // We need to create a temporary directory and a temporary link.
+    // Unfortunately we can't use wxFileName::CreateTempFileName() for neither
+    // as it creates plain files, so use tempnam() explicitly instead.
+    char* tn = tempnam(NULL, "wxfn1");
+    const wxString tempdir1 = wxString::From8BitData(tn);
+    free(tn);
+
+    CPPUNIT_ASSERT( wxFileName::Mkdir(tempdir1) );
+    // Unfortunately the casts are needed to select the overload we need here.
+    wxON_BLOCK_EXIT2( static_cast<bool (*)(const wxString&, int)>(wxFileName::Rmdir),
+                      tempdir1, static_cast<int>(wxPATH_RMDIR_RECURSIVE) );
+
+    tn = tempnam(NULL, "wxfn2");
+    const wxString tempdir2 = wxString::From8BitData(tn);
+    free(tn);
+    CPPUNIT_ASSERT_EQUAL( 0, symlink(tempdir1, tempdir2) );
+    wxON_BLOCK_EXIT1( wxRemoveFile, tempdir2 );
+
+
+    wxFileName fn3(tempdir1, "foo");
+    wxFileName fn4(tempdir2, "foo");
+
+    // These files have different paths, hence are different.
+    CPPUNIT_ASSERT( !fn3.SameAs(fn4) );
+
+    // Create and close a file to trigger creating it.
+    wxFile(fn3.GetFullPath(), wxFile::write);
+
+    // Now that both files do exist we should be able to detect that they are
+    // actually the same file.
+    CPPUNIT_ASSERT( fn3.SameAs(fn4) );
 #endif // __UNIX__
 }
