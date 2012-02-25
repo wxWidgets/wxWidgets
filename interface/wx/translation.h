@@ -466,10 +466,10 @@ public:
     This function calls wxTranslations::GetString().
 
     @note This function is not suitable for literal strings in Unicode builds
-          since the literal strings must be enclosed into _T() or wxT() macro
-          which makes them unrecognised by @c xgettext, and so they are not
-          extracted to the message catalog. Instead, use the _() and wxPLURAL()
-          macro for all literal strings.
+          since the literal strings must be enclosed in wxT() macro which makes
+          them unrecognised by @c xgettext, and so they are not extracted to
+          the message catalog. Instead, use the _() and wxPLURAL() macro for
+          all literal strings.
 
     @see wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&)
 
@@ -505,12 +505,12 @@ const wxString& wxGetTranslation(const wxString& string,
                                  const wxString& domain = wxEmptyString);
 
 /**
+    Macro to be used around all literal strings that should be translated.
+
     This macro expands into a call to wxGetTranslation(), so it marks the
     message for the extraction by @c xgettext just as wxTRANSLATE() does, but
     also returns the translation of the string for the current locale during
     execution.
-
-    Don't confuse this with _T()!
 
     @header{wx/intl.h}
 */
