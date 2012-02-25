@@ -53,18 +53,21 @@ enum wxShowEffect
 
 
 /**
-   struct containing all the visual attributes of a control
+    Struct containing all the visual attributes of a control.
 */
 struct  wxVisualAttributes
 {
-    // the font used for control label/text inside it
+    /// The font used for control label/text inside it.
     wxFont font;
 
-    // the foreground colour
+    /// The foreground colour.
     wxColour colFg;
 
-    // the background colour, may be wxNullColour if the controls background
-    // colour is not solid
+    /**
+        The background colour.
+
+        May be wxNullColour if the controls background colour is not solid.
+     */
     wxColour colBg;
 };
 
