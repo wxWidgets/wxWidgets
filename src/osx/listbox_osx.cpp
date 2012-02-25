@@ -74,6 +74,9 @@ bool wxListBox::Create(
     DontCreatePeer();
     m_blockEvents = false;
 
+    if ( ! (style & wxNO_BORDER) )
+        style = (style & ~wxBORDER_MASK) | wxSUNKEN_BORDER ;
+
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   wxT("only a single listbox selection mode can be specified") );
 
