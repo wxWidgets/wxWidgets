@@ -108,6 +108,9 @@ bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxSt
         const wxPoint& pos, const wxSize& sz, long style)
 {
     SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
+#ifdef __WXMAC__
+    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif
 
     int resizeBorder = wxRESIZE_BORDER;
 

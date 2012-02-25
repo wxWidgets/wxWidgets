@@ -152,6 +152,10 @@ bool wxRichTextStyleOrganiserDialog::Create( int flags, wxRichTextStyleSheet* sh
 
 void wxRichTextStyleOrganiserDialog::CreateControls()
 {
+#ifdef __WXMAC__
+    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif
+
     bool hideTypeSelector = false;
     wxRichTextStyleListBox::wxRichTextStyleType typesToShow = wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL;
 

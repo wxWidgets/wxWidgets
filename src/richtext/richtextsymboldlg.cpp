@@ -379,6 +379,10 @@ void wxSymbolPickerDialog::Init()
 
 void wxSymbolPickerDialog::CreateControls()
 {
+#ifdef __WXMAC__
+    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif
+
 ////@begin wxSymbolPickerDialog content construction
     wxSymbolPickerDialog* itemDialog1 = this;
 
