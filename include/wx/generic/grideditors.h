@@ -295,6 +295,8 @@ public:
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
 
+    virtual void SetSize(const wxRect& rect);
+
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);

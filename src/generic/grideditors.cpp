@@ -1414,6 +1414,29 @@ void wxGridCellChoiceEditor::Create(wxWindow* parent,
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
 
+void wxGridCellChoiceEditor::SetSize(const wxRect& rect)
+{
+    wxASSERT_MSG(m_control,
+                 wxT("The wxGridCellChoiceEditor must be created first!"));
+
+    // Check that the height is not too small to fit the combobox.
+    wxRect rectTallEnough = rect;
+    const wxSize bestSize = m_control->GetBestSize();
+    const wxCoord diffY = bestSize.GetHeight() - rectTallEnough.GetHeight();
+    if ( diffY > 0 )
+    {
+        // Do make it tall enough.
+        rectTallEnough.height += diffY;
+
+        // Also centre the effective rectangle vertically with respect to the
+        // original one.
+        rectTallEnough.y -= diffY/2;
+    }
+    //else: The rectangle provided is already tall enough.
+
+    wxGridCellEditor::SetSize(rectTallEnough);
+}
+
 void wxGridCellChoiceEditor::PaintBackground(const wxRect& rectCell,
                                              wxGridCellAttr * attr)
 {
