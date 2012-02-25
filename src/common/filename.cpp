@@ -640,8 +640,8 @@ bool wxFileSystemObjectExists(const wxString& path, int flags)
 {
     // Should the existence of file/directory with this name be accepted, i.e.
     // result in the true return value from this function?
-    const bool acceptFile = flags & wxFileSystemObject_File;
-    const bool acceptDir  = flags & wxFileSystemObject_Dir;
+    const bool acceptFile = (flags & wxFileSystemObject_File) != 0;
+    const bool acceptDir  = (flags & wxFileSystemObject_Dir) != 0;
 
     wxString strPath(path);
 
