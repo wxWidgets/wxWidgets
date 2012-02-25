@@ -1033,7 +1033,14 @@ wxLocale::~wxLocale()
 bool wxLocale::IsAvailable(int lang)
 {
     const wxLanguageInfo *info = wxLocale::GetLanguageInfo(lang);
-    wxCHECK_MSG( info, false, wxS("invalid language") );
+    if ( !info )
+    {
+        // The language is unknown (this normally only happens when we're
+        // passed wxLANGUAGE_DEFAULT), so we can't support it.
+        wxASSERT_MSG( lang == wxLANGUAGE_DEFAULT,
+                      wxS("No info for a valid language?") );
+        return false;
+    }
 
 #if defined(__WIN32__)
     if ( !info->WinLang )
