@@ -3558,7 +3558,12 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
-            if ( !event.HasModifiers() )
+            if ( event.HasModifiers() )
+            {
+                event.Skip();
+                break;
+            }
+            else
             {
                 // Enter activates the item, i.e. sends wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED to
                 // it. Only if that event is not handled do we activate column renderer (which
@@ -3578,7 +3583,12 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             }
 
         case WXK_SPACE:
-            if ( !event.HasModifiers() )
+            if ( event.HasModifiers() )
+            {
+                event.Skip();
+                break;
+            }
+            else
             {
                 // Space toggles activatable items or -- if not activatable --
                 // starts inline editing (this is normally done using F2 on
@@ -3608,7 +3618,12 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             }
 
         case WXK_F2:
-            if ( !event.HasModifiers() )
+            if ( event.HasModifiers() )
+            {
+                event.Skip();
+                break;
+            }
+            else
             {
                 if( !m_selection.empty() )
                 {
