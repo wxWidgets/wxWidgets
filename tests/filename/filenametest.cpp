@@ -24,6 +24,7 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
+#include "wx/scopeguard.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
@@ -639,6 +640,7 @@ void FileNameTestCase::TestGetTimes()
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
     CPPUNIT_ASSERT( fn.IsOk() );
+    wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
 
     wxDateTime dtAccess, dtMod, dtCreate;
     CPPUNIT_ASSERT( fn.GetTimes(&dtAccess, &dtMod, &dtCreate) );
@@ -654,6 +656,7 @@ void FileNameTestCase::TestExists()
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
     CPPUNIT_ASSERT( fn.IsOk() );
+    wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
 
     CPPUNIT_ASSERT( fn.FileExists() );
     CPPUNIT_ASSERT( !wxFileName::DirExists(fn.GetFullPath()) );
