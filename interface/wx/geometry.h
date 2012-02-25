@@ -316,7 +316,7 @@ public:
 class wxTransform2D
 {
 public :
-    virtual ~wxTransform2D() { }
+    virtual ~wxTransform2D();
     virtual void                    Transform( wxPoint2DInt* pt )const  = 0;
     virtual void                    Transform( wxRect2DInt* r ) const;
     virtual wxPoint2DInt    Transform( const wxPoint2DInt &pt ) const;

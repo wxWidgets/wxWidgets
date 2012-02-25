@@ -230,8 +230,8 @@ public:
     class MessageParameters
     {
     public:
-        /// Constructor
-        MessageParameters() { }
+        /// Trivial default constructor.
+        MessageParameters();
 
         /// Constructor taking a filename and a mime type.
         MessageParameters(const wxString& filename,
@@ -247,7 +247,7 @@ public:
         virtual wxString GetParamValue(const wxString& name) const;
 
         /// Trivial but virtual dtor as this class can be inherited from.
-        virtual ~MessageParameters() { }
+        virtual ~MessageParameters();
     };
 
     /**

@@ -253,8 +253,8 @@ public:
 class wxTranslationsLoader
 {
 public:
-    /// Constructor
-    wxTranslationsLoader() {}
+    /// Trivial default constructor.
+    wxTranslationsLoader();
 
     /**
         Called to load requested catalog.

@@ -71,12 +71,12 @@ public:
     //
     // Dimension is unconstrained
     //
-    void Unconstrained() { relationship = wxUnconstrained; }
+    void Unconstrained();
 
     //
     // Dimension is 'as is' (use current size settings)
     //
-    void AsIs() { relationship = wxAsIs; }
+    void AsIs();
 
     //
     // Accessors
@@ -129,7 +129,7 @@ public:
 
     // note that default copy ctor and assignment operators are ok
 
-    virtual ~wxLayoutConstraints(){}
+    virtual ~wxLayoutConstraints();
 
     bool SatisfyConstraints(wxWindow *win, int *noChanges);
     bool AreSatisfied() const;

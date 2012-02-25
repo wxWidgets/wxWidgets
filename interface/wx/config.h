@@ -968,7 +968,7 @@ public:
         Returns the name of the key which was passed to the ctor.
         The "name" is just anything which follows the last slash of the string given to the ctor.
     */
-    const wxString& Name() const { return m_strName; }
+    const wxString& Name() const;
 
     /**
         This method must be called if the original path inside the wxConfig object 
