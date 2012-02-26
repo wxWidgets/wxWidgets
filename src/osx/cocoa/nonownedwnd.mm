@@ -120,9 +120,14 @@ bool shouldHandleSelector(SEL selector)
     bool handled = false;
     if ( ([event type] >= NSLeftMouseDown) && ([event type] <= NSMouseExited) )
     {
+        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+
         wxWindow* cw = wxWindow::GetCapture();
         if ( cw != NULL )
         {
+            if (wxTheApp)
+                wxTheApp->MacSetCurrentEvent(event, NULL);
             ((wxWidgetCocoaImpl*)cw->GetPeer())->DoHandleMouseEvent( event);
             handled = true;
         }
@@ -136,9 +141,16 @@ bool shouldHandleSelector(SEL selector)
             wxWindow* mw = ::wxFindWindowAtPoint(pt);
             if ( mw )
             {
+                if (wxTheApp)
+                    wxTheApp->MacSetCurrentEvent(event, NULL);
                 ((wxWidgetCocoaImpl*)mw->GetPeer())->DoHandleMouseEvent( event);
                 handled = true;
             }
+        }
+        if ( handled )
+        {
+            if (wxTheApp)
+                wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
         }
     }
     return handled;
@@ -469,8 +481,8 @@ extern int wxOSXGetIdFromSelector(SEL action );
             [editor release];
         }
         return editor;
-    }
-
+    } 
+ 
     return nil;
 }
 
