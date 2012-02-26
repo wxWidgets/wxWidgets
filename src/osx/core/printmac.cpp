@@ -348,6 +348,8 @@ void wxOSXPrintData::TransferPrinterNameTo( wxPrintData &data )
 
 void wxOSXPrintData::TransferPaperInfoTo( wxPrintData &data )
 {
+    PMGetPageFormatPaper(m_macPageFormat, &m_macPaper);
+
     PMPrinter printer ;
     PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
     OSStatus err = noErr ;
