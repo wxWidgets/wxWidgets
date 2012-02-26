@@ -225,10 +225,13 @@ public:
             const wxObjectEventFunctor &other =
                 static_cast< const wxObjectEventFunctor & >( functor );
 
-            // FIXME-VC6: amazing but true: replacing "method == NULL" here
-            // with "!method" makes VC6 crash with an ICE in DLL build (only!)
+            // FIXME-VC6: amazing but true: replacing "m_method == 0" here
+            // with "!m_method" makes VC6 crash with an ICE in DLL build (only!)
+            // Also notice that using "NULL" instead of "0" results in warnings
+            // about "using NULL in arithmetics" from arm-linux-androideabi-g++
+            // 4.4.3 used for wxAndroid build.
 
-            return ( m_method == other.m_method || other.m_method == NULL ) &&
+            return ( m_method == other.m_method || other.m_method == 0 ) &&
                    ( m_handler == other.m_handler || other.m_handler == NULL );
         }
         else

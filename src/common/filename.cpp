@@ -2666,12 +2666,14 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
     wxStructStat stBuf;
     if ( wxStat( GetFullPath(), &stBuf) == 0 )
     {
+        // Android defines st_*time fields as unsigned long, but time_t as long,
+        // hence the static_casts.
         if ( dtAccess )
-            dtAccess->Set(stBuf.st_atime);
+            dtAccess->Set(static_cast<time_t>(stBuf.st_atime));
         if ( dtMod )
-            dtMod->Set(stBuf.st_mtime);
+            dtMod->Set(static_cast<time_t>(stBuf.st_mtime));
         if ( dtCreate )
-            dtCreate->Set(stBuf.st_ctime);
+            dtCreate->Set(static_cast<time_t>(stBuf.st_ctime));
 
         return true;
     }

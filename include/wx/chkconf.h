@@ -1219,6 +1219,8 @@
 #  include "wx/motif/chkconf.h"
 #elif defined(__WXX11__)
 #  include "wx/x11/chkconf.h"
+#elif defined(__WXANDROID__)
+#  include "wx/android/chkconf.h"
 #endif
 
 /*
