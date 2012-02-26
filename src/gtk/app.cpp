@@ -38,7 +38,9 @@
     #include <hildon/hildon.h>
 #endif // wxUSE_LIBHILDON2
 
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 
 //-----------------------------------------------------------------------------
 // link GnomeVFS

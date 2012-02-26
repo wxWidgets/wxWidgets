@@ -36,14 +36,20 @@
 #include "wx/sysopt.h"
 
 #include <gtk/gtk.h>
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 
 #include "wx/gtk/private/win_gtk.h"
+
+#ifdef GDK_WINDOWING_X11
 
 #include "wx/unix/utilsx11.h"
 
 // XA_CARDINAL
 #include <X11/Xatom.h>
+
+#endif // GDK_WINDOWING_X11
 
 #if wxUSE_LIBHILDON
     #include <hildon-widgets/hildon-program.h>
@@ -90,6 +96,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
     else
 #endif
     {
+#ifdef GDK_WINDOWING_X11
         GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(win));
         wxCHECK_RET(window, "wxgtk_window_set_urgency_hint: GdkWindow not realized");
 
@@ -107,6 +114,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
 
         XSetWMHints(dpy, xid, wm_hints);
         XFree(wm_hints);
+#endif // GDK_WINDOWING_X11
     }
 }
 #define gtk_window_set_urgency_hint wxgtk_window_set_urgency_hint
@@ -399,6 +407,7 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
 {
+#ifdef GDK_WINDOWING_X11
     static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     Atom xproperty = gdk_x11_atom_to_xatom_for_display(
                         gdk_drawable_get_display(window), property);
@@ -424,6 +433,9 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     if (data)
         XFree(data);
     return success;
+#else
+    return false;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -758,6 +770,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
 
     m_fsIsShowing = show;
 
+#ifdef GDK_WINDOWING_X11
     wxX11FullScreenMethod method =
         wxGetFullScreenMethodX11((WXDisplay*)GDK_DISPLAY(),
                                  (WXWindow)GDK_ROOT_WINDOW());
@@ -767,12 +780,14 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     //     check if WM supports the spec and use legacy methods if it
     //     doesn't.
     if ( method == wxX11_FS_WMSPEC )
+#endif // GDK_WINDOWING_X11
     {
         if (show)
             gtk_window_fullscreen( GTK_WINDOW( m_widget ) );
         else
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
     }
+#ifdef GDK_WINDOWING_X11
     else
     {
         GdkWindow* window = gtk_widget_get_window(m_widget);
@@ -821,6 +836,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
                     m_fsSaveFrame.width, m_fsSaveFrame.height);
         }
     }
+#endif // GDK_WINDOWING_X11
 
     // documented behaviour is to show the window if it's still hidden when
     // showing it full screen
@@ -866,9 +882,13 @@ bool wxTopLevelWindowGTK::Show( bool show )
         GdkScreen* screen = NULL;
         if (deferShow)
         {
+#ifdef GDK_WINDOWING_X11
             screen = gtk_widget_get_screen(m_widget);
             GdkAtom atom = gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false);
             deferShow = gdk_x11_screen_supports_net_wm_hint(screen, atom) != 0;
+#else
+            deferShow = false;
+#endif
             // If _NET_REQUEST_FRAME_EXTENTS not supported, don't allow changes
             // to m_decorSize, it breaks saving/restoring window size with
             // GetSize()/SetSize() because it makes window bigger between each
@@ -906,6 +926,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
             gtk_widget_set_allocation(m_widget, &alloc);
         }
 
+#ifdef GDK_WINDOWING_X11
         // send _NET_REQUEST_FRAME_EXTENTS
         XClientMessageEvent xevent;
         memset(&xevent, 0, sizeof(xevent));
@@ -920,6 +941,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         XSendEvent(display, DefaultRootWindow(display), false,
             SubstructureNotifyMask | SubstructureRedirectMask,
             (XEvent*)&xevent);
+#endif // GDK_WINDOWING_X11
 
         if (gs_requestFrameExtentsStatus == 0)
         {
@@ -1377,6 +1399,7 @@ void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
     }
 }
 
+#ifdef GDK_WINDOWING_X11
 /* Get the X Window between child and the root window.
    This should usually be the WM managed XID */
 static Window wxGetTopmostWindowX11(Display *dpy, Window child)
@@ -1396,6 +1419,7 @@ static Window wxGetTopmostWindowX11(Display *dpy, Window child)
 
     return child;
 }
+#endif // GDK_WINDOWING_X11
 
 bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 {
@@ -1405,6 +1429,7 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
     if (window == NULL)
         return false;
 
+#ifdef GDK_WINDOWING_X11
     Display* dpy = GDK_WINDOW_XDISPLAY(window);
     // We need to get the X Window that has the root window as the immediate parent
     // and m_widget->window as a child. This should be the X Window that the WM manages and
@@ -1424,6 +1449,9 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
     }
     XSync(dpy, False);
     return true;
+#else // !GDK_WINDOWING_X11
+    return false;
+#endif // GDK_WINDOWING_X11 / !GDK_WINDOWING_X11
 }
 
 bool wxTopLevelWindowGTK::CanSetTransparent()

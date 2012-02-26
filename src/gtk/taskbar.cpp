@@ -116,6 +116,7 @@ status_icon_popup_menu(GtkStatusIcon*, guint, guint, wxTaskBarIcon* taskBarIcon)
 
 bool wxTaskBarIconBase::IsAvailable()
 {
+#ifdef GDK_WINDOWING_X11
     char name[32];
     g_snprintf(name, sizeof(name), "_NET_SYSTEM_TRAY_S%d",
         gdk_x11_get_default_screen());
@@ -124,6 +125,9 @@ bool wxTaskBarIconBase::IsAvailable()
     Window manager = XGetSelectionOwner(gdk_x11_get_default_xdisplay(), atom);
 
     return manager != None;
+#else
+    return true;
+#endif
 }
 //-----------------------------------------------------------------------------
 

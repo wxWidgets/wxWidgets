@@ -27,7 +27,12 @@
 #include "wx/evtloop.h"
 
 #include <gtk/gtk.h>
+#ifdef GDK_WINDOWING_WIN32
+#include <gdk/gdkwin32.h>
+#endif
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 
 #if wxDEBUG_LEVEL
     #include "wx/gtk/assertdlg_gtk.h"

@@ -41,7 +41,11 @@
 #include "wx/gtk/private/event.h"
 using namespace wxGTKImpl;
 
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#else
+typedef guint KeySym;
+#endif
 
 #include <gdk/gdkkeysyms.h>
 #if GTK_CHECK_VERSION(3,0,0)
@@ -728,6 +732,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                 keysym = (KeySym)gdk_event->string[0];
             }
 
+#ifdef GDK_WINDOWING_X11
             // we want to always get the same key code when the same key is
             // pressed regardless of the state of the modifiers, i.e. on a
             // standard US keyboard pressing '5' or '%' ('5' key with
@@ -746,6 +751,9 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             // use the normalized, i.e. lower register, keysym if we've
             // got one
             key_code = keysymNormalized ? keysymNormalized : keysym;
+#else
+            key_code = keysym;
+#endif
 
             // as explained above, we want to have lower register key codes
             // normally but for the letter keys we want to have the upper ones
@@ -3579,10 +3587,12 @@ void wxWindowGTK::WarpPointer( int x, int y )
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     gdk_device_warp(gdk_device_manager_get_client_pointer(manager), screen, x, y);
 #else
+#ifdef GDK_WINDOWING_X11
     XWarpPointer(GDK_DISPLAY_XDISPLAY(display),
         None,
         GDK_WINDOW_XID(gdk_screen_get_root_window(screen)),
         0, 0, 0, 0, x, y);
+#endif
 #endif
 }
 
@@ -4088,7 +4098,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
         {
             // Make sure GDK/X11 doesn't refresh the window
             // automatically.
-            gdk_window_set_back_pixmap( window, None, False );
+            gdk_window_set_back_pixmap( window, NULL, FALSE );
             m_needsStyleChange = false;
         }
         else // window not realized yet
