@@ -7269,44 +7269,16 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW_WEBKIT=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
-            AC_MSG_CHECKING([for webkitgtk libraries])
-            WX_PATH_FIND_LIBRARIES(webkitgtk-1.0)
-            if test "$ac_find_libraries" != "" ; then
-                WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
-                if test "$ac_path_to_link" != " -L/usr/lib" ; then
-                    LDFLAGS="$LDFLAGS $ac_path_to_link"
-                fi
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwebkitgtk-1.0"
-                AC_MSG_RESULT([yes])
-           
-                AC_MSG_CHECKING(for webkitgtk headers)
-                WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /usr/include/webkit-1.0], webkit/webkit.h)
-                if test "$ac_find_includes" != "" ; then
-                   AC_MSG_RESULT(found in $ac_find_includes)
-                   WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
-                   CPPFLAGS="$ac_path_to_include $CPPFLAGS"
-                   
-                   dnl we also depend on libsoup
-                   AC_MSG_CHECKING(for libsoup headers)
-                   WX_PATH_FIND_INCLUDES([$SEARCH_INCLUDE /usr/include/libsoup-2.4], libsoup/soup.h)
-                   if test "$ac_find_includes" != "" ; then
-                       AC_MSG_RESULT(found in $ac_find_includes)
-                       WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
-                       CPPFLAGS="$ac_path_to_include $CPPFLAGS"
-
-                       USE_WEBVIEW_WEBKIT=1
-                   else
-                       AC_MSG_RESULT([not found])
-                       AC_MSG_WARN([libsoup headers not found; disabling WebKit backend])
-                   fi
-                else
-                   AC_MSG_RESULT([not found])
-                   AC_MSG_WARN([WebKit headers not found; disabling WebKit backend])
-                fi
-            else
-                AC_MSG_RESULT([no])
-                AC_MSG_WARN([WebKit libraries not found; disabling WebKit backend])
-            fi
+            PKG_CHECK_MODULES([WEBKIT],
+                              [webkit-1.0 >= 1.3.1],
+                              [
+                                USE_WEBVIEW_WEBKIT=1
+                                CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $WEBKIT_LIBS"
+                              ],
+                              [
+                                AC_MSG_WARN([webkitgtk not found.])
+                              ])
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
             dnl Under Mac we always have the libraries but check for the
             dnl headers
