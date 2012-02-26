@@ -320,6 +320,8 @@ bool wxSpinCtrl::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
         return false;
+    m_text->Enable(enable);
+    m_btn->Enable(enable);
     return true;
 }
 
