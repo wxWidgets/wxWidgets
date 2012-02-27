@@ -2970,15 +2970,20 @@ wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) co
 
 wxDataViewItem wxDataViewMainWindow::GetItemByRow(unsigned int row) const
 {
+    wxDataViewItem item;
     if (IsVirtualList())
     {
-        return wxDataViewItem( wxUIntToPtr(row+1) );
+        if ( row < GetRowCount() )
+            item = wxDataViewItem(wxUIntToPtr(row+1));
     }
     else
     {
         wxDataViewTreeNode *node = GetTreeNodeByRow(row);
-        return node ? node->GetItem() : wxDataViewItem();
+        if ( node )
+            item = node->GetItem();
     }
+
+    return item;
 }
 
 bool

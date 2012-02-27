@@ -199,6 +199,8 @@ public:
 protected:
     virtual void EnsureVisible( int row, int column );
 
+    // Notice that row here may be invalid (i.e. >= GetRowCount()), this is not
+    // an error and this function simply returns an invalid item in this case.
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
     virtual int GetRowByItem( const wxDataViewItem & item ) const;
 
