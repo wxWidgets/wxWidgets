@@ -431,59 +431,19 @@ IconRef wxBitmapRefData::GetIconRef()
         switch (sz)
         {
             case 128:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-                if ( UMAGetSystemVersion() >= 0x1050 )
-                {
-                    dataType = kIconServices128PixelDataARGB ;
-                }
-                else
-#endif
-                {
-                    dataType = kThumbnail32BitData ;
-                    maskType = kThumbnail8BitMask ;
-                }
+                dataType = kIconServices128PixelDataARGB ;
                 break;
 
             case 48:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-                if ( UMAGetSystemVersion() >= 0x1050 )
-                {
-                    dataType = kIconServices48PixelDataARGB ;
-                }
-                else
-#endif
-                {
-                    dataType = kHuge32BitData ;
-                    maskType = kHuge8BitMask ;
-                }
+                dataType = kIconServices48PixelDataARGB ;
                 break;
 
             case 32:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-                if ( UMAGetSystemVersion() >= 0x1050 )
-                {
-                    dataType = kIconServices32PixelDataARGB ;
-                }
-                else
-#endif
-                {
-                    dataType = kLarge32BitData ;
-                    maskType = kLarge8BitMask ;
-                }
+                dataType = kIconServices32PixelDataARGB ;
                 break;
 
             case 16:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-                if ( UMAGetSystemVersion() >= 0x1050 )
-                {
-                    dataType = kIconServices16PixelDataARGB ;
-                }
-                else
-#endif
-                {
-                    dataType = kSmall32BitData ;
-                    maskType = kSmall8BitMask ;
-                }
+                dataType = kIconServices16PixelDataARGB ;
                 break;
 
             default:
@@ -492,8 +452,7 @@ IconRef wxBitmapRefData::GetIconRef()
 
         if ( dataType != 0 )
         {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-            if (  maskType == 0 && UMAGetSystemVersion() >= 0x1050 )
+            if (  maskType == 0 )
             {
                 size_t datasize = sz * sz * 4 ;
                 Handle data = NewHandle( datasize ) ;
@@ -555,7 +514,6 @@ IconRef wxBitmapRefData::GetIconRef()
                 DisposeHandle( data );
             }
             else
-#endif
             {
                 // setup the header properly
 
@@ -644,37 +602,6 @@ IconRef wxBitmapRefData::GetIconRef()
 
 PicHandle wxBitmapRefData::GetPictHandle()
 {
-    if ( m_pictHandle == NULL )
-    {
-#ifndef __LP64__
-        GraphicsExportComponent exporter = 0;
-        OSStatus err = OpenADefaultComponent(GraphicsExporterComponentType, kQTFileTypePicture, &exporter);
-        if (noErr == err)
-        {
-            m_pictHandle = (PicHandle) NewHandle(0);
-            if ( m_pictHandle )
-            {
-                // QT does not correctly export the mask
-                // TODO if we get around to it create a synthetic PICT with the CopyBits and Mask commands
-                CGImageRef imageRef = CreateCGImage();
-                err = GraphicsExportSetInputCGImage( exporter, imageRef );
-                err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
-                err = GraphicsExportDoExport(exporter, NULL);
-                CGImageRelease( imageRef );
-
-                size_t handleSize = GetHandleSize( (Handle) m_pictHandle );
-                // the 512 bytes header is only needed for pict files, but not in memory
-                if ( handleSize >= 512 )
-                {
-                    memmove( *m_pictHandle , (char*)(*m_pictHandle)+512, handleSize - 512 );
-                    SetHandleSize( (Handle) m_pictHandle, handleSize - 512 );
-                }
-            }
-            CloseComponent( exporter );
-        }
-#endif
-    }
-
     return m_pictHandle ;
 }
 #endif
