@@ -144,7 +144,9 @@ void wxFileButton::SetInitialDirectory(const wxString& dir)
 
 #if wxUSE_DIRPICKERCTRL && defined(__WXGTK26__)
 
+#ifdef __UNIX__
 #include <unistd.h> // chdir
+#endif
 
 //-----------------------------------------------------------------------------
 // "current-folder-changed"

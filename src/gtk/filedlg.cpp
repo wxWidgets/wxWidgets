@@ -22,7 +22,9 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
+#ifdef __UNIX__
 #include <unistd.h> // chdir
+#endif
 
 #include "wx/filename.h" // wxFilename
 #include "wx/tokenzr.h" // wxStringTokenizer

@@ -20,11 +20,6 @@
 #include "wx/wx.h"
 #endif
 
-#ifdef __WXGTK__
-#include <unistd.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#endif
 #include "wx/textfile.h"
 #include "wx/config.h"
 #include "wx/fileconf.h"

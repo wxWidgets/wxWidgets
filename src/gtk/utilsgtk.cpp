@@ -45,8 +45,9 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sys/wait.h>   // for WNOHANG
+#ifdef __UNIX__
 #include <unistd.h>
+#endif
 
 #if wxUSE_DETECT_SM
     #include <X11/SM/SMlib.h>

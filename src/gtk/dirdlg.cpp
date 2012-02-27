@@ -31,7 +31,9 @@
 
 #include "wx/gtk/private.h"
 
+#ifdef __UNIX__
 #include <unistd.h> // chdir
+#endif
 
 //-----------------------------------------------------------------------------
 // "clicked" for OK-button
