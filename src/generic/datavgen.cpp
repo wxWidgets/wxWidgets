@@ -637,7 +637,7 @@ public:
     // the displaying number of the tree are changing along with the
     // expanding/collapsing of the tree nodes
     unsigned int GetLastVisibleRow();
-    unsigned int GetRowCount();
+    unsigned int GetRowCount() const;
 
     const wxDataViewSelection& GetSelections() const { return m_selection; }
     void SetSelections( const wxDataViewSelection & sel )
@@ -706,7 +706,7 @@ public:
     void StartEditing(const wxDataViewItem& item, const wxDataViewColumn* col);
 
 private:
-    int RecalculateCount();
+    int RecalculateCount() const;
 
     // Return false only if the event was vetoed by its handler.
     bool SendExpanderEvent(wxEventType type, const wxDataViewItem& item);
@@ -2576,12 +2576,14 @@ unsigned int wxDataViewMainWindow::GetLastVisibleRow()
     return wxMin( GetRowCount()-1, row );
 }
 
-unsigned int wxDataViewMainWindow::GetRowCount()
+unsigned int wxDataViewMainWindow::GetRowCount() const
 {
     if ( m_count == -1 )
     {
-        m_count = RecalculateCount();
-        UpdateDisplay();
+        wxDataViewMainWindow* const
+            self = const_cast<wxDataViewMainWindow*>(this);
+        self->m_count = RecalculateCount();
+        self->UpdateDisplay();
     }
     return m_count;
 }
@@ -3297,7 +3299,7 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
     return itemRect;
 }
 
-int wxDataViewMainWindow::RecalculateCount()
+int wxDataViewMainWindow::RecalculateCount() const
 {
     if (IsVirtualList())
     {
