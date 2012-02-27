@@ -75,20 +75,20 @@ protected:
     static wxVisualAttributes
         GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
                                           bool useBase = false,
-                                          int state = -1);
+                                          int state = 0);
     static wxVisualAttributes
         GetDefaultAttributesFromGTKWidget(wxGtkWidgetNew_t,
                                           bool useBase = false,
-                                          int state = -1);
+                                          int state = 0);
     static wxVisualAttributes
         GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromStr_t,
                                           bool useBase = false,
-                                          int state = -1);
+                                          int state = 0);
 
     static wxVisualAttributes
         GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t,
                                           bool useBase = false,
-                                          int state = -1);
+                                          int state = 0);
 
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.

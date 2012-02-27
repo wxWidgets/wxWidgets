@@ -229,9 +229,6 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         return wxWindow::GetClassDefaultAttributes(wxWINDOW_VARIANT_NORMAL);
     }
 
-    if (state == -1)
-        state = GTK_STATE_NORMAL;
-
     // get the style's colours
     attr.colFg = wxColour(style->fg[state]);
     if (useBase)
