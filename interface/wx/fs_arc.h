@@ -7,7 +7,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+    @class wxArchiveFSHandler
 
+    A file system handler for accessing files inside of archives.
+*/
 class wxArchiveFSHandler : public wxFileSystemHandler
 {
 public:

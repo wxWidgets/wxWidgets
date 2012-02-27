@@ -6,6 +6,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+    @class wxInternetFSHandler
+
+    A file system handler for accessing files from internet servers.
+*/
 class wxInternetFSHandler : public wxFileSystemHandler
 {
 public:

@@ -7,6 +7,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+    @class wxFilterFSHandler
+
+    Filter file system handler.
+*/
 
 class wxFilterFSHandler : public wxFileSystemHandler
 {
