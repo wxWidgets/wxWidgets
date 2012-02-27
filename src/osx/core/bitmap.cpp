@@ -1730,65 +1730,8 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
     return false ;
 }
 
-#if !defined( __LP64__ ) && !defined(__WXOSX_IPHONE__)
-
-class WXDLLEXPORT wxPICTResourceHandler: public wxBitmapHandler
-{
-    DECLARE_DYNAMIC_CLASS(wxPICTResourceHandler)
-
-public:
-    inline wxPICTResourceHandler()
-    {
-        SetName(wxT("Macintosh Pict resource"));
-        SetExtension(wxEmptyString);
-        SetType(wxBITMAP_TYPE_PICT_RESOURCE);
-    };
-
-    virtual bool LoadFile(wxBitmap *bitmap,
-                          const wxString& name,
-                          wxBitmapType type,
-                          int desiredWidth,
-                          int desiredHeight);
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxPICTResourceHandler, wxBitmapHandler)
-
-
-bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap,
-                                     const wxString& name,
-                                     wxBitmapType WXUNUSED(type),
-                                     int WXUNUSED(desiredWidth),
-                                     int WXUNUSED(desiredHeight))
-{
-#if wxUSE_METAFILE
-    Str255 theName ;
-    wxMacStringToPascal( name , theName ) ;
-
-    PicHandle thePict = (PicHandle ) GetNamedResource( 'PICT' , theName ) ;
-    if ( thePict )
-    {
-        wxMetafile mf ;
-
-        mf.SetPICT( thePict ) ;
-        bitmap->Create( mf.GetWidth() , mf.GetHeight() ) ;
-        wxMemoryDC dc ;
-        dc.SelectObject( *bitmap ) ;
-        mf.Play( &dc ) ;
-        dc.SelectObject( wxNullBitmap ) ;
-
-        return true ;
-    }
-#endif
-
-    return false ;
-}
-#endif
-
 void wxBitmap::InitStandardHandlers()
 {
-#if !defined( __LP64__ ) && !defined(__WXOSX_IPHONE__)
-    AddHandler( new wxPICTResourceHandler ) ;
-#endif
 #if wxOSX_USE_COCOA_OR_CARBON
     AddHandler( new wxICONResourceHandler ) ;
 #endif
