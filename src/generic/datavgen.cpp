@@ -1377,7 +1377,14 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_useCellFocus = false;
     m_currentRow = 0;
 
-    m_lineHeight = wxMax( 17, GetCharHeight() + 4 ); // 17 = mini icon height + 1
+#ifdef __WXMSW__
+    // We would like to use the same line height that Explorer uses. This is
+    // different from standard ListView control since Vista.
+    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+        m_lineHeight = wxMax(16, GetCharHeight()) + 6; // 16 = mini icon height
+    else
+#endif // __WXMSW__
+        m_lineHeight = wxMax(16, GetCharHeight()) + 1; // 16 = mini icon height
 
 #if wxUSE_DRAG_AND_DROP
     m_dragCount = 0;
