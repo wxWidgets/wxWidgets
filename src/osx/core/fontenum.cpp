@@ -65,19 +65,6 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         status = ATSFontFamilyIteratorNext( theFontFamilyIterator, &theATSFontFamilyRef );
         if(status == noErr)
         {
- #ifndef __LP64__
-            // TODO CS : Find replacement
-            // added CS : avoid showing fonts that won't be displayable
-            FMFontStyle intrinsicStyle = 0 ;
-            FMFont fontInstance ;
-            FMFontFamily fmFamily = FMGetFontFamilyFromATSFontFamilyRef( theATSFontFamilyRef );
-            status = FMGetFontFromFontFamilyInstance( fmFamily , 0 , &fontInstance , &intrinsicStyle);
-            if ( status != noErr )
-            {
-                status = noErr;
-                continue ;
-            }
-#endif
             if ( encoding != wxFONTENCODING_SYSTEM )
             {
                 TextEncoding fontFamiliyEncoding = ATSFontFamilyGetEncoding(theATSFontFamilyRef) ;
