@@ -293,5 +293,13 @@ public:
         This method is mostly meant for internal use only.
      */
     virtual bool IsSorted() const;
+
+
+    // NOTE: Phoenix needs to see the implementation of pure virtuals so it
+    // knows that this class is not abstract.
+    virtual unsigned int GetCount() const; 
+    virtual wxString GetString(unsigned int n) const; 
+    virtual void SetString(unsigned int n, const wxString& s); 
+    virtual int FindString(const wxString& s, bool bCase = false) const;     
 };
 
