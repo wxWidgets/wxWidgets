@@ -116,9 +116,16 @@ The Xcode projects for the wxWidgets library and minimal project are set up
 to create universal binaries.
 
 If using the Apple command line tools, pass --enable-universal_binary when
-configuring wxWidgets. If you use wx-config --libs to link your application,
-he necessary linker flags will be added. When compiling your own files,
-you need to add -arch ppc -arch i386 to your CFLAGS.
+configuring wxWidgets. This will create the libraries for all the supported
+architectures, currently ppc, i386 and x86_64 when using Cocoa (Carbon isn't
+available in 64 bit builds). You may explicitly specify the architectures to
+use as a comma-separated list, e.g. --enable-universal_binary=i386,x86_64.
+
+Notice that if you use wx-config --libs to link your application, the -arch
+flags are not added automatically as it is possible to link e.g. x86_64-only
+program to a "fat" library containing other architectures. If you want to
+build a universal application, you need to add the necessary "-arch xxx" flags
+to your project or makefile separately.
 
 As an alternative to using --enable-universal_binary, you can build for
 each architecture separately and then use the lipo tool to glue the

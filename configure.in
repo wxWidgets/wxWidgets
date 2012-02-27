@@ -728,7 +728,7 @@ WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregardin
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 WX_ARG_DISABLE(vararg_macros,[  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
 
-WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary  create universal binary with Mac PPC and i386 (and x86_64 if using Cocoa) architectures ]], wxUSE_UNIVERSAL_BINARY)
+WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary=archs create universal binary for the specified (or all supported) architectures]], wxUSE_UNIVERSAL_BINARY)
 WX_ARG_ENABLE_PARAM(macosx_arch,      [[  --enable-macosx_arch=ARCH  build for just the specified architecture]], wxUSE_MAC_ARCH)
 
 WX_ARG_ENABLE(compat26,      [  --enable-compat26       enable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6)
@@ -1147,74 +1147,64 @@ if test "$wxUSE_MAC" = 1; then
 retest_macosx_linking=no
 
 OSX_ARCH_OPTS=""
-if test "x$wxUSE_MAC_ARCH" != xno; then
-    OSX_ARCH_OPTS="-arch $wxUSE_MAC_ARCH"
-fi
 
-dnl Support the old --enable-universal_binary in case anyone was using it.
-    if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
-        dnl --enable-universal_binary uses a default SDK (currently 10.4u)
-        dnl --enable-universal_binary=SDK names a path to an SDK
-        if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
-            # Implicitly turn on the new --with-macosx-sdk using the default
-            # SDK which provides the behaviour this option has always had.
-            if test "x$wxUSE_MACOSX_SDK" = "x"; then
-                AC_MSG_WARN([Enabling default SDK due to --enable-universal_binary.])
-                AC_MSG_WARN([If you don't want this, specify --without-macosx-sdk])
-                wxUSE_MACOSX_SDK=yes
-            fi
-        else
-            # Complain to user if he specified an argument to --enable-universal_binary
-            # and also 1) specified --with-macosx-sdk using the default (yes) or
-            # 2) specified --with-macosx-sdk using a path or 3) specified
-            # --without-macosx-sdk (no).
-            if test "x$wxUSE_MACOSX_SDK" != "x" ; then
-                AC_MSG_FAILURE([Please specify the new --with-macosx-sdk=PATH and do not specify an arg to --enable-universal_binary])
-            else
-                # Put the SDK path into the wxUSE_MACOSX_SDK.  We don't have to
-                # special-case the empty string because the below test simply
-                # converts "no" to the empty string anyway.
-                wxUSE_MACOSX_SDK="$wxUSE_UNIVERSAL_BINARY"
-                dnl Warn about deprecated usage.
-                AC_MSG_WARN([Please use --with-macosx-sdk=PATH and --enable-universal_binary without an argument])
-            fi
-        fi
-        dnl FIXME: I think it would be better to put this into CC, CXX, and LD rather than the flags.
-        OSX_ARCH_OPTS="-arch ppc -arch i386"
-	if test "$wxUSE_OSX_COCOA" = 1; then
-            OSX_ARCH_OPTS="$OSX_ARCH_OPTS -arch x86_64"
-        fi
-        AC_MSG_CHECKING([for universal binary architectures])
-	AC_MSG_RESULT([$OSX_ARCH_OPTS])
-
-        dnl NOTE: Only the compiler driver needs arch flags.  The link editor
-        dnl is incapable of using them but the compiler driver (which we use
-        dnl as LD when building dynamic libraries) uses them to invoke the
-        dnl real ld multiple times.  If we moved to libtool -dynamic we would
-        dnl need no arch flags because libtool automatically invokes ld for
-        dnl every architecture found in the fat input files.
-        dnl
-        dnl For static library builds, AR/RANLIB automatically create proper
-        dnl fat archives although AR is unable to update them once RANLIB has
-        dnl made them into proper fat archives.  Fortunately, our link process
-        dnl simply removes the .a file before using ar to create a new one.
-        dnl If we did move to libtool -static we still wouldn't need arch flags
-        dnl because libtool automatically figures it out based on input.
-        retest_macosx_linking=yes
-
-        dnl HACK: PCH could be made to work by precompiling for each architecture into separate directories
-        dnl and including all architecture directories with each compiler invocation.
-        dnl That would require a major rework of Bakefile and at the same time it would be nice to have
-        dnl Objective-C++ precompiled headers.
-        AC_MSG_WARN([Disabling precompiled headers due to universal binary build.])
-        bk_use_pch=no
+dnl Deal with architecture selection. By default, we compile for the current
+dnl architecture, whatever it is. With --enable-universal_binary the list of
+dnl architectures can be explicitly specified. If it isn't, we compile for all
+dnl supported ones.
+if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
+    if test "x$wxUSE_MAC_ARCH" != xno; then
+        AC_MSG_WARN([--enable-macosx_arch is ignored when --enable-universal_binary is used.])
     fi
 
-CXXFLAGS="$OSX_ARCH_OPTS $CXXFLAGS"
-CFLAGS="$OSX_ARCH_OPTS $CFLAGS"
-OBJCXXFLAGS="$OSX_ARCH_OPTS $OBJCXXFLAGS"
-OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
-LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
+    if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
+        OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
+    else dnl Use all architectures supported
+        OSX_ARCH_OPTS="ppc,i386"
+        if test "$wxUSE_OSX_COCOA" = 1; then
+            OSX_ARCH_OPTS="$OSX_ARCH_OPTS,x86_64"
+        fi
+    fi
+
+    AC_MSG_CHECKING([for architectures to use in universal binary])
+    AC_MSG_RESULT([$OSX_ARCH_OPTS])
+
+    dnl NOTE: Only the compiler driver needs arch flags.  The link editor
+    dnl is incapable of using them but the compiler driver (which we use
+    dnl as LD when building dynamic libraries) uses them to invoke the
+    dnl real ld multiple times.  If we moved to libtool -dynamic we would
+    dnl need no arch flags because libtool automatically invokes ld for
+    dnl every architecture found in the fat input files.
+    dnl
+    dnl For static library builds, AR/RANLIB automatically create proper
+    dnl fat archives although AR is unable to update them once RANLIB has
+    dnl made them into proper fat archives.  Fortunately, our link process
+    dnl simply removes the .a file before using ar to create a new one.
+    dnl If we did move to libtool -static we still wouldn't need arch flags
+    dnl because libtool automatically figures it out based on input.
+    retest_macosx_linking=yes
+
+    dnl HACK: PCH could be made to work by precompiling for each architecture into separate directories
+    dnl and including all architecture directories with each compiler invocation.
+    dnl That would require a major rework of Bakefile and at the same time it would be nice to have
+    dnl Objective-C++ precompiled headers.
+    AC_MSG_WARN([Disabling precompiled headers due to universal binary build.])
+    bk_use_pch=no
+else
+    if test "x$wxUSE_MAC_ARCH" != xno; then
+        OSX_ARCH_OPTS=$wxUSE_MAC_ARCH
+    fi
+fi
+
+if test "x$OSX_ARCH_OPTS" != "x"; then
+    OSX_ARCH_OPTS=`echo $OSX_ARCH_OPTS | sed -e 's/^/-arch /' -e 's/,/ -arch /g'`
+
+    CXXFLAGS="$OSX_ARCH_OPTS $CXXFLAGS"
+    CFLAGS="$OSX_ARCH_OPTS $CFLAGS"
+    OBJCXXFLAGS="$OSX_ARCH_OPTS $OBJCXXFLAGS"
+    OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
+    LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
+fi
 
 dnl Set up the Mac OS X SDK.  We do this early so configure tests will occur
 dnl with the SDK in place.
