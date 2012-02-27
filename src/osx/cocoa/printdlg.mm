@@ -33,7 +33,6 @@ IMPLEMENT_CLASS(wxOSXCocoaPrintData, wxOSXPrintData)
 wxOSXCocoaPrintData::wxOSXCocoaPrintData()
 {
     m_macPrintInfo = [[NSPrintInfo alloc] init];
-    // TODO add 10.4 code
     m_macPageFormat = (PMPageFormat) [m_macPrintInfo PMPageFormat];
     m_macPrintSettings = (PMPrintSettings) [m_macPrintInfo PMPrintSettings];
     m_macPrintSession = (PMPrintSession) [m_macPrintInfo PMPrintSession] ;
@@ -47,14 +46,12 @@ wxOSXCocoaPrintData::~wxOSXCocoaPrintData()
 
 void wxOSXCocoaPrintData::UpdateFromPMState()
 {
-    // TODO add 10.4 code
     [m_macPrintInfo updateFromPMPageFormat];
     [m_macPrintInfo updateFromPMPrintSettings];
 }
 
 void wxOSXCocoaPrintData::UpdateToPMState()
 {
-    // TODO add 10.4 code
     m_macPageFormat = (PMPageFormat) [m_macPrintInfo PMPageFormat];
     m_macPrintSettings = (PMPrintSettings) [m_macPrintInfo PMPrintSettings];
     m_macPrintSession = (PMPrintSession) [m_macPrintInfo PMPrintSession] ;
