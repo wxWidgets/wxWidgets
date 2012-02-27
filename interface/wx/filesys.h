@@ -62,6 +62,11 @@ public:
     static void AddHandler(wxFileSystemHandler* handler);
 
     /**
+       Remove a filesystem handler from the list of handlers.
+    */
+    static wxFileSystemHandler* RemoveHandler(wxFileSystemHandler *handler);
+    
+    /**
         Sets the current location. @a location parameter passed to OpenFile() is
         relative to this path.
 
