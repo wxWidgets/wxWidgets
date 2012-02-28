@@ -1509,6 +1509,7 @@ public:
 
 private:
     bool EnsureIsValid();
+    void CheckInvariants() const;
 
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
     virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle );
@@ -1654,6 +1655,13 @@ wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 }
 
 
+void wxMacCoreGraphicsContext::CheckInvariants() const
+{
+    // check invariants here for debugging ...
+}
+
+
+
 void wxMacCoreGraphicsContext::StartPage( wxDouble width, wxDouble height )
 {
     CGRect r;
@@ -1679,6 +1687,8 @@ void wxMacCoreGraphicsContext::Flush()
 
 bool wxMacCoreGraphicsContext::EnsureIsValid()
 {
+    CheckInvariants();
+    
     if ( !m_cgContext )
     {
         if (m_invisible)
@@ -1752,6 +1762,8 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
 #endif
         }
     }
+    CheckInvariants();
+
     return m_cgContext != NULL;
 }
 
@@ -1778,6 +1790,7 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
             return false;
     }
     CGContextSetShouldAntialias(m_cgContext, antialiasMode);
+    CheckInvariants();
     return true;
 }
 
@@ -1817,6 +1830,7 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
             return false;
     }
     CGContextSetInterpolationQuality(m_cgContext, quality);
+    CheckInvariants();
     return true;
 }
 
@@ -1936,24 +1950,30 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         CGContextSetBlendMode(m_cgContext, mode);
     }
 #endif
+    CheckInvariants();
     return true;
 }
 
 void wxMacCoreGraphicsContext::BeginLayer(wxDouble opacity)
 {
+    CheckInvariants();
     CGContextSaveGState(m_cgContext);
     CGContextSetAlpha(m_cgContext, (CGFloat) opacity);
     CGContextBeginTransparencyLayer(m_cgContext, 0);
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::EndLayer()
 {
+    CheckInvariants();
     CGContextEndTransparencyLayer(m_cgContext);
     CGContextRestoreGState(m_cgContext);
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
+    CheckInvariants();
 #if wxOSX_USE_COCOA_OR_CARBON
     if( m_cgContext )
     {
@@ -1984,11 +2004,13 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
     // allow usage as measuring context
     // wxASSERT_MSG( m_cgContext != NULL, "Needs a valid context for clipping" );
 #endif
+    CheckInvariants();    
 }
 
 // clips drawings to the rect
 void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+    CheckInvariants();
     CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( m_cgContext )
     {
@@ -2007,6 +2029,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
     // wxFAIL_MSG( "Needs a valid context for clipping" );
 #endif
     }
+    CheckInvariants();    
 }
 
     // resets the clipping to original extent
@@ -2033,6 +2056,7 @@ void wxMacCoreGraphicsContext::ResetClip()
     // wxFAIL_MSG( "Needs a valid context for clipping" );
 #endif
     }
+    CheckInvariants();    
 }
 
 void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
@@ -2051,6 +2075,8 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
     CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextStrokePath( m_cgContext );
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonFillMode fillStyle )
@@ -2104,6 +2130,8 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonF
 
     CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextDrawPath( m_cgContext , mode );
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonFillMode fillStyle )
@@ -2134,6 +2162,8 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
         else
             CGContextFillPath( m_cgContext );
     }
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
@@ -2143,6 +2173,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
 
     if ( m_cgContext )
     {
+        CheckInvariants();
         CGContextRestoreGState( m_cgContext );
         CGContextRestoreGState( m_cgContext );
         if ( m_contextSynthesized )
@@ -2247,6 +2278,8 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
         wxMacDrawCGImage( m_cgContext , &r , image );
     }
 #endif
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -2266,6 +2299,8 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
         NULL , kPlotIconRefNormalFlags , icon.GetHICON() );
 #endif
     CGContextRestoreGState( m_cgContext );
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::PushState()
@@ -2319,9 +2354,12 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         y += CTFontGetAscent(font);
 
         CGContextSaveGState(m_cgContext);
+        CGAffineTransform textMatrix = CGContextGetTextMatrix(m_cgContext);
+        
         CGContextTranslateCTM(m_cgContext, (CGFloat) x, (CGFloat) y);
         CGContextScaleCTM(m_cgContext, 1, -1);
-        CGContextSetTextPosition(m_cgContext, 0, 0);
+        CGContextSetTextMatrix(m_cgContext, CGAffineTransformIdentity);
+        
         CTLineDraw( line, m_cgContext );
         
         if ( fref->GetUnderlined() ) {
@@ -2337,7 +2375,9 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         }
         
         CGContextRestoreGState(m_cgContext);
+        CGContextSetTextMatrix(m_cgContext, textMatrix);
         CFRelease( col );
+        CheckInvariants();
         return;
     }
 #endif
@@ -2362,6 +2402,8 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     CGContextRestoreGState(m_cgContext);
     CFRelease( col );
 #endif
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
@@ -2464,6 +2506,7 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
         CGContextRestoreGState(m_cgContext);
 
         ::ATSUDisposeTextLayout(atsuLayout);
+        CheckInvariants();
 
         return;
     }
@@ -2472,6 +2515,8 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
     // default implementation takes care of rotation and calls non rotated DrawText afterwards
     wxGraphicsContext::DoDrawRotatedText( str, x, y, angle );
 #endif
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
@@ -2573,6 +2618,8 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     if ( width )
         *width = sz.width;
 #endif
+    
+    CheckInvariants();    
 }
 
 void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
@@ -2671,6 +2718,8 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 #if wxOSX_USE_IPHONE
     // TODO core graphics text implementation here
 #endif
+    
+    CheckInvariants();
 }
 
 void * wxMacCoreGraphicsContext::GetNativeContext()
@@ -2711,6 +2760,7 @@ void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 // sets the transform of this context
 void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
+    CheckInvariants();
     if ( m_cgContext )
     {
         CGAffineTransform transform = CGContextGetCTM( m_cgContext );
@@ -2722,6 +2772,7 @@ void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
     {
         m_windowTransform = *(CGAffineTransform*) matrix.GetNativeMatrix();
     }
+    CheckInvariants();
 }
 
 // gets the matrix of this context
