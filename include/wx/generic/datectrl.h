@@ -83,7 +83,7 @@ private:
     void OnFocus(wxFocusEvent& event);
 
 #ifdef __WXOSX_COCOA__
-    virtual void OSXGenerateEvent(const wxDateTime& dt) {}
+    virtual void OSXGenerateEvent(const wxDateTime& WXUNUSED(dt)) { }
 #endif
 
     wxComboCtrl* m_combo;
