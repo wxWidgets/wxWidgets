@@ -747,7 +747,6 @@ void wxBitmapRefData::Free()
 #ifndef __LP64__
     if ( m_pictHandle )
     {
-        KillPicture( m_pictHandle ) ;
         m_pictHandle = NULL ;
     }
 #endif
