@@ -2341,8 +2341,11 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
     m_width = WidthDefault(size.x) ;
     m_height = HeightDefault(size.y);
 
-    m_x = (int)pos.x;
-    m_y = (int)pos.y;
+    if (pos != wxDefaultPosition)
+    {
+        m_x = pos.x;
+        m_y = pos.y;
+    }
 
     return true;
 }
@@ -2700,8 +2703,6 @@ void wxWindowGTK::OnInternalIdle()
 
 void wxWindowGTK::DoGetSize( int *width, int *height ) const
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
-
     if (width) (*width) = m_width;
     if (height) (*height) = m_height;
 }
@@ -2796,39 +2797,17 @@ wxSize wxWindowGTK::DoGetBorderSize() const
 
 void wxWindowGTK::DoGetPosition( int *x, int *y ) const
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
-
     int dx = 0;
     int dy = 0;
-    if (!IsTopLevel() && m_parent && m_parent->m_wxwindow)
+    GtkWidget* parent = NULL;
+    if (m_widget)
+        parent = gtk_widget_get_parent(m_widget);
+    if (WX_IS_PIZZA(parent))
     {
-        wxPizza* pizza = WX_PIZZA(m_parent->m_wxwindow);
+        wxPizza* pizza = WX_PIZZA(parent);
         dx = pizza->m_scroll_x;
         dy = pizza->m_scroll_y;
     }
-
-    if (m_x == -1 && m_y == -1)
-    {
-        GdkWindow *source = NULL;
-        if (m_wxwindow)
-            source = gtk_widget_get_window(m_wxwindow);
-        else
-            source = gtk_widget_get_window(m_widget);
-
-        if (source)
-        {
-            int org_x = 0;
-            int org_y = 0;
-            gdk_window_get_origin( source, &org_x, &org_y );
-
-            if (m_parent)
-                m_parent->ScreenToClient(&org_x, &org_y);
-
-            const_cast<wxWindowGTK*>(this)->m_x = org_x;
-            const_cast<wxWindowGTK*>(this)->m_y = org_y;
-        }
-    }
-
     if (x) (*x) = m_x - dx;
     if (y) (*y) = m_y - dy;
 }
