@@ -272,7 +272,7 @@ static bool wxQueryWMspecSupport(Display* WXUNUSED(display),
                                  Atom (feature))
 {
     GdkAtom gatom = gdk_x11_xatom_to_atom(feature);
-    return gdk_net_wm_supports(gatom);
+    return gdk_x11_screen_supports_net_wm_hint(gdk_screen_get_default(), gatom);
 }
 #else
 static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
