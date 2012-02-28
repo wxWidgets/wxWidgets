@@ -40,7 +40,7 @@ public:
 
     // implementation
 
-    virtual bool IsTransparentForMouse() const { return true; }
+    virtual bool GTKIsTransparentForMouse() const { return true; }
 
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 
