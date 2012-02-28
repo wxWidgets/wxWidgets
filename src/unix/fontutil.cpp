@@ -165,9 +165,6 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         ret = wxFONTFAMILY_TELETYPE;    // begins with "Courier"
 #if defined(__WXGTK20__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
     else
-#ifdef __WXGTK20__
-    if (!gtk_check_version(2,4,0))
-#endif
     {
         PangoFontFamily **families;
         PangoFontFamily  *family = NULL;
