@@ -1285,7 +1285,9 @@ void wxTopLevelWindowGTK::Maximize(bool maximize)
 
 bool wxTopLevelWindowGTK::IsMaximized() const
 {
-    GdkWindow* window = gtk_widget_get_window(m_widget);
+    GdkWindow* window = NULL;
+    if (m_widget)
+        window = gtk_widget_get_window(m_widget);
     return window && (gdk_window_get_state(window) & GDK_WINDOW_STATE_MAXIMIZED);
 }
 
