@@ -166,7 +166,7 @@ fswatcher$(EXEEXT): $(FSWATCHER_OBJECTS) $(__fswatcher___win32rc)
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >fswatcher.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >fswatcher.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	/bin/echo "APPL????" >fswatcher.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	ln -f fswatcher$(EXEEXT) fswatcher.app/Contents/MacOS/fswatcher

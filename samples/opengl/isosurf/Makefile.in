@@ -169,7 +169,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >isosurf.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
-@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	echo -n "APPL????" >isosurf.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	/bin/echo "APPL????" >isosurf.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	ln -f isosurf$(EXEEXT) isosurf.app/Contents/MacOS/isosurf

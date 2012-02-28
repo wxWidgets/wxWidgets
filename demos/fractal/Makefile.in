@@ -166,7 +166,7 @@ fractal$(EXEEXT): $(FRACTAL_OBJECTS) $(__fractal___win32rc)
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >fractal.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >fractal.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	/bin/echo "APPL????" >fractal.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	ln -f fractal$(EXEEXT) fractal.app/Contents/MacOS/fractal

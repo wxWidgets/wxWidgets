@@ -171,7 +171,7 @@ stctest$(EXEEXT): $(STCTEST_OBJECTS) $(__stctest___win32rc)
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >stctest.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >stctest.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	/bin/echo "APPL????" >stctest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	ln -f stctest$(EXEEXT) stctest.app/Contents/MacOS/stctest

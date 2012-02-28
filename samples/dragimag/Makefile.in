@@ -166,7 +166,7 @@ dragimag$(EXEEXT): $(DRAGIMAG_OBJECTS) $(__dragimag___win32rc)
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >dragimag.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >dragimag.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	/bin/echo "APPL????" >dragimag.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	ln -f dragimag$(EXEEXT) dragimag.app/Contents/MacOS/dragimag

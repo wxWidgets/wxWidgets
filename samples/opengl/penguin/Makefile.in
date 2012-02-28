@@ -179,7 +179,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >penguin.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
-@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	echo -n "APPL????" >penguin.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	/bin/echo "APPL????" >penguin.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	ln -f penguin$(EXEEXT) penguin.app/Contents/MacOS/penguin

@@ -59,7 +59,7 @@
                     $(BUNDLE_PLIST) >$(BUNDLE)/Info.plist
 
                 <!-- PkgInfo: -->
-                echo -n "APPL????" >$(BUNDLE)/PkgInfo
+                /bin/echo "APPL????" >$(BUNDLE)/PkgInfo
 
                 <!-- move the binary: -->
                 ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)

@@ -168,7 +168,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	$(top_srcdir)/src/osx/carbon/Info.plist.in >nettest.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	
-@COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	echo -n "APPL????" >nettest.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	/bin/echo "APPL????" >nettest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	ln -f nettest$(EXEEXT) nettest.app/Contents/MacOS/nettest

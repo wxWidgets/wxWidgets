@@ -388,7 +388,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >test_gui.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >test_gui.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	/bin/echo "APPL????" >test_gui.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f test_gui$(EXEEXT) test_gui.app/Contents/MacOS/test_gui
