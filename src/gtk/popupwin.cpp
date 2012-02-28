@@ -73,14 +73,6 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 }
 }
 
-void wxPopupWindow::AddChildGTK(wxWindowGTK* child)
-{
-    gtk_widget_set_size_request(
-        child->m_widget, child->m_width, child->m_height);
-    gtk_fixed_put(
-        GTK_FIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y);
-}
-
 //-----------------------------------------------------------------------------
 // wxPopupWindow
 //-----------------------------------------------------------------------------

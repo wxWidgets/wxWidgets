@@ -42,9 +42,6 @@ protected:
 
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
-private:
-    virtual void AddChildGTK(wxWindowGTK* child);
-
 #ifdef __WXUNIVERSAL__
     DECLARE_EVENT_TABLE()
 #endif
