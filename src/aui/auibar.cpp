@@ -2654,14 +2654,13 @@ void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)
             return;
     }
 
-    if (m_overflowSizerItem)
+    if (m_overflowSizerItem && m_art)
     {
         int dropdown_size = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);
         if (dropdown_size > 0 &&
             evt.m_x > cli_rect.width - dropdown_size &&
             evt.m_y >= 0 &&
-            evt.m_y < cli_rect.height &&
-            m_art)
+            evt.m_y < cli_rect.height)
         {
             return;
         }
@@ -2721,14 +2720,13 @@ void wxAuiToolBar::OnMiddleDown(wxMouseEvent& evt)
             return;
     }
 
-    if (m_overflowSizerItem)
+    if (m_overflowSizerItem && m_art)
     {
         int dropdown_size = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);
         if (dropdown_size > 0 &&
             evt.m_x > cli_rect.width - dropdown_size &&
             evt.m_y >= 0 &&
-            evt.m_y < cli_rect.height &&
-            m_art)
+            evt.m_y < cli_rect.height)
         {
             return;
         }
