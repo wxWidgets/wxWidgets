@@ -986,7 +986,7 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
                 if ( m_charset == wxS("CHARSET") )
                 {
                     // "CHARSET" is not valid charset, but lazy translator
-                    m_charset.empty();
+                    m_charset.clear();
                 }
             }
         }

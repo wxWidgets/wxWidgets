@@ -326,7 +326,7 @@ void wxRegKey::SetHkey(WXHKEY hKey)
   m_mode = Write;
 
   // reset old data
-  m_strKey.empty();
+  m_strKey.clear();
   m_dwLastError = 0;
 }
 
