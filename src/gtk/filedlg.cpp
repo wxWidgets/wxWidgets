@@ -371,6 +371,12 @@ void wxFileDialog::SetMessage(const wxString& message)
 
 void wxFileDialog::SetPath(const wxString& path)
 {
+    // Don't do anything if no path is specified, in particular don't set the
+    // path to m_dir below as this would result in opening the dialog in the
+    // parent directory of this one instead of m_dir itself.
+    if ( path.empty() )
+        return;
+
     // we need an absolute path for GTK native chooser so ensure that we have
     // it: use the initial directory if it was set or just CWD otherwise (this
     // is the default behaviour if m_dir is empty)
