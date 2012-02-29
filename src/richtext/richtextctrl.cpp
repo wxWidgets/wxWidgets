@@ -1176,7 +1176,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
             ScrollIntoView(m_caretPosition, WXK_LEFT);
 
-            if (deletions > 0)
+            // Always send this event; wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED will be sent only if there is an actual deletion.
+            //if (deletions > 0)
             {
                 wxRichTextEvent cmdEvent(
                     wxEVT_COMMAND_RICHTEXT_DELETE,
@@ -1314,7 +1315,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         ScrollIntoView(m_caretPosition, WXK_LEFT);
 
-        if (deletions > 0)
+        // Always send this event; wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED will be sent only if there is an actual deletion.
+        //if (deletions > 0)
         {
             wxRichTextEvent cmdEvent(
                 wxEVT_COMMAND_RICHTEXT_DELETE,
@@ -1387,7 +1389,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         ScrollIntoView(m_caretPosition, WXK_LEFT);
 
-        if (deletions > 0)
+        // Always send this event; wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED will be sent only if there is an actual deletion.
+        //if (deletions > 0)
         {
             wxRichTextEvent cmdEvent(
                 wxEVT_COMMAND_RICHTEXT_DELETE,
