@@ -415,7 +415,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     /* Place the WebKitWebView in the GtkScrolledWindow */
     gtk_container_add (GTK_CONTAINER (scrolled_window), web_view);
-    gtk_widget_show(m_widget);
     gtk_widget_show(web_view);
 
     g_signal_connect_after(web_view, "notify::load-status",

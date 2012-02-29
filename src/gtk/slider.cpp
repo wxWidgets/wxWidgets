@@ -318,7 +318,6 @@ bool wxSlider::Create(wxWindow *parent,
         else
             m_widget = gtk_vbox_new(false, 0);
         g_object_ref(m_widget);
-        gtk_widget_show( m_widget );
         gtk_container_add( GTK_CONTAINER(m_widget), m_scale );
 
         GtkWidget *box;

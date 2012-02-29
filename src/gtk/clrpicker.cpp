@@ -69,7 +69,6 @@ bool wxColourButton::Create( wxWindow *parent, wxWindowID id,
     m_colour = col;
     m_widget = gtk_color_button_new_with_color( m_colour.GetColor() );
     g_object_ref(m_widget);
-    gtk_widget_show(m_widget);
 
     // GtkColourButton signals
     g_signal_connect(m_widget, "color-set",

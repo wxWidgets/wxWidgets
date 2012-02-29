@@ -233,7 +233,6 @@ bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_image_new();
     g_object_ref(m_widget);
-    gtk_widget_show(m_widget);
 
     m_parent->DoAddChild( this );
 

@@ -81,8 +81,6 @@ bool wxFontButton::Create( wxWindow *parent, wxWindowID id,
     gtk_font_button_set_use_size(GTK_FONT_BUTTON(m_widget), usefont);
     gtk_font_button_set_use_font(GTK_FONT_BUTTON(m_widget), usefont);
 
-    gtk_widget_show(m_widget);
-
     // GtkFontButton signals
     g_signal_connect(m_widget, "font-set",
                     G_CALLBACK(gtk_fontbutton_setfont_callback), this);
