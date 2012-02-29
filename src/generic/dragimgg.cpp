@@ -247,7 +247,7 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
         m_boundingRect = * rect;
 
     m_isDirty = false;
-    m_isDirty = false;
+    m_isShown = false;
 
     if (m_cursor.IsOk())
     {
