@@ -830,7 +830,6 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
     // default values for other fields
     rasDialParams.szPhoneNumber[0] = '\0';
     rasDialParams.szCallbackNumber[0] = '\0';
-    rasDialParams.szCallbackNumber[0] = '\0';
 
     rasDialParams.szDomain[0] = '*';
     rasDialParams.szDomain[1] = '\0';
