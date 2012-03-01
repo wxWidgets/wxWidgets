@@ -406,15 +406,12 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
         return false;
     }
 
-    GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    m_widget = gtk_scrolled_window_new(NULL, NULL);
+    g_object_ref(m_widget);
     web_view = webkit_web_view_new ();
-    g_object_ref(web_view); // TODO: check memory management
-
-    m_widget = scrolled_window;
-    g_object_ref(m_widget); // TODO: check memory management
 
     /* Place the WebKitWebView in the GtkScrolledWindow */
-    gtk_container_add (GTK_CONTAINER (scrolled_window), web_view);
+    gtk_container_add(GTK_CONTAINER(m_widget), web_view);
     gtk_widget_show(web_view);
 
     g_signal_connect_after(web_view, "notify::load-status",
