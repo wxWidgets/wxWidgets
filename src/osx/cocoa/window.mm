@@ -137,13 +137,90 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (void)setImagePosition:(NSCellImagePosition)aPosition;
 @end
 
+// in case we want to use the native tooltip callbacks
+
+#if 0
+
+@interface NSView(wxToolTip)
+- (NSString *)view:(NSView *)view stringForToolTip:(NSToolTipTag)tag point:(NSPoint)point userData:(void *)userData;
+@end
+
+@implementation NSView(wxToolTip)
+
+- (NSString *)view:(NSView *)view stringForToolTip:(NSToolTipTag)tag point:(NSPoint)point userData:(void *)userData {
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( view );
+    if (impl == NULL)
+        return nil;
+    
+    return @"Tag";
+}
+@end
+
+#endif
+
+// The following code is a combination of the code listed here:
+// http://lists.apple.com/archives/cocoa-dev/2008/Apr/msg01582.html
+// (which can't be used because KLGetCurrentKeyboardLayout etc aren't 64-bit)
+// and the code here:
+// http://inquisitivecocoa.com/category/objective-c/
+@interface NSEvent (OsGuiUtilsAdditions)
+- (NSString*) charactersIgnoringModifiersIncludingShift;
+@end
+
+@implementation NSEvent (OsGuiUtilsAdditions)
+- (NSString*) charactersIgnoringModifiersIncludingShift {
+    // First try -charactersIgnoringModifiers and look for keys which UCKeyTranslate translates
+    // differently than AppKit.
+    NSString* c = [self charactersIgnoringModifiers];
+    if ([c length] == 1) {
+        unichar codepoint = [c characterAtIndex:0];
+        if ((codepoint >= 0xF700 && codepoint <= 0xF8FF) || codepoint == 0x7F) {
+            return c;
+        }
+    }
+    // This is not a "special" key, so ask UCKeyTranslate to give us the character with no
+    // modifiers attached.  Actually, that's not quite accurate; we attach the Command modifier
+    // which hints the OS to use Latin characters where possible, which is generally what we want.
+    NSString* result = @"";
+    TISInputSourceRef currentKeyboard = TISCopyCurrentKeyboardInputSource();
+    CFDataRef uchr = (CFDataRef)TISGetInputSourceProperty(currentKeyboard, kTISPropertyUnicodeKeyLayoutData);
+    CFRelease(currentKeyboard);
+    if (uchr == NULL) {
+        // this can happen for some non-U.S. input methods (eg. Romaji or Hiragana)
+        return c;
+    }
+    const UCKeyboardLayout *keyboardLayout = (const UCKeyboardLayout*)CFDataGetBytePtr(uchr);
+    if (keyboardLayout) {
+        UInt32 deadKeyState = 0;
+        UniCharCount maxStringLength = 255;
+        UniCharCount actualStringLength = 0;
+        UniChar unicodeString[maxStringLength];
+        
+        OSStatus status = UCKeyTranslate(keyboardLayout,
+                                         [self keyCode],
+                                         kUCKeyActionDown,
+                                         cmdKey >> 8,         // force the Command key to "on"
+                                         LMGetKbdType(),
+                                         kUCKeyTranslateNoDeadKeysMask,
+                                         &deadKeyState,
+                                         maxStringLength,
+                                         &actualStringLength,
+                                         unicodeString);
+        
+        if(status == noErr)
+            result = [NSString stringWithCharacters:unicodeString length:(NSInteger)actualStringLength];
+    }
+    return result;
+}
+@end
+
 long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
 {
     long retval = 0;
 
     if ([event type] != NSFlagsChanged)
     {
-        NSString* s = [event charactersIgnoringModifiers];
+        NSString* s = [event charactersIgnoringModifiersIncludingShift];
         // backspace char reports as delete w/modifiers for some reason
         if ([s length] == 1)
         {
@@ -319,7 +396,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     wxString chars;
     if ( eventType != NSFlagsChanged )
     {
-        NSString* nschars = [[nsEvent charactersIgnoringModifiers] uppercaseString];
+        NSString* nschars = [[nsEvent charactersIgnoringModifiersIncludingShift] uppercaseString];
         if ( charString )
         {
             // if charString is set, it did not come from key up / key down
@@ -2261,15 +2338,31 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bo
                                                                  alpha:(CGFloat) (col.Alpha() / 255.0)]];
 }
 
+NSToolTipTag tt = 0;
+
 void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
 {
     if (tooltip)
     {
+        /*
+        if ( tt != 0 )
+        {
+            [m_osxView removeToolTip:tt];
+            tt = 0;
+        }
+         */
         wxCFStringRef cf( tooltip->GetTip() , m_wxPeer->GetFont().GetEncoding() );
         [m_osxView setToolTip: cf.AsNSString()];
+        // tt = [m_osxView addToolTipRect:[m_osxView bounds] owner:m_osxView userData:nil];
     }
     else 
-        [m_osxView setToolTip: nil];
+    {
+        if ( tt != 0 )
+        {
+            [m_osxView removeToolTip:tt];
+            tt = 0;
+        }
+    }
 
 }
 
