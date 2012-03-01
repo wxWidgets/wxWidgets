@@ -32,8 +32,6 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
                                  GParamSpec*,
                                  wxWebViewWebKit *webKitCtrl)
 {
-    if (!webKitCtrl->m_ready) return;
-
     wxString url = webKitCtrl->GetCurrentURL();
 
     WebKitLoadStatus status;
@@ -395,7 +393,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
-    m_ready = false;
     m_busy = false;
     m_guard = false;
 
@@ -414,9 +411,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_web_view));
     gtk_widget_show(GTK_WIDGET(m_web_view));
 
-    g_signal_connect_after(m_web_view, "notify::load-status",
-                           G_CALLBACK(wxgtk_webview_webkit_load_status),
-                           this);
     g_signal_connect_after(m_web_view, "navigation-policy-decision-requested",
                            G_CALLBACK(wxgtk_webview_webkit_navigation),
                            this);
@@ -445,7 +439,10 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     history = webkit_web_view_get_back_forward_list(m_web_view);
     m_historyLimit = webkit_web_back_forward_list_get_limit(history);
 
-    m_ready = true;
+    // last to avoid getting signal too early
+    g_signal_connect_after(m_web_view, "notify::load-status",
+                           G_CALLBACK(wxgtk_webview_webkit_load_status),
+                           this);
 
     return true;
 }

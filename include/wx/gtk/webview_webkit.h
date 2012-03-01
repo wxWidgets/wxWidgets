@@ -115,10 +115,6 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
     virtual wxVector<wxSharedPtr<wxWebViewHandler> > GetHandlers() { return m_handlerList; }
 
-    /** FIXME: hack to work around signals being received too early */
-    bool m_ready;
-
-
     /** TODO: check if this can be made private
      * The native control has a getter to check for busy state, but except in
      * very recent versions of webkit this getter doesn't say everything we need
