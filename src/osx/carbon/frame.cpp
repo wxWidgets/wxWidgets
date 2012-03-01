@@ -29,7 +29,6 @@
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)
   EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
-  EVT_SIZE(wxFrame::OnSize)
 END_EVENT_TABLE()
 
 #define WX_MAC_STATUSBAR_HEIGHT 18
@@ -214,14 +213,6 @@ void wxFrame::OnActivate(wxActivateEvent& event)
         }
 #endif
     }
-}
-
-
-void wxFrame::OnSize(wxSizeEvent& event)
-{
-    PositionBars();
-    
-    event.Skip();
 }
 
 #if wxUSE_MENUS

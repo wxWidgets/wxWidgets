@@ -59,7 +59,6 @@ public:
     // event handlers
     void OnActivate(wxActivateEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    void OnSize(wxSizeEvent& event);
 
     // Toolbar
 #if wxUSE_TOOLBAR
@@ -84,6 +83,8 @@ public:
 
     void PositionBars();
 
+    // internal response to size events
+    virtual void MacOnInternalSize() { PositionBars(); }
 
 protected:
     // common part of all ctors

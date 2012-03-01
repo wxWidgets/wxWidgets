@@ -288,6 +288,9 @@ public:
     
     float               GetContentScaleFactor() const ;
     
+    // internal response to size events
+    virtual void MacOnInternalSize() {}
+
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;

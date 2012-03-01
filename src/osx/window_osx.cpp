@@ -1065,6 +1065,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         if ( doResize )
         {
             MacRepositionScrollBars() ;
+            MacOnInternalSize();
             wxSize size(actualWidth, actualHeight);
             wxSizeEvent event(size, m_windowId);
             event.SetEventObject(this);
@@ -1148,6 +1149,7 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
         if (sizeFlags & wxSIZE_FORCE_EVENT)
         {
+            MacOnInternalSize();
             wxSizeEvent event( wxSize(width,height), GetId() );
             event.SetEventObject( this );
             HandleWindowEvent( event );
@@ -1686,6 +1688,7 @@ void wxWindowMac::DoUpdateScrollbarVisibility()
     MacRepositionScrollBars() ;
     if ( triggerSizeEvent )
     {
+        MacOnInternalSize();
         wxSizeEvent event(GetSize(), m_windowId);
         event.SetEventObject(this);
         HandleWindowEvent(event);

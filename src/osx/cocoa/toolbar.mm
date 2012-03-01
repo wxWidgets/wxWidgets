@@ -1193,6 +1193,9 @@ bool wxToolBar::Realize()
     SetInitialSize( wxSize(m_minWidth, m_minHeight));
 
     SendSizeEventToParent();
+    wxWindow * const parent = GetParent();
+    if ( parent && !parent->IsBeingDeleted() )
+        parent->MacOnInternalSize();
     
     return true;
 }
