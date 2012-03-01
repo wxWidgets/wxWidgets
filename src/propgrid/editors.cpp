@@ -95,10 +95,10 @@
 
 #elif defined(__WXGTK__)
     // tested
-    #define wxPG_CHECKMARK_XADJ                 0
-    #define wxPG_CHECKMARK_YADJ                 0
-    #define wxPG_CHECKMARK_WADJ                 (-1)
-    #define wxPG_CHECKMARK_HADJ                 (-1)
+    #define wxPG_CHECKMARK_XADJ                 1
+    #define wxPG_CHECKMARK_YADJ                 1
+    #define wxPG_CHECKMARK_WADJ                 (-2)
+    #define wxPG_CHECKMARK_HADJ                 (-2)
     #define wxPG_CHECKMARK_DEFLATE              3
 
     #define wxPG_NAT_BUTTON_BORDER_ANY      1
@@ -109,10 +109,10 @@
 
 #elif defined(__WXMAC__)
     // *not* tested
-    #define wxPG_CHECKMARK_XADJ                 0
-    #define wxPG_CHECKMARK_YADJ                 0
-    #define wxPG_CHECKMARK_WADJ                 0
-    #define wxPG_CHECKMARK_HADJ                 0
+    #define wxPG_CHECKMARK_XADJ                 4
+    #define wxPG_CHECKMARK_YADJ                 4
+    #define wxPG_CHECKMARK_WADJ                 -6
+    #define wxPG_CHECKMARK_HADJ                 -6
     #define wxPG_CHECKMARK_DEFLATE              0
 
     #define wxPG_NAT_BUTTON_BORDER_ANY      0
