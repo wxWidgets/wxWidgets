@@ -15,6 +15,7 @@
 #include "wx/dcmemory.h"
 #include "wx/dcgraph.h"
 #include "wx/stopwatch.h"
+#include "wx/crt.h"
 
 struct GraphicsBenchmarkOptions
 {
@@ -42,14 +43,20 @@ public:
     GraphicsBenchmarkFrame()
         : wxFrame(NULL, wxID_ANY, "wxWidgets Graphics Benchmark")
     {
+        Connect(wxEVT_CREATE,
+                wxWindowCreateEventHandler(GraphicsBenchmarkFrame::OnCreate));
         Connect(wxEVT_PAINT,
                 wxPaintEventHandler(GraphicsBenchmarkFrame::OnPaint));
 
-                m_bitmap.Create(64, 64, 32);
+        m_bitmap.Create(64, 64, 32);
 
         Show();
         SetClientSize(opts.width, opts.height);
+    }
 
+private:
+    void OnCreate(wxWindowCreateEvent&)
+    {
         wxClientDC dc(this);
         BenchmarkLines("dc   client", dc);
         BenchmarkRectangles("dc   client", dc);
@@ -72,7 +79,6 @@ public:
         BenchmarkBitmaps("gcdc memory", gcdc2);
     }
 
-protected:
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc(this);
@@ -114,7 +120,7 @@ protected:
 
         const long t = sw.Time();
 
-        wxPrintf("%d lines done in %lums = %gus/line\n",
+        wxPrintf("%ld lines done in %ldms = %gus/line\n",
                  opts.numLines, t, (1000. * t)/opts.numLines);
     }
 
@@ -141,7 +147,7 @@ protected:
 
         const long t = sw.Time();
 
-        wxPrintf("%d rects done in %lums = %gus/rect\n",
+        wxPrintf("%ld rects done in %ldms = %gus/rect\n",
                  opts.numLines, t, (1000. * t)/opts.numLines);
     }
 
@@ -165,7 +171,7 @@ protected:
 
         const long t = sw.Time();
 
-        wxPrintf("%d bitmaps done in %lums = %gus/bitmap\n",
+        wxPrintf("%ld bitmaps done in %ldms = %gus/bitmap\n",
                  opts.numLines, t, (1000. * t)/opts.numLines);
     }
 
