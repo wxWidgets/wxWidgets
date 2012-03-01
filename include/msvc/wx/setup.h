@@ -46,7 +46,7 @@
 // wxMSVC_VERSION as "XX" or define wxMSVC_VERSION_AUTO to use the appropriate
 // version depending on the compiler used
 #ifdef wxMSVC_VERSION
-    #define wxCOMPILER_PREFIX wxCONCAT2(vc, wxMSVC_VERSION)
+    #define wxCOMPILER_PREFIX wxCONCAT(vc, wxMSVC_VERSION)
 #elif defined(wxMSVC_VERSION_AUTO)
     #if _MSC_VER == 1200
         #define wxCOMPILER_PREFIX vc60
