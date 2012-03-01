@@ -408,29 +408,29 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     m_widget = gtk_scrolled_window_new(NULL, NULL);
     g_object_ref(m_widget);
-    web_view = webkit_web_view_new ();
+    m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
 
     /* Place the WebKitWebView in the GtkScrolledWindow */
-    gtk_container_add(GTK_CONTAINER(m_widget), web_view);
-    gtk_widget_show(web_view);
+    gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_web_view));
+    gtk_widget_show(GTK_WIDGET(m_web_view));
 
-    g_signal_connect_after(web_view, "notify::load-status",
+    g_signal_connect_after(m_web_view, "notify::load-status",
                            G_CALLBACK(wxgtk_webview_webkit_load_status),
                            this);
-    g_signal_connect_after(web_view, "navigation-policy-decision-requested",
+    g_signal_connect_after(m_web_view, "navigation-policy-decision-requested",
                            G_CALLBACK(wxgtk_webview_webkit_navigation),
                            this);
-    g_signal_connect_after(web_view, "load-error", 
+    g_signal_connect_after(m_web_view, "load-error", 
                            G_CALLBACK(wxgtk_webview_webkit_error),
                            this);
 
-    g_signal_connect_after(web_view, "new-window-policy-decision-requested",
+    g_signal_connect_after(m_web_view, "new-window-policy-decision-requested",
                            G_CALLBACK(wxgtk_webview_webkit_new_window), this);
 
-    g_signal_connect_after(web_view, "title-changed",
+    g_signal_connect_after(m_web_view, "title-changed",
                            G_CALLBACK(wxgtk_webview_webkit_title_changed), this);
 
-    g_signal_connect_after(web_view, "resource-request-starting",
+    g_signal_connect_after(m_web_view, "resource-request-starting",
                            G_CALLBACK(wxgtk_webview_webkit_resource_req), this);
 
     m_parent->DoAddChild( this );
@@ -438,11 +438,11 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     PostCreation(size);
 
     /* Open a webpage */
-    webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url.utf8_str());
+    webkit_web_view_load_uri(m_web_view, url.utf8_str());
 
     //Get the initial history limit so we can enable and disable it later
     WebKitWebBackForwardList* history;
-    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    history = webkit_web_view_get_back_forward_list(m_web_view);
     m_historyLimit = webkit_web_back_forward_list_get_limit(history);
 
     m_ready = true;
@@ -472,80 +472,80 @@ wxWebViewWebKit::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 
 void wxWebViewWebKit::ZoomIn()
 {
-    webkit_web_view_zoom_in (WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_zoom_in(m_web_view);
 }
 
 void wxWebViewWebKit::ZoomOut()
 {
-    webkit_web_view_zoom_out (WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_zoom_out(m_web_view);
 }
 
 void wxWebViewWebKit::SetWebkitZoom(float level)
 {
-    webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW(web_view), level);
+    webkit_web_view_set_zoom_level(m_web_view, level);
 }
 
 float wxWebViewWebKit::GetWebkitZoom() const
 {
-    return webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_get_zoom_level(m_web_view);
 }
 
 void wxWebViewWebKit::Stop()
 {
-     webkit_web_view_stop_loading (WEBKIT_WEB_VIEW(web_view));
+     webkit_web_view_stop_loading(m_web_view);
 }
 
 void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
 {
     if (flags & wxWEB_VIEW_RELOAD_NO_CACHE)
     {
-        webkit_web_view_reload_bypass_cache (WEBKIT_WEB_VIEW(web_view));
+        webkit_web_view_reload_bypass_cache(m_web_view);
     }
     else
     {
-        webkit_web_view_reload (WEBKIT_WEB_VIEW(web_view));
+        webkit_web_view_reload(m_web_view);
     }
 }
 
 void wxWebViewWebKit::LoadURL(const wxString& url)
 {
-    webkit_web_view_load_uri(WEBKIT_WEB_VIEW(web_view), wxGTK_CONV(url));
+    webkit_web_view_load_uri(m_web_view, wxGTK_CONV(url));
 }
 
 
 void wxWebViewWebKit::GoBack()
 {
-    webkit_web_view_go_back (WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_go_back(m_web_view);
 }
 
 void wxWebViewWebKit::GoForward()
 {
-    webkit_web_view_go_forward (WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_go_forward(m_web_view);
 }
 
 
 bool wxWebViewWebKit::CanGoBack() const
 {
-    return webkit_web_view_can_go_back (WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_can_go_back(m_web_view);
 }
 
 
 bool wxWebViewWebKit::CanGoForward() const
 {
-    return webkit_web_view_can_go_forward (WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_can_go_forward(m_web_view);
 }
 
 void wxWebViewWebKit::ClearHistory()
 {
     WebKitWebBackForwardList* history;
-    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    history = webkit_web_view_get_back_forward_list(m_web_view);
     webkit_web_back_forward_list_clear(history);
 }
 
 void wxWebViewWebKit::EnableHistory(bool enable)
 {
     WebKitWebBackForwardList* history;
-    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    history = webkit_web_view_get_back_forward_list(m_web_view);
     if(enable)
     {
         webkit_web_back_forward_list_set_limit(history, m_historyLimit);
@@ -560,7 +560,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory
 {
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist; 
     WebKitWebBackForwardList* history;
-    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    history = webkit_web_view_get_back_forward_list(m_web_view);
     GList* list = webkit_web_back_forward_list_get_back_list_with_limit(history, 
                                                                         m_historyLimit);
     //We need to iterate in reverse to get the order we desire
@@ -581,7 +581,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory(
 {
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist; 
     WebKitWebBackForwardList* history;
-    history = webkit_web_view_get_back_forward_list(WEBKIT_WEB_VIEW(web_view));
+    history = webkit_web_view_get_back_forward_list(m_web_view);
     GList* list = webkit_web_back_forward_list_get_forward_list_with_limit(history, 
                                                                            m_historyLimit);
     for(guint i = 0; i < g_list_length(list); i++)
@@ -602,81 +602,78 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)item->m_histItem;
     if(gtkitem)
     {
-        webkit_web_view_go_to_back_forward_item(WEBKIT_WEB_VIEW(web_view), 
+        webkit_web_view_go_to_back_forward_item(m_web_view, 
                                                 WEBKIT_WEB_HISTORY_ITEM(gtkitem));
     }
 }
 
 bool wxWebViewWebKit::CanCut() const
 {
-    return webkit_web_view_can_cut_clipboard(WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_can_cut_clipboard(m_web_view);
 }
 
 bool wxWebViewWebKit::CanCopy() const
 {
-    return webkit_web_view_can_copy_clipboard(WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_can_copy_clipboard(m_web_view);
 }
 
 bool wxWebViewWebKit::CanPaste() const
 {
-    return webkit_web_view_can_paste_clipboard(WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_can_paste_clipboard(m_web_view);
 }
 
 void wxWebViewWebKit::Cut()
 {
-    webkit_web_view_cut_clipboard(WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_cut_clipboard(m_web_view);
 }
 
 void wxWebViewWebKit::Copy()
 {
-    webkit_web_view_copy_clipboard(WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_copy_clipboard(m_web_view);
 }
 
 void wxWebViewWebKit::Paste()
 {
-    webkit_web_view_paste_clipboard(WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_paste_clipboard(m_web_view);
 }
 
 bool wxWebViewWebKit::CanUndo() const
 {
-    return webkit_web_view_can_undo(WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_can_undo(m_web_view);
 }
 
 bool wxWebViewWebKit::CanRedo() const
 {
-    return webkit_web_view_can_redo(WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_can_redo(m_web_view);
 }
 
 void wxWebViewWebKit::Undo()
 {
-    webkit_web_view_undo(WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_undo(m_web_view);
 }
 
 void wxWebViewWebKit::Redo()
 {
-    webkit_web_view_redo(WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_redo(m_web_view);
 }
 
 wxString wxWebViewWebKit::GetCurrentURL() const
 {
     // FIXME: check which encoding the web kit control uses instead of
     // assuming UTF8 (here and elsewhere too)
-    return wxString::FromUTF8(webkit_web_view_get_uri(
-                                WEBKIT_WEB_VIEW(web_view)));
+    return wxString::FromUTF8(webkit_web_view_get_uri(m_web_view));
 }
 
 
 wxString wxWebViewWebKit::GetCurrentTitle() const
 {
-    return wxString::FromUTF8(webkit_web_view_get_title(
-                                WEBKIT_WEB_VIEW(web_view)));
+    return wxString::FromUTF8(webkit_web_view_get_title(m_web_view));
 }
 
 
 wxString wxWebViewWebKit::GetPageSource() const
 {
-    WebKitWebFrame* frame = webkit_web_view_get_main_frame(
-        WEBKIT_WEB_VIEW(web_view));
+    WebKitWebFrame* frame = webkit_web_view_get_main_frame(m_web_view);
     WebKitWebDataSource* src = webkit_web_frame_get_data_source (frame);
 
     // TODO: check encoding with
@@ -750,15 +747,14 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
 {
-    webkit_web_view_set_full_content_zoom(WEBKIT_WEB_VIEW(web_view),
+    webkit_web_view_set_full_content_zoom(m_web_view,
                                           (type == wxWEB_VIEW_ZOOM_TYPE_LAYOUT ?
                                           TRUE : FALSE));
 }
 
 wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
 {
-    gboolean fczoom = webkit_web_view_get_full_content_zoom(
-            WEBKIT_WEB_VIEW(web_view));
+    gboolean fczoom = webkit_web_view_get_full_content_zoom(m_web_view);
 
     if (fczoom) return wxWEB_VIEW_ZOOM_TYPE_LAYOUT;
     else        return wxWEB_VIEW_ZOOM_TYPE_TEXT;
@@ -772,7 +768,7 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType) const
 
 void wxWebViewWebKit::SetPage(const wxString& html, const wxString& baseUri)
 {
-    webkit_web_view_load_string (WEBKIT_WEB_VIEW(web_view),
+    webkit_web_view_load_string (m_web_view,
                                  html.mb_str(wxConvUTF8),
                                  "text/html",
                                  "UTF-8",
@@ -781,8 +777,7 @@ void wxWebViewWebKit::SetPage(const wxString& html, const wxString& baseUri)
 
 void wxWebViewWebKit::Print()
 {
-    WebKitWebFrame* frame = webkit_web_view_get_main_frame(
-            WEBKIT_WEB_VIEW(web_view));
+    WebKitWebFrame* frame = webkit_web_view_get_main_frame(m_web_view);
     webkit_web_frame_print (frame);
 
     // GtkPrintOperationResult  webkit_web_frame_print_full
@@ -822,27 +817,27 @@ bool wxWebViewWebKit::IsBusy() const
 
 void wxWebViewWebKit::SetEditable(bool enable)
 {
-    webkit_web_view_set_editable(WEBKIT_WEB_VIEW(web_view), enable);
+    webkit_web_view_set_editable(m_web_view, enable);
 }
 
 bool wxWebViewWebKit::IsEditable() const
 {
-    return webkit_web_view_get_editable(WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_get_editable(m_web_view);
 }
 
 void wxWebViewWebKit::DeleteSelection()
 {
-    webkit_web_view_delete_selection(WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_delete_selection(m_web_view);
 }
 
 bool wxWebViewWebKit::HasSelection() const
 {
-    return webkit_web_view_has_selection(WEBKIT_WEB_VIEW(web_view));
+    return webkit_web_view_has_selection(m_web_view);
 }
 
 void wxWebViewWebKit::SelectAll()
 {
-    webkit_web_view_select_all(WEBKIT_WEB_VIEW(web_view));
+    webkit_web_view_select_all(m_web_view);
 }
 
 wxString wxWebViewWebKit::GetSelectedText() const
@@ -852,7 +847,7 @@ wxString wxWebViewWebKit::GetSelectedText() const
     WebKitDOMDOMSelection* sel;
     WebKitDOMRange* range;
 
-    doc = webkit_web_view_get_dom_document(WEBKIT_WEB_VIEW(web_view));
+    doc = webkit_web_view_get_dom_document(m_web_view);
     win = webkit_dom_document_get_default_view(WEBKIT_DOM_DOCUMENT(doc));
     sel = webkit_dom_dom_window_get_selection(WEBKIT_DOM_DOM_WINDOW(win));
     range = webkit_dom_dom_selection_get_range_at(WEBKIT_DOM_DOM_SELECTION(sel), 
@@ -871,7 +866,7 @@ wxString wxWebViewWebKit::GetSelectedSource() const
     WebKitDOMDocumentFragment* clone;
     WebKitDOMHTMLElement* html;
 
-    doc = webkit_web_view_get_dom_document(WEBKIT_WEB_VIEW(web_view));
+    doc = webkit_web_view_get_dom_document(m_web_view);
     win = webkit_dom_document_get_default_view(WEBKIT_DOM_DOCUMENT(doc));
     sel = webkit_dom_dom_window_get_selection(WEBKIT_DOM_DOM_WINDOW(win));
     range = webkit_dom_dom_selection_get_range_at(WEBKIT_DOM_DOM_SELECTION(sel), 
@@ -892,7 +887,7 @@ void wxWebViewWebKit::ClearSelection()
     WebKitDOMDOMWindow* win;
     WebKitDOMDOMSelection* sel;
 
-    doc = webkit_web_view_get_dom_document(WEBKIT_WEB_VIEW(web_view));
+    doc = webkit_web_view_get_dom_document(m_web_view);
     win = webkit_dom_document_get_default_view(WEBKIT_DOM_DOCUMENT(doc));
     sel = webkit_dom_dom_window_get_selection(WEBKIT_DOM_DOM_WINDOW(win));
     webkit_dom_dom_selection_remove_all_ranges(WEBKIT_DOM_DOM_SELECTION(sel));
@@ -904,7 +899,7 @@ wxString wxWebViewWebKit::GetPageText() const
     WebKitDOMDocument* doc; 
     WebKitDOMHTMLElement* body;
 
-    doc = webkit_web_view_get_dom_document(WEBKIT_WEB_VIEW(web_view));
+    doc = webkit_web_view_get_dom_document(m_web_view);
     body = webkit_dom_document_get_body(WEBKIT_DOM_DOCUMENT(doc));
     return wxString(webkit_dom_html_element_get_inner_text(WEBKIT_DOM_HTML_ELEMENT(body)), 
                     wxConvUTF8);
@@ -912,7 +907,7 @@ wxString wxWebViewWebKit::GetPageText() const
 
 void wxWebViewWebKit::RunScript(const wxString& javascript)
 {
-    webkit_web_view_execute_script(WEBKIT_WEB_VIEW(web_view), 
+    webkit_web_view_execute_script(m_web_view, 
                                    javascript.mb_str(wxConvUTF8));
 }
 

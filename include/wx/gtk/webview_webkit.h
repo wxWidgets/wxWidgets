@@ -17,6 +17,8 @@
 #include "wx/sharedptr.h"
 #include "wx/webview.h"
 
+typedef struct _WebKitWebView WebKitWebView;
+
 //-----------------------------------------------------------------------------
 // wxWebViewWebKit
 //-----------------------------------------------------------------------------
@@ -145,7 +147,7 @@ private:
     // focus event handler: calls GTKUpdateBitmap()
     void GTKOnFocus(wxFocusEvent& event);
 
-    GtkWidget *web_view;
+    WebKitWebView *m_web_view;
     int m_historyLimit;
 
     wxVector<wxSharedPtr<wxWebViewHandler> > m_handlerList;
