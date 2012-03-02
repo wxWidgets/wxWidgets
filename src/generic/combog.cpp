@@ -255,9 +255,15 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         int customBorder = m_widthCustomBorder;
 
         // Set border colour
+#ifdef __WXMAC__
+        wxPen pen1( wxColour(133,133,133),
+                    customBorder,
+                    wxSOLID );
+#else        
         wxPen pen1( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT),
                     customBorder,
                     wxPENSTYLE_SOLID);
+#endif
         dc.SetPen( pen1 );
 
         // area around both controls
