@@ -9,7 +9,7 @@
 /**
     @class wxDateTime
 
-    wxDateTime class represents an absolute moment in the time.
+    wxDateTime class represents an absolute moment in time.
 
     The type @c wxDateTime_t is typedefed as <tt>unsigned short</tt> and is
     used to contain the number of years, hours, minutes, seconds and
@@ -438,6 +438,12 @@ public:
         object later.
     */
     wxDateTime();
+
+    /**
+       Copy constructor.
+    */
+    wxDateTime(const wxDateTime& date);
+    
     /**
         Same as Set().
 
@@ -476,7 +482,7 @@ public:
         This constructor is named "wxDateTimeFromDMY" in wxPython.
         @endWxPythonOnly
     */
-    wxDateTime(wxDateTime_t day, Month month = Inv_Month,
+    wxDateTime(wxDateTime_t day, Month month,
                int year = Inv_Year, wxDateTime_t hour = 0,
                wxDateTime_t minute = 0, wxDateTime_t second = 0,
                wxDateTime_t millisec = 0);
@@ -514,6 +520,13 @@ public:
         @beginWxPythonOnly Unsupported. @endWxPythonOnly
     */
     wxDateTime& Set(const struct tm& tm);
+
+    /**
+       Sets the date and time from the broken down representation in the
+       @a wxDateTime::Tm structure.
+    */
+    wxDateTime& Set(const Tm& tm);
+    
     /**
         Sets the date from the so-called Julian Day Number.
 
@@ -540,7 +553,7 @@ public:
     /**
         Sets the date and time from the parameters.
     */
-    wxDateTime& Set(wxDateTime_t day, Month month = Inv_Month,
+    wxDateTime& Set(wxDateTime_t day, Month month,
                     int year = Inv_Year, wxDateTime_t hour = 0,
                     wxDateTime_t minute = 0, wxDateTime_t second = 0,
                     wxDateTime_t millisec = 0);
@@ -616,7 +629,7 @@ public:
     /**
         Returns the date and time in DOS format.
     */
-    long unsigned int GetAsDOS() const;
+    unsigned long GetAsDOS() const;
 
     /**
         Initialize using the Windows SYSTEMTIME structure.
@@ -656,28 +669,28 @@ public:
     /**
         Returns the day in the given timezone (local one by default).
     */
-    short unsigned int GetDay(const TimeZone& tz = Local) const;
+    unsigned short GetDay(const TimeZone& tz = Local) const;
 
     /**
         Returns the day of the year (in 1-366 range) in the given timezone
         (local one by default).
     */
-    short unsigned int GetDayOfYear(const TimeZone& tz = Local) const;
+    unsigned short GetDayOfYear(const TimeZone& tz = Local) const;
 
     /**
         Returns the hour in the given timezone (local one by default).
     */
-    short unsigned int GetHour(const TimeZone& tz = Local) const;
+    unsigned short GetHour(const TimeZone& tz = Local) const;
 
     /**
         Returns the milliseconds in the given timezone (local one by default).
     */
-    short unsigned int GetMillisecond(const TimeZone& tz = Local) const;
+    unsigned short GetMillisecond(const TimeZone& tz = Local) const;
 
     /**
         Returns the minute in the given timezone (local one by default).
     */
-    short unsigned int GetMinute(const TimeZone& tz = Local) const;
+    unsigned short GetMinute(const TimeZone& tz = Local) const;
 
     /**
         Returns the month in the given timezone (local one by default).
@@ -687,7 +700,7 @@ public:
     /**
         Returns the seconds in the given timezone (local one by default).
     */
-    short unsigned int GetSecond(const TimeZone& tz = Local) const;
+    unsigned short GetSecond(const TimeZone& tz = Local) const;
 
     /**
         Returns the number of seconds since Jan 1, 1970. An assert failure will
@@ -1915,7 +1928,7 @@ public:
     /**
         Returns @true if this date span is different from the other one.
     */
-    bool operator!=(const wxDateSpan&) const;
+    bool operator!=(const wxDateSpan& other) const;
 
     /**
         Returns @true if this date span is equal to the other one. Two date
@@ -1923,7 +1936,7 @@ public:
         years and months and the same total number of days (counting both days
         and weeks).
     */
-    bool operator==(const wxDateSpan&) const;
+    bool operator==(const wxDateSpan& other) const;
 };
 
 
@@ -2005,7 +2018,7 @@ public:
         specifier of larger unit, only the rest part is taken, otherwise the
         full value is used.
     */
-    wxString Format(const wxString& = wxDefaultTimeSpanFormat) const;
+    wxString Format(const wxString& format = wxDefaultTimeSpanFormat) const;
 
     /**
         Returns the difference in number of days.
