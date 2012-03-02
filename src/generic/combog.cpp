@@ -233,9 +233,15 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         int customBorder = m_widthCustomBorder;
 
         // Set border colour
+#ifdef __WXMAC__
+        wxPen pen1( wxColour(133,133,133),
+                    customBorder,
+                    wxSOLID );
+#else        
         wxPen pen1( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT),
                     customBorder,
                     wxSOLID );
+#endif
         dc.SetPen( pen1 );
 
         // area around both controls
@@ -281,8 +287,8 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     
     if ( !m_btn )
     {
-    #ifdef __WXGTK__
-        // Under GTK+ this avoids drawing the button background with wrong
+    #if defined(__WXGTK__) || defined(__WXMAC__)
+        // Under GTK+ and Mac, this avoids drawing the button background with wrong
         // colour
         DrawButton(dc,rectb,0);
     #else
