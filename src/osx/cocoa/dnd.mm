@@ -36,6 +36,8 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 {
     switch (code)
     {
+        case NSDragOperationGeneric:
+            return wxDragCopy;
         case NSDragOperationCopy:
             return wxDragCopy;
         case NSDragOperationMove:
@@ -250,6 +252,23 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
         result = NSDragOperationToWxDragResult([delegate code]);
         [delegate release];
         [image release];
+        
+        wxWindow* mouseUpTarget = wxWindow::GetCapture();
+
+        if ( mouseUpTarget == NULL )
+        {
+            mouseUpTarget = m_window;
+        }
+        
+        if ( mouseUpTarget != NULL )
+        {
+            wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+            ((wxWidgetCocoaImpl*)mouseUpTarget->GetPeer())->SetupMouseEvent(wxevent , theEvent) ;
+            wxevent.SetEventType(wxEVT_LEFT_UP);
+        
+            mouseUpTarget->HandleWindowEvent(wxevent);
+        }
+        
         gCurrentSource = NULL;
     }
 
