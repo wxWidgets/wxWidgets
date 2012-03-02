@@ -35,6 +35,7 @@
 #include "wx/sstream.h"
 #include "wx/html/htmlwin.h"
 #include "wx/stopwatch.h"
+#include "wx/sysopt.h"
 
 #if wxUSE_FILESYSTEM
 #include "wx/filesys.h"
@@ -634,6 +635,10 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style)
        : wxFrame(NULL, id, title, pos, size, style)
 {
+#ifdef __WXMAC__
+    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif
+    
     // set the frame icon
     SetIcon(wxICON(sample));
 
@@ -744,7 +749,21 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     }
 #endif
 
-    wxToolBar* toolBar = CreateToolBar();
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(sizer);
+
+    // On Mac, don't create a 'native' wxToolBar because small bitmaps are not supported by native
+    // toolbars. On Mac, a non-native, small-bitmap toolbar doesn't show unless it is explicitly
+    // managed, hence the use of sizers. In a real application, use larger icons for the main
+    // toolbar to avoid the need for this workaround. Or, use the toolbar in a container window
+    // as part of a more complex hierarchy, and the toolbar will automatically be non-native.
+
+    wxSystemOptions::SetOption(wxT("mac.toolbar.no-native"), 1);
+
+    wxToolBar* toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                       wxNO_BORDER|wxTB_FLAT|wxTB_NODIVIDER|wxTB_NOALIGN);
+
+    sizer->Add(toolBar, 0, wxEXPAND);
 
     toolBar->AddTool(wxID_OPEN, wxEmptyString, wxBitmap(open_xpm), _("Open"));
     toolBar->AddTool(wxID_SAVEAS, wxEmptyString, wxBitmap(save_xpm), _("Save"));
@@ -768,14 +787,15 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     toolBar->AddTool(ID_FORMAT_INDENT_MORE, wxEmptyString, wxBitmap(indentmore_xpm), _("Indent More"));
     toolBar->AddSeparator();
     toolBar->AddTool(ID_FORMAT_FONT, wxEmptyString, wxBitmap(font_xpm), _("Font"));
-    toolBar->AddTool(ID_FORMAT_IMAGE, wxString("Im"), wxBitmap(font_xpm), _("Image Property"));
+    toolBar->AddSeparator();
 
-    wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, ID_RICHTEXT_STYLE_COMBO, wxDefaultPosition, wxSize(200, -1));
+    wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, ID_RICHTEXT_STYLE_COMBO, wxDefaultPosition, wxSize(160, -1), wxCB_READONLY);
     toolBar->AddControl(combo);
 
     toolBar->Realize();
 
-    wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, GetClientSize(), wxSP_LIVE_UPDATE);
+    wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxSize(100,100), wxSP_LIVE_UPDATE);
+    sizer->Add(splitter, 1, wxEXPAND);
 
     wxFont textFont = wxFont(12, wxROMAN, wxNORMAL, wxNORMAL);
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
@@ -806,6 +826,8 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
         splitter->SplitVertically(m_richTextCtrl, styleListCtrl, 500);
     }
 
+    Layout();
+
     splitter->UpdateSize();
 
     styleListCtrl->SetStyleSheet(wxGetApp().GetStyleSheet());
@@ -822,26 +844,9 @@ void MyFrame::WriteInitialText()
 
     r.SetDefaultStyle(wxRichTextAttr());
 
-    // Add some locked content first - needs Undo to be enabled
-    {
-        r.BeginLock();
-        r.WriteText(wxString(wxT("This is a locked object.")));
-        r.EndLock();
-
-        r.WriteText(wxString(wxT(" This is unlocked text. ")));
-
-        r.BeginLock();
-        r.WriteText(wxString(wxT("More locked content.")));
-        r.EndLock();
-        r.Newline();
-
-        // Flush the Undo buffer
-        r.GetCommandProcessor()->ClearCommands();
-    }
+    r.Freeze();
 
     r.BeginSuppressUndo();
-
-    r.Freeze();
 
     r.BeginParagraphSpacing(0, 20);
 
@@ -1100,9 +1105,26 @@ void MyFrame::WriteInitialText()
     }
 #endif
 
-    r.Thaw();
-
     r.EndSuppressUndo();
+
+    // Add some locked content first - needs Undo to be enabled
+    {
+        r.BeginLock();
+        r.WriteText(wxString(wxT("This is a locked object.")));
+        r.EndLock();
+
+        r.WriteText(wxString(wxT(" This is unlocked text. ")));
+
+        r.BeginLock();
+        r.WriteText(wxString(wxT("More locked content.")));
+        r.EndLock();
+        r.Newline();
+
+        // Flush the Undo buffer
+        r.GetCommandProcessor()->ClearCommands();
+    }
+
+    r.Thaw();
 }
 
 // event handlers
