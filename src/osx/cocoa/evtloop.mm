@@ -460,4 +460,3 @@ wxWindowDisabler::~wxWindowDisabler()
     
     delete m_winDisabled;
 }
-
