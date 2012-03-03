@@ -255,11 +255,14 @@ void wxGUIEventLoop::DoStop()
 
 void wxGUIEventLoop::WakeUp()
 {
-    NSEvent* cevent = [NSApp currentEvent];
+    // NSEvent* cevent = [NSApp currentEvent];
+    NSString* mode = [[NSRunLoop mainRunLoop] currentMode];
     
     // when already in a mouse event handler, don't add higher level event
-    if ( cevent != nil && [cevent type] < NSKeyDown )
+    // if ( cevent != nil && [cevent type] <= NSMouseMoved && )
+    if ( [NSEventTrackingRunLoopMode isEqualToString:mode] )
     {
+        // NSLog(@"event for wakeup %@ in mode %@",cevent,mode);
         wxCFEventLoop::WakeUp();        
     }
     else
