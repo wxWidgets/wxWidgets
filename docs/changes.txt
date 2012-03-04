@@ -503,7 +503,8 @@ MSW:
 - Fix coordinates and Z-position for joystick events (Markus Juergens).
 - Fix size of the font returned by wxTextCtrl::GetStyle() (Igor Korot).
 - Add wxActiveXContainer::QueryClientSiteInterface and implement it in
-  wxWebViewIE to improve the default behaviour (Allonii)
+  wxWebViewIE to improve the default behaviour (Allonii).
+- Update stretchable spaces in wxToolBar after tool removal (Catalin Raceanu).
 
 OSX:
 
