@@ -179,29 +179,29 @@ public:
 #endif // !wxHAS_NATIVE_TAB_TRAVERSAL
     }
 
-    WXDLLIMPEXP_CORE virtual bool AcceptsFocus() const
+    virtual bool AcceptsFocus() const
     {
         return m_container.AcceptsFocus();
     }
 
-    WXDLLIMPEXP_CORE virtual bool AcceptsFocusRecursively() const
+    virtual bool AcceptsFocusRecursively() const
     {
         return m_container.AcceptsFocusRecursively();
     }
 
-    WXDLLIMPEXP_CORE virtual bool AcceptsFocusFromKeyboard() const
+    virtual bool AcceptsFocusFromKeyboard() const
     {
         return m_container.AcceptsFocusFromKeyboard();
     }
 
-    WXDLLIMPEXP_CORE virtual void AddChild(wxWindowBase *child)
+    virtual void AddChild(wxWindowBase *child)
     {
         BaseWindowClass::AddChild(child);
 
         m_container.UpdateCanFocus();
     }
 
-    WXDLLIMPEXP_CORE virtual void RemoveChild(wxWindowBase *child)
+    virtual void RemoveChild(wxWindowBase *child)
     {
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL
         m_container.HandleOnWindowDestroy(child);
@@ -212,7 +212,7 @@ public:
         m_container.UpdateCanFocus();
     }
 
-    WXDLLIMPEXP_CORE virtual void SetFocus()
+    virtual void SetFocus()
     {
         if ( !m_container.DoSetFocus() )
             BaseWindowClass::SetFocus();
