@@ -9,6 +9,21 @@
 #define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 
 /**
+    Initial folder for generic directory dialog.
+*/
+const char wxDirDialogDefaultFolderStr[] = "/";
+
+/**
+    Default message for directory selector dialog.
+*/
+const char wxDirSelectorPromptStr[] = "Select a directory";
+
+/**
+    Default name for directory selector dialog.
+*/
+const char wxDirDialogNameStr[] = "wxDirCtrl";
+
+/**
     @class wxDirDialog
 
     This class represents the directory chooser dialog.

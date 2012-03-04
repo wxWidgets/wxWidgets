@@ -7,6 +7,24 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Default width of the choice dialog.
+*/
+#define wxCHOICE_WIDTH 150
+
+/**
+    Default height of the choice dialog.
+*/
+#define wxCHOICE_HEIGHT 200
+
+/**
+    Default style of the choice dialog.
+
+    @remarks wxRESIZE_BORDER is not used under WinCE.
+*/
+#define wxCHOICEDLG_STYLE (wxDEFAULT_DIALOG_STYLE | wxOK | wxCANCEL | wxCENTRE | wxRESIZE_BORDER)
+
+
+/**
     @class wxMultiChoiceDialog
 
     This class represents a dialog that shows a list of strings, and allows the
@@ -314,11 +332,11 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& aChoices,
                            wxWindow* parent = NULL,
-                           int x = -1,
-                           int y = -1,
+                           int x = wxDefaultCoord,
+                           int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = 150,
-                           int height = 200,
+                           int width = wxCHOICE_WIDTH,
+                           int height = wxCHOICE_HEIGHT,
                            int initialSelection = 0);
 
 int wxGetSingleChoiceIndex(const wxString& message,
@@ -326,11 +344,11 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            int n,
                            const wxString& choices[],
                            wxWindow* parent = NULL,
-                           int x = -1,
-                           int y = -1,
+                           int x = wxDefaultCoord,
+                           int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = 150,
-                           int height = 200,
+                           int width = wxCHOICE_WIDTH,
+                           int height = wxCHOICE_HEIGHT,
                            int initialSelection = 0);
 
 
@@ -374,22 +392,22 @@ wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& aChoices,
                            wxWindow* parent = NULL,
-                           int x = -1,
-                           int y = -1,
+                           int x = wxDefaultCoord,
+                           int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = 150,
-                           int height = 200
+                           int width = wxCHOICE_WIDTH,
+                           int height = wxCHOICE_HEIGHT,
                            int initialSelection = 0);
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            int n,
                            const wxString& choices[],
                            wxWindow* parent = NULL,
-                           int x = -1,
-                           int y = -1,
+                           int x = wxDefaultCoord,
+                           int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = 150,
-                           int height = 200
+                           int width = wxCHOICE_WIDTH,
+                           int height = wxCHOICE_HEIGHT,
                            int initialSelection = 0);
 
 
@@ -427,11 +445,11 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                const wxArrayString& aChoices,
                                const wxString& client_data[],
                                wxWindow* parent = NULL,
-                               int x = -1,
-                               int y = -1,
+                               int x = wxDefaultCoord,
+                               int y = wxDefaultCoord,
                                bool centre = true,
-                               int width = 150,
-                               int height = 200
+                               int width = wxCHOICE_WIDTH,
+                               int height = wxCHOICE_HEIGHT,
                                int initialSelection = 0);
 
 wxString wxGetSingleChoiceData(const wxString& message,
@@ -440,11 +458,11 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                const wxString& choices[],
                                const wxString& client_data[],
                                wxWindow* parent = NULL,
-                               int x = -1,
-                               int y = -1,
+                               int x = wxDefaultCoord,
+                               int y = wxDefaultCoord,
                                bool centre = true,
-                               int width = 150,
-                               int height = 200
+                               int width = wxCHOICE_WIDTH,
+                               int height = wxCHOICE_HEIGHT,
                                int initialSelection = 0);
 
 void* wxGetSingleChoiceData(const wxString& message,
@@ -494,11 +512,11 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& caption,
                             const wxArrayString& aChoices,
                             wxWindow* parent = NULL,
-                            int x = -1,
-                            int y = -1,
+                            int x = wxDefaultCoord,
+                            int y = wxDefaultCoord,
                             bool centre = true,
-                            int width = 150,
-                            int height = 200);
+                            int width = wxCHOICE_WIDTH,
+                            int height = wxCHOICE_HEIGHT);
 
 int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& message,
@@ -506,11 +524,11 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             int n,
                             const wxString& choices[],
                             wxWindow* parent = NULL,
-                            int x = -1,
-                            int y = -1,
+                            int x = wxDefaultCoord,
+                            int y = wxDefaultCoord,
                             bool centre = true,
-                            int width = 150,
-                            int height = 200);
+                            int width = wxCHOICE_WIDTH,
+                            int height = wxCHOICE_HEIGHT);
 
 //@}
 

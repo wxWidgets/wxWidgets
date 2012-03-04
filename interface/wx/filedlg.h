@@ -20,6 +20,13 @@ enum
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
 /**
+    Default wildcard string used in wxFileDialog corresponding to all files.
+
+    It is defined as "*.*" under MSW and OS/2 and "*" everywhere else.
+*/
+const char wxFileSelectorDefaultWildcardStr[];
+
+/**
     @class wxFileDialog
 
     This class represents the file chooser dialog.
@@ -360,11 +367,11 @@ wxString wxFileSelector(const wxString& message,
                         const wxString& default_path = wxEmptyString,
                         const wxString& default_filename = wxEmptyString,
                         const wxString& default_extension = wxEmptyString,
-                        const wxString& wildcard = ".",
+                        const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                         int flags = 0,
                         wxWindow* parent = NULL,
-                        int x = -1,
-                        int y = -1);
+                        int x = wxDefaultCoord,
+                        int y = wxDefaultCoord);
 
 //@}
 

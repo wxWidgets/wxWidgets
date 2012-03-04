@@ -7,6 +7,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Default message box caption string.
+*/
+const char wxMessageBoxCaptionStr[] = "Message";
+
+
+/**
     @class wxMessageDialog
 
     This class represents a dialog that shows a single or multi-line message,

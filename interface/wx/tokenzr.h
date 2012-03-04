@@ -59,6 +59,9 @@ enum wxStringTokenizerMode
     wxTOKEN_STRTOK
 };
 
+/// Default wxStringTokenizer delimiters are the usual white space characters.
+#define wxDEFAULT_DELIMITERS " \t\r\n"
+
 /**
     @class wxStringTokenizer
 
@@ -106,7 +109,7 @@ public:
         @see SetString()
    */
     wxStringTokenizer(const wxString& str,
-                      const wxString& delims = " \t\r\n",
+                      const wxString& delims = wxDEFAULT_DELIMITERS,
                       wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
 
     /**
@@ -154,8 +157,8 @@ public:
         containing delimiters, and the @a mode specifying how the string
         should be tokenized.
     */
-    void SetString(const wxString& to_tokenize,
-                   const wxString& delims = " \t\r\n",
+    void SetString(const wxString& str,
+                   const wxString& delims = wxDEFAULT_DELIMITERS,
                    wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
 };
 
@@ -178,5 +181,5 @@ wxArrayString
 wxStringTokenize(const wxString& str,
                  const wxString& delims = wxDEFAULT_DELIMITERS,
                  wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
-                 
+
 //@}

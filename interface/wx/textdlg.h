@@ -7,6 +7,18 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Default text dialog style.
+*/
+#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
+
+/// Default text dialog caption.
+const char wxGetTextFromUserPromptStr[] = "Input Text";
+
+/// Default password dialog caption.
+const char wxGetPasswordFromUserPromptStr[] = "Enter Password";
+
+
+/**
     @class wxPasswordEntryDialog
 
     This class represents a dialog that requests a one-line password string from
@@ -45,7 +57,7 @@ public:
     wxPasswordEntryDialog(wxWindow* parent, const wxString& message,
                           const wxString& caption = wxGetPasswordFromUserPromptStr,
                           const wxString& defaultValue = wxEmptyString,
-                          long style = wxOK | wxCANCEL | wxCENTRE,
+                          long style = wxTextEntryDialogStyle,
                           const wxPoint& pos = wxDefaultPosition);
 };
 
@@ -87,7 +99,7 @@ public:
     wxTextEntryDialog(wxWindow* parent, const wxString& message,
                       const wxString& caption = wxGetTextFromUserPromptStr,
                       const wxString& value = wxEmptyString,
-                      long style = wxOK | wxCANCEL | wxCENTRE,
+                      long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition);
 
     /**
@@ -139,7 +151,7 @@ public:
     @header{wx/textdlg.h}
 */
 wxString wxGetTextFromUser(const wxString& message,
-                           const wxString& caption = "Input text",
+                           const wxString& caption = wxGetTextFromUserPromptStr,
                            const wxString& default_value = wxEmptyString,
                            wxWindow* parent = NULL,
                            int x = wxDefaultCoord,
@@ -154,7 +166,7 @@ wxString wxGetTextFromUser(const wxString& message,
     @header{wx/textdlg.h}
 */
 wxString wxGetPasswordFromUser(const wxString& message,
-                               const wxString& caption = "Input text",
+                               const wxString& caption = wxGetPasswordFromUserPromptStr,
                                const wxString& default_value = wxEmptyString,
                                wxWindow* parent = NULL,
                                int x = wxDefaultCoord,
