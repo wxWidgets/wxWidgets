@@ -48,7 +48,7 @@
 // ----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "emulator.xpm"
 #endif
 

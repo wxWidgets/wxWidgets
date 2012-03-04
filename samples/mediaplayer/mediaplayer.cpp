@@ -78,7 +78,7 @@
     wxFORCE_LINK_MODULE(wxmediabackend_wmp10)
 #endif // static wxMSW build
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 

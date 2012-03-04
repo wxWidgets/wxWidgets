@@ -44,7 +44,7 @@
 #include "wx/fontpicker.h"
 #include "wx/aboutdlg.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 

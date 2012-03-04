@@ -24,7 +24,7 @@
 
 #include "wx/html/htmlwin.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../../sample.xpm"
 #endif
 

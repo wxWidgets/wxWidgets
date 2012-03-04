@@ -61,7 +61,7 @@
     #include "wx/filename.h"
 #endif
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "doc.xpm"
     #include "chart.xpm"
     #include "notepad.xpm"

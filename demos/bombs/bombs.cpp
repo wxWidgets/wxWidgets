@@ -29,8 +29,7 @@
 #   include <time.h>
 #endif
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) \
-    || defined(__WXMAC__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
 #   include "bombs.xpm"
 #endif
 

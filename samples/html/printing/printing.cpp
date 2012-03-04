@@ -25,7 +25,7 @@
 #include "wx/html/htmlwin.h"
 #include "wx/html/htmprint.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../../sample.xpm"
 #endif
 

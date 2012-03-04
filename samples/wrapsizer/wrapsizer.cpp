@@ -21,7 +21,7 @@
 #include "wx/wrapsizer.h"
 #include "wx/artprov.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 

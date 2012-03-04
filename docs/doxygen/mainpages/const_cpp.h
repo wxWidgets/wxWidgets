@@ -214,6 +214,8 @@ Currently the following symbols exist:
     decide whether some function should be overloaded for both
     <code>long</code> and <code>long long</code> types.}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
+@itemdef{wxHAS_IMAGES_IN_RESOURCES, Defined if <a href="http://en.wikipedia.org/wiki/Resource_(Windows)">
+    Windows resource files</a> or OS/2 resource files are available on the current platform.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,
         Defined if the current port supports radio menu items (see wxMenu::AppendRadioItem).}

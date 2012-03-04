@@ -36,7 +36,7 @@
 #include "bitmaps/help.xpm"
 #include "SVGlogo24.xpm"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 

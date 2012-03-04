@@ -29,7 +29,7 @@
 #include "wx/log.h"
 #include "wx/config.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 

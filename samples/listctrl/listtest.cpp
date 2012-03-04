@@ -20,11 +20,11 @@
 #include "wx/wx.h"
 #endif
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "bitmaps/toolbrai.xpm"
     #include "bitmaps/toolchar.xpm"
     #include "bitmaps/tooldata.xpm"
@@ -177,7 +177,7 @@ MyFrame::MyFrame(const wxChar *title)
     m_imageListNormal = new wxImageList(32, 32, true);
     m_imageListSmall = new wxImageList(16, 16, true);
 
-#ifdef __WXMSW__
+#if wxHAS_IMAGES_IN_RESOURCES
     m_imageListNormal->Add( wxIcon(wxT("icon1"), wxBITMAP_TYPE_ICO_RESOURCE) );
     m_imageListNormal->Add( wxIcon(wxT("icon2"), wxBITMAP_TYPE_ICO_RESOURCE) );
     m_imageListNormal->Add( wxIcon(wxT("icon3"), wxBITMAP_TYPE_ICO_RESOURCE) );

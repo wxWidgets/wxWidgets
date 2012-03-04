@@ -33,7 +33,7 @@
 #include "wx/valtext.h"
 #include "wx/valnum.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 

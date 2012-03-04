@@ -45,7 +45,7 @@
 //#define wxUSE_DDE_FOR_IPC 0
 #include <wx/ipc.h>
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
 #include "mondrian.xpm"
 #endif
 

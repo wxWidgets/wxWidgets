@@ -32,7 +32,7 @@
 
 #include "wx/toolbar.h"
 
-#if !defined(__WXMSW__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
     #include "chart.xpm"
 #endif

@@ -160,14 +160,18 @@ enum wxStockCursor
 // macros
 // ---------------------------------------------------------------------------
 
+#if defined(__WINDOWS__) || defined(__WXPM__)
+    #define wxHAS_IMAGES_IN_RESOURCES
+#endif
+
 /* Useful macro for creating icons portably, for example:
 
     wxIcon *icon = new wxICON(sample);
 
   expands into:
 
-    wxIcon *icon = new wxIcon("sample");      // On wxMSW
-    wxIcon *icon = new wxIcon(sample_xpm);    // On wxGTK
+    wxIcon *icon = new wxIcon("sample");      // On Windows
+    wxIcon *icon = new wxIcon(sample_xpm);    // On wxGTK/Linux
  */
 
 #ifdef __WXMSW__

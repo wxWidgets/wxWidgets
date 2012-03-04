@@ -24,7 +24,7 @@
 #error Sorry, this sample is only appropriate under Windows.
 #endif
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
