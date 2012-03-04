@@ -10,10 +10,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcmemory.h"
 #include "wx/gtk/dcmemory.h"
 
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------

@@ -10,13 +10,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcscreen.h"
 #include "wx/gtk/dcscreen.h"
 
 #include <gtk/gtk.h>
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
 
 //-----------------------------------------------------------------------------
 // wxScreenDCImpl
