@@ -7205,6 +7205,14 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     pt2.y = pt.y;
 
     HWND hWnd = ::WindowFromPoint(pt2);
+    if ( hWnd )
+    {
+        // WindowFromPoint() ignores the disabled children but we're supposed
+        // to take them into account, so check if we have a child at this
+        // coordinate.
+        ::ScreenToClient(hWnd, &pt2);
+        hWnd = ::ChildWindowFromPointEx(hWnd, pt2, CWP_SKIPINVISIBLE);
+    }
 
     return wxGetWindowFromHWND((WXHWND)hWnd);
 }

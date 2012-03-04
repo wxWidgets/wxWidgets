@@ -404,6 +404,9 @@ void wxEnableTopLevelWindows(bool enable = true);
     Find the deepest window at the given mouse position in screen coordinates,
     returning the window if found, or @NULL if not.
 
+    This function takes child windows at the given position into account even
+    if they are disabled. The hidden children are however skipped by it.
+
     @header{wx/utils.h}
 */
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt);

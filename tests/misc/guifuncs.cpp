@@ -17,12 +17,15 @@
     #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
     #include "wx/filefn.h"
 #endif // !PCH
 
-#include "wx/defs.h"
+#include "wx/app.h"
+#include "wx/button.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
 
@@ -40,11 +43,13 @@ private:
         CPPUNIT_TEST( DisplaySize );
         CPPUNIT_TEST( URLDataObject );
         CPPUNIT_TEST( ParseFileDialogFilter );
+        CPPUNIT_TEST( FindWindowAtPoint );
     CPPUNIT_TEST_SUITE_END();
 
     void DisplaySize();
     void URLDataObject();
     void ParseFileDialogFilter();
+    void FindWindowAtPoint();
 
     DECLARE_NO_COPY_CLASS(MiscGUIFuncsTestCase)
 };
@@ -129,3 +134,46 @@ void MiscGUIFuncsTestCase::ParseFileDialogFilter()
     );
 }
 
+void MiscGUIFuncsTestCase::FindWindowAtPoint()
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+    CPPUNIT_ASSERT( parent );
+
+    CPPUNIT_ASSERT_MESSAGE
+    (
+        "No window for a point outside of the window",
+        !wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(900, 900)))
+    );
+
+    wxWindow* const btn1 = new wxButton(parent, wxID_ANY, "1", wxPoint(10, 10));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Point over a child control corresponds to it",
+        btn1,
+        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 11)))
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Point outside of any child control returns the TLW itself",
+        parent,
+        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(5, 5)))
+    );
+
+    wxWindow* const btn2 = new wxButton(parent, wxID_ANY, "2", wxPoint(10, 90));
+    btn2->Disable();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Point over a disabled child control still corresponds to it",
+        btn2,
+        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91)))
+    );
+
+    btn2->Hide();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Point over a hidden child control doesn't take it into account",
+        parent,
+        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91)))
+    );
+}
