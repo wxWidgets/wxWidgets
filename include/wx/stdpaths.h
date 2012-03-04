@@ -171,7 +171,7 @@ protected:
 };
 
 #if wxUSE_STDPATHS
-    #if defined(__WXMSW__)
+    #if defined(__WINDOWS__)
         #include "wx/msw/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
     // We want CoreFoundation paths on both CarbonLib and Darwin (for all ports)

@@ -23,7 +23,7 @@
     #define wxFSWatchEntry wxFSWatchEntryKq
     WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxFSWatchEntry>,wxFSWatchEntries);
     #include "wx/unix/private/fswatcher_kqueue.h"
-#elif defined(__WXMSW__)
+#elif defined(__WINDOWS__)
     class wxFSWatchEntryMSW;
     #define wxFSWatchEntry wxFSWatchEntryMSW
     WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxFSWatchEntry>,wxFSWatchEntries);

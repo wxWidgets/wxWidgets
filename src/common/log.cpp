@@ -215,9 +215,9 @@ wxLogFormatter::Format(wxLogLevel level,
 
     // don't time stamp debug messages under MSW as debug viewers usually
     // already have an option to do it
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     if ( level != wxLOG_Debug && level != wxLOG_Trace )
-#endif // __WXMSW__
+#endif // __WINDOWS__
         prefix = FormatTime(info.timestamp);
 
     switch ( level )
@@ -232,7 +232,7 @@ wxLogFormatter::Format(wxLogLevel level,
 
         // don't prepend "debug/trace" prefix under MSW as it goes to the debug
         // window anyhow and so can't be confused with something else
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
     case wxLOG_Debug:
         // this prefix (as well as the one below) is intentionally not
         // translated as nobody translates debug messages anyhow
@@ -242,7 +242,7 @@ wxLogFormatter::Format(wxLogLevel level,
     case wxLOG_Trace:
         prefix += "Trace: ";
         break;
-#endif // !__WXMSW__
+#endif // !__WINDOWS__
     }
 
     return prefix + msg;
@@ -1048,7 +1048,7 @@ static void wxLogWrap(FILE *f, const char *pszPrefix, const char *psz)
 // get error code from syste
 unsigned long wxSysErrorCode()
 {
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     return ::GetLastError();
 #else   //Unix
     return errno;
@@ -1061,7 +1061,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     if ( nErrCode == 0 )
         nErrCode = wxSysErrorCode();
 
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     static wxChar s_szBuf[1024];
 
     // get error message from system
@@ -1109,7 +1109,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     }
 
     return s_szBuf;
-#else // !__WXMSW__
+#else // !__WINDOWS__
     #if wxUSE_UNICODE
         static wchar_t s_wzBuf[1024];
         wxConvCurrent->MB2WC(s_wzBuf, strerror((int)nErrCode),
@@ -1118,7 +1118,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     #else
         return strerror((int)nErrCode);
     #endif
-#endif  // __WXMSW__/!__WXMSW__
+#endif  // __WINDOWS__/!__WINDOWS__
 }
 
 #endif // wxUSE_LOG

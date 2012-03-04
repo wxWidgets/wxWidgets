@@ -77,7 +77,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
+    #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h" // For GetShort/LongPathName
     #endif
     #include "wx/dynarray.h"
@@ -98,7 +98,7 @@
     #include "wx/msw/gccpriv.h"
 #endif
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 #include "wx/msw/private.h"
 #endif
 
@@ -1318,7 +1318,7 @@ bool wxFileName::Rmdir(int flags) const
 
 bool wxFileName::Rmdir(const wxString& dir, int flags)
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     if ( flags & wxPATH_RMDIR_RECURSIVE )
     {
         // SHFileOperation needs double null termination string
@@ -1354,9 +1354,9 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
         return true;
     }
     else if ( flags & wxPATH_RMDIR_FULL )
-#else // !__WXMSW__
+#else // !__WINDOWS__
     if ( flags != 0 )   // wxPATH_RMDIR_FULL or wxPATH_RMDIR_RECURSIVE
-#endif // !__WXMSW__
+#endif // !__WINDOWS__
     {
         wxString path(dir);
         if ( path.Last() != wxFILE_SEP_PATH )
@@ -1377,7 +1377,7 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
             cont = d.GetNext(&filename);
         }
 
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
         if ( flags & wxPATH_RMDIR_RECURSIVE )
         {
             // delete all files too
@@ -1388,7 +1388,7 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
                 cont = d.GetNext(&filename);
             }
         }
-#endif // !__WXMSW__
+#endif // !__WINDOWS__
     }
 
     return ::wxRmdir(dir);
@@ -2122,7 +2122,7 @@ wxString wxFileName::GetShortPath() const
 {
     wxString path(GetFullPath());
 
-#if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__) && defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     DWORD sz = ::GetShortPathName(path.t_str(), NULL, 0);
     if ( sz != 0 )
     {
@@ -2272,7 +2272,7 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 {
     if (format == wxPATH_NATIVE)
     {
-#if defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__)
+#if defined(__WINDOWS__) || defined(__OS2__) || defined(__DOS__)
         format = wxPATH_DOS;
 #elif defined(__VMS)
         format = wxPATH_VMS;

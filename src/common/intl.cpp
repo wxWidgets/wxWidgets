@@ -121,7 +121,7 @@ inline wxString ExtractNotLang(const wxString& langFull)
 // wxLanguageInfo
 // ----------------------------------------------------------------------------
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 
 // helper used by wxLanguageInfo::GetLocaleName() and elsewhere to determine
 // whether the locale is Unicode-only (it is if this function returns empty
@@ -177,7 +177,7 @@ wxString wxLanguageInfo::GetLocaleName() const
     return locale;
 }
 
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 // ----------------------------------------------------------------------------
 // wxLocale
@@ -1126,7 +1126,7 @@ wxString wxLocale::GetHeaderValue(const wxString& header,
 // accessors for locale-dependent data
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__) || defined(__WXOSX__)
+#if defined(__WINDOWS__) || defined(__WXOSX__)
 
 namespace
 {
@@ -1148,7 +1148,7 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
 
     const char* formatchars =
         "dghHmMsSy"
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         "t"
 #else
         "EawD"
@@ -1188,7 +1188,7 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                             // between 1 and 2 digits for days
                             fmtWX += "%d";
                             break;
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
                         case 3: // ddd
                             fmtWX += "%a";
                             break;
@@ -1201,7 +1201,7 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                             wxFAIL_MSG( "too many 'd's" );
                     }
                     break;
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
                 case 'D':
                     switch ( lastCount )
                     {
@@ -1344,12 +1344,12 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                     wxASSERT_MSG( lastCount <= 2, "too many 'g's" );
 
                     break;
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
                 case 'a':
                     fmtWX += "%p";
                     break;
 #endif
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
                 case 't':
                     switch ( lastCount )
                     {
@@ -1389,9 +1389,9 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
 
 } // anonymous namespace
 
-#endif // __WXMSW__ || __WXOSX__
+#endif // __WINDOWS__ || __WXOSX__
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
 
 namespace
 {
@@ -1582,7 +1582,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
     return str.AsString();
 }
 
-#else // !__WXMSW__ && !__WXOSX__, assume generic POSIX
+#else // !__WINDOWS__ && !__WXOSX__, assume generic POSIX
 
 namespace
 {

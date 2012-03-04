@@ -50,7 +50,7 @@
         typedef void (*wxTlsDestructorFunction)(void*);
     }
 
-    #if defined(__WXMSW__)
+    #if defined(__WINDOWS__)
         #include "wx/msw/tls.h"
     #elif defined(__OS2__)
         #include "wx/os2/tls.h"

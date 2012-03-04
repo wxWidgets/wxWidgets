@@ -36,7 +36,7 @@
 #include "wx/iconloc.h"
 #include "wx/confbase.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/registry.h"
     #include "wx/msw/private.h"
 #endif // OS

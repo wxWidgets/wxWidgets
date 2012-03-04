@@ -367,7 +367,7 @@ template<typename CharType>
 static CharType *wxDoRealPath (CharType *path)
 {
   static const CharType SEP = wxFILE_SEP_PATH;
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
   wxUnix2DosFilename(path);
 #endif
   if (path[0] && path[1]) {
@@ -398,7 +398,7 @@ static CharType *wxDoRealPath (CharType *path)
                         path[0] = SEP;
                         path[1] = wxT('\0');
                       }
-#if defined(__WXMSW__) || defined(__OS2__)
+#if defined(__WINDOWS__) || defined(__OS2__)
                     /* Check that path[2] is NULL! */
                     else if (path[1] == wxT(':') && !path[2])
                       {
@@ -447,7 +447,7 @@ wxChar *wxCopyAbsolutePath(const wxString& filename)
     {
         wxString buf = ::wxGetCwd();
         wxChar ch = buf.Last();
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         if (ch != wxT('\\') && ch != wxT('/'))
             buf << wxT("\\");
 #else
@@ -501,7 +501,7 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
     trimchars[3] = 0;
 
     static const CharType SEP = wxFILE_SEP_PATH;
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     //wxUnix2DosFilename(path);
 #endif
 
@@ -521,7 +521,7 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
 
     s = nm;
     d = lnm;
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     q = FALSE;
 #else
     q = nm[0] == wxT('\\') && nm[1] == wxT('~');
@@ -546,7 +546,7 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
       else
 #else
     while ((*d++ = *s) != 0) {
-#  ifndef __WXMSW__
+#  ifndef __WINDOWS__
         if (*s == wxT('\\')) {
             if ((*(d - 1) = *++s)!=0) {
                 s++;
@@ -558,7 +558,7 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
 #endif
             // No env variables on WinCE
 #ifndef __WXWINCE__
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         if (*s++ == wxT('$') && (*s == wxT('{') || *s == wxT(')')))
 #else
         if (*s++ == wxT('$'))
@@ -677,7 +677,7 @@ wxContractPath (const wxString& filename,
     return NULL;
 
   wxStrcpy (dest, filename);
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
   wxUnix2DosFilename(dest);
 #endif
 
@@ -767,7 +767,7 @@ wxPathOnly (wxChar *path)
             i --;
         }
 
-#if defined(__WXMSW__) || defined(__OS2__)
+#if defined(__WINDOWS__) || defined(__OS2__)
         // Try Drive specifier
         if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
         {
@@ -816,7 +816,7 @@ wxString wxPathOnly (const wxString& path)
             i --;
         }
 
-#if defined(__WXMSW__) || defined(__OS2__)
+#if defined(__WINDOWS__) || defined(__OS2__)
         // Try Drive specifier
         if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
         {
@@ -923,7 +923,7 @@ static void wxDoDos2UnixFilename(T *s)
       {
         if (*s == wxT('\\'))
           *s = wxT('/');
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         else
           *s = wxTolower(*s);        // Case INDEPENDENT
 #endif
@@ -936,14 +936,14 @@ void wxDos2UnixFilename(wchar_t *s) { wxDoDos2UnixFilename(s); }
 
 template<typename T>
 static void
-#if defined(__WXMSW__) || defined(__OS2__)
+#if defined(__WINDOWS__) || defined(__OS2__)
 wxDoUnix2DosFilename(T *s)
 #else
 wxDoUnix2DosFilename(T *WXUNUSED(s) )
 #endif
 {
 // Yes, I really mean this to happen under DOS only! JACS
-#if defined(__WXMSW__) || defined(__OS2__)
+#if defined(__WINDOWS__) || defined(__OS2__)
   if (s)
     while (*s)
       {
@@ -1150,7 +1150,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     wxUnusedVar(overwrite);
     return false;
 
-#endif // __WXMSW__ && __WIN32__
+#endif // __WINDOWS__ && __WIN32__
 
     return true;
 }
@@ -1213,7 +1213,7 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#elif (!(defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__))) || \
+#elif (!(defined(__WINDOWS__) || defined(__OS2__) || defined(__DOS__))) || \
       (defined(__GNUWIN32__) && !defined(__MINGW32__)) ||                \
       defined(__WINE__) || defined(__WXMICROWIN__)
     const wxChar *dirname = dir.c_str();
@@ -1863,7 +1863,7 @@ bool wxIsExecutable(const wxString &path)
 //
 wxFileKind wxGetFileKind(int fd)
 {
-#if defined __WXMSW__ && !defined __WXWINCE__ && defined wxGetOSFHandle
+#if defined __WINDOWS__ && !defined __WXWINCE__ && defined wxGetOSFHandle
     switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
     {
         case FILE_TYPE_CHAR:

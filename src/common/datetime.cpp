@@ -63,7 +63,7 @@
 #if !defined(wxUSE_DATETIME) || wxUSE_DATETIME
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
+    #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h"
     #endif
     #include "wx/string.h"
@@ -2198,7 +2198,7 @@ WXDLLIMPEXP_BASE void wxPrevWDay(wxDateTime::WeekDay& wd)
                                : (wxDateTime::WeekDay)(wd - 1);
 }
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 
 wxDateTime& wxDateTime::SetFromMSWSysTime(const SYSTEMTIME& st)
 {
@@ -2246,6 +2246,6 @@ void wxDateTime::GetAsMSWSysDate(SYSTEMTIME* st) const
     st->wMilliseconds = 0;
 }
 
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 #endif // wxUSE_DATETIME

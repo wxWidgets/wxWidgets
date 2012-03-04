@@ -26,7 +26,7 @@
 #include "wx/time.h"
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
+    #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h"
     #endif
     #include "wx/intl.h"
@@ -48,7 +48,7 @@
 #  endif
 #endif
 
-#if defined(__MWERKS__) && defined(__WXMSW__)
+#if defined(__MWERKS__) && defined(__WINDOWS__)
 #   undef HAVE_FTIME
 #   undef HAVE_GETTIMEOFDAY
 #endif
@@ -274,7 +274,7 @@ long wxGetUTCTime()
 
 wxLongLong wxGetUTCTimeUSec()
 {
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     FILETIME ft;
     ::GetSystemTimeAsFileTime(&ft);
 
@@ -309,7 +309,7 @@ wxLongLong wxGetUTCTimeMillis()
 
     // If possible, use a function which avoids conversions from
     // broken-up time structures to milliseconds
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     FILETIME ft;
     ::GetSystemTimeAsFileTime(&ft);
 

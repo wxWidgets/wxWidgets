@@ -40,7 +40,7 @@ class WXDLLIMPEXP_FWD_BASE wxFFile;
 
 // this symbol is defined for the platforms where file systems use volumes in
 // paths
-#if defined(__WXMSW__) || defined(__DOS__) || defined(__OS2__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
     #define wxHAS_FILESYSTEM_VOLUMES
 #endif
 

@@ -33,7 +33,7 @@
 #if wxUSE_STOPWATCH
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
+    #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h"
     #endif
     #include "wx/log.h"
@@ -51,7 +51,7 @@
 namespace
 {
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 
 struct PerfCounter
 {
@@ -70,7 +70,7 @@ struct PerfCounter
     bool init;
 } gs_perfCounter;
 
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 const int MILLISECONDS_PER_SECOND = 1000;
 const int MICROSECONDS_PER_MILLISECOND = 1000;
@@ -80,7 +80,7 @@ const int MICROSECONDS_PER_SECOND = 1000*1000;
 
 void wxStopWatch::DoStart()
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     if ( !gs_perfCounter.init )
     {
         wxCRIT_SECT_LOCKER(lock, gs_perfCounter.cs);
@@ -99,19 +99,19 @@ void wxStopWatch::DoStart()
 
         gs_perfCounter.init = true;
     }
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
     m_t0 = GetCurrentClockValue();
 }
 
 wxLongLong wxStopWatch::GetClockFreq() const
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     // Under MSW we use the high resolution performance counter timer which has
     // its own frequency (usually related to the CPU clock speed).
     if ( gs_perfCounter.CanBeUsed() )
         return gs_perfCounter.freq.QuadPart;
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 #ifdef HAVE_GETTIMEOFDAY
     // With gettimeofday() we can have nominally microsecond precision and
@@ -137,14 +137,14 @@ void wxStopWatch::Start(long t0)
 
 wxLongLong wxStopWatch::GetCurrentClockValue() const
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     if ( gs_perfCounter.CanBeUsed() )
     {
         LARGE_INTEGER counter;
         ::QueryPerformanceCounter(&counter);
         return counter.QuadPart;
     }
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 #ifdef HAVE_GETTIMEOFDAY
     return wxGetUTCTimeUSec();

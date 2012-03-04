@@ -25,7 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
+    #ifdef __WINDOWS__
         #include  "wx/msw/wrapwin.h"  // includes windows.h for MessageBox()
     #endif
     #include "wx/list.h"
@@ -52,7 +52,7 @@
     #include <typeinfo>
 #endif
 
-#if !defined(__WXMSW__) || defined(__WXMICROWIN__)
+#if !defined(__WINDOWS__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
 
@@ -65,7 +65,7 @@
 #if wxDEBUG_LEVEL
     #if wxUSE_STACKWALKER
         #include "wx/stackwalk.h"
-        #ifdef __WXMSW__
+        #ifdef __WINDOWS__
             #include "wx/msw/debughlp.h"
         #endif
     #endif // wxUSE_STACKWALKER
@@ -896,12 +896,12 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
 {
 #if wxDEBUG_LEVEL
 
-#if !defined(__WXMSW__)
+#if !defined(__WINDOWS__)
     // on Unix stack frame generation may take some time, depending on the
     // size of the executable mainly... warn the user that we are working
     wxFprintf(stderr, "Collecting stack trace information, please wait...");
     fflush(stderr);
-#endif // !__WXMSW__
+#endif // !__WINDOWS__
 
 
     wxString stackTrace;
@@ -1016,7 +1016,7 @@ void wxAbort()
 // break into the debugger
 void wxTrap()
 {
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     DebugBreak();
 #elif defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     Debugger();
@@ -1179,8 +1179,8 @@ static void LINKAGEMODE SetTraceMasks()
 static
 bool DoShowAssertDialog(const wxString& msg)
 {
-    // under MSW we can show the dialog even in the console mode
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+    // under Windows we can show the dialog even in the console mode
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     wxString msgDlg(msg);
 
     // this message is intentionally not translated -- it is for developers
@@ -1203,9 +1203,9 @@ bool DoShowAssertDialog(const wxString& msg)
 
         //case IDNO: nothing to do
     }
-#else // !__WXMSW__
+#else // !__WINDOWS__
     wxUnusedVar(msg);
-#endif // __WXMSW__/!__WXMSW__
+#endif // __WINDOWS__/!__WINDOWS__
 
     // continue with the asserts by default
     return false;

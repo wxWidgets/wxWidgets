@@ -200,7 +200,7 @@ enum wxPosixPermissions
     #define   wxCRT_RmDir      _wrmdir
     #define   wxCRT_Stat       _wstat
     #define   wxStructStat struct _stat
-#elif (defined(__WXMSW__) || defined(__OS2__)) && \
+#elif (defined(__WINDOWS__) || defined(__OS2__)) && \
       ( \
         defined(__VISUALC__) || \
         defined(__MINGW64__) || \

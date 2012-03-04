@@ -79,7 +79,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 // TODO: use POSIX getaddrinfo() (also available in Winsock 2) for simplicity
 //       and to use the same code for IPv4 and IPv6 support
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #define HAVE_INET_ADDR
 
     #ifndef HAVE_GETHOSTBYNAME
@@ -109,7 +109,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
             #pragma warning(default:4706)
         #endif
     #endif
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 // we assume that we have gethostbyaddr_r() if and only if we have
 // gethostbyname_r() and that it uses the similar conventions to it (see

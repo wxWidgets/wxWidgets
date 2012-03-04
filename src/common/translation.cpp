@@ -50,7 +50,7 @@
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
 #endif
 

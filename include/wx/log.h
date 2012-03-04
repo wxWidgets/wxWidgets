@@ -29,7 +29,7 @@ typedef unsigned long wxLogLevel;
     #define wxTraceResAlloc 0x0004  // trace GDI resource allocation
     #define wxTraceRefCount 0x0008  // trace various ref counting operations
 
-    #ifdef  __WXMSW__
+    #ifdef  __WINDOWS__
         #define wxTraceOleCalls 0x0100  // OLE interface calls
     #endif
 
@@ -128,7 +128,7 @@ enum wxLogLevelValues
 #define wxTRACE_ResAlloc wxT("resalloc") // trace GDI resource allocation
 #define wxTRACE_RefCount wxT("refcount") // trace various ref counting operations
 
-#ifdef  __WXMSW__
+#ifdef  __WINDOWS__
     #define wxTRACE_OleCalls wxT("ole")  // OLE interface calls
 #endif
 

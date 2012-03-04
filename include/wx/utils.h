@@ -410,12 +410,12 @@ WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 int flags = 0,
                                 const wxExecuteEnv *env = NULL);
 
-#if defined(__WXMSW__) && wxUSE_IPC
+#if defined(__WINDOWS__) && wxUSE_IPC
 // ask a DDE server to execute the DDE request with given parameters
 WXDLLIMPEXP_BASE bool wxExecuteDDE(const wxString& ddeServer,
                                    const wxString& ddeTopic,
                                    const wxString& ddeCommand);
-#endif // __WXMSW__ && wxUSE_IPC
+#endif // __WINDOWS__ && wxUSE_IPC
 
 enum wxSignal
 {
@@ -815,8 +815,8 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
 // Windows resources access
 // ----------------------------------------------------------------------------
 
-// MSW only: get user-defined resource from the .res file.
-#ifdef __WXMSW__
+// Windows only: get user-defined resource from the .res file.
+#ifdef __WINDOWS__
     // default resource type for wxLoadUserResource()
     extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxUserResourceStr;
 
@@ -843,7 +843,7 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
                        const wxString& resourceType = wxUserResourceStr,
                        int* pLen = NULL,
                        WXHINSTANCE module = 0);
-#endif // MSW
+#endif // __WINDOWS__
 
 #endif
     // _WX_UTILSH__

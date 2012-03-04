@@ -91,7 +91,7 @@
     #include <sys/stat.h>
 #endif
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     #include "wx/msw/private.h"
     #include "wx/filesys.h"
 #endif
@@ -350,7 +350,7 @@ void wxPlatform::ClearPlatforms()
 
 bool wxPlatform::Is(int platform)
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     if (platform == wxOS_WINDOWS)
         return true;
 #endif
@@ -583,9 +583,9 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
     // standard headers anyhow so we can just rely on already having the
     // correct declaration. And if this turns out to be wrong, we can always
     // add a configure test checking whether it is declared later.
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
     extern char **environ;
-#endif // !__WXMSW__
+#endif // !__WINDOWS__
 
     char **env = environ;
 #endif
@@ -998,7 +998,7 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 // Launch default browser
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
 
 // implemented in a port-specific utils source file:
 bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int flags);
@@ -1064,7 +1064,7 @@ static bool DoLaunchDefaultBrowserHelper(const wxString& urlOrig, int flags)
     // (e.g. "C:\\test.txt" when parsed by wxURI reports a scheme == "C")
     bool hasValidScheme = uri.HasScheme() && uri.GetScheme().length() > 1;
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
 
     // NOTE: when testing wxMSW's wxLaunchDefaultBrowser all possible forms
     //       of the URL/flags should be tested; e.g.:

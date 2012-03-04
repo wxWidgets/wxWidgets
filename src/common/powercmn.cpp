@@ -43,7 +43,7 @@
 #endif
 
 // provide stubs for the systems not implementing these functions
-#if !defined(__WXMSW__)
+#if !defined(__WINDOWS__)
 
 wxPowerType wxGetPowerType()
 {

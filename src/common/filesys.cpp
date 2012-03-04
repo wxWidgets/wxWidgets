@@ -635,7 +635,7 @@ wxFileName wxFileSystem::URLToFileName(const wxString& url)
 
     path = wxURI::Unescape(path);
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     // file urls either start with a forward slash (local harddisk),
     // otherwise they have a servername/sharename notation,
     // which only exists on msw and corresponds to a unc

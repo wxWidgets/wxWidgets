@@ -41,9 +41,9 @@
 #include "wx/vector.h"
 #include "wx/xlocale.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 #if wxUSE_STD_IOSTREAM
     #include <sstream>

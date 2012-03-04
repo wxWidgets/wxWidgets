@@ -46,7 +46,7 @@
 
 #include  "wx/stdpaths.h"
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     #include "wx/msw/private.h"
 #endif  //windows.h
 #if defined(__WXPM__)

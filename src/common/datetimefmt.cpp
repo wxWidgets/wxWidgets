@@ -34,7 +34,7 @@
 #if !defined(wxUSE_DATETIME) || wxUSE_DATETIME
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
+    #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h"
     #endif
     #include "wx/string.h"
@@ -326,7 +326,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     time_t time = GetTicks();
 
     if ( (time != (time_t)-1) && !wxStrstr(format, wxT("%l"))
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
             && !wxStrstr(format, wxT("%z"))
 #endif
        )

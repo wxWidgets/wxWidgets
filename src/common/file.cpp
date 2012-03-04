@@ -24,7 +24,7 @@
 #if wxUSE_FILE
 
 // standard
-#if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__) && !defined(__GNUWIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 
 #define   WIN32_LEAN_AND_MEAN
 #define   NOSERVICE
@@ -47,7 +47,7 @@
 #define   NOCRYPT
 #define   NOMCX
 
-#elif defined(__WXMSW__) && defined(__WXWINCE__)
+#elif defined(__WINDOWS__) && defined(__WXWINCE__)
     #include  "wx/msw/missing.h"
 #elif (defined(__OS2__))
     #include <io.h>
@@ -119,7 +119,7 @@
     #define   O_BINARY    (0)
 #endif  //__UNIX__
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/mslu.h"
 #endif
 

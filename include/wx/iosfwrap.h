@@ -18,7 +18,7 @@
 #   include <iosfwd>
 #endif
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 #   include "wx/msw/winundef.h"
 #endif
 

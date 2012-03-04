@@ -32,10 +32,6 @@ always tested using @ifdef_ and not @if_.
 @section page_cppconst_guisystem GUI system
 
 @beginDefList
-@itemdef{__WINDOWS__, any Windows, you may also use __WXMSW__}
-@itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
-@itemdef{__WIN32__, Win32 API}
-@itemdef{__WIN64__, Win64 (mostly same as Win32 but data type sizes are different)}
 @itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
 @itemdef{__WXCOCOA__, OS X using wxCocoa Port}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
@@ -49,7 +45,7 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WXMAC__, old define for Mac OS X}
 @itemdef{__WXMOTIF__, Motif}
 @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
-@itemdef{__WXMSW__, Any Windows}
+@itemdef{__WXMSW__, GUI using <a href="http://en.wikipedia.org/wiki/Windows_User">Windows Controls</a>}
 @itemdef{__WXOSX__, any OS X}
 @itemdef{__WXOSX_IPHONE__, OS X iPhone}
 @itemdef{__WXOSX_CARBON__, Mac OS X using Carbon}
@@ -112,7 +108,10 @@ symbols, although this has not always been followed.
 @itemdef{__UNIX__, any Unix}
 @itemdef{__UNIX_LIKE__, Unix, BeOS or VMS}
 @itemdef{__VMS__, VMS}
-@itemdef{__WINDOWS__, any Windows}
+@itemdef{__WINDOWS__, Any Windows platform, using any port (see also @c __WXMSW__)}
+@itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
+@itemdef{__WIN32__, Win32 API}
+@itemdef{__WIN64__, Win64 (mostly same as Win32 but data type sizes are different)}
 @itemdef{__WINE__, Wine}
 @itemdef{_WIN32_WCE, Windows CE version}
 @endDefList

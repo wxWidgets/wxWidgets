@@ -11,7 +11,7 @@
 #ifndef _WX_PRIVATE_SOCKADDR_H_
 #define _WX_PRIVATE_SOCKADDR_H_
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
 
     #if wxUSE_IPV6
