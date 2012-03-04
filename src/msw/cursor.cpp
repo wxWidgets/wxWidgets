@@ -293,15 +293,8 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
         { false, wxT("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
         { false, wxT("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
         {  true, IDC_ARROW                   }, // WXCURSOR_CHAR
-
-        // Displays as an I-beam on XP, so use a cursor file
-//        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
-        {  false, wxT("WXCURSOR_CROSS")       }, // WXCURSOR_CROSS
-
-        // See special handling below for wxCURSOR_HAND
-//        { false, wxT("WXCURSOR_HAND")         }, // wxCURSOR_HAND
+        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
         {  true, IDC_HAND                    }, // wxCURSOR_HAND
-
         {  true, IDC_IBEAM                   }, // WXCURSOR_IBEAM
         {  true, IDC_ARROW                   }, // WXCURSOR_LEFT_BUTTON
         { false, wxT("WXCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
