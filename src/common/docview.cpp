@@ -1414,7 +1414,7 @@ void wxDocManager::ActivateDocument(wxDocument *doc)
 
     view->Activate(true);
     if ( wxWindow *win = view->GetFrame() )
-        win->SetFocus();
+        win->Raise();
 }
 
 wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)

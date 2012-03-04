@@ -181,6 +181,11 @@ public:
     // return true.
     virtual bool IsTopNavigationDomain() const { return true; }
 
+    // Raising any frame is supposed to show it but wxFrame Raise()
+    // implementation doesn't work for MDI child frames in most forms so
+    // forward this to Activate() which serves the same purpose by default.
+    virtual void Raise() { Activate(); }
+
 protected:
     wxMDIParentFrame *m_mdiParent;
 };

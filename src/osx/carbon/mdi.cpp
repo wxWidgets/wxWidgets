@@ -417,7 +417,9 @@ void wxMDIChildFrame::MacActivate(long timestamp, bool activating)
 // MDI operations
 void wxMDIChildFrame::Activate()
 {
-    Raise ();
+    // The base class method calls Activate() so skip it to avoid infinite
+    // recursion and go directly to the real Raise() implementation.
+    wxFrame::Raise();
 }
 
 //-----------------------------------------------------------------------------
