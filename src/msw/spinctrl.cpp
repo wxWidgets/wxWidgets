@@ -394,14 +394,15 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // Set the range in the native control
     SetRange(min, max);
 
-    if ( !value.empty() )
+    // If necessary, set the textual value. Don't do it if it's the same as the
+    // numeric value though.
+    if ( value != wxString::Format("%d", initial) )
     {
         SetValue(value);
         m_oldValue = (int) wxAtol(value);
     }
     else
     {
-        SetValue(wxString::Format(wxT("%d"), initial));
         m_oldValue = initial;
     }
 
