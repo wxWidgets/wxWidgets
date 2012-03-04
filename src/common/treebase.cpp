@@ -363,7 +363,7 @@ void wxTreeCtrlBase::OnCharHook(wxKeyEvent& event)
                 // fall through
 
             case WXK_RETURN:
-                EndEditLabel(GetSelection(), discardChanges);
+                EndEditLabel(GetFocusedItem(), discardChanges);
 
                 // Do not call Skip() below.
                 return;
