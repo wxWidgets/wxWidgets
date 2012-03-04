@@ -373,5 +373,34 @@ wxString wxFileSelector(const wxString& message,
                         int x = wxDefaultCoord,
                         int y = wxDefaultCoord);
 
+/**
+    An extended version of wxFileSelector
+*/
+wxString wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
+                          const wxString& default_path = wxEmptyString,
+                          const wxString& default_filename = wxEmptyString,
+                          int *indexDefaultExtension = NULL,
+                          const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
+                          int flags = 0,
+                          wxWindow *parent = NULL,
+                          int x = wxDefaultCoord,
+                          int y = wxDefaultCoord);
+
+/**
+    Ask for filename to load
+*/
+wxString wxLoadFileSelector(const wxString& what,
+                            const wxString& extension,
+                            const wxString& default_name = wxEmptyString,
+                            wxWindow *parent = NULL);
+
+/**
+    Ask for filename to save
+*/
+wxString wxSaveFileSelector(const wxString& what,
+                            const wxString& extension,
+                            const wxString& default_name = wxEmptyString,
+                            wxWindow *parent = NULL);
+
 //@}
 
