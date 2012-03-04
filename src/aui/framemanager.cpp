@@ -554,6 +554,7 @@ static void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
 void wxAuiManager::SetActivePane(wxWindow* active_pane)
 {
     int i, pane_count;
+    wxAuiPaneInfo* active_paneinfo = NULL;
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
         wxAuiPaneInfo& pane = m_panes.Item(i);
@@ -561,7 +562,17 @@ void wxAuiManager::SetActivePane(wxWindow* active_pane)
         if (pane.window == active_pane)
         {
             pane.state |= wxAuiPaneInfo::optionActive;
+            active_paneinfo = &pane;
         }
+    }
+
+    // send the 'activated' event after all panes have been updated
+    if ( active_paneinfo )
+    {
+        wxAuiManagerEvent evt(wxEVT_AUI_PANE_ACTIVATED);
+        evt.SetManager(this);
+        evt.SetPane(active_paneinfo);
+        ProcessMgrEvent(evt);
     }
 }
 

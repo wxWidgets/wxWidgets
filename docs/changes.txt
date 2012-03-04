@@ -489,6 +489,8 @@ All (GUI):
 - Implement best size calculation for report mode wxListCtrl.
 - Fix setting of the frame icon when using non-standard icon sizes (vid).
 - Implement wxDV_ROW_LINES in generic wxDataViewCtrl (RedCAT).
+- Added EVT_AUI_PANE_ACTIVATED event (Ronny Krüger).
+
 
 GTK:
 

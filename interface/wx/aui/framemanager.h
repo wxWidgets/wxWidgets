@@ -158,6 +158,9 @@ enum wxAuiManagerOption
         Triggered when a pane is maximized.
     @event{EVT_AUI_PANE_RESTORE(func)}
         Triggered when a pane is restored.
+    @event{EVT_AUI_PANE_ACTIVATED(func)}
+        Triggered when a pane is made 'active'. This event is new since
+        wxWidgets 2.9.4.
     @event{EVT_AUI_RENDER(func)}
         This event can be caught to override the default renderer in order to
         custom draw your wxAuiManager window (not recommended).
@@ -872,11 +875,14 @@ public:
         Triggered when a pane is maximized.
     @event{EVT_AUI_PANE_RESTORE(func)}
         Triggered when a pane is restored.
+    @event{EVT_AUI_PANE_ACTIVATED(func)}
+        Triggered when a pane is made 'active'. This event is new since
+        wxWidgets 2.9.4.
     @event{EVT_AUI_RENDER(func)}
         This event can be caught to override the default renderer in order to
         custom draw your wxAuiManager window (not recommended).
     @endEventTable
-    
+
     @library{wxaui}
     @category{events,aui}
 
