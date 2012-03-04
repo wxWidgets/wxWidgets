@@ -119,7 +119,16 @@ private:
     // helper function for draw std menu check mark
     void DrawStdCheckMark(WXHDC hdc, const tagRECT* rc, wxODStatus stat);
 
-#endif // wxUSE_OWNER_DRAWN
+#else // !wxUSE_OWNER_DRAWN
+    // Provide stubs for the public functions above to ensure that the code
+    // still compiles without wxUSE_OWNER_DRAWN -- it makes sense to just drop
+    // the bitmaps then instead of failing compilation.
+    void SetBitmaps(const wxBitmap& WXUNUSED(bmpChecked),
+                    const wxBitmap& WXUNUSED(bmpUnchecked) = wxNullBitmap) { }
+    void SetBitmap(const wxBitmap& WXUNUSED(bmp),
+                   bool WXUNUSED(bChecked) = true) { }
+    const wxBitmap& GetBitmap() const { return wxNullBitmap; }
+#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
 
 private:
     // common part of all ctors
