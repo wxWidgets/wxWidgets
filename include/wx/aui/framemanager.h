@@ -594,6 +594,8 @@ protected:
     /// Ends a resize action, or for live update, resizes the sash
     bool DoEndResizeAction(wxMouseEvent& event);
 
+    void SetActivePane(wxWindow* active_pane);
+
 public:
 
     // public events (which can be invoked externally)

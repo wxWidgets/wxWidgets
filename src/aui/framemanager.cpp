@@ -59,6 +59,7 @@ wxDEFINE_EVENT( wxEVT_AUI_PANE_BUTTON, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_PANE_CLOSE, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_PANE_MAXIMIZE, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_PANE_RESTORE, wxAuiManagerEvent );
+wxDEFINE_EVENT( wxEVT_AUI_PANE_ACTIVATED, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_RENDER, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 
@@ -550,15 +551,17 @@ static void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
 // SetActivePane() sets the active pane, as well as cycles through
 // every other pane and makes sure that all others' active flags
 // are turned off
-static void SetActivePane(wxAuiPaneInfoArray& panes, wxWindow* active_pane)
+void wxAuiManager::SetActivePane(wxWindow* active_pane)
 {
     int i, pane_count;
-    for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
+    for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
-        wxAuiPaneInfo& pane = panes.Item(i);
+        wxAuiPaneInfo& pane = m_panes.Item(i);
         pane.state &= ~wxAuiPaneInfo::optionActive;
         if (pane.window == active_pane)
+        {
             pane.state |= wxAuiPaneInfo::optionActive;
+        }
     }
 }
 
@@ -3814,7 +3817,7 @@ void wxAuiManager::OnFloatingPaneActivated(wxWindow* wnd)
 {
     if ((GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE) && GetPane(wnd).IsOk())
     {
-        SetActivePane(m_panes, wnd);
+        SetActivePane(wnd);
         Repaint();
     }
 }
@@ -4127,7 +4130,7 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
             if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
             {
                 // set the caption as active
-                SetActivePane(m_panes, part->pane->window);
+                SetActivePane(part->pane->window);
                 Repaint();
             }
 
@@ -4737,7 +4740,7 @@ void wxAuiManager::OnChildFocus(wxChildFocusEvent& event)
         wxAuiPaneInfo& pane = GetPane(event.GetWindow());
         if (pane.IsOk() && (pane.state & wxAuiPaneInfo::optionActive) == 0)
         {
-            SetActivePane(m_panes, event.GetWindow());
+            SetActivePane(event.GetWindow());
             m_frame->Refresh();
         }
     }
