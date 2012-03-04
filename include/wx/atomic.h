@@ -43,7 +43,7 @@ inline wxUint32 wxAtomicDec (wxUint32 &value)
 }
 
 
-#elif defined(__WXMSW__)
+#elif defined(__WINDOWS__)
 
 // include standard Windows headers
 #include "wx/msw/wrapwin.h"

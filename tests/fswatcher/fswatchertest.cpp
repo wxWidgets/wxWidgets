@@ -428,9 +428,9 @@ private:
         CPPUNIT_TEST( TestEventModify );
 
         // MSW implementation doesn't detect file access events currently
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
         CPPUNIT_TEST( TestEventAccess );
-#endif // __WXMSW__
+#endif // __WINDOWS__
 #endif // !wxHAS_KQUEUE
 
         CPPUNIT_TEST( TestNoEventsAfterRemove );

@@ -641,9 +641,15 @@ bool wxJoystick::HasPOVCTS() const
 
 bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq)
 {
+#ifdef __WXMSW__
     BOOL changed = (pollingFreq == 0);
     MMRESULT res = joySetCapture((HWND) win->GetHWND(), m_joystick, pollingFreq, changed);
     return (res == JOYERR_NOERROR);
+#else
+    wxUnusedVar(win);
+    wxUnusedVar(pollingFreq);
+    return false;
+#endif
 }
 
 bool wxJoystick::ReleaseCapture()

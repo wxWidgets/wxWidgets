@@ -32,7 +32,7 @@
 
 #include "wx/msw/ole/automtn.h"
 
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
 #error "Sorry, this sample works under Windows only."
 #endif
 

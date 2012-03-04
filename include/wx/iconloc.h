@@ -39,9 +39,9 @@ private:
     wxString m_filename;
 };
 
-// under MSW the same file may contain several icons so we also store the
+// under Windows the same file may contain several icons so we also store the
 // index of the icon
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
 
 class WXDLLIMPEXP_BASE wxIconLocation : public wxIconLocationBase
 {
@@ -65,7 +65,7 @@ wxIconLocation::wxIconLocation(const wxString& file, int num)
     SetIndex(num);
 }
 
-#else // !MSW
+#else // !__WINDOWS__
 
 // must be a class because we forward declare it as class
 class WXDLLIMPEXP_BASE wxIconLocation : public wxIconLocationBase

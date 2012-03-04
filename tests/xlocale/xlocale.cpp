@@ -75,7 +75,7 @@ void XLocaleTestCase::TestCtor()
 
 #ifdef wxHAS_XLOCALE_SUPPORT
     CPPUNIT_ASSERT( wxXLocale(wxLANGUAGE_FRENCH).IsOk() );
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     CPPUNIT_ASSERT( wxXLocale("french").IsOk() );
 #else
     CPPUNIT_ASSERT( wxXLocale("fr_FR").IsOk() );

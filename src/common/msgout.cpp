@@ -163,7 +163,7 @@ void wxMessageOutputStderr::Output(const wxString& str)
 
 void wxMessageOutputDebug::Output(const wxString& str)
 {
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     wxString out(AppendLineFeedIfNeeded(str));
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
@@ -202,7 +202,7 @@ void wxMessageOutputMessageBox::Output(const wxString& str)
     wxString out(str);
 
     // the native MSW msg box understands the TABs, others don't
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
     out.Replace(wxT("\t"), wxT("        "));
 #endif
 

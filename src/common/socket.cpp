@@ -2111,7 +2111,7 @@ wxFORCE_LINK_MODULE( socketiohandler )
 #endif
 
 // same for ManagerSetter in the MSW file
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     wxFORCE_LINK_MODULE( mswsocket )
 #endif
 

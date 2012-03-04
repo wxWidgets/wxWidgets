@@ -46,7 +46,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DynamicLibraryTestCase, "DynamicLibraryTe
 
 void DynamicLibraryTestCase::Load()
 {
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     static const wxChar *LIB_NAME = wxT("kernel32.dll");
     static const wxChar *FUNC_NAME = wxT("lstrlenA");
 #elif defined(__UNIX__)
@@ -74,7 +74,7 @@ void DynamicLibraryTestCase::Load()
     // Call the function dynamically loaded
     CPPUNIT_ASSERT( pfnStrlen("foo") == 3 );
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     static const wxChar *FUNC_NAME_AW = wxT("lstrlen");
 
     typedef int (wxSTDCALL *wxStrlenTypeAorW)(const wxChar *);
@@ -86,5 +86,5 @@ void DynamicLibraryTestCase::Load()
     CPPUNIT_ASSERT_MESSAGE( errMsg2.ToStdString(), pfnStrlenAorW );
 
     CPPUNIT_ASSERT( pfnStrlenAorW(wxT("foobar")) == 6 );
-#endif // __WXMSW__
+#endif // __WINDOWS__
 }

@@ -26,9 +26,9 @@
 #include "wx/stdpaths.h"
 #include "wx/scopeguard.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/registry.h"
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 #ifdef __UNIX__
     #include <unistd.h>
@@ -323,7 +323,7 @@ void FileNameTestCase::TestNormalize()
     } tests[] =
     {
         // test wxPATH_NORM_ENV_VARS
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         { "%ABCDEF%/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
 #else
         { "$(ABCDEF)/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
@@ -407,7 +407,7 @@ void FileNameTestCase::TestNormalize()
     // and also that the registry key was changed recently and didn't take
     // effect yet but these are marginal cases which we consciously choose to
     // ignore for now)
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     long shortNamesDisabled;
     if ( wxRegKey
          (
@@ -421,7 +421,7 @@ void FileNameTestCase::TestNormalize()
         CPPUNIT_ASSERT_EQUAL( "..\\mkinstalldirs", fn.GetFullPath() );
     }
     //else: when in doubt, don't run the test
-#endif // __WXMSW__
+#endif // __WINDOWS__
 }
 
 void FileNameTestCase::TestReplace()
@@ -605,7 +605,7 @@ void FileNameTestCase::TestCreateTempFileName()
         { "foo", "$SYSTEM_TEMP", true },
         { "..", "$SYSTEM_TEMP", true },
         { "../bar", "..", true },
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         { "$USER_DOCS_DIR\\", "$USER_DOCS_DIR", true },
         { "c:\\a\\directory\\which\\does\\not\\exist", "", false },
 #elif defined( __UNIX__ )

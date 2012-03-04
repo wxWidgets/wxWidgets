@@ -22,10 +22,10 @@ WX_DECLARE_USER_EXPORTED_LIST(wxDDEClient, wxDDEClientList, WXDLLIMPEXP_BASE);
 WX_DECLARE_USER_EXPORTED_LIST(wxDDEServer, wxDDEServerList, WXDLLIMPEXP_BASE);
 WX_DECLARE_USER_EXPORTED_LIST(wxDDEConnection, wxDDEConnectionList, WXDLLIMPEXP_BASE);
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     #include "wx/msw/dde.h"
 #else
-    #error DDE is only supported on MSW
+    #error DDE is only supported under Windows
 #endif
 
 #endif

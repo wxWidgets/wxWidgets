@@ -93,7 +93,7 @@ TextStreamTestCase::TextStreamTestCase()
 {
 }
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__WXPM__)
 #   define NEWLINE "\r\n"
 #   define NEWLINELEN 2
 #elif defined(__WXMAC__) && !defined(__DARWIN__)

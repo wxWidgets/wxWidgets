@@ -35,7 +35,7 @@
 #include "wx/tokenzr.h"
 #include "wx/imaglist.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
 #endif
 

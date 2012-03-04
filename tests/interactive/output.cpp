@@ -90,7 +90,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( InteractiveOutputTestCase, "InteractiveOu
 // wxDllLoader
 // ----------------------------------------------------------------------------
 
-#if !defined(__WXMSW__) && !defined(__UNIX__)
+#if !defined(__WINDOWS__) && !defined(__UNIX__)
     #undef TEST_DYNLIB
 #endif
 

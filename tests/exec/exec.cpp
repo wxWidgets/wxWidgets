@@ -27,7 +27,7 @@
     #define ASYNC_COMMAND "xclock"
     #define SHELL_COMMAND "echo hi from shell>/dev/null"
     #define COMMAND_NO_OUTPUT "echo -n"
-#elif defined(__WXMSW__)
+#elif defined(__WINDOWS__)
     #define COMMAND "cmd.exe /c \"echo hi\""
     #define ASYNC_COMMAND "notepad"
     #define SHELL_COMMAND "echo hi > nul:"

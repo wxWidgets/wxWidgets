@@ -272,7 +272,7 @@ void VarArgTestCase::ArgsValidation()
 
     // check size_t handling
     size_t len = sizeof(*this);
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     wxString::Format("%Iu", len);
 #else
     wxString::Format("%zu", len);

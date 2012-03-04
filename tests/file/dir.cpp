@@ -178,7 +178,7 @@ void DirTestCase::DirExists()
         { ".", true },
         { "..", true },
         { "$USER_DOCS_DIR", true },
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
         { "$USER_DOCS_DIR\\", true },
         { "$USER_DOCS_DIR\\\\", true },
         { "..\\..", true },
@@ -202,20 +202,20 @@ void DirTestCase::DirExists()
 #endif
     };
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     wxString homedrive = wxGetenv("HOMEDRIVE");
     if ( homedrive.empty() )
         homedrive = "c:";
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
     for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
     {
         wxString dirname = testData[n].dirname;
         dirname.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         dirname.Replace("$MSW_DRIVE", homedrive);
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
         std::string errDesc = wxString::Format("failed on directory '%s'", dirname).ToStdString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(errDesc, testData[n].shouldExist, wxDir::Exists(dirname));

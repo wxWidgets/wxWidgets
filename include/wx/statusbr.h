@@ -234,7 +234,7 @@ protected:
 #if defined(__WXUNIVERSAL__)
     #define wxStatusBarUniv wxStatusBar
     #include "wx/univ/statusbr.h"
-#elif defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
+#elif defined(__WXMSW__) && wxUSE_NATIVE_STATUSBAR
     #include "wx/msw/statusbar.h"
 #elif defined(__WXMAC__)
     #define wxStatusBarMac wxStatusBar

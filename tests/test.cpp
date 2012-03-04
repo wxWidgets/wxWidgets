@@ -45,7 +45,7 @@
 #include <exception>
 #include <iostream>
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/msvcrt.h"
 #endif
 

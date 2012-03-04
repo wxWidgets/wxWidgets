@@ -75,7 +75,7 @@
 #include "wx/platinfo.h"
 #include "wx/private/window.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
 #endif
 

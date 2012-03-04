@@ -22,8 +22,8 @@
     #pragma hdrstop
 #endif
 
-#ifndef __WXMSW__
-    #error "This sample is MSW-only"
+#ifndef __WINDOWS__
+    #error "This sample is Windows-only"
 #endif
 
 #include "wx/app.h"

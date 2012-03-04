@@ -356,7 +356,7 @@ BENCHMARK_FUNC(StringCmpNoCase)
 // Also benchmark various native functions under MSW. Surprisingly/annoyingly
 // they sometimes have vastly better performance than alternatives, especially
 // for case-sensitive comparison (see #10375).
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 
 #include "wx/msw/wrapwin.h"
 
@@ -400,7 +400,7 @@ BENCHMARK_FUNC(MSWCompareStringIgnoreCase)
              ) == CSTR_EQUAL;
 }
 
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 // ----------------------------------------------------------------------------
 // string buffers: wx[W]CharBuffer

@@ -22,7 +22,7 @@
 
 // under Windows we prefer to use the native implementation but can be forced
 // to use the file-based one
-#if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
+#if defined(__WINDOWS__) && wxUSE_CONFIG_NATIVE
     #include "wx/msw/regconf.h"
     #define wxConfig  wxRegConfig
 #elif defined(__WXOS2__) && wxUSE_CONFIG_NATIVE

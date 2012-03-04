@@ -31,8 +31,8 @@
 #include "wx/stattext.h"
 #include "wx/button.h"
 
-#ifndef __WXMSW__
-    #error "This sample is MSW-only"
+#ifndef __WINDOWS__
+    #error "This sample is Windows-only"
 #endif
 
 #ifdef WXUSINGDLL
