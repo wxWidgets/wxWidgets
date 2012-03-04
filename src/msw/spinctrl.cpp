@@ -264,6 +264,14 @@ void wxSpinCtrl::NormalizeValue()
 // construction
 // ----------------------------------------------------------------------------
 
+void wxSpinCtrl::Init()
+{
+    m_blockEvent = false;
+    m_hwndBuddy = NULL;
+    m_wndProcBuddy = NULL;
+    m_oldValue = INT_MIN;
+}
+
 bool wxSpinCtrl::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxString& value,
@@ -273,13 +281,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int min, int max, int initial,
                         const wxString& name)
 {
-    m_blockEvent = false;
-
-    // this should be in ctor/init function but I don't want to add one to 2.8
-    // to avoid problems with default ctor which can be inlined in the user
-    // code and so might not get this fix without recompilation
-    m_oldValue = INT_MIN;
-
     // before using DoGetBestSize(), have to set style to let the base class
     // know whether this is a horizontal or vertical control (we're always
     // vertical)
