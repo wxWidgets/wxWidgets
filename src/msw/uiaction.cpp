@@ -65,8 +65,8 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
     int displayx, displayy;
     wxDisplaySize(&displayx, &displayy);
 
-    int scaledx = std::ceil((float)x * 65535.0 / (displayx-1));
-    int scaledy = std::ceil((float)y * 65535.0 / (displayy-1));
+    int scaledx = ceil((float)x * 65535.0 / (displayx-1));
+    int scaledy = ceil((float)y * 65535.0 / (displayy-1));
     mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, scaledx, scaledy, 0, 0);
 
     return true;
