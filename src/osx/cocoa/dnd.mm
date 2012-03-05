@@ -220,7 +220,7 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
         wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
 
         NSPoint down = [theEvent locationInWindow];
-        NSPoint p = [view convertPoint:down toView:nil];
+        NSPoint p = [view convertPoint:down fromView:nil];
                 
         gCurrentSource = this;
         
