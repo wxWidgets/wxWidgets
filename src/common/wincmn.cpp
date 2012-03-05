@@ -2607,17 +2607,12 @@ void wxWindowBase::GetPositionConstraint(int *x, int *y) const
 
 void wxWindowBase::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags) const
 {
-    // don't do it for the dialogs/frames - they float independently of their
-    // parent
-    if ( !IsTopLevel() )
+    wxWindow *parent = GetParent();
+    if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
     {
-        wxWindow *parent = GetParent();
-        if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
-        {
-            wxPoint pt(parent->GetClientAreaOrigin());
-            x += pt.x;
-            y += pt.y;
-        }
+        wxPoint pt(parent->GetClientAreaOrigin());
+        x += pt.x;
+        y += pt.y;
     }
 }
 

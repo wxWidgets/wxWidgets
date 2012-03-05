@@ -58,6 +58,17 @@ public:
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+
+    // Overridden base class methods.
+    // ------------------------------
+
+    virtual void AdjustForParentClientOrigin(int& WXUNUSED(x), int& WXUNUSED(y),
+                                             int WXUNUSED(sizeFlags) = 0) const
+    {
+        // Non owned windows positions don't need to be adjusted for parent
+        // client area origin so simply do nothing here.
+    }
+
 protected:
     virtual bool DoClearShape()
     {
