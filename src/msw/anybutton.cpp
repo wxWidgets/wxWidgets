@@ -3,7 +3,7 @@
 // Purpose:     wxAnyButton
 // Author:      Julian Smart
 // Created:     1998-01-04 (extracted from button.cpp)
-// RCS-ID:      $Id: anybutton.cpp 67384 2011-04-03 20:31:32Z DS $
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -656,7 +656,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     if ( m_imageData &&
           bitmap.GetSize() != m_imageData->GetBitmap(State_Normal).GetSize() )
     {
-        wxASSERT_MSG( which == State_Normal,
+        wxASSERT_MSG( (which == State_Normal) || bitmap.IsNull(),
                       "Must set normal bitmap with the new size first" );
 
 #if wxUSE_UXTHEME
