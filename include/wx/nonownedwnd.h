@@ -69,6 +69,13 @@ public:
         // client area origin so simply do nothing here.
     }
 
+    virtual void InheritAttributes()
+    {
+        // Non owned windows don't inherit attributes from their parent window
+        // (if the parent frame is red, it doesn't mean that all dialogs shown
+        // by it should be red as well), so don't do anything here neither.
+    }
+
 protected:
     virtual bool DoClearShape()
     {
