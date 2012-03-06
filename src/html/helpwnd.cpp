@@ -417,10 +417,16 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 
         if ( helpStyle & wxHF_BOOKMARKS )
         {
+            long comboStyle = wxCB_READONLY;
+#ifndef __WXMAC__
+            // Not supported on OSX/Cocoa presently
+            comboStyle |= wxCB_SORT;
+
+#endif
             m_Bookmarks = new wxComboBox(dummy, wxID_HTML_BOOKMARKSLIST,
                                          wxEmptyString,
                                          wxDefaultPosition, wxDefaultSize,
-                                         0, NULL, wxCB_READONLY | wxCB_SORT);
+                                         0, NULL, comboStyle);
             m_Bookmarks->Append(_("(bookmarks)"));
             for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
                 m_Bookmarks->Append(m_BookmarksNames[i]);
