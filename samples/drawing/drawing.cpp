@@ -554,19 +554,29 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 
 void MyCanvas::DrawDefault(wxDC& dc)
 {
-    // mark the origin
-    dc.DrawCircle(0, 0, 10);
-
-#if !defined(wxMAC_USE_CORE_GRAPHICS) || !wxMAC_USE_CORE_GRAPHICS
-    // GetPixel and FloodFill not supported by Mac OS X CoreGraphics
-    // (FloodFill uses Blit from a non-wxMemoryDC)
-    //flood fill using brush, starting at 1,1 and replacing whatever colour we find there
-    dc.SetBrush(wxBrush(wxColour(128,128,0), wxSOLID));
-
-    wxColour tmpColour ;
-    dc.GetPixel(1,1, &tmpColour);
-    dc.FloodFill(1,1, tmpColour, wxFLOOD_SURFACE);
-#endif
+    // Draw circle centered at the origin, then flood fill it with a different
+    // color. Done with a wxMemoryDC because Blit (used by generic
+    // wxDoFloodFill) from a window that is being painted gives unpredictable
+    // results on wxGTK
+    {
+        wxImage img(21, 21, false);
+        img.Clear(1);
+        wxBitmap bmp(img);
+        {
+            wxMemoryDC mdc(bmp);
+            mdc.SetBrush(dc.GetBrush());
+            mdc.SetPen(dc.GetPen());
+            mdc.DrawCircle(10, 10, 10);
+            wxColour c;
+            if (mdc.GetPixel(11, 11, &c))
+            {
+                mdc.SetBrush(wxColour(128, 128, 0));
+                mdc.FloodFill(11, 11, c, wxFLOOD_SURFACE);
+            }
+        }
+        bmp.SetMask(new wxMask(bmp, wxColour(1, 1, 1)));
+        dc.DrawBitmap(bmp, -10, -10, true);
+    }
 
     dc.DrawCheckMark(5, 80, 15, 15);
     dc.DrawCheckMark(25, 80, 30, 30);
