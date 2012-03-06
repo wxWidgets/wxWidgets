@@ -3681,7 +3681,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                         m_selectedBlockCorner = coords;
 
                     // if event is handled by user code, no further processing
-                    if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) == 1 )
+                    if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) != 0 )
                         performDefault = false;
                     
                     return performDefault;
