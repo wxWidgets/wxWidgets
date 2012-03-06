@@ -958,7 +958,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
 
             // If the pen is transparent pen we increase the size
             // for better compatibility with other platforms.
-            if ( m_pen.IsNonTransparent() )
+            if (m_pen.IsTransparent())
             {
                 ++ww;
                 ++hh;
