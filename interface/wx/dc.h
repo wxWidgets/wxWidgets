@@ -707,6 +707,13 @@ public:
         @note The present implementation for non-Windows platforms may fail to
               find colour borders if the pixels do not match the colour
               exactly. However the function will still return @true.
+
+        @note This method shouldn't be used with wxPaintDC under non-Windows
+              platforms as it uses GetPixel() internally and this may give
+              wrong results, notably in wxGTK. If you need to flood fill
+              wxPaintDC, create a temporary wxMemoryDC, flood fill it and then
+              blit it to, or draw as a bitmap on, wxPaintDC. See the example of
+              doing this in the drawing sample and wxBufferedPaintDC class.
     */
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
                    wxFloodFillStyle style = wxFLOOD_SURFACE);
@@ -1365,6 +1372,9 @@ public:
         for wxPostScriptDC or wxMetafileDC.
 
         @note Setting a pixel can be done using DrawPoint().
+
+        @note This method shouldn't be used with wxPaintDC as accessing the DC
+        while drawing can result in unexpected results, notably in wxGTK.
 
         @beginWxPythonOnly
         The wxColour value is returned and is not required as a parameter.
