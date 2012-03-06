@@ -2160,7 +2160,7 @@ private:
     // --------------------------------
 
     // process mouse drag event in WXGRID_CURSOR_SELECT_CELL mode
-    void DoGridCellDrag(wxMouseEvent& event,
+    bool DoGridCellDrag(wxMouseEvent& event,
                         const wxGridCellCoords& coords,
                         bool isFirstDrag);
 

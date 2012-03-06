@@ -3647,13 +3647,15 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
 // grid mouse event processing
 // ----------------------------------------------------------------------------
 
-void
+bool
 wxGrid::DoGridCellDrag(wxMouseEvent& event,
                        const wxGridCellCoords& coords,
                        bool isFirstDrag)
 {
+    bool performDefault = true ;
+    
     if ( coords == wxGridNoCellCoords )
-        return; // we're outside any valid cell
+        return performDefault; // we're outside any valid cell
 
     // Hide the edit control, so it won't interfere with drag-shrinking.
     if ( IsCellEditControlShown() )
@@ -3678,8 +3680,11 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                     if ( m_selectedBlockCorner == wxGridNoCellCoords)
                         m_selectedBlockCorner = coords;
 
-                    SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event);
-                    return;
+                    // if event is handled by user code, no further processing
+                    if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) == 1 )
+                        performDefault = false;
+                    
+                    return performDefault;
                 }
             }
 
@@ -3690,6 +3695,8 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
             // we don't handle the other key modifiers
             event.Skip();
     }
+    
+    return performDefault;
 }
 
 void wxGrid::DoGridLineDrag(wxMouseEvent& event, const wxGridOperations& oper)
@@ -3742,7 +3749,9 @@ void wxGrid::DoGridDragEvent(wxMouseEvent& event, const wxGridCellCoords& coords
     switch ( m_cursorMode )
     {
         case WXGRID_CURSOR_SELECT_CELL:
-            DoGridCellDrag(event, coords, isFirstDrag);
+            // no further handling if handled by user
+            if ( DoGridCellDrag(event, coords, isFirstDrag) == false )
+                return;
             break;
 
         case WXGRID_CURSOR_RESIZE_ROW:
@@ -4396,6 +4405,14 @@ wxGrid::SendEvent(const wxEventType type,
                mouseEv.GetY() + GetColLabelSize(),
                false,
                mouseEv);
+
+       if ( type == wxEVT_GRID_CELL_BEGIN_DRAG )
+       {
+           // by default the dragging is not supported, the user code must
+           // explicitly allow the event for it to take place
+           gridEvt.Veto();
+       }
+              
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
    }
