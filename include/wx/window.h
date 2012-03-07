@@ -623,9 +623,10 @@ public:
 
     bool HasExtraStyle(int exFlag) const { return (m_exStyle & exFlag) != 0; }
 
+#if WXWIN_COMPATIBILITY_2_8
         // make the window modal (all other windows unresponsive)
-    virtual void MakeModal(bool modal = true);
-
+    wxDEPRECATED( virtual void MakeModal(bool modal = true) );
+#endif
 
     // (primitive) theming support
     // ---------------------------

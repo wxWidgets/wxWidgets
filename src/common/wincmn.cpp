@@ -1916,6 +1916,7 @@ wxWindowBase::FindWindowById( long id, const wxWindow* parent )
 // dialog oriented functions
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_8
 void wxWindowBase::MakeModal(bool modal)
 {
     // Disable all other windows
@@ -1932,6 +1933,7 @@ void wxWindowBase::MakeModal(bool modal)
         }
     }
 }
+#endif // WXWIN_COMPATIBILITY_2_8
 
 bool wxWindowBase::Validate()
 {

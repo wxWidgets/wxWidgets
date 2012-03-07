@@ -423,6 +423,8 @@ Deprecated methods and their replacements
   you use these functions.
 - wxDataViewCtrl::StartEditor(item, n) taking column index is now deprecated,
   use EditItem(item, GetColumn(n)), which takes the column itself, instead.
+- wxWindow::MakeModal() is deprecated, use wxDialog::ShowModal() instead if
+  possible or wxWindowDisabler otherwise.
 
 
 Major new features in this release

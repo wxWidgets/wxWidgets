@@ -3172,17 +3172,6 @@ public:
     */
     virtual bool IsTopLevel() const;
 
-    /**
-        Disables all other windows in the application so that
-        the user can only interact with this window.
-
-        @param modal
-            If @true, this call disables all other windows in the application so that
-            the user can only interact with this window. If @false, the effect is
-            reversed.
-    */
-    virtual void MakeModal(bool modal = true);
-
     
     /**
         This virtual function is normally only used internally, but
