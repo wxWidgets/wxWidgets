@@ -1525,6 +1525,10 @@ void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
 
         GetEventHandler()->ProcessEvent(evt);
     }
+    else
+    {
+        event.Skip();
+    }
 }
 
 void wxHtmlWindow::OnCopy(wxCommandEvent& WXUNUSED(event))
