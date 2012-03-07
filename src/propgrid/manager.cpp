@@ -1821,7 +1821,7 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
         }
 
         if ( highest > 0 )
-            m_pPropGrid->SetSplitterPosition( highest );
+            SetSplitterPosition( highest );
     }
 
 #if wxUSE_HEADERCTRL
