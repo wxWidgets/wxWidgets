@@ -931,7 +931,7 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
     if (impl == NULL)
         return;
 
-#ifdef wxUSE_THREADS
+#if wxUSE_THREADS
     // OS X starts a NSUIHeartBeatThread for animating the default button in a
     // dialog. This causes a drawRect of the active dialog from outside the
     // main UI thread. This causes an occasional crash since the wx drawing

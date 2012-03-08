@@ -57,9 +57,7 @@
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
 #include "wx/artprov.h"
-#ifdef wxUSE_TOGGLEBTN
 #include "wx/tglbtn.h"
-#endif // wxUSE_TOGGLEBTN
 
 #include "wx/univ/stdrend.h"
 #include "wx/univ/inpcons.h"

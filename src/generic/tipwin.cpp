@@ -167,7 +167,7 @@ wxTipWindow::~wxTipWindow()
     {
         *m_windowPtr = NULL;
     }
-    #ifdef wxUSE_POPUPWIN
+    #if wxUSE_POPUPWIN
         #ifdef __WXGTK__
             if ( m_view->HasCapture() )
                 m_view->ReleaseMouse();
