@@ -496,7 +496,18 @@ bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
     return z >=  hitMin && z <= hitMax;
 }
 
+void wxSplitterWindow::SetSashInvisible(bool invisible)
+{
+    if ( IsSashInvisible() != invisible )
+        ToggleWindowStyle(wxSP_NOSASH);
+}
+
 int wxSplitterWindow::GetSashSize() const
+{
+    return IsSashInvisible() ? 0 : GetDefaultSashSize();
+}
+
+int wxSplitterWindow::GetDefaultSashSize() const
 {
     return wxRendererNative::Get().GetSplitterParams(this).widthSash;
 }
@@ -522,7 +533,7 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
         return;
 
     // nor if we're configured to not show it
-    if ( HasFlag(wxSP_NOSASH) )
+    if ( IsSashInvisible() )
         return;
 
     wxRendererNative::Get().DrawSplitterSash

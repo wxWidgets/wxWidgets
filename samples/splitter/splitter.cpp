@@ -60,7 +60,8 @@ enum
     SPLIT_SETPOSITION,
     SPLIT_SETMINSIZE,
     SPLIT_SETGRAVITY,
-    SPLIT_REPLACE
+    SPLIT_REPLACE,
+    SPLIT_INVISIBLE
 };
 
 // ----------------------------------------------------------------------------
@@ -99,6 +100,7 @@ public:
     void OnSetMinSize(wxCommandEvent& event);
     void OnSetGravity(wxCommandEvent& event);
     void OnReplace(wxCommandEvent &event);
+    void OnToggleInvisible(wxCommandEvent &event);
 
     void OnQuit(wxCommandEvent& event);
 
@@ -106,6 +108,7 @@ public:
     void OnUpdateUIHorizontal(wxUpdateUIEvent& event);
     void OnUpdateUIVertical(wxUpdateUIEvent& event);
     void OnUpdateUIUnsplit(wxUpdateUIEvent& event);
+    void OnUpdateUIInvisible(wxUpdateUIEvent& event);
 
 private:
     wxScrolledWindow *m_left, *m_right;
@@ -187,12 +190,14 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::OnSetMinSize)
     EVT_MENU(SPLIT_SETGRAVITY, MyFrame::OnSetGravity)
     EVT_MENU(SPLIT_REPLACE, MyFrame::OnReplace)
+    EVT_MENU(SPLIT_INVISIBLE, MyFrame::OnToggleInvisible)
 
     EVT_MENU(SPLIT_QUIT, MyFrame::OnQuit)
 
     EVT_UPDATE_UI(SPLIT_VERTICAL, MyFrame::OnUpdateUIVertical)
     EVT_UPDATE_UI(SPLIT_HORIZONTAL, MyFrame::OnUpdateUIHorizontal)
     EVT_UPDATE_UI(SPLIT_UNSPLIT, MyFrame::OnUpdateUIUnsplit)
+    EVT_UPDATE_UI(SPLIT_INVISIBLE, MyFrame::OnUpdateUIInvisible)
 END_EVENT_TABLE()
 
 // My frame constructor
@@ -218,6 +223,9 @@ MyFrame::MyFrame()
     splitMenu->Append(SPLIT_UNSPLIT,
                       wxT("&Unsplit\tCtrl-U"),
                       wxT("Unsplit"));
+    splitMenu->AppendCheckItem(SPLIT_INVISIBLE,
+                      wxT("Toggle sash &invisibility\tCtrl-I"),
+                      wxT("Toggle sash invisibility"));
     splitMenu->AppendSeparator();
 
     splitMenu->AppendCheckItem(SPLIT_LIVE,
@@ -436,6 +444,12 @@ void MyFrame::OnReplace(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+void MyFrame::OnToggleInvisible(wxCommandEvent& WXUNUSED(event) )
+{
+    m_splitter->SetSashInvisible(!m_splitter->IsSashInvisible());
+    m_splitter->SizeWindows();
+}
+
 // Update UI handlers
 
 void MyFrame::OnUpdateUIHorizontal(wxUpdateUIEvent& event)
@@ -451,6 +465,11 @@ void MyFrame::OnUpdateUIVertical(wxUpdateUIEvent& event)
 void MyFrame::OnUpdateUIUnsplit(wxUpdateUIEvent& event)
 {
     event.Enable( m_splitter->IsSplit() );
+}
+
+void MyFrame::OnUpdateUIInvisible(wxUpdateUIEvent& event)
+{
+    event.Check( m_splitter->IsSashInvisible() );
 }
 
 // ----------------------------------------------------------------------------

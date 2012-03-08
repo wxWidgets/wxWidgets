@@ -136,8 +136,14 @@ public:
     // Sets the border size
     void SetBorderSize(int WXUNUSED(width)) { }
 
-    // Gets the sash size
+    // Hide or show the sash and test whether it's currently hidden.
+    void SetSashInvisible(bool invisible = true);
+    bool IsSashInvisible() const { return HasFlag(wxSP_NOSASH); }
+
+    // Gets the current sash size which may be 0 if it's hidden and the default
+    // sash size.
     int GetSashSize() const;
+    int GetDefaultSashSize() const;
 
     // Gets the border size
     int GetBorderSize() const;

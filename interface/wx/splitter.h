@@ -163,16 +163,25 @@ public:
     int GetSashPosition() const;
 
     /**
-        Returns the sash size in pixels.
+        Returns the default sash size in pixels or 0 if it is invisible.
+
+        @see GetDefaultSashSize(), IsSashInvisible()
+     */
+    int GetSashSize() const;
+
+    /**
+        Returns the default sash size in pixels.
 
         The size of the sash is its width for a vertically split window and its
         height for a horizontally split one. Its other direction is the same as
         the client size of the window in the corresponding direction.
 
-        The sash size is platform-dependent because it conforms to the current
-        platform look-and-feel and cannot be changed.
+        The default sash size is platform-dependent because it conforms to the
+        current platform look-and-feel and cannot be changed.
+
+        @since 2.9.4
      */
-    int GetSashSize() const;
+    int GetDefaultSashSize() const;
 
     /**
         Gets the split mode.
@@ -204,6 +213,17 @@ public:
         @see SplitVertically(), SplitHorizontally()
     */
     void Initialize(wxWindow* window);
+
+    /**
+        Returns @true if the sash is invisible even when the window is split, @false otherwise.
+
+        @remark This is a shortcut for HasFlag(wxSP_NOSASH)
+
+        @see SetSashInvisible()
+
+        @since 2.9.4
+    */
+    bool IsSashInvisible() const;
 
     /**
         Returns @true if the window is split, @false otherwise.
@@ -334,6 +354,25 @@ public:
         @see GetSplitMode(), SplitVertically(), SplitHorizontally().
     */
     void SetSplitMode(int mode);
+
+    /**
+        Sets whether the sash should be invisible, even when the window is
+        split.
+
+        When the sash is invisible, it doesn't appear on the screen at all and,
+        in particular, doesn't allow the user to resize the windows.
+
+        @remarks Only sets the internal variable; does not update the display.
+
+        @param invisible
+            If @true, the sash is always invisible, else it is shown when the
+            window is split.
+
+        @see IsSashInvisible()
+
+        @since 2.9.4
+    */
+    void SetSashInvisible(bool invisible=true);
 
     /**
         Initializes the top and bottom panes of the splitter window.
