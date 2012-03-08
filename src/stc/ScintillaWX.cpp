@@ -827,7 +827,7 @@ void ScintillaWX::DoMouseWheel(int rotation, int delta,
     int lines;
 
     if (ctrlDown) {  // Zoom the fonts if Ctrl key down
-        if (rotation < 0) {
+        if (rotation > 0) {
             KeyCommand(SCI_ZOOMIN);
         }
         else {
