@@ -87,21 +87,16 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 @interface wxNSView : NSView
 {
-    NSTrackingRectTag rectTag;
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+    BOOL _hasToolTip;    
+    NSTrackingRectTag   _lastToolTipTrackTag;
+    id              _lastToolTipOwner;
+    void*           _lastUserData;
+    
     NSTrackingArea* _trackingArea;
-#endif
 }
 
-// the tracking tag is needed to track mouse enter / exit events
-- (void) setTrackingTag: (NSTrackingRectTag)tag;
-- (NSTrackingRectTag) trackingTag;
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-// under 10.5 we can also track mouse moved events on non-focused windows if
-// we use the new NSTrackingArea APIs. 
 - (void) updateTrackingArea;
 - (NSTrackingArea*) trackingArea;
-#endif
 @end // wxNSView
 
 @interface NSView(PossibleMethods)
@@ -136,27 +131,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (void)setTextColor:(NSColor *)color;
 - (void)setImagePosition:(NSCellImagePosition)aPosition;
 @end
-
-// in case we want to use the native tooltip callbacks
-
-#if 0
-
-@interface NSView(wxToolTip)
-- (NSString *)view:(NSView *)view stringForToolTip:(NSToolTipTag)tag point:(NSPoint)point userData:(void *)userData;
-@end
-
-@implementation NSView(wxToolTip)
-
-- (NSString *)view:(NSView *)view stringForToolTip:(NSToolTipTag)tag point:(NSPoint)point userData:(void *)userData {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( view );
-    if (impl == NULL)
-        return nil;
-    
-    return @"Tag";
-}
-@end
-
-#endif
 
 // The following code is a combination of the code listed here:
 // http://lists.apple.com/archives/cocoa-dev/2008/Apr/msg01582.html
@@ -710,17 +684,6 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     }
 }
 
-- (void) setTrackingTag: (NSTrackingRectTag)tag
-{
-    rectTag = tag;
-}
-
-- (NSTrackingRectTag) trackingTag
-{
-    return rectTag;
-}
-
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 - (void) updateTrackingArea
 {
     if (_trackingArea)
@@ -741,7 +704,88 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 {
     return _trackingArea;
 }
-#endif
+
+/* idea taken from webkit sources: overwrite the methods that (private) NSToolTipManager will use to attach its tracking rectangle 
+ * then when changing the tooltip send fake view-exit and view-enter methods which will lead to a tooltip refresh
+ */
+
+
+- (void)_sendToolTipMouseExited
+{
+    // Nothing matters except window, trackingNumber, and userData.
+    NSEvent *fakeEvent = [NSEvent enterExitEventWithType:NSMouseExited
+                                                location:NSMakePoint(0, 0)
+                                           modifierFlags:0
+                                               timestamp:0
+                                            windowNumber:[[self window] windowNumber]
+                                                 context:NULL
+                                             eventNumber:0
+                                          trackingNumber:_lastToolTipTrackTag
+                                                userData:_lastUserData];
+    [_lastToolTipOwner mouseExited:fakeEvent];
+}
+
+- (void)_sendToolTipMouseEntered
+{
+    // Nothing matters except window, trackingNumber, and userData.
+    NSEvent *fakeEvent = [NSEvent enterExitEventWithType:NSMouseEntered
+                                                location:NSMakePoint(0, 0)
+                                           modifierFlags:0
+                                               timestamp:0
+                                            windowNumber:[[self window] windowNumber]
+                                                 context:NULL
+                                             eventNumber:0
+                                          trackingNumber:_lastToolTipTrackTag
+                                                userData:_lastUserData];
+    [_lastToolTipOwner mouseEntered:fakeEvent];
+}
+
+- (void)setToolTip:(NSString *)string;
+{
+    if (string)
+    {
+        if ( _hasToolTip )
+        {
+            [self _sendToolTipMouseExited];
+        }
+
+        [super setToolTip:string];
+        _hasToolTip = YES;
+        [self _sendToolTipMouseEntered];
+    }
+    else 
+    {
+        if ( _hasToolTip )
+        {
+            [self _sendToolTipMouseExited];
+            [super setToolTip:nil];
+            _hasToolTip = NO;
+        }
+    }
+}
+
+- (NSTrackingRectTag)addTrackingRect:(NSRect)rect owner:(id)owner userData:(void *)data assumeInside:(BOOL)assumeInside
+{
+    NSTrackingRectTag tag = [super addTrackingRect:rect owner:owner userData:data assumeInside:assumeInside];
+    if ( owner != self )
+    {
+        _lastUserData = data;
+        _lastToolTipOwner = owner;
+        _lastToolTipTrackTag = tag;
+    }
+    return tag;
+}
+
+- (void)removeTrackingRect:(NSTrackingRectTag)tag
+{
+    if (tag == _lastToolTipTrackTag) 
+    {
+        _lastUserData = NULL;
+        _lastToolTipOwner = nil;
+        _lastToolTipTrackTag = 0;
+    }
+    [super removeTrackingRect:tag];
+}
 @end // wxNSView
 
 //
@@ -1968,18 +2012,9 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
     [[m_osxView superview] setNeedsDisplayInRect:r];
 
     wxNSView* wxview = (wxNSView*)m_osxView;
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+
     if ([wxview respondsToSelector:@selector(updateTrackingArea)] )
         [wxview updateTrackingArea]; 
-#else
-    if ([m_osxView respondsToSelector:@selector(trackingTag)] )
-    {
-        if ( [wxview trackingTag] )
-            [wxview removeTrackingRect: [wxview trackingTag]];
-
-        [wxview setTrackingTag: [wxview addTrackingRect: [m_osxView bounds] owner: wxview userData: nil assumeInside: NO]];
-    }
-#endif
 }
 
 void wxWidgetCocoaImpl::GetPosition( int &x, int &y ) const
@@ -2340,32 +2375,17 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bo
                                                                  alpha:(CGFloat) (col.Alpha() / 255.0)]];
 }
 
-NSToolTipTag tt = 0;
-
 void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
 {
-    if (tooltip)
+    if ( tooltip )
     {
-        /*
-        if ( tt != 0 )
-        {
-            [m_osxView removeToolTip:tt];
-            tt = 0;
-        }
-         */
         wxCFStringRef cf( tooltip->GetTip() , m_wxPeer->GetFont().GetEncoding() );
         [m_osxView setToolTip: cf.AsNSString()];
-        // tt = [m_osxView addToolTipRect:[m_osxView bounds] owner:m_osxView userData:nil];
     }
     else 
     {
-        if ( tt != 0 )
-        {
-            [m_osxView removeToolTip:tt];
-            tt = 0;
-        }
+        [m_osxView setToolTip:nil];
     }
-
 }
 
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
@@ -2448,8 +2468,11 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
     SetupMouseEvent(wxevent , event) ;
-
-    return GetWXPeer()->HandleWindowEvent(wxevent);
+    wxWindow* wxp = GetWXPeer();
+#if wxUSE_TOOLTIPS
+    wxToolTip::RelayEvent( wxp , wxevent);
+#endif    
+    return wxp->HandleWindowEvent(wxevent);
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow)
