@@ -2468,11 +2468,7 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
     SetupMouseEvent(wxevent , event) ;
-    wxWindow* wxp = GetWXPeer();
-#if wxUSE_TOOLTIPS
-    wxToolTip::RelayEvent( wxp , wxevent);
-#endif    
-    return wxp->HandleWindowEvent(wxevent);
+    return GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow)
