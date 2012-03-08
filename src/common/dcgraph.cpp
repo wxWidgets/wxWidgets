@@ -903,6 +903,7 @@ bool wxGCDCImpl::DoStretchBlit(
                    source->LogicalToDeviceY(ysrc),
                    source->LogicalToDeviceXRel(srcWidth),
                    source->LogicalToDeviceYRel(srcHeight));
+    const wxRect subrectOrig = subrect;
     // clip the subrect down to the size of the source DC
     wxRect clip;
     source->GetSize(&clip.width, &clip.height);
@@ -934,8 +935,19 @@ bool wxGCDCImpl::DoStretchBlit(
             if ( !useMask && blit.GetMask() )
                 blit.SetMask(NULL);
 
-            m_graphicContext->DrawBitmap( blit, xdest, ydest,
-                                          dstWidth, dstHeight);
+            double x = xdest;
+            double y = ydest;
+            double w = dstWidth;
+            double h = dstHeight;
+            // adjust dest rect if source rect is clipped
+            if (subrect.width != subrectOrig.width || subrect.height != subrectOrig.height)
+            {
+                x += (subrect.x - subrectOrig.x) / double(subrectOrig.width) * dstWidth;
+                y += (subrect.y - subrectOrig.y) / double(subrectOrig.height) * dstHeight;
+                w *= double(subrect.width) / subrectOrig.width;
+                h *= double(subrect.height) / subrectOrig.height;
+            }
+            m_graphicContext->DrawBitmap(blit, x, y, w, h);
         }
         else
         {
