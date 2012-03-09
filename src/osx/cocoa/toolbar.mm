@@ -761,6 +761,41 @@ void wxToolBar::DoGetSize( int *width, int *height ) const
 #endif
 }
 
+void wxToolBar::DoGetPosition(int*x, int *y) const
+{
+#if wxOSX_USE_NATIVE_TOOLBAR
+    bool    ownToolbarInstalled;
+    
+    MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
+    if ( ownToolbarInstalled )
+    {
+        WXWindow tlw = MacGetTopLevelWindowRef();
+        float toolbarHeight = 0.0;
+        NSRect windowFrame = NSMakeRect(0, 0, 0, 0);
+        
+        if(m_macToolbar && [(NSToolbar*)m_macToolbar isVisible])
+        {
+            windowFrame = [NSWindow contentRectForFrameRect:[tlw frame]
+                                                  styleMask:[tlw styleMask]];
+            toolbarHeight = NSHeight(windowFrame)
+            - NSHeight([[tlw contentView] frame]);
+        }
+        
+        // it is extending to the north of the content area
+        
+        if ( x != NULL )
+            *x = 0;
+        if ( y != NULL )
+            *y = -toolbarHeight;
+    }
+    else
+        wxToolBarBase::DoGetPosition( x, y );
+    
+#else
+    wxToolBarBase::DoGetPosition( x, y );
+#endif
+}
+
 wxSize wxToolBar::DoGetBestSize() const
 {
     // was updated in Realize()

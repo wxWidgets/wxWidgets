@@ -86,8 +86,11 @@ protected:
     void DoSetSize(int x, int y, int width, int height, int sizeFlags);
 
 #ifndef __WXOSX_IPHONE__
-   virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetSize(int *width, int *height) const;
     virtual wxSize DoGetBestSize() const;
+#endif
+#ifdef __WXOSX_COCOA__
+    virtual void DoGetPosition(int*x, int *y) const;
 #endif
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
