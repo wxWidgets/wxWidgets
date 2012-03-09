@@ -20,11 +20,12 @@
 
 enum wxRibbonPanelOption
 {
-    wxRIBBON_PANEL_NO_AUTO_MINIMISE    = 1 << 0,
-    wxRIBBON_PANEL_EXT_BUTTON        = 1 << 3,
-    wxRIBBON_PANEL_MINIMISE_BUTTON    = 1 << 4,
+    wxRIBBON_PANEL_NO_AUTO_MINIMISE = 1 << 0,
+    wxRIBBON_PANEL_EXT_BUTTON       = 1 << 3,
+    wxRIBBON_PANEL_MINIMISE_BUTTON  = 1 << 4,
+    wxRIBBON_PANEL_STRETCH          = 1 << 5,
 
-    wxRIBBON_PANEL_DEFAULT_STYLE = 0
+    wxRIBBON_PANEL_DEFAULT_STYLE    = 0
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonPanel : public wxRibbonControl

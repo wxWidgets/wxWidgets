@@ -238,7 +238,7 @@ void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags
     if(minimised != m_minimised)
     {
         m_minimised = minimised;
-        // Note that for sizers, this routine disallows the use of mixed shown 
+        // Note that for sizers, this routine disallows the use of mixed shown
         // and hidden controls
         // TODO ? use some list of user set invisible children to restore status.
         for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
@@ -259,7 +259,7 @@ bool wxRibbonPanel::IsMinimised(wxSize at_size) const
 {
     if(GetSizer())
     {
-        // we have no information on size change direction 
+        // we have no information on size change direction
         // so check both
         wxSize size = GetMinNotMinimisedSize();
         if(size.x > at_size.x || size.y > at_size.y)
@@ -303,7 +303,12 @@ bool wxRibbonPanel::IsSizingContinuous() const
 {
     // A panel never sizes continuously, even if all of its children can,
     // as it would appear out of place along side non-continuous panels.
-    return false;
+
+    // JS 2012-03-09: introducing wxRIBBON_PANEL_STRETCH to allow
+    // the panel to fill its parent page. For example we might have
+    // a list of styles in one of the pages, which should stretch to
+    // fill available space.
+    return (m_flags & wxRIBBON_PANEL_STRETCH) != 0;
 }
 
 wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
@@ -348,7 +353,7 @@ wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
             wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
             if(ribbon_child != NULL)
             {
-                smaller = ribbon_child->GetNextSmallerSize(direction, child_relative);                
+                smaller = ribbon_child->GetNextSmallerSize(direction, child_relative);
                 minimise = (smaller == child_relative);
             }
         }
@@ -445,7 +450,7 @@ wxSize wxRibbonPanel::DoGetNextLargerSize(wxOrientation direction,
 
         if(GetSizer())
         {
-            // We could just let the sizer expand in flow direction but see comment 
+            // We could just let the sizer expand in flow direction but see comment
             // in IsSizingContinuous()
             larger = GetPanelSizerBestSize();
             // and adjust for page in non flow direction
@@ -560,8 +565,8 @@ wxSize wxRibbonPanel::GetPanelSizerMinSize() const
     }
     // else use previously calculated m_smallest_unminimised_size
     wxClientDC dc((wxRibbonPanel*) this);
-    return m_art->GetPanelClientSize(dc, 
-                                    this, 
+    return m_art->GetPanelClientSize(dc,
+                                    this,
                                     m_smallest_unminimised_size,
                                     NULL);
 }
@@ -766,10 +771,10 @@ bool wxRibbonPanel::ShowExpanded()
     }
 
     // Move sizer to new panel
-    if(GetSizer())    
+    if(GetSizer())
     {
         wxSizer* sizer = GetSizer();
-        SetSizer(NULL, false); 
+        SetSizer(NULL, false);
         m_expanded_panel->SetSizer(sizer);
     }
 
