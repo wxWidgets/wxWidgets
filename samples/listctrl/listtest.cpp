@@ -845,7 +845,7 @@ void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnEdit(wxCommandEvent& WXUNUSED(event))
 {
     // demonstrate cancelling editing: this currently is wxMSW-only
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     if ( m_listCtrl->GetEditControl() )
     {
         m_listCtrl->EndEditLabel(true);
