@@ -831,6 +831,7 @@ void DateTimeTestCase::TestTimeFormat()
 
     // test some degenerate cases
     CPPUNIT_ASSERT( !dt.ParseFormat("", "%z") );
+    CPPUNIT_ASSERT( !dt.ParseFormat("", "%%") );
 
     // test compilation of some calls which should compile (and not result in
     // ambiguity because of char*<->wxCStrData<->wxString conversions)

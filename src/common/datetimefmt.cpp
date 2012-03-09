@@ -1448,7 +1448,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case wxT('%'):       // a percent sign
-                if ( *input++ != wxT('%') )
+                if ( input == end || *input++ != wxT('%') )
                 {
                     // no match
                     return false;
