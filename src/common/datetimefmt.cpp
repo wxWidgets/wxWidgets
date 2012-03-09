@@ -1408,6 +1408,11 @@ wxDateTime::ParseFormat(const wxString& date,
 
             case wxT('z'):
                 {
+                    // check that we have something here at all
+                    if ( input == end )
+                        return false;
+
+                    // and then check that it's either plus or minus sign
                     bool minusFound;
                     if ( *input == wxT('-') )
                         minusFound = true;

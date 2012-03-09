@@ -829,6 +829,9 @@ void DateTimeTestCase::TestTimeFormat()
     CPPUNIT_ASSERT( dt.ParseFormat("17", "%d") );
     CPPUNIT_ASSERT_EQUAL( 17, dt.GetDay() );
 
+    // test some degenerate cases
+    CPPUNIT_ASSERT( !dt.ParseFormat("", "%z") );
+
     // test compilation of some calls which should compile (and not result in
     // ambiguity because of char*<->wxCStrData<->wxString conversions)
     wxString s("foo");
