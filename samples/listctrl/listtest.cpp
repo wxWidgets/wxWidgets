@@ -177,7 +177,7 @@ MyFrame::MyFrame(const wxChar *title)
     m_imageListNormal = new wxImageList(32, 32, true);
     m_imageListSmall = new wxImageList(16, 16, true);
 
-#if wxHAS_IMAGES_IN_RESOURCES
+#ifdef wxHAS_IMAGES_IN_RESOURCES
     m_imageListNormal->Add( wxIcon(wxT("icon1"), wxBITMAP_TYPE_ICO_RESOURCE) );
     m_imageListNormal->Add( wxIcon(wxT("icon2"), wxBITMAP_TYPE_ICO_RESOURCE) );
     m_imageListNormal->Add( wxIcon(wxT("icon3"), wxBITMAP_TYPE_ICO_RESOURCE) );
