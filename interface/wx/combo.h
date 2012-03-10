@@ -694,7 +694,7 @@ public:
 
         @since 2.9.1
     */
-    virtual void SetHint(const wxString& hint);
+    virtual bool SetHint(const wxString& hint);
 
     /**
         Sets the insertion point in the text field.
