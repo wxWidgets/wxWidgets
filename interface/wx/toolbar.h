@@ -98,7 +98,6 @@ public:
     wxControl *GetControl() const;
     wxToolBarBase *GetToolBar() const;
 
-    // style/kind
     bool IsStretchable() const;
     bool IsButton() const;
     bool IsControl() const;
@@ -108,12 +107,10 @@ public:
     wxItemKind GetKind() const;
     void MakeStretchable();
 
-    // state
     bool IsEnabled() const;
     bool IsToggled() const;
     bool CanBeToggled() const;
 
-    // attributes
     const wxBitmap& GetNormalBitmap() const;
     const wxBitmap& GetDisabledBitmap() const;
 
@@ -125,7 +122,6 @@ public:
 
     wxObject *GetClientData() const;
 
-    // modifiers: return true if the state really changed
     virtual bool Enable(bool enable);
     virtual bool Toggle(bool toggle);
     virtual bool SetToggle(bool toggle);
@@ -137,14 +133,11 @@ public:
     virtual void SetLabel(const wxString& label);
     void SetClientData(wxObject *clientData);
     
-    // add tool to/remove it from a toolbar
     virtual void Detach();
     virtual void Attach(wxToolBarBase *tbar);
 
-    // these methods are only for tools of wxITEM_DROPDOWN kind (but even such
-    // tools can have a NULL associated menu)
     virtual void SetDropdownMenu(wxMenu *menu);
-    wxMenu *GetDropdownMenu() const { return m_dropdownMenu; }
+    wxMenu *GetDropdownMenu() const;
 };
 
 
@@ -724,13 +717,16 @@ public:
             the overload taking @a tool parameter the caller is responsible for
             deleting the tool in the latter case.
     */
-    wxToolBarToolBase* InsertTool(size_t pos, int toolId,
-                                  const wxBitmap& bitmap1,
-                                  const wxBitmap& bitmap2 = wxNullBitmap,
-                                  bool isToggle = false,
-                                  wxObject* clientData = NULL,
-                                  const wxString& shortHelpString = wxEmptyString,
-                                  const wxString& longHelpString = wxEmptyString);
+    wxToolBarToolBase* InsertTool(  size_t pos,
+                                    int toolId,
+                                    const wxString& label,
+                                    const wxBitmap& bitmap,
+                                    const wxBitmap& bmpDisabled = wxNullBitmap,
+                                    wxItemKind kind = wxITEM_NORMAL,
+                                    const wxString& shortHelp = wxEmptyString,
+                                    const wxString& longHelp = wxEmptyString,
+                                    wxObject *clientData = NULL);
+
     wxToolBarToolBase* InsertTool(size_t pos,
                                   wxToolBarToolBase* tool);
     //@}
@@ -981,7 +977,7 @@ public:
     /**
        Factory function to create a new toolbar tool.
     */
-    virtual wxToolBarToolBase *CreateTool(int toolid,
+    virtual wxToolBarToolBase *CreateTool(int toolId,
                                           const wxString& label,
                                           const wxBitmap& bmpNormal,
                                           const wxBitmap& bmpDisabled = wxNullBitmap,
