@@ -131,22 +131,6 @@ bool shouldHandleSelector(SEL selector)
             ((wxWidgetCocoaImpl*)cw->GetPeer())->DoHandleMouseEvent( event);
             handled = true;
         }
-        else if ( [event type] == NSMouseMoved )
-        {
-            NSPoint nsPoint = [event locationInWindow];
-            if ( [event window] != nil )
-                nsPoint = [[event window] convertBaseToScreen:nsPoint];
-
-            wxPoint pt = wxFromNSPoint(NULL, nsPoint);
-            wxWindow* mw = ::wxFindWindowAtPoint(pt);
-            if ( mw )
-            {
-                if (wxTheApp)
-                    wxTheApp->MacSetCurrentEvent(event, NULL);
-                ((wxWidgetCocoaImpl*)mw->GetPeer())->DoHandleMouseEvent( event);
-                handled = true;
-            }
-        }
         if ( handled )
         {
             if (wxTheApp)
@@ -654,8 +638,6 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     [m_macWindow setDelegate:controller];
 
-    [m_macWindow setAcceptsMouseMovedEvents: YES];
-    
     if ( ( style & wxFRAME_SHAPED) )
     {
         [m_macWindow setOpaque:NO];

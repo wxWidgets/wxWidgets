@@ -92,11 +92,8 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     id              _lastToolTipOwner;
     void*           _lastUserData;
     
-    NSTrackingArea* _trackingArea;
 }
 
-- (void) updateTrackingArea;
-- (NSTrackingArea*) trackingArea;
 @end // wxNSView
 
 @interface NSView(PossibleMethods)
@@ -682,27 +679,6 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
     }
-}
-
-- (void) updateTrackingArea
-{
-    if (_trackingArea)
-    {
-        [self removeTrackingArea: _trackingArea];
-        [_trackingArea release];
-    }
-    
-    NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveAlways;
-        
-    NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: [self bounds] options: options owner: self userInfo: nil];
-    [self addTrackingArea: area];
-
-    _trackingArea = area;
-}
-
-- (NSTrackingArea*) trackingArea
-{
-    return _trackingArea;
 }
 
 /* idea taken from webkit sources: overwrite the methods that (private) NSToolTipManager will use to attach its tracking rectangle 
@@ -2010,11 +1986,6 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
     NSRect r = wxToNSRect( [m_osxView superview], wxRect(x,y,width, height) );
     [m_osxView setFrame:r];
     [[m_osxView superview] setNeedsDisplayInRect:r];
-
-    wxNSView* wxview = (wxNSView*)m_osxView;
-
-    if ([wxview respondsToSelector:@selector(updateTrackingArea)] )
-        [wxview updateTrackingArea]; 
 }
 
 void wxWidgetCocoaImpl::GetPosition( int &x, int &y ) const
@@ -2402,7 +2373,11 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
         }
 
     }
-}
+    NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect;
+        NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: NSZeroRect options: options owner: m_osxView userInfo: nil];
+    [m_osxView addTrackingArea: area];
+    [area release];
+ }
 
 bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
