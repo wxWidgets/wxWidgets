@@ -58,6 +58,17 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxString& label,
+                                          const wxBitmap& bitmap1,
+                                          const wxBitmap& bitmap2 = wxNullBitmap,
+                                          wxItemKind kind = wxITEM_NORMAL,
+                                          wxObject *clientData = NULL,
+                                          const wxString& shortHelpString = wxEmptyString,
+                                          const wxString& longHelpString = wxEmptyString);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label);
+
     // implementation from now on
     // --------------------------
 
@@ -72,17 +83,6 @@ protected:
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
-
-    virtual wxToolBarToolBase *CreateTool(int id,
-                                          const wxString& label,
-                                          const wxBitmap& bitmap1,
-                                          const wxBitmap& bitmap2,
-                                          wxItemKind kind,
-                                          wxObject *clientData,
-                                          const wxString& shortHelpString,
-                                          const wxString& longHelpString);
-    virtual wxToolBarToolBase *CreateTool(wxControl *control,
-                                          const wxString& label);
 
 private:
     void Init();

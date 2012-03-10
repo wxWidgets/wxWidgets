@@ -567,6 +567,33 @@ public:
     // use GetToolMargins() instead
     wxSize GetMargins() const { return GetToolMargins(); }
 
+    // Tool factories,
+    // helper functions to create toolbar tools
+    // -------------------------
+    virtual wxToolBarToolBase *CreateTool(int toolid,
+                                          const wxString& label,
+                                          const wxBitmap& bmpNormal,
+                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          wxItemKind kind = wxITEM_NORMAL,
+                                          wxObject *clientData = NULL,
+                                          const wxString& shortHelp = wxEmptyString,
+                                          const wxString& longHelp = wxEmptyString) = 0;
+
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label) = 0;
+
+    // this one is not virtual but just a simple helper/wrapper around
+    // CreateTool() for separators
+    wxToolBarToolBase *CreateSeparator()
+    {
+        return CreateTool(wxID_SEPARATOR,
+                          wxEmptyString,
+                          wxNullBitmap, wxNullBitmap,
+                          wxITEM_SEPARATOR, NULL,
+                          wxEmptyString, wxEmptyString);
+    }
+
+    
     // implementation only from now on
     // -------------------------------
 
@@ -618,29 +645,6 @@ protected:
     // called when the tools "can be toggled" flag changes
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) = 0;
 
-    // the functions to create toolbar tools
-    virtual wxToolBarToolBase *CreateTool(int toolid,
-                                          const wxString& label,
-                                          const wxBitmap& bmpNormal,
-                                          const wxBitmap& bmpDisabled,
-                                          wxItemKind kind,
-                                          wxObject *clientData,
-                                          const wxString& shortHelp,
-                                          const wxString& longHelp) = 0;
-
-    virtual wxToolBarToolBase *CreateTool(wxControl *control,
-                                          const wxString& label) = 0;
-
-    // this one is not virtual but just a simple helper/wrapper around
-    // CreateTool() for separators
-    wxToolBarToolBase *CreateSeparator()
-    {
-        return CreateTool(wxID_SEPARATOR,
-                          wxEmptyString,
-                          wxNullBitmap, wxNullBitmap,
-                          wxITEM_SEPARATOR, NULL,
-                          wxEmptyString, wxEmptyString);
-    }
 
     // helper functions
     // ----------------

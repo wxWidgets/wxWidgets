@@ -976,5 +976,28 @@ public:
             tool.
     */
     virtual void ToggleTool(int toolId, bool toggle);
+
+
+    /**
+       Factory function to create a new toolbar tool.
+    */
+    virtual wxToolBarToolBase *CreateTool(int toolid,
+                                          const wxString& label,
+                                          const wxBitmap& bmpNormal,
+                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          wxItemKind kind = wxITEM_NORMAL,
+                                          wxObject *clientData = NULL,
+                                          const wxString& shortHelp = wxEmptyString,
+                                          const wxString& longHelp = wxEmptyString);
+    /**
+       Factory function to create a new control toolbar tool.
+    */
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label);
+
+    /**
+       Factory function to create a new separator toolbar tool.
+    */
+    wxToolBarToolBase *CreateSeparator()
 };
 
