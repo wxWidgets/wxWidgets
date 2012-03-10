@@ -1196,6 +1196,16 @@ enum wxDuplexMode
 };
 
 /**
+    Print quality.
+*/
+#define wxPRINT_QUALITY_HIGH    -1
+#define wxPRINT_QUALITY_MEDIUM  -2
+#define wxPRINT_QUALITY_LOW     -3
+#define wxPRINT_QUALITY_DRAFT   -4
+
+typedef int wxPrintQuality;
+
+/**
     Print mode (currently PostScript only).
 */
 enum wxPrintMode
