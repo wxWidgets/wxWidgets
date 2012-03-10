@@ -747,7 +747,7 @@ public:
         Returns 1 under other platforms (e.g. wxMSW) or when building in ANSI mode
         (@c wxUSE_UNICODE==0).
     */
-    virtual size_t GetFormatCount(Direction dir = Get);
+    virtual size_t GetFormatCount(Direction dir = Get) const;
 
     /**
         Returns the preferred format supported by this object.
