@@ -820,6 +820,15 @@ void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event)
     impl->mouseEvent(event, self, _cmd);
 }
 
+void wxOSX_cursorUpdate(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return;
+    
+    impl->cursorUpdate(event, self, _cmd);
+}
+
 BOOL wxOSX_acceptsFirstMouse(NSView* WXUNUSED(self), SEL WXUNUSED(_cmd), NSEvent *WXUNUSED(event))
 {
     // This is needed to support click through, otherwise the first click on a window
@@ -879,15 +888,6 @@ BOOL wxOSX_resignFirstResponder(NSView* self, SEL _cmd)
         return NO;
 
     return impl->resignFirstResponder(self, _cmd);
-}
-
-void wxOSX_resetCursorRects(NSView* self, SEL _cmd)
-{
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if (impl == NULL)
-        return;
-
-    impl->resetCursorRects(self, _cmd);
 }
 
 BOOL wxOSX_isFlipped(NSView* self, SEL _cmd)
@@ -1116,7 +1116,6 @@ typedef void (*wxOSX_TextEventHandlerPtr)(NSView* self, SEL _cmd, NSString *even
 typedef void (*wxOSX_EventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
 typedef BOOL (*wxOSX_PerformKeyEventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
 typedef BOOL (*wxOSX_FocusHandlerPtr)(NSView* self, SEL _cmd);
-typedef BOOL (*wxOSX_ResetCursorRectsHandlerPtr)(NSView* self, SEL _cmd);
 
 void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
@@ -1141,6 +1140,22 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         }
     }
 }
+
+void wxWidgetCocoaImpl::cursorUpdate(WX_NSEvent event, WXWidget slf, void *_cmd)
+{
+    NSCursor *cursor = (NSCursor*)GetWXPeer()->GetCursor().GetHCURSOR();
+    if (cursor == NULL)
+    {
+        wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        superimpl(slf, (SEL)_cmd, event);
+    }
+    else 
+    {
+        [cursor set];
+    }
+}
+
+
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
@@ -1259,25 +1274,6 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
         DoNotifyFocusEvent( false, otherWindow );
     }
     return r;
-}
-
-void wxWidgetCocoaImpl::resetCursorRects(WXWidget slf, void *_cmd)
-{
-    wxWindow* wxpeer = GetWXPeer();
-    if ( wxpeer )
-    {
-        NSCursor *cursor = (NSCursor*)wxpeer->GetCursor().GetHCURSOR();
-        if (cursor == NULL)
-        {
-            wxOSX_ResetCursorRectsHandlerPtr superimpl = (wxOSX_ResetCursorRectsHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-            superimpl(slf, (SEL)_cmd);
-        }
-        else
-        {
-            [slf addCursorRect: [slf bounds]
-                cursor: cursor];
-        }
-    }
 }
 
 bool wxWidgetCocoaImpl::isFlipped(WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
@@ -1489,6 +1485,8 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseEntered:), (IMP) wxOSX_mouseEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseExited:), (IMP) wxOSX_mouseEvent, "v@:@" )
 
+    wxOSX_CLASS_ADD_METHOD(c, @selector(cursorUpdate:), (IMP) wxOSX_cursorUpdate, "v@:@" )
+
     wxOSX_CLASS_ADD_METHOD(c, @selector(keyDown:), (IMP) wxOSX_keyEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(keyUp:), (IMP) wxOSX_keyEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(flagsChanged:), (IMP) wxOSX_keyEvent, "v@:@" )
@@ -1500,7 +1498,6 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(acceptsFirstResponder), (IMP) wxOSX_acceptsFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(resignFirstResponder), (IMP) wxOSX_resignFirstResponder, "c@:" )
-    wxOSX_CLASS_ADD_METHOD(c, @selector(resetCursorRects), (IMP) wxOSX_resetCursorRects, "v@:" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(isFlipped), (IMP) wxOSX_isFlipped, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_NSRect={_NSPoint=ff}{_NSSize=ff}}" )
@@ -2373,7 +2370,7 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
         }
 
     }
-    NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect;
+    NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited|NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect;
         NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: NSZeroRect options: options owner: m_osxView userInfo: nil];
     [m_osxView addTrackingArea: area];
     [area release];
@@ -2501,7 +2498,6 @@ void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
             [(NSCursor*)cursor.GetHCURSOR() set];
         }
     }
-    [[m_osxView window] invalidateCursorRectsForView:m_osxView];
 }
 
 void wxWidgetCocoaImpl::CaptureMouse()
