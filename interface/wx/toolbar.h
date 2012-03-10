@@ -6,6 +6,150 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+enum wxToolBarToolStyle
+{
+    wxTOOL_STYLE_BUTTON    = 1,
+    wxTOOL_STYLE_SEPARATOR = 2,
+    wxTOOL_STYLE_CONTROL
+};
+
+
+/** wxToolBar style flags */
+enum
+{
+    /** lay out the toolbar horizontally */
+    wxTB_HORIZONTAL,
+    wxTB_TOP,
+
+    /** lay out the toolbar vertically */
+    wxTB_VERTICAL,
+    wxTB_LEFT,
+
+    /** show 3D buttons (wxToolBarSimple only) */
+    wxTB_3DBUTTONS,
+
+    /** "flat" buttons (Win32/GTK only) */
+    wxTB_FLAT,
+
+    /** dockable toolbar (GTK only) */
+    wxTB_DOCKABLE,
+
+    /** don't show the icons (they're shown by default) */
+    wxTB_NOICONS,
+
+    /** show the text (not shown by default) */
+    wxTB_TEXT,
+
+    /** don't show the divider between toolbar and the window (Win32 only) */
+    wxTB_NODIVIDER,
+
+    /** no automatic alignment (Win32 only, useless) */
+    wxTB_NOALIGN,
+
+    /** show the text and the icons alongside, not vertically stacked (Win32/GTK) */
+    wxTB_HORZ_LAYOUT,
+    wxTB_HORZ_TEXT,
+
+    /** don't show the toolbar short help tooltips */
+    wxTB_NO_TOOLTIPS,
+
+    /** lay out toolbar at the bottom of the window */
+    wxTB_BOTTOM,
+
+    /** lay out toolbar at the right edge of the window */
+    wxTB_RIGHT
+};
+
+
+
+/**
+    @class wxToolBarToolBase
+
+    A toolbar tool represents one item on the toolbar.
+
+    It has a unique id (except for the separators), the style (telling whether
+    it is a normal button, separator or a control), the state (toggled or not,
+    enabled or not) and short and long help strings. The default
+    implementations use the short help string for the tooltip text which is
+    popped up when the mouse pointer enters the tool and the long help string
+    for the applications status bar.
+*/
+class wxToolBarToolBase : public wxObject
+{
+public:
+    wxToolBarToolBase(wxToolBarBase *tbar = NULL,
+                      int toolid = wxID_SEPARATOR,
+                      const wxString& label = wxEmptyString,
+                      const wxBitmap& bmpNormal = wxNullBitmap,
+                      const wxBitmap& bmpDisabled = wxNullBitmap,
+                      wxItemKind kind = wxITEM_NORMAL,
+                      wxObject *clientData = NULL,
+                      const wxString& shortHelpString = wxEmptyString,
+                      const wxString& longHelpString = wxEmptyString);
+
+    wxToolBarToolBase(wxToolBarBase *tbar,
+                      wxControl *control,
+                      const wxString& label);
+
+    virtual ~wxToolBarToolBase();
+
+    int GetId() const;
+
+    wxControl *GetControl() const;
+    wxToolBarBase *GetToolBar() const;
+
+    // style/kind
+    bool IsStretchable() const;
+    bool IsButton() const;
+    bool IsControl() const;
+    bool IsSeparator() const;
+    bool IsStretchableSpace() const;
+    int GetStyle() const;
+    wxItemKind GetKind() const;
+    void MakeStretchable();
+
+    // state
+    bool IsEnabled() const;
+    bool IsToggled() const;
+    bool CanBeToggled() const;
+
+    // attributes
+    const wxBitmap& GetNormalBitmap() const;
+    const wxBitmap& GetDisabledBitmap() const;
+
+    const wxBitmap& GetBitmap() const;
+    const wxString& GetLabel() const;
+
+    const wxString& GetShortHelp() const;
+    const wxString& GetLongHelp() const;
+
+    wxObject *GetClientData() const;
+
+    // modifiers: return true if the state really changed
+    virtual bool Enable(bool enable);
+    virtual bool Toggle(bool toggle);
+    virtual bool SetToggle(bool toggle);
+    virtual bool SetShortHelp(const wxString& help);
+    virtual bool SetLongHelp(const wxString& help);
+    void Toggle();
+    virtual void SetNormalBitmap(const wxBitmap& bmp);
+    virtual void SetDisabledBitmap(const wxBitmap& bmp);
+    virtual void SetLabel(const wxString& label);
+    void SetClientData(wxObject *clientData);
+    
+    // add tool to/remove it from a toolbar
+    virtual void Detach();
+    virtual void Attach(wxToolBarBase *tbar);
+
+    // these methods are only for tools of wxITEM_DROPDOWN kind (but even such
+    // tools can have a NULL associated menu)
+    virtual void SetDropdownMenu(wxMenu *menu);
+    wxMenu *GetDropdownMenu() const { return m_dropdownMenu; }
+};
+
+
+
+
 /**
     @class wxToolBar
 
@@ -337,7 +481,7 @@ public:
     */
     wxToolBarToolBase* AddTool(int toolId, const wxString& label,
                                const wxBitmap& bitmap,
-                               const wxBitmap& bmpDisabled = wxNullBitmap,
+                               const wxBitmap& bmpDisabled,
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelpString = wxEmptyString,
                                const wxString& longHelpString = wxEmptyString,
