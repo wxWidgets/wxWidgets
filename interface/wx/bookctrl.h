@@ -7,6 +7,31 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Bit flags returned by wxBookCtrl::HitTest().
+
+    Notice that wxOSX currently only returns wxBK_HITTEST_ONLABEL or
+    wxBK_HITTEST_NOWHERE and never the other values, so you should only test
+    for these two in the code that should be portable under OS X.
+ */
+enum
+{
+    /// No tab at the specified point.
+    wxBK_HITTEST_NOWHERE = 1,
+
+    /// The point is over an icon.
+    wxBK_HITTEST_ONICON  = 2,
+
+    /// The point is over a tab label.
+    wxBK_HITTEST_ONLABEL = 4,
+
+    /// The point if over a tab item but not over its icon or label.
+    wxBK_HITTEST_ONITEM  = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL,
+
+    /// The point is over the page area.
+    wxBK_HITTEST_ONPAGE  = 8
+};
+
+/**
     @class wxBookCtrlBase
 
     A book control is a convenient way of displaying multiple pages of information,
@@ -176,19 +201,10 @@ public:
         @param pt
             Specifies the point for the hit test.
         @param flags
-            Return value for detailed information. One of the following values:
-            <TABLE><TR><TD>wxBK_HITTEST_NOWHERE</TD>
-            <TD>There was no tab under this point.</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONICON</TD>
-            <TD>The point was over an icon (currently wxMSW only).</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONLABEL</TD>
-            <TD>The point was over a label (currently wxMSW only).</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONITEM</TD>
-            <TD>The point was over an item, but not on the label or icon.</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONPAGE</TD>
-            <TD>The point was over a currently selected page, not over any tab.
-            Note that this flag is present only if wxNOT_FOUND is returned.</TD></TR>
-            </TABLE>
+            Return more details about the point, see returned value is a
+            combination of ::wxBK_HITTEST_NOWHERE, ::wxBK_HITTEST_ONICON,
+            ::wxBK_HITTEST_ONLABEL, ::wxBK_HITTEST_ONITEM,
+            ::wxBK_HITTEST_ONPAGE.
 
         @return Returns the zero-based tab index or @c wxNOT_FOUND if there is no
                 tab at the specified position.
