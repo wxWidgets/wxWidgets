@@ -31,27 +31,7 @@ void wxTestableFrame::OnEvent(wxEvent& evt)
 
 int wxTestableFrame::GetEventCount(wxEventType type)
 {
-    if (type == wxEVT_ANY)
-    {
-        //Get the total event count
-        long total = 0;
-
-        for(wxLongToLongHashMap::iterator iter = m_count.begin();
-            iter != m_count.end();
-            iter++)
-        {
-            total += iter->second;
-            iter->second = 0;
-        }
-
-        return total;
-    }
-    else
-    {
-        long count = m_count[type];
-        m_count[type] = 0;
-        return count;
-    }
+    return m_count[type];
 }
 
 void wxTestableFrame::ClearEventCount(wxEventType type)
@@ -63,24 +43,19 @@ EventCounter::EventCounter(wxWindow* win, wxEventType type) : m_type(type),
                                                               m_win(win)
 
 {
-    m_frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                           wxTestableFrame);
+    m_frame = wxStaticCast(wxTheApp->GetTopWindow(), wxTestableFrame);
 
-    m_win->Connect(m_type,
-                   wxEventHandler(wxTestableFrame::OnEvent),
-                   NULL,
-                   m_frame);
+    m_win->Connect(m_type, wxEventHandler(wxTestableFrame::OnEvent),
+                   NULL, m_frame);
 }
 
 EventCounter::~EventCounter()
 {
-    m_win->Disconnect(m_type,
-                      wxEventHandler(wxTestableFrame::OnEvent),
-                      NULL,
-                      m_frame);
+    m_win->Disconnect(m_type, wxEventHandler(wxTestableFrame::OnEvent),
+                      NULL, m_frame);
 
     //This stops spurious counts from previous tests
-    m_frame->ClearEventCount(m_type);
+    Clear();
 
     m_frame = NULL;
     m_win = NULL;

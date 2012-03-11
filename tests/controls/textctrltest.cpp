@@ -147,10 +147,7 @@ void TextCtrlTestCase::ReadOnly()
                             wxDefaultPosition, wxDefaultSize,
                             wxTE_READONLY);
 
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_text, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(m_text, wxEVT_COMMAND_TEXT_UPDATED);
 
     m_text->SetFocus();
 
@@ -159,7 +156,7 @@ void TextCtrlTestCase::ReadOnly()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL("", m_text->GetValue());
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
 
     // SetEditable() is supposed to override wxTE_READONLY
     m_text->SetEditable(true);
@@ -168,7 +165,7 @@ void TextCtrlTestCase::ReadOnly()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_text->GetValue());
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
 
     delete m_text;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
@@ -178,11 +175,8 @@ void TextCtrlTestCase::ReadOnly()
 void TextCtrlTestCase::MaxLength()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_text, wxEVT_COMMAND_TEXT_UPDATED);
-    EventCounter count1(m_text, wxEVT_COMMAND_TEXT_MAXLEN);
+    EventCounter updated(m_text, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter maxlen(m_text, wxEVT_COMMAND_TEXT_MAXLEN);
 
     m_text->SetFocus();
     m_text->SetMaxLength(10);
@@ -191,27 +185,33 @@ void TextCtrlTestCase::MaxLength()
     sim.Text("abcdef");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
+    CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
 
     sim.Text("ghij");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
-    CPPUNIT_ASSERT_EQUAL(10, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+    CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
+    CPPUNIT_ASSERT_EQUAL(10, updated.GetCount());
+
+    maxlen.Clear();
+    updated.Clear();
 
     sim.Text("k");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+    CPPUNIT_ASSERT_EQUAL(1, maxlen.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
+
+    maxlen.Clear();
+    updated.Clear();
 
     m_text->SetMaxLength(0);
 
     sim.Text("k");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+    CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
 #endif
 }
 
@@ -315,10 +315,7 @@ void TextCtrlTestCase::Url()
                             wxDefaultPosition, wxDefaultSize,
                             wxTE_MULTILINE | wxTE_RICH | wxTE_AUTO_URL);
 
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_text, wxEVT_COMMAND_TEXT_URL);
+    EventCounter url(m_text, wxEVT_COMMAND_TEXT_URL);
 
     m_text->AppendText("http://www.wxwidgets.org");
 
@@ -327,7 +324,7 @@ void TextCtrlTestCase::Url()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, url.GetCount());
 #endif
 }
 

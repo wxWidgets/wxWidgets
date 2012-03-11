@@ -80,12 +80,9 @@ void ButtonTestCase::tearDown()
 
 void ButtonTestCase::Click()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     //We use the internal class EventCounter which handles connecting and
     //disconnecting the control to the wxTestableFrame
-    EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
 
     wxUIActionSimulator sim;
 
@@ -97,15 +94,12 @@ void ButtonTestCase::Click()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
+    CPPUNIT_ASSERT_EQUAL( 1, clicked.GetCount() );
 }
 
 void ButtonTestCase::Disabled()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
 
     wxUIActionSimulator sim;
 
@@ -118,7 +112,7 @@ void ButtonTestCase::Disabled()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );
+    CPPUNIT_ASSERT_EQUAL( 0, clicked.GetCount() );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

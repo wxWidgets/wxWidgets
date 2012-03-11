@@ -18,13 +18,12 @@ public:
 
     void OnEvent(wxEvent& evt);
 
-    //wxEVT_ANY get the count for all events or a type can be specified
-    int GetEventCount(wxEventType type = wxEVT_ANY);
+private:
+    friend class EventCounter;
 
-    //Used to clear an event count, after disconnecting a counter for example
+    int GetEventCount(wxEventType type);
     void ClearEventCount(wxEventType type);
 
-private:
     wxLongToLongHashMap m_count;
 };
 
@@ -33,6 +32,9 @@ class EventCounter
 public:
     EventCounter(wxWindow* win, wxEventType type);
     ~EventCounter();
+
+    int GetCount() { return m_frame->GetEventCount(m_type); }
+    void Clear() { m_frame->ClearEventCount(m_type); }
 
 private:
     wxEventType m_type;

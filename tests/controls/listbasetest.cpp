@@ -187,9 +187,6 @@ void ListBaseTestCase::ItemClick()
     if ( wxGetUserId().Lower().Matches("buildslave*") )
         return;
 
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     wxListCtrl* const list = GetList();
 
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
@@ -200,10 +197,10 @@ void ListBaseTestCase::ItemClick()
     list->SetItem(0, 1, "first column");
     list->SetItem(0, 2, "second column");
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_ITEM_SELECTED);
-    EventCounter count1(list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
-    EventCounter count2(list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
-    EventCounter count3(list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
+    EventCounter selected(list, wxEVT_COMMAND_LIST_ITEM_SELECTED);
+    EventCounter focused(list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
+    EventCounter activated(list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
+    EventCounter rclick(list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
 
     wxUIActionSimulator sim;
 
@@ -227,10 +224,10 @@ void ListBaseTestCase::ItemClick()
 
     // when the first item was selected the focus changes to it, but not
     // on subsequent clicks
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_FOCUSED));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_SELECTED));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_ACTIVATED));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, selected.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
 
     //tidy up when we are finished
     list->ClearAll();
@@ -240,12 +237,9 @@ void ListBaseTestCase::ItemClick()
 void ListBaseTestCase::KeyDown()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     wxListCtrl* const list = GetList();
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_KEY_DOWN);
+    EventCounter keydown(list, wxEVT_COMMAND_LIST_KEY_DOWN);
 
     wxUIActionSimulator sim;
 
@@ -253,20 +247,17 @@ void ListBaseTestCase::KeyDown()
     sim.Text("aAbB");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, keydown.GetCount());
 #endif
 }
 
 void ListBaseTestCase::DeleteItems()
 {
 #ifndef __WXOSX__
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     wxListCtrl* const list = GetList();
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_DELETE_ITEM);
-    EventCounter count1(list, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS);
+    EventCounter deleteitem(list, wxEVT_COMMAND_LIST_DELETE_ITEM);
+    EventCounter deleteall(list, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS);
 
 
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
@@ -294,19 +285,16 @@ void ListBaseTestCase::DeleteItems()
     list->ClearAll();
     list->DeleteAllItems();
 
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ITEM));
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));
+    CPPUNIT_ASSERT_EQUAL(2, deleteitem.GetCount());
+    CPPUNIT_ASSERT_EQUAL(2, deleteall.GetCount());
 #endif
 }
 
 void ListBaseTestCase::InsertItem()
 {
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     wxListCtrl* const list = GetList();
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_INSERT_ITEM);
+    EventCounter insert(list, wxEVT_COMMAND_LIST_INSERT_ITEM);
 
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
 
@@ -317,7 +305,7 @@ void ListBaseTestCase::InsertItem()
     list->InsertItem(item);
     list->InsertItem(1, "more text");
 
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_INSERT_ITEM));
+    CPPUNIT_ASSERT_EQUAL(2, insert.GetCount());
 }
 
 void ListBaseTestCase::Find()
@@ -401,11 +389,8 @@ void ListBaseTestCase::EditLabel()
     list->InsertItem(0, "Item 0");
     list->InsertItem(1, "Item 1");
 
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(list, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT);
-    EventCounter count1(list, wxEVT_COMMAND_LIST_END_LABEL_EDIT);
+    EventCounter beginedit(list, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT);
+    EventCounter endedit(list, wxEVT_COMMAND_LIST_END_LABEL_EDIT);
 
     wxUIActionSimulator sim;
 
@@ -416,8 +401,8 @@ void ListBaseTestCase::EditLabel()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_END_LABEL_EDIT));
+    CPPUNIT_ASSERT_EQUAL(1, beginedit.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, endedit.GetCount());
 #endif
 }
 

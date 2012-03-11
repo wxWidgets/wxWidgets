@@ -87,11 +87,8 @@ void SliderTestCase::tearDown()
 void SliderTestCase::PageUpDown()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_slider, wxEVT_SCROLL_PAGEUP);
-    EventCounter count1(m_slider, wxEVT_SCROLL_PAGEDOWN);
+    EventCounter pageup(m_slider, wxEVT_SCROLL_PAGEUP);
+    EventCounter pagedown(m_slider, wxEVT_SCROLL_PAGEDOWN);
 
     wxUIActionSimulator sim;
 
@@ -102,19 +99,16 @@ void SliderTestCase::PageUpDown()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_PAGEUP));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_PAGEDOWN));
+    CPPUNIT_ASSERT_EQUAL(1, pageup.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, pagedown.GetCount());
 #endif
 }
 
 void SliderTestCase::LineUpDown()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_slider, wxEVT_SCROLL_LINEUP);
-    EventCounter count1(m_slider, wxEVT_SCROLL_LINEDOWN);
+    EventCounter lineup(m_slider, wxEVT_SCROLL_LINEUP);
+    EventCounter linedown(m_slider, wxEVT_SCROLL_LINEDOWN);
 
     wxUIActionSimulator sim;
 
@@ -125,8 +119,8 @@ void SliderTestCase::LineUpDown()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_LINEUP));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_LINEDOWN));
+    CPPUNIT_ASSERT_EQUAL(1, lineup.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, linedown.GetCount());
 #endif
 }
 
@@ -193,12 +187,9 @@ void SliderTestCase::Range()
 void SliderTestCase::Thumb()
 {
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_slider, wxEVT_SCROLL_THUMBTRACK);
-    EventCounter count1(m_slider, wxEVT_SCROLL_THUMBRELEASE);
-    EventCounter count2(m_slider, wxEVT_SCROLL_CHANGED);
+    EventCounter track(m_slider, wxEVT_SCROLL_THUMBTRACK);
+    EventCounter release(m_slider, wxEVT_SCROLL_THUMBRELEASE);
+    EventCounter changed(m_slider, wxEVT_SCROLL_CHANGED);
 
     wxUIActionSimulator sim;
 
@@ -216,10 +207,10 @@ void SliderTestCase::Thumb()
     sim.MouseUp();
     wxYield();
 
-    CPPUNIT_ASSERT(frame->GetEventCount(wxEVT_SCROLL_THUMBTRACK) != 0);
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_THUMBRELEASE));
+    CPPUNIT_ASSERT(track.GetCount() != 0);
+    CPPUNIT_ASSERT_EQUAL(1, release.GetCount());
 #ifdef __WXMSW__
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_CHANGED));
+    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 #endif
 }

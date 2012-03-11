@@ -239,11 +239,8 @@ void TreeCtrlTestCase::SelectItemMulti()
 void TreeCtrlTestCase::ItemClick()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_tree, wxEVT_COMMAND_TREE_ITEM_ACTIVATED);
-    EventCounter count1(m_tree, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK);
+    EventCounter activated(m_tree, wxEVT_COMMAND_TREE_ITEM_ACTIVATED);
+    EventCounter rclick(m_tree, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK);
 
     wxUIActionSimulator sim;
 
@@ -262,35 +259,29 @@ void TreeCtrlTestCase::ItemClick()
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_ACTIVATED));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
 void TreeCtrlTestCase::DeleteItem()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_tree, wxEVT_COMMAND_TREE_DELETE_ITEM);
+    EventCounter deleteitem(m_tree, wxEVT_COMMAND_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
     m_tree->Delete(todelete);
     // We do not test DeleteAllItems() as under some versions of Windows events
     // are not generated.
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, deleteitem.GetCount());
 }
 
 #if wxUSE_UIACTIONSIMULATOR
 
 void TreeCtrlTestCase::LabelEdit()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_tree, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT);
-    EventCounter count1(m_tree, wxEVT_COMMAND_TREE_END_LABEL_EDIT);
+    EventCounter beginedit(m_tree, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT);
+    EventCounter endedit(m_tree, wxEVT_COMMAND_TREE_END_LABEL_EDIT);
 
     wxUIActionSimulator sim;
 
@@ -300,20 +291,17 @@ void TreeCtrlTestCase::LabelEdit()
     sim.Text("newroottext");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, beginedit.GetCount());
 
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, endedit.GetCount());
 }
 
 void TreeCtrlTestCase::KeyDown()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_tree, wxEVT_COMMAND_TREE_KEY_DOWN);
+    EventCounter keydown(m_tree, wxEVT_COMMAND_TREE_KEY_DOWN);
 
     wxUIActionSimulator sim;
 
@@ -321,22 +309,19 @@ void TreeCtrlTestCase::KeyDown()
     sim.Text("aAbB");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, keydown.GetCount());
 }
 
 #if !defined(__WXGTK__)
 
 void TreeCtrlTestCase::CollapseExpandEvents()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     m_tree->CollapseAll();
 
-    EventCounter count(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
-    EventCounter count1(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSING);
-    EventCounter count2(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDED);
-    EventCounter count3(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDING);
+    EventCounter collapsed(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
+    EventCounter collapsing(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSING);
+    EventCounter expanded(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDED);
+    EventCounter expanding(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDING);
 
     wxUIActionSimulator sim;
 
@@ -352,26 +337,23 @@ void TreeCtrlTestCase::CollapseExpandEvents()
     sim.MouseDblClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_EXPANDING));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_EXPANDED));
+    CPPUNIT_ASSERT_EQUAL(1, expanding.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, expanded.GetCount());
 
     sim.MouseDblClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_COLLAPSING));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_COLLAPSED));
+    CPPUNIT_ASSERT_EQUAL(1, collapsing.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, collapsed.GetCount());
 }
 
 void TreeCtrlTestCase::SelectionChange()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     m_tree->ExpandAll();
     m_tree->UnselectAll();
 
-    EventCounter count(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGED);
-    EventCounter count1(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGING);
+    EventCounter changed(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGED);
+    EventCounter changing(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGING);
 
     wxUIActionSimulator sim;
 
@@ -395,18 +377,15 @@ void TreeCtrlTestCase::SelectionChange()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_TREE_SEL_CHANGED));
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_TREE_SEL_CHANGING));
+    CPPUNIT_ASSERT_EQUAL(2, changed.GetCount());
+    CPPUNIT_ASSERT_EQUAL(2, changing.GetCount());
 }
 
 #endif // !__WXGTK__
 
 void TreeCtrlTestCase::Menu()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_tree, wxEVT_COMMAND_TREE_ITEM_MENU);
+    EventCounter menu(m_tree, wxEVT_COMMAND_TREE_ITEM_MENU);
     wxUIActionSimulator sim;
 
     wxRect pos;
@@ -421,7 +400,7 @@ void TreeCtrlTestCase::Menu()
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_MENU));
+    CPPUNIT_ASSERT_EQUAL(1, menu.GetCount());
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

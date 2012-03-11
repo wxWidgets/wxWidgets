@@ -83,10 +83,7 @@ void CheckBoxTestCase::tearDown()
 
 void CheckBoxTestCase::Check()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_check, wxEVT_COMMAND_CHECKBOX_CLICKED);
+    EventCounter clicked(m_check, wxEVT_COMMAND_CHECKBOX_CLICKED);
 
     //We should be unchecked by default
     CPPUNIT_ASSERT(!m_check->IsChecked());
@@ -108,7 +105,7 @@ void CheckBoxTestCase::Check()
     CPPUNIT_ASSERT(!m_check->IsChecked());
 
     //None of these should send events
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, clicked.GetCount());
 }
 
 #ifdef wxHAS_3STATE_CHECKBOX

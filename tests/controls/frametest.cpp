@@ -62,26 +62,20 @@ void FrameTestCase::tearDown()
 void FrameTestCase::Iconize()
 {
 #ifdef __WXMSW__
-    wxTestableFrame* testframe = wxStaticCast(wxTheApp->GetTopWindow(),
-                                              wxTestableFrame);
-
-    EventCounter count(m_frame, wxEVT_ICONIZE);
+    EventCounter iconize(m_frame, wxEVT_ICONIZE);
 
     m_frame->Iconize();
     m_frame->Iconize(false);
 
-    CPPUNIT_ASSERT_EQUAL(2, testframe->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(2, iconize.GetCount());
 #endif
 }
 
 void FrameTestCase::Close()
 {
-    wxTestableFrame* testframe = wxStaticCast(wxTheApp->GetTopWindow(),
-                                              wxTestableFrame);
-
-    EventCounter count(m_frame, wxEVT_CLOSE_WINDOW);
+    EventCounter close(m_frame, wxEVT_CLOSE_WINDOW);
 
     m_frame->Close();
 
-    CPPUNIT_ASSERT_EQUAL(1, testframe->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, close.GetCount());
 }

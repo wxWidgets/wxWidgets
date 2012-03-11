@@ -122,35 +122,36 @@ void BookCtrlBaseTestCase::PageManagement()
 
 void BookCtrlBaseTestCase::ChangeEvents()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     wxBookCtrlBase * const base = GetBase();
 
     base->SetSelection(0);
 
-    EventCounter count(base, GetChangingEvent());
-    EventCounter count1(base, GetChangedEvent());
+    EventCounter changing(base, GetChangingEvent());
+    EventCounter changed(base, GetChangedEvent());
 
     base->SetSelection(1);
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(GetChangingEvent()));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(GetChangedEvent()));
+    CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 
+    changed.Clear();
+    changing.Clear();
     base->ChangeSelection(2);
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(GetChangingEvent()));
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(GetChangedEvent()));
+    CPPUNIT_ASSERT_EQUAL(0, changing.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, changed.GetCount());
 
     base->AdvanceSelection();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(GetChangingEvent()));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(GetChangedEvent()));
+    CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 
+    changed.Clear();
+    changing.Clear();
     base->AdvanceSelection(false);
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(GetChangingEvent()));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(GetChangedEvent()));
+    CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 }
 
 void BookCtrlBaseTestCase::Image()

@@ -70,10 +70,7 @@ void SpinCtrlDoubleTestCase::tearDown()
 void SpinCtrlDoubleTestCase::Arrows()
 {
 #ifndef __WXGTK__
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_spin, wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED);
+    EventCounter updated(m_spin, wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED);
 
     wxUIActionSimulator sim;
 
@@ -83,13 +80,14 @@ void SpinCtrlDoubleTestCase::Arrows()
     sim.Char(WXK_UP);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
     CPPUNIT_ASSERT_EQUAL(1.0, m_spin->GetValue());
+    updated.Clear();
 
     sim.Char(WXK_DOWN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
 #endif
 }

@@ -126,12 +126,9 @@ void GridTestCase::tearDown()
 void GridTestCase::CellEdit()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_grid, wxEVT_GRID_CELL_CHANGING);
-    EventCounter count1(m_grid, wxEVT_GRID_CELL_CHANGED);
-    EventCounter count2(m_grid, wxEVT_GRID_EDITOR_CREATED);
+    EventCounter changing(m_grid, wxEVT_GRID_CELL_CHANGING);
+    EventCounter changed(m_grid, wxEVT_GRID_CELL_CHANGED);
+    EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
 
     wxUIActionSimulator sim;
 
@@ -144,31 +141,28 @@ void GridTestCase::CellEdit()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_EDITOR_CREATED));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_CHANGING));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_CHANGED));
+    CPPUNIT_ASSERT_EQUAL(1, created.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 }
 
 void GridTestCase::CellClick()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
-    EventCounter count1(m_grid, wxEVT_GRID_CELL_LEFT_DCLICK);
-    EventCounter count2(m_grid, wxEVT_GRID_CELL_RIGHT_CLICK);
-    EventCounter count3(m_grid, wxEVT_GRID_CELL_RIGHT_DCLICK);
+    EventCounter lclick(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
+    EventCounter ldclick(m_grid, wxEVT_GRID_CELL_LEFT_DCLICK);
+    EventCounter rclick(m_grid, wxEVT_GRID_CELL_RIGHT_CLICK);
+    EventCounter rdclick(m_grid, wxEVT_GRID_CELL_RIGHT_DCLICK);
 
 
     wxUIActionSimulator sim;
 
     wxRect rect = m_grid->CellToRect(0, 0);
     wxPoint point = m_grid->CalcScrolledPosition(rect.GetPosition());
-    point = frame->ClientToScreen(point + wxPoint(m_grid->GetRowLabelSize(),
-                                                  m_grid->GetColLabelSize())
-                                        + wxPoint(2, 2));
+    point = m_grid->ClientToScreen(point + wxPoint(m_grid->GetRowLabelSize(),
+                                                   m_grid->GetColLabelSize())
+                                         + wxPoint(2, 2));
 
     sim.MouseMove(point);
     wxYield();
@@ -176,44 +170,43 @@ void GridTestCase::CellClick()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_LEFT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, lclick.GetCount());
+    lclick.Clear();
 
     sim.MouseDblClick();
     wxYield();
 
     //A double click event sends a single click event first
     //test to ensure this still happens in the future
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_LEFT_CLICK));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_LEFT_DCLICK));
+    CPPUNIT_ASSERT_EQUAL(1, lclick.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, ldclick.GetCount());
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
+    rclick.Clear();
 
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_CLICK));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_DCLICK));
+    CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, rdclick.GetCount());
 #endif
 }
 
 void GridTestCase::CellSelect()
 {
 #if wxUSE_UIACTIONSIMULATOR
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_grid, wxEVT_GRID_SELECT_CELL);
+    EventCounter cell(m_grid, wxEVT_GRID_SELECT_CELL);
 
     wxUIActionSimulator sim;
 
     wxRect rect = m_grid->CellToRect(0, 0);
     wxPoint point = m_grid->CalcScrolledPosition(rect.GetPosition());
-    point = frame->ClientToScreen(point + wxPoint(m_grid->GetRowLabelSize(),
-                                                  m_grid->GetColLabelSize())
-                                        + wxPoint(4, 4));
+    point = m_grid->ClientToScreen(point + wxPoint(m_grid->GetRowLabelSize(),
+                                                   m_grid->GetColLabelSize())
+                                         + wxPoint(4, 4));
 
     sim.MouseMove(point);
     wxYield();
@@ -221,7 +214,9 @@ void GridTestCase::CellSelect()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_SELECT_CELL));
+    CPPUNIT_ASSERT_EQUAL(1, cell.GetCount());
+
+    cell.Clear();
 
     m_grid->SetGridCursor(1, 1);
     m_grid->GoToCell(1, 0);
@@ -232,20 +227,17 @@ void GridTestCase::CellSelect()
     sim.MouseDblClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(3, frame->GetEventCount(wxEVT_GRID_SELECT_CELL));
+    CPPUNIT_ASSERT_EQUAL(3, cell.GetCount());
 #endif
 }
 
 void GridTestCase::LabelClick()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_grid, wxEVT_GRID_LABEL_LEFT_CLICK);
-    EventCounter count1(m_grid, wxEVT_GRID_LABEL_LEFT_DCLICK);
-    EventCounter count2(m_grid, wxEVT_GRID_LABEL_RIGHT_CLICK);
-    EventCounter count3(m_grid, wxEVT_GRID_LABEL_RIGHT_DCLICK);
+    EventCounter lclick(m_grid, wxEVT_GRID_LABEL_LEFT_CLICK);
+    EventCounter ldclick(m_grid, wxEVT_GRID_LABEL_LEFT_DCLICK);
+    EventCounter rclick(m_grid, wxEVT_GRID_LABEL_RIGHT_CLICK);
+    EventCounter rdclick(m_grid, wxEVT_GRID_LABEL_RIGHT_DCLICK);
 
     wxUIActionSimulator sim;
 
@@ -258,17 +250,18 @@ void GridTestCase::LabelClick()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_LEFT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, lclick.GetCount());
 
     sim.MouseDblClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_LEFT_DCLICK));
+    CPPUNIT_ASSERT_EQUAL(1, ldclick.GetCount());
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
+    rclick.Clear();
 
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
     wxYield();
@@ -277,12 +270,12 @@ void GridTestCase::LabelClick()
     {
         //Right double click not supported with native headers so we get two
         //right click events
-        CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
+        CPPUNIT_ASSERT_EQUAL(2, rclick.GetCount());
     }
     else
     {
-        CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
-        CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_DCLICK));
+        CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
+        CPPUNIT_ASSERT_EQUAL(1, rdclick.GetCount());
     }
 #endif
 }
@@ -292,10 +285,7 @@ void GridTestCase::SortClick()
 #if wxUSE_UIACTIONSIMULATOR
     m_grid->SetSortingColumn(0);
 
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_grid, wxEVT_GRID_COL_SORT);
+    EventCounter sort(m_grid, wxEVT_GRID_COL_SORT);
 
     wxUIActionSimulator sim;
 
@@ -308,18 +298,15 @@ void GridTestCase::SortClick()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, sort.GetCount());
 #endif
 }
 
 void GridTestCase::Size()
 {
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_grid, wxEVT_GRID_COL_SIZE);
-    EventCounter count1(m_grid, wxEVT_GRID_ROW_SIZE);
+    EventCounter colsize(m_grid, wxEVT_GRID_COL_SIZE);
+    EventCounter rowsize(m_grid, wxEVT_GRID_ROW_SIZE);
 
     wxUIActionSimulator sim;
 
@@ -338,7 +325,7 @@ void GridTestCase::Size()
     sim.MouseUp();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_COL_SIZE));
+    CPPUNIT_ASSERT_EQUAL(1, colsize.GetCount());
 
     pt = m_grid->ClientToScreen(wxPoint(5, m_grid->GetColLabelSize() +
                                         m_grid->GetRowSize(0)));
@@ -346,17 +333,14 @@ void GridTestCase::Size()
     sim.MouseDragDrop(pt.x, pt.y, pt.x, pt.y + 50);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_ROW_SIZE));
+    CPPUNIT_ASSERT_EQUAL(1, rowsize.GetCount());
 #endif
 }
 
 void GridTestCase::RangeSelect()
 {
 #if wxUSE_UIACTIONSIMULATOR
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_grid, wxEVT_GRID_RANGE_SELECT);
+    EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECT);
 
     wxUIActionSimulator sim;
 
@@ -377,7 +361,7 @@ void GridTestCase::RangeSelect()
     sim.MouseUp();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_RANGE_SELECT));
+    CPPUNIT_ASSERT_EQUAL(1, select.GetCount());
 #endif
 }
 
@@ -656,11 +640,8 @@ void GridTestCase::CellFormatting()
 void GridTestCase::Editable()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     //As the grid is not editable we shouldn't create an editor
-    EventCounter count(m_grid, wxEVT_GRID_EDITOR_CREATED);
+    EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
 
     wxUIActionSimulator sim;
 
@@ -680,18 +661,15 @@ void GridTestCase::Editable()
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, created.GetCount());
 #endif
 }
 
 void GridTestCase::ReadOnly()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     //As the cell is readonly we shouldn't create an editor
-    EventCounter count(m_grid, wxEVT_GRID_EDITOR_CREATED);
+    EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
 
     wxUIActionSimulator sim;
 
@@ -714,7 +692,7 @@ void GridTestCase::ReadOnly()
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, created.GetCount());
 #endif
 }
 

@@ -121,11 +121,8 @@ void RichTextCtrlTestCase::CharacterEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_CHARACTER);
-    EventCounter count1(m_rich, wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED);
+    EventCounter character(m_rich, wxEVT_COMMAND_RICHTEXT_CHARACTER);
+    EventCounter content(m_rich, wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED);
 
     m_rich->SetFocus();
 
@@ -133,16 +130,19 @@ void RichTextCtrlTestCase::CharacterEvent()
     sim.Text("abcdef");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CHARACTER));
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED));
+    CPPUNIT_ASSERT_EQUAL(6, character.GetCount());
+    CPPUNIT_ASSERT_EQUAL(6, content.GetCount());
+
+    character.Clear();
+    content.Clear();
 
     //As these are not characters they shouldn't count
     sim.Char(WXK_RETURN);
     sim.Char(WXK_SHIFT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CHARACTER));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED));
+    CPPUNIT_ASSERT_EQUAL(0, character.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, content.GetCount());
 #endif
 #endif
 }
@@ -153,11 +153,8 @@ void RichTextCtrlTestCase::DeleteEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_DELETE);
-    EventCounter count1(m_rich, wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED);
+    EventCounter deleteevent(m_rich, wxEVT_COMMAND_RICHTEXT_DELETE);
+    EventCounter contentdelete(m_rich, wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED);
 
     m_rich->SetFocus();
 
@@ -167,9 +164,9 @@ void RichTextCtrlTestCase::DeleteEvent()
     sim.Char(WXK_DELETE);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_DELETE));
+    CPPUNIT_ASSERT_EQUAL(2, deleteevent.GetCount());
     //Only one as the delete doesn't delete anthing
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED));
+    CPPUNIT_ASSERT_EQUAL(1, contentdelete.GetCount());
 #endif
 #endif
 }
@@ -180,10 +177,7 @@ void RichTextCtrlTestCase::ReturnEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_RETURN);
+    EventCounter returnevent(m_rich, wxEVT_COMMAND_RICHTEXT_RETURN);
 
     m_rich->SetFocus();
 
@@ -191,44 +185,41 @@ void RichTextCtrlTestCase::ReturnEvent()
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, returnevent.GetCount());
 #endif
 #endif
 }
 
 void RichTextCtrlTestCase::StyleEvent()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED);
+    EventCounter stylechanged(m_rich, wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED);
 
     m_rich->SetValue("Sometext");
     m_rich->SetStyle(0, 8, wxTextAttr(*wxRED, *wxWHITE));
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED));
+    CPPUNIT_ASSERT_EQUAL(1, stylechanged.GetCount());
 }
 
 void RichTextCtrlTestCase::BufferResetEvent()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_BUFFER_RESET);
+    EventCounter reset(m_rich, wxEVT_COMMAND_RICHTEXT_BUFFER_RESET);
 
     m_rich->AppendText("more text!");
     m_rich->SetValue("");
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
 
+    reset.Clear();
     m_rich->AppendText("more text!");
     m_rich->Clear();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
+
+    reset.Clear();
 
     //We expect a buffer reset here as setvalue clears the existing text
     m_rich->SetValue("replace");
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
 }
 
 void RichTextCtrlTestCase::UrlEvent()
@@ -236,10 +227,7 @@ void RichTextCtrlTestCase::UrlEvent()
 #if wxUSE_UIACTIONSIMULATOR
     // Mouse up event not being caught on GTK+
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_TEXT_URL);
+    EventCounter url(m_rich, wxEVT_COMMAND_TEXT_URL);
 
     m_rich->BeginURL("http://www.wxwidgets.org");
     m_rich->WriteText("http://www.wxwidgets.org");
@@ -252,7 +240,7 @@ void RichTextCtrlTestCase::UrlEvent()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, url.GetCount());
 #endif
 #endif
 }
@@ -261,10 +249,7 @@ void RichTextCtrlTestCase::TextEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
 
     m_rich->SetFocus();
 
@@ -273,7 +258,7 @@ void RichTextCtrlTestCase::TextEvent()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
 #endif
 #endif
 }
@@ -424,10 +409,7 @@ void RichTextCtrlTestCase::Editable()
 {
 #if wxUSE_UIACTIONSIMULATOR
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
 
     m_rich->SetFocus();
 
@@ -436,14 +418,15 @@ void RichTextCtrlTestCase::Editable()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
+    updated.Clear();
 
     m_rich->SetEditable(false);
     sim.Text("gh");
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
 #endif
 #endif
 }

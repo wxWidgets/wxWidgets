@@ -94,10 +94,7 @@ void HyperlinkCtrlTestCase::Url()
 void HyperlinkCtrlTestCase::Click()
 {
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_hyperlink, wxEVT_COMMAND_HYPERLINK);
+    EventCounter hyperlink(m_hyperlink, wxEVT_COMMAND_HYPERLINK);
 
     wxUIActionSimulator sim;
 
@@ -107,7 +104,7 @@ void HyperlinkCtrlTestCase::Click()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, hyperlink.GetCount());
 #endif
 }
 

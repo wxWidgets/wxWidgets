@@ -129,17 +129,14 @@ void OwnerDrawnComboBoxTestCase::Size()
 
 void OwnerDrawnComboBoxTestCase::PopDismiss()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_combo, wxEVT_COMMAND_COMBOBOX_DROPDOWN);
-    EventCounter count1(m_combo, wxEVT_COMMAND_COMBOBOX_CLOSEUP);
+    EventCounter drop(m_combo, wxEVT_COMMAND_COMBOBOX_DROPDOWN);
+    EventCounter close(m_combo, wxEVT_COMMAND_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
     m_combo->Dismiss();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_COMBOBOX_DROPDOWN));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_COMBOBOX_CLOSEUP));
+    CPPUNIT_ASSERT_EQUAL(1, drop.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, close.GetCount());
 }
 
 void OwnerDrawnComboBoxTestCase::Sort()

@@ -97,12 +97,9 @@ void ListCtrlTestCase::EditLabel()
 #if wxUSE_UIACTIONSIMULATOR
 void ListCtrlTestCase::ColumnDrag()
 {
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_list, wxEVT_COMMAND_LIST_COL_BEGIN_DRAG);
-    EventCounter count1(m_list, wxEVT_COMMAND_LIST_COL_DRAGGING);
-    EventCounter count2(m_list, wxEVT_COMMAND_LIST_COL_END_DRAG);
+    EventCounter begindrag(m_list, wxEVT_COMMAND_LIST_COL_BEGIN_DRAG);
+    EventCounter dragging(m_list, wxEVT_COMMAND_LIST_COL_DRAGGING);
+    EventCounter enddrag(m_list, wxEVT_COMMAND_LIST_COL_END_DRAG);
 
     m_list->InsertColumn(0, "Column 0");
     m_list->InsertColumn(1, "Column 1");
@@ -126,20 +123,17 @@ void ListCtrlTestCase::ColumnDrag()
     sim.MouseUp();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG));
-    CPPUNIT_ASSERT(frame->GetEventCount(wxEVT_COMMAND_LIST_COL_DRAGGING) > 0);
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_END_DRAG));
+    CPPUNIT_ASSERT_EQUAL(1, begindrag.GetCount());
+    CPPUNIT_ASSERT(dragging.GetCount() > 0);
+    CPPUNIT_ASSERT_EQUAL(1, enddrag.GetCount());
 
     m_list->ClearAll();
 }
 
 void ListCtrlTestCase::ColumnClick()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_list, wxEVT_COMMAND_LIST_COL_CLICK);
-    EventCounter count1(m_list, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK);
+    EventCounter colclick(m_list, wxEVT_COMMAND_LIST_COL_CLICK);
+    EventCounter colrclick(m_list, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK);
 
 
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
@@ -153,8 +147,8 @@ void ListCtrlTestCase::ColumnClick()
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_CLICK));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, colclick.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, colrclick.GetCount());
 
     m_list->ClearAll();
 }

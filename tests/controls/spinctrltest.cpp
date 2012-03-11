@@ -68,10 +68,7 @@ void SpinCtrlTestCase::tearDown()
 void SpinCtrlTestCase::Arrows()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_spin, wxEVT_COMMAND_SPINCTRL_UPDATED);
+    EventCounter updated(m_spin, wxEVT_COMMAND_SPINCTRL_UPDATED);
 
     wxUIActionSimulator sim;
 
@@ -81,14 +78,15 @@ void SpinCtrlTestCase::Arrows()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, m_spin->GetValue());
+    updated.Clear();
 
     sim.Char(WXK_DOWN);
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
     CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
 #endif
 }

@@ -65,10 +65,7 @@ void CheckListBoxTestCase::tearDown()
 
 void CheckListBoxTestCase::Check()
 {
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_check, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED);
+    EventCounter toggled(m_check, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED);
 
     wxArrayString testitems;
     testitems.Add("item 0");
@@ -83,7 +80,7 @@ void CheckListBoxTestCase::Check()
     m_check->Check(1, false);
 
     //We should not get any events when changing this from code
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, toggled.GetCount());
     CPPUNIT_ASSERT_EQUAL(true, m_check->IsChecked(0));
     CPPUNIT_ASSERT_EQUAL(false, m_check->IsChecked(1));
 
