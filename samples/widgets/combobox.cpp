@@ -62,6 +62,8 @@ enum
     ComboPage_InsertText,
     ComboPage_Add,
     ComboPage_AddText,
+    ComboPage_SetFirst,
+    ComboPage_SetFirstText,
     ComboPage_AddSeveral,
     ComboPage_AddMany,
     ComboPage_Clear,
@@ -112,6 +114,7 @@ protected:
     void OnButtonClear(wxCommandEvent& event);
     void OnButtonInsert(wxCommandEvent &event);
     void OnButtonAdd(wxCommandEvent& event);
+    void OnButtonSetFirst(wxCommandEvent& event);
     void OnButtonAddSeveral(wxCommandEvent& event);
     void OnButtonAddMany(wxCommandEvent& event);
     void OnButtonSetValue(wxCommandEvent& event);
@@ -158,6 +161,7 @@ protected:
     // the text entries for "Add/change string" and "Delete" buttons
     wxTextCtrl *m_textInsert,
                *m_textAdd,
+               *m_textSetFirst,
                *m_textChange,
                *m_textSetValue,
                *m_textDelete,
@@ -182,6 +186,7 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ComboPage_Clear, ComboboxWidgetsPage::OnButtonClear)
     EVT_BUTTON(ComboPage_Insert, ComboboxWidgetsPage::OnButtonInsert)
     EVT_BUTTON(ComboPage_Add, ComboboxWidgetsPage::OnButtonAdd)
+    EVT_BUTTON(ComboPage_SetFirst, ComboboxWidgetsPage::OnButtonSetFirst)
     EVT_BUTTON(ComboPage_AddSeveral, ComboboxWidgetsPage::OnButtonAddSeveral)
     EVT_BUTTON(ComboPage_AddMany, ComboboxWidgetsPage::OnButtonAddMany)
     EVT_BUTTON(ComboPage_SetValue, ComboboxWidgetsPage::OnButtonSetValue)
@@ -325,6 +330,12 @@ void ComboboxWidgetsPage::CreateContent()
                                             wxT("&Add this string"),
                                             ComboPage_AddText,
                                             &m_textAdd);
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+    sizerRow = CreateSizerWithTextAndButton(ComboPage_SetFirst,
+                                            wxT("Change &1st string"),
+                                            ComboPage_SetFirstText,
+                                            &m_textSetFirst);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, ComboPage_AddSeveral, wxT("&Append a few strings"));
@@ -537,6 +548,17 @@ void ComboboxWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
     }
 
     m_combobox->Append(s);
+}
+
+void ComboboxWidgetsPage::OnButtonSetFirst(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_combobox->IsListEmpty() )
+    {
+        wxLogWarning("No string to change.");
+        return;
+    }
+
+    m_combobox->SetString(0, m_textSetFirst->GetValue());
 }
 
 void ComboboxWidgetsPage::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
