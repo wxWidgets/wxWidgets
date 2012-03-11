@@ -1191,6 +1191,78 @@ public:
     //@}
 };
 
+/**
+    Represents coordinates of a grid cell.
+
+    An object of this class is simply a (row, column) pair.
+ */
+class wxGridCellCoords
+{
+public:
+    /**
+        Default constructor initializes the object to invalid state.
+
+        Initially the row and column are both invalid (-1) and so operator!()
+        for an uninitialized wxGridCellCoords returns false.
+     */
+    wxGridCellCoords();
+
+    /**
+        Constructor taking a row and a column.
+     */
+    wxGridCellCoords(int row, int col);
+
+    /**
+        Return the row of the coordinate.
+     */
+    int GetRow() const;
+
+    /**
+        Set the row of the coordinate.
+     */
+    void SetRow(int n);
+
+    /**
+        Return the column of the coordinate.
+     */
+    int GetCol() const;
+
+    /**
+        Set the column of the coordinate.
+     */
+    void SetCol(int n);
+
+    /**
+        Set the row and column of the coordinate.
+     */
+    void Set(int row, int col);
+
+    /**
+        Assignment operator for coordinate types.
+     */
+    wxGridCellCoords& operator=(const wxGridCellCoords& other);
+
+    /**
+        Equality operator.
+     */
+    bool operator==(const wxGridCellCoords& other) const;
+
+    /**
+        Inequality operator.
+     */
+     bool operator!=(const wxGridCellCoords& other) const;
+
+    /**
+        Checks whether the coordinates are invalid.
+
+        Returns false only if both row and column are -1. Notice that if either
+        row or column (but not both) are -1, this method returns true even if
+        the object is invalid. This is done because objects in such state
+        should actually never exist, i.e. either both coordinates should be -1
+        or none of them should be -1.
+     */
+    bool operator!() const;
+};
 
 /**
     @class wxGridTableBase
