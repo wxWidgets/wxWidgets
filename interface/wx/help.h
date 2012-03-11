@@ -7,6 +7,15 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Help search modes for wxHelpController::KeywordSearch().
+ */
+enum wxHelpSearchMode
+{
+    wxHELP_SEARCH_INDEX,    ///< Search the index only.
+    wxHELP_SEARCH_ALL       ///< Search all entries.
+};
+
+/**
     @class wxHelpController
 
     This is a family of classes by which applications may invoke a help viewer
@@ -182,8 +191,8 @@ public:
     /**
         If the help viewer is not running, runs it, and searches for sections matching
         the given keyword. If one match is found, the file is displayed at this section.
-        The optional parameter allows the search the index (wxHELP_SEARCH_INDEX)
-        but this currently only supported by the wxHtmlHelpController.
+        The optional parameter allows to search the index (wxHELP_SEARCH_INDEX)
+        but this currently is only supported by the wxHtmlHelpController.
 
         - @e WinHelp, MS HTML Help:
           If more than one match is found, the first topic is displayed.
