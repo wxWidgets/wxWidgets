@@ -145,7 +145,7 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
         !wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(900, 900)))
     );
 
-    wxWindow* const btn1 = new wxButton(parent, wxID_ANY, "1", wxPoint(10, 10));
+    wxWindow* btn1 = new wxButton(parent, wxID_ANY, "1", wxPoint(10, 10));
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "Point over a child control corresponds to it",
@@ -160,7 +160,7 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
         wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(5, 5)))
     );
 
-    wxWindow* const btn2 = new wxButton(parent, wxID_ANY, "2", wxPoint(10, 90));
+    wxWindow* btn2 = new wxButton(parent, wxID_ANY, "2", wxPoint(10, 90));
     btn2->Disable();
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
@@ -176,4 +176,7 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
         parent,
         wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91)))
     );
+
+    wxDELETE(btn1);
+    wxDELETE(btn2);
 }
