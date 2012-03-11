@@ -2055,7 +2055,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 WXHBRUSH wxTextCtrl::MSWControlColor(WXHDC hDC, WXHWND hWnd)
 {
-    if ( !IsEnabled() && !HasFlag(wxTE_MULTILINE) )
+    if ( !IsThisEnabled() && !HasFlag(wxTE_MULTILINE) )
         return MSWControlColorDisabled(hDC);
 
     return wxTextCtrlBase::MSWControlColor(hDC, hWnd);

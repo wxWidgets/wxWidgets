@@ -758,7 +758,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 WXHBRUSH wxChoice::MSWControlColor(WXHDC hDC, WXHWND hWnd)
 {
-    if ( !IsEnabled() )
+    if ( !IsThisEnabled() )
         return MSWControlColorDisabled(hDC);
 
     return wxChoiceBase::MSWControlColor(hDC, hWnd);

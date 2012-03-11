@@ -294,7 +294,7 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
     if ( !(flags & wxCONTROL_ISSUBMENU) )
     {
         // Drawing control
-        isEnabled = IsEnabled();
+        isEnabled = IsThisEnabled();
         doDrawFocusRect = ShouldDrawFocus();
 
 #if wxUSE_UXTHEME
@@ -429,7 +429,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     wxColour bgCol = GetBackgroundColour();
 
 #if wxUSE_UXTHEME
-    const bool isEnabled = IsEnabled();
+    const bool isEnabled = IsThisEnabled();
 
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HDC hDc = GetHdcOf(*impl);
