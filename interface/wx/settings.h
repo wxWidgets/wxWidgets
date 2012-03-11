@@ -160,7 +160,6 @@ enum wxSystemMetric
     wxSYS_CURSOR_Y,           //!< Height of cursor.
     wxSYS_DCLICK_X,           //!< Width in pixels of rectangle within which two successive mouse clicks must fall to generate a double-click.
     wxSYS_DCLICK_Y,           //!< Height in pixels of rectangle within which two successive mouse clicks must fall to generate a double-click.
-    wxSYS_DCLICK_MSEC,        //!< Maximal time, in milliseconds, which may pass between subsequent clicks for a double click to be generated.
     wxSYS_DRAG_X,             //!< Width in pixels of a rectangle centered on a drag point to allow for limited movement of the mouse pointer before a drag operation begins.
     wxSYS_DRAG_Y,             //!< Height in pixels of a rectangle centered on a drag point to allow for limited movement of the mouse pointer before a drag operation begins.
     wxSYS_EDGE_X,             //!< Width of a 3D border, in pixels.
@@ -193,7 +192,7 @@ enum wxSystemMetric
                               //!< visually in situations where it would otherwise present the information
                               //!< only in audible form; zero otherwise.
     wxSYS_SWAP_BUTTONS,       //!< Non-zero if the meanings of the left and right mouse buttons are swapped; zero otherwise.
-    wxSYS_DCLICK_MSEC
+    wxSYS_DCLICK_MSEC         //!< Maximal time, in milliseconds, which may pass between subsequent clicks for a double click to be generated.
 };
 
 /**
