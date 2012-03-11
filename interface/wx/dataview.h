@@ -373,7 +373,7 @@ public:
     */
     int Compare(const wxDataViewItem& item1,
                 const wxDataViewItem& item2,
-                unsigned int column, bool ascending);
+                unsigned int column, bool ascending) const;
 
     /**
         Override this to indicate that the row has special font attributes.
@@ -2195,7 +2195,7 @@ public:
         Appends a column to the control and additionally appends a
         column to the store with the type string.
     */
-    virtual void AppendColumn( wxDataViewColumn *column );
+    virtual bool AppendColumn( wxDataViewColumn *column );
 
     /**
         Appends a column to the control and additionally appends a
@@ -2251,7 +2251,7 @@ public:
         Inserts a column to the control and additionally inserts a
         column to the store with the type string.
     */
-    virtual void InsertColumn( unsigned int pos, wxDataViewColumn *column );
+    virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *column );
 
     /**
         Inserts a column to the control and additionally inserts a
@@ -2264,7 +2264,7 @@ public:
         Prepends a column to the control and additionally prepends a
         column to the store with the type string.
     */
-    virtual void PrependColumn( wxDataViewColumn *column );
+    virtual bool PrependColumn( wxDataViewColumn *column );
 
     /**
         Prepends a column to the control and additionally prepends a
