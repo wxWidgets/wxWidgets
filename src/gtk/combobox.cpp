@@ -282,6 +282,19 @@ void wxComboBox::SetValue(const wxString& value)
         wxTextEntry::SetValue(value);
 }
 
+void wxComboBox::SetString(unsigned int n, const wxString& text)
+{
+    wxChoice::SetString(n, text);
+
+    if ( static_cast<int>(n) == GetSelection() )
+    {
+        // We also need to update the currently shown text, for consistency
+        // with wxMSW and also because it makes sense as leaving the old string
+        // in the text but not in the list would be confusing to the user.
+        SetValue(text);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // standard event handling
 // ----------------------------------------------------------------------------

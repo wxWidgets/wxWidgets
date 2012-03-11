@@ -88,6 +88,9 @@ public:
     {
         return wxItemContainer::GetStringSelection();
     }
+
+    virtual void SetString(unsigned int n, const wxString& string);
+
     virtual void Popup();
     virtual void Dismiss();
 

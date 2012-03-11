@@ -314,7 +314,15 @@ public:
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual wxString GetString(unsigned int n) const;
     virtual wxString GetStringSelection() const;
-    virtual void SetString(unsigned int n, const wxString& s);
+
+    /**
+        Changes the text of the specified combobox item.
+
+        Notice that if the item is the currently selected one, i.e. if its text
+        is displayed in the text part of the combobox, then the text is also
+        replaced with the new @a text.
+     */
+    virtual void SetString(unsigned int n, const wxString& text);
 
     virtual unsigned int GetCount() const;
 };
