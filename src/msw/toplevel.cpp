@@ -1335,32 +1335,6 @@ bool wxTopLevelWindowMSW::CanSetTransparent()
     return (os_type == wxOS_WINDOWS_NT && ver_major >= 5);
 }
 
-void wxTopLevelWindowMSW::DoEnable(bool enable)
-{
-    wxTopLevelWindowBase::DoEnable(enable);
-
-    // Enabling or disabling a window may change its appearance. Unfortunately,
-    // in at least some situation, toplevel windows don't repaint themselves,
-    // so we have to issue explicit refresh to avoid rendering artifacts.
-    //
-    // TODO: find out just what exactly is wrong here
-    //Refresh();
-
-    // JS: From observing other application behaviour, such as VS 2010, controls such
-    // as text fields and comboboxes do not indicate a disabled state when the parent
-    // is disabled due to a modal dialog being shown. Therefore I have changed these
-    // controls' behaviour to only indicate a disabled state when IsThisEnabled returns false,
-    // i.e. the application has specifically disabled each control. Since the colour
-    // no longer changes when the top-level window is disabled, this means we can avoid
-    // doing a refresh that causes a distracting flicker in some controls.
-    // Windows should probably be sending a paint event to each child control just in
-    // case the state change requires a refresh, but this would cause flicker so perhaps
-    // it's as well that it doesn't.
-    // The result of this change is to remove the flicker and also remove the distraction
-    // of individual controls greying-out due to a dialog being shown, which I think was
-    // the wrong behaviour.
-}
-
 void wxTopLevelWindowMSW::DoFreeze()
 {
     // do nothing: freezing toplevel window causes paint and mouse events

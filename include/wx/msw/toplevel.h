@@ -152,8 +152,6 @@ protected:
     virtual void DoFreeze();
     virtual void DoThaw();
 
-    virtual void DoEnable(bool enable);
-
     // helper of SetIcons(): calls gets the icon with the size specified by the
     // given system metrics (SM_C{X|Y}[SM]ICON) from the bundle and sets it
     // using WM_SETICON with the specified wParam (ICOM_SMALL or ICON_BIG);
