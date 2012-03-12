@@ -710,22 +710,7 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
             break ;
 #endif
         case kEventClassAppleEvent :
-            {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-                if ( AEProcessEvent != NULL )
-                {
-                    result = AEProcessEvent(event);
-                }
-#endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-                {
-                    EventRecord rec ;
-
-                    wxMacConvertEventToRecord( event , &rec ) ;
-                    result = AEProcessAppleEvent( &rec ) ;
-                }
-#endif
-            }
+            result = AEProcessEvent(event);
             break ;
 
         default :
@@ -981,98 +966,6 @@ void wxApp::CleanUp()
 //----------------------------------------------------------------------
 // misc initialization stuff
 //----------------------------------------------------------------------
-
-#if wxOSX_USE_CARBON && MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
-{
-    OSStatus err = noErr ;
-    bool converted = ConvertEventRefToEventRecord( event, rec) ;
-
-    if ( !converted )
-    {
-        switch ( GetEventClass( event ) )
-        {
-            case kEventClassKeyboard :
-            {
-                converted = true ;
-                switch ( GetEventKind(event) )
-                {
-                    case kEventRawKeyDown :
-                        rec->what = keyDown ;
-                        break ;
-
-                    case kEventRawKeyRepeat :
-                        rec->what = autoKey ;
-                        break ;
-
-                    case kEventRawKeyUp :
-                        rec->what = keyUp ;
-                        break ;
-
-                    case kEventRawKeyModifiersChanged :
-                        rec->what = nullEvent ;
-                        break ;
-
-                    default :
-                        converted = false ;
-                        break ;
-                }
-
-                if ( converted )
-                {
-                    UInt32 keyCode ;
-                    unsigned char charCode ;
-                    UInt32 modifiers ;
-                    GetMouse( &rec->where) ;
-                    err = GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
-                    err = GetEventParameter(event, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
-                    err = GetEventParameter(event, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode);
-                    rec->modifiers = modifiers ;
-                    rec->message = (keyCode << 8 ) + charCode ;
-                }
-            }
-            break ;
-
-            case kEventClassTextInput :
-            {
-                switch ( GetEventKind( event ) )
-                {
-                    case kEventTextInputUnicodeForKeyEvent :
-                        {
-                            EventRef rawEvent ;
-                            err = GetEventParameter(
-                                event, kEventParamTextInputSendKeyboardEvent, typeEventRef, NULL,
-                                sizeof(rawEvent), NULL, &rawEvent ) ;
-                            converted = true ;
-
-                            {
-                                UInt32 keyCode, modifiers;
-                                unsigned char charCode ;
-                                GetMouse( &rec->where) ;
-                                rec->what = keyDown ;
-                                err = GetEventParameter(rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
-                                err = GetEventParameter(rawEvent, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
-                                err = GetEventParameter(rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode);
-                                rec->modifiers = modifiers ;
-                                rec->message = (keyCode << 8 ) + charCode ;
-                            }
-                       }
-                       break ;
-
-                    default :
-                        break ;
-                }
-            }
-            break ;
-
-            default :
-                break ;
-        }
-    }
-
-    return converted ;
-}
-#endif
 
 wxApp::wxApp()
 {

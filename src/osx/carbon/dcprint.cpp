@@ -88,28 +88,11 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
     m_err = PMSessionGetCurrentPrinter(native->GetPrintSession(), &printer);
     if ( m_err == noErr )
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-        if ( PMPrinterGetOutputResolution != NULL )
+        m_err = PMPrinterGetOutputResolution( printer, native->GetPrintSettings(), &res) ;
+        if ( m_err == -9589 /* kPMKeyNotFound */ )
         {
-            {
-                m_err = PMPrinterGetOutputResolution( printer, native->GetPrintSettings(), &res) ;
-                if ( m_err == -9589 /* kPMKeyNotFound */ )
-                {
-                    m_err = noErr ;
-                    res.hRes = res.vRes = 300;
-                }
-            }
-        }
-        else
-#endif
-        {
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-            m_err = PMPrinterGetPrinterResolution(printer, kPMCurrentValue, &res);
-            if ( m_err != noErr )
-            {
-                m_err = PMGetResolution((PMPageFormat) (native->GetPageFormat()), &res);
-            }
-#endif
+            m_err = noErr ;
+            res.hRes = res.vRes = 300;
         }
     }
     else
@@ -162,28 +145,14 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
     m_err = PMSessionGetCurrentPrinter(native->GetPrintSession(), &printer);
     if (m_err == noErr)
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-        if ( PMPrinterGetOutputResolution != NULL )
+        m_err = PMPrinterGetOutputResolution( printer, native->GetPrintSettings(), &res) ;
+        if ( m_err == -9589 /* kPMKeyNotFound */ )
         {
-            m_err = PMPrinterGetOutputResolution( printer, native->GetPrintSettings(), &res) ;
-            if ( m_err == -9589 /* kPMKeyNotFound */ )
-            {
-                m_err = noErr ;
-                res.hRes = res.vRes = 300;
-            }
-        }
-        else
-#endif
-        {
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-            if ( PMPrinterGetPrinterResolution(printer, kPMCurrentValue, &res) != noErr )
-            {
-                res.hRes = res.vRes = 300;
-            }
-#endif
+            m_err = noErr ;
+            res.hRes = res.vRes = 300;
         }
     }
-
+    
     m_maxX = wxCoord((double)m_maxX * res.hRes / 72.0);
     m_maxY = wxCoord((double)m_maxY * res.vRes / 72.0);
 
