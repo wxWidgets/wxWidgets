@@ -24,6 +24,7 @@ enum wxRibbonPanelOption
     wxRIBBON_PANEL_EXT_BUTTON       = 1 << 3,
     wxRIBBON_PANEL_MINIMISE_BUTTON  = 1 << 4,
     wxRIBBON_PANEL_STRETCH          = 1 << 5,
+    wxRIBBON_PANEL_FLEXIBLE         = 1 << 6,
 
     wxRIBBON_PANEL_DEFAULT_STYLE    = 0
 };
@@ -74,6 +75,11 @@ public:
 
     wxRibbonPanel* GetExpandedDummy();
     wxRibbonPanel* GetExpandedPanel();
+
+    // Finds the best width and height given the parent's width and height
+    virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const;
+
+    long GetFlags() { return m_flags; }
 
 protected:
     virtual wxSize DoGetBestSize() const;

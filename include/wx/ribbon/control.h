@@ -55,6 +55,9 @@ public:
     virtual bool Realize();
     bool Realise() {return Realize();}
 
+    // Finds the best width and height given the parent's width and height
+    virtual wxSize GetBestSizeForParentSize(const wxSize& WXUNUSED(parentSize)) const { return GetBestSize(); }
+
 protected:
     wxRibbonArtProvider* m_art;
 

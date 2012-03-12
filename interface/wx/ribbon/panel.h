@@ -45,6 +45,12 @@
         minimises.
     @style{wxRIBBON_PANEL_STRETCH}
         Stretches a single panel to fit the parent page.
+    @style{wxRIBBON_PANEL_FLEXIBLE}
+        Allows the panel to size in both directions; currently only useful
+        when a single wxRibbonToolBar is the child of the panel, particularly
+        in vertical orientation where the number of rows is dependent on the
+        amount of horizontal space available. Set the minimum and maximum
+        toolbar rows to take full advantage of this wrapping behaviour.
     @endStyleTable
 
     @library{wxribbon}

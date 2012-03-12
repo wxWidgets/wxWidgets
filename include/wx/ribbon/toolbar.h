@@ -155,6 +155,9 @@ public:
     virtual void EnableTool(int tool_id, bool enable = true);
     virtual void ToggleTool(int tool_id, bool checked);
 
+    // Finds the best width and height given the parent's width and height
+    virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const;
+
 protected:
     friend class wxRibbonToolBarEvent;
     virtual wxSize DoGetBestSize() const;

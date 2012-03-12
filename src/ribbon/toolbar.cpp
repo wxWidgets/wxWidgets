@@ -781,7 +781,21 @@ bool wxRibbonToolBar::Realize()
     wxSize* row_sizes = new wxSize[m_nrows_max];
     wxOrientation major_axis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
         wxVERTICAL : wxHORIZONTAL;
+
     SetMinSize(wxSize(0, 0));
+    wxSize minSize(INT_MAX, INT_MAX);
+
+    // See if we're sizing flexibly (i.e. wrapping), and set min size differently
+    bool sizingFlexibly = false;
+    wxRibbonPanel* panel = wxDynamicCast(GetParent(), wxRibbonPanel);
+    if (panel && (panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE))
+        sizingFlexibly = true;
+
+    // Without this, there will be redundant horizontal space because SetMinSize will
+    // use the smallest possible height (and therefore largest width).
+    if (sizingFlexibly)
+        major_axis = wxHORIZONTAL;
+
     for(nrows = m_nrows_min; nrows <= m_nrows_max; ++nrows)
     {
         for(r = 0; r < nrows; ++r)
@@ -809,11 +823,28 @@ bool wxRibbonToolBar::Realize()
             size.IncBy(0, row_sizes[r].y);
         }
         m_sizes[nrows - m_nrows_min] = size;
+
         if(GetSizeInOrientation(size, major_axis) < smallest_area)
         {
-            SetMinSize(size);
             smallest_area = GetSizeInOrientation(size, major_axis);
+            SetMinSize(size);
         }
+
+        if (sizingFlexibly)
+        {
+            if (size.x < minSize.x)
+                minSize.x = size.x;
+            if (size.y < minSize.y)
+                minSize.y = size.y;
+        }
+    }
+
+    if (sizingFlexibly)
+    {
+        // Give it the min size in either direction regardless of row,
+        // so that we're able to vary the size of the panel according to
+        // the space the toolbar takes up.
+        SetMinSize(minSize);
     }
     delete[] row_sizes;
 
@@ -834,6 +865,20 @@ void wxRibbonToolBar::OnSize(wxSizeEvent& evt)
     int row_count = m_nrows_max;
     wxOrientation major_axis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
         wxVERTICAL : wxHORIZONTAL;
+
+    // See if we're sizing flexibly, and set min size differently
+    bool sizingFlexibly = false;
+    wxRibbonPanel* panel = wxDynamicCast(GetParent(), wxRibbonPanel);
+    if (panel && (panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE))
+        sizingFlexibly = true;
+
+    // Without this, there will be redundant horizontal space because SetMinSize will
+    // use the smallest possible height (and therefore largest width).
+    if (sizingFlexibly)
+        major_axis = wxHORIZONTAL;
+
+    wxSize bestSize = m_sizes[0];
+
     if(m_nrows_max != m_nrows_min)
     {
         int area = 0;
@@ -844,6 +889,7 @@ void wxRibbonToolBar::OnSize(wxSizeEvent& evt)
             {
                 area = GetSizeInOrientation(m_sizes[i], major_axis);
                 row_count = m_nrows_min + i;
+                bestSize = m_sizes[i];
             }
         }
     }
@@ -893,6 +939,41 @@ void wxRibbonToolBar::OnSize(wxSizeEvent& evt)
 
     delete[] rowypos;
     delete[] row_sizes;
+}
+
+// Finds the best width and height given the parents' width and height
+wxSize wxRibbonToolBar::GetBestSizeForParentSize(const wxSize& parentSize) const
+{
+    if (!m_sizes)
+        return GetMinSize();
+
+    // Choose row count with largest possible area
+    wxSize size = parentSize;
+    int row_count = m_nrows_max;
+    wxOrientation major_axis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
+        wxVERTICAL : wxHORIZONTAL;
+
+    // A toolbar should maximize its width whether vertical or horizontal, so
+    // force the major axis to be horizontal. Without this, there will be
+    // redundant horizontal space.
+    major_axis = wxHORIZONTAL;
+    wxSize bestSize = m_sizes[0];
+
+    if(m_nrows_max != m_nrows_min)
+    {
+        int area = 0;
+        for(int i = 0; i <= m_nrows_max - m_nrows_min; ++i)
+        {
+            if(m_sizes[i].x <= size.x && m_sizes[i].y <= size.y &&
+                GetSizeInOrientation(m_sizes[i], major_axis) > area)
+            {
+                area = GetSizeInOrientation(m_sizes[i], major_axis);
+                row_count = m_nrows_min + i;
+                bestSize = m_sizes[i];
+            }
+        }
+    }
+    return bestSize;
 }
 
 wxSize wxRibbonToolBar::DoGetBestSize() const

@@ -311,6 +311,24 @@ bool wxRibbonPanel::IsSizingContinuous() const
     return (m_flags & wxRIBBON_PANEL_STRETCH) != 0;
 }
 
+// Finds the best width and height given the parent's width and height
+wxSize wxRibbonPanel::GetBestSizeForParentSize(const wxSize& parentSize) const
+{
+    if (GetChildren().GetCount() == 1)
+    {
+        wxWindow* win = GetChildren().GetFirst()->GetData();
+        wxRibbonControl* control = wxDynamicCast(win, wxRibbonControl);
+        if (control)
+        {
+            wxClientDC temp_dc((wxRibbonPanel*) this);
+            wxSize childSize = control->GetBestSizeForParentSize(parentSize);
+            wxSize overallSize = m_art->GetPanelSize(temp_dc, this, childSize, NULL);
+            return overallSize;
+        }
+    }
+    return GetSize();
+}
+
 wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
                                          wxSize relative_to) const
 {
@@ -742,6 +760,13 @@ bool wxRibbonPanel::ShowExpanded()
     }
 
     wxSize size = GetBestSize();
+
+    // Special case for flexible panel layout, where GetBestSize doesn't work
+    if (GetFlags() & wxRIBBON_PANEL_FLEXIBLE)
+    {
+        size = GetBestSizeForParentSize(wxSize(400, 1000));
+    }
+
     wxPoint pos = GetExpandedPosition(wxRect(GetScreenPosition(), GetSize()),
         size, m_preferred_expand_direction).GetTopLeft();
 
@@ -750,7 +775,7 @@ bool wxRibbonPanel::ShowExpanded()
         pos, size, wxFRAME_NO_TASKBAR | wxBORDER_NONE);
 
     m_expanded_panel = new wxRibbonPanel(container, wxID_ANY,
-        GetLabel(), m_minimised_icon, wxPoint(0, 0), size, m_flags);
+        GetLabel(), m_minimised_icon, wxPoint(0, 0), size, (m_flags /* & ~wxRIBBON_PANEL_FLEXIBLE */));
 
     m_expanded_panel->SetArtProvider(m_art);
     m_expanded_panel->m_expanded_dummy = this;

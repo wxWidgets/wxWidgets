@@ -495,19 +495,30 @@ bool wxRibbonPage::Realize()
 
 void wxRibbonPage::PopulateSizeCalcArray(wxSize (wxWindow::*get_size)(void) const)
 {
+    wxSize parentSize = GetSize();
+    parentSize.x -= m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE);
+    parentSize.x -= m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
+    parentSize.y -= m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE);
+    parentSize.y -= m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
+
     if(m_size_calc_array_size != GetChildren().GetCount())
     {
         delete[] m_size_calc_array;
         m_size_calc_array_size = GetChildren().GetCount();
         m_size_calc_array = new wxSize[m_size_calc_array_size];
     }
+
     wxSize* node_size = m_size_calc_array;
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
           node = node->GetNext(), ++node_size )
     {
         wxWindow* child = node->GetData();
-        *node_size = (child->*get_size)();
+        wxRibbonPanel* panel = wxDynamicCast(child, wxRibbonPanel);
+        if (panel && panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE)
+            *node_size = panel->GetBestSizeForParentSize(parentSize);
+        else
+            *node_size = (child->*get_size)();
     }
 }
 
@@ -776,7 +787,12 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
             {
                 continue;
             }
-            if(panel->IsSizingContinuous())
+            if (panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE)
+            {
+                // Don't change if it's flexible since we already calculated the
+                // correct size for the panel.
+            }
+            else if(panel->IsSizingContinuous())
             {
                 int size = GetSizeInOrientation(*panel_size, direction);
                 if(size < smallest_size)
