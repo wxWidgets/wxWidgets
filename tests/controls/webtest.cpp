@@ -61,9 +61,13 @@ private:
     void LoadUrl(int times = 1);
 
     wxWebView* m_browser;
+    EventCounter* m_loaded;
 
     DECLARE_NO_COPY_CLASS(WebTestCase)
 };
+
+//Convenience macro
+#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS((*m_loaded), 1)
 
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( WebTestCase );
@@ -74,12 +78,14 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WebTestCase, "WebTestCase" );
 void WebTestCase::setUp()
 {
     m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY);
-    //We yield to let the initial page load
-    wxYield();
+
+    m_loaded = new EventCounter(m_browser, wxEVT_COMMAND_WEB_VIEW_LOADED);
+    ENSURE_LOADED;
 }
 
 void WebTestCase::tearDown()
 {
+    wxDELETE(m_loaded);
     wxDELETE(m_browser);
 }
 
@@ -93,7 +99,7 @@ void WebTestCase::LoadUrl(int times)
             m_browser->LoadURL("about:blank");
         else
             m_browser->LoadURL("about:");
-        wxYield();
+        ENSURE_LOADED;
     }
 }
 
@@ -103,7 +109,7 @@ void WebTestCase::Title()
 
     //Test title after loading raw html
     m_browser->SetPage("<html><title>Title</title><body>Text</body></html>", "");
-    wxYield();
+    ENSURE_LOADED;
     CPPUNIT_ASSERT_EQUAL("Title", m_browser->GetCurrentTitle());
 
     //Test title after loading a url, we yield to let events process
@@ -113,11 +119,6 @@ void WebTestCase::Title()
 
 void WebTestCase::Url()
 {
-    // FIXME: This test fails on MSW buildbot slaves although works fine on
-    //        development machine.
-    if ( wxGetUserId().Lower().Matches("buildslave*") )
-        return;
-
     CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
 
     //After first loading about:blank the next in the sequence is about:
@@ -127,26 +128,21 @@ void WebTestCase::Url()
 
 void WebTestCase::History()
 {
-    // FIXME: This test fails on MSW buildbot slaves although works fine on
-    //        development machine.
-    if ( wxGetUserId().Lower().Matches("buildslave*") )
-        return;
-
     LoadUrl(3);
 
     CPPUNIT_ASSERT(m_browser->CanGoBack());
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
 
     m_browser->GoBack();
-    wxYield();
+    ENSURE_LOADED;
 
     CPPUNIT_ASSERT(m_browser->CanGoBack());
     CPPUNIT_ASSERT(m_browser->CanGoForward());
 
     m_browser->GoBack();
-    wxYield();
+    ENSURE_LOADED;
     m_browser->GoBack();
-    wxYield();
+    ENSURE_LOADED;
 
     //We should now be at the start of the history
     CPPUNIT_ASSERT(!m_browser->CanGoBack());
@@ -169,16 +165,11 @@ void WebTestCase::HistoryEnable()
 
 void WebTestCase::HistoryClear()
 {
-    // FIXME: This test fails on MSW buildbot slaves although works fine on
-    //        development machine.
-    if ( wxGetUserId().Lower().Matches("buildslave*") )
-        return;
-
     LoadUrl(2);
 
     //Now we are in the 'middle' of the history
     m_browser->GoBack();
-    wxYield();
+    ENSURE_LOADED;
 
     CPPUNIT_ASSERT(m_browser->CanGoForward());
     CPPUNIT_ASSERT(m_browser->CanGoBack());
@@ -191,20 +182,15 @@ void WebTestCase::HistoryClear()
 
 void WebTestCase::HistoryList()
 {
-    // FIXME: This test fails on MSW buildbot slaves although works fine on
-    //        development machine.
-    if ( wxGetUserId().Lower().Matches("buildslave*") )
-        return;
-
     LoadUrl(2);
     m_browser->GoBack();
-    wxYield();
+    ENSURE_LOADED;
 
     CPPUNIT_ASSERT_EQUAL(1, m_browser->GetBackwardHistory().size());
     CPPUNIT_ASSERT_EQUAL(1, m_browser->GetForwardHistory().size());
 
     m_browser->LoadHistoryItem(m_browser->GetForwardHistory()[0]);
-    wxYield();
+    ENSURE_LOADED;
 
     CPPUNIT_ASSERT(!m_browser->CanGoForward());
     CPPUNIT_ASSERT_EQUAL(2, m_browser->GetBackwardHistory().size());
@@ -226,7 +212,7 @@ void WebTestCase::Editable()
 void WebTestCase::Selection()
 {
     m_browser->SetPage("<html><body>Some <strong>strong</strong> text</body></html>", "");
-    wxYield();
+    ENSURE_LOADED;
     CPPUNIT_ASSERT(!m_browser->HasSelection());
 
     m_browser->SelectAll();
@@ -234,20 +220,15 @@ void WebTestCase::Selection()
     CPPUNIT_ASSERT(m_browser->HasSelection());
     CPPUNIT_ASSERT_EQUAL("Some strong text", m_browser->GetSelectedText());
     //We lower case the result as ie returns tags in uppercase
-    CPPUNIT_ASSERT_EQUAL("some <strong>strong</strong> text", 
+    CPPUNIT_ASSERT_EQUAL("some <strong>strong</strong> text",
                          m_browser->GetSelectedSource().Lower());
 
     m_browser->ClearSelection();
-    CPPUNIT_ASSERT(!m_browser->HasSelection());  
+    CPPUNIT_ASSERT(!m_browser->HasSelection());
 }
 
 void WebTestCase::Zoom()
 {
-    // FIXME: This test fails on MSW buildbot slaves although works fine on
-    //        development machine.
-    if ( wxGetUserId().Lower().Matches("buildslave*") )
-        return;
-
     if(m_browser->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT))
     {
         m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
@@ -279,9 +260,11 @@ void WebTestCase::RunScript()
 void WebTestCase::SetPage()
 {
     m_browser->SetPage("<html><body>text</body></html>", "");
+    ENSURE_LOADED;
     CPPUNIT_ASSERT_EQUAL("text", m_browser->GetPageText());
 
     m_browser->SetPage("<html><body>other text</body></html>", "");
+    ENSURE_LOADED;
     CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
 }
 
