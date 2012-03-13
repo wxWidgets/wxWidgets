@@ -321,7 +321,8 @@ wxSize wxRibbonPanel::GetBestSizeForParentSize(const wxSize& parentSize) const
         if (control)
         {
             wxClientDC temp_dc((wxRibbonPanel*) this);
-            wxSize childSize = control->GetBestSizeForParentSize(parentSize);
+            wxSize clientParentSize = m_art->GetPanelClientSize(temp_dc, this, parentSize, NULL);
+            wxSize childSize = control->GetBestSizeForParentSize(clientParentSize);
             wxSize overallSize = m_art->GetPanelSize(temp_dc, this, childSize, NULL);
             return overallSize;
         }
