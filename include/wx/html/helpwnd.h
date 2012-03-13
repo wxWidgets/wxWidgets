@@ -273,7 +273,7 @@ private:
 enum
 {
     //wxID_HTML_HELPFRAME = wxID_HIGHEST + 1,
-    wxID_HTML_PANEL = wxID_HIGHEST + 2,
+    wxID_HTML_PANEL = wxID_HIGHEST + 10,
     wxID_HTML_BACK,
     wxID_HTML_FORWARD,
     wxID_HTML_UPNODE,
