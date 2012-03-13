@@ -358,8 +358,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 
 #ifdef __WXMSW__
     wxBorder htmlWindowBorder = GetDefaultBorder();
-    if (htmlWindowBorder == wxBORDER_SUNKEN)
-        htmlWindowBorder = wxBORDER_SIMPLE;
+    htmlWindowBorder = wxBORDER_THEME;
 #else
     wxBorder htmlWindowBorder = wxBORDER_SUNKEN;
 #endif
