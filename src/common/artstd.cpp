@@ -219,7 +219,12 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
                 int bmp_w = bmp.GetWidth();
                 int bmp_h = bmp.GetHeight();
 
-                if ((bmp_h < bestSize.x) && (bmp_w < bestSize.y))
+                if (bmp_w == 16 && bmp_h == 15 && bestSize == wxSize(16, 16))
+                {
+                    // Do nothing in this special but quite common case, because scaling
+                    // with only a pixel difference will look horrible.
+                }
+                else if ((bmp_h < bestSize.x) && (bmp_w < bestSize.y))
                 {
                     // the caller wants default size, which is larger than
                     // the image we have; to avoid degrading it visually by
