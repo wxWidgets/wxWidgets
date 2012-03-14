@@ -175,12 +175,23 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& name)
     : wxFileDialogBase()
 {
+    Create(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name);
+}
+
+bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
+                           const wxString& defaultDir,
+                           const wxString& defaultFileName,
+                           const wxString& wildCard,
+                           long style, const wxPoint& pos,
+                           const wxSize& sz,
+                           const wxString& name)
+{
     parent = GetParentForModalDialog(parent, style);
 
     if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName,
                                   wildCard, style, pos, sz, name))
     {
-        return;
+        return false;
     }
 
     if (!PreCreation(parent, pos, wxDefaultSize) ||
@@ -188,7 +199,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                 wxDefaultValidator, wxT("filedialog")))
     {
         wxFAIL_MSG( wxT("wxFileDialog creation failed") );
-        return;
+        return false;
     }
 
     GtkFileChooserAction gtk_action;
@@ -311,6 +322,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                          G_CALLBACK(gtk_filedialog_update_preview_callback),
                          previewImage);
     }
+
+    return true;
 }
 
 wxFileDialog::~wxFileDialog()

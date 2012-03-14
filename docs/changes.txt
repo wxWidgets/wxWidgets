@@ -499,6 +499,7 @@ GTK:
 
 - Implement support for wxBG_STYLE_TRANSPARENT (Armel Asselin).
 - Fix wxNotebook best size calculation.
+- Implement wxDirDialog::Create() and wxFileDialog::Create() (vinayakgarg).
 
 MSW:
 

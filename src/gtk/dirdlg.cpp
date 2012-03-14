@@ -99,6 +99,17 @@ wxDirDialog::wxDirDialog(wxWindow* parent,
                          const wxSize& WXUNUSED(sz),
                          const wxString& WXUNUSED(name))
 {
+    Create(parent, title, defaultPath, style, pos);
+}
+
+bool wxDirDialog::Create(wxWindow* parent,
+                         const wxString& title,
+                         const wxString& defaultPath,
+                         long style,
+                         const wxPoint& pos,
+                         const wxSize& WXUNUSED(sz),
+                         const wxString& WXUNUSED(name))
+{
     m_message = title;
 
     parent = GetParentForModalDialog(parent, style);
@@ -108,7 +119,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent,
                 wxDefaultValidator, wxT("dirdialog")))
     {
         wxFAIL_MSG( wxT("wxDirDialog creation failed") );
-        return;
+        return false;
     }
 
     GtkWindow* gtk_parent = NULL;
@@ -147,6 +158,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent,
     if ( !defaultPath.empty() )
         gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
                 defaultPath.fn_str() );
+    return true;
 }
 
 void wxDirDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
