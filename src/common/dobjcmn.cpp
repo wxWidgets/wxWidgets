@@ -234,7 +234,12 @@ bool wxDataObjectComposite::SetData(const wxDataFormat& format,
                  wxT("unsupported format in wxDataObjectComposite"));
 
     m_receivedFormat = format;
-    return dataObj->SetData( len, buf );
+
+    // Notice that we must pass "format" here as wxTextDataObject, that we can
+    // have as one of our "simple" sub-objects actually is not that simple and
+    // can support multiple formats (ASCII/UTF-8/UTF-16/...) and so needs to
+    // know which one it is given.
+    return dataObj->SetData( format, len, buf );
 }
 
 // ----------------------------------------------------------------------------
