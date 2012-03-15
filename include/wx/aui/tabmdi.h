@@ -101,6 +101,7 @@ protected:
     void AddWindowMenu(wxMenuBar *pMenuBar);
 
     void DoHandleMenu(wxCommandEvent &event);
+    void DoHandleUpdateUI(wxUpdateUIEvent &event);
 #endif // wxUSE_MENUS
 
     virtual bool ProcessEvent(wxEvent& event);

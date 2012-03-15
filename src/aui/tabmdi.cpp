@@ -56,6 +56,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxAuiMDIParentFrame, wxFrame)
 BEGIN_EVENT_TABLE(wxAuiMDIParentFrame, wxFrame)
 #if wxUSE_MENUS
     EVT_MENU (wxID_ANY, wxAuiMDIParentFrame::DoHandleMenu)
+    EVT_UPDATE_UI (wxID_ANY, wxAuiMDIParentFrame::DoHandleUpdateUI)
 #endif
 END_EVENT_TABLE()
 
@@ -343,6 +344,35 @@ void wxAuiMDIParentFrame::DoHandleMenu(wxCommandEvent& event)
         case wxWINDOWPREV:
             ActivatePrevious();
             break;
+        default:
+            event.Skip();
+    }
+}
+
+void wxAuiMDIParentFrame::DoHandleUpdateUI(wxUpdateUIEvent& event)
+{
+    switch (event.GetId())
+    {
+        case wxWINDOWCLOSE:
+        case wxWINDOWCLOSEALL:
+        {
+            wxAuiMDIClientWindow* client_window = GetClientWindow();
+            wxCHECK_RET(client_window, wxS("Missing MDI Client Window"));
+            size_t pages = client_window->GetPageCount();
+            event.Enable(pages >= 1);
+            break;
+        }
+
+        case wxWINDOWNEXT:
+        case wxWINDOWPREV:
+        {
+            wxAuiMDIClientWindow* client_window = GetClientWindow();
+            wxCHECK_RET(client_window, wxS("Missing MDI Client Window"));
+            size_t pages = client_window->GetPageCount();
+            event.Enable(pages >= 2);
+            break;
+        }
+
         default:
             event.Skip();
     }
