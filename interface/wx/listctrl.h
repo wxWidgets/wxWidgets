@@ -971,8 +971,24 @@ public:
     bool SetItemPtrData(long item, wxUIntPtr data);
 
     /**
-        Sets the item state. For a list of state flags, see SetItem().
-        The @b stateMask indicates which state flags are valid.
+        Sets the item state.
+
+        The @a stateMask is a combination of @c wxLIST_STATE_XXX constants
+        described in wxListItem documentation. For each of the bits specified
+        in @a stateMask, the corresponding state is set or cleared depending on
+        whether @a state argument contains the same bit or not.
+
+        So to select an item you can use
+        @code
+            list->SetItemState(item, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+        @endcode
+        while to deselect it you should use
+        @code
+            list->SetItemState(item, 0, wxLIST_STATE_SELECTED);
+        @endcode
+
+        Consider using wxListView if possible to avoid dealing with this
+        error-prone and confusing method.
     */
     bool SetItemState(long item, long state, long stateMask);
 
