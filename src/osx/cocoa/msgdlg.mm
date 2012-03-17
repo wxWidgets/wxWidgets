@@ -94,10 +94,10 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
         wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
 
-        wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
-        wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
-        wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding()) ;
-        wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
+        wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), GetFont().GetEncoding() );
+        wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), GetFont().GetEncoding() );
+        wxCFStringRef cfOKString( wxControl::GetLabelText(GetOKLabel()), GetFont().GetEncoding()) ;
+        wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()), GetFont().GetEncoding() );
 
         NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
                 
@@ -227,10 +227,10 @@ void* wxMessageDialog::ConstructNSAlert()
     NSAlert* alert = [[NSAlert alloc] init];
     NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
 
-    wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
+    wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), GetFont().GetEncoding() );
+    wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), GetFont().GetEncoding() );
+    wxCFStringRef cfOKString( wxControl::GetLabelText(GetOKLabel()), GetFont().GetEncoding() );
+    wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()), GetFont().GetEncoding() );
 
     wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
     wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
