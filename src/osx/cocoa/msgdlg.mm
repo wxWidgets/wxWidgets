@@ -18,6 +18,7 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/control.h"
 #include "wx/thread.h"
 #include "wx/osx/private.h"
 
