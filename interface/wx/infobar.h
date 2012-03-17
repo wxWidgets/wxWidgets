@@ -150,7 +150,7 @@ public:
         This method hides the window and lays out the parent window to account
         for its disappearance (unlike a simple Hide()).
      */
-    void Dismiss();
+    virtual void Dismiss();
 
     /**
         Remove a button previously added by AddButton().
