@@ -175,8 +175,7 @@ def main(scriptName, args):
         "installdir"    : ("", "Directory where built wxWidgets will be installed"),
         "mac_distdir"   : (None, "If set on Mac, will create an installer package in the specified dir."),
         "mac_universal_binary" 
-                        : (False, "Build Mac version as a universal binary"),
-        "mac_arch"      : ("", "Build just the specified architecture on Mac"),
+                        : ("", "Comma separated list of architectures to include in the Mac universal binary"),
         "mac_framework" : (False, "Install the Mac build as a framework"),
         "mac_framework_prefix" 
                         : (defFwPrefix, "Prefix where the framework should be installed. Default: %s" % defFwPrefix),
@@ -237,9 +236,6 @@ def main(scriptName, args):
         if options.osx_cocoa:
             configure_opts.append("--with-osx_cocoa")
 
-        if  options.mac_arch: 
-            configure_opts.append("--enable-macosx_arch=%s" % options.mac_arch)
-            
         wxpy_configure_opts = [
                             "--with-opengl",
                             "--enable-sound",
@@ -307,11 +303,6 @@ def main(scriptName, args):
             # TODO: Should options.install be automatically turned on if the
             # mac_framework flag is given?
             
-            # The framework build is always a universal binary, unless we are
-            # explicitly told to build only one architecture
-            if not options.mac_arch:
-                options.mac_universal_binary = True
-                
             # framework builds always need to be monolithic
             if not "--enable-monolithic" in configure_opts:
                 configure_opts.append("--enable-monolithic")
@@ -329,7 +320,7 @@ def main(scriptName, args):
                     shutil.rmtree(frameworkRootDir)
 
         if options.mac_universal_binary: 
-            configure_opts.append("--enable-universal_binary")
+            configure_opts.append("--enable-universal_binary=%s" % options.mac_universal_binary)
 
             
         print "Configure options: " + `configure_opts`
