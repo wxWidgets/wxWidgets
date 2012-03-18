@@ -277,7 +277,7 @@ static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
 // set this button as being currently default
 void wxButton::SetTmpDefault()
 {
-    wxTopLevelWindow * const tlw = GetTLWParentIfNotBeingDeleted(GetParent());
+    wxTopLevelWindow * const tlw = GetTLWParentIfNotBeingDeleted(this);
     if ( !tlw )
         return;
 
@@ -291,7 +291,7 @@ void wxButton::SetTmpDefault()
 // unset this button as currently default, it may still stay permanent default
 void wxButton::UnsetTmpDefault()
 {
-    wxTopLevelWindow * const tlw = GetTLWParentIfNotBeingDeleted(GetParent());
+    wxTopLevelWindow * const tlw = GetTLWParentIfNotBeingDeleted(this);
     if ( !tlw )
         return;
 
