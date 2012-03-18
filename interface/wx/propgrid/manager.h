@@ -467,6 +467,11 @@ public:
     */
     void SetSplitterLeft( bool subProps = false, bool allPages = true );
 
+    /** Moves splitter as left as possible on an individual page, while still allowing all
+        labels to be shown in full.
+    */
+    void SetPageSplitterLeft(int page, bool subProps = false);
+
     /**
         Sets splitter position on individual page.
 

@@ -1830,6 +1830,27 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
 #endif
 }
 
+void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
+{
+    wxASSERT_MSG( (page < (int) GetPageCount()),
+                  wxT("SetPageSplitterLeft() has no effect until pages have been added") );
+
+    if (page < (int) GetPageCount())
+    {
+        wxClientDC dc(this);
+        dc.SetFont(m_pPropGrid->GetFont());
+
+        int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[page]->m_properties, 0, subProps );
+        maxW += m_pPropGrid->m_marginWidth;
+        SetPageSplitterPosition( page, maxW );
+
+#if wxUSE_HEADERCTRL
+        if ( m_showHeader )
+            m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
+    }
+}
+
 // -----------------------------------------------------------------------
 
 void wxPropertyGridManager::OnPropertyGridSelect( wxPropertyGridEvent& event )
