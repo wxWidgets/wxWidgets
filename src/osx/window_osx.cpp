@@ -2713,7 +2713,7 @@ bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
 
 bool wxWindowMac::UnregisterHotKey(int hotkeyId)
 {
-    for ( unsigned i = s_hotkeys.size()-1; i>=0; -- i )
+    for ( int i = ((int)s_hotkeys.size())-1; i>=0; -- i )
     {
         if ( s_hotkeys[i].keyId == hotkeyId )
         {
