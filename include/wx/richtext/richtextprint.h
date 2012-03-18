@@ -169,8 +169,8 @@ public:
     bool PreviewBuffer(const wxRichTextBuffer& buffer);
 
     /// Print the file or buffer
-    bool PrintFile(const wxString& richTextFile);
-    bool PrintBuffer(const wxRichTextBuffer& buffer);
+    bool PrintFile(const wxString& richTextFile, bool showPrintDialog = true);
+    bool PrintBuffer(const wxRichTextBuffer& buffer, bool showPrintDialog = true);
 
     /// Shows page setup dialog
     void PageSetup();
@@ -226,7 +226,7 @@ public:
 protected:
     virtual wxRichTextPrintout *CreatePrintout();
     virtual bool DoPreview(wxRichTextPrintout *printout1, wxRichTextPrintout *printout2);
-    virtual bool DoPrint(wxRichTextPrintout *printout);
+    virtual bool DoPrint(wxRichTextPrintout *printout, bool showPrintDialog);
 
 private:
     wxPrintData*                m_printData;

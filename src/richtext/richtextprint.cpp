@@ -537,7 +537,7 @@ bool wxRichTextPrinting::PreviewBuffer(const wxRichTextBuffer& buffer)
     return DoPreview(p1, p2);
 }
 
-bool wxRichTextPrinting::PrintFile(const wxString& richTextFile)
+bool wxRichTextPrinting::PrintFile(const wxString& richTextFile, bool showPrintDialog)
 {
     SetRichTextBufferPrinting(new wxRichTextBuffer);
 
@@ -550,19 +550,19 @@ bool wxRichTextPrinting::PrintFile(const wxString& richTextFile)
     wxRichTextPrintout *p = CreatePrintout();
     p->SetRichTextBuffer(m_richTextBufferPrinting);
 
-    bool ret = DoPrint(p);
+    bool ret = DoPrint(p, showPrintDialog);
     delete p;
     return ret;
 }
 
-bool wxRichTextPrinting::PrintBuffer(const wxRichTextBuffer& buffer)
+bool wxRichTextPrinting::PrintBuffer(const wxRichTextBuffer& buffer, bool showPrintDialog)
 {
     SetRichTextBufferPrinting(new wxRichTextBuffer(buffer));
 
     wxRichTextPrintout *p = CreatePrintout();
     p->SetRichTextBuffer(m_richTextBufferPrinting);
 
-    bool ret = DoPrint(p);
+    bool ret = DoPrint(p, showPrintDialog);
     delete p;
     return ret;
 }
@@ -587,12 +587,12 @@ bool wxRichTextPrinting::DoPreview(wxRichTextPrintout *printout1, wxRichTextPrin
     return true;
 }
 
-bool wxRichTextPrinting::DoPrint(wxRichTextPrintout *printout)
+bool wxRichTextPrinting::DoPrint(wxRichTextPrintout *printout, bool showPrintDialog)
 {
     wxPrintDialogData printDialogData(*GetPrintData());
     wxPrinter printer(&printDialogData);
 
-    if (!printer.Print(m_parentWindow, printout, true))
+    if (!printer.Print(m_parentWindow, printout, showPrintDialog))
     {
         return false;
     }
