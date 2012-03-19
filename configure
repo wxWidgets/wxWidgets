@@ -50574,6 +50574,10 @@ if test "$wxUSE_TASKBARICON" = "yes"; then
 #define wxUSE_TASKBARICON 1
 _ACEOF
 
+                cat >>confdefs.h <<\_ACEOF
+#define wxUSE_TASKBARICON_BALLOONS 1
+_ACEOF
+
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
 fi
 

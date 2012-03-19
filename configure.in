@@ -7225,6 +7225,10 @@ fi
 
 if test "$wxUSE_TASKBARICON" = "yes"; then
     AC_DEFINE(wxUSE_TASKBARICON)
+    dnl This is used under MSW, just enable it always without testing for the
+    dnl toolkit nor providing a separate option for it because it's totally
+    dnl harmless to have it defined even if it's unnecessary.
+    AC_DEFINE(wxUSE_TASKBARICON_BALLOONS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
 fi
 
