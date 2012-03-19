@@ -773,7 +773,7 @@ wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_DROP;
            item, in this case wxDataViewEvent::GetItem() simply returns an
            invalid item.
     @event{EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICKED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
@@ -2895,7 +2895,7 @@ public:
     @event{EVT_DATAVIEW_ITEM_CONTEXT_MENU(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICKED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
@@ -2977,7 +2977,7 @@ public:
     void SetColumn(int col);
 
     /**
-        For @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only.
+        For @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK only.
     */
     void SetDataViewColumn(wxDataViewColumn* col);
 
