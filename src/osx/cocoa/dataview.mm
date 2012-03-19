@@ -2995,6 +2995,8 @@ bool wxDataViewIconTextRenderer::MacRender()
         iconText << GetValue();
         if (iconText.GetIcon().IsOk())
             [cell setImage:[[wxBitmap(iconText.GetIcon()).GetNSImage() retain] autorelease]];
+        else
+            [cell setImage:nil];
         [cell setStringValue:[[wxCFStringRef(iconText.GetText()).AsNSString() retain] autorelease]];
         return true;
     }
