@@ -811,7 +811,7 @@ public:
 
     // these are pure virtual in wxGridTableBase
     //
-    virtual int GetNumberRows() { return m_data.size(); }
+    virtual int GetNumberRows() { return static_cast<int>(m_data.size()); }
     virtual int GetNumberCols() { return m_numCols; }
     virtual wxString GetValue( int row, int col );
     virtual void SetValue( int row, int col, const wxString& s );

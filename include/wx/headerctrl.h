@@ -352,7 +352,10 @@ private:
     void Init();
 
     // bring the column count in sync with the number of columns we store
-    void UpdateColumnCount() { SetColumnCount(m_cols.size()); }
+    void UpdateColumnCount()
+    {
+        SetColumnCount(static_cast<int>(m_cols.size()));
+    }
 
 
     // all our current columns
