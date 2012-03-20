@@ -887,6 +887,17 @@ void AdjustCharEventKeyCodes(wxKeyEvent& event)
 
 } // anonymous namespace
 
+// If a widget does not handle a key or mouse event, GTK+ sends it up the
+// parent chain until it is handled. These events are not supposed to propagate
+// in wxWidgets, so this code avoids handling them in any parent wxWindow,
+// while still allowing the event to propagate so things like native keyboard
+// navigation will work.
+#define wxPROCESS_EVENT_ONCE(EventType, event) \
+    static EventType eventPrev; \
+    if (memcmp(&eventPrev, event, sizeof(EventType)) == 0) \
+        return false; \
+    eventPrev = *event
+
 extern "C" {
 static gboolean
 gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
@@ -897,6 +908,8 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         return FALSE;
     if (g_blockEventsOnDrag)
         return FALSE;
+
+    wxPROCESS_EVENT_ONCE(GdkEventKey, gdk_event);
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     bool ret = false;
@@ -1069,6 +1082,8 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
     if (g_blockEventsOnDrag)
         return FALSE;
 
+    wxPROCESS_EVENT_ONCE(GdkEventKey, gdk_event);
+
     wxKeyEvent event( wxEVT_KEY_UP );
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
@@ -1077,21 +1092,6 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
     }
 
     return win->GTKProcessEvent(event);
-}
-}
-
-//-----------------------------------------------------------------------------
-// key and mouse events, after, from m_widget
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gboolean key_and_mouse_event_after(GtkWidget* widget, GdkEventKey*, wxWindow*)
-{
-    // If a widget does not handle a key or mouse event, GTK+ sends it up the
-    // parent chain until it is handled. These events are not supposed to
-    // propagate in wxWidgets, so prevent it unless widget is in a native
-    // container.
-    return WX_IS_PIZZA(gtk_widget_get_parent(widget));
 }
 }
 
@@ -1279,6 +1279,8 @@ gtk_window_button_press_callback( GtkWidget *widget,
                                   GdkEventButton *gdk_event,
                                   wxWindowGTK *win )
 {
+    wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
+
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     g_lastButtonNumber = gdk_event->button;
@@ -1476,6 +1478,8 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
                                     GdkEventButton *gdk_event,
                                     wxWindowGTK *win )
 {
+    wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
+
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     g_lastButtonNumber = 0;
@@ -1539,6 +1543,8 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
                                    GdkEventMotion *gdk_event,
                                    wxWindowGTK *win )
 {
+    wxPROCESS_EVENT_ONCE(GdkEventMotion, gdk_event);
+
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     if (gdk_event->is_hint)
@@ -2429,18 +2435,6 @@ void wxWindowGTK::PostCreation()
     GtkWidget *connect_widget = GetConnectWidget();
 
     ConnectWidget( connect_widget );
-
-    // connect handler to prevent events from propagating up parent chain
-    g_signal_connect_after(m_widget,
-        "key_press_event", G_CALLBACK(key_and_mouse_event_after), this);
-    g_signal_connect_after(m_widget,
-        "key_release_event", G_CALLBACK(key_and_mouse_event_after), this);
-    g_signal_connect_after(m_widget,
-        "button_press_event", G_CALLBACK(key_and_mouse_event_after), this);
-    g_signal_connect_after(m_widget,
-        "button_release_event", G_CALLBACK(key_and_mouse_event_after), this);
-    g_signal_connect_after(m_widget,
-        "motion_notify_event", G_CALLBACK(key_and_mouse_event_after), this);
 
     // We cannot set colours, fonts and cursors before the widget has been
     // realized, so we do this directly after realization -- unless the widget
