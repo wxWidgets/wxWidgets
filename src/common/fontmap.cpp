@@ -518,10 +518,4 @@ bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
     return wxTestFontEncoding(info);
 }
 
-#if wxUSE_FONTDLG
-wxFontDialogBase::~wxFontDialogBase()
-{
-}
-#endif
-
 #endif // wxUSE_FONTMAP

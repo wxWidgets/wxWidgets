@@ -37,8 +37,6 @@ public:
     bool Create(wxWindow *parent, const wxFontData& data)
         { InitFontData(&data); return Create(parent); }
 
-    virtual ~wxFontDialogBase();
-
     // retrieve the font data
     const wxFontData& GetFontData() const { return m_fontData; }
     wxFontData& GetFontData() { return m_fontData; }
