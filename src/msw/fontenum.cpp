@@ -187,9 +187,18 @@ bool wxFontEnumeratorHelper::OnFont(const LPLOGFONT lf,
         {
             wxConstCast(this, wxFontEnumeratorHelper)->m_charsets.Add(cs);
 
+#if wxUSE_FONTMAP
             wxFontEncoding enc = wxGetFontEncFromCharSet(cs);
             return m_fontEnum->OnFontEncoding(lf->lfFaceName,
                                               wxFontMapper::GetEncodingName(enc));
+#else // !wxUSE_FONTMAP
+            // Just use some unique and, hopefully, understandable, name.
+            return m_fontEnum->OnFontEncoding
+                               (
+                                lf->lfFaceName,
+                                wxString::Format(wxS("Code page %d"), cs)
+                               );
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
         }
         else
         {
