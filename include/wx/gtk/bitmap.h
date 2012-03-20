@@ -30,13 +30,16 @@ public:
     virtual ~wxMask();
 
     // implementation
-    GdkPixmap* m_bitmap;
+    wxMask(GdkPixmap*);
     GdkPixmap* GetBitmap() const;
 
 protected:
     virtual void FreeData();
     virtual bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour);
     virtual bool InitFromMonoBitmap(const wxBitmap& bitmap);
+
+private:
+    GdkPixmap* m_bitmap;
 
     DECLARE_DYNAMIC_CLASS(wxMask)
 };

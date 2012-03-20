@@ -116,6 +116,11 @@ wxMask::wxMask( const wxBitmap& bitmap )
     InitFromMonoBitmap(bitmap);
 }
 
+wxMask::wxMask(GdkPixmap* bitmap)
+{
+    m_bitmap = bitmap;
+}
+
 wxMask::~wxMask()
 {
     if (m_bitmap)
@@ -300,8 +305,7 @@ wxBitmap::wxBitmap(const char* const* bits)
 
     if (M_BMPDATA->m_pixmap != NULL && mask != NULL)
     {
-        M_BMPDATA->m_mask = new wxMask;
-        M_BMPDATA->m_mask->m_bitmap = mask;
+        M_BMPDATA->m_mask = new wxMask(mask);
     }
 }
 
@@ -410,9 +414,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
                 bit_index = (bit_index + 7) & ~7u;
             }
         }
-        wxMask* mask = new wxMask;
-        mask->m_bitmap = gdk_bitmap_create_from_data(M_BMPDATA->m_pixmap, (char*)out, w, h);
-        SetMask(mask);
+        SetMask(new wxMask(gdk_bitmap_create_from_data(M_BMPDATA->m_pixmap, (char*)out, w, h)));
         delete[] out;
     }
     return IsOk();
@@ -628,14 +630,16 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
             newRef->m_pixmap, gc, bmpData->m_pixmap, rect.x, rect.y, 0, 0, w, h);
         g_object_unref(gc);
     }
-    if (bmpData->m_mask && bmpData->m_mask->m_bitmap)
+    GdkPixmap* mask = NULL;
+    if (bmpData->m_mask)
+        mask = bmpData->m_mask->GetBitmap();
+    if (mask)
     {
-        GdkPixmap* sub_mask = gdk_pixmap_new(bmpData->m_mask->m_bitmap, w, h, 1);
-        newRef->m_mask = new wxMask;
-        newRef->m_mask->m_bitmap = sub_mask;
+        GdkPixmap* sub_mask = gdk_pixmap_new(mask, w, h, 1);
+        newRef->m_mask = new wxMask(sub_mask);
         GdkGC* gc = gdk_gc_new(sub_mask);
         gdk_draw_drawable(
-            sub_mask, gc, bmpData->m_mask->m_bitmap, rect.x, rect.y, 0, 0, w, h);
+            sub_mask, gc, mask, rect.x, rect.y, 0, 0, w, h);
         g_object_unref(gc);
     }
 
@@ -739,16 +743,20 @@ GdkPixmap *wxBitmap::GetPixmap() const
 
     if (bmpData->m_pixbuf)
     {
+        GdkPixmap* pixmap = NULL;
         GdkPixmap** mask_pixmap = NULL;
         if (gdk_pixbuf_get_has_alpha(bmpData->m_pixbuf))
         {
             // make new mask from alpha
-            delete bmpData->m_mask;
-            bmpData->m_mask = new wxMask;
-            mask_pixmap = &bmpData->m_mask->m_bitmap;
+            mask_pixmap = &pixmap;
         }
         gdk_pixbuf_render_pixmap_and_mask(
             bmpData->m_pixbuf, &bmpData->m_pixmap, mask_pixmap, 128);
+        if (pixmap)
+        {
+            delete bmpData->m_mask;
+            bmpData->m_mask = new wxMask(pixmap);
+        }
     }
     else
     {
@@ -777,7 +785,7 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
     const int h = bmpData->m_height;
     GdkPixmap* mask = NULL;
     if (bmpData->m_mask)
-        mask = bmpData->m_mask->m_bitmap;
+        mask = bmpData->m_mask->GetBitmap();
     const bool useAlpha = bmpData->m_alphaRequested || mask;
     bmpData->m_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, useAlpha, 8, w, h);
     if (bmpData->m_pixmap)
