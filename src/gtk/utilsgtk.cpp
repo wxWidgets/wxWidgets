@@ -304,25 +304,11 @@ protected:
     virtual void OnStackFrame(const wxStackFrame& frame)
     {
         wxString fncname = frame.GetName();
-        wxString fncargs = fncname;
-
-        size_t n = fncname.find(wxT('('));
-        if (n != wxString::npos)
-        {
-            // remove arguments from function name
-            fncname.erase(n);
-
-            // remove function name and brackets from arguments
-            fncargs = fncargs.substr(n+1, fncargs.length()-n-2);
-        }
-        else
-            fncargs = wxEmptyString;
 
         // append this stack frame's info in the dialog
         if (!frame.GetFileName().empty() || !fncname.empty())
             gtk_assert_dialog_append_stack_frame(m_dlg,
                                                 fncname.mb_str(),
-                                                fncargs.mb_str(),
                                                 frame.GetFileName().mb_str(),
                                                 frame.GetLine());
     }

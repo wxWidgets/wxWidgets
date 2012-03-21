@@ -23,10 +23,9 @@
        in gtk_assert_dialog_create_backtrace_list_model() function
  */
 #define STACKFRAME_LEVEL_COLIDX        0
-#define FUNCTION_NAME_COLIDX           1
+#define FUNCTION_PROTOTYPE_COLIDX      1
 #define SOURCE_FILE_COLIDX             2
 #define LINE_NUMBER_COLIDX             3
-#define FUNCTION_ARGS_COLIDX           4
 
 
 
@@ -86,12 +85,11 @@ GtkWidget *gtk_assert_dialog_create_backtrace_list_model ()
     GtkWidget *treeview;
 
     /* create list store */
-    store = gtk_list_store_new (5,
+    store = gtk_list_store_new (4,
                                 G_TYPE_UINT,        /* stack frame number */
-                                G_TYPE_STRING,      /* function name      */
+                                G_TYPE_STRING,      /* function prototype */
                                 G_TYPE_STRING,      /* source file name   */
-                                G_TYPE_STRING,      /* line number        */
-                                G_TYPE_STRING);     /* function arguments */
+                                G_TYPE_STRING);     /* line number        */
 
     /* create the tree view */
     treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL(store));
@@ -100,8 +98,7 @@ GtkWidget *gtk_assert_dialog_create_backtrace_list_model ()
 
     /* append columns */
     gtk_assert_dialog_append_text_column(treeview, "#", STACKFRAME_LEVEL_COLIDX);
-    gtk_assert_dialog_append_text_column(treeview, "Function name", FUNCTION_NAME_COLIDX);
-    gtk_assert_dialog_append_text_column(treeview, "Function args", FUNCTION_ARGS_COLIDX);
+    gtk_assert_dialog_append_text_column(treeview, "Function Prototype", FUNCTION_PROTOTYPE_COLIDX);
     gtk_assert_dialog_append_text_column(treeview, "Source file", SOURCE_FILE_COLIDX);
     gtk_assert_dialog_append_text_column(treeview, "Line #", LINE_NUMBER_COLIDX);
 
@@ -381,7 +378,7 @@ gchar *gtk_assert_dialog_get_message (GtkAssertDialog *dlg)
 
 gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
 {
-    gchar *function, *arguments, *sourcefile, *linenum;
+    gchar *function, *sourcefile, *linenum;
     guint count;
 
     GtkTreeModel *model;
@@ -399,16 +396,15 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
     do
     {
         /* append this stack frame's info to the string */
-        gtk_tree_model_get (model, &iter,
+        gtk_tree_model_get(model, &iter,
                             STACKFRAME_LEVEL_COLIDX, &count,
-                            FUNCTION_NAME_COLIDX, &function,
-                            FUNCTION_ARGS_COLIDX, &arguments,
+                            FUNCTION_PROTOTYPE_COLIDX, &function,
                             SOURCE_FILE_COLIDX, &sourcefile,
                             LINE_NUMBER_COLIDX, &linenum,
                             -1);
 
-        g_string_append_printf (string, "[%u] %s(%s)",
-                                count, function, arguments);
+        g_string_append_printf(string, "[%u] %s",
+                                count, function);
         if (sourcefile[0] != '\0')
             g_string_append_printf (string, " %s", sourcefile);
         if (linenum[0] != '\0')
@@ -416,7 +412,6 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
         g_string_append (string, "\n");
 
         g_free (function);
-        g_free (arguments);
         g_free (sourcefile);
         g_free (linenum);
 
@@ -451,7 +446,6 @@ void gtk_assert_dialog_set_backtrace_callback(GtkAssertDialog *assertdlg,
 
 void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
                                           const gchar *function,
-                                          const gchar *arguments,
                                           const gchar *sourcefile,
                                           guint line_number)
 {
@@ -474,8 +468,7 @@ void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
     gtk_list_store_append (GTK_LIST_STORE(model), &iter);
     gtk_list_store_set (GTK_LIST_STORE(model), &iter,
                         STACKFRAME_LEVEL_COLIDX, count+1,     /* start from 1 and not from 0 */
-                        FUNCTION_NAME_COLIDX, function,
-                        FUNCTION_ARGS_COLIDX, arguments,
+                        FUNCTION_PROTOTYPE_COLIDX, function,
                         SOURCE_FILE_COLIDX, sourcefile,
                         LINE_NUMBER_COLIDX, linenum->str,
                         -1);

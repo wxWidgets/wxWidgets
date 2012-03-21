@@ -72,7 +72,6 @@ void gtk_assert_dialog_set_backtrace_callback(GtkAssertDialog *assertdlg,
 /* appends a stack frame to the dialog */
 void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
                                           const gchar *function,
-                                          const gchar *arguments,
                                           const gchar *sourcefile,
                                           guint line_number);
 
