@@ -1448,6 +1448,12 @@ private:
  wxEVT_RIGHT_DCLICK
 */
 
+enum wxMouseWheelAxis
+{
+    wxMOUSE_WHEEL_VERTICAL,
+    wxMOUSE_WHEEL_HORIZONTAL
+};
+
 class WXDLLIMPEXP_CORE wxMouseEvent : public wxEvent,
                                       public wxMouseState
 {
@@ -1535,10 +1541,10 @@ public:
     // should occur for each delta.
     int GetWheelDelta() const { return m_wheelDelta; }
 
-    // Gets the axis the wheel operation concerns, 0 being the y axis as on
-    // most mouse wheels, 1 is the x axis for things like MightyMouse scrolls
-    // or horizontal trackpad scrolling
-    int GetWheelAxis() const { return m_wheelAxis; }
+    // Gets the axis the wheel operation concerns; wxMOUSE_WHEEL_VERTICAL
+    // (most common case) or wxMOUSE_WHEEL_HORIZONTAL (for horizontal scrolling
+    // using e.g. a trackpad).
+    wxMouseWheelAxis GetWheelAxis() const { return m_wheelAxis; }
 
     // Returns the configured number of lines (or whatever) to be scrolled per
     // wheel action.  Defaults to one.
@@ -1560,7 +1566,7 @@ public:
 public:
     int           m_clickCount;
 
-    int           m_wheelAxis;
+    wxMouseWheelAxis m_wheelAxis;
     int           m_wheelRotation;
     int           m_wheelDelta;
     int           m_linesPerAction;

@@ -633,7 +633,7 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
                 
             if ( fabs(deltaX) > fabs(deltaY) )
             {
-                wxevent.m_wheelAxis = 1;
+                wxevent.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
                 wxevent.m_wheelRotation = (int)deltaX;
             }
             else

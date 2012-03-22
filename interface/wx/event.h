@@ -2187,6 +2187,16 @@ public:
     wxClipboardTextEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 };
 
+/**
+    Possible axis values for mouse wheel scroll events.
+
+    @since 2.9.4
+ */
+enum wxMouseWheelAxis
+{
+    wxMOUSE_WHEEL_VERTICAL,     ///< Vertical scroll event.
+    wxMOUSE_WHEEL_HORIZONTAL    ///< Horizontal scroll event.
+};
 
 
 /**
@@ -2440,12 +2450,16 @@ public:
     int GetWheelRotation() const;
 
     /**
-        Gets the axis the wheel operation concerns; @c 0 is the Y axis as on
-        most mouse wheels, @c 1 is the X axis.
+        Gets the axis the wheel operation concerns.
 
-        Note that only some models of mouse have horizontal wheel axis.
+        Usually the mouse wheel is used to scroll vertically so @c
+        wxMOUSE_WHEEL_VERTICAL is returned but some mice (and most trackpads)
+        also allow to use the wheel to scroll horizontally in which case
+        @c wxMOUSE_WHEEL_HORIZONTAL is returned.
+
+        Notice that before wxWidgets 2.9.4 this method returned @c int.
     */
-    int GetWheelAxis() const;
+    wxMouseWheelAxis GetWheelAxis() const;
 
     /**
         Returns @true if the event was a mouse button event (not necessarily a button

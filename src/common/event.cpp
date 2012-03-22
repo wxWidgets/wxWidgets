@@ -554,10 +554,10 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
 
     m_clickCount = -1;
 
+    m_wheelAxis = wxMOUSE_WHEEL_VERTICAL;
     m_wheelRotation = 0;
     m_wheelDelta = 0;
     m_linesPerAction = 0;
-    m_wheelAxis = 0;
 }
 
 void wxMouseEvent::Assign(const wxMouseEvent& event)
