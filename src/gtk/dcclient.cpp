@@ -379,13 +379,18 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
             m_textGC = wxGetPoolGC( m_gdkwindow, wxTEXT_SCREEN );
             m_bgGC = wxGetPoolGC( m_gdkwindow, wxBG_SCREEN );
         }
-        else if (m_cmap == gdk_screen_get_rgba_colormap(gdk_colormap_get_screen(m_cmap)))
+#if GTK_CHECK_VERSION(2,12,0)
+        // gdk_screen_get_rgba_colormap was added in 2.8, but this code is for
+        // compositing which requires 2.12
+        else if (gtk_check_version(2,12,0) == NULL &&
+            m_cmap == gdk_screen_get_rgba_colormap(gdk_colormap_get_screen(m_cmap)))
         {
             m_penGC = wxGetPoolGC( m_gdkwindow, wxPEN_COLOUR_ALPHA );
             m_brushGC = wxGetPoolGC( m_gdkwindow, wxBRUSH_COLOUR_ALPHA );
             m_textGC = wxGetPoolGC( m_gdkwindow, wxTEXT_COLOUR_ALPHA );
             m_bgGC = wxGetPoolGC( m_gdkwindow, wxBG_COLOUR_ALPHA );
         }
+#endif
         else
         {
             m_penGC = wxGetPoolGC( m_gdkwindow, wxPEN_COLOUR );
