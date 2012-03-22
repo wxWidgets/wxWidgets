@@ -522,6 +522,7 @@ OSX:
 Univ:
 
 - Fix regression with read-only wxComboBox appearance (Jason Erb).
+- Implement wxThread::SetConcurrency() for POSIX systems (Igor Korot).
 
 
 

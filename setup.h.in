@@ -1117,6 +1117,9 @@
 /* Define if you have thr_setconcurrency function */
 #undef HAVE_THR_SETCONCURRENCY
 
+/* Define if you have pthread_setconcurrency function */
+#undef HAVE_PTHREAD_SET_CONCURRENCY
+
 /* Define if you have the uname function.  */
 #undef HAVE_UNAME
 

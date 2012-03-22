@@ -4977,7 +4977,13 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
     dnl do other tests only if we are using threads
     if test "$wxUSE_THREADS" = "yes" ; then
-      AC_CHECK_FUNCS(thr_setconcurrency)
+        AC_CHECK_FUNCS(pthread_setconcurrency,
+            AC_DEFINE(HAVE_PTHREAD_SET_CONCURRENCY),
+            [
+                AC_CHECK_FUNCS(thr_setconcurrency,
+                    AC_DEFINE(HAVE_THR_SETCONCURRENCY),
+                    AC_MSG_WARN(Setting thread concurrency will not work properly))
+            ])
 
       dnl can't use AC_CHECK_FUNCS for this one as it's usually a macro and so
       dnl wouldn't be found by it

@@ -1127,18 +1127,23 @@ wxThreadIdType wxThread::GetCurrentId()
 
 bool wxThread::SetConcurrency(size_t level)
 {
-#ifdef HAVE_THR_SETCONCURRENCY
+#ifdef HAVE_PTHREAD_SET_CONCURRENCY
+    int rc = pthread_setconcurrency( level );
+#elif defined(HAVE_THR_SETCONCURRENCY)
     int rc = thr_setconcurrency(level);
-    if ( rc != 0 )
-    {
-        wxLogSysError(rc, wxT("thr_setconcurrency() failed"));
-    }
-
-    return rc == 0;
 #else // !HAVE_THR_SETCONCURRENCY
     // ok only for the default value
-    return level == 0;
+    int rc = level == 0 ? 0 : -1;
 #endif // HAVE_THR_SETCONCURRENCY/!HAVE_THR_SETCONCURRENCY
+
+    if ( rc != 0 )
+    {
+        wxLogSysError(rc, _("Failed to set thread concurrency level to %lu"),
+                      static_cast<unsigned long>(level));
+        return false;
+    }
+
+    return true;
 }
 
 // -----------------------------------------------------------------------------
