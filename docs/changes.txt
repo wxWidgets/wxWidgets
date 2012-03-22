@@ -513,6 +513,7 @@ MSW:
 - Add wxActiveXContainer::QueryClientSiteInterface and implement it in
   wxWebViewIE to improve the default behaviour (Allonii).
 - Update stretchable spaces in wxToolBar after tool removal (Catalin Raceanu).
+- Add support for horizontal mouse wheel events (Lauri Nurmi).
 
 OSX:
 

@@ -2898,9 +2898,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
 #if wxUSE_MOUSEWHEEL
         case WM_MOUSEWHEEL:
-            processed = HandleMouseWheel(wParam, lParam);
+            processed = HandleMouseWheel(wxMOUSE_WHEEL_VERTICAL, wParam, lParam);
             break;
-#endif
+
+        case WM_MOUSEHWHEEL:
+            processed = HandleMouseWheel(wxMOUSE_WHEEL_HORIZONTAL, wParam, lParam);
+            break;
+#endif // wxUSE_MOUSEWHEEL
 
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
@@ -5551,7 +5555,9 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
 }
 
 
-bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
+bool
+wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
+                              WXWPARAM wParam, WXLPARAM lParam)
 {
 #if wxUSE_MOUSEWHEEL
     // notice that WM_MOUSEWHEEL position is in screen coords (as it's
@@ -5564,6 +5570,7 @@ bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
     InitMouseEvent(event, pt.x, pt.y, LOWORD(wParam));
     event.m_wheelRotation = (short)HIWORD(wParam);
     event.m_wheelDelta = WHEEL_DELTA;
+    event.m_wheelAxis = axis;
 
     static int s_linesPerRotation = -1;
     if ( s_linesPerRotation == -1 )
