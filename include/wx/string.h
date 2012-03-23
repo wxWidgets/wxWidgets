@@ -3485,7 +3485,7 @@ private:
 
   void DoUngetWriteBuf(size_t nLen)
   {
-      wxSTRING_SET_CACHED_LENGTH(nLen);
+      wxSTRING_INVALIDATE_CACHE();
 
       m_impl.DoUngetWriteBuf(nLen);
   }
