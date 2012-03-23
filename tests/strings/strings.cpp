@@ -190,6 +190,8 @@ void StringTestCase::Constructors()
     CPPUNIT_ASSERT_EQUAL( L"Hello", wxString(L"Hello", 5) );
 #endif // wxUSE_UNICODE
 
+    CPPUNIT_ASSERT_EQUAL( 0, wxString(wxString(), 17).length() );
+
     static const char *s = "?really!";
     const char *start = wxStrchr(s, 'r');
     const char *end = wxStrchr(s, '!');

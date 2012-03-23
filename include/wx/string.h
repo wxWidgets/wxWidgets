@@ -2613,9 +2613,21 @@ public:
       return *this;
   }
 
+    // This is a non-standard-compliant overload taking the first "len"
+    // characters of the source string.
   wxString& assign(const wxString& str, size_t len)
   {
+#if wxUSE_STRING_POS_CACHE
+      // It is legal to pass len > str.length() to wxStringImpl::assign() but
+      // by restricting it here we save some work for that function so it's not
+      // really less efficient and, at the same time, ensure that we don't
+      // cache invalid length.
+      const size_t lenSrc = str.length();
+      if ( len > lenSrc )
+          len = lenSrc;
+
       wxSTRING_SET_CACHED_LENGTH(len);
+#endif // wxUSE_STRING_POS_CACHE
 
       m_impl.assign(str.m_impl, 0, str.LenToImpl(len));
 
