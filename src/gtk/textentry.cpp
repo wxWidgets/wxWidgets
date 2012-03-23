@@ -204,6 +204,16 @@ void wxTextEntry::SetSelection(long from, long to)
     // insertion point is set to the start of the selection and not its end as
     // GTK+ does by default
     gtk_editable_select_region(GetEditable(), to, from);
+
+    // avoid reported problem with RHEL 5 GTK+ 2.10 where selection is reset by
+    // a clipboard callback, see #13277
+    if (gtk_check_version(2,12,0))
+    {
+        GtkEntry* entry = GTK_ENTRY(GetEditable());
+        if (to < 0)
+            to = entry->text_length;
+        entry->selection_bound = to;
+    }
 }
 
 void wxTextEntry::GetSelection(long *from, long *to) const
