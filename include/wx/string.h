@@ -2669,7 +2669,7 @@ public:
 
   wxString& assign(const char *sz, size_t n)
   {
-      wxSTRING_SET_CACHED_LENGTH(n);
+      wxSTRING_INVALIDATE_CACHE();
 
       SubstrBufFromMB str(ImplStr(sz, n));
       m_impl.assign(str.data, str.len);

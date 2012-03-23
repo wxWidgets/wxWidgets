@@ -192,6 +192,12 @@ void StringTestCase::Constructors()
 
     CPPUNIT_ASSERT_EQUAL( 0, wxString(wxString(), 17).length() );
 
+    // This string has 3 characters (<h>, <e'> and <l>), not 4!
+    wxString s3("h\xc3\xa9llo", 4);
+    CPPUNIT_ASSERT_EQUAL( 3, s3.length() );
+    CPPUNIT_ASSERT_EQUAL( 'l', (char)s3[2] );
+
+
     static const char *s = "?really!";
     const char *start = wxStrchr(s, 'r');
     const char *end = wxStrchr(s, '!');
@@ -218,6 +224,9 @@ void StringTestCase::StaticConstructors()
     CPPUNIT_ASSERT_EQUAL( "Hell", wxString::FromUTF8("Hello", 4) );
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello", 5) );
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello") );
+
+    CPPUNIT_ASSERT_EQUAL( 2, wxString::FromUTF8("h\xc3\xa9llo", 3).length() );
+
 
     //CPPUNIT_ASSERT_EQUAL( 1, wxString::FromUTF8("", 1).length() );
 }
