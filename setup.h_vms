@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 16 March 2012                                                      *
+ * Date : 23 March 2012                                                      *
  *                                                                           *
  *****************************************************************************/
 
@@ -1222,6 +1222,9 @@ typedef pid_t GPid;
 
 /* Define if you have thr_setconcurrency function */
 #undef HAVE_THR_SETCONCURRENCY
+
+/* Define if you have pthread_setconcurrency function */
+#define HAVE_PTHREAD_SET_CONCURRENCY 1
 
 /* Define if you have the uname function.  */
 #define HAVE_UNAME 1
