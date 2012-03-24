@@ -7682,7 +7682,7 @@ void wxGrid::SetRowSize( int row, int height )
     }
 
     // See comment in SetColSize
-    if ( height < GetRowMinimalAcceptableHeight())
+    if ( height > 0 && height < GetRowMinimalAcceptableHeight())
         return;
 
     if ( m_rowHeights.IsEmpty() )
@@ -7701,7 +7701,10 @@ void wxGrid::SetRowSize( int row, int height )
     }
 
     if ( !GetBatchCount() )
+    {
         CalcDimensions();
+        Refresh();
+    }
 }
 
 void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
