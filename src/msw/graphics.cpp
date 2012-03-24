@@ -1390,6 +1390,7 @@ void wxGDIPlusContext::Init(Graphics* graphics, int width, int height)
     m_context->SetTextRenderingHint(TextRenderingHintSystemDefault);
     m_context->SetPixelOffsetMode(PixelOffsetModeHalf);
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
+    m_context->SetInterpolationMode(InterpolationModeHighQuality);
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
 }
@@ -1535,10 +1536,41 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
     return true;
 }
 
-bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality WXUNUSED(interpolation))
+bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality interpolation)
 {
-    // placeholder
-    return false;
+    if (m_interpolation == interpolation)
+        return true;
+
+    m_interpolation = interpolation;
+
+    InterpolationMode interpolationMode = InterpolationModeDefault;
+    switch (interpolation)
+    {
+        case wxINTERPOLATION_DEFAULT:
+            interpolationMode = InterpolationModeDefault;
+            break;
+
+        case wxINTERPOLATION_NONE:
+            interpolationMode = InterpolationModeNearestNeighbor;
+            break;
+
+        case wxINTERPOLATION_FAST:
+            interpolationMode = InterpolationModeLowQuality;
+            break;
+
+        case wxINTERPOLATION_GOOD:
+            interpolationMode = InterpolationModeHighQuality;
+            break;
+
+        case wxINTERPOLATION_BEST:
+            interpolationMode = InterpolationModeHighQualityBicubic;
+            break;
+
+        default:
+            return false;
+    }
+    m_context->SetInterpolationMode(interpolationMode);
+    return true;
 }
 
 bool wxGDIPlusContext::SetCompositionMode(wxCompositionMode op)

@@ -787,15 +787,17 @@ public:
     virtual wxAntialiasMode GetAntialiasMode() const ;
 
     /**
-        Sets the interpolation quality, returns true if it supported
+        Sets the interpolation quality, returns true if it is supported.
+
+        Not implemented in Cairo backend currently.
      */
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
-    
+
     /**
-        Returns the current interpolation quality
+        Returns the current interpolation quality.
      */
     virtual wxInterpolationQuality GetInterpolationQuality() const;
-    
+
     /**
         Sets the compositing operator, returns true if it supported
     */
