@@ -11,10 +11,6 @@
 #define _WX_GTKDCCLIENT_H_
 
 #include "wx/gtk/dc.h"
-#include "wx/dcclient.h"
-#include "wx/region.h"
-
-class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 //-----------------------------------------------------------------------------
 // wxWindowDCImpl
