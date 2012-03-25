@@ -99,17 +99,17 @@ namespace wxGTKPrivate
 //
 // the returned widgets shouldn't be destroyed, this is done automatically on
 // shutdown
-GtkWidget *GetButtonWidget();
-GtkWidget *GetCheckButtonWidget();
-GtkWidget *GetComboBoxWidget();
-GtkWidget *GetEntryWidget();
-GtkWidget *GetHeaderButtonWidgetFirst();
-GtkWidget *GetHeaderButtonWidgetLast();
-GtkWidget *GetHeaderButtonWidget();
-GtkWidget *GetRadioButtonWidget();
-GtkWidget *GetSplitterWidget();
-GtkWidget *GetTextEntryWidget();
-GtkWidget *GetTreeWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetButtonWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetCheckButtonWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetComboBoxWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetEntryWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetHeaderButtonWidgetFirst();
+WXDLLIMPEXP_CORE GtkWidget *GetHeaderButtonWidgetLast();
+WXDLLIMPEXP_CORE GtkWidget *GetHeaderButtonWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetRadioButtonWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetSplitterWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetTextEntryWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetTreeWidget();
 
 } // wxGTKPrivate
 
