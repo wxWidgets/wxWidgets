@@ -14,6 +14,7 @@
 # wxFoo class we want to pretty print. Then just add wxFoo to the types array
 # in wxLookupFunction at the bottom of this file.
 
+import datetime
 
 # shamelessly stolen from std::string example
 class wxStringPrinter:
@@ -25,6 +26,18 @@ class wxStringPrinter:
 
     def display_hint(self):
         return 'string'
+
+class wxDateTimePrinter:
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        # A value of type wxLongLong can't be used in Python arithmetic
+        # expressions directly so we need to convert it to long long first and
+        # then cast to int explicitly to be able to use it as a timestamp.
+        msec = self.val['m_time'].cast(gdb.lookup_type('long long'))
+        sec = int(msec / 1000)
+        return datetime.datetime.fromtimestamp(sec).isoformat(' ')
 
 class wxXYPrinterBase:
     def __init__(self, val):
@@ -53,7 +66,7 @@ class wxRectPrinter(wxXYPrinterBase):
 def wxLookupFunction(val):
     # Using a list is probably ok for so few items but consider switching to a
     # set (or a dict and cache class types as the keys in it?) if needed later.
-    types = ['wxString', 'wxPoint', 'wxSize', 'wxRect']
+    types = ['wxString', 'wxDateTime', 'wxPoint', 'wxSize', 'wxRect']
 
     for t in types:
         if val.type.tag == t:
