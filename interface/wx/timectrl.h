@@ -89,6 +89,18 @@ public:
                 const wxString& name = "timectrl");
 
     /**
+        Returns the currently entered time as hours, minutes and seconds.
+
+        All the arguments must be non-@NULL, @false is returned otherwise and
+        none of them is modified.
+
+        @see SetTime()
+
+        @since 2.9.4
+     */
+    bool GetTime(int* hour, int* min, int* sec) const;
+
+    /**
         Returns the currently entered time.
 
         The date part of the returned wxDateTime object is always set to today
@@ -97,10 +109,36 @@ public:
     virtual wxDateTime GetValue() const = 0;
 
     /**
+        Changes the current time of the control.
+
+        Calling this method does not result in a time change event.
+
+        @param hour The new hour value in 0..23 interval.
+        @param min The new minute value in 0..59 interval.
+        @param sec The new second value in 0..59 interval.
+        @return @true if the time was changed or @false on failure, e.g. if the
+            time components were invalid.
+
+        @see GetTime()
+
+        @since 2.9.4
+     */
+    bool SetTime(int hour, int min, int sec);
+
+    /**
         Changes the current value of the control.
 
         The date part of @a dt is ignored, only the time part is displayed in
         the control. The @a dt object must however be valid.
+
+        In particular notice that it is a bad idea to use default wxDateTime
+        constructor from hour, minute and second values as it uses the today
+        date for the date part which means that some times can be invalid if
+        today happens to be the day of DST change. For example, when switching
+        to summer time the time 2:00 typically doesn't exist as the clocks jump
+        directly to 3:00. To avoid this problem, use a fixed date on which DST
+        is known not to change (e.g. Jan 1, 2012) for the date part of the
+        argument or use SetTime().
 
         Calling this method does not result in a time change event.
     */

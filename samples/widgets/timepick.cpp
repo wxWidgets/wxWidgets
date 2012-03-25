@@ -217,21 +217,23 @@ void TimePickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void TimePickerWidgetsPage::OnButtonSet(wxCommandEvent& WXUNUSED(event))
 {
-    wxDateTime dt;
-    if ( !dt.ParseISOTime(m_textCur->GetValue()) )
+    int h, m, s;
+    if ( wxSscanf(m_textCur->GetValue(), "%d:%d:%d", &h, &m, &s) != 3 )
     {
         wxLogError("Invalid time, please use HH:MM:SS format.");
         return;
     }
 
-    m_timePicker->SetValue(dt);
+    m_timePicker->SetTime(h, m, s);
 }
 
 void TimePickerWidgetsPage::OnTimeChanged(wxDateEvent& event)
 {
-    wxLogMessage("Time changed, now is %s (control value is %s).",
-                 event.GetDate().FormatISOTime(),
-                 m_timePicker->GetValue().FormatISOTime());
+    int h, m, s;
+    m_timePicker->GetTime(&h, &m, &s);
+
+    wxLogMessage("Time changed, now is %s (control value is %02d:%02d:%02d).",
+                 event.GetDate().FormatISOTime(), h, m, s);
 }
 
 #endif // wxUSE_TIMEPICKCTRL
