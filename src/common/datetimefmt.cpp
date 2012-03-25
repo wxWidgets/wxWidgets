@@ -935,6 +935,26 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     return true;
 }
 
+const char* wxDateTime::ParseRfc822Date(const char* date)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseRfc822Date(dateStr, &end) )
+        return NULL;
+
+    return date + dateStr.IterOffsetInMBStr(end);
+}
+
+const wchar_t* wxDateTime::ParseRfc822Date(const wchar_t* date)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseRfc822Date(dateStr, &end) )
+        return NULL;
+
+    return date + (end - dateStr.begin());
+}
+
 bool
 wxDateTime::ParseFormat(const wxString& date,
                         const wxString& format,
@@ -1569,6 +1589,32 @@ wxDateTime::ParseFormat(const wxString& date,
     return true;
 }
 
+const char*
+wxDateTime::ParseFormat(const char* date,
+                        const wxString& format,
+                        const wxDateTime& dateDef)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseFormat(dateStr, format, dateDef, &end) )
+        return NULL;
+
+    return date + dateStr.IterOffsetInMBStr(end);
+}
+
+const wchar_t*
+wxDateTime::ParseFormat(const wchar_t* date,
+                        const wxString& format,
+                        const wxDateTime& dateDef)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseFormat(dateStr, format, dateDef, &end) )
+        return NULL;
+
+    return date + (end - dateStr.begin());
+}
+
 bool
 wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
 {
@@ -1620,6 +1666,26 @@ wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
     *end = endBoth;
 
     return true;
+}
+
+const char* wxDateTime::ParseDateTime(const char* date)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseDateTime(dateStr, &end) )
+        return NULL;
+
+    return date + dateStr.IterOffsetInMBStr(end);
+}
+
+const wchar_t* wxDateTime::ParseDateTime(const wchar_t* date)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseDateTime(dateStr, &end) )
+        return NULL;
+
+    return date + (end - dateStr.begin());
 }
 
 bool
@@ -1979,6 +2045,26 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     return true;
 }
 
+const char* wxDateTime::ParseDate(const char* date)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseDate(dateStr, &end) )
+        return NULL;
+
+    return date + dateStr.IterOffsetInMBStr(end);
+}
+
+const wchar_t* wxDateTime::ParseDate(const wchar_t* date)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseDate(dateStr, &end) )
+        return NULL;
+
+    return date + (end - dateStr.begin());
+}
+
 bool
 wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
 {
@@ -2032,6 +2118,26 @@ wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
     }
 
     return false;
+}
+
+const char* wxDateTime::ParseTime(const char* date)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseTime(dateStr, &end) )
+        return NULL;
+
+    return date + dateStr.IterOffsetInMBStr(end);
+}
+
+const wchar_t* wxDateTime::ParseTime(const wchar_t* date)
+{
+    wxString::const_iterator end;
+    wxString dateStr(date);
+    if ( !ParseTime(dateStr, &end) )
+        return NULL;
+
+    return date + (end - dateStr.begin());
 }
 
 // ----------------------------------------------------------------------------

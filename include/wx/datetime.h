@@ -1205,6 +1205,44 @@ public:
                                      : wxAnyStrPtr();
     }
 
+    // In addition to wxAnyStrPtr versions above we also must provide the
+    // overloads for C strings as we must return a pointer into the original
+    // string and not inside a temporary wxString which would have been created
+    // if the overloads above were used.
+    //
+    // And then we also have to provide the overloads for wxCStrData, as usual.
+    wxAnyStrPtr ParseRfc822Date(const wxCStrData& date)
+        { return ParseRfc822Date(wxString(date)); }
+    const char* ParseRfc822Date(const char* date);
+    const wchar_t* ParseRfc822Date(const wchar_t* date);
+
+    wxAnyStrPtr ParseFormat(const wxCStrData& date,
+                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxDateTime& dateDef = wxDefaultDateTime)
+        { return ParseFormat(wxString(date), format, dateDef); }
+    const char* ParseFormat(const char* date,
+                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxDateTime& dateDef = wxDefaultDateTime);
+    const wchar_t* ParseFormat(const wchar_t* date,
+                               const wxString& format = wxDefaultDateTimeFormat,
+                               const wxDateTime& dateDef = wxDefaultDateTime);
+
+    wxAnyStrPtr ParseDateTime(const wxCStrData& datetime)
+        { return ParseDateTime(wxString(datetime)); }
+    const char* ParseDateTime(const char* datetime);
+    const wchar_t* ParseDateTime(const wchar_t* datetime);
+
+    wxAnyStrPtr ParseDate(const wxCStrData& date)
+        { return ParseDate(wxString(date)); }
+    const char* ParseDate(const char* date);
+    const wchar_t* ParseDate(const wchar_t* date);
+
+    wxAnyStrPtr ParseTime(const wxCStrData& time)
+        { return ParseTime(wxString(time)); }
+    const char* ParseTime(const char* time);
+    const wchar_t* ParseTime(const wchar_t* time);
+
+
     // implementation
     // ------------------------------------------------------------------------
 

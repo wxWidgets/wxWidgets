@@ -1043,6 +1043,10 @@ void DateTimeTestCase::TestDateParse()
             );
         }
     }
+
+    // Check that incomplete parse works correctly.
+    const char* p = dt.ParseFormat("2012-03-23 12:34:56", "%Y-%m-%d");
+    CPPUNIT_ASSERT_EQUAL( " 12:34:56", wxString(p) );
 }
 
 void DateTimeTestCase::TestDateParseISO()
