@@ -38,6 +38,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/stockitem.h"
+#include "wx/aui/dockart.h"
 
 enum MDI_MENU_ID
 {
