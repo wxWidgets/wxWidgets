@@ -24,7 +24,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/clientdc.h"
+    #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/aui/tabmdi.h"

@@ -24,6 +24,7 @@
 #include "wx/aui/tabart.h"
 #include "wx/aui/framemanager.h"
 #include "wx/bookctrl.h"
+#include "wx/containr.h"
 
 
 class wxAuiNotebook;
