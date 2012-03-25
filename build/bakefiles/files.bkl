@@ -3548,6 +3548,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                                  wxAUI                                 -->
 <!-- ====================================================================== -->
 
+<set var="AUI_GTK_SRC" hints="files">
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
+        src/aui/tabartgtk.cpp
+    </if>
+</set>
+<set var="AUI_GTK_HDR" hints="files">
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
+        wx/aui/tabartgtk.h
+    </if>
+</set>
 <set var="AUI_SRC" hints="files">
     src/aui/framemanager.cpp
     src/aui/dockart.cpp
@@ -3556,6 +3566,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/aui/auibar.cpp
     src/aui/tabmdi.cpp
     src/aui/tabart.cpp
+    $(AUI_GTK_SRC)
 </set>
 <set var="AUI_HDR" hints="files">
     wx/aui/framemanager.h
@@ -3566,6 +3577,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/aui/tabmdi.h
     wx/aui/aui.h
     wx/aui/tabart.h
+    $(AUI_GTK_HDR)
 </set>
 
 <!-- ====================================================================== -->

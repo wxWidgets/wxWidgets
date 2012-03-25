@@ -275,7 +275,17 @@ protected:
     unsigned int m_flags;
 };
 
-#define wxAuiDefaultTabArt wxAuiGenericTabArt
+#ifndef __WXUNIVERSAL__
+    #if defined(__WXGTK20__)
+        #define wxHAS_NATIVE_TABART
+        #include "wx/aui/tabartgtk.h"
+        #define wxAuiDefaultTabArt wxAuiGtkTabArt
+    #endif
+#endif // !__WXUNIVERSAL__
+
+#ifndef wxHAS_NATIVE_TABART
+    #define wxAuiDefaultTabArt wxAuiGenericTabArt
+#endif
 
 #endif  // wxUSE_AUI
 
