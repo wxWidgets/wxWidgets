@@ -554,6 +554,10 @@ SOURCE=..\..\include\wx\aui\framemanager.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\aui\tabart.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\aui\tabmdi.h
 # End Source File
 # End Group
@@ -579,6 +583,10 @@ SOURCE=..\..\src\aui\floatpane.cpp
 # Begin Source File
 
 SOURCE=..\..\src\aui\framemanager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\aui\tabart.cpp
 # End Source File
 # Begin Source File
 

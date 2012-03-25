@@ -1840,7 +1840,8 @@ AUIDLL_OBJECTS =  \
 	auidll_floatpane.o \
 	auidll_auibook.o \
 	auidll_auibar.o \
-	auidll_tabmdi.o
+	auidll_tabmdi.o \
+	auidll_tabart.o
 AUIDLL_ODEP =  $(_____pch_wxprec_auidll_wx_wxprec_h_gch___depname)
 AUILIB_CXXFLAGS = $(__auilib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1853,7 +1854,8 @@ AUILIB_OBJECTS =  \
 	auilib_floatpane.o \
 	auilib_auibook.o \
 	auilib_auibar.o \
-	auilib_tabmdi.o
+	auilib_tabmdi.o \
+	auilib_tabart.o
 AUILIB_ODEP =  $(_____pch_wxprec_auilib_wx_wxprec_h_gch___depname)
 RIBBONDLL_CXXFLAGS = $(__ribbondll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -4198,6 +4200,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/aui/auibar.h \
 	wx/aui/tabmdi.h \
 	wx/aui/aui.h \
+	wx/aui/tabart.h \
 	wx/propgrid/advprops.h \
 	wx/propgrid/editors.h \
 	wx/propgrid/manager.h \
@@ -4514,6 +4517,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_auibook.o \
 	monodll_auibar.o \
 	monodll_tabmdi.o \
+	monodll_tabart.o \
 	monodll_advprops.o \
 	monodll_editors.o \
 	monodll_manager.o \
@@ -6408,6 +6412,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_auibook.o \
 	monolib_auibar.o \
 	monolib_tabmdi.o \
+	monolib_tabart.o \
 	monolib_advprops.o \
 	monolib_editors.o \
 	monolib_manager.o \
@@ -17403,6 +17408,9 @@ monodll_auibar.o: $(srcdir)/src/aui/auibar.cpp $(MONODLL_ODEP)
 monodll_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
 
+monodll_tabart.o: $(srcdir)/src/aui/tabart.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabart.cpp
+
 monodll_advprops.o: $(srcdir)/src/propgrid/advprops.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/propgrid/advprops.cpp
 
@@ -22700,6 +22708,9 @@ monolib_auibar.o: $(srcdir)/src/aui/auibar.cpp $(MONOLIB_ODEP)
 
 monolib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
+
+monolib_tabart.o: $(srcdir)/src/aui/tabart.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabart.cpp
 
 monolib_advprops.o: $(srcdir)/src/propgrid/advprops.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/propgrid/advprops.cpp
@@ -36462,6 +36473,9 @@ auidll_auibar.o: $(srcdir)/src/aui/auibar.cpp $(AUIDLL_ODEP)
 auidll_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
 
+auidll_tabart.o: $(srcdir)/src/aui/tabart.cpp $(AUIDLL_ODEP)
+	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabart.cpp
+
 auilib_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
 
@@ -36479,6 +36493,9 @@ auilib_auibar.o: $(srcdir)/src/aui/auibar.cpp $(AUILIB_ODEP)
 
 auilib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
+
+auilib_tabart.o: $(srcdir)/src/aui/tabart.cpp $(AUILIB_ODEP)
+	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabart.cpp
 
 ribbondll_version_rc.o: $(srcdir)/src/msw/version.rc $(RIBBONDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_RIBBON

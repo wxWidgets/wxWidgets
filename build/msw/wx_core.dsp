@@ -6892,6 +6892,10 @@ SOURCE=..\..\include\wx\stc\stc.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\aui\tabart.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\aui\tabmdi.h
 # End Source File
 # Begin Source File

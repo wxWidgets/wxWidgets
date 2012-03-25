@@ -3555,6 +3555,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/aui/auibook.cpp
     src/aui/auibar.cpp
     src/aui/tabmdi.cpp
+    src/aui/tabart.cpp
 </set>
 <set var="AUI_HDR" hints="files">
     wx/aui/framemanager.h
@@ -3564,6 +3565,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/aui/auibar.h
     wx/aui/tabmdi.h
     wx/aui/aui.h
+    wx/aui/tabart.h
 </set>
 
 <!-- ====================================================================== -->
