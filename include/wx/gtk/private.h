@@ -106,6 +106,7 @@ WXDLLIMPEXP_CORE GtkWidget *GetEntryWidget();
 WXDLLIMPEXP_CORE GtkWidget *GetHeaderButtonWidgetFirst();
 WXDLLIMPEXP_CORE GtkWidget *GetHeaderButtonWidgetLast();
 WXDLLIMPEXP_CORE GtkWidget *GetHeaderButtonWidget();
+WXDLLIMPEXP_CORE GtkWidget *GetNotebookWidget();
 WXDLLIMPEXP_CORE GtkWidget *GetRadioButtonWidget();
 WXDLLIMPEXP_CORE GtkWidget *GetSplitterWidget();
 WXDLLIMPEXP_CORE GtkWidget *GetTextEntryWidget();

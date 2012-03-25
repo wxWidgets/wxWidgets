@@ -64,6 +64,20 @@ GtkWidget *GetButtonWidget()
     return s_button;
 }
 
+GtkWidget *GetNotebookWidget()
+{
+    static GtkWidget *s_notebook = NULL;
+
+    if ( !s_notebook )
+    {
+        s_notebook = gtk_notebook_new();
+        gtk_container_add(GetContainer(), s_notebook);
+        gtk_widget_realize(s_notebook);
+    }
+
+    return s_notebook;
+}
+
 GtkWidget *GetCheckButtonWidget()
 {
     static GtkWidget *s_button = NULL;
