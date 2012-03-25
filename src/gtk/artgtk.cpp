@@ -259,7 +259,7 @@ wxIconBundle DoCreateIconBundle(const char *stockid,
             continue;
 
         wxIcon icon;
-        icon.SetPixbuf(pixbuf);
+        icon.CopyFromBitmap(wxBitmap(pixbuf));
         bundle.AddIcon(icon);
     }
 
@@ -296,11 +296,7 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
         }
     }
 
-    wxBitmap bmp;
-    if (pixbuf != NULL)
-        bmp.SetPixbuf(pixbuf);
-
-    return bmp;
+    return wxBitmap(pixbuf);
 }
 
 wxIconBundle

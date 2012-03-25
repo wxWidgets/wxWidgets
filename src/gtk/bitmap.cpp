@@ -309,6 +309,18 @@ wxBitmap::wxBitmap(const char* const* bits)
     }
 }
 
+wxBitmap::wxBitmap(GdkPixbuf* pixbuf)
+{
+    if (pixbuf)
+    {
+        wxBitmapRefData* bmpData = new wxBitmapRefData(
+            gdk_pixbuf_get_width(pixbuf), gdk_pixbuf_get_height(pixbuf),
+            gdk_pixbuf_get_n_channels(pixbuf) * 8);
+        m_refData = bmpData;
+        bmpData->m_pixbuf = pixbuf;
+    }
+}
+
 wxBitmap::~wxBitmap()
 {
 }
@@ -679,10 +691,7 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
     {
         wxUnusedVar(type); // The type is detected automatically by GDK.
 
-        UnRef();
-        GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(name.fn_str(), NULL);
-        if (pixbuf)
-            SetPixbuf(pixbuf);
+        *this = wxBitmap(gdk_pixbuf_new_from_file(name.fn_str(), NULL));
     }
 
     return IsOk();
@@ -800,22 +809,6 @@ bool wxBitmap::HasPixbuf() const
     wxCHECK_MSG( IsOk(), false, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_pixbuf != NULL;
-}
-
-void wxBitmap::SetPixbuf(GdkPixbuf* pixbuf)
-{
-    UnRef();
-
-    if (!pixbuf)
-        return;
-
-    int depth = -1;
-    if (gdk_pixbuf_get_has_alpha(pixbuf))
-        depth = 32;
-    m_refData = new wxBitmapRefData(
-        gdk_pixbuf_get_width(pixbuf), gdk_pixbuf_get_height(pixbuf), depth);
-
-    M_BMPDATA->m_pixbuf = pixbuf;
 }
 
 void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)

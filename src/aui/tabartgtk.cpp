@@ -4,7 +4,7 @@
 // Author:      Jens Lody and Teodor Petrov
 // Modified by:
 // Created:     2012-03-23
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2012 Jens Lody <jens@codeblocks.org>
 //                  and Teodor Petrov
 // Licence:     wxWindows licence
@@ -119,8 +119,7 @@ wxRect DrawCloseButton(wxDC& dc,
     int xthickness = style_button->xthickness;
     int ythickness = style_button->ythickness;
 
-    wxBitmap bmp;
-    bmp.SetPixbuf(gtk_widget_render_icon(widget, GTK_STOCK_CLOSE, GTK_ICON_SIZE_SMALL_TOOLBAR, "tab"));
+    wxBitmap bmp(gtk_widget_render_icon(widget, GTK_STOCK_CLOSE, GTK_ICON_SIZE_SMALL_TOOLBAR, "tab"));
 
     if(bmp.GetWidth() != s_CloseIconSize || bmp.GetHeight() != s_CloseIconSize)
     {

@@ -224,7 +224,7 @@ wxBitmap wxBitmapComboBox::GetItemBitmap(unsigned int n) const
         if ( pixbuf )
         {
             g_object_ref( pixbuf );
-            bitmap.SetPixbuf( pixbuf );
+            bitmap = wxBitmap(pixbuf);
         }
         g_value_unset( &value );
     }

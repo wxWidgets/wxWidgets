@@ -68,6 +68,7 @@ public:
     wxBitmap( const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH )
         { (void)CreateFromImage(image, depth); }
 #endif // wxUSE_IMAGE
+    wxBitmap(GdkPixbuf* pixbuf);
     virtual ~wxBitmap();
 
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
@@ -108,7 +109,6 @@ public:
     void SetHeight( int height );
     void SetWidth( int width );
     void SetDepth( int depth );
-    void SetPixbuf(GdkPixbuf* pixbuf);
 
     GdkPixmap *GetPixmap() const;
     bool HasPixmap() const;
