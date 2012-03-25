@@ -291,8 +291,14 @@ ParseFormatAt(wxString::const_iterator& p,
     const wxString str(p, end);
     wxString::const_iterator endParse;
     wxDateTime dt;
-    if ( dt.ParseFormat(str, fmt, &endParse) ||
-            (!fmtAlt.empty() && dt.ParseFormat(str, fmtAlt, &endParse)) )
+
+    // Use a default date outside of the DST period to avoid problems with
+    // parsing the time differently depending on the todays date (which is used
+    // as the fall back date if none is explicitly specified).
+    static const wxDateTime dtDef(1, wxDateTime::Jan, 2012);
+
+    if ( dt.ParseFormat(str, fmt, dtDef, &endParse) ||
+            (!fmtAlt.empty() && dt.ParseFormat(str, fmtAlt, dtDef, &endParse)) )
     {
         p += endParse - str.begin();
     }
