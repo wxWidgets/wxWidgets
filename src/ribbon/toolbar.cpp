@@ -949,7 +949,6 @@ wxSize wxRibbonToolBar::GetBestSizeForParentSize(const wxSize& parentSize) const
 
     // Choose row count with largest possible area
     wxSize size = parentSize;
-    int row_count = m_nrows_max;
     wxOrientation major_axis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
         wxVERTICAL : wxHORIZONTAL;
 
@@ -968,7 +967,6 @@ wxSize wxRibbonToolBar::GetBestSizeForParentSize(const wxSize& parentSize) const
                 GetSizeInOrientation(m_sizes[i], major_axis) > area)
             {
                 area = GetSizeInOrientation(m_sizes[i], major_axis);
-                row_count = m_nrows_min + i;
                 bestSize = m_sizes[i];
             }
         }
