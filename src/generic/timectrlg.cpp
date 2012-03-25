@@ -131,6 +131,17 @@ public:
     {
         m_time = time.IsValid() ? time : wxDateTime::Now();
 
+        // Ensure that the date part doesn't correspond to a DST change date as
+        // time is discontinuous then resulting in many problems, e.g. it's
+        // impossible to even enter 2:00:00 at the beginning of summer time
+        // date as this time doesn't exist. By using Jan 1, on which nobody
+        // changes DST, we avoid all such problems.
+        wxDateTime::Tm tm = m_time.GetTm();
+        tm.mday =
+        tm.yday = 1;
+        tm.mon = wxDateTime::Jan;
+        m_time.Set(tm);
+
         UpdateTextWithoutEvent();
     }
 
