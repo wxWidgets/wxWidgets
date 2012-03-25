@@ -1150,6 +1150,25 @@ public:
   #undef WX_STR_ITERATOR_TAG
   #undef WX_STR_ITERATOR_IMPL
 
+  // This method is mostly used by wxWidgets itself and return the offset of
+  // the given iterator in bytes relative to the start of the buffer
+  // representing the current string contents in the current locale encoding.
+  //
+  // It is inefficient as it involves converting part of the string to this
+  // encoding (and also unsafe as it simply returns 0 if the conversion fails)
+  // and so should be avoided if possible, wx itself only uses it to implement
+  // backwards-compatible API.
+  ptrdiff_t IterOffsetInMBStr(const const_iterator& i) const
+  {
+      const wxString str(begin(), i);
+
+      // This is logically equivalent to strlen(str.mb_str()) but avoids
+      // actually converting the string to multibyte and just computes the
+      // length that it would have after conversion.
+      size_t ofs = wxConvLibc.FromWChar(NULL, 0, str.wc_str(), str.length());
+      return ofs == wxCONV_FAILED ? 0 : static_cast<ptrdiff_t>(ofs);
+  }
+
   friend class iterator;
   friend class const_iterator;
 
