@@ -1541,8 +1541,6 @@ bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality interpolat
     if (m_interpolation == interpolation)
         return true;
 
-    m_interpolation = interpolation;
-
     InterpolationMode interpolationMode = InterpolationModeDefault;
     switch (interpolation)
     {
@@ -1569,7 +1567,12 @@ bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality interpolat
         default:
             return false;
     }
-    m_context->SetInterpolationMode(interpolationMode);
+
+    if ( m_context->SetInterpolationMode(interpolationMode) != Gdiplus::Ok )
+        return false;
+
+    m_interpolation = interpolation;
+
     return true;
 }
 
