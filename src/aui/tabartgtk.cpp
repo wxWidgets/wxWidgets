@@ -212,7 +212,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
             tab_rect.y -= 2 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
             if (!page.active)
                 tab_rect.y += 2 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
-            gap_y = tab_rect.y + tab_rect.height;
+            gap_y = tab_rect.y + tab_rect.height  - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder / 2;
             // fall through
         case wxAUI_NB_BOTTOM:
             gap_x = tab_rect.x - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder / 2;
@@ -246,7 +246,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
             gtk_paint_box_gap(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_OUT,
                               NULL, widget,
                               const_cast<char*>("notebook"),
-                              window_rect.x, gap_y,
+                              1, gap_y,
                               window_rect.width, gap_height,
                               GTK_POS_BOTTOM, gap_x , gap_width);
         }
@@ -265,7 +265,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
             gtk_paint_box_gap(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_OUT,
                               NULL, widget,
                               const_cast<char*>("notebook"),
-                              window_rect.x, gap_y,
+                              1, gap_y,
                               window_rect.width, gap_height,
                               GTK_POS_TOP, gap_x , gap_width);
         }
