@@ -345,8 +345,8 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
 
     // The dimensions used for indentation etc. have to be unscaled
     // during printing to be correct when scaling is applied.
-    // if (!IsPreview())
-        m_richTextBuffer->SetScale(scale);
+    // Also, correct the conversions in wxRTC using DC instead of print DC.
+    m_richTextBuffer->SetScale(scale * float(dc->GetPPI().x)/float(ppiPrinterX));
 
     // Calculate margins
     int marginLeft = wxRichTextObject::ConvertTenthsMMToPixels(ppiPrinterX, m_marginLeft);
