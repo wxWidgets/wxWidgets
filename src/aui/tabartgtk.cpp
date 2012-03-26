@@ -50,11 +50,7 @@ static int s_CloseIconSize = 16; // default size
 
 }
 
-wxAuiGtkTabArt::wxAuiGtkTabArt()//:
-//    m_Xthickness(0),
-//    m_Ythickness(0),
-//    m_TabHBorder(0),
-//    m_TabVBorder(0)
+wxAuiGtkTabArt::wxAuiGtkTabArt()
 
 {
 }
@@ -178,7 +174,6 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
                          "focus-line-width", &focus_width,
                          NULL);
 
-    int gap_x = 0, gap_width = 0;
     int tab_pos;
     if (m_flags &wxAUI_NB_BOTTOM)
         tab_pos = wxAUI_NB_BOTTOM;
@@ -203,8 +198,10 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
     if (! page.bitmap.IsOk())
         tab_rect.height += 1;
 
-    int gap_height = 6 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
-    int gap_y = tab_rect.y - gap_height;
+    int gap_rect_height = 6 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
+    int gap_rect_x = 1, gap_start = 0, gap_width = 0;
+    int gap_rect_y = tab_rect.y - gap_rect_height;
+    int gap_rect_width = window_rect.width;
 
     switch (tab_pos)
     {
@@ -212,15 +209,17 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
             tab_rect.y -= 2 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
             if (!page.active)
                 tab_rect.y += 2 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
-            gap_y = tab_rect.y + tab_rect.height  - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder / 2;
+            gap_rect_y = tab_rect.y + tab_rect.height - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder / 2;
             // fall through
         case wxAUI_NB_BOTTOM:
-            gap_x = tab_rect.x - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder / 2;
+            gap_start = tab_rect.x - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder / 2;
             gap_width = tab_rect.width;
             break;
+        // TODO: case wxAUI_NB_LEFT: break;
+        // TODO: case wxAUI_NB_RIGHT: break;
     }
     tab_rect.y += GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder / 2;
-    gap_y += GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder / 2;
+    gap_rect_y += GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder / 2;
 
     int padding = focus_width + GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
 
@@ -246,9 +245,9 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
             gtk_paint_box_gap(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_OUT,
                               NULL, widget,
                               const_cast<char*>("notebook"),
-                              1, gap_y,
-                              window_rect.width, gap_height,
-                              GTK_POS_BOTTOM, gap_x , gap_width);
+                              gap_rect_x, gap_rect_y,
+                              gap_rect_width, gap_rect_height,
+                              GTK_POS_BOTTOM, gap_start , gap_width);
         }
         gtk_paint_extension(style_notebook, window,
                            page.active ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE, GTK_SHADOW_OUT,
@@ -265,9 +264,9 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
             gtk_paint_box_gap(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_OUT,
                               NULL, widget,
                               const_cast<char*>("notebook"),
-                              1, gap_y,
-                              window_rect.width, gap_height,
-                              GTK_POS_TOP, gap_x , gap_width);
+                              gap_rect_x, gap_rect_y,
+                              gap_rect_width, gap_rect_height,
+                              GTK_POS_TOP, gap_start , gap_width);
         }
         gtk_paint_extension(style_notebook, window,
                            page.active ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE, GTK_SHADOW_OUT,
