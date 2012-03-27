@@ -1118,10 +1118,12 @@ public:
     //@{
 
     /**
-        Copy from a source DC to this DC, specifying the destination
-        coordinates, size of area to copy, source DC, source coordinates,
-        logical function, whether to use a bitmap mask, and mask source
-        position.
+        Copy from a source DC to this DC.
+
+        With this method you can specify the destination coordinates and the
+        size of area to copy which will be the same for both the source and
+        target DCs. If you need to apply scaling while copying, use
+        StretchBlit().
 
         @param xdest
             Destination device context x position.
@@ -1185,10 +1187,15 @@ public:
               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     /**
-        Copy from a source DC to this DC, specifying the destination
-        coordinates, destination size, source DC, source coordinates, size of
-        source area to copy, logical function, whether to use a bitmap mask,
-        and mask source position.
+        Copy from a source DC to this DC possibly changing the scale.
+
+        Unlike Blit(), this method allows to specify different source and
+        destination region sizes, meaning that it can stretch or shrink it
+        while copying. The same can be achieved by changing the scale of the
+        source or target DC but calling this method is simpler and can also be
+        more efficient if the platform provides a native implementation of it.
+
+        The meaning of its other parameters is the same as with Blit().
 
         @param xdest
             Destination device context x position.
@@ -1247,8 +1254,6 @@ public:
             source position. Currently only implemented on Windows.
 
         There is partial support for Blit() in wxPostScriptDC, under X.
-
-        StretchBlit() is only implemented under wxMAC and wxMSW.
 
         See wxMemoryDC for typical usage.
 
