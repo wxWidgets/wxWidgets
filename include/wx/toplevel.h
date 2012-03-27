@@ -224,7 +224,9 @@ public:
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     // Is this the active frame (highlighted in the taskbar)?
-    virtual bool IsActive() { return wxGetTopLevelParent(FindFocus()) == this; }
+    //
+    // A TLW is active only if it contains the currently focused window.
+    virtual bool IsActive() { return IsDescendant(FindFocus()); }
 
     // this function may be overridden to return false to allow closing the
     // application even when this top level window is still open
