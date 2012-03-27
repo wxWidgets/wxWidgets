@@ -740,6 +740,10 @@ public:
         // is this window a top level one?
     virtual bool IsTopLevel() const;
 
+        // is this window a child or grand child of this one (inside the same
+        // TLW)?
+    bool IsDescendant(wxWindowBase* win) const;
+
         // it doesn't really change parent, use Reparent() instead
     void SetParent( wxWindowBase *parent ) { m_parent = (wxWindow *)parent; }
         // change the real parent of this window, return true if the parent

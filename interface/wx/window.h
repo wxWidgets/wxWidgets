@@ -493,6 +493,23 @@ public:
         @see GetNextSibling()
     */
     wxWindow* GetPrevSibling() const;
+
+    /**
+        Check if the specified window is a descendant of this one.
+
+        Returns @true if the window is a descendant (i.e. a child or
+        grand-child or grand-grand-child or ...) of this one.
+
+        Notice that a window can never be a descendant of another one if they
+        are in different top level windows, i.e. a child of a wxDialog is not
+        considered to be a descendant of dialogs parent wxFrame.
+
+        @param win Any window, possible @NULL (@false is always returned then).
+
+        @since 2.9.4
+     */
+    bool IsDescendant(wxWindowBase* win) const;
+
     /**
         Reparents the window, i.e. the window will be removed from its
         current parent window (e.g. a non-standard toolbar in a wxFrame)

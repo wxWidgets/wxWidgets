@@ -1242,8 +1242,27 @@ void wxWindowBase::Thaw()
 }
 
 // ----------------------------------------------------------------------------
-// reparenting the window
+// Dealing with parents and children.
 // ----------------------------------------------------------------------------
+
+bool wxWindowBase::IsDescendant(wxWindowBase* win) const
+{
+    // Iterate until we find this window in the parent chain or exhaust it.
+    while ( win )
+    {
+        wxWindow* const parent = win->GetParent();
+        if ( parent == this )
+            return true;
+
+        // Stop iterating on reaching the top level window boundary.
+        if ( parent->IsTopLevel() )
+            break;
+
+        win = parent;
+    }
+
+    return false;
+}
 
 void wxWindowBase::AddChild(wxWindowBase *child)
 {
