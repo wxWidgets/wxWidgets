@@ -743,9 +743,6 @@ protected:
     int overflow(int i);
 #endif // wxHAS_TEXT_WINDOW_STREAM
 
-    virtual bool DoLoadFile(const wxString& file, int fileType);
-    virtual bool DoSaveFile(const wxString& file, int fileType);
-
     // Another wxTextAreaBase override.
     virtual bool IsValidPosition(long pos) const
     {
