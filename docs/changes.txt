@@ -207,6 +207,9 @@ Changes in behaviour not resulting in compilation errors, please read this!
   behaved differently in wxMSW and wxGTK/wxOSX before) if more than one item
   is selected in a control with wxDV_MULTIPLE style.
 
+- wxDC::Blit() now honours the source DC coordinate system in wxMSW, as in all
+  the other ports, do not apply scaling to source coordinates manually any more.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

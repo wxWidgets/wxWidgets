@@ -2246,6 +2246,13 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         return false;
     }
 
+    // We need to interpret source-related coordinates in source DC
+    // coordinate system.
+    xsrc = source->LogicalToDeviceX(xsrc);
+    ysrc = source->LogicalToDeviceY(ysrc);
+    srcWidth = source->LogicalToDeviceXRel(srcWidth);
+    srcHeight = source->LogicalToDeviceYRel(srcHeight);
+
     const HDC hdcSrc = GetHdcOf(*implSrc);
 
     // if either the source or destination has alpha channel, we must use

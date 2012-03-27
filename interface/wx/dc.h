@@ -1125,6 +1125,11 @@ public:
         target DCs. If you need to apply scaling while copying, use
         StretchBlit().
 
+        Notice that source DC coordinates @a xsrc and @a ysrc are interpreted
+        using the current source DC coordinate system, i.e. the scale, origin
+        position and axis directions are taken into account when transforming
+        them to physical (pixel) coordinates.
+
         @param xdest
             Destination device context x position.
         @param ydest
@@ -1195,7 +1200,10 @@ public:
         source or target DC but calling this method is simpler and can also be
         more efficient if the platform provides a native implementation of it.
 
-        The meaning of its other parameters is the same as with Blit().
+        The meaning of its other parameters is the same as with Blit(), in
+        particular all source coordinates are interpreted using the source DC
+        coordinate system, i.e. are affected by its scale, origin translation
+        and axis direction.
 
         @param xdest
             Destination device context x position.
