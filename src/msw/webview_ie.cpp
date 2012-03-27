@@ -122,6 +122,10 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
         hr = SafeArrayUnaccessData(psaStrings);
 
         IHTMLDocument2* document = GetDocument();
+
+        if(!document)
+            return;
+
         document->write(psaStrings);
         document->close();
         document->Release();
@@ -140,6 +144,10 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
             hr = SafeArrayUnaccessData(psaStrings);
 
             document = GetDocument();
+
+            if(!document)
+                return;
+
             document->write(psaStrings);
             document->Release();
 
@@ -172,25 +180,33 @@ void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
 wxString wxWebViewIE::GetPageSource() const
 {
     IHTMLDocument2* document = GetDocument();
-    IHTMLElement *bodyTag = NULL;
-    IHTMLElement *htmlTag = NULL;
-    wxString source;
-    HRESULT hr = document->get_body(&bodyTag);
-    if(SUCCEEDED(hr))
+
+    if(document)
     {
-        hr = bodyTag->get_parentElement(&htmlTag);
+        IHTMLElement *bodyTag = NULL;
+        IHTMLElement *htmlTag = NULL;
+        wxString source;
+        HRESULT hr = document->get_body(&bodyTag);
         if(SUCCEEDED(hr))
         {
-            BSTR bstr;
-            htmlTag->get_outerHTML(&bstr);
-            source = wxString(bstr);
-            htmlTag->Release();
+            hr = bodyTag->get_parentElement(&htmlTag);
+            if(SUCCEEDED(hr))
+            {
+                BSTR bstr;
+                htmlTag->get_outerHTML(&bstr);
+                source = wxString(bstr);
+                htmlTag->Release();
+            }
+            bodyTag->Release();
         }
-        bodyTag->Release();
-    }
 
-    document->Release();
-    return source;
+        document->Release();
+        return source;
+    }
+    else
+    {
+        return "";
+    }
 }
 
 wxWebViewZoom wxWebViewIE::GetZoom() const
@@ -521,11 +537,18 @@ wxString wxWebViewIE::GetCurrentURL() const
 wxString wxWebViewIE::GetCurrentTitle() const
 {
     IHTMLDocument2* document = GetDocument();
-    BSTR title;
 
-    document->get_nameProp(&title);
-    document->Release();
-    return wxString(title);
+    if(document)
+    {
+        BSTR title;
+        document->get_nameProp(&title);
+        document->Release();
+        return wxString(title);
+    }
+    else
+    {
+        return "";
+    }
 }
 
 bool wxWebViewIE::CanCut() const
@@ -579,24 +602,36 @@ void wxWebViewIE::Redo()
 void wxWebViewIE::SetEditable(bool enable)
 {
     IHTMLDocument2* document = GetDocument();
-    if( enable )
-        document->put_designMode(SysAllocString(L"On"));
-    else
-        document->put_designMode(SysAllocString(L"Off"));
 
-    document->Release();
+    if(document)
+    {
+        if( enable )
+            document->put_designMode(SysAllocString(L"On"));
+        else
+            document->put_designMode(SysAllocString(L"Off"));
+
+        document->Release();
+    }
 }
 
 bool wxWebViewIE::IsEditable() const
 {
     IHTMLDocument2* document = GetDocument();
-    BSTR mode;
-    document->get_designMode(&mode);
-    document->Release();
-    if(wxString(mode) == "On")
-        return true;
+
+    if(document)
+    {
+        BSTR mode;
+        document->get_designMode(&mode);
+        document->Release();
+        if(wxString(mode) == "On")
+            return true;
+        else
+            return false;
+    }
     else
+    {
         return false;
+    }
 }
 
 void wxWebViewIE::SelectAll()
@@ -607,18 +642,26 @@ void wxWebViewIE::SelectAll()
 bool wxWebViewIE::HasSelection() const
 {
     IHTMLDocument2* document = GetDocument();
-    IHTMLSelectionObject* selection;
-    wxString sel;
-    HRESULT hr = document->get_selection(&selection);
-    if(SUCCEEDED(hr))
+
+    if(document)
     {
-        BSTR type;
-        selection->get_type(&type);
-        sel = wxString(type);
-        selection->Release();
+        IHTMLSelectionObject* selection;
+        wxString sel;
+        HRESULT hr = document->get_selection(&selection);
+        if(SUCCEEDED(hr))
+        {
+            BSTR type;
+            selection->get_type(&type);
+            sel = wxString(type);
+            selection->Release();
+        }
+        document->Release();
+        return sel != "None";
     }
-    document->Release();
-    return sel != "None";
+    else
+    {
+        return false;
+    }
 }
 
 void wxWebViewIE::DeleteSelection()
@@ -629,108 +672,140 @@ void wxWebViewIE::DeleteSelection()
 wxString wxWebViewIE::GetSelectedText() const
 {
     IHTMLDocument2* document = GetDocument();
-    IHTMLSelectionObject* selection;
-    wxString selected;
-    HRESULT hr = document->get_selection(&selection);
-    if(SUCCEEDED(hr))
+
+    if(document)
     {
-        IDispatch* disrange;
-        hr = selection->createRange(&disrange);
+        IHTMLSelectionObject* selection;
+        wxString selected;
+        HRESULT hr = document->get_selection(&selection);
         if(SUCCEEDED(hr))
         {
-            IHTMLTxtRange* range;
-            hr = disrange->QueryInterface(IID_IHTMLTxtRange, (void**)&range);
+            IDispatch* disrange;
+            hr = selection->createRange(&disrange);
             if(SUCCEEDED(hr))
             {
-                BSTR text;
-                range->get_text(&text);
-                selected = wxString(text);
-                range->Release();
+                IHTMLTxtRange* range;
+                hr = disrange->QueryInterface(IID_IHTMLTxtRange, (void**)&range);
+                if(SUCCEEDED(hr))
+                {
+                    BSTR text;
+                    range->get_text(&text);
+                    selected = wxString(text);
+                    range->Release();
+                }
+                disrange->Release();
             }
-            disrange->Release();
+            selection->Release();
         }
-        selection->Release();
+        document->Release();
+        return selected;
     }
-    document->Release();
-    return selected;
+    else
+    {
+        return "";
+    }
 }
 
 wxString wxWebViewIE::GetSelectedSource() const
 {
     IHTMLDocument2* document = GetDocument();
-    IHTMLSelectionObject* selection;
-    wxString selected;
-    HRESULT hr = document->get_selection(&selection);
-    if(SUCCEEDED(hr))
+
+    if(document)
     {
-        IDispatch* disrange;
-        hr = selection->createRange(&disrange);
+        IHTMLSelectionObject* selection;
+        wxString selected;
+        HRESULT hr = document->get_selection(&selection);
         if(SUCCEEDED(hr))
         {
-            IHTMLTxtRange* range;
-            hr = disrange->QueryInterface(IID_IHTMLTxtRange, (void**)&range);
+            IDispatch* disrange;
+            hr = selection->createRange(&disrange);
             if(SUCCEEDED(hr))
             {
-                BSTR text;
-                range->get_htmlText(&text);
-                selected = wxString(text);
-                range->Release();
+                IHTMLTxtRange* range;
+                hr = disrange->QueryInterface(IID_IHTMLTxtRange, (void**)&range);
+                if(SUCCEEDED(hr))
+                {
+                    BSTR text;
+                    range->get_htmlText(&text);
+                    selected = wxString(text);
+                    range->Release();
+                }
+                disrange->Release();
             }
-            disrange->Release();
+            selection->Release();
         }
-        selection->Release();
+        document->Release();
+        return selected;
     }
-    document->Release();
-    return selected;
+    else
+    {
+        return "";
+    }
 }
 
 void wxWebViewIE::ClearSelection()
 {
     IHTMLDocument2* document = GetDocument();
-    IHTMLSelectionObject* selection;
-    wxString selected;
-    HRESULT hr = document->get_selection(&selection);
-    if(SUCCEEDED(hr))
+
+    if(document)
     {
-        selection->empty();
-        selection->Release();
+        IHTMLSelectionObject* selection;
+        wxString selected;
+        HRESULT hr = document->get_selection(&selection);
+        if(SUCCEEDED(hr))
+        {
+            selection->empty();
+            selection->Release();
+        }
+        document->Release();
     }
-    document->Release();
 }
 
 wxString wxWebViewIE::GetPageText() const
 {
     IHTMLDocument2* document = GetDocument();
-    wxString text;
-    IHTMLElement* body;
-    HRESULT hr = document->get_body(&body);
-    if(SUCCEEDED(hr))
+
+    if(document)
     {
-        BSTR out;
-        body->get_innerText(&out);
-        text = wxString(out);
-        body->Release();
+        wxString text;
+        IHTMLElement* body;
+        HRESULT hr = document->get_body(&body);
+        if(SUCCEEDED(hr))
+        {
+            BSTR out;
+            body->get_innerText(&out);
+            text = wxString(out);
+            body->Release();
+        }
+        document->Release();
+        return text;
     }
-    document->Release();
-    return text;
+    else
+    {
+        return "";
+    }
 }
 
 void wxWebViewIE::RunScript(const wxString& javascript)
 {
     IHTMLDocument2* document = GetDocument();
-    IHTMLWindow2* window;
-    wxString language = "javascript";
-    HRESULT hr = document->get_parentWindow(&window);
-    if(SUCCEEDED(hr))
+
+    if(document)
     {
-        VARIANT level;
-        VariantInit(&level);
-        V_VT(&level) = VT_EMPTY;
-        window->execScript(SysAllocString(javascript.wc_str()),
-                           SysAllocString(language.wc_str()),
-                           &level);
+        IHTMLWindow2* window;
+        wxString language = "javascript";
+        HRESULT hr = document->get_parentWindow(&window);
+        if(SUCCEEDED(hr))
+        {
+            VARIANT level;
+            VariantInit(&level);
+            V_VT(&level) = VT_EMPTY;
+            window->execScript(SysAllocString(javascript.wc_str()),
+                               SysAllocString(language.wc_str()),
+                               &level);
+        }
+        document->Release();
     }
-    document->Release();
 }
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
@@ -767,29 +842,49 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 bool wxWebViewIE::CanExecCommand(wxString command) const
 {
     IHTMLDocument2* document = GetDocument();
-    VARIANT_BOOL enabled;
 
-    document->queryCommandEnabled(SysAllocString(command.wc_str()), &enabled);
-    document->Release();
+    if(document)
+    {
+        VARIANT_BOOL enabled;
 
-    return (enabled == VARIANT_TRUE);
+        document->queryCommandEnabled(SysAllocString(command.wc_str()), &enabled);
+        document->Release();
+
+        return (enabled == VARIANT_TRUE);
+    }
+    else
+    {
+        return false;
+    }
+
 }
 
 void wxWebViewIE::ExecCommand(wxString command)
 {
     IHTMLDocument2* document = GetDocument();
-    document->execCommand(SysAllocString(command.wc_str()), VARIANT_FALSE, VARIANT(), NULL);
-    document->Release();
+
+    if(document)
+    {
+        document->execCommand(SysAllocString(command.wc_str()), VARIANT_FALSE, VARIANT(), NULL);
+        document->Release();
+    }
 }
 
 IHTMLDocument2* wxWebViewIE::GetDocument() const
 {
-    wxVariant variant = m_ie.GetProperty("Document");
-    IHTMLDocument2* document = (IHTMLDocument2*)variant.GetVoidPtr();
-
-    wxASSERT(document);
-
-    return document;
+    IDispatch* dispatch;
+    HRESULT result = m_webBrowser->get_Document(&dispatch);
+    if(SUCCEEDED(result))
+    {
+        IHTMLDocument2* document;
+        dispatch->QueryInterface(IID_IHTMLDocument2, (void**)&document);
+        //document is set to null automatically if the interface isn't supported
+        return document;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 bool wxWebViewIE::EnableControlFeature(long flag, bool enable)
