@@ -6,6 +6,123 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/// style flags
+#define wxLC_VRULES          0x0001
+#define wxLC_HRULES          0x0002
+
+#define wxLC_ICON            0x0004
+#define wxLC_SMALL_ICON      0x0008
+#define wxLC_LIST            0x0010
+#define wxLC_REPORT          0x0020
+
+#define wxLC_ALIGN_TOP       0x0040
+#define wxLC_ALIGN_LEFT      0x0080
+#define wxLC_AUTOARRANGE     0x0100
+#define wxLC_VIRTUAL         0x0200
+#define wxLC_EDIT_LABELS     0x0400
+#define wxLC_NO_HEADER       0x0800
+#define wxLC_NO_SORT_HEADER  0x1000
+#define wxLC_SINGLE_SEL      0x2000
+#define wxLC_SORT_ASCENDING  0x4000
+#define wxLC_SORT_DESCENDING 0x8000
+
+#define wxLC_MASK_TYPE       (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
+#define wxLC_MASK_ALIGN      (wxLC_ALIGN_TOP | wxLC_ALIGN_LEFT)
+#define wxLC_MASK_SORT       (wxLC_SORT_ASCENDING | wxLC_SORT_DESCENDING)
+
+
+/// Mask flags to tell app/GUI what fields of wxListItem are valid
+#define wxLIST_MASK_STATE           0x0001
+#define wxLIST_MASK_TEXT            0x0002
+#define wxLIST_MASK_IMAGE           0x0004
+#define wxLIST_MASK_DATA            0x0008
+#define wxLIST_SET_ITEM             0x0010
+#define wxLIST_MASK_WIDTH           0x0020
+#define wxLIST_MASK_FORMAT          0x0040
+
+/// State flags for indicating the state of an item
+#define wxLIST_STATE_DONTCARE       0x0000
+#define wxLIST_STATE_DROPHILITED    0x0001      // MSW only
+#define wxLIST_STATE_FOCUSED        0x0002
+#define wxLIST_STATE_SELECTED       0x0004
+#define wxLIST_STATE_CUT            0x0008      // MSW only
+#define wxLIST_STATE_DISABLED       0x0010      // OS2 only
+#define wxLIST_STATE_FILTERED       0x0020      // OS2 only
+#define wxLIST_STATE_INUSE          0x0040      // OS2 only
+#define wxLIST_STATE_PICKED         0x0080      // OS2 only
+#define wxLIST_STATE_SOURCE         0x0100      // OS2 only
+
+/// Hit test flags, used in HitTest
+#define wxLIST_HITTEST_ABOVE            0x0001  // Above the client area.
+#define wxLIST_HITTEST_BELOW            0x0002  // Below the client area.
+#define wxLIST_HITTEST_NOWHERE          0x0004  // In the client area but below the last item.
+#define wxLIST_HITTEST_ONITEMICON       0x0020  // On the bitmap associated with an item.
+#define wxLIST_HITTEST_ONITEMLABEL      0x0080  // On the label (string) associated with an item.
+#define wxLIST_HITTEST_ONITEMRIGHT      0x0100  // In the area to the right of an item.
+#define wxLIST_HITTEST_ONITEMSTATEICON  0x0200  // On the state icon for a tree view item that is in a user-defined state.
+#define wxLIST_HITTEST_TOLEFT           0x0400  // To the left of the client area.
+#define wxLIST_HITTEST_TORIGHT          0x0800  // To the right of the client area.
+
+#define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL | wxLIST_HITTEST_ONITEMSTATEICON)
+
+/// GetSubItemRect constants
+#define wxLIST_GETSUBITEMRECT_WHOLEITEM -1l
+
+/// Flags for GetNextItem (MSW only except wxLIST_NEXT_ALL)
+enum
+{
+    wxLIST_NEXT_ABOVE,          // Searches for an item above the specified item
+    wxLIST_NEXT_ALL,            // Searches for subsequent item by index
+    wxLIST_NEXT_BELOW,          // Searches for an item below the specified item
+    wxLIST_NEXT_LEFT,           // Searches for an item to the left of the specified item
+    wxLIST_NEXT_RIGHT           // Searches for an item to the right of the specified item
+};
+
+/// Alignment flags for Arrange (MSW only except wxLIST_ALIGN_LEFT)
+enum
+{
+    wxLIST_ALIGN_DEFAULT,
+    wxLIST_ALIGN_LEFT,
+    wxLIST_ALIGN_TOP,
+    wxLIST_ALIGN_SNAP_TO_GRID
+};
+
+/// Column format (MSW only except wxLIST_FORMAT_LEFT)
+enum wxListColumnFormat
+{
+    wxLIST_FORMAT_LEFT,
+    wxLIST_FORMAT_RIGHT,
+    wxLIST_FORMAT_CENTRE,
+    wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
+};
+
+/// Autosize values for SetColumnWidth
+enum
+{
+    wxLIST_AUTOSIZE = -1,
+    wxLIST_AUTOSIZE_USEHEADER = -2      // partly supported by generic version
+};
+
+/// Flag values for GetItemRect
+enum
+{
+    wxLIST_RECT_BOUNDS,
+    wxLIST_RECT_ICON,
+    wxLIST_RECT_LABEL
+};
+
+/// Flag values for FindItem (MSW only)
+enum
+{
+    wxLIST_FIND_UP,
+    wxLIST_FIND_DOWN,
+    wxLIST_FIND_LEFT,
+    wxLIST_FIND_RIGHT
+};
+
+
+
+
 /**
     @class wxListCtrl
 
@@ -944,15 +1061,6 @@ public:
     */
     bool SetItemImage(long item, int image, int selImage = -1);
 
-    /**
-        Sets the unselected and selected images associated with the item.
-        The images are indices into the image list associated with the list control.
-
-        @deprecated
-        This form is deprecated: @a selImage is not used; use the other
-        SetItemImage() overload.
-    */
-    bool SetItemImage(long item, int image, int selImage = -1);
 
     /**
         Sets the position of the item, in icon or small icon view. Windows only.
@@ -1265,6 +1373,27 @@ public:
 };
 
 
+wxEventType wxEVT_COMMAND_LIST_BEGIN_DRAG;
+wxEventType wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+wxEventType wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
+wxEventType wxEVT_COMMAND_LIST_END_LABEL_EDIT;
+wxEventType wxEVT_COMMAND_LIST_DELETE_ITEM;
+wxEventType wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
+wxEventType wxEVT_COMMAND_LIST_ITEM_SELECTED;
+wxEventType wxEVT_COMMAND_LIST_ITEM_DESELECTED;
+wxEventType wxEVT_COMMAND_LIST_KEY_DOWN;
+wxEventType wxEVT_COMMAND_LIST_INSERT_ITEM;
+wxEventType wxEVT_COMMAND_LIST_COL_CLICK;
+wxEventType wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
+wxEventType wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
+wxEventType wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+wxEventType wxEVT_COMMAND_LIST_CACHE_HINT;
+wxEventType wxEVT_COMMAND_LIST_COL_RIGHT_CLICK;
+wxEventType wxEVT_COMMAND_LIST_COL_BEGIN_DRAG;
+wxEventType wxEVT_COMMAND_LIST_COL_DRAGGING;
+wxEventType wxEVT_COMMAND_LIST_COL_END_DRAG;
+wxEventType wxEVT_COMMAND_LIST_ITEM_FOCUSED;
+
 
 /**
     @class wxListItemAttr
@@ -1435,16 +1564,6 @@ public:
 };
 
 
-/**
-    Column format (MSW only except wxLIST_FORMAT_LEFT).
-*/
-enum wxListColumnFormat
-{
-    wxLIST_FORMAT_LEFT,
-    wxLIST_FORMAT_RIGHT,
-    wxLIST_FORMAT_CENTRE,
-    wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
-};
 
 /**
     @class wxListItem
