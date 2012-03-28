@@ -1604,9 +1604,8 @@ public:
         printf("Current time in Paris:\t%s\n", now.Format("%c", wxDateTime::CET).c_str());
         @endcode
 
-        @note This function is accurate up to seconds. UNow() should be used
-              for better precision, but it is less efficient and might not be
-              available on all platforms.
+        @note This function is accurate up to seconds. UNow() can be used if
+              better precision is required.
 
         @see Today()
     */
@@ -1641,11 +1640,13 @@ public:
     static wxDateTime Today();
 
     /**
-        Returns the object corresponding to the current time including the
-        milliseconds if a function to get time with such precision is available
-        on the current platform (supported under most Unices and Win32).
+        Returns the object corresponding to the current UTC time including the
+        milliseconds.
 
-        @see Now()
+        Notice that unlike Now(), this method creates a wxDateTime object
+        corresponding to UTC, not local, time.
+
+        @see Now(), wxGetUTCTimeMillis()
     */
     static wxDateTime UNow();
 };
