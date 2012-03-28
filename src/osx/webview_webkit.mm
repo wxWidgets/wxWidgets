@@ -557,7 +557,7 @@ void wxWebViewWebKit::Print()
     {
         [op setShowsPrintPanel: showPrompt];
         // in my tests, the progress bar always freezes and it stops the whole
-        // print operation. do not turn this to true unless there is a 
+        // print operation. do not turn this to true unless there is a
         // workaround for the bug.
         [op setShowsProgressPanel: false];
     }
@@ -1086,7 +1086,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                 *out = wxWEB_NAV_ERR_USER_CANCELLED;
                 break;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5                
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
             case NSURLErrorCannotDecodeRawData:
             case NSURLErrorCannotDecodeContentData:
             case NSURLErrorCannotParseResponse:
@@ -1182,7 +1182,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                          webKitWindow->GetId(),
                          webKitWindow->GetCurrentURL(),
                          target);
-                                   
+
     event.SetString(wxStringWithNSString(title));
 
     if (webKitWindow && webKitWindow->GetEventHandler())
@@ -1228,7 +1228,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     }
 }
 
-- (void)webView:(WebView *)sender 
+- (void)webView:(WebView *)sender
       decidePolicyForNewWindowAction:(NSDictionary *)actionInformation
                              request:(NSURLRequest *)request
                         newFrameName:(NSString *)frameName
@@ -1285,18 +1285,18 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
     NSURLResponse *response =  [[NSURLResponse alloc] initWithURL:[request URL]
 			                   MIMEType:wxNSStringWithWxString(file->GetMimeType())
-			                   expectedContentLength:length 
+			                   expectedContentLength:length
 			                   textEncodingName:nil];
-    
+
     //Load the data, we malloc it so it is tidied up properly
     void* buffer = malloc(length);
     file->GetStream()->Read(buffer, length);
     NSData *data = [[NSData alloc] initWithBytesNoCopy:buffer length:length];
-    
+
     id<NSURLProtocolClient> client = [self client];
 
     //We do not support caching anything yet
-	[client URLProtocol:self didReceiveResponse:response 
+	[client URLProtocol:self didReceiveResponse:response
             cacheStoragePolicy:NSURLCacheStorageNotAllowed];
 
     //Set the data

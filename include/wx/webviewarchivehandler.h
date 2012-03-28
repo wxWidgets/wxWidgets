@@ -20,7 +20,7 @@ class wxFileSystem;
 #include "wx/webview.h"
 
 //Loads from uris such as scheme:///C:/example/example.html or archives such as
-//scheme:///C:/example/example.zip;protocol=zip/example.html 
+//scheme:///C:/example/example.zip;protocol=zip/example.html
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewArchiveHandler : public wxWebViewHandler
 {

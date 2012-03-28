@@ -200,7 +200,7 @@ public:
 
     virtual HRESULT wxSTDCALL GetHostInfo(DOCHOSTUIINFO *pInfo) = 0;
 
-    virtual HRESULT wxSTDCALL ShowUI(DWORD dwID, 
+    virtual HRESULT wxSTDCALL ShowUI(DWORD dwID,
                                      IOleInPlaceActiveObject *pActiveObject,
                                      IOleCommandTarget *pCommandTarget,
                                      IOleInPlaceFrame *pFrame,
@@ -209,7 +209,7 @@ public:
     virtual HRESULT wxSTDCALL HideUI(void) = 0;
 
     virtual HRESULT wxSTDCALL UpdateUI(void) = 0;
-    
+
     virtual HRESULT wxSTDCALL EnableModeless(BOOL fEnable) = 0;
 
     virtual HRESULT wxSTDCALL OnDocWindowActivate(BOOL fActivate) = 0;
@@ -220,11 +220,11 @@ public:
                                            IOleInPlaceUIWindow *pUIWindow,
                                            BOOL fRameWindow) = 0;
 
-    virtual HRESULT wxSTDCALL TranslateAccelerator(LPMSG lpMsg, 
+    virtual HRESULT wxSTDCALL TranslateAccelerator(LPMSG lpMsg,
                                                    const GUID *pguidCmdGroup,
                                                    DWORD nCmdID) = 0;
 
-    virtual HRESULT wxSTDCALL GetOptionKeyPath(LPOLESTR *pchKey, 
+    virtual HRESULT wxSTDCALL GetOptionKeyPath(LPOLESTR *pchKey,
                                                DWORD dw) = 0;
 
     virtual HRESULT wxSTDCALL GetDropTarget(IDropTarget *pDropTarget,
@@ -468,7 +468,7 @@ public:
     virtual HRESULT wxSTDCALL ShowContextMenu(DWORD dwID, POINT *ppt,
                                               IUnknown *pcmdtReserved,
                                               IDispatch *pdispReserved);
-    
+
     virtual HRESULT wxSTDCALL GetHostInfo(DOCHOSTUIINFO *pInfo);
 
     virtual HRESULT wxSTDCALL ShowUI(DWORD dwID,
@@ -495,7 +495,7 @@ public:
                                                    const GUID *pguidCmdGroup,
                                                    DWORD nCmdID);
 
-    virtual HRESULT wxSTDCALL GetOptionKeyPath(LPOLESTR *pchKey, 
+    virtual HRESULT wxSTDCALL GetOptionKeyPath(LPOLESTR *pchKey,
                                                DWORD dw);
 
     virtual HRESULT wxSTDCALL GetDropTarget(IDropTarget *pDropTarget,

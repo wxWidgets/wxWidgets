@@ -74,14 +74,14 @@ public:
     virtual bool CanSetZoomType(wxWebViewZoomType type) const;
 
     virtual bool IsBusy() const { return m_busy; }
-    
+
     //History functions
     virtual void ClearHistory();
     virtual void EnableHistory(bool enable = true);
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory();
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory();
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item);
-    
+
     //Undo / redo functionality
     virtual bool CanUndo() const;
     virtual bool CanRedo() const;
@@ -95,11 +95,11 @@ public:
     virtual void Cut();
     virtual void Copy();
     virtual void Paste();
-    
+
     //Editing functions
     virtual void SetEditable(bool enable = true);
     virtual bool IsEditable() const;
-    
+
     //Selection
     virtual void DeleteSelection();
     virtual bool HasSelection() const;
@@ -107,9 +107,9 @@ public:
     virtual wxString GetSelectedText() const;
     virtual wxString GetSelectedSource() const;
     virtual void ClearSelection();
-    
+
     void RunScript(const wxString& javascript);
-    
+
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
 
@@ -158,6 +158,6 @@ private:
     //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
 };
 
-#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT 
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT
 
 #endif // _WX_WEBKIT_H_

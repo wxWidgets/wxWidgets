@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {
 public:
-    wxWebViewHistoryItem(const wxString& url, const wxString& title) : 
+    wxWebViewHistoryItem(const wxString& url, const wxString& title) :
                      m_url(url), m_title(title) {}
     wxString GetUrl() { return m_url; }
     wxString GetTitle() { return m_title; }

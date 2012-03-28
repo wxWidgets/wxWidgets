@@ -30,6 +30,6 @@ private:
     struct objc_object *m_histItem;
 };
 
-#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT 
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT
 
 #endif // _WX_OSX_WEBVIEWHISTORYITEM_H_

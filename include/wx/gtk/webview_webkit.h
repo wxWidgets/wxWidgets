@@ -110,7 +110,7 @@ public:
     virtual void ClearSelection();
 
     virtual void RunScript(const wxString& javascript);
-    
+
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
     virtual wxVector<wxSharedPtr<wxWebViewHandler> > GetHandlers() { return m_handlerList; }

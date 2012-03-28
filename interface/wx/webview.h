@@ -23,18 +23,18 @@ enum wxWebViewZoom
 */
 enum wxWebViewZoomType
 {
-    /** 
-        The entire layout scales when zooming, including images 
+    /**
+        The entire layout scales when zooming, including images
     */
     wxWEB_VIEW_ZOOM_TYPE_LAYOUT,
-    /** 
+    /**
         Only the text changes in size when zooming, images and other layout
-        elements retain their initial size 
+        elements retain their initial size
     */
     wxWEB_VIEW_ZOOM_TYPE_TEXT
 };
 
-/** 
+/**
     Types of errors that can cause navigation to fail
 */
 enum wxWebViewNavigationError
@@ -58,17 +58,16 @@ enum wxWebViewNavigationError
     wxWEB_NAV_ERR_OTHER
 };
 
-/** 
-    Type of refresh 
+/**
+    Type of refresh
 */
 enum wxWebViewReloadFlags
 {
     /** Default reload, will access cache */
     wxWEB_VIEW_RELOAD_DEFAULT,
     /** Reload the current view without accessing the cache */
-    wxWEB_VIEW_RELOAD_NO_CACHE 
+    wxWEB_VIEW_RELOAD_NO_CACHE
 };
-
 
 /**
  * List of available backends for wxWebView
@@ -88,14 +87,14 @@ enum wxWebViewBackend
 
 /**
     @class wxWebViewHistoryItem
-  
+
     A simple class that contains the URL and title of an element of the history
-    of a wxWebView. 
-   
+    of a wxWebView.
+
     @since 2.9.3
     @library{wxwebview}
     @category{webview}
-    
+
     @see wxWebView
  */
 class wxWebViewHistoryItem
@@ -105,12 +104,12 @@ public:
         Construtor.
     */
     wxWebViewHistoryItem(const wxString& url, const wxString& title);
-    
+
     /**
         @return The url of the page.
     */
     wxString GetUrl();
-    
+
     /**
         @return The title of the page.
     */
@@ -119,14 +118,14 @@ public:
 
 /**
     @class wxWebViewHandler
-  
-    The base class for handling custom schemes in wxWebView, for example to 
+
+    The base class for handling custom schemes in wxWebView, for example to
     allow virtual file system support.
-   
+
     @since 2.9.3
     @library{wxwebview}
     @category{webview}
-    
+
     @see wxWebView
  */
 class wxWebViewHandler
@@ -140,7 +139,7 @@ public:
 
     /**
         @return A pointer to the file represented by @c uri.
-    */  
+    */
     virtual wxFSFile* GetFile(const wxString &uri) = 0;
 
     /**
@@ -151,68 +150,68 @@ public:
 
 /**
     @class wxWebView
-  
+
     This control may be used to render web (HTML / CSS / javascript) documents.
-    It is designed to allow the creation of multiple backends for each port, 
+    It is designed to allow the creation of multiple backends for each port,
     although currently just one is available. It differs from wxHtmlWindow in
     that each backend is actually a full rendering engine, Trident on MSW and
     Webkit on OSX and GTK. This allows the correct viewing complex pages with
-    javascript and css. 
-    
+    javascript and css.
+
     @section descriptions Backend Descriptions
-    
+
     @par wxWEB_VIEW_BACKEND_IE (MSW)
-    
+
     The IE backend uses Microsoft's Trident rendering engine, specifically the
     version used by the locally installed copy of Internet Explorer. As such it
-    is only available for the MSW port. By default recent versions of the 
+    is only available for the MSW port. By default recent versions of the
     <a href="http://msdn.microsoft.com/en-us/library/aa752085%28v=VS.85%29.aspx">WebBrowser</a>
     control, which this backend uses, emulate Internet Explorer 7. This can be
-    changed with a registry setting, see 
+    changed with a registry setting, see
     <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
-    
+
     @par wxWEB_VIEW_WEBKIT (GTK)
-    
-    Under GTK the WebKit backend uses 
+
+    Under GTK the WebKit backend uses
     <a href="http://webkitgtk.org/">WebKitGTK+</a>. The current minimum version
     required is 1.3.1 which ships by default with Ubuntu Natty and Debian
-    Wheezy and has the package name libwebkitgtk-dev. Custom schemes and 
+    Wheezy and has the package name libwebkitgtk-dev. Custom schemes and
     virtual files systems are supported under this backend, however embedded
     resources such as images and stylesheets are currently loaded using the
     data:// scheme.
-    
+
     @par wxWEB_VIEW_WEBKIT (OSX)
-    
-    The OSX WebKit backend uses Apple's 
+
+    The OSX WebKit backend uses Apple's
     <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
     class. This backend has full support for custom schemes and virtual file
     systems.
 
     @section async Asynchronous Notifications
-    
+
     Many of the methods in wxWebView are asynchronous, i.e. they return
     immediately and perform their work in the background. This includes
-    functions such as LoadUrl() and Reload(). To receive notification of the 
+    functions such as LoadUrl() and Reload(). To receive notification of the
     progress and completion of these functions you need to handle the events
     that are provided. Specifically @c wxEVT_COMMAND_WEB_VIEW_LOADED notifies
-    when the page or a sub-frame has finished loading and 
+    when the page or a sub-frame has finished loading and
     @c wxEVT_COMMAND_WEB_VIEW_ERROR notifies that an error has occurred.
-    
+
     @section vfs Virtual File Systems and Custom Schemes
-    
+
     wxWebView supports the registering of custom scheme handlers, for example
-    @c file or @c http. To do this create a new class which inherits from 
-    wxWebViewHandler, where wxWebHandler::GetFile() returns a pointer to a 
+    @c file or @c http. To do this create a new class which inherits from
+    wxWebViewHandler, where wxWebHandler::GetFile() returns a pointer to a
     wxFSFile which represents the given url. You can then register your handler
     with RegisterHandler() it will be called for all pages and resources.
-    
+
     wxWebFileHandler is provided to allow the navigation of pages inside a zip
-    archive. It overrides the @c file scheme and provides support for the 
-    standard @c file syntax as well as paths to archives of the form 
+    archive. It overrides the @c file scheme and provides support for the
+    standard @c file syntax as well as paths to archives of the form
     @c file:///C:/example/docs.zip;protocol=zip/main.htm
-  
+
     @beginEventEmissionTable{wxWebViewEvent}
     @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_NAVIGATING event, generated before trying
@@ -226,7 +225,7 @@ public:
        will be generated per frame.
     @event{EVT_WEB_VIEW_LOADED(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
-       is fully loaded and displayed. Note that if the displayed HTML document has 
+       is fully loaded and displayed. Note that if the displayed HTML document has
        several frames, one such event will be generated per frame.
     @event{EVT_WEB_VIEW_ERROR(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
@@ -236,13 +235,13 @@ public:
        precise error message/code.
     @event{EVT_WEB_VIEW_NEWWINDOW(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
-       window is created. You must handle this event if you want anything to 
+       window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab.
     @event{EVT_WEB_VIEW_TITLE_CHANGED(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED event, generated when 
+       Process a @c wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
     @endEventTable
-   
+
     @since 2.9.3
     @library{wxwebview}
     @category{ctrl,webview}
@@ -311,12 +310,12 @@ public:
                 shown.
     */
     virtual wxString GetPageSource() const = 0;
-    
+
     /**
         Get the text of the current page.
     */
     virtual wxString GetPageText() const = 0;
-    
+
     /**
         Returns whether the web control is currently busy (e.g. loading a page).
     */
@@ -341,7 +340,7 @@ public:
         displayed page.
     */
     virtual void Print() = 0;
-    
+
     /**
         Registers a custom scheme handler.
         @param handler A shared pointer to a wxWebHandler.
@@ -353,12 +352,12 @@ public:
         @param flags A bit array that may optionally contain reload options.
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
-    
+
     /**
-        Runs the given javascript code. 
+        Runs the given javascript code.
     */
     virtual void RunScript(const wxString& javascript) = 0;
-    
+
     /**
         Set the editable property of the web control. Enabling allows the user
         to edit the page even if the @c contenteditable attribute is not set.
@@ -395,27 +394,27 @@ public:
 
     /**
         Returns @true if the current selection can be copied.
-        
+
         @note This always returns @c true on the OSX WebKit backend.
     */
     virtual bool CanCopy() const = 0;
 
     /**
         Returns @true if the current selection can be cut.
-        
+
          @note This always returns @c true on the OSX WebKit backend.
     */
     virtual bool CanCut() const = 0;
 
     /**
         Returns @true if data can be pasted.
-        
+
         @note This always returns @c true on the OSX WebKit backend.
     */
     virtual bool CanPaste() const = 0;
 
     /**
-        Copies the current selection. 
+        Copies the current selection.
     */
     virtual void Copy() = 0;
 
@@ -433,13 +432,13 @@ public:
         @name History
     */
 
-    /** 
+    /**
         Returns @true if it is possible to navigate backward in the history of
         visited pages.
     */
     virtual bool CanGoBack() const = 0;
 
-    /** 
+    /**
         Returns @true if it is possible to navigate forward in the history of
         visited pages.
     */
@@ -462,13 +461,13 @@ public:
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory() = 0;
 
     /**
-        Returns a list of items in the forward history. The first item in the 
-        vector is the next item in the history with respect to the curently 
+        Returns a list of items in the forward history. The first item in the
+        vector is the next item in the history with respect to the curently
         loaded page.
     */
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory() = 0;
 
-    /** 
+    /**
         Navigate back in the history of visited pages.
         Only valid if CanGoBack() returns true.
     */
@@ -481,31 +480,31 @@ public:
     virtual void GoForward() = 0;
 
     /**
-        Loads a history item. 
+        Loads a history item.
     */
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) = 0;
-    
+
     /**
         @name Selection
     */
-    
+
     /**
-        Clears the current selection. 
+        Clears the current selection.
     */
     virtual void ClearSelection() = 0;
-    
+
     /**
         Deletes the current selection. Note that for @c wxWEB_VIEW_BACKEND_WEBKIT
-        the selection must be editable, either through SetEditable or the 
+        the selection must be editable, either through SetEditable or the
         correct HTML attribute.
     */
     virtual void DeleteSelection() = 0;
-    
+
     /**
         Returns the currently selected source, if any.
     */
     virtual wxString GetSelectedSource() const = 0;
-    
+
     /**
         Returns the currently selected text, if any.
     */
@@ -591,7 +590,7 @@ public:
 /**
     @class wxWebViewEvent
 
-    A navigation  event holds information about events associated with 
+    A navigation  event holds information about events associated with
     wxWebView objects.
 
     @beginEventEmissionTable{wxWebViewEvent}
@@ -607,7 +606,7 @@ public:
        will be generated per frame.
     @event{EVT_WEB_VIEW_LOADED(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
-       is fully loaded and displayed. Note that if the displayed HTML document has 
+       is fully loaded and displayed. Note that if the displayed HTML document has
        several frames, one such event will be generated per frame.
     @event{EVT_WEB_VIEW_ERROR(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
@@ -617,13 +616,13 @@ public:
        precise error message/code.
     @event{EVT_WEB_VIEW_NEWWINDOW(id, func)}
        Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
-       window is created. You must handle this event if you want anything to 
+       window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab.
     @event{EVT_WEB_VIEW_TITLE_CHANGED(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED event, generated when 
+       Process a @c wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
     @endEventTable
-    
+
     @since 2.9.3
     @library{wxwebview}
     @category{events,webview}

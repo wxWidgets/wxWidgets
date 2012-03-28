@@ -65,7 +65,7 @@ enum wxWebViewReloadFlags
 {
     //Default, may access cache
     wxWEB_VIEW_RELOAD_DEFAULT,
-    wxWEB_VIEW_RELOAD_NO_CACHE 
+    wxWEB_VIEW_RELOAD_NO_CACHE
 };
 
 enum wxWebViewBackend

@@ -28,7 +28,7 @@ extern "C"
 {
 
 static void
-wxgtk_webview_webkit_load_status(GtkWidget* widget, 
+wxgtk_webview_webkit_load_status(GtkWidget* widget,
                                  GParamSpec*,
                                  wxWebViewWebKit *webKitCtrl)
 {
@@ -88,7 +88,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     if(webKitCtrl->m_guard)
     {
         webKitCtrl->m_guard = false;
-        //We set this to make sure that we don't try to load the page again from 
+        //We set this to make sure that we don't try to load the page again from
         //the resource request callback
         webKitCtrl->m_vfsurl = webkit_network_request_get_uri(request);
         webkit_web_policy_decision_use(policy_decision);
@@ -128,7 +128,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
                 handler = (*it);
             }
         }
-        //If we found a handler we can then use it to load the file directly 
+        //If we found a handler we can then use it to load the file directly
         //ourselves
         if(handler)
         {
@@ -337,10 +337,10 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
                                   wxWebViewWebKit *webKitCtrl)
 {
     wxString uri = webkit_network_request_get_uri(request);
-    
+
     wxSharedPtr<wxWebViewHandler> handler;
     wxVector<wxSharedPtr<wxWebViewHandler> > hanlders = webKitCtrl->GetHandlers();
-    
+
     //We are not vetoed so see if we match one of the additional handlers
     for(wxVector<wxSharedPtr<wxWebViewHandler> >::iterator it = hanlders.begin();
         it != hanlders.end(); ++it)
@@ -350,7 +350,7 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
             handler = (*it);
         }
     }
-    //If we found a handler we can then use it to load the file directly 
+    //If we found a handler we can then use it to load the file directly
     //ourselves
     if(handler)
     {
@@ -373,7 +373,7 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
             //Then we can redirect the call
             webkit_network_request_set_uri(request, path.utf8_str());
         }
-        
+
     }
 }
 
@@ -414,7 +414,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     g_signal_connect_after(m_web_view, "navigation-policy-decision-requested",
                            G_CALLBACK(wxgtk_webview_webkit_navigation),
                            this);
-    g_signal_connect_after(m_web_view, "load-error", 
+    g_signal_connect_after(m_web_view, "load-error",
                            G_CALLBACK(wxgtk_webview_webkit_error),
                            this);
 
@@ -555,10 +555,10 @@ void wxWebViewWebKit::EnableHistory(bool enable)
 
 wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
 {
-    wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist; 
+    wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
     WebKitWebBackForwardList* history;
     history = webkit_web_view_get_back_forward_list(m_web_view);
-    GList* list = webkit_web_back_forward_list_get_back_list_with_limit(history, 
+    GList* list = webkit_web_back_forward_list_get_back_list_with_limit(history,
                                                                         m_historyLimit);
     //We need to iterate in reverse to get the order we desire
     for(int i = g_list_length(list) - 1; i >= 0 ; i--)
@@ -576,10 +576,10 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory
 
 wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory()
 {
-    wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist; 
+    wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist;
     WebKitWebBackForwardList* history;
     history = webkit_web_view_get_back_forward_list(m_web_view);
-    GList* list = webkit_web_back_forward_list_get_forward_list_with_limit(history, 
+    GList* list = webkit_web_back_forward_list_get_forward_list_with_limit(history,
                                                                            m_historyLimit);
     for(guint i = 0; i < g_list_length(list); i++)
     {
@@ -599,7 +599,7 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     WebKitWebHistoryItem* gtkitem = (WebKitWebHistoryItem*)item->m_histItem;
     if(gtkitem)
     {
-        webkit_web_view_go_to_back_forward_item(m_web_view, 
+        webkit_web_view_go_to_back_forward_item(m_web_view,
                                                 WEBKIT_WEB_HISTORY_ITEM(gtkitem));
     }
 }
@@ -839,7 +839,7 @@ void wxWebViewWebKit::SelectAll()
 
 wxString wxWebViewWebKit::GetSelectedText() const
 {
-    WebKitDOMDocument* doc; 
+    WebKitDOMDocument* doc;
     WebKitDOMDOMWindow* win;
     WebKitDOMDOMSelection* sel;
     WebKitDOMRange* range;
@@ -847,15 +847,15 @@ wxString wxWebViewWebKit::GetSelectedText() const
     doc = webkit_web_view_get_dom_document(m_web_view);
     win = webkit_dom_document_get_default_view(WEBKIT_DOM_DOCUMENT(doc));
     sel = webkit_dom_dom_window_get_selection(WEBKIT_DOM_DOM_WINDOW(win));
-    range = webkit_dom_dom_selection_get_range_at(WEBKIT_DOM_DOM_SELECTION(sel), 
+    range = webkit_dom_dom_selection_get_range_at(WEBKIT_DOM_DOM_SELECTION(sel),
                                                   0, NULL);
-    return wxString(webkit_dom_range_get_text(WEBKIT_DOM_RANGE(range)), 
+    return wxString(webkit_dom_range_get_text(WEBKIT_DOM_RANGE(range)),
                     wxConvUTF8);
 }
 
 wxString wxWebViewWebKit::GetSelectedSource() const
 {
-    WebKitDOMDocument* doc; 
+    WebKitDOMDocument* doc;
     WebKitDOMDOMWindow* win;
     WebKitDOMDOMSelection* sel;
     WebKitDOMRange* range;
@@ -866,7 +866,7 @@ wxString wxWebViewWebKit::GetSelectedSource() const
     doc = webkit_web_view_get_dom_document(m_web_view);
     win = webkit_dom_document_get_default_view(WEBKIT_DOM_DOCUMENT(doc));
     sel = webkit_dom_dom_window_get_selection(WEBKIT_DOM_DOM_WINDOW(win));
-    range = webkit_dom_dom_selection_get_range_at(WEBKIT_DOM_DOM_SELECTION(sel), 
+    range = webkit_dom_dom_selection_get_range_at(WEBKIT_DOM_DOM_SELECTION(sel),
                                                   0, NULL);
     div = webkit_dom_document_create_element(WEBKIT_DOM_DOCUMENT(doc), "div", NULL);
 
@@ -874,13 +874,13 @@ wxString wxWebViewWebKit::GetSelectedSource() const
     webkit_dom_node_append_child(&div->parent_instance, &clone->parent_instance, NULL);
     html = (WebKitDOMHTMLElement*)div;
 
-    return wxString(webkit_dom_html_element_get_inner_html(WEBKIT_DOM_HTML_ELEMENT(html)), 
+    return wxString(webkit_dom_html_element_get_inner_html(WEBKIT_DOM_HTML_ELEMENT(html)),
                     wxConvUTF8);
 }
 
 void wxWebViewWebKit::ClearSelection()
 {
-    WebKitDOMDocument* doc; 
+    WebKitDOMDocument* doc;
     WebKitDOMDOMWindow* win;
     WebKitDOMDOMSelection* sel;
 
@@ -893,18 +893,18 @@ void wxWebViewWebKit::ClearSelection()
 
 wxString wxWebViewWebKit::GetPageText() const
 {
-    WebKitDOMDocument* doc; 
+    WebKitDOMDocument* doc;
     WebKitDOMHTMLElement* body;
 
     doc = webkit_web_view_get_dom_document(m_web_view);
     body = webkit_dom_document_get_body(WEBKIT_DOM_DOCUMENT(doc));
-    return wxString(webkit_dom_html_element_get_inner_text(WEBKIT_DOM_HTML_ELEMENT(body)), 
+    return wxString(webkit_dom_html_element_get_inner_text(WEBKIT_DOM_HTML_ELEMENT(body)),
                     wxConvUTF8);
 }
 
 void wxWebViewWebKit::RunScript(const wxString& javascript)
 {
-    webkit_web_view_execute_script(m_web_view, 
+    webkit_web_view_execute_script(m_web_view,
                                    javascript.mb_str(wxConvUTF8));
 }
 

@@ -560,6 +560,7 @@ bool wxWebViewIE::CanCopy() const
 {
     return CanExecCommand("Copy");
 }
+
 bool wxWebViewIE::CanPaste() const
 {
     return CanExecCommand("Paste");
@@ -584,6 +585,7 @@ bool wxWebViewIE::CanUndo() const
 {
     return CanExecCommand("Undo");
 }
+
 bool wxWebViewIE::CanRedo() const
 {
     return CanExecCommand("Redo");
@@ -892,8 +894,8 @@ bool wxWebViewIE::EnableControlFeature(long flag, bool enable)
 #if wxUSE_DYNLIB_CLASS
 
     wxDynamicLibrary urlMon(wxT("urlmon.dll"));
-    if( urlMon.IsLoaded() && 
-        urlMon.HasSymbol("CoInternetSetFeatureEnabled") && 
+    if( urlMon.IsLoaded() &&
+        urlMon.HasSymbol("CoInternetSetFeatureEnabled") &&
         urlMon.HasSymbol("CoInternetIsFeatureEnabled"))
     {
         typedef HRESULT (WINAPI *CoInternetSetFeatureEnabled_t)(DWORD, DWORD, BOOL);
@@ -1296,7 +1298,7 @@ STDMETHODIMP ClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-wxIEContainer::wxIEContainer(wxWindow *parent, REFIID iid, IUnknown *pUnk, 
+wxIEContainer::wxIEContainer(wxWindow *parent, REFIID iid, IUnknown *pUnk,
                              DocHostUIHandler* uiHandler) :
     wxActiveXContainer(parent,iid,pUnk)
 {
@@ -1307,7 +1309,7 @@ wxIEContainer::~wxIEContainer()
 {
 }
 
-bool wxIEContainer::QueryClientSiteInterface(REFIID iid, void **_interface, 
+bool wxIEContainer::QueryClientSiteInterface(REFIID iid, void **_interface,
                                              const char *&desc)
 {
     if (m_uiHandler && IsEqualIID(iid, wxIID_IDocHostUIHandler))
@@ -1319,8 +1321,8 @@ bool wxIEContainer::QueryClientSiteInterface(REFIID iid, void **_interface,
     return false;
 }
 
-HRESULT DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, 
-                                          IUnknown *pcmdtReserved, 
+HRESULT DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
+                                          IUnknown *pcmdtReserved,
                                           IDispatch *pdispReserved)
 {
     wxUnusedVar(dwID);
@@ -1332,13 +1334,13 @@ HRESULT DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
 
 HRESULT DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
 {
-    //don't show 3d border and ebales themes.
+    //don't show 3d border and enable themes.
     pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_THEME;
     return S_OK;
 }
 
 HRESULT DocHostUIHandler::ShowUI(DWORD dwID,
-                                 IOleInPlaceActiveObject *pActiveObject, 
+                                 IOleInPlaceActiveObject *pActiveObject,
                                  IOleCommandTarget *pCommandTarget,
                                  IOleInPlaceFrame *pFrame,
                                  IOleInPlaceUIWindow *pDoc)
@@ -1379,7 +1381,7 @@ HRESULT DocHostUIHandler::OnFrameWindowActivate(BOOL fActivate)
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::ResizeBorder(LPCRECT prcBorder, 
+HRESULT DocHostUIHandler::ResizeBorder(LPCRECT prcBorder,
                                        IOleInPlaceUIWindow *pUIWindow,
                                        BOOL fFrameWindow)
 {
@@ -1389,7 +1391,7 @@ HRESULT DocHostUIHandler::ResizeBorder(LPCRECT prcBorder,
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg, 
+HRESULT DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg,
                                                const GUID *pguidCmdGroup,
                                                DWORD nCmdID)
 {
