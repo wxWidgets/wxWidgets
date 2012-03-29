@@ -1147,6 +1147,7 @@ void wxGCDCImpl::DoGradientFillLinear(const wxRect& rect,
     m_graphicContext->SetPen(*wxTRANSPARENT_PEN);
     m_graphicContext->DrawRectangle(rect.x,rect.y,rect.width,rect.height);
     m_graphicContext->SetPen(m_pen);
+    m_graphicContext->SetBrush(m_brush);
 }
 
 void wxGCDCImpl::DoGradientFillConcentric(const wxRect& rect,
@@ -1175,6 +1176,7 @@ void wxGCDCImpl::DoGradientFillConcentric(const wxRect& rect,
 
     m_graphicContext->DrawRectangle(rect.x,rect.y,rect.width,rect.height);
     m_graphicContext->SetPen(m_pen);
+    m_graphicContext->SetBrush(m_brush);
 }
 
 void wxGCDCImpl::DoDrawCheckMark(wxCoord x, wxCoord y,
