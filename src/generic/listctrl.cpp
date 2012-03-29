@@ -934,7 +934,6 @@ void wxListLineData::ReverseHighlight( void )
 BEGIN_EVENT_TABLE(wxListHeaderWindow,wxWindow)
     EVT_PAINT         (wxListHeaderWindow::OnPaint)
     EVT_MOUSE_EVENTS  (wxListHeaderWindow::OnMouse)
-    EVT_SET_FOCUS     (wxListHeaderWindow::OnSetFocus)
 END_EVENT_TABLE()
 
 void wxListHeaderWindow::Init()
@@ -1339,12 +1338,6 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                 SetCursor(*m_currentCursor);
         }
     }
-}
-
-void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
-{
-    m_owner->SetFocus();
-    m_owner->Update();
 }
 
 bool wxListHeaderWindow::SendListEvent(wxEventType type, const wxPoint& pos)
@@ -5152,14 +5145,6 @@ void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
         m_mainWin->DoScreenToClient(x, y);
     else
         wxListCtrlBase::DoScreenToClient(x, y);
-}
-
-void wxGenericListCtrl::SetFocus()
-{
-    // The test in window.cpp fails as we are a composite
-    // window, so it checks against "this", but not m_mainWin.
-    if ( DoFindFocus() != this )
-        m_mainWin->SetFocus();
 }
 
 wxSize wxGenericListCtrl::DoGetBestClientSize() const

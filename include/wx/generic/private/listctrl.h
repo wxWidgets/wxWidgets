@@ -346,12 +346,14 @@ public:
 
     virtual ~wxListHeaderWindow();
 
+    // We never need focus as we don't have any keyboard interface.
+    virtual bool AcceptsFocus() const { return false; }
+
     void DrawCurrent();
     void AdjustDC( wxDC& dc );
 
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
-    void OnSetFocus( wxFocusEvent &event );
 
     // needs refresh
     bool m_dirty;

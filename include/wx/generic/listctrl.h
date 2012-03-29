@@ -11,6 +11,7 @@
 #ifndef _WX_GENERIC_LISTCTRL_H_
 #define _WX_GENERIC_LISTCTRL_H_
 
+#include "wx/containr.h"
 #include "wx/scrolwin.h"
 #include "wx/textctrl.h"
 
@@ -29,7 +30,7 @@ class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 // wxListCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxListCtrlBase,
+class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxNavigationEnabled<wxListCtrlBase>,
                                           public wxScrollHelper
 {
 public:
@@ -188,7 +189,6 @@ public:
 #endif
 
     virtual bool ShouldInheritColours() const { return false; }
-    virtual void SetFocus();
 
     // implementation
     // --------------
