@@ -376,12 +376,6 @@ public:
     virtual unsigned GetRow( const wxDataViewItem &item ) const;
     wxDataViewItem GetItem( unsigned int row ) const;
 
-    // compare based on index
-
-    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending ) const;
-    virtual bool HasDefaultCompare() const;
-
     // implement base methods
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
 

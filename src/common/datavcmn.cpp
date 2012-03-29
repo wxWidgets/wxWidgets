@@ -500,33 +500,6 @@ wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
     return wxDataViewItem( m_hash[row] );
 }
 
-bool wxDataViewIndexListModel::HasDefaultCompare() const
-{
-    return !m_ordered;
-}
-
-int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
-                                      const wxDataViewItem& item2,
-                                      unsigned int WXUNUSED(column),
-                                      bool ascending) const
-{
-    if (m_ordered)
-    {
-        unsigned int pos1 = wxPtrToUInt(item1.GetID());  // -1 not needed here
-        unsigned int pos2 = wxPtrToUInt(item2.GetID());  // -1 not needed here
-
-        if (ascending)
-            return pos1 - pos2;
-        else
-            return pos2 - pos1;
-    }
-
-    if (ascending)
-        return GetRow(item1) - GetRow(item2);
-
-    return GetRow(item2) - GetRow(item1);
-}
-
 unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const
 {
     if (item.IsOk())
