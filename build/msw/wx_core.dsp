@@ -5356,10 +5356,6 @@ SOURCE=..\..\include\wx\msw\scrolbar.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\setup0.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\slider.h
 # End Source File
 # Begin Source File

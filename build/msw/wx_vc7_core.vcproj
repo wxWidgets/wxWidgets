@@ -4589,9 +4589,6 @@
 				RelativePath="..\..\include\wx\msw\scrolbar.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\setup0.h">
-			</File>
-			<File
 				RelativePath="..\..\include\wx\msw\slider.h">
 			</File>
 			<File

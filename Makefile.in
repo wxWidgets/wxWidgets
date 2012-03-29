@@ -3027,7 +3027,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/rcdefs.h \
 	wx/msw/richmsgdlg.h \
 	wx/msw/scrolbar.h \
-	wx/msw/setup0.h \
 	wx/msw/slider.h \
 	wx/msw/spinbutt.h \
 	wx/msw/spinctrl.h \
@@ -3466,7 +3465,6 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/region.h \
 	wx/os2/scrolbar.h \
 	wx/os2/settings.h \
-	wx/os2/setup0.h \
 	wx/os2/slider.h \
 	wx/os2/spinbutt.h \
 	wx/os2/spinctrl.h \
@@ -3557,7 +3555,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/rcdefs.h \
 	wx/msw/richmsgdlg.h \
 	wx/msw/scrolbar.h \
-	wx/msw/setup0.h \
 	wx/msw/slider.h \
 	wx/msw/spinbutt.h \
 	wx/msw/spinctrl.h \

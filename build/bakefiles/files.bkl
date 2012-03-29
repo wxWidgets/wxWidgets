@@ -1837,7 +1837,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/rcdefs.h
     wx/msw/richmsgdlg.h
     wx/msw/scrolbar.h
-    wx/msw/setup0.h
     wx/msw/slider.h
     wx/msw/spinbutt.h
     wx/msw/spinctrl.h
@@ -2156,7 +2155,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/region.h
     wx/os2/scrolbar.h
     wx/os2/settings.h
-    wx/os2/setup0.h
     wx/os2/slider.h
     wx/os2/spinbutt.h
     wx/os2/spinctrl.h
