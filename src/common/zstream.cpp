@@ -47,10 +47,18 @@ enum {
 
 wxVersionInfo wxGetZlibVersionInfo()
 {
-    return wxVersionInfo("zlib",
-                         ZLIB_VERNUM >> 12,
-                         (ZLIB_VERNUM >> 8) & 0x0F,
-                         (ZLIB_VERNUM & 0xFF) / 0x10);
+    int major,
+        minor,
+        build;
+
+    if ( sscanf(zlibVersion(), "%d.%d.%d", &major, &minor, &build) != 3 )
+    {
+        major =
+        minor =
+        build = 0;
+    }
+
+    return wxVersionInfo("zlib", major, minor, build);
 }
 
 /////////////////////////////////////////////////////////////////////////////
