@@ -6,6 +6,21 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+enum
+{
+    // Only allow directory viewing/selection, no files
+    wxDIRCTRL_DIR_ONLY       = 0x0010,
+    // When setting the default path, select the first file in the directory
+    wxDIRCTRL_SELECT_FIRST   = 0x0020,
+    // Use 3D borders on internal controls
+    wxDIRCTRL_3D_INTERNAL    = 0x0080,
+    // Editable labels
+    wxDIRCTRL_EDIT_LABELS    = 0x0100,
+    // Allow multiple selection
+    wxDIRCTRL_MULTIPLE       = 0x0200
+};
+
+
 /**
     @class wxGenericDirCtrl
 
@@ -223,3 +238,25 @@ public:
     virtual void UnselectAll();
 };
 
+
+
+class wxDirFilterListCtrl: public wxChoice
+{
+public:
+    wxDirFilterListCtrl();
+    wxDirFilterListCtrl(wxGenericDirCtrl* parent, const wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0);
+    bool Create(wxGenericDirCtrl* parent, const wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0);
+
+    virtual ~wxDirFilterListCtrl() {}
+
+    void Init();
+
+    //// Operations
+    void FillFilterList(const wxString& filter, int defaultFilter);
+};
