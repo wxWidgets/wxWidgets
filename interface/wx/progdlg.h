@@ -16,11 +16,16 @@
 #define wxPD_CAN_SKIP           0x0080
 
 /**
-    @class wxProgressDialog
+    @class wxGenericProgressDialog
 
     This class represents a dialog that shows a short message and a
     progress bar. Optionally, it can display ABORT and SKIP buttons, and
     the elapsed, remaining and estimated time for the end of the progress.
+
+    This class provides a generic implementation of the progress dialog.  If
+    the platform has a native progress dialog available then it will be
+    accessible using the @a wxProgressDialog class, otherwise it will
+    essentially be the same as this class.
 
     Note that you must be aware that wxProgressDialog internally calls
     wxEventLoopBase::YieldFor with @c wxEVT_CATEGORY_UI and @c wxEVT_CATEGORY_USER_INPUT
@@ -63,7 +68,7 @@
     @library{wxbase}
     @category{cmndlg}
 */
-class wxProgressDialog : public wxDialog
+class wxGenericProgressDialog : public wxDialog
 {
 public:
     /**
@@ -84,15 +89,15 @@ public:
         @param style
             The dialog style. See wxProgressDialog.
     */
-    wxProgressDialog(const wxString& title, const wxString& message,
-                     int maximum = 100,
-                     wxWindow* parent = NULL,
-                     int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL);
+    wxGenericProgressDialog(const wxString& title, const wxString& message,
+                            int maximum = 100,
+                            wxWindow* parent = NULL,
+                            int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL);
 
     /**
         Destructor. Deletes the dialog and enables all top level windows.
     */
-    virtual ~wxProgressDialog();
+    virtual ~wxGenericProgressDialog();
 
     /**
         Returns the last value passed to the Update() function or
@@ -206,3 +211,20 @@ public:
                         bool* skip = NULL);
 };
 
+
+
+
+/**
+    @class wxProgressDialog
+
+    If supported by the platform this class will provide the platform's native
+    progress dialog, else it will simply be the @a wxGenericProgressDialog.
+*/
+class wxProgressDialog : public wxGenericProgressDialog
+{
+public:
+    wxProgressDialog( const wxString& title, const wxString& message,
+                      int maximum = 100,
+                      wxWindow *parent = NULL,
+                      int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE );
+};
