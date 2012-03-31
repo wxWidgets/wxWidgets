@@ -20,7 +20,7 @@ enum wxFindReplaceFlags
 
     /** case sensitive search/replace selected (otherwise - case insensitive) */
     wxFR_MATCHCASE  = 4
-}
+};
 
 
 /**
@@ -39,7 +39,7 @@ enum wxFindReplaceDialogStyles
 
     /** don't allow whole word searching */
     wxFR_NOWHOLEWORD   = 8
-}
+};
 
 
 /**
@@ -94,6 +94,12 @@ public:
     */
     const wxString& GetReplaceString() const;
 };
+
+wxEventType wxEVT_COMMAND_FIND;
+wxEventType wxEVT_COMMAND_FIND_NEXT;
+wxEventType wxEVT_COMMAND_FIND_REPLACE;
+wxEventType wxEVT_COMMAND_FIND_REPLACE_ALL;
+wxEventType wxEVT_COMMAND_FIND_CLOSE;
 
 
 
