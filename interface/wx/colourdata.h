@@ -19,6 +19,12 @@
 class wxColourData : public wxObject
 {
 public:
+    /// number of custom colours we store
+    enum
+    {
+        NUM_CUSTOM = 16
+    };
+
     /**
         Constructor. Initializes the custom colours to @c wxNullColour, the
         @e data colour setting to black, and the @e choose full setting to
