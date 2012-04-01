@@ -30,6 +30,15 @@
     This class represents a dialog that shows a list of strings, and allows the
     user to select one or more.
 
+    @beginStyleTable
+    @style{wxOK}
+        Show an OK button.
+    @style{wxCANCEL}
+        Show a Cancel button.
+    @style{wxCENTRE}
+        Centre the message. Not Windows.
+    @endStyleTable
+
     @library{wxbase}
     @category{cmndlg}
 
@@ -54,20 +63,11 @@ public:
             An array of strings, or a string list, containing the choices.
         @param style
             A dialog style (bitlist) containing flags chosen from standard
-            dialog style and the ones listed below. The default value is
-            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
-            wxCANCEL | wxCENTRE.
+            dialog styles and the ones listed in the class documentation. The
+            default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+            wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
             Dialog position. Not Windows.
-
-        @beginStyleTable
-        @style{wxOK}
-            Show an OK button.
-        @style{wxCANCEL}
-            Show a Cancel button.
-        @style{wxCENTRE}
-            Centre the message. Not Windows.
-        @endStyleTable
 
         @remarks Use ShowModal() to show the dialog.
 
@@ -101,20 +101,11 @@ public:
             An array of strings, or a string list, containing the choices.
         @param style
             A dialog style (bitlist) containing flags chosen from standard
-            dialog style and the ones listed below. The default value is
-            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
-            wxCANCEL | wxCENTRE.
+            dialog styles and the ones listed in the class documentation. The
+            default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+            wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
             Dialog position. Not Windows.
-
-        @beginStyleTable
-        @style{wxOK}
-            Show an OK button.
-        @style{wxCANCEL}
-            Show a Cancel button.
-        @style{wxCENTRE}
-            Centre the message. Not Windows.
-        @endStyleTable
 
         @remarks Use ShowModal() to show the dialog.
 
@@ -163,6 +154,15 @@ public:
     user to select one. Double-clicking on a list item is equivalent to
     single-clicking and then pressing OK.
 
+    @beginStyleTable
+    @style{wxOK}
+        Show an OK button.
+    @style{wxCANCEL}
+        Show a Cancel button.
+    @style{wxCENTRE}
+        Centre the message. Not Windows.
+    @endStyleTable
+
     @library{wxbase}
     @category{cmndlg}
 
@@ -191,20 +191,11 @@ public:
             GetSelectionData().
         @param style
             A dialog style (bitlist) containing flags chosen from standard
-            dialog styles and the ones listed below. The default value is
-            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
-            wxCANCEL | wxCENTRE.
+            dialog styles and the ones listed in the class documentation. The
+            default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+            wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
             Dialog position. Not Windows.
-
-        @beginStyleTable
-        @style{wxOK}
-            Show an OK button.
-        @style{wxCANCEL}
-            Show a Cancel button.
-        @style{wxCENTRE}
-            Centre the message. Not Windows.
-        @endStyleTable
 
         @remarks Use ShowModal() to show the dialog.
 
@@ -243,20 +234,11 @@ public:
             GetSelectionData().
         @param style
             A dialog style (bitlist) containing flags chosen from standard
-            dialog styles and the ones listed below. The default value is
-            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
-            wxCANCEL | wxCENTRE.
+            dialog styles and the ones listed in the class documentation. The
+            default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+            wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
             Dialog position. Not Windows.
-
-        @beginStyleTable
-        @style{wxOK}
-            Show an OK button.
-        @style{wxCANCEL}
-            Show a Cancel button.
-        @style{wxCENTRE}
-            Centre the message. Not Windows.
-        @endStyleTable
 
         @remarks Use ShowModal() to show the dialog.
 
