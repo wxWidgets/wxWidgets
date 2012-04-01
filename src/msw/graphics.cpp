@@ -396,10 +396,7 @@ protected:
     void Init(Graphics* graphics, int width, int height);
 
 private:
-    virtual void DoDrawText(const wxString& str, wxDouble x, wxDouble y)
-        { DoDrawFilledText(str, x, y, wxNullGraphicsBrush); }
-    virtual void DoDrawFilledText(const wxString& str, wxDouble x, wxDouble y,
-                                  const wxGraphicsBrush& backgroundBrush);
+    virtual void DoDrawText(const wxString& str, wxDouble x, wxDouble y);
 
     Graphics* m_context;
     wxStack<GraphicsState> m_stateStack;
@@ -1733,9 +1730,8 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     DeleteObject(iconInfo.hbmMask);
 }
 
-void wxGDIPlusContext::DoDrawFilledText(const wxString& str,
-                                        wxDouble x, wxDouble y,
-                                        const wxGraphicsBrush& brush)
+void wxGDIPlusContext::DoDrawText(const wxString& str,
+                                        wxDouble x, wxDouble y )
 {
    if (m_composition == wxCOMPOSITION_DEST)
         return;
@@ -1748,9 +1744,7 @@ void wxGDIPlusContext::DoDrawFilledText(const wxString& str,
 
     wxGDIPlusFontData * const
         fontData = (wxGDIPlusFontData *)m_font.GetRefData();
-    wxGDIPlusBrushData * const
-        brushData = (wxGDIPlusBrushData *)brush.GetRefData();
-
+ 
     m_context->DrawString
                (
                     str.wc_str(*wxConvUI),  // string to draw, always Unicode
@@ -1758,8 +1752,7 @@ void wxGDIPlusContext::DoDrawFilledText(const wxString& str,
                     fontData->GetGDIPlusFont(),
                     PointF(x, y),
                     StringFormat::GenericTypographic(),
-                    brushData ? brushData->GetGDIPlusBrush()
-                              : fontData->GetGDIPlusBrush()
+                    fontData->GetGDIPlusBrush()
                );
 }
 
