@@ -160,14 +160,20 @@ public:
 
         @see operator[] for the operator version.
     */
-    wxString& Item(size_t nIndex) const;
+    //@{
+    wxString& Item(size_t nIndex);
+    const wxString& Item(size_t nIndex) const;
+    //@}
 
     /**
         Returns the last element of the array. Attempt to access the last element of
         an empty array will result in assert failure in debug build, however no checks
         are done in release mode.
     */
-    wxString& Last() const;
+    //@{
+    wxString& Last();
+    const wxString& Last() const;
+    //@}
 
     /**
         Removes the first item matching this value. An assert failure is provoked by
