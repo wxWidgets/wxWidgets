@@ -150,6 +150,13 @@ protected:
 class wxStreamBuffer
 {
 public:
+    /** BufMode flags */
+    enum BufMode
+    {
+        read,
+        write,
+        read_write
+    };
 
     /**
         Constructor, creates a new stream buffer using @a stream as a parent stream
@@ -241,7 +248,7 @@ public:
         Destructor.
         It finalizes all IO calls and frees all internal buffers if necessary.
     */
-    wxStreamBuffer();
+    ~wxStreamBuffer();
 
     /**
         Fill the IO buffer.
