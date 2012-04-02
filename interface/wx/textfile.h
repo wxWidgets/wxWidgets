@@ -190,10 +190,14 @@ public:
     /**
         Retrieves the line number @a n from the file.
 
-        The returned line may be modified but you shouldn't add line terminator
-        at the end - this will be done by wxTextFile.
+        The returned line may be modified when non-const method is used but you
+        shouldn't add line terminator at the end -- this will be done by
+        wxTextFile itself.
     */
-    wxString& GetLine(size_t n) const;
+    //@{
+    wxString& GetLine(size_t n);
+    const wxString& GetLine(size_t n) const;
+    //@}
 
     /**
         Get the number of lines in the file.
