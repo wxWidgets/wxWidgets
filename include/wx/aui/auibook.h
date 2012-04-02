@@ -335,9 +335,6 @@ public:
     // we don't want focus for ourselves
     // virtual bool AcceptsFocus() const { return false; }
 
-    // Redo sizing after thawing
-    virtual void Thaw();
-
     //wxBookCtrlBase functions
 
     virtual void SetPageSize (const wxSize &size);
@@ -362,6 +359,9 @@ protected:
 
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+    // Redo sizing after thawing
+    virtual void DoThaw();
 
     // these can be overridden
 

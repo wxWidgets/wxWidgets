@@ -3238,11 +3238,11 @@ bool wxAuiNotebook::ShowWindowMenu()
         return false;
 }
 
-void wxAuiNotebook::Thaw()
+void wxAuiNotebook::DoThaw()
 {
     DoSizing();
 
-    wxControl::Thaw();
+    wxBookCtrlBase::DoThaw();
 }
 
 void wxAuiNotebook::SetPageSize (const wxSize& WXUNUSED(size))
