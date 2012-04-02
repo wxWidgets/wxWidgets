@@ -99,13 +99,13 @@ public:
         associated with this drop target, calling its wxDataObject::SetData()
         method.
     */
-    virtual bool GetData();
+    virtual bool GetData() = 0;
 
     /**
         Called after OnDrop() returns @true. By default this will usually
         GetData() and will return the suggested default value @a def.
     */
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) = 0;
 
     /**
         Called when the mouse is being dragged over the drop target. By
@@ -136,7 +136,7 @@ public:
 
         @return @true to accept the data, or @false to veto the operation.
     */
-    virtual bool OnDrop(wxCoord x, wxCoord y);
+    virtual bool OnDrop(wxCoord x, wxCoord y) = 0;
 
     /**
         Called when the mouse enters the drop target. By default, this calls
