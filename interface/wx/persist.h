@@ -57,7 +57,7 @@ public:
 
         @see DisableRestoring()
      */
-    bool DisableSaving();
+    void DisableSaving();
 
     /**
         Globally disable restoring the persistence object properties.
@@ -67,7 +67,7 @@ public:
 
         @see DisableSaving()
      */
-    bool DisableRestoring();
+    void DisableRestoring();
 
 
     /**
