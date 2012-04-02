@@ -242,7 +242,7 @@ public:
     /**
         Returns @true if the User component of the URI exists.
     */
-    bool HasUser() const;
+    bool HasUserInfo() const;
 
     /**
         Returns @true if a valid [absolute] URI, otherwise this URI is a URI
