@@ -255,7 +255,7 @@ public:
         The @a conv argument is only meaningful in Unicode build of wxWidgets when
         it is used to convert the file to wide character representation.
     */
-    bool Open(const wxMBConv& conv = wxConvAuto()) const;
+    bool Open(const wxMBConv& conv = wxConvAuto());
 
     /**
         Opens the file with the given name and also loads file in memory on success.
@@ -265,7 +265,7 @@ public:
         The @a conv argument is only meaningful in Unicode build of wxWidgets when
         it is used to convert the file to wide character representation.
     */
-    bool Open(const wxString& strFile, const wxMBConv& conv = wxConvAuto()) const;
+    bool Open(const wxString& strFile, const wxMBConv& conv = wxConvAuto());
 
     /**
         Delete line number @a n from the file.
