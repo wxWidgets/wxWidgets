@@ -513,6 +513,14 @@ public:
                                           wxDouble ty = 0.0) const;
 
     /**
+        Creates a native affine transformation matrix from the passed
+        generic one.
+
+        @since 2.9.4
+    */
+    wxGraphicsMatrix CreateMatrix(const wxAffineMatrix2DBase& mat) const;
+
+    /**
         Creates a native graphics path which is initially empty.
     */
     wxGraphicsPath CreatePath() const;

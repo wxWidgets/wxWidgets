@@ -510,6 +510,16 @@ public:
     virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
         wxDouble tx=0.0, wxDouble ty=0.0) const;
 
+    wxGraphicsMatrix CreateMatrix( const wxAffineMatrix2DBase& mat ) const
+    {
+        wxMatrix2D mat2D;
+        wxPoint2DDouble tr;
+        mat.Get(&mat2D, &tr);
+
+        return CreateMatrix(mat2D.m_11, mat2D.m_12, mat2D.m_21, mat2D.m_22,
+                            tr.m_x, tr.m_y);
+    }
+
     // push the current state of the context, ie the transformation matrix on a stack
     virtual void PushState() = 0;
 
