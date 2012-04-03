@@ -51725,7 +51725,67 @@ if test "$wxUSE_MAC" = 1 ; then
         if test "$wxUSE_OSX_IPHONE" = 1; then
             EXTRA_FRAMEWORKS="-framework IOKit -framework UIKit -framework CFNetwork -framework AudioToolbox -framework CoreFoundation -framework CoreGraphics -framework OpenGLES -framework Foundation -framework QuartzCore"
         else
-            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
+
+
+            if test "$cross_compiling" != "no"; then
+                                                                                                wx_cv_target_x86_64=no
+            else
+                { echo "$as_me:$LINENO: checking if we target only x86_64" >&5
+echo $ECHO_N "checking if we target only x86_64... $ECHO_C" >&6; }
+if test "${wx_cv_target_x86_64+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+int main() { return 0; }
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  if file conftest$ac_exeext|grep -q 'i386\|ppc'; then
+                            wx_cv_target_x86_64=no
+                        else
+                            wx_cv_target_x86_64=yes
+                        fi
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+
+fi
+{ echo "$as_me:$LINENO: result: $wx_cv_target_x86_64" >&5
+echo "${ECHO_T}$wx_cv_target_x86_64" >&6; }
+            fi
+
+            if test "$wx_cv_target_x86_64" != "yes"; then
+                EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
+            fi
         fi
     fi
 fi
