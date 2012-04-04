@@ -63,6 +63,9 @@ bool wxRadioButton::Create( wxWindow *parent,
         return false;
     }
 
+    // Check if this radio button should be put into an existing group. This
+    // shouldn't be done if it's given a style to explicitly start a new group
+    // or if it's not meant to be a part of a group at all.
     GSList* radioButtonGroup = NULL;
     if (!HasFlag(wxRB_GROUP) && !HasFlag(wxRB_SINGLE))
     {
@@ -71,10 +74,22 @@ bool wxRadioButton::Create( wxWindow *parent,
         for (; node; node = node->GetPrevious())
         {
             wxWindow *child = node->GetData();
-            if (child->HasFlag(wxRB_GROUP) && wxIsKindOf(child, wxRadioButton))
+
+            // We stop at the first previous radio button in any case as it
+            // wouldn't make sense to put this button in a group with another
+            // one if there is a radio button that is not part of the same
+            // group between them.
+            if (wxIsKindOf(child, wxRadioButton))
             {
-                radioButtonGroup = gtk_radio_button_get_group(
-                    GTK_RADIO_BUTTON(child->m_widget));
+                // Any preceding radio button can be used to get its group, not
+                // necessarily one with wxRB_GROUP style, but exclude
+                // wxRB_SINGLE ones as their group should never be shared.
+                if (!child->HasFlag(wxRB_SINGLE))
+                {
+                    radioButtonGroup = gtk_radio_button_get_group(
+                        GTK_RADIO_BUTTON(child->m_widget));
+                }
+
                 break;
             }
         }
