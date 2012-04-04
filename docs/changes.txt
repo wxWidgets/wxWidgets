@@ -473,6 +473,7 @@ All:
 - Fix wrong time zone used in wxDateTime::UNow().
 - Fix performance of wxStdInputStream with MSVC8/9 (wsu).
 - Added wxFileName::Exists().
+- Implement wxThread::SetConcurrency() for POSIX systems (Igor Korot).
 
 All (GUI):
 
@@ -529,7 +530,6 @@ OSX:
 Univ:
 
 - Fix regression with read-only wxComboBox appearance (Jason Erb).
-- Implement wxThread::SetConcurrency() for POSIX systems (Igor Korot).
 
 
 
