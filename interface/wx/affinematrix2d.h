@@ -15,7 +15,7 @@
 
     @since 2.9.2
 */
-class wxAffineMatrix2D
+class wxAffineMatrix2D : public wxAffineMatrix2DBase
 {
 public:
     /**
