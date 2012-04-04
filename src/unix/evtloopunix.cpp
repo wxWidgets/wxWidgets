@@ -58,7 +58,7 @@ class PipeIOHandler : public wxFDIOHandler
 public:
     // default ctor does nothing, call Create() to really initialize the
     // object
-    PipeIOHandler() { }
+    PipeIOHandler() : m_pipeIsEmpty(false) { }
 
     bool Create();
 
@@ -74,6 +74,15 @@ public:
 
 private:
     wxPipe m_pipe;
+
+    // Protects access to m_pipeIsEmpty.
+    wxCriticalSection m_pipeLock;
+
+    // This flag is set to true after writing to the pipe and reset to false
+    // after reading from it in the main thread. Having it allows us to avoid
+    // overflowing the pipe with too many writes if the main thread can't keep
+    // up with reading from it.
+    bool m_pipeIsEmpty;
 };
 
 // ----------------------------------------------------------------------------
@@ -87,6 +96,7 @@ bool PipeIOHandler::Create()
         wxLogError(_("Failed to create wake up pipe used by event loop."));
         return false;
     }
+
 
     if ( !m_pipe.MakeNonBlocking(wxPipe::Read) )
     {
@@ -106,38 +116,65 @@ bool PipeIOHandler::Create()
 
 void PipeIOHandler::WakeUp()
 {
+    wxCriticalSectionLocker lock(m_pipeLock);
+
+    // No need to do anything if the pipe already contains something.
+    if ( !m_pipeIsEmpty )
+      return;
+
     if ( write(m_pipe[wxPipe::Write], "s", 1) != 1 )
     {
         // don't use wxLog here, we can be in another thread and this could
         // result in dead locks
         perror("write(wake up pipe)");
     }
+    else
+    {
+        // We just wrote to it, so it's not empty any more.
+        m_pipeIsEmpty = false;
+    }
 }
 
 void PipeIOHandler::OnReadWaiting()
 {
-    // got wakeup from child thread: read all data available in pipe just to
-    // make it empty (even though we write one byte at a time from WakeUp(),
-    // it could have been called several times)
+    // got wakeup from child thread, remove the data that provoked it from the
+    // pipe
+
+    wxCriticalSectionLocker lock(m_pipeLock);
+
     char buf[4];
     for ( ;; )
     {
         const int size = read(GetReadFd(), buf, WXSIZEOF(buf));
 
-        if ( size == 0 || (size == -1 && (errno == EAGAIN || errno == EINTR)) )
+        if ( size > 0 )
         {
-            // nothing left in the pipe (EAGAIN is expected for an FD with
-            // O_NONBLOCK)
-            break;
-        }
-
-        if ( size == -1 )
-        {
-            wxLogSysError(_("Failed to read from wake-up pipe"));
+            wxASSERT_MSG( size == 1, "Too many writes to wake-up pipe?" );
 
             break;
         }
+
+        if ( size == 0 || (size == -1 && errno == EAGAIN) )
+        {
+            // No data available, not an error (but still surprising,
+            // spurious wakeup?)
+            break;
+        }
+
+        if ( errno == EINTR )
+        {
+            // We were interrupted, try again.
+            continue;
+        }
+
+        wxLogSysError(_("Failed to read from wake-up pipe"));
+
+        return;
     }
+
+    // The pipe is empty now, so future calls to WakeUp() would need to write
+    // to it again.
+    m_pipeIsEmpty = true;
 
     // writing to the wake up pipe will make wxConsoleEventLoop return from
     // wxFDIODispatcher::Dispatch() it might be currently blocking in, nothing
