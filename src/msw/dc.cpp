@@ -2246,13 +2246,6 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         return false;
     }
 
-    // We need to interpret source-related coordinates in source DC
-    // coordinate system.
-    xsrc = source->LogicalToDeviceX(xsrc);
-    ysrc = source->LogicalToDeviceY(ysrc);
-    srcWidth = source->LogicalToDeviceXRel(srcWidth);
-    srcHeight = source->LogicalToDeviceYRel(srcHeight);
-
     const HDC hdcSrc = GetHdcOf(*implSrc);
 
     // if either the source or destination has alpha channel, we must use
@@ -2448,6 +2441,17 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                              &ds) == sizeof(ds) )
             {
                 SET_STRETCH_BLT_MODE(GetHdc());
+
+                // Unlike all the other functions used here (i.e. AlphaBlt(),
+                // MaskBlt(), BitBlt() and StretchBlt()), StretchDIBits() does
+                // not take into account the source DC logical coordinates
+                // automatically as it doesn't even work with the source HDC.
+                // So do this manually to ensure that the coordinates are
+                // interpreted in the same way here as in all the other cases.
+                xsrc = source->LogicalToDeviceX(xsrc);
+                ysrc = source->LogicalToDeviceY(ysrc);
+                srcWidth = source->LogicalToDeviceXRel(srcWidth);
+                srcHeight = source->LogicalToDeviceYRel(srcHeight);
 
                 // Figure out what co-ordinate system we're supposed to specify
                 // ysrc in.
