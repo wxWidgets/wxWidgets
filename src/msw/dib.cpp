@@ -45,9 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if !defined(__MWERKS__)
-    #include <memory.h>
-#endif
+#include <memory.h>
 
 #include "wx/msw/dib.h"
 

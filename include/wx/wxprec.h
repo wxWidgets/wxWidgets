@@ -17,7 +17,6 @@
 #if defined(__VISUALC__)   || \
     defined(__DMC__)       || \
     defined(__VISAGECPP__) || \
-    defined(__MWERKS__)    || \
     defined(__WATCOMC__)   || \
     defined(__BORLANDC__)
 

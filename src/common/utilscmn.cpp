@@ -86,7 +86,7 @@
     #include "wx/osx/private.h"
 #endif
 
-#if !defined(__MWERKS__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     #include <sys/types.h>
     #include <sys/stat.h>
 #endif

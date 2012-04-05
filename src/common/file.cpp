@@ -460,7 +460,7 @@ bool wxFile::Eof() const
 
     wxFileOffset iRc;
 
-#if defined(__DOS__) || defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ )
+#if defined(__DOS__) || defined(__UNIX__) || defined(__GNUWIN32__)
     // @@ this doesn't work, of course, on unseekable file descriptors
     wxFileOffset ofsCur = Tell(),
     ofsMax = Length();

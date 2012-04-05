@@ -1169,12 +1169,6 @@ int wxString::CmpNoCase(const wxString& s) const
 
 #if wxUSE_UNICODE
 
-#ifdef __MWERKS__
-#ifndef __SCHAR_MAX__
-#define __SCHAR_MAX__ 127
-#endif
-#endif
-
 wxString wxString::FromAscii(const char *ascii, size_t len)
 {
     if (!ascii || len == 0)

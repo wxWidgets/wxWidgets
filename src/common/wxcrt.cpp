@@ -67,11 +67,6 @@
     #define wxSET_ERRNO(value) errno = value
 #endif
 
-#if defined(__MWERKS__) && __MSL__ >= 0x6000
-namespace std {}
-using namespace std ;
-#endif
-
 #if defined(__DARWIN__)
     #include "wx/osx/core/cfref.h"
     #include <CoreFoundation/CFLocale.h>
@@ -99,12 +94,12 @@ WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 #endif
   }
 
-  // note that we rely on common (and required by Unix98 but unfortunately not
+  // Note that we rely on common (and required by Unix98 but unfortunately not
   // C99) extension which allows to call mbs(r)towcs() with NULL output pointer
   // to just get the size of the needed buffer -- this is needed as otherwise
-  // we have no idea about how much space we need and if the CRT doesn't
-  // support it (the only currently known example being Metrowerks, see
-  // wx/crt.h) we don't use its mbstowcs() at all
+  // we have no idea about how much space we need. Currently all supported
+  // compilers do provide it and if they don't, HAVE_WCSRTOMBS shouldn't be
+  // defined at all.
 #ifdef HAVE_WCSRTOMBS
   return mbsrtowcs(NULL, &psz, 0, &mbstate);
 #else

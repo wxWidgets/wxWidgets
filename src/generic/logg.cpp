@@ -69,10 +69,6 @@
     #include "wx/image.h"
 #endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
 
-#if defined(__MWERKS__) && wxUSE_UNICODE
-    #include <wtime.h>
-#endif
-
 #include "wx/time.h"
 
 // the suffix we add to the button to show that the dialog can be expanded

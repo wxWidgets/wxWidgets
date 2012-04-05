@@ -28,7 +28,6 @@
 // some compilers don't have standard compliant rdbuf() (and MSVC has it only
 // in its new iostream library, not in the old one used with iostream.h)
 #if defined(__WATCOMC__) || \
-    defined(__MWERKS__) || \
     ((defined(__VISUALC5__) || defined(__VISUALC6__)) && wxUSE_IOSTREAMH)
     #define wxHAS_TEXT_WINDOW_STREAM 0
 #elif wxUSE_STD_IOSTREAM

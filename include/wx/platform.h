@@ -14,16 +14,6 @@
 #ifndef _WX_PLATFORM_H_
 #define _WX_PLATFORM_H_
 
-
-
-/*
-    Codewarrior doesn't define any Windows symbols until some headers
-    are included
-*/
-#ifdef __MWERKS__
-#   include <stddef.h>
-#endif
-
 #ifdef __WXMAC_XCODE__
 #    include <unistd.h>
 #    include <TargetConditionals.h>
@@ -236,11 +226,6 @@
 #   endif
 #endif /* wxUSE_UNICODE */
 
-#if defined( __MWERKS__ ) && !defined(__INTEL__)
-/* otherwise MSL headers bring in WIN32 dependant APIs */
-#undef UNICODE
-#endif
-
 
 /*
    test for old versions of Borland C, normally need at least 5.82, Turbo
@@ -398,17 +383,6 @@
 #    endif
 
 /*
-   OS: Classic Mac OS
- */
-#elif defined(applec) || \
-      defined(THINK_C) || \
-      (defined(__MWERKS__) && !defined(__INTEL__))
-      /* MacOS */
-#    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
-#        define wxSIZE_T_IS_ULONG
-#    endif
-
-/*
    OS: OS/2
  */
 #elif defined(__OS2__)
@@ -446,9 +420,9 @@
 
     /*
        define another standard symbol for Microsoft Visual C++: the standard
-       one (_MSC_VER) is also defined by Metrowerks compiler
+       one (_MSC_VER) is also defined by some other compilers.
      */
-#    if defined(_MSC_VER) && !defined(__MWERKS__)
+#    if defined(_MSC_VER)
 #        define __VISUALC__ _MSC_VER
 
     /*

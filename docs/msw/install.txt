@@ -64,7 +64,7 @@ The following sections explain how to compile wxWidgets with each supported
 compiler, see the "Building Applications" section about the instructions for
 building your application using wxWidgets.
 
-Search for one of Microsoft/Borland/Watcom/Symantec/Metrowerks/Cygwin/Mingw32
+Search for one of Microsoft/Borland/Watcom/Symantec/Cygwin/Mingw32 keywords
 to quickly locate the instructions for your compiler. Notice that the primary
 compilers for wxWidgets under MSW are Microsoft Visual C++ and GNU g++, other
 compilers are more rarely tested and might not work so please consider using
@@ -377,76 +377,6 @@ Note (4): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
           If you install STLPort or another STL implementation, you'll need to
           edit wx/string.h and remove the check for Digital Mars in it (search
           for __WATCOM__).
-
-
-Metrowerks CodeWarrior Compilation
-----------------------------------------------------------------
-
-** NOTE: We don't use Metrowerks compiler any more and so depend on
-**       your contributions to keep it up to date. It is possible that
-**       the project files mentioned below are out of date due to recently
-**       added files, please add them manually if you get linking errors.
-**       The authoritative list of files is in build/bakefiles/files.bkl
-
-1. CodeWarrior Pro 7 project files in XML format are already
-   included in wxMSW-2.8.x.zip and the setup version.
-
-2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if
-   you are working from the SVN version) to make sure the settings reflect
-   what you want.  If you aren't sure, leave it alone and go with the
-   default settings.  A few notes:
-       - Don't use wxUSE_DEBUG_NEW_ALWAYS: it doesn't mix well with MSL
-       - wxUSE_GLOBAL_MEMORY_OPERATORS works, but memory leak reports
-         will be rather confusing due to interactions with the MSL ANSI
-         and runtime libs.
-
-3. The project file to build the Win32 wxWidgets libraries relies on the
-   Batch File Runner plug-in. This plug-in is not installed as part of
-   a normal CW7 installation. However, you can find this plug-in on the
-   CodeWarrior Reference CD, in the Thrill Seekers folder; it's called the
-   "Batch File Post Linker".
-
-4. If you choose not to install the Batch File Runner plug-in, then you
-   need to do the following by hand:
-      (1) Create the directories lib\cw7msw\include\wx and copy the file
-          include\wx\msw\setup.h (or include\wx\msw\setup0.h if you are
-          working from the SVN version) to lib\cw7msw\include\wx\setup.h
-      (2) Create the directories lib\cw7mswd\include\wx and copy the file
-          include\wx\msw\setup.h (or include\wx\msw\setup0.h if you are
-          working from the SVN version) to lib\cw7mswd\include\wx\setup.h
-
-5. Import src\wxWidgetsW7.xml to create the project file wxWidgetsW7.mcp.
-   Store this project file in directory src.  You may get warnings about
-   not being able to find certain project paths; ignore these warnings, the
-   appropriate paths will be created during the build by the Batch File Runner.
-
-6. Choose the wxlib Win32 debug or wxlib Win32 Release target and build.  You
-   will get some warnings about hidden virtual functions, illegal conversions
-   from const pointers to pointers, etc., all of which you can safely ignore.
-   ***Note:  if you get errors that the compiler can't find "wx/setup.h", just
-   stop the build and build again.  These errors occur because sometimes the
-   compiler starts doing its thing before the copying of setup.h has completed.
-
-7. The following libraries will be produced depending on chosen
-   target:
-       - wx_x86.lib             ANSI Release (static)
-       - wx_x86_d.lib           ANSI Debug (static)
-
-8. Sorry, I haven't had time yet to create and test Unicode or DLL versions.
-   Volunteers for this are welcome (as neither DLLs nor Unicode builds are
-   big priorities for me ;).
-
-9. CodeWarrior Pro7 project files (in XML format) are also provided for some
-   of the samples.  In particular, there are project files for the minimal,
-   controls, dialogs, dnd, nd docview samples.  You can use these project
-   files as templates for the other samples and for your own projects.
-       - For example, to make a project file for the "grid" sample,
-         just copy the project file for the "minimal" sample, minimalW7.mcp
-         (made by importing minimalW7.xml into CodeWarrior), into the
-         sample/grid directory, calling it gridW7.mcp.  Open
-         newgridW7.mcp and revise the project by deleting the files
-         minimal.rc and minimal.cpp and adding the files griddemo.rc and
-         griddemo.cpp.  Build and run....
 
 
 Cygwin/MinGW Compilation

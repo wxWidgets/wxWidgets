@@ -22,20 +22,6 @@
 #endif /* wxUSE_STACKWALKER */
 
 /*
- * disable the settings which don't work for some compilers
- */
-
-#if defined(__MWERKS__)
-    #undef wxUSE_DEBUG_NEW_ALWAYS
-    #define wxUSE_DEBUG_NEW_ALWAYS      0
-
-    /* DS: Fixes compilation when wxUSE_ON_FATAL_EXCEPTION is 1 */
-    #ifndef wxTYPE_SA_HANDLER
-        #define wxTYPE_SA_HANDLER int
-    #endif
-#endif
-
-/*
  * check graphics context option, must be on for every os x platform
  * we only use core graphics now on all builds, try to catch attempts
  * to configure the build otherwise and give error messages

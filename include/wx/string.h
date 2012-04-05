@@ -154,7 +154,7 @@ inline int Stricmp(const char *psz1, const char *psz2)
   } while ( c1 && (c1 == c2) );
 
   return c1 - c2;
-#elif defined(__VISUALC__) || ( defined(__MWERKS__) && defined(__INTEL__) )
+#elif defined(__VISUALC__)
   return _stricmp(psz1, psz2);
 #elif defined(__SC__)
   return _stricmp(psz1, psz2);
@@ -172,14 +172,6 @@ inline int Stricmp(const char *psz1, const char *psz2)
       defined(HAVE_STRCASECMP_IN_STRINGS_H) || \
       defined(__GNUWIN32__)
   return strcasecmp(psz1, psz2);
-#elif defined(__MWERKS__) && !defined(__INTEL__)
-  register char c1, c2;
-  do {
-    c1 = tolower(*psz1++);
-    c2 = tolower(*psz2++);
-  } while ( c1 && (c1 == c2) );
-
-  return c1 - c2;
 #else
   // almost all compilers/libraries provide this function (unfortunately under
   // different names), that's why we don't implement our own which will surely

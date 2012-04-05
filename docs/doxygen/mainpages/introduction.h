@@ -127,9 +127,8 @@ To make use of wxWidgets, you currently need one of the following setups.
 
 @li A 32-bit or 64-bit PC running MS Windows.
 @li A Windows compiler: MS Visual C++ (embedded Visual C++ for wxWinCE
-    port), Borland C++, Watcom C++, Cygwin, MinGW, Metrowerks CodeWarrior,
-    Digital Mars C++. See @c install.txt for details about compiler
-    version supported.
+    port), Borland C++, Watcom C++, Cygwin, MinGW, Digital Mars C++.
+    See @c install.txt for details about compiler version supported.
 
 (b) Unix:
 

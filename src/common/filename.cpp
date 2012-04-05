@@ -33,7 +33,7 @@
                 http://msdn.microsoft.com/en-us/library/aa365248(VS.85).aspx.
 
 
-   wxPATH_MAC:  Mac OS 8/9 and Mac OS X under CodeWarrior 7 format, absolute file
+   wxPATH_MAC:  Mac OS 8/9 only, not used any longer, absolute file
                 names have the form
                     volume:dir1:...:dirN:filename
                 and the relative file names are either
@@ -116,19 +116,6 @@
 
 #ifdef __DJGPP__
 #include <unistd.h>
-#endif
-
-#ifdef __MWERKS__
-#ifdef __MACH__
-#include <sys/types.h>
-#include <utime.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#else
-#include <stat.h>
-#include <unistd.h>
-#include <unix.h>
-#endif
 #endif
 
 #ifdef __WATCOMC__
@@ -1001,7 +988,7 @@ static wxString wxCreateTempImpl(
     }
 #else // !HAVE_MKTEMP (includes __DOS__)
     // generate the unique file name ourselves
-    #if !defined(__DOS__) && (!defined(__MWERKS__) || defined(__DARWIN__) )
+    #if !defined(__DOS__)
     path << (unsigned int)getpid();
     #endif
 

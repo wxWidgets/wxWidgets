@@ -266,10 +266,6 @@ private:
     //
     // if CRITICAL_SECTION size changes in Windows, you'll get an assert from
     // thread.cpp and will need to increase the buffer size
-    //
-    // finally, we need this typedef instead of declaring m_buffer directly
-    // because otherwise the assert mentioned above wouldn't compile with some
-    // compilers (notably CodeWarrior 8)
 #ifdef __WIN64__
     typedef char wxCritSectBuffer[40];
 #else // __WIN32__

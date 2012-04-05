@@ -60,9 +60,7 @@
 #if !defined(__GNUWIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     #include <direct.h>
 
-    #ifndef __MWERKS__
-        #include <dos.h>
-    #endif
+    #include <dos.h>
 #endif  //GNUWIN32
 
 #if defined(__CYGWIN__)

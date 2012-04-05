@@ -37,9 +37,7 @@
     #include <stdlib.h>
     #include <ctype.h>
 
-    #if !defined(__MWERKS__)
-        #include <memory.h>
-    #endif
+    #include <memory.h>
 #endif // !WX_PRECOMP
 
 #include "wx/socket.h"

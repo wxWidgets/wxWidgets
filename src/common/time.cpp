@@ -48,11 +48,6 @@
 #  endif
 #endif
 
-#if defined(__MWERKS__) && defined(__WINDOWS__)
-#   undef HAVE_FTIME
-#   undef HAVE_GETTIMEOFDAY
-#endif
-
 #ifndef __WXWINCE__
 #include <time.h>
 #else
@@ -70,10 +65,6 @@
     #include <unistd.h>
 #elif defined(HAVE_FTIME)
     #include <sys/timeb.h>
-#endif
-
-#if defined(__MWERKS__) && wxUSE_UNICODE
-    #include <wtime.h>
 #endif
 
 #if defined(__DJGPP__) || defined(__WINE__)
@@ -223,10 +214,6 @@ int wxGetTimeZone()
         return WX_TIMEZONE;
     #elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
         return _timezone;
-    #elif defined(__MWERKS__)
-        // This is just plain wrong but apparently MetroWerks runtime didn't have
-        // any way to get the time zone.
-        return 28800;
     #else // unknown platform -- assume it has timezone
         return timezone;
     #endif // different time zone variables

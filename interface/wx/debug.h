@@ -317,7 +317,7 @@ void wxDisableAsserts();
     Returns @true if the program is running under debugger, @false otherwise.
 
     Please note that this function is currently only implemented for Win32 and
-    Mac builds using CodeWarrior and always returns @false elsewhere.
+    always returns @false elsewhere.
 
     @header{wx/debug.h}
 */

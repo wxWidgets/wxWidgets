@@ -65,7 +65,7 @@
     #define wxFinite(x) isfinite(x)
 #elif ( defined(__GNUG__)||defined(__GNUWIN32__)||defined(__DJGPP__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
-      defined(__HPUX__)||defined(__MWERKS__) ) && ( !defined(wxOSX_USE_IPHONE) || wxOSX_USE_IPHONE == 0 )
+      defined(__HPUX__) ) && ( !defined(wxOSX_USE_IPHONE) || wxOSX_USE_IPHONE == 0 )
 #ifdef __SOLARIS__
 #include <ieeefp.h>
 #endif
@@ -79,7 +79,7 @@
     #define wxIsNaN(x) _isnan(x)
 #elif defined(__GNUG__)||defined(__GNUWIN32__)||defined(__DJGPP__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
-      defined(__HPUX__)||defined(__MWERKS__)
+      defined(__HPUX__)
     #define wxIsNaN(x) isnan(x)
 #else
     #define wxIsNaN(x) ((x) != (x))

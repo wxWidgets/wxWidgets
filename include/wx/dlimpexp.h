@@ -57,11 +57,6 @@
 #        define WXEXPORT _Export
 #        define WXIMPORT _Export
 #    endif
-#elif defined(__WXMAC__) || defined(__WXCOCOA__)
-#    ifdef __MWERKS__
-#        define WXEXPORT __declspec(export)
-#        define WXIMPORT __declspec(import)
-#    endif
 #elif defined(__CYGWIN__)
 #    define WXEXPORT __declspec(dllexport)
 #    define WXIMPORT __declspec(dllimport)

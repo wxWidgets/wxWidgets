@@ -252,9 +252,6 @@ typedef short int WXTYPE;
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
         /*  BC++ 4.52 doesn't support explicit, CBuilder 1 does */
         #define HAVE_EXPLICIT
-    #elif defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
-        /*  Metrowerks CW6 or higher has explicit */
-        #define HAVE_EXPLICIT
     #elif defined(__DIGITALMARS__)
         #define HAVE_EXPLICIT
     #elif defined(__WATCOMC__)
@@ -740,13 +737,6 @@ typedef short int WXTYPE;
 /*  compiler specific settings */
 /*  ---------------------------------------------------------------------------- */
 
-#if defined(__MWERKS__)
-    #undef try
-    #undef except
-    #undef finally
-    #define except(x) catch(...)
-#endif /*  Metrowerks */
-
 #if wxONLY_WATCOM_EARLIER_THAN(1,4)
     typedef short mode_t;
 #endif
@@ -754,13 +744,10 @@ typedef short int WXTYPE;
 /*  where should i put this? we need to make sure of this as it breaks */
 /*  the <iostream> code. */
 #if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
-#  ifndef __MWERKS__
-/*  #undef __WXDEBUG__ */
 #    ifdef wxUSE_DEBUG_NEW_ALWAYS
 #    undef wxUSE_DEBUG_NEW_ALWAYS
 #    define wxUSE_DEBUG_NEW_ALWAYS 0
 #    endif
-#  endif
 #endif
 
 /*  ---------------------------------------------------------------------------- */
@@ -777,9 +764,7 @@ enum {  wxDefaultCoord = -1 };
 /*  ---------------------------------------------------------------------------- */
 
 #if defined(__MINGW32__)
-  #if !defined(__MWERKS__)
     #include <sys/types.h>
-  #endif
 #endif
 
 /*  chars are always one byte (by definition), shorts are always two (in */
@@ -1006,15 +991,6 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
     #define wxLongLongFmtSpec "I64"
-#elif defined(__MWERKS__)
-    #if __option(longlong)
-        #define wxLongLong_t long long
-        #define wxLongLongSuffix ll
-        #define wxLongLongFmtSpec "ll"
-    #else
-        #error "The 64 bit integer support in CodeWarrior has been disabled."
-        #error "See the documentation on the 'longlong' pragma."
-    #endif
 #elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
     #define wxLongLong_t long long
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
@@ -1208,11 +1184,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 /*            calculations */
 
 typedef float wxFloat32;
-#if (defined( __WXMAC__ ) || defined(__WXCOCOA__))  && defined (__MWERKS__)
-    typedef short double wxFloat64;
-#else
-    typedef double wxFloat64;
-#endif
+typedef double wxFloat64;
 
 typedef double wxDouble;
 
@@ -1290,36 +1262,6 @@ typedef double wxDouble;
 
 /*  byte swapping */
 
-#if defined (__MWERKS__) && ( (__MWERKS__ < 0x0900) || macintosh )
-/*  assembler versions for these */
-#ifdef __POWERPC__
-    inline wxUint16 wxUINT16_SWAP_ALWAYS( wxUint16 i )
-        {return (__lhbrx( &i , 0 ) );}
-    inline wxInt16 wxINT16_SWAP_ALWAYS( wxInt16 i )
-        {return (__lhbrx( &i , 0 ) );}
-    inline wxUint32 wxUINT32_SWAP_ALWAYS( wxUint32 i )
-        {return (__lwbrx( &i , 0 ) );}
-    inline wxInt32 wxINT32_SWAP_ALWAYS( wxInt32 i )
-        {return (__lwbrx( &i , 0 ) );}
-#else
-    #pragma parameter __D0 wxUINT16_SWAP_ALWAYS(__D0)
-    pascal wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value)
-        = { 0xE158 };
-
-    #pragma parameter __D0 wxINT16_SWAP_ALWAYS(__D0)
-    pascal wxInt16 wxINT16_SWAP_ALWAYS(wxInt16 value)
-        = { 0xE158 };
-
-    #pragma parameter __D0 wxUINT32_SWAP_ALWAYS (__D0)
-    pascal wxUint32 wxUINT32_SWAP_ALWAYS(wxUint32 value)
-        = { 0xE158, 0x4840, 0xE158 };
-
-    #pragma parameter __D0 wxINT32_SWAP_ALWAYS (__D0)
-    pascal wxInt32 wxINT32_SWAP_ALWAYS(wxInt32 value)
-        = { 0xE158, 0x4840, 0xE158 };
-
-#endif
-#else /*  !MWERKS */
 #define wxUINT16_SWAP_ALWAYS(val) \
    ((wxUint16) ( \
     (((wxUint16) (val) & (wxUint16) 0x00ffU) << 8) | \
@@ -1343,7 +1285,6 @@ typedef double wxDouble;
     (((wxUint32) (val) & (wxUint32) 0x0000ff00U) <<  8) | \
     (((wxUint32) (val) & (wxUint32) 0x00ff0000U) >>  8) | \
     (((wxUint32) (val) & (wxUint32) 0xff000000U) >> 24)))
-#endif
 /*  machine specific byte swapping */
 
 #ifdef wxLongLong_t
@@ -2900,7 +2841,7 @@ typedef unsigned int NSUInteger;
  */
 
 /*  NOTE: This ought to work with other compilers too, but I'm being cautious */
-#if (defined(__GNUC__) && defined(__APPLE__)) || defined(__MWERKS__)
+#if (defined(__GNUC__) && defined(__APPLE__))
 /* It's desirable to have type safety for Objective-C(++) code as it does
 at least catch typos of method names among other things.  However, it
 is not possible to declare an Objective-C class from plain old C or C++
@@ -2920,7 +2861,7 @@ typedef klass *WX_##klass
 typedef struct klass *WX_##klass
 #endif /*  defined(__OBJC__) */
 
-#else /*  not Apple's GNU or CodeWarrior */
+#else /*  not Apple's gcc */
 #warning "Objective-C types will not be checked by the compiler."
 /*  NOTE: typedef struct objc_object *id; */
 /*  IOW, we're declaring these using the id type without using that name, */
@@ -2930,7 +2871,7 @@ typedef struct klass *WX_##klass
 #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
 typedef struct objc_object *WX_##klass
 
-#endif /*  (defined(__GNUC__) && defined(__APPLE__)) || defined(__MWERKS__) */
+#endif /*  (defined(__GNUC__) && defined(__APPLE__)) */
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBitmapImageRep);

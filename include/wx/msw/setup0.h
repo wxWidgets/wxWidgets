@@ -151,7 +151,7 @@
 // In debug mode, causes new to be defined to be WXDEBUG_NEW (see object.h). If
 // this causes problems (e.g. link errors), set this to 0. You may need to set
 // this to 0 if using templates (at least for VC++). This switch is currently
-// ignored for mingw / cygwin / CodeWarrior
+// ignored for MinGW/Cygwin.
 //
 // Default is 0
 //

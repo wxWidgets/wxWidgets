@@ -169,9 +169,9 @@ extern LONG APIENTRY _EXPORT
 
 // This one is a macro so that it can be tested with #ifdef, it will be
 // undefined if it cannot be implemented for a given compiler.
-// Vc++, bcc, dmc, ow, mingw, codewarrior (and rsxnt) have _get_osfhandle.
-// Cygwin has get_osfhandle. Others are currently unknown, e.g. Salford,
-// Intel, Visual Age.
+// Vc++, bcc, dmc, ow, mingw akk have _get_osfhandle() and Cygwin has
+// get_osfhandle. Others are currently unknown, e.g. Salford, Intel, Visual
+// Age.
 #if defined(__WXWINCE__)
     #define wxGetOSFHandle(fd) ((HANDLE)fd)
     #define wxOpenOSFHandle(h, flags) ((int)wxPtrToUInt(h))
@@ -181,8 +181,7 @@ extern LONG APIENTRY _EXPORT
    || defined(__BORLANDC__) \
    || defined(__DMC__) \
    || defined(__WATCOMC__) \
-   || defined(__MINGW32__) \
-   || (defined(__MWERKS__) && defined(__MSL__))
+   || defined(__MINGW32__)
     #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
     #define wxOpenOSFHandle(h, flags) (_open_osfhandle(wxPtrToUInt(h), flags))
     #define wx_fdopen _fdopen

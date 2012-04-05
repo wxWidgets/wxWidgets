@@ -48,14 +48,9 @@
 
    Actually MinGW has tchar.h, but it does not include wchar.h
  */
-#if defined(__MWERKS__) || defined(__VISAGECPP__) || defined(__MINGW32__) || defined(__WATCOMC__)
+#if defined(__VISAGECPP__) || defined(__MINGW32__) || defined(__WATCOMC__)
     #ifndef HAVE_WCHAR_H
         #define HAVE_WCHAR_H
-    #endif
-#endif
-#if defined(__MWERKS__) && !defined(__MACH__)
-    #ifndef HAVE_WCSLEN
-        #define HAVE_WCSLEN
     #endif
 #endif
 

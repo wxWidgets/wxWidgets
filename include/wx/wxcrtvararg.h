@@ -150,12 +150,8 @@
             #define wxCRT_VsnprintfW    _vsnwprintf
         #endif
 
-        /*
-           All versions of CodeWarrior supported by wxWidgets apparently
-           have both snprintf() and vsnprintf()
-         */
         #if defined(HAVE_VSNPRINTF) \
-            || defined(__MWERKS__) || defined(__WATCOMC__)
+            || defined(__WATCOMC__)
             #ifdef HAVE_BROKEN_VSNPRINTF_DECL
                 #define wxCRT_VsnprintfA    wx_fixed_vsnprintf
             #else

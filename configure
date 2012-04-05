@@ -39218,7 +39218,7 @@ if test "${wx_cv_func_vsnprintf_decl+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-                                                            cat >conftest.$ac_ext <<_ACEOF
+                                    cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -39227,12 +39227,6 @@ cat >>conftest.$ac_ext <<_ACEOF
 
                     #include <stdio.h>
                     #include <stdarg.h>
-                    #ifdef __MSL__
-                    #if __MSL__ >= 0x6000
-                    namespace std {}
-                    using namespace std;
-                    #endif
-                    #endif
 
 int
 main ()

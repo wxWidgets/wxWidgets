@@ -400,7 +400,7 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 
 #if wxUSE_DATAOBJ
 
-#if wxDEBUG_LEVEL && ( ( defined(__VISUALC__) && (__VISUALC__ > 1000) ) || defined(__MWERKS__) )
+#if wxDEBUG_LEVEL && (( defined(__VISUALC__) && (__VISUALC__ > 1000) ))
 static wxString GetIidName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID
@@ -417,7 +417,7 @@ static wxString GetIidName(REFIID riid)
     ADD_KNOWN_IID(AdviseSink2),
     ADD_KNOWN_IID(BindCtx),
     ADD_KNOWN_IID(ClassFactory),
-#if ( !defined( __VISUALC__) || (__VISUALC__!=1010) ) && !defined(__MWERKS__)
+#if ( !defined( __VISUALC__) || (__VISUALC__!=1010) )
     ADD_KNOWN_IID(ContinueCallback),
     ADD_KNOWN_IID(EnumOleDocumentViews),
     ADD_KNOWN_IID(OleCommandTarget),

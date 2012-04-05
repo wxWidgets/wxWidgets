@@ -44,12 +44,6 @@
 
 #include "wx/evtloop.h"
 
-#if defined(__MWERKS__) && wxUSE_UNICODE
-#if __MWERKS__ < 0x4100
-    #include <wtime.h>
-#endif
-#endif
-
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))

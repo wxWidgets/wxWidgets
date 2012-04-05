@@ -35,17 +35,12 @@
 // ----------------------------------------------------------------------------
 
 // default type is the native one
-// the native type under Mac OS X is:
-//   - Unix when compiling with the Apple Developer Tools (__UNIX__)
-//   - Mac when compiling with CodeWarrior (__WXMAC__)
 
 const wxTextFileType wxTextBuffer::typeDefault =
 #if defined(__WINDOWS__) || defined(__DOS__)
   wxTextFileType_Dos;
 #elif defined(__UNIX__)
   wxTextFileType_Unix;
-#elif defined(__WXMAC__)
-  wxTextFileType_Mac;
 #elif defined(__OS2__)
   wxTextFileType_Os2;
 #else

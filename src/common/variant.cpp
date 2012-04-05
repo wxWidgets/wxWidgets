@@ -37,11 +37,6 @@
     #endif
 #endif
 
-#if defined(__MWERKS__) && __MSL__ >= 0x6000
-namespace std {}
-using namespace std ;
-#endif
-
 #if wxUSE_STREAMS
     #include "wx/txtstrm.h"
 #endif

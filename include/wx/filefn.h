@@ -22,22 +22,9 @@
     #include <time.h>
 #endif
 
-#ifdef __WXWINCE__
-// Nothing
-#elif !defined(__MWERKS__)
+#ifndef __WXWINCE__
     #include <sys/types.h>
     #include <sys/stat.h>
-#else
-    #ifdef __MACH__
-        #include <sys/types.h>
-        #include <utime.h>
-        #include <sys/stat.h>
-        #include <unistd.h>
-    #else
-        #include <stat.h>
-        #include <unistd.h>
-        #include <unix.h>
-    #endif
 #endif
 
 #ifdef __OS2__
@@ -58,7 +45,7 @@
 #endif
 
 #if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__WXWINCE__) && !defined(__CYGWIN__)
+#if !defined( __GNUWIN32__ ) && !defined(__WXWINCE__) && !defined(__CYGWIN__)
     #include <direct.h>
     #include <dos.h>
     #include <io.h>
@@ -106,11 +93,9 @@
     #endif
 #endif
 
-#if (defined(__VISUALC__) && !defined(__WXWINCE__)) || ( defined(__MWERKS__) && defined( __INTEL__) )
+#if defined(__VISUALC__) && !defined(__WXWINCE__)
     typedef _off_t off_t;
 #elif defined(__SYMANTEC__)
-    typedef long off_t;
-#elif defined(__MWERKS__) && !defined(__INTEL__) && !defined(__MACH__)
     typedef long off_t;
 #endif
 
@@ -206,7 +191,6 @@ enum wxPosixPermissions
         defined(__MINGW64__) || \
         (defined(__MINGW32__) && !defined(__WINE__) && \
                                 wxCHECK_W32API_VERSION(0, 5)) || \
-        defined(__MWERKS__) || \
         defined(__DMC__) || \
         defined(__WATCOMC__) || \
         defined(__BORLANDC__) \
@@ -236,9 +220,8 @@ enum wxPosixPermissions
         #define wxFtell ftello64
     #endif
 
-    // other Windows compilers (DMC, Watcom, Metrowerks and Borland) don't have
-    // huge file support (or at least not all functions needed for it by wx)
-    // currently
+    // other Windows compilers (DMC, Watcom, and Borland) don't have huge file
+    // support (or at least not all functions needed for it by wx) currently
 
     // types
 
@@ -309,20 +292,8 @@ enum wxPosixPermissions
     // complications
     #define   wxClose      wxPOSIX_IDENT(close)
 
-    #if defined(__MWERKS__)
-        #if __MSL__ >= 0x6000
-            #define wxRead(fd, buf, nCount)  _read(fd, (void *)buf, nCount)
-            #define wxWrite(fd, buf, nCount) _write(fd, (void *)buf, nCount)
-        #else
-            #define wxRead(fd, buf, nCount)\
-                  _read(fd, (const char *)buf, nCount)
-            #define wxWrite(fd, buf, nCount)\
-                  _write(fd, (const char *)buf, nCount)
-        #endif
-    #else // __MWERKS__
-        #define wxRead         wxPOSIX_IDENT(read)
-        #define wxWrite        wxPOSIX_IDENT(write)
-    #endif
+    #define wxRead         wxPOSIX_IDENT(read)
+    #define wxWrite        wxPOSIX_IDENT(write)
 
     #ifdef wxHAS_HUGE_FILES
         #ifndef __MINGW64__

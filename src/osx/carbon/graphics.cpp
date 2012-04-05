@@ -113,10 +113,8 @@ extern "C"
 // constants
 //-----------------------------------------------------------------------------
 
-#if !defined( __DARWIN__ ) || defined(__MWERKS__)
 #ifndef M_PI
 const double M_PI = 3.14159265358979;
-#endif
 #endif
 
 static const double RAD2DEG = 180.0 / M_PI;

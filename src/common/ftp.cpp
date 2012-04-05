@@ -48,9 +48,7 @@
 #include "wx/protocol/protocol.h"
 #include "wx/protocol/ftp.h"
 
-#ifndef __MWERKS__
-    #include <memory.h>
-#endif
+#include <memory.h>
 
 // ----------------------------------------------------------------------------
 // constants

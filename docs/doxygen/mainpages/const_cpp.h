@@ -88,8 +88,7 @@ symbols, although this has not always been followed.
 @itemdef{__AIX__, AIX}
 @itemdef{__BSD__, Any *BSD system}
 @itemdef{__CYGWIN__, Cygwin: Unix on Win32}
-@itemdef{__DARWIN__, Mac OS X using the BSD Unix C library
-                    (as opposed to using the Metrowerks MSL C/C++ library)}
+@itemdef{__DARWIN__, Mac OS X (with BSD C library)}
 @itemdef{__DATA_GENERAL__, DG-UX}
 @itemdef{__FREEBSD__, FreeBSD}
 @itemdef{__HPUX__, HP-UX (Unix)}
@@ -157,7 +156,6 @@ compiler used.
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
 @itemdef{__MINGW32__, MinGW}
-@itemdef{__MWERKS__, CodeWarrior MetroWerks compiler}
 @itemdef{__SUNCC__, Sun CC, see also wxCHECK_SUNCC_VERSION}
 @itemdef{__SYMANTECC__, Symantec C++}
 @itemdef{__VISAGECPP__, IBM Visual Age (OS/2)}

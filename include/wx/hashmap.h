@@ -689,8 +689,7 @@ public: \
     /* count() == 0 | 1 */ \
     size_type count( const const_key_type& key ) \
     { \
-        /* explicit cast needed to suppress CodeWarrior warnings */ \
-        return (size_type)(GetNode( key ) ? 1 : 0); \
+        return GetNode( key ) ? 1u : 0u; \
     } \
 }
 

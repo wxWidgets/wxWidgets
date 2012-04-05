@@ -195,9 +195,8 @@ inline T *wxCheckCast(const void *ptr, T * = NULL)
     #define _WX_WANT_DELETE_VOID_CONSTCHAR_SIZET
 #endif
 
-// Only VC++ 6 and CodeWarrior get overloaded delete that matches new
-#if (defined(__VISUALC__) && (__VISUALC__ >= 1200)) || \
-        (defined(__MWERKS__) && (__MWERKS__ >= 0x2400))
+// Only VC++ 6 gets overloaded delete that matches new
+#if (defined(__VISUALC__) && (__VISUALC__ >= 1200))
     #define _WX_WANT_DELETE_VOID_WXCHAR_INT
 #endif
 
@@ -213,12 +212,6 @@ inline T *wxCheckCast(const void *ptr, T * = NULL)
     #if !defined(__VISUALC__)
         #define _WX_WANT_ARRAY_DELETE_VOID
     #endif
-
-    // Only CodeWarrior 6 or higher
-    #if defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
-        #define _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
-    #endif
-
 #endif // wxUSE_ARRAY_MEMORY_OPERATORS
 
 #endif // wxUSE_MEMORY_TRACING

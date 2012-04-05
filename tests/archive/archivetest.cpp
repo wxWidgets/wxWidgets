@@ -51,9 +51,6 @@ using std::auto_ptr;
 #if defined __DMC__ && __DMC__ >= 0x832
 #   define WXARC_MEMBER_TEMPLATES
 #endif
-#if defined __MWERKS__ && __MWERKS__ >= 0x2200
-#   define WXARC_MEMBER_TEMPLATES
-#endif
 #if defined __HP_aCC && __HP_aCC > 33300
 #   define WXARC_MEMBER_TEMPLATES
 #endif

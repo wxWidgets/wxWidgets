@@ -22,11 +22,6 @@
 
 #include <string.h>
 
-#if defined(__MWERKS__) && __MSL__ >= 0x6000
-namespace std {}
-using namespace std ;
-#endif
-
 // prefer snprintf over sprintf
 #if defined(__VISUALC__) || \
         (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)

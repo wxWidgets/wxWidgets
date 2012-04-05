@@ -152,7 +152,7 @@
 // In debug mode, causes new to be defined to be WXDEBUG_NEW (see object.h). If
 // this causes problems (e.g. link errors), set this to 0. You may need to set
 // this to 0 if using templates (at least for VC++). This switch is currently
-// ignored for mingw / cygwin / CodeWarrior
+// ignored for MinGW/Cygwin.
 //
 // Default is 0
 //
@@ -1500,19 +1500,6 @@
 // ----------------------------------------------------------------------------
 // Mac-specific settings
 // ----------------------------------------------------------------------------
-
-// override some settings for Metrowerks
-//
-// VZ: isn't this file only used when building with Metrowerks anyhow?
-// CS: no, it is also used by the Xcode projects
-#ifdef __MWERKS__
-    #undef wxUSE_DEBUG_CONTEXT
-    #define wxUSE_DEBUG_CONTEXT 1
-
-    #undef wxUSE_STD_IOSTREAM
-    // CS: I have to set this to 0 now, as shared builds are having problems
-    #define wxUSE_STD_IOSTREAM  0
-#endif
 
 #undef wxUSE_GRAPHICS_CONTEXT
 #define wxUSE_GRAPHICS_CONTEXT 1

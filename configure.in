@@ -4204,19 +4204,11 @@ if test "$ac_cv_func_vsnprintf" = "yes"; then
     AC_CACHE_CHECK([for vsnprintf declaration], wx_cv_func_vsnprintf_decl,
         [
             dnl our troubles are not over: HP-UX 11 prototypes vsnprintf() as
-            dnl taking "char *" and not "const char *" while Metrowerks does
-            dnl provide a correct vsnprintf declaration but in C++ mode it's
-            dnl always in std namespace and so we have to bring it in scope
+            dnl taking "char *" and not "const char *" so test for this too
             AC_TRY_COMPILE(
                 [
                     #include <stdio.h>
                     #include <stdarg.h>
-                    #ifdef __MSL__
-                    #if __MSL__ >= 0x6000
-                    namespace std {}
-                    using namespace std;
-                    #endif
-                    #endif
                 ],
                 [
                     char *buf;
@@ -7876,8 +7868,7 @@ dnl add -I options we use during library compilation
 dnl
 dnl note that the order is somewhat important: wxWidgets headers should
 dnl come first and the one with setup.h should be before $(top_srcdir)/include
-dnl in case the latter contains setup.h used by non-autoconf makefiles (e.g.
-dnl CodeWarrior):
+dnl in case the latter contains setup.h used by non-autoconf makefiles
 CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
  -I\\${wx_top_builddir}/lib/wx/include/${TOOLCHAIN_FULLNAME} \
  -I\\${top_srcdir}/include $TOOLKIT_INCLUDE \
