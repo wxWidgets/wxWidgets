@@ -627,6 +627,26 @@ int wxChoice::SetHeightSimpleComboBox(int nItems) const
 }
 
 // ----------------------------------------------------------------------------
+// Popup operations
+// ----------------------------------------------------------------------------
+
+void wxChoice::MSWDoPopupOrDismiss(bool show)
+{
+    wxASSERT_MSG( !HasFlag(wxCB_SIMPLE),
+                  wxT("can't popup/dismiss the list for simple combo box") );
+
+    // we *must* set focus to the combobox before showing or hiding the drop
+    // down as without this we get WM_LBUTTONDOWN messages with invalid HWND
+    // when hiding it (whether programmatically or manually) resulting in a
+    // crash when we pass them to IsDialogMessage()
+    //
+    // this can be seen in the combo page of the widgets sample under Windows 7
+    SetFocus();
+
+    ::SendMessage(GetHwnd(), CB_SHOWDROPDOWN, show, 0);
+}
+
+// ----------------------------------------------------------------------------
 // MSW message handlers
 // ----------------------------------------------------------------------------
 

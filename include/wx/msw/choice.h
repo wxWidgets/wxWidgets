@@ -124,6 +124,9 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
+    // Show or hide the popup part of the control.
+    void MSWDoPopupOrDismiss(bool show);
+
     // update the height of the drop down list to fit the number of items we
     // have (without changing the visible height)
     void MSWUpdateDropDownHeight();

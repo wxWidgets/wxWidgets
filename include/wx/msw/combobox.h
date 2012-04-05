@@ -130,7 +130,6 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip);
 #endif
-    void MSWDoPopupOrDismiss(bool show);
 
     // this is the implementation of GetEditHWND() which can also be used when
     // we don't have the edit control, it simply returns NULL then
