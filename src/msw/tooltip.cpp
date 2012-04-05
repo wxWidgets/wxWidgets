@@ -502,7 +502,7 @@ void wxToolTip::SetWindow(wxWindow *win)
     // add the window itself
     if ( m_window )
     {
-        AddOtherWindow(m_window->GetHWND());
+        DoAddHWND(m_window->GetHWND());
     }
 #if !defined(__WXUNIVERSAL__)
     // and all of its subcontrols (e.g. radio buttons in a radiobox) as well

@@ -520,6 +520,7 @@ MSW:
 - Add support for horizontal mouse wheel events (Lauri Nurmi).
 - Implement wxGraphicsContext::SetInterpolationQuality() (Eric Jensen).
 - Fix coordinate handling in wxDC::Blit() when source DC is a DIB.
+- Fix handling of composite windows in wxToolTip (Armel Asselin).
 
 OSX:
 
