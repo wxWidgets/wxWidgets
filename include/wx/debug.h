@@ -437,10 +437,9 @@ template<int x> struct static_assert_test{};
 /*
     Return true if we're running under debugger.
 
-    Currently this only really works under Win32 and Mac in CodeWarrior builds,
-    it always returns false in other cases.
+    Currently only really works under Win32 and just returns false elsewhere.
  */
-#if defined(__WXMAC__) || defined(__WIN32__)
+#if defined(__WIN32__)
     extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
 #else // !Mac
     inline bool wxIsDebuggerRunning() { return false; }
