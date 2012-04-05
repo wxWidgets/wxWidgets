@@ -1187,7 +1187,17 @@ bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxWindow *editor, wxVar
 {
     wxTextCtrl *text = (wxTextCtrl*) editor;
 
-    wxDataViewIconText iconText(text->GetValue(), m_value.GetIcon());
+    // The icon can't be edited so get its old value and reuse it.
+    wxVariant valueOld;
+    wxDataViewColumn* const col = GetOwner();
+    GetView()->GetModel()->GetValue(valueOld, m_item, col->GetModelColumn());
+
+    wxDataViewIconText iconText;
+    iconText << valueOld;
+
+    // But replace the text with the value entered by user.
+    iconText.SetText(text->GetValue());
+
     value << iconText;
     return true;
 }
