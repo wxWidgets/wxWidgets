@@ -646,6 +646,19 @@ void wxChoice::MSWDoPopupOrDismiss(bool show)
     ::SendMessage(GetHwnd(), CB_SHOWDROPDOWN, show, 0);
 }
 
+bool wxChoice::Show(bool show)
+{
+    if ( !wxChoiceBase::Show(show) )
+        return false;
+
+    // When hiding the combobox, we also need to hide its popup part as it
+    // doesn't happen automatically.
+    if ( !show && ::SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0) )
+        MSWDoPopupOrDismiss(false);
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // MSW message handlers
 // ----------------------------------------------------------------------------

@@ -66,6 +66,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxChoiceNameStr);
 
+    virtual bool Show(bool show = true);
+
     virtual void SetLabel(const wxString& label);
 
     virtual unsigned int GetCount() const;
