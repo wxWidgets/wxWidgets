@@ -820,7 +820,7 @@ public:
         wxMenuItemList is a pseudo-template list class containing wxMenuItem
         pointers, see wxList.
     */
-    wxMenuItemList& GetMenuItems() const;
+    wxMenuItemList& GetMenuItems();
     const wxMenuItemList& GetMenuItems() const;
     //@}
 
