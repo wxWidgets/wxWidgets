@@ -207,6 +207,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   behaved differently in wxMSW and wxGTK/wxOSX before) if more than one item
   is selected in a control with wxDV_MULTIPLE style.
 
+- wxEVT_COMMAND_MENU_SELECTED, MENU_OPEN and CLOSE events returned a menu from
+  GetEventObject() in all ports but the frame the menu was attached to in wxMSW.
+  Now all ports return the menu that was opened or closed as the event object.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

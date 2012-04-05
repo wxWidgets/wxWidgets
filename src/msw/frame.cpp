@@ -854,7 +854,7 @@ bool
 wxFrame::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup)
 {
     wxMenuEvent event(evtType, popup ? wxID_ANY : 0, menu);
-    event.SetEventObject(this);
+    event.SetEventObject(menu);
 
     return HandleWindowEvent(event);
 }
