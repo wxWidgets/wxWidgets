@@ -665,7 +665,7 @@ void wxComboBox::DoSetToolTip(wxToolTip *tip)
     wxChoice::DoSetToolTip(tip);
 
     if ( tip && !HasFlag(wxCB_READONLY) )
-        tip->Add(GetEditHWND());
+        tip->AddOtherWindow(GetEditHWND());
 }
 
 #endif // wxUSE_TOOLTIPS

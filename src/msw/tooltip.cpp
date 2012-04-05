@@ -374,17 +374,17 @@ void wxToolTip::Remove()
     DoForAllWindows(&wxToolTip::DoRemove);
 }
 
-void wxToolTip::Add(WXHWND hWnd)
+void wxToolTip::AddOtherWindow(WXHWND hWnd)
 {
     if ( !m_others )
         m_others = new wxToolTipOtherWindows;
 
     m_others->push_back(hWnd);
 
-    DoAddOtherWindow(hWnd);
+    DoAddHWND(hWnd);
 }
 
-void wxToolTip::DoAddOtherWindow(WXHWND hWnd)
+void wxToolTip::DoAddHWND(WXHWND hWnd)
 {
     HWND hwnd = (HWND)hWnd;
 
@@ -502,7 +502,7 @@ void wxToolTip::SetWindow(wxWindow *win)
     // add the window itself
     if ( m_window )
     {
-        Add(m_window->GetHWND());
+        AddOtherWindow(m_window->GetHWND());
     }
 #if !defined(__WXUNIVERSAL__)
     // and all of its subcontrols (e.g. radio buttons in a radiobox) as well
@@ -526,7 +526,7 @@ void wxToolTip::SetWindow(wxWindow *win)
             // must have it by now!
             wxASSERT_MSG( hwnd, wxT("no hwnd for subcontrol?") );
 
-            Add((WXHWND)hwnd);
+            AddOtherWindow((WXHWND)hwnd);
         }
     }
 #endif // !defined(__WXUNIVERSAL__)

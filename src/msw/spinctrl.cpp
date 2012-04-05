@@ -604,7 +604,7 @@ void wxSpinCtrl::DoSetToolTip(wxToolTip *tip)
     wxSpinButton::DoSetToolTip(tip);
 
     if ( tip )
-        tip->Add(m_hwndBuddy);
+        tip->AddOtherWindow(m_hwndBuddy);
 }
 
 #endif // wxUSE_TOOLTIPS

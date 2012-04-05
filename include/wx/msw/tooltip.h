@@ -60,7 +60,7 @@ public:
     static void RelayEvent(WXMSG *msg);
 
     // add a window to the tooltip control
-    void Add(WXHWND hwnd);
+    void AddOtherWindow(WXHWND hwnd);
 
     // remove any tooltip from the window
     static void Remove(WXHWND hwnd, unsigned int id, const wxRect& rc);
@@ -72,7 +72,7 @@ public:
 
 private:
     // Adds a window other than our main m_window to this tooltip.
-    void DoAddOtherWindow(WXHWND hWnd);
+    void DoAddHWND(WXHWND hWnd);
 
     // Perform the specified operation for the given window only.
     void DoSetTip(WXHWND hWnd);

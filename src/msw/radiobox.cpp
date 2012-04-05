@@ -498,7 +498,7 @@ void wxRadioBox::DoSetItemToolTip(unsigned int item, wxToolTip *tooltip)
     // we have already checked for the item to be valid in wxRadioBoxBase
     const HWND hwndRbtn = (*m_radioButtons)[item];
     if ( tooltip != NULL )
-        tooltip->Add(hwndRbtn);
+        tooltip->AddOtherWindow(hwndRbtn);
     else // unset the tooltip
         wxToolTip::Remove(hwndRbtn, 0, wxRect(0,0,0,0));
         // the second parameter can be zero since it's ignored by Remove()
