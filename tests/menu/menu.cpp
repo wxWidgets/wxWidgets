@@ -22,6 +22,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/menu.h"
+#include "wx/uiaction.h"
+
 #include <stdarg.h>
 
 // ----------------------------------------------------------------------------
@@ -87,6 +89,7 @@ private:
         CPPUNIT_TEST( Labels );
         CPPUNIT_TEST( RadioItems );
         CPPUNIT_TEST( RemoveAdd );
+        WXUISIM_TEST( Events );
     CPPUNIT_TEST_SUITE_END();
 
     void CreateFrame();
@@ -98,6 +101,7 @@ private:
     void Labels();
     void RadioItems();
     void RemoveAdd();
+    void Events();
 
     wxFrame* m_frame;
 
@@ -150,7 +154,7 @@ void MenuTestCase::CreateFrame()
 
 
     PopulateMenu(helpMenu, "Helpmenu item ", itemcount);
-    helpMenu->Append(MenuTestCase_Bar, "Bar");
+    helpMenu->Append(MenuTestCase_Bar, "Bar\tF1");
     helpMenu->AppendSubMenu(subMenu, "Sub&menu", "Test a submenu");
 
     // +2 for "Foo" and "Bar", +2 for the 2 submenus
@@ -392,4 +396,73 @@ void MenuTestCase::RemoveAdd()
     menu0->Insert(0, item);
     CPPUNIT_ASSERT( menu0->FindItemByPosition(0) == item );
     menu0->Delete(item);
+}
+
+void MenuTestCase::Events()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    class MenuEventHandler : public wxEvtHandler
+    {
+    public:
+        MenuEventHandler(wxWindow* win)
+            : m_win(win)
+        {
+            m_win->Connect(wxEVT_COMMAND_MENU_SELECTED,
+                           wxCommandEventHandler(MenuEventHandler::OnMenu),
+                           NULL,
+                           this);
+
+            m_gotEvent = false;
+            m_event = NULL;
+        }
+
+        virtual ~MenuEventHandler()
+        {
+            m_win->Disconnect(wxEVT_COMMAND_MENU_SELECTED,
+                              wxCommandEventHandler(MenuEventHandler::OnMenu),
+                              NULL,
+                              this);
+
+            delete m_event;
+        }
+
+        const wxCommandEvent& GetEvent()
+        {
+            CPPUNIT_ASSERT( m_gotEvent );
+
+            m_gotEvent = false;
+
+            return *m_event;
+        }
+
+    private:
+        void OnMenu(wxCommandEvent& event)
+        {
+            CPPUNIT_ASSERT( !m_gotEvent );
+
+            delete m_event;
+            m_event = static_cast<wxCommandEvent*>(event.Clone());
+            m_gotEvent = true;
+        }
+
+        wxWindow* const m_win;
+        wxCommandEvent* m_event;
+        bool m_gotEvent;
+    };
+
+    MenuEventHandler handler(m_frame);
+
+    // Invoke the accelerator.
+    m_frame->Show();
+    m_frame->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+    sim.KeyDown(WXK_F1);
+    sim.KeyUp(WXK_F1);
+    wxYield();
+
+    const wxCommandEvent& ev = handler.GetEvent();
+    CPPUNIT_ASSERT_EQUAL( static_cast<int>(MenuTestCase_Bar), ev.GetId() );
+#endif // wxUSE_UIACTIONSIMULATOR
 }
