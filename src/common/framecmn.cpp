@@ -242,11 +242,7 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
 
 bool wxFrameBase::ProcessCommand(int id)
 {
-    wxMenuBar *bar = GetMenuBar();
-    if ( !bar )
-        return false;
-
-    wxMenuItem *item = bar->FindItem(id);
+    wxMenuItem* const item = FindItemInMenuBar(id);
     if ( !item )
         return false;
 
