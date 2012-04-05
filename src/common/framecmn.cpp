@@ -251,8 +251,7 @@ bool wxFrameBase::ProcessCommand(int id)
 
 bool wxFrameBase::ProcessCommand(wxMenuItem *item)
 {
-    wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, item->GetId());
-    commandEvent.SetEventObject(this);
+    wxCHECK_MSG( item, false, wxS("Menu item can't be NULL") );
 
     if (!item->IsEnabled())
         return true;
@@ -260,19 +259,23 @@ bool wxFrameBase::ProcessCommand(wxMenuItem *item)
     if ((item->GetKind() == wxITEM_RADIO) && item->IsChecked() )
         return true;
 
+    int checked;
     if (item->IsCheckable())
     {
         item->Toggle();
 
         // use the new value
-        commandEvent.SetInt(item->IsChecked());
+        checked = item->IsChecked();
     }
     else // Uncheckable item.
     {
-        commandEvent.SetInt(-1);
+        checked = -1;
     }
 
-    return HandleWindowEvent(commandEvent);
+    wxMenu* const menu = item->GetMenu();
+    wxCHECK_MSG( menu, false, wxS("Menu item should be attached to a menu") );
+
+    return menu->SendEvent(item->GetId(), checked);
 }
 
 #endif // wxUSE_MENUS

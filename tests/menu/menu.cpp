@@ -116,6 +116,9 @@ private:
 
     wxArrayString m_menuLabels;
 
+    // The menu containing the item with MenuTestCase_Bar id.
+    wxMenu* m_menuWithBar;
+
     DECLARE_NO_COPY_CLASS(MenuTestCase)
 };
 
@@ -155,6 +158,7 @@ void MenuTestCase::CreateFrame()
 
     PopulateMenu(helpMenu, "Helpmenu item ", itemcount);
     helpMenu->Append(MenuTestCase_Bar, "Bar\tF1");
+    m_menuWithBar = helpMenu;
     helpMenu->AppendSubMenu(subMenu, "Sub&menu", "Test a submenu");
 
     // +2 for "Foo" and "Bar", +2 for the 2 submenus
@@ -464,5 +468,13 @@ void MenuTestCase::Events()
 
     const wxCommandEvent& ev = handler.GetEvent();
     CPPUNIT_ASSERT_EQUAL( static_cast<int>(MenuTestCase_Bar), ev.GetId() );
+
+    wxObject* const src = ev.GetEventObject();
+    CPPUNIT_ASSERT( src );
+
+    CPPUNIT_ASSERT_EQUAL( "wxMenu",
+                          wxString(src->GetClassInfo()->GetClassName()) );
+    CPPUNIT_ASSERT_EQUAL( static_cast<wxObject*>(m_menuWithBar),
+                          src );
 #endif // wxUSE_UIACTIONSIMULATOR
 }
