@@ -1400,10 +1400,15 @@ HRESULT DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg,
         //control is down?
         if((GetKeyState(VK_CONTROL) & 0x8000 ))
         {
-            //skip CTRL-N, CTRL-F and CTRL-P
-            if(lpMsg->wParam == 'N' || lpMsg->wParam == 'P' || lpMsg->wParam == 'F')
+            //skip the accelerators used by the control
+            switch(lpMsg->wParam)
             {
-                return S_OK;
+                case 'F':
+                case 'L':
+                case 'N':
+                case 'O':
+                case 'P':
+                    return S_OK;
             }
         }
         //skip F5
