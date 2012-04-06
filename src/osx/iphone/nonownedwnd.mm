@@ -454,6 +454,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
             footerView = frame->GetToolBar()->GetHandle();
         }
     }
+    return footerView;
 }
 
 @end
