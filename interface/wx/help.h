@@ -35,7 +35,7 @@ enum wxHelpSearchMode
     The help viewer will only get run, however, just before the first call to
     display something.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{help}
 
     @see wxHelpController, wxHtmlHelpController, @ref overview_html
@@ -73,12 +73,12 @@ public:
         This function is for backward compatibility only, and applications
         should use DisplaySection() instead.
     */
-    virtual bool DisplayBlock(long blockNo);
+    virtual bool DisplayBlock(long blockNo) = 0;
 
     /**
         If the help viewer is not running, runs it and displays the contents.
     */
-    virtual bool DisplayContents();
+    virtual bool DisplayContents() = 0;
 
     /**
         Displays the section as a popup window using a context id.
@@ -108,7 +108,7 @@ public:
           See also the help sample for notes on how to specify section numbers for
           various help file formats.
     */
-    virtual bool DisplaySection(int sectionNo);
+    virtual bool DisplaySection(int sectionNo) = 0;;
 
     /**
         Displays the text in a popup window, if possible.
@@ -169,7 +169,7 @@ public:
         - @e wxHtmlHelpController: see wxHtmlHelpController::KeywordSearch.
     */
     virtual bool KeywordSearch(const wxString& keyWord,
-                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL) = 0;
 
     /**
         If the help viewer is not running, runs it and loads the given file.
@@ -182,7 +182,7 @@ public:
 
         wxHtmlHelpController ignores this call.
     */
-    virtual bool LoadFile(const wxString& file = wxEmptyString);
+    virtual bool LoadFile(const wxString& file = wxEmptyString) = 0;
 
     /**
         Overridable member called when this application's viewer is quit by the user.
@@ -194,7 +194,7 @@ public:
         If the viewer is running, quits it by disconnecting.
         For Windows Help, the viewer will only close if no other application is using it.
     */
-    virtual bool Quit();
+    virtual bool Quit() = 0;
 
     /**
         For wxHtmlHelpController, the title is set (with %s indicating the
@@ -293,7 +293,7 @@ public:
       @code wxFileSystem::AddHandler(new wxArchiveFSHandler); @endcode
       or nothing will be shown in your help window.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{help}
 
     @see wxHtmlHelpController, @ref overview_html
