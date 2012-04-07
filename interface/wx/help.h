@@ -6,6 +6,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+#define wxHELP_NETSCAPE     1
+
+
 /**
     Help search modes for wxHelpController::KeywordSearch().
  */
@@ -16,10 +20,10 @@ enum wxHelpSearchMode
 };
 
 /**
-    @class wxHelpController
+    @class wxHelpControllerBase
 
-    This is a family of classes by which applications may invoke a help viewer
-    to provide on-line help.
+    This is the abstract base class a family of classes by which applications
+    may invoke a help viewer to provide on-line help.
 
     A help controller allows an application to display help, at the contents
     or at a particular topic, and shut the help program down on termination.
@@ -31,48 +35,12 @@ enum wxHelpSearchMode
     The help viewer will only get run, however, just before the first call to
     display something.
 
-    Most help controller classes actually derive from wxHelpControllerBase and have
-    names of the form wxXXXHelpController or wxHelpControllerXXX.
-    An appropriate class is aliased to the name wxHelpController for each platform, as
-    follows:
-    - On desktop Windows, wxCHMHelpController is used (MS HTML Help).
-    - On Windows CE, wxWinceHelpController is used.
-    - On all other platforms, wxHtmlHelpController is used if wxHTML is compiled
-      into wxWidgets; otherwise wxExtHelpController is used (for invoking an
-      external browser).
-
-    The remaining help controller classes need to be named explicitly by an
-    application that wishes to make use of them.
-
-    The following help controller classes are defined:
-    - wxWinHelpController, for controlling Windows Help.
-    - wxCHMHelpController, for controlling MS HTML Help. To use this, you need to
-      set wxUSE_MS_HTML_HELP to 1 in setup.h and have the htmlhelp.h header from
-      Microsoft's HTML Help kit. (You don't need the VC++-specific htmlhelp.lib
-      because wxWidgets loads necessary DLL at runtime and so it works with all
-      compilers.)
-    - wxBestHelpController, for controlling MS HTML Help or, if Microsoft's runtime
-      is not available, wxHtmlHelpController. You need to provide @b both CHM and
-      HTB versions of the help file. For wxMSW only.
-    - wxExtHelpController, for controlling external browsers under Unix.
-      The default browser is Netscape Navigator. The 'help' sample shows its use.
-    - wxWinceHelpController, for controlling a simple @c .htm help controller for
-      Windows CE applications.
-    - wxHtmlHelpController, a sophisticated help controller using wxHTML, in a
-      similar style to the Microsoft HTML Help viewer and using some of the same
-      files. Although it has an API compatible with other help controllers, it has
-      more advanced features, so it is recommended that you use the specific API
-      for this class instead. Note that if you use .zip or .htb formats for your
-      books, you must add this line to your application initialization:
-      @code wxFileSystem::AddHandler(new wxArchiveFSHandler); @endcode
-      or nothing will be shown in your help window.
-
     @library{wxbase}
     @category{help}
 
-    @see wxHtmlHelpController, @ref overview_html
+    @see wxHelpController, wxHtmlHelpController, @ref overview_html
 */
-class wxHelpController : public wxHelpControllerBase
+class wxHelpControllerBase : public wxObject
 {
 public:
     /**
@@ -84,12 +52,12 @@ public:
 
         You can also change the parent window later with SetParentWindow().
     */
-    wxHelpController(wxWindow* parentWindow = NULL);
+    wxHelpControllerBase(wxWindow* parentWindow = NULL);
 
     /**
         Destroys the help instance, closing down the viewer if it is running.
     */
-    ~wxHelpController();
+    ~wxHelpControllerBase();
 
     /**
         If the help viewer is not running, runs it and displays the file at the given
@@ -265,6 +233,84 @@ public:
 
         @todo modernize this function with ::wxLaunchDefaultBrowser
     */
-    virtual void SetViewer(const wxString& viewer, long flags);
+    virtual void SetViewer(const wxString& viewer, long flags=wxHELP_NETSCAPE);
 };
+
+
+
+
+
+
+/**
+    @class wxHelpController
+
+    This is an alias for one of a family of help controller classes which is
+    most appropriate for the current platform.
+    
+    A help controller allows an application to display help, at the contents
+    or at a particular topic, and shut the help program down on termination.
+    This avoids proliferation of many instances of the help viewer whenever the
+    user requests a different topic via the application's menus or buttons.
+
+    Typically, an application will create a help controller instance when it starts,
+    and immediately call wxHelpController::Initialize to associate a filename with it.
+    The help viewer will only get run, however, just before the first call to
+    display something.
+
+    Most help controller classes actually derive from wxHelpControllerBase and have
+    names of the form wxXXXHelpController or wxHelpControllerXXX.
+    An appropriate class is aliased to the name wxHelpController for each platform, as
+    follows:
+    - On desktop Windows, wxCHMHelpController is used (MS HTML Help).
+    - On Windows CE, wxWinceHelpController is used.
+    - On all other platforms, wxHtmlHelpController is used if wxHTML is compiled
+      into wxWidgets; otherwise wxExtHelpController is used (for invoking an
+      external browser).
+
+    The remaining help controller classes need to be named explicitly by an
+    application that wishes to make use of them.
+
+    The following help controller classes are defined:
+    - wxWinHelpController, for controlling Windows Help.
+    - wxCHMHelpController, for controlling MS HTML Help. To use this, you need to
+      set wxUSE_MS_HTML_HELP to 1 in setup.h and have the htmlhelp.h header from
+      Microsoft's HTML Help kit. (You don't need the VC++-specific htmlhelp.lib
+      because wxWidgets loads necessary DLL at runtime and so it works with all
+      compilers.)
+    - wxBestHelpController, for controlling MS HTML Help or, if Microsoft's runtime
+      is not available, wxHtmlHelpController. You need to provide @b both CHM and
+      HTB versions of the help file. For wxMSW only.
+    - wxExtHelpController, for controlling external browsers under Unix.
+      The default browser is Netscape Navigator. The 'help' sample shows its use.
+    - wxWinceHelpController, for controlling a simple @c .htm help controller for
+      Windows CE applications.
+    - wxHtmlHelpController, a sophisticated help controller using wxHTML, in a
+      similar style to the Microsoft HTML Help viewer and using some of the same
+      files. Although it has an API compatible with other help controllers, it has
+      more advanced features, so it is recommended that you use the specific API
+      for this class instead. Note that if you use .zip or .htb formats for your
+      books, you must add this line to your application initialization:
+      @code wxFileSystem::AddHandler(new wxArchiveFSHandler); @endcode
+      or nothing will be shown in your help window.
+
+    @library{wxbase}
+    @category{help}
+
+    @see wxHtmlHelpController, @ref overview_html
+*/
+class wxHelpController : public wxHelpControllerBase
+{
+public:
+    /**
+        Constructs a help instance object, but does not invoke the help viewer.
+
+        If you provide a window, it will be used by some help controller classes, such as
+        wxCHMHelpController, wxWinHelpController and wxHtmlHelpController, as the
+        parent for the help window instead of the value of wxApp::GetTopWindow.
+
+        You can also change the parent window later with SetParentWindow().
+    */
+    wxHelpController(wxWindow* parentWindow = NULL);
+};
+
 
