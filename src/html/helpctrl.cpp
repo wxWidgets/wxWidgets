@@ -43,6 +43,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxHelpControllerBase)
 wxHtmlHelpController::wxHtmlHelpController(int style, wxWindow* parentWindow):
     wxHelpControllerBase(parentWindow)
 {
+    Init(style);
+}
+
+wxHtmlHelpController::wxHtmlHelpController(wxWindow* parentWindow, int style):
+    wxHelpControllerBase(parentWindow)
+{
+    Init(style);
+}
+
+void wxHtmlHelpController::Init(int style)
+{
     m_helpWindow = NULL;
     m_helpFrame = NULL;
     m_helpDialog = NULL;
@@ -54,6 +65,7 @@ wxHtmlHelpController::wxHtmlHelpController(int style, wxWindow* parentWindow):
     m_FrameStyle = style;
     m_shouldPreventAppExit = false;
 }
+
 
 wxHtmlHelpController::~wxHtmlHelpController()
 {

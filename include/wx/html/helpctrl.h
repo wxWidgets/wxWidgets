@@ -46,6 +46,8 @@ class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxE
 
 public:
     wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = NULL);
+    wxHtmlHelpController(wxWindow* parentWindow, int style = wxHF_DEFAULT_STYLE);
+    
     virtual ~wxHtmlHelpController();
 
     void SetShouldPreventAppExit(bool enable);
@@ -115,6 +117,8 @@ public:
     wxWindow* FindTopLevelWindow();
 
 protected:
+    void Init(int style);
+    
     virtual wxWindow* CreateHelpWindow();
     virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData *data);
     virtual wxHtmlHelpDialog* CreateHelpDialog(wxHtmlHelpData *data);

@@ -79,6 +79,8 @@ public:
     */
     wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE,
                          wxWindow* parentWindow = NULL);
+    wxHtmlHelpController(wxWindow* parentWindow, int style = wxHF_DEFAULT_STYLE);
+
 
     /**
         Adds a book (i.e. a @ref overview_html_helpformats ".hhp file"; an HTML Help
