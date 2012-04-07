@@ -37,7 +37,7 @@
     @see wxBestHelpController, wxHtmlHelpFrame, wxHtmlHelpDialog,
          wxHtmlHelpWindow, wxHtmlModalHelp
 */
-class wxHtmlHelpController
+class wxHtmlHelpController : public wxHelpControllerBase
 {
 public:
     /**
