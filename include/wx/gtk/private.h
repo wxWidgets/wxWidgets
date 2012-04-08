@@ -28,7 +28,7 @@
 extern const gchar *wx_pango_version_check(int major, int minor, int micro);
 
 #if wxUSE_UNICODE
-    #define wxGTK_CONV(s) s.utf8_str()
+    #define wxGTK_CONV(s) (s).utf8_str()
     #define wxGTK_CONV_ENC(s, enc) wxGTK_CONV((s))
     #define wxGTK_CONV_FONT(s, font) wxGTK_CONV((s))
     #define wxGTK_CONV_SYS(s) wxGTK_CONV((s))
