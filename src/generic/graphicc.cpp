@@ -81,6 +81,9 @@ using namespace std;
 
 #ifdef __WXMSW__
 #include <cairo-win32.h>
+// We must do this as cairo-win32.h includes windows.h which pollutes the
+// global name space with macros.
+#include "wx/msw/winundef.h"
 #endif
 
 #ifdef __WXMAC__

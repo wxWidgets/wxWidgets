@@ -25,6 +25,10 @@
 
 #if wxUSE_CAIRO
 
+#ifdef __WXMSW__
+#include "wx/msw/wrapwin.h"
+#endif
+
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #include <cairo-quartz.h>
