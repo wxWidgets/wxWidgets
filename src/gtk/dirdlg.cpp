@@ -157,7 +157,8 @@ bool wxDirDialog::Create(wxWindow* parent,
 
     if ( !defaultPath.empty() )
         gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
-                defaultPath.fn_str() );
+                                             wxGTK_CONV_FN(defaultPath) );
+
     return true;
 }
 
@@ -179,7 +180,7 @@ void wxDirDialog::SetPath(const wxString& dir)
     if (wxDirExists(dir))
     {
         gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                            dir.fn_str());
+                                            wxGTK_CONV_FN(dir));
     }
 }
 

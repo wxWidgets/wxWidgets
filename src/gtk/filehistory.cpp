@@ -32,6 +32,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include "wx/gtk/private/string.h"
+#include "wx/gtk/private.h"
 
 // ============================================================================
 // implementation
@@ -45,7 +46,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     const wxString fullPath = wxFileName(file).GetFullPath();
     if ( !gtk_check_version(2,10,0) )
     {
-        wxGtkString uri(g_filename_to_uri(fullPath.fn_str(), NULL, NULL));
+        wxGtkString uri(g_filename_to_uri(wxGTK_CONV_FN(fullPath), NULL, NULL));
 
         if ( uri )
             gtk_recent_manager_add_item(gtk_recent_manager_get_default(), uri);

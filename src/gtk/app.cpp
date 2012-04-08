@@ -297,6 +297,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     // gtk+ 2.0 supports Unicode through UTF-8 strings
     wxConvCurrent = &wxConvUTF8;
 
+#ifdef __UNIX__
     // decide which conversion to use for the file names
 
     // (1) this variable exists for the sole purpose of specifying the encoding
@@ -345,6 +346,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 #endif // wxUSE_INTL
     static wxConvBrokenFileNames fileconv(encName);
     wxConvFileName = &fileconv;
+#endif // __UNIX__
 
 
     bool init_result;

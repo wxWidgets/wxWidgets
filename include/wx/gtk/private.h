@@ -87,6 +87,17 @@ extern const gchar *wx_pango_version_check(int major, int minor, int micro);
     #define wxGTK_CONV_BACK_SYS(s) wxConvertFromGTK((s))
 #endif
 
+// Define a macro for converting wxString to char* in appropriate encoding for
+// the file names.
+#ifdef G_OS_WIN32
+    // Under MSW, UTF-8 file name encodings are always used.
+    #define wxGTK_CONV_FN(s) (s).utf8_str()
+#else
+    // Under Unix use GLib file name encoding (which is also UTF-8 by default
+    // but may be different from it).
+    #define wxGTK_CONV_FN(s) (s).fn_str()
+#endif
+
 // ----------------------------------------------------------------------------
 // various private helper functions
 // ----------------------------------------------------------------------------

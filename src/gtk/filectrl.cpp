@@ -362,7 +362,7 @@ bool wxGtkFileCtrl::Create( wxWindow *parent,
     if ( !dir.empty() )
     {
         gtk_file_chooser_set_current_folder( m_fcWidget,
-                                             dir.fn_str() );
+                                             wxGTK_CONV_FN(dir) );
     }
 
     const wxString fname = fn.GetFullName();
@@ -371,7 +371,7 @@ bool wxGtkFileCtrl::Create( wxWindow *parent,
         if ( !fname.empty() )
         {
             gtk_file_chooser_set_current_name( m_fcWidget,
-                                               fname.fn_str() );
+                                               wxGTK_CONV_FN(fname) );
         }
     }
     else // wxFC_OPEN
@@ -379,7 +379,7 @@ bool wxGtkFileCtrl::Create( wxWindow *parent,
         if ( !fname.empty() )
         {
             gtk_file_chooser_set_filename( m_fcWidget,
-                                           fn.GetFullPath().fn_str() );
+                                           wxGTK_CONV_FN(fn.GetFullPath()) );
         }
     }
 

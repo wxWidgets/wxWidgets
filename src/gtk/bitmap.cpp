@@ -21,6 +21,7 @@
 #include "wx/rawbmp.h"
 
 #include "wx/gtk/private/object.h"
+#include "wx/gtk/private.h"
 
 #include <gtk/gtk.h>
 
@@ -677,7 +678,7 @@ bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalett
         default: break;
     }
     return type_name &&
-        gdk_pixbuf_save(GetPixbuf(), name.fn_str(), type_name, NULL, NULL);
+        gdk_pixbuf_save(GetPixbuf(), wxGTK_CONV_FN(name), type_name, NULL, NULL);
 }
 
 bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
@@ -691,7 +692,7 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
     {
         wxUnusedVar(type); // The type is detected automatically by GDK.
 
-        *this = wxBitmap(gdk_pixbuf_new_from_file(name.fn_str(), NULL));
+        *this = wxBitmap(gdk_pixbuf_new_from_file(wxGTK_CONV_FN(name), NULL));
     }
 
     return IsOk();

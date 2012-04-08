@@ -23,6 +23,7 @@
 #endif
 
 #include "wx/wfstream.h"
+#include "wx/gtk/private.h"
 
 #include <gtk/gtk.h>
 
@@ -84,7 +85,7 @@ wxAnimation& wxAnimation::operator=(const wxAnimation& that)
 bool wxAnimation::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
 {
     UnRef();
-    m_pixbuf = gdk_pixbuf_animation_new_from_file(name.fn_str(), NULL);
+    m_pixbuf = gdk_pixbuf_animation_new_from_file(wxGTK_CONV_FN(name), NULL);
     return IsOk();
 }
 

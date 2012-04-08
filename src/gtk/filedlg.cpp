@@ -288,7 +288,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     const wxString dir = fn.GetPath();
     if ( !dir.empty() )
     {
-        gtk_file_chooser_set_current_folder(file_chooser, dir.fn_str());
+        gtk_file_chooser_set_current_folder(file_chooser, wxGTK_CONV_FN(dir));
     }
 
     const wxString fname = fn.GetFullName();
@@ -296,7 +296,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     {
         if ( !fname.empty() )
         {
-            gtk_file_chooser_set_current_name(file_chooser, fname.fn_str());
+            gtk_file_chooser_set_current_name(file_chooser, wxGTK_CONV_FN(fname));
         }
 
 #if GTK_CHECK_VERSION(2,7,3)
@@ -309,7 +309,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
         if ( !fname.empty() )
         {
             gtk_file_chooser_set_filename(file_chooser,
-                                          fn.GetFullPath().fn_str());
+                                          wxGTK_CONV_FN(fn.GetFullPath()));
         }
     }
 
