@@ -9,12 +9,85 @@
 /**
     This type identifies the client of the art objects requested to wxArtProvider.
 */
-typedef class wxString wxArtClient;
+typedef wxString wxArtClient;
 
 /**
     This type identifies a specific art object which can be requested to wxArtProvider.
 */
-typedef class wxString wxArtID;
+typedef wxString wxArtID;
+
+
+wxArtClient wxART_TOOLBAR;
+wxArtClient wxART_MENU;
+wxArtClient wxART_FRAME_ICON;
+
+wxArtClient wxART_CMN_DIALOG;
+wxArtClient wxART_HELP_BROWSER;
+wxArtClient wxART_MESSAGE_BOX;
+wxArtClient wxART_BUTTON;
+wxArtClient wxART_LIST;
+
+wxArtClient wxART_OTHER;
+
+
+wxArtID wxART_ADD_BOOKMARK;         
+wxArtID wxART_DEL_BOOKMARK;         
+wxArtID wxART_HELP_SIDE_PANEL;      
+wxArtID wxART_HELP_SETTINGS;        
+wxArtID wxART_HELP_BOOK;            
+wxArtID wxART_HELP_FOLDER;          
+wxArtID wxART_HELP_PAGE;            
+wxArtID wxART_GO_BACK;              
+wxArtID wxART_GO_FORWARD;           
+wxArtID wxART_GO_UP;                
+wxArtID wxART_GO_DOWN;              
+wxArtID wxART_GO_TO_PARENT;         
+wxArtID wxART_GO_HOME;              
+wxArtID wxART_GOTO_FIRST;           
+wxArtID wxART_GOTO_LAST;            
+wxArtID wxART_FILE_OPEN;            
+wxArtID wxART_FILE_SAVE;            
+wxArtID wxART_FILE_SAVE_AS;         
+wxArtID wxART_PRINT;                
+wxArtID wxART_HELP;                 
+wxArtID wxART_TIP;                  
+wxArtID wxART_REPORT_VIEW;          
+wxArtID wxART_LIST_VIEW;            
+wxArtID wxART_NEW_DIR;              
+wxArtID wxART_HARDDISK;             
+wxArtID wxART_FLOPPY;               
+wxArtID wxART_CDROM;                
+wxArtID wxART_REMOVABLE;            
+wxArtID wxART_FOLDER;               
+wxArtID wxART_FOLDER_OPEN;          
+wxArtID wxART_GO_DIR_UP;            
+wxArtID wxART_EXECUTABLE_FILE;      
+wxArtID wxART_NORMAL_FILE;          
+wxArtID wxART_TICK_MARK;            
+wxArtID wxART_CROSS_MARK;           
+wxArtID wxART_ERROR;                
+wxArtID wxART_QUESTION;             
+wxArtID wxART_WARNING;              
+wxArtID wxART_INFORMATION;          
+wxArtID wxART_MISSING_IMAGE;        
+
+wxArtID wxART_COPY;                 
+wxArtID wxART_CUT;                  
+wxArtID wxART_PASTE;                
+wxArtID wxART_DELETE;               
+wxArtID wxART_NEW;                  
+
+wxArtID wxART_UNDO;                 
+wxArtID wxART_REDO;                 
+
+wxArtID wxART_PLUS;                 
+wxArtID wxART_MINUS;                
+
+wxArtID wxART_CLOSE;                
+wxArtID wxART_QUIT;                 
+
+wxArtID wxART_FIND;                 
+wxArtID wxART_FIND_AND_REPLACE;     
 
 
 /**
