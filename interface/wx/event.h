@@ -1414,7 +1414,7 @@ public:
                 else
                 {
                     // It's a special key, deal with all the known ones:
-                    switch ( keycode )
+                    switch ( GetKeyCode() )
                     {
                         case WXK_LEFT:
                         case WXK_RIGHT:
