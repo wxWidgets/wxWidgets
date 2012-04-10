@@ -6,6 +6,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxHL_CONTEXTMENU        0x0001
+#define wxHL_ALIGN_LEFT         0x0002
+#define wxHL_ALIGN_RIGHT        0x0004
+#define wxHL_ALIGN_CENTRE       0x0008
+#define wxHL_DEFAULT_STYLE      (wxHL_CONTEXTMENU|wxNO_BORDER|wxHL_ALIGN_CENTRE)
+
 /**
     @class wxHyperlinkEvent
 
@@ -39,6 +45,7 @@ public:
 };
 
 
+wxEventType wxEVT_COMMAND_HYPERLINK;
 
 /**
     @class wxHyperlinkCtrl
@@ -94,6 +101,8 @@ public:
 class wxHyperlinkCtrl : public wxControl
 {
 public:
+    wxHyperlinkCtrl();
+    
     /**
         Constructor. See Create() for more info.
     */
