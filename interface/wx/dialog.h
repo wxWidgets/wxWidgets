@@ -284,6 +284,12 @@ public:
     wxStdDialogButtonSizer* CreateStdDialogButtonSizer(long flags);
 
     /**
+       Splits text up at newlines and places the lines into wxStaticText
+       objects in a vertical wxBoxSizer.
+    */
+    wxSizer *CreateTextSizer( const wxString& message );
+
+    /**
         Performs layout adaptation, usually if the dialog is too large to fit
         on the display.
 
