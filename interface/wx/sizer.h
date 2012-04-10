@@ -49,12 +49,6 @@
     window, the library wouldn't be able to delete such an orphan sizer and in
     this, and only this, case it should be deleted explicitly.
 
-    @beginWxPythonOnly
-    If you wish to create a sizer class in wxPython you should
-    derive the class from @c wxPySizer in order to get Python-aware
-    capabilities for the various virtual methods.
-    @endWxPythonOnly
-
     @section wxsizer_flags wxSizer flags
 
     The "flag" argument accepted by wxSizeItem constructors and other

@@ -182,15 +182,6 @@ public:
 
         @see wxWindow::Enable()
 
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the following methods:
-
-        @beginTable
-        @row2col{Enable(flag), Enables or disables the entire radiobox.}
-        @row2col{EnableItem(n\, flag), Enables or disables an individual button in the radiobox.}
-        @endTable
-
-        @endWxPythonOnly
     */
     virtual bool Enable(unsigned int n, bool enable = true);
 
@@ -310,16 +301,6 @@ public:
 
         @see
             wxWindow::Show()
-
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the following methods:
-
-        @beginTable
-        @row2col{Show(flag), Shows or hides the entire radiobox.}
-        @row2col{ShowItem(n\, flag), Shows or hides individual buttons.}
-        @endTable
-
-        @endWxPythonOnly
 
     */
     virtual bool Show(unsigned int item, bool show = true);

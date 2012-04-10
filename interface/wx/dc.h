@@ -409,11 +409,6 @@ public:
         Draws lines using an array of points of size @a n adding the optional
         offset coordinate. The current pen is used for drawing the lines.
 
-        @beginWxPythonOnly
-        The wxPython version of this method accepts a Python list of wxPoint
-        objects.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
@@ -424,11 +419,6 @@ public:
         This method uses a list of wxPoints, adding the optional offset
         coordinate. The programmer is responsible for deleting the list of
         points.
-
-        @beginWxPythonOnly
-        The wxPython version of this method accepts a Python list of wxPoint
-        objects.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         The wxPerl version of this method accepts
@@ -481,11 +471,6 @@ public:
 
         The programmer is responsible for deleting the list of points.
 
-        @beginWxPythonOnly
-        The wxPython version of this method accepts a Python list of wxPoint
-        objects.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         The wxPerl version of this method accepts
         as its first parameter a reference to an array
@@ -518,10 +503,6 @@ public:
         call to DrawPolyPolygon() must be closed. Unlike polygons created by
         the DrawPolygon() member function, the polygons created by this
         method are not closed automatically.
-
-        @beginWxPythonOnly
-        Not implemented yet.
-        @endWxPythonOnly
     */
     void DrawPolyPolygon(int n, int count[], wxPoint points[],
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
@@ -593,11 +574,6 @@ public:
 
     /**
         Draws a spline between all given points using the current pen.
-
-        @beginWxPythonOnly
-        The wxPython version of this method accepts a Python list of wxPoint
-        objects.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Not supported by wxPerl.
@@ -753,11 +729,6 @@ public:
 
     /**
         Gets the rectangle surrounding the current clipping region.
-
-        @beginWxPythonOnly
-        No arguments are required and the four values defining the rectangle
-        are returned as a tuple.
-        @endWxPythonOnly
     */
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
 
@@ -883,11 +854,6 @@ public:
         function that is faster or more accurate than the generic
         implementation then it should be used instead.
 
-        @beginWxPythonOnly
-        This method only takes the @a text parameter and returns a Python list
-        of integers.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method only takes the @a text parameter and
         returns the widths as a list of integers.
@@ -913,13 +879,6 @@ public:
         font is.
 
         @note This function only works with single-line strings.
-
-        @beginWxPythonOnly
-        The following methods are implemented in wxPython:
-        - GetTextExtent(string) - Returns a 2-tuple, (width, height).
-        - GetFullTextExtent(string, font=NULL) -
-            Returns a 4-tuple, (width, height, descent, externalLeading).
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method is implemented as GetTextExtent(string,
@@ -1388,10 +1347,6 @@ public:
 
         @note This method shouldn't be used with wxPaintDC as accessing the DC
         while drawing can result in unexpected results, notably in wxGTK.
-
-        @beginWxPythonOnly
-        The wxColour value is returned and is not required as a parameter.
-        @endWxPythonOnly
     */
     bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
 
@@ -1415,13 +1370,6 @@ public:
         double scaleY = (double)(maxY / h);
         dc.SetUserScale(min(scaleX, scaleY),min(scaleX, scaleY));
         @endcode
-
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the
-        following methods:
-        - GetSize() - Returns a wxSize.
-        - GetSizeWH() - Returns a 2-tuple (width, height).
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl there are two methods instead of a single overloaded

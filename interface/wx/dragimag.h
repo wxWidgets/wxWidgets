@@ -16,11 +16,6 @@
     platforms, wxGenericDragImage is used. Applications may also prefer to use
     wxGenericDragImage on Windows, too.
 
-    @beginWxPythonOnly
-    wxPython uses wxGenericDragImage on all platforms, but uses the wxDragImage
-    name.
-    @endWxPythonOnly
-
     To use this class, when you wish to start dragging an image, create a
     wxDragImage object and store it somewhere you can access it as the drag
     progresses. Call BeginDrag() to start, and EndDrag() to stop the drag. To
@@ -65,10 +60,6 @@ public:
             Icon to be used as the drag image.
         @param cursor
             Optional cursor to combine with the image.
-
-        @beginWxPythonOnly
-        This constructor is called wxDragIcon in wxPython.
-        @endWxPythonOnly
     */
     wxDragImage(const wxIcon& image, const wxCursor& cursor = wxNullCursor);
     /**
@@ -78,10 +69,6 @@ public:
             Text used to construct a drag image.
         @param cursor
             Optional cursor to combine with the image.
-
-        @beginWxPythonOnly
-        This constructor is called wxDragString in wxPython.
-        @endWxPythonOnly
     */
     wxDragImage(const wxString& text, const wxCursor& cursor = wxNullCursor);
     /**
@@ -92,10 +79,6 @@ public:
             Tree control for constructing a tree drag image.
         @param id
             Tree control item id.
-
-        @beginWxPythonOnly
-        This constructor is called wxDragTreeItem in wxPython.
-        @endWxPythonOnly
     */
     wxDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
     /**
@@ -106,10 +89,6 @@ public:
             List control for constructing a list drag image.
         @param id
             List control item id.
-
-        @beginWxPythonOnly
-        This constructor is called wxDragListItem in wxPython.
-        @endWxPythonOnly
     */
     wxDragImage(const wxListCtrl& listCtrl, long id);
     /**

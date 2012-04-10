@@ -29,12 +29,6 @@
     parameter, it is currently ignored as only the Gregorian calendar is
     supported. Future versions will support other calendars.
 
-    @beginWxPythonOnly
-    These methods are standalone functions named
-    "wxDateTime_<StaticMethodName>" in wxPython.
-    @endWxPythonOnly
-
-
     @section datetime_formatting Date Formatting and Parsing
 
     The date formatting and parsing functions convert wxDateTime objects to and
@@ -446,41 +440,23 @@ public:
     
     /**
         Same as Set().
-
-        @beginWxPythonOnly
-        This constructor is named "wxDateTimeFromTimeT" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime(time_t timet);
     /**
         Same as Set().
-
-        @beginWxPythonOnly Unsupported. @endWxPythonOnly
     */
     wxDateTime(const struct tm& tm);
     /**
         Same as Set().
-
-        @beginWxPythonOnly
-        This constructor is named "wxDateTimeFromJDN" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime(double jdn);
     /**
         Same as Set().
-
-        @beginWxPythonOnly
-        This constructor is named "wxDateTimeFromHMS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime(wxDateTime_t hour, wxDateTime_t minute = 0,
                wxDateTime_t second = 0, wxDateTime_t millisec = 0);
     /**
         Same as Set().
-
-        @beginWxPythonOnly
-        This constructor is named "wxDateTimeFromDMY" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime(wxDateTime_t day, Month month,
                int year = Inv_Year, wxDateTime_t hour = 0,
@@ -507,17 +483,11 @@ public:
     /**
         Constructs the object from @a timet value holding the number of seconds
         since Jan 1, 1970.
-
-        @beginWxPythonOnly
-        This method is named "SetTimeT" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Set(time_t timet);
     /**
         Sets the date and time from the broken down representation in the
         standard @a tm structure.
-
-        @beginWxPythonOnly Unsupported. @endWxPythonOnly
     */
     wxDateTime& Set(const struct tm& tm);
 
@@ -534,19 +504,11 @@ public:
         particular instant is the fractional number of days since 12 hours
         Universal Coordinated Time (Greenwich mean noon) on January 1 of the
         year -4712 in the Julian proleptic calendar.
-
-        @beginWxPythonOnly
-        This method is named "SetJDN" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Set(double jdn);
     /**
         Sets the date to be equal to Today() and the time from supplied
         parameters.
-
-        @beginWxPythonOnly
-        This method is named "SetHMS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Set(wxDateTime_t hour, wxDateTime_t minute = 0,
                     wxDateTime_t second = 0, wxDateTime_t millisec = 0);
@@ -848,67 +810,35 @@ public:
 
     /**
         Adds the given date span to this object.
-
-        @beginWxPythonOnly
-        This method is named "AddDS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Add(const wxDateSpan& diff) const;
     /**
         Adds the given date span to this object.
-
-        @beginWxPythonOnly
-        This method is named "AddDS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Add(const wxDateSpan& diff);
     /**
         Adds the given time span to this object.
-
-        @beginWxPythonOnly
-        This method is named "AddTS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Add(const wxTimeSpan& diff) const;
     /**
         Adds the given time span to this object.
-
-        @beginWxPythonOnly
-        This method is named "AddTS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Add(const wxTimeSpan& diff);
 
     /**
         Subtracts the given time span from this object.
-
-        @beginWxPythonOnly
-        This method is named "SubtractTS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Subtract(const wxTimeSpan& diff) const;
     /**
         Subtracts the given time span from this object.
-
-        @beginWxPythonOnly
-        This method is named "SubtractTS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Subtract(const wxTimeSpan& diff);
     /**
         Subtracts the given date span from this object.
-
-        @beginWxPythonOnly
-        This method is named "SubtractDS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Subtract(const wxDateSpan& diff) const;
     /**
         Subtracts the given date span from this object.
-
-        @beginWxPythonOnly
-        This method is named "SubtractDS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Subtract(const wxDateSpan& diff);
     /**
@@ -1520,20 +1450,12 @@ public:
     /**
         Returns the number of days in the given year. The only supported value
         for @a cal currently is @c Gregorian.
-
-        @beginWxPythonOnly
-        This method is named "GetNumberOfDaysInYear" in wxPython.
-        @endWxPythonOnly
     */
     static wxDateTime_t GetNumberOfDays(int year, Calendar cal = Gregorian);
 
     /**
         Returns the number of days in the given month of the given year. The
         only supported value for @a cal currently is @c Gregorian.
-
-        @beginWxPythonOnly
-        This method is named "GetNumberOfDaysInMonth" in wxPython.
-        @endWxPythonOnly
     */
     static wxDateTime_t GetNumberOfDays(Month month, int year = Inv_Year,
                                         Calendar cal = Gregorian);

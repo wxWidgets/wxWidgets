@@ -230,14 +230,6 @@ public:
             Property to start iteration from. If @NULL, then first child of root
             is used.
 
-        @beginWxPythonOnly
-        Instead of ++ operator, use Next() method, and instead of * operator,
-        use GetProperty() method. There is also GetPyIterator() method (which
-        takes the same arguments but instead returns a pythonic iterator),
-        @c Properties attribute which is an iterator over all non-category,
-        non-private properties, and finally @c Items attribute which is an
-        iterator over all items except private child properties.
-        @endWxPythonOnly
     */
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
                                         wxPGProperty* firstProp = NULL );
@@ -257,14 +249,6 @@ public:
             from the first property from the top, and wxBOTTOM means that the
             iteration will instead begin from bottommost valid item.
 
-        @beginWxPythonOnly
-        Instead of ++ operator, use Next() method, and instead of * operator,
-        use GetProperty() method. There is also GetPyIterator() method (which
-        takes the same arguments but instead returns a pythonic iterator),
-        @c Properties attribute which is an iterator over all non-category,
-        non-private properties, and finally @c Items attribute which is an
-        iterator over all items except private child properties.
-        @endWxPythonOnly
     */
     wxPropertyGridIterator GetIterator( int flags, int startPos );
     wxPropertyGridConstIterator GetIterator( int flags, int startPos ) const;
@@ -469,15 +453,6 @@ public:
 
         @param flags
             See @ref propgrid_iterator_flags.
-
-        @beginWxPythonOnly
-        Instead of ++ operator, use Next() method, and instead of * operator,
-        use GetProperty() method. There is also GetPyVIterator() method (which
-        takes the same arguments but instead returns a pythonic iterator),
-        @c Properties attribute which is an iterator over all non-category,
-        non-private properties, and finally @c Items attribute which is an
-        iterator over all items except private child properties.
-        @endWxPythonOnly
     */
     virtual wxPGVIterator GetVIterator( int flags ) const;
 

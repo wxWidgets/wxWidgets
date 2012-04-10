@@ -115,10 +115,6 @@ public:
 
     /**
         Increment operator. Increments the iterator to the next region.
-
-        @beginWxPythonOnly
-        A wxPython alias for this operator is called Next.
-        @endWxPythonOnly
     */
     wxRegionIterator& operator ++();
 

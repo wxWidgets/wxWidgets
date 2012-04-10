@@ -196,8 +196,6 @@ ALIASES += stock{3}="<tr><td><span class='itemdef'>\1</span></td> <td> @image ht
 # See ENABLED_SECTIONS configuration key for more info about these:
 ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL <b>wxPerl Note:</b> "
 ALIASES += endWxPerlOnly="\endif"
-ALIASES += beginWxPythonOnly="\if WXPYTHON_MANUAL <b>wxPython Note:</b> "
-ALIASES += endWxPythonOnly="\endif"
 
 # This is to get around a bug in Doxygen that prevents use of '{' or '}'
 # inside of any aliased command in parameters.

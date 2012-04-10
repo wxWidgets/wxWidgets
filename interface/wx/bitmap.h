@@ -710,19 +710,11 @@ public:
 
     /**
         Constructs a mask from a monochrome bitmap.
-
-        @beginWxPythonOnly
-        This is the default constructor for wxMask in wxPython.
-        @endWxPythonOnly
     */
     wxMask(const wxBitmap& bitmap);
 
     /**
         Constructs a mask from a bitmap and a colour that indicates the background.
-
-        @beginWxPythonOnly
-        wxPython has an alternate wxMask constructor matching this form called wxMaskColour.
-        @endWxPythonOnly
     */
     wxMask(const wxBitmap& bitmap, const wxColour& colour);
 

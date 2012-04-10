@@ -71,14 +71,6 @@ public:
 
         @remarks Use ShowModal() to show the dialog.
 
-        @beginWxPythonOnly
-
-        For Python the two parameters @a n and @a choices are collapsed into a
-        multi parameter @a choices which is expected to be a Python list of
-        strings.
-
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
@@ -108,14 +100,6 @@ public:
             Dialog position. Not Windows.
 
         @remarks Use ShowModal() to show the dialog.
-
-        @beginWxPythonOnly
-
-        For Python the two parameters @a n and @a choices are collapsed into a
-        multi parameter @a choices which is expected to be a Python list of
-        strings.
-
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Use an array reference for the @a choices parameter.
@@ -199,14 +183,6 @@ public:
 
         @remarks Use ShowModal() to show the dialog.
 
-        @beginWxPythonOnly
-
-        For Python the two parameters @a n and @a choices are collapsed into a
-        multi parameter @a choices which is expected to be a Python list of
-        strings.
-
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
@@ -241,14 +217,6 @@ public:
             Dialog position. Not Windows.
 
         @remarks Use ShowModal() to show the dialog.
-
-        @beginWxPythonOnly
-
-        For Python the two parameters @a n and @a choices are collapsed into a
-        multi parameter @a choices which is expected to be a Python list of
-        strings.
-
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Use an array reference for the @a choices parameter.

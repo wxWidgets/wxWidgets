@@ -116,11 +116,6 @@ public:
         @param name
             Window name.
 
-        @beginWxPythonOnly
-        The wxComboBox constructor in wxPython reduces the @a n and @a choices
-        arguments are to a single argument, which is a list of strings.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
@@ -158,11 +153,6 @@ public:
             Window validator.
         @param name
             Window name.
-
-        @beginWxPythonOnly
-        The wxComboBox constructor in wxPython reduces the @a n and @a choices
-        arguments are to a single argument, which is a list of strings.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Use an array reference for the @a choices parameter.
@@ -259,11 +249,6 @@ public:
 
     /**
         Same as wxTextEntry::SetSelection().
-
-        @beginWxPythonOnly
-        This method is called SetMark() in wxPython, "SetSelection" is kept for
-        wxControlWithItems::SetSelection().
-        @endWxPythonOnly
     */
     virtual void SetSelection(long from, long to);
 

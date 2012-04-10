@@ -641,10 +641,6 @@ public:
         Or you can just use the FitThisSizeToXXX() and MapScreenSizeToXXX routines below,
         which do most of the scaling calculations for you.
 
-        @beginWxPythonOnly
-        This method returns the output-only parameters as a tuple.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method takes no arguments and returns a
         2-element list (w, h).
@@ -660,10 +656,6 @@ public:
 
         If you are doing your own scaling, remember to multiply this by a scaling
         factor to take the preview DC size into account.
-
-        @beginWxPythonOnly
-        This method returns the output-only parameters as a tuple.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method takes no arguments and returns a
@@ -682,22 +674,12 @@ public:
 
         @a minPage must be greater than zero and @a maxPage must be greater
         than @a minPage.
-
-        @beginWxPythonOnly
-        When this method is implemented in a derived Python class, it should be designed
-        to take no parameters (other than the self reference) and to return a tuple of
-        four integers.
-        @endWxPythonOnly
     */
     virtual void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
                              int* pageTo);
 
     /**
         Returns the size of the printer page in millimetres.
-
-        @beginWxPythonOnly
-        This method returns the output-only parameters as a tuple.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method takes no arguments and returns a
@@ -715,15 +697,6 @@ public:
         previewing, a memory device context is used, which uses a bitmap size reflecting
         the current preview zoom. The application must take this discrepancy into
         account if previewing is to be supported.
-
-        @beginWxPythonOnly
-        This method returns the output-only parameters as a tuple.
-        @endWxPythonOnly
-
-        @beginWxPerlOnly
-        In wxPerl this method takes no arguments and returns a
-        2-element list (w, h).
-        @endWxPerlOnly
     */
     void GetPageSizePixels(int* w, int* h) const;
 
@@ -846,11 +819,6 @@ public:
         @remarks
         The base OnBeginDocument() must be called (and the return value
         checked) from within the overridden function, since it calls wxDC::StartDoc().
-
-        @beginWxPythonOnly
-         If this method is overridden in a Python class then the base class version can
-         be called by using the method <tt>base_OnBeginDocument(startPage, endPage)</tt>.
-        @endWxPythonOnly
     */
     virtual bool OnBeginDocument(int startPage, int endPage);
 

@@ -791,11 +791,6 @@ wxColourDatabase* wxTheColourDatabase;
     almost equivalent to wxSize, has a different meaning: wxPoint represents a
     position while wxSize represents the size.
 
-    @beginWxPythonOnly
-    wxPython defines aliases for the @e x and @e y members named @e width and
-    @e height since it makes much more sense for sizes.
-    @endWxPythonOnly
-
     @library{wxcore}
     @category{data}
 

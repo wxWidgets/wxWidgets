@@ -383,12 +383,6 @@ public:
         So, for example, the x coordinate may be negative if the tree has a
         horizontal scrollbar and its position is not 0.
 
-        @beginWxPythonOnly
-        The wxPython version of this method requires only the @a item and @a
-        textOnly parameters. The return value is either a wxRect object or @c
-        None.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method only takes the @a item and
         @a textOnly parameters and returns a @c Wx::Rect (or @c undef).
@@ -437,11 +431,6 @@ public:
 
         Returns an invalid tree item (i.e. wxTreeItemId::IsOk() returns @false)
         if there are no further children.
-
-        @beginWxPythonOnly
-        In wxPython the returned wxTreeItemId and the new cookie value are both
-        returned as a tuple containing the two values.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method only takes the @a item parameter, and
@@ -504,12 +493,6 @@ public:
         Returns the tree item data associated with the item.
 
         @see wxTreeItemData
-
-        @beginWxPythonOnly
-        wxPython provides the following shortcut method:
-        @li GetPyData(item): Returns the Python Object associated with the
-            wxTreeItemData for the given item Id.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         wxPerl provides the following shortcut method:
@@ -577,11 +560,6 @@ public:
         GetFirstChild() and GetNextChild() should be the same.
 
         Returns an invalid tree item if there are no further children.
-
-        @beginWxPythonOnly
-        In wxPython the returned wxTreeItemId and the new cookie value are both
-        returned as a tuple containing the two values.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method returns a 2-element list
@@ -657,11 +635,6 @@ public:
 
         Returns the number of selected items.
 
-        @beginWxPythonOnly
-        The wxPython version of this method accepts no parameters and returns a
-        Python list of @ref wxTreeItemId "wxTreeItemId"s.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method takes no parameters and returns a list of
         @c Wx::TreeItemId.
@@ -692,10 +665,6 @@ public:
           item that is in a user-defined state.
         - @c wxTREE_HITTEST_TOLEFT: To the right of the client area.
         - @c wxTREE_HITTEST_TORIGHT: To the left of the client area.
-
-        @beginWxPythonOnly
-        In wxPython both the wxTreeItemId and the flags are returned as a tuple.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method only takes the @a point parameter
@@ -729,10 +698,6 @@ public:
         image list specifying the image to use for unselected and selected
         items, respectively. If @a image -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
-
-        @beginWxPythonOnly
-        In wxPython, this form of this method is called @c InsertItemBefore().
-        @endWxPythonOnly
     */
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
                             size_t before,
@@ -874,11 +839,6 @@ public:
         any) is @em not freed by this function and so calling this function
         multiple times for the same item will result in memory leaks unless you
         delete the old item data pointer yourself.
-
-        @beginWxPythonOnly
-        - @b SetPyData( @a item, @c obj): Associate the given Python Object with
-            the wxTreeItemData for the given item Id.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         wxPerl provides the following shortcut method:

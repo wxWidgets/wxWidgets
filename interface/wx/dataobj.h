@@ -204,11 +204,6 @@ public:
     objects which only render their data or only set it (i.e. work in only one
     direction), should return 0 from GetFormatCount().
 
-    @beginWxPythonOnly
-    At this time this class is not directly usable from wxPython. Derive a
-    class from wxPyDataObjectSimple() instead.
-    @endWxPythonOnly
-
     @beginWxPerlOnly
     This class is not currently usable from wxPerl; you may use
     Wx::PlDataObjectSimple instead.
@@ -378,22 +373,12 @@ public:
 
     /**
         Set the data. The data object will make an internal copy.
-
-        @beginWxPythonOnly
-        This method expects a string in wxPython. You can pass nearly any
-        object by pickling it first.
-        @endWxPythonOnly
     */
     virtual bool SetData(size_t size, const void* data);
 
     /**
         Like SetData(), but doesn't copy the data - instead the object takes
         ownership of the pointer.
-
-        @beginWxPythonOnly
-        This method expects a string in wxPython. You can pass nearly any
-        object by pickling it first.
-        @endWxPythonOnly
     */
     void TakeData(size_t size, void* data);
 };
@@ -525,12 +510,6 @@ public:
     be set must override SetData(). Of course, the objects supporting both
     operations must override all three methods.
 
-    @beginWxPythonOnly
-    If you wish to create a derived wxDataObjectSimple class in wxPython you
-    should derive the class from wxPyDataObjectSimple in order to get
-    Python-aware capabilities for the various virtual methods.
-    @endWxPythonOnly
-
     @beginWxPerlOnly
     In wxPerl, you need to derive your data object class from
     Wx::PlDataObjectSimple.
@@ -555,11 +534,6 @@ public:
         Copy the data to the buffer, return @true on success.
         Must be implemented in the derived class if the object supports rendering
         its data.
-
-        @beginWxPythonOnly
-        When implementing this method in wxPython, no additional parameters are
-        required and the data should be returned from the method as a string.
-        @endWxPythonOnly
     */
     virtual bool GetDataHere(void* buf) const;
 
@@ -579,11 +553,6 @@ public:
         Copy the data from the buffer, return @true on success.
         Must be implemented in the derived class if the object supports setting
         its data.
-
-        @beginWxPythonOnly
-        When implementing this method in wxPython, the data comes as a single
-        string parameter rather than the two shown here.
-        @endWxPythonOnly
     */
     virtual bool SetData(size_t len, const void* buf);
 
@@ -606,12 +575,6 @@ public:
 
     This class may be used as is, but GetBitmap() may be overridden to increase
     efficiency.
-
-    @beginWxPythonOnly
-    If you wish to create a derived wxBitmapDataObject class in wxPython you
-    should derive the class from wxPyBitmapDataObject in order to get
-    Python-aware capabilities for the various virtual methods.
-    @endWxPythonOnly
 
     @library{wxcore}
     @category{dnd}
@@ -701,12 +664,6 @@ public:
     achieve any efficiency gain by overriding these functions because copying
     wxStrings is already a very efficient operation (data is not actually
     copied because wxStrings are reference counted).
-
-    @beginWxPythonOnly
-    If you wish to create a derived wxTextDataObject class in wxPython you
-    should derive the class from wxPyTextDataObject in order to get
-    Python-aware capabilities for the various virtual methods.
-    @endWxPythonOnly
 
     @library{wxcore}
     @category{dnd}

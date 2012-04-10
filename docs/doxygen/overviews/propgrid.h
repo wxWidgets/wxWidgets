@@ -556,18 +556,6 @@ This example reverse-iterates through all visible items:
 
 @endcode
 
-@beginWxPythonOnly
-PropertyGridInterface has some useful pythonic iterators as attributes.
-@c Properties lets you iterate through all items that are not category
-captions or private children. @c Items lets you iterate through everything
-except private children. Also, there are GetPyIterator() and GetPyVIterator(),
-which return pythonic iterators instead of normal wxPropertyGridIterator.
-
-If you need to use C++ style iterators in wxPython code, note that
-Instead of ++ operator, use Next() method, and instead of
-* operator, use GetProperty() method.
-@endWxPythonOnly
-
 GetIterator() only works with wxPropertyGrid and the individual pages
 of wxPropertyGridManager. In order to iterate through an arbitrary
 property container (such as entire wxPropertyGridManager), you need to use

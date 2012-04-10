@@ -67,12 +67,6 @@ public:
     /**
         Default constructor.
 
-        @beginWxPythonOnly
-        The following methods are added in wxPython for accessing the object:
-        - GetData(): Returns a reference to the Python Object.
-        - SetData(obj): Associates a new Python Object with the wxTreeItemData.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl the constructor accepts a scalar as an optional parameter
         and stores it as client data; use

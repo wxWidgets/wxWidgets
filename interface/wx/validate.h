@@ -26,12 +26,6 @@
 
     For more information, please see @ref overview_validator.
 
-    @beginWxPythonOnly
-    If you wish to create a validator class in wxPython you should derive the
-    class from @c wxPyValidator in order to get Python-aware capabilities for
-    the various virtual methods.
-    @endWxPythonOnly
-
     @library{wxcore}
     @category{validator}
 

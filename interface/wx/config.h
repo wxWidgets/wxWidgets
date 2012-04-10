@@ -240,19 +240,6 @@
     contain an arbitrary path (either relative or absolute), not just the
     key name.
 
-    @beginWxPythonOnly
-    In place of a single overloaded method name, wxPython implements the
-    following methods:
-    - Read(key, default="") - Returns a string.
-    - ReadInt(key, default=0) - Returns an integer.
-    - ReadFloat(key, default=0.0) - Returns a floating point number.
-    - ReadBool(key, default=0) - Returns a boolean.
-    - Write(key, value) - Writes a string.
-    - WriteInt(key, value) - Writes an int.
-    - WriteFloat(key, value) - Writes a floating point number.
-    @endWxPythonOnly
-
-
     @library{wxbase}
     @category{cfg}
     
@@ -373,11 +360,6 @@ public:
     /**
         Gets the first entry.
 
-        @beginWxPythonOnly
-        The wxPython version of this method returns a 3-tuple consisting of the
-        continue flag, the value string, and the index for the next call.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method takes no parameters and returns a 3-element
         list (continue_flag, string, index_for_getnextentry).
@@ -387,11 +369,6 @@ public:
 
     /**
         Gets the first group.
-
-        @beginWxPythonOnly
-        The wxPython version of this method returns a 3-tuple consisting of the
-        continue flag, the value string, and the index for the next call.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method takes no parameters and returns a 3-element
@@ -403,11 +380,6 @@ public:
     /**
         Gets the next entry.
 
-        @beginWxPythonOnly
-        The wxPython version of this method returns a 3-tuple consisting of the
-        continue flag, the value string, and the index for the next call.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method only takes the @a index parameter and
         returns a 3-element list (continue_flag, string,
@@ -418,11 +390,6 @@ public:
 
     /**
         Gets the next group.
-
-        @beginWxPythonOnly
-        The wxPython version of this method returns a 3-tuple consisting of the
-        continue flag, the value string, and the index for the next call.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method only takes the @a index parameter and

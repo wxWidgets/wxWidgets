@@ -1415,12 +1415,6 @@ public:
             A pointer to a integer value for the y coordinate. Pass the client
             coordinate in, and a screen coordinate will be passed out.
 
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the following methods:
-            - ClientToScreen(point): Accepts and returns a wxPoint
-            - ClientToScreenXY(x, y): Returns a 2-tuple, (x, y)
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method returns a 2-element list instead of
         modifying its parameters.
