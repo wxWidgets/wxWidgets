@@ -19,6 +19,9 @@
 class wxDateEvent : public wxCommandEvent
 {
 public:
+    wxDateEvent();
+    wxDateEvent(wxWindow *win, const wxDateTime& dt, wxEventType type);
+
     /**
         Returns the date.
     */
@@ -31,3 +34,5 @@ public:
     void SetDate(const wxDateTime& date);
 };
 
+wxEventType wxEVT_DATE_CHANGED;
+wxEventType wxEVT_TIME_CHANGED;
