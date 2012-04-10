@@ -10,7 +10,7 @@
     @class wxCommandLinkButton
 
     Objects of this class are similar in appearance to the normal wxButtons but
-    to the links in a web page in functionality.
+    are similar to the links in a web page in functionality.
 
     Pressing such button usually results in switching to another window of the
     program and so they can be used as a replacement for the "Next" button in a
