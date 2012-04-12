@@ -6,6 +6,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+#define wxFNTP_FONTDESC_AS_LABEL      0x0008
+#define wxFNTP_USEFONT_FOR_LABEL      0x0010
+#define wxFONTBTN_DEFAULT_STYLE       (wxFNTP_FONTDESC_AS_LABEL | wxFNTP_USEFONT_FOR_LABEL)
+#define wxFNTP_USE_TEXTCTRL           (wxPB_USE_TEXTCTRL)
+#define wxFNTP_DEFAULT_STYLE          (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)
+
+wxEventType wxEVT_COMMAND_FONTPICKER_CHANGED;
+
+
 /**
     @class wxFontPickerCtrl
 
@@ -49,6 +59,8 @@
 class wxFontPickerCtrl : public wxPickerBase
 {
 public:
+    wxFontPickerCtrl();
+    
     /**
         Initializes the object and calls Create() with
         all the parameters.

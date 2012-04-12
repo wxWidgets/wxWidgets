@@ -106,6 +106,11 @@ public:     // public API
     wxControl *GetPickerCtrl()
         { return m_picker; }
 
+    void SetTextCtrl(wxTextCtrl* text)
+        { m_text = text; }
+    void SetPickerCtrl(wxControl* picker)
+        { m_picker = picker; }
+
     // methods that derived class must/may override
     virtual void UpdatePickerFromTextCtrl() = 0;
     virtual void UpdateTextCtrlFromPicker() = 0;

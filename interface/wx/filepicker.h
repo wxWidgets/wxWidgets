@@ -6,6 +6,25 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxFLP_OPEN                    0x0400
+#define wxFLP_SAVE                    0x0800
+#define wxFLP_OVERWRITE_PROMPT        0x1000
+#define wxFLP_FILE_MUST_EXIST         0x2000
+#define wxFLP_CHANGE_DIR              0x4000
+#define wxFLP_SMALL                   wxPB_SMALL
+#define wxFLP_USE_TEXTCTRL            (wxPB_USE_TEXTCTRL)
+#define wxFLP_DEFAULT_STYLE           (wxFLP_OPEN|wxFLP_FILE_MUST_EXIST)
+
+#define wxDIRP_DIR_MUST_EXIST         0x0008
+#define wxDIRP_CHANGE_DIR             0x0010
+#define wxDIRP_SMALL                  wxPB_SMALL
+#define wxDIRP_USE_TEXTCTRL           (wxPB_USE_TEXTCTRL)
+#define wxDIRP_DEFAULT_STYLE          (wxDIRP_DIR_MUST_EXIST)
+
+wxEventType wxEVT_COMMAND_FILEPICKER_CHANGED;
+wxEventType wxEVT_COMMAND_DIRPICKER_CHANGED;
+
+
 /**
     @class wxFilePickerCtrl
 
@@ -60,6 +79,8 @@
 class wxFilePickerCtrl : public wxPickerBase
 {
 public:
+    wxFilePickerCtrl();
+    
     /**
         Initializes the object and calls Create() with
         all the parameters.
@@ -201,6 +222,8 @@ public:
 class wxDirPickerCtrl : public wxPickerBase
 {
 public:
+    wxDirPickerCtrl();
+    
     /**
         Initializes the object and calls Create() with
         all the parameters.
@@ -311,6 +334,8 @@ public:
 class wxFileDirPickerEvent : public wxCommandEvent
 {
 public:
+    wxFileDirPickerEvent();
+
     /**
         The constructor is not normally used by the user code.
     */
