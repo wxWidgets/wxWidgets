@@ -874,12 +874,13 @@ void wxWebViewIE::ExecCommand(wxString command)
 
 IHTMLDocument2* wxWebViewIE::GetDocument() const
 {
-    IDispatch* dispatch;
+    IDispatch* dispatch = NULL;
     HRESULT result = m_webBrowser->get_Document(&dispatch);
-    if(SUCCEEDED(result))
+    if(dispatch && SUCCEEDED(result))
     {
         IHTMLDocument2* document;
         dispatch->QueryInterface(IID_IHTMLDocument2, (void**)&document);
+        dispatch->Release();
         //document is set to null automatically if the interface isn't supported
         return document;
     }
