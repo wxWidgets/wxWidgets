@@ -347,6 +347,7 @@ bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxStri
 
         m_target = [[wxOSXStatusItemTarget alloc] init];
         [m_target setImplementation:this];
+        [m_statusItem setHighlightMode:YES];
         [m_statusItem setTarget:m_target];
         [m_statusItem setAction:@selector(clickedAction:)];
         [m_statusItem sendActionOn:NSLeftMouseDownMask];
