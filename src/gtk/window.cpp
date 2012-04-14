@@ -1641,22 +1641,43 @@ window_scroll_event_hscrollbar(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* 
 static gboolean
 window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 {
-    if (gdk_event->direction != GDK_SCROLL_UP &&
-        gdk_event->direction != GDK_SCROLL_DOWN)
-    {
-        return false;
-    }
-
     wxMouseEvent event(wxEVT_MOUSEWHEEL);
     InitMouseEvent(win, event, gdk_event);
 
     // FIXME: Get these values from GTK or GDK
     event.m_linesPerAction = 3;
     event.m_wheelDelta = 120;
-    if (gdk_event->direction == GDK_SCROLL_UP)
-        event.m_wheelRotation = 120;
-    else
-        event.m_wheelRotation = -120;
+
+    // Determine the scroll direction.
+    switch (gdk_event->direction)
+    {
+        case GDK_SCROLL_UP:
+        case GDK_SCROLL_RIGHT:
+            event.m_wheelRotation = 120;
+            break;
+
+        case GDK_SCROLL_DOWN:
+        case GDK_SCROLL_LEFT:
+            event.m_wheelRotation = -120;
+            break;
+
+        default:
+            return false;  // Unknown/unhandled direction
+    }
+
+    // And the scroll axis.
+    switch (gdk_event->direction)
+    {
+        case GDK_SCROLL_UP:
+        case GDK_SCROLL_DOWN:
+            event.m_wheelAxis = wxMOUSE_WHEEL_VERTICAL;
+            break;
+
+        case GDK_SCROLL_LEFT:
+        case GDK_SCROLL_RIGHT:
+            event.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+            break;
+    }
 
     if (win->GTKProcessEvent(event))
       return TRUE;

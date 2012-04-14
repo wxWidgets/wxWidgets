@@ -480,6 +480,7 @@ All:
 All (GUI):
 
 - Added strike-through support to wxFont (Igor Korot).
+- Add support for horizontal mouse wheel events to MSW and GTK (Lauri Nurmi).
 - Fix infinite loop in wxHtmlEasyPrinting when trying to page break images
   taller than the page height in wxHtmlEasyPrinting (Laurent Poujoulat).
 - Added wxFilePickerCtrl::SetInitialDirectory().
@@ -521,7 +522,6 @@ MSW:
 - Add wxActiveXContainer::QueryClientSiteInterface and implement it in
   wxWebViewIE to improve the default behaviour (Allonii).
 - Update stretchable spaces in wxToolBar after tool removal (Catalin Raceanu).
-- Add support for horizontal mouse wheel events (Lauri Nurmi).
 - Implement wxGraphicsContext::SetInterpolationQuality() (Eric Jensen).
 - Fix coordinate handling in wxDC::Blit() when source DC is a DIB.
 - Fix handling of composite windows in wxToolTip (Armel Asselin).
