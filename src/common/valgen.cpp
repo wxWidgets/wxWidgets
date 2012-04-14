@@ -84,6 +84,8 @@ wxGenericValidator::wxGenericValidator(wxDateTime *val)
     m_pDateTime = val;
 }
 
+#endif // wxUSE_DATETIME
+
 wxGenericValidator::wxGenericValidator(wxFileName *val)
 {
     Initialize();
@@ -101,8 +103,6 @@ wxGenericValidator::wxGenericValidator(double *val)
     Initialize();
     m_pDouble = val;
 }
-
-#endif // wxUSE_DATETIME
 
 wxGenericValidator::wxGenericValidator(const wxGenericValidator& val)
     : wxValidator()
