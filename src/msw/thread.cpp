@@ -1173,6 +1173,8 @@ wxThreadError wxThread::Kill()
 
 void wxThread::Exit(ExitCode status)
 {
+    wxThreadInternal::DoThreadOnExit(this);
+
     m_internal->Free();
 
     if ( IsDetached() )
