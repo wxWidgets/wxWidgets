@@ -502,6 +502,7 @@ All (GUI):
 - Added wxSplitterWindow::SetSashInvisible() (Armel Asselin).
 - Enable/disable "Window" menu items in AUI MDI correctly (wsu).
 - Added wxTimePickerCtrl::Get/SetTime().
+- Fix WXK_MENU handling in wxStyledTextCtrl under wxGTK (cantabile).
 
 
 GTK:

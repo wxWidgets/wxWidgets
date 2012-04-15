@@ -991,7 +991,7 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
     case WXK_CONTROL:           key = 0; break;
     case WXK_ALT:               key = 0; break;
     case WXK_SHIFT:             key = 0; break;
-    case WXK_MENU:              key = 0; break;
+    case WXK_MENU:              key = SCK_MENU; break;
     }
 
 #ifdef __WXMAC__
