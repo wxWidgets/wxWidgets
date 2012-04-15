@@ -28,6 +28,11 @@ public:
     virtual int ShowModal();
 
 private:
+    // The real implementations of ShowModal(), used for Windows versions
+    // before and since Vista.
+    int ShowSHBrowseForFolder(WXHWND owner);
+    int ShowIFileDialog(WXHWND owner);
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDirDialog)
 };
 

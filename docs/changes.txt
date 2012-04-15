@@ -516,6 +516,7 @@ GTK:
 MSW:
 
 - Fixed regression with initial focus in the dialogs in 2.9.3.
+- Use new style directory selection dialog under Vista and later (PB).
 - Added support for wxEXEC_MAKE_GROUP_LEADER to wxExecute (tteras).
 - Set wxMenu being closed in wxEVT_MENU_CLOSE events (Marcin Malich).
 - Fix coordinates and Z-position for joystick events (Markus Juergens).
