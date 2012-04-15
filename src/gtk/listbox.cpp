@@ -210,7 +210,7 @@ static gint gtk_listbox_sort_callback(GtkTreeModel * WXUNUSED(model),
     wxCHECK_MSG(entry2, 0, wxT("Could not get second entry"));
 
     //We compare collate keys here instead of calling g_utf8_collate
-    //as it is rather slow (and even the docs reccommend this)
+    //as it is rather slow (and even the docs recommend this)
     return strcmp(gtk_tree_entry_get_collate_key(entry1),
                   gtk_tree_entry_get_collate_key(entry2)) >= 0;
 }

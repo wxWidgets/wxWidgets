@@ -787,7 +787,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
             GtkTextIter start, end;
 
             // We create our wxUrl tag here for slight efficiency gain - we
-            // don't have to check for the tag existance in callbacks,
+            // don't have to check for the tag existence in callbacks,
             // hereby it's guaranteed to exist.
             gtk_text_buffer_create_tag(m_buffer, "wxUrl",
                                        "foreground", "blue",
@@ -1953,7 +1953,7 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
         gtk_text_iter_forward_to_tag_toggle(&end, tag);
 
     // Native context menu is probably not desired on an URL.
-    // Consider making this dependant on ProcessEvent(wxTextUrlEvent) return value
+    // Consider making this dependent on ProcessEvent(wxTextUrlEvent) return value
     if(event.GetEventType() == wxEVT_RIGHT_DOWN)
         event.Skip(false);
 

@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     1998-05-20 (extracted from button.cpp)
-// Id:          $Id: anybutton.cpp 67326 2011-03-28 06:27:49Z PC $
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
