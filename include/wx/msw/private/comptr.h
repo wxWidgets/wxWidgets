@@ -3,7 +3,7 @@
 // Purpose:     Smart pointer for COM interfaces.
 // Author:      PB
 // Created:     2012-04-16
-// RCS-ID:      $Id: $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2012 wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,7 +12,7 @@
 #define _WX_MSW_PRIVATE_COMPTR_H_
 
 // ----------------------------------------------------------------------------
-// wxCOMPtr: Minimalistic a smart pointer for use with COM interfaces.
+// wxCOMPtr: A minimalistic smart pointer for use with COM interfaces.
 // ----------------------------------------------------------------------------
 
 template <class T>

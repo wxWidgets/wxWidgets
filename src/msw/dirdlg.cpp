@@ -357,21 +357,21 @@ int wxDirDialog::ShowIFileDialog(WXHWND owner)
                                                 REFIID,
                                                 void**);
 
-        SHCreateItemFromParsingName_t s_pfnSHCreateItemFromParsingName = NULL;
+        SHCreateItemFromParsingName_t pfnSHCreateItemFromParsingName = NULL;
         wxDynamicLibrary dllShell32;
         if ( dllShell32.Load(wxS("shell32.dll"), wxDL_VERBATIM | wxDL_QUIET) )
         {
-            wxDL_INIT_FUNC(s_pfn, SHCreateItemFromParsingName, dllShell32);
+            wxDL_INIT_FUNC(pfn, SHCreateItemFromParsingName, dllShell32);
         }
 
-        if ( !s_pfnSHCreateItemFromParsingName )
+        if ( !pfnSHCreateItemFromParsingName )
         {
             wxLogLastError(wxS("SHCreateItemFromParsingName() not found"));
             return wxID_NONE;
         }
 
         wxCOMPtr<IShellItem> folder;
-        hr = s_pfnSHCreateItemFromParsingName(m_path.wc_str(),
+        hr = pfnSHCreateItemFromParsingName(m_path.wc_str(),
                                               NULL,
                                               wxIID_PPV_ARGS(IShellItem,
                                                              &folder));
