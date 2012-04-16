@@ -1814,7 +1814,11 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr,
         return;
     }
 
-    wxLogTrace( wxTRACE_Socket, wxT("wxSocketServer on fd %d"), m_impl->m_fd );
+    // Notice that we need a cast as SOCKET is 64 bit under Win64 and that the
+    // cast is safe because a SOCKET is a handle and so limited to 32 (or,
+    // actually, even 24) bit values anyhow.
+    wxLogTrace( wxTRACE_Socket, wxT("wxSocketServer on fd %u"),
+                static_cast<unsigned>(m_impl->m_fd) );
 }
 
 // --------------------------------------------------------------------------
