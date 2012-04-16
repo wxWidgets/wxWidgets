@@ -2605,7 +2605,6 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         if (y == -1)
             y = currentY;
     }
-    AdjustForParentClientOrigin(x, y, sizeFlags);
 
     // calculate the best size if we should auto size the window
     if ( ((sizeFlags & wxSIZE_AUTO_WIDTH) && width == -1) ||
