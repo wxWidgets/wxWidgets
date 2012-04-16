@@ -417,8 +417,9 @@ private:
 class WindowHDC
 {
 public:
+    WindowHDC() : m_hwnd(NULL), m_hdc(NULL) { }
     WindowHDC(HWND hwnd) { m_hdc = ::GetDC(m_hwnd = hwnd); }
-   ~WindowHDC() { ::ReleaseDC(m_hwnd, m_hdc); }
+   ~WindowHDC() { if ( m_hwnd && m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
 
     operator HDC() const { return m_hdc; }
 
