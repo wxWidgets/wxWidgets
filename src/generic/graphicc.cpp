@@ -71,19 +71,16 @@ using namespace std;
 #include <cairo.h>
 #ifdef __WXMSW__
 #include <cairo-win32.h>
+// Notice that the order is important: cairo-win32.h includes windows.h which
+// pollutes the global name space with macros so include our own header which
+// #undefines them after it.
+#include "wx/msw/private.h"
 #endif
 
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #include "wx/fontutil.h"
 #include "wx/gtk/dc.h"
-#endif
-
-#ifdef __WXMSW__
-#include <cairo-win32.h>
-// We must do this as cairo-win32.h includes windows.h which pollutes the
-// global name space with macros.
-#include "wx/msw/winundef.h"
 #endif
 
 #ifdef __WXMAC__
@@ -400,6 +397,7 @@ public:
     virtual void Clip( const wxRegion &region );
 #ifdef __WXMSW__
     cairo_surface_t* m_mswSurface;
+    WindowHDC m_mswWindowHDC;
 #endif
 
     // clips drawings to the rect
@@ -1744,7 +1742,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
-: wxGraphicsContext(renderer)
+    : wxGraphicsContext(renderer)
+#ifdef __WXMSW__
+    , m_mswWindowHDC(GetHwndOf(window))
+#endif
 {
     m_enableOffset = true;    
 #ifdef __WXGTK__
@@ -1768,7 +1769,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 #endif
 
 #ifdef __WXMSW__
-    m_mswSurface = cairo_win32_surface_create((HDC)window->GetHandle());
+    m_mswSurface = cairo_win32_surface_create((HDC)m_mswWindowHDC);
     Init(cairo_create(m_mswSurface));
 #endif
 
