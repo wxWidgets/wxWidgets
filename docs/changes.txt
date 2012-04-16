@@ -503,6 +503,7 @@ All (GUI):
 - Enable/disable "Window" menu items in AUI MDI correctly (wsu).
 - Added wxTimePickerCtrl::Get/SetTime().
 - Fix WXK_MENU handling in wxStyledTextCtrl under wxGTK (cantabile).
+- Added wxAcceleratorEntry::ToRawString() (Armel Asselin).
 
 
 GTK:

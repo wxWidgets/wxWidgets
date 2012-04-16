@@ -118,7 +118,12 @@ public:
     // returns a wxString for the this accelerator.
     // this function formats it using the <flags>-<keycode> format
     // where <flags> maybe a hyphen-separated list of "shift|alt|ctrl"
-    wxString ToString() const;
+    wxString ToString() const { return AsPossiblyLocalizedString(true); }
+
+    // same as above but without translating, useful if the string is meant to
+    // be stored in a file or otherwise stored, instead of being shown to the
+    // user
+    wxString ToRawString() const { return AsPossiblyLocalizedString(false); }
 
     // returns true if the given string correctly initialized this object
     // (i.e. if IsOk() returns true after this call)
@@ -126,6 +131,8 @@ public:
 
 
 private:
+    wxString AsPossiblyLocalizedString(bool localized) const;
+
     // common part of Create() and FromString()
     static bool ParseAccel(const wxString& str, int *flags, int *keycode);
 

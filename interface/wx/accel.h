@@ -115,6 +115,20 @@ public:
     wxString ToString() const;
 
     /**
+        Returns a textual representation of this accelerator which is
+        appropriate for saving in configuration files.
+
+        Unlike the string returned by ToString(), this one is never translated
+        so, while it's not suitable for showing to the user, it can be used to
+        uniquely identify the accelerator independently of the user language.
+
+        The returned string can still be parsed by FromString().
+
+        @since 2.9.4
+    */
+    wxString ToRawString() const;
+
+    /**
         Parses the given string and sets the accelerator accordingly.
 
         @param str
