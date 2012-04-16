@@ -1406,6 +1406,9 @@ bool wxAuiToolBar::SetFont(const wxFont& font)
 
 void wxAuiToolBar::SetHoverItem(wxAuiToolBarItem* pitem)
 {
+    if (pitem && (pitem->m_state & wxAUI_BUTTON_STATE_DISABLED))
+        pitem = NULL;
+
     wxAuiToolBarItem* former_hover = NULL;
 
     size_t i, count;
@@ -2580,6 +2583,11 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         if(!GetEventHandler()->ProcessEvent(e) || e.GetSkipped())
             CaptureMouse();
 
+        // Ensure hovered item is really ok, as mouse may have moved during
+        //  event processing
+        wxPoint cursor_pos_after_evt = ScreenToClient(wxGetMousePosition());
+        SetHoverItem(FindToolByPosition(cursor_pos_after_evt.x, cursor_pos_after_evt.y));
+
         DoIdleUpdate();
     }
 }
@@ -2591,11 +2599,9 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
     SetPressedItem(NULL);
 
-    wxAuiToolBarItem* hitItem = FindToolByPosition(evt.GetX(), evt.GetY());
-    if (hitItem && !(hitItem->m_state & wxAUI_BUTTON_STATE_DISABLED))
-    {
-        SetHoverItem(hitItem);
-    }
+    wxAuiToolBarItem* hitItem;
+    hitItem = FindToolByPosition(evt.GetX(), evt.GetY());
+    SetHoverItem(hitItem);
 
     if (m_dragging)
     {
@@ -2636,6 +2642,12 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
             ReleaseMouse();
 
             GetEventHandler()->ProcessEvent(e);
+
+            // Ensure hovered item is really ok, as mouse may have moved during
+            // event processing
+            wxPoint cursor_pos_after_evt = ScreenToClient(wxGetMousePosition());
+            SetHoverItem(FindToolByPosition(cursor_pos_after_evt.x, cursor_pos_after_evt.y));
+
             DoIdleUpdate();
         }
         else
@@ -2808,10 +2820,7 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
     }
     else
     {
-        if (hitItem && (hitItem->m_state & wxAUI_BUTTON_STATE_DISABLED))
-            SetHoverItem(NULL);
-        else
-            SetHoverItem(hitItem);
+        SetHoverItem(hitItem);
 
         // tooltips handling
         wxAuiToolBarItem* packingHitItem;
