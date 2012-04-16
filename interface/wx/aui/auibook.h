@@ -220,6 +220,13 @@ public:
     wxString GetPageText(size_t page) const;
 
     /**
+        Returns the tooltip for the tab label of the page.
+
+        @since 2.9.4
+    */
+    wxString GetPageToolTip(size_t pageIdx) const;
+
+    /**
         Returns the currently selected page.
     */
     int GetSelection() const;
@@ -307,6 +314,17 @@ public:
         Sets the tab label for the page.
     */
     bool SetPageText(size_t page, const wxString& text);
+
+    /**
+        Sets the tooltip displayed when hovering over the tab label of the page.
+
+        @return
+            @true if tooltip was updated, @false if it failed, e.g. because the
+            page index is invalid.
+
+        @since 2.9.4
+    */
+    bool SetPageToolTip(size_t page, const wxString& text);
 
     /**
         Sets the font for drawing selected tab labels.

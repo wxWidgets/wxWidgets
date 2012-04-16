@@ -1237,6 +1237,18 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         }
     }
 
+    wxWindow* wnd = NULL;
+    if (evt.Moving() && TabHitTest(evt.m_x, evt.m_y, &wnd))
+    {
+        wxString tooltip(m_pages[GetIdxFromWindow(wnd)].tooltip);
+
+        // If the text changes, set it else, keep old, to avoid
+        // 'moving tooltip' effect
+        if (GetToolTipText() != tooltip)
+            SetToolTip(tooltip);
+    }
+    else
+        UnsetToolTip();
 
     if (!evt.LeftIsDown() || m_clickPt == wxDefaultPosition)
         return;
@@ -2124,6 +2136,37 @@ wxString wxAuiNotebook::GetPageText(size_t page_idx) const
     // update our own tab catalog
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
     return page_info.caption;
+}
+
+bool wxAuiNotebook::SetPageToolTip(size_t page_idx, const wxString& text)
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return false;
+
+    // update our own tab catalog
+    wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    page_info.tooltip = text;
+
+    wxAuiTabCtrl* ctrl;
+    int ctrl_idx;
+    if (!FindTab(page_info.window, &ctrl, &ctrl_idx))
+        return false;
+
+    wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
+    info.tooltip = text;
+
+    // NB: we don't update the tooltip if it is already being displayed, it
+    //     typically never happens, no need to code that
+    return true;
+}
+
+wxString wxAuiNotebook::GetPageToolTip(size_t page_idx) const
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return wxString();
+
+    const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    return page_info.tooltip;
 }
 
 bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmap& bitmap)

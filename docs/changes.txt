@@ -499,6 +499,7 @@ All (GUI):
 - Fix setting of the frame icon when using non-standard icon sizes (vid).
 - Implement wxDV_ROW_LINES in generic wxDataViewCtrl (RedCAT).
 - Added EVT_AUI_PANE_ACTIVATED event (Ronny Krüger).
+- Added support for page tooltips to wxAuiNotebook (Armel Asselin).
 - Added wxSplitterWindow::SetSashInvisible() (Armel Asselin).
 - Enable/disable "Window" menu items in AUI MDI correctly (wsu).
 - Added wxTimePickerCtrl::Get/SetTime().
