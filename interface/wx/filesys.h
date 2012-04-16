@@ -463,3 +463,41 @@ protected:
     static wxString GetRightLocation(const wxString& location);
 };
 
+
+/**
+    Input stream for virtual file stream files.
+
+    The stream reads data from wxFSFile obtained from wxFileSystem. It is
+    especially useful to allow using virtual files with other wxWidgets
+    functions and classes working with streams, e.g. for loading images or
+    animations from virtual files and not only physical ones.
+
+    @library{wxbase}
+    @category{streams}
+
+    @see wxWrapperInputStream, wxFSFile
+
+    @since 2.9.4
+*/
+class wxFSInputStream : public wxWrapperInputStream
+{
+public:
+    /**
+        Create a stream associated with the data of the given virtual file
+        system file.
+
+        @param filename
+            The name of the input file passed to wxFileSystem::OpenFile().
+        @param flags
+            Combination of flags from wxFileSystemOpenFlags. ::wxFS_READ is
+            implied, i.e. it is always added to the flags value.
+
+        Use wxStreamBase::IsOk() to verify if the constructor succeeded.
+    */
+    wxFileInputStream(const wxString& filename, int flags = 0);
+
+    /**
+        Returns @true if the stream is initialized and ready.
+    */
+    bool IsOk() const;
+};
