@@ -1066,3 +1066,57 @@ public:
 };
 
 
+/**
+    @class wxWrapperInputStream
+
+    A wrapper input stream is a kind of filter stream which forwards all the
+    operations to its base stream. This is useful to build utility classes such
+    as wxFSInputStream.
+
+    @note
+    The interface of this class is the same as that of wxInputStream.
+    Only a constructor differs and it is documented below.
+
+    @library{wxbase}
+    @category{streams}
+
+    @see wxFSInputStream, wxFilterInputStream
+    @since 2.9.4
+*/
+class wxWrapperInputStream : public wxFilterInputStream
+{
+public:
+    //@{
+    /**
+        Initializes a wrapper stream.
+
+        If the parent stream is passed as a pointer then the new wrapper stream
+        takes ownership of it. If it is passed by reference then it does not.
+    */
+    wxWrapperInputStream(wxInputStream& stream);
+    wxWrapperInputStream(wxInputStream* stream);
+    //@}
+
+protected:
+    /**
+        Default constructor, use InitParentStream() to finish initialization.
+
+        This constructor can be used by the derived classes from their own
+        constructors when the parent stream can't be specified immediately.
+        The derived class must call InitParentStream() later to do it.
+     */
+    wxWrapperInputStream();
+
+    //@{
+    /**
+        Set up the wrapped stream for an object initialized using the default
+        constructor.
+
+        The ownership logic is the same as for the non-default constructor,
+        i.e. this object takes ownership of the stream if it's passed by
+        pointer but not if it's passed by reference.
+     */
+    void InitParentStream(wxInputStream& stream);
+    void InitParentStream(wxInputStream* stream);
+    //@}
+};

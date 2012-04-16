@@ -36,6 +36,7 @@
 #include <ctype.h>
 #include "wx/datstrm.h"
 #include "wx/textfile.h"
+#include "wx/scopeguard.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -1444,6 +1445,93 @@ void wxBufferedOutputStream::SetOutputStreamBuffer(wxStreamBuffer *buffer)
 
     delete m_o_streambuf;
     m_o_streambuf = buffer;
+}
+
+// ---------------------------------------------------------------------------
+// wxWrapperInputStream implementation
+// ---------------------------------------------------------------------------
+
+wxWrapperInputStream::wxWrapperInputStream()
+{
+    m_lasterror = wxSTREAM_READ_ERROR;
+}
+
+wxWrapperInputStream::wxWrapperInputStream(wxInputStream& stream)
+    : wxFilterInputStream(stream)
+{
+    SynchronizeLastError();
+}
+
+wxWrapperInputStream::wxWrapperInputStream(wxInputStream *stream)
+    : wxFilterInputStream(stream)
+{
+    if ( m_parent_i_stream )
+        SynchronizeLastError();
+    else
+        m_lasterror = wxSTREAM_READ_ERROR;
+}
+
+void wxWrapperInputStream::InitParentStream(wxInputStream& stream)
+{
+    wxCHECK_RET( !m_parent_i_stream, "Can't init parent stream twice" );
+
+    m_parent_i_stream = &stream;
+
+    SynchronizeLastError();
+}
+
+void wxWrapperInputStream::InitParentStream(wxInputStream* stream)
+{
+    wxCHECK_RET( !m_parent_i_stream, "Can't init parent stream twice" );
+
+    m_parent_i_stream = stream;
+
+    if ( m_parent_i_stream )
+    {
+        m_owns = true;
+
+        SynchronizeLastError();
+    }
+}
+
+wxFileOffset wxWrapperInputStream::GetLength() const
+{
+    wxCHECK_MSG(m_parent_i_stream, wxInvalidOffset, "Stream not valid");
+
+    wxON_BLOCK_EXIT_THIS0(wxWrapperInputStream::SynchronizeLastError);
+    return m_parent_i_stream->GetLength();
+}
+
+bool wxWrapperInputStream::IsSeekable() const
+{
+    wxCHECK_MSG(m_parent_i_stream, false, "Stream not valid");
+    return m_parent_i_stream->IsSeekable();
+}
+
+size_t wxWrapperInputStream::OnSysRead(void *buffer, size_t size)
+{
+    wxCHECK_MSG(m_parent_i_stream, false, "Stream not valid");
+
+    wxON_BLOCK_EXIT_THIS0(wxWrapperInputStream::SynchronizeLastError);
+
+    m_parent_i_stream->Read(buffer, size);
+    return m_parent_i_stream->LastRead();
+}
+
+wxFileOffset wxWrapperInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
+{
+    wxCHECK_MSG(IsSeekable(), false, "Stream not seekable");
+
+    wxON_BLOCK_EXIT_THIS0(wxWrapperInputStream::SynchronizeLastError);
+    return m_parent_i_stream->SeekI (pos, mode);
+}
+
+wxFileOffset wxWrapperInputStream::OnSysTell() const
+{
+    wxCHECK_MSG(m_parent_i_stream, false, "Stream not valid");
+
+    wxON_BLOCK_EXIT_THIS0(wxWrapperInputStream::SynchronizeLastError);
+    return m_parent_i_stream->TellI();
 }
 
 // ----------------------------------------------------------------------------
