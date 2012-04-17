@@ -385,7 +385,7 @@ void wxGCDCImpl::SetTextForeground( const wxColour &col )
     // don't set m_textForegroundColour to an invalid colour as we'd crash
     // later then (we use m_textForegroundColour.GetColor() without checking
     // in a few places)
-    if ( col.IsOk() && col != m_textForegroundColour )
+    if ( col.IsOk() )
     {
         m_textForegroundColour = col;
         m_graphicContext->SetFont( m_font, m_textForegroundColour );
@@ -481,9 +481,6 @@ void wxGCDCImpl::SetFont( const wxFont &font )
 
 void wxGCDCImpl::SetPen( const wxPen &pen )
 {
-    if ( m_pen == pen )
-        return;
-
     m_pen = pen;
     if ( m_graphicContext )
     {
@@ -493,9 +490,6 @@ void wxGCDCImpl::SetPen( const wxPen &pen )
 
 void wxGCDCImpl::SetBrush( const wxBrush &brush )
 {
-    if (m_brush == brush)
-        return;
-
     m_brush = brush;
     if ( m_graphicContext )
     {
@@ -505,9 +499,6 @@ void wxGCDCImpl::SetBrush( const wxBrush &brush )
 
 void wxGCDCImpl::SetBackground( const wxBrush &brush )
 {
-    if (m_backgroundBrush == brush)
-        return;
-
     m_backgroundBrush = brush;
     if (!m_backgroundBrush.IsOk())
         return;
@@ -515,9 +506,6 @@ void wxGCDCImpl::SetBackground( const wxBrush &brush )
 
 void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 {
-    if (m_logicalFunction == function)
-        return;
-
     m_logicalFunction = function;
 
     wxCompositionMode mode = TranslateRasterOp( function );
