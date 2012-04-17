@@ -34,6 +34,8 @@ public:
     */
     wxTipProvider(size_t currentTip);
 
+    virtual ~wxTipProvider();
+
     /**
         Returns the index of the current tip (i.e. the one which would be returned by GetTip()).
 
@@ -60,7 +62,7 @@ public:
         modification to the string. If you return wxEmptyString, then this tip is
         skipped, and the next one is read.
     */
-    virtual wxString PreProcessTip(const wxString& tip);
+    virtual wxString PreprocessTip(const wxString& tip);
 };
 
 
