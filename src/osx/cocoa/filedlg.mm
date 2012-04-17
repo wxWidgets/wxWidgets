@@ -585,20 +585,22 @@ int wxFileDialog::ShowModal()
         [oPanel setMessage:cf.AsNSString()];
         [oPanel setAllowsMultipleSelection: (HasFlag(wxFD_MULTIPLE) ? YES : NO )];
 
-        if ( UMAGetSystemVersion() < 0x1060 )
-        {
-            returnCode = [oPanel runModalForDirectory:m_dir.IsEmpty() ? nil : dir.AsNSString()
-                                                 file:file.AsNSString() types:(m_delegate == nil ? types : nil)];
-        }
-        else 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+        if ( UMAGetSystemVersion() >= 0x1060 )
         {
             [oPanel setAllowedFileTypes: (m_delegate == nil ? types : nil)];
             if ( !m_dir.IsEmpty() )
                 [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
-                                               isDirectory:YES]];
+                                                   isDirectory:YES]];
             returnCode = [oPanel runModal];
         }
-
+        else 
+#endif
+        {
+            returnCode = [oPanel runModalForDirectory:m_dir.IsEmpty() ? nil : dir.AsNSString()
+                                                 file:file.AsNSString() types:(m_delegate == nil ? types : nil)];
+        }
+            
         ModalFinishedCallback(oPanel, returnCode);
     }
 
