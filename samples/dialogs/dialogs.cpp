@@ -2931,6 +2931,10 @@ bool TestMessageBoxDialog::Create()
     // this sizer allows to configure the messages shown in the message box
     wxSizer * const
         sizerMsgs = new wxStaticBoxSizer(wxVERTICAL, this, "&Messages");
+    sizerMsgs->Add(new wxStaticText(this, wxID_ANY, "&Title:"));
+    m_textTitle = new wxTextCtrl(this, wxID_ANY, "Test Message Box");
+    sizerMsgs->Add(m_textTitle, wxSizerFlags().Expand().Border(wxBOTTOM));
+
     sizerMsgs->Add(new wxStaticText(this, wxID_ANY, "&Main message:"));
     m_textMsg = new wxTextCtrl(this, wxID_ANY, "Hello from a box!",
                                wxDefaultPosition, wxDefaultSize,
@@ -3139,7 +3143,7 @@ void TestMessageBoxDialog::PrepareMessageDialog(wxMessageDialogBase &dlg)
 
 void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageDialog dlg(this, GetMessage(), "Test Message Box", GetStyle());
+    wxMessageDialog dlg(this, GetMessage(), GetTitle(), GetStyle());
     PrepareMessageDialog(dlg);
 
     wxString btnName;
@@ -3227,8 +3231,7 @@ void TestRichMessageDialog::AddAdditionalFlags(wxSizer *sizer)
 
 void TestRichMessageDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichMessageDialog dlg(this, GetMessage(), "Test Rich Message Dialog",
-                            GetStyle());
+    wxRichMessageDialog dlg(this, GetMessage(), GetTitle(), GetStyle());
     PrepareMessageDialog(dlg);
 
     dlg.ShowCheckBox(m_textCheckBox->GetValue(),

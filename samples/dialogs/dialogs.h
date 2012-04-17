@@ -208,6 +208,7 @@ public:
     bool Create();
 
 protected:
+    wxString GetTitle() { return m_textTitle->GetValue(); }
     wxString GetMessage() { return m_textMsg->GetValue(); }
     long GetStyle();
 
@@ -251,7 +252,8 @@ private:
         MsgDlgIcon_Max
     };
 
-    wxTextCtrl *m_textMsg,
+    wxTextCtrl *m_textTitle,
+               *m_textMsg,
                *m_textExtMsg;
 
     wxCheckBox *m_buttons[Btn_Max];
