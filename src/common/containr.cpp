@@ -653,17 +653,27 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         // It might happen that the window got reparented
         if ( (*childLastFocused)->GetParent() == win )
         {
-            // And it also could have become hidden in the meanwhile, in this
-            // case focus its parent instead.
-            while ( !(*childLastFocused)->IsShown() )
+            // And it also could have become hidden in the meanwhile
+            // We want to focus on the deepest widget visible
+            wxWindow *deepestVisibleWindow = NULL;
+
+            while ( *childLastFocused )
             {
+                if ( (*childLastFocused)->IsShown() )
+                {
+                    if ( !deepestVisibleWindow )
+                        deepestVisibleWindow = *childLastFocused;
+                }
+                else
+                    deepestVisibleWindow = NULL;
+
                 *childLastFocused = (*childLastFocused)->GetParent();
-                if ( !*childLastFocused )
-                    break;
             }
 
-            if ( *childLastFocused )
+            if ( deepestVisibleWindow )
             {
+                *childLastFocused = deepestVisibleWindow;
+
                 wxLogTrace(TRACE_FOCUS,
                            wxT("SetFocusToChild() => last child (0x%p)."),
                            (*childLastFocused)->GetHandle());
