@@ -2596,15 +2596,22 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
     wxASSERT_MSG( (m_parent != NULL), wxT("wxWindowGTK::SetSize requires parent.\n") );
 
-    if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0 && (x == -1 || y == -1))
+    int scrollX = 0, scrollY = 0;
+    GtkWidget* parent = gtk_widget_get_parent(m_widget);
+    if (WX_IS_PIZZA(parent))
     {
-        int currentX, currentY;
-        GetPosition(&currentX, &currentY);
-        if (x == -1)
-            x = currentX;
-        if (y == -1)
-            y = currentY;
+        wxPizza* pizza = WX_PIZZA(parent);
+        scrollX = pizza->m_scroll_x;
+        scrollY = pizza->m_scroll_y;
     }
+    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        x += scrollX;
+    else
+        x = m_x;
+    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        y += scrollY;
+    else
+        y = m_y;
 
     // calculate the best size if we should auto size the window
     if ( ((sizeFlags & wxSIZE_AUTO_WIDTH) && width == -1) ||
@@ -2625,9 +2632,8 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
     if (m_parent->m_wxwindow)
     {
-        wxPizza* pizza = WX_PIZZA(m_parent->m_wxwindow);
-        m_x = x + pizza->m_scroll_x;
-        m_y = y + pizza->m_scroll_y;
+        m_x = x;
+        m_y = y;
 
         int left_border = 0;
         int right_border = 0;
