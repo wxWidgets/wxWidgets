@@ -33,7 +33,7 @@
 
     @see wxDC, wxClientDC, wxMemoryDC, wxWindowDC, wxScreenDC
 */
-class wxPaintDC : public wxWindowDC
+class wxPaintDC : public wxClientDC
 {
 public:
     /**
