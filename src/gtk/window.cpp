@@ -1166,7 +1166,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while (node)
     {
-        wxWindowGTK *child = node->GetData();
+        wxWindow* child = static_cast<wxWindow*>(node->GetData());
 
         node = node->GetNext();
         if (!child->IsShown())
