@@ -2640,11 +2640,6 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
     if (m_parent->m_wxwindow)
     {
-        int left_border = 0;
-        int right_border = 0;
-        int top_border = 0;
-        int bottom_border = 0;
-
         /* the default button has a border around it */
         if (gtk_widget_get_can_default(m_widget))
         {
@@ -2652,18 +2647,15 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
             gtk_widget_style_get( m_widget, "default_border", &default_border, NULL );
             if (default_border)
             {
-                left_border += default_border->left;
-                right_border += default_border->right;
-                top_border += default_border->top;
-                bottom_border += default_border->bottom;
+                x -= default_border->left;
+                y -= default_border->top;
+                width += default_border->left + default_border->right;
+                height += default_border->top + default_border->bottom;
                 gtk_border_free( default_border );
             }
         }
 
-        DoMoveWindow( m_x - left_border,
-                      m_y - top_border,
-                      m_width+left_border+right_border,
-                      m_height+top_border+bottom_border );
+        DoMoveWindow(x, y, width, height);
     }
 
     if (sizeChange)
