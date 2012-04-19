@@ -2624,17 +2624,22 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
             height = sizeBest.y;
     }
 
-    const wxSize oldSize(m_width, m_height);
-    if (width != -1)
-        m_width = width;
-    if (height != -1)
-        m_height = height;
+    if (width == -1)
+        width = m_width;
+    if (height == -1)
+        height = m_height;
 
-    if (m_parent->m_wxwindow)
+    const bool sizeChange = m_width != width || m_height != height;
+    if (sizeChange || m_x != x || m_y != y)
     {
         m_x = x;
         m_y = y;
+        m_width = width;
+        m_height = height;
+    }
 
+    if (m_parent->m_wxwindow)
+    {
         int left_border = 0;
         int right_border = 0;
         int top_border = 0;
@@ -2661,21 +2666,15 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
                       m_height+top_border+bottom_border );
     }
 
-    if (m_width != oldSize.x || m_height != oldSize.y)
+    if (sizeChange)
     {
         // update these variables to keep size_allocate handler
         // from sending another size event for this change
         GetClientSize( &m_oldClientWidth, &m_oldClientHeight );
 
         gtk_widget_queue_resize(m_widget);
-        if (!m_nativeSizeEvent)
-        {
-            wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-            event.SetEventObject( this );
-            HandleWindowEvent( event );
-        }
-    } else
-    if (sizeFlags & wxSIZE_FORCE_EVENT)
+    }
+    if ((sizeChange && !m_nativeSizeEvent) || (sizeFlags & wxSIZE_FORCE_EVENT))
     {
         wxSizeEvent event( wxSize(m_width,m_height), GetId() );
         event.SetEventObject( this );
