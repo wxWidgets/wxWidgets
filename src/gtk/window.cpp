@@ -2566,12 +2566,14 @@ bool wxWindowGTK::Destroy()
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
-    gtk_widget_set_size_request(m_widget, width, height);
-
-    // inform the parent to perform the move
-    wxASSERT_MSG(m_parent && m_parent->m_wxwindow,
-                 "the parent window has no client area?");
-    WX_PIZZA(m_parent->m_wxwindow)->move(m_widget, x, y);
+    GtkWidget* parent = gtk_widget_get_parent(m_widget);
+    if (WX_IS_PIZZA(parent))
+    {
+        WX_PIZZA(parent)->move(m_widget, x, y);
+        gtk_widget_set_size_request(m_widget, width, height);
+    }
+    else
+        gtk_widget_queue_resize(m_widget);
 }
 
 void wxWindowGTK::ConstrainSize()
@@ -2593,8 +2595,7 @@ void wxWindowGTK::ConstrainSize()
 
 void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
-    wxASSERT_MSG( (m_parent != NULL), wxT("wxWindowGTK::SetSize requires parent.\n") );
+    wxCHECK_RET(m_widget, "invalid window");
 
     int scrollX = 0, scrollY = 0;
     GtkWidget* parent = gtk_widget_get_parent(m_widget);
@@ -2636,10 +2637,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         m_y = y;
         m_width = width;
         m_height = height;
-    }
 
-    if (m_parent->m_wxwindow)
-    {
         /* the default button has a border around it */
         if (gtk_widget_get_can_default(m_widget))
         {
@@ -2658,16 +2656,12 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         DoMoveWindow(x, y, width, height);
     }
 
-    if (sizeChange)
+    if ((sizeChange && !m_nativeSizeEvent) || (sizeFlags & wxSIZE_FORCE_EVENT))
     {
         // update these variables to keep size_allocate handler
         // from sending another size event for this change
         GetClientSize( &m_oldClientWidth, &m_oldClientHeight );
 
-        gtk_widget_queue_resize(m_widget);
-    }
-    if ((sizeChange && !m_nativeSizeEvent) || (sizeFlags & wxSIZE_FORCE_EVENT))
-    {
         wxSizeEvent event( wxSize(m_width,m_height), GetId() );
         event.SetEventObject( this );
         HandleWindowEvent( event );
