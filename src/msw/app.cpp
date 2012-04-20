@@ -619,7 +619,7 @@ int wxApp::GetComCtl32Version()
         // depending on the OS version and the presence of the manifest, it can
         // be either v5 or v6 and instead of trying to guess it just get the
         // handle of the already loaded version
-        wxLoadedDLL dllComCtl32(_T("comctl32.dll"));
+        wxLoadedDLL dllComCtl32(wxT("comctl32.dll"));
         if ( !dllComCtl32.IsLoaded() )
         {
             s_verComCtl32 = 0;
@@ -639,7 +639,7 @@ int wxApp::GetComCtl32Version()
                 HRESULT hr = (*pfnDllGetVersion)(&dvi);
                 if ( FAILED(hr) )
                 {
-                    wxLogApiError(_T("DllGetVersion"), hr);
+                    wxLogApiError(wxT("DllGetVersion"), hr);
                 }
                 else
                 {
@@ -656,7 +656,7 @@ int wxApp::GetComCtl32Version()
             if ( !s_verComCtl32 )
             {
                 // InitCommonControlsEx is unique to 4.70 and later
-                void *pfn = dllComCtl32.GetSymbol(_T("InitCommonControlsEx"));
+                void *pfn = dllComCtl32.GetSymbol(wxT("InitCommonControlsEx"));
                 if ( !pfn )
                 {
                     // not found, must be 4.00
@@ -666,7 +666,7 @@ int wxApp::GetComCtl32Version()
                 {
                     // many symbols appeared in comctl32 4.71, could use any of
                     // them except may be DllInstall()
-                    pfn = dllComCtl32.GetSymbol(_T("InitializeFlatSB"));
+                    pfn = dllComCtl32.GetSymbol(wxT("InitializeFlatSB"));
                     if ( !pfn )
                     {
                         // not found, must be 4.70
@@ -706,6 +706,11 @@ bool wxApp::Yield(bool onlyIfNeeded)
         {
             wxFAIL_MSG( wxT("wxYield called recursively" ) );
         }
+
+#if wxUSE_LOG
+        // let the logs be flashed again
+        wxLog::Resume();
+#endif // wxUSE_LOG
 
         return false;
     }
@@ -754,10 +759,10 @@ bool wxApp::OnExceptionInMainLoop()
             ::MessageBox
               (
                 NULL,
-                _T("An unhandled exception occurred. Press \"Abort\" to \
+                wxT("An unhandled exception occurred. Press \"Abort\" to \
 terminate the program,\r\n\
 \"Retry\" to exit the program normally and \"Ignore\" to try to continue."),
-                _T("Unhandled exception"),
+                wxT("Unhandled exception"),
                 MB_ABORTRETRYIGNORE |
                 MB_ICONERROR|
                 MB_TASKMODAL
@@ -768,7 +773,7 @@ terminate the program,\r\n\
             throw;
 
         default:
-            wxFAIL_MSG( _T("unexpected MessageBox() return code") );
+            wxFAIL_MSG( wxT("unexpected MessageBox() return code") );
             // fall through
 
         case IDRETRY:
