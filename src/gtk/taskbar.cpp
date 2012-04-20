@@ -266,7 +266,7 @@ void wxTaskBarIcon::Private::size_allocate(int width, int height)
 
 IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 
-wxTaskBarIcon::wxTaskBarIcon()
+wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType WXUNUSED(iconType))
 {
     m_priv = new Private(this);
 }

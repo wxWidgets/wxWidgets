@@ -141,9 +141,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 
 wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType iconType)
 {
-    if(iconType == DOCK)
+    if(iconType == wxTBI_DOCK)
         m_impl = new wxTaskBarIconDockImpl(this);
-    else if(iconType == CUSTOM_STATUSITEM)
+    else if(iconType == wxTBI_CUSTOM_STATUSITEM)
         m_impl = new wxTaskBarIconCustomStatusItemImpl(this);
     else
     {   m_impl = NULL;

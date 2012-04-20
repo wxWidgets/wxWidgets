@@ -21,7 +21,7 @@ class WXDLLIMPEXP_FWD_ADV wxTaskBarIconWindow;
 class WXDLLIMPEXP_ADV wxTaskBarIcon : public wxTaskBarIconBase
 {
 public:
-    wxTaskBarIcon();
+    wxTaskBarIcon(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE);
     virtual ~wxTaskBarIcon();
 
     // Accessors

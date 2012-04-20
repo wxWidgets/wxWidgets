@@ -19,21 +19,7 @@ class WXDLLIMPEXP_ADV wxTaskBarIcon : public wxTaskBarIconBase
 {
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon)
 public:
-        // type of taskbar item to create (currently only DOCK is implemented)
-        enum wxTaskBarIconType
-        {
-            DOCK
-#if wxOSX_USE_COCOA
-        ,   CUSTOM_STATUSITEM
-#endif
-#if wxOSX_USE_COCOA
-        ,   DEFAULT_TYPE = CUSTOM_STATUSITEM
-#else
-        ,   DEFAULT_TYPE = DOCK
-#endif
-        };
-
-    wxTaskBarIcon(wxTaskBarIconType iconType = DEFAULT_TYPE);
+    wxTaskBarIcon(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE);
     virtual ~wxTaskBarIcon();
 
     // returns true if the taskbaricon is in the global menubar

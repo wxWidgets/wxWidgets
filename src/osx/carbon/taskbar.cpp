@@ -469,8 +469,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType WXUNUSED_UNLESS_DEBUG(nType))
 {
     wxASSERT_MSG(
-        nType == DOCK,
-        wxT("Only the DOCK implementation of wxTaskBarIcon on Mac-Carbon is currently supported!") );
+        nType == wxTBI_DOCK,
+        wxT("Only the wxTBI_DOCK implementation of wxTaskBarIcon on Mac-Carbon is currently supported!") );
 
     m_impl = new wxDockTaskBarIcon(this);
 }
