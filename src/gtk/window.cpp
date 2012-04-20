@@ -2564,6 +2564,27 @@ bool wxWindowGTK::Destroy()
     return wxWindowBase::Destroy();
 }
 
+static GSList* gs_queueResizeList;
+
+extern "C" {
+static gboolean queue_resize(void*)
+{
+    gdk_threads_enter();
+    for (GSList* p = gs_queueResizeList; p; p = p->next)
+    {
+        if (p->data)
+        {
+            gtk_widget_queue_resize(GTK_WIDGET(p->data));
+            g_object_remove_weak_pointer(G_OBJECT(p->data), &p->data);
+        }
+    }
+    g_slist_free(gs_queueResizeList);
+    gs_queueResizeList = NULL;
+    gdk_threads_leave();
+    return false;
+}
+}
+
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
     GtkWidget* parent = gtk_widget_get_parent(m_widget);
@@ -2572,8 +2593,19 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
         WX_PIZZA(parent)->move(m_widget, x, y);
         gtk_widget_set_size_request(m_widget, width, height);
     }
-    else
-        gtk_widget_queue_resize(m_widget);
+
+    // With GTK3, gtk_widget_queue_resize() is ignored while a size-allocate
+    // is in progress. This situation is common in wxWidgets, since
+    // size-allocate can generate wxSizeEvent and size event handlers often
+    // call SetSize(), directly or indirectly. Work around this by deferring
+    // the queue-resize until after size-allocate processing is finished.
+    if (g_slist_find(gs_queueResizeList, m_widget) == NULL)
+    {
+        if (gs_queueResizeList == NULL)
+            g_idle_add_full(GTK_PRIORITY_RESIZE, queue_resize, NULL, NULL);
+        gs_queueResizeList = g_slist_prepend(gs_queueResizeList, m_widget);
+        g_object_add_weak_pointer(G_OBJECT(m_widget), &gs_queueResizeList->data);
+    }
 }
 
 void wxWindowGTK::ConstrainSize()
