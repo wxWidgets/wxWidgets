@@ -27,7 +27,7 @@ enum wxTaskBarIconType
 {
     wxTBI_DOCK,
     wxTBI_CUSTOM_STATUSITEM,
-#if wxOSX_USE_COCOA
+#if defined(wxOSX_USE_COCOA) && wxOSX_USE_COCOA
     wxTBI_DEFAULT_TYPE = wxTBI_CUSTOM_STATUSITEM
 #else
     wxTBI_DEFAULT_TYPE = wxTBI_DOCK
