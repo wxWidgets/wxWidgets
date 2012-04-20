@@ -3159,6 +3159,9 @@ public:
     */
     virtual bool IsDoubleBuffered() const;
 
+    /**
+       Turn on or off double buffering of the window if the system supports it.
+    */
     void SetDoubleBuffered(bool on);
 
     /**
