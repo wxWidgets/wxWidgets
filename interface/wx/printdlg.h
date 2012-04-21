@@ -18,7 +18,7 @@
 
     @see @ref overview_printing, @ref overview_cmndlg_print
 */
-class wxPrintDialog : public wxDialog
+class wxPrintDialog : public wxObject
 {
 public:
     /**
@@ -30,6 +30,7 @@ public:
         @see wxPrintDialogData
     */
     wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
+    wxPrintDialog(wxWindow *parent, wxPrintData* data);
 
     /**
         Destructor.
@@ -53,6 +54,12 @@ public:
         with the print dialog.
     */
     virtual wxPrintDialogData& GetPrintDialogData();
+
+    /**
+       Returns the @ref overview_printing_printdata "print data" associated
+       with the print dialog.
+    */
+    virtual wxPrintData& GetPrintData();
 
     /**
         Shows the dialog, returning @c wxID_OK if the user pressed OK, and @c
@@ -89,7 +96,7 @@ public:
 
     @see @ref overview_printing, wxPrintDialog, wxPageSetupDialogData
 */
-class wxPageSetupDialog : public wxDialog
+class wxPageSetupDialog : public wxObject
 {
 public:
     /**

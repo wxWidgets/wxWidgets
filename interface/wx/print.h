@@ -6,6 +6,37 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+enum wxPrinterError
+{
+    wxPRINTER_NO_ERROR = 0,
+    wxPRINTER_CANCELLED,
+    wxPRINTER_ERROR
+};
+
+#define wxPREVIEW_PRINT        1
+#define wxPREVIEW_PREVIOUS     2
+#define wxPREVIEW_NEXT         4
+#define wxPREVIEW_ZOOM         8
+#define wxPREVIEW_FIRST       16
+#define wxPREVIEW_LAST        32
+#define wxPREVIEW_GOTO        64
+
+#define wxPREVIEW_DEFAULT  (wxPREVIEW_PREVIOUS|wxPREVIEW_NEXT|wxPREVIEW_ZOOM\
+                            |wxPREVIEW_FIRST|wxPREVIEW_GOTO|wxPREVIEW_LAST)
+
+// Ids for controls
+#define wxID_PREVIEW_CLOSE      1
+#define wxID_PREVIEW_NEXT       2
+#define wxID_PREVIEW_PREVIOUS   3
+#define wxID_PREVIEW_PRINT      4
+#define wxID_PREVIEW_ZOOM       5
+#define wxID_PREVIEW_FIRST      6
+#define wxID_PREVIEW_LAST       7
+#define wxID_PREVIEW_GOTO       8
+#define wxID_PREVIEW_ZOOM_IN    9
+#define wxID_PREVIEW_ZOOM_OUT   10
+
+
 /**
     @class wxPreviewControlBar
 
@@ -282,8 +313,8 @@ public:
         the preview frame so that the user can print directly from the preview interface.
 
         @remarks
-        Do not explicitly delete the printout objects once this destructor has been
-        called, since they will be deleted in the wxPrintPreview constructor.
+        Do not explicitly delete the printout objects once this constructor has been
+        called, since they will be deleted in the wxPrintPreview destructor.
         The same does not apply to the @a data argument.
 
         Use IsOk() to check whether the wxPrintPreview object was created correctly.
@@ -291,6 +322,9 @@ public:
     wxPrintPreview(wxPrintout* printout,
                    wxPrintout* printoutForPrinting = NULL,
                    wxPrintDialogData* data = NULL);
+    wxPrintPreview(wxPrintout* printout,
+                   wxPrintout* printoutForPrinting,
+                   wxPrintData* data);
 
     /**
         Destructor.
@@ -298,7 +332,7 @@ public:
         Deletes both print preview objects, so do not destroy these objects
         in your application.
     */
-    ~wxPrinter();
+    ~wxPrintPreview();
 
     /**
         Gets the preview window used for displaying the print preview image.
