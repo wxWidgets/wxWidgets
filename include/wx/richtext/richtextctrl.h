@@ -686,7 +686,7 @@ public:
     /**
         Sets the attributes for a single object
     */
-    virtual void SetStyle(wxRichTextObject *obj, const wxRichTextAttr& textAttr);
+    virtual void SetStyle(wxRichTextObject *obj, const wxRichTextAttr& textAttr, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     //@{
     /**

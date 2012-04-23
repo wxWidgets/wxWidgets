@@ -3588,9 +3588,9 @@ bool wxRichTextCtrl::SetStyle(const wxRichTextRange& range, const wxRichTextAttr
     return GetFocusObject()->SetStyle(range.ToInternal(), style);
 }
 
-void wxRichTextCtrl::SetStyle(wxRichTextObject *obj, const wxRichTextAttr& textAttr)
+void wxRichTextCtrl::SetStyle(wxRichTextObject *obj, const wxRichTextAttr& textAttr, int flags)
 {
-    GetFocusObject()->SetStyle(obj, textAttr);
+    GetFocusObject()->SetStyle(obj, textAttr, flags);
 }
 
 // extended style setting operation with flags including:

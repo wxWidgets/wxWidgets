@@ -144,11 +144,11 @@ bool wxRichTextFormattingDialog::ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTe
 }
 
 // Apply attributes to the object being edited, if any
-bool wxRichTextFormattingDialog::ApplyStyle(wxRichTextCtrl* ctrl, int WXUNUSED(flags))
+bool wxRichTextFormattingDialog::ApplyStyle(wxRichTextCtrl* ctrl, int flags)
 {
     if (GetObject())
     {
-        ctrl->SetStyle(GetObject(), m_attributes);
+        ctrl->SetStyle(GetObject(), m_attributes, flags);
         return true;
     }
     else
