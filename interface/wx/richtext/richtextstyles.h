@@ -179,6 +179,21 @@ public:
         Sets the attributes for this style.
     */
     void SetStyle(const wxTextAttr& style);
+
+    /**
+        Returns the definition's properties.
+    */
+    wxRichTextProperties& GetProperties();
+
+    /**
+        Returns the definition's properties.
+    */
+    const wxRichTextProperties& GetProperties() const;
+
+    /**
+        Sets the definition's properties.
+    */
+    void SetProperties(const wxRichTextProperties& props);
 };
 
 
@@ -662,5 +677,20 @@ public:
         Sets the style sheet's name.
     */
     void SetName(const wxString& name);
+
+    /**
+        Returns the sheet's properties.
+    */
+    wxRichTextProperties& GetProperties();
+
+    /**
+        Returns the sheet's properties.
+    */
+    const wxRichTextProperties& GetProperties() const;
+
+    /**
+        Sets the sheet's properties.
+    */
+    void SetProperties(const wxRichTextProperties& props);
 };
 

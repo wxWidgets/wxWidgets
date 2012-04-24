@@ -35,7 +35,7 @@ public:
     wxRichTextXMLHandler(const wxString& name = wxT("XML"), const wxString& ext = wxT("xml"), int type = wxRICHTEXT_TYPE_XML)
         : wxRichTextFileHandler(name, ext, type)
         { Init(); }
-        
+
     void Init();
 
 #if wxUSE_STREAMS
@@ -69,6 +69,7 @@ public:
     bool ImportXML(wxRichTextBuffer* buffer, wxRichTextObject* obj, wxXmlNode* node);
     bool ImportStyleDefinition(wxRichTextStyleSheet* sheet, wxXmlNode* node);
     bool ImportProperties(wxRichTextObject* obj, wxXmlNode* node);
+    bool ImportProperties(wxRichTextProperties& properties, wxXmlNode* node);
 
     /// Import style parameters
     bool ImportStyle(wxRichTextAttr& attr, wxXmlNode* node, bool isPara = false);
@@ -76,7 +77,7 @@ public:
 
     /// Creates an object given an XML element name
     virtual wxRichTextObject* CreateObjectForXMLName(wxRichTextObject* parent, const wxString& name) const;
-    
+
     /// Can we save using this handler?
     virtual bool CanSave() const { return true; }
 

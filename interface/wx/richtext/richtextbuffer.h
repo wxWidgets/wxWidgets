@@ -2377,7 +2377,7 @@ public:
     wxRichTextAttr& GetAttributes() { return m_attributes; }
 
     /**
-        Sets the object's properties.
+        Returns the object's properties.
     */
     wxRichTextProperties& GetProperties() { return m_properties; }
 
@@ -2387,7 +2387,7 @@ public:
     const wxRichTextProperties& GetProperties() const { return m_properties; }
 
     /**
-        Returns the object's properties.
+        Sets the object's properties.
     */
     void SetProperties(const wxRichTextProperties& props) { m_properties = props; }
 

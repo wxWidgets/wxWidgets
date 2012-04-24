@@ -47,11 +47,12 @@ void wxRichTextStyleDefinition::Copy(const wxRichTextStyleDefinition& def)
     m_baseStyle = def.m_baseStyle;
     m_style = def.m_style;
     m_description = def.m_description;
+    m_properties = def.m_properties;
 }
 
 bool wxRichTextStyleDefinition::Eq(const wxRichTextStyleDefinition& def) const
 {
-    return (m_name == def.m_name && m_baseStyle == def.m_baseStyle && m_style == def.m_style);
+    return (m_name == def.m_name && m_baseStyle == def.m_baseStyle && m_style == def.m_style && m_properties == def.m_properties);
 }
 
 /// Gets the style combined with the base style
@@ -523,6 +524,7 @@ void wxRichTextStyleSheet::Copy(const wxRichTextStyleSheet& sheet)
 
     SetName(sheet.GetName());
     SetDescription(sheet.GetDescription());
+    m_properties = sheet.m_properties;
 }
 
 /// Equality

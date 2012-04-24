@@ -101,11 +101,27 @@ public:
     /// Gets the style combined with the base style
     virtual wxRichTextAttr GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const;
 
+    /**
+        Sets the definition's properties.
+    */
+    wxRichTextProperties& GetProperties() { return m_properties; }
+
+    /**
+        Returns the definition's properties.
+    */
+    const wxRichTextProperties& GetProperties() const { return m_properties; }
+
+    /**
+        Returns the definition's properties.
+    */
+    void SetProperties(const wxRichTextProperties& props) { m_properties = props; }
+
 protected:
-    wxString        m_name;
-    wxString        m_baseStyle;
-    wxString        m_description;
-    wxRichTextAttr  m_style;
+    wxString                m_name;
+    wxString                m_baseStyle;
+    wxString                m_description;
+    wxRichTextAttr          m_style;
+    wxRichTextProperties    m_properties;
 };
 
 /*!
@@ -402,6 +418,21 @@ public:
     void SetDescription(const wxString& descr) { m_description = descr; }
     const wxString& GetDescription() const { return m_description; }
 
+    /**
+        Sets the definition's properties.
+    */
+    wxRichTextProperties& GetProperties() { return m_properties; }
+
+    /**
+        Returns the definition's properties.
+    */
+    const wxRichTextProperties& GetProperties() const { return m_properties; }
+
+    /**
+        Returns the definition's properties.
+    */
+    void SetProperties(const wxRichTextProperties& props) { m_properties = props; }
+
 /// Implementation
 
     /// Add a definition to one of the style lists
@@ -425,6 +456,7 @@ protected:
 
     wxRichTextStyleSheet*   m_previousSheet;
     wxRichTextStyleSheet*   m_nextSheet;
+    wxRichTextProperties    m_properties;
 };
 
 #if wxUSE_HTML

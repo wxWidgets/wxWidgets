@@ -208,6 +208,11 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxRichTextObject*
 
 bool wxRichTextXMLHandler::ImportProperties(wxRichTextObject* obj, wxXmlNode* node)
 {
+    return ImportProperties(obj->GetProperties(), node);
+}
+
+bool wxRichTextXMLHandler::ImportProperties(wxRichTextProperties& properties, wxXmlNode* node)
+{
     wxXmlNode* child = node->GetChildren();
     while (child)
     {
@@ -225,7 +230,7 @@ bool wxRichTextXMLHandler::ImportProperties(wxRichTextObject* obj, wxXmlNode* no
                     wxVariant var = MakePropertyFromString(name, value, type);
                     if (!var.IsNull())
                     {
-                        obj->GetProperties().SetProperty(var);
+                        properties.SetProperty(var);
                     }
                 }
                 propertyChild = propertyChild->GetNext();
@@ -262,6 +267,8 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
             child = child->GetNext();
         }
 
+        ImportProperties(def->GetProperties(), node);
+
         sheet->AddCharacterStyle(def);
     }
     else if (styleType == wxT("paragraphstyle"))
@@ -284,6 +291,8 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
             child = child->GetNext();
         }
 
+        ImportProperties(def->GetProperties(), node);
+
         sheet->AddParagraphStyle(def);
     }
     else if (styleType == wxT("boxstyle"))
@@ -303,6 +312,8 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
             }
             child = child->GetNext();
         }
+
+        ImportProperties(def->GetProperties(), node);
 
         sheet->AddBoxStyle(def);
     }
@@ -338,6 +349,8 @@ bool wxRichTextXMLHandler::ImportStyleDefinition(wxRichTextStyleSheet* sheet, wx
             }
             child = child->GetNext();
         }
+
+        ImportProperties(def->GetProperties(), node);
 
         sheet->AddListStyle(def);
     }
@@ -835,6 +848,8 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
             wxRichTextBoxStyleDefinition* def = buffer->GetStyleSheet()->GetBoxStyle(i);
             ExportStyleDefinition(styleSheetNode, def);
         }
+
+        WriteProperties(styleSheetNode, buffer->GetStyleSheet()->GetProperties());
     }
     bool success = ExportXML(rootNode, *buffer);
 #if wxRICHTEXT_USE_OUTPUT_TIMINGS
@@ -909,6 +924,8 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
             wxRichTextBoxStyleDefinition* def = buffer->GetStyleSheet()->GetBoxStyle(i);
             ExportStyleDefinition(stream, def, level + 1);
         }
+
+        WriteProperties(stream, buffer->GetStyleSheet()->GetProperties(), level);
 
         OutputIndentation(stream, level);
         OutputString(stream, wxT("</stylesheet>"));
@@ -1372,6 +1389,8 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxXmlNode* parent, wxRichTextSt
 
         AddAttributes(styleNode, def->GetStyle(), true);
     }
+
+    WriteProperties(defNode, def->GetProperties());
 
     return true;
 }
@@ -2532,6 +2551,7 @@ bool wxRichTextParagraphLayoutBox::ImportFromXML(wxRichTextBuffer* buffer, wxXml
 
             child2 = child2->GetNext();
         }
+        handler->ImportProperties(sheet->GetProperties(), child);
 
         // Notify that styles have changed. If this is vetoed by the app,
         // the new sheet will be deleted. If it is not vetoed, the
