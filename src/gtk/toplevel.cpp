@@ -1401,28 +1401,6 @@ void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
     }
 }
 
-#ifdef GDK_WINDOWING_X11
-/* Get the X Window between child and the root window.
-   This should usually be the WM managed XID */
-static Window wxGetTopmostWindowX11(Display *dpy, Window child)
-{
-    Window root, parent;
-    Window* children;
-    unsigned int nchildren;
-
-    XQueryTree(dpy, child, &root, &parent, &children, &nchildren);
-    XFree(children);
-
-    while (parent != root) {
-        child = parent;
-        XQueryTree(dpy, child, &root, &parent, &children, &nchildren);
-        XFree(children);
-    }
-
-    return child;
-}
-#endif // GDK_WINDOWING_X11
-
 bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 {
     GdkWindow* window = NULL;
@@ -1433,11 +1411,7 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 
 #ifdef GDK_WINDOWING_X11
     Display* dpy = GDK_WINDOW_XDISPLAY(window);
-    // We need to get the X Window that has the root window as the immediate parent
-    // and m_widget->window as a child. This should be the X Window that the WM manages and
-    // from which the opacity property is checked from.
-    Window win = wxGetTopmostWindowX11(dpy, GDK_WINDOW_XID(window));
-
+    Window win = GDK_WINDOW_XID(window);
 
     // Using pure Xlib to not have a GTK version check mess due to gtk2.0 not having GdkDisplay
     if (alpha == 0xff)
