@@ -613,7 +613,11 @@ void wxRichTextObject::Invalidate(const wxRichTextRange& invalidRange)
 {
     if (invalidRange != wxRICHTEXT_NONE)
     {
-        SetCachedSize(wxDefaultSize);
+        // If this is a floating object, size may not be recalculated
+        // after floats have been collected in an early stage of Layout.
+        // So avoid resetting the cache for floating objects during layout.
+        if (!IsFloating())
+            SetCachedSize(wxDefaultSize);
         SetMaxSize(wxDefaultSize);
         SetMinSize(wxDefaultSize);
     }
@@ -2025,6 +2029,14 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
     }
     else
         maxHeight = 0; // topMargin + bottomMargin;
+
+    // Check the bottom edge of any floating object
+    if (GetFloatCollector() && GetFloatCollector()->HasFloats())
+    {
+        int bottom = GetFloatCollector()->GetLastRectBottom();
+        if (bottom > maxHeight)
+            maxHeight = bottom;
+    }
 
     if (attr.GetTextBoxAttr().GetSize().GetWidth().IsValid())
     {
@@ -10057,6 +10069,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichTextImage, wxRichTextObject)
 wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent, wxRichTextAttr* charStyle):
     wxRichTextObject(parent)
 {
+    Init();
     m_imageBlock.MakeImageBlockDefaultQuality(image, wxBITMAP_TYPE_PNG);
     if (charStyle)
         SetAttributes(*charStyle);
@@ -10065,40 +10078,155 @@ wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent,
 wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent, wxRichTextAttr* charStyle):
     wxRichTextObject(parent)
 {
+    Init();
     m_imageBlock = imageBlock;
     if (charStyle)
         SetAttributes(*charStyle);
 }
 
+void wxRichTextImage::Init()
+{
+    m_originalImageSize = wxSize(-1, -1);
+}
+
 /// Create a cached image at the required size
 bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
 {
-    if (resetCache || !m_imageCache.IsOk() /* || m_imageCache.GetWidth() != size.x || m_imageCache.GetHeight() != size.y */)
-    {
-        if (!m_imageBlock.IsOk())
-            return false;
+    if (!m_imageBlock.IsOk())
+        return false;
 
-        wxImage image;
+    // If we have an original image size, use that to compute the cached bitmap size
+    // instead of loading the image each time. This way we can avoid loading
+    // the image so long as the new cached bitmap size hasn't changed.
+
+    wxImage image;
+    if (resetCache || m_originalImageSize == wxSize(-1, -1))
+    {
+        m_imageCache = wxNullBitmap;
+
         m_imageBlock.Load(image);
         if (!image.IsOk())
             return false;
 
-        int width = image.GetWidth();
-        int height = image.GetHeight();
+        m_originalImageSize = wxSize(image.GetWidth(), image.GetHeight());
+    }
 
-        if (GetAttributes().GetTextBoxAttr().GetWidth().IsValid() && GetAttributes().GetTextBoxAttr().GetWidth().GetValue() > 0)
+    int width = m_originalImageSize.GetWidth();
+    int height = m_originalImageSize.GetHeight();
+
+    int parentWidth = 0;
+    int parentHeight = 0;
+
+    int maxWidth = -1;
+    int maxHeight = -1;
+
+    wxRichTextBuffer* buffer = GetBuffer();
+    if (buffer)
+    {
+        wxSize sz;
+        if (buffer->GetRichTextCtrl())
         {
-            if (GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-                width = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetWidth().GetValue());
-            else
-                width = GetAttributes().GetTextBoxAttr().GetWidth().GetValue();
+            // Subtract borders
+            sz = buffer->GetRichTextCtrl()->GetClientSize();
+
+            wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
+            marginRect = wxRect(0, 0, sz.x, sz.y);
+            buffer->GetBoxRects(dc, buffer, buffer->GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
+
+            sz = contentRect.GetSize();
+
+            // Start with a maximum width of the control size, even if not specified by the content,
+            // to minimize the amount of picture overlapping the right-hand side
+            maxWidth = sz.x;
         }
-        if (GetAttributes().GetTextBoxAttr().GetHeight().IsValid() && GetAttributes().GetTextBoxAttr().GetHeight().GetValue() > 0)
+        else
+            sz = buffer->GetCachedSize();
+        parentWidth = sz.GetWidth();
+        parentHeight = sz.GetHeight();
+    }
+
+    if (GetAttributes().GetTextBoxAttr().GetWidth().IsValid() && GetAttributes().GetTextBoxAttr().GetWidth().GetValue() > 0)
+    {
+        if (parentWidth > 0 && GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
+            width = (int) ((GetAttributes().GetTextBoxAttr().GetWidth().GetValue() * parentWidth)/100.0);
+        else if (GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+            width = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetWidth().GetValue());
+        else if (GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
+            width = GetAttributes().GetTextBoxAttr().GetWidth().GetValue();
+    }
+
+    // Limit to max width
+
+    if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().IsValid() && GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetValue() > 0)
+    {
+        int mw = -1;
+
+        if (parentWidth > 0 && GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
+            mw = (int) ((GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetValue() * parentWidth)/100.0);
+        else if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+            mw = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetValue());
+        else if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
+            mw = GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetValue();
+
+        // If we already have a smaller max width due to the constraints of the control size,
+        // don't use the larger max width.
+        if (mw != -1 && ((maxWidth == -1) || (mw < maxWidth)))
+            maxWidth = mw;
+    }
+
+    if (maxWidth > 0 && width > maxWidth)
+        width = maxWidth;
+
+    // Preserve the aspect ratio
+    if (width != m_originalImageSize.GetWidth())
+        height = (int) (float(m_originalImageSize.GetHeight()) * (float(width)/float(m_originalImageSize.GetWidth())));
+
+    if (GetAttributes().GetTextBoxAttr().GetHeight().IsValid() && GetAttributes().GetTextBoxAttr().GetHeight().GetValue() > 0)
+    {
+        if (parentHeight > 0 && GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
+            height = (int) ((GetAttributes().GetTextBoxAttr().GetHeight().GetValue() * parentHeight)/100.0);
+        else if (GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+            height = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetHeight().GetValue());
+        else if (GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
+            height = GetAttributes().GetTextBoxAttr().GetHeight().GetValue();
+
+        // Preserve the aspect ratio
+        if (height != m_originalImageSize.GetHeight())
+            width = (int) (float(m_originalImageSize.GetWidth()) * (float(height)/float(m_originalImageSize.GetHeight())));
+    }
+
+    // Limit to max height
+
+    if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().IsValid() && GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetValue() > 0)
+    {
+        if (parentHeight > 0 && GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
+            maxHeight = (int) ((GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetValue() * parentHeight)/100.0);
+        else if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+            maxHeight = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetValue());
+        else if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
+            maxHeight = GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetValue();
+    }
+
+    if (maxHeight > 0 && height > maxHeight)
+    {
+        height = maxHeight;
+
+        // Preserve the aspect ratio
+        if (height != m_originalImageSize.GetHeight())
+            width = (int) (float(m_originalImageSize.GetWidth()) * (float(height)/float(m_originalImageSize.GetHeight())));
+    }
+
+    if (m_imageCache.IsOk() && m_imageCache.GetWidth() == width && m_imageCache.GetHeight() == height)
+    {
+        // Do nothing, we didn't need to change the image cache
+    }
+    else
+    {
+        if (!image.IsOk())
         {
-            if (GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-                height = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetHeight().GetValue());
-            else
-                height = GetAttributes().GetTextBoxAttr().GetHeight().GetValue();
+            m_imageBlock.Load(image);
+            if (!image.IsOk())
+                return false;
         }
 
         if (image.GetWidth() == width && image.GetHeight() == height)
@@ -10243,6 +10371,7 @@ void wxRichTextImage::Copy(const wxRichTextImage& obj)
     wxRichTextObject::Copy(obj);
 
     m_imageBlock = obj.m_imageBlock;
+    m_originalImageSize = obj.m_originalImageSize;
 }
 
 /// Edit properties via a GUI

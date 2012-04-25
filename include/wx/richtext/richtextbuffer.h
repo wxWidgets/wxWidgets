@@ -4012,7 +4012,7 @@ public:
     /**
         Default constructor.
     */
-    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextObject(parent) { }
+    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextObject(parent) { Init(); }
 
     /**
         Creates a wxRichTextImage from a wxImage.
@@ -4028,6 +4028,11 @@ public:
         Copy constructor.
     */
     wxRichTextImage(const wxRichTextImage& obj): wxRichTextObject(obj) { Copy(obj); }
+
+    /**
+        Initialisation.
+    */
+    void Init();
 
 // Overridables
 
@@ -4079,12 +4084,12 @@ public:
     /**
         Sets the image cache.
     */
-    void SetImageCache(const wxBitmap& bitmap) { m_imageCache = bitmap; }
+    void SetImageCache(const wxBitmap& bitmap) { m_imageCache = bitmap; m_originalImageSize = wxSize(bitmap.GetWidth(), bitmap.GetHeight()); }
 
     /**
         Resets the image cache.
     */
-    void ResetImageCache() { m_imageCache = wxNullBitmap; }
+    void ResetImageCache() { m_imageCache = wxNullBitmap; m_originalImageSize = wxSize(-1, -1); }
 
     /**
         Returns the image block containing the raw data.
@@ -4108,9 +4113,20 @@ public:
     */
     virtual bool LoadImageCache(wxDC& dc, bool resetCache = false);
 
+    /**
+        Gets the original image size.
+    */
+    wxSize GetOriginalImageSize() const { return m_originalImageSize; }
+
+    /**
+        Sets the original image size.
+    */
+    void SetOriginalImageSize(const wxSize& sz) { m_originalImageSize = sz; }
+
 protected:
     wxRichTextImageBlock    m_imageBlock;
     wxBitmap                m_imageCache;
+    wxSize                  m_originalImageSize;
 };
 
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCommand;

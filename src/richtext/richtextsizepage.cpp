@@ -533,25 +533,27 @@ bool wxRichTextSizePage::TransferDataToWindow()
         }
     }
 
-    if (dialog && dialog->GetObject())
-    {
-        wxTextAttrSize size = dialog->GetObject()->GetNaturalSize();
-        if (size.GetWidth().IsValid() && size.GetHeight().IsValid())
-        {
-            if (!GetAttributes()->GetTextBoxAttr().GetWidth().IsValid() || GetAttributes()->GetTextBoxAttr().GetWidth().GetValue() <= 0)
-            {
-                GetAttributes()->GetTextBoxAttr().GetWidth() = size.GetWidth();
-            }
+    wxRichTextImage* imageObj = NULL;
+    if (dialog)
+        imageObj = wxDynamicCast(dialog->GetObject(), wxRichTextImage);
 
-            if (!GetAttributes()->GetTextBoxAttr().GetHeight().IsValid() || GetAttributes()->GetTextBoxAttr().GetHeight().GetValue() <= 0)
-            {
-                GetAttributes()->GetTextBoxAttr().GetHeight() = size.GetHeight();
-            }
-        }
+    // For an image, show the original width and height if the size is not explicitly specified.
+    if (imageObj && !GetAttributes()->GetTextBoxAttr().GetWidth().IsValid() && !GetAttributes()->GetTextBoxAttr().GetHeight().IsValid() &&
+        imageObj->GetOriginalImageSize() != wxSize(-1, -1))
+    {
+        m_widthCheckbox->SetValue(false);
+        m_heightCheckbox->SetValue(false);
+        m_unitsW->SetSelection(0);
+        m_unitsH->SetSelection(0);
+        m_width->SetValue(wxString::Format(wxT("%d"), (int) imageObj->GetOriginalImageSize().GetWidth()));
+        m_height->SetValue(wxString::Format(wxT("%d"), (int) imageObj->GetOriginalImageSize().GetHeight()));
+    }
+    else
+    {
+        wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetWidth(), m_width, m_unitsW, m_widthCheckbox);
+        wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetHeight(), m_height, m_unitsH, m_heightCheckbox);
     }
 
-    wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetWidth(), m_width, m_unitsW, m_widthCheckbox);
-    wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetHeight(), m_height, m_unitsH, m_heightCheckbox);
     wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetMinSize().GetWidth(), m_minWidth, m_unitsMinW, m_minWidthCheckbox);
     wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetMinSize().GetHeight(), m_minHeight, m_unitsMinH, m_minHeightCheckbox);
     wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetMaxSize().GetWidth(), m_maxWidth, m_unitsMaxW, m_maxWidthCheckbox);
