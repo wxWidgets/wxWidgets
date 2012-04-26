@@ -335,6 +335,24 @@ public:
         @since 2.9.2
      */
      static wxVersionInfo GetLibraryVersionInfo();
+
+protected:
+    /**
+       Called to get the number of images available in a multi-image file
+       type, if supported.
+       
+       NOTE: this function is allowed to change the current stream position
+             since GetImageCount() will take care of restoring it later
+    */
+    virtual int DoGetImageCount( wxInputStream& stream );
+
+    /**
+       Called to test if this handler can read an image from the given stream.
+       
+       NOTE: this function is allowed to change the current stream position
+             since CallDoCanRead() will take care of restoring it later
+    */
+    virtual bool DoCanRead( wxInputStream& stream ) = 0;
 };
 
 
@@ -1077,7 +1095,7 @@ public:
         This is most often used when doing direct image manipulation.
         The return value points to an array of characters in RGBRGBRGB... format
         in the top-to-bottom, left-to-right order, that is the first RGB triplet
-        corresponds to the pixel first pixel of the first row, the second one ---
+        corresponds to the first pixel of the first row, the second one ---
         to the second pixel of the first row and so on until the end of the first
         row, with second row following after it and so on.
 
