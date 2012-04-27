@@ -218,6 +218,21 @@ Changes in behaviour which may result in compilation errors
 - WXWIN_COMPATIBILITY_2_4 doesn't exist any more, please update your code if
   you still relied on features deprecated since version 2.4
 
+- WXWIN_COMPATIBILITY_2_6 still exists but is 0 by default in this release and
+  will be removed in 3.2. You can set it to 1 and rebuild wxWidgets to access
+  the old and deprecated symbols but please consider updating your code
+  instead. Here are replacements for some of the obsolete symbols:
+   + wxSAVE and wxOPEN -> wxFD_SAVE and wxFD_OPEN
+   + WXK_PRIOR and WXK_NEXT -> WXK_PAGEUP and WXK_PAGEDOWN
+   + wxRESIZE_BOX -> wxMAXIMIZE_BOX
+   + wxTHICK_FRAME -> wxRESIZE_BORDER
+   + wxPROCESS_ENTER and wxPASSWORD -> wxTE_PROCESS_ENTER and wxTE_PASSWORD
+   + EVT_SCROLL_ENDSCROLL -> EVT_SCROLL_CHANGED
+   + NewControlId -> wxWindow::NewControlId()
+   + wxFileHistory::GetNoHistoryFiles() -> wxFileHistory::GetCount()
+   + wxSizerItem::SetOption() -> wxSizerItem::SetProportion()
+   + wxSizer::Remove(wxWindow*) -> wxSizer::Detach()
+
 - wxDC classes hierarchy has changed, if you derived any classes from wxDC you
   need to review them as wxDC doesn't have any virtual methods any longer and
   uses delegation instead of inheritance to present different behaviours.
