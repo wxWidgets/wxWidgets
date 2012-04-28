@@ -224,10 +224,19 @@ void wxTextEntryBase::AppendText(const wxString& text)
 
 void wxTextEntryBase::DoSetValue(const wxString& value, int flags)
 {
-    EventsSuppressor noeventsIf(this, !(flags & SetValue_SendEvent));
+    if ( value != GetValue() )
+    {
+        EventsSuppressor noeventsIf(this, !(flags & SetValue_SendEvent));
 
-    SelectAll();
-    WriteText(value);
+        SelectAll();
+        WriteText(value);
+    }
+    else // Same value, no need to do anything.
+    {
+        // Except that we still need to generate the event for consistency with
+        // the normal case when the text does change.
+        SendTextUpdatedEvent(GetEditableWindow());
+    }
 
     SetInsertionPoint(0);
 }
