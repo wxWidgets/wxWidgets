@@ -39,6 +39,19 @@ class wxDateTimePrinter:
         sec = int(msec / 1000)
         return datetime.datetime.fromtimestamp(sec).isoformat(' ')
 
+class wxFileNamePrinter:
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        # It is simpler to just call the internal function here than to iterate
+        # over m_dirs array ourselves. The disadvantage of this approach is
+        # that it requires a live inferior process and so doesn't work when
+        # debugging using only a core file. If this ever becomes a serious
+        # problem, this should be rewritten to use m_dirs and m_name and m_ext.
+        return gdb.parse_and_eval('((wxFileName*)%s)->GetFullPath(0)' %
+                                  self.val.address)
+
 class wxXYPrinterBase:
     def __init__(self, val):
         self.x = val['x']
@@ -66,7 +79,12 @@ class wxRectPrinter(wxXYPrinterBase):
 def wxLookupFunction(val):
     # Using a list is probably ok for so few items but consider switching to a
     # set (or a dict and cache class types as the keys in it?) if needed later.
-    types = ['wxString', 'wxDateTime', 'wxPoint', 'wxSize', 'wxRect']
+    types = ['wxString',
+             'wxDateTime',
+             'wxFileName',
+             'wxPoint',
+             'wxSize',
+             'wxRect']
 
     for t in types:
         if val.type.tag == t:
