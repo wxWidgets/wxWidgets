@@ -208,7 +208,7 @@ public:
     bool Create();
 
 protected:
-    wxString GetTitle() { return m_textTitle->GetValue(); }
+    wxString GetBoxTitle() { return m_textTitle->GetValue(); }
     wxString GetMessage() { return m_textMsg->GetValue(); }
     long GetStyle();
 

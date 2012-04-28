@@ -3143,7 +3143,7 @@ void TestMessageBoxDialog::PrepareMessageDialog(wxMessageDialogBase &dlg)
 
 void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageDialog dlg(this, GetMessage(), GetTitle(), GetStyle());
+    wxMessageDialog dlg(this, GetMessage(), GetBoxTitle(), GetStyle());
     PrepareMessageDialog(dlg);
 
     wxString btnName;
@@ -3231,7 +3231,7 @@ void TestRichMessageDialog::AddAdditionalFlags(wxSizer *sizer)
 
 void TestRichMessageDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 {
-    wxRichMessageDialog dlg(this, GetMessage(), GetTitle(), GetStyle());
+    wxRichMessageDialog dlg(this, GetMessage(), GetBoxTitle(), GetStyle());
     PrepareMessageDialog(dlg);
 
     dlg.ShowCheckBox(m_textCheckBox->GetValue(),
