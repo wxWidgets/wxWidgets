@@ -49,13 +49,36 @@ private:
     virtual wxTextEntry *GetTestEntry() const { return m_text; }
     virtual wxWindow *GetTestWindow() const { return m_text; }
 
+    #define SINGLE_AND_MULTI_TESTS() \
+        WXUISIM_TEST( ReadOnly ); \
+        CPPUNIT_TEST( StreamInput ); \
+        CPPUNIT_TEST( Redirector )
+
     CPPUNIT_TEST_SUITE( TextCtrlTestCase );
+        // These tests run for single line text controls.
         wxTEXT_ENTRY_TESTS();
-        WXUISIM_TEST( ReadOnly );
         WXUISIM_TEST( MaxLength );
-        CPPUNIT_TEST( StreamInput );
-        CPPUNIT_TEST( Redirector );
+        SINGLE_AND_MULTI_TESTS();
+
+        // Now switch to the multi-line text controls.
         CPPUNIT_TEST( PseudoTestSwitchToMultiLineStyle );
+
+        // Rerun some of the tests above. Notice that not all of them pass, so
+        // we can't just use wxTEXT_ENTRY_TESTS() here. For some of them it's
+        // normal, e.g. Hint() test isn't supposed to work for multi-line
+        // controls. Others, such as InsertionPoint() and TextChangeEvents()
+        // don't pass neither but this could be a bug.
+        CPPUNIT_TEST( SetValue );
+        CPPUNIT_TEST( Selection );
+        CPPUNIT_TEST( Replace );
+        WXUISIM_TEST( Editable );
+        CPPUNIT_TEST( CopyPaste );
+        CPPUNIT_TEST( UndoRedo );
+
+        SINGLE_AND_MULTI_TESTS();
+
+
+        // All tests from now on are for multi-line controls only.
         CPPUNIT_TEST( MultiLineReplace );
         //WXUISIM_TEST( ProcessEnter );
         WXUISIM_TEST( Url );
