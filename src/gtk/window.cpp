@@ -31,7 +31,6 @@
 #include "wx/tooltip.h"
 #include "wx/caret.h"
 #include "wx/fontutil.h"
-#include "wx/scopeguard.h"
 #include "wx/sysopt.h"
 
 #include <ctype.h>
@@ -2062,6 +2061,13 @@ void wxWindowGTK::GTKHandleRealized()
 
 wxWindow *wxWindowBase::DoFindFocus()
 {
+    // For compatibility with wxMSW, pretend that showing a popup menu doesn't
+    // change the focus and that it remains on the window showing it, even
+    // though the real focus does change in GTK.
+    extern wxMenu *wxCurrentPopupMenu;
+    if ( wxCurrentPopupMenu )
+        return wxCurrentPopupMenu->GetInvokingWindow();
+
     wxWindowGTK *focus = gs_pendingFocus ? gs_pendingFocus : gs_currentFocus;
     // the cast is necessary when we compile in wxUniversal mode
     return static_cast<wxWindow*>(focus);
@@ -4209,14 +4215,6 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
-
-    // For compatibility with other ports, pretend that the window showing the
-    // menu has focus while the menu is shown. This is needed because the popup
-    // menu actually steals the focus from the window it's associated it in
-    // wxGTK unlike, say, wxMSW.
-    wxWindowGTK* const oldPendingFocus = gs_pendingFocus;
-    gs_pendingFocus = this;
-    wxON_BLOCK_EXIT_SET( gs_pendingFocus, oldPendingFocus );
 
     menu->UpdateUI();
 
