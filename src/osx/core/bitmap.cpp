@@ -306,7 +306,7 @@ bool wxBitmapRefData::Create(CGImageRef image)
             memset( data , 0 , size ) ;
             m_memBuf.UngetWriteBuf( size ) ;
             CGImageAlphaInfo alpha = CGImageGetAlphaInfo(image);
-            if ( alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipLast || alpha == kCGImageAlphaNoneSkipLast )
+            if ( alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipFirst || alpha == kCGImageAlphaNoneSkipLast )
             {
                 m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst );
             }
