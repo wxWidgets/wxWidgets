@@ -53,7 +53,17 @@ wxSize wxAnyButton::DoGetBestSize() const
     GetPeer()->GetBestRect( &bestsize ) ;
 
     int wBtn;
-    if ( EmptyRect( &bestsize ) || ( GetWindowStyle() & wxBU_EXACTFIT) )
+    if ( GetBitmapLabel().IsOk() )
+    {
+        sz.x = bestsize.right - bestsize.left ;
+        sz.y = bestsize.bottom - bestsize.top ;
+        sz.x  = sz.x  + MacGetLeftBorderSize() +
+        MacGetRightBorderSize();
+        sz.y = sz.y + MacGetTopBorderSize() +
+        MacGetBottomBorderSize();
+        wBtn = sz.x;
+    }
+    else if ( EmptyRect( &bestsize ) || ( GetWindowStyle() & wxBU_EXACTFIT) )
     {
         Point bounds;
 
