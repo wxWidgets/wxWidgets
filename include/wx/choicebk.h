@@ -111,7 +111,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // wxChoicebookEvent is obsolete and defined for compatibility only
-typedef wxBookCtrlEvent wxChoicebookEvent;
+#define wxChoicebookEvent wxBookCtrlEvent
 typedef wxBookCtrlEventFunction wxChoicebookEventFunction;
 #define wxChoicebookEventHandler(func) wxBookCtrlEventHandler(func)
 

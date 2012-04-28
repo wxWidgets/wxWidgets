@@ -128,7 +128,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // wxToolbookEvent is obsolete and defined for compatibility only
-typedef wxBookCtrlEvent wxToolbookEvent;
+#define wxToolbookEvent wxBookCtrlEvent
 typedef wxBookCtrlEventFunction wxToolbookEventFunction;
 #define wxToolbookEventHandler(func) wxBookCtrlEventHandler(func)
 

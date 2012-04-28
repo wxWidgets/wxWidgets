@@ -229,7 +229,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // wxTreebookEvent is obsolete and defined for compatibility only
-typedef wxBookCtrlEvent wxTreebookEvent;
+#define wxTreebookEvent wxBookCtrlEvent
 typedef wxBookCtrlEventFunction wxTreebookEventFunction;
 #define wxTreebookEventHandler(func) wxBookCtrlEventHandler(func)
 
