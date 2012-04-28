@@ -403,6 +403,7 @@ protected:
     void CreateLayout();
 
     void OnPaint(wxPaintEvent& event);
+    void OnEraseBackground(wxEraseEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseDown(wxMouseEvent& event);
@@ -544,6 +545,10 @@ private:
     int m_HistoryPos;
     // if this FLAG is false, items are not added to history
     bool m_HistoryOn;
+
+    // Flag used to communicate between OnPaint() and OnEraseBackground(), see
+    // the comments near its use.
+    bool m_isBgReallyErased;
 
     // standard mouse cursors
     static wxCursor *ms_cursorLink;
