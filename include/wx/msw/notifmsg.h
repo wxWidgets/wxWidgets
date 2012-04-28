@@ -23,8 +23,9 @@ public:
     wxNotificationMessage() { Init(); }
     wxNotificationMessage(const wxString& title,
                           const wxString& message = wxString(),
-                          wxWindow *parent = NULL)
-        : wxNotificationMessageBase(title, message, parent)
+                          wxWindow *parent = NULL,
+                          int flags = wxICON_INFORMATION)
+        : wxNotificationMessageBase(title, message, parent, flags)
     {
         Init();
     }
