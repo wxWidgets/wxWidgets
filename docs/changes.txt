@@ -133,6 +133,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   or equivalent function should now be done into wxApp::OnEventLoopEnter().
   See wxApp::OnEventLoopEnter() and wxApp::OnEventLoopExit() docs for more info.
 
+- wxDialogs get wxEVT_SIZE events immediately after creation in wxMSW, as with
+  wxFrames. This means that this event handler may be called earlier than in
+  2.8, check that all the controls are initialized before using them in it.
+
 - wxLoadFileSelector() now allows the user to select existing files only.
 
 - Erase background events are now not generated at all when background style is
