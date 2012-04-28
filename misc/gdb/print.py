@@ -36,6 +36,8 @@ class wxDateTimePrinter:
         # expressions directly so we need to convert it to long long first and
         # then cast to int explicitly to be able to use it as a timestamp.
         msec = self.val['m_time'].cast(gdb.lookup_type('long long'))
+        if msec == 0x8000000000000000:
+            return 'NONE'
         sec = int(msec / 1000)
         return datetime.datetime.fromtimestamp(sec).isoformat(' ')
 
