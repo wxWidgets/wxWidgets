@@ -60,6 +60,11 @@
 // what is considered "small index"?
 #define INDEX_IS_SMALL 1000
 
+// minimum width for content tree and index
+// (we cannot let minimum size be determined from content, else long titles
+//  make the help frame unusable)
+const wxCoord CONTENT_TREE_INDEX_MIN_WIDTH = 150;
+
 /* Motif defines this as a macro */
 #ifdef Below
 #undef Below
@@ -1033,6 +1038,9 @@ void wxHtmlHelpWindow::CreateContents()
             imaged[it->level] = true;
         }
     }
+
+    m_ContentsBox->SetMinSize(wxSize(CONTENT_TREE_INDEX_MIN_WIDTH,
+                                     m_ContentsBox->GetMinHeight()));
 }
 
 void wxHtmlHelpWindow::CreateIndex()
@@ -1056,6 +1064,9 @@ void wxHtmlHelpWindow::CreateIndex()
     for (size_t i = 0; i < cnt; i++)
         m_IndexList->Append((*m_mergedIndex)[i].name,
                             (char*)(&(*m_mergedIndex)[i]));
+
+    m_IndexList->SetMinSize(wxSize(CONTENT_TREE_INDEX_MIN_WIDTH,
+                                   m_IndexList->GetMinHeight()));
 }
 
 void wxHtmlHelpWindow::CreateSearch()
