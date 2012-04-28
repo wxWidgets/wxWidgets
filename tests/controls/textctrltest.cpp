@@ -31,6 +31,8 @@
 #include "asserthelper.h"
 #include "wx/uiaction.h"
 
+static const int TEXT_HEIGHT = 200;
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -49,11 +51,12 @@ private:
 
     CPPUNIT_TEST_SUITE( TextCtrlTestCase );
         wxTEXT_ENTRY_TESTS();
-        CPPUNIT_TEST( MultiLineReplace );
         WXUISIM_TEST( ReadOnly );
         WXUISIM_TEST( MaxLength );
         CPPUNIT_TEST( StreamInput );
         CPPUNIT_TEST( Redirector );
+        CPPUNIT_TEST( PseudoTestSwitchToMultiLineStyle );
+        CPPUNIT_TEST( MultiLineReplace );
         //WXUISIM_TEST( ProcessEnter );
         WXUISIM_TEST( Url );
         CPPUNIT_TEST( Style );
@@ -64,6 +67,11 @@ private:
         CPPUNIT_TEST( PositionToCoordsRich );
         CPPUNIT_TEST( PositionToCoordsRich2 );
     CPPUNIT_TEST_SUITE_END();
+
+    void PseudoTestSwitchToMultiLineStyle()
+    {
+        ms_style = wxTE_MULTILINE;
+    }
 
     void MultiLineReplace();
     void ReadOnly();
@@ -82,7 +90,13 @@ private:
 
     void DoPositionToCoordsTestWithStyle(long style);
 
+    // Create the control with the following styles added to ms_style which may
+    // (or not) already contain wxTE_MULTILINE.
+    void CreateText(long extraStyles);
+
     wxTextCtrl *m_text;
+
+    static long ms_style;
 
     DECLARE_NO_COPY_CLASS(TextCtrlTestCase)
 };
@@ -97,9 +111,24 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TextCtrlTestCase, "TextCtrlTestCase" );
 // test initialization
 // ----------------------------------------------------------------------------
 
+// This is 0 initially and set to wxTE_MULTILINE later to allow running the
+// same tests for both single and multi line controls.
+long TextCtrlTestCase::ms_style = 0;
+
+void TextCtrlTestCase::CreateText(long extraStyles)
+{
+    wxSize size;
+    if ( ms_style == wxTE_MULTILINE )
+        size = wxSize(400, TEXT_HEIGHT);
+
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, size,
+                            ms_style | extraStyles);
+}
+
 void TextCtrlTestCase::setUp()
 {
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+    CreateText(ms_style);
 }
 
 void TextCtrlTestCase::tearDown()
@@ -113,12 +142,6 @@ void TextCtrlTestCase::tearDown()
 
 void TextCtrlTestCase::MultiLineReplace()
 {
-    // we need a multiline control for this test so recreate it
-    delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize,
-                            wxTE_MULTILINE);
-
     m_text->SetValue("Hello replace\n"
                     "0123456789012");
     m_text->SetInsertionPoint(0);
@@ -133,9 +156,6 @@ void TextCtrlTestCase::MultiLineReplace()
     m_text->Replace(13, -1, "");
     CPPUNIT_ASSERT_EQUAL("Hello changed", m_text->GetValue());
     CPPUNIT_ASSERT_EQUAL(13, m_text->GetInsertionPoint());
-
-    delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
 void TextCtrlTestCase::ReadOnly()
@@ -143,9 +163,7 @@ void TextCtrlTestCase::ReadOnly()
 #if wxUSE_UIACTIONSIMULATOR
     // we need a read only control for this test so recreate it
     delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize,
-                            wxTE_READONLY);
+    CreateText(wxTE_READONLY);
 
     EventCounter updated(m_text, wxEVT_COMMAND_TEXT_UPDATED);
 
@@ -166,9 +184,6 @@ void TextCtrlTestCase::ReadOnly()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_text->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
-
-    delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
 #endif
 }
 
@@ -293,9 +308,7 @@ void TextCtrlTestCase::ProcessEnter()
 
     // we need a text control with wxTE_PROCESS_ENTER for this test
     delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize,
-                            wxTE_PROCESS_ENTER);
+    CreateText(wxTE_PROCESS_ENTER);
 
     m_text->SetFocus();
 
@@ -311,9 +324,7 @@ void TextCtrlTestCase::Url()
 {
 #if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
     delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize,
-                            wxTE_MULTILINE | wxTE_RICH | wxTE_AUTO_URL);
+    CreateText(wxTE_RICH | wxTE_AUTO_URL);
 
     EventCounter url(m_text, wxEVT_COMMAND_TEXT_URL);
 
@@ -333,8 +344,7 @@ void TextCtrlTestCase::Style()
 #ifndef __WXOSX__
     delete m_text;
     // We need wxTE_RICH under windows for style support
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize, wxTE_RICH);
+    CreateText(wxTE_RICH);
 
     // Red text on a white background
     m_text->SetDefaultStyle(wxTextAttr(*wxRED, *wxWHITE));
@@ -390,9 +400,7 @@ void TextCtrlTestCase::FontStyle()
     // We need wxTE_RICH under MSW and wxTE_MULTILINE under GTK for style
     // support so recreate the control with these styles.
     delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize,
-                            wxTE_MULTILINE | wxTE_RICH);
+    CreateText(wxTE_RICH);
 
     // Check that we get back the same font from GetStyle() after setting it
     // with SetDefaultStyle().
@@ -443,10 +451,6 @@ void TextCtrlTestCase::FontStyle()
 
 void TextCtrlTestCase::Lines()
 {
-    delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxSize(400, 200), wxTE_MULTILINE);
-
     m_text->SetValue("line1\nline2\nlong long line 3");
     m_text->Refresh();
     m_text->Update();
@@ -477,11 +481,6 @@ void TextCtrlTestCase::Lines()
 
 void TextCtrlTestCase::LogTextCtrl()
 {
-    delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxSize(400, 200),
-                            wxTE_MULTILINE);
-
     CPPUNIT_ASSERT(m_text->IsEmpty());
 
     wxLogTextCtrl* logtext = new wxLogTextCtrl(m_text);
@@ -512,12 +511,8 @@ void TextCtrlTestCase::PositionToCoordsRich2()
 
 void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
 {
-    static const int TEXT_HEIGHT = 200;
-
     delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxSize(400, TEXT_HEIGHT),
-                            wxTE_MULTILINE | style);
+    CreateText(style);
 
     // Asking for invalid index should fail.
     WX_ASSERT_FAILS_WITH_ASSERT( m_text->PositionToCoords(1) );
