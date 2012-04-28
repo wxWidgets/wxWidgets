@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-24 09:56+0200\n"
 "PO-Revision-Date: 2006-03-04 12:54+0100\n"
-"Last-Translator: Christian Buck <chbuck@gmail.com>\n"
+"Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -203,7 +203,7 @@ msgstr "&Aktuelle Größe"
 
 #: ../src/richtext/richtextindentspage.cpp:296
 msgid "&After a paragraph:"
-msgstr ""
+msgstr "&Nach einem Absatz"
 
 #: ../src/richtext/richtextliststylepage.cpp:318
 #: ../src/richtext/richtextindentspage.cpp:138
@@ -234,7 +234,7 @@ msgstr ""
 
 #: ../src/richtext/richtextindentspage.cpp:284
 msgid "&Before a paragraph:"
-msgstr ""
+msgstr "&Vor einem Absatz"
 
 #: ../src/common/stockitem.cpp:113
 msgid "&Bold"
@@ -308,7 +308,7 @@ msgstr "&Runter"
 
 #: ../src/common/stockitem.cpp:120
 msgid "&Edit"
-msgstr ""
+msgstr "&Bearbeiten"
 
 #: ../src/richtext/richtextstyledlg.cpp:249
 #, fuzzy
@@ -372,7 +372,7 @@ msgstr ""
 #: ../src/richtext/richtextindentspage.cpp:177
 #, fuzzy
 msgid "&Indeterminate"
-msgstr "&Unterstrichen"
+msgstr "&Unbestimmt"
 
 #: ../src/common/stockitem.cpp:131
 msgid "&Index"
@@ -391,12 +391,12 @@ msgstr "Bündig"
 #: ../src/richtext/richtextliststylepage.cpp:327
 #: ../src/richtext/richtextindentspage.cpp:149
 msgid "&Left"
-msgstr ""
+msgstr "&Links"
 
 #: ../src/richtext/richtextliststylepage.cpp:380
 #: ../src/richtext/richtextindentspage.cpp:205
 msgid "&Left:"
-msgstr ""
+msgstr "&Links:"
 
 #: ../src/richtext/richtextliststylepage.cpp:182
 msgid "&List level:"
@@ -425,7 +425,7 @@ msgstr "&Weiter >"
 
 #: ../src/generic/tipdlg.cpp:274
 msgid "&Next Tip"
-msgstr "&Nächster Tip"
+msgstr "&Nächster Tipp"
 
 #: ../src/richtext/richtextstylepage.cpp:122
 #, fuzzy
@@ -442,7 +442,7 @@ msgstr "Bemerkungen:"
 
 #: ../src/richtext/richtextbulletspage.cpp:262
 msgid "&Number:"
-msgstr ""
+msgstr "&Nummer"
 
 #: ../src/common/stockitem.cpp:139 ../src/generic/fontdlgg.cpp:382
 #: ../src/generic/fontdlgg.cpp:389 ../src/mac/carbon/fontdlg.cpp:531
@@ -6546,7 +6546,7 @@ msgstr "ausführliche Log-Nachrichten erstellen"
 #: ../src/richtext/richtextbuffer.cpp:8705
 #: ../src/richtext/richtextbuffer.cpp:8776
 msgid "image"
-msgstr ""
+msgstr "Bild"
 
 #: ../src/common/tarstrm.cpp:793
 msgid "incomplete header block in tar"
@@ -6748,7 +6748,7 @@ msgstr "morgen"
 
 #: ../src/gtk/aboutdlg.cpp:153
 msgid "translator-credits"
-msgstr ""
+msgstr "Dank an die Übersetzer"
 
 #: ../src/common/datetime.cpp:4024
 msgid "twelfth"
