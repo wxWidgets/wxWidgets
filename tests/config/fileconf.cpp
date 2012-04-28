@@ -71,6 +71,7 @@ private:
         CPPUNIT_TEST( Save );
         CPPUNIT_TEST( DeleteEntry );
         CPPUNIT_TEST( DeleteAndWriteEntry );
+        CPPUNIT_TEST( DeleteLastRootEntry );
         CPPUNIT_TEST( DeleteGroup );
         CPPUNIT_TEST( DeleteAll );
         CPPUNIT_TEST( RenameEntry );
@@ -95,6 +96,7 @@ private:
     void Save();
     void DeleteEntry();
     void DeleteAndWriteEntry();
+    void DeleteLastRootEntry();
     void DeleteGroup();
     void DeleteAll();
     void RenameEntry();
@@ -374,6 +376,24 @@ void FileConfigTestCase::DeleteAndWriteEntry()
     fc.DeleteEntry("/root/group1/subentry");
     fc.DeleteEntry("/root/group1/subentry3");
     wxVERIFY_FILECONFIG( "", fc );
+}
+
+void FileConfigTestCase::DeleteLastRootEntry()
+{
+    // This tests for the bug which occurred when the last entry of the root
+    // group was deleted: this corrupted internal state and resulted in a crash
+    // after trying to write the just deleted entry again.
+    wxStringInputStream sis("");
+    wxFileConfig fc(sis);
+
+    fc.Write("key", "value");
+    wxVERIFY_FILECONFIG( "key=value\n", fc );
+
+    fc.DeleteEntry("key");
+    wxVERIFY_FILECONFIG( "", fc );
+
+    fc.Write("key", "value");
+    wxVERIFY_FILECONFIG( "key=value\n", fc );
 }
 
 void FileConfigTestCase::DeleteGroup()
