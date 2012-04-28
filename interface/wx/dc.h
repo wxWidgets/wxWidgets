@@ -1548,10 +1548,12 @@ public:
 /**
     @class wxDCClipper
 
-    wxDCClipper is a small helper class for setting a clipping region on a wxDC
-    and unsetting it automatically. An object of wxDCClipper class is typically
-    created on the stack so that it is automatically destroyed when the object
-    goes out of scope. A typical usage example:
+    wxDCClipper is a helper class for setting a clipping region on a wxDC
+    during its lifetime.
+
+    An object of wxDCClipper class is typically created on the stack so that it
+    is automatically destroyed when the object goes out of scope. A typical
+    usage example:
 
     @code
     void MyFunction(wxDC& dc)
@@ -1567,6 +1569,12 @@ public:
         // ... drawing functions here are not affected by clipping rect ...
     }
     @endcode
+
+    @note Unlike other similar classes such as wxDCFontChanger, wxDCClipper
+        currently doesn't restore the previously active clipping region when it
+        is destroyed but simply resets clipping on the associated wxDC. This
+        may be changed in the future wxWidgets versions but has to be taken
+        into account explicitly in the current one.
 
     @library{wxcore}
     @category{gdi}
