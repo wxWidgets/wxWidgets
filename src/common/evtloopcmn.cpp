@@ -105,12 +105,14 @@ bool wxEventLoopManual::ProcessEvents()
     // executed)
     if ( wxTheApp )
     {
+        const bool hadExitedBefore = m_shouldExit;
+
         wxTheApp->ProcessPendingEvents();
 
         // One of the pending event handlers could have decided to exit the
         // loop so check for the flag before trying to dispatch more events
         // (which could block indefinitely if no more are coming).
-        if ( m_shouldExit )
+        if ( !hadExitedBefore && m_shouldExit )
         {
             // We still need to dispatch any remaining pending events, just as
             // we do in the event loop in Run() if the loop is exited from a
