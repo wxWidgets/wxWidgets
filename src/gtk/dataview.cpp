@@ -270,6 +270,14 @@ public:
 
     bool IsSorted() const                       { return m_sort_column >= 0; }
 
+    // Should we be sorted either because we have a configured sort column or
+    // because we have a default sort order?
+    bool ShouldBeSorted() const
+    {
+        return IsSorted() || GetDataViewModel()->HasDefaultCompare();
+    }
+
+
     // accessors
     wxDataViewModel* GetDataViewModel() { return m_wx_model; }
     const wxDataViewModel* GetDataViewModel() const { return m_wx_model; }
@@ -360,7 +368,7 @@ public:
 
             m_children.Add( id );
 
-            if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
+            if (m_internal->ShouldBeSorted())
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
@@ -369,7 +377,7 @@ public:
 
     void InsertNode( wxGtkTreeModelNode* child, unsigned pos )
         {
-            if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
+            if (m_internal->ShouldBeSorted())
             {
                 AddNode(child);
                 return;
@@ -407,7 +415,7 @@ public:
         {
             m_children.Insert( id, pos );
 
-            if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
+            if (m_internal->ShouldBeSorted())
             {
                 gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
