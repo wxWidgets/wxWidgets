@@ -3594,6 +3594,7 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
     event.SetItem( item );
     event.SetModel( m_wx_model );
     event.SetDataFormat(gtk_selection_data_get_target(selection_data));
+    event.SetDataSize(gtk_selection_data_get_length(selection_data));
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
 
