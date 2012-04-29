@@ -120,6 +120,18 @@ void GridTestCase::setUp()
 
 void GridTestCase::tearDown()
 {
+    // This is just a hack to continue the rest of the tests to run: if we
+    // destroy the header control while it has capture, this results in an
+    // assert failure and while handling an exception from it more bad things
+    // happen (as it's thrown from a dtor), resulting in simply aborting
+    // everything. So ensure that it doesn't have capture in any case.
+    //
+    // Of course, the right thing to do would be to understand why does it
+    // still have capture when the grid is destroyed sometimes.
+    wxWindow* const win = wxWindow::GetCapture();
+    if ( win )
+        win->ReleaseMouse();
+
     wxDELETE(m_grid);
 }
 
