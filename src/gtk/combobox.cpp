@@ -292,6 +292,10 @@ void wxComboBox::SetString(unsigned int n, const wxString& text)
         // with wxMSW and also because it makes sense as leaving the old string
         // in the text but not in the list would be confusing to the user.
         SetValue(text);
+
+        // And we need to keep the selection unchanged, modifying the item is
+        // not supposed to deselect it.
+        SetSelection(n);
     }
 }
 
