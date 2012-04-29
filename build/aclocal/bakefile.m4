@@ -558,16 +558,7 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
 
         if test "x$GCC" = "xyes"; then
             DEPSMODE=gcc
-            case "${BAKEFILE_HOST}" in
-                *-*-darwin* )
-                    dnl -cpp-precomp (the default) conflicts with -MMD option
-                    dnl used by bk-deps (see also http://developer.apple.com/documentation/Darwin/Conceptual/PortingUnix/compiling/chapter_4_section_3.html)
-                    DEPSFLAG="-no-cpp-precomp -MMD"
-                ;;
-                * )
-                    DEPSFLAG="-MMD"
-                ;;
-            esac
+            DEPSFLAG="-MMD"
             AC_MSG_RESULT([gcc])
         elif test "x$MWCC" = "xyes"; then
             DEPSMODE=mwcc

@@ -53827,14 +53827,7 @@ echo "${ECHO_T}disabled" >&6; }
 
         if test "x$GCC" = "xyes"; then
             DEPSMODE=gcc
-            case "${BAKEFILE_HOST}" in
-                *-*-darwin* )
-                                                            DEPSFLAG="-no-cpp-precomp -MMD"
-                ;;
-                * )
-                    DEPSFLAG="-MMD"
-                ;;
-            esac
+            DEPSFLAG="-MMD"
             { echo "$as_me:$LINENO: result: gcc" >&5
 echo "${ECHO_T}gcc" >&6; }
         elif test "x$MWCC" = "xyes"; then
