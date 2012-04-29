@@ -15,7 +15,7 @@
         <ldflags>$(CPPUNIT_LIBS)</ldflags>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
-            <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW'">
+            <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
                 <sources>dummy.cpp</sources>
                 <precomp-headers-gen>dummy.cpp</precomp-headers-gen>
             </if>
