@@ -2997,35 +2997,14 @@ public:
     void SetDataObject( wxDataObject *obj );
 
     /**
-        Used internally. Gets associated wxDataObject for data transfer
-        within a drag operation.
-    */
-    wxDataObject *GetDataObject() const;
-
-    /**
-        Used internally. Sets the wxDataFormat during a drop operation.
-    */
-    void SetDataFormat( const wxDataFormat &format );
-
-    /**
         Gets the wxDataFormat during a drop operation.
     */
     wxDataFormat GetDataFormat() const;
 
     /**
-        Used internally. Sets the data size for a drop data transfer.
-    */
-    void SetDataSize( size_t size );
-
-    /**
         Gets the data size for a drop data transfer.
     */
     size_t GetDataSize() const;
-
-    /**
-        Used internally. Sets the data buffer for a drop data transfer.
-    */
-    void SetDataBuffer( void* buf );
 
     /**
         Gets the data buffer for a drop data transfer.
