@@ -268,7 +268,7 @@ public:
     void SetDataViewSortColumn( wxDataViewColumn *column ) { m_dataview_sort_column = column; }
     wxDataViewColumn *GetDataViewSortColumn()   { return m_dataview_sort_column; }
 
-    bool IsSorted()                             { return (m_sort_column >= 0); }
+    bool IsSorted() const                       { return m_sort_column >= 0; }
 
     // accessors
     wxDataViewModel* GetDataViewModel() { return m_wx_model; }
