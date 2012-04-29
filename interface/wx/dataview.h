@@ -3012,6 +3012,41 @@ public:
     void *GetDataBuffer() const;
 
     /**
+        Specify the kind of the drag operation to perform.
+
+        This method can be used inside a wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG
+        handler in order to configure the drag operation. Valid values are
+        ::wxDrag_CopyOnly (default), ::wxDrag_AllowMove (allow the data to be
+        moved) and ::wxDrag_DefaultMove.
+
+        Currently it is only honoured by the generic version of wxDataViewCtrl
+        (used e.g. under MSW) and not supported by the native GTK and OS X
+        versions.
+
+        @see GetDropEffect()
+
+        @since 2.9.4
+    */
+    void SetDragFlags(int flags);
+
+    /**
+        Returns the effect the user requested to happen to the dropped data.
+
+        This function can be used inside
+        wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE and
+        wxEVT_COMMAND_DATAVIEW_ITEM_DROP handlers and returns whether the user
+        is trying to copy (the return value is ::wxDragCopy) or move (if the
+        return value is ::wxDragMove) the data.
+
+        Currently this is only available when using the generic version of
+        wxDataViewCtrl (used e.g. under MSW) and always returns ::wxDragNone in
+        the GTK and OS X native versions.
+
+        @since 2.9.4
+    */
+    wxDragResult GetDropEffect() const;
+
+    /**
         Return the first row that will be displayed.
     */
     int GetCacheFrom() const;

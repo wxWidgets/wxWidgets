@@ -841,6 +841,7 @@ void MyFrame::OnBeginDrag( wxDataViewEvent &event )
     wxTextDataObject *obj = new wxTextDataObject;
     obj->SetText( node->m_title );
     event.SetDataObject( obj );
+    event.SetDragFlags(wxDrag_AllowMove); // allows both copy and move
 }
 
 void MyFrame::OnDropPossible( wxDataViewEvent &event )

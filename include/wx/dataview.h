@@ -19,6 +19,7 @@
 #include "wx/textctrl.h"
 #include "wx/headercol.h"
 #include "wx/variant.h"
+#include "wx/dnd.h"             // For wxDragResult declaration only.
 #include "wx/dynarray.h"
 #include "wx/icon.h"
 #include "wx/itemid.h"
@@ -761,7 +762,9 @@ public:
 #if wxUSE_DRAG_AND_DROP
         , m_dataObject(NULL),
         m_dataBuffer(NULL),
-        m_dataSize(0)
+        m_dataSize(0),
+        m_dragFlags(0),
+        m_dropEffect(wxDragNone)
 #endif
         { }
 
@@ -780,7 +783,9 @@ public:
         , m_dataObject(event.m_dataObject),
         m_dataFormat(event.m_dataFormat),
         m_dataBuffer(event.m_dataBuffer),
-        m_dataSize(event.m_dataSize)
+        m_dataSize(event.m_dataSize),
+        m_dragFlags(event.m_dragFlags),
+        m_dropEffect(event.m_dropEffect)
 #endif
         { }
 
@@ -826,6 +831,10 @@ public:
     size_t GetDataSize() const { return m_dataSize; }
     void SetDataBuffer( void* buf ) { m_dataBuffer = buf;}
     void *GetDataBuffer() const { return m_dataBuffer; }
+    void SetDragFlags( int flags ) { m_dragFlags = flags; }
+    int GetDragFlags() const { return m_dragFlags; }
+    void SetDropEffect( wxDragResult effect ) { m_dropEffect = effect; }
+    wxDragResult GetDropEffect() const { return m_dropEffect; }
 #endif // wxUSE_DRAG_AND_DROP
 
     virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
@@ -847,6 +856,9 @@ protected:
     wxDataFormat        m_dataFormat;
     void*               m_dataBuffer;
     size_t              m_dataSize;
+
+    int                 m_dragFlags;
+    wxDragResult        m_dropEffect;
 #endif // wxUSE_DRAG_AND_DROP
 
 private:

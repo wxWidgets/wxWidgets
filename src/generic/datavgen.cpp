@@ -1490,6 +1490,7 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x,
     event.SetItem( item );
     event.SetModel( model );
     event.SetDataFormat( format );
+    event.SetDropEffect( def );
     if (!m_owner->HandleWindowEvent( event ))
     {
         RemoveDropHint();
@@ -1566,6 +1567,7 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
     event.SetDataFormat( format );
     event.SetDataSize( obj->GetSize() );
     event.SetDataBuffer( obj->GetData() );
+    event.SetDropEffect( def );
     if (!m_owner->HandleWindowEvent( event ))
         return wxDragNone;
 
@@ -4083,7 +4085,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
             wxDataViewDropSource drag( this, drag_item_row );
             drag.SetData( *obj );
-            /* wxDragResult res = */ drag.DoDragDrop();
+            /* wxDragResult res = */ drag.DoDragDrop(event.GetDragFlags());
             delete obj;
         }
         return;

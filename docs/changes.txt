@@ -525,6 +525,7 @@ All (GUI):
 - Added wxTimePickerCtrl::Get/SetTime().
 - Fix WXK_MENU handling in wxStyledTextCtrl under wxGTK (cantabile).
 - Added wxAcceleratorEntry::ToRawString() (Armel Asselin).
+- Added wxDataViewEvent::SetDragFlags() and GetDropEffect() (Friedrich).
 
 
 GTK:
