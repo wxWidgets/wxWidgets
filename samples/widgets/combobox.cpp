@@ -481,11 +481,7 @@ void ComboboxWidgetsPage::OnButtonChange(wxCommandEvent& WXUNUSED(event))
     int sel = m_combobox->GetSelection();
     if ( sel != wxNOT_FOUND )
     {
-#ifndef __WXGTK__
         m_combobox->SetString(sel, m_textChange->GetValue());
-#else
-        wxLogMessage(wxT("Not implemented in wxGTK"));
-#endif
     }
 }
 
