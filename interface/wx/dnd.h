@@ -7,6 +7,16 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Possible flags for drag and drop operations.
+ */
+enum
+{
+    wxDrag_CopyOnly    = 0, ///< Allow only copying.
+    wxDrag_AllowMove   = 1, ///< Allow moving too (copying is always allowed).
+    wxDrag_DefaultMove = 3  ///< Allow moving and make it default operation.
+};
+
+/**
     @class wxTextDropTarget
 
     A predefined drop target for dealing with text data.
@@ -286,10 +296,11 @@ public:
         example.
 
         @param flags
-            If wxDrag_AllowMove is included in the flags, data may be moved and
-            not only copied (default). If wxDrag_DefaultMove is specified
-            (which includes the previous flag), this is even the default
-            operation.
+            If ::wxDrag_AllowMove is included in the flags, data may be moved
+            and not only copied as is the case for the default
+            ::wxDrag_CopyOnly. If ::wxDrag_DefaultMove is specified
+            (which includes the previous flag), moving is not only possible but
+            becomes the default operation.
 
         @return The operation requested by the user, may be ::wxDragCopy,
                  ::wxDragMove, ::wxDragLink, ::wxDragCancel or ::wxDragNone if
