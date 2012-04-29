@@ -87,6 +87,9 @@ struct CrtAssertFailure
 
 #if wxDEBUG_LEVEL
 
+// Information about the last not yet handled assertion.
+static wxString s_lastAssertMessage;
+
 static wxString FormatAssertMessage(const wxString& file,
                                     int line,
                                     const wxString& func,
@@ -110,27 +113,42 @@ static void TestAssertHandler(const wxString& file,
     // fail or whether we need to abort (in this case "msg" will contain the
     // explanation why did we decide to do it).
     wxString abortReason;
+
+    const wxString
+        assertMessage = FormatAssertMessage(file, line, func, cond, msg);
+
     if ( !wxIsMainThread() )
     {
         // Exceptions thrown from worker threads are not caught currently and
         // so we'd just die without any useful information -- abort instead.
-        abortReason = "in a worker thread";
+        abortReason << assertMessage << "in a worker thread.";
     }
     else if ( uncaught_exception() )
     {
         // Throwing while already handling an exception would result in
         // terminate() being called and we wouldn't get any useful information
         // about why the test failed then.
-        abortReason = "while handling an exception";
+        if ( s_lastAssertMessage.empty() )
+        {
+            abortReason << assertMessage << "while handling an exception";
+        }
+        else // In this case the exception is due to a previous assert.
+        {
+            abortReason << s_lastAssertMessage << "\n  and another "
+                        << assertMessage << " while handling it.";
+        }
     }
     else // Can "safely" throw from here.
     {
+        // Remember this in case another assert happens while handling this
+        // exception: we want to show the original assert as it's usually more
+        // useful to determine the real root of the problem.
+        s_lastAssertMessage = assertMessage;
+
         throw TestAssertFailure(file, line, func, cond, msg);
     }
 
-    wxFprintf(stderr, "%s %s -- aborting.",
-              FormatAssertMessage(file, line, func, cond, msg),
-              abortReason);
+    wxFputs(abortReason, stderr);
     fflush(stderr);
     _exit(-1);
 }
@@ -149,8 +167,8 @@ static string GetExceptionMessage()
 #if wxDEBUG_LEVEL
     catch ( TestAssertFailure& e )
     {
-        msg << FormatAssertMessage(e.m_file, e.m_line, e.m_func,
-                                   e.m_cond, e.m_msg);
+        msg = s_lastAssertMessage;
+        s_lastAssertMessage.clear();
     }
 #endif // wxDEBUG_LEVEL
 #ifdef wxUSE_VC_CRTDBG
