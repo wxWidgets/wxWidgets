@@ -242,10 +242,18 @@ private:
     void UpdateColWidths();
 
     wxDataViewColumnList      m_cols;
-    // cached column best widths or 0 if not computed, values are for
+    // cached column best widths information, values are for
     // respective columns from m_cols and the arrays have same size
-    wxVector<int>             m_colsBestWidths;
-    // m_colsBestWidths partially invalid, needs recomputing
+    struct CachedColWidthInfo
+    {
+        CachedColWidthInfo() : width(0), dirty(true) {}
+        int width;  // cached width or 0 if not computed
+        bool dirty; // column was invalidated, header needs updating
+    };
+    wxVector<CachedColWidthInfo> m_colsBestWidths;
+    // This indicates that at least one entry in m_colsBestWidths has 'dirty'
+    // flag set. It's cheaper to check one flag in OnInternalIdle() than to
+    // iterate over m_colsBestWidths to check if anything needs to be done.
     bool                      m_colsDirty;
 
     wxDataViewModelNotifier  *m_notifier;

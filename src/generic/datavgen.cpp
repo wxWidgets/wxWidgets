@@ -4547,7 +4547,7 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
         return false;
 
     m_cols.Append( col );
-    m_colsBestWidths.push_back(0);
+    m_colsBestWidths.push_back(CachedColWidthInfo());
     OnColumnsCountChanged();
     return true;
 }
@@ -4558,7 +4558,7 @@ bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
         return false;
 
     m_cols.Insert( col );
-    m_colsBestWidths.insert(m_colsBestWidths.begin(), 0);
+    m_colsBestWidths.insert(m_colsBestWidths.begin(), CachedColWidthInfo());
     OnColumnsCountChanged();
     return true;
 }
@@ -4569,7 +4569,7 @@ bool wxDataViewCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
         return false;
 
     m_cols.Insert( pos, col );
-    m_colsBestWidths.insert(m_colsBestWidths.begin() + pos, 0);
+    m_colsBestWidths.insert(m_colsBestWidths.begin() + pos, CachedColWidthInfo());
     OnColumnsCountChanged();
     return true;
 }
@@ -4644,8 +4644,8 @@ int wxDataViewCtrl::GetColumnIndex(const wxDataViewColumn *column) const
 
 unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
 {
-    if ( m_colsBestWidths[idx] != 0 )
-        return m_colsBestWidths[idx];
+    if ( m_colsBestWidths[idx].width != 0 )
+        return m_colsBestWidths[idx].width;
 
     const int count = m_clientArea->GetRowCount();
     wxDataViewColumn *column = GetColumn(idx);
@@ -4795,7 +4795,7 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
     if ( max_width > 0 )
         max_width += 2 * PADDING_RIGHTLEFT;
 
-    const_cast<wxDataViewCtrl*>(this)->m_colsBestWidths[idx] = max_width;
+    const_cast<wxDataViewCtrl*>(this)->m_colsBestWidths[idx].width = max_width;
     return max_width;
 }
 
@@ -4840,12 +4840,14 @@ bool wxDataViewCtrl::ClearColumns()
 
 void wxDataViewCtrl::InvalidateColBestWidth(int idx)
 {
-    m_colsBestWidths[idx] = 0;
+    m_colsBestWidths[idx].width = 0;
+    m_colsBestWidths[idx].dirty = true;
     m_colsDirty = true;
 }
 
 void wxDataViewCtrl::InvalidateColBestWidths()
 {
+    // mark all columns as dirty:
     m_colsBestWidths.clear();
     m_colsBestWidths.resize(m_cols.size());
     m_colsDirty = true;
@@ -4853,14 +4855,27 @@ void wxDataViewCtrl::InvalidateColBestWidths()
 
 void wxDataViewCtrl::UpdateColWidths()
 {
+    m_colsDirty = false;
+
     if ( !m_headerArea )
         return;
 
     const unsigned len = m_colsBestWidths.size();
     for ( unsigned i = 0; i < len; i++ )
     {
-        if ( m_colsBestWidths[i] == 0 )
+        // Note that we have to have an explicit 'dirty' flag here instead of
+        // checking if the width==0, as is done in GetBestColumnWidth().
+        //
+        // Testing width==0 wouldn't work correctly if some code called
+        // GetWidth() after col. width invalidation but before
+        // wxDataViewCtrl::UpdateColWidths() was called at idle time. This
+        // would result in the header's column width getting out of sync with
+        // the control itself.
+        if ( m_colsBestWidths[i].dirty )
+        {
             m_headerArea->UpdateColumn(i);
+            m_colsBestWidths[i].dirty = false;
+        }
     }
 }
 
@@ -4869,10 +4884,7 @@ void wxDataViewCtrl::OnInternalIdle()
     wxDataViewCtrlBase::OnInternalIdle();
 
     if ( m_colsDirty )
-    {
-        m_colsDirty = false;
         UpdateColWidths();
-    }
 }
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
