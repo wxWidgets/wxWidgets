@@ -4718,6 +4718,8 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
                                   GetModel(), column->GetModelColumn(),
                                   m_clientArea->GetRowHeight());
 
+    calculator.UpdateWithWidth(column->GetMinWidth());
+
     if ( m_headerArea )
         calculator.UpdateWithWidth(m_headerArea->GetColumnTitleWidth(*column));
 
