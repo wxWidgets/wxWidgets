@@ -5082,14 +5082,20 @@ void wxDataViewCtrl::Expand( const wxDataViewItem & item )
 
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
+    {
         m_clientArea->Expand(row);
+        InvalidateColBestWidths();
+    }
 }
 
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 {
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
+    {
         m_clientArea->Collapse(row);
+        InvalidateColBestWidths();
+    }
 }
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
