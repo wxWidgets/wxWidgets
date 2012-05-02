@@ -127,6 +127,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
+    EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -340,7 +341,10 @@ bool wxToolBar::Create(wxWindow *parent,
     // in WM_ERASEBKGND too (by default this won't be done but if the toolbar
     // has a non default background colour, then it would be used in both
     // places resulting in flicker)
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
+    if (wxApp::GetComCtl32Version() >= 600)
+    {
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+    }
 
     return true;
 }
@@ -1677,6 +1681,13 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     {
         event.Skip();
     }
+}
+
+// This handler is needed to fix problems with painting the background of
+// toolbar icons with comctl32.dll < 6.0.
+void wxToolBar::OnEraseBackground(wxEraseEvent& event)
+{
+    MSWDoEraseBackground(event.GetDC()->GetHDC());
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
