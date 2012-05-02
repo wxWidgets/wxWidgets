@@ -23,6 +23,9 @@ public:
 
     virtual void WakeUp();
 
+    void OSXUseLowLevelWakeup(bool useIt)
+        { m_osxLowLevelWakeUp = useIt ; }
+    
 protected:
     virtual int DoDispatchTimeout(unsigned long timeout);
 
@@ -39,6 +42,8 @@ protected:
     WXWindow m_dummyWindow;
     
     int m_modalNestedLevel;
+    
+    bool m_osxLowLevelWakeUp;
 };
 
 #endif // _WX_OSX_COCOA_EVTLOOP_H_
