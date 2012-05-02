@@ -14,6 +14,7 @@
 #if wxUSE_COMBOBOX
 
 #include "wx/combobox.h"
+#include "wx/evtloop.h"
 
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
@@ -83,7 +84,14 @@
             // For some reason, wxComboBox::GetValue will not return the newly selected item 
             // while we're inside this callback, so use AddPendingEvent to make sure
             // GetValue() returns the right value.
+            wxEventLoop* const loop = (wxEventLoop*) wxEventLoopBase::GetActive();
+            if ( loop )
+                loop->OSXUseLowLevelWakeup(true);
+
             wxpeer->GetEventHandler()->AddPendingEvent( event );
+
+            if ( loop )
+                loop->OSXUseLowLevelWakeup(false);
         }
     }
 }
