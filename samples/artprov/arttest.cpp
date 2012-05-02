@@ -63,8 +63,8 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
-    ID_Quit = wxID_HIGHEST,
-    ID_Logs,
+    ID_Quit = wxID_EXIT,
+    ID_Logs = wxID_HIGHEST+1,
     ID_Browser,
     ID_PlugProvider
 };
