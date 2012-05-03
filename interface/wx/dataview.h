@@ -1690,11 +1690,14 @@ public:
 
 
 /**
-    @class wxDataViewChoiceRenderer
+    A wxDataViewCtrl renderer using wxChoice control and values of strings in
+    it.
 
     This class is used by wxDataViewCtrl to render choice controls.
     It stores a string so that SetValue() and GetValue() operate
     on a variant holding a string.
+
+    @see wxDataViewChoiceByIndexRenderer
 
     @library{wxadv}
     @category{dvc}
@@ -1714,11 +1717,33 @@ public:
         Returns the choice referred to by index.
     */
     wxString GetChoice(size_t index) const;
-    
+
     /**
         Returns all choices.
     */
     const wxArrayString& GetChoices() const;
+};
+
+
+/**
+    A wxDataViewCtrl renderer using wxChoice control and indexes into it.
+
+    Unlike its base wxDataViewChoiceRenderer class, this one stores the choice
+    index, i.e. an @c int, in the variant used by its SetValue() and
+    GetValue().
+
+    @library{wxadv}
+    @category{dvc}
+*/
+class wxDataViewChoiceByIndexRenderer : public wxDataViewChoiceRenderer
+{
+public:
+    /**
+        The ctor.
+    */
+    wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
+                              wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                              int alignment = wxDVR_DEFAULT_ALIGNMENT );
 };
 
 
