@@ -17,47 +17,6 @@ enum
 };
 
 /**
-    @class wxTextDropTarget
-
-    A predefined drop target for dealing with text data.
-
-    @library{wxcore}
-    @category{dnd}
-
-    @see @ref overview_dnd, wxDropSource, wxDropTarget, wxFileDropTarget
-*/
-class wxTextDropTarget : public wxDropTarget
-{
-public:
-    /**
-        Constructor.
-    */
-    wxTextDropTarget();
-
-    /**
-        See wxDropTarget::OnDrop(). This function is implemented appropriately
-        for text, and calls OnDropText().
-    */
-    virtual bool OnDrop(wxCoord x, wxCoord y);
-
-    /**
-        Override this function to receive dropped text.
-
-        @param x
-            The x coordinate of the mouse.
-        @param y
-            The y coordinate of the mouse.
-        @param data
-            The data being dropped: a wxString.
-
-        Return @true to accept the data, or @false to veto the operation.
-    */
-    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& data) = 0;
-};
-
-
-
-/**
     Result returned from a wxDropSource::DoDragDrop() call.
 */
 enum wxDragResult
@@ -69,6 +28,8 @@ enum wxDragResult
     wxDragLink,     ///< Operation is a drag-link.
     wxDragCancel    ///< The operation was cancelled by user (not an error).
 };
+
+
 
 /**
     @class wxDropTarget
@@ -109,23 +70,23 @@ public:
         associated with this drop target, calling its wxDataObject::SetData()
         method.
     */
-    virtual bool GetData() = 0;
+    virtual bool GetData();
 
     /**
         Called after OnDrop() returns @true. By default this will usually
-        GetData() and will return the suggested default value @a def.
+        GetData() and will return the suggested default value @a defResult.
     */
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) = 0;
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult defResult) = 0;
 
     /**
         Called when the mouse is being dragged over the drop target. By
-        default, this calls functions return the suggested return value @a def.
+        default, this calls functions return the suggested return value @a defResult.
 
         @param x
             The x coordinate of the mouse.
         @param y
             The y coordinate of the mouse.
-        @param def
+        @param defResult
             Suggested value for return value. Determined by SHIFT or CONTROL
             key states.
 
@@ -133,7 +94,7 @@ public:
                  feedback from the side of the drop source, typically in form
                  of changing the icon.
     */
-    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult defResult);
 
     /**
         Called when the user drops a data object on the target. Return @false
@@ -146,7 +107,7 @@ public:
 
         @return @true to accept the data, or @false to veto the operation.
     */
-    virtual bool OnDrop(wxCoord x, wxCoord y) = 0;
+    virtual bool OnDrop(wxCoord x, wxCoord y);
 
     /**
         Called when the mouse enters the drop target. By default, this calls
@@ -156,7 +117,7 @@ public:
             The x coordinate of the mouse.
         @param y
             The y coordinate of the mouse.
-        @param def
+        @param defResult
             Suggested default for return value. Determined by SHIFT or CONTROL
             key states.
 
@@ -164,7 +125,7 @@ public:
                  feedback from the side of the drop source, typically in form
                  of changing the icon.
     */
-    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult defResult);
 
     /**
         Called when the mouse leaves the drop target.
@@ -176,6 +137,22 @@ public:
         any previously associated data object.
     */
     void SetDataObject(wxDataObject* data);
+
+
+    /**
+       Sets the default action for drag and drop.  Use wxDragMove or
+       wxDragCopy to set deafult action to move or copy and use wxDragNone
+       (default) to set default action specified by initialization of draging
+       (see wxDropSource::DoDragDrop())
+    */
+    void SetDefaultAction(wxDragResult action);
+
+    /**
+       Returns default action for drag and drop or wxDragNone if this not
+       specified.
+    */
+    wxDragResult GetDefaultAction();
+
 };
 
 
@@ -347,6 +324,46 @@ public:
 
 
 /**
+    @class wxTextDropTarget
+
+    A predefined drop target for dealing with text data.
+
+    @library{wxcore}
+    @category{dnd}
+
+    @see @ref overview_dnd, wxDropSource, wxDropTarget, wxFileDropTarget
+*/
+class wxTextDropTarget : public wxDropTarget
+{
+public:
+    /**
+        Constructor.
+    */
+    wxTextDropTarget();
+
+    /**
+        See wxDropTarget::OnDrop(). This function is implemented appropriately
+        for text, and calls OnDropText().
+    */
+    virtual bool OnDrop(wxCoord x, wxCoord y);
+
+    /**
+        Override this function to receive dropped text.
+
+        @param x
+            The x coordinate of the mouse.
+        @param y
+            The y coordinate of the mouse.
+        @param data
+            The data being dropped: a wxString.
+
+        Return @true to accept the data, or @false to veto the operation.
+    */
+    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& data) = 0;
+};
+
+
+/**
     @class wxFileDropTarget
 
     This is a drop target which accepts files (dragged from File Manager or
@@ -409,6 +426,12 @@ public:
     @header{wx/dnd.h}
 */
 #define wxDROP_ICON(name)
+
+/**
+   Returns true if res indicates that something was done during a DnD operation,
+   i.e. is neither error nor none nor cancel.
+*/
+bool wxIsDragResultOk(wxDragResult res);
 
 //@}
 
