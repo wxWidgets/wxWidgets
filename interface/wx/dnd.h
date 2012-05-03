@@ -310,9 +310,23 @@ public:
         @param res
             The drag result to set the icon for.
         @param cursor
-            The ion to show when this drag result occurs.
+            The icon to show when this drag result occurs.
+
+        @onlyfor{wxmsw,wxosx}
     */
     void SetCursor(wxDragResult res, const wxCursor& cursor);
+
+    /**
+        Set the icon to use for a certain drag result.
+
+        @param res
+            The drag result to set the icon for.
+        @param icon
+            The icon to show when this drag result occurs.
+
+        @onlyfor{wxgtk}
+    */
+    void SetIcon(wxDragResult res, const wxIcon& icon);
 
     /**
         Sets the data wxDataObject associated with the drop source. This will
