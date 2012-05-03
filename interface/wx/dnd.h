@@ -214,9 +214,9 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = NULL,
-                 const wxCursor& iconCopy = wxNullIcon,
-                 const wxCursor& iconMove = wxNullIcon,
-                 const wxCursor& iconNone = wxNullIcon);
+                 const wxCursor& iconCopy = wxNullCursor,
+                 const wxCursor& iconMove = wxNullCursor,
+                 const wxCursor& iconNone = wxNullCursor);
 
     /**
         The constructor taking a wxDataObject.
@@ -240,9 +240,9 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxDataObject& data, wxWindow* win = NULL,
-                 const wxCursor& iconCopy = wxNullIcon,
-                 const wxCursor& iconMove = wxNullIcon,
-                 const wxCursor& iconNone = wxNullIcon);
+                 const wxCursor& iconCopy = wxNullCursor,
+                 const wxCursor& iconMove = wxNullCursor,
+                 const wxCursor& iconNone = wxNullCursor);
 
     /**
         This constructor requires that you must call SetData() later.
@@ -262,9 +262,9 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = NULL,
-                 const wxIcon& iconCopy = wxNullCursor,
-                 const wxIcon& iconMove = wxNullCursor,
-                 const wxIcon& iconNone = wxNullCursor);
+                 const wxIcon& iconCopy = wxNullIcon,
+                 const wxIcon& iconMove = wxNullIcon,
+                 const wxIcon& iconNone = wxNullIcon);
 
     /**
         The constructor taking a wxDataObject.
@@ -286,9 +286,9 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxDataObject& data, wxWindow* win = NULL,
-                 const wxIcon& iconCopy = wxNullCursor,
-                 const wxIcon& iconMove = wxNullCursor,
-                 const wxIcon& iconNone = wxNullCursor);
+                 const wxIcon& iconCopy = wxNullIcon,
+                 const wxIcon& iconMove = wxNullIcon,
+                 const wxIcon& iconNone = wxNullIcon);
 
     /**
         Starts the drag-and-drop operation which will terminate when the user
