@@ -561,6 +561,10 @@ Univ:
 
 - Fix regression with read-only wxComboBox appearance (Jason Erb).
 
+Unix:
+
+- Fix bug with wxDir("/").GetName() returning empty string.
+
 
 
 2.9.3: (released 2011-12-14)

@@ -41,11 +41,13 @@ private:
         CPPUNIT_TEST( DirExists );
         CPPUNIT_TEST( Traverse );
         CPPUNIT_TEST( Enum );
+        CPPUNIT_TEST( GetName );
     CPPUNIT_TEST_SUITE_END();
 
     void DirExists();
     void Traverse();
     void Enum();
+    void GetName();
 
     void CreateTempFile(const wxString& path);
     wxArrayString DirEnumHelper(wxDir& dir,
@@ -227,3 +229,15 @@ void DirTestCase::DirExists()
     CPPUNIT_ASSERT( wxDir::Exists(wxGetCwd()) );
 }
 
+void DirTestCase::GetName()
+{
+    wxDir d;
+
+    CPPUNIT_ASSERT( d.Open(".") );
+    CPPUNIT_ASSERT( d.GetName().Last() != wxFILE_SEP_PATH );
+
+#ifdef __UNIX__
+    CPPUNIT_ASSERT( d.Open("/") );
+    CPPUNIT_ASSERT_EQUAL( "/", d.GetName() );
+#endif
+}

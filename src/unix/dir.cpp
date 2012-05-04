@@ -235,10 +235,13 @@ wxString wxDir::GetName() const
     if ( m_data )
     {
         name = M_DIR->GetName();
-        if ( !name.empty() && (name.Last() == wxT('/')) )
+
+        // Notice that we need to check for length > 1 as we shouldn't remove
+        // the last slash from the root directory!
+        if ( name.length() > 1 && (name.Last() == wxT('/')) )
         {
-            // chop off the last (back)slash
-            name.Truncate(name.length() - 1);
+            // chop off the last slash
+            name.RemoveLast();
         }
     }
 
