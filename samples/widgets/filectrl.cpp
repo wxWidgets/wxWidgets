@@ -71,7 +71,7 @@ public:
     FileCtrlWidgetsPage( WidgetsBookCtrl *book, wxImageList *imaglist );
     virtual ~FileCtrlWidgetsPage() {}
 
-    virtual wxControl *GetWidget() const { return /*m_fileCtrl*/NULL; }
+    virtual wxControl *GetWidget() const { return m_fileCtrl; }
     virtual void RecreateWidget() { CreateFileCtrl(); }
 
     // lazy creation of the content
