@@ -747,7 +747,9 @@ wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_DROP;
     @event{EVT_DATAVIEW_SELECTION_CHANGED(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_ACTIVATED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event. This event
+           is triggered by double clicking an item or pressing some special key
+           (usually "Enter") when it is focused.
     @event{EVT_DATAVIEW_ITEM_START_EDITING(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING event. This
            event can be vetoed in order to prevent editing on an item by item
@@ -787,6 +789,11 @@ wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_DROP;
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
     @endEventTable
+
+    Notice that this control doesn't allow to process generic mouse events such
+    as @c wxEVT_LEFT_DOWN in all ports (notably it doesn't work in wxGTK). If
+    you need to handle any mouse events not covered by the ones above, consider
+    using a custom renderer for the cells that must handle them.
 
     @library{wxadv}
     @category{ctrl,dvc}
