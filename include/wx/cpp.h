@@ -15,11 +15,23 @@
 
 /* wxCONCAT works like preprocessor ## operator but also works with macros */
 #define wxCONCAT_HELPER(text, line) text ## line
-#define wxCONCAT(text, line)        wxCONCAT_HELPER(text, line)
 
-#define wxCONCAT3(x1, x2, x3) wxCONCAT(wxCONCAT(x1, x2), x3)
-#define wxCONCAT4(x1, x2, x3, x4) wxCONCAT(wxCONCAT3(x1, x2, x3), x4)
-#define wxCONCAT5(x1, x2, x3, x4, x5) wxCONCAT(wxCONCAT4(x1, x2, x3, x4), x5)
+#define wxCONCAT(x1, x2) \
+    wxCONCAT_HELPER(x1, x2)
+#define wxCONCAT3(x1, x2, x3) \
+    wxCONCAT(wxCONCAT(x1, x2), x3)
+#define wxCONCAT4(x1, x2, x3, x4) \
+    wxCONCAT(wxCONCAT3(x1, x2, x3), x4)
+#define wxCONCAT5(x1, x2, x3, x4, x5) \
+    wxCONCAT(wxCONCAT4(x1, x2, x3, x4), x5)
+#define wxCONCAT6(x1, x2, x3, x4, x5, x6) \
+    wxCONCAT(wxCONCAT5(x1, x2, x3, x4, x5), x6)
+#define wxCONCAT7(x1, x2, x3, x4, x5, x6, x7) \
+    wxCONCAT(wxCONCAT6(x1, x2, x3, x4, x5, x6), x7)
+#define wxCONCAT8(x1, x2, x3, x4, x5, x6, x7, x8) \
+    wxCONCAT(wxCONCAT7(x1, x2, x3, x4, x5, x6, x7), x8)
+#define wxCONCAT9(x1, x2, x3, x4, x5, x6, x7, x8, x9) \
+    wxCONCAT(wxCONCAT8(x1, x2, x3, x4, x5, x6, x7, x8), x9)
 
 /* wxSTRINGIZE works as the preprocessor # operator but also works with macros */
 #define wxSTRINGIZE_HELPER(x)       #x
