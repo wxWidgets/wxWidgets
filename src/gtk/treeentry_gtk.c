@@ -95,8 +95,8 @@ gpointer   gtk_tree_entry_get_userdata  (GtkTreeEntry* entry)
 
 void     gtk_tree_entry_set_label       (GtkTreeEntry* entry, const gchar* label)
 {
-    g_assert(GTK_IS_TREE_ENTRY(entry));
     gchar *temp;
+    g_assert(GTK_IS_TREE_ENTRY(entry));
 
     /* free previous if it exists */
     if(entry->label)
