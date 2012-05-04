@@ -9,6 +9,21 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Styles used with wxTimePickerCtrl.
+
+    Currently no special styles are defined for this object.
+
+    @library{wxadv}
+    @category{pickers}
+
+    @since 2.9.3
+ */
+enum
+{
+    wxTP_DEFAULT = 0
+};
+
+/**
     @class wxTimePickerCtrl
 
     This control allows the user to enter time.
