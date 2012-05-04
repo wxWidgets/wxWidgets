@@ -235,9 +235,13 @@ void DirTestCase::GetName()
 
     CPPUNIT_ASSERT( d.Open(".") );
     CPPUNIT_ASSERT( d.GetName().Last() != wxFILE_SEP_PATH );
+    CPPUNIT_ASSERT( d.GetNameWithSep().Last() == wxFILE_SEP_PATH );
+    CPPUNIT_ASSERT_EQUAL( d.GetName() + wxFILE_SEP_PATH,
+                          d.GetNameWithSep() );
 
 #ifdef __UNIX__
     CPPUNIT_ASSERT( d.Open("/") );
     CPPUNIT_ASSERT_EQUAL( "/", d.GetName() );
+    CPPUNIT_ASSERT_EQUAL( "/", d.GetNameWithSep() );
 #endif
 }

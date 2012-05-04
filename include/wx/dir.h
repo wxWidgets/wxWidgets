@@ -106,6 +106,10 @@ public:
     // get the full name of the directory (without '/' at the end)
     wxString GetName() const;
 
+    // Same as GetName() but does include the trailing separator, unless the
+    // string is empty (only for invalid directories).
+    wxString GetNameWithSep() const;
+
 
     // file enumeration routines
     // -------------------------

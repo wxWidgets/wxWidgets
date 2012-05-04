@@ -218,10 +218,30 @@ public:
                   int flags = wxDIR_DEFAULT) const;
 
     /**
-        Returns the name of the directory itself. The returned string does not
-        have the trailing path separator (slash or backslash).
+        Returns the name of the directory itself.
+
+        The returned string does not have the trailing path separator (slash or
+        backslash).
+
+        Notice that in spite of this the last character of the returned string
+        can still be the path separator if this directory is the root one.
+        Because of this, don't append ::wxFILE_SEP_PATH to the returned value
+        if you do need a slash-terminated directory name but use
+        GetNameWithSep() instead to avoid having duplicate consecutive slashes.
     */
     wxString GetName() const;
+
+    /**
+        Returns the name of the directory with the path separator appended.
+
+        The last character of the returned string is always ::wxFILE_SEP_PATH
+        unless the string is empty, indicating that this directory is invalid.
+
+        @see GetName()
+
+        @since 2.9.4
+     */
+    wxString GetNameWithSep() const;
 
     /**
         Continue enumerating files which satisfy the criteria specified by the

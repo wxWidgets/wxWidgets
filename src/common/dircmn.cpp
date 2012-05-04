@@ -73,6 +73,28 @@ bool wxDir::HasSubDirs(const wxString& spec) const
 #endif // !Unix
 
 // ----------------------------------------------------------------------------
+// wxDir::GetNameWithSep()
+// ----------------------------------------------------------------------------
+
+wxString wxDir::GetNameWithSep() const
+{
+    // Note that for historical reasons (i.e. because GetName() was there
+    // first) we implement this one in terms of GetName() even though it might
+    // actually make more sense to reverse this logic.
+
+    wxString name = GetName();
+    if ( !name.empty() )
+    {
+        // Notice that even though GetName() isn't supposed to return the
+        // separator, it can still be present for the root directory name.
+        if ( name.Last() != wxFILE_SEP_PATH )
+            name += wxFILE_SEP_PATH;
+    }
+
+    return name;
+}
+
+// ----------------------------------------------------------------------------
 // wxDir::Traverse()
 // ----------------------------------------------------------------------------
 
@@ -87,8 +109,7 @@ size_t wxDir::Traverse(wxDirTraverser& sink,
     size_t nFiles = 0;
 
     // the name of this dir with path delimiter at the end
-    wxString prefix = GetName();
-    prefix += wxFILE_SEP_PATH;
+    const wxString prefix = GetNameWithSep();
 
     // first, recurse into subdirs
     if ( flags & wxDIR_DIRS )

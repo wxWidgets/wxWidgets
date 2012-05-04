@@ -496,6 +496,7 @@ All:
 - Added wxFileName::Exists().
 - Implement wxThread::SetConcurrency() for POSIX systems (Igor Korot).
 - Fix deadlock due to too many events in Unix console apps (Lukasz Michalski).
+- Added wxDir::GetNameWithSep().
 
 All (GUI):
 
