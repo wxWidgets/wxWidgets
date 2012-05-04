@@ -82,15 +82,20 @@
     #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _lib)
 #endif // DLL/!DLL
 
+// The user can predefine a different prefix if not using the default MSW port
+// with MSVC.
+#ifndef wxTOOLKIT_PREFIX
+    #define wxTOOLKIT_PREFIX msw
+#endif // wxTOOLKIT_PREFIX
 
 // the real setup.h header file we need is in the build-specific directory,
 // construct the path to it
 #ifdef wxSUFFIX
     #define wxSETUPH_PATH \
-        wxCONCAT5(../../../lib/, wxLIB_SUBDIR, /msw, wxSUFFIX, /wx/setup.h)
+        wxCONCAT6(../../../lib/, wxLIB_SUBDIR, /, wxTOOLKIT_PREFIX, wxSUFFIX, /wx/setup.h)
 #else // suffix is empty
     #define wxSETUPH_PATH \
-        wxCONCAT3(../../../lib/, wxLIB_SUBDIR, /msw/wx/setup.h)
+        wxCONCAT5(../../../lib/, wxLIB_SUBDIR, /, wxTOOLKIT_PREFIX, /wx/setup.h)
 #endif
 
 #define wxSETUPH_PATH_STR wxSTRINGIZE(wxSETUPH_PATH)
@@ -112,7 +117,7 @@
     "wx" name wxSHORT_VERSION_STRING wxSUFFIX_STR subname
 
 #define wxBASE_LIB_NAME(name) wxWX_LIB_NAME("base", "_" name)
-#define wxMSW_LIB_NAME(name) wxWX_LIB_NAME("msw", "_" name)
+#define wxTOOLKIT_LIB_NAME(name) wxWX_LIB_NAME(wxSTRINGIZE(wxTOOLKIT_PREFIX), "_" name)
 
 // This one is for 3rd party libraries: they don't have the version number
 // in their names and usually exist in ANSI version only (except for regex)
@@ -153,41 +158,41 @@
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
     #endif
 
-    #pragma comment(lib, wxMSW_LIB_NAME("core"))
+    #pragma comment(lib, wxTOOLKIT_LIB_NAME("core"))
 
     #ifndef wxNO_ADV_LIB
-        #pragma comment(lib, wxMSW_LIB_NAME("adv"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("adv"))
     #endif
 
     #ifndef wxNO_HTML_LIB
-        #pragma comment(lib, wxMSW_LIB_NAME("html"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("html"))
     #endif
     #if wxUSE_GLCANVAS && !defined(wxNO_GL_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("gl"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("gl"))
     #endif
     #if wxUSE_DEBUGREPORT && !defined(wxNO_QA_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("qa"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("qa"))
     #endif
     #if wxUSE_XRC && !defined(wxNO_XRC_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("xrc"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("xrc"))
     #endif
     #if wxUSE_AUI && !defined(wxNO_AUI_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("aui"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("aui"))
     #endif
     #if wxUSE_PROPGRID && !defined(wxNO_PROPGRID_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("propgrid"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("propgrid"))
     #endif
     #if wxUSE_RIBBON && !defined(wxNO_RIBBON_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("ribbon"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("ribbon"))
     #endif
     #if wxUSE_RICHTEXT && !defined(wxNO_RICHTEXT_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("richtext"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("richtext"))
     #endif
     #if wxUSE_MEDIACTRL && !defined(wxNO_MEDIA_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("media"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("media"))
     #endif
     #if wxUSE_STC && !defined(wxNO_STC_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("stc"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("stc"))
         #ifndef WXUSINGDLL
             #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
         #endif
