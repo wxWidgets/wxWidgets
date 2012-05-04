@@ -7,6 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
 #include "wx/defs.h"
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/win_gtk.h"

@@ -626,6 +626,8 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <precomp-headers-file>wxprec_$(id)</precomp-headers-file>
             <precomp-headers-exclude>
                 src/common/extended.c
+                src/gtk/eggtrayicon.c
+                src/gtk/treeentry_gtk.c
             </precomp-headers-exclude>
         </if>
 

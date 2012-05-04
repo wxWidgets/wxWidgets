@@ -7,6 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
+#include "wx/wxprec.h"
+
 #include "wx/platform.h"
 #include <gtk/gtk.h>
 #include "wx/gtk/assertdlg_gtk.h"
