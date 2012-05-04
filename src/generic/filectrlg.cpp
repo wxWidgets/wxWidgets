@@ -883,9 +883,9 @@ wxFileListCtrl::~wxFileListCtrl()
 // wxGenericFileCtrl implementation
 ///////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC_CLASS( wxGenericFileCtrl, wxPanel )
+IMPLEMENT_DYNAMIC_CLASS( wxGenericFileCtrl, wxNavigationEnabled<wxControl> )
 
-BEGIN_EVENT_TABLE( wxGenericFileCtrl, wxPanel )
+BEGIN_EVENT_TABLE( wxGenericFileCtrl, wxNavigationEnabled<wxControl> )
     EVT_LIST_ITEM_SELECTED( ID_FILELIST_CTRL, wxGenericFileCtrl::OnSelected )
     EVT_LIST_ITEM_ACTIVATED( ID_FILELIST_CTRL, wxGenericFileCtrl::OnActivated )
     EVT_CHOICE( ID_CHOICE, wxGenericFileCtrl::OnChoiceFilter )
@@ -916,7 +916,11 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     wxASSERT_MSG( !( ( m_style & wxFC_SAVE ) && ( m_style & wxFC_MULTIPLE ) ),
                   wxT( "wxFC_MULTIPLE can't be used with wxFC_SAVE" ) );
 
-    wxPanel::Create( parent, id, pos, size, wxTAB_TRAVERSAL, name );
+    wxNavigationEnabled<wxControl>::Create( parent, id,
+                                            pos, size,
+                                            wxTAB_TRAVERSAL,
+                                            wxDefaultValidator,
+                                            name );
 
     m_dir = defaultDirectory;
 

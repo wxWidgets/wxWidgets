@@ -14,7 +14,7 @@
 
 #if wxUSE_FILECTRL
 
-#include "wx/panel.h"
+#include "wx/containr.h"
 #include "wx/listctrl.h"
 #include "wx/filectrl.h"
 #include "wx/filename.h"
@@ -182,7 +182,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-class WXDLLIMPEXP_CORE wxGenericFileCtrl : public wxPanel,
+class WXDLLIMPEXP_CORE wxGenericFileCtrl : public wxNavigationEnabled<wxControl>,
                                            public wxFileCtrlBase
 {
 public:
