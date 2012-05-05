@@ -947,11 +947,6 @@ void MyStatusBar::OnSize(wxSizeEvent& event)
         return;
 #endif
 
-    // TEMPORARY HACK: TODO find a more general solution
-#ifdef wxStatusBarGeneric
-    wxStatusBar::OnSize(event);
-#endif
-
     wxRect rect;
     if (!GetFieldRect(Field_Checkbox, rect))
     {

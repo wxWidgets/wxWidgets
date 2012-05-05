@@ -181,9 +181,15 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
     wxStatusBarBase::SetStatusWidths(n, widths_field);
 
     // update cache
-    int width;
-    GetClientSize(&width, &m_lastClientHeight);
-    m_widthsAbs = CalculateAbsWidths(width);
+    DoUpdateFieldWidths();
+}
+
+void wxStatusBarGeneric::DoUpdateFieldWidths()
+{
+    m_lastClientSize = GetClientSize();
+
+    // recompute the cache of the field widths if the status bar width has changed
+    m_widthsAbs = CalculateAbsWidths(m_lastClientSize.x);
 }
 
 bool wxStatusBarGeneric::ShowsSizeGrip() const
@@ -325,6 +331,16 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
     wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), false,
                  wxT("invalid status bar field index") );
 
+    // We can be called from the user-defined EVT_SIZE handler in which case
+    // the widths haven't been updated yet and we need to do it now. This is
+    // not very efficient as we keep testing the size but there is no other way
+    // to make the code needing the up-to-date fields sizes in its EVT_SIZE to
+    // work.
+    if ( GetClientSize().x != m_lastClientSize.x )
+    {
+        const_cast<wxStatusBarGeneric*>(this)->DoUpdateFieldWidths();
+    }
+
     if (m_widthsAbs.IsEmpty())
         return false;
 
@@ -335,7 +351,7 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 
     rect.y = m_borderY;
     rect.width = m_widthsAbs[n] - 2*m_borderX;
-    rect.height = m_lastClientHeight - 2*m_borderY;
+    rect.height = m_lastClientSize.y - 2*m_borderY;
 
     return true;
 }
@@ -348,7 +364,7 @@ int wxStatusBarGeneric::GetFieldFromPoint(const wxPoint& pt) const
     // NOTE: we explicitly don't take in count the borders since they are only
     //       useful when rendering the status text, not for hit-test computations
 
-    if (pt.y <= 0 || pt.y >= m_lastClientHeight)
+    if (pt.y <= 0 || pt.y >= m_lastClientSize.y)
         return wxNOT_FOUND;
 
     int x = 0;
@@ -525,18 +541,11 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
 #endif
 }
 
-void wxStatusBarGeneric::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxStatusBarGeneric::OnSize(wxSizeEvent& event)
 {
-    // FIXME: workarounds for OS/2 bugs have nothing to do here (VZ)
-    int width;
-#ifdef __WXPM__
-    GetSize(&width, &m_lastClientHeight);
-#else
-    GetClientSize(&width, &m_lastClientHeight);
-#endif
+    DoUpdateFieldWidths();
 
-    // recompute the cache of the field widths if the status bar width has changed
-    m_widthsAbs = CalculateAbsWidths(width);
+    event.Skip();
 }
 
 #endif // wxUSE_STATUSBAR
