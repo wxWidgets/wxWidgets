@@ -932,6 +932,15 @@ wxToolBar::~wxToolBar()
     if ( !m_macToolbar )
         return;
 
+    // it might already have been uninstalled due to a previous call to Destroy, but in case
+    // wasn't, do so now, otherwise redraw events may occur for deleted objects
+    bool ownToolbarInstalled = false;
+    MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
+    if (ownToolbarInstalled)
+    {
+        MacUninstallNativeToolbar();
+    }
+
     CFIndex count = CFGetRetainCount( m_macToolbar ) ;
     // Leopard seems to have one refcount more, so we cannot check reliably at the moment
     if ( UMAGetSystemVersion() < 0x1050 )
