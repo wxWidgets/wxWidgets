@@ -955,7 +955,7 @@ wxFileOffset wxInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
 
         wxASSERT(bytes_read == (size_t)pos);
 
-        // we should now have seeked to the right position...
+        // we should now have sought to the right position...
         return TellI();
     }
 

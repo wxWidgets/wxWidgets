@@ -354,7 +354,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     ab_clr = (1 << bits);
     ab_fin = (1 << bits) + 1;
 
-    // these will change through the decompression proccess
+    // these will change through the decompression process
     ab_bits  = bits + 1;
     ab_free  = (1 << bits) + 2;
     ab_max   = (1 << ab_bits) - 1;

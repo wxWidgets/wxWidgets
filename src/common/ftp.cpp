@@ -684,7 +684,7 @@ public:
 
         // when checking the result, the stream will
         // almost always show an error, even if the file was
-        // properly transfered, thus, let's just grab the result
+        // properly transferred, thus, let's just grab the result
 
         // we are looking for "226 transfer completed"
         char code = m_ftp->GetResult();
@@ -900,7 +900,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
 
     int filesize = -1;
 
-    // Check for existance of file via wxFTP::FileExists(...)
+    // Check for existence of file via wxFTP::FileExists(...)
     if ( FileExists(fileName) )
     {
         wxString command;
@@ -937,7 +937,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
         }
 
         // Set transfermode back to the original. Only the "SIZE"-command
-        // is dependant on transfermode
+        // is dependent on transfermode
         if ( oldTransfermode != NONE )
         {
             SetTransferMode(oldTransfermode);
