@@ -420,15 +420,12 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 {
     // TODO: Convert drawing in this function to Windows API Code
 
-    const bool useVistaComboBox = ::wxGetWinVersion() >= wxWinVersion_Vista;
-
     wxSize sz = GetClientSize();
     wxDC* dcPtr = wxAutoBufferedPaintDCFactory(this);
     wxDC& dc = *dcPtr;
 
     const wxRect& rectButton = m_btnArea;
     wxRect rectTextField = m_tcArea;
-    wxColour bgCol = GetBackgroundColour();
 
     // FIXME: Either SetBackgroundColour or GetBackgroundColour
     //        doesn't work under Vista, so here's a temporary
@@ -436,7 +433,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     //        In the theme-less rendering code below, this fixes incorrect
     //        background on read-only comboboxes (they are gray, but should be
     //        white).
-    bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
 #if wxUSE_UXTHEME
     const bool isEnabled = IsThisEnabled();
@@ -465,6 +462,8 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 #if wxUSE_UXTHEME
     if ( hTheme )
     {
+        const bool useVistaComboBox = ::wxGetWinVersion() >= wxWinVersion_Vista;
+
         RECT rFull;
         wxCopyRectToRECT(borderRect, rFull);
 
