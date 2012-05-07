@@ -4793,6 +4793,12 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         }
         while (doLoop);
 
+        if (child->IsTopLevel())
+        {
+            // We can move it to the correct position at this point
+            child->Move(GetPosition() + wxPoint(currentWidth, currentPosition.y));
+        }
+
         // Cases:
         // 1) There was a line break BEFORE the natural break
         // 2) There was a line break AFTER the natural break
@@ -4807,12 +4813,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
             )
         {
-            if (child->IsTopLevel())
-            {
-                // We can move it to the correct position at this point
-                child->Move(GetPosition() + wxPoint(currentWidth, currentPosition.y));
-            }
-
             long wrapPosition = 0;
             if ((childSize.x + currentWidth <= availableRect.width) && !node->GetNext() && !lineBreakInThisObject)
                 wrapPosition = child->GetRange().GetEnd();
@@ -10334,7 +10334,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
 }
 
 /// Draw the item
-bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int WXUNUSED(descent), int WXUNUSED(style))
+bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& WXUNUSED(range), const wxRichTextSelection& selection, const wxRect& rect, int WXUNUSED(descent), int WXUNUSED(style))
 {
     if (!IsShown())
         return true;
@@ -10348,12 +10348,6 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
     context.ApplyVirtualAttributes(attr, this);
 
     DrawBoxAttributes(dc, GetBuffer(), attr, wxRect(rect.GetPosition(), GetCachedSize()));
-
-#if 0
-    int y = rect.y + (rect.height - m_imageCache.GetHeight());
-
-    dc.DrawBitmap(m_imageCache, rect.x, y, true);
-#endif
 
     wxSize imageSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
     wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
