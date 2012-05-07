@@ -885,7 +885,7 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxMsgCatalogFile clas
+// wxMsgCatalogFile class
 // ----------------------------------------------------------------------------
 
 wxMsgCatalogFile::wxMsgCatalogFile()

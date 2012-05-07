@@ -552,7 +552,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
     /*
     Set the image resolution if it's available. Resolution tag is not
-    dependant on RESOLUTIONUNIT != RESUNIT_NONE (according to TIFF spec).
+    dependent on RESOLUTIONUNIT != RESUNIT_NONE (according to TIFF spec).
     */
     float resX, resY;
 

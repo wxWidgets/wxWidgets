@@ -1375,7 +1375,7 @@ wxSize wxComboCtrlBase::DoGetBestSize() const
     else
         fhei = sizeText.y + 4;
 
-    // Need to force height to accomodate bitmap?
+    // Need to force height to accommodate bitmap?
     int btnSizeY = m_btnSize.y;
     if ( m_bmpNormal.IsOk() && fhei < btnSizeY )
         fhei = btnSizeY;

@@ -1798,7 +1798,7 @@ bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
 /* static */
 bool wxFileName::IsCaseSensitive( wxPathFormat format )
 {
-    // only Unix filenames are truely case-sensitive
+    // only Unix filenames are truly case-sensitive
     return GetFormat(format) == wxPATH_UNIX;
 }
 

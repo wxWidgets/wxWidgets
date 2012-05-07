@@ -293,7 +293,7 @@ ParseFormatAt(wxString::const_iterator& p,
     wxDateTime dt;
 
     // Use a default date outside of the DST period to avoid problems with
-    // parsing the time differently depending on the todays date (which is used
+    // parsing the time differently depending on the today's date (which is used
     // as the fall back date if none is explicitly specified).
     static const wxDateTime dtDef(1, wxDateTime::Jan, 2012);
 
