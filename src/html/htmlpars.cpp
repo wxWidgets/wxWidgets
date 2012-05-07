@@ -957,12 +957,14 @@ wxHtmlParser::SkipCommentTag(wxString::const_iterator& start,
 
     wxString::const_iterator p = start;
 
-    // comments begin with "<!--" in HTML 4.0
-    if ( end - start < 4 || *++p != '!' || *++p != '-' || *++p != '-' )
-    {
-        // not a comment at all
-        return false;
-    }
+    // Comments begin with "<!--" in HTML 4.0; anything shorter or not containing
+    // these characters is not a comment and we're not going to skip it.
+    if ( ++p == end || *p != '!' )
+      return false;
+    if ( ++p == end || *p != '-' )
+      return false;
+    if ( ++p == end || *p != '-' )
+      return false;
 
     // skip the start of the comment tag in any case, if we don't find the
     // closing tag we should ignore broken markup
