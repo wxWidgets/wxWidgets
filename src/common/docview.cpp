@@ -859,17 +859,19 @@ wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 bool
 wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
 {
+    wxScopeGuard g = wxMakeObjGuard(*doc, &wxDocument::DeleteAllViews);
+
     doc->SetFilename(path);
     doc->SetDocumentTemplate(this);
     GetDocumentManager()->AddDocument(doc);
     doc->SetCommandProcessor(doc->OnCreateCommandProcessor());
 
-    if (doc->OnCreate(path, flags))
-        return true;
+    if ( !doc->OnCreate(path, flags) )
+        return false;
 
-    if (GetDocumentManager()->GetDocuments().Member(doc))
-        doc->DeleteAllViews();
-    return false;
+    g.Dismiss(); // no need to call DeleteAllViews() anymore
+
+    return true;
 }
 
 wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
