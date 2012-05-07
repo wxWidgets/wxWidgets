@@ -4729,9 +4729,19 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
             // buffer, so we may have different available line widths with different
             // [startY, endY]. So, we can't determine how wide the available
             // space is until we know the exact line height.
-            lineDescent = wxMax(childDescent, maxDescent);
-            lineAscent = wxMax(childSize.y-childDescent, maxAscent);
-            lineHeight = lineDescent + lineAscent;
+            if (childDescent == 0)
+            {
+                lineHeight = wxMax(lineHeight, childSize.y);
+                lineDescent = maxDescent;
+                lineAscent = maxAscent;
+            }
+            else
+            {
+                lineDescent = wxMax(childDescent, maxDescent);
+                lineAscent = wxMax(childSize.y-childDescent, maxAscent);
+            }
+            lineHeight = wxMax(lineHeight, (lineDescent + lineAscent));
+
             wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
 
             // Adjust availableRect to the space that is available when taking floating objects into account.
@@ -4833,9 +4843,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
             wxSize actualSize;
             wxRichTextRange actualRange(lastCompletedEndPos+1, wrapPosition);
 
-            /// Use previous descent, not the wrapping descent we just found, since this may be too big
-            /// for the fragment we're about to add.
-            childDescent = maxDescent;
+            childDescent = 0;
 
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
             if (!child->IsEmpty())
@@ -4849,9 +4857,15 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                 GetRangeSize(actualRange, actualSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED);
 
             currentWidth = actualSize.x;
-            maxDescent = wxMax(childDescent, maxDescent);
-            maxAscent = wxMax(actualSize.y-childDescent, maxAscent);
-            lineHeight = maxDescent + maxAscent;
+
+            // The descent for the whole line at this point, is the correct max descent
+            maxDescent = childDescent;
+            // Maximum ascent
+            maxAscent = actualSize.y-childDescent;
+
+            // lineHeight is given by the height for the whole line, since it will
+            // take into account ascend/descend.
+            lineHeight = actualSize.y;
 
             if (lineHeight == 0 && buffer)
             {
@@ -4887,7 +4901,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
             lineCount ++;
 
-            // TODO: account for zero-length objects, such as fields
+            // TODO: account for zero-length objects
             // wxASSERT(wrapPosition > lastCompletedEndPos);
 
             lastEndPos = wrapPosition;
@@ -4914,9 +4928,20 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         {
             // We still fit, so don't add a line, and keep going
             currentWidth += childSize.x;
-            maxDescent = wxMax(childDescent, maxDescent);
-            maxAscent = wxMax(childSize.y-childDescent, maxAscent);
-            lineHeight = maxDescent + maxAscent;
+
+            if (childDescent == 0)
+            {
+                // An object with a zero descend value wants to take up the whole
+                // height regardless of baseline
+                lineHeight = wxMax(lineHeight, childSize.y);
+            }
+            else
+            {
+                maxDescent = wxMax(childDescent, maxDescent);
+                maxAscent = wxMax(childSize.y-childDescent, maxAscent);
+            }
+
+            lineHeight = wxMax(lineHeight, (maxDescent + maxAscent));
 
             maxWidth = wxMax(maxWidth, currentWidth+startOffset);
             lastEndPos = child->GetRange().GetEnd();
@@ -5137,8 +5162,6 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     if (flags & wxRICHTEXT_UNFORMATTED)
     {
         // Just use unformatted data, assume no line breaks
-        // TODO: take into account line breaks
-
         wxSize sz;
 
         wxArrayInt childExtents;
@@ -5147,6 +5170,10 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             p = & childExtents;
         else
             p = NULL;
+
+        int maxDescent = 0;
+        int maxAscent = 0;
+        int maxLineHeight = 0;
 
         wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
         while (node)
@@ -5175,10 +5202,6 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
                     wxRichTextRange rangeToUse = range;
                     rangeToUse.LimitTo(child->GetRange());
-#if 0
-                    if (child->IsTopLevel())
-                        rangeToUse = child->GetOwnRange();
-#endif
                     int childDescent = 0;
 
                     // At present wxRICHTEXT_HEIGHT_ONLY is only fast if we're already cached the size,
@@ -5188,23 +5211,52 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                         childDescent = child->GetDescent();
                         childSize = child->GetCachedSize();
 
-                        sz.y = wxMax(sz.y, childSize.y);
+                        if (childDescent == 0)
+                        {
+                            maxLineHeight = wxMax(maxLineHeight, childSize.y);
+                        }
+                        else
+                        {
+                            maxDescent = wxMax(maxDescent, childDescent);
+                            maxAscent = wxMax(maxAscent, (childSize.y - childDescent));
+                        }
+
+                        maxLineHeight = wxMax(maxLineHeight, (maxAscent + maxDescent));
+
+                        sz.y = wxMax(sz.y, maxLineHeight);
                         sz.x += childSize.x;
-                        descent = wxMax(descent, childDescent);
+                        descent = maxDescent;
                     }
                     else if (child->IsTopLevel())
                     {
                         childDescent = child->GetDescent();
                         childSize = child->GetCachedSize();
 
-                        sz.y = wxMax(sz.y, childSize.y);
+                        if (childDescent == 0)
+                        {
+                            maxLineHeight = wxMax(maxLineHeight, childSize.y);
+                        }
+                        else
+                        {
+                            maxDescent = wxMax(maxDescent, childDescent);
+                            maxAscent = wxMax(maxAscent, (childSize.y - childDescent));
+                        }
+
+                        maxLineHeight = wxMax(maxLineHeight, (maxAscent + maxDescent));
+
+                        sz.y = wxMax(sz.y, maxLineHeight);
                         sz.x += childSize.x;
-                        descent = wxMax(descent, childDescent);
+                        descent = maxDescent;
+
+                        // FIXME: this won't change the original values.
+                        // Should we be calling GetRangeSize above instead of using cached values?
+#if 0
                         if ((flags & wxRICHTEXT_CACHE_SIZE) && (rangeToUse == child->GetRange()))
                         {
                             child->SetCachedSize(childSize);
                             child->SetDescent(childDescent);
                         }
+#endif
 
                         if (partialExtents)
                         {
@@ -5219,9 +5271,21 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                     }
                     else if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, context, flags, wxPoint(position.x + sz.x, position.y), p))
                     {
-                        sz.y = wxMax(sz.y, childSize.y);
+                        if (childDescent == 0)
+                        {
+                            maxLineHeight = wxMax(maxLineHeight, childSize.y);
+                        }
+                        else
+                        {
+                            maxDescent = wxMax(maxDescent, childDescent);
+                            maxAscent = wxMax(maxAscent, (childSize.y - childDescent));
+                        }
+
+                        maxLineHeight = wxMax(maxLineHeight, (maxAscent + maxDescent));
+
+                        sz.y = wxMax(sz.y, maxLineHeight);
                         sz.x += childSize.x;
-                        descent = wxMax(descent, childDescent);
+                        descent = maxDescent;
 
                         if ((flags & wxRICHTEXT_CACHE_SIZE) && (rangeToUse == child->GetRange()))
                         {
@@ -5273,7 +5337,10 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             wxRichTextRange lineRange = line->GetAbsoluteRange();
             if (!lineRange.IsOutside(range))
             {
-                wxSize lineSize;
+                int maxDescent = 0;
+                int maxAscent = 0;
+                int maxLineHeight = 0;
+                int maxLineWidth = 0;
 
                 wxRichTextObjectList::compatibility_iterator node2 = m_children.GetFirst();
                 while (node2)
@@ -5291,8 +5358,20 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                         int childDescent = 0;
                         if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, context, flags, wxPoint(position.x + sz.x, position.y)))
                         {
-                            lineSize.y = wxMax(lineSize.y, childSize.y);
-                            lineSize.x += childSize.x;
+                            if (childDescent == 0)
+                            {
+                                // Assume that if descent is zero, this child can occupy the full line height
+                                // and does not need space for the line's maximum descent. So we influence
+                                // the overall max line height only.
+                                maxLineHeight = wxMax(maxLineHeight, childSize.y);
+                            }
+                            else
+                            {
+                                maxAscent = wxMax(maxAscent, (childSize.y - childDescent));
+                                maxDescent = wxMax(maxAscent, childDescent);
+                            }
+                            maxLineHeight = wxMax(maxLineHeight, (maxAscent + maxDescent));
+                            maxLineWidth += childSize.x;
                         }
                         descent = wxMax(descent, childDescent);
                     }
@@ -5300,9 +5379,11 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                     node2 = node2->GetNext();
                 }
 
+                descent = wxMax(descent, maxDescent);
+
                 // Increase size by a line (TODO: paragraph spacing)
-                sz.y += lineSize.y;
-                sz.x = wxMax(sz.x, lineSize.x);
+                sz.y += maxLineHeight;
+                sz.x = wxMax(sz.x, maxLineWidth);
             }
             node = node->GetNext();
         }
@@ -10281,7 +10362,7 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
 
     dc.DrawBitmap(m_imageCache, contentRect.x, contentRect.y, true);
 
-    if (selection.WithinSelection(range.GetStart(), this))
+    if (selection.WithinSelection(GetRange().GetStart(), this))
     {
         wxCheckSetBrush(dc, *wxBLACK_BRUSH);
         wxCheckSetPen(dc, *wxBLACK_PEN);
