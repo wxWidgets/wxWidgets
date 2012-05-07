@@ -371,6 +371,8 @@ GTK_DIST: UNIV_DIST
 X11_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/wxX11.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/x11/*.h $(DISTDIR)/include/wx/x11
+	mkdir $(DISTDIR)/include/wx/x11/private
+	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
 	mkdir $(DISTDIR)/include/wx/gtk/private
 	$(CP_P) $(INCDIR)/wx/gtk/private/string.h $(DISTDIR)/include/wx/gtk/private
 	$(CP_P) $(X11DIR)/*.cpp $(DISTDIR)/src/x11
@@ -400,6 +402,8 @@ MOTIF_DIST: ALL_GUI_DIST
 	$(CP_P) $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
 		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \
 		$(DISTDIR)/include/wx/x11
+	mkdir $(DISTDIR)/include/wx/x11/private
+	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
 
 OSX_CARBON_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/*.* $(DISTDIR)/include
