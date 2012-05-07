@@ -42,6 +42,7 @@ using namespace wxGTKImpl;
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#include "wx/x11/private/wrapxkb.h"
 #else
 typedef guint KeySym;
 #endif
@@ -745,7 +746,11 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
             wxLogTrace(TRACE_KEYS, wxT("\t-> keycode %d"), keycode);
 
+#ifdef HAVE_X11_XKBLIB_H
+            KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, 0, 0);
+#else
             KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
+#endif
 
             // use the normalized, i.e. lower register, keysym if we've
             // got one

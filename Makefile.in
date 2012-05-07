@@ -37200,6 +37200,8 @@ GTK_DIST: UNIV_DIST
 	$(CP_P) $(GTK1DIR)/*.c $(DISTDIR)/src/gtk1
 	$(CP_P) $(GTK1DIR)/*.xbm $(DISTDIR)/src/gtk1
 	$(CP_P) $(GTK1DIR)/*.mms $(DISTDIR)/src/gtk1
+	mkdir $(DISTDIR)/include/wx/x11/private
+	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
 
 	mkdir $(DISTDIR)/include/wx/gtk/gnome
 	mkdir $(DISTDIR)/src/gtk/gnome
