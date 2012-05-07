@@ -2335,7 +2335,7 @@ bool wxRichTextCtrl::PageDown(int noPages, int flags)
 
 static bool wxRichTextCtrlIsWhitespace(const wxString& str)
 {
-    return str == wxT(" ") || str == wxT("\t");
+    return str == wxT(" ") || str == wxT("\t") || (!str.empty() && (str[0] == (wxChar) 160));
 }
 
 // Finds the caret position for the next word
