@@ -1657,7 +1657,6 @@ void wxRichTextParagraphLayoutBox::Init()
 
     m_invalidRange = wxRICHTEXT_ALL;
 
-    SetMargins(4);
     m_partialParagraph = false;
     m_floatCollector = NULL;
 }
@@ -6851,6 +6850,7 @@ void wxRichTextBuffer::Init()
     m_suppressUndo = 0;
     m_handlerFlags = 0;
     m_scale = 1.0;
+    SetMargins(4);
 }
 
 /// Initialisation

@@ -741,12 +741,17 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
 void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 {
 #if wxUSE_DRAG_AND_DROP
-    // See if we're starting Drag'n'Drop
-    if (m_preDrag)
+    size_t distance = 0;
+    if (m_preDrag || m_dragging)
     {
         int x = m_dragStartPoint.x - event.GetPosition().x;
         int y = m_dragStartPoint.y - event.GetPosition().y;
-        size_t distance = abs(x) + abs(y);
+        distance = abs(x) + abs(y);
+    }
+
+    // See if we're starting Drag'n'Drop
+    if (m_preDrag)
+    {
 #if wxUSE_DATETIME
         wxTimeSpan diff = wxDateTime::UNow() - m_dragStartTime;
 #endif
@@ -853,6 +858,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 #if wxUSE_DRAG_AND_DROP
         && !m_preDrag
 #endif
+        && (distance > 4)
         )
     {
         wxRichTextParagraphLayoutBox* commonAncestor = NULL;
@@ -930,9 +936,9 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 #if wxUSE_DRAG_AND_DROP
         && !m_preDrag
 #endif
+        && (distance > 4)
         )
     {
-        // TODO: test closeness
         SetCaretPositionAfterClick(container, position, hit, true /* extend selection */);
     }
 }
