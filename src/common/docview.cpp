@@ -60,6 +60,7 @@
 #include "wx/vector.h"
 #include "wx/scopedarray.h"
 #include "wx/scopedptr.h"
+#include "wx/scopeguard.h"
 #include "wx/except.h"
 
 #if wxUSE_STD_IOSTREAM
