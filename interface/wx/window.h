@@ -828,6 +828,24 @@ public:
     wxSize GetBestSize() const;
 
     /**
+        Returns the best height needed by this window if it had the given width.
+
+        @see DoGetBestClientHeight()
+
+        @since 2.9.4
+     */
+    int GetBestHeight(int width) const;
+
+    /**
+        Returns the best width needed by this window if it had the given height.
+
+        @see DoGetBestClientWidth()
+
+        @since 2.9.4
+     */
+    int GetBestWidth(int height) const;
+
+    /**
         Returns the size of the window 'client area' in pixels.
 
         The client area is the area which may be drawn on by the programmer,
@@ -3479,6 +3497,43 @@ protected:
      */
     virtual wxSize DoGetBestClientSize() const;
 
+    /**
+        Override this method to implement height-for-width best size
+        calculation.
+
+        Return the height needed to fully display the control contents if its
+        width is fixed to the given value. Custom classes implementing
+        wrapping should override this method and return the height
+        corresponding to the number of lines needed to lay out the control
+        contents at this width.
+
+        Currently this method is not used by wxWidgets yet, however it is
+        planned that it will be used by the new sizer classes implementing
+        height-for-width layout strategy in the future.
+
+        Notice that implementing this method or even implementing both it and
+        DoGetBestClientWidth() doesn't replace overriding DoGetBestClientSize(),
+        i.e. you still need to implement the latter as well in order to provide
+        the best size when neither width nor height are constrained.
+
+        By default returns ::wxDefaultCoord meaning that the vertical component
+        of DoGetBestClientSize() return value should be used.
+
+        @since 2.9.4
+     */
+    virtual int DoGetBestClientHeight(int width) const;
+
+    /**
+        Override this method to implement width-for-height best size
+        calculation.
+
+        This method is exactly the same as DoGetBestClientHeight() except that
+        it determines the width assuming the height is fixed instead of vice
+        versa.
+
+        @since 2.9.4
+     */
+    virtual int DoGetBestClientWidth(int height) const;
 
     /**
         Sets the initial window size if none is given (i.e. at least one of the

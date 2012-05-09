@@ -916,6 +916,24 @@ wxSize wxWindowBase::GetBestSize() const
     return DoGetBestSize();
 }
 
+int wxWindowBase::GetBestHeight(int width) const
+{
+    const int height = DoGetBestClientHeight(width);
+
+    return height == wxDefaultCoord
+            ? GetBestSize().y
+            : height + DoGetBorderSize().y;
+}
+
+int wxWindowBase::GetBestWidth(int height) const
+{
+    const int width = DoGetBestClientWidth(height);
+
+    return width == wxDefaultCoord
+            ? GetBestSize().x
+            : width + DoGetBorderSize().x;
+}
+
 void wxWindowBase::SetMinSize(const wxSize& minSize)
 {
     m_minWidth = minSize.x;
