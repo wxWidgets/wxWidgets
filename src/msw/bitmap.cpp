@@ -342,8 +342,9 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
                     wxDIB dib(iconInfo.hbmColor);
                     if (dib.IsOk())
                     {
-                        const unsigned char* pixels = dib.GetData();
-                        for (int idx = 0; idx < w*h*4; idx+=4)
+                        unsigned char* const pixels = dib.GetData();
+                        int idx;
+                        for ( idx = 0; idx < w*h*4; idx += 4 )
                         {
                             if (pixels[idx+3] != 0)
                             {
@@ -352,6 +353,25 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
                                 refData->m_hasAlpha = true;
                                 break;
                             }
+                        }
+
+                        if ( refData->m_hasAlpha )
+                        {
+                            // If we do have alpha, ensure we use premultiplied
+                            // data for our pixels as this is what the bitmaps
+                            // created in other ways do and this is necessary
+                            // for e.g. AlphaBlend() to work with this bitmap.
+                            for ( idx = 0; idx < w*h*4; idx += 4 )
+                            {
+                                const unsigned char a = pixels[idx+3];
+
+                                pixels[idx]   = ((pixels[idx]  *a) + 127)/255;
+                                pixels[idx+1] = ((pixels[idx+1]*a) + 127)/255;
+                                pixels[idx+2] = ((pixels[idx+2]*a) + 127)/255;
+                            }
+
+                            ::DeleteObject(refData->m_hBitmap);
+                            refData->m_hBitmap = dib.Detach();
                         }
                     }
                 }
