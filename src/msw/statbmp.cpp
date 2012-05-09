@@ -189,17 +189,21 @@ void wxStaticBitmap::Free()
     wxDELETE(m_image);
 }
 
-wxSize wxStaticBitmap::DoGetBestSize() const
+wxSize wxStaticBitmap::DoGetBestClientSize() const
 {
+    wxSize size;
     if ( ImageIsOk() )
     {
-        wxSize best(m_image->GetWidth(), m_image->GetHeight());
-        CacheBestSize(best);
-        return best;
+        size = m_image->GetSize();
+    }
+    else // No image yet
+    {
+        // this is completely arbitrary
+        size.x =
+        size.y = 16;
     }
 
-    // this is completely arbitrary
-    return wxSize(16, 16);
+    return size;
 }
 
 #ifndef __WXWINCE__
@@ -232,12 +236,12 @@ void wxStaticBitmap::SetImage( const wxGDIImage* image )
 {
     wxGDIImage* convertedImage = ConvertImage( *image );
     SetImageNoCopy( convertedImage );
-    InvalidateBestSize();
 }
 
 void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 {
     Free();
+    InvalidateBestSize();
 
     m_isIcon = image->IsKindOf( CLASSINFO(wxIcon) );
     // the image has already been copied
