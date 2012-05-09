@@ -33,12 +33,14 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( SpinCtrlTestCase );
+        CPPUNIT_TEST( Initial );
         WXUISIM_TEST( Arrows );
         WXUISIM_TEST( Wrap );
         CPPUNIT_TEST( Range );
         CPPUNIT_TEST( Value );
     CPPUNIT_TEST_SUITE_END();
 
+    void Initial();
     void Arrows();
     void Wrap();
     void Range();
@@ -63,6 +65,28 @@ void SpinCtrlTestCase::setUp()
 void SpinCtrlTestCase::tearDown()
 {
     wxDELETE(m_spin);
+}
+
+void SpinCtrlTestCase::Initial()
+{
+    // Initial value is defined by "initial" argument which is 0 by default.
+    CPPUNIT_ASSERT_EQUAL( 0, m_spin->GetValue() );
+
+    wxWindow* const parent = m_spin->GetParent();
+
+    // Recreate the control with another "initial" to check this.
+    delete m_spin;
+    m_spin = new wxSpinCtrl(parent, wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize, 0,
+                            0, 100, 17);
+    CPPUNIT_ASSERT_EQUAL( 17, m_spin->GetValue() );
+
+    // But if the text string is specified, it takes precedence.
+    delete m_spin;
+    m_spin = new wxSpinCtrl(parent, wxID_ANY, "99",
+                            wxDefaultPosition, wxDefaultSize, 0,
+                            0, 100, 17);
+    CPPUNIT_ASSERT_EQUAL( 99, m_spin->GetValue() );
 }
 
 void SpinCtrlTestCase::Arrows()

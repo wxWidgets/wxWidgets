@@ -62,6 +62,13 @@ public:
     /**
         Constructor, creating and showing a spin control.
 
+        If @a value is non-empty, it will be shown in the text entry part of
+        the control and if it has numeric value, the initial numeric value of
+        the control, as returned by GetValue() will also be determined by it
+        instead of by @a initial. Hence, it only makes sense to specify @a
+        initial if @a value is a non-empty string not convertible to a number,
+        otherwise @a initial is simply ignored.
+
         @param parent
             Parent window. Must not be @NULL.
         @param value

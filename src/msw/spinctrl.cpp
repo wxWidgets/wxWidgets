@@ -389,22 +389,25 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
+    // If the initial text value is actually a number, it overrides the
+    // "initial" argument specified later.
+    long initialFromText;
+    if ( value.ToLong(&initialFromText) )
+        initial = initialFromText;
+
     SetValue(initial);
+
+    m_oldValue = initial;
 
     // Set the range in the native control
     SetRange(min, max);
 
-    // If necessary, set the textual value. Don't do it if it's the same as the
-    // numeric value though.
-    if ( value != wxString::Format("%d", initial) )
-    {
+    // Also set the text part of the control if it was specified independently
+    // but don't generate an event for this, it would be unexpected.
+    m_blockEvent = true;
+    if ( !value.empty() )
         SetValue(value);
-        m_oldValue = (int) wxAtol(value);
-    }
-    else
-    {
-        m_oldValue = initial;
-    }
+    m_blockEvent = false;
 
     return true;
 }
