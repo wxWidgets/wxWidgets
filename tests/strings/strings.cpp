@@ -192,10 +192,16 @@ void StringTestCase::Constructors()
 
     CPPUNIT_ASSERT_EQUAL( 0, wxString(wxString(), 17).length() );
 
-    // This string has 3 characters (<h>, <e'> and <l>), not 4!
-    wxString s3("h\xc3\xa9llo", 4);
-    CPPUNIT_ASSERT_EQUAL( 3, s3.length() );
-    CPPUNIT_ASSERT_EQUAL( 'l', (char)s3[2] );
+#if wxUSE_UNICODE_UTF8
+    // This string has 3 characters (<h>, <e'> and <l>), not 4 when using UTF-8
+    // locale!
+    if ( wxConvLibc.IsUTF8() )
+    {
+        wxString s3("h\xc3\xa9llo", 4);
+        CPPUNIT_ASSERT_EQUAL( 3, s3.length() );
+        CPPUNIT_ASSERT_EQUAL( 'l', (char)s3[2] );
+    }
+#endif // wxUSE_UNICODE_UTF8
 
 
     static const char *s = "?really!";
