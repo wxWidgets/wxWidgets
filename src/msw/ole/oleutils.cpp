@@ -148,7 +148,13 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
         oleVariant.vt = VT_I4;
         oleVariant.lVal = variant.GetLong() ;
     }
-#if wxUSE_LONGLONG
+    // Original VC6 came with SDK too old to contain VARIANT::llVal declaration
+    // and there doesn't seem to be any way to test for it as Microsoft simply
+    // added it to the later version of oaidl.h without changing anything else.
+    // So assume it's not present for VC6, even though it might be if an
+    // updated SDK is used. In this case the user would need to disable this
+    // check himself.
+#if wxUSE_LONGLONG && !defined(__VISUALC6__)
     else if (type == wxT("longlong"))
     {
         oleVariant.vt = VT_I8;
@@ -357,7 +363,8 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 #endif // wxUSE_DATETIME
                 break;
 
-#if wxUSE_LONGLONG
+                // See the comment before the __VISUALC6__ test above.
+#if wxUSE_LONGLONG && !defined(__VISUALC6__)
             case VT_I8:
                 variant = wxLongLong(oleVariant.llVal);
                 break;
