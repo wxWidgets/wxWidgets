@@ -372,6 +372,12 @@ Changes in behaviour which may result in compilation errors
   result in compilation errors due to an ambiguity between them if you pass
   NULL as client data. To fix this, cast NULL explicitly to "void**".
 
+- wxChoicebookEvent, wxListbookEvent, wxNotebookEvent, wxToolbookEvent and
+  wxTreebookEvent are now all synonyms for wxBookCtrlEvent. The existing code
+  using the old names continues to work but they can't be forward-declared
+  any more. Use wxBookCtrlEvent in your code if you need to forward-declare
+  it or just include the appropriate header instead of forward declaration.
+
 
 Deprecated methods and their replacements
 -----------------------------------------
