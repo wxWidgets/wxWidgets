@@ -5149,8 +5149,8 @@ void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
 
 wxSize wxGenericListCtrl::DoGetBestClientSize() const
 {
-    // Something is better than nothing even if this is completely arbitrary.
-    wxSize sizeBest(100, 80);
+    // The base class version can compute the best size in report view only.
+    wxSize sizeBest = wxListCtrlBase::DoGetBestClientSize();
 
     if ( !InReportView() )
     {
