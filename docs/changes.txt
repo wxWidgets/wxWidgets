@@ -450,6 +450,14 @@ Deprecated methods and their replacements
   possible or wxWindowDisabler otherwise.
 
 
+Changes in behaviour visible to end users
+-----------------------------------------
+
+- In wxMSW wxSpinCtrl used to prevent the user from entering more digits than
+  could fit in its visible area. This was inconsistent with the other ports and
+  now the control scrolls if too much text is added.
+
+
 Major new features in this release
 ----------------------------------
 

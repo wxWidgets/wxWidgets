@@ -298,6 +298,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     WXDWORD exStyle = 0;
     WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
+    // Scroll text automatically if there is not enough space to show all of
+    // it, this is better than not allowing to enter more digits at all.
+    msStyle |= ES_AUTOHSCROLL;
+
     // propagate text alignment style to text ctrl
     if ( style & wxALIGN_RIGHT )
         msStyle |= ES_RIGHT;
