@@ -1334,6 +1334,29 @@ void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
 }
 
 // ----------------------------------------------------------------------------
+// Geometry
+// ----------------------------------------------------------------------------
+
+wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
+{
+    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y, -1);
+
+    wxSize size(LOWORD(rc), HIWORD(rc));
+
+    // We have to add space for the scrollbars ourselves, they're not taken
+    // into account by ListView_ApproximateViewRect(), at least not with
+    // commctrl32.dll v6.
+    const DWORD mswStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+
+    if ( mswStyle & WS_HSCROLL )
+        size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+    if ( mswStyle & WS_VSCROLL )
+        size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+
+    return size;
+}
+
+// ----------------------------------------------------------------------------
 // Operations
 // ----------------------------------------------------------------------------
 

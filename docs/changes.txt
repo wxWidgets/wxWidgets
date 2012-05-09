@@ -566,6 +566,7 @@ MSW:
 - Fix coordinate handling in wxDC::Blit() when source DC is a DIB.
 - Fix handling of composite windows in wxToolTip (Armel Asselin).
 - Add VT_I8 support to wxAutomationObject (PB).
+- Fix wxListbook size calculations to avoid spurious scrollbars.
 
 OSX:
 

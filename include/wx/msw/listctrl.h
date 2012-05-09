@@ -384,6 +384,14 @@ protected:
     // common part of all ctors
     void Init();
 
+    // Implement constrained best size calculation.
+    virtual int DoGetBestClientHeight(int width) const
+        { return MSWGetBestViewRect(width, -1).y; }
+    virtual int DoGetBestClientWidth(int height) const
+        { return MSWGetBestViewRect(-1, height).x; }
+
+    wxSize MSWGetBestViewRect(int x, int y) const;
+
     // Implement base class pure virtual methods.
     long DoInsertColumn(long col, const wxListItem& info);
 
