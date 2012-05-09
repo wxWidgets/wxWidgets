@@ -317,13 +317,23 @@ void wxMDIParentFrame::RemoveMDIChild(wxMDIChildFrame * WXUNUSED(child))
 void wxMDIParentFrame::AddWindowMenu()
 {
     if ( m_windowMenu )
+    {
+        // For correct handling of the events from this menu we also must
+        // attach it to the menu bar.
+        m_windowMenu->Attach(GetMenuBar());
+
         MDIInsertWindowMenu(GetClientWindow(), m_hMenu, GetMDIWindowMenu(this));
+    }
 }
 
 void wxMDIParentFrame::RemoveWindowMenu()
 {
     if ( m_windowMenu )
+    {
         MDIRemoveWindowMenu(GetClientWindow(), m_hMenu);
+
+        m_windowMenu->Detach();
+    }
 }
 
 void wxMDIParentFrame::UpdateWindowMenu(bool enable)
