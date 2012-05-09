@@ -1072,9 +1072,6 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             int nBmpWidth  = bmp.GetWidth(),
                 nBmpHeight = bmp.GetHeight();
 
-            // there should be enough space!
-            wxASSERT( nBmpWidth <= imgWidth && nBmpHeight <= (rcImg.bottom - rcImg.top) );
-
             int x = rcImg.left + (imgWidth - nBmpWidth) / 2;
             int y = rcImg.top  + (rcImg.bottom - rcImg.top - nBmpHeight) / 2;
             dc.Blit(x, y, nBmpWidth, nBmpHeight, &dcMem, 0, 0, wxCOPY, true);
