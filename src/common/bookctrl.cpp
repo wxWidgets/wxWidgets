@@ -105,13 +105,11 @@ void wxBookCtrlBase::DoInvalidateBestSize()
 
 wxSize wxBookCtrlBase::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    // We need to add the size of the controller and the border between if it's
-    // shown. Notice that we don't use GetControllerSize() here as it returns
-    // the actual size while we want the best size here.
+    // Add the size of the controller and the border between if it's shown.
     if ( !m_bookctrl || !m_bookctrl->IsShown() )
         return sizePage;
 
-    const wxSize sizeController = m_bookctrl->GetBestSize();
+    const wxSize sizeController = GetControllerSize();
 
     wxSize size = sizePage;
     if ( IsVertical() )
@@ -288,19 +286,19 @@ wxSize wxBookCtrlBase::GetControllerSize() const
     if ( !m_bookctrl || !m_bookctrl->IsShown() )
         return wxSize(0, 0);
 
-    const wxSize sizeClient = GetClientSize(),
-                 sizeCtrl = m_bookctrl->GetBestSize();
+    const wxSize sizeClient = GetClientSize();
 
     wxSize size;
 
+    // Ask for the best width/height considering the other direction.
     if ( IsVertical() )
     {
         size.x = sizeClient.x;
-        size.y = sizeCtrl.y;
+        size.y = m_bookctrl->GetBestHeight(sizeClient.x);
     }
     else // left/right aligned
     {
-        size.x = sizeCtrl.x;
+        size.x = m_bookctrl->GetBestWidth(sizeClient.y);
         size.y = sizeClient.y;
     }
 
