@@ -1020,6 +1020,21 @@ public:
     virtual wxRichTextBox* WriteTextBox(const wxRichTextAttr& textAttr = wxRichTextAttr());
 
     /**
+        Writes a field at the current insertion point.
+
+        @param fieldType
+            The field type, matching an existing field type definition.
+        @param properties
+            Extra data for the field.
+        @param textAttr
+            Optional attributes.
+
+        @see wxRichTextField, wxRichTextFieldType, wxRichTextFieldTypeStandard
+    */
+    virtual wxRichTextField* WriteField(const wxString& fieldType, const wxRichTextProperties& properties,
+                            const wxRichTextAttr& textAttr = wxRichTextAttr());
+
+    /**
         Write a table at the current insertion point, returning the table.
         You can then call SetFocusObject() to set the focus to the new object.
     */

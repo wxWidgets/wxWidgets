@@ -3542,7 +3542,6 @@ void wxRichTextParagraphLayoutBox::PrepareContent(wxRichTextParagraphLayoutBox& 
         buffer->GetRichTextCtrl()->PrepareContent(container);
 }
 
-
 /// Set character or paragraph properties
 bool wxRichTextParagraphLayoutBox::SetProperties(const wxRichTextRange& range, const wxRichTextProperties& properties, int flags)
 {
@@ -4611,7 +4610,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
         node = node->GetNext();
     }
-
 #endif
 
     // Split up lines
@@ -4724,7 +4722,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
             wxRect oldAvailableRect = availableRect;
 
             // Available width depends on the floating objects and the line height.
-            // Note: the floating objects may be placed vertically along the two side of
+            // Note: the floating objects may be placed vertically along the two sides of
             // buffer, so we may have different available line widths with different
             // [startY, endY]. So, we can't determine how wide the available
             // space is until we know the exact line height.
@@ -4740,7 +4738,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                 lineAscent = wxMax(childSize.y-childDescent, maxAscent);
             }
             lineHeight = wxMax(lineHeight, (lineDescent + lineAscent));
-
             wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
 
             // Adjust availableRect to the space that is available when taking floating objects into account.
@@ -4764,7 +4761,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                 {
                     wxSize oldSize = child->GetCachedSize();
 
-                    //child->SetCachedSize(wxDefaultSize);
                     // Lays out the object first with a given amount of space, and then if no width was specified in attr,
                     // lays out the object again using the minimum size
                     child->Invalidate(wxRICHTEXT_ALL);
@@ -4772,7 +4768,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                                 attr, child->GetAttributes(), availableRect, parentRect, style);
                     childSize = child->GetCachedSize();
                     childDescent = child->GetDescent();
-                    //child->SetPosition(availableRect.GetPosition());
 
                     if (oldSize != child->GetCachedSize())
                     {
@@ -4999,7 +4994,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         SetMinSize(marginRect.GetSize());
     }
 
-
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
 #if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
     // Use the text extents to calculate the size of each fragment in each line
@@ -5177,7 +5171,6 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
         wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
         while (node)
         {
-
             wxRichTextObject* child = node->GetData();
             if (!child->GetRange().IsOutside(range))
             {
@@ -5203,7 +5196,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                     rangeToUse.LimitTo(child->GetRange());
                     int childDescent = 0;
 
-                    // At present wxRICHTEXT_HEIGHT_ONLY is only fast if we're already cached the size,
+                    // At present wxRICHTEXT_HEIGHT_ONLY is only fast if we've already cached the size,
                     // but it's only going to be used after caching has taken place.
                     if ((flags & wxRICHTEXT_HEIGHT_ONLY) && child->GetCachedSize().y != 0)
                     {
@@ -5372,7 +5365,6 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                             maxLineHeight = wxMax(maxLineHeight, (maxAscent + maxDescent));
                             maxLineWidth += childSize.x;
                         }
-                        descent = wxMax(descent, childDescent);
                     }
 
                     node2 = node2->GetNext();
@@ -5511,7 +5503,11 @@ int wxRichTextParagraph::HitTest(wxDC& dc, wxRichTextDrawingContext& context, co
     while (objNode)
     {
         wxRichTextObject* child = objNode->GetData();
-        if (child->IsTopLevel() && ((flags & wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS) == 0))
+        // Don't recurse if we have wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS,
+        // and also, if this seems composite but actually is marked as atomic,
+        // don't recurse.
+        if (child->IsTopLevel() && ((flags & wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS) == 0) &&
+            (! (((flags & wxRICHTEXT_HITTEST_HONOUR_ATOMIC) != 0) && child->IsAtomic())))
         {
             {
                 int hitTest = child->HitTest(dc, context, pt, textPosition, obj, contextObj);
@@ -6506,8 +6502,8 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr,
 
         x += w;
     }
-    return true;
 
+    return true;
 }
 
 /// Lay the item out
@@ -6833,11 +6829,12 @@ long wxRichTextPlainText::GetFirstLineBreakPosition(long pos)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextBuffer, wxRichTextParagraphLayoutBox)
 
-wxList                  wxRichTextBuffer::sm_handlers;
-wxList                  wxRichTextBuffer::sm_drawingHandlers;
-wxRichTextRenderer*     wxRichTextBuffer::sm_renderer = NULL;
-int                     wxRichTextBuffer::sm_bulletRightMargin = 20;
-float                   wxRichTextBuffer::sm_bulletProportion = (float) 0.3;
+wxList                      wxRichTextBuffer::sm_handlers;
+wxList                      wxRichTextBuffer::sm_drawingHandlers;
+wxRichTextFieldTypeHashMap  wxRichTextBuffer::sm_fieldTypes;
+wxRichTextRenderer*         wxRichTextBuffer::sm_renderer = NULL;
+int                         wxRichTextBuffer::sm_bulletRightMargin = 20;
+float                       wxRichTextBuffer::sm_bulletProportion = (float) 0.3;
 
 /// Initialisation
 void wxRichTextBuffer::Init()
@@ -7150,6 +7147,47 @@ wxRichTextObject* wxRichTextParagraphLayoutBox::InsertObjectWithUndo(wxRichTextB
     buffer->SubmitAction(action);
 
     wxRichTextObject* obj = GetLeafObjectAtPosition(pos);
+    return obj;
+}
+
+wxRichTextField* wxRichTextParagraphLayoutBox::InsertFieldWithUndo(wxRichTextBuffer* buffer, long pos, const wxString& fieldType,
+                                                        const wxRichTextProperties& properties,
+                                                        wxRichTextCtrl* ctrl, int flags,
+                                                        const wxRichTextAttr& textAttr)
+{
+    wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Field"), wxRICHTEXT_INSERT, buffer, this, ctrl, false);
+
+    wxRichTextAttr* p = NULL;
+    wxRichTextAttr paraAttr;
+    if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
+    {
+        paraAttr = GetStyleForNewParagraph(buffer, pos);
+        if (!paraAttr.IsDefault())
+            p = & paraAttr;
+    }
+
+    wxRichTextAttr attr(buffer->GetDefaultStyle());
+
+    wxRichTextParagraph* newPara = new wxRichTextParagraph(this, & attr);
+    if (p)
+        newPara->SetAttributes(*p);
+
+    wxRichTextField* fieldObject = new wxRichTextField();
+    fieldObject->wxRichTextObject::SetProperties(properties);
+    fieldObject->SetFieldType(fieldType);
+    fieldObject->SetAttributes(textAttr);
+    newPara->AppendChild(fieldObject);
+    action->GetNewParagraphs().AppendChild(newPara);
+    action->GetNewParagraphs().UpdateRanges();
+    action->GetNewParagraphs().SetPartialParagraph(true);
+    action->SetPosition(pos);
+
+    // Set the range we'll need to delete in Undo
+    action->SetRange(wxRichTextRange(pos, pos));
+
+    buffer->SubmitAction(action);
+
+    wxRichTextField* obj = wxDynamicCast(GetLeafObjectAtPosition(pos), wxRichTextField);
     return obj;
 }
 
@@ -8298,6 +8336,345 @@ bool wxRichTextBox::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
         return false;
 }
 
+/*!
+ * wxRichTextField
+ */
+
+IMPLEMENT_DYNAMIC_CLASS(wxRichTextField, wxRichTextParagraphLayoutBox)
+
+wxRichTextField::wxRichTextField(const wxString& fieldType, wxRichTextObject* parent):
+    wxRichTextParagraphLayoutBox(parent)
+{
+    SetFieldType(fieldType);
+}
+
+/// Draw the item
+bool wxRichTextField::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style)
+{
+    if (!IsShown())
+        return true;
+
+    wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
+    if (fieldType && fieldType->Draw(this, dc, context, range, selection, rect, descent, style))
+        return true;
+
+    // Fallback; but don't draw guidelines.
+    style &= ~wxRICHTEXT_DRAW_GUIDELINES;
+    return wxRichTextParagraphLayoutBox::Draw(dc, context, range, selection, rect, descent, style);
+}
+
+bool wxRichTextField::Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style)
+{
+    wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
+    if (fieldType && fieldType->Layout(this, dc, context, rect, parentRect, style))
+        return true;
+
+    // Fallback
+    return wxRichTextParagraphLayoutBox::Layout(dc, context, rect, parentRect, style);
+}
+
+bool wxRichTextField::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position, wxArrayInt* partialExtents) const
+{
+    wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
+    if (fieldType)
+        return fieldType->GetRangeSize((wxRichTextField*) this, range, size, descent, dc, context, flags, position, partialExtents);
+
+    return wxRichTextParagraphLayoutBox::GetRangeSize(range, size, descent, dc, context, flags, position, partialExtents);
+}
+
+/// Calculate range
+void wxRichTextField::CalculateRange(long start, long& end)
+{
+    if (IsTopLevel())
+        wxRichTextParagraphLayoutBox::CalculateRange(start, end);
+    else
+        wxRichTextObject::CalculateRange(start, end);
+}
+
+/// Copy
+void wxRichTextField::Copy(const wxRichTextField& obj)
+{
+    wxRichTextParagraphLayoutBox::Copy(obj);
+
+    UpdateField();
+}
+
+// Edit properties via a GUI
+bool wxRichTextField::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
+{
+    wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
+    if (fieldType)
+        return fieldType->EditProperties(this, parent, buffer);
+
+    return false;
+}
+
+bool wxRichTextField::CanEditProperties() const
+{
+    wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
+    if (fieldType)
+        return fieldType->CanEditProperties((wxRichTextField*) this);
+
+    return false;
+}
+
+wxString wxRichTextField::GetPropertiesMenuLabel() const
+{
+    wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
+    if (fieldType)
+        return fieldType->GetPropertiesMenuLabel((wxRichTextField*) this);
+
+    return wxEmptyString;
+}
+
+bool wxRichTextField::UpdateField()
+{
+    wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
+    if (fieldType)
+        return fieldType->UpdateField((wxRichTextField*) this);
+
+    return false;
+}
+
+bool wxRichTextField::IsTopLevel() const
+{
+    wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
+    if (fieldType)
+        return fieldType->IsTopLevel((wxRichTextField*) this);
+
+    return true;
+}
+
+IMPLEMENT_CLASS(wxRichTextFieldType, wxObject)
+
+IMPLEMENT_CLASS(wxRichTextFieldTypeStandard, wxRichTextFieldType)
+
+wxRichTextFieldTypeStandard::wxRichTextFieldTypeStandard(const wxString& name, const wxString& label, int displayStyle)
+{
+    Init();
+
+    SetName(name);
+    SetLabel(label);
+    SetDisplayStyle(displayStyle);
+}
+
+wxRichTextFieldTypeStandard::wxRichTextFieldTypeStandard(const wxString& name, const wxBitmap& bitmap, int displayStyle)
+{
+    Init();
+
+    SetName(name);
+    SetBitmap(bitmap);
+    SetDisplayStyle(displayStyle);
+}
+
+void wxRichTextFieldTypeStandard::Init()
+{
+    m_displayStyle = wxRICHTEXT_FIELD_STYLE_RECTANGLE;
+    m_font = wxFont(6, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    m_textColour = *wxWHITE;
+    m_borderColour = *wxBLACK;
+    m_backgroundColour = *wxBLACK;
+    m_verticalPadding = 1;
+    m_horizontalPadding = 3;
+    m_horizontalMargin = 2;
+    m_verticalMargin = 0;
+}
+
+void wxRichTextFieldTypeStandard::Copy(const wxRichTextFieldTypeStandard& field)
+{
+    wxRichTextFieldType::Copy(field);
+
+    m_label = field.m_label;
+    m_displayStyle = field.m_displayStyle;
+    m_font = field.m_font;
+    m_textColour = field.m_textColour;
+    m_borderColour = field.m_borderColour;
+    m_backgroundColour = field.m_backgroundColour;
+    m_verticalPadding = field.m_verticalPadding;
+    m_horizontalPadding = field.m_horizontalPadding;
+    m_horizontalMargin = field.m_horizontalMargin;
+    m_bitmap = field.m_bitmap;
+}
+
+bool wxRichTextFieldTypeStandard::Draw(wxRichTextField* obj, wxDC& dc, wxRichTextDrawingContext& WXUNUSED(context), const wxRichTextRange& WXUNUSED(range), const wxRichTextSelection& selection, const wxRect& rect, int descent, int WXUNUSED(style))
+{
+    if (m_displayStyle == wxRICHTEXT_FIELD_STYLE_COMPOSITE)
+        return false; // USe default composite drawing
+    else // if (m_displayStyle == wxRICHTEXT_FIELD_STYLE_RECTANGLE || m_displayStyle == wxRICHTEXT_FIELD_STYLE_NOBORDER)
+    {
+        int borderSize = 1;
+
+        wxPen borderPen(m_borderColour, 1, wxSOLID);
+        wxBrush backgroundBrush(m_backgroundColour);
+        wxColour textColour(m_textColour);
+
+        if (selection.WithinSelection(obj->GetRange().GetStart(), obj))
+        {
+            wxColour highlightColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+            wxColour highlightTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+
+            borderPen = wxPen(highlightTextColour, 1, wxSOLID);
+            backgroundBrush = wxBrush(highlightColour);
+
+            wxCheckSetBrush(dc, backgroundBrush);
+            wxCheckSetPen(dc, wxPen(highlightColour, 1, wxSOLID));
+            dc.DrawRectangle(rect);
+        }
+
+        if (m_displayStyle != wxRICHTEXT_FIELD_STYLE_NO_BORDER)
+            borderSize = 0;
+
+        // objectRect is the area where the content is drawn, after margins around it have been taken into account
+        wxRect objectRect = wxRect(wxPoint(rect.x + m_horizontalMargin, rect.y + wxMax(0, rect.height - descent - obj->GetCachedSize().y)),
+            wxSize(obj->GetCachedSize().x - 2*m_horizontalMargin - borderSize, obj->GetCachedSize().y));
+
+        // clientArea is where the text is actually written
+        wxRect clientArea = objectRect;
+
+        if (m_displayStyle == wxRICHTEXT_FIELD_STYLE_RECTANGLE)
+        {
+            dc.SetPen(borderPen);
+            dc.SetBrush(backgroundBrush);
+            dc.DrawRoundedRectangle(objectRect, 4.0);
+        }
+        else if (m_displayStyle == wxRICHTEXT_FIELD_STYLE_START_TAG)
+        {
+            int arrowLength = objectRect.height/2;
+            clientArea.width -= (arrowLength - m_horizontalPadding);
+
+            wxPoint pts[5];
+            pts[0].x = objectRect.x; pts[0].y = objectRect.y;
+            pts[1].x = objectRect.x + objectRect.width - arrowLength; pts[1].y = objectRect.y;
+            pts[2].x = objectRect.x + objectRect.width; pts[2].y = objectRect.y + (objectRect.height/2);
+            pts[3].x = objectRect.x + objectRect.width - arrowLength; pts[3].y = objectRect.y + objectRect.height;
+            pts[4].x = objectRect.x; pts[4].y = objectRect.y + objectRect.height;
+            dc.SetPen(borderPen);
+            dc.SetBrush(backgroundBrush);
+            dc.DrawPolygon(5, pts);
+        }
+        else if (m_displayStyle == wxRICHTEXT_FIELD_STYLE_END_TAG)
+        {
+            int arrowLength = objectRect.height/2;
+            clientArea.width -= (arrowLength - m_horizontalPadding);
+            clientArea.x += (arrowLength - m_horizontalPadding);
+
+            wxPoint pts[5];
+            pts[0].x = objectRect.x + objectRect.width; pts[0].y = objectRect.y;
+            pts[1].x = objectRect.x + arrowLength; pts[1].y = objectRect.y;
+            pts[2].x = objectRect.x; pts[2].y = objectRect.y + (objectRect.height/2);
+            pts[3].x = objectRect.x + arrowLength; pts[3].y = objectRect.y + objectRect.height;
+            pts[4].x = objectRect.x + objectRect.width; pts[4].y = objectRect.y + objectRect.height;
+            dc.SetPen(borderPen);
+            dc.SetBrush(backgroundBrush);
+            dc.DrawPolygon(5, pts);
+        }
+
+        if (m_bitmap.IsOk())
+        {
+            int x = clientArea.x + (clientArea.width - m_bitmap.GetWidth())/2;
+            int y = clientArea.y + m_verticalPadding;
+            dc.DrawBitmap(m_bitmap, x, y, true);
+
+            if (selection.WithinSelection(obj->GetRange().GetStart(), obj))
+            {
+                wxCheckSetBrush(dc, *wxBLACK_BRUSH);
+                wxCheckSetPen(dc, *wxBLACK_PEN);
+                dc.SetLogicalFunction(wxINVERT);
+                dc.DrawRectangle(wxRect(x, y, m_bitmap.GetWidth(), m_bitmap.GetHeight()));
+                dc.SetLogicalFunction(wxCOPY);
+            }
+        }
+        else
+        {
+            wxString label(m_label);
+            if (label.IsEmpty())
+                label = wxT("??");
+            int w, h, maxDescent;
+            dc.SetFont(m_font);
+            dc.GetTextExtent(m_label, & w, &h, & maxDescent);
+            dc.SetTextForeground(textColour);
+
+            int x = clientArea.x + (clientArea.width - w)/2;
+            int y = clientArea.y + (clientArea.height - (h - maxDescent))/2;
+            dc.DrawText(m_label, x, y);
+        }
+    }
+
+    return true;
+}
+
+bool wxRichTextFieldTypeStandard::Layout(wxRichTextField* obj, wxDC& dc, wxRichTextDrawingContext& context, const wxRect& WXUNUSED(rect), const wxRect& WXUNUSED(parentRect), int style)
+{
+    if (m_displayStyle == wxRICHTEXT_FIELD_STYLE_COMPOSITE)
+        return false; // USe default composite layout
+
+    wxSize size = GetSize(obj, dc, context, style);
+    obj->SetCachedSize(size);
+    obj->SetMinSize(size);
+    obj->SetMaxSize(size);
+    return true;
+}
+
+bool wxRichTextFieldTypeStandard::GetRangeSize(wxRichTextField* obj, const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position, wxArrayInt* partialExtents) const
+{
+    if (IsTopLevel(obj))
+        return obj->wxRichTextParagraphLayoutBox::GetRangeSize(range, size, descent, dc, context, flags, position);
+    else
+    {
+        wxSize sz = GetSize(obj, dc, context, 0);
+        if (partialExtents)
+        {
+            int lastSize;
+            if (partialExtents->GetCount() > 0)
+                lastSize = (*partialExtents)[partialExtents->GetCount()-1];
+            else
+                lastSize = 0;
+            partialExtents->Add(lastSize + sz.x);
+        }
+        size = sz;
+       return true;
+    }
+}
+
+wxSize wxRichTextFieldTypeStandard::GetSize(wxRichTextField* WXUNUSED(obj), wxDC& dc, wxRichTextDrawingContext& WXUNUSED(context), int WXUNUSED(style)) const
+{
+    int borderSize = 1;
+    int w = 0, h = 0, maxDescent = 0;
+
+    wxSize sz;
+    if (m_bitmap.IsOk())
+    {
+        w = m_bitmap.GetWidth();
+        h = m_bitmap.GetHeight();
+
+        sz = wxSize(w + m_horizontalMargin*2, h + m_verticalMargin*2);
+    }
+    else
+    {
+        wxString label(m_label);
+        if (label.IsEmpty())
+            label = wxT("??");
+        dc.SetFont(m_font);
+        dc.GetTextExtent(label, & w, &h, & maxDescent);
+
+        sz = wxSize(w + m_horizontalPadding*2 + m_horizontalMargin*2, h + m_verticalPadding *2 + m_verticalMargin*2);
+    }
+
+    if (m_displayStyle != wxRICHTEXT_FIELD_STYLE_NO_BORDER)
+    {
+        sz.x += borderSize*2;
+        sz.y += borderSize*2;
+    }
+
+    if (m_displayStyle == wxRICHTEXT_FIELD_STYLE_START_TAG || m_displayStyle == wxRICHTEXT_FIELD_STYLE_END_TAG)
+    {
+        // Add space for the arrow
+        sz.x += (sz.y/2 - m_horizontalPadding);
+    }
+
+    return sz;
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextCell, wxRichTextBox)
 
 wxRichTextCell::wxRichTextCell(wxRichTextObject* parent):
@@ -8484,7 +8861,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
     wxArrayInt absoluteColWidths;
     absoluteColWidths.Add(0, m_colCount);
-    // wxArrayInt absoluteColWidthsSpanning(m_colCount);
+
     wxArrayInt percentageColWidths;
     percentageColWidths.Add(0, m_colCount);
     // wxArrayInt percentageColWidthsSpanning(m_colCount);
@@ -9484,6 +9861,7 @@ public:
     {
         wxRichTextBuffer::CleanUpHandlers();
         wxRichTextBuffer::CleanUpDrawingHandlers();
+        wxRichTextBuffer::CleanUpFieldTypes();
         wxRichTextDecimalToRoman(-1);
         wxRichTextParagraph::ClearDefaultTabs();
         wxRichTextCtrl::ClearAvailableFontNames();
@@ -9851,6 +10229,7 @@ bool wxRichTextAction::Undo()
 
             container->DeleteRange(GetRange());
             container->UpdateRanges();
+
             // InvalidateHierarchy goes up the hierarchy as well as down, otherwise with a nested object,
             // Layout() would stop prematurely at the top level.
             container->InvalidateHierarchy(wxRichTextRange(GetRange().GetStart(), GetRange().GetStart()));
@@ -9882,6 +10261,7 @@ bool wxRichTextAction::Undo()
 
             container->InsertFragment(GetRange().GetStart(), m_oldParagraphs);
             container->UpdateRanges();
+
             // InvalidateHierarchy goes up the hierarchy as well as down, otherwise with a nested object,
             // Layout() would stop prematurely at the top level.
             container->InvalidateHierarchy(GetRange());
@@ -11165,7 +11545,6 @@ void wxRichTextFontTable::Clear()
 }
 
 // wxTextBoxAttr
-
 
 void wxTextBoxAttr::Reset()
 {
@@ -12716,6 +13095,46 @@ void wxRichTextBuffer::CleanUpDrawingHandlers()
     }
 
     sm_drawingHandlers.Clear();
+}
+
+void wxRichTextBuffer::AddFieldType(wxRichTextFieldType *fieldType)
+{
+    sm_fieldTypes[fieldType->GetName()] = fieldType;
+}
+
+bool wxRichTextBuffer::RemoveFieldType(const wxString& name)
+{
+    wxRichTextFieldTypeHashMap::iterator it = sm_fieldTypes.find(name);
+    if (it == sm_fieldTypes.end())
+        return false;
+    else
+    {
+        wxRichTextFieldType* fieldType = it->second;
+        sm_fieldTypes.erase(it);
+        delete fieldType;
+        return true;
+    }
+}
+
+wxRichTextFieldType *wxRichTextBuffer::FindFieldType(const wxString& name)
+{
+    wxRichTextFieldTypeHashMap::iterator it = sm_fieldTypes.find(name);
+    if (it == sm_fieldTypes.end())
+        return NULL;
+    else
+        return it->second;
+}
+
+void wxRichTextBuffer::CleanUpFieldTypes()
+{
+    wxRichTextFieldTypeHashMap::iterator it;
+    for( it = sm_fieldTypes.begin(); it != sm_fieldTypes.end(); ++it )
+    {
+        wxRichTextFieldType* fieldType = it->second;
+        delete fieldType;
+    }
+
+    sm_fieldTypes.clear();
 }
 
 #endif

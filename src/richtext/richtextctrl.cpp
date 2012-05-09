@@ -576,7 +576,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
     wxRichTextObject* hitObj = NULL;
     wxRichTextObject* contextObj = NULL;
     wxRichTextDrawingContext context(& GetBuffer());
-    int hit = GetBuffer().HitTest(dc, context, event.GetLogicalPosition(dc), position, & hitObj, & contextObj);
+    int hit = GetBuffer().HitTest(dc, context, event.GetLogicalPosition(dc), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
 
 #if wxUSE_DRAG_AND_DROP
     // If there's no selection, or we're not inside it, this isn't an attempt to initiate Drag'n'Drop
@@ -644,7 +644,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
         wxRichTextObject* contextObj = NULL;
         wxRichTextDrawingContext context(& GetBuffer());
         // Only get objects at this level, not nested, because otherwise we couldn't swipe text at a single level.
-        int hit = GetFocusObject()->HitTest(dc, context, logicalPt, position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS);
+        int hit = GetFocusObject()->HitTest(dc, context, logicalPt, position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS|wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
 
 #if wxUSE_DRAG_AND_DROP
         if (m_preDrag)
@@ -656,7 +656,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
             long position = 0;
             wxRichTextObject* hitObj = NULL;
             wxRichTextObject* contextObj = NULL;
-            int hit = GetBuffer().HitTest(dc, context, event.GetLogicalPosition(dc), position, & hitObj, & contextObj);
+            int hit = GetBuffer().HitTest(dc, context, event.GetLogicalPosition(dc), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
             wxRichTextParagraphLayoutBox* oldFocusObject = GetFocusObject();
             wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
             if (container && container != GetFocusObject() && container->AcceptsFocus())
@@ -957,7 +957,7 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
     wxRichTextObject* hitObj = NULL;
     wxRichTextObject* contextObj = NULL;
     wxRichTextDrawingContext context(& GetBuffer());
-    int hit = GetFocusObject()->HitTest(dc, context, logicalPt, position, & hitObj, & contextObj);
+    int hit = GetFocusObject()->HitTest(dc, context, logicalPt, position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
 
     if (hitObj && hitObj->GetContainer() != GetFocusObject())
     {
@@ -1183,7 +1183,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             ScrollIntoView(m_caretPosition, WXK_LEFT);
 
             // Always send this event; wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED will be sent only if there is an actual deletion.
-            //if (deletions > 0)
             {
                 wxRichTextEvent cmdEvent(
                     wxEVT_COMMAND_RICHTEXT_DELETE,
@@ -1322,7 +1321,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         ScrollIntoView(m_caretPosition, WXK_LEFT);
 
         // Always send this event; wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED will be sent only if there is an actual deletion.
-        //if (deletions > 0)
         {
             wxRichTextEvent cmdEvent(
                 wxEVT_COMMAND_RICHTEXT_DELETE,
@@ -1396,7 +1394,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         ScrollIntoView(m_caretPosition, WXK_LEFT);
 
         // Always send this event; wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED will be sent only if there is an actual deletion.
-        //if (deletions > 0)
         {
             wxRichTextEvent cmdEvent(
                 wxEVT_COMMAND_RICHTEXT_DELETE,
@@ -2092,7 +2089,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     }
 
     wxRichTextParagraphLayoutBox* container = GetFocusObject();
-    int hitTestFlags = wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS|wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS;
+    int hitTestFlags = wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS|wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS|wxRICHTEXT_HITTEST_HONOUR_ATOMIC;
 
     if (notInThisObject)
     {
@@ -3002,6 +2999,13 @@ wxRichTextBox* wxRichTextCtrl::WriteTextBox(const wxRichTextAttr& textAttr)
     wxRichTextObject* obj = GetFocusObject()->InsertObjectWithUndo(& GetBuffer(), m_caretPosition+1, textBox, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
     wxRichTextBox* box = wxDynamicCast(obj, wxRichTextBox);
     return box;
+}
+
+wxRichTextField* wxRichTextCtrl::WriteField(const wxString& fieldType, const wxRichTextProperties& properties,
+                            const wxRichTextAttr& textAttr)
+{
+    return GetFocusObject()->InsertFieldWithUndo(& GetBuffer(), m_caretPosition+1, fieldType, properties,
+                this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE, textAttr);
 }
 
 // Write a table at the current insertion point, returning the table.
@@ -4575,7 +4579,6 @@ void wxRichTextCtrl::EnableVerticalScrollbar(bool enable)
     m_verticalScrollbarEnabled = enable;
     SetupScrollbars();
 }
-
 
 #if wxRICHTEXT_USE_OWN_CARET
 

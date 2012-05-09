@@ -172,6 +172,8 @@ wxRichTextObject* wxRichTextXMLHandler::CreateObjectForXMLName(wxRichTextObject*
         return new wxRichTextCell;
     else if (name == wxT("table"))
         return new wxRichTextTable;
+    else if (name == wxT("field"))
+        return new wxRichTextField;
     else
         return NULL;
 }
@@ -1085,6 +1087,7 @@ bool wxRichTextXMLHandler::ExportStyleDefinition(wxOutputStream& stream, wxRichT
         OutputString(stream, wxT("</boxstyle>"));
     }
 
+    WriteProperties(stream, def->GetProperties(), level);
 
     return true;
 }

@@ -77,7 +77,10 @@ enum wxRichTextHitTestFlags
     wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS = 0x20,
 
     // Ignore floating objects
-    wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS = 0x40
+    wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS = 0x40,
+
+    // Don't recurse into objects marked as atomic
+    wxRICHTEXT_HITTEST_HONOUR_ATOMIC = 0x80
 };
 
 /**
@@ -2286,9 +2289,15 @@ public:
     wxRichTextRange GetOwnRangeIfTopLevel() const { return IsTopLevel() ? m_ownRange : m_range; }
 
     /**
-        Returns @true if this object this composite.
+        Returns @true if this object is composite.
     */
     virtual bool IsComposite() const { return false; }
+
+    /**
+        Returns @true if no user editing can be done inside the object. This returns @true for simple objects,
+        @false for most composite objects, but @true for fields, which if composite, should not be user-edited.
+    */
+    virtual bool IsAtomic() const { return true; }
 
     /**
         Returns a pointer to the parent object.
@@ -2606,6 +2615,12 @@ public:
     virtual bool IsComposite() const { return true; }
 
     /**
+        Returns @true if no user editing can be done inside the object. This returns @true for simple objects,
+        @false for most composite objects, but @true for fields, which if composite, should not be user-edited.
+    */
+    virtual bool IsAtomic() const { return false; }
+
+    /**
         Returns true if the buffer is empty.
     */
     virtual bool IsEmpty() const { return GetChildCount() == 0; }
@@ -2756,6 +2771,16 @@ public:
         Submits a command to insert the given image.
     */
     bool InsertImageWithUndo(wxRichTextBuffer* buffer, long pos, const wxRichTextImageBlock& imageBlock,
+                                                        wxRichTextCtrl* ctrl, int flags,
+                                                        const wxRichTextAttr& textAttr);
+
+    /**
+        Submits a command to insert the given field. Field data can be included in properties.
+
+        @see wxRichTextField, wxRichTextFieldType, wxRichTextFieldTypeStandard
+    */
+    wxRichTextField* InsertFieldWithUndo(wxRichTextBuffer* buffer, long pos, const wxString& fieldType,
+                                                        const wxRichTextProperties& properties,
                                                         wxRichTextCtrl* ctrl, int flags,
                                                         const wxRichTextAttr& textAttr);
 
@@ -3296,6 +3321,470 @@ public:
     void Copy(const wxRichTextBox& obj);
 
 protected:
+};
+
+/**
+    @class wxRichTextField
+
+    This class implements the general concept of a field, an object that represents
+    additional functionality such as a footnote, a bookmark, a page number, a table
+    of contents, and so on. Extra information (such as a bookmark name) can be stored
+    in the object properties.
+
+    Drawing, layout, and property editing is delegated to classes derived
+    from wxRichTextFieldType, such as instances of wxRichTextFieldTypeStandard; this makes
+    the use of fields an efficient method of introducing extra functionality, since
+    most of the information required to draw a field (such as a bitmap) is kept centrally
+    in a single field type definition.
+
+    The FieldType property, accessed by SetFieldType/GetFieldType, is used to retrieve
+    the field type definition. So be careful not to overwrite this property.
+
+    wxRichTextField is derived from wxRichTextParagraphLayoutBox, which means that it
+    can contain its own read-only content, refreshed when the application calls the UpdateField
+    function. Whether a field is treated as a composite or a single graphic is determined
+    by the field type definition. If using wxRichTextFieldTypeStandard, passing the display
+    type wxRICHTEXT_FIELD_STYLE_COMPOSITE to the field type definition causes the field
+    to behave like a composite; the other display styles display a simple graphic.
+    When implementing a composite field, you will still need to derive from wxRichTextFieldTypeStandard
+    or wxRichTextFieldType, if only to implement UpdateField to refresh the field content
+    appropriately. wxRichTextFieldTypeStandard is only one possible implementation, but
+    covers common needs especially for simple, static fields using text or a bitmap.
+
+    Register field types on application initialisation with the static function
+    wxRichTextParagraphLayoutBox::AddFieldType. They will be deleted automatically
+    on application exit.
+
+    An application can write a field to a control with wxRichTextCtrl::WriteField,
+    taking a field type, the properties for the field, and optional attributes.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextFieldTypeStandard, wxRichTextFieldType, wxRichTextParagraphLayoutBox, wxRichTextProperties, wxRichTextCtrl
+*/
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextField: public wxRichTextParagraphLayoutBox
+{
+    DECLARE_DYNAMIC_CLASS(wxRichTextField)
+public:
+// Constructors
+
+    /**
+        Default constructor; optionally pass the parent object.
+    */
+
+    wxRichTextField(const wxString& fieldType = wxEmptyString, wxRichTextObject* parent = NULL);
+
+    /**
+        Copy constructor.
+    */
+
+    wxRichTextField(const wxRichTextField& obj): wxRichTextParagraphLayoutBox() { Copy(obj); }
+
+// Overridables
+
+    virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+
+    virtual bool Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style);
+
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+
+    virtual wxString GetXMLNodeName() const { return wxT("field"); }
+
+    virtual bool CanEditProperties() const;
+
+    virtual bool EditProperties(wxWindow* parent, wxRichTextBuffer* buffer);
+
+    virtual wxString GetPropertiesMenuLabel() const;
+
+    virtual bool AcceptsFocus() const { return false; }
+
+    virtual void CalculateRange(long start, long& end);
+
+    /**
+        If a field has children, we don't want the user to be able to edit it.
+    */
+    virtual bool IsAtomic() const { return true; }
+
+    virtual bool IsEmpty() const { return false; }
+
+    virtual bool IsTopLevel() const;
+
+// Accessors
+
+    void SetFieldType(const wxString& fieldType) { GetProperties().SetProperty(wxT("FieldType"), fieldType); }
+    wxString GetFieldType() const { return GetProperties().GetPropertyString(wxT("FieldType")); }
+
+// Operations
+
+    /**
+        Update the field; delegated to the associated field type. This would typically expand the field to its value,
+        if this is a dynamically changing and/or composite field.
+     */
+    virtual bool UpdateField();
+
+    virtual wxRichTextObject* Clone() const { return new wxRichTextField(*this); }
+
+    void Copy(const wxRichTextField& obj);
+
+protected:
+};
+
+/**
+    @class wxRichTextFieldType
+
+    The base class for custom field types. Each type definition handles one
+    field type. Override functions to provide drawing, layout, updating and
+    property editing functionality for a field.
+
+    Register field types on application initialisation with the static function
+    wxRichTextParagraphLayoutBox::AddFieldType. They will be deleted automatically
+    on application exit.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextFieldTypeStandard, wxRichTextField, wxRichTextCtrl
+*/
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextFieldType: public wxObject
+{
+    DECLARE_CLASS(wxRichTextFieldType)
+public:
+    /**
+        Creates a field type definition.
+    */
+    wxRichTextFieldType(const wxString& name = wxEmptyString)
+        : m_name(name)
+        { }
+
+    /**
+        Copy constructor.
+    */
+    wxRichTextFieldType(const wxRichTextFieldType& fieldType) { Copy(fieldType); }
+
+    void Copy(const wxRichTextFieldType& fieldType) { m_name = fieldType.m_name; }
+
+    /**
+        Draw the item, within the given range. Some objects may ignore the range (for
+        example paragraphs) while others must obey it (lines, to implement wrapping)
+    */
+    virtual bool Draw(wxRichTextField* obj, wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style) = 0;
+
+    /**
+        Lay the item out at the specified position with the given size constraint.
+        Layout must set the cached size. @rect is the available space for the object,
+        and @a parentRect is the container that is used to determine a relative size
+        or position (for example if a text box must be 50% of the parent text box).
+    */
+    virtual bool Layout(wxRichTextField* obj, wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style) = 0;
+
+    /**
+        Returns the object size for the given range. Returns @false if the range
+        is invalid for this object.
+    */
+    virtual bool GetRangeSize(wxRichTextField* obj, const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const = 0;
+
+    /**
+        Returns @true if we can edit the object's properties via a GUI.
+    */
+    virtual bool CanEditProperties(wxRichTextField* WXUNUSED(obj)) const { return false; }
+
+    /**
+        Edits the object's properties via a GUI.
+    */
+    virtual bool EditProperties(wxRichTextField* WXUNUSED(obj), wxWindow* WXUNUSED(parent), wxRichTextBuffer* WXUNUSED(buffer)) { return false; }
+
+    /**
+        Returns the label to be used for the properties context menu item.
+    */
+    virtual wxString GetPropertiesMenuLabel(wxRichTextField* WXUNUSED(obj)) const { return wxEmptyString; }
+
+    /**
+        Update the field. This would typically expand the field to its value,
+        if this is a dynamically changing and/or composite field.
+     */
+    virtual bool UpdateField(wxRichTextField* WXUNUSED(obj)) { return false; }
+
+    /**
+        Returns @true if this object is top-level, i.e. contains its own paragraphs, such as a text box.
+    */
+    virtual bool IsTopLevel(wxRichTextField* WXUNUSED(obj)) const { return true; }
+
+    /**
+        Sets the field type name. There should be a unique name per field type object.
+    */
+    void SetName(const wxString& name) { m_name = name; }
+
+    /**
+        Returns the field type name. There should be a unique name per field type object.
+    */
+    wxString GetName() const { return m_name; }
+
+protected:
+
+    wxString  m_name;
+};
+
+WX_DECLARE_STRING_HASH_MAP(wxRichTextFieldType*, wxRichTextFieldTypeHashMap);
+
+/**
+    @class wxRichTextFieldTypeStandard
+
+    A field type that can handle fields with text or bitmap labels, with a small range
+    of styles for implementing rectangular fields and fields that can be used for start
+    and end tags.
+
+    The border, text and background colours can be customised; the default is
+    white text on a black background.
+
+    The following display styles can be used.
+
+    @beginStyleTable
+    @style{wxRICHTEXT_FIELD_STYLE_COMPOSITE}
+           Creates a composite field; you will probably need to derive a new class to implement UpdateField.
+    @style{wxRICHTEXT_FIELD_STYLE_RECTANGLE}
+           Shows a rounded rectangle background.
+    @style{wxRICHTEXT_FIELD_STYLE_NO_BORDER}
+           Suppresses the background and border; mostly used with a bitmap label.
+    @style{wxRICHTEXT_FIELD_STYLE_START_TAG}
+           Shows a start tag background, with the pointy end facing right.
+    @style{wxRICHTEXT_FIELD_STYLE_END_TAG}
+           Shows an end tag background, with the pointy end facing left.
+    @endStyleTable
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextFieldType, wxRichTextField, wxRichTextBuffer, wxRichTextCtrl
+*/
+
+class WXDLLIMPEXP_RICHTEXT wxRichTextFieldTypeStandard: public wxRichTextFieldType
+{
+    DECLARE_CLASS(wxRichTextFieldTypeStandard)
+public:
+
+    // Display style types
+    enum { wxRICHTEXT_FIELD_STYLE_COMPOSITE = 0x01,
+           wxRICHTEXT_FIELD_STYLE_RECTANGLE = 0x02,
+           wxRICHTEXT_FIELD_STYLE_NO_BORDER = 0x04,
+           wxRICHTEXT_FIELD_STYLE_START_TAG = 0x08,
+           wxRICHTEXT_FIELD_STYLE_END_TAG = 0x10
+         };
+
+    /**
+        Constructor, creating a field type definition with a text label.
+
+        @param parent
+            The name of the type definition. This must be unique, and is the type
+            name used when adding a field to a control.
+        @param label
+            The text label to be shown on the field.
+        @param displayStyle
+            The display style: one of wxRICHTEXT_FIELD_STYLE_RECTANGLE,
+            wxRICHTEXT_FIELD_STYLE_NO_BORDER, wxRICHTEXT_FIELD_STYLE_START_TAG,
+            wxRICHTEXT_FIELD_STYLE_END_TAG.
+
+    */
+    wxRichTextFieldTypeStandard(const wxString& name, const wxString& label, int displayStyle = wxRICHTEXT_FIELD_STYLE_RECTANGLE);
+
+    /**
+        Constructor, creating a field type definition with a bitmap label.
+
+        @param parent
+            The name of the type definition. This must be unique, and is the type
+            name used when adding a field to a control.
+        @param label
+            The bitmap label to be shown on the field.
+        @param displayStyle
+            The display style: one of wxRICHTEXT_FIELD_STYLE_RECTANGLE,
+            wxRICHTEXT_FIELD_STYLE_NO_BORDER, wxRICHTEXT_FIELD_STYLE_START_TAG,
+            wxRICHTEXT_FIELD_STYLE_END_TAG.
+
+    */
+    wxRichTextFieldTypeStandard(const wxString& name, const wxBitmap& bitmap, int displayStyle = wxRICHTEXT_FIELD_STYLE_NO_BORDER);
+
+    /**
+        The default constructor.
+
+    */
+    wxRichTextFieldTypeStandard() { Init(); }
+
+    /**
+        The copy constructor.
+
+    */
+    wxRichTextFieldTypeStandard(const wxRichTextFieldTypeStandard& field) { Copy(field); }
+
+    /**
+        Initialises the object.
+    */
+    void Init();
+
+    /**
+        Copies the object.
+    */
+    void Copy(const wxRichTextFieldTypeStandard& field);
+
+    /**
+        The assignment operator.
+    */
+    void operator=(const wxRichTextFieldTypeStandard& field) { Copy(field); }
+
+    /**
+        Draw the item, within the given range. Some objects may ignore the range (for
+        example paragraphs) while others must obey it (lines, to implement wrapping)
+    */
+    virtual bool Draw(wxRichTextField* obj, wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
+
+    /**
+        Lay the item out at the specified position with the given size constraint.
+        Layout must set the cached size. @rect is the available space for the object,
+        and @a parentRect is the container that is used to determine a relative size
+        or position (for example if a text box must be 50% of the parent text box).
+    */
+    virtual bool Layout(wxRichTextField* obj, wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style);
+
+    /**
+        Returns the object size for the given range. Returns @false if the range
+        is invalid for this object.
+    */
+    virtual bool GetRangeSize(wxRichTextField* obj, const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+
+    /**
+        Get the size of the field, given the label, font size, and so on.
+    */
+    wxSize GetSize(wxRichTextField* obj, wxDC& dc, wxRichTextDrawingContext& context, int style) const;
+
+    /**
+        Returns @true if the display type is wxRICHTEXT_FIELD_STYLE_COMPOSITE, @false otherwise.
+    */
+    virtual bool IsTopLevel(wxRichTextField* WXUNUSED(obj)) const { return (GetDisplayStyle() & wxRICHTEXT_FIELD_STYLE_COMPOSITE) != 0; }
+
+    /**
+        Sets the text label for fields of this type.
+    */
+    void SetLabel(const wxString& label) { m_label = label; }
+
+    /**
+        Returns the text label for fields of this type.
+    */
+    const wxString& GetLabel() const { return m_label; }
+
+    /**
+        Sets the bitmap label for fields of this type.
+    */
+    void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
+
+    /**
+        Gets the bitmap label for fields of this type.
+    */
+    const wxBitmap& GetBitmap() const { return m_bitmap; }
+
+    /**
+        Gets the display style for fields of this type.
+    */
+    int GetDisplayStyle() const { return m_displayStyle; }
+
+    /**
+        Sets the display style for fields of this type.
+    */
+    void SetDisplayStyle(int displayStyle) { m_displayStyle = displayStyle; }
+
+    /**
+        Gets the font used for drawing the text label.
+    */
+    const wxFont& GetFont() const { return m_font; }
+
+    /**
+        Sets the font used for drawing the text label.
+    */
+    void SetFont(const wxFont& font) { m_font = font; }
+
+    /**
+        Gets the colour used for drawing the text label.
+    */
+    const wxColour& GetTextColour() const { return m_textColour; }
+
+    /**
+        Sets the colour used for drawing the text label.
+    */
+    void SetTextColour(const wxColour& colour) { m_textColour = colour; }
+
+    /**
+        Gets the colour used for drawing the field border.
+    */
+    const wxColour& GetBorderColour() const { return m_borderColour; }
+
+    /**
+        Sets the colour used for drawing the field border.
+    */
+    void SetBorderColour(const wxColour& colour) { m_borderColour = colour; }
+
+    /**
+        Gets the colour used for drawing the field background.
+    */
+    const wxColour& GetBackgroundColour() const { return m_backgroundColour; }
+
+    /**
+        Sets the colour used for drawing the field background.
+    */
+    void SetBackgroundColour(const wxColour& colour) { m_backgroundColour = colour; }
+
+    /**
+        Sets the vertical padding (the distance between the border and the text).
+    */
+    void SetVerticalPadding(int padding) { m_verticalPadding = padding; }
+
+    /**
+        Gets the vertical padding (the distance between the border and the text).
+    */
+    int GetVerticalPadding() const { return m_verticalPadding; }
+
+    /**
+        Sets the horizontal padding (the distance between the border and the text).
+    */
+    void SetHorizontalPadding(int padding) { m_horizontalPadding = padding; }
+
+    /**
+        Sets the horizontal padding (the distance between the border and the text).
+    */
+    int GetHorizontalPadding() const { return m_horizontalPadding; }
+
+    /**
+        Sets the horizontal margin surrounding the field object.
+    */
+    void SetHorizontalMargin(int margin) { m_horizontalMargin = margin; }
+
+    /**
+        Gets the horizontal margin surrounding the field object.
+    */
+    int GetHorizontalMargin() const { return m_horizontalMargin; }
+
+    /**
+        Sets the vertical margin surrounding the field object.
+    */
+    void SetVerticalMargin(int margin) { m_verticalMargin = margin; }
+
+    /**
+        Gets the vertical margin surrounding the field object.
+    */
+    int GetVerticalMargin() const { return m_verticalMargin; }
+
+protected:
+
+    wxString    m_label;
+    int         m_displayStyle;
+    wxFont      m_font;
+    wxColour    m_textColour;
+    wxColour    m_borderColour;
+    wxColour    m_backgroundColour;
+    int         m_verticalPadding;
+    int         m_horizontalPadding;
+    int         m_horizontalMargin;
+    int         m_verticalMargin;
+    wxBitmap    m_bitmap;
 };
 
 /**
@@ -4625,6 +5114,38 @@ public:
     static void CleanUpDrawingHandlers();
 
     /**
+        Returns the field types.
+    */
+    static wxRichTextFieldTypeHashMap& GetFieldTypes() { return sm_fieldTypes; }
+
+    /**
+        Adds a field type.
+
+        @see RemoveFieldType(), FindFieldType(), wxRichTextField, wxRichTextFieldType, wxRichTextFieldTypeStandard
+
+    */
+    static void AddFieldType(wxRichTextFieldType *fieldType);
+
+    /**
+        Removes a field type by name.
+
+        @see AddFieldType(), FindFieldType(), wxRichTextField, wxRichTextFieldType, wxRichTextFieldTypeStandard
+    */
+    static bool RemoveFieldType(const wxString& name);
+
+    /**
+        Finds a field type by name.
+
+        @see RemoveFieldType(), AddFieldType(), wxRichTextField, wxRichTextFieldType, wxRichTextFieldTypeStandard
+    */
+    static wxRichTextFieldType *FindFieldType(const wxString& name);
+
+    /**
+        Cleans up field types.
+    */
+    static void CleanUpFieldTypes();
+
+    /**
         Returns the renderer object.
     */
     static wxRichTextRenderer* GetRenderer() { return sm_renderer; }
@@ -4709,6 +5230,9 @@ protected:
 
     /// Drawing handlers
     static wxList           sm_drawingHandlers;
+
+    /// Field types
+    static wxRichTextFieldTypeHashMap sm_fieldTypes;
 
     /// Renderer
     static wxRichTextRenderer* sm_renderer;
@@ -5374,12 +5898,12 @@ public:
     virtual void SetVisible(bool visible) { m_visible = visible; }
 
     /**
-        Sets the name of the nandler.
+        Sets the name of the handler.
     */
     void SetName(const wxString& name) { m_name = name; }
 
     /**
-        Returns the name of the nandler.
+        Returns the name of the handler.
     */
     wxString GetName() const { return m_name; }
 
@@ -5492,7 +6016,7 @@ protected:
     @class wxRichTextDrawingHandler
 
     The base class for custom drawing handlers.
-    Currently, drawing handlers can provide virtual handlers.
+    Currently, drawing handlers can provide virtual attributes.
 
     @library{wxrichtext}
     @category{richtext}
@@ -5522,12 +6046,12 @@ public:
     virtual bool GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const = 0;
 
     /**
-        Sets the name of the nandler.
+        Sets the name of the handler.
     */
     void SetName(const wxString& name) { m_name = name; }
 
     /**
-        Returns the name of the nandler.
+        Returns the name of the handler.
     */
     wxString GetName() const { return m_name; }
 
