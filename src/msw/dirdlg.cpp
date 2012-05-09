@@ -72,10 +72,14 @@ struct IShellItem : public IUnknown
     virtual HRESULT wxSTDCALL Compare(IShellItem*, DWORD, int*) = 0;
 };
 
+#endif // #ifndef __IShellItem_INTERFACE_DEFINED__
+
+// Define this GUID in any case, even when __IShellItem_INTERFACE_DEFINED__ is
+// defined in the headers we might still not have it in the actual uuid.lib,
+// this happens with at least VC7 used with its original (i.e. not updated) SDK
+// and there is no harm in defining the GUID unconditionally.
 DEFINE_GUID(IID_IShellItem,
     0x43826D1E, 0xE718, 0x42EE, 0xBC, 0x55, 0xA1, 0xE2, 0x61, 0xC3, 0x7B, 0xFE);
-
-#endif // #ifndef __IShellItem_INTERFACE_DEFINED__
 
 struct IShellItemFilter;
 struct IFileDialogEvents;
