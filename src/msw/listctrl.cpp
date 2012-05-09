@@ -1656,6 +1656,12 @@ long wxListCtrl::InsertItem(const wxListItem& info)
 {
     wxASSERT_MSG( !IsVirtual(), wxT("can't be used with virtual controls") );
 
+    // In 2.8 it was possible to succeed inserting an item without initializing
+    // its ID as it defaulted to 0. This was however never supported and in 2.9
+    // the ID is -1 by default and inserting it simply fails, but it might be
+    // not obvious why does it happen, so check it proactively.
+    wxASSERT_MSG( info.m_itemId != -1, wxS("Item ID must be set.") );
+
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
     item.mask &= ~LVIF_PARAM;
