@@ -24,6 +24,18 @@ some simple explanations of things.
 
 @section overview_windowsizing_glossary Glossary
 
+@li @b "Size": this is the current size of the window and it can be explicitly
+    set or fetched with the wxWindow::SetSize() or wxWindow::GetSize() methods.
+    This size value is the size that the widget is currently using on screen and is
+    the way to change the size of something that is not being managed by a sizer.
+
+@li @b "Client Size": the client size represents the widget's area inside of any
+    borders belonging to the widget and is the area that can be drawn upon in a
+    @c EVT_PAINT event. For wxFrame, the client size also excludes the frame
+    menu, tool and status bars, if any. If a window doesn't have any border
+    (and is not a wxFrame with some bars) then its client size is the same as
+    its size.
+
 @li @b "Best Size": the best size of a widget depends on what kind of widget it is,
     and usually also on the contents of the widget. For example a wxListBox's best
     size will be calculated based on how many items it has, up to a certain limit,
@@ -31,8 +43,16 @@ some simple explanations of things.
     normally won't be smaller than the platform default button size (unless a style
     flag overrides that).
     There is a special virtual method in the C++ window classes called
-    wxWindow::DoGetBestSize() that a class needs to override if it wants to calculate
-    its own best size based on its content.
+    wxWindow::DoGetBestSize() that a class can override if it wants to calculate
+    its own best size based on its content, however notice that usually it is
+    more convenient to override DoGetBestClientSize(), see below.
+
+@li @b "Best Client Size": this is simply the client size corresponding to the
+    best window size. When the fitting size for the given contents is computed,
+    it will usually be the client size and the size of the borders needs to be
+    added to obtain the full best size. For this reason, it's preferable to
+    override DoGetBestClientSize() and let DoGetBestSize() compute the full
+    best size.
 
 @li @b "Minimal Size": the minimal size of a widget is a size that is normally explicitly
     set by the programmer either with the wxWindow::SetMinSize() method or with the
@@ -47,16 +67,6 @@ some simple explanations of things.
     with wxWindow::SetSizeHints().
     Top-level windows such as wxFrame will not allow the user to resize the frame above
     the maximum size.
-
-@li @b "Size": the size of a widget can be explicitly set or fetched with the
-    wxWindow::SetSize() or wxWindow::GetSize() methods.
-    This size value is the size that the widget is currently using on screen and is
-    the way to change the size of something that is not being managed by a sizer.
-
-@li @b "Client Size": the client size represents the widget's area inside of any
-    borders belonging to the widget and is the area that can be drawn upon in a
-    @c EVT_PAINT event. If a widget doesn't have a border then its client size is
-    the same as its size.
 
 @li @b "Initial Size": the initial size of a widget is the size given to the
     constructor of the widget, if any.

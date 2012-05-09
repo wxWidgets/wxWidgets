@@ -737,7 +737,8 @@ public:
     /**
         @name Sizing functions
 
-        See also the protected functions DoGetBestSize() and SetInitialBestSize().
+        See also the protected functions DoGetBestSize() and
+        DoGetBestClientSize().
     */
     //@{
 
@@ -818,8 +819,9 @@ public:
         wxPanel), the size returned by this function will be the same as the size
         the window would have had after calling Fit().
 
-        Note that when you write your own widget you need to override the
-        DoGetBestSize() function instead of this (non-virtual!) function.
+        Override virtual DoGetBestSize() or, better, because it's usually more
+        convenient, DoGetBestClientSize() when writing your own custom window
+        class to change the value returned by this public non-virtual method.
 
         @see CacheBestSize(), @ref overview_windowsizing
     */
@@ -3438,9 +3440,11 @@ protected:
     virtual void DoCentre(int direction);
 
     /**
-        Gets the size which best suits the window: for a control, it would be
-        the minimal size which doesn't truncate the control, for a panel - the
-        same size as it would have after a call to Fit().
+        Implementation of GetBestSize() that can be overridden.
+
+        Notice that it is usually more convenient to override
+        DoGetBestClientSize() rather than this method itself as you need to
+        explicitly account for the window borders size if you do the latter.
 
         The default implementation of this function is designed for use in container
         windows, such as wxPanel, and works something like this:
@@ -3458,11 +3462,28 @@ protected:
     */
     virtual wxSize DoGetBestSize() const;
 
+    /**
+        Override this method to return the best size for a custom control.
+
+        A typical implementation of this method should compute the minimal size
+        needed to fully display the control contents taking into account the
+        current font size.
+
+        The default implementation simply returns ::wxDefaultSize and
+        GetBestSize() returns an arbitrary hardcoded size for the window, so
+        you must override it when implementing a custom window class.
+
+        @see @ref overview_windowsizing
+
+        @since 2.9.0
+     */
+    virtual wxSize DoGetBestClientSize() const;
+
 
     /**
         Sets the initial window size if none is given (i.e. at least one of the
         components of the size passed to ctor/Create() is wxDefaultCoord).
-        @deprecated @todo provide deprecation description
+        @deprecated Use SetInitialSize() instead.
     */
     virtual void SetInitialBestSize(const wxSize& size);
 
