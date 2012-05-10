@@ -42,6 +42,7 @@
 #include "wx/richtext/richtextstyles.h"
 #include "wx/richtext/richtextimagedlg.h"
 #include "wx/richtext/richtextsizepage.h"
+#include "wx/richtext/richtextxml.h"
 
 #include "wx/listimpl.cpp"
 #include "wx/arrimpl.cpp"
@@ -9855,6 +9856,17 @@ public:
         wxRichTextBuffer::SetRenderer(new wxRichTextStdRenderer);
         wxRichTextBuffer::InitStandardHandlers();
         wxRichTextParagraph::InitDefaultTabs();
+
+        wxRichTextXMLHandler::RegisterNodeName(wxT("text"), wxT("wxRichTextPlainText"));
+        wxRichTextXMLHandler::RegisterNodeName(wxT("symbol"), wxT("wxRichTextPlainText"));
+        wxRichTextXMLHandler::RegisterNodeName(wxT("image"), wxT("wxRichTextImage"));
+        wxRichTextXMLHandler::RegisterNodeName(wxT("paragraph"), wxT("wxRichTextParagraph"));
+        wxRichTextXMLHandler::RegisterNodeName(wxT("paragraphlayout"), wxT("wxRichTextParagraphLayoutBox"));
+        wxRichTextXMLHandler::RegisterNodeName(wxT("textbox"), wxT("wxRichTextBox"));
+        wxRichTextXMLHandler::RegisterNodeName(wxT("cell"), wxT("wxRichTextCell"));
+        wxRichTextXMLHandler::RegisterNodeName(wxT("table"), wxT("wxRichTextTable"));
+        wxRichTextXMLHandler::RegisterNodeName(wxT("field"), wxT("wxRichTextField"));
+
         return true;
     }
     void OnExit()
@@ -9862,6 +9874,7 @@ public:
         wxRichTextBuffer::CleanUpHandlers();
         wxRichTextBuffer::CleanUpDrawingHandlers();
         wxRichTextBuffer::CleanUpFieldTypes();
+        wxRichTextXMLHandler::ClearNodeToClassMap();
         wxRichTextDecimalToRoman(-1);
         wxRichTextParagraph::ClearDefaultTabs();
         wxRichTextCtrl::ClearAvailableFontNames();

@@ -53,7 +53,7 @@ public:
         Recursively exports an object to the stream.
     */
     bool ExportXML(wxOutputStream& stream, wxRichTextObject& obj, int level);
-    
+
     /**
         Helper function: gets node context.
     */
@@ -85,6 +85,17 @@ public:
         Recursively imports an object.
     */
     bool ImportXML(wxRichTextBuffer* buffer, wxRichTextObject* obj, wxXmlNode* node);
+
+    /**
+        Call with XML node name, C++ class name so that wxRTC can read in the node.
+        If you add a custom object, call this.
+    */
+    static void RegisterNodeName(const wxString& nodeName, const wxString& className) { sm_nodeNameToClassMap[nodeName] = className; }
+
+    /**
+        Cleans up the mapping between node name and C++ class.
+    */
+    static void ClearNodeToClassMap() { sm_nodeNameToClassMap.clear(); }
 
 protected:
 

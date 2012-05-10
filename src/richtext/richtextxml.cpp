@@ -89,6 +89,8 @@ static inline void AddString(wxString& str, const wxColour& col) { str << wxT("#
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler)
 
+wxStringToStringHashMap wxRichTextXMLHandler::sm_nodeNameToClassMap;
+
 void wxRichTextXMLHandler::Init()
 {
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
@@ -158,24 +160,12 @@ bool wxRichTextXMLHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& s
 /// Creates an object given an XML element name
 wxRichTextObject* wxRichTextXMLHandler::CreateObjectForXMLName(wxRichTextObject* WXUNUSED(parent), const wxString& name) const
 {
-    if (name == wxT("text") || name == wxT("symbol"))
-        return new wxRichTextPlainText;
-    else if (name == wxT("image"))
-        return new wxRichTextImage;
-    else if (name == wxT("paragraph"))
-        return new wxRichTextParagraph;
-    else if (name == wxT("paragraphlayout"))
-        return new wxRichTextParagraphLayoutBox;
-    else if (name == wxT("textbox"))
-        return new wxRichTextBox;
-    else if (name == wxT("cell"))
-        return new wxRichTextCell;
-    else if (name == wxT("table"))
-        return new wxRichTextTable;
-    else if (name == wxT("field"))
-        return new wxRichTextField;
-    else
+    // The standard node to class mappings are added in wxRichTextModule::OnInit in richtextbuffer.cpp
+    wxStringToStringHashMap::const_iterator it = sm_nodeNameToClassMap.find(name);
+    if (it == sm_nodeNameToClassMap.end())
         return NULL;
+    else
+        return wxDynamicCast(wxCreateDynamicObject(it->second), wxRichTextObject);
 }
 
 /// Recursively import an object
