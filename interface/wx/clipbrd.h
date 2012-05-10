@@ -174,5 +174,11 @@ public:
         platforms.
     */
     virtual void UsePrimarySelection(bool primary = false);
+
+    /**
+       Returns the global instance (wxTheClipboard) of the clipboard object.
+    */
+    static wxClipboard *Get();
+
 };
 
