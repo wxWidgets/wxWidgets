@@ -118,6 +118,8 @@ public:
 };
 
 
+const wxDataFormat wxFormatInvalid;
+
 
 /**
     @class wxDataObject
@@ -260,8 +262,10 @@ public:
                                Direction dir = Get) const = 0;
 
     /**
-        The method will write the data of the format @a format in the buffer
-        @a buf and return @true on success, @false on failure.
+        The method will write the data of the format @a format to the buffer
+        @a buf.  In other words, copy the data from this object in the given
+        format to the supplied buffer. Returns @true on success, @false on
+        failure.
     */
     virtual bool GetDataHere(const wxDataFormat& format, void* buf) const = 0;
 
@@ -285,7 +289,8 @@ public:
 
     /**
         Set the data in the format @a format of the length @a len provided in
-        the buffer @a buf.
+        the buffer @a buf.  In other words, copy length bytes of data from the
+        buffer to this data object.
 
         @param format
             The format for which to set the data.
