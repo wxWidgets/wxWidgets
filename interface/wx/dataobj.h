@@ -109,7 +109,17 @@ public:
     /**
         Returns @true if the formats are different.
     */
+    bool operator !=(const wxDataFormat& format) const;
+
+    /**
+        Returns @true if the formats are different.
+    */
     bool operator !=(wxDataFormatId format) const;
+
+    /**
+        Returns @true if the formats are equal.
+    */
+    bool operator ==(const wxDataFormat& format) const;
 
     /**
         Returns @true if the formats are equal.
@@ -496,7 +506,7 @@ public:
         @since 2.9.1
     */
     wxDataObjectSimple *GetObject(const wxDataFormat& format,
-                                  wxDataObjectBase::Direction dir = Get) const;
+                                  wxDataObject::Direction dir = wxDataObject::Get) const;
 };
 
 
@@ -709,7 +719,7 @@ public:
         Returns 1 under other platforms (e.g. wxMSW) or when building in ANSI mode
         (@c wxUSE_UNICODE==0).
     */
-    virtual size_t GetFormatCount(Direction dir = Get) const;
+    virtual size_t GetFormatCount(wxDataObject::Direction dir = wxDataObject::Get) const;
 
     /**
         Returns the preferred format supported by this object.
@@ -726,7 +736,7 @@ public:
         under other ports returns only one of the two, depending on the build mode.
     */
     virtual void GetAllFormats(wxDataFormat* formats,
-                               Direction dir = Get) const = 0;
+                               wxDataObject::Direction dir = wxDataObject::Get) const;
 
     /**
         Sets the text associated with the data object. This method is called
