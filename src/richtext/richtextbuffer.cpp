@@ -1870,6 +1870,10 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
         availableSpace = GetAvailableContentArea(dc, context, rect);
     }
 
+    // Fix the width if we're at the top level
+    if (!GetParent())
+        attr.GetTextBoxAttr().GetWidth().SetValue(rect.GetWidth(), wxTEXT_ATTR_UNITS_PIXELS);
+
     int leftMargin, rightMargin, topMargin, bottomMargin;
     wxRichTextObject::GetTotalMargin(dc, GetBuffer(), attr, leftMargin, rightMargin,
             topMargin, bottomMargin);
