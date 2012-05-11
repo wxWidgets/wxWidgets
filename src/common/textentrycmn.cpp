@@ -235,7 +235,8 @@ void wxTextEntryBase::DoSetValue(const wxString& value, int flags)
     {
         // Except that we still need to generate the event for consistency with
         // the normal case when the text does change.
-        SendTextUpdatedEvent(GetEditableWindow());
+        if ( flags & SetValue_SendEvent )
+            SendTextUpdatedEvent(GetEditableWindow());
     }
 
     SetInsertionPoint(0);
