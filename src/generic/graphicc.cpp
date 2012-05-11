@@ -1675,8 +1675,35 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     m_enableOffset = true;
 
 #ifdef __WXMSW__
-    m_mswSurface = cairo_win32_surface_create((HDC)dc.GetHDC());
+
+    HDC hdc = (HDC)dc.GetHDC();
+
+    HBITMAP bitmap = (HBITMAP)GetCurrentObject(hdc, OBJ_BITMAP);
+
+    BITMAP info;
+    bool hasBitmap = false;
+
+    // cairo_win32_surface_create creates a 24-bit bitmap,
+    // so if we have alpha, we need to create a 32-bit surface instead.
+    if (!GetObject(bitmap, sizeof(info), &info) || info.bmBitsPixel < 32)
+        m_mswSurface = cairo_win32_surface_create(hdc);
+    else {
+        hasBitmap = true;
+        m_mswSurface = cairo_image_surface_create_for_data((unsigned char*)info.bmBits,
+                                               CAIRO_FORMAT_ARGB32,
+                                               info.bmWidth,
+                                               info.bmHeight,
+                                               info.bmWidthBytes);
+    }
+
     Init( cairo_create(m_mswSurface) );
+    // If we've created a image surface, we need to flip the Y axis so that 
+    // all drawing will appear right side up.
+    if (hasBitmap) {
+        cairo_matrix_t matrix;
+        cairo_matrix_init(&matrix, 1.0, 0.0, 0.0, -1.0, 0.0, height);
+        cairo_set_matrix(m_context, &matrix);
+    }
 #endif
     
 #ifdef __WXGTK20__
