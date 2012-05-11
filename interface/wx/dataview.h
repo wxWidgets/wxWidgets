@@ -2934,6 +2934,8 @@ public:
            Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
+           Currently this even is only generated when using the native OSX
+           version.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG event.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
