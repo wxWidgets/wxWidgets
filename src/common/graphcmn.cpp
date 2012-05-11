@@ -524,6 +524,11 @@ void wxGraphicsGradientStops::Add(const wxGraphicsGradientStop& stop)
     }
 }
 
+void * wxGraphicsBitmap::GetNativeBitmap() const
+{
+    return GetBitmapData()->GetNativeBitmap();
+}
+
 //-----------------------------------------------------------------------------
 // wxGraphicsContext Convenience Methods
 //-----------------------------------------------------------------------------

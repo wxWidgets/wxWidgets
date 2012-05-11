@@ -107,6 +107,7 @@ class WXDLLIMPEXP_FWD_CORE wxGraphicsBitmap;
 //
 
 class WXDLLIMPEXP_FWD_CORE wxGraphicsObjectRefData;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsBitmapData;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsMatrixData;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsPathData;
 
@@ -174,6 +175,13 @@ public:
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
 #endif // wxUSE_IMAGE
+    
+    void* GetNativeBitmap() const;
+
+    const wxGraphicsBitmapData* GetBitmapData() const
+    { return (const wxGraphicsBitmapData*) GetRefData(); }
+    wxGraphicsBitmapData* GetBitmapData()
+    { return (wxGraphicsBitmapData*) GetRefData(); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGraphicsBitmap)

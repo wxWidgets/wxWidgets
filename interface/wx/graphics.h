@@ -296,6 +296,14 @@ public:
         @since 2.9.3
      */
     wxImage ConvertToImage() const;
+
+    /**
+        Return the pointer to the native bitmap data. (CGImageRef for Core Graphics, 
+        cairo_surface_t for Cairo, Bitmap* for GDI+.)
+
+        @since 2.9.4
+     */
+    void* GetNativeBitmap() const;
 };
 
 /**

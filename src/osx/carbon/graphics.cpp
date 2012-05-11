@@ -969,13 +969,14 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 #endif
 }
 
-class wxMacCoreGraphicsBitmapData : public wxGraphicsObjectRefData
+class wxMacCoreGraphicsBitmapData : public wxGraphicsBitmapData
 {
 public:
     wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap, bool monochrome );
     ~wxMacCoreGraphicsBitmapData();
 
     virtual CGImageRef GetBitmap() { return m_bitmap; }
+    void* GetNativeBitmap() const { return (void*)m_bitmap; }
     bool IsMonochrome() { return m_monochrome; }
 
 #if wxUSE_IMAGE
@@ -990,7 +991,7 @@ private :
     bool m_monochrome;
 };
 
-wxMacCoreGraphicsBitmapData::wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap, bool monochrome ) : wxGraphicsObjectRefData( renderer ),
+wxMacCoreGraphicsBitmapData::wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap, bool monochrome ) : wxGraphicsBitmapData( renderer ),
     m_bitmap(bitmap), m_monochrome(monochrome)
 {
 }
@@ -2245,7 +2246,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
         return;
 
 #ifdef __WXMAC__
-    wxMacCoreGraphicsBitmapData* refdata  =static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
+    wxMacCoreGraphicsBitmapData* refdata = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
     CGImageRef image = refdata->GetBitmap();
     CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( refdata->IsMonochrome() == 1 )

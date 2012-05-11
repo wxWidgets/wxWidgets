@@ -272,7 +272,7 @@ private:
     GraphicsPath* m_brushPath;
 };
 
-class WXDLLIMPEXP_CORE wxGDIPlusBitmapData : public wxGraphicsObjectRefData
+class WXDLLIMPEXP_CORE wxGDIPlusBitmapData : public wxGraphicsBitmapData
 {
 public:
     wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, Bitmap* bitmap );
@@ -280,6 +280,7 @@ public:
     ~wxGDIPlusBitmapData ();
 
     virtual Bitmap* GetGDIPlusBitmap() { return m_bitmap; }
+    void* GetNativeBitmap() const { return (void*)m_bitmap; }
 
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
@@ -943,13 +944,13 @@ wxGDIPlusFontData::~wxGDIPlusFontData()
 //-----------------------------------------------------------------------------
 
 wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, Bitmap* bitmap ) :
-    wxGraphicsObjectRefData( renderer ), m_bitmap( bitmap )
+    wxGraphicsBitmapData( renderer ), m_bitmap( bitmap )
 {
     m_helper = NULL;
 }
 
 wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
-                        const wxBitmap &bmp) : wxGraphicsObjectRefData( renderer )
+                        const wxBitmap &bmp) : wxGraphicsBitmapData( renderer )
 {
     m_bitmap = NULL;
     m_helper = NULL;

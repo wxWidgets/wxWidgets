@@ -323,7 +323,7 @@ private :
     cairo_font_weight_t m_weight;
 };
 
-class wxCairoBitmapData : public wxGraphicsObjectRefData
+class wxCairoBitmapData : public wxGraphicsBitmapData
 {
 public:
     wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp );
@@ -335,6 +335,7 @@ public:
 
     virtual cairo_surface_t* GetCairoSurface() { return m_surface; }
     virtual cairo_pattern_t* GetCairoPattern() { return m_pattern; }
+    void* GetNativeBitmap() const { return (void*)m_surface; }
     virtual wxSize GetSize() { return wxSize(m_width, m_height); }
 
 #if wxUSE_IMAGE
@@ -1248,13 +1249,13 @@ void wxCairoBitmapData::InitSurface(cairo_format_t format, int stride)
 }
 
 wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap ) :
-    wxGraphicsObjectRefData( renderer )
+    wxGraphicsBitmapData( renderer )
 {
     m_surface = bitmap;
     m_pattern = cairo_pattern_create_for_surface(m_surface);
 }
 
-wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp ) : wxGraphicsObjectRefData( renderer )
+wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp ) : wxGraphicsBitmapData( renderer )
 {
     wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
 
@@ -1394,7 +1395,7 @@ inline unsigned char Unpremultiply(unsigned char alpha, unsigned char data)
 
 wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
                                      const wxImage& image)
-    : wxGraphicsObjectRefData(renderer)
+    : wxGraphicsBitmapData(renderer)
 {
     const cairo_format_t bufferFormat = image.HasAlpha()
                                             ? CAIRO_FORMAT_ARGB32
