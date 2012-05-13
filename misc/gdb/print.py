@@ -22,7 +22,7 @@ class wxStringPrinter:
         self.val = val
 
     def to_string(self):
-        return self.val['m_impl']['_M_dataplus']['_M_p'].string()
+        return self.val['m_impl']['_M_dataplus']['_M_p']
 
     def display_hint(self):
         return 'string'
