@@ -285,6 +285,12 @@ Changes in behaviour which may result in compilation errors
     error instead. This can be worked around by explicitly casting to const
     wxChar*: wxLogError(_("error: %s"), !err.empty() ? (const wxChar*)err.c_str() : "")
 
+- wxDateTime::ParseXXX() overloads don't return anything when called with
+  wxCStrData argument. If you need to test the parsing success, use a newer
+  overload taking wxString::const_iterator and returning bool or explicitly
+  select a narrow or wide char version to use by casting c_str() to either
+  "char*" or "wchar_t*". Or create a temporary wxString and parse it instead.
+
 - wxCtime() and wxAsctime() return char*; this is incompatible with Unicode
   build in wxWidgets 2.8 that returned wchar_t*.
 
