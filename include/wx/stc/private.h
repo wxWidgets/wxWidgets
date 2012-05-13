@@ -21,7 +21,7 @@
 
 extern wxString stc2wx(const char* str);
 extern wxString stc2wx(const char* str, size_t len);
-extern const wxWX2MBbuf wx2stc(const wxString& str);
+extern wxCharBuffer wx2stc(const wxString& str);
 
 // This function takes both wxString and wxCharBuffer because it uses either
 // one or the other of them depending on the build mode. In Unicode it uses the
@@ -40,7 +40,7 @@ inline wxString stc2wx(const char* str) {
 inline wxString stc2wx(const char* str, size_t len) {
     return wxString(str, len);
 }
-inline const wxWX2MBbuf wx2stc(const wxString& str) {
+inline const char* wx2stc(const wxString& str) {
     return str.mbc_str();
 }
 

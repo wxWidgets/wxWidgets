@@ -258,7 +258,7 @@ void wxStyledTextCtrl::SetHScrollBar(wxScrollBar* bar)  {
 
 // Add text to the document at current position.
 void wxStyledTextCtrl::AddText(const wxString& text) {
-                    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+                    const wxWX2MBbuf buf = wx2stc(text);
                     SendMsg(2001, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
@@ -1410,7 +1410,7 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos,
             TextToFind  ft;
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
-            wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+            const wxWX2MBbuf buf = wx2stc(text);
             ft.lpstrText = (char*)(const char*)buf;
 
             return SendMsg(2150, flags, (sptr_t)&ft);
@@ -1708,7 +1708,7 @@ int wxStyledTextCtrl::GetTargetEnd() const
 // Returns the length of the replacement text.
 
      int wxStyledTextCtrl::ReplaceTarget(const wxString& text) {
-         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+         const wxWX2MBbuf buf = wx2stc(text);
          return SendMsg(2194, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
@@ -1720,7 +1720,7 @@ int wxStyledTextCtrl::GetTargetEnd() const
 // caused by processing the \d patterns.
 
      int wxStyledTextCtrl::ReplaceTargetRE(const wxString& text) {
-         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+         const wxWX2MBbuf buf = wx2stc(text);
          return SendMsg(2195, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
@@ -1729,7 +1729,7 @@ int wxStyledTextCtrl::GetTargetEnd() const
 // Returns length of range or -1 for failure in which case target is not moved.
 
      int wxStyledTextCtrl::SearchInTarget(const wxString& text) {
-         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+         const wxWX2MBbuf buf = wx2stc(text);
          return SendMsg(2197, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
@@ -2085,7 +2085,7 @@ bool wxStyledTextCtrl::GetUseVerticalScrollBar() const
 
 // Append a string to the end of the document without changing the selection.
 void wxStyledTextCtrl::AppendText(const wxString& text) {
-                    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+                    const wxWX2MBbuf buf = wx2stc(text);
                     SendMsg(2282, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
