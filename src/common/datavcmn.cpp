@@ -308,15 +308,6 @@ void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
 int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
                               unsigned int column, bool ascending ) const
 {
-    // sort branches before leaves
-    bool item1_is_container = IsContainer(item1);
-    bool item2_is_container = IsContainer(item2);
-
-    if (item1_is_container && !item2_is_container)
-        return 1;
-    if (item2_is_container && !item1_is_container)
-        return -1;
-
     wxVariant value1,value2;
     GetValue( value1, item1, column );
     GetValue( value2, item2, column );
