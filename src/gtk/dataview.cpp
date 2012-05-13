@@ -2792,7 +2792,9 @@ bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
     m_value << value;
 
     SetTextValue(m_value.GetText());
-    SetPixbufProp(m_rendererIcon, m_value.GetIcon().GetPixbuf());
+
+    const wxIcon& icon = m_value.GetIcon();
+    SetPixbufProp(m_rendererIcon, icon.IsOk() ? icon.GetPixbuf() : NULL);
 
     return true;
 }
