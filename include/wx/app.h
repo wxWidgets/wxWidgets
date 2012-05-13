@@ -795,6 +795,7 @@ public:
 // Use this macro if you want to define your own main() or WinMain() function
 // and call wxEntry() from there.
 #define wxIMPLEMENT_APP_NO_MAIN(appname)                                    \
+    appname& wxGetApp() { return *static_cast<appname*>(wxApp::GetInstance()); }    \
     wxAppConsole *wxCreateApp()                                             \
     {                                                                       \
         wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE,         \
@@ -802,9 +803,7 @@ public:
         return new appname;                                                 \
     }                                                                       \
     wxAppInitializer                                                        \
-        wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp);        \
-    appname& wxGetApp() { return *static_cast<appname*>(wxApp::GetInstance()); }    \
-    wxDECLARE_APP(appname)
+        wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp)
 
 // Same as wxIMPLEMENT_APP() normally but doesn't include themes support in
 // wxUniversal builds
