@@ -23,6 +23,15 @@ extern wxString stc2wx(const char* str);
 extern wxString stc2wx(const char* str, size_t len);
 extern const wxWX2MBbuf wx2stc(const wxString& str);
 
+// This function takes both wxString and wxCharBuffer because it uses either
+// one or the other of them depending on the build mode. In Unicode it uses the
+// length of the already converted buffer to avoid doing the conversion again
+// just to compute the length.
+inline size_t wx2stclen(const wxString& WXUNUSED(str), const wxCharBuffer& buf)
+{
+    return buf.length() - 1;
+}
+
 #else // not UNICODE
 
 inline wxString stc2wx(const char* str) {
@@ -33,6 +42,12 @@ inline wxString stc2wx(const char* str, size_t len) {
 }
 inline const wxWX2MBbuf wx2stc(const wxString& str) {
     return str.mbc_str();
+}
+
+// As explained above, the buffer argument is only used in Unicode build.
+inline size_t wx2stclen(const wxString& str, const char* WXUNUSED(buf))
+{
+    return str.length();
 }
 
 #endif // UNICODE

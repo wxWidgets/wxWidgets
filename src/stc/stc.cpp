@@ -259,7 +259,7 @@ void wxStyledTextCtrl::SetHScrollBar(wxScrollBar* bar)  {
 // Add text to the document at current position.
 void wxStyledTextCtrl::AddText(const wxString& text) {
                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                    SendMsg(2001, buf.length()-1, (sptr_t)(const char*)buf);
+                    SendMsg(2001, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
 // Add array of cells to document.
@@ -1709,7 +1709,7 @@ int wxStyledTextCtrl::GetTargetEnd() const
 
      int wxStyledTextCtrl::ReplaceTarget(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(2194, buf.length()-1, (sptr_t)(const char*)buf);
+         return SendMsg(2194, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
 // Replace the target text with the argument text after \d processing.
@@ -1721,7 +1721,7 @@ int wxStyledTextCtrl::GetTargetEnd() const
 
      int wxStyledTextCtrl::ReplaceTargetRE(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(2195, buf.length()-1, (sptr_t)(const char*)buf);
+         return SendMsg(2195, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
 // Search for a counted string in the target and set the target to the found
@@ -1730,7 +1730,7 @@ int wxStyledTextCtrl::GetTargetEnd() const
 
      int wxStyledTextCtrl::SearchInTarget(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(2197, buf.length()-1, (sptr_t)(const char*)buf);
+         return SendMsg(2197, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
 // Set the search flags used by SearchInTarget.
@@ -2086,7 +2086,7 @@ bool wxStyledTextCtrl::GetUseVerticalScrollBar() const
 // Append a string to the end of the document without changing the selection.
 void wxStyledTextCtrl::AppendText(const wxString& text) {
                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                    SendMsg(2282, buf.length()-1, (sptr_t)(const char*)buf);
+                    SendMsg(2282, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
 // Is drawing done in two phases with backgrounds drawn before foregrounds?
