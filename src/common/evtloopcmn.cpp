@@ -105,23 +105,13 @@ bool wxEventLoopManual::ProcessEvents()
     // executed)
     if ( wxTheApp )
     {
-        const bool hadExitedBefore = m_shouldExit;
-
         wxTheApp->ProcessPendingEvents();
 
         // One of the pending event handlers could have decided to exit the
         // loop so check for the flag before trying to dispatch more events
         // (which could block indefinitely if no more are coming).
-        if ( !hadExitedBefore && m_shouldExit )
-        {
-            // We still need to dispatch any remaining pending events, just as
-            // we do in the event loop in Run() if the loop is exited from a
-            // normal event handler.
-            while ( wxTheApp->HasPendingEvents() )
-                wxTheApp->ProcessPendingEvents();
-
+        if ( m_shouldExit )
             return false;
-        }
     }
 
     return Dispatch();
@@ -157,19 +147,11 @@ int wxEventLoopManual::Run()
 
                 // generate and process idle events for as long as we don't
                 // have anything else to do
-                while ( !Pending() && ProcessIdle() && !m_shouldExit )
+                while ( !m_shouldExit && !Pending() && ProcessIdle() )
                     ;
 
-                // if the "should exit" flag is set, the loop should terminate
-                // but not before processing any remaining messages so while
-                // Pending() returns true, do process them
                 if ( m_shouldExit )
-                {
-                    while ( Pending() )
-                        ProcessEvents();
-
                     break;
-                }
 
                 // a message came or no more idle processing to do, dispatch
                 // all the pending events and call Dispatch() to wait for the
@@ -179,6 +161,33 @@ int wxEventLoopManual::Run()
                     // we got WM_QUIT
                     break;
                 }
+            }
+
+            // Process the remaining queued messages, both at the level of the
+            // underlying toolkit level (Pending/Dispatch()) and wx level
+            // (Has/ProcessPendingEvents()).
+            //
+            // We do run the risk of never exiting this loop if pending event
+            // handlers endlessly generate new events but they shouldn't do
+            // this in a well-behaved program and we shouldn't just discard the
+            // events we already have, they might be important.
+            for ( ;; )
+            {
+                bool hasMoreEvents = false;
+                if ( wxTheApp && wxTheApp->HasPendingEvents() )
+                {
+                    wxTheApp->ProcessPendingEvents();
+                    hasMoreEvents = true;
+                }
+
+                if ( Pending() )
+                {
+                    Dispatch();
+                    hasMoreEvents = true;
+                }
+
+                if ( !hasMoreEvents )
+                    break;
             }
 
 #if wxUSE_EXCEPTIONS
