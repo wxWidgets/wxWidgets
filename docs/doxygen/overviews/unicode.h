@@ -126,11 +126,14 @@ terms reported above.
 
 @section overview_unicode_supportin Unicode Support in wxWidgets
 
-Since wxWidgets 3.0 Unicode support is always enabled and building the library
-without it is not recommended any longer and will cease to be supported in the
-near future. This means that internally only Unicode strings are used and that,
-under Microsoft Windows, Unicode system API is used which means that wxWidgets
-programs require the Microsoft Layer for Unicode to run on Windows 95/98/ME.
+@subsection overview_unicode_support_default Unicode is Always Used by Default
+
+Since wxWidgets 3.0 Unicode support is always enabled and while building the
+library without it is still possible, it is not recommended any longer and will
+cease to be supported in the near future. This means that internally only
+Unicode strings are used and that, under Microsoft Windows, Unicode system API
+is used which means that wxWidgets programs require the Microsoft Layer for
+Unicode to run on Windows 95/98/ME.
 
 However, unlike the Unicode build mode of the previous versions of wxWidgets, this
 support is mostly transparent: you can still continue to work with the @b narrow
@@ -179,6 +182,54 @@ To summarize, Unicode support in wxWidgets is mostly @b transparent for the
 application and if you use wxString objects for storing all the character data
 in your program there is really nothing special to do. However you should be
 aware of the potential problems covered by the following section.
+
+
+@subsection overview_unicode_support_utf Choosing Unicode Representation
+
+wxWidgets uses the system @c wchar_t in wxString implementation by default
+under all systems. Thus, under Microsoft Windows, UCS-2 (simplified version of
+UTF-16 without support for surrogate characters) is used as @c wchar_t is 2
+bytes on this platform. Under Unix systems, including Mac OS X, UCS-4 (also
+known as UTF-32) is used by default, however it is also possible to build
+wxWidgets to use UTF-8 internally by passing @c --enable-utf8 option to
+configure.
+
+The interface provided by wxString is the same independently of the format used
+internally. However different formats have specific advantages and
+disadvantages. Notably, under Unix, the underlying graphical toolkit (e.g.
+GTK+) usually uses UTF-8 encoded strings and using the same representations for
+the strings in wxWidgets allows to avoid conversion from UTF-32 to UTF-8 and
+vice versa each time a string is shown in the UI or retrieved from it. The
+overhead of such conversions is usually negligible for small strings but may be
+important for some programs. If you believe that it would be advantageous to
+use UTF-8 for the strings in your particular application, you may rebuild
+wxWidgets to use UTF-8 as explained above (notice that this is currently not
+supported under Microsoft Windows and arguably doesn't make much sense there as
+Windows itself uses UTF-16 and not UTF-8) but be sure to be aware of the
+performance implications (see @ref overview_unicode_performance) of using UTF-8
+in wxString before doing this!
+
+Generally speaking you should only use non-default UTF-8 build in specific
+circumstances e.g. building for resource-constrained systems where the overhead
+of conversions (and also reduced memory usage of UTF-8 compared to UTF-32 for
+the European languages) can be important. If the environment in which your
+program is running is under your control -- as is quite often the case in such
+scenarios -- consider ensuring that the system always uses UTF-8 locale and
+use @c --enable-utf8only configure option to disable support for the other
+locales and consider all strings to be in UTF-8. This further reduces the code
+size and removes the need for conversions in more cases.
+
+
+@subsection overview_unicode_settings Unicode Related Preprocessor Symbols
+
+@c wxUSE_UNICODE is defined as 1 now to indicate Unicode support. It can be
+explicitly set to 0 in @c setup.h under MSW or you can use @c --disable-unicode
+under Unix but doing this is strongly discouraged. By default, @c
+wxUSE_UNICODE_WCHAR is also defined as 1, however in UTF-8 build (described in
+the previous section), it is set to 0 and @c wxUSE_UNICODE_UTF8, which is
+usually 0, is set to 1 instead. In the latter case, @c wxUSE_UTF8_LOCALE_ONLY
+can also be set to 1 to indicate that all strings are considered to be in UTF-8.
+
 
 
 @section overview_unicode_pitfalls Potential Unicode Pitfalls
@@ -280,17 +331,18 @@ wxWidgets 3.0 and the new code should be used with this in mind and ideally
 avoiding implicit conversions to @c char*.
 
 
-@subsection overview_unicode_performance Unicode Performance Implications
+@subsection overview_unicode_performance Performance Implications of Using UTF-8
 
-Under Unix systems wxString class uses variable-width UTF-8 encoding for
-internal representation and this implies that it can't guarantee constant-time
-access to N-th element of the string any longer as to find the position of this
-character in the string we have to examine all the preceding ones. Usually this
-doesn't matter much because most algorithms used on the strings examine them
-sequentially anyhow and because wxString implements a cache for iterating over
-the string by index but it can have serious consequences for algorithms
-using random access to string elements as they typically acquire O(N^2) time
-complexity instead of O(N) where N is the length of the string.
+As mentioned above, under Unix systems wxString class can use variable-width
+UTF-8 encoding for internal representation. In this case it can't guarantee
+constant-time access to N-th element of the string any longer as to find the
+position of this character in the string we have to examine all the preceding
+ones. Usually this doesn't matter much because most algorithms used on the
+strings examine them sequentially anyhow and because wxString implements a
+cache for iterating over the string by index but it can have serious
+consequences for algorithms using random access to string elements as they
+typically acquire O(N^2) time complexity instead of O(N) where N is the length
+of the string.
 
 Even despite caching the index, indexed access should be replaced with
 sequential access using string iterators. For example a typical loop:
@@ -383,16 +435,6 @@ Similarly, wxWX2WCbuf can be used for the return type of wxString::wc_str().
 But, once again, none of these cryptic types is really needed if you just pass
 the return value of any of the functions mentioned in this section to another
 function directly.
-
-@section overview_unicode_settings Unicode Related Compilation Settings
-
-@c wxUSE_UNICODE is now defined as @c 1 by default to indicate Unicode support.
-If UTF-8 is used for the internal storage in wxString, @c wxUSE_UNICODE_UTF8 is
-also defined, otherwise @c wxUSE_UNICODE_WCHAR is.
-
-You are encouraged to always use the default build settings of wxWidgets; this avoids
-the need of different builds of the same application/library because of different
-"build modes".
 
 */
 

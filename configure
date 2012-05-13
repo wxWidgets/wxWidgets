@@ -3038,16 +3038,15 @@ DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
+DEFAULT_wxUSE_UNICODE_UTF8=no
+DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
 DEFAULT_wxUSE_ARTPROVIDER_TANGO=auto
-DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_COMPILER_TLS=auto
 DEFAULT_wxUSE_HOTKEY=auto
 DEFAULT_wxUSE_METAFILE=auto
-
-DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
 DEFAULT_wxUSE_UNIVERSAL_BINARY=no
 DEFAULT_wxUSE_MAC_ARCH=no
@@ -34343,17 +34342,6 @@ else
     DISTDIR="wxBase"
 fi
 
-
-
-if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
-    if test "$USE_UNIX" = 1 -a "$wxUSE_DARWIN" != 1 ; then
-        wxUSE_UNICODE_UTF8=yes
-    elif test "$USE_OS2" = 1 ; then
-                                wxUSE_UNICODE_UTF8=yes
-    else
-        wxUSE_UNICODE_UTF8=no
-    fi
-fi
 
 
 if test "$wxUSE_GUI" = "yes"; then
