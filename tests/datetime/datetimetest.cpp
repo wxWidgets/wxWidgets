@@ -839,23 +839,23 @@ void DateTimeTestCase::TestTimeFormat()
     CPPUNIT_ASSERT( !dt.ParseFormat("foo") );
     CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo")) );
     CPPUNIT_ASSERT( !dt.ParseFormat(s) );
-    CPPUNIT_ASSERT( !dt.ParseFormat(s.c_str()) );
+    dt.ParseFormat(s.c_str()); // Simply test compilation of this one.
 
     CPPUNIT_ASSERT( !dt.ParseFormat("foo", "%c") );
     CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), "%c") );
     CPPUNIT_ASSERT( !dt.ParseFormat(s, "%c") );
-    CPPUNIT_ASSERT( !dt.ParseFormat(s.c_str(), "%c") );
+    dt.ParseFormat(s.c_str(), "%c");
 
     CPPUNIT_ASSERT( !dt.ParseFormat("foo", wxT("%c")) );
     CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), wxT("%c")) );
     CPPUNIT_ASSERT( !dt.ParseFormat(s, "%c") );
-    CPPUNIT_ASSERT( !dt.ParseFormat(s.c_str(), wxT("%c")) );
+    dt.ParseFormat(s.c_str(), wxT("%c"));
 
     wxString spec("%c");
     CPPUNIT_ASSERT( !dt.ParseFormat("foo", spec) );
     CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), spec) );
     CPPUNIT_ASSERT( !dt.ParseFormat(s, spec) );
-    CPPUNIT_ASSERT( !dt.ParseFormat(s.c_str(), spec) );
+    dt.ParseFormat(s.c_str(), spec);
 }
 
 void DateTimeTestCase::TestTimeSpanFormat()
