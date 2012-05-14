@@ -666,6 +666,13 @@ void wxRichTextStyleListBox::UpdateStyles()
             SendSelectedEvent();
         }
     }
+    else
+    {
+        m_styleNames.Clear();
+        SetSelection(wxNOT_FOUND);
+        SetItemCount(0);
+        Refresh();
+    }
 }
 
 // Get index for style name
