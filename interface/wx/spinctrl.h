@@ -66,8 +66,9 @@ public:
         the control and if it has numeric value, the initial numeric value of
         the control, as returned by GetValue() will also be determined by it
         instead of by @a initial. Hence, it only makes sense to specify @a
-        initial if @a value is a non-empty string not convertible to a number,
-        otherwise @a initial is simply ignored.
+        initial if @a value is an empty string or is not convertible to a
+        number, otherwise @a initial is simply ignored and the number specified
+        by @a value is used.
 
         @param parent
             Parent window. Must not be @NULL.
