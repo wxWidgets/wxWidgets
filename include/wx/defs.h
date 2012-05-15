@@ -391,6 +391,10 @@ typedef short int WXTYPE;
     #if wxCHECK_WATCOM_VERSION(1,2)
         #define HAVE_VARIADIC_MACROS
     #endif
+
+    #if wxCHECK_VISUALC_VERSION(9)
+        #define HAVE_VARIADIC_MACROS
+    #endif
 #endif /* HAVE_VARIADIC_MACROS */
 
 
