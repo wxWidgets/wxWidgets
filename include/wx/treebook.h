@@ -17,6 +17,7 @@
 #if wxUSE_TREEBOOK
 
 #include "wx/bookctrl.h"
+#include "wx/containr.h"
 #include "wx/treectrl.h"        // for wxArrayTreeItemIds
 
 typedef wxWindow wxTreebookPage;
@@ -27,7 +28,7 @@ class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 // wxTreebook
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTreebook : public wxBookCtrlBase
+class WXDLLIMPEXP_CORE wxTreebook : public wxNavigationEnabled<wxBookCtrlBase>
 {
 public:
     // Constructors and such
