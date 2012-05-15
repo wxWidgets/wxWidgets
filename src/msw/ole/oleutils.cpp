@@ -199,49 +199,62 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
         oleVariant.vt = VT_DISPATCH;
         oleVariant.pdispVal = (IDispatch*) variant.GetVoidPtr();
     }
-    else if (type == wxT("list") || type == wxT("stringlist"))
+    else if (type == wxT("list") || type == wxT("arrstring"))
     {
-        oleVariant.vt = VT_VARIANT | VT_ARRAY;
-
         SAFEARRAY *psa;
         SAFEARRAYBOUND saBound;
-        VARIANTARG *pvargBase;
-        VARIANTARG *pvarg;
-        int i, j;
+        bool isArrString = type == wxT("arrstring");
+        wxArrayString strings;
 
-        int iCount = variant.GetCount();
+        if (isArrString)
+            strings = variant.GetArrayString();
+        oleVariant.vt = (isArrString ? VT_BSTR : VT_VARIANT) | VT_ARRAY;
 
+        long lCount = isArrString ? strings.GetCount() : variant.GetCount();
         saBound.lLbound = 0;
-        saBound.cElements = iCount;
-
-        psa = SafeArrayCreate(VT_VARIANT, 1, &saBound);
+        saBound.cElements = lCount;
+        psa = SafeArrayCreate(isArrString ? VT_BSTR : VT_VARIANT, 1, &saBound);
         if (psa == NULL)
             return false;
 
-        SafeArrayAccessData(psa, (void**)&pvargBase);
-
-        pvarg = pvargBase;
-        for (i = 0; i < iCount; i++)
+        long i;
+        for (i = 0; i < lCount; i++)
         {
-            // copy each string in the list of strings
-            wxVariant eachVariant(variant[i]);
-            if (!wxConvertVariantToOle(eachVariant, * pvarg))
+            if (isArrString)
             {
-                // memory failure:  back out and free strings alloc'ed up to
-                // now, and then the array itself.
-                pvarg = pvargBase;
-                for (j = 0; j < i; j++)
+                wxBasicString bstr(strings[i]);
+                if ( !bstr && !strings[i].empty() )
                 {
-                    SysFreeString(pvarg->bstrVal);
-                    pvarg++;
+                    // BSTR can be NULL for empty strings but if the string was
+                    // not empty, it means we failed to allocate memory for it.
+                    break;
                 }
-                SafeArrayDestroy(psa);
-                return false;
+
+                if ( FAILED(SafeArrayPutElement(psa, &i, (BSTR)bstr)) )
+                    break;
             }
-            pvarg++;
+            else // list of wxVariants
+            {
+                VARIANT v;
+                if  ( !wxConvertVariantToOle(variant[i], v) )
+                    break;
+
+                HRESULT hr = SafeArrayPutElement(psa, &i, &v);
+
+                // SafeArrayPutElement makes a copy of an added element, so
+                // free this one.
+                VariantClear(&v);
+
+                if (FAILED(hr))
+                    break;
+            }
         }
 
-        SafeArrayUnaccessData(psa);
+        if (i < lCount) // the iteration was exited prematurely because of an error
+        {
+            SafeArrayDestroy(psa);
+            return false;
+        }
 
         oleVariant.parray = psa;
     }
