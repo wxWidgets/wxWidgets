@@ -229,7 +229,11 @@ static void wxgtk_main_do_event(GdkEvent* event, void* data)
     //       new event types (since new event types are always added in GDK with non
     //       conflicting values for ABI compatibility).
 
-    wxEventCategory cat = wxEVT_CATEGORY_UNKNOWN;
+    // Some events (currently only a single one) may be used for more than one
+    // category, so we need 2 variables. The second one will remain "unknown"
+    // in most cases.
+    wxEventCategory cat = wxEVT_CATEGORY_UNKNOWN,
+                    cat2 = wxEVT_CATEGORY_UNKNOWN;
     switch (event->type)
     {
     case GDK_SELECTION_REQUEST:
@@ -252,6 +256,14 @@ static void wxgtk_main_do_event(GdkEvent* event, void* data)
         cat = wxEVT_CATEGORY_USER_INPUT;
         break;
 
+    case GDK_PROPERTY_NOTIFY:
+        // This one is special: it can be used for UI purposes but also for
+        // clipboard operations, so allow it in both cases (we probably could
+        // examine the event itself to distinguish between the two cases but
+        // this would be unnecessarily complicated).
+        cat2 = wxEVT_CATEGORY_CLIPBOARD;
+        // Fall through.
+
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
 
@@ -259,7 +271,6 @@ static void wxgtk_main_do_event(GdkEvent* event, void* data)
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
     case GDK_VISIBILITY_NOTIFY:
-    case GDK_PROPERTY_NOTIFY:
 
     case GDK_FOCUS_CHANGE:
     case GDK_CONFIGURE:
@@ -296,11 +307,19 @@ static void wxgtk_main_do_event(GdkEvent* event, void* data)
     wxGUIEventLoop* evtloop = static_cast<wxGUIEventLoop*>(data);
 
     // is this event allowed now?
-    if (evtloop->IsEventAllowedInsideYield(cat))
-        gtk_main_do_event(event);         // process it now
+    if (evtloop->IsEventAllowedInsideYield(cat) ||
+            (cat2 != wxEVT_CATEGORY_UNKNOWN &&
+                evtloop->IsEventAllowedInsideYield(cat2)))
+    {
+        // process it now
+        gtk_main_do_event(event);
+    }
     else if (event->type != GDK_NOTHING)
+    {
+        // process it later (but make a copy; the caller will free the event
+        // pointer)
         evtloop->StoreGdkEventForLaterProcessing(gdk_event_copy(event));
-            // process it later (but make a copy; the caller will free the event pointer)
+    }
 }
 }
 
