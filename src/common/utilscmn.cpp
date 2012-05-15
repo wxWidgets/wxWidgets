@@ -1184,22 +1184,22 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
     size_t len = in.length();
     out.reserve(len);
 
-    for ( size_t n = 0; n < len; n++ )
+    for ( wxString::const_iterator it = in.begin(); it != in.end(); ++it )
     {
-        wxChar ch = in[n];
+        wxChar ch = *it;
         if ( (flags & wxStrip_Mnemonics) && ch == wxT('&') )
         {
             // skip it, it is used to introduce the accel char (or to quote
             // itself in which case it should still be skipped): note that it
             // can't be the last character of the string
-            if ( ++n == len )
+            if ( ++it == in.end() )
             {
                 wxLogDebug(wxT("Invalid menu string '%s'"), in.c_str());
             }
             else
             {
                 // use the next char instead
-                ch = in[n];
+                ch = *it;
             }
         }
         else if ( (flags & wxStrip_Accel) && ch == wxT('\t') )
