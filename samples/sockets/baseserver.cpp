@@ -142,7 +142,7 @@ private:
 
     long int m_maxConnections;
 
-    long m_port;
+    unsigned short m_port;
 
     wxTimer mTimer;
 };
@@ -282,9 +282,18 @@ Server::OnCmdLineParsed(wxCmdLineParser& pParser)
         wxLogMessage("%d connection(s) to exit",m_maxConnections);
     }
 
-    if (pParser.Found("p",&m_port))
+    long port;
+    if (pParser.Found("p", &port))
     {
-        wxLogMessage("%d connection(s) to exit",m_maxConnections);
+        if ( port <= 0 || port > USHRT_MAX )
+        {
+            wxLogError("Invalid port number %ld, must be in 0..%u range.",
+                       port, USHRT_MAX);
+            return false;
+        }
+
+        m_port = static_cast<unsigned short>(port);
+        wxLogMessage("Will listen on port %u", m_port);
     }
 
     if (pParser.Found("t"))
@@ -331,7 +340,7 @@ bool Server::OnInit()
     m_eventWorkersFailed = 0;
     m_maxEventWorkers = 0;
 
-    wxLogMessage("Server listening at port %d, waiting for connections", m_port);
+    wxLogMessage("Server listening at port %u, waiting for connections", m_port);
     return true;
 }
 
