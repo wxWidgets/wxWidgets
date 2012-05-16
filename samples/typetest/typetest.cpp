@@ -892,10 +892,10 @@ void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
 
     printf( "\n\nConversion with wxConvLocal:\n" );
     wxConvCurrent = &wxConvLocal;
-    printf( (const char*) str.mbc_str() );
+    puts( str.mbc_str() );
     printf( "\n\nConversion with wxConvLibc:\n" );
     wxConvCurrent = &wxConvLibc;
-    printf( (const char*) str.mbc_str() );
+    puts( str.mbc_str() );
 
 }
 #endif
