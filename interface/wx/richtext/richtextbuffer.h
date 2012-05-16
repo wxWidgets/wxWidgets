@@ -216,7 +216,8 @@ enum wxTextBoxAttrPosition
 {
     wxTEXT_BOX_ATTR_POSITION_STATIC         = 0x0000, // Default is static, i.e. as per normal layout
     wxTEXT_BOX_ATTR_POSITION_RELATIVE       = 0x0010, // Relative to the relevant edge
-    wxTEXT_BOX_ATTR_POSITION_ABSOLUTE       = 0x0020,
+    wxTEXT_BOX_ATTR_POSITION_ABSOLUTE       = 0x0020, // Relative to the parent
+    wxTEXT_BOX_ATTR_POSITION_FIXED          = 0x0040, // Relative to the top-level window
 
     wxTEXT_BOX_ATTR_POSITION_MASK           = 0x00F0
 };
@@ -383,7 +384,7 @@ public:
     bool EqPartial(const wxTextAttrDimensions& dims) const;
 
     /**
-        Apply border to 'this', but not if the same as @a compareWith.
+        Apply to 'this', but not if the same as @a compareWith.
 
     */
     bool Apply(const wxTextAttrDimensions& dims, const wxTextAttrDimensions* compareWith = NULL);
@@ -473,7 +474,7 @@ public:
     bool EqPartial(const wxTextAttrSize& dims) const;
 
     /**
-        Apply border to this object, but not if the same as @a compareWith.
+        Apply to this object, but not if the same as @a compareWith.
     */
     bool Apply(const wxTextAttrSize& dims, const wxTextAttrSize* compareWith = NULL);
 

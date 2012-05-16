@@ -21,6 +21,7 @@
 
 ////@begin includes
 #include "wx/statline.h"
+#include "wx/valgen.h"
 ////@end includes
 
 /*!
@@ -83,6 +84,9 @@ public:
 
 ////@begin wxRichTextSizePage event handler declarations
 
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX
+    void OnRichtextVerticalAlignmentComboboxUpdate( wxUpdateUIEvent& event );
+
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_WIDTH
     void OnRichtextWidthUpdate( wxUpdateUIEvent& event );
 
@@ -101,11 +105,17 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_MAX_HEIGHT
     void OnRichtextMaxHeightUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX
-    void OnRichtextVerticalAlignmentComboboxUpdate( wxUpdateUIEvent& event );
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_LEFT
+    void OnRichtextLeftUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_OFFSET
-    void OnRichtextOffsetUpdate( wxUpdateUIEvent& event );
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_LEFT_UNITS
+    void OnRichtextTopUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_RIGHT
+    void OnRichtextRightUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_BOTTOM
+    void OnRichtextBottomUpdate( wxUpdateUIEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXT_PARA_UP
     void OnRichtextParaUpClick( wxCommandEvent& event );
@@ -116,6 +126,9 @@ public:
 ////@end wxRichTextSizePage event handler declarations
 
 ////@begin wxRichTextSizePage member function declarations
+
+    int GetPositionMode() const { return m_positionMode ; }
+    void SetPositionMode(int value) { m_positionMode = value ; }
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
@@ -131,6 +144,9 @@ public:
     wxBoxSizer* m_parentSizer;
     wxBoxSizer* m_floatingControls;
     wxComboBox* m_float;
+    wxBoxSizer* m_alignmentControls;
+    wxCheckBox* m_verticalAlignmentCheckbox;
+    wxComboBox* m_verticalAlignmentComboBox;
     wxCheckBox* m_widthCheckbox;
     wxTextCtrl* m_width;
     wxComboBox* m_unitsW;
@@ -149,19 +165,29 @@ public:
     wxCheckBox* m_maxHeightCheckbox;
     wxTextCtrl* m_maxHeight;
     wxComboBox* m_unitsMaxH;
-    wxBoxSizer* m_alignmentControls;
-    wxCheckBox* m_verticalAlignmentCheckbox;
-    wxComboBox* m_verticalAlignmentComboBox;
     wxBoxSizer* m_positionControls;
     wxBoxSizer* m_moveObjectParentSizer;
-    wxCheckBox* m_offsetYCheckbox;
-    wxTextCtrl* m_offset;
-    wxComboBox* m_unitsOffset;
+    wxComboBox* m_positionModeCtrl;
+    wxCheckBox* m_positionLeftCheckbox;
+    wxTextCtrl* m_left;
+    wxComboBox* m_unitsLeft;
+    wxCheckBox* m_positionTopCheckbox;
+    wxTextCtrl* m_top;
+    wxComboBox* m_unitsTop;
+    wxCheckBox* m_positionRightCheckbox;
+    wxTextCtrl* m_right;
+    wxComboBox* m_unitsRight;
+    wxCheckBox* m_positionBottomCheckbox;
+    wxTextCtrl* m_bottom;
+    wxComboBox* m_unitsBottom;
     wxBoxSizer* m_moveObjectSizer;
+    int m_positionMode;
     /// Control identifiers
     enum {
         ID_WXRICHTEXTSIZEPAGE = 10700,
         ID_RICHTEXT_FLOATING_MODE = 10701,
+        ID_RICHTEXT_VERTICAL_ALIGNMENT_CHECKBOX = 10708,
+        ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX = 10709,
         ID_RICHTEXT_WIDTH_CHECKBOX = 10702,
         ID_RICHTEXT_WIDTH = 10703,
         ID_RICHTEXT_UNITS_W = 10704,
@@ -180,11 +206,19 @@ public:
         ID_RICHTEXT_MAX_HEIGHT_CHECKBOX = 10724,
         ID_RICHTEXT_MAX_HEIGHT = 10725,
         ID_RICHTEXT_UNITS_MAX_H = 10726,
-        ID_RICHTEXT_VERTICAL_ALIGNMENT_CHECKBOX = 10708,
-        ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX = 10709,
-        ID_RICHTEXT_OFFSET_CHECKBOX = 10710,
-        ID_RICHTEXT_OFFSET = 10711,
-        ID_RICHTEXT_OFFSET_UNITS = 10712,
+        ID_RICHTEXT_POSITION_MODE = 10735,
+        ID_RICHTEXT_LEFT_CHECKBOX = 10710,
+        ID_RICHTEXT_LEFT = 10711,
+        ID_RICHTEXT_LEFT_UNITS = 10712,
+        ID_RICHTEXT_TOP_CHECKBOX = 10710,
+        ID_RICHTEXT_TOP = 10728,
+        ID_RICHTEXT_TOP_UNITS = 10729,
+        ID_RICHTEXT_RIGHT_CHECKBOX = 10727,
+        ID_RICHTEXT_RIGHT = 10730,
+        ID_RICHTEXT_RIGHT_UNITS = 10731,
+        ID_RICHTEXT_BOTTOM_CHECKBOX = 10732,
+        ID_RICHTEXT_BOTTOM = 10733,
+        ID_RICHTEXT_BOTTOM_UNITS = 10734,
         ID_RICHTEXT_PARA_UP = 10713,
         ID_RICHTEXT_PARA_DOWN = 10714
     };
