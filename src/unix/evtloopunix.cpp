@@ -58,7 +58,7 @@ class PipeIOHandler : public wxFDIOHandler
 public:
     // default ctor does nothing, call Create() to really initialize the
     // object
-    PipeIOHandler() : m_pipeIsEmpty(false) { }
+    PipeIOHandler() : m_pipeIsEmpty(true) { }
 
     bool Create();
 
