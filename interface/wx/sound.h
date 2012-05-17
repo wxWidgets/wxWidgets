@@ -6,6 +6,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+#define wxSOUND_SYNC  0
+#define wxSOUND_ASYNC 1
+#define wxSOUND_LOOP  2
+
+
 /**
     @class wxSound
 
@@ -63,6 +69,16 @@ public:
         @return @true if the call was successful, @false otherwise.
     */
     bool Create(const wxString& fileName, bool isResource = false);
+
+    /**
+        Constructs a wave object from in-memory data.
+
+        @param size
+            Size of the buffer pointer to by @a data.
+        @param data
+            The buffer containing the sound data in WAV format.
+     */
+    bool Create(size_t size, const void* data);
 
     /**
         Returns @true if the object contains a successfully loaded file or resource,
