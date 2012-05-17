@@ -258,7 +258,7 @@ Server::DumpStatistics()
 
     if ((int)(m_threadWorkersDone+m_eventWorkersDone) == m_maxConnections)
     {
-        wxLogMessage("%d connection(s) served, exiting",m_maxConnections);
+        wxLogMessage("%ld connection(s) served, exiting",m_maxConnections);
         ExitMainLoop();
     }
 }
@@ -279,7 +279,7 @@ Server::OnCmdLineParsed(wxCmdLineParser& pParser)
 
     if (pParser.Found("m",&m_maxConnections))
     {
-        wxLogMessage("%d connection(s) to exit",m_maxConnections);
+        wxLogMessage("%ld connection(s) to exit",m_maxConnections);
     }
 
     long port;
@@ -434,8 +434,8 @@ void  Server::OnWorkerEvent(WorkerEvent& pEvent)
     {
         if (it->GetData() == pEvent.m_sender)
         {
-            wxLogVerbose("Deleting thread worker (%d left)",
-                         m_threadWorkers.GetCount());
+            wxLogVerbose("Deleting thread worker (%lu left)",
+                         static_cast<unsigned long>( m_threadWorkers.GetCount() ));
             it->GetData()->Wait();
             delete it->GetData();
             m_threadWorkers.DeleteNode(it);
@@ -450,8 +450,8 @@ void  Server::OnWorkerEvent(WorkerEvent& pEvent)
     {
         if (it2->GetData() == pEvent.m_sender)
         {
-            wxLogVerbose("Deleting event worker (%d left)",
-                         m_eventWorkers.GetCount());
+            wxLogVerbose("Deleting event worker (%lu left)",
+                         static_cast<unsigned long>( m_eventWorkers.GetCount() ));
             delete it2->GetData();
             m_eventWorkers.DeleteNode(it2);
             if (!pEvent.m_workerFailed)

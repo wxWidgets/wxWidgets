@@ -612,9 +612,9 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
     }
 
     // Print the contents type and file size
-    wxLogMessage("Contents type: %s\nFile size: %i\nStarting to download...",
+    wxLogMessage("Contents type: %s\nFile size: %lu\nStarting to download...",
                  url.GetProtocol().GetContentType(),
-                 data->GetSize());
+                 static_cast<unsigned long>( data->GetSize() ));
 
     // Get the data
     wxStringOutputStream sout;
