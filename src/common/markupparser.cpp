@@ -3,7 +3,7 @@
 // Purpose:     Implementation of wxMarkupParser.
 // Author:      Vadim Zeitlin
 // Created:     2011-02-16
-// RCS-ID:      $Id: $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -279,11 +279,11 @@ bool wxMarkupParser::Parse(const wxString& text)
                         m_output.OnText(current);
                         current.clear();
                     }
-
+#if wxUSE_LOG_DEBUG
                     // Remember the tag starting position for the error
                     // messages.
                     const size_t pos = it - text.begin();
-
+#endif
                     bool start = true;
                     if ( ++it != end && *it == '/' )
                     {
