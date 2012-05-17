@@ -976,7 +976,7 @@ public:
     ~wxMacCoreGraphicsBitmapData();
 
     virtual CGImageRef GetBitmap() { return m_bitmap; }
-    void* GetNativeBitmap() const { return (void*)m_bitmap; }
+    virtual void* GetNativeBitmap() const { return m_bitmap; }
     bool IsMonochrome() { return m_monochrome; }
 
 #if wxUSE_IMAGE

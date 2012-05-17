@@ -335,7 +335,7 @@ public:
 
     virtual cairo_surface_t* GetCairoSurface() { return m_surface; }
     virtual cairo_pattern_t* GetCairoPattern() { return m_pattern; }
-    void* GetNativeBitmap() const { return (void*)m_surface; }
+    virtual void* GetNativeBitmap() const { return m_surface; }
     virtual wxSize GetSize() { return wxSize(m_width, m_height); }
 
 #if wxUSE_IMAGE

@@ -280,7 +280,7 @@ public:
     ~wxGDIPlusBitmapData ();
 
     virtual Bitmap* GetGDIPlusBitmap() { return m_bitmap; }
-    void* GetNativeBitmap() const { return (void*)m_bitmap; }
+    virtual void* GetNativeBitmap() const { return m_bitmap; }
 
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
