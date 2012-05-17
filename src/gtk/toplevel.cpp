@@ -246,22 +246,6 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
 }
 }
 
-// ----------------------------------------------------------------------------
-// "size_request"
-// ----------------------------------------------------------------------------
-
-extern "C" {
-static
-void wxgtk_tlw_size_request_callback(GtkWidget * WXUNUSED(widget),
-                                     GtkRequisition *requisition,
-                                     wxTopLevelWindowGTK *win)
-{
-    // we must return the size of the window without WM decorations, otherwise
-    // GTK+ gets confused, so don't call just GetSize() here
-    win->GTKDoGetSize(&requisition->width, &requisition->height);
-}
-}
-
 //-----------------------------------------------------------------------------
 // "delete_event"
 //-----------------------------------------------------------------------------
@@ -628,8 +612,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect(m_wxwindow, "size_allocate",
         G_CALLBACK(size_allocate), this);
 
-    g_signal_connect (m_widget, "size_request",
-                      G_CALLBACK (wxgtk_tlw_size_request_callback), this);
     PostCreation();
 
 #if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
@@ -702,6 +684,15 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
            m_gdkDecor |= GDK_DECOR_RESIZEH;
         }
     }
+
+    // GTK sometimes chooses very small size if max size hint is not explicitly set
+    int maxWidth = m_maxWidth;
+    int maxHeight = m_maxHeight;
+    if (maxWidth < 0)
+        maxWidth = INT_MAX;
+    if (maxHeight < 0)
+        maxHeight = INT_MAX;
+    DoSetSizeHints(m_minWidth, m_minHeight, maxWidth, maxHeight, -1, -1);
 
     m_decorSize = GetCachedDecorSize();
     int w, h;

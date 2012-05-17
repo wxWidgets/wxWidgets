@@ -29,6 +29,12 @@ drawn on wxPizza's parent GdkWindow.
 For RTL, child widget positions are mirrored in size_allocate.
 */
 
+struct wxPizzaChild
+{
+    GtkWidget* widget;
+    int x, y, width, height;
+};
+
 static GtkWidgetClass* parent_class;
 
 extern "C" {
@@ -77,9 +83,9 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
     widget->allocation = *alloc;
 
     // adjust child positions
-    for (const GList* list = pizza->m_fixed.children; list; list = list->next)
+    for (const GList* p = pizza->m_children; p; p = p->next)
     {
-        const GtkFixedChild* child = static_cast<GtkFixedChild*>(list->data);
+        const wxPizzaChild* child = static_cast<wxPizzaChild*>(p->data);
         if (gtk_widget_get_visible(child->widget))
         {
             GtkAllocation child_alloc;
@@ -88,10 +94,8 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
             // which has already been adjusted
             child_alloc.x = child->x - pizza->m_scroll_x;
             child_alloc.y = child->y - pizza->m_scroll_y;
-            GtkRequisition req;
-            gtk_widget_get_child_requisition(child->widget, &req);
-            child_alloc.width  = req.width;
-            child_alloc.height = req.height;
+            child_alloc.width  = child->width;
+            child_alloc.height = child->height;
             if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
                 child_alloc.x = w - child_alloc.x - child_alloc.width;
             gtk_widget_size_allocate(child->widget, &child_alloc);
@@ -140,6 +144,28 @@ static void hide(GtkWidget* widget)
     }
 
     parent_class->hide(widget);
+}
+
+static void pizza_add(GtkContainer* container, GtkWidget* widget)
+{
+    WX_PIZZA(container)->put(widget, 0, 0, 1, 1);
+}
+
+static void pizza_remove(GtkContainer* container, GtkWidget* widget)
+{
+    GTK_CONTAINER_CLASS(parent_class)->remove(container, widget);
+
+    wxPizza* pizza = WX_PIZZA(container);
+    for (GList* p = pizza->m_children; p; p = p->next)
+    {
+        wxPizzaChild* child = static_cast<wxPizzaChild*>(p->data);
+        if (child->widget == widget)
+        {
+            pizza->m_children = g_list_delete_link(pizza->m_children, p);
+            delete child;
+            break;
+        }
+    }
 }
 
 // not used, but needs to exist so gtk_widget_set_scroll_adjustments will work
@@ -193,6 +219,9 @@ static void class_init(void* g_class, void*)
     widget_class->realize = realize;
     widget_class->show = show;
     widget_class->hide = hide;
+    GtkContainerClass* container_class = (GtkContainerClass*)g_class;
+    container_class->add = pizza_add;
+    container_class->remove = pizza_remove;
     wxPizzaClass* klass = (wxPizzaClass*)g_class;
 
     // needed to make widget appear scrollable to GTK+
@@ -235,6 +264,7 @@ GtkWidget* wxPizza::New(long windowStyle)
 {
     GtkWidget* widget = GTK_WIDGET(g_object_new(type(), NULL));
     wxPizza* pizza = WX_PIZZA(widget);
+    pizza->m_children = NULL;
     pizza->m_scroll_x = 0;
     pizza->m_scroll_y = 0;
     pizza->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;
@@ -264,26 +294,35 @@ GtkWidget* wxPizza::New(long windowStyle)
     return widget;
 }
 
-// gtk_fixed_move does not check for a change before issuing a queue_resize,
-// we need to avoid that to prevent endless sizing loops, so check first
-void wxPizza::move(GtkWidget* widget, int x, int y)
+void wxPizza::move(GtkWidget* widget, int x, int y, int width, int height)
 {
-    GtkFixed* fixed = &m_fixed;
-    for (const GList* list = fixed->children; list; list = list->next)
+    for (const GList* p = m_children; p; p = p->next)
     {
-        const GtkFixedChild* child = static_cast<GtkFixedChild*>(list->data);
+        wxPizzaChild* child = static_cast<wxPizzaChild*>(p->data);
         if (child->widget == widget)
         {
-            if (child->x != x || child->y != y)
-                gtk_fixed_move(fixed, widget, x, y);
+            child->x = x;
+            child->y = y;
+            child->width = width;
+            child->height = height;
+            // normally a queue-resize would be needed here, but we know
+            // wxWindowGTK::DoMoveWindow() will take care of it
             break;
         }
     }
 }
 
-void wxPizza::put(GtkWidget* widget, int x, int y)
+void wxPizza::put(GtkWidget* widget, int x, int y, int width, int height)
 {
-    gtk_fixed_put(&m_fixed, widget, x, y);
+    gtk_fixed_put(GTK_FIXED(this), widget, 0, 0);
+
+    wxPizzaChild* child = new wxPizzaChild;
+    child->widget = widget;
+    child->x = x;
+    child->y = y;
+    child->width = width;
+    child->height = height;
+    m_children = g_list_append(m_children, child);
 }
 
 struct AdjustData {

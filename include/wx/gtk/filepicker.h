@@ -107,8 +107,6 @@ public:     // overrides
     FILEDIRBTN_OVERRIDES
 
 protected:
-    virtual bool GTKShouldConnectSizeRequest() const { return false; }
-
     wxDialog *m_dialog;
 
 private:

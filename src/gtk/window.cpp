@@ -222,28 +222,6 @@ int          g_lastButtonNumber = 0;
 #define TRACE_FOCUS wxT("focus")
 
 //-----------------------------------------------------------------------------
-// "size_request" of m_widget
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
-                                   GtkRequisition *requisition,
-                                   wxWindow * win)
-{
-    int w, h;
-    win->GetSize( &w, &h );
-    if (w < 2)
-        w = 2;
-    if (h < 2)
-        h = 2;
-
-    requisition->height = h;
-    requisition->width = w;
-}
-}
-
-//-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
@@ -2088,9 +2066,8 @@ void wxWindowGTK::AddChildGTK(wxWindowGTK* child)
     child->m_x += pizza->m_scroll_x;
     child->m_y += pizza->m_scroll_y;
 
-    gtk_widget_set_size_request(
-        child->m_widget, child->m_width, child->m_height);
-    pizza->put(child->m_widget, child->m_x, child->m_y);
+    pizza->put(child->m_widget,
+        child->m_x, child->m_y, child->m_width, child->m_height);
 }
 
 //-----------------------------------------------------------------------------
@@ -2505,16 +2482,8 @@ void wxWindowGTK::PostCreation()
     }
 #endif // GTK+ >= 2.8
 
-    if ( GTKShouldConnectSizeRequest() )
-    {
-        // This is needed if we want to add our windows into native
-        // GTK controls, such as the toolbar. With this callback, the
-        // toolbar gets to know the correct size (the one set by the
-        // programmer). Sadly, it misbehaves for wxComboBox.
-        g_signal_connect (m_widget, "size_request",
-                          G_CALLBACK (wxgtk_window_size_request_callback),
-                          this);
-    }
+    if (!WX_IS_PIZZA(gtk_widget_get_parent(m_widget)) && !GTK_IS_WINDOW(m_widget))
+        gtk_widget_set_size_request(m_widget, m_width, m_height);
 
     InheritAttributes();
 
@@ -2600,10 +2569,9 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
     GtkWidget* parent = gtk_widget_get_parent(m_widget);
     if (WX_IS_PIZZA(parent))
-    {
-        WX_PIZZA(parent)->move(m_widget, x, y);
+        WX_PIZZA(parent)->move(m_widget, x, y, width, height);
+    else
         gtk_widget_set_size_request(m_widget, width, height);
-    }
 
     // With GTK3, gtk_widget_queue_resize() is ignored while a size-allocate
     // is in progress. This situation is common in wxWidgets, since

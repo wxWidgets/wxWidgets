@@ -23,12 +23,13 @@ struct WXDLLIMPEXP_CORE wxPizza
 
     static GtkWidget* New(long windowStyle = 0);
     static GType type();
-    void move(GtkWidget* widget, int x, int y);
-    void put(GtkWidget* widget, int x, int y);
+    void move(GtkWidget* widget, int x, int y, int width, int height);
+    void put(GtkWidget* widget, int x, int y, int width, int height);
     void scroll(int dx, int dy);
     void get_border_widths(int& x, int& y);
 
     GtkFixed m_fixed;
+    GList* m_children;
     int m_scroll_x;
     int m_scroll_y;
     int m_border_style;

@@ -333,6 +333,14 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     m_diffX = 0;
     m_diffY = 0;
 
+    // don't allow sizing smaller than decorations
+    int minWidth = 2 * m_miniEdge;
+    int minHeight = 2 * m_miniEdge + m_miniTitle;
+    if (m_minWidth < minWidth)
+        m_minWidth = minWidth;
+    if (m_minHeight < minHeight)
+        m_minHeight = minHeight;
+
     wxFrame::Create( parent, id, title, pos, size, style, name );
 
     // Use a GtkEventBox for the title and borders. Using m_widget for this
@@ -359,12 +367,6 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     gtk_window_set_default_size(GTK_WINDOW(m_widget), m_width, m_height);
     m_decorSize.Set(0, 0);
     m_deferShow = false;
-
-    // don't allow sizing smaller than decorations
-    GdkGeometry geom;
-    geom.min_width  = 2 * m_miniEdge;
-    geom.min_height = 2 * m_miniEdge + m_miniTitle;
-    gtk_window_set_geometry_hints(GTK_WINDOW(m_widget), NULL, &geom, GDK_HINT_MIN_SIZE);
 
     if (m_parent && (GTK_IS_WINDOW(m_parent->m_widget)))
     {

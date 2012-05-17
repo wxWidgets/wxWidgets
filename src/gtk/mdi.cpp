@@ -316,14 +316,6 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
         m_menuBar->Show(false);
         gtk_box_pack_start(GTK_BOX(mdi_frame->m_mainWidget), m_menuBar->m_widget, false, false, 0);
         gtk_box_reorder_child(GTK_BOX(mdi_frame->m_mainWidget), m_menuBar->m_widget, 0);
-
-        gulong handler_id = g_signal_handler_find(
-            m_menuBar->m_widget,
-            GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-            g_signal_lookup("size_request", GTK_TYPE_WIDGET),
-            0, NULL, NULL, m_menuBar);
-        if (handler_id != 0)
-            g_signal_handler_disconnect(m_menuBar->m_widget, handler_id);
         gtk_widget_set_size_request(m_menuBar->m_widget, -1, -1);
     }
 }

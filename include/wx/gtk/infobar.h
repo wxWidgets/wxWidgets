@@ -54,7 +54,6 @@ public:
     void GTKResponse(int btnid);
 
 protected:
-    virtual bool GTKShouldConnectSizeRequest() const { return false; }
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
 private:

@@ -169,20 +169,6 @@ enter_notify_event(GtkWidget*, GdkEventCrossing* event, wxToolBarTool* tool)
 }
 
 //-----------------------------------------------------------------------------
-// "size_request" from m_toolbar
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-size_request(GtkWidget*, GtkRequisition* req, wxToolBar* win)
-{
-    const wxSize margins = win->GetMargins();
-    req->width  += margins.x;
-    req->height += 2 * margins.y;
-}
-}
-
-//-----------------------------------------------------------------------------
 // "expose_event" from GtkImage inside m_item
 //-----------------------------------------------------------------------------
 
@@ -415,9 +401,6 @@ bool wxToolBar::Create( wxWindow *parent,
 
     PostCreation(size);
 
-    g_signal_connect_after(m_toolbar, "size_request",
-        G_CALLBACK(size_request), this);
-
     return true;
 }
 
@@ -597,12 +580,6 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                 gtk_toolbar_insert(m_toolbar, tool->m_item, int(pos));
                 g_object_unref(tool->m_item);
             }
-            // Inserted items "slide" into place using an animated effect that
-            // causes multiple size events on the item. Must set size request
-            // to keep item size from getting permanently set too small by the
-            // first of these size events.
-            const wxSize size = control->GetSize();
-            gtk_widget_set_size_request(control->m_widget, size.x, size.y);
             break;
     }
     gtk_widget_show(GTK_WIDGET(tool->m_item));

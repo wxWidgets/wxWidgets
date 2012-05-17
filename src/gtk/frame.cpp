@@ -300,16 +300,6 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
             GTK_BOX(m_mainWidget), menuBar->m_widget, false, false, 0);
         gtk_box_reorder_child(GTK_BOX(m_mainWidget), menuBar->m_widget, 0);
 
-        // disconnect wxWindowGTK "size_request" handler,
-        // it interferes with sizing of detached GtkHandleBox
-        gulong handler_id = g_signal_handler_find(
-            menuBar->m_widget,
-            GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-            g_signal_lookup("size_request", GTK_TYPE_WIDGET),
-            0, NULL, NULL, menuBar);
-        if (handler_id != 0)
-            g_signal_handler_disconnect(menuBar->m_widget, handler_id);
-
         // reset size request to allow native sizing to work
         gtk_widget_set_size_request(menuBar->m_widget, -1, -1);
 
@@ -364,17 +354,6 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
             gtk_box_reorder_child(
                 GTK_BOX(m_mainWidget), toolbar->m_widget, pos);
         }
-
-        // disconnect wxWindowGTK "size_request" handler,
-        // it interferes with sizing of detached GtkHandleBox
-        gulong handler_id = g_signal_handler_find(
-            toolbar->m_widget,
-            GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-            g_signal_lookup("size_request", GTK_TYPE_WIDGET),
-            0, NULL, NULL, toolbar);
-        if (handler_id != 0)
-            g_signal_handler_disconnect(toolbar->m_widget, handler_id);
-
         // reset size request to allow native sizing to work
         gtk_widget_set_size_request(toolbar->m_widget, -1, -1);
     }
@@ -397,6 +376,13 @@ void wxFrame::SetStatusBar(wxStatusBar *statbar)
             statbar->m_widget, false, false, 0, GTK_PACK_END);
         // make sure next size_allocate on statusbar causes a size event
         statbar->m_oldClientWidth = 0;
+        int h = -1;
+        if (statbar->m_wxwindow)
+        {
+            // statusbar is not a native widget, need to set height request
+            h = statbar->m_height;
+        }
+        gtk_widget_set_size_request(statbar->m_widget, -1, h);
     }
     // make sure next size_allocate causes a wxSizeEvent
     m_oldClientWidth = 0;

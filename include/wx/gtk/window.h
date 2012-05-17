@@ -382,11 +382,6 @@ protected:
     // just as it does.
     unsigned long GTKConnectWidget(const char *signal, wxGTKCallback callback);
 
-    // Return true from here if PostCreation() should connect to size_request
-    // signal: this is done by default but doesn't work for some native
-    // controls which override this function to return false
-    virtual bool GTKShouldConnectSizeRequest() const { return !IsTopLevel(); }
-
     void ConstrainSize();
 
 private:
