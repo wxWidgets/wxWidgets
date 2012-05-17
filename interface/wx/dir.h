@@ -310,23 +310,27 @@ public:
     static bool Remove(const wxString &dir, int flags = 0);
     
     /**
-        Enumerate all files and directories under the given directory
-        recursively calling the element of the provided wxDirTraverser object
-        for each of them.
+        Enumerate all files and directories under the given directory.
 
-        More precisely, the function will really recurse into subdirectories if
-        @a flags contains ::wxDIR_DIRS flag. It will ignore the files (but
-        still possibly recurse into subdirectories) if ::wxDIR_FILES flag is
-        given.
-        See ::wxDirFlags for the list of the possible flags.
+        If @a flags contains ::wxDIR_DIRS this enumeration is recursive, i.e.
+        all the subdirectories of the given one and the files inside them will
+        be traversed. Otherwise only the files in this directory itself are.
+
+        If @a flags doesn't contain ::wxDIR_FILES then only subdirectories are
+        examined but not normal files. It doesn't make sense to not specify
+        either ::wxDIR_DIRS or ::wxDIR_FILES and usually both of them should be
+        specified, as is the case by default.
 
         For each directory found, @ref wxDirTraverser::OnDir() "sink.OnDir()"
         is called and @ref wxDirTraverser::OnFile() "sink.OnFile()" is called
         for every file. Depending on the return value, the enumeration may
-        continue or stop.
+        continue or stop. If entering a subdirectory fails, @ref
+        wxDirTraverser::OnOpenError() "sink.OnOpenError()" is called.
 
         The function returns the total number of files found or @c "(size_t)-1"
         on error.
+
+        See ::wxDirFlags for the full list of the possible flags.
 
         @see GetAllFiles()
     */
