@@ -207,7 +207,7 @@ void wxTaskBarIcon::Private::SetIcon()
 #if wxUSE_TOOLTIPS
     const char *tip_text = NULL;
     if (!m_tipText.empty())
-        tip_text = m_tipText.c_str();
+        tip_text = m_tipText;
 
 #if GTK_CHECK_VERSION(2,10,0)
     if (m_statusIcon)

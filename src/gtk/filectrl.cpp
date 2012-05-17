@@ -47,7 +47,7 @@ wxString wxGtkFileChooser::GetPath() const
     wxGtkString str( gtk_file_chooser_get_filename( m_widget ) );
 
     wxString string;
-    if (str.c_str() != NULL)
+    if (str)
         string = wxString::FromUTF8(str);
     return string;
 }
