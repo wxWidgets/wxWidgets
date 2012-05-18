@@ -124,7 +124,7 @@ wxObject* wxVariantOfPtrToObjectConverter##name ( const wxAny &data )        \
     _DEFAULT_CONSTRUCTOR(name)                                                  \
     _DEFAULT_CONVERTERS(name)                                                   \
     void wxVariantToObjectConverter##name ( const wxAny &data, wxObjectFunctor* fn )                 \
-{ (*fn)( &wxANY_AS(data, name) ); }                        \
+    { name o = wxANY_AS(data, name); (*fn)( &o ); }                        \
     \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo,NULL };  \
     wxClassInfo name::ms_classInfo(name::ms_classParents, wxT(unit),                \
