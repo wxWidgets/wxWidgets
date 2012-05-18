@@ -268,8 +268,6 @@ def main(scriptName, args):
                 xcodePath+"/SDKs/MacOSX10.6.sdk",
                 xcodePath+"/SDKs/MacOSX10.7.sdk",
             ]
-            if not options.osx_cocoa:
-                sdks.insert(0, xcodePath+"/SDKs/MacOSX10.4u.sdk")
             
             # use the lowest available sdk
             for sdk in sdks:
