@@ -97,6 +97,24 @@ public:
         necessary to convert the strings to the same case before calling it.
     */
     static bool IsOfType(const wxString& mimeType, const wxString& wildcard);
+
+
+    /**
+       Create a new association using the fields of wxFileTypeInfo (at least
+       the MIME type and the extension should be set).
+    */
+    wxFileType *Associate(const wxFileTypeInfo& ftInfo);
+
+    /**
+       Undo Associate().
+    */
+    bool Unassociate(wxFileType *ft) ;
+
+    /**
+       Enumerate all known file types.  Returns the number of retrieved items.
+     */
+    size_t EnumAllFileTypes(wxArrayString& mimetypes);
+
 };
 
 
@@ -104,6 +122,7 @@ public:
     The global wxMimeTypesManager instance.
 */
 wxMimeTypesManager* wxTheMimeTypesManager;
+
 
 
 /**
@@ -361,7 +380,16 @@ public:
     */
     bool GetPrintCommand(wxString* command,
                          const MessageParameters& params) const;
+
+    /**
+       Returns the number of commands for this mime type, and fills the verbs
+       and commands arrays with the command information.
+     */
+    size_t GetAllCommands(wxArrayString *verbs, wxArrayString *commands,
+                          const wxFileType::MessageParameters& params) const;
 };
+
+
 
 /**
     Container of information about wxFileType.
@@ -406,6 +434,12 @@ public:
                    const wxString& description,
                    const wxString& extension,
                    ...);
+    
+    /**
+       Constuctor using an array of string elements corresponding to the
+       parameters of the ctor above in the same order.
+    */
+    wxFileTypeInfo(const wxArrayString& sArray);
 
     /**
         Add another extension associated with this file type.
@@ -442,4 +476,55 @@ public:
         file type registration.
      */
     void SetShortDesc(const wxString& shortDesc);
+
+    /**
+       Set the icon information.
+    */
+    void SetIcon(const wxString& iconFile, int iconIndex = 0);
+
+    /**
+       Get the MIME type
+    */
+    const wxString& GetMimeType() const;
+    
+    /**
+       Get the open command
+    */
+    const wxString& GetOpenCommand() const;
+
+    /**
+       Get the print command
+    */
+    const wxString& GetPrintCommand() const;
+    
+    /**
+       Get the short description (only used under Win32 so far)
+    */
+    const wxString& GetShortDesc() const;
+    
+    /**
+       Get the long, user visible description
+    */
+    const wxString& GetDescription() const;
+    
+    /**
+       Get the array of all extensions
+    */
+    const wxArrayString& GetExtensions() const;
+
+    /**
+       Get the number of extensions.
+    */
+    size_t GetExtensionsCount() const;
+    
+    /**
+       Get the icon filename
+    */
+    const wxString& GetIconFile() const;
+
+    /**
+       Get the index of the icon within the icon file.
+    */
+    int GetIconIndex() const;
+
 };
