@@ -2531,7 +2531,7 @@ Rect wxMacGetBoundsForControl( wxWindowMac* window , const wxPoint& pos , const 
     int x, y, w, h ;
 
     window->MacGetBoundsForControl( pos , size , x , y, w, h , adjustForOrigin ) ;
-    Rect bounds = { y, x, y + h, x + w };
+    Rect bounds = { static_cast<short>(y), static_cast<short>(x), static_cast<short>(y + h), static_cast<short>(x + w) };
 
     return bounds ;
 }
