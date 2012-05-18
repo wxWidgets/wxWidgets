@@ -236,7 +236,7 @@ void wxFlagsToString( wxString &s, const e& data )
 #define wxBEGIN_FLAGS( e ) \
     wxEnumMemberData s_enumDataMembers##e[] = {
 
-#define wxFLAGS_MEMBER( v ) { wxT(#v), v },
+#define wxFLAGS_MEMBER( v ) { wxT(#v), static_cast<int>(v) },
 
 #define wxEND_FLAGS( e )                                                \
         { NULL, 0 } };                                                 \
