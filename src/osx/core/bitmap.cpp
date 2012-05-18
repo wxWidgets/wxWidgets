@@ -315,7 +315,7 @@ bool wxBitmapRefData::Create(CGImageRef image)
                 m_hasAlpha = true;
                 m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst );
             }
-            CGRect rect = {{0,0},{m_width,m_height}}; 
+            CGRect rect = CGRectMake(0,0,m_width,m_height);
             CGContextDrawImage(m_hBitmap, rect, image);
             
             wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
