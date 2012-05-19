@@ -102,8 +102,6 @@ public:
     virtual int GetDepth() const;
     virtual wxSize GetPPI() const;
 
-    virtual void SetMapMode(wxMappingMode mode);
-
     virtual void SetLogicalFunction(wxRasterOperationMode function);
 
     virtual void SetTextForeground(const wxColour& colour);

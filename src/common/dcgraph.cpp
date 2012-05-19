@@ -399,35 +399,6 @@ void wxGCDCImpl::SetTextBackground( const wxColour &col )
     m_textBackgroundColour = col;
 }
 
-void wxGCDCImpl::SetMapMode( wxMappingMode mode )
-{
-    switch (mode)
-    {
-    case wxMM_TWIPS:
-        SetLogicalScale( twips2mm * m_mm_to_pix_x, twips2mm * m_mm_to_pix_y );
-        break;
-
-    case wxMM_POINTS:
-        SetLogicalScale( pt2mm * m_mm_to_pix_x, pt2mm * m_mm_to_pix_y );
-        break;
-
-    case wxMM_METRIC:
-        SetLogicalScale( m_mm_to_pix_x, m_mm_to_pix_y );
-        break;
-
-    case wxMM_LOMETRIC:
-        SetLogicalScale( m_mm_to_pix_x / 10.0, m_mm_to_pix_y / 10.0 );
-        break;
-
-    case wxMM_TEXT:
-    default:
-        SetLogicalScale( 1.0, 1.0 );
-        break;
-    }
-
-    ComputeScaleAndOrigin();
-}
-
 wxSize wxGCDCImpl::GetPPI() const
 {
     return wxSize(72, 72);
