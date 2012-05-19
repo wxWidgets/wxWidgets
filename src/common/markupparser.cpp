@@ -279,7 +279,12 @@ bool wxMarkupParser::Parse(const wxString& text)
                         m_output.OnText(current);
                         current.clear();
                     }
-#if wxUSE_LOG_DEBUG
+
+                    // This variable is used only in the debugging messages
+                    // and doesn't need to be defined if they're not compiled
+                    // at all (it actually would result in unused variable
+                    // messages in this case).
+#if wxUSE_LOG_DEBUG && defined(HAVE_VARIADIC_MACROS)
                     // Remember the tag starting position for the error
                     // messages.
                     const size_t pos = it - text.begin();
