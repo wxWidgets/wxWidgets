@@ -445,6 +445,47 @@ public:
     */
     void SetY(int y);
 
+    /**
+       Set the left side of the rectangle.
+    */
+    void SetLeft(int left);
+
+    /**
+       Set the right side of the rectangle.
+     */
+    void SetRight(int right);
+
+    /**
+       Set the top edge of the rectangle.
+     */
+    void SetTop(int top);
+
+    /**
+       Set the bottome edge of th rectangle.
+     */
+    void SetBottom(int bottom);
+
+    /**
+       Set the top-left point of the rectangle.
+     */
+    void SetTopLeft(const wxPoint &p);
+
+    /**
+       Set the bottom-right point of the rectangle.
+     */
+    void SetBottomRight(const wxPoint &p);
+
+    /**
+       Set the top-right point of the rectangle.
+     */
+    void SetTopRight(const wxPoint &p);
+
+    /**
+       Set the bottom-left point of the rectangle.
+     */
+    void SetBottomLeft(const wxPoint &p);
+
+    
     //@{
     /**
         Modifies the rectangle to contain the bounding box of this rectangle
