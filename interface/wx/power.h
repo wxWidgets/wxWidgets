@@ -61,10 +61,24 @@ enum wxBatteryState
 class wxPowerEvent : public wxEvent
 {
 public:
+    wxPowerEvent();
+    wxPowerEvent(wxEventType evtType);
+    
     /**
         Call this to prevent suspend from taking place in @c wxEVT_POWER_SUSPENDING
         handler (it is ignored for all the others).
     */
     void Veto();
+
+    /**
+       Returns whether Veto has been called.
+    */
+    bool IsVetoed() const;
 };
+
+wxEventType wxEVT_POWER_SUSPENDING;
+wxEventType wxEVT_POWER_SUSPENDED;
+wxEventType wxEVT_POWER_SUSPEND_CANCEL;
+wxEventType wxEVT_POWER_RESUME;
+
 
