@@ -1195,6 +1195,15 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
     
     switch (code)
     {
+        // Clang warns about switch values not of the same type as (enumerated)
+        // switch controlling expression. This is generally useful but here we
+        // really want to be able to use letters and digits without making them
+        // part of wxKeyCode enum.
+#ifdef __clang__
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wswitch"
+#endif // __clang__
+
         case 'a': case 'A':   keycode = kVK_ANSI_A; break;
         case 'b': case 'B':   keycode = kVK_ANSI_B; break;
         case 'c': case 'C':   keycode = kVK_ANSI_C; break;
@@ -1232,6 +1241,10 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
         case '7':             keycode = kVK_ANSI_7; break;
         case '8':             keycode = kVK_ANSI_8; break;
         case '9':             keycode = kVK_ANSI_9; break;
+
+#ifdef __clang__
+    #pragma clang diagnostic pop
+#endif // __clang__
             
         case WXK_BACK:        keycode = kVK_Delete; break;
         case WXK_TAB:         keycode = kVK_Tab; break;
