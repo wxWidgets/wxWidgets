@@ -123,6 +123,8 @@ public:
 class wxRichTextFormattingDialog : public wxPropertySheetDialog
 {
 public:
+    enum { Option_AllowPixelFontSize = 0x0001 };
+
     /**
         Default ctor.
     */
@@ -226,6 +228,23 @@ public:
         Sets the attributes to be edited.
     */
     void SetAttributes(const wxTextAttr& attr);
+
+    /**
+        Sets the dialog options, determining what the interface presents to the user.
+        Currently the only option is Option_AllowPixelFontSize.
+    */
+    void SetOptions(int options) { m_options = options; }
+
+    /**
+        Gets the dialog options, determining what the interface presents to the user.
+        Currently the only option is Option_AllowPixelFontSize.
+    */
+    int GetOptions() const { return m_options; }
+
+    /**
+        Returns @true if the given option is present.
+    */
+    bool HasOption(int option) const { return (m_options & option) != 0; }
 
     /**
         Sets the formatting factory object to be used for customization and page

@@ -1660,6 +1660,31 @@ public:
     */
     virtual bool GetVerticalScrollbarEnabled() const;
 
+    /**
+        Sets the scale factor for displaying fonts, for example for more comfortable
+        editing.
+    */
+    void SetFontScale(double fontScale, bool refresh = false);
+
+    /**
+        Returns the scale factor for displaying fonts, for example for more comfortable
+        editing.
+    */
+    double GetFontScale() const { return GetBuffer().GetFontScale(); }
+
+    /**
+        Sets the scale factor for displaying certain dimensions such as indentation and
+        inter-paragraph spacing. This can be useful when editing in a small control
+        where you still want legible text, but a minimum of wasted white space.
+    */
+    void SetDimensionScale(double dimScale, bool refresh = false);
+
+    /**
+        Returns the scale factor for displaying certain dimensions such as indentation
+        and inter-paragraph spacing.
+    */
+    double GetDimensionScale() const { return GetBuffer().GetDimensionScale(); }
+
 // Command handlers
 
     /**

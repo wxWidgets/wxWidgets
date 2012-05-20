@@ -775,7 +775,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
             name.Find(wxT("default")) != wxNOT_FOUND || name.Find(defaultTranslated) != wxNOT_FOUND)
         {
             wxRichTextAttr attr2(d->GetStyleMergedWithBase(GetStyleSheet()));
-            if (attr2.HasFontSize())
+            if (attr2.HasFontPointSize())
             {
                 stdFontSize = attr2.GetFontSize();
                 break;
@@ -796,7 +796,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
             if (d)
             {
                 wxRichTextAttr attr2(d->GetStyleMergedWithBase(GetStyleSheet()));
-                if (attr2.HasFontSize())
+                if (attr2.HasFontPointSize())
                 {
                     if (attr2.GetFontSize() <= (int) maxSize)
                         sizes[attr2.GetFontSize()] ++;
@@ -816,7 +816,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     if (stdFontSize == 0)
         stdFontSize = 12;
 
-    int thisFontSize = ((attr.GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0) ? attr.GetFontSize() : stdFontSize;
+    int thisFontSize = attr.HasFontPointSize() ? attr.GetFontSize() : stdFontSize;
 
     if (thisFontSize < stdFontSize)
         size --;

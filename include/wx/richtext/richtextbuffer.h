@@ -281,7 +281,7 @@ enum wxRichTextHitTestFlags
 // A special flag telling the buffer to keep the first paragraph style
 // as-is, when deleting a paragraph marker. In future we might pass a
 // flag to InsertFragment and DeleteRange to indicate the appropriate mode.
-#define wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE   0x10000000
+#define wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE   0x20000000
 
 /**
     Default superscript/subscript font multiplication factor.
@@ -370,9 +370,12 @@ public:
     void Reset() { m_value = 0; m_flags = 0; }
 
     /**
-        Partial equality test.
+        Partial equality test. If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a dim are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a dim but not
+        in this object.
     */
-    bool EqPartial(const wxTextAttrDimension& dim) const;
+    bool EqPartial(const wxTextAttrDimension& dim, bool weakTest = true) const;
 
     /** Apply the dimension, but not those identical to @a compareWith if present.
     */
@@ -497,10 +500,13 @@ public:
     bool operator==(const wxTextAttrDimensions& dims) const { return m_left == dims.m_left && m_top == dims.m_top && m_right == dims.m_right && m_bottom == dims.m_bottom; }
 
     /**
-        Partial equality test.
+        Partial equality test. If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a dim sare present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a dims but not
+        in this object.
 
     */
-    bool EqPartial(const wxTextAttrDimensions& dims) const;
+    bool EqPartial(const wxTextAttrDimensions& dims, bool weakTest = true) const;
 
     /**
         Apply to 'this', but not if the same as @a compareWith.
@@ -588,9 +594,12 @@ public:
     bool operator==(const wxTextAttrSize& size) const { return m_width == size.m_width && m_height == size.m_height ; }
 
     /**
-        Partial equality test.
+        Partial equality test. If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a size are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a size but not
+        in this object.
     */
-    bool EqPartial(const wxTextAttrSize& dims) const;
+    bool EqPartial(const wxTextAttrSize& size, bool weakTest = true) const;
 
     /**
         Apply to this object, but not if the same as @a compareWith.
@@ -813,9 +822,12 @@ public:
     void Reset() { m_borderStyle = 0; m_borderColour = 0; m_flags = 0; m_borderWidth.Reset(); }
 
     /**
-        Partial equality test.
+        Partial equality test. If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a border are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a border but not
+        in this object.
     */
-    bool EqPartial(const wxTextAttrBorder& border) const;
+    bool EqPartial(const wxTextAttrBorder& border, bool weakTest = true) const;
 
     /**
         Applies the border to this object, but not if the same as @a compareWith.
@@ -989,9 +1001,12 @@ public:
     void Reset() { m_left.Reset(); m_right.Reset(); m_top.Reset(); m_bottom.Reset(); }
 
     /**
-        Partial equality test.
+        Partial equality test. If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a borders are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a borders but not
+        in this object.
     */
-    bool EqPartial(const wxTextAttrBorders& borders) const;
+    bool EqPartial(const wxTextAttrBorders& borders, bool weakTest = true) const;
 
     /**
         Applies border to this object, but not if the same as @a compareWith.
@@ -1087,10 +1102,13 @@ public:
     bool operator== (const wxTextBoxAttr& attr) const;
 
     /**
-        Partial equality test, ignoring unset attributes.
+        Partial equality test, ignoring unset attributes. If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a attr are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a attr but not
+        in this object.
 
     */
-    bool EqPartial(const wxTextBoxAttr& attr) const;
+    bool EqPartial(const wxTextBoxAttr& attr, bool weakTest = true) const;
 
     /**
         Merges the given attributes. If @a compareWith is non-NULL, then it will be used
@@ -1489,9 +1507,12 @@ public:
     bool operator==(const wxRichTextAttr& attr) const;
 
     /**
-        Partial equality test taking comparison object into account.
+        Partial equality test. If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a attr are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a attr but not
+        in this object.
     */
-    bool EqPartial(const wxRichTextAttr& attr) const;
+    bool EqPartial(const wxRichTextAttr& attr, bool weakTest = true) const;
 
     /**
         Merges the given attributes. If @a compareWith
@@ -1752,7 +1773,14 @@ public:
     */
     bool operator != (const wxRichTextFontTable& table) const { return !(*this == table); }
 
+    /**
+        Set the font scale factor.
+    */
+    void SetFontScale(double fontScale);
+
 protected:
+
+    double m_fontScale;
 
     DECLARE_DYNAMIC_CLASS(wxRichTextFontTable)
 };
@@ -3545,7 +3573,7 @@ public:
         Update the field; delegated to the associated field type. This would typically expand the field to its value,
         if this is a dynamically changing and/or composite field.
      */
-    virtual bool UpdateField();
+    virtual bool UpdateField(wxRichTextBuffer* buffer);
 
     virtual wxRichTextObject* Clone() const { return new wxRichTextField(*this); }
 
@@ -3628,7 +3656,7 @@ public:
         Update the field. This would typically expand the field to its value,
         if this is a dynamically changing and/or composite field.
      */
-    virtual bool UpdateField(wxRichTextField* WXUNUSED(obj)) { return false; }
+    virtual bool UpdateField(wxRichTextBuffer* WXUNUSED(buffer), wxRichTextField* WXUNUSED(obj)) { return false; }
 
     /**
         Returns @true if this object is top-level, i.e. contains its own paragraphs, such as a text box.
@@ -4704,6 +4732,31 @@ public:
     */
     void SetFontTable(const wxRichTextFontTable& table) { m_fontTable = table; }
 
+    /**
+        Sets the scale factor for displaying fonts, for example for more comfortable
+        editing.
+    */
+    void SetFontScale(double fontScale);
+
+    /**
+        Returns the scale factor for displaying fonts, for example for more comfortable
+        editing.
+    */
+    double GetFontScale() const { return m_fontScale; }
+
+    /**
+        Sets the scale factor for displaying certain dimensions such as indentation and
+        inter-paragraph spacing. This can be useful when editing in a small control
+        where you still want legible text, but a minimum of wasted white space.
+    */
+    void SetDimensionScale(double dimScale);
+
+    /**
+        Returns the scale factor for displaying certain dimensions such as indentation
+        and inter-paragraph spacing.
+    */
+    double GetDimensionScale() const { return m_dimensionScale; }
+
 // Operations
 
     /**
@@ -5374,6 +5427,12 @@ protected:
 
     /// Scaling factor in use: needed to calculate correct dimensions when printing
     double                  m_scale;
+
+    /// Font scale for adjusting the text size when editing
+    double                  m_fontScale;
+
+    /// Dimension scale for reducing redundant whitespace when editing
+    double                  m_dimensionScale;
 };
 
 /**
@@ -6331,10 +6390,6 @@ inline bool wxRichTextHasStyle(int flags, int style)
 /// Compare two attribute objects
 WXDLLIMPEXP_RICHTEXT bool wxTextAttrEq(const wxRichTextAttr& attr1, const wxRichTextAttr& attr2);
 WXDLLIMPEXP_RICHTEXT bool wxTextAttrEq(const wxRichTextAttr& attr1, const wxRichTextAttr& attr2);
-
-/// Compare two attribute objects, but take into account the flags
-/// specifying attributes of interest.
-WXDLLIMPEXP_RICHTEXT bool wxTextAttrEqPartial(const wxRichTextAttr& attr1, const wxRichTextAttr& attr2);
 
 /// Apply one style to another
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);

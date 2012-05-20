@@ -1092,8 +1092,10 @@ wxString wxRichTextXMLHandler::AddAttributes(const wxRichTextAttr& attr, bool is
     if (attr.HasBackgroundColour() && attr.GetBackgroundColour().IsOk())
         AddAttribute(str, wxT("bgcolor"), attr.GetBackgroundColour());
 
-    if (attr.HasFontSize())
-        AddAttribute(str, wxT("fontsize"), attr.GetFontSize());
+    if (attr.HasFontPointSize())
+        AddAttribute(str, wxT("fontpointsize"), attr.GetFontSize());
+    else if (attr.HasFontPixelSize())
+        AddAttribute(str, wxT("fontpixelsize"), attr.GetFontSize());
 
     if (attr.HasFontFamily())
         AddAttribute(str, wxT("fontfamily"), attr.GetFontFamily());
@@ -1395,8 +1397,10 @@ bool wxRichTextXMLHandler::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, 
     if (attr.HasBackgroundColour() && attr.GetBackgroundColour().IsOk())
         node->AddAttribute(wxT("bgcolor"), MakeString(attr.GetBackgroundColour()));
 
-    if (attr.HasFontSize())
-        node->AddAttribute(wxT("fontsize"), MakeString(attr.GetFontSize()));
+    if (attr.HasFontPointSize())
+        node->AddAttribute(wxT("fontpointsize"), MakeString(attr.GetFontSize()));
+    else if (attr.HasFontPixelSize())
+        node->AddAttribute(wxT("fontpixelsize"), MakeString(attr.GetFontSize()));
     if (attr.HasFontFamily())
         node->AddAttribute(wxT("fontfamily"), MakeString(attr.GetFontFamily()));
     if (attr.HasFontItalic())
@@ -1683,10 +1687,15 @@ bool wxRichTextXMLHandler::ImportStyle(wxRichTextAttr& attr, wxXmlNode* node, bo
             if (!value.empty())
                 attr.SetFontStyle((wxFontStyle)wxAtoi(value));
         }
-        else if (name == wxT("fontsize"))
+        else if (name == wxT("fontsize") || name == wxT("fontpointsize"))
         {
             if (!value.empty())
-                attr.SetFontSize(wxAtoi(value));
+                attr.SetFontPointSize(wxAtoi(value));
+        }
+        else if (name == wxT("fontpixelsize"))
+        {
+            if (!value.empty())
+                attr.SetFontPixelSize(wxAtoi(value));
         }
         else if (name == wxT("fontweight"))
         {

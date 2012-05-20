@@ -126,6 +126,8 @@ DECLARE_CLASS(wxRichTextFormattingDialog)
 DECLARE_HELP_PROVISION()
 
 public:
+    enum { Option_AllowPixelFontSize = 0x0001 };
+
     wxRichTextFormattingDialog() { Init(); }
 
     wxRichTextFormattingDialog(long flags, wxWindow* parent, const wxString& title = wxGetTranslation(wxT("Formatting")), wxWindowID id = wxID_ANY,
@@ -164,7 +166,7 @@ public:
 
     /// Apply attributes to the given range
     virtual bool ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE);
-    
+
     /// Apply attributes to the object being edited, if any
     virtual bool ApplyStyle(wxRichTextCtrl* ctrl, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
@@ -172,12 +174,18 @@ public:
     const wxRichTextAttr& GetAttributes() const { return m_attributes; }
     wxRichTextAttr& GetAttributes() { return m_attributes; }
     void SetAttributes(const wxRichTextAttr& attr) { m_attributes = attr; }
-#if 0
-    /// Gets and sets the attributes that the user wants to reset
-    const wxRichTextAttr& GetResetAttributes() const { return m_resetAttributes; }
-    wxRichTextAttr& GetResetAttributes() { return m_resetAttributes; }
-    void SetResetAttributes(const wxRichTextAttr& attr) { m_resetAttributes = attr; }
-#endif
+
+    /// Sets the dialog options, determining what the interface presents to the user.
+    /// Currently the only option is Option_AllowPixelFontSize.
+    void SetOptions(int options) { m_options = options; }
+
+    /// Gets the dialog options, determining what the interface presents to the user.
+    /// Currently the only option is Option_AllowPixelFontSize.
+    int GetOptions() const { return m_options; }
+
+    /// Returns @true if the given option is present.
+    bool HasOption(int option) const { return (m_options & option) != 0; }
+
     /// If editing the attributes for a particular object, such as an image,
     /// set the object so the code can initialize attributes such as size correctly.
     wxRichTextObject* GetObject() const { return m_object; }
@@ -222,24 +230,24 @@ public:
 
     /// Get the dimension from the value and units controls
     static void GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox);
-    
+
     /// Convert CM to MM
     static bool ConvertFromString(const wxString& string, int& ret, int scale);
 
     /// Map book control page index to our page id
     void AddPageId(int id) { m_pageIds.Add(id); }
-    
+
     /// Find a page by class
     wxWindow* FindPage(wxClassInfo* info) const;
 
 protected:
 
     wxRichTextAttr                              m_attributes;
-    //wxRichTextAttr                              m_resetAttributes;
     wxRichTextStyleDefinition*                  m_styleDefinition;
     wxRichTextStyleSheet*                       m_styleSheet;
     wxRichTextObject*                           m_object;
     wxArrayInt                                  m_pageIds; // mapping of book control indexes to page ids
+    int                                         m_options; // UI options
 
     static wxRichTextFormattingDialogFactory*   ms_FormattingDialogFactory;
     static bool                                 sm_showToolTips;

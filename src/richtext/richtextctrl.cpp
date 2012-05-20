@@ -264,7 +264,6 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     attributes.SetLineSpacing(10);
     attributes.SetParagraphSpacingAfter(10);
     attributes.SetParagraphSpacingBefore(0);
-
     SetBasicStyle(attributes);
 
     int margin = 5;
@@ -2931,6 +2930,7 @@ void wxRichTextCtrl::DoWriteText(const wxString& value, int flags)
     wxString valueUnix = wxTextFile::Translate(value, wxTextFileType_Unix);
 
     GetFocusObject()->InsertTextWithUndo(& GetBuffer(), m_caretPosition+1, valueUnix, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+    GetBuffer().Defragment();
 
     if ( flags & SetValue_SendEvent )
         wxTextCtrl::SendTextUpdatedEvent(this);
@@ -4578,6 +4578,26 @@ void wxRichTextCtrl::EnableVerticalScrollbar(bool enable)
 {
     m_verticalScrollbarEnabled = enable;
     SetupScrollbars();
+}
+
+void wxRichTextCtrl::SetFontScale(double fontScale, bool refresh)
+{
+    GetBuffer().SetFontScale(fontScale);
+    if (refresh)
+    {
+        GetBuffer().Invalidate(wxRICHTEXT_ALL);
+        Refresh();
+    }
+}
+
+void wxRichTextCtrl::SetDimensionScale(double dimScale, bool refresh)
+{
+    GetBuffer().SetDimensionScale(dimScale);
+    if (refresh)
+    {
+        GetBuffer().Invalidate(wxRICHTEXT_ALL);
+        Refresh();
+    }
 }
 
 #if wxRICHTEXT_USE_OWN_CARET

@@ -19,6 +19,7 @@
 #include "wx/richtext/richtextdialogpage.h"
 
 ////@begin includes
+#include "wx/spinbutt.h"
 ////@end includes
 
 /*!
@@ -26,6 +27,8 @@
  */
 
 ////@begin forward declarations
+class wxSpinButton;
+class wxBoxSizer;
 class wxRichTextFontListBox;
 class wxRichTextColourSwatchCtrl;
 class wxRichTextFontPreviewCtrl;
@@ -82,11 +85,23 @@ public:
 
 ////@begin wxRichTextFontPage event handler declarations
 
+    /// wxEVT_IDLE event handler for ID_RICHTEXTFONTPAGE
+    void OnIdle( wxIdleEvent& event );
+
     /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTFONTPAGE_FACETEXTCTRL
     void OnFaceTextCtrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTFONTPAGE_SIZETEXTCTRL
     void OnSizeTextCtrlUpdated( wxCommandEvent& event );
+
+    /// wxEVT_SCROLL_LINEUP event handler for ID_RICHTEXTFONTPAGE_SPINBUTTONS
+    void OnRichtextfontpageSpinbuttonsUp( wxSpinEvent& event );
+
+    /// wxEVT_SCROLL_LINEDOWN event handler for ID_RICHTEXTFONTPAGE_SPINBUTTONS
+    void OnRichtextfontpageSpinbuttonsDown( wxSpinEvent& event );
+
+    /// wxEVT_COMMAND_CHOICE_SELECTED event handler for ID_RICHTEXTFONTPAGE_SIZE_UNITS
+    void OnRichtextfontpageSizeUnitsSelected( wxCommandEvent& event );
 
     /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_SIZELISTBOX
     void OnSizeListBoxSelected( wxCommandEvent& event );
@@ -128,8 +143,11 @@ public:
 
 ////@begin wxRichTextFontPage member variables
     wxTextCtrl* m_faceTextCtrl;
-    wxRichTextFontListBox* m_faceListBox;
     wxTextCtrl* m_sizeTextCtrl;
+    wxSpinButton* m_fontSizeSpinButtons;
+    wxChoice* m_sizeUnitsCtrl;
+    wxBoxSizer* m_fontListBoxParent;
+    wxRichTextFontListBox* m_faceListBox;
     wxListBox* m_sizeListBox;
     wxComboBox* m_styleCtrl;
     wxComboBox* m_weightCtrl;
@@ -147,8 +165,10 @@ public:
     enum {
         ID_RICHTEXTFONTPAGE = 10000,
         ID_RICHTEXTFONTPAGE_FACETEXTCTRL = 10001,
-        ID_RICHTEXTFONTPAGE_FACELISTBOX = 10002,
         ID_RICHTEXTFONTPAGE_SIZETEXTCTRL = 10005,
+        ID_RICHTEXTFONTPAGE_SPINBUTTONS = 10018,
+        ID_RICHTEXTFONTPAGE_SIZE_UNITS = 10017,
+        ID_RICHTEXTFONTPAGE_FACELISTBOX = 10002,
         ID_RICHTEXTFONTPAGE_SIZELISTBOX = 10006,
         ID_RICHTEXTFONTPAGE_STYLECTRL = 10007,
         ID_RICHTEXTFONTPAGE_WEIGHTCTRL = 10004,

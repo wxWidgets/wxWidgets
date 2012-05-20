@@ -97,6 +97,7 @@ void wxRichTextFormattingDialog::Init()
     m_styleDefinition = NULL;
     m_styleSheet = NULL;
     m_object = NULL;
+    m_options = 0;
 }
 
 wxRichTextFormattingDialog::~wxRichTextFormattingDialog()

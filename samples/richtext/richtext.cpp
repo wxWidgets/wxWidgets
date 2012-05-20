@@ -82,6 +82,61 @@
 #include "wx/richtext/richtextprint.h"
 #include "wx/richtext/richtextimagedlg.h"
 
+// A custom field type
+class wxRichTextFieldTypePropertiesTest: public wxRichTextFieldTypeStandard
+{
+public:
+    wxRichTextFieldTypePropertiesTest(const wxString& name, const wxString& label, int displayStyle = wxRICHTEXT_FIELD_STYLE_RECTANGLE):
+        wxRichTextFieldTypeStandard(name, label, displayStyle)
+    {
+    }
+    wxRichTextFieldTypePropertiesTest(const wxString& name, const wxBitmap& bitmap, int displayStyle = wxRICHTEXT_FIELD_STYLE_RECTANGLE):
+        wxRichTextFieldTypeStandard(name, bitmap, displayStyle)
+    {
+    }
+
+    virtual bool CanEditProperties(wxRichTextField* WXUNUSED(obj)) const { return true; }
+    virtual bool EditProperties(wxRichTextField* WXUNUSED(obj), wxWindow* WXUNUSED(parent), wxRichTextBuffer* WXUNUSED(buffer))
+    {
+        wxString label = GetLabel();
+        wxMessageBox(wxString::Format(wxT("Editing %s"), label.c_str()));
+        return true;
+    }
+
+    virtual wxString GetPropertiesMenuLabel(wxRichTextField* WXUNUSED(obj)) const
+    {
+        return GetLabel();
+    }
+};
+
+// A custom composite field type
+class wxRichTextFieldTypeCompositeTest: public wxRichTextFieldTypePropertiesTest
+{
+public:
+    wxRichTextFieldTypeCompositeTest(const wxString& name, const wxString& label):
+        wxRichTextFieldTypePropertiesTest(name, label, wxRICHTEXT_FIELD_STYLE_COMPOSITE)
+    {
+    }
+
+    virtual bool UpdateField(wxRichTextBuffer* buffer, wxRichTextField* obj)
+    {
+        if (buffer)
+        {
+            wxRichTextAttr attr(buffer->GetAttributes());
+            attr.GetTextBoxAttr().Reset();
+            attr.SetParagraphSpacingAfter(0);
+            attr.SetLineSpacing(10);
+            obj->SetAttributes(attr);
+        }
+        obj->GetChildren().Clear();
+        wxRichTextParagraph* para = new wxRichTextParagraph;
+        wxRichTextPlainText* text = new wxRichTextPlainText(GetLabel());
+        para->AppendChild(text);
+        obj->AppendChild(para);
+        return true;
+   }
+};
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -237,6 +292,9 @@ public:
     void OnPageSetup(wxCommandEvent& event);
 
     void OnInsertImage(wxCommandEvent& event);
+
+    void OnSetFontScale(wxCommandEvent& event);
+    void OnSetDimensionScale(wxCommandEvent& event);
 protected:
 
     // Forward command events to the current rich text control, if any
@@ -301,6 +359,9 @@ enum
     ID_FORMAT_PROMOTE_LIST,
     ID_FORMAT_DEMOTE_LIST,
     ID_FORMAT_CLEAR_LIST,
+
+    ID_SET_FONT_SCALE,
+    ID_SET_DIMENSION_SCALE,
 
     ID_VIEW_HTML,
     ID_SWITCH_STYLE_SHEETS,
@@ -396,6 +457,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_TEXT_URL(wxID_ANY, MyFrame::OnURL)
     EVT_RICHTEXT_STYLESHEET_REPLACING(wxID_ANY, MyFrame::OnStyleSheetReplacing)
+
+    EVT_MENU(ID_SET_FONT_SCALE, MyFrame::OnSetFontScale)
+    EVT_MENU(ID_SET_DIMENSION_SCALE, MyFrame::OnSetDimensionScale)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -436,6 +500,25 @@ bool MyApp::OnInit()
     // Add extra handlers (plain text is automatically added)
     wxRichTextBuffer::AddHandler(new wxRichTextXMLHandler);
     wxRichTextBuffer::AddHandler(new wxRichTextHTMLHandler);
+
+    // Add field types
+
+    wxRichTextBuffer::AddFieldType(new wxRichTextFieldTypePropertiesTest(wxT("rectangle"), wxT("RECTANGLE"), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_RECTANGLE));
+
+    wxRichTextFieldTypeStandard* s1 = new wxRichTextFieldTypeStandard(wxT("begin-section"), wxT("SECTION"), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_START_TAG);
+    s1->SetBackgroundColour(*wxBLUE);
+
+    wxRichTextFieldTypeStandard* s2 = new wxRichTextFieldTypeStandard(wxT("end-section"), wxT("SECTION"), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_END_TAG);
+    s2->SetBackgroundColour(*wxBLUE);
+
+    wxRichTextFieldTypeStandard* s3 = new wxRichTextFieldTypeStandard(wxT("bitmap"), wxBitmap(paste_xpm), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_NO_BORDER);
+
+    wxRichTextBuffer::AddFieldType(s1);
+    wxRichTextBuffer::AddFieldType(s2);
+    wxRichTextBuffer::AddFieldType(s3);
+
+    wxRichTextFieldTypeCompositeTest* s4 = new wxRichTextFieldTypeCompositeTest(wxT("composite"), wxT("This is a field value"));
+    wxRichTextBuffer::AddFieldType(s4);
 
     // Add image handlers
 #if wxUSE_LIBPNG
@@ -673,11 +756,9 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     editMenu->AppendSeparator();
     editMenu->Append(wxID_SELECTALL, _("Select A&ll\tCtrl+A"));
-#if 0
     editMenu->AppendSeparator();
-    editMenu->Append(wxID_FIND, _("&Find...\tCtrl+F"));
-    editMenu->Append(stID_FIND_REPLACE, _("&Replace...\tCtrl+R"));
-#endif
+    editMenu->Append(ID_SET_FONT_SCALE, _("Set &Text Scale..."));
+    editMenu->Append(ID_SET_DIMENSION_SCALE, _("Set &Dimension Scale..."));
 
     wxMenu* formatMenu = new wxMenu;
     formatMenu->AppendCheckItem(ID_FORMAT_BOLD, _("&Bold\tCtrl+B"));
@@ -802,9 +883,13 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
     m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxWANTS_CHARS);
+    wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
+
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
 
     m_richTextCtrl->SetFont(font);
+
+    wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
 
     m_richTextCtrl->SetMargins(10, 10);
 
@@ -873,6 +958,13 @@ void MyFrame::WriteInitialText()
     r.Newline();
 
     r.EndAlignment();
+
+#if 0
+    r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
+    r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
+    r.Newline();
+    r.EndAlignment();
+#endif
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_LEFT);
     wxRichTextAttr imageAttr;
@@ -1042,8 +1134,8 @@ void MyFrame::WriteInitialText()
     r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!\n"));
 
     r.EndParagraphSpacing();
-#if 1
 
+#if 1
     {
         // Add a text box
 
@@ -1105,6 +1197,23 @@ void MyFrame::WriteInitialText()
     }
 #endif
 
+    r.Newline();
+
+    wxRichTextProperties properties;
+    r.WriteText(wxT("This is a rectangle field: "));
+    r.WriteField(wxT("rectangle"), properties);
+    r.WriteText(wxT(" and a begin section field: "));
+    r.WriteField(wxT("begin-section"), properties);
+    r.WriteText(wxT("This is text between the two tags."));
+    r.WriteField(wxT("end-section"), properties);
+    r.WriteText(wxT(" Now a bitmap. "));
+    r.WriteField(wxT("bitmap"), properties);
+    r.WriteText(wxT(" Before we go, here's a composite field: ***"));
+    wxRichTextField* field = r.WriteField(wxT("composite"), properties);
+    field->UpdateField(& r.GetBuffer()); // Creates the composite value (sort of a text box)
+    r.WriteText(wxT("*** End of composite field."));
+
+    r.Newline();
     r.EndSuppressUndo();
 
     // Add some locked content first - needs Undo to be enabled
@@ -1357,39 +1466,13 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
     int pages = wxRICHTEXT_FORMAT_FONT;
 
     wxRichTextFormattingDialog formatDlg(pages, this);
+    formatDlg.SetOptions(wxRichTextFormattingDialog::Option_AllowPixelFontSize);
     formatDlg.GetStyle(m_richTextCtrl, range);
 
     if (formatDlg.ShowModal() == wxID_OK)
     {
         formatDlg.ApplyStyle(m_richTextCtrl, range, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
     }
-
-    // Old method using wxFontDialog
-#if 0
-    if (!m_richTextCtrl->HasSelection())
-        return;
-
-    wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-    wxFontData fontData;
-
-    wxRichTextAttr attr;
-    attr.SetFlags(wxTEXT_ATTR_FONT);
-
-    if (m_richTextCtrl->GetStyle(m_richTextCtrl->GetInsertionPoint(), attr))
-        fontData.SetInitialFont(attr.GetFont());
-
-    wxFontDialog dialog(this, fontData);
-    if (dialog.ShowModal() == wxID_OK)
-    {
-        fontData = dialog.GetFontData();
-        attr.SetFlags(wxTEXT_ATTR_FONT);
-        attr.SetFont(fontData.GetChosenFont());
-        if (attr.GetFont().IsOk())
-        {
-            m_richTextCtrl->SetStyle(range, attr);
-        }
-    }
-#endif
 }
 
 void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
@@ -1890,6 +1973,30 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
     dialog.ShowModal();
 
 //    wxGetApp().GetPrinting()->PageSetup();
+}
+
+void MyFrame::OnSetFontScale(wxCommandEvent& WXUNUSED(event))
+{
+    wxString value = wxString::Format(wxT("%g"), m_richTextCtrl->GetFontScale());
+    wxString text = wxGetTextFromUser(wxT("Enter a text scale factor:"), wxT("Text Scale Factor"), value, wxGetTopLevelParent(this));
+    if (!text.IsEmpty() && value != text)
+    {
+        double scale = 1.0;
+        wxSscanf(text, wxT("%lf"), & scale);
+        m_richTextCtrl->SetFontScale(scale, true);
+    }
+}
+
+void MyFrame::OnSetDimensionScale(wxCommandEvent& WXUNUSED(event))
+{
+    wxString value = wxString::Format(wxT("%g"), m_richTextCtrl->GetDimensionScale());
+    wxString text = wxGetTextFromUser(wxT("Enter a dimension scale factor:"), wxT("Dimension Scale Factor"), value, wxGetTopLevelParent(this));
+    if (!text.IsEmpty() && value != text)
+    {
+        double scale = 1.0;
+        wxSscanf(text, wxT("%lf"), & scale);
+        m_richTextCtrl->SetDimensionScale(scale, true);
+    }
 }
 
 void MyRichTextCtrl::PrepareContent(wxRichTextParagraphLayoutBox& container)

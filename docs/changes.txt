@@ -548,6 +548,8 @@ All (GUI):
 - Added wxAcceleratorEntry::ToRawString() (Armel Asselin).
 - Added wxDataViewEvent::SetDragFlags() and GetDropEffect() (Friedrich).
 - Added support for fields and virtual attributes to wxRichTextCtrl.
+- Added custom text and dimension scaling to wxRichTextCtrl.
+- Added pixel font size capability to wxTextAttr and wxRichTextCtrl.
 
 GTK:
 

@@ -166,13 +166,16 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_BACKGROUND_COLOUR    = 0x00000002,
 
     wxTEXT_ATTR_FONT_FACE            = 0x00000004,
-    wxTEXT_ATTR_FONT_SIZE            = 0x00000008,
+    wxTEXT_ATTR_FONT_POINT_SIZE      = 0x00000008,
+    wxTEXT_ATTR_FONT_PIXEL_SIZE      = 0x10000000,
     wxTEXT_ATTR_FONT_WEIGHT          = 0x00000010,
     wxTEXT_ATTR_FONT_ITALIC          = 0x00000020,
     wxTEXT_ATTR_FONT_UNDERLINE       = 0x00000040,
     wxTEXT_ATTR_FONT_STRIKETHROUGH   = 0x08000000,
     wxTEXT_ATTR_FONT_ENCODING        = 0x02000000,
     wxTEXT_ATTR_FONT_FAMILY          = 0x04000000,
+    wxTEXT_ATTR_FONT_SIZE = \
+        ( wxTEXT_ATTR_FONT_POINT_SIZE | wxTEXT_ATTR_FONT_PIXEL_SIZE ),
     wxTEXT_ATTR_FONT = \
         ( wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | \
             wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_STRIKETHROUGH | wxTEXT_ATTR_FONT_ENCODING | wxTEXT_ATTR_FONT_FAMILY ),
@@ -298,8 +301,11 @@ public:
     // Equality test
     bool operator== (const wxTextAttr& attr) const;
 
-    // Partial equality test
-    bool EqPartial(const wxTextAttr& attr) const;
+    // Partial equality test.  If @a weakTest is @true, attributes of this object do not
+    // have to be present if those attributes of @a attr are present. If @a weakTest is
+    // @false, the function will fail if an attribute is present in @a attr but not
+    // in this object.
+    bool EqPartial(const wxTextAttr& attr, bool weakTest = true) const;
 
     // Get attributes from font.
     bool GetFontAttributes(const wxFont& font, int flags = wxTEXT_ATTR_FONT);
@@ -312,7 +318,9 @@ public:
     void SetLeftIndent(int indent, int subIndent = 0) { m_leftIndent = indent; m_leftSubIndent = subIndent; m_flags |= wxTEXT_ATTR_LEFT_INDENT; }
     void SetRightIndent(int indent) { m_rightIndent = indent; m_flags |= wxTEXT_ATTR_RIGHT_INDENT; }
 
-    void SetFontSize(int pointSize) { m_fontSize = pointSize; m_flags |= wxTEXT_ATTR_FONT_SIZE; }
+    void SetFontSize(int pointSize) { m_fontSize = pointSize; m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_POINT_SIZE; }
+    void SetFontPointSize(int pointSize) { m_fontSize = pointSize; m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_POINT_SIZE; }
+    void SetFontPixelSize(int pixelSize) { m_fontSize = pixelSize; m_flags &= ~wxTEXT_ATTR_FONT_SIZE; m_flags |= wxTEXT_ATTR_FONT_PIXEL_SIZE; }
     void SetFontStyle(wxFontStyle fontStyle) { m_fontStyle = fontStyle; m_flags |= wxTEXT_ATTR_FONT_ITALIC; }
     void SetFontWeight(wxFontWeight fontWeight) { m_fontWeight = fontWeight; m_flags |= wxTEXT_ATTR_FONT_WEIGHT; }
     void SetFontFaceName(const wxString& faceName) { m_fontFaceName = faceName; m_flags |= wxTEXT_ATTR_FONT_FACE; }
@@ -322,7 +330,7 @@ public:
     void SetFontFamily(wxFontFamily family) { m_fontFamily = family; m_flags |= wxTEXT_ATTR_FONT_FAMILY; }
 
     // Set font
-    void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT) { GetFontAttributes(font, flags); }
+    void SetFont(const wxFont& font, int flags = (wxTEXT_ATTR_FONT & ~wxTEXT_ATTR_FONT_PIXEL_SIZE)) { GetFontAttributes(font, flags); }
 
     void SetFlags(long flags) { m_flags = flags; }
 
@@ -389,6 +397,8 @@ public:
     bool HasRightIndent() const { return HasFlag(wxTEXT_ATTR_RIGHT_INDENT); }
     bool HasFontWeight() const { return HasFlag(wxTEXT_ATTR_FONT_WEIGHT); }
     bool HasFontSize() const { return HasFlag(wxTEXT_ATTR_FONT_SIZE); }
+    bool HasFontPointSize() const { return HasFlag(wxTEXT_ATTR_FONT_POINT_SIZE); }
+    bool HasFontPixelSize() const { return HasFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE); }
     bool HasFontItalic() const { return HasFlag(wxTEXT_ATTR_FONT_ITALIC); }
     bool HasFontUnderlined() const { return HasFlag(wxTEXT_ATTR_FONT_UNDERLINE); }
     bool HasFontStrikethrough() const { return HasFlag(wxTEXT_ATTR_FONT_STRIKETHROUGH); }
@@ -431,7 +441,7 @@ public:
     // is non-NULL, then it will be used to mask out those attributes that are the same in style
     // and compareWith, for situations where we don't want to explicitly set inherited attributes.
     bool Apply(const wxTextAttr& style, const wxTextAttr* compareWith = NULL);
-    
+
     // merges the attributes of the base and the overlay objects and returns
     // the result; the parameter attributes take precedence
     //

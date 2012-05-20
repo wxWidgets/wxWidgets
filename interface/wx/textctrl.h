@@ -87,19 +87,23 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_BACKGROUND_COLOUR    = 0x00000002,
 
     wxTEXT_ATTR_FONT_FACE            = 0x00000004,
-    wxTEXT_ATTR_FONT_SIZE            = 0x00000008,
+    wxTEXT_ATTR_FONT_POINT_SIZE      = 0x00000008,
+    wxTEXT_ATTR_FONT_PIXEL_SIZE      = 0x10000000,
     wxTEXT_ATTR_FONT_WEIGHT          = 0x00000010,
     wxTEXT_ATTR_FONT_ITALIC          = 0x00000020,
     wxTEXT_ATTR_FONT_UNDERLINE       = 0x00000040,
+    wxTEXT_ATTR_FONT_STRIKETHROUGH   = 0x08000000,
     wxTEXT_ATTR_FONT_ENCODING        = 0x02000000,
     wxTEXT_ATTR_FONT_FAMILY          = 0x04000000,
 
+    wxTEXT_ATTR_FONT_SIZE = \
+        ( wxTEXT_ATTR_FONT_POINT_SIZE | wxTEXT_ATTR_FONT_PIXEL_SIZE ),
     /**
         Defined as the combination of all @c wxTEXT_ATTR_FONT_* values above.
     */
     wxTEXT_ATTR_FONT = \
         ( wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | \
-            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING | wxTEXT_ATTR_FONT_FAMILY ),
+            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_STRIKETHROUGH | wxTEXT_ATTR_FONT_ENCODING | wxTEXT_ATTR_FONT_FAMILY ),
 
     wxTEXT_ATTR_ALIGNMENT            = 0x00000080,
     wxTEXT_ATTR_LEFT_INDENT          = 0x00000100,
@@ -289,6 +293,14 @@ public:
     static wxTextAttr Merge(const wxTextAttr& base,
                             const wxTextAttr& overlay);
 
+
+    /**
+        Partial equality test.  If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a attr are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a attr but not
+        in this object.
+    */
+    bool EqPartial(const wxTextAttrEx& attr, bool weakTest = true) const;
 
     /**
         @name GetXXX functions
@@ -567,9 +579,19 @@ public:
     bool HasFontItalic() const;
 
     /**
-        Returns @true if the attribute object specifies a font point size.
+        Returns @true if the attribute object specifies a font point or pixel size.
     */
     bool HasFontSize() const;
+
+    /**
+        Returns @true if the attribute object specifies a font point size.
+    */
+    bool HasFontPointSize() const;
+
+    /**
+        Returns @true if the attribute object specifies a font pixel size.
+    */
+    bool HasFontPixelSize() const;
 
     /**
         Returns @true if the attribute object specifies either underlining or no
@@ -738,7 +760,7 @@ public:
         Sets the attributes for the given font.
         Note that wxTextAttr does not store an actual wxFont object.
     */
-    void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT);
+    void SetFont(const wxFont& font, int flags = (wxTEXT_ATTR_FONT & ~wxTEXT_ATTR_FONT_PIXEL_SIZE));
 
     /**
         Sets the font encoding.
@@ -759,6 +781,16 @@ public:
         Sets the font size in points.
     */
     void SetFontSize(int pointSize);
+
+    /**
+        Sets the font size in points.
+    */
+    void SetFontPointSize(int pointSize);
+
+    /**
+        Sets the font size in pixels.
+    */
+    void SetFontPixelSize(int pixelSize);
 
     /**
         Sets the font style (normal, italic or slanted).
