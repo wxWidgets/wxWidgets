@@ -115,7 +115,12 @@ bool wxDialog::Show(bool show)
 
     if ( !show )
     {
-        switch( m_modality )
+        const int modalityOrig = m_modality;
+
+        // complete the 'hiding' before we send the event
+        m_modality = wxDIALOG_MODALITY_NONE;
+
+        switch ( modalityOrig )
         {
             case wxDIALOG_MODALITY_WINDOW_MODAL:
                 EndWindowModal(); // OS X implementation method for cleanup
@@ -124,7 +129,6 @@ bool wxDialog::Show(bool show)
             default:
                 break;
         }
-        m_modality = wxDIALOG_MODALITY_NONE;
     }
 
     return true;
