@@ -338,7 +338,7 @@ wxTaskBarIconCustomStatusItemImpl::~wxTaskBarIconCustomStatusItemImpl()
 {
 }
 
-bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxString& WXUNUSED(tooltip))
+bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
     if(!m_statusItem)
     {
@@ -368,6 +368,8 @@ bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxStri
     }
 
     [m_statusItem setImage:m_icon.GetNSImage()];
+    wxCFStringRef cfTooltip(tooltip);
+    [m_statusItem setToolTip:cfTooltip.AsNSString()];
     return true;
 }
 
