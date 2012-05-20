@@ -38,6 +38,8 @@
 #include "wx/osx/private.h"
 #include "wx/sysopt.h"
 
+#include <mach-o/dyld.h>
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -48,6 +50,34 @@
 // type choice will not be shown, but all possible file items will be shown, if a popup must be working
 // then the delegate method - (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename will have to
 // be implemented
+
+namespace
+{
+
+bool HasAppKit_10_6()
+{
+    // Even if we require 10.6, we might be loaded by an application that
+    // was linked against 10.5.  setAllowedFileTypes will still be ignored
+    // in this case.  From NSSavePanel.h:
+    // NSOpenPanel: On versions less than 10.6, this property is ignored.
+    // For applications that link against 10.6 and higher, this property will
+    // determine which files should be enabled in the open panel.
+    int32_t version = NSVersionOfLinkTimeLibrary("AppKit");
+    if (version == -1)
+    {
+        // If we're loaded by an application that doesn't link against AppKit,
+        // use the runtime version instead.  This check will not work for the
+        // case above.
+        version = NSVersionOfRunTimeLibrary("AppKit");
+    }
+    if (version == -1)
+    {
+        return false;
+    }
+    return version >= 0x40e2400 /* version of 10.6 AppKit */;
+}
+
+} // anonymous namespace
 
 @interface wxOpenPanelDelegate : NSObject wxOSX_10_6_AND_LATER(<NSOpenSavePanelDelegate>)
 {
@@ -436,7 +466,7 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
         accView = m_filterPanel->GetHandle();
         if( HasFlag(wxFD_OPEN) )
         {
-            if ( UMAGetSystemVersion() < 0x1060 )
+            if ( UMAGetSystemVersion() < 0x1060 || !HasAppKit_10_6() )
             {
                 wxOpenPanelDelegate* del = [[wxOpenPanelDelegate alloc]init];
                 [del setFileDialog:this];
@@ -586,7 +616,7 @@ int wxFileDialog::ShowModal()
         [oPanel setAllowsMultipleSelection: (HasFlag(wxFD_MULTIPLE) ? YES : NO )];
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-        if ( UMAGetSystemVersion() >= 0x1060 )
+        if ( UMAGetSystemVersion() >= 0x1060 && HasAppKit_10_6() )
         {
             [oPanel setAllowedFileTypes: (m_delegate == nil ? types : nil)];
             if ( !m_dir.IsEmpty() )
