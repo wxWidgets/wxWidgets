@@ -14,13 +14,6 @@
 #ifndef _WX_OSX_CHKCONF_H_
 #define _WX_OSX_CHKCONF_H_
 
-
-#if wxUSE_STACKWALKER
-    /* not supported under Mac */
-#   undef wxUSE_STACKWALKER
-#   define wxUSE_STACKWALKER 0
-#endif /* wxUSE_STACKWALKER */
-
 /*
  * check graphics context option, must be on for every os x platform
  * we only use core graphics now on all builds, try to catch attempts
