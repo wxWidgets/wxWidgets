@@ -300,6 +300,8 @@ private:
 
   wxDataViewColumnPtrArrayType m_ColumnPtrs; // all column pointers are stored in an array
 
+  wxDataViewModelNotifier* m_ModelNotifier; // stores the model notifier for the control (does not own the notifier)
+
  // wxWidget internal stuff:
   DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
   DECLARE_NO_COPY_CLASS(wxDataViewCtrl)

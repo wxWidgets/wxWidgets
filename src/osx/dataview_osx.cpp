@@ -348,6 +348,11 @@ void wxDataViewCustomRenderer::SetDC(wxDC* newDCPtr)
 wxDataViewCtrl::~wxDataViewCtrl()
 {
   ClearColumns();
+
+  // Ensure that the already destructed controls is not notified about changes
+  // in the model any more.
+  if (m_ModelNotifier != NULL)
+    m_ModelNotifier->GetOwner()->RemoveNotifier(m_ModelNotifier);
 }
 
 void wxDataViewCtrl::Init()
@@ -355,6 +360,7 @@ void wxDataViewCtrl::Init()
   m_CustomRendererPtr = NULL;
   m_Deleting          = false;
   m_cgContext         = NULL;
+  m_ModelNotifier     = NULL;
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent,
@@ -381,10 +387,19 @@ bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
 
 
   wxCHECK_MSG(dataViewWidgetPtr != NULL,false,"Pointer to native control must not be NULL.");
+
+  // We could have been associated with another model previously, break the
+  // association in this case.
+  if ( m_ModelNotifier )
+      m_ModelNotifier->GetOwner()->RemoveNotifier(m_ModelNotifier);
+
   if (wxDataViewCtrlBase::AssociateModel(model) && dataViewWidgetPtr->AssociateModel(model))
   {
     if (model != NULL)
-      model->AddNotifier(new wxOSXDataViewModelNotifier(this));
+    {
+      m_ModelNotifier = new wxOSXDataViewModelNotifier(this);
+      model->AddNotifier(m_ModelNotifier);
+    }
     return true;
   }
   else
