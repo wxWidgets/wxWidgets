@@ -25,7 +25,6 @@ wish to jump directly in the details of its support in the library:
 @li @ref overview_unicode_supportin
 @li @ref overview_unicode_pitfalls
 @li @ref overview_unicode_supportout
-@li @ref overview_unicode_settings
 
 <hr>
 
