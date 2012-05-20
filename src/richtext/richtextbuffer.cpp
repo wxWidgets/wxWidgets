@@ -11588,7 +11588,7 @@ wxFont wxRichTextFontTableData::FindFont(const wxRichTextAttr& fontSpec, double 
     {
         if (fontSpec.HasFontPixelSize() && !fontSpec.HasFontPointSize())
         {
-            wxFont font(wxSize(0, fontSize), wxDEFAULT, fontSpec.GetFontStyle(), fontSpec.GetFontWeight(), fontSpec.GetFontUnderlined(), facename.c_str());
+            wxFont font(wxSize(0, fontSize), wxFONTFAMILY_DEFAULT, fontSpec.GetFontStyle(), fontSpec.GetFontWeight(), fontSpec.GetFontUnderlined(), facename);
             if (fontSpec.HasFontStrikethrough() && fontSpec.GetFontStrikethrough())
                 font.SetStrikethrough(true);
             m_hashMap[spec] = font;
