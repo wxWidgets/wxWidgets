@@ -55,9 +55,7 @@
     #define USE_LOG_WINDOW 0
 #endif
 
-#if wxUSE_OWNER_DRAWN || defined(__WXGTK__)
 #include "copy.xpm"
-#endif
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
