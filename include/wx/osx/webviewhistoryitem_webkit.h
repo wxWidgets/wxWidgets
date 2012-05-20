@@ -15,6 +15,8 @@
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
                                           ||  defined(__WXOSX_CARBON__))
 
+#include "wx/osx/private/objcid.h"
+
 class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {
 public:
@@ -27,7 +29,7 @@ public:
 
 private:
     wxString m_url, m_title;
-    struct objc_object *m_histItem;
+    wxObjCID m_histItem;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT

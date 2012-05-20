@@ -21,6 +21,8 @@
 #include "wx/control.h"
 #include "wx/webview.h"
 
+#include "wx/osx/private/objcid.h"
+
 // ----------------------------------------------------------------------------
 // Web Kit Control
 // ----------------------------------------------------------------------------
@@ -149,7 +151,7 @@ private:
     wxWindowID m_windowID;
     wxString m_pageTitle;
 
-    struct objc_object *m_webView;
+    wxObjCID m_webView;
 
     // we may use this later to setup our own mouse events,
     // so leave it in for now.
