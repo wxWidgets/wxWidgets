@@ -300,7 +300,7 @@ public:
         @false, the function will fail if an attribute is present in @a attr but not
         in this object.
     */
-    bool EqPartial(const wxTextAttrEx& attr, bool weakTest = true) const;
+    bool EqPartial(const wxTextAttr& attr, bool weakTest = true) const;
 
     /**
         @name GetXXX functions
@@ -760,7 +760,7 @@ public:
         Sets the attributes for the given font.
         Note that wxTextAttr does not store an actual wxFont object.
     */
-    void SetFont(const wxFont& font, int flags = (wxTEXT_ATTR_FONT & ~wxTEXT_ATTR_FONT_PIXEL_SIZE));
+    void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT & ~wxTEXT_ATTR_FONT_PIXEL_SIZE);
 
     /**
         Sets the font encoding.
