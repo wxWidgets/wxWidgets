@@ -11596,7 +11596,7 @@ wxFont wxRichTextFontTableData::FindFont(const wxRichTextAttr& fontSpec, double 
         }
         else
         {
-            wxFont font(fontSize, wxDEFAULT, fontSpec.GetFontStyle(), fontSpec.GetFontWeight(), fontSpec.GetFontUnderlined(), facename.c_str());
+            wxFont font(fontSize, wxFONTFAMILY_DEFAULT, fontSpec.GetFontStyle(), fontSpec.GetFontWeight(), fontSpec.GetFontUnderlined(), facename.c_str());
             if (fontSpec.HasFontStrikethrough() && fontSpec.GetFontStrikethrough())
                 font.SetStrikethrough(true);
 
