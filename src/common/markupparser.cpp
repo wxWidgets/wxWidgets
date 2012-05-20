@@ -284,7 +284,7 @@ bool wxMarkupParser::Parse(const wxString& text)
                     // and doesn't need to be defined if they're not compiled
                     // at all (it actually would result in unused variable
                     // messages in this case).
-#if wxUSE_LOG_DEBUG && defined(HAVE_VARIADIC_MACROS)
+#if wxUSE_LOG_DEBUG || !defined(HAVE_VARIADIC_MACROS)
                     // Remember the tag starting position for the error
                     // messages.
                     const size_t pos = it - text.begin();
