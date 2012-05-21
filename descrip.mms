@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 March 2012                                                       *
+# Date : 21 May 2012                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -321,6 +321,9 @@ motif : [.include.wx]setup.h
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
+	set default [-.html]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
@@ -336,6 +339,8 @@ motif : [.include.wx]setup.h
 	set default [--.samples.calendar]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.caret]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.combo]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
