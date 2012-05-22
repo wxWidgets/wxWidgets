@@ -856,8 +856,8 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
     if (m_dragging
 #if wxUSE_DRAG_AND_DROP
         && !m_preDrag
-#endif
         && (distance > 4)
+#endif
         )
     {
         wxRichTextParagraphLayoutBox* commonAncestor = NULL;
@@ -934,8 +934,8 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
     if (hitObj && m_dragging && hit != wxRICHTEXT_HITTEST_NONE && m_selectionState == wxRichTextCtrlSelectionState_Normal
 #if wxUSE_DRAG_AND_DROP
         && !m_preDrag
-#endif
         && (distance > 4)
+#endif
         )
     {
         SetCaretPositionAfterClick(container, position, hit, true /* extend selection */);
