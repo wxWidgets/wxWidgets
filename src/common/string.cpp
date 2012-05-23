@@ -1436,7 +1436,7 @@ size_t wxString::Replace(const wxString& strOld,
     }
     else if ( !bReplaceAll)
     {
-        size_t pos = m_impl.find(strOld, 0);
+        size_t pos = m_impl.find(strOld.m_impl, 0);
         if ( pos != npos )
         {
             m_impl.replace(pos, strOld.m_impl.length(), strNew.m_impl);
