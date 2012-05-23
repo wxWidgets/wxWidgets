@@ -70,10 +70,8 @@ bool HasAppKit_10_6()
         // case above.
         version = NSVersionOfRunTimeLibrary("AppKit");
     }
-    if (version == -1)
-    {
-        return false;
-    }
+
+    // Notice that this still works correctly even if version is -1.
     return version >= 0x40e2400 /* version of 10.6 AppKit */;
 }
 
