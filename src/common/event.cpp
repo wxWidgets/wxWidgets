@@ -1162,6 +1162,8 @@ wxEventFilter* wxEvtHandler::ms_filterList = NULL;
             // Skip the assert below.
             return;
         }
+
+        prev = f;
     }
 
     wxFAIL_MSG( "Filter not found" );
