@@ -362,9 +362,16 @@ public:
         
         Optionally you can specify also an accelerator string appending a tab character 
         <tt>\\t</tt> followed by a valid key combination (e.g. <tt>CTRL+V</tt>).
-        Its general syntax is any combination of @c "CTRL", @c "ALT" and @c "SHIFT" strings
-        (case doesn't matter) separated by either @c '-' or @c '+' characters and followed
-        by the accelerator itself.
+        Its general syntax is any combination of @c "CTRL", @c "RAWCTRL",  @c
+        "ALT" and @c "SHIFT" strings (case doesn't matter) separated by either
+        @c '-' or @c '+' characters and followed by the accelerator itself.
+        Notice that @c CTRL corresponds to the "Ctrl" key on most platforms but
+        not under Mac OS where it is mapped to "Cmd" key on Mac keyboard.
+        Usually this is exactly what you want in portable code but if you
+        really need to use the (rarely used for this purpose) "Ctrl" key even
+        under Mac, you may use @c RAWCTRL to prevent this mapping. Under the
+        other platforms @c RAWCTRL is the same as plain @c CTRL.
+
         The accelerator may be any alphanumeric character, any function key
         (from F1 to F12) or one of the special characters listed in the table
         below (again, case doesn't matter):

@@ -108,7 +108,7 @@ public:
     /**
         Returns a textual representation of this accelerator.
 
-        The returned string is of the form <code>[Alt+][Ctrl+][Shift+]Key</code>
+        The returned string is of the form <code>[Alt+][Ctrl+][RawCtrl+][Shift+]Key</code>
         where the modifier keys are present only if the corresponding flag is
         set.
     */
