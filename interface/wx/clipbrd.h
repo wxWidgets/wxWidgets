@@ -102,6 +102,9 @@ public:
         (possibly eating memory), otherwise the clipboard will be emptied on
         exit.
 
+        Currently this method is not implemented in X11-based ports, i.e.
+        wxGTK, wxX11 and wxMotif and always returns @false there.
+
         @return @false if the operation is unsuccessful for any reason.
     */
     virtual bool Flush();
