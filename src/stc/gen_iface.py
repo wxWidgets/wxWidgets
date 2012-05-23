@@ -88,8 +88,8 @@ methodOverrideMap = {
                  'void %s(const wxString& text);',
 
                  '''void %s(const wxString& text) {
-                    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                    SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
+                    const wxWX2MBbuf buf = wx2stc(text);
+                    SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
                  0),
 
     'AddStyledText' : (0,
@@ -103,8 +103,8 @@ methodOverrideMap = {
                  'void %s(const wxString& text);',
 
                  '''void %s(const wxString& text) {
-                    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                    SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
+                    const wxWX2MBbuf buf = wx2stc(text);
+                    SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
                  0),
 
     'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0, 0),
@@ -439,7 +439,7 @@ methodOverrideMap = {
             TextToFind  ft;
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
-            wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+            const wxWX2MBbuf buf = wx2stc(text);
             ft.lpstrText = (char*)(const char*)buf;
 
             return SendMsg(%s, flags, (sptr_t)&ft);''',
@@ -596,8 +596,8 @@ methodOverrideMap = {
 
      '''
      int %s(const wxString& text) {
-         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
+         const wxWX2MBbuf buf = wx2stc(text);
+         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
      0),
 
     'ReplaceTargetRE' :
@@ -606,8 +606,8 @@ methodOverrideMap = {
 
      '''
      int %s(const wxString& text) {
-         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
+         const wxWX2MBbuf buf = wx2stc(text);
+         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
      0),
 
     'SearchInTarget' :
@@ -616,8 +616,8 @@ methodOverrideMap = {
 
      '''
      int %s(const wxString& text) {
-         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, buf.length()-1, (sptr_t)(const char*)buf);''',
+         const wxWX2MBbuf buf = wx2stc(text);
+         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
      0),
 
     # not sure what to do about these yet
