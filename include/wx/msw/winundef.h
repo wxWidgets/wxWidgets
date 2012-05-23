@@ -252,10 +252,16 @@
 
 #ifdef StartDoc
    #undef StartDoc
-   #if defined( __GNUG__ ) && !wxCHECK_W32API_VERSION( 0, 5 )
-      #define DOCINFOW DOCINFO
-      #define DOCINFOA DOCINFO
+
+   // Work around a bug in very old MinGW headers that didn't define DOCINFOW
+   // and DOCINFOA but only DOCINFO in both ANSI and Unicode.
+   #if defined( __GNUG__ )
+      #if !wxCHECK_W32API_VERSION( 0, 5 )
+        #define DOCINFOW DOCINFO
+        #define DOCINFOA DOCINFO
+      #endif
    #endif
+
    #ifdef _UNICODE
    inline int StartDoc(HDC h, CONST DOCINFOW* info)
    {
