@@ -4128,16 +4128,10 @@ wxCharBuffer wxStyledTextCtrl::GetLineRaw(int line)
 
 wxCharBuffer wxStyledTextCtrl::GetSelectedTextRaw()
 {
-    long   start;
-    long   end;
+    // Calculate the length needed first.
+    const int len = SendMsg(SCI_GETSELTEXT, 0, (sptr_t)0);
 
-    GetSelection(&start, &end);
-    int   len  = end - start;
-    if (!len) {
-        wxCharBuffer empty;
-        return empty;
-    }
-
+    // And then really get the data.
     wxCharBuffer buf(len);
     SendMsg(SCI_GETSELTEXT, 0, (sptr_t)buf.data());
     return buf;
