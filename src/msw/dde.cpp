@@ -1068,7 +1068,7 @@ static HSZ DDEAtomFromString(const wxString& s)
 {
     wxASSERT_MSG( DDEIdInst, wxT("DDE not initialized") );
 
-    HSZ hsz = DdeCreateStringHandle(DDEIdInst, (wxChar*)s.wx_str(), DDE_CP);
+    HSZ hsz = DdeCreateStringHandle(DDEIdInst, const_cast<wxChar*>(static_cast<const wxChar*>(s.t_str())), DDE_CP);
     if ( !hsz )
     {
         DDELogError(_("Failed to create DDE string"));

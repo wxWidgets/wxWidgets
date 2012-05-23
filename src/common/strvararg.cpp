@@ -435,6 +435,8 @@ class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 };
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
+#endif // __WINDOWS__/!__WINDOWS__
+
 #if wxUSE_UNICODE_UTF8
 class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
 {
@@ -457,8 +459,6 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
     }
 };
 #endif // wxUSE_UNICODE_UTF8
-
-#endif // __WINDOWS__/!__WINDOWS__
 
 #if !wxUSE_UNICODE // FIXME-UTF8: remove
 class wxPrintfFormatConverterANSI : public wxFormatConverterBase<char>

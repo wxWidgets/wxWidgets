@@ -288,7 +288,7 @@ static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc,
                         // The filter function will not know mounted from unmounted, and neither do we unless
                         // we are iterating using RESOURCE_CONNECTED, in which case they all are mounted.
                         // Volumes on disconnected servers, however, will correctly show as unmounted.
-                        FilteredAdd(list, filename.wx_str(), flagsSet, flagsUnset&~wxFS_VOL_MOUNTED);
+                        FilteredAdd(list, filename.t_str(), flagsSet, flagsUnset&~wxFS_VOL_MOUNTED);
                         if (scope == RESOURCE_GLOBALNET)
                             s_fileInfo[filename].m_flags &= ~wxFS_VOL_MOUNTED;
                     }
@@ -502,7 +502,7 @@ bool wxFSVolumeBase::Create(const wxString& name)
 
     // Display name.
     SHFILEINFO fi;
-    long rc = SHGetFileInfo(m_volName.wx_str(), 0, &fi, sizeof(fi), SHGFI_DISPLAYNAME);
+    long rc = SHGetFileInfo(m_volName.t_str(), 0, &fi, sizeof(fi), SHGFI_DISPLAYNAME);
     if (!rc)
     {
         wxLogError(_("Cannot read typename from '%s'!"), m_volName.c_str());

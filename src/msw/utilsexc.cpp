@@ -857,14 +857,14 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
                     // WinCE requires appname to be non null
                     // Win32 allows for null
 #ifdef __WXWINCE__
-                 (wxChar *)
-                 moduleName.wx_str(),// application name
-                 (wxChar *)
-                 arguments.wx_str(), // arguments
+                 static_cast<const TCHAR *>(
+                 moduleName.t_str()),// application name
+                 const_cast<TCHAR *>(static_cast<const TCHAR *>(
+                 arguments.t_str())), // arguments
 #else
                  NULL,               // application name (use only cmd line)
-                 (wxChar *)
-                 command.wx_str(),   // full command line
+                 const_cast<TCHAR *>(static_cast<const TCHAR *>(
+                 command.t_str())),   // full command line
 #endif
                  NULL,               // security attributes: defaults for both
                  NULL,               //   the process and its main thread
@@ -872,7 +872,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
                  dwFlags,            // process creation flags
                  envBuffer.data(),   // environment (may be NULL which is fine)
                  useCwd              // initial working directory
-                    ? const_cast<wxChar *>(env->cwd.wx_str())
+                    ? const_cast<TCHAR *>(static_cast<const TCHAR *>(env->cwd.t_str()))
                     : NULL,          //     (or use the same)
                  &si,                // startup info (unused here)
                  &pi                 // process info
