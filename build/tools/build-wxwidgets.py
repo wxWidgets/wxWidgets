@@ -9,7 +9,6 @@ import os
 import re
 import sys
 import builder
-import commands
 import glob
 import optparse
 import platform
@@ -38,7 +37,7 @@ def numCPUs():
     """
     # Linux, Unix and MacOS:
     if hasattr(os, "sysconf"):
-        if os.sysconf_names.has_key("SC_NPROCESSORS_ONLN"):
+        if "SC_NPROCESSORS_ONLN" in os.sysconf_names:
             # Linux & Unix:
             ncpus = os.sysconf("SC_NPROCESSORS_ONLN")
             if isinstance(ncpus, int) and ncpus > 0:
@@ -48,7 +47,7 @@ def numCPUs():
             return p.stdout.read()
             
     # Windows:
-    if os.environ.has_key("NUMBER_OF_PROCESSORS"):
+    if "NUMBER_OF_PROCESSORS" in os.environ:
             ncpus = int(os.environ["NUMBER_OF_PROCESSORS"]);
             if ncpus > 0:
                 return ncpus
@@ -56,16 +55,14 @@ def numCPUs():
 
 
 def getXcodePath():
-    p = subprocess.Popen("xcode-select -print-path", shell=True, stdout=subprocess.PIPE)
-    output = p.stdout.read()
-    return output.strip()
+    return getoutput("xcode-select -print-path")
 
 
 def exitIfError(code, msg):
     if code != 0:
-        print msg
+        print(msg)
         if exitWithException:
-            raise builder.BuildError, msg
+            raise builder.BuildError(msg)
         else:
             sys.exit(1)
      
@@ -110,14 +107,14 @@ def macFixupInstallNames(destdir, prefix, buildDir=None):
     # When an installdir is used then the install_names embedded in
     # the dylibs are not correct.  Reset the IDs and the dependencies
     # to use just the prefix.
-    print "**** macFixupInstallNames(%s, %s, %s)" % (destdir, prefix, buildDir)
+    print("**** macFixupInstallNames(%s, %s, %s)" % (destdir, prefix, buildDir))
     pwd = os.getcwd()
     os.chdir(destdir+prefix+'/lib')
     dylibs = glob.glob('*.dylib')     # ('*[0-9].[0-9].[0-9].[0-9]*.dylib')
     for lib in dylibs:
         cmd = 'install_name_tool -id %s/lib/%s %s/lib/%s' % \
               (prefix,lib,  destdir+prefix,lib)
-        print cmd
+        print(cmd)
         run(cmd)
         for dep in dylibs:
             if buildDir is not None:
@@ -126,7 +123,7 @@ def macFixupInstallNames(destdir, prefix, buildDir=None):
             else:
                 cmd = 'install_name_tool -change %s/lib/%s %s/lib/%s %s/lib/%s' % \
                       (destdir+prefix,dep,  prefix,dep,  destdir+prefix,lib)
-            print cmd
+            print(cmd)
             run(cmd)        
     os.chdir(pwd)
 
@@ -134,9 +131,24 @@ def macFixupInstallNames(destdir, prefix, buildDir=None):
 def run(cmd):
     global verbose
     if verbose:
-        print "Running %s" % cmd
+        print("Running %s" % cmd)
     return exitIfError(os.system(cmd), "Error running %s" % cmd)
 
+
+def getoutput(cmd):
+    sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    output = None
+    output = sp.stdout.read()
+    if sys.version_info > (3,):
+        output = output.decode('utf-8')  # TODO: is utf-8 okay here?
+    output = output.rstrip()
+    rval = sp.wait()
+    if rval:
+        # Failed!
+        print("Command '%s' failed with exit code %d." % (cmd, rval))
+        sys.exit(rval)
+    return output
+    
 
 def main(scriptName, args):
     global scriptDir
@@ -196,11 +208,10 @@ def main(scriptName, args):
     parser = optparse.OptionParser(usage="usage: %prog [options]", version="%prog 1.0")
 
     keys = option_dict.keys()
-    keys.sort()
-    for opt in keys:
+    for opt in sorted(keys):
         default = option_dict[opt][0]
         action = "store"
-        if type(default) == types.BooleanType:
+        if type(default) == bool:
             action = "store_true"
         parser.add_option("--" + opt, default=default, action=action, dest=opt, 
                           help=option_dict[opt][1])
@@ -321,7 +332,7 @@ def main(scriptName, args):
             configure_opts.append("--enable-universal_binary=%s" % options.mac_universal_binary)
 
             
-        print "Configure options: " + `configure_opts`
+        print("Configure options: " + repr(configure_opts))
         wxBuilder = builder.AutoconfBuilder()
         if not options.no_config and not options.clean:
             olddir = os.getcwd()
@@ -332,14 +343,14 @@ def main(scriptName, args):
             os.chdir(olddir)
 
         if options.config_only:
-            print "Exiting after configure"
+            print("Exiting after configure")
             return
     
     elif toolkit in ["msvc", "msvcProject"]:
         flags = {}
         buildDir = os.path.abspath(os.path.join(scriptDir, "..", "msw"))
 
-        print "creating wx/msw/setup.h from setup0.h"
+        print("creating wx/msw/setup.h from setup0.h")
         if options.unicode:
             flags["wxUSE_UNICODE"] = "1"
             if VERSION < (2,9):
@@ -347,7 +358,7 @@ def main(scriptName, args):
     
         if options.cairo:
             if not os.environ.get("CAIRO_ROOT"):
-                print "WARNING: Expected CAIRO_ROOT set in the environment!"
+                print("WARNING: Expected CAIRO_ROOT set in the environment!")
             flags["wxUSE_CAIRO"] = "1"
     
         if options.wxpython:
@@ -375,7 +386,7 @@ def main(scriptName, args):
         for flag in flags:
             setupText, subsMade = re.subn(flag + "\s+?\d", "%s %s" % (flag, flags[flag]), setupText)
             if subsMade == 0:
-                print "Flag %s wasn't found in setup0.h!" % flag
+                print("Flag %s wasn't found in setup0.h!" % flag)
                 sys.exit(1)
     
         setupFile = open(os.path.join(mswIncludeDir, "setup.h"), "wb")
@@ -383,7 +394,7 @@ def main(scriptName, args):
         setupFile.close()
         args = []
         if toolkit == "msvc":
-            print "setting build options..."
+            print("setting build options...")
             args.append("-f makefile.vc")
             if options.unicode:
                 args.append("UNICODE=1")
@@ -424,11 +435,11 @@ def main(scriptName, args):
         
             
     if not wxBuilder:
-        print "Builder not available for your specified platform/compiler."
+        print("Builder not available for your specified platform/compiler.")
         sys.exit(1)
     
     if options.clean:
-        print "Performing cleanup."
+        print("Performing cleanup.")
         wxBuilder.clean(dir=buildDir, options=args)
         
         sys.exit(0)
@@ -455,7 +466,7 @@ def main(scriptName, args):
                 links.append(reallib)
                 reallib = "lib/" + os.readlink(reallib)
                 
-            #print "reallib is %s" % reallib
+            #print("reallib is %s" % reallib)
             run("mv -f %s lib/%s.dylib" % (reallib, frameworkname))
             
             for link in links:
@@ -463,7 +474,7 @@ def main(scriptName, args):
     
         frameworkRootDir = prefixDir
         if installDir:
-            print "installDir = %s" % installDir
+            print("installDir = %s" % installDir)
             frameworkRootDir = installDir + prefixDir
         os.chdir(frameworkRootDir)
         build_string = ""
@@ -471,10 +482,10 @@ def main(scriptName, args):
             build_string = "d"
 
         fwname = getFrameworkName(options)
-        version = commands.getoutput("bin/wx-config --release")
-        version_full = commands.getoutput("bin/wx-config --version")
-        basename = commands.getoutput("bin/wx-config --basename")
-        configname = commands.getoutput("bin/wx-config --selected-config")
+        version = getoutput("bin/wx-config --release")
+        version_full = getoutput("bin/wx-config --version")
+        basename = getoutput("bin/wx-config --basename")
+        configname = getoutput("bin/wx-config --selected-config")
         
         os.makedirs("Resources")
         wxplist = dict(
@@ -559,10 +570,10 @@ def main(scriptName, args):
         file('lib/wx/config/%s' % configname, 'w').write(text)
         
         # The framework is finished!
-        print "wxWidgets framework created at: " + \
+        print("wxWidgets framework created at: " + 
               os.path.join( installDir, 
                             options.mac_framework_prefix,
-                            '%s.framework' % fwname)
+                            '%s.framework' % fwname))
         
         
     # adjust the install_name if needed
@@ -596,7 +607,7 @@ def main(scriptName, args):
         args.append("--version %s" % getWxRelease())
         args.append("--out %s" % os.path.join(packagedir, packageName + ".pkg"))
         cmd = packageMakerPath + ' '.join(args)
-        print "cmd = %s" % cmd
+        print("cmd = %s" % cmd)
         run(cmd)
         
         os.chdir(options.mac_distdir)

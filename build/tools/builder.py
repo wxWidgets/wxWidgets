@@ -18,7 +18,7 @@ def runInDir(command, dir=None, verbose=True):
 
     commandStr = " ".join(command)
     if verbose:
-        print commandStr
+        print(commandStr)
     result = os.system(commandStr)
 
     if dir:
@@ -181,7 +181,7 @@ class AutoconfBuilder(GNUMakeBuilder):
 
         optionsStr = string.join(options, " ") if options else ""
         command = "%s %s" % (configure_cmd, optionsStr)
-        print command
+        print(command)
         result = os.system(command)
         #os.chdir(olddir)
         return result
