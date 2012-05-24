@@ -2943,6 +2943,14 @@ public:
     window (whether using the mouse or keyboard) and when it is done from the
     program itself using wxWindow::SetFocus.
 
+    The focus event handlers should almost invariably call wxEvent::Skip() on
+    their event argument to allow the default handling to take place. Failure
+    to do this may result in incorrect behaviour of the native controls. Also
+    note that wxEVT_KILL_FOCUS handler must not call wxWindow::SetFocus() as
+    this, again, is not supported by all native controls. If you need to do
+    this, consider using the @ref sec_delayed_action described in wxIdleEvent
+    documentation.
+
     @beginEventTable{wxFocusEvent}
     @event{EVT_SET_FOCUS(func)}
         Process a @c wxEVT_SET_FOCUS event.
@@ -3488,6 +3496,30 @@ enum wxIdleMode
 
     @library{wxbase}
     @category{events}
+
+    @section sec_delayed_action Delayed Action Mechanism
+
+    wxIdleEvent can be used to perform some action "at slightly later time".
+    This can be necessary in several circumstances when, for whatever reason,
+    something can't be done in the current event handler. For example, if a
+    mouse event handler is called with the mouse button pressed, the mouse can
+    be currently captured and some operations with it -- notably capturing it
+    again -- might be impossible or lead to undesirable results. If you still
+    want to capture it, you can do it from @c wxEVT_IDLE handler when it is
+    called the next time instead of doing it immediately.
+
+    This can be achieved in two different ways: when using static event tables,
+    you will need a flag indicating to the (always connected) idle event
+    handler whether the desired action should be performed. The originally
+    called handler would then set it to indicate that it should indeed be done
+    and the idle handler itself would reset it to prevent it from doing the
+    same action again.
+
+    Using dynamically connected event handlers things are even simpler as the
+    original event handler can simply wxEvtHandler::Connect() or
+    wxEvtHandler::Bind() the idle event handler which would only be executed
+    then and could wxEvtHandler::Disconnect() or wxEvtHandler::Unbind() itself.
+
 
     @see @ref overview_events, wxUpdateUIEvent, wxWindow::OnInternalIdle
 */
