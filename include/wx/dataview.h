@@ -972,6 +972,8 @@ public:
     void DeleteItem( unsigned int pos );
     void DeleteAllItems();
 
+    unsigned int GetItemCount() const;
+
     void SetItemData( const wxDataViewItem& item, wxUIntPtr data );
     wxUIntPtr GetItemData( const wxDataViewItem& item ) const;
 
@@ -1084,6 +1086,9 @@ public:
         { GetStore()->SetItemData( item, data ); }
     wxUIntPtr GetItemData( const wxDataViewItem& item ) const
         { return GetStore()->GetItemData( item ); }
+
+    int GetItemCount() const
+        { return GetStore()->GetItemCount(); }
 
     void OnSize( wxSizeEvent &event );
 

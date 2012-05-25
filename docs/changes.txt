@@ -557,6 +557,7 @@ All (GUI):
 - Added pixel font size capability to wxTextAttr and wxRichTextCtrl.
 - Fully implement wxStyledTextCtrl::PositionToXY() (troelsk).
 - Added wxDataViewListCtrl::{Set,Get}ItemData().
+- Added wxDataViewListCtrl::GetItemCount() (Kry).
 
 GTK:
 

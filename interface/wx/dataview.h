@@ -2338,6 +2338,13 @@ public:
     void DeleteAllItems();
 
     /**
+        Returns the number of items (=rows) in the control
+
+        @since 2.9.4
+    */
+    unsigned int GetItemCount() const;
+
+    /**
         Returns the client data associated with the item.
 
         @see SetItemData()
@@ -2709,6 +2716,13 @@ public:
         Delete all item (=all rows) in the store.
     */
     void DeleteAllItems();
+
+    /**
+        Returns the number of items (=rows) in the control
+
+        @since 2.9.4
+    */
+    unsigned int GetItemCount() const;
 
     /**
         Returns the client data associated with the item.

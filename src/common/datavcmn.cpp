@@ -1705,6 +1705,11 @@ unsigned int wxDataViewListStore::GetColumnCount() const
     return m_cols.GetCount();
 }
 
+unsigned int wxDataViewListStore::GetItemCount() const
+{
+    return m_data.size();
+}
+
 wxString wxDataViewListStore::GetColumnType( unsigned int pos ) const
 {
     return m_cols[pos];
