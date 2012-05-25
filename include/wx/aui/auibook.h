@@ -327,9 +327,6 @@ public:
     // Gets the height of the notebook for a given page height
     int GetHeightForPageHeight(int pageHeight);
 
-    // Advances the selection, generation page selection events
-    void AdvanceSelection(bool forward = true);
-
     // Shows the window menu
     bool ShowWindowMenu();
 
@@ -346,8 +343,6 @@ public:
 
     virtual int GetPageImage(size_t n) const;
     virtual bool SetPageImage(size_t n, int imageId);
-
-    wxWindow* GetCurrentPage () const;
 
     virtual int ChangeSelection(size_t n);
 

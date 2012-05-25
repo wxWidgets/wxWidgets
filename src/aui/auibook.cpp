@@ -3235,34 +3235,6 @@ int wxAuiNotebook::GetHeightForPageHeight(int pageHeight)
     return tabCtrlHeight + pageHeight + decorHeight;
 }
 
-// Advances the selection, generation page selection events
-void wxAuiNotebook::AdvanceSelection(bool forward)
-{
-    if (GetPageCount() <= 1)
-        return;
-
-    int currentSelection = GetSelection();
-
-    if (forward)
-    {
-        if (currentSelection == (int) (GetPageCount() - 1))
-            return;
-        else if (currentSelection == -1)
-            currentSelection = 0;
-        else
-            currentSelection ++;
-    }
-    else
-    {
-        if (currentSelection <= 0)
-            return;
-        else
-            currentSelection --;
-    }
-
-    SetSelection(currentSelection);
-}
-
 // Shows the window menu
 bool wxAuiNotebook::ShowWindowMenu()
 {
@@ -3311,13 +3283,6 @@ int wxAuiNotebook::GetPageImage(size_t WXUNUSED(n)) const
 bool wxAuiNotebook::SetPageImage(size_t n, int imageId)
 {
     return SetPageBitmap(n, GetImageList()->GetBitmap(imageId));
-}
-
-wxWindow* wxAuiNotebook::GetCurrentPage () const
-{
-    const int sel = GetSelection();
-
-    return sel == wxNOT_FOUND ? NULL : GetPage(sel);
 }
 
 int wxAuiNotebook::ChangeSelection(size_t n)
