@@ -1504,11 +1504,7 @@ bool wxStyledTextCtrl::GetModify() const
 
 // Retrieve the selected text.
 wxString wxStyledTextCtrl::GetSelectedText() {
-         long   start;
-         long   end;
-
-         GetSelection(&start, &end);
-         int   len  = end - start;
+         const int len = SendMsg(SCI_GETSELTEXT, 0, (sptr_t)0);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+2);
