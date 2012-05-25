@@ -609,7 +609,9 @@ int wxGnomePrintDialog::ShowModal()
     m_printDialogData.SetNoCopies( copies );
     m_printDialogData.SetCollate( collate );
 
-    switch (gs_libGnomePrint->gnome_print_dialog_get_range( (GnomePrintDialog*) m_widget ))
+    // Cast needed to avoid warnings because the gnome_print_dialog_get_range()
+    // is declared as returning a wrong enum type.
+    switch ( static_cast<int>( gs_libGnomePrint->gnome_print_dialog_get_range( (GnomePrintDialog*) m_widget )))
     {
         case GNOME_PRINT_RANGE_SELECTION:
             m_printDialogData.SetSelection( true );
