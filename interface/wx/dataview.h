@@ -2315,17 +2315,17 @@ public:
     /**
         Appends an item (=row) to the control and store.
     */
-    void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
         Prepends an item (=row) to the control and store.
     */
-    void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
         Inserts an item (=row) to the control and store.
     */
-    void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
         Delete the row at position @a row.
@@ -2658,7 +2658,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
         Prepends an item (=row) and fills it with @a values.
@@ -2667,7 +2667,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
         Inserts an item (=row) and fills it with @a values.
@@ -2676,7 +2676,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
         Delete the item (=row) at position @a pos.

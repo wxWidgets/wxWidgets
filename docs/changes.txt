@@ -505,6 +505,11 @@ Major new features in this release
 2.9.4:
 ------
 
+INCOMPATIBLE CHANGES SINCE 2.9.3
+
+- wxDataViewListCtrl doesn't delete its client data any more for compatibility
+  with wxListCtrl, use full wxDataViewCtrl if you don't need compatibility.
+
 All:
 
 - Added wxLogFormatter to allow customizing wxLog output (Sébastien Gallou).

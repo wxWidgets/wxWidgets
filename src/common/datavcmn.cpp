@@ -1710,7 +1710,7 @@ wxString wxDataViewListStore::GetColumnType( unsigned int pos ) const
     return m_cols[pos];
 }
 
-void wxDataViewListStore::AppendItem( const wxVector<wxVariant> &values, wxClientData *data )
+void wxDataViewListStore::AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data )
 {
     wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
     line->m_values = values;
@@ -1719,7 +1719,7 @@ void wxDataViewListStore::AppendItem( const wxVector<wxVariant> &values, wxClien
     RowAppended();
 }
 
-void wxDataViewListStore::PrependItem( const wxVector<wxVariant> &values, wxClientData *data )
+void wxDataViewListStore::PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data )
 {
     wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
     line->m_values = values;
@@ -1729,7 +1729,7 @@ void wxDataViewListStore::PrependItem( const wxVector<wxVariant> &values, wxClie
 }
 
 void wxDataViewListStore::InsertItem(  unsigned int row, const wxVector<wxVariant> &values,
-                                       wxClientData *data )
+                                       wxUIntPtr data )
 {
     wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
     line->m_values = values;
