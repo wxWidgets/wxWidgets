@@ -972,6 +972,9 @@ public:
     void DeleteItem( unsigned int pos );
     void DeleteAllItems();
 
+    void SetItemData( const wxDataViewItem& item, wxUIntPtr data );
+    wxUIntPtr GetItemData( const wxDataViewItem& item ) const;
+
     // override base virtuals
 
     virtual unsigned int GetColumnCount() const;
@@ -1076,6 +1079,11 @@ public:
           GetStore()->RowValueChanged( row, col); }
     bool GetToggleValue( unsigned int row, unsigned int col ) const
         { wxVariant value; GetStore()->GetValueByRow( value, row, col ); return value.GetBool(); }
+
+    void SetItemData( const wxDataViewItem& item, wxUIntPtr data )
+        { GetStore()->SetItemData( item, data ); }
+    wxUIntPtr GetItemData( const wxDataViewItem& item ) const
+        { return GetStore()->GetItemData( item ); }
 
     void OnSize( wxSizeEvent &event );
 

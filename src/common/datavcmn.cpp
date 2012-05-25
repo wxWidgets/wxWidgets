@@ -1761,6 +1761,22 @@ void wxDataViewListStore::DeleteAllItems()
     Reset( 0 );
 }
 
+void wxDataViewListStore::SetItemData( const wxDataViewItem& item, wxUIntPtr data )
+{
+    wxDataViewListStoreLine* line = m_data[wxPtrToUInt( item.GetID() ) - 1];
+    if (!line) return;
+
+    line->SetData( data );
+}
+
+wxUIntPtr wxDataViewListStore::GetItemData( const wxDataViewItem& item ) const
+{
+    wxDataViewListStoreLine* line = m_data[wxPtrToUInt( item.GetID() ) - 1];
+    if (!line) return NULL;
+
+    return line->GetData();
+}
+
 void wxDataViewListStore::GetValueByRow( wxVariant &value, unsigned int row, unsigned int col ) const
 {
     wxDataViewListStoreLine *line = m_data[row];

@@ -2338,6 +2338,15 @@ public:
     void DeleteAllItems();
 
     /**
+        Returns the client data associated with the item.
+
+        @see SetItemData()
+
+        @since 2.9.4
+    */
+    wxUIntPtr GetItemData(const wxDataViewItem& item) const;
+
+    /**
          Sets the value in the store and update the control.
     */
     void SetValue( const wxVariant &value, unsigned int row, unsigned int col );
@@ -2378,6 +2387,19 @@ public:
          respective column.
     */
     bool GetToggleValue( unsigned int row, unsigned int col ) const;
+
+    /**
+        Associates a client data pointer with the given item.
+
+        Notice that the control does @e not take ownership of the pointer for
+        compatibility with wxListCtrl. I.e. it will @e not delete the pointer
+        (if it is a pointer and not a number) itself, it is up to you to do it.
+
+        @see GetItemData()
+
+        @since 2.9.4
+    */
+    void SetItemData(const wxDataViewItem& item, wxUIntPtr data);
 
     //@}
 };
@@ -2689,6 +2711,15 @@ public:
     void DeleteAllItems();
 
     /**
+        Returns the client data associated with the item.
+
+        @see SetItemData()
+
+        @since 2.9.4
+    */
+    wxUIntPtr GetItemData(const wxDataViewItem& item) const;
+
+    /**
         Overridden from wxDataViewModel
     */
     virtual unsigned int GetColumnCount() const;
@@ -2697,6 +2728,18 @@ public:
         Overridden from wxDataViewModel
     */
     virtual wxString GetColumnType( unsigned int col ) const;
+
+    /**
+        Sets the client data associated with the item.
+
+        Notice that this class does @e not take ownership of the passed in
+        pointer and will not delete it.
+
+        @see GetItemData()
+
+        @since 2.9.4
+    */
+    void SetItemData(const wxDataViewItem& item, wxUIntPtr data);
 
     /**
         Overridden from wxDataViewIndexListModel
