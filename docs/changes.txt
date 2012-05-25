@@ -550,6 +550,7 @@ All (GUI):
 - Added support for fields and virtual attributes to wxRichTextCtrl.
 - Added custom text and dimension scaling to wxRichTextCtrl.
 - Added pixel font size capability to wxTextAttr and wxRichTextCtrl.
+- Fully implement wxStyledTextCtrl::PositionToXY() (troelsk).
 
 GTK:
 

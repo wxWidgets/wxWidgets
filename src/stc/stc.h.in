@@ -398,16 +398,15 @@ public:
 
     virtual bool PositionToXY(long pos, long *x, long *y) const
     {
+        long l = LineFromPosition(pos);
+        if ( l == -1 )
+            return false;
+
         if ( x )
-            *x = -1; // TODO
+            *x = pos - PositionFromLine(l);
 
         if ( y )
-        {
-            long l = LineFromPosition(pos);
-            if ( l == -1 )
-                return false;
             *y = l;
-        }
 
         return true;
     }
