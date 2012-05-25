@@ -107,6 +107,12 @@ public:
             The translation in x direction.
         @param dy
             The translation in y direction.
+
+        @code
+        //           |  1   0   0 |   | m_11  m_12   0 |
+        // matrix' = |  0   1   0 | x | m_21  m_22   0 |
+        //           | dx  dy   1 |   | m_tx  m_ty   1 |
+        @endcode
     */
     void Translate(wxDouble dx, wxDouble dy);
 
@@ -117,6 +123,12 @@ public:
             Scaling in x direction.
         @param yScale
             Scaling in y direction.
+
+        @code
+        //           | xScale   0      0 |   | m_11  m_12   0 |
+        // matrix' = |   0    yScale   0 | x | m_21  m_22   0 |
+        //           |   0      0      1 |   | m_tx  m_ty   1 |
+        @endcode
     */
     void Scale(wxDouble xScale, wxDouble yScale);
 
@@ -130,12 +142,18 @@ public:
     void Mirror(int direction = wxHORIZONTAL);
 
     /**
-        Add counter clockwise rotation to this matrix.
+        Add clockwise rotation to this matrix.
 
-        @param ccRadians
-            Rotation angle in radians.
+        @param cRadians
+            Rotation angle in radians, clockwise.
+
+        @code
+        //           | cos    sin   0 |   | m_11  m_12   0 |
+        // matrix' = | -sin   cos   0 | x | m_21  m_22   0 |
+        //           |  0      0    1 |   | m_tx  m_ty   1 |
+        @endcode
     */
-    void Rotate(wxDouble ccRadians);
+    void Rotate(wxDouble cRadians);
 
     /**
         Applies this matrix to the point.
@@ -144,6 +162,12 @@ public:
             The point receiving the transformations.
 
         @return The point with the transformations applied.
+
+        @code
+        //                                    | m_11  m_12   0 |
+        // point' = | src.m_x  src._my  1 | x | m_21  m_22   0 |
+        //                                    | m_tx  m_ty   1 |
+        @endcode
     */
     wxPoint2DDouble TransformPoint(const wxPoint2DDouble& p) const;
     void TransformPoint(wxDouble* x, wxDouble* y) const;
@@ -155,6 +179,12 @@ public:
             The source receiving the transformations.
 
         @return The source with the transformations applied.
+
+        @code
+        //                                   | m_11  m_12   0 |
+        // dist' = | src.m_x  src._my  0 | x | m_21  m_22   0 |
+        //                                   | m_tx  m_ty   1 |
+        @endcode
     */
     wxPoint2DDouble TransformDistance(const wxPoint2DDouble& p) const;
     void TransformDistance(wxDouble* dx, wxDouble* dy) const;

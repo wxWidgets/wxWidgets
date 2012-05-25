@@ -16,6 +16,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/graphics.h"
 #include "wx/dcmemory.h"
 #include "wx/affinematrix2d.h"
 #include "wx/math.h"
@@ -42,6 +43,9 @@ private:
 #if wxUSE_DC_TRANSFORM_MATRIX
         CPPUNIT_TEST( VMirrorAndTranslate );
         CPPUNIT_TEST( Rotate90Clockwise );
+#if wxUSE_GRAPHICS_CONTEXT
+        CPPUNIT_TEST( CompareToGraphicsContext );
+#endif // wxUSE_GRAPHICS_CONTEXT
 #endif // wxUSE_DC_TRANSFORM_MATRIX
     CPPUNIT_TEST_SUITE_END();
 
@@ -49,6 +53,9 @@ private:
 #if wxUSE_DC_TRANSFORM_MATRIX
     void VMirrorAndTranslate();
     void Rotate90Clockwise();
+#if wxUSE_GRAPHICS_CONTEXT
+    void CompareToGraphicsContext();
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     wxImage m_imgOrig;
     wxBitmap m_bmpOrig;
@@ -133,7 +140,7 @@ void AffineTransformTestCase::Rotate90Clockwise()
             return;
 
         wxAffineMatrix2D matrix;
-        matrix.Rotate(-0.5 * M_PI);
+        matrix.Rotate(0.5 * M_PI);
         matrix.Translate(0, -m_bmpOrig.GetHeight());
         dc.SetTransformMatrix(matrix);
         dc.DrawBitmap(m_bmpOrig, 0, 0);
@@ -142,5 +149,103 @@ void AffineTransformTestCase::Rotate90Clockwise()
     CPPUNIT_ASSERT_EQUAL( bmpUsingMatrix.ConvertToImage(),
                           m_imgOrig.Rotate90(true) );
 }
+
+#if wxUSE_GRAPHICS_CONTEXT
+void AffineTransformTestCase::CompareToGraphicsContext()
+{
+    wxPoint2DDouble pointA1(1.0, 3.0), pointA2(60.0, 50.0),
+                    pointG1(1.0, 3.0), pointG2(60.0, 50.0);
+
+    // Create affine matrix and transform it
+    wxAffineMatrix2D matrixA1, matrixA2;
+    matrixA2.Rotate(M_PI / 3);
+    matrixA1.Translate(-m_bmpOrig.GetWidth()/2, -m_bmpOrig.GetHeight()/2);
+    matrixA1.Rotate(-M_PI *2/ 6);
+    matrixA1.Translate(m_bmpOrig.GetWidth()/2, m_bmpOrig.GetHeight()/2);
+    matrixA1.Mirror(wxHORIZONTAL);
+    matrixA1.Concat(matrixA2);
+    matrixA1.Mirror(wxVERTICAL);
+    matrixA1.Translate(m_bmpOrig.GetWidth()/2, -m_bmpOrig.GetHeight()/2);
+    matrixA1.Scale(0.9, 0.9);
+    matrixA1.Invert();
+
+    // Create image using first matrix
+    wxBitmap bmpUsingMatrixA1(m_bmpOrig.GetHeight(), m_bmpOrig.GetWidth());
+
+    // Build the transformed image using the transformation matrix
+    {
+        wxMemoryDC dc(bmpUsingMatrixA1);
+
+        if ( !dc.CanUseTransformMatrix() )
+            return;
+
+        // Draw the bitmap
+        dc.SetTransformMatrix(matrixA1);
+        dc.DrawBitmap(m_bmpOrig, 0, 0);
+
+        // Draw a line
+        matrixA1.TransformPoint(&pointA1.m_x, &pointA1.m_y);
+        matrixA1.TransformDistance(&pointA2.m_x, &pointA2.m_y);
+
+        dc.DrawLine(wxRound(pointA1.m_x), wxRound(pointA1.m_y),
+            wxRound(pointA1.m_x + pointA2.m_x), wxRound(pointA1.m_x + pointA2.m_y));
+    }
+
+
+    // Create graphics matrix and transform it
+    wxMemoryDC mDc;
+    wxGraphicsContext* gDc = wxGraphicsContext::Create(mDc);
+    wxGraphicsMatrix matrixG1 = gDc->CreateMatrix();
+    wxGraphicsMatrix matrixG2 = gDc->CreateMatrix();
+    matrixG2.Rotate(M_PI / 3);
+    matrixG1.Translate(-m_bmpOrig.GetWidth()/2, -m_bmpOrig.GetHeight()/2);
+    matrixG1.Rotate(-M_PI*2 / 6);
+    matrixG1.Translate(m_bmpOrig.GetWidth()/2, m_bmpOrig.GetHeight()/2);
+    matrixG1.Scale(-1, 1);
+    matrixG1.Concat(matrixG2);
+    matrixG1.Scale(1, -1);
+    matrixG1.Translate(m_bmpOrig.GetWidth()/2, -m_bmpOrig.GetHeight()/2);
+    matrixG1.Scale(0.9, 0.9);
+    matrixG1.Invert();
+    // Create affine matrix from the graphics matrix
+    wxMatrix2D mat2D;
+    wxPoint2DDouble tr;
+    matrixG1.Get(&mat2D.m_11, &mat2D.m_12, &mat2D.m_21, &mat2D.m_22, &tr.m_x, &tr.m_y);
+    wxAffineMatrix2D matrixAG;
+    matrixAG.Set(mat2D, tr);
+
+    delete gDc;
+
+    // Create image using last matrix
+    wxBitmap bmpUsingMatrixAG(m_bmpOrig.GetHeight(), m_bmpOrig.GetWidth());
+
+    // Build the transformed image using the transformation matrix
+    {
+        wxMemoryDC dc(bmpUsingMatrixAG);
+
+        if ( !dc.CanUseTransformMatrix() )
+            return;
+
+        // Draw the bitmap
+        dc.SetTransformMatrix(matrixAG);
+        dc.DrawBitmap(m_bmpOrig, 0, 0);
+
+        // Draw a line
+        matrixG1.TransformPoint(&pointG1.m_x, &pointG1.m_y);
+        matrixG1.TransformDistance(&pointG2.m_x, &pointG2.m_y);
+
+        dc.DrawLine(wxRound(pointG1.m_x), wxRound(pointG1.m_y),
+            wxRound(pointG1.m_x + pointG2.m_x), wxRound(pointG1.m_x + pointG2.m_y));
+    }
+
+
+    CPPUNIT_ASSERT_EQUAL( bmpUsingMatrixA1.ConvertToImage(),
+                          bmpUsingMatrixAG.ConvertToImage() );
+
+    // Save the images to check that something _is_ inside the visible area.
+    //bmpUsingMatrixA1.SaveFile("matrixA1.jpg", wxBITMAP_TYPE_JPEG);
+    //bmpUsingMatrixAG.SaveFile("matrixAG.jpg", wxBITMAP_TYPE_JPEG);
+}
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 #endif // wxUSE_DC_TRANSFORM_MATRIX

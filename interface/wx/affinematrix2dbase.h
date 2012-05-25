@@ -156,12 +156,12 @@ public:
     virtual void Scale(wxDouble xScale, wxDouble yScale) = 0;
 
     /**
-        Add counter clockwise rotation to this matrix.
+        Add clockwise rotation to this matrix.
 
-        @param ccRadians
-            Rotation angle in radians.
+        @param cRadians
+            Rotation angle in radians, clockwise.
     */    
-    virtual void Rotate(wxDouble ccRadians) = 0;
+    virtual void Rotate(wxDouble cRadians) = 0;
 
     /**
         Add mirroring to this matrix.

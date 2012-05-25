@@ -1299,7 +1299,10 @@ public:
     virtual bool IsIdentity() const;
 
     /**
-        Rotates this matrix (in radians).
+        Rotates this matrix clockwise (in radians).
+
+        @param radians
+            Rotation angle in radians, clockwise.
     */
     virtual void Rotate(wxDouble angle);
 
