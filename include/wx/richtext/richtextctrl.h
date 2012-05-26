@@ -1726,6 +1726,46 @@ public:
     */
     double GetDimensionScale() const { return GetBuffer().GetDimensionScale(); }
 
+    /**
+        Sets an overall scale factor for displaying and editing the content.
+    */
+    void SetScale(double scale, bool refresh = false);
+
+    /**
+        Returns an overall scale factor for displaying and editing the content.
+    */
+    double GetScale() const { return m_scale; }
+
+    /**
+        Returns an unscaled point.
+    */
+    wxPoint GetUnscaledPoint(const wxPoint& pt) const;
+
+    /**
+        Returns a scaled point.
+    */
+    wxPoint GetScaledPoint(const wxPoint& pt) const;
+
+    /**
+        Returns an unscaled size.
+    */
+    wxSize GetUnscaledSize(const wxSize& sz) const;
+
+    /**
+        Returns a scaled size.
+    */
+    wxSize GetScaledSize(const wxSize& sz) const;
+
+    /**
+        Returns an unscaled rectangle.
+    */
+    wxRect GetUnscaledRect(const wxRect& rect) const;
+
+    /**
+        Returns a scaled rectangle.
+    */
+    wxRect GetScaledRect(const wxRect& rect) const;
+
 // Command handlers
 
     /**
@@ -2250,6 +2290,9 @@ protected:
 
     /// The object that currently has the editing focus
     wxRichTextParagraphLayoutBox* m_focusObject;
+
+    /// An overall scale factor
+    double                  m_scale;
 };
 
 #if wxUSE_DRAG_AND_DROP

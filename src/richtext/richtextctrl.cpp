@@ -367,6 +367,7 @@ void wxRichTextCtrl::Init()
     m_delayedLayoutThreshold = wxRICHTEXT_DEFAULT_DELAYED_LAYOUT_THRESHOLD;
     m_caretPositionForDefaultStyle = -2;
     m_focusObject = & m_buffer;
+    m_scale = 1.0;
 }
 
 void wxRichTextCtrl::DoThaw()
@@ -439,17 +440,21 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         // Paint the background
         PaintBackground(dc);
 
-        // wxRect drawingArea(GetLogicalPoint(wxPoint(0, 0)), GetClientSize());
-
         wxRect drawingArea(GetUpdateRegion().GetBox());
-        drawingArea.SetPosition(GetLogicalPoint(drawingArea.GetPosition()));
+        drawingArea.SetPosition(GetUnscaledPoint(GetLogicalPoint(drawingArea.GetPosition())));
+        drawingArea.SetSize(GetUnscaledSize(drawingArea.GetSize()));
 
-        wxRect availableSpace(GetClientSize());
+        wxRect availableSpace(GetUnscaledSize(GetClientSize()));
         wxRichTextDrawingContext context(& GetBuffer());
         if (GetBuffer().IsDirty())
         {
+            dc.SetUserScale(GetScale(), GetScale());
+
             GetBuffer().Layout(dc, context, availableSpace, availableSpace, wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_VARIABLE_HEIGHT);
             GetBuffer().Invalidate(wxRICHTEXT_NONE);
+
+            dc.SetUserScale(1.0, 1.0);
+
             SetupScrollbars();
         }
 
@@ -458,12 +463,17 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         clipRect.y += GetBuffer().GetTopMargin();
         clipRect.width -= (GetBuffer().GetLeftMargin() + GetBuffer().GetRightMargin());
         clipRect.height -= (GetBuffer().GetTopMargin() + GetBuffer().GetBottomMargin());
+
+        clipRect = GetScaledRect(clipRect);
         clipRect.SetPosition(GetLogicalPoint(clipRect.GetPosition()));
+
         dc.SetClippingRegion(clipRect);
 
         int flags = 0;
         if ((GetExtraStyle() & wxRICHTEXT_EX_NO_GUIDELINES) == 0)
             flags |= wxRICHTEXT_DRAW_GUIDELINES;
+
+        dc.SetUserScale(GetScale(), GetScale());
 
         GetBuffer().Draw(dc, context, GetBuffer().GetOwnRange(), GetSelection(), drawingArea, 0 /* descent */, flags);
 
@@ -479,6 +489,8 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             ((wxRichTextCaret*) GetCaret())->DoDraw(& dc);
         }
 #endif
+
+        dc.SetUserScale(1.0, 1.0);
     }
 
 #if !wxRICHTEXT_USE_OWN_CARET
@@ -575,7 +587,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
     wxRichTextObject* hitObj = NULL;
     wxRichTextObject* contextObj = NULL;
     wxRichTextDrawingContext context(& GetBuffer());
-    int hit = GetBuffer().HitTest(dc, context, event.GetLogicalPosition(dc), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
+    int hit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(event.GetLogicalPosition(dc)), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
 
 #if wxUSE_DRAG_AND_DROP
     // If there's no selection, or we're not inside it, this isn't an attempt to initiate Drag'n'Drop
@@ -643,7 +655,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
         wxRichTextObject* contextObj = NULL;
         wxRichTextDrawingContext context(& GetBuffer());
         // Only get objects at this level, not nested, because otherwise we couldn't swipe text at a single level.
-        int hit = GetFocusObject()->HitTest(dc, context, logicalPt, position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS|wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
+        int hit = GetFocusObject()->HitTest(dc, context, GetUnscaledPoint(logicalPt), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS|wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
 
 #if wxUSE_DRAG_AND_DROP
         if (m_preDrag)
@@ -655,7 +667,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
             long position = 0;
             wxRichTextObject* hitObj = NULL;
             wxRichTextObject* contextObj = NULL;
-            int hit = GetBuffer().HitTest(dc, context, event.GetLogicalPosition(dc), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
+            int hit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(event.GetLogicalPosition(dc)), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
             wxRichTextParagraphLayoutBox* oldFocusObject = GetFocusObject();
             wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
             if (container && container != GetFocusObject() && container->AcceptsFocus())
@@ -832,7 +844,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         container = GetFocusObject();
     }
     wxRichTextDrawingContext context(& GetBuffer());
-    int hit = container->HitTest(dc, context, logicalPt, position, & hitObj, & contextObj, flags);
+    int hit = container->HitTest(dc, context, GetUnscaledPoint(logicalPt), position, & hitObj, & contextObj, flags);
 
     // See if we need to change the cursor
 
@@ -867,7 +879,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         // Check for dragging across multiple containers
         long position2 = 0;
         wxRichTextObject* hitObj2 = NULL, *contextObj2 = NULL;
-        int hit2 = GetBuffer().HitTest(dc, context, logicalPt, position2, & hitObj2, & contextObj2, 0);
+        int hit2 = GetBuffer().HitTest(dc, context, GetUnscaledPoint(logicalPt), position2, & hitObj2, & contextObj2, 0);
         if (hit2 != wxRICHTEXT_HITTEST_NONE && !(hit2 & wxRICHTEXT_HITTEST_OUTSIDE) && hitObj2 && hitObj != hitObj2)
         {
             // See if we can find a common ancestor
@@ -956,7 +968,7 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
     wxRichTextObject* hitObj = NULL;
     wxRichTextObject* contextObj = NULL;
     wxRichTextDrawingContext context(& GetBuffer());
-    int hit = GetFocusObject()->HitTest(dc, context, logicalPt, position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
+    int hit = GetFocusObject()->HitTest(dc, context, GetUnscaledPoint(logicalPt), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
 
     if (hitObj && hitObj->GetContainer() != GetFocusObject())
     {
@@ -1718,7 +1730,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     if (ppuY != 0)
         syUnits = sy/ppuY;
 
-    wxRect rect = line->GetRect();
+    wxRect rect = GetScaledRect(line->GetRect());
 
     bool scrolled = false;
 
@@ -1731,14 +1743,13 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
         wxRichTextObject::GetTotalMargin(dc, & GetBuffer(), GetBuffer().GetAttributes(), leftMargin, rightMargin,
             topMargin, bottomMargin);
     }
-//    clientSize.y -= GetBuffer().GetBottomMargin();
-    clientSize.y -= bottomMargin;
+    clientSize.y -= (int) (0.5 + bottomMargin * GetScale());
 
     if (GetWindowStyle() & wxRE_CENTRE_CARET)
     {
         int y = rect.y - GetClientSize().y/2;
         int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
-        if (y >= 0 && (y + clientSize.y) < GetBuffer().GetCachedSize().y)
+        if (y >= 0 && (y + clientSize.y) < (int) (0.5 + GetBuffer().GetCachedSize().y * GetScale()))
         {
             if (startYUnits != yUnits)
             {
@@ -1777,11 +1788,11 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
                 scrolled = true;
             }
         }
-        else if (rect.y < (startY + GetBuffer().GetTopMargin()))
+        else if (rect.y < (startY + (int) (0.5 + GetBuffer().GetTopMargin() * GetScale())))
         {
             // Make it scroll so this item is at the top
             // of the window
-            int y = rect.y - GetBuffer().GetTopMargin();
+            int y = rect.y - (int) (0.5 + GetBuffer().GetTopMargin() * GetScale());
             int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
 
             if (startYUnits != yUnits)
@@ -1797,11 +1808,11 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
              keyCode == WXK_HOME || keyCode == WXK_NUMPAD_HOME ||
              keyCode == WXK_PAGEUP || keyCode == WXK_NUMPAD_PAGEUP )
     {
-        if (rect.y < (startY + GetBuffer().GetBottomMargin()))
+        if (rect.y < (startY + (int) (0.5 + GetBuffer().GetBottomMargin() * GetScale())))
         {
             // Make it scroll so this item is at the top
             // of the window
-            int y = rect.y - GetBuffer().GetTopMargin();
+            int y = rect.y - (int) (0.5 + GetBuffer().GetTopMargin() * GetScale());
             int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
 
             if (startYUnits != yUnits)
@@ -1853,11 +1864,12 @@ bool wxRichTextCtrl::IsPositionVisible(long pos) const
     startX = 0;
     startY = startY * ppuY;
 
-    wxRect rect = line->GetRect();
+    wxRect rect = GetScaledRect(line->GetRect());
     wxSize clientSize = GetClientSize();
-    clientSize.y -= GetBuffer().GetBottomMargin();
+    clientSize.y -= (int) (0.5 + GetBuffer().GetBottomMargin() * GetScale());
 
-    return (rect.GetTop() >= (startY + GetBuffer().GetTopMargin())) && (rect.GetBottom() <= (startY + clientSize.y));
+    return (rect.GetTop() >= (startY + (int) (0.5 + GetBuffer().GetTopMargin() * GetScale()))) &&
+           (rect.GetBottom() <= (startY + clientSize.y));
 }
 
 void wxRichTextCtrl::SetCaretPosition(long position, bool showAtLineStart)
@@ -2572,7 +2584,7 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop)
     int pixelsPerUnit = 5;
     wxSize clientSize = GetClientSize();
 
-    int maxHeight = GetBuffer().GetCachedSize().y + GetBuffer().GetTopMargin();
+    int maxHeight = (int) (0.5 + GetScale() * (GetBuffer().GetCachedSize().y + GetBuffer().GetTopMargin()));
 
     // Round up so we have at least maxHeight pixels
     int unitsY = (int) (((float)maxHeight/(float)pixelsPerUnit) + 0.5);
@@ -2861,7 +2873,7 @@ wxRichTextCtrl::FindContainerAtPoint(const wxPoint pt, long& position, int& hit,
 
     wxRichTextObject* contextObj = NULL;
     wxRichTextDrawingContext context(& GetBuffer());
-    hit = GetBuffer().HitTest(dc, context, logicalPt, position, &hitObj, &contextObj, flags);
+    hit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(logicalPt), position, &hitObj, &contextObj, flags);
     wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
 
     return container;
@@ -3504,7 +3516,7 @@ int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool add
     {
         wxPoint logicalPt = GetLogicalPoint(ScreenToClient(pt));
         wxRichTextDrawingContext context(& GetBuffer());
-        int hit = GetBuffer().HitTest(dc, context, logicalPt, position, & hitObj, & contextObj);
+        int hit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(logicalPt), position, & hitObj, & contextObj);
 
         if (hit == wxRICHTEXT_HITTEST_ON || hit == wxRICHTEXT_HITTEST_BEFORE || hit == wxRICHTEXT_HITTEST_AFTER)
         {
@@ -3742,6 +3754,9 @@ void wxRichTextCtrl::PositionCaret(wxRichTextParagraphLayoutBox* container)
     wxRect caretRect;
     if (GetCaretPositionForIndex(GetCaretPosition(), caretRect, container))
     {
+        caretRect = GetScaledRect(caretRect);
+        int topMargin = (int) (0.5 + GetScale()*GetBuffer().GetTopMargin());
+        int bottomMargin = (int) (0.5 + GetScale()*GetBuffer().GetBottomMargin());
         wxPoint newPt = caretRect.GetPosition();
         wxSize newSz = caretRect.GetSize();
         wxPoint pt = GetPhysicalPoint(newPt);
@@ -3752,23 +3767,23 @@ void wxRichTextCtrl::PositionCaret(wxRichTextParagraphLayoutBox* container)
                 GetCaret()->SetSize(newSz);
 
             // Adjust size so the caret size and position doesn't appear in the margins
-            if (((pt.y + newSz.y) <= GetBuffer().GetTopMargin()) || (pt.y >= (GetClientSize().y - GetBuffer().GetBottomMargin())))
+            if (((pt.y + newSz.y) <= topMargin) || (pt.y >= (GetClientSize().y - bottomMargin)))
             {
                 pt.x = -200;
                 pt.y = -200;
             }
-            else if (pt.y < GetBuffer().GetTopMargin() && (pt.y + newSz.y) > GetBuffer().GetTopMargin())
+            else if (pt.y < topMargin && (pt.y + newSz.y) > topMargin)
             {
-                newSz.y -= (GetBuffer().GetTopMargin() - pt.y);
+                newSz.y -= (topMargin - pt.y);
                 if (newSz.y > 0)
                 {
-                    pt.y = GetBuffer().GetTopMargin();
+                    pt.y = topMargin;
                     GetCaret()->SetSize(newSz);
                 }
             }
-            else if (pt.y < (GetClientSize().y - GetBuffer().GetBottomMargin()) && (pt.y + newSz.y) > (GetClientSize().y - GetBuffer().GetBottomMargin()))
+            else if (pt.y < (GetClientSize().y - bottomMargin) && (pt.y + newSz.y) > (GetClientSize().y - bottomMargin))
             {
-                newSz.y = GetClientSize().y - GetBuffer().GetBottomMargin() - pt.y;
+                newSz.y = GetClientSize().y - bottomMargin - pt.y;
                 GetCaret()->SetSize(newSz);
             }
 
@@ -3782,9 +3797,9 @@ void wxRichTextCtrl::PositionCaret(wxRichTextParagraphLayoutBox* container)
 bool wxRichTextCtrl::GetCaretPositionForIndex(long position, wxRect& rect, wxRichTextParagraphLayoutBox* container)
 {
     wxClientDC dc(this);
-    dc.SetFont(GetFont());
-
     PrepareDC(dc);
+    dc.SetUserScale(GetScale(), GetScale());
+    dc.SetFont(GetFont());
 
     wxPoint pt;
     int height = 0;
@@ -3855,7 +3870,7 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
 {
     if (GetBuffer().IsDirty() || onlyVisibleRect)
     {
-        wxRect availableSpace(GetClientSize());
+        wxRect availableSpace(GetUnscaledSize(GetClientSize()));
         if (availableSpace.width == 0)
             availableSpace.width = 10;
         if (availableSpace.height == 0)
@@ -3865,13 +3880,13 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
         if (onlyVisibleRect)
         {
             flags |= wxRICHTEXT_LAYOUT_SPECIFIED_RECT;
-            availableSpace.SetPosition(GetLogicalPoint(wxPoint(0, 0)));
+            availableSpace.SetPosition(GetUnscaledPoint(GetLogicalPoint(wxPoint(0, 0))));
         }
 
         wxClientDC dc(this);
-        dc.SetFont(GetFont());
 
         PrepareDC(dc);
+        dc.SetFont(GetFont());
 
         wxRichTextDrawingContext context(& GetBuffer());
         GetBuffer().Defragment();
@@ -4241,7 +4256,7 @@ bool wxRichTextCtrl::SetDefaultStyleToCursorStyle()
 /// Returns the first visible position in the current view
 long wxRichTextCtrl::GetFirstVisiblePosition() const
 {
-    wxRichTextLine* line = GetFocusObject()->GetLineAtYPosition(GetLogicalPoint(wxPoint(0, 0)).y);
+    wxRichTextLine* line = GetFocusObject()->GetLineAtYPosition(GetUnscaledPoint(GetLogicalPoint(wxPoint(0, 0))).y);
     if (line)
         return line->GetAbsoluteRange().GetStart();
     else
@@ -4412,8 +4427,8 @@ bool wxRichTextCtrl::RefreshForSelectionChange(const wxRichTextSelection& oldSel
     if (firstLine && lastLine)
     {
         wxSize clientSize = GetClientSize();
-        wxPoint pt1 = GetPhysicalPoint(firstLine->GetAbsolutePosition());
-        wxPoint pt2 = GetPhysicalPoint(lastLine->GetAbsolutePosition()) + wxPoint(0, lastLine->GetSize().y);
+        wxPoint pt1 = GetPhysicalPoint(GetScaledPoint(firstLine->GetAbsolutePosition()));
+        wxPoint pt2 = GetPhysicalPoint(GetScaledPoint(lastLine->GetAbsolutePosition())) + wxPoint(0, (int) (0.5 + lastLine->GetSize().y * GetScale()));
 
         pt1.x = 0;
         pt1.y = wxMax(0, pt1.y);
@@ -4552,7 +4567,7 @@ bool wxRichTextDropSource::GiveFeedback(wxDragResult WXUNUSED(effect))
     long position = 0;
     int hit = 0;
     wxRichTextObject* hitObj = NULL;
-    wxRichTextParagraphLayoutBox* container = m_rtc->FindContainerAtPoint(m_rtc->ScreenToClient(wxGetMousePosition()), position, hit, hitObj);
+    wxRichTextParagraphLayoutBox* container = m_rtc->FindContainerAtPoint(m_rtc->GetUnscaledPoint(m_rtc->ScreenToClient(wxGetMousePosition())), position, hit, hitObj);
 
     if (!(hit & wxRICHTEXT_HITTEST_NONE) && container && container->AcceptsFocus())
     {
@@ -4598,6 +4613,73 @@ void wxRichTextCtrl::SetDimensionScale(double dimScale, bool refresh)
         GetBuffer().Invalidate(wxRICHTEXT_ALL);
         Refresh();
     }
+}
+
+// Sets an overall scale factor for displaying and editing the content.
+void wxRichTextCtrl::SetScale(double scale, bool refresh)
+{
+    m_scale = scale;
+    if (refresh)
+    {
+        GetBuffer().Invalidate(wxRICHTEXT_ALL);
+        Refresh();
+    }
+}
+
+// Get an unscaled point
+wxPoint wxRichTextCtrl::GetUnscaledPoint(const wxPoint& pt) const
+{
+    if (GetScale() == 1.0)
+        return pt;
+    else
+        return wxPoint((int) (0.5 + double(pt.x) / GetScale()), (int) (0.5 + double(pt.y) / GetScale()));
+}
+
+// Get a scaled point
+wxPoint wxRichTextCtrl::GetScaledPoint(const wxPoint& pt) const
+{
+    if (GetScale() == 1.0)
+        return pt;
+    else
+        return wxPoint((int) (0.5 + double(pt.x) * GetScale()), (int) (0.5 + double(pt.y) * GetScale()));
+}
+
+// Get an unscaled size
+wxSize wxRichTextCtrl::GetUnscaledSize(const wxSize& sz) const
+{
+    if (GetScale() == 1.0)
+        return sz;
+    else
+        return wxSize((int) (0.5 + double(sz.x) / GetScale()), (int) (0.5 + double(sz.y) / GetScale()));
+}
+
+// Get a scaled size
+wxSize wxRichTextCtrl::GetScaledSize(const wxSize& sz) const
+{
+    if (GetScale() == 1.0)
+        return sz;
+    else
+        return wxSize((int) (0.5 + double(sz.x) * GetScale()), (int) (0.5 + double(sz.y) * GetScale()));
+}
+
+// Get an unscaled rect
+wxRect wxRichTextCtrl::GetUnscaledRect(const wxRect& rect) const
+{
+    if (GetScale() == 1.0)
+        return rect;
+    else
+        return wxRect((int) (0.5 + double(rect.x) / GetScale()), (int) (0.5 + double(rect.y) / GetScale()),
+                      (int) (0.5 + double(rect.width) / GetScale()), (int) (0.5 + double(rect.height) / GetScale()));
+}
+
+// Get a scaled rect
+wxRect wxRichTextCtrl::GetScaledRect(const wxRect& rect) const
+{
+    if (GetScale() == 1.0)
+        return rect;
+    else
+        return wxRect((int) (0.5 + double(rect.x) * GetScale()), (int) (0.5 + double(rect.y) * GetScale()),
+                      (int) (0.5 + double(rect.width) * GetScale()), (int) (0.5 + double(rect.height) * GetScale()));
 }
 
 #if wxRICHTEXT_USE_OWN_CARET

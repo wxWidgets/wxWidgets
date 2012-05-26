@@ -6273,14 +6273,14 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
             if (textFont.IsUsingSizeInPixels())
             {
                 double size = static_cast<double>(textFont.GetPixelSize().y) / wxSCRIPT_MUL_FACTOR;
-                textFont.SetPixelSize(wxSize(0, static_cast<int>(size)) );
+                textFont.SetPixelSize(wxSize(0, static_cast<int>(size)));
                 x = rect.x;
                 y = rect.y;
             }
             else
             {
                 double size = static_cast<double>(textFont.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
-                textFont.SetPointSize( static_cast<int>(size) );
+                textFont.SetPointSize(static_cast<int>(size));
                 x = rect.x;
                 y = rect.y;
             }
@@ -6293,15 +6293,15 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
                 double size = static_cast<double>(textFont.GetPixelSize().y) / wxSCRIPT_MUL_FACTOR;
                 textFont.SetPixelSize(wxSize(0, static_cast<int>(size)));
                 x = rect.x;
-                int sub_height = static_cast<int>( static_cast<double>(charHeight) / wxSCRIPT_MUL_FACTOR);
+                int sub_height = static_cast<int>(static_cast<double>(charHeight) / wxSCRIPT_MUL_FACTOR);
                 y = rect.y + (rect.height - sub_height + (descent - m_descent));
             }
             else
             {
                 double size = static_cast<double>(textFont.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
-                textFont.SetPointSize( static_cast<int>(size) );
+                textFont.SetPointSize(static_cast<int>(size));
                 x = rect.x;
-                int sub_height = static_cast<int>( static_cast<double>(charHeight) / wxSCRIPT_MUL_FACTOR);
+                int sub_height = static_cast<int>(static_cast<double>(charHeight) / wxSCRIPT_MUL_FACTOR);
                 y = rect.y + (rect.height - sub_height + (descent - m_descent));
             }
             wxCheckSetFont(dc, textFont);
@@ -10082,8 +10082,8 @@ void wxRichTextAction::CalculateRefreshOptimizations(wxArrayInt& optimizationLin
     // first, but of course this means we'll be doing it twice.
     if (!m_buffer->IsDirty() && m_ctrl) // can only do optimisation if the buffer is already laid out correctly
     {
-        wxSize clientSize = m_ctrl->GetClientSize();
-        wxPoint firstVisiblePt = m_ctrl->GetFirstVisiblePoint();
+        wxSize clientSize = m_ctrl->GetUnscaledSize(m_ctrl->GetClientSize());
+        wxPoint firstVisiblePt = m_ctrl->GetUnscaledPoint(m_ctrl->GetFirstVisiblePoint());
         int lastY = firstVisiblePt.y + clientSize.y;
 
         wxRichTextParagraph* para = container->GetParagraphAtPosition(GetRange().GetStart());
@@ -10437,8 +10437,8 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
             {
                 size_t i;
 
-                wxSize clientSize = m_ctrl->GetClientSize();
-                wxPoint firstVisiblePt = m_ctrl->GetFirstVisiblePoint();
+                wxSize clientSize = m_ctrl->GetUnscaledSize(m_ctrl->GetClientSize());
+                wxPoint firstVisiblePt = m_ctrl->GetUnscaledPoint(m_ctrl->GetFirstVisiblePoint());
 
                 // Start/end positions
                 int firstY = 0;
@@ -10533,7 +10533,7 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
                     lastY = firstVisiblePt.y + clientSize.y;
 
                 // Convert to device coordinates
-                wxRect rect(m_ctrl->GetPhysicalPoint(wxPoint(firstVisiblePt.x, firstY)), wxSize(clientSize.x, lastY - firstY));
+                wxRect rect(m_ctrl->GetPhysicalPoint(m_ctrl->GetScaledPoint(wxPoint(firstVisiblePt.x, firstY))), m_ctrl->GetScaledSize(wxSize(clientSize.x, lastY - firstY)));
                 m_ctrl->RefreshRect(rect);
             }
             else
