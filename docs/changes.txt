@@ -522,6 +522,7 @@ All:
 - Implement wxThread::SetConcurrency() for POSIX systems (Igor Korot).
 - Fix deadlock due to too many events in Unix console apps (Lukasz Michalski).
 - Added wxDir::GetNameWithSep().
+- Allow unloading wxPluginLibrary objects in any order (manyleaves).
 
 All (GUI):
 

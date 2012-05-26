@@ -76,9 +76,32 @@ wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
         : m_linkcount(1)
         , m_objcount(0)
 {
-    m_before = wxClassInfo::GetFirst();
+    const wxClassInfo* const oldFirst = wxClassInfo::GetFirst();
     Load( libname, flags );
-    m_after = wxClassInfo::GetFirst();
+
+    // It is simple to know what is the last object we registered, it's just
+    // the new head of the wxClassInfo list:
+    m_ourLast = wxClassInfo::GetFirst();
+
+    // But to find the first wxClassInfo created by this library we need to
+    // iterate until we get to the previous head as we don't have the links in
+    // the backwards direction:
+    if ( m_ourLast != oldFirst )
+    {
+        for ( const wxClassInfo* info = m_ourLast; ; info = info->GetNext() )
+        {
+            if ( info->GetNext() == oldFirst )
+            {
+                m_ourFirst = info;
+                break;
+            }
+        }
+    }
+    else // We didn't register any classes at all.
+    {
+        m_ourFirst =
+        m_ourLast = NULL;
+    }
 
     if( m_handle != 0 )
     {
@@ -130,7 +153,10 @@ bool wxPluginLibrary::UnrefLib()
 
 void wxPluginLibrary::UpdateClasses()
 {
-    for (const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
+    if ( !m_ourFirst )
+        return;
+
+    for ( const wxClassInfo *info = m_ourFirst; ; info = info->GetNext() )
     {
         if( info->GetClassName() )
         {
@@ -138,6 +164,9 @@ void wxPluginLibrary::UpdateClasses()
             // we can quickly find the entry they correspond to.
             (*ms_classes)[info->GetClassName()] = this;
         }
+
+        if ( info == m_ourLast )
+            break;
     }
 }
 
@@ -147,9 +176,15 @@ void wxPluginLibrary::RestoreClasses()
     if (!ms_classes)
         return;
 
-    for(const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
+    if ( !m_ourFirst )
+        return;
+
+    for ( const wxClassInfo *info = m_ourFirst; ; info = info->GetNext() )
     {
         ms_classes->erase(ms_classes->find(info->GetClassName()));
+
+        if ( info == m_ourLast )
+            break;
     }
 }
 
@@ -166,16 +201,22 @@ void wxPluginLibrary::RegisterModules()
     wxASSERT_MSG( m_linkcount == 1,
                   wxT("RegisterModules should only be called for the first load") );
 
-    for ( const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
+    if ( m_ourFirst )
     {
-        if( info->IsKindOf(CLASSINFO(wxModule)) )
+        for ( const wxClassInfo *info = m_ourFirst; ; info = info->GetNext() )
         {
-            wxModule *m = wxDynamicCast(info->CreateObject(), wxModule);
+            if( info->IsKindOf(CLASSINFO(wxModule)) )
+            {
+                wxModule *m = wxDynamicCast(info->CreateObject(), wxModule);
 
-            wxASSERT_MSG( m, wxT("wxDynamicCast of wxModule failed") );
+                wxASSERT_MSG( m, wxT("wxDynamicCast of wxModule failed") );
 
-            m_wxmodules.push_back(m);
-            wxModule::RegisterModule(m);
+                m_wxmodules.push_back(m);
+                wxModule::RegisterModule(m);
+            }
+
+            if ( info == m_ourLast )
+                break;
         }
     }
 

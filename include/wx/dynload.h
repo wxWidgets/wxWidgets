@@ -82,8 +82,11 @@ public:
 
 private:
 
-    const wxClassInfo    *m_before; // sm_first before loading this lib
-    const wxClassInfo    *m_after;  // ..and after.
+    // These pointers may be NULL but if they are not, then m_ourLast follows
+    // m_ourFirst in the linked list, i.e. can be found by calling GetNext() a
+    // sufficient number of times.
+    const wxClassInfo    *m_ourFirst; // first class info in this plugin
+    const wxClassInfo    *m_ourLast;  // ..and the last one
 
     size_t          m_linkcount;    // Ref count of library link calls
     size_t          m_objcount;     // ..and (pluggable) object instantiations.
