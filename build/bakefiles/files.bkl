@@ -200,7 +200,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/objcid.h
     wx/osx/core/private.h
     wx/osx/core/stdpaths.h
-    wx/osx/core/private/strconv_cf.h
 </set>
 
 <!-- Base files used by OS X ports (not Carbon) -->
@@ -565,7 +564,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/urlmsw.cpp
 </set>
 <set var="NET_WIN32_HDR" hints="files">
-    wx/msw/private/sockmsw.h
 </set>
 
 <set var="NET_WINCE_SRC" hints="files">
@@ -1110,7 +1108,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/nonownedwnd.h
     wx/gtk/pen.h
     wx/gtk/popupwin.h
-    wx/gtk/private/win_gtk.h
     wx/gtk/region.h
     wx/gtk/tooltip.h
     wx/gtk/toplevel.h
@@ -2453,9 +2450,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/carbon/chkconf.h
     wx/osx/carbon/evtloop.h
     wx/osx/carbon/private.h
-    wx/osx/carbon/private/mactext.h
-    wx/osx/carbon/private/overlay.h
-    wx/osx/carbon/private/print.h
     wx/osx/carbon/region.h
     wx/osx/carbon/statbmp.h
     wx/osx/carbon/uma.h

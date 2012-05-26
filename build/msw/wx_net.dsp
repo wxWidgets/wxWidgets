@@ -572,10 +572,6 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 !ENDIF
 
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\private\sockmsw.h
-# End Source File
 # End Group
 # Begin Group "Common Headers"
 

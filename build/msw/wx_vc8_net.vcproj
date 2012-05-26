@@ -1093,10 +1093,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\msw\private\sockmsw.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Common Headers"
