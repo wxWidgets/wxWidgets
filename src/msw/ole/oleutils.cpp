@@ -131,6 +131,96 @@ wxBasicString::~wxBasicString()
 
 #if wxUSE_VARIANT
 
+namespace
+{
+
+// Helper class for creating and filling SAFEARRAY. To use it, call Create()
+// first, then SetElement() for each element and finally Detach() the SAFEARRAY
+// from it if you don't want it to be deleted when this class is.
+class wxSafeArrayHelper
+{
+public:
+    wxSafeArrayHelper();
+    ~wxSafeArrayHelper();
+
+    bool Create(VARTYPE vt, long count); // creates and locks the array
+
+    bool SetElement(size_t index, const wxVariant& variant);
+    bool SetElement(size_t index, const wxString& str);
+
+    SAFEARRAY* Detach(); // unlocks the array and gives up its ownership
+
+private:
+    void Unlock();
+
+    SAFEARRAY* m_array;
+};
+
+wxSafeArrayHelper::wxSafeArrayHelper()
+{
+    m_array = NULL;
+}
+
+wxSafeArrayHelper::~wxSafeArrayHelper()
+{
+    if ( m_array )
+    {
+        Unlock();
+        SafeArrayDestroy(m_array);
+    }
+}
+
+bool wxSafeArrayHelper::Create(VARTYPE vt, long count)
+{
+    SAFEARRAYBOUND saBound;
+
+    saBound.lLbound = 0;
+    saBound.cElements = count;
+    m_array = SafeArrayCreate(vt, 1, &saBound);
+    if ( !m_array )
+        return false;
+    return SUCCEEDED( SafeArrayLock(m_array) );
+}
+
+bool wxSafeArrayHelper::SetElement(size_t index, const wxVariant& variant)
+{
+    VARIANT* data = (VARIANT*)m_array->pvData;
+    return wxConvertVariantToOle(variant, data[index]);
+}
+
+bool wxSafeArrayHelper::SetElement(size_t index, const wxString& str)
+{
+    BSTR bstr = wxConvertStringToOle(str);
+
+    if ( !bstr && !str.empty() )
+    {
+        // BSTR can be NULL for empty strings but if the string was
+        // not empty, it means we failed to allocate memory for it.
+        return false;
+    }
+
+    BSTR* data = (BSTR*)m_array->pvData;
+    data[index] = bstr;
+    return true;
+}
+
+SAFEARRAY* wxSafeArrayHelper::Detach()
+{
+    Unlock();
+    SAFEARRAY* result = m_array;
+    m_array = NULL;
+    return result;
+}
+
+void wxSafeArrayHelper::Unlock()
+{
+    if ( m_array )
+        SafeArrayUnlock(m_array);
+}
+
+} // unnamed namespace
+
+
 WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 {
     VariantInit(&oleVariant);
@@ -199,64 +289,38 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
         oleVariant.vt = VT_DISPATCH;
         oleVariant.pdispVal = (IDispatch*) variant.GetVoidPtr();
     }
-    else if (type == wxT("list") || type == wxT("arrstring"))
+    else if (type == wxT("list"))
     {
-        SAFEARRAY *psa;
-        SAFEARRAYBOUND saBound;
-        bool isArrString = type == wxT("arrstring");
-        wxArrayString strings;
+        wxSafeArrayHelper sah;
 
-        if (isArrString)
-            strings = variant.GetArrayString();
-        oleVariant.vt = (isArrString ? VT_BSTR : VT_VARIANT) | VT_ARRAY;
-
-        long lCount = isArrString ? strings.GetCount() : variant.GetCount();
-        saBound.lLbound = 0;
-        saBound.cElements = lCount;
-        psa = SafeArrayCreate(isArrString ? VT_BSTR : VT_VARIANT, 1, &saBound);
-        if (psa == NULL)
+        if (!sah.Create(VT_VARIANT, variant.GetCount()))
             return false;
 
-        long i;
-        for (i = 0; i < lCount; i++)
+        for (size_t i = 0; i < variant.GetCount(); i++)
         {
-            if (isArrString)
-            {
-                wxBasicString bstr(strings[i]);
-                if ( !bstr && !strings[i].empty() )
-                {
-                    // BSTR can be NULL for empty strings but if the string was
-                    // not empty, it means we failed to allocate memory for it.
-                    break;
-                }
-
-                if ( FAILED(SafeArrayPutElement(psa, &i, (BSTR)bstr)) )
-                    break;
-            }
-            else // list of wxVariants
-            {
-                VARIANT v;
-                if  ( !wxConvertVariantToOle(variant[i], v) )
-                    break;
-
-                HRESULT hr = SafeArrayPutElement(psa, &i, &v);
-
-                // SafeArrayPutElement makes a copy of an added element, so
-                // free this one.
-                VariantClear(&v);
-
-                if (FAILED(hr))
-                    break;
-            }
+            if (!sah.SetElement(i, variant[i]))
+                return false;
         }
 
-        if (i < lCount) // the iteration was exited prematurely because of an error
-        {
-            SafeArrayDestroy(psa);
+        oleVariant.vt = VT_VARIANT | VT_ARRAY;
+        oleVariant.parray = sah.Detach();
+    }
+    else if (type == wxT("arrstring"))
+    {
+        wxArrayString strings(variant.GetArrayString());
+        wxSafeArrayHelper sah;
+
+        if (!sah.Create(VT_BSTR, strings.GetCount()))
             return false;
+
+        for (size_t i = 0; i < strings.GetCount(); i++)
+        {
+            if (!sah.SetElement(i, strings[i]))
+                return false;
         }
 
-        oleVariant.parray = psa;
+        oleVariant.vt = VT_BSTR | VT_ARRAY;
+        oleVariant.parray = sah.Detach();
     }
     else
     {
