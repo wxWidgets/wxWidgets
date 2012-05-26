@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        osx/private/objcid.h
+// Name:        wx/osx/core/objcid.h
 // Purpose:     Define wxObjCID working in both C++ and Objective-C.
 // Author:      Vadim Zeitlin
 // Created:     2012-05-20
@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_PRIVATE_OBJCID_H_
-#define _WX_OSX_PRIVATE_OBJCID_H_
+#ifndef _WX_OSX_CORE_OBJCID_H_
+#define _WX_OSX_CORE_OBJCID_H_
 
 // ----------------------------------------------------------------------------
 // wxObjCID: Equivalent of Objective-C "id" that works in C++ code.
@@ -21,4 +21,4 @@
     typedef struct objc_object* wxObjCID;
 #endif
 
-#endif // _WX_OSX_PRIVATE_OBJCID_H_
+#endif // _WX_OSX_CORE_OBJCID_H_

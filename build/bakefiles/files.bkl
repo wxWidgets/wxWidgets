@@ -197,6 +197,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/cfref.h
     wx/osx/core/cfstring.h
     wx/osx/core/hid.h
+    wx/osx/core/objcid.h
     wx/osx/core/private.h
     wx/osx/core/stdpaths.h
     wx/osx/core/private/strconv_cf.h

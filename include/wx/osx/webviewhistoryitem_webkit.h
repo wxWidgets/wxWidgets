@@ -15,7 +15,7 @@
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
                                           ||  defined(__WXOSX_CARBON__))
 
-#include "wx/osx/private/objcid.h"
+#include "wx/osx/core/objcid.h"
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {

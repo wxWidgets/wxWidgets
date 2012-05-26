@@ -2332,6 +2332,7 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_HDR =  \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
 	wx/osx/core/hid.h \
+	wx/osx/core/objcid.h \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h \
@@ -2352,6 +2353,7 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
 	wx/osx/core/hid.h \
+	wx/osx/core/objcid.h \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h \
@@ -2385,6 +2387,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
 	wx/osx/core/hid.h \
+	wx/osx/core/objcid.h \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h
@@ -2407,6 +2410,7 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
 	wx/osx/core/hid.h \
+	wx/osx/core/objcid.h \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h
@@ -2429,6 +2433,7 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
 	wx/osx/core/hid.h \
+	wx/osx/core/objcid.h \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h
@@ -2451,6 +2456,7 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
 	wx/osx/core/hid.h \
+	wx/osx/core/objcid.h \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h
@@ -2473,6 +2479,7 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
 	wx/osx/core/hid.h \
+	wx/osx/core/objcid.h \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h

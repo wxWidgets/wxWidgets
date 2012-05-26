@@ -21,7 +21,7 @@
 #include "wx/control.h"
 #include "wx/webview.h"
 
-#include "wx/osx/private/objcid.h"
+#include "wx/osx/core/objcid.h"
 
 // ----------------------------------------------------------------------------
 // Web Kit Control
