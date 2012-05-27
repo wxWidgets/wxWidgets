@@ -56,6 +56,8 @@
 
 #if wxUSE_OLE_AUTOMATION
 
+#include <wx/vector.h>
+
 // Report an OLE error when calling the specified method to the user via wxLog.
 static void
 ShowException(const wxString& member,
@@ -79,9 +81,24 @@ wxAutomationObject::~wxAutomationObject()
     }
 }
 
+namespace
+{
+
+// A simple helper that ensures that VARIANT is destroyed on scope exit.
+struct wxOleVariantArg : VARIANTARG
+{
+    wxOleVariantArg()  { VariantInit(this);  }
+    ~wxOleVariantArg() { VariantClear(this); }
+};
+
+} // anonymous namespace
+
+
 #define INVOKEARG(i) (args ? args[i] : *(ptrArgs[i]))
 
 // For Put/Get, no named arguments are allowed.
+// WARNING: if args contain IDispatches, their reference count will be decreased
+// by one after Invoke() returns!
 bool wxAutomationObject::Invoke(const wxString& member, int action,
         wxVariant& retValue, int noArgs, wxVariant args[], const wxVariant* ptrArgs[]) const
 {
@@ -100,23 +117,23 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
         return obj.Invoke(rest, action, retValue, noArgs, args, ptrArgs);
     }
 
-    VARIANTARG vReturn;
-    VariantInit(& vReturn);
-
-    VARIANTARG* vReturnPtr = & vReturn;
+    wxOleVariantArg vReturn;
+    wxOleVariantArg* vReturnPtr = & vReturn;
 
     // Find number of names args
     int namedArgCount = 0;
     int i;
     for (i = 0; i < noArgs; i++)
+    {
         if ( !INVOKEARG(i).GetName().empty() )
         {
             namedArgCount ++;
         }
+    }
 
     int namedArgStringCount = namedArgCount + 1;
-    BSTR* argNames = new BSTR[namedArgStringCount];
-    argNames[0] = wxConvertStringToOle(member);
+    wxVector<wxBasicString> argNames(namedArgStringCount, wxString());
+    argNames[0] = member;
 
     // Note that arguments are specified in reverse order
     // (all totally logical; hey, we're dealing with OLE here.)
@@ -126,13 +143,13 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     {
         if ( !INVOKEARG(i).GetName().empty() )
         {
-            argNames[(namedArgCount-j)] = wxConvertStringToOle(INVOKEARG(i).GetName());
+            argNames[(namedArgCount-j)] = INVOKEARG(i).GetName();
             j ++;
         }
     }
 
     // + 1 for the member name, + 1 again in case we're a 'put'
-    DISPID* dispIds = new DISPID[namedArgCount + 2];
+    wxVector<DISPID> dispIds(namedArgCount + 2);
 
     HRESULT hr;
     DISPPARAMS dispparams;
@@ -140,13 +157,14 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 
     // Get the IDs for the member and its arguments.  GetIDsOfNames expects the
     // member name as the first name, followed by argument names (if any).
-    hr = ((IDispatch*)m_dispatchPtr)->GetIDsOfNames(IID_NULL, argNames,
-                                1 + namedArgCount, LOCALE_SYSTEM_DEFAULT, dispIds);
+    hr = ((IDispatch*)m_dispatchPtr)->GetIDsOfNames(IID_NULL,
+                                // We rely on the fact that wxBasicString is
+                                // just BSTR with some methods here.
+                                reinterpret_cast<BSTR *>(&argNames[0]),
+                                1 + namedArgCount, LOCALE_SYSTEM_DEFAULT, &dispIds[0]);
     if (FAILED(hr))
     {
         ShowException(member, hr);
-        delete[] argNames;
-        delete[] dispIds;
         return false;
     }
 
@@ -160,21 +178,16 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     }
 
     // Convert the wxVariants to VARIANTARGs
-    VARIANTARG* oleArgs = new VARIANTARG[noArgs];
+    wxVector<wxOleVariantArg> oleArgs(noArgs);
     for (i = 0; i < noArgs; i++)
     {
         // Again, reverse args
         if (!wxConvertVariantToOle(INVOKEARG((noArgs-1) - i), oleArgs[i]))
-        {
-            delete[] argNames;
-            delete[] dispIds;
-            delete[] oleArgs;
             return false;
-        }
     }
 
-    dispparams.rgdispidNamedArgs = dispIds + 1;
-    dispparams.rgvarg = oleArgs;
+    dispparams.rgdispidNamedArgs = &dispIds[0] + 1;
+    dispparams.rgvarg = &oleArgs[0];
     dispparams.cArgs = noArgs;
     dispparams.cNamedArgs = namedArgCount;
 
@@ -183,17 +196,6 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 
     hr = ((IDispatch*)m_dispatchPtr)->Invoke(dispIds[0], IID_NULL, LOCALE_SYSTEM_DEFAULT,
                         (WORD)action, &dispparams, vReturnPtr, &excep, &uiArgErr);
-
-    for (i = 0; i < namedArgStringCount; i++)
-    {
-        SysFreeString(argNames[i]);
-    }
-    delete[] argNames;
-    delete[] dispIds;
-
-    for (i = 0; i < noArgs; i++)
-        VariantClear(& oleArgs[i]) ;
-    delete[] oleArgs;
 
     if (FAILED(hr))
     {
@@ -205,8 +207,6 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
         SysFreeString(excep.bstrDescription);
         SysFreeString(excep.bstrHelpFile);
 
-        if (vReturnPtr)
-            VariantClear(vReturnPtr);
         return false;
     }
     else
@@ -214,13 +214,13 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
         if (vReturnPtr)
         {
             // Convert result to wxVariant form
-            wxConvertOleToVariant(vReturn, retValue);
+            if (!wxConvertOleToVariant(vReturn, retValue))
+                return false;
             // Mustn't release the dispatch pointer
             if (vReturn.vt == VT_DISPATCH)
             {
                 vReturn.pdispVal = NULL;
             }
-            VariantClear(& vReturn);
         }
     }
     return true;
