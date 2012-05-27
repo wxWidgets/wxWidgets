@@ -111,6 +111,8 @@ public:
     void OnVTable( wxCommandEvent& );
     void OnBugsTable( wxCommandEvent& );
     void OnTabularTable( wxCommandEvent& );
+    void OnGridRender( wxCommandEvent& event );
+    void OnRenderPaint( wxPaintEvent& event );
 
     enum
     {
@@ -174,7 +176,18 @@ public:
         ID_SET_HIGHLIGHT_WIDTH,
         ID_SET_RO_HIGHLIGHT_WIDTH,
 
-        ID_TESTFUNC
+        ID_TESTFUNC,
+
+        ID_RENDER_ROW_LABEL,
+        ID_RENDER_COL_LABEL,
+        ID_RENDER_GRID_LINES,
+        ID_RENDER_GRID_BORDER,
+        ID_RENDER_SELECT_HLIGHT,
+        ID_RENDER_LOMETRIC,
+        ID_RENDER_COORDS,
+        ID_RENDER_ZOOM,
+        ID_RENDER_MARGIN,
+        ID_RENDER_DEFAULT_SIZE,
     };
 
 #if wxUSE_LOG
@@ -183,6 +196,8 @@ public:
 
     // add the cells to selection when using commands from select menu?
     bool m_addToSel;
+
+    wxBitmap m_gridBitmap;
 
     DECLARE_EVENT_TABLE()
 };

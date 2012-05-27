@@ -1851,6 +1851,50 @@ public:
     };
 
     /**
+        Rendering styles supported by wxGrid::Render() method.
+
+        @since 2.9.4
+     */
+    enum wxGridRenderStyle
+    {
+        /// Draw grid row header labels.
+        wxGRID_DRAW_ROWS_HEADER = 0x001,
+
+        /// Draw grid column header labels.
+        wxGRID_DRAW_COLS_HEADER = 0x002,
+
+        /// Draw grid cell border lines.
+        wxGRID_DRAW_CELL_LINES = 0x004,
+
+        /**
+            Draw a bounding rectangle around the rendered cell area.
+
+            Useful where row or column headers are not drawn or where there is
+            multi row or column cell clipping and therefore no cell border at
+            the rendered outer boundary.
+        */
+        wxGRID_DRAW_BOX_RECT = 0x008,
+
+        /**
+            Draw the grid cell selection highlight if a selection is present.
+
+            At present the highlight colour drawn depends on whether the grid
+            window loses focus before drawing begins.
+        */
+        wxGRID_DRAW_SELECTION = 0x010,
+
+        /**
+            The default render style.
+
+            Includes all except wxGRID_DRAW_SELECTION.
+         */
+        wxGRID_DRAW_DEFAULT = wxGRID_DRAW_ROWS_HEADER |
+                              wxGRID_DRAW_COLS_HEADER |
+                              wxGRID_DRAW_CELL_LINES |
+                              wxGRID_DRAW_BOX_RECT
+    };
+
+    /**
         @name Constructors and Initialization
      */
     //@{
@@ -4001,6 +4045,39 @@ public:
         @since 2.9.2
      */
     void RefreshAttr(int row, int col);
+
+    /**
+        Draws part or all of a wxGrid on a wxDC for printing or display.
+
+        Pagination can be accomplished by using sequential Render() calls
+        with appropriate values in wxGridCellCoords topLeft and bottomRight.
+
+        @param dc
+            The wxDC to be drawn on.
+        @param pos
+            The position on the wxDC where rendering should begin. If not
+            specified drawing will begin at the wxDC MaxX() and MaxY().
+        @param size
+            The size of the area on the wxDC that the rendered wxGrid should
+            occupy. If not specified the drawing will be scaled to fit the
+            available dc width or height. The wxGrid's aspect ratio is
+            maintained whether or not size is specified.
+        @param topLeft
+            The top left cell of the block to be drawn. Defaults to ( 0, 0 ).
+        @param bottomRight
+            The bottom right cell of the block to be drawn. Defaults to row and
+            column counts.
+        @param style
+            A combination of values from wxGridRenderStyle.
+
+        @since 2.9.4
+     */
+    void Render( wxDC& dc,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 const wxGridCellCoords& topLeft = wxGridCellCoords( -1, -1 ),
+                 const wxGridCellCoords& bottomRight = wxGridCellCoords( -1, -1 ),
+                 int style = wxGRID_DRAW_DEFAULT );
 
     /**
         Sets the cell attributes for all cells in the specified column.

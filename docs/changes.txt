@@ -526,6 +526,7 @@ All:
 
 All (GUI):
 
+- Add wxGrid::Render() for printing wxGrid (John Roberts).
 - Added strike-through support to wxFont (Igor Korot).
 - Add support for horizontal mouse wheel events to MSW and GTK (Lauri Nurmi).
 - Fix infinite loop in wxHtmlEasyPrinting when trying to page break images

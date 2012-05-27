@@ -212,6 +212,9 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SET_HIGHLIGHT_WIDTH, GridFrame::OnSetHighlightWidth)
     EVT_MENU( ID_SET_RO_HIGHLIGHT_WIDTH, GridFrame::OnSetROHighlightWidth)
 
+    EVT_MENU( wxID_PRINT, GridFrame::OnGridRender )
+    EVT_MENU( ID_RENDER_COORDS, GridFrame::OnGridRender )
+
     EVT_GRID_LABEL_LEFT_CLICK( GridFrame::OnLabelLeftClick )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
     EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
@@ -238,6 +241,38 @@ GridFrame::GridFrame()
     fileMenu->Append( ID_VTABLE, wxT("&Virtual table test\tCtrl-V"));
     fileMenu->Append( ID_BUGS_TABLE, wxT("&Bugs table test\tCtrl-B"));
     fileMenu->Append( ID_TABULAR_TABLE, wxT("&Tabular table test\tCtrl-T"));
+    fileMenu->AppendSeparator();
+
+    wxMenu* setupMenu = new wxMenu;
+    wxMenuItem* item;
+    item = setupMenu->AppendCheckItem( ID_RENDER_ROW_LABEL,
+                                       "Render row labels" );
+    item->Check();
+    item = setupMenu->AppendCheckItem( ID_RENDER_COL_LABEL,
+                                       "Render column labels" );
+    item->Check();
+    item = setupMenu->AppendCheckItem( ID_RENDER_GRID_LINES,
+                                       "Render grid cell lines" );
+    item->Check();
+    item = setupMenu->AppendCheckItem( ID_RENDER_GRID_BORDER,
+                                       "Render border" );
+    item->Check();
+    item = setupMenu->AppendCheckItem( ID_RENDER_SELECT_HLIGHT,
+                                       "Render selection highlight" );
+    setupMenu->AppendSeparator();
+    setupMenu->AppendCheckItem( ID_RENDER_LOMETRIC,
+                                       "Use LOMETRIC mapping mode" );
+    setupMenu->AppendCheckItem( ID_RENDER_DEFAULT_SIZE,
+                                       "Use wxDefaultSize" );
+    setupMenu->AppendCheckItem( ID_RENDER_MARGIN,
+                                "Logical 50 unit margin" );
+    setupMenu->AppendCheckItem( ID_RENDER_ZOOM,
+                                "Zoom 125%" );
+
+    fileMenu->AppendSubMenu( setupMenu, "Render setup" );
+    fileMenu->Append( wxID_PRINT, "Render" );
+    fileMenu->Append( ID_RENDER_COORDS, "Render G5:P30" );
+
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, wxT("E&xit\tAlt-X") );
 
@@ -2067,4 +2102,159 @@ TabularGridFrame::TabularGridFrame()
 void GridFrame::OnTabularTable(wxCommandEvent&)
 {
     new TabularGridFrame;
+}
+
+// Example using wxGrid::Render
+// Displays a preset selection or, if it exists, a selection block
+// Draws the selection to a wxBitmap and displays the bitmap
+void GridFrame::OnGridRender( wxCommandEvent& event )
+{
+    int styleRender = 0, i;
+    bool useLometric = false, defSize = false;
+    double zoom = 1;
+    wxSize sizeMargin( 0, 0 );
+    wxPoint pointOrigin( 0, 0 );
+
+    wxMenu* menu = GetMenuBar()->GetMenu( 0 );
+    wxMenuItem* menuItem = menu->FindItem( ID_RENDER_ROW_LABEL );
+    menu = menuItem->GetMenu();
+
+    if ( menu->FindItem( ID_RENDER_ROW_LABEL )->IsChecked() )
+        styleRender |= wxGRID_DRAW_ROWS_HEADER;
+    if ( menu->FindItem( ID_RENDER_COL_LABEL )->IsChecked() )
+        styleRender |= wxGRID_DRAW_COLS_HEADER;
+    if ( menu->FindItem( ID_RENDER_GRID_LINES )->IsChecked() )
+        styleRender |= wxGRID_DRAW_CELL_LINES;
+    if ( menu->FindItem( ID_RENDER_GRID_BORDER )->IsChecked() )
+        styleRender |= wxGRID_DRAW_BOX_RECT;
+    if ( menu->FindItem( ID_RENDER_SELECT_HLIGHT )->IsChecked() )
+        styleRender |= wxGRID_DRAW_SELECTION;
+    if ( menu->FindItem( ID_RENDER_LOMETRIC )->IsChecked() )
+        useLometric = true;
+    if ( menu->FindItem( ID_RENDER_MARGIN )->IsChecked() )
+    {
+        pointOrigin.x += 50;
+        pointOrigin.y += 50;
+        sizeMargin.IncBy( 50 );
+    }
+    if ( menu->FindItem( ID_RENDER_ZOOM )->IsChecked() )
+        zoom = 1.25;
+    if ( menu->FindItem( ID_RENDER_DEFAULT_SIZE )->IsChecked() )
+        defSize = true;
+
+    // init render area coords with a default row and col selection
+    wxGridCellCoords topLeft( 0, 0 ), bottomRight( 8, 6 );
+    // check whether we are printing a block selection
+    // other selection types not catered for here
+    if ( event.GetId() == ID_RENDER_COORDS )
+    {
+        topLeft.SetCol( 6 );
+        topLeft.SetRow( 4 );
+        bottomRight.SetCol( 15 );
+        bottomRight.SetRow( 29 );
+    }
+    else if ( grid->IsSelection() && grid->GetSelectionBlockTopLeft().Count() )
+    {
+        wxGridCellCoordsArray cells = grid->GetSelectionBlockTopLeft();
+        if ( grid->GetSelectionBlockBottomRight().Count() )
+        {
+            cells.Add( grid->GetSelectionBlockBottomRight()[ 0 ] );
+            topLeft.Set( cells[ 0 ].GetRow(),
+                            cells[ 0 ].GetCol() );
+            bottomRight.Set( cells[ 1 ].GetRow(),
+                                cells[ 1 ].GetCol() );
+        }
+    }
+
+    // sum col widths
+    wxSize sizeRender( 0, 0 );
+    wxGridSizesInfo sizeinfo = grid->GetColSizes();
+    for ( i = topLeft.GetCol(); i <= bottomRight.GetCol(); i++ )
+    {
+        sizeRender.x += sizeinfo.GetSize( i );
+    }
+
+    // sum row heights
+    sizeinfo = grid->GetRowSizes();
+    for ( i = topLeft.GetRow(); i <= bottomRight.GetRow(); i++ )
+    {
+        sizeRender.y += sizeinfo.GetSize( i );
+    }
+
+    if ( styleRender & wxGRID_DRAW_ROWS_HEADER )
+        sizeRender.x += grid->GetRowLabelSize();
+    if ( styleRender & wxGRID_DRAW_COLS_HEADER )
+        sizeRender.y += grid->GetColLabelSize();
+
+    sizeRender.x *= zoom;
+    sizeRender.y *= zoom;
+
+    // delete any existing render frame and create new one
+    wxWindow* win = FindWindow( "frameRender" );
+    if ( win )
+        win->Destroy();
+
+    wxFrame* frame = new wxFrame( this, wxID_ANY, "Grid Render" );
+    frame->SetClientSize( 780, 400 );
+    frame->SetName( "frameRender" );
+
+    wxPanel* canvas = new wxPanel( frame, wxID_ANY );
+
+    // make bitmap large enough for margins if any
+    if ( !defSize )
+        sizeRender.IncBy( sizeMargin * 2 );
+    else
+        sizeRender.IncBy( sizeMargin );
+
+    wxBitmap bmp( sizeRender );
+    // don't leave it larger or drawing will be scaled
+    sizeRender.DecBy( sizeMargin * 2 );
+
+    wxMemoryDC memDc(bmp);
+
+    // default row labels have no background colour so set background
+    memDc.SetBackground( wxBrush( canvas->GetBackgroundColour() ) );
+    memDc.Clear();
+
+    // convert sizeRender to mapping mode units if necessary
+    if ( useLometric )
+    {
+        memDc.SetMapMode( wxMM_LOMETRIC );
+        wxSize sizePPI = memDc.GetPPI();
+        sizeRender.x = memDc.DeviceToLogicalXRel( sizeRender.x );
+        sizeRender.y = memDc.DeviceToLogicalYRel( sizeRender.y );
+    }
+
+    // pass wxDefaultSize if menu item is checked
+    if ( defSize )
+        sizeRender = wxDefaultSize;
+
+    grid->Render( memDc,
+                  pointOrigin,
+                  sizeRender,
+                  topLeft, bottomRight,
+                  wxGridRenderStyle( styleRender ) );
+
+    m_gridBitmap = bmp;
+
+    canvas->Bind( wxEVT_PAINT, &GridFrame::OnRenderPaint, this );
+
+    frame->Show();
+}
+
+void GridFrame::OnRenderPaint( wxPaintEvent& event )
+{
+    wxPanel* canvas = ( wxPanel* )event.GetEventObject();
+    wxPaintDC dc( canvas );
+    canvas->PrepareDC( dc );
+
+    if ( !m_gridBitmap.IsOk() )
+        return;;
+
+    wxMemoryDC memDc( m_gridBitmap );
+
+    dc.Blit( 0, 0,
+             m_gridBitmap.GetWidth(),
+             m_gridBitmap.GetHeight(),
+             &memDc, 0, 0 );
 }

@@ -65,6 +65,20 @@ enum wxGridDirection
     wxGRID_ROW
 };
 
+// Flags used with wxGrid::Render() to select parts of the grid to draw.
+enum wxGridRenderStyle
+{
+    wxGRID_DRAW_ROWS_HEADER = 0x001,
+    wxGRID_DRAW_COLS_HEADER = 0x002,
+    wxGRID_DRAW_CELL_LINES = 0x004,
+    wxGRID_DRAW_BOX_RECT = 0x008,
+    wxGRID_DRAW_SELECTION = 0x010,
+    wxGRID_DRAW_DEFAULT = wxGRID_DRAW_ROWS_HEADER |
+                          wxGRID_DRAW_COLS_HEADER |
+                          wxGRID_DRAW_CELL_LINES |
+                          wxGRID_DRAW_BOX_RECT
+};
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -1030,6 +1044,14 @@ public:
                             int verticalAlignment = wxALIGN_TOP,
                             int textOrientation = wxHORIZONTAL ) const;
 
+    // ------ grid render function for printing
+    //
+    void Render( wxDC& dc,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 const wxGridCellCoords& topLeft = wxGridCellCoords(-1, -1),
+                 const wxGridCellCoords& bottomRight = wxGridCellCoords(-1, -1),
+                 int style = wxGRID_DRAW_DEFAULT );
 
     // Split a string containing newline characters into an array of
     // strings and return the number of lines
@@ -2252,6 +2274,10 @@ private:
     void DoDisableLineResize(int line, wxGridFixedIndicesSet *& setFixed);
     bool DoCanResizeLine(int line, const wxGridFixedIndicesSet *setFixed) const;
 
+
+    // Helper of Render(): set the scale to draw the cells at the right size.
+    void SetRenderScale( wxDC& dc, const wxPoint& pos, const wxSize& size,
+                         int gridWidth, int gridHeight );
 
 
     // these sets contain the indices of fixed, i.e. non-resizable
