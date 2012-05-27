@@ -5346,6 +5346,67 @@ void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells)
     }
 }
 
+// Used by wxGrid::Render() to draw the grid lines only for the cells in the
+// specified range.
+void
+wxGrid::DrawRangeGridLines(wxDC& dc,
+                           const wxRegion& reg,
+                           const wxGridCellCoords& topLeft,
+                           const wxGridCellCoords& bottomRight)
+{
+    if ( !m_gridLinesEnabled )
+         return;
+
+    int top, left, width, height;
+    reg.GetBox( left, top, width, height );
+
+    // create a clipping region
+    wxRegion clippedcells( dc.LogicalToDeviceX( left ),
+                           dc.LogicalToDeviceY( top ),
+                           dc.LogicalToDeviceXRel( width ),
+                           dc.LogicalToDeviceYRel( height ) );
+
+    // subtract multi cell span area from clipping region for lines
+    wxRect rect;
+    for ( int row = topLeft.GetRow(); row <= bottomRight.GetRow(); row++ )
+    {
+        for ( int col = topLeft.GetCol(); col <= bottomRight.GetCol(); col++ )
+        {
+            int cell_rows, cell_cols;
+            GetCellSize( row, col, &cell_rows, &cell_cols );
+            if ( cell_rows > 1 || cell_cols > 1 ) // multi cell
+            {
+                rect = CellToRect( row, col );
+                // cater for scaling
+                // device origin already set in ::Render() for x, y
+                rect.x = dc.LogicalToDeviceX( rect.x );
+                rect.y = dc.LogicalToDeviceY( rect.y );
+                rect.width = dc.LogicalToDeviceXRel( rect.width );
+                rect.height = dc.LogicalToDeviceYRel( rect.height ) - 1;
+                clippedcells.Subtract( rect );
+            }
+            else if ( cell_rows < 0 || cell_cols < 0 ) // part of multicell
+            {
+                rect = CellToRect( row + cell_rows, col + cell_cols );
+                rect.x = dc.LogicalToDeviceX( rect.x );
+                rect.y = dc.LogicalToDeviceY( rect.y );
+                rect.width = dc.LogicalToDeviceXRel( rect.width );
+                rect.height = dc.LogicalToDeviceYRel( rect.height ) - 1;
+                clippedcells.Subtract( rect );
+            }
+        }
+    }
+
+    dc.SetDeviceClippingRegion( clippedcells );
+
+    DoDrawGridLines(dc,
+                    top, left, top + height, left + width,
+                    topLeft.GetRow(), topLeft.GetCol(),
+                    bottomRight.GetRow(), bottomRight.GetCol());
+
+    dc.DestroyClippingRegion();
+}
+
 // This is used to redraw all grid lines e.g. when the grid line colour
 // has been changed
 //

@@ -2133,6 +2133,12 @@ private:
     // redraw the grid lines, should be called after changing their attributes
     void RedrawGridLines();
 
+    // draw all grid lines in the given cell region (unlike the public
+    // DrawAllGridLines() which just draws all of them)
+    void DrawRangeGridLines(wxDC& dc, const wxRegion& reg,
+                            const wxGridCellCoords& topLeft,
+                            const wxGridCellCoords& bottomRight);
+
     // draw all lines from top to bottom row and left to right column in the
     // rectangle determined by (top, left)-(bottom, right) -- but notice that
     // the caller must have set up the clipping correctly, this rectangle is
