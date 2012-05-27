@@ -5417,9 +5417,22 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 
     dc.SetDeviceClippingRegion( clippedcells );
 
+    DoDrawGridLines(dc,
+                    top, left, bottom, right,
+                    topRow, leftCol, m_numRows, m_numCols);
 
+    dc.DestroyClippingRegion();
+}
+
+void
+wxGrid::DoDrawGridLines(wxDC& dc,
+                        int top, int left,
+                        int bottom, int right,
+                        int topRow, int leftCol,
+                        int bottomRow, int rightCol)
+{
     // horizontal grid lines
-    for ( int i = internalYToRow(top); i < m_numRows; i++ )
+    for ( int i = topRow; i < bottomRow; i++ )
     {
         int bot = GetRowBottom(i) - 1;
 
@@ -5434,7 +5447,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     }
 
     // vertical grid lines
-    for ( int colPos = leftCol; colPos < m_numCols; colPos++ )
+    for ( int colPos = leftCol; colPos < rightCol; colPos++ )
     {
         int i = GetColAt( colPos );
 
@@ -5453,8 +5466,6 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
             dc.DrawLine( colRight, top, colRight, bottom );
         }
     }
-
-    dc.DestroyClippingRegion();
 }
 
 void wxGrid::DrawRowLabels( wxDC& dc, const wxArrayInt& rows)

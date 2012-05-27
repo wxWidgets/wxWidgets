@@ -2133,6 +2133,16 @@ private:
     // redraw the grid lines, should be called after changing their attributes
     void RedrawGridLines();
 
+    // draw all lines from top to bottom row and left to right column in the
+    // rectangle determined by (top, left)-(bottom, right) -- but notice that
+    // the caller must have set up the clipping correctly, this rectangle is
+    // only used here for optimization
+    void DoDrawGridLines(wxDC& dc,
+                         int top, int left,
+                         int bottom, int right,
+                         int topRow, int leftCol,
+                         int bottomRight, int rightCol);
+
     // common part of Clip{Horz,Vert}GridLines
     void DoClipGridLines(bool& var, bool clip);
 
