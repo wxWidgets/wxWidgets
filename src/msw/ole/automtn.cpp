@@ -187,7 +187,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     }
 
     dispparams.rgdispidNamedArgs = &dispIds[0] + 1;
-    dispparams.rgvarg = &oleArgs[0];
+    dispparams.rgvarg = oleArgs.empty() ? NULL : &oleArgs[0];
     dispparams.cArgs = noArgs;
     dispparams.cNamedArgs = namedArgCount;
 
