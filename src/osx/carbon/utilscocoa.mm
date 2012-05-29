@@ -193,7 +193,7 @@ WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
 }
 
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
-static const NSAffineTransformStruct kSlantNSTransformStruct = { 1, 0, tan(DegToRad(11)), 1, 0, 0  };
+static const NSAffineTransformStruct kSlantNSTransformStruct = { 1, 0, static_cast<CGFloat>(tan(DegToRad(11))), 1, 0, 0  };
 
 WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
 {
