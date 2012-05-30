@@ -72,6 +72,19 @@ wxProtocol::wxProtocol()
     SetDefaultTimeout(60);      // default timeout is 60 seconds
 }
 
+void wxProtocol::SetDefaultTimeout(wxUint32 Value)
+{
+    m_uiDefaultTimeout = Value;
+#if wxUSE_SOCKETS
+    wxSocketBase::SetTimeout(Value); // sets it for this socket
+#endif
+}
+
+wxProtocol::~wxProtocol()
+{
+    delete m_log;
+}
+
 #if wxUSE_SOCKETS
 bool wxProtocol::Reconnect()
 {
@@ -90,19 +103,6 @@ bool wxProtocol::Reconnect()
         return false;
 
     return true;
-}
-
-void wxProtocol::SetDefaultTimeout(wxUint32 Value)
-{
-    m_uiDefaultTimeout = Value;
-#if wxUSE_SOCKETS
-    wxSocketBase::SetTimeout(Value); // sets it for this socket
-#endif
-}
-
-wxProtocol::~wxProtocol()
-{
-    delete m_log;
 }
 
 // ----------------------------------------------------------------------------
