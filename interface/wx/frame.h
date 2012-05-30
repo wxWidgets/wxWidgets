@@ -7,6 +7,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+   Frame specific styles
+*/
+#define wxFRAME_NO_TASKBAR      0x0002  // No taskbar button (MSW only)
+#define wxFRAME_TOOL_WINDOW     0x0004  // No taskbar button, no system menu
+#define wxFRAME_FLOAT_ON_PARENT 0x0008  // Always above its parent
+
+
+/**
     @class wxFrame
 
     A frame is a window whose size and position can (usually) be changed by the user.
