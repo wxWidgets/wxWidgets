@@ -427,6 +427,117 @@ bool wxTextDataObject::SetData(size_t len, const void *buf)
 
 #endif // different wxTextDataObject implementations
 
+size_t wxHTMLDataObject::GetDataSize() const
+{
+    size_t size = 0;
+    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
+    wxCharBuffer buffer =  wxConvUTF8.cWX2MB( GetHTML().c_str() );
+
+    if (buffer) 
+    {
+        size = strlen( buffer );
+#if __WXMSW__
+        // On Windows we need to add some stuff to the string to satisfy 
+        // its clipboard format requirements.
+        size += 400;
+#endif
+    }
+
+    return size;
+}
+
+bool wxHTMLDataObject::GetDataHere(void *buf) const
+{
+    if ( !buf )
+        return false;
+
+    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
+    wxCharBuffer html =  wxConvUTF8.cWX2MB( GetHTML().c_str() );
+    if ( !html )
+        return false;
+
+    size_t bytes = GetDataSize();
+#if __WXMSW__
+    // add the extra info that the MSW clipboard format requires.
+    char* buffer = new char[bytes];
+
+        // Create a template string for the HTML header...
+    strcpy(buffer,
+        "Version:0.9\r\n"
+        "StartHTML:00000000\r\n"
+        "EndHTML:00000000\r\n"
+        "StartFragment:00000000\r\n"
+        "EndFragment:00000000\r\n"
+        "<html><body>\r\n"
+        "<!--StartFragment -->\r\n");
+
+    // Append the HTML...
+    strcat(buffer, html);
+    strcat(buffer, "\r\n");
+    // Finish up the HTML format...
+    strcat(buffer,
+        "<!--EndFragment-->\r\n"
+        "</body>\r\n"
+        "</html>");
+
+    // Now go back, calculate all the lengths, and write out the
+    // necessary header information. Note, wsprintf() truncates the
+    // string when you overwrite it so you follow up with code to replace
+    // the 0 appended at the end with a '\r'...
+    char *ptr = strstr(buffer, "StartHTML");
+    sprintf(ptr+10, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
+    *(ptr+10+8) = '\r';
+
+    ptr = strstr(buffer, "EndHTML");
+    sprintf(ptr+8, "%08u", (unsigned)strlen(buffer));
+    *(ptr+8+8) = '\r';
+
+    ptr = strstr(buffer, "StartFragment");
+    sprintf(ptr+14, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
+    *(ptr+14+8) = '\r';
+
+    ptr = strstr(buffer, "EndFragment");
+    sprintf(ptr+12, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
+    *(ptr+12+8) = '\r';
+#else
+    wxCharBuffer buffer = html;
+#endif // __WXMSW__
+
+    memcpy( (char*) buf, buffer, bytes );
+
+    return true;
+}
+
+bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
+{
+    if ( buf == NULL )
+        return false;
+
+    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
+    wxWCharBuffer buffer =  wxConvUTF8.cMB2WX( (const char*)buf );
+
+    wxString html(buffer);
+    // To be consistent with other platforms, we only add the Fragment part
+    // of the Windows HTML clipboard format to the data object.
+#if __WXMSW__
+    int fragmentStart = html.rfind("StartFragment");
+    int fragmentEnd = html.rfind("EndFragment");
+
+    if (fragmentStart != wxNOT_FOUND && fragmentEnd != wxNOT_FOUND) 
+    {
+        int startCommentEnd = html.find("-->", fragmentStart) + 3;
+        int endCommentStart = html.rfind("<!--", fragmentEnd);
+        
+        if (startCommentEnd != wxNOT_FOUND && endCommentStart != wxNOT_FOUND)
+            html = html.Mid(startCommentEnd, endCommentStart - startCommentEnd);
+    }
+#endif
+    SetHTML( html );
+
+    return true;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxCustomDataObject
 // ----------------------------------------------------------------------------

@@ -67,6 +67,21 @@
     #define GetTymedName(tymed) wxEmptyString
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
+wxDataFormat HtmlFormatFixup(wxDataFormat format)
+{
+    // Since the HTML format is dynamically registered, the wxDF_HTML
+    // format does not match the native constant in the way other formats do,
+    // so for the format checks below to work, we must change the native
+    // id to the wxDF_HTML constant.
+    wxChar s_szBuf[256];
+    if (::GetClipboardFormatName(format, s_szBuf, WXSIZEOF(s_szBuf)))
+    {
+        if (s_szBuf == wxString("HTML Format"))
+            format = wxDF_HTML;
+    }
+    return format;
+}
+
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC interface implementation
 // ----------------------------------------------------------------------------
@@ -183,7 +198,10 @@ wxIEnumFORMATETC::wxIEnumFORMATETC(const wxDataFormat *formats, ULONG nCount)
     m_nCount = nCount;
     m_formats = new CLIPFORMAT[nCount];
     for ( ULONG n = 0; n < nCount; n++ ) {
-        m_formats[n] = formats[n].GetFormatId();
+        if (formats[n].GetFormatId() != wxDF_HTML)
+            m_formats[n] = formats[n].GetFormatId();
+        else
+            m_formats[n] = ::RegisterClipboardFormat(wxT("HTML Format"));
     }
 }
 
@@ -290,6 +308,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
     // for the bitmaps and metafiles we use the handles instead of global memory
     // to pass the data
     wxDataFormat format = (wxDataFormat::NativeFormat)pformatetcIn->cfFormat;
+    format = HtmlFormatFixup(format);
 
     switch ( format )
     {
@@ -432,6 +451,8 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
             {
                 wxDataFormat format = pformatetc->cfFormat;
 
+                format = HtmlFormatFixup(format);
+
                 // this is quite weird, but for file drag and drop, explorer
                 // calls our SetData() with the formats we do *not* support!
                 //
@@ -459,6 +480,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 size_t size;
                 switch ( format )
                 {
+                    case wxDF_HTML:
                     case CF_TEXT:
                     case CF_OEMTEXT:
                         size = strlen((const char *)pBuf);
@@ -567,6 +589,8 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
 
     // and now check the type of data requested
     wxDataFormat format = pformatetc->cfFormat;
+    format = HtmlFormatFixup(format);
+
     if ( m_pDataObject->IsSupportedFormat(format) ) {
         wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::QueryGetData: %s ok"),
                    wxGetFormatName(format));

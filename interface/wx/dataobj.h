@@ -34,9 +34,7 @@
     @itemdef{wxDF_FILENAME,
              A list of filenames.}
     @itemdef{wxDF_HTML,
-             An HTML string. This is only valid when passed to
-             wxSetClipboardData when compiled with Visual C++ in non-Unicode
-             mode.}
+             An HTML string. This is currently only valid on Mac and MSW.}
     @endDefList
 
     As mentioned above, these standard formats may be passed to any function
@@ -789,4 +787,31 @@ public:
     const wxArrayString& GetFilenames() const;
 };
 
+/**
+    @class wxHTMLDataObject
 
+    wxHTMLDataObject is used for working with HTML-formatted text.
+    
+    @library{wxcore}
+    @category{dnd}
+
+    @see wxDataObject, wxDataObjectSimple
+*/
+class wxHTMLDataObject : public wxDataObjectSimple
+{
+public:
+    /**
+        Constructor.
+    */
+    wxHTMLDataObject(const wxString& html = wxEmptyString);
+
+    /**
+        Returns the HTML string.
+    */
+    virtual wxString GetHTML() const;
+    
+    /**
+        Sets the HTML string.
+    */
+    virtual void SetHTML(const wxString& html);
+};

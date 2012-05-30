@@ -33,6 +33,7 @@ GdkAtom  g_textAtom        = 0;
 GdkAtom  g_altTextAtom     = 0;
 GdkAtom  g_pngAtom         = 0;
 GdkAtom  g_fileAtom        = 0;
+GdkAtom  g_htmlAtom        = 0;
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -95,6 +96,9 @@ void wxDataFormat::SetType( wxDataFormatId type )
     if (m_type == wxDF_FILENAME)
         m_format = g_fileAtom;
     else
+    if (m_type == wxDF_HTML)
+        m_format = g_htmlAtom;
+    else
     {
        wxFAIL_MSG( wxT("invalid dataformat") );
     }
@@ -132,6 +136,9 @@ void wxDataFormat::SetId( NativeFormat format )
     if (m_format == g_fileAtom)
         m_type = wxDF_FILENAME;
     else
+    if (m_format == g_htmlAtom)
+        m_type = wxDF_HTML;
+    else
         m_type = wxDF_PRIVATE;
 }
 
@@ -164,6 +171,8 @@ void wxDataFormat::PrepareFormats()
         g_pngAtom = gdk_atom_intern( "image/png", FALSE );
     if (!g_fileAtom)
         g_fileAtom = gdk_atom_intern( "text/uri-list", FALSE );
+    if (!g_htmlAtom)
+        g_htmlAtom = gdk_atom_intern( "text/html", FALSE );
 }
 
 //-------------------------------------------------------------------------

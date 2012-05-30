@@ -128,6 +128,10 @@ void wxDataFormat::SetType( wxDataFormatId dataType )
         m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.utf16-plain-text") );
         break;
 
+    case wxDF_HTML:
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.html") );
+        break;
+
     case wxDF_BITMAP:
         m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.tiff") );
         break;
@@ -158,6 +162,10 @@ void wxDataFormat::SetId( NativeFormat format )
         m_format = 0;
     }
     m_format = (NativeFormat) CFStringCreateCopy(NULL, (CFStringRef)format);
+    if ( UTTypeConformsTo( (CFStringRef)format, CFSTR("public.html") ) )
+    {
+        m_type = wxDF_HTML;
+    }
     if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.utf16-plain-text") )  )
     {
         m_type = wxDF_UNICODETEXT;
