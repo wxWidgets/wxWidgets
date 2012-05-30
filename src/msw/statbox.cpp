@@ -528,4 +528,26 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 #endif // !__WXWINCE__
 
+
+wxPoint wxStaticBox::GetClientAreaOrigin() const
+{
+    // See: http://msdn.microsoft.com/en-us/library/aa511279.aspx
+    wxPoint pt = ConvertDialogToPixels(wxPoint(6,11));
+    return pt;
+}
+
+
+void wxStaticBox::DoGetClientSize(int *width, int *height) const
+{
+    // See: http://msdn.microsoft.com/en-us/library/aa511279.aspx
+    wxPoint lr = ConvertDialogToPixels(wxPoint(6,7));
+    wxPoint ul = GetClientAreaOrigin();
+    wxSize  sz = GetSize();
+    
+    if (width)
+        *width = sz.x - ul.x - lr.x;
+    if (height)
+        *height = sz.y - ul.y - lr.x;
+}
+
 #endif // wxUSE_STATBOX
