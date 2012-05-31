@@ -436,7 +436,7 @@ size_t wxHTMLDataObject::GetDataSize() const
     if (buffer) 
     {
         size = strlen( buffer );
-#if __WXMSW__
+#ifdef __WXMSW__
         // On Windows we need to add some stuff to the string to satisfy 
         // its clipboard format requirements.
         size += 400;
@@ -457,7 +457,7 @@ bool wxHTMLDataObject::GetDataHere(void *buf) const
         return false;
 
     size_t bytes = GetDataSize();
-#if __WXMSW__
+#ifdef __WXMSW__
     // add the extra info that the MSW clipboard format requires.
     char* buffer = new char[bytes];
 
@@ -519,7 +519,7 @@ bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     wxString html(buffer);
     // To be consistent with other platforms, we only add the Fragment part
     // of the Windows HTML clipboard format to the data object.
-#if __WXMSW__
+#ifdef __WXMSW__
     int fragmentStart = html.rfind("StartFragment");
     int fragmentEnd = html.rfind("EndFragment");
 
