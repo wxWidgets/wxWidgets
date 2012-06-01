@@ -1814,80 +1814,43 @@ void wxGrid::Render( wxDC& dc,
     dc.GetUserScale( &scaleUserX, &scaleUserY );
 
     // set defaults if necessary
-    long colLeft = topLeft.GetCol() > -1 ? topLeft.GetCol() : 0;
-    long rowTop = topLeft.GetRow() > -1 ? topLeft.GetRow() : 0;
-    long colRight = bottomRight.GetCol() > -1 ? bottomRight.GetCol()
-                                              : GetNumberCols() - 1;
-    long rowBottom = bottomRight.GetRow() > -1 ? bottomRight.GetRow()
-                                               : GetNumberRows() - 1;
+    wxGridCellCoords leftTop( topLeft ), rightBottom( bottomRight );
+    if ( leftTop.GetCol() < 0 )
+        leftTop.SetCol(0);
+    if ( leftTop.GetRow() < 0 )
+        leftTop.SetRow(0);
+    if ( rightBottom.GetCol() < 0 )
+        rightBottom.SetCol(GetNumberCols() - 1);
+    if ( rightBottom.GetRow() < 0 )
+        rightBottom.SetRow(GetNumberRows() - 1);
 
-    // get grid area size to be rendered
-    long offsetCols = 0, offsetRows = 0;
+    // get grid offset, size and cell parameters
+    wxPoint pointOffSet;
+    wxSize sizeGrid;
     wxGridCellCoordsArray renderCells;
     wxArrayInt arrayCols;
     wxArrayInt arrayRows;
-    int col, row, gridWidth, gridHeight;
 
-    // fill array with cells to be rendered
-    // calculate width of cell drawn area
-    // and get grid column offset used where startcol > 0
-    gridWidth = 0;
-    wxGridSizesInfo sizeinfo = GetColSizes();
-    for ( col = 0; col <= colRight; col++ )
-    {
-        if ( col < colLeft )
-        {
-            offsetCols += sizeinfo.GetSize( col );
-        }
-        else
-        {
-            for ( row = rowTop; row <= rowBottom; row++ )
-            {
-                renderCells.Add( wxGridCellCoords( row, col ));
-                arrayRows.Add( row ); // column labels rendered in DrawColLabels
-            }
-            arrayCols.Add( col ); // row labels rendered in DrawRowLabels
-            gridWidth += sizeinfo.GetSize( col );
-        }
-    }
-
-    // calculate height of rendered cells
-    // and row Y offset where startrow > 0
-    gridHeight = 0;
-    sizeinfo = GetRowSizes();
-    for ( row = 0; row <= rowBottom; row++ )
-    {
-        if ( row < rowTop )
-            offsetRows += sizeinfo.GetSize( row );
-        else
-            gridHeight += sizeinfo.GetSize( row );
-    }
+    GetRenderSizes( leftTop, rightBottom,
+                    pointOffSet, sizeGrid,
+                    renderCells,
+                    arrayCols, arrayRows );
 
     // add headers/labels to dimensions
     if ( style & wxGRID_DRAW_ROWS_HEADER )
-        gridWidth += GetRowLabelSize();
+        sizeGrid.x += GetRowLabelSize();
     if ( style & wxGRID_DRAW_COLS_HEADER )
-        gridHeight += GetColLabelSize();
+        sizeGrid.y += GetColLabelSize();
 
-    // set drawing start position DeviceOrigin
-    // if not specified use previous dc draw extents MaxX and MaxY
-    wxPoint positionRender = position;
-    if ( !positionRender.IsFullySpecified() )
-    {
-        if ( positionRender.x == wxDefaultPosition.x )
-            positionRender.x = dc.MaxX();
+    // get render start position in logical units
+    wxPoint positionRender = GetRenderPosition( dc, position );
 
-        if ( positionRender.y == wxDefaultPosition.y )
-            positionRender.y = dc.MaxY();
-    }
-
-    // positionRender should be in logical units
     wxCoord originX = dc.LogicalToDeviceX( positionRender.x );
     wxCoord originY = dc.LogicalToDeviceY( positionRender.y );
 
     dc.SetDeviceOrigin( originX, originY );
 
-    SetRenderScale( dc, positionRender, size, gridWidth, gridHeight );
+    SetRenderScale( dc, positionRender, size, sizeGrid );
 
     // draw row headers at specified origin
     if ( GetRowLabelSize() > 0 && ( style & wxGRID_DRAW_ROWS_HEADER ) )
@@ -1898,7 +1861,7 @@ void wxGrid::Render( wxDC& dc,
             originY += dc.LogicalToDeviceYRel( GetColLabelSize() );
         }
 
-        originY -= dc.LogicalToDeviceYRel( offsetRows );
+        originY -= dc.LogicalToDeviceYRel( pointOffSet.y );
         dc.SetDeviceOrigin( originX, originY );
 
         DrawRowLabels( dc, arrayRows );
@@ -1907,13 +1870,13 @@ void wxGrid::Render( wxDC& dc,
         if ( style & wxGRID_DRAW_COLS_HEADER )
             originY -= dc.LogicalToDeviceYRel( GetColLabelSize() );
 
-        originY += dc.LogicalToDeviceYRel( offsetRows );
+        originY += dc.LogicalToDeviceYRel( pointOffSet.y );
         // X offset so we don't overwrite row labels
         originX += dc.LogicalToDeviceXRel( GetRowLabelSize() );
     }
 
     // subtract col offset where startcol > 0
-    originX -= dc.LogicalToDeviceXRel( offsetCols );
+    originX -= dc.LogicalToDeviceXRel( pointOffSet.x );
     // no y offset for col labels, they are at the Y origin
 
     // draw column labels
@@ -1926,77 +1889,37 @@ void wxGrid::Render( wxDC& dc,
     }
 
     // set device origin to draw grid cells and lines
-    originY -= dc.LogicalToDeviceYRel( offsetRows );
+    originY -= dc.LogicalToDeviceYRel( pointOffSet.y );
     dc.SetDeviceOrigin( originX, originY );
 
     // draw cell area background
     dc.SetBrush( GetDefaultCellBackgroundColour() );
     dc.SetPen( *wxTRANSPARENT_PEN );
     // subtract headers from grid area dimensions
-    unsigned cellsWidth = gridWidth, cellsHeight = gridHeight;
+    wxSize sizeCells( sizeGrid );
     if ( style & wxGRID_DRAW_ROWS_HEADER )
-        cellsWidth -= GetRowLabelSize();
+        sizeCells.x -= GetRowLabelSize();
     if ( style & wxGRID_DRAW_COLS_HEADER )
-        cellsHeight -= GetColLabelSize();
+        sizeCells.y -= GetColLabelSize();
 
-    dc.DrawRectangle( wxPoint( offsetCols, offsetRows ),
-                      wxSize( cellsWidth, cellsHeight ) );
+    dc.DrawRectangle( pointOffSet, sizeCells );
 
     // draw cells
     DrawGridCellArea( dc, renderCells );
 
-    // calculate region for drawing grid lines
+    // draw grid lines
     if ( style & wxGRID_DRAW_CELL_LINES )
     {
-        wxRegion regionClip( offsetCols,
-                             offsetRows,
-                             cellsWidth,
-                             cellsHeight );
+        wxRegion regionClip( pointOffSet.x, pointOffSet.y,
+                             sizeCells.x, sizeCells.y );
 
         DrawRangeGridLines(dc, regionClip, renderCells[0], renderCells.Last());
     }
 
     // draw render rectangle bounding lines
-    // useful where there is multi cell row or col clipping and no cell border
-    if ( style & wxGRID_DRAW_BOX_RECT )
-    {
-        int bottom = offsetRows + cellsHeight,
-            right = offsetCols + cellsWidth - 1;
-
-        // horiz top line if we are not drawing column header/labels
-        if ( !( style & wxGRID_DRAW_COLS_HEADER ) )
-        {
-            int left =  offsetCols;
-            left +=  ( style & wxGRID_DRAW_COLS_HEADER )
-                      ? - GetRowLabelSize() : 0;
-            dc.SetPen( GetRowGridLinePen( rowTop ) );
-            dc.DrawLine( left,
-                         offsetRows,
-                         right,
-                         offsetRows );
-        }
-
-        // horiz bottom line
-        dc.SetPen( GetRowGridLinePen( rowBottom ) );
-        dc.DrawLine( offsetCols, bottom - 1, right, bottom - 1 );
-
-        // left vertical line if we are not drawing row header/labels
-        if ( !( style & wxGRID_DRAW_ROWS_HEADER ) )
-        {
-            int top =  offsetRows;
-            top +=  ( style & wxGRID_DRAW_COLS_HEADER )
-                      ? - GetColLabelSize() : 0;
-            dc.SetPen( GetColGridLinePen( colLeft ) );
-            dc.DrawLine( offsetCols -1,
-                         top,
-                         offsetCols - 1,
-                         bottom - 1 );
-        }
-
-        // right vertical line
-        dc.SetPen( GetColGridLinePen( colRight ) );
-        dc.DrawLine( right, offsetRows, right, bottom - 1 );
-    }
+    DoRenderBox( dc, style,
+                 pointOffSet, sizeCells,
+                 leftTop, rightBottom );
 
     // restore user setings
     dc.SetDeviceOrigin( userOriginX, userOriginY );
@@ -2014,7 +1937,7 @@ void wxGrid::Render( wxDC& dc,
 void
 wxGrid::SetRenderScale(wxDC& dc,
                        const wxPoint& pos, const wxSize& size,
-                       int gridWidth, int gridHeight)
+                       const wxSize& sizeGrid )
 {
     double scaleX, scaleY;
     wxSize sizeTemp;
@@ -2031,10 +1954,120 @@ wxGrid::SetRenderScale(wxDC& dc,
         sizeTemp.SetHeight( dc.DeviceToLogicalYRel( dc.GetSize().GetY() )
                             - pos.y );
 
-    scaleX = (double)( (double) sizeTemp.GetX() / (double) gridWidth );
-    scaleY = (double)( (double) sizeTemp.GetY() / (double) gridHeight );
+    scaleX = (double)( (double) sizeTemp.GetX() / (double) sizeGrid.GetX() );
+    scaleY = (double)( (double) sizeTemp.GetY() / (double) sizeGrid.GetY() );
 
     dc.SetUserScale( wxMin( scaleX, scaleY), wxMin( scaleX, scaleY ) );
+}
+
+// get grid rendered size, origin offset and fill cell arrays
+void wxGrid::GetRenderSizes( const wxGridCellCoords& topLeft,
+                             const wxGridCellCoords& bottomRight,
+                             wxPoint& pointOffSet, wxSize& sizeGrid,
+                             wxGridCellCoordsArray& renderCells,
+                             wxArrayInt& arrayCols, wxArrayInt& arrayRows )
+{
+    pointOffSet.x = 0;
+    pointOffSet.y = 0;
+    sizeGrid.SetWidth( 0 );
+    sizeGrid.SetHeight( 0 );
+
+    int col, row;
+
+    wxGridSizesInfo sizeinfo = GetColSizes();
+    for ( col = 0; col <= bottomRight.GetCol(); col++ )
+    {
+        if ( col < topLeft.GetCol() )
+        {
+            pointOffSet.x += sizeinfo.GetSize( col );
+        }
+        else
+        {
+            for ( row = topLeft.GetRow(); row <= bottomRight.GetRow(); row++ )
+            {
+                renderCells.Add( wxGridCellCoords( row, col ));
+                arrayRows.Add( row ); // column labels rendered in DrawColLabels
+            }
+            arrayCols.Add( col ); // row labels rendered in DrawRowLabels
+            sizeGrid.x += sizeinfo.GetSize( col );
+        }
+    }
+
+    sizeinfo = GetRowSizes();
+    for ( row = 0; row <= bottomRight.GetRow(); row++ )
+    {
+        if ( row < topLeft.GetRow() )
+            pointOffSet.y += sizeinfo.GetSize( row );
+        else
+            sizeGrid.y += sizeinfo.GetSize( row );
+    }
+}
+
+// get render start position
+// if position not specified use dc draw extents MaxX and MaxY
+wxPoint wxGrid::GetRenderPosition( wxDC& dc, const wxPoint& position )
+{
+    wxPoint positionRender( position );
+
+    if ( !positionRender.IsFullySpecified() )
+    {
+        if ( positionRender.x == wxDefaultPosition.x )
+            positionRender.x = dc.MaxX();
+
+        if ( positionRender.y == wxDefaultPosition.y )
+            positionRender.y = dc.MaxY();
+    }
+
+    return positionRender;
+}
+
+// draw render rectangle bounding lines
+// useful where there is multi cell row or col clipping and no cell border
+void wxGrid::DoRenderBox( wxDC& dc, const int& style,
+                          const wxPoint& pointOffSet,
+                          const wxSize& sizeCells,
+                          const wxGridCellCoords& topLeft,
+                          const wxGridCellCoords& bottomRight )
+{
+    if ( !( style & wxGRID_DRAW_BOX_RECT ) )
+        return;
+
+    int bottom = pointOffSet.y + sizeCells.GetY(),
+        right = pointOffSet.x + sizeCells.GetX() - 1;
+
+    // horiz top line if we are not drawing column header/labels
+    if ( !( style & wxGRID_DRAW_COLS_HEADER ) )
+    {
+        int left = pointOffSet.x;
+        left += ( style & wxGRID_DRAW_COLS_HEADER )
+                     ? - GetRowLabelSize() : 0;
+        dc.SetPen( GetRowGridLinePen( topLeft.GetRow() ) );
+        dc.DrawLine( left,
+                     pointOffSet.y,
+                     right,
+                     pointOffSet.y );
+    }
+
+    // horiz bottom line
+    dc.SetPen( GetRowGridLinePen( bottomRight.GetRow() ) );
+    dc.DrawLine( pointOffSet.x, bottom - 1, right, bottom - 1 );
+
+    // left vertical line if we are not drawing row header/labels
+    if ( !( style & wxGRID_DRAW_ROWS_HEADER ) )
+    {
+        int top = pointOffSet.y;
+        top += ( style & wxGRID_DRAW_COLS_HEADER )
+                     ? - GetColLabelSize() : 0;
+        dc.SetPen( GetColGridLinePen( topLeft.GetCol() ) );
+        dc.DrawLine( pointOffSet.x -1,
+                     top,
+                     pointOffSet.x - 1,
+                     bottom - 1 );
+    }
+
+    // right vertical line
+    dc.SetPen( GetColGridLinePen( bottomRight.GetCol() ) );
+    dc.DrawLine( right, pointOffSet.y, right, bottom - 1 );
 }
 
 void wxGridWindow::ScrollWindow( int dx, int dy, const wxRect *rect )

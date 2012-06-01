@@ -2274,11 +2274,26 @@ private:
     void DoDisableLineResize(int line, wxGridFixedIndicesSet *& setFixed);
     bool DoCanResizeLine(int line, const wxGridFixedIndicesSet *setFixed) const;
 
+    // Helper of Render(): get grid size, origin offset and fill cell arrays
+    void GetRenderSizes( const wxGridCellCoords& topLeft,
+                         const wxGridCellCoords& bottomRight,
+                         wxPoint& pointOffSet, wxSize& sizeGrid,
+                         wxGridCellCoordsArray& renderCells,
+                         wxArrayInt& arrayCols, wxArrayInt& arrayRows );
 
     // Helper of Render(): set the scale to draw the cells at the right size.
     void SetRenderScale( wxDC& dc, const wxPoint& pos, const wxSize& size,
-                         int gridWidth, int gridHeight );
+                         const wxSize& sizeGrid );
 
+    // Helper of Render(): get render start position from passed parameter
+    wxPoint GetRenderPosition( wxDC& dc, const wxPoint& position );
+
+    // Helper of Render(): draws a box around the rendered area
+    void DoRenderBox( wxDC& dc, const int& style,
+                      const wxPoint& pointOffSet,
+                      const wxSize& sizeCellArea,
+                      const wxGridCellCoords& topLeft,
+                      const wxGridCellCoords& bottomRight );
 
     // these sets contain the indices of fixed, i.e. non-resizable
     // interactively, grid rows or columns and are NULL if there are no fixed
