@@ -409,7 +409,7 @@ wxWindow *wxWindowMSW::FindItemByHWND(WXHWND hWnd, bool controlOnly) const
 
         if ( !controlOnly
 #if wxUSE_CONTROLS
-                || parent->IsKindOf(CLASSINFO(wxControl))
+                || wxDynamicCast(parent, wxControl)
 #endif // wxUSE_CONTROLS
            )
         {
@@ -7386,7 +7386,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxIdleWakeUpModule, wxModule)
 #if wxUSE_STATBOX
 static void wxAdjustZOrder(wxWindow* parent)
 {
-    if (parent->IsKindOf(CLASSINFO(wxStaticBox)))
+    if (wxDynamicCast(parent, wxStaticBox))
     {
         // Set the z-order correctly
         SetWindowPos((HWND) parent->GetHWND(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);

@@ -413,7 +413,7 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, wxWindow* 
 
     wxSize sz = fullScreenRect->GetSize();
 
-    if (fullScreenRect->GetParent() && !fullScreenRect->IsKindOf(CLASSINFO(wxFrame)))
+    if (fullScreenRect->GetParent() && !wxDynamicCast(fullScreenRect, wxFrame))
         fullScreenRect->GetParent()->ClientToScreen(& x, & y);
 
     rect.x = x; rect.y = y;

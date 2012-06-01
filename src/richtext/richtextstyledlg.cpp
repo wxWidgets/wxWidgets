@@ -711,19 +711,19 @@ void wxRichTextStyleOrganiserDialog::OnEditClick( wxCommandEvent& WXUNUSED(event
 
         int pages = wxRICHTEXT_FORMAT_STYLE_EDITOR;
 
-        if (def->IsKindOf(CLASSINFO(wxRichTextCharacterStyleDefinition)))
+        if (wxDynamicCast(def, wxRichTextCharacterStyleDefinition))
         {
             pages |= wxRICHTEXT_FORMAT_FONT;
         }
-        else if (def->IsKindOf(CLASSINFO(wxRichTextListStyleDefinition)))
+        else if (wxDynamicCast(def, wxRichTextListStyleDefinition))
         {
             pages |= wxRICHTEXT_FORMAT_LIST_STYLE|wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING;
         }
-        else if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
+        else if (wxDynamicCast(def, wxRichTextParagraphStyleDefinition))
         {
             pages |= wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING|wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
         }
-        else if (def->IsKindOf(CLASSINFO(wxRichTextBoxStyleDefinition)))
+        else if (wxDynamicCast(def, wxRichTextBoxStyleDefinition))
         {
             pages |= wxRICHTEXT_FORMAT_MARGINS|wxRICHTEXT_FORMAT_SIZE|wxRICHTEXT_FORMAT_BORDERS|wxRICHTEXT_FORMAT_BACKGROUND;
         }
@@ -788,13 +788,13 @@ void wxRichTextStyleOrganiserDialog::OnDeleteClick( wxCommandEvent& WXUNUSED(eve
         {
             m_stylesListBox->GetStyleListBox()->SetItemCount(0);
 
-            if (def->IsKindOf(CLASSINFO(wxRichTextListStyleDefinition)))
+            if (wxDynamicCast(def, wxRichTextListStyleDefinition))
                 GetStyleSheet()->RemoveListStyle((wxRichTextListStyleDefinition*) def, true);
-            else if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
+            else if (wxDynamicCast(def, wxRichTextParagraphStyleDefinition))
                 GetStyleSheet()->RemoveParagraphStyle((wxRichTextParagraphStyleDefinition*) def, true);
-            else if (def->IsKindOf(CLASSINFO(wxRichTextCharacterStyleDefinition)))
+            else if (wxDynamicCast(def, wxRichTextCharacterStyleDefinition))
                 GetStyleSheet()->RemoveCharacterStyle((wxRichTextCharacterStyleDefinition*) def, true);
-            else if (def->IsKindOf(CLASSINFO(wxRichTextBoxStyleDefinition)))
+            else if (wxDynamicCast(def, wxRichTextBoxStyleDefinition))
                 GetStyleSheet()->RemoveBoxStyle((wxRichTextBoxStyleDefinition*) def, true);
 
             m_stylesListBox->UpdateStyles();

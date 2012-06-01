@@ -203,7 +203,7 @@ bool wxNumericPropertyValidator::Validate(wxWindow* parent)
         return false;
 
     wxWindow* wnd = GetWindow();
-    if ( !wnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+    if ( !wxDynamicCast(wnd, wxTextCtrl) )
         return true;
 
     // Do not allow zero-length string
@@ -1080,7 +1080,7 @@ bool wxEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WXUNUS
     // unless property has string as preferred value type
     // To reduce code size, use conversion here as well
     if ( value.GetType() == wxPG_VARIANT_TYPE_STRING &&
-         !this->IsKindOf(CLASSINFO(wxEditEnumProperty)) )
+         !wxDynamicCastThis(wxEditEnumProperty) )
         return ValueFromString_( value, value.GetString(), wxPG_PROPERTY_SPECIFIC );
 
     return true;
@@ -1683,7 +1683,7 @@ bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty
     wxString path;
     int indFilter = -1;
 
-    if ( property->IsKindOf(CLASSINFO(wxFileProperty)) )
+    if ( wxDynamicCast(property, wxFileProperty) )
     {
         fileProp = ((wxFileProperty*)property);
         wxFileName filename = fileProp->GetValue().GetString();

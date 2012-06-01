@@ -517,7 +517,7 @@ bool wxComboPopupWindow::ProcessLeftDown(wxMouseEvent& event)
 void wxComboPopupWindow::OnDismiss()
 {
     wxComboCtrlBase* combo = (wxComboCtrlBase*) GetParent();
-    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxComboCtrlBase)),
+    wxASSERT_MSG( wxDynamicCast(combo, wxComboCtrlBase),
                   wxT("parent might not be wxComboCtrl, but check IMPLEMENT_DYNAMIC_CLASS(2) macro for correctness") );
 
     combo->OnPopupDismiss(true);

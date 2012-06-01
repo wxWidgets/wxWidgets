@@ -4134,7 +4134,7 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
 
     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_RESET;
 
-    if (def->IsKindOf(CLASSINFO(wxRichTextListStyleDefinition)))
+    if (wxDynamicCast(def, wxRichTextListStyleDefinition))
     {
         flags |= wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY;
 
@@ -4154,7 +4154,7 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
     bool isPara = false;
 
     // Make sure the attr has the style name
-    if (def->IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition)))
+    if (wxDynamicCast(def, wxRichTextParagraphStyleDefinition))
     {
         isPara = true;
         attr.SetParagraphStyleName(def->GetName());
@@ -4164,12 +4164,12 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
         // to change its style independently.
         flags |= wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY;
     }
-    else if (def->IsKindOf(CLASSINFO(wxRichTextCharacterStyleDefinition)))
+    else if (wxDynamicCast(def, wxRichTextCharacterStyleDefinition))
         attr.SetCharacterStyleName(def->GetName());
-    else if (def->IsKindOf(CLASSINFO(wxRichTextBoxStyleDefinition)))
+    else if (wxDynamicCast(def, wxRichTextBoxStyleDefinition))
         attr.GetTextBoxAttr().SetBoxStyleName(def->GetName());
 
-    if (def->IsKindOf(CLASSINFO(wxRichTextBoxStyleDefinition)))
+    if (wxDynamicCast(def, wxRichTextBoxStyleDefinition))
     {
         if (GetFocusObject() && (GetFocusObject() != & GetBuffer()))
         {

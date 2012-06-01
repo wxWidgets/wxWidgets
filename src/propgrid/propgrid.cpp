@@ -3058,7 +3058,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
             if ( changedProperty == GetSelection() )
             {
                 wxWindow* editor = GetEditorControl();
-                wxASSERT( editor->IsKindOf(CLASSINFO(wxTextCtrl)) );
+                wxASSERT( wxDynamicCast(editor, wxTextCtrl) );
                 evtChangingValue = wxStaticCast(editor, wxTextCtrl)->GetValue();
             }
             else
@@ -3113,7 +3113,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
 wxStatusBar* wxPropertyGrid::GetStatusBar()
 {
     wxWindow* topWnd = ::wxGetTopLevelParent(this);
-    if ( topWnd && topWnd->IsKindOf(CLASSINFO(wxFrame)) )
+    if ( wxDynamicCast(topWnd, wxFrame) )
     {
         wxFrame* pFrame = wxStaticCast(topWnd, wxFrame);
         if ( pFrame )
@@ -3196,7 +3196,7 @@ bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
 
     //
     // For non-wxTextCtrl editors, we do need to revert the value
-    if ( !editor->IsKindOf(CLASSINFO(wxTextCtrl)) &&
+    if ( !wxDynamicCast(editor, wxTextCtrl) &&
          property == GetSelection() )
     {
         property->GetEditorClass()->UpdateControl(property, editor);
@@ -3562,7 +3562,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     // Filter out excess wxTextCtrl modified events
     if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED && wnd )
     {
-        if ( wnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+        if ( wxDynamicCast(wnd, wxTextCtrl) )
         {
             wxTextCtrl* tc = (wxTextCtrl*) wnd;
 
@@ -3571,12 +3571,12 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
                 return true;
             m_prevTcValue = newTcValue;
         }
-        else if ( wnd->IsKindOf(CLASSINFO(wxComboCtrl)) )
+        else if ( wxDynamicCast(wnd, wxComboCtrl) )
         {
             // In some cases we might stumble unintentionally on
             // wxComboCtrl's embedded wxTextCtrl's events. Let's
             // avoid them.
-            if ( editorWnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+            if ( wxDynamicCast(editorWnd, wxTextCtrl) )
                 return false;
 
             wxComboCtrl* cc = (wxComboCtrl*) wnd;
@@ -5244,7 +5244,7 @@ bool wxPropertyGrid::OnMouseCommon( wxMouseEvent& event, int* px, int* py )
 
     // Hide popup on clicks
     if ( event.GetEventType() != wxEVT_MOTION )
-        if ( wnd && wnd->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
+        if ( wxDynamicCast(wnd, wxOwnerDrawnComboBox) )
         {
             ((wxOwnerDrawnComboBox*)wnd)->HidePopup();
         }

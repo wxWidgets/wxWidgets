@@ -1008,7 +1008,7 @@ void wxRichTextObject::Dump(wxTextOutputStream& stream)
 wxRichTextBuffer* wxRichTextObject::GetBuffer() const
 {
     const wxRichTextObject* obj = this;
-    while (obj && !obj->IsKindOf(CLASSINFO(wxRichTextBuffer)))
+    while (obj && !wxDynamicCast(obj, wxRichTextBuffer))
         obj = obj->GetParent();
     return wxDynamicCast(obj, wxRichTextBuffer);
 }
@@ -3478,7 +3478,7 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
                     if (childRange.GetLength() == 0 && GetRange().GetLength() == 1)
                         childRange.SetEnd(childRange.GetEnd()+1);
 
-                    if (!childRange.IsOutside(range) && child->IsKindOf(CLASSINFO(wxRichTextPlainText)))
+                    if (!childRange.IsOutside(range) && wxDynamicCast(child, wxRichTextPlainText))
                     {
                         foundCount ++;
                         wxRichTextAttr textAttr = para->GetCombinedAttributes(child->GetAttributes());
@@ -4982,7 +4982,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
             // If floating, ignore. We already laid out floats.
             // Also ignore if empty object, except if we haven't got any
             // size yet.
-            if (!child->IsFloating() && child->GetRange().GetLength() != 0 && !child->IsKindOf(CLASSINFO(wxRichTextPlainText)))
+            if (!child->IsFloating() && child->GetRange().GetLength() != 0 && !wxDynamicCast(child, wxRichTextPlainText))
             {
                 if (child->GetCachedSize().x > minWidth)
                     minWidth = child->GetMinSize().x;

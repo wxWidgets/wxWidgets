@@ -163,7 +163,7 @@ wxCoord wxVListBoxComboPopup::OnMeasureItem(size_t n) const
 {
     wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
 
-    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
+    wxASSERT_MSG( wxDynamicCast(combo, wxOwnerDrawnComboBox),
                   wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
 
     wxCoord h = combo->OnMeasureItem(n);
@@ -176,7 +176,7 @@ wxCoord wxVListBoxComboPopup::OnMeasureItemWidth(size_t n) const
 {
     wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
 
-    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
+    wxASSERT_MSG( wxDynamicCast(combo, wxOwnerDrawnComboBox),
                   wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
 
     return combo->OnMeasureItemWidth(n);
@@ -189,7 +189,7 @@ void wxVListBoxComboPopup::OnDrawBg( wxDC& dc,
 {
     wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
 
-    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
+    wxASSERT_MSG( wxDynamicCast(combo, wxOwnerDrawnComboBox),
                   wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
 
     if ( IsCurrent((size_t)item) && !(flags & wxODCB_PAINTING_CONTROL) )
@@ -208,7 +208,7 @@ void wxVListBoxComboPopup::OnDrawItem( wxDC& dc, const wxRect& rect, int item, i
 {
     wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
 
-    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
+    wxASSERT_MSG( wxDynamicCast(combo, wxOwnerDrawnComboBox),
                   wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
 
     combo->OnDrawItem(dc,rect,item,flags);

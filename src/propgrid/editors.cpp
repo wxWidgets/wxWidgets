@@ -217,13 +217,13 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
     // Get old editor appearance
     wxTextCtrl* tc = NULL;
     wxComboCtrl* cb = NULL;
-    if ( ctrl->IsKindOf(CLASSINFO(wxTextCtrl)) )
+    if ( wxDynamicCast(ctrl, wxTextCtrl) )
     {
         tc = (wxTextCtrl*) ctrl;
     }
     else
     {
-        if ( ctrl->IsKindOf(CLASSINFO(wxComboCtrl)) )
+        if ( wxDynamicCast(ctrl, wxComboCtrl) )
         {
             cb = (wxComboCtrl*) ctrl;
             tc = cb->GetTextCtrl();
@@ -343,7 +343,7 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
 
     int flags = 0;
     if ( (property->GetFlags() & wxPG_PROP_PASSWORD) &&
-         property->IsKindOf(CLASSINFO(wxStringProperty)) )
+         wxDynamicCast(property, wxStringProperty) )
         flags |= wxTE_PASSWORD;
 
     wxWindow* wnd = propGrid->GenerateEditorTextCtrl(pos,sz,text,NULL,flags,
@@ -547,7 +547,7 @@ protected:
         int evtType = event.GetEventType();
 
         if ( m_property->HasFlag(wxPG_PROP_USE_DCC) &&
-             m_property->IsKindOf(CLASSINFO(wxBoolProperty)) &&
+             wxDynamicCast(m_property, wxBoolProperty) &&
              !m_combo->IsPopupShown() )
         {
             // Just check that it is in the text area
@@ -1021,7 +1021,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     int odcbFlags = extraStyle | wxBORDER_NONE | wxTE_PROCESS_ENTER;
 
     if ( (property->GetFlags() & wxPG_PROP_USE_DCC) &&
-         (property->IsKindOf(CLASSINFO(wxBoolProperty)) ) )
+         wxDynamicCast(property, wxBoolProperty) )
         odcbFlags |= wxODCB_DCLICK_CYCLES;
 
     //
@@ -1092,7 +1092,7 @@ void wxPGChoiceEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) c
 {
     wxASSERT( ctrl );
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( cb->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)));
+    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
     int ind = property->GetChoiceSelection();
     cb->SetSelection(ind);
 }
@@ -1108,7 +1108,7 @@ int wxPGChoiceEditor::InsertItem( wxWindow* ctrl, const wxString& label, int ind
 {
     wxASSERT( ctrl );
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( cb->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)));
+    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
 
     if (index < 0)
         index = cb->GetCount();
@@ -1121,7 +1121,7 @@ void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
 {
     wxASSERT( ctrl );
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( cb->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)));
+    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
 
     cb->Delete(index);
 }
@@ -1590,7 +1590,7 @@ void wxSimpleCheckBox::SetValue( int value )
     wxCommandEvent evt(wxEVT_COMMAND_CHECKBOX_CLICKED,GetParent()->GetId());
 
     wxPropertyGrid* propGrid = (wxPropertyGrid*) GetParent();
-    wxASSERT( propGrid->IsKindOf(CLASSINFO(wxPropertyGrid)) );
+    wxASSERT( wxDynamicCast(propGrid, wxPropertyGrid) );
     propGrid->HandleCustomEditorEvent(evt);
 }
 
@@ -1763,7 +1763,7 @@ void wxPropertyGrid::CorrectEditorWidgetSizeX()
 #ifdef __WXMAC__
         if ( m_wndEditor )
 #else
-        if ( m_wndEditor && m_wndEditor->IsKindOf(CLASSINFO(wxTextCtrl)) )
+        if ( wxDynamicCast(m_wndEditor, wxTextCtrl) )
 #endif
             secWid += wxPG_TEXTCTRL_AND_BUTTON_SPACING;
     }
@@ -2093,10 +2093,10 @@ wxTextCtrl* wxPropertyGrid::GetEditorTextCtrl() const
     if ( !wnd )
         return NULL;
 
-    if ( wnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+    if ( wxDynamicCast(wnd, wxTextCtrl) )
         return wxStaticCast(wnd, wxTextCtrl);
 
-    if ( wnd->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
+    if ( wxDynamicCast(wnd, wxOwnerDrawnComboBox) )
     {
         wxOwnerDrawnComboBox* cb = wxStaticCast(wnd, wxOwnerDrawnComboBox);
         return cb->GetTextCtrl();

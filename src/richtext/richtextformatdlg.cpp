@@ -553,7 +553,7 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 wxRichTextFormattingDialog* wxRichTextFormattingDialog::GetDialog(wxWindow* win)
 {
     wxWindow* p = win->GetParent();
-    while (p && !p->IsKindOf(CLASSINFO(wxRichTextFormattingDialog)))
+    while (p && !wxDynamicCast(p, wxRichTextFormattingDialog))
         p = p->GetParent();
     wxRichTextFormattingDialog* dialog = wxDynamicCast(p, wxRichTextFormattingDialog);
     return dialog;
@@ -709,7 +709,7 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
     if (event.LeftDown())
     {
         wxWindow* parent = GetParent();
-        while (parent != NULL && !parent->IsKindOf(CLASSINFO(wxDialog)) && !parent->IsKindOf(CLASSINFO(wxFrame)))
+        while (parent != NULL && !wxDynamicCast(parent, wxDialog) && !wxDynamicCast(parent, wxFrame))
             parent = parent->GetParent();
 
         wxColourData data;

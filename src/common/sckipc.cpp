@@ -399,7 +399,7 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
 
             if (connection)
             {
-                if (connection->IsKindOf(CLASSINFO(wxTCPConnection)))
+                if (wxDynamicCast(connection, wxTCPConnection))
                 {
                     connection->m_topic = topic;
                     connection->m_sock  = client;
@@ -898,7 +898,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 
             if (new_connection)
             {
-                if (new_connection->IsKindOf(CLASSINFO(wxTCPConnection)))
+                if (wxDynamicCast(new_connection, wxTCPConnection))
                 {
                     // Acknowledge success
                     out.Write8(IPC_CONNECT);

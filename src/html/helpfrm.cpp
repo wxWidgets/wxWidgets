@@ -204,7 +204,7 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
     if (m_HtmlHelpWin->GetSplitterWindow() && m_HtmlHelpWin->GetCfgData().navig_on)
         m_HtmlHelpWin->GetCfgData().sashpos = m_HtmlHelpWin->GetSplitterWindow()->GetSashPosition();
 
-    if (m_helpController && m_helpController->IsKindOf(CLASSINFO(wxHtmlHelpController)))
+    if (m_helpController && wxDynamicCast(m_helpController, wxHtmlHelpController))
     {
         ((wxHtmlHelpController*) m_helpController)->OnCloseFrame(evt);
     }

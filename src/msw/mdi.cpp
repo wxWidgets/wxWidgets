@@ -1374,7 +1374,7 @@ void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeF
             while (node)
             {
                 wxWindow *child = node->GetData();
-                if (child->IsKindOf(CLASSINFO(wxMDIChildFrame)))
+                if (wxDynamicCast(child, wxMDIChildFrame))
                 {
                    ::RedrawWindow(GetHwndOf(child),
                                   NULL,

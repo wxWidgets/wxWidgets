@@ -457,7 +457,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
                                                          const wxPoint& pos,
                                                          const wxSize& sz ) const
 {
-    wxCHECK_MSG( property->IsKindOf(CLASSINFO(wxDateProperty)),
+    wxCHECK_MSG( wxDynamicCast(property, wxDateProperty),
                  NULL,
                  wxT("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
 
@@ -498,7 +498,7 @@ void wxPGDatePickerCtrlEditor::UpdateControl( wxPGProperty* property,
                                               wxWindow* wnd ) const
 {
     wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+    wxASSERT( wxDynamicCast(ctrl, wxDatePickerCtrl) );
 
     wxDateTime dateValue(wxInvalidDateTime);
     wxVariant v(property->GetValue());
@@ -523,7 +523,7 @@ bool wxPGDatePickerCtrlEditor::OnEvent( wxPropertyGrid* WXUNUSED(propgrid),
 bool wxPGDatePickerCtrlEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* WXUNUSED(property), wxWindow* wnd ) const
 {
     wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+    wxASSERT( wxDynamicCast(ctrl, wxDatePickerCtrl) );
 
     variant = ctrl->GetValue();
 
@@ -534,7 +534,7 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
                                                       wxWindow* wnd ) const
 {
     wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+    wxASSERT( wxDynamicCast(ctrl, wxDatePickerCtrl) );
 
     wxDateProperty* prop = wxDynamicCast(property, wxDateProperty);
 
@@ -1320,7 +1320,7 @@ public:
                          const wxPropertyGrid* propertyGrid, wxPGProperty* property,
                          int WXUNUSED(column), int item, int WXUNUSED(flags) ) const
     {
-        wxASSERT( property->IsKindOf(CLASSINFO(wxSystemColourProperty)) );
+        wxASSERT( wxDynamicCast(property, wxSystemColourProperty) );
         wxSystemColourProperty* prop = wxStaticCast(property, wxSystemColourProperty);
 
         dc.SetPen(*wxBLACK_PEN);

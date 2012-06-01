@@ -114,21 +114,21 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
 wxTextEntry *wxTextValidator::GetTextEntry()
 {
 #if wxUSE_TEXTCTRL
-    if (m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
+    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
     {
         return (wxTextCtrl*)m_validatorWindow;
     }
 #endif
 
 #if wxUSE_COMBOBOX
-    if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)))
+    if (wxDynamicCast(m_validatorWindow, wxComboBox))
     {
         return (wxComboBox*)m_validatorWindow;
     }
 #endif
 
 #if wxUSE_COMBOCTRL
-    if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboCtrl)))
+    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
     {
         return (wxComboCtrl*)m_validatorWindow;
     }

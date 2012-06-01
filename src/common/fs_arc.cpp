@@ -405,7 +405,7 @@ wxFSFile* wxArchiveFSHandler::OpenFile(
     }
 
 #if WXWIN_COMPATIBILITY_2_6 && wxUSE_ZIPSTREAM
-    if (factory->IsKindOf(CLASSINFO(wxZipClassFactory)))
+    if (wxDynamicCast(factory, wxZipClassFactory))
         ((wxZipInputStream*)s)->m_allowSeeking = true;
 #endif // WXWIN_COMPATIBILITY_2_6
 

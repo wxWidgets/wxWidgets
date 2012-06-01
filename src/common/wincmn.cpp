@@ -649,7 +649,7 @@ static bool wxHasRealChildren(const wxWindowBase* win)
         wxWindow *win = node->GetData();
         if ( !win->IsTopLevel() && win->IsShown()
 #if wxUSE_SCROLLBAR
-            && !win->IsKindOf(CLASSINFO(wxScrollBar))
+            && !wxDynamicCast(win, wxScrollBar)
 #endif
             )
             realChildCount ++;
@@ -3511,7 +3511,7 @@ wxAccStatus wxWindowAccessible::GetLocation(wxRect& rect, int elementId)
     if (win)
     {
         rect = win->GetRect();
-        if (win->GetParent() && !win->IsKindOf(CLASSINFO(wxTopLevelWindow)))
+        if (win->GetParent() && !wxDynamicCast(win, wxTopLevelWindow))
             rect.SetPosition(win->GetParent()->ClientToScreen(rect.GetPosition()));
         return wxACC_OK;
     }
@@ -3630,7 +3630,7 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
     // accessible classes, one for each kind of wxWidgets
     // control or window.
 #if wxUSE_BUTTON
-    if (GetWindow()->IsKindOf(CLASSINFO(wxButton)))
+    if (wxDynamicCast(GetWindow(), wxButton))
         title = ((wxButton*) GetWindow())->GetLabel();
     else
 #endif
@@ -3789,14 +3789,14 @@ wxAccStatus wxWindowAccessible::GetRole(int childId, wxAccRole* role)
     if (childId > 0)
         return wxACC_NOT_IMPLEMENTED;
 
-    if (GetWindow()->IsKindOf(CLASSINFO(wxControl)))
+    if (wxDynamicCast(GetWindow(), wxControl))
         return wxACC_NOT_IMPLEMENTED;
 #if wxUSE_STATUSBAR
-    if (GetWindow()->IsKindOf(CLASSINFO(wxStatusBar)))
+    if (wxDynamicCast(GetWindow(), wxStatusBar))
         return wxACC_NOT_IMPLEMENTED;
 #endif
 #if wxUSE_TOOLBAR
-    if (GetWindow()->IsKindOf(CLASSINFO(wxToolBar)))
+    if (wxDynamicCast(GetWindow(), wxToolBar))
         return wxACC_NOT_IMPLEMENTED;
 #endif
 
@@ -3821,15 +3821,15 @@ wxAccStatus wxWindowAccessible::GetState(int childId, long* state)
     if (childId > 0)
         return wxACC_NOT_IMPLEMENTED;
 
-    if (GetWindow()->IsKindOf(CLASSINFO(wxControl)))
+    if (wxDynamicCast(GetWindow(), wxControl))
         return wxACC_NOT_IMPLEMENTED;
 
 #if wxUSE_STATUSBAR
-    if (GetWindow()->IsKindOf(CLASSINFO(wxStatusBar)))
+    if (wxDynamicCast(GetWindow(), wxStatusBar))
         return wxACC_NOT_IMPLEMENTED;
 #endif
 #if wxUSE_TOOLBAR
-    if (GetWindow()->IsKindOf(CLASSINFO(wxToolBar)))
+    if (wxDynamicCast(GetWindow(), wxToolBar))
         return wxACC_NOT_IMPLEMENTED;
 #endif
 
