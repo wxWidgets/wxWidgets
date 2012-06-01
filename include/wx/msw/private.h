@@ -218,6 +218,21 @@ struct WinStruct : public T
 };
 
 
+// Macros for converting wxString to the type expected by API functions.
+//
+// Normally it is enough to just use wxString::t_str() which is implicitly
+// convertible to LPCTSTR, but in some cases an explicit conversion is required.
+//
+// In such cases wxMSW_CONV_LPCTSTR() should be used. But if an API function
+// takes a non-const pointer, wxMSW_CONV_LPTSTR() which casts away the
+// constness (but doesn't make it possible to really modify the returned
+// pointer, of course) should be used. And if a string is passed as LPARAM, use
+// wxMSW_CONV_LPARAM() which does the required ugly reinterpret_cast<> too.
+#define wxMSW_CONV_LPCTSTR(s) static_cast<const wxChar *>((s).t_str())
+#define wxMSW_CONV_LPTSTR(s) const_cast<wxChar *>(wxMSW_CONV_LPCTSTR(s))
+#define wxMSW_CONV_LPARAM(s) reinterpret_cast<LPARAM>(wxMSW_CONV_LPCTSTR(s))
+
+
 #if wxUSE_GUI
 
 #include "wx/gdicmn.h"
