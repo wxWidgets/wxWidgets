@@ -560,6 +560,7 @@ All (GUI):
 - Fully implement wxStyledTextCtrl::PositionToXY() (troelsk).
 - Added wxDataViewListCtrl::{Set,Get}ItemData().
 - Added wxDataViewListCtrl::GetItemCount() (Kry).
+- Added support for Korean Johab and Vietnamese encodings (jank9201).
 
 GTK:
 

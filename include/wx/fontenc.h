@@ -65,6 +65,8 @@ enum wxFontEncoding
     wxFONTENCODING_CP1255,          // WinHebrew
     wxFONTENCODING_CP1256,          // WinArabic
     wxFONTENCODING_CP1257,          // WinBaltic (same as Latin 7)
+    wxFONTENCODING_CP1258,          // WinVietnamese
+    wxFONTENCODING_CP1361,          // Johab Korean character set.
     wxFONTENCODING_CP12_MAX,
 
     wxFONTENCODING_UTF7,            // UTF-7 Unicode encoding
@@ -151,7 +153,11 @@ enum wxFontEncoding
     wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932, // Shift JIS
 
         // Korean (CP 949 not actually the same but close enough)
-    wxFONTENCODING_EUC_KR = wxFONTENCODING_CP949
+    wxFONTENCODING_EUC_KR = wxFONTENCODING_CP949,
+    wxFONTENCODING_JOHAB = wxFONTENCODING_CP1361,
+
+        // Vietnamese
+    wxFONTENCODING_VIETNAMESE = wxFONTENCODING_CP1258
 };
 
 #endif // _WX_FONTENC_H_

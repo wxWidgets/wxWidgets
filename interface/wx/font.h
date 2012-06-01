@@ -191,6 +191,8 @@ enum wxFontEncoding
     wxFONTENCODING_CP1255,          //!< WinHebrew
     wxFONTENCODING_CP1256,          //!< WinArabic
     wxFONTENCODING_CP1257,          //!< WinBaltic (same as Latin 7)
+    wxFONTENCODING_CP1258,          //!< WinVietnamese (since 2.9.4)
+    wxFONTENCODING_CP1361,          //!< Johab Korean character set (since 2.9.4)
     wxFONTENCODING_CP12_MAX,
 
     wxFONTENCODING_UTF7,            //!< UTF-7 Unicode encoding
@@ -262,7 +264,9 @@ enum wxFontEncoding
     wxFONTENCODING_GB2312 = wxFONTENCODING_CP936, //!< Simplified Chinese
     wxFONTENCODING_BIG5 = wxFONTENCODING_CP950,   //!< Traditional Chinese
     wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932, //!< Shift JIS
-    wxFONTENCODING_EUC_KR = wxFONTENCODING_CP949 //!< Korean
+    wxFONTENCODING_EUC_KR = wxFONTENCODING_CP949, //!< Korean
+    wxFONTENCODING_JOHAB = wxFONTENCODING_CP1361, //!< Korean Johab (since 2.9.4)
+    wxFONTENCODING_VIETNAMESE = wxFONTENCODING_CP1258 //!< Vietnamese (since 2.9.4)
 };
 
 

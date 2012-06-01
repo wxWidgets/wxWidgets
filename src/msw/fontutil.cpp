@@ -251,6 +251,14 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
             fontEncoding = wxFONTENCODING_CP950;
             break;
 
+        case VIETNAMESE_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1258;
+            break;
+
+        case JOHAB_CHARSET:
+            fontEncoding = wxFONTENCODING_CP1361;
+            break;
+
 #endif // Win32
 
         case OEM_CHARSET:

@@ -88,6 +88,8 @@ static const wxFontEncoding gs_encodings[] =
     wxFONTENCODING_CP1255,
     wxFONTENCODING_CP1256,
     wxFONTENCODING_CP1257,
+    wxFONTENCODING_CP1258,
+    wxFONTENCODING_CP1361,
     wxFONTENCODING_CP437,
     wxFONTENCODING_UTF7,
     wxFONTENCODING_UTF8,
@@ -175,6 +177,8 @@ static const char* const gs_encodingDescs[] =
     wxTRANSLATE( "Windows Hebrew (CP 1255)" ),
     wxTRANSLATE( "Windows Arabic (CP 1256)" ),
     wxTRANSLATE( "Windows Baltic (CP 1257)" ),
+    wxTRANSLATE( "Windows Vietnamese (CP 1258)" ),
+    wxTRANSLATE( "Windows Johab (CP 1361)" ),
     wxTRANSLATE( "Windows/DOS OEM (CP 437)" ),
     wxTRANSLATE( "Unicode 7 bit (UTF-7)" ),
     wxTRANSLATE( "Unicode 8 bit (UTF-8)" ),
@@ -277,6 +281,8 @@ static const wxChar* const gs_encodingNames[][9] =
     { wxT( "WINDOWS-1255" ),wxT( "CP1255" ),wxT( "MS1255" ),wxT( "IBM-1255" ),NULL },
     { wxT( "WINDOWS-1256" ),wxT( "CP1256" ),wxT( "MS1256" ),wxT( "IBM-1256" ),NULL },
     { wxT( "WINDOWS-1257" ),wxT( "CP1257" ),wxT( "MS1257" ),wxT( "IBM-1257" ),NULL },
+    { wxT( "WINDOWS-1258" ),wxT( "CP1258" ),wxT( "MS1258" ),wxT( "IBM-1258" ),NULL },
+    { wxT( "WINDOWS-1361" ),wxT( "CP1361" ),wxT( "MS1361" ),wxT( "IBM-1361" ), wxT( "JOHAB" ), NULL },
     { wxT( "WINDOWS-437" ), wxT( "CP437" ), wxT( "MS437" ), wxT( "IBM-437" ), NULL },
 
     { wxT( "UTF-7" ), wxT("UTF7"), NULL },
@@ -749,6 +755,14 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
 
                         case 950:
                             encoding = wxFONTENCODING_CP950;
+                            break;
+
+                        case 1258:
+                            encoding = wxFONTENCODING_CP1258;
+                            break;
+
+                        case 1361:
+                            encoding = wxFONTENCODING_CP1361;
                             break;
                     }
                 }
