@@ -6825,7 +6825,7 @@ wxString wxRichTextPlainText::GetTextForRange(const wxRichTextRange& range) cons
 /// Returns true if this object can merge itself with the given one.
 bool wxRichTextPlainText::CanMerge(wxRichTextObject* object) const
 {
-    return object->GetClassInfo() == CLASSINFO(wxRichTextPlainText) &&
+    return object->GetClassInfo() == wxCLASSINFO(wxRichTextPlainText) &&
         (m_text.empty() || (wxTextAttrEq(GetAttributes(), object->GetAttributes()) && m_properties == object->GetProperties()));
 }
 
@@ -8817,7 +8817,7 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
     wxRichTextObjectPropertiesDialog cellDlg(this, wxGetTopLevelParent(parent), wxID_ANY, caption);
     cellDlg.SetAttributes(attr);
 
-    wxRichTextSizePage* sizePage = wxDynamicCast(cellDlg.FindPage(CLASSINFO(wxRichTextSizePage)), wxRichTextSizePage);
+    wxRichTextSizePage* sizePage = wxDynamicCast(cellDlg.FindPage(wxCLASSINFO(wxRichTextSizePage)), wxRichTextSizePage);
     if (sizePage)
     {
         // We don't want position and floating controls for a cell.

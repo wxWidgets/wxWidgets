@@ -500,7 +500,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     // (so propgrid can be NULL, too).
 
     wxPGProperty* parent = m_parent;
-    bool parentIsRoot = parent->IsKindOf(CLASSINFO(wxPGRootProperty));
+    bool parentIsRoot = parent->IsKindOf(wxCLASSINFO(wxPGRootProperty));
 
     //
     // Convert invalid cells to default ones in this grid
@@ -2021,11 +2021,11 @@ const wxPGEditor* wxPGProperty::GetEditorClass() const
     if ( GetDisplayedCommonValueCount() )
     {
         // TextCtrlAndButton -> ComboBoxAndButton
-        if ( editor->IsKindOf(CLASSINFO(wxPGTextCtrlAndButtonEditor)) )
+        if ( wxDynamicCast(editor, wxPGTextCtrlAndButtonEditor) )
             editor = wxPGEditor_ChoiceAndButton;
 
         // TextCtrl -> ComboBox
-        else if ( editor->IsKindOf(CLASSINFO(wxPGTextCtrlEditor)) )
+        else if ( wxDynamicCast(editor, wxPGTextCtrlEditor) )
             editor = wxPGEditor_ComboBox;
     }
 

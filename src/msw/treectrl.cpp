@@ -1996,7 +1996,7 @@ void wxTreeCtrl::DeleteTextCtrl()
 wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item,
                                   wxClassInfo *textControlClass)
 {
-    wxASSERT( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)) );
+    wxASSERT( textControlClass->IsKindOf(wxCLASSINFO(wxTextCtrl)) );
 
     DeleteTextCtrl();
 
@@ -2156,7 +2156,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
     //     may be why as if you don't use the DECLARE_CLASS/IMPLEMENT_CLASS
     //     combo for your derived wxTreeCtrl if will sort without
     //     OnCompareItems
-    if ( GetClassInfo() == CLASSINFO(wxTreeCtrl) )
+    if ( GetClassInfo() == wxCLASSINFO(wxTreeCtrl) )
     {
         TreeView_SortChildren(GetHwnd(), HITEM(item), 0);
     }

@@ -61,10 +61,10 @@ wxRichTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTex
     if (m_baseStyle.IsEmpty())
         return m_style;
 
-    bool isParaStyle = IsKindOf(CLASSINFO(wxRichTextParagraphStyleDefinition));
-    bool isCharStyle = IsKindOf(CLASSINFO(wxRichTextCharacterStyleDefinition));
-    bool isListStyle = IsKindOf(CLASSINFO(wxRichTextListStyleDefinition));
-    bool isBoxStyle = IsKindOf(CLASSINFO(wxRichTextBoxStyleDefinition));
+    bool isParaStyle = IsKindOf(wxCLASSINFO(wxRichTextParagraphStyleDefinition));
+    bool isCharStyle = IsKindOf(wxCLASSINFO(wxRichTextCharacterStyleDefinition));
+    bool isListStyle = IsKindOf(wxCLASSINFO(wxRichTextListStyleDefinition));
+    bool isBoxStyle  = IsKindOf(wxCLASSINFO(wxRichTextBoxStyleDefinition));
 
     // Collect the styles, detecting loops
     wxArrayString styleNames;

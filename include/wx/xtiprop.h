@@ -536,13 +536,13 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
         &_accessor##pname, flags, help, group  );
 
 #define wxEVENT_PROPERTY( name, eventType, eventClass )                               \
-    static wxEventSourceTypeInfo _typeInfo##name( eventType, CLASSINFO( eventClass ) );  \
+    static wxEventSourceTypeInfo _typeInfo##name( eventType, wxCLASSINFO( eventClass ) );  \
     static wxPropertyInfo _propertyInfo##name( first,class_t::GetClassInfoStatic(),   \
         wxT(#name), &_typeInfo##name, NULL, wxAny() );
 
 #define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass )          \
     static wxEventSourceTypeInfo _typeInfo##name( eventType, lastEventType,              \
-                                               CLASSINFO( eventClass ) );             \
+                                               wxCLASSINFO( eventClass ) );             \
     static wxPropertyInfo _propertyInfo##name( first, class_t::GetClassInfoStatic(),  \
         wxT(#name), &_typeInfo##name, NULL, wxAny() );
 

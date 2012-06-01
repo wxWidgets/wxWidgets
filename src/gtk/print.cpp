@@ -74,7 +74,7 @@ public:
     {
 #if wxUSE_LIBGNOMEPRINT
         // This module must be initialized AFTER gnomeprint's one
-        AddDependency(CLASSINFO(wxGnomePrintModule));
+        AddDependency(wxCLASSINFO(wxGnomePrintModule));
 #endif
     }
     bool OnInit();

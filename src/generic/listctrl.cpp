@@ -2208,7 +2208,7 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     wxCHECK_MSG( (item >= 0) && ((size_t)item < GetItemCount()), NULL,
                  wxT("wrong index in wxGenericListCtrl::EditLabel()") );
 
-    wxASSERT_MSG( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)),
+    wxASSERT_MSG( textControlClass->IsKindOf(wxCLASSINFO(wxTextCtrl)),
                  wxT("EditLabel() needs a text control") );
 
     size_t itemEdit = (size_t)item;

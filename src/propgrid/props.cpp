@@ -1127,7 +1127,7 @@ bool wxEnumProperty::ValueFromString_( wxVariant& value, const wxString& text, i
 
     bool asText = false;
 
-    bool isEdit = this->IsKindOf(CLASSINFO(wxEditEnumProperty));
+    bool isEdit = this->IsKindOf(wxCLASSINFO(wxEditEnumProperty));
 
     // If text not any of the choices, store as text instead
     // (but only if we are wxEditEnumProperty)

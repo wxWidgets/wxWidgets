@@ -56,7 +56,7 @@ void wxModule::RegisterModules()
     {
         const wxClassInfo* classInfo = *it;
 
-        if ( classInfo->IsKindOf(CLASSINFO(wxModule)) &&
+        if ( classInfo->IsKindOf(wxCLASSINFO(wxModule)) &&
              (classInfo != (& (wxModule::ms_classInfo))) )
         {
             wxLogTrace(TRACE_MODULE, wxT("Registering module %s"),

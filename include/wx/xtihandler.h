@@ -94,7 +94,7 @@ private:
 #define wxHANDLER(name,eventClassType)                                               \
     static wxHandlerInfo _handlerInfo##name( first, class_t::GetClassInfoStatic(),   \
                     wxT(#name), (wxObjectEventFunction) (wxEventFunction) &name,     \
-                    CLASSINFO( eventClassType ) );
+                    wxCLASSINFO( eventClassType ) );
 
 #define wxBEGIN_HANDLERS_TABLE(theClass)          \
     wxHandlerInfo *theClass::GetHandlersStatic()  \

@@ -205,7 +205,7 @@ void wxPluginLibrary::RegisterModules()
     {
         for ( const wxClassInfo *info = m_ourFirst; ; info = info->GetNext() )
         {
-            if( info->IsKindOf(CLASSINFO(wxModule)) )
+            if( info->IsKindOf(wxCLASSINFO(wxModule)) )
             {
                 wxModule *m = wxDynamicCast(info->CreateObject(), wxModule);
 

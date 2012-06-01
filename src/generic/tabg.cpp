@@ -1225,9 +1225,9 @@ wxPanelTabView::wxPanelTabView(wxPanel *pan, long style)
   m_panel = pan;
   m_currentWindow = NULL;
 
-  if (m_panel->IsKindOf(CLASSINFO(wxTabbedDialog)))
+  if (m_panel->IsKindOf(wxCLASSINFO(wxTabbedDialog)))
     ((wxTabbedDialog *)m_panel)->SetTabView(this);
-  else if (m_panel->IsKindOf(CLASSINFO(wxTabbedPanel)))
+  else if (m_panel->IsKindOf(wxCLASSINFO(wxTabbedPanel)))
     ((wxTabbedPanel *)m_panel)->SetTabView(this);
 
   SetWindow(m_panel);

@@ -346,7 +346,7 @@ private:
 
     virtual bool ProcessEvent( wxEvent& event )
     {
-        if ( event.IsKindOf(CLASSINFO(wxHeaderCtrlEvent)) )
+        if ( event.IsKindOf(wxCLASSINFO(wxHeaderCtrlEvent)) )
         {
             wxHeaderCtrlEvent& hcEvent =
                 static_cast<wxHeaderCtrlEvent&>(event);

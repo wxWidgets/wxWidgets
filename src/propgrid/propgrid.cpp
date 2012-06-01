@@ -6342,7 +6342,7 @@ wxPGProperty* wxPropertyGridPopulator::Add( const wxString& propClass,
         return NULL;
     }
 
-    if ( !classInfo || !classInfo->IsKindOf(CLASSINFO(wxPGProperty)) )
+    if ( !classInfo || !classInfo->IsKindOf(wxCLASSINFO(wxPGProperty)) )
     {
         ProcessError(wxString::Format(wxT("'%s' is not valid property class"),propClass.c_str()));
         return NULL;

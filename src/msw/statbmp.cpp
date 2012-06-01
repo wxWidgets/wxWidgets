@@ -61,7 +61,7 @@
 
 static wxGDIImage* ConvertImage( const wxGDIImage& bitmap )
 {
-    bool isIcon = bitmap.IsKindOf( CLASSINFO(wxIcon) );
+    bool isIcon = bitmap.IsKindOf( wxCLASSINFO(wxIcon) );
 
     if( !isIcon )
     {
@@ -99,10 +99,10 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // we may have either bitmap or icon: if a bitmap with mask is passed, we
     // will transform it to an icon ourselves because otherwise the mask will
     // be ignored by Windows
-    m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
+    m_isIcon = bitmap.IsKindOf(wxCLASSINFO(wxIcon));
 
     wxGDIImage *image = ConvertImage( bitmap );
-    m_isIcon = image->IsKindOf( CLASSINFO(wxIcon) );
+    m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
 
     // create the native control
     if ( !MSWCreateControl(wxT("STATIC"), wxEmptyString, pos, size) )
@@ -243,7 +243,7 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     Free();
     InvalidateBestSize();
 
-    m_isIcon = image->IsKindOf( CLASSINFO(wxIcon) );
+    m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
     // the image has already been copied
     m_image = image;
 
