@@ -231,7 +231,7 @@ public:
 
     virtual void startTest(CppUnit::Test *test)
     {
-        wxPrintf("  %-60s  ", test->getName());
+        printf("  %-60s  ", test->getName().c_str());
         m_result = RESULT_OK;
         m_watch.Start();
     }
@@ -244,10 +244,10 @@ public:
     virtual void endTest(CppUnit::Test * WXUNUSED(test))
     {
         m_watch.Pause();
-        wxPrintf(GetResultStr(m_result));
+        printf("%s", GetResultStr(m_result));
         if (m_timing)
-            wxPrintf("  %6ld ms", m_watch.Time());
-        wxPrintf("\n");
+            printf("  %6ld ms", m_watch.Time());
+        printf("\n");
     }
 
 protected :
@@ -259,7 +259,7 @@ protected :
         RESULT_MAX
     };
 
-    wxString GetResultStr(ResultType type) const
+    const char* GetResultStr(ResultType type) const
     {
         static const char *resultTypeNames[] =
         {
