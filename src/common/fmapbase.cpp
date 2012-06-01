@@ -266,7 +266,7 @@ static const wxChar* const gs_encodingNames[][9] =
 
     { wxT( "WINDOWS-874" ), wxT( "CP874" ), wxT( "MS874" ), wxT( "IBM-874" ), NULL },
     { wxT( "WINDOWS-932" ), wxT( "CP932" ), wxT( "MS932" ), wxT( "IBM-932" ), wxT( "SJIS" ), wxT( "SHIFT-JIS" ), wxT( "SHIFT_JIS" ), NULL },
-    { wxT( "WINDOWS-936" ), wxT( "CP936" ), wxT( "MS936" ), wxT( "IBM-936" ), wxT( "GB2312" ), NULL },
+    { wxT( "WINDOWS-936" ), wxT( "CP936" ), wxT( "MS936" ), wxT( "IBM-936" ), wxT( "GB2312" ), wxT( "gbk" ),wxT( "GBK" ), NULL },
     { wxT( "WINDOWS-949" ), wxT( "CP949" ), wxT( "MS949" ), wxT( "IBM-949" ), wxT( "EUC-KR" ), wxT( "eucKR" ), wxT( "euc_kr" ), NULL },
     { wxT( "WINDOWS-950" ), wxT( "CP950" ), wxT( "MS950" ), wxT( "IBM-950" ), wxT( "BIG5" ), wxT( "BIG-5" ), wxT( "BIG-FIVE" ), NULL },
     { wxT( "WINDOWS-1250" ),wxT( "CP1250" ),wxT( "MS1250" ),wxT( "IBM-1250" ),NULL },
