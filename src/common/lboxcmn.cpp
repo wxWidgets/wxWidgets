@@ -167,6 +167,14 @@ void wxListBoxBase::DeselectAll(int itemToLeaveSelected)
 
 void wxListBoxBase::UpdateOldSelections()
 {
+    // When the control becomes empty, any previously remembered selections are
+    // invalid anyhow, so just forget them.
+    if ( IsEmpty() )
+    {
+        m_oldSelections.clear();
+        return;
+    }
+
     // We need to remember the selection even in single-selection case on
     // Windows, so that we don't send an event when the user clicks on an
     // already selected item.
