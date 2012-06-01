@@ -497,6 +497,8 @@ void wxListBox::DoClear()
     gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
 
     GTKEnableEvents();
+
+    UpdateOldSelections();
 }
 
 void wxListBox::DoDeleteOneItem(unsigned int n)
