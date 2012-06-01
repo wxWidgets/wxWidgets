@@ -702,7 +702,7 @@ wxString wxWebKitCtrl::RunScript(const wxString& javascript){
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
-#if defined(__WXMAC_) && wxOSX_USE_CARBON
+#if defined(__WXMAC__) && wxOSX_USE_CARBON
     // This is a nasty hack because WebKit seems to lose its position when it is embedded
     // in a control that is not itself the content view for a TLW.
     // I put it in OnSize because these calcs are not perfect, and in fact are basically
