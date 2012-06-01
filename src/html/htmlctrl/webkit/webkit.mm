@@ -682,18 +682,20 @@ wxString wxWebKitCtrl::RunScript(const wxString& javascript){
     id result = [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
 
     NSString* resultAsString;
-    NSString* className = NSStringFromClass([result class]);
-    if ([className isEqualToString:@"NSCFNumber"])
-        resultAsString = [NSString stringWithFormat:@"%@", result];
-    else if ([className isEqualToString:@"NSCFString"])
-        resultAsString = result;
-    else if ([className isEqualToString:@"NSCFBoolean"]){
-        if ([result boolValue])
-            resultAsString = @"true";
+    if ([result isKindOfClass:[NSNumber class]]){
+        // __NSCFBoolean is a subclass of NSNumber
+        if (strcmp([result objCType], @encode(BOOL)) == 0){
+            if ([result boolValue])
+                resultAsString = @"true";
+            else
+                resultAsString = @"false";
+        }
         else
-            resultAsString = @"false";
+            resultAsString = [NSString stringWithFormat:@"%@", result];
     }
-    else if ([className isEqualToString:@"WebScriptObject"])
+    else if ([result isKindOfClass:[NSString class]])
+        resultAsString = result;
+    else if ([result isKindOfClass:[WebScriptObject class]])
         resultAsString = [result stringRepresentation];
     else
         return wxString(); // This can happen, see e.g. #12361.
