@@ -1439,7 +1439,11 @@ wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)
         "the first handler of the wxWindow stack should have non-NULL next handler" );
 
     firstHandler->SetNextHandler(NULL);
-    secondHandler->SetPreviousHandler(NULL);
+
+    // It is harmless but useless to unset the previous handler of the window
+    // itself as it's always NULL anyhow, so don't do this.
+    if ( secondHandler != this )
+        secondHandler->SetPreviousHandler(NULL);
 
     // now firstHandler is completely unlinked; set secondHandler as the new window event handler
     SetEventHandler(secondHandler);
