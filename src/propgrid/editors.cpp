@@ -732,9 +732,6 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                                        wxRect& rect,
                                        int flags )
 {
-    // Sanity check
-    wxASSERT( IsKindOf(CLASSINFO(wxPropertyGrid)) );
-
     wxPGProperty* p = GetSelection();
     wxString text;
 
