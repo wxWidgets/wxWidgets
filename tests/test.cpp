@@ -412,6 +412,23 @@ extern bool IsNetworkAvailable()
     return online;
 }
 
+extern bool IsAutomaticTest()
+{
+    static int s_isAutomatic = -1;
+    if ( s_isAutomatic == -1 )
+    {
+        // Allow setting an environment variable to emulate buildslave user for
+        // testing.
+        wxString username;
+        if ( !wxGetEnv("WX_TEST_USER", &username) )
+            username = wxGetUserId();
+
+        s_isAutomatic = username.Lower().Matches("buildslave*");
+    }
+
+    return s_isAutomatic == 1;
+}
+
 // helper of OnRun(): gets the test with the given name, returning NULL (and
 // not an empty test suite) if there is no such test
 static Test *GetTestByName(const wxString& name)

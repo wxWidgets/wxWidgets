@@ -126,6 +126,8 @@ extern void SetProcessEventFunc(ProcessEventFunc func);
 
 extern bool IsNetworkAvailable();
 
+extern bool IsAutomaticTest();
+
 // Helper class setting the locale to the given one for its lifetime.
 class LocaleSetter
 {

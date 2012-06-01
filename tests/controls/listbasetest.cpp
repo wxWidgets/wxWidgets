@@ -181,11 +181,13 @@ void ListBaseTestCase::ItemClick()
     //        generic wxListCtrl implementation.
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
 
+#ifdef __WXMSW__
     // FIXME: This test fails on MSW buildbot slaves although works fine on
     //        development machine, no idea why. It seems to be a problem with
     //        wxUIActionSimulator rather the wxListCtrl control itself however.
-    if ( wxGetUserId().Lower().Matches("buildslave*") )
+    if ( IsAutomaticTest() )
         return;
+#endif // __WXMSW__
 
     wxListCtrl* const list = GetList();
 
