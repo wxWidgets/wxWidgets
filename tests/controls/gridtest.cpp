@@ -24,6 +24,20 @@
 #include "asserthelper.h"
 #include "wx/uiaction.h"
 
+// FIXME: A lot of mouse-related tests sporadically fail in wxGTK. This happens
+//        almost all the time but sometimes the tests do pass and the failure
+//        doesn't happen when debugging so this looks like some kind of event
+//        dispatching/simulating problem rather than a real problem in wxGrid.
+//
+//        Just disable these tests for now but it would be really great to
+//        really fix the problem.
+#ifdef __WXGTK__
+    #define NONGTK_TEST(test)
+#else
+    #define NONGTK_TEST(test) WXUISIM_TEST(test)
+#endif
+
+
 class GridTestCase : public CppUnit::TestCase
 {
 public:
@@ -35,12 +49,12 @@ public:
 private:
     CPPUNIT_TEST_SUITE( GridTestCase );
         WXUISIM_TEST( CellEdit );
-        WXUISIM_TEST( CellClick );
-        WXUISIM_TEST( CellSelect );
-        WXUISIM_TEST( LabelClick );
-        WXUISIM_TEST( SortClick );
+        NONGTK_TEST( CellClick );
+        NONGTK_TEST( CellSelect );
+        NONGTK_TEST( LabelClick );
+        NONGTK_TEST( SortClick );
         WXUISIM_TEST( Size );
-        WXUISIM_TEST( RangeSelect );
+        NONGTK_TEST( RangeSelect );
         CPPUNIT_TEST( Cursor );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( AddRowCol );
@@ -53,12 +67,12 @@ private:
         WXUISIM_TEST( Editable );
         WXUISIM_TEST( ReadOnly );
         CPPUNIT_TEST( PseudoTest_NativeHeader );
-        WXUISIM_TEST( LabelClick );
-        WXUISIM_TEST( SortClick );
+        NONGTK_TEST( LabelClick );
+        NONGTK_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
         CPPUNIT_TEST( PseudoTest_NativeLabels );
-        WXUISIM_TEST( LabelClick );
-        WXUISIM_TEST( SortClick );
+        NONGTK_TEST( LabelClick );
+        NONGTK_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
     CPPUNIT_TEST_SUITE_END();
 
