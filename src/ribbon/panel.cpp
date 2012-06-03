@@ -32,6 +32,10 @@
 #include "wx/msw/private.h"
 #endif
 
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
+
+IMPLEMENT_DYNAMIC_CLASS(wxRibbonPanelEvent, wxCommandEvent)
+
 IMPLEMENT_CLASS(wxRibbonPanel, wxRibbonControl)
 
 BEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
@@ -39,6 +43,7 @@ BEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
     EVT_ERASE_BACKGROUND(wxRibbonPanel::OnEraseBackground)
     EVT_KILL_FOCUS(wxRibbonPanel::OnKillFocus)
     EVT_LEAVE_WINDOW(wxRibbonPanel::OnMouseLeave)
+    EVT_MOTION(wxRibbonPanel::OnMotion)
     EVT_LEFT_DOWN(wxRibbonPanel::OnMouseClick)
     EVT_PAINT(wxRibbonPanel::OnPaint)
     EVT_SIZE(wxRibbonPanel::OnSize)
@@ -119,6 +124,7 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
     m_minimised_icon = icon;
     m_minimised = false;
     m_hovered = false;
+    m_ext_button_hovered = false;
 
     if(m_art == NULL)
     {
@@ -142,6 +148,11 @@ bool wxRibbonPanel::IsMinimised() const
 bool wxRibbonPanel::IsHovered() const
 {
     return m_hovered;
+}
+
+bool wxRibbonPanel::IsExtButtonHovered() const
+{
+    return m_ext_button_hovered;
 }
 
 void wxRibbonPanel::OnMouseEnter(wxMouseEvent& evt)
@@ -178,9 +189,14 @@ void wxRibbonPanel::OnMouseLeaveChild(wxMouseEvent& evt)
     evt.Skip();
 }
 
+void wxRibbonPanel::OnMotion(wxMouseEvent& evt)
+{
+    TestPositionForHover(evt.GetPosition());
+}
+
 void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
 {
-    bool hovered = false;
+    bool hovered = false, ext_button_hovered = false;
     if(pos.x >= 0 && pos.y >= 0)
     {
         wxSize size = GetSize();
@@ -189,9 +205,17 @@ void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
             hovered = true;
         }
     }
-    if(hovered != m_hovered)
+    if(hovered)
+    {
+        if(HasExtButton())
+            ext_button_hovered = m_ext_button_rect.Contains(pos);
+        else
+            ext_button_hovered = false;
+    }
+    if(hovered != m_hovered || ext_button_hovered != m_ext_button_hovered)
     {
         m_hovered = hovered;
+        m_ext_button_hovered = ext_button_hovered;
         Refresh(false);
     }
 }
@@ -214,6 +238,15 @@ void wxRibbonPanel::RemoveChild(wxWindowBase *child)
     child->Disconnect(wxEVT_LEAVE_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseLeaveChild, NULL, this);
 
     wxRibbonControl::RemoveChild(child);
+}
+
+bool wxRibbonPanel::HasExtButton()const
+{
+    wxRibbonBar* bar = GetAncestorRibbonBar();
+    if(bar==NULL)
+        return false;
+    return (m_flags & wxRIBBON_PANEL_EXT_BUTTON) &&
+        (bar->GetWindowStyleFlag() & wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS);
 }
 
 void wxRibbonPanel::OnSize(wxSizeEvent& evt)
@@ -721,6 +754,10 @@ bool wxRibbonPanel::Layout()
         wxWindow* child = GetChildren().Item(0)->GetData();
         child->SetSize(position.x, position.y, size.GetWidth(), size.GetHeight());
     }
+
+    if(HasExtButton())
+        m_ext_button_rect = m_art->GetPanelExtButtonArea(dc, this, GetSize());
+
     return true;
 }
 
@@ -736,6 +773,13 @@ void wxRibbonPanel::OnMouseClick(wxMouseEvent& WXUNUSED(evt))
         {
             ShowExpanded();
         }
+    }
+    else if(IsExtButtonHovered())
+    {
+        wxRibbonPanelEvent notification(wxEVT_COMMAND_RIBBONPANEL_EXTBUTTON_ACTIVATED, GetId());
+        notification.SetEventObject(this);
+        notification.SetPanel(this);
+        ProcessEvent(notification);
     }
 }
 

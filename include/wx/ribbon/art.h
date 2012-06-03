@@ -101,6 +101,8 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_COLOUR,
     wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_PANEL_BUTTON_FACE_COLOUR,
+    wxRIBBON_ART_PANEL_BUTTON_HOVER_FACE_COLOUR,
     wxRIBBON_ART_PAGE_BORDER_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
@@ -327,6 +329,11 @@ public:
                         wxSize size,
                         wxPoint* client_offset) = 0;
 
+    virtual wxRect GetPanelExtButtonArea(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxRect rect) = 0;
+
     virtual wxSize GetGallerySize(
                         wxDC& dc,
                         const wxRibbonGallery* wnd,
@@ -511,6 +518,11 @@ public:
                         wxSize size,
                         wxPoint* client_offset);
 
+    wxRect GetPanelExtButtonArea(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxRect rect);
+
     wxSize GetGallerySize(
                         wxDC& dc,
                         const wxRibbonGallery* wnd,
@@ -592,6 +604,7 @@ protected:
     wxBitmap m_gallery_down_bitmap[4];
     wxBitmap m_gallery_extension_bitmap[4];
     wxBitmap m_toolbar_drop_bitmap;
+    wxBitmap m_panel_extension_bitmap[2];
 
     wxColour m_primary_scheme_colour;
     wxColour m_secondary_scheme_colour;
@@ -614,6 +627,8 @@ protected:
     wxColour m_panel_active_background_gradient_colour;
     wxColour m_panel_active_background_top_colour;
     wxColour m_panel_active_background_top_gradient_colour;
+    wxColour m_panel_button_face_colour;
+    wxColour m_panel_button_hover_face_colour;
     wxColour m_page_background_colour;
     wxColour m_page_background_gradient_colour;
     wxColour m_page_background_top_colour;
@@ -660,6 +675,7 @@ protected:
     wxBrush m_tab_ctrl_background_brush;
     wxBrush m_panel_label_background_brush;
     wxBrush m_panel_hover_label_background_brush;
+    wxBrush m_panel_hover_button_background_brush;
     wxBrush m_gallery_hover_background_brush;
     wxBrush m_gallery_button_background_top_brush;
     wxBrush m_gallery_button_hover_background_top_brush;
@@ -675,6 +691,7 @@ protected:
     wxPen m_panel_border_gradient_pen;
     wxPen m_panel_minimised_border_pen;
     wxPen m_panel_minimised_border_gradient_pen;
+    wxPen m_panel_hover_button_border_pen;
     wxPen m_tab_border_pen;
     wxPen m_button_bar_hover_border_pen;
     wxPen m_button_bar_active_border_pen;
@@ -736,6 +753,11 @@ public:
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset);
+
+    wxRect GetPanelExtButtonArea(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxRect rect);
 
     void DrawTabCtrlBackground(
                         wxDC& dc,

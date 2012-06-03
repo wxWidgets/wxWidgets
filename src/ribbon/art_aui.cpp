@@ -642,6 +642,27 @@ wxSize wxRibbonAUIArtProvider::GetPanelClientSize(
     return size;
 }
 
+wxRect wxRibbonAUIArtProvider::GetPanelExtButtonArea(wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxRect rect)
+{
+    wxRect true_rect(rect);
+    RemovePanelPadding(&true_rect);
+
+    true_rect.x++;
+    true_rect.width -= 2;
+    true_rect.y++;
+
+    dc.SetFont(m_panel_label_font);
+    wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
+    int label_height = label_size.GetHeight() + 5;
+    wxRect label_rect(true_rect);
+    label_rect.height = label_height - 1;
+
+    rect = wxRect(label_rect.GetRight()-13, label_rect.GetBottom()-13, 13, 13);
+    return rect;
+}
+
 void wxRibbonAUIArtProvider::DrawPanelBackground(
                         wxDC& dc,
                         wxRibbonPanel* wnd,
@@ -704,6 +725,19 @@ void wxRibbonAUIArtProvider::DrawPanelBackground(
         wxColour gradient = m_page_hover_background_gradient_colour;
 #endif
         dc.GradientFillLinear(gradient_rect, colour, gradient, wxSOUTH);
+    }
+
+    if(wnd->HasExtButton())
+    {
+        if(wnd->IsExtButtonHovered())
+        {
+            dc.SetPen(m_panel_hover_button_border_pen);
+            dc.SetBrush(m_panel_hover_button_background_brush);
+            dc.DrawRoundedRectangle(label_rect.GetRight() - 13, label_rect.GetBottom() - 13, 13, 13, 1.0);
+            dc.DrawBitmap(m_panel_extension_bitmap[1], label_rect.GetRight() - 10, label_rect.GetBottom() - 10, true);
+        }
+        else
+            dc.DrawBitmap(m_panel_extension_bitmap[0], label_rect.GetRight() - 10, label_rect.GetBottom() - 10, true);
     }
 }
 

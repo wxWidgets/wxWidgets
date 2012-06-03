@@ -7,6 +7,41 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
+    @class wxRibbonPanelEvent
+
+    Event used to indicate various actions relating to a wxRibbonPanel.
+
+    See wxRibbonPanel for available event types.
+
+    @since 2.9.4
+
+    @library{wxribbon}
+    @category{events,ribbon}
+
+    @see wxRibbonPanel
+*/
+class wxRibbonPanelEvent : public wxCommandEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxRibbonPanelEvent(wxEventType command_type = wxEVT_NULL,
+                       int win_id = 0,
+                       wxRibbonPanel* panel = NULL)
+
+    /**
+        Returns the panel relating to this event.
+    */
+    wxRibbonPanel* GetPanel();
+
+    /**
+        Sets the page relating to this event.
+    */
+    void SetPanel(wxRibbonPanel* page);
+};
+
+/**
     @class wxRibbonPanel
 
     Serves as a container for a group of (ribbon) controls. A wxRibbonPage will
@@ -52,6 +87,11 @@
         amount of horizontal space available. Set the minimum and maximum
         toolbar rows to take full advantage of this wrapping behaviour.
     @endStyleTable
+
+    @beginEventEmissionTable{wxRibbonPanelEvent}
+    @event{EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(id, func)}
+        Triggered when the user activate the panel extension button.
+    @endEventTable
 
     @library{wxribbon}
     @category{ribbon}
@@ -124,6 +164,18 @@ public:
     const wxBitmap& GetMinimisedIcon() const;
 
     /**
+        Test if the panel has an extension button.
+
+        Such button is shown in the top right corner of the panel if
+        @c wxRIBBON_PANEL_EXT_BUTTON style is used for it.
+
+        @since 2.9.4
+
+        @return @true if the panel and its wxRibbonBar allow it in their styles.
+    */
+    virtual bool HasExtButton() const;
+
+    /**
         Query if the panel is currently minimised.
     */
     bool IsMinimised() const;
@@ -139,6 +191,16 @@ public:
             hovered over the panel or one of its children), @false otherwise.
     */
     bool IsHovered() const;
+
+    /**
+        Query if the mouse is currently hovered over the extension button.
+
+        Extension button is only shown for panels with @c
+        wxRIBBON_PANEL_EXT_BUTTON style.
+
+        @since 2.9.4
+    */
+    bool IsExtButtonHovered() const;
 
     /**
         Query if the panel can automatically minimise itself at small sizes.

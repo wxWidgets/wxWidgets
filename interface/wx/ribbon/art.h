@@ -776,7 +776,24 @@ public:
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset) = 0;
-    
+
+    /**
+        Calculate the position and size of the panel extension button.
+
+        @param dc
+            A device context to use if one is required for size calculations.
+        @param wnd
+            The ribbon panel in question.
+        @param rect
+            The panel rectangle from which calculate extension button rectangle.
+
+        @since 2.9.4
+    */
+    virtual wxRect GetPanelExtButtonArea(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxRect rect) = 0;
+
     /**
         Calculate the size of a wxRibbonGallery control for a given client
         size. This should increment the given size by enough to fit the gallery

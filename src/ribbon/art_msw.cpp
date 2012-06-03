@@ -82,6 +82,18 @@ static const char* const gallery_extension_xpm[] = {
   " xxx ",
   "  x  "};
 
+static const char* const panel_extension_xpm[] = {
+  "7 7 2 1",
+  "  c None",
+  "x c #FF00FF",
+  "xxxxxx ",
+  "x      ",
+  "x      ",
+  "x  x  x",
+  "x   xxx",
+  "x   xxx",
+  "   xxxx"};
+
 wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
 {
     m_flags = 0;
@@ -212,6 +224,10 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     m_panel_label_colour = LikePrimary(2.8, -0.14, -0.35);
     m_panel_hover_label_colour = m_panel_label_colour;
     m_panel_minimised_label_colour = m_tab_label_colour;
+    m_panel_hover_button_background_brush = LikeSecondary(-0.9, 0.16, -0.07);
+    m_panel_hover_button_border_pen = LikeSecondary(-3.9, -0.16, -0.14);
+    SetColour(wxRIBBON_ART_PANEL_BUTTON_FACE_COLOUR, LikePrimary(1.4, -0.21, -0.23));
+    SetColour(wxRIBBON_ART_PANEL_BUTTON_HOVER_FACE_COLOUR, LikePrimary(1.5, -0.24, -0.29));
 
     m_gallery_button_disabled_background_colour = LikePrimary(-2.8, -0.46, 0.09);
     m_gallery_button_disabled_background_top_brush = LikePrimary(-2.8, -0.36, 0.15);
@@ -284,6 +300,10 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
         copy->m_gallery_down_bitmap[i] = m_gallery_down_bitmap[i];
         copy->m_gallery_extension_bitmap[i] = m_gallery_extension_bitmap[i];
     }
+    for(int i = 0; i < 2; ++i)
+    {
+        copy->m_panel_extension_bitmap[i] = m_panel_extension_bitmap[i];
+    }
     copy->m_toolbar_drop_bitmap = m_toolbar_drop_bitmap;
 
     copy->m_primary_scheme_colour = m_primary_scheme_colour;
@@ -303,6 +323,8 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     copy->m_panel_label_colour = m_panel_label_colour;
     copy->m_panel_hover_label_colour = m_panel_hover_label_colour;
     copy->m_panel_minimised_label_colour = m_panel_minimised_label_colour;
+    copy->m_panel_button_face_colour = m_panel_button_face_colour;
+    copy->m_panel_button_hover_face_colour = m_panel_button_hover_face_colour;
     copy->m_panel_active_background_colour = m_panel_active_background_colour;
     copy->m_panel_active_background_gradient_colour = m_panel_active_background_gradient_colour;
     copy->m_panel_active_background_top_colour = m_panel_active_background_top_colour;
@@ -339,6 +361,7 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     copy->m_tab_ctrl_background_brush = m_tab_ctrl_background_brush;
     copy->m_panel_label_background_brush = m_panel_label_background_brush;
     copy->m_panel_hover_label_background_brush = m_panel_hover_label_background_brush;
+    copy->m_panel_hover_button_background_brush = m_panel_hover_button_background_brush;
     copy->m_gallery_hover_background_brush = m_gallery_hover_background_brush;
     copy->m_gallery_button_background_top_brush = m_gallery_button_background_top_brush;
     copy->m_gallery_button_hover_background_top_brush = m_gallery_button_hover_background_top_brush;
@@ -354,6 +377,7 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     copy->m_panel_border_gradient_pen = m_panel_border_gradient_pen;
     copy->m_panel_minimised_border_pen = m_panel_minimised_border_pen;
     copy->m_panel_minimised_border_gradient_pen = m_panel_minimised_border_gradient_pen;
+    copy->m_panel_hover_button_border_pen = m_panel_hover_button_border_pen;
     copy->m_tab_border_pen = m_tab_border_pen;
     copy->m_gallery_border_pen = m_gallery_border_pen;
     copy->m_button_bar_hover_border_pen = m_button_bar_hover_border_pen;
@@ -407,6 +431,8 @@ void wxRibbonMSWArtProvider::SetFlags(long flags)
     Reload(wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR);
     Reload(wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR);
     Reload(wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR);
+    Reload(wxRIBBON_ART_PANEL_BUTTON_FACE_COLOUR);
+    Reload(wxRIBBON_ART_PANEL_BUTTON_HOVER_FACE_COLOUR);
 #undef Reload
 }
 
@@ -647,6 +673,10 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id) const
             return m_panel_active_background_colour;
         case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
             return m_panel_active_background_gradient_colour;
+        case wxRIBBON_ART_PANEL_BUTTON_FACE_COLOUR:
+            return m_panel_button_face_colour;
+        case wxRIBBON_ART_PANEL_BUTTON_HOVER_FACE_COLOUR:
+            return m_panel_button_hover_face_colour;
         case wxRIBBON_ART_PAGE_BORDER_COLOUR:
             return m_page_border_pen.GetColour();
         case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR:
@@ -896,6 +926,14 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
             m_panel_active_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_PANEL_BUTTON_FACE_COLOUR:
+            m_panel_button_face_colour = colour;
+            m_panel_extension_bitmap[0] = wxRibbonLoadPixmap(panel_extension_xpm, colour);
+            break;
+        case wxRIBBON_ART_PANEL_BUTTON_HOVER_FACE_COLOUR:
+            m_panel_button_hover_face_colour = colour;
+            m_panel_extension_bitmap[1] = wxRibbonLoadPixmap(panel_extension_xpm, colour);
             break;
         case wxRIBBON_ART_PAGE_BORDER_COLOUR:
             m_page_border_pen.SetColour(colour);
@@ -1464,6 +1502,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
 
     wxRect true_rect(rect);
     RemovePanelPadding(&true_rect);
+    bool has_ext_button = wnd->HasExtButton();
 
     int label_height;
     {
@@ -1490,6 +1529,11 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
         label_rect.SetHeight(label_size.GetHeight() + 2);
         label_rect.SetY(true_rect.GetBottom() - label_rect.GetHeight());
         label_height = label_rect.GetHeight();
+
+        wxRect label_bg_rect = label_rect;
+
+        if(has_ext_button)
+            label_rect.SetWidth(label_rect.GetWidth() - 13);
 
         if(label_size.GetWidth() > label_rect.GetWidth())
         {
@@ -1519,7 +1563,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
             }
         }
 
-        dc.DrawRectangle(label_rect.GetX(), label_rect.GetY(), label_rect.GetWidth(), label_rect.GetHeight());
+        dc.DrawRectangle(label_bg_rect);
         if(clip_label)
         {
             wxDCClipper clip(dc, label_rect);
@@ -1532,6 +1576,19 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
                 (label_rect.GetWidth() - label_size.GetWidth()) / 2,
                 label_rect.y +
                 (label_rect.GetHeight() - label_size.GetHeight()) / 2);
+        }
+
+        if(has_ext_button)
+        {
+            if(wnd->IsExtButtonHovered())
+            {
+                dc.SetPen(m_panel_hover_button_border_pen);
+                dc.SetBrush(m_panel_hover_button_background_brush);
+                dc.DrawRoundedRectangle(label_rect.GetRight(), label_rect.GetBottom() - 13, 13, 13, 1.0);
+                dc.DrawBitmap(m_panel_extension_bitmap[1], label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
+            }
+            else
+                dc.DrawBitmap(m_panel_extension_bitmap[0], label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
         }
     }
 
@@ -1546,6 +1603,15 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
     }
 
     DrawPanelBorder(dc, true_rect, m_panel_border_pen, m_panel_border_gradient_pen);
+}
+
+wxRect wxRibbonMSWArtProvider::GetPanelExtButtonArea(wxDC& WXUNUSED(dc),
+                        const wxRibbonPanel* WXUNUSED(wnd),
+                        wxRect rect)
+{
+    RemovePanelPadding(&rect);
+    rect = wxRect(rect.GetRight()-13, rect.GetBottom()-13, 13, 13);
+    return rect;
 }
 
 void wxRibbonMSWArtProvider::DrawGalleryBackground(

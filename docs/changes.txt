@@ -541,6 +541,7 @@ All (GUI):
 - Send wxEVT_UPDATE_UI for wxRibbonButtonBar and wxRibbonToolBar (Emilien Kia).
 - Add InsertXXXButton() to wxRibbonButtonBar and wxRibbonToolBar (Emilien Kia).
 - Allow enabling/disabling and toggling tools in wxRibbonToolBar (Emilien Kia).
+- Implement support for extension button to wxRibbonPanel (Emilien Kia).
 - Fix multiple item selection in generic wxTreeCtrl (Igor Korot).
 - Implement wxMenuBar::IsEnabledTop() for all major ports (Igor Korot).
 - Implement best size calculation for report mode wxListCtrl.

@@ -129,6 +129,8 @@ public:
 
     void OnTogglePanels(wxCommandEvent& evt);
 
+    void OnExtButton(wxRibbonPanelEvent& evt);
+
 protected:
     wxRibbonGallery* PopulateColoursPanel(wxWindow* panel, wxColour def,
         int gallery_id);
@@ -222,6 +224,7 @@ EVT_MENU(ID_POSITION_TOP, MyFrame::OnPositionTopLabels)
 EVT_MENU(ID_POSITION_TOP_ICONS, MyFrame::OnPositionTopIcons)
 EVT_MENU(ID_POSITION_TOP_BOTH, MyFrame::OnPositionTopBoth)
 EVT_TOGGLEBUTTON(ID_TOGGLE_PANELS, MyFrame::OnTogglePanels)
+EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(wxID_ANY, MyFrame::OnExtButton)
 END_EVENT_TABLE()
 
 #include "align_center.xpm"
@@ -250,13 +253,17 @@ END_EVENT_TABLE()
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, wxT("wxRibbon Sample Application"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
 {
-    m_ribbon = new wxRibbonBar(this, wxID_ANY);
+    m_ribbon = new wxRibbonBar(this, wxID_ANY,
+                               wxDefaultPosition, wxDefaultSize,
+                               wxRIBBON_BAR_DEFAULT_STYLE |
+                               wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS);
 
     {
         wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"), ribbon_xpm);
         wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Toolbar"), 
                                             wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
-                                            wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+                                            wxRIBBON_PANEL_NO_AUTO_MINIMISE |
+                                            wxRIBBON_PANEL_EXT_BUTTON);
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
         toolbar->AddToggleTool(wxID_JUSTIFY_LEFT, align_left_xpm);
         toolbar->AddToggleTool(wxID_JUSTIFY_CENTER , align_center_xpm);
@@ -819,6 +826,11 @@ void MyFrame::OnPositionLeftDropdown(wxRibbonToolBarEvent& evt)
 void MyFrame::OnTogglePanels(wxCommandEvent& WXUNUSED(evt))
 {
     m_ribbon->ShowPanels(m_togglePanels->GetValue());
+}
+
+void MyFrame::OnExtButton(wxRibbonPanelEvent& WXUNUSED(evt))
+{
+    wxMessageBox("Extension button clicked");
 }
 
 void MyFrame::AddText(wxString msg)
