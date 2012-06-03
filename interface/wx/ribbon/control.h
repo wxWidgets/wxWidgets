@@ -149,6 +149,15 @@ public:
     bool Realise();
 
     /**
+        Get the first ancestor which is a wxRibbonBar (or derived) or NULL
+        if not having such parent.
+
+        @since 2.9.4
+     */
+    virtual wxRibbonBar* GetAncestorRibbonBar()const;
+
+
+    /**
         Finds the best width and height given the parent's width and height.
         Used to implement the wxRIBBON_PANEL_FLEXIBLE panel style.
     */

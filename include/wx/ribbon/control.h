@@ -19,6 +19,7 @@
 #include "wx/control.h"
 #include "wx/dynarray.h"
 
+class wxRibbonBar;
 class wxRibbonArtProvider;
 
 class WXDLLIMPEXP_RIBBON wxRibbonControl : public wxControl
@@ -54,6 +55,8 @@ public:
 
     virtual bool Realize();
     bool Realise() {return Realize();}
+
+    virtual wxRibbonBar* GetAncestorRibbonBar()const;
 
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& WXUNUSED(parentSize)) const { return GetBestSize(); }
