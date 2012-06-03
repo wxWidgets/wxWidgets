@@ -796,7 +796,7 @@ public:
     {
         if ( IsRegistered() )
         {
-            if ( !::UnregisterClass(m_clsname.wx_str(), wxGetInstance()) )
+            if ( !::UnregisterClass(m_clsname.t_str(), wxGetInstance()) )
             {
                 wxLogLastError(wxT("UnregisterClass"));
             }

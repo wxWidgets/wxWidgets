@@ -251,7 +251,7 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
     if (bCase)
        return wxItemContainerImmutable::FindString( s, bCase );
 
-    int pos = ListBox_FindStringExact(GetHwnd(), -1, s.wx_str());
+    int pos = ListBox_FindStringExact(GetHwnd(), -1, s.t_str());
     if (pos == LB_ERR)
         return wxNOT_FOUND;
     else
@@ -473,7 +473,7 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     if ( n == (m_noItems - 1) )
         newN = -1;
 
-    ListBox_InsertString(GetHwnd(), newN, s.wx_str());
+    ListBox_InsertString(GetHwnd(), newN, s.t_str());
 
     // restore the client data
     if ( oldData )

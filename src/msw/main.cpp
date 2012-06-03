@@ -316,7 +316,7 @@ struct wxMSWCommandLineArguments
         argv = new wxChar *[argc + 1];
         for ( int i = 0; i < argc; i++ )
         {
-            argv[i] = wxStrdup(args[i].wx_str());
+            argv[i] = wxStrdup(args[i].t_str());
         }
 
         // argv[] must be NULL-terminated

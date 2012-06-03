@@ -427,7 +427,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
     // implementation detail
     m_updatesCount = -2;
 
-    if ( !MSWCreateControl(windowClass.wx_str(), msStyle, pos, size, valueWin) )
+    if ( !MSWCreateControl(windowClass.t_str(), msStyle, pos, size, valueWin) )
         return false;
 
     m_updatesCount = -1;
@@ -1109,7 +1109,7 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
                       // EM_REPLACESEL takes 1 to indicate the operation should be redoable
-                      selectionOnly ? 1 : 0, (LPARAM)valueDos.wx_str());
+                      selectionOnly ? 1 : 0, wxMSW_CONV_LPARAM(valueDos));
 
         if ( !ucf.GotUpdate() && (flags & SetValue_SendEvent) )
         {

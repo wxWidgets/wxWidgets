@@ -715,7 +715,7 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     if ( isLaterThanWin95 )
         info.fMask |= MIIM_STRING;
     //else: MIIM_TYPE already specified
-    info.dwTypeData = (LPTSTR)m_text.wx_str();
+    info.dwTypeData = wxMSW_CONV_LPTSTR(m_text);
     info.cch = m_text.length();
     if ( !::SetMenuItemInfo(hMenu, id, FALSE, &info) )
     {
@@ -975,7 +975,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         int x = rcText.left;
         int y = rcText.top + (rcText.bottom - rcText.top - textSize.cy) / 2;
 
-        ::DrawState(hdc, NULL, NULL, (LPARAM)text.wx_str(),
+        ::DrawState(hdc, NULL, NULL, wxMSW_CONV_LPARAM(text),
                     text.length(), x, y, 0, 0, flags);
 
         // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO
@@ -1005,7 +1005,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
             int y = rcText.top + (rcText.bottom - rcText.top - accelSize.cy) / 2;
 
-            ::DrawState(hdc, NULL, NULL, (LPARAM)accel.wx_str(),
+            ::DrawState(hdc, NULL, NULL, wxMSW_CONV_LPARAM(accel),
                         accel.length(), x, y, 0, 0, flags);
         }
     }

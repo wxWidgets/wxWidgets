@@ -47,14 +47,14 @@ int wxRichMessageDialog::ShowModal()
         // add a checkbox
         if ( !m_checkBoxText.empty() )
         {
-            tdc.pszVerificationText = m_checkBoxText.wx_str();
+            tdc.pszVerificationText = m_checkBoxText.t_str();
             if ( m_checkBoxValue )
                 tdc.dwFlags |= TDF_VERIFICATION_FLAG_CHECKED;
         }
 
         // add collapsible footer
         if ( !m_detailedText.empty() )
-            tdc.pszExpandedInformation = m_detailedText.wx_str();
+            tdc.pszExpandedInformation = m_detailedText.t_str();
 
         TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
         if ( !taskDialogIndirect )

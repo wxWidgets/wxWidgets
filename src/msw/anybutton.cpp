@@ -813,7 +813,7 @@ void DrawButtonText(HDC hdc,
         // first we need to compute its bounding rect
         RECT rc;
         ::CopyRect(&rc, pRect);
-        ::DrawText(hdc, text.wx_str(), text.length(), &rc,
+        ::DrawText(hdc, text.t_str(), text.length(), &rc,
                    DT_CENTER | DT_CALCRECT);
 
         // now center this rect inside the entire button area
@@ -824,7 +824,7 @@ void DrawButtonText(HDC hdc,
         rc.top = pRect->top + (pRect->bottom - pRect->top)/2 - h/2;
         rc.bottom = rc.top+h;
 
-        ::DrawText(hdc, text.wx_str(), text.length(), &rc, flags);
+        ::DrawText(hdc, text.t_str(), text.length(), &rc, flags);
     }
     else // single line label
     {
@@ -851,7 +851,7 @@ void DrawButtonText(HDC hdc,
 
         // notice that we must have DT_SINGLELINE for vertical alignment flags
         // to work
-        ::DrawText(hdc, text.wx_str(), text.length(), pRect,
+        ::DrawText(hdc, text.t_str(), text.length(), pRect,
                    flags | DT_SINGLELINE );
     }
 }

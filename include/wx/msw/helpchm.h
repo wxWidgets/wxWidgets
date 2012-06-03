@@ -63,7 +63,7 @@ protected:
     // the first 2 HtmlHelp() parameters
     bool CallHtmlHelp(unsigned cmd, WXWPARAM param)
     {
-        return CallHtmlHelp(GetParentWindow(), GetValidFilename().wx_str(),
+        return CallHtmlHelp(GetParentWindow(), GetValidFilename().t_str(),
                             cmd, param);
     }
 

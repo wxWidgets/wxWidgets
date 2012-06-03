@@ -612,7 +612,7 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
         }
 
         SHFILEINFO fi;
-        long rc = SHGetFileInfo(m_volName.wx_str(), 0, &fi, sizeof(fi), flags);
+        long rc = SHGetFileInfo(m_volName.t_str(), 0, &fi, sizeof(fi), flags);
         m_icons[type].SetHICON((WXHICON)fi.hIcon);
         if (!rc || !fi.hIcon)
         {

@@ -2174,7 +2174,7 @@ void wxWindowMSW::DoGetTextExtent(const wxString& string,
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    ::GetTextExtentPoint32(hdc, string.wx_str(), string.length(), &sizeRect);
+    ::GetTextExtentPoint32(hdc, string.t_str(), string.length(), &sizeRect);
     GetTextMetrics(hdc, &tm);
 
     if ( x )
@@ -3761,8 +3761,8 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         extendedStyle,
-                        className.wx_str(),
-                        title ? title : m_windowName.wx_str(),
+                        className.t_str(),
+                        title ? title : m_windowName.t_str(),
                         style,
                         x, y, w, h,
                         (HWND)MSWGetParent(),
@@ -3882,7 +3882,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
                     (
                         CP_ACP,
                         0,                      // no flags
-                        ttip.wx_str(),
+                        ttip.t_str(),
                         tipLength,
                         buf,
                         WXSIZEOF(buf) - 1
@@ -5826,7 +5826,7 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                 wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
 
                 const wxString label(item->GetItemLabel());
-                const wxChar *p = wxStrchr(label.wx_str(), wxT('&'));
+                const wxChar *p = wxStrchr(label.t_str(), wxT('&'));
                 while ( p++ )
                 {
                     if ( *p == wxT('&') )

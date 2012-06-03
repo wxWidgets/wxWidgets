@@ -447,7 +447,7 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     // around it
     if ( isFocused )
     {
-        if ( !::DrawText(hdc, label.wx_str(), label.length(), &rectLabel,
+        if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel,
                          fmt | DT_CALCRECT) )
         {
             wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
@@ -459,7 +459,7 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         ::SetTextColor(hdc, ::GetSysColor(COLOR_GRAYTEXT));
     }
 
-    if ( !::DrawText(hdc, label.wx_str(), label.length(), &rectLabel, fmt) )
+    if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel, fmt) )
     {
         wxLogLastError(wxT("DrawText()"));
     }

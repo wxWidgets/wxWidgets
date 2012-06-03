@@ -557,7 +557,7 @@ bool wxConsoleStderr::Write(const wxString& text)
         return false;
     }
 
-    if ( !::WriteConsole(m_hStderr, text.wx_str(), text.length(), &ret, NULL) )
+    if ( !::WriteConsole(m_hStderr, text.t_str(), text.length(), &ret, NULL) )
     {
         wxLogLastError(wxT("WriteConsole"));
         return false;
@@ -692,7 +692,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
 
 
     ClassRegInfo regClass(name);
-    wndclass.lpszClassName = regClass.regname.wx_str();
+    wndclass.lpszClassName = regClass.regname.t_str();
     if ( !::RegisterClass(&wndclass) )
     {
         wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
@@ -701,7 +701,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     }
 
     wndclass.style &= ~(CS_HREDRAW | CS_VREDRAW);
-    wndclass.lpszClassName = regClass.regnameNR.wx_str();
+    wndclass.lpszClassName = regClass.regnameNR.t_str();
     if ( !::RegisterClass(&wndclass) )
     {
         wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
@@ -716,7 +716,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     // function returns (it could be invalidated later if new elements are
     // added to the vector and it's reallocated but this shouldn't matter as
     // this pointer should be used right now, not stored)
-    return gs_regClassesInfo.back().regname.wx_str();
+    return gs_regClassesInfo.back().regname.t_str();
 }
 
 bool wxApp::IsRegisteredClassName(const wxString& name)

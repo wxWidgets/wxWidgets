@@ -1871,7 +1871,7 @@ void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
 
     SIZE sizeRect;
     const size_t len = string.length();
-    if ( !::GetTextExtentPoint32(GetHdc(), string.wx_str(), len, &sizeRect) )
+    if ( !::GetTextExtentPoint32(GetHdc(), string.t_str(), len, &sizeRect) )
     {
         wxLogLastError(wxT("GetTextExtentPoint32()"));
     }

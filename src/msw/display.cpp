@@ -431,7 +431,7 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
     // do change the mode
     switch ( pfnChangeDisplaySettingsEx
              (
-                GetName().wx_str(), // display name
+                GetName().t_str(),  // display name
                 pDevMode,           // dev mode or NULL to reset
                 NULL,               // reserved
                 flags,

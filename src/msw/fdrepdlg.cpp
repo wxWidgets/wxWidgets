@@ -310,7 +310,7 @@ wxFindReplaceDialogHookProc(HWND hwnd,
         FINDREPLACE *pFR = (FINDREPLACE *)lParam;
         wxFindReplaceDialog *dialog = (wxFindReplaceDialog *)pFR->lCustData;
 
-        ::SetWindowText(hwnd, dialog->GetTitle().wx_str());
+        ::SetWindowText(hwnd, dialog->GetTitle().t_str());
 
         // don't return FALSE from here or the dialog won't be shown
         return TRUE;

@@ -403,7 +403,7 @@ bool wxToolMenuBar::Realize()
                     const wxString& label = tool->GetLabel();
                     if ( !label.empty() )
                     {
-                        button.iString = (int)label.wx_str();
+                        button.iString = (int) wxMSW_CONV_LPCTSTR(label);
                     }
                 }
 

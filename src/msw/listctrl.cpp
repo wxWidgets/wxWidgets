@@ -1542,7 +1542,7 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
     findInfo.flags = LVFI_STRING;
     if ( partial )
         findInfo.flags |= LVFI_PARTIAL;
-    findInfo.psz = str.wx_str();
+    findInfo.psz = str.t_str();
 
     // ListView_FindItem() excludes the first item from search and to look
     // through all the items you need to start from -1 which is unnatural and
@@ -3279,7 +3279,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
         else
         {
             // pszText is not const, hence the cast
-            lvItem.pszText = (wxChar *)info.m_text.wx_str();
+            lvItem.pszText = wxMSW_CONV_LPTSTR(info.m_text);
             if ( lvItem.pszText )
                 lvItem.cchTextMax = info.m_text.length();
             else
@@ -3300,7 +3300,7 @@ static void wxConvertToMSWListCol(HWND hwndList,
     if ( item.m_mask & wxLIST_MASK_TEXT )
     {
         lvCol.mask |= LVCF_TEXT;
-        lvCol.pszText = (wxChar *)item.m_text.wx_str(); // cast is safe
+        lvCol.pszText = wxMSW_CONV_LPTSTR(item.m_text);
     }
 
     if ( item.m_mask & wxLIST_MASK_FORMAT )

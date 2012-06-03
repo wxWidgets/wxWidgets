@@ -397,7 +397,7 @@ void wxToolTip::DoAddHWND(WXHWND hWnd)
     // NMTTDISPINFO struct -- and setting the tooltip here we can have tooltips
     // of any length
     ti.hwnd = hwnd;
-    ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
+    ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
 
     if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
     {
@@ -442,7 +442,7 @@ void wxToolTip::DoAddHWND(WXHWND hWnd)
             const wxString token = tokenizer.GetNextToken();
 
             SIZE sz;
-            if ( !::GetTextExtentPoint32(hdc, token.wx_str(),
+            if ( !::GetTextExtentPoint32(hdc, token.t_str(),
                                          token.length(), &sz) )
             {
                 wxLogLastError(wxT("GetTextExtentPoint32"));
@@ -484,7 +484,7 @@ void wxToolTip::DoAddHWND(WXHWND hWnd)
         // replace the '\n's with spaces because otherwise they appear as
         // unprintable characters in the tooltip string
         m_text.Replace(wxT("\n"), wxT(" "));
-        ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
+        ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
 
         if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
         {
@@ -561,7 +561,7 @@ void wxToolTip::DoSetTip(WXHWND hWnd)
     ti.lpszText = const_cast<wxChar *>(wxT(""));
     (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
 
-    ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
+    ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
     (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
 }
 

@@ -59,7 +59,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxEnhMetaFile, wxObject)
 
 // we must pass NULL if the string is empty to metafile functions
 static inline const wxChar *GetMetaFileName(const wxString& fn)
-    { return !fn ? (const wxChar *)NULL : (const wxChar*)fn.wx_str(); }
+    { return !fn ? NULL : wxMSW_CONV_LPCTSTR(fn); }
 
 // ============================================================================
 // implementation
@@ -291,7 +291,7 @@ void wxEnhMetaFileDCImpl::Create(HDC hdcRef,
     }
 
     m_hDC = (WXHDC)::CreateEnhMetaFile(hdcRef, GetMetaFileName(filename),
-                                       pRect, description.wx_str());
+                                       pRect, description.t_str());
     if ( !m_hDC )
     {
         wxLogLastError(wxT("CreateEnhMetaFile"));

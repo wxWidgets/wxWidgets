@@ -132,7 +132,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                        (
                         exstyle,            // extended style
                         classname,          // the kind of control to create
-                        label.wx_str(),     // the window name
+                        label.t_str(),      // the window name
                         style,              // the window style
                         x, y, w, h,         // the window position and size
                         GetHwndOf(GetParent()),         // parent
@@ -163,7 +163,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // Notice that 0xffff is not a valid Unicode character so the problem
     // doesn't arise in Unicode build.
     if ( !label.empty() && label[0] == -1 )
-        ::SetWindowText(GetHwnd(), label.wx_str());
+        ::SetWindowText(GetHwnd(), label.t_str());
 #endif // !wxUSE_UNICODE
 
     // saving the label in m_labelOrig to return it verbatim
@@ -453,7 +453,7 @@ int wxControlWithItems::MSWInsertOrAppendItem(unsigned pos,
                                               unsigned wm)
 {
     LRESULT n = SendMessage((HWND)MSWGetItemsHWND(), wm, pos,
-                            (LPARAM)item.wx_str());
+                            wxMSW_CONV_LPARAM(item));
     if ( n == CB_ERR || n == CB_ERRSPACE )
     {
         wxLogLastError(wxT("SendMessage(XX_ADD/INSERTSTRING)"));

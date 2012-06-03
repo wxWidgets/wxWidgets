@@ -65,7 +65,7 @@ public:
     BOOL Open( const wxString& printerName, LPPRINTER_DEFAULTS pDefault=(LPPRINTER_DEFAULTS)NULL )
     {
         Close();
-        return OpenPrinter( (LPTSTR)printerName.wx_str(), &m_hPrinter, pDefault );
+        return OpenPrinter( wxMSW_CONV_LPTSTR(printerName), &m_hPrinter, pDefault );
     }
 
     BOOL Close()
@@ -391,7 +391,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
     if (m_devMode)
         return;
 
-    LPTSTR szPrinterName = (LPTSTR)printerName.wx_str();
+    LPTSTR szPrinterName = wxMSW_CONV_LPTSTR(printerName);
 
     // From MSDN: How To Modify Printer Settings with the DocumentProperties() Function
     // The purpose of this is to fill the DEVMODE with privdata from printer driver.
@@ -494,7 +494,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
 bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 {
     WinPrinter printer;
-    LPTSTR szPrinterName = (LPTSTR)data.GetPrinterName().wx_str();
+    LPTSTR szPrinterName = wxMSW_CONV_LPTSTR(data.GetPrinterName());
 
     if (!m_devMode)
         InitializeDevMode(data.GetPrinterName(), &printer);
@@ -524,7 +524,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
             // NB: the cast is needed in the ANSI build, strangely enough
             //     dmDeviceName is BYTE[] and not char[] there
             wxStrlcpy(reinterpret_cast<wxChar *>(devMode->dmDeviceName),
-                      name.wx_str(),
+                      name.t_str(),
                       WXSIZEOF(devMode->dmDeviceName));
         }
 

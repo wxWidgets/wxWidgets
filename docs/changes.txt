@@ -587,7 +587,7 @@ MSW:
 - Fix handling of composite windows in wxToolTip (Armel Asselin).
 - Add VT_I8 support to wxAutomationObject (PB).
 - Fix wxListbook size calculations to avoid spurious scrollbars.
-- Fix non-GUI code compilation with wxUSE_UNICODE_UTF8 (Kolya Kosenko).
+- Fix code compilation with wxUSE_UNICODE_UTF8 (Kolya Kosenko).
 
 OSX:
 

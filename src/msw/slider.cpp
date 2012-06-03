@@ -583,7 +583,7 @@ void wxSlider::SetValue(int value)
 
     if ( m_labels )
     {
-        ::SetWindowText((*m_labels)[SliderLabel_Value], Format(value).wx_str());
+        ::SetWindowText((*m_labels)[SliderLabel_Value], Format(value).t_str());
     }
 }
 
@@ -603,9 +603,9 @@ void wxSlider::SetRange(int minValue, int maxValue)
     if ( m_labels )
     {
         ::SetWindowText((*m_labels)[SliderLabel_Min],
-                        Format(ValueInvertOrNot(m_rangeMin)).wx_str());
+                        Format(ValueInvertOrNot(m_rangeMin)).t_str());
         ::SetWindowText((*m_labels)[SliderLabel_Max],
-                        Format(ValueInvertOrNot(m_rangeMax)).wx_str());
+                        Format(ValueInvertOrNot(m_rangeMax)).t_str());
     }
 
     // When emulating wxSL_INVERSE style in wxWidgets, we need to update the

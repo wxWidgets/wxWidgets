@@ -226,7 +226,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     notifyData.uFlags |= NIF_TIP;
     if ( !tooltip.empty() )
     {
-        wxStrlcpy(notifyData.szTip, tooltip.wx_str(), WXSIZEOF(notifyData.szTip));
+        wxStrlcpy(notifyData.szTip, tooltip.t_str(), WXSIZEOF(notifyData.szTip));
     }
 
     bool ok = wxShellNotifyIcon(m_iconAdded ? NIM_MODIFY
@@ -271,8 +271,8 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     notifyData = NotifyIconData(hwnd);
     notifyData.uFlags |= NIF_INFO;
     notifyData.uTimeout = msec;
-    wxStrlcpy(notifyData.szInfo, text.wx_str(), WXSIZEOF(notifyData.szInfo));
-    wxStrlcpy(notifyData.szInfoTitle, title.wx_str(),
+    wxStrlcpy(notifyData.szInfo, text.t_str(), WXSIZEOF(notifyData.szInfo));
+    wxStrlcpy(notifyData.szInfoTitle, title.t_str(),
                 WXSIZEOF(notifyData.szInfoTitle));
 
     if ( flags & wxICON_INFORMATION )

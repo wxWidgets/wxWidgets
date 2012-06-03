@@ -625,7 +625,7 @@ wxTextEntry::~wxTextEntry()
 
 void wxTextEntry::WriteText(const wxString& text)
 {
-    ::SendMessage(GetEditHwnd(), EM_REPLACESEL, 0, (LPARAM)text.wx_str());
+    ::SendMessage(GetEditHwnd(), EM_REPLACESEL, 0, wxMSW_CONV_LPARAM(text));
 }
 
 wxString wxTextEntry::DoGetValue() const

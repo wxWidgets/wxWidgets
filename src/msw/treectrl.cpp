@@ -959,7 +959,7 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
         return;
 
     wxTreeViewItem tvItem(item, TVIF_TEXT);
-    tvItem.pszText = (wxChar *)text.wx_str();  // conversion is ok
+    tvItem.pszText = wxMSW_CONV_LPTSTR(text);
     DoSetItem(&tvItem);
 
     // when setting the text of the item being edited, the text control should
@@ -972,7 +972,7 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
     {
         if ( item == m_idEdited )
         {
-            ::SetWindowText(hwndEdit, text.wx_str());
+            ::SetWindowText(hwndEdit, text.t_str());
         }
     }
 }
@@ -1476,7 +1476,7 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     if ( !text.empty() )
     {
         mask |= TVIF_TEXT;
-        tvIns.item.pszText = (wxChar *)text.wx_str();  // cast is ok
+        tvIns.item.pszText = wxMSW_CONV_LPTSTR(text);
     }
     else
     {

@@ -271,7 +271,7 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     HWND hwndEdit = ::CreateWindow
                       (
                         wxT("EDIT"),
-                        wxTextBuffer::Translate(text).wx_str(),
+                        wxTextBuffer::Translate(text).t_str(),
                         WS_CHILD | WS_VSCROLL | WS_VISIBLE |
                         ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL,
                         rc.left, rc.top,
@@ -373,7 +373,7 @@ void wxMessageDialog::AdjustButtonLabels()
         if ( widthNeeded > wBtnNew )
             wBtnNew = widthNeeded;
 
-        ::SetWindowText(hwndBtn, label.wx_str());
+        ::SetWindowText(hwndBtn, label.t_str());
     }
 
     if ( wBtnNew <= wBtnOld )
@@ -584,7 +584,7 @@ int wxMessageDialog::ShowMessageBox()
 #endif // wxUSE_MSGBOX_HOOK
 
     // do show the dialog
-    int msAns = MessageBox(hWnd, message.wx_str(), m_caption.wx_str(), msStyle);
+    int msAns = MessageBox(hWnd, message.t_str(), m_caption.t_str(), msStyle);
 
     return MSWTranslateReturnCode(msAns);
 }
@@ -696,7 +696,7 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
                   TDF_POSITION_RELATIVE_TO_WINDOW |
                   TDF_SIZE_TO_CONTENT;
     tdc.hInstance = wxGetInstance();
-    tdc.pszWindowTitle = caption.wx_str();
+    tdc.pszWindowTitle = caption.t_str();
 
     // use the top level window as parent if none specified
     tdc.hwndParent = parent ? GetHwndOf(parent) : NULL;
@@ -713,12 +713,12 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     // message in our ctor, see comment there.
     if ( !extendedMessage.empty() )
     {
-        tdc.pszMainInstruction = message.wx_str();
-        tdc.pszContent = extendedMessage.wx_str();
+        tdc.pszMainInstruction = message.t_str();
+        tdc.pszContent = extendedMessage.t_str();
     }
     else
     {
-        tdc.pszContent = message.wx_str();
+        tdc.pszContent = message.t_str();
     }
 
     // set an icon to be used, if possible
@@ -802,7 +802,7 @@ void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
         TASKDIALOG_BUTTON &tdBtn = buttons[tdc.cButtons];
 
         tdBtn.nButtonID = btnCustomId;
-        tdBtn.pszButtonText = customLabel.wx_str();
+        tdBtn.pszButtonText = customLabel.t_str();
         tdc.cButtons++;
 
         // We should never have more than 4 buttons currently as this is the

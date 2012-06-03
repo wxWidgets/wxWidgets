@@ -154,7 +154,7 @@ private:
 
 void wxDataFormat::SetId(const wxString& format)
 {
-    m_format = (wxDataFormat::NativeFormat)::RegisterClipboardFormat(format.wx_str());
+    m_format = (wxDataFormat::NativeFormat)::RegisterClipboardFormat(format.t_str());
     if ( !m_format )
     {
         wxLogError(_("Couldn't register clipboard format '%s'."), format);
@@ -1152,7 +1152,7 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
 #endif // wxUSE_UNICODE_MSLU
         {
             len = m_filenames[i].length();
-            memcpy(pbuf, m_filenames[i].wx_str(), len*sizeOfChar);
+            memcpy(pbuf, m_filenames[i].t_str(), len*sizeOfChar);
         }
 
         pbuf += len*sizeOfChar;

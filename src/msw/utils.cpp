@@ -141,7 +141,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
             !regKey.QueryValue(wxT("Name"), hostName) )
         return false;
 
-    wxStrlcpy(buf, hostName.wx_str(), maxSize);
+    wxStrlcpy(buf, hostName.t_str(), maxSize);
 #else // !__WXWINCE__
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )

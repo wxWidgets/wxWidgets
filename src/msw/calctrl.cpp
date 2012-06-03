@@ -109,7 +109,7 @@ wxCalendarCtrl::Create(wxWindow *parent,
     }
 
     const wxChar * const clsname = s_clsMonthCal.IsRegistered()
-        ? s_clsMonthCal.GetName().wx_str()
+        ? s_clsMonthCal.GetName().t_str()
         : MONTHCAL_CLASS;
 
     if ( !MSWCreateControl(clsname, wxEmptyString, pos, size) )

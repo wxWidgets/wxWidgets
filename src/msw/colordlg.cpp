@@ -79,7 +79,7 @@ wxColourDialogHookProc(HWND hwnd,
 
         const wxString title = dialog->GetTitle();
         if ( !title.empty() )
-            ::SetWindowText(hwnd, title.wx_str());
+            ::SetWindowText(hwnd, title.t_str());
 
         dialog->MSWOnInitDone((WXHWND)hwnd);
     }

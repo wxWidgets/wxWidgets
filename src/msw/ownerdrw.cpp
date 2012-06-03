@@ -90,7 +90,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc,
         int cx = rc.GetWidth() - GetMarginWidth();
         int cy = sizeRect.cy;
 
-        ::DrawState(hdc, NULL, NULL, (LPARAM)text.wx_str(),
+        ::DrawState(hdc, NULL, NULL, wxMSW_CONV_LPARAM(text),
                     text.length(), x, y, cx, cy, flags);
 
     } // reset to default the font, colors and brush

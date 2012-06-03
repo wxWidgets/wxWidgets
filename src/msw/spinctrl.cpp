@@ -452,7 +452,7 @@ void  wxSpinCtrl::SetValue(int val)
         // to leave it like this, while we really want to always show the
         // current value in the control, so do it manually
         ::SetWindowText(GetBuddyHwnd(),
-                        wxString::Format(wxT("%d"), val).wx_str());
+                        wxString::Format(wxT("%d"), val).t_str());
     }
 
     m_oldValue = GetValue();

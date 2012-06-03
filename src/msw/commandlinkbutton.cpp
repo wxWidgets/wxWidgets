@@ -92,7 +92,7 @@ wxCommandLinkButton::SetMainLabelAndNote(const wxString& mainLabel,
     if ( HasNativeCommandLinkButton() )
     {
         wxButton::SetLabel(mainLabel);
-        ::SendMessage(m_hWnd, BCM_SETNOTE, 0, (LPARAM) note.wx_str());
+        ::SendMessage(m_hWnd, BCM_SETNOTE, 0, wxMSW_CONV_LPARAM(note));
 
         // Preserve the user-specified label for GetLabel()
         m_labelOrig = mainLabel;

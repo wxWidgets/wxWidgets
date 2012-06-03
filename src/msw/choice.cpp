@@ -333,7 +333,7 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
    else
    {
        int pos = (int)SendMessage(GetHwnd(), CB_FINDSTRINGEXACT,
-                                  (WPARAM)-1, (LPARAM)s.wx_str());
+                                  (WPARAM)-1, wxMSW_CONV_LPARAM(s));
 
        return pos == LB_ERR ? wxNOT_FOUND : pos;
    }
@@ -360,7 +360,7 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     const bool wasSelected = static_cast<int>(n) == GetSelection();
 
     ::SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
-    ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LPARAM)s.wx_str() );
+    ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, wxMSW_CONV_LPARAM(s) );
 
     // restore the client data
     if ( oldData )

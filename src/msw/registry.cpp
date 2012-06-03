@@ -33,10 +33,10 @@
 #include "wx/dynlib.h"
 #include "wx/file.h"
 #include "wx/wfstream.h"
+#include "wx/msw/private.h"
 
 // Windows headers
 #ifdef __WXWINCE__
-#include "wx/msw/private.h"
 #include <winbase.h>
 #include <winreg.h>
 #endif
