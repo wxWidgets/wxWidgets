@@ -113,7 +113,7 @@ private:
 // Define a helper for the macro below: we just need a function taking a
 // pointer and not returning anything to avoid warnings about unused return
 // value of the cast in the macro itself.
-namespace wxPrivate { void PPV_ARGS_CHECK(void*) { } }
+namespace wxPrivate { inline void PPV_ARGS_CHECK(void*) { } }
 
 // Takes the interface name and a pointer to a pointer of the interface type
 // and expands into the IID of this interface and the same pointer but after a

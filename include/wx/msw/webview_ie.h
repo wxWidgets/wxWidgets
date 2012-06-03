@@ -19,6 +19,7 @@
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/ole/activex.h"
 #include "wx/msw/ole/oleutils.h"
+#include "wx/msw/private/comptr.h"
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/missing.h"
 #include "wx/sharedptr.h"
@@ -360,7 +361,7 @@ private:
     wxAutomationObject m_ie;
     IWebBrowser2* m_webBrowser;
     DWORD m_dwCookie;
-    DocHostUIHandler* m_uiHandler;
+    wxCOMPtr<DocHostUIHandler> m_uiHandler;
 
     //We store the current zoom type;
     wxWebViewZoomType m_zoomType;
@@ -383,7 +384,7 @@ private:
     //Generic helper functions for IHtmlDocument commands
     bool CanExecCommand(wxString command) const;
     void ExecCommand(wxString command);
-    IHTMLDocument2* GetDocument() const;
+    wxCOMPtr<IHTMLDocument2> GetDocument() const;
     //Toggles control features see INTERNETFEATURELIST for values.
     bool EnableControlFeature(long flag, bool enable = true);
 
