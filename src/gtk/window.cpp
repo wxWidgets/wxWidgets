@@ -2567,11 +2567,10 @@ static gboolean queue_resize(void*)
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
+    gtk_widget_set_size_request(m_widget, width, height);
     GtkWidget* parent = gtk_widget_get_parent(m_widget);
     if (WX_IS_PIZZA(parent))
         WX_PIZZA(parent)->move(m_widget, x, y, width, height);
-    else
-        gtk_widget_set_size_request(m_widget, width, height);
 
     // With GTK3, gtk_widget_queue_resize() is ignored while a size-allocate
     // is in progress. This situation is common in wxWidgets, since
