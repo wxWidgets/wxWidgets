@@ -12411,34 +12411,44 @@ void wxTextAttrCollectCommonAttributes(wxTextAttr& currentStyle, const wxTextAtt
 
     if (attr.HasFont())
     {
-        if (attr.HasFontPointSize() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_POINT_SIZE))
+        // If different font size units are being used, this is a clash.
+        if (((attr.GetFlags() & wxTEXT_ATTR_FONT_SIZE) | (currentStyle.GetFlags() & wxTEXT_ATTR_FONT_SIZE)) == wxTEXT_ATTR_FONT_SIZE)
         {
-            if (currentStyle.HasFontPointSize())
-            {
-                if (currentStyle.GetFontSize() != attr.GetFontSize())
-                {
-                    // Clash of attr - mark as such
-                    clashingAttr.AddFlag(wxTEXT_ATTR_FONT_POINT_SIZE);
-                    currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_POINT_SIZE);
-                }
-            }
-            else
-                currentStyle.SetFontSize(attr.GetFontSize());
+            currentStyle.SetFontSize(0);
+            currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_SIZE);
+            clashingAttr.AddFlag(wxTEXT_ATTR_FONT_SIZE);
         }
-
-        if (attr.HasFontPixelSize() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_PIXEL_SIZE))
+        else
         {
-            if (currentStyle.HasFontPixelSize())
+            if (attr.HasFontPointSize() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_POINT_SIZE))
             {
-                if (currentStyle.GetFontSize() != attr.GetFontSize())
+                if (currentStyle.HasFontPointSize())
                 {
-                    // Clash of attr - mark as such
-                    clashingAttr.AddFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE);
-                    currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE);
+                    if (currentStyle.GetFontSize() != attr.GetFontSize())
+                    {
+                        // Clash of attr - mark as such
+                        clashingAttr.AddFlag(wxTEXT_ATTR_FONT_POINT_SIZE);
+                        currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_POINT_SIZE);
+                    }
                 }
+                else
+                    currentStyle.SetFontSize(attr.GetFontSize());
             }
-            else
-                currentStyle.SetFontPixelSize(attr.GetFontSize());
+
+            if (attr.HasFontPixelSize() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_PIXEL_SIZE))
+            {
+                if (currentStyle.HasFontPixelSize())
+                {
+                    if (currentStyle.GetFontSize() != attr.GetFontSize())
+                    {
+                        // Clash of attr - mark as such
+                        clashingAttr.AddFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE);
+                        currentStyle.RemoveFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE);
+                    }
+                }
+                else
+                    currentStyle.SetFontPixelSize(attr.GetFontSize());
+            }
         }
 
         if (attr.HasFontItalic() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_FONT_ITALIC))
