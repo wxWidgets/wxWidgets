@@ -24,6 +24,7 @@
 #include "wx/ribbon/toolbar.h"
 #include "wx/sizer.h"
 #include "wx/menu.h"
+#include "wx/msgdlg.h"
 #include "wx/dcbuffer.h"
 #include "wx/colordlg.h"
 #include "wx/artprov.h"
