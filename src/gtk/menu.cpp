@@ -58,6 +58,18 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
+wxMenuBar::~wxMenuBar()
+{
+    if (m_widget)
+    {
+        // Work around a probable bug in Ubuntu 12.04 which causes a warning if
+        // gtk_widget_destroy() is called on a wxMenuBar attached to a frame
+        GtkWidget* widget = m_widget;
+        m_widget = NULL;
+        g_object_unref(widget);
+    }
+}
+
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
@@ -91,7 +103,7 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     GTKApplyWidgetStyle();
 #endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2/!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
 
-    g_object_ref(m_widget);
+    g_object_ref_sink(m_widget);
 
     for (size_t i = 0; i < n; ++i )
         Append(menus[i], titles[i]);

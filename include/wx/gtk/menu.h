@@ -21,6 +21,7 @@ public:
     wxMenuBar();
     wxMenuBar(long style);
     wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0);
+    ~wxMenuBar();
 
     // implement base class (pure) virtuals
     virtual bool Append( wxMenu *menu, const wxString &title );
