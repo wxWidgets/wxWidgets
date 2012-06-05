@@ -118,6 +118,9 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxStaticBox::DoGetBestSize() const
 {
+    wxSize best;
+
+    // Calculate the size needed by the label
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
@@ -127,8 +130,19 @@ wxSize wxStaticBox::DoGetBestSize() const
     wBox += 3*cx;
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
-    wxSize best(wBox, hBox);
-    CacheBestSize(best);
+    // If there is a sizer then the base best size is the sizer's minimum
+    if (GetSizer() != NULL)
+    {
+        wxSize cm(GetSizer()->CalcMin());
+        best = ClientToWindowSize(cm);
+        // adjust for a long label if needed
+        best.x = wxMax(best.x, wBox);
+    }
+    // otherwise the best size falls back to the label size
+    else
+    {
+        best = wxSize(wBox, hBox);
+    }
     return best;
 }
 
