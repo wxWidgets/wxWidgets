@@ -6,6 +6,20 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+//
+// New window styles for wxComboCtrlBase
+//
+enum
+{
+    // Double-clicking a read-only combo triggers call to popup's OnComboPopup.
+    // In wxOwnerDrawnComboBox, for instance, it cycles item.
+    wxCC_SPECIAL_DCLICK             = 0x0100,
+
+    // Dropbutton acts like standard push button.
+    wxCC_STD_BUTTON                 = 0x0200
+};
+
+
 /**
     @class wxComboPopup
 
@@ -437,6 +451,35 @@ public:
     */
     void EnablePopupAnimation(bool enable = true);
 
+    
+    /**
+       Returns true if given key combination should toggle the popup.
+    */
+    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
+
+
+    /**
+       Prepare background of combo control or an item in a dropdown list in a
+       way typical on platform. This includes painting the focus/disabled
+       background and setting the clipping region.
+
+       Unless you plan to paint your own focus indicator, you should always
+       call this in your wxComboPopup::PaintComboControl implementation.  In
+       addition, it sets pen and text colour to what looks good and proper
+       against the background.
+
+       flags: wxRendererNative flags:
+              wxCONTROL_ISSUBMENU: is drawing a list item instead of combo control
+              wxCONTROL_SELECTED: list item is selected
+              wxCONTROL_DISABLED: control/item is disabled
+    */
+    virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const;
+
+    /**
+       Returns true if focus indicator should be drawn in the control.
+    */
+    bool ShouldDrawFocus() const;
+
     /**
         Returns disabled button bitmap that has been set with
         SetButtonBitmaps().
@@ -822,6 +865,12 @@ public:
               list), otherwise the call to SetValue() is ignored.
     */
     virtual void SetValue(const wxString& value);
+
+    /**
+       Changes value of the control as if user had done it by selecting an
+       item from a combo box drop-down list.
+     */
+    void SetValueByUser(const wxString& value);
 
     /**
         Show the popup.
