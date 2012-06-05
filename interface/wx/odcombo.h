@@ -22,6 +22,27 @@ enum wxOwnerDrawnComboBoxPaintingFlags
     wxODCB_PAINTING_SELECTED        = 0x0002
 };
 
+
+/**
+   New window styles for wxOwnerDrawnComboBox
+*/
+enum
+{
+    /**
+       Double-clicking cycles item if wxCB_READONLY is also used.
+    */
+    wxODCB_DCLICK_CYCLES            = wxCC_SPECIAL_DCLICK,
+
+    /**
+       If used, control itself is not custom paint using callback.
+       Even if this is not used, writable combo is never custom paint
+       until SetCustomPaintWidth is called
+    */
+    wxODCB_STD_CONTROL_PAINT        = 0x1000
+};
+
+
+
 /**
     @class wxOwnerDrawnComboBox
 
@@ -60,7 +81,7 @@ enum wxOwnerDrawnComboBoxPaintingFlags
 
     @see wxComboCtrl, wxComboBox, wxVListBox, wxCommandEvent
 */
-class wxOwnerDrawnComboBox : public wxComboCtrl
+class wxOwnerDrawnComboBox : public wxComboCtrl, wxItemContainer
 {
 public:
     /**
