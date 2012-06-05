@@ -211,19 +211,28 @@ public:
 
         This is defined as the zero based index of the character position to
         the right of the insertion point. For example, if the insertion point
-        is at the end of the single-line text control, it is equal to both
-        GetLastPosition() and @c "GetValue().Length()" (but notice that the latter
-        equality is not necessarily true for multiline edit controls which may
-        use multiple new line characters).
+        is at the end of the single-line text control, it is equal to
+        GetLastPosition().
 
-        The following code snippet safely returns the character at the insertion
-        point or the zero character if the point is at the end of the control.
+        Notice that insertion position is, in general, different from the index
+        of the character the cursor position at in the string returned by
+        GetValue(). While this is always the case for the single line controls,
+        multi-line controls can use two characters @c "\\r\\n" as line
+        separator (this is notably the case under MSW) meaning that indices in
+        the control and its string value are offset by 1 for every line.
+
+        Hence to correctly get the character at the current cursor position,
+        taking into account that there can be none if the cursor is at the end
+        of the string, you could do the following:
 
         @code
-        char GetCurrentChar(wxTextCtrl *tc) {
-            if (tc->GetInsertionPoint() == tc->GetLastPosition())
-            return '\0';
-            return tc->GetValue[tc->GetInsertionPoint()];
+        wxString GetCurrentChar(wxTextCtrl *tc)
+        {
+            long pos = tc->GetInsertionPoint();
+            if ( pos == tc->GetLastPosition() )
+                return wxString();
+
+            return tc->GetRange(pos, pos + 1);
         }
         @endcode
     */
