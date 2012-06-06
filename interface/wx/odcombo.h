@@ -81,7 +81,7 @@ enum
 
     @see wxComboCtrl, wxComboBox, wxVListBox, wxCommandEvent
 */
-class wxOwnerDrawnComboBox : public wxComboCtrl, wxItemContainer
+class wxOwnerDrawnComboBox : public wxComboCtrl, public wxItemContainer
 {
 public:
     /**
