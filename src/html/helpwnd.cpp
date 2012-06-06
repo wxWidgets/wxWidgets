@@ -120,15 +120,13 @@ public:
         SetStandardFonts();
     }
 
-    void OnLink(wxHtmlLinkEvent& ev)
+    virtual bool LoadPage(const wxString& location)
     {
-        const wxMouseEvent *e = ev.GetLinkInfo().GetEvent();
-        if (e == NULL || e->LeftUp())
-            m_Window->NotifyPageChanged();
+        if ( !wxHtmlWindow::LoadPage(location) )
+            return false;
 
-        // skip the event so that normal processing (i.e. following the link)
-        // is done:
-        ev.Skip();
+        m_Window->NotifyPageChanged();
+        return true;
     }
 
     // Returns full location with anchor (helper)
@@ -150,12 +148,7 @@ private:
     wxHtmlHelpWindow *m_Window;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlHelpHtmlWindow);
-    DECLARE_EVENT_TABLE()
 };
-
-BEGIN_EVENT_TABLE(wxHtmlHelpHtmlWindow, wxHtmlWindow)
-    EVT_HTML_LINK_CLICKED(wxID_ANY, wxHtmlHelpHtmlWindow::OnLink)
-END_EVENT_TABLE()
 
 
 //---------------------------------------------------------------------------
@@ -716,7 +709,6 @@ bool wxHtmlHelpWindow::Display(const wxString& x)
     if (!url.empty())
     {
         m_HtmlWin->LoadPage(url);
-        NotifyPageChanged();
         return true;
     }
 
@@ -729,7 +721,6 @@ bool wxHtmlHelpWindow::Display(const int id)
     if (!url.empty())
     {
         m_HtmlWin->LoadPage(url);
-        NotifyPageChanged();
         return true;
     }
 
@@ -792,7 +783,6 @@ void wxHtmlHelpWindow::DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it)
         if (!it->items[0]->page.empty())
         {
             m_HtmlWin->LoadPage(it->items[0]->GetFullPath());
-            NotifyPageChanged();
         }
     }
     else
@@ -829,7 +819,6 @@ void wxHtmlHelpWindow::DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it)
         if (dlg.ShowModal() == wxID_OK)
         {
             m_HtmlWin->LoadPage(it->items[dlg.GetSelection()]->GetFullPath());
-            NotifyPageChanged();
         }
     }
 }
@@ -938,7 +927,6 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
                 if (it)
                 {
                     m_HtmlWin->LoadPage(it->GetFullPath());
-                    NotifyPageChanged();
                 }
                 break;
             }
@@ -1406,12 +1394,10 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
     {
         case wxID_HTML_BACK :
             m_HtmlWin->HistoryBack();
-            NotifyPageChanged();
             break;
 
         case wxID_HTML_FORWARD :
             m_HtmlWin->HistoryForward();
-            NotifyPageChanged();
             break;
 
         case wxID_HTML_UP :
@@ -1427,7 +1413,6 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
                     if (!it.page.empty())
                     {
                         m_HtmlWin->LoadPage(it.GetFullPath());
-                        NotifyPageChanged();
                     }
                 }
             }
@@ -1456,10 +1441,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
                     if (ind >= 0)
                     {
                         if (!it->page.empty())
-                        {
                             m_HtmlWin->LoadPage(it->GetFullPath());
-                            NotifyPageChanged();
-                        }
                     }
                 }
             }
@@ -1481,10 +1463,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
                     while (contents[idx].GetFullPath() == page) idx++;
 
                     if (!contents[idx].page.empty())
-                    {
                         m_HtmlWin->LoadPage(contents[idx].GetFullPath());
-                        NotifyPageChanged();
-                    }
                 }
             }
             break;
@@ -1749,7 +1728,6 @@ void wxHtmlHelpWindow::OnSearchSel(wxCommandEvent& WXUNUSED(event))
     {
         if (!it->page.empty())
             m_HtmlWin->LoadPage(it->GetFullPath());
-        NotifyPageChanged();
     }
 }
 
@@ -1768,7 +1746,6 @@ void wxHtmlHelpWindow::OnBookmarksSel(wxCommandEvent& WXUNUSED(event))
     if (!str.empty() && str != _("(bookmarks)") && idx != wxNOT_FOUND)
     {
        m_HtmlWin->LoadPage(m_BookmarksPages[(size_t)idx]);
-       NotifyPageChanged();
     }
 }
 
