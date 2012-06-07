@@ -4151,9 +4151,9 @@ bool wxWindowGTK::IsTransparentBackgroundSupported(wxString* reason) const
         *reason = _("This program was compiled with a too old version of GTK+, "
                     "please rebuild with GTK+ 2.12 or newer.");
     }
-#endif // wxGTK_HAS_COMPOSITING_SUPPORT/!wxGTK_HAS_COMPOSITING_SUPPORT
 
     return false;
+#endif // wxGTK_HAS_COMPOSITING_SUPPORT/!wxGTK_HAS_COMPOSITING_SUPPORT
 }
 
 // ----------------------------------------------------------------------------

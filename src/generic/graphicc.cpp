@@ -2410,9 +2410,10 @@ wxGraphicsContext * wxCairoRenderer::CreateMeasuringContext()
     ENSURE_LOADED_OR_RETURN(NULL);
 #ifdef __WXGTK__
     return CreateContextFromNativeWindow(gdk_get_default_root_window());
-#endif
+#else
     return NULL;
     // TODO
+#endif
 }
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( wxWindow* window )
