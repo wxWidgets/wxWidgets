@@ -1433,7 +1433,7 @@ bool wxTopLevelWindowGTK::CanSetTransparent()
 #if GTK_CHECK_VERSION(2,10,0)
     if (!gtk_check_version(2,10,0))
     {
-        return (gtk_widget_is_composited (m_widget));
+        return gtk_widget_is_composited(m_widget) != 0;
     }
     else
 #endif // In case of lower versions than gtk+-2.10.0 we could look for _NET_WM_CM_Sn ourselves

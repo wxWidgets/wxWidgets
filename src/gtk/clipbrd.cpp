@@ -507,7 +507,7 @@ bool wxClipboard::SetSelectionOwner(bool set)
                 set ? m_clipboardWidget : NULL,
                 GTKGetClipboardAtom(),
                 (guint32)GDK_CURRENT_TIME
-              );
+              ) != 0;
 
     if ( !rc )
     {

@@ -137,7 +137,7 @@ wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 bool wxRegion::DoIsEqual(const wxRegion& region) const
 {
     return gdk_region_equal(M_REGIONDATA->m_region,
-                            M_REGIONDATA_OF(region)->m_region);
+                            M_REGIONDATA_OF(region)->m_region) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -292,7 +292,7 @@ bool wxRegion::IsEmpty() const
     if (!m_refData)
         return true;
 
-    return gdk_region_empty( M_REGIONDATA->m_region );
+    return gdk_region_empty( M_REGIONDATA->m_region ) != 0;
 }
 
 wxRegionContain wxRegion::DoContainsPoint( wxCoord x, wxCoord y ) const

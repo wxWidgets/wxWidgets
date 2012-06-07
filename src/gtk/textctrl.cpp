@@ -1599,7 +1599,7 @@ bool wxTextCtrl::IsEditable() const
 
     if ( IsMultiLine() )
     {
-        return gtk_text_view_get_editable(GTK_TEXT_VIEW(m_text));
+        return gtk_text_view_get_editable(GTK_TEXT_VIEW(m_text)) != 0;
     }
     else
     {

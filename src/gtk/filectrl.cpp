@@ -88,7 +88,7 @@ bool wxGtkFileChooser::SetPath( const wxString& path )
     if ( path.empty() )
         return true;
 
-    return gtk_file_chooser_set_filename( m_widget, path.utf8_str() );
+    return gtk_file_chooser_set_filename( m_widget, path.utf8_str() ) != 0;
 }
 
 bool wxGtkFileChooser::SetDirectory( const wxString& dir )

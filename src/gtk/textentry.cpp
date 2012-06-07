@@ -279,7 +279,7 @@ bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 
 bool wxTextEntry::IsEditable() const
 {
-    return gtk_editable_get_editable(GetEditable());
+    return gtk_editable_get_editable(GetEditable()) != 0;
 }
 
 void wxTextEntry::SetEditable(bool editable)

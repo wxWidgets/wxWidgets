@@ -44,8 +44,8 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
         {
             // The 3 states cycle like this when clicked:
             // checked -> undetermined -> unchecked -> checked -> ...
-            bool active = gtk_toggle_button_get_active(toggle);
-            bool inconsistent = gtk_toggle_button_get_inconsistent(toggle);
+            bool active = gtk_toggle_button_get_active(toggle) != 0;
+            bool inconsistent = gtk_toggle_button_get_inconsistent(toggle) != 0;
 
             cb->GTKDisableEvents();
 
@@ -177,7 +177,7 @@ bool wxCheckBox::GetValue() const
 {
     wxCHECK_MSG( m_widgetCheckbox != NULL, false, wxT("invalid checkbox") );
 
-    return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widgetCheckbox));
+    return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widgetCheckbox)) != 0;
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)

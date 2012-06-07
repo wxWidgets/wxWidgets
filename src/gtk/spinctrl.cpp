@@ -195,7 +195,7 @@ bool wxSpinCtrlGTKBase::GetSnapToTicks() const
 {
     wxCHECK_MSG(m_widget, false, "invalid spin button");
 
-    return gtk_spin_button_get_snap_to_ticks( GTK_SPIN_BUTTON(m_widget) );
+    return gtk_spin_button_get_snap_to_ticks( GTK_SPIN_BUTTON(m_widget) ) != 0;
 }
 
 void wxSpinCtrlGTKBase::SetValue( const wxString& value )

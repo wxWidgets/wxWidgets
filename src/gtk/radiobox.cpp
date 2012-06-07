@@ -88,7 +88,7 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
         // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
         new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
         // CTRL-TAB changes the (parent) window, i.e. switch notebook page
-        new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
+        new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) != 0 );
         new_event.SetCurrentFocus( rb );
         return rb->GetParent()->HandleWindowEvent(new_event);
     }
@@ -475,7 +475,7 @@ bool wxRadioBox::IsItemEnabled(unsigned int item) const
 
     // don't use GTK_WIDGET_IS_SENSITIVE() here, we want to return true even if
     // the parent radiobox is disabled
-    return gtk_widget_get_sensitive(GTK_WIDGET(button));
+    return gtk_widget_get_sensitive(GTK_WIDGET(button)) != 0;
 }
 
 bool wxRadioBox::Show(unsigned int item, bool show)
@@ -506,7 +506,7 @@ bool wxRadioBox::IsItemShown(unsigned int item) const
 
     GtkButton *button = GTK_BUTTON( node->GetData()->button );
 
-    return gtk_widget_get_visible(GTK_WIDGET(button));
+    return gtk_widget_get_visible(GTK_WIDGET(button)) != 0;
 }
 
 unsigned int wxRadioBox::GetCount() const

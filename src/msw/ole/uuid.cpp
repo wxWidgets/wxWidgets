@@ -86,7 +86,7 @@ bool Uuid::operator==(const Uuid& uuid) const
 {
     // IsEqualGUID() returns BOOL and not bool so use an explicit comparison to
     // avoid MSVC warnings about int->bool conversion
-    return IsEqualGUID(m_uuid, uuid.m_uuid) == TRUE;
+    return IsEqualGUID(m_uuid, uuid.m_uuid) != 0;
 }
 
 // dtor

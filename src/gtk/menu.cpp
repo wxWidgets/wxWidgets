@@ -434,7 +434,7 @@ bool wxMenuBar::IsEnabledTop(size_t pos) const
     wxCHECK_MSG( node, false, wxS("invalid index in IsEnabledTop") );
     wxMenu* const menu = node->GetData();
     wxCHECK_MSG( menu->m_owner, true, wxS("no menu owner?") );
-    return gtk_widget_get_sensitive( menu->m_owner );
+    return gtk_widget_get_sensitive( menu->m_owner ) != 0;
 }
 
 wxString wxMenuBar::GetMenuLabel( size_t pos ) const

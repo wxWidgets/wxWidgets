@@ -2257,12 +2257,10 @@ static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_BOOLEAN );
     g_object_get_property( G_OBJECT(renderer), "active", &gvalue );
-    bool tmp = g_value_get_boolean( &gvalue );
-    g_value_unset( &gvalue );
     // invert it
-    tmp = !tmp;
+    wxVariant value = !g_value_get_boolean( &gvalue );
+    g_value_unset( &gvalue );
 
-    wxVariant value = tmp;
     if (!cell->Validate( value ))
         return;
 
@@ -2320,10 +2318,8 @@ bool wxDataViewToggleRenderer::GetValue( wxVariant &value ) const
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_BOOLEAN );
     g_object_get_property( G_OBJECT(m_renderer), "active", &gvalue );
-    bool tmp = g_value_get_boolean( &gvalue );
+    value = g_value_get_boolean( &gvalue ) != 0;
     g_value_unset( &gvalue );
-
-    value = tmp;
 
     return true;
 }
@@ -2625,7 +2621,7 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString &choices
                 "has-entry", FALSE,
                 NULL);
 
-        bool editable = (mode & wxDATAVIEW_CELL_EDITABLE);
+        bool editable = (mode & wxDATAVIEW_CELL_EDITABLE) != 0;
         g_object_set (m_renderer, "editable", editable, NULL);
 
         SetAlignment(alignment);
@@ -3143,19 +3139,19 @@ void wxDataViewColumn::SetSortable( bool sortable )
 bool wxDataViewColumn::IsSortable() const
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-    return gtk_tree_view_column_get_clickable( column );
+    return gtk_tree_view_column_get_clickable( column ) != 0;
 }
 
 bool wxDataViewColumn::IsSortKey() const
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-    return gtk_tree_view_column_get_sort_indicator( column );
+    return gtk_tree_view_column_get_sort_indicator( column ) != 0;
 }
 
 bool wxDataViewColumn::IsResizeable() const
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-    return gtk_tree_view_column_get_resizable( column );
+    return gtk_tree_view_column_get_resizable( column ) != 0;
 }
 
 bool wxDataViewColumn::IsHidden() const
@@ -3225,7 +3221,7 @@ void wxDataViewColumn::SetReorderable( bool reorderable )
 
 bool wxDataViewColumn::IsReorderable() const
 {
-    return gtk_tree_view_column_get_reorderable( GTK_TREE_VIEW_COLUMN(m_column) );
+    return gtk_tree_view_column_get_reorderable( GTK_TREE_VIEW_COLUMN(m_column) ) != 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -4811,7 +4807,7 @@ bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
     GtkTreeIter iter;
     iter.user_data = item.GetID();
     wxGtkTreePath path(m_internal->get_path( &iter ));
-    return gtk_tree_view_row_expanded( GTK_TREE_VIEW(m_treeview), path );
+    return gtk_tree_view_row_expanded( GTK_TREE_VIEW(m_treeview), path ) != 0;
 }
 
 wxDataViewItem wxDataViewCtrl::DoGetCurrentItem() const
@@ -4996,7 +4992,7 @@ bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
     iter.stamp = m_internal->GetGtkModel()->stamp;
     iter.user_data = (gpointer) item.GetID();
 
-    return gtk_tree_selection_iter_is_selected( selection, &iter );
+    return gtk_tree_selection_iter_is_selected( selection, &iter ) != 0;
 }
 
 void wxDataViewCtrl::SelectAll()

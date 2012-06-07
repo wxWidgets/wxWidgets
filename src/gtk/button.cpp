@@ -295,7 +295,7 @@ wxSize wxButton::DoGetBestSize() const
     // extra border around it, but we don't want to take it into account in
     // our size calculations (otherwise the result is visually ugly), so
     // always return the size of non default button from here
-    const bool isDefault = gtk_widget_has_default(m_widget);
+    const bool isDefault = gtk_widget_has_default(m_widget) != 0;
     if ( isDefault )
     {
         // temporarily unset default flag

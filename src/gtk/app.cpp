@@ -368,7 +368,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     init_result = true;  // is there a _check() version of this?
     gpe_application_init( &argcGTK, &argvGTK );
 #else
-    init_result = gtk_init_check( &argcGTK, &argvGTK );
+    init_result = gtk_init_check( &argcGTK, &argvGTK ) != 0;
 #endif
     wxUpdateLocaleIsUtf8();
 

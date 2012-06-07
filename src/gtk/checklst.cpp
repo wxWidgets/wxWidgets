@@ -121,7 +121,7 @@ bool wxCheckListBox::IsChecked(unsigned int index) const
                              0, //column
                              &value);
 
-    return g_value_get_boolean(&value) == TRUE ? true : false;
+    return g_value_get_boolean(&value) != 0;
 }
 
 void wxCheckListBox::Check(unsigned int index, bool check)

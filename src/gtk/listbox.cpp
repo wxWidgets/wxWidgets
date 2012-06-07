@@ -729,7 +729,7 @@ bool wxListBox::IsSelected( int n ) const
     GtkTreeIter iter;
     wxCHECK_MSG( GTKGetIteratorFor(n, &iter), false, wxT("Invalid index") );
 
-    return gtk_tree_selection_iter_is_selected(selection, &iter);
+    return gtk_tree_selection_iter_is_selected(selection, &iter) != 0;
 }
 
 void wxListBox::DoSetSelection( int n, bool select )

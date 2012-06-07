@@ -923,7 +923,8 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
         // docs, if IM filter returns true, no further processing should be done.
         // we should send the key_down event anyway.
-        bool intercepted_by_IM = gtk_im_context_filter_keypress(win->m_imData->context, gdk_event);
+        bool intercepted_by_IM =
+            gtk_im_context_filter_keypress(win->m_imData->context, gdk_event) != 0;
         win->m_imData->lastKeyEvent = NULL;
         if (intercepted_by_IM)
         {
@@ -3417,7 +3418,7 @@ bool wxWindowGTK::DoNavigateIn(int flags)
         gboolean rc;
         g_signal_emit_by_name(parent->m_widget, "focus", dir, &rc);
 
-        return rc == TRUE;
+        return rc != 0;
     }
 }
 
@@ -3883,7 +3884,7 @@ void wxWindowGTK::SetDoubleBuffered( bool on )
 
 bool wxWindowGTK::IsDoubleBuffered() const
 {
-    return gtk_widget_get_double_buffered( m_wxwindow );
+    return gtk_widget_get_double_buffered( m_wxwindow ) != 0;
 }
 
 void wxWindowGTK::ClearBackground()
