@@ -67,6 +67,11 @@ void wxRichToolTip::SetTipKind(wxTipKind tipKind)
     m_impl->SetTipKind(tipKind);
 }
 
+void wxRichToolTip::SetTitleFont(const wxFont& font)
+{
+    m_impl->SetTitleFont(font);
+}
+
 void wxRichToolTip::ShowFor(wxWindow* win)
 {
     wxCHECK_RET( win, wxS("Must have a valid window") );
