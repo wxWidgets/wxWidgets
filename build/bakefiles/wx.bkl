@@ -40,7 +40,7 @@
     <subproject id="samples">
         <installable>no</installable>
         <dir cond="FORMAT=='autoconf'">samples</dir>
-        <dir cond="FORMAT!='autoconf' and TOOLKIT in ['PM','MSW','MOTIF']">../../samples</dir>
+        <dir cond="FORMAT!='autoconf'">../../samples</dir>
     </subproject>
 
     <if cond="FORMAT=='autoconf'">
@@ -194,8 +194,8 @@
 
         <set var="SETUP_H_SUBDIR">
             <if cond="WXUNIV=='1'">univ</if>
-            <if cond="WXUNIV=='0' and TOOLKIT!='PM'">$(TOOLKIT_LOWERCASE)</if>
-            <if cond="WXUNIV=='0' and TOOLKIT=='PM'">os2</if>
+            <if cond="WXUNIV=='0' and PLATFORM_OS2!='1'">$(TOOLKIT_LOWERCASE)</if>
+            <if cond="WXUNIV=='0' and PLATFORM_OS2=='1'">os2</if>
         </set>
 
         <copy-file-to-file-if-not-exist id="master_setup.h">
@@ -212,7 +212,7 @@
 
 
     <!-- create rcdefs.h on Windows: -->
-    <if cond="FORMAT in ['borland','mingw','msvc','watcom'] and TOOLKIT == 'MSW'">
+    <if cond="FORMAT in ['borland','mingw','msvc','watcom']">
 
         <mkdir id="libdir_setup_wx_msw">
             <depends>libdir_setup_wx</depends>

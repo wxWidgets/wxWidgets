@@ -424,7 +424,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
                     univ/setup.h
                 </msvc-headers-setup-h>
                 <set var="_custom_build_include_wx_msw_setup_h">
-                    <if cond="WXUNIV=='0'">
+                    <if cond="WXUNIV=='0' and TOOLKIT=='MSW'">
                         $(msvc_copy_setup_h_script % 'msw\setup.h')
                     </if>
                 </set>
@@ -614,7 +614,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <define>WXBUILDING</define>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
-            <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','PM','WINCE']">
+            <if cond="FORMAT!='autoconf'">
                 <sources>$(WXTOPDIR)src/common/dummy.cpp</sources>
                 <precomp-headers-gen>
                     $(WXTOPDIR)src/common/dummy.cpp
