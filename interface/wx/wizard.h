@@ -6,6 +6,20 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+// Extended style to specify a help button
+#define wxWIZARD_EX_HELPBUTTON   0x00000010
+
+// Bitmap placement flags
+#define wxWIZARD_VALIGN_TOP       0x01
+#define wxWIZARD_VALIGN_CENTRE    0x02
+#define wxWIZARD_VALIGN_BOTTOM    0x04
+#define wxWIZARD_HALIGN_LEFT      0x08
+#define wxWIZARD_HALIGN_CENTRE    0x10
+#define wxWIZARD_HALIGN_RIGHT     0x20
+#define wxWIZARD_TILE             0x40
+
+
 /**
     @class wxWizardPage
 
@@ -37,6 +51,11 @@ class wxWizardPage : public wxPanel
 {
 public:
     /**
+       Default constructor.
+    */
+    wxWizardPage();
+    
+    /**
         Constructor accepts an optional bitmap which will be used for this page
         instead of the default one for this wizard (note that all bitmaps used should
         be of the same size). Notice that no other parameters are needed because the
@@ -49,6 +68,18 @@ public:
     */
     wxWizardPage(wxWizard* parent,
                  const wxBitmap& bitmap = wxNullBitmap);
+
+    /**
+       Creates the wizard page.
+       Must be called if the default constructor had been used to create the object.
+
+        @param parent
+            The parent wizard
+        @param bitmap
+            The page-specific bitmap if different from the global one
+    */
+    bool Create(wxWizard *parent,
+                const wxBitmap& bitmap = wxNullBitmap);
 
     /**
         This method is called by wxWizard to get the bitmap to display alongside the page.
@@ -144,6 +175,14 @@ public:
 };
 
 
+wxEventType wxEVT_WIZARD_PAGE_CHANGED;
+wxEventType wxEVT_WIZARD_PAGE_CHANGING;
+wxEventType wxEVT_WIZARD_CANCEL;
+wxEventType wxEVT_WIZARD_HELP;
+wxEventType wxEVT_WIZARD_FINISHED;
+wxEventType wxEVT_WIZARD_PAGE_SHOWN;
+wxEventType wxEVT_WIZARD_BEFORE_PAGE_CHANGED;
+
 
 /**
     @class wxWizardPageSimple
@@ -165,6 +204,11 @@ class wxWizardPageSimple : public wxWizardPage
 {
 public:
     /**
+       Default constructor.
+    */
+    wxWizardPageSimple();
+    
+    /**
         Constructor takes the previous and next pages.
         They may be modified later by SetPrev() or SetNext().
     */
@@ -172,6 +216,15 @@ public:
                        wxWizardPage* prev = NULL,
                        wxWizardPage* next = NULL,
                        const wxBitmap& bitmap = wxNullBitmap);
+
+    /**
+       Creates the wizard page.
+       Must be called if the default constructor had been used to create the object.
+    */
+    bool Create(wxWizard *parent = NULL, 
+                wxWizardPage *prev = NULL,
+                wxWizardPage *next = NULL,
+                const wxBitmap& bitmap = wxNullBitmap);
 
     /**
         A convenience function to make the pages follow each other.
