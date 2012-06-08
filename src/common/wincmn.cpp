@@ -1268,15 +1268,14 @@ bool wxWindowBase::IsDescendant(wxWindowBase* win) const
     // Iterate until we find this window in the parent chain or exhaust it.
     while ( win )
     {
-        wxWindow* const parent = win->GetParent();
-        if ( parent == this )
+        if ( win == this )
             return true;
 
         // Stop iterating on reaching the top level window boundary.
-        if ( parent->IsTopLevel() )
+        if ( win->IsTopLevel() )
             break;
 
-        win = parent;
+        win = win->GetParent();
     }
 
     return false;
