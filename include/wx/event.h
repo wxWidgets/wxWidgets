@@ -1244,7 +1244,7 @@ public:
     {
         // make sure our string member (which uses COW, aka refcounting) is not
         // shared by other wxString instances:
-        SetString(GetString().c_str());
+        SetString(GetString().Clone());
     }
 
     virtual wxEvent *Clone() const
