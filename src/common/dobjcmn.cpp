@@ -508,7 +508,7 @@ bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
         return false;
 
     // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
-    const wxString html = wxString::FromUTF8(static_cast<const char*>(buf));
+    wxString html = wxString::FromUTF8(static_cast<const char*>(buf));
 
 #ifdef __WXMSW__
     // To be consistent with other platforms, we only add the Fragment part
