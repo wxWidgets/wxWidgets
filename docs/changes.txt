@@ -590,6 +590,8 @@ MSW:
 - Add VT_I8 support to wxAutomationObject (PB).
 - Fix wxListbook size calculations to avoid spurious scrollbars.
 - Fix code compilation with wxUSE_UNICODE_UTF8 (Kolya Kosenko).
+- Fix crash in wxTreeCtrl when calling GetSelection() from selection changed
+  event handler under Vista and later (sbrowne).
 
 OSX:
 

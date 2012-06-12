@@ -84,13 +84,21 @@ class TreeItemUnlocker
 {
 public:
     // unlock a single item
-    TreeItemUnlocker(HTREEITEM item) { ms_unlockedItem = item; }
+    TreeItemUnlocker(HTREEITEM item)
+    {
+        m_oldUnlockedItem = ms_unlockedItem;
+        ms_unlockedItem = item;
+    }
 
     // unlock all items, don't use unless absolutely necessary
-    TreeItemUnlocker() { ms_unlockedItem = (HTREEITEM)-1; }
+    TreeItemUnlocker()
+    {
+        m_oldUnlockedItem = ms_unlockedItem;
+        ms_unlockedItem = (HTREEITEM)-1;
+    }
 
     // lock everything back
-    ~TreeItemUnlocker() { ms_unlockedItem = NULL; }
+    ~TreeItemUnlocker() { ms_unlockedItem = m_oldUnlockedItem; }
 
 
     // check if the item state is currently locked
@@ -99,6 +107,9 @@ public:
 
 private:
     static HTREEITEM ms_unlockedItem;
+    HTREEITEM m_oldUnlockedItem;
+
+    wxDECLARE_NO_COPY_CLASS(TreeItemUnlocker);
 };
 
 HTREEITEM TreeItemUnlocker::ms_unlockedItem = NULL;
