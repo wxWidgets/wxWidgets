@@ -614,7 +614,7 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
         {
             wxWindowID itemid = item->GetId();
             wxUpdateUIEvent event(itemid);
-            event.SetEventObject( source );
+            event.SetEventObject( this );
 
             if ( source->ProcessEvent(event) )
             {
