@@ -155,7 +155,6 @@ public :
         }
         [menu setDelegate:controller];
         [m_osxMenu setImplementation:this];
-        [menu setAutoenablesItems:NO];
         // gc aware
         if ( m_osxMenu )
             CFRetain(m_osxMenu);
