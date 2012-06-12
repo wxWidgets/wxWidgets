@@ -517,6 +517,12 @@ wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
     if ( !m_wxPeer->IsNativeWindowWrapper() )
     {
         [m_macWindow setDelegate:nil];
+     
+        // make sure we remove this first, otherwise the ref count will not lead to the 
+        // native window's destruction
+        if ([m_macWindow parentWindow] != 0)
+            [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
+
         [m_macWindow release];
     }
 }
@@ -679,14 +685,34 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
     if ( show )
     {
         wxNonOwnedWindow* wxpeer = GetWXPeer(); 
-        if (wxpeer && !(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW)) 
-            [m_macWindow makeKeyAndOrderFront:nil];
-        else 
-            [m_macWindow orderFront:nil]; 
+        if ( wxpeer )
+        {
+            // add to parent window before showing
+            if ( wxpeer->GetParent() )
+            {
+                NSView * parentView = wxpeer->GetParent()->GetPeer()->GetWXWidget();
+                if ( parentView )
+                {
+                    NSWindow* parentNSWindow = [parentView window];
+                    if ( parentNSWindow )
+                        [parentNSWindow addChildWindow:m_macWindow ordered:NSWindowAbove];
+                }
+            }
+            
+            if (!(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW)) 
+                [m_macWindow makeKeyAndOrderFront:nil];
+            else 
+                [m_macWindow orderFront:nil]; 
+        }
         [[m_macWindow contentView] setNeedsDisplay: YES];
     }
     else
+    {
+        // avoid propagation of orderOut to parent 
+        if ([m_macWindow parentWindow] != 0)
+            [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
         [m_macWindow orderOut:nil];
+    }
     return true;
 }
 
