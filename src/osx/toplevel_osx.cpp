@@ -106,7 +106,13 @@ bool wxTopLevelWindowMac::Destroy()
     if (m_nowpeer && m_nowpeer->GetWXWindow())
         ClearKeyboardFocus( (WindowRef)m_nowpeer->GetWXWindow() );
 #endif
-    return wxTopLevelWindowBase::Destroy();
+    // delayed destruction: the tlw will be deleted during the next idle
+    // loop iteration
+    if ( !wxPendingDelete.Member(this) )
+        wxPendingDelete.Append(this);
+    
+    Hide();
+    return true;
 }
 
 
