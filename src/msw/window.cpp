@@ -4843,6 +4843,16 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
 
 bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 {
+    if ( IsBeingDeleted() )
+    {
+        // We can get WM_ERASEBKGND after starting the destruction of our top
+        // level parent. Handling it in this case is unnecessary and can be
+        // actually harmful as e.g. wxStaticBox::GetClientSize() doesn't work
+        // without a valid TLW parent (because it uses dialog units internally
+        // which use the dialog font), so just don't do anything then.
+        return false;
+    }
+
     switch ( GetBackgroundStyle() )
     {
         case wxBG_STYLE_ERASE:
