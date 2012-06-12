@@ -178,7 +178,7 @@
 
 
     <!-- copy setup.h on DOS/OS2/Windows if the format supports it: -->
-    <if cond="FORMAT!='autoconf' and IS_MSVC_PRJ=='0' and TOOLKIT in ['PM','MSW','MOTIF']">
+    <if cond="FORMAT!='autoconf' and IS_MSVC_PRJ=='0'">
         <mkdir id="libdir">
             <dir>$(LIBDIRNAME)</dir>
         </mkdir>
