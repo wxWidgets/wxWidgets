@@ -33,6 +33,7 @@
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/image.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/notebook.h"
