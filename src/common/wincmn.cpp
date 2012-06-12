@@ -2747,6 +2747,8 @@ wxSize wxWindowBase::GetDlgUnitBase() const
 {
     const wxWindowBase * const parent = wxGetTopLevelParent((wxWindow*)this);
 
+    wxCHECK_MSG( parent, wxDefaultSize, wxS("Must have TLW parent") );
+
     if ( !parent->m_font.IsOk() )
     {
         // Default GUI font is used. This is the most common case, so
