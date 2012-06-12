@@ -99,12 +99,14 @@ fi
 update_common_setup_h include/wx/motif/setup0.h
 update_common_setup_h include/wx/msw/setup0.h
 update_common_setup_h include/wx/msw/wince/setup.h
+update_common_setup_h include/wx/gtk/setup0.h
 update_common_setup_h include/wx/osx/setup0.h
 update_common_setup_h include/wx/os2/setup0.h
 update_common_setup_h include/wx/univ/setup0.h
 update_common_setup_h setup.h.in
 
 update_msw_setup_h include/wx/msw/setup0.h
+update_msw_setup_h include/wx/gtk/setup0.h
 update_msw_setup_h setup.h.in
 
 update_single_setup_h wxUniv include/wx/univ/setup_inc.h include/wx/univ/setup0.h
