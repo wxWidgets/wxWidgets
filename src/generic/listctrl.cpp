@@ -1582,10 +1582,9 @@ wxListMainWindow::wxListMainWindow()
 wxListMainWindow::wxListMainWindow( wxWindow *parent,
                                     wxWindowID id,
                                     const wxPoint& pos,
-                                    const wxSize& size,
-                                    long style,
-                                    const wxString &name )
-                : wxWindow( parent, id, pos, size, style, name )
+                                    const wxSize& size )
+                : wxWindow( parent, id, pos, size,
+                            wxWANTS_CHARS | wxBORDER_NONE )
 {
     Init();
 
@@ -4389,12 +4388,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
                                   validator, name ) )
         return false;
 
-#ifdef __WXGTK__
-    style &= ~wxBORDER_MASK;
-    style |= wxBORDER_THEME;
-#endif
-
-    m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0, 0), size, style );
+    m_mainWin = new wxListMainWindow(this, wxID_ANY, wxPoint(0, 0), size);
 
     SetTargetWindow( m_mainWin );
 

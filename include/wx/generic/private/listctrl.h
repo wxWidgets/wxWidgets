@@ -450,10 +450,8 @@ public:
     wxListMainWindow();
     wxListMainWindow( wxWindow *parent,
                       wxWindowID id,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long style = 0,
-                      const wxString &name = wxT("listctrlmainwindow") );
+                      const wxPoint& pos,
+                      const wxSize& size );
 
     virtual ~wxListMainWindow();
 
