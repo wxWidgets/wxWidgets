@@ -185,6 +185,9 @@ wxSize wxListCtrlBase::DoGetBestClientSize() const
     if ( !InReportView() )
         return wxControl::DoGetBestClientSize();
 
+    int totalWidth;
+    wxClientDC dc(const_cast<wxListCtrlBase*>(this));
+
     // In report mode, we use only the column headers, not items, to determine
     // the best width. The reason for this is that it's easier (we can't just
     // iterate over all items, especially not in a virtual control, so we'd
@@ -196,15 +199,17 @@ wxSize wxListCtrlBase::DoGetBestClientSize() const
     // headers are just truncated if there is not enough place for them.
     const int columns = GetColumnCount();
     if ( HasFlag(wxLC_NO_HEADER) || !columns )
-        return wxControl::DoGetBestClientSize();
-
-    wxClientDC dc(const_cast<wxListCtrlBase*>(this));
-
-    // Total width of all headers determines the best control width.
-    int totalWidth = 0;
-    for ( int col = 0; col < columns; col++ )
     {
-        totalWidth += GetColumnWidth(col);
+        // Use some arbitrary width.
+        totalWidth = 50*dc.GetCharWidth();
+    }
+    else // We do have columns, use them to determine the best width.
+    {
+        totalWidth = 0;
+        for ( int col = 0; col < columns; col++ )
+        {
+            totalWidth += GetColumnWidth(col);
+        }
     }
 
     // Use some arbitrary height, there is no good way to determine it.
