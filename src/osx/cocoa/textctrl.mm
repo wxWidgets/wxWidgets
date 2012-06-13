@@ -119,7 +119,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (id)init 
 {
-    [super init];
+    self = [super init];
     maxLength = 0;
     return self;
 }
