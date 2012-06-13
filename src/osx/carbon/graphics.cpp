@@ -1846,8 +1846,8 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
     if (m_composition == wxCOMPOSITION_DEST)
         return true;
 
-#if wxOSX_USE_COCOA_OR_CARBON
-    if ( UMAGetSystemVersion() < 0x1060 )
+    // TODO REMOVE if we don't need it because of bugs in 10.5
+#if 0
     {
         CGCompositeOperation cop = kCGCompositeOperationSourceOver;
         CGBlendMode mode = kCGBlendModeNormal;
@@ -1886,11 +1886,9 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         case wxCOMPOSITION_XOR:
             cop = kCGCompositeOperationXOR;
             break;
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
         case wxCOMPOSITION_ADD:
             mode = kCGBlendModePlusLighter ;
             break;
-#endif
         default:
             return false;
         }
@@ -1900,8 +1898,6 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
             CGContextSetBlendMode(m_cgContext, mode);
     }
 #endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-    else
     {
         CGBlendMode mode = kCGBlendModeNormal;
         switch( op )
@@ -1948,7 +1944,7 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         }
         CGContextSetBlendMode(m_cgContext, mode);
     }
-#endif
+
     CheckInvariants();
     return true;
 }
@@ -2375,7 +2371,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         
         CGContextRestoreGState(m_cgContext);
         CGContextSetTextMatrix(m_cgContext, textMatrix);
-        CFRelease( col );
+        CGColorRelease( col );
         CheckInvariants();
         return;
     }
