@@ -27,6 +27,10 @@ if [ "$WXWIDGETS" = "" ]; then
     fi
 fi
 
+if [ "$DOXYGEN" = "" ]; then
+    DOXYGEN=doxygen
+fi
+
 # prepare folders for the cp commands below
 mkdir -p out/html       # we need to copy files in this folder below
 mkdir -p out/html/generic out/html/wxmsw out/html/wxgtk out/html/wxmac
@@ -57,7 +61,7 @@ fi
 #     otherwise when generating the CHM file with Doxygen, those files are
 #     not included!
 #
-doxygen $cfgfile
+$DOXYGEN $cfgfile
 
 if [[ "$1" = "qch" ]]; then
     # we need to add missing files to the .qhp
