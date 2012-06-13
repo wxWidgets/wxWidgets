@@ -2404,9 +2404,10 @@ void wxStaticBoxSizer::RecalcSizes()
         m_position.x = m_position.y = 0;
 #elif defined(__WXOSX__) && wxOSX_USE_COCOA
         // the distance from the 'inner' content view to the embedded controls
+        // this is independent of the title, therefore top_border is not relevant
         m_position.x = m_position.y = 10;
 #else
-        // if the wxStaticBox has childrens, then these windows must be placed
+        // if the wxStaticBox has children, then these windows must be placed
         // by the wxBoxSizer::RecalcSizes() call below using coordinates relative
         // to the top-left corner of the staticbox (but unlike wxGTK, we need
         // to keep in count the static borders here!):
