@@ -578,7 +578,7 @@ protected:
 /**
     Scrolled window derived from wxPanel.
 
-    See wxScrolled for detailed description.
+    See wxScrolled for a detailed description.
 
     @note Note that because this class derives from wxPanel, it shares its
           behaviour with regard to TAB traversal and focus handling (in
