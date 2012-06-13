@@ -39,6 +39,7 @@
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/gl.h>
 
+#include "wx/osx/core/private.h"
 #include "wx/osx/private/glgrab.h"
 
 extern CGColorSpaceRef wxMacGetGenericRGBColorSpace();
