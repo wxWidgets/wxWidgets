@@ -178,28 +178,28 @@ inline void wxDisableAsserts() { wxSetAssertHandler(NULL); }
 //
 // also notice that these functions can't be inline as wxString is not defined
 // yet (and can't be as wxString code itself may use assertions)
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WX_ATTRIBUTE_NORETURN WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WX_ATTRIBUTE_NORETURN WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond,
                                         const char *msg);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WX_ATTRIBUTE_NORETURN WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond,
-                                        const wxChar *msg);
+                                        const wxChar *msg) ;
 #endif /* wxUSE_UNICODE */
 
 // this version is for compatibility with wx 2.8 Unicode build only, we don't
 // use it ourselves any more except in ANSI-only build in which case it is all
 // we need
-extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *file,
+extern WX_ATTRIBUTE_NORETURN WXDLLIMPEXP_BASE void wxOnAssert(const wxChar *file,
                                         int line,
                                         const char *func,
                                         const wxChar *cond,
@@ -208,24 +208,24 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *file,
 // these overloads work when msg passed to debug macro is a string and we
 // also have to provide wxCStrData overload to resolve ambiguity which would
 // otherwise arise from wxASSERT( s.c_str() )
-extern void WXDLLIMPEXP_BASE wxOnAssert(const wxString& file,
+extern WX_ATTRIBUTE_NORETURN WXDLLIMPEXP_BASE void wxOnAssert(const wxString& file,
                                         int line,
                                         const wxString& func,
                                         const wxString& cond,
                                         const wxString& msg);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const wxString& file,
+extern WX_ATTRIBUTE_NORETURN WXDLLIMPEXP_BASE void wxOnAssert(const wxString& file,
                                         int line,
                                         const wxString& func,
                                         const wxString& cond);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WX_ATTRIBUTE_NORETURN WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond,
                                         const wxCStrData& msg);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WX_ATTRIBUTE_NORETURN WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond,
