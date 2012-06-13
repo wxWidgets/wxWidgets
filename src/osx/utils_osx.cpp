@@ -90,6 +90,7 @@ int wxDisplayDepth()
             theDepth = 32; // some reasonable default
 
         CFRelease(encoding);
+        CGDisplayModeRelease(currentMode);
     }
     else
 #endif
