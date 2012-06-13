@@ -39,7 +39,9 @@ WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareCon
 {
     WXGLContext context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext: shareContext];
     if ( !context )
+    {
         wxFAIL_MSG("NSOpenGLContext creation failed");
+    }
     return context ;
 }
 
