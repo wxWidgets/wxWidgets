@@ -118,6 +118,11 @@ extern UIFont* CreateUIFont( const wxFont& font )
     return [UIFont fontWithName:wxCFStringRef(font.GetFaceName() ).AsNSString() size:font.GetPointSize()];
 }
 
+CFArrayRef CopyAvailableFontFamilyNames()
+{
+    return (CFArrayRef) [[UIFont familyNames] retain];
+}
+
 extern void DrawTextInContext( CGContextRef context, CGPoint where, UIFont *font, NSString* text )
 {
     bool contextChanged = ( UIGraphicsGetCurrentContext() != context );

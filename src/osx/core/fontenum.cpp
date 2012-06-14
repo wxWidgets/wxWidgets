@@ -31,6 +31,10 @@
 // wxFontEnumerator
 // ----------------------------------------------------------------------------
 
+#if wxOSX_USE_IPHONE
+extern CFArrayRef CopyAvailableFontFamilyNames();
+#endif
+
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
@@ -41,7 +45,8 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 #if wxOSX_USE_CORE_TEXT
     {
         CFArrayRef cfFontFamilies = nil;
-        
+
+#if wxOSX_USE_COCOA_OR_CARBON
 #if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
         if ( UMAGetSystemVersion() >= 0x1060 )
             cfFontFamilies = CTFontManagerCopyAvailableFontFamilyNames();
@@ -89,6 +94,9 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
             cfFontFamilies = atsfontnames;
 #endif
         }
+#elif wxOSX_USE_IPHONE
+        cfFontFamilies = CopyAvailableFontFamilyNames();
+#endif
         
         CFIndex count = CFArrayGetCount(cfFontFamilies);
         for(CFIndex i = 0; i < count; i++)
