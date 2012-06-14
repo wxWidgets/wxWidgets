@@ -20,7 +20,7 @@
  * under a certain platform
  */
 
-#define wxOSX_USE_CORE_TEXT 0
+#define wxOSX_USE_CORE_TEXT 1
 #define wxOSX_USE_ATSU_TEXT 0
 #define wxHAS_OPENGL_ES
 

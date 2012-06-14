@@ -18,6 +18,11 @@
     #import <UIKit/UIKit.h>
 #endif
 
+#include <CoreText/CTFont.h>
+#include <CoreText/CTStringAttributes.h>
+#include <CoreText/CTLine.h>
+
+
 #if wxUSE_GUI
 
 OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
