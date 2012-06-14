@@ -241,6 +241,8 @@ void wxBell()
 }
 @end
 
+wxNSAppController* appcontroller = nil;
+
 bool wxApp::DoInitGui()
 {
     wxMacAutoreleasePool pool;
@@ -248,8 +250,8 @@ bool wxApp::DoInitGui()
 
     if (!sm_isEmbedded)
     {
-        wxNSAppController* controller = [[wxNSAppController alloc] init];
-        [NSApp setDelegate:controller];
+        appcontroller = [[wxNSAppController alloc] init];
+        [NSApp setDelegate:appcontroller];
 
         // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads
         // to the duplication of menus under 10.5 and a warning under 10.6
@@ -262,6 +264,12 @@ bool wxApp::DoInitGui()
 
 void wxApp::DoCleanUp()
 {
+    if ( appcontroller != nil )
+    {
+        [NSApp setDelegate:nil];
+        [appcontroller release];
+        appcontroller = nil;
+    }
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
