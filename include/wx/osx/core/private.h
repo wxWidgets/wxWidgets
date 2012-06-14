@@ -32,28 +32,22 @@
     #define wxOSX_10_6_AND_LATER(x)
 #endif
 
-// common defs for clang analyzer support
-
-#ifndef __has_feature      // Optional.
-    #define __has_feature(x) 0 // Compatibility with non-clang compilers.
-#endif
-
+// platform specific Clang analyzer support
 #ifndef NS_RETURNS_RETAINED
-    #if __has_feature(attribute_ns_returns_retained)
-        #define NS_RETURNS_RETAINED __attribute__((ns_returns_retained))
-    #else
-        #define NS_RETURNS_RETAINED
-    #endif
+#   if WX_HAS_CLANG_FEATURE(attribute_ns_returns_retained)
+#       define NS_RETURNS_RETAINED __attribute__((ns_returns_retained))
+#   else
+#       define NS_RETURNS_RETAINED
+#   endif
 #endif
 
 #ifndef CF_RETURNS_RETAINED
-    #if __has_feature(attribute_cf_returns_retained)
-        #define CF_RETURNS_RETAINED __attribute__((cf_returns_retained))
-    #else
-        #define CF_RETURNS_RETAINED
-    #endif
+#   if WX_HAS_CLANG_FEATURE(attribute_cf_returns_retained)
+#       define CF_RETURNS_RETAINED __attribute__((cf_returns_retained))
+#   else
+#       define CF_RETURNS_RETAINED
+#   endif
 #endif
-
 
 #if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
