@@ -1035,20 +1035,23 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
     {
         unsigned char *sourcedata = (unsigned char*) GetRawAccess() ;
         unsigned char *destdata = (unsigned char*) ret.BeginRawAccess() ;
-        wxASSERT( (sourcedata != NULL) && (destdata != NULL) ) ;
+        wxASSERT((sourcedata != NULL) && (destdata != NULL));
 
-        int sourcelinesize = GetBitmapData()->GetBytesPerRow() ;
-        int destlinesize = ret.GetBitmapData()->GetBytesPerRow() ;
-        unsigned char *source = sourcedata + rect.x * 4 + rect.y * sourcelinesize ;
-        unsigned char *dest = destdata ;
-
-        for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
+        if ( (sourcedata != NULL) && (destdata != NULL) )
         {
-            memcpy( dest , source , destlinesize ) ;
+            int sourcelinesize = GetBitmapData()->GetBytesPerRow() ;
+            int destlinesize = ret.GetBitmapData()->GetBytesPerRow() ;
+            unsigned char *source = sourcedata + rect.x * 4 + rect.y * sourcelinesize ;
+            unsigned char *dest = destdata ;
+
+            for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
+            {
+                memcpy( dest , source , destlinesize ) ;
+            }
         }
+        ret.EndRawAccess() ;
     }
 
-    ret.EndRawAccess() ;
 
     if ( M_BITMAPDATA->m_bitmapMask )
     {
@@ -1063,15 +1066,18 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         unsigned char *destdata = (unsigned char * ) maskbuf.GetWriteBuf( maskbufsize ) ;
         wxASSERT( (source != NULL) && (destdata != NULL) ) ;
 
-        source += rect.x * kMaskBytesPerPixel + rect.y * sourcelinesize ;
-        unsigned char *dest = destdata ;
-
-        for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
+        if ( (source != NULL) && (destdata != NULL) )
         {
-            memcpy( dest , source , destlinesize ) ;
-        }
+            source += rect.x * kMaskBytesPerPixel + rect.y * sourcelinesize ;
+            unsigned char *dest = destdata ;
 
-        maskbuf.UngetWriteBuf( maskbufsize ) ;
+            for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
+            {
+                memcpy( dest , source , destlinesize ) ;
+            }
+
+            maskbuf.UngetWriteBuf( maskbufsize ) ;
+        }
         ret.SetMask( new wxMask( maskbuf , destwidth , destheight , rowBytes ) ) ;
     }
     else if ( HasAlpha() )
@@ -1607,31 +1613,32 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     size_t size = m_bytesPerRow * m_height ;
     unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
     wxASSERT( destdatabase != NULL ) ;
-
-    memset( destdatabase , 0 , size ) ;
-    unsigned char * srcdatabase = (unsigned char*) bitmap.GetRawAccess() ;
-    size_t sourceBytesRow = bitmap.GetBitmapData()->GetBytesPerRow();
-
-    for ( int y = 0 ; y < m_height ; ++y , srcdatabase+= sourceBytesRow, destdatabase += m_bytesPerRow)
+    if ( destdatabase != NULL)
     {
-        unsigned char *srcdata = srcdatabase ;
-        unsigned char *destdata = destdatabase ;
-        unsigned char r, g, b;
+        memset( destdatabase , 0 , size ) ;
+        unsigned char * srcdatabase = (unsigned char*) bitmap.GetRawAccess() ;
+        size_t sourceBytesRow = bitmap.GetBitmapData()->GetBytesPerRow();
 
-        for ( int x = 0 ; x < m_width ; ++x )
+        for ( int y = 0 ; y < m_height ; ++y , srcdatabase+= sourceBytesRow, destdatabase += m_bytesPerRow)
         {
-            srcdata++ ;
-            r = *srcdata++ ;
-            g = *srcdata++ ;
-            b = *srcdata++ ;
+            unsigned char *srcdata = srcdatabase ;
+            unsigned char *destdata = destdatabase ;
+            unsigned char r, g, b;
 
-            if ( colour == wxColour( r , g , b ) )
-                *destdata++ = 0xFF ;
-            else
-                *destdata++ = 0x00 ;
+            for ( int x = 0 ; x < m_width ; ++x )
+            {
+                srcdata++ ;
+                r = *srcdata++ ;
+                g = *srcdata++ ;
+                b = *srcdata++ ;
+
+                if ( colour == wxColour( r , g , b ) )
+                    *destdata++ = 0xFF ;
+                else
+                    *destdata++ = 0x00 ;
+            }
         }
     }
-
     m_memBuf.UngetWriteBuf( size ) ;
     RealizeNative() ;
 
