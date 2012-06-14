@@ -35,9 +35,7 @@
 
 // #include "MoreFilesX.h"
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    #include <AudioToolbox/AudioServices.h>
-#endif
+#include <AudioToolbox/AudioServices.h>
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/timer.h"

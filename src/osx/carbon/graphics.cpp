@@ -148,26 +148,14 @@ OSStatus wxMacDrawCGImage(
 CGColorRef wxMacCreateCGColor( const wxColour& col )
 {
     CGColorRef retval = 0;
-#ifdef __WXMAC__
-    retval = col.CreateCGColor();
-#else
-// TODO add conversion NSColor - CGColorRef (obj-c)
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    if ( CGColorCreateGenericRGB )
-        retval = CGColorCreateGenericRGB( col.Red() / 255.0 , col.Green() / 255.0, col.Blue() / 255.0, col.Alpha() / 255.0 );
-    else
-#endif
-    {
-        CGFloat components[4] = { col.Red() / 255.0, col.Green() / 255.0, col.Blue()  / 255.0, col.Alpha() / 255.0 } ;
-        retval = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
-    }
 
-#endif
+    retval = col.CreateCGColor();
+
     wxASSERT(retval != NULL);
     return retval;
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && wxOSX_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
 
 CTFontRef wxMacCreateCTFont( const wxFont& font )
 {
@@ -2285,11 +2273,11 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
     CGContextScaleCTM( m_cgContext, 1, -1 );
 #if wxOSX_USE_COCOA_OR_CARBON
+    CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
     PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
         NULL , kPlotIconRefNormalFlags , icon.GetHICON() );
 #endif

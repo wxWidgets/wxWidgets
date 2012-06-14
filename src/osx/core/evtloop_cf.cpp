@@ -48,7 +48,6 @@
 // wxCFEventLoopSource and wxCFEventLoop implementation
 // ============================================================================
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 namespace
 {
 
@@ -135,18 +134,6 @@ wxCFEventLoopSource::~wxCFEventLoopSource()
     if ( m_cffd )
         CFRelease(m_cffd);
 }
-
-#else // OS X < 10.5
-
-wxEventLoopSource *
-wxCFEventLoop::AddSourceForFD(int WXUNUSED(fd),
-                              wxEventLoopSourceHandler * WXUNUSED(handler),
-                              int WXUNUSED(flags))
-{
-    return NULL;
-}
-
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED
 
 #endif // wxUSE_EVENTLOOP_SOURCE
 
