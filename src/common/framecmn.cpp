@@ -119,8 +119,10 @@ wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxString(), 0 /*flags*/, \
 wxPROPERTY_FLAGS( WindowStyle, wxFrameStyle, long, SetWindowStyleFlag, \
                  GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
                  wxT("Helpstring"), wxT("group")) // style
+#if wxUSE_MENUS
 wxPROPERTY( MenuBar, wxMenuBar *, SetMenuBar, GetMenuBar, wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group"))
+#endif
 wxEND_PROPERTIES_TABLE()
 
 wxEMPTY_HANDLERS_TABLE(wxFrame)
