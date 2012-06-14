@@ -2325,7 +2325,6 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         return;
 
 #if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
         wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
@@ -2414,7 +2413,6 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
         return;
 
 #if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
     {
         // default implementation takes care of rotation and calls non rotated DrawText afterwards
         wxGraphicsContext::DoDrawRotatedText( str, x, y, angle );
@@ -2532,7 +2530,6 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         return;
 
 #if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
         CTFontRef font = fref->OSXGetCTFont();
