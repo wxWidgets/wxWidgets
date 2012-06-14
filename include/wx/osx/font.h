@@ -121,6 +121,8 @@ public:
     virtual wxFontEncoding GetEncoding() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
 
+    virtual bool IsFixedWidth() const;
+
     virtual void SetPointSize(int pointSize);
     virtual void SetFamily(wxFontFamily family);
     virtual void SetStyle(wxFontStyle style);
