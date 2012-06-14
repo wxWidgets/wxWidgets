@@ -137,6 +137,8 @@ public:
     }
 
     wxFontEncoding GetEncoding() const { return m_info.GetEncoding(); }
+    
+    bool IsFixedWidth() const;
 
     void Free();
 
@@ -272,7 +274,6 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
     Init();
 
 #if wxOSX_USE_CORE_TEXT
-    if (  UMAGetSystemVersion() >= 0x1050 )
     {
         CTFontUIFontType uifont = kCTFontSystemFontType;
         switch( font )
@@ -465,7 +466,6 @@ void wxFontRefData::MacFindFont()
     m_info.EnsureValid();
 
 #if wxOSX_USE_CORE_TEXT
-    if (  UMAGetSystemVersion() >= 0x1050 )
     {
          CTFontSymbolicTraits traits = 0;
 
@@ -540,6 +540,16 @@ void wxFontRefData::MacFindFont()
     m_uiFont = wxFont::OSXCreateUIFont( &m_info );
 #endif
     m_fontValid = true;
+}
+
+bool wxFontRefData::IsFixedWidth() const
+{
+#if wxOSX_USE_CORE_TEXT
+    CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(m_ctFont);
+    return (traits & kCTFontMonoSpaceTrait) != 0;
+#else
+    return false;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -728,6 +738,13 @@ wxSize wxFont::GetPixelSize() const
 #else
     return wxFontBase::GetPixelSize();
 #endif
+}
+
+bool wxFont::IsFixedWidth() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , wxFONTWEIGHT_MAX, wxT("invalid font") );
+    
+    return M_FONTDATA->IsFixedWidth();
 }
 
 wxFontFamily wxFont::DoGetFamily() const
