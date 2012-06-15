@@ -12,7 +12,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && defined(__UNIX__)
 
 #include "wx/apptrait.h"
 #include "wx/private/fdiomanager.h"
@@ -67,4 +67,4 @@ wxFDIOManager *wxGUIAppTraits::GetFDIOManager()
     return &s_manager;
 }
 
-#endif // wxUSE_SOCKETS
+#endif // wxUSE_SOCKETS && __UNIX__
