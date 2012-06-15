@@ -310,7 +310,7 @@ wxIcon wxRichTextStylePage::GetIconResource( const wxString& name )
 void wxRichTextStylePage::OnNextStyleUpdate( wxUpdateUIEvent& event )
 {
     wxRichTextStyleDefinition* def = wxRichTextFormattingDialog::GetDialogStyleDefinition(this);
-    event.Enable(wxDynamicCast(def, wxRichTextParagraphStyleDefinition));
+    event.Enable(wxDynamicCast(def, wxRichTextParagraphStyleDefinition) != NULL);
 }
 
 #endif // wxUSE_RICHTEXT
