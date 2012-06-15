@@ -17,8 +17,11 @@
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoop );
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopObserver );
 
+class WXDLLIMPEXP_BASE wxCFEventLoopPauseObservers;
+
 class WXDLLIMPEXP_BASE wxCFEventLoop : public wxEventLoopBase
 {
+    friend class wxCFEventLoopPauseObservers;
 public:
     wxCFEventLoop();
     virtual ~wxCFEventLoop();
@@ -53,10 +56,12 @@ public:
       AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
 #endif // wxUSE_EVENTLOOP_SOURCE
 
-
 protected:
     void CommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
     void DefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
+
+    // set to false to avoid idling at unexpected moments - eg when having native message boxes
+    void SetProcessIdleEvents(bool process) { m_processIdleEvents = process; }
 
     static void OSXCommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity, void *info);
     static void OSXDefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity, void *info);
@@ -84,6 +89,9 @@ protected:
 
     // default mode runloop observer
     CFRunLoopObserverRef m_defaultModeRunLoopObserver;
+    
+    // set to false to avoid idling at unexpected moments - eg when having native message boxes
+    bool m_processIdleEvents;
 
 private:
     // process all already pending events and dispatch a new one (blocking
@@ -91,6 +99,15 @@ private:
     //
     // returns the return value of DoDispatchTimeout()
     int DoProcessEvents();
+
+    wxDECLARE_NO_COPY_CLASS(wxCFEventLoop);
+};
+
+class WXDLLIMPEXP_BASE wxCFEventLoopPauseObservers : public wxObject
+{
+public:
+    wxCFEventLoopPauseObservers();
+    virtual ~wxCFEventLoopPauseObservers();
 };
 
 #if wxUSE_GUI
