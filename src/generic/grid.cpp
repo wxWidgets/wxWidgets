@@ -1942,20 +1942,20 @@ wxGrid::SetRenderScale(wxDC& dc,
     double scaleX, scaleY;
     wxSize sizeTemp;
 
-    if ( size.GetX() != wxDefaultSize.GetX() ) // size.x was specified
-        sizeTemp.SetWidth( size.GetX() );
+    if ( size.GetWidth() != wxDefaultSize.GetWidth() ) // size.x was specified
+        sizeTemp.SetWidth( size.GetWidth() );
     else
-        sizeTemp.SetWidth( dc.DeviceToLogicalXRel( dc.GetSize().GetX() )
+        sizeTemp.SetWidth( dc.DeviceToLogicalXRel( dc.GetSize().GetWidth() )
                            - pos.x );
 
-    if ( size.GetY() != wxDefaultSize.GetY() ) // size.y was specified
-        sizeTemp.SetHeight( size.GetY() );
+    if ( size.GetHeight() != wxDefaultSize.GetHeight() ) // size.y was specified
+        sizeTemp.SetHeight( size.GetHeight() );
     else
-        sizeTemp.SetHeight( dc.DeviceToLogicalYRel( dc.GetSize().GetY() )
+        sizeTemp.SetHeight( dc.DeviceToLogicalYRel( dc.GetSize().GetHeight() )
                             - pos.y );
 
-    scaleX = (double)( (double) sizeTemp.GetX() / (double) sizeGrid.GetX() );
-    scaleY = (double)( (double) sizeTemp.GetY() / (double) sizeGrid.GetY() );
+    scaleX = (double)( (double) sizeTemp.GetWidth() / (double) sizeGrid.GetWidth() );
+    scaleY = (double)( (double) sizeTemp.GetHeight() / (double) sizeGrid.GetHeight() );
 
     dc.SetUserScale( wxMin( scaleX, scaleY), wxMin( scaleX, scaleY ) );
 }
