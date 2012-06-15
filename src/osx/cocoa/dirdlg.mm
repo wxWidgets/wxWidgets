@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/filename.h"
+#include "wx/evtloop.h"
 
 #include "wx/osx/private.h"
 
@@ -90,6 +91,8 @@ void wxDirDialog::ShowWindowModal()
 
 int wxDirDialog::ShowModal()
 {
+    wxCFEventLoopPauseIdleEvents pause;
+
     NSOpenPanel *oPanel = [NSOpenPanel openPanel];
     [oPanel setCanChooseDirectories:YES];
     [oPanel setResolvesAliases:YES];

@@ -34,6 +34,7 @@
 
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
+#include "wx/evtloop.h"
 
 #include "wx/osx/private.h"
 #include "wx/sysopt.h"
@@ -494,6 +495,8 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 
 int wxFileDialog::ShowModal()
 {
+    wxCFEventLoopPauseIdleEvents pause;
+
     wxMacAutoreleasePool autoreleasepool;
     
     wxCFStringRef cf( m_message );
