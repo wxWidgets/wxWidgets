@@ -584,6 +584,7 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
     wxCHECK_MSG( type >= 0 && (size_t)type < m_icons.GetCount(), wxNullIcon,
                  wxT("wxFSIconType::GetIcon(): invalid icon index") );
 
+#ifdef __WXMSW__
     // Load on demand.
     if (m_icons[type].IsNull())
     {
@@ -621,6 +622,10 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
     }
 
     return m_icons[type];
+#else
+    wxFAIL_MSG(wxS("Can't convert HICON to wxIcon in this port."));
+    return wxNullIcon;
+#endif
 } // GetIcon
 
 #endif // wxUSE_GUI
