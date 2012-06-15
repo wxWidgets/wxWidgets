@@ -17,11 +17,11 @@
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoop );
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopObserver );
 
-class WXDLLIMPEXP_BASE wxCFEventLoopPauseObservers;
+class WXDLLIMPEXP_BASE wxCFEventLoopPauseIdleEvents;
 
 class WXDLLIMPEXP_BASE wxCFEventLoop : public wxEventLoopBase
 {
-    friend class wxCFEventLoopPauseObservers;
+    friend class wxCFEventLoopPauseIdleEvents;
 public:
     wxCFEventLoop();
     virtual ~wxCFEventLoop();
@@ -103,11 +103,11 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxCFEventLoop);
 };
 
-class WXDLLIMPEXP_BASE wxCFEventLoopPauseObservers : public wxObject
+class WXDLLIMPEXP_BASE wxCFEventLoopPauseIdleEvents : public wxObject
 {
 public:
-    wxCFEventLoopPauseObservers();
-    virtual ~wxCFEventLoopPauseObservers();
+    wxCFEventLoopPauseIdleEvents();
+    virtual ~wxCFEventLoopPauseIdleEvents();
 };
 
 #if wxUSE_GUI

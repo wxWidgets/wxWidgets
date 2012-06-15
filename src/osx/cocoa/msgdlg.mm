@@ -62,7 +62,7 @@ wxMessageDialog::~wxMessageDialog()
 
 int wxMessageDialog::ShowModal()
 {
-    wxCFEventLoopPauseObservers pause;
+    wxCFEventLoopPauseIdleEvents pause;
     
     int resultbutton = wxID_CANCEL;
 

@@ -441,14 +441,14 @@ void wxCFEventLoop::Exit(int rc)
     DoStop();
 }
 
-wxCFEventLoopPauseObservers::wxCFEventLoopPauseObservers()
+wxCFEventLoopPauseIdleEvents::wxCFEventLoopPauseIdleEvents()
 {
     wxCFEventLoop* cfl = dynamic_cast<wxCFEventLoop*>(wxEventLoopBase::GetActive());
     if ( cfl )
         cfl->SetProcessIdleEvents(false);
 }
 
-wxCFEventLoopPauseObservers::~wxCFEventLoopPauseObservers()
+wxCFEventLoopPauseIdleEvents::~wxCFEventLoopPauseIdleEvents()
 {
     wxCFEventLoop* cfl = dynamic_cast<wxCFEventLoop*>(wxEventLoopBase::GetActive());
     if ( cfl )
