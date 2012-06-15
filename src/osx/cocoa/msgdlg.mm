@@ -20,6 +20,7 @@
 
 #include "wx/control.h"
 #include "wx/thread.h"
+#include "wx/evtloop.h"
 #include "wx/osx/private.h"
 
 
@@ -61,6 +62,8 @@ wxMessageDialog::~wxMessageDialog()
 
 int wxMessageDialog::ShowModal()
 {
+    wxCFEventLoopPauseObservers pause;
+    
     int resultbutton = wxID_CANCEL;
 
     const long style = GetMessageDialogStyle();
