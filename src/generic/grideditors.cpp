@@ -56,6 +56,10 @@
     #define WXUNUSED_GTK(identifier)    identifier
 #endif
 
+#ifdef __WXOSX__
+#include "wx/osx/private.h"
+#endif
+
 // Required for wxIs... functions
 #include <ctype.h>
 
@@ -406,6 +410,10 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
                                wxDefaultPosition, wxDefaultSize,
                                style);
 
+#ifdef __WXOSX__
+    wxWidgetImpl* impl = m_control->GetPeer();
+    impl->SetNeedsFocusRect(false);
+#endif
     // set max length allowed in the textctrl, if the parameter was set
     if ( m_maxChars != 0 )
     {
@@ -451,6 +459,12 @@ void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
 
     rect.width -= 2;
     rect.height -= 2;
+#elif defined(__WXOSX__)
+    rect.x += 1;
+    rect.y += 1;
+    
+    rect.width -= 1;
+    rect.height -= 1;
 #else
     int extra_x = ( rect.x > 2 ) ? 2 : 1;
     int extra_y = ( rect.y > 2 ) ? 2 : 1;
