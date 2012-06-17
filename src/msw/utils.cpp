@@ -1076,12 +1076,6 @@ unsigned long wxGetProcessId()
     return ::GetCurrentProcessId();
 }
 
-// Emit a beeeeeep
-void wxBell()
-{
-    ::MessageBeep((UINT)-1);        // default sound
-}
-
 bool wxIsDebuggerRunning()
 {
 #if wxUSE_DYNLIB_CLASS

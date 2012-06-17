@@ -45,7 +45,7 @@
 
 #include "wx/evtloop.h"
 
-#if wxUSE_BASE
+#if wxUSE_GUI
 
 // Emit a beeeeeep
 void wxBell()
@@ -62,10 +62,6 @@ void wxBell()
     }
 #endif
 }
-
-#endif // wxUSE_BASE
-
-#if wxUSE_GUI
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {

@@ -37,17 +37,13 @@
 
 #if wxOSX_USE_COCOA
 
-#if wxUSE_BASE
+#if wxUSE_GUI
 
 // Emit a beeeeeep
 void wxBell()
 {
     NSBeep();
 }
-
-#endif // wxUSE_BASE
-
-#if wxUSE_GUI
 
 @implementation wxNSAppController
 

@@ -192,6 +192,8 @@ bool wxIsBusy();
     @note This function is categorized as a GUI one and so is not thread-safe.
 
     @header{wx/utils.h}
+
+    @library{wxcore}
 */
 void wxBell();
 

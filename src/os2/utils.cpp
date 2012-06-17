@@ -306,12 +306,6 @@ void wxFlushEvents()
 //  wxYield();
 }
 
-// Emit a beeeeeep
-void wxBell()
-{
-    DosBeep(1000,1000); // 1kHz during 1 sec.
-}
-
 wxString wxGetOsDescription()
 {
     wxString strVer(wxT("OS/2"));

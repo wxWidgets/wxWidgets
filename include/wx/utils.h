@@ -130,12 +130,7 @@ wxDEPRECATED_INLINE(inline bool wxStringEq(const wchar_t *s1, const wchar_t *s2)
 // ----------------------------------------------------------------------------
 
 // Sound the bell
-#if !defined __EMX__ && \
-    (defined __WXMOTIF__ || defined __WXGTK__ || defined __WXX11__)
 WXDLLIMPEXP_CORE void wxBell();
-#else
-WXDLLIMPEXP_BASE void wxBell();
-#endif
 
 #if wxUSE_MSGDLG
 // Show wxWidgets information

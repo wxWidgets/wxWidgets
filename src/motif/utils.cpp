@@ -112,14 +112,11 @@ int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 // ----------------------------------------------------------------------------
 
 // Emit a beeeeeep
-#ifndef __EMX__
-// on OS/2, we use the wxBell from wxBase library (src/os2/utils.cpp)
 void wxBell()
 {
     // Use current setting for the bell
     XBell (wxGlobalDisplay(), 0);
 }
-#endif
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {

@@ -66,14 +66,11 @@ extern GtkWidget *wxGetRootWindow();
 //----------------------------------------------------------------------------
 // misc.
 //----------------------------------------------------------------------------
-#ifndef __EMX__
-// on OS/2, we use the wxBell from wxBase library
 
 void wxBell()
 {
     gdk_beep();
 }
-#endif
 
 // ----------------------------------------------------------------------------
 // display characterstics

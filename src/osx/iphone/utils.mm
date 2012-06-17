@@ -39,13 +39,6 @@
 
 #if 1 // wxUSE_BASE
 
-// Emit a beeeeeep
-void wxBell()
-{
-    // would be kSystemSoundID_UserPreferredAlert but since the headers aren't correct, add it manually
-    AudioServicesPlayAlertSound(0x00001000 );
-}
-
 // ----------------------------------------------------------------------------
 // Common Event Support
 // ----------------------------------------------------------------------------
@@ -90,6 +83,13 @@ void wxApp::DoCleanUp()
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
+
+// Emit a beeeeeep
+void wxBell()
+{
+    // would be kSystemSoundID_UserPreferredAlert but since the headers aren't correct, add it manually
+    AudioServicesPlayAlertSound(0x00001000 );
+}
 
 // ----------------------------------------------------------------------------
 // Launch default browser

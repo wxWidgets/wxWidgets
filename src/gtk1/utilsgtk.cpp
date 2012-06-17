@@ -58,14 +58,11 @@ extern GtkWidget *wxGetRootWindow();
 //----------------------------------------------------------------------------
 // misc.
 //----------------------------------------------------------------------------
-#ifndef __EMX__
-// on OS/2, we use the wxBell from wxBase library
 
 void wxBell()
 {
     gdk_beep();
 }
-#endif
 
 /* Don't synthesize KeyUp events holding down a key and producing
    KeyDown events with autorepeat. */
