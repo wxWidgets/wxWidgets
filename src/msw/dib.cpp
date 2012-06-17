@@ -575,7 +575,7 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
 wxPalette *wxDIB::CreatePalette() const
 {
     // GetDIBColorTable not available in eVC3
-#if defined(_WIN32_WCE) && _WIN32_WCE < 400
+#if !defined(__WXMSW__) || defined(_WIN32_WCE) && _WIN32_WCE < 400
     return NULL;
 #else
     wxCHECK_MSG( m_handle, NULL, wxT("wxDIB::CreatePalette(): invalid object") );

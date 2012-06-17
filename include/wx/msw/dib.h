@@ -37,9 +37,11 @@ public:
     wxDIB(int width, int height, int depth)
         { Init(); (void)Create(width, height, depth); }
 
+#ifdef __WXMSW__
     // create a DIB from the DDB
     wxDIB(const wxBitmap& bmp)
         { Init(); (void)Create(bmp); }
+#endif // __WXMSW__
 
     // create a DIB from the Windows DDB
     wxDIB(HBITMAP hbmp)
@@ -53,7 +55,9 @@ public:
 
     // same as the corresponding ctors but with return value
     bool Create(int width, int height, int depth);
+#ifdef __WXMSW__
     bool Create(const wxBitmap& bmp) { return Create(GetHbitmapOf(bmp)); }
+#endif
     bool Create(HBITMAP hbmp);
     bool Load(const wxString& filename);
 
