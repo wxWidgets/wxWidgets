@@ -1645,4 +1645,16 @@
 #define wxUSE_CRASHREPORT 1
 /* --- end MSW options --- */
 
+// GTK-specific options used when not using configure. As we can't test for the
+// exact GTK version (without including GTK+ headers that we don't want to
+// include from our own public headers), just assume a recent GTK 2.x.
+#define __WXGTK20__
+#define __WXGTK26__
+#define __WXGTK210__
+#define __WXGTK218__
+
+// Alternatively, all the above symbols could be commented and this one
+// uncommented if using GTK+ 3.
+//#define __WXGTK30__
+
 #endif // _WX_SETUP_H_
