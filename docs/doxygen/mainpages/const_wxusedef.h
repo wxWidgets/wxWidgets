@@ -92,6 +92,7 @@ library:
 @itemdef{wxUSE_COLOURPICKERCTRL, Use wxColourPickerCtrl class.}
 @itemdef{wxUSE_COMBOBOX, Use wxComboBox class.}
 @itemdef{wxUSE_COMBOCTRL, Use wxComboCtrl class.}
+@itemdef{wxUSE_COMPILER_TLS, Can be set to 0 to prevent using compile thread-specific variables support.}
 @itemdef{wxUSE_CONFIG, Use wxConfig and related classes.}
 @itemdef{wxUSE_CONFIG_NATIVE, When enabled use native OS configuration instead of the wxFileConfig class.}
 @itemdef{wxUSE_CONSOLE_EVENTLOOP, Enable event loop in console programs.}

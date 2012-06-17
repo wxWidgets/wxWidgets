@@ -202,6 +202,7 @@
 
 #define wxUSE_PRINTF_POS_PARAMS      0
 
+#define wxUSE_COMPILER_TLS 0
 
 
 #define wxUSE_STL 0

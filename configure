@@ -32030,7 +32030,7 @@ EOF
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; } ; then :
 
-	        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+   	        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
     ax_gcc_version_option=yes
@@ -32038,7 +32038,7 @@ $as_echo "yes" >&6; }
 
 else
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+   		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
     ax_gcc_version_option=no
@@ -32508,6 +32508,9 @@ fi
 done
 
       fi
+
+$as_echo "#define wxUSE_COMPILER_TLS 1" >>confdefs.h
+
 
 if test "$wxUSE_THREADS" = "yes"; then
   $as_echo "#define wxUSE_THREADS 1" >>confdefs.h

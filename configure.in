@@ -5226,6 +5226,10 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
 dnl    ]
 dnl )
 
+dnl This is currently always defined under Unix, there is no reason to ever
+dnl disable compiler TLS support there.
+AC_DEFINE(wxUSE_COMPILER_TLS)
+
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
 
