@@ -47,7 +47,7 @@
 
 #include <errno.h>
 
-#if defined(__UNIX__) && !defined(__CYGWIN__)
+#if defined(__UNIX__) && !defined(__WXMSW__)
     #include <netdb.h>
     #include <arpa/inet.h>
 #endif // __UNIX__

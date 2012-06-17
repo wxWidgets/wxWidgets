@@ -494,7 +494,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxAppConsoleBase);
 };
 
-#if defined(__UNIX__) && !defined(__CYGWIN__)
+#if defined(__UNIX__) && !defined(__WXMSW__)
     #include "wx/unix/app.h"
 #else
     // this has to be a class and not a typedef as we forward declare it

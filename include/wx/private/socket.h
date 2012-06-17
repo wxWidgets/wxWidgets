@@ -51,7 +51,7 @@
    having been defined in sys/types.h" when winsock.h is included later and
    doesn't seem to be necessary anyhow. It's not needed under Mac neither.
  */
-#if !defined(__WXMAC__) && !defined(__CYGWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXMAC__) && !defined(__WXMSW__) && !defined(__WXWINCE__)
 #include <sys/types.h>
 #endif
 
