@@ -21,7 +21,9 @@
 #include "wx/apptrait.h"
 #include "wx/process.h"
 #include "wx/sysopt.h"
+#ifdef __UNIX__
 #include "wx/unix/execute.h"
+#endif
 
 #include "wx/gtk/private/timer.h"
 #include "wx/evtloop.h"
@@ -191,6 +193,8 @@ const gchar *wx_pango_version_check (int major, int minor, int micro)
 // subprocess routines
 // ----------------------------------------------------------------------------
 
+#ifdef __UNIX__
+
 extern "C" {
 static gboolean EndProcessDetector(GIOChannel* source, GIOCondition, void* data)
 {
@@ -216,7 +220,7 @@ int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
     return int(id);
 }
 
-
+#endif // __UNIX__
 
 // ----------------------------------------------------------------------------
 // wxPlatformInfo-related
@@ -284,13 +288,15 @@ wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 }
 
 
-#if wxUSE_INTL
+#if wxUSE_INTL && defined(__UNIX__)
 void wxGUIAppTraits::SetLocale()
 {
     gtk_set_locale();
     wxUpdateLocaleIsUtf8();
 }
 #endif
+
+#ifdef __UNIX__
 
 #if wxDEBUG_LEVEL && wxUSE_STACKWALKER
 
@@ -380,6 +386,10 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
     return wxAppTraitsBase::ShowAssertDialog(msg);
 }
 
+#endif // __UNIX__
+
+#if defined(__UNIX__) || defined(__OS2__)
+
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
     wxString de = wxSystemOptions::GetOption(wxT("gtk.desktop"));
@@ -397,6 +407,8 @@ wxString wxGUIAppTraits::GetDesktopEnvironment() const
 
     return de;
 }
+
+#endif // __UNIX__ || __OS2__
 
 #ifdef __WXGTK26__
 
@@ -446,6 +458,8 @@ wxString wxGetNameFromGtkOptionEntry(const GOptionEntry *opt)
 }
 
 #endif // __WXGTK26__
+
+#ifdef __UNIX__
 
 wxString
 wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
@@ -497,3 +511,4 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
     return usage;
 }
 
+#endif // __UNIX__
