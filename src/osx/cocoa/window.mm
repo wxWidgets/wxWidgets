@@ -2536,7 +2536,7 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
 
     // temporary hook for dnd
     [v registerForDraggedTypes:[NSArray arrayWithObjects:
-        NSStringPboardType, NSFilenamesPboardType, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
+        NSStringPboardType, NSFilenamesPboardType, (NSString*) kPasteboardTypeFileURLPromise, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
 
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, false, true );
     return c;

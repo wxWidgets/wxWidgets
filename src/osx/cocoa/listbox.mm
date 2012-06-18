@@ -556,7 +556,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
 
     // temporary hook for dnd
     [tableview registerForDraggedTypes:[NSArray arrayWithObjects:
-        NSStringPboardType, NSFilenamesPboardType, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
+        NSStringPboardType, NSFilenamesPboardType, (NSString*) kPasteboardTypeFileURLPromise, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
 
     [ds setImplementation:c];
     return c;
