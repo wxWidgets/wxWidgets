@@ -158,7 +158,7 @@ bool wxRichTextStylePage::TransferDataFromWindow()
 bool wxRichTextStylePage::TransferDataToWindow()
 {
     wxPanel::TransferDataToWindow();
-    
+
     wxRichTextStyleDefinition* def = wxRichTextFormattingDialog::GetDialogStyleDefinition(this);
     if (def)
     {

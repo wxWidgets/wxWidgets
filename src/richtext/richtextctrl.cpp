@@ -2663,6 +2663,8 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 
 bool wxRichTextCtrl::DoLoadFile(const wxString& filename, int fileType)
 {
+    SetFocusObject(& GetBuffer(), true);
+
     bool success = GetBuffer().LoadFile(filename, (wxRichTextFileType)fileType);
     if (success)
         m_filename = filename;
