@@ -979,11 +979,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     char **argvGST = new char*[wxTheApp->argc + 1];
     for ( i = 0; i < wxTheApp->argc; i++ )
     {
-#if wxUSE_UNICODE_WCHAR
-        argvGST[i] = wxStrdupA(wxConvUTF8.cWX2MB(wxTheApp->argv[i]));
-#else
         argvGST[i] = wxStrdupA(wxTheApp->argv[i].utf8_str());
-#endif
     }
 
     argvGST[wxTheApp->argc] = NULL;
