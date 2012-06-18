@@ -26,13 +26,13 @@
 #include "wx/mstream.h"
 #include "wx/metafile.h"
 #include "wx/tokenzr.h"
+#include "wx/filename.h"
 
 #include "wx/osx/private.h"
 
 #if wxOSX_USE_COCOA_OR_CARBON
     #include <QuickTime/QuickTime.h>
 #endif
-
 
 // ----------------------------------------------------------------------------
 // wxDataFormat
@@ -186,7 +186,8 @@ void wxDataFormat::SetId( NativeFormat format )
     {
         m_type = wxDF_METAFILE;
     }
-    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.file-url") )  )
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.file-url") ) ||
+             UTTypeConformsTo( (CFStringRef)format, kPasteboardTypeFileURLPromise))
     {
         m_type = wxDF_FILENAME;
     }
@@ -424,13 +425,24 @@ bool wxDataObject::GetFromPasteboard( void * pb )
 
                     if ( dataFormat == flavorFormat )
                     {
+                        if ( UTTypeConformsTo( (CFStringRef)flavorType, kPasteboardTypeFileURLPromise) )
+                        {
+                            wxString tempdir = wxFileName::GetTempDir() + wxFILE_SEP_PATH + "wxtemp.XXXXXX";
+                            char* result = mkdtemp((char*)tempdir.fn_str().data());
+                            
+                            if (!result)
+                                continue;
+                            
+                            wxCFRef<CFURLRef> dest(CFURLCreateFromFileSystemRepresentation(NULL,(const UInt8*)result,strlen(result),true));
+                            PasteboardSetPasteLocation(pasteboard, dest);
+                        }
                         err = PasteboardCopyItemFlavorData( pasteboard, itemID, flavorType , &flavorData );
                         if ( err == noErr )
                         {
                             flavorDataSize = CFDataGetLength( flavorData );
                             if (dataFormat.GetType() == wxDF_FILENAME )
                             {
-                                // revert the translation and decomposition to arrive at a proper utf8 string again
+                                 // revert the translation and decomposition to arrive at a proper utf8 string again
                                 CFURLRef url = CFURLCreateWithBytes( kCFAllocatorDefault, CFDataGetBytePtr( flavorData ), flavorDataSize, kCFStringEncodingUTF8, NULL );
                                 CFStringRef cfString = CFURLCopyFileSystemPath( url, kCFURLPOSIXPathStyle );
                                 CFRelease( url );
