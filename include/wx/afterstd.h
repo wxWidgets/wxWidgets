@@ -13,7 +13,7 @@
     See the comments in beforestd.h.
  */
 
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     #include "wx/msw/winundef.h"
 #endif
 

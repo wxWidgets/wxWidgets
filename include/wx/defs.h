@@ -30,7 +30,7 @@
 #ifdef __cplusplus
 /*  Make sure the environment is set correctly */
 #   if defined(__WXMSW__) && defined(__X__)
-#       error "Target can't be both X and Windows"
+#       error "Target can't be both X and MSW"
 #   elif !defined(__WXMOTIF__) && \
          !defined(__WXMSW__)   && \
          !defined(__WXGTK__)   && \
@@ -3018,7 +3018,9 @@ typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
 
+#ifdef __WXMSW__
 typedef WXHWND          WXWidget;
+#endif
 
 #ifdef __WIN64__
 typedef unsigned __int64   WXWPARAM;
@@ -3254,9 +3256,9 @@ typedef const void* WXWidget;
 /*  included before or after wxWidgets classes, and therefore must be */
 /*  disabled here before any significant wxWidgets headers are included. */
 #ifdef __cplusplus
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 #include "wx/msw/winundef.h"
-#endif /* __WXMSW__ */
+#endif /* __WINDOWS__ */
 #endif /* __cplusplus */
 
 
