@@ -742,8 +742,11 @@ wxSize wxFont::GetPixelSize() const
 
 bool wxFont::IsFixedWidth() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , wxFONTWEIGHT_MAX, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , false, wxT("invalid font") );
     
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
+
     return M_FONTDATA->IsFixedWidth();
 }
 
