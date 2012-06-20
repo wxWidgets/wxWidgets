@@ -55,9 +55,11 @@
 #   undef  wxUSE_MEDIACTRL
 #   define wxUSE_MEDIACTRL 0
 
-    // We could use GDK_WINDOWING_X11 for those but this would require
-    // including gdk/gdk.h and we don't want to do it from here, so assume
-    // we're not using X11 if we're not under Unix.
+    /*
+        We could use GDK_WINDOWING_X11 for those but this would require
+        including gdk/gdk.h and we don't want to do it from here, so assume
+        we're not using X11 if we're not under Unix.
+     */
 
 #   undef  wxUSE_UIACTIONSIMULATOR
 #   define wxUSE_UIACTIONSIMULATOR 0
@@ -67,8 +69,10 @@
 
 #endif /* __UNIX__ */
 
-// We always need Cairo with wxGTK, enable it if necessary (this can only
-// happen under Windows).
+/*
+    We always need Cairo with wxGTK, enable it if necessary (this can only
+    happen under Windows).
+ */
 #ifdef __WINDOWS__
 
 #if !wxUSE_CAIRO
