@@ -1773,12 +1773,11 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
     // Notice that we must use the real font style or the results would be
     // incorrect for italic/bold fonts.
     const INT style = f->GetStyle();
-    REAL rDescent = ffamily.GetCellDescent(style) *
-        f->GetSize() / ffamily.GetEmHeight(style);
-    REAL rAscent = ffamily.GetCellAscent(style) *
-        f->GetSize() / ffamily.GetEmHeight(style);
-    REAL rHeight = ffamily.GetLineSpacing(style) *
-        f->GetSize() / ffamily.GetEmHeight(style);
+    const REAL size = f->GetSize();
+    const REAL emHeight = ffamily.GetEmHeight(style);
+    REAL rDescent = ffamily.GetCellDescent(style) * size / emHeight;
+    REAL rAscent = ffamily.GetCellAscent(style) * size / emHeight;
+    REAL rHeight = ffamily.GetLineSpacing(style) * size / emHeight;
 
     if ( height )
         *height = rHeight * factorY;
