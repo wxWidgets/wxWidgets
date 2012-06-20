@@ -6,6 +6,17 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// wxListbook flags
+#define wxLB_DEFAULT          wxBK_DEFAULT
+#define wxLB_TOP              wxBK_TOP
+#define wxLB_BOTTOM           wxBK_BOTTOM
+#define wxLB_LEFT             wxBK_LEFT
+#define wxLB_RIGHT            wxBK_RIGHT
+#define wxLB_ALIGN_MASK       wxBK_ALIGN_MASK
+
+wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED;
+wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING;
+
 /**
     @class wxListbook
 
@@ -66,6 +77,17 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxString& name = wxEmptyString);
+
+    /**
+       Create the list book control that has already been constructed with
+       the default constructor.
+    */
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxEmptyString);
 
     /**
         Returns the wxListView associated with the control.

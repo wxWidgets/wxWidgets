@@ -35,6 +35,9 @@
 class wxFontEnumerator
 {
 public:
+    wxFontEnumerator();
+    virtual ~wxFontEnumerator();
+
     /**
         Call OnFontEncoding() for each encoding supported by the given font -
         or for each encoding supported by at least some font if @a font is not specified.

@@ -6,6 +6,18 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+// wxChoicebook flags
+#define wxCHB_DEFAULT          wxBK_DEFAULT
+#define wxCHB_TOP              wxBK_TOP
+#define wxCHB_BOTTOM           wxBK_BOTTOM
+#define wxCHB_LEFT             wxBK_LEFT
+#define wxCHB_RIGHT            wxBK_RIGHT
+#define wxCHB_ALIGN_MASK       wxBK_ALIGN_MASK
+
+wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING;
+
 /**
     @class wxChoicebook
 
@@ -66,6 +78,18 @@ public:
                  const wxString& name = wxEmptyString);
     //@}
 
+    /**
+       Create the choicebook control that has already been constructed with
+       the default constructor.
+    */
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxEmptyString);
+
+    
     /**
         Returns the wxChoice associated with the control.
     */

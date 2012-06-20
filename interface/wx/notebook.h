@@ -26,6 +26,10 @@ enum
 #define wxNB_NOPAGETHEME      0x0400
 #define wxNB_FLAT             0x0800
 
+wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
+
+
 /**
     @class wxNotebook
 

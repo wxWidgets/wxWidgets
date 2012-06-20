@@ -6,6 +6,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING;
+wxEventType wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED;
+wxEventType wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED;
+
 /**
     @class wxTreebook
 
