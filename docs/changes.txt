@@ -592,6 +592,7 @@ MSW:
 - Fix code compilation with wxUSE_UNICODE_UTF8 (Kolya Kosenko).
 - Fix crash in wxTreeCtrl when calling GetSelection() from selection changed
   event handler under Vista and later (sbrowne).
+- Fix text extent computation in wxGraphicsContext (juria90).
 
 OSX:
 
