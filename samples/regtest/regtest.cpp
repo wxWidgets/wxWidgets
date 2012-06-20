@@ -1193,7 +1193,7 @@ const wxChar *RegTreeCtrl::TreeNode::FullName() const
         s_strName = Parent()->FullName();
         s_strName << wxT('\\') << m_strName;
 
-        return s_strName;
+        return s_strName.t_str();
     }
 }
 

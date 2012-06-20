@@ -315,28 +315,28 @@ BENCHMARK_FUNC(StrcmpA)
 {
     const wxString& s = GetTestAsciiString();
 
-    return wxCRT_StrcmpA(s, s) == 0;
+    return wxCRT_StrcmpA(s.c_str(), s.c_str()) == 0;
 }
 
 BENCHMARK_FUNC(StrcmpW)
 {
     const wxString& s = GetTestAsciiString();
 
-    return wxCRT_StrcmpW(s, s) == 0;
+    return wxCRT_StrcmpW(s.wc_str(), s.wc_str()) == 0;
 }
 
 BENCHMARK_FUNC(StricmpA)
 {
     const wxString& s = GetTestAsciiString();
 
-    return wxCRT_StricmpA(s, s) == 0;
+    return wxCRT_StricmpA(s.c_str(), s.c_str()) == 0;
 }
 
 BENCHMARK_FUNC(StricmpW)
 {
     const wxString& s = GetTestAsciiString();
 
-    return wxCRT_StricmpW(s, s) == 0;
+    return wxCRT_StricmpW(s.wc_str(), s.wc_str()) == 0;
 }
 
 BENCHMARK_FUNC(StringCmp)

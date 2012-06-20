@@ -295,7 +295,7 @@ void wx28HtmlParser::DoParsing(int begin_pos, int end_pos)
             // Add text:
             AddText(GetEntitiesParser()->Parse(
                        m_Source.Mid(pieces[m_CurTextPiece].m_pos,
-                                    pieces[m_CurTextPiece].m_lng)));
+                                    pieces[m_CurTextPiece].m_lng)).t_str());
             begin_pos = pieces[m_CurTextPiece].m_pos +
                         pieces[m_CurTextPiece].m_lng;
             m_CurTextPiece++;

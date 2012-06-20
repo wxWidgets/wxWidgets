@@ -213,7 +213,7 @@ void MyFrame::OnSimulateText(wxCommandEvent& WXUNUSED(event))
 
     wxUIActionSimulator sim;
     m_text->SetFocus();
-    sim.Text(s_text);
+    sim.Text(s_text.c_str());
 }
 
 void MyFrame::OnButtonPressed(wxCommandEvent& WXUNUSED(event))
