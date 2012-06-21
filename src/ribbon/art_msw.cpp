@@ -294,13 +294,14 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone() const
 
 void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
 {
-    for(int i = 0; i < 4; ++i)
+    int i;
+    for(i = 0; i < 4; ++i)
     {
         copy->m_gallery_up_bitmap[i] = m_gallery_up_bitmap[i];
         copy->m_gallery_down_bitmap[i] = m_gallery_down_bitmap[i];
         copy->m_gallery_extension_bitmap[i] = m_gallery_extension_bitmap[i];
     }
-    for(int i = 0; i < 2; ++i)
+    for(i = 0; i < 2; ++i)
     {
         copy->m_panel_extension_bitmap[i] = m_panel_extension_bitmap[i];
     }
@@ -1187,10 +1188,10 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
 {
     wxRect background;
     // Expanded panels need a background - the expanded panel at
-    // best size may have a greater Y dimension higher than when 
+    // best size may have a greater Y dimension higher than when
     // on the bar if it has a sizer. AUI art provider does not need this
     // because it paints the panel without reference to its parent's size.
-    // Expanded panels use a wxFrame as parent (not a wxRibbonPage). 
+    // Expanded panels use a wxFrame as parent (not a wxRibbonPage).
 
     if(wnd->GetSizer() && wnd->GetParent() != page)
     {
