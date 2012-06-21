@@ -4831,7 +4831,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
             // Line end position shouldn't be the same as the end, or greater.
             if (wrapPosition >= GetRange().GetEnd())
-                wrapPosition = GetRange().GetEnd()-1;
+                wrapPosition = wxMax(0, GetRange().GetEnd()-1);
 
             // wxLogDebug(wxT("Split at %ld"), wrapPosition);
 
