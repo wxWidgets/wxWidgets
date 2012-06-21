@@ -1137,8 +1137,12 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
         hints.width_inc  = incW > 0 ? incW : 1;
         hints.height_inc = incH > 0 ? incH : 1;
     }
-    gtk_window_set_geometry_hints(
-        (GtkWindow*)m_widget, NULL, &hints, (GdkWindowHints)hints_mask);
+
+    if (hints_mask)
+    {
+        gtk_window_set_geometry_hints(
+            (GtkWindow*)m_widget, NULL, &hints, (GdkWindowHints)hints_mask);
+    }
 }
 
 void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
