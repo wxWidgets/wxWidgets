@@ -97,25 +97,29 @@ void wxRichTextPrintout::OnPreparePrinting()
 
                     if (((lineY + line->GetSize().y) > rect.GetBottom()) || hasHardPageBreak)
                     {
-                        // New page starting at this line
-                        int newY = rect.y;
+                        // Only if we're not at the start of the document, and
+                        // even then, only if either it's a hard break or if the object
+                        // can fit in a whole page (otherwise there's no point in making
+                        // the rest of this page blank).
+                        if (lastLine && (hasHardPageBreak || (line->GetSize().y <= rect.GetHeight())))
+                        {
+                            // New page starting at this line
+                            int newY = rect.y;
+                            
+                            // We increase the offset by the difference between new and old positions
+                            
+                            int increaseOffsetBy = lineY - newY;
+                            yOffset += increaseOffsetBy;
+                            
+                            m_pageBreaksStart.Add(lastStartPos);
+                            m_pageBreaksEnd.Add(lastLine->GetAbsoluteRange().GetEnd());
+                            m_pageYOffsets.Add(yOffset);
+                            
+                            lastStartPos = line->GetAbsoluteRange().GetStart();
+                            m_numPages ++;
+                        }
 
-                        // We increase the offset by the difference between new and old positions
-
-                        int increaseOffsetBy = lineY - newY;
-                        yOffset += increaseOffsetBy;
-
-                        if (!lastLine)
-                            lastLine = line;
-
-                        m_pageBreaksStart.Add(lastStartPos);
-                        m_pageBreaksEnd.Add(lastLine->GetAbsoluteRange().GetEnd());
-                        m_pageYOffsets.Add(yOffset);
-
-                        lastStartPos = line->GetAbsoluteRange().GetStart();
                         lastLine = line;
-
-                        m_numPages ++;
 
                         // Now create page breaks for the rest of the line, if it's larger than the page height
                         int contentLeft = line->GetSize().y - rect.GetHeight();
@@ -127,6 +131,8 @@ void wxRichTextPrintout::OnPreparePrinting()
                             m_pageBreaksStart.Add(lastStartPos);
                             m_pageBreaksEnd.Add(lastLine->GetAbsoluteRange().GetEnd());
                             m_pageYOffsets.Add(yOffset);
+
+                            m_numPages ++;
                         }
                     }
 
