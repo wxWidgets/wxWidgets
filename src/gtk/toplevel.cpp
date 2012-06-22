@@ -686,13 +686,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 
     // GTK sometimes chooses very small size if max size hint is not explicitly set
-    int maxWidth = m_maxWidth;
-    int maxHeight = m_maxHeight;
-    if (maxWidth < 0)
-        maxWidth = INT_MAX;
-    if (maxHeight < 0)
-        maxHeight = INT_MAX;
-    DoSetSizeHints(m_minWidth, m_minHeight, maxWidth, maxHeight, -1, -1);
+    DoSetSizeHints(m_minWidth, m_minHeight, m_maxWidth, m_maxHeight, -1, -1);
 
     m_decorSize = GetCachedDecorSize();
     int w, h;
@@ -1110,39 +1104,29 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
     const wxSize minSize = GetMinSize();
     const wxSize maxSize = GetMaxSize();
     GdkGeometry hints;
-    int hints_mask = 0;
-    if (minSize.x > 0 || minSize.y > 0)
-    {
-        hints_mask |= GDK_HINT_MIN_SIZE;
+    // always set both min and max hints, otherwise GTK will
+    // make assumptions we don't want about the unset values
+    int hints_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
+    hints.min_width = 1;
+    hints.min_height = 1;
+    hints.max_width = INT_MAX;
+    hints.max_height = INT_MAX;
+    if (minSize.x > m_decorSize.x)
         hints.min_width = minSize.x - m_decorSize.x;
-        if (hints.min_width < 0)
-            hints.min_width = 0;
+    if (minSize.y > m_decorSize.y)
         hints.min_height = minSize.y - m_decorSize.y;
-        if (hints.min_height < 0)
-            hints.min_height = 0;
-    }
-    if (maxSize.x > 0 || maxSize.y > 0)
-    {
-        hints_mask |= GDK_HINT_MAX_SIZE;
+    if (maxSize.x > m_decorSize.x)
         hints.max_width = maxSize.x - m_decorSize.x;
-        if (hints.max_width < 0)
-            hints.max_width = INT_MAX;
+    if (maxSize.y > m_decorSize.y)
         hints.max_height = maxSize.y - m_decorSize.y;
-        if (hints.max_height < 0)
-            hints.max_height = INT_MAX;
-    }
     if (incW > 0 || incH > 0)
     {
         hints_mask |= GDK_HINT_RESIZE_INC;
         hints.width_inc  = incW > 0 ? incW : 1;
         hints.height_inc = incH > 0 ? incH : 1;
     }
-
-    if (hints_mask)
-    {
-        gtk_window_set_geometry_hints(
-            (GtkWindow*)m_widget, NULL, &hints, (GdkWindowHints)hints_mask);
-    }
+    gtk_window_set_geometry_hints(
+        (GtkWindow*)m_widget, NULL, &hints, (GdkWindowHints)hints_mask);
 }
 
 void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
