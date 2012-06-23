@@ -113,9 +113,9 @@ const int wxInvalidOffset = -1;
 /**
     The type used to store and provide byte offsets or byte sizes for files or streams.
 
-    It is type-defined as @c off_t on POSIX platforms
-    (see http://www.gnu.org/software/libc/manual/html_node/File-Position-Primitive.html)
-    or to @c wxLongLong_t on Windows when @c wxHAS_HUGE_FILES is defined.
+    This type is usually just a synonym for @c off_t but can be defined as
+    @c wxLongLong_t if @c wxHAS_HUGE_FILES is defined but @c off_t is only 32
+    bits.
 */
 typedef off_t wxFileOffset;
 
