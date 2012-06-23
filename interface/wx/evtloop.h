@@ -286,3 +286,20 @@ public:
      */
     ~wxEventLoopActivator();
 };
+
+/**
+    @class wxGUIEventLoop
+
+    A generic implementation of the GUI event loop.
+    
+    @library{wxbase}
+    @category{appmanagement}
+*/
+class wxGUIEventLoop : public wxEventLoopBase
+{
+public:
+    wxGUIEventLoop();
+    virtual ~wxGUIEventLoop();
+};
+
+
