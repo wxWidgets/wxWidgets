@@ -1115,10 +1115,18 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
         hints.min_width = minSize.x - m_decorSize.x;
     if (minSize.y > m_decorSize.y)
         hints.min_height = minSize.y - m_decorSize.y;
-    if (maxSize.x > m_decorSize.x)
+    if (maxSize.x > 0)
+    {
         hints.max_width = maxSize.x - m_decorSize.x;
-    if (maxSize.y > m_decorSize.y)
+        if (hints.max_width < hints.min_width)
+            hints.max_width = hints.min_width;
+    }
+    if (maxSize.y > 0)
+    {
         hints.max_height = maxSize.y - m_decorSize.y;
+        if (hints.max_height < hints.min_height)
+            hints.max_height = hints.min_height;
+    }
     if (incW > 0 || incH > 0)
     {
         hints_mask |= GDK_HINT_RESIZE_INC;
