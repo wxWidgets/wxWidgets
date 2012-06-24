@@ -488,6 +488,7 @@ void wxTopLevelWindowGTK::Init()
     m_deferShowAllowed = true;
     m_updateDecorSize = true;
     m_netFrameExtentsTimerId = 0;
+    m_incWidth = m_incHeight = 0;
 
     m_urgency_hint = -2;
 }
@@ -686,7 +687,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 
     // GTK sometimes chooses very small size if max size hint is not explicitly set
-    DoSetSizeHints(m_minWidth, m_minHeight, m_maxWidth, m_maxHeight, -1, -1);
+    DoSetSizeHints(m_minWidth, m_minHeight, m_maxWidth, m_maxHeight, m_incWidth, m_incHeight);
 
     m_decorSize = GetCachedDecorSize();
     int w, h;
@@ -1100,6 +1101,8 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int incW, int incH )
 {
     base_type::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+    m_incWidth = incW;
+    m_incHeight = incH;
 
     const wxSize minSize = GetMinSize();
     const wxSize maxSize = GetMaxSize();
@@ -1146,14 +1149,18 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
         const wxSize diff = decorSize - m_decorSize;
         m_decorSize = decorSize;
         bool resized = false;
+        if (m_minWidth > 0 || m_minHeight > 0 || m_maxWidth > 0 || m_maxHeight > 0)
+        {
+            // update size hints, they depend on m_decorSize
+            DoSetSizeHints(m_minWidth, m_minHeight, m_maxWidth, m_maxHeight, m_incWidth, m_incHeight);
+        }
         if (m_deferShow)
         {
             // keep overall size unchanged by shrinking m_widget
             int w, h;
             GTKDoGetSize(&w, &h);
             // but not if size would be less than minimum, it won't take effect
-            const wxSize minSize = GetMinSize();
-            if (w >= minSize.x && h >= minSize.y)
+            if (w >= m_minWidth - decorSize.x && h >= m_minHeight - decorSize.y )
             {
                 gtk_window_resize(GTK_WINDOW(m_widget), w, h);
                 resized = true;

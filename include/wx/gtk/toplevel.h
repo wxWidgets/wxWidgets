@@ -150,6 +150,9 @@ protected:
 private:
     wxSize& GetCachedDecorSize();
 
+    // size hint increments
+    int m_incWidth, m_incHeight;
+
     // is the frame currently iconized?
     bool m_isIconized;
 
