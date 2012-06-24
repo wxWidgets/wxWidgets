@@ -2112,14 +2112,33 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
 void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
     widths.Empty();
-    widths.Add(0, text.length());
-
     wxCHECK_RET( !m_font.IsNull(), wxT("wxCairoContext::GetPartialTextExtents - no valid font set") );
-
-    if (text.empty())
-        return;
-
+#if __WXGTK__
+    const wxCharBuffer data = text.utf8_str();
+    int w = 0;
+    if (data.length())
+    {
+        PangoLayout* layout = pango_cairo_create_layout(m_context);
+        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
+        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
+        pango_layout_set_text(layout, data, data.length());
+        PangoLayoutIter* iter = pango_layout_get_iter(layout);
+        PangoRectangle rect;
+        do {
+            pango_layout_iter_get_cluster_extents(iter, NULL, &rect);
+            w += rect.width;
+            widths.Add(PANGO_PIXELS(w));
+        } while (pango_layout_iter_next_cluster(iter));
+        pango_layout_iter_free(iter);
+        g_object_unref(layout);
+    }
+    size_t i = widths.GetCount();
+    const size_t len = text.length();
+    while (i++ < len)
+        widths.Add(PANGO_PIXELS(w));
+#else
     // TODO
+#endif
 }
 
 void * wxCairoContext::GetNativeContext()
