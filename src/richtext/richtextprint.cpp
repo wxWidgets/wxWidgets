@@ -105,16 +105,16 @@ void wxRichTextPrintout::OnPreparePrinting()
                         {
                             // New page starting at this line
                             int newY = rect.y;
-                            
+
                             // We increase the offset by the difference between new and old positions
-                            
+
                             int increaseOffsetBy = lineY - newY;
                             yOffset += increaseOffsetBy;
-                            
+
                             m_pageBreaksStart.Add(lastStartPos);
                             m_pageBreaksEnd.Add(lastLine->GetAbsoluteRange().GetEnd());
                             m_pageYOffsets.Add(yOffset);
-                            
+
                             lastStartPos = line->GetAbsoluteRange().GetStart();
                             m_numPages ++;
                         }
@@ -146,12 +146,9 @@ void wxRichTextPrintout::OnPreparePrinting()
         }
 
         // Closing page break
-        if (m_pageBreaksStart.GetCount() == 0 || (m_pageBreaksEnd[m_pageBreaksEnd.GetCount()-1] < (GetRichTextBuffer()->GetOwnRange().GetEnd()-1)))
-        {
-            m_pageBreaksStart.Add(lastStartPos);
-            m_pageBreaksEnd.Add(GetRichTextBuffer()->GetOwnRange().GetEnd());
-            m_pageYOffsets.Add(yOffset);
-        }
+        m_pageBreaksStart.Add(lastStartPos);
+        m_pageBreaksEnd.Add(GetRichTextBuffer()->GetOwnRange().GetEnd());
+        m_pageYOffsets.Add(yOffset);
     }
 }
 
