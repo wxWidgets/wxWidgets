@@ -89,7 +89,18 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     if ( subrect )
         srcRect = CGRectOffset( srcRect, -subrect->x, -subrect->y ) ;
 
-    CGImageRef image = grabViaOpenGL(kCGNullDirectDisplay, srcRect);
+    CGImageRef image = NULL;
+    
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+    if ( UMAGetSystemVersion() >= 10.6)
+    {
+        image = CGDisplayCreateImage(kCGDirectMainDisplay);
+    }
+    else
+#endif
+    {
+        image = grabViaOpenGL(kCGNullDirectDisplay, srcRect);
+    }
 
     wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
 
