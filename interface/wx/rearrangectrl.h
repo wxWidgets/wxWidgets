@@ -180,7 +180,7 @@ public:
     @library{wxcore}
     @category{ctrl}
  */
-class wxRearrangeCtrl
+class wxRearrangeCtrl : public wxPanel
 {
 public:
     /**
@@ -269,7 +269,7 @@ public:
     @library{wxcore}
     @category{cmndlg}
  */
-class wxRearrangeDialog
+class wxRearrangeDialog : public wxDialog
 {
 public:
     /**
