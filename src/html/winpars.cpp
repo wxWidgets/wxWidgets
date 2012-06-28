@@ -573,11 +573,15 @@ void wxHtmlWinParser::SetFontPointSize(int pt)
         {
             if ( (pt > m_FontsSizes[n]) && (pt <= m_FontsSizes[n + 1]) )
             {
-                // In this range, find out which entry it is closest to
-                if ( (pt - m_FontsSizes[n]) < (m_FontsSizes[n + 1] - pt) )
-                    m_FontSize = n;
-                else
-                    m_FontSize = n + 1;
+                if ( (pt - m_FontsSizes[n]) >= (m_FontsSizes[n + 1] - pt) )
+                {
+                    // The actual size is closer to the next entry than to this
+                    // one, so use it.
+                    n++;
+                }
+
+                // Notice that m_FontSize starts from 1, hence +1 here.
+                m_FontSize = n + 1;
 
                 break;
             }

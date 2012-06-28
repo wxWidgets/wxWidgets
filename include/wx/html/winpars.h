@@ -185,7 +185,7 @@ private:
             // current container. See Open/CloseContainer for details.
 
     int m_FontBold, m_FontItalic, m_FontUnderlined, m_FontFixed; // this is not true,false but 1,0, we need it for indexing
-    int m_FontSize; /* -2 to +4,  0 is default */
+    int m_FontSize; // From 1 (smallest) to 7, default is 3.
     wxColour m_LinkColor;
     wxColour m_ActualColor;
             // basic font parameters.
