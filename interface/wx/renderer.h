@@ -566,6 +566,8 @@ public:
 */
 struct wxRendererVersion
 {
+    wxRendererVersion(int version_, int age_);
+    
     /**
         Checks if the main program is compatible with the renderer having the version
         @e ver, returns @true if it is and @false otherwise.
