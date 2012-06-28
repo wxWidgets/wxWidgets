@@ -53,7 +53,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         else
 #endif
         {
-#if (MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6) && wxOSX_USE_ATSU_TEXT
+#if (MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6)
             //
             // From Apple's QA 1471 http://developer.apple.com/qa/qa2006/qa1471.html
             //
