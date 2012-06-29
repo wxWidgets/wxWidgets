@@ -238,26 +238,18 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
             // fall through
 
         case WM_SYSCHAR:
-            return HandleChar(wParam, lParam);
-
         case WM_SYSKEYDOWN:
         case WM_KEYDOWN:
-            return HandleKeyDown(wParam, lParam);
-
         case WM_SYSKEYUP:
         case WM_KEYUP:
-            return HandleKeyUp(wParam, lParam);
-
         case WM_SETFOCUS:
-            return HandleSetFocus((WXHWND)wParam);
-
         case WM_KILLFOCUS:
-            return HandleKillFocus((WXHWND)wParam);
-
         case WM_CUT:
         case WM_COPY:
         case WM_PASTE:
-            return HandleClipboardEvent(msg);
+            // For the messages above the result is not used.
+            WXLRESULT result;
+            return MSWHandleMessage(&result, msg, wParam, lParam);
     }
 
     return false;
