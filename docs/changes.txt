@@ -570,6 +570,7 @@ GTK:
 
 - Added support for GTK+ 3 (John Chain and Paul Cornett)
 - Implement support for wxBG_STYLE_TRANSPARENT (Armel Asselin).
+- Implement stippled/hatched pens/brushes in wxGraphicsContext (Kit Bishop).
 - Fix wxNotebook best size calculation.
 - Implement wxDirDialog::Create() and wxFileDialog::Create() (vinayakgarg).
 - Fix const methods display in assert dialog (vinayakgarg).
