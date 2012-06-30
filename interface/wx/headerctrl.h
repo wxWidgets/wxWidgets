@@ -8,6 +8,22 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+enum
+{
+    // allow column drag and drop
+    wxHD_ALLOW_REORDER = 0x0001,
+
+    // allow hiding (and showing back) the columns using the menu shown by
+    // right clicking the header
+    wxHD_ALLOW_HIDE = 0x0002,
+
+    // style used by default when creating the control
+    wxHD_DEFAULT_STYLE = wxHD_ALLOW_REORDER
+};
+
+
+
 /**
     @class wxHeaderCtrl
 
@@ -683,3 +699,19 @@ public:
      */
     unsigned int GetNewOrder() const;
 };
+
+
+
+wxEventType wxEVT_COMMAND_HEADER_CLICK;
+wxEventType wxEVT_COMMAND_HEADER_RIGHT_CLICK;
+wxEventType wxEVT_COMMAND_HEADER_MIDDLE_CLICK;
+wxEventType wxEVT_COMMAND_HEADER_DCLICK;
+wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK;
+wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK;
+wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
+wxEventType wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
+wxEventType wxEVT_COMMAND_HEADER_RESIZING;
+wxEventType wxEVT_COMMAND_HEADER_END_RESIZE;
+wxEventType wxEVT_COMMAND_HEADER_BEGIN_REORDER;
+wxEventType wxEVT_COMMAND_HEADER_END_REORDER;
+wxEventType wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED;
