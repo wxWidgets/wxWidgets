@@ -12,13 +12,24 @@
 @ingroup group_funcmacro
 
 Useful macros and functions for error checking and defensive programming.
-wxWidgets defines three families of the assert-like macros: the wxASSERT() and
-wxFAIL() macros only do anything if __WXDEBUG__ is defined (in other words, in
-the debug build) but disappear completely in the release build. On the other
-hand, the wxCHECK() macros stay in release builds but a check failure doesn't
-generate any user-visible effects. Finally, the compile time assertions don't
-happen during the run-time but result in the compilation error messages if the
-condition they check fail.
+
+Starting with wxWidgets 2.9.1, debugging support in wxWidgets is always
+compiled in by default, you need to explicitly define ::wxDEBUG_LEVEL as 0 to
+disable it completely. However, by default debugging macros are dormant in the
+release builds, i.e. when the main program is compiled with the standard @c
+NDEBUG symbol being defined. You may explicitly activate the debugging checks
+in the release build by calling wxSetAssertHandler() with a custom function if
+needed.
+
+When debugging support is active, failure of both wxASSERT() and wxCHECK()
+macros conditions result in a debug alert. When debugging support is inactive
+or turned off entirely at compilation time, wxASSERT() and wxFAIL() macros
+don't do anything while wxCHECK() still checks its condition and returns if it
+fails, even if no alerts are shown to the user.
+
+Finally, the compile time assertions don't happen during the run-time but
+result in the compilation error messages if the condition they check fail.
+They are always enabled and are not affected by ::wxDEBUG_LEVEL.
 
 Related class group: @ref group_class_debugging.
 
