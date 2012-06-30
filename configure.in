@@ -402,9 +402,6 @@ DEFAULT_wxUSE_MAC_ARCH=no
 
 DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
-dnl Applicable only when --with-gtk was used:
-DEFAULT_wxUSE_GTK2=yes
-
 dnl Always default to no. Only special cases require this.
 DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
 
@@ -469,7 +466,7 @@ fi
 
 dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
-AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3, 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx_carbon,    [  --with-osx_carbon       use Mac OS X (Carbon)], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
@@ -487,8 +484,6 @@ AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB=
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
-
-AC_ARG_ENABLE(gtk2,        [  --disable-gtk2          use GTK+ 1.2 instead of 2.0], [wxUSE_GTK2="$enableval"])
 WX_ARG_ENABLE(gpe,         [  --enable-gpe            use GNOME PDA Environment features if possible], wxUSE_GPE)
 
 dnl check that no more than one toolkit is given and that if none are given that
@@ -559,15 +554,6 @@ if test "$wxUSE_GUI" = "yes"; then
       *)
         AC_MSG_ERROR(Please specify at most one toolkit)
     esac
-
-    # to be removed when --disable-gtk2 isn't needed
-    if test "x$wxUSE_GTK2" = "xyes"; then
-        wxGTK_VERSION=2
-        wxUSE_GTK1=0
-    elif test "x$wxUSE_GTK2" = "xno"; then
-        wxGTK_VERSION=1
-        wxUSE_GTK1=1
-    fi
 
     for toolkit in $ALL_TOOLKITS; do
         var=wxUSE_$toolkit
@@ -2881,8 +2867,10 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
+    WXGTK1=
     WXGTK127=
     WXGTK2=
+    WXGTK3=
     WXGPE=
 
     if test "$wxUSE_OLD_COCOA" = 1 ; then
@@ -2930,6 +2918,10 @@ if test "$wxUSE_GUI" = "yes"; then
                     GTK_MODULES=gthread
                 fi
 
+                if test -z "$wxGTK_VERSION"; then
+                    wxGTK_VERSION=any
+                fi
+
                 dnl detect GTK2
                 wx_cv_lib_gtk=
                 if test "x$wxGTK_VERSION" != "x1"
@@ -2944,7 +2936,14 @@ if test "$wxUSE_GUI" = "yes"; then
                             fi
                     esac
 
-                    AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                    if test "$wxGTK_VERSION" != 3; then
+                        AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                    fi
+                    if test -z "$wx_cv_lib_gtk"; then
+                        if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
+                            AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
+                        fi
+                    fi
                 fi
 
                 dnl detect GTK1.x
@@ -2980,12 +2979,16 @@ if test "$wxUSE_GUI" = "yes"; then
         fi
 
         case "$wx_cv_lib_gtk" in
+            3)      WXGTK3=1
+                    TOOLKIT_VERSION=3
+                    ;;
             2.0)    WXGTK2=1
                     TOOLKIT_VERSION=2
                     ;;
             1.2.7)  WXGTK127=1
+                    WXGTK1=1
                     ;;
-            1.2*) ;;
+            1.2*)   WXGTK1=1 ;;
             *)      AC_MSG_ERROR([
 The development files for GTK+ were not found. For GTK+ 2, please
 ensure that pkg-config is in the path and that gtk+-2.0.pc is
@@ -2997,7 +3000,11 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     ;;
         esac
 
-        if test "$WXGTK2" = 1; then
+        if test "$WXGTK3" = 1; then
+            AC_DEFINE(__WXGTK218__)
+            AC_DEFINE(__WXGTK210__)
+            AC_DEFINE(__WXGTK26__)
+        elif test "$WXGTK2" = 1; then
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
@@ -3635,7 +3642,7 @@ dnl ---------------------------------------------------------------------------
 USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
     dnl Xinerama is used for wxGTK1/wxX11/wxMotif only
-    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
+    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$WXGTK1" = 1; then
         WX_FIND_LIB(Xinerama, XineramaQueryScreens)
         if test "$ac_find_libraries" != "" ; then
             if test "$ac_find_libraries" != "std" ; then
@@ -3712,7 +3719,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
-    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK2" = 1 -o "$wxUSE_GTK" = 1; then
+    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1; then
 
         dnl adjust CPPFLAGS to include GL/gl.h location if necessary
         dnl (/opt/graphics/OpenGL is for HP-UX systems, bug 925307)
@@ -5248,6 +5255,10 @@ else
   fi
 fi
 
+if test "$WXGTK3" = 1 ; then
+    AC_DEFINE_UNQUOTED(__WXGTK3__, 1)
+    WXGTK2=1
+fi
 if test "$WXGTK2" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGTK20__,$WXGTK2)
 fi
@@ -5284,10 +5295,10 @@ if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DwxDEBUG_LEVEL=0"
 
     if test "$wxUSE_GTK" = 1 ; then
-        if test "x$wxGTK_VERSION" = "x1" ; then
-            CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
-        else
+        if test "$WXGTK2" = 1 ; then
             CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
+        else
+            CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
         fi
     fi
 fi
@@ -5660,9 +5671,13 @@ if test "$WXGTK2" = 1; then
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
 
         if test "$wxUSE_GTKPRINT" = "yes" ; then
-
+            if test "$WXGTK3" = 1; then
+                gtk_unix_print="gtk+-unix-print-3.0"
+            else
+                gtk_unix_print="gtk+-unix-print-2.0 >= 2.10"
+            fi
                 PKG_CHECK_MODULES(GTKPRINT,
-                                  [gtk+-unix-print-2.0 >= 2.10],
+                                  [$gtk_unix_print],
                     [
                         CFLAGS="$GTKPRINT_CFLAGS $CFLAGS"
                         CXXFLAGS="$GTKPRINT_CFLAGS $CXXFLAGS"
@@ -7245,8 +7260,12 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW_WEBKIT=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
+            webkitgtk=webkit-1.0
+            if test "$WXGTK3" = 1; then
+                webkitgtk=webkitgtk-3.0
+            fi
             PKG_CHECK_MODULES([WEBKIT],
-                              [webkit-1.0 >= 1.3.1],
+                              [$webkitgtk >= 1.3.1],
                               [
                                 USE_WEBVIEW_WEBKIT=1
                                 CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
@@ -8016,7 +8035,11 @@ case "$TOOLKIT" in
     GTK)
         TOOLKIT_DESC="GTK+"
         if test "$WXGTK2" = 1; then
-            TOOLKIT_DESC="$TOOLKIT_DESC 2"
+            if test "$WXGTK3" = 1; then
+                TOOLKIT_DESC="$TOOLKIT_DESC 3"
+            else
+                TOOLKIT_DESC="$TOOLKIT_DESC 2"
+            fi
             if test "$wxUSE_GTKPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
             fi

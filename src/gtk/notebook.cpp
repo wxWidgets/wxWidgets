@@ -25,7 +25,9 @@
 #include "wx/imaglist.h"
 #include "wx/fontutil.h"
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 //-----------------------------------------------------------------------------
 // wxGtkNotebookPage
@@ -455,12 +457,16 @@ bool wxNotebook::InsertPage( size_t position,
     gtk_notebook_insert_page(notebook, win->m_widget, pageData->m_box, position);
 
     /* apply current style */
+#ifdef __WXGTK3__
+    GTKApplyStyle(pageData->m_label, NULL);
+#else
     GtkRcStyle *style = GTKCreateWidgetStyle();
     if ( style )
     {
         gtk_widget_modify_style(pageData->m_label, style);
         g_object_unref(style);
     }
+#endif
 
     if (select && GetPageCount() > 1)
     {
@@ -580,15 +586,19 @@ bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 
 void wxNotebook::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_widget, style);
+    GTKApplyStyle(m_widget, style);
     for (size_t i = GetPageCount(); i--;)
-        gtk_widget_modify_style(GetNotebookPage(i)->m_label, style);
+        GTKApplyStyle(GetNotebookPage(i)->m_label, style);
 }
 
 GdkWindow *wxNotebook::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
     windows.push_back(gtk_widget_get_window(m_widget));
+#ifdef __WXGTK3__
+    // no access to internal GdkWindows
+#else
     windows.push_back(GTK_NOTEBOOK(m_widget)->event_window);
+#endif
 
     return NULL;
 }

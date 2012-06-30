@@ -32,7 +32,7 @@
 #include "wx/gtk/private/gtk2-compat.h"
 
 #ifdef GDK_WINDOWING_X11
-    #include <X11/Xlib.h>
+    #include <gdk/gdkx.h>
 #endif
 
 // ============================================================================
@@ -95,7 +95,11 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle win)
 bool wxNativeContainerWindow::Create(wxNativeContainerWindowId anid)
 {
     bool rc;
+#ifdef __WXGTK3__
+    GdkWindow * const win = gdk_x11_window_foreign_new_for_display(gdk_display_get_default(), anid);
+#else
     GdkWindow * const win = gdk_window_foreign_new(anid);
+#endif
     if ( win )
     {
         rc = Create(win);

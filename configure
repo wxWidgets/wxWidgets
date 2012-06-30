@@ -714,6 +714,11 @@ COND_TOOLKIT_MAC
 COND_TOOLKIT_GTK_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2
@@ -744,6 +749,8 @@ COND_PLATFORM_WIN32_1
 COND_PLATFORM_WIN32_0
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0
 COND_PLATFORM_UNIX_1_USE_GUI_1
+COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
+COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_UNIX_1
@@ -1082,7 +1089,6 @@ with_directfb
 with_microwin
 with_x11
 enable_nanox
-enable_gtk2
 enable_gpe
 with_libpng
 with_libjpeg
@@ -2034,7 +2040,6 @@ Optional Features:
   --disable-all-features  disable all optional features to build minimal library
   --enable-universal      use wxWidgets GUI controls instead of native ones
   --enable-nanox          use NanoX
-  --disable-gtk2          use GTK+ 1.2 instead of 2.0
   --enable-gpe            use GNOME PDA Environment features if possible
   --enable-debug          build library for debugging
   --disable-debug_flag    disable all debugging support
@@ -2293,7 +2298,7 @@ Optional Packages:
   --without-subdirs       don't generate makefiles for samples/demos/...
   --with-flavour=NAME     specify a name to identify this build
   --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes
-  --with-gtk[=VERSION]    use GTK+, VERSION can be 2 (default), 1 or "any"
+  --with-gtk[=VERSION]    use GTK+, VERSION can be 3, 2 (default), 1 or "any"
   --with-motif            use Motif/Lesstif
   --with-osx_carbon       use Mac OS X (Carbon)
   --with-osx_cocoa        use Mac OS X (Cocoa)
@@ -3585,7 +3590,7 @@ $as_echo "$as_me: loading site script $ac_site_file" >&6;}
       || { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "failed to load site script $ac_site_file
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
   fi
 done
 
@@ -3728,7 +3733,7 @@ fi
 $as_echo "$ac_cv_build" >&6; }
 case $ac_cv_build in
 *-*-*) ;;
-*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5 ;;
+*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
 esac
 build=$ac_cv_build
 ac_save_IFS=$IFS; IFS='-'
@@ -3761,7 +3766,7 @@ fi
 $as_echo "$ac_cv_host" >&6; }
 case $ac_cv_host in
 *-*-*) ;;
-*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5 ;;
+*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
 esac
 host=$ac_cv_host
 ac_save_IFS=$IFS; IFS='-'
@@ -4121,8 +4126,6 @@ DEFAULT_wxUSE_UNIVERSAL_BINARY=no
 DEFAULT_wxUSE_MAC_ARCH=no
 
 DEFAULT_wxUSE_OFFICIAL_BUILD=no
-
-DEFAULT_wxUSE_GTK2=yes
 
 DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
 
@@ -4617,12 +4620,6 @@ fi
 $as_echo "$result" >&6; }
 
 
-# Check whether --enable-gtk2 was given.
-if test "${enable_gtk2+set}" = set; then :
-  enableval=$enable_gtk2; wxUSE_GTK2="$enableval"
-fi
-
-
           enablestring=
           defaultval=
           if test -z "$defaultval"; then
@@ -4729,15 +4726,6 @@ if test "$wxUSE_GUI" = "yes"; then
       *)
         as_fn_error $? "Please specify at most one toolkit" "$LINENO" 5
     esac
-
-    # to be removed when --disable-gtk2 isn't needed
-    if test "x$wxUSE_GTK2" = "xyes"; then
-        wxGTK_VERSION=2
-        wxUSE_GTK1=0
-    elif test "x$wxUSE_GTK2" = "xno"; then
-        wxGTK_VERSION=1
-        wxUSE_GTK1=1
-    fi
 
     for toolkit in $ALL_TOOLKITS; do
         var=wxUSE_$toolkit
@@ -16493,7 +16481,7 @@ fi
 test -z "$CC" && { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "no acceptable C compiler found in \$PATH
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 
 # Provide some information about the compiler.
 $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler version" >&5
@@ -16608,7 +16596,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "C compiler cannot create executables
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -16651,7 +16639,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "cannot compute suffix of executables: cannot compile and link
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 fi
 rm -f conftest conftest$ac_cv_exeext
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_exeext" >&5
@@ -16710,7 +16698,7 @@ $as_echo "$ac_try_echo"; } >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "cannot run C compiled programs.
 If you meant to cross compile, use \`--host'.
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
     fi
   fi
 fi
@@ -16762,7 +16750,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "cannot compute suffix of object files: cannot compile
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 fi
 rm -f conftest.$ac_cv_objext conftest.$ac_ext
 fi
@@ -17187,7 +17175,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "cannot figure out if compiler needs -ext o: cannot compile
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 rm -f conftest.$ac_ext.o conftest.$ac_objext conftest.$ac_ext
@@ -17871,7 +17859,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "C preprocessor \"$CPP\" fails sanity check
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 fi
 
 ac_ext=c
@@ -18517,7 +18505,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "cannot figure out if compiler needs -ext o: cannot compile
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 rm -f conftest.$ac_ext.o conftest.$ac_objext conftest.$ac_ext
@@ -19237,7 +19225,7 @@ $as_echo_n "checking for SDK directory $wxUSE_MACOSX_SDK... " >&6; }
         { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "not found
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
     else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: exists" >&5
 $as_echo "exists" >&6; }
@@ -19416,7 +19404,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "no.  Try a different SDK
-See \`config.log' for more details" "$LINENO" 5 ; }; exit 1
+See \`config.log' for more details" "$LINENO" 5; }; exit 1
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -19453,7 +19441,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "no.  Try a different SDK
-See \`config.log' for more details" "$LINENO" 5 ; }; exit 1
+See \`config.log' for more details" "$LINENO" 5; }; exit 1
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -19570,7 +19558,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "no.  CoreFoundation not available.
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
@@ -20191,7 +20179,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (short)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_short=0
    fi
@@ -20224,7 +20212,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (void *)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_void_p=0
    fi
@@ -20257,7 +20245,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (int)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_int=0
    fi
@@ -20290,7 +20278,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (long)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_long=0
    fi
@@ -20323,7 +20311,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (size_t)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_size_t=0
    fi
@@ -20359,7 +20347,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (long long)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_long_long=0
    fi
@@ -20394,7 +20382,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (long long)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_long_long=0
    fi
@@ -20432,7 +20420,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (long long)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_long_long=0
    fi
@@ -20484,7 +20472,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (wchar_t)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_wchar_t=0
    fi
@@ -21773,7 +21761,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "C++ preprocessor \"$CXXCPP\" fails sanity check
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 fi
 
 ac_ext=cpp
@@ -22703,7 +22691,7 @@ else
      { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error 77 "cannot compute sizeof (boolean)
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
    else
      ac_cv_sizeof_boolean=0
    fi
@@ -23063,8 +23051,10 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
+    WXGTK1=
     WXGTK127=
     WXGTK2=
+    WXGTK3=
     WXGPE=
 
     if test "$wxUSE_OLD_COCOA" = 1 ; then
@@ -23113,6 +23103,10 @@ $as_echo "" >&6; }
                     GTK_MODULES=gthread
                 fi
 
+                if test -z "$wxGTK_VERSION"; then
+                    wxGTK_VERSION=any
+                fi
+
                                 wx_cv_lib_gtk=
                 if test "x$wxGTK_VERSION" != "x1"
                 then
@@ -23123,7 +23117,8 @@ $as_echo "" >&6; }
                             fi
                     esac
 
-                    # Check whether --enable-gtktest was given.
+                    if test "$wxGTK_VERSION" != 3; then
+                        # Check whether --enable-gtktest was given.
 if test "${enable_gtktest+set}" = set; then :
   enableval=$enable_gtktest;
 else
@@ -23382,6 +23377,270 @@ rm -f core conftest.err conftest.$ac_objext \
 
   rm -f conf.gtktest
 
+                    fi
+                    if test -z "$wx_cv_lib_gtk"; then
+                        if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
+                            # Check whether --enable-gtktest was given.
+if test "${enable_gtktest+set}" = set; then :
+  enableval=$enable_gtktest;
+else
+  enable_gtktest=yes
+fi
+
+
+  pkg_config_args=gtk+-3.0
+  for module in . $GTK_MODULES
+  do
+      case "$module" in
+         gthread)
+             pkg_config_args="$pkg_config_args gthread-2.0"
+         ;;
+      esac
+  done
+
+  no_gtk=""
+
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+$as_echo "$PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+
+  if test x$PKG_CONFIG != xno ; then
+    if $PKG_CONFIG --atleast-pkgconfig-version 0.7 ; then
+      :
+    else
+      echo "*** pkg-config too old; version 0.7 or better required."
+      no_gtk=yes
+      PKG_CONFIG=no
+    fi
+  else
+    no_gtk=yes
+  fi
+
+  min_gtk_version=3.0.0
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK+ - version >= $min_gtk_version" >&5
+$as_echo_n "checking for GTK+ - version >= $min_gtk_version... " >&6; }
+
+  if test x$PKG_CONFIG != xno ; then
+    ## don't try to run the test against uninstalled libtool libs
+    if $PKG_CONFIG --uninstalled $pkg_config_args; then
+	  echo "Will use uninstalled version of GTK+ found in PKG_CONFIG_PATH"
+	  enable_gtktest=no
+    fi
+
+    if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args; then
+	  :
+    else
+	  no_gtk=yes
+    fi
+  fi
+
+  if test x"$no_gtk" = x ; then
+    GTK_CFLAGS=`$PKG_CONFIG $pkg_config_args --cflags`
+    GTK_LIBS=`$PKG_CONFIG $pkg_config_args --libs`
+    gtk_config_major_version=`$PKG_CONFIG --modversion gtk+-3.0 | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+    gtk_config_minor_version=`$PKG_CONFIG --modversion gtk+-3.0 | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+    gtk_config_micro_version=`$PKG_CONFIG --modversion gtk+-3.0 | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+    if test "x$enable_gtktest" = "xyes" ; then
+      ac_save_CFLAGS="$CFLAGS"
+      ac_save_LIBS="$LIBS"
+      CFLAGS="$CFLAGS $GTK_CFLAGS"
+      LIBS="$GTK_LIBS $LIBS"
+      rm -f conf.gtktest
+      if test "$cross_compiling" = yes; then :
+  echo $ac_n "cross compiling; assumed OK... $ac_c"
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <gtk/gtk.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int
+main ()
+{
+  int major, minor, micro;
+  char *tmp_version;
+
+  fclose (fopen ("conf.gtktest", "w"));
+
+  /* HP/UX 9 (%@#!) writes to sscanf strings */
+  tmp_version = g_strdup("$min_gtk_version");
+  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
+     printf("%s, bad version string\n", "$min_gtk_version");
+     exit(1);
+   }
+
+  if ((gtk_major_version != $gtk_config_major_version) ||
+      (gtk_minor_version != $gtk_config_minor_version) ||
+      (gtk_micro_version != $gtk_config_micro_version))
+    {
+      printf("\n*** 'pkg-config --modversion gtk+-3.0' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n",
+             $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
+             gtk_major_version, gtk_minor_version, gtk_micro_version);
+      printf ("*** was found! If pkg-config was correct, then it is best\n");
+      printf ("*** to remove the old version of GTK+. You may also be able to fix the error\n");
+      printf("*** by modifying your LD_LIBRARY_PATH enviroment variable, or by editing\n");
+      printf("*** /etc/ld.so.conf. Make sure you have run ldconfig if that is\n");
+      printf("*** required on your system.\n");
+      printf("*** If pkg-config was wrong, set the environment variable PKG_CONFIG_PATH\n");
+      printf("*** to point to the correct configuration files\n");
+    }
+  else if ((gtk_major_version != GTK_MAJOR_VERSION) ||
+	   (gtk_minor_version != GTK_MINOR_VERSION) ||
+           (gtk_micro_version != GTK_MICRO_VERSION))
+    {
+      printf("*** GTK+ header files (version %d.%d.%d) do not match\n",
+	     GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+      printf("*** library (version %d.%d.%d)\n",
+	     gtk_major_version, gtk_minor_version, gtk_micro_version);
+    }
+  else
+    {
+      if ((gtk_major_version > major) ||
+        ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
+        ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)))
+      {
+        return 0;
+       }
+     else
+      {
+        printf("\n*** An old version of GTK+ (%d.%d.%d) was found.\n",
+               gtk_major_version, gtk_minor_version, gtk_micro_version);
+        printf("*** You need a version of GTK+ newer than %d.%d.%d. The latest version of\n",
+	       major, minor, micro);
+        printf("*** GTK+ is always available from ftp://ftp.gtk.org.\n");
+        printf("***\n");
+        printf("*** If you have already installed a sufficiently new version, this error\n");
+        printf("*** probably means that the wrong copy of the pkg-config shell script is\n");
+        printf("*** being found. The easiest way to fix this is to remove the old version\n");
+        printf("*** of GTK+, but you can also set the PKG_CONFIG environment to point to the\n");
+        printf("*** correct copy of pkg-config. (In this case, you will have to\n");
+        printf("*** modify your LD_LIBRARY_PATH enviroment variable, or edit /etc/ld.so.conf\n");
+        printf("*** so that the correct libraries are found at run-time))\n");
+      }
+    }
+  return 1;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+
+else
+  no_gtk=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+     fi
+  fi
+  if test "x$no_gtk" = x ; then
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version)" >&5
+$as_echo "yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version)" >&6; }
+     wx_cv_lib_gtk=3
+  else
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+     if test "$PKG_CONFIG" = "no" ; then
+       echo "*** A new enough version of pkg-config was not found."
+       echo "*** See http://pkgconfig.sourceforge.net"
+     else
+       if test -f conf.gtktest ; then
+        :
+       else
+          echo "*** Could not run GTK+ test program, checking why..."
+	  ac_save_CFLAGS="$CFLAGS"
+	  ac_save_LIBS="$LIBS"
+          CFLAGS="$CFLAGS $GTK_CFLAGS"
+          LIBS="$LIBS $GTK_LIBS"
+          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <gtk/gtk.h>
+#include <stdio.h>
+
+int
+main ()
+{
+ return ((gtk_major_version) || (gtk_minor_version) || (gtk_micro_version));
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+   echo "*** The test program compiled, but did not run. This usually means"
+          echo "*** that the run-time linker is not finding GTK+ or finding the wrong"
+          echo "*** version of GTK+. If it is not finding GTK+, you'll need to set your"
+          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+          echo "*** is required on your system"
+	  echo "***"
+          echo "*** If you have an old version installed, it is best to remove it, although"
+          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
+else
+   echo "*** The test program failed to compile or link. See the file config.log for the"
+          echo "*** exact error that occured. This usually means GTK+ is incorrectly installed."
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+          CFLAGS="$ac_save_CFLAGS"
+          LIBS="$ac_save_LIBS"
+       fi
+     fi
+     GTK_CFLAGS=""
+     GTK_LIBS=""
+     :
+  fi
+
+
+  rm -f conf.gtktest
+
+                        fi
+                    fi
                 fi
 
                                 if test -z "$wx_cv_lib_gtk"; then
@@ -23951,12 +24210,16 @@ $as_echo "$wx_cv_lib_gtk" >&6; }
         fi
 
         case "$wx_cv_lib_gtk" in
+            3)      WXGTK3=1
+                    TOOLKIT_VERSION=3
+                    ;;
             2.0)    WXGTK2=1
                     TOOLKIT_VERSION=2
                     ;;
             1.2.7)  WXGTK127=1
+                    WXGTK1=1
                     ;;
-            1.2*) ;;
+            1.2*)   WXGTK1=1 ;;
             *)      as_fn_error $? "
 The development files for GTK+ were not found. For GTK+ 2, please
 ensure that pkg-config is in the path and that gtk+-2.0.pc is
@@ -23968,7 +24231,14 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     ;;
         esac
 
-        if test "$WXGTK2" = 1; then
+        if test "$WXGTK3" = 1; then
+            $as_echo "#define __WXGTK218__ 1" >>confdefs.h
+
+            $as_echo "#define __WXGTK210__ 1" >>confdefs.h
+
+            $as_echo "#define __WXGTK26__ 1" >>confdefs.h
+
+        elif test "$WXGTK2" = 1; then
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
@@ -24453,7 +24723,7 @@ if test "x$with_x" = xno; then
   have_x=disabled
 else
   case $x_includes,$x_libraries in #(
-    *\'*) as_fn_error $? "cannot use X directory names containing '" "$LINENO" 5 ;; #(
+    *\'*) as_fn_error $? "cannot use X directory names containing '" "$LINENO" 5;; #(
     *,NONE | NONE,*) if test "${ac_cv_have_x+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
@@ -26205,7 +26475,7 @@ fi
 
 USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
-        if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
+        if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$WXGTK1" = 1; then
 
   ac_find_libraries=
 
@@ -27331,7 +27601,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
-    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK2" = 1 -o "$wxUSE_GTK" = 1; then
+    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1; then
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for OpenGL headers" >&5
 $as_echo_n "checking for OpenGL headers... " >&6; }
@@ -29028,7 +29298,7 @@ else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "no
-See \`config.log' for more details" "$LINENO" 5 ; }
+See \`config.log' for more details" "$LINENO" 5; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
@@ -32532,6 +32802,13 @@ $as_echo "no" >&6; }
   fi
 fi
 
+if test "$WXGTK3" = 1 ; then
+    cat >>confdefs.h <<_ACEOF
+#define __WXGTK3__ 1
+_ACEOF
+
+    WXGTK2=1
+fi
 if test "$WXGTK2" = 1 ; then
   cat >>confdefs.h <<_ACEOF
 #define __WXGTK20__ $WXGTK2
@@ -32572,10 +32849,10 @@ if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DwxDEBUG_LEVEL=0"
 
     if test "$wxUSE_GTK" = 1 ; then
-        if test "x$wxGTK_VERSION" = "x1" ; then
-            CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
-        else
+        if test "$WXGTK2" = 1 ; then
             CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
+        else
+            CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
         fi
     fi
 fi
@@ -33479,7 +33756,11 @@ fi
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
 
         if test "$wxUSE_GTKPRINT" = "yes" ; then
-
+            if test "$WXGTK3" = 1; then
+                gtk_unix_print="gtk+-unix-print-3.0"
+            else
+                gtk_unix_print="gtk+-unix-print-2.0 >= 2.10"
+            fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTKPRINT" >&5
@@ -33490,12 +33771,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_GTKPRINT_CFLAGS="$GTKPRINT_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-unix-print-2.0 >= 2.10\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gtk+-unix-print-2.0 >= 2.10") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$gtk_unix_print\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$gtk_unix_print") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GTKPRINT_CFLAGS=`$PKG_CONFIG --cflags "gtk+-unix-print-2.0 >= 2.10" 2>/dev/null`
+  pkg_cv_GTKPRINT_CFLAGS=`$PKG_CONFIG --cflags "$gtk_unix_print" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -33508,12 +33789,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_GTKPRINT_LIBS="$GTKPRINT_LIBS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-unix-print-2.0 >= 2.10\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gtk+-unix-print-2.0 >= 2.10") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$gtk_unix_print\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$gtk_unix_print") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GTKPRINT_LIBS=`$PKG_CONFIG --libs "gtk+-unix-print-2.0 >= 2.10" 2>/dev/null`
+  pkg_cv_GTKPRINT_LIBS=`$PKG_CONFIG --libs "$gtk_unix_print" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -33532,9 +33813,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTKPRINT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gtk+-unix-print-2.0 >= 2.10"`
+	        GTKPRINT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$gtk_unix_print"`
         else
-	        GTKPRINT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk+-unix-print-2.0 >= 2.10"`
+	        GTKPRINT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$gtk_unix_print"`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$GTKPRINT_PKG_ERRORS" >&5
@@ -36024,6 +36305,10 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW_WEBKIT=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
+            webkitgtk=webkit-1.0
+            if test "$WXGTK3" = 1; then
+                webkitgtk=webkitgtk-3.0
+            fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
@@ -36034,12 +36319,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit-1.0 >= 1.3.1\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "webkit-1.0 >= 1.3.1") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$webkitgtk >= 1.3.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$webkitgtk >= 1.3.1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit-1.0 >= 1.3.1" 2>/dev/null`
+  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "$webkitgtk >= 1.3.1" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -36052,12 +36337,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit-1.0 >= 1.3.1\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "webkit-1.0 >= 1.3.1") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$webkitgtk >= 1.3.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$webkitgtk >= 1.3.1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit-1.0 >= 1.3.1" 2>/dev/null`
+  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "$webkitgtk >= 1.3.1" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -36076,9 +36361,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "webkit-1.0 >= 1.3.1"`
+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$webkitgtk >= 1.3.1"`
         else
-	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "webkit-1.0 >= 1.3.1"`
+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$webkitgtk >= 1.3.1"`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$WEBKIT_PKG_ERRORS" >&5
@@ -37118,7 +37403,11 @@ case "$TOOLKIT" in
     GTK)
         TOOLKIT_DESC="GTK+"
         if test "$WXGTK2" = 1; then
-            TOOLKIT_DESC="$TOOLKIT_DESC 2"
+            if test "$WXGTK3" = 1; then
+                TOOLKIT_DESC="$TOOLKIT_DESC 3"
+            else
+                TOOLKIT_DESC="$TOOLKIT_DESC 2"
+            fi
             if test "$wxUSE_GTKPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
             fi
@@ -39795,6 +40084,16 @@ EOF
         COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
 
+    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
+    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
+        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
+    fi
+
+    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
+    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
+    fi
+
     COND_PLATFORM_UNIX_1_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_USE_GUI_1=""
@@ -39943,6 +40242,31 @@ EOF
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0=""
+    fi
+
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0=""
+    fi
+
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
+    fi
+
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
+    fi
+
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0=""
+    fi
+
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0=""
     fi
 
     COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1="#"
@@ -41509,7 +41833,7 @@ do
     "wx-config") CONFIG_COMMANDS="$CONFIG_COMMANDS wx-config" ;;
     "$mk") CONFIG_FILES="$CONFIG_FILES $mk" ;;
 
-  *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5 ;;
+  *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
 done
 
@@ -41825,7 +42149,7 @@ do
   esac
   case $ac_mode$ac_tag in
   :[FHL]*:*);;
-  :L* | :C*:*) as_fn_error $? "invalid tag \`$ac_tag'" "$LINENO" 5 ;;
+  :L* | :C*:*) as_fn_error $? "invalid tag \`$ac_tag'" "$LINENO" 5;;
   :[FH]-) ac_tag=-:-;;
   :[FH]*) ac_tag=$ac_tag:$ac_tag.in;;
   esac
@@ -41853,7 +42177,7 @@ do
 	   [\\/$]*) false;;
 	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
 	   esac ||
-	   as_fn_error 1 "cannot find input file: \`$ac_f'" "$LINENO" 5 ;;
+	   as_fn_error 1 "cannot find input file: \`$ac_f'" "$LINENO" 5;;
       esac
       case $ac_f in *\'*) ac_f=`$as_echo "$ac_f" | sed "s/'/'\\\\\\\\''/g"`;; esac
       as_fn_append ac_file_inputs " '$ac_f'"
@@ -41880,7 +42204,7 @@ $as_echo "$as_me: creating $ac_file" >&6;}
 
     case $ac_tag in
     *:-:* | *:-) cat >"$tmp/stdin" \
-      || as_fn_error $? "could not create $ac_file" "$LINENO" 5  ;;
+      || as_fn_error $? "could not create $ac_file" "$LINENO" 5 ;;
     esac
     ;;
   esac

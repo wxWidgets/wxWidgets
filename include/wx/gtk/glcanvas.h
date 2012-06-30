@@ -39,6 +39,7 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style);
 
     // implement wxGLCanvasX11 methods
     // --------------------------------
@@ -93,6 +94,9 @@ public:
     void OnInternalIdle();
 
     bool              m_exposed;
+#ifdef __WXGTK3__
+    cairo_t* m_cairoPaintContext;
+#endif
 
 #if WXWIN_COMPATIBILITY_2_8
     wxGLContext      *m_sharedContext;

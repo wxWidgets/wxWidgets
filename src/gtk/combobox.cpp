@@ -21,7 +21,9 @@
     #include "wx/arrstr.h"
 #endif
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -170,7 +172,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     g_signal_connect_after (m_widget, "changed",
                         G_CALLBACK (gtkcombobox_changed_callback), this);
 
+#ifndef __WXGTK3__
     if ( !gtk_check_version(2,10,0) )
+#endif
     {
         g_signal_connect (m_widget, "notify::popup-shown",
                           G_CALLBACK (gtkcombobox_popupshown_callback), this);
@@ -183,7 +187,11 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 void wxComboBox::GTKCreateComboBoxWidget()
 {
+#ifdef __WXGTK3__
+    m_widget = gtk_combo_box_text_new_with_entry();
+#else
     m_widget = gtk_combo_box_entry_new_text();
+#endif
     g_object_ref(m_widget);
 
     m_entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(m_widget)));
@@ -264,14 +272,23 @@ GtkWidget* wxComboBox::GetConnectWidget()
 
 GdkWindow* wxComboBox::GTKGetWindow(wxArrayGdkWindows& /* windows */) const
 {
+#ifdef __WXGTK3__
+    // no access to internal GdkWindows
+    return NULL;
+#else
     return gtk_entry_get_text_window(GetEntry());
+#endif
 }
 
 // static
 wxVisualAttributes
 wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
+#ifdef __WXGTK3__
+    return GetDefaultAttributesFromGTKWidget(gtk_combo_box_new_with_entry, true);
+#else
     return GetDefaultAttributesFromGTKWidget(gtk_combo_box_entry_new, true);
+#endif
 }
 
 void wxComboBox::SetValue(const wxString& value)

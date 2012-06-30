@@ -256,15 +256,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxGStreamerMediaBackend, wxMediaBackend)
 //-----------------------------------------------------------------------------
 #ifdef __WXGTK__
 extern "C" {
-static gboolean gtk_window_expose_callback(GtkWidget *widget,
-                                           GdkEventExpose *event,
-                                           wxGStreamerMediaBackend *be)
+static gboolean
+#ifdef __WXGTK3__
+draw(GtkWidget* widget, cairo_t* cr, wxGStreamerMediaBackend* be)
+#else
+expose_event(GtkWidget* widget, GdkEventExpose* event, wxGStreamerMediaBackend* be)
+#endif
 {
-    if(event->count > 0)
-        return FALSE;
-
-    GdkWindow* window = gtk_widget_get_window(widget);
-
     // I've seen this recommended somewhere...
     // TODO: Is this needed? Maybe it is just cruft...
     // gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
@@ -282,9 +280,17 @@ static gboolean gtk_window_expose_callback(GtkWidget *widget,
     else
     {
         // draw a black background like some other backends do....
-        gdk_draw_rectangle (window, widget->style->black_gc, TRUE, 0, 0,
+#ifdef __WXGTK3__
+        GtkAllocation a;
+        gtk_widget_get_allocation(widget, &a);
+        cairo_rectangle(cr, 0, 0, a.width, a.height);
+        cairo_set_source_rgb(cr, 0, 0, 0);
+        cairo_fill(cr);
+#else
+        gdk_draw_rectangle (event->window, widget->style->black_gc, TRUE, 0, 0,
                             widget->allocation.width,
                             widget->allocation.height);
+#endif
     }
 
     return FALSE;
@@ -310,11 +316,15 @@ static gint gtk_window_realize_callback(GtkWidget* widget,
     wxASSERT(window);
 
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
-                                GDK_WINDOW_XWINDOW( window )
+                                GDK_WINDOW_XID(window)
                                 );
     g_signal_connect (be->GetControl()->m_wxwindow,
-                      "expose_event",
-                      G_CALLBACK(gtk_window_expose_callback), be);
+#ifdef __WXGTK3__
+        "draw", G_CALLBACK(draw),
+#else
+        "expose_event", G_CALLBACK(expose_event),
+#endif
+        be);
     return 0;
 }
 }
@@ -716,16 +726,19 @@ void wxGStreamerMediaBackend::SetupXOverlay()
 #endif
         gst_x_overlay_set_xwindow_id(GST_X_OVERLAY(m_xoverlay),
 #ifdef __WXGTK__
-                        GDK_WINDOW_XWINDOW( window )
+                        GDK_WINDOW_XID(window)
 #else
                         ctrl->GetHandle()
 #endif
                                   );
 #ifdef __WXGTK__
         g_signal_connect(m_ctrl->m_wxwindow,
-                        // m_ctrl->m_wxwindow/*m_ctrl->m_widget*/,
-                      "expose_event",
-                      G_CALLBACK(gtk_window_expose_callback), this);
+#ifdef __WXGTK3__
+            "draw", G_CALLBACK(draw),
+#else
+            "expose_event", G_CALLBACK(expose_event),
+#endif
+            this);
     } // end if GtkPizza realized
 #endif
 }

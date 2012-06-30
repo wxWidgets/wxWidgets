@@ -452,7 +452,7 @@ bool wxWebViewWebKit::Enable( bool enable )
     if (!wxControl::Enable(enable))
         return false;
 
-    gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
+    gtk_widget_set_sensitive(gtk_bin_get_child(GTK_BIN(m_widget)), enable);
 
     //if (enable)
     //    GTKFixSensitivity();

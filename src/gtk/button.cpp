@@ -18,7 +18,9 @@
 
 #include "wx/stockitem.h"
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/list.h"
 
 // ----------------------------------------------------------------------------
@@ -174,7 +176,12 @@ wxSize wxButtonBase::GetDefaultSize()
         gtk_container_add(GTK_CONTAINER(box), btn);
         gtk_container_add(GTK_CONTAINER(wnd), box);
         GtkRequisition req;
+#ifdef __WXGTK3__
+        gtk_widget_get_preferred_height(btn, NULL, &req.height);
+        gtk_widget_get_preferred_width_for_height(btn, req.height, NULL, &req.width);
+#else
         gtk_widget_size_request(btn, &req);
+#endif
 
         gint minwidth, minheight;
         gtk_widget_style_get(box,
@@ -269,9 +276,9 @@ GtkLabel *wxButton::GTKGetLabel() const
 
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_widget, style);
+    GTKApplyStyle(m_widget, style);
     GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
-    gtk_widget_modify_style(child, style);
+    GTKApplyStyle(child, style);
 
     // for buttons with images, the path to the label is (at least in 2.12)
     // GtkButton -> GtkAlignment -> GtkHBox -> GtkLabel
@@ -283,7 +290,7 @@ void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
             wxGtkList list(gtk_container_get_children(GTK_CONTAINER(box)));
             for (GList* item = list; item; item = item->next)
             {
-                gtk_widget_modify_style(GTK_WIDGET(item->data), style);
+                GTKApplyStyle(GTK_WIDGET(item->data), style);
             }
         }
     }

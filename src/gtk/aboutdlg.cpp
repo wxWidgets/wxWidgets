@@ -21,14 +21,19 @@
 
 #if wxUSE_ABOUTDLG && defined(__WXGTK26__)
 
+#include "wx/aboutdlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"       // for wxLaunchDefaultBrowser()
 #endif //WX_PRECOMP
 
-#include "wx/aboutdlg.h"
+#ifndef __WXGTK3__
 #include "wx/generic/aboutdlgg.h"
+#endif
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // GtkArray: temporary array of GTK strings
@@ -101,25 +106,41 @@ private:
 // GTK+ about dialog is modeless, keep track of it in this variable
 static GtkAboutDialog *gs_aboutDialog = NULL;
 
-extern "C" void
-wxGtkAboutDialogOnClose(GtkAboutDialog *about)
+extern "C" {
+static void wxGtkAboutDialogOnClose(GtkAboutDialog *about)
 {
     gtk_widget_destroy(GTK_WIDGET(about));
     if ( about == gs_aboutDialog )
         gs_aboutDialog = NULL;
 }
+}
 
-extern "C" void
-wxGtkAboutDialogOnLink(GtkAboutDialog * WXUNUSED(about),
-                       const gchar *link,
-                       gpointer WXUNUSED(data))
+#ifdef __WXGTK3__
+extern "C" {
+static gboolean activate_link(GtkAboutDialog*, const char* link, void* dontIgnore)
+{
+    if (dontIgnore)
+    {
+        wxLaunchDefaultBrowser(wxGTK_CONV_BACK_SYS(link));
+        return true;
+    }
+    return false;
+}
+}
+#else
+extern "C" {
+static void wxGtkAboutDialogOnLink(GtkAboutDialog*, const char* link, void*)
 {
     wxLaunchDefaultBrowser(wxGTK_CONV_BACK_SYS(link));
 }
+}
+#endif
 
 void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
 {
+#ifndef __WXGTK3__
     if ( !gtk_check_version(2,6,0) )
+#endif
     {
         // don't create another dialog if one is already present
         if ( !gs_aboutDialog )
@@ -150,10 +171,14 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
 
         if ( info.HasWebSite() )
         {
+#ifdef __WXGTK3__
+            g_signal_connect(dlg, "activate-link", G_CALLBACK(activate_link), dlg);
+#else
             // NB: must be called before gtk_about_dialog_set_website() as
             //     otherwise it has no effect (although GTK+ docs don't mention
             //     this...)
             gtk_about_dialog_set_url_hook(wxGtkAboutDialogOnLink, NULL, NULL);
+#endif
 
             gtk_about_dialog_set_website(dlg, wxGTK_CONV_SYS(info.GetWebSiteURL()));
             gtk_about_dialog_set_website_label
@@ -166,7 +191,11 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
         {
             gtk_about_dialog_set_website(dlg, NULL);
             gtk_about_dialog_set_website_label(dlg, NULL);
+#ifdef __WXGTK3__
+            g_signal_connect(dlg, "activate-link", G_CALLBACK(activate_link), NULL);
+#else
             gtk_about_dialog_set_url_hook(NULL, NULL, NULL);
+#endif
         }
 
         if ( info.HasDevelopers() )
@@ -216,11 +245,12 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
                             G_CALLBACK(wxGtkAboutDialogOnClose), NULL);
 
         gtk_window_present(GTK_WINDOW(dlg));
-        return;
     }
-
-    // native about dialog not available, fall back to the generic one
-    wxGenericAboutBox(info);
+#ifndef __WXGTK3__
+    else
+        // native about dialog not available, fall back to the generic one
+        wxGenericAboutBox(info);
+#endif
 }
 
 #endif // wxUSE_ABOUTDLG && GTK+ 2.6+

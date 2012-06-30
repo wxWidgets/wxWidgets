@@ -26,7 +26,6 @@
     #include <gpe/init.h>
 #endif
 
-#include "wx/gtk/private.h"
 #include "wx/apptrait.h"
 #include "wx/fontmap.h"
 
@@ -38,9 +37,8 @@
     #include <hildon/hildon.h>
 #endif // wxUSE_LIBHILDON2
 
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
+#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // link GnomeVFS
@@ -231,6 +229,7 @@ bool wxApp::OnInitGui()
     if ( !wxAppBase::OnInitGui() )
         return false;
 
+#ifndef __WXGTK3__
     // if this is a wxGLApp (derived from wxApp), and we've already
     // chosen a specific visual, then derive the GdkVisual from that
     if ( GetXVisualInfo() )
@@ -268,6 +267,7 @@ bool wxApp::OnInitGui()
             }
         }
     }
+#endif
 
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     if ( !GetHildonProgram() )

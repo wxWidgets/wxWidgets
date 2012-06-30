@@ -12,6 +12,13 @@
 
 #include "wx/dynarray.h"
 
+#ifdef __WXGTK3__
+    typedef struct _cairo cairo_t;
+    #define WXUNUSED_IN_GTK3(x)
+#else
+    #define WXUNUSED_IN_GTK3(x) x
+#endif
+
 // helper structure that holds class that holds GtkIMContext object and
 // some additional data needed for key events processing
 struct wxGtkIMData;
@@ -140,12 +147,13 @@ public:
     // Internal addition of child windows
     void DoAddChild(wxWindowGTK *child);
 
-    // This methods sends wxPaintEvents to the window. It reads the
-    // update region, breaks it up into rects and sends an event
-    // for each rect. It is also responsible for background erase
-    // events and NC paint events. It is called from "draw" and
-    // "expose" handlers as well as from ::Update()
-    void GtkSendPaintEvents();
+    // This method sends wxPaintEvents to the window.
+    // It is also responsible for background erase events.
+#ifdef __WXGTK3__
+    void GTKSendPaintEvents(cairo_t* cr);
+#else
+    void GTKSendPaintEvents(const GdkRegion* region);
+#endif
 
     // The methods below are required because many native widgets
     // are composed of several subwidgets and setting a style for
@@ -267,7 +275,6 @@ public:
 
     wxGtkIMData         *m_imData;
 
-
     // indices for the arrays below
     enum ScrollDir { ScrollDir_Horz, ScrollDir_Vert, ScrollDir_Max };
 
@@ -359,19 +366,22 @@ protected:
     // Copies m_children tab order to GTK focus chain:
     void RealizeTabOrder();
 
+#ifndef __WXGTK3__
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create
     // modified GTK style with non-standard attributes. If forceStyle=true,
     // creates empty GtkRcStyle if there are no modifications, otherwise
     // returns NULL in such case.
     GtkRcStyle *GTKCreateWidgetStyle(bool forceStyle = false);
+#endif
 
-    // Overridden in many GTK widgets who have to handle subwidgets
-    virtual void GTKApplyWidgetStyle(bool forceStyle = false);
+    void GTKApplyWidgetStyle(bool forceStyle = false);
 
     // helper function to ease native widgets wrapping, called by
     // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+
+    void GTKApplyStyle(GtkWidget* widget, GtkRcStyle* style);
 
     // sets the border of a given GtkScrolledWindow from a wx style
     static void GTKScrolledWindowSetBorder(GtkWidget* w, int style);
@@ -394,6 +404,17 @@ private:
     // are already at the end)
     bool DoScrollByUnits(ScrollDir dir, ScrollUnit unit, int units);
     virtual void AddChildGTK(wxWindowGTK* child);
+
+#ifdef __WXGTK3__
+    // paint context is stashed here so wxPaintDC can use it
+    cairo_t* m_paintContext;
+
+public:
+    cairo_t* GTKPaintContext() const
+    {
+        return m_paintContext;
+    }
+#endif
 
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
     wxDECLARE_NO_COPY_CLASS(wxWindowGTK);

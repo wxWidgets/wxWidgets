@@ -26,13 +26,14 @@
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
 #ifndef WX_PRECOMP
+    #include "wx/textentry.h"
     #include "wx/window.h"
     #include "wx/textctrl.h"
 #endif //WX_PRECOMP
 
-#include "wx/textentry.h"
-
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ============================================================================
 // signal handlers implementation
@@ -205,6 +206,7 @@ void wxTextEntry::SetSelection(long from, long to)
     // GTK+ does by default
     gtk_editable_select_region(GetEditable(), to, from);
 
+#ifndef __WXGTK3__
     // avoid reported problem with RHEL 5 GTK+ 2.10 where selection is reset by
     // a clipboard callback, see #13277
     if (gtk_check_version(2,12,0))
@@ -214,6 +216,7 @@ void wxTextEntry::SetSelection(long from, long to)
             to = entry->text_length;
         entry->selection_bound = to;
     }
+#endif
 }
 
 void wxTextEntry::GetSelection(long *from, long *to) const

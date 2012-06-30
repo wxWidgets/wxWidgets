@@ -44,7 +44,9 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
 
 #ifdef __WXGTK210__
     const wxString fullPath = wxFileName(file).GetFullPath();
+#ifndef __WXGTK3__
     if ( !gtk_check_version(2,10,0) )
+#endif
     {
         wxGtkString uri(g_filename_to_uri(wxGTK_CONV_FN(fullPath), NULL, NULL));
 

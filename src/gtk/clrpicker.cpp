@@ -37,9 +37,14 @@ static void gtk_clrbutton_setcolor_callback(GtkColorButton *widget,
 {
     // update the m_colour member of the wxColourButton
     wxASSERT(p);
+#ifdef __WXGTK3__
+    GdkRGBA gdkColor;
+    gtk_color_button_get_rgba(widget, &gdkColor);
+#else
     GdkColor gdkColor;
     gtk_color_button_get_color(widget, &gdkColor);
-    p->SetGdkColor(gdkColor);
+#endif
+    p->GTKSetColour(gdkColor);
 
     // fire the colour-changed event
     wxColourPickerEvent event(p, p->GetId(), p->GetColour());
@@ -67,7 +72,11 @@ bool wxColourButton::Create( wxWindow *parent, wxWindowID id,
     }
 
     m_colour = col;
+#ifdef __WXGTK3__
+    m_widget = gtk_color_button_new_with_rgba(m_colour);
+#else
     m_widget = gtk_color_button_new_with_color( m_colour.GetColor() );
+#endif
     g_object_ref(m_widget);
 
     // GtkColourButton signals
@@ -89,7 +98,11 @@ wxColourButton::~wxColourButton()
 
 void wxColourButton::UpdateColour()
 {
+#ifdef __WXGTK3__
+    gtk_color_button_set_rgba(GTK_COLOR_BUTTON(m_widget), m_colour);
+#else
     gtk_color_button_set_color(GTK_COLOR_BUTTON(m_widget), m_colour.GetColor());
+#endif
 }
 
 #endif // wxUSE_COLOURPICKERCTRL

@@ -20,10 +20,11 @@
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/gtk/private.h"
 #include "wx/utils.h"
 #include "wx/sysopt.h"
 
+#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 #include "wx/gtk/private/mnemonics.h"
 
 // ============================================================================
@@ -57,6 +58,21 @@ bool wxControl::Create( wxWindow *parent,
     return ret;
 }
 
+#ifdef __WXGTK3__
+bool wxControl::SetFont(const wxFont& font)
+{
+    const bool changed = base_type::SetFont(font);
+    if (changed && !gtk_widget_get_realized(m_widget))
+    {
+        // GTK defers sending "style-updated" until widget is realized, but
+        // GetBestSize() won't compute correct result until the signal is sent,
+        // so we have to do it now
+        g_signal_emit_by_name(m_widget, "style-updated");
+    }
+    return changed;
+}
+#endif
+
 wxSize wxControl::DoGetBestSize() const
 {
     // Do not return any arbitrary default value...
@@ -71,7 +87,20 @@ wxSize wxControl::DoGetBestSize() const
     else
     {
         GtkRequisition req;
+#ifdef __WXGTK3__
+        if (gtk_widget_get_request_mode(m_widget) != GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+        {
+            gtk_widget_get_preferred_height(m_widget, NULL, &req.height);
+            gtk_widget_get_preferred_width_for_height(m_widget, req.height, NULL, &req.width);
+        }
+        else
+        {
+            gtk_widget_get_preferred_width(m_widget, NULL, &req.width);
+            gtk_widget_get_preferred_height_for_width(m_widget, req.width, NULL, &req.height);
+        }
+#else
         GTK_WIDGET_GET_CLASS(m_widget)->size_request(m_widget, &req);
+#endif
         best.Set(req.width, req.height);
     }
     CacheBestSize(best);
@@ -82,12 +111,14 @@ void wxControl::PostCreation(const wxSize& size)
 {
     wxWindow::PostCreation();
 
+#ifndef __WXGTK3__
     // NB: GetBestSize needs to know the style, otherwise it will assume
     //     default font and if the user uses a different font, determined
     //     best size will be different (typically, smaller) than the desired
     //     size. This call ensure that a style is available at the time
     //     GetBestSize is called.
     gtk_widget_ensure_style(m_widget);
+#endif
 
     GTKApplyWidgetStyle();
     SetInitialSize(size);
@@ -99,8 +130,9 @@ void wxControl::PostCreation(const wxSize& size)
 // ----------------------------------------------------------------------------
 
 // Fix sensitivity due to bug in GTK+ < 2.14
-void wxControl::GTKFixSensitivity(bool onlyIfUnderMouse)
+void wxControl::GTKFixSensitivity(bool WXUNUSED_IN_GTK3(onlyIfUnderMouse))
 {
+#ifndef __WXGTK3__
     if (gtk_check_version(2,14,0)
 #if wxUSE_SYSTEM_OPTIONS
         && (wxSystemOptions::GetOptionInt(wxT("gtk.control.disable-sensitivity-fix")) != 1)
@@ -115,6 +147,7 @@ void wxControl::GTKFixSensitivity(bool onlyIfUnderMouse)
             Show();
         }
     }
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -168,8 +201,8 @@ void wxControl::GTKSetLabelForFrame(GtkFrame *w, const wxString& label)
 
 void wxControl::GTKFrameApplyWidgetStyle(GtkFrame* w, GtkRcStyle* style)
 {
-    gtk_widget_modify_style(GTK_WIDGET(w), style);
-    gtk_widget_modify_style(gtk_frame_get_label_widget (w), style);
+    GTKApplyStyle(GTK_WIDGET(w), style);
+    GTKApplyStyle(gtk_frame_get_label_widget(w), style);
 }
 
 void wxControl::GTKFrameSetMnemonicWidget(GtkFrame* w, GtkWidget* widget)
@@ -214,11 +247,29 @@ wxVisualAttributes wxControl::GetDefaultAttributes() const
 // static
 wxVisualAttributes
 wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
-                                             bool useBase,
+                                             bool WXUNUSED_IN_GTK3(useBase),
                                              int state)
 {
-    GtkStyle* style;
     wxVisualAttributes attr;
+#ifdef __WXGTK3__
+    GtkStateFlags stateFlag = GTK_STATE_FLAG_NORMAL;
+    if (state)
+    {
+        wxASSERT(state == GTK_STATE_ACTIVE);
+        stateFlag = GTK_STATE_FLAG_ACTIVE;
+    }
+    GtkStyleContext* sc = gtk_widget_get_style_context(widget);
+    GdkRGBA c;
+    gtk_style_context_get_color(sc, stateFlag, &c);
+    attr.colFg = wxColour(c);
+    gtk_style_context_get_background_color(sc, stateFlag, &c);
+    attr.colBg = wxColour(c);
+    wxNativeFontInfo info;
+    info.description = const_cast<PangoFontDescription*>(gtk_style_context_get_font(sc, stateFlag));
+    attr.font = wxFont(info);
+    info.description = NULL;
+#else
+    GtkStyle* style;
 
     style = gtk_rc_get_style(widget);
     if (!style)
@@ -246,7 +297,8 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         attr.font = wxFont(info);
         info.description = NULL;
     }
-    else
+#endif
+    if (!attr.font.IsOk())
     {
         GtkSettings *settings = gtk_settings_get_default();
         gchar *font_name = NULL;

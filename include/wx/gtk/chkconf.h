@@ -81,3 +81,14 @@
 #endif
 
 #endif  /* __WINDOWS__ */
+
+#ifdef __WXGTK3__
+    #if !wxUSE_GRAPHICS_CONTEXT
+        #ifdef wxABORT_ON_CONFIG_ERROR
+            #error "GTK+ 3 support requires wxGraphicsContext"
+        #else
+            #undef wxUSE_GRAPHICS_CONTEXT
+            #define wxUSE_GRAPHICS_CONTEXT 1
+        #endif
+    #endif
+#endif

@@ -17,8 +17,9 @@
     #include "wx/arrstr.h"
 #endif
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -76,7 +77,11 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         m_strings = new wxGtkCollatedArrayString;
     }
 
+#ifdef __WXGTK3__
+    m_widget = gtk_combo_box_text_new();
+#else
     m_widget = gtk_combo_box_new_text();
+#endif
     g_object_ref(m_widget);
 
     Append(n, choices);
@@ -117,7 +122,11 @@ void wxChoice::SendSelectionChangedEvent(wxEventType evt_type)
 
 void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
 {
+#ifdef __WXGTK3__
+    gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(m_widget), n, wxGTK_CONV(text));
+#else
     gtk_combo_box_insert_text( GTK_COMBO_BOX( m_widget ), n, wxGTK_CONV( text ) );
+#endif
 }
 
 int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
@@ -370,8 +379,8 @@ wxSize wxChoice::DoGetBestSize() const
 
 void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(gtk_bin_get_child(GTK_BIN(m_widget)), style);
+    GTKApplyStyle(m_widget, style);
+    GTKApplyStyle(gtk_bin_get_child(GTK_BIN(m_widget)), style);
 }
 
 

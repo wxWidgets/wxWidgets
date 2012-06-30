@@ -113,10 +113,13 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     if (GTK_IS_WINDOW (toplevel))
     {
 #if GTK_CHECK_VERSION(2,10,0)
+#ifndef __WXGTK3__
         if (!gtk_check_version(2,10,0))
-            gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), GTK_WINDOW (m_widget));
 #endif
-
+        {
+            gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), GTK_WINDOW (m_widget));
+        }
+#endif
         gtk_window_set_transient_for (GTK_WINDOW (m_widget), GTK_WINDOW (toplevel));
     }
     gtk_window_set_resizable (GTK_WINDOW (m_widget), FALSE);
@@ -125,7 +128,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     g_signal_connect (m_widget, "delete_event",
                       G_CALLBACK (gtk_dialog_delete_callback), this);
 
-    m_wxwindow = wxPizza::New(m_windowStyle);
+    m_wxwindow = wxPizza::New();
     gtk_widget_show( m_wxwindow );
 
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );

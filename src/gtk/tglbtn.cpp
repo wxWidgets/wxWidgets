@@ -21,6 +21,7 @@
     #include "wx/button.h"
 #endif
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 extern bool      g_blockEventsOnDrag;
@@ -212,8 +213,8 @@ GtkLabel *wxToggleButton::GTKGetLabel() const
 
 void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(gtk_bin_get_child(GTK_BIN(m_widget)), style);
+    GTKApplyStyle(m_widget, style);
+    GTKApplyStyle(gtk_bin_get_child(GTK_BIN(m_widget)), style);
 }
 
 // Get the "best" size for this control.

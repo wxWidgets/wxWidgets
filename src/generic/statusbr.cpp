@@ -30,6 +30,7 @@
 #ifdef __WXGTK20__
     #include <gtk/gtk.h>
     #include "wx/gtk/private.h"
+    #include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
@@ -90,8 +91,10 @@ gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
 BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
     EVT_SIZE(wxStatusBarGeneric::OnSize)
+#ifdef __WXGTK20__
     EVT_LEFT_DOWN(wxStatusBarGeneric::OnLeftDown)
     EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
+#endif
     EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -132,7 +135,11 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
 #if defined( __WXGTK20__ )
 #if GTK_CHECK_VERSION(2,12,0)
-    if (HasFlag(wxSTB_SHOW_TIPS) && !gtk_check_version(2,12,0))
+    if (HasFlag(wxSTB_SHOW_TIPS)
+#ifndef __WXGTK3__
+        && gtk_check_version(2,12,0) == NULL
+#endif
+        )
     {
         g_object_set(m_widget, "has-tooltip", TRUE, NULL);
         g_signal_connect(m_widget, "query-tooltip",
@@ -427,6 +434,23 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     if ( ShowsSizeGrip() )
     {
         const wxRect& rc = GetSizeGripRect();
+#ifdef __WXGTK3__
+        GtkWidget* toplevel = gtk_widget_get_toplevel(m_widget);
+        if (toplevel && !gtk_window_get_has_resize_grip(GTK_WINDOW(toplevel)))
+        {
+            GtkStyleContext* sc = gtk_widget_get_style_context(toplevel);
+            gtk_style_context_save(sc);
+            gtk_style_context_add_class(sc, GTK_STYLE_CLASS_GRIP);
+            GtkJunctionSides sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
+            if (GetLayoutDirection() == wxLayout_RightToLeft)
+                sides = GTK_JUNCTION_CORNER_BOTTOMLEFT;
+            gtk_style_context_set_junction_sides(sc, sides);
+            gtk_render_handle(sc,
+                static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext()),
+                rc.x, rc.y, rc.width, rc.height);
+            gtk_style_context_restore(sc);
+        }
+#else
         GdkWindowEdge edge =
             GetLayoutDirection() == wxLayout_RightToLeft ? GDK_WINDOW_EDGE_SOUTH_WEST :
                                                            GDK_WINDOW_EDGE_SOUTH_EAST;
@@ -438,6 +462,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
                             "statusbar",
                             edge,
                             rc.x, rc.y, rc.width, rc.height );
+#endif
     }
 #endif // __WXGTK20__
 
@@ -460,19 +485,20 @@ void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
+#ifdef __WXGTK20__
 void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
 {
-#ifdef __WXGTK20__
     int width, height;
     GetClientSize(&width, &height);
 
-    if ( ShowsSizeGrip()  && (event.GetX() > width-height) )
+    GtkWidget* ancestor = gtk_widget_get_toplevel(m_widget);
+#ifdef __WXGTK3__
+    if (ancestor && gtk_window_get_has_resize_grip(GTK_WINDOW(ancestor)))
+        ancestor = NULL;
+#endif
+
+    if (ancestor && ShowsSizeGrip() && event.GetX() > width - height)
     {
-        GtkWidget *ancestor = gtk_widget_get_toplevel( m_widget );
-
-        if (!GTK_IS_WINDOW (ancestor))
-            return;
-
         GdkWindow *source = GTKGetDrawingWindow();
 
         int org_x = 0;
@@ -502,24 +528,21 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
     {
         event.Skip( true );
     }
-#else
-    event.Skip( true );
-#endif
 }
 
 void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
 {
-#ifdef __WXGTK20__
     int width, height;
     GetClientSize(&width, &height);
 
-    if ( ShowsSizeGrip() && (event.GetX() > width-height) )
+    GtkWidget* ancestor = gtk_widget_get_toplevel(m_widget);
+#ifdef __WXGTK3__
+    if (ancestor && gtk_window_get_has_resize_grip(GTK_WINDOW(ancestor)))
+        ancestor = NULL;
+#endif
+
+    if (ancestor && ShowsSizeGrip() && event.GetX() > width - height)
     {
-        GtkWidget *ancestor = gtk_widget_get_toplevel( m_widget );
-
-        if (!GTK_IS_WINDOW (ancestor))
-            return;
-
         GdkWindow *source = GTKGetDrawingWindow();
 
         int org_x = 0;
@@ -536,10 +559,8 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
     {
         event.Skip( true );
     }
-#else
-    event.Skip( true );
-#endif
 }
+#endif // __WXGTK20__
 
 void wxStatusBarGeneric::OnSize(wxSizeEvent& event)
 {

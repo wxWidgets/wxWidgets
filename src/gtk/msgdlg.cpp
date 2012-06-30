@@ -24,10 +24,10 @@
     #include "wx/intl.h"
 #endif
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/messagetype.h"
 #include "wx/gtk/private/mnemonics.h"
-#include <gtk/gtk.h>
 
 #if wxUSE_LIBHILDON
     #include <hildon-widgets/hildon-note.h>
@@ -168,7 +168,11 @@ void wxMessageDialog::GTKCreateMsgDialog()
     wxString message;
 #if GTK_CHECK_VERSION(2, 6, 0)
     bool needsExtMessage = false;
-    if ( gtk_check_version(2, 6, 0) == NULL && !m_extendedMessage.empty() )
+    if (!m_extendedMessage.empty()
+#ifndef __WXGTK3__
+        && gtk_check_version(2, 6, 0) == NULL
+#endif
+        )
     {
         message = m_message;
         needsExtMessage = true;

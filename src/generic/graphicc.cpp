@@ -80,7 +80,9 @@ using namespace std;
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #include "wx/fontutil.h"
+#ifndef __WXGTK3__
 #include "wx/gtk/dc.h"
+#endif
 #endif
 
 #ifdef __WXMAC__
@@ -367,7 +369,7 @@ public:
     wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
     wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc );
 #ifdef __WXGTK__
-    wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable );
+    wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window );
 #endif
 #ifdef __WXMSW__
     wxCairoContext( wxGraphicsRenderer* renderer, HDC context );
@@ -1264,7 +1266,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // image has alpha (or a mask represented as alpha) then we'll use a
     // different format and iterator than if it doesn't...
     cairo_format_t bufferFormat = bmp.GetDepth() == 32
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
                                             || bmp.GetMask()
 #endif
                                         ? CAIRO_FORMAT_ARGB32
@@ -1337,7 +1339,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             p.OffsetY(pixData, 1);
         }
     }
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXGTK3__)
     // if there is a mask, set the alpha bytes in the target buffer to 
     // fully transparent or fully opaque
     if (bmpSource.GetMask())
@@ -1636,7 +1638,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     Init( cairo_create(m_mswSurface) );
 #endif
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK3__
+    cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
+    if (cr)
+        Init(cr);
+#elif defined __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
@@ -1707,7 +1713,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     }
 #endif
     
-#ifdef __WXGTK20__
+#ifdef __WXGTK3__
+    cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
+    if (cr)
+        Init(cr);
+#elif defined __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
@@ -1737,15 +1747,20 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 }
 
 #ifdef __WXGTK20__
-wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable )
+wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window )
 : wxGraphicsContext(renderer)
 {
-    Init( gdk_cairo_create( drawable ) );
+    Init( gdk_cairo_create( window ) );
 
+#ifdef __WXGTK3__
+    m_width = gdk_window_get_width(window);
+    m_height = gdk_window_get_height(window);
+#else
     int width, height;
-    gdk_drawable_get_size( drawable, &width, &height );
+    gdk_drawable_get_size(window, &width, &height);
     m_width = width;
     m_height = height;
+#endif
 }
 #endif
 
@@ -2410,7 +2425,7 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * windo
 {
     ENSURE_LOADED_OR_RETURN(NULL);
 #ifdef __WXGTK__
-    return new wxCairoContext(this,(GdkDrawable*)window);
+    return new wxCairoContext(this, static_cast<GdkWindow*>(window));
 #else
     wxUnusedVar(window);
     return NULL;

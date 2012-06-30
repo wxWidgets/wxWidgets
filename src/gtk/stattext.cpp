@@ -13,6 +13,8 @@
 #if wxUSE_STATTEXT
 
 #include "wx/stattext.h"
+
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
@@ -71,7 +73,9 @@ bool wxStaticText::Create(wxWindow *parent,
     gtk_label_set_justify(GTK_LABEL(m_widget), justify);
 
 #ifdef __WXGTK26__
+#ifndef __WXGTK3__
     if (!gtk_check_version(2,6,0))
+#endif
     {
         // set ellipsize mode
         PangoEllipsizeMode ellipsizeMode = PANGO_ELLIPSIZE_NONE;
@@ -107,6 +111,7 @@ void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 
     InvalidateBestSize();
 
+#ifndef __WXGTK3__
     if (gtk_check_version(2,6,0) && IsEllipsized())
     {
         // GTK+ < 2.6 does not support ellipsization so we need to do it
@@ -116,6 +121,7 @@ void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
         GTKSetLabelForLabel(GTK_LABEL(m_widget), GetEllipsizedLabel());
     }
     else // Ellipsization not needed or supported by GTK+.
+#endif
     {
         (this->*setter)(GTK_LABEL(m_widget), label);
     }
@@ -211,12 +217,14 @@ void wxStaticText::DoSetSize(int x, int y,
 {
     wxStaticTextBase::DoSetSize(x, y, width, height, sizeFlags);
 
+#ifndef __WXGTK3__
     if (gtk_check_version(2,6,0))
     {
         // GTK+ < 2.6 does not support ellipsization - we need to run our
         // generic code (actually it will be run only if IsEllipsized() == true)
         UpdateLabel();
     }
+#endif
 }
 
 wxSize wxStaticText::DoGetBestSize() const
@@ -228,11 +236,19 @@ wxSize wxStaticText::DoGetBestSize() const
     // gtk_label_set_line_wrap() from here is a bad idea as it queues another
     // size request by calling gtk_widget_queue_resize() and we end up in
     // infinite loop sometimes (notably when the control is in a toolbar)
+    // With GTK3 however, there is no simple alternative, and the sizing loop
+    // no longer seems to occur.
+#ifdef __WXGTK3__
+    gtk_label_set_line_wrap(GTK_LABEL(m_widget), false);
+#else
     GTK_LABEL(m_widget)->wrap = FALSE;
-
+#endif
     wxSize size = wxStaticTextBase::DoGetBestSize();
-
+#ifdef __WXGTK3__
+    gtk_label_set_line_wrap(GTK_LABEL(m_widget), true);
+#else
     GTK_LABEL(m_widget)->wrap = TRUE; // restore old value
+#endif
 
     // Adding 1 to width to workaround GTK sometimes wrapping the text needlessly
     size.x++;

@@ -30,7 +30,9 @@
 #include <sys/stat.h>
 #include <ctype.h>
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -167,25 +169,29 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         GtkJustification align;
         switch (attr.GetAlignment())
         {
-            default:
-                align = GTK_JUSTIFY_LEFT;
-                break;
             case wxTEXT_ALIGNMENT_RIGHT:
                 align = GTK_JUSTIFY_RIGHT;
                 break;
             case wxTEXT_ALIGNMENT_CENTER:
                 align = GTK_JUSTIFY_CENTER;
                 break;
+            case wxTEXT_ALIGNMENT_JUSTIFIED:
+#ifdef __WXGTK3__
+                align = GTK_JUSTIFY_FILL;
+                break;
+#elif GTK_CHECK_VERSION(2,11,0)
 // gtk+ doesn't support justify before gtk+-2.11.0 with pango-1.17 being available
 // (but if new enough pango isn't available it's a mere gtk warning)
-#if GTK_CHECK_VERSION(2,11,0)
-            case wxTEXT_ALIGNMENT_JUSTIFIED:
                 if (!gtk_check_version(2,11,0))
+                {
                     align = GTK_JUSTIFY_FILL;
-                else
-                    align = GTK_JUSTIFY_LEFT;
-                break;
+                    break;
+                }
+                // fallthrough
 #endif
+            default:
+                align = GTK_JUSTIFY_LEFT;
+                break;
         }
 
         g_snprintf(buf, sizeof(buf), "WXALIGNMENT %d", align);
@@ -1645,7 +1651,12 @@ GdkWindow *wxTextCtrl::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     }
     else
     {
+#ifdef __WXGTK3__
+        // no access to internal GdkWindows
+        return NULL;
+#else
         return gtk_entry_get_text_window(GTK_ENTRY(m_text));
+#endif
     }
 }
 
@@ -1792,7 +1803,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_text, style);
+    GTKApplyStyle(m_text, style);
 }
 
 void wxTextCtrl::OnCut(wxCommandEvent& WXUNUSED(event))

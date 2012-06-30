@@ -1063,9 +1063,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/cursor.cpp
     src/gtk/dataobj.cpp
     src/gtk/dc.cpp
-    src/gtk/dcclient.cpp
-    src/gtk/dcmemory.cpp
-    src/gtk/dcscreen.cpp
     src/gtk/dnd.cpp
     src/gtk/evtloop.cpp
     src/gtk/filectrl.cpp
@@ -1087,6 +1084,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/win_gtk.cpp
     src/gtk/window.cpp
 </set>
+<set var="GTK2_LOWLEVEL_SRC" hints="files">
+    $(GTK_LOWLEVEL_SRC)
+    src/gtk/dcclient.cpp
+    src/gtk/dcmemory.cpp
+    src/gtk/dcscreen.cpp
+</set>
 <set var="GTK_LOWLEVEL_HDR" hints="files">
     $(GTK_PLATFORM_HDR)
     wx/generic/icon.h
@@ -1101,10 +1104,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dataform.h
     wx/gtk/dataobj.h
     wx/gtk/dataobj2.h
-    wx/gtk/dc.h
-    wx/gtk/dcclient.h
-    wx/gtk/dcmemory.h
-    wx/gtk/dcscreen.h
     wx/gtk/dnd.h
     wx/gtk/evtloop.h
     wx/gtk/evtloopsrc.h
@@ -3119,13 +3118,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_GTK_SRC" hints="files">
     $(ADVANCED_GTK_PLATFORM_SRC)
     src/gtk/taskbar.cpp
+</set>
+<set var="ADVANCED_GTK2_SRC" hints="files">
+    $(ADVANCED_GTK_SRC)
     src/gtk/eggtrayicon.c
     src/gtk/hildon/notifmsg.cpp
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
     $(ADVANCED_GTK_PLATFORM_HDR)
-    wx/gtk/hildon/notifmsg.h
     wx/gtk/taskbar.h
+</set>
+<set var="ADVANCED_GTK2_HDR" hints="files">
+    $(ADVANCED_GTK_HDR)
+    wx/gtk/hildon/notifmsg.h
 </set>
 
 <set var="ADVANCED_GTK_NATIVE_SRC" hints="files">
@@ -3500,6 +3505,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='OSX_COCOA'">src/osx/cocoa/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='OSX_IPHONE'">src/osx/iphone/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">
+        src/unix/glx11.cpp
+        src/gtk/glcanvas.cpp
+    </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         src/gtk/glcanvas.cpp
         src/unix/glx11.cpp
@@ -3524,6 +3533,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='OSX_CARBON'">wx/osx/glcanvas.h</if>
     <if cond="TOOLKIT=='OSX_COCOA'">wx/osx/glcanvas.h</if>
     <if cond="TOOLKIT=='COCOA'">wx/cocoa/glcanvas.h</if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">
+        wx/gtk/glcanvas.h
+        wx/unix/glx11.h
+    </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         wx/gtk/glcanvas.h
         wx/unix/glx11.h
@@ -3788,7 +3801,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- GUI sources: -->
 
     <set var="LOWLEVEL_SRC" hints="files">
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK2_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC) $(MSW_DESKTOP_LOWLEVEL_SRC)</if>
@@ -3802,6 +3816,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
     </set>
     <set var="LOWLEVEL_HDR" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_HDR)</if>
@@ -3822,6 +3837,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
 
     <set var="GUI_SRC" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
@@ -3834,6 +3850,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='PM'">$(OS2_SRC)</if>
     </set>
     <set var="GUI_HDR" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_HDR)</if>
@@ -3864,7 +3881,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_IPHONE'">$(ADVANCED_OSX_IPHONE_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC) $(ADVANCED_MOTIF_SRC)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_SRC)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_SRC)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK2_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
@@ -3877,7 +3895,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_IPHONE'">$(ADVANCED_OSX_IPHONE_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR) $(ADVANCED_MOTIF_HDR)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_HDR)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_HDR)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK2_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
@@ -3885,11 +3904,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <!-- wxAdv files not used by wxUniv -->
     <set var="ADVANCED_PLATFORM_NATIVE_SRC" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_NATIVE_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_NATIVE_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_NATIVE_HDR" hints="files">
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_NATIVE_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_NATIVE_HDR)</if>
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_HDR)</if>

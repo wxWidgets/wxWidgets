@@ -26,7 +26,7 @@
 //         functions even if GTK_CHECK_VERSION would indicate the function is
 //         already available in GTK+.
 
-#if !GTK_CHECK_VERSION(3,0,0) && !(defined(GTK_DISABLE_DEPRECATED) || defined(GSEAL_ENABLE))
+#ifndef __WXGTK3__
 
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.8
@@ -343,7 +343,58 @@ static inline GdkWindow* wx_gtk_entry_get_text_window(GtkEntry* entry)
 #define gtk_entry_get_text_window wx_gtk_entry_get_text_window
 
 // ----------------------------------------------------------------------------
+// the following were introduced in GTK+ 2.22
+
+static inline GdkWindow* wx_gtk_button_get_event_window(GtkButton* button)
+{
+    return button->event_window;
+}
+#define gtk_button_get_event_window wx_gtk_button_get_event_window
+
+static inline GdkDragAction wx_gdk_drag_context_get_actions(GdkDragContext* context)
+{
+    return context->actions;
+}
+#define gdk_drag_context_get_actions wx_gdk_drag_context_get_actions
+
+static inline GdkDragAction wx_gdk_drag_context_get_selected_action(GdkDragContext* context)
+{
+    return context->action;
+}
+#define gdk_drag_context_get_selected_action wx_gdk_drag_context_get_selected_action
+
+static inline GdkDragAction wx_gdk_drag_context_get_suggested_action(GdkDragContext* context)
+{
+    return context->suggested_action;
+}
+#define gdk_drag_context_get_suggested_action wx_gdk_drag_context_get_suggested_action
+
+static inline GList* wx_gdk_drag_context_list_targets(GdkDragContext* context)
+{
+    return context->targets;
+}
+#define gdk_drag_context_list_targets wx_gdk_drag_context_list_targets
+
+static inline gint wx_gdk_visual_get_depth(GdkVisual* visual)
+{
+    return visual->depth;
+}
+#define gdk_visual_get_depth wx_gdk_visual_get_depth
+
+// ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.24
+
+static inline GdkDisplay* wx_gdk_window_get_display(GdkWindow* window)
+{
+    return gdk_drawable_get_display(window);
+}
+#define gdk_window_get_display wx_gdk_window_get_display
+
+static inline GdkScreen* wx_gdk_window_get_screen(GdkWindow* window)
+{
+    return gdk_drawable_get_screen(window);
+}
+#define gdk_window_get_screen wx_gdk_window_get_screen
 
 static inline gint wx_gdk_window_get_height(GdkWindow* window)
 {
@@ -369,8 +420,20 @@ static inline void wx_gdk_cairo_set_source_window(cairo_t* cr, GdkWindow* window
 #define gdk_cairo_set_source_window wx_gdk_cairo_set_source_window
 #endif
 
-#endif // !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
+// ----------------------------------------------------------------------------
+// the following were introduced in GTK+ 3.0
 
+static inline void wx_gdk_window_get_geometry(GdkWindow* window, gint* x, gint* y, gint* width, gint* height)
+{
+    gdk_window_get_geometry(window, x, y, width, height, NULL);
+}
+#define gdk_window_get_geometry wx_gdk_window_get_geometry
 
+static inline GtkWidget* wx_gtk_tree_view_column_get_button(GtkTreeViewColumn* tree_column)
+{
+    return tree_column->button;
+}
+#define gtk_tree_view_column_get_button wx_gtk_tree_view_column_get_button 
+
+#endif // !__WXGTK3__
 #endif // _WX_GTK_PRIVATE_COMPAT_H_
-

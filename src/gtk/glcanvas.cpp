@@ -40,6 +40,7 @@ gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 // "map" from m_wxwindow
 //-----------------------------------------------------------------------------
 
+#ifndef __WXGTK3__
 extern "C" {
 static void
 gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
@@ -52,12 +53,28 @@ gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
     win->GetUpdateRegion().Clear();
 }
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
 extern "C" {
+#ifdef __WXGTK3__
+static gboolean draw(GtkWidget*, cairo_t* cr, wxGLCanvas* win)
+{
+    win->m_exposed = true;
+    if (win->m_cairoPaintContext == NULL)
+    {
+        win->m_cairoPaintContext = cr;
+        cairo_reference(cr);
+    }
+    double x1, y1, x2, y2;
+    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+    win->GetUpdateRegion().Union(int(x1), int(y1), int(x2 - x1), int(y2 - y1));
+    return false;
+}
+#else
 static gboolean
 gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxGLCanvas *win )
 {
@@ -69,6 +86,7 @@ gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_e
                                   gdk_event->area.height );
     return false;
 }
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -107,9 +125,13 @@ parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void*
         {
             GdkScreen* screen = gtk_widget_get_screen(win->m_wxwindow);
             visual = gdk_x11_screen_lookup_visual(screen, xvi->visualid);
+#ifdef __WXGTK3__
+            gtk_widget_set_visual(win->m_wxwindow, visual);
+#else
             GdkColormap* colormap = gdk_colormap_new(visual, false);
             gtk_widget_set_colormap(win->m_wxwindow, colormap);
             g_object_unref(colormap);
+#endif
         }
         // remove hook
         return false;
@@ -207,6 +229,10 @@ bool wxGLCanvas::Create(wxWindow *parent,
     m_exposed = false;
     m_noExpose = true;
     m_nativeSizeEvent = true;
+#ifdef __WXGTK3__
+    m_cairoPaintContext = NULL;
+    m_backgroundStyle = wxBG_STYLE_PAINT;
+#endif
 
     if ( !InitVisual(attribList) )
         return false;
@@ -224,8 +250,12 @@ bool wxGLCanvas::Create(wxWindow *parent,
 #if WXWIN_COMPATIBILITY_2_8
     g_signal_connect(m_wxwindow, "realize",       G_CALLBACK(gtk_glwindow_realized_callback), this);
 #endif // WXWIN_COMPATIBILITY_2_8
+#ifdef __WXGTK3__
+    g_signal_connect(m_wxwindow, "draw", G_CALLBACK(draw), this);
+#else
     g_signal_connect(m_wxwindow, "map",           G_CALLBACK(gtk_glwindow_map_callback),      this);
     g_signal_connect(m_wxwindow, "expose_event",  G_CALLBACK(gtk_glwindow_expose_callback),   this);
+#endif
     g_signal_connect(m_widget,   "size_allocate", G_CALLBACK(gtk_glcanvas_size_callback),     this);
 
 #if WXWIN_COMPATIBILITY_2_8
@@ -236,25 +266,38 @@ bool wxGLCanvas::Create(wxWindow *parent,
         gtk_glwindow_realized_callback( m_wxwindow, this );
 #endif // WXWIN_COMPATIBILITY_2_8
 
+#ifndef __WXGTK3__
     if (gtk_widget_get_mapped(m_wxwindow))
         gtk_glwindow_map_callback( m_wxwindow, this );
+#endif
 
     return true;
+}
+
+bool wxGLCanvas::SetBackgroundStyle(wxBackgroundStyle /* style */)
+{
+    return false;
 }
 
 Window wxGLCanvas::GetXWindow() const
 {
     GdkWindow* window = GTKGetDrawingWindow();
-    return window ? GDK_WINDOW_XWINDOW(window) : 0;
+    return window ? GDK_WINDOW_XID(window) : 0;
 }
 
 void wxGLCanvas::OnInternalIdle()
 {
     if (m_exposed)
     {
+#ifdef __WXGTK3__
+        GTKSendPaintEvents(m_cairoPaintContext);
+        cairo_destroy(m_cairoPaintContext);
+        m_cairoPaintContext = NULL;
+#else
         wxPaintEvent event( GetId() );
         event.SetEventObject( this );
         HandleWindowEvent( event );
+#endif
 
         m_exposed = false;
         GetUpdateRegion().Clear();

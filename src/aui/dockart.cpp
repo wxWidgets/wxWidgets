@@ -43,10 +43,13 @@
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #include "wx/renderer.h"
-#if GTK_CHECK_VERSION(2,0,0)
+#ifdef __WXGTK20__
    #include "wx/gtk/private/gtk2-compat.h"
 #else
    #define gtk_widget_is_drawable GTK_WIDGET_DRAWABLE
+#endif
+#ifdef __WXGTK3__
+    #include "wx/graphics.h"
 #endif
 #endif
 
@@ -420,11 +423,17 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     gtk_paint_handle
     (
         gtk_widget_get_style(window->m_wxwindow),
+#ifdef __WXGTK3__
+        static_cast<cairo_t*>(dc.GetGraphicsContext()->GetNativeContext()),
+#else
         window->GTKGetDrawingWindow(),
+#endif
         // flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
         GTK_STATE_NORMAL,
         GTK_SHADOW_NONE,
+#ifndef __WXGTK3__
         NULL /* no clipping */,
+#endif
         window->m_wxwindow,
         "paned",
         rect.x,

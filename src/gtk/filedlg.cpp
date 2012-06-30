@@ -41,6 +41,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     wxGtkString filename(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget)));
 
     // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
+#ifndef __WXGTK3__
 #if GTK_CHECK_VERSION(2,7,3)
     if (gtk_check_version(2, 7, 3) != NULL)
 #endif
@@ -62,6 +63,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
             }
         }
     }
+#endif
 
     if (style & wxFD_FILE_MUST_EXIST)
     {
@@ -290,8 +292,14 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
         }
 
 #if GTK_CHECK_VERSION(2,7,3)
-        if ((style & wxFD_OVERWRITE_PROMPT) && !gtk_check_version(2,7,3))
+        if ((style & wxFD_OVERWRITE_PROMPT)
+#ifndef __WXGTK3__
+            && gtk_check_version(2,7,3) == NULL
+#endif
+            )
+        {
             gtk_file_chooser_set_do_overwrite_confirmation(file_chooser, true);
+        }
 #endif
     }
     else // wxFD_OPEN

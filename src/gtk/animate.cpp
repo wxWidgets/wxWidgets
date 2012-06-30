@@ -363,20 +363,8 @@ void wxAnimationCtrl::DisplayStaticImage()
     if (m_bmpStaticReal.IsOk())
     {
         // show inactive bitmap
-        GdkBitmap *mask = NULL;
-        if (m_bmpStaticReal.GetMask())
-            mask = m_bmpStaticReal.GetMask()->GetBitmap();
-
-        if (m_bmpStaticReal.HasPixbuf())
-        {
-            gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
+        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
                                       m_bmpStaticReal.GetPixbuf());
-        }
-        else
-        {
-            gtk_image_set_from_pixmap(GTK_IMAGE(m_widget),
-                                      m_bmpStaticReal.GetPixmap(), mask);
-        }
     }
     else
     {

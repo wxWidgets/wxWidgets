@@ -4,7 +4,7 @@
 // Author:      Benjamin I. Williams
 // Modified by: Jens Lody (extracted from wx/aui/auibook.h)
 // Created:     2012-03-21
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (C) Copyright 2006, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
@@ -276,7 +276,7 @@ protected:
 };
 
 #ifndef __WXUNIVERSAL__
-    #if defined(__WXGTK20__)
+    #if defined(__WXGTK20__) && !defined(__WXGTK3__)
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartgtk.h"
         #define wxAuiDefaultTabArt wxAuiGtkTabArt

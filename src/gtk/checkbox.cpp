@@ -15,6 +15,7 @@
 #include "wx/checkbox.h"
 
 #include <gtk/gtk.h>
+#include "wx/gtk/private/gtk2-compat.h"
 
 //-----------------------------------------------------------------------------
 // data
@@ -224,13 +225,13 @@ bool wxCheckBox::Enable( bool enable )
 
 void wxCheckBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_widgetCheckbox, style);
-    gtk_widget_modify_style(m_widgetLabel, style);
+    GTKApplyStyle(m_widgetCheckbox, style);
+    GTKApplyStyle(m_widgetLabel, style);
 }
 
 GdkWindow *wxCheckBox::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return GTK_BUTTON(m_widgetCheckbox)->event_window;
+    return gtk_button_get_event_window(GTK_BUTTON(m_widgetCheckbox));
 }
 
 // static

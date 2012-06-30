@@ -18,7 +18,9 @@
     #include "wx/tooltip.h"
 #endif
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 #include <gdk/gdkkeysyms.h>
 #if GTK_CHECK_VERSION(3,0,0)
@@ -547,8 +549,8 @@ void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
     {
         GtkWidget *widget = GTK_WIDGET( node->GetData()->button );
 
-        gtk_widget_modify_style( widget, style );
-        gtk_widget_modify_style(gtk_bin_get_child(GTK_BIN(widget)), style);
+        GTKApplyStyle(widget, style);
+        GTKApplyStyle(gtk_bin_get_child(GTK_BIN(widget)), style);
 
         node = node->GetNext();
     }

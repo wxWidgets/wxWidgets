@@ -26,6 +26,7 @@ extern "C" {
 
 class WXDLLIMPEXP_CORE wxControl : public wxControlBase
 {
+    typedef wxControlBase base_type;
 public:
     wxControl();
     wxControl(wxWindow *parent, wxWindowID id,
@@ -43,8 +44,10 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxControlNameStr);
 
-
     virtual wxVisualAttributes GetDefaultAttributes() const;
+#ifdef __WXGTK3__
+    virtual bool SetFont(const wxFont& font);
+#endif
 
 protected:
     virtual wxSize DoGetBestSize() const;

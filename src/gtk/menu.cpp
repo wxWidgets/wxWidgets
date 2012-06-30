@@ -24,7 +24,10 @@
 
 #include "wx/accel.h"
 #include "wx/stockitem.h"
+
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/mnemonics.h"
 
 // we use normal item but with a special id for the menu title
@@ -138,7 +141,7 @@ DetachFromFrame(wxMenu* menu, wxFrame* frame)
         // Note that wxGetTopLevelParent() is really needed because this frame
         // can be an MDI child frame which is a fake frame and not a TLW at all
         GtkWindow * const tlw = GTK_WINDOW(wxGetTopLevelParent(frame)->m_widget);
-        if (g_slist_find(menu->m_accel->acceleratables, tlw))
+        if (g_slist_find(gtk_accel_groups_from_object(G_OBJECT(tlw)), menu->m_accel))
             gtk_window_remove_accel_group(tlw, menu->m_accel);
     }
 
@@ -159,7 +162,7 @@ AttachToFrame(wxMenu* menu, wxFrame* frame)
     if (menu->m_accel)
     {
         GtkWindow * const tlw = GTK_WINDOW(wxGetTopLevelParent(frame)->m_widget);
-        if (!g_slist_find(menu->m_accel->acceleratables, tlw))
+        if (!g_slist_find(gtk_accel_groups_from_object(G_OBJECT(tlw)), menu->m_accel))
             gtk_window_add_accel_group(tlw, menu->m_accel);
     }
 
@@ -899,6 +902,9 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         return NULL;
 
     GtkWidget * const mitem = item->GetMenuItem();
+#ifdef __WXGTK3__
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
+#else
     if (!gtk_check_version(2,12,0))
     {
         // gtk_menu_item_remove_submenu() is deprecated since 2.12, but
@@ -913,6 +919,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         // instead.
         gtk_menu_item_remove_submenu(GTK_MENU_ITEM(mitem));
     }
+#endif
 
     gtk_widget_destroy(mitem);
     item->SetMenuItem(NULL);

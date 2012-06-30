@@ -3193,14 +3193,14 @@ typedef struct _GdkDragContext  GdkDragContext;
     typedef unsigned long GdkAtom;
 #endif
 
-#if !defined(__WXGTK30__)
+#if !defined(__WXGTK3__)
     typedef struct _GdkColormap GdkColormap;
     typedef struct _GdkFont GdkFont;
     typedef struct _GdkGC GdkGC;
     typedef struct _GdkRegion GdkRegion;
 #endif
 
-#if defined(__WXGTK30__)
+#if defined(__WXGTK3__)
     typedef struct _GdkWindow GdkWindow;
 #elif defined(__WXGTK20__)
     typedef struct _GdkDrawable GdkWindow;

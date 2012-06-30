@@ -52,8 +52,8 @@ protected:
 
 public:     // used by the GTK callback only
 
-    void SetGdkColor(const GdkColor& gdkColor)
-        { m_colour = wxColor(gdkColor); }
+    void GTKSetColour(const wxColour& colour)
+        { m_colour = colour; }
 
     wxWindow *m_topParent;
 

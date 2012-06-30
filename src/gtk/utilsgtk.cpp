@@ -57,6 +57,8 @@
     #include "wx/unix/utilsx11.h"
 #endif
 
+#include "wx/gtk/private/gtk2-compat.h"
+
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -73,13 +75,15 @@ void wxBell()
 }
 
 // ----------------------------------------------------------------------------
-// display characterstics
+// display characteristics
 // ----------------------------------------------------------------------------
 
+#ifdef GDK_WINDOWING_X11
 void *wxGetDisplay()
 {
-    return GDK_DISPLAY();
+    return GDK_DISPLAY_XDISPLAY(gtk_widget_get_display(wxGetRootWindow()));
 }
+#endif
 
 void wxDisplaySize( int *width, int *height )
 {
@@ -105,7 +109,7 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
-    return gtk_widget_get_visual(wxGetRootWindow())->depth;
+    return gdk_visual_get_depth(gtk_widget_get_visual(wxGetRootWindow()));
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
@@ -166,7 +170,9 @@ const gchar *wx_pango_version_check (int major, int minor, int micro)
     //       added in pango-1.4 or earlier since GTK 2.4 (our minimum requirement
     //       for GTK lib) required pango 1.4...
 
-#ifdef PANGO_VERSION_MAJOR
+#ifdef __WXGTK3__
+    return pango_version_check(major, minor, micro);
+#elif defined(PANGO_VERSION_MAJOR)
     if (!gtk_check_version (2,11,0))
     {
         // GTK+ 2.11 requires Pango >= 1.15.3 and pango_version_check
@@ -184,7 +190,6 @@ const gchar *wx_pango_version_check (int major, int minor, int micro)
     return "too old headers";
 #endif
 }
-
 
 // ----------------------------------------------------------------------------
 // subprocess routines
@@ -288,7 +293,11 @@ wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 #if wxUSE_INTL && defined(__UNIX__)
 void wxGUIAppTraits::SetLocale()
 {
+#ifdef __WXGTK3__
+    setlocale(LC_ALL, "");
+#else
     gtk_set_locale();
+#endif
     wxUpdateLocaleIsUtf8();
 }
 #endif
@@ -465,7 +474,9 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
     wxString usage;
 
 #ifdef __WXGTK26__
+#ifndef __WXGTK3__
     if (!gtk_check_version(2,6,0))
+#endif
     {
         // since GTK>=2.6, we can use the glib_check_version() symbol...
 

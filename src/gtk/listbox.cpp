@@ -25,15 +25,15 @@
     #include "wx/arrstr.h"
 #endif
 
-#include "wx/gtk/private.h"
-#include "wx/gtk/private/object.h"
-#include "wx/gtk/treeentry_gtk.h"
-
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif
 
 #include <gtk/gtk.h>
+#include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/object.h"
+#include "wx/gtk/treeentry_gtk.h"
 
 #include <gdk/gdkkeysyms.h>
 #if GTK_CHECK_VERSION(3,0,0)
@@ -816,7 +816,7 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
     // need to translate from master window since it is in client coords
     gint binx, biny;
     gdk_window_get_geometry(gtk_tree_view_get_bin_window(m_treeview),
-                            &binx, &biny, NULL, NULL, NULL);
+                            &binx, &biny, NULL, NULL);
 
     GtkTreePath* path;
     if ( !gtk_tree_view_get_path_at_pos
@@ -857,6 +857,9 @@ GdkWindow *wxListBox::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 
 void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
+#ifdef __WXGTK3__
+    // don't know if this is even necessary, or how to do it
+#else
     if (m_hasBgCol && m_backgroundColour.IsOk())
     {
         GdkWindow *window = gtk_tree_view_get_bin_window(m_treeview);
@@ -867,8 +870,9 @@ void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
             gdk_window_clear( window );
         }
     }
+#endif
 
-    gtk_widget_modify_style( GTK_WIDGET(m_treeview), style );
+    GTKApplyStyle(GTK_WIDGET(m_treeview), style);
 }
 
 wxSize wxListBox::DoGetBestSize() const

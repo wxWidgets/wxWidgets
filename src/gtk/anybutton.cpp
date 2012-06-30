@@ -19,7 +19,8 @@
 
 #include "wx/stockitem.h"
 
-#include "wx/gtk/private.h"
+#include <gtk/gtk.h>
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -87,7 +88,7 @@ bool wxAnyButton::Enable( bool enable )
 
 GdkWindow *wxAnyButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return GTK_BUTTON(m_widget)->event_window;
+    return gtk_button_get_event_window(GTK_BUTTON(m_widget));
 }
 
 // static

@@ -1652,9 +1652,6 @@
 #define __WXGTK26__
 #define __WXGTK210__
 #define __WXGTK218__
-
-// Alternatively, all the above symbols could be commented and this one
-// uncommented if using GTK+ 3.
-//#define __WXGTK30__
+//#define __WXGTK3__
 
 #endif // _WX_SETUP_H_

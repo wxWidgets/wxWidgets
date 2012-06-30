@@ -86,8 +86,12 @@ private:
 
 bool wxGtkPrintModule::OnInit()
 {
+#ifndef __WXGTK3__
     if (gtk_check_version(2,10,0) == NULL)
+#endif
+    {
         wxPrintFactory::SetPrintFactory( new wxGtkPrintFactory );
+    }
     return true;
 }
 
@@ -1705,9 +1709,11 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     y = wxCoord(YLOG2DEV(y));
     int bw = bitmap.GetWidth();
     int bh = bitmap.GetHeight();
+#ifndef __WXGTK3__
     wxBitmap bmpSource = bitmap;  // we need a non-const instance.
     if (!useMask && !bitmap.HasPixbuf() && bitmap.GetMask())
         bmpSource.SetMask(NULL);
+#endif
 
     cairo_save(m_cairo);
 
@@ -1719,12 +1725,16 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     wxDouble scaleY = (wxDouble) YLOG2DEVREL(bh) / (wxDouble) bh;
     cairo_scale(m_cairo, scaleX, scaleY);
 
+#ifdef __WXGTK3__
+    bitmap.Draw(m_cairo, 0, 0, useMask, &m_textForegroundColour, &m_textBackgroundColour);
+#else
     gdk_cairo_set_source_pixbuf(m_cairo, bmpSource.GetPixbuf(), 0, 0);
     cairo_pattern_set_filter(cairo_get_source(m_cairo), CAIRO_FILTER_NEAREST);
     // Use the original size here since the context is scaled already.
     cairo_rectangle(m_cairo, 0, 0, bw, bh);
     // Fill the rectangle using the pattern.
     cairo_fill(m_cairo);
+#endif
 
     CalcBoundingBox(0,0);
     CalcBoundingBox(bw,bh);

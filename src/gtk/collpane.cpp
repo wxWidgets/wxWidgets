@@ -24,7 +24,9 @@
 #include "wx/sizer.h"
 #include "wx/panel.h"
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // the lines below duplicate the same definitions in collpaneg.cpp, if we have
 // another implementation of this class we should extract them to a common file
@@ -220,10 +222,12 @@ wxSize wxCollapsiblePane::DoGetBestSize() const
     wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
 
     GtkRequisition req;
-    req.width = 2;
-    req.height = 2;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
-            (m_widget, &req );
+#ifdef __WXGTK3__
+    gtk_widget_get_preferred_width(m_widget, NULL, &req.width);
+    gtk_widget_get_preferred_height_for_width(m_widget, req.width, NULL, &req.height);
+#else
+    GTK_WIDGET_GET_CLASS(m_widget)->size_request(m_widget, &req);
+#endif
 
     // notice that we do not cache our best size here as it changes
     // all times the user expands/hide our pane

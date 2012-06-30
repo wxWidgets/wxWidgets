@@ -82,8 +82,12 @@ namespace
 
 inline bool UseNative()
 {
+#ifdef __WXGTK3__
+    return true;
+#else
     // native GtkInfoBar widget is only available in GTK+ 2.18 and later
     return gtk_check_version(2, 18, 0) == 0;
+#endif
 }
 
 } // anonymous namespace
@@ -275,7 +279,7 @@ void wxInfoBar::DoApplyWidgetStyle(GtkRcStyle *style)
     wxInfoBarGeneric::DoApplyWidgetStyle(style);
 
     if ( UseNative() )
-        gtk_widget_modify_style(m_impl->m_label, style);
+        GTKApplyStyle(m_impl->m_label, style);
 }
 
 #endif // wxUSE_INFOBAR

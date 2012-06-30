@@ -15,7 +15,9 @@
 
 #include "wx/toolbar.h"
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -174,7 +176,11 @@ enter_notify_event(GtkWidget*, GdkEventCrossing* event, wxToolBarTool* tool)
 
 extern "C" {
 static gboolean
+#ifdef __WXGTK3__
+image_draw(GtkWidget* widget, cairo_t* cr, wxToolBarTool* tool)
+#else
 image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
+#endif
 {
     const wxBitmap& bitmap = tool->GetDisabledBitmap();
     if (tool->IsEnabled() || !bitmap.IsOk())
@@ -185,12 +191,16 @@ image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
     gtk_widget_get_allocation(widget, &alloc);
     GtkRequisition req;
     gtk_widget_get_requisition(widget, &req);
+    const int x = alloc.x + (alloc.width - req.width) / 2;
+    const int y = alloc.y + (alloc.height - req.height) / 2;
+#ifdef __WXGTK3__
+    bitmap.Draw(cr, x, y);
+#else
     gdk_draw_pixbuf(
         gtk_widget_get_window(widget), gtk_widget_get_style(widget)->black_gc, bitmap.GetPixbuf(),
-        0, 0,
-        alloc.x + (alloc.width - req.width) / 2,
-        alloc.y + (alloc.height - req.height) / 2,
+        0, 0, x, y,
         -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0);
+#endif
     return true;
 }
 }
@@ -341,11 +351,13 @@ void wxToolBar::Init()
 
 wxToolBar::~wxToolBar()
 {
+#ifndef __WXGTK3__
     if (m_tooltips) // always NULL if GTK >= 2.12
     {
         gtk_object_destroy(GTK_OBJECT(m_tooltips));
         g_object_unref(m_tooltips);
     }
+#endif
 }
 
 bool wxToolBar::Create( wxWindow *parent,
@@ -366,7 +378,7 @@ bool wxToolBar::Create( wxWindow *parent,
     FixupStyle();
 
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
-#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
+#ifndef __WXGTK3__
     if (gtk_check_version(2, 12, 0))
     {
         m_tooltips = gtk_tooltips_new();
@@ -425,7 +437,7 @@ void wxToolBar::GtkSetStyle()
             style = GTK_TOOLBAR_BOTH_HORIZ;
     }
 
-#if GTK_CHECK_VERSION(3,0,0) || defined(GTK_DISABLE_DEPRECATED)
+#ifdef __WXGTK3__
     gtk_orientable_set_orientation(GTK_ORIENTABLE(m_toolbar), orient);
 #else
     gtk_toolbar_set_orientation(m_toolbar, orient);
@@ -513,8 +525,13 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                     GTK_TOOL_BUTTON(tool->m_item), image);
                 tool->SetImage();
                 gtk_widget_show(image);
+#ifdef __WXGTK3__
+                g_signal_connect(image, "draw",
+                    G_CALLBACK(image_draw), tool);
+#else
                 g_signal_connect(image, "expose_event",
                     G_CALLBACK(image_expose_event), tool);
+#endif
             }
             if (!tool->GetLabel().empty())
             {
@@ -534,7 +551,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                 else
 #endif
                 {
-#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
+#ifndef __WXGTK3__
                     gtk_tool_item_set_tooltip(tool->m_item,
                         m_tooltips, wxGTK_CONV(tool->GetShortHelp()), "");
 #endif
@@ -602,7 +619,7 @@ bool wxToolBar::DoDeleteTool(size_t /* pos */, wxToolBarToolBase* toolBase)
         GtkWidget* widget = tool->GetControl()->m_widget;
         gtk_container_remove(GTK_CONTAINER(gtk_widget_get_parent(widget)), widget);
     }
-    gtk_object_destroy(GTK_OBJECT(tool->m_item));
+    gtk_widget_destroy(GTK_WIDGET(tool->m_item));
     tool->m_item = NULL;
 
     InvalidateBestSize();
@@ -708,7 +725,7 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
             else
 #endif
             {
-#if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
+#ifndef __WXGTK3__
                 gtk_tool_item_set_tooltip(tool->m_item,
                     m_tooltips, wxGTK_CONV(helpString), "");
 #endif

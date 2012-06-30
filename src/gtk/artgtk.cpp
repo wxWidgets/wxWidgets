@@ -21,6 +21,8 @@
 #endif
 
 #include "wx/artprov.h"
+
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 // compatibility with older GTK+ versions:
@@ -303,6 +305,7 @@ wxIconBundle
 wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
                                     const wxArtClient& WXUNUSED(client))
 {
+    wxIconBundle bundle;
     const wxString stockid = wxArtIDToStock(id);
 
     // try to load the bundle as stock icon first
@@ -313,7 +316,7 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
         GtkIconSize *sizes;
         gint n_sizes;
         gtk_icon_set_get_sizes(iconset, &sizes, &n_sizes);
-        wxIconBundle bundle = DoCreateIconBundle
+        bundle = DoCreateIconBundle
                               (
                                   stockid.utf8_str(),
                                   sizes, sizes + n_sizes,
@@ -325,7 +328,9 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
 
     // otherwise try icon themes
 #ifdef __WXGTK26__
+#ifndef __WXGTK3__
     if ( !gtk_check_version(2,6,0) )
+#endif
     {
         gint *sizes = gtk_icon_theme_get_icon_sizes
                       (
@@ -333,24 +338,23 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
                           stockid.utf8_str()
                       );
         if ( !sizes )
-            return wxNullIconBundle;
+            return bundle;
 
         gint *last = sizes;
         while ( *last )
             last++;
 
-        wxIconBundle bundle = DoCreateIconBundle
+        bundle = DoCreateIconBundle
                               (
                                   stockid.utf8_str(),
                                   sizes, last,
                                   &CreateThemeIcon
                               );
         g_free(sizes);
-        return bundle;
     }
 #endif // __WXGTK26__
 
-    return wxNullIconBundle;
+    return bundle;
 }
 
 // ----------------------------------------------------------------------------
