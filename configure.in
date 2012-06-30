@@ -1182,6 +1182,11 @@ else
 fi
 
 if test "x$OSX_ARCH_OPTS" != "x"; then
+    dnl Check if there is more than one architecture
+    if echo $OSX_ARCH_OPTS | grep -q ","; then
+        disable_macosx_deps=yes
+    fi     
+
     OSX_ARCH_OPTS=`echo $OSX_ARCH_OPTS | sed -e 's/^/-arch /' -e 's/,/ -arch /g'`
 
     CXXFLAGS="$OSX_ARCH_OPTS $CXXFLAGS"
@@ -8215,9 +8220,11 @@ dnl at which time, this hack can be removed.
 
 if test "$wxUSE_MAC" = 1 ; then
     if test "x$wxUSE_UNIVERSAL_BINARY" != "xno" ; then
-        sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
-        mv temp bk-deps
-        chmod +x bk-deps
+        if test "x$disable_macosx_deps" = "xyes"; then
+	    sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
+	    mv temp bk-deps
+            chmod +x bk-deps
+	fi
     fi
 fi
 
