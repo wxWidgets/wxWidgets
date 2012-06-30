@@ -154,10 +154,8 @@ wxStaticBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
-    const int BORDER = 5; // FIXME: hardcoded value
-
     *borderTop = GetCharHeight();
-    *borderOther = BORDER;
+    *borderOther = GetCharWidth()/2;
 }
 
 #endif // wxUSE_STATBOX
