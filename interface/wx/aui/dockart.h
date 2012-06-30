@@ -8,66 +8,171 @@
 
 
 /**
-    @todo TOWRITE
+    These are the possible pane dock art settings for wxAuiDefaultDockArt.
+
+    @library{wxaui}
+    @category{aui}
+
 */
 enum wxAuiPaneDockArtSetting
 {
+
+    /// Customizes the sash size
     wxAUI_DOCKART_SASH_SIZE = 0,
+
+    /// Customizes the caption size
     wxAUI_DOCKART_CAPTION_SIZE = 1,
+
+    /// Customizes the gripper size
     wxAUI_DOCKART_GRIPPER_SIZE = 2,
+
+    /// Customizes the pane border size
     wxAUI_DOCKART_PANE_BORDER_SIZE = 3,
+
+    /// Customizes the pane button size
     wxAUI_DOCKART_PANE_BUTTON_SIZE = 4,
+
+    /// Customizes the background colour, which corresponds to the client area.
     wxAUI_DOCKART_BACKGROUND_COLOUR = 5,
+
+    /// Customizes the sash colour
     wxAUI_DOCKART_SASH_COLOUR = 6,
+
+    /// Customizes the active caption colour
     wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR = 7,
+
+    /// Customizes the active caption gradient colour
     wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR = 8,
+
+    /// Customizes the inactive caption colour
     wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR = 9,
+
+    /// Customizes the inactive gradient caption colour
     wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR = 10,
+
+    /// Customizes the active caption text colour
     wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR = 11,
+
+    /// Customizes the inactive caption text colour
     wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR = 12,
+
+    /// Customizes the border colour
     wxAUI_DOCKART_BORDER_COLOUR = 13,
+
+    /// Customizes the gripper colour
     wxAUI_DOCKART_GRIPPER_COLOUR = 14,
+
+    /// Customizes the caption font
     wxAUI_DOCKART_CAPTION_FONT = 15,
+
+    /// Customizes the gradient type (no gradient, vertical or horizontal)
     wxAUI_DOCKART_GRADIENT_TYPE = 16
+
 };
 
 /**
-    @todo TOWRITE
+    These are the possible gradient dock art settings for wxAuiDefaultDockArt
+
 */
 enum wxAuiPaneDockArtGradients
 {
+    /// No gradient on the captions, in other words a solid colour
     wxAUI_GRADIENT_NONE = 0,
+
+    /// Vertical gradient on the captions, in other words a gradal change in colours from top to bottom
     wxAUI_GRADIENT_VERTICAL = 1,
+
+    /// Horizontal gradient on the captions, in other words a gradual change in colours from left to right
     wxAUI_GRADIENT_HORIZONTAL = 2
 };
 
 /**
-    @todo TOWRITE
+    These are the possible pane button / wxAuiNotebook button / wxAuiToolBar button states.
 */
 enum wxAuiPaneButtonState
 {
+    /// Normal button state
     wxAUI_BUTTON_STATE_NORMAL = 0,
-    wxAUI_BUTTON_STATE_HOVER = 1,
-    wxAUI_BUTTON_STATE_PRESSED = 2
+
+    /// Hovered button state
+    wxAUI_BUTTON_STATE_HOVER = 1 << 1,
+
+    /// Pressed button state
+    wxAUI_BUTTON_STATE_PRESSED = 1 << 2,
+
+    /// Disabled button state
+    wxAUI_BUTTON_STATE_DISABLED = 1 << 3,
+
+    /// Hidden button state
+    wxAUI_BUTTON_STATE_HIDDEN   = 1 << 4,
+
+    /// Checked button state
+    wxAUI_BUTTON_STATE_CHECKED  = 1 << 5
 };
 
 /**
-    @todo TOWRITE
+    These are the possible pane button / wxAuiNotebook button / wxAuiToolBar button identifiers.
+
 */
 enum wxAuiButtonId
 {
+    /// Shows a close button on the pane
     wxAUI_BUTTON_CLOSE = 101,
+
+    /// Shows a maximize/restore button on the pane
     wxAUI_BUTTON_MAXIMIZE_RESTORE = 102,
+
+    /// Shows a minimize button on the pane
     wxAUI_BUTTON_MINIMIZE = 103,
+
+    /**
+        Shows a pin button on the pane
+     */
     wxAUI_BUTTON_PIN = 104,
+
+    /**
+        Shows an option button on the pane (not implemented)
+     */
     wxAUI_BUTTON_OPTIONS = 105,
+
+    /**
+        Shows a window list button on the pane (for wxAuiNotebook)
+     */
     wxAUI_BUTTON_WINDOWLIST = 106,
-    wxAUI_BUTTON_LEFT = 107,
-    wxAUI_BUTTON_RIGHT = 108,
+
+    /**
+        Shows a left button on the pane (for wxAuiNotebook)
+     */
+     wxAUI_BUTTON_LEFT = 107,
+
+    /**
+        Shows a right button on the pane (for wxAuiNotebook)
+     */
+     wxAUI_BUTTON_RIGHT = 108,
+
+    /**
+        Shows an up button on the pane (not implemented)
+     */
     wxAUI_BUTTON_UP = 109,
+
+    /**
+        Shows a down button on the pane (not implemented)
+     */
     wxAUI_BUTTON_DOWN = 110,
+
+    /**
+        Shows one of three possible custom buttons on the pane (not implemented)
+     */
     wxAUI_BUTTON_CUSTOM1 = 201,
+
+    /**
+        Shows one of three possible custom buttons on the pane (not implemented)
+     */
     wxAUI_BUTTON_CUSTOM2 = 202,
+
+    /**
+        Shows one of three possible custom buttons on the pane (not implemented)
+     */
     wxAUI_BUTTON_CUSTOM3 = 203
 };
 

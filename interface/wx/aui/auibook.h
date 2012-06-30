@@ -9,7 +9,9 @@
 /**
     @class wxAuiNotebook
 
-    wxAuiNotebook is part of the wxAUI class framework.
+    wxAuiNotebook is part of the wxAUI class framework, which represents a
+    notebook control, managing multiple windows with associated tabs.
+
     See also @ref overview_aui.
 
     wxAuiNotebook is a notebook control which implements many features common in
@@ -368,14 +370,138 @@ public:
     bool ShowWindowMenu();
 };
 
+/**
+    @class wxAuiTabContainerButton
+
+    A simple class which holds information about wxAuiNotebook tab buttons and their state.
+
+    @library{wxaui}
+    @category{aui}
+*/
+class wxAuiTabContainerButton
+{
+public:
+    /// button's id
+    int id;
+    /// current state (normal, hover, pressed, etc.)
+    int curState;
+    /// buttons location (wxLEFT, wxRIGHT, or wxCENTER)
+    int location;
+    /// button's hover bitmap
+    wxBitmap bitmap;
+    /// button's disabled bitmap
+    wxBitmap disBitmap;
+    /// button's hit rectangle
+    wxRect rect;
+};
+
+
+/**
+    @class wxAuiTabContainer
+
+    wxAuiTabContainer is a class which contains information about each tab.
+    It also can render an entire tab control to a specified DC.
+    It's not a window class itself, because this code will be used by
+    the wxAuiNotebook, where it is disadvantageous to have separate
+    windows for each tab control in the case of "docked tabs".
+
+    A derived class, wxAuiTabCtrl, is an actual wxWindow - derived window
+    which can be used as a tab control in the normal sense.
+
+    @library{wxaui}
+    @category{aui}
+*/
+class wxAuiTabContainer
+{
+public:
+
+    /**
+        Default ctor.
+    */
+    wxAuiTabContainer();
+
+    /**
+        Default dtor.
+    */
+    virtual ~wxAuiTabContainer();
+
+    void SetArtProvider(wxAuiTabArt* art);
+    wxAuiTabArt* GetArtProvider() const;
+
+    void SetFlags(unsigned int flags);
+    unsigned int GetFlags() const;
+
+    bool AddPage(wxWindow* page, const wxAuiNotebookPage& info);
+    bool InsertPage(wxWindow* page, const wxAuiNotebookPage& info, size_t idx);
+    bool MovePage(wxWindow* page, size_t newIdx);
+    bool RemovePage(wxWindow* page);
+    bool SetActivePage(wxWindow* page);
+    bool SetActivePage(size_t page);
+    void SetNoneActive();
+    int GetActivePage() const;
+    bool TabHitTest(int x, int y, wxWindow** hit) const;
+    bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const;
+    wxWindow* GetWindowFromIdx(size_t idx) const;
+    int GetIdxFromWindow(wxWindow* page) const;
+    size_t GetPageCount() const;
+    wxAuiNotebookPage& GetPage(size_t idx);
+    const wxAuiNotebookPage& GetPage(size_t idx) const;
+    wxAuiNotebookPageArray& GetPages();
+    void SetNormalFont(const wxFont& normalFont);
+    void SetSelectedFont(const wxFont& selectedFont);
+    void SetMeasuringFont(const wxFont& measuringFont);
+    void SetColour(const wxColour& colour);
+    void SetActiveColour(const wxColour& colour);
+    void DoShowHide();
+    void SetRect(const wxRect& rect);
+
+    void RemoveButton(int id);
+    void AddButton(int id,
+                   int location,
+                   const wxBitmap& normalBitmap = wxNullBitmap,
+                   const wxBitmap& disabledBitmap = wxNullBitmap);
+
+    size_t GetTabOffset() const;
+    void SetTabOffset(size_t offset);
+
+    // Is the tab visible?
+    bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
+
+    // Make the tab visible if it wasn't already
+    void MakeTabVisible(int tabPage, wxWindow* win);
+
+protected:
+
+    virtual void Render(wxDC* dc, wxWindow* wnd);
+
+protected:
+
+    wxAuiTabArt* m_art;
+    wxAuiNotebookPageArray m_pages;
+    wxAuiTabContainerButtonArray m_buttons;
+    wxAuiTabContainerButtonArray m_tabCloseButtons;
+    wxRect m_rect;
+    size_t m_tabOffset;
+    unsigned int m_flags;
+};
+
 
 
 /**
     @class wxAuiTabArt
 
-    Tab art class.
+    Tab art provider defines all the drawing functions used by wxAuiNotebook.
 
-    @todo BETTER DESCRIPTION NEEDED
+    This allows the wxAuiNotebook to have a pluggable look-and-feel.
+
+    By default, a wxAuiNotebook uses an instance of this class called
+    wxAuiDefaultTabArt which provides bitmap art and a colour scheme that is
+    adapted to the major platforms' look. You can either derive from that class
+    to alter its behaviour or write a completely new tab art class.
+
+    Another example of creating a new wxAuiNotebook tab bar is wxAuiSimpleTabArt.
+
+    Call wxAuiNotebook::SetArtProvider() to make use of this new tab art.
 
     @library{wxaui}
     @category{aui}
@@ -523,3 +649,202 @@ public:
     wxEvent *Clone();
 };
 
+/**
+    Default art provider for wxAuiNotebook.
+
+    @see wxAuiTabArt
+
+    @genericAppearance{auidefaulttabart.png}
+
+    @library{wxaui}
+    @category{aui}
+*/
+
+class wxAuiDefaultTabArt : public wxAuiTabArt
+{
+public:
+
+    wxAuiDefaultTabArt();
+    virtual ~wxAuiDefaultTabArt();
+
+    wxAuiTabArt* Clone();
+    void SetFlags(unsigned int flags);
+    void SetSizingInfo(const wxSize& tabCtrlSize,
+                       size_t tabCount);
+
+    void SetNormalFont(const wxFont& font);
+    void SetSelectedFont(const wxFont& font);
+    void SetMeasuringFont(const wxFont& font);
+    void SetColour(const wxColour& colour);
+    void SetActiveColour(const wxColour& colour);
+
+    void DrawBackground(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& rect);
+
+    void DrawTab(wxDC& dc,
+                 wxWindow* wnd,
+                 const wxAuiNotebookPage& pane,
+                 const wxRect& inRect,
+                 int closeButtonState,
+                 wxRect* outTabRect,
+                 wxRect* outButtonRect,
+                 int* xExtent);
+
+    void DrawButton(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect);
+
+    int GetIndentSize();
+
+    wxSize GetTabSize(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxString& caption,
+                 const wxBitmap& bitmap,
+                 bool active,
+                 int closeButtonState,
+                 int* xExtent);
+
+    int ShowDropDown(
+                 wxWindow* wnd,
+                 const wxAuiNotebookPageArray& items,
+                 int activeIdx);
+
+    int GetBestTabCtrlSize(wxWindow* wnd,
+                 const wxAuiNotebookPageArray& pages,
+                 const wxSize& requiredBmpSize);
+
+protected:
+    /**
+        The font used for all tabs
+     */
+    wxFont m_normalFont;
+    wxFont m_selectedFont; /// The font used on the selected tab
+    wxFont m_measuringFont;
+    wxColour m_baseColour;
+    wxPen m_baseColourPen;
+    wxPen m_borderPen;
+    wxBrush m_baseColourBrush;
+    wxColour m_activeColour;
+    wxBitmap m_activeCloseBmp;
+    wxBitmap m_disabledCloseBmp;
+    wxBitmap m_activeLeftBmp;
+    wxBitmap m_disabledLeftBmp;
+    wxBitmap m_activeRightBmp;
+    wxBitmap m_disabledRightBmp;
+    wxBitmap m_activeWindowListBmp;
+    wxBitmap m_disabledWindowListBmp;
+
+    int m_fixedTabWidth;
+    int m_tabCtrlHeight;
+    unsigned int m_flags;
+};
+
+
+/**
+    @class wxAuiSimpleTabArt
+
+    Another standard tab art provider for wxAuiNotebook.
+
+    wxAuiSimpleTabArt is derived from wxAuiTabArt demonstrating how to write a
+    completely new tab art class. It can also be used as alternative to
+    wxAuiDefaultTabArt.
+
+    @genericAppearance{auisimpletabart.png}
+
+    @library{wxaui}
+    @category{aui}
+*/
+
+class wxAuiSimpleTabArt : public wxAuiTabArt
+{
+
+public:
+
+    wxAuiSimpleTabArt();
+    virtual ~wxAuiSimpleTabArt();
+
+    wxAuiTabArt* Clone();
+    void SetFlags(unsigned int flags);
+
+    void SetSizingInfo(const wxSize& tabCtrlSize,
+                       size_t tabCount);
+
+    void SetNormalFont(const wxFont& font);
+    void SetSelectedFont(const wxFont& font);
+    void SetMeasuringFont(const wxFont& font);
+    void SetColour(const wxColour& colour);
+    void SetActiveColour(const wxColour& colour);
+
+    void DrawBackground(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& rect);
+
+    void DrawTab(wxDC& dc,
+                 wxWindow* wnd,
+                 const wxAuiNotebookPage& pane,
+                 const wxRect& inRect,
+                 int closeButtonState,
+                 wxRect* outTabRect,
+                 wxRect* outButtonRect,
+                 int* xExtent);
+
+    void DrawButton(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect);
+
+    int GetIndentSize();
+
+    wxSize GetTabSize(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxString& caption,
+                 const wxBitmap& bitmap,
+                 bool active,
+                 int closeButtonState,
+                 int* xExtent);
+
+    int ShowDropDown(
+                 wxWindow* wnd,
+                 const wxAuiNotebookPageArray& items,
+                 int activeIdx);
+
+    int GetBestTabCtrlSize(wxWindow* wnd,
+                 const wxAuiNotebookPageArray& pages,
+                 const wxSize& requiredBmpSize);
+
+protected:
+
+    wxFont m_normalFont;
+    wxFont m_selectedFont;
+    wxFont m_measuringFont;
+    wxPen m_normalBkPen;
+    wxPen m_selectedBkPen;
+    wxBrush m_normalBkBrush;
+    wxBrush m_selectedBkBrush;
+    wxBrush m_bkBrush;
+    wxBitmap m_activeCloseBmp;
+    wxBitmap m_disabledCloseBmp;
+    wxBitmap m_activeLeftBmp;
+    wxBitmap m_disabledLeftBmp;
+    wxBitmap m_activeRightBmp;
+    wxBitmap m_disabledRightBmp;
+    wxBitmap m_activeWindowListBmp;
+    wxBitmap m_disabledWindowListBmp;
+
+    int m_fixedTabWidth;
+    unsigned int m_flags;
+};

@@ -8,54 +8,125 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
+    wxAuiToolBarStyle is part of the wxAUI class framework, used to define the appearance of a wxAuiToolBar.
+
+    See also @ref overview_aui.
+
     @library{wxaui}
     @category{aui}
   */
 enum wxAuiToolBarStyle
 {
+    /**
+      Shows the text in the toolbar buttons; by default only icons are shown.
+    */
     wxAUI_TB_TEXT          = 1 << 0,
+
+    /**
+      Don't show tooltips on wxAuiToolBar items.
+    */
     wxAUI_TB_NO_TOOLTIPS   = 1 << 1,
+
+    /**
+      Do not auto-resize the wxAuiToolBar.
+    */
     wxAUI_TB_NO_AUTORESIZE = 1 << 2,
+
+    /**
+      Shows a gripper on the wxAuiToolBar.
+    */
     wxAUI_TB_GRIPPER       = 1 << 3,
+
+    /**
+      The wxAuiToolBar can contain overflow items.
+    */
     wxAUI_TB_OVERFLOW      = 1 << 4,
+
     /**
-      Using this style forces the toolbar to be vertical and be only dockable
-      to the left or right sides of the window whereas by default it can be
-      horizontal or vertical and be docked anywhere.
-      */
+      Using this style forces the toolbar to be vertical and be only dockable to the left or right sides of the window whereas by default it can be horizontal or vertical and be docked anywhere.
+    */
     wxAUI_TB_VERTICAL      = 1 << 5,
-    wxAUI_TB_HORZ_LAYOUT   = 1 << 6,
+
     /**
-      Analogous to wxAUI_TB_VERTICAL, but forces the toolbar
-      to be horizontal
-      */
+      Shows the text and the icons alongside, not vertically stacked. This style must be used with wxAUI_TB_TEXT
+    */
+    wxAUI_TB_HORZ_LAYOUT   = 1 << 6,
+
+    /**
+      Analogous to wxAUI_TB_VERTICAL, but forces the toolbar to be horizontal, docking to the top or bottom of the window.
+    */
     wxAUI_TB_HORIZONTAL    = 1 << 7,
+
+    /**
+       Shows the text alongside the icons, not vertically stacked.
+    */
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
+
+    /**
+      Shows the text in the toolbar buttons; by default only icons are shown.
+    */
     wxAUI_ORIENTATION_MASK = (wxAUI_TB_VERTICAL | wxAUI_TB_HORIZONTAL),
+
+    /**
+      By default only icons are shown.
+    */
     wxAUI_TB_DEFAULT_STYLE = 0
+
 };
 
 /**
-  @library{wxaui}
-  @category{aui}
-  */
+    wxAuiToolBarArtSetting
+
+    @library{wxaui}
+    @category{aui}
+*/
 enum wxAuiToolBarArtSetting
 {
+    /**
+      wxAuiToolBar seperator size.
+    */
     wxAUI_TBART_SEPARATOR_SIZE = 0,
+
+    /**
+      wxAuiToolBar gripper size.
+    */
     wxAUI_TBART_GRIPPER_SIZE = 1,
+
+    /**
+      Overflow button size in wxAuiToolBar.
+    */
     wxAUI_TBART_OVERFLOW_SIZE = 2
+
 };
 
 /**
+  wxAuiToolBarToolTextOrientation
+
   @library{wxaui}
   @category{aui}
   */
 enum wxAuiToolBarToolTextOrientation
 {
-    wxAUI_TBTOOL_TEXT_LEFT = 0,     //!< unused/unimplemented
+    /**
+      Text in wxAuiToolBar items is left aligned, currently unused/unimplemented.
+    */
+    wxAUI_TBTOOL_TEXT_LEFT = 0,
+
+    /**
+      Text in wxAuiToolBar items is right aligned.
+    */
     wxAUI_TBTOOL_TEXT_RIGHT = 1,
-    wxAUI_TBTOOL_TEXT_TOP = 2,      //!< unused/unimplemented
+
+    /**
+      Text in wxAuiToolBar items is top aligned, currently unused/unimplemented.
+    */
+    wxAUI_TBTOOL_TEXT_TOP = 2,
+
+    /**
+      Text in wxAuiToolBar items is bottom aligned.
+    */
     wxAUI_TBTOOL_TEXT_BOTTOM = 3
+
 };
 
 
@@ -70,12 +141,24 @@ enum wxAuiToolBarToolTextOrientation
 class wxAuiToolBarEvent : public wxNotifyEvent
 {
 public:
+    /**
+      Returns whether the drop down menu has been clicked.
+    */
     bool IsDropDownClicked() const;
 
+    /**
+      Returns the point where the user clicked with the mouse.
+    */
     wxPoint GetClickPoint() const;
 
+    /**
+      Returns the wxAuiToolBarItem rectangle bounding the mouse click point.
+    */
     wxRect GetItemRect() const;
 
+    /**
+      Returns the wxAuiToolBarItem identifier.
+    */
     int GetToolId() const;
 };
 
@@ -83,8 +166,16 @@ public:
 /**
     @class wxAuiToolBarItem
 
-    wxAuiToolBarItem is part of the wxAUI class framework.
+    wxAuiToolBarItem is part of the wxAUI class framework, representing a toolbar element.
+
     See also @ref wxAuiToolBar and @ref overview_aui.
+
+    It has a unique id (except for the separators which always have id = -1), the
+    style (telling whether it is a normal button, separator or a control), the
+    state (toggled or not, enabled or not) and short and long help strings. The
+    default implementations use the short help string for the tooltip text which
+    is popped up when the mouse pointer enters the tool and the long help string
+    for the applications status bar (currently not implemented).
 
     @library{wxaui}
     @category{aui}
@@ -93,69 +184,196 @@ class wxAuiToolBarItem
 {
 public:
 
+    /**
+       Default Constructor
+    */
     wxAuiToolBarItem();
 
+    /**
+      Assigns the properties of the wxAuiToolBarItem "c" to this.
+    */
     wxAuiToolBarItem(const wxAuiToolBarItem& c);
 
+    /**
+       Assigns the properties of the wxAuiToolBarItem "c" to this, returning a pointer to this.
+    */
     wxAuiToolBarItem& operator=(const wxAuiToolBarItem& c);
 
+    /**
+      Assigns the properties of the wxAuiToolBarItem "c" to this.
+    */
     void Assign(const wxAuiToolBarItem& c);
 
+    /**
+      Assigns a window to the toolbar item.
+    */
     void SetWindow(wxWindow* w);
+    /**
+      Returns the wxWindow* associated to the toolbar item.
+    */
     wxWindow* GetWindow();
 
+    /**
+      Sets the toolbar item identifier.
+    */
     void SetId(int new_id);
+    /**
+      Returns the toolbar item identifier.
+    */
     int GetId() const;
 
+    /**
+      Sets the wxAuiToolBarItem kind.
+    */
     void SetKind(int new_kind);
+
+    /**
+      Returns the toolbar item kind.
+    */
     int GetKind() const;
 
+    /**
+
+    */
     void SetState(int new_state);
+    /**
+
+    */
     int GetState() const;
 
+    /**
+
+    */
     void SetSizerItem(wxSizerItem* s);
+    /**
+
+    */
     wxSizerItem* GetSizerItem() const;
 
+    /**
+
+    */
     void SetLabel(const wxString& s);
+    /**
+
+    */
     const wxString& GetLabel() const;
 
+    /**
+
+    */
     void SetBitmap(const wxBitmap& bmp);
+    /**
+
+    */
     const wxBitmap& GetBitmap() const;
 
+    /**
+
+    */
     void SetDisabledBitmap(const wxBitmap& bmp);
+    /**
+
+    */
     const wxBitmap& GetDisabledBitmap() const;
 
+    /**
+
+    */
     void SetHoverBitmap(const wxBitmap& bmp);
+    /**
+
+    */
     const wxBitmap& GetHoverBitmap() const;
 
+    /**
+
+    */
     void SetShortHelp(const wxString& s);
+    /**
+
+    */
     const wxString& GetShortHelp() const;
 
+    /**
+
+    */
     void SetLongHelp(const wxString& s);
+    /**
+
+    */
     const wxString& GetLongHelp() const;
 
+    /**
+
+    */
     void SetMinSize(const wxSize& s);
+    /**
+
+    */
     const wxSize& GetMinSize() const;
 
+    /**
+
+    */
     void SetSpacerPixels(int s);
+    /**
+
+    */
     int GetSpacerPixels() const;
 
+    /**
+
+    */
     void SetProportion(int p);
+    /**
+
+    */
     int GetProportion() const;
 
+    /**
+
+    */
     void SetActive(bool b);
+    /**
+
+    */
     bool IsActive() const;
 
+    /**
+
+    */
     void SetHasDropDown(bool b);
+    /**
+
+    */
     bool HasDropDown() const;
 
+    /**
+
+    */
     void SetSticky(bool b);
+    /**
+
+    */
     bool IsSticky() const;
 
+    /**
+
+    */
     void SetUserData(long l);
+    /**
+
+    */
     long GetUserData() const;
 
+    /**
+
+    */
     void SetAlignment(int l);
+    /**
+
+    */
     int GetAlignment() const;
 };
 

@@ -16,8 +16,11 @@ Classes:
 @li wxAuiNotebook
 @li wxAuiDockArt
 @li wxAuiTabArt
+@li wxAuiDefaultTabArt
 @li wxAuiToolBar
 @li wxAuiToolBarArt
+@li wxAuiTabContainer
+@li wxAuiTabContainerButton
 
 wxAUI stands for Advanced User Interface. It aims to give the user a cutting
 edge interface with floatable windows, and a user-customizable layout. The
