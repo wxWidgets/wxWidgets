@@ -82,7 +82,8 @@ public:
         ID_UI_CHECK_UPDATED,
         ID_CHANGE_TEXT1,
         ID_CHANGE_TEXT2,
-        ID_UI_CHANGE_TEXT_UPDATED
+        ID_UI_CHANGE_TEXT_UPDATED,
+        ID_REMOVE_PAGE
     };
 
     void OnEnableUpdateUI(wxUpdateUIEvent& evt);
@@ -127,7 +128,7 @@ public:
     void OnPositionLeftIcons(wxCommandEvent& evt);
     void OnPositionLeftBoth(wxCommandEvent& evt);
     void OnPositionLeftDropdown(wxRibbonToolBarEvent& evt);
-
+    void OnRemovePage(wxRibbonButtonBarEvent& evt);
     void OnTogglePanels(wxCommandEvent& evt);
 
     void OnExtButton(wxRibbonPanelEvent& evt);
@@ -226,6 +227,7 @@ EVT_MENU(ID_POSITION_TOP_ICONS, MyFrame::OnPositionTopIcons)
 EVT_MENU(ID_POSITION_TOP_BOTH, MyFrame::OnPositionTopBoth)
 EVT_TOGGLEBUTTON(ID_TOGGLE_PANELS, MyFrame::OnTogglePanels)
 EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(wxID_ANY, MyFrame::OnExtButton)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_REMOVE_PAGE, MyFrame::OnRemovePage)
 END_EVENT_TABLE()
 
 #include "align_center.xpm"
@@ -386,7 +388,12 @@ MyFrame::MyFrame()
         bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, wxT("Zero"), ribbon_xpm);
     }
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Empty Page"), empty_xpm);
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Another Page"), empty_xpm);
+    {
+        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Another Page"), empty_xpm);
+        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, wxT("Page manipulation"), ribbon_xpm);
+        wxRibbonButtonBar *bar = new wxRibbonButtonBar(panel, wxID_ANY);
+        bar->AddButton(ID_REMOVE_PAGE, wxT("Remove"), wxArtProvider::GetBitmap(wxART_DELETE, wxART_OTHER, wxSize(24, 24)));
+    }
 
     m_ribbon->Realize();
 
@@ -966,4 +973,14 @@ void MyFrame::SetArtProvider(wxRibbonArtProvider *prov)
     m_ribbon->Realize();
     m_ribbon->Thaw();
     GetSizer()->Layout();
+}
+
+void MyFrame::OnRemovePage(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    size_t n = m_ribbon->GetPageCount();
+    if(n > 0)
+    {
+        m_ribbon->DeletePage(n-1);
+        m_ribbon->Realize();
+    }
 }

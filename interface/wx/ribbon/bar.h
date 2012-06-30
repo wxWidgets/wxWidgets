@@ -207,12 +207,36 @@ public:
     wxRibbonPage* GetPage(int n);
     
     /**
+        Get the number of pages in this bar.
+
+        @since 2.9.4
+    */
+    size_t GetPageCount() const;
+
+    /**
         Dismiss the expanded panel of the currently active page.
         
-        Calls and returns the value fromwxRibbonPage::DismissExpandedPanel()
+        Calls and returns the value from wxRibbonPage::DismissExpandedPanel()
         for the currently active page, or @false if there is no active page.
     */
     bool DismissExpandedPanel();
+
+    /**
+        Delete a single page from this ribbon bar.
+
+        The user must call wxRibbonBar::Realize() after one (or more) calls to
+        this function.
+
+        @since 2.9.4
+    */
+    void DeletePage(size_t n);
+
+    /**
+        Delete all pages from the ribbon bar.
+
+        @since 2.9.4
+    */
+    void ClearPages();
 
     /**
         Shows or hides the panel area of the ribbon bar.

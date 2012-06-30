@@ -113,7 +113,11 @@ public:
     bool SetActivePage(wxRibbonPage* page);
     int GetActivePage() const;
     wxRibbonPage* GetPage(int n);
+    size_t GetPageCount() const;
     bool DismissExpandedPanel();
+
+    void DeletePage(size_t n);
+    void ClearPages();
 
     void ShowPanels(bool show = true);
     void HidePanels() { ShowPanels(false); }

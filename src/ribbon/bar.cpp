@@ -20,6 +20,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/art.h"
 #include "wx/dcbuffer.h"
+#include "wx/app.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -273,6 +274,72 @@ wxRibbonPage* wxRibbonBar::GetPage(int n)
     if(n < 0 || (size_t)n >= m_pages.GetCount())
         return 0;
     return m_pages.Item(n).page;
+}
+
+size_t wxRibbonBar::GetPageCount() const
+{
+    return m_pages.GetCount();
+}
+
+void wxRibbonBar::DeletePage(size_t n)
+{
+    if(n < m_pages.GetCount())
+    {
+        wxRibbonPage *page = m_pages.Item(n).page;
+
+        // Schedule page object for destruction and not destroying directly
+        // as this function can be called in an event handler and page functions
+        // can be called afeter removing.
+        // Like in wxRibbonButtonBar::OnMouseUp
+        if(!wxTheApp->IsScheduledForDestruction(page))
+        {
+            wxTheApp->ScheduleForDestruction(page);
+        }
+
+        m_pages.RemoveAt(n);
+
+        if(m_current_page == static_cast<int>(n))
+        {
+            m_current_page = -1;
+
+            if(m_pages.GetCount() > 0)
+            {
+                if(n >= m_pages.GetCount())
+                {
+                    SetActivePage(m_pages.GetCount() - 1);
+                }
+                else
+                {
+                    SetActivePage(n - 1);
+                }
+            }
+        }
+        else if(m_current_page > static_cast<int>(n))
+        {
+            m_current_page--;
+        }
+    }
+}
+
+void wxRibbonBar::ClearPages()
+{
+    size_t i;
+    for(i=0; i<m_pages.GetCount(); i++)
+    {
+        wxRibbonPage *page = m_pages.Item(i).page;
+        // Schedule page object for destruction and not destroying directly
+        // as this function can be called in an event handler and page functions
+        // can be called afeter removing.
+        // Like in wxRibbonButtonBar::OnMouseUp
+        if(!wxTheApp->IsScheduledForDestruction(page))
+        {
+            wxTheApp->ScheduleForDestruction(page);
+        }
+    }
+    m_pages.Empty();
+    Realize();
+    m_current_page = -1;
+    Refresh();
 }
 
 bool wxRibbonBar::SetActivePage(size_t page)
