@@ -53,6 +53,12 @@ extern int WXDLLIMPEXP_BASE wxEntry(int& argc, char **argv);
 
 #endif// wxUSE_UNICODE
 
+// Under Windows we define additional wxEntry() overloads with signature
+// compatible with WinMain() and not the traditional main().
+#if wxUSE_GUI && defined(__WINDOWS__)
+    #include "wx/msw/init.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // Using the library without (explicit) application object: you may avoid using
 // wxDECLARE_APP and wxIMPLEMENT_APP macros and call the functions below instead at

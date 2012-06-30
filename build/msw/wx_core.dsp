@@ -5240,6 +5240,10 @@ SOURCE=..\..\include\wx\msw\iniconf.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\init.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\joystick.h
 # End Source File
 # Begin Source File

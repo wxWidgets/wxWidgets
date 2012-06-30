@@ -6020,6 +6020,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\init.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\joystick.h"
 				>
 			</File>

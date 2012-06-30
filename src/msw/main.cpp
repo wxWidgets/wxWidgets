@@ -202,7 +202,7 @@ int wxEntry(int& argc, wxChar **argv)
 
 #endif // wxUSE_BASE
 
-#if wxUSE_GUI && defined(__WXMSW__)
+#if wxUSE_GUI
 
 namespace
 {
@@ -358,7 +358,9 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
 
     // remember the parameters Windows gave us
     wxSetInstance(hInstance);
+#ifdef __WXMSW__
     wxApp::m_nCmdShow = nCmdShow;
+#endif
 
     // parse the command line: we can't use pCmdLine in Unicode build so it is
     // simpler to never use it at all (this also results in a more correct
@@ -414,7 +416,7 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     return wxEntry(wxArgs.argc, wxArgs.argv);
 }
 
-#endif // wxUSE_GUI && __WXMSW__
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // global HINSTANCE

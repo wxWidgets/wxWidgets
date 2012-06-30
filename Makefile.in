@@ -3001,6 +3001,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \
+	wx/msw/init.h \
 	wx/msw/listbox.h \
 	wx/msw/listctrl.h \
 	wx/msw/mdi.h \
@@ -3520,6 +3521,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \
+	wx/msw/init.h \
 	wx/msw/listbox.h \
 	wx/msw/listctrl.h \
 	wx/msw/mdi.h \
