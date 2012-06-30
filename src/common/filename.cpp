@@ -812,7 +812,7 @@ static int wxOpenWithDeleteOnClose(const wxString& filename)
     DWORD attributes = FILE_ATTRIBUTE_TEMPORARY |
                        FILE_FLAG_DELETE_ON_CLOSE;
 
-    HANDLE h = ::CreateFile(filename.fn_str(), access, 0, NULL,
+    HANDLE h = ::CreateFile(filename.t_str(), access, 0, NULL,
                             disposition, attributes, NULL);
 
     return wxOpenOSFHandle(h, wxO_BINARY);
@@ -1318,11 +1318,7 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
         SHFILEOPSTRUCT fileop;
         wxZeroMemory(fileop);
         fileop.wFunc = FO_DELETE;
-    #if defined(__CYGWIN__) && defined(wxUSE_UNICODE)
-        fileop.pFrom = path.wc_str();
-    #else
-        fileop.pFrom = path.fn_str();
-    #endif
+        fileop.pFrom = path.t_str();
         fileop.fFlags = FOF_SILENT | FOF_NOCONFIRMATION;
     #ifndef __WXWINCE__
         // FOF_NOERRORUI is not defined in WinCE

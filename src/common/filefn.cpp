@@ -1537,7 +1537,7 @@ bool wxSetWorkingDirectory(const wxString& d)
     // No equivalent in WinCE
     wxUnusedVar(d);
 #else
-    success = (SetCurrentDirectory(d.fn_str()) != 0);
+    success = (SetCurrentDirectory(d.t_str()) != 0);
 #endif
 #else
     // Must change drive, too.
@@ -1765,7 +1765,7 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
     // quoting the MSDN: "To obtain a handle to a directory, call the
     // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag", but this
     // doesn't work under Win9x/ME but then it's not needed there anyhow
-    const DWORD dwAttr = ::GetFileAttributes(path.fn_str());
+    const DWORD dwAttr = ::GetFileAttributes(path.t_str());
     if ( dwAttr == INVALID_FILE_ATTRIBUTES )
     {
         // file probably doesn't exist at all
