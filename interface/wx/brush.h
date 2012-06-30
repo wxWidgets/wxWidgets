@@ -30,26 +30,29 @@ enum wxBrushStyle
     wxBRUSHSTYLE_STIPPLE = wxSTIPPLE,
         /**< Uses a bitmap as a stipple. */
 
-    wxBRUSHSTYLE_BDIAGONAL_HATCH = wxBDIAGONAL_HATCH,
+    wxBRUSHSTYLE_BDIAGONAL_HATCH,
         /**< Backward diagonal hatch. */
 
-    wxBRUSHSTYLE_CROSSDIAG_HATCH = wxCROSSDIAG_HATCH,
+    wxBRUSHSTYLE_CROSSDIAG_HATCH,
         /**< Cross-diagonal hatch. */
 
-    wxBRUSHSTYLE_FDIAGONAL_HATCH = wxFDIAGONAL_HATCH,
+    wxBRUSHSTYLE_FDIAGONAL_HATCH,
         /**< Forward diagonal hatch. */
 
-    wxBRUSHSTYLE_CROSS_HATCH = wxCROSS_HATCH,
+    wxBRUSHSTYLE_CROSS_HATCH,
         /**< Cross hatch. */
 
-    wxBRUSHSTYLE_HORIZONTAL_HATCH = wxHORIZONTAL_HATCH,
+    wxBRUSHSTYLE_HORIZONTAL_HATCH,
         /**< Horizontal hatch. */
 
-    wxBRUSHSTYLE_VERTICAL_HATCH = wxVERTICAL_HATCH,
+    wxBRUSHSTYLE_VERTICAL_HATCH,
         /**< Vertical hatch. */
 
-    wxBRUSHSTYLE_FIRST_HATCH = wxFIRST_HATCH,
-    wxBRUSHSTYLE_LAST_HATCH = wxLAST_HATCH,
+    wxBRUSHSTYLE_FIRST_HATCH,
+        /**< First of the hatch styles (inclusive). */
+
+    wxBRUSHSTYLE_LAST_HATCH
+        /**< Last of the hatch styles (inclusive). */
 };
 
 

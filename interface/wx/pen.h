@@ -64,8 +64,11 @@ enum wxPenStyle
     wxPENSTYLE_VERTICAL_HATCH,
         /**< Vertical hatch. */
 
-    wxPENSTYLE_FIRST_HATCH = wxPENSTYLE_BDIAGONAL_HATCH,
-    wxPENSTYLE_LAST_HATCH = wxPENSTYLE_VERTICAL_HATCH
+    wxPENSTYLE_FIRST_HATCH,
+        /**< First of the hatch styles (inclusive). */
+
+    wxPENSTYLE_LAST_HATCH
+        /**< Last of the hatch styles (inclusive). */
 };
 
 /**
