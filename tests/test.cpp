@@ -165,7 +165,7 @@ static string GetExceptionMessage()
         throw;
     }
 #if wxDEBUG_LEVEL
-    catch ( TestAssertFailure& e )
+    catch ( TestAssertFailure& )
     {
         msg = s_lastAssertMessage;
         s_lastAssertMessage.clear();
