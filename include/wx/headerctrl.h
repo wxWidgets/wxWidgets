@@ -210,6 +210,10 @@ protected:
     // indices after the number of columns changed
     void DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int count);
 
+protected:
+    // this window doesn't look nice with the border so don't use it by default
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
 private:
     // methods implementing our public API and defined in platform-specific
     // implementations
@@ -222,8 +226,6 @@ private:
     virtual void DoSetColumnsOrder(const wxArrayInt& order) = 0;
     virtual wxArrayInt DoGetColumnsOrder() const = 0;
 
-    // this window doesn't look nice with the border so don't use it by default
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     // event handlers
     void OnSeparatorDClick(wxHeaderCtrlEvent& event);

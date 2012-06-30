@@ -48,6 +48,10 @@ public:
 
     virtual ~wxHeaderCtrl();
 
+protected:
+    virtual wxSize DoGetBestSize() const;
+
+    
 private:
     // implement base class pure virtuals
     virtual void DoSetCount(unsigned int count);
@@ -58,9 +62,6 @@ private:
 
     virtual void DoSetColumnsOrder(const wxArrayInt& order);
     virtual wxArrayInt DoGetColumnsOrder() const;
-
-    // override wxWindow methods which must be implemented by a new control
-    virtual wxSize DoGetBestSize() const;
 
     // common part of all ctors
     void Init();
