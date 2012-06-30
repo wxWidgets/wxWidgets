@@ -2237,7 +2237,10 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
 
     m_gridBitmap = bmp;
 
-    canvas->Bind( wxEVT_PAINT, &GridFrame::OnRenderPaint, this );
+    canvas->Connect( wxEVT_PAINT,
+                     wxPaintEventHandler(GridFrame::OnRenderPaint),
+                     NULL,
+                     this );
 
     frame->Show();
 }
