@@ -289,8 +289,8 @@ public:
     bool DeletePage(size_t page);
     bool RemovePage(size_t page);
 
-    size_t GetPageCount() const;
-    wxWindow* GetPage(size_t pageIdx) const;
+    virtual size_t GetPageCount() const;
+    virtual wxWindow* GetPage(size_t pageIdx) const;
     int GetPageIndex(wxWindow* pageWnd) const;
 
     bool SetPageText(size_t page, const wxString& text);
