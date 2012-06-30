@@ -80,6 +80,7 @@
                             <object class="sizeritem">
                               <object class="wxStaticBitmap" name="first_row[0]">
                                 <bitmap>update.gif</bitmap>
+                                <tooltip>See the tooltip!</tooltip>
                               </object>
                             </object>
                             <object class="sizeritem">

@@ -256,7 +256,16 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     m_isInside = true;
     m_isGBS = (m_class == wxT("wxGridBagSizer"));
 
-    CreateChildren(m_parent, true/*only this handler*/);
+    wxObject* parent = m_parent;
+#if wxUSE_STATBOX
+    // wxStaticBoxSizer's child controls should be parented by the box itself,
+    // not its parent.
+    wxStaticBoxSizer* const stsizer = wxDynamicCast(sizer, wxStaticBoxSizer);
+    if ( stsizer )
+        parent = stsizer->GetStaticBox();
+#endif // wxUSE_STATBOX
+
+    CreateChildren(parent, true/*only this handler*/);
 
     // set growable rows and cols for sizers which support this
     if ( wxFlexGridSizer *flexsizer = wxDynamicCast(sizer, wxFlexGridSizer) )
