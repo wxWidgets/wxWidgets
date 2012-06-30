@@ -30,7 +30,11 @@
   #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
   #include "wx/motif/icon.h"
 #elif defined(__WXGTK20__)
-  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
+  #ifdef __WINDOWS__
+    #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_ICO_RESOURCE
+  #else
+    #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
+  #endif
   #include "wx/generic/icon.h"
 #elif defined(__WXGTK__)
   #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM

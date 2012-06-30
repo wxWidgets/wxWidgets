@@ -2235,10 +2235,102 @@ bool wxImage::HasOption(const wxString& name) const
 // image I/O
 // ----------------------------------------------------------------------------
 
-bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
-                        wxBitmapType WXUNUSED_UNLESS_STREAMS(type),
+// Under Windows we can load wxImage not only from files but also from
+// resources.
+#if defined(__WINDOWS__) && wxUSE_WXDIB && wxUSE_IMAGE
+    #define HAS_LOAD_FROM_RESOURCE
+#endif
+
+#ifdef HAS_LOAD_FROM_RESOURCE
+
+#include "wx/msw/dib.h"
+#include "wx/msw/private.h"
+
+static wxImage LoadImageFromResource(const wxString &name, wxBitmapType type)
+{
+    AutoHBITMAP
+        hBitmap,
+        hMask;
+
+    if ( type == wxBITMAP_TYPE_BMP_RESOURCE )
+    {
+        hBitmap = ::LoadBitmap(wxGetInstance(), name.t_str());
+
+        if ( !hBitmap )
+        {
+            wxLogError(_("Failed to load bitmap \"%s\" from resources."), name);
+        }
+    }
+    else if ( type == wxBITMAP_TYPE_ICO_RESOURCE )
+    {
+        const HICON hIcon = ::LoadIcon(wxGetInstance(), name.t_str());
+
+        if ( !hIcon )
+        {
+            wxLogError(_("Failed to load icon \"%s\" from resources."), name);
+        }
+        else
+        {
+            ICONINFO info;
+            if ( !::GetIconInfo(hIcon, &info) )
+            {
+                wxLogLastError(wxT("GetIconInfo"));
+                return wxImage();
+            }
+
+            hBitmap = info.hbmColor;
+            hMask   = info.hbmMask;
+        }
+    }
+    else if ( type == wxBITMAP_TYPE_CUR_RESOURCE )
+    {
+        wxLogDebug(wxS("Loading cursors from resources is not implemented."));
+    }
+    else
+    {
+        wxFAIL_MSG(wxS("Invalid bitmap resource type."));
+    }
+
+    if ( !hBitmap )
+        return wxImage();
+
+    wxImage image = wxDIB(hBitmap).ConvertToImage();
+    if ( hMask )
+    {
+        const wxImage mask = wxDIB(hMask).ConvertToImage();
+        image.SetMaskFromImage(mask, 255, 255, 255);
+    }
+    else
+    {
+        // Light gray colour is a default mask
+        image.SetMaskColour(0xc0, 0xc0, 0xc0);
+    }
+
+    image.InitAlpha();
+
+    return image;
+}
+
+#endif // HAS_LOAD_FROM_RESOURCE
+
+bool wxImage::LoadFile( const wxString& filename,
+                        wxBitmapType type,
                         int WXUNUSED_UNLESS_STREAMS(index) )
 {
+#ifdef HAS_LOAD_FROM_RESOURCE
+    if (   type == wxBITMAP_TYPE_BMP_RESOURCE
+        || type == wxBITMAP_TYPE_ICO_RESOURCE
+        || type == wxBITMAP_TYPE_CUR_RESOURCE)
+    {
+        const wxImage image = ::LoadImageFromResource(filename, type);
+        if ( image.IsOk() )
+        {
+            *this = image;
+            return true;
+        }
+    }
+#endif // HAS_LOAD_FROM_RESOURCE
+
 #if HAS_FILE_STREAMS
     wxImageFileInputStream stream(filename);
     if ( stream.IsOk() )
