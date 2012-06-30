@@ -156,7 +156,7 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
     const int BORDER = 5; // FIXME: hardcoded value
 
-    *borderTop = GetLabel().empty() ? 2*BORDER : GetCharHeight();
+    *borderTop = GetCharHeight();
     *borderOther = BORDER;
 }
 
