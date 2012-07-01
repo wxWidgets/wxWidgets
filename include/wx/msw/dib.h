@@ -12,12 +12,15 @@
 #ifndef _WX_MSW_DIB_H_
 #define _WX_MSW_DIB_H_
 
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
 
 #include "wx/msw/private.h"
 
 #if wxUSE_WXDIB
+
+#ifdef __WXMSW__
+    #include "wx/bitmap.h"
+#endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
 // wxDIB: represents a DIB section
