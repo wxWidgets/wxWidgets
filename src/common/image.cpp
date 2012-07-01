@@ -2254,7 +2254,7 @@ static wxImage LoadImageFromResource(const wxString &name, wxBitmapType type)
 
     if ( type == wxBITMAP_TYPE_BMP_RESOURCE )
     {
-        hBitmap = ::LoadBitmap(wxGetInstance(), name.t_str());
+        hBitmap.Init( ::LoadBitmap(wxGetInstance(), name.t_str()) );
 
         if ( !hBitmap )
         {
@@ -2278,8 +2278,8 @@ static wxImage LoadImageFromResource(const wxString &name, wxBitmapType type)
                 return wxImage();
             }
 
-            hBitmap = info.hbmColor;
-            hMask   = info.hbmMask;
+            hBitmap.Init(info.hbmColor);
+            hMask.Init(info.hbmMask);
         }
     }
     else if ( type == wxBITMAP_TYPE_CUR_RESOURCE )
