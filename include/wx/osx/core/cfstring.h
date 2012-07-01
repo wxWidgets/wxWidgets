@@ -71,6 +71,7 @@ public:
     wxString AsString( wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) const;
 
     static wxString AsString( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
+    static wxString AsStringWithNormalizationFormC( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
 #if wxOSX_USE_COCOA_OR_IPHONE
     static wxString AsString( NSString* ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
 #endif

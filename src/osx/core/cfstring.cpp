@@ -632,6 +632,18 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
     }
 }
 
+wxString wxCFStringRef::AsStringWithNormalizationFormC( CFStringRef ref, wxFontEncoding encoding )
+{
+    if ( !ref )
+        return wxEmptyString ;
+
+    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, ref);
+    CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
+    wxString str = wxCFStringRef::AsString(ref,encoding);
+    CFRelease(cfMutableString);
+    return str;
+}
+
 wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UNICODE(encoding) )
 {
     if ( !ref )
