@@ -30,7 +30,6 @@
     <!-- wxWidgets version numbers logic: -->
     <include file="version.bkl"/>
 
-
     <!-- ================================================================== -->
     <!--                     Names of libraries and DLLs:                   -->
     <!-- ================================================================== -->
@@ -169,7 +168,7 @@
     <!--             Where to store built libraries and objects:         -->
     <!-- =============================================================== -->
 
-    <set var="DIR_SUFFIX_CPU">
+    <set var="ARCH_SUFFIX">
         <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
         <if cond="TARGET_CPU=='amd64'">_amd64</if>
         <if cond="TARGET_CPU=='AMD64'">_amd64</if>
@@ -190,7 +189,7 @@
         <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
 
         <set var="OBJS" make_var="1">
-            $(COMPILER_PREFIX)_$(CFG_NAME_PART)$(DIR_SUFFIX_CPU)
+            $(COMPILER_PREFIX)_$(CFG_NAME_PART)$(ARCH_SUFFIX)
         </set>
 
         <set var="BUILDDIR">$(OBJS)</set>
@@ -206,7 +205,7 @@
     <set var="LIBDIRNAME" make_var="1">
         <if cond="FORMAT=='autoconf'">$(wx_top_builddir)/lib</if>
         <if cond="FORMAT!='autoconf'">
-            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER_PREFIX)$(DIR_SUFFIX_CPU)_$(LIBTYPE_SUFFIX)$(CFG)
+            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER_PREFIX)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
         </if>
     </set>
 
