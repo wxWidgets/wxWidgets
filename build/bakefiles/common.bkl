@@ -30,6 +30,14 @@
     <!-- wxWidgets version numbers logic: -->
     <include file="version.bkl"/>
 
+    <set var="ARCH_SUFFIX">
+        <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
+        <if cond="TARGET_CPU=='amd64'">_amd64</if>
+        <if cond="TARGET_CPU=='AMD64'">_amd64</if>
+        <if cond="TARGET_CPU=='ia64'">_ia64</if>
+        <if cond="TARGET_CPU=='IA64'">_ia64</if>
+    </set>
+
     <!-- ================================================================== -->
     <!--                     Names of libraries and DLLs:                   -->
     <!-- ================================================================== -->
@@ -43,12 +51,26 @@
         <if cond="TOOLKIT=='MAC'">_carbon</if>
     </set>
 
+    <!--
+        Optional compiler version, mainly for Windows compilers for which it is
+        supposed to be set on make command line for the official builds.
+     -->
+    <set var="COMPILER_VERSION" make_var="1">
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='1'">ERROR-COMPILER-VERSION-MUST-BE-SET-FOR-OFFICIAL-BUILD</if>
+    </set>
+
     <set var="COMPILERORGCC">
         <if cond="isdefined('COMPILER')">$(COMPILER)</if>
         <if cond="not isdefined('COMPILER')">gcc</if>
     </set>
+
+    <!--
+        In the official builds we use not only the compiler name but also its
+        version and architecture we compile for in the libraries names.
+     -->
     <set var="WXCOMPILER">
-        <if cond="PLATFORM_WIN32=='1'">_$(COMPILERORGCC)</if>
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='1'">_$(COMPILERORGCC)$(COMPILER_VERSION)$(ARCH_SUFFIX)</if>
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='0'">_$(COMPILERORGCC)</if>
     </set>
 
     <set var="VENDORTAG">
@@ -168,14 +190,6 @@
     <!--             Where to store built libraries and objects:         -->
     <!-- =============================================================== -->
 
-    <set var="ARCH_SUFFIX">
-        <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
-        <if cond="TARGET_CPU=='amd64'">_amd64</if>
-        <if cond="TARGET_CPU=='AMD64'">_amd64</if>
-        <if cond="TARGET_CPU=='ia64'">_ia64</if>
-        <if cond="TARGET_CPU=='IA64'">_ia64</if>
-    </set>
-
     <if cond="FORMAT!='autoconf'">
         <set var="WXDLLFLAG">
             <if cond="SHARED=='1'">dll</if>
@@ -189,7 +203,7 @@
         <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
 
         <set var="OBJS" make_var="1">
-            $(COMPILER_PREFIX)_$(CFG_NAME_PART)$(ARCH_SUFFIX)
+            $(COMPILER_PREFIX)$(COMPILER_VERSION)_$(CFG_NAME_PART)$(ARCH_SUFFIX)
         </set>
 
         <set var="BUILDDIR">$(OBJS)</set>
@@ -205,7 +219,7 @@
     <set var="LIBDIRNAME" make_var="1">
         <if cond="FORMAT=='autoconf'">$(wx_top_builddir)/lib</if>
         <if cond="FORMAT!='autoconf'">
-            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER_PREFIX)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
+            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
         </if>
     </set>
 
