@@ -1127,8 +1127,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
-    <!-- Generic implementations used by wxGPE: -->
-    src/generic/fontdlgg.cpp
     <!-- GTK+ specific files: -->
     src/gtk/anybutton.cpp
     src/gtk/artgtk.cpp
@@ -1150,7 +1148,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/fontdlg.cpp
     src/gtk/frame.cpp
     src/gtk/gauge.cpp
-    src/gtk/gnome/gprint.cpp
     src/gtk/gnome/gvfs.cpp
     src/gtk/infobar.cpp
     src/gtk/listbox.cpp
@@ -1178,10 +1175,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/tglbtn.cpp
     src/gtk/treeentry_gtk.c
 </set>
+<set var="GTK2_SRC" hints="files">
+    $(GTK_SRC)
+    <!-- Generic implementations used by wxGPE: -->
+    src/generic/fontdlgg.cpp
+    <!-- GTK+ specific files: -->
+    src/gtk/gnome/gprint.cpp
+</set>
 <set var="GTK_HDR" hints="files">
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
-    wx/generic/fontdlgg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/gtk/accel.h
@@ -1206,7 +1209,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/fontdlg.h
     wx/gtk/frame.h
     wx/gtk/gauge.h
-    wx/gtk/gnome/gprint.h
     wx/gtk/gnome/gvfs.h
     wx/gtk/infobar.h
     wx/gtk/listbox.h
@@ -1232,6 +1234,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/textentry.h
     wx/gtk/tglbtn.h
     wx/gtk/treeentry_gtk.h
+</set>
+<set var="GTK2_HDR" hints="files">
+    wx/generic/fontdlgg.h
+    wx/gtk/gnome/gprint.h
 </set>
 
 
@@ -3838,7 +3844,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <set var="GUI_SRC" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_SRC)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_SRC)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK2_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_SRC) $(MSW_DESKTOP_SRC)</if>
@@ -3851,7 +3857,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
     <set var="GUI_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_HDR)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_HDR)</if>
+        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK2_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_HDR)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_DESKTOP_HDR)</if>
