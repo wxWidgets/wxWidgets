@@ -105,6 +105,8 @@ public :
     void                CaptureMouse();
     void                ReleaseMouse();
 
+    void                SetDropTarget(wxDropTarget* target);
+    
     wxInt32             GetValue() const;
     void                SetValue( wxInt32 v );
     wxBitmap            GetBitmap() const;

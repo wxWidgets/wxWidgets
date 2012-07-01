@@ -2072,6 +2072,23 @@ bool wxWidgetCocoaImpl::SetFocus()
     return true;
 }
 
+void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
+{
+    [m_osxView unregisterDraggedTypes];
+    
+    if ( target == NULL )
+        return;
+    
+    wxDataObject* dobj = target->GetDataObject();
+    
+    if( dobj )
+    {
+        CFMutableArrayRef typesarray = CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
+        
+        [m_osxView registerForDraggedTypes:(NSArray*)typesarray];
+        CFRelease(typesarray);
+    }
+}
 
 void wxWidgetCocoaImpl::RemoveFromParent()
 {
@@ -2533,10 +2550,6 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSView* v = [[wxNSView alloc] initWithFrame:r];
-
-    // temporary hook for dnd
-    [v registerForDraggedTypes:[NSArray arrayWithObjects:
-        NSStringPboardType, NSFilenamesPboardType, (NSString*) kPasteboardTypeFileURLPromise, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
 
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, false, true );
     return c;
