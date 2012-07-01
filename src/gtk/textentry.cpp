@@ -110,6 +110,26 @@ void wxTextEntry::WriteText(const wxString& value)
     gtk_editable_set_position(edit, len);
 }
 
+void wxTextEntry::DoSetValue(const wxString& value, int flags)
+{
+    if (value != GetValue())
+    {
+        // use Remove() rather than SelectAll() to avoid unnecessary clipboard
+        // operations, and prevent triggering an apparent bug in GTK which
+        // causes the the subsequent WriteText() to append rather than overwrite
+        {
+            EventsSuppressor noevents(this);
+            Remove(0, -1);
+        }
+        EventsSuppressor noeventsIf(this, !(flags & SetValue_SendEvent));
+        WriteText(value);
+    }
+    else if (flags & SetValue_SendEvent)
+        SendTextUpdatedEvent(GetEditableWindow());
+
+    SetInsertionPoint(0);
+}
+
 wxString wxTextEntry::DoGetValue() const
 {
     const wxGtkString value(gtk_editable_get_chars(GetEditable(), 0, -1));

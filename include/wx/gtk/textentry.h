@@ -52,6 +52,7 @@ public:
     void SendMaxLenEvent();
 
 protected:
+    virtual void DoSetValue(const wxString& value, int flags);
     virtual wxString DoGetValue() const;
 
     // margins functions
