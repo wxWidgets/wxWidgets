@@ -655,10 +655,8 @@ void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
     delete m_dropTarget;
 
     m_dropTarget = pDropTarget;
-    if ( m_dropTarget != NULL )
-    {
-        // TODO:
-    }
+
+    GetPeer()->SetDropTarget(m_dropTarget) ;
 }
 
 #endif

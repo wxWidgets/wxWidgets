@@ -301,6 +301,8 @@ public :
     virtual void        SetCursor( const wxCursor & cursor ) = 0;
     virtual void        CaptureMouse() = 0;
     virtual void        ReleaseMouse() = 0;
+    
+    virtual void        SetDropTarget( wxDropTarget *dropTarget ) {}
 
     virtual wxInt32     GetValue() const = 0;
     virtual void        SetValue( wxInt32 v ) = 0;
