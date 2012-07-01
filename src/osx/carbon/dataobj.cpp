@@ -401,6 +401,7 @@ bool wxDataObject::GetFromPasteboard( void * pb )
     ItemCount itemCount = 0;
     wxString filenamesPassed;
     bool transferred = false;
+    bool pastelocationset = false;
 
     // we synchronize here once again, so we don't mind which flags get returned
     PasteboardSynchronize( pasteboard );
@@ -444,14 +445,18 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                     {
                         if ( UTTypeConformsTo( (CFStringRef)flavorType, kPasteboardTypeFileURLPromise) )
                         {
-                            wxString tempdir = wxFileName::GetTempDir() + wxFILE_SEP_PATH + "wxtemp.XXXXXX";
-                            char* result = mkdtemp((char*)tempdir.fn_str().data());
-                            
-                            if (!result)
-                                continue;
-                            
-                            wxCFRef<CFURLRef> dest(CFURLCreateFromFileSystemRepresentation(NULL,(const UInt8*)result,strlen(result),true));
-                            PasteboardSetPasteLocation(pasteboard, dest);
+                            if ( !pastelocationset )
+                            {
+                                wxString tempdir = wxFileName::GetTempDir() + wxFILE_SEP_PATH + "wxtemp.XXXXXX";
+                                char* result = mkdtemp((char*)tempdir.fn_str().data());
+                                
+                                if (!result)
+                                    continue;
+                                
+                                wxCFRef<CFURLRef> dest(CFURLCreateFromFileSystemRepresentation(NULL,(const UInt8*)result,strlen(result),true));
+                                PasteboardSetPasteLocation(pasteboard, dest);
+                                pastelocationset = true;
+                           }
                         }
                         else if ( flavorFormat.GetType() != wxDF_PRIVATE )
                         {
