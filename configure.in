@@ -5695,6 +5695,10 @@ if test "$WXGTK2" = 1; then
                 )
         fi
 
+        if test "$WXGTK3" = 1; then
+            wxUSE_LIBGNOMEPRINT=no
+        fi
+
         if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
 
                 PKG_CHECK_MODULES(LIBGNOMEPRINTUI,

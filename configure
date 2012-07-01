@@ -33892,6 +33892,10 @@ $as_echo "yes" >&6; }
 fi
         fi
 
+        if test "$WXGTK3" = 1; then
+            wxUSE_LIBGNOMEPRINT=no
+        fi
+
         if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
 
 
