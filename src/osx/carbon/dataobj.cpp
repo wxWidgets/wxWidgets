@@ -594,6 +594,46 @@ bool wxDataObject::HasDataInPasteboard( void * pb )
     return hasData;
 }
 
+#if wxOSX_USE_COCOA
+
+void wxDataObject::AddSupportedTypes( void* cfarray)
+{
+    wxDataFormat *array = new wxDataFormat[ GetFormatCount() ];
+    GetAllFormats( array );
+    
+    for (size_t i = 0; i < GetFormatCount(); i++)
+    {
+        wxDataFormat dataFormat = array[ i ];
+        
+        if ( dataFormat.GetType() == wxDF_UNICODETEXT || dataFormat.GetType() == wxDF_TEXT )
+        {
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, kUTTypeUTF16PlainText);
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, kUTTypePlainText);
+        }
+        else if ( dataFormat.GetType() == wxDF_FILENAME )
+        {
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, kUTTypeFileURL);
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, kPasteboardTypeFileURLPromise);
+        }
+        else if ( dataFormat.GetType() == wxDF_HTML )
+        {
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, kUTTypeHTML);
+        }
+        else if ( dataFormat.GetType() == wxDF_BITMAP )
+        {
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, kUTTypeTIFF);
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, kUTTypePICT);
+        }
+        else if ( dataFormat.GetType() == wxDF_METAFILE )
+        {
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, kUTTypePDF);
+        }
+    }
+    delete[] array;
+}
+
+#endif
+
 // ----------------------------------------------------------------------------
 // wxTextDataObject
 // ----------------------------------------------------------------------------
