@@ -2620,12 +2620,11 @@ wxDataViewRenderer::OSXOnCellChanged(NSObject *object,
                                      const wxDataViewItem& item,
                                      unsigned col)
 {
-    // TODO: we probably should get rid of this code entirely and make this
-    //       function pure virtual, but currently we still have some native
-    //       renderers (wxDataViewChoiceRenderer) which don't override it and
-    //       there is also wxDataViewCustomRenderer for which it's not obvious
-    //       how it should be implemented so keep this "auto-deduction" of
-    //       variant type from NSObject for now
+    // TODO: This code should really be removed and this function be made pure
+    //       virtual. We just need to decide what to do with custom renderers
+    //       (i.e. wxDataViewCustomRenderer), currently OS X "in place" editing
+    //       which doesn't really create an editor control is not compatible
+    //       with the in place editing under other platforms.
 
     wxVariant value;
     if ( [object isKindOfClass:[NSString class]] )
@@ -2854,6 +2853,17 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
         [cell addItemWithTitle:wxCFStringRef(choices[i]).AsNSString()];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
+}
+
+void
+wxDataViewChoiceRenderer::OSXOnCellChanged(NSObject *value,
+                                           const wxDataViewItem& item,
+                                           unsigned col)
+{
+    // At least under OS X 10.7 we get the index of the item selected and not
+    // its string.
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->ChangeValue(GetChoice(ObjectToLong(value)), item, col);
 }
 
 bool wxDataViewChoiceRenderer::MacRender()

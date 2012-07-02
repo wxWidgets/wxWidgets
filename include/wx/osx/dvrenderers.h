@@ -103,6 +103,12 @@ public:
     wxString GetChoice(size_t index) const { return m_choices[index]; }
     const wxArrayString& GetChoices() const { return m_choices; }
 
+#if wxOSX_USE_COCOA
+    virtual void OSXOnCellChanged(NSObject *value,
+                                  const wxDataViewItem& item,
+                                  unsigned col);
+#endif // Cocoa
+
 private:
     wxArrayString m_choices;
 
