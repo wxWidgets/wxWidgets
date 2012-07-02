@@ -2086,12 +2086,14 @@ void wxWindowGTK::GTKHandleRealized()
     {
         // attaching to style changed signal after realization avoids initial
         // changes we don't care about
-        g_signal_connect(m_wxwindow,
+        const gchar *detailed_signal =
 #ifdef __WXGTK3__
-            "style_updated",
+            "style_updated";
 #else
-            "style_set",
+            "style_set";
 #endif
+        g_signal_connect(m_wxwindow,
+            detailed_signal,
             G_CALLBACK(style_updated), this);
     }
 }
