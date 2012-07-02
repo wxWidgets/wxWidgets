@@ -131,11 +131,13 @@ unsigned int wxComboBox::GetCount() const
 
 void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
+    m_datas.RemoveAt(n);
     GetComboPeer()->RemoveItem(n);
 }
 
 void wxComboBox::DoClear()
 {
+    m_datas.Clear();
     GetComboPeer()->Clear();
 }
 
