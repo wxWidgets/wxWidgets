@@ -38,6 +38,8 @@
 #endif
 #endif
 
+#include <limits.h>     // for INT_MAX
+
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -1048,7 +1050,7 @@ void wxGCDCImpl::Clear(void)
     m_graphicContext->SetPen( p );
     wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
     m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
-    DoDrawRectangle( 0, 0, 32000 , 32000 );
+    DoDrawRectangle( 0, 0, INT_MAX , INT_MAX );
     m_graphicContext->SetCompositionMode(formerMode);
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
