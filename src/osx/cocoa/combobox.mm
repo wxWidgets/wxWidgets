@@ -76,11 +76,14 @@
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl && impl->ShouldSendEvents())
     {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        wxComboBox* wxpeer = static_cast<wxComboBox*>(impl->GetWXPeer());
         if ( wxpeer ) {
+            const int sel = wxpeer->GetSelection();
+
             wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, wxpeer->GetId());
             event.SetEventObject( wxpeer );
-            event.SetInt( static_cast<wxComboBox*>(wxpeer)->GetSelection() );
+            event.SetInt( sel );
+            event.SetString( wxpeer->GetString(sel) );
             // For some reason, wxComboBox::GetValue will not return the newly selected item 
             // while we're inside this callback, so use AddPendingEvent to make sure
             // GetValue() returns the right value.

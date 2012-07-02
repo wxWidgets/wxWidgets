@@ -672,6 +672,12 @@ void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)
     wxLogMessage(wxT("Combobox item %ld selected"), sel);
 
     wxLogMessage(wxT("Combobox GetValue(): %s"), m_combobox->GetValue().c_str() );
+
+    if ( event.GetString() != m_combobox->GetValue() )
+    {
+        wxLogMessage("ERROR: Event has different string \"%s\"",
+                     event.GetString());
+    }
 }
 
 void ComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
