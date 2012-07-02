@@ -367,9 +367,9 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 wxKeyEvent event(wxEVT_KEY_DOWN);
 
                 event.m_shiftDown = modifiers & shiftKey;
-                event.m_controlDown = modifiers & controlKey;
+                event.m_rawControlDown = modifiers & controlKey;
                 event.m_altDown = modifiers & optionKey;
-                event.m_metaDown = modifiers & cmdKey;
+                event.m_controlDown = event.m_metaDown = modifiers & cmdKey;
                 event.m_x = point.h;
                 event.m_y = point.v;
 
@@ -382,7 +382,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & controlKey )
                 {
-                    event.m_keyCode = WXK_CONTROL ;
+                    event.m_keyCode = WXK_RAW_CONTROL  ;
                     event.SetEventType( ( modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->HandleWindowEvent( event ) ;
                 }
@@ -400,7 +400,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 }
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & cmdKey )
                 {
-                    event.m_keyCode = WXK_COMMAND ;
+                    event.m_keyCode = WXK_CONTROL;
                     event.SetEventType( ( modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->HandleWindowEvent( event ) ;
                 }
@@ -443,9 +443,9 @@ WXDLLEXPORT void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEve
     wxevent.m_x = screenMouseLocation.h;
     wxevent.m_y = screenMouseLocation.v;
     wxevent.m_shiftDown = modifiers & shiftKey;
-    wxevent.m_controlDown = modifiers & controlKey;
+    wxevent.m_rawControlDown = modifiers & controlKey;
     wxevent.m_altDown = modifiers & optionKey;
-    wxevent.m_metaDown = modifiers & cmdKey;
+    wxevent.m_controlDown = wxevent.m_metaDown = modifiers & cmdKey;
     wxevent.m_clickCount = clickCount;
     wxevent.SetTimestamp( cEvent.GetTicks() ) ;
 
