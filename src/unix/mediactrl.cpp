@@ -34,6 +34,7 @@
     #include "wx/timer.h"           // wxTimer
 #endif
 
+#include "wx/filesys.h"             // FileNameToURL()
 #include "wx/thread.h"              // wxMutex/wxMutexLocker
 
 #ifdef __WXGTK__
@@ -1168,7 +1169,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 //-----------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Load(const wxString& fileName)
 {
-    return DoLoad(wxString( wxT("file://") ) + fileName);
+    return DoLoad(wxFileSystem::FileNameToURL(fileName));
 }
 
 //-----------------------------------------------------------------------------
