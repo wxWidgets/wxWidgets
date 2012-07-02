@@ -66,6 +66,7 @@
 #include "wx/dnd.h"         // drag and drop for the playlist
 #include "wx/filename.h"    // For wxFileName::GetName()
 #include "wx/config.h"      // for native wxConfig
+#include "wx/vector.h"
 
 // Under MSW we have several different backends but when linking statically
 // they may be discarded by the linker (this definitely happens with MSVC) so
@@ -145,6 +146,14 @@ public:
 #ifdef __WXMAC__
     virtual void MacOpenFiles(const wxArrayString & fileNames );
 #endif
+
+#if wxUSE_CMDLINE_PARSER
+    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+
+    // Files specified on the command line, if any.
+    wxVector<wxString> m_params;
+#endif // wxUSE_CMDLINE_PARSER
 
     virtual bool OnInit();
 
@@ -409,6 +418,34 @@ const wxChar* wxGetMediaStateText(int nState)
 IMPLEMENT_APP(wxMediaPlayerApp)
 
 // ----------------------------------------------------------------------------
+// wxMediaPlayerApp command line parsing
+// ----------------------------------------------------------------------------
+
+#if wxUSE_CMDLINE_PARSER
+
+void wxMediaPlayerApp::OnInitCmdLine(wxCmdLineParser& parser)
+{
+    wxApp::OnInitCmdLine(parser);
+
+    parser.AddParam("input files",
+                    wxCMD_LINE_VAL_STRING,
+                    wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE);
+}
+
+bool wxMediaPlayerApp::OnCmdLineParsed(wxCmdLineParser& parser)
+{
+    if ( !wxApp::OnCmdLineParsed(parser) )
+        return false;
+
+    for (size_t paramNr=0; paramNr < parser.GetParamCount(); ++paramNr)
+        m_params.push_back(parser.GetParam(paramNr));
+
+    return true;
+}
+
+#endif // wxUSE_CMDLINE_PARSER
+
+// ----------------------------------------------------------------------------
 // wxMediaPlayerApp::OnInit
 //
 // Where execution starts - akin to a main or WinMain.
@@ -429,34 +466,15 @@ bool wxMediaPlayerApp::OnInit()
     frame->Show(true);
 
 #if wxUSE_CMDLINE_PARSER
-    //
-    //  What this does is get all the command line arguments
-    //  and treat each one as a file to put to the initial playlist
-    //
-    wxCmdLineEntryDesc cmdLineDesc[2];
-    cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
-    cmdLineDesc[0].shortName = NULL;
-    cmdLineDesc[0].longName = NULL;
-    cmdLineDesc[0].description = "input files";
-    cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
-    cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
-
-    cmdLineDesc[1].kind = wxCMD_LINE_NONE;
-
-    // gets the passed media files from cmd line
-    wxCmdLineParser parser (cmdLineDesc, argc, argv);
-
-    // get filenames from the commandline
-    if (parser.Parse() == 0)
+    if ( !m_params.empty() )
     {
-        for (size_t paramNr=0; paramNr < parser.GetParamCount(); ++paramNr)
-        {
-            frame->AddToPlayList((parser.GetParam (paramNr)));
-        }
+        for ( size_t n = 0; n < m_params.size(); n++ )
+            frame->AddToPlayList(m_params[n]);
+
         wxCommandEvent theEvent(wxEVT_COMMAND_MENU_SELECTED, wxID_NEXT);
         frame->AddPendingEvent(theEvent);
     }
-#endif
+#endif // wxUSE_CMDLINE_PARSER
 
     return true;
 }
@@ -702,24 +720,34 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
                         wxT(""),
                         true);
 
-    //
-    //  Here we load the our configuration -
-    //  in our case we load all the files that were left in
-    //  the playlist the last time the user closed our application
-    //
-    //  As an exercise to the reader try modifying it so that
-    //  it properly loads the playlist for each page without
-    //  conflicting (loading the same data) with the other ones.
-    //
-    wxConfig conf;
-    wxString key, outstring;
-    for(int i = 0; ; ++i)
+
+    // Don't load previous files if we have some specified on the command line,
+    // we wouldn't play them otherwise (they'd have to be inserted into the
+    // play list at the beginning instead of being appended but we don't
+    // support this).
+#if wxUSE_CMDLINE_PARSER
+    if ( wxGetApp().m_params.empty() )
+#endif // wxUSE_CMDLINE_PARSER
     {
-        key.clear();
-        key << i;
-        if(!conf.Read(key, &outstring))
-            break;
-        page->m_playlist->AddToPlayList(outstring);
+        //
+        //  Here we load the our configuration -
+        //  in our case we load all the files that were left in
+        //  the playlist the last time the user closed our application
+        //
+        //  As an exercise to the reader try modifying it so that
+        //  it properly loads the playlist for each page without
+        //  conflicting (loading the same data) with the other ones.
+        //
+        wxConfig conf;
+        wxString key, outstring;
+        for(int i = 0; ; ++i)
+        {
+            key.clear();
+            key << i;
+            if(!conf.Read(key, &outstring))
+                break;
+            page->m_playlist->AddToPlayList(outstring);
+        }
     }
 
     //
