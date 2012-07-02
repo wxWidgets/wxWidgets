@@ -75,6 +75,7 @@ There is some support for the following platforms:
 - Most Unix variants with X11
 - Most Unix variants with Motif/Lesstif
 - Most Unix variants with GTK+ 1.2
+- Most Unix variants with GTK+ 3 (still in development)
 - OS/2
 - Windows CE (Pocket PC)
 
@@ -200,4 +201,4 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, December 2011
+The wxWidgets Team, July 2012

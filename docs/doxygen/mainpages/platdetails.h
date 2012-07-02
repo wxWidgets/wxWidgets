@@ -65,6 +65,10 @@ This is the default for many systems.
 GTK+ 1.2 can still be used, albeit discouraged. For that you can
 pass @c --with-gtk=1 to the @c configure script.
 
+Support for GTK+ 3 is available starting with wxWidgets 2.9.4, use @c configure
+option @c --with-gtk=3 to enable it. It is still under development and may have
+significant bugs or missing features, and should be considered experimental.
+
 For further information, please see the files in @c docs/gtk
 in the distribution.
 

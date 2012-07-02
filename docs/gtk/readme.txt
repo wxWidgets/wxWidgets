@@ -11,6 +11,11 @@ tests for the presence of newer features at run-time and it
 will fall back to a generic implementation if these features
 are not present in the GTK+ version used.
 
+wxWidgets 2.9.4 adds support for GTK+ 3, which can be enabled
+with configure option --with-gtk=3. Note that this port is
+still in development and may have significant bugs or missing
+features, and should be considered experimental.
+
 wxWidgets 2.8 still supports GTK+ 1.2, but no developement
 is done on that port anymore and support for GTK+ 1.2 will
 probably be dropped entirely. Indeed, one of the major steps
