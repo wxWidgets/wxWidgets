@@ -780,7 +780,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     btnSizer->Add(new wxButton(win, wxID_SAVE), flagsBtn);
 #endif // CAN_SAVE_FILES
 
-    paneSz->Add(btnSizer, wxSizerFlags().Right().Border(wxTOP));
+    paneSz->Add(btnSizer, wxSizerFlags().Right().Border(wxTOP|wxBOTTOM));
 #endif // wxUSE_CLIPBOARD || CAN_SAVE_FILES
 
     win->SetSizer(paneSz);
