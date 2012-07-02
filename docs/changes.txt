@@ -577,6 +577,7 @@ GTK:
 - Implement native tab art for wxAUI (Jens Lody and Teodor Petrov).
 - Fix pasting large amounts of text (Bradley Hawkins).
 - Show gstreamer errors if wxMediaCtrl fails to play file.
+- Fix wxGridCellEnumEditor mouse handling (Fulvio Senore).
 
 MSW:
 
