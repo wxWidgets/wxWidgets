@@ -161,9 +161,13 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
     wxArrayString fileNames;
     for (i = 1; i <= itemsInList; i++)
     {
-        AEGetNthPtr(
+        err = AEGetNthPtr(
             &docList, i, typeFSRef, &keywd, &returnedType,
             (Ptr)&theRef, sizeof(theRef), &actualSize);
+        
+        if ( err != noErr)
+            return err;
+        
         fName = wxMacFSRefToPath( &theRef ) ;
 
         fileNames.Add(fName);
