@@ -58,6 +58,15 @@ def getXcodePath():
     return getoutput("xcode-select -print-path")
 
 
+def getVisCVersion():
+    text = getoutput("cl.exe")
+    if 'Version 15' in text:
+        return '90'
+    # TODO: Add more tests to get the other versions...
+    else:
+        return 'FIXME'
+    
+
 def exitIfError(code, msg):
     if code != 0:
         print(msg)
@@ -402,6 +411,7 @@ def main(scriptName, args):
     
             if options.wxpython:
                 args.append("OFFICIAL_BUILD=1")
+                args.append("COMPILER_VERSION=%s" % getVisCVersion())
                 args.append("SHARED=1")
                 args.append("MONOLITHIC=0")
                 args.append("USE_OPENGL=1")
