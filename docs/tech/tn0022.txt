@@ -9,6 +9,8 @@ changing the version number.
 
 Put a date on the release line in docs/changes.txt.
 
+Update the date in the manual (docs/doxygen/mainpages/manual.h).
+
 Mark the milestone corresponding to the previous release as being completed and
 create a new version and a new milestone for it in Trac admin web interface
 (ask Robin Dunn for password to access it).
