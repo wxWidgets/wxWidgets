@@ -50,6 +50,12 @@ when using a release build of the library, was much improved making
 it less likely that you use the library incorrectly. Many new GUI
 and base classes have been added or improved.
 
+Compared to the previous 2.9.3 release the most important change is
+the addition of new, still experimental, GTK+ 3 support in wxGTK.
+But the main focus of this release is on incremental improvements
+and fixing defects in preparation for 3.0 release. In particular,
+wxOSX/Cocoa port has been significantly improved.
+
 Please see the file docs/changes.txt for more details and make sure
 to read the section "Incompatible changes since 2.8" if you upgrade
 from a previous wxWidgets release.

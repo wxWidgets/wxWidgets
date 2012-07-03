@@ -502,7 +502,7 @@ Major new features in this release
   was added.
 
 
-2.9.4:
+2.9.4: (release 2012-07-03)
 ------
 
 INCOMPATIBLE CHANGES SINCE 2.9.3
