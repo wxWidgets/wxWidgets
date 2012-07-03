@@ -1253,66 +1253,14 @@ dnl We need to quote the next line where we don't need macros and do need [] in 
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    AC_CHECK_PROGS(OSX_SW_VERS, sw_vers)
-    if test "$OSX_SW_VERS" != ""; then
-        OSX_VERSION=`sw_vers -productVersion | grep 10.[[0-9]]`
-    else
-        dnl can't determine it (happens e.g. when cross-compiling) so use a
-        dnl conservative default
-        AC_MSG_WARN([Assuming OS X 10.4, use --with-macosx-version-min to override.])
-        OSX_VERSION="10.4"
-    fi
-
-    case "$OSX_VERSION" in
-        10.4* )
-            wxUSE_MACOSX_VERSION_MIN=10.4
-            ;;
-
-        * )
-            if test "$wxUSE_OSX_CARBON" = 1; then
-                # otherwise configure stops on leopard for universal_binary
-                wxUSE_MACOSX_VERSION_MIN=10.4
-            else
-                # for Cocoa, use 10.5 to be able to compile it in 64 bits too
-                wxUSE_MACOSX_VERSION_MIN=10.5
-            fi
-            ;;
-    esac
-fi
-
-NEEDS_GCC40="no"
-if test "x$wxUSE_MACOSX_VERSION_MIN" == "x10.4"; then
-    NEEDS_GCC40="yes"
-fi
-
-if test "$wxUSE_OSX_CARBON" = 1; then
-    NEEDS_GCC40="yes"
-fi
-
-if test "x$NEEDS_GCC40" == "xyes"; then
-    # gcc 4.2 cannot compile 10.4 compatible code, so if the user is using it
-    # and wants 10.4 compatible code, then 'downgrade' to 4.0
-    # This is also the simplest way to get 32-bit binaries on Snow Leopard.
-    if test "x$CC" = "xgcc"; then
-        CCVERSION=`$CC --version | grep 4.[[2-9]].`
-        if test "x$CCVERSION" != "x"; then
-            echo "$as_me:$LINENO: WARNING: gcc >= 4.2 cannot compile 10.4 compatible code. Using gcc 4.0 instead."
-            CC="gcc-4.0"
-        fi
-    fi
-
-    if test "x$CXX" = "xg++"; then
-        CCVERSION=`$CXX --version | grep 4.[[2-9]].`
-        if test "x$CCVERSION" != "x"; then
-            CXX="g++-4.0"
-        fi
-    fi
+    wxUSE_MACOSX_VERSION_MIN=10.5
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then 
     eval "CC=\"$CC $MACOSX_SDK_OPTS\""
     eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
     eval "LD=\"$LD $MACOSX_SDK_OPTS\""
+    retest_macosx_linking=yes
 fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
@@ -1332,12 +1280,12 @@ dnl still compile and link both C and C++.  If we didn't do this, then most
 dnl of the remaining tests would fail.
 if test "x$retest_macosx_linking" = "xyes"; then
     AC_LANG_PUSH(C)
-    AC_MSG_CHECKING([if C compiler works with SDK/version options])
+    AC_MSG_CHECKING([if C compiler ($CC) works with SDK/version options])
     AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([no.  Try a different SDK]); exit 1])
     AC_LANG_POP()
 
     AC_LANG_PUSH(C++)
-    AC_MSG_CHECKING([if C++ compiler works with SDK/version options])
+    AC_MSG_CHECKING([if C++ compiler ($CXX) works with SDK/version options])
     AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([no.  Try a different SDK]); exit 1])
     AC_LANG_POP()
 fi
