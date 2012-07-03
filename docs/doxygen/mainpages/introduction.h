@@ -134,10 +134,11 @@ To make use of wxWidgets, you currently need one of the following setups.
 
 @li Almost any C++ compiler, including GNU C++ and many Unix vendors
     compilers such as Sun CC, HP-UX aCC or SGI mipsPro.
-@li Almost any Unix workstation, and one of: GTK+ 2.4 or higher (GTK+ 1.2.10
+@li Almost any Unix workstation, and one of: GTK+ 2.6 or higher (GTK+ 1.2.10
     may still be supported but wxGTK1 port is not maintained any longer and lacks
-    many features of wxGTK2), Motif 1.2 or higher or Lesstif. If using the wxX11
-    port, no such widget set is required.
+    many features of wxGTK2; GTK+ 3 is supported but is still experimental),
+    Motif 1.2 or higher or Lesstif. If using the wxX11 port, no such widget set
+    is required.
 
 (c) Mac OS/Mac OS X:
 
