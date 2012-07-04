@@ -11,10 +11,6 @@ Put a date on the release line in docs/changes.txt.
 
 Update the date in the manual (docs/doxygen/mainpages/manual.h).
 
-Mark the milestone corresponding to the previous release as being completed and
-create a new version and a new milestone for it in Trac admin web interface
-(ask Robin Dunn for password to access it).
-
 
 Creating release files
 ----------------------
@@ -100,8 +96,8 @@ Version updates
 ---------------
 
 Trac: mark the milestone corresponding to the release as completed and add a
-new version for it to allow reporting bugs against it (ask Vadim or Robin to do
-it).
+new version for it to allow reporting bugs against it and create the next
+milestone (ask Vadim or Robin to do it or to get admin password).
 
 Run misc/scripts/inc_release to increment micro version, i.e. replace x.y.z
 with x.y.z+1 (minor or major versions updates require manual intervention).
