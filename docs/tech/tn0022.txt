@@ -73,6 +73,9 @@ being "default downloads" for the appropriate platforms (.zip or .exe for MSW,
 .tar.bz2 for everything else) as otherwise SourceForge would continue to suggest
 people to download old files.
 
+Also upload docs/release_files.mdwn as README.md to display it by default when
+its directory is viewed on the web.
+
 Also upload the files to the FTP mirror at ftp.wxwidgets.org (ask Chris for
 access if you don't have it).
 
