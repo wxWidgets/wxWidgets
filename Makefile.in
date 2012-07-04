@@ -2863,9 +2863,61 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR =  \
 	wx/gtk1/tglbtn.h \
 	wx/gtk1/treectrl.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= wx/generic/fontdlgg.h \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	wx/gtk/gnome/gprint.h
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
+	wx/generic/fdrepdlg.h \
+	wx/generic/filepickerg.h \
+	wx/generic/listctrl.h \
+	wx/generic/statusbr.h \
+	wx/gtk/accel.h \
+	wx/gtk/anybutton.h \
+	wx/gtk/bmpbuttn.h \
+	wx/gtk/button.h \
+	wx/gtk/checkbox.h \
+	wx/gtk/checklst.h \
+	wx/gtk/chkconf.h \
+	wx/gtk/collpane.h \
+	wx/gtk/colordlg.h \
+	wx/gtk/choice.h \
+	wx/gtk/combobox.h \
+	wx/gtk/control.h \
+	wx/gtk/clrpicker.h \
+	wx/gtk/dialog.h \
+	wx/gtk/dirdlg.h \
+	wx/gtk/filectrl.h \
+	wx/gtk/filedlg.h \
+	wx/gtk/fontpicker.h \
+	wx/gtk/filepicker.h \
+	wx/gtk/fontdlg.h \
+	wx/gtk/frame.h \
+	wx/gtk/gauge.h \
+	wx/gtk/gnome/gvfs.h \
+	wx/gtk/infobar.h \
+	wx/gtk/listbox.h \
+	wx/gtk/mdi.h \
+	wx/gtk/menu.h \
+	wx/gtk/menuitem.h \
+	wx/gtk/msgdlg.h \
+	wx/gtk/notebook.h \
+	wx/gtk/print.h \
+	wx/gtk/radiobox.h \
+	wx/gtk/radiobut.h \
+	wx/gtk/scrolbar.h \
+	wx/gtk/scrolwin.h \
+	wx/gtk/slider.h \
+	wx/gtk/spinbutt.h \
+	wx/gtk/spinctrl.h \
+	wx/gtk/statbmp.h \
+	wx/gtk/statbox.h \
+	wx/gtk/statline.h \
+	wx/gtk/stattext.h \
+	wx/gtk/toolbar.h \
+	wx/gtk/textctrl.h \
+	wx/gtk/textentry.h \
+	wx/gtk/tglbtn.h \
+	wx/gtk/treeentry_gtk.h \
+	wx/generic/fontdlgg.h \
+	wx/gtk/gnome/gprint.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
 	wx/generic/fdrepdlg.h \
 	wx/generic/filepickerg.h \
