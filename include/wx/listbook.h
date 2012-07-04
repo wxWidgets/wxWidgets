@@ -88,10 +88,6 @@ protected:
     wxBookCtrlEvent* CreatePageChangingEvent() const;
     void MakeChangedEvent(wxBookCtrlEvent &event);
 
-    // get flags for different list control modes
-    long GetListCtrlIconViewFlags() const;
-    long GetListCtrlReportViewFlags() const;
-
     // event handlers
     void OnListSelected(wxListEvent& event);
     void OnSize(wxSizeEvent& event);
