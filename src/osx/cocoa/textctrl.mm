@@ -932,6 +932,15 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         else
             v = [[wxNSTextField alloc] initWithFrame:r];
 
+        if ( style & wxTE_RIGHT)
+        {
+            [v setAlignment:NSRightTextAlignment];
+        }
+        else if ( style & wxTE_CENTRE)
+        {
+            [v setAlignment:NSCenterTextAlignment];
+        }
+        
         if ( style & wxNO_BORDER )
         {
             // FIXME: How can we remove the native control's border?
