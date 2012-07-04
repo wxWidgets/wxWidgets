@@ -25,7 +25,7 @@
            Align the text to the left.
     @style{wxALIGN_RIGHT}
            Align the text to the right.
-    @style{wxALIGN_CENTRE}
+    @style{wxALIGN_CENTRE_HORIZONTAL}
            Center the text (horizontally).
     @style{wxST_NO_AUTORESIZE}
            By default, the control will adjust its size to exactly fit to the
