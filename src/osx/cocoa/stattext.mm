@@ -102,7 +102,7 @@ private:
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineBreakMode:m_lineBreak];
         int style = GetWXPeer()->GetWindowStyleFlag();
-        if (style & wxALIGN_CENTER)
+        if (style & wxALIGN_CENTER_HORIZONTAL)
             [paragraphStyle setAlignment: NSCenterTextAlignment];
         else if (style & wxALIGN_RIGHT)
             [paragraphStyle setAlignment: NSRightTextAlignment];
