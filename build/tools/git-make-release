@@ -48,17 +48,23 @@ cleanup
 
 git archive --prefix=$prefix/ HEAD | (cd ..; tar x)
 cd ..
-mv $prefix/include/wx/msw/setup0.h $prefix/include/wx/msw/setup.h
+# All setup0.h files are supposed to be renamed to just setup.h when checked
+# out and in the distribution.
+find $prefix/include/wx -type f -name setup0.h | while read f; do
+    mv $f ${f%0.h}.h
+done
 
 tar cjf $prefix.tar.bz2 $prefix
 
 cd $prefix
 set +x
 for f in `cat ../eol-native`; do
-    if [ $f == "include/wx/msw/setup0.h" ]; then
-        # we renamed this file above so adjust
-        f="include/wx/msw/setup.h"
-    fi
+    case $f in
+        */setup0.h)
+            # we renamed this file above so adjust
+            f=${f%0.h}.h
+            ;;
+    esac
     unix2dos -q $f
 done
 set -x
