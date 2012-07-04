@@ -32,7 +32,7 @@
            size of the text when SetLabel() is called. If this style flag is
            given, the control will not change its size (this style is
            especially useful with controls which also have the @c wxALIGN_RIGHT or
-           the @c wxALIGN_CENTRE style because otherwise they won't make sense any
+           the @c wxALIGN_CENTRE_HORIZONTAL style because otherwise they won't make sense any
            longer after a call to SetLabel()).
     @style{wxST_ELLIPSIZE_START}
            If the labeltext width exceeds the control width, replace the beginning
