@@ -59,7 +59,7 @@ for f in `cat ../eol-native`; do
         # we renamed this file above so adjust
         f="include/wx/msw/setup.h"
     fi
-    unix2dos $f
+    unix2dos -q $f
 done
 set -x
 
