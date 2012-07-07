@@ -923,6 +923,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
         c = new wxNSTextViewControl( wxpeer, v );
+        c->SetNeedsFocusRect( true );
     }
     else
     {
@@ -940,25 +941,31 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         {
             [v setAlignment:NSCenterTextAlignment];
         }
-        
-        if ( style & wxNO_BORDER )
-        {
-            // FIXME: How can we remove the native control's border?
-            // setBordered is separate from the text ctrl's border.
-        }
-        
+                
         NSTextFieldCell* cell = [v cell];
         [cell setScrollable:YES];
         // TODO: Remove if we definitely are sure, it's not needed
         // as setting scrolling to yes, should turn off any wrapping
         // [cell setLineBreakMode:NSLineBreakByClipping]; 
 
-        [v setBezeled:NO];
-        [v setBordered:NO];
-
         c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
+        
+        if ( (style & wxNO_BORDER) || (style & wxSIMPLE_BORDER) )
+        {
+            // under 10.7 the textcontrol can draw its own focus
+            // even if no border is shown, on previous systems
+            // we have to emulate this
+            [v setBezeled:NO];
+            [v setBordered:NO];
+            if ( UMAGetSystemVersion() < 0x1070 )
+                c->SetNeedsFocusRect( true );
+        }
+        else
+        {
+            // use native border
+            c->SetNeedsFrame(false);
+        }
     }
-    c->SetNeedsFocusRect( true );
 
     return c;
 }
