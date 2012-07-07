@@ -513,6 +513,7 @@
 		AAC2CB4D851230008AE4ABA1 /* dcscreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22D6E6D9712338C6906CFAA4 /* dcscreen.cpp */; };
 		AB58406CEBA13BC4A2A83B66 /* printmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5C13F8AA1387BADB7E60C /* printmac.cpp */; };
 		ABCD15C4AB37396EA17B7B28 /* translation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AC666417602346EA583709E /* translation.cpp */; };
+		AC0B0C52922B30188AE95E94 /* tabart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51054B41BFD83E97BAF76D07 /* tabart.cpp */; };
 		AC6AC589EFB233C7B65A3224 /* overlaycmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 303ACF199BE431BD891C9301 /* overlaycmn.cpp */; };
 		AC91349D7F0E37739B1F5165 /* palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEF6B3FB66243812969E5BD1 /* palette.cpp */; };
 		ACD644CFA85A3B70A3E3B118 /* jcparam.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F41EDEB298538CC86FF6DC1 /* jcparam.c */; };
@@ -1003,6 +1004,7 @@
 		4FDE5A962FA234FA83A605AD /* Indicator.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Indicator.cxx; path = ../../src/stc/scintilla/src/Indicator.cxx; sourceTree = "<group>"; };
 		4FE0B33481283D3493613B0F /* config.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = config.cpp; path = ../../src/common/config.cpp; sourceTree = "<group>"; };
 		508B04B4FF913BECBC9DBFFB /* LexSpecman.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexSpecman.cxx; path = ../../src/stc/scintilla/src/LexSpecman.cxx; sourceTree = "<group>"; };
+		51054B41BFD83E97BAF76D07 /* tabart.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabart.cpp; path = ../../src/aui/tabart.cpp; sourceTree = "<group>"; };
 		5145561C78303EEE9F827962 /* LexLua.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLua.cxx; path = ../../src/stc/scintilla/src/LexLua.cxx; sourceTree = "<group>"; };
 		5168ADF7BE39351F8F24E1E6 /* cfstring.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cfstring.cpp; path = ../../src/osx/core/cfstring.cpp; sourceTree = "<group>"; };
 		5190E3E110443FD29F2474FC /* treelist.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treelist.cpp; path = ../../src/generic/treelist.cpp; sourceTree = "<group>"; };
@@ -2146,6 +2148,7 @@
 				A298576700C33F018616E7BD /* auibook.cpp */,
 				05A4437E9697300390FDE14E /* auibar.cpp */,
 				C0155E0C2F6131358D2DA5ED /* tabmdi.cpp */,
+				51054B41BFD83E97BAF76D07 /* tabart.cpp */,
 			);
 			name = src/aui;
 			sourceTree = "<group>";
@@ -3455,6 +3458,7 @@
 				E104017EE1A4357DAF84E1E6 /* auibook.cpp in Sources */,
 				39CC380F801F3EE984523275 /* auibar.cpp in Sources */,
 				6C46AF0370793AA0B74A5A4A /* tabmdi.cpp in Sources */,
+				AC0B0C52922B30188AE95E94 /* tabart.cpp in Sources */,
 				DE43350F6C9D3148A64F0AF9 /* art_internal.cpp in Sources */,
 				7DC4A542372437ECA0790F87 /* art_msw.cpp in Sources */,
 				A0BA01A85C303C78A3130711 /* art_aui.cpp in Sources */,
