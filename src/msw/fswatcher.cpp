@@ -136,7 +136,7 @@ void wxFSWatcherImplMSW::SendEvent(wxFileSystemWatcherEvent& evt)
 
 bool wxFSWatcherImplMSW::DoSetUpWatch(wxFSWatchEntryMSW& watch)
 {
-    BOOL bWatchSubtree wxDUMMY_INITIALIZE(FALSE);
+    BOOL bWatchSubtree = FALSE;
 
     switch ( watch.GetType() )
     {
