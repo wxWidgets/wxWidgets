@@ -10,6 +10,14 @@ INCOMPATIBLE CHANGES SINCE 2.8.x
         the "Changes Since wxWidgets 2.8" section of the manual,
         please read it if the explanation here is too cryptic.
 
+Table of contents of this section:
+
+ - Unicode-related changes
+ - wxODBC and contrib libraries removal
+ - Changes in behaviour not resulting in compilation errors
+ - Build system changes
+ - Major new features in this release
+
 
 Unicode-related changes
 -----------------------
@@ -468,6 +476,20 @@ Changes in behaviour visible to end users
 - In wxMSW wxSpinCtrl used to prevent the user from entering more digits than
   could fit in its visible area. This was inconsistent with the other ports and
   now the control scrolls if too much text is added.
+
+
+Build system changes
+--------------------
+
+- In wxMSW makefile builds, "_x64" is used instead of "_amd64" when compiling
+  for this architecture in the architecture-specific paths and library names.
+  TARGET_CPU can still be specified as "amd64" for compatibility but "x64"
+  should be used now.
+
+- Official wxMSW binaries, i.e. those built with OFFICIAL_BUILD=1, built with
+  MSVC now include the version of the compiler used and the architecture if
+  it's not the default "x86". E.g. a library built with MSVC 10 for amd64 is
+  called "wxbase294ud_vc110_amd64.dll" now.
 
 
 Major new features in this release

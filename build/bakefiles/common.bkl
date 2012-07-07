@@ -32,10 +32,12 @@
 
     <set var="ARCH_SUFFIX">
         <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
-        <if cond="TARGET_CPU=='amd64'">_amd64</if>
-        <if cond="TARGET_CPU=='AMD64'">_amd64</if>
+        <if cond="TARGET_CPU=='amd64'">_x64</if>
+        <if cond="TARGET_CPU=='AMD64'">_x64</if>
         <if cond="TARGET_CPU=='ia64'">_ia64</if>
         <if cond="TARGET_CPU=='IA64'">_ia64</if>
+        <if cond="TARGET_CPU=='x64'">_x64</if>
+        <if cond="TARGET_CPU=='X64'">_x64</if>
     </set>
 
     <!-- ================================================================== -->
@@ -318,6 +320,8 @@
         <if cond="TARGET_CPU=='AMD64'">/MACHINE:X64</if>
         <if cond="TARGET_CPU=='ia64'">/MACHINE:IA64</if>
         <if cond="TARGET_CPU=='IA64'">/MACHINE:IA64</if>
+        <if cond="TARGET_CPU=='x64'">/MACHINE:X64</if>
+        <if cond="TARGET_CPU=='X64'">/MACHINE:X64</if>
     </set>
 
     <template id="common_settings">
