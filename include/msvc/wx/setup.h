@@ -71,7 +71,7 @@
 
 // architecture-specific part: not used (again, for compatibility), for x86
 #if defined(_M_X64)
-    #define wxARCH_SUFFIX _amd64
+    #define wxARCH_SUFFIX _x64
 #elif defined(_M_IA64)
     #define wxARCH_SUFFIX _ia64
 #else // assume _M_IX86
