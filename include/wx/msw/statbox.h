@@ -43,10 +43,6 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
-    virtual wxPoint GetClientAreaOrigin() const;
-    virtual void DoGetClientSize(int *width, int *height) const;
-
-
 protected:
     virtual wxSize DoGetBestSize() const;
 
