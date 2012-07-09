@@ -70,13 +70,30 @@ Uploading
 
 Upload the files to SourceForge. This can be done via the web interface or just
 scp to sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
+The following files need to be uploaded:
+
+    wxMSW-Setup-2.9.3.exe
+    wxWidgets-x.y.z.7z
+    wxWidgets-x.y.z.tar.bz2
+    wxWidgets-x.y.z.zip
+    wxWidgets-x.y.z_Headers.zip
+    wxWidgets-docs-chm-x.y.z.zip
+    wxWidgets-docs-html-x.y.z.tar.bz2
+    wxWidgets-docs-html-x.y.z.zip
+
 You will need to use the web interface to mark the latest uploaded files as
 being "default downloads" for the appropriate platforms (.zip or .exe for MSW,
 .tar.bz2 for everything else) as otherwise SourceForge would continue to suggest
 people to download old files.
 
-Also upload docs/release_files.mdwn as README.md to display it by default when
-its directory is viewed on the web.
+Next, update (at least the versions and SHA1 sums, but maybe more) and upload
+docs/release_files.mdwn and docs/release_binaries.mdwn files. They need to be
+renamed to README.md on SF to be shown when the directory is viewed, i.e. do:
+
+    scp docs/release_files.mdwn \
+        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z/README.md
+    scp docs/release_binaries.mdwn \
+        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z/binaries/README.md
 
 Also upload the files to the FTP mirror at ftp.wxwidgets.org (ask Chris for
 access if you don't have it).
