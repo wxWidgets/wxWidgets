@@ -5553,12 +5553,14 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
     if ( keycode == WXK_TAB )
     {
+#if defined(__WXGTK__)
         wxWindow* mainControl;
 
         if ( HasInternalFlag(wxPG_FL_IN_MANAGER) )
             mainControl = GetParent();
         else
             mainControl = this;
+#endif
 
         if ( !event.ShiftDown() )
         {

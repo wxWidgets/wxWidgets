@@ -292,9 +292,9 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
         case 1:
         {
-            unsigned char r;
-            unsigned char g;
-            unsigned char b;
+            unsigned char r = 0;
+            unsigned char g = 0;
+            unsigned char b = 0;
 
             // No compression read the data directly to imageData.
 
@@ -486,9 +486,9 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
         case 9:
         {
-            unsigned char r;
-            unsigned char g;
-            unsigned char b;
+            unsigned char r = 0;
+            unsigned char g = 0;
+            unsigned char b = 0;
 
             // Decode the RLE data.
 

@@ -644,7 +644,7 @@ public:
     long FindItem( const wxPoint& pt );
     long HitTest( int x, int y, int &flags ) const;
     void InsertItem( wxListItem &item );
-    void InsertColumn( long col, const wxListItem &item );
+    long InsertColumn( long col, const wxListItem &item );
     int GetItemWidthWithImage(wxListItem * item);
     void SortItems( wxListCtrlCompare fn, wxIntPtr data );
 

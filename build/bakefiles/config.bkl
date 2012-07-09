@@ -103,7 +103,8 @@ your environment is set up appropriately with the correct compiler in the
 PATH. Rather it affects some options passed to some of the common build
 utilities such as the resource compiler and the linker.
 
-Accepted values: AMD64, IA64.
+Accepted values: IA64, X64
+(AMD64 accepted as synonym for X64 but should not be used any more).
             </description>
         </option>
     </if>

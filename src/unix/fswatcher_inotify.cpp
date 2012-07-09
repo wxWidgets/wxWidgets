@@ -344,9 +344,12 @@ protected:
         wxString mask = (inevt.mask & IN_ISDIR) ?
                         wxString::Format("IS_DIR | %u", inevt.mask & ~IN_ISDIR) :
                         wxString::Format("%u", inevt.mask);
+        const char* name = "";
+        if (inevt.len)
+            name = inevt.name;
         return wxString::Format("Event: wd=%d, mask=%s, cookie=%u, len=%u, "
                                 "name=%s", inevt.wd, mask, inevt.cookie,
-                                inevt.len, inevt.name);
+                                inevt.len, name);
     }
 
     static wxFileName GetEventPath(const wxFSWatchEntry& watch,
@@ -354,7 +357,7 @@ protected:
     {
         // only when dir is watched, we have non-empty e.name
         wxFileName path = watch.GetPath();
-        if (path.IsDir())
+        if (path.IsDir() && inevt.len)
         {
             path = wxFileName(path.GetPath(), inevt.name);
         }

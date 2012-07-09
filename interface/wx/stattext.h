@@ -25,14 +25,14 @@
            Align the text to the left.
     @style{wxALIGN_RIGHT}
            Align the text to the right.
-    @style{wxALIGN_CENTRE}
+    @style{wxALIGN_CENTRE_HORIZONTAL}
            Center the text (horizontally).
     @style{wxST_NO_AUTORESIZE}
            By default, the control will adjust its size to exactly fit to the
            size of the text when SetLabel() is called. If this style flag is
            given, the control will not change its size (this style is
            especially useful with controls which also have the @c wxALIGN_RIGHT or
-           the @c wxALIGN_CENTRE style because otherwise they won't make sense any
+           the @c wxALIGN_CENTRE_HORIZONTAL style because otherwise they won't make sense any
            longer after a call to SetLabel()).
     @style{wxST_ELLIPSIZE_START}
            If the labeltext width exceeds the control width, replace the beginning

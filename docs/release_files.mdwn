@@ -1,0 +1,35 @@
+wxWidgets 2.9.4
+===============
+
+This directory contains the files for wxWidgets 2.9.4 release.
+
+Please notice that since the 2.9 series only a single source distribution is
+provided instead of the multiple distributions containing only the files for
+each port as was done before. So you only need to download wxWidgets-2.9.4.zip
+(or .7z for much smaller archive size) for Microsoft Windows systems or
+wxWidgets-2.9.4.tar.bz2 for Unix ones, including Mac OS X. The only difference
+between these files is that the ZIP (and 7z) archives contain files with DOS
+line endings while the tar balls contain files with Unix line endings.
+
+Windows users: note that the provided wxWidgets-2.9.4-Setup.exe file installs
+the sources for wxMSW and does *not* include wxWidgets binaries and you still
+need to build the library, please see `docs/msw/install.txt` for instructions.
+
+
+Reporting Problems
+------------------
+
+Please report any bugs in this release using [our Trac](http://trac.wxwidgets.org/report)
+or by posting to [wx-users mailing list](http://groups.google.com/group/wx-users).
+
+
+Check Sums
+----------
+
+To verify your download you can use the following sha1sums:
+
+    0b8921c5f115bd335cde24f0cf4f579067815195  wxWidgets-2.9.4.7z
+    231c3e6b411ab3ab4c787e9bfa2bb5743ea8317d  wxWidgets-2.9.4.tar.bz2
+    2031902d1bd0c69d559e5c98e49fc232cfaba87b  wxWidgets-2.9.4.zip
+    1c46c67f0db0fd89d86ab03f8cd1aa2016dcd95f  wxWidgets-docs-html-2.9.4.tar.bz2
+    e1a8ccc1032df673900e8d9248f32969a0d3ccb5  wxWidgets-docs-html-2.9.4.zip

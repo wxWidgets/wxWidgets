@@ -1236,6 +1236,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/treeentry_gtk.h
 </set>
 <set var="GTK2_HDR" hints="files">
+    $(GTK_HDR)
     wx/generic/fontdlgg.h
     wx/gtk/gnome/gprint.h
 </set>

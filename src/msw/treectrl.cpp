@@ -2925,10 +2925,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 // click if needed
                 if ( processed )
                 {
-                    int htFlags = 0;
-                    wxTreeItemId item = HitTest(wxPoint(x, y), htFlags);
-
-                    if ( htFlags & wxTREE_HITTEST_ONITEMSTATEICON )
+                    if ( tvht.flags & TVHT_ONITEMSTATEICON )
                     {
                         m_triggerStateImageClick = true;
                     }

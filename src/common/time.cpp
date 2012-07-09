@@ -292,8 +292,6 @@ wxLongLong wxGetUTCTimeUSec()
 // Get local time as milliseconds since 00:00:00, Jan 1st 1970
 wxLongLong wxGetUTCTimeMillis()
 {
-    wxLongLong val = MILLISECONDS_PER_SECOND;
-
     // If possible, use a function which avoids conversions from
     // broken-up time structures to milliseconds
 #if defined(__WINDOWS__)
@@ -306,7 +304,10 @@ wxLongLong wxGetUTCTimeMillis()
     t /= 10000;
     t -= wxLL(11644473600000); // Unix - Windows epochs difference in ms.
     return t;
-#elif defined(HAVE_GETTIMEOFDAY)
+#else // !__WINDOWS__
+    wxLongLong val = MILLISECONDS_PER_SECOND;
+
+#if defined(HAVE_GETTIMEOFDAY)
     struct timeval tp;
     if ( wxGetTimeOfDay(&tp) != -1 )
     {
@@ -342,6 +343,8 @@ wxLongLong wxGetUTCTimeMillis()
     val *= wxGetUTCTime();
     return val;
 #endif // time functions
+
+#endif // __WINDOWS__/!__WINDOWS__
 }
 
 wxLongLong wxGetLocalTimeMillis()

@@ -38,24 +38,6 @@
 
 #include "wx/sysopt.h"
 
-namespace
-{
-
-// FIXME: This function exists because native OS X wxListCtrl seems to have
-// problems with report view, either imperfect display or reported hanging, so
-// disable it for now (but it should be fixed, and this function removed).
-bool CanUseReportView()
-{
-#if defined(__WXMAC__) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-    if (wxSystemOptions::GetOptionInt(wxMAC_ALWAYS_USE_GENERIC_LISTCTRL) == 0)
-        return false;
-    else
-#endif
-        return true;
-}
-
-} // anonymous namespace
-
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
 // ----------------------------------------------------------------------------
@@ -118,12 +100,9 @@ wxListbook::Create(wxWindow *parent,
                     wxDefaultPosition,
                     wxDefaultSize,
                     wxLC_SINGLE_SEL |
-                    (CanUseReportView() ? GetListCtrlReportViewFlags()
-                                        : GetListCtrlIconViewFlags())
+                    (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP) |
+                    wxLC_LIST
                  );
-
-    if ( CanUseReportView() )
-        GetListView()->InsertColumn(0, wxT("Pages"));
 
 #ifdef __WXMSW__
     // On XP with themes enabled the GetViewRect used in GetControllerSize() to
@@ -136,20 +115,6 @@ wxListbook::Create(wxWindow *parent,
     GetEventHandler()->AddPendingEvent(evt);
 #endif
     return true;
-}
-
-// ----------------------------------------------------------------------------
-// wxListCtrl flags
-// ----------------------------------------------------------------------------
-
-long wxListbook::GetListCtrlIconViewFlags() const
-{
-    return (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP) | wxLC_ICON;
-}
-
-long wxListbook::GetListCtrlReportViewFlags() const
-{
-    return wxLC_REPORT | wxLC_NO_HEADER;
 }
 
 // ----------------------------------------------------------------------------
@@ -259,38 +224,33 @@ bool wxListbook::SetPageImage(size_t n, int imageId)
 
 void wxListbook::SetImageList(wxImageList *imageList)
 {
-    if ( CanUseReportView() )
+    wxListView * const list = GetListView();
+
+    // If imageList presence has changed, we update the list control style
+    if ( (imageList != NULL) != (GetImageList() != NULL) )
     {
-        wxListView * const list = GetListView();
+        // Preserve the selection which is lost when changing the mode
+        const int oldSel = GetSelection();
 
-        // If imageList presence has changed, we update the list control view
-        if ( (imageList != NULL) != (GetImageList() != NULL) )
+        // Update the style to use icon view for images, list view otherwise
+        long style = list->GetWindowStyle() & ~wxLC_MASK_TYPE;
+        if ( imageList )
         {
-            // Preserve the selection which is lost when changing the mode
-            const int oldSel = GetSelection();
-
-            // Update the style to use icon view for images, report view otherwise
-            long style = wxLC_SINGLE_SEL;
-            if ( imageList )
-            {
-                style |= GetListCtrlIconViewFlags();
-            }
-            else // no image list
-            {
-                style |= GetListCtrlReportViewFlags();
-            }
-
-            list->SetWindowStyleFlag(style);
-            if ( !imageList )
-                list->InsertColumn(0, wxT("Pages"));
-
-            // Restore selection
-            if ( oldSel != wxNOT_FOUND )
-                SetSelection(oldSel);
+            style |= wxLC_ICON;
+        }
+        else // no image list
+        {
+            style |= wxLC_LIST;
         }
 
-        list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
+        list->SetWindowStyleFlag(style);
+
+        // Restore selection
+        if ( oldSel != wxNOT_FOUND )
+            SetSelection(oldSel);
     }
+
+    list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
 
     wxBookCtrlBase::SetImageList(imageList);
 }

@@ -253,7 +253,7 @@ Using makefiles:
 1. Open a 64-bit build command prompt, for either x64 or Itanium. Change
    directory to build\msw. Then for x64 type:
 
-    nmake -f makefile.vc TARGET_CPU=AMD64
+    nmake -f makefile.vc TARGET_CPU=X64
 
    or for Itanium:
 
@@ -266,7 +266,7 @@ Using makefiles:
 2. Change to the directory of one of the samples such as samples\minimal. Type
    the same command used to build the main library, for example for x64:
 
-    nmake -f makefile.vc TARGET_CPU=AMD64
+    nmake -f makefile.vc TARGET_CPU=X64
 
 Notes:
 
@@ -277,7 +277,7 @@ additional library to be linked or the following error is received.
 
 If you receive this error add bufferoverflowu.lib to link, e.g.:
 
-    nmake -f makefile.vc TARGET_CPU=AMD64 LDFLAGS=bufferoverflowu.lib
+    nmake -f makefile.vc TARGET_CPU=X64 LDFLAGS=bufferoverflowu.lib
 
 See http://support.microsoft.com/?id=894573 for more information.
 
@@ -710,7 +710,7 @@ DEBUG_INFO=1
   omitted or set to 'default' its value is determined the value of
   the BUILD option.
 
-TARGET_CPU=AMD64|IA64
+TARGET_CPU=X64|IA64
   (VC++ only.) Set this variable to build for x86_64 systems. If unset, x86
   build is performed.
 

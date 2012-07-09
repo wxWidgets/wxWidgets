@@ -4125,8 +4125,10 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     RefreshLines(id, GetItemCount() - 1);
 }
 
-void wxListMainWindow::InsertColumn( long col, const wxListItem &item )
+long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
 {
+    long idx = -1;
+
     m_dirty = true;
     if ( InReportView() )
     {
@@ -4143,9 +4145,11 @@ void wxListMainWindow::InsertColumn( long col, const wxListItem &item )
                 node = m_columns.Item( col );
             m_columns.Insert( node, column );
             m_aColWidths.Insert( colWidthInfo, col );
+            idx = col;
         }
         else
         {
+            idx = m_aColWidths.GetCount();
             m_columns.Append( column );
             m_aColWidths.Add( colWidthInfo );
         }
@@ -4167,6 +4171,7 @@ void wxListMainWindow::InsertColumn( long col, const wxListItem &item )
         // invalidate it as it has to be recalculated
         m_headerWidth = 0;
     }
+    return idx;
 }
 
 int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
@@ -4947,14 +4952,14 @@ long wxGenericListCtrl::DoInsertColumn( long col, const wxListItem &item )
 {
     wxCHECK_MSG( InReportView(), -1, wxT("can't add column in non report mode") );
 
-    m_mainWin->InsertColumn( col, item );
+    long idx = m_mainWin->InsertColumn( col, item );
 
     // NOTE: if wxLC_NO_HEADER was given, then we are in report view mode but
     //       still have m_headerWin==NULL
     if (m_headerWin)
         m_headerWin->Refresh();
 
-    return 0;
+    return idx;
 }
 
 bool wxGenericListCtrl::ScrollList( int dx, int dy )

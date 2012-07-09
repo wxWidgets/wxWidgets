@@ -101,7 +101,7 @@
 
     <set var="WXCPU">
         <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
-        <if cond="FORMAT_SUPPORTS_MULTIPLE_ARCHITECTURES=='1' and TARGET_CPU=='AMD64'">_amd64</if>
+        <if cond="FORMAT_SUPPORTS_MULTIPLE_ARCHITECTURES=='1' and TARGET_CPU=='AMD64'">_x64</if>
         <if cond="FORMAT_SUPPORTS_MULTIPLE_ARCHITECTURES=='1' and TARGET_CPU=='IA64'">_ia64</if>
     </set>
     

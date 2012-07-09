@@ -3613,7 +3613,9 @@ public:
     /**
         Copy constructor.
     */
-    wxRichTextFieldType(const wxRichTextFieldType& fieldType) { Copy(fieldType); }
+    wxRichTextFieldType(const wxRichTextFieldType& fieldType)
+        : wxObject(fieldType)
+    { Copy(fieldType); }
 
     void Copy(const wxRichTextFieldType& fieldType) { m_name = fieldType.m_name; }
 
@@ -3766,7 +3768,9 @@ public:
         The copy constructor.
 
     */
-    wxRichTextFieldTypeStandard(const wxRichTextFieldTypeStandard& field) { Copy(field); }
+    wxRichTextFieldTypeStandard(const wxRichTextFieldTypeStandard& field)
+        : wxRichTextFieldType(field)
+    { Copy(field); }
 
     /**
         Initialises the object.
