@@ -11,9 +11,14 @@ wxWidgets-2.9.4.tar.bz2 for Unix ones, including Mac OS X. The only difference
 between these files is that the ZIP (and 7z) archives contain files with DOS
 line endings while the tar balls contain files with Unix line endings.
 
-Windows users: note that the provided wxWidgets-2.9.4-Setup.exe file installs
-the sources for wxMSW and does *not* include wxWidgets binaries and you still
-need to build the library, please see `docs/msw/install.txt` for instructions.
+
+Note for Windows users: as an experiment, we also provide, for the first time,
+pre-built binaries of wxMSW port built using several versions of Microsoft
+Visual C++ compiler. They are available from the `binaries` subdirectory.
+Please notice that the files in this directory, including
+wxWidgets-2.9.4-Setup.exe file, contain *only* the sources and do **not**
+include any binaries, so you will need to build the library after downloading
+them. Please see `docs/msw/install.txt` for instructions.
 
 
 Reporting Problems
@@ -28,8 +33,8 @@ Check Sums
 
 To verify your download you can use the following sha1sums:
 
-    0b8921c5f115bd335cde24f0cf4f579067815195  wxWidgets-2.9.4.7z
-    231c3e6b411ab3ab4c787e9bfa2bb5743ea8317d  wxWidgets-2.9.4.tar.bz2
-    2031902d1bd0c69d559e5c98e49fc232cfaba87b  wxWidgets-2.9.4.zip
-    1c46c67f0db0fd89d86ab03f8cd1aa2016dcd95f  wxWidgets-docs-html-2.9.4.tar.bz2
-    e1a8ccc1032df673900e8d9248f32969a0d3ccb5  wxWidgets-docs-html-2.9.4.zip
+    0adcc19fd4eca50eba3abb0b46eb83c055146bdb  wxWidgets-2.9.4.7z
+    5a34ddf19d37c741f74652ee847df9568a8b81e1  wxWidgets-2.9.4.tar.bz2
+    4697b6e45a20c9e05d888458d658f89ada8dd5c9  wxWidgets-2.9.4.zip
+    37fc96b3194ad47a574ba8013264104cdf4c942c  wxWidgets-docs-html-2.9.4.tar.bz2
+    bbf4bdf1c0746fe0b634ed55e2657d327db12033  wxWidgets-docs-html-2.9.4.zip

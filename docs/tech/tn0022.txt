@@ -11,6 +11,8 @@ Put a date on the release line in docs/changes.txt.
 
 Update the date in the manual (docs/doxygen/mainpages/manual.h).
 
+Update the release announcement post in docs/publicity/announce.txt.
+
 
 Creating release files
 ----------------------
@@ -85,7 +87,7 @@ Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 Announcement
 ------------
 
-Post announcement at least to wx-announce@googlegroups.com.
+Post docs/publicity/announce.txt at least to wx-announce@googlegroups.com.
 
 TODO: where else to announce it?
 
