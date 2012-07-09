@@ -108,6 +108,11 @@ In addition to the sources, documentation in HTML, CHM and HTB
 for Microsoft Windows. Notice that you will still need to compile
 wxWidgets even when using the installer.
 
+Experimentally, we also supply binaries of wxMSW libraries built
+with several versions of Microsoft Visual C++ compiler for this
+release. They are available in the "binaries" subdirectory, see
+the description of the files in the README file there.
+
 
 Installation
 ------------

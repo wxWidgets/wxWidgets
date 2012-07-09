@@ -524,7 +524,7 @@ Major new features in this release
   was added.
 
 
-2.9.4: (release 2012-07-03)
+2.9.4: (release 2012-07-09)
 ------
 
 INCOMPATIBLE CHANGES SINCE 2.9.3
