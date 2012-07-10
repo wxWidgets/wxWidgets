@@ -683,6 +683,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/crashrpt.h \
 	wx/msw/dde.h \
 	wx/msw/debughlp.h \
+	wx/msw/evtloopconsole.h \
 	wx/msw/gccpriv.h \
 	wx/msw/libraries.h \
 	wx/msw/mimetype.h \
@@ -824,6 +825,7 @@ ALL_BASE_SOURCES =  \
 	src/msw/dde.cpp \
 	src/msw/dir.cpp \
 	src/msw/dlmsw.cpp \
+	src/msw/evtloopconsole.cpp \
 	src/msw/mimetype.cpp \
 	src/msw/power.cpp \
 	src/msw/regconf.cpp \
@@ -860,7 +862,6 @@ ALL_BASE_SOURCES =  \
 	src/osx/carbon/utils.cpp \
 	src/osx/carbon/uma.cpp \
 	src/osx/cocoa/utils.mm \
-	src/msw/evtloop.cpp \
 	src/msw/main.cpp \
 	src/msw/mslu.cpp \
 	src/msw/volume.cpp \
@@ -2529,6 +2530,7 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/crashrpt.h \
 	wx/msw/dde.h \
 	wx/msw/debughlp.h \
+	wx/msw/evtloopconsole.h \
 	wx/msw/gccpriv.h \
 	wx/msw/libraries.h \
 	wx/msw/mimetype.h \
@@ -4470,6 +4472,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_dde.o \
 	monodll_msw_dir.o \
 	monodll_dlmsw.o \
+	monodll_evtloopconsole.o \
 	monodll_msw_mimetype.o \
 	monodll_power.o \
 	monodll_regconf.o \
@@ -4487,8 +4490,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS = monodll_wince_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
-@COND_PLATFORM_WIN32_1@	= monodll_msw_evtloop.o monodll_msw_main.o \
-@COND_PLATFORM_WIN32_1@	monodll_mslu.o monodll_volume.o
+@COND_PLATFORM_WIN32_1@	= monodll_msw_main.o monodll_mslu.o monodll_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_CARBON@	= monodll_carbon_utils.o monodll_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
@@ -5667,6 +5669,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_dialog.o \
 	monodll_msw_dirdlg.o \
 	monodll_dragimag.o \
+	monodll_msw_evtloop.o \
 	monodll_msw_filedlg.o \
 	monodll_msw_frame.o \
 	monodll_msw_gauge.o \
@@ -5906,6 +5909,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_dialog.o \
 	monodll_msw_dirdlg.o \
 	monodll_dragimag.o \
+	monodll_msw_evtloop.o \
 	monodll_msw_filedlg.o \
 	monodll_msw_frame.o \
 	monodll_msw_gauge.o \
@@ -6662,6 +6666,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_dde.o \
 	monolib_msw_dir.o \
 	monolib_dlmsw.o \
+	monolib_evtloopconsole.o \
 	monolib_msw_mimetype.o \
 	monolib_power.o \
 	monolib_regconf.o \
@@ -6679,8 +6684,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_1 = monolib_wince_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_WIN32_1@	= monolib_msw_evtloop.o monolib_msw_main.o \
-@COND_PLATFORM_WIN32_1@	monolib_mslu.o monolib_volume.o
+@COND_PLATFORM_WIN32_1@	= monolib_msw_main.o monolib_mslu.o monolib_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_CARBON@	= monolib_carbon_utils.o monolib_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
@@ -7859,6 +7863,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_dialog.o \
 	monolib_msw_dirdlg.o \
 	monolib_dragimag.o \
+	monolib_msw_evtloop.o \
 	monolib_msw_filedlg.o \
 	monolib_msw_frame.o \
 	monolib_msw_gauge.o \
@@ -8098,6 +8103,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_dialog.o \
 	monolib_msw_dirdlg.o \
 	monolib_dragimag.o \
+	monolib_msw_evtloop.o \
 	monolib_msw_filedlg.o \
 	monolib_msw_frame.o \
 	monolib_msw_gauge.o \
@@ -8907,6 +8913,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_dde.o \
 	basedll_msw_dir.o \
 	basedll_dlmsw.o \
+	basedll_evtloopconsole.o \
 	basedll_msw_mimetype.o \
 	basedll_power.o \
 	basedll_regconf.o \
@@ -8924,8 +8931,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_2 = basedll_wince_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_WIN32_1@	= basedll_evtloop.o basedll_main.o basedll_mslu.o \
-@COND_PLATFORM_WIN32_1@	basedll_volume.o
+@COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_mslu.o basedll_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
 @COND_TOOLKIT_OSX_CARBON@	= basedll_carbon_utils.o basedll_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
@@ -9007,6 +9013,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_dde.o \
 	baselib_msw_dir.o \
 	baselib_dlmsw.o \
+	baselib_evtloopconsole.o \
 	baselib_msw_mimetype.o \
 	baselib_power.o \
 	baselib_regconf.o \
@@ -9024,8 +9031,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_3 = baselib_wince_time.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_WIN32_1@	= baselib_evtloop.o baselib_main.o baselib_mslu.o \
-@COND_PLATFORM_WIN32_1@	baselib_volume.o
+@COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_mslu.o baselib_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
 @COND_TOOLKIT_OSX_CARBON@	= baselib_carbon_utils.o baselib_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
@@ -9199,8 +9205,7 @@ COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__coredll___win32rc = coredll_version_rc.o
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
-@COND_PLATFORM_WIN32_1@	= coredll_msw_evtloop.o coredll_msw_main.o \
-@COND_PLATFORM_WIN32_1@	coredll_mslu.o coredll_volume.o
+@COND_PLATFORM_WIN32_1@	= coredll_msw_main.o coredll_mslu.o coredll_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
 @COND_TOOLKIT_OSX_CARBON@	= coredll_carbon_utils.o coredll_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
@@ -10228,6 +10233,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_dialog.o \
 	coredll_msw_dirdlg.o \
 	coredll_dragimag.o \
+	coredll_msw_evtloop.o \
 	coredll_msw_filedlg.o \
 	coredll_msw_frame.o \
 	coredll_msw_gauge.o \
@@ -10467,6 +10473,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_dialog.o \
 	coredll_msw_dirdlg.o \
 	coredll_dragimag.o \
+	coredll_msw_evtloop.o \
 	coredll_msw_filedlg.o \
 	coredll_msw_frame.o \
 	coredll_msw_gauge.o \
@@ -10837,8 +10844,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_USE_PCH_1@	= ./.pch/wxprec_corelib/wx/wxprec.h.gch
 @COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
-@COND_PLATFORM_WIN32_1@	= corelib_msw_evtloop.o corelib_msw_main.o \
-@COND_PLATFORM_WIN32_1@	corelib_mslu.o corelib_volume.o
+@COND_PLATFORM_WIN32_1@	= corelib_msw_main.o corelib_mslu.o corelib_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
 @COND_TOOLKIT_OSX_CARBON@	= corelib_carbon_utils.o corelib_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
@@ -11866,6 +11872,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_dialog.o \
 	corelib_msw_dirdlg.o \
 	corelib_dragimag.o \
+	corelib_msw_evtloop.o \
 	corelib_msw_filedlg.o \
 	corelib_msw_frame.o \
 	corelib_msw_gauge.o \
@@ -12105,6 +12112,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_dialog.o \
 	corelib_msw_dirdlg.o \
 	corelib_dragimag.o \
+	corelib_msw_evtloop.o \
 	corelib_msw_filedlg.o \
 	corelib_msw_frame.o \
 	corelib_msw_gauge.o \
@@ -15698,7 +15706,7 @@ locale_msw_uninstall:
 	fi ; \
 	done
 
-@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).5.r:
+@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).5.r: 
 @COND_TOOLKIT_COCOA@	$(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).5.rsrc
 @COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).5.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).5.r
 
@@ -16666,6 +16674,9 @@ monodll_msw_dir.o: $(srcdir)/src/msw/dir.cpp $(MONODLL_ODEP)
 monodll_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dlmsw.cpp
 
+monodll_evtloopconsole.o: $(srcdir)/src/msw/evtloopconsole.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloopconsole.cpp
+
 monodll_msw_mimetype.o: $(srcdir)/src/msw/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mimetype.cpp
 
@@ -16764,9 +16775,6 @@ monodll_msgout.o: $(srcdir)/src/common/msgout.cpp $(MONODLL_ODEP)
 
 monodll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
-
-monodll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 monodll_msw_main.o: $(srcdir)/src/msw/main.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -20329,6 +20337,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_filedlg.o: $(srcdir)/src/msw/filedlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/filedlg.cpp
 
@@ -22276,6 +22290,9 @@ monolib_msw_dir.o: $(srcdir)/src/msw/dir.cpp $(MONOLIB_ODEP)
 monolib_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dlmsw.cpp
 
+monolib_evtloopconsole.o: $(srcdir)/src/msw/evtloopconsole.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloopconsole.cpp
+
 monolib_msw_mimetype.o: $(srcdir)/src/msw/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mimetype.cpp
 
@@ -22374,9 +22391,6 @@ monolib_msgout.o: $(srcdir)/src/common/msgout.cpp $(MONOLIB_ODEP)
 
 monolib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
-
-monolib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 monolib_msw_main.o: $(srcdir)/src/msw/main.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -25939,6 +25953,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_filedlg.o: $(srcdir)/src/msw/filedlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/filedlg.cpp
 
@@ -27886,6 +27906,9 @@ basedll_msw_dir.o: $(srcdir)/src/msw/dir.cpp $(BASEDLL_ODEP)
 basedll_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/dlmsw.cpp
 
+basedll_evtloopconsole.o: $(srcdir)/src/msw/evtloopconsole.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/evtloopconsole.cpp
+
 basedll_msw_mimetype.o: $(srcdir)/src/msw/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/mimetype.cpp
 
@@ -27984,9 +28007,6 @@ basedll_msgout.o: $(srcdir)/src/common/msgout.cpp $(BASEDLL_ODEP)
 
 basedll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
-
-basedll_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 basedll_main.o: $(srcdir)/src/msw/main.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -28393,6 +28413,9 @@ baselib_msw_dir.o: $(srcdir)/src/msw/dir.cpp $(BASELIB_ODEP)
 baselib_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/dlmsw.cpp
 
+baselib_evtloopconsole.o: $(srcdir)/src/msw/evtloopconsole.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/evtloopconsole.cpp
+
 baselib_msw_mimetype.o: $(srcdir)/src/msw/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/mimetype.cpp
 
@@ -28491,9 +28514,6 @@ baselib_msgout.o: $(srcdir)/src/common/msgout.cpp $(BASELIB_ODEP)
 
 baselib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
-
-baselib_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 baselib_main.o: $(srcdir)/src/msw/main.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -28749,9 +28769,6 @@ coredll_msgout.o: $(srcdir)/src/common/msgout.cpp $(COREDLL_ODEP)
 
 coredll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
-
-coredll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 coredll_msw_main.o: $(srcdir)/src/msw/main.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -31723,6 +31740,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_filedlg.o: $(srcdir)/src/msw/filedlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/filedlg.cpp
 
@@ -32946,9 +32969,6 @@ corelib_msgout.o: $(srcdir)/src/common/msgout.cpp $(CORELIB_ODEP)
 
 corelib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
-
-corelib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 corelib_msw_main.o: $(srcdir)/src/msw/main.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -35919,6 +35939,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_filedlg.o: $(srcdir)/src/msw/filedlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/filedlg.cpp

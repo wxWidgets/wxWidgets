@@ -1256,7 +1256,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\evtloop.cpp"
+				RelativePath="..\..\src\msw\evtloopconsole.cpp"
 				>
 			</File>
 			<File
@@ -1492,6 +1492,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\debughlp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\evtloopconsole.h"
 				>
 			</File>
 			<File

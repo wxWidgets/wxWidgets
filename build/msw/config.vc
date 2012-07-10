@@ -53,7 +53,7 @@ BUILD = debug
 # utilities such as the resource compiler and the linker.
 # 
 # Accepted values: IA64, X64
-# (AMD64 accepted as synonym for X64 but should not be used any more).
+# (AMD64 accepted as synonym for X64 but should not be used any more). 
 TARGET_CPU = $(CPU)
 
 # Should debugging info be included in the executables? The default value

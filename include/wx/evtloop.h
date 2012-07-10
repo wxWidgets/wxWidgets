@@ -184,7 +184,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
 
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && !defined(__WXOSX__))
+#if defined(__WINDOWS__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && !defined(__WXOSX__))
 
 // this class can be used to implement a standard event loop logic using
 // Pending() and Dispatch()
@@ -233,10 +233,7 @@ private:
 // integration with MFC) but currently this is not done for all ports yet (e.g.
 // wxX11) so fall back to the old wxGUIEventLoop definition below for them
 
-#if defined(__WXMSW__)
-    // this header defines both console and GUI loops for MSW
-    #include "wx/msw/evtloop.h"
-#elif defined(__WXOSX__)
+#if defined(__WXOSX__)
     // CoreFoundation-based event loop is currently in wxBase so include it in
     // any case too (although maybe it actually shouldn't be there at all)
     #include "wx/osx/evtloop.h"
@@ -244,7 +241,9 @@ private:
 
 // include the appropriate header defining wxGUIEventLoop
 
-#if defined(__WXCOCOA__)
+#if defined(__WXMSW__)
+    #include "wx/msw/evtloop.h"
+#elif defined(__WXCOCOA__)
     #include "wx/cocoa/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
@@ -310,6 +309,8 @@ protected:
 // include the header defining wxConsoleEventLoop for Unix systems
 #if defined(__UNIX__) && !defined(__WXMSW__)
 #include "wx/unix/evtloop.h"
+#elif defined(__WINDOWS__)
+#include "wx/msw/evtloopconsole.h"
 #endif
 
 #if wxUSE_GUI
@@ -319,7 +320,7 @@ protected:
 #else // !wxUSE_GUI
     // we can't define wxEventLoop differently in GUI and base libraries so use
     // a #define to still allow writing wxEventLoop in the user code
-    #if wxUSE_CONSOLE_EVENTLOOP && (defined(__WXMSW__) || defined(__UNIX__))
+    #if wxUSE_CONSOLE_EVENTLOOP && (defined(__WINDOWS__) || defined(__UNIX__))
         #define wxEventLoop wxConsoleEventLoop
     #else // we still must define it somehow for the code below...
         #define wxEventLoop wxEventLoopBase

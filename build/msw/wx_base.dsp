@@ -635,7 +635,7 @@ SOURCE=..\..\src\msw\dlmsw.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\evtloop.cpp
+SOURCE=..\..\src\msw\evtloopconsole.cpp
 # End Source File
 # Begin Source File
 
@@ -913,6 +913,10 @@ SOURCE=..\..\include\wx\msw\dde.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\debughlp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\evtloopconsole.h
 # End Source File
 # Begin Source File
 

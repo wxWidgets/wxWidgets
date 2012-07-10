@@ -917,7 +917,7 @@
 				RelativePath="..\..\src\msw\dlmsw.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\msw\evtloop.cpp">
+				RelativePath="..\..\src\msw\evtloopconsole.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\fswatcher.cpp">
@@ -1097,6 +1097,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\debughlp.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\evtloopconsole.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\fswatcher.h">

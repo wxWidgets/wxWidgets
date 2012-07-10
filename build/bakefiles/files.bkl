@@ -128,6 +128,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dde.cpp
     src/msw/dir.cpp
     src/msw/dlmsw.cpp
+    src/msw/evtloopconsole.cpp
     src/msw/mimetype.cpp
     src/msw/power.cpp
     src/msw/regconf.cpp
@@ -142,7 +143,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/fswatcher.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
-    src/msw/evtloop.cpp
     src/msw/main.cpp
     src/msw/mslu.cpp
     src/msw/volume.cpp
@@ -157,6 +157,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/crashrpt.h
     wx/msw/dde.h
     wx/msw/debughlp.h
+    wx/msw/evtloopconsole.h
     wx/msw/gccpriv.h
     wx/msw/libraries.h
     wx/msw/mimetype.h
@@ -1735,6 +1736,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
+    src/msw/evtloop.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp

@@ -402,6 +402,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dde.o \
 	$(OBJS)\monodll_dir.o \
 	$(OBJS)\monodll_dlmsw.o \
+	$(OBJS)\monodll_evtloopconsole.o \
 	$(OBJS)\monodll_mimetype.o \
 	$(OBJS)\monodll_power.o \
 	$(OBJS)\monodll_regconf.o \
@@ -418,7 +419,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_fs_mem.o \
 	$(OBJS)\monodll_msgout.o \
 	$(OBJS)\monodll_utilscmn.o \
-	$(OBJS)\monodll_evtloop.o \
 	$(OBJS)\monodll_main.o \
 	$(OBJS)\monodll_mslu.o \
 	$(OBJS)\monodll_volume.o \
@@ -552,6 +552,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dde.o \
 	$(OBJS)\monolib_dir.o \
 	$(OBJS)\monolib_dlmsw.o \
+	$(OBJS)\monolib_evtloopconsole.o \
 	$(OBJS)\monolib_mimetype.o \
 	$(OBJS)\monolib_power.o \
 	$(OBJS)\monolib_regconf.o \
@@ -568,7 +569,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_fs_mem.o \
 	$(OBJS)\monolib_msgout.o \
 	$(OBJS)\monolib_utilscmn.o \
-	$(OBJS)\monolib_evtloop.o \
 	$(OBJS)\monolib_main.o \
 	$(OBJS)\monolib_mslu.o \
 	$(OBJS)\monolib_volume.o \
@@ -700,6 +700,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dde.o \
 	$(OBJS)\basedll_dir.o \
 	$(OBJS)\basedll_dlmsw.o \
+	$(OBJS)\basedll_evtloopconsole.o \
 	$(OBJS)\basedll_mimetype.o \
 	$(OBJS)\basedll_power.o \
 	$(OBJS)\basedll_regconf.o \
@@ -716,7 +717,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_fs_mem.o \
 	$(OBJS)\basedll_msgout.o \
 	$(OBJS)\basedll_utilscmn.o \
-	$(OBJS)\basedll_evtloop.o \
 	$(OBJS)\basedll_main.o \
 	$(OBJS)\basedll_mslu.o \
 	$(OBJS)\basedll_volume.o
@@ -832,6 +832,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dde.o \
 	$(OBJS)\baselib_dir.o \
 	$(OBJS)\baselib_dlmsw.o \
+	$(OBJS)\baselib_evtloopconsole.o \
 	$(OBJS)\baselib_mimetype.o \
 	$(OBJS)\baselib_power.o \
 	$(OBJS)\baselib_regconf.o \
@@ -848,7 +849,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_fs_mem.o \
 	$(OBJS)\baselib_msgout.o \
 	$(OBJS)\baselib_utilscmn.o \
-	$(OBJS)\baselib_evtloop.o \
 	$(OBJS)\baselib_main.o \
 	$(OBJS)\baselib_mslu.o \
 	$(OBJS)\baselib_volume.o
@@ -916,7 +916,6 @@ COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_fs_mem.o \
 	$(OBJS)\coredll_msgout.o \
 	$(OBJS)\coredll_utilscmn.o \
-	$(OBJS)\coredll_evtloop.o \
 	$(OBJS)\coredll_main.o \
 	$(OBJS)\coredll_mslu.o \
 	$(OBJS)\coredll_volume.o \
@@ -936,7 +935,6 @@ CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_fs_mem.o \
 	$(OBJS)\corelib_msgout.o \
 	$(OBJS)\corelib_utilscmn.o \
-	$(OBJS)\corelib_evtloop.o \
 	$(OBJS)\corelib_main.o \
 	$(OBJS)\corelib_mslu.o \
 	$(OBJS)\corelib_volume.o \
@@ -1818,6 +1816,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_dialog.o \
 	$(OBJS)\monodll_dirdlg.o \
 	$(OBJS)\monodll_dragimag.o \
+	$(OBJS)\monodll_evtloop.o \
 	$(OBJS)\monodll_filedlg.o \
 	$(OBJS)\monodll_frame.o \
 	$(OBJS)\monodll_msw_gauge.o \
@@ -2608,6 +2607,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_dialog.o \
 	$(OBJS)\monolib_dirdlg.o \
 	$(OBJS)\monolib_dragimag.o \
+	$(OBJS)\monolib_evtloop.o \
 	$(OBJS)\monolib_filedlg.o \
 	$(OBJS)\monolib_frame.o \
 	$(OBJS)\monolib_msw_gauge.o \
@@ -3290,6 +3290,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_dialog.o \
 	$(OBJS)\coredll_dirdlg.o \
 	$(OBJS)\coredll_dragimag.o \
+	$(OBJS)\coredll_evtloop.o \
 	$(OBJS)\coredll_filedlg.o \
 	$(OBJS)\coredll_frame.o \
 	$(OBJS)\coredll_msw_gauge.o \
@@ -3840,6 +3841,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_dialog.o \
 	$(OBJS)\corelib_dirdlg.o \
 	$(OBJS)\corelib_dragimag.o \
+	$(OBJS)\corelib_evtloop.o \
 	$(OBJS)\corelib_filedlg.o \
 	$(OBJS)\corelib_frame.o \
 	$(OBJS)\corelib_msw_gauge.o \
@@ -6511,6 +6513,9 @@ $(OBJS)\monodll_dir.o: ../../src/msw/dir.cpp
 $(OBJS)\monodll_dlmsw.o: ../../src/msw/dlmsw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_evtloopconsole.o: ../../src/msw/evtloopconsole.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_mimetype.o: ../../src/msw/mimetype.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6557,9 +6562,6 @@ $(OBJS)\monodll_msgout.o: ../../src/common/msgout.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_utilscmn.o: ../../src/common/utilscmn.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_main.o: ../../src/msw/main.cpp
@@ -6650,6 +6652,9 @@ $(OBJS)\monodll_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_dragimag.o: ../../src/msw/dragimag.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_filedlg.o: ../../src/msw/filedlg.cpp
@@ -8919,6 +8924,9 @@ $(OBJS)\monolib_dir.o: ../../src/msw/dir.cpp
 $(OBJS)\monolib_dlmsw.o: ../../src/msw/dlmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_evtloopconsole.o: ../../src/msw/evtloopconsole.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_mimetype.o: ../../src/msw/mimetype.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8965,9 +8973,6 @@ $(OBJS)\monolib_msgout.o: ../../src/common/msgout.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_utilscmn.o: ../../src/common/utilscmn.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_main.o: ../../src/msw/main.cpp
@@ -9058,6 +9063,9 @@ $(OBJS)\monolib_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_dragimag.o: ../../src/msw/dragimag.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_filedlg.o: ../../src/msw/filedlg.cpp
@@ -11327,6 +11335,9 @@ $(OBJS)\basedll_dir.o: ../../src/msw/dir.cpp
 $(OBJS)\basedll_dlmsw.o: ../../src/msw/dlmsw.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_evtloopconsole.o: ../../src/msw/evtloopconsole.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_mimetype.o: ../../src/msw/mimetype.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11373,9 +11384,6 @@ $(OBJS)\basedll_msgout.o: ../../src/common/msgout.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_utilscmn.o: ../../src/common/utilscmn.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\basedll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_main.o: ../../src/msw/main.cpp
@@ -11666,6 +11674,9 @@ $(OBJS)\baselib_dir.o: ../../src/msw/dir.cpp
 $(OBJS)\baselib_dlmsw.o: ../../src/msw/dlmsw.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\baselib_evtloopconsole.o: ../../src/msw/evtloopconsole.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\baselib_mimetype.o: ../../src/msw/mimetype.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11712,9 +11723,6 @@ $(OBJS)\baselib_msgout.o: ../../src/common/msgout.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_utilscmn.o: ../../src/common/utilscmn.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\baselib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_main.o: ../../src/msw/main.cpp
@@ -11825,9 +11833,6 @@ $(OBJS)\coredll_msgout.o: ../../src/common/msgout.cpp
 $(OBJS)\coredll_utilscmn.o: ../../src/common/utilscmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_evtloop.o: ../../src/msw/evtloop.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\coredll_main.o: ../../src/msw/main.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11880,6 +11885,9 @@ $(OBJS)\coredll_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_dragimag.o: ../../src/msw/dragimag.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\coredll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_filedlg.o: ../../src/msw/filedlg.cpp
@@ -13233,9 +13241,6 @@ $(OBJS)\corelib_msgout.o: ../../src/common/msgout.cpp
 $(OBJS)\corelib_utilscmn.o: ../../src/common/utilscmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\corelib_evtloop.o: ../../src/msw/evtloop.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\corelib_main.o: ../../src/msw/main.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13288,6 +13293,9 @@ $(OBJS)\corelib_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_dragimag.o: ../../src/msw/dragimag.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_filedlg.o: ../../src/msw/filedlg.cpp

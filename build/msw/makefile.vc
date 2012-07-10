@@ -434,6 +434,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dde.obj \
 	$(OBJS)\monodll_dir.obj \
 	$(OBJS)\monodll_dlmsw.obj \
+	$(OBJS)\monodll_evtloopconsole.obj \
 	$(OBJS)\monodll_mimetype.obj \
 	$(OBJS)\monodll_power.obj \
 	$(OBJS)\monodll_regconf.obj \
@@ -450,7 +451,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_fs_mem.obj \
 	$(OBJS)\monodll_msgout.obj \
 	$(OBJS)\monodll_utilscmn.obj \
-	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_main.obj \
 	$(OBJS)\monodll_mslu.obj \
 	$(OBJS)\monodll_volume.obj \
@@ -592,6 +592,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dde.obj \
 	$(OBJS)\monolib_dir.obj \
 	$(OBJS)\monolib_dlmsw.obj \
+	$(OBJS)\monolib_evtloopconsole.obj \
 	$(OBJS)\monolib_mimetype.obj \
 	$(OBJS)\monolib_power.obj \
 	$(OBJS)\monolib_regconf.obj \
@@ -608,7 +609,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_fs_mem.obj \
 	$(OBJS)\monolib_msgout.obj \
 	$(OBJS)\monolib_utilscmn.obj \
-	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_main.obj \
 	$(OBJS)\monolib_mslu.obj \
 	$(OBJS)\monolib_volume.obj \
@@ -746,6 +746,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dde.obj \
 	$(OBJS)\basedll_dir.obj \
 	$(OBJS)\basedll_dlmsw.obj \
+	$(OBJS)\basedll_evtloopconsole.obj \
 	$(OBJS)\basedll_mimetype.obj \
 	$(OBJS)\basedll_power.obj \
 	$(OBJS)\basedll_regconf.obj \
@@ -762,7 +763,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_fs_mem.obj \
 	$(OBJS)\basedll_msgout.obj \
 	$(OBJS)\basedll_utilscmn.obj \
-	$(OBJS)\basedll_evtloop.obj \
 	$(OBJS)\basedll_main.obj \
 	$(OBJS)\basedll_mslu.obj \
 	$(OBJS)\basedll_volume.obj
@@ -887,6 +887,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dde.obj \
 	$(OBJS)\baselib_dir.obj \
 	$(OBJS)\baselib_dlmsw.obj \
+	$(OBJS)\baselib_evtloopconsole.obj \
 	$(OBJS)\baselib_mimetype.obj \
 	$(OBJS)\baselib_power.obj \
 	$(OBJS)\baselib_regconf.obj \
@@ -903,7 +904,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_fs_mem.obj \
 	$(OBJS)\baselib_msgout.obj \
 	$(OBJS)\baselib_utilscmn.obj \
-	$(OBJS)\baselib_evtloop.obj \
 	$(OBJS)\baselib_main.obj \
 	$(OBJS)\baselib_mslu.obj \
 	$(OBJS)\baselib_volume.obj
@@ -982,7 +982,6 @@ COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_fs_mem.obj \
 	$(OBJS)\coredll_msgout.obj \
 	$(OBJS)\coredll_utilscmn.obj \
-	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_main.obj \
 	$(OBJS)\coredll_mslu.obj \
 	$(OBJS)\coredll_volume.obj \
@@ -1008,7 +1007,6 @@ CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_fs_mem.obj \
 	$(OBJS)\corelib_msgout.obj \
 	$(OBJS)\corelib_utilscmn.obj \
-	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_main.obj \
 	$(OBJS)\corelib_mslu.obj \
 	$(OBJS)\corelib_volume.obj \
@@ -2098,6 +2096,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_dialog.obj \
 	$(OBJS)\monodll_dirdlg.obj \
 	$(OBJS)\monodll_dragimag.obj \
+	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_filedlg.obj \
 	$(OBJS)\monodll_frame.obj \
 	$(OBJS)\monodll_msw_gauge.obj \
@@ -2888,6 +2887,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_dialog.obj \
 	$(OBJS)\monolib_dirdlg.obj \
 	$(OBJS)\monolib_dragimag.obj \
+	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_filedlg.obj \
 	$(OBJS)\monolib_frame.obj \
 	$(OBJS)\monolib_msw_gauge.obj \
@@ -3620,6 +3620,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_dialog.obj \
 	$(OBJS)\coredll_dirdlg.obj \
 	$(OBJS)\coredll_dragimag.obj \
+	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_filedlg.obj \
 	$(OBJS)\coredll_frame.obj \
 	$(OBJS)\coredll_msw_gauge.obj \
@@ -4168,6 +4169,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_dialog.obj \
 	$(OBJS)\corelib_dirdlg.obj \
 	$(OBJS)\corelib_dragimag.obj \
+	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_filedlg.obj \
 	$(OBJS)\corelib_frame.obj \
 	$(OBJS)\corelib_msw_gauge.obj \
@@ -7027,6 +7029,9 @@ $(OBJS)\monodll_dir.obj: ..\..\src\msw\dir.cpp
 $(OBJS)\monodll_dlmsw.obj: ..\..\src\msw\dlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\dlmsw.cpp
 
+$(OBJS)\monodll_evtloopconsole.obj: ..\..\src\msw\evtloopconsole.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloopconsole.cpp
+
 $(OBJS)\monodll_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\mimetype.cpp
 
@@ -7074,9 +7079,6 @@ $(OBJS)\monodll_msgout.obj: ..\..\src\common\msgout.cpp
 
 $(OBJS)\monodll_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\utilscmn.cpp
-
-$(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 
 $(OBJS)\monodll_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\main.cpp
@@ -7167,6 +7169,9 @@ $(OBJS)\monodll_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 
 $(OBJS)\monodll_dragimag.obj: ..\..\src\msw\dragimag.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\dragimag.cpp
+
+$(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 
 $(OBJS)\monodll_filedlg.obj: ..\..\src\msw\filedlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\filedlg.cpp
@@ -9435,6 +9440,9 @@ $(OBJS)\monolib_dir.obj: ..\..\src\msw\dir.cpp
 $(OBJS)\monolib_dlmsw.obj: ..\..\src\msw\dlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\dlmsw.cpp
 
+$(OBJS)\monolib_evtloopconsole.obj: ..\..\src\msw\evtloopconsole.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloopconsole.cpp
+
 $(OBJS)\monolib_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\mimetype.cpp
 
@@ -9482,9 +9490,6 @@ $(OBJS)\monolib_msgout.obj: ..\..\src\common\msgout.cpp
 
 $(OBJS)\monolib_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\utilscmn.cpp
-
-$(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 
 $(OBJS)\monolib_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\main.cpp
@@ -9575,6 +9580,9 @@ $(OBJS)\monolib_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 
 $(OBJS)\monolib_dragimag.obj: ..\..\src\msw\dragimag.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\dragimag.cpp
+
+$(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 
 $(OBJS)\monolib_filedlg.obj: ..\..\src\msw\filedlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\filedlg.cpp
@@ -11843,6 +11851,9 @@ $(OBJS)\basedll_dir.obj: ..\..\src\msw\dir.cpp
 $(OBJS)\basedll_dlmsw.obj: ..\..\src\msw\dlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\dlmsw.cpp
 
+$(OBJS)\basedll_evtloopconsole.obj: ..\..\src\msw\evtloopconsole.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\evtloopconsole.cpp
+
 $(OBJS)\basedll_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\mimetype.cpp
 
@@ -11890,9 +11901,6 @@ $(OBJS)\basedll_msgout.obj: ..\..\src\common\msgout.cpp
 
 $(OBJS)\basedll_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\utilscmn.cpp
-
-$(OBJS)\basedll_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 
 $(OBJS)\basedll_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\main.cpp
@@ -12182,6 +12190,9 @@ $(OBJS)\baselib_dir.obj: ..\..\src\msw\dir.cpp
 $(OBJS)\baselib_dlmsw.obj: ..\..\src\msw\dlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\dlmsw.cpp
 
+$(OBJS)\baselib_evtloopconsole.obj: ..\..\src\msw\evtloopconsole.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\evtloopconsole.cpp
+
 $(OBJS)\baselib_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\mimetype.cpp
 
@@ -12229,9 +12240,6 @@ $(OBJS)\baselib_msgout.obj: ..\..\src\common\msgout.cpp
 
 $(OBJS)\baselib_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\utilscmn.cpp
-
-$(OBJS)\baselib_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 
 $(OBJS)\baselib_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\main.cpp
@@ -12341,9 +12349,6 @@ $(OBJS)\coredll_msgout.obj: ..\..\src\common\msgout.cpp
 $(OBJS)\coredll_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\utilscmn.cpp
 
-$(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
-
 $(OBJS)\coredll_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\main.cpp
 
@@ -12397,6 +12402,9 @@ $(OBJS)\coredll_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 
 $(OBJS)\coredll_dragimag.obj: ..\..\src\msw\dragimag.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\dragimag.cpp
+
+$(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 
 $(OBJS)\coredll_filedlg.obj: ..\..\src\msw\filedlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\filedlg.cpp
@@ -13749,9 +13757,6 @@ $(OBJS)\corelib_msgout.obj: ..\..\src\common\msgout.cpp
 $(OBJS)\corelib_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\utilscmn.cpp
 
-$(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
-
 $(OBJS)\corelib_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\main.cpp
 
@@ -13805,6 +13810,9 @@ $(OBJS)\corelib_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 
 $(OBJS)\corelib_dragimag.obj: ..\..\src\msw\dragimag.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\dragimag.cpp
+
+$(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 
 $(OBJS)\corelib_filedlg.obj: ..\..\src\msw\filedlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\filedlg.cpp
