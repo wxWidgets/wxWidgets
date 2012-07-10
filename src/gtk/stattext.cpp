@@ -191,13 +191,6 @@ bool wxStaticText::SetFont( const wxFont &font )
     return ret;
 }
 
-void wxStaticText::DoSetSize(int x, int y,
-                             int width, int height,
-                             int sizeFlags )
-{
-    wxStaticTextBase::DoSetSize(x, y, width, height, sizeFlags);
-}
-
 wxSize wxStaticText::DoGetBestSize() const
 {
     // Do not return any arbitrary default value...
