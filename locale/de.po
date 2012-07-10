@@ -6023,7 +6023,7 @@ msgstr "Mehrere aktive DFÜ-Verbindungen gefunden, wähle eine davon aus."
 
 #: ../src/common/accelcmn.cpp:315
 msgid "Shift+"
-msgstr "Umschalten-"
+msgstr "Umschalt+"
 
 #: ../src/generic/dirdlgg.cpp:171
 msgid "Show &hidden directories"
