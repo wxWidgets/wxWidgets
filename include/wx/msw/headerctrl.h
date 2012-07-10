@@ -46,7 +46,14 @@ public:
 
     virtual ~wxHeaderCtrl();
 
-
+    
+protected:
+    // override wxWindow methods which must be implemented by a new control
+    virtual wxSize DoGetBestSize() const;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    
 private:
     // implement base class pure virtuals
     virtual void DoSetCount(unsigned int count);
@@ -57,12 +64,6 @@ private:
 
     virtual void DoSetColumnsOrder(const wxArrayInt& order);
     virtual wxArrayInt DoGetColumnsOrder() const;
-
-    // override wxWindow methods which must be implemented by a new control
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
 
     // override MSW-specific methods needed for new control
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
