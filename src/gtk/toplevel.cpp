@@ -354,15 +354,10 @@ gtk_frame_map_callback( GtkWidget*,
         win->GetEventHandler()->ProcessEvent(eventShow);
     }
 
-#if GTK_CHECK_VERSION(2,6,0)
-#ifndef __WXGTK3__
-    if (!gtk_check_version(2,6,0))
-#endif
     {
         // restore focus-on-map setting in case ShowWithoutActivating() was called
         gtk_window_set_focus_on_map(GTK_WINDOW(win->m_widget), true);
     }
-#endif // GTK+ 2.6+
 
     return false;
 }
@@ -977,12 +972,7 @@ void wxTopLevelWindowGTK::ShowWithoutActivating()
 {
     if (!m_isShown)
     {
-#if GTK_CHECK_VERSION(2,6,0)
-#ifndef __WXGTK3__
-        if (!gtk_check_version(2,6,0))
-#endif
             gtk_window_set_focus_on_map(GTK_WINDOW(m_widget), false);
-#endif // GTK+ 2.6+
 
         Show(true);
     }

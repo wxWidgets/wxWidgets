@@ -19,17 +19,13 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_ABOUTDLG && defined(__WXGTK26__)
+#if wxUSE_ABOUTDLG
 
 #include "wx/aboutdlg.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"       // for wxLaunchDefaultBrowser()
 #endif //WX_PRECOMP
-
-#ifndef __WXGTK3__
-#include "wx/generic/aboutdlgg.h"
-#endif
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
@@ -138,9 +134,6 @@ static void wxGtkAboutDialogOnLink(GtkAboutDialog*, const char* link, void*)
 
 void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
 {
-#ifndef __WXGTK3__
-    if ( !gtk_check_version(2,6,0) )
-#endif
     {
         // don't create another dialog if one is already present
         if ( !gs_aboutDialog )
@@ -246,11 +239,6 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
 
         gtk_window_present(GTK_WINDOW(dlg));
     }
-#ifndef __WXGTK3__
-    else
-        // native about dialog not available, fall back to the generic one
-        wxGenericAboutBox(info);
-#endif
 }
 
-#endif // wxUSE_ABOUTDLG && GTK+ 2.6+
+#endif // wxUSE_ABOUTDLG

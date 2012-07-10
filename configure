@@ -23103,7 +23103,7 @@ fi
     no_gtk=yes
   fi
 
-  min_gtk_version=2.4.0
+  min_gtk_version=2.6.0
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK+ - version >= $min_gtk_version" >&5
 $as_echo_n "checking for GTK+ - version >= $min_gtk_version... " >&6; }
 
@@ -24147,8 +24147,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
             $as_echo "#define __WXGTK210__ 1" >>confdefs.h
 
-            $as_echo "#define __WXGTK26__ 1" >>confdefs.h
-
         elif test "$WXGTK2" = 1; then
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
@@ -24179,8 +24177,6 @@ if ac_fn_c_try_compile "$LINENO"; then :
                             $as_echo "#define __WXGTK218__ 1" >>confdefs.h
 
                             $as_echo "#define __WXGTK210__ 1" >>confdefs.h
-
-                            $as_echo "#define __WXGTK26__ 1" >>confdefs.h
 
                             { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -24219,8 +24215,6 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
                                 $as_echo "#define __WXGTK210__ 1" >>confdefs.h
 
-                                $as_echo "#define __WXGTK26__ 1" >>confdefs.h
-
                                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
                                 ac_wxgtk210=1
@@ -24233,44 +24227,6 @@ $as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-                if test "$ac_wxgtk210" = 0; then
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GTK+ is version >= 2.6" >&5
-$as_echo_n "checking if GTK+ is version >= 2.6... " >&6; }
-                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-                                    #include <gtk/gtk.h>
-
-int
-main ()
-{
-
-                                    #if !GTK_CHECK_VERSION(2,6,0)
-                                    Not GTK+ 2.6
-                                    #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-                                    $as_echo "#define __WXGTK26__ 1" >>confdefs.h
-
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-                                    ac_wxgtk26=1
-
-else
-
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                                    ac_wxgtk26=0
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                fi
             fi
 
             CFLAGS="$save_CFLAGS"

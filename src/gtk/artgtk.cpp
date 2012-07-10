@@ -327,10 +327,6 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
     }
 
     // otherwise try icon themes
-#ifdef __WXGTK26__
-#ifndef __WXGTK3__
-    if ( !gtk_check_version(2,6,0) )
-#endif
     {
         gint *sizes = gtk_icon_theme_get_icon_sizes
                       (
@@ -352,7 +348,6 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
                               );
         g_free(sizes);
     }
-#endif // __WXGTK26__
 
     return bundle;
 }

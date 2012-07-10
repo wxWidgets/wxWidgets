@@ -1231,11 +1231,7 @@ const char *wxGetStockGtkID(wxWindowID id)
         case wx:                   \
             return gtk;
 
-    #if GTK_CHECK_VERSION(2,6,0)
         #define STOCKITEM_26(wx,gtk) STOCKITEM(wx,gtk)
-    #else
-        #define STOCKITEM_26(wx,gtk)
-    #endif
 
     #if GTK_CHECK_VERSION(2,8,0)
         #define STOCKITEM_28(wx,gtk) STOCKITEM(wx,gtk)

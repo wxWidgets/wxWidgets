@@ -310,7 +310,7 @@ void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 // currently wxAboutBox is implemented natively only under these platforms, for
 // the others we provide a generic fallback here
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && \
-        (!defined(__WXGTK26__) || defined(__WXUNIVERSAL__))
+        (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__))
 
 void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {

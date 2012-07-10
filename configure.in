@@ -2890,7 +2890,7 @@ if test "$wxUSE_GUI" = "yes"; then
                     esac
 
                     if test "$wxGTK_VERSION" != 3; then
-                        AM_PATH_GTK_2_0(2.4.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                        AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
                     fi
                     if test -z "$wx_cv_lib_gtk"; then
                         if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
@@ -2956,7 +2956,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         if test "$WXGTK3" = 1; then
             AC_DEFINE(__WXGTK218__)
             AC_DEFINE(__WXGTK210__)
-            AC_DEFINE(__WXGTK26__)
         elif test "$WXGTK2" = 1; then
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
@@ -2976,7 +2975,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            [
                             AC_DEFINE(__WXGTK218__)
                             AC_DEFINE(__WXGTK210__)
-                            AC_DEFINE(__WXGTK26__)
                             AC_MSG_RESULT([yes])
                             ac_wxgtk218=1
                            ],
@@ -2998,7 +2996,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                                ],
                                [
                                 AC_DEFINE(__WXGTK210__)
-                                AC_DEFINE(__WXGTK26__)
                                 AC_MSG_RESULT([yes])
                                 ac_wxgtk210=1
                                ],
@@ -3006,28 +3003,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                                 AC_MSG_RESULT([no])
                                 ac_wxgtk210=0
                                ])
-
-                if test "$ac_wxgtk210" = 0; then
-                    dnl test if we have at least GTK+ 2.6:
-                    AC_MSG_CHECKING([if GTK+ is version >= 2.6])
-                    AC_TRY_COMPILE([
-                                    #include <gtk/gtk.h>
-                                ],
-                                [
-                                    #if !GTK_CHECK_VERSION(2,6,0)
-                                    Not GTK+ 2.6
-                                    #endif
-                                ],
-                                [
-                                    AC_DEFINE(__WXGTK26__)
-                                    AC_MSG_RESULT([yes])
-                                    ac_wxgtk26=1
-                                ],
-                                [
-                                    AC_MSG_RESULT([no])
-                                    ac_wxgtk26=0
-                                ])
-                fi
             fi
 
             CFLAGS="$save_CFLAGS"

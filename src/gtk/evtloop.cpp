@@ -239,9 +239,7 @@ static void wxgtk_main_do_event(GdkEvent* event, void* data)
     case GDK_SELECTION_REQUEST:
     case GDK_SELECTION_NOTIFY:
     case GDK_SELECTION_CLEAR:
-#if GTK_CHECK_VERSION(2,6,0)
     case GDK_OWNER_CHANGE:
-#endif
         cat = wxEVT_CATEGORY_CLIPBOARD;
         break;
 

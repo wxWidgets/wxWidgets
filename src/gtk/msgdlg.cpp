@@ -166,19 +166,13 @@ void wxMessageDialog::GTKCreateMsgDialog()
     }
 
     wxString message;
-#if GTK_CHECK_VERSION(2, 6, 0)
     bool needsExtMessage = false;
-    if (!m_extendedMessage.empty()
-#ifndef __WXGTK3__
-        && gtk_check_version(2, 6, 0) == NULL
-#endif
-        )
+    if (!m_extendedMessage.empty())
     {
         message = m_message;
         needsExtMessage = true;
     }
-    else // extended message not needed or not supported
-#endif // GTK+ 2.6+
+    else // extended message not needed
     {
         message = GetFullMessage();
     }
@@ -190,7 +184,6 @@ void wxMessageDialog::GTKCreateMsgDialog()
                                       "%s",
                                       (const char*)wxGTK_CONV(message));
 
-#if GTK_CHECK_VERSION(2, 6, 0)
     if ( needsExtMessage )
     {
         gtk_message_dialog_format_secondary_text
@@ -200,7 +193,6 @@ void wxMessageDialog::GTKCreateMsgDialog()
             (const char *)wxGTK_CONV(m_extendedMessage)
         );
     }
-#endif // GTK+ 2.6+
 #endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2/!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
 
     g_object_ref(m_widget);

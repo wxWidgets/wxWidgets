@@ -1451,8 +1451,6 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
 
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-#ifdef __WXGTK26__
-    if (!gtk_check_version(2,6,0))
     {
         x = XLOG2DEV(x);
         y = YLOG2DEV(y);
@@ -1528,110 +1526,6 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
 
         CalcBoundingBox(x+minX, y+minY);
         CalcBoundingBox(x+maxX, y+maxY);
-    }
-    else
-#endif //__WXGTK26__
-    {
-#if wxUSE_IMAGE
-    if ( wxIsNullDouble(angle) )
-    {
-        DoDrawText(text, x, y);
-        return;
-    }
-
-    wxCoord w;
-    wxCoord h;
-
-    // TODO: implement later without GdkFont for GTK 2.0
-    DoGetTextExtent(text, &w, &h, NULL,NULL, &m_font);
-
-    // draw the string normally
-    wxBitmap src(w, h);
-    wxMemoryDC dc;
-    dc.SelectObject(src);
-    dc.SetFont(GetFont());
-    dc.SetBackground(*wxBLACK_BRUSH);
-    dc.SetBrush(*wxBLACK_BRUSH);
-    dc.Clear();
-    dc.SetTextForeground( *wxWHITE );
-    dc.DrawText(text, 0, 0);
-    dc.SelectObject(wxNullBitmap);
-
-    // Calculate the size of the rotated bounding box.
-    double rad = DegToRad(angle);
-    double dx = cos(rad),
-           dy = sin(rad);
-
-    // the rectngle vertices are counted clockwise with the first one being at
-    // (0, 0) (or, rather, at (x, y))
-    double x2 = w*dx,
-           y2 = -w*dy;      // y axis points to the bottom, hence minus
-    double x4 = h*dy,
-           y4 = h*dx;
-    double x3 = x4 + x2,
-           y3 = y4 + y2;
-
-    // calc max and min
-    wxCoord maxX = (wxCoord)(dmax(x2, dmax(x3, x4)) + 0.5),
-            maxY = (wxCoord)(dmax(y2, dmax(y3, y4)) + 0.5),
-            minX = (wxCoord)(dmin(x2, dmin(x3, x4)) - 0.5),
-            minY = (wxCoord)(dmin(y2, dmin(y3, y4)) - 0.5);
-
-
-    wxImage image = src.ConvertToImage();
-
-    image.ConvertColourToAlpha( m_textForegroundColour.Red(),
-                                m_textForegroundColour.Green(),
-                                m_textForegroundColour.Blue() );
-    image = image.Rotate( rad, wxPoint(0,0) );
-
-    int i_angle = (int) angle;
-    i_angle = i_angle % 360;
-    if (i_angle < 0)
-        i_angle += 360;
-    int xoffset = 0;
-    if ((i_angle >= 90.0) && (i_angle < 270.0))
-        xoffset = image.GetWidth();
-    int yoffset = 0;
-    if ((i_angle >= 0.0) && (i_angle < 180.0))
-        yoffset = image.GetHeight();
-
-    if ((i_angle >= 0) && (i_angle < 90))
-        yoffset -= (int)( cos(rad)*h );
-    if ((i_angle >= 90) && (i_angle < 180))
-        xoffset -= (int)( sin(rad)*h );
-    if ((i_angle >= 180) && (i_angle < 270))
-        yoffset -= (int)( cos(rad)*h );
-    if ((i_angle >= 270) && (i_angle < 360))
-        xoffset -= (int)( sin(rad)*h );
-
-    int i_x = x - xoffset;
-    int i_y = y - yoffset;
-
-    src = image;
-    DoDrawBitmap( src, i_x, i_y, true );
-
-
-    // it would be better to draw with non underlined font and draw the line
-    // manually here (it would be more straight...)
-#if 0
-    if ( m_font.GetUnderlined() )
-    {
-        gdk_draw_line( m_gdkwindow, m_textGC,
-                       XLOG2DEV(x + x4), YLOG2DEV(y + y4 + font->descent),
-                       XLOG2DEV(x + x3), YLOG2DEV(y + y3 + font->descent));
-    }
-#endif // 0
-
-    // update the bounding box
-    CalcBoundingBox(x + minX, y + minY);
-    CalcBoundingBox(x + maxX, y + maxY);
-#else // !wxUSE_IMAGE
-    wxUnusedVar(text);
-    wxUnusedVar(x);
-    wxUnusedVar(y);
-    wxUnusedVar(angle);
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
     }
 }
 

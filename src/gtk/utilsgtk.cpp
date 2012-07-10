@@ -416,8 +416,6 @@ wxString wxGUIAppTraits::GetDesktopEnvironment() const
 
 #endif // __UNIX__ || __OS2__
 
-#ifdef __WXGTK26__
-
 // see the hack below in wxCmdLineParser::GetUsageString().
 // TODO: replace this hack with a g_option_group_get_entries()
 //       call as soon as such function exists;
@@ -463,8 +461,6 @@ wxString wxGetNameFromGtkOptionEntry(const GOptionEntry *opt)
     return wxT("  ") + ret;
 }
 
-#endif // __WXGTK26__
-
 #ifdef __UNIX__
 
 wxString
@@ -473,10 +469,6 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
 {
     wxString usage;
 
-#ifdef __WXGTK26__
-#ifndef __WXGTK3__
-    if (!gtk_check_version(2,6,0))
-#endif
     {
         // since GTK>=2.6, we can use the glib_check_version() symbol...
 
@@ -484,7 +476,7 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
         // because, as we use the undocumented _GOptionGroup struct, we don't want
         // to run this code with future versions which might change it (2.32 is the
         // latest one at the time of this writing)
-        if (glib_check_version(2,6,0) == NULL && glib_check_version(2,33,0))
+        if (glib_check_version(2,33,0))
         {
             usage << _("The following standard GTK+ options are also supported:\n");
 
@@ -511,10 +503,6 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
             g_option_group_free (gtkOpts);
         }
     }
-#else
-    wxUnusedVar(names);
-    wxUnusedVar(desc);
-#endif // __WXGTK26__
 
     return usage;
 }
