@@ -709,7 +709,7 @@ void FileNameTestCase::TestIsSame()
     tn = tempnam(NULL, "wxfn2");
     const wxString tempdir2 = wxString::From8BitData(tn);
     free(tn);
-    CPPUNIT_ASSERT_EQUAL( 0, symlink(tempdir1, tempdir2) );
+    CPPUNIT_ASSERT_EQUAL( 0, symlink(tempdir1.c_str(), tempdir2.c_str()) );
     wxON_BLOCK_EXIT1( wxRemoveFile, tempdir2 );
 
 
