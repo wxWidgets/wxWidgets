@@ -22,7 +22,7 @@
 </build>
 
 <build>
-    <name>Linux x86 wxGTK trunk STL</name>
+    <name>Linux x86 wxGTK trunk STL no compat</name>
     <builddir>brandt32_gtk_stl</builddir>
     <scheduler>trunk_quick</scheduler>
     <steps>
