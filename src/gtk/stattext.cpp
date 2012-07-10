@@ -72,18 +72,16 @@ bool wxStaticText::Create(wxWindow *parent,
 
     gtk_label_set_justify(GTK_LABEL(m_widget), justify);
 
-    {
-        // set ellipsize mode
-        PangoEllipsizeMode ellipsizeMode = PANGO_ELLIPSIZE_NONE;
-        if ( style & wxST_ELLIPSIZE_START )
-            ellipsizeMode = PANGO_ELLIPSIZE_START;
-        else if ( style & wxST_ELLIPSIZE_MIDDLE )
-            ellipsizeMode = PANGO_ELLIPSIZE_MIDDLE;
-        else if ( style & wxST_ELLIPSIZE_END )
-            ellipsizeMode = PANGO_ELLIPSIZE_END;
+    // set ellipsize mode
+    PangoEllipsizeMode ellipsizeMode = PANGO_ELLIPSIZE_NONE;
+    if ( style & wxST_ELLIPSIZE_START )
+        ellipsizeMode = PANGO_ELLIPSIZE_START;
+    else if ( style & wxST_ELLIPSIZE_MIDDLE )
+        ellipsizeMode = PANGO_ELLIPSIZE_MIDDLE;
+    else if ( style & wxST_ELLIPSIZE_END )
+        ellipsizeMode = PANGO_ELLIPSIZE_END;
 
-        gtk_label_set_ellipsize( GTK_LABEL(m_widget), ellipsizeMode );
-    }
+    gtk_label_set_ellipsize( GTK_LABEL(m_widget), ellipsizeMode );
 
     // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
@@ -106,9 +104,7 @@ void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 
     InvalidateBestSize();
 
-    {
-        (this->*setter)(GTK_LABEL(m_widget), label);
-    }
+    (this->*setter)(GTK_LABEL(m_widget), label);
 
     // adjust the label size to the new label unless disabled
     if ( !HasFlag(wxST_NO_AUTORESIZE) &&

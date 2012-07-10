@@ -178,9 +178,7 @@ void wxAnyButton::GTKDoShowBitmap(const wxBitmap& bitmap)
     }
     else // have both label and bitmap
     {
-        {
-            image = gtk_button_get_image(GTK_BUTTON(m_widget));
-        }
+        image = gtk_button_get_image(GTK_BUTTON(m_widget));
     }
 
     wxCHECK_RET( image && GTK_IS_IMAGE(image), "must have image widget" );

@@ -327,27 +327,25 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
     }
 
     // otherwise try icon themes
-    {
-        gint *sizes = gtk_icon_theme_get_icon_sizes
-                      (
-                          gtk_icon_theme_get_default(),
-                          stockid.utf8_str()
-                      );
-        if ( !sizes )
-            return bundle;
+    gint *sizes = gtk_icon_theme_get_icon_sizes
+                  (
+                      gtk_icon_theme_get_default(),
+                      stockid.utf8_str()
+                  );
+    if ( !sizes )
+        return bundle;
 
-        gint *last = sizes;
-        while ( *last )
-            last++;
+    gint *last = sizes;
+    while ( *last )
+        last++;
 
-        bundle = DoCreateIconBundle
-                              (
-                                  stockid.utf8_str(),
-                                  sizes, last,
-                                  &CreateThemeIcon
-                              );
-        g_free(sizes);
-    }
+    bundle = DoCreateIconBundle
+                          (
+                              stockid.utf8_str(),
+                              sizes, last,
+                              &CreateThemeIcon
+                          );
+    g_free(sizes);
 
     return bundle;
 }

@@ -469,39 +469,35 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
 {
     wxString usage;
 
+    // check whether GLib version is greater than 2.6 but also lower than 2.33
+    // because, as we use the undocumented _GOptionGroup struct, we don't want
+    // to run this code with future versions which might change it (2.32 is the
+    // latest one at the time of this writing)
+    if (glib_check_version(2,33,0))
     {
-        // since GTK>=2.6, we can use the glib_check_version() symbol...
+        usage << _("The following standard GTK+ options are also supported:\n");
 
-        // check whether GLib version is greater than 2.6 but also lower than 2.33
-        // because, as we use the undocumented _GOptionGroup struct, we don't want
-        // to run this code with future versions which might change it (2.32 is the
-        // latest one at the time of this writing)
-        if (glib_check_version(2,33,0))
+        // passing true here means that the function can open the default
+        // display while parsing (not really used here anyhow)
+        GOptionGroup *gtkOpts = gtk_get_option_group(true);
+
+        // WARNING: here we access the internals of GOptionGroup:
+        GOptionEntry *entries = ((_GOptionGroup*)gtkOpts)->entries;
+        unsigned int n_entries = ((_GOptionGroup*)gtkOpts)->n_entries;
+        wxArrayString namesOptions, descOptions;
+
+        for ( size_t n = 0; n < n_entries; n++ )
         {
-            usage << _("The following standard GTK+ options are also supported:\n");
+            if ( entries[n].flags & G_OPTION_FLAG_HIDDEN )
+                continue;       // skip
 
-            // passing true here means that the function can open the default
-            // display while parsing (not really used here anyhow)
-            GOptionGroup *gtkOpts = gtk_get_option_group(true);
+            names.push_back(wxGetNameFromGtkOptionEntry(&entries[n]));
 
-            // WARNING: here we access the internals of GOptionGroup:
-            GOptionEntry *entries = ((_GOptionGroup*)gtkOpts)->entries;
-            unsigned int n_entries = ((_GOptionGroup*)gtkOpts)->n_entries;
-            wxArrayString namesOptions, descOptions;
-
-            for ( size_t n = 0; n < n_entries; n++ )
-            {
-                if ( entries[n].flags & G_OPTION_FLAG_HIDDEN )
-                    continue;       // skip
-
-                names.push_back(wxGetNameFromGtkOptionEntry(&entries[n]));
-
-                const gchar * const entryDesc = entries[n].description;
-                desc.push_back(wxString(entryDesc));
-            }
-
-            g_option_group_free (gtkOpts);
+            const gchar * const entryDesc = entries[n].description;
+            desc.push_back(wxString(entryDesc));
         }
+
+        g_option_group_free (gtkOpts);
     }
 
     return usage;
