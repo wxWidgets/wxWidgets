@@ -1077,8 +1077,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_readonly = new MyTextCtrl( this, wxID_ANY, wxT("Read only"),
       wxPoint(10,90), wxSize(140,wxDefaultCoord), wxTE_READONLY );
 
-    m_limited = new MyTextCtrl(this, wxID_ANY, wxT("Max 8 ch"),
+    m_limited = new MyTextCtrl(this, wxID_ANY, "",
                               wxPoint(10, 130), wxSize(140, wxDefaultCoord));
+    m_limited->SetHint("Max 8 ch");
     m_limited->SetMaxLength(8);
 
     // multi line text controls

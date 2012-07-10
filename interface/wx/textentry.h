@@ -456,6 +456,10 @@ public:
             currently you should avoid calling methods such as WriteText() or
             Replace() when using hints and the text control is empty.
 
+        @remarks Hints can only be used for single line text controls,
+            native multi-line text controls don't support hints under any
+            platform and hence wxWidgets doesn't provide them neither.
+
         @since 2.9.0
      */
     virtual bool SetHint(const wxString& hint);
