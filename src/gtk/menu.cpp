@@ -1231,8 +1231,6 @@ const char *wxGetStockGtkID(wxWindowID id)
         case wx:                   \
             return gtk;
 
-        #define STOCKITEM_26(wx,gtk) STOCKITEM(wx,gtk)
-
     #if GTK_CHECK_VERSION(2,8,0)
         #define STOCKITEM_28(wx,gtk) STOCKITEM(wx,gtk)
     #else
@@ -1248,7 +1246,7 @@ const char *wxGetStockGtkID(wxWindowID id)
 
     switch (id)
     {
-        STOCKITEM_26(wxID_ABOUT,         GTK_STOCK_ABOUT)
+        STOCKITEM(wxID_ABOUT,            GTK_STOCK_ABOUT)
         STOCKITEM(wxID_ADD,              GTK_STOCK_ADD)
         STOCKITEM(wxID_APPLY,            GTK_STOCK_APPLY)
         STOCKITEM(wxID_BACKWARD,         GTK_STOCK_GO_BACK)
@@ -1263,10 +1261,10 @@ const char *wxGetStockGtkID(wxWindowID id)
         STOCKITEM(wxID_CUT,              GTK_STOCK_CUT)
         STOCKITEM(wxID_DELETE,           GTK_STOCK_DELETE)
         STOCKITEM(wxID_DOWN,             GTK_STOCK_GO_DOWN)
-        STOCKITEM_26(wxID_EDIT,          GTK_STOCK_EDIT)
+        STOCKITEM(wxID_EDIT,             GTK_STOCK_EDIT)
         STOCKITEM(wxID_EXECUTE,          GTK_STOCK_EXECUTE)
         STOCKITEM(wxID_EXIT,             GTK_STOCK_QUIT)
-        STOCKITEM_26(wxID_FILE,          GTK_STOCK_FILE)
+        STOCKITEM(wxID_FILE,             GTK_STOCK_FILE)
         STOCKITEM(wxID_FIND,             GTK_STOCK_FIND)
         STOCKITEM(wxID_FIRST,            GTK_STOCK_GOTO_FIRST)
         STOCKITEM(wxID_FLOPPY,           GTK_STOCK_FLOPPY)
