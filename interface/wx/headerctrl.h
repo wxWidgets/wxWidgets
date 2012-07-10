@@ -675,29 +675,35 @@ protected:
 class wxHeaderCtrlEvent : public wxNotifyEvent
 {
 public:
+    wxHeaderCtrlEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
+    wxHeaderCtrlEvent(const wxHeaderCtrlEvent& event);
+
     /**
         Return the index of the column affected by this event.
 
         This method can be called for all header control events.
      */
     int GetColumn() const;
-
+    void SetColumn(int col);
+    
     /**
         Return the current width of the column.
 
         This method can only be called for the dragging events.
      */
     int GetWidth() const;
-
+    void SetWidth(int width);
+    
     /**
         Return the new order of the column.
 
-        This method can only be called for end reorder event for which it
+        This method can only be called for a reorder event for which it
         indicates the tentative new position for the column GetColumn()
         selected by the user. If the event is not vetoed, this will become the
         new column position in wxHeaderCtrl::GetColumnsOrder().
      */
     unsigned int GetNewOrder() const;
+    void SetNewOrder(unsigned int order);
 };
 
 
