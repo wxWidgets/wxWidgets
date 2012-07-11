@@ -16,7 +16,7 @@ set -e
 set -x
 
 docs_dir_name=wxWidgets-$version
-docs_file_basename=wxWidgets-docs-html-$version
+docs_file_basename=wxWidgets-$version-docs-html
 
 cd docs/doxygen
 ./regen.sh html
