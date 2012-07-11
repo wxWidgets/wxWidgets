@@ -474,7 +474,9 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxDateTime startDate;
                 startDate.SetFromMSWSysDate(ds->stStart);
 
-                wxDateTime currentDate = m_date;
+                // Ensure we have a valid date to work with.
+                wxDateTime currentDate = m_date.IsValid() ? m_date : startDate;
+
                 // Set to the start of month for comparison with startDate to
                 // work correctly.
                 currentDate.SetDay(1);
