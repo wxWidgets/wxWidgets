@@ -204,9 +204,12 @@ long wxTextEntry::GetLastPosition() const
 {
     // this can't be implemented for arbitrary GtkEditable so only do it for
     // GtkEntries
-    GtkEntry * const entry = GTK_ENTRY(GetEditable());
+    long pos = -1;
+    GtkEditable* editable = GetEditable();
+    if (GTK_IS_ENTRY(editable))
+        pos = gtk_entry_get_text_length(GTK_ENTRY(editable));
 
-    return entry ? gtk_entry_get_text_length(entry) : -1;
+    return pos;
 }
 
 // ----------------------------------------------------------------------------
