@@ -313,7 +313,7 @@ void EventPropagationTestCase::ScrollWindowWithoutHandler()
 
     TestScrollWindow * const win = new TestScrollWindow(parent);
 
-#ifndef __WXOSX__
+#if !defined(__WXOSX__) && !defined(__WXGTK3__)
     wxPaintEvent event(win->GetId());
     win->ProcessWindowEvent(event);
     CPPUNIT_ASSERT_EQUAL( "PD", g_str );
@@ -331,7 +331,7 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
 
     TestScrollWindow * const win = new TestScrollWindow(parent);
 
-#ifndef __WXOSX__
+#if !defined(__WXOSX__) && !defined(__WXGTK3__)
     TestPaintEvtHandler h('h');
     win->PushEventHandler(&h);
     wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
