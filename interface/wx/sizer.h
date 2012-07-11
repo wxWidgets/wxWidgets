@@ -283,6 +283,19 @@ public:
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
+    
+    /**
+        Appends a spacer child to the sizer.
+
+        @param width
+            Width of the spacer.
+        @param height
+            Height of the spacer.
+        @param flags
+            A wxSizerFlags object that enables you to specify most of the other
+            parameters more conveniently.
+    */
+    wxSizerItem* Add( int width, int height, const wxSizerFlags& flags);
 
     wxSizerItem* Add(wxSizerItem* item);
     
@@ -571,6 +584,15 @@ public:
                         int flag = 0,
                         int border = 0,
                         wxObject* userData = NULL);
+    /**
+        Insert a child into the sizer before any existing item at @a index.
+
+        See Add() for the meaning of the other parameters.
+    */
+    wxSizerItem* Insert(size_t index,
+                        int width,
+                        int height,
+                        const wxSizerFlags& flags);
 
     wxSizerItem* Insert(size_t index, wxSizerItem* item);
     
@@ -661,6 +683,12 @@ public:
                          int flag = 0,
                          int border = 0,
                          wxObject* userData = NULL);
+
+    /**
+        Same as Add(), but prepends the items to the beginning of the
+        list of items (windows, subsizers or spaces) owned by this sizer.
+    */
+    wxSizerItem* Prepend(int width, int height, const wxSizerFlags& flags);
 
     wxSizerItem* Prepend(wxSizerItem* item);
     
