@@ -44,12 +44,7 @@ private:
         WXUISIM_TEST( TextEvent );
         CPPUNIT_TEST( CutCopyPaste );
         CPPUNIT_TEST( UndoRedo );
-        // FIXME: This test is temporarily disabled as it currently fails
-        //        but it should be reenabled and fixed a.s.a.p. after the
-        //        release.
-#if 0
         CPPUNIT_TEST( CaretPosition );
-#endif
         CPPUNIT_TEST( Selection );
         WXUISIM_TEST( Editable );
         CPPUNIT_TEST( Range );
