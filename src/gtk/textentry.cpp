@@ -205,9 +205,9 @@ long wxTextEntry::GetLastPosition() const
     // this can't be implemented for arbitrary GtkEditable so only do it for
     // GtkEntries
     long pos = -1;
-    GtkEditable* editable = GetEditable();
-    if (GTK_IS_ENTRY(editable))
-        pos = gtk_entry_get_text_length(GTK_ENTRY(editable));
+    GtkEntry* entry = (GtkEntry*)GetEditable();
+    if (GTK_IS_ENTRY(entry))
+        pos = gtk_entry_get_text_length(entry);
 
     return pos;
 }
@@ -275,8 +275,8 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 
 bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 {
-    GtkEntry * const entry = GTK_ENTRY(GetEditable());
-    wxCHECK_MSG(entry, false, "auto completion doesn't work with this control");
+    GtkEntry* const entry = (GtkEntry*)GetEditable();
+    wxCHECK_MSG(GTK_IS_ENTRY(entry), false, "auto completion doesn't work with this control");
 
     GtkListStore * const store = gtk_list_store_new(1, G_TYPE_STRING);
     GtkTreeIter iter;
@@ -319,8 +319,8 @@ void wxTextEntry::SetEditable(bool editable)
 
 void wxTextEntry::SetMaxLength(unsigned long len)
 {
-    GtkEntry * const entry = GTK_ENTRY(GetEditable());
-    if ( !entry )
+    GtkEntry* const entry = (GtkEntry*)GetEditable();
+    if (!GTK_IS_ENTRY(entry))
         return;
 
     gtk_entry_set_max_length(entry, len);
