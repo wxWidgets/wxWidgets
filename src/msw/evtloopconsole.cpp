@@ -24,6 +24,11 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/msw/wrapwin.h"
+#endif //WX_PRECOMP
+
 #include "wx/evtloop.h"
 
 // ============================================================================
