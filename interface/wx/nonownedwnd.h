@@ -8,6 +8,13 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+
+/**
+   Styles that can be used with any wxNonOwnedWindow:
+*/
+#define wxFRAME_SHAPED          0x0010  // Create a window that is able to be shaped
+
+
 /**
     Common base class for all non-child windows.
 
