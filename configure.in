@@ -1177,16 +1177,16 @@ fi
 if test "x$OSX_ARCH_OPTS" != "x"; then
     dnl Check if there is more than one architecture
     if echo $OSX_ARCH_OPTS | grep -q ","; then
-    	AC_MSG_WARN([Disabling dependency tracking due to universal binary build.])
+        AC_MSG_WARN([Disabling dependency tracking due to universal binary build.])
         disable_macosx_deps=yes
 
-	dnl HACK: PCH could be made to work by precompiling for each architecture into separate directories
-    	dnl and including all architecture directories with each compiler invocation.
-    	dnl That would require a major rework of Bakefile and at the same time it would be nice to have
-    	dnl Objective-C++ precompiled headers.
-    	AC_MSG_WARN([Disabling precompiled headers due to universal binary build.])
-    	bk_use_pch=no
-    fi     
+        dnl HACK: PCH could be made to work by precompiling for each architecture into separate directories
+        dnl and including all architecture directories with each compiler invocation.
+        dnl That would require a major rework of Bakefile and at the same time it would be nice to have
+        dnl Objective-C++ precompiled headers.
+        AC_MSG_WARN([Disabling precompiled headers due to universal binary build.])
+        bk_use_pch=no
+    fi
 
     OSX_ARCH_OPTS=`echo $OSX_ARCH_OPTS | sed -e 's/^/-arch /' -e 's/,/ -arch /g'`
 
@@ -8149,10 +8149,10 @@ dnl at which time, this hack can be removed.
 if test "$wxUSE_MAC" = 1 ; then
     if test "x$wxUSE_UNIVERSAL_BINARY" != "xno" ; then
         if test "x$disable_macosx_deps" = "xyes"; then
-	    sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
-	    mv temp bk-deps
+            sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
+                mv temp bk-deps
             chmod +x bk-deps
-	fi
+        fi
     fi
 fi
 
