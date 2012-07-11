@@ -441,10 +441,7 @@ void wxGCDCImpl::SetFont( const wxFont &font )
     m_font = font;
     if ( m_graphicContext )
     {
-        wxFont f = font;
-        if ( f.IsOk() )
-            f.SetPointSize( /*LogicalToDeviceYRel*/(font.GetPointSize()));
-        m_graphicContext->SetFont( f, m_textForegroundColour );
+        m_graphicContext->SetFont(font, m_textForegroundColour);
     }
 }
 
