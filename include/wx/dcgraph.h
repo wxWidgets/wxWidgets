@@ -68,9 +68,6 @@ public:
 
     virtual ~wxGCDCImpl();
 
-    void Init();
-
-
     // implement base class pure virtuals
     // ----------------------------------
 
@@ -212,6 +209,9 @@ protected:
     double m_formerScaleX, m_formerScaleY;
 
     wxGraphicsContext* m_graphicContext;
+
+private:
+    void Init(wxGraphicsContext*);
 
     DECLARE_CLASS(wxGCDCImpl)
     wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);

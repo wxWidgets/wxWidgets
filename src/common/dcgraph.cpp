@@ -157,7 +157,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxGCDCImpl, wxDCImpl)
 wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :
    wxDCImpl( owner )
 {
-    Init();
+    Init(wxGraphicsContext::Create());
 }
 
 void wxGCDCImpl::SetGraphicsContext( wxGraphicsContext* ctx )
@@ -179,26 +179,21 @@ void wxGCDCImpl::SetGraphicsContext( wxGraphicsContext* ctx )
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxWindowDC& dc ) :
    wxDCImpl( owner )
 {
-    Init();
-    SetGraphicsContext( wxGraphicsContext::Create(dc) );
+    Init(wxGraphicsContext::Create(dc));
     m_window = dc.GetWindow();
 }
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc ) :
    wxDCImpl( owner )
 {
-    Init();
-    wxGraphicsContext* context;
-    context = wxGraphicsContext::Create(dc);
-    SetGraphicsContext( context );
+    Init(wxGraphicsContext::Create(dc));
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc ) :
    wxDCImpl( owner )
 {
-    Init();
-    SetGraphicsContext( wxGraphicsContext::Create(dc) );
+    Init(wxGraphicsContext::Create(dc));
 }
 #endif
 
@@ -206,12 +201,11 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc ) :
 wxGCDCImpl::wxGCDCImpl(wxDC *owner, const wxEnhMetaFileDC& dc)
    : wxDCImpl(owner)
 {
-    Init();
-    SetGraphicsContext(wxGraphicsContext::Create(dc));
+    Init(wxGraphicsContext::Create(dc));
 }
 #endif
 
-void wxGCDCImpl::Init()
+void wxGCDCImpl::Init(wxGraphicsContext* ctx)
 {
     m_ok = false;
     m_colour = true;
@@ -222,10 +216,12 @@ void wxGCDCImpl::Init()
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
-    m_graphicContext = wxGraphicsContext::Create();
+    m_graphicContext = NULL;
+    if (ctx)
+        SetGraphicsContext(ctx);
+
     m_logicalFunctionSupported = true;
 }
-
 
 wxGCDCImpl::~wxGCDCImpl()
 {
