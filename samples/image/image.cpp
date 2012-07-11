@@ -150,7 +150,7 @@ private:
         m_zoom = 1.;
 
         wxMenu *menu = new wxMenu;
-        menu->Append(wxID_SAVE);
+        menu->Append(wxID_SAVEAS);
         menu->AppendSeparator();
         menu->AppendCheckItem(ID_PAINT_BG, wxT("&Paint background"),
                               "Uncheck this for transparent images");
@@ -214,7 +214,7 @@ private:
         wxString savefilename = wxFileSelector( wxT("Save Image"),
                                                 wxEmptyString,
                                                 wxEmptyString,
-                                                (const wxChar *)NULL,
+                                                wxEmptyString,
                                                 wxT("BMP files (*.bmp)|*.bmp|")
 #if wxUSE_LIBPNG
                                                 wxT("PNG files (*.png)|*.png|")
@@ -231,9 +231,12 @@ private:
 #if wxUSE_PCX
                                                 wxT("PCX files (*.pcx)|*.pcx|")
 #endif
+#if wxUSE_XPM
+                                                wxT("X PixMap files (*.xpm)|*.xpm|")
+#endif
                                                 wxT("ICO files (*.ico)|*.ico|")
                                                 wxT("CUR files (*.cur)|*.cur"),
-                                                wxFD_SAVE,
+                                                wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
                                                 this);
 
         if ( savefilename.empty() )
@@ -590,7 +593,7 @@ BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_ERASE_BACKGROUND(MyImageFrame::OnEraseBackground)
     EVT_PAINT(MyImageFrame::OnPaint)
 
-    EVT_MENU(wxID_SAVE, MyImageFrame::OnSave)
+    EVT_MENU(wxID_SAVEAS, MyImageFrame::OnSave)
     EVT_MENU_RANGE(ID_ROTATE_LEFT, ID_ROTATE_RIGHT, MyImageFrame::OnRotate)
     EVT_MENU(ID_RESIZE, MyImageFrame::OnResize)
 
