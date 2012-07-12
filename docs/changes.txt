@@ -524,7 +524,14 @@ Major new features in this release
   was added.
 
 
-2.9.4: (release 2012-07-09)
+2.9.5: (released ????-??-??)
+
+All (GUI):
+
+- Fix item data access in wxDataViewListCtrl (Kry).
+
+
+2.9.4: (released 2012-07-09)
 ------
 
 INCOMPATIBLE CHANGES SINCE 2.9.3
