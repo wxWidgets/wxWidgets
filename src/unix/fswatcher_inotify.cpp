@@ -139,6 +139,9 @@ public:
             wxFAIL_MSG( wxString::Format("Path %s is not watched",
                                           watch->GetPath()) );
         }
+        // Cache the wd in case any events arrive late
+        m_staleDescriptors.Add(watch->GetWatchDescriptor());
+
         watch->SetWatchDescriptor(-1);
         return true;
     }
@@ -217,13 +220,33 @@ protected:
         // will be already removed from our list at that time
         if (inevt.mask & IN_IGNORED)
         {
+            // It is now safe to remove it from the stale descriptors too, we
+            // won't get any more events for it.
+            m_staleDescriptors.Remove(inevt.wd);
+            wxLogTrace(wxTRACE_FSWATCHER,
+                       "Removed wd %i from the stale-wd cache", inevt.wd);
             return;
         }
 
         // get watch entry for this event
         wxFSWatchEntryDescriptors::iterator it = m_watchMap.find(inevt.wd);
-        wxCHECK_RET(it != m_watchMap.end(),
-                             "Watch descriptor not present in the watch map!");
+        if (it == m_watchMap.end())
+        {
+            // It's not in the map; check if was recently removed from it.
+            if (m_staleDescriptors.Index(inevt.wd) != wxNOT_FOUND)
+            {
+                wxLogTrace(wxTRACE_FSWATCHER,
+                           "Got an event for stale wd %i", inevt.wd);
+            }
+            else
+            {
+                wxFAIL_MSG("Event for unknown watch descriptor.");
+            }
+
+            // In any case, don't process this event: it's either for an
+            // already removed entry, or for a completely unknown one.
+            return;
+        }
 
         wxFSWatchEntry& watch = *(it->second);
         int nativeFlags = inevt.mask;
@@ -425,6 +448,7 @@ protected:
 
     wxFSWSourceHandler* m_handler;        // handler for inotify event source
     wxFSWatchEntryDescriptors m_watchMap; // inotify wd=>wxFSWatchEntry* map
+    wxArrayInt m_staleDescriptors;        // stores recently-removed watches
     wxInotifyCookies m_cookies;           // map to track renames
     wxEventLoopSource* m_source;          // our event loop source
 
