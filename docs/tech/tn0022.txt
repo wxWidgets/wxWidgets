@@ -95,6 +95,12 @@ renamed to README.md on SF to be shown when the directory is viewed, i.e. do:
     scp docs/release_binaries.mdwn \
         sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z/binaries/README.md
 
+And upload the change log too:
+
+    scp docs/changes.txt \
+        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
+
+
 Also upload the files to the FTP mirror at ftp.wxwidgets.org (ask Chris for
 access if you don't have it).
 
@@ -110,6 +116,8 @@ TODO: where else to announce it?
 
 Update www.wxwidgets.org, usually a news item is enough but something more can
 be called for for major releases.
+
+Also update downloads/index.html to mention the new latest release.
 
 Post to wxBlog if necessary.
 
