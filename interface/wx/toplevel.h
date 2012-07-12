@@ -125,7 +125,7 @@ public:
     /**
         A synonym for CentreOnScreen().
     */
-    void CenterOnScreen(int direction);
+    void CenterOnScreen(int direction = wxBOTH);
 
     /**
         Centres the window on screen.
