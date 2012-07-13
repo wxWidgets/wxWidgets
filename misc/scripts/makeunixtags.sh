@@ -24,6 +24,7 @@ ctags --totals --c++-kinds=+px --language-force=c++ \
 	include/wx/html/*.h \
 	include/wx/propgrid/*.h \
 	include/wx/protocol/*.h \
+	include/wx/ribbon/*.h \
 	include/wx/richtext/*.h \
 	include/wx/xml/*.h \
 	include/wx/xrc/*.h \
@@ -35,6 +36,7 @@ ctags --totals --c++-kinds=+px --language-force=c++ \
 	src/$1/*.cpp \
 	src/html/*.cpp \
 	src/propgrid/*.cpp \
+	src/ribbon/*.cpp \
 	src/richtext/*.cpp \
 	src/unix/*.cpp \
 	src/xml/*.cpp \
