@@ -159,17 +159,22 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
         // all of them to Add() and let it choose? this is useful when adding a
         // file to a dir that is already watched, then not only should we know
         // about that, but Add() should also behave well then
-        virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename))
+        virtual wxDirTraverseResult OnFile(const wxString& filename)
         {
+            wxLogTrace(wxTRACE_FSWATCHER,
+                       "--- AddTree adding file '%s' ---", filename);
+            m_watcher->DoAdd(wxFileName::FileName(filename),
+                             m_events, wxFSWPath_File);
             return wxDIR_CONTINUE;
         }
 
         virtual wxDirTraverseResult OnDir(const wxString& dirname)
         {
-            wxLogTrace(wxTRACE_FSWATCHER, "--- AddTree adding '%s' ---",
-                                                                    dirname);
+            wxLogTrace(wxTRACE_FSWATCHER,
+                       "--- AddTree adding directory '%s' ---", dirname);
             // we add as much as possible and ignore errors
-            m_watcher->Add(wxFileName(dirname), m_events);
+            m_watcher->DoAdd(wxFileName::DirName(dirname),
+                             m_events, wxFSWPath_Dir);
             return wxDIR_CONTINUE;
         }
 
@@ -182,6 +187,9 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
     wxDir dir(path.GetFullPath());
     AddTraverser traverser(this, events);
     dir.Traverse(traverser, filter);
+
+    // Add the path itself explicitly as Traverse() doesn't return it.
+    Add(path.GetPathWithSep(), events);
 
     return true;
 }
@@ -209,7 +217,7 @@ bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
 
         virtual wxDirTraverseResult OnDir(const wxString& dirname)
         {
-            m_watcher->RemoveTree(wxFileName(dirname));
+            m_watcher->Remove(wxFileName::DirName(dirname));
             return wxDIR_CONTINUE;
         }
 
@@ -220,6 +228,9 @@ bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
     wxDir dir(path.GetFullPath());
     RemoveTraverser traverser(this);
     dir.Traverse(traverser);
+
+    // As in AddTree() above, handle the path itself explicitly.
+    Remove(path);
 
     return true;
 }
