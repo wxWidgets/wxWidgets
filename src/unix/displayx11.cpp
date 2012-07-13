@@ -382,7 +382,7 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 
 #include "wx/utils.h"
 
-#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2 || !defined(GDK_WINDOWING_X11)
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {

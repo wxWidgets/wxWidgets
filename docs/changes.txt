@@ -531,6 +531,10 @@ All (GUI):
 - Add possibility to hide and show again wxRibbonBar pages (wxBen).
 - Fix item data access in wxDataViewListCtrl (Kry).
 
+wxGTK:
+
+- Allow building wxGTK3 with Broadway backend (Kolya Kosenko).
+
 
 2.9.4: (released 2012-07-09)
 ------
