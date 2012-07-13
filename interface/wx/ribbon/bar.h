@@ -222,6 +222,15 @@ public:
     bool DismissExpandedPanel();
 
     /**
+        Returns the number for a given ribbon bar page.
+
+        The number can be used in other ribbon bar calls.
+
+        @since 2.9.5
+    */
+    int GetPageNumber(wxRibbonPage* page) const;
+
+    /**
         Delete a single page from this ribbon bar.
 
         The user must call wxRibbonBar::Realize() after one (or more) calls to
@@ -237,6 +246,36 @@ public:
         @since 2.9.4
     */
     void ClearPages();
+
+    /**
+        Indicates whether the tab for the given page is shown to the user or
+        not.
+
+        By default all page tabs are shown.
+
+        @since 2.9.5
+    */
+    bool IsPageShown(size_t page) const;
+
+    /**
+        Show or hide the tab for a given page.
+
+        After showing or hiding a tab, you need to call wxRibbonBar::Realize().
+        If you hide the tab for the currently active page (GetActivePage) then
+        you should call SetActivePage to activate a different page.
+
+        @since 2.9.5
+    */
+    void ShowPage(size_t page, bool show_tab=true);
+
+    /**
+        Hides the tab for a given page.
+
+        Equivalent to @c ShowPage(page, false).
+
+        @since 2.9.5
+    */
+    void HidePage(size_t page);
 
     /**
         Shows or hides the panel area of the ribbon bar.

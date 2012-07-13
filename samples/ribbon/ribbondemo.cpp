@@ -83,7 +83,9 @@ public:
         ID_CHANGE_TEXT1,
         ID_CHANGE_TEXT2,
         ID_UI_CHANGE_TEXT_UPDATED,
-        ID_REMOVE_PAGE
+        ID_REMOVE_PAGE,
+        ID_HIDE_PAGES,
+        ID_SHOW_PAGES
     };
 
     void OnEnableUpdateUI(wxUpdateUIEvent& evt);
@@ -129,6 +131,8 @@ public:
     void OnPositionLeftBoth(wxCommandEvent& evt);
     void OnPositionLeftDropdown(wxRibbonToolBarEvent& evt);
     void OnRemovePage(wxRibbonButtonBarEvent& evt);
+    void OnHidePages(wxRibbonButtonBarEvent& evt);
+    void OnShowPages(wxRibbonButtonBarEvent& evt);
     void OnTogglePanels(wxCommandEvent& evt);
 
     void OnExtButton(wxRibbonPanelEvent& evt);
@@ -228,6 +232,8 @@ EVT_MENU(ID_POSITION_TOP_BOTH, MyFrame::OnPositionTopBoth)
 EVT_TOGGLEBUTTON(ID_TOGGLE_PANELS, MyFrame::OnTogglePanels)
 EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(wxID_ANY, MyFrame::OnExtButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_REMOVE_PAGE, MyFrame::OnRemovePage)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_HIDE_PAGES, MyFrame::OnHidePages)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_SHOW_PAGES, MyFrame::OnShowPages)
 END_EVENT_TABLE()
 
 #include "align_center.xpm"
@@ -393,6 +399,8 @@ MyFrame::MyFrame()
         wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, wxT("Page manipulation"), ribbon_xpm);
         wxRibbonButtonBar *bar = new wxRibbonButtonBar(panel, wxID_ANY);
         bar->AddButton(ID_REMOVE_PAGE, wxT("Remove"), wxArtProvider::GetBitmap(wxART_DELETE, wxART_OTHER, wxSize(24, 24)));
+        bar->AddButton(ID_HIDE_PAGES, wxT("Hide Pages"), ribbon_xpm);
+        bar->AddButton(ID_SHOW_PAGES, wxT("Show Pages"), ribbon_xpm);
     }
 
     m_ribbon->Realize();
@@ -983,4 +991,20 @@ void MyFrame::OnRemovePage(wxRibbonButtonBarEvent& WXUNUSED(evt))
         m_ribbon->DeletePage(n-1);
         m_ribbon->Realize();
     }
+}
+
+void MyFrame::OnHidePages(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_ribbon->HidePage(1);
+    m_ribbon->HidePage(2);
+    m_ribbon->HidePage(3);
+    m_ribbon->Realize();
+}
+
+void MyFrame::OnShowPages(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_ribbon->ShowPage(1);
+    m_ribbon->ShowPage(2);
+    m_ribbon->ShowPage(3);
+    m_ribbon->Realize();
 }

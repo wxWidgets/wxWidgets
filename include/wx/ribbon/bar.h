@@ -80,6 +80,7 @@ public:
     int minimum_width;
     bool active;
     bool hovered;
+    bool shown;
 };
 
 #ifndef SWIG
@@ -115,9 +116,14 @@ public:
     wxRibbonPage* GetPage(int n);
     size_t GetPageCount() const;
     bool DismissExpandedPanel();
+    int GetPageNumber(wxRibbonPage* page) const;
 
     void DeletePage(size_t n);
     void ClearPages();
+
+    bool IsPageShown(size_t page) const;
+    void ShowPage(size_t page, bool show = true);
+    void HidePage(size_t page) { ShowPage(page, false); }
 
     void ShowPanels(bool show = true);
     void HidePanels() { ShowPanels(false); }

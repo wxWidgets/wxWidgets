@@ -66,6 +66,7 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     info.page = page;
     info.active = false;
     info.hovered = false;
+    info.shown = true;
     // info.rect not set (intentional)
 
     wxClientDC dcTemp(this);
@@ -141,6 +142,8 @@ bool wxRibbonBar::Realize()
     for(i = 0; i < numtabs; ++i)
     {
         wxRibbonPageTabInfo& info = m_pages.Item(i);
+        if (!info.shown)
+            continue;
         RepositionPage(info.page);
         if(!info.page->Realize())
         {
@@ -281,6 +284,20 @@ size_t wxRibbonBar::GetPageCount() const
     return m_pages.GetCount();
 }
 
+bool wxRibbonBar::IsPageShown(size_t page) const
+{
+    if (page >= m_pages.GetCount())
+        return false;
+    return m_pages.Item(page).shown;
+}
+
+void wxRibbonBar::ShowPage(size_t page, bool show)
+{
+    if(page >= m_pages.GetCount())
+        return;
+    m_pages.Item(page).shown = show;
+}
+
 void wxRibbonBar::DeletePage(size_t n)
 {
     if(n < m_pages.GetCount())
@@ -361,6 +378,7 @@ bool wxRibbonBar::SetActivePage(size_t page)
     }
     m_current_page = (int)page;
     m_pages.Item(page).active = true;
+    m_pages.Item(page).shown = true;
     {
         wxRibbonPage* wnd = m_pages.Item(page).page;
         RepositionPage(wnd);
@@ -385,6 +403,20 @@ bool wxRibbonBar::SetActivePage(wxRibbonPage* page)
     }
     return false;
 }
+
+int wxRibbonBar::GetPageNumber(wxRibbonPage* page) const
+{
+    size_t numpages = m_pages.GetCount();
+    for(size_t i = 0; i < numpages; ++i)
+    {
+        if(m_pages.Item(i).page == page)
+        {
+            return i;
+        }
+    }
+    return wxNOT_FOUND;
+}
+
 
 int wxRibbonBar::GetActivePage() const
 {
@@ -423,6 +455,8 @@ void wxRibbonBar::RecalculateTabSizes()
         for(i = 0; i < numtabs; ++i)
         {
             wxRibbonPageTabInfo& info = m_pages.Item(i);
+            if (!info.shown)
+                continue;
             info.rect.x = x;
             info.rect.y = y;
             info.rect.width = info.ideal_width;
@@ -440,6 +474,8 @@ void wxRibbonBar::RecalculateTabSizes()
         for(i = 0; i < numtabs; ++i)
         {
             wxRibbonPageTabInfo& info = m_pages.Item(i);
+            if (!info.shown)
+                continue;
             info.rect.x = x;
             info.rect.y = y;
             info.rect.width = info.minimum_width;
@@ -476,6 +512,8 @@ void wxRibbonBar::RecalculateTabSizes()
         for(i = 0; i < numtabs; ++i)
         {
             wxRibbonPageTabInfo& info = m_pages.Item(i);
+            if (!info.shown)
+                continue;
             info.rect.x -= m_tab_scroll_amount;
         }
     }
@@ -497,6 +535,8 @@ void wxRibbonBar::RecalculateTabSizes()
         for(i = 0; i < numtabs; ++i)
         {
             wxRibbonPageTabInfo& info = m_pages.Item(i);
+            if (!info.shown)
+                continue;
             if(info.small_must_have_separator_width < smallest_tab_width)
             {
                 smallest_tab_width = info.small_must_have_separator_width;
@@ -512,6 +552,8 @@ void wxRibbonBar::RecalculateTabSizes()
             for(i = 0; i < numtabs; ++i)
             {
                 wxRibbonPageTabInfo& info = m_pages.Item(i);
+                if (!info.shown)
+                    continue;
                 int delta = info.ideal_width - info.small_must_have_separator_width;
                 info.rect.x = x;
                 info.rect.y = y;
@@ -530,6 +572,8 @@ void wxRibbonBar::RecalculateTabSizes()
             for(i = 0; i < numtabs; ++i)
             {
                 wxRibbonPageTabInfo& info = m_pages.Item(i);
+                if (!info.shown)
+                    continue;
                 if(info.minimum_width < smallest_tab_width)
                 {
                     total_small_width += smallest_tab_width;
@@ -546,6 +590,8 @@ void wxRibbonBar::RecalculateTabSizes()
                 for(i = 0; i < numtabs; ++i)
                 {
                     // Sneaky obj array trickery to not copy the tab descriptors
+                    if (!m_pages.Item(i).shown)
+                        continue;
                     sorted_pages.Add(&m_pages.Item(i));
                 }
                 sorted_pages.Sort(OrderPageTabInfoBySmallWidthAsc);
@@ -553,6 +599,8 @@ void wxRibbonBar::RecalculateTabSizes()
                 for(i = 0; i < numtabs; ++i)
                 {
                     wxRibbonPageTabInfo& info = sorted_pages.Item(i);
+                    if (!info.shown)
+                        continue;
                     if(info.small_must_have_separator_width * (int)(numtabs - i) <= width)
                     {
                         info.rect.width = info.small_must_have_separator_width;;
@@ -566,6 +614,8 @@ void wxRibbonBar::RecalculateTabSizes()
                 for(i = 0; i < numtabs; ++i)
                 {
                     wxRibbonPageTabInfo& info = m_pages.Item(i);
+                    if (!info.shown)
+                        continue;
                     info.rect.x = x;
                     info.rect.y = y;
                     info.rect.height = m_tab_height;
@@ -583,6 +633,8 @@ void wxRibbonBar::RecalculateTabSizes()
                 for(i = 0; i < numtabs; ++i)
                 {
                     wxRibbonPageTabInfo& info = m_pages.Item(i);
+                    if (!info.shown)
+                        continue;
                     int delta = smallest_tab_width - info.minimum_width;
                     info.rect.x = x;
                     info.rect.y = y;
@@ -718,6 +770,8 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     for(i = 0; i < numtabs; ++i)
     {
         wxRibbonPageTabInfo& info = m_pages.Item(i);
+        if (!info.shown)
+            continue;
 
         dc.DestroyClippingRegion();
         if(m_tab_scroll_buttons_shown)
@@ -750,6 +804,8 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         for(i = 0; i < numtabs - 1; ++i)
         {
             wxRibbonPageTabInfo& info = m_pages.Item(i);
+            if (!info.shown)
+                continue;
             rect.x = info.rect.x + info.rect.width;
 
             if(m_tab_scroll_buttons_shown && !tabs_rect.Intersects(rect))
@@ -822,6 +878,8 @@ wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
         for(i = 0; i < numtabs; ++i)
         {
             wxRibbonPageTabInfo& info = m_pages.Item(i);
+            if (!info.shown)
+                continue;
             if(info.rect.Contains(position))
             {
                 if(index != NULL)
@@ -919,6 +977,8 @@ void wxRibbonBar::ScrollTabBar(int amount)
     for(i = 0; i < numtabs; ++i)
     {
         wxRibbonPageTabInfo& info = m_pages.Item(i);
+        if (!info.shown)
+            continue;
         info.rect.SetX(info.rect.GetX() - amount);
     }
     if(show_right != (m_tab_scroll_right_button_rect.GetWidth() != 0) ||
@@ -1009,6 +1069,8 @@ void wxRibbonBar::RecalculateMinSize()
         for(i = 1; i < numtabs; ++i)
         {
             wxRibbonPageTabInfo& info = m_pages.Item(i);
+            if (!info.shown)
+                continue;
             wxSize page_min = info.page->GetMinSize();
 
             min_size.x = wxMax(min_size.x, page_min.x);

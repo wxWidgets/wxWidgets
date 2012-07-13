@@ -528,6 +528,7 @@ Major new features in this release
 
 All (GUI):
 
+- Add possibility to hide and show again wxRibbonBar pages (wxBen).
 - Fix item data access in wxDataViewListCtrl (Kry).
 
 
