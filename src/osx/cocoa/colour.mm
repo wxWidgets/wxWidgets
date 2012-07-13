@@ -42,5 +42,5 @@ wxColour::wxColour(WX_NSColor col)
 
 WX_NSColor wxColour::OSXGetNSColor() const
 {
-    return [NSColor colorWithDeviceRed:m_red / 255.0 green:m_green / 255.0 blue:m_blue / 255.0 alpha:m_alpha / 255.0];
+    return [NSColor colorWithCalibratedRed:m_red / 255.0 green:m_green / 255.0 blue:m_blue / 255.0 alpha:m_alpha / 255.0];
 }

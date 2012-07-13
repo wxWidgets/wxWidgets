@@ -1167,6 +1167,23 @@ outlineView:(NSOutlineView*)outlineView
 
 @implementation wxCustomCell
 
+#if 0 // starting implementation for custom cell clicks
+
+- (id)init
+{
+    self = [super init];
+    [self setAction:@selector(clickedAction)];
+    [self setTarget:self];
+    return self;
+}
+
+- (void) clickedAction: (id) sender
+{
+    wxUnusedVar(sender);
+}
+
+#endif
+
 -(NSSize) cellSize
 {
     wxCustomRendererObject * const
@@ -2697,7 +2714,7 @@ void wxDataViewRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
             }
 
             const wxColour& c = attr.GetColour();
-            colText = [NSColor colorWithDeviceRed:c.Red() / 255.
+            colText = [NSColor colorWithCalibratedRed:c.Red() / 255.
                 green:c.Green() / 255.
                 blue:c.Blue() / 255.
                 alpha:c.Alpha() / 255.];
