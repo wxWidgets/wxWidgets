@@ -431,7 +431,7 @@ wxMSWFileSystemWatcher::AddTree(const wxFileName& path,
         return false;
     }
 
-    return DoAdd(path, events, wxFSWPath_Tree);
+    return AddAny(path, events, wxFSWPath_Tree);
 }
 
 #endif // wxUSE_FSWATCHER

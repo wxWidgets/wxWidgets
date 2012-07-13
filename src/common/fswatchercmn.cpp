@@ -95,13 +95,13 @@ bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
         return false;
     }
 
-    return DoAdd(path, events, type);
+    return AddAny(path, events, type);
 }
 
 bool
-wxFileSystemWatcherBase::DoAdd(const wxFileName& path,
-                               int events,
-                               wxFSWPathType type)
+wxFileSystemWatcherBase::AddAny(const wxFileName& path,
+                                int events,
+                                wxFSWPathType type)
 {
     wxString canonical = GetCanonicalPath(path);
     if (canonical.IsEmpty())
@@ -163,7 +163,7 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
         {
             wxLogTrace(wxTRACE_FSWATCHER,
                        "--- AddTree adding file '%s' ---", filename);
-            m_watcher->DoAdd(wxFileName::FileName(filename),
+            m_watcher->AddAny(wxFileName::FileName(filename),
                              m_events, wxFSWPath_File);
             return wxDIR_CONTINUE;
         }
@@ -173,7 +173,7 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
             wxLogTrace(wxTRACE_FSWATCHER,
                        "--- AddTree adding directory '%s' ---", dirname);
             // we add as much as possible and ignore errors
-            m_watcher->DoAdd(wxFileName::DirName(dirname),
+            m_watcher->AddAny(wxFileName::DirName(dirname),
                              m_events, wxFSWPath_Dir);
             return wxDIR_CONTINUE;
         }

@@ -305,6 +305,13 @@ public:
             m_owner = handler;
     }
 
+
+    // This is a semi-private function used by wxWidgets itself only.
+    //
+    // Delegates the real work of adding the path to wxFSWatcherImpl::Add() and
+    // updates m_watches if the new path was successfully added.
+    bool AddAny(const wxFileName& path, int events, wxFSWPathType type);
+
 protected:
 
     static wxString GetCanonicalPath(const wxFileName& path)
@@ -319,10 +326,6 @@ protected:
 
         return path_copy.GetFullPath();
     }
-
-    // Delegates the real work of adding the path to wxFSWatcherImpl::Add() and
-    // updates m_watches if the new path was successfully added.
-    bool DoAdd(const wxFileName& path, int events, wxFSWPathType type);
 
 
     wxFSWatchInfoMap m_watches;        // path=>wxFSWatchInfo map
