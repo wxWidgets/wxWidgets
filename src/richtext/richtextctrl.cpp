@@ -1992,7 +1992,7 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
         // we want to adjust the caret position such that it is positioned at the
         // start of the next line, rather than jumping past the first character of the
         // line.
-        if (noPositions == 1 && !extendSel)
+        if (noPositions == 1)
             MoveCaretForward(oldPos);
         else
             SetCaretPosition(newPos);
@@ -2019,7 +2019,7 @@ bool wxRichTextCtrl::MoveLeft(int noPositions, int flags)
         if (!extendSel)
             SelectNone();
 
-        if (noPositions == 1 && !extendSel)
+        if (noPositions == 1)
             MoveCaretBack(oldPos);
         else
             SetCaretPosition(newPos);
