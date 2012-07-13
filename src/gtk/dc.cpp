@@ -28,8 +28,15 @@ wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner)
     m_height = 0;
 }
 
+wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, int)
+    : base_type(owner, 0)
+{
+    m_width = 0;
+    m_height = 0;
+}
+
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, wxWindow* window)
-    : base_type(owner)
+    : base_type(owner, 0)
 {
     m_window = window;
     m_font = window->GetFont();
@@ -219,6 +226,8 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
         if (x || y)
             SetDeviceLocalOrigin(x, y);
     }
+    else
+        SetGraphicsContext(wxGraphicsContext::Create());
 }
 //-----------------------------------------------------------------------------
 
@@ -255,13 +264,7 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
         }
     }
     else
-    {
-        // create something that can be used for measuring, but not drawing
-        cairo_t* cr = gdk_cairo_create(gdk_get_default_root_window());
-        cairo_rectangle(cr, 0, 0, 0, 0);
-        cairo_clip(cr);
-        SetGraphicsContext(wxGraphicsContext::CreateFromNative(cr));
-    }
+        SetGraphicsContext(wxGraphicsContext::Create());
 }
 //-----------------------------------------------------------------------------
 
@@ -279,7 +282,7 @@ wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
 //-----------------------------------------------------------------------------
 
 wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
-    : base_type(owner)
+    : base_type(owner, 0)
 {
     GdkWindow* window = gdk_get_default_root_window();
     m_width = gdk_window_get_width(window);
@@ -296,7 +299,7 @@ wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner)
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner, wxBitmap& bitmap)
-    : base_type(owner)
+    : base_type(owner, 0)
     , m_bitmap(bitmap)
 {
     Setup();
@@ -345,7 +348,7 @@ void wxMemoryDCImpl::Setup()
 //-----------------------------------------------------------------------------
 
 wxGTKCairoDC::wxGTKCairoDC(cairo_t* cr)
-    : base_type(new wxGTKCairoDCImpl(this))
+    : base_type(new wxGTKCairoDCImpl(this, 0))
 {
     cairo_reference(cr);
     SetGraphicsContext(wxGraphicsContext::CreateFromNative(cr));

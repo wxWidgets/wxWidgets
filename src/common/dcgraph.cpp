@@ -205,6 +205,13 @@ wxGCDCImpl::wxGCDCImpl(wxDC *owner, const wxEnhMetaFileDC& dc)
 }
 #endif
 
+wxGCDCImpl::wxGCDCImpl(wxDC* owner, int)
+   : wxDCImpl(owner)
+{
+    // derived class will set a context
+    Init(NULL);
+}
+
 void wxGCDCImpl::Init(wxGraphicsContext* ctx)
 {
     m_ok = false;

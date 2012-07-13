@@ -19,7 +19,9 @@ class wxGTKCairoDCImpl: public wxGCDCImpl
     typedef wxGCDCImpl base_type;
 public:
     wxGTKCairoDCImpl(wxDC* owner);
+    wxGTKCairoDCImpl(wxDC* owner, int);
     wxGTKCairoDCImpl(wxDC* owner, wxWindow* window);
+
     virtual void DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool useMask);
     virtual void DoDrawIcon(const wxIcon& icon, int x, int y);
 #if wxUSE_IMAGE

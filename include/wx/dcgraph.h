@@ -201,6 +201,10 @@ public:
 #endif // __WXMSW__
 
 protected:
+    // unused int parameter distinguishes this version, which does not create a
+    // wxGraphicsContext, in the expectation that the derived class will do it
+    wxGCDCImpl(wxDC* owner, int);
+
     // scaling variables
     bool m_logicalFunctionSupported;
     wxGraphicsMatrix m_matrixOriginal;
