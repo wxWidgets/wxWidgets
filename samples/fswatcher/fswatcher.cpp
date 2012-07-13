@@ -351,15 +351,18 @@ void MyFrame::AddEntry(wxFSWPathType type, wxString filename)
                filename,
                type == wxFSWPath_Dir ? "directory" : "directory tree");
 
+    wxString prefix;
     bool ok = false;
     switch ( type )
     {
         case wxFSWPath_Dir:
             ok = m_watcher->Add(wxFileName::DirName(filename));
+            prefix = "Dir:  ";
             break;
 
         case wxFSWPath_Tree:
             ok = m_watcher->AddTree(wxFileName::DirName(filename));
+            prefix = "Tree: ";
             break;
 
         case wxFSWPath_File:
@@ -373,7 +376,10 @@ void MyFrame::AddEntry(wxFSWPathType type, wxString filename)
         return;
     }
 
-    m_filesList->InsertItem(m_filesList->GetItemCount(), filename);
+    // Prepend 'prefix' to the filepath, partly for display
+    // but mostly so that OnRemove() can work out the correct way to remove it
+    m_filesList->InsertItem(m_filesList->GetItemCount(),
+                            prefix + wxFileName::DirName(filename).GetFullPath());
 }
 
 void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
@@ -383,10 +389,23 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
     if (idx == -1)
         return;
 
-    wxString path = m_filesList->GetItemText(idx);
-
+    bool ret;
+    wxString path;
     // TODO we know it is a dir, but it doesn't have to be
-    if (!m_watcher->Remove(wxFileName::DirName(path)))
+    if (m_filesList->GetItemText(idx).StartsWith("Dir:  ", &path))
+    {
+        ret = m_watcher->Remove(wxFileName::DirName(path));
+    }
+    else if (m_filesList->GetItemText(idx).StartsWith("Tree: ", &path))
+    {
+        ret = m_watcher->RemoveTree(wxFileName::DirName(path));
+    }
+    else
+    {
+        wxFAIL_MSG("Unexpected item in wxListView.");
+    }
+
+    if (!ret)
     {
         wxLogError("Error removing '%s' from watched paths", path);
     }
