@@ -417,6 +417,7 @@ private:
     CPPUNIT_TEST_SUITE( FileSystemWatcherTestCase );
         CPPUNIT_TEST( TestEventCreate );
         CPPUNIT_TEST( TestEventDelete );
+        CPPUNIT_TEST( TestTrees );
 
         // kqueue-based implementation doesn't collapse create/delete pairs in
         // renames and doesn't detect neither modifications nor access to the
@@ -441,6 +442,7 @@ private:
     void TestEventRename();
     void TestEventModify();
     void TestEventAccess();
+    void TestTrees();
 
     void TestNoEventsAfterRemove();
 
@@ -627,6 +629,149 @@ void FileSystemWatcherTestCase::TestEventAccess()
     EventGenerator::Get().ModifyFile();
 
     EventTester tester;
+    tester.Run();
+}
+
+// ----------------------------------------------------------------------------
+// TestTrees
+// ----------------------------------------------------------------------------
+void FileSystemWatcherTestCase::TestTrees()
+{
+    class TreeTester : public EventHandler
+    {
+        const size_t subdirs;
+        const size_t files;
+
+    public:
+        TreeTester() : subdirs(5), files(3) {}
+
+        void GrowTree(wxFileName dir)
+        {
+            CPPUNIT_ASSERT(dir.Mkdir());
+
+            // Create a branch of 5 numbered subdirs, each containing 3
+            // numbered files
+            for ( unsigned d = 0; d < subdirs; ++d )
+            {
+                dir.AppendDir(wxString::Format("subdir%u", d+1));
+                CPPUNIT_ASSERT(dir.Mkdir());
+
+                const wxString prefix = dir.GetPathWithSep();
+                for ( unsigned f = 0; f < files; ++f )
+                {
+                    // Just create the files.
+                    wxFile(prefix + wxString::Format("file%u", f+1),
+                           wxFile::write);
+                }
+            }
+        }
+
+        void RmDir(wxFileName dir)
+        {
+            CPPUNIT_ASSERT(dir.DirExists());
+
+            CPPUNIT_ASSERT(dir.Rmdir(wxPATH_RMDIR_RECURSIVE));
+        }
+
+        void WatchDir(wxFileName dir)
+        {
+            CPPUNIT_ASSERT(m_watcher);
+
+            // Store the initial count; there may already be some watches
+            const int initial = m_watcher->GetWatchedPathsCount();
+
+            m_watcher->Add(dir);
+            CPPUNIT_ASSERT_EQUAL(initial + 1,
+                                 m_watcher->GetWatchedPathsCount());
+        }
+
+        void RemoveSingleWatch(wxFileName dir)
+        {
+            CPPUNIT_ASSERT(m_watcher);
+
+            const int initial = m_watcher->GetWatchedPathsCount();
+
+            m_watcher->Remove(dir);
+            CPPUNIT_ASSERT_EQUAL(initial - 1,
+                                 m_watcher->GetWatchedPathsCount());
+        }
+
+        void WatchTree(const wxFileName& dir)
+        {
+            CPPUNIT_ASSERT(m_watcher);
+
+            const size_t
+                treeitems = (subdirs*files) + subdirs + 1; // +1 for the trunk
+
+            // Store the initial count; there may already be some watches
+            const int initial = m_watcher->GetWatchedPathsCount();
+
+            GrowTree(dir);
+
+            m_watcher->AddTree(dir);
+            const int plustree = m_watcher->GetWatchedPathsCount();
+
+            CPPUNIT_ASSERT_EQUAL(initial + treeitems, plustree);
+
+            m_watcher->RemoveTree(dir);
+            CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
+        }
+
+        void RemoveAllWatches()
+        {
+            CPPUNIT_ASSERT(m_watcher);
+
+            m_watcher->RemoveAll();
+            CPPUNIT_ASSERT_EQUAL(0, m_watcher->GetWatchedPathsCount());
+        }
+
+        virtual void GenerateEvent()
+        {
+            // We don't use this function for events. Just run the tests
+
+            wxFileName watchdir = EventGenerator::GetWatchDir();
+            CPPUNIT_ASSERT(watchdir.DirExists());
+
+            wxFileName treedir(watchdir);
+            treedir.AppendDir("treetrunk");
+            CPPUNIT_ASSERT(!treedir.DirExists());
+
+            wxFileName singledir(watchdir);
+            singledir.AppendDir("single");
+            CPPUNIT_ASSERT(!singledir.DirExists());
+            CPPUNIT_ASSERT(singledir.Mkdir());
+
+            WatchDir(singledir);
+            WatchTree(treedir);
+
+            RemoveSingleWatch(singledir);
+            // Add it back again, ready to test RemoveAll()
+            WatchDir(singledir);
+
+            RemoveAllWatches();
+
+            // Clean up
+            RmDir(singledir);
+            RmDir(treedir);
+
+            Exit();
+        }
+
+        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        {
+            CPPUNIT_FAIL("Shouldn't be called");
+
+            return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
+        }
+
+        virtual void CheckResult()
+        {
+            // Do nothing. We override this to prevent receiving events in
+            // ExpectedEvent()
+        }
+    };
+
+    TreeTester tester;
     tester.Run();
 }
 
