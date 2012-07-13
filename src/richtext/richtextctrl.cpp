@@ -2208,7 +2208,7 @@ bool wxRichTextCtrl::MoveToParagraphStart(int flags)
         if (!extendSel)
             SelectNone();
 
-        SetCaretPosition(newPos);
+        SetCaretPosition(newPos, true);
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
@@ -3174,6 +3174,7 @@ void wxRichTextCtrl::SetInsertionPoint(long pos)
     SelectNone();
 
     m_caretPosition = pos - 1;
+    m_caretAtLineStart = true;
 
     PositionCaret();
 

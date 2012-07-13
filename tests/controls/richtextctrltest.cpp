@@ -350,7 +350,7 @@ void RichTextCtrlTestCase::CaretPosition()
     m_rich->AddParagraph("This is paragraph one");
     m_rich->AddParagraph("Paragraph two\n has \nlots of\n lines");
 
-    m_rich->MoveCaret(1);
+    m_rich->SetInsertionPoint(2);
 
     CPPUNIT_ASSERT_EQUAL(1, m_rich->GetCaretPosition());
 
