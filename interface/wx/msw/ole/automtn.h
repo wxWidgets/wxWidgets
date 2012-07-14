@@ -42,6 +42,179 @@ enum wxAutomationInstanceFlags
     wxAutomationInstance_SilentIfNone = 2
 };
 
+/**
+    @class wxVariantDataCurrency
+
+    This class represents a thin wrapper for Microsoft Windows CURRENCY type.
+
+    It is used for converting between wxVariant and OLE VARIANT
+    with type set to VT_CURRENCY. When wxVariant stores
+    wxVariantDataCurrency, it returns "currency" as its type.
+
+    An example of setting and getting CURRENCY value to and from wxVariant:
+    @code
+    CURRENCY cy;
+    wxVariant variant;
+
+    // set wxVariant to currency type
+    if ( SUCCEEDED(VarCyFromR8(123.45, &cy)) )  // set cy to 123.45
+    {
+        variant.SetData(new wxVariantDataCurrency(cy));
+
+        // or instead of the line above you could write:
+        // wxVariantDataCurrency wxCy;
+        // wxCy.SetValue(cy);
+        // variant.SetData(wxCy.Clone());
+    }
+
+    // get CURRENCY value from wxVariant
+    if ( variant.GetType() == "currency" )
+    {
+        wxVariantDataCurrency*
+            wxCy = wxDynamicCastVariantData(variant.GetData(), wxVariantDataCurrency);
+        cy = wxCy->GetValue();
+    }
+    @endcode
+
+    @onlyfor{wxmsw}
+    @since 2.9.5
+
+    @library{wxcore}
+    @category{data}
+
+    @see wxAutomationObject, wxVariant, wxVariantData, wxVariantDataErrorCode
+
+    @header{wx/msw/ole/oleutils.h}
+*/
+class wxVariantDataCurrency : public wxVariantData
+{
+public:
+    /**
+        Default constructor initializes the object to 0.0.
+    */
+    wxVariantDataCurrency();
+
+    /**
+        Constructor from CURRENCY.
+    */
+    wxVariantDataCurrency(CURRENCY value);
+
+    /**
+        Returns the stored CURRENCY value.
+    */
+    CURRENCY GetValue() const;
+
+    /**
+        Sets the stored value to @a value.
+    */
+    void SetValue(CURRENCY value);
+
+    /**
+        Returns true if @a data is of wxVariantDataCurency type
+        and contains the same CURRENCY value.
+    */
+    virtual bool Eq(wxVariantData& data) const;
+
+    /**
+        Fills the provided string with the textual representation of this
+        object.
+
+        The implementation of this method using @c VarBstrFromCy() Windows API
+        function with LOCALE_USER_DEFAULT.
+    */
+    virtual bool Write(wxString& str) const;
+
+    /**
+        Returns a copy of itself.
+    */
+    wxVariantData* Clone() const;
+
+    /**
+        Returns "currency".
+    */
+    virtual wxString GetType() const;
+
+    /**
+        Converts the value of this object to wxAny.
+    */
+    virtual bool GetAsAny(wxAny* any) const;
+};
+
+
+/**
+    @class wxVariantDataErrorCode
+
+    This class represents a thin wrapper for Microsoft Windows SCODE type
+    (which is the same as HRESULT).
+
+    It is used for converting between a wxVariant and OLE VARIANT with type set
+    to VT_ERROR. When wxVariant stores wxVariantDataErrorCode, it returns
+    "errorcode" as its type. This class can be used for returning error codes
+    of automation calls or exchanging values with other applications: e.g.
+    Microsoft Excel returns VARIANTs with VT_ERROR type for cell values with
+    errors (one of XlCVError constants, displayed as e.g. "#DIV/0!" or "#REF!"
+    there) etc. See wxVariantDataCurrency for an example of how to  exchange
+    values between wxVariant and a native type not directly supported by it.
+
+    @onlyfor{wxmsw}
+    @since 2.9.5
+
+    @library{wxcore}
+    @category{data}
+
+    @see wxAutomationObject, wxVariant, wxVariantData, wxVariantDataCurrency
+
+    @header{wx/msw/ole/oleutils.h}
+*/
+class wxVariantDataErrorCode : public wxVariantData
+{
+public:
+    /**
+        Constructor initializes the object to @a value or S_OK if no value was
+        passed.
+    */
+    wxVariantDataErrorCode(SCODE value = S_OK);
+
+    /**
+        Returns the stored SCODE value.
+    */
+    SCODE GetValue() const;
+
+    /**
+        Set the stored value to @a value.
+    */
+    void SetValue(SCODE value);
+
+    /**
+        Returns true if @a data is of wxVariantDataErrorCode type
+        and contains the same SCODE value.
+    */
+    virtual bool Eq(wxVariantData& data) const;
+
+    /**
+        Fills the provided string with the textual representation of this
+        object.
+
+        The error code is just a number, so it's output as such.
+    */
+    virtual bool Write(wxString& str) const;
+
+    /**
+        Returns a copy of itself.
+    */
+    wxVariantData* Clone() const;
+
+    /**
+        Returns "errorcode".
+    */
+    virtual wxString GetType() const { return wxS("errorcode"); }
+
+    /**
+        Converts the value of this object to wxAny.
+    */
+    virtual bool GetAsAny(wxAny* any) const;
+};
+
 
 /**
     @class wxAutomationObject
@@ -72,7 +245,7 @@ enum wxAutomationInstanceFlags
     @library{wxcore}
     @category{data}
 
-    @see wxVariant
+    @see wxVariant, wxVariantDataCurrency, wxVariantDataErrorCode
 */
 class wxAutomationObject : public wxObject
 {
