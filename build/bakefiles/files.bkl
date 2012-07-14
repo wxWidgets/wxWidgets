@@ -1691,6 +1691,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/toplevel.cpp
     src/msw/uiaction.cpp
     src/msw/utilsgui.cpp
+    src/msw/utilswin.cpp
     src/msw/uxtheme.cpp
     src/msw/window.cpp
 </set>

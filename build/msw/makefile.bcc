@@ -1778,6 +1778,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_toplevel.obj \
 	$(OBJS)\monodll_uiaction.obj \
 	$(OBJS)\monodll_utilsgui.obj \
+	$(OBJS)\monodll_utilswin.obj \
 	$(OBJS)\monodll_uxtheme.obj \
 	$(OBJS)\monodll_window.obj \
 	$(OBJS)\monodll_helpchm.obj \
@@ -2051,6 +2052,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_toplevel.obj \
 	$(OBJS)\monodll_uiaction.obj \
 	$(OBJS)\monodll_utilsgui.obj \
+	$(OBJS)\monodll_utilswin.obj \
 	$(OBJS)\monodll_uxtheme.obj \
 	$(OBJS)\monodll_window.obj \
 	$(OBJS)\monodll_helpchm.obj \
@@ -2563,6 +2565,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_toplevel.obj \
 	$(OBJS)\monolib_uiaction.obj \
 	$(OBJS)\monolib_utilsgui.obj \
+	$(OBJS)\monolib_utilswin.obj \
 	$(OBJS)\monolib_uxtheme.obj \
 	$(OBJS)\monolib_window.obj \
 	$(OBJS)\monolib_helpchm.obj \
@@ -2836,6 +2839,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_toplevel.obj \
 	$(OBJS)\monolib_uiaction.obj \
 	$(OBJS)\monolib_utilsgui.obj \
+	$(OBJS)\monolib_utilswin.obj \
 	$(OBJS)\monolib_uxtheme.obj \
 	$(OBJS)\monolib_window.obj \
 	$(OBJS)\monolib_helpchm.obj \
@@ -3230,6 +3234,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_toplevel.obj \
 	$(OBJS)\coredll_uiaction.obj \
 	$(OBJS)\coredll_utilsgui.obj \
+	$(OBJS)\coredll_utilswin.obj \
 	$(OBJS)\coredll_uxtheme.obj \
 	$(OBJS)\coredll_window.obj \
 	$(OBJS)\coredll_helpchm.obj \
@@ -3503,6 +3508,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_toplevel.obj \
 	$(OBJS)\coredll_uiaction.obj \
 	$(OBJS)\coredll_utilsgui.obj \
+	$(OBJS)\coredll_utilswin.obj \
 	$(OBJS)\coredll_uxtheme.obj \
 	$(OBJS)\coredll_window.obj \
 	$(OBJS)\coredll_helpchm.obj \
@@ -3773,6 +3779,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_toplevel.obj \
 	$(OBJS)\corelib_uiaction.obj \
 	$(OBJS)\corelib_utilsgui.obj \
+	$(OBJS)\corelib_utilswin.obj \
 	$(OBJS)\corelib_uxtheme.obj \
 	$(OBJS)\corelib_window.obj \
 	$(OBJS)\corelib_helpchm.obj \
@@ -4046,6 +4053,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_toplevel.obj \
 	$(OBJS)\corelib_uiaction.obj \
 	$(OBJS)\corelib_utilsgui.obj \
+	$(OBJS)\corelib_utilswin.obj \
 	$(OBJS)\corelib_uxtheme.obj \
 	$(OBJS)\corelib_window.obj \
 	$(OBJS)\corelib_helpchm.obj \
@@ -7420,6 +7428,11 @@ $(OBJS)\monodll_utilsgui.obj: ..\..\src\msw\utilsgui.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_utilswin.obj: ..\..\src\msw\utilswin.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\utilswin.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_uxtheme.obj: ..\..\src\msw\uxtheme.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\uxtheme.cpp
 !endif
@@ -9831,6 +9844,11 @@ $(OBJS)\monolib_utilsgui.obj: ..\..\src\msw\utilsgui.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_utilswin.obj: ..\..\src\msw\utilswin.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\utilswin.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_uxtheme.obj: ..\..\src\msw\uxtheme.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\uxtheme.cpp
 !endif
@@ -12209,6 +12227,11 @@ $(OBJS)\coredll_utilsgui.obj: ..\..\src\msw\utilsgui.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_utilswin.obj: ..\..\src\msw\utilswin.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\utilswin.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_uxtheme.obj: ..\..\src\msw\uxtheme.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\uxtheme.cpp
 !endif
@@ -13614,6 +13637,11 @@ $(OBJS)\corelib_uiaction.obj: ..\..\src\msw\uiaction.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_utilsgui.obj: ..\..\src\msw\utilsgui.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\utilsgui.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_utilswin.obj: ..\..\src\msw\utilswin.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\utilswin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

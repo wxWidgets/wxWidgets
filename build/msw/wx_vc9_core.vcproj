@@ -3464,6 +3464,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\utilswin.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\ole\uuid.cpp"
 				>
 			</File>

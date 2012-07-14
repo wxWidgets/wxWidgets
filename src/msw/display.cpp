@@ -621,3 +621,21 @@ int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
 }
 
 #endif // wxUSE_DISPLAY
+
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+{
+#if defined(__WXMICROWIN__)
+    *x = 0; *y = 0;
+    wxDisplaySize(width, height);
+#else
+    // Determine the desktop dimensions minus the taskbar and any other
+    // special decorations...
+    RECT r;
+
+    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
+    if (x)      *x = r.left;
+    if (y)      *y = r.top;
+    if (width)  *width = r.right - r.left;
+    if (height) *height = r.bottom - r.top;
+#endif
+}

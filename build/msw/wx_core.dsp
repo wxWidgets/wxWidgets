@@ -2856,6 +2856,10 @@ SOURCE=..\..\src\msw\utilsgui.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\utilswin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\ole\uuid.cpp
 # End Source File
 # Begin Source File

@@ -5231,6 +5231,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_toplevel.o \
 	monodll_uiaction.o \
 	monodll_msw_utilsgui.o \
+	monodll_utilswin.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o \
 	monodll_helpchm.o \
@@ -5291,6 +5292,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_toplevel.o \
 	monodll_uiaction.o \
 	monodll_msw_utilsgui.o \
+	monodll_utilswin.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS)
@@ -6165,6 +6167,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_toplevel.o \
 	monodll_uiaction.o \
 	monodll_msw_utilsgui.o \
+	monodll_utilswin.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o \
 	monodll_helpchm.o \
@@ -6225,6 +6228,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_toplevel.o \
 	monodll_uiaction.o \
 	monodll_msw_utilsgui.o \
+	monodll_utilswin.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1)
@@ -7425,6 +7429,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_toplevel.o \
 	monolib_uiaction.o \
 	monolib_msw_utilsgui.o \
+	monolib_utilswin.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o \
 	monolib_helpchm.o \
@@ -7485,6 +7490,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_toplevel.o \
 	monolib_uiaction.o \
 	monolib_msw_utilsgui.o \
+	monolib_utilswin.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2)
@@ -8359,6 +8365,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_toplevel.o \
 	monolib_uiaction.o \
 	monolib_msw_utilsgui.o \
+	monolib_utilswin.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o \
 	monolib_helpchm.o \
@@ -8419,6 +8426,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_toplevel.o \
 	monolib_uiaction.o \
 	monolib_msw_utilsgui.o \
+	monolib_utilswin.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3)
@@ -9795,6 +9803,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_toplevel.o \
 	coredll_uiaction.o \
 	coredll_msw_utilsgui.o \
+	coredll_utilswin.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o \
 	coredll_helpchm.o \
@@ -9855,6 +9864,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_toplevel.o \
 	coredll_uiaction.o \
 	coredll_msw_utilsgui.o \
+	coredll_utilswin.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4)
@@ -10729,6 +10739,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_toplevel.o \
 	coredll_uiaction.o \
 	coredll_msw_utilsgui.o \
+	coredll_utilswin.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o \
 	coredll_helpchm.o \
@@ -10789,6 +10800,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_toplevel.o \
 	coredll_uiaction.o \
 	coredll_msw_utilsgui.o \
+	coredll_utilswin.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5)
@@ -11434,6 +11446,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_toplevel.o \
 	corelib_uiaction.o \
 	corelib_msw_utilsgui.o \
+	corelib_utilswin.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o \
 	corelib_helpchm.o \
@@ -11494,6 +11507,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_toplevel.o \
 	corelib_uiaction.o \
 	corelib_msw_utilsgui.o \
+	corelib_utilswin.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6)
@@ -12368,6 +12382,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_toplevel.o \
 	corelib_uiaction.o \
 	corelib_msw_utilsgui.o \
+	corelib_utilswin.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o \
 	corelib_helpchm.o \
@@ -12428,6 +12443,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_toplevel.o \
 	corelib_uiaction.o \
 	corelib_msw_utilsgui.o \
+	corelib_utilswin.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7)
@@ -19236,6 +19252,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/utilsgui.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_uxtheme.o: $(srcdir)/src/msw/uxtheme.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/uxtheme.cpp
 
@@ -24851,6 +24873,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/utilsgui.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_uxtheme.o: $(srcdir)/src/msw/uxtheme.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/uxtheme.cpp
@@ -30639,6 +30667,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_msw_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/utilsgui.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_uxtheme.o: $(srcdir)/src/msw/uxtheme.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/uxtheme.cpp
 
@@ -34838,6 +34872,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_msw_utilsgui.o: $(srcdir)/src/msw/utilsgui.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/utilsgui.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_uxtheme.o: $(srcdir)/src/msw/uxtheme.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/uxtheme.cpp
