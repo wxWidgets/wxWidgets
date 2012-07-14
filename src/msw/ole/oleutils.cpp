@@ -221,6 +221,109 @@ void wxSafeArrayHelper::Unlock()
 } // unnamed namespace
 
 
+// ----------------------------------------------------------------------------
+// wxVariantDataCurrency
+// ----------------------------------------------------------------------------
+
+
+#if wxUSE_ANY
+
+bool wxVariantDataCurrency::GetAsAny(wxAny* any) const
+{
+    *any = m_value;
+    return true;
+}
+
+wxVariantData* wxVariantDataCurrency::VariantDataFactory(const wxAny& any)
+{
+    return new wxVariantDataCurrency(wxANY_AS(any, CURRENCY));
+}
+
+REGISTER_WXANY_CONVERSION(CURRENCY, wxVariantDataCurrency)
+
+#endif // wxUSE_ANY
+
+bool wxVariantDataCurrency::Eq(wxVariantData& data) const
+{
+    wxASSERT_MSG( (data.GetType() == wxS("currency")),
+                  "wxVariantDataCurrency::Eq: argument mismatch" );
+
+    wxVariantDataCurrency& otherData = (wxVariantDataCurrency&) data;
+
+    return otherData.m_value.int64 == m_value.int64;
+}
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataCurrency::Write(wxSTD ostream& str) const
+{
+    wxString s;
+    Write(s);
+    str << s;
+    return true;
+}
+#endif
+
+bool wxVariantDataCurrency::Write(wxString& str) const
+{
+    BSTR bStr = NULL;
+    if ( SUCCEEDED(VarBstrFromCy(m_value, LOCALE_USER_DEFAULT, 0, &bStr)) )
+    {
+        str = wxConvertStringFromOle(bStr);
+        SysFreeString(bStr);
+        return true;
+    }
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// wxVariantDataErrorCode
+// ----------------------------------------------------------------------------
+
+#if wxUSE_ANY
+
+bool wxVariantDataErrorCode::GetAsAny(wxAny* any) const
+{
+    *any = m_value;
+    return true;
+}
+
+wxVariantData* wxVariantDataErrorCode::VariantDataFactory(const wxAny& any)
+{
+    return new wxVariantDataErrorCode(wxANY_AS(any, SCODE));
+}
+
+REGISTER_WXANY_CONVERSION(SCODE, wxVariantDataErrorCode)
+
+#endif // wxUSE_ANY
+
+bool wxVariantDataErrorCode::Eq(wxVariantData& data) const
+{
+    wxASSERT_MSG( (data.GetType() == wxS("errorcode")),
+                  "wxVariantDataErrorCode::Eq: argument mismatch" );
+
+    wxVariantDataErrorCode& otherData = (wxVariantDataErrorCode&) data;
+
+    return otherData.m_value == m_value;
+}
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataErrorCode::Write(wxSTD ostream& str) const
+{
+    wxString s;
+    Write(s);
+    str << s;
+    return true;
+}
+#endif
+
+bool wxVariantDataErrorCode::Write(wxString& str) const
+{
+    str << m_value;
+    return true;
+}
+
+
+
 WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 {
     VariantInit(&oleVariant);
@@ -232,8 +335,23 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
 
     wxString type(variant.GetType());
 
-
-    if (type == wxT("long"))
+    if (type == wxT("errorcode"))
+    {
+        wxVariantDataErrorCode* const
+            ec = wxDynamicCastVariantData(variant.GetData(),
+                                          wxVariantDataErrorCode);
+        oleVariant.vt = VT_ERROR;
+        oleVariant.scode = ec->GetValue();
+    }
+    else if (type == wxT("currency"))
+    {
+        wxVariantDataCurrency* const
+            c = wxDynamicCastVariantData(variant.GetData(),
+                                         wxVariantDataCurrency);
+        oleVariant.vt = VT_CY;
+        oleVariant.cyVal = c->GetValue();
+    }
+    else if (type == wxT("long"))
     {
         oleVariant.vt = VT_I4;
         oleVariant.lVal = variant.GetLong() ;
@@ -420,6 +538,14 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
     {
         switch ( oleVariant.vt & VT_TYPEMASK )
         {
+            case VT_ERROR:
+                variant.SetData(new wxVariantDataErrorCode(oleVariant.scode));
+                break;
+
+            case VT_CY:
+                variant.SetData(new wxVariantDataCurrency(oleVariant.cyVal));
+                break;
+
             case VT_BSTR:
                 {
                     wxString str(wxConvertStringFromOle(oleVariant.bstrVal));

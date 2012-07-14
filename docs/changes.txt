@@ -525,6 +525,7 @@ Major new features in this release
 
 
 2.9.5: (released ????-??-??)
+----------------------------
 
 All (GUI):
 
@@ -534,6 +535,10 @@ All (GUI):
 wxGTK:
 
 - Allow building wxGTK3 with Broadway backend (Kolya Kosenko).
+
+wxMSW:
+
+- Add support for CURRENCY and SCODE types to OLE Automation helpers (PB).
 
 
 2.9.4: (released 2012-07-09)
