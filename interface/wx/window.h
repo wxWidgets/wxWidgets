@@ -47,7 +47,9 @@ enum wxShowEffect
     wxSHOW_EFFECT_BLEND,
 
     /// Expanding or collapsing effect
-    wxSHOW_EFFECT_EXPAND
+    wxSHOW_EFFECT_EXPAND,
+
+    wxSHOW_EFFECT_MAX
 };
 
 
