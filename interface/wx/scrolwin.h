@@ -183,7 +183,6 @@ public:
                long style = wxHSCROLL | wxVSCROLL,
                const wxString& name = "scrolledWindow");
 
-
     /**
         Translates the logical coordinates to the device ones. For example, if
         a window is scrolled 10 pixels to the bottom, the device coordinates of
@@ -199,6 +198,7 @@ public:
         @see CalcUnscrolledPosition()
     */
     void CalcScrolledPosition(int x, int y, int* xx, int* yy) const;
+    wxPoint CalcScrolledPosition(const wxPoint& pt) const;
 
     /**
         Translates the device coordinates to the logical ones. For example, if
@@ -215,6 +215,7 @@ public:
         @see CalcScrolledPosition()
     */
     void CalcUnscrolledPosition(int x, int y, int* xx, int* yy) const;
+    wxPoint CalcUnscrolledPosition(const wxPoint& pt) const;
 
     /**
         Creates the window for two-step construction. Derived classes
