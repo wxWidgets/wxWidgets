@@ -871,11 +871,21 @@ bool wxTopLevelWindowGTK::Show( bool show )
         {
 #ifdef GDK_WINDOWING_X11
             screen = gtk_widget_get_screen(m_widget);
-            GdkAtom atom = gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false);
-            deferShow = gdk_x11_screen_supports_net_wm_hint(screen, atom) != 0;
-#else
-            deferShow = false;
+#ifdef __WXGTK3__
+            if ( GDK_IS_X11_SCREEN(screen) )
 #endif
+            {
+                GdkAtom atom = gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false);
+                deferShow = gdk_x11_screen_supports_net_wm_hint(screen, atom) != 0;
+            }
+#ifdef __WXGTK3__
+            else
+#endif
+#endif // GDK/X11
+            {
+                deferShow = false;
+            }
+
             // If _NET_REQUEST_FRAME_EXTENTS not supported, don't allow changes
             // to m_decorSize, it breaks saving/restoring window size with
             // GetSize()/SetSize() because it makes window bigger between each

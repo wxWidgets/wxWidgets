@@ -854,6 +854,8 @@ bool wxGetKeyState(wxKeyCode key)
     return key_vector[keyCode >> 3] & (1 << (keyCode & 7));
 }
 
+#endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
+
 // ----------------------------------------------------------------------------
 // Launch document with default app
 // ----------------------------------------------------------------------------
@@ -929,7 +931,5 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
 
     return false;
 }
-
-#endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
 
 #endif // __WXX11__ || __WXGTK__ || __WXMOTIF__

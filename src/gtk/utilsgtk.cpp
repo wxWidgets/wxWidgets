@@ -504,17 +504,3 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
 }
 
 #endif // __UNIX__
-
-#ifdef GDK_WINDOWING_BROADWAY
-
-bool wxLaunchDefaultApplication(const wxString& document, int flags)
-{
-    return false;
-}
-
-bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
-{
-    return false;
-}
-
-#endif
