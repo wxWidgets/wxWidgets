@@ -555,8 +555,8 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     wxListWidgetCocoaImpl* c = new wxListWidgetCocoaImpl( wxpeer, scrollview, tableview, ds );
 
     // temporary hook for dnd
-    [tableview registerForDraggedTypes:[NSArray arrayWithObjects:
-        NSStringPboardType, NSFilenamesPboardType, (NSString*) kPasteboardTypeFileURLPromise, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
+ //   [tableview registerForDraggedTypes:[NSArray arrayWithObjects:
+ //       NSStringPboardType, NSFilenamesPboardType, (NSString*) kPasteboardTypeFileURLPromise, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
 
     [ds setImplementation:c];
     return c;

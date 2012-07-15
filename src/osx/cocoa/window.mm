@@ -2084,8 +2084,12 @@ void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
     if( dobj )
     {
         CFMutableArrayRef typesarray = CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
-        
-        [m_osxView registerForDraggedTypes:(NSArray*)typesarray];
+        dobj->AddSupportedTypes(typesarray);
+        NSView* targetView = m_osxView;
+        if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+            targetView = [(NSScrollView*) m_osxView documentView];
+
+        [targetView registerForDraggedTypes:(NSArray*)typesarray];
         CFRelease(typesarray);
     }
 }
