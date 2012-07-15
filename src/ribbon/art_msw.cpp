@@ -97,7 +97,11 @@ static const char* const panel_extension_xpm[] = {
 wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
 {
     m_flags = 0;
+#if defined( __WXMAC__ )
+    m_tab_label_font = *wxSMALL_FONT;
+#else
     m_tab_label_font = *wxNORMAL_FONT;
+#endif
     m_button_bar_label_font = m_tab_label_font;
     m_panel_label_font = m_tab_label_font;
 
