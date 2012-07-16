@@ -643,8 +643,8 @@ void wxDataObject::AddSupportedTypes( void* cfarray)
 void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                      wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
-    *formats++ = wxDataFormat( wxDF_TEXT );
-    *formats = wxDataFormat( wxDF_UNICODETEXT );
+    *formats++ = wxDataFormat(wxDF_UNICODETEXT);
+    *formats = wxDataFormat(wxDF_TEXT);
 }
 #endif
 
