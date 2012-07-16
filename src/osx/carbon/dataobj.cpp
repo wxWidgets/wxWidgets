@@ -394,10 +394,11 @@ bool wxDataObject::IsFormatInPasteboard( void * pb, const wxDataFormat &dataForm
 bool wxDataObject::GetFromPasteboard( void * pb )
 {
     PasteboardRef pasteboard = (PasteboardRef) pb;
-    size_t formatcount = GetFormatCount() + 1;
+
+    size_t formatcount = GetFormatCount(wxDataObject::Set);
     wxDataFormat *array = new wxDataFormat[ formatcount ];
-    array[0] = GetPreferredFormat();
-    GetAllFormats( &array[1] );
+    GetAllFormats(array, wxDataObject::Set);
+    
     ItemCount itemCount = 0;
     wxString filenamesPassed;
     bool transferred = false;
@@ -538,10 +539,9 @@ bool wxDataObject::GetFromPasteboard( void * pb )
 bool wxDataObject::HasDataInPasteboard( void * pb )
 {
     PasteboardRef pasteboard = (PasteboardRef) pb;
-    size_t formatcount = GetFormatCount() + 1;
+    size_t formatcount = GetFormatCount(wxDataObject::Set);
     wxDataFormat *array = new wxDataFormat[ formatcount ];
-    array[0] = GetPreferredFormat();
-    GetAllFormats( &array[1] );
+    GetAllFormats(array, wxDataObject::Set);
     ItemCount itemCount = 0;
     bool hasData = false;
 
@@ -598,10 +598,11 @@ bool wxDataObject::HasDataInPasteboard( void * pb )
 
 void wxDataObject::AddSupportedTypes( void* cfarray)
 {
-    wxDataFormat *array = new wxDataFormat[ GetFormatCount() ];
-    GetAllFormats( array );
+    size_t nFormats = GetFormatCount(wxDataObject::Set);
+    wxDataFormat *array = new wxDataFormat[nFormats];
+    GetAllFormats(array, wxDataObject::Set);
     
-    for (size_t i = 0; i < GetFormatCount(); i++)
+    for (size_t i = 0; i < nFormats; i++)
     {
         wxDataFormat dataFormat = array[ i ];
         
