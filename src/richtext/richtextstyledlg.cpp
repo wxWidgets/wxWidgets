@@ -784,7 +784,7 @@ void wxRichTextStyleOrganiserDialog::OnDeleteClick( wxCommandEvent& WXUNUSED(eve
     {
         wxRichTextStyleDefinition* def = m_stylesListBox->GetStyleListBox()->GetStyle(sel);
         wxString name(def->GetName());
-        if (wxYES == wxMessageBox(wxString::Format(_("Delete style %s?"), name), _("Delete Style"), wxYES_NO|wxICON_QUESTION, this))
+        if (wxYES == wxMessageBox(wxString::Format(_("Delete style %s?"), name.c_str()), _("Delete Style"), wxYES_NO|wxICON_QUESTION, this))
         {
             m_stylesListBox->GetStyleListBox()->SetItemCount(0);
 
