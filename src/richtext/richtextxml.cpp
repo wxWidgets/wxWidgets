@@ -875,7 +875,7 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
 
     wxString s ;
     s.Printf(wxT("<?xml version=\"%s\" encoding=\"%s\"?>\n"),
-             version, fileEncoding);
+             version.c_str(), fileEncoding.c_str());
     OutputString(stream, s);
     OutputString(stream, wxT("<richtext version=\"1.0.0.0\" xmlns=\"http://www.wxwidgets.org\">"));
 
