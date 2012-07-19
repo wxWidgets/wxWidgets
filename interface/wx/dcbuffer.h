@@ -154,6 +154,13 @@ public:
 };
 
 
+/**
+ * Check if the window is natively double buffered and will return a wxPaintDC
+ * if it is, a wxBufferedPaintDC otherwise.  It is the caller's responsibility
+ * to delete the wxDC pointer when finished with it.
+ */
+wxDC* wxAutoBufferedPaintDCFactory(wxWindow* window);
+
 
 /**
     @class wxBufferedPaintDC

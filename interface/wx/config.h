@@ -6,6 +6,18 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+// Flags for constructor style parameter
+enum
+{
+    wxCONFIG_USE_LOCAL_FILE = 1,
+    wxCONFIG_USE_GLOBAL_FILE = 2,
+    wxCONFIG_USE_RELATIVE_PATH = 4,
+    wxCONFIG_USE_NO_ESCAPE_CHARACTERS = 8,
+    wxCONFIG_USE_SUBDIR = 16
+};
+
+
 /**
     @class wxConfigBase
 
@@ -905,7 +917,7 @@ public:
     @library{wxbase}
     @category{cfg}
 */
-class WXDLLIMPEXP_BASE wxConfigPathChanger
+class wxConfigPathChanger
 {
 public:
 

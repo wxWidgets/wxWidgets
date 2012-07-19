@@ -378,6 +378,21 @@ public:
     */
     static bool Remove(wxArtProvider* provider);
 
+    /**
+     * Helper used by GetMessageBoxIcon(): return the art id corresponding to
+     * the standard wxICON_INFORMATION/WARNING/ERROR/QUESTION flags (only one
+     * can be set)
+     */
+    static wxArtID GetMessageBoxIconId(int flags);
+
+    /**
+     * Helper used by several generic classes: return the icon corresponding to
+     * the standard wxICON_INFORMATION/WARNING/ERROR/QUESTION flags (only one
+     * can be set)
+     */
+    static wxIcon GetMessageBoxIcon(int flags);
+
+
 protected:
 
     /**
