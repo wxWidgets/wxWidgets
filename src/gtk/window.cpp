@@ -314,21 +314,25 @@ draw_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
         if (win->HasFlag(wxBORDER_RAISED))
             shadow = GTK_SHADOW_OUT;
 
-        // Style detail to use
+        GtkStyle* style;
         const char* detail;
-        if (win->m_widget == win->m_wxwindow)
-            // for non-scrollable wxWindows
-            detail = "entry";
-        else
-            // for scrollable ones
+        if (win->HasFlag(wxHSCROLL | wxVSCROLL))
+        {
+            style = gtk_widget_get_style(wxGTKPrivate::GetTreeWidget());
             detail = "viewport";
+        }
+        else
+        {
+            style = gtk_widget_get_style(wxGTKPrivate::GetEntryWidget());
+            detail = "entry";
+        }
 
         // clip rect is required to avoid painting background
         // over upper left (w,h) of parent window
         GdkRectangle clipRect = { x, y, w, h };
         gtk_paint_shadow(
-           gtk_widget_get_style(win->m_wxwindow), gdk_event->window, GTK_STATE_NORMAL,
-           shadow, &clipRect, wxGTKPrivate::GetEntryWidget(), detail, x, y, w, h);
+           style, gdk_event->window, GTK_STATE_NORMAL,
+           shadow, &clipRect, widget, detail, x, y, w, h);
 #endif // !__WXGTK3__
     }
     return false;
