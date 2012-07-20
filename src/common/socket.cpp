@@ -887,8 +887,12 @@ bool wxSocketBase::Destroy()
     Notify(false);
 
     // Schedule this object for deletion instead of destroying it right now if
-    // possible as we may have other events pending for it
-    if ( wxTheApp )
+    // it can have other events pending for it and we have a way to do it.
+    //
+    // Notice that sockets used in other threads won't have any events for them
+    // and we shouldn't use delayed destruction mechanism for them as it's not
+    // MT-safe.
+    if ( wxIsMainThread() && wxTheApp )
     {
         wxTheApp->ScheduleForDestruction(this);
     }
