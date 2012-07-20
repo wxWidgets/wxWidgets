@@ -93,34 +93,19 @@ public:
 // wxURLDataObject is a specialization of wxDataObject for URLs
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxURLDataObject : public wxDataObjectSimple
+class WXDLLIMPEXP_CORE wxURLDataObject : public wxDataObjectComposite
 {
 public:
     wxURLDataObject(const wxString& url = wxEmptyString);
 
-    wxString GetURL() const { return m_url; }
-    void SetURL(const wxString& url) { m_url = url; }
-
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
-
-    // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const
-    {
-        return GetDataSize();
-    }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
-    {
-        return GetDataHere(buf);
-    }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
-    {
-        return SetData(len, buf);
-    }
+    wxString GetURL() const;
+    void SetURL(const wxString& url);
 
 private:
-    wxString m_url;
+    class wxTextURIListDataObject* const m_dobjURIList;
+    wxTextDataObject* const m_dobjText;
+
+    wxDECLARE_NO_COPY_CLASS(wxURLDataObject);
 };
 
 

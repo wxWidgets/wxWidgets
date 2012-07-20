@@ -420,30 +420,101 @@ void wxBitmapDataObject::DoConvertToPng()
 // wxURLDataObject
 // ----------------------------------------------------------------------------
 
+class wxTextURIListDataObject : public wxDataObjectSimple
+{
+public:
+    wxTextURIListDataObject(const wxString& url)
+        : wxDataObjectSimple(wxDataFormat(g_fileAtom)),
+          m_url(url)
+    {
+    }
+
+    const wxString& GetURL() const { return m_url; }
+    void SetURL(const wxString& url) { m_url = url; }
+
+
+    virtual size_t GetDataSize() const
+    {
+        // It is not totally clear whether we should include "\r\n" at the end
+        // of the string if there is only one URL or not, but not doing it
+        // doesn't seem to create any problems, so keep things simple.
+        return strlen(m_url.utf8_str()) + 1;
+    }
+
+    virtual bool GetDataHere(void *buf) const
+    {
+        char* const dst = static_cast<char*>(buf);
+
+        strcpy(dst, m_url.utf8_str());
+
+        return true;
+    }
+
+    virtual bool SetData(size_t len, const void *buf)
+    {
+        const char* const src = static_cast<const char*>(buf);
+
+        // The string might be "\r\n"-terminated but this is not necessarily
+        // the case (e.g. when dragging an URL from Firefox, it isn't).
+        if ( len > 1 && src[len - 1] == '\n' )
+        {
+            if ( len > 2 && src[len - 2] == '\r' )
+                len--;
+
+            len--;
+        }
+
+        m_url = wxString::FromUTF8(src, len);
+
+        return true;
+    }
+
+    // Must provide overloads to avoid hiding them (and warnings about it)
+    virtual size_t GetDataSize(const wxDataFormat&) const
+    {
+        return GetDataSize();
+    }
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    {
+        return GetDataHere(buf);
+    }
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    {
+        return SetData(len, buf);
+    }
+
+private:
+    wxString m_url;
+};
+
 wxURLDataObject::wxURLDataObject(const wxString& url) :
-   wxDataObjectSimple( wxDataFormat( g_fileAtom ) )
+    m_dobjURIList(new wxTextURIListDataObject(url)),
+    m_dobjText(new wxTextDataObject(url))
 {
-   m_url = url;
+    // Use both URL-specific format and a plain text one to ensure that URLs
+    // can be pasted into any application.
+    Add(m_dobjURIList, true /* preferred */);
+    Add(m_dobjText);
 }
 
-size_t wxURLDataObject::GetDataSize() const
+void wxURLDataObject::SetURL(const wxString& url)
 {
-    return strlen(m_url.utf8_str()) + 1;
+    m_dobjURIList->SetURL(url);
+    m_dobjText->SetText(url);
 }
 
-bool wxURLDataObject::GetDataHere(void *buf) const
+wxString wxURLDataObject::GetURL() const
 {
-    strcpy(static_cast<char*>(buf), m_url.utf8_str());
-
-    return true;
+    if ( GetReceivedFormat() == g_fileAtom )
+    {
+        // If we received the URL as an URI, use it.
+        return m_dobjURIList->GetURL();
+    }
+    else // Otherwise we either got it as text or didn't get anything yet.
+    {
+        // In either case using the text format should be fine.
+        return m_dobjText->GetText();
+    }
 }
-
-bool wxURLDataObject::SetData(size_t len, const void *buf)
-{
-    m_url = wxString::FromUTF8(static_cast<const char*>(buf), len);
-
-    return true;
-}
-
 
 #endif // wxUSE_DATAOBJ
