@@ -227,6 +227,7 @@ public:
 #endif // wxUSE_METAFILE
 
     void OnCopyFiles(wxCommandEvent& event);
+    void OnCopyURL(wxCommandEvent& event);
 
     void OnUsePrimary(wxCommandEvent& event);
 
@@ -816,6 +817,7 @@ enum
     Menu_PasteBitmap,
     Menu_PasteMFile,
     Menu_CopyFiles,
+    Menu_CopyURL,
     Menu_UsePrimary,
     Menu_Shape_New = 500,
     Menu_Shape_Edit,
@@ -844,6 +846,7 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_PasteMFile, DnDFrame::OnPasteMetafile)
 #endif // wxUSE_METAFILE
     EVT_MENU(Menu_CopyFiles,  DnDFrame::OnCopyFiles)
+    EVT_MENU(Menu_CopyURL,    DnDFrame::OnCopyURL)
     EVT_MENU(Menu_UsePrimary, DnDFrame::OnUsePrimary)
 
     EVT_UPDATE_UI(Menu_DragMoveDef, DnDFrame::OnUpdateUIMoveByDefault)
@@ -974,6 +977,7 @@ DnDFrame::DnDFrame()
 #endif // wxUSE_METAFILE
     clip_menu->AppendSeparator();
     clip_menu->Append(Menu_CopyFiles, wxT("Copy &files\tCtrl-F"));
+    clip_menu->Append(Menu_CopyURL, wxT("Copy &URL\tCtrl-U"));
     clip_menu->AppendSeparator();
     clip_menu->AppendCheckItem(Menu_UsePrimary, wxT("Use &primary selection\tCtrl-P"));
 
@@ -1483,6 +1487,27 @@ void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
 #else // !MSW
     wxLogError(wxT("Sorry, not implemented"));
 #endif // MSW/!MSW
+}
+
+void DnDFrame::OnCopyURL(wxCommandEvent& WXUNUSED(event))
+{
+    // Just hard code it for now, we could ask the user but the point here is
+    // to test copying URLs, it doesn't really matter what it is.
+    const wxString url("http://www.wxwidgets.org/");
+
+    wxClipboardLocker locker;
+    if ( !!locker && wxTheClipboard->AddData(new wxURLDataObject(url)) )
+    {
+        wxLogStatus(this, "Copied URL \"%s\" to %s.",
+                    url,
+                    GetMenuBar()->IsChecked(Menu_UsePrimary)
+                        ? "primary selection"
+                        : "clipboard");
+    }
+    else
+    {
+        wxLogError("Failed to copy URL.");
+    }
 }
 
 // ---------------------------------------------------------------------------

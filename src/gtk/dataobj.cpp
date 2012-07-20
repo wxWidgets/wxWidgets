@@ -421,45 +421,26 @@ void wxBitmapDataObject::DoConvertToPng()
 // ----------------------------------------------------------------------------
 
 wxURLDataObject::wxURLDataObject(const wxString& url) :
-   wxDataObjectSimple( wxDataFormat( gdk_atom_intern("text/x-moz-url",FALSE) ) )
+   wxDataObjectSimple( wxDataFormat( g_fileAtom ) )
 {
    m_url = url;
 }
 
 size_t wxURLDataObject::GetDataSize() const
 {
-    if (m_url.empty())
-        return 0;
-
-    return 2*m_url.Len()+2;
+    return strlen(m_url.utf8_str()) + 1;
 }
 
 bool wxURLDataObject::GetDataHere(void *buf) const
 {
-    if (m_url.empty())
-        return false;
-
-    wxCSConv conv( "UCS2" );
-    conv.FromWChar( (char*) buf, 2*m_url.Len()+2, m_url.wc_str() );
+    strcpy(static_cast<char*>(buf), m_url.utf8_str());
 
     return true;
 }
 
-    // copy data from buffer to our data
 bool wxURLDataObject::SetData(size_t len, const void *buf)
 {
-    if (len == 0)
-    {
-        m_url = wxEmptyString;
-        return false;
-    }
-
-    wxCSConv conv( "UCS2" );
-    wxWCharBuffer res = conv.cMB2WC( (const char*) buf );
-    m_url = res;
-    int pos = m_url.Find( '\n' );
-    if (pos != wxNOT_FOUND)
-        m_url.Remove( pos, m_url.Len() - pos );
+    m_url = wxString::FromUTF8(static_cast<const char*>(buf), len);
 
     return true;
 }

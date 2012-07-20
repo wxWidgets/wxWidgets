@@ -535,6 +535,7 @@ All (GUI):
 wxGTK:
 
 - Allow building wxGTK3 with Broadway backend (Kolya Kosenko).
+- Improve drag-and-drop of URLs.
 
 wxMSW:
 
