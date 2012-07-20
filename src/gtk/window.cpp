@@ -1313,142 +1313,79 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
 
     g_lastButtonNumber = gdk_event->button;
 
-    // GDK sends surplus button down events
-    // before a double click event. We
-    // need to filter these out.
-    if ((gdk_event->type == GDK_BUTTON_PRESS) && (win->m_wxwindow))
+    wxEventType event_type;
+    wxEventType down;
+    wxEventType dclick;
+    switch (gdk_event->button)
     {
-        GdkEvent *peek_event = gdk_event_peek();
-        if (peek_event)
-        {
-            if ((peek_event->type == GDK_2BUTTON_PRESS) ||
-                (peek_event->type == GDK_3BUTTON_PRESS))
-            {
-                gdk_event_free( peek_event );
-                return TRUE;
-            }
-            else
-            {
-                gdk_event_free( peek_event );
-            }
-        }
+        case 1:
+            down = wxEVT_LEFT_DOWN;
+            dclick = wxEVT_LEFT_DCLICK;
+            break;
+        case 2:
+            down = wxEVT_MIDDLE_DOWN;
+            dclick = wxEVT_MIDDLE_DCLICK;
+            break;
+        case 3:
+            down = wxEVT_RIGHT_DOWN;
+            dclick = wxEVT_RIGHT_DCLICK;
+            break;
+        case 8:
+            down = wxEVT_AUX1_DOWN;
+            dclick = wxEVT_AUX1_DCLICK;
+            break;
+        case 9:
+            down = wxEVT_AUX2_DOWN;
+            dclick = wxEVT_AUX2_DCLICK;
+            break;
+        default:
+            return false;
     }
-
-    wxEventType event_type = wxEVT_NULL;
-
+    switch (gdk_event->type)
+    {
+        case GDK_BUTTON_PRESS:
+            event_type = down;
+            // GDK sends surplus button down events
+            // before a double click event. We
+            // need to filter these out.
+            if (win->m_wxwindow)
+            {
+                GdkEvent* peek_event = gdk_event_peek();
+                if (peek_event)
+                {
+                    const GdkEventType peek_event_type = peek_event->type;
+                    gdk_event_free(peek_event);
+                    if (peek_event_type == GDK_2BUTTON_PRESS ||
+                        peek_event_type == GDK_3BUTTON_PRESS)
+                    {
+                        return true;
+                    }
+                }
+            }
+            break;
+        case GDK_2BUTTON_PRESS:
+            event_type = dclick;
 #ifndef __WXGTK3__
-    if ( gdk_event->type == GDK_2BUTTON_PRESS &&
-            gdk_event->button >= 1 && gdk_event->button <= 3 )
-    {
-        // Reset GDK internal timestamp variables in order to disable GDK
-        // triple click events. GDK will then next time believe no button has
-        // been clicked just before, and send a normal button click event.
-        GdkDisplay* display = gtk_widget_get_display (widget);
-        display->button_click_time[1] = 0;
-        display->button_click_time[0] = 0;
-    }
+            if (gdk_event->button >= 1 && gdk_event->button <= 3)
+            {
+                // Reset GDK internal timestamp variables in order to disable GDK
+                // triple click events. GDK will then next time believe no button has
+                // been clicked just before, and send a normal button click event.
+                GdkDisplay* display = gtk_widget_get_display(widget);
+                display->button_click_time[1] = 0;
+                display->button_click_time[0] = 0;
+            }
 #endif // !__WXGTK3__
-
-    if (gdk_event->button == 1)
-    {
-        // note that GDK generates triple click events which are not supported
-        // by wxWidgets but still have to be passed to the app as otherwise
-        // clicks would simply go missing
-        switch (gdk_event->type)
-        {
-            // we shouldn't get triple clicks at all for GTK2 because we
-            // suppress them artificially using the code above but we still
-            // should map them to something for GTK1 and not just ignore them
-            // as this would lose clicks
-            case GDK_3BUTTON_PRESS:     // we could also map this to DCLICK...
-            case GDK_BUTTON_PRESS:
-                event_type = wxEVT_LEFT_DOWN;
-                break;
-
-            case GDK_2BUTTON_PRESS:
-                event_type = wxEVT_LEFT_DCLICK;
-                break;
-
-            default:
-                // just to silence gcc warnings
-                ;
-        }
-    }
-    else if (gdk_event->button == 2)
-    {
-        switch (gdk_event->type)
-        {
-            case GDK_3BUTTON_PRESS:
-            case GDK_BUTTON_PRESS:
-                event_type = wxEVT_MIDDLE_DOWN;
-                break;
-
-            case GDK_2BUTTON_PRESS:
-                event_type = wxEVT_MIDDLE_DCLICK;
-                break;
-
-            default:
-                ;
-        }
-    }
-    else if (gdk_event->button == 3)
-    {
-        switch (gdk_event->type)
-        {
-            case GDK_3BUTTON_PRESS:
-            case GDK_BUTTON_PRESS:
-                event_type = wxEVT_RIGHT_DOWN;
-                break;
-
-            case GDK_2BUTTON_PRESS:
-                event_type = wxEVT_RIGHT_DCLICK;
-                break;
-
-            default:
-                ;
-        }
-    }
-
-    else if (gdk_event->button == 8)
-    {
-        switch (gdk_event->type)
-        {
-            case GDK_3BUTTON_PRESS:
-            case GDK_BUTTON_PRESS:
-                event_type = wxEVT_AUX1_DOWN;
-                break;
-
-            case GDK_2BUTTON_PRESS:
-                event_type = wxEVT_AUX1_DCLICK;
-                break;
-
-            default:
-                ;
-        }
-    }
-
-    else if (gdk_event->button == 9)
-    {
-        switch (gdk_event->type)
-        {
-            case GDK_3BUTTON_PRESS:
-            case GDK_BUTTON_PRESS:
-                event_type = wxEVT_AUX2_DOWN;
-                break;
-
-            case GDK_2BUTTON_PRESS:
-                event_type = wxEVT_AUX2_DCLICK;
-                break;
-
-            default:
-                ;
-        }
-    }
-
-    if ( event_type == wxEVT_NULL )
-    {
-        // unknown mouse button or click type
-        return FALSE;
+            break;
+        // we shouldn't get triple clicks at all for GTK2 because we
+        // suppress them artificially using the code above but we still
+        // should map them to something for GTK3 and not just ignore them
+        // as this would lose clicks
+        case GDK_3BUTTON_PRESS:
+            event_type = down;
+            break;
+        default:
+            return false;
     }
 
     g_lastMouseEvent = (GdkEvent*) gdk_event;
