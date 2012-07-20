@@ -328,7 +328,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     {
         gtk_selection_data_set(
             selection_data,
-            GDK_SELECTION_TYPE_STRING,
+            format.GetFormatId(),
             8*sizeof(gchar),
             (const guchar*)buf.data(),
             size );
