@@ -408,7 +408,7 @@ public:
     // helper classes
     // ------------------------------------------------------------------------
 
-        // a class representing a time zone: basicly, this is just an offset
+        // a class representing a time zone: basically, this is just an offset
         // (in seconds) from GMT
     class WXDLLIMPEXP_BASE TimeZone
     {
@@ -693,7 +693,7 @@ public:
         // default assignment operator is ok
 
     // calendar calculations (functions which set the date only leave the time
-    // unchanged, e.g. don't explictly zero it): SetXXX() functions modify the
+    // unchanged, e.g. don't explicitly zero it): SetXXX() functions modify the
     // object itself, GetXXX() ones return a new object.
     // ------------------------------------------------------------------------
 

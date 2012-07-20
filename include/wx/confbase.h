@@ -73,7 +73,7 @@ enum
 // abstract base class wxConfigBase which defines the interface for derived
 // classes
 //
-// wxConfig organizes the items in a tree-like structure (modeled after the
+// wxConfig organizes the items in a tree-like structure (modelled after the
 // Unix/Dos filesystem). There are groups (directories) and keys (files).
 // There is always one current group given by the current path.
 //

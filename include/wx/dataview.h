@@ -229,7 +229,7 @@ public:
         return true;
     }
 
-    // define hierachy
+    // define hierarchy
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const = 0;
     virtual bool IsContainer( const wxDataViewItem &item ) const = 0;
     // Is the container just a header or an item with all columns

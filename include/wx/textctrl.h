@@ -821,7 +821,7 @@ public:
           m_start(event.m_start),
           m_end(event.m_end) { }
 
-    // get the mouse event which happend over the URL
+    // get the mouse event which happened over the URL
     const wxMouseEvent& GetMouseEvent() const { return m_evtMouse; }
 
     // get the start of the URL

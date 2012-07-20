@@ -601,7 +601,7 @@ public:
     virtual void DeleteWindows();
 
     // Inform sizer about the first direction that has been decided (by parent item)
-    // Returns true if it made use of the informtion (and recalculated min size)
+    // Returns true if it made use of the information (and recalculated min size)
     virtual bool InformFirstDirection( int WXUNUSED(direction), int WXUNUSED(size), int WXUNUSED(availableOtherDir) )
         { return false; }
 
