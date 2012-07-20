@@ -24,22 +24,22 @@ one of the following sets of commands from the wxWidgets directory
 # Build the library for Cocoa (wxWidgets 2.9.0 and later)
 mkdir build-cocoa-debug
 cd build-cocoa-debug
-../configure --enable-unicode --enable-debug --disable-shared --with-osx_cocoa
-make;cd ..
+../configure --with-osx_cocoa --enable-debug
+make
 # Build the samples and demos
-cd build-cocoa-debug/samples; make;cd ../..
-cd build-cocoa-debug/demos;   make;cd ../..
+cd samples; make;cd ..
+cd demos;   make;cd ..
 
 ---------
 
 # Build the library for Carbon
 mkdir build-carbon-debug
 cd build-carbon-debug
-../configure --enable-unicode --enable-debug --disable-shared
-make;cd ..
+../configure --with-osx_carbon --enable-debug
+make
 # Build the samples and demos
-cd build-carbon-debug/samples;make;cd ../..
-cd build-carbon-debug/demos;  make;cd ../..
+cd samples;make;cd ..
+cd demos;  make;cd ..
 
 ---------
 
@@ -79,15 +79,6 @@ system directories in order to use your program.  One way to avoid this
 is to configure wxWidgets with --disable-shared.  Another way to avoid
 it is to make a framework for wxWidgets.  Making frameworks is beyond
 the scope of this document.
-
-Note:
-We recommend you configure a static library instead:
-
-4) ../configure --disable-shared
-
-or activate OpenGL:
-
-4) ../configure --with-opengl
 
 Note:
 It is rarely desirable to install non-Apple software into system directories.
