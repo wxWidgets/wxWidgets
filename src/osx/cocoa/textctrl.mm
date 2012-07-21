@@ -867,7 +867,12 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
     if ( editor )
     {
         wxMacEditHelper helper(m_textField);
+        BOOL hasUndo = [editor respondsToSelector:@selector(setAllowsUndo:)];
+        if ( hasUndo )
+            [editor setAllowsUndo:NO];
         [editor insertText:wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+        if ( hasUndo )
+            [editor setAllowsUndo:YES];
     }
     else
     {
