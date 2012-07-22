@@ -2788,7 +2788,7 @@ public:
             @false if the window's close handler should be able to veto the destruction
             of this window, @true if it cannot.
 
-        @return @true if the even was handled and not vetoed, @false otherwise.
+        @return @true if the event was handled and not vetoed, @false otherwise.
 
         @remarks Close calls the close handler for the window, providing an
                  opportunity for the window to choose whether to destroy
