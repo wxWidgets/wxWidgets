@@ -641,7 +641,10 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
                 wxCommandEventHandler(WebFrame::OnHistory), NULL, this );
     }
 
-    item = m_tools_history_menu->AppendRadioItem(wxID_ANY, m_browser->GetCurrentTitle());
+    wxString title = m_browser->GetCurrentTitle();
+    if ( title.empty() )
+        title = "(untitled)";
+    item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
     item->Check();
 
     //No need to connect the current item
