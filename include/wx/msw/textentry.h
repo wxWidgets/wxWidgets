@@ -75,7 +75,9 @@ protected:
     // wxUSE_OLE as OleInitialize() is not called then
 #if wxUSE_OLE
     virtual bool DoAutoCompleteStrings(const wxArrayString& choices);
+#if wxUSE_DYNLIB_CLASS
     virtual bool DoAutoCompleteFileNames(int flags);
+#endif // wxUSE_DYNLIB_CLASS
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer);
 #endif // wxUSE_OLE
 
