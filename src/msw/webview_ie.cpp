@@ -1173,7 +1173,7 @@ END_IID_TABLE;
 
 IMPLEMENT_IUNKNOWN_METHODS(VirtualProtocol)
 
-HRESULT VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProtocolSink *pOIProtSink,
+HRESULT STDMETHODCALLTYPE VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProtocolSink *pOIProtSink,
                                wxIInternetBindInfo *pOIBindInfo, DWORD grfPI,
                                HANDLE_PTR dwReserved)
 {
@@ -1200,7 +1200,7 @@ HRESULT VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProtocolSink *pOIProtSi
     return S_OK;
 }
 
-HRESULT VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
+HRESULT STDMETHODCALLTYPE VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
 {
     //If the file is null we return false to indicte it is finished
     if(!m_file)
@@ -1246,7 +1246,7 @@ END_IID_TABLE;
 
 IMPLEMENT_IUNKNOWN_METHODS(ClassFactory)
 
-HRESULT ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
+HRESULT STDMETHODCALLTYPE ClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid,
                                      void ** ppvObject)
 {
     if (pUnkOuter)
@@ -1288,7 +1288,7 @@ bool wxIEContainer::QueryClientSiteInterface(REFIID iid, void **_interface,
     return false;
 }
 
-HRESULT DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
+HRESULT wxSTDCALL DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
                                           IUnknown *pcmdtReserved,
                                           IDispatch *pdispReserved)
 {
@@ -1299,14 +1299,14 @@ HRESULT DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
+HRESULT wxSTDCALL DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
 {
     //don't show 3d border and enable themes.
     pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_THEME;
     return S_OK;
 }
 
-HRESULT DocHostUIHandler::ShowUI(DWORD dwID,
+HRESULT wxSTDCALL DocHostUIHandler::ShowUI(DWORD dwID,
                                  IOleInPlaceActiveObject *pActiveObject,
                                  IOleCommandTarget *pCommandTarget,
                                  IOleInPlaceFrame *pFrame,
@@ -1320,35 +1320,35 @@ HRESULT DocHostUIHandler::ShowUI(DWORD dwID,
     return S_FALSE;
 }
 
-HRESULT DocHostUIHandler::HideUI(void)
+HRESULT wxSTDCALL DocHostUIHandler::HideUI(void)
 {
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::UpdateUI(void)
+HRESULT wxSTDCALL DocHostUIHandler::UpdateUI(void)
 {
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::EnableModeless(BOOL fEnable)
+HRESULT wxSTDCALL DocHostUIHandler::EnableModeless(BOOL fEnable)
 {
     wxUnusedVar(fEnable);
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::OnDocWindowActivate(BOOL fActivate)
+HRESULT wxSTDCALL DocHostUIHandler::OnDocWindowActivate(BOOL fActivate)
 {
     wxUnusedVar(fActivate);
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::OnFrameWindowActivate(BOOL fActivate)
+HRESULT wxSTDCALL DocHostUIHandler::OnFrameWindowActivate(BOOL fActivate)
 {
     wxUnusedVar(fActivate);
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::ResizeBorder(LPCRECT prcBorder,
+HRESULT wxSTDCALL DocHostUIHandler::ResizeBorder(LPCRECT prcBorder,
                                        IOleInPlaceUIWindow *pUIWindow,
                                        BOOL fFrameWindow)
 {
@@ -1358,7 +1358,7 @@ HRESULT DocHostUIHandler::ResizeBorder(LPCRECT prcBorder,
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg,
+HRESULT wxSTDCALL DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg,
                                                const GUID *pguidCmdGroup,
                                                DWORD nCmdID)
 {
@@ -1390,14 +1390,14 @@ HRESULT DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg,
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::GetOptionKeyPath(LPOLESTR *pchKey,DWORD dw)
+HRESULT wxSTDCALL DocHostUIHandler::GetOptionKeyPath(LPOLESTR *pchKey,DWORD dw)
 {
     wxUnusedVar(pchKey);
     wxUnusedVar(dw);
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::GetDropTarget(IDropTarget *pDropTarget,
+HRESULT wxSTDCALL DocHostUIHandler::GetDropTarget(IDropTarget *pDropTarget,
                                         IDropTarget **ppDropTarget)
 {
     wxUnusedVar(pDropTarget);
@@ -1405,13 +1405,13 @@ HRESULT DocHostUIHandler::GetDropTarget(IDropTarget *pDropTarget,
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::GetExternal(IDispatch **ppDispatch)
+HRESULT wxSTDCALL DocHostUIHandler::GetExternal(IDispatch **ppDispatch)
 {
     wxUnusedVar(ppDispatch);
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::TranslateUrl(DWORD dwTranslate,
+HRESULT wxSTDCALL DocHostUIHandler::TranslateUrl(DWORD dwTranslate,
                                        OLECHAR *pchURLIn,
                                        OLECHAR **ppchURLOut)
 {
@@ -1421,7 +1421,7 @@ HRESULT DocHostUIHandler::TranslateUrl(DWORD dwTranslate,
     return E_NOTIMPL;
 }
 
-HRESULT DocHostUIHandler::FilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
+HRESULT wxSTDCALL DocHostUIHandler::FilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
 {
     wxUnusedVar(pDO);
     wxUnusedVar(ppDORet);
