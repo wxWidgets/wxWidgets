@@ -951,8 +951,37 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             return TRUE;
         }
 
-        // Emit KEY_DOWN event
-        ret = win->HandleWindowEvent( event );
+        // Next check for accelerators.
+#if wxUSE_ACCEL
+        wxWindowGTK *ancestor = win;
+        while (ancestor)
+        {
+            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
+            if (command != -1)
+            {
+                wxCommandEvent menu_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                ret = ancestor->HandleWindowEvent( menu_event );
+
+                if ( !ret )
+                {
+                    // if the accelerator wasn't handled as menu event, try
+                    // it as button click (for compatibility with other
+                    // platforms):
+                    wxCommandEvent button_event( wxEVT_COMMAND_BUTTON_CLICKED, command );
+                    ret = ancestor->HandleWindowEvent( button_event );
+                }
+
+                break;
+            }
+            if (ancestor->IsTopLevel())
+                break;
+            ancestor = ancestor->GetParent();
+        }
+#endif // wxUSE_ACCEL
+
+        // If not an accelerator, then emit KEY_DOWN event
+        if ( !ret )
+            ret = win->HandleWindowEvent( event );
     }
     else
     {
@@ -980,36 +1009,6 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
     if (return_after_IM)
         return FALSE;
-
-#if wxUSE_ACCEL
-    if (!ret)
-    {
-        wxWindowGTK *ancestor = win;
-        while (ancestor)
-        {
-            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-            if (command != -1)
-            {
-                wxCommandEvent menu_event( wxEVT_COMMAND_MENU_SELECTED, command );
-                ret = ancestor->HandleWindowEvent( menu_event );
-
-                if ( !ret )
-                {
-                    // if the accelerator wasn't handled as menu event, try
-                    // it as button click (for compatibility with other
-                    // platforms):
-                    wxCommandEvent button_event( wxEVT_COMMAND_BUTTON_CLICKED, command );
-                    ret = ancestor->HandleWindowEvent( button_event );
-                }
-
-                break;
-            }
-            if (ancestor->IsTopLevel())
-                break;
-            ancestor = ancestor->GetParent();
-        }
-    }
-#endif // wxUSE_ACCEL
 
     // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
     // will only be sent if it is not in an accelerator table.
