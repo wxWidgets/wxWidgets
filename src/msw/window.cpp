@@ -670,6 +670,7 @@ wxWindowMSW::MSWShowWithEffect(bool show,
                                wxShowEffect effect,
                                unsigned timeout)
 {
+#if wxUSE_DYNLIB_CLASS
     if ( effect == wxSHOW_EFFECT_NONE )
         return Show(show);
 
@@ -766,6 +767,9 @@ wxWindowMSW::MSWShowWithEffect(bool show,
     }
 
     return true;
+#else    // wxUSE_DYNLIB_CLASS
+    return Show(show);
+#endif
 }
 
 // Raise the window to the top of the Z order
