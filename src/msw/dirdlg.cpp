@@ -50,7 +50,7 @@
 #if wxUSE_DYNLIB_CLASS && !defined(__WXWINCE__)
     #define wxUSE_IFILEDIALOG 1
 #else
-    #define wxUSE_IFILEDIALOG
+    #define wxUSE_IFILEDIALOG 0
 #endif
 
 #if wxUSE_IFILEDIALOG
