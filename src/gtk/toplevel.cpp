@@ -1022,8 +1022,6 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 {
     wxCHECK_RET( m_widget, wxT("invalid frame") );
 
-    m_deferShowAllowed = true;
-
     // deal with the position first
     int old_x = m_x;
     int old_y = m_y;
@@ -1057,6 +1055,8 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     if (m_height < 1) m_height = 1;
     if (m_width != oldSize.x || m_height != oldSize.y)
     {
+        m_deferShowAllowed = true;
+
         int w, h;
         GTKDoGetSize(&w, &h);
         gtk_window_resize(GTK_WINDOW(m_widget), w, h);
