@@ -399,7 +399,13 @@ public:
         m_pMyMenuItem3->SetItemLabel("Simple item");
         m_pMyMenuItem4->SetItemLabel("Item with &accelerator");
         @endcode
-        
+
+        @note In wxGTK using @c "SHIFT" with non-alphabetic characters
+        currently doesn't work, even in combination with other modifiers, due
+        to GTK+ limitation. E.g. @c Shift+Ctrl+A works but @c Shift+Ctrl+1 or
+        @c Shift+/ do not, so avoid using accelerators of this form in portable
+        code.
+
         @see GetItemLabel(), GetItemLabelText()
     */
     virtual void SetItemLabel(const wxString& label);
