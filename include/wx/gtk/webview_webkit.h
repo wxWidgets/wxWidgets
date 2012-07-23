@@ -47,6 +47,8 @@ public:
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxString& name = wxWebViewNameStr);
 
+    virtual ~wxWebViewWebKit();
+
     virtual bool Enable( bool enable = true );
 
     // implementation
