@@ -2779,6 +2779,11 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 /*  platform specific (implementation) parts of the headers */
 /*  --------------------------------------------------------------------------- */
 
+#ifdef __DARWIN__
+#define DECLARE_WXOSX_OPAQUE_CFREF( name ) typedef struct __##name* name##Ref;
+#define DECLARE_WXOSX_OPAQUE_CONST_CFREF( name ) typedef const struct __##name* name##Ref;
+#endif
+
 #ifdef __WXMAC__
 
 #define WX_OPAQUE_TYPE( name ) struct wxOpaque##name
@@ -2814,9 +2819,6 @@ typedef void*       WXDisplay;
 typedef const void * CFTypeRef;
 
 /* typedef const struct __CFString * CFStringRef; */
-
-#define DECLARE_WXOSX_OPAQUE_CFREF( name ) typedef struct __##name* name##Ref;
-#define DECLARE_WXOSX_OPAQUE_CONST_CFREF( name ) typedef const struct __##name* name##Ref;
 
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFString )
 typedef struct __CFString * CFMutableStringRef;

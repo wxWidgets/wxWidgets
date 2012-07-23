@@ -233,7 +233,7 @@ private:
 // integration with MFC) but currently this is not done for all ports yet (e.g.
 // wxX11) so fall back to the old wxGUIEventLoop definition below for them
 
-#if defined(__WXOSX__)
+#if defined(__DARWIN__)
     // CoreFoundation-based event loop is currently in wxBase so include it in
     // any case too (although maybe it actually shouldn't be there at all)
     #include "wx/osx/evtloop.h"

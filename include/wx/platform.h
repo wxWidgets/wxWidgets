@@ -609,8 +609,7 @@
     checking for any OS X port (Carbon and Cocoa) and __WXMAC__ is an old name
     for it.
  */
-#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__) \
-        || (defined(__DARWIN__) && !wxUSE_GUI)
+#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__)
 #   ifndef __WXOSX__
 #       define __WXOSX__ 1
 #   endif

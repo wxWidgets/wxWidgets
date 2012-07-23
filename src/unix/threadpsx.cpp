@@ -1837,7 +1837,7 @@ static void DeleteThread(wxThread *This)
     }
 }
 
-#ifndef __WXOSX__
+#ifndef __DARWIN__
 
 void wxMutexGuiEnterImpl()
 {

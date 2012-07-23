@@ -561,7 +561,7 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
    // Now this routine wil give false for OpenVMS
    // TODO : should we do something with logicals?
     char **env=NULL;
-#elif defined(__WXOSX__)
+#elif defined(__DARWIN__)
 #if wxOSX_USE_COCOA_OR_CARBON
     // Under Mac shared libraries don't have access to the global environ
     // variable so use this Mac-specific function instead as advised by

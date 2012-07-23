@@ -992,7 +992,7 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 #endif
 
 // these functions are in src/osx/utilsexc_base.cpp for wxMac
-#ifndef __WXMAC__
+#ifndef __DARWIN__
 
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
@@ -1028,7 +1028,7 @@ wxString wxGetOsDescription()
     return wxGetCommandOutput(wxT("uname -s -r -m"));
 }
 
-#endif // !__WXMAC__
+#endif // !__DARWIN__
 
 unsigned long wxGetProcessId()
 {

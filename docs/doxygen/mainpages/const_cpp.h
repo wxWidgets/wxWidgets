@@ -42,14 +42,14 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WXGTK24__, GTK+ 2.4 or higher}
 @itemdef{__WXGTK26__, GTK+ 2.6 or higher}
 @itemdef{__WXGTK210__, GTK+ 2.10 or higher}
-@itemdef{__WXMAC__, old define for Mac OS X}
+@itemdef{__WXMAC__, old define, same as @c __WXOSX__}
 @itemdef{__WXMOTIF__, Motif}
 @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
 @itemdef{__WXMSW__, GUI using <a href="http://en.wikipedia.org/wiki/Windows_User">Windows Controls</a>}
-@itemdef{__WXOSX__, any OS X}
-@itemdef{__WXOSX_IPHONE__, OS X iPhone}
+@itemdef{__WXOSX__, OS X GUI using any Apple widget framework (Carbon, AppKit or UIKit)}
+@itemdef{__WXOSX_IPHONE__, OS X iPhone (UIKit)}
 @itemdef{__WXOSX_CARBON__, Mac OS X using Carbon}
-@itemdef{__WXOSX_COCOA__, Mac OS X using Cocoa}
+@itemdef{__WXOSX_COCOA__, Mac OS X using Cocoa (AppKit)}
 @itemdef{__WXOSX_MAC__, Mac OS X (Carbon or Cocoa)}
 @itemdef{__WXOSX_OR_COCOA__, Any Mac OS X port (wxOSX-Carbon, wxOSX-Cocoa or 
                         wxCocoa)}
@@ -88,7 +88,7 @@ symbols, although this has not always been followed.
 @itemdef{__AIX__, AIX}
 @itemdef{__BSD__, Any *BSD system}
 @itemdef{__CYGWIN__, Cygwin: Unix on Win32}
-@itemdef{__DARWIN__, Mac OS X (with BSD C library)}
+@itemdef{__DARWIN__, Mac OS X (with BSD C library), using any port (see also @c __WXOSX__)}
 @itemdef{__DATA_GENERAL__, DG-UX}
 @itemdef{__FREEBSD__, FreeBSD}
 @itemdef{__HPUX__, HP-UX (Unix)}

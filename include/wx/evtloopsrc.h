@@ -89,9 +89,11 @@ inline wxEventLoopSource::~wxEventLoopSource() { }
 
 #if defined(__WXGTK20__)
     #include "wx/gtk/evtloopsrc.h"
-#elif defined(__WXOSX__)
+#endif
+
+#if defined(__DARWIN__)
     #include "wx/osx/evtloopsrc.h"
-#endif // platform
+#endif
 
 #endif // wxUSE_EVENTLOOP_SOURCE
 
