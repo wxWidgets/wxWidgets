@@ -2531,12 +2531,14 @@ void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
 
 void wxWidgetCocoaImpl::CaptureMouse()
 {
-    [[m_osxView window] disableCursorRects];
+    // TODO remove if we don't get into problems with cursor settings
+    //    [[m_osxView window] disableCursorRects];
 }
 
 void wxWidgetCocoaImpl::ReleaseMouse()
 {
-    [[m_osxView window] enableCursorRects];
+    // TODO remove if we don't get into problems with cursor settings
+    //    [[m_osxView window] enableCursorRects];
 }
 
 void wxWidgetCocoaImpl::SetFlipped(bool flipped)
