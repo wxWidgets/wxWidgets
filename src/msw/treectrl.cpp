@@ -3513,7 +3513,10 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             {
                                 wxLoadedDLL dllComCtl32(wxT("comctl32.dll"));
                                 if ( dllComCtl32.IsLoaded() )
+                                {
                                     wxDL_INIT_FUNC(s_pfn, ImageList_Copy, dllComCtl32);
+                                    loaded = true;
+                                }
                             }
 
                             if ( !s_pfnImageList_Copy )
