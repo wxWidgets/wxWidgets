@@ -25,8 +25,6 @@
 
 #include "wx/evtloop.h"
 
-#if wxUSE_EVENTLOOP_SOURCE
-
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
@@ -47,6 +45,8 @@
 // ============================================================================
 // wxCFEventLoopSource and wxCFEventLoop implementation
 // ============================================================================
+
+#if wxUSE_EVENTLOOP_SOURCE
 
 namespace
 {
