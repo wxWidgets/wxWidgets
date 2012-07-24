@@ -777,7 +777,7 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType) const
     return true;
 }
 
-void wxWebViewWebKit::SetPage(const wxString& html, const wxString& baseUri)
+void wxWebViewWebKit::DoSetPage(const wxString& html, const wxString& baseUri)
 {
     webkit_web_view_load_string (m_web_view,
                                  html.mb_str(wxConvUTF8),

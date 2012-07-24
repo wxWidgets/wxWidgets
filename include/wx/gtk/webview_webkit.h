@@ -73,9 +73,6 @@ public:
     virtual wxString GetCurrentTitle() const;
     virtual wxString GetPageSource() const;
     virtual wxString GetPageText() const;
-    //We do not want to hide the other overloads
-    using wxWebView::SetPage;
-    virtual void SetPage(const wxString& html, const wxString& baseUrl);
     virtual void Print();
     virtual bool IsBusy() const;
 
@@ -132,6 +129,7 @@ public:
     bool m_guard;
 
 protected:
+    virtual void DoSetPage(const wxString& html, const wxString& baseUrl);
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 

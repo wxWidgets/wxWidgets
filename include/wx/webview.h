@@ -127,12 +127,15 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
     virtual void RunScript(const wxString& javascript) = 0;
     virtual void SetEditable(bool enable = true) = 0;
-    virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
-    virtual void SetPage(wxInputStream& html, wxString baseUrl)
+    void SetPage(const wxString& html, const wxString& baseUrl)
+    {
+        DoSetPage(html, baseUrl);
+    }
+    void SetPage(wxInputStream& html, wxString baseUrl)
     {
         wxStringOutputStream stream;
         stream.Write(html);
-        SetPage(stream.GetString(), baseUrl);
+        DoSetPage(stream.GetString(), baseUrl);
     }
     virtual void Stop() = 0;
 
@@ -175,6 +178,9 @@ public:
     virtual bool CanRedo() const = 0;
     virtual void Undo() = 0;
     virtual void Redo() = 0;
+
+protected:
+    virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };

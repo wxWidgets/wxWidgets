@@ -823,7 +823,7 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 
 }
 
-void wxWebViewWebKit::SetPage(const wxString& src, const wxString& baseUrl)
+void wxWebViewWebKit::DoSetPage(const wxString& src, const wxString& baseUrl)
 {
    if ( !m_webView )
         return;

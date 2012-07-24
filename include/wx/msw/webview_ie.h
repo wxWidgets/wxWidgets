@@ -303,8 +303,6 @@ public:
 
     virtual void Print();
 
-    virtual void SetPage(const wxString& html, const wxString& baseUrl);
-
     virtual wxWebViewZoom GetZoom() const;
     virtual void SetZoom(wxWebViewZoom zoom);
 
@@ -355,6 +353,9 @@ public:
     void onEraseBg(wxEraseEvent&) {}
 
     DECLARE_EVENT_TABLE();
+
+protected:
+    virtual void DoSetPage(const wxString& html, const wxString& baseUrl);
 
 private:
     wxIEContainer* m_container;

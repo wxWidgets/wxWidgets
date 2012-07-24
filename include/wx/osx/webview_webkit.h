@@ -59,10 +59,6 @@ public:
     virtual wxString GetPageSource() const;
     virtual wxString GetPageText() const;
 
-    //We do not want to hide the other overloads
-    using wxWebView::SetPage;
-    virtual void SetPage(const wxString& html, const wxString& baseUrl);
-
     virtual void Print();
 
     virtual void LoadURL(const wxString& url);
@@ -143,6 +139,8 @@ public:
     bool m_busy;
 
 protected:
+    virtual void DoSetPage(const wxString& html, const wxString& baseUrl);
+
     DECLARE_EVENT_TABLE()
     void MacVisibilityChanged();
 

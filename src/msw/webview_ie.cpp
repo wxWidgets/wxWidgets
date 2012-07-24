@@ -105,7 +105,7 @@ void wxWebViewIE::LoadURL(const wxString& url)
     m_ie.CallMethod("Navigate", wxConvertStringToOle(url));
 }
 
-void wxWebViewIE::SetPage(const wxString& html, const wxString& baseUrl)
+void wxWebViewIE::DoSetPage(const wxString& html, const wxString& baseUrl)
 {
     BSTR bstr = SysAllocString(OLESTR(""));
     SAFEARRAY *psaStrings = SafeArrayCreateVector(VT_VARIANT, 0, 1);
