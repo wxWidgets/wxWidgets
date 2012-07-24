@@ -455,6 +455,11 @@ bool g_lastButtonWasFakeRight = false ;
 @interface NSEvent (DeviceDelta)
 - (CGFloat)deviceDeltaX;
 - (CGFloat)deviceDeltaY;
+
+// 10.7+
+- (BOOL)hasPreciseScrollingDeltas;
+- (CGFloat)scrollingDeltaX;
+- (CGFloat)scrollingDeltaY;
 @end
 
 void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
@@ -609,23 +614,39 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 
             wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
 
-            // see http://developer.apple.com/qa/qa2005/qa1453.html
-            // for more details on why we have to look for the exact type
-            
-            const EventRef cEvent = (EventRef) [nsEvent eventRef];
-            bool isMouseScrollEvent = false;
-            if ( cEvent )
-                isMouseScrollEvent = ::GetEventKind(cEvent) == kEventMouseScroll;
-                
-            if ( isMouseScrollEvent )
+            if ( UMAGetSystemVersion() >= 0x1070 )
             {
-                deltaX = [nsEvent deviceDeltaX];
-                deltaY = [nsEvent deviceDeltaY];
+                if ( [nsEvent hasPreciseScrollingDeltas] )
+                {
+                    deltaX = [nsEvent scrollingDeltaX];
+                    deltaY = [nsEvent scrollingDeltaY];
+                }
+                else
+                {
+                    deltaX = [nsEvent scrollingDeltaX] * 10;
+                    deltaY = [nsEvent scrollingDeltaY] * 10;
+                }
             }
             else
             {
-                deltaX = ([nsEvent deltaX] * 10);
-                deltaY = ([nsEvent deltaY] * 10);
+                const EventRef cEvent = (EventRef) [nsEvent eventRef];
+                // see http://developer.apple.com/qa/qa2005/qa1453.html
+                // for more details on why we have to look for the exact type
+                
+                bool isMouseScrollEvent = false;
+                if ( cEvent )
+                    isMouseScrollEvent = ::GetEventKind(cEvent) == kEventMouseScroll;
+                
+                if ( isMouseScrollEvent )
+                {
+                    deltaX = [nsEvent deviceDeltaX];
+                    deltaY = [nsEvent deviceDeltaY];
+                }
+                else
+                {
+                    deltaX = ([nsEvent deltaX] * 10);
+                    deltaY = ([nsEvent deltaY] * 10);
+                }
             }
             
             wxevent.m_wheelDelta = 10;
