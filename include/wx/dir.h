@@ -94,11 +94,14 @@ public:
     // opens the directory for enumeration, use IsOpened() to test success
     wxDir(const wxString& dir);
 
-    // dtor cleans up the associated resources
-    ~wxDir();
+    // dtor calls Close() automatically
+    ~wxDir() { Close(); }
 
     // open the directory for enumerating
     bool Open(const wxString& dir);
+
+    // close the directory, Open() can be called again later
+    void Close();
 
     // returns true if the directory was successfully opened
     bool IsOpened() const;

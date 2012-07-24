@@ -343,9 +343,13 @@ wxString wxDir::GetName() const
     return name;
 }
 
-wxDir::~wxDir()
+void wxDir::Close()
 {
-    delete M_DIR;
+    if ( m_data )
+    {
+        delete m_data;
+        m_data = NULL;
+    }
 }
 
 // ----------------------------------------------------------------------------

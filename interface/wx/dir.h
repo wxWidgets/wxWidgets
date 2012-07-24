@@ -160,10 +160,22 @@ public:
     wxDir(const wxString& dir);
 
     /**
-        Destructor cleans up the associated resources. It is not virtual and so
-        this class is not meant to be used polymorphically.
+        Destructor cleans up the associated resources by calling Close().
+
+        It is not virtual and so this class is not meant to be used
+        polymorphically.
     */
     ~wxDir();
+
+    /**
+        Close the directory.
+
+        The object can't be used after closing it, but Open() may be called
+        again to reopen it later.
+
+        @since 2.9.5
+    */
+    void Close();
 
     /**
         Test for existence of a directory with the given name.
