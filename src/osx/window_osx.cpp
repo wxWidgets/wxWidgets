@@ -2628,20 +2628,18 @@ wxHotKeyHandler(EventHandlerCallRef WXUNUSED(nextHandler),
             unsigned char charCode ;
             UInt32 keyCode ;
             UInt32 modifiers ;
-            Point where ;
             UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
 
             GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
             GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
             GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
-            GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &where );
             
             UInt32 keymessage = (keyCode << 8) + charCode;
             
             wxKeyEvent wxevent(wxEVT_HOTKEY);
             wxevent.SetId(hotKeyId.id);
             wxTheApp->MacCreateKeyEvent( wxevent, s_hotkeys[i].window , keymessage , 
-                                        modifiers , when , where.h , where.v , 0 ) ;
+                                        modifiers , when , 0 ) ;
             
             s_hotkeys[i].window->HandleWindowEvent(wxevent);
         }
