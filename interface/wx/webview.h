@@ -305,6 +305,34 @@ public:
     virtual wxString GetCurrentURL() const = 0;
 
     /**
+        Return the pointer to the native backend used by this control.
+
+        This method can be used to retrieve the pointer to the native rendering
+        engine used by this control. The return value needs to be down-casted
+        to the appropriate type depending on the platform: under Windows, it's
+        a pointer to IWebBrowser2 interface, under OS X it's a WebView pointer
+        and under GTK it's a WebKitWebView.
+
+        For example, you could set the WebKit options using this method:
+        @code
+            #include <webkit/webkit.h>
+
+            #ifdef __WXGTK__
+               WebKitWebView*
+                wv = static_cast<WebKitWebView*>(m_window->GetNativeBackend());
+
+               WebKitWebSettings* settings = webkit_web_view_get_settings(wv);
+               g_object_set(G_OBJECT(settings),
+                            "enable-frame-flattening", TRUE,
+                            NULL);
+            #endif
+        @endcode
+
+        @since 2.9.5
+     */
+    virtual void* GetNativeBackend() const = 0;
+
+    /**
         Get the HTML source code of the currently displayed document.
         @return The HTML source code, or an empty string if no page is currently
                 shown.

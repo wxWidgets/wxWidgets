@@ -179,6 +179,9 @@ public:
     virtual void Undo() = 0;
     virtual void Redo() = 0;
 
+    //Get the pointer to the underlying native engine.
+    virtual void* GetNativeBackend() const = 0;
+
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 

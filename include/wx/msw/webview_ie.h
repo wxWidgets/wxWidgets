@@ -337,6 +337,8 @@ public:
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
 
+    virtual void* GetNativeBackend() const { return m_webBrowser; }
+
     // ---- IE-specific methods
 
     // FIXME: I seem to be able to access remote webpages even in offline mode...

@@ -111,6 +111,8 @@ public:
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
 
+    virtual void* GetNativeBackend() const { return m_webView; }
+
     // ---- methods not from the parent (common) interface
     bool  CanGetPageSource() const;
 
