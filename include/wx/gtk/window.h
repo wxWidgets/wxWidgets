@@ -359,6 +359,14 @@ protected:
     // common part of all ctors (not virtual because called from ctor)
     void Init();
 
+    // Create a GtkScrolledWindow containing the given widget (usually
+    // m_wxwindow but not necessarily) and assigns it to m_widget. Also shows
+    // the widget passed to it.
+    //
+    // Can be only called if we have either wxHSCROLL or wxVSCROLL in our
+    // style.
+    void GTKCreateScrolledWindowWith(GtkWidget* view);
+
     virtual void DoMoveInTabOrder(wxWindow *win, WindowOrder move);
     virtual bool DoNavigateIn(int flags);
 

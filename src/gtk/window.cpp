@@ -2204,6 +2204,71 @@ wxWindowGTK::wxWindowGTK( wxWindow *parent,
     Create( parent, id, pos, size, style, name );
 }
 
+void wxWindowGTK::GTKCreateScrolledWindowWith(GtkWidget* view)
+{
+    wxASSERT_MSG( HasFlag(wxHSCROLL) || HasFlag(wxVSCROLL),
+                  wxS("Must not be called if scrolling is not needed.") );
+
+    m_widget = gtk_scrolled_window_new( NULL, NULL );
+
+    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
+
+    // There is a conflict with default bindings at GTK+
+    // level between scrolled windows and notebooks both of which want to use
+    // Ctrl-PageUp/Down: scrolled windows for scrolling in the horizontal
+    // direction and notebooks for changing pages -- we decide that if we don't
+    // have wxHSCROLL style we can safely sacrifice horizontal scrolling if it
+    // means we can get working keyboard navigation in notebooks
+    if ( !HasFlag(wxHSCROLL) )
+    {
+        GtkBindingSet *
+            bindings = gtk_binding_set_by_class(G_OBJECT_GET_CLASS(m_widget));
+        if ( bindings )
+        {
+            gtk_binding_entry_remove(bindings, GDK_Page_Up, GDK_CONTROL_MASK);
+            gtk_binding_entry_remove(bindings, GDK_Page_Down, GDK_CONTROL_MASK);
+        }
+    }
+
+    if (HasFlag(wxALWAYS_SHOW_SB))
+    {
+        gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS );
+    }
+    else
+    {
+        gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+    }
+
+    m_scrollBar[ScrollDir_Horz] = GTK_RANGE(gtk_scrolled_window_get_hscrollbar(scrolledWindow));
+    m_scrollBar[ScrollDir_Vert] = GTK_RANGE(gtk_scrolled_window_get_vscrollbar(scrolledWindow));
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+        gtk_range_set_inverted( m_scrollBar[ScrollDir_Horz], TRUE );
+
+    gtk_container_add( GTK_CONTAINER(m_widget), view );
+
+    // connect various scroll-related events
+    for ( int dir = 0; dir < ScrollDir_Max; dir++ )
+    {
+        // these handlers block mouse events to any window during scrolling
+        // such as motion events and prevent GTK and wxWidgets from fighting
+        // over where the slider should be
+        g_signal_connect(m_scrollBar[dir], "button_press_event",
+                     G_CALLBACK(gtk_scrollbar_button_press_event), this);
+        g_signal_connect(m_scrollBar[dir], "button_release_event",
+                     G_CALLBACK(gtk_scrollbar_button_release_event), this);
+
+        gulong handler_id = g_signal_connect(m_scrollBar[dir], "event_after",
+                            G_CALLBACK(gtk_scrollbar_event_after), this);
+        g_signal_handler_block(m_scrollBar[dir], handler_id);
+
+        // these handlers get notified when scrollbar slider moves
+        g_signal_connect_after(m_scrollBar[dir], "value_changed",
+                     G_CALLBACK(gtk_scrollbar_value_changed), this);
+    }
+
+    gtk_widget_show( view );
+}
+
 bool wxWindowGTK::Create( wxWindow *parent,
                           wxWindowID id,
                           const wxPoint &pos,
@@ -2242,66 +2307,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
     if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
         m_widget = m_wxwindow;
     else
-    {
-        m_widget = gtk_scrolled_window_new( NULL, NULL );
-
-        GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
-
-        // There is a conflict with default bindings at GTK+
-        // level between scrolled windows and notebooks both of which want to use
-        // Ctrl-PageUp/Down: scrolled windows for scrolling in the horizontal
-        // direction and notebooks for changing pages -- we decide that if we don't
-        // have wxHSCROLL style we can safely sacrifice horizontal scrolling if it
-        // means we can get working keyboard navigation in notebooks
-        if ( !HasFlag(wxHSCROLL) )
-        {
-            GtkBindingSet *
-                bindings = gtk_binding_set_by_class(G_OBJECT_GET_CLASS(m_widget));
-            if ( bindings )
-            {
-                gtk_binding_entry_remove(bindings, GDK_Page_Up, GDK_CONTROL_MASK);
-                gtk_binding_entry_remove(bindings, GDK_Page_Down, GDK_CONTROL_MASK);
-            }
-        }
-
-        if (HasFlag(wxALWAYS_SHOW_SB))
-        {
-            gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS );
-        }
-        else
-        {
-            gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
-        }
-
-        m_scrollBar[ScrollDir_Horz] = GTK_RANGE(gtk_scrolled_window_get_hscrollbar(scrolledWindow));
-        m_scrollBar[ScrollDir_Vert] = GTK_RANGE(gtk_scrolled_window_get_vscrollbar(scrolledWindow));
-        if (GetLayoutDirection() == wxLayout_RightToLeft)
-            gtk_range_set_inverted( m_scrollBar[ScrollDir_Horz], TRUE );
-
-        gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
-
-        // connect various scroll-related events
-        for ( int dir = 0; dir < ScrollDir_Max; dir++ )
-        {
-            // these handlers block mouse events to any window during scrolling
-            // such as motion events and prevent GTK and wxWidgets from fighting
-            // over where the slider should be
-            g_signal_connect(m_scrollBar[dir], "button_press_event",
-                         G_CALLBACK(gtk_scrollbar_button_press_event), this);
-            g_signal_connect(m_scrollBar[dir], "button_release_event",
-                         G_CALLBACK(gtk_scrollbar_button_release_event), this);
-
-            gulong handler_id = g_signal_connect(m_scrollBar[dir], "event_after",
-                                G_CALLBACK(gtk_scrollbar_event_after), this);
-            g_signal_handler_block(m_scrollBar[dir], handler_id);
-
-            // these handlers get notified when scrollbar slider moves
-            g_signal_connect_after(m_scrollBar[dir], "value_changed",
-                         G_CALLBACK(gtk_scrollbar_value_changed), this);
-        }
-
-        gtk_widget_show( m_wxwindow );
-    }
+        GTKCreateScrolledWindowWith(m_wxwindow);
     g_object_ref(m_widget);
 
     if (m_parent)
