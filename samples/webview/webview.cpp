@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/artprov.h"
+#include "wx/cmdline.h"
 #include "wx/notifmsg.h"
 #include "wx/settings.h"
 #include "wx/webview.h"
@@ -60,14 +61,44 @@ WX_DECLARE_HASH_MAP(int, wxSharedPtr<wxWebViewHistoryItem>,
 class WebApp : public wxApp
 {
 public:
+    WebApp() :
+        m_url("http://www.wxwidgets.org")
+    {
+    }
+
     virtual bool OnInit();
+
+#if wxUSE_CMDLINE_PARSER
+    virtual void OnInitCmdLine(wxCmdLineParser& parser)
+    {
+        wxApp::OnInitCmdLine(parser);
+
+        parser.AddParam("URL to open",
+                        wxCMD_LINE_VAL_STRING,
+                        wxCMD_LINE_PARAM_OPTIONAL);
+    }
+
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser)
+    {
+        if ( !wxApp::OnCmdLineParsed(parser) )
+            return false;
+
+        if ( parser.GetParamCount() )
+            m_url = parser.GetParam(0);
+
+        return true;
+    }
+#endif // wxUSE_CMDLINE_PARSER
+
+private:
+    wxString m_url;
 };
 
 class WebFrame : public wxFrame
 {
 public:
-    WebFrame();
-    ~WebFrame();
+    WebFrame(const wxString& url);
+    virtual ~WebFrame();
 
     void UpdateState();
     void OnIdle(wxIdleEvent& evt);
@@ -156,13 +187,14 @@ bool WebApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    WebFrame *frame = new WebFrame();
+    WebFrame *frame = new WebFrame(m_url);
     frame->Show();
 
     return true;
 }
 
-WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
+WebFrame::WebFrame(const wxString& url) :
+    wxFrame(NULL, wxID_ANY, "wxWebView Sample")
 {
     //Required from virtual file system archive support
     wxFileSystem::AddHandler(new wxArchiveFSHandler);
@@ -205,7 +237,7 @@ WebFrame::WebFrame() : wxFrame(NULL, wxID_ANY, "wxWebView Sample")
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
     // Create the webview
-    m_browser = wxWebView::New(this, wxID_ANY, "http://www.wxwidgets.org");
+    m_browser = wxWebView::New(this, wxID_ANY, url);
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     //We register the wxfs:// protocol for testing purposes
