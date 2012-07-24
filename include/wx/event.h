@@ -1699,10 +1699,10 @@ public:
         { return wxPoint(m_x, m_y); }
 
     // Get X position
-    wxCoord GetX() const { return m_x; }
+    wxCoord GetX() const;
 
     // Get Y position
-    wxCoord GetY() const { return m_y; }
+    wxCoord GetY() const;
 
     // Can be called from wxEVT_CHAR_HOOK handler to allow generation of normal
     // key events even though the event had been handled (by default they would
@@ -1766,6 +1766,7 @@ private:
     {
         m_x = evt.m_x;
         m_y = evt.m_y;
+        m_hasPosition = evt.m_hasPosition;
 
         m_keyCode = evt.m_keyCode;
 
@@ -1776,10 +1777,18 @@ private:
 #endif
     }
 
+    // Initialize m_x and m_y using the current mouse cursor position if
+    // necessary.
+    void InitPositionIfNecessary() const;
+
     // If this flag is true, the normal key events should still be generated
     // even if wxEVT_CHAR_HOOK had been handled. By default it is false as
     // handling wxEVT_CHAR_HOOK suppresses all the subsequent events.
     bool m_allowNext;
+
+    // If true, m_x and m_y were already initialized. If false, try to get them
+    // when they're requested.
+    bool m_hasPosition;
 
     DECLARE_DYNAMIC_CLASS(wxKeyEvent)
 };

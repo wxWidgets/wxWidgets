@@ -162,7 +162,7 @@ MyFrame::MyFrame(const wxString& title)
                                             wxTE_READONLY);
     headerText->SetValue(
                " event          key     KeyCode mod   UnicodeKey  "
-               "  RawKeyCode RawKeyFlags");
+               "  RawKeyCode RawKeyFlags  Position");
 
 
     m_logText = new wxTextCtrl(this, wxID_ANY, "",
@@ -404,7 +404,7 @@ wxString GetKeyName(const wxKeyEvent &event)
 void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
 {
     wxString msg;
-    // event  key_name  KeyCode  modifiers  Unicode  raw_code raw_flags
+    // event  key_name  KeyCode  modifiers  Unicode  raw_code raw_flags pos
     msg.Printf("%7s %15s %5d   %c%c%c%c"
 #if wxUSE_UNICODE
                    "%5d (U+%04x)"
@@ -416,6 +416,7 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
 #else
                    "  not-set    not-set"
 #endif
+                   "  (%5d,%5d)"
                    "\n",
                name,
                GetKeyName(event),
@@ -432,6 +433,8 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
                , (unsigned long) event.GetRawKeyCode()
                , (unsigned long) event.GetRawKeyFlags()
 #endif
+               , event.GetX()
+               , event.GetY()
                );
 
     m_logText->AppendText(msg);

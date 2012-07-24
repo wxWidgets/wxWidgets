@@ -736,6 +736,10 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
     m_uniChar = WXK_NONE;
 #endif
 
+    m_x =
+    m_y = wxDefaultCoord;
+    m_hasPosition = false;
+
     InitPropagation();
 }
 
@@ -757,6 +761,42 @@ wxKeyEvent::wxKeyEvent(wxEventType eventType, const wxKeyEvent& evt)
     m_eventType = eventType;
 
     InitPropagation();
+}
+
+void wxKeyEvent::InitPositionIfNecessary() const
+{
+    if ( m_hasPosition )
+        return;
+
+    // We're const because we're called from const Get[XY]() methods but we
+    // need to update the "cached" values.
+    wxKeyEvent& self = const_cast<wxKeyEvent&>(*this);
+    self.m_hasPosition = true;
+
+    // The only position we can possibly associate with the keyboard event on
+    // the platforms where it doesn't carry it already is the mouse position.
+    wxGetMousePosition(&self.m_x, &self.m_y);
+
+    // If this event is associated with a window, the position should be in its
+    // client coordinates, but otherwise leave it in screen coordinates as what
+    // else can we use?
+    wxWindow* const win = wxDynamicCast(GetEventObject(), wxWindow);
+    if ( win )
+        win->ScreenToClient(&self.m_x, &self.m_y);
+}
+
+wxCoord wxKeyEvent::GetX() const
+{
+    InitPositionIfNecessary();
+
+    return m_x;
+}
+
+wxCoord wxKeyEvent::GetY() const
+{
+    InitPositionIfNecessary();
+
+    return m_y;
 }
 
 bool wxKeyEvent::IsKeyInCategory(int category) const

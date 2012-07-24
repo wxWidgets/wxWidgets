@@ -5682,21 +5682,6 @@ MSWInitAnyKeyEvent(wxKeyEvent& event,
 #ifndef __WXWINCE__
     event.SetTimestamp(::GetMessageTime());
 #endif
-
-    // Event coordinates must be in window client coordinates system which
-    // doesn't make sense if there is no window.
-    //
-    // We could use screen coordinates for such events but this would make the
-    // logic of the event handlers more complicated: you'd need to test for the
-    // event object and interpret the coordinates differently according to
-    // whether it's NULL or not so unless somebody really asks for this let's
-    // just avoid the issue.
-    if ( win )
-    {
-        const wxPoint mousePos = win->ScreenToClient(wxGetMousePosition());
-        event.m_x = mousePos.x;
-        event.m_y = mousePos.y;
-    }
 }
 
 } // anonymous namespace

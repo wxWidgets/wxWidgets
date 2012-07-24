@@ -1444,6 +1444,9 @@ public:
     //@{
     /**
         Obtains the position (in client coordinates) at which the key was pressed.
+
+        Notice that this position is simply the current mouse pointer position
+        and has no special relationship to the key event itself.
     */
     wxPoint GetPosition() const;
     void GetPosition(long* x, long* y) const;
@@ -1502,11 +1505,15 @@ public:
 
     /**
         Returns the X position (in client coordinates) of the event.
+
+        @see GetPosition()
     */
     wxCoord GetX() const;
 
     /**
         Returns the Y position (in client coordinates) of the event.
+
+        @see GetPosition()
     */
     wxCoord GetY() const;
 

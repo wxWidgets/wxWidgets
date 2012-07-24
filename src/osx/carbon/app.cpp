@@ -1400,34 +1400,34 @@ wxMouseState wxGetMouseState()
 
 // TODO : once the new key/char handling is tested, move all the code to wxWindow
 
-bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar )
 {
     if ( !focus )
         return false ;
 
     wxKeyEvent event(wxEVT_KEY_DOWN) ;
-    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , uniChar ) ;
 
     return focus->OSXHandleKeyEvent(event);
 }
 
-bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar )
 {
     if ( !focus )
         return false ;
 
     wxKeyEvent event( wxEVT_KEY_UP ) ;
-    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , uniChar ) ;
 
     return focus->OSXHandleKeyEvent(event) ;
 }
 
-bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar )
 {
     if ( !focus )
         return false ;
     wxKeyEvent event(wxEVT_CHAR) ;
-    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , uniChar ) ;
 
     bool handled = false ;
 
@@ -1508,7 +1508,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
 }
 
 // This method handles common code for SendKeyDown, SendKeyUp, and SendChar events.
-void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar )
 {
 #if wxOSX_USE_COCOA_OR_CARBON
     
@@ -1590,8 +1590,6 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
 
     event.m_rawCode = keymessage;
     event.m_rawFlags = modifiers;
-    event.m_x = wherex;
-    event.m_y = wherey;
     event.SetTimestamp(when);
     event.SetEventObject(focus);
 #else
@@ -1600,8 +1598,6 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     wxUnusedVar(keymessage);
     wxUnusedVar(modifiers);
     wxUnusedVar(when);
-    wxUnusedVar(wherex);
-    wxUnusedVar(wherey);
     wxUnusedVar(uniChar);
 #endif
 }
