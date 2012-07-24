@@ -127,6 +127,10 @@ public:
     void OnMode(wxCommandEvent& evt);
     void OnZoomLayout(wxCommandEvent& evt);
     void OnHistory(wxCommandEvent& evt);
+    void OnScrollLineUp(wxCommandEvent&) { m_browser->LineUp(); }
+    void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
+    void OnScrollPageUp(wxCommandEvent&) { m_browser->PageUp(); }
+    void OnScrollPageDown(wxCommandEvent&) { m_browser->PageDown(); }
     void OnRunScript(wxCommandEvent& evt);
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
@@ -161,6 +165,10 @@ private:
     wxMenuItem* m_edit_undo;
     wxMenuItem* m_edit_redo;
     wxMenuItem* m_edit_mode;
+    wxMenuItem* m_scroll_line_up;
+    wxMenuItem* m_scroll_line_down;
+    wxMenuItem* m_scroll_page_up;
+    wxMenuItem* m_scroll_page_down;
     wxMenuItem* m_selection_clear;
     wxMenuItem* m_selection_delete;
 
@@ -289,6 +297,13 @@ WebFrame::WebFrame(const wxString& url) :
     m_tools_menu->AppendSeparator();
     m_tools_menu->AppendSubMenu(editmenu, "Edit");
 
+    wxMenu* scroll_menu = new wxMenu;
+    m_scroll_line_up = scroll_menu->Append(wxID_ANY, "Line &up");
+    m_scroll_line_down = scroll_menu->Append(wxID_ANY, "Line &down");
+    m_scroll_page_up = scroll_menu->Append(wxID_ANY, "Page u&p");
+    m_scroll_page_down = scroll_menu->Append(wxID_ANY, "Page d&own");
+    m_tools_menu->AppendSubMenu(scroll_menu, "Scroll");
+
     wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
 
     //Selection menu
@@ -371,6 +386,14 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnRedo),  NULL, this );
     Connect(m_edit_mode->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnMode),  NULL, this );
+    Connect(m_scroll_line_up->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnScrollLineUp),  NULL, this );
+    Connect(m_scroll_line_down->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnScrollLineDown),  NULL, this );
+    Connect(m_scroll_page_up->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnScrollPageUp),  NULL, this );
+    Connect(m_scroll_page_down->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnScrollPageDown),  NULL, this );
     Connect(script->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
     Connect(m_selection_clear->GetId(), wxEVT_COMMAND_MENU_SELECTED,

@@ -401,6 +401,10 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     m_busy = false;
     m_guard = false;
 
+    // We currently unconditionally impose scrolling in both directions as it's
+    // necessary to show arbitrary pages.
+    style |= wxHSCROLL | wxVSCROLL;
+
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
@@ -408,13 +412,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
         return false;
     }
 
-    m_widget = gtk_scrolled_window_new(NULL, NULL);
-    g_object_ref(m_widget);
     m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
-
-    /* Place the WebKitWebView in the GtkScrolledWindow */
-    gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_web_view));
-    gtk_widget_show(GTK_WIDGET(m_web_view));
+    GTKCreateScrolledWindowWith(GTK_WIDGET(m_web_view));
+    g_object_ref(m_widget);
 
     g_signal_connect_after(m_web_view, "navigation-policy-decision-requested",
                            G_CALLBACK(wxgtk_webview_webkit_navigation),
