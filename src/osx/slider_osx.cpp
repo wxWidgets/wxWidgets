@@ -105,6 +105,7 @@ bool wxSlider::Create(wxWindow *parent,
 
     SetPeer(wxWidgetImpl::CreateSlider( this, parent, id, value, minValue, maxValue, pos, size, style, GetExtraStyle() ));
 
+#if 0
     if (style & wxSL_VERTICAL)
         // Forces SetSize to use the proper width
         SetSizeHints(10, -1, 10, -1);
@@ -115,7 +116,8 @@ bool wxSlider::Create(wxWindow *parent,
     // NB: SetSizeHints is overloaded by wxSlider and will substitute 10 with the
     // proper dimensions, it also means other people cannot bugger the slider with
     // other values
-
+#endif
+    
     if (style & wxSL_LABELS)
     {
         m_macMinimumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
@@ -476,6 +478,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     // yet another hack since this is a composite control
     // when wxSlider has it's size hardcoded, we're not allowed to
     // change the size. But when the control has labels, we DO need
+    
     // to resize the internal Mac control to accommodate the text labels.
     // We need to trick the wxWidgets resize mechanism so that we can
     // resize the slider part of the control ONLY.
