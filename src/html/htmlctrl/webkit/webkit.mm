@@ -99,7 +99,6 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
 
     UInt32 keyCode ;
     UInt32 modifiers ;
-    Point point ;
     UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
 
 #if wxUSE_UNICODE
@@ -131,7 +130,6 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
     GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
     GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
     GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
-    GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
 
     UInt32 message = (keyCode << 8) + charCode;
     switch ( GetEventKind( event ) )
@@ -143,7 +141,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
                 WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
                 wxTheApp->MacSetCurrentEvent( event , handler ) ;
                 if ( /* focus && */ wxTheApp->MacSendKeyDownEvent(
-                    focus , message , modifiers , when , point.h , point.v , uniChar[0] ) )
+                    focus , message , modifiers , when , uniChar[0] ) )
                 {
                     result = noErr ;
                 }
@@ -153,7 +151,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
 
         case kEventRawKeyUp :
             if ( /* focus && */ wxTheApp->MacSendKeyUpEvent(
-                focus , message , modifiers , when , point.h , point.v , uniChar[0] ) )
+                focus , message , modifiers , when , uniChar[0] ) )
             {
                 result = noErr ;
             }
@@ -167,8 +165,6 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
                 event.m_rawControlDown = modifiers & controlKey;
                 event.m_altDown = modifiers & optionKey;
                 event.m_controlDown = modifiers & cmdKey;
-                event.m_x = point.h;
-                event.m_y = point.v;
 
 #if wxUSE_UNICODE
                 event.m_uniChar = uniChar[0] ;
