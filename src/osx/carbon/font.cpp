@@ -667,7 +667,7 @@ wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 
 void wxFont::SetPointSize(int pointSize)
 {
-    if ( M_FONTDATA->GetPointSize() == pointSize )
+    if ( M_FONTDATA != NULL && M_FONTDATA->GetPointSize() == pointSize )
         return;
 
     AllocExclusive();
