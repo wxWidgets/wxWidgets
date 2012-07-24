@@ -236,8 +236,17 @@ private:
 #if defined(__DARWIN__)
     // CoreFoundation-based event loop is currently in wxBase so include it in
     // any case too (although maybe it actually shouldn't be there at all)
-    #include "wx/osx/evtloop.h"
-#elif wxUSE_GUI
+    #include "wx/osx/core/evtloop.h"
+#endif
+
+// include the header defining wxConsoleEventLoop
+#if defined(__UNIX__) && !defined(__WXMSW__)
+    #include "wx/unix/evtloop.h"
+#elif defined(__WINDOWS__)
+    #include "wx/msw/evtloopconsole.h"
+#endif
+
+#if wxUSE_GUI
 
 // include the appropriate header defining wxGUIEventLoop
 
@@ -245,6 +254,8 @@ private:
     #include "wx/msw/evtloop.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/evtloop.h"
+#elif defined(__WXOSX__)
+    #include "wx/osx/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
 #elif defined(__WXGTK20__)
@@ -305,13 +316,6 @@ protected:
 #endif // platforms
 
 #endif // wxUSE_GUI
-
-// include the header defining wxConsoleEventLoop for Unix systems
-#if defined(__UNIX__) && !defined(__WXMSW__)
-#include "wx/unix/evtloop.h"
-#elif defined(__WINDOWS__)
-#include "wx/msw/evtloopconsole.h"
-#endif
 
 #if wxUSE_GUI
     // we use a class rather than a typedef because wxEventLoop is
