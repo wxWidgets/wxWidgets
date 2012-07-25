@@ -1053,6 +1053,14 @@ bool wxToolBar::Realize()
                         break;
                 }
 
+                // Instead of using fixed widths for all buttons, size them
+                // automatically according to the size of their bitmap and text
+                // label, if present. This particularly matters for toolbars
+                // with the wxTB_HORZ_LAYOUT style: they look hideously ugly
+                // without autosizing when the labels have even slightly
+                // different lengths.
+                button.fsStyle |= TBSTYLE_AUTOSIZE;
+
                 bitmapId++;
                 break;
         }
