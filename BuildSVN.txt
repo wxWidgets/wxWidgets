@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------
-                How to build the sources from CVS
+                How to build the sources from SVN
 ------------------------------------------------------------------------
 
 Please use the install.txt files in docs/gtk, docs/msw, docs/motif, docs/mac
@@ -10,10 +10,10 @@ I) Windows using plain makefiles
 
 a) If using Microsoft Visual C++ 5.0 or 6.0
 
-Ensure that the command-line compiler and tools (including
-nmake) are installed and ready to run.  Depending on your
-installation there may be a batch file (commonly named VCVARS32.BAT)
-that needs to be run to set correct environment variables and PATH entries.
+Ensure that the command-line compiler and tools (including nmake) are installed
+and ready to run.  Depending on your installation there may be a batch file
+(commonly named VCVARS32.BAT) that needs to be run to set correct environment
+variables and PATH entries.
 
 Continue with item c) below.
 
@@ -24,11 +24,11 @@ You can get MinGW from  http://www.mingw.org/
 
 Cygwin is available at  http://www.cygwin.com/
 
-If you are using Cygwin or MinGW together with the MSYS environment, you
-can build the library using configure (see "Unix ports" and
-"Windows using configure" below). You can also
-build wxWidgets without configure using native makefile, but only with
-MinGW. Using Cygwin together with Windows makefile is no longer supported.
+If you are using Cygwin or MinGW together with the MSYS environment, you can
+build the library using configure (see "Unix ports" and "Windows using
+configure" below). You can also build wxWidgets without configure using native
+makefile, but only with MinGW. Using Cygwin together with Windows makefile is no
+longer supported.
 
 If building with MinGW without configure:
 
@@ -49,8 +49,7 @@ If using configure, Unix instructions apply.
 
 c) Build instructions
 
-Assumming that you installed the wxWidgets sources
-into c:\wxWidgets:
+Assumming that you installed the wxWidgets sources into c:\wxWidgets:
 
 -> Copy c:\wxWidgets\include\wx\msw\setup0.h
    to   c:\wxWidgets\include\wx\msw\setup.h
@@ -59,7 +58,7 @@ into c:\wxWidgets:
 
    and std iostreams are disabled with
    #define wxUSE_STD_IOSTREAM   0
- 
+
 -> type: cd c:\wxWidgets\build\msw
 -> type: make -f makefile.gcc  (if using GNU tools)
 or type: nmake -f makefile.vc   (if using MS VC++)
@@ -69,7 +68,7 @@ etc.
 
 d) Borland (including free command line tools)
    Download tools from http://www.borland.com/downloads/
-   
+
    See docs/msw/install.txt for details; in brief:
 
 -> type cd c:\wxWidgets\build\msw
@@ -82,20 +81,18 @@ in docs/msw/install.txt.
 II) Unix ports
 --------------
 
-Building wxGTK or wxMotif completely without configure
-won't ever work, but there is now a new makefile system
-that works without libtool and automake, using only
-configure to create what is needed.
+Building wxGTK or wxMotif completely without configure won't ever work, but
+there is now a new makefile system that works without libtool and automake,
+using only configure to create what is needed.
 
-In order to create configure, you need to have the
-GNU autoconf package (version > 2.54) installed
-on your system and type run "autoconf" in the base
-directory (or run the autogen.sh script in the same
-directory, which just calls autoconf). Note that you usually don't
-need to do this because configure is included in CVS.
+In order to create configure, you need to have the GNU autoconf package (version
+> 2.54) installed on your system and type run "autoconf" in the base directory
+(or run the autogen.sh script in the same directory, which just calls autoconf).
+Note that you usually don't need to do this because configure is included in
+SVN.
 
-Set WXWIN environment variable to the base directory such
-as ~/wxWidgets (this is actually not really needed).
+Set WXWIN environment variable to the base directory such as ~/wxWidgets (this
+is actually not really needed).
 
 -> type: export WXWIN=~/wxWidgets
 -> type: md mybuild
@@ -108,33 +105,30 @@ or type: ../configure --with-gtk
 -> type: ldconfig
 -> type: exit
 
-Call configure with --disable-shared to create a static
-library. Calling "make uninstall" will remove the installed
-library and "make dist" will create a distribution (not
-yet complete).
+Call configure with --disable-shared to create a static library. Calling "make
+uninstall" will remove the installed library and "make dist" will create a
+distribution (not yet complete).
 
 III) Windows using configure
 ----------------------------------------
 
-wxWidgets can be built on Windows using MSYS (see
-http://www.mingw.org/), which is a POSIX build environment
-for Windows. With MSYS you can just ./configure && make (see also VII,
-Unix->Windows cross-compiling using configure).
+wxWidgets can be built on Windows using MSYS (see http://www.mingw.org/), which
+is a POSIX build environment for Windows. With MSYS you can just ./configure &&
+make (see also VII, Unix->Windows cross-compiling using configure).
 
-Of course, you can also build the library using plain makefiles (see
-section I).
+Of course, you can also build the library using plain makefiles (see section I).
 
 IV) Classic MacOS using CodeWarrior (eg MacOS 8.x/9.x)
 ----------------------------------------
 
-Refer to the readme.txt and install.txt files in docs/mac to build
-wxWidgets under Classic Mac OS using CodeWarrior.
+Refer to the readme.txt and install.txt files in docs/mac to build wxWidgets
+under Classic Mac OS using CodeWarrior.
 
-If you are checking out the CVS sources using cvs under Mac OS X and
-compiling under Classic Mac OS:
+If you are checking out the SVN sources using SVN under Mac OS X and compiling
+under Classic Mac OS:
 
 - make sure that all text files have a Mac OS type of 'TEXT' otherwise
-  CodeWarrior may ignore them. Checking out the CVS sources using cvs
+  CodeWarrior may ignore them. Checking out the SVN sources using SVN
   under Mac OS X creates untyped files which can lead to compilation
   errors under CodeWarrior which are hard to track down.
 
@@ -144,15 +138,13 @@ compiling under Classic Mac OS:
 V) MacOS X using configure and the Developer Tools
 ----------------------------------------
 
-You need to have the Developer Tools installed. If this is not the case,
-you will need to register at the Apple Developer web site (this is a free
+You need to have the Developer Tools installed. If this is not the case, you
+will need to register at the Apple Developer web site (this is a free
 registration) in order to download the Developer Tools installer.
 
-In order to create configure, you need to have the
-GNU autoconf package (version >= 2.54) installed
-on your system and type run "autoconf" in the base
-directory (or run the autogen.sh script in the same
-directory, which just calls autoconf).
+In order to create configure, you need to have the GNU autoconf package (version
+>= 2.54) installed on your system and type run "autoconf" in the base directory
+(or run the autogen.sh script in the same directory, which just calls autoconf).
 
 -> type: mkdir macbuild
 -> type: cd macbuild
@@ -167,26 +159,26 @@ No notes.
 VII) Unix->Windows cross-compiling using configure
 --------------------------------------------------
 
-First you'll need a cross-compiler; linux glibc binaries of MinGW and
-Cygwin (both based on egcs) can be found at
-ftp://ftp.objsw.com/pub/crossgcc/linux-x-win32. Alternative binaries,
-based on the latest MinGW release can be found at
-http://members.telering.at/jessich/mingw/mingwcross/mingw_cross.html
-Otherwise you can compile one yourself.
+First you'll need a cross-compiler; linux glibc binaries of MinGW and Cygwin
+(both based on egcs) can be found at
+ftp://ftp.objsw.com/pub/crossgcc/linux-x-win32. Alternative binaries, based on
+the latest MinGW release can be found at
+http://members.telering.at/jessich/mingw/mingwcross/mingw_cross.html Otherwise
+you can compile one yourself.
 
-[ A Note about Cygwin and MinGW: the main difference is that Cygwin
-binaries are always linked against cygwin.dll. This dll encapsulates most
-standard Unix C extensions, which is very handy if you're porting unix
-software to windows. However, wxMSW doesn't need this, so MinGW is
-preferable if you write portable C(++). ]
+[ A Note about Cygwin and MinGW: the main difference is that Cygwin binaries are
+always linked against cygwin.dll. This dll encapsulates most standard Unix C
+extensions, which is very handy if you're porting unix software to windows.
+However, wxMSW doesn't need this, so MinGW is preferable if you write portable
+C(++). ]
 
-You might want to build both Unix and Windows binaries in the same source
-tree; to do this make subdirs for each e.g. unix and win32. If you've
-already build wxWidgets in the main dir, do a 'make distclean' there,
-otherwise configure will get confused. (In any case, read the section 'Unix
-using configure' and make sure you're able to build a native wxWidgets
-library; cross-compiling errors can be pretty obscure and you'll want to be
-sure that your configure setup is basically sound.)
+You might want to build both Unix and Windows binaries in the same source tree;
+to do this make subdirs for each e.g. unix and win32. If you've already build
+wxWidgets in the main dir, do a 'make distclean' there, otherwise configure will
+get confused. (In any case, read the section 'Unix using configure' and make
+sure you're able to build a native wxWidgets library; cross-compiling errors can
+be pretty obscure and you'll want to be sure that your configure setup is
+basically sound.)
 
 To cross compile the windows library, do
 -> cd win32
@@ -249,9 +241,9 @@ and run it with wine, for example (or copy to a Windows box)
 If all is well, do an install; from win32
 -> make install
 
-Native and cross-compiled installations can co-exist peacefully
-(as long as their widget sets differ), except for wx-config. You might
-want to rename the cross-compiled one to i586-mingw32-wx-config, or something.
+Native and cross-compiled installations can co-exist peacefully (as long as
+their widget sets differ), except for wx-config. You might want to rename the
+cross-compiled one to i586-mingw32-wx-config, or something.
 
 Cross-compiling TODO:
 ---------------------
@@ -259,4 +251,3 @@ Cross-compiling TODO:
 default wx resources into libwx_msw.a?) [ No we can't; the linker won't
 link it in... you have to supply an object file ]
 - static executables are HUGE -- there must be room for improvement.
-
