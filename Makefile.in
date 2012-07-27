@@ -2918,7 +2918,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/menuitem.h \
 	wx/gtk/msgdlg.h \
 	wx/gtk/notebook.h \
-	wx/gtk/notifmsg.h \
 	wx/gtk/print.h \
 	wx/gtk/radiobox.h \
 	wx/gtk/radiobut.h \
@@ -2974,7 +2973,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
 	wx/gtk/menuitem.h \
 	wx/gtk/msgdlg.h \
 	wx/gtk/notebook.h \
-	wx/gtk/notifmsg.h \
 	wx/gtk/print.h \
 	wx/gtk/radiobox.h \
 	wx/gtk/radiobut.h \
@@ -3727,12 +3725,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION__ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR =  \
 	$(ADVANCED_GTK_PLATFORM_HDR) \
+	wx/gtk/notifmsg.h \
 	wx/gtk/taskbar.h \
 	wx/gtk/hildon/notifmsg.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@ADVANCED_PLATFORM_HDR \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= $(ADVANCED_GTK_PLATFORM_HDR) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	wx/gtk/taskbar.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	wx/gtk/notifmsg.h wx/gtk/taskbar.h
 COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR =  \
 	wx/unix/joystick.h \
 	wx/unix/sound.h \
@@ -5527,7 +5526,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_msgdlg.o \
 	monodll_gtk_nativewin.o \
 	monodll_gtk_notebook.o \
-	monodll_gtk_notifmsg.o \
 	monodll_gtk_print.o \
 	monodll_gtk_radiobox.o \
 	monodll_gtk_radiobut.o \
@@ -5584,7 +5582,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS =  \
 	monodll_gtk_msgdlg.o \
 	monodll_gtk_nativewin.o \
 	monodll_gtk_notebook.o \
-	monodll_gtk_notifmsg.o \
 	monodll_gtk_print.o \
 	monodll_gtk_radiobox.o \
 	monodll_gtk_radiobut.o \
@@ -6383,14 +6380,16 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS) \
+	monodll_gtk_notifmsg.o \
 	monodll_gtk_taskbar.o \
 	monodll_gtk_eggtrayicon.o \
 	monodll_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	monodll_gtk_taskbar.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS =  \
+	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS) \
+	monodll_gtk_notifmsg.o \
+	monodll_gtk_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_unix_joystick.o \
@@ -6510,14 +6509,16 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS) \
+	monodll_gtk_notifmsg.o \
 	monodll_gtk_taskbar.o \
 	monodll_gtk_eggtrayicon.o \
 	monodll_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_1)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_1 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	monodll_gtk_taskbar.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
+	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS) \
+	monodll_gtk_notifmsg.o \
+	monodll_gtk_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monodll_taskbarcmn.o \
 	monodll_unix_joystick.o \
@@ -7727,7 +7728,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_msgdlg.o \
 	monolib_gtk_nativewin.o \
 	monolib_gtk_notebook.o \
-	monolib_gtk_notifmsg.o \
 	monolib_gtk_print.o \
 	monolib_gtk_radiobox.o \
 	monolib_gtk_radiobut.o \
@@ -7784,7 +7784,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_msgdlg.o \
 	monolib_gtk_nativewin.o \
 	monolib_gtk_notebook.o \
-	monolib_gtk_notifmsg.o \
 	monolib_gtk_print.o \
 	monolib_gtk_radiobox.o \
 	monolib_gtk_radiobut.o \
@@ -8583,14 +8582,16 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_17) \
+	monolib_gtk_notifmsg.o \
 	monolib_gtk_taskbar.o \
 	monolib_gtk_eggtrayicon.o \
 	monolib_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_2)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_2 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_17) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	monolib_gtk_taskbar.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
+	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_17) \
+	monolib_gtk_notifmsg.o \
+	monolib_gtk_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	monolib_taskbarcmn.o \
 	monolib_unix_joystick.o \
@@ -8710,14 +8711,16 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_17) \
+	monolib_gtk_notifmsg.o \
 	monolib_gtk_taskbar.o \
 	monolib_gtk_eggtrayicon.o \
 	monolib_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_3)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_3 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_17) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	monolib_gtk_taskbar.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
+	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_17) \
+	monolib_gtk_notifmsg.o \
+	monolib_gtk_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	monolib_taskbarcmn.o \
 	monolib_unix_joystick.o \
@@ -10103,7 +10106,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_msgdlg.o \
 	coredll_gtk_nativewin.o \
 	coredll_gtk_notebook.o \
-	coredll_notifmsg.o \
 	coredll_gtk_print.o \
 	coredll_gtk_radiobox.o \
 	coredll_gtk_radiobut.o \
@@ -10160,7 +10162,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_msgdlg.o \
 	coredll_gtk_nativewin.o \
 	coredll_gtk_notebook.o \
-	coredll_notifmsg.o \
 	coredll_gtk_print.o \
 	coredll_gtk_radiobox.o \
 	coredll_gtk_radiobut.o \
@@ -11748,7 +11749,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_msgdlg.o \
 	corelib_gtk_nativewin.o \
 	corelib_gtk_notebook.o \
-	corelib_notifmsg.o \
 	corelib_gtk_print.o \
 	corelib_gtk_radiobox.o \
 	corelib_gtk_radiobut.o \
@@ -11805,7 +11805,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_msgdlg.o \
 	corelib_gtk_nativewin.o \
 	corelib_gtk_notebook.o \
-	corelib_notifmsg.o \
 	corelib_gtk_print.o \
 	corelib_gtk_radiobox.o \
 	corelib_gtk_radiobut.o \
@@ -12673,14 +12672,16 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_4)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_1) \
+	advdll_gtk_notifmsg.o \
 	advdll_gtk_taskbar.o \
 	advdll_gtk_eggtrayicon.o \
 	advdll_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_4)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_4 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_1) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	advdll_gtk_taskbar.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
+	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_1) \
+	advdll_gtk_notifmsg.o \
+	advdll_gtk_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_4)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 	advdll_taskbarcmn.o \
 	advdll_unix_joystick.o \
@@ -12800,14 +12801,16 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_5)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_1) \
+	advdll_gtk_notifmsg.o \
 	advdll_gtk_taskbar.o \
 	advdll_gtk_eggtrayicon.o \
 	advdll_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_5)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_5 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_1) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	advdll_gtk_taskbar.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
+	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_1) \
+	advdll_gtk_notifmsg.o \
+	advdll_gtk_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_5)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	advdll_taskbarcmn.o \
 	advdll_unix_joystick.o \
@@ -12977,14 +12980,16 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_6)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_4) \
+	advlib_gtk_notifmsg.o \
 	advlib_gtk_taskbar.o \
 	advlib_gtk_eggtrayicon.o \
 	advlib_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_6)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_6 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_4) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	advlib_gtk_taskbar.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
+	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_4) \
+	advlib_gtk_notifmsg.o \
+	advlib_gtk_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_6)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 	advlib_taskbarcmn.o \
 	advlib_unix_joystick.o \
@@ -13104,14 +13109,16 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__ADVANCED_PLATFORM_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____ADVANCED_PLATFORM_SRC_OBJECTS_7)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_4) \
+	advlib_gtk_notifmsg.o \
 	advlib_gtk_taskbar.o \
 	advlib_gtk_eggtrayicon.o \
 	advlib_hildon_notifmsg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_7)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_7 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_4) \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	advlib_gtk_taskbar.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
+	$(__ADVANCED_GTK_PLATFORM_SRC_OBJECTS_1_4) \
+	advlib_gtk_notifmsg.o \
+	advlib_gtk_taskbar.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__ADVANCED_PLATFORM_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_7)
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	advlib_taskbarcmn.o \
 	advlib_unix_joystick.o \
@@ -20121,12 +20128,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
 
@@ -22055,6 +22056,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
@@ -25821,12 +25828,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
 
@@ -27755,6 +27756,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
@@ -31691,12 +31698,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_gtk_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
@@ -35952,12 +35953,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_gtk_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
 
@@ -37893,6 +37888,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp
 
@@ -38336,6 +38337,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_X11@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_gtk_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/taskbar.cpp

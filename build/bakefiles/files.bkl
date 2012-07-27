@@ -1162,7 +1162,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/msgdlg.cpp
     src/gtk/nativewin.cpp
     src/gtk/notebook.cpp
-    src/gtk/notifmsg.cpp
     src/gtk/print.cpp
     src/gtk/radiobox.cpp
     src/gtk/radiobut.cpp
@@ -1223,7 +1222,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/menuitem.h
     wx/gtk/msgdlg.h
     wx/gtk/notebook.h
-    wx/gtk/notifmsg.h
     wx/gtk/print.h
     wx/gtk/radiobox.h
     wx/gtk/radiobut.h
@@ -3135,6 +3133,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="ADVANCED_GTK_SRC" hints="files">
     $(ADVANCED_GTK_PLATFORM_SRC)
+    src/gtk/notifmsg.cpp
     src/gtk/taskbar.cpp
 </set>
 <set var="ADVANCED_GTK2_SRC" hints="files">
@@ -3144,6 +3143,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
     $(ADVANCED_GTK_PLATFORM_HDR)
+    wx/gtk/notifmsg.h
     wx/gtk/taskbar.h
 </set>
 <set var="ADVANCED_GTK2_HDR" hints="files">
