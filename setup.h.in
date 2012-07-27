@@ -823,6 +823,10 @@
  */
 #define wxUSE_LIBHILDON2 0
 /*
+ * Use libnotify library.
+ */
+#define wxUSE_LIBNOTIFY 0
+/*
  * Use libXpm
  */
 #define wxHAVE_LIB_XPM 0

@@ -869,6 +869,10 @@ typedef pid_t GPid;
  * Use the Hildon 2.0 framework
  */
 #define wxUSE_LIBHILDON2 0
+/*
+ * Use libnotify library.
+ */
+#define wxUSE_LIBNOTIFY 0
 
 #define wxUSE_DC_TRANSFORM_MATRIX 1
 

@@ -980,6 +980,8 @@ HILDON2_LIBS
 HILDON2_CFLAGS
 HILDON_LIBS
 HILDON_CFLAGS
+LIBNOTIFY_LIBS
+LIBNOTIFY_CFLAGS
 GNOMEVFS_LIBS
 GNOMEVFS_CFLAGS
 LIBGNOMEPRINTUI_LIBS
@@ -1126,6 +1128,7 @@ with_libmspack
 with_gtkprint
 with_gnomeprint
 with_gnomevfs
+with_libnotify
 with_hildon
 with_opengl
 with_dmalloc
@@ -1429,6 +1432,8 @@ LIBGNOMEPRINTUI_CFLAGS
 LIBGNOMEPRINTUI_LIBS
 GNOMEVFS_CFLAGS
 GNOMEVFS_LIBS
+LIBNOTIFY_CFLAGS
+LIBNOTIFY_LIBS
 HILDON_CFLAGS
 HILDON_LIBS
 HILDON2_CFLAGS
@@ -2349,6 +2354,7 @@ Optional Packages:
   --without-gtkprint      don't use GTK printing support
   --without-gnomeprint    don't use GNOME printing libraries
   --with-gnomevfs         use GNOME VFS for associating MIME types
+  --with-libnotify        use libnotify for notifications
   --with-hildon           use Hildon framework for Nokia 770/800/810
   --with-opengl           use OpenGL (or Mesa)
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
@@ -2425,6 +2431,10 @@ Some influential environment variables:
               C compiler flags for GNOMEVFS, overriding pkg-config
   GNOMEVFS_LIBS
               linker flags for GNOMEVFS, overriding pkg-config
+  LIBNOTIFY_CFLAGS
+              C compiler flags for LIBNOTIFY, overriding pkg-config
+  LIBNOTIFY_LIBS
+              linker flags for LIBNOTIFY, overriding pkg-config
   HILDON_CFLAGS
               C compiler flags for HILDON, overriding pkg-config
   HILDON_LIBS linker flags for HILDON, overriding pkg-config
@@ -5175,6 +5185,50 @@ fi
             fi
           else
             result=$wxUSE_LIBGNOMEVFS
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${withstring:-with}-libnotify" >&5
+$as_echo_n "checking for --${withstring:-with}-libnotify... " >&6; }
+
+# Check whether --with-libnotify was given.
+if test "${with_libnotify+set}" = set; then :
+  withval=$with_libnotify;
+                        if test "$withval" = yes; then
+                          wx_cv_use_libnotify='wxUSE_LIBNOTIFY=yes'
+                        else
+                          wx_cv_use_libnotify='wxUSE_LIBNOTIFY=no'
+                        fi
+
+else
+
+                        wx_cv_use_libnotify='wxUSE_LIBNOTIFY=${'DEFAULT_wxUSE_LIBNOTIFY":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_libnotify"
+
+          if test x"$withstring" = xwithout; then
+            if test $wxUSE_LIBNOTIFY = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_LIBNOTIFY
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -33976,6 +34030,94 @@ fi
         fi
     fi
 
+    if test "$wxUSE_NOTIFICATION_MESSAGE" = "yes" ; then
+        if test "$wxUSE_LIBNOTIFY" = "yes" ; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY" >&5
+$as_echo_n "checking for LIBNOTIFY... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBNOTIFY_CFLAGS"; then
+        pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.7\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libnotify >= 0.7") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBNOTIFY_CFLAGS=`$PKG_CONFIG --cflags "libnotify >= 0.7" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBNOTIFY_LIBS"; then
+        pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.7\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libnotify >= 0.7") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBNOTIFY_LIBS=`$PKG_CONFIG --libs "libnotify >= 0.7" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libnotify >= 0.7"`
+        else
+	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libnotify >= 0.7"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBNOTIFY_PKG_ERRORS" >&5
+
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+$as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+
+
+elif test $pkg_failed = untried; then
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+$as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+
+
+else
+	LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
+	LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBNOTIFY_LIBS"
+                    CFLAGS="$LIBNOTIFY_CFLAGS $CFLAGS"
+                    CXXFLAGS="$LIBNOTIFY_CFLAGS $CXXFLAGS"
+                    $as_echo "#define wxUSE_LIBNOTIFY 1" >>confdefs.h
+
+
+fi
+        fi
+    fi
+
     if test "$wxUSE_LIBHILDON" = "yes" ; then
 
 pkg_failed=no
@@ -37352,6 +37494,9 @@ case "$TOOLKIT" in
             fi
             if test "$wxUSE_LIBGNOMEVFS" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomevfs"
+            fi
+            if test "$wxUSE_LIBNOTIFY" = "yes" ; then
+                TOOLKIT_EXTRA="$TOOLKIT_EXTRA libnotify"
             fi
             if test "$wxUSE_LIBHILDON" = "yes"; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"

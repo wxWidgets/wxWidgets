@@ -1162,6 +1162,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/msgdlg.cpp
     src/gtk/nativewin.cpp
     src/gtk/notebook.cpp
+    src/gtk/notifmsg.cpp
     src/gtk/print.cpp
     src/gtk/radiobox.cpp
     src/gtk/radiobut.cpp
@@ -1222,6 +1223,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/menuitem.h
     wx/gtk/msgdlg.h
     wx/gtk/notebook.h
+    wx/gtk/notifmsg.h
     wx/gtk/print.h
     wx/gtk/radiobox.h
     wx/gtk/radiobut.h

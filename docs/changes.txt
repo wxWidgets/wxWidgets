@@ -539,6 +539,7 @@ All (GUI):
 wxGTK:
 
 - Allow building wxGTK3 with Broadway backend (Kolya Kosenko).
+- Provide native implementation of wxNotificationMessage using libnotify.
 - Improve drag-and-drop of URLs.
 
 wxMSW:

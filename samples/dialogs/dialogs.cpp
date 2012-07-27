@@ -1747,6 +1747,9 @@ void MyFrame::OnRequestUserAttention(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnNotifMsgAuto(wxCommandEvent& WXUNUSED(event))
 {
+    // Notice that the notification remains shown even after the
+    // wxNotificationMessage object itself is destroyed so we can show simple
+    // notifications using temporary objects.
     if ( !wxNotificationMessage
           (
             "Automatic Notification",
@@ -1756,6 +1759,11 @@ void MyFrame::OnNotifMsgAuto(wxCommandEvent& WXUNUSED(event))
     {
         wxLogStatus("Failed to show notification message");
     }
+
+    // But it doesn't have to be a temporary, of course.
+    wxNotificationMessage n("Dummy Warning", "Example of a warning notification.");
+    n.SetFlags(wxICON_ERROR);
+    n.Show(5); // Just for testing, use 5 second delay.
 }
 
 void MyFrame::OnNotifMsgShow(wxCommandEvent& WXUNUSED(event))

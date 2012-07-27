@@ -591,6 +591,7 @@ WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help fi
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
 WX_ARG_WITHOUT(gnomeprint, [  --without-gnomeprint    don't use GNOME printing libraries], wxUSE_LIBGNOMEPRINT)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
+WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770/800/810], wxUSE_LIBHILDON)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
@@ -5665,6 +5666,22 @@ if test "$WXGTK2" = 1; then
         fi
     fi
 
+    if test "$wxUSE_NOTIFICATION_MESSAGE" = "yes" ; then
+        if test "$wxUSE_LIBNOTIFY" = "yes" ; then
+            PKG_CHECK_MODULES(LIBNOTIFY, [libnotify >= 0.7],
+                [
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBNOTIFY_LIBS"
+                    CFLAGS="$LIBNOTIFY_CFLAGS $CFLAGS"
+                    CXXFLAGS="$LIBNOTIFY_CFLAGS $CXXFLAGS"
+                    AC_DEFINE(wxUSE_LIBNOTIFY)
+                ],
+                [
+                    AC_MSG_WARN([libnotify not found, wxNotificationMessage will use generic implementation.])
+                ]
+            )
+        fi
+    fi
+
     if test "$wxUSE_LIBHILDON" = "yes" ; then
         PKG_CHECK_MODULES(HILDON,
                           [hildon-lgpl >= 0.9],
@@ -7980,6 +7997,9 @@ case "$TOOLKIT" in
             fi
             if test "$wxUSE_LIBGNOMEVFS" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomevfs"
+            fi
+            if test "$wxUSE_LIBNOTIFY" = "yes" ; then
+                TOOLKIT_EXTRA="$TOOLKIT_EXTRA libnotify"
             fi
             if test "$wxUSE_LIBHILDON" = "yes"; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"

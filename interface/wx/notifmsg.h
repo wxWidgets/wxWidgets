@@ -11,10 +11,9 @@
 
     This class allows to show the user a message non intrusively.
 
-    Currently it is implemented natively only for the Maemo platform and uses
+    Currently it is implemented natively for Windows and GTK and uses
     (non-modal) dialogs for the display of the notifications under the other
-    platforms but it will be extended to use the platform-specific notifications
-    in the other ports in the future.
+    platforms.
 
     Notice that this class is not a window and so doesn't derive from wxWindow.
 
@@ -45,6 +44,14 @@ public:
     */
     wxNotificationMessage(const wxString& title, const wxString& message = wxEmptyString,
                           wxWindow* parent = NULL, int flags = wxICON_INFORMATION);
+
+    /**
+        Destructor does not hide the notification.
+
+        The notification can continue to be shown even after the C++ object was
+        destroyed, call Close() explicitly if it needs to be hidden.
+     */
+    virtual ~wxNotificationMessage();
 
     /**
         Hides the notification.
@@ -94,6 +101,11 @@ public:
         notice that you shouldn't rely on @a timeout being exactly respected
         because the current platform may only support default timeout value
         and also because the user may be able to close the notification.
+
+        @note When using native notifications in wxGTK, the timeout is ignored
+            for the notifications with @c wxICON_WARNING or @c wxICON_ERROR
+            flags, they always remain shown unless they're explicitly hidden by
+            the user, i.e. behave as if Timeout_Auto were given.
 
         @return @false if an error occurred.
     */
