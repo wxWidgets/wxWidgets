@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_NOTIFICATION_MESSAGE
+#if wxUSE_NOTIFICATION_MESSAGE && wxUSE_LIBNOTIFY
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
@@ -191,4 +191,4 @@ wxNotificationMessage::~wxNotificationMessage()
         g_object_unref(m_notification);
 }
 
-#endif // wxUSE_NOTIFICATION_MESSAGE
+#endif // wxUSE_NOTIFICATION_MESSAGE && wxUSE_LIBNOTIFY
