@@ -5608,6 +5608,7 @@ if test "$WXGTK2" = 1; then
                 PKG_CHECK_MODULES(GTKPRINT,
                                   [$gtk_unix_print],
                     [
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GTKPRINT_LIBS"
                         CFLAGS="$GTKPRINT_CFLAGS $CFLAGS"
                         CXXFLAGS="$GTKPRINT_CFLAGS $CXXFLAGS"
                         AC_DEFINE(wxUSE_GTKPRINT)
@@ -5628,6 +5629,7 @@ if test "$WXGTK2" = 1; then
                 PKG_CHECK_MODULES(LIBGNOMEPRINTUI,
                                   [libgnomeprintui-2.2 >= 2.8],
                     [
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBGNOMEPRINTUI_LIBS"
                         CFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CFLAGS"
                         CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
                         AC_DEFINE(wxUSE_LIBGNOMEPRINT)
@@ -5650,6 +5652,7 @@ if test "$WXGTK2" = 1; then
                 PKG_CHECK_MODULES(GNOMEVFS,
                                   [gnome-vfs-2.0 >= 2.0],
                     [
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GNOMEVFS_LIBS"
                         CFLAGS="$GNOMEVFS_CFLAGS $CFLAGS"
                         CXXFLAGS="$GNOMEVFS_CFLAGS $CXXFLAGS"
                         AC_DEFINE(wxUSE_LIBGNOMEVFS)
@@ -5666,7 +5669,7 @@ if test "$WXGTK2" = 1; then
         PKG_CHECK_MODULES(HILDON,
                           [hildon-lgpl >= 0.9],
             [
-                EXTRALIBS_HILDON="$HILDON_LIBS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $HILDON_LIBS"
                 CFLAGS="$CFLAGS $HILDON_CFLAGS"
                 CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
                 AC_DEFINE(wxUSE_LIBHILDON)
@@ -5683,7 +5686,7 @@ if test "$WXGTK2" = 1; then
             PKG_CHECK_MODULES(HILDON2,
                               [hildon-1 >= 1.99],
                 [
-                    EXTRALIBS_HILDON="$HILDON2_LIBS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $HILDON2_LIBS"
                     CFLAGS="$CFLAGS $HILDON2_CFLAGS"
                     CXXFLAGS="$CXXFLAGS $HILDON2_CFLAGS"
                     AC_DEFINE(wxUSE_LIBHILDON2)
@@ -7844,7 +7847,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -7946,10 +7949,6 @@ AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(EXTRALIBS_STC)
 AC_SUBST(WITH_PLUGIN_SDL)
-AC_SUBST(EXTRALIBS_GTKPRINT)
-AC_SUBST(EXTRALIBS_GNOMEPRINT)
-AC_SUBST(EXTRALIBS_GNOMEVFS)
-AC_SUBST(EXTRALIBS_HILDON)
 AC_SUBST(UNICODE)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)

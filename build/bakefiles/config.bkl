@@ -385,7 +385,6 @@ to run the tests, include CppUnit library here.
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
         <option name="EXTRALIBS_SDL"/>
-        <option name="EXTRALIBS_GNOMEPRINT"/>
         <option name="CXXWARNINGS"/>
         <option name="HOST_SUFFIX"/>
         <option name="DYLIB_RPATH_INSTALL"/>

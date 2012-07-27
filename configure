@@ -941,10 +941,6 @@ TOOLKIT_LOWERCASE
 DEBUG_FLAG
 DEBUG_INFO
 UNICODE
-EXTRALIBS_HILDON
-EXTRALIBS_GNOMEVFS
-EXTRALIBS_GNOMEPRINT
-EXTRALIBS_GTKPRINT
 WITH_PLUGIN_SDL
 EXTRALIBS_STC
 EXTRALIBS_SDL
@@ -33776,6 +33772,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GTKPRINT_LIBS"
                         CFLAGS="$GTKPRINT_CFLAGS $CFLAGS"
                         CXXFLAGS="$GTKPRINT_CFLAGS $CXXFLAGS"
                         $as_echo "#define wxUSE_GTKPRINT 1" >>confdefs.h
@@ -33878,6 +33875,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBGNOMEPRINTUI_LIBS"
                         CFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CFLAGS"
                         CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
                         $as_echo "#define wxUSE_LIBGNOMEPRINT 1" >>confdefs.h
@@ -33968,6 +33966,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GNOMEVFS_LIBS"
                         CFLAGS="$GNOMEVFS_CFLAGS $CFLAGS"
                         CXXFLAGS="$GNOMEVFS_CFLAGS $CXXFLAGS"
                         $as_echo "#define wxUSE_LIBGNOMEVFS 1" >>confdefs.h
@@ -34058,7 +34057,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                EXTRALIBS_HILDON="$HILDON_LIBS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $HILDON_LIBS"
                 CFLAGS="$CFLAGS $HILDON_CFLAGS"
                 CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
                 $as_echo "#define wxUSE_LIBHILDON 1" >>confdefs.h
@@ -34146,7 +34145,7 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                    EXTRALIBS_HILDON="$HILDON2_LIBS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $HILDON2_LIBS"
                     CFLAGS="$CFLAGS $HILDON2_CFLAGS"
                     CXXFLAGS="$CXXFLAGS $HILDON2_CFLAGS"
                     $as_echo "#define wxUSE_LIBHILDON2 1" >>confdefs.h
@@ -37217,7 +37216,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -37302,10 +37301,6 @@ if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
 else
     OFFICIAL_BUILD=0
 fi
-
-
-
-
 
 
 
