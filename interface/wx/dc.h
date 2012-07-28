@@ -1535,6 +1535,22 @@ public:
     //@}
 
 
+    /**
+       Returns a value that can be used as a handle to the native drawing
+       context, if this wxDC has something that could be thought of in that
+       way.  (Not all of them do.)
+
+       For example, on Windows the return value is an HDC, on OSX it is a
+       CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
+       wxGCDC then the return value will be the value returned from
+       wxGraphicsContext::GetNativeContext.  A value of NULL is returned if
+       the DC does not have anything that fits the handle concept.
+       
+       @since 2.9.5
+     */
+    void* GetHandle() const;
+    
+
     void SetLogicalScale(double x, double y);
     void GetLogicalScale(double *x, double *y) const;
     void SetLogicalOrigin(wxCoord x, wxCoord y);

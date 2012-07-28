@@ -283,6 +283,8 @@ public:
         return NULL;
     }
 
+    virtual void* GetHandle() const = 0;
+    
     // query dimension, colour deps, resolution
 
     virtual void DoGetSize(int *width, int *height) const = 0;
@@ -786,6 +788,9 @@ public:
 
     wxWindow *GetWindow() const
         { return m_pimpl->GetWindow(); }
+
+    void *GetHandle() const
+        { return m_pimpl->GetHandle(); }
 
     bool IsOk() const
         { return m_pimpl && m_pimpl->IsOk(); }

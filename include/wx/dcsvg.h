@@ -96,6 +96,8 @@ public:
     virtual void SetFont(const wxFont& font);
     virtual void SetPen(const wxPen& pen);
 
+    virtual void* GetHandle() const { return NULL; }
+
 private:
    virtual bool DoGetPixel(wxCoord, wxCoord, wxColour *) const
    {

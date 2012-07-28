@@ -433,6 +433,16 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
     }
 }
 
+void* wxGCDCImpl::GetHandle() const
+{
+    void* cgctx = NULL;
+    wxGraphicsContext* gc = GetGraphicsContext();
+    if (gc) {
+        cgctx = gc->GetNativeContext();
+    }
+    return cgctx;
+}
+
 void wxGCDCImpl::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
 

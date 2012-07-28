@@ -94,6 +94,8 @@ public:
     virtual int GetResolution() const;
     virtual wxRect GetPaperRect() const;
 
+    virtual void* GetHandle() const { return NULL; }
+    
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col,
                      wxFloodFillStyle style = wxFLOOD_SURFACE);

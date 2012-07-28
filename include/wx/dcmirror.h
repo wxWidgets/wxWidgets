@@ -66,6 +66,9 @@ public:
     virtual void SetLogicalFunction(wxRasterOperationMode function)
         { m_dc.SetLogicalFunction(function); }
 
+    virtual void* GetHandle() const
+        { return m_dc.GetHandle(); }
+
 protected:
     // returns x and y if not mirroring or y and x if mirroring
     wxCoord GetX(wxCoord x, wxCoord y) const { return m_mirror ? y : x; }

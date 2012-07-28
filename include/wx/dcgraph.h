@@ -109,6 +109,8 @@ public:
     wxGraphicsContext* GetGraphicsContext() const { return m_graphicContext; }
     virtual void SetGraphicsContext( wxGraphicsContext* ctx );
 
+    virtual void* GetHandle() const;
+
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              wxFloodFillStyle style = wxFLOOD_SURFACE);
