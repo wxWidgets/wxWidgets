@@ -126,6 +126,8 @@ public:
         m_clipX2 = 0;
     }
 
+    void* GetHandle() const { return (void*)GetHDC(); }
+    
     const wxBitmap& GetSelectedBitmap() const { return m_selectedBitmap; }
     wxBitmap& GetSelectedBitmap() { return m_selectedBitmap; }
 
