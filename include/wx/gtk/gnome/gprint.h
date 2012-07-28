@@ -294,6 +294,8 @@ protected:
     virtual wxRect GetPaperRect() const;
     virtual int GetResolution() const;
 
+    virtual void* GetHandle() const { return (void*)m_gpc; }
+    
 private:
     wxPrintData             m_printData;
     PangoContext           *m_context;
