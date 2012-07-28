@@ -164,3 +164,8 @@ wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
     return m_selected;
 }
 
+void* wxMemoryDCImpl::GetHandle() const
+{
+    const wxBitmap& bmp = GetSelectedBitmap();
+    return bmp.GetPixmap();
+}

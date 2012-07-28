@@ -1216,6 +1216,11 @@ void* wxGtkPrinterDCImpl::GetCairoContext() const
     return (void*) cairo_reference( m_cairo );
 }
 
+void* wxGtkPrinterDCImpl::GetHandle() const
+{
+    return GetCairoContext();
+}
+
 bool wxGtkPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
                                wxCoord WXUNUSED(y1),
                                const wxColour& WXUNUSED(col),

@@ -227,7 +227,8 @@ public:
     bool IsOk() const;
 
     virtual void* GetCairoContext() const;
-
+    virtual void* GetHandle() const;
+    
     bool CanDrawBitmap() const { return true; }
     void Clear();
     void SetFont( const wxFont& font );
