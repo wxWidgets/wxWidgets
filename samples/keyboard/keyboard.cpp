@@ -54,6 +54,16 @@ private:
     void OnChar(wxKeyEvent& event) { LogEvent("Char", event); }
     void OnCharHook(wxKeyEvent& event)
     {
+        // The logged messages can be confusing if the input window doesn't
+        // have focus so warn about this.
+        if ( !m_inputWin->HasFocus() )
+        {
+            m_logText->SetDefaultStyle(*wxRED);
+            m_logText->AppendText("WARNING: focus is not on input window, "
+                                  "non-hook events won't be logged.\n");
+            m_logText->SetDefaultStyle(wxTextAttr());
+        }
+
         LogEvent("Hook", event);
         if ( m_skipHook )
             event.Skip();
@@ -167,7 +177,7 @@ MyFrame::MyFrame(const wxString& title)
 
     m_logText = new wxTextCtrl(this, wxID_ANY, "",
                                wxDefaultPosition, wxDefaultSize,
-                               wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL);
+                               wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxHSCROLL);
 
     // set monospace font to have output in nice columns
     wxFont font(10, wxFONTFAMILY_TELETYPE,
