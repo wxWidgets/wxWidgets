@@ -60,6 +60,7 @@ gtkcombobox_popupshown_callback(GObject *WXUNUSED(gobject),
     event.SetEventObject( combo );
     combo->HandleWindowEvent( event );
 }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -167,6 +168,8 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
         g_signal_connect_after (entry, "changed",
                                 G_CALLBACK (gtkcombobox_text_changed_callback), this);
+
+        GTKConnectClipboardSignals(GTK_WIDGET(entry));
     }
 
     g_signal_connect_after (m_widget, "changed",

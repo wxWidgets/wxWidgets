@@ -52,6 +52,10 @@ public:
     void SendMaxLenEvent();
 
 protected:
+    // This method must be called from the derived class Create() to connect
+    // the handlers for the clipboard (cut/copy/paste) events.
+    void GTKConnectClipboardSignals(GtkWidget* entry);
+
     virtual void DoSetValue(const wxString& value, int flags);
     virtual wxString DoGetValue() const;
 

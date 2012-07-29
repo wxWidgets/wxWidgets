@@ -39,11 +39,9 @@
 // signal handlers implementation
 // ============================================================================
 
-extern "C"
-{
-
 // "insert_text" handler for GtkEntry
-static void
+extern "C"
+void
 wx_gtk_insert_text_callback(GtkEditable *editable,
                             const gchar * WXUNUSED(new_text),
                             gint WXUNUSED(new_text_length),
@@ -72,6 +70,51 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
 
         text->SendMaxLenEvent();
     }
+}
+
+//-----------------------------------------------------------------------------
+//  clipboard events: "copy-clipboard", "cut-clipboard", "paste-clipboard"
+//-----------------------------------------------------------------------------
+
+// common part of the event handlers below
+static void
+DoHandleClipboardCallback( GtkWidget *widget,
+                           wxWindow *win,
+                           wxEventType eventType,
+                           const gchar* signal_name)
+{
+    wxClipboardTextEvent event( eventType, win->GetId() );
+    event.SetEventObject( win );
+    if ( win->HandleWindowEvent( event ) )
+    {
+        // don't let the default processing to take place if we did something
+        // ourselves in the event handler
+        g_signal_stop_emission_by_name (widget, signal_name);
+    }
+}
+
+extern "C"
+{
+
+static void
+wx_gtk_copy_clipboard_callback( GtkWidget *widget, wxWindow *win )
+{
+    DoHandleClipboardCallback(
+        widget, win, wxEVT_COMMAND_TEXT_COPY, "copy-clipboard" );
+}
+
+static void
+wx_gtk_cut_clipboard_callback( GtkWidget *widget, wxWindow *win )
+{
+    DoHandleClipboardCallback(
+        widget, win, wxEVT_COMMAND_TEXT_CUT, "cut-clipboard" );
+}
+
+static void
+wx_gtk_paste_clipboard_callback( GtkWidget *widget, wxWindow *win )
+{
+    DoHandleClipboardCallback(
+        widget, win, wxEVT_COMMAND_TEXT_PASTE, "paste-clipboard" );
 }
 
 } // extern "C"
@@ -146,6 +189,19 @@ void wxTextEntry::Remove(long from, long to)
 // ----------------------------------------------------------------------------
 // clipboard operations
 // ----------------------------------------------------------------------------
+
+void wxTextEntry::GTKConnectClipboardSignals(GtkWidget* entry)
+{
+    g_signal_connect(entry, "copy-clipboard",
+                     G_CALLBACK (wx_gtk_copy_clipboard_callback),
+                     GetEditableWindow());
+    g_signal_connect(entry, "cut-clipboard",
+                     G_CALLBACK (wx_gtk_cut_clipboard_callback),
+                     GetEditableWindow());
+    g_signal_connect(entry, "paste-clipboard",
+                     G_CALLBACK (wx_gtk_paste_clipboard_callback),
+                     GetEditableWindow());
+}
 
 void wxTextEntry::Copy()
 {

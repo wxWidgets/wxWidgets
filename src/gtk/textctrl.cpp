@@ -556,48 +556,6 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 }
 
 //-----------------------------------------------------------------------------
-//  clipboard events: "copy-clipboard", "cut-clipboard", "paste-clipboard"
-//-----------------------------------------------------------------------------
-
-// common part of the event handlers below
-static void
-handle_text_clipboard_callback( GtkWidget *widget, wxTextCtrl *win,
-                                wxEventType eventType, const gchar * signal_name)
-{
-    wxClipboardTextEvent event( eventType, win->GetId() );
-    event.SetEventObject( win );
-    if ( win->HandleWindowEvent( event ) )
-    {
-        // don't let the default processing to take place if we did something
-        // ourselves in the event handler
-        g_signal_stop_emission_by_name (widget, signal_name);
-    }
-}
-
-extern "C" {
-static void
-gtk_copy_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
-{
-    handle_text_clipboard_callback(
-        widget, win, wxEVT_COMMAND_TEXT_COPY, "copy-clipboard" );
-}
-
-static void
-gtk_cut_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
-{
-    handle_text_clipboard_callback(
-        widget, win, wxEVT_COMMAND_TEXT_CUT, "cut-clipboard" );
-}
-
-static void
-gtk_paste_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
-{
-    handle_text_clipboard_callback(
-        widget, win, wxEVT_COMMAND_TEXT_PASTE, "paste-clipboard" );
-}
-}
-
-//-----------------------------------------------------------------------------
 //  "mark_set"
 //-----------------------------------------------------------------------------
 
@@ -829,12 +787,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
 
-    g_signal_connect (m_text, "copy-clipboard",
-                      G_CALLBACK (gtk_copy_clipboard_callback), this);
-    g_signal_connect (m_text, "cut-clipboard",
-                      G_CALLBACK (gtk_cut_clipboard_callback), this);
-    g_signal_connect (m_text, "paste-clipboard",
-                      G_CALLBACK (gtk_paste_clipboard_callback), this);
+    GTKConnectClipboardSignals(m_text);
 
     m_cursor = wxCursor( wxCURSOR_IBEAM );
 

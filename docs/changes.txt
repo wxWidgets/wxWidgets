@@ -540,6 +540,7 @@ wxGTK:
 
 - Allow building wxGTK3 with Broadway backend (Kolya Kosenko).
 - Provide native implementation of wxNotificationMessage using libnotify.
+- Generate clipboard events for wxComboBox and not only wxTextCtrl.
 - Improve drag-and-drop of URLs.
 
 wxMSW:

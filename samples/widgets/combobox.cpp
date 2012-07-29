@@ -124,6 +124,7 @@ protected:
     void OnCloseup(wxCommandEvent& event);
     void OnComboBox(wxCommandEvent& event);
     void OnComboText(wxCommandEvent& event);
+    void OnComboTextPasted(wxClipboardTextEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
@@ -215,6 +216,7 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_COMBOBOX_CLOSEUP(ComboPage_Combo, ComboboxWidgetsPage::OnCloseup)
     EVT_TEXT(ComboPage_Combo, ComboboxWidgetsPage::OnComboText)
     EVT_TEXT_ENTER(ComboPage_Combo, ComboboxWidgetsPage::OnComboText)
+    EVT_TEXT_PASTE(ComboPage_Combo, ComboboxWidgetsPage::OnComboTextPasted)
 
     EVT_CHECKBOX(wxID_ANY, ComboboxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ComboboxWidgetsPage::OnCheckOrRadioBox)
@@ -660,6 +662,12 @@ void ComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
     {
         wxLogMessage(wxT("Combobox text changed (now '%s')"), s.c_str());
     }
+}
+
+void ComboboxWidgetsPage::OnComboTextPasted(wxClipboardTextEvent& event)
+{
+    wxLogMessage("Text pasted from clipboard.");
+    event.Skip();
 }
 
 void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)

@@ -171,6 +171,7 @@ protected:
 
     void OnText(wxCommandEvent& event);
     void OnTextEnter(wxCommandEvent& event);
+    void OnTextPasted(wxClipboardTextEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
@@ -326,6 +327,7 @@ BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
 
     EVT_TEXT(TextPage_Textctrl, TextWidgetsPage::OnText)
     EVT_TEXT_ENTER(TextPage_Textctrl, TextWidgetsPage::OnTextEnter)
+    EVT_TEXT_PASTE(TextPage_Textctrl, TextWidgetsPage::OnTextPasted)
 
     EVT_CHECKBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
@@ -918,6 +920,12 @@ void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))
 void TextWidgetsPage::OnTextEnter(wxCommandEvent& event)
 {
     wxLogMessage(wxT("Text entered: '%s'"), event.GetString().c_str());
+    event.Skip();
+}
+
+void TextWidgetsPage::OnTextPasted(wxClipboardTextEvent& event)
+{
+    wxLogMessage("Text pasted from clipboard.");
     event.Skip();
 }
 
