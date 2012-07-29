@@ -24,6 +24,8 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/textbuf.h"
+
 // ----------------------------------------------------------------------------
 // lists
 // ----------------------------------------------------------------------------
@@ -406,28 +408,43 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
 
 #else // !wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ
 
+// NB: This branch, using native wxChar for the clipboard, is only used under
+//     Windows currently. It's just a coincidence, but Windows is also the only
+//     platform where we need to convert the text to the native EOL format, so
+//     wxTextBuffer::Translate() is only used here and not in the code above.
+
 size_t wxTextDataObject::GetDataSize() const
 {
-    return GetTextLength() * sizeof(wxChar);
+    return (wxTextBuffer::Translate(GetText()).length() + 1)*sizeof(wxChar);
 }
 
 bool wxTextDataObject::GetDataHere(void *buf) const
 {
+    const wxString textNative = wxTextBuffer::Translate(GetText());
+
     // NOTE: use wxTmemcpy() instead of wxStrncpy() to allow
     //       retrieval of strings with embedded NULLs
-    wxTmemcpy( (wxChar*)buf, GetText().c_str(), GetTextLength() );
+    wxTmemcpy(static_cast<wxChar*>(buf),
+              textNative.c_str(),
+              (textNative.length() + 1)*sizeof(wxChar));
 
     return true;
 }
 
 bool wxTextDataObject::SetData(size_t len, const void *buf)
 {
-    SetText( wxString((const wxChar*)buf, len/sizeof(wxChar)) );
+    const wxString
+        text = wxString(static_cast<const wxChar*>(buf), len/sizeof(wxChar));
+    SetText(wxTextBuffer::Translate(text, wxTextFileType_Unix));
 
     return true;
 }
 
 #endif // different wxTextDataObject implementations
+
+// ----------------------------------------------------------------------------
+// wxHTMLDataObject
+// ----------------------------------------------------------------------------
 
 size_t wxHTMLDataObject::GetDataSize() const
 {
