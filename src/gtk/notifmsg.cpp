@@ -82,6 +82,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxLibnotifyModule, wxModule);
 // wxNotificationMessage implementation
 // ============================================================================
 
+bool wxNotificationMessage::GTKSetIconName(const wxString& name)
+{
+    m_iconName = name;
+
+    return true;
+}
+
 bool wxNotificationMessage::Show(int timeout)
 {
     if ( !wxLibnotifyModule::Initialize() )
@@ -111,6 +118,15 @@ bool wxNotificationMessage::Show(int timeout)
         default:
             wxFAIL_MSG( "Unknown notification message flags." );
             return false;
+    }
+
+    // Explicitly specified icon name overrides the implicit one determined by
+    // the flags.
+    wxScopedCharBuffer buf;
+    if ( !m_iconName.empty() )
+    {
+        buf = m_iconName.utf8_str();
+        icon = buf;
     }
 
     // Create the notification or update an existing one if we had already been
