@@ -299,13 +299,14 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
 
 size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 {
+    const wxString& text = GetText();
     if ( format == wxDF_UNICODETEXT || wxLocaleIsUtf8 )
     {
-        return m_text.utf8_length();
+        return text.utf8_length();
     }
     else // wxDF_TEXT
     {
-        const wxCharBuffer buf(wxConvLocal.cWC2MB(m_text.wc_str()));
+        const wxCharBuffer buf(wxConvLocal.cWC2MB(text.wc_str()));
         return buf ? strlen(buf) : 0;
     }
 }
@@ -315,13 +316,14 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
     if ( !buf )
         return false;
 
+    const wxString& text = GetText();
     if ( format == wxDF_UNICODETEXT || wxLocaleIsUtf8 )
     {
-        memcpy(buf, m_text.utf8_str(), m_text.utf8_length());
+        memcpy(buf, text.utf8_str(), text.utf8_length());
     }
     else // wxDF_TEXT
     {
-        const wxCharBuffer bufLocal(wxConvLocal.cWC2MB(m_text.wc_str()));
+        const wxCharBuffer bufLocal(wxConvLocal.cWC2MB(text.wc_str()));
         if ( !bufLocal )
             return false;
 
@@ -346,11 +348,11 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
         // is not in UTF-8 so do an extra check for tranquility, it shouldn't
         // matter much if we lose a bit of performance when pasting from
         // clipboard
-        m_text = wxString::FromUTF8(buf, len);
+        SetText(wxString::FromUTF8(buf, len));
     }
     else // wxDF_TEXT, convert from current (non-UTF8) locale
     {
-        m_text = wxConvLocal.cMB2WC(buf, len, NULL);
+        SetText(wxConvLocal.cMB2WC(buf, len, NULL));
     }
 
     return true;
