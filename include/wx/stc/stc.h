@@ -4291,9 +4291,6 @@ protected:
 
     bool                m_lastKeyDownConsumed;
 
-    // Time until when we should ignore any new mouse wheel events.
-    wxLongLong m_timeToBlockWheelEventsUntil;
-
     friend class ScintillaWX;
     friend class Platform;
 #endif // !SWIG
