@@ -41,7 +41,7 @@ public:
 
         The return value is a combination of @c wxMOD_ALT, @c wxMOD_CONTROL,
         @c wxMOD_SHIFT and @c wxMOD_META bit masks. Additionally, @c wxMOD_NONE
-        is defined as 0, i.e. corresponds to no modifiers (see HasModifiers())
+        is defined as 0, i.e. corresponds to no modifiers (see HasAnyModifiers())
         and @c wxMOD_CMD is either @c wxMOD_CONTROL (MSW and Unix) or
         @c wxMOD_META (Mac), see CmdDown().
         See ::wxKeyModifier for the full list of modifiers.
@@ -73,6 +73,27 @@ public:
         Returns true if any modifiers at all are pressed.
 
         This is equivalent to @c GetModifiers() @c != @c wxMOD_NONE.
+
+        Notice that this is different from HasModifiers() method which doesn't
+        take e.g. Shift modifier into account. This method is most suitable for
+        mouse events when any modifier, including Shift, can change the
+        interpretation of the event.
+
+        @since 2.9.5
+     */
+    bool HasAnyModifiers() const;
+
+    /**
+        Returns true if Control or Alt are pressed.
+
+        Checks if Control, Alt or, under OS X only, Command key are pressed
+        (notice that the real Control key is still taken into account under OS
+        X too).
+
+        This method returns @false if only Shift is pressed for compatibility
+        reasons and also because pressing Shift usually doesn't change the
+        interpretation of key events, see HasAnyModifiers() if you want to
+        take Shift into account as well.
      */
     bool HasModifiers() const;
 

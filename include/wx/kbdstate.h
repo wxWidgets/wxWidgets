@@ -55,7 +55,14 @@ public:
     }
 
     // returns true if any modifiers at all are pressed
-    bool HasModifiers() const { return GetModifiers() != wxMOD_NONE; }
+    bool HasAnyModifiers() const { return GetModifiers() != wxMOD_NONE; }
+
+    // returns true if any modifiers changing the usual key interpretation are
+    // pressed, notably excluding Shift
+    bool HasModifiers() const
+    {
+        return ControlDown() || RawControlDown() || AltDown();
+    }
 
     // accessors for individual modifier keys
     bool ControlDown() const { return m_controlDown; }
