@@ -2587,11 +2587,14 @@ void AddStdXRCID_Records()
     stdID(wxID_PREVIEW);
     stdID(wxID_ABOUT);
     stdID(wxID_HELP_CONTENTS);
+    stdID(wxID_HELP_INDEX),
+    stdID(wxID_HELP_SEARCH),
     stdID(wxID_HELP_COMMANDS);
     stdID(wxID_HELP_PROCEDURES);
     stdID(wxID_HELP_CONTEXT);
     stdID(wxID_CLOSE_ALL);
     stdID(wxID_PREFERENCES);
+
     stdID(wxID_EDIT);
     stdID(wxID_CUT);
     stdID(wxID_COPY);
@@ -2604,6 +2607,7 @@ void AddStdXRCID_Records()
     stdID(wxID_REPLACE);
     stdID(wxID_REPLACE_ALL);
     stdID(wxID_PROPERTIES);
+
     stdID(wxID_VIEW_DETAILS);
     stdID(wxID_VIEW_LARGEICONS);
     stdID(wxID_VIEW_SMALLICONS);
@@ -2612,6 +2616,8 @@ void AddStdXRCID_Records()
     stdID(wxID_VIEW_SORTNAME);
     stdID(wxID_VIEW_SORTSIZE);
     stdID(wxID_VIEW_SORTTYPE);
+
+
     stdID(wxID_FILE1);
     stdID(wxID_FILE2);
     stdID(wxID_FILE3);
@@ -2621,6 +2627,8 @@ void AddStdXRCID_Records()
     stdID(wxID_FILE7);
     stdID(wxID_FILE8);
     stdID(wxID_FILE9);
+
+
     stdID(wxID_OK);
     stdID(wxID_CANCEL);
     stdID(wxID_APPLY);
@@ -2641,12 +2649,14 @@ void AddStdXRCID_Records()
     stdID(wxID_IGNORE);
     stdID(wxID_ADD);
     stdID(wxID_REMOVE);
+
     stdID(wxID_UP);
     stdID(wxID_DOWN);
     stdID(wxID_HOME);
     stdID(wxID_REFRESH);
     stdID(wxID_STOP);
     stdID(wxID_INDEX);
+
     stdID(wxID_BOLD);
     stdID(wxID_ITALIC);
     stdID(wxID_JUSTIFY_CENTER);
@@ -2662,13 +2672,6 @@ void AddStdXRCID_Records()
     stdID(wxID_ZOOM_OUT);
     stdID(wxID_UNDELETE);
     stdID(wxID_REVERT_TO_SAVED);
-    stdID(wxID_SYSTEM_MENU);
-    stdID(wxID_CLOSE_FRAME);
-    stdID(wxID_MOVE_FRAME);
-    stdID(wxID_RESIZE_FRAME);
-    stdID(wxID_MAXIMIZE_FRAME);
-    stdID(wxID_ICONIZE_FRAME);
-    stdID(wxID_RESTORE_FRAME);
     stdID(wxID_CDROM);
     stdID(wxID_CONVERT);
     stdID(wxID_EXECUTE);
@@ -2688,6 +2691,23 @@ void AddStdXRCID_Records()
     stdID(wxID_SPELL_CHECK);
     stdID(wxID_STRIKETHROUGH);
 
+
+    stdID(wxID_SYSTEM_MENU);
+    stdID(wxID_CLOSE_FRAME);
+    stdID(wxID_MOVE_FRAME);
+    stdID(wxID_RESIZE_FRAME);
+    stdID(wxID_MAXIMIZE_FRAME);
+    stdID(wxID_ICONIZE_FRAME);
+    stdID(wxID_RESTORE_FRAME);
+
+
+
+    stdID(wxID_MDI_WINDOW_CASCADE);
+    stdID(wxID_MDI_WINDOW_TILE_HORZ);
+    stdID(wxID_MDI_WINDOW_TILE_VERT);
+    stdID(wxID_MDI_WINDOW_ARRANGE_ICONS);
+    stdID(wxID_MDI_WINDOW_PREV);
+    stdID(wxID_MDI_WINDOW_NEXT);
 #undef stdID
 }
 
