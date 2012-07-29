@@ -93,13 +93,21 @@ void NumFormatterTestCase::LongToString()
         return;
 
     CPPUNIT_ASSERT_EQUAL(          "1", wxNumberFormatter::ToString(         1L));
+    CPPUNIT_ASSERT_EQUAL(         "-1", wxNumberFormatter::ToString(        -1L));
     CPPUNIT_ASSERT_EQUAL(         "12", wxNumberFormatter::ToString(        12L));
+    CPPUNIT_ASSERT_EQUAL(        "-12", wxNumberFormatter::ToString(       -12L));
     CPPUNIT_ASSERT_EQUAL(        "123", wxNumberFormatter::ToString(       123L));
+    CPPUNIT_ASSERT_EQUAL(       "-123", wxNumberFormatter::ToString(      -123L));
     CPPUNIT_ASSERT_EQUAL(      "1,234", wxNumberFormatter::ToString(      1234L));
+    CPPUNIT_ASSERT_EQUAL(     "-1,234", wxNumberFormatter::ToString(     -1234L));
     CPPUNIT_ASSERT_EQUAL(     "12,345", wxNumberFormatter::ToString(     12345L));
+    CPPUNIT_ASSERT_EQUAL(    "-12,345", wxNumberFormatter::ToString(    -12345L));
     CPPUNIT_ASSERT_EQUAL(    "123,456", wxNumberFormatter::ToString(    123456L));
+    CPPUNIT_ASSERT_EQUAL(   "-123,456", wxNumberFormatter::ToString(   -123456L));
     CPPUNIT_ASSERT_EQUAL(  "1,234,567", wxNumberFormatter::ToString(   1234567L));
+    CPPUNIT_ASSERT_EQUAL( "-1,234,567", wxNumberFormatter::ToString(  -1234567L));
     CPPUNIT_ASSERT_EQUAL( "12,345,678", wxNumberFormatter::ToString(  12345678L));
+    CPPUNIT_ASSERT_EQUAL("-12,345,678", wxNumberFormatter::ToString( -12345678L));
     CPPUNIT_ASSERT_EQUAL("123,456,789", wxNumberFormatter::ToString( 123456789L));
 }
 
