@@ -40,6 +40,7 @@ wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_UP, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_DOWN, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_LEFT_DCLICK, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TOGGLED, wxRibbonBarEvent);
 
 IMPLEMENT_CLASS(wxRibbonBar, wxRibbonControl)
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent)
@@ -243,6 +244,7 @@ void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
     {
         RefreshTabBar();
     }
+    HitTestToggleButton(evt.GetPosition());
 }
 
 void wxRibbonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
@@ -269,6 +271,12 @@ void wxRibbonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
     if(refresh_tabs)
     {
         RefreshTabBar();
+    }
+    if(m_toggle_button_hovered)
+    {
+        m_bar_hovered = false;
+        m_toggle_button_hovered = false;
+        Refresh(false);
     }
 }
 
@@ -720,6 +728,9 @@ void wxRibbonBar::CommonInit(long style)
         SetArtProvider(new wxRibbonDefaultArtProvider);
     }
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+
+    m_toggle_button_hovered = false;
+    m_bar_hovered = false;
 }
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
@@ -756,6 +767,8 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     }
 
     DoEraseBackground(dc);
+
+    m_toggle_button_rect = m_art->GetBarToggleButtonArea(dc, this, GetSize());
 
     size_t numtabs = m_pages.GetCount();
     double sep_visibility = 0.0;
@@ -830,6 +843,9 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             m_art->DrawScrollButton(dc, this, m_tab_scroll_right_button_rect, wxRIBBON_SCROLL_BTN_RIGHT | m_tab_scroll_right_button_state | wxRIBBON_SCROLL_BTN_FOR_TABS);
         }
     }
+    wxRect rect(GetClientSize().GetWidth() - 30, 6, 12, 12);
+    if ( m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON  )
+        m_art->DrawToggleButton(dc, this, rect, ArePanelsShown());
 }
 
 void wxRibbonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -925,6 +941,23 @@ void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
         {
             m_tab_scroll_right_button_state |= wxRIBBON_SCROLL_BTN_ACTIVE | wxRIBBON_SCROLL_BTN_HOVERED;
             RefreshTabBar();
+        }
+    }
+
+    wxPoint position = evt.GetPosition();
+
+    if(position.x >= 0 && position.y >= 0)
+    {
+        wxSize size = GetSize();
+        if(position.x < size.GetWidth() && position.y < size.GetHeight())
+        {
+            if(m_toggle_button_rect.Contains(position))
+            {
+                ShowPanels(!ArePanelsShown());
+                wxRibbonBarEvent event(wxEVT_COMMAND_RIBBONBAR_TOGGLED, GetId());
+                event.SetEventObject(this);
+                ProcessWindowEvent(event);
+            }
         }
     }
 }
@@ -1108,6 +1141,31 @@ wxSize wxRibbonBar::DoGetBestSize() const
         best.SetHeight(m_tab_height);
     }
     return best;
+}
+
+void wxRibbonBar::HitTestToggleButton(wxPoint position)
+{
+    bool hovered = false, toggle_button_hovered = false;
+    if(position.x >= 0 && position.y >= 0)
+    {
+        wxSize size = GetSize();
+        if(position.x < size.GetWidth() && position.y < size.GetHeight())
+        {
+            hovered = true;
+        }
+    }
+    if(hovered)
+    {
+        toggle_button_hovered = (m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON) &&
+                                    m_toggle_button_rect.Contains(position);
+
+        if(hovered != m_bar_hovered || toggle_button_hovered != m_toggle_button_hovered)
+        {
+            m_bar_hovered = hovered;
+            m_toggle_button_hovered = toggle_button_hovered;
+            Refresh(false);
+        }
+    }
 }
 
 #endif // wxUSE_RIBBON

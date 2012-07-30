@@ -134,6 +134,7 @@ public:
     void OnHidePages(wxRibbonButtonBarEvent& evt);
     void OnShowPages(wxRibbonButtonBarEvent& evt);
     void OnTogglePanels(wxCommandEvent& evt);
+    void OnRibbonBarToggled(wxRibbonBarEvent& evt);
 
     void OnExtButton(wxRibbonPanelEvent& evt);
 
@@ -234,6 +235,7 @@ EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(wxID_ANY, MyFrame::OnExtButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_REMOVE_PAGE, MyFrame::OnRemovePage)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_HIDE_PAGES, MyFrame::OnHidePages)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SHOW_PAGES, MyFrame::OnShowPages)
+EVT_RIBBONBAR_TOGGLED(wxID_ANY, MyFrame::OnRibbonBarToggled)
 END_EVENT_TABLE()
 
 #include "align_center.xpm"
@@ -262,10 +264,7 @@ END_EVENT_TABLE()
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, wxT("wxRibbon Sample Application"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
 {
-    m_ribbon = new wxRibbonBar(this, wxID_ANY,
-                               wxDefaultPosition, wxDefaultSize,
-                               wxRIBBON_BAR_DEFAULT_STYLE |
-                               wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS);
+    m_ribbon = new wxRibbonBar(this);
 
     {
         wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"), ribbon_xpm);
@@ -1007,4 +1006,12 @@ void MyFrame::OnShowPages(wxRibbonButtonBarEvent& WXUNUSED(evt))
     m_ribbon->ShowPage(2);
     m_ribbon->ShowPage(3);
     m_ribbon->Realize();
+}
+
+void MyFrame::OnRibbonBarToggled(wxRibbonBarEvent& WXUNUSED(evt))
+{
+    AddText(wxString::Format("Ribbon bar %s.",
+                             m_ribbon->ArePanelsShown()
+                                ? "expanded"
+                                : "collapsed"));
 }

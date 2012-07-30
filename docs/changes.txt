@@ -534,6 +534,7 @@ All:
 All (GUI):
 
 - Add possibility to hide and show again wxRibbonBar pages (wxBen).
+- Add expand/collapse button to wxRibbonBar (rakeshthp).
 - Fix item data access in wxDataViewListCtrl (Kry).
 
 wxGTK:
