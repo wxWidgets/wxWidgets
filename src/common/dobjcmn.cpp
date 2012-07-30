@@ -425,8 +425,8 @@ bool wxTextDataObject::GetDataHere(void *buf) const
     // NOTE: use wxTmemcpy() instead of wxStrncpy() to allow
     //       retrieval of strings with embedded NULLs
     wxTmemcpy(static_cast<wxChar*>(buf),
-              textNative.c_str(),
-              (textNative.length() + 1)*sizeof(wxChar));
+              textNative.t_str(),
+              textNative.length() + 1);
 
     return true;
 }
