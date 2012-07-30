@@ -570,7 +570,11 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
                   var.GetWxObjectPtr() : NULL));
 
 // Replacement for using wxDynamicCast on a wxVariantData object
-#define wxDynamicCastVariantData(data, classname) dynamic_cast<classname*>(data)
+#ifndef wxNO_RTTI
+    #define wxDynamicCastVariantData(data, classname) dynamic_cast<classname*>(data)
+#endif
+
+#define wxStaticCastVariantData(data, classname) static_cast<classname*>(data)
 
 extern wxVariant WXDLLIMPEXP_BASE wxNullVariant;
 

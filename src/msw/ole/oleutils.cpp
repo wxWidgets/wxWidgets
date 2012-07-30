@@ -338,16 +338,16 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
     if (type == wxT("errorcode"))
     {
         wxVariantDataErrorCode* const
-            ec = wxDynamicCastVariantData(variant.GetData(),
-                                          wxVariantDataErrorCode);
+            ec = wxStaticCastVariantData(variant.GetData(),
+                                         wxVariantDataErrorCode);
         oleVariant.vt = VT_ERROR;
         oleVariant.scode = ec->GetValue();
     }
     else if (type == wxT("currency"))
     {
         wxVariantDataCurrency* const
-            c = wxDynamicCastVariantData(variant.GetData(),
-                                         wxVariantDataCurrency);
+            c = wxStaticCastVariantData(variant.GetData(),
+                                        wxVariantDataCurrency);
         oleVariant.vt = VT_CY;
         oleVariant.cyVal = c->GetValue();
     }
