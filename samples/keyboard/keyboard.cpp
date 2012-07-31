@@ -33,6 +33,8 @@ private:
     void OnQuit(wxCommandEvent& WXUNUSED(event)) { Close(true); }
     void OnAbout(wxCommandEvent& event);
 
+    void OnUseTextCtrl(wxCommandEvent& event);
+
     void OnTestAccelA(wxCommandEvent& WXUNUSED(event))
         { m_logText->AppendText("Test accelerator \"A\" used.\n"); }
     void OnTestAccelCtrlA(wxCommandEvent& WXUNUSED(event))
@@ -72,6 +74,9 @@ private:
     void OnPaintInputWin(wxPaintEvent& event);
 
     void LogEvent(const wxString& name, wxKeyEvent& event);
+
+    // Set m_inputWin to either a new wxWindow or new wxTextCtrl.
+    void DoCreateInputWindow(bool text);
 
     wxTextCtrl *m_logText;
     wxWindow *m_inputWin;
@@ -123,6 +128,7 @@ MyFrame::MyFrame(const wxString& title)
         ClearID = wxID_CLEAR,
         SkipHook = 100,
         SkipDown,
+        UseTextCtrl,
         TestAccelA,
         TestAccelCtrlA,
         TestAccelEsc
@@ -149,6 +155,11 @@ MyFrame::MyFrame(const wxString& title)
     menuFile->Check(SkipDown, true);
     menuFile->AppendSeparator();
 
+    menuFile->AppendCheckItem(UseTextCtrl, "Use &text control\tCtrl-T",
+        "Use wxTextCtrl or a simple wxWindow for input window"
+    );
+    menuFile->AppendSeparator();
+
     menuFile->Append(QuitID, "E&xit\tAlt-X", "Quit this program");
 
     // the "About" item should be in the help menu
@@ -163,9 +174,7 @@ MyFrame::MyFrame(const wxString& title)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
-    m_inputWin = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(-1, 50),
-                              wxRAISED_BORDER);
-    m_inputWin->SetBackgroundColour(*wxBLUE);
+    DoCreateInputWindow(false /* simple window initially */);
 
     wxTextCtrl *headerText = new wxTextCtrl(this, wxID_ANY, "",
                                             wxDefaultPosition, wxDefaultSize,
@@ -212,6 +221,9 @@ MyFrame::MyFrame(const wxString& title)
     Connect(SkipDown, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnSkipDown));
 
+    Connect(UseTextCtrl, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(MyFrame::OnUseTextCtrl));
+
     Connect(TestAccelA, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnTestAccelA));
 
@@ -220,17 +232,6 @@ MyFrame::MyFrame(const wxString& title)
 
     Connect(TestAccelEsc, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnTestAccelEsc));
-
-    // connect event handlers for the blue input window
-    m_inputWin->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyFrame::OnKeyDown),
-                        NULL, this);
-    m_inputWin->Connect(wxEVT_KEY_UP, wxKeyEventHandler(MyFrame::OnKeyUp),
-                        NULL, this);
-    m_inputWin->Connect(wxEVT_CHAR, wxKeyEventHandler(MyFrame::OnChar),
-                        NULL, this);
-    m_inputWin->Connect(wxEVT_PAINT,
-                        wxPaintEventHandler(MyFrame::OnPaintInputWin),
-                        NULL, this);
 
     // notice that we don't connect OnCharHook() to the input window, unlike
     // the usual key events this one is propagated upwards
@@ -253,6 +254,47 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  "(c) 2008 Marcin Wojdyr",
                  "About wxWidgets Keyboard Sample",
                  wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::DoCreateInputWindow(bool text)
+{
+    wxWindow* const oldWin = m_inputWin;
+
+    m_inputWin = text ? new wxTextCtrl(this, wxID_ANY, "Press keys here",
+                                       wxDefaultPosition, wxSize(-1, 50),
+                                       wxTE_MULTILINE)
+                      : new wxWindow(this, wxID_ANY,
+                                     wxDefaultPosition, wxSize(-1, 50),
+                                     wxRAISED_BORDER);
+    m_inputWin->SetBackgroundColour(*wxBLUE);
+    m_inputWin->SetForegroundColour(*wxWHITE);
+
+    // connect event handlers for the blue input window
+    m_inputWin->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyFrame::OnKeyDown),
+                        NULL, this);
+    m_inputWin->Connect(wxEVT_KEY_UP, wxKeyEventHandler(MyFrame::OnKeyUp),
+                        NULL, this);
+    m_inputWin->Connect(wxEVT_CHAR, wxKeyEventHandler(MyFrame::OnChar),
+                        NULL, this);
+
+    if ( !text )
+    {
+        m_inputWin->Connect(wxEVT_PAINT,
+                            wxPaintEventHandler(MyFrame::OnPaintInputWin),
+                            NULL, this);
+    }
+
+    if ( oldWin )
+    {
+        GetSizer()->Replace(oldWin, m_inputWin);
+        Layout();
+        delete oldWin;
+    }
+}
+
+void MyFrame::OnUseTextCtrl(wxCommandEvent& event)
+{
+    DoCreateInputWindow(event.IsChecked());
 }
 
 void MyFrame::OnPaintInputWin(wxPaintEvent& WXUNUSED(event))
