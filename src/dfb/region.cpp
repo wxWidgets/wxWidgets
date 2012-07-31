@@ -33,7 +33,7 @@ public:
 
     ~wxRegionRefData() {}
 
-    // default assignment and comparision operators are OK
+    // default assignment and comparison operators are OK
 
     wxRect m_rect;
 };
@@ -178,7 +178,7 @@ bool wxRegion::DoSubtract(const wxRegion& region)
     }
     else if ( !M_REGION->m_rect.Intersects(rect) )
     {
-        // the rectangles are disjoint, so substracting has no effect
+        // the rectangles are disjoint, so subtracting has no effect
         return true;
     }
     else

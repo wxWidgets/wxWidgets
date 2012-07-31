@@ -61,7 +61,7 @@ bool wxDfbCheckReturn(DFBResult code)
 
         default:
             // FIXME: should handle the errors individually
-            wxLogError(_("DirectFB error %d occured."), (int)code);
+            wxLogError(_("DirectFB error %d occurred."), (int)code);
             return false;
     }
 }
