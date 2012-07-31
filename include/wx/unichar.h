@@ -329,17 +329,13 @@ inline wxUniChar& wxUniChar::operator=(const wxUniCharRef& c)
 // Comparison operators for the case when wxUniChar(Ref) is the second operand
 // implemented in terms of member comparison functions
 
-#define wxCMP_REVERSE(c1, c2, op) c2 op c1
+wxDEFINE_COMPARISONS_BY_REV(char, const wxUniChar&)
+wxDEFINE_COMPARISONS_BY_REV(char, const wxUniCharRef&)
 
-wxDEFINE_COMPARISONS(char, const wxUniChar&, wxCMP_REVERSE)
-wxDEFINE_COMPARISONS(char, const wxUniCharRef&, wxCMP_REVERSE)
+wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniChar&)
+wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniCharRef&)
 
-wxDEFINE_COMPARISONS(wchar_t, const wxUniChar&, wxCMP_REVERSE)
-wxDEFINE_COMPARISONS(wchar_t, const wxUniCharRef&, wxCMP_REVERSE)
-
-wxDEFINE_COMPARISONS(const wxUniChar&, const wxUniCharRef&, wxCMP_REVERSE)
-
-#undef wxCMP_REVERSE
+wxDEFINE_COMPARISONS_BY_REV(const wxUniChar&, const wxUniCharRef&)
 
 // for expressions like c-'A':
 inline int operator-(char c1, const wxUniCharRef& c2) { return -(c2 - c1); }
