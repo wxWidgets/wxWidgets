@@ -1012,10 +1012,9 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
     // will only be sent if it is not in an accelerator table.
     if (!ret)
     {
-        long key_code;
         KeySym keysym = gdk_event->keyval;
         // Find key code for EVT_CHAR and EVT_CHAR_HOOK events
-        key_code = wxTranslateKeySymToWXKey(keysym, true /* isChar */);
+        long key_code = wxTranslateKeySymToWXKey(keysym, true /* isChar */);
         if ( !key_code )
         {
             if ( wxIsAsciiKeysym(keysym) )
@@ -1037,6 +1036,9 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), key_code);
 
             eventChar.m_keyCode = key_code;
+#if wxUSE_UNICODE
+            eventChar.m_uniChar = gdk_keyval_to_unicode(key_code);
+#endif // wxUSE_UNICODE
 
             AdjustCharEventKeyCodes(eventChar);
 
