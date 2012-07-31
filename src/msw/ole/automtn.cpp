@@ -70,6 +70,7 @@ ShowException(const wxString& member,
 wxAutomationObject::wxAutomationObject(WXIDISPATCH* dispatchPtr)
 {
     m_dispatchPtr = dispatchPtr;
+    m_lcid = LOCALE_SYSTEM_DEFAULT;
 }
 
 wxAutomationObject::~wxAutomationObject()
@@ -161,7 +162,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
                                 // We rely on the fact that wxBasicString is
                                 // just BSTR with some methods here.
                                 reinterpret_cast<BSTR *>(&argNames[0]),
-                                1 + namedArgCount, LOCALE_SYSTEM_DEFAULT, &dispIds[0]);
+                                1 + namedArgCount, m_lcid, &dispIds[0]);
     if (FAILED(hr))
     {
         ShowException(member, hr);
@@ -194,7 +195,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     EXCEPINFO excep;
     wxZeroMemory(excep);
 
-    hr = ((IDispatch*)m_dispatchPtr)->Invoke(dispIds[0], IID_NULL, LOCALE_SYSTEM_DEFAULT,
+    hr = ((IDispatch*)m_dispatchPtr)->Invoke(dispIds[0], IID_NULL, m_lcid,
                         (WORD)action, &dispparams, vReturnPtr, &excep, &uiArgErr);
 
     if (FAILED(hr))
@@ -467,6 +468,7 @@ bool wxAutomationObject::GetObject(wxAutomationObject& obj, const wxString& prop
     if (dispatch)
     {
         obj.SetDispatchPtr(dispatch);
+        obj.SetLCID(GetLCID());
         return true;
     }
     else
@@ -480,6 +482,7 @@ bool wxAutomationObject::GetObject(wxAutomationObject& obj, const wxString& prop
     if (dispatch)
     {
         obj.SetDispatchPtr(dispatch);
+        obj.SetLCID(GetLCID());
         return true;
     }
     else
@@ -587,6 +590,16 @@ bool wxAutomationObject::CreateInstance(const wxString& progId) const
         m_dispatchPtr = DoCreateInstance(progId, clsId);
 
     return m_dispatchPtr != NULL;
+}
+
+LCID wxAutomationObject::GetLCID() const
+{
+    return m_lcid;
+}
+
+void wxAutomationObject::SetLCID(LCID lcid)
+{
+    m_lcid = lcid;
 }
 
 static void

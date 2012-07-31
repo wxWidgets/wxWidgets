@@ -429,5 +429,30 @@ public:
         You may need to cast from IDispatch* to WXIDISPATCH* when calling this function.
     */
     void SetDispatchPtr(WXIDISPATCH* dispatchPtr);
+
+    /**
+        Returns the locale identifier used in automation calls.
+
+        The default is LOCALE_SYSTEM_DEFAULT but the objects obtained by
+        GetObject() inherit the locale identifier from the one that created
+        them.
+
+        @since 2.9.5
+    */
+    LCID GetLCID() const;
+
+    /**
+        Sets the locale identifier to be used in automation calls performed by
+        this object.
+
+        The default value is LOCALE_SYSTEM_DEFAULT.
+
+        Notice that any automation objects created by this one inherit the same
+        LCID.
+
+        @since 2.9.5
+    */
+    void SetLCID(LCID lcid);
+
 };
 
