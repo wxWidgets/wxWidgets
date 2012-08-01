@@ -630,7 +630,7 @@ void wxMimeTypesManagerImpl::ClearData()
 
 //
 //  Q) Iterating through the map - why does it use if (err == noErr) instead of just asserting?
-//  A) Some intermediate indexes are bad while subsequent ones may be good.  Its wierd, I know.
+//  A) Some intermediate indexes are bad while subsequent ones may be good.  Its weird, I know.
 //
 
 // extension -> file type

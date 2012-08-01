@@ -1634,7 +1634,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
               {
                 columnPtr->SetSortOrder(!(columnPtr->IsSortOrderAscending()));
                // initialize wxWidget event:
-                wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED,dataViewCtrlPtr->GetId()); // variable defintion
+                wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED,dataViewCtrlPtr->GetId()); // variable definition
 
                 dataViewEvent.SetEventObject(dataViewCtrlPtr);
                 dataViewEvent.SetColumn(columnIndex);

@@ -664,7 +664,7 @@ bool wxThreadInternal::Create( wxThread *thread, unsigned int stackSize )
         OSStatus err = MPCreateQueue( &m_notifyQueueId );
         if (err != noErr)
         {
-            wxLogSysError( wxT("Cant create the thread event queue") );
+            wxLogSysError( wxT("Can't create the thread event queue") );
 
             return false;
         }

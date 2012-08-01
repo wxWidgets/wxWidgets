@@ -381,7 +381,7 @@ bool wxIcon::LoadIconFromFile(const wxString& filename, int desiredWidth, int de
 
     if( err == noErr )
     {
-        // If everthing is OK, assign m_refData
+        // If everything is OK, assign m_refData
         m_refData = new wxIconRefData( (WXHICON) iconRef, desiredWidth, desiredHeight );
         result = true;
     }

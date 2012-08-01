@@ -1120,7 +1120,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             // which we don't want in this case
             wxSize sz = GetParent()->GetSize();
             ShowHideWindowToolbar( tlw, true, false );
-            // Restore the orginal size
+            // Restore the original size
             GetParent()->SetSize( sz );
 
             ChangeWindowAttributes( tlw, kWindowToolbarButtonAttribute, 0 );

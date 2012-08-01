@@ -241,7 +241,7 @@ wxDockEventHandler(EventHandlerCallRef WXUNUSED(inHandlerCallRef),
 // Performs a top-to-bottom copy of the input menu and all of its
 // submenus.
 //
-// This is mostly needed for 2.4 compatability. However wxPython and others
+// This is mostly needed for 2.4 compatibility. However wxPython and others
 // still use this way of setting the taskbarmenu.
 //-----------------------------------------------------------------------------
 wxMenu * wxDeepCopyMenu( wxMenu *menu )
@@ -463,7 +463,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 //
 // Note that we only support DOCK currently as others require cocoa and
 // also some require hacks and other such things. (MenuExtras are
-// actually seperate programs that also require a special undocumented id
+// actually separate programs that also require a special undocumented id
 // hack and other such fun stuff).
 //-----------------------------------------------------------------------------
 wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType WXUNUSED_UNLESS_DEBUG(nType))

@@ -97,7 +97,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
         CFRelease(pClass);
     }
 
-    //Now get the maching services
+    //Now get the matching services
     io_iterator_t pIterator;
     if( IOServiceGetMatchingServices(m_pPort,
                         pDictionary, &pIterator) != kIOReturnSuccess )
@@ -261,7 +261,7 @@ size_t wxHIDDevice::GetCount (int nClass, int nType)
         CFRelease(pClass);
     }
 
-    //Now get the maching services
+    //Now get the matching services
     io_iterator_t pIterator;
     if( IOServiceGetMatchingServices(pPort,
                                      pDictionary, &pIterator) != kIOReturnSuccess )
