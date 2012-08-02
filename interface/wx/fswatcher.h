@@ -143,6 +143,13 @@ public:
 class wxFileSystemWatcherEvent : public wxEvent
 {
 public:
+    wxFileSystemWatcherEvent(int changeType, int watchid = wxID_ANY);
+    wxFileSystemWatcherEvent(int changeType, const wxString& errorMsg,
+                             int watchid = wxID_ANY);
+    wxFileSystemWatcherEvent(int changeType,
+                             const wxFileName& path, const wxFileName& newPath,
+                             int watchid = wxID_ANY);
+
     /**
         Returns the path at which the event occurred.
      */
@@ -182,6 +189,7 @@ public:
     wxString ToString() const;
 };
 
+wxEventType wxEVT_FSWATCHER;
 
 /**
     These are the possible types of file system change events.
