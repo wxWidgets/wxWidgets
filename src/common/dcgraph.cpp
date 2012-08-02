@@ -38,8 +38,6 @@
 #endif
 #endif
 
-#include <limits.h>     // for INT_MAX
-
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -1060,7 +1058,10 @@ void wxGCDCImpl::Clear(void)
     m_graphicContext->SetPen( p );
     wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
     m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
-    DoDrawRectangle( 0, 0, INT_MAX , INT_MAX );
+    // maximum positive coordinate Cairo can handle is 2^23 - 1
+    DoDrawRectangle(
+        DeviceToLogicalX(0), DeviceToLogicalY(0),
+        DeviceToLogicalXRel(0x007fffff), DeviceToLogicalYRel(0x007fffff));
     m_graphicContext->SetCompositionMode(formerMode);
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
