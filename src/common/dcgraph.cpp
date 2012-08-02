@@ -18,24 +18,12 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
 
-#include "wx/graphics.h"
 #include "wx/dcgraph.h"
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
-    #include "wx/bitmap.h"
+    #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
-    #include "wx/region.h"
-#endif
-
-#include "wx/dcclient.h"
-
-#ifdef __WXOSX_OR_COCOA__
-#ifdef __WXOSX_IPHONE__
-    #include <CoreGraphics/CoreGraphics.h>
-#else
-    #include <ApplicationServices/ApplicationServices.h>
-#endif
 #endif
 
 //-----------------------------------------------------------------------------
