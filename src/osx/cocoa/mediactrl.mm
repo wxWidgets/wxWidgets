@@ -55,9 +55,6 @@
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 
-#import <AppKit/NSMovie.h>
-#import <AppKit/NSMovieView.h>
-
 class WXDLLIMPEXP_FWD_MEDIA wxQTMediaBackend;
 
 @interface wxQTMovie : QTMovie {
@@ -191,8 +188,9 @@ private:
     }
 }
 
--(void)loadStateChanged:(QTMovie *)movie
+-(void)loadStateChanged:(NSNotification *)notification
 {
+    QTMovie *movie = [notification object];
     long loadState = [[movie attributeForKey:QTMovieLoadStateAttribute] longValue];
     if (loadState >= QTMovieLoadStatePlayable)
     {
@@ -283,13 +281,30 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
 bool wxQTMediaBackend::Load(const wxURI& location)
 {
     wxCFStringRef uri(location.BuildURI());
-
-    [m_movie release];
-    wxQTMovie* movie = [[wxQTMovie alloc] initWithURL: [NSURL URLWithString: uri.AsNSString()] error: nil ];
+    NSURL *url = [NSURL URLWithString: uri.AsNSString()];
     
+    if (! [wxQTMovie canInitWithURL:url])
+        return false;
+    
+    [m_movie release];
+    wxQTMovie* movie = [[wxQTMovie alloc] initWithURL:url error: nil ];
+
     m_movie = movie;
-    [m_movie setBackend:this];
-    [m_movieview setMovie:movie];
+    if (movie != nil)
+    {
+        [m_movie setBackend:this];
+        [m_movieview setMovie:movie];
+
+        // If the media file is able to be loaded quickly then there may not be
+        // any QTMovieLoadStateDidChangeNotification message sent, so we need to
+        // also check the load state here and finish our initialization if it has
+        // been loaded.
+        long loadState = [[m_movie attributeForKey:QTMovieLoadStateAttribute] longValue];
+        if (loadState >= QTMovieLoadStateLoaded)
+        {
+            FinishLoad();
+        }        
+    }
     
     return movie != nil;
 }
@@ -298,12 +313,10 @@ void wxQTMediaBackend::FinishLoad()
 {
     DoShowPlayerControls(m_interfaceflags);
     
-    NSRect r =[m_movieview movieBounds];
-    m_bestSize.x = r.size.width;
-    m_bestSize.y = r.size.height;
+    NSSize s = [[m_movie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
+    m_bestSize = wxSize(s.width, s.height);
     
     NotifyMovieLoaded();
-
 }
 
 bool wxQTMediaBackend::Play()

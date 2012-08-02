@@ -3217,7 +3217,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MEDIA_OSX_COCOA_SRC" hints="files">
-    <!-- src/osx/cocoa/mediactrl.mm -->
+    src/osx/cocoa/mediactrl.mm
 </set>
 <set var="MEDIA_OSX_COCOA_HDR" hints="files">
 </set>

@@ -37052,6 +37052,9 @@ fi
         else
             USE_MEDIA=0
         fi
+
+    elif test "$wxUSE_MAC" = 1; then
+                           GST_LIBS="-framework QTKit"
     fi
 
     if test $USE_MEDIA = 1; then

@@ -7562,6 +7562,11 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         else
             USE_MEDIA=0
         fi
+
+    elif test "$wxUSE_MAC" = 1; then 
+         dnl We always have the necessary libraries under Mac 
+         dnl but we need to link with it explicitly.
+         GST_LIBS="-framework QTKit"
     fi
 
     if test $USE_MEDIA = 1; then
