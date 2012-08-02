@@ -283,7 +283,7 @@ public:
         return NULL;
     }
 
-    virtual void* GetHandle() const = 0;
+    virtual void* GetHandle() const { return NULL; }
     
     // query dimension, colour deps, resolution
 
