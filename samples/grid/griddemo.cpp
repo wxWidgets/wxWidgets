@@ -2220,7 +2220,6 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     if ( useLometric )
     {
         memDc.SetMapMode( wxMM_LOMETRIC );
-        wxSize sizePPI = memDc.GetPPI();
         sizeRender.x = memDc.DeviceToLogicalXRel( sizeRender.x );
         sizeRender.y = memDc.DeviceToLogicalYRel( sizeRender.y );
     }
