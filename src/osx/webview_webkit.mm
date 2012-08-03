@@ -310,6 +310,15 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
 
 @end
 
+@interface WebViewUIDelegate : NSObject
+{
+    wxWebViewWebKit* webKitWindow;
+}
+
+- initWithWxWindow: (wxWebViewWebKit*)inWindow;
+
+@end
+
 //We use a hash to map scheme names to wxWebViewHandler
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
 
@@ -381,6 +390,11 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     [m_webView setPolicyDelegate:policyDelegate];
 
+    WebViewUIDelegate* uiDelegate =
+            [[WebViewUIDelegate alloc] initWithWxWindow: this];
+
+    [m_webView setUIDelegate:uiDelegate];
+
     //Register our own class for custom scheme handling
     [NSURLProtocol registerClass:[WebViewCustomProtocol class]];
 
@@ -392,14 +406,19 @@ wxWebViewWebKit::~wxWebViewWebKit()
 {
     WebViewLoadDelegate* loadDelegate = [m_webView frameLoadDelegate];
     WebViewPolicyDelegate* policyDelegate = [m_webView policyDelegate];
+    WebViewUIDelegate* uiDelegate = [m_webView UIDelegate];
     [m_webView setFrameLoadDelegate: nil];
     [m_webView setPolicyDelegate: nil];
+    [m_webView setUIDelegate: nil];
 
     if (loadDelegate)
         [loadDelegate release];
 
     if (policyDelegate)
         [policyDelegate release];
+
+    if (uiDelegate)
+        [uiDelegate release];
 }
 
 // ----------------------------------------------------------------------------
@@ -1308,6 +1327,25 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 }
 
+@end
+
+
+@implementation WebViewUIDelegate
+
+- initWithWxWindow: (wxWebViewWebKit*)inWindow
+{
+    [super init];
+    webKitWindow = inWindow;    // non retained
+    return self;
+}
+
+- (void)webView:(WebView *)sender printFrameView:(WebFrameView *)frameView
+{
+    wxUnusedVar(sender);
+    wxUnusedVar(frameView);
+
+    webKitWindow->Print();
+}
 @end
 
 #endif //wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT
