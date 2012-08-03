@@ -3167,15 +3167,19 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg ) const
 
 wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg ) const
 {
-    wxRegionIterator iter( reg );
     wxRect r;
 
     wxGridCellCoordsArray  cellsExposed;
 
     int left, top, right, bottom;
-    while ( iter )
+    for ( wxRegionIterator iter(reg); iter; ++iter )
     {
         r = iter.GetRect();
+
+        // Skip 0-height cells, they're invisible anyhow, don't waste time
+        // getting their rectangles and so on.
+        if ( !r.GetHeight() )
+            continue;
 
         // TODO: remove this when we can...
         // There is a bug in wxMotif that gives garbage update
@@ -3224,8 +3228,6 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg ) const
             for ( size_t n = 0; n < count; n++ )
                 cellsExposed.Add(wxGridCellCoords(row, cols[n]));
         }
-
-        ++iter;
     }
 
     return cellsExposed;
