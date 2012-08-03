@@ -390,6 +390,15 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
+@interface MyUIDelegate : NSObject
+{
+    wxWebKitCtrl* webKitWindow;
+}
+
+- initWithWxWindow: (wxWebKitCtrl*)inWindow;
+
+@end
+
 // ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
@@ -481,6 +490,10 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     MyPolicyDelegate* myPolicyDelegate = [[MyPolicyDelegate alloc] initWithWxWindow: this];
     [m_webView setPolicyDelegate:myPolicyDelegate];
 
+    // this is used to provide printing support for JavaScript
+    MyUIDelegate* myUIDelegate = [[MyUIDelegate alloc] initWithWxWindow: this];
+    [m_webView setUIDelegate:myUIDelegate];
+
     LoadURL(m_currentURL);
     return true;
 }
@@ -489,14 +502,19 @@ wxWebKitCtrl::~wxWebKitCtrl()
 {
     MyFrameLoadMonitor* myFrameLoadMonitor = [m_webView frameLoadDelegate];
     MyPolicyDelegate* myPolicyDelegate = [m_webView policyDelegate];
+    MyUIDelegate* myUIDelegate = [m_webView UIDelegate];
     [m_webView setFrameLoadDelegate: nil];
     [m_webView setPolicyDelegate: nil];
+    [m_webView setUIDelegate: nil];
     
     if (myFrameLoadMonitor)
         [myFrameLoadMonitor release];
         
     if (myPolicyDelegate)
         [myPolicyDelegate release];
+
+    if (myUIDelegate)
+        [myUIDelegate release];
 }
 
 // ----------------------------------------------------------------------------
@@ -918,6 +936,25 @@ void wxWebKitCtrl::MacVisibilityChanged(){
         webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
 
     [listener use];
+}
+@end
+
+
+@implementation MyUIDelegate
+
+- initWithWxWindow: (wxWebKitCtrl*)inWindow
+{
+    self = [super init];
+    webKitWindow = inWindow;    // non retained
+    return self;
+}
+
+- (void)webView:(WebView *)sender printFrameView:(WebFrameView *)frameView
+{
+    wxUnusedVar(sender);
+    wxUnusedVar(frameView);
+
+    webKitWindow->Print(true);
 }
 @end
 
