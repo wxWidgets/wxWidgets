@@ -565,7 +565,7 @@ public:
     virtual bool SetCompositionMode(wxCompositionMode op) = 0;
 
     // returns the size of the graphics context in device coordinates
-    void GetSize(wxDouble* width, wxDouble* height)
+    void GetSize(wxDouble* width, wxDouble* height) const
     {
         if ( width )
             *width = m_width;
