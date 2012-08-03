@@ -526,9 +526,9 @@ public:
 */
         // single attribute accessors
 
-    inline wxPoint2DDouble GetPosition()
+    wxPoint2DDouble GetPosition() const
         { return wxPoint2DDouble(m_x, m_y); }
-    inline wxSize GetSize()
+    wxSize GetSize() const
         { return wxSize((int) m_width, (int) m_height); }
 
     // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
@@ -655,8 +655,8 @@ public:
 
         // single attribute accessors
 
-      inline wxPoint2DInt GetPosition() { return wxPoint2DInt(m_x, m_y); }
-       inline wxSize GetSize() { return wxSize(m_width, m_height); }
+       wxPoint2DInt GetPosition() const { return wxPoint2DInt(m_x, m_y); }
+       wxSize GetSize() const { return wxSize(m_width, m_height); }
 
         // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
         // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
