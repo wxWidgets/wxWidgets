@@ -199,6 +199,9 @@
             #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
         #endif
     #endif
+    #if wxUSE_WEBVIEW && !defined(wxNO_WEBVIEW_LIB)
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("webview"))
+    #endif
 #endif // wxUSE_GUI
 
 
