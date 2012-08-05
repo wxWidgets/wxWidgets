@@ -709,8 +709,20 @@ bool wxTopLevelWindowMSW::Show(bool show)
         }
         else if ( m_iconized )
         {
-            // iconize and show
+            // We were iconized while we were hidden, so now we need to show
+            // the window in iconized state.
             nShowCmd = SW_MINIMIZE;
+        }
+        else if ( ::IsIconic(GetHwnd()) )
+        {
+            // We were restored while we were hidden, so now we need to show
+            // the window in its normal state.
+            //
+            // As below, don't activate some kinds of windows.
+            if ( HasFlag(wxFRAME_TOOL_WINDOW) || !IsEnabled() )
+                nShowCmd = SW_SHOWNOACTIVATE;
+            else
+                nShowCmd = SW_RESTORE;
         }
         else // just show
         {
@@ -823,9 +835,9 @@ void wxTopLevelWindowMSW::Iconize(bool iconize)
     }
     else // hidden
     {
-        // iconizing the window shouldn't show it so just remember that we need
-        // to become iconized when shown later
-        m_iconized = true;
+        // iconizing the window shouldn't show it so just update the internal
+        // state (otherwise it's done by DoShowWindow() itself)
+        m_iconized = iconize;
     }
 }
 
