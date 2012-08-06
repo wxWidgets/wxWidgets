@@ -39,6 +39,7 @@
     #include "wx/image.h"
 #endif
 
+#include "wx/scopedptr.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
 
@@ -62,11 +63,13 @@
 class WXDLLEXPORT wxBitmapRefData : public wxGDIImageRefData
 {
 public:
-    wxBitmapRefData();
+    wxBitmapRefData() { Init(); }
     wxBitmapRefData(const wxBitmapRefData& data);
     virtual ~wxBitmapRefData() { Free(); }
 
     virtual void Free();
+
+    void CopyFromDIB(const wxDIB& dib);
 
     // set the mask object to use as the mask, we take ownership of it
     void SetMask(wxMask *mask)
@@ -114,6 +117,8 @@ public:
     bool m_isDIB;
 
 private:
+    void Init();
+
     // optional mask for transparent drawing
     wxMask       *m_bitmapMask;
 
@@ -183,7 +188,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 // wxBitmapRefData
 // ----------------------------------------------------------------------------
 
-wxBitmapRefData::wxBitmapRefData()
+void wxBitmapRefData::Init()
 {
 #if wxDEBUG_LEVEL
     m_selectedInto = NULL;
@@ -202,23 +207,25 @@ wxBitmapRefData::wxBitmapRefData()
 wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
                : wxGDIImageRefData(data)
 {
-#if wxDEBUG_LEVEL
-    m_selectedInto = NULL;
-#endif
+    Init();
 
     // (deep) copy the mask if present
-    m_bitmapMask = NULL;
     if (data.m_bitmapMask)
         m_bitmapMask = new wxMask(*data.m_bitmapMask);
 
-    // FIXME: we don't copy m_hBitmap currently but we should, see wxBitmap::
-    //        CloneGDIRefData()
-
-    wxASSERT_MSG( !data.m_isDIB,
+    wxASSERT_MSG( !data.m_dib,
                     wxT("can't copy bitmap locked for raw access!") );
-    m_isDIB = false;
 
     m_hasAlpha = data.m_hasAlpha;
+
+#if wxUSE_WXDIB
+    // copy the other bitmap
+    if ( data.m_hBitmap )
+    {
+        wxDIB dib((HBITMAP)(data.m_hBitmap));
+        CopyFromDIB(dib);
+    }
+#endif // wxUSE_WXDIB
 }
 
 void wxBitmapRefData::Free()
@@ -241,6 +248,35 @@ void wxBitmapRefData::Free()
     wxDELETE(m_bitmapMask);
 }
 
+void wxBitmapRefData::CopyFromDIB(const wxDIB& dib)
+{
+    wxCHECK_RET( !IsOk(), "bitmap already initialized" );
+    wxCHECK_RET( dib.IsOk(), wxT("invalid DIB in CopyFromDIB") );
+
+#ifdef SOMETIMES_USE_DIB
+    HBITMAP hbitmap = dib.CreateDDB();
+    if ( !hbitmap )
+        return;
+    m_isDIB = false;
+#else // ALWAYS_USE_DIB
+    HBITMAP hbitmap = const_cast<wxDIB &>(dib).Detach();
+    m_isDIB = true;
+#endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
+
+    m_width = dib.GetWidth();
+    m_height = dib.GetHeight();
+    m_depth = dib.GetDepth();
+
+    m_hBitmap = (WXHBITMAP)hbitmap;
+
+#if wxUSE_PALETTE
+    wxPalette *palette = dib.CreatePalette();
+    if ( palette )
+        m_bitmapPalette = *palette;
+    delete palette;
+#endif // wxUSE_PALETTE
+}
+
 // ----------------------------------------------------------------------------
 // wxBitmap creation
 // ----------------------------------------------------------------------------
@@ -250,46 +286,9 @@ wxGDIImageRefData *wxBitmap::CreateData() const
     return new wxBitmapRefData;
 }
 
-wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *dataOrig) const
+wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    const wxBitmapRefData *
-        data = static_cast<const wxBitmapRefData *>(dataOrig);
-    if ( !data )
-        return NULL;
-
-    // FIXME: this method is backwards, it should just create a new
-    //        wxBitmapRefData using its copy ctor but instead it modifies this
-    //        bitmap itself and then returns its m_refData -- which works, of
-    //        course (except in !wxUSE_WXDIB), but is completely illogical
-    wxBitmap *self = const_cast<wxBitmap *>(this);
-
-    wxBitmapRefData *selfdata;
-#if wxUSE_WXDIB
-    // copy the other bitmap
-    if ( data->m_hBitmap )
-    {
-        wxDIB dib((HBITMAP)(data->m_hBitmap));
-        self->CopyFromDIB(dib);
-
-        selfdata = static_cast<wxBitmapRefData *>(m_refData);
-        selfdata->m_hasAlpha = data->m_hasAlpha;
-    }
-    else
-#endif // wxUSE_WXDIB
-    {
-        // copy the bitmap data
-        selfdata = new wxBitmapRefData(*data);
-        self->m_refData = selfdata;
-    }
-
-    // copy also the mask
-    wxMask * const maskSrc = data->GetMask();
-    if ( maskSrc )
-    {
-        selfdata->SetMask(new wxMask(*maskSrc));
-    }
-
-    return selfdata;
+    return new wxBitmapRefData(*static_cast<const wxBitmapRefData *>(data));
 }
 
 bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
@@ -427,37 +426,13 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon, wxBitmapTransparency transp)
 
 bool wxBitmap::CopyFromDIB(const wxDIB& dib)
 {
-    wxCHECK_MSG( dib.IsOk(), false, wxT("invalid DIB in CopyFromDIB") );
-
-#ifdef SOMETIMES_USE_DIB
-    HBITMAP hbitmap = dib.CreateDDB();
-    if ( !hbitmap )
+    wxScopedPtr<wxBitmapRefData> newData(new wxBitmapRefData);
+    newData->CopyFromDIB(dib);
+    if ( !newData->IsOk() )
         return false;
-#else // ALWAYS_USE_DIB
-    HBITMAP hbitmap = const_cast<wxDIB &>(dib).Detach();
-#endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
 
     UnRef();
-
-    wxBitmapRefData *refData = new wxBitmapRefData;
-    m_refData = refData;
-
-    refData->m_width = dib.GetWidth();
-    refData->m_height = dib.GetHeight();
-    refData->m_depth = dib.GetDepth();
-
-    refData->m_hBitmap = (WXHBITMAP)hbitmap;
-
-#if wxUSE_PALETTE
-    wxPalette *palette = dib.CreatePalette();
-    if ( palette )
-    {
-        refData->m_bitmapPalette = *palette;
-    }
-
-    delete palette;
-#endif // wxUSE_PALETTE
-
+    m_refData = newData.release();
     return true;
 }
 
