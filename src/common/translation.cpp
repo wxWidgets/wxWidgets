@@ -1440,7 +1440,7 @@ wxString wxTranslations::ChooseLanguageForDomain(const wxString& WXUNUSED(domain
 
 namespace
 {
-WX_DECLARE_HASH_SET(wxString, ::wxStringHash, ::wxStringEqual,
+WX_DECLARE_HASH_SET(wxString, wxStringHash, wxStringEqual,
                     wxLocaleUntranslatedStrings);
 }
 

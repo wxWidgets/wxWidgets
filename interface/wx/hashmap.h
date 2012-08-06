@@ -83,8 +83,8 @@
     @code
     WX_DECLARE_HASH_MAP( int,
                          wxString,
-                         ::wxIntegerHash,
-                         ::wxIntegerEqual,
+                         wxIntegerHash,
+                         wxIntegerEqual,
                          MyHash );
 
     // using an user-defined class for keys
@@ -119,8 +119,8 @@
 
     WX_DECLARE_HASH_MAP( MyKey,      // type of the keys
                          SOME_TYPE,  // any type you like
-                         ::MyKeyHash,  // hasher
-                         ::MyKeyEqual, // key equality predicate
+                         MyKeyHash,  // hasher
+                         MyKeyEqual, // key equality predicate
                          CLASSNAME); // name of the class
     @endcode
 

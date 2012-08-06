@@ -29,7 +29,7 @@ class wxHtmlTextPieces;
 class wxHtmlParserState;
 
 WX_DECLARE_HASH_SET_WITH_DECL_PTR(wxHtmlTagHandler*,
-                                  ::wxPointerHash, ::wxPointerEqual,
+                                  wxPointerHash, wxPointerEqual,
                                   wxHtmlTagHandlersSet,
                                   class WXDLLIMPEXP_HTML);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxHtmlTagHandler*,
