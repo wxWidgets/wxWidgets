@@ -3540,13 +3540,19 @@ bool wxRichTextParagraphLayoutBox::SetListStyle(const wxRichTextRange& range, wx
                     wxTextAttrEx listStyle(def->GetCombinedStyleForLevel(thisLevel, styleSheet));
                     wxRichTextApplyStyle(newPara->GetAttributes(), listStyle);
 
-                    // Now we need to do numbering
-                    if (renumber)
+                    // Preserve the existing list item continuation bullet style, if any
+                    if (para->GetAttributes().HasBulletStyle() && (para->GetAttributes().GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION))
+                        newPara->GetAttributes().SetBulletStyle(newPara->GetAttributes().GetBulletStyle()|wxTEXT_ATTR_BULLET_STYLE_CONTINUATION);
+                    else
                     {
-                        newPara->GetAttributes().SetBulletNumber(n);
-                    }
+                        // Now we need to do numbering
+                        if (renumber)
+                        {
+                            newPara->GetAttributes().SetBulletNumber(n);
+                        }
 
-                    n ++;
+                        n ++;
+                    }
                 }
                 else if (!newPara->GetAttributes().GetListStyleName().IsEmpty())
                 {
@@ -3715,6 +3721,10 @@ bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, co
                     wxTextAttrEx listStyle(defToUse->GetCombinedStyleForLevel(thisLevel, styleSheet));
                     wxRichTextApplyStyle(newPara->GetAttributes(), listStyle);
 
+                    // Preserve the existing list item continuation bullet style, if any
+                    if (para->GetAttributes().HasBulletStyle() && (para->GetAttributes().GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION))
+                        newPara->GetAttributes().SetBulletStyle(newPara->GetAttributes().GetBulletStyle()|wxTEXT_ATTR_BULLET_STYLE_CONTINUATION);
+
                     // OK, we've (re)applied the style, now let's get the numbering right.
 
                     if (currentLevel == -1)
@@ -3748,7 +3758,8 @@ bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, co
                     }
                     else
                     {
-                        levels[currentLevel] ++;
+                        if (!(para->GetAttributes().HasBulletStyle() && (para->GetAttributes().GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION)))
+                            levels[currentLevel] ++;
                     }
 
                     newPara->GetAttributes().SetBulletNumber(levels[currentLevel]);
@@ -3825,7 +3836,23 @@ bool wxRichTextParagraphLayoutBox::PromoteList(int promoteBy, const wxRichTextRa
 /// position of the paragraph that it had to start looking from.
 bool wxRichTextParagraphLayoutBox::FindNextParagraphNumber(wxRichTextParagraph* previousParagraph, wxRichTextAttr& attr) const
 {
-    if (!previousParagraph->GetAttributes().HasFlag(wxTEXT_ATTR_BULLET_STYLE) || previousParagraph->GetAttributes().GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE)
+    // Search for a paragraph that isn't a continuation paragraph (no bullet)
+    while (previousParagraph && previousParagraph->GetAttributes().HasBulletStyle() && previousParagraph->GetAttributes().GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION)
+    {
+        wxRichTextObjectList::compatibility_iterator node = ((wxRichTextCompositeObject*) previousParagraph->GetParent())->GetChildren().Find(previousParagraph);
+        if (node)
+        {
+            node = node->GetPrevious();
+            if (node)
+                previousParagraph = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+            else
+                previousParagraph = NULL;
+        }
+        else
+            previousParagraph = NULL;
+    }
+
+    if (!previousParagraph || !previousParagraph->GetAttributes().HasFlag(wxTEXT_ATTR_BULLET_STYLE) || previousParagraph->GetAttributes().GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE)
         return false;
 
     wxRichTextStyleSheet* styleSheet = GetStyleSheet();
@@ -3912,7 +3939,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     wxTextAttrEx attr = GetCombinedAttributes();
 
     // Draw the bullet, if any
-    if (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE)
+    if ((attr.GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE) == 0 && (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION) == 0)
     {
         if (attr.GetLeftSubIndent() != 0)
         {

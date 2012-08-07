@@ -813,6 +813,15 @@ public:
 
 // Implementation
 
+#if wxABI_VERSION >= 20813
+    /// Processes the back key.
+    bool ProcessBackKey(wxKeyEvent& event, int flags);
+
+    /// Given a character position at which there is a list style, find the range
+    /// encompassing the same list style by looking backwards and forwards.
+    wxRichTextRange FindRangeForList(long pos, bool& isNumberedList);
+#endif
+
      /// Font names take a long time to retrieve, so cache them (on demand)
      static const wxArrayString& GetAvailableFontNames();
      static void ClearAvailableFontNames();

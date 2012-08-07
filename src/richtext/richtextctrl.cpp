@@ -797,55 +797,9 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         // Must process this before translation, otherwise it's translated into a WXK_DELETE event.
         if (event.CmdDown() && event.GetKeyCode() == WXK_BACK)
         {
-            BeginBatchUndo(_("Delete Text"));
-
-            long newPos = m_caretPosition;
-
-            bool processed = DeleteSelectedContent(& newPos);
-
-            // Submit range in character positions, which are greater than caret positions,
-            // so subtract 1 for deleted character and add 1 for conversion to character position.
-            if (newPos > -1)
-            {
-                if (event.CmdDown())
-                {
-                    long pos = wxRichTextCtrl::FindNextWordPosition(-1);
-                    if (pos < newPos)
-                    {
-                        GetBuffer().DeleteRangeWithUndo(wxRichTextRange(pos+1, newPos), this);
-                        processed = true;
-                    }
-                }
-
-                if (!processed)
-                    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(newPos, newPos), this);
-            }
-
-            EndBatchUndo();
-
-            if (GetLastPosition() == -1)
-            {
-                GetBuffer().Reset();
-
-                m_caretPosition = -1;
-                PositionCaret();
-                SetDefaultStyleToCursorStyle();
-            }
-
-            ScrollIntoView(m_caretPosition, WXK_LEFT);
-
-            wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_DELETE,
-                GetId());
-            cmdEvent.SetEventObject(this);
-            cmdEvent.SetFlags(flags);
-            cmdEvent.SetPosition(m_caretPosition+1);
-            GetEventHandler()->ProcessEvent(cmdEvent);
-
-            Update();
+            if (!ProcessBackKey(event, flags))
+                return;
         }
-        else
-            event.Skip();
 
         return;
     }
@@ -877,6 +831,14 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         else
             GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE|wxRICHTEXT_INSERT_INTERACTIVE);
 
+        // Automatically renumber list
+        bool isNumberedList = false;
+        wxRichTextRange numberedListRange = FindRangeForList(newPos+1, isNumberedList);
+        if (isNumberedList && numberedListRange != wxRichTextRange(-1, -1))
+        {
+            NumberList(numberedListRange, NULL, wxRICHTEXT_SETSTYLE_RENUMBER|wxRICHTEXT_SETSTYLE_WITH_UNDO);
+        }
+
         EndBatchUndo();
         SetDefaultStyleToCursorStyle();
 
@@ -901,52 +863,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
     }
     else if (event.GetKeyCode() == WXK_BACK)
     {
-        BeginBatchUndo(_("Delete Text"));
-
-        long newPos = m_caretPosition;
-
-        bool processed = DeleteSelectedContent(& newPos);
-
-        // Submit range in character positions, which are greater than caret positions,
-        // so subtract 1 for deleted character and add 1 for conversion to character position.
-        if (newPos > -1)
-        {
-            if (event.CmdDown())
-            {
-                long pos = wxRichTextCtrl::FindNextWordPosition(-1);
-                if (pos < newPos)
-                {
-                    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(pos+1, newPos), this);
-                    processed = true;
-                }
-            }
-
-            if (!processed)
-                GetBuffer().DeleteRangeWithUndo(wxRichTextRange(newPos, newPos), this);
-        }
-
-        EndBatchUndo();
-
-        if (GetLastPosition() == -1)
-        {
-            GetBuffer().Reset();
-
-            m_caretPosition = -1;
-            PositionCaret();
-            SetDefaultStyleToCursorStyle();
-        }
-
-        ScrollIntoView(m_caretPosition, WXK_LEFT);
-
-        wxRichTextEvent cmdEvent(
-            wxEVT_COMMAND_RICHTEXT_DELETE,
-            GetId());
-        cmdEvent.SetEventObject(this);
-        cmdEvent.SetFlags(flags);
-        cmdEvent.SetPosition(m_caretPosition+1);
-        GetEventHandler()->ProcessEvent(cmdEvent);
-
-        Update();
+        ProcessBackKey(event, flags);
     }
     else if (event.GetKeyCode() == WXK_DELETE)
     {
@@ -3152,7 +3069,7 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
         GetBuffer().Layout(dc, availableSpace, flags);
         GetBuffer().SetDirty(false);
 
-        if (!IsFrozen())
+        if (!IsFrozen() && !onlyVisibleRect)
             SetupScrollbars();
     }
 
@@ -3535,6 +3452,165 @@ bool wxRichTextCtrl::PromoteList(int promoteBy, const wxRichTextRange& range, co
 bool wxRichTextCtrl::Delete(const wxRichTextRange& range)
 {
     return GetBuffer().DeleteRangeWithUndo(range.ToInternal(), this);
+}
+
+// Processes the back key
+bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
+{
+    if (!IsEditable())
+    {
+        return false;
+    }
+
+    wxRichTextParagraph* para = GetBuffer().GetParagraphAtPosition(m_caretPosition, true);
+
+    // If we're at the start of a list item with a bullet, let's 'delete' the bullet, i.e.
+    // make it a continuation paragraph.
+    if (!HasSelection() && para && ((m_caretPosition+1) == para->GetRange().GetStart()) &&
+        para->GetAttributes().HasBulletStyle() && (para->GetAttributes().GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION) == 0)
+    {
+        wxRichTextParagraph* newPara = wxDynamicCast(para->Clone(), wxRichTextParagraph);
+        newPara->GetAttributes().SetBulletStyle(newPara->GetAttributes().GetBulletStyle() | wxTEXT_ATTR_BULLET_STYLE_CONTINUATION);
+
+        wxRichTextAction* action = new wxRichTextAction(NULL, _("Remove Bullet"), wxRICHTEXT_CHANGE_STYLE, & GetBuffer(), this);
+        action->SetRange(newPara->GetRange());
+        action->SetPosition(GetCaretPosition());
+        action->GetNewParagraphs().AppendChild(newPara);
+        // Also store the old ones for Undo
+        action->GetOldParagraphs().AppendChild(new wxRichTextParagraph(*para));
+
+        GetBuffer().Invalidate(para->GetRange());
+        GetBuffer().SubmitAction(action);
+
+        // Automatically renumber list
+        bool isNumberedList = false;
+        wxRichTextRange numberedListRange = FindRangeForList(m_caretPosition, isNumberedList);
+        if (isNumberedList && numberedListRange != wxRichTextRange(-1, -1))
+        {
+            NumberList(numberedListRange, NULL, wxRICHTEXT_SETSTYLE_RENUMBER|wxRICHTEXT_SETSTYLE_WITH_UNDO);
+        }
+
+        Update();
+    }
+    else
+    {
+        BeginBatchUndo(_("Delete Text"));
+
+        long newPos = m_caretPosition;
+
+        bool processed = DeleteSelectedContent(& newPos);
+
+        int deletions = 0;
+        if (processed)
+            deletions ++;
+
+        // Submit range in character positions, which are greater than caret positions,
+        // so subtract 1 for deleted character and add 1 for conversion to character position.
+        if (newPos > -1)
+        {
+            if (event.CmdDown())
+            {
+                long pos = wxRichTextCtrl::FindNextWordPosition(-1);
+                if (pos < newPos)
+                {
+                    wxRichTextRange range(pos+1, newPos);
+                    GetBuffer().DeleteRangeWithUndo(range, this);
+                    deletions ++;
+                    processed = true;
+                }
+            }
+
+            if (!processed)
+            {
+                wxRichTextRange range(newPos, newPos);
+                GetBuffer().DeleteRangeWithUndo(range, this);
+                deletions ++;
+            }
+        }
+
+        EndBatchUndo();
+
+        if (GetLastPosition() == -1)
+        {
+            GetBuffer().Reset();
+
+            m_caretPosition = -1;
+            PositionCaret();
+            SetDefaultStyleToCursorStyle();
+        }
+
+        ScrollIntoView(m_caretPosition, WXK_LEFT);
+
+        // Always send this event; wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED will be sent only if there is an actual deletion.
+        {
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_DELETE,
+                GetId());
+            cmdEvent.SetEventObject(this);
+            cmdEvent.SetFlags(flags);
+            cmdEvent.SetPosition(m_caretPosition+1);
+            GetEventHandler()->ProcessEvent(cmdEvent);
+        }
+
+        Update();
+    }
+
+    return true;
+}
+
+// Given a character position at which there is a list style, find the range
+// encompassing the same list style by looking backwards and forwards.
+wxRichTextRange wxRichTextCtrl::FindRangeForList(long pos, bool& isNumberedList)
+{
+    wxRichTextParagraphLayoutBox* focusObject = & GetBuffer();
+    wxRichTextRange range = wxRichTextRange(-1, -1);
+    wxRichTextParagraph* para = focusObject->GetParagraphAtPosition(pos);
+    if (!para || !para->GetAttributes().HasListStyleName())
+        return range;
+    else
+    {
+        wxString listStyle = para->GetAttributes().GetListStyleName();
+        range = para->GetRange();
+
+        isNumberedList = para->GetAttributes().HasBulletNumber();
+
+        // Search back
+        wxRichTextObjectList::compatibility_iterator initialNode = focusObject->GetChildren().Find(para);
+        if (initialNode)
+        {
+            wxRichTextObjectList::compatibility_iterator startNode = initialNode->GetPrevious();
+            while (startNode)
+            {
+                wxRichTextParagraph* p = wxDynamicCast(startNode->GetData(), wxRichTextParagraph);
+                if (p)
+                {
+                    if (!p->GetAttributes().HasListStyleName() || p->GetAttributes().GetListStyleName() != listStyle)
+                        break;
+                    else
+                        range.SetStart(p->GetRange().GetStart());
+                }
+
+                startNode = startNode->GetPrevious();
+            }
+
+            // Search forward
+            wxRichTextObjectList::compatibility_iterator endNode = initialNode->GetNext();
+            while (endNode)
+            {
+                wxRichTextParagraph* p = wxDynamicCast(endNode->GetData(), wxRichTextParagraph);
+                if (p)
+                {
+                    if (!p->GetAttributes().HasListStyleName() || p->GetAttributes().GetListStyleName() != listStyle)
+                        break;
+                    else
+                        range.SetEnd(p->GetRange().GetEnd());
+                }
+
+                endNode = endNode->GetNext();
+            }
+        }
+    }
+    return range;
 }
 
 const wxArrayString& wxRichTextCtrl::GetAvailableFontNames()

@@ -25,10 +25,12 @@
 
 # public symbols added in 2.8.13 (please keep in alphabetical order):
 @WX_VERSION_TAG@.13 {
+        *wxRichTextCtrl*FindRangeForList*;
         *wxRichTextCtrl*ForceDelayedLayout*;
         *wxRichTextCtrl*GetFullLayoutRequired*;
         *wxRichTextCtrl*GetFullLayoutSavedPosition*;
         *wxRichTextCtrl*GetFullLayoutTime*;
+        *wxRichTextCtrl*ProcessBackKey*;
         *wxRichTextCtrl*SetFullLayoutRequired*;
         *wxRichTextCtrl*SetFullLayoutSavedPosition*;
         *wxRichTextCtrl*SetFullLayoutTime*;
