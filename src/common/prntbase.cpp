@@ -1710,7 +1710,7 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
         // Behave like modal dialogs, don't show in taskbar. This implies
         // removing the minimize box, because minimizing windows without
         // taskbar entry is confusing.
-        SetWindowStyle(GetWindowStyle() & ~wxMINIMIZE_BOX | wxFRAME_NO_TASKBAR);
+        SetWindowStyle((GetWindowStyle() & ~wxMINIMIZE_BOX) | wxFRAME_NO_TASKBAR);
     }
 
     Layout();
