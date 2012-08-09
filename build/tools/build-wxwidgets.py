@@ -337,7 +337,13 @@ def main(scriptName, args):
                     shutil.rmtree(frameworkRootDir)
 
         if options.mac_universal_binary: 
-            configure_opts.append("--enable-universal_binary=%s" % options.mac_universal_binary)
+            if options.mac_universal_binary == 'default':
+                if options.osx_cocoa:
+                    configure_opts.append("--enable-universal_binary=i386,x86_64")                
+                else:
+                    configure_opts.append("--enable-universal_binary")                
+            else:
+                configure_opts.append("--enable-universal_binary=%s" % options.mac_universal_binary)
 
             
         print("Configure options: " + repr(configure_opts))
