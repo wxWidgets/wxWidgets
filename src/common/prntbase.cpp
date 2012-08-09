@@ -323,19 +323,7 @@ wxPrinterBase::~wxPrinterBase()
 
 wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout * printout)
 {
-    wxPrintAbortDialog *dialog = new wxPrintAbortDialog(parent, _("Printing ") , wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
-
-    wxBoxSizer *button_sizer = new wxBoxSizer( wxVERTICAL );
-    button_sizer->Add( new wxStaticText(dialog, wxID_ANY, _("Please wait while printing\n") + printout->GetTitle() ), 0, wxALL, 10 );
-    button_sizer->Add( new wxButton( dialog, wxID_CANCEL, wxT("Cancel") ), 0, wxALL | wxALIGN_CENTER, 10 );
-
-    dialog->SetAutoLayout( true );
-    dialog->SetSizer( button_sizer );
-
-    button_sizer->Fit(dialog);
-    button_sizer->SetSizeHints (dialog) ;
-
-    return dialog;
+    return new wxPrintAbortDialog(parent, printout->GetTitle());
 }
 
 void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout), const wxString& message)
@@ -521,6 +509,25 @@ wxPageSetupDialogData& wxPageSetupDialog::GetPageSetupData()
 BEGIN_EVENT_TABLE(wxPrintAbortDialog, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxPrintAbortDialog::OnCancel)
 END_EVENT_TABLE()
+
+wxPrintAbortDialog::wxPrintAbortDialog(wxWindow *parent,
+                                       const wxString& documentTitle,
+                                       const wxPoint& pos,
+                                       const wxSize& size,
+                                       long style,
+                                       const wxString& name)
+    : wxDialog(parent, wxID_ANY, _("Printing"), pos, size, style, name)
+{
+    wxBoxSizer *button_sizer = new wxBoxSizer(wxVERTICAL);
+    button_sizer->Add(new wxStaticText(this, wxID_ANY, _("Please wait while printing\n") + documentTitle), 0, wxALL, 10 );
+    button_sizer->Add(new wxButton(this, wxID_CANCEL, wxT("Cancel") ), 0, wxALL | wxALIGN_CENTER, 10);
+
+    SetAutoLayout(true);
+    SetSizer(button_sizer);
+
+    button_sizer->Fit(this);
+    button_sizer->SetSizeHints(this);
+}
 
 void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {

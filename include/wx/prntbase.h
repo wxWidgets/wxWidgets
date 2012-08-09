@@ -733,14 +733,11 @@ class WXDLLIMPEXP_CORE wxPrintAbortDialog: public wxDialog
 {
 public:
     wxPrintAbortDialog(wxWindow *parent,
-                       const wxString& title,
+                       const wxString& documentTitle,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
-                       long style = 0,
-                       const wxString& name = wxT("dialog"))
-        : wxDialog(parent, wxID_ANY, title, pos, size, style, name)
-        {
-        }
+                       long style = wxDEFAULT_DIALOG_STYLE,
+                       const wxString& name = wxT("dialog"));
 
     void OnCancel(wxCommandEvent& event);
 
