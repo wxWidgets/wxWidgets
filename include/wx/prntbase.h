@@ -41,6 +41,7 @@ class WXDLLIMPEXP_FWD_CORE wxPrintFactory;
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 class WXDLLIMPEXP_FWD_CORE wxPrintPreview;
 class WXDLLIMPEXP_FWD_CORE wxPrintAbortDialog;
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
 class wxPrintPageMaxCtrl;
 class wxPrintPageTextCtrl;
 
@@ -740,9 +741,14 @@ public:
                        long style = wxDEFAULT_DIALOG_STYLE,
                        const wxString& name = wxT("dialog"));
 
+    void SetProgress(int currentPage, int totalPages,
+                     int currentCopy, int totalCopies);
+
     void OnCancel(wxCommandEvent& event);
 
 private:
+    wxStaticText *m_progress;
+
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxPrintAbortDialog);
 };

@@ -518,15 +518,34 @@ wxPrintAbortDialog::wxPrintAbortDialog(wxWindow *parent,
                                        const wxString& name)
     : wxDialog(parent, wxID_ANY, _("Printing"), pos, size, style, name)
 {
-    wxBoxSizer *button_sizer = new wxBoxSizer(wxVERTICAL);
-    button_sizer->Add(new wxStaticText(this, wxID_ANY, _("Please wait while printing\n") + documentTitle), 0, wxALL, 10 );
-    button_sizer->Add(new wxButton(this, wxID_CANCEL, wxT("Cancel") ), 0, wxALL | wxALIGN_CENTER, 10);
+    wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(new wxStaticText(this, wxID_ANY, _("Please wait while printing...")),
+                   wxSizerFlags().Expand().DoubleBorder());
 
-    SetAutoLayout(true);
-    SetSizer(button_sizer);
+    wxFlexGridSizer *gridSizer = new wxFlexGridSizer(2, wxSize(20, 0));
+    gridSizer->Add(new wxStaticText(this, wxID_ANY, _("Document:")));
+    gridSizer->AddGrowableCol(1);
+    gridSizer->Add(new wxStaticText(this, wxID_ANY, documentTitle));
+    gridSizer->Add(new wxStaticText(this, wxID_ANY, _("Progress:")));
+    m_progress = new wxStaticText(this, wxID_ANY, _("Preparing"));
+    m_progress->SetMinSize(wxSize(250, -1));
+    gridSizer->Add(m_progress);
+    mainSizer->Add(gridSizer, wxSizerFlags().Expand().DoubleBorder(wxLEFT | wxRIGHT));
 
-    button_sizer->Fit(this);
-    button_sizer->SetSizeHints(this);
+    mainSizer->Add(CreateStdDialogButtonSizer(wxCANCEL),
+                   wxSizerFlags().Expand().DoubleBorder());
+
+    SetSizerAndFit(mainSizer);
+}
+
+void wxPrintAbortDialog::SetProgress(int currentPage, int totalPages,
+                                     int currentCopy, int totalCopies)
+{
+  wxString text;
+  text.Printf(_("Printing page %d of %d"), currentPage, totalPages);
+  if ( totalCopies > 1 )
+      text += wxString::Format(_(" (copy %d of %d)"), currentCopy, totalCopies);
+  m_progress->SetLabel(text);
 }
 
 void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))

@@ -196,10 +196,8 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         maxPageNum = m_printDialogData.GetToPage();
     }
 
-    int copyCount;
-    for ( copyCount = 1;
-          copyCount <= m_printDialogData.GetNoCopies();
-          copyCount++ )
+    const int maxCopyCount = m_printDialogData.GetNoCopies();
+    for ( int copyCount = 1; copyCount <= maxCopyCount; copyCount++ )
     {
         if ( !printout->OnBeginDocument(minPageNum, maxPageNum) )
         {
@@ -219,6 +217,10 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
               pn <= maxPageNum && printout->HasPage(pn);
               pn++ )
         {
+            win->SetProgress(pn - minPageNum + 1,
+                             maxPageNum - minPageNum + 1,
+                             copyCount, maxCopyCount);
+
             if ( sm_abortIt )
             {
                 sm_lastError = wxPRINTER_CANCELLED;
