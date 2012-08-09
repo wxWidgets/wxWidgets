@@ -465,7 +465,7 @@ public:
     /**
         Creates the default printing abort window, with a cancel button.
     */
-    virtual wxWindow* CreateAbortWindow(wxWindow* parent, wxPrintout* printout);
+    virtual wxPrintAbortDialog* CreateAbortWindow(wxWindow* parent, wxPrintout* printout);
 
     /**
         Returns @true if the user has aborted the print job.

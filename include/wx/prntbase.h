@@ -40,6 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxPreviewFrame;
 class WXDLLIMPEXP_FWD_CORE wxPrintFactory;
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 class WXDLLIMPEXP_FWD_CORE wxPrintPreview;
+class WXDLLIMPEXP_FWD_CORE wxPrintAbortDialog;
 class wxPrintPageMaxCtrl;
 class wxPrintPageTextCtrl;
 
@@ -188,7 +189,7 @@ public:
     wxPrinterBase(wxPrintDialogData *data = NULL);
     virtual ~wxPrinterBase();
 
-    virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
+    virtual wxPrintAbortDialog *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
     virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message);
 
     virtual wxPrintDialogData& GetPrintDialogData() const;
@@ -228,7 +229,7 @@ public:
     wxPrinter(wxPrintDialogData *data = NULL);
     virtual ~wxPrinter();
 
-    virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
+    virtual wxPrintAbortDialog *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
     virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message);
 
     virtual bool Setup(wxWindow *parent);

@@ -167,7 +167,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
 
-    wxWindow *win = CreateAbortWindow(parent, printout);
+    wxPrintAbortDialog *win = CreateAbortWindow(parent, printout);
     wxYield();
 
     ::SetAbortProc(GetHdcOf(*impl), wxAbortProc);

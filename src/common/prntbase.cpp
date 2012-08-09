@@ -321,7 +321,7 @@ wxPrinterBase::~wxPrinterBase()
 {
 }
 
-wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout * printout)
+wxPrintAbortDialog *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout * printout)
 {
     return new wxPrintAbortDialog(parent, printout->GetTitle());
 }
@@ -352,7 +352,7 @@ wxPrinter::~wxPrinter()
     delete m_pimpl;
 }
 
-wxWindow *wxPrinter::CreateAbortWindow(wxWindow *parent, wxPrintout *printout)
+wxPrintAbortDialog *wxPrinter::CreateAbortWindow(wxWindow *parent, wxPrintout *printout)
 {
     return m_pimpl->CreateAbortWindow( parent, printout );
 }
