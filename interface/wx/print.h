@@ -905,3 +905,23 @@ public:
     void SetLogicalOrigin(wxCoord x, wxCoord y);
 };
 
+
+/**
+   @class wxPrintAbortDialog
+
+   The dialog created by default by the print framework that enables aborting
+   the printing process.
+ */
+class wxPrintAbortDialog: public wxDialog
+{
+public:
+    wxPrintAbortDialog(wxWindow *parent,
+                       const wxString& documentTitle,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxDEFAULT_DIALOG_STYLE,
+                       const wxString& name = wxT("dialog"));
+
+    void SetProgress(int currentPage, int totalPages,
+                     int currentCopy, int totalCopies);
+};
