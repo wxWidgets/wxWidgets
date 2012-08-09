@@ -550,7 +550,7 @@ void wxPrintAbortDialog::SetProgress(int currentPage, int totalPages,
 
 void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    wxCHECK( wxPrinterBase::sm_abortWindow != NULL );
+    wxCHECK_RET( wxPrinterBase::sm_abortWindow != NULL, "OnCancel called twice" );
 
     wxPrinterBase::sm_abortIt = true;
     wxPrinterBase::sm_abortWindow->Destroy();
