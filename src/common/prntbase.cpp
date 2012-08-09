@@ -531,9 +531,9 @@ wxPrintAbortDialog::wxPrintAbortDialog(wxWindow *parent,
 
 void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
+    wxCHECK( wxPrinterBase::sm_abortWindow != NULL );
+
     wxPrinterBase::sm_abortIt = true;
-    wxPrinterBase::sm_abortWindow->Show(false);
-    wxPrinterBase::sm_abortWindow->Close(true);
     wxPrinterBase::sm_abortWindow->Destroy();
     wxPrinterBase::sm_abortWindow = NULL;
 }
