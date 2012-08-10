@@ -920,7 +920,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxDEFAULT_DIALOG_STYLE,
-                       const wxString& name = wxT("dialog"));
+                       const wxString& name = "dialog");
 
     void SetProgress(int currentPage, int totalPages,
                      int currentCopy, int totalCopies);
