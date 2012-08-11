@@ -74,6 +74,9 @@ public:
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
 
+    virtual void SetLabel(const wxString& label) { SetTitle( label ); }
+    virtual wxString GetLabel() const            { return GetTitle(); }
+    
     virtual void OSXSetModified(bool modified);
     virtual bool OSXIsModified() const;
 
