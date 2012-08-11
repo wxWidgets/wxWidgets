@@ -374,7 +374,7 @@ MyFunctor myFunctor;
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &myFunctor, wxID_EXIT );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, myFunctor, wxID_EXIT );
 }
 @endcode
 
