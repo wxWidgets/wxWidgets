@@ -2184,10 +2184,7 @@ void wxDataViewTreeStore::DeleteItem( const wxDataViewItem& item )
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent_item );
     if (!parent_node) return;
 
-    wxDataViewTreeStoreContainerNode *node = FindContainerNode( item );
-    if (!node) return;
-
-    parent_node->GetChildren().DeleteObject( node );
+    parent_node->GetChildren().DeleteObject( FindNode(item) );
 }
 
 void wxDataViewTreeStore::DeleteChildren( const wxDataViewItem& item )
