@@ -2339,7 +2339,17 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         // If this was the last child to be removed, it's possible the parent
         // node became a leaf. Let's ask the model about it.
         if ( parentNode->GetChildNodes().empty() )
-            parentNode->SetHasChildren(GetModel()->IsContainer(parent));
+        {
+            bool isContainer = GetModel()->IsContainer(parent);
+            parentNode->SetHasChildren(isContainer);
+            if ( isContainer )
+            {
+                // If it's still a container, make sure we show "+" icon for it
+                // and not "-" one as there is nothing to collapse any more.
+                if ( parentNode->IsOpen() )
+                    parentNode->ToggleOpen();
+            }
+        }
 
         // Update selection by removing 'item' and its entire children tree from the selection.
         if ( !m_selection.empty() )
