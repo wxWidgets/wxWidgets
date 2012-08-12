@@ -2372,14 +2372,33 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
         if ([cell respondsToSelector:@selector(setControlSize:)])
             [cell setControlSize:size];
     }
+
+    // we need to propagate this to inner views as well
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+    {
+        NSView* targetView = [(NSScrollView*) m_osxView documentView];
+    
+        if ( [targetView respondsToSelector:@selector(setControlSize:)] )
+            [targetView setControlSize:size];
+        else if ([targetView respondsToSelector:@selector(cell)])
+        {
+            id cell = [(id)targetView cell];
+            if ([cell respondsToSelector:@selector(setControlSize:)])
+                [cell setControlSize:size];
+        }
+    }
 }
 
 void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bool)
 {
-    if ([m_osxView respondsToSelector:@selector(setFont:)])
-        [m_osxView setFont: font.OSXGetNSFont()];
-    if ([m_osxView respondsToSelector:@selector(setTextColor:)])
-        [m_osxView setTextColor:[NSColor colorWithCalibratedRed:(CGFloat) (col.Red() / 255.0)
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
+
+    if ([targetView respondsToSelector:@selector(setFont:)])
+        [targetView setFont: font.OSXGetNSFont()];
+    if ([targetView respondsToSelector:@selector(setTextColor:)])
+        [targetView setTextColor:[NSColor colorWithCalibratedRed:(CGFloat) (col.Red() / 255.0)
                                                                  green:(CGFloat) (col.Green() / 255.0)
                                                                   blue:(CGFloat) (col.Blue() / 255.0)
                                                                  alpha:(CGFloat) (col.Alpha() / 255.0)]];
