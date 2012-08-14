@@ -465,7 +465,7 @@ get bool StyleGetUnderline=2488(int style,)
 # Get is a style mixed case, or to force upper or lower case.
 get int StyleGetCase=2489(int style,)
 
-# Get the character get of the font in a style.
+# Get the character set of the font in a style.
 get int StyleGetCharacterSet=2490(int style,)
 
 # Get is a style visible or not.
@@ -1245,7 +1245,7 @@ get bool GetVScrollBar=2281(,)
 # Append a string to the end of the document without changing the selection.
 fun void AppendText=2282(int length, string text)
 
-# Is drawing done in two phases with backgrounds drawn before faoregrounds?
+# Is drawing done in two phases with backgrounds drawn before foregrounds?
 get bool GetTwoPhaseDraw=2283(,)
 
 # In twoPhaseDraw mode, drawing is performed in two phases, first the background
