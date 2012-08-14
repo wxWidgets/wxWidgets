@@ -79,6 +79,11 @@ public:
     static void SuppressBellOnError(bool suppress = true);
 
     /**
+       Returns if the error sound is currently disabled.
+    */
+    static bool IsSilent();
+    
+    /**
         Associates a window with the validator.
 
         This function is automatically called by wxWidgets when creating a wxWindow-derived

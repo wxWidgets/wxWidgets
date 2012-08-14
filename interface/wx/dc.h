@@ -1534,6 +1534,23 @@ public:
 
     //@}
 
+    
+    /**
+        @name query capabilities
+    */
+    //@{
+
+    /**
+       Does the DC support drawing bitmaps?
+    */
+    bool CanDrawBitmap() const;
+
+    /**
+       Does the DC supoprt calculating the size required to draw text?
+    */
+    bool CanGetTextExtent() const;
+    
+    //@}
 
     /**
        Returns a value that can be used as a handle to the native drawing
@@ -1549,7 +1566,13 @@ public:
        @since 2.9.5
      */
     void* GetHandle() const;
+
     
+    /**
+       If supported by the platform and the type of DC, fetch the contents of the DC, or a subset of it, as a bitmap.
+    */
+    wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
+
 
     void SetLogicalScale(double x, double y);
     void GetLogicalScale(double *x, double *y) const;

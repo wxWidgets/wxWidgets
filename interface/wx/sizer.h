@@ -440,6 +440,11 @@ public:
     wxWindow* GetContainingWindow() const;
 
     /**
+       Set the window this sizer is used in.
+    */
+    void SetContainingWindow(wxWindow *window);
+    
+    /**
        Returns the number of items in the sizer.
 
        If you just need to test whether the sizer is empty or not you can also
@@ -921,6 +926,13 @@ public:
         @see Hide(), IsShown()
     */
     bool Show(size_t index, bool show = true);
+
+
+    /**
+       Show or hide all items managed by the sizer.
+    */
+    virtual void ShowItems(bool show);
+
 };
 
 

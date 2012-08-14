@@ -360,6 +360,26 @@ public:
         container windows.
      */
     virtual bool AcceptsFocusRecursively() const;
+    
+    /**
+     Can this window itself have focus?
+    */
+    bool IsFocusable() const;
+
+    /**
+       Can this window have focus right now?
+        
+       If this method returns true, it means that calling SetFocus() will
+       put focus either to this window or one of its children, if you need
+       to know whether this window accepts focus itself, use IsFocusable()
+    */
+    bool CanAcceptFocus() const;
+
+    /**
+       Can this window be assigned focus from keyboard right now?
+    */
+    bool CanAcceptFocusFromKeyboard() const;
+
 
     /**
         Returns @true if the window (or in case of composite controls, its main
@@ -1897,6 +1917,9 @@ public:
     */
     void SetOwnBackgroundColour(const wxColour& colour);
 
+    bool InheritsBackgroundColour() const;
+    bool UseBgCol() const;
+
     /**
         Sets the font of the window but prevents it from being inherited by the
         children of this window.
@@ -2687,6 +2710,14 @@ public:
     virtual wxLayoutDirection GetLayoutDirection() const;
 
     /**
+       Mirror coordinates for RTL layout if this window uses it and if the
+       mirroring is not done automatically like Win32.
+    */
+    virtual wxCoord AdjustForLayoutDirection(wxCoord x,
+                                             wxCoord width,
+                                             wxCoord widthTotal) const;
+
+    /**
         Returns the window's name.
 
         @remarks This name is not guaranteed to be unique; it is up to the
@@ -3222,6 +3253,12 @@ public:
         in order to send update events to the window in idle time.
     */
     virtual void OnInternalIdle();
+
+    /**
+       Send idle event to window and all subwindows. Returns true if more idle
+       time is requested.
+    */
+    virtual bool SendIdleEvents(wxIdleEvent& event);
 
     /**
         Registers a system wide hotkey. Every time the user presses the hotkey
