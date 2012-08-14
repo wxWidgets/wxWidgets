@@ -3,11 +3,11 @@ scintilla/include directories from the Scintilla source distribution.
 All other code needed to implement Scintilla on top of wxWidgets is
 located in the directory above this one.
 
-The current version of the Scintilla code is 2.03
+The current version of the Scintilla code is 3.21
 
 These are the basic steps needed to update the version of Scintilla used by wxSTC.  
 
-1. Copy include and src folders to src/stc/scintilla
+1. Copy include, lexers, lexlib and src folders to src/stc/scintilla
 
 2. Examine diffs between the new src/stc/scintilla/Scintilla.iface
 file and the version in SVN.  You should get familiar especially with

@@ -735,6 +735,134 @@ methodOverrideMap = {
                              0),
     
 
+    'GetWordChars' :
+    (0,
+     'wxString %s() const;',
+
+     '''wxString %s() const {
+         int msg = %s;
+         int len = SendMsg(msg, NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+
+     ('Get the set of characters making up words for when moving or selecting by word.',)),
+
+    'GetTag' :
+    (0,
+     'wxString %s(int tagNumber) const;',
+
+     '''wxString %s(int tagNumber) const {
+         int msg = %s;
+         int len = SendMsg(msg, tagNumber, NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, tagNumber, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     0),
+
+    'GetWhitespaceChars' :
+    (0,
+     'wxString %s() const;',
+
+     '''wxString %s() const {
+         int msg = %s;
+         int len = SendMsg(msg, NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     0),
+
+
+    'GetPunctuationChars' :
+    (0,
+     'wxString %s() const;',
+
+     '''wxString %s() const {
+         int msg = %s;
+         int len = SendMsg(msg, NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     0),
+
+
+    'PropertyNames' :
+    (0,
+     'wxString %s() const;',
+
+     '''wxString %s() const {
+         int msg = %s;
+         int len = SendMsg(msg, NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     0),
+
+
+
+    'DescribeProperty' :
+    (0,
+     'wxString %s(const wxString& name) const;',
+
+     '''wxString %s(const wxString& name) const {
+         int msg = %s;
+         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     0),
+
+
+
+    'DescribeKeyWordSets' :
+    (0,
+     'wxString %s() const;',
+
+     '''wxString %s() const {
+         int msg = %s;
+         int len = SendMsg(msg, NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     0),
+
+
+
     '' : ('', 0, 0, 0),
 
     }

@@ -24,7 +24,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <vector>
+#include <map>
 
+// These are all Scintilla headers
 #include "Platform.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
@@ -33,9 +36,12 @@
 #include "ScintillaWidget.h"
 #ifdef SCI_LEXER
 #include "SciLexer.h"
-#include "PropSet.h"
+#include "PropSetSimple.h"
+#include "ILexer.h"
+#include "LexerModule.h"
+#include "LexAccessor.h"
 #include "Accessor.h"
-#include "KeyWords.h"
+#include "WordList.h"
 #endif
 #include "ContractionState.h"
 #include "SVector.h"
