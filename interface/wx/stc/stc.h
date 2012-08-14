@@ -146,6 +146,18 @@ public:
     int GetY() const;
 
     /**
+     */
+    int  GetToken() const;
+
+    /**
+     */
+    int  GetAnnotationsLinesAdded() const;
+
+    /**
+     */
+    int  GetUpdated() const;
+
+    /**
 
     */
     void SetDragAllowMove(bool val);
@@ -244,6 +256,19 @@ public:
 
     */
     void SetY(int val);
+
+    /**
+     */
+    void SetToken(int val);
+
+    /**
+     */
+    void SetAnnotationLinesAdded(int val);
+
+    /**
+     */
+    void SetUpdated(int val);
+
 };
 
 
@@ -326,6 +351,8 @@ public:
     @event{EVT_STC_AUTOCOMP_CANCELLED(id, fn)}
         TOWRITE
     @event{EVT_STC_AUTOCOMP_CHAR_DELETED(id, fn)}
+        TOWRITE
+    @event{EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn)}
         TOWRITE
     @endEventTable
 
@@ -530,6 +557,16 @@ public:
     void AutoCompStops(const wxString& characterSet);
 
     /**
+       Set auto-completion case insensitive behaviour to either prefer case-sensitive matches or have no preference.
+    */
+    void AutoCompSetCaseInsensitiveBehaviour(int behaviour);
+
+    /**
+       Get auto-completion case insensitive behaviour.
+    */
+    int AutoCompGetCaseInsensitiveBehaviour() const;
+
+    /**
         Dedent the selected lines.
     */
     void BackTab();
@@ -544,6 +581,16 @@ public:
         Highlight the character at a position indicating there is no matching brace.
     */
     void BraceBadLight(int pos);
+
+    /**
+       Use specified indicator to highlight matching braces instead of changing their style.
+    */
+    void BraceHighlightIndicator(bool useBraceHighlightIndicator, int indicator);
+
+    /**
+       Use specified indicator to highlight non matching brace instead of changing its style.
+    */
+    void BraceBadLightIndicator(bool useBraceBadLightIndicator, int indicator);
 
     /**
         Highlight the characters at two positions.
@@ -589,6 +636,11 @@ public:
         Highlight a segment of the definition.
     */
     void CallTipSetHighlight(int start, int end);
+
+    /**
+       Set position of calltip, above or below text.
+    */
+    void CallTipSetPosition(bool above);
 
     /**
         Show a call tip containing a definition near position pos.
@@ -723,6 +775,11 @@ public:
     void CopyText(int length, const wxString& text);
 
     /**
+       Count characters between two positions.
+    */
+    int CountCharacters(int startPos, int endPos);
+
+    /**
 
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -741,6 +798,11 @@ public:
         Cut the selection to the clipboard.
     */
     virtual void Cut();
+
+    /**
+       Delete a range of text in the document.
+    */
+    void DeleteRange(int pos, int deleteLength);
 
     /**
         Delete back from the current position to the start of the line.
@@ -910,7 +972,7 @@ public:
         Can the caret preferred x position only be changed by explicit movement
         commands?
     */
-    bool GetCaretSticky() const;
+    int GetCaretSticky() const;
 
     /**
         Returns the width of the insert mode caret.
@@ -1106,6 +1168,11 @@ public:
         Is a line visible?
     */
     bool GetLineVisible(int line) const;
+
+    /**
+       Are all lines visible?
+    */
+    bool GetAllLinesVisible() const;
 
     /**
         Returns the size in pixels of the left margin.
@@ -1689,7 +1756,8 @@ public:
     int MarkerLineFromHandle(int handle);
 
     /**
-        Find the next line after lineStart that includes a marker in mask.
+        Find the next line at or after lineStart that includes a marker in mask.
+        Return -1 when no more lines.
     */
     int MarkerNext(int lineStart, int markerMask);
 
@@ -1712,6 +1780,16 @@ public:
         Set the foreground colour used for a particular marker number.
     */
     void MarkerSetForeground(int markerNumber, const wxColour& fore);
+
+    /**
+       Set the background colour used for a particular marker number when its folding block is selected.
+    */
+    void MarkerSetBackgroundSelected(int markerNumber, const wxColour& back);
+
+    /**
+       Enable/disable highlight for current folding bloc (smallest one that contains the caret)
+    */
+    void MarkerEnableHighlight(bool enabled);
 
     /**
         Move the caret inside current view if it's not there already.
@@ -1956,7 +2034,7 @@ public:
     /**
         Stop the caret preferred x position changing when the user types.
     */
-    void SetCaretSticky(bool useCaretStickyBehaviour);
+    void SetCaretSticky(int useCaretStickyBehaviour);
 
     /**
         Set the width of the insert mode caret.
@@ -2154,6 +2232,16 @@ public:
     void SetMarginWidth(int margin, int pixelWidth);
 
     /**
+       Set the cursor shown when the mouse is inside a margin.'
+    */
+    void SetMarginCursor(int margin, int cursor);
+
+    /**
+       Retrieve the cursor shown in a margin.
+    */
+    int GetMarginCursor(int margin) const;
+
+    /**
         Set the left and right margin in the edit area, measured in pixels.
     */
     void SetMargins(int left, int right);
@@ -2182,6 +2270,21 @@ public:
         Enable/Disable convert-on-paste for line endings
     */
     void SetPasteConvertEndings(bool convert);
+
+    /**
+       Change the effect of pasting when there are multiple selections.
+    */
+    void SetMultiPaste(int multiPaste);
+
+    /**
+       Retrieve the effect of pasting when there are multiple selections..
+    */
+    int GetMultiPaste() const;
+
+    /**
+       Retrieve the value of a tag from a regular expression search.
+    */
+    wxString GetTag(int tagNumber) const;
 
     /**
         Modify colours when printing for clearer printed text.
@@ -2248,6 +2351,11 @@ public:
         Set the foreground colour of the main and additional selections and whether to use this setting.
     */
     void SetSelForeground(bool useSetting, const wxColour& fore);
+
+    /**
+       Set caret to a position, while removing any existing selection.
+    */
+    void SetEmptySelection(int pos);
 
     /**
         Select a range of text.
@@ -2398,6 +2506,21 @@ public:
     void SetWhitespaceChars(const wxString& characters);
 
     /**
+       Get the set of characters making up whitespace for when moving or selecting by word.
+    */
+    wxString GetWhitespaceChars() const;
+
+    /**
+       Set the set of characters making up punctuation characters.  Should be called after SetWordChars.
+    */
+    void SetPunctuationChars(const wxString& characters);
+
+    /**
+       Get the set of characters making up punctuation characters
+    */
+    wxString GetPunctuationChars() const;
+
+    /**
         Set the foreground colour of all whitespace and whether to use this setting.
     */
     void SetWhitespaceForeground(bool useSetting,
@@ -2419,6 +2542,11 @@ public:
         First sets defaults like SetCharsDefault.
     */
     void SetWordChars(const wxString& characters);
+
+    /**
+       Get the set of characters making up words for when moving or selecting by word.
+    */
+    wxString GetWordChars() const;
 
     /**
         Sets whether text is word wrapped.
@@ -2594,6 +2722,27 @@ public:
         Set the size of characters of a style.
     */
     void StyleSetSize(int style, int sizePoints);
+
+    /**
+       Set the size of characters of a style. Size is in points multiplied by 100.
+    */
+    void StyleSetSizeFractional(int style, int caseForce);
+
+    /**
+       Get the size of characters of a style in points multiplied by 100
+    */
+    int StyleGetSizeFractional(int style) const;
+
+    /**
+       Set the weight of characters of a style.
+     */
+    void StyleSetWeight(int style, int weight);
+
+    /**
+     *Get the weight of characters of a style.
+     */
+    int StyleGetWeight(int style) const;
+
 
     /**
         Extract style settings from a spec-string which is composed of one or
@@ -2827,6 +2976,19 @@ public:
     const char* GetCharacterPointer();
 
     /**
+       Return a read-only pointer to a range of characters in the document.
+       May move the gap so that the range is contiguous, but will only move up
+       to rangeLength bytes.
+    */
+    const char* GetRangePointer(int position, int rangeLength) const;
+
+    /**
+       Return a position which, to avoid performance costs, should not be within
+       the range of a call to GetRangePointer.
+    */
+    int GetGapPosition() const;
+    
+    /**
        Always interpret keyboard input as Unicode
     */
     void SetKeysUnicode(bool keysUnicode);
@@ -2845,6 +3007,16 @@ public:
        Get the alpha fill colour of the given indicator.
     */
     int IndicatorGetAlpha(int indicator) const;
+
+    /**
+       Set the alpha outline colour of the given indicator.
+    */
+    void IndicatorSetOutlineAlpha(int indicator, int alpha);
+
+    /**
+       Get the alpha outline colour of the given indicator.
+    */
+    int IndicatorGetOutlineAlpha(int indicator) const;
 
     /**
        Set extra ascent for each line
@@ -2915,6 +3087,16 @@ public:
        Get the start of the range of style numbers used for margin text
     */
     int MarginGetStyleOffset() const;
+
+    /**
+       Set the margin options.
+    */
+    void SetMarginOptions(int marginOptions);
+
+    /**
+       Get the margin options.
+    */
+    int GetMarginOptions() const;
 
     /**
        Set the annotation text for a line
@@ -3150,7 +3332,109 @@ public:
        Swap that caret and anchor of the main selection.
     */
     void SwapMainAnchorCaret();
-    
+
+    /**
+       Indicate that the internal state of a lexer has changed over a range and therefore
+       there may be a need to redraw.
+    */
+    int ChangeLexerState(int start, int end);
+
+    /**
+       Find the next line at or after lineStart that is a contracted fold header line.
+       Return -1 when no more lines.
+    */
+    int ContractedFoldNext(int lineStart);
+
+    /**
+       Centre current line in window.
+    */
+    void VerticalCentreCaret();
+
+    /**
+       Move the selected lines up one line, shifting the line above after the selection
+    */
+    void MoveSelectedLinesUp();
+
+    /**
+       Move the selected lines down one line, shifting the line below before the selection
+    */
+    void MoveSelectedLinesDown();
+
+    /**
+       Set the identifier reported as idFrom in notification messages.
+    */
+    void SetIdentifier(int identifier);
+
+    /**
+       Get the identifier.
+    */
+    int GetIdentifier() const;
+
+    /**
+       Set the width for future RGBA image data.
+    */
+    void RGBAImageSetWidth(int width);
+
+    /**
+       Set the height for future RGBA image data.
+    */
+    void RGBAImageSetHeight(int height);
+
+    /**
+       Define a marker from RGBA data.
+       It has the width and height from RGBAImageSetWidth/Height
+    */
+    void MarkerDefineRGBAImage(int markerNumber, const unsigned char* pixels);
+
+    /**
+       Register an RGBA image for use in autocompletion lists.
+       It has the width and height from RGBAImageSetWidth/Height
+    */
+    void RegisterRGBAImage(int type, const unsigned char* pixels);
+
+    /**
+       Scroll to start of document.
+    */
+    void ScrollToStart();
+
+    /**
+       Scroll to end of document.
+    */
+    void ScrollToEnd();
+
+    /**
+       Create an ILoader.
+       (This is a Scintilla type which can be used to load a document in
+       a background thread.  See Scintilla's documentation for details.)
+    */
+    void* CreateLoader(int bytes);
+
+    /**
+       For private communication between an application and a known lexer.
+    */
+    void* PrivateLexerCall(int operation, void* pointer);
+
+    /**
+       Retrieve a '\n' separated list of properties understood by the current lexer.
+    */
+    wxString PropertyNames() const;
+
+    /**
+       Retrieve the type of a property.
+    */
+    int PropertyType(const wxString& name);
+
+    /**
+       Describe a property.
+    */
+    wxString DescribeProperty(const wxString& name) const;
+
+    /**
+       Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
+    */
+    wxString DescribeKeyWordSets() const;
+
+
     /**
        Get Scintilla library version information.
 
