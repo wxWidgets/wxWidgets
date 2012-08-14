@@ -52,6 +52,8 @@ cmdValues = [ 2011,
               (2426, 2442),
               (2450, 2455),
               2518,
+              (2619, 2621),
+              (2628, 2629)
             ]
 
 
@@ -180,6 +182,7 @@ methodOverrideMap = {
 
     'MarkerSetFore' : ('MarkerSetForeground', 0, 0, 0),
     'MarkerSetBack' : ('MarkerSetBackground', 0, 0, 0),
+    'MarkerSetBackSelected' : ('MarkerSetBackgroundSelected', 0,0,0),
 
     'MarkerSymbolDefined' : ('GetMarkerSymbolDefined', 0, 0, 0),
 
@@ -231,7 +234,9 @@ methodOverrideMap = {
     'GetMarginMaskN' : ('GetMarginMask', 0, 0, 0),
     'SetMarginSensitiveN' : ('SetMarginSensitive', 0, 0, 0),
     'GetMarginSensitiveN' : ('GetMarginSensitive', 0, 0, 0),
-
+    'SetMarginCursorN' : ('SetMarginCursor', 0, 0, 0),
+    'GetMarginCursorN' : ('GetMarginCursor', 0, 0, 0),
+    
     'MarginGetText' :
     (0,
     'wxString %s(int line) const;',
@@ -355,6 +360,8 @@ methodOverrideMap = {
 
     'IndicSetAlpha' : ('IndicatorSetAlpha', 0, 0, 0),
     'IndicGetAlpha' : ('IndicatorGetAlpha', 0, 0, 0),
+    'IndicSetOutlineAlpha' : ('IndicatorSetOutlineAlpha', 0, 0, 0),
+    'IndicGetOutlineAlpha' : ('IndicatorGetOutlineAlpha', 0, 0, 0),
     'IndicSetStyle' : ('IndicatorSetStyle', 0, 0, 0),
     'IndicGetStyle' : ('IndicatorGetStyle', 0, 0, 0),
     'IndicSetFore' : ('IndicatorSetForeground', 0, 0, 0),
@@ -394,6 +401,8 @@ methodOverrideMap = {
     'AutoCSetMaxHeight'     : ('AutoCompSetMaxHeight', 0, 0, 0),
     'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
     'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
+    'AutoCSetCaseInsensitiveBehaviour'     : ('AutoCompSetCaseInsensitiveBehaviour', 0, 0, 0),
+    'AutoCGetCaseInsensitiveBehaviour'     : ('AutoCompGetCaseInsensitiveBehaviour', 0, 0, 0),
 
     'RegisterImage' :
     (0,
@@ -729,9 +738,15 @@ methodOverrideMap = {
     'SetSelection' : (None, 0, 0, 0),
 
     'GetCharacterPointer' : (0,
-                             'const char* %s();',
-                             'const char* %s() {\n'
+                             'const char* %s() const;',
+                             'const char* %s() const {\n'
                              '    return (const char*)SendMsg(%s, 0, 0);',
+                             0),
+    
+    'GetRangePointer' : (0,
+                             'const char* %s(int position, int rangeLength) const;',
+                             'const char* %s(int position, int rangeLength) const {\n'
+                             '    return (const char*)SendMsg(%s, position, rangeLength);',
                              0),
     
 
@@ -741,12 +756,12 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -776,12 +791,12 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -794,12 +809,12 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -812,12 +827,12 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -850,19 +865,54 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
      0),
+     
+
+    'MarkerDefineRGBAImage' :
+    (0,
+    'void %s(int markerNumber, const unsigned char* pixels);',
+    '''void %s(int markerNumber, const unsigned char* pixels) {
+           SendMsg(%s, markerNumber, (sptr_t)pixels);''',
+    0),
 
 
+    'RegisterRGBAImage' :
+    (0,
+    'void %s(int type, const unsigned char* pixels);',
+    '''void %s(int type, const unsigned char* pixels) {
+           SendMsg(%s, type, (sptr_t)pixels);''',
+    0),
 
+
+    # I think these are only available on the native OSX backend, so
+    # don't add them to the wx API...
+    'FindIndicatorShow' : (None, 0,0,0),
+    'FindIndicatorFlash' : (None, 0,0,0),
+    'FindIndicatorHide' : (None, 0,0,0),
+
+    'CreateLoader' :
+    (0,
+     'void* %s(int bytes) const;',
+     """void* %s(int bytes) const {
+         return (void*)(sptr_t)SendMsg(%s, bytes); """,
+     0),
+
+     'PrivateLexerCall' :
+     (0,
+      'void* %s(int operation, void* pointer);',
+      """void* %s(int operation, void* pointer) {
+           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer); """,
+      0),
+    
     '' : ('', 0, 0, 0),
 
     }

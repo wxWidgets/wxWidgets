@@ -126,6 +126,7 @@ wxDEFINE_EVENT( wxEVT_STC_INDICATOR_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CANCELLED, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxStyledTextEvent );
 
 
 
@@ -551,7 +552,7 @@ void wxStyledTextCtrl::MarkerSetBackground(int markerNumber, const wxColour& bac
 }
 
 // Set the background colour used for a particular marker number when its folding block is selected.
-void wxStyledTextCtrl::MarkerSetBackSelected(int markerNumber, const wxColour& back)
+void wxStyledTextCtrl::MarkerSetBackgroundSelected(int markerNumber, const wxColour& back)
 {
     SendMsg(2292, markerNumber, wxColourAsLong(back));
 }
@@ -677,13 +678,13 @@ bool wxStyledTextCtrl::GetMarginSensitive(int margin) const
 }
 
 // Set the cursor shown when the mouse is inside a margin.
-void wxStyledTextCtrl::SetMarginCursorN(int margin, int cursor)
+void wxStyledTextCtrl::SetMarginCursor(int margin, int cursor)
 {
     SendMsg(2248, margin, cursor);
 }
 
 // Retrieve the cursor shown in a margin.
-int wxStyledTextCtrl::GetMarginCursorN(int margin) const
+int wxStyledTextCtrl::GetMarginCursor(int margin) const
 {
     return SendMsg(2249, margin, 0);
 }
@@ -962,12 +963,12 @@ void wxStyledTextCtrl::SetWordChars(const wxString& characters)
 // Get the set of characters making up words for when moving or selecting by word.
 wxString wxStyledTextCtrl::GetWordChars() const {
          int msg = 2646;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);
@@ -3162,12 +3163,12 @@ void wxStyledTextCtrl::SetWhitespaceChars(const wxString& characters)
 // Get the set of characters making up whitespace for when moving or selecting by word.
 wxString wxStyledTextCtrl::GetWhitespaceChars() const {
          int msg = 2647;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);
@@ -3183,12 +3184,12 @@ void wxStyledTextCtrl::SetPunctuationChars(const wxString& characters)
 // Get the set of characters making up punctuation characters
 wxString wxStyledTextCtrl::GetPunctuationChars() const {
          int msg = 2649;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);
@@ -3207,13 +3208,13 @@ int wxStyledTextCtrl::AutoCompGetCurrent() const
 }
 
 // Set auto-completion case insensitive behaviour to either prefer case-sensitive matches or have no preference.
-void wxStyledTextCtrl::AutoCSetCaseInsensitiveBehaviour(int behaviour)
+void wxStyledTextCtrl::AutoCompSetCaseInsensitiveBehaviour(int behaviour)
 {
     SendMsg(2634, behaviour, 0);
 }
 
 // Get auto-completion case insensitive behaviour.
-int wxStyledTextCtrl::AutoCGetCaseInsensitiveBehaviour() const
+int wxStyledTextCtrl::AutoCompGetCaseInsensitiveBehaviour() const
 {
     return SendMsg(2635, 0, 0);
 }
@@ -3371,16 +3372,15 @@ void wxStyledTextCtrl::CopyAllowLine()
 
 // Compact the document buffer and return a read-only pointer to the
 // characters in the document.
-const char* wxStyledTextCtrl::GetCharacterPointer() {
+const char* wxStyledTextCtrl::GetCharacterPointer() const {
     return (const char*)SendMsg(2520, 0, 0);
 }
 
 // Return a read-only pointer to a range of characters in the document.
 // May move the gap so that the range is contiguous, but will only move up
 // to rangeLength bytes.
-int wxStyledTextCtrl::GetRangePointer(int position, int rangeLength) const
-{
-    return SendMsg(2643, position, rangeLength);
+const char* wxStyledTextCtrl::GetRangePointer(int position, int rangeLength) const {
+    return (const char*)SendMsg(2643, position, rangeLength);
 }
 
 // Return a position which, to avoid performance costs, should not be within
@@ -3415,13 +3415,13 @@ int wxStyledTextCtrl::IndicatorGetAlpha(int indicator) const
 }
 
 // Set the alpha outline colour of the given indicator.
-void wxStyledTextCtrl::IndicSetOutlineAlpha(int indicator, int alpha)
+void wxStyledTextCtrl::IndicatorSetOutlineAlpha(int indicator, int alpha)
 {
     SendMsg(2558, indicator, alpha);
 }
 
 // Get the alpha outline colour of the given indicator.
-int wxStyledTextCtrl::IndicGetOutlineAlpha(int indicator) const
+int wxStyledTextCtrl::IndicatorGetOutlineAlpha(int indicator) const
 {
     return SendMsg(2559, indicator, 0);
 }
@@ -3939,16 +3939,14 @@ void wxStyledTextCtrl::RGBAImageSetHeight(int height)
 
 // Define a marker from RGBA data.
 // It has the width and height from RGBAImageSetWidth/Height
-void wxStyledTextCtrl::MarkerDefineRGBAImage(int markerNumber, const wxString& pixels)
-{
-    SendMsg(2626, markerNumber, (sptr_t)(const char*)wx2stc(pixels));
+void wxStyledTextCtrl::MarkerDefineRGBAImage(int markerNumber, const unsigned char* pixels) {
+           SendMsg(2626, markerNumber, (sptr_t)pixels);
 }
 
 // Register an RGBA image for use in autocompletion lists.
 // It has the width and height from RGBAImageSetWidth/Height
-void wxStyledTextCtrl::RegisterRGBAImage(int type, const wxString& pixels)
-{
-    SendMsg(2627, type, (sptr_t)(const char*)wx2stc(pixels));
+void wxStyledTextCtrl::RegisterRGBAImage(int type, const unsigned char* pixels) {
+           SendMsg(2627, type, (sptr_t)pixels);
 }
 
 // Scroll to start of document.
@@ -3976,27 +3974,8 @@ int wxStyledTextCtrl::GetTechnology() const
 }
 
 // Create an ILoader*.
-int wxStyledTextCtrl::CreateLoader(int bytes)
-{
-    return SendMsg(2632, bytes, 0);
-}
-
-// On OS X, show a find indicator.
-void wxStyledTextCtrl::FindIndicatorShow(int start, int end)
-{
-    SendMsg(2640, start, end);
-}
-
-// On OS X, flash a find indicator, then fade out.
-void wxStyledTextCtrl::FindIndicatorFlash(int start, int end)
-{
-    SendMsg(2641, start, end);
-}
-
-// On OS X, hide the find indicator.
-void wxStyledTextCtrl::FindIndicatorHide()
-{
-    SendMsg(2642, 0, 0);
+void* wxStyledTextCtrl::CreateLoader(int bytes) const {
+         return (void*)(sptr_t)SendMsg(2632, bytes); 
 }
 
 // Start notifying the container of all key presses and commands.
@@ -4088,20 +4067,19 @@ int wxStyledTextCtrl::GetStyleBitsNeeded() const
 }
 
 // For private communication between an application and a known lexer.
-int wxStyledTextCtrl::PrivateLexerCall(int operation, int pointer)
-{
-    return SendMsg(4013, operation, pointer);
+void* wxStyledTextCtrl::PrivateLexerCall(int operation, void* pointer) {
+           return (void*)(sptr_t)SendMsg(4013, operation, (sptr_t)pointer); 
 }
 
 // Retrieve a '\n' separated list of properties understood by the current lexer.
 wxString wxStyledTextCtrl::PropertyNames() const {
          int msg = 4014;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);
@@ -4130,12 +4108,12 @@ wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
 // Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
 wxString wxStyledTextCtrl::DescribeKeyWordSets() const {
          int msg = 4017;
-         int len = SendMsg(msg, NULL);
+         int len = SendMsg(msg, 0, NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)buf);
+         SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);
@@ -4815,10 +4793,12 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_DOUBLECLICK:
         evt.SetEventType(wxEVT_STC_DOUBLECLICK);
+        evt.SetLine(scn.line);
         break;
 
     case SCN_UPDATEUI:
         evt.SetEventType(wxEVT_STC_UPDATEUI);
+        evt.SetUpdated(scn.updated);
         break;
 
     case SCN_MODIFIED:
@@ -4830,6 +4810,8 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetLine(scn.line);
         evt.SetFoldLevelNow(scn.foldLevelNow);
         evt.SetFoldLevelPrev(scn.foldLevelPrev);
+        evt.SetToken(scn.token);
+        evt.SetAnnotationLinesAdded(scn.annotationLinesAdded);
         break;
 
     case SCN_MACRORECORD:
@@ -4914,6 +4896,10 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_AUTOCCHARDELETED:
         evt.SetEventType(wxEVT_STC_AUTOCOMP_CHAR_DELETED);
+        break;
+
+    case SCN_HOTSPOTRELEASECLICK:
+        evt.SetEventType(wxEVT_STC_HOTSPOT_RELEASE_CLICK);
         break;
 
     default:

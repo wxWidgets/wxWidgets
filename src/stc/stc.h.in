@@ -56,7 +56,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #endif
 #endif
 
-
 //----------------------------------------------------------------------
 // STC constants generated section {{{
 
@@ -521,6 +520,9 @@ public:
     void SetListType(int val)             { m_listType = val; }
     void SetX(int val)                    { m_x = val; }
     void SetY(int val)                    { m_y = val; }
+    void SetToken(int val)                { m_token = val; }
+    void SetAnnotationLinesAdded(int val) { m_annotationLinesAdded = val; }
+    void SetUpdated(int val)              { m_updated = val; }
 #ifdef  STC_USE_DND
     void SetDragText(const wxString& val) { m_dragText = val; }
     void SetDragFlags(int flags)          { m_dragFlags = flags; }
@@ -554,6 +556,10 @@ public:
     int  GetListType() const         { return m_listType; }
     int  GetX() const                { return m_x; }
     int  GetY() const                { return m_y; }
+    int  GetToken() const                 { return m_token; }
+    int  GetAnnotationsLinesAdded() const { return m_annotationLinesAdded; }
+    int  GetUpdated() const               { return m_updated; }
+    
 #ifdef STC_USE_DND
     wxString GetDragText()           { return m_dragText; }
     int GetDragFlags()               { return m_dragFlags; }
@@ -593,6 +599,11 @@ private:
     int m_listType;
     int m_x;
     int m_y;
+
+    int m_token;		/* wxEVT_STC__MODIFIED with SC_MOD_CONTAINER */
+    int m_annotationLinesAdded;	/* wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION */
+    int m_updated;              // wxEVT_STC_UPDATEUI
+
 
 #if wxUSE_DRAG_AND_DROP
     wxString m_dragText;        // wxEVT_STC_START_DRAG, wxEVT_STC_DO_DROP
@@ -635,6 +646,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_INDICATOR_CLICK, wxStyledTe
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_CANCELLED, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxStyledTextEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxStyledTextEvent );
 #else
     enum {
         wxEVT_STC_CHANGE,
@@ -666,7 +678,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxSt
         wxEVT_STC_INDICATOR_CLICK,
         wxEVT_STC_INDICATOR_RELEASE,
         wxEVT_STC_AUTOCOMP_CANCELLED,
-        wxEVT_STC_AUTOCOMP_CHAR_DELETED
+        wxEVT_STC_AUTOCOMP_CHAR_DELETED,
+        wxEVT_STC_HOTSPOT_RELEASE_CLICK
     };
 #endif
 
@@ -708,6 +721,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_INDICATOR_RELEASE(id, fn)  wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_RELEASE,     id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_CANCELLED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_CANCELLED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_CHAR_DELETED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_CHAR_DELETED, id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
+#define EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_RELEASE_CLICK, id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 
 #endif
 

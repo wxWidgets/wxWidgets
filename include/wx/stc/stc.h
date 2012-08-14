@@ -56,7 +56,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #endif
 #endif
 
-
 //----------------------------------------------------------------------
 // STC constants generated section {{{
 
@@ -2462,6 +2461,21 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 // Move caret right one word, position cursor at end of word, extending selection to new caret position.
 #define wxSTC_CMD_WORDRIGHTENDEXTEND 2442
 
+// Centre current line in window.
+#define wxSTC_CMD_VERTICALCENTRECARET 2619
+
+// Move the selected lines up one line, shifting the line above after the selection
+#define wxSTC_CMD_MOVESELECTEDLINESUP 2620
+
+// Move the selected lines down one line, shifting the line below before the selection
+#define wxSTC_CMD_MOVESELECTEDLINESDOWN 2621
+
+// Scroll to start of document.
+#define wxSTC_CMD_SCROLLTOSTART 2628
+
+// Scroll to end of document.
+#define wxSTC_CMD_SCROLLTOEND 2629
+
 //}}}
 //----------------------------------------------------------------------
 
@@ -2659,7 +2673,7 @@ public:
     void MarkerSetBackground(int markerNumber, const wxColour& back);
 
     // Set the background colour used for a particular marker number when its folding block is selected.
-    void MarkerSetBackSelected(int markerNumber, const wxColour& back);
+    void MarkerSetBackgroundSelected(int markerNumber, const wxColour& back);
 
     // Enable/disable highlight for current folding bloc (smallest one that contains the caret)
     void MarkerEnableHighlight(bool enabled);
@@ -2717,10 +2731,10 @@ public:
     bool GetMarginSensitive(int margin) const;
 
     // Set the cursor shown when the mouse is inside a margin.
-    void SetMarginCursorN(int margin, int cursor);
+    void SetMarginCursor(int margin, int cursor);
 
     // Retrieve the cursor shown in a margin.
-    int GetMarginCursorN(int margin) const;
+    int GetMarginCursor(int margin) const;
 
     // Clear all the styles and make equivalent to the global default style.
     void StyleClearAll();
@@ -3953,10 +3967,10 @@ public:
     int AutoCompGetCurrent() const;
 
     // Set auto-completion case insensitive behaviour to either prefer case-sensitive matches or have no preference.
-    void AutoCSetCaseInsensitiveBehaviour(int behaviour);
+    void AutoCompSetCaseInsensitiveBehaviour(int behaviour);
 
     // Get auto-completion case insensitive behaviour.
-    int AutoCGetCaseInsensitiveBehaviour() const;
+    int AutoCompGetCaseInsensitiveBehaviour() const;
 
     // Enlarge the document to a particular size of text bytes.
     void Allocate(int bytes);
@@ -4036,12 +4050,12 @@ public:
 
     // Compact the document buffer and return a read-only pointer to the
     // characters in the document.
-    const char* GetCharacterPointer();
+    const char* GetCharacterPointer() const;
 
     // Return a read-only pointer to a range of characters in the document.
     // May move the gap so that the range is contiguous, but will only move up
     // to rangeLength bytes.
-    int GetRangePointer(int position, int rangeLength) const;
+    const char* GetRangePointer(int position, int rangeLength) const;
 
     // Return a position which, to avoid performance costs, should not be within
     // the range of a call to GetRangePointer.
@@ -4060,10 +4074,10 @@ public:
     int IndicatorGetAlpha(int indicator) const;
 
     // Set the alpha outline colour of the given indicator.
-    void IndicSetOutlineAlpha(int indicator, int alpha);
+    void IndicatorSetOutlineAlpha(int indicator, int alpha);
 
     // Get the alpha outline colour of the given indicator.
-    int IndicGetOutlineAlpha(int indicator) const;
+    int IndicatorGetOutlineAlpha(int indicator) const;
 
     // Set extra ascent for each line
     void SetExtraAscent(int extraAscent);
@@ -4294,11 +4308,11 @@ public:
 
     // Define a marker from RGBA data.
     // It has the width and height from RGBAImageSetWidth/Height
-    void MarkerDefineRGBAImage(int markerNumber, const wxString& pixels);
+    void MarkerDefineRGBAImage(int markerNumber, const unsigned char* pixels);
 
     // Register an RGBA image for use in autocompletion lists.
     // It has the width and height from RGBAImageSetWidth/Height
-    void RegisterRGBAImage(int type, const wxString& pixels);
+    void RegisterRGBAImage(int type, const unsigned char* pixels);
 
     // Scroll to start of document.
     void ScrollToStart();
@@ -4313,16 +4327,7 @@ public:
     int GetTechnology() const;
 
     // Create an ILoader*.
-    int CreateLoader(int bytes);
-
-    // On OS X, show a find indicator.
-    void FindIndicatorShow(int start, int end);
-
-    // On OS X, flash a find indicator, then fade out.
-    void FindIndicatorFlash(int start, int end);
-
-    // On OS X, hide the find indicator.
-    void FindIndicatorHide();
+    void* CreateLoader(int bytes) const;
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();
@@ -4363,7 +4368,7 @@ public:
     int GetStyleBitsNeeded() const;
 
     // For private communication between an application and a known lexer.
-    int PrivateLexerCall(int operation, int pointer);
+    void* PrivateLexerCall(int operation, void* pointer);
 
     // Retrieve a '\n' separated list of properties understood by the current lexer.
     wxString PropertyNames() const;
@@ -4773,6 +4778,9 @@ public:
     void SetListType(int val)             { m_listType = val; }
     void SetX(int val)                    { m_x = val; }
     void SetY(int val)                    { m_y = val; }
+    void SetToken(int val)                { m_token = val; }
+    void SetAnnotationLinesAdded(int val) { m_annotationLinesAdded = val; }
+    void SetUpdated(int val)              { m_updated = val; }
 #ifdef  STC_USE_DND
     void SetDragText(const wxString& val) { m_dragText = val; }
     void SetDragFlags(int flags)          { m_dragFlags = flags; }
@@ -4806,6 +4814,10 @@ public:
     int  GetListType() const         { return m_listType; }
     int  GetX() const                { return m_x; }
     int  GetY() const                { return m_y; }
+    int  GetToken() const                 { return m_token; }
+    int  GetAnnotationsLinesAdded() const { return m_annotationLinesAdded; }
+    int  GetUpdated() const               { return m_updated; }
+    
 #ifdef STC_USE_DND
     wxString GetDragText()           { return m_dragText; }
     int GetDragFlags()               { return m_dragFlags; }
@@ -4845,6 +4857,11 @@ private:
     int m_listType;
     int m_x;
     int m_y;
+
+    int m_token;                /* wxEVT_STC__MODIFIED with SC_MOD_CONTAINER */
+    int m_annotationLinesAdded; /* wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION */
+    int m_updated;              // wxEVT_STC_UPDATEUI
+
 
 #if wxUSE_DRAG_AND_DROP
     wxString m_dragText;        // wxEVT_STC_START_DRAG, wxEVT_STC_DO_DROP
@@ -4887,6 +4904,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_INDICATOR_CLICK, wxStyledTe
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_CANCELLED, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxStyledTextEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxStyledTextEvent );
 #else
     enum {
         wxEVT_STC_CHANGE,
@@ -4918,7 +4936,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxSt
         wxEVT_STC_INDICATOR_CLICK,
         wxEVT_STC_INDICATOR_RELEASE,
         wxEVT_STC_AUTOCOMP_CANCELLED,
-        wxEVT_STC_AUTOCOMP_CHAR_DELETED
+        wxEVT_STC_AUTOCOMP_CHAR_DELETED,
+        wxEVT_STC_HOTSPOT_RELEASE_CLICK
     };
 #endif
 
@@ -4960,6 +4979,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_INDICATOR_RELEASE(id, fn)  wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_RELEASE,     id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_CANCELLED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_CANCELLED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_CHAR_DELETED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_CHAR_DELETED, id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
+#define EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_RELEASE_CLICK, id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 
 #endif
 

@@ -126,6 +126,7 @@ wxDEFINE_EVENT( wxEVT_STC_INDICATOR_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CANCELLED, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxStyledTextEvent );
 
 
 
@@ -930,10 +931,12 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_DOUBLECLICK:
         evt.SetEventType(wxEVT_STC_DOUBLECLICK);
+        evt.SetLine(scn.line);
         break;
 
     case SCN_UPDATEUI:
         evt.SetEventType(wxEVT_STC_UPDATEUI);
+        evt.SetUpdated(scn.updated);
         break;
 
     case SCN_MODIFIED:
@@ -945,6 +948,8 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetLine(scn.line);
         evt.SetFoldLevelNow(scn.foldLevelNow);
         evt.SetFoldLevelPrev(scn.foldLevelPrev);
+        evt.SetToken(scn.token);
+        evt.SetAnnotationLinesAdded(scn.annotationLinesAdded);
         break;
 
     case SCN_MACRORECORD:
@@ -1029,6 +1034,10 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_AUTOCCHARDELETED:
         evt.SetEventType(wxEVT_STC_AUTOCOMP_CHAR_DELETED);
+        break;
+
+    case SCN_HOTSPOTRELEASECLICK:
+        evt.SetEventType(wxEVT_STC_HOTSPOT_RELEASE_CLICK);
         break;
 
     default:
