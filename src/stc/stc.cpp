@@ -963,7 +963,7 @@ void wxStyledTextCtrl::SetWordChars(const wxString& characters)
 // Get the set of characters making up words for when moving or selecting by word.
 wxString wxStyledTextCtrl::GetWordChars() const {
          int msg = 2646;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -2212,7 +2212,7 @@ int wxStyledTextCtrl::GetMultiPaste() const
 // Retrieve the value of a tag from a regular expression search.
 wxString wxStyledTextCtrl::GetTag(int tagNumber) const {
          int msg = 2616;
-         int len = SendMsg(msg, tagNumber, NULL);
+         int len = SendMsg(msg, tagNumber, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -3163,7 +3163,7 @@ void wxStyledTextCtrl::SetWhitespaceChars(const wxString& characters)
 // Get the set of characters making up whitespace for when moving or selecting by word.
 wxString wxStyledTextCtrl::GetWhitespaceChars() const {
          int msg = 2647;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -3184,7 +3184,7 @@ void wxStyledTextCtrl::SetPunctuationChars(const wxString& characters)
 // Get the set of characters making up punctuation characters
 wxString wxStyledTextCtrl::GetPunctuationChars() const {
          int msg = 2649;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -4074,7 +4074,7 @@ void* wxStyledTextCtrl::PrivateLexerCall(int operation, void* pointer) {
 // Retrieve a '\n' separated list of properties understood by the current lexer.
 wxString wxStyledTextCtrl::PropertyNames() const {
          int msg = 4014;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -4094,7 +4094,7 @@ int wxStyledTextCtrl::PropertyType(const wxString& name)
 // Describe a property.
 wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
          int msg = 4016;
-         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), NULL);
+         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -4108,7 +4108,7 @@ wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
 // Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
 wxString wxStyledTextCtrl::DescribeKeyWordSets() const {
          int msg = 4017;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);

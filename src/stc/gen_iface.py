@@ -756,7 +756,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -774,7 +774,7 @@ methodOverrideMap = {
 
      '''wxString %s(int tagNumber) const {
          int msg = %s;
-         int len = SendMsg(msg, tagNumber, NULL);
+         int len = SendMsg(msg, tagNumber, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -791,7 +791,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -809,7 +809,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -827,7 +827,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -846,7 +846,7 @@ methodOverrideMap = {
 
      '''wxString %s(const wxString& name) const {
          int msg = %s;
-         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), NULL);
+         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -865,7 +865,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          int msg = %s;
-         int len = SendMsg(msg, 0, NULL);
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
