@@ -46,8 +46,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -69,8 +69,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -92,8 +92,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -115,8 +115,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -138,8 +138,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -161,8 +161,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -184,8 +184,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -207,8 +207,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -235,6 +235,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\lexlib\Accessor.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\AutoComplete.cxx
 # End Source File
 # Begin Source File
@@ -243,11 +247,19 @@ SOURCE=..\..\src\stc\scintilla\src\CallTip.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\Catalogue.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\CellBuffer.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\CharClassify.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexlib\CharacterSet.cxx
 # End Source File
 # Begin Source File
 
@@ -260,10 +272,6 @@ SOURCE=..\..\src\stc\scintilla\src\Decoration.cxx
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\Document.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\stc\scintilla\src\DocumentAccessor.cxx
 # End Source File
 # Begin Source File
 
@@ -283,319 +291,367 @@ SOURCE=..\..\src\stc\scintilla\src\KeyMap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\KeyWords.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexA68k.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexAPDL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexAPDL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexASY.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexASY.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexAU3.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexAU3.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexAVE.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexAVE.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexAbaqus.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexAVS.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexAda.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexAbaqus.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexAsm.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexAda.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexAsn1.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexAsm.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexBaan.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexAsn1.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexBash.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexBaan.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexBasic.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexBash.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexBullant.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexBasic.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexCLW.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexBullant.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexCOBOL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCLW.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexCPP.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCOBOL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexCSS.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCPP.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexCaml.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCSS.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexCmake.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCaml.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexConf.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCmake.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexCrontab.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCoffeeScript.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexCsound.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexConf.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexD.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCrontab.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexEScript.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexCsound.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexEiffel.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexD.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexErlang.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexECL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexFlagship.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexEScript.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexForth.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexEiffel.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexFortran.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexErlang.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexGAP.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexFlagship.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexGui4Cli.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexForth.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexHTML.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexFortran.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexHaskell.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexGAP.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexInno.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexGui4Cli.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexKix.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexHTML.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexLisp.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexHaskell.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexLout.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexInno.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexLua.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexKix.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexMMIXAL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexLisp.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexMPT.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexLout.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexMSSQL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexLua.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexMagik.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexMMIXAL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexMarkdown.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexMPT.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexMatlab.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexMSSQL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexMetapost.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexMagik.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexMySQL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexMarkdown.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexNimrod.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexMatlab.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexNsis.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexMetapost.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexOpal.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexModula.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexOthers.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexMySQL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPB.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexNimrod.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPLM.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexNsis.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPOV.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexOScript.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPS.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexOpal.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPascal.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexOthers.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPerl.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPB.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPowerPro.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPLM.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPowerShell.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPOV.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexProgress.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPS.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexPython.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPascal.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexR.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPerl.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexRebol.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPowerPro.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexRuby.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPowerShell.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexSML.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexProgress.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexSQL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexPython.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexScriptol.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexR.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexSmalltalk.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexRebol.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexSorcus.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexRuby.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexSpecman.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexSML.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexSpice.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexSQL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexTACL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexScriptol.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexTADS3.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexSmalltalk.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexTAL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexSorcus.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexTCL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexSpecman.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexTeX.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexSpice.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexVB.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexTACL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexVHDL.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexTADS3.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexVerilog.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexTAL.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\LexYAML.cxx
+SOURCE=..\..\src\stc\scintilla\lexers\LexTCL.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexTCMD.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexTeX.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexTxt2tags.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexVB.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexVHDL.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexVerilog.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexVisualProlog.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexYAML.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexlib\LexerBase.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexlib\LexerModule.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexlib\LexerNoExceptions.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexlib\LexerSimple.cxx
 # End Source File
 # Begin Source File
 
@@ -611,7 +667,7 @@ SOURCE=..\..\src\stc\scintilla\src\PositionCache.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\PropSet.cxx
+SOURCE=..\..\src\stc\scintilla\lexlib\PropSetSimple.cxx
 # End Source File
 # Begin Source File
 
@@ -635,7 +691,7 @@ SOURCE=..\..\src\stc\scintilla\src\Style.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\StyleContext.cxx
+SOURCE=..\..\src\stc\scintilla\lexlib\StyleContext.cxx
 # End Source File
 # Begin Source File
 
@@ -647,7 +703,7 @@ SOURCE=..\..\src\stc\scintilla\src\ViewStyle.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\stc\scintilla\src\WindowAccessor.cxx
+SOURCE=..\..\src\stc\scintilla\lexlib\WordList.cxx
 # End Source File
 # Begin Source File
 

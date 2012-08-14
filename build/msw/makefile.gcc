@@ -178,115 +178,130 @@ WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmltok.o
 WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -DNDEBUG -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
-	-I$(SETUPHDIR) -I..\..\include $(__wxscintilla_usingdll_p) -D__WXMSW__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
+	-DSCI_LEXER -DLINK_LEXERS -I$(SETUPHDIR) -I..\..\include \
+	$(__wxscintilla_usingdll_p) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
-	$(OBJS)\wxscintilla_AutoComplete.o \
-	$(OBJS)\wxscintilla_CallTip.o \
-	$(OBJS)\wxscintilla_CellBuffer.o \
-	$(OBJS)\wxscintilla_CharClassify.o \
-	$(OBJS)\wxscintilla_ContractionState.o \
-	$(OBJS)\wxscintilla_Decoration.o \
-	$(OBJS)\wxscintilla_Document.o \
-	$(OBJS)\wxscintilla_DocumentAccessor.o \
-	$(OBJS)\wxscintilla_Editor.o \
-	$(OBJS)\wxscintilla_ExternalLexer.o \
-	$(OBJS)\wxscintilla_Indicator.o \
-	$(OBJS)\wxscintilla_KeyMap.o \
-	$(OBJS)\wxscintilla_KeyWords.o \
+	$(OBJS)\wxscintilla_LexA68k.o \
+	$(OBJS)\wxscintilla_LexAbaqus.o \
+	$(OBJS)\wxscintilla_LexAda.o \
 	$(OBJS)\wxscintilla_LexAPDL.o \
+	$(OBJS)\wxscintilla_LexAsm.o \
+	$(OBJS)\wxscintilla_LexAsn1.o \
 	$(OBJS)\wxscintilla_LexASY.o \
 	$(OBJS)\wxscintilla_LexAU3.o \
 	$(OBJS)\wxscintilla_LexAVE.o \
-	$(OBJS)\wxscintilla_LexAbaqus.o \
-	$(OBJS)\wxscintilla_LexAda.o \
-	$(OBJS)\wxscintilla_LexAsm.o \
-	$(OBJS)\wxscintilla_LexAsn1.o \
+	$(OBJS)\wxscintilla_LexAVS.o \
 	$(OBJS)\wxscintilla_LexBaan.o \
 	$(OBJS)\wxscintilla_LexBash.o \
 	$(OBJS)\wxscintilla_LexBasic.o \
 	$(OBJS)\wxscintilla_LexBullant.o \
-	$(OBJS)\wxscintilla_LexCLW.o \
-	$(OBJS)\wxscintilla_LexCOBOL.o \
-	$(OBJS)\wxscintilla_LexCPP.o \
-	$(OBJS)\wxscintilla_LexCSS.o \
 	$(OBJS)\wxscintilla_LexCaml.o \
+	$(OBJS)\wxscintilla_LexCLW.o \
 	$(OBJS)\wxscintilla_LexCmake.o \
+	$(OBJS)\wxscintilla_LexCOBOL.o \
+	$(OBJS)\wxscintilla_LexCoffeeScript.o \
 	$(OBJS)\wxscintilla_LexConf.o \
+	$(OBJS)\wxscintilla_LexCPP.o \
 	$(OBJS)\wxscintilla_LexCrontab.o \
 	$(OBJS)\wxscintilla_LexCsound.o \
+	$(OBJS)\wxscintilla_LexCSS.o \
 	$(OBJS)\wxscintilla_LexD.o \
-	$(OBJS)\wxscintilla_LexEScript.o \
+	$(OBJS)\wxscintilla_LexECL.o \
 	$(OBJS)\wxscintilla_LexEiffel.o \
 	$(OBJS)\wxscintilla_LexErlang.o \
+	$(OBJS)\wxscintilla_LexEScript.o \
 	$(OBJS)\wxscintilla_LexFlagship.o \
 	$(OBJS)\wxscintilla_LexForth.o \
 	$(OBJS)\wxscintilla_LexFortran.o \
 	$(OBJS)\wxscintilla_LexGAP.o \
 	$(OBJS)\wxscintilla_LexGui4Cli.o \
-	$(OBJS)\wxscintilla_LexHTML.o \
 	$(OBJS)\wxscintilla_LexHaskell.o \
+	$(OBJS)\wxscintilla_LexHTML.o \
 	$(OBJS)\wxscintilla_LexInno.o \
 	$(OBJS)\wxscintilla_LexKix.o \
 	$(OBJS)\wxscintilla_LexLisp.o \
 	$(OBJS)\wxscintilla_LexLout.o \
 	$(OBJS)\wxscintilla_LexLua.o \
-	$(OBJS)\wxscintilla_LexMMIXAL.o \
-	$(OBJS)\wxscintilla_LexMPT.o \
-	$(OBJS)\wxscintilla_LexMSSQL.o \
 	$(OBJS)\wxscintilla_LexMagik.o \
 	$(OBJS)\wxscintilla_LexMarkdown.o \
 	$(OBJS)\wxscintilla_LexMatlab.o \
 	$(OBJS)\wxscintilla_LexMetapost.o \
+	$(OBJS)\wxscintilla_LexMMIXAL.o \
+	$(OBJS)\wxscintilla_LexModula.o \
+	$(OBJS)\wxscintilla_LexMPT.o \
+	$(OBJS)\wxscintilla_LexMSSQL.o \
 	$(OBJS)\wxscintilla_LexMySQL.o \
 	$(OBJS)\wxscintilla_LexNimrod.o \
 	$(OBJS)\wxscintilla_LexNsis.o \
 	$(OBJS)\wxscintilla_LexOpal.o \
+	$(OBJS)\wxscintilla_LexOScript.o \
 	$(OBJS)\wxscintilla_LexOthers.o \
+	$(OBJS)\wxscintilla_LexPascal.o \
 	$(OBJS)\wxscintilla_LexPB.o \
+	$(OBJS)\wxscintilla_LexPerl.o \
 	$(OBJS)\wxscintilla_LexPLM.o \
 	$(OBJS)\wxscintilla_LexPOV.o \
-	$(OBJS)\wxscintilla_LexPS.o \
-	$(OBJS)\wxscintilla_LexPascal.o \
-	$(OBJS)\wxscintilla_LexPerl.o \
 	$(OBJS)\wxscintilla_LexPowerPro.o \
 	$(OBJS)\wxscintilla_LexPowerShell.o \
 	$(OBJS)\wxscintilla_LexProgress.o \
+	$(OBJS)\wxscintilla_LexPS.o \
 	$(OBJS)\wxscintilla_LexPython.o \
 	$(OBJS)\wxscintilla_LexR.o \
 	$(OBJS)\wxscintilla_LexRebol.o \
 	$(OBJS)\wxscintilla_LexRuby.o \
-	$(OBJS)\wxscintilla_LexSML.o \
-	$(OBJS)\wxscintilla_LexSQL.o \
 	$(OBJS)\wxscintilla_LexScriptol.o \
 	$(OBJS)\wxscintilla_LexSmalltalk.o \
+	$(OBJS)\wxscintilla_LexSML.o \
 	$(OBJS)\wxscintilla_LexSorcus.o \
 	$(OBJS)\wxscintilla_LexSpecman.o \
 	$(OBJS)\wxscintilla_LexSpice.o \
+	$(OBJS)\wxscintilla_LexSQL.o \
 	$(OBJS)\wxscintilla_LexTACL.o \
 	$(OBJS)\wxscintilla_LexTADS3.o \
 	$(OBJS)\wxscintilla_LexTAL.o \
 	$(OBJS)\wxscintilla_LexTCL.o \
+	$(OBJS)\wxscintilla_LexTCMD.o \
 	$(OBJS)\wxscintilla_LexTeX.o \
+	$(OBJS)\wxscintilla_LexTxt2tags.o \
 	$(OBJS)\wxscintilla_LexVB.o \
-	$(OBJS)\wxscintilla_LexVHDL.o \
 	$(OBJS)\wxscintilla_LexVerilog.o \
+	$(OBJS)\wxscintilla_LexVHDL.o \
+	$(OBJS)\wxscintilla_LexVisualProlog.o \
 	$(OBJS)\wxscintilla_LexYAML.o \
+	$(OBJS)\wxscintilla_Accessor.o \
+	$(OBJS)\wxscintilla_CharacterSet.o \
+	$(OBJS)\wxscintilla_LexerBase.o \
+	$(OBJS)\wxscintilla_LexerModule.o \
+	$(OBJS)\wxscintilla_LexerNoExceptions.o \
+	$(OBJS)\wxscintilla_LexerSimple.o \
+	$(OBJS)\wxscintilla_PropSetSimple.o \
+	$(OBJS)\wxscintilla_StyleContext.o \
+	$(OBJS)\wxscintilla_WordList.o \
+	$(OBJS)\wxscintilla_AutoComplete.o \
+	$(OBJS)\wxscintilla_CallTip.o \
+	$(OBJS)\wxscintilla_Catalogue.o \
+	$(OBJS)\wxscintilla_CellBuffer.o \
+	$(OBJS)\wxscintilla_CharClassify.o \
+	$(OBJS)\wxscintilla_ContractionState.o \
+	$(OBJS)\wxscintilla_Decoration.o \
+	$(OBJS)\wxscintilla_Document.o \
+	$(OBJS)\wxscintilla_Editor.o \
+	$(OBJS)\wxscintilla_ExternalLexer.o \
+	$(OBJS)\wxscintilla_Indicator.o \
+	$(OBJS)\wxscintilla_KeyMap.o \
 	$(OBJS)\wxscintilla_LineMarker.o \
 	$(OBJS)\wxscintilla_PerLine.o \
 	$(OBJS)\wxscintilla_PositionCache.o \
-	$(OBJS)\wxscintilla_PropSet.o \
 	$(OBJS)\wxscintilla_RESearch.o \
 	$(OBJS)\wxscintilla_RunStyles.o \
 	$(OBJS)\wxscintilla_ScintillaBase.o \
 	$(OBJS)\wxscintilla_Selection.o \
 	$(OBJS)\wxscintilla_Style.o \
-	$(OBJS)\wxscintilla_StyleContext.o \
 	$(OBJS)\wxscintilla_UniConversion.o \
 	$(OBJS)\wxscintilla_ViewStyle.o \
-	$(OBJS)\wxscintilla_WindowAccessor.o \
 	$(OBJS)\wxscintilla_XPM.o
 MONODLL_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
@@ -295,8 +310,9 @@ MONODLL_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -DwxUSE_BASE=1 -DWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-DwxUSE_BASE=1 -DWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
 MONODLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -305,9 +321,9 @@ MONODLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
 	-I..\..\src\regex -I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
-	-DwxUSE_BASE=1 -DWXMAKINGDLL $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
+	-DSCI_LEXER -DLINK_LEXERS -DwxUSE_BASE=1 -DWXMAKINGDLL $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.o \
 	$(OBJS)\monodll_any.o \
@@ -445,8 +461,9 @@ MONOLIB_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -455,9 +472,9 @@ MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
 	-I..\..\src\regex -I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
-	-DwxUSE_BASE=1 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
+	-DSCI_LEXER -DLINK_LEXERS -DwxUSE_BASE=1 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.o \
 	$(OBJS)\monolib_any.o \
@@ -1477,9 +1494,10 @@ STCDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) 
 	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -DWXUSINGDLL -DWXMAKINGDLL_STC $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-DWXUSINGDLL -DWXMAKINGDLL_STC $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_dummy.o \
 	$(OBJS)\stcdll_version_rc.o \
@@ -1493,9 +1511,10 @@ STCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) 
 	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+	$(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_dummy.o \
 	$(OBJS)\stclib_stc.o \
@@ -5927,10 +5946,301 @@ $(OBJS)\wxexpat_xmlrole.o: ../../src/expat/lib/xmlrole.c
 $(OBJS)\wxexpat_xmltok.o: ../../src/expat/lib/xmltok.c
 	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexA68k.o: ../../src/stc/scintilla/lexers/LexA68k.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexAbaqus.o: ../../src/stc/scintilla/lexers/LexAbaqus.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexAda.o: ../../src/stc/scintilla/lexers/LexAda.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexAPDL.o: ../../src/stc/scintilla/lexers/LexAPDL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexAsm.o: ../../src/stc/scintilla/lexers/LexAsm.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexAsn1.o: ../../src/stc/scintilla/lexers/LexAsn1.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexASY.o: ../../src/stc/scintilla/lexers/LexASY.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexAU3.o: ../../src/stc/scintilla/lexers/LexAU3.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexAVE.o: ../../src/stc/scintilla/lexers/LexAVE.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexAVS.o: ../../src/stc/scintilla/lexers/LexAVS.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexBaan.o: ../../src/stc/scintilla/lexers/LexBaan.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexBash.o: ../../src/stc/scintilla/lexers/LexBash.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexBasic.o: ../../src/stc/scintilla/lexers/LexBasic.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexBullant.o: ../../src/stc/scintilla/lexers/LexBullant.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCaml.o: ../../src/stc/scintilla/lexers/LexCaml.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCLW.o: ../../src/stc/scintilla/lexers/LexCLW.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCmake.o: ../../src/stc/scintilla/lexers/LexCmake.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCOBOL.o: ../../src/stc/scintilla/lexers/LexCOBOL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCoffeeScript.o: ../../src/stc/scintilla/lexers/LexCoffeeScript.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexConf.o: ../../src/stc/scintilla/lexers/LexConf.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCPP.o: ../../src/stc/scintilla/lexers/LexCPP.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCrontab.o: ../../src/stc/scintilla/lexers/LexCrontab.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCsound.o: ../../src/stc/scintilla/lexers/LexCsound.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexCSS.o: ../../src/stc/scintilla/lexers/LexCSS.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexD.o: ../../src/stc/scintilla/lexers/LexD.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexECL.o: ../../src/stc/scintilla/lexers/LexECL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexEiffel.o: ../../src/stc/scintilla/lexers/LexEiffel.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexErlang.o: ../../src/stc/scintilla/lexers/LexErlang.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexEScript.o: ../../src/stc/scintilla/lexers/LexEScript.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexFlagship.o: ../../src/stc/scintilla/lexers/LexFlagship.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexForth.o: ../../src/stc/scintilla/lexers/LexForth.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexFortran.o: ../../src/stc/scintilla/lexers/LexFortran.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexGAP.o: ../../src/stc/scintilla/lexers/LexGAP.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexGui4Cli.o: ../../src/stc/scintilla/lexers/LexGui4Cli.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexHaskell.o: ../../src/stc/scintilla/lexers/LexHaskell.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexHTML.o: ../../src/stc/scintilla/lexers/LexHTML.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexInno.o: ../../src/stc/scintilla/lexers/LexInno.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexKix.o: ../../src/stc/scintilla/lexers/LexKix.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexLisp.o: ../../src/stc/scintilla/lexers/LexLisp.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexLout.o: ../../src/stc/scintilla/lexers/LexLout.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexLua.o: ../../src/stc/scintilla/lexers/LexLua.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMagik.o: ../../src/stc/scintilla/lexers/LexMagik.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMarkdown.o: ../../src/stc/scintilla/lexers/LexMarkdown.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMatlab.o: ../../src/stc/scintilla/lexers/LexMatlab.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMetapost.o: ../../src/stc/scintilla/lexers/LexMetapost.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMMIXAL.o: ../../src/stc/scintilla/lexers/LexMMIXAL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexModula.o: ../../src/stc/scintilla/lexers/LexModula.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMPT.o: ../../src/stc/scintilla/lexers/LexMPT.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMSSQL.o: ../../src/stc/scintilla/lexers/LexMSSQL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMySQL.o: ../../src/stc/scintilla/lexers/LexMySQL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexNimrod.o: ../../src/stc/scintilla/lexers/LexNimrod.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexNsis.o: ../../src/stc/scintilla/lexers/LexNsis.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexOpal.o: ../../src/stc/scintilla/lexers/LexOpal.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexOScript.o: ../../src/stc/scintilla/lexers/LexOScript.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexOthers.o: ../../src/stc/scintilla/lexers/LexOthers.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPascal.o: ../../src/stc/scintilla/lexers/LexPascal.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPB.o: ../../src/stc/scintilla/lexers/LexPB.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPerl.o: ../../src/stc/scintilla/lexers/LexPerl.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPLM.o: ../../src/stc/scintilla/lexers/LexPLM.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPOV.o: ../../src/stc/scintilla/lexers/LexPOV.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPowerPro.o: ../../src/stc/scintilla/lexers/LexPowerPro.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPowerShell.o: ../../src/stc/scintilla/lexers/LexPowerShell.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexProgress.o: ../../src/stc/scintilla/lexers/LexProgress.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPS.o: ../../src/stc/scintilla/lexers/LexPS.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPython.o: ../../src/stc/scintilla/lexers/LexPython.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexR.o: ../../src/stc/scintilla/lexers/LexR.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexRebol.o: ../../src/stc/scintilla/lexers/LexRebol.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexRuby.o: ../../src/stc/scintilla/lexers/LexRuby.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexScriptol.o: ../../src/stc/scintilla/lexers/LexScriptol.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexSmalltalk.o: ../../src/stc/scintilla/lexers/LexSmalltalk.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexSML.o: ../../src/stc/scintilla/lexers/LexSML.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexSorcus.o: ../../src/stc/scintilla/lexers/LexSorcus.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexSpecman.o: ../../src/stc/scintilla/lexers/LexSpecman.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexSpice.o: ../../src/stc/scintilla/lexers/LexSpice.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexSQL.o: ../../src/stc/scintilla/lexers/LexSQL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTACL.o: ../../src/stc/scintilla/lexers/LexTACL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTADS3.o: ../../src/stc/scintilla/lexers/LexTADS3.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTAL.o: ../../src/stc/scintilla/lexers/LexTAL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTCL.o: ../../src/stc/scintilla/lexers/LexTCL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTCMD.o: ../../src/stc/scintilla/lexers/LexTCMD.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTeX.o: ../../src/stc/scintilla/lexers/LexTeX.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTxt2tags.o: ../../src/stc/scintilla/lexers/LexTxt2tags.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexVB.o: ../../src/stc/scintilla/lexers/LexVB.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexVerilog.o: ../../src/stc/scintilla/lexers/LexVerilog.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexVHDL.o: ../../src/stc/scintilla/lexers/LexVHDL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexVisualProlog.o: ../../src/stc/scintilla/lexers/LexVisualProlog.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexYAML.o: ../../src/stc/scintilla/lexers/LexYAML.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_Accessor.o: ../../src/stc/scintilla/lexlib/Accessor.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_CharacterSet.o: ../../src/stc/scintilla/lexlib/CharacterSet.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexerBase.o: ../../src/stc/scintilla/lexlib/LexerBase.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexerModule.o: ../../src/stc/scintilla/lexlib/LexerModule.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexerNoExceptions.o: ../../src/stc/scintilla/lexlib/LexerNoExceptions.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexerSimple.o: ../../src/stc/scintilla/lexlib/LexerSimple.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_PropSetSimple.o: ../../src/stc/scintilla/lexlib/PropSetSimple.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_StyleContext.o: ../../src/stc/scintilla/lexlib/StyleContext.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_WordList.o: ../../src/stc/scintilla/lexlib/WordList.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_AutoComplete.o: ../../src/stc/scintilla/src/AutoComplete.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_CallTip.o: ../../src/stc/scintilla/src/CallTip.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_Catalogue.o: ../../src/stc/scintilla/src/Catalogue.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_CellBuffer.o: ../../src/stc/scintilla/src/CellBuffer.cxx
@@ -5948,9 +6258,6 @@ $(OBJS)\wxscintilla_Decoration.o: ../../src/stc/scintilla/src/Decoration.cxx
 $(OBJS)\wxscintilla_Document.o: ../../src/stc/scintilla/src/Document.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxscintilla_DocumentAccessor.o: ../../src/stc/scintilla/src/DocumentAccessor.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\wxscintilla_Editor.o: ../../src/stc/scintilla/src/Editor.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5963,243 +6270,6 @@ $(OBJS)\wxscintilla_Indicator.o: ../../src/stc/scintilla/src/Indicator.cxx
 $(OBJS)\wxscintilla_KeyMap.o: ../../src/stc/scintilla/src/KeyMap.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxscintilla_KeyWords.o: ../../src/stc/scintilla/src/KeyWords.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexAPDL.o: ../../src/stc/scintilla/src/LexAPDL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexASY.o: ../../src/stc/scintilla/src/LexASY.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexAU3.o: ../../src/stc/scintilla/src/LexAU3.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexAVE.o: ../../src/stc/scintilla/src/LexAVE.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexAbaqus.o: ../../src/stc/scintilla/src/LexAbaqus.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexAda.o: ../../src/stc/scintilla/src/LexAda.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexAsm.o: ../../src/stc/scintilla/src/LexAsm.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexAsn1.o: ../../src/stc/scintilla/src/LexAsn1.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexBaan.o: ../../src/stc/scintilla/src/LexBaan.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexBash.o: ../../src/stc/scintilla/src/LexBash.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexBasic.o: ../../src/stc/scintilla/src/LexBasic.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexBullant.o: ../../src/stc/scintilla/src/LexBullant.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexCLW.o: ../../src/stc/scintilla/src/LexCLW.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexCOBOL.o: ../../src/stc/scintilla/src/LexCOBOL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexCPP.o: ../../src/stc/scintilla/src/LexCPP.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexCSS.o: ../../src/stc/scintilla/src/LexCSS.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexCaml.o: ../../src/stc/scintilla/src/LexCaml.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexCmake.o: ../../src/stc/scintilla/src/LexCmake.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexConf.o: ../../src/stc/scintilla/src/LexConf.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexCrontab.o: ../../src/stc/scintilla/src/LexCrontab.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexCsound.o: ../../src/stc/scintilla/src/LexCsound.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexD.o: ../../src/stc/scintilla/src/LexD.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexEScript.o: ../../src/stc/scintilla/src/LexEScript.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexEiffel.o: ../../src/stc/scintilla/src/LexEiffel.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexErlang.o: ../../src/stc/scintilla/src/LexErlang.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexFlagship.o: ../../src/stc/scintilla/src/LexFlagship.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexForth.o: ../../src/stc/scintilla/src/LexForth.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexFortran.o: ../../src/stc/scintilla/src/LexFortran.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexGAP.o: ../../src/stc/scintilla/src/LexGAP.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexGui4Cli.o: ../../src/stc/scintilla/src/LexGui4Cli.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexHTML.o: ../../src/stc/scintilla/src/LexHTML.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexHaskell.o: ../../src/stc/scintilla/src/LexHaskell.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexInno.o: ../../src/stc/scintilla/src/LexInno.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexKix.o: ../../src/stc/scintilla/src/LexKix.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexLisp.o: ../../src/stc/scintilla/src/LexLisp.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexLout.o: ../../src/stc/scintilla/src/LexLout.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexLua.o: ../../src/stc/scintilla/src/LexLua.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexMMIXAL.o: ../../src/stc/scintilla/src/LexMMIXAL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexMPT.o: ../../src/stc/scintilla/src/LexMPT.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexMSSQL.o: ../../src/stc/scintilla/src/LexMSSQL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexMagik.o: ../../src/stc/scintilla/src/LexMagik.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexMarkdown.o: ../../src/stc/scintilla/src/LexMarkdown.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexMatlab.o: ../../src/stc/scintilla/src/LexMatlab.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexMetapost.o: ../../src/stc/scintilla/src/LexMetapost.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexMySQL.o: ../../src/stc/scintilla/src/LexMySQL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexNimrod.o: ../../src/stc/scintilla/src/LexNimrod.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexNsis.o: ../../src/stc/scintilla/src/LexNsis.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexOpal.o: ../../src/stc/scintilla/src/LexOpal.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexOthers.o: ../../src/stc/scintilla/src/LexOthers.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPB.o: ../../src/stc/scintilla/src/LexPB.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPLM.o: ../../src/stc/scintilla/src/LexPLM.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPOV.o: ../../src/stc/scintilla/src/LexPOV.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPS.o: ../../src/stc/scintilla/src/LexPS.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPascal.o: ../../src/stc/scintilla/src/LexPascal.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPerl.o: ../../src/stc/scintilla/src/LexPerl.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPowerPro.o: ../../src/stc/scintilla/src/LexPowerPro.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPowerShell.o: ../../src/stc/scintilla/src/LexPowerShell.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexProgress.o: ../../src/stc/scintilla/src/LexProgress.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexPython.o: ../../src/stc/scintilla/src/LexPython.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexR.o: ../../src/stc/scintilla/src/LexR.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexRebol.o: ../../src/stc/scintilla/src/LexRebol.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexRuby.o: ../../src/stc/scintilla/src/LexRuby.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexSML.o: ../../src/stc/scintilla/src/LexSML.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexSQL.o: ../../src/stc/scintilla/src/LexSQL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexScriptol.o: ../../src/stc/scintilla/src/LexScriptol.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexSmalltalk.o: ../../src/stc/scintilla/src/LexSmalltalk.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexSorcus.o: ../../src/stc/scintilla/src/LexSorcus.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexSpecman.o: ../../src/stc/scintilla/src/LexSpecman.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexSpice.o: ../../src/stc/scintilla/src/LexSpice.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexTACL.o: ../../src/stc/scintilla/src/LexTACL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexTADS3.o: ../../src/stc/scintilla/src/LexTADS3.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexTAL.o: ../../src/stc/scintilla/src/LexTAL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexTCL.o: ../../src/stc/scintilla/src/LexTCL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexTeX.o: ../../src/stc/scintilla/src/LexTeX.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexVB.o: ../../src/stc/scintilla/src/LexVB.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexVHDL.o: ../../src/stc/scintilla/src/LexVHDL.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexVerilog.o: ../../src/stc/scintilla/src/LexVerilog.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_LexYAML.o: ../../src/stc/scintilla/src/LexYAML.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\wxscintilla_LineMarker.o: ../../src/stc/scintilla/src/LineMarker.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6207,9 +6277,6 @@ $(OBJS)\wxscintilla_PerLine.o: ../../src/stc/scintilla/src/PerLine.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_PositionCache.o: ../../src/stc/scintilla/src/PositionCache.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_PropSet.o: ../../src/stc/scintilla/src/PropSet.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_RESearch.o: ../../src/stc/scintilla/src/RESearch.cxx
@@ -6227,16 +6294,10 @@ $(OBJS)\wxscintilla_Selection.o: ../../src/stc/scintilla/src/Selection.cxx
 $(OBJS)\wxscintilla_Style.o: ../../src/stc/scintilla/src/Style.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxscintilla_StyleContext.o: ../../src/stc/scintilla/src/StyleContext.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\wxscintilla_UniConversion.o: ../../src/stc/scintilla/src/UniConversion.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_ViewStyle.o: ../../src/stc/scintilla/src/ViewStyle.cxx
-	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxscintilla_WindowAccessor.o: ../../src/stc/scintilla/src/WindowAccessor.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_XPM.o: ../../src/stc/scintilla/src/XPM.cxx
@@ -8656,7 +8717,7 @@ $(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
 endif
 
 $(OBJS)\monodll_version_rc.o: ../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define wxUSE_BASE=1 --define WXMAKINGDLL
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/lexlib --include-dir ../../src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define wxUSE_BASE=1 --define WXMAKINGDLL
 
 $(OBJS)\monolib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
@@ -15881,7 +15942,7 @@ $(OBJS)\stcdll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_version_rc.o: ../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define WXUSINGDLL --define WXMAKINGDLL_STC
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/lexlib --include-dir ../../src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define WXUSINGDLL --define WXMAKINGDLL_STC
 
 $(OBJS)\stcdll_stc.o: ../../src/stc/stc.cpp
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<

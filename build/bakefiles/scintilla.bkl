@@ -31,6 +31,7 @@
 
     <template id="wxscintilla_cppflags">
         <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
+        <include>$(TOP_SRCDIR)src/stc/scintilla/lexlib</include>
         <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
         <define>__WX__</define>
         <define>SCI_LEXER</define>
@@ -55,110 +56,124 @@
         <define>$(UNICODE_DEFINE)</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
+            src/stc/scintilla/lexers/LexA68k.cxx
+            src/stc/scintilla/lexers/LexAbaqus.cxx
+            src/stc/scintilla/lexers/LexAda.cxx
+            src/stc/scintilla/lexers/LexAPDL.cxx
+            src/stc/scintilla/lexers/LexAsm.cxx
+            src/stc/scintilla/lexers/LexAsn1.cxx
+            src/stc/scintilla/lexers/LexASY.cxx
+            src/stc/scintilla/lexers/LexAU3.cxx
+            src/stc/scintilla/lexers/LexAVE.cxx
+            src/stc/scintilla/lexers/LexAVS.cxx
+            src/stc/scintilla/lexers/LexBaan.cxx
+            src/stc/scintilla/lexers/LexBash.cxx
+            src/stc/scintilla/lexers/LexBasic.cxx
+            src/stc/scintilla/lexers/LexBullant.cxx
+            src/stc/scintilla/lexers/LexCaml.cxx
+            src/stc/scintilla/lexers/LexCLW.cxx
+            src/stc/scintilla/lexers/LexCmake.cxx
+            src/stc/scintilla/lexers/LexCOBOL.cxx
+            src/stc/scintilla/lexers/LexCoffeeScript.cxx
+            src/stc/scintilla/lexers/LexConf.cxx
+            src/stc/scintilla/lexers/LexCPP.cxx
+            src/stc/scintilla/lexers/LexCrontab.cxx
+            src/stc/scintilla/lexers/LexCsound.cxx
+            src/stc/scintilla/lexers/LexCSS.cxx
+            src/stc/scintilla/lexers/LexD.cxx
+            src/stc/scintilla/lexers/LexECL.cxx
+            src/stc/scintilla/lexers/LexEiffel.cxx
+            src/stc/scintilla/lexers/LexErlang.cxx
+            src/stc/scintilla/lexers/LexEScript.cxx
+            src/stc/scintilla/lexers/LexFlagship.cxx
+            src/stc/scintilla/lexers/LexForth.cxx
+            src/stc/scintilla/lexers/LexFortran.cxx
+            src/stc/scintilla/lexers/LexGAP.cxx
+            src/stc/scintilla/lexers/LexGui4Cli.cxx
+            src/stc/scintilla/lexers/LexHaskell.cxx
+            src/stc/scintilla/lexers/LexHTML.cxx
+            src/stc/scintilla/lexers/LexInno.cxx
+            src/stc/scintilla/lexers/LexKix.cxx
+            src/stc/scintilla/lexers/LexLisp.cxx
+            src/stc/scintilla/lexers/LexLout.cxx
+            src/stc/scintilla/lexers/LexLua.cxx
+            src/stc/scintilla/lexers/LexMagik.cxx
+            src/stc/scintilla/lexers/LexMarkdown.cxx
+            src/stc/scintilla/lexers/LexMatlab.cxx
+            src/stc/scintilla/lexers/LexMetapost.cxx
+            src/stc/scintilla/lexers/LexMMIXAL.cxx
+            src/stc/scintilla/lexers/LexModula.cxx
+            src/stc/scintilla/lexers/LexMPT.cxx
+            src/stc/scintilla/lexers/LexMSSQL.cxx
+            src/stc/scintilla/lexers/LexMySQL.cxx
+            src/stc/scintilla/lexers/LexNimrod.cxx
+            src/stc/scintilla/lexers/LexNsis.cxx
+            src/stc/scintilla/lexers/LexOpal.cxx
+            src/stc/scintilla/lexers/LexOScript.cxx
+            src/stc/scintilla/lexers/LexOthers.cxx
+            src/stc/scintilla/lexers/LexPascal.cxx
+            src/stc/scintilla/lexers/LexPB.cxx
+            src/stc/scintilla/lexers/LexPerl.cxx
+            src/stc/scintilla/lexers/LexPLM.cxx
+            src/stc/scintilla/lexers/LexPOV.cxx
+            src/stc/scintilla/lexers/LexPowerPro.cxx
+            src/stc/scintilla/lexers/LexPowerShell.cxx
+            src/stc/scintilla/lexers/LexProgress.cxx
+            src/stc/scintilla/lexers/LexPS.cxx
+            src/stc/scintilla/lexers/LexPython.cxx
+            src/stc/scintilla/lexers/LexR.cxx
+            src/stc/scintilla/lexers/LexRebol.cxx
+            src/stc/scintilla/lexers/LexRuby.cxx
+            src/stc/scintilla/lexers/LexScriptol.cxx
+            src/stc/scintilla/lexers/LexSmalltalk.cxx
+            src/stc/scintilla/lexers/LexSML.cxx
+            src/stc/scintilla/lexers/LexSorcus.cxx
+            src/stc/scintilla/lexers/LexSpecman.cxx
+            src/stc/scintilla/lexers/LexSpice.cxx
+            src/stc/scintilla/lexers/LexSQL.cxx
+            src/stc/scintilla/lexers/LexTACL.cxx
+            src/stc/scintilla/lexers/LexTADS3.cxx
+            src/stc/scintilla/lexers/LexTAL.cxx
+            src/stc/scintilla/lexers/LexTCL.cxx
+            src/stc/scintilla/lexers/LexTCMD.cxx
+            src/stc/scintilla/lexers/LexTeX.cxx
+            src/stc/scintilla/lexers/LexTxt2tags.cxx
+            src/stc/scintilla/lexers/LexVB.cxx
+            src/stc/scintilla/lexers/LexVerilog.cxx
+            src/stc/scintilla/lexers/LexVHDL.cxx
+            src/stc/scintilla/lexers/LexVisualProlog.cxx
+            src/stc/scintilla/lexers/LexYAML.cxx
+            src/stc/scintilla/lexlib/Accessor.cxx
+            src/stc/scintilla/lexlib/CharacterSet.cxx
+            src/stc/scintilla/lexlib/LexerBase.cxx
+            src/stc/scintilla/lexlib/LexerModule.cxx
+            src/stc/scintilla/lexlib/LexerNoExceptions.cxx
+            src/stc/scintilla/lexlib/LexerSimple.cxx
+            src/stc/scintilla/lexlib/PropSetSimple.cxx
+            src/stc/scintilla/lexlib/StyleContext.cxx
+            src/stc/scintilla/lexlib/WordList.cxx
             src/stc/scintilla/src/AutoComplete.cxx
             src/stc/scintilla/src/CallTip.cxx
+            src/stc/scintilla/src/Catalogue.cxx
             src/stc/scintilla/src/CellBuffer.cxx
             src/stc/scintilla/src/CharClassify.cxx
             src/stc/scintilla/src/ContractionState.cxx
             src/stc/scintilla/src/Decoration.cxx
             src/stc/scintilla/src/Document.cxx
-            src/stc/scintilla/src/DocumentAccessor.cxx
             src/stc/scintilla/src/Editor.cxx
             src/stc/scintilla/src/ExternalLexer.cxx
             src/stc/scintilla/src/Indicator.cxx
             src/stc/scintilla/src/KeyMap.cxx
-            src/stc/scintilla/src/KeyWords.cxx
-            src/stc/scintilla/src/LexAPDL.cxx
-            src/stc/scintilla/src/LexASY.cxx
-            src/stc/scintilla/src/LexAU3.cxx
-            src/stc/scintilla/src/LexAVE.cxx
-            src/stc/scintilla/src/LexAbaqus.cxx
-            src/stc/scintilla/src/LexAda.cxx
-            src/stc/scintilla/src/LexAsm.cxx
-            src/stc/scintilla/src/LexAsn1.cxx
-            src/stc/scintilla/src/LexBaan.cxx
-            src/stc/scintilla/src/LexBash.cxx
-            src/stc/scintilla/src/LexBasic.cxx
-            src/stc/scintilla/src/LexBullant.cxx
-            src/stc/scintilla/src/LexCLW.cxx
-            src/stc/scintilla/src/LexCOBOL.cxx
-            src/stc/scintilla/src/LexCPP.cxx
-            src/stc/scintilla/src/LexCSS.cxx
-            src/stc/scintilla/src/LexCaml.cxx
-            src/stc/scintilla/src/LexCmake.cxx
-            src/stc/scintilla/src/LexConf.cxx
-            src/stc/scintilla/src/LexCrontab.cxx
-            src/stc/scintilla/src/LexCsound.cxx
-            src/stc/scintilla/src/LexD.cxx
-            src/stc/scintilla/src/LexEScript.cxx
-            src/stc/scintilla/src/LexEiffel.cxx
-            src/stc/scintilla/src/LexErlang.cxx
-            src/stc/scintilla/src/LexFlagship.cxx
-            src/stc/scintilla/src/LexForth.cxx
-            src/stc/scintilla/src/LexFortran.cxx
-            src/stc/scintilla/src/LexGAP.cxx
-            src/stc/scintilla/src/LexGui4Cli.cxx
-            src/stc/scintilla/src/LexHTML.cxx
-            src/stc/scintilla/src/LexHaskell.cxx
-            src/stc/scintilla/src/LexInno.cxx
-            src/stc/scintilla/src/LexKix.cxx
-            src/stc/scintilla/src/LexLisp.cxx
-            src/stc/scintilla/src/LexLout.cxx
-            src/stc/scintilla/src/LexLua.cxx
-            src/stc/scintilla/src/LexMMIXAL.cxx
-            src/stc/scintilla/src/LexMPT.cxx
-            src/stc/scintilla/src/LexMSSQL.cxx
-            src/stc/scintilla/src/LexMagik.cxx
-            src/stc/scintilla/src/LexMarkdown.cxx
-            src/stc/scintilla/src/LexMatlab.cxx
-            src/stc/scintilla/src/LexMetapost.cxx
-            src/stc/scintilla/src/LexMySQL.cxx
-            src/stc/scintilla/src/LexNimrod.cxx
-            src/stc/scintilla/src/LexNsis.cxx
-            src/stc/scintilla/src/LexOpal.cxx
-            src/stc/scintilla/src/LexOthers.cxx
-            src/stc/scintilla/src/LexPB.cxx
-            src/stc/scintilla/src/LexPLM.cxx
-            src/stc/scintilla/src/LexPOV.cxx
-            src/stc/scintilla/src/LexPS.cxx
-            src/stc/scintilla/src/LexPascal.cxx
-            src/stc/scintilla/src/LexPerl.cxx
-            src/stc/scintilla/src/LexPowerPro.cxx
-            src/stc/scintilla/src/LexPowerShell.cxx
-            src/stc/scintilla/src/LexProgress.cxx
-            src/stc/scintilla/src/LexPython.cxx
-            src/stc/scintilla/src/LexR.cxx
-            src/stc/scintilla/src/LexRebol.cxx
-            src/stc/scintilla/src/LexRuby.cxx
-            src/stc/scintilla/src/LexSML.cxx
-            src/stc/scintilla/src/LexSQL.cxx
-            src/stc/scintilla/src/LexScriptol.cxx
-            src/stc/scintilla/src/LexSmalltalk.cxx
-            src/stc/scintilla/src/LexSorcus.cxx
-            src/stc/scintilla/src/LexSpecman.cxx
-            src/stc/scintilla/src/LexSpice.cxx
-            src/stc/scintilla/src/LexTACL.cxx
-            src/stc/scintilla/src/LexTADS3.cxx
-            src/stc/scintilla/src/LexTAL.cxx
-            src/stc/scintilla/src/LexTCL.cxx
-            src/stc/scintilla/src/LexTeX.cxx
-            src/stc/scintilla/src/LexVB.cxx
-            src/stc/scintilla/src/LexVHDL.cxx
-            src/stc/scintilla/src/LexVerilog.cxx
-            src/stc/scintilla/src/LexYAML.cxx
             src/stc/scintilla/src/LineMarker.cxx
             src/stc/scintilla/src/PerLine.cxx
             src/stc/scintilla/src/PositionCache.cxx
-            src/stc/scintilla/src/PropSet.cxx
             src/stc/scintilla/src/RESearch.cxx
             src/stc/scintilla/src/RunStyles.cxx
             src/stc/scintilla/src/ScintillaBase.cxx
             src/stc/scintilla/src/Selection.cxx
             src/stc/scintilla/src/Style.cxx
-            src/stc/scintilla/src/StyleContext.cxx
             src/stc/scintilla/src/UniConversion.cxx
             src/stc/scintilla/src/ViewStyle.cxx
-            src/stc/scintilla/src/WindowAccessor.cxx
             src/stc/scintilla/src/XPM.cxx
         </sources>
     </lib>

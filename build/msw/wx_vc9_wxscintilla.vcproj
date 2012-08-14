@@ -45,13 +45,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -71,7 +71,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -126,13 +126,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
 				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -150,7 +150,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -205,13 +205,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -231,7 +231,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -286,13 +286,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"
 				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -310,7 +310,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -365,13 +365,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -391,7 +391,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -446,13 +446,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
 				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -470,7 +470,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -525,13 +525,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -551,7 +551,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -606,13 +606,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"
 				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -630,7 +630,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -672,6 +672,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexlib\Accessor.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\AutoComplete.cxx"
 				>
 			</File>
@@ -680,11 +684,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\Catalogue.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\CellBuffer.cxx"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\CharClassify.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexlib\CharacterSet.cxx"
 				>
 			</File>
 			<File
@@ -697,10 +709,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\Document.cxx"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\DocumentAccessor.cxx"
 				>
 			</File>
 			<File
@@ -720,319 +728,367 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\KeyWords.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexA68k.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAPDL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexAPDL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexASY.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexASY.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAU3.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexAU3.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAVE.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexAVE.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAbaqus.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexAVS.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAda.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexAbaqus.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAsm.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexAda.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAsn1.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexAsm.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexBaan.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexAsn1.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexBash.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexBaan.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexBasic.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexBash.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexBullant.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexBasic.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCLW.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexBullant.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCOBOL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCLW.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCPP.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCOBOL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCSS.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCPP.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCaml.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCSS.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCmake.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCaml.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexConf.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCmake.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCrontab.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCoffeeScript.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCsound.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexConf.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexD.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCrontab.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexEScript.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexCsound.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexEiffel.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexD.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexErlang.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexECL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexFlagship.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexEScript.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexForth.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexEiffel.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexFortran.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexErlang.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexGAP.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexFlagship.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexGui4Cli.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexForth.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexHTML.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexFortran.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexHaskell.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexGAP.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexInno.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexGui4Cli.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexKix.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexHTML.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexLisp.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexHaskell.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexLout.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexInno.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexLua.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexKix.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMMIXAL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexLisp.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMPT.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexLout.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMSSQL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexLua.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMagik.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMMIXAL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMarkdown.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMPT.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMatlab.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMSSQL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMetapost.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMagik.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMySQL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMarkdown.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexNimrod.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMatlab.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexNsis.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMetapost.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexOpal.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexModula.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexOthers.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMySQL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPB.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexNimrod.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPLM.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexNsis.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPOV.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexOScript.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPS.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexOpal.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPascal.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexOthers.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPerl.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPB.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPowerPro.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPLM.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPowerShell.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPOV.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexProgress.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPS.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPython.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPascal.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexR.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPerl.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexRebol.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPowerPro.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexRuby.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPowerShell.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSML.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexProgress.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSQL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPython.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexScriptol.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexR.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSmalltalk.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexRebol.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSorcus.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexRuby.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSpecman.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexSML.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSpice.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexSQL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexTACL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexScriptol.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexTADS3.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexSmalltalk.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexTAL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexSorcus.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexTCL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexSpecman.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexTeX.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexSpice.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexVB.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexTACL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexVHDL.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexTADS3.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexVerilog.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexTAL.cxx"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexYAML.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexers\LexTCL.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexTCMD.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexTeX.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexTxt2tags.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexVB.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexVHDL.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexVerilog.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexVisualProlog.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexYAML.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexlib\LexerBase.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexlib\LexerModule.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexlib\LexerNoExceptions.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexlib\LexerSimple.cxx"
 				>
 			</File>
 			<File
@@ -1048,7 +1104,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\PropSet.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexlib\PropSetSimple.cxx"
 				>
 			</File>
 			<File
@@ -1072,7 +1128,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\StyleContext.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexlib\StyleContext.cxx"
 				>
 			</File>
 			<File
@@ -1084,7 +1140,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\WindowAccessor.cxx"
+				RelativePath="..\..\src\stc\scintilla\lexlib\WordList.cxx"
 				>
 			</File>
 			<File
