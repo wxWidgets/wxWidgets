@@ -168,6 +168,14 @@ bool ContractionState::SetVisible(int lineDocStart, int lineDocEnd, bool visible
 	}
 }
 
+bool ContractionState::HiddenLines() const {
+	if (OneToOne()) {
+		return false;
+	} else {
+		return !visible->AllSameAs(1);
+	}
+}
+
 bool ContractionState::GetExpanded(int lineDoc) const {
 	if (OneToOne()) {
 		return true;
@@ -193,6 +201,23 @@ bool ContractionState::SetExpanded(int lineDoc, bool expanded_) {
 	}
 }
 
+int ContractionState::ContractedNext(int lineDocStart) const {
+	if (OneToOne()) {
+		return -1;
+	} else {
+		Check();
+		if (!expanded->ValueAt(lineDocStart)) {
+			return lineDocStart;
+		} else {
+			int lineDocNextChange = expanded->EndRun(lineDocStart);
+			if (lineDocNextChange < LinesInDoc())
+				return lineDocNextChange;
+			else
+				return -1;
+		}
+	}
+}
+
 int ContractionState::GetHeight(int lineDoc) const {
 	if (OneToOne()) {
 		return 1;
@@ -206,7 +231,7 @@ int ContractionState::GetHeight(int lineDoc) const {
 bool ContractionState::SetHeight(int lineDoc, int height) {
 	if (OneToOne() && (height == 1)) {
 		return false;
-	} else {
+	} else if (lineDoc < LinesInDoc()) {
 		EnsureData();
 		if (GetHeight(lineDoc) != height) {
 			if (GetVisible(lineDoc)) {
@@ -219,6 +244,8 @@ bool ContractionState::SetHeight(int lineDoc, int height) {
 			Check();
 			return false;
 		}
+	} else {
+		return false;
 	}
 }
 
@@ -232,11 +259,11 @@ void ContractionState::ShowAll() {
 
 void ContractionState::Check() const {
 #ifdef CHECK_CORRECTNESS
-	for (int vline = 0;vline < LinesDisplayed(); vline++) {
+	for (int vline = 0; vline < LinesDisplayed(); vline++) {
 		const int lineDoc = DocFromDisplay(vline);
 		PLATFORM_ASSERT(GetVisible(lineDoc));
 	}
-	for (int lineDoc = 0;lineDoc < LinesInDoc(); lineDoc++) {
+	for (int lineDoc = 0; lineDoc < LinesInDoc(); lineDoc++) {
 		const int displayThis = DisplayFromDoc(lineDoc);
 		const int displayNext = DisplayFromDoc(lineDoc + 1);
 		const int height = displayNext - displayThis;

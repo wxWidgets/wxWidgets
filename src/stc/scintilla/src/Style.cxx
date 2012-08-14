@@ -16,21 +16,56 @@
 using namespace Scintilla;
 #endif
 
-Style::Style() {
-	aliasOfDefaultFont = true;
-	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
-	      Platform::DefaultFontSize(), 0, SC_CHARSET_DEFAULT,
-	      false, false, false, false, caseMixed, true, true, false);
+FontAlias::FontAlias() {
 }
 
-Style::Style(const Style &source) {
+FontAlias::~FontAlias() {
+	SetID(0);
+	// ~Font will not release the actual font resource sine it is now 0
+}
+
+void FontAlias::MakeAlias(Font &fontOrigin) {
+	SetID(fontOrigin.GetID());
+}
+
+void FontAlias::ClearFont() {
+	SetID(0);
+}
+
+bool FontSpecification::EqualTo(const FontSpecification &other) const {
+	return weight == other.weight &&
+	       italic == other.italic &&
+	       size == other.size &&
+	       characterSet == other.characterSet &&
+	       fontName == other.fontName;
+}
+
+FontMeasurements::FontMeasurements() {
+	Clear();
+}
+
+void FontMeasurements::Clear() {
+	ascent = 1;
+	descent = 1;
+	aveCharWidth = 1;
+	spaceWidth = 1;
+	sizeZoomed = 2;
+}
+
+Style::Style() : FontSpecification() {
+	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
+	      Platform::DefaultFontSize() * SC_FONT_SIZE_MULTIPLIER, 0, SC_CHARSET_DEFAULT,
+	      SC_WEIGHT_NORMAL, false, false, false, caseMixed, true, true, false);
+}
+
+Style::Style(const Style &source) : FontSpecification(), FontMeasurements() {
 	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
 	      0, 0, 0,
-	      false, false, false, false, caseMixed, true, true, false);
-	fore.desired = source.fore.desired;
-	back.desired = source.back.desired;
+	      SC_WEIGHT_NORMAL, false, false, false, caseMixed, true, true, false);
+	fore = source.fore;
+	back = source.back;
 	characterSet = source.characterSet;
-	bold = source.bold;
+	weight = source.weight;
 	italic = source.italic;
 	size = source.size;
 	eolFilled = source.eolFilled;
@@ -42,11 +77,6 @@ Style::Style(const Style &source) {
 }
 
 Style::~Style() {
-	if (aliasOfDefaultFont)
-		font.SetID(0);
-	else
-		font.Release();
-	aliasOfDefaultFont = false;
 }
 
 Style &Style::operator=(const Style &source) {
@@ -54,11 +84,11 @@ Style &Style::operator=(const Style &source) {
 		return * this;
 	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
 	      0, 0, SC_CHARSET_DEFAULT,
-	      false, false, false, false, caseMixed, true, true, false);
-	fore.desired = source.fore.desired;
-	back.desired = source.back.desired;
+	      SC_WEIGHT_NORMAL, false, false, false, caseMixed, true, true, false);
+	fore = source.fore;
+	back = source.back;
 	characterSet = source.characterSet;
-	bold = source.bold;
+	weight = source.weight;
 	italic = source.italic;
 	size = source.size;
 	eolFilled = source.eolFilled;
@@ -70,14 +100,14 @@ Style &Style::operator=(const Style &source) {
 }
 
 void Style::Clear(ColourDesired fore_, ColourDesired back_, int size_,
-                  const char *fontName_, int characterSet_,
-                  bool bold_, bool italic_, bool eolFilled_,
-                  bool underline_, ecaseForced caseForce_,
-		  bool visible_, bool changeable_, bool hotspot_) {
-	fore.desired = fore_;
-	back.desired = back_;
+        const char *fontName_, int characterSet_,
+        int weight_, bool italic_, bool eolFilled_,
+        bool underline_, ecaseForced caseForce_,
+        bool visible_, bool changeable_, bool hotspot_) {
+	fore = fore_;
+	back = back_;
 	characterSet = characterSet_;
-	bold = bold_;
+	weight = weight_;
 	italic = italic_;
 	size = size_;
 	fontName = fontName_;
@@ -87,72 +117,31 @@ void Style::Clear(ColourDesired fore_, ColourDesired back_, int size_,
 	visible = visible_;
 	changeable = changeable_;
 	hotspot = hotspot_;
-	if (aliasOfDefaultFont)
-		font.SetID(0);
-	else
-		font.Release();
-	aliasOfDefaultFont = false;
+	font.ClearFont();
+	FontMeasurements::Clear();
 }
 
 void Style::ClearTo(const Style &source) {
 	Clear(
-		source.fore.desired,
-		source.back.desired,
-		source.size,
-		source.fontName,
-		source.characterSet,
-		source.bold,
-		source.italic,
-		source.eolFilled,
-		source.underline,
-		source.caseForce,
-		source.visible,
-		source.changeable,
-		source.hotspot);
+	    source.fore,
+	    source.back,
+	    source.size,
+	    source.fontName,
+	    source.characterSet,
+	    source.weight,
+	    source.italic,
+	    source.eolFilled,
+	    source.underline,
+	    source.caseForce,
+	    source.visible,
+	    source.changeable,
+	    source.hotspot);
 }
 
-bool Style::EquivalentFontTo(const Style *other) const {
-	if (bold != other->bold ||
-	        italic != other->italic ||
-	        size != other->size ||
-	        characterSet != other->characterSet)
-		return false;
-	if (fontName == other->fontName)
-		return true;
-	if (!fontName)
-		return false;
-	if (!other->fontName)
-		return false;
-	return strcmp(fontName, other->fontName) == 0;
-}
-
-void Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle, int extraFontFlag) {
-	sizeZoomed = size + zoomLevel;
-	if (sizeZoomed <= 2)	// Hangs if sizeZoomed <= 1
-		sizeZoomed = 2;
-
-	if (aliasOfDefaultFont)
-		font.SetID(0);
-	else
-		font.Release();
-	int deviceHeight = surface.DeviceHeightFont(sizeZoomed);
-	aliasOfDefaultFont = defaultStyle &&
-	                     (EquivalentFontTo(defaultStyle) || !fontName);
-	if (aliasOfDefaultFont) {
-		font.SetID(defaultStyle->font.GetID());
-	} else if (fontName) {
-		font.Create(fontName, characterSet, deviceHeight, bold, italic, extraFontFlag);
-	} else {
-		font.SetID(0);
-	}
-
-	ascent = surface.Ascent(font);
-	descent = surface.Descent(font);
-	// Probably more typographically correct to include leading
-	// but that means more complex drawing as leading must be erased
-	//lineHeight = surface.ExternalLeading() + surface.Height();
-	externalLeading = surface.ExternalLeading(font);
-	lineHeight = surface.Height(font);
-	aveCharWidth = surface.AverageCharWidth(font);
-	spaceWidth = surface.WidthChar(font, ' ');
+void Style::Copy(Font &font_, const FontMeasurements &fm_) {
+	font.MakeAlias(font_);
+#if PLAT_WX
+	font.SetAscent(fm_.ascent);
+#endif
+	(FontMeasurements &)(*this) = fm_;
 }

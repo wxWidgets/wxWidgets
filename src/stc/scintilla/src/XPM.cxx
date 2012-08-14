@@ -8,6 +8,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <vector>
+#include <map>
+
 #include "Platform.h"
 
 #include "XPM.h"
@@ -38,16 +41,12 @@ static size_t MeasureLength(const char *s) {
 	return i;
 }
 
-ColourAllocated XPM::ColourFromCode(int ch) {
-	return colourCodeTable[ch]->allocated;
-#ifdef SLOW
-	for (int i=0; i<nColours; i++) {
-		if (codes[i] == ch) {
-			return colours[i].allocated;
-		}
-	}
-	return colours[0].allocated;
-#endif
+ColourDesired XPM::ColourDesiredFromCode(int ch) const {
+	return *colourCodeTable[ch];
+}
+
+ColourDesired XPM::ColourFromCode(int ch) const {
+	return *colourCodeTable[ch];
 }
 
 void XPM::FillRun(Surface *surface, int code, int startX, int y, int x) {
@@ -62,7 +61,7 @@ XPM::XPM(const char *textForm) :
 	Init(textForm);
 }
 
-XPM::XPM(const char * const *linesForm) :
+XPM::XPM(const char *const *linesForm) :
 	data(0), codes(0), colours(0), lines(0) {
 	Init(linesForm);
 }
@@ -88,7 +87,7 @@ void XPM::Init(const char *textForm) {
 	}
 }
 
-void XPM::Init(const char * const *linesForm) {
+void XPM::Init(const char *const *linesForm) {
 	Clear();
 	height = 1;
 	width = 1;
@@ -113,7 +112,7 @@ void XPM::Init(const char * const *linesForm) {
 		return;
 	}
 	codes = new char[nColours];
-	colours = new ColourPair[nColours];
+	colours = new ColourDesired[nColours];
 
 	int strings = 1+height+nColours;
 	lines = new char *[strings];
@@ -140,9 +139,9 @@ void XPM::Init(const char * const *linesForm) {
 		codes[c] = colourDef[0];
 		colourDef += 4;
 		if (*colourDef == '#') {
-			colours[c].desired.Set(colourDef);
+			colours[c].Set(colourDef);
 		} else {
-			colours[c].desired = ColourDesired(0xff, 0xff, 0xff);
+			colours[c] = ColourDesired(0xff, 0xff, 0xff);
 			codeTransparent = codes[c];
 		}
 		colourCodeTable[static_cast<unsigned char>(codes[c])] = &(colours[c]);
@@ -160,24 +159,6 @@ void XPM::Clear() {
 	lines = 0;
 }
 
-void XPM::RefreshColourPalette(Palette &pal, bool want) {
-	if (!data || !codes || !colours || !lines) {
-		return;
-	}
-	for (int i=0; i<nColours; i++) {
-		pal.WantFind(colours[i], want);
-	}
-}
-
-void XPM::CopyDesiredColours() {
-	if (!data || !codes || !colours || !lines) {
-		return;
-	}
-	for (int i=0; i<nColours; i++) {
-		colours[i].Copy();
-	}
-}
-
 void XPM::Draw(Surface *surface, PRectangle &rc) {
 	if (!data || !codes || !colours || !lines) {
 		return;
@@ -185,7 +166,7 @@ void XPM::Draw(Surface *surface, PRectangle &rc) {
 	// Centre the pixmap
 	int startY = rc.top + (rc.Height() - height) / 2;
 	int startX = rc.left + (rc.Width() - width) / 2;
-	for (int y=0;y<height;y++) {
+	for (int y=0; y<height; y++) {
 		int prevCode = 0;
 		int xStartRun = 0;
 		for (int x=0; x<width; x++) {
@@ -197,6 +178,21 @@ void XPM::Draw(Surface *surface, PRectangle &rc) {
 			}
 		}
 		FillRun(surface, prevCode, startX + xStartRun, startY + y, startX + width);
+	}
+}
+
+void XPM::PixelAt(int x, int y, ColourDesired &colour, bool &transparent) const {
+	if (!data || !codes || !colours || !lines || (x<0) || (x >= width) || (y<0) || (y >= height)) {
+		colour = 0;
+		transparent = true;
+		return;
+	}
+	int code = lines[y+nColours+1][x];
+	transparent = code == codeTransparent;
+	if (transparent) {
+		colour = 0;
+	} else {
+		colour = ColourDesiredFromCode(code).AsLong();
 	}
 }
 
@@ -261,16 +257,15 @@ void XPMSet::Clear() {
 	width = -1;
 }
 
-void XPMSet::Add(int id, const char *textForm) {
+void XPMSet::Add(int ident, const char *textForm) {
 	// Invalidate cached dimensions
 	height = -1;
 	width = -1;
 
 	// Replace if this id already present
 	for (int i = 0; i < len; i++) {
-		if (set[i]->GetId() == id) {
+		if (set[i]->GetId() == ident) {
 			set[i]->Init(textForm);
-			set[i]->CopyDesiredColours();
 			return;
 		}
 	}
@@ -278,8 +273,7 @@ void XPMSet::Add(int id, const char *textForm) {
 	// Not present, so add to end
 	XPM *pxpm = new XPM(textForm);
 	if (pxpm) {
-		pxpm->SetId(id);
-		pxpm->CopyDesiredColours();
+		pxpm->SetId(ident);
 		if (len == maximum) {
 			maximum += 64;
 			XPM **setNew = new XPM *[maximum];
@@ -294,9 +288,9 @@ void XPMSet::Add(int id, const char *textForm) {
 	}
 }
 
-XPM *XPMSet::Get(int id) {
+XPM *XPMSet::Get(int ident) {
 	for (int i = 0; i < len; i++) {
-		if (set[i]->GetId() == id) {
+		if (set[i]->GetId() == ident) {
 			return set[i];
 		}
 	}
@@ -319,6 +313,113 @@ int XPMSet::GetWidth() {
 		for (int i = 0; i < len; i++) {
 			if (width < set[i]->GetWidth()) {
 				width = set[i]->GetWidth();
+			}
+		}
+	}
+	return (width > 0) ? width : 0;
+}
+
+RGBAImage::RGBAImage(int width_, int height_, const unsigned char *pixels_) :
+	height(height_), width(width_) {
+	if (pixels_) {
+		pixelBytes.assign(pixels_, pixels_ + CountBytes());
+	} else {
+		pixelBytes.resize(CountBytes());
+	}
+}
+
+RGBAImage::RGBAImage(const XPM &xpm) {
+	height = xpm.GetHeight();
+	width = xpm.GetWidth();
+	pixelBytes.resize(CountBytes());
+	for (int y=0; y<height; y++) {
+		for (int x=0; x<width; x++) {
+			ColourDesired colour;
+			bool transparent = false;
+			xpm.PixelAt(x, y, colour, transparent);
+			SetPixel(x, y, colour, transparent ? 0 : 255);
+		}
+	}
+}
+
+RGBAImage::~RGBAImage() {
+}
+
+int RGBAImage::CountBytes() const {
+	return width * height * 4;
+}
+
+const unsigned char *RGBAImage::Pixels() const {
+	return &pixelBytes[0];
+}
+
+void RGBAImage::SetPixel(int x, int y, ColourDesired colour, int alpha) {
+	unsigned char *pixel = &pixelBytes[0] + (y*width+x) * 4;
+	// RGBA
+	pixel[0] = colour.GetRed();
+	pixel[1] = colour.GetGreen();
+	pixel[2] = colour.GetBlue();
+	pixel[3] = alpha;
+}
+
+RGBAImageSet::RGBAImageSet() : height(-1), width(-1){
+}
+
+RGBAImageSet::~RGBAImageSet() {
+	Clear();
+}
+
+/// Remove all images.
+void RGBAImageSet::Clear() {
+	for (ImageMap::iterator it=images.begin(); it != images.end(); ++it) {
+		delete it->second;
+		it->second = 0;
+	}
+	images.clear();
+	height = -1;
+	width = -1;
+}
+
+/// Add an image.
+void RGBAImageSet::Add(int ident, RGBAImage *image) {
+	ImageMap::iterator it=images.find(ident);
+	if (it == images.end()) {
+		images[ident] = image;
+	} else {
+		delete it->second;
+		it->second = image;
+	}
+	height = -1;
+	width = -1;
+}
+
+/// Get image by id.
+RGBAImage *RGBAImageSet::Get(int ident) {
+	ImageMap::iterator it = images.find(ident);
+	if (it != images.end()) {
+		return it->second;
+	}
+	return NULL;
+}
+
+/// Give the largest height of the set.
+int RGBAImageSet::GetHeight() const {
+	if (height < 0) {
+		for (ImageMap::const_iterator it=images.begin(); it != images.end(); ++it) {
+			if (height < it->second->GetHeight()) {
+				height = it->second->GetHeight();
+			}
+		}
+	}
+	return (height > 0) ? height : 0;
+}
+
+/// Give the largest width of the set.
+int RGBAImageSet::GetWidth() const {
+	if (width < 0) {
+		for (ImageMap::const_iterator it=images.begin(); it != images.end(); ++it) {
+			if (width < it->second->GetWidth()) {
+				width = it->second->GetWidth();
 			}
 		}
 	}

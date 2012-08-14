@@ -8,11 +8,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
+
+#include <string>
 
 #include "Platform.h"
 
-#include "CharClassify.h"
+#include "CharacterSet.h"
 #include "AutoComplete.h"
+#include "Scintilla.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
@@ -29,7 +33,8 @@ AutoComplete::AutoComplete() :
 	startLen(0),
 	cancelAtStartPos(true),
 	autoHide(true),
-	dropRestOfWord(false)	{
+	dropRestOfWord(false),
+	ignoreCaseBehaviour(SC_CASEINSENSITIVEBEHAVIOUR_RESPECTCASE) {
 	lb = ListBox::Allocate();
 	stopChars[0] = '\0';
 	fillUpChars[0] = '\0';
@@ -43,17 +48,17 @@ AutoComplete::~AutoComplete() {
 	}
 }
 
-bool AutoComplete::Active() {
+bool AutoComplete::Active() const {
 	return active;
 }
 
-void AutoComplete::Start(Window &parent, int ctrlID, 
-	int position, Point location, int startLen_, 
-	int lineHeight, bool unicodeMode) {
+void AutoComplete::Start(Window &parent, int ctrlID,
+	int position, Point location, int startLen_,
+	int lineHeight, bool unicodeMode, int technology) {
 	if (active) {
 		Cancel();
 	}
-	lb->Create(parent, ctrlID, location, lineHeight, unicodeMode);
+	lb->Create(parent, ctrlID, location, lineHeight, unicodeMode, technology);
 	lb->Clear();
 	active = true;
 	startLen = startLen_;
@@ -82,7 +87,7 @@ void AutoComplete::SetSeparator(char separator_) {
 	separator = separator_;
 }
 
-char AutoComplete::GetSeparator() {
+char AutoComplete::GetSeparator() const {
 	return separator;
 }
 
@@ -90,12 +95,22 @@ void AutoComplete::SetTypesep(char separator_) {
 	typesep = separator_;
 }
 
-char AutoComplete::GetTypesep() {
+char AutoComplete::GetTypesep() const {
 	return typesep;
 }
 
 void AutoComplete::SetList(const char *list) {
 	lb->SetList(list, separator, typesep);
+}
+
+int AutoComplete::GetSelection() const {
+	return lb->GetSelection();
+}
+
+std::string AutoComplete::GetValue(int item) const {
+	char value[maxItemLen];
+	lb->GetValue(item, value, sizeof(value));
+	return std::string(value);
 }
 
 void AutoComplete::Show(bool show) {
@@ -127,12 +142,11 @@ void AutoComplete::Move(int delta) {
 void AutoComplete::Select(const char *word) {
 	size_t lenWord = strlen(word);
 	int location = -1;
-	const int maxItemLen=1000;
-	char item[maxItemLen];
 	int start = 0; // lower bound of the api array block to search
 	int end = lb->Length() - 1; // upper bound of the api array block to search
 	while ((start <= end) && (location == -1)) { // Binary searching loop
 		int pivot = (start + end) / 2;
+		char item[maxItemLen];
 		lb->GetValue(pivot, item, maxItemLen);
 		int cond;
 		if (ignoreCase)
@@ -152,7 +166,8 @@ void AutoComplete::Select(const char *word) {
 				--pivot;
 			}
 			location = pivot;
-			if (ignoreCase) {
+			if (ignoreCase
+				&& ignoreCaseBehaviour == SC_CASEINSENSITIVEBEHAVIOUR_RESPECTCASE) {
 				// Check for exact-case match
 				for (; pivot <= end; pivot++) {
 					lb->GetValue(pivot, item, maxItemLen);

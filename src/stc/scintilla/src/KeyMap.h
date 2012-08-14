@@ -16,6 +16,7 @@ namespace Scintilla {
 #define SCI_SHIFT SCMOD_SHIFT
 #define SCI_CTRL SCMOD_CTRL
 #define SCI_ALT SCMOD_ALT
+#define SCI_META SCMOD_META
 #define SCI_CSHIFT (SCI_CTRL | SCI_SHIFT)
 #define SCI_ASHIFT (SCI_ALT | SCI_SHIFT)
 

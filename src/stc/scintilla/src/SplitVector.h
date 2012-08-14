@@ -1,6 +1,6 @@
 // Scintilla source code edit control
 /** @file SplitVector.h
- ** Main data structure for holding arrays that handle insertions 
+ ** Main data structure for holding arrays that handle insertions
  ** and deletions efficiently.
  **/
 // Copyright 1998-2007 by Neil Hodgson <neilh@scintilla.org>
@@ -97,7 +97,7 @@ public:
 
 	/// Retrieve the character at a particular position.
 	/// Retrieving positions outside the range of the buffer returns 0.
-	/// The assertions here are disabled since calling code can be 
+	/// The assertions here are disabled since calling code can be
 	/// simpler if out of range access works and returns 0.
 	T ValueAt(int position) const {
 		if (position < part1Length) {
@@ -135,7 +135,7 @@ public:
 		}
 	}
 
-	T& operator[](int position) const {
+	T &operator[](int position) const {
 		PLATFORM_ASSERT(position >= 0 && position < lengthBody);
 		if (position < part1Length) {
 			return body[position];
@@ -182,14 +182,14 @@ public:
 		}
 	}
 
-	/// Ensure at least length elements allocated, 
+	/// Ensure at least length elements allocated,
 	/// appending zero valued elements if needed.
 	void EnsureLength(int wantedLength) {
 		if (Length() < wantedLength) {
 			InsertValue(Length(), wantedLength - Length(), 0);
 		}
 	}
-	
+
 	/// Insert text into the buffer from an array.
 	void InsertFromArray(int positionToInsert, const T s[], int positionFrom, int insertLength) {
 		PLATFORM_ASSERT((positionToInsert >= 0) && (positionToInsert <= lengthBody));
@@ -238,11 +238,46 @@ public:
 		DeleteRange(0, lengthBody);
 	}
 
-	T* BufferPointer() {
+	// Retrieve a range of elements into an array
+	void GetRange(T *buffer, int position, int retrieveLength) const {
+		// Split into up to 2 ranges, before and after the split then use memcpy on each.
+		int range1Length = 0;
+		if (position < part1Length) {
+			int part1AfterPosition = part1Length - position;
+			range1Length = retrieveLength;
+			if (range1Length > part1AfterPosition)
+				range1Length = part1AfterPosition;
+		}
+		memcpy(buffer, body + position, range1Length * sizeof(T));
+		buffer += range1Length;
+		position = position + range1Length + gapLength;
+		int range2Length = retrieveLength - range1Length;
+		memcpy(buffer, body + position, range2Length * sizeof(T));
+	}
+
+	T *BufferPointer() {
 		RoomFor(1);
 		GapTo(lengthBody);
 		body[lengthBody] = 0;
 		return body;
+	}
+
+	T *RangePointer(int position, int rangeLength) {
+		if (position < part1Length) {
+			if ((position + rangeLength) > part1Length) {
+				// Range overlaps gap, so move gap to start of range.
+				GapTo(position);
+				return body + position + gapLength;
+			} else {
+				return body + position ;
+			}
+		} else {
+			return body + position + gapLength;
+		}
+	}
+
+	int GapPosition() const {
+		return part1Length; 
 	}
 };
 

@@ -37,7 +37,7 @@ public:
 	void SetPerLine(PerLine *pl);
 
 	void InsertText(int line, int delta);
-	void InsertLine(int line, int position);
+	void InsertLine(int line, int position, bool lineStart);
 	void SetLineStart(int line, int position);
 	void RemoveLine(int line);
 	int Lines() const {
@@ -142,6 +142,10 @@ private:
 
 	LineVector lv;
 
+	/// Actions without undo
+	void BasicInsertString(int position, const char *s, int insertLength);
+	void BasicDeleteChars(int position, int deleteLength);
+
 public:
 
 	CellBuffer();
@@ -149,9 +153,12 @@ public:
 
 	/// Retrieving positions outside the range of the buffer works and returns 0
 	char CharAt(int position) const;
-	void GetCharRange(char *buffer, int position, int lengthRetrieve);
-	char StyleAt(int position);
+	void GetCharRange(char *buffer, int position, int lengthRetrieve) const;
+	char StyleAt(int position) const;
+	void GetStyleRange(unsigned char *buffer, int position, int lengthRetrieve) const;
 	const char *BufferPointer();
+	const char *RangePointer(int position, int rangeLength);
+	int GapPosition() const;
 
 	int Length() const;
 	void Allocate(int newSize);
@@ -159,7 +166,7 @@ public:
 	int Lines() const;
 	int LineStart(int line) const;
 	int LineFromPosition(int pos) const { return lv.LineFromPosition(pos); }
-	void InsertLine(int line, int position);
+	void InsertLine(int line, int position, bool lineStart);
 	void RemoveLine(int line);
 	const char *InsertString(int position, const char *s, int insertLength, bool &startSequence);
 
@@ -170,7 +177,7 @@ public:
 
 	const char *DeleteChars(int position, int deleteLength, bool &startSequence);
 
-	bool IsReadOnly();
+	bool IsReadOnly() const;
 	void SetReadOnly(bool set);
 
 	/// The save point is a marker in the undo stack where the container has stated that
@@ -178,12 +185,8 @@ public:
 	void SetSavePoint();
 	bool IsSavePoint();
 
-	/// Actions without undo
-	void BasicInsertString(int position, const char *s, int insertLength);
-	void BasicDeleteChars(int position, int deleteLength);
-
 	bool SetUndoCollection(bool collectUndo);
-	bool IsCollectingUndo();
+	bool IsCollectingUndo() const;
 	void BeginUndoAction();
 	void EndUndoAction();
 	void AddUndoAction(int token, bool mayCoalesce);

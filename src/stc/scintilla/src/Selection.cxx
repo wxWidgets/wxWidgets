@@ -20,6 +20,9 @@ using namespace Scintilla;
 #endif
 
 void SelectionPosition::MoveForInsertDelete(bool insertion, int startChange, int length) {
+	if (position == startChange) {
+		virtualSpace = 0;
+	}
 	if (insertion) {
 		if (position > startChange) {
 			position += length;
@@ -31,6 +34,7 @@ void SelectionPosition::MoveForInsertDelete(bool insertion, int startChange, int
 				position -= length;
 			} else {
 				position = startChange;
+				virtualSpace = 0;
 			}
 		}
 	}
@@ -127,7 +131,7 @@ bool SelectionRange::Trim(SelectionRange range) {
 		} else if (start <= startRange) {
 			// Trim end
 			end = startRange;
-		} else { // 
+		} else { //
 			PLATFORM_ASSERT(end >= endRange);
 			// Trim start
 			start = endRange;
@@ -267,7 +271,7 @@ void Selection::TrimSelection(SelectionRange range) {
 	for (size_t i=0; i<ranges.size();) {
 		if ((i != mainRange) && (ranges[i].Trim(range))) {
 			// Trimmed to empty so remove
-			for (size_t j=i;j<ranges.size()-1;j++) {
+			for (size_t j=i; j<ranges.size()-1; j++) {
 				ranges[j] = ranges[j+1];
 				if (j == mainRange-1)
 					mainRange--;
@@ -287,6 +291,11 @@ void Selection::SetSelection(SelectionRange range) {
 
 void Selection::AddSelection(SelectionRange range) {
 	TrimSelection(range);
+	ranges.push_back(range);
+	mainRange = ranges.size() - 1;
+}
+
+void Selection::AddSelectionWithoutTrim(SelectionRange range) {
 	ranges.push_back(range);
 	mainRange = ranges.size() - 1;
 }
