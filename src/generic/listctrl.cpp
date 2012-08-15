@@ -2302,8 +2302,11 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     if ( event.LeftDown() )
         SetFocus();
 
-    event.SetEventObject( GetParent() );
-    if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
+    // Pretend that the event happened in wxListCtrl itself.
+    wxMouseEvent me(event);
+    me.SetEventObject( GetParent() );
+    me.SetId(GetParent()->GetId());
+    if ( GetParent()->GetEventHandler()->ProcessEvent( me ))
         return;
 
     if (event.GetEventType() == wxEVT_MOUSEWHEEL)
@@ -2705,6 +2708,7 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
     // propagate the key event upwards
     wxKeyEvent ke(event);
     ke.SetEventObject( parent );
+    ke.SetId(GetParent()->GetId());
     if (parent->GetEventHandler()->ProcessEvent( ke ))
         return;
 
@@ -2728,6 +2732,8 @@ void wxListMainWindow::OnKeyUp( wxKeyEvent &event )
 
     // propagate the key event upwards
     wxKeyEvent ke(event);
+    ke.SetEventObject( parent );
+    ke.SetId(GetParent()->GetId());
     if (parent->GetEventHandler()->ProcessEvent( ke ))
         return;
 
@@ -2757,6 +2763,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     // propagate the char event upwards
     wxKeyEvent ke(event);
     ke.SetEventObject( parent );
+    ke.SetId(GetParent()->GetId());
     if (parent->GetEventHandler()->ProcessEvent( ke ))
         return;
 
