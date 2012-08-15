@@ -4793,7 +4793,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     }
     else if (evt.button == wxAUI_BUTTON_MAXIMIZE_RESTORE && !pane.IsMaximized())
     {
-        // fire pane close event
+        // fire pane maximize event
         wxAuiManagerEvent e(wxEVT_AUI_PANE_MAXIMIZE);
         e.SetManager(this);
         e.SetPane(evt.pane);
@@ -4807,7 +4807,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     }
     else if (evt.button == wxAUI_BUTTON_MAXIMIZE_RESTORE && pane.IsMaximized())
     {
-        // fire pane close event
+        // fire pane restore event
         wxAuiManagerEvent e(wxEVT_AUI_PANE_RESTORE);
         e.SetManager(this);
         e.SetPane(evt.pane);
@@ -4819,11 +4819,29 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
             Update();
         }
     }
-    else if (evt.button == wxAUI_BUTTON_PIN)
+    else if (evt.button == wxAUI_BUTTON_PIN &&
+                (m_flags & wxAUI_MGR_ALLOW_FLOATING) && pane.IsFloatable())
     {
-        if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
-            pane.IsFloatable())
-                pane.Float();
+        if (pane.IsMaximized())
+        {
+            // If the pane is maximized, the original state must be restored
+            // before trying to float the pane, otherwise the other panels
+            // wouldn't appear correctly when it becomes floating.
+            wxAuiManagerEvent e(wxEVT_AUI_PANE_RESTORE);
+            e.SetManager(this);
+            e.SetPane(evt.pane);
+            ProcessMgrEvent(e);
+
+            if (e.GetVeto())
+            {
+                // If it can't be restored, it can't be floated neither.
+                return;
+            }
+
+            RestorePane(pane);
+        }
+
+        pane.Float();
         Update();
     }
 }
