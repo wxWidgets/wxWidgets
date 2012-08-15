@@ -2889,7 +2889,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                 if(wxRibbonCanLabelBreakAtPosition(label, i))
                 {
                     int width = wxMax(
-                        dc.GetTextExtent(label.Mid(0, i - 1)).GetWidth(),
+                        dc.GetTextExtent(label.Left(i)).GetWidth(),
                         dc.GetTextExtent(label.Mid(i + 1)).GetWidth() + last_line_extra_width);
                     if(width < best_width)
                     {
