@@ -82,6 +82,7 @@ public:
     int minimum_width;
     bool active;
     bool hovered;
+    bool highlight;
     bool shown;
 };
 
@@ -126,6 +127,10 @@ public:
     bool IsPageShown(size_t page) const;
     void ShowPage(size_t page, bool show = true);
     void HidePage(size_t page) { ShowPage(page, false); }
+
+    bool IsPageHighlighted(size_t page) const;
+    void AddPageHighlight(size_t page, bool highlight = true);
+    void RemovePageHighlight(size_t page) { AddPageHighlight(page, false); }
 
     void ShowPanels(bool show = true);
     void HidePanels() { ShowPanels(false); }

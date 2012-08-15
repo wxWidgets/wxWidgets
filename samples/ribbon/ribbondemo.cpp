@@ -401,6 +401,8 @@ MyFrame::MyFrame()
         bar->AddButton(ID_HIDE_PAGES, wxT("Hide Pages"), ribbon_xpm);
         bar->AddButton(ID_SHOW_PAGES, wxT("Show Pages"), ribbon_xpm);
     }
+    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Highlight Page"), empty_xpm);
+    m_ribbon->AddPageHighlight(m_ribbon->GetPageCount()-1);
 
     m_ribbon->Realize();
 

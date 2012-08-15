@@ -285,6 +285,35 @@ public:
     void HidePage(size_t page);
 
     /**
+        Indicates whether a tab is currently highlighted.
+
+        @see AddPageHighlight()
+
+        @since 2.9.5
+    */
+    bool IsPageHighlighted(size_t page) const;
+
+    /**
+        Highlight the specified tab.
+
+        Highlighted tabs have a colour between that of the active tab
+        and a tab over which the mouse is hovering. This can be used
+        to make a tab (usually temporarily) more noticeable to the user.
+
+        @since 2.9.5
+    */
+    void AddPageHighlight(size_t page, bool highlight = true);
+
+    /**
+        Changes a tab to not be highlighted.
+
+        @see AddPageHighlight()
+
+        @since 2.9.5
+    */
+    void RemovePageHighlight(size_t page);
+
+    /**
         Shows or hides the panel area of the ribbon bar.
 
         If the panel area is hidden, then only the tab of the ribbon bar will

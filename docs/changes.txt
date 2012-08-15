@@ -536,6 +536,7 @@ All (GUI):
 
 - Respect window max size in wxBoxSizer (Nathan Ridge).
 - Add possibility to hide and show again wxRibbonBar pages (wxBen).
+- Add wxRibbonBar pages highlighting (wxBen).
 - Add expand/collapse button to wxRibbonBar (rakeshthp).
 - Fix item data access in wxDataViewListCtrl (Kry).
 - Fix problem with floating maximized AUI panes (Laurent Poujoulat).

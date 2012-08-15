@@ -1063,7 +1063,7 @@ void wxRibbonMSWArtProvider::DrawTab(
     if(tab.rect.height <= 2)
         return;
 
-    if(tab.active || tab.hovered)
+    if(tab.active || tab.hovered || tab.highlight)
     {
         if(tab.active)
         {
@@ -1097,6 +1097,41 @@ void wxRibbonMSWArtProvider::DrawTab(
             background.height = h - background.height;
             dc.GradientFillLinear(background, m_tab_hover_background_colour,
                 m_tab_hover_background_gradient_colour, wxSOUTH);
+        }
+        else if(tab.highlight)
+        {
+            wxRect background(tab.rect);
+
+            background.x += 2;
+            background.y += 2;
+            background.width -= 4;
+            background.height -= 3;
+            int h = background.height;
+            background.height /= 2;
+
+            //For highlight pages we show a colour between the active page and for a hovered page:
+            wxColour top_colour1((m_tab_active_background_colour.Red()   + m_tab_hover_background_top_colour.Red())/2,
+                                 (m_tab_active_background_colour.Green() + m_tab_hover_background_top_colour.Green())/2,
+                                 (m_tab_active_background_colour.Blue()  + m_tab_hover_background_top_colour.Blue())/2);
+
+            wxColour bottom_colour1((m_tab_active_background_gradient_colour.Red()   + m_tab_hover_background_top_gradient_colour.Red())/2,
+                                    (m_tab_active_background_gradient_colour.Green() + m_tab_hover_background_top_gradient_colour.Green())/2,
+                                    (m_tab_active_background_gradient_colour.Blue()  + m_tab_hover_background_top_gradient_colour.Blue())/2);
+
+            dc.GradientFillLinear(background, top_colour1, bottom_colour1, wxSOUTH);
+
+            background.y += background.height;
+            background.height = h - background.height;
+
+            wxColour top_colour2((m_tab_active_background_colour.Red()   + m_tab_hover_background_colour.Red())/2,
+                                 (m_tab_active_background_colour.Green() + m_tab_hover_background_colour.Green())/2,
+                                 (m_tab_active_background_colour.Blue()  + m_tab_hover_background_colour.Blue())/2);
+
+            wxColour bottom_colour2((m_tab_active_background_gradient_colour.Red()   + m_tab_hover_background_gradient_colour.Red())/2,
+                                    (m_tab_active_background_gradient_colour.Green() + m_tab_hover_background_gradient_colour.Green())/2,
+                                    (m_tab_active_background_gradient_colour.Blue()  + m_tab_hover_background_gradient_colour.Blue())/2);
+
+            dc.GradientFillLinear(background, top_colour2, bottom_colour2, wxSOUTH);
         }
 
         wxPoint border_points[6];

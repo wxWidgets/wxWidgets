@@ -67,6 +67,7 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     info.page = page;
     info.active = false;
     info.hovered = false;
+    info.highlight = false;
     info.shown = true;
     // info.rect not set (intentional)
 
@@ -304,6 +305,20 @@ void wxRibbonBar::ShowPage(size_t page, bool show)
     if(page >= m_pages.GetCount())
         return;
     m_pages.Item(page).shown = show;
+}
+
+bool wxRibbonBar::IsPageHighlighted(size_t page) const
+{
+    if (page >= m_pages.GetCount())
+        return false;
+    return m_pages.Item(page).highlight;
+}
+
+void wxRibbonBar::AddPageHighlight(size_t page, bool highlight)
+{
+    if(page >= m_pages.GetCount())
+        return;
+    m_pages.Item(page).highlight = highlight;
 }
 
 void wxRibbonBar::DeletePage(size_t n)
