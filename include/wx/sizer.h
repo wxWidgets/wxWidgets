@@ -436,6 +436,10 @@ protected:
     void DoSetSizer(wxSizer *sizer);
     void DoSetSpacer(const wxSize& size);
 
+    // Add the border specified for this item to the given size
+    // if it's != wxDefaultSize, just return wxDefaultSize otherwise.
+    wxSize AddBorderToSize(const wxSize& size) const;
+
     // discriminated union: depending on m_kind one of the fields is valid
     enum
     {

@@ -207,6 +207,23 @@ void wxSizerItem::DoSetSpacer(const wxSize& size)
     SetRatio(size);
 }
 
+wxSize wxSizerItem::AddBorderToSize(const wxSize& size) const
+{
+    if (size == wxDefaultSize)
+        return size;
+
+    wxSize result = size;
+    if (m_flag & wxWEST)
+        result.x += m_border;
+    if (m_flag & wxEAST)
+        result.x += m_border;
+    if (m_flag & wxNORTH)
+        result.y += m_border;
+    if (m_flag & wxSOUTH)
+        result.y += m_border;
+    return result;
+}
+
 wxSizerItem::wxSizerItem(int width,
                          int height,
                          int proportion,
@@ -397,18 +414,7 @@ wxSize wxSizerItem::CalcMin()
 
 wxSize wxSizerItem::GetMinSizeWithBorder() const
 {
-    wxSize ret = m_minSize;
-
-    if (m_flag & wxWEST)
-        ret.x += m_border;
-    if (m_flag & wxEAST)
-        ret.x += m_border;
-    if (m_flag & wxNORTH)
-        ret.y += m_border;
-    if (m_flag & wxSOUTH)
-        ret.y += m_border;
-
-    return ret;
+    return AddBorderToSize(m_minSize);
 }
 
 
