@@ -131,6 +131,11 @@ public:
 
     /**
         Sets range of allowable values.
+
+        Notice that calling this method may change the value of the control if
+        it's not inside the new valid range, e.g. it will become @a minVal if
+        it is less than it now. However no @c wxEVT_COMMAND_SPINCTRL_UPDATED
+        event is generated, even if it the value does change.
     */
     void SetRange(int minVal, int maxVal);
 

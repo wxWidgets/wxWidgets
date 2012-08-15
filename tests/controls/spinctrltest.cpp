@@ -165,7 +165,18 @@ void SpinCtrlTestCase::Range()
     CPPUNIT_ASSERT_EQUAL(0, m_spin->GetMin());
     CPPUNIT_ASSERT_EQUAL(100, m_spin->GetMax());
 
-    //Test neagtive ranges
+    // Test that the value is adjusted to be inside the new valid range but
+    // that this doesn't result in any events (as this is not something done by
+    // the user).
+    {
+        EventCounter updated(m_spin, wxEVT_COMMAND_SPINCTRL_UPDATED);
+
+        m_spin->SetRange(1, 10);
+        CPPUNIT_ASSERT_EQUAL(1, m_spin->GetValue());
+        CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
+    }
+
+    //Test negative ranges
     m_spin->SetRange(-10, 10);
 
     CPPUNIT_ASSERT_EQUAL(-10, m_spin->GetMin());

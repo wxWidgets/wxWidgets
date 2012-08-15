@@ -550,6 +550,7 @@ wxMSW:
 - Add support for CURRENCY and SCODE types to OLE Automation helpers (PB).
 - Allow setting LCID used by wxAutomationObject (PB).
 - Fix calling Iconize(false) on hidden top level windows (Christian Walther).
+- Don't send any events from wxSpinCtrl::SetRange() even if the value changed.
 
 
 2.9.4: (released 2012-07-09)
