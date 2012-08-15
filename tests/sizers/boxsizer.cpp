@@ -20,6 +20,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/sizer.h"
+    #include "wx/listbox.h"
 #endif // WX_PRECOMP
 
 #include "asserthelper.h"
@@ -41,11 +42,17 @@ private:
         CPPUNIT_TEST( Size1 );
         CPPUNIT_TEST( Size3 );
         CPPUNIT_TEST( CalcMin );
+        CPPUNIT_TEST( BestSizeRespectsMaxSize );
+        CPPUNIT_TEST( RecalcSizesRespectsMaxSize1 );
+        CPPUNIT_TEST( RecalcSizesRespectsMaxSize2 );
     CPPUNIT_TEST_SUITE_END();
 
     void Size1();
     void Size3();
     void CalcMin();
+    void BestSizeRespectsMaxSize();
+    void RecalcSizesRespectsMaxSize1();
+    void RecalcSizesRespectsMaxSize2();
 
     wxWindow *m_win;
     wxSizer *m_sizer;
@@ -297,4 +304,76 @@ void BoxSizerTestCase::CalcMin()
             cmtd.total, m_sizer->CalcMin().x
         );
     }
+}
+
+void BoxSizerTestCase::BestSizeRespectsMaxSize()
+{
+    m_sizer->Clear();
+
+    const int maxWidth = 100;
+
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    wxListBox* listbox = new wxListBox(m_win, wxID_ANY);
+    listbox->Append("some very very very very very very very very very very very long string");
+    listbox->SetMaxSize(wxSize(maxWidth, -1));
+    sizer->Add(listbox);
+
+    m_sizer->Add(sizer);
+    m_win->Layout();
+
+    CPPUNIT_ASSERT_EQUAL(maxWidth, listbox->GetSize().GetWidth());
+}
+
+void BoxSizerTestCase::RecalcSizesRespectsMaxSize1()
+{
+    m_sizer->Clear();
+
+    const int maxWidth = 100;
+
+    m_win->SetClientSize(300, 300);
+
+    wxSizer* sizer1 = new wxBoxSizer(wxVERTICAL);
+    m_sizer->Add(sizer1);
+
+    wxListBox* listbox1 = new wxListBox(m_win, wxID_ANY);
+    listbox1->Append("some very very very very very very very very very very very long string");
+    sizer1->Add(listbox1);
+
+    wxSizer* sizer2 = new wxBoxSizer(wxHORIZONTAL);
+    sizer1->Add(sizer2, wxSizerFlags().Expand());
+
+    wxListBox* listbox2 = new wxListBox(m_win, wxID_ANY);
+    listbox2->Append("some string");
+    listbox2->SetMaxSize(wxSize(100, -1));
+    sizer2->Add(listbox2, wxSizerFlags().Proportion(1));
+
+    m_win->Layout();
+
+    CPPUNIT_ASSERT_EQUAL(maxWidth, listbox2->GetSize().GetWidth());
+}
+
+void BoxSizerTestCase::RecalcSizesRespectsMaxSize2()
+{
+    m_sizer->Clear();
+
+    m_win->SetClientSize(300, 300);
+
+    wxSizer* sizer1 = new wxBoxSizer(wxVERTICAL);
+    m_sizer->Add(sizer1, wxSizerFlags().Expand());
+
+    wxWindow* child1 = new wxWindow(m_win, wxID_ANY);
+    sizer1->Add(child1, wxSizerFlags().Proportion(1));
+
+    wxWindow* child2 = new wxWindow(m_win, wxID_ANY);
+    child2->SetMaxSize(wxSize(-1, 50));
+    sizer1->Add(child2, wxSizerFlags().Proportion(1));
+
+    wxWindow* child3 = new wxWindow(m_win, wxID_ANY);
+    sizer1->Add(child3, wxSizerFlags().Proportion(1));
+
+    m_win->Layout();
+
+    CPPUNIT_ASSERT_EQUAL(125, child1->GetSize().GetHeight());
+    CPPUNIT_ASSERT_EQUAL(50, child2->GetSize().GetHeight());
+    CPPUNIT_ASSERT_EQUAL(125, child3->GetSize().GetHeight());
 }

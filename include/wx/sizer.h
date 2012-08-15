@@ -311,6 +311,10 @@ public:
         { return m_minSize; }
     wxSize GetMinSizeWithBorder() const;
 
+    wxSize GetMaxSize() const
+        { return IsWindow() ? m_window->GetMaxSize() : wxDefaultSize; }
+    wxSize GetMaxSizeWithBorder() const;
+
     void SetMinSize(const wxSize& size)
     {
         if ( IsWindow() )

@@ -417,6 +417,10 @@ wxSize wxSizerItem::GetMinSizeWithBorder() const
     return AddBorderToSize(m_minSize);
 }
 
+wxSize wxSizerItem::GetMaxSizeWithBorder() const
+{
+    return AddBorderToSize(GetMaxSize());
+}
 
 void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
 {
@@ -2226,6 +2230,66 @@ void wxBoxSizer::RecalcSizes()
             nonFixedSpaceChanged = true;
         }
 
+        // Similar to the previous loop, but dealing with items whose max size
+        // is less than what we would allocate to them taking their proportion
+        // into account.
+        nonFixedSpaceChanged = false;
+        for ( i = m_children.begin(), n = 0; ; ++i, ++n )
+        {
+            if ( nonFixedSpaceChanged )
+            {
+                i = m_children.begin();
+                n = 0;
+                nonFixedSpaceChanged = false;
+            }
+
+            // check for the end of the loop only after the check above as
+            // otherwise we wouldn't do another pass if the last child resulted
+            // in non fixed space reduction
+            if ( i == m_children.end() )
+                break;
+
+            wxSizerItem * const item = *i;
+
+            if ( !item->IsShown() )
+                continue;
+
+            // don't check the item which we had already dealt with during a
+            // previous pass (this is more than an optimization, the code
+            // wouldn't work correctly if we kept adjusting for the same item
+            // over and over again)
+            if ( majorSizes[n] != wxDefaultCoord )
+                continue;
+
+            wxCoord maxMajor = GetSizeInMajorDir(item->GetMaxSizeWithBorder());
+
+            // must be nonzero, fixed-size items were dealt with in previous loop
+            const int propItem = item->GetProportion();
+
+            // is the desired size of this item small enough?
+            if ( maxMajor < 0 ||
+                    (remaining*propItem)/totalProportion <= maxMajor )
+            {
+                // yes, it is, we'll determine the real size of this
+                // item later, for now just leave it as wxDefaultCoord
+                continue;
+            }
+
+            // the proportion of this item won't count, it has
+            // effectively become fixed
+            totalProportion -= propItem;
+
+            // we can already allocate space for this item
+            majorSizes[n] = maxMajor;
+
+            // change the amount of the space remaining to the other items,
+            // as this can result in not being able to satisfy their
+            // proportions any more we will need to redo another loop
+            // iteration
+            remaining -= maxMajor;
+
+            nonFixedSpaceChanged = true;
+        }
 
         // Last by one pass: distribute the remaining space among the non-fixed
         // items whose size weren't fixed yet according to their proportions.
@@ -2277,8 +2341,15 @@ void wxBoxSizer::RecalcSizes()
             // its minimal size which is bad but better than not showing parts
             // of the window at all
             minorSize = totalMinorSize;
+
+            // do not allow the size in the minor direction to grow beyond the max
+            // size of the item in the minor direction
+            const wxCoord maxMinorSize = GetSizeInMinorDir(item->GetMaxSizeWithBorder());
+            if ( maxMinorSize >= 0 && minorSize > maxMinorSize )
+                minorSize = maxMinorSize;
         }
-        else if ( flag & (IsVertical() ? wxALIGN_RIGHT : wxALIGN_BOTTOM) )
+
+        if ( flag & (IsVertical() ? wxALIGN_RIGHT : wxALIGN_BOTTOM) )
         {
             PosInMinorDir(posChild) += totalMinorSize - minorSize;
         }
