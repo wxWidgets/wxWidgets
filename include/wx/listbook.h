@@ -88,6 +88,9 @@ protected:
     wxBookCtrlEvent* CreatePageChangingEvent() const;
     void MakeChangedEvent(wxBookCtrlEvent &event);
 
+    // Get the correct wxListCtrl flags to use depending on our own flags.
+    long GetListCtrlFlags() const;
+
     // event handlers
     void OnListSelected(wxListEvent& event);
     void OnSize(wxSizeEvent& event);

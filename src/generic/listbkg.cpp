@@ -36,8 +36,6 @@
 #include "wx/statline.h"
 #include "wx/imaglist.h"
 
-#include "wx/sysopt.h"
-
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
 // ----------------------------------------------------------------------------
@@ -99,10 +97,11 @@ wxListbook::Create(wxWindow *parent,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    wxLC_SINGLE_SEL |
-                    (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP) |
-                    wxLC_LIST
+                    GetListCtrlFlags()
                  );
+
+    if ( GetListView()->InReportView() )
+        GetListView()->InsertColumn(0, wxS("Pages"));
 
 #ifdef __WXMSW__
     // On XP with themes enabled the GetViewRect used in GetControllerSize() to
@@ -115,6 +114,46 @@ wxListbook::Create(wxWindow *parent,
     GetEventHandler()->AddPendingEvent(evt);
 #endif
     return true;
+}
+
+// ----------------------------------------------------------------------------
+// wxListCtrl flags
+// ----------------------------------------------------------------------------
+
+long wxListbook::GetListCtrlFlags() const
+{
+    // We'd like to always use wxLC_ICON mode but it doesn't work with the
+    // native wxListCtrl under MSW unless we do have icons for all the items,
+    // so we can't use it if we have no image list. In this case we'd like to
+    // use wxLC_LIST mode because it works correctly for both horizontally and
+    // vertically laid out controls, but MSW native wxListCtrl insists on
+    // creating multiple columns if there are too many items and there doesn't
+    // seem anything to do about it, so we have to use wxLC_REPORT mode in this
+    // case there.
+
+    long flags = IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP;
+    if ( GetImageList() )
+    {
+        flags |= wxLC_ICON;
+    }
+    else // No images.
+    {
+#ifdef __WXMSW__
+        if ( !IsVertical() )
+        {
+            // Notice that we intentionally overwrite the alignment flags here
+            // by not using "|=", alignment isn't used for report view.
+            flags = wxLC_REPORT | wxLC_NO_HEADER;
+        }
+        else
+#endif // __WXMSW__
+        {
+            flags |= wxLC_LIST;
+        }
+    }
+
+    // Use single selection in any case.
+    return flags | wxLC_SINGLE_SEL;
 }
 
 // ----------------------------------------------------------------------------
@@ -224,26 +263,24 @@ bool wxListbook::SetPageImage(size_t n, int imageId)
 
 void wxListbook::SetImageList(wxImageList *imageList)
 {
+    const long flagsOld = GetListCtrlFlags();
+
+    wxBookCtrlBase::SetImageList(imageList);
+
+    const long flagsNew = GetListCtrlFlags();
+
     wxListView * const list = GetListView();
 
-    // If imageList presence has changed, we update the list control style
-    if ( (imageList != NULL) != (GetImageList() != NULL) )
+    // We may need to change the list control mode if the image list presence
+    // has changed.
+    if ( flagsNew != flagsOld )
     {
         // Preserve the selection which is lost when changing the mode
         const int oldSel = GetSelection();
 
-        // Update the style to use icon view for images, list view otherwise
-        long style = list->GetWindowStyle() & ~wxLC_MASK_TYPE;
-        if ( imageList )
-        {
-            style |= wxLC_ICON;
-        }
-        else // no image list
-        {
-            style |= wxLC_LIST;
-        }
-
-        list->SetWindowStyleFlag(style);
+        list->SetWindowStyleFlag(flagsNew);
+        if ( list->InReportView() )
+            list->InsertColumn(0, wxS("Pages"));
 
         // Restore selection
         if ( oldSel != wxNOT_FOUND )
@@ -251,8 +288,6 @@ void wxListbook::SetImageList(wxImageList *imageList)
     }
 
     list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
-
-    wxBookCtrlBase::SetImageList(imageList);
 }
 
 // ----------------------------------------------------------------------------
