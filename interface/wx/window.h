@@ -845,6 +845,12 @@ public:
         convenient, DoGetBestClientSize() when writing your own custom window
         class to change the value returned by this public non-virtual method.
 
+        Notice that the best size respects the minimal and maximal size
+        explicitly set for the window, if any. So even if some window believes
+        that it needs 200 pixels horizontally, calling SetMaxSize() with a
+        width of 100 would ensure that GetBestSize() returns the width of at
+        most 100 pixels.
+
         @see CacheBestSize(), @ref overview_windowsizing
     */
     wxSize GetBestSize() const;

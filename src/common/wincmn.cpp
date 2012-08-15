@@ -906,14 +906,19 @@ wxSize wxWindowBase::GetBestSize() const
     // it to be used
     wxSize size = DoGetBestClientSize();
     if ( size != wxDefaultSize )
-    {
         size += DoGetBorderSize();
+    else
+        size = DoGetBestSize();
 
-        CacheBestSize(size);
-        return size;
-    }
+    // Ensure that the best size is at least as large as min size.
+    size.IncTo(GetMinSize());
 
-    return DoGetBestSize();
+    // And not larger than max size.
+    size.DecToIfSpecified(GetMaxSize());
+
+    // Finally cache result and return.
+    CacheBestSize(size);
+    return size;
 }
 
 int wxWindowBase::GetBestHeight(int width) const
@@ -938,12 +943,16 @@ void wxWindowBase::SetMinSize(const wxSize& minSize)
 {
     m_minWidth = minSize.x;
     m_minHeight = minSize.y;
+
+    InvalidateBestSize();
 }
 
 void wxWindowBase::SetMaxSize(const wxSize& maxSize)
 {
     m_maxWidth = maxSize.x;
     m_maxHeight = maxSize.y;
+
+    InvalidateBestSize();
 }
 
 void wxWindowBase::SetInitialSize(const wxSize& size)
