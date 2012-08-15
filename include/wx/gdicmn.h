@@ -255,6 +255,13 @@ public:
         { if ( sz.x > x ) x = sz.x; if ( sz.y > y ) y = sz.y; }
     void DecTo(const wxSize& sz)
         { if ( sz.x < x ) x = sz.x; if ( sz.y < y ) y = sz.y; }
+    void DecToIfSpecified(const wxSize& sz)
+    {
+        if ( sz.x != wxDefaultCoord && sz.x < x )
+            x = sz.x;
+        if ( sz.y != wxDefaultCoord && sz.y < y )
+            y = sz.y;
+    }
 
     void IncBy(int dx, int dy) { x += dx; y += dy; }
     void IncBy(const wxPoint& pt);

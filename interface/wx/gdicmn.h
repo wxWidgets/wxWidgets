@@ -874,6 +874,18 @@ public:
     void DecTo(const wxSize& size);
 
     /**
+        Decrements this object to be not bigger than the given size ignoring
+        non-specified components.
+
+        This is similar to DecTo() but doesn't do anything for x or y
+        component if the same component of @a size is not specified, i.e. set
+        to ::wxDefaultCoord.
+
+        @since 2.9.5
+     */
+    void DecToIfSpecified(const wxSize& size);
+
+    /**
         Gets the height member.
     */
     int GetHeight() const;
