@@ -298,7 +298,7 @@ protected:
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
 
     /**
-        This method is used to draw the items background and, maybe, a border
+        This method is used to draw the item's background and, maybe, a border
         around it.
 
         The base class version implements a reasonable default behaviour which
