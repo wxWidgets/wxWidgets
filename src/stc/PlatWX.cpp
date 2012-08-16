@@ -828,7 +828,8 @@ public:
 #ifdef __WXMSW__
         lv->Show();
 #endif
-#ifdef __WXOSX_COCOA__
+#if defined(__WXOSX_COCOA__) || defined(__WXGTK__)
+        // This color will end up being our border
         SetBackgroundColour(wxColour(0xC0, 0xC0, 0xC0));
 #endif
     }
@@ -893,7 +894,7 @@ public:
         x = y = 0;
         w = sz.x;
         h = sz.y;
-#ifdef __WXOSX_COCOA__
+#if defined(__WXOSX_COCOA__) || defined(__WXGTK__)
         // make room for the parent's bg color to show, to act as a border
         x = y = 1;
         w -= 2;
