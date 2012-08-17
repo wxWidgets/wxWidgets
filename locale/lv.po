@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.8.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-24 09:56+0200\n"
-"PO-Revision-Date: 2012-08-16 16:21+0300\n"
+"PO-Revision-Date: 2012-08-17 11:36+0300\n"
 "Last-Translator: Jānis Eisaks <jancs@dv.lv>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwindows.org>\n"
 "Language: Latvian\n"
@@ -64,7 +64,7 @@ msgstr "Versija"
 
 #: ../src/common/fontcmn.cpp:619
 msgid " bold"
-msgstr "treknināts"
+msgstr "treknraksts"
 
 #: ../src/common/fontcmn.cpp:635
 msgid " italic"
@@ -636,7 +636,7 @@ msgstr "A&ugšup"
 
 #: ../src/generic/fontdlgg.cpp:300
 msgid "&Weight:"
-msgstr "&Platums:"
+msgstr "&Svars:"
 
 #: ../src/aui/tabmdi.cpp:300
 #: ../src/aui/tabmdi.cpp:316
@@ -908,11 +908,11 @@ msgstr "<SAITE>"
 
 #: ../src/html/helpwnd.cpp:1272
 msgid "<b><i>Bold italic face.</i></b><br>"
-msgstr ""
+msgstr "<b><i>Treknraksts kursīvā.</i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1276
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
-msgstr ""
+msgstr "<b><i>treknraksts kursīvā <u>pasvītrots</u></i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1271
 msgid "<b>Bold face.</b> "
@@ -920,7 +920,7 @@ msgstr "<b>Treknraksts.</b> "
 
 #: ../src/html/helpwnd.cpp:1270
 msgid "<i>Italic face.</i> "
-msgstr "Kursīvs."
+msgstr "<i>Kursīvs.</i>"
 
 #: ../src/richtext/richtextliststylepage.cpp:496
 #: ../src/richtext/richtextbulletspage.cpp:294
@@ -1768,21 +1768,18 @@ msgstr "Atzīmējiet, lai iekļautu aizzīmi iekavās."
 
 #: ../src/mac/carbon/fontdlg.cpp:479
 #: ../src/mac/carbon/fontdlg.cpp:481
-#, fuzzy
 msgid "Check to make the font bold."
-msgstr "Īsinājumtaustiņš fonta lieluma palielināšanai"
+msgstr "Atzīmējiet, lai iegūtu fontu treknrakstā."
 
 #: ../src/mac/carbon/fontdlg.cpp:486
 #: ../src/mac/carbon/fontdlg.cpp:488
-#, fuzzy
 msgid "Check to make the font italic."
-msgstr "Īsinājumtaustiņš fonta lieluma palielināšanai"
+msgstr "Atzīmējiet, lai iegūtu fontu kursīvā."
 
 #: ../src/mac/carbon/fontdlg.cpp:495
 #: ../src/mac/carbon/fontdlg.cpp:497
-#, fuzzy
 msgid "Check to make the font underlined."
-msgstr "Īsinājumtaustiņš fonta lieluma palielināšanai"
+msgstr "Atzīmējiet, lai iegūtu fontu ar pasvītrojumu."
 
 #: ../src/richtext/richtextstyledlg.cpp:275
 #: ../src/richtext/richtextstyledlg.cpp:277
@@ -2334,9 +2331,9 @@ msgid "Delete style %s?"
 msgstr "Dzēst stilu %s?"
 
 #: ../src/unix/snglinst.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Deleted stale lock file '%s'."
-msgstr "Kļūda, dzēšot neesošu slēgšanas failu `%s': %s"
+msgstr "Izdzēsts izmantotais slēdzenes fails '%s'."
 
 #: ../src/common/module.cpp:124
 #, fuzzy, c-format
@@ -2633,9 +2630,8 @@ msgid "Failed to %s dialup connection: %s"
 msgstr "ftpfs: savienojums ar serveri neizdevās: %s"
 
 #: ../src/unix/snglinst.cpp:270
-#, fuzzy
 msgid "Failed to access lock file."
-msgstr "Nevar izņemt slēdzenes failu `%s': %s"
+msgstr "Neizdevās piekļūt slēdzenes failam."
 
 #: ../src/msw/dib.cpp:563
 #, c-format
@@ -2657,9 +2653,9 @@ msgid "Failed to close file handle"
 msgstr "Neizdevās aizvērt failu '%s': fclose() neizdevās: %s"
 
 #: ../src/unix/snglinst.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close lock file '%s'"
-msgstr "Nevar izņemt slēdzenes failu `%s': %s"
+msgstr "Neizdevās aizvērt slēdzenes failu '%s'"
 
 #: ../src/msw/clipbrd.cpp:113
 msgid "Failed to close the clipboard."
@@ -2706,7 +2702,6 @@ msgstr "Neizdevās nokopēt reģistra apakšatslēgu '%s' uz '%s'."
 #: ../src/msw/dde.cpp:984
 msgid "Failed to create DDE string"
 msgstr "Neizdevās izveidot DDE virkni"
-
 
 #: ../src/msw/mdi.cpp:463
 msgid "Failed to create MDI parent frame."
@@ -2862,18 +2857,18 @@ msgid "Failed to insert text in the control."
 msgstr ""
 
 #: ../src/unix/snglinst.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inspect the lock file '%s'"
-msgstr "Nevar izņemt slēdzenes failu `%s': %s"
+msgstr "Neizdevās pārbaudīt slēdzenes failu '%s'"
 
 #: ../src/unix/threadpsx.cpp:910
 msgid "Failed to join a thread, potential memory leak detected - please restart the program"
 msgstr ""
 
 #: ../src/msw/utils.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to kill process %d"
-msgstr "Neizdevās apstrādāt pieprasījumu."
+msgstr "Neizdevās pārtraukt procesu %d"
 
 #: ../src/common/iconbndl.cpp:66
 #, c-format
@@ -2900,9 +2895,9 @@ msgid "Failed to load shared library '%s' Error '%s'"
 msgstr "Neizdevās ielādēt koplietojamo bibliotēku '%s' Kļūda '%s'"
 
 #: ../src/unix/snglinst.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lock the lock file '%s'"
-msgstr "Nevar izņemt slēdzenes failu `%s': %s"
+msgstr "Neizdevās aizslēgt slēdzenes failu '%s'"
 
 #: ../src/common/filename.cpp:2208
 #, fuzzy, c-format
@@ -2937,9 +2932,8 @@ msgid "Failed to put data on the clipboard"
 msgstr "Neizdevās ievieto datus starpliktuvē"
 
 #: ../src/unix/snglinst.cpp:279
-#, fuzzy
 msgid "Failed to read PID from lock file."
-msgstr "Nevarēju nolasīt pietiekami daudz datus no bērna pid programkanāla (%s)"
+msgstr "Neizdevās nolasīt PID no slēdzenes faila."
 
 #: ../src/common/fileconf.cpp:522
 msgid "Failed to read config options."
@@ -2975,14 +2969,14 @@ msgid "Failed to remove debug report file \"%s\""
 msgstr "Neizdevās izdzēst atkļūdošanas atskaites failu  \"%s\""
 
 #: ../src/unix/snglinst.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove lock file '%s'"
-msgstr "Nevar izņemt slēdzenes failu `%s': %s"
+msgstr "Neizdevās izdzēst slēdzenes failu '%s'"
 
 #: ../src/unix/snglinst.cpp:289
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr ""
+msgstr "Neizdevās izdzēst izmantoto slēdzenes failu '%s'."
 
 #: ../src/msw/registry.cpp:470
 #, c-format
@@ -3038,7 +3032,7 @@ msgstr "Kopē iezīmētos datus uz starpliktuvi."
 #: ../src/unix/snglinst.cpp:182
 #, c-format
 msgid "Failed to set permissions on lock file '%s'"
-msgstr ""
+msgstr "Neizdevās uzstādīt pieejas tiesības slēdzenes failam '%s'"
 
 #: ../src/common/file.cpp:516
 msgid "Failed to set temporary file permissions"
@@ -3081,9 +3075,9 @@ msgid "Failed to touch the file '%s'"
 msgstr "Neizdevās atvērt failu %s : %s\n"
 
 #: ../src/unix/snglinst.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to unlock lock file '%s'"
-msgstr "Nevar izņemt slēdzenes failu `%s': %s"
+msgstr "Neizdevās atslēgt slēdzenes failu '%s'"
 
 #: ../src/msw/dde.cpp:313
 #, fuzzy, c-format
@@ -3100,9 +3094,9 @@ msgid "Failed to upload the debug report (error code %d)."
 msgstr ""
 
 #: ../src/unix/snglinst.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write to lock file '%s'"
-msgstr "Nevar izņemt slēdzenes failu `%s': %s"
+msgstr "Neizdevās ierakstīt slēdzenes failā '%s'"
 
 #: ../src/generic/logg.cpp:400
 msgid "Fatal error"
@@ -3174,7 +3168,7 @@ msgstr "Fiksēts fonts:"
 
 #: ../src/html/helpwnd.cpp:1275
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
-msgstr ""
+msgstr "Fiksēta izmēra.<br> <b>treknraksts</b> <i>kursīvs</i> "
 
 #: ../src/common/paper.cpp:113
 msgid "Folio, 8 1/2 x 13 in"
@@ -3187,7 +3181,7 @@ msgstr "Fonts"
 
 #: ../src/richtext/richtextfontpage.cpp:187
 msgid "Font &weight:"
-msgstr "Fonta platums:"
+msgstr "Fonta svars:"
 
 #: ../src/html/helpwnd.cpp:1216
 msgid "Font size:"
@@ -3618,9 +3612,9 @@ msgid "Invalid geometry specification '%s'"
 msgstr "Nederīga ģeometrijas specifikācija '%s'."
 
 #: ../src/unix/snglinst.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid lock file '%s'."
-msgstr "&Izmantot slēgšanas failu"
+msgstr "Nederīgs slēdzenes fails '%s'."
 
 #: ../src/common/xtistrm.cpp:361
 #: ../src/common/xtistrm.cpp:376
@@ -3887,7 +3881,6 @@ msgid "Letter Plus 8 1/2 x 12.69 in"
 msgstr "Letter Plus 8 1/2 x 12.69 in"
 
 #: ../src/common/paper.cpp:171
-
 msgid "Letter Rotated 11 x 8 1/2 in"
 msgstr "Letter Rotated 11 x 8 1/2 in"
 
@@ -3952,14 +3945,14 @@ msgid "Loading : "
 msgstr "Lasa..."
 
 #: ../src/unix/snglinst.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Lock file '%s' has incorrect owner."
-msgstr "Izvēlētajam failam ir nepareizs formāts."
+msgstr "Slēdzenes failam '%s' ir nepareizs īpašnieks."
 
 #: ../src/unix/snglinst.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Lock file '%s' has incorrect permissions."
-msgstr "Izvēlētajam failam ir nepareizs formāts."
+msgstr "slēdzenes failam '%s' ir nepareizas pieejas tiesības."
 
 #: ../src/generic/logg.cpp:578
 #, c-format
@@ -5426,7 +5419,7 @@ msgstr "Fonta stils."
 #: ../src/generic/fontdlgg.cpp:304
 #: ../src/generic/fontdlgg.cpp:306
 msgid "The font weight."
-msgstr "Fonta platums"
+msgstr "Fonta svars."
 
 #: ../src/richtext/richtextliststylepage.cpp:386
 #: ../src/richtext/richtextliststylepage.cpp:388
@@ -6128,7 +6121,7 @@ msgstr "Sa&mazināt"
 
 #: ../src/common/stockitem.cpp:161
 msgid "Zoom to &Fit"
-msgstr "Ietilpināt attēlu"
+msgstr "Ietil&pināt"
 
 #: ../src/common/docview.cpp:2164
 msgid "[EMPTY]"
