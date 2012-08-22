@@ -531,6 +531,7 @@ All:
 
 - Add wxDir::Close() method (Silverstorm82).
 - Fix compilation of wxHash{Map,Set} with g++ 4.7 (Nathan Ridge).
+- Added Nepali translation (Him Prasad Gautam).
 
 All (GUI):
 
