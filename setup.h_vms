@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 29 June 2012                                                       *
+ * Date : 23 August 2012                                                     *
  *                                                                           *
  *****************************************************************************/
 
@@ -83,6 +83,10 @@
 
 /* Define this if your version of GTK+ is greater than 2.0 */
 #ifdef VMS_GTK2
+
+/* Define this if your version of GTK+ is >= 3.0 */
+#define __WXGTK3__ 1
+
 #define __WXGTK20__ 1
 
 /* Define this if your version of GTK+ is greater than 2.6 */
@@ -876,6 +880,10 @@ typedef pid_t GPid;
 
 #define wxUSE_DC_TRANSFORM_MATRIX 1
 
+/*
+ * Use libnotify library.
+ */
+#define wxUSE_LIBNOTIFY 1
 /*
  * Use libXpm
  */
