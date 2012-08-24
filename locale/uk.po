@@ -1,13 +1,15 @@
 # translation of wxstd.pot to Ukrainian
-# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2010, 2011.
+# This file is distributed under the same license as the wxWidgets package.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2010, 2011, 2012.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-18 18:11+0100\n"
-"PO-Revision-Date: 2011-12-20 20:35+0200\n"
+"PO-Revision-Date: 2012-08-23 14:04+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <translation@linux.org.ua>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1263,9 +1265,8 @@ msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Додати до файла журналу «%s» (вибір [Ні] перепише його)?"
 
 #: ../src/osx/menu_osx.cpp:556 ../src/osx/menu_osx.cpp:564
-#, fuzzy
 msgid "Application"
-msgstr "Обране"
+msgstr "Програма"
 
 #: ../src/common/stockitem.cpp:142
 msgid "Apply"
@@ -1892,9 +1893,8 @@ msgid "Change Object Style"
 msgstr "Змінити стиль об’єкта"
 
 #: ../src/richtext/richtextbuffer.cpp:3555
-#, fuzzy
 msgid "Change Properties"
-msgstr "Властивості комірки"
+msgstr "Змінити властивості"
 
 #: ../src/richtext/richtextbuffer.cpp:3116
 msgid "Change Style"
@@ -2064,9 +2064,8 @@ msgstr "Клацніть, щоб підтвердити вибір шрифту.
 
 #: ../src/richtext/richtextstyledlg.cpp:248
 #: ../src/richtext/richtextstyledlg.cpp:250
-#, fuzzy
 msgid "Click to create a new box style."
-msgstr "Клацніть, щоб створити новий стиль списку."
+msgstr "Клацніть, щоб створити новий стиль панелі."
 
 #: ../src/richtext/richtextstyledlg.cpp:230
 #: ../src/richtext/richtextstyledlg.cpp:232
@@ -2189,6 +2188,8 @@ msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
+"У цій системі не передбачено можливості композитного відтворення, будь ласка, "
+"увімкніть композитне відтворення у вашій програмі для керування вікнами."
 
 #: ../src/html/helpwnd.cpp:1560
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
@@ -2315,9 +2316,8 @@ msgid "Could not set column width."
 msgstr "Не вдалося встановити ширину стовпчика."
 
 #: ../src/common/filefn.cpp:1568
-#, fuzzy
 msgid "Could not set current working directory"
-msgstr "Не вдалося отримати робочий каталог"
+msgstr "Не вдалося вказати поточний робочий каталог"
 
 #: ../src/osx/carbon/dataview.cpp:2776
 msgid "Could not set header description."
@@ -2753,7 +2753,7 @@ msgstr "Донизу"
 
 #: ../src/richtext/richtextctrl.cpp:787
 msgid "Drag"
-msgstr ""
+msgstr "Перетягування"
 
 #: ../src/common/paper.cpp:102
 msgid "E sheet, 34 x 44 in"
@@ -2800,21 +2800,18 @@ msgstr "Увімкнути значення висоти."
 
 #: ../src/richtext/richtextsizepage.cpp:338
 #: ../src/richtext/richtextsizepage.cpp:340
-#, fuzzy
 msgid "Enable the maximum width value."
-msgstr "Увімкнути значення ширини."
+msgstr "Увімкнути значення максимальної ширини."
 
 #: ../src/richtext/richtextsizepage.cpp:311
 #: ../src/richtext/richtextsizepage.cpp:313
-#, fuzzy
 msgid "Enable the minimum height value."
-msgstr "Увімкнути значення висоти."
+msgstr "Увімкнути значення мінімальної висоти."
 
 #: ../src/richtext/richtextsizepage.cpp:284
 #: ../src/richtext/richtextsizepage.cpp:286
-#, fuzzy
 msgid "Enable the minimum width value."
-msgstr "Увімкнути значення ширини."
+msgstr "Увімкнути значення мінімальної ширини."
 
 #: ../src/richtext/richtextsizepage.cpp:230
 #: ../src/richtext/richtextsizepage.cpp:232
@@ -2837,9 +2834,8 @@ msgid "Enables a background colour."
 msgstr "Вмикає колір тла."
 
 #: ../src/richtext/richtextstyledlg.cpp:935
-#, fuzzy
 msgid "Enter a box style name"
-msgstr "Введіть назву нового стилю"
+msgstr "Введіть назву стилю панелі"
 
 #: ../src/richtext/richtextstyledlg.cpp:607
 msgid "Enter a character style name"
@@ -2933,9 +2929,8 @@ msgid "Event queue overflowed"
 msgstr "Чергу подій переповнено"
 
 #: ../src/generic/dbgrptg.cpp:231
-#, fuzzy
 msgid "Executable files (*.exe)|*.exe|"
-msgstr "Виконувані файли (*.exe)|*.exe|Всі файли (*.*)|*.*||"
+msgstr "Виконувані файли (*.exe)|*.exe|"
 
 #: ../src/common/stockitem.cpp:156
 msgid "Execute"
@@ -3577,14 +3572,14 @@ msgstr ""
 "Ви справді хочете його переписати?"
 
 #: ../src/common/filefn.cpp:1204
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be removed"
-msgstr "Не вдалося створити каталог «%s»"
+msgstr "Не вдалося вилучити файл «%s»"
 
 #: ../src/common/filefn.cpp:1184
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be renamed '%s'"
-msgstr "Не вдалося створити каталог «%s»"
+msgstr "Не вдалося перейменувати файл «%s» на «%s»"
 
 #: ../src/richtext/richtextctrl.cpp:2665 ../src/common/textcmn.cpp:870
 msgid "File couldn't be loaded."
@@ -3725,6 +3720,9 @@ msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
 msgstr ""
+"Встановлені у цій системі бібліотеки GTK+ є надто старими, щоб підтримувати "
+"композитне відтворення належним чином. Будь ласка, встановіть версію "
+"бібліотек GTK+ 2.12 або пізнішу."
 
 #: ../src/univ/themes/gtk.cpp:528
 msgid "GTK+ theme"
@@ -3860,9 +3858,9 @@ msgid "Help: %s"
 msgstr "Довідка: %s"
 
 #: ../src/osx/menu_osx.cpp:556
-#, fuzzy, c-format
+#, c-format
 msgid "Hide %s"
-msgstr "Сховати"
+msgstr "Сховати %s"
 
 #: ../src/osx/menu_osx.cpp:558
 msgid "Hide Others"
@@ -4699,14 +4697,12 @@ msgid "Match case"
 msgstr "Великі/малі літери"
 
 #: ../src/richtext/richtextsizepage.cpp:363
-#, fuzzy
 msgid "Max height:"
-msgstr "&Висота:"
+msgstr "Макс. висота:"
 
 #: ../src/richtext/richtextsizepage.cpp:336
-#, fuzzy
 msgid "Max width:"
-msgstr "Замінити на:"
+msgstr "Макс. ширина:"
 
 #: ../src/common/fs_mem.cpp:176
 #, c-format
@@ -4734,13 +4730,12 @@ msgid "Mi&nimize"
 msgstr "З&меншити"
 
 #: ../src/richtext/richtextsizepage.cpp:309
-#, fuzzy
 msgid "Min height:"
-msgstr "Вага шри&фту:"
+msgstr "Мін. висота:"
 
 #: ../src/richtext/richtextsizepage.cpp:282
 msgid "Min width:"
-msgstr ""
+msgstr "Мінімальна ширина:"
 
 #: ../src/msw/ole/automtn.cpp:639
 msgid "Missing a required parameter."
@@ -4807,9 +4802,8 @@ msgid "New"
 msgstr "Створити"
 
 #: ../src/richtext/richtextstyledlg.cpp:247
-#, fuzzy
 msgid "New &Box Style..."
-msgstr "Створити стиль &списку…"
+msgstr "Створити стиль &панелі…"
 
 #: ../src/richtext/richtextstyledlg.cpp:229
 msgid "New &Character Style..."
@@ -5576,9 +5570,9 @@ msgid "Quit"
 msgstr "Вийти"
 
 #: ../src/osx/menu_osx.cpp:564
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "Вийти"
+msgstr "Вийти з %s"
 
 #: ../src/common/stockitem.cpp:264
 msgid "Quit this program"
@@ -5593,9 +5587,8 @@ msgid "RIGHT"
 msgstr "RIGHT"
 
 #: ../src/common/accelcmn.cpp:318
-#, fuzzy
 msgid "RawCtrl+"
-msgstr "Ctrl+"
+msgstr "RawCtrl+"
 
 #: ../src/common/ffile.cpp:114 ../src/common/ffile.cpp:133
 #, c-format
@@ -6365,27 +6358,23 @@ msgstr "Висота об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:374
 #: ../src/richtext/richtextsizepage.cpp:376
-#, fuzzy
 msgid "The object maximum height."
-msgstr "Висота об’єкта."
+msgstr "Максимальна висота об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:347
 #: ../src/richtext/richtextsizepage.cpp:349
-#, fuzzy
 msgid "The object maximum width."
-msgstr "Ширина об’єкта."
+msgstr "Максимальна ширина об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:293
 #: ../src/richtext/richtextsizepage.cpp:295
-#, fuzzy
 msgid "The object minimum width."
-msgstr "Ширина об’єкта."
+msgstr "Мінімальна ширина об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:320
 #: ../src/richtext/richtextsizepage.cpp:322
-#, fuzzy
 msgid "The object minmum height."
-msgstr "Висота об’єкта."
+msgstr "Мінімальна висота об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:239
 #: ../src/richtext/richtextsizepage.cpp:241
@@ -6556,13 +6545,15 @@ msgstr "Це не %s."
 
 #: ../src/common/wincmn.cpp:1584
 msgid "This platform does not support background transparency."
-msgstr ""
+msgstr "На цій платформі підтримки прозорості тла не передбачено."
 
 #: ../src/gtk/window.cpp:4147
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
 msgstr ""
+"Цю програму було зібрано з надто старою версією GTK+. Будь ласка, виконайте "
+"повторне збирання з версією GTK+ 2.12 або новішою."
 
 #: ../src/msw/datecontrols.cpp:60
 msgid ""
@@ -6944,27 +6935,23 @@ msgstr "Одиниці виміру лівої фаски."
 
 #: ../src/richtext/richtextsizepage.cpp:385
 #: ../src/richtext/richtextsizepage.cpp:387
-#, fuzzy
 msgid "Units for the maximum object height."
-msgstr "Одиниці виміру висоти об’єкта."
+msgstr "Одиниці виміру максимальної висоти об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:358
 #: ../src/richtext/richtextsizepage.cpp:360
-#, fuzzy
 msgid "Units for the maximum object width."
-msgstr "Одиниці виміру ширини об’єкта."
+msgstr "Одиниці виміру максимальної ширини об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:331
 #: ../src/richtext/richtextsizepage.cpp:333
-#, fuzzy
 msgid "Units for the minimum object height."
-msgstr "Одиниці виміру висоти об’єкта."
+msgstr "Одиниці виміру мінімальної висоти об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:304
 #: ../src/richtext/richtextsizepage.cpp:306
-#, fuzzy
 msgid "Units for the minimum object width."
-msgstr "Одиниці виміру ширини об’єкта."
+msgstr "Одиниці виміру мінімальної ширини об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:277
 #: ../src/richtext/richtextsizepage.cpp:279
@@ -7814,7 +7801,8 @@ msgstr "помилка читання локального заголовка zi
 #: ../src/common/zipstrm.cpp:2397
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
-msgstr "помилка запису елемента zip «%s»: помилкова контрольна сума або довжина"
+msgstr ""
+"помилка запису елемента zip «%s»: помилкова контрольна сума або довжина"
 
 #: ../src/common/ffile.cpp:169
 #, c-format
@@ -8059,9 +8047,8 @@ msgid "px"
 msgstr "пк"
 
 #: ../src/common/accelcmn.cpp:189
-#, fuzzy
 msgid "rawctrl"
-msgstr "ctrl"
+msgstr "rawctrl"
 
 #: ../src/html/chm.cpp:334
 msgid "read error"
@@ -8150,9 +8137,8 @@ msgid "str"
 msgstr "str"
 
 #: ../src/common/fontcmn.cpp:795 ../src/common/fontcmn.cpp:970
-#, fuzzy
 msgid "strikethrough"
-msgstr "Перекреслення"
+msgstr "перекреслення"
 
 #: ../src/common/tarstrm.cpp:1004 ../src/common/tarstrm.cpp:1026
 #: ../src/common/tarstrm.cpp:1508 ../src/common/tarstrm.cpp:1530
