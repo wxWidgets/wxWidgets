@@ -379,9 +379,9 @@ void wxRichTextSizePage::CreateControls()
     itemFlexGridSizer27->Add(itemBoxSizer41, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
     m_minHeight = new wxTextCtrl( itemRichTextDialogPage1, ID_RICHTEXT_MIN_HEIGHT, wxEmptyString, wxDefaultPosition, wxSize(60, -1), 0 );
-    m_minHeight->SetHelpText(_("The object minmum height."));
+    m_minHeight->SetHelpText(_("The object minimum height."));
     if (wxRichTextSizePage::ShowToolTips())
-        m_minHeight->SetToolTip(_("The object minmum height."));
+        m_minHeight->SetToolTip(_("The object minimum height."));
     itemBoxSizer41->Add(m_minHeight, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
 
     wxArrayString m_unitsMinHStrings;
