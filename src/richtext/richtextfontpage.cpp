@@ -456,6 +456,9 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         attr->SetTextEffects(attr->GetTextEffects() & ~(wxTEXT_ATTR_EFFECT_SUBSCRIPT|wxTEXT_ATTR_EFFECT_SUPERSCRIPT) );
     }
 
+    if (attr->GetTextEffectFlags() == 0)
+        attr->SetFlags(attr->GetFlags() & ~wxTEXT_ATTR_EFFECTS);
+
     return true;
 }
 
