@@ -35,6 +35,7 @@ private:
         CPPUNIT_TEST( String );
         CPPUNIT_TEST( PChar );
         CPPUNIT_TEST( Format );
+        CPPUNIT_TEST( FormatUnicode );
         CPPUNIT_TEST( Constructors );
         CPPUNIT_TEST( StaticConstructors );
         CPPUNIT_TEST( Extraction );
@@ -68,6 +69,7 @@ private:
     void String();
     void PChar();
     void Format();
+    void FormatUnicode();
     void Constructors();
     void StaticConstructors();
     void Extraction();
@@ -172,6 +174,20 @@ void StringTestCase::Format()
         "two one",
         wxString::Format(wxT("%2$s %1$s"), wxT("one"), wxT("two"))
     );
+}
+
+void StringTestCase::FormatUnicode()
+{
+#if wxUSE_UNICODE
+    const char *UNICODE_STR = "Iestat\xC4\xAB %i%i";
+    //const char *UNICODE_STR = "Iestat\xCC\x84 %i%i";
+
+    wxString fmt = wxString::FromUTF8(UNICODE_STR);
+    wxString s = wxString::Format(fmt, 1, 1);
+    wxString expected(fmt);
+    expected.Replace("%i", "1");
+    CPPUNIT_ASSERT_EQUAL( expected, s );
+#endif // wxUSE_UNICODE
 }
 
 void StringTestCase::Constructors()
