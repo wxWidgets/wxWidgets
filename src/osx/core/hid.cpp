@@ -36,7 +36,7 @@
     #include "wx/module.h"
 #endif
 
-#include "wx/osx/core/cfstring.h"
+#include "wx/osx/private.h"
 
 // ============================================================================
 // implementation
@@ -673,73 +673,8 @@ bool wxGetKeyState (wxKeyCode key)
     wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
         WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
 
-    if (wxHIDModule::sm_keyboards.GetCount() == 0)
-    {
-        int nKeyboards = wxHIDKeyboard::GetCount();
-
-        for(int i = 1; i <= nKeyboards; ++i)
-        {
-            wxHIDKeyboard* keyboard = new wxHIDKeyboard();
-            if(keyboard->Create(i))
-            {
-                wxHIDModule::sm_keyboards.Add(keyboard);
-            }
-            else
-            {
-                delete keyboard;
-                break;
-            }
-        }
-
-        wxASSERT_MSG(wxHIDModule::sm_keyboards.GetCount() != 0,
-                     wxT("No keyboards found!"));
-    }
-
-    for(size_t i = 0; i < wxHIDModule::sm_keyboards.GetCount(); ++i)
-    {
-        wxHIDKeyboard* keyboard = (wxHIDKeyboard*)
-                                wxHIDModule::sm_keyboards[i];
-
-    switch(key)
-    {
-    case WXK_SHIFT:
-            if( keyboard->IsActive(WXK_SHIFT) ||
-                   keyboard->IsActive(WXK_RSHIFT) )
-            {
-                return true;
-            }
-        break;
-    case WXK_ALT:
-            if( keyboard->IsActive(WXK_ALT) ||
-                   keyboard->IsActive(WXK_RALT) )
-            {
-                return true;
-            }
-        break;
-    case WXK_CONTROL:
-            if( keyboard->IsActive(WXK_CONTROL) ||
-                   keyboard->IsActive(WXK_RCONTROL) )
-            {
-                return true;
-            }
-        break;
-    case WXK_RAW_CONTROL:
-            if( keyboard->IsActive(WXK_RAW_CONTROL) ||
-                   keyboard->IsActive(WXK_RAW_RCONTROL) )
-            {
-                return true;
-            }
-        break;
-    default:
-            if( keyboard->IsActive(key) )
-            {
-                return true;
-            }
-        break;
-    }
-    }
-
-    return false; //not down/error
+    CGKeyCode cgcode = wxCharCodeWXToOSX((wxKeyCode)key);
+    return CGEventSourceKeyState(kCGEventSourceStateCombinedSessionState, cgcode);
 }
 
 #endif //__DARWIN__
