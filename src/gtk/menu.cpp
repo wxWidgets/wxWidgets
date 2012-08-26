@@ -684,6 +684,13 @@ static void menu_map(GtkWidget*, wxMenu* menu)
 // "hide" from m_menu
 static void menu_hide(GtkWidget*, wxMenu* menu)
 {
+    // When using Ubuntu Unity desktop environment we get "hide" signal even
+    // when the window is not shown yet because Unity hides all the menus to
+    // show them only in the global menu bar. Just ignore this even instead of
+    // crashing in DoCommonMenuCallbackCode().
+    if ( !menu->GetWindow() )
+        return;
+
     wxMenuEvent event(wxEVT_MENU_CLOSE, menu->m_popupShown ? -1 : 0, menu);
     menu->m_popupShown = false;
     DoCommonMenuCallbackCode(menu, event);
