@@ -342,6 +342,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         pPage->SetSize(rect, wxSIZE_FORCE_EVENT);
     }
 
+#if 0 // deactivate r65078 for the moment
     // If the selected page is hidden at this point, the notebook
     // has become visible for the first time after creation, and
     // we postponed showing the page in ChangePage().
@@ -355,6 +356,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
             pPage->SetFocus();
         }
     }
+#endif
 
     // Processing continues to next OnSize
     event.Skip();
@@ -480,6 +482,7 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     if ( nSel != wxNOT_FOUND )
     {
         wxNotebookPage *pPage = m_pages[nSel];
+#if 0 // deactivate r65078 for the moment
         if ( IsShownOnScreen() )
         {
             pPage->Show( true );
@@ -494,6 +497,10 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
             // We Show() the selected page in our OnSize handler,
             // unless it already is shown.
         }
+#else
+        pPage->Show( true );
+        pPage->SetFocus();
+#endif
     }
 
     m_selection = nSel;
