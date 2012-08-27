@@ -2,10 +2,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-18 18:11+0100\n"
+"POT-Creation-Date: 2012-08-27 11:51+0200\n"
 "PO-Revision-Date: 2009-04-06 07:16+0100\n"
 "Last-Translator: Michał Trzebiatowski <hippie_1968@hotmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,14 +21,19 @@ msgstr ""
 "\n"
 "Proszę przesłać ten raport do autora programu, dziękuję!\n"
 
-#: ../src/richtext/richtextstyledlg.cpp:214
-#: ../src/richtext/richtextstyledlg.cpp:226
+#: ../src/richtext/richtextstyledlg.cpp:218
+#: ../src/richtext/richtextstyledlg.cpp:230
 msgid " "
 msgstr " "
 
 #: ../src/generic/dbgrptg.cpp:323
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Dziękujemy i przepraszamy za niedogodności!\n"
+
+#: ../src/common/prntbase.cpp:547
+#, fuzzy, c-format
+msgid " (copy %d of %d)"
+msgstr "Strona %d z %d"
 
 #: ../src/common/log.cpp:428
 #, c-format
@@ -39,11 +45,11 @@ msgstr " (błąd %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "moduł tiff: %s"
 
-#: ../src/common/docview.cpp:1605
+#: ../src/common/docview.cpp:1615
 msgid " - "
 msgstr " - "
 
-#: ../src/richtext/richtextprint.cpp:582 ../src/html/htmprint.cpp:705
+#: ../src/richtext/richtextprint.cpp:585 ../src/html/htmprint.cpp:705
 msgid " Preview"
 msgstr " Podgląd"
 
@@ -79,12 +85,12 @@ msgstr "Koperta #14, 5 x 11 1/2 cali"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "Koperta #9, 3 7/8 x 8 7/8 cali"
 
-#: ../src/html/helpwnd.cpp:1044
+#: ../src/html/helpwnd.cpp:1045
 #, fuzzy, c-format
 msgid "%d of %lu"
 msgstr "%i z %i"
 
-#: ../src/html/helpwnd.cpp:1687 ../src/html/helpwnd.cpp:1725
+#: ../src/html/helpwnd.cpp:1682 ../src/html/helpwnd.cpp:1720
 #, c-format
 msgid "%i of %i"
 msgstr "%i z %i"
@@ -97,7 +103,7 @@ msgstr[0] "%ld bajt"
 msgstr[1] "%ld bajty"
 msgstr[2] "%ld bajtów"
 
-#: ../src/html/helpwnd.cpp:1046
+#: ../src/html/helpwnd.cpp:1047
 #, fuzzy, c-format
 msgid "%lu of %lu"
 msgstr "%i z %i"
@@ -107,17 +113,17 @@ msgstr "%i z %i"
 msgid "%s (or %s)"
 msgstr "%s (lub %s)"
 
-#: ../src/generic/logg.cpp:235
+#: ../src/generic/logg.cpp:231
 #, c-format
 msgid "%s Error"
 msgstr "%s Błąd"
 
-#: ../src/generic/logg.cpp:247
+#: ../src/generic/logg.cpp:243
 #, c-format
 msgid "%s Information"
 msgstr "%s Informacja"
 
-#: ../src/generic/logg.cpp:239
+#: ../src/generic/logg.cpp:235
 #, c-format
 msgid "%s Warning"
 msgstr "%s Ostrzeżenie"
@@ -154,7 +160,7 @@ msgstr "&Wyrównanie"
 msgid "&Apply"
 msgstr "Z&astosuj"
 
-#: ../src/richtext/richtextstyledlg.cpp:255
+#: ../src/richtext/richtextstyledlg.cpp:259
 msgid "&Apply Style"
 msgstr "Z&astosuj styl"
 
@@ -178,7 +184,7 @@ msgstr "&Na podstawie:"
 msgid "&Before a paragraph:"
 msgstr "&Przed paragrafem:"
 
-#: ../src/richtext/richtextfontpage.cpp:238
+#: ../src/richtext/richtextfontpage.cpp:269
 #, fuzzy
 msgid "&Bg colour:"
 msgstr "K&olor:"
@@ -195,10 +201,11 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:575
 msgid "&Bottom:"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:3408
+#: ../include/wx/richtext/richtextbuffer.h:3464
 #, fuzzy
 msgid "&Box"
 msgstr "Pogru&biony"
@@ -212,7 +219,7 @@ msgstr "&Styl wypunktowania:"
 msgid "&CD-Rom"
 msgstr ""
 
-#: ../src/generic/wizard.cpp:432 ../src/generic/fontdlgg.cpp:471
+#: ../src/generic/wizard.cpp:433 ../src/generic/fontdlgg.cpp:471
 #: ../src/generic/fontdlgg.cpp:490 ../src/osx/carbon/fontdlg.cpp:586
 #: ../src/common/stockitem.cpp:146
 msgid "&Cancel"
@@ -222,12 +229,12 @@ msgstr "&Anuluj"
 msgid "&Cascade"
 msgstr "&Kaskada"
 
-#: ../include/wx/richtext/richtextbuffer.h:4870
+#: ../include/wx/richtext/richtextbuffer.h:5476
 #, fuzzy
 msgid "&Cell"
 msgstr "&Anuluj"
 
-#: ../src/richtext/richtextsymboldlg.cpp:436
+#: ../src/richtext/richtextsymboldlg.cpp:440
 msgid "&Character code:"
 msgstr "&Kod znaku:"
 
@@ -235,8 +242,8 @@ msgstr "&Kod znaku:"
 msgid "&Clear"
 msgstr "Wy&czyść"
 
-#: ../src/generic/logg.cpp:524 ../src/common/stockitem.cpp:149
-#: ../src/common/prntbase.cpp:1545 ../src/univ/themes/win32.cpp:3759
+#: ../src/generic/logg.cpp:520 ../src/common/stockitem.cpp:149
+#: ../src/common/prntbase.cpp:1571 ../src/univ/themes/win32.cpp:3757
 #: ../src/html/helpfrm.cpp:140
 msgid "&Close"
 msgstr "Zam&knij"
@@ -246,7 +253,7 @@ msgstr "Zam&knij"
 msgid "&Color"
 msgstr "K&olor:"
 
-#: ../src/richtext/richtextfontpage.cpp:225
+#: ../src/richtext/richtextfontpage.cpp:256
 msgid "&Colour:"
 msgstr "K&olor:"
 
@@ -255,7 +262,7 @@ msgstr "K&olor:"
 msgid "&Convert"
 msgstr "Zawartość"
 
-#: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:584
+#: ../src/richtext/richtextctrl.cpp:325 ../src/osx/textctrl_osx.cpp:584
 #: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2223
 msgid "&Copy"
 msgstr "&Kopiuj"
@@ -274,12 +281,12 @@ msgid "&Debug report preview:"
 msgstr "Po&dgląd raportu błędów:"
 
 #: ../src/richtext/richtexttabspage.cpp:143
-#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:586
+#: ../src/richtext/richtextctrl.cpp:327 ../src/osx/textctrl_osx.cpp:586
 #: ../src/common/stockitem.cpp:153 ../src/msw/textctrl.cpp:2225
 msgid "&Delete"
 msgstr "&Usuń"
 
-#: ../src/richtext/richtextstyledlg.cpp:273
+#: ../src/richtext/richtextstyledlg.cpp:277
 msgid "&Delete Style..."
 msgstr "&Usuń styl..."
 
@@ -287,7 +294,7 @@ msgstr "&Usuń styl..."
 msgid "&Descending"
 msgstr ""
 
-#: ../src/generic/logg.cpp:696
+#: ../src/generic/logg.cpp:692
 msgid "&Details"
 msgstr "&Szczegóły"
 
@@ -299,7 +306,7 @@ msgstr "W &dół"
 msgid "&Edit"
 msgstr "&Edytuj"
 
-#: ../src/richtext/richtextstyledlg.cpp:267
+#: ../src/richtext/richtextstyledlg.cpp:271
 msgid "&Edit Style..."
 msgstr "&Edytuj styl..."
 
@@ -315,7 +322,7 @@ msgstr "&Plik"
 msgid "&Find"
 msgstr "&Znajdź"
 
-#: ../src/generic/wizard.cpp:626
+#: ../src/generic/wizard.cpp:627
 msgid "&Finish"
 msgstr "Za&kończ"
 
@@ -324,7 +331,7 @@ msgstr "Za&kończ"
 msgid "&First"
 msgstr "pierwszy"
 
-#: ../src/richtext/richtextsizepage.cpp:196
+#: ../src/richtext/richtextsizepage.cpp:222
 msgid "&Floating mode:"
 msgstr ""
 
@@ -346,8 +353,8 @@ msgstr "&Rozmiar czcionki:"
 msgid "&Font for Level..."
 msgstr "&Czcionka dla poziomu..."
 
-#: ../src/richtext/richtextfontpage.cpp:144
-#: ../src/richtext/richtextsymboldlg.cpp:397
+#: ../src/richtext/richtextfontpage.cpp:154
+#: ../src/richtext/richtextsymboldlg.cpp:401
 msgid "&Font:"
 msgstr "&Czcionka:"
 
@@ -355,7 +362,7 @@ msgstr "&Czcionka:"
 msgid "&Forward"
 msgstr "&Dalej"
 
-#: ../src/richtext/richtextsymboldlg.cpp:448
+#: ../src/richtext/richtextsymboldlg.cpp:452
 msgid "&From:"
 msgstr "&Od:"
 
@@ -363,13 +370,13 @@ msgstr "&Od:"
 msgid "&Harddisk"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:255
+#: ../src/richtext/richtextsizepage.cpp:317
 #, fuzzy
 msgid "&Height:"
 msgstr "&Waga"
 
-#: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:307
-#: ../src/richtext/richtextsymboldlg.cpp:476 ../src/osx/menu_osx.cpp:685
+#: ../src/generic/wizard.cpp:436 ../src/richtext/richtextstyledlg.cpp:311
+#: ../src/richtext/richtextsymboldlg.cpp:480 ../src/osx/menu_osx.cpp:685
 #: ../src/common/stockitem.cpp:164 ../src/html/helpfrm.cpp:148
 msgid "&Help"
 msgstr "&Pomoc"
@@ -431,6 +438,7 @@ msgstr "&Lewy"
 #: ../src/richtext/richtextliststylepage.cpp:382
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
+#: ../src/richtext/richtextsizepage.cpp:491
 msgid "&Left:"
 msgstr "&Lewy:"
 
@@ -438,15 +446,15 @@ msgstr "&Lewy:"
 msgid "&List level:"
 msgstr "Poziom &listy:"
 
-#: ../src/generic/logg.cpp:525
+#: ../src/generic/logg.cpp:521
 msgid "&Log"
 msgstr "&Dziennik"
 
-#: ../src/univ/themes/win32.cpp:3751
+#: ../src/univ/themes/win32.cpp:3749
 msgid "&Move"
 msgstr "Prz&enieś"
 
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:606
 msgid "&Move the object to:"
 msgstr ""
 
@@ -459,16 +467,16 @@ msgstr "&Nowy"
 msgid "&New"
 msgstr "&Nowy"
 
-#: ../src/aui/tabmdi.cpp:108 ../src/generic/mdig.cpp:101
+#: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:101
 #: ../src/msw/mdi.cpp:169
 msgid "&Next"
 msgstr "&Następne"
 
-#: ../src/generic/wizard.cpp:431 ../src/generic/wizard.cpp:626
+#: ../src/generic/wizard.cpp:432 ../src/generic/wizard.cpp:627
 msgid "&Next >"
 msgstr "&Dalej >"
 
-#: ../src/richtext/richtextsizepage.cpp:486
+#: ../src/richtext/richtextsizepage.cpp:615
 #, fuzzy
 msgid "&Next Paragraph"
 msgstr "&Po paragrafie:"
@@ -511,12 +519,12 @@ msgstr "Poziom &kontur:"
 msgid "&Page Break"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:327 ../src/osx/textctrl_osx.cpp:585
+#: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:585
 #: ../src/common/stockitem.cpp:181 ../src/msw/textctrl.cpp:2224
 msgid "&Paste"
 msgstr "Wkl&ej"
 
-#: ../include/wx/richtext/richtextbuffer.h:4051
+#: ../include/wx/richtext/richtextbuffer.h:4580
 msgid "&Picture"
 msgstr ""
 
@@ -528,21 +536,21 @@ msgstr "&Rozmiar czcionki:"
 msgid "&Position (tenths of a mm):"
 msgstr "&Pozycja (w dziesiątych częściach mm):"
 
+#: ../src/richtext/richtextsizepage.cpp:476
+#, fuzzy
+msgid "&Position mode:"
+msgstr "Pytanie"
+
 #: ../src/common/stockitem.cpp:182
 msgid "&Preferences"
 msgstr "&Preferencje"
 
-#: ../src/common/stockitem.cpp:183
-#, fuzzy
-msgid "&Preview..."
-msgstr " Podgląd"
-
-#: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:102
+#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:102
 #: ../src/msw/mdi.cpp:170
 msgid "&Previous"
 msgstr "&Poprzednie"
 
-#: ../src/richtext/richtextsizepage.cpp:480
+#: ../src/richtext/richtextsizepage.cpp:609
 #, fuzzy
 msgid "&Previous Paragraph"
 msgstr "Poprzednia strona"
@@ -551,7 +559,7 @@ msgstr "Poprzednia strona"
 msgid "&Print..."
 msgstr "&Drukuj..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4730
+#: ../src/richtext/richtextctrl.cpp:331 ../src/richtext/richtextctrl.cpp:4888
 #: ../src/common/stockitem.cpp:185
 msgid "&Properties"
 msgstr "&Właściwości"
@@ -560,7 +568,7 @@ msgstr "&Właściwości"
 msgid "&Quit"
 msgstr "&Wyjście"
 
-#: ../src/richtext/richtextctrl.cpp:323 ../src/osx/textctrl_osx.cpp:581
+#: ../src/richtext/richtextctrl.cpp:322 ../src/osx/textctrl_osx.cpp:581
 #: ../src/common/stockitem.cpp:186 ../src/common/cmdproc.cpp:294
 #: ../src/common/cmdproc.cpp:301 ../src/msw/textctrl.cpp:2220
 msgid "&Redo"
@@ -570,7 +578,7 @@ msgstr "&Ponów"
 msgid "&Redo "
 msgstr "&Ponów "
 
-#: ../src/richtext/richtextstyledlg.cpp:261
+#: ../src/richtext/richtextstyledlg.cpp:265
 msgid "&Rename Style..."
 msgstr "&Zmień nazwę stylu..."
 
@@ -578,11 +586,11 @@ msgstr "&Zmień nazwę stylu..."
 msgid "&Replace"
 msgstr "&Zastąp"
 
-#: ../src/richtext/richtextstyledlg.cpp:291
+#: ../src/richtext/richtextstyledlg.cpp:295
 msgid "&Restart numbering"
 msgstr "&Ponowienie numeracji"
 
-#: ../src/univ/themes/win32.cpp:3750
+#: ../src/univ/themes/win32.cpp:3748
 msgid "&Restore"
 msgstr "&Przywróć"
 
@@ -597,6 +605,7 @@ msgstr "&Prawy"
 #: ../src/richtext/richtextliststylepage.cpp:400
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
+#: ../src/richtext/richtextsizepage.cpp:547
 msgid "&Right:"
 msgstr "&Prawy:"
 
@@ -618,11 +627,11 @@ msgstr "&Szczegóły"
 msgid "&Show tips at startup"
 msgstr "&Pokazuj porady przy uruchamianiu"
 
-#: ../src/univ/themes/win32.cpp:3753
+#: ../src/univ/themes/win32.cpp:3751
 msgid "&Size"
 msgstr "&Rozmiar"
 
-#: ../src/richtext/richtextfontpage.cpp:162
+#: ../src/richtext/richtextfontpage.cpp:166
 msgid "&Size:"
 msgstr "&Rozmiar:"
 
@@ -643,7 +652,7 @@ msgstr ""
 msgid "&Stop"
 msgstr "&Stop"
 
-#: ../src/richtext/richtextfontpage.cpp:251 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextfontpage.cpp:282 ../src/common/stockitem.cpp:200
 msgid "&Strikethrough"
 msgstr "&Przekreślenie"
 
@@ -651,11 +660,11 @@ msgstr "&Przekreślenie"
 msgid "&Style:"
 msgstr "&Styl:"
 
-#: ../src/richtext/richtextstyledlg.cpp:202
+#: ../src/richtext/richtextstyledlg.cpp:206
 msgid "&Styles:"
 msgstr "&Style:"
 
-#: ../src/richtext/richtextsymboldlg.cpp:410
+#: ../src/richtext/richtextsymboldlg.cpp:414
 msgid "&Subset:"
 msgstr "&Podzbiór:"
 
@@ -664,7 +673,7 @@ msgstr "&Podzbiór:"
 msgid "&Symbol:"
 msgstr "&Symbol:"
 
-#: ../include/wx/richtext/richtextbuffer.h:4952
+#: ../include/wx/richtext/richtextbuffer.h:5558
 #, fuzzy
 msgid "&Table"
 msgstr "Karty"
@@ -678,6 +687,7 @@ msgstr "&Kopiuj"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
+#: ../src/richtext/richtextsizepage.cpp:519
 #, fuzzy
 msgid "&Top:"
 msgstr "Do:"
@@ -686,11 +696,11 @@ msgstr "Do:"
 msgid "&Underline"
 msgstr "&Podkreślony"
 
-#: ../src/richtext/richtextfontpage.cpp:210
+#: ../src/richtext/richtextfontpage.cpp:241
 msgid "&Underlining:"
 msgstr "&Podkreślony:"
 
-#: ../src/richtext/richtextctrl.cpp:322 ../src/osx/textctrl_osx.cpp:580
+#: ../src/richtext/richtextctrl.cpp:321 ../src/osx/textctrl_osx.cpp:580
 #: ../src/common/stockitem.cpp:204 ../src/common/cmdproc.cpp:272
 #: ../src/msw/textctrl.cpp:2219
 msgid "&Undo"
@@ -708,7 +718,7 @@ msgstr "&Cofnij wcięcie"
 msgid "&Up"
 msgstr "&W górę"
 
-#: ../src/richtext/richtextsizepage.cpp:408
+#: ../src/richtext/richtextsizepage.cpp:254
 #, fuzzy
 msgid "&Vertical alignment:"
 msgstr "&Wyrównanie wypunktowania:"
@@ -722,13 +732,13 @@ msgstr "&Otwórz..."
 msgid "&Weight:"
 msgstr "&Waga"
 
-#: ../src/richtext/richtextsizepage.cpp:228
+#: ../src/richtext/richtextsizepage.cpp:290
 #, fuzzy
 msgid "&Width:"
 msgstr "&Waga"
 
-#: ../src/aui/tabmdi.cpp:301 ../src/aui/tabmdi.cpp:317
-#: ../src/aui/tabmdi.cpp:319 ../src/generic/mdig.cpp:295
+#: ../src/aui/tabmdi.cpp:303 ../src/aui/tabmdi.cpp:319
+#: ../src/aui/tabmdi.cpp:321 ../src/generic/mdig.cpp:295
 #: ../src/generic/mdig.cpp:311 ../src/generic/mdig.cpp:315
 #: ../src/msw/mdi.cpp:70
 msgid "&Window"
@@ -763,7 +773,7 @@ msgstr "'%s' nie jest poprawną wartością numeryczną opcji '%s'."
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' nie jest prawidłowym katalogiem komunikatów."
 
-#: ../src/common/textbuf.cpp:245
+#: ../src/common/textbuf.cpp:240
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' jest prawdopodobnie buforem binarnym."
@@ -798,7 +808,7 @@ msgstr "'%s' powinien zawierać tylko znaki ASCII."
 msgid "(*)"
 msgstr "(*)"
 
-#: ../src/html/helpwnd.cpp:979
+#: ../src/html/helpwnd.cpp:977
 msgid "(Help)"
 msgstr "(Pomoc)"
 
@@ -807,12 +817,12 @@ msgstr "(Pomoc)"
 msgid "(None)"
 msgstr "(Brak)"
 
-#: ../src/richtext/richtextsymboldlg.cpp:501
+#: ../src/richtext/richtextsymboldlg.cpp:505
 msgid "(Normal text)"
 msgstr "(Normalna tekst)"
 
-#: ../src/html/helpwnd.cpp:424 ../src/html/helpwnd.cpp:1116
-#: ../src/html/helpwnd.cpp:1752
+#: ../src/html/helpwnd.cpp:427 ../src/html/helpwnd.cpp:1120
+#: ../src/html/helpwnd.cpp:1746
 msgid "(bookmarks)"
 msgstr "(zakładki)"
 
@@ -822,10 +832,10 @@ msgstr "(zakładki)"
 #: ../src/richtext/richtextindentspage.cpp:299
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:312
-#: ../src/richtext/richtextformatdlg.cpp:824
-#: ../src/richtext/richtextfontpage.cpp:291
-#: ../src/richtext/richtextfontpage.cpp:295
-#: ../src/richtext/richtextfontpage.cpp:299
+#: ../src/richtext/richtextformatdlg.cpp:828
+#: ../src/richtext/richtextfontpage.cpp:322
+#: ../src/richtext/richtextfontpage.cpp:326
+#: ../src/richtext/richtextfontpage.cpp:330
 #: ../src/richtext/richtextliststylepage.cpp:449
 #: ../src/richtext/richtextliststylepage.cpp:461
 #: ../src/richtext/richtextliststylepage.cpp:462
@@ -847,7 +857,7 @@ msgstr "*)"
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1332
+#: ../src/msw/utils.cpp:1324
 msgid ", 64-bit edition"
 msgstr ""
 
@@ -989,15 +999,15 @@ msgstr "9 x 11 cali"
 msgid ": file does not exist!"
 msgstr ": plik nie istnieje!"
 
-#: ../src/common/fontmap.cpp:198
+#: ../src/common/fontmap.cpp:200
 msgid ": unknown charset"
 msgstr ": nieznany zestaw znaków"
 
-#: ../src/common/fontmap.cpp:412
+#: ../src/common/fontmap.cpp:414
 msgid ": unknown encoding"
 msgstr ": nieznane kodowanie"
 
-#: ../src/generic/wizard.cpp:437
+#: ../src/generic/wizard.cpp:438
 msgid "< &Back"
 msgstr "< &Wstecz"
 
@@ -1047,19 +1057,19 @@ msgstr "<NAPĘD>"
 msgid "<LINK>"
 msgstr "<ŁĄCZE>"
 
-#: ../src/html/helpwnd.cpp:1276
+#: ../src/html/helpwnd.cpp:1280
 msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr "<b><i>Pogrubiona kursywa.</i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1280
+#: ../src/html/helpwnd.cpp:1284
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
 msgstr "<b><i>pogrubiona kursywa <u>z podkreśleniem</u></i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1275
+#: ../src/html/helpwnd.cpp:1279
 msgid "<b>Bold face.</b> "
 msgstr "<b>Pogrubienie.</b> "
 
-#: ../src/html/helpwnd.cpp:1274
+#: ../src/html/helpwnd.cpp:1278
 msgid "<i>Italic face.</i> "
 msgstr "<i>Kursywa.</i> "
 
@@ -1169,7 +1179,7 @@ msgstr "A6 105 x 148 mm"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 Obrócone 148 x 105 mm"
 
-#: ../src/generic/fontdlgg.cpp:84 ../src/richtext/richtextformatdlg.cpp:521
+#: ../src/generic/fontdlgg.cpp:84 ../src/richtext/richtextformatdlg.cpp:525
 #: ../src/osx/carbon/fontdlg.cpp:337
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
@@ -1178,7 +1188,7 @@ msgstr "ABCDEFGabcdefg12345"
 msgid "ADD"
 msgstr "DODAJ"
 
-#: ../src/richtext/richtextsymboldlg.cpp:455 ../src/common/ftp.cpp:408
+#: ../src/richtext/richtextsymboldlg.cpp:459 ../src/common/ftp.cpp:406
 msgid "ASCII"
 msgstr "ASCII"
 
@@ -1192,6 +1202,10 @@ msgstr "Inform&acje"
 msgid "About %s"
 msgstr "O %s"
 
+#: ../src/richtext/richtextsizepage.cpp:482
+msgid "Absolute"
+msgstr ""
+
 #: ../src/common/stockitem.cpp:208
 #, fuzzy
 msgid "Actual Size"
@@ -1201,11 +1215,11 @@ msgstr "&Bieżący rozmiar"
 msgid "Add"
 msgstr "Dodaj"
 
-#: ../src/html/helpwnd.cpp:437
+#: ../src/html/helpwnd.cpp:440
 msgid "Add current page to bookmarks"
 msgstr "Dodaj bieżącą stronę do listy zakładek"
 
-#: ../src/generic/colrdlgg.cpp:290
+#: ../src/generic/colrdlgg.cpp:284
 msgid "Add to custom colours"
 msgstr "Dodaj do kolorów niestandardowych"
 
@@ -1218,7 +1232,7 @@ msgid "AddToPropertyCollection called w/o valid adder"
 msgstr ""
 "Funkcja AddToPropertyCollection wywołana bez poprawnego modułu dodającego"
 
-#: ../src/html/helpctrl.cpp:148
+#: ../src/html/helpctrl.cpp:160
 #, c-format
 msgid "Adding book %s"
 msgstr "Dodawanie pliku pomocy %s"
@@ -1243,7 +1257,7 @@ msgstr "Wyrównanie do lewej"
 msgid "Align Right"
 msgstr "Wyrównanie do prawej"
 
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:242
 #, fuzzy
 msgid "Alignment"
 msgstr "&Wyrównanie"
@@ -1252,20 +1266,20 @@ msgstr "&Wyrównanie"
 msgid "All"
 msgstr "Wszystko"
 
-#: ../src/generic/filectrlg.cpp:1195 ../src/common/fldlgcmn.cpp:90
+#: ../src/generic/filectrlg.cpp:1199 ../src/common/fldlgcmn.cpp:90
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Wszystkie pliki (%s)|%s"
 
-#: ../include/wx/defs.h:2769
+#: ../include/wx/defs.h:2774
 msgid "All files (*)|*"
 msgstr "Wszystkie pliki (*)|*"
 
-#: ../include/wx/defs.h:2766
+#: ../include/wx/defs.h:2771
 msgid "All files (*.*)|*.*"
 msgstr "Wszystkie pliki (*.*)|*.*"
 
-#: ../src/richtext/richtextstyles.cpp:1032
+#: ../src/richtext/richtextstyles.cpp:1041
 msgid "All styles"
 msgstr "Wszystkie style"
 
@@ -1282,7 +1296,7 @@ msgstr ""
 msgid "Already dialling ISP."
 msgstr "Już łączy z ISP."
 
-#: ../src/common/accelcmn.cpp:311 ../src/univ/themes/win32.cpp:3759
+#: ../src/common/accelcmn.cpp:321 ../src/univ/themes/win32.cpp:3757
 #, fuzzy
 msgid "Alt+"
 msgstr "Alt-"
@@ -1296,7 +1310,7 @@ msgstr "I zawiera następujące plik:\n"
 msgid "Animation file is not of type %ld."
 msgstr "Plik animacyjny nie jest typu %ld."
 
-#: ../src/generic/logg.cpp:1036
+#: ../src/generic/logg.cpp:1038
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Dołączyć dziennik do pliku '%s' (wybierając [Nie] zastąpisz go)?"
@@ -1316,13 +1330,13 @@ msgstr "Z&astosuj"
 msgid "Arabic"
 msgstr "Arabski"
 
-#: ../src/common/fmapbase.cpp:152
+#: ../src/common/fmapbase.cpp:154
 msgid "Arabic (ISO-8859-6)"
 msgstr "Arabski (ISO-8859-6)"
 
 # catalog file --> ?
 # domain --> ?
-#: ../src/msw/ole/automtn.cpp:643
+#: ../src/msw/ole/automtn.cpp:656
 #, fuzzy, c-format
 msgid "Argument %u not found."
 msgstr "Nie znaleziono indeksu kolumny."
@@ -1433,7 +1447,7 @@ msgid "Back"
 msgstr "&Wstecz"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
-#: ../src/richtext/richtextformatdlg.cpp:369
+#: ../src/richtext/richtextformatdlg.cpp:373
 #, fuzzy
 msgid "Background"
 msgstr "Kolor tła"
@@ -1447,11 +1461,11 @@ msgstr "Kolor tła"
 msgid "Background colour"
 msgstr "Kolor tła"
 
-#: ../src/common/fmapbase.cpp:159
+#: ../src/common/fmapbase.cpp:161
 msgid "Baltic (ISO-8859-13)"
 msgstr "Bałtycki (ISO-8859-13)"
 
-#: ../src/common/fmapbase.cpp:150
+#: ../src/common/fmapbase.cpp:152
 msgid "Baltic (old) (ISO-8859-4)"
 msgstr "Bałtycki (stary) (ISO-8859-4)"
 
@@ -1468,7 +1482,7 @@ msgstr "Bitmap"
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr "Bitmap renderer nie mógł wyświetlić wartości; typ wartości:"
 
-#: ../src/generic/fontdlgg.cpp:334 ../src/richtext/richtextfontpage.cpp:297
+#: ../src/generic/fontdlgg.cpp:334 ../src/richtext/richtextfontpage.cpp:328
 #: ../src/osx/carbon/fontdlg.cpp:538 ../src/common/stockitem.cpp:144
 msgid "Bold"
 msgstr "Pogrubiony"
@@ -1479,12 +1493,12 @@ msgstr "Pogrubiony"
 msgid "Border"
 msgstr "Modern"
 
-#: ../src/richtext/richtextformatdlg.cpp:363
+#: ../src/richtext/richtextformatdlg.cpp:367
 #, fuzzy
 msgid "Borders"
 msgstr "Modern"
 
-#: ../src/richtext/richtextsizepage.cpp:418 ../src/common/stockitem.cpp:145
+#: ../src/richtext/richtextsizepage.cpp:264 ../src/common/stockitem.cpp:145
 msgid "Bottom"
 msgstr ""
 
@@ -1492,12 +1506,12 @@ msgstr ""
 msgid "Bottom margin (mm):"
 msgstr "Dolny margines (mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:8194
+#: ../src/richtext/richtextbuffer.cpp:8431
 #, fuzzy
 msgid "Box Properties"
 msgstr "&Właściwości"
 
-#: ../src/richtext/richtextstyles.cpp:1036
+#: ../src/richtext/richtextstyles.cpp:1045
 #, fuzzy
 msgid "Box styles"
 msgstr "Wszystkie style"
@@ -1515,7 +1529,7 @@ msgstr "&Wyrównanie wypunktowania:"
 msgid "Bullet style"
 msgstr "Styl wypunktowania"
 
-#: ../src/richtext/richtextformatdlg.cpp:337
+#: ../src/richtext/richtextformatdlg.cpp:341
 msgid "Bullets"
 msgstr "Wypunktowania"
 
@@ -1523,7 +1537,7 @@ msgstr "Wypunktowania"
 msgid "C sheet, 17 x 22 in"
 msgstr "Arkusz C, 17 x 22 cali"
 
-#: ../src/generic/logg.cpp:522
+#: ../src/generic/logg.cpp:518
 msgid "C&lear"
 msgstr "&Wyczyść"
 
@@ -1575,7 +1589,7 @@ msgstr "WYCZYŚĆ"
 msgid "COMMAND"
 msgstr "POLECENIE"
 
-#: ../src/richtext/richtextfontpage.cpp:258
+#: ../src/richtext/richtextfontpage.cpp:289
 msgid "Ca&pitals"
 msgstr "&Duże litery"
 
@@ -1583,7 +1597,7 @@ msgstr "&Duże litery"
 msgid "Can't &Undo "
 msgstr "Nie można &cofnąć "
 
-#: ../src/common/image.cpp:2487
+#: ../src/common/image.cpp:2579
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
 
@@ -1606,7 +1620,7 @@ msgstr "Nie można utworzyć klucza rejestru '%s'"
 msgid "Can't create thread"
 msgstr "Nie można utworzyć wątku"
 
-#: ../src/msw/window.cpp:3772
+#: ../src/msw/window.cpp:3780
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Nie można utworzyć okna klasy '%s'"
@@ -1651,11 +1665,11 @@ msgstr "Nie można znaleźć bieżącej pozycji w pliku '%s'"
 msgid "Can't get info about registry key '%s'"
 msgstr "Nie można uzyskać informacji o kluczu rejestru '%s'"
 
-#: ../src/common/zstream.cpp:339
+#: ../src/common/zstream.cpp:347
 msgid "Can't initialize zlib deflate stream."
 msgstr "Nie można zainicjować strumienia kompresji biblioteki zlib."
 
-#: ../src/common/zstream.cpp:178
+#: ../src/common/zstream.cpp:186
 msgid "Can't initialize zlib inflate stream."
 msgstr "Nie można zainicjować strumienia dekompresji biblioteki zlib."
 
@@ -1674,12 +1688,12 @@ msgstr ""
 msgid "Can't open registry key '%s'"
 msgstr "Nie można otworzyć klucza rejestru '%s'"
 
-#: ../src/common/zstream.cpp:245
+#: ../src/common/zstream.cpp:253
 #, c-format
 msgid "Can't read from inflate stream: %s"
 msgstr "Nie można czytać z dekompresowanego strumienia: %s"
 
-#: ../src/common/zstream.cpp:237
+#: ../src/common/zstream.cpp:245
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
 msgstr ""
 "Nie można odczytać dekompresowanego strumienia: nieoczekiwany koniec w "
@@ -1696,12 +1710,12 @@ msgstr "Nie można odczytać wartości '%s'"
 msgid "Can't read value of key '%s'"
 msgstr "Nie można odczytać wartości klucza '%s'"
 
-#: ../src/common/image.cpp:2284
+#: ../src/common/image.cpp:2376
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Nie można zapisać obrazu do pliku '%s': nieznane rozszerzenie."
 
-#: ../src/generic/logg.cpp:583 ../src/generic/logg.cpp:998
+#: ../src/generic/logg.cpp:579 ../src/generic/logg.cpp:1000
 msgid "Can't save log contents to file."
 msgstr "Nie można zapisać zawartości dziennika w pliku."
 
@@ -1716,17 +1730,17 @@ msgstr "Nie można zmienić priorytetu wątku"
 msgid "Can't set value of '%s'"
 msgstr "Nie można nadać wartości '%s'"
 
-#: ../src/unix/utilsunx.cpp:372
+#: ../src/unix/utilsunx.cpp:352
 #, fuzzy
 msgid "Can't write to child process's stdin"
 msgstr "Nie udało się zabić procesu %d"
 
-#: ../src/common/zstream.cpp:420
+#: ../src/common/zstream.cpp:428
 #, c-format
 msgid "Can't write to deflate stream: %s"
 msgstr "Nie można zapisywać do kompresowanego strumienia: %s"
 
-#: ../src/generic/dirdlgg.cpp:108 ../src/richtext/richtextstyledlg.cpp:304
+#: ../src/generic/dirdlgg.cpp:108 ../src/richtext/richtextstyledlg.cpp:308
 #: ../src/common/stockitem.cpp:146 ../src/msw/msgdlg.cpp:489
 #: ../src/msw/progdlg.cpp:674 ../src/gtk1/fontdlg.cpp:145
 #: ../src/motif/msgdlg.cpp:194
@@ -1743,7 +1757,7 @@ msgstr ""
 "Nie można utworzyć nowego ID kolumny. Prawdopodobnie została osiągnięta "
 "maks. liczba kolumn."
 
-#: ../src/common/filefn.cpp:1333
+#: ../src/common/filefn.cpp:1330
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "Nie można wyliczyć plików '%s'"
@@ -1758,29 +1772,29 @@ msgstr "Nie można wyliczyć plików w katalogu '%s'"
 msgid "Cannot find active dialup connection: %s"
 msgstr "NIe można znaleźć aktywnego połączenia dialup: %s"
 
-#: ../src/msw/dialup.cpp:850
+#: ../src/msw/dialup.cpp:849
 msgid "Cannot find the location of address book file"
 msgstr "Nie można znaleźć lokalizacji pliku książki adresowej"
 
-#: ../src/msw/ole/automtn.cpp:554
+#: ../src/msw/ole/automtn.cpp:557
 #, fuzzy, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "NIe można znaleźć aktywnego połączenia dialup: %s"
 
-#: ../src/unix/threadpsx.cpp:1208
+#: ../src/unix/threadpsx.cpp:1213
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Nie można uzyskać zakresu priorytetów strategii harmogramowania %d."
 
-#: ../src/unix/utilsunx.cpp:898
+#: ../src/unix/utilsunx.cpp:878
 msgid "Cannot get the hostname"
 msgstr "Nie można pobrać nazwy serwera"
 
-#: ../src/unix/utilsunx.cpp:934
+#: ../src/unix/utilsunx.cpp:914
 msgid "Cannot get the official hostname"
 msgstr "Nie można pobrać oficjalnej nazwy serwera"
 
-#: ../src/msw/dialup.cpp:951
+#: ../src/msw/dialup.cpp:950
 msgid "Cannot hang up - no active dialup connection."
 msgstr "Nie można rozłączyć - brak aktywnego połączenia dialup."
 
@@ -1793,7 +1807,7 @@ msgstr "Nie można zainicjować OLE"
 msgid "Cannot initialize sockets"
 msgstr "Nie można zainicjować OLE"
 
-#: ../src/msw/volume.cpp:619
+#: ../src/msw/volume.cpp:620
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Nie można wczytać ikony z '%s'."
@@ -1837,7 +1851,7 @@ msgstr "Nie można otworzyć pliku indeksowego: %s"
 msgid "Cannot open resources file '%s'."
 msgstr "Nie można wczytać zasobów z pliku z '%s'."
 
-#: ../src/html/helpwnd.cpp:1543
+#: ../src/html/helpwnd.cpp:1538
 msgid "Cannot print empty page."
 msgstr "Nie można wydrukować pustej strony."
 
@@ -1856,7 +1870,7 @@ msgstr "Nie można wznowić wątku %lu"
 msgid "Cannot resume thread %x"
 msgstr "Nie można wznowić wątku %x"
 
-#: ../src/unix/threadpsx.cpp:1189
+#: ../src/unix/threadpsx.cpp:1194
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "Nie można uzyskać strategii harmonogramowania wątków."
 
@@ -1883,7 +1897,7 @@ msgstr "Nie można zawiesić wątku %x"
 msgid "Cannot wait for thread termination"
 msgstr "Nie można czekać na zakończenie wątku"
 
-#: ../src/html/helpwnd.cpp:544
+#: ../src/html/helpwnd.cpp:547
 msgid "Case sensitive"
 msgstr "Uwzględniaj wielkość liter"
 
@@ -1891,12 +1905,12 @@ msgstr "Uwzględniaj wielkość liter"
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8267
+#: ../src/richtext/richtextbuffer.cpp:8843
 #, fuzzy
 msgid "Cell Properties"
 msgstr "&Właściwości"
 
-#: ../src/common/fmapbase.cpp:160
+#: ../src/common/fmapbase.cpp:162
 msgid "Celtic (ISO-8859-14)"
 msgstr "Celtycki (ISO-8859-14)"
 
@@ -1909,7 +1923,7 @@ msgstr "Cen&trowany"
 msgid "Centered"
 msgstr "Wyrównanie do środka"
 
-#: ../src/common/fmapbase.cpp:148
+#: ../src/common/fmapbase.cpp:150
 msgid "Central European (ISO-8859-2)"
 msgstr "Środkowoeuropejski (ISO-8859-2)"
 
@@ -1925,7 +1939,7 @@ msgstr "Wyrównanie do środka"
 msgid "Centre text."
 msgstr "Wyrównanietekstu."
 
-#: ../src/richtext/richtextsizepage.cpp:417
+#: ../src/richtext/richtextsizepage.cpp:263
 #, fuzzy
 msgid "Centred"
 msgstr "Cen&trowany"
@@ -1935,21 +1949,21 @@ msgstr "Cen&trowany"
 msgid "Ch&oose..."
 msgstr "&Wybierz..."
 
-#: ../src/richtext/richtextbuffer.cpp:3925
+#: ../src/richtext/richtextbuffer.cpp:3936
 msgid "Change List Style"
 msgstr "Zmień styl listy"
 
-#: ../src/richtext/richtextbuffer.cpp:3289
+#: ../src/richtext/richtextbuffer.cpp:3300
 #, fuzzy
 msgid "Change Object Style"
 msgstr "Zmień styl listy"
 
-#: ../src/richtext/richtextbuffer.cpp:3555
+#: ../src/richtext/richtextbuffer.cpp:3566
 #, fuzzy
 msgid "Change Properties"
 msgstr "&Właściwości"
 
-#: ../src/richtext/richtextbuffer.cpp:3116
+#: ../src/richtext/richtextbuffer.cpp:3127
 msgid "Change Style"
 msgstr "Zmień styl"
 
@@ -1959,7 +1973,7 @@ msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr ""
 "Zmiany nie zostaną zapisane, aby uniknąć nadpisania istniejącego pliku \"%s\""
 
-#: ../src/richtext/richtextstyles.cpp:1034
+#: ../src/richtext/richtextstyles.cpp:1043
 msgid "Character styles"
 msgstr "Style zkaku"
 
@@ -1996,28 +2010,28 @@ msgstr "Sprawdź aby zrobić kursywę czcionki."
 msgid "Check to make the font underlined."
 msgstr "Sprawdź aby podkreślić czcionkę."
 
-#: ../src/richtext/richtextstyledlg.cpp:293
-#: ../src/richtext/richtextstyledlg.cpp:295
+#: ../src/richtext/richtextstyledlg.cpp:297
+#: ../src/richtext/richtextstyledlg.cpp:299
 msgid "Check to restart numbering."
 msgstr "Sprawdź aby ponownie uruchomić numerację."
 
-#: ../src/richtext/richtextfontpage.cpp:253
-#: ../src/richtext/richtextfontpage.cpp:255
+#: ../src/richtext/richtextfontpage.cpp:284
+#: ../src/richtext/richtextfontpage.cpp:286
 msgid "Check to show a line through the text."
 msgstr "Sprawdź aby pokazać linię poprzez tekst."
 
-#: ../src/richtext/richtextfontpage.cpp:260
-#: ../src/richtext/richtextfontpage.cpp:262
+#: ../src/richtext/richtextfontpage.cpp:291
+#: ../src/richtext/richtextfontpage.cpp:293
 msgid "Check to show the text in capitals."
 msgstr "Sprawdź aby wyświetlić tekst w dużych literach."
 
-#: ../src/richtext/richtextfontpage.cpp:274
-#: ../src/richtext/richtextfontpage.cpp:276
+#: ../src/richtext/richtextfontpage.cpp:305
+#: ../src/richtext/richtextfontpage.cpp:307
 msgid "Check to show the text in subscript."
 msgstr "Sprawdź aby wyświetlić tekst w indeksie dolnym."
 
-#: ../src/richtext/richtextfontpage.cpp:267
-#: ../src/richtext/richtextfontpage.cpp:269
+#: ../src/richtext/richtextfontpage.cpp:298
+#: ../src/richtext/richtextfontpage.cpp:300
 msgid "Check to show the text in superscript."
 msgstr "Sprawdź aby wyświetlić tekst w indeksie górnym."
 
@@ -2035,7 +2049,7 @@ msgstr "Tworzenie katalogu"
 msgid "Choose a file"
 msgstr "Wybierz czcionkę"
 
-#: ../src/generic/colrdlgg.cpp:145 ../src/gtk/colordlg.cpp:60
+#: ../src/generic/colrdlgg.cpp:145 ../src/gtk/colordlg.cpp:62
 msgid "Choose colour"
 msgstr "Wybierz kolor"
 
@@ -2049,11 +2063,11 @@ msgstr "Wybierz czcionkę"
 msgid "Circular dependency involving module \"%s\" detected."
 msgstr "Wykryto zależność kołową z udziałem modułu \"%s\"."
 
-#: ../src/aui/tabmdi.cpp:105 ../src/generic/mdig.cpp:98
+#: ../src/aui/tabmdi.cpp:107 ../src/generic/mdig.cpp:98
 msgid "Cl&ose"
 msgstr "Zam&knij"
 
-#: ../src/msw/ole/automtn.cpp:655
+#: ../src/msw/ole/automtn.cpp:668
 #, fuzzy
 msgid "Class not registered."
 msgstr "Nie można utworzyć wątku"
@@ -2063,12 +2077,12 @@ msgstr "Nie można utworzyć wątku"
 msgid "Clear"
 msgstr "Wy&czyść"
 
-#: ../src/generic/logg.cpp:522
+#: ../src/generic/logg.cpp:518
 msgid "Clear the log contents"
 msgstr "Wyczyść zawartość dziennika"
 
-#: ../src/richtext/richtextstyledlg.cpp:256
-#: ../src/richtext/richtextstyledlg.cpp:258
+#: ../src/richtext/richtextstyledlg.cpp:260
+#: ../src/richtext/richtextstyledlg.cpp:262
 msgid "Click to apply the selected style."
 msgstr "Kliknij, aby zastosować wybrany styl."
 
@@ -2091,14 +2105,14 @@ msgstr "Anulowanie wyboru czcionki"
 msgid "Click to change the font colour."
 msgstr "Kliknij, aby zmienić kolor czcionki."
 
-#: ../src/richtext/richtextfontpage.cpp:243
-#: ../src/richtext/richtextfontpage.cpp:245
+#: ../src/richtext/richtextfontpage.cpp:274
+#: ../src/richtext/richtextfontpage.cpp:276
 #, fuzzy
 msgid "Click to change the text background colour."
 msgstr "Kliknij, aby zmienić kolor tekstu."
 
-#: ../src/richtext/richtextfontpage.cpp:230
-#: ../src/richtext/richtextfontpage.cpp:232
+#: ../src/richtext/richtextfontpage.cpp:261
+#: ../src/richtext/richtextfontpage.cpp:263
 msgid "Click to change the text colour."
 msgstr "Kliknij, aby zmienić kolor tekstu."
 
@@ -2107,8 +2121,8 @@ msgstr "Kliknij, aby zmienić kolor tekstu."
 msgid "Click to choose the font for this level."
 msgstr "Kliknij, aby wybrać czcionkę dla tego poziomu."
 
-#: ../src/richtext/richtextstyledlg.cpp:283
-#: ../src/richtext/richtextstyledlg.cpp:285
+#: ../src/richtext/richtextstyledlg.cpp:287
+#: ../src/richtext/richtextstyledlg.cpp:289
 msgid "Click to close this window."
 msgstr "Kliknij, aby zamknąć to okno."
 
@@ -2121,24 +2135,24 @@ msgstr "Kliknij, aby potwierdzić zmiany czcionki."
 msgid "Click to confirm the font selection."
 msgstr "Potwierdzenie wyboru czcionki"
 
-#: ../src/richtext/richtextstyledlg.cpp:248
-#: ../src/richtext/richtextstyledlg.cpp:250
+#: ../src/richtext/richtextstyledlg.cpp:252
+#: ../src/richtext/richtextstyledlg.cpp:254
 #, fuzzy
 msgid "Click to create a new box style."
 msgstr "Kliknij, aby utworzyć nowy styl listy."
 
-#: ../src/richtext/richtextstyledlg.cpp:230
-#: ../src/richtext/richtextstyledlg.cpp:232
+#: ../src/richtext/richtextstyledlg.cpp:234
+#: ../src/richtext/richtextstyledlg.cpp:236
 msgid "Click to create a new character style."
 msgstr "Kliknij, aby utworzyć nowy styl znaków."
 
-#: ../src/richtext/richtextstyledlg.cpp:242
-#: ../src/richtext/richtextstyledlg.cpp:244
+#: ../src/richtext/richtextstyledlg.cpp:246
+#: ../src/richtext/richtextstyledlg.cpp:248
 msgid "Click to create a new list style."
 msgstr "Kliknij, aby utworzyć nowy styl listy."
 
-#: ../src/richtext/richtextstyledlg.cpp:236
-#: ../src/richtext/richtextstyledlg.cpp:238
+#: ../src/richtext/richtextstyledlg.cpp:240
+#: ../src/richtext/richtextstyledlg.cpp:242
 msgid "Click to create a new paragraph style."
 msgstr "Kliknij, aby utworzyć nowy styl paragrafu."
 
@@ -2152,8 +2166,8 @@ msgstr "Kliknij, aby utworzyć nową pozycję karty."
 msgid "Click to delete all tab positions."
 msgstr "Kliknij, aby usunąć wszystkie pozycje karty."
 
-#: ../src/richtext/richtextstyledlg.cpp:274
-#: ../src/richtext/richtextstyledlg.cpp:276
+#: ../src/richtext/richtextstyledlg.cpp:278
+#: ../src/richtext/richtextstyledlg.cpp:280
 msgid "Click to delete the selected style."
 msgstr "Kliknij, aby usunąć wybrany styl."
 
@@ -2162,25 +2176,25 @@ msgstr "Kliknij, aby usunąć wybrany styl."
 msgid "Click to delete the selected tab position."
 msgstr "Kliknij, aby usunąć wybraną pozycję karty."
 
-#: ../src/richtext/richtextstyledlg.cpp:268
-#: ../src/richtext/richtextstyledlg.cpp:270
+#: ../src/richtext/richtextstyledlg.cpp:272
+#: ../src/richtext/richtextstyledlg.cpp:274
 msgid "Click to edit the selected style."
 msgstr "Kliknij, aby edytować wybrany styl."
 
-#: ../src/richtext/richtextstyledlg.cpp:262
-#: ../src/richtext/richtextstyledlg.cpp:264
+#: ../src/richtext/richtextstyledlg.cpp:266
+#: ../src/richtext/richtextstyledlg.cpp:268
 msgid "Click to rename the selected style."
 msgstr "Kliknij, aby zmienić nazwę wybranego stylu."
 
 #: ../src/generic/dbgrptg.cpp:94 ../src/generic/progdlgg.cpp:805
-#: ../src/generic/progdlgg.cpp:810 ../src/richtext/richtextstyledlg.cpp:281
-#: ../src/richtext/richtextsymboldlg.cpp:473 ../src/common/stockitem.cpp:149
+#: ../src/generic/progdlgg.cpp:810 ../src/richtext/richtextstyledlg.cpp:285
+#: ../src/richtext/richtextsymboldlg.cpp:477 ../src/common/stockitem.cpp:149
 #: ../src/msw/progdlg.cpp:171 ../src/msw/progdlg.cpp:680
 #: ../src/html/helpdlg.cpp:91
 msgid "Close"
 msgstr "Zamknij"
 
-#: ../src/aui/tabmdi.cpp:106 ../src/generic/mdig.cpp:99
+#: ../src/aui/tabmdi.cpp:108 ../src/generic/mdig.cpp:99
 msgid "Close All"
 msgstr "Zamknij wszystko"
 
@@ -2188,7 +2202,7 @@ msgstr "Zamknij wszystko"
 msgid "Close current document"
 msgstr "Zamknij bieżący dokument"
 
-#: ../src/generic/logg.cpp:524
+#: ../src/generic/logg.cpp:520
 msgid "Close this window"
 msgstr "Zamknij okno"
 
@@ -2197,7 +2211,7 @@ msgstr "Zamknij okno"
 msgid "Color"
 msgstr "Kolor"
 
-#: ../src/richtext/richtextformatdlg.cpp:718
+#: ../src/richtext/richtextformatdlg.cpp:722
 msgid "Colour"
 msgstr "Kolor"
 
@@ -2246,13 +2260,13 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Okno wyboru koloru nie powiodło się z błędem %0lx."
 
-#: ../src/gtk/window.cpp:4136
+#: ../src/gtk/window.cpp:4228
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:1560
+#: ../src/html/helpwnd.cpp:1555
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Skompresowane pliki pomocy HTML Help (*.chm)|*.chm|"
 
@@ -2265,7 +2279,7 @@ msgstr "Komputer"
 msgid "Config entry name cannot start with '%c'."
 msgstr "Nazwa pozycji konfiguracji nie może zaczynać się od '%c'."
 
-#: ../src/gtk/filedlg.cpp:56
+#: ../src/gtk/filedlg.cpp:59
 msgid "Confirm"
 msgstr "Potwierdź"
 
@@ -2277,7 +2291,7 @@ msgstr "Potwierdź uaktualnienie rejestru"
 msgid "Connecting..."
 msgstr "Łączenie..."
 
-#: ../src/html/helpwnd.cpp:480
+#: ../src/html/helpwnd.cpp:483
 msgid "Contents"
 msgstr "Zawartość"
 
@@ -2378,7 +2392,7 @@ msgstr "Nie można ustawić wyrównania."
 msgid "Could not set column width."
 msgstr "Nie można ustawić szerokości kolumny."
 
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1565
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "Nie udało się uzyskać katalogu roboczego"
@@ -2403,17 +2417,17 @@ msgstr "Nie można ustawić minimalnej szerokości."
 msgid "Could not set property flags."
 msgstr "Nie można ustawić flag własności."
 
-#: ../src/common/prntbase.cpp:1953
+#: ../src/common/prntbase.cpp:1986
 msgid "Could not start document preview."
 msgstr "Nie można wystartować podglądu dokumentu."
 
-#: ../src/generic/printps.cpp:179 ../src/msw/printwin.cpp:206
-#: ../src/gtk/print.cpp:1068 ../src/gtk/gnome/gprint.cpp:916
+#: ../src/generic/printps.cpp:179 ../src/msw/printwin.cpp:204
+#: ../src/gtk/print.cpp:1079 ../src/gtk/gnome/gprint.cpp:918
 msgid "Could not start printing."
 msgstr "Nie można rozpocząć drukowania."
 
 # przenieść?
-#: ../src/common/wincmn.cpp:1973
+#: ../src/common/wincmn.cpp:2024
 msgid "Could not transfer data to window"
 msgstr "Nie można przenieść danych do okna"
 
@@ -2446,7 +2460,7 @@ msgstr "Nie można zakończyć wątku"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Nie można znaleźć symbolu '%s' w bibliotece"
 
-#: ../src/gtk/print.cpp:2005
+#: ../src/gtk/print.cpp:2027
 msgid "Couldn't get hatch style from wxBrush."
 msgstr "Nie można uzyskać stylów kreskowania z wxBrush."
 
@@ -2473,12 +2487,17 @@ msgstr ""
 msgid "Couldn't load sound data from '%s'."
 msgstr "Nie można wczytać danych dźwiękowych '%s'."
 
+#: ../src/msw/dirdlg.cpp:439
+#, fuzzy
+msgid "Couldn't obtain folder name"
+msgstr "Nie można utworzyć stopera"
+
 #: ../src/unix/sound_sdl.cpp:226
 #, c-format
 msgid "Couldn't open audio: %s"
 msgstr "Nie można otworzyć dźwięku: %s"
 
-#: ../src/msw/ole/dataobj.cpp:145
+#: ../src/msw/ole/dataobj.cpp:160
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr "Nie można zarejestrować formatu schowka '%s'."
@@ -2514,21 +2533,21 @@ msgstr "Tworzenie katalogu"
 msgid "Create new directory"
 msgstr "Utwórz nowy katalog"
 
-#: ../src/common/accelcmn.cpp:313
+#: ../src/common/accelcmn.cpp:323
 #, fuzzy
 msgid "Ctrl+"
 msgstr "Ctrl-"
 
-#: ../src/richtext/richtextctrl.cpp:325 ../src/osx/textctrl_osx.cpp:583
+#: ../src/richtext/richtextctrl.cpp:324 ../src/osx/textctrl_osx.cpp:583
 #: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2222
 msgid "Cu&t"
 msgstr "&Wytnij"
 
-#: ../src/generic/filectrlg.cpp:946
+#: ../src/generic/filectrlg.cpp:950
 msgid "Current directory:"
 msgstr "Bieżący katalog:"
 
-#: ../src/gtk/print.cpp:755
+#: ../src/gtk/print.cpp:764
 msgid "Custom size"
 msgstr "Rozmiar użytkownika"
 
@@ -2545,7 +2564,7 @@ msgstr "Wytnij"
 msgid "Cut selection"
 msgstr "Wytnij wybór"
 
-#: ../src/common/fmapbase.cpp:151
+#: ../src/common/fmapbase.cpp:153
 msgid "Cyrillic (ISO-8859-5)"
 msgstr "Cyrylica (ISO-8859-5)"
 
@@ -2631,7 +2650,7 @@ msgstr "Generowanie raportu błędów nie powiodło się."
 msgid "Decorative"
 msgstr "Decorative"
 
-#: ../src/common/fmapbase.cpp:783
+#: ../src/common/fmapbase.cpp:797
 msgid "Default encoding"
 msgstr "Kodowanie domyślne"
 
@@ -2643,7 +2662,7 @@ msgstr "Domyślna czcionka"
 msgid "Default printer"
 msgstr "Domyślna drukarka"
 
-#: ../src/richtext/richtextbuffer.cpp:7145 ../src/common/stockitem.cpp:153
+#: ../src/richtext/richtextbuffer.cpp:7367 ../src/common/stockitem.cpp:153
 #: ../src/stc/stc_i18n.cpp:21
 msgid "Delete"
 msgstr "Usuń"
@@ -2652,12 +2671,11 @@ msgstr "Usuń"
 msgid "Delete A&ll"
 msgstr "&Usuń wszystko"
 
-#: ../src/richtext/richtextstyledlg.cpp:783
+#: ../src/richtext/richtextstyledlg.cpp:787
 msgid "Delete Style"
 msgstr "Usuń styl"
 
-#: ../src/richtext/richtextctrl.cpp:1126 ../src/richtext/richtextctrl.cpp:1266
-#: ../src/richtext/richtextctrl.cpp:1340
+#: ../src/richtext/richtextctrl.cpp:1221 ../src/richtext/richtextctrl.cpp:1442
 msgid "Delete Text"
 msgstr "Usuń tekst"
 
@@ -2669,7 +2687,7 @@ msgstr "Usuń pozycję"
 msgid "Delete selection"
 msgstr "Usuń wybór"
 
-#: ../src/richtext/richtextstyledlg.cpp:783
+#: ../src/richtext/richtextstyledlg.cpp:787
 #, c-format
 msgid "Delete style %s?"
 msgstr "Usuń styl %s?"
@@ -2714,20 +2732,20 @@ msgid "Did you know..."
 msgstr "Czy wiesz że..."
 
 #: ../src/dfb/wrapdfb.cpp:64
-#, c-format
-msgid "DirectFB error %d occured."
+#, fuzzy, c-format
+msgid "DirectFB error %d occurred."
 msgstr "Wystąpił błąd DirectFB %d."
 
-#: ../src/motif/filedlg.cpp:218
+#: ../src/motif/filedlg.cpp:217
 msgid "Directories"
 msgstr "Katalogi"
 
-#: ../src/common/filefn.cpp:1248
+#: ../src/common/filefn.cpp:1245
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Nie można utworzyć katalogu '%s'"
 
-#: ../src/common/filefn.cpp:1268
+#: ../src/common/filefn.cpp:1265
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "Nie można utworzyć katalogu '%s'"
@@ -2736,15 +2754,15 @@ msgstr "Nie można utworzyć katalogu '%s'"
 msgid "Directory does not exist"
 msgstr "Katalog nie istnieje"
 
-#: ../src/generic/filectrlg.cpp:1402
+#: ../src/generic/filectrlg.cpp:1406
 msgid "Directory doesn't exist."
 msgstr "Katalog nie istnieje."
 
-#: ../src/common/docview.cpp:457
+#: ../src/common/docview.cpp:458
 msgid "Discard changes and reload the last saved version?"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:510
+#: ../src/html/helpwnd.cpp:513
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
@@ -2752,11 +2770,11 @@ msgstr ""
 "Wyświetla wszystkie elementy indeksu zawierające podany łańcuch. Szuka bez "
 "uwzględniania wielkości liter."
 
-#: ../src/html/helpwnd.cpp:690
+#: ../src/html/helpwnd.cpp:693
 msgid "Display options dialog"
 msgstr "Wyświetl okno dialogowe opcji"
 
-#: ../src/html/helpwnd.cpp:329
+#: ../src/html/helpwnd.cpp:327
 msgid "Displays help as you browse the books on the left."
 msgstr "Wyświetla pomoc podczas przeglądania książek po lewej."
 
@@ -2775,10 +2793,15 @@ msgstr ""
 "Nowa wartość to \n"
 "%s %1"
 
-#: ../src/common/docview.cpp:533
+#: ../src/common/docview.cpp:534
 #, fuzzy, c-format
 msgid "Do you want to save changes to %s?"
 msgstr "Chcesz zapisać zmiany w dokumencie %s?"
+
+#: ../src/common/prntbase.cpp:526
+#, fuzzy
+msgid "Document:"
+msgstr "Dokumentacja autorstwa"
 
 #: ../src/generic/aboutdlgg.cpp:74
 msgid "Documentation by "
@@ -2788,7 +2811,7 @@ msgstr "Dokumentacja autorstwa"
 msgid "Documentation writers"
 msgstr "Autorzy dokumentacji"
 
-#: ../src/common/sizer.cpp:2579
+#: ../src/common/sizer.cpp:2657
 msgid "Don't Save"
 msgstr "Nie Zapisuj"
 
@@ -2823,7 +2846,7 @@ msgstr "Dwukrotnie użyty identyfikator : %d"
 msgid "Down"
 msgstr "W dół"
 
-#: ../src/richtext/richtextctrl.cpp:787
+#: ../src/richtext/richtextctrl.cpp:804
 msgid "Drag"
 msgstr ""
 
@@ -2839,7 +2862,7 @@ msgstr "END"
 msgid "ENTER"
 msgstr "ENTER"
 
-#: ../src/unix/fswatcher_inotify.cpp:335
+#: ../src/unix/fswatcher_inotify.cpp:358
 #, fuzzy
 msgid "EOF while reading from inotify descriptor"
 msgstr "nie można czytać z deskryptora pliku %d"
@@ -2865,45 +2888,40 @@ msgstr "&Edytuj"
 msgid "Edit item"
 msgstr "Edytuj pozycję"
 
-#: ../src/richtext/richtextsizepage.cpp:257
-#: ../src/richtext/richtextsizepage.cpp:259
-#: ../src/richtext/richtextsizepage.cpp:365
-#: ../src/richtext/richtextsizepage.cpp:367
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:429
 msgid "Enable the height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:402
 #, fuzzy
 msgid "Enable the maximum width value."
 msgstr "Nie można ustawić maksymalnej szerokości."
 
-#: ../src/richtext/richtextsizepage.cpp:311
-#: ../src/richtext/richtextsizepage.cpp:313
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:375
 msgid "Enable the minimum height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:284
-#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:346
+#: ../src/richtext/richtextsizepage.cpp:348
 #, fuzzy
 msgid "Enable the minimum width value."
 msgstr "Nie można ustawić minimalnej szerokości."
 
-#: ../src/richtext/richtextsizepage.cpp:230
-#: ../src/richtext/richtextsizepage.cpp:232
+#: ../src/richtext/richtextsizepage.cpp:292
+#: ../src/richtext/richtextsizepage.cpp:294
 msgid "Enable the width value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:410
-#: ../src/richtext/richtextsizepage.cpp:412
+#: ../src/richtext/richtextsizepage.cpp:256
+#: ../src/richtext/richtextsizepage.cpp:258
 #, fuzzy
 msgid "Enable vertical alignment."
 msgstr "Nie można ustawić wyrównania."
-
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:454
-msgid "Enable vertical offset."
-msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:133
 #: ../src/richtext/richtextbackgroundpage.cpp:135
@@ -2911,24 +2929,24 @@ msgstr ""
 msgid "Enables a background colour."
 msgstr "Kolor tła"
 
-#: ../src/richtext/richtextstyledlg.cpp:935
+#: ../src/richtext/richtextstyledlg.cpp:939
 #, fuzzy
 msgid "Enter a box style name"
 msgstr "Podaj nową nazwę stylu"
 
-#: ../src/richtext/richtextstyledlg.cpp:607
+#: ../src/richtext/richtextstyledlg.cpp:611
 msgid "Enter a character style name"
 msgstr "Wprowadź nazwę stylu znaku"
 
-#: ../src/richtext/richtextstyledlg.cpp:821
+#: ../src/richtext/richtextstyledlg.cpp:825
 msgid "Enter a list style name"
 msgstr "Wprowadź nazwę listy stylu"
 
-#: ../src/richtext/richtextstyledlg.cpp:894
+#: ../src/richtext/richtextstyledlg.cpp:898
 msgid "Enter a new style name"
 msgstr "Podaj nową nazwę stylu"
 
-#: ../src/richtext/richtextstyledlg.cpp:655
+#: ../src/richtext/richtextstyledlg.cpp:659
 msgid "Enter a paragraph style name"
 msgstr "Wprowadź nazwę stylu paragrafu"
 
@@ -2957,8 +2975,8 @@ msgstr ""
 #: ../src/generic/dirctrlg.cpp:691 ../src/generic/dirdlgg.cpp:353
 #: ../src/generic/filectrlg.cpp:671 ../src/generic/filectrlg.cpp:785
 #: ../src/generic/filectrlg.cpp:799 ../src/generic/filectrlg.cpp:815
-#: ../src/generic/filectrlg.cpp:1371 ../src/generic/filectrlg.cpp:1402
-#: ../src/gtk/filedlg.cpp:69 ../src/gtk1/fontdlg.cpp:75
+#: ../src/generic/filectrlg.cpp:1375 ../src/generic/filectrlg.cpp:1406
+#: ../src/gtk/filedlg.cpp:73 ../src/gtk1/fontdlg.cpp:75
 msgid "Error"
 msgstr "Błąd"
 
@@ -2979,7 +2997,7 @@ msgstr "Błąd przy tworzeniu katalogu"
 msgid "Error in reading image DIB."
 msgstr "Błąd odczytu obrazu DIB."
 
-#: ../src/propgrid/propgrid.cpp:6563
+#: ../src/propgrid/propgrid.cpp:6565
 #, c-format
 msgid "Error in resource: %s"
 msgstr ""
@@ -2992,7 +3010,7 @@ msgstr "Błąd odczytu opcji konfiguracji."
 msgid "Error saving user configuration data."
 msgstr "Błąd zapisu konfiguracji użytkownika."
 
-#: ../src/gtk/print.cpp:669
+#: ../src/gtk/print.cpp:678
 msgid "Error while printing: "
 msgstr "Błąd podczas drukowania:"
 
@@ -3000,11 +3018,11 @@ msgstr "Błąd podczas drukowania:"
 msgid "Error: "
 msgstr "Błąd: "
 
-#: ../src/common/fmapbase.cpp:149
+#: ../src/common/fmapbase.cpp:151
 msgid "Esperanto (ISO-8859-3)"
 msgstr "Esperanto (ISO-8859-3)"
 
-#: ../src/unix/fswatcher_inotify.cpp:415
+#: ../src/unix/fswatcher_inotify.cpp:441
 msgid "Event queue overflowed"
 msgstr ""
 
@@ -3017,7 +3035,7 @@ msgstr "Programy (*.exe)|*.exe|Wszystkie pliki (*.*)|*.*||"
 msgid "Execute"
 msgstr ""
 
-#: ../src/msw/utilsexc.cpp:904
+#: ../src/msw/utilsexc.cpp:899
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Wykonanie polecenia '%s' nie powiodło się"
@@ -3039,7 +3057,7 @@ msgstr ""
 "Eksport klucza rejestrów: plik \"%s\" już istnieje i nie może zostać "
 "nadpisany."
 
-#: ../src/common/fmapbase.cpp:192
+#: ../src/common/fmapbase.cpp:196
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
 msgstr "Japońska rozszerzona strona kodowa UNIX (EUC-JP)"
 
@@ -3048,7 +3066,7 @@ msgstr "Japońska rozszerzona strona kodowa UNIX (EUC-JP)"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Pobranie '%s' do '%s' nie powiodło się."
 
-#: ../src/common/accelcmn.cpp:239 ../src/common/accelcmn.cpp:324
+#: ../src/common/accelcmn.cpp:239 ../src/common/accelcmn.cpp:334
 msgid "F"
 msgstr "F"
 
@@ -3067,7 +3085,7 @@ msgstr "Nie udało się dostać do pliku blokującego."
 msgid "Failed to add descriptor %d to epoll descriptor %d"
 msgstr "Nie udało się dodać deskryptora %d do deskryptora epoll %d"
 
-#: ../src/msw/dib.cpp:551
+#: ../src/msw/dib.cpp:549
 #, fuzzy, c-format
 msgid "Failed to allocate %luKb of memory for bitmap data."
 msgstr "Nie udała się rezerwacja %luKb pamięci na dane obrazu."
@@ -3081,7 +3099,7 @@ msgstr "Nie udało się przydzielić koloru dla OpenGL"
 msgid "Failed to change video mode"
 msgstr "Nie udało się zmienić trybu video"
 
-#: ../src/common/image.cpp:2943
+#: ../src/common/image.cpp:3036
 #, fuzzy, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "Nie udało się zapisać obrazu do pliku \"%s\"."
@@ -3092,7 +3110,7 @@ msgid "Failed to clean up debug report directory \"%s\""
 msgstr "Nie udało się czyszczenie katalogu raportu błędów \"%s\""
 
 # uchwyt chyba zbędny
-#: ../src/common/filename.cpp:222
+#: ../src/common/filename.cpp:209
 msgid "Failed to close file handle"
 msgstr "Nie udało się zamknąć pliku."
 
@@ -3101,11 +3119,11 @@ msgstr "Nie udało się zamknąć pliku."
 msgid "Failed to close lock file '%s'"
 msgstr "Nie udało się zamknąć pliku blokującego '%s'"
 
-#: ../src/msw/clipbrd.cpp:115
+#: ../src/msw/clipbrd.cpp:116
 msgid "Failed to close the clipboard."
 msgstr "Nie udało się zamknąć schowka."
 
-#: ../src/x11/utils.cpp:207
+#: ../src/x11/utils.cpp:204
 #, c-format
 msgid "Failed to close the display \"%s\""
 msgstr "Nie udało się zamknąć ekranu \"%s\""
@@ -3124,7 +3142,7 @@ msgstr "Nie udało się połączyć: brak ISP."
 msgid "Failed to convert file \"%s\" to Unicode."
 msgstr "Nie udało się zamienić pliku \"%s\" na Unicode."
 
-#: ../src/generic/logg.cpp:978
+#: ../src/generic/logg.cpp:980
 #, fuzzy
 msgid "Failed to copy dialog contents to the clipboard."
 msgstr "Nie udało się otworzyć schowka."
@@ -3139,7 +3157,7 @@ msgstr "Nie udało się skopiować wartości rejestru '%s'"
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "Nie udało się skopiować zawartości klucza rejestru '%s' do '%s'."
 
-#: ../src/common/filefn.cpp:1055
+#: ../src/common/filefn.cpp:1053
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "Nie udało się skopiować pliku '%s' do '%s'."
@@ -3153,20 +3171,20 @@ msgstr "Nie udało się kopiowanie klucza rejestru '%s' na '%s'."
 msgid "Failed to create DDE string"
 msgstr "Nie udało się utworzyć łańcucha DDE"
 
-#: ../src/msw/mdi.cpp:569
+#: ../src/msw/mdi.cpp:579
 msgid "Failed to create MDI parent frame."
 msgstr "Nie udało się utworzyć ramki rodzica MDI."
 
-#: ../src/common/filename.cpp:1032
+#: ../src/common/filename.cpp:1019
 msgid "Failed to create a temporary file name"
 msgstr "Nie udało się wygenerować nazwy dla pliku tymczasowego"
 
 # dlaczego anonimowego?
-#: ../src/msw/utilsexc.cpp:271
+#: ../src/msw/utilsexc.cpp:269
 msgid "Failed to create an anonymous pipe"
 msgstr "Nie udało się utworzyć potoku"
 
-#: ../src/msw/ole/automtn.cpp:514
+#: ../src/msw/ole/automtn.cpp:517
 #, fuzzy, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr "Nie udało się utworzenie katalogu \"%s\""
@@ -3210,16 +3228,16 @@ msgstr ""
 "Nie udało się utworzyć standardowego okna dialogowego wyszukaj/zastąp (kod "
 "błędu %d)"
 
-#: ../src/unix/evtloopunix.cpp:87
+#: ../src/unix/evtloopunix.cpp:96
 msgid "Failed to create wake up pipe used by event loop."
 msgstr "Nie udało się utworzyć potoku budzącego używanego przez pętlę zdarzeń"
 
-#: ../src/html/winpars.cpp:733
+#: ../src/html/winpars.cpp:737
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Nie udało się wyświelić dokumentu HTML w kodowaniu %s"
 
-#: ../src/msw/clipbrd.cpp:127
+#: ../src/msw/clipbrd.cpp:128
 msgid "Failed to empty the clipboard."
 msgstr "Nie udało się opróżnić schowka."
 
@@ -3233,12 +3251,12 @@ msgid "Failed to establish an advise loop with DDE server"
 msgstr ""
 "Nie udało się rozpocząć transakcji doradzającej (advise) z serwerem DDE"
 
-#: ../src/msw/dialup.cpp:651 ../src/msw/dialup.cpp:886
+#: ../src/msw/dialup.cpp:651 ../src/msw/dialup.cpp:885
 #, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "Nie udało się nawiązać połączenia dialup: %s"
 
-#: ../src/unix/utilsunx.cpp:548 ../src/unix/utilsunx.cpp:562
+#: ../src/unix/utilsunx.cpp:528 ../src/unix/utilsunx.cpp:542
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Nie udało się wykonać '%s'\n"
@@ -3249,7 +3267,7 @@ msgstr ""
 "Nie udało się uruchomienie curl, proszę zainstalować go w dostępnym katalogu "
 "(PATH)."
 
-#: ../src/msw/ole/automtn.cpp:497
+#: ../src/msw/ole/automtn.cpp:500
 #, fuzzy, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr "Nie udało się otworzyć ekranu \"%s\"."
@@ -3264,20 +3282,20 @@ msgstr "Nie udało się znaleźć połączenia dla regularnego wyrażenia: %s"
 msgid "Failed to get ISP names: %s"
 msgstr "Nie udało się usyskać listy ISP: %s"
 
-#: ../src/msw/ole/automtn.cpp:566
+#: ../src/msw/ole/automtn.cpp:569
 #, fuzzy, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr "Nie udało się utworzenie katalogu \"%s\""
 
-#: ../src/msw/clipbrd.cpp:745
+#: ../src/msw/clipbrd.cpp:748
 msgid "Failed to get data from the clipboard"
 msgstr "Nie udało się pobrać danych ze schowka"
 
-#: ../src/common/time.cpp:263
+#: ../src/common/time.cpp:250
 msgid "Failed to get the local system time"
 msgstr "Nie udało się pobrać lokalnego czasu systemowego"
 
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1449
 msgid "Failed to get the working directory"
 msgstr "Nie udało się uzyskać katalogu roboczego"
 
@@ -3293,12 +3311,12 @@ msgstr "Nie udało się zainicjować pomocy MS HTML."
 msgid "Failed to initialize OpenGL"
 msgstr "Nie udało się zainicjować OpenGL"
 
-#: ../src/msw/dialup.cpp:881
+#: ../src/msw/dialup.cpp:880
 #, c-format
 msgid "Failed to initiate dialup connection: %s"
 msgstr "Nie udało się rozpocząć połączenia dialup: %s"
 
-#: ../src/gtk/textctrl.cpp:1100
+#: ../src/gtk/textctrl.cpp:1059
 msgid "Failed to insert text in the control."
 msgstr "Nie udało się  wstawić tekstu w kontroli."
 
@@ -3322,10 +3340,20 @@ msgstr ""
 "Nie udało połączyć się z wątkiem, potencjalny wyciek pamięci - uruchom "
 "program ponownie"
 
-#: ../src/msw/utils.cpp:747
+#: ../src/msw/utils.cpp:745
 #, c-format
 msgid "Failed to kill process %d"
 msgstr "Nie udało się zabić procesu %d"
+
+#: ../src/common/image.cpp:2261
+#, fuzzy, c-format
+msgid "Failed to load bitmap \"%s\" from resources."
+msgstr "Nie udało się wczytać obrazu %d z pliku '%s'."
+
+#: ../src/common/image.cpp:2270
+#, fuzzy, c-format
+msgid "Failed to load icon \"%s\" from resources."
+msgstr "Nie udało się wczytać obrazu %d z pliku '%s'."
 
 #: ../src/common/iconbndl.cpp:183
 #, fuzzy, c-format
@@ -3337,7 +3365,7 @@ msgstr "Nie udało się wczytać obrazu %d z pliku '%s'."
 msgid "Failed to load image %d from stream."
 msgstr "Nie udało się wczytać obrazu %d z pliku '%s'."
 
-#: ../src/common/image.cpp:2251 ../src/common/image.cpp:2270
+#: ../src/common/image.cpp:2343 ../src/common/image.cpp:2362
 #, fuzzy, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "Nie udało się wczytać obrazu %d z pliku '%s'."
@@ -3351,7 +3379,7 @@ msgstr "Nie udało się załadowanie pliku meta \"%s\"."
 msgid "Failed to load mpr.dll."
 msgstr "Nie udało się wczytać mpr.dll."
 
-#: ../src/msw/utils.cpp:1128
+#: ../src/msw/utils.cpp:1120
 #, fuzzy, c-format
 msgid "Failed to load resource \"%s\"."
 msgstr "Nie udało się załadowanie pliku meta \"%s\"."
@@ -3361,7 +3389,7 @@ msgstr "Nie udało się załadowanie pliku meta \"%s\"."
 msgid "Failed to load shared library '%s'"
 msgstr "Nie udało się wczytać biblioteki '%s'."
 
-#: ../src/msw/utils.cpp:1135
+#: ../src/msw/utils.cpp:1127
 #, fuzzy, c-format
 msgid "Failed to lock resource \"%s\"."
 msgstr "Nie udało się zablokować pliku blokującego '%s'"
@@ -3377,7 +3405,7 @@ msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr "Nie można zmienić hasła %d w deskryptorze epoll %d"
 
 # nieładne
-#: ../src/common/filename.cpp:2582
+#: ../src/common/filename.cpp:2573
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Nie udało się zmodyfikować czasów pliku '%s'"
@@ -3386,12 +3414,12 @@ msgstr "Nie udało się zmodyfikować czasów pliku '%s'"
 msgid "Failed to monitor I/O channels"
 msgstr "Nie udało się monitorować kanałów wejściowych/wyjściowych"
 
-#: ../src/common/filename.cpp:205
+#: ../src/common/filename.cpp:192
 #, c-format
 msgid "Failed to open '%s' for reading"
 msgstr "Nie udało się otworzyć '%s' do odczytu"
 
-#: ../src/common/filename.cpp:210
+#: ../src/common/filename.cpp:197
 #, c-format
 msgid "Failed to open '%s' for writing"
 msgstr "Nie udało się otworzyć '%s' do zapisu"
@@ -3401,7 +3429,7 @@ msgstr "Nie udało się otworzyć '%s' do zapisu"
 msgid "Failed to open CHM archive '%s'."
 msgstr "Nie udało się otworzyć archiwum CHM '%s'."
 
-#: ../src/common/utilscmn.cpp:1132
+#: ../src/common/utilscmn.cpp:1137
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "Nie udało się otworzyć URL \"%s\" w domyślnej przeglądarce."
@@ -3411,16 +3439,16 @@ msgstr "Nie udało się otworzyć URL \"%s\" w domyślnej przeglądarce."
 msgid "Failed to open directory \"%s\" for monitoring."
 msgstr "Nie udało się otworzyć '%s' do zapisu"
 
-#: ../src/x11/utils.cpp:226
+#: ../src/x11/utils.cpp:223
 #, c-format
 msgid "Failed to open display \"%s\"."
 msgstr "Nie udało się otworzyć ekranu \"%s\"."
 
-#: ../src/common/filename.cpp:1067
+#: ../src/common/filename.cpp:1054
 msgid "Failed to open temporary file."
 msgstr "Nie udało się otworzyć pliku tymczasowego."
 
-#: ../src/msw/clipbrd.cpp:94
+#: ../src/msw/clipbrd.cpp:95
 msgid "Failed to open the clipboard."
 msgstr "Nie udało się otworzyć schowka."
 
@@ -3429,7 +3457,12 @@ msgstr "Nie udało się otworzyć schowka."
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Nie można przetworzyć formy liczby mnogiej: '%s'"
 
-#: ../src/msw/clipbrd.cpp:645
+#: ../src/unix/mediactrl.cpp:1269
+#, fuzzy, c-format
+msgid "Failed to prepare playing \"%s\"."
+msgstr "Nie udało się otworzyć ekranu \"%s\"."
+
+#: ../src/msw/clipbrd.cpp:648
 msgid "Failed to put data on the clipboard"
 msgstr "Nie udało się umieścić danych w schowku"
 
@@ -3441,7 +3474,7 @@ msgstr "Nie udało sie odczytać identyfikatora z pliku blokującego."
 msgid "Failed to read config options."
 msgstr "Nie udało się odczytać opcji konfiguracji."
 
-#: ../src/common/docview.cpp:680
+#: ../src/common/docview.cpp:681
 #, fuzzy, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "Nie udało się załadowanie pliku meta \"%s\"."
@@ -3451,15 +3484,15 @@ msgstr "Nie udało się załadowanie pliku meta \"%s\"."
 msgid "Failed to read event from DirectFB pipe"
 msgstr "Nie udało się czytać z potoku budzącego "
 
-#: ../src/unix/evtloopunix.cpp:136
+#: ../src/unix/evtloopunix.cpp:170
 msgid "Failed to read from wake-up pipe"
 msgstr "Nie udało się czytać z potoku budzącego "
 
-#: ../src/unix/utilsunx.cpp:608
+#: ../src/unix/utilsunx.cpp:588
 msgid "Failed to redirect child process input/output"
 msgstr "Nie udało się przekierować wejścia/wyjścia procesu potomnego."
 
-#: ../src/msw/utilsexc.cpp:733
+#: ../src/msw/utilsexc.cpp:731
 msgid "Failed to redirect the child process IO"
 msgstr "Nie udało się przekierować wejścia/wyjścia procesu potomnego"
 
@@ -3468,7 +3501,7 @@ msgstr "Nie udało się przekierować wejścia/wyjścia procesu potomnego"
 msgid "Failed to register DDE server '%s'"
 msgstr "Nie udało się zarejestrować serwera DDE '%s'"
 
-#: ../src/common/fontmap.cpp:244
+#: ../src/common/fontmap.cpp:246
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Nie udało się zapamiętać kodowania dla zestawu znaków '%s'"
@@ -3494,7 +3527,7 @@ msgstr "Nie udało się usunąć nieaktualnego pliku blokującego '%s'."
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Nie udało się zmienić nazwy wartości rejestru '%s' do '%s'."
 
-#: ../src/common/filefn.cpp:1165
+#: ../src/common/filefn.cpp:1163
 #, c-format
 msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
@@ -3508,11 +3541,11 @@ msgstr ""
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Nie udało się zmienić nazwy klucza rejestru '%s' na '%s'."
 
-#: ../src/msw/clipbrd.cpp:499
+#: ../src/msw/clipbrd.cpp:498
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Nie udało się odzyskać danych ze schowka."
 
-#: ../src/common/filename.cpp:2676
+#: ../src/common/filename.cpp:2669
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Nie udało się odczytać czasów pliku '%s'"
@@ -3521,16 +3554,16 @@ msgstr "Nie udało się odczytać czasów pliku '%s'"
 msgid "Failed to retrieve text of RAS error message"
 msgstr "Nie udało się uzyskać tekstu komunikatu błędu RAS"
 
-#: ../src/msw/clipbrd.cpp:782
+#: ../src/msw/clipbrd.cpp:785
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Nie udało się uzyskać listy formatów obsługiwanych przez schowek"
 
-#: ../src/common/docview.cpp:651
+#: ../src/common/docview.cpp:652
 #, fuzzy, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "Nie udało się zapisać obrazu do pliku \"%s\"."
 
-#: ../src/msw/dib.cpp:329
+#: ../src/msw/dib.cpp:327
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "Nie udało się zapisać obrazu do pliku \"%s\"."
@@ -3539,12 +3572,12 @@ msgstr "Nie udało się zapisać obrazu do pliku \"%s\"."
 msgid "Failed to send DDE advise notification"
 msgstr "Nie udało się wysłać powiadomienia DDE"
 
-#: ../src/common/ftp.cpp:407
+#: ../src/common/ftp.cpp:405
 #, c-format
 msgid "Failed to set FTP transfer mode to %s."
 msgstr "FTP: Nie udało się ustawić trybu transmisji na '%s'."
 
-#: ../src/msw/clipbrd.cpp:375
+#: ../src/msw/clipbrd.cpp:374
 msgid "Failed to set clipboard data."
 msgstr "Nie udało się skorzystać ze schowka."
 
@@ -3557,16 +3590,21 @@ msgstr "Nie udało się nadanie praw dostępu na blokowanym pliku '%s'"
 msgid "Failed to set temporary file permissions"
 msgstr "Nie udało się nadać praw dostępu pliku tymczasowemu"
 
-#: ../src/gtk/textctrl.cpp:1041
+#: ../src/gtk/textctrl.cpp:1000
 msgid "Failed to set text in the text control."
 msgstr "Nie udało się ustawić tekstu w kontroli tekstu."
 
-#: ../src/unix/threadpsx.cpp:1333 ../src/unix/threadpsx.cpp:1343
+#: ../src/unix/threadpsx.cpp:1141
+#, fuzzy, c-format
+msgid "Failed to set thread concurrency level to %lu"
+msgstr "Nie udało się zmienić priorytetu wątku na %d."
+
+#: ../src/unix/threadpsx.cpp:1338 ../src/unix/threadpsx.cpp:1348
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Nie udało się zmienić priorytetu wątku na %d."
 
-#: ../src/unix/utilsunx.cpp:729
+#: ../src/unix/utilsunx.cpp:709
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 
@@ -3580,11 +3618,11 @@ msgstr "Nie udało się odłożyć obrazu '%s' do pamięci VFS!"
 msgid "Failed to switch DirectFB pipe to non-blocking mode"
 msgstr "Nie udało się przełączyć potoku budzącego na modus nie-blokujący"
 
-#: ../src/unix/evtloopunix.cpp:93
+#: ../src/unix/evtloopunix.cpp:103
 msgid "Failed to switch wake up pipe to non-blocking mode"
 msgstr "Nie udało się przełączyć potoku budzącego na modus nie-blokujący"
 
-#: ../src/unix/threadpsx.cpp:1525
+#: ../src/unix/threadpsx.cpp:1530
 msgid "Failed to terminate a thread."
 msgstr "Nie udało się zakończyć wątku."
 
@@ -3593,12 +3631,12 @@ msgid "Failed to terminate the advise loop with DDE server"
 msgstr ""
 "Nie udało się zakończyć transakcji doradzającej (advise) z serwerem DDE"
 
-#: ../src/msw/dialup.cpp:961
+#: ../src/msw/dialup.cpp:960
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Nie udało się zakończyć połączenia dialup: %s"
 
-#: ../src/common/filename.cpp:2597
+#: ../src/common/filename.cpp:2588
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Nie udało się zmienić czasów pliku '%s'"
@@ -3647,17 +3685,17 @@ msgstr "&Rozmiar czcionki:"
 msgid "File"
 msgstr "Plik"
 
-#: ../src/common/docview.cpp:668
+#: ../src/common/docview.cpp:669
 #, fuzzy, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "Nie udało się otworzyć '%s' do odczytu"
 
-#: ../src/common/docview.cpp:645
+#: ../src/common/docview.cpp:646
 #, fuzzy, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "Nie udało się otworzyć '%s' do zapisu"
 
-#: ../src/gtk/filedlg.cpp:53
+#: ../src/gtk/filedlg.cpp:56
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Plik '%s' już istnieje, naprawdę chcesz go zastąpić?"
@@ -3671,17 +3709,17 @@ msgstr ""
 "Plik '%s' już istnieje.\n"
 "Chcesz go zastąpić?"
 
-#: ../src/common/filefn.cpp:1204
+#: ../src/common/filefn.cpp:1201
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "Nie można utworzyć katalogu '%s'"
 
-#: ../src/common/filefn.cpp:1184
+#: ../src/common/filefn.cpp:1182
 #, fuzzy, c-format
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "Nie można utworzyć katalogu '%s'"
 
-#: ../src/richtext/richtextctrl.cpp:2665 ../src/common/textcmn.cpp:870
+#: ../src/richtext/richtextctrl.cpp:2664 ../src/common/textcmn.cpp:920
 msgid "File couldn't be loaded."
 msgstr "Plik nie może być wczytany."
 
@@ -3690,7 +3728,7 @@ msgstr "Plik nie może być wczytany."
 msgid "File dialog failed with error code %0lx."
 msgstr "Okno wyboru koloru nie powiodło się z błędem %0lx."
 
-#: ../src/common/docview.cpp:1752
+#: ../src/common/docview.cpp:1762
 msgid "File error"
 msgstr "Błąd plikowy"
 
@@ -3698,24 +3736,24 @@ msgstr "Błąd plikowy"
 msgid "File name exists already."
 msgstr "Plik o tej nazwie już istnieje."
 
-#: ../src/unix/fswatcher_inotify.cpp:413
+#: ../src/unix/fswatcher_inotify.cpp:439
 msgid "File system containing watched object was unmounted"
 msgstr ""
 
-#: ../src/motif/filedlg.cpp:219
+#: ../src/motif/filedlg.cpp:218
 msgid "Files"
 msgstr "Pliki"
 
-#: ../src/common/filefn.cpp:1756
+#: ../src/common/filefn.cpp:1753
 #, c-format
 msgid "Files (%s)"
 msgstr "Pliki (%s)"
 
-#: ../src/motif/filedlg.cpp:217
+#: ../src/motif/filedlg.cpp:216
 msgid "Filter"
 msgstr "Filtr"
 
-#: ../src/common/stockitem.cpp:159 ../src/html/helpwnd.cpp:498
+#: ../src/common/stockitem.cpp:159 ../src/html/helpwnd.cpp:501
 msgid "Find"
 msgstr "Znajdź"
 
@@ -3724,20 +3762,25 @@ msgstr "Znajdź"
 msgid "First"
 msgstr "pierwszy"
 
-#: ../src/common/prntbase.cpp:1493
+#: ../src/common/prntbase.cpp:1519
 #, fuzzy
 msgid "First page"
 msgstr "Następna strona"
 
-#: ../src/html/helpwnd.cpp:1216
+#: ../src/richtext/richtextsizepage.cpp:483
+#, fuzzy
+msgid "Fixed"
+msgstr "Czcionka o stałej szerokości:"
+
+#: ../src/html/helpwnd.cpp:1220
 msgid "Fixed font:"
 msgstr "Czcionka o stałej szerokości:"
 
-#: ../src/html/helpwnd.cpp:1279
+#: ../src/html/helpwnd.cpp:1283
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Ustalony rozmiar tekstu.<br> <b>pogrubienie</b> <i>kursywa</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:181
+#: ../src/richtext/richtextsizepage.cpp:207
 msgid "Floating"
 msgstr ""
 
@@ -3750,20 +3793,20 @@ msgstr "Kopiuj"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 cali"
 
-#: ../src/richtext/richtextformatdlg.cpp:319 ../src/osx/carbon/fontdlg.cpp:471
+#: ../src/richtext/richtextformatdlg.cpp:323 ../src/osx/carbon/fontdlg.cpp:471
 #: ../src/common/stockitem.cpp:195
 msgid "Font"
 msgstr "Czcionka"
 
-#: ../src/richtext/richtextfontpage.cpp:197
+#: ../src/richtext/richtextfontpage.cpp:228
 msgid "Font &weight:"
 msgstr "&Waga czcionki:"
 
-#: ../src/html/helpwnd.cpp:1217
+#: ../src/html/helpwnd.cpp:1221
 msgid "Font size:"
 msgstr "Rozmiar czcionki:"
 
-#: ../src/richtext/richtextfontpage.cpp:184
+#: ../src/richtext/richtextfontpage.cpp:215
 msgid "Font st&yle:"
 msgstr "&Styl czcionki:"
 
@@ -3776,7 +3819,7 @@ msgstr "Czcionka:"
 msgid "Fonts index file %s disappeared while loading fonts."
 msgstr "Plik indeksu czcionek %s znikł podczas ładowania czcionek."
 
-#: ../src/unix/utilsunx.cpp:581
+#: ../src/unix/utilsunx.cpp:561
 msgid "Fork failed"
 msgstr "Rozwidlenie nie powiodło się"
 
@@ -3789,7 +3832,7 @@ msgstr "&Dalej"
 msgid "Forward hrefs are not supported"
 msgstr "Przekazywanie właściwości 'href' nie jest wspierane"
 
-#: ../src/html/helpwnd.cpp:890
+#: ../src/html/helpwnd.cpp:889
 #, c-format
 msgid "Found %i matches"
 msgstr "Znaleziono %i odpowiednik(i/ów)"
@@ -3820,13 +3863,13 @@ msgstr "GIF: za mało pamięci."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: neznany błąd !!!"
 
-#: ../src/gtk/window.cpp:4119
+#: ../src/gtk/window.cpp:4210
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
 msgstr ""
 
-#: ../src/univ/themes/gtk.cpp:528
+#: ../src/univ/themes/gtk.cpp:526
 msgid "GTK+ theme"
 msgstr "Kompozycja GTK+"
 
@@ -3855,15 +3898,15 @@ msgid "GetPropertyCollection called w/o valid collection getter"
 msgstr ""
 "Funkcja GetPropertyCollection wywołana bez poprawnego modułu pobierającego"
 
-#: ../src/html/helpwnd.cpp:671
+#: ../src/html/helpwnd.cpp:674
 msgid "Go back"
 msgstr "Idź wstecz"
 
-#: ../src/html/helpwnd.cpp:672
+#: ../src/html/helpwnd.cpp:675
 msgid "Go forward"
 msgstr "Idź dalej"
 
-#: ../src/html/helpwnd.cpp:674
+#: ../src/html/helpwnd.cpp:677
 msgid "Go one level up in document hierarchy"
 msgstr "Idź poziom wyżej w hierarchi dokumentu"
 
@@ -3879,7 +3922,7 @@ msgstr "Idź do katalogu nadrzędnego"
 msgid "Graphics art by "
 msgstr "Grafika autorstwa"
 
-#: ../src/common/fmapbase.cpp:153
+#: ../src/common/fmapbase.cpp:155
 msgid "Greek (ISO-8859-7)"
 msgstr "Grecki (ISO-8859-7)"
 
@@ -3887,7 +3930,7 @@ msgstr "Grecki (ISO-8859-7)"
 msgid "Groove"
 msgstr ""
 
-#: ../src/common/zstream.cpp:151 ../src/common/zstream.cpp:311
+#: ../src/common/zstream.cpp:159 ../src/common/zstream.cpp:319
 msgid "Gzip not supported by this version of zlib"
 msgstr "Format Gzip nie jest wspierany przez tę wersję biblioteki zlib"
 
@@ -3899,7 +3942,7 @@ msgstr "POMOC"
 msgid "HOME"
 msgstr "HOME"
 
-#: ../src/html/helpwnd.cpp:1558
+#: ../src/html/helpwnd.cpp:1553
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "Plik projektu pomocy HTML Help (*.hhp)|*.hhp|"
 
@@ -3909,7 +3952,7 @@ msgstr "Plik projektu pomocy HTML Help (*.hhp)|*.hhp|"
 msgid "HTML anchor %s does not exist."
 msgstr "HTML: kotwica %s ie istnieje."
 
-#: ../src/html/helpwnd.cpp:1556
+#: ../src/html/helpwnd.cpp:1551
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "Pliki HTML (*.html;*.htm)|*.html;*.htm|"
 
@@ -3917,7 +3960,7 @@ msgstr "Pliki HTML (*.html;*.htm)|*.html;*.htm|"
 msgid "Harddisk"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:154
+#: ../src/common/fmapbase.cpp:156
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebrajski (ISO-8859-8)"
 
@@ -3926,7 +3969,7 @@ msgstr "Hebrajski (ISO-8859-8)"
 msgid "Help"
 msgstr "Pomoc"
 
-#: ../src/html/helpwnd.cpp:1210
+#: ../src/html/helpwnd.cpp:1214
 msgid "Help Browser Options"
 msgstr "Opcje przeglądarki pomocy"
 
@@ -3935,7 +3978,7 @@ msgid "Help Index"
 msgstr "Spis treści"
 
 # pomoc do drukowania?
-#: ../src/html/helpwnd.cpp:1540
+#: ../src/html/helpwnd.cpp:1535
 msgid "Help Printing"
 msgstr "Drukowanie pomocy"
 
@@ -3943,7 +3986,7 @@ msgstr "Drukowanie pomocy"
 msgid "Help Topics"
 msgstr "Tematy Pomocy"
 
-#: ../src/html/helpwnd.cpp:1557
+#: ../src/html/helpwnd.cpp:1552
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "Pakiety pomocy (*.htb)|*.htb|Pakiety pomocy (*.zip)|*.zip|"
 
@@ -3959,7 +4002,7 @@ msgstr "Nie znaleziono katalogu pomocy \"%s\"."
 msgid "Help file \"%s\" not found."
 msgstr "Nie znaleziono pliku pomocy \"%s\"."
 
-#: ../src/html/helpctrl.cpp:53
+#: ../src/html/helpctrl.cpp:64
 #, c-format
 msgid "Help: %s"
 msgstr "Pomoc: %s"
@@ -3985,8 +4028,8 @@ msgstr "Katalog początkowy"
 msgid "Home directory"
 msgstr "Katalog początkowy"
 
-#: ../src/richtext/richtextsizepage.cpp:205
-#: ../src/richtext/richtextsizepage.cpp:207
+#: ../src/richtext/richtextsizepage.cpp:231
+#: ../src/richtext/richtextsizepage.cpp:233
 msgid "How the object will float relative to the text."
 msgstr ""
 
@@ -4039,7 +4082,7 @@ msgstr "INS"
 msgid "INSERT"
 msgstr "WSTAW"
 
-#: ../src/common/fmapbase.cpp:194
+#: ../src/common/fmapbase.cpp:198
 msgid "ISO-2022-JP"
 msgstr "ISO-2022-JP"
 
@@ -4093,7 +4136,7 @@ msgstr "Nieprawidłowa Liczba Parametrów w Metodzie Create"
 msgid "Illegal directory name."
 msgstr "Niedozwolona nazwa katalogu."
 
-#: ../src/generic/filectrlg.cpp:1370
+#: ../src/generic/filectrlg.cpp:1374
 msgid "Illegal file specification."
 msgstr "Niedozwolona specyfikacja pliku."
 
@@ -4101,12 +4144,12 @@ msgstr "Niedozwolona specyfikacja pliku."
 msgid "Image and mask have different sizes."
 msgstr "Obraz i maska mają różne rozmiary."
 
-#: ../src/common/image.cpp:2410
+#: ../src/common/image.cpp:2502
 #, fuzzy, c-format
 msgid "Image file is not of type %d."
 msgstr "Nie jest to obraz typu %ld."
 
-#: ../src/common/image.cpp:2540
+#: ../src/common/image.cpp:2632
 #, fuzzy, c-format
 msgid "Image is not of type %s."
 msgstr "Nie jest to obraz typu %s."
@@ -4119,21 +4162,21 @@ msgstr ""
 "Nie jest możliwe utworzenie kontrolki rich edit, użyj zamiast tego prostego "
 "'text control'. Przeinstaluj riched32.dll"
 
-#: ../src/unix/utilsunx.cpp:322
+#: ../src/unix/utilsunx.cpp:302
 msgid "Impossible to get child process input"
 msgstr "Nie jest możliwe uzyskanie wejścia procesu potomnego"
 
-#: ../src/common/filefn.cpp:1071
+#: ../src/common/filefn.cpp:1069
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "Uzyskanie praw dostępu do pliku '%s' jest niemożliwe"
 
-#: ../src/common/filefn.cpp:1085
+#: ../src/common/filefn.cpp:1083
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "Zastąpienie pliku '%s' jest niemożliwe"
 
-#: ../src/common/filefn.cpp:1139
+#: ../src/common/filefn.cpp:1137
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Nie jest możliwe nadanie praw dostępu plikowi '%s'"
@@ -4143,7 +4186,7 @@ msgstr "Nie jest możliwe nadanie praw dostępu plikowi '%s'"
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:606
+#: ../src/msw/ole/automtn.cpp:619
 msgid "Incorrect number of arguments."
 msgstr ""
 
@@ -4151,15 +4194,15 @@ msgstr ""
 msgid "Indent"
 msgstr "Wcięcie"
 
-#: ../src/richtext/richtextformatdlg.cpp:325
+#: ../src/richtext/richtextformatdlg.cpp:329
 msgid "Indents && Spacing"
 msgstr "Wcięcia i odstępy"
 
-#: ../src/common/stockitem.cpp:167 ../src/html/helpwnd.cpp:523
+#: ../src/common/stockitem.cpp:167 ../src/html/helpwnd.cpp:526
 msgid "Index"
 msgstr "Indeks"
 
-#: ../src/common/fmapbase.cpp:158
+#: ../src/common/fmapbase.cpp:160
 msgid "Indian (ISO-8859-12)"
 msgstr "Hinduski (ISO-8859-12)"
 
@@ -4167,28 +4210,33 @@ msgstr "Hinduski (ISO-8859-12)"
 msgid "Info"
 msgstr ""
 
-#: ../src/common/init.cpp:261
+#: ../src/common/init.cpp:273
 msgid "Initialization failed in post init, aborting."
 msgstr "Inicjalizacja nie powiodła się powodując wyjście."
 
-#: ../src/richtext/richtextsymboldlg.cpp:469
+#: ../src/richtext/richtextsymboldlg.cpp:473
 msgid "Insert"
 msgstr "Wstawić"
 
-#: ../src/richtext/richtextbuffer.cpp:6985
-#: ../src/richtext/richtextbuffer.cpp:7840
+#: ../src/richtext/richtextbuffer.cpp:7246
+#, fuzzy
+msgid "Insert Field"
+msgstr "Wstaw tekst"
+
+#: ../src/richtext/richtextbuffer.cpp:7157
+#: ../src/richtext/richtextbuffer.cpp:8063
 msgid "Insert Image"
 msgstr "Wstaw obraz"
 
-#: ../src/richtext/richtextbuffer.cpp:7029
+#: ../src/richtext/richtextbuffer.cpp:7204
 #, fuzzy
 msgid "Insert Object"
 msgstr "Wstaw tekst"
 
-#: ../src/richtext/richtextctrl.cpp:1219 ../src/richtext/richtextctrl.cpp:1471
-#: ../src/richtext/richtextbuffer.cpp:6832
-#: ../src/richtext/richtextbuffer.cpp:6859
-#: ../src/richtext/richtextbuffer.cpp:6903
+#: ../src/richtext/richtextctrl.cpp:1162 ../src/richtext/richtextctrl.cpp:1352
+#: ../src/richtext/richtextbuffer.cpp:7002
+#: ../src/richtext/richtextbuffer.cpp:7029
+#: ../src/richtext/richtextbuffer.cpp:7073
 msgid "Insert Text"
 msgstr "Wstaw tekst"
 
@@ -4203,7 +4251,7 @@ msgstr "Odstępy przed paragrafem."
 msgid "Inset"
 msgstr "Wstawić"
 
-#: ../src/gtk/app.cpp:428
+#: ../src/gtk/app.cpp:432
 #, c-format
 msgid "Invalid GTK+ command line option, use \"%s --help\""
 msgstr "Nieprawidłowa opcja GTK+ wiersza poleceń, należy użyć \"%s --help\""
@@ -4261,7 +4309,7 @@ msgstr "Nieprawidłowe wyrażenie regularne '%s': %s"
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:330 ../src/richtext/richtextfontpage.cpp:293
+#: ../src/generic/fontdlgg.cpp:330 ../src/richtext/richtextfontpage.cpp:324
 #: ../src/osx/carbon/fontdlg.cpp:545 ../src/common/stockitem.cpp:169
 msgid "Italic"
 msgstr "Kursywa"
@@ -4345,15 +4393,15 @@ msgstr "Wyrównanie obustronne"
 msgid "Justify text left and right."
 msgstr "Wyjustuj tekst w lewo i w prawo."
 
-#: ../src/common/fmapbase.cpp:162
+#: ../src/common/fmapbase.cpp:164
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/common/fmapbase.cpp:163
+#: ../src/common/fmapbase.cpp:165
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/common/accelcmn.cpp:255 ../src/common/accelcmn.cpp:326
+#: ../src/common/accelcmn.cpp:255 ../src/common/accelcmn.cpp:337
 msgid "KP_"
 msgstr "KP_"
 
@@ -4466,7 +4514,7 @@ msgstr "Pejzaż"
 msgid "Last"
 msgstr "Wklej"
 
-#: ../src/common/prntbase.cpp:1517
+#: ../src/common/prntbase.cpp:1543
 #, fuzzy
 msgid "Last page"
 msgstr "Następna strona"
@@ -4489,7 +4537,7 @@ msgstr "Ledger, 17 x 11 cali"
 #: ../src/richtext/richtextbulletspage.cpp:200
 #: ../src/richtext/richtextbulletspage.cpp:203
 #: ../src/richtext/richtextbulletspage.cpp:204
-#: ../src/richtext/richtextsizepage.cpp:201
+#: ../src/richtext/richtextsizepage.cpp:227
 msgid "Left"
 msgstr "Lewo"
 
@@ -4567,21 +4615,21 @@ msgstr "Odstęp między wierszami:"
 msgid "Link contained '//', converted to absolute link."
 msgstr "Odsyłacz zawierający '//' przekonwertowano do adresu bezwzględnego."
 
-#: ../src/richtext/richtextformatdlg.cpp:344
+#: ../src/richtext/richtextformatdlg.cpp:348
 msgid "List Style"
 msgstr "Styl listy"
 
-#: ../src/richtext/richtextstyles.cpp:1035
+#: ../src/richtext/richtextstyles.cpp:1044
 msgid "List styles"
 msgstr "Style listy"
 
-#: ../src/richtext/richtextfontpage.cpp:173
-#: ../src/richtext/richtextfontpage.cpp:175
+#: ../src/richtext/richtextfontpage.cpp:204
+#: ../src/richtext/richtextfontpage.cpp:206
 msgid "Lists font sizes in points."
 msgstr "Wielkość czcionki listy w punktach."
 
-#: ../src/richtext/richtextfontpage.cpp:154
-#: ../src/richtext/richtextfontpage.cpp:156
+#: ../src/richtext/richtextfontpage.cpp:197
+#: ../src/richtext/richtextfontpage.cpp:199
 msgid "Lists the available fonts."
 msgstr "Lista dostępnych czcionek."
 
@@ -4604,7 +4652,7 @@ msgstr "Blokowany plik '%s' ma niewłaściwego właściciela."
 msgid "Lock file '%s' has incorrect permissions."
 msgstr "Blokowany plik '%s' ma niewłaściwe uprawnienia."
 
-#: ../src/generic/logg.cpp:586
+#: ../src/generic/logg.cpp:582
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Log został zapisany do pliku '%s'."
@@ -4619,7 +4667,7 @@ msgstr "Małe litery"
 msgid "Lower case roman numerals"
 msgstr "Małe litery cyframi rzymskimi"
 
-#: ../src/gtk/mdi.cpp:431 ../src/gtk1/mdi.cpp:432
+#: ../src/gtk/mdi.cpp:423 ../src/gtk1/mdi.cpp:432
 msgid "MDI child"
 msgstr "potomek MDI"
 
@@ -4635,173 +4683,173 @@ msgstr ""
 "Funkcje pomocy dla MS HTML Help nie są dostępne, ponieważ biblioteka MS HTML "
 "Help nie jest zainstalowana na tej maszynie. Zainstaluj ją."
 
-#: ../src/univ/themes/win32.cpp:3757
+#: ../src/univ/themes/win32.cpp:3755
 msgid "Ma&ximize"
 msgstr "&Maksymalizuj"
 
-#: ../src/common/fmapbase.cpp:200
+#: ../src/common/fmapbase.cpp:204
 #, fuzzy
 msgid "MacArabic"
 msgstr "Arabski"
 
-#: ../src/common/fmapbase.cpp:219
+#: ../src/common/fmapbase.cpp:223
 msgid "MacArmenian"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:208
+#: ../src/common/fmapbase.cpp:212
 msgid "MacBengali"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:214
+#: ../src/common/fmapbase.cpp:218
 msgid "MacBurmese"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:233
+#: ../src/common/fmapbase.cpp:237
 msgid "MacCeltic"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:224
+#: ../src/common/fmapbase.cpp:228
 msgid "MacCentralEurRoman"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:220
+#: ../src/common/fmapbase.cpp:224
 msgid "MacChineseSimp"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:198
+#: ../src/common/fmapbase.cpp:202
 msgid "MacChineseTrad"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:230
+#: ../src/common/fmapbase.cpp:234
 msgid "MacCroatian"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:203
+#: ../src/common/fmapbase.cpp:207
 msgid "MacCyrillic"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:204
+#: ../src/common/fmapbase.cpp:208
 msgid "MacDevanagari"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:228
+#: ../src/common/fmapbase.cpp:232
 msgid "MacDingbats"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:223
+#: ../src/common/fmapbase.cpp:227
 msgid "MacEthiopic"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:226
+#: ../src/common/fmapbase.cpp:230
 #, fuzzy
 msgid "MacExtArabic"
 msgstr "Arabski"
 
-#: ../src/common/fmapbase.cpp:234
+#: ../src/common/fmapbase.cpp:238
 msgid "MacGaelic"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:218
+#: ../src/common/fmapbase.cpp:222
 msgid "MacGeorgian"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:202
+#: ../src/common/fmapbase.cpp:206
 msgid "MacGreek"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:206
+#: ../src/common/fmapbase.cpp:210
 msgid "MacGujarati"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:205
+#: ../src/common/fmapbase.cpp:209
 msgid "MacGurmukhi"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:201
+#: ../src/common/fmapbase.cpp:205
 msgid "MacHebrew"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:231
+#: ../src/common/fmapbase.cpp:235
 msgid "MacIcelandic"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:197
+#: ../src/common/fmapbase.cpp:201
 msgid "MacJapanese"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:211
+#: ../src/common/fmapbase.cpp:215
 msgid "MacKannada"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:235
+#: ../src/common/fmapbase.cpp:239
 msgid "MacKeyboardGlyphs"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:215
+#: ../src/common/fmapbase.cpp:219
 msgid "MacKhmer"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:199
+#: ../src/common/fmapbase.cpp:203
 msgid "MacKorean"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:217
+#: ../src/common/fmapbase.cpp:221
 msgid "MacLaotian"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:212
+#: ../src/common/fmapbase.cpp:216
 msgid "MacMalayalam"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:222
+#: ../src/common/fmapbase.cpp:226
 msgid "MacMongolian"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:207
+#: ../src/common/fmapbase.cpp:211
 msgid "MacOriya"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:196
+#: ../src/common/fmapbase.cpp:200
 #, fuzzy
 msgid "MacRoman"
 msgstr "Roman"
 
-#: ../src/common/fmapbase.cpp:232
+#: ../src/common/fmapbase.cpp:236
 #, fuzzy
 msgid "MacRomanian"
 msgstr "Roman"
 
-#: ../src/common/fmapbase.cpp:213
+#: ../src/common/fmapbase.cpp:217
 #, fuzzy
 msgid "MacSinhalese"
 msgstr "Uwzględniaj wielkość liter"
 
-#: ../src/common/fmapbase.cpp:227
+#: ../src/common/fmapbase.cpp:231
 #, fuzzy
 msgid "MacSymbol"
 msgstr "Symbol"
 
-#: ../src/common/fmapbase.cpp:209
+#: ../src/common/fmapbase.cpp:213
 msgid "MacTamil"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:210
+#: ../src/common/fmapbase.cpp:214
 msgid "MacTelugu"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:216
+#: ../src/common/fmapbase.cpp:220
 msgid "MacThai"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:221
+#: ../src/common/fmapbase.cpp:225
 msgid "MacTibetan"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:229
+#: ../src/common/fmapbase.cpp:233
 msgid "MacTurkish"
 msgstr ""
 
-#: ../src/common/fmapbase.cpp:225
+#: ../src/common/fmapbase.cpp:229
 msgid "MacVietnamese"
 msgstr ""
 
@@ -4810,7 +4858,7 @@ msgstr ""
 msgid "Make a selection:"
 msgstr "Wklej wybór"
 
-#: ../src/richtext/richtextformatdlg.cpp:357
+#: ../src/richtext/richtextformatdlg.cpp:361
 #: ../src/richtext/richtextmarginspage.cpp:172
 msgid "Margins"
 msgstr ""
@@ -4819,15 +4867,20 @@ msgstr ""
 msgid "Match case"
 msgstr "Uwzględniaj wielkość liter"
 
-#: ../src/richtext/richtextsizepage.cpp:363
+#: ../src/richtext/richtextsizepage.cpp:425
 #, fuzzy
 msgid "Max height:"
 msgstr "&Waga"
 
-#: ../src/richtext/richtextsizepage.cpp:336
+#: ../src/richtext/richtextsizepage.cpp:398
 #, fuzzy
 msgid "Max width:"
 msgstr "Zastąp przez:"
+
+#: ../src/unix/mediactrl.cpp:1007
+#, c-format
+msgid "Media playback error: %s"
+msgstr ""
 
 #: ../src/common/fs_mem.cpp:176
 #, c-format
@@ -4847,24 +4900,24 @@ msgstr "Komunikat programu %s"
 msgid "Metal theme"
 msgstr "Kompozycja metalowa"
 
-#: ../src/msw/ole/automtn.cpp:623
+#: ../src/msw/ole/automtn.cpp:636
 msgid "Method or property not found."
 msgstr ""
 
-#: ../src/univ/themes/win32.cpp:3755
+#: ../src/univ/themes/win32.cpp:3753
 msgid "Mi&nimize"
 msgstr "Mi&nimalizuj"
 
-#: ../src/richtext/richtextsizepage.cpp:309
+#: ../src/richtext/richtextsizepage.cpp:371
 #, fuzzy
 msgid "Min height:"
 msgstr "&Waga czcionki:"
 
-#: ../src/richtext/richtextsizepage.cpp:282
+#: ../src/richtext/richtextsizepage.cpp:344
 msgid "Min width:"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:639
+#: ../src/msw/ole/automtn.cpp:652
 msgid "Missing a required parameter."
 msgstr ""
 
@@ -4897,19 +4950,19 @@ msgstr "Przenieś w dół"
 msgid "Move up"
 msgstr "Przenieś w górę"
 
-#: ../src/richtext/richtextsizepage.cpp:487
-#: ../src/richtext/richtextsizepage.cpp:489
+#: ../src/richtext/richtextsizepage.cpp:616
+#: ../src/richtext/richtextsizepage.cpp:618
 #, fuzzy
 msgid "Moves the object to the next paragraph."
 msgstr "Domyślny styl dla następnego paragrafu."
 
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:610
+#: ../src/richtext/richtextsizepage.cpp:612
 #, fuzzy
 msgid "Moves the object to the previous paragraph."
 msgstr "Wróć do poprzedniej strony HTML"
 
-#: ../src/richtext/richtextbuffer.cpp:8265
+#: ../src/richtext/richtextbuffer.cpp:8841
 msgid "Multiple Cell Properties"
 msgstr ""
 
@@ -4930,33 +4983,33 @@ msgstr ""
 msgid "New"
 msgstr "&Nowy"
 
-#: ../src/richtext/richtextstyledlg.cpp:247
+#: ../src/richtext/richtextstyledlg.cpp:251
 #, fuzzy
 msgid "New &Box Style..."
 msgstr "Nowy styl &listy..."
 
-#: ../src/richtext/richtextstyledlg.cpp:229
+#: ../src/richtext/richtextstyledlg.cpp:233
 msgid "New &Character Style..."
 msgstr "Nowy styl &znaku..."
 
-#: ../src/richtext/richtextstyledlg.cpp:241
+#: ../src/richtext/richtextstyledlg.cpp:245
 msgid "New &List Style..."
 msgstr "Nowy styl &listy..."
 
-#: ../src/richtext/richtextstyledlg.cpp:235
+#: ../src/richtext/richtextstyledlg.cpp:239
 msgid "New &Paragraph Style..."
 msgstr "Nowy styl &paragrafu..."
 
-#: ../src/richtext/richtextstyledlg.cpp:607
-#: ../src/richtext/richtextstyledlg.cpp:612
-#: ../src/richtext/richtextstyledlg.cpp:655
-#: ../src/richtext/richtextstyledlg.cpp:660
-#: ../src/richtext/richtextstyledlg.cpp:821
-#: ../src/richtext/richtextstyledlg.cpp:826
-#: ../src/richtext/richtextstyledlg.cpp:894
-#: ../src/richtext/richtextstyledlg.cpp:902
-#: ../src/richtext/richtextstyledlg.cpp:935
-#: ../src/richtext/richtextstyledlg.cpp:940
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:616
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:664
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:830
+#: ../src/richtext/richtextstyledlg.cpp:898
+#: ../src/richtext/richtextstyledlg.cpp:906
+#: ../src/richtext/richtextstyledlg.cpp:939
+#: ../src/richtext/richtextstyledlg.cpp:944
 msgid "New Style"
 msgstr "Nowy styl"
 
@@ -4978,7 +5031,7 @@ msgstr "NowaNaz"
 msgid "Next"
 msgstr "Dalej"
 
-#: ../src/common/prntbase.cpp:1512 ../src/html/helpwnd.cpp:676
+#: ../src/common/prntbase.cpp:1538 ../src/html/helpwnd.cpp:679
 msgid "Next page"
 msgstr "Następna strona"
 
@@ -5009,7 +5062,7 @@ msgstr "Nie istnieje kolumny dla określonego indeksu kolumny."
 msgid "No column for the specified column position existing."
 msgstr "Nie istnieje kolumny dla określonej pozycji kolumny."
 
-#: ../src/common/utilscmn.cpp:1046
+#: ../src/common/utilscmn.cpp:1051
 msgid "No default application configured for HTML files."
 msgstr "Nie ma ustawionej domyślnej aplikacji dla plików HTML."
 
@@ -5017,7 +5070,7 @@ msgstr "Nie ma ustawionej domyślnej aplikacji dla plików HTML."
 msgid "No entries found."
 msgstr "Nie znaleziono pozycji."
 
-#: ../src/common/fontmap.cpp:420
+#: ../src/common/fontmap.cpp:422
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
@@ -5029,7 +5082,7 @@ msgstr ""
 "jednak dostępne jest alternatywne kodowanie '%s'.\n"
 "Chesz użyć tego kodowania (możesz także wybrać inne)?"
 
-#: ../src/common/fontmap.cpp:425
+#: ../src/common/fontmap.cpp:427
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found.\n"
@@ -5044,22 +5097,22 @@ msgstr ""
 msgid "No handler found for animation type."
 msgstr "Brak procedury obsługi typu animacji."
 
-#: ../src/common/image.cpp:2392
+#: ../src/common/image.cpp:2484
 msgid "No handler found for image type."
 msgstr "Brak procedury obsługi grafiki."
 
-#: ../src/common/image.cpp:2400 ../src/common/image.cpp:2511
-#: ../src/common/image.cpp:2564
+#: ../src/common/image.cpp:2492 ../src/common/image.cpp:2603
+#: ../src/common/image.cpp:2656
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Brak procedury obsługi obrazów typu %d."
 
-#: ../src/common/image.cpp:2534 ../src/common/image.cpp:2578
+#: ../src/common/image.cpp:2626 ../src/common/image.cpp:2670
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Brak procedury obsługi obrazów typu %s."
 
-#: ../src/html/helpwnd.cpp:873
+#: ../src/html/helpwnd.cpp:872
 msgid "No matching page found yet"
 msgstr "Jeszcze nie znaleziono pasującej strony"
 
@@ -5081,7 +5134,7 @@ msgstr "Brak dźwięku"
 msgid "No unused colour in image being masked."
 msgstr "Brak nieużywanych kolorów w maskowanym obrazie."
 
-#: ../src/common/image.cpp:3040
+#: ../src/common/image.cpp:3133
 msgid "No unused colour in image."
 msgstr "Brak wolnych kolorów w obrazie."
 
@@ -5091,14 +5144,14 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr "Znaleziono nie ważne mapowania w pliku \"%s\"."
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:200
-#: ../src/richtext/richtextsizepage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:204
+#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
+#: ../src/richtext/richtextsizepage.cpp:230
 #, fuzzy
 msgid "None"
 msgstr "(Brak)"
 
-#: ../src/common/fmapbase.cpp:156
+#: ../src/common/fmapbase.cpp:158
 msgid "Nordic (ISO-8859-10)"
 msgstr "Nordycki (ISO-8859-10)"
 
@@ -5106,11 +5159,11 @@ msgstr "Nordycki (ISO-8859-10)"
 msgid "Normal"
 msgstr "Normalny"
 
-#: ../src/html/helpwnd.cpp:1273
+#: ../src/html/helpwnd.cpp:1277
 msgid "Normal face<br>and <u>underlined</u>. "
 msgstr "Zwykły tekst<br>i <u>podkreślony</u>. "
 
-#: ../src/html/helpwnd.cpp:1215
+#: ../src/html/helpwnd.cpp:1219
 msgid "Normal font:"
 msgstr "Normalna czcionka:"
 
@@ -5124,7 +5177,7 @@ msgstr "O %s"
 msgid "Not available"
 msgstr "Brak wsparcia dla XBM!"
 
-#: ../src/richtext/richtextfontpage.cpp:300
+#: ../src/richtext/richtextfontpage.cpp:331
 msgid "Not underlined"
 msgstr "Nie podkreślony"
 
@@ -5146,13 +5199,13 @@ msgstr "Szerokość kolumny nie może być ustalona"
 msgid "Numbered outline"
 msgstr "Numerowane kontury"
 
-#: ../src/richtext/richtextstyledlg.cpp:301 ../src/common/stockitem.cpp:179
+#: ../src/richtext/richtextstyledlg.cpp:305 ../src/common/stockitem.cpp:179
 #: ../src/msw/msgdlg.cpp:489 ../src/msw/msgdlg.cpp:777
 #: ../src/msw/dialog.cpp:120 ../src/gtk1/fontdlg.cpp:139
 msgid "OK"
 msgstr "OK"
 
-#: ../src/msw/ole/automtn.cpp:663
+#: ../src/msw/ole/automtn.cpp:676
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr ""
@@ -5162,7 +5215,7 @@ msgstr ""
 msgid "Object Properties"
 msgstr "&Właściwości"
 
-#: ../src/msw/ole/automtn.cpp:631
+#: ../src/msw/ole/automtn.cpp:644
 msgid "Object implementation does not support named arguments."
 msgstr ""
 
@@ -5170,11 +5223,11 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Obiekty muszą posiadać właściwość typu 'id'"
 
-#: ../src/common/docview.cpp:1736 ../src/common/docview.cpp:1778
+#: ../src/common/docview.cpp:1746 ../src/common/docview.cpp:1788
 msgid "Open File"
 msgstr "Otwieranie Pliku"
 
-#: ../src/html/helpwnd.cpp:682 ../src/html/helpwnd.cpp:1563
+#: ../src/html/helpwnd.cpp:685 ../src/html/helpwnd.cpp:1558
 msgid "Open HTML document"
 msgstr "Otwórz dokument HTML"
 
@@ -5235,7 +5288,7 @@ msgstr "Poziom &kontur:"
 msgid "Outset"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:627
+#: ../src/msw/ole/automtn.cpp:640
 msgid "Overflow while coercing argument values."
 msgstr ""
 
@@ -5409,22 +5462,22 @@ msgstr "WYDRUK"
 msgid "Padding"
 msgstr "odczytu"
 
-#: ../src/common/prntbase.cpp:2012
+#: ../src/common/prntbase.cpp:2045
 #, c-format
 msgid "Page %d"
 msgstr "Strona %d"
 
-#: ../src/common/prntbase.cpp:2010
+#: ../src/common/prntbase.cpp:2043
 #, c-format
 msgid "Page %d of %d"
 msgstr "Strona %d z %d"
 
-#: ../src/gtk/print.cpp:770
+#: ../src/gtk/print.cpp:779
 msgid "Page Setup"
 msgstr "Ustawienia strony"
 
-#: ../src/generic/prntdlgg.cpp:834 ../src/common/prntbase.cpp:480
-#: ../src/gtk/gnome/gprint.cpp:706
+#: ../src/generic/prntdlgg.cpp:834 ../src/common/prntbase.cpp:468
+#: ../src/gtk/gnome/gprint.cpp:708
 msgid "Page setup"
 msgstr "Ustawienia strony"
 
@@ -5438,7 +5491,7 @@ msgstr "Strony"
 msgid "Paper size"
 msgstr "Rozmiar papieru"
 
-#: ../src/richtext/richtextstyles.cpp:1033
+#: ../src/richtext/richtextstyles.cpp:1042
 msgid "Paragraph styles"
 msgstr "Style paragrafu"
 
@@ -5447,10 +5500,11 @@ msgid "Passing a already registered object to SetObject"
 msgstr "Przekazano już zarejestrowany obiekt do funkcji SetObject"
 
 #: ../src/common/xtistrm.cpp:481
-msgid "Passing an unkown object to GetObject"
+#, fuzzy
+msgid "Passing an unknown object to GetObject"
 msgstr "Przekazanie nieznanego obiektu do funkcji GetObject"
 
-#: ../src/richtext/richtextctrl.cpp:3075 ../src/common/stockitem.cpp:181
+#: ../src/richtext/richtextctrl.cpp:3082 ../src/common/stockitem.cpp:181
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Paste"
 msgstr "Wklej"
@@ -5469,7 +5523,7 @@ msgstr "&Okres"
 msgid "Permissions"
 msgstr "Uprawnienia"
 
-#: ../src/richtext/richtextbuffer.cpp:10251
+#: ../src/richtext/richtextbuffer.cpp:10953
 #, fuzzy
 msgid "Picture Properties"
 msgstr "&Właściwości"
@@ -5482,7 +5536,7 @@ msgstr "Nie udało się utworzyć potoku."
 msgid "Please choose a valid font."
 msgstr "Proszę wybrać poprawną czcionkę."
 
-#: ../src/gtk/filedlg.cpp:68
+#: ../src/gtk/filedlg.cpp:72
 msgid "Please choose an existing file."
 msgstr "Proszę wybrać istniejący plik."
 
@@ -5509,8 +5563,9 @@ msgstr ""
 msgid "Please select the columns to show and define their order:"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:329
-msgid "Please wait while printing\n"
+#: ../src/common/prntbase.cpp:522
+#, fuzzy
+msgid "Please wait while printing..."
 msgstr "Proszę czekać, trwa drukowanie\n"
 
 #: ../src/propgrid/advprops.cpp:632
@@ -5539,7 +5594,7 @@ msgstr "Wskaźnik do modelu nie jest prawidłowo ustawiony."
 msgid "Portrait"
 msgstr "Portret"
 
-#: ../src/richtext/richtextsizepage.cpp:432
+#: ../src/richtext/richtextsizepage.cpp:458
 #, fuzzy
 msgid "Position"
 msgstr "Pytanie"
@@ -5558,33 +5613,32 @@ msgstr "&Preferencje"
 msgid "Preferences..."
 msgstr "&Preferencje"
 
-#: ../src/common/stockitem.cpp:183
-#, fuzzy
-msgid "Preview..."
-msgstr " Podgląd"
+#: ../src/common/prntbase.cpp:530
+msgid "Preparing"
+msgstr ""
 
 #: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:574
-#: ../src/html/helpwnd.cpp:1232
+#: ../src/html/helpwnd.cpp:1236
 msgid "Preview:"
 msgstr "Podgląd:"
 
-#: ../src/common/prntbase.cpp:1498 ../src/html/helpwnd.cpp:675
+#: ../src/common/prntbase.cpp:1524 ../src/html/helpwnd.cpp:678
 msgid "Previous page"
 msgstr "Poprzednia strona"
 
 #: ../src/generic/prntdlgg.cpp:149 ../src/generic/prntdlgg.cpp:163
-#: ../src/common/prntbase.cpp:422 ../src/common/prntbase.cpp:1486
-#: ../src/gtk/print.cpp:589 ../src/gtk/print.cpp:602
+#: ../src/common/prntbase.cpp:410 ../src/common/prntbase.cpp:1512
+#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
 #: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
 msgid "Print"
 msgstr "Drukuj"
 
-#: ../include/wx/prntbase.h:394 ../src/common/docview.cpp:1244
+#: ../include/wx/prntbase.h:396 ../src/common/docview.cpp:1247
 msgid "Print Preview"
 msgstr "Podgląd wydruku"
 
-#: ../src/common/prntbase.cpp:1953 ../src/common/prntbase.cpp:1995
-#: ../src/common/prntbase.cpp:2003
+#: ../src/common/prntbase.cpp:1986 ../src/common/prntbase.cpp:2028
+#: ../src/common/prntbase.cpp:2036
 msgid "Print Preview Failure"
 msgstr "Awaria podglądu wydruku"
 
@@ -5600,20 +5654,30 @@ msgstr "Ustawienia wydruku"
 msgid "Print in colour"
 msgstr "Wydruk w kolorze"
 
-#: ../src/gtk/gnome/gprint.cpp:938
+#: ../src/common/stockitem.cpp:183
+#, fuzzy
+msgid "Print previe&w..."
+msgstr "Podgląd &wydruku"
+
+#: ../src/gtk/gnome/gprint.cpp:940
 msgid "Print preview"
 msgstr "Podgląd wydruku"
 
-#: ../src/common/docview.cpp:1238
+#: ../src/common/docview.cpp:1241
 #, fuzzy
 msgid "Print preview creation failed."
 msgstr "Nie udało się utworzyć potoku."
+
+#: ../src/common/stockitem.cpp:183
+#, fuzzy
+msgid "Print preview..."
+msgstr "Podgląd wydruku"
 
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Print spooling"
 msgstr "Kolejkowanie wydruków"
 
-#: ../src/html/helpwnd.cpp:686
+#: ../src/html/helpwnd.cpp:689
 msgid "Print this page"
 msgstr "Drukuj stronę"
 
@@ -5650,18 +5714,24 @@ msgstr "Drukarka..."
 msgid "Printer:"
 msgstr "Drukarka:"
 
-#: ../include/wx/richtext/richtextprint.h:164 ../src/html/htmprint.cpp:278
+#: ../include/wx/richtext/richtextprint.h:164 ../src/common/prntbase.cpp:519
+#: ../src/html/htmprint.cpp:278
 #, fuzzy
 msgid "Printing"
 msgstr "Drukowanie "
 
-#: ../src/common/prntbase.cpp:326 ../src/common/prntbase.cpp:561
+#: ../src/common/prntbase.cpp:587
 msgid "Printing "
 msgstr "Drukowanie "
 
-#: ../src/common/prntbase.cpp:343
+#: ../src/common/prntbase.cpp:331
 msgid "Printing Error"
 msgstr "Błąd wydruku"
+
+#: ../src/common/prntbase.cpp:545
+#, fuzzy, c-format
+msgid "Printing page %d of %d"
+msgstr "Drukowanie strony %d..."
 
 #: ../src/generic/printps.cpp:202
 #, c-format
@@ -5672,8 +5742,8 @@ msgstr "Drukowanie strony %d..."
 msgid "Printing..."
 msgstr "Drukowanie..."
 
-#: ../include/wx/richtext/richtextprint.h:110 ../include/wx/prntbase.h:262
-#: ../src/common/docview.cpp:2047
+#: ../include/wx/richtext/richtextprint.h:110 ../include/wx/prntbase.h:264
+#: ../src/common/docview.cpp:2057
 #, fuzzy
 msgid "Printout"
 msgstr "Drukuj"
@@ -5689,6 +5759,10 @@ msgstr ""
 #: ../src/osx/carbon/dataview.cpp:2473
 msgid "Progress renderer cannot render value type; value type: "
 msgstr "Render postępu nie może renderować typu wartości; typ wartości:"
+
+#: ../src/common/prntbase.cpp:529
+msgid "Progress:"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:185
 #, fuzzy
@@ -5709,7 +5783,7 @@ msgstr "Błąd wydruku"
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1038
+#: ../src/generic/logg.cpp:1040
 msgid "Question"
 msgstr "Pytanie"
 
@@ -5735,7 +5809,7 @@ msgstr "RETURN"
 msgid "RIGHT"
 msgstr "PRAWO"
 
-#: ../src/common/accelcmn.cpp:318
+#: ../src/common/accelcmn.cpp:328
 #, fuzzy
 msgid "RawCtrl+"
 msgstr "Ctrl-"
@@ -5787,10 +5861,15 @@ msgstr ""
 msgid "Registry value '%s' already exists."
 msgstr "Wartość rejestru '%s' już istnieje."
 
-#: ../src/richtext/richtextfontpage.cpp:292
-#: ../src/richtext/richtextfontpage.cpp:296
+#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:327
 msgid "Regular"
 msgstr "Regularne"
+
+#: ../src/richtext/richtextsizepage.cpp:481
+#, fuzzy
+msgid "Relative"
+msgstr "Decorative"
 
 #: ../src/generic/helpext.cpp:463
 msgid "Relevant entries:"
@@ -5800,7 +5879,12 @@ msgstr "Pozycje związane:"
 msgid "Remove"
 msgstr "Usuń"
 
-#: ../src/html/helpwnd.cpp:438
+#: ../src/richtext/richtextctrl.cpp:1420
+#, fuzzy
+msgid "Remove Bullet"
+msgstr "Usuń"
+
+#: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
 msgstr "Usuń bieżącą stronę z listy zakładek"
 
@@ -5814,7 +5898,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Rendering nie powiodł się."
 
-#: ../src/richtext/richtextbuffer.cpp:4091
+#: ../src/richtext/richtextbuffer.cpp:4109
 msgid "Renumber List"
 msgstr "Zmień numerację listy"
 
@@ -5822,7 +5906,7 @@ msgstr "Zmień numerację listy"
 msgid "Rep&lace"
 msgstr "&Zastąp"
 
-#: ../src/richtext/richtextctrl.cpp:3234 ../src/common/stockitem.cpp:189
+#: ../src/richtext/richtextctrl.cpp:3242 ../src/common/stockitem.cpp:189
 msgid "Replace"
 msgstr "Zastąp"
 
@@ -5858,7 +5942,7 @@ msgstr "Prawy"
 
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextbulletspage.cpp:202
-#: ../src/richtext/richtextsizepage.cpp:202
+#: ../src/richtext/richtextsizepage.cpp:228
 msgid "Right"
 msgstr "Prawy"
 
@@ -5902,7 +5986,7 @@ msgstr "ZRZUT EKRANU"
 msgid "SPACE"
 msgstr "SPACJA"
 
-#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:328
+#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:340
 msgid "SPECIAL"
 msgstr "SPECJALNY"
 
@@ -5910,7 +5994,7 @@ msgstr "SPECJALNY"
 msgid "SUBTRACT"
 msgstr "DZIELENIE"
 
-#: ../src/common/stockitem.cpp:191 ../src/common/sizer.cpp:2577
+#: ../src/common/stockitem.cpp:191 ../src/common/sizer.cpp:2655
 msgid "Save"
 msgstr "Zapisz"
 
@@ -5919,11 +6003,11 @@ msgstr "Zapisz"
 msgid "Save %s file"
 msgstr "Zapisz plik %s"
 
-#: ../src/generic/logg.cpp:520
+#: ../src/generic/logg.cpp:516
 msgid "Save &As..."
 msgstr "Zapisz J&ako..."
 
-#: ../src/common/docview.cpp:362
+#: ../src/common/docview.cpp:363
 msgid "Save As"
 msgstr "Zapisz Jako"
 
@@ -5941,7 +6025,7 @@ msgstr "Zapisz bieżący dokument"
 msgid "Save current document with a different filename"
 msgstr "Zapisz bieżący dokument pod inną nazwą pliku"
 
-#: ../src/generic/logg.cpp:520
+#: ../src/generic/logg.cpp:516
 msgid "Save log contents to file"
 msgstr "Zapisz zawartość dziennika do pliku"
 
@@ -5949,12 +6033,12 @@ msgstr "Zapisz zawartość dziennika do pliku"
 msgid "Script"
 msgstr "Script"
 
-#: ../src/generic/srchctlg.cpp:68 ../src/html/helpwnd.cpp:546
-#: ../src/html/helpwnd.cpp:561
+#: ../src/generic/srchctlg.cpp:68 ../src/html/helpwnd.cpp:549
+#: ../src/html/helpwnd.cpp:564
 msgid "Search"
 msgstr "Szukaj"
 
-#: ../src/html/helpwnd.cpp:548
+#: ../src/html/helpwnd.cpp:551
 #, fuzzy
 msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
@@ -5972,11 +6056,11 @@ msgid "Search for:"
 msgstr "Znajdź:"
 
 # spisach?
-#: ../src/html/helpwnd.cpp:1062
+#: ../src/html/helpwnd.cpp:1066
 msgid "Search in all books"
 msgstr "Szukaj we wszystkich plikach pomocy"
 
-#: ../src/html/helpwnd.cpp:872
+#: ../src/html/helpwnd.cpp:871
 msgid "Searching..."
 msgstr "Wyszukiwanie..."
 
@@ -5994,7 +6078,7 @@ msgstr "Błąd pozycjonowania w pliku '%s'"
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr "Błąd wyszukiwania w pliku '%s' (stdio nie wspiera olbrzymich plików)"
 
-#: ../src/richtext/richtextctrl.cpp:330 ../src/osx/textctrl_osx.cpp:588
+#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:588
 #: ../src/common/stockitem.cpp:193 ../src/msw/textctrl.cpp:2227
 msgid "Select &All"
 msgstr "&Zaznacz wszystko"
@@ -6003,31 +6087,31 @@ msgstr "&Zaznacz wszystko"
 msgid "Select All"
 msgstr "Zaznacz wszystko"
 
-#: ../src/common/docview.cpp:1858
+#: ../src/common/docview.cpp:1868
 msgid "Select a document template"
 msgstr "Wybierz szablon dokumentu"
 
 # perspektywę?
-#: ../src/common/docview.cpp:1932
+#: ../src/common/docview.cpp:1942
 msgid "Select a document view"
 msgstr "Wybierz widok dokumentu"
 
-#: ../src/richtext/richtextfontpage.cpp:202
-#: ../src/richtext/richtextfontpage.cpp:204
+#: ../src/richtext/richtextfontpage.cpp:233
+#: ../src/richtext/richtextfontpage.cpp:235
 msgid "Select regular or bold."
 msgstr "Wybierz regularną lub pogrubioną czcionkę."
 
-#: ../src/richtext/richtextfontpage.cpp:189
-#: ../src/richtext/richtextfontpage.cpp:191
+#: ../src/richtext/richtextfontpage.cpp:220
+#: ../src/richtext/richtextfontpage.cpp:222
 msgid "Select regular or italic style."
 msgstr "Wybierz regularny lub kursywny styl."
 
-#: ../src/richtext/richtextfontpage.cpp:215
-#: ../src/richtext/richtextfontpage.cpp:217
+#: ../src/richtext/richtextfontpage.cpp:246
+#: ../src/richtext/richtextfontpage.cpp:248
 msgid "Select underlining or no underlining."
 msgstr "Wybierz podkreślanie lub bez podkreślania."
 
-#: ../src/motif/filedlg.cpp:219
+#: ../src/motif/filedlg.cpp:218
 msgid "Selection"
 msgstr "Wybór"
 
@@ -6041,7 +6125,7 @@ msgstr "Wybiera poziom listy do edycji."
 msgid "Separator expected after the option '%s'."
 msgstr "Oczekiwano separatora po opcji '%s'."
 
-#: ../src/richtext/richtextbuffer.cpp:9221
+#: ../src/richtext/richtextbuffer.cpp:9797
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "Usuń styl"
@@ -6051,7 +6135,7 @@ msgid "SetProperty called w/o valid setter"
 msgstr ""
 "Funkcja SetProperty wywołana bez poprawnej moduły ustawiającego właściwość"
 
-#: ../src/common/filename.cpp:2533
+#: ../src/common/filename.cpp:2524
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
@@ -6063,7 +6147,7 @@ msgstr "Ustawienia..."
 msgid "Several active dialup connections found, choosing one randomly."
 msgstr "Znalezione kilka dostępnych połączeń dialup, zostanie użyte pierwsze."
 
-#: ../src/common/accelcmn.cpp:315
+#: ../src/common/accelcmn.cpp:325
 #, fuzzy
 msgid "Shift+"
 msgstr "Shift-"
@@ -6072,7 +6156,7 @@ msgstr "Shift-"
 msgid "Show &hidden directories"
 msgstr "Pokaż &ukryte katalogi"
 
-#: ../src/generic/filectrlg.cpp:993
+#: ../src/generic/filectrlg.cpp:997
 msgid "Show &hidden files"
 msgstr "Pokazuj &ukryte pliki"
 
@@ -6085,11 +6169,11 @@ msgstr "Pokaż wszystko"
 msgid "Show about dialog"
 msgstr "Pokazuje okno O"
 
-#: ../src/html/helpwnd.cpp:500
+#: ../src/html/helpwnd.cpp:503
 msgid "Show all"
 msgstr "Pokaż wszystko"
 
-#: ../src/html/helpwnd.cpp:511
+#: ../src/html/helpwnd.cpp:514
 msgid "Show all items in index"
 msgstr "Pokaż wszystkie elementy indeksu"
 
@@ -6097,12 +6181,12 @@ msgstr "Pokaż wszystkie elementy indeksu"
 msgid "Show hidden directories"
 msgstr "Pokaż ukryte katalogi"
 
-#: ../src/html/helpwnd.cpp:669
+#: ../src/html/helpwnd.cpp:672
 msgid "Show/hide navigation panel"
 msgstr "Pokaż/ukryj panel sterowania"
 
-#: ../src/richtext/richtextsymboldlg.cpp:418
-#: ../src/richtext/richtextsymboldlg.cpp:420
+#: ../src/richtext/richtextsymboldlg.cpp:422
+#: ../src/richtext/richtextsymboldlg.cpp:424
 msgid "Shows a Unicode subset."
 msgstr "Pokazuje podzbiór Unicode."
 
@@ -6113,8 +6197,8 @@ msgstr "Pokazuje podzbiór Unicode."
 msgid "Shows a preview of the bullet settings."
 msgstr "Pokazuje podgląd ustawień wypunktowania."
 
-#: ../src/richtext/richtextfontpage.cpp:282
-#: ../src/richtext/richtextfontpage.cpp:284
+#: ../src/richtext/richtextfontpage.cpp:313
+#: ../src/richtext/richtextfontpage.cpp:315
 msgid "Shows a preview of the font settings."
 msgstr "Pokazuje podgląd ustawień czcionki."
 
@@ -6140,8 +6224,8 @@ msgstr "Prosty czarno-biały motyw"
 msgid "Single"
 msgstr "Pojedynczy"
 
-#: ../src/generic/filectrlg.cpp:454 ../src/richtext/richtextformatdlg.cpp:351
-#: ../src/richtext/richtextsizepage.cpp:213
+#: ../src/generic/filectrlg.cpp:454 ../src/richtext/richtextformatdlg.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:275
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -6163,23 +6247,23 @@ msgstr "Pochylony"
 msgid "Solid"
 msgstr "Pogrubiony"
 
-#: ../src/common/docview.cpp:1754
+#: ../src/common/docview.cpp:1764
 msgid "Sorry, could not open this file."
 msgstr "Niestety nie można otworzyć tego pliku."
 
-#: ../src/common/prntbase.cpp:1995 ../src/common/prntbase.cpp:2003
+#: ../src/common/prntbase.cpp:2028 ../src/common/prntbase.cpp:2036
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Niestety za mało pamięci aby przygotować podgląd."
 
-#: ../src/richtext/richtextstyledlg.cpp:612
-#: ../src/richtext/richtextstyledlg.cpp:660
-#: ../src/richtext/richtextstyledlg.cpp:826
-#: ../src/richtext/richtextstyledlg.cpp:902
-#: ../src/richtext/richtextstyledlg.cpp:940
+#: ../src/richtext/richtextstyledlg.cpp:616
+#: ../src/richtext/richtextstyledlg.cpp:664
+#: ../src/richtext/richtextstyledlg.cpp:830
+#: ../src/richtext/richtextstyledlg.cpp:906
+#: ../src/richtext/richtextstyledlg.cpp:944
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Niestety, nazwa ta jest zajęta. Proszę wybrać inną."
 
-#: ../src/common/docview.cpp:1777
+#: ../src/common/docview.cpp:1787
 msgid "Sorry, the format for this file is unknown."
 msgstr "Niestety, nieznany format pliku."
 
@@ -6209,6 +6293,13 @@ msgstr "Standard"
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Statement, 5 1/2 x 8 1/2 cala"
 
+#: ../src/richtext/richtextsizepage.cpp:480
+#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#, fuzzy
+msgid "Static"
+msgstr "Status:"
+
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Status:"
 msgstr "Status:"
@@ -6228,7 +6319,7 @@ msgstr "&Przekreślenie"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Nieprawidłowa specyfikacja koloru : %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:313 ../src/propgrid/advprops.cpp:648
+#: ../src/richtext/richtextformatdlg.cpp:317 ../src/propgrid/advprops.cpp:648
 msgid "Style"
 msgstr "Styl"
 
@@ -6240,11 +6331,11 @@ msgstr "Organizator stylu"
 msgid "Style:"
 msgstr "Styl:"
 
-#: ../src/richtext/richtextfontpage.cpp:272
+#: ../src/richtext/richtextfontpage.cpp:303
 msgid "Subscrip&t"
 msgstr "Indeks &dolny"
 
-#: ../src/richtext/richtextfontpage.cpp:265
+#: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
 msgstr "Indeks &górny"
 
@@ -6299,7 +6390,7 @@ msgstr "TIFF: Błąd zapisu."
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9362
+#: ../src/richtext/richtextbuffer.cpp:9938
 #, fuzzy
 msgid "Table Properties"
 msgstr "&Właściwości"
@@ -6312,7 +6403,7 @@ msgstr "Tabloid Extra 11.69 x 18 cali"
 msgid "Tabloid, 11 x 17 in"
 msgstr "Tabloid, 11 x 17 cali"
 
-#: ../src/richtext/richtextformatdlg.cpp:331
+#: ../src/richtext/richtextformatdlg.cpp:335
 msgid "Tabs"
 msgstr "Karty"
 
@@ -6320,7 +6411,7 @@ msgstr "Karty"
 msgid "Teletype"
 msgstr "Teletype"
 
-#: ../src/common/docview.cpp:1859
+#: ../src/common/docview.cpp:1869
 msgid "Templates"
 msgstr "Szablony"
 
@@ -6328,15 +6419,15 @@ msgstr "Szablony"
 msgid "Text renderer cannot render value; value type: "
 msgstr "Render tekstu nie może renderować wartości; typ wartości:"
 
-#: ../src/common/fmapbase.cpp:157
+#: ../src/common/fmapbase.cpp:159
 msgid "Thai (ISO-8859-11)"
 msgstr "Tajski (ISO-8859-11)"
 
-#: ../src/common/ftp.cpp:623
+#: ../src/common/ftp.cpp:621
 msgid "The FTP server doesn't support passive mode."
 msgstr "Serwer FTP nie obsługuje trybu pasywnego."
 
-#: ../src/common/ftp.cpp:609
+#: ../src/common/ftp.cpp:607
 msgid "The FTP server doesn't support the PORT command."
 msgstr "Serwer FTP nie obsługuje komendy PORT."
 
@@ -6347,8 +6438,8 @@ msgstr "Serwer FTP nie obsługuje komendy PORT."
 msgid "The available bullet styles."
 msgstr "Dostępne style wypunktowania."
 
-#: ../src/richtext/richtextstyledlg.cpp:206
-#: ../src/richtext/richtextstyledlg.cpp:208
+#: ../src/richtext/richtextstyledlg.cpp:210
+#: ../src/richtext/richtextstyledlg.cpp:212
 msgid "The available styles."
 msgstr "Dostępne style."
 
@@ -6370,6 +6461,14 @@ msgstr "Rozmiar czcionki."
 msgid "The bottom padding size."
 msgstr "Rozmiar czcionki."
 
+#: ../src/richtext/richtextsizepage.cpp:577
+#: ../src/richtext/richtextsizepage.cpp:579
+#: ../src/richtext/richtextsizepage.cpp:587
+#: ../src/richtext/richtextsizepage.cpp:589
+#, fuzzy
+msgid "The bottom position."
+msgstr "Pozycja karty."
+
 #: ../src/richtext/richtextliststylepage.cpp:255
 #: ../src/richtext/richtextliststylepage.cpp:257
 #: ../src/richtext/richtextliststylepage.cpp:276
@@ -6381,12 +6480,12 @@ msgstr "Rozmiar czcionki."
 msgid "The bullet character."
 msgstr "Znak wypunktowania."
 
-#: ../src/richtext/richtextsymboldlg.cpp:440
-#: ../src/richtext/richtextsymboldlg.cpp:442
+#: ../src/richtext/richtextsymboldlg.cpp:444
+#: ../src/richtext/richtextsymboldlg.cpp:446
 msgid "The character code."
 msgstr "Kod znaku."
 
-#: ../src/common/fontmap.cpp:202
+#: ../src/common/fontmap.cpp:204
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -6397,7 +6496,7 @@ msgstr ""
 "inny zestaw aby go zastąpić lub wybierz\n"
 "[Anuluj] jeśli nie można go zastąpić."
 
-#: ../src/msw/ole/dataobj.cpp:162
+#: ../src/msw/ole/dataobj.cpp:177
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "Format schowka '%d' nie istnieje."
@@ -6425,7 +6524,7 @@ msgid ""
 "Would you like to proceed with printing it nevertheless?"
 msgstr ""
 
-#: ../src/common/docview.cpp:1178
+#: ../src/common/docview.cpp:1181
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -6441,7 +6540,7 @@ msgstr ""
 msgid "The first line indent."
 msgstr "Wcięcie pierwszego wierszu."
 
-#: ../src/gtk/utilsgtk.cpp:475
+#: ../src/gtk/utilsgtk.cpp:478
 msgid "The following standard GTK+ options are also supported:\n"
 msgstr "Następujące opcje standardowe GTK+ także są obsługiwane:\n"
 
@@ -6453,8 +6552,8 @@ msgstr "Kolor czcionki."
 msgid "The font family."
 msgstr "Rodzina czcionki."
 
-#: ../src/richtext/richtextsymboldlg.cpp:402
-#: ../src/richtext/richtextsymboldlg.cpp:404
+#: ../src/richtext/richtextsymboldlg.cpp:406
+#: ../src/richtext/richtextsymboldlg.cpp:408
 msgid "The font from which to take the symbol."
 msgstr "Czcionka z której pobrać symbol."
 
@@ -6467,6 +6566,12 @@ msgstr "Rozmiar czcionki."
 msgid "The font size in points."
 msgstr "Rozmiar czcionki w punktach."
 
+#: ../src/richtext/richtextfontpage.cpp:188
+#: ../src/richtext/richtextfontpage.cpp:190
+#, fuzzy
+msgid "The font size units, points or pixels."
+msgstr "Rozmiar czcionki w punktach."
+
 #: ../src/generic/fontdlgg.cpp:387 ../src/generic/fontdlgg.cpp:389
 msgid "The font style."
 msgstr "Styl czcionki."
@@ -6475,7 +6580,7 @@ msgstr "Styl czcionki."
 msgid "The font weight."
 msgstr "Waga czcionki."
 
-#: ../src/common/docview.cpp:1439
+#: ../src/common/docview.cpp:1449
 #, fuzzy, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Szerokość kolumny nie może być ustalona"
@@ -6499,6 +6604,14 @@ msgstr "Rozmiar czcionki."
 msgid "The left padding size."
 msgstr "Rozmiar czcionki."
 
+#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:495
+#: ../src/richtext/richtextsizepage.cpp:503
+#: ../src/richtext/richtextsizepage.cpp:505
+#, fuzzy
+msgid "The left position."
+msgstr "Pozycja karty."
+
 #: ../src/richtext/richtextindentspage.cpp:313
 #: ../src/richtext/richtextindentspage.cpp:315
 #: ../src/richtext/richtextliststylepage.cpp:463
@@ -6511,42 +6624,42 @@ msgstr "Odstęp między wierszami."
 msgid "The list item number."
 msgstr "Numer pozycji listy."
 
-#: ../src/msw/ole/automtn.cpp:635
+#: ../src/msw/ole/automtn.cpp:648
 msgid "The locale ID is unknown."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:266
-#: ../src/richtext/richtextsizepage.cpp:268
+#: ../src/richtext/richtextsizepage.cpp:328
+#: ../src/richtext/richtextsizepage.cpp:330
 #, fuzzy
 msgid "The object height."
 msgstr "Waga czcionki."
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:436
+#: ../src/richtext/richtextsizepage.cpp:438
 #, fuzzy
 msgid "The object maximum height."
 msgstr "Waga czcionki."
 
-#: ../src/richtext/richtextsizepage.cpp:347
-#: ../src/richtext/richtextsizepage.cpp:349
+#: ../src/richtext/richtextsizepage.cpp:409
+#: ../src/richtext/richtextsizepage.cpp:411
 #, fuzzy
 msgid "The object maximum width."
 msgstr "Waga czcionki."
 
-#: ../src/richtext/richtextsizepage.cpp:293
-#: ../src/richtext/richtextsizepage.cpp:295
+#: ../src/richtext/richtextsizepage.cpp:382
+#: ../src/richtext/richtextsizepage.cpp:384
+#, fuzzy
+msgid "The object minimum height."
+msgstr "Waga czcionki."
+
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:357
 #, fuzzy
 msgid "The object minimum width."
 msgstr "Waga czcionki."
 
-#: ../src/richtext/richtextsizepage.cpp:320
-#: ../src/richtext/richtextsizepage.cpp:322
-#, fuzzy
-msgid "The object minmum height."
-msgstr "Waga czcionki."
-
-#: ../src/richtext/richtextsizepage.cpp:239
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:301
+#: ../src/richtext/richtextsizepage.cpp:303
 #, fuzzy
 msgid "The object width."
 msgstr "Waga czcionki."
@@ -6569,12 +6682,12 @@ msgstr[2] "Poprzednia wiadomość była %lu razy powtórzona."
 msgid "The previous message repeated once."
 msgstr "Poprzednia wiadomość była raz powtórzona."
 
-#: ../src/gtk/print.cpp:922 ../src/gtk/print.cpp:1105
+#: ../src/gtk/print.cpp:933 ../src/gtk/print.cpp:1116
 msgid "The print dialog returned an error."
 msgstr "Okno dialogowe drukowania zwróciło błąd."
 
-#: ../src/richtext/richtextsymboldlg.cpp:459
-#: ../src/richtext/richtextsymboldlg.cpp:461
+#: ../src/richtext/richtextsymboldlg.cpp:463
+#: ../src/richtext/richtextsymboldlg.cpp:465
 msgid "The range to show."
 msgstr "Zakres do pokazania."
 
@@ -6612,6 +6725,14 @@ msgstr "Prawidłowe wcięcie."
 msgid "The right padding size."
 msgstr "Prawidłowe wcięcie."
 
+#: ../src/richtext/richtextsizepage.cpp:549
+#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
+#, fuzzy
+msgid "The right position."
+msgstr "Pozycja karty."
+
 #: ../src/richtext/richtextindentspage.cpp:292
 #: ../src/richtext/richtextliststylepage.cpp:440
 #: ../src/richtext/richtextliststylepage.cpp:442
@@ -6635,12 +6756,12 @@ msgstr "Nazwa stylu."
 msgid "The style on which this style is based."
 msgstr "Styl, na którym ten styl jest oparty."
 
-#: ../src/richtext/richtextstyledlg.cpp:218
-#: ../src/richtext/richtextstyledlg.cpp:220
+#: ../src/richtext/richtextstyledlg.cpp:222
+#: ../src/richtext/richtextstyledlg.cpp:224
 msgid "The style preview."
 msgstr "Podgląd stylu."
 
-#: ../src/msw/ole/automtn.cpp:651
+#: ../src/msw/ole/automtn.cpp:664
 msgid "The system cannot find the file specified."
 msgstr ""
 
@@ -6653,7 +6774,7 @@ msgstr "Pozycja karty."
 msgid "The tab positions."
 msgstr "Pozycje karty."
 
-#: ../src/richtext/richtextctrl.cpp:2682
+#: ../src/richtext/richtextctrl.cpp:2681
 msgid "The text couldn't be saved."
 msgstr "Tekst nie może być zapisany.."
 
@@ -6669,6 +6790,14 @@ msgstr "Rozmiar czcionki."
 msgid "The top padding size."
 msgstr "Rozmiar czcionki."
 
+#: ../src/richtext/richtextsizepage.cpp:521
+#: ../src/richtext/richtextsizepage.cpp:523
+#: ../src/richtext/richtextsizepage.cpp:531
+#: ../src/richtext/richtextsizepage.cpp:533
+#, fuzzy
+msgid "The top position."
+msgstr "Pozycja karty."
+
 #: ../src/common/cmdline.cpp:1054
 #, c-format
 msgid "The value for the option '%s' must be specified."
@@ -6683,13 +6812,7 @@ msgstr ""
 "Zainstalowana wersja serwisu zdalnego dostępu (RAS) jest zbyt stara, "
 "zainstaluj nowszą (brakująca funkcja to: %s)."
 
-#: ../src/richtext/richtextsizepage.cpp:459
-#: ../src/richtext/richtextsizepage.cpp:461
-#, fuzzy
-msgid "The vertical offset relative to the paragraph."
-msgstr "Domyślny styl dla następnego paragrafu."
-
-#: ../src/gtk/print.cpp:950
+#: ../src/gtk/print.cpp:961
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "wxGtkPrinterDC nie może być używany."
 
@@ -6697,7 +6820,7 @@ msgstr "wxGtkPrinterDC nie może być używany."
 msgid "There is no column or renderer for the specified column index."
 msgstr "Nie ma kolumny lub rendera dla określonej kolumny indeksu."
 
-#: ../src/richtext/richtextprint.cpp:608 ../src/html/htmprint.cpp:736
+#: ../src/richtext/richtextprint.cpp:611 ../src/html/htmprint.cpp:736
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -6710,16 +6833,16 @@ msgid ""
 "when it is printed."
 msgstr ""
 
-#: ../src/common/image.cpp:2517
+#: ../src/common/image.cpp:2609
 #, fuzzy, c-format
 msgid "This is not a %s."
 msgstr "PCX: To nie jest plik w formacie PCX."
 
-#: ../src/common/wincmn.cpp:1584
+#: ../src/common/wincmn.cpp:1633
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4147
+#: ../src/gtk/window.cpp:4239
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6733,7 +6856,7 @@ msgstr ""
 "Ten system nie wspiera wyboru daty, należy zaktualizować bibliotekę comctl32."
 "dll"
 
-#: ../src/msw/thread.cpp:1288
+#: ../src/msw/thread.cpp:1290
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -6741,13 +6864,13 @@ msgstr ""
 "Zainicjowanie modułu wątków nie powiodło się: nie można odłożyć wartości do "
 "lokalnej pamięci wątków"
 
-#: ../src/unix/threadpsx.cpp:1714
+#: ../src/unix/threadpsx.cpp:1719
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 "Zainicjowanie modułu wątków nie powiodło się: nie udało się utworzyć klucza "
 "wątków"
 
-#: ../src/msw/thread.cpp:1276
+#: ../src/msw/thread.cpp:1278
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -6755,7 +6878,7 @@ msgstr ""
 "Zainicjowanie modułu wątków nie powiodło się: nie jest możliwe przydzielenie "
 "indeksu w lokalnej pamięci wątków."
 
-#: ../src/unix/threadpsx.cpp:1216
+#: ../src/unix/threadpsx.cpp:1221
 msgid "Thread priority setting is ignored."
 msgstr "Ustawienie priorytetu wątku jest ignorowane."
 
@@ -6767,7 +6890,7 @@ msgstr "&Sąsiadująco w poziomie"
 msgid "Tile &Vertically"
 msgstr "Sąsi&adująco w pionie"
 
-#: ../src/common/ftp.cpp:205
+#: ../src/common/ftp.cpp:203
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
 msgstr ""
 "Przekroczono czas oczekiwania dla serwera FTP, spróbuj trybu pasywnego."
@@ -6792,7 +6915,7 @@ msgstr "Do:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "Aktywny render nie może renderować wartości; typ wartości:"
 
-#: ../src/richtext/richtextbuffer.cpp:7276
+#: ../src/richtext/richtextbuffer.cpp:7499
 msgid "Too many EndStyle calls!"
 msgstr "Zbyt wiele wezwań EndStyle!"
 
@@ -6800,9 +6923,9 @@ msgstr "Zbyt wiele wezwań EndStyle!"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Zbyt wiele kolorów w formacie PNG, obraz może być zamazany."
 
-#: ../src/richtext/richtextsizepage.cpp:416
-#: ../src/richtext/richtextsizepage.cpp:419
-#: ../src/richtext/richtextsizepage.cpp:420 ../src/common/stockitem.cpp:201
+#: ../src/richtext/richtextsizepage.cpp:262
+#: ../src/richtext/richtextsizepage.cpp:265
+#: ../src/richtext/richtextsizepage.cpp:266 ../src/common/stockitem.cpp:201
 #, fuzzy
 msgid "Top"
 msgstr "Do:"
@@ -6828,7 +6951,7 @@ msgstr ""
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "Próbą usunięcia pliku '%s' z pamięci VFS, który nie został wczytany!"
 
-#: ../src/common/fmapbase.cpp:155
+#: ../src/common/fmapbase.cpp:157
 msgid "Turkish (ISO-8859-9)"
 msgstr "Turecki (ISO-8859-9)"
 
@@ -6836,17 +6959,17 @@ msgstr "Turecki (ISO-8859-9)"
 msgid "Type"
 msgstr "Typ"
 
-#: ../src/richtext/richtextfontpage.cpp:148
-#: ../src/richtext/richtextfontpage.cpp:150
+#: ../src/richtext/richtextfontpage.cpp:158
+#: ../src/richtext/richtextfontpage.cpp:160
 msgid "Type a font name."
 msgstr "Wpisz nazwę czcionki."
 
-#: ../src/richtext/richtextfontpage.cpp:166
-#: ../src/richtext/richtextfontpage.cpp:168
+#: ../src/richtext/richtextfontpage.cpp:173
+#: ../src/richtext/richtextfontpage.cpp:175
 msgid "Type a size in points."
 msgstr "Wpisz rozmiar w punktach."
 
-#: ../src/msw/ole/automtn.cpp:647
+#: ../src/msw/ole/automtn.cpp:660
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr ""
@@ -6871,7 +6994,7 @@ msgstr "GÓRA"
 msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr "Składanka US Std, 14 7/8 x 11 cali"
 
-#: ../src/common/fmapbase.cpp:193
+#: ../src/common/fmapbase.cpp:197
 msgid "US-ASCII"
 msgstr "US-ASCII"
 
@@ -6942,11 +7065,11 @@ msgstr ""
 msgid "Unable to handle native drag&drop data"
 msgstr ""
 
-#: ../src/gtk/app.cpp:438
+#: ../src/gtk/app.cpp:442
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "Nie można ustawić GTK+, czy jest prawidłowo ustawiony EKRAN?"
 
-#: ../src/gtk/app.cpp:273
+#: ../src/gtk/app.cpp:275
 msgid "Unable to initialize Hildon program"
 msgstr "Nie udało się zainicjować programu Hildon"
 
@@ -6968,7 +7091,7 @@ msgstr "Nie można odtowrzyć dźwięku asynchronicznie."
 msgid "Unable to post completion status"
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:330
+#: ../src/unix/fswatcher_inotify.cpp:353
 #, fuzzy
 msgid "Unable to read from inotify descriptor"
 msgstr "nie można czytać z deskryptora pliku %d"
@@ -6999,7 +7122,7 @@ msgstr "Odzyskaj"
 msgid "Underline"
 msgstr "&Podkreślony"
 
-#: ../src/richtext/richtextfontpage.cpp:301 ../src/osx/carbon/fontdlg.cpp:554
+#: ../src/richtext/richtextfontpage.cpp:332 ../src/osx/carbon/fontdlg.cpp:554
 #: ../src/propgrid/advprops.cpp:656
 msgid "Underlined"
 msgstr "Podkreślony"
@@ -7031,41 +7154,41 @@ msgstr ""
 msgid "Ungraceful worker thread termination"
 msgstr "Nie można czekać na zakończenie wątku"
 
-#: ../src/richtext/richtextsymboldlg.cpp:456
-#: ../src/richtext/richtextsymboldlg.cpp:457
-#: ../src/richtext/richtextsymboldlg.cpp:458
+#: ../src/richtext/richtextsymboldlg.cpp:460
+#: ../src/richtext/richtextsymboldlg.cpp:461
+#: ../src/richtext/richtextsymboldlg.cpp:462
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../src/common/fmapbase.cpp:182 ../src/common/fmapbase.cpp:188
+#: ../src/common/fmapbase.cpp:186 ../src/common/fmapbase.cpp:192
 msgid "Unicode 16 bit (UTF-16)"
 msgstr "Unicode 16 bit (UTF-16)"
 
-#: ../src/common/fmapbase.cpp:187
+#: ../src/common/fmapbase.cpp:191
 msgid "Unicode 16 bit Big Endian (UTF-16BE)"
 msgstr "Unicode 16 bit Big Endian (UTF-16BE)"
 
-#: ../src/common/fmapbase.cpp:183
+#: ../src/common/fmapbase.cpp:187
 msgid "Unicode 16 bit Little Endian (UTF-16LE)"
 msgstr "Unicode 16 bit Little Endian (UTF-16LE)"
 
-#: ../src/common/fmapbase.cpp:184 ../src/common/fmapbase.cpp:190
+#: ../src/common/fmapbase.cpp:188 ../src/common/fmapbase.cpp:194
 msgid "Unicode 32 bit (UTF-32)"
 msgstr "Unicode 32 bit (UTF-32)"
 
-#: ../src/common/fmapbase.cpp:189
+#: ../src/common/fmapbase.cpp:193
 msgid "Unicode 32 bit Big Endian (UTF-32BE)"
 msgstr "Unicode 32 bit Big Endian (UTF-32BE)"
 
-#: ../src/common/fmapbase.cpp:185
+#: ../src/common/fmapbase.cpp:189
 msgid "Unicode 32 bit Little Endian (UTF-32LE)"
 msgstr "Unicode 32 bit Little Endian (UTF-32LE)"
 
-#: ../src/common/fmapbase.cpp:179
+#: ../src/common/fmapbase.cpp:183
 msgid "Unicode 7 bit (UTF-7)"
 msgstr "Unicode 7 bit (UTF-7)"
 
-#: ../src/common/fmapbase.cpp:180
+#: ../src/common/fmapbase.cpp:184
 msgid "Unicode 8 bit (UTF-8)"
 msgstr "Unicode 8 bit (UTF-8)"
 
@@ -7094,6 +7217,12 @@ msgstr ""
 msgid "Units for the bottom padding."
 msgstr ""
 
+#: ../src/richtext/richtextsizepage.cpp:598
+#: ../src/richtext/richtextsizepage.cpp:600
+#, fuzzy
+msgid "Units for the bottom position."
+msgstr "Nie można czekać na zakończenie wątku."
+
 #: ../src/richtext/richtextborderspage.cpp:283
 #: ../src/richtext/richtextborderspage.cpp:285
 msgid "Units for the left border width."
@@ -7114,42 +7243,43 @@ msgstr ""
 msgid "Units for the left padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:385
-#: ../src/richtext/richtextsizepage.cpp:387
+#: ../src/richtext/richtextsizepage.cpp:514
+#: ../src/richtext/richtextsizepage.cpp:516
+#, fuzzy
+msgid "Units for the left position."
+msgstr "Nie można czekać na zakończenie wątku."
+
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 #, fuzzy
 msgid "Units for the maximum object height."
 msgstr "Waga czcionki."
 
-#: ../src/richtext/richtextsizepage.cpp:358
-#: ../src/richtext/richtextsizepage.cpp:360
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 #, fuzzy
 msgid "Units for the maximum object width."
 msgstr "Waga czcionki."
 
-#: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:333
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 #, fuzzy
 msgid "Units for the minimum object height."
 msgstr "Waga czcionki."
 
-#: ../src/richtext/richtextsizepage.cpp:304
-#: ../src/richtext/richtextsizepage.cpp:306
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 #, fuzzy
 msgid "Units for the minimum object width."
 msgstr "Waga czcionki."
 
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:341
 msgid "Units for the object height."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:469
-#: ../src/richtext/richtextsizepage.cpp:471
-msgid "Units for the object offset."
-msgstr ""
-
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:312
+#: ../src/richtext/richtextsizepage.cpp:314
 msgid "Units for the object width."
 msgstr ""
 
@@ -7173,6 +7303,12 @@ msgstr ""
 msgid "Units for the right padding."
 msgstr ""
 
+#: ../src/richtext/richtextsizepage.cpp:570
+#: ../src/richtext/richtextsizepage.cpp:572
+#, fuzzy
+msgid "Units for the right position."
+msgstr "Nie można czekać na zakończenie wątku."
+
 #: ../src/richtext/richtextborderspage.cpp:343
 #: ../src/richtext/richtextborderspage.cpp:345
 msgid "Units for the top border width."
@@ -7193,6 +7329,12 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:369
 msgid "Units for the top padding."
 msgstr ""
+
+#: ../src/richtext/richtextsizepage.cpp:542
+#: ../src/richtext/richtextsizepage.cpp:544
+#, fuzzy
+msgid "Units for the top position."
+msgstr "Nie można czekać na zakończenie wątku."
 
 #: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
 msgid "Unknown"
@@ -7231,22 +7373,22 @@ msgstr "błąd w formacie"
 msgid "Unknown dynamic library error"
 msgstr "Nieznany błąd biblioteki dynamicznej"
 
-#: ../src/common/fmapbase.cpp:797
+#: ../src/common/fmapbase.cpp:811
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "Nieznane kodowanie (%d)"
 
-#: ../src/msw/ole/automtn.cpp:659
+#: ../src/msw/ole/automtn.cpp:672
 #, fuzzy, c-format
 msgid "Unknown error %08x"
 msgstr "Nieznany błąd DDE %08x"
 
-#: ../src/msw/ole/automtn.cpp:618
+#: ../src/msw/ole/automtn.cpp:631
 #, fuzzy
 msgid "Unknown exception"
 msgstr "Nieznana opcja '%s'"
 
-#: ../src/common/image.cpp:2502
+#: ../src/common/image.cpp:2594
 #, fuzzy
 msgid "Unknown image data format."
 msgstr "błąd w formacie"
@@ -7256,7 +7398,7 @@ msgstr "błąd w formacie"
 msgid "Unknown long option '%s'"
 msgstr "Nieznana długa opcja '%s'"
 
-#: ../src/msw/ole/automtn.cpp:602
+#: ../src/msw/ole/automtn.cpp:615
 msgid "Unknown name or named argument."
 msgstr ""
 
@@ -7281,7 +7423,7 @@ msgstr "Polecenie bez nazwy"
 msgid "Unspecified"
 msgstr "Wyrównanie obustronne"
 
-#: ../src/msw/clipbrd.cpp:269 ../src/msw/clipbrd.cpp:441
+#: ../src/msw/clipbrd.cpp:272 ../src/msw/clipbrd.cpp:440
 msgid "Unsupported clipboard format."
 msgstr "Nieobsługiwany format schowka."
 
@@ -7350,12 +7492,8 @@ msgstr "Wprowadź numer strony pomiędzy %d a %d:"
 msgid "Version "
 msgstr "Wersja %s"
 
-#: ../src/richtext/richtextsizepage.cpp:450
-msgid "Vertical &Offset:"
-msgstr ""
-
-#: ../src/richtext/richtextsizepage.cpp:421
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:267
+#: ../src/richtext/richtextsizepage.cpp:269
 #, fuzzy
 msgid "Vertical alignment."
 msgstr "Nie można ustawić wyrównania."
@@ -7368,7 +7506,7 @@ msgstr "Przeglądaj pliki w formie szczegółowej listy"
 msgid "View files as a list view"
 msgstr "Przeglądaj pliki w formie listy"
 
-#: ../src/common/docview.cpp:1933
+#: ../src/common/docview.cpp:1943
 msgid "Views"
 msgstr "Widoki"
 
@@ -7398,11 +7536,11 @@ msgstr "Ostrzeżenie: "
 msgid "Weight"
 msgstr "&Waga"
 
-#: ../src/common/fmapbase.cpp:147
+#: ../src/common/fmapbase.cpp:149
 msgid "Western European (ISO-8859-1)"
 msgstr "Zachodnioeuropejski (ISO-8859-1)"
 
-#: ../src/common/fmapbase.cpp:161
+#: ../src/common/fmapbase.cpp:163
 msgid "Western European with Euro (ISO-8859-15)"
 msgstr "Zachodnioeuropejski z Euro (ISO-8859-15)"
 
@@ -7414,148 +7552,158 @@ msgstr "Określenie podkreślenia."
 msgid "Whole word"
 msgstr "Całe słowo"
 
-#: ../src/html/helpwnd.cpp:545
+#: ../src/html/helpwnd.cpp:548
 msgid "Whole words only"
 msgstr "Tylko całe słowa"
 
-#: ../src/univ/themes/win32.cpp:1105
+#: ../src/univ/themes/win32.cpp:1103
 msgid "Win32 theme"
 msgstr "Kompozycja Win32"
 
-#: ../src/msw/utils.cpp:1228
+#: ../src/msw/utils.cpp:1220
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s na Windows 3.1"
 
-#: ../src/msw/utils.cpp:1278
+#: ../src/msw/utils.cpp:1270
 #, fuzzy
 msgid "Windows 2000"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1310
+#: ../src/msw/utils.cpp:1302
 #, fuzzy
 msgid "Windows 7"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1242
+#: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1238
+#: ../src/msw/utils.cpp:1230
 msgid "Windows 95 OSR2"
 msgstr "Windows 95 OSR2"
 
-#: ../src/msw/utils.cpp:1253
+#: ../src/msw/utils.cpp:1245
 msgid "Windows 98"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1249
+#: ../src/msw/utils.cpp:1241
 msgid "Windows 98 SE"
 msgstr "Windows 98 SE"
 
-#: ../src/msw/utils.cpp:1260
+#: ../src/msw/utils.cpp:1252
 #, c-format
 msgid "Windows 9x (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
 
-#: ../src/common/fmapbase.cpp:176
+#: ../src/common/fmapbase.cpp:178
 msgid "Windows Arabic (CP 1256)"
 msgstr "Windows arabski (CP 1256)"
 
-#: ../src/common/fmapbase.cpp:177
+#: ../src/common/fmapbase.cpp:179
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows bałtycki (CP 1257)"
 
-#: ../src/msw/utils.cpp:1222
+#: ../src/msw/utils.cpp:1214
 #, c-format
 msgid "Windows CE (%d.%d)"
 msgstr "Windows CE (%d.%d)"
 
-#: ../src/common/fmapbase.cpp:170
+#: ../src/common/fmapbase.cpp:172
 msgid "Windows Central European (CP 1250)"
 msgstr "Windows środkowoeuropejski (CP 1250)"
 
-#: ../src/common/fmapbase.cpp:167
+#: ../src/common/fmapbase.cpp:169
 #, fuzzy
 msgid "Windows Chinese Simplified (CP 936) or GB-2312"
 msgstr "Windows chiński uproszczony (CP 936)"
 
-#: ../src/common/fmapbase.cpp:169
+#: ../src/common/fmapbase.cpp:171
 #, fuzzy
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
 msgstr "Windows chiński tradycyjny (CP 950)"
 
-#: ../src/common/fmapbase.cpp:171
+#: ../src/common/fmapbase.cpp:173
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Windows cyrylica (CP 1251)"
 
-#: ../src/common/fmapbase.cpp:173
+#: ../src/common/fmapbase.cpp:175
 msgid "Windows Greek (CP 1253)"
 msgstr "Windows grecki (CP 1253)"
 
-#: ../src/common/fmapbase.cpp:175
+#: ../src/common/fmapbase.cpp:177
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows hebrajski (CP 1255)"
 
-#: ../src/common/fmapbase.cpp:166
+#: ../src/common/fmapbase.cpp:168
 #, fuzzy
 msgid "Windows Japanese (CP 932) or Shift-JIS"
 msgstr "Windows japoński (CP 932)"
 
-#: ../src/common/fmapbase.cpp:168
+#: ../src/common/fmapbase.cpp:181
+#, fuzzy
+msgid "Windows Johab (CP 1361)"
+msgstr "Windows arabski (CP 1256)"
+
+#: ../src/common/fmapbase.cpp:170
 msgid "Windows Korean (CP 949)"
 msgstr "Windows koreański (CP 949)"
 
-#: ../src/msw/utils.cpp:1257
+#: ../src/msw/utils.cpp:1249
 msgid "Windows ME"
 msgstr "Windows ME"
 
-#: ../src/msw/utils.cpp:1318
+#: ../src/msw/utils.cpp:1310
 #, fuzzy, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu (kompilacja %lu"
 
-#: ../src/msw/utils.cpp:1287
+#: ../src/msw/utils.cpp:1279
 #, fuzzy
 msgid "Windows Server 2003"
 msgstr "Windows Server 2003 (kompilacja %lu"
 
-#: ../src/msw/utils.cpp:1303
+#: ../src/msw/utils.cpp:1295
 #, fuzzy
 msgid "Windows Server 2008"
 msgstr "Windows Server 2003 (kompilacja %lu"
 
-#: ../src/msw/utils.cpp:1309
+#: ../src/msw/utils.cpp:1301
 #, fuzzy
 msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2003 (kompilacja %lu"
 
-#: ../src/common/fmapbase.cpp:165
+#: ../src/common/fmapbase.cpp:167
 msgid "Windows Thai (CP 874)"
 msgstr "Windows Thai (CP 874)"
 
-#: ../src/common/fmapbase.cpp:174
+#: ../src/common/fmapbase.cpp:176
 msgid "Windows Turkish (CP 1254)"
 msgstr "Windows turecki (CP 1254)"
 
-#: ../src/msw/utils.cpp:1304
+#: ../src/common/fmapbase.cpp:180
+#, fuzzy
+msgid "Windows Vietnamese (CP 1258)"
+msgstr "Windows grecki (CP 1253)"
+
+#: ../src/msw/utils.cpp:1296
 #, fuzzy
 msgid "Windows Vista"
 msgstr "Windows 95"
 
-#: ../src/common/fmapbase.cpp:172
+#: ../src/common/fmapbase.cpp:174
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows zachodnioeuropejski (CP 1252)"
 
-#: ../src/msw/utils.cpp:1293
+#: ../src/msw/utils.cpp:1285
 #, fuzzy
 msgid "Windows XP"
 msgstr "Windows 95"
 
-#: ../src/common/fmapbase.cpp:178
+#: ../src/common/fmapbase.cpp:182
 msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
-#: ../src/common/fmapbase.cpp:164
+#: ../src/common/fmapbase.cpp:166
 #, fuzzy
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
 msgstr "Windows cyrylica (CP 1251)"
@@ -7625,12 +7773,12 @@ msgstr "Powiększen&ie"
 msgid "Zoom &Out"
 msgstr "P&omniejszenie"
 
-#: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1539
+#: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1565
 #, fuzzy
 msgid "Zoom In"
 msgstr "Powiększen&ie"
 
-#: ../src/common/stockitem.cpp:211 ../src/common/prntbase.cpp:1525
+#: ../src/common/stockitem.cpp:211 ../src/common/prntbase.cpp:1551
 #, fuzzy
 msgid "Zoom Out"
 msgstr "P&omniejszenie"
@@ -7750,7 +7898,7 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr "założenie że jest to połączony wieloczęściowy zip"
 
-#: ../src/common/fileconf.cpp:1878
+#: ../src/common/fileconf.cpp:1883
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "zignorowano próbę zmiany niezmiennego klucza '%s'."
@@ -7767,7 +7915,7 @@ msgstr "błędne oznaczenie"
 msgid "bad zipfile offset to entry"
 msgstr "błędne przemieszczenie w pliku zip"
 
-#: ../src/common/ftp.cpp:408
+#: ../src/common/ftp.cpp:406
 msgid "binary"
 msgstr "binarny"
 
@@ -7779,7 +7927,7 @@ msgstr "pogrubiony"
 msgid "buffer is too small for Windows directory."
 msgstr "bufor jest zbyt mały na katalog Windows."
 
-#: ../src/msw/utils.cpp:1324
+#: ../src/msw/utils.cpp:1316
 #, fuzzy, c-format
 msgid "build %lu"
 msgstr "Windows XP (kompilacja %lu"
@@ -7828,7 +7976,7 @@ msgstr "nie można znaleźć centralnego katalogu zip"
 msgid "can't find length of file on file descriptor %d"
 msgstr "nie można znaleźć rozmiaru pliku w deskryptorze pliku %d"
 
-#: ../src/msw/utils.cpp:376
+#: ../src/msw/utils.cpp:374
 msgid "can't find user's HOME, using current directory."
 msgstr "nie można znaleźć katalogu domowego, zostanie użyty bieżący."
 
@@ -7842,7 +7990,7 @@ msgstr "nie można opróżnić deskryptora pliku %d"
 msgid "can't get seek position on file descriptor %d"
 msgstr "nie można odczytać bieżącej pozycji w deskryptorze pliku %d"
 
-#: ../src/common/fontmap.cpp:324
+#: ../src/common/fontmap.cpp:326
 msgid "can't load any font, aborting"
 msgstr "nie można załadować żadnej czcionki, program kończy pracę"
 
@@ -7932,13 +8080,16 @@ msgstr "Niepowodzenie sumy kontrolnej czytania nagłówka bloku tar"
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:246
-#: ../src/richtext/richtextsizepage.cpp:273
-#: ../src/richtext/richtextsizepage.cpp:300
-#: ../src/richtext/richtextsizepage.cpp:327
-#: ../src/richtext/richtextsizepage.cpp:354
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:466
+#: ../src/richtext/richtextsizepage.cpp:308
+#: ../src/richtext/richtextsizepage.cpp:335
+#: ../src/richtext/richtextsizepage.cpp:362
+#: ../src/richtext/richtextsizepage.cpp:389
+#: ../src/richtext/richtextsizepage.cpp:416
+#: ../src/richtext/richtextsizepage.cpp:443
+#: ../src/richtext/richtextsizepage.cpp:510
+#: ../src/richtext/richtextsizepage.cpp:538
+#: ../src/richtext/richtextsizepage.cpp:566
+#: ../src/richtext/richtextsizepage.cpp:594
 msgid "cm"
 msgstr ""
 
@@ -7962,7 +8113,7 @@ msgstr "data"
 msgid "decompression error"
 msgstr "błąd dekompresji"
 
-#: ../src/richtext/richtextstyles.cpp:759 ../src/common/fmapbase.cpp:807
+#: ../src/richtext/richtextstyles.cpp:768 ../src/common/fmapbase.cpp:821
 msgid "default"
 msgstr "domyślny"
 
@@ -7974,19 +8125,19 @@ msgstr "podwójnie"
 msgid "dump of the process state (binary)"
 msgstr "kopia stanu procesu (binarnie)"
 
-#: ../src/common/datetimefmt.cpp:1848
+#: ../src/common/datetimefmt.cpp:1925
 msgid "eighteenth"
 msgstr "osiemnasty"
 
-#: ../src/common/datetimefmt.cpp:1838
+#: ../src/common/datetimefmt.cpp:1915
 msgid "eighth"
 msgstr "ósmy"
 
-#: ../src/common/datetimefmt.cpp:1841
+#: ../src/common/datetimefmt.cpp:1918
 msgid "eleventh"
 msgstr "jedenasty"
 
-#: ../src/common/fileconf.cpp:1864
+#: ../src/common/fileconf.cpp:1869
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "pozycja '%s' występuje w grupie '%s' więcej niż jeden raz"
@@ -8023,11 +8174,11 @@ msgstr "błąd zapisu zip '%s': niepoprawna sygnatura crc lub długość"
 msgid "failed to flush the file '%s'"
 msgstr "nie udało się opróżnić (flush) pliku '%s'"
 
-#: ../src/common/datetimefmt.cpp:1845
+#: ../src/common/datetimefmt.cpp:1922
 msgid "fifteenth"
 msgstr "piętnasty"
 
-#: ../src/common/datetimefmt.cpp:1835
+#: ../src/common/datetimefmt.cpp:1912
 msgid "fifth"
 msgstr "piąty"
 
@@ -8057,23 +8208,23 @@ msgstr "plik '%s', linia %d: zignorowano wartość dla niezmiennego klucza '%s'.
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "plik '%s': nieoczekiwany znak %c w lini %d."
 
-#: ../src/richtext/richtextbuffer.cpp:7651
+#: ../src/richtext/richtextbuffer.cpp:7874
 msgid "files"
 msgstr "pliki"
 
-#: ../src/common/datetimefmt.cpp:1831
+#: ../src/common/datetimefmt.cpp:1908
 msgid "first"
 msgstr "pierwszy"
 
-#: ../src/html/helpwnd.cpp:1262
+#: ../src/html/helpwnd.cpp:1266
 msgid "font size"
 msgstr "rozmiar czcionki"
 
-#: ../src/common/datetimefmt.cpp:1844
+#: ../src/common/datetimefmt.cpp:1921
 msgid "fourteenth"
 msgstr "czternasty"
 
-#: ../src/common/datetimefmt.cpp:1834
+#: ../src/common/datetimefmt.cpp:1911
 msgid "fourth"
 msgstr "czwarty"
 
@@ -8082,8 +8233,8 @@ msgstr "czwarty"
 msgid "generate verbose log messages"
 msgstr "generuje listę komunikatów"
 
-#: ../src/richtext/richtextbuffer.cpp:10527
-#: ../src/richtext/richtextbuffer.cpp:10637
+#: ../src/richtext/richtextbuffer.cpp:11223
+#: ../src/richtext/richtextbuffer.cpp:11333
 msgid "image"
 msgstr "obraz"
 
@@ -8103,7 +8254,7 @@ msgstr "nieprawidłowy rozmiar podany w wpisie tar"
 msgid "invalid data in extended tar header"
 msgstr "nieprawidłowe dane w rozszerzonym nagłówku tar"
 
-#: ../src/generic/logg.cpp:1052
+#: ../src/generic/logg.cpp:1054
 msgid "invalid message box return value"
 msgstr "wartość zwrócona przez okno komunikatu jest nieprawidłowa"
 
@@ -8124,15 +8275,15 @@ msgstr "lekki"
 msgid "locale '%s' cannot be set."
 msgstr "lokalizacja '%s' nie może być ustawiona."
 
-#: ../src/common/datetimefmt.cpp:1984
+#: ../src/common/datetimefmt.cpp:2081
 msgid "midnight"
 msgstr "północ"
 
-#: ../src/common/datetimefmt.cpp:1849
+#: ../src/common/datetimefmt.cpp:1926
 msgid "nineteenth"
 msgstr "dziewiętnasty"
 
-#: ../src/common/datetimefmt.cpp:1839
+#: ../src/common/datetimefmt.cpp:1916
 msgid "ninth"
 msgstr "dziewiąty"
 
@@ -8153,16 +8304,16 @@ msgstr "nie znaleziono czcionek w %s, wykorzystując czcionki wypunktowania"
 msgid "noname"
 msgstr "beznazwy"
 
-#: ../src/common/datetimefmt.cpp:1983
+#: ../src/common/datetimefmt.cpp:2080
 msgid "noon"
 msgstr "południe"
 
-#: ../src/richtext/richtextstyles.cpp:758
+#: ../src/richtext/richtextstyles.cpp:767
 #, fuzzy
 msgid "normal"
 msgstr "Normalny"
 
-#: ../src/gtk/print.cpp:1215 ../src/gtk/print.cpp:1320
+#: ../src/gtk/print.cpp:1231 ../src/gtk/print.cpp:1336
 msgid "not implemented"
 msgstr "nie zaimplementowany"
 
@@ -8178,12 +8329,16 @@ msgstr "obiekty nie może mieć węzłów typu 'XML Text'"
 msgid "out of memory"
 msgstr "brak wolnej pamięci"
 
-#: ../src/richtext/richtextsizepage.cpp:247
-#: ../src/richtext/richtextsizepage.cpp:274
-#: ../src/richtext/richtextsizepage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:328
-#: ../src/richtext/richtextsizepage.cpp:355
-#: ../src/richtext/richtextsizepage.cpp:382
+#: ../src/richtext/richtextsizepage.cpp:309
+#: ../src/richtext/richtextsizepage.cpp:336
+#: ../src/richtext/richtextsizepage.cpp:363
+#: ../src/richtext/richtextsizepage.cpp:390
+#: ../src/richtext/richtextsizepage.cpp:417
+#: ../src/richtext/richtextsizepage.cpp:444
+#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:539
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:595
 msgid "percent"
 msgstr ""
 
@@ -8191,6 +8346,12 @@ msgstr ""
 msgid "process context description"
 msgstr "opis kontekstu procesu"
 
+#: ../src/richtext/richtextfontpage.cpp:184
+#: ../src/richtext/richtextfontpage.cpp:187
+msgid "pt"
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:185
 #: ../src/richtext/richtextborderspage.cpp:279
 #: ../src/richtext/richtextborderspage.cpp:281
 #: ../src/richtext/richtextborderspage.cpp:282
@@ -8239,27 +8400,36 @@ msgstr "opis kontekstu procesu"
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:248
-#: ../src/richtext/richtextsizepage.cpp:249
-#: ../src/richtext/richtextsizepage.cpp:272
-#: ../src/richtext/richtextsizepage.cpp:275
-#: ../src/richtext/richtextsizepage.cpp:276
-#: ../src/richtext/richtextsizepage.cpp:299
-#: ../src/richtext/richtextsizepage.cpp:302
-#: ../src/richtext/richtextsizepage.cpp:303
-#: ../src/richtext/richtextsizepage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:330
-#: ../src/richtext/richtextsizepage.cpp:353
-#: ../src/richtext/richtextsizepage.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:357
-#: ../src/richtext/richtextsizepage.cpp:380
-#: ../src/richtext/richtextsizepage.cpp:383
-#: ../src/richtext/richtextsizepage.cpp:384
-#: ../src/richtext/richtextsizepage.cpp:465
-#: ../src/richtext/richtextsizepage.cpp:467
-#: ../src/richtext/richtextsizepage.cpp:468
+#: ../src/richtext/richtextsizepage.cpp:307
+#: ../src/richtext/richtextsizepage.cpp:310
+#: ../src/richtext/richtextsizepage.cpp:311
+#: ../src/richtext/richtextsizepage.cpp:334
+#: ../src/richtext/richtextsizepage.cpp:337
+#: ../src/richtext/richtextsizepage.cpp:338
+#: ../src/richtext/richtextsizepage.cpp:361
+#: ../src/richtext/richtextsizepage.cpp:364
+#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:388
+#: ../src/richtext/richtextsizepage.cpp:391
+#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:415
+#: ../src/richtext/richtextsizepage.cpp:418
+#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:442
+#: ../src/richtext/richtextsizepage.cpp:445
+#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:509
+#: ../src/richtext/richtextsizepage.cpp:512
+#: ../src/richtext/richtextsizepage.cpp:513
+#: ../src/richtext/richtextsizepage.cpp:537
+#: ../src/richtext/richtextsizepage.cpp:540
+#: ../src/richtext/richtextsizepage.cpp:541
+#: ../src/richtext/richtextsizepage.cpp:565
+#: ../src/richtext/richtextsizepage.cpp:568
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:596
+#: ../src/richtext/richtextsizepage.cpp:597
 msgid "px"
 msgstr ""
 
@@ -8286,7 +8456,7 @@ msgstr "odczyt strumienia zip (%s): niepoprawna długość"
 msgid "reentrancy problem."
 msgstr "problem współbieżności"
 
-#: ../src/common/datetimefmt.cpp:1832
+#: ../src/common/datetimefmt.cpp:1909
 msgid "second"
 msgstr "drugi"
 
@@ -8294,11 +8464,11 @@ msgstr "drugi"
 msgid "seek error"
 msgstr "błąd przeszukiwania"
 
-#: ../src/common/datetimefmt.cpp:1847
+#: ../src/common/datetimefmt.cpp:1924
 msgid "seventeenth"
 msgstr "siedemnasty"
 
-#: ../src/common/datetimefmt.cpp:1837
+#: ../src/common/datetimefmt.cpp:1914
 msgid "seventh"
 msgstr "siódmy"
 
@@ -8310,11 +8480,11 @@ msgstr "shift"
 msgid "show this help message"
 msgstr "wyświetla ten komunikat"
 
-#: ../src/common/datetimefmt.cpp:1846
+#: ../src/common/datetimefmt.cpp:1923
 msgid "sixteenth"
 msgstr "szesnasty"
 
-#: ../src/common/datetimefmt.cpp:1836
+#: ../src/common/datetimefmt.cpp:1913
 msgid "sixth"
 msgstr "szósty"
 
@@ -8326,25 +8496,25 @@ msgstr "określa tryb wyświetlania, który ma być użyty (np. 640x480-16)"
 msgid "specify the theme to use"
 msgstr "określa kompozycję, który ma być użyta"
 
-#: ../src/richtext/richtextbuffer.cpp:8151
+#: ../src/richtext/richtextbuffer.cpp:8388
 #, fuzzy
 msgid "standard/circle"
 msgstr "Standard"
 
-#: ../src/richtext/richtextbuffer.cpp:8152
+#: ../src/richtext/richtextbuffer.cpp:8389
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8154
+#: ../src/richtext/richtextbuffer.cpp:8391
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8153
+#: ../src/richtext/richtextbuffer.cpp:8390
 #, fuzzy
 msgid "standard/square"
 msgstr "Standard"
 
-#: ../src/richtext/richtextbuffer.cpp:8155
+#: ../src/richtext/richtextbuffer.cpp:8392
 msgid "standard/triangle"
 msgstr ""
 
@@ -8366,7 +8536,7 @@ msgstr "&Przekreślenie"
 msgid "tar entry not open"
 msgstr "wpis tar nie otwarty"
 
-#: ../src/common/datetimefmt.cpp:1840
+#: ../src/common/datetimefmt.cpp:1917
 msgid "tenth"
 msgstr "dziesiąty"
 
@@ -8375,36 +8545,36 @@ msgstr "dziesiąty"
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "odpowiedź na transakcję spowodowała ustawienie bitu DDE_FBUSY."
 
-#: ../src/common/datetimefmt.cpp:1833
+#: ../src/common/datetimefmt.cpp:1910
 msgid "third"
 msgstr "trzeci"
 
-#: ../src/common/datetimefmt.cpp:1843
+#: ../src/common/datetimefmt.cpp:1920
 msgid "thirteenth"
 msgstr "trzynasty"
 
-#: ../src/common/datetimefmt.cpp:1637
+#: ../src/common/datetimefmt.cpp:1714
 msgid "today"
 msgstr "dziś"
 
-#: ../src/common/datetimefmt.cpp:1639
+#: ../src/common/datetimefmt.cpp:1716
 msgid "tomorrow"
 msgstr "jutro"
 
-#: ../src/common/fileconf.cpp:1975
+#: ../src/common/fileconf.cpp:1980
 #, c-format
 msgid "trailing backslash ignored in '%s'"
 msgstr "końcowy ukośnik odwrotny zignorowany w '%s'"
 
-#: ../src/gtk/aboutdlg.cpp:198
+#: ../src/gtk/aboutdlg.cpp:219
 msgid "translator-credits"
 msgstr "Michał Trzebiatowski"
 
-#: ../src/common/datetimefmt.cpp:1842
+#: ../src/common/datetimefmt.cpp:1919
 msgid "twelfth"
 msgstr "dwunasty"
 
-#: ../src/common/datetimefmt.cpp:1850
+#: ../src/common/datetimefmt.cpp:1927
 msgid "twentieth"
 msgstr "dwudziesty"
 
@@ -8412,7 +8582,7 @@ msgstr "dwudziesty"
 msgid "underlined"
 msgstr "podkreślony"
 
-#: ../src/common/fileconf.cpp:2010
+#: ../src/common/fileconf.cpp:2015
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "nieoczekiwany \" na pozycji %d w '%s'."
@@ -8444,16 +8614,16 @@ msgstr "nieznany błąd (kod błędu %08x)."
 msgid "unknown seek origin"
 msgstr "nieznany odnośnik pozycjonowania"
 
-#: ../src/common/fmapbase.cpp:821
+#: ../src/common/fmapbase.cpp:835
 #, c-format
 msgid "unknown-%d"
 msgstr "nieznany-%d"
 
-#: ../src/common/docview.cpp:509
+#: ../src/common/docview.cpp:510
 msgid "unnamed"
 msgstr "beznazwy"
 
-#: ../src/common/docview.cpp:1587
+#: ../src/common/docview.cpp:1597
 #, c-format
 msgid "unnamed%d"
 msgstr "beznazwy%d"
@@ -8471,11 +8641,11 @@ msgstr "użycie katalogu '%s' z '%s'."
 msgid "write error"
 msgstr "błąd zapisu"
 
-#: ../src/common/time.cpp:331
+#: ../src/common/time.cpp:319
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay zwróciło błąd."
 
-#: ../src/gtk/print.cpp:978
+#: ../src/gtk/print.cpp:989
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr "wxPrintout: GetPageInfo daje zero maxPage."
 
@@ -8497,15 +8667,15 @@ msgstr "Nie można zainicjować wyświetlania dla '%s': program kończy pracę."
 msgid "wxWidgets could not open display. Exiting."
 msgstr "Nie można zainicjować wyświetlania. Program kończy pracę."
 
-#: ../src/richtext/richtextsymboldlg.cpp:431
+#: ../src/richtext/richtextsymboldlg.cpp:435
 msgid "xxxx"
 msgstr "xxxx"
 
-#: ../src/common/datetimefmt.cpp:1638
+#: ../src/common/datetimefmt.cpp:1715
 msgid "yesterday"
 msgstr "wczoraj"
 
-#: ../src/common/zstream.cpp:244 ../src/common/zstream.cpp:419
+#: ../src/common/zstream.cpp:252 ../src/common/zstream.cpp:427
 #, c-format
 msgid "zlib error %d"
 msgstr "błąd biblioteki zlib %d"
@@ -8514,6 +8684,18 @@ msgstr "błąd biblioteki zlib %d"
 #: ../src/richtext/richtextbulletspage.cpp:302
 msgid "~"
 msgstr "~"
+
+#, fuzzy
+#~ msgid "&Preview..."
+#~ msgstr " Podgląd"
+
+#, fuzzy
+#~ msgid "Preview..."
+#~ msgstr " Podgląd"
+
+#, fuzzy
+#~ msgid "The vertical offset relative to the paragraph."
+#~ msgstr "Domyślny styl dla następnego paragrafu."
 
 #~ msgid "&Save..."
 #~ msgstr "&Zapisz..."
@@ -8727,9 +8909,6 @@ msgstr "~"
 
 #~ msgid "Preparing help window..."
 #~ msgstr "Przygotowanie okna pomocy..."
-
-#~ msgid "Print previe&w"
-#~ msgstr "Podgląd &wydruku"
 
 #~ msgid "Program aborted."
 #~ msgstr "Program przerwany."
