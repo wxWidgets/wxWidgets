@@ -86,6 +86,9 @@ public:
     virtual void Undo();
     virtual void Redo();
 
+    //Find function
+    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT) { return wxNOT_FOUND; };
+
     //Clipboard functions
     virtual bool CanCut() const { return true; }
     virtual bool CanCopy() const { return true; }

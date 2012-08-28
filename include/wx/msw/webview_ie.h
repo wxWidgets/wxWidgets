@@ -244,10 +244,13 @@ public:
 /* END OF MSHTMHST.H implementation */
 
 struct IHTMLDocument2;
+struct IHTMLElement;
+struct IMarkupPointer;
 class wxFSFile;
 class ClassFactory;
 class wxIEContainer;
 class DocHostUIHandler;
+class wxFindPointers;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
@@ -320,6 +323,9 @@ public:
     virtual void Undo();
     virtual void Redo();
 
+    //Find function
+    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT);
+
     //Editing functions
     virtual void SetEditable(bool enable = true);
     virtual bool IsEditable() const;
@@ -384,10 +390,21 @@ private:
     bool m_historyLoadingFromList;
     bool m_historyEnabled;
 
-    //Generic helper functions for IHtmlDocument commands
+    //We store find flag, results and position.
+    wxVector<wxFindPointers> m_findPointers;
+    int m_findFlags;
+    wxString m_findText;
+    int m_findPosition;
+
+    //Generic helper functions
     bool CanExecCommand(wxString command) const;
     void ExecCommand(wxString command);
     wxCOMPtr<IHTMLDocument2> GetDocument() const;
+    bool IsElementVisible(IHTMLElement* elm);
+    //Find helper functions.
+    void FindInternal(const wxString& text, int flags, int internal_flag);
+    long FindNext(int direction = 1);
+    void FindClear();
     //Toggles control features see INTERNETFEATURELIST for values.
     bool EnableControlFeature(long flag, bool enable = true);
 
@@ -515,6 +532,18 @@ public:
                                                IDataObject **ppDORet);
     //IUnknown
     DECLARE_IUNKNOWN_METHODS;
+};
+
+class wxFindPointers
+{
+public:
+    wxFindPointers(IMarkupPointer *ptrBegin, IMarkupPointer *ptrEnd)
+    {
+        begin = ptrBegin;
+        end = ptrEnd;
+    }
+    //The two markup pointers.
+    IMarkupPointer *begin, *end;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)

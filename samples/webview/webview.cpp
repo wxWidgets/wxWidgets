@@ -136,6 +136,10 @@ public:
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
     void OnLoadScheme(wxCommandEvent& evt);
+    void OnFind(wxCommandEvent& evt);
+    void OnFindDone(wxCommandEvent& evt);
+    void OnFindText(wxCommandEvent& evt);
+    void OnFindOptions(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -147,6 +151,15 @@ private:
     wxToolBarToolBase* m_toolbar_stop;
     wxToolBarToolBase* m_toolbar_reload;
     wxToolBarToolBase* m_toolbar_tools;
+
+    wxToolBarToolBase* m_find_toolbar_done;
+    wxToolBarToolBase* m_find_toolbar_next;
+    wxToolBarToolBase* m_find_toolbar_previous;
+    wxToolBarToolBase* m_find_toolbar_options;
+    wxMenuItem* m_find_toolbar_wrap;
+    wxMenuItem* m_find_toolbar_highlight;
+    wxMenuItem* m_find_toolbar_matchcase;
+    wxMenuItem* m_find_toolbar_wholeword;
 
     wxMenu* m_tools_menu;
     wxMenu* m_tools_history_menu;
@@ -171,11 +184,16 @@ private:
     wxMenuItem* m_scroll_page_down;
     wxMenuItem* m_selection_clear;
     wxMenuItem* m_selection_delete;
+    wxMenuItem* m_find;
 
     wxInfoBar *m_info;
     wxStaticText* m_info_text;
+    wxTextCtrl* m_find_ctrl;
+    wxToolBar* m_find_toolbar;
 
     wxMenuHistoryMap m_histMenuItems;
+    wxString m_findText;
+    int m_findFlags, m_findCount;
 };
 
 class SourceViewDialog : public wxDialog
@@ -240,6 +258,47 @@ WebFrame::WebFrame(const wxString& url) :
 
     m_toolbar->Realize();
 
+    // Set find values.
+    m_findFlags = wxWEB_VIEW_FIND_DEFAULT;
+    m_findText = wxEmptyString;
+    m_findCount = 0;
+
+    // Create panel for find toolbar.
+    wxPanel* panel = new wxPanel(this);
+    topsizer->Add(panel, wxSizerFlags().Expand());
+
+    // Create sizer for panel.
+    wxBoxSizer* panel_sizer = new wxBoxSizer(wxVERTICAL);
+    panel->SetSizer(panel_sizer);
+
+    // Create the find toolbar.
+    m_find_toolbar = new wxToolBar(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_TEXT|wxTB_HORZ_LAYOUT);
+    m_find_toolbar->Hide();
+    panel_sizer->Add(m_find_toolbar, wxSizerFlags().Expand());
+
+    // Create find control.
+    m_find_ctrl = new wxTextCtrl(m_find_toolbar, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(140,-1), wxTE_PROCESS_ENTER);
+
+
+    //Find options menu
+    wxMenu* findmenu = new wxMenu;
+    m_find_toolbar_wrap = findmenu->AppendCheckItem(wxID_ANY,"Wrap");
+    m_find_toolbar_matchcase = findmenu->AppendCheckItem(wxID_ANY,"Match Case");
+    m_find_toolbar_wholeword = findmenu->AppendCheckItem(wxID_ANY,"Entire Word");
+    m_find_toolbar_highlight = findmenu->AppendCheckItem(wxID_ANY,"Highlight");
+    // Add find toolbar tools.
+    m_find_toolbar->SetToolSeparation(7);
+    m_find_toolbar_done = m_find_toolbar->AddTool(wxID_ANY, "Close", wxArtProvider::GetBitmap(wxART_CROSS_MARK));
+    m_find_toolbar->AddSeparator();
+    m_find_toolbar->AddControl(m_find_ctrl, "Find");
+    m_find_toolbar->AddSeparator();
+    m_find_toolbar_next = m_find_toolbar->AddTool(wxID_ANY, "Next", wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_TOOLBAR, wxSize(16,16)));
+    m_find_toolbar_previous = m_find_toolbar->AddTool(wxID_ANY, "Previous", wxArtProvider::GetBitmap(wxART_GO_UP, wxART_TOOLBAR, wxSize(16,16)));
+    m_find_toolbar->AddSeparator();
+    m_find_toolbar_options = m_find_toolbar->AddTool(wxID_ANY, "Options", wxArtProvider::GetBitmap(wxART_PLUS, wxART_TOOLBAR, wxSize(16,16)), "", wxITEM_DROPDOWN);
+    m_find_toolbar_options->SetDropdownMenu(findmenu);
+    m_find_toolbar->Realize();
+
     // Create the info panel
     m_info = new wxInfoBar(this);
     topsizer->Add(m_info, wxSizerFlags().Expand());
@@ -273,6 +332,10 @@ WebFrame::WebFrame(const wxString& url) :
     m_tools_menu->AppendSeparator();
     m_tools_handle_navigation = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle Navigation"));
     m_tools_handle_new_window = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle New Windows"));
+    m_tools_menu->AppendSeparator();
+
+    //Find
+    m_find = m_tools_menu->Append(wxID_ANY, _("Find"));
     m_tools_menu->AppendSeparator();
 
     //History menu
@@ -339,6 +402,20 @@ WebFrame::WebFrame(const wxString& url) :
     Connect(m_url->GetId(), wxEVT_COMMAND_TEXT_ENTER,
             wxCommandEventHandler(WebFrame::OnUrl), NULL, this );
 
+    // Connect find toolbar events.
+    Connect(m_find_toolbar_done->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEventHandler(WebFrame::OnFindDone), NULL, this );
+    Connect(m_find_toolbar_next->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
+    Connect(m_find_toolbar_previous->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
+
+    // Connect find control events.
+    Connect(m_find_ctrl->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
+            wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
+    Connect(m_find_ctrl->GetId(), wxEVT_COMMAND_TEXT_ENTER,
+            wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
+
     // Connect the webview events
     Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
             wxWebViewEventHandler(WebFrame::OnNavigationRequest), NULL, this);
@@ -404,6 +481,8 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnSelectAll),  NULL, this );
     Connect(loadscheme->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnLoadScheme),  NULL, this );
+    Connect(m_find->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnFind),  NULL, this );
 
     //Connect the idle events
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(WebFrame::OnIdle), NULL, this);
@@ -547,6 +626,72 @@ void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
     path.Replace("\\", "/");
     path = "wxfs:///" + path + ";protocol=zip/doc.htm";
     m_browser->LoadURL(path);
+}
+
+void WebFrame::OnFind(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString value = m_browser->GetSelectedText();
+    if(value.Len() > 150)
+    {
+        value.Truncate(150);
+    }
+    m_find_ctrl->SetValue(value);
+    if(!m_find_toolbar->IsShown()){
+        m_find_toolbar->Show(true);
+        SendSizeEvent();
+    }
+    m_find_ctrl->SelectAll();
+}
+
+void WebFrame::OnFindDone(wxCommandEvent& WXUNUSED(evt))
+{
+    m_browser->Find("");
+    m_find_toolbar->Show(false);
+    SendSizeEvent();
+}
+
+void WebFrame::OnFindText(wxCommandEvent& evt)
+{
+    int flags = 0;
+
+    if(m_find_toolbar_wrap->IsChecked())
+        flags |= wxWEB_VIEW_FIND_WRAP;
+    if(m_find_toolbar_wholeword->IsChecked())
+        flags |= wxWEB_VIEW_FIND_ENTIRE_WORD;
+    if(m_find_toolbar_matchcase->IsChecked())
+        flags |= wxWEB_VIEW_FIND_MATCH_CASE;
+    if(m_find_toolbar_highlight->IsChecked())
+        flags |= wxWEB_VIEW_FIND_HIGHLIGHT_RESULT;
+
+    if(m_find_toolbar_previous->GetId() == evt.GetId())
+        flags |= wxWEB_VIEW_FIND_BACKWARDS;
+
+    wxString find_text = m_find_ctrl->GetValue();
+    long count = m_browser->Find(find_text, flags);
+
+    if(m_findText != find_text)
+    {
+        m_findCount = count;
+        m_findText = find_text;
+    }
+
+    if(count != wxNOT_FOUND || find_text.IsEmpty())
+    {
+        m_find_ctrl->SetBackgroundColour(*wxWHITE);
+    }
+    else
+    {
+        m_find_ctrl->SetBackgroundColour(wxColour(255, 101, 101));
+    }
+
+    m_find_ctrl->Refresh();
+
+    //Log the result, note that count is zero indexed.
+    if(count != m_findCount)
+    {
+        count++;
+    }
+    wxLogMessage("Searching for:%s  current match:%i/%i", m_findText.c_str(), count, m_findCount);
 }
 
 /**

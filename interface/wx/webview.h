@@ -70,6 +70,30 @@ enum wxWebViewReloadFlags
 };
 
 /**
+    Find flags used when searching for text on page.
+*/
+enum wxWebViewFindFlags
+{
+    /** Causes the search to restart when end or beginning reached */
+    wxWEB_VIEW_FIND_WRAP =             0x0001,
+
+    /** Matches an entire word when searching */
+    wxWEB_VIEW_FIND_ENTIRE_WORD =      0x0002,
+
+    /** Match case, i.e. case sensitive searching */
+    wxWEB_VIEW_FIND_MATCH_CASE =       0x0004,
+
+    /** Highlights the search results */
+    wxWEB_VIEW_FIND_HIGHLIGHT_RESULT = 0x0008,
+
+    /** Searches for phrase in backward direction */
+    wxWEB_VIEW_FIND_BACKWARDS =        0x0010,
+
+    /** The default flag, which is simple searching */
+    wxWEB_VIEW_FIND_DEFAULT =          0
+};
+
+/**
  * List of available backends for wxWebView
  */
 enum wxWebViewBackend
@@ -571,6 +595,30 @@ public:
         Undos the last action.
     */
     virtual void Undo() = 0;
+
+    /**
+        @name Finding
+    */
+
+    /**
+        Finds a phrase on the current page and if found, the control will
+        scroll the phrase into view and select it.
+        @param text The phrase to search for.
+        @param flags The flags for the search.
+        @return If search phrase was not found in combination with the flags
+                then @c wxNOT_FOUND is returned. If called for the first time
+                with search phrase then the total number of results will be 
+                returned. Then for every time its called with the same search
+                phrase it will return the number of the current match.
+        @note This function will restart the search if the flags
+              @c wxWEB_VIEW_FIND_ENTIRE_WORD or @c wxWEB_VIEW_FIND_MATCH_CASE
+              are changed, since this will require a new search. To reset the
+              search, for example reseting the highlights call the function 
+              with an empty search phrase. This always returns @c wxNOT_FOUND
+              on the OSX WebKit backend.
+        @since 2.9.5
+    */
+    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEB_VIEW_FIND_DEFAULT) = 0;
 
     /**
         @name Zoom

@@ -39,6 +39,12 @@ DEFINE_GUID(wxIID_IInternetProtocolRoot,0x79eac9e3,0xbaf9,0x11ce,0x8c,0x82,0,0xa
 DEFINE_GUID(wxIID_IInternetProtocol,0x79eac9e4,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
 DEFINE_GUID(wxIID_IDocHostUIHandler, 0xbd3f23c0, 0xd43e, 0x11cf, 0x89, 0x3b, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x1a);
 
+enum //Internal find flags
+{
+    wxWEB_VIEW_FIND_ADD_POINTERS =      0x0001,
+    wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT =  0x0002
+};
+
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
@@ -68,6 +74,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
     m_historyEnabled = true;
     m_historyPosition = -1;
     m_zoomType = wxWEB_VIEW_ZOOM_TYPE_TEXT;
+    FindClear();
 
     if (::CoCreateInstance(CLSID_WebBrowser, NULL,
                            CLSCTX_INPROC_SERVER, // CLSCTX_INPROC,
@@ -98,6 +105,7 @@ wxWebViewIE::~wxWebViewIE()
     {
         m_factories[i]->Release();
     }
+    FindClear();
 }
 
 void wxWebViewIE::LoadURL(const wxString& url)
@@ -591,6 +599,53 @@ void wxWebViewIE::Redo()
     ExecCommand("Redo");
 }
 
+long wxWebViewIE::Find(const wxString& text, int flags)
+{
+    //If the text is empty then we clear.
+    if(text.IsEmpty())
+    {
+        ClearSelection();
+        if(m_findFlags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT)
+        {
+            FindInternal(m_findText, (m_findFlags &~ wxWEB_VIEW_FIND_HIGHLIGHT_RESULT), wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT);
+        }
+        FindClear();
+        return wxNOT_FOUND;
+    }
+    //Have we done this search before?
+    if(m_findText == text)
+    {
+        //Just do a highlight?
+        if((flags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT) != (m_findFlags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT))
+        {
+            m_findFlags = flags;
+            if(!m_findPointers.empty())
+            {
+                FindInternal(m_findText, m_findFlags, ((flags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT) == 0 ? wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT : 0));
+            }
+            return m_findPosition;
+        }
+        else if(((m_findFlags & wxWEB_VIEW_FIND_ENTIRE_WORD) == (flags & wxWEB_VIEW_FIND_ENTIRE_WORD)) && ((m_findFlags & wxWEB_VIEW_FIND_MATCH_CASE) == (flags&wxWEB_VIEW_FIND_MATCH_CASE)))
+        {
+            m_findFlags = flags;
+            return FindNext(((flags & wxWEB_VIEW_FIND_BACKWARDS) ? -1 : 1));
+        }
+    }
+    //Remove old highlight if any.
+    if(m_findFlags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT)
+    {
+        FindInternal(m_findText, (m_findFlags &~ wxWEB_VIEW_FIND_HIGHLIGHT_RESULT), wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT);
+    }
+    //Reset find variables.
+    FindClear();
+    ClearSelection();
+    m_findText = text;
+    m_findFlags = flags;
+    //find the text and return count.
+    FindInternal(text, flags, wxWEB_VIEW_FIND_ADD_POINTERS);
+    return m_findPointers.empty() ? wxNOT_FOUND : m_findPointers.size();
+}
+
 void wxWebViewIE::SetEditable(bool enable)
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
@@ -856,6 +911,232 @@ wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
     return document;
 }
 
+bool wxWebViewIE::IsElementVisible(IHTMLElement* elm)
+{
+    IHTMLCurrentStyle* style;
+    IHTMLElement *elm1 = elm;
+    IHTMLElement2 *elm2;
+    BSTR tmp_bstr;
+    bool is_visible = true;
+    //This method is not perfect but it does discover most of the hidden elements.
+    //so if a better solution is found, then please do improve.
+    while(elm1)
+    {
+        if(SUCCEEDED(elm1->QueryInterface(IID_IHTMLElement2, (void**) &elm2)))
+        {
+            if(SUCCEEDED(elm2->get_currentStyle(&style)))
+            {
+                //Check if the object has the style display:none.
+                if((style->get_display(&tmp_bstr) != S_OK) || 
+                   (tmp_bstr != NULL && (_wcsicmp(tmp_bstr, L"none") == 0)))
+                {
+                    is_visible = false;
+                }
+                //Check if the object has the style visibility:hidden.
+                if(is_visible && (style->get_visibility(&tmp_bstr) != S_OK) || 
+                  (tmp_bstr != NULL && _wcsicmp(tmp_bstr, L"hidden") == 0))
+                {
+                    is_visible = false;
+                }
+                style->Release();
+            }
+            elm2->Release();
+        }
+
+        //Lets check the object's parent element.
+        IHTMLElement* parent;
+        if(is_visible && SUCCEEDED(elm1->get_parentElement(&parent)))
+        {
+            elm1->Release();
+            elm1 = parent;
+        }
+        else
+        {
+            elm1->Release();
+            break;
+        }
+    }
+    return is_visible;
+}
+
+void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_flag)
+{
+    IMarkupServices *pIMS;
+    IMarkupContainer *pIMC;
+    IMarkupPointer *ptrBegin, *ptrEnd;
+    IHTMLElement* elm;
+    long find_flag = 0;
+    IHTMLDocument2 *document = GetDocument();
+    //This function does the acutal work.
+    if(SUCCEEDED(document->QueryInterface(IID_IMarkupServices, (void **)&pIMS)))
+    {
+        if(SUCCEEDED(document->QueryInterface(IID_IMarkupContainer, (void **)&pIMC)))
+        {
+            BSTR attr_bstr = SysAllocString(L"style=\"background-color:#ffff00\"");
+            BSTR text_bstr = SysAllocString(text.wc_str());
+            pIMS->CreateMarkupPointer(&ptrBegin);
+            pIMS->CreateMarkupPointer(&ptrEnd);
+
+            ptrBegin->SetGravity(POINTER_GRAVITY_Right);
+            ptrBegin->MoveToContainer(pIMC, TRUE);
+            //Create the find flag from the wx one.
+            if(flags & wxWEB_VIEW_FIND_ENTIRE_WORD)
+            {
+                find_flag |= FINDTEXT_WHOLEWORD;
+            }
+            if(flags & wxWEB_VIEW_FIND_MATCH_CASE)
+            {
+                find_flag |= FINDTEXT_MATCHCASE;
+            }
+
+            //A little speed-up to avoid to re-alloc in the positions vector.
+            if(text.Len() < 3 && m_findPointers.capacity() < 500)
+            {
+               m_findPointers.reserve(text.Len() == 1 ? 1000 : 500);
+            }
+
+            while(ptrBegin->FindText(text_bstr, find_flag, ptrEnd, NULL) == S_OK)
+            {
+                if(ptrBegin->CurrentScope(&elm) == S_OK)
+                {
+                    if(IsElementVisible(elm))
+                    {
+                        //Highlight the word if the flag was set.
+                        if(flags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT)
+                        {
+                            IHTMLElement* pFontEl;
+                            pIMS->CreateElement(TAGID_FONT, attr_bstr, &pFontEl);
+                            pIMS->InsertElement(pFontEl, ptrBegin, ptrEnd);
+                        }
+                        if(internal_flag & wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT)
+                        {
+                            IHTMLElement* pFontEl;
+                            ptrBegin->CurrentScope(&pFontEl);
+                            pIMS->RemoveElement(pFontEl);
+                            pFontEl->Release();
+                        }
+                        if(internal_flag & wxWEB_VIEW_FIND_ADD_POINTERS)
+                        {
+                            IMarkupPointer *cptrBegin, *cptrEnd;
+                            pIMS->CreateMarkupPointer(&cptrBegin);
+                            pIMS->CreateMarkupPointer(&cptrEnd);
+                            cptrBegin->MoveToPointer(ptrBegin);
+                            cptrEnd->MoveToPointer(ptrEnd);
+                            m_findPointers.push_back(wxFindPointers(cptrBegin,cptrEnd));
+                        }
+                    }
+                    elm->Release();
+                }
+                ptrBegin->MoveToPointer(ptrEnd);
+            }
+            //Clean up.
+            SysFreeString(text_bstr);
+            SysFreeString(attr_bstr);
+            pIMC->Release();
+            ptrBegin->Release();
+            ptrEnd->Release();
+        }
+        pIMS->Release();
+    }
+    document->Release();
+}
+
+long wxWebViewIE::FindNext(int direction)
+{
+    //Don't bother if we have no pointers set.
+    if(m_findPointers.empty())
+    {
+        return wxNOT_FOUND;
+    }
+    //Manage the find position and do some checks.
+    if(direction > 0)
+    {
+        m_findPosition++;
+    }
+    else
+    {
+        m_findPosition--;
+    }
+
+    if(m_findPosition >= (signed)m_findPointers.size())
+    {
+        if(m_findFlags & wxWEB_VIEW_FIND_WRAP)
+        {
+            m_findPosition = 0;
+        }
+        else
+        {
+            m_findPosition--;
+            return wxNOT_FOUND;
+        }
+    }
+    else if(m_findPosition < 0)
+    {
+        if(m_findFlags & wxWEB_VIEW_FIND_WRAP)
+        {
+            m_findPosition = m_findPointers.size()-1;
+        }
+        else
+        {
+            m_findPosition++;
+            return wxNOT_FOUND;
+        }
+    }
+    //some variables to use later on.
+    IHTMLElement *body_element;
+    IHTMLBodyElement *body;
+    IHTMLTxtRange *range = NULL;
+    IMarkupServices *pIMS;
+    IHTMLDocument2 *document = GetDocument();
+    long ret = -1;
+    //Now try to create a range from the body.
+    if(SUCCEEDED(document->get_body(&body_element)))
+    {
+        if(SUCCEEDED(body_element->QueryInterface(IID_IHTMLBodyElement,(void**)&body)))
+        {
+            if(SUCCEEDED(body->createTextRange(&range)))
+            {
+                //So far so good, now we try to position our find pointers.
+                if(SUCCEEDED(document->QueryInterface(IID_IMarkupServices,(void **)&pIMS)))
+                {
+                    IMarkupPointer *begin = m_findPointers[m_findPosition].begin, *end = m_findPointers[m_findPosition].end;
+                    if(pIMS->MoveRangeToPointers(begin,end,range) == S_OK && range->select() == S_OK)
+                    {
+                        ret = m_findPosition;
+                    }
+                    pIMS->Release();
+                }
+                range->Release();
+            }
+            body->Release();
+        }
+        body_element->Release();
+    }
+    document->Release();
+    return ret;
+}
+
+void wxWebViewIE::FindClear()
+{
+    //Reset find variables.
+    m_findText.Empty();
+    m_findFlags = wxWEB_VIEW_FIND_DEFAULT;
+    m_findPosition = -1;
+
+    //The m_findPointers contains pointers for the found text.
+    //Since it uses ref counting we call release on the pointers first
+    //before we remove them from the vector. In other words do not just
+    //remove elements from m_findPointers without calling release first
+    //or you will get a memory leak.
+    size_t count = m_findPointers.size();
+    for(size_t i = 0; i < count; i++)
+    {
+        m_findPointers[i].begin->Release();
+        m_findPointers[i].end->Release();
+    }
+    m_findPointers.clear();
+}
+
 bool wxWebViewIE::EnableControlFeature(long flag, bool enable)
 {
 #if wxUSE_DYNLIB_CLASS
@@ -989,6 +1270,8 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             }
             //Reset as we are done now
             m_historyLoadingFromList = false;
+            //Reset the find values.
+            FindClear();
             // TODO: set target parameter if possible
             wxString target = wxEmptyString;
             wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED, GetId(),

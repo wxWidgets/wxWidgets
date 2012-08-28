@@ -96,6 +96,9 @@ public:
     virtual void Undo();
     virtual void Redo();
 
+    //Find function
+    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT);
+
     //Editing functions
     virtual void SetEditable(bool enable = true);
     virtual bool IsEditable() const;
@@ -142,6 +145,9 @@ private:
     void SetWebkitZoom(float level);
     float GetWebkitZoom() const;
 
+    //Find helper function
+    void FindClear();
+
     // focus event handler: calls GTKUpdateBitmap()
     void GTKOnFocus(wxFocusEvent& event);
 
@@ -149,6 +155,12 @@ private:
     int m_historyLimit;
 
     wxVector<wxSharedPtr<wxWebViewHandler> > m_handlerList;
+
+    //variables used for Find()
+    int m_findFlags;
+    wxString m_findText;
+    int m_findPosition;
+    int m_findCount;
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 };

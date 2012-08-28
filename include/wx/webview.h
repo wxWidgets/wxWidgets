@@ -68,6 +68,16 @@ enum wxWebViewReloadFlags
     wxWEB_VIEW_RELOAD_NO_CACHE
 };
 
+enum wxWebViewFindFlags
+{
+    wxWEB_VIEW_FIND_WRAP =             0x0001,
+    wxWEB_VIEW_FIND_ENTIRE_WORD =      0x0002,
+    wxWEB_VIEW_FIND_MATCH_CASE =       0x0004,
+    wxWEB_VIEW_FIND_HIGHLIGHT_RESULT = 0x0008,
+    wxWEB_VIEW_FIND_BACKWARDS =        0x0010,
+    wxWEB_VIEW_FIND_DEFAULT =          0
+};
+
 enum wxWebViewBackend
 {
     wxWEB_VIEW_BACKEND_DEFAULT,
@@ -181,6 +191,8 @@ public:
 
     //Get the pointer to the underlying native engine.
     virtual void* GetNativeBackend() const = 0;
+    //Find function
+    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT) = 0;
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
