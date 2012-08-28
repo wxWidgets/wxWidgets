@@ -1323,8 +1323,10 @@ void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
 void ListBoxImpl::RegisterRGBAImage(int type, int width, int height,
                                     const unsigned char *pixelsImage)
 {
+#ifdef wxHAS_RAW_BITMAP
     wxBitmap bmp = BitmapFromRGBAImage(width, height, pixelsImage);
     RegisterImageHelper(type, bmp);
+#endif
 }
 
 
