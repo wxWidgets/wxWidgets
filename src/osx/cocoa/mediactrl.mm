@@ -192,17 +192,17 @@ private:
 {
     QTMovie *movie = [notification object];
     long loadState = [[movie attributeForKey:QTMovieLoadStateAttribute] longValue];
-    if (loadState >= QTMovieLoadStatePlayable)
-    {
-        // the movie has loaded enough media data to begin playing
-    }
-    else if (loadState >= QTMovieLoadStateLoaded)
-    {
-        m_backend->FinishLoad();
-    }
-    else if (loadState == -1)
+    if ( loadState == QTMovieLoadStateError )
     {
         // error occurred 
+    }
+    else if (loadState >= QTMovieLoadStatePlayable)
+    {
+        // the movie has loaded enough media data to begin playing, but we don't have an event for that yet
+    }
+    else if (loadState >= QTMovieLoadStateComplete) // we might use QTMovieLoadStatePlaythroughOK
+    {
+        m_backend->FinishLoad();
     }
 }
 
@@ -225,8 +225,8 @@ private:
 IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
 
 wxQTMediaBackend::wxQTMediaBackend() : 
-    m_interfaceflags(wxMEDIACTRLPLAYERCONTROLS_NONE),
-    m_movie(nil), m_movieview(nil)
+    m_movie(nil), m_movieview(nil),
+    m_interfaceflags(wxMEDIACTRLPLAYERCONTROLS_NONE)
 {
 }
 
@@ -300,7 +300,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
         // also check the load state here and finish our initialization if it has
         // been loaded.
         long loadState = [[m_movie attributeForKey:QTMovieLoadStateAttribute] longValue];
-        if (loadState >= QTMovieLoadStateLoaded)
+        if (loadState >= QTMovieLoadStateComplete)
         {
             FinishLoad();
         }        
@@ -407,6 +407,7 @@ wxSize wxQTMediaBackend::GetVideoSize() const
 
 void wxQTMediaBackend::Move(int x, int y, int w, int h)
 {
+    // as we have a native player, no need to move the video area 
 }
 
 bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
@@ -426,6 +427,8 @@ void wxQTMediaBackend::DoShowPlayerControls(wxMediaCtrlPlayerControls flags)
     }
     else 
     {
+        [m_movieview setControllerVisible:YES];
+        
         [m_movieview setStepButtonsVisible:(flags & wxMEDIACTRLPLAYERCONTROLS_STEP) ? YES:NO];
         [m_movieview setVolumeButtonVisible:(flags & wxMEDIACTRLPLAYERCONTROLS_VOLUME) ? YES:NO];
     }
