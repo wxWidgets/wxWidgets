@@ -1,8 +1,8 @@
 #*****************************************************************************
 #                                                                            *
 # Make file for VMS                                                          *
-# Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 10 November 1999                                                     *
+# Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
+# Date : 24 August 2012                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -44,6 +44,6 @@ game_gtk.exe : game.obj bombs1.obj bombs.obj
 .endif
 .endif
 
-game.obj : game.cpp
-bombs1.obj : bombs1.cpp
-bombs.obj : bombs.cpp
+game.obj : game.cpp [--.include.wx]setup.h
+bombs1.obj : bombs1.cpp [--.include.wx]setup.h
+bombs.obj : bombs.cpp [--.include.wx]setup.h
