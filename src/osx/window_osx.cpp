@@ -484,39 +484,6 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
         return;
 
     GetPeer()->SetControlSize( variant );
-#if wxOSX_USE_CARBON
-    ControlSize size ;
-
-    // we will get that from the settings later
-    // and make this NORMAL later, but first
-    // we have a few calculations that we must fix
-
-    switch ( variant )
-    {
-        case wxWINDOW_VARIANT_NORMAL :
-            size = kControlSizeNormal;
-            break ;
-
-        case wxWINDOW_VARIANT_SMALL :
-            size = kControlSizeSmall;
-            break ;
-
-        case wxWINDOW_VARIANT_MINI :
-            // not always defined in the headers
-            size = 3 ;
-            break ;
-
-        case wxWINDOW_VARIANT_LARGE :
-            size = kControlSizeLarge;
-            break ;
-
-        default:
-            wxFAIL_MSG(wxT("unexpected window variant"));
-            break ;
-    }
-    GetPeer()->SetData<ControlSize>(kControlEntireControl, kControlSizeTag, &size ) ;
-#endif
-
 
     switch ( variant )
     {
