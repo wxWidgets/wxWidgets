@@ -322,7 +322,9 @@ protected:
         [[(NSTableColumn *)[tableColumns objectAtIndex:columnIndex] dataCell] setFont:aFont];
 
     // todo introduce a common NSLayoutManager instance for all and use new method
+#ifndef __LP64__
     [self setRowHeight:[aFont defaultLineHeightForFont]+2];
+#endif
 }
 
 - (void) setControlSize:(NSControlSize) size
