@@ -261,6 +261,9 @@ void wxBell()
 
 wxNSAppController* appcontroller = nil;
 
+NSLayoutManager* gNSLayoutManager = nil;
+
+
 bool wxApp::DoInitGui()
 {
     wxMacAutoreleasePool pool;
@@ -278,6 +281,8 @@ bool wxApp::DoInitGui()
         [NSApp finishLaunching];
 #endif
     }
+    gNSLayoutManager = [[NSLayoutManager alloc] init];
+    
     return true;
 }
 
@@ -288,6 +293,11 @@ void wxApp::DoCleanUp()
         [NSApp setDelegate:nil];
         [appcontroller release];
         appcontroller = nil;
+    }
+    if ( gNSLayoutManager != nil )
+    {
+        [gNSLayoutManager release];
+        gNSLayoutManager = nil;
     }
 }
 

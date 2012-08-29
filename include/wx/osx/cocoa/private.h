@@ -417,6 +417,8 @@ const short kwxCursorLast = kwxCursorWatch;
 
 extern ClassicCursor gMacCursors[];
 
+extern NSLayoutManager* gNSLayoutManager;
+
 #endif
 
 #endif
