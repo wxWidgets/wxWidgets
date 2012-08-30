@@ -3274,7 +3274,6 @@ COND_TOOLKIT_OSX_CARBON_GUI_HDR =  \
 	wx/osx/scrolbar.h \
 	wx/osx/slider.h \
 	wx/osx/spinbutt.h \
-	wx/osx/spinctrl.h \
 	wx/osx/srchctrl.h \
 	wx/osx/statbmp.h \
 	wx/osx/statbox.h \
@@ -3377,7 +3376,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/scrolbar.h \
 	wx/osx/slider.h \
 	wx/osx/spinbutt.h \
-	wx/osx/spinctrl.h \
 	wx/osx/srchctrl.h \
 	wx/osx/statbmp.h \
 	wx/osx/statbox.h \
@@ -3484,7 +3482,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/scrolbar.h \
 	wx/osx/slider.h \
 	wx/osx/spinbutt.h \
-	wx/osx/spinctrl.h \
 	wx/osx/srchctrl.h \
 	wx/osx/statbmp.h \
 	wx/osx/statbox.h \
@@ -14349,7 +14346,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_scrolbar_osx.o \
 	monodll_slider_osx.o \
 	monodll_spinbutt_osx.o \
-	monodll_spinctrl_osx.o \
 	monodll_srchctrl_osx.o \
 	monodll_statbox_osx.o \
 	monodll_statline_osx.o \
@@ -14479,7 +14475,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_12 =  \
 	monolib_scrolbar_osx.o \
 	monolib_slider_osx.o \
 	monolib_spinbutt_osx.o \
-	monolib_spinctrl_osx.o \
 	monolib_srchctrl_osx.o \
 	monolib_statbox_osx.o \
 	monolib_statline_osx.o \
@@ -14609,7 +14604,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14 =  \
 	coredll_scrolbar_osx.o \
 	coredll_slider_osx.o \
 	coredll_spinbutt_osx.o \
-	coredll_spinctrl_osx.o \
 	coredll_srchctrl_osx.o \
 	coredll_statbox_osx.o \
 	coredll_statline_osx.o \
@@ -14727,7 +14721,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0 =  \
 	corelib_scrolbar_osx.o \
 	corelib_slider_osx.o \
 	corelib_spinbutt_osx.o \
-	corelib_spinctrl_osx.o \
 	corelib_srchctrl_osx.o \
 	corelib_statbox_osx.o \
 	corelib_statline_osx.o \
@@ -20970,15 +20963,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_spinbutt_osx.o: $(srcdir)/src/osx/spinbutt_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/spinbutt_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_srchctrl_osx.o: $(srcdir)/src/osx/srchctrl_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/srchctrl_osx.cpp
 
@@ -26672,15 +26656,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_spinbutt_osx.o: $(srcdir)/src/osx/spinbutt_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/spinbutt_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_srchctrl_osx.o: $(srcdir)/src/osx/srchctrl_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/srchctrl_osx.cpp
@@ -32544,15 +32519,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_spinbutt_osx.o: $(srcdir)/src/osx/spinbutt_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/spinbutt_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_srchctrl_osx.o: $(srcdir)/src/osx/srchctrl_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/srchctrl_osx.cpp
 
@@ -36797,15 +36763,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_spinbutt_osx.o: $(srcdir)/src/osx/spinbutt_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/spinbutt_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_spinctrl_osx.o: $(srcdir)/src/osx/spinctrl_osx.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/spinctrl_osx.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_srchctrl_osx.o: $(srcdir)/src/osx/srchctrl_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/srchctrl_osx.cpp

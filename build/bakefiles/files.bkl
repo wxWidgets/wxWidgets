@@ -2259,7 +2259,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/scrolbar_osx.cpp
     src/osx/slider_osx.cpp
     src/osx/spinbutt_osx.cpp
-    src/osx/spinctrl_osx.cpp
     src/osx/srchctrl_osx.cpp
     src/osx/statbox_osx.cpp
     src/osx/statline_osx.cpp
@@ -2386,7 +2385,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/scrolbar.h
     wx/osx/slider.h
     wx/osx/spinbutt.h
-    wx/osx/spinctrl.h
     wx/osx/srchctrl.h
     wx/osx/statbmp.h
     wx/osx/statbox.h

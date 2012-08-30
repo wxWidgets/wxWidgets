@@ -113,9 +113,7 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 // wxSpinCtrlDouble implementations or neither, define the appropriate symbols
 // and include the generic version if necessary to provide the missing class(es)
 
-#if defined(__WXUNIVERSAL__) || \
-    defined(__WXMOTIF__) || \
-    defined(__WXCOCOA__)
+#if defined(__WXUNIVERSAL__)
     // nothing, use generic controls
 #elif defined(__WXMSW__)
     #define wxHAS_NATIVE_SPINCTRL
@@ -130,9 +128,6 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #elif defined(__WXGTK__)
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/gtk1/spinctrl.h"
-#elif defined(__WXMAC__)
-    #define wxHAS_NATIVE_SPINCTRL
-    #include "wx/osx/spinctrl.h"
 #endif // platform
 
 #if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
