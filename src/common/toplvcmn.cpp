@@ -361,6 +361,14 @@ void wxTopLevelWindowBase::SetIcon(const wxIcon& icon)
 // whole client area
 void wxTopLevelWindowBase::DoLayout()
 {
+    // We are called during the window destruction several times, e.g. as
+    // wxFrame tries to adjust to its tool/status bars disappearing. But
+    // actually doing the layout is pretty useless in this case as the window
+    // will disappear anyhow -- so just don't bother.
+    if ( IsBeingDeleted() )
+        return;
+
+
     // if we're using constraints or sizers - do use them
     if ( GetAutoLayout() )
     {
