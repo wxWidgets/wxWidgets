@@ -766,13 +766,26 @@ public:
 // your compiler really, really wants main() to be in your main program (e.g.
 // hello.cpp). Now wxIMPLEMENT_APP should add this code if required.
 
-#define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                        \
-    int main(int argc, char **argv)                                           \
-    {                                                                         \
-        wxDISABLE_DEBUG_SUPPORT();                                            \
+// For compilers that support it, prefer to use wmain() as this ensures any
+// Unicode strings can be passed as command line parameters and not just those
+// representable in the current locale.
+#if wxUSE_UNICODE && defined(__VISUALC__)
+    #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
+        int wmain(int argc, wchar_t **argv)                                   \
+        {                                                                     \
+            wxDISABLE_DEBUG_SUPPORT();                                        \
                                                                               \
-        return wxEntry(argc, argv);                                           \
-    }
+            return wxEntry(argc, argv);                                       \
+        }
+#else // Use standard main()
+    #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
+        int main(int argc, char **argv)                                       \
+        {                                                                     \
+            wxDISABLE_DEBUG_SUPPORT();                                        \
+                                                                              \
+            return wxEntry(argc, argv);                                       \
+        }
+#endif
 
 // port-specific header could have defined it already in some special way
 #ifndef wxIMPLEMENT_WXWIN_MAIN
