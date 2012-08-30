@@ -166,7 +166,7 @@ enum wxAuiManagerOption
         custom draw your wxAuiManager window (not recommended).
     @endEventTable
 
-    @library{wxbase}
+    @library{wxaui}
     @category{aui}
 
     @see @ref overview_aui, wxAuiNotebook, wxAuiDockArt, wxAuiPaneInfo
