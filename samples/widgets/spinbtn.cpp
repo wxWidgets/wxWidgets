@@ -58,10 +58,12 @@ enum
     SpinBtnPage_Clear,
     SpinBtnPage_SetValue,
     SpinBtnPage_SetMinAndMax,
+    SpinBtnPage_SetBase,
     SpinBtnPage_CurValueText,
     SpinBtnPage_ValueText,
     SpinBtnPage_MinText,
     SpinBtnPage_MaxText,
+    SpinBtnPage_BaseText,
     SpinBtnPage_SpinBtn,
     SpinBtnPage_SpinCtrl,
     SpinBtnPage_SpinCtrlDouble
@@ -105,6 +107,7 @@ protected:
     void OnButtonClear(wxCommandEvent& event);
     void OnButtonSetValue(wxCommandEvent& event);
     void OnButtonSetMinAndMax(wxCommandEvent& event);
+    void OnButtonSetBase(wxCommandEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
@@ -118,6 +121,7 @@ protected:
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
     void OnUpdateUIMinMaxButton(wxUpdateUIEvent& event);
+    void OnUpdateUIBaseButton(wxUpdateUIEvent& event);
 
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
 
@@ -136,6 +140,9 @@ protected:
     // the spinbtn range
     int m_min, m_max;
 
+    // and numeric base
+    int m_base;
+
     // the controls
     // ------------
 
@@ -144,7 +151,7 @@ protected:
                *m_chkArrowKeys,
                *m_chkWrap,
                *m_chkProcessEnter;
-   wxRadioBox *m_radioAlign;
+    wxRadioBox *m_radioAlign;
 
     // the spinbtn and the spinctrl and the sizer containing them
     wxSpinButton *m_spinbtn;
@@ -156,7 +163,8 @@ protected:
     // the text entries for set value/range
     wxTextCtrl *m_textValue,
                *m_textMin,
-               *m_textMax;
+               *m_textMax,
+               *m_textBase;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -171,9 +179,11 @@ BEGIN_EVENT_TABLE(SpinBtnWidgetsPage, WidgetsPage)
     EVT_BUTTON(SpinBtnPage_Reset, SpinBtnWidgetsPage::OnButtonReset)
     EVT_BUTTON(SpinBtnPage_SetValue, SpinBtnWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(SpinBtnPage_SetMinAndMax, SpinBtnWidgetsPage::OnButtonSetMinAndMax)
+    EVT_BUTTON(SpinBtnPage_SetBase, SpinBtnWidgetsPage::OnButtonSetBase)
 
     EVT_UPDATE_UI(SpinBtnPage_SetValue, SpinBtnWidgetsPage::OnUpdateUIValueButton)
     EVT_UPDATE_UI(SpinBtnPage_SetMinAndMax, SpinBtnWidgetsPage::OnUpdateUIMinMaxButton)
+    EVT_UPDATE_UI(SpinBtnPage_SetBase, SpinBtnWidgetsPage::OnUpdateUIBaseButton)
 
     EVT_UPDATE_UI(SpinBtnPage_Reset, SpinBtnWidgetsPage::OnUpdateUIResetButton)
 
@@ -218,12 +228,15 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
     m_spinbtn = NULL;
     m_spinctrl = NULL;
     m_spinctrldbl = NULL;
-    m_textValue = NULL;
-    m_textMin = NULL;
-    m_textMax = NULL;
+    m_textValue =
+    m_textMin =
+    m_textMax =
+    m_textBase = NULL;
 
     m_min = 0;
     m_max = 10;
+
+    m_base = 10;
 
     m_sizerSpin = NULL;
 }
@@ -293,6 +306,13 @@ void SpinBtnWidgetsPage::CreateContent()
     m_textMin->SetValue( wxString::Format(wxT("%d"), m_min) );
     m_textMax->SetValue( wxString::Format(wxT("%d"), m_max) );
 
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+    sizerRow = CreateSizerWithTextAndButton(SpinBtnPage_SetBase,
+                                            "Set &base",
+                                            SpinBtnPage_BaseText,
+                                            &m_textBase);
+    m_textBase->SetValue("10");
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     // right pane
@@ -445,6 +465,22 @@ void SpinBtnWidgetsPage::OnButtonSetMinAndMax(wxCommandEvent& WXUNUSED(event))
     m_spinctrldbl->SetRange(minNew, maxNew);
 }
 
+void SpinBtnWidgetsPage::OnButtonSetBase(wxCommandEvent& WXUNUSED(event))
+{
+    unsigned long base;
+    if ( !m_textBase->GetValue().ToULong(&base) || !base )
+    {
+        wxLogWarning("Invalid base value.");
+        return;
+    }
+
+    m_base = base;
+    if ( !m_spinctrl->SetBase(m_base) )
+    {
+        wxLogWarning("Setting base %d failed.", m_base);
+    }
+}
+
 void SpinBtnWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
 {
     long val;
@@ -472,6 +508,12 @@ void SpinBtnWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)
     event.Enable( m_textMin->GetValue().ToLong(&mn) &&
                   m_textMax->GetValue().ToLong(&mx) &&
                   mn <= mx);
+}
+
+void SpinBtnWidgetsPage::OnUpdateUIBaseButton(wxUpdateUIEvent& event)
+{
+    unsigned long base;
+    event.Enable( m_textBase->GetValue().ToULong(&base) && base );
 }
 
 void SpinBtnWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)

@@ -562,6 +562,30 @@ void wxSpinCtrlGenericBase::SetSelection(long from, long to)
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
 
+bool wxSpinCtrl::SetBase(int base)
+{
+    // Currently we only support base 10 and 16. We could add support for base
+    // 8 quite easily but wxMSW doesn't support it natively so don't bother.
+    if ( base != 10 && base != 16 )
+        return false;
+
+    if ( base == m_base )
+        return true;
+
+    // Update the current control contents to show in the new base: be careful
+    // to call DoTextToValue() before changing the base...
+    double val;
+    const bool hasValidVal = DoTextToValue(m_textCtrl->GetValue(), &val);
+
+    m_base = base;
+
+    // ... but DoValueToText() after doing it.
+    if ( hasValidVal )
+        m_textCtrl->SetValue(DoValueToText(val));
+
+    return true;
+}
+
 void wxSpinCtrl::DoSendEvent()
 {
     wxSpinEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
@@ -574,7 +598,7 @@ void wxSpinCtrl::DoSendEvent()
 bool wxSpinCtrl::DoTextToValue(const wxString& text, double *val)
 {
     long lval;
-    if ( !text.ToLong(&lval) )
+    if ( !text.ToLong(&lval, GetBase()) )
         return false;
 
     *val = static_cast<double>(lval);
@@ -584,7 +608,19 @@ bool wxSpinCtrl::DoTextToValue(const wxString& text, double *val)
 
 wxString wxSpinCtrl::DoValueToText(double val)
 {
-    return wxString::Format("%ld", static_cast<long>(val));
+    switch ( GetBase() )
+    {
+        case 16:
+            return wxPrivate::wxSpinCtrlFormatAsHex(static_cast<long>(val),
+                                                    GetMax());
+
+        default:
+            wxFAIL_MSG( wxS("Unsupported spin control base") );
+            // Fall through
+
+        case 10:
+            return wxString::Format("%ld", static_cast<long>(val));
+    }
 }
 
 #endif // !wxHAS_NATIVE_SPINCTRL

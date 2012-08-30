@@ -854,7 +854,8 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxSpinCtrl" name="controls_spinctrl">
                                     <size>100,-1</size>
                                     <max>100</max>
-                                    <value>0</value>
+                                    <value>17</value>
+                                    <base>16</base>
                                 </object>
                             </object>
                         </object>

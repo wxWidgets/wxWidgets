@@ -103,4 +103,17 @@ wxCONSTRUCTOR_6( wxSpinCtrl, wxWindow*, Parent, wxWindowID, Id, \
                 wxSize, Size, long, WindowStyle )
 
 
+wxString wxPrivate::wxSpinCtrlFormatAsHex(long val, long maxVal)
+{
+    // We format the value like this is for compatibility with (native
+    // behaviour of) wxMSW
+    wxString text;
+    if ( maxVal < 0x10000 )
+        text.Printf(wxS("0x%04lx"), val);
+    else
+        text.Printf(wxS("0x%08lx"), val);
+
+    return text;
+}
+
 #endif // wxUSE_SPINCTRL

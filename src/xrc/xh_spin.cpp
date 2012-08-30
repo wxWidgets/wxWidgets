@@ -96,6 +96,10 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
                     GetLong(wxT("value"), DEFAULT_VALUE),
                     GetName());
 
+    const long base = GetLong(wxS("base"), 10);
+    if ( base != 10 )
+        control->SetBase(base);
+
     SetupWindow(control);
 
     return control;

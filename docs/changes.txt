@@ -537,6 +537,7 @@ All:
 All (GUI):
 
 - Add new wxSimplebook class.
+- Support hexadecimal numbers in wxSpinCtrl.
 - Respect window max size in wxBoxSizer (Nathan Ridge).
 - Add support for searching in wxWebView for MSW and GTK (Allonii).
 - Add possibility to hide and show again wxRibbonBar pages (wxBen).

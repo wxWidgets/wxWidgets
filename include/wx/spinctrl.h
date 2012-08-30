@@ -51,6 +51,10 @@ public:
     virtual void SetSnapToTicks(bool snap_to_ticks) = 0;
     // void SetDigits(unsigned digits)              - wxSpinCtrlDouble only
 
+    // The base for numbers display, e.g. 10 or 16.
+    virtual int GetBase() const = 0;
+    virtual bool SetBase(int base) = 0;
+
     // Select text in the textctrl
     virtual void SetSelection(long from, long to) = 0;
 
@@ -133,6 +137,15 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
     #include "wx/generic/spinctlg.h"
 #endif
+
+namespace wxPrivate
+{
+
+// This is an internal helper function currently used by all ports: return the
+// string containing hexadecimal representation of the given number.
+extern wxString wxSpinCtrlFormatAsHex(long val, long maxVal);
+
+} // namespace wxPrivate
 
 #endif // wxUSE_SPINCTRL
 

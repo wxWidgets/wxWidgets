@@ -115,6 +115,15 @@ public:
                 int initial = 0, const wxString& name = "wxSpinCtrl");
 
     /**
+        Returns the numerical base being currently used, 10 by default.
+
+        @see SetBase()
+
+        @since 2.9.5
+     */
+    int GetBase() const;
+
+    /**
         Gets maximal allowable value.
     */
     int GetMax() const;
@@ -128,6 +137,27 @@ public:
         Gets the value of the spin control.
     */
     int GetValue() const;
+
+    /**
+        Sets the base to use for the numbers in this control.
+
+        Currently the only supported values are 10 (which is the default) and
+        16.
+
+        Changing the base allows the user to enter the numbers in the specified
+        base, e.g. with "0x" prefix for hexadecimal numbers, and also displays
+        the numbers in the specified base when they are changed using the spin
+        control arrows.
+
+        @param base
+            Numeric base, currently only 10 and 16 are supported.
+        @return
+            @true if the base was successfully changed or @false if it failed,
+            usually meaning that either the base is not 10 or 16.
+
+        @since 2.9.5
+     */
+    bool SetBase(int base);
 
     /**
         Sets range of allowable values.

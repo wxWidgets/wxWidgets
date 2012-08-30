@@ -1495,7 +1495,12 @@ HTML markup. Note that the markup has to be escaped:
 
 @subsubsection xrc_wxspinctrl wxSpinCtrl
 
-wxSpinCtrl supports the properties as @ref xrc_wxspinbutton.
+wxSpinCtrl supports the same properties as @ref xrc_wxspinbutton and, since
+wxWidgets 2.9.5, another one:
+@beginTable
+@row3col{base, integer,
+    Numeric base, currently can be only 10 or 16 (default: 10).}
+@endTable
 
 
 @subsubsection xrc_wxsplitterwindow wxSplitterWindow
