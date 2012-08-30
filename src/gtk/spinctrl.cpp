@@ -84,8 +84,6 @@ gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 // wxSpinCtrlGTKBase
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlGTKBase, wxSpinCtrlBase)
-
 BEGIN_EVENT_TABLE(wxSpinCtrlGTKBase, wxSpinCtrlBase)
     EVT_CHAR(wxSpinCtrlGTKBase::OnChar)
 END_EVENT_TABLE()

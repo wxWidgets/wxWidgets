@@ -79,7 +79,6 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
 
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrlGTKBase)
     DECLARE_EVENT_TABLE()
 };
 
