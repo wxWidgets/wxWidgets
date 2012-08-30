@@ -640,7 +640,7 @@ void wxSpinCtrl::SendSpinUpdate(int value)
 }
 
 bool wxSpinCtrl::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
-                               WXWORD pos, WXHWND control)
+                             WXWORD WXUNUSED(pos), WXHWND control)
 {
     wxCHECK_MSG( control, false, wxT("scrolling what?") );
 
@@ -650,11 +650,13 @@ bool wxSpinCtrl::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
         return false;
     }
 
-    int new_value = (short) pos;
+    // Notice that we can't use "pos" from WM_VSCROLL as it is 16 bit and we
+    // might be using 32 bit range.
+    int new_value = GetValue();
     if (m_oldValue != new_value)
        SendSpinUpdate( new_value );
 
-    return TRUE;
+    return true;
 }
 
 bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *result)
