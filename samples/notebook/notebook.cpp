@@ -503,15 +503,6 @@ MyFrame::~MyFrame()
             wxFAIL_MSG( wxT("unknown book control type") );                    \
     }
 
-int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk, int aui) const
-{
-    int flag = 0;
-
-    DISPATCH_ON_TYPE(flag =, nb,  lb,  chb,  tbk, toolbk, aui, + 0);
-
-    return flag;
-}
-
 void MyFrame::RecreateBook()
 {
     int flags;

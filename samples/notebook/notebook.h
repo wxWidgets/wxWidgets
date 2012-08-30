@@ -97,7 +97,6 @@ private:
 
     void RecreateBook();
     wxPanel *CreateNewPage() const;
-    int TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbkm, int aui) const;
     void AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag, const wxChar * flagName) const;
 
     // Sample setup
