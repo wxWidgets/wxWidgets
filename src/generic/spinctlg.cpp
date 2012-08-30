@@ -65,7 +65,7 @@ class wxSpinCtrlTextGeneric : public wxTextCtrl
 public:
     wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value, long style=0)
         : wxTextCtrl(spin->GetParent(), wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     style & wxALIGN_MASK)
+                     style & (wxALIGN_MASK | wxTE_PROCESS_ENTER))
     {
         m_spin = spin;
 
@@ -84,8 +84,18 @@ public:
 
     void OnChar( wxKeyEvent &event )
     {
-        if (m_spin)
-            m_spin->ProcessWindowEvent(event);
+        if ( !m_spin->ProcessWindowEvent(event) )
+            event.Skip();
+    }
+
+    void OnTextEnter(wxCommandEvent& event)
+    {
+        // We need to forward this event to the spin control itself as it's
+        // supposed to generate it if wxTE_PROCESS_ENTER is used with it.
+        wxCommandEvent eventCopy(event);
+        eventCopy.SetEventObject(m_spin);
+        eventCopy.SetId(m_spin->GetId());
+        m_spin->ProcessWindowEvent(eventCopy);
     }
 
     void OnKillFocus(wxFocusEvent& event)
@@ -104,6 +114,7 @@ private:
 
 BEGIN_EVENT_TABLE(wxSpinCtrlTextGeneric, wxTextCtrl)
     EVT_CHAR(wxSpinCtrlTextGeneric::OnChar)
+    EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlTextGeneric::OnTextEnter)
 
     EVT_KILL_FOCUS(wxSpinCtrlTextGeneric::OnKillFocus)
 END_EVENT_TABLE()

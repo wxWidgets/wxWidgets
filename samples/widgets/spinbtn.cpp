@@ -197,6 +197,7 @@ BEGIN_EVENT_TABLE(SpinBtnWidgetsPage, WidgetsPage)
     EVT_TEXT(SpinBtnPage_SpinCtrl, SpinBtnWidgetsPage::OnSpinText)
     EVT_TEXT_ENTER(SpinBtnPage_SpinCtrl, SpinBtnWidgetsPage::OnSpinTextEnter)
     EVT_TEXT(SpinBtnPage_SpinCtrlDouble, SpinBtnWidgetsPage::OnSpinText)
+    EVT_TEXT_ENTER(SpinBtnPage_SpinCtrlDouble, SpinBtnWidgetsPage::OnSpinTextEnter)
 
     EVT_CHECKBOX(wxID_ANY, SpinBtnWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, SpinBtnWidgetsPage::OnCheckOrRadioBox)
