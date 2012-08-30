@@ -3,16 +3,14 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.8.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-27 11:51+0200\n"
-"PO-Revision-Date: 2012-02-21 08:31+0100\n"
-"Last-Translator: dingoe <translations@gvmelle.com>\n"
+"PO-Revision-Date: 2012-08-30 10:59+0100\n"
+"Last-Translator: Thomas De Rocker <thomasderocker@hotmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
-"Language: \n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Dutch\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: NETHERLANDS\n"
 
 #: ../src/common/debugrpt.cpp:582
 msgid ""
@@ -20,8 +18,7 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 "\n"
-"Stuurt u dit rapport alstublieft naar de programmabeheerder, alvast "
-"bedankt!\n"
+"Gelieve dit rapport naar de programmabeheerder te sturen, alvast bedankt\n"
 
 #: ../src/richtext/richtextstyledlg.cpp:218
 #: ../src/richtext/richtextstyledlg.cpp:230
@@ -33,9 +30,9 @@ msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Dank u en onze excuses voor het ongemak!\n"
 
 #: ../src/common/prntbase.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "Pagina %d van %d"
+msgstr " (%d van %d kopiëren)"
 
 #: ../src/common/log.cpp:428
 #, c-format
@@ -523,9 +520,8 @@ msgid "&Position (tenths of a mm):"
 msgstr "&Positie (tienden van een mm):"
 
 #: ../src/richtext/richtextsizepage.cpp:476
-#, fuzzy
 msgid "&Position mode:"
-msgstr "&Zwevende modus:"
+msgstr "&Positiemodus:"
 
 #: ../src/common/stockitem.cpp:182
 msgid "&Preferences"
@@ -1168,7 +1164,7 @@ msgstr "Over %s"
 
 #: ../src/richtext/richtextsizepage.cpp:482
 msgid "Absolute"
-msgstr ""
+msgstr "Absoluut"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"
@@ -2417,9 +2413,8 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "Kon geen geluidsgegevens laden van '%s'."
 
 #: ../src/msw/dirdlg.cpp:439
-#, fuzzy
 msgid "Couldn't obtain folder name"
-msgstr "Kon geen timer creëren"
+msgstr "Kon de mapnaam niet verkrijgen"
 
 #: ../src/unix/sound_sdl.cpp:226
 #, c-format
@@ -2657,7 +2652,7 @@ msgid "Did you know..."
 msgstr "Wist u dat..."
 
 #: ../src/dfb/wrapdfb.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
 msgstr "DirectFB fout %d opgetreden."
 
@@ -2725,9 +2720,8 @@ msgid "Do you want to save changes to %s?"
 msgstr "Wilt u de veranderingen aan %s opslaan?"
 
 #: ../src/common/prntbase.cpp:526
-#, fuzzy
 msgid "Document:"
-msgstr "Documentatie door"
+msgstr "Document:"
 
 #: ../src/generic/aboutdlgg.cpp:74
 msgid "Documentation by "
@@ -3245,14 +3239,14 @@ msgid "Failed to kill process %d"
 msgstr "Abrupt afsluiten van proces %d mislukt"
 
 #: ../src/common/image.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "Laden van afbeelding %d van stream mislukt."
+msgstr "Laden van bitmap \"%s\" van bronnen mislukt."
 
 #: ../src/common/image.cpp:2270
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "Laden van afbeelding %d van stream mislukt."
+msgstr "Laden van icoon \"%s\" van bronnen mislukt."
 
 #: ../src/common/iconbndl.cpp:183
 #, c-format
@@ -3356,9 +3350,9 @@ msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Kan Plural-Forms:'%s' niet parseren"
 
 #: ../src/unix/mediactrl.cpp:1269
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "Openen van display \"%s\" mislukt."
+msgstr "Voorbereiden om \"%s\" af te spelen mislukt."
 
 #: ../src/msw/clipbrd.cpp:648
 msgid "Failed to put data on the clipboard"
@@ -3491,9 +3485,9 @@ msgid "Failed to set text in the text control."
 msgstr "Kan geen tekst aanbrengen in tekst-control."
 
 #: ../src/unix/threadpsx.cpp:1141
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "Instellen van prioriteit van thread %d mislukt."
+msgstr "Instellen van concurrency-niveau van thread op %lu mislukt"
 
 #: ../src/unix/threadpsx.cpp:1338 ../src/unix/threadpsx.cpp:1348
 #, c-format
@@ -3658,9 +3652,8 @@ msgid "First page"
 msgstr "Eerste pagina"
 
 #: ../src/richtext/richtextsizepage.cpp:483
-#, fuzzy
 msgid "Fixed"
-msgstr "Niet proportioneel lettertype:"
+msgstr "Vast"
 
 #: ../src/html/helpwnd.cpp:1220
 msgid "Fixed font:"
@@ -4105,9 +4098,8 @@ msgid "Insert"
 msgstr "Invoegen"
 
 #: ../src/richtext/richtextbuffer.cpp:7246
-#, fuzzy
 msgid "Insert Field"
-msgstr "Tekst invoegen"
+msgstr "Veld invoegen"
 
 #: ../src/richtext/richtextbuffer.cpp:7157
 #: ../src/richtext/richtextbuffer.cpp:8063
@@ -4744,7 +4736,7 @@ msgstr "Maximale breedte:"
 #: ../src/unix/mediactrl.cpp:1007
 #, c-format
 msgid "Media playback error: %s"
-msgstr ""
+msgstr "Media-afspeelfout: %s"
 
 #: ../src/common/fs_mem.cpp:176
 #, c-format
@@ -5352,7 +5344,6 @@ msgid "Passing a already registered object to SetObject"
 msgstr "Al geregistreerd object doorgegeven aan SetObject"
 
 #: ../src/common/xtistrm.cpp:481
-#, fuzzy
 msgid "Passing an unknown object to GetObject"
 msgstr "Doorgave van een onbekend object naar GetObject"
 
@@ -5415,9 +5406,8 @@ msgid "Please select the columns to show and define their order:"
 msgstr "Selecteer de kolommen voor weergeven en definiëren van hun volgorde:"
 
 #: ../src/common/prntbase.cpp:522
-#, fuzzy
 msgid "Please wait while printing..."
-msgstr "Een ogenblik geduld alstublieft. Bezig met printen\n"
+msgstr "Een ogenblik geduld. Bezig met printen..."
 
 #: ../src/propgrid/advprops.cpp:632
 msgid "Point Size"
@@ -5462,7 +5452,7 @@ msgstr "Voorkeuren..."
 
 #: ../src/common/prntbase.cpp:530
 msgid "Preparing"
-msgstr ""
+msgstr "Voorbereiden"
 
 #: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:574
 #: ../src/html/helpwnd.cpp:1236
@@ -5502,9 +5492,8 @@ msgid "Print in colour"
 msgstr "In kleur afdrukken"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print previe&w..."
-msgstr "&Afdrukvoorbeeld"
+msgstr "&Afdrukvoorbeeld..."
 
 #: ../src/gtk/gnome/gprint.cpp:940
 msgid "Print preview"
@@ -5515,9 +5504,8 @@ msgid "Print preview creation failed."
 msgstr "Maken afdrukvoorbeeld mislukt."
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print preview..."
-msgstr "Afdrukvoorbeeld"
+msgstr "Afdrukvoorbeeld..."
 
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Print spooling"
@@ -5573,9 +5561,9 @@ msgid "Printing Error"
 msgstr "Afdrukfout"
 
 #: ../src/common/prntbase.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d of %d"
-msgstr "Bezig met afdrukken van pagina %d..."
+msgstr "Bezig met afdrukken van pagina %d van %d"
 
 #: ../src/generic/printps.cpp:202
 #, c-format
@@ -5605,7 +5593,7 @@ msgstr "Voortgang renderer kan geen woord type renderen; waarde type:"
 
 #: ../src/common/prntbase.cpp:529
 msgid "Progress:"
-msgstr ""
+msgstr "Voortgang:"
 
 #: ../src/common/stockitem.cpp:185
 msgid "Properties"
@@ -5705,9 +5693,8 @@ msgid "Regular"
 msgstr "regelmatig"
 
 #: ../src/richtext/richtextsizepage.cpp:481
-#, fuzzy
 msgid "Relative"
-msgstr "Decoratief"
+msgstr "Relatief"
 
 #: ../src/generic/helpext.cpp:463
 msgid "Relevant entries:"
@@ -5718,9 +5705,8 @@ msgid "Remove"
 msgstr "Weghalen"
 
 #: ../src/richtext/richtextctrl.cpp:1420
-#, fuzzy
 msgid "Remove Bullet"
-msgstr "Weghalen"
+msgstr "Bolletje weghalen"
 
 #: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
@@ -6127,9 +6113,8 @@ msgstr "USA Statement, 5 1/2 x 8 1/2 inch"
 #: ../src/richtext/richtextsizepage.cpp:480
 #: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:485
-#, fuzzy
 msgid "Static"
-msgstr "Status:"
+msgstr "Statisch"
 
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Status:"
@@ -6290,9 +6275,8 @@ msgstr "De grootte van de bodem uitvulruimte."
 #: ../src/richtext/richtextsizepage.cpp:579
 #: ../src/richtext/richtextsizepage.cpp:587
 #: ../src/richtext/richtextsizepage.cpp:589
-#, fuzzy
 msgid "The bottom position."
-msgstr "De tab positie."
+msgstr "De onderpositie."
 
 #: ../src/richtext/richtextliststylepage.cpp:255
 #: ../src/richtext/richtextliststylepage.cpp:257
@@ -6397,9 +6381,8 @@ msgstr "De lettertypegrootte in punten."
 
 #: ../src/richtext/richtextfontpage.cpp:188
 #: ../src/richtext/richtextfontpage.cpp:190
-#, fuzzy
 msgid "The font size units, points or pixels."
-msgstr "De lettertypegrootte in punten."
+msgstr "De lettertypegrootte in units, punten of pixels."
 
 #: ../src/generic/fontdlgg.cpp:387 ../src/generic/fontdlgg.cpp:389
 msgid "The font style."
@@ -6435,9 +6418,8 @@ msgstr "De grootte van de linker uitvulruimte."
 #: ../src/richtext/richtextsizepage.cpp:495
 #: ../src/richtext/richtextsizepage.cpp:503
 #: ../src/richtext/richtextsizepage.cpp:505
-#, fuzzy
 msgid "The left position."
-msgstr "De tab positie."
+msgstr "De linkerpositie"
 
 #: ../src/richtext/richtextindentspage.cpp:313
 #: ../src/richtext/richtextindentspage.cpp:315
@@ -6472,7 +6454,6 @@ msgstr "De maximale breedte van het object."
 
 #: ../src/richtext/richtextsizepage.cpp:382
 #: ../src/richtext/richtextsizepage.cpp:384
-#, fuzzy
 msgid "The object minimum height."
 msgstr "De minimale hoogte van het object."
 
@@ -6547,9 +6528,8 @@ msgstr "De grootte van de rechteruitvulruimte."
 #: ../src/richtext/richtextsizepage.cpp:551
 #: ../src/richtext/richtextsizepage.cpp:559
 #: ../src/richtext/richtextsizepage.cpp:561
-#, fuzzy
 msgid "The right position."
-msgstr "De tab positie."
+msgstr "De rechterpositie."
 
 #: ../src/richtext/richtextindentspage.cpp:292
 #: ../src/richtext/richtextliststylepage.cpp:440
@@ -6610,9 +6590,8 @@ msgstr "De grootte van de bovenuitvulruimte."
 #: ../src/richtext/richtextsizepage.cpp:523
 #: ../src/richtext/richtextsizepage.cpp:531
 #: ../src/richtext/richtextsizepage.cpp:533
-#, fuzzy
 msgid "The top position."
-msgstr "De tab positie."
+msgstr "De bovenpositie."
 
 #: ../src/common/cmdline.cpp:1054
 #, c-format
@@ -7029,9 +7008,8 @@ msgstr "Eenheden voor de bodem uitvulbreedte."
 
 #: ../src/richtext/richtextsizepage.cpp:598
 #: ../src/richtext/richtextsizepage.cpp:600
-#, fuzzy
 msgid "Units for the bottom position."
-msgstr "Eenheden voor de bodem uitvulbreedte."
+msgstr "Eenheden voor de onderpositie."
 
 #: ../src/richtext/richtextborderspage.cpp:283
 #: ../src/richtext/richtextborderspage.cpp:285
@@ -7055,9 +7033,8 @@ msgstr "Eenheden voor de linker uitvulbreedte."
 
 #: ../src/richtext/richtextsizepage.cpp:514
 #: ../src/richtext/richtextsizepage.cpp:516
-#, fuzzy
 msgid "Units for the left position."
-msgstr "Eenheden voor de linker uitvulbreedte."
+msgstr "Eenheden voor de linkerpositie."
 
 #: ../src/richtext/richtextsizepage.cpp:447
 #: ../src/richtext/richtextsizepage.cpp:449
@@ -7111,9 +7088,8 @@ msgstr "Eenheden voor de rechter uitvulbreedte."
 
 #: ../src/richtext/richtextsizepage.cpp:570
 #: ../src/richtext/richtextsizepage.cpp:572
-#, fuzzy
 msgid "Units for the right position."
-msgstr "Eenheden voor de rechter uitvulbreedte."
+msgstr "Eenheden voor de rechterpositie."
 
 #: ../src/richtext/richtextborderspage.cpp:343
 #: ../src/richtext/richtextborderspage.cpp:345
@@ -7137,9 +7113,8 @@ msgstr "Eenheden voor de boven uitvulbreedte."
 
 #: ../src/richtext/richtextsizepage.cpp:542
 #: ../src/richtext/richtextsizepage.cpp:544
-#, fuzzy
 msgid "Units for the top position."
-msgstr "Eenheden voor de boven uitvulbreedte."
+msgstr "Eenheden voor de bovenpositie."
 
 #: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
 msgid "Unknown"
@@ -7430,9 +7405,8 @@ msgid "Windows Japanese (CP 932) or Shift-JIS"
 msgstr "Windows Japans (CP 932) of Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:181
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows Arabisch (CP 1256)"
+msgstr "Windows Johab (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:170
 msgid "Windows Korean (CP 949)"
@@ -7468,9 +7442,8 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Turks (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Windows Grieks (CP 1253)"
+msgstr "Windows Vietnamees (CP 1258)"
 
 #: ../src/msw/utils.cpp:1296
 msgid "Windows Vista"
@@ -8131,7 +8104,7 @@ msgstr "procesinhoud beschrijving"
 #: ../src/richtext/richtextfontpage.cpp:184
 #: ../src/richtext/richtextfontpage.cpp:187
 msgid "pt"
-msgstr ""
+msgstr "pt"
 
 #: ../src/richtext/richtextfontpage.cpp:185
 #: ../src/richtext/richtextborderspage.cpp:279
