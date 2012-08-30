@@ -6867,6 +6867,10 @@ SOURCE=..\..\include\wx\settings.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\simplebook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\sizer.h
 # End Source File
 # Begin Source File

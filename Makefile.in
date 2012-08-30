@@ -4214,6 +4214,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/rawbmp.h \
 	wx/region.h \
 	wx/scopeguard.h \
+	wx/simplebook.h \
 	wx/spinbutt.h \
 	wx/spinctrl.h \
 	wx/splitter.h \

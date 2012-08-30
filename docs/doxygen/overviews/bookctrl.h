@@ -15,6 +15,7 @@ Classes:
 @li wxChoicebook
 @li wxListbook
 @li wxNotebook
+@li wxSimplebook
 @li wxTreebook
 @li wxToolbook
 
@@ -35,11 +36,15 @@ displayed one page at a time. wxWidgets has five variants of this control:
 @li wxChoicebook: controlled by a wxChoice
 @li wxListbook: controlled by a wxListCtrl
 @li wxNotebook: uses a row of tabs
+@li wxSimplebook: doesn't allow the user to change the page at all.
 @li wxTreebook: controlled by a wxTreeCtrl
 @li wxToolbook: controlled by a wxToolBar
 
 See the @ref page_samples_notebook for an example of wxBookCtrl usage.
 
+Notice that wxSimplebook is special in that it only allows the program to
+change the selection, thus it's usually used in slightly different
+circumstances than the other variants.
 
 @section overview_bookctrl_bestbookctrl Best Book
 

@@ -988,6 +988,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/rawbmp.h
     wx/region.h
     wx/scopeguard.h
+    wx/simplebook.h
     wx/spinbutt.h
     wx/spinctrl.h
     wx/splitter.h

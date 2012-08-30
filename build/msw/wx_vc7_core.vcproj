@@ -5715,6 +5715,9 @@
 				RelativePath="..\..\include\wx\settings.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\simplebook.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\sizer.h">
 			</File>
 			<File

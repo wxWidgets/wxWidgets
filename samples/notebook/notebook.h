@@ -13,6 +13,7 @@
 #include "wx/listbook.h"
 #include "wx/treebook.h"
 #include "wx/notebook.h"
+#include "wx/simplebook.h"
 #include "wx/toolbook.h"
 #include "wx/aui/auibook.h"
 
@@ -108,6 +109,7 @@ private:
         Type_Treebook,
         Type_Toolbook,
         Type_AuiNotebook,
+        Type_Simplebook,
         Type_Max
     } m_type;
     int m_orient;
@@ -144,6 +146,7 @@ enum ID_COMMANDS
     ID_BOOK_TREEBOOK,
     ID_BOOK_TOOLBOOK,
     ID_BOOK_AUINOTEBOOK,
+    ID_BOOK_SIMPLEBOOK,
     ID_BOOK_MAX,
 
     ID_ORIENT_DEFAULT,

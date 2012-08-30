@@ -254,6 +254,8 @@ The following are a variety of classes that are derived from wxWindow.
 @li wxSashWindow: Window with four optional sashes that can be dragged
 @li wxSashLayoutWindow: Window that can be involved in an IDE-like layout
     arrangement
+@li wxSimplebook: Another book control but one allowing only the program, not
+    the user, to change its current page.
 @li wxWizardPage: A base class for the page in wizard dialog.
 @li wxWizardPageSimple: A page in wizard dialog.
 @li wxCustomBackgroundWindow: A window allowing to set a custom bitmap.

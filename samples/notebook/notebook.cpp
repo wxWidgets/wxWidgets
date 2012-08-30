@@ -302,7 +302,7 @@ MyFrame::MyFrame()
 #elif wxUSE_AUI
     m_type = Type_Aui;
 #else
-    #error "Don't use Notebook sample without any book enabled in wxWidgets build!"
+    m_type = Type_Simplebook;
 #endif
 
     m_orient = ID_ORIENT_DEFAULT;
@@ -335,6 +335,7 @@ MyFrame::MyFrame()
 #if wxUSE_AUI
     menuType->AppendRadioItem(ID_BOOK_AUINOTEBOOK,   wxT("&AuiNotebook\tCtrl-6"));
 #endif
+    menuType->AppendRadioItem(ID_BOOK_SIMPLEBOOK, "&Simple book\tCtrl-7");
 
     menuType->Check(ID_BOOK_NOTEBOOK + m_type, true);
 
@@ -489,7 +490,9 @@ MyFrame::~MyFrame()
     #define CASE_AUINOTEBOOK(x)
 #endif
 
-#define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, toolb, aui, after)           \
+#define CASE_SIMPLEBOOK(x) case Type_Simplebook: x; break;
+
+#define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, toolb, aui, sb, after)       \
     switch ( m_type )                                                         \
     {                                                                         \
         CASE_NOTEBOOK(before nb after)                                        \
@@ -498,9 +501,10 @@ MyFrame::~MyFrame()
         CASE_TREEBOOK(before tb after)                                        \
         CASE_TOOLBOOK(before toolb after)                                     \
         CASE_AUINOTEBOOK(before aui after)                                    \
+        CASE_SIMPLEBOOK(before sb after)                                      \
                                                                               \
         default:                                                              \
-            wxFAIL_MSG( wxT("unknown book control type") );                    \
+            wxFAIL_MSG( wxT("unknown book control type") );                   \
     }
 
 void MyFrame::RecreateBook()
@@ -554,6 +558,7 @@ void MyFrame::RecreateBook()
                          wxTreebook,
                          wxToolbook,
                          wxAuiNotebook,
+                         wxSimplebook,
                      (m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags));
 
     if ( !m_bookCtrl )
