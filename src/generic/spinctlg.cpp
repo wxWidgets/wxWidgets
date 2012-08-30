@@ -159,7 +159,6 @@ void wxSpinCtrlGenericBase::Init()
     m_max           = 100;
     m_increment     = 1;
     m_snap_to_ticks = false;
-    m_format        = wxS("%g");
 
     m_spin_value    = 0;
 
@@ -207,10 +206,10 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     if ( !value.empty() )
     {
         double d;
-        if ( value.ToDouble(&d) )
+        if ( DoTextToValue(value, &d) )
         {
             m_value = d;
-            m_textCtrl->SetValue(wxString::Format(m_format, m_value));
+            m_textCtrl->SetValue(DoValueToText(m_value));
         }
     }
 
@@ -448,7 +447,7 @@ bool wxSpinCtrlGenericBase::SyncSpinToText()
         return false;
 
     double textValue;
-    if ( m_textCtrl->GetValue().ToDouble(&textValue) )
+    if ( DoTextToValue(m_textCtrl->GetValue(), &textValue) )
     {
         if (textValue > m_max)
             textValue = m_max;
@@ -476,7 +475,7 @@ void wxSpinCtrlGenericBase::SetValue(const wxString& text)
     wxCHECK_RET( m_textCtrl, wxT("invalid call to wxSpinCtrl::SetValue") );
 
     double val;
-    if ( text.ToDouble(&val) && InRange(val) )
+    if ( DoTextToValue(text, &val) && InRange(val) )
     {
         DoSetValue(val);
     }
@@ -508,12 +507,12 @@ bool wxSpinCtrlGenericBase::DoSetValue(double val)
         }
     }
 
-    wxString str(wxString::Format(m_format.c_str(), val));
+    wxString str(DoValueToText(val));
 
     if ((val != m_value) || (str != m_textCtrl->GetValue()))
     {
-        m_value = val;
-        str.ToDouble( &m_value );    // wysiwyg for textctrl
+        if ( !DoTextToValue(str, &m_value ) )    // wysiwyg for textctrl
+            m_value = val;
         m_textCtrl->SetValue( str );
         m_textCtrl->SetInsertionPointEnd();
         m_textCtrl->DiscardEdits();
@@ -572,6 +571,22 @@ void wxSpinCtrl::DoSendEvent()
     GetEventHandler()->ProcessEvent( event );
 }
 
+bool wxSpinCtrl::DoTextToValue(const wxString& text, double *val)
+{
+    long lval;
+    if ( !text.ToLong(&lval) )
+        return false;
+
+    *val = static_cast<double>(lval);
+
+    return true;
+}
+
+wxString wxSpinCtrl::DoValueToText(double val)
+{
+    return wxString::Format("%ld", static_cast<long>(val));
+}
+
 #endif // !wxHAS_NATIVE_SPINCTRL
 
 //-----------------------------------------------------------------------------
@@ -587,6 +602,16 @@ void wxSpinCtrlDouble::DoSendEvent()
     event.SetValue(m_value);
     event.SetString(m_textCtrl->GetValue());
     GetEventHandler()->ProcessEvent( event );
+}
+
+bool wxSpinCtrlDouble::DoTextToValue(const wxString& text, double *val)
+{
+    return text.ToDouble(val);
+}
+
+wxString wxSpinCtrlDouble::DoValueToText(double val)
+{
+    return wxString::Format(m_format, val);
 }
 
 void wxSpinCtrlDouble::SetDigits(unsigned digits)

@@ -129,6 +129,10 @@ protected:
     // Send the correct event type
     virtual void DoSendEvent() = 0;
 
+    // Convert the text to/from the corresponding value.
+    virtual bool DoTextToValue(const wxString& text, double *val) = 0;
+    virtual wxString DoValueToText(double val) = 0;
+
     // check if the value is in range
     bool InRange(double n) const { return (n >= m_min) && (n <= m_max); }
 
@@ -141,7 +145,6 @@ protected:
     double m_max;
     double m_increment;
     bool   m_snap_to_ticks;
-    wxString m_format;
 
     int m_spin_value;
 
@@ -299,6 +302,8 @@ public:
 protected:
     virtual void DoSendEvent();
 
+    virtual bool DoTextToValue(const wxString& text, double *val);
+    virtual wxString DoValueToText(double val);
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
 
@@ -311,7 +316,7 @@ protected:
 class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxSpinCtrlGenericBase
 {
 public:
-    wxSpinCtrlDouble() : m_digits(0) { }
+    wxSpinCtrlDouble() { Init(); }
     wxSpinCtrlDouble(wxWindow *parent,
                      wxWindowID id = wxID_ANY,
                      const wxString& value = wxEmptyString,
@@ -322,7 +327,8 @@ public:
                      double inc = 1,
                      const wxString& name = wxT("wxSpinCtrlDouble"))
     {
-        m_digits = 0;
+        Init();
+
         Create(parent, id, value, pos, size, style,
                min, max, initial, inc, name);
     }
@@ -360,7 +366,20 @@ public:
 protected:
     virtual void DoSendEvent();
 
+    virtual bool DoTextToValue(const wxString& text, double *val);
+    virtual wxString DoValueToText(double val);
+
     unsigned m_digits;
+
+private:
+    // Common part of all ctors.
+    void Init()
+    {
+        m_digits = 0;
+        m_format = wxS("%g");
+    }
+
+    wxString m_format;
 
     DECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble)
 };
