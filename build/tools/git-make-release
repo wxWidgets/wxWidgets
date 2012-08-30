@@ -54,6 +54,9 @@ find $prefix/include/wx -type f -name setup0.h | while read f; do
     mv $f ${f%0.h}.h
 done
 
+# Compile gettext catalogs.
+make -C $prefix/locale allmo
+
 tar cjf $prefix.tar.bz2 $prefix
 
 cd $prefix
