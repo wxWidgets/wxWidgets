@@ -277,6 +277,11 @@ protected:
         { wxFAIL_MSG(wxT("Override this function!")); }
 
 
+    // The derived class also may override the following method, also called
+    // from DoSetSelection(), to show/hide pages differently.
+    virtual void DoShowPage(wxWindow* page, bool show) { page->Show(show); }
+
+
     // Should we accept NULL page pointers in Add/InsertPage()?
     //
     // Default is no but derived classes may override it if they can treat NULL

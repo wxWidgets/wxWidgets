@@ -476,11 +476,11 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
         if ( !(flags & SetSelection_SendEvent) || allowed)
         {
             if ( oldSel != wxNOT_FOUND )
-                m_pages[oldSel]->Hide();
+                DoShowPage(m_pages[oldSel], false);
 
             wxWindow *page = m_pages[n];
             page->SetSize(GetPageRect());
-            page->Show();
+            DoShowPage(page, true);
 
             // change selection now to ignore the selection change event
             UpdateSelectedPage(n);
