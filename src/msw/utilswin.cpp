@@ -92,16 +92,17 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int f
                 if ( ok )
                 {
                     // for WWW_OpenURL, the index of the window to open the URL
-                    // in is -1 (meaning "current") by default, replace it with
-                    // 0 which means "new" (see KB article 160957)
-                    ok = ddeCmd.Replace(wxT("-1"), wxT("0"),
-                                        false /* only first occurrence */) == 1;
-                }
+                    // in may be -1 (meaning "current") by default, replace it
+                    // with 0 which means "new" (see KB article 160957), but
+                    // don't fail if there is no -1 as at least for recent
+                    // Firefox versions the default value already is 0
+                    ddeCmd.Replace(wxT("-1"), wxT("0"),
+                                   false /* only first occurrence */);
 
-                if ( ok )
-                {
                     // and also replace the parameters: the topic should
-                    // contain a placeholder for the URL
+                    // contain a placeholder for the URL and we should fail if
+                    // we didn't find it as this would mean that we have no way
+                    // of passing the URL to the browser
                     ok = ddeCmd.Replace(wxT("%1"), url, false) == 1;
                 }
 
