@@ -599,6 +599,7 @@ static const struct ToLongData
     long value;
 #endif // wxLongLong_t
     int flags;
+    int base;
 
     long LValue() const { return value; }
     unsigned long ULValue() const { return value; }
@@ -629,6 +630,22 @@ static const struct ToLongData
     { wxT("9223372036854775808"), wxULL(9223372036854775808), Number_LongLong |
                                                              Number_Unsigned },
 #endif // wxLongLong_t
+
+    // Base tests.
+    { wxT("010"),  10, Number_Ok, 10 },
+    { wxT("010"),   8, Number_Ok,  0 },
+    { wxT("010"),   8, Number_Ok,  8 },
+    { wxT("010"),  16, Number_Ok, 16 },
+
+    { wxT("0010"), 10, Number_Ok, 10 },
+    { wxT("0010"),  8, Number_Ok,  0 },
+    { wxT("0010"),  8, Number_Ok,  8 },
+    { wxT("0010"), 16, Number_Ok, 16 },
+
+    { wxT("0x11"),  0, Number_Invalid, 10 },
+    { wxT("0x11"), 17, Number_Ok,       0 },
+    { wxT("0x11"),  0, Number_Invalid,  8 },
+    { wxT("0x11"), 17, Number_Ok,      16 },
 };
 
 void StringTestCase::ToLong()
@@ -644,11 +661,13 @@ void StringTestCase::ToLong()
         // NOTE: unless you're using some exotic locale, ToCLong and ToLong
         //       should behave the same for our test data set:
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToCLong(&l) );
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(),
+                              wxString(ld.str).ToCLong(&l, ld.base) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.LValue(), l );
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLong(&l) );
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(),
+                              wxString(ld.str).ToLong(&l, ld.base) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.LValue(), l );
     }
@@ -678,11 +697,13 @@ void StringTestCase::ToULong()
         // NOTE: unless you're using some exotic locale, ToCLong and ToLong
         //       should behave the same for our test data set:
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToCULong(&ul) );
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(),
+                              wxString(ld.str).ToCULong(&ul, ld.base) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULong(&ul) );
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(),
+                              wxString(ld.str).ToULong(&ul, ld.base) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
     }
@@ -700,7 +721,8 @@ void StringTestCase::ToLongLong()
         if ( ld.flags & (Number_Long | Number_Unsigned) )
             continue;
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLongLong(&l) );
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(),
+                              wxString(ld.str).ToLongLong(&l, ld.base) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.LLValue(), l );
     }
@@ -716,7 +738,8 @@ void StringTestCase::ToULongLong()
         if ( ld.flags & (Number_Long | Number_Signed) )
             continue;
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULongLong(&ul) );
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(),
+                              wxString(ld.str).ToULongLong(&ul, ld.base) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.ULLValue(), ul );
     }
