@@ -1406,12 +1406,23 @@ public:
         @code
             void MyHandler::OnChar(wxKeyEvent& event)
             {
-                if ( event.GetUnicodeKey() != WXK_NONE )
+                wxChar uc = event.GetUnicodeKey();
+                if ( uc != WXK_NONE )
                 {
-                    // It's a printable character
-                    wxLogMessage("You pressed '%c'", event.GetUnicodeKey());
+                    // It's a "normal" character. Notice that this includes
+                    // control characters in 1..31 range, e.g. WXK_RETURN or
+                    // WXK_BACK.
+                    if ( wxIsprint(uc) )
+                    {
+                        wxLogMessage("You pressed '%c'", uc);
+                    }
+                    else
+                    {
+                        // It's a control character
+                        ...
+                    }
                 }
-                else
+                else // No Unicode equivalent.
                 {
                     // It's a special key, deal with all the known ones:
                     switch ( GetKeyCode() )
