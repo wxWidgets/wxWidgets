@@ -55,6 +55,10 @@
     #endif // wxCrtSetDbgFlag
 #endif // __WINDOWS__
 
+#if wxUSE_UNICODE && defined(__WXOSX__)
+    #include <locale.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
