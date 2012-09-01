@@ -1437,7 +1437,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
         else                                                                  \
             wxMAKE_LOGGER(Status).MaybeStore(wxLOG_KEY_FRAME).Log
 
-    #define wxVLogStatus(format, argptr) \
+    #define wxVLogStatus \
         wxMAKE_LOGGER(Status).MaybeStore(wxLOG_KEY_FRAME).LogV
 #endif // wxUSE_GUI
 
