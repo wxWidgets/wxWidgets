@@ -34,6 +34,7 @@
         *wxRichTextCtrl*SetFullLayoutRequired*;
         *wxRichTextCtrl*SetFullLayoutSavedPosition*;
         *wxRichTextCtrl*SetFullLayoutTime*;
+        *wxVListBox*GetItemRect*;
         *wxXmlNode*DeleteAttribute*;
 };
 

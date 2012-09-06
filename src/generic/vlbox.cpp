@@ -303,6 +303,29 @@ int wxVListBox::GetNextSelected(unsigned long& cookie) const
     return wxNOT_FOUND;
 }
 
+// Returns the position and size of the given line in listbox coordinates
+wxRect wxVListBox::GetItemRect(size_t line) const
+{
+    wxRect rect(0,0,0,0);
+
+    // is this line visible?
+    if ( !IsVisible(line) )
+    {
+        // no, it is useless to do anything
+        return rect;
+    }
+
+    // calculate the rect occupied by this line on screen
+    rect.width = GetClientSize().x;
+    rect.height = OnGetLineHeight(line);
+    for ( size_t n = GetVisibleBegin(); n < line; n++ )
+    {
+        rect.y += OnGetLineHeight(n);
+    }
+
+    return rect;
+}
+
 // ----------------------------------------------------------------------------
 // wxVListBox appearance parameters
 // ----------------------------------------------------------------------------

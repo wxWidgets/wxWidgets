@@ -127,6 +127,10 @@ public:
     // get the background colour of selected cells
     const wxColour& GetSelectionBackground() const { return m_colBgSel; }
 
+#if wxABI_VERSION >= 20813
+    /// Returns the position and size of the given line in listbox coordinates
+    wxRect GetItemRect(size_t line) const;
+#endif
 
     // operations
     // ----------
