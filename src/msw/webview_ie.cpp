@@ -601,6 +601,7 @@ void wxWebViewIE::Redo()
 
 long wxWebViewIE::Find(const wxString& text, int flags)
 {
+#if !defined(__MINGW32__) && !defined(__VISUALC6__)
     //If the text is empty then we clear.
     if(text.IsEmpty())
     {
@@ -644,6 +645,9 @@ long wxWebViewIE::Find(const wxString& text, int flags)
     //find the text and return count.
     FindInternal(text, flags, wxWEB_VIEW_FIND_ADD_POINTERS);
     return m_findPointers.empty() ? wxNOT_FOUND : m_findPointers.size();
+#else
+    return wxNOT_FOUND;
+#endif
 }
 
 void wxWebViewIE::SetEditable(bool enable)
@@ -913,6 +917,7 @@ wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
 
 bool wxWebViewIE::IsElementVisible(IHTMLElement* elm)
 {
+#if !defined(__MINGW32__) && !defined(__VISUALC6__)
     IHTMLCurrentStyle* style;
     IHTMLElement *elm1 = elm;
     IHTMLElement2 *elm2;
@@ -957,10 +962,14 @@ bool wxWebViewIE::IsElementVisible(IHTMLElement* elm)
         }
     }
     return is_visible;
+#else
+    return false;
+#endif
 }
 
 void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_flag)
 {
+#if !defined(__MINGW32__) && !defined(__VISUALC6__)
     IMarkupServices *pIMS;
     IMarkupContainer *pIMC;
     IMarkupPointer *ptrBegin, *ptrEnd;
@@ -1039,10 +1048,12 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
         pIMS->Release();
     }
     document->Release();
+#endif
 }
 
 long wxWebViewIE::FindNext(int direction)
 {
+#if !defined(__MINGW32__) && !defined(__VISUALC6__)
     //Don't bother if we have no pointers set.
     if(m_findPointers.empty())
     {
@@ -1114,10 +1125,14 @@ long wxWebViewIE::FindNext(int direction)
     }
     document->Release();
     return ret;
+#else
+    return wxNOT_FOUND;
+#endif
 }
 
 void wxWebViewIE::FindClear()
 {
+#if !defined(__MINGW32__) && !defined(__VISUALC6__)
     //Reset find variables.
     m_findText.Empty();
     m_findFlags = wxWEB_VIEW_FIND_DEFAULT;
@@ -1135,6 +1150,7 @@ void wxWebViewIE::FindClear()
         m_findPointers[i].end->Release();
     }
     m_findPointers.clear();
+#endif
 }
 
 bool wxWebViewIE::EnableControlFeature(long flag, bool enable)
