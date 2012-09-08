@@ -753,7 +753,7 @@ outlineView:(NSOutlineView*)outlineView
 
     // send first the event to wxWidgets that the sorting has changed so that
     // the program can do special actions before the sorting actually starts:
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED,dvc->GetId()); // variable defintion
+    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED,dvc->GetId()); // variable definition
 
     event.SetEventObject(dvc);
     if (noOfDescriptors > 0)

@@ -166,7 +166,7 @@ public :
     virtual void InsertOrAppend(wxMenuItem *pItem, size_t pos)
     {
         NSMenuItem* nsmenuitem = (NSMenuItem*) pItem->GetPeer()->GetHMenuItem();
-        // make sure a call of SetSubMenu is also reflected (occuring after Create)
+        // make sure a call of SetSubMenu is also reflected (occurring after Create)
         // update the native menu item accordingly
         
         if ( pItem->IsSubMenu() )

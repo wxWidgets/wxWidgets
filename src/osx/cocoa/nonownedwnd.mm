@@ -111,7 +111,7 @@ bool shouldHandleSelector(SEL selector)
     return (wxNonOwnedWindowCocoaImpl*) wxNonOwnedWindowImpl::FindFromWXWindow( self );
 }
 
-// TODO in cocoa everything during a drag is sent to the NSWindow the mouse down occured, 
+// TODO in cocoa everything during a drag is sent to the NSWindow the mouse down occurred,
 // this does not conform to the wx behaviour if the window is not captured, so try to resend
 // or capture all wx mouse event handling at the tlw as we did for carbon
 
