@@ -149,11 +149,11 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
                 }
                 LogTraceArray(" - system preferred languages", preferred);
 
-                for ( wxArrayString::const_iterator i = preferred.begin();
-                      i != preferred.end();
-                      ++i )
+                for ( wxArrayString::const_iterator j = preferred.begin();
+                      j != preferred.end();
+                      ++j )
                 {
-                    wxString lang(*i);
+                    wxString lang(*j);
                     lang.Replace("-", "_");
                     if ( available.Index(lang) != wxNOT_FOUND )
                         return lang;
