@@ -110,10 +110,8 @@ static BOOL wxShellNotifyIcon(DWORD dwMessage, NOTIFYICONDATA *pData)
 // wxTaskBarIconWindow: helper window
 // ----------------------------------------------------------------------------
 
-// NB: this class serves two purposes:
-//     1. win32 needs a HWND associated with taskbar icon, this provides it
-//     2. we need wxTopLevelWindow so that the app doesn't exit when
-//        last frame is closed but there still is a taskbar icon
+// We need a HWND to create a taskbar icon, so create a special hidden window
+// just to be able to use its HWND.
 class wxTaskBarIconWindow : public wxFrame
 {
 public:
@@ -123,6 +121,11 @@ public:
     {
     }
 
+    // This implicitly created window shouldn't prevent the application from
+    // exiting if all its other windows are closed.
+    virtual bool ShouldPreventAppExit() const { return false; }
+
+protected:
     WXLRESULT MSWWindowProc(WXUINT msg,
                             WXWPARAM wParam, WXLPARAM lParam)
     {

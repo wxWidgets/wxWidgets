@@ -126,8 +126,8 @@ public:
     wxSizerFlags& Border(int direction, int borderInPixels)
     {
         wxCHECK_MSG( !(direction & ~wxALL), *this,
-                     wxS("direction must be a combination of wxDirection enum "
-                         "values.") );
+                     wxS("direction must be a combination of wxDirection ")
+                     wxS("enum values.") );
 
         m_flags &= ~wxALL;
         m_flags |= direction;
