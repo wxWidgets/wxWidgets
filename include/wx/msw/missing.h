@@ -651,6 +651,10 @@ typedef struct
 #define INET_E_CODE_INSTALL_SUPPRESSED 0x800C0400L
 #endif
 
+#ifndef MUI_LANGUAGE_NAME
+#define MUI_LANGUAGE_NAME 0x8
+#endif
+
 //We need to check if we are using MinGW or mingw-w64 as their
 //definitions are different
 

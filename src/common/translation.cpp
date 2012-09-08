@@ -54,6 +54,7 @@
     #include "wx/dynlib.h"
     #include "wx/scopedarray.h"
     #include "wx/msw/wrapwin.h"
+    #include "wx/msw/missing.h"
 #endif
 #ifdef __WXOSX__
     #include "wx/osx/core/cfstring.h"
