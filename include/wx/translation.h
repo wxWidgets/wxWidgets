@@ -132,6 +132,11 @@ public:
     // get languages available for this app
     wxArrayString GetAvailableTranslations(const wxString& domain) const;
 
+    // find best translation language for given domain
+    wxString GetBestTranslation(const wxString& domain, wxLanguage msgIdLanguage);
+    wxString GetBestTranslation(const wxString& domain,
+                                const wxString& msgIdLanguage = "en");
+
     // add standard wxWidgets catalog ("wxstd")
     bool AddStdCatalog();
 
@@ -167,10 +172,6 @@ public:
 private:
     // perform loading of the catalog via m_loader
     bool LoadCatalog(const wxString& domain, const wxString& lang);
-
-    // find best translation for given domain
-    wxString ChooseLanguageForDomain(const wxString& domain,
-                                     const wxString& msgIdLang);
 
     // find catalog by name in a linked list, return NULL if !found
     wxMsgCatalog *FindCatalog(const wxString& domain) const;

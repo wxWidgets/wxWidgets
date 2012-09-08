@@ -30,7 +30,7 @@
 
     @since 2.9.1
 
-    @see wxLocale
+    @see wxLocale, wxTranslationsLoader, wxFileTranslationsLoader
  */
 class wxTranslations
 {
@@ -85,8 +85,57 @@ public:
         This method can be used e.g. to populate list of application's
         translations offered to the user. To do this, pass the app's main
         catalog as @a domain.
+
+        @see GetBestTranslation()
      */
     wxArrayString GetAvailableTranslations(const wxString& domain) const;
+
+    /**
+        Returns the best UI language for the @a domain.
+
+        The language is determined from the preferred UI language or languages
+        list the user configured in the OS. Notice that this may or may not
+        correspond to the default @em locale as obtained from
+        wxLocale::GetSystemLanguage(); modern operation systems (Windows
+        Vista+, OS X) have separate language and regional (= locale) settings.
+
+        @param domain
+            The catalog domain to look for.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code
+            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+
+        @return Language code if a suitable match was found, empty string
+                otherwise.
+
+        @since 2.9.5
+     */
+    wxString GetBestTranslation(const wxString& domain, wxLanguage msgIdLanguage);
+
+    /**
+        Returns the best UI language for the @a domain.
+
+        The language is determined from the preferred UI language or languages
+        list the user configured in the OS. Notice that this may or may not
+        correspond to the default @em locale as obtained from
+        wxLocale::GetSystemLanguage(); modern operation systems (Windows
+        Vista+, OS X) have separate language and regional (= locale) settings.
+
+        @param domain
+            The catalog domain to look for.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code
+            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+
+        @return Language code if a suitable match was found, empty string
+                otherwise.
+
+        @since 2.9.5
+     */
+    wxString GetBestTranslation(const wxString& domain,
+                                const wxString& msgIdLanguage = "en");
 
     /**
         Add standard wxWidgets catalogs ("wxstd" and possible port-specific

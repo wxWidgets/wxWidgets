@@ -391,10 +391,17 @@ public:
     static wxString GetSystemEncodingName();
 
     /**
-        Tries to detect the user's default language setting.
+        Tries to detect the user's default locale setting.
 
         Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing
         algorithm failed.
+
+        @note This function works with @em locales and returns the user's default
+              locale. This may be, and usually is, the same as their preferred UI
+              language, but it's not the same thing. Use wxTranslation to obtain
+              @em language information.
+
+        @see wxTranslations::GetBestTranslation().
     */
     static int GetSystemLanguage();
 

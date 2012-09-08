@@ -51,7 +51,14 @@
 #include "wx/hashset.h"
 
 #ifdef __WINDOWS__
+    #include "wx/dynlib.h"
+    #include "wx/scopedarray.h"
     #include "wx/msw/wrapwin.h"
+#endif
+#ifdef __WXOSX__
+    #include "wx/osx/core/cfstring.h"
+    #include <CoreFoundation/CFBundle.h>
+    #include <CoreFoundation/CFLocale.h>
 #endif
 
 // ----------------------------------------------------------------------------
@@ -82,6 +89,148 @@ namespace
 // of making the public wxMsgCatalog and wxTranslationsLoader APIs ugly, we
 // store them in this global map.
 wxStringToStringHashMap gs_msgIdCharset;
+#endif
+
+// ----------------------------------------------------------------------------
+// Platform specific helpers
+// ----------------------------------------------------------------------------
+
+void LogTraceArray(const char *prefix, const wxArrayString& arr)
+{
+    wxLogTrace(TRACE_I18N, "%s: [%s]", prefix, wxJoin(arr, ','));
+}
+
+// Use locale-based detection as a fallback
+wxString GetPreferredUILanguageFallback(const wxArrayString& WXUNUSED(available))
+{
+    const wxString lang = wxLocale::GetLanguageCanonicalName(wxLocale::GetSystemLanguage());
+    wxLogTrace(TRACE_I18N, " - obtained best language from locale: %s", lang);
+    return lang;
+}
+
+#ifdef __WINDOWS__
+
+wxString GetPreferredUILanguage(const wxArrayString& available)
+{
+    typedef BOOL (WINAPI *GetUserPreferredUILanguages_t)(DWORD, PULONG, PWSTR, PULONG);
+    static GetUserPreferredUILanguages_t s_pfnGetUserPreferredUILanguages = NULL;
+    static bool s_initDone = false;
+    if ( !s_initDone )
+    {
+        wxLoadedDLL dllKernel32("kernel32.dll");
+        wxDL_INIT_FUNC(s_pfn, GetUserPreferredUILanguages, dllKernel32);
+        s_initDone = true;
+    }
+
+    if ( s_pfnGetUserPreferredUILanguages )
+    {
+        ULONG numLangs;
+        ULONG bufferSize = 0;
+        if ( (*s_pfnGetUserPreferredUILanguages)(MUI_LANGUAGE_NAME,
+                                                 &numLangs,
+                                                 NULL,
+                                                 &bufferSize) )
+        {
+            wxScopedArray<WCHAR> langs(new WCHAR[bufferSize]);
+            if ( (*s_pfnGetUserPreferredUILanguages)(MUI_LANGUAGE_NAME,
+                                                     &numLangs,
+                                                     langs.get(),
+                                                     &bufferSize) )
+            {
+                wxArrayString preferred;
+
+                WCHAR *buf = langs.get();
+                for ( unsigned i = 0; i < numLangs; i++ )
+                {
+                    const wxString lang(buf);
+                    preferred.push_back(lang);
+                    buf += lang.length() + 1;
+                }
+                LogTraceArray(" - system preferred languages", preferred);
+
+                for ( wxArrayString::const_iterator i = preferred.begin();
+                      i != preferred.end();
+                      ++i )
+                {
+                    wxString lang(*i);
+                    lang.Replace("-", "_");
+                    if ( available.Index(lang) != wxNOT_FOUND )
+                        return lang;
+                    size_t pos = lang.find('_');
+                    if ( pos != wxString::npos )
+                    {
+                        lang = lang.substr(0, pos);
+                        if ( available.Index(lang) != wxNOT_FOUND )
+                            return lang;
+                    }
+                }
+            }
+        }
+    }
+
+    return GetPreferredUILanguageFallback(available);
+}
+
+#elif defined(__WXOSX__)
+
+void LogTraceArray(const char *prefix, CFArrayRef arr)
+{
+    wxString s;
+    const unsigned count = CFArrayGetCount(arr);
+    if ( count )
+    {
+        s += wxCFStringRef::AsString((CFStringRef)CFArrayGetValueAtIndex(arr, 0));
+        for ( unsigned i = 1 ; i < count; i++ )
+            s += "," + wxCFStringRef::AsString((CFStringRef)CFArrayGetValueAtIndex(arr, i));
+    }
+    wxLogTrace(TRACE_I18N, "%s: [%s]", prefix, s);
+}
+
+wxString GetPreferredUILanguage(const wxArrayString& available)
+{
+    wxStringToStringHashMap availableNormalized;
+    wxCFRef<CFMutableArrayRef> availableArr(
+        CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks));
+
+    for ( wxArrayString::const_iterator i = available.begin();
+          i != available.end();
+          ++i )
+    {
+        wxString lang(*i);
+        wxCFStringRef code_wx(*i);
+        wxCFStringRef code_norm(
+            CFLocaleCreateCanonicalLanguageIdentifierFromString(kCFAllocatorDefault, code_wx));
+        CFArrayAppendValue(availableArr, code_norm);
+        availableNormalized[code_norm.AsString()] = *i;
+    }
+    LogTraceArray(" - normalized available list", availableArr);
+
+    wxCFRef<CFArrayRef> prefArr(
+        CFBundleCopyLocalizationsForPreferences(availableArr, NULL));
+    LogTraceArray(" - system preferred languages", prefArr);
+
+    unsigned prefArrLength = CFArrayGetCount(prefArr);
+    if ( prefArrLength > 0 )
+    {
+        // Lookup the name in 'available' by index -- we need to get the
+        // original value corresponding to the normalized one chosen.
+        wxString lang(wxCFStringRef::AsString((CFStringRef)CFArrayGetValueAtIndex(prefArr, 0)));
+        wxStringToStringHashMap::const_iterator i = availableNormalized.find(lang);
+        if ( i == availableNormalized.end() )
+            return lang;
+        else
+            return i->second;
+    }
+
+    return GetPreferredUILanguageFallback(available);
+}
+
+#else
+
+// On Unix, there's just one language=locale setting, so we should always
+// use that.
+#define GetPreferredUILanguage GetPreferredUILanguageFallback
+
 #endif
 
 } // anonymous namespace
@@ -1336,7 +1485,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
                                 wxLanguage msgIdLanguage)
 {
     const wxString msgIdLang = wxLocale::GetLanguageCanonicalName(msgIdLanguage);
-    const wxString domain_lang = ChooseLanguageForDomain(domain, msgIdLang);
+    const wxString domain_lang = GetBestTranslation(domain, msgIdLang);
 
     if ( domain_lang.empty() )
     {
@@ -1423,18 +1572,30 @@ bool wxTranslations::IsLoaded(const wxString& domain) const
     return FindCatalog(domain) != NULL;
 }
 
+wxString wxTranslations::GetBestTranslation(const wxString& domain,
+                                            wxLanguage msgIdLanguage)
+{
+    const wxString lang = wxLocale::GetLanguageCanonicalName(msgIdLanguage);
+    return GetBestTranslation(domain, lang);
+}
 
-wxString wxTranslations::ChooseLanguageForDomain(const wxString& WXUNUSED(domain),
-                                                 const wxString& WXUNUSED(msgIdLang))
+wxString wxTranslations::GetBestTranslation(const wxString& domain,
+                                            const wxString& msgIdLanguage)
 {
     // explicitly set language should always be respected
     if ( !m_lang.empty() )
         return m_lang;
 
-    // TODO: if the default language is used, pick the best (by comparing
-    //       available languages with user's preferences), instead of blindly
-    //       trusting availability of system language translation
-    return wxLocale::GetLanguageCanonicalName(wxLocale::GetSystemLanguage());
+    wxArrayString available(GetAvailableTranslations(domain));
+    // it's OK to have duplicates, so just add msgid language
+    available.push_back(msgIdLanguage);
+    available.push_back(msgIdLanguage.BeforeFirst('_'));
+
+    wxLogTrace(TRACE_I18N, "choosing best language for domain '%s'", domain);
+    LogTraceArray(" - available translations", available);
+    const wxString lang = GetPreferredUILanguage(available);
+    wxLogTrace(TRACE_I18N, " => using language '%s'", lang);
+    return lang;
 }
 
 
