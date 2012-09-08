@@ -138,6 +138,7 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas)
     SetCurrent(*canvas);
 
     // set up the parameters we want to use
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);

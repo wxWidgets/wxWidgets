@@ -276,7 +276,7 @@ void TestGLCanvas::InitGL()
     static const GLfloat light1_color[4] = { 0.4f, 0.4f, 1.0f, 1.0f };
 
     /* remove back faces */
-    glDisable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
     /* speedups */
