@@ -709,7 +709,7 @@ int wxRichTextStyleListBox::SetStyleSelection(const wxString& name)
     {
         SetSelection(i);
         if (!IsVisible(i))
-            ScrollToLine(i);
+            ScrollToRow(i);
     }
     return i;
 }
