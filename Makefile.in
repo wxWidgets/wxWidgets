@@ -2163,6 +2163,7 @@ COND_PLATFORM_UNIX_1_GTK_PLATFORM_HDR =  \
 	wx/unix/fontutil.h \
 	wx/unix/utilsx11.h
 @COND_PLATFORM_UNIX_1@GTK_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_GTK_PLATFORM_HDR)
+@COND_TOOLKIT_MSW@UNIV_PLATFORM_HDR = wx/msw/evtloop.h
 @COND_PLATFORM_MACOSX_1@ADVANCED_GTK_PLATFORM_HDR = \
 @COND_PLATFORM_MACOSX_1@	wx/unix/joystick.h wx/unix/sound.h \
 @COND_PLATFORM_MACOSX_1@	wx/unix/taskbarx11.h
@@ -3949,6 +3950,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 @COND_TOOLKIT_X11@MEDIA_PLATFORM_HDR = 
 @COND_USE_GUI_1_WXUNIV_0@GUI_CORE_HEADERS = $(GUI_HDR)
 COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
+	$(UNIV_PLATFORM_HDR) \
 	wx/generic/accel.h \
 	wx/generic/animate.h \
 	wx/generic/clrpickerg.h \
@@ -4851,6 +4853,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
 	$(__PLATFORM_SRC_OBJECTS) \
+	$(__UNIV_PLATFORM_SRC_OBJECTS) \
 	monodll_generic_accel.o \
 	monodll_clrpickerg.o \
 	monodll_collpaneg.o \
@@ -6308,6 +6311,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_utilsx.o \
 	monodll_x11_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
+@COND_TOOLKIT_MSW@__UNIV_PLATFORM_SRC_OBJECTS = monodll_msw_evtloop.o
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_animatecmn.o \
 	monodll_bmpcboxcmn.o \
@@ -7054,6 +7058,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
 	$(__PLATFORM_SRC_OBJECTS_0) \
+	$(__UNIV_PLATFORM_SRC_OBJECTS_1) \
 	monolib_generic_accel.o \
 	monolib_clrpickerg.o \
 	monolib_collpaneg.o \
@@ -8511,6 +8516,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_utilsx.o \
 	monolib_x11_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
+@COND_TOOLKIT_MSW@__UNIV_PLATFORM_SRC_OBJECTS_1 = monolib_msw_evtloop.o
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_animatecmn.o \
 	monolib_bmpcboxcmn.o \
@@ -9433,6 +9439,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
 	$(__PLATFORM_SRC_OBJECTS_8) \
+	$(__UNIV_PLATFORM_SRC_OBJECTS_2) \
 	coredll_generic_accel.o \
 	coredll_clrpickerg.o \
 	coredll_collpaneg.o \
@@ -10890,6 +10897,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_utilsx.o \
 	coredll_x11_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5)
+@COND_TOOLKIT_MSW@__UNIV_PLATFORM_SRC_OBJECTS_2 = coredll_msw_evtloop.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__corelib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname)
@@ -11076,6 +11084,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
 	$(__PLATFORM_SRC_OBJECTS_9) \
+	$(__UNIV_PLATFORM_SRC_OBJECTS_3) \
 	corelib_generic_accel.o \
 	corelib_clrpickerg.o \
 	corelib_collpaneg.o \
@@ -12533,6 +12542,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_utilsx.o \
 	corelib_x11_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7)
+@COND_TOOLKIT_MSW@__UNIV_PLATFORM_SRC_OBJECTS_3 = corelib_msw_evtloop.o
 @COND_SHARED_1@____wxcore_namedll_DEP = $(__coredll___depname)
 @COND_SHARED_0@____wxcore_namelib_DEP = $(__corelib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___advdll___depname = \
@@ -20570,11 +20580,11 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
-
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_filedlg.o: $(srcdir)/src/msw/filedlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/filedlg.cpp
@@ -26264,11 +26274,11 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
-
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_filedlg.o: $(srcdir)/src/msw/filedlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/filedlg.cpp
@@ -32126,11 +32136,11 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
-
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_filedlg.o: $(srcdir)/src/msw/filedlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/filedlg.cpp
@@ -36371,11 +36381,11 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
-
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_filedlg.o: $(srcdir)/src/msw/filedlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/filedlg.cpp

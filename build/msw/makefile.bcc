@@ -2077,6 +2077,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_helpwin.obj \
 	$(OBJS)\monodll_automtn.obj \
 	$(OBJS)\monodll_uuid.obj \
+	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_generic_accel.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
@@ -2864,6 +2865,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_helpwin.obj \
 	$(OBJS)\monolib_automtn.obj \
 	$(OBJS)\monolib_uuid.obj \
+	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_generic_accel.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
@@ -3533,6 +3535,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_helpwin.obj \
 	$(OBJS)\coredll_automtn.obj \
 	$(OBJS)\coredll_uuid.obj \
+	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_generic_accel.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
@@ -4078,6 +4081,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_helpwin.obj \
 	$(OBJS)\corelib_automtn.obj \
 	$(OBJS)\corelib_uuid.obj \
+	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_generic_accel.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
@@ -6554,9 +6558,6 @@ $(OBJS)\monodll_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 $(OBJS)\monodll_dragimag.obj: ..\..\src\msw\dragimag.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\dragimag.cpp
 
-$(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
-
 $(OBJS)\monodll_filedlg.obj: ..\..\src\msw\filedlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\filedlg.cpp
 
@@ -7545,6 +7546,11 @@ $(OBJS)\monodll_fontpickerg.obj: ..\..\src\generic\fontpickerg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\prntdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -8970,9 +8976,6 @@ $(OBJS)\monolib_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 $(OBJS)\monolib_dragimag.obj: ..\..\src\msw\dragimag.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\dragimag.cpp
 
-$(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
-
 $(OBJS)\monolib_filedlg.obj: ..\..\src\msw\filedlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\filedlg.cpp
 
@@ -9961,6 +9964,11 @@ $(OBJS)\monolib_fontpickerg.obj: ..\..\src\generic\fontpickerg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\prntdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -11797,9 +11805,6 @@ $(OBJS)\coredll_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 $(OBJS)\coredll_dragimag.obj: ..\..\src\msw\dragimag.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\dragimag.cpp
 
-$(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
-
 $(OBJS)\coredll_filedlg.obj: ..\..\src\msw\filedlg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\filedlg.cpp
 
@@ -12344,6 +12349,11 @@ $(OBJS)\coredll_fontpickerg.obj: ..\..\src\generic\fontpickerg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\prntdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13210,9 +13220,6 @@ $(OBJS)\corelib_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 $(OBJS)\corelib_dragimag.obj: ..\..\src\msw\dragimag.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\dragimag.cpp
 
-$(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
-
 $(OBJS)\corelib_filedlg.obj: ..\..\src\msw\filedlg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\filedlg.cpp
 
@@ -13757,6 +13764,11 @@ $(OBJS)\corelib_fontpickerg.obj: ..\..\src\generic\fontpickerg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\prntdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

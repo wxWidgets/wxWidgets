@@ -2760,7 +2760,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/themes/win32.cpp
 </set>
 
+<set var="UNIV_PLATFORM_SRC" hints="files">
+    <if cond="TOOLKIT=='MSW'">
+        src/msw/evtloop.cpp
+    </if>
+</set>
+<set var="UNIV_PLATFORM_HDR" hints="files">
+    <if cond="TOOLKIT=='MSW'">
+        wx/msw/evtloop.h
+    </if>
+</set>
+
 <set var="UNIV_SRC" hints="files">
+    $(UNIV_PLATFORM_SRC)
     src/generic/accel.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
@@ -2812,6 +2824,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/winuniv.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
+    $(UNIV_PLATFORM_HDR)
     wx/generic/accel.h
     wx/generic/animate.h
     wx/generic/clrpickerg.h

@@ -2092,6 +2092,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_automtn.o \
 	$(OBJS)\monodll_uuid.o \
+	$(OBJS)\monodll_evtloop.o \
 	$(OBJS)\monodll_generic_accel.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
@@ -2885,6 +2886,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_automtn.o \
 	$(OBJS)\monolib_uuid.o \
+	$(OBJS)\monolib_evtloop.o \
 	$(OBJS)\monolib_generic_accel.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
@@ -3570,6 +3572,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_automtn.o \
 	$(OBJS)\coredll_uuid.o \
+	$(OBJS)\coredll_evtloop.o \
 	$(OBJS)\coredll_generic_accel.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
@@ -4123,6 +4126,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_automtn.o \
 	$(OBJS)\corelib_uuid.o \
+	$(OBJS)\corelib_evtloop.o \
 	$(OBJS)\corelib_generic_accel.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
@@ -6723,9 +6727,6 @@ $(OBJS)\monodll_dirdlg.o: ../../src/msw/dirdlg.cpp
 $(OBJS)\monodll_dragimag.o: ../../src/msw/dragimag.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_evtloop.o: ../../src/msw/evtloop.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7713,6 +7714,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_prntdlgg.o: ../../src/generic/prntdlgg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9139,9 +9145,6 @@ $(OBJS)\monolib_dirdlg.o: ../../src/msw/dirdlg.cpp
 $(OBJS)\monolib_dragimag.o: ../../src/msw/dragimag.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_evtloop.o: ../../src/msw/evtloop.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monolib_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10129,6 +10132,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_prntdlgg.o: ../../src/generic/prntdlgg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11966,9 +11974,6 @@ $(OBJS)\coredll_dirdlg.o: ../../src/msw/dirdlg.cpp
 $(OBJS)\coredll_dragimag.o: ../../src/msw/dragimag.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_evtloop.o: ../../src/msw/evtloop.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\coredll_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12512,6 +12517,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_prntdlgg.o: ../../src/generic/prntdlgg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13379,9 +13389,6 @@ $(OBJS)\corelib_dirdlg.o: ../../src/msw/dirdlg.cpp
 $(OBJS)\corelib_dragimag.o: ../../src/msw/dragimag.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\corelib_evtloop.o: ../../src/msw/evtloop.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\corelib_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13925,6 +13932,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_prntdlgg.o: ../../src/generic/prntdlgg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
