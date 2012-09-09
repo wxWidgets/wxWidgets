@@ -706,7 +706,11 @@ int wxRichTextStyleListBox::SetStyleSelection(const wxString& name)
 {
     int i = GetIndexForStyle(name);
     if (i > -1)
+    {
         SetSelection(i);
+        if (!IsVisible(i))
+            ScrollToLine(i);
+    }
     return i;
 }
 
