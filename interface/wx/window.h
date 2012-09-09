@@ -1923,7 +1923,16 @@ public:
     */
     void SetOwnBackgroundColour(const wxColour& colour);
 
+    /**
+        Return @true if this window inherits the background colour from its parent.
+
+        @see SetOwnBackgroundColour(), InheritAttributes()
+    */
     bool InheritsBackgroundColour() const;
+
+    /**
+        Return @true if a background colour has been set for this window.
+    */
     bool UseBgCol() const;
 
     /**
