@@ -155,7 +155,7 @@ void wxTextEntry::WriteText(const wxString& value)
 
 void wxTextEntry::DoSetValue(const wxString& value, int flags)
 {
-    if (value != GetValue())
+    if (value != DoGetValue())
     {
         // use Remove() rather than SelectAll() to avoid unnecessary clipboard
         // operations, and prevent triggering an apparent bug in GTK which
