@@ -666,6 +666,16 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
     event.m_metaDown = (gdk_event->state & GDK_META_MASK) != 0;
 
+    // At least with current Linux systems, MOD5 corresponds to AltGr key and
+    // we represent it, for consistency with Windows, which really allows to
+    // use Ctrl+Alt as a replacement for AltGr if this key is not present, as a
+    // combination of these two modifiers.
+    if ( gdk_event->state & GDK_MOD5_MASK )
+    {
+        event.m_controlDown =
+        event.m_altDown = true;
+    }
+
     // Normally we take the state of modifiers directly from the low level GDK
     // event but unfortunately GDK uses a different convention from MSW for the
     // key events corresponding to the modifier keys themselves: in it, when
