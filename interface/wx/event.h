@@ -1411,8 +1411,8 @@ public:
                 {
                     // It's a "normal" character. Notice that this includes
                     // control characters in 1..31 range, e.g. WXK_RETURN or
-                    // WXK_BACK.
-                    if ( wxIsprint(uc) )
+                    // WXK_BACK, so check for them explicitly.
+                    if ( uc >= 32 )
                     {
                         wxLogMessage("You pressed '%c'", uc);
                     }
