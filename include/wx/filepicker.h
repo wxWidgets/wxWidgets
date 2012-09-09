@@ -148,7 +148,7 @@ protected:
 class WXDLLIMPEXP_CORE wxFileDirPickerCtrlBase : public wxPickerBase
 {
 public:
-    wxFileDirPickerCtrlBase() : m_bIgnoreNextTextCtrlUpdate(false) {}
+    wxFileDirPickerCtrlBase() {}
 
 protected:
     // NB: no default values since this function will never be used
@@ -208,9 +208,6 @@ protected:
                                             const wxString& wildcard) = 0;
 
 protected:
-
-    // true if the next UpdateTextCtrl() call is to ignore
-    bool m_bIgnoreNextTextCtrlUpdate;
 
     // m_picker object as wxFileDirPickerWidgetBase interface
     wxFileDirPickerWidgetBase *m_pickerIface;

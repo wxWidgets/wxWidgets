@@ -100,8 +100,7 @@ class WXDLLIMPEXP_CORE wxFontPickerCtrl : public wxPickerBase
 {
 public:
     wxFontPickerCtrl()
-        : m_bIgnoreNextTextCtrlUpdate(false),
-        m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
+        : m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
     {
     }
 
@@ -116,8 +115,7 @@ public:
                      long style = wxFNTP_DEFAULT_STYLE,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxFontPickerCtrlNameStr)
-        : m_bIgnoreNextTextCtrlUpdate(false),
-          m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
+        : m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
     {
         Create(parent, id, initial, pos, size, style, validator, name);
     }
@@ -164,9 +162,6 @@ protected:
     // extracts the style for our picker from wxFontPickerCtrl's style
     long GetPickerStyle(long style) const
         { return (style & (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)); }
-
-    // true if the next UpdateTextCtrl() call is to ignore
-    bool m_bIgnoreNextTextCtrlUpdate;
 
     // the maximum pointsize allowed to the user
     unsigned int m_nMaxPointSize;

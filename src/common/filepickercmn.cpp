@@ -115,13 +115,6 @@ void wxFileDirPickerCtrlBase::UpdatePickerFromTextCtrl()
 {
     wxASSERT(m_text);
 
-    if (m_bIgnoreNextTextCtrlUpdate)
-    {
-        // ignore this update
-        m_bIgnoreNextTextCtrlUpdate = false;
-        return;
-    }
-
     // remove the eventually present path-separator from the end of the textctrl
     // string otherwise we would generate a wxFileDirPickerEvent when changing
     // from e.g. /home/user to /home/user/ and we want to avoid it !
@@ -150,11 +143,10 @@ void wxFileDirPickerCtrlBase::UpdateTextCtrlFromPicker()
     if (!m_text)
         return;     // no textctrl to update
 
-    // NOTE: this SetValue() will generate an unwanted wxEVT_COMMAND_TEXT_UPDATED
-    //       which will trigger a unneeded UpdateFromTextCtrl(); thus before using
-    //       SetValue() we set the m_bIgnoreNextTextCtrlUpdate flag...
-    m_bIgnoreNextTextCtrlUpdate = true;
-    m_text->SetValue(m_pickerIface->GetPath());
+    // Take care to use ChangeValue() here and not SetValue() to avoid
+    // generating an event that would trigger UpdateTextCtrlFromPicker()
+    // resulting in infinite recursion.
+    m_text->ChangeValue(m_pickerIface->GetPath());
 }
 
 
