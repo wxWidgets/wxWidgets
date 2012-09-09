@@ -297,7 +297,9 @@ void FilePickerWidgetsPage::UpdateFilePickerMode()
 
 void FilePickerWidgetsPage::OnButtonSetDir(wxCommandEvent& WXUNUSED(event))
 {
-    m_filePicker->SetInitialDirectory(m_textInitialDir->GetValue());
+    const wxString& dir = m_textInitialDir->GetValue();
+    m_filePicker->SetInitialDirectory(dir);
+    wxLogMessage("Initial directory set to \"%s\"", dir);
 }
 
 void FilePickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
