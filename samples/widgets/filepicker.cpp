@@ -60,7 +60,8 @@ enum
 {
     PickerPage_Reset = wxID_HIGHEST,
     PickerPage_File,
-    PickerPage_SetDir
+    PickerPage_SetDir,
+    PickerPage_CurrentPath
 };
 
 
@@ -102,6 +103,7 @@ protected:
     void OnCheckBox(wxCommandEvent &ev);
     void OnButtonReset(wxCommandEvent &ev);
     void OnButtonSetDir(wxCommandEvent &ev);
+    void OnUpdatePath(wxUpdateUIEvent &ev);
 
 
     // the picker
@@ -117,6 +119,7 @@ protected:
                *m_chkFileChangeDir,
                *m_chkSmall;
     wxRadioBox *m_radioFilePickerMode;
+    wxStaticText *m_labelPath;
     wxTextCtrl *m_textInitialDir;
 
     wxBoxSizer *m_sizer;
@@ -138,6 +141,8 @@ BEGIN_EVENT_TABLE(FilePickerWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, FilePickerWidgetsPage::OnCheckBox)
     EVT_RADIOBOX(wxID_ANY, FilePickerWidgetsPage::OnCheckBox)
+
+    EVT_UPDATE_UI(PickerPage_CurrentPath, FilePickerWidgetsPage::OnUpdatePath)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -194,15 +199,19 @@ void FilePickerWidgetsPage::CreateContent()
 
     Reset();    // set checkboxes state
 
-    // create pickers
+    // create the picker and the static text displaying its current value
+    m_labelPath = new wxStaticText(this, PickerPage_CurrentPath, "");
+
     m_filePicker = NULL;
     CreatePicker();
 
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
-    m_sizer->Add(m_filePicker, 0, wxEXPAND|wxALL, 5);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
+    m_sizer->AddStretchSpacer();
+    m_sizer->Add(m_filePicker, wxSizerFlags().Expand().Border());
+    m_sizer->AddStretchSpacer();
+    m_sizer->Add(m_labelPath, wxSizerFlags().Expand().Border());
+    m_sizer->AddStretchSpacer();
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
@@ -329,6 +338,11 @@ void FilePickerWidgetsPage::OnCheckBox(wxCommandEvent &event)
         UpdateFilePickerMode();
         RecreatePicker();
     }
+}
+
+void FilePickerWidgetsPage::OnUpdatePath(wxUpdateUIEvent& ev)
+{
+    ev.SetText( "Current path: " + m_filePicker->GetPath() );
 }
 
 #endif  // wxUSE_FILEPICKERCTRL
