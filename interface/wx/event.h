@@ -1393,11 +1393,11 @@ public:
         codes.
 
         Note that this method returns a meaningful value only for special
-        non-alphanumeric keys or if the user entered a character that can be
-        represented in current locale's default charset. Otherwise, e.g. if the
-        user enters a Japanese character in a program not using Japanese
-        locale, this method returns @c WXK_NONE and GetUnicodeKey() should be
-        used to obtain the corresponding Unicode character.
+        non-alphanumeric keys or if the user entered a Latin-1 character (this
+        includes ASCII and the accented letters found in Western European
+        languages but not letters of other alphabets such as e.g. Cyrillic).
+        Otherwise it simply method returns @c WXK_NONE and GetUnicodeKey()
+        should be used to obtain the corresponding Unicode character.
 
         Using GetUnicodeKey() is in general the right thing to do if you are
         interested in the characters typed by the user, GetKeyCode() should be
