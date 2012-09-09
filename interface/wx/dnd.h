@@ -133,6 +133,11 @@ public:
     virtual void OnLeave();
 
     /**
+        Returns the data wxDataObject associated with the drop target
+    */
+    wxDataObject *GetDataObject() const;
+
+    /**
         Sets the data wxDataObject associated with the drop target and deletes
         any previously associated data object.
     */
