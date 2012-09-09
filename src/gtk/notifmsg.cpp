@@ -138,6 +138,13 @@ bool wxNotificationMessage::Show(int timeout)
                             GetTitle().utf8_str(),
                             GetMessage().utf8_str(),
                             icon
+#if !wxUSE_LIBNOTIFY_0_7
+                            // There used to be an "associated window"
+                            // parameter in this function but it has
+                            // disappeared by 0.7, so use it for previous
+                            // versions only.
+                            , 0
+#endif // libnotify < 0.7
                          );
         if ( !m_notification )
         {

@@ -5668,17 +5668,26 @@ if test "$WXGTK2" = 1; then
 
     if test "$wxUSE_NOTIFICATION_MESSAGE" = "yes" ; then
         if test "$wxUSE_LIBNOTIFY" = "yes" ; then
+            HAVE_LIBNOTIFY=0
             PKG_CHECK_MODULES(LIBNOTIFY, [libnotify >= 0.7],
                 [
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBNOTIFY_LIBS"
-                    CFLAGS="$LIBNOTIFY_CFLAGS $CFLAGS"
-                    CXXFLAGS="$LIBNOTIFY_CFLAGS $CXXFLAGS"
-                    AC_DEFINE(wxUSE_LIBNOTIFY)
+                    HAVE_LIBNOTIFY=1
+                    AC_DEFINE(wxUSE_LIBNOTIFY_0_7)
                 ],
                 [
-                    AC_MSG_WARN([libnotify not found, wxNotificationMessage will use generic implementation.])
+                    PKG_CHECK_MODULES(LIBNOTIFY, [libnotify >= 0.4],
+                        [HAVE_LIBNOTIFY=1],
+                        [AC_MSG_WARN([libnotify not found, wxNotificationMessage will use generic implementation.])]
+                    )
                 ]
             )
+
+            if test "$HAVE_LIBNOTIFY" = "1" ; then
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBNOTIFY_LIBS"
+                CFLAGS="$LIBNOTIFY_CFLAGS $CFLAGS"
+                CXXFLAGS="$LIBNOTIFY_CFLAGS $CXXFLAGS"
+                AC_DEFINE(wxUSE_LIBNOTIFY)
+            fi
         fi
     fi
 

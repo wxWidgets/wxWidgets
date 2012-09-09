@@ -34032,6 +34032,7 @@ fi
 
     if test "$wxUSE_NOTIFICATION_MESSAGE" = "yes" ; then
         if test "$wxUSE_LIBNOTIFY" = "yes" ; then
+            HAVE_LIBNOTIFY=0
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY" >&5
@@ -34092,14 +34093,156 @@ fi
 	echo "$LIBNOTIFY_PKG_ERRORS" >&5
 
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY" >&5
+$as_echo_n "checking for LIBNOTIFY... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBNOTIFY_CFLAGS"; then
+        pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libnotify >= 0.4") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBNOTIFY_CFLAGS=`$PKG_CONFIG --cflags "libnotify >= 0.4" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBNOTIFY_LIBS"; then
+        pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libnotify >= 0.4") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBNOTIFY_LIBS=`$PKG_CONFIG --libs "libnotify >= 0.4" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libnotify >= 0.4"`
+        else
+	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libnotify >= 0.4"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBNOTIFY_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
 $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+
+elif test $pkg_failed = untried; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+$as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+
+else
+	LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
+	LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	HAVE_LIBNOTIFY=1
+fi
 
 
 elif test $pkg_failed = untried; then
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY" >&5
+$as_echo_n "checking for LIBNOTIFY... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBNOTIFY_CFLAGS"; then
+        pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libnotify >= 0.4") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBNOTIFY_CFLAGS=`$PKG_CONFIG --cflags "libnotify >= 0.4" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBNOTIFY_LIBS"; then
+        pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libnotify >= 0.4") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBNOTIFY_LIBS=`$PKG_CONFIG --libs "libnotify >= 0.4" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libnotify >= 0.4"`
+        else
+	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libnotify >= 0.4"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBNOTIFY_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
 $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+
+elif test $pkg_failed = untried; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+$as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+
+else
+	LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
+	LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	HAVE_LIBNOTIFY=1
+fi
 
 
 else
@@ -34108,13 +34251,19 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBNOTIFY_LIBS"
-                    CFLAGS="$LIBNOTIFY_CFLAGS $CFLAGS"
-                    CXXFLAGS="$LIBNOTIFY_CFLAGS $CXXFLAGS"
-                    $as_echo "#define wxUSE_LIBNOTIFY 1" >>confdefs.h
+                    HAVE_LIBNOTIFY=1
+                    $as_echo "#define wxUSE_LIBNOTIFY_0_7 1" >>confdefs.h
 
 
 fi
+
+            if test "$HAVE_LIBNOTIFY" = "1" ; then
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBNOTIFY_LIBS"
+                CFLAGS="$LIBNOTIFY_CFLAGS $CFLAGS"
+                CXXFLAGS="$LIBNOTIFY_CFLAGS $CXXFLAGS"
+                $as_echo "#define wxUSE_LIBNOTIFY 1" >>confdefs.h
+
+            fi
         fi
     fi
 

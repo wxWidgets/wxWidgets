@@ -827,6 +827,10 @@
  */
 #define wxUSE_LIBNOTIFY 0
 /*
+ * Use libnotify 0.7+ API.
+ */
+#define wxUSE_LIBNOTIFY_0_7 0
+/*
  * Use libXpm
  */
 #define wxHAVE_LIB_XPM 0
