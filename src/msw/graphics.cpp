@@ -381,6 +381,13 @@ public:
     // stroke lines connecting each of the points
     virtual void StrokeLines( size_t n, const wxPoint2DDouble *points);
 
+    // We don't have any specific implementation for this one in wxMSW but
+    // override it just to avoid warnings about hiding the base class virtual.
+    virtual void StrokeLines( size_t n, const wxPoint2DDouble *beginPoints, const wxPoint2DDouble *endPoints)
+    {
+        wxGraphicsContext::StrokeLines(n, beginPoints, endPoints);
+    }
+
     // draws a polygon
     virtual void DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
