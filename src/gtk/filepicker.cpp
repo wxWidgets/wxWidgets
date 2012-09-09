@@ -131,7 +131,15 @@ void wxFileButton::SetPath(const wxString &str)
 void wxFileButton::SetInitialDirectory(const wxString& dir)
 {
     if (m_dialog)
-        DoSetInitialDirectory(static_cast<wxFileDialog*>(m_dialog), dir);
+    {
+        // Only change the directory if the default file name doesn't have any
+        // directory in it, otherwise it takes precedence.
+        if ( m_path.find_first_of(wxFileName::GetPathSeparators()) ==
+                wxString::npos )
+        {
+            static_cast<wxFileDialog*>(m_dialog)->SetDirectory(dir);
+        }
+    }
     else
         wxGenericFileButton::SetInitialDirectory(dir);
 }

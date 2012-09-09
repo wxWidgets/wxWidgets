@@ -156,10 +156,6 @@ protected:
     void UpdatePathFromDialog(wxDialog *p)
         { m_path = wxStaticCast(p, wxFileDialog)->GetPath(); }
 
-    // Set the initial directory for the dialog but without overriding the
-    // directory of the currently selected file, if any.
-    void DoSetInitialDirectory(wxFileDialog* dialog, const wxString& dir);
-
 private:
     DECLARE_DYNAMIC_CLASS(wxGenericFileButton)
 };
