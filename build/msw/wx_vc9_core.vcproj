@@ -6232,6 +6232,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\webview_missing.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\webviewhistoryitem_ie.h"
 				>
 			</File>

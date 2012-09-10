@@ -542,6 +542,10 @@ SOURCE=..\..\include\wx\msw\webview_ie.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\webview_missing.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\webviewhistoryitem_ie.h
 # End Source File
 # End Group

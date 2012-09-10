@@ -3351,6 +3351,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MSW'">
         wx/msw/webviewhistoryitem_ie.h
         wx/msw/webview_ie.h
+        wx/msw/webview_missing.h
     </if>
     <if cond="TOOLKIT=='GTK'">
         wx/gtk/webviewhistoryitem_webkit.h

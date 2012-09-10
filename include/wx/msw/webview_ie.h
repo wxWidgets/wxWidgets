@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/msw/webviewie.h
+// Name:        include/wx/msw/webview_ie.h
 // Purpose:     wxMSW IE wxWebView backend
 // Author:      Marianne Gagnon
 // Id:          $Id$
@@ -22,226 +22,9 @@
 #include "wx/msw/private/comptr.h"
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/missing.h"
+#include "wx/msw/webview_missing.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
-
-/* Classes and definitions from urlmon.h vary in their
- * completeness between compilers and versions of compilers.
- * We implement our own versions here which should work
- * for all compilers. The definitions are taken from the
- * mingw-w64 headers which are public domain.
- */
-
-#ifndef REFRESH_NORMAL
-#define REFRESH_NORMAL 0
-#endif
-
-#ifndef REFRESH_COMPLETELY
-#define REFRESH_COMPLETELY 3
-#endif
-
-typedef enum __wxMIDL_IBindStatusCallback_0006
-{
-    wxBSCF_FIRSTDATANOTIFICATION = 0x1,
-    wxBSCF_INTERMEDIATEDATANOTIFICATION = 0x2,
-    wxBSCF_LASTDATANOTIFICATION = 0x4,
-    wxBSCF_DATAFULLYAVAILABLE = 0x8,
-    wxBSCF_AVAILABLEDATASIZEUNKNOWN = 0x10
-}   wxBSCF;
-
-EXTERN_C const IID CLSID_FileProtocol;
-
-typedef struct _tagwxBINDINFO
-{
-    ULONG cbSize;
-    LPWSTR szExtraInfo;
-    STGMEDIUM stgmedData;
-    DWORD grfBindInfoF;
-    DWORD dwBindVerb;
-    LPWSTR szCustomVerb;
-    DWORD cbstgmedData;
-    DWORD dwOptions;
-    DWORD dwOptionsFlags;
-    DWORD dwCodePage;
-    SECURITY_ATTRIBUTES securityAttributes;
-    IID iid;
-    IUnknown *pUnk;
-    DWORD dwReserved;
-}   wxBINDINFO;
-
-typedef struct _tagwxPROTOCOLDATA
-{
-    DWORD grfFlags;
-    DWORD dwState;
-    LPVOID pData;
-    ULONG cbData;
-}   wxPROTOCOLDATA;
-
-class wxIInternetBindInfo : public IUnknown
-{
-public:
-    virtual HRESULT wxSTDCALL GetBindInfo(DWORD *grfBINDF,wxBINDINFO *pbindinfo) = 0;
-    virtual HRESULT wxSTDCALL GetBindString(ULONG ulStringType,LPOLESTR *ppwzStr,
-                                         ULONG cEl,ULONG *pcElFetched) = 0;
-};
-
-class wxIInternetProtocolSink : public IUnknown
-{
-public:
-    virtual HRESULT wxSTDCALL Switch(wxPROTOCOLDATA *pProtocolData) = 0;
-    virtual HRESULT wxSTDCALL ReportProgress(ULONG ulStatusCode,
-                                          LPCWSTR szStatusText) = 0;
-    virtual HRESULT wxSTDCALL ReportData(DWORD grfBSCF,ULONG ulProgress,
-                                      ULONG ulProgressMax) = 0;
-    virtual HRESULT wxSTDCALL ReportResult(HRESULT hrResult,DWORD dwError,
-                                        LPCWSTR szResult) = 0;
-};
-
-class wxIInternetProtocolRoot : public IUnknown
-{
-public:
-    virtual HRESULT wxSTDCALL Start(LPCWSTR szUrl,wxIInternetProtocolSink *pOIProtSink,
-                                 wxIInternetBindInfo *pOIBindInfo,DWORD grfPI,
-                                 HANDLE_PTR dwReserved) = 0;
-    virtual HRESULT wxSTDCALL Continue(wxPROTOCOLDATA *pProtocolData) = 0;
-    virtual HRESULT wxSTDCALL Abort(HRESULT hrReason,DWORD dwOptions) = 0;
-    virtual HRESULT wxSTDCALL Terminate(DWORD dwOptions) = 0;
-    virtual HRESULT wxSTDCALL Suspend(void) = 0;
-    virtual HRESULT wxSTDCALL Resume(void) = 0;
-};
-
-
-class wxIInternetProtocol : public wxIInternetProtocolRoot
-{
-public:
-    virtual HRESULT wxSTDCALL Read(void *pv,ULONG cb,ULONG *pcbRead) = 0;
-    virtual HRESULT wxSTDCALL Seek(LARGE_INTEGER dlibMove,DWORD dwOrigin,
-                                ULARGE_INTEGER *plibNewPosition) = 0;
-    virtual HRESULT wxSTDCALL LockRequest(DWORD dwOptions) = 0;
-    virtual HRESULT wxSTDCALL UnlockRequest(void) = 0;
-};
-
-
-class wxIInternetSession : public IUnknown
-{
-  public:
-    virtual HRESULT wxSTDCALL RegisterNameSpace(IClassFactory *pCF,REFCLSID rclsid,
-                                             LPCWSTR pwzProtocol,
-                                             ULONG cPatterns,
-                                             const LPCWSTR *ppwzPatterns,
-                                             DWORD dwReserved) = 0;
-    virtual HRESULT wxSTDCALL UnregisterNameSpace(IClassFactory *pCF,
-                                               LPCWSTR pszProtocol) = 0;
-    virtual HRESULT wxSTDCALL RegisterMimeFilter(IClassFactory *pCF,
-                                              REFCLSID rclsid,
-                                              LPCWSTR pwzType) = 0;
-    virtual HRESULT wxSTDCALL UnregisterMimeFilter(IClassFactory *pCF,
-                                                LPCWSTR pwzType) = 0;
-    virtual HRESULT wxSTDCALL CreateBinding(LPBC pBC,LPCWSTR szUrl,
-                                         IUnknown *pUnkOuter,IUnknown **ppUnk,
-                                         wxIInternetProtocol **ppOInetProt,
-                                         DWORD dwOption) = 0;
-    virtual HRESULT wxSTDCALL SetSessionOption(DWORD dwOption,LPVOID pBuffer,
-                                            DWORD dwBufferLength,
-                                            DWORD dwReserved) = 0;
-    virtual HRESULT wxSTDCALL GetSessionOption(DWORD dwOption,LPVOID pBuffer,
-                                            DWORD *pdwBufferLength,
-                                            DWORD dwReserved) = 0;
-};
-
-/* END OF URLMON.H implementation */
-
-/* Same goes for the mshtmhst.h, these are also taken
- * from mingw-w64 headers.
- */
-
-typedef enum _tagwxDOCHOSTUIFLAG
-{
-    DOCHOSTUIFLAG_DIALOG = 0x1,
-    DOCHOSTUIFLAG_DISABLE_HELP_MENU = 0x2,
-    DOCHOSTUIFLAG_NO3DBORDER = 0x4,
-    DOCHOSTUIFLAG_SCROLL_NO = 0x8,
-    DOCHOSTUIFLAG_DISABLE_SCRIPT_INACTIVE = 0x10,
-    DOCHOSTUIFLAG_OPENNEWWIN = 0x20,
-    DOCHOSTUIFLAG_DISABLE_OFFSCREEN = 0x40,
-    DOCHOSTUIFLAG_FLAT_SCROLLBAR = 0x80,
-    DOCHOSTUIFLAG_DIV_BLOCKDEFAULT = 0x100,
-    DOCHOSTUIFLAG_ACTIVATE_CLIENTHIT_ONLY = 0x200,
-    DOCHOSTUIFLAG_OVERRIDEBEHAVIORFACTORY = 0x400,
-    DOCHOSTUIFLAG_CODEPAGELINKEDFONTS = 0x800,
-    DOCHOSTUIFLAG_URL_ENCODING_DISABLE_UTF8 = 0x1000,
-    DOCHOSTUIFLAG_URL_ENCODING_ENABLE_UTF8 = 0x2000,
-    DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE = 0x4000,
-    DOCHOSTUIFLAG_ENABLE_INPLACE_NAVIGATION = 0x10000,
-    DOCHOSTUIFLAG_IME_ENABLE_RECONVERSION = 0x20000,
-    DOCHOSTUIFLAG_THEME = 0x40000,
-    DOCHOSTUIFLAG_NOTHEME = 0x80000,
-    DOCHOSTUIFLAG_NOPICS = 0x100000,
-    DOCHOSTUIFLAG_NO3DOUTERBORDER = 0x200000,
-    DOCHOSTUIFLAG_DISABLE_EDIT_NS_FIXUP = 0x400000,
-    DOCHOSTUIFLAG_LOCAL_MACHINE_ACCESS_CHECK = 0x800000,
-    DOCHOSTUIFLAG_DISABLE_UNTRUSTEDPROTOCOL = 0x1000000
-} DOCHOSTUIFLAG;
-
-typedef struct _tagwxDOCHOSTUIINFO
-{
-    ULONG cbSize;
-    DWORD dwFlags;
-    DWORD dwDoubleClick;
-    OLECHAR *pchHostCss;
-    OLECHAR *pchHostNS;
-} DOCHOSTUIINFO;
-
-class wxIDocHostUIHandler : public IUnknown
-{
-public:
-    virtual HRESULT wxSTDCALL ShowContextMenu(DWORD dwID, POINT *ppt,
-                                              IUnknown *pcmdtReserved,
-                                              IDispatch *pdispReserved) = 0;
-
-    virtual HRESULT wxSTDCALL GetHostInfo(DOCHOSTUIINFO *pInfo) = 0;
-
-    virtual HRESULT wxSTDCALL ShowUI(DWORD dwID,
-                                     IOleInPlaceActiveObject *pActiveObject,
-                                     IOleCommandTarget *pCommandTarget,
-                                     IOleInPlaceFrame *pFrame,
-                                     IOleInPlaceUIWindow *pDoc) = 0;
-
-    virtual HRESULT wxSTDCALL HideUI(void) = 0;
-
-    virtual HRESULT wxSTDCALL UpdateUI(void) = 0;
-
-    virtual HRESULT wxSTDCALL EnableModeless(BOOL fEnable) = 0;
-
-    virtual HRESULT wxSTDCALL OnDocWindowActivate(BOOL fActivate) = 0;
-
-    virtual HRESULT wxSTDCALL OnFrameWindowActivate(BOOL fActivate) = 0;
-
-    virtual HRESULT wxSTDCALL ResizeBorder(LPCRECT prcBorder,
-                                           IOleInPlaceUIWindow *pUIWindow,
-                                           BOOL fRameWindow) = 0;
-
-    virtual HRESULT wxSTDCALL TranslateAccelerator(LPMSG lpMsg,
-                                                   const GUID *pguidCmdGroup,
-                                                   DWORD nCmdID) = 0;
-
-    virtual HRESULT wxSTDCALL GetOptionKeyPath(LPOLESTR *pchKey,
-                                               DWORD dw) = 0;
-
-    virtual HRESULT wxSTDCALL GetDropTarget(IDropTarget *pDropTarget,
-                                            IDropTarget **ppDropTarget) = 0;
-
-    virtual HRESULT wxSTDCALL GetExternal(IDispatch **ppDispatch) = 0;
-
-    virtual HRESULT wxSTDCALL TranslateUrl(DWORD dwTranslate,
-                                           OLECHAR *pchURLIn,
-                                           OLECHAR **ppchURLOut) = 0;
-
-    virtual HRESULT wxSTDCALL FilterDataObject(IDataObject *pDO,
-                                               IDataObject **ppDORet) = 0;
-};
-
-/* END OF MSHTMHST.H implementation */
 
 struct IHTMLDocument2;
 struct IHTMLElement;
@@ -251,6 +34,7 @@ class ClassFactory;
 class wxIEContainer;
 class DocHostUIHandler;
 class wxFindPointers;
+class wxIInternetProtocol;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
@@ -537,13 +321,13 @@ public:
 class wxFindPointers
 {
 public:
-    wxFindPointers(IMarkupPointer *ptrBegin, IMarkupPointer *ptrEnd)
+    wxFindPointers(wxIMarkupPointer *ptrBegin, wxIMarkupPointer *ptrEnd)
     {
         begin = ptrBegin;
         end = ptrEnd;
     }
     //The two markup pointers.
-    IMarkupPointer *begin, *end;
+    wxIMarkupPointer *begin, *end;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)

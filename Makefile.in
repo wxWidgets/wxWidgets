@@ -2177,8 +2177,11 @@ COND_PLATFORM_UNIX_1_GTK_PLATFORM_HDR =  \
 @COND_TOOLKIT_GTK@WEBVIEW_HDR_PLATFORM = \
 @COND_TOOLKIT_GTK@	wx/gtk/webviewhistoryitem_webkit.h \
 @COND_TOOLKIT_GTK@	wx/gtk/webview_webkit.h
-@COND_TOOLKIT_MSW@WEBVIEW_HDR_PLATFORM = \
-@COND_TOOLKIT_MSW@	wx/msw/webviewhistoryitem_ie.h wx/msw/webview_ie.h
+COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM =  \
+	wx/msw/webviewhistoryitem_ie.h \
+	wx/msw/webview_ie.h \
+	wx/msw/webview_missing.h
+@COND_TOOLKIT_MSW@WEBVIEW_HDR_PLATFORM = $(COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM)
 @COND_TOOLKIT_COCOA@OPENGL_HDR_PLATFORM = wx/cocoa/glcanvas.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@OPENGL_HDR_PLATFORM \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	= wx/gtk1/glcanvas.h wx/unix/glx11.h

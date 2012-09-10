@@ -38,6 +38,9 @@ namespace {
 DEFINE_GUID(wxIID_IInternetProtocolRoot,0x79eac9e3,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
 DEFINE_GUID(wxIID_IInternetProtocol,0x79eac9e4,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
 DEFINE_GUID(wxIID_IDocHostUIHandler, 0xbd3f23c0, 0xd43e, 0x11cf, 0x89, 0x3b, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x1a);
+DEFINE_GUID(wxIID_IHTMLElement2,0x3050f434,0x98b5,0x11cf,0xbb,0x82,0,0xaa,0,0xbd,0xce,0x0b);
+DEFINE_GUID(wxIID_IMarkupServices,0x3050f4a0,0x98b5,0x11cf,0xbb,0x82,0,0xaa,0,0xbd,0xce,0x0b);
+DEFINE_GUID(wxIID_IMarkupContainer,0x3050f5f9,0x98b5,0x11cf,0xbb,0x82,0,0xaa,0,0xbd,0xce,0x0b);
 
 enum //Internal find flags
 {
@@ -601,7 +604,6 @@ void wxWebViewIE::Redo()
 
 long wxWebViewIE::Find(const wxString& text, int flags)
 {
-#if !defined(__MINGW32__) && !defined(__VISUALC6__)
     //If the text is empty then we clear.
     if(text.IsEmpty())
     {
@@ -645,9 +647,6 @@ long wxWebViewIE::Find(const wxString& text, int flags)
     //find the text and return count.
     FindInternal(text, flags, wxWEB_VIEW_FIND_ADD_POINTERS);
     return m_findPointers.empty() ? wxNOT_FOUND : m_findPointers.size();
-#else
-    return wxNOT_FOUND;
-#endif
 }
 
 void wxWebViewIE::SetEditable(bool enable)
@@ -917,17 +916,16 @@ wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
 
 bool wxWebViewIE::IsElementVisible(IHTMLElement* elm)
 {
-#if !defined(__MINGW32__) && !defined(__VISUALC6__)
-    IHTMLCurrentStyle* style;
+    wxIHTMLCurrentStyle* style;
     IHTMLElement *elm1 = elm;
-    IHTMLElement2 *elm2;
+    wxIHTMLElement2 *elm2;
     BSTR tmp_bstr;
     bool is_visible = true;
     //This method is not perfect but it does discover most of the hidden elements.
     //so if a better solution is found, then please do improve.
     while(elm1)
     {
-        if(SUCCEEDED(elm1->QueryInterface(IID_IHTMLElement2, (void**) &elm2)))
+        if(SUCCEEDED(elm1->QueryInterface(wxIID_IHTMLElement2, (void**) &elm2)))
         {
             if(SUCCEEDED(elm2->get_currentStyle(&style)))
             {
@@ -962,24 +960,20 @@ bool wxWebViewIE::IsElementVisible(IHTMLElement* elm)
         }
     }
     return is_visible;
-#else
-    return false;
-#endif
 }
 
 void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_flag)
 {
-#if !defined(__MINGW32__) && !defined(__VISUALC6__)
-    IMarkupServices *pIMS;
-    IMarkupContainer *pIMC;
-    IMarkupPointer *ptrBegin, *ptrEnd;
+    wxIMarkupServices *pIMS;
+    wxIMarkupContainer *pIMC;
+    wxIMarkupPointer *ptrBegin, *ptrEnd;
     IHTMLElement* elm;
     long find_flag = 0;
     IHTMLDocument2 *document = GetDocument();
     //This function does the acutal work.
-    if(SUCCEEDED(document->QueryInterface(IID_IMarkupServices, (void **)&pIMS)))
+    if(SUCCEEDED(document->QueryInterface(wxIID_IMarkupServices, (void **)&pIMS)))
     {
-        if(SUCCEEDED(document->QueryInterface(IID_IMarkupContainer, (void **)&pIMC)))
+        if(SUCCEEDED(document->QueryInterface(wxIID_IMarkupContainer, (void **)&pIMC)))
         {
             BSTR attr_bstr = SysAllocString(L"style=\"background-color:#ffff00\"");
             BSTR text_bstr = SysAllocString(text.wc_str());
@@ -1026,7 +1020,7 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
                         }
                         if(internal_flag & wxWEB_VIEW_FIND_ADD_POINTERS)
                         {
-                            IMarkupPointer *cptrBegin, *cptrEnd;
+                            wxIMarkupPointer *cptrBegin, *cptrEnd;
                             pIMS->CreateMarkupPointer(&cptrBegin);
                             pIMS->CreateMarkupPointer(&cptrEnd);
                             cptrBegin->MoveToPointer(ptrBegin);
@@ -1048,12 +1042,10 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
         pIMS->Release();
     }
     document->Release();
-#endif
 }
 
 long wxWebViewIE::FindNext(int direction)
 {
-#if !defined(__MINGW32__) && !defined(__VISUALC6__)
     //Don't bother if we have no pointers set.
     if(m_findPointers.empty())
     {
@@ -1096,8 +1088,8 @@ long wxWebViewIE::FindNext(int direction)
     //some variables to use later on.
     IHTMLElement *body_element;
     IHTMLBodyElement *body;
-    IHTMLTxtRange *range = NULL;
-    IMarkupServices *pIMS;
+    wxIHTMLTxtRange *range = NULL;
+    wxIMarkupServices *pIMS;
     IHTMLDocument2 *document = GetDocument();
     long ret = -1;
     //Now try to create a range from the body.
@@ -1105,12 +1097,12 @@ long wxWebViewIE::FindNext(int direction)
     {
         if(SUCCEEDED(body_element->QueryInterface(IID_IHTMLBodyElement,(void**)&body)))
         {
-            if(SUCCEEDED(body->createTextRange(&range)))
+            if(SUCCEEDED(body->createTextRange((IHTMLTxtRange**)(&range))))
             {
                 //So far so good, now we try to position our find pointers.
-                if(SUCCEEDED(document->QueryInterface(IID_IMarkupServices,(void **)&pIMS)))
+                if(SUCCEEDED(document->QueryInterface(wxIID_IMarkupServices,(void **)&pIMS)))
                 {
-                    IMarkupPointer *begin = m_findPointers[m_findPosition].begin, *end = m_findPointers[m_findPosition].end;
+                    wxIMarkupPointer *begin = m_findPointers[m_findPosition].begin, *end = m_findPointers[m_findPosition].end;
                     if(pIMS->MoveRangeToPointers(begin,end,range) == S_OK && range->select() == S_OK)
                     {
                         ret = m_findPosition;
@@ -1125,14 +1117,10 @@ long wxWebViewIE::FindNext(int direction)
     }
     document->Release();
     return ret;
-#else
-    return wxNOT_FOUND;
-#endif
 }
 
 void wxWebViewIE::FindClear()
 {
-#if !defined(__MINGW32__) && !defined(__VISUALC6__)
     //Reset find variables.
     m_findText.Empty();
     m_findFlags = wxWEB_VIEW_FIND_DEFAULT;
@@ -1150,7 +1138,6 @@ void wxWebViewIE::FindClear()
         m_findPointers[i].end->Release();
     }
     m_findPointers.clear();
-#endif
 }
 
 bool wxWebViewIE::EnableControlFeature(long flag, bool enable)
