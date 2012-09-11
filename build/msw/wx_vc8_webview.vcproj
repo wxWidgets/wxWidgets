@@ -814,6 +814,10 @@
 				RelativePath="..\..\src\common\webviewarchivehandler.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\common\webviewfshandler.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="MSW Sources"
@@ -1080,6 +1084,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\webviewarchivehandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\webviewfshandler.h"
 				>
 			</File>
 		</Filter>

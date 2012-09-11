@@ -1646,7 +1646,8 @@ WEBVIEWDLL_OBJECTS =  \
 	$(__webviewdll___win32rc) \
 	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_2) \
 	webviewdll_webview.o \
-	webviewdll_webviewarchivehandler.o
+	webviewdll_webviewarchivehandler.o \
+	webviewdll_webviewfshandler.o
 WEBVIEWDLL_ODEP =  $(_____pch_wxprec_webviewdll_wx_wxprec_h_gch___depname)
 WEBVIEWLIB_CXXFLAGS = $(__webviewlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1661,7 +1662,8 @@ WEBVIEWLIB_OBJCXXFLAGS = $(__webviewlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 WEBVIEWLIB_OBJECTS =  \
 	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_3) \
 	webviewlib_webview.o \
-	webviewlib_webviewarchivehandler.o
+	webviewlib_webviewarchivehandler.o \
+	webviewlib_webviewfshandler.o
 WEBVIEWLIB_ODEP =  $(_____pch_wxprec_webviewlib_wx_wxprec_h_gch___depname)
 QADLL_CXXFLAGS = $(__qadll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -4381,7 +4383,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/stc/stc.h \
 	$(WEBVIEW_HDR_PLATFORM) \
 	wx/webview.h \
-	wx/webviewarchivehandler.h
+	wx/webviewarchivehandler.h \
+	wx/webviewfshandler.h
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
 COND_MONOLITHIC_1_SHARED_1___monodll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -4582,6 +4585,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	$(__WEBVIEW_SRC_PLATFORM_OBJECTS) \
 	monodll_webview.o \
 	monodll_webviewarchivehandler.o \
+	monodll_webviewfshandler.o \
 	monodll_debugrpt.o \
 	monodll_dbgrptg.o \
 	monodll_xh_animatctrl.o \
@@ -6787,6 +6791,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_1) \
 	monolib_webview.o \
 	monolib_webviewarchivehandler.o \
+	monolib_webviewfshandler.o \
 	monolib_debugrpt.o \
 	monolib_dbgrptg.o \
 	monolib_xh_animatctrl.o \
@@ -18228,6 +18233,9 @@ monodll_webview.o: $(srcdir)/src/common/webview.cpp $(MONODLL_ODEP)
 monodll_webviewarchivehandler.o: $(srcdir)/src/common/webviewarchivehandler.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/webviewarchivehandler.cpp
 
+monodll_webviewfshandler.o: $(srcdir)/src/common/webviewfshandler.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/webviewfshandler.cpp
+
 monodll_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
 
@@ -23921,6 +23929,9 @@ monolib_webview.o: $(srcdir)/src/common/webview.cpp $(MONOLIB_ODEP)
 
 monolib_webviewarchivehandler.o: $(srcdir)/src/common/webviewarchivehandler.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/webviewarchivehandler.cpp
+
+monolib_webviewfshandler.o: $(srcdir)/src/common/webviewfshandler.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/webviewfshandler.cpp
 
 monolib_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/debugrpt.cpp
@@ -38766,6 +38777,9 @@ webviewdll_webview.o: $(srcdir)/src/common/webview.cpp $(WEBVIEWDLL_ODEP)
 webviewdll_webviewarchivehandler.o: $(srcdir)/src/common/webviewarchivehandler.cpp $(WEBVIEWDLL_ODEP)
 	$(CXXC) -c -o $@ $(WEBVIEWDLL_CXXFLAGS) $(srcdir)/src/common/webviewarchivehandler.cpp
 
+webviewdll_webviewfshandler.o: $(srcdir)/src/common/webviewfshandler.cpp $(WEBVIEWDLL_ODEP)
+	$(CXXC) -c -o $@ $(WEBVIEWDLL_CXXFLAGS) $(srcdir)/src/common/webviewfshandler.cpp
+
 webviewlib_webview_ie.o: $(srcdir)/src/msw/webview_ie.cpp $(WEBVIEWLIB_ODEP)
 	$(CXXC) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(srcdir)/src/msw/webview_ie.cpp
 
@@ -38780,6 +38794,9 @@ webviewlib_webview.o: $(srcdir)/src/common/webview.cpp $(WEBVIEWLIB_ODEP)
 
 webviewlib_webviewarchivehandler.o: $(srcdir)/src/common/webviewarchivehandler.cpp $(WEBVIEWLIB_ODEP)
 	$(CXXC) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(srcdir)/src/common/webviewarchivehandler.cpp
+
+webviewlib_webviewfshandler.o: $(srcdir)/src/common/webviewfshandler.cpp $(WEBVIEWLIB_ODEP)
+	$(CXXC) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(srcdir)/src/common/webviewfshandler.cpp
 
 qadll_version_rc.o: $(srcdir)/src/msw/version.rc $(QADLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_QA

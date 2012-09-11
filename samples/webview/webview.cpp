@@ -32,9 +32,11 @@
 #include "wx/settings.h"
 #include "wx/webview.h"
 #include "wx/webviewarchivehandler.h"
+#include "wx/webviewfshandler.h"
 #include "wx/infobar.h"
 #include "wx/filesys.h"
 #include "wx/fs_arc.h"
+#include "wx/fs_mem.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -136,6 +138,7 @@ public:
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
     void OnLoadScheme(wxCommandEvent& evt);
+    void OnUseMemoryFS(wxCommandEvent& evt);
     void OnFind(wxCommandEvent& evt);
     void OnFindDone(wxCommandEvent& evt);
     void OnFindText(wxCommandEvent& evt);
@@ -213,6 +216,27 @@ bool WebApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    //Required for virtual file system archive and memory support
+    wxFileSystem::AddHandler(new wxArchiveFSHandler);
+    wxFileSystem::AddHandler(new wxMemoryFSHandler);
+
+    // Create the memory files
+    wxImage::AddHandler(new wxPNGHandler);
+    wxMemoryFSHandler::AddFile("logo.png", 
+        wxBitmap(wxlogo_xpm), wxBITMAP_TYPE_PNG);
+    wxMemoryFSHandler::AddFile("page1.htm",
+        "<html><head><title>File System Example</title>"
+        "<link rel='stylesheet' type='text/css' href='memory:test.css'>"
+        "</head><body><h1>Page 1</h1>"
+        "<p><img src='memory:logo.png'></p>"
+        "<p>Some text about <a href='memory:page2.htm'>Page 2</a>.</p></body>");
+    wxMemoryFSHandler::AddFile("page2.htm",
+        "<html><head><title>File System Example</title>"
+        "<link rel='stylesheet' type='text/css' href='memory:test.css'>"
+        "</head><body><h1>Page 2</h1>"
+        "<p><a href='memory:page1.htm'>Page 1</a> was better.</p></body>");
+    wxMemoryFSHandler::AddFile("test.css", "h1 {color: red;}");
+
     WebFrame *frame = new WebFrame(m_url);
     frame->Show();
 
@@ -222,9 +246,6 @@ bool WebApp::OnInit()
 WebFrame::WebFrame(const wxString& url) :
     wxFrame(NULL, wxID_ANY, "wxWebView Sample")
 {
-    //Required from virtual file system archive support
-    wxFileSystem::AddHandler(new wxArchiveFSHandler);
-
     // set the frame icon
     SetIcon(wxICON(sample));
     SetTitle("wxWebView Sample");
@@ -309,6 +330,8 @@ WebFrame::WebFrame(const wxString& url) :
 
     //We register the wxfs:// protocol for testing purposes
     m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));
+    //And the memory: file system
+    m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler("memory")));
 
     SetSizer(topsizer);
 
@@ -378,6 +401,7 @@ WebFrame::WebFrame(const wxString& url) :
     editmenu->AppendSubMenu(selection, "Selection");
 
     wxMenuItem* loadscheme =  m_tools_menu->Append(wxID_ANY, _("Custom Scheme Example"));
+    wxMenuItem* usememoryfs =  m_tools_menu->Append(wxID_ANY, _("Memory File System Example"));
 
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
@@ -481,6 +505,8 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnSelectAll),  NULL, this );
     Connect(loadscheme->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnLoadScheme),  NULL, this );
+    Connect(usememoryfs->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnUseMemoryFS),  NULL, this );
     Connect(m_find->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnFind),  NULL, this );
 
@@ -626,6 +652,11 @@ void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
     path.Replace("\\", "/");
     path = "wxfs:///" + path + ";protocol=zip/doc.htm";
     m_browser->LoadURL(path);
+}
+
+void WebFrame::OnUseMemoryFS(wxCommandEvent& WXUNUSED(evt))
+{
+    m_browser->LoadURL("memory:page1.htm");
 }
 
 void WebFrame::OnFind(wxCommandEvent& WXUNUSED(evt))

@@ -256,6 +256,10 @@ SOURCE=..\..\src\common\webview.cpp
 
 SOURCE=..\..\src\common\webviewarchivehandler.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\webviewfshandler.cpp
+# End Source File
 # End Group
 # Begin Group "MSW Sources"
 
@@ -559,6 +563,10 @@ SOURCE=..\..\include\wx\webview.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\webviewarchivehandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\webviewfshandler.h
 # End Source File
 # End Group
 # End Target

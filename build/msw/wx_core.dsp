@@ -7044,6 +7044,10 @@ SOURCE=..\..\include\wx\webviewarchivehandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\webviewfshandler.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\persist\window.h
 # End Source File
 # Begin Source File

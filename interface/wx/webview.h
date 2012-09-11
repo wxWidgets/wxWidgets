@@ -231,10 +231,13 @@ public:
     wxFSFile which represents the given url. You can then register your handler
     with RegisterHandler() it will be called for all pages and resources.
 
-    wxWebFileHandler is provided to allow the navigation of pages inside a zip
-    archive. It overrides the @c file scheme and provides support for the
-    standard @c file syntax as well as paths to archives of the form
-    @c file:///C:/example/docs.zip;protocol=zip/main.htm
+    wxWebViewFSHandler is provided to access the virtual file system encapsulated by
+    wxFileSystem. The wxMemoryFSHandler documentation gives an example of how this
+    may be used.
+
+    wxWebViewArchiveHandler is provided to allow the navigation of pages inside a zip
+    archive. It supports paths of the form:
+    @c scheme:///C:/example/docs.zip;protocol=zip/main.htm
 
     @beginEventEmissionTable{wxWebViewEvent}
     @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
@@ -607,13 +610,13 @@ public:
         @param flags The flags for the search.
         @return If search phrase was not found in combination with the flags
                 then @c wxNOT_FOUND is returned. If called for the first time
-                with search phrase then the total number of results will be 
+                with search phrase then the total number of results will be
                 returned. Then for every time its called with the same search
                 phrase it will return the number of the current match.
         @note This function will restart the search if the flags
               @c wxWEB_VIEW_FIND_ENTIRE_WORD or @c wxWEB_VIEW_FIND_MATCH_CASE
               are changed, since this will require a new search. To reset the
-              search, for example reseting the highlights call the function 
+              search, for example reseting the highlights call the function
               with an empty search phrase. This always returns @c wxNOT_FOUND
               on the OSX WebKit backend.
         @since 2.9.5

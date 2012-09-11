@@ -1103,7 +1103,8 @@ WEBVIEWDLL_OBJECTS =  \
 	$(OBJS)\webviewdll_version_rc.o \
 	$(OBJS)\webviewdll_webview_ie.o \
 	$(OBJS)\webviewdll_webview.o \
-	$(OBJS)\webviewdll_webviewarchivehandler.o
+	$(OBJS)\webviewdll_webviewarchivehandler.o \
+	$(OBJS)\webviewdll_webviewfshandler.o
 WEBVIEWLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1117,7 +1118,8 @@ WEBVIEWLIB_OBJECTS =  \
 	$(OBJS)\webviewlib_dummy.o \
 	$(OBJS)\webviewlib_webview_ie.o \
 	$(OBJS)\webviewlib_webview.o \
-	$(OBJS)\webviewlib_webviewarchivehandler.o
+	$(OBJS)\webviewlib_webviewarchivehandler.o \
+	$(OBJS)\webviewlib_webviewfshandler.o
 QADLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1655,6 +1657,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_webview_ie.o \
 	$(OBJS)\monodll_webview.o \
 	$(OBJS)\monodll_webviewarchivehandler.o \
+	$(OBJS)\monodll_webviewfshandler.o \
 	$(OBJS)\monodll_debugrpt.o \
 	$(OBJS)\monodll_dbgrptg.o \
 	$(OBJS)\monodll_xh_animatctrl.o \
@@ -2449,6 +2452,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_webview_ie.o \
 	$(OBJS)\monolib_webview.o \
 	$(OBJS)\monolib_webviewarchivehandler.o \
+	$(OBJS)\monolib_webviewfshandler.o \
 	$(OBJS)\monolib_debugrpt.o \
 	$(OBJS)\monolib_dbgrptg.o \
 	$(OBJS)\monolib_xh_animatctrl.o \
@@ -7118,6 +7122,9 @@ $(OBJS)\monodll_webview.o: ../../src/common/webview.cpp
 $(OBJS)\monodll_webviewarchivehandler.o: ../../src/common/webviewarchivehandler.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_webviewfshandler.o: ../../src/common/webviewfshandler.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_debugrpt.o: ../../src/common/debugrpt.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9534,6 +9541,9 @@ $(OBJS)\monolib_webview.o: ../../src/common/webview.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_webviewarchivehandler.o: ../../src/common/webviewarchivehandler.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_webviewfshandler.o: ../../src/common/webviewfshandler.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_debugrpt.o: ../../src/common/debugrpt.cpp
@@ -15258,6 +15268,9 @@ $(OBJS)\webviewdll_webview.o: ../../src/common/webview.cpp
 $(OBJS)\webviewdll_webviewarchivehandler.o: ../../src/common/webviewarchivehandler.cpp
 	$(CXX) -c -o $@ $(WEBVIEWDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\webviewdll_webviewfshandler.o: ../../src/common/webviewfshandler.cpp
+	$(CXX) -c -o $@ $(WEBVIEWDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\webviewlib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15268,6 +15281,9 @@ $(OBJS)\webviewlib_webview.o: ../../src/common/webview.cpp
 	$(CXX) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\webviewlib_webviewarchivehandler.o: ../../src/common/webviewarchivehandler.cpp
+	$(CXX) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\webviewlib_webviewfshandler.o: ../../src/common/webviewfshandler.cpp
 	$(CXX) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\qadll_dummy.o: ../../src/common/dummy.cpp

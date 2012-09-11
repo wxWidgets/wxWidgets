@@ -149,6 +149,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_webview_ie.obj &
 	$(OBJS)\monodll_webview.obj &
 	$(OBJS)\monodll_webviewarchivehandler.obj &
+	$(OBJS)\monodll_webviewfshandler.obj &
 	$(OBJS)\monodll_debugrpt.obj &
 	$(OBJS)\monodll_dbgrptg.obj &
 	$(OBJS)\monodll_xh_animatctrl.obj &
@@ -948,6 +949,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_webview_ie.obj &
 	$(OBJS)\monolib_webview.obj &
 	$(OBJS)\monolib_webviewarchivehandler.obj &
+	$(OBJS)\monolib_webviewfshandler.obj &
 	$(OBJS)\monolib_debugrpt.obj &
 	$(OBJS)\monolib_dbgrptg.obj &
 	$(OBJS)\monolib_xh_animatctrl.obj &
@@ -4655,7 +4657,8 @@ WEBVIEWDLL_OBJECTS =  &
 	$(OBJS)\webviewdll_dummy.obj &
 	$(OBJS)\webviewdll_webview_ie.obj &
 	$(OBJS)\webviewdll_webview.obj &
-	$(OBJS)\webviewdll_webviewarchivehandler.obj
+	$(OBJS)\webviewdll_webviewarchivehandler.obj &
+	$(OBJS)\webviewdll_webviewfshandler.obj
 WEBVIEWLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -4669,7 +4672,8 @@ WEBVIEWLIB_OBJECTS =  &
 	$(OBJS)\webviewlib_dummy.obj &
 	$(OBJS)\webviewlib_webview_ie.obj &
 	$(OBJS)\webviewlib_webview.obj &
-	$(OBJS)\webviewlib_webviewarchivehandler.obj
+	$(OBJS)\webviewlib_webviewarchivehandler.obj &
+	$(OBJS)\webviewlib_webviewfshandler.obj
 QADLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -7391,6 +7395,9 @@ $(OBJS)\monodll_webview.obj :  .AUTODEPEND ..\..\src\common\webview.cpp
 $(OBJS)\monodll_webviewarchivehandler.obj :  .AUTODEPEND ..\..\src\common\webviewarchivehandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_webviewfshandler.obj :  .AUTODEPEND ..\..\src\common\webviewfshandler.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -9807,6 +9814,9 @@ $(OBJS)\monolib_webview.obj :  .AUTODEPEND ..\..\src\common\webview.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_webviewarchivehandler.obj :  .AUTODEPEND ..\..\src\common\webviewarchivehandler.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_webviewfshandler.obj :  .AUTODEPEND ..\..\src\common\webviewfshandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_debugrpt.obj :  .AUTODEPEND ..\..\src\common\debugrpt.cpp
@@ -15531,6 +15541,9 @@ $(OBJS)\webviewdll_webview.obj :  .AUTODEPEND ..\..\src\common\webview.cpp
 $(OBJS)\webviewdll_webviewarchivehandler.obj :  .AUTODEPEND ..\..\src\common\webviewarchivehandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WEBVIEWDLL_CXXFLAGS) $<
 
+$(OBJS)\webviewdll_webviewfshandler.obj :  .AUTODEPEND ..\..\src\common\webviewfshandler.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WEBVIEWDLL_CXXFLAGS) $<
+
 $(OBJS)\webviewlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WEBVIEWLIB_CXXFLAGS) $<
 
@@ -15541,6 +15554,9 @@ $(OBJS)\webviewlib_webview.obj :  .AUTODEPEND ..\..\src\common\webview.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WEBVIEWLIB_CXXFLAGS) $<
 
 $(OBJS)\webviewlib_webviewarchivehandler.obj :  .AUTODEPEND ..\..\src\common\webviewarchivehandler.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WEBVIEWLIB_CXXFLAGS) $<
+
+$(OBJS)\webviewlib_webviewfshandler.obj :  .AUTODEPEND ..\..\src\common\webviewfshandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WEBVIEWLIB_CXXFLAGS) $<
 
 $(OBJS)\qadll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp

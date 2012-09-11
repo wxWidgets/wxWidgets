@@ -13,7 +13,7 @@
     them accessible via an URL.
 
     It is particularly suitable for storing bitmaps from resources or included XPM
-    files so that they can be used with wxHTML.
+    files so that they can be used with wxHTML or wxWebView.
 
     Filenames are prefixed with @c "memory:", e.g. @c "memory:myfile.html".
 
@@ -26,24 +26,30 @@
 
     void MyFrame::OnAbout(wxCommandEvent&)
     {
-        wxBusyCursor bcur;
         wxFileSystem::AddHandler(new wxMemoryFSHandler);
-        wxMemoryFSHandler::AddFile("logo.pcx", wxBITMAP(logo), wxBITMAP_TYPE_PCX);
+        wxMemoryFSHandler::AddFile("logo.png", wxBITMAP(logo), wxBITMAP_TYPE_PNG);
         wxMemoryFSHandler::AddFile("about.htm",
                                 "<html><body>About: "
-                                "<img src=\"memory:logo.pcx\"></body></html>");
+                                "<img src=\"memory:logo.png\"></body></html>");
 
         wxDialog dlg(this, -1, wxString(_("About")));
         wxBoxSizer *topsizer;
-        wxHtmlWindow *html;
         topsizer = new wxBoxSizer(wxVERTICAL);
-        html = new wxHtmlWindow(&dlg, -1, wxDefaultPosition,
-                                wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
-        html->SetBorders(0);
-        html->LoadPage("memory:about.htm");
-        html->SetSize(html->GetInternalRepresentation()->GetWidth(),
-                    html->GetInternalRepresentation()->GetHeight());
-        topsizer->Add(html, 1, wxALL, 10);
+    #ifdef USE_WEBVIEW
+        wxWebView* browser = wxWebView::New(&dlg, wxID_ANY, wxWebViewDefaultURLStr,
+                                 wxDefaultPosition, wxSize(380, 160));
+        browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler("memory")));
+        browser->LoadURL("memory:about.htm");
+    #else // Use wxHtml
+        wxHtmlWindow *browser;
+        browser = new wxHtmlWindow(&dlg, -1, wxDefaultPosition,
+                                   wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
+        browser->SetBorders(0);
+        browser->LoadPage("memory:about.htm");
+        browser->SetSize(browser->GetInternalRepresentation()->GetWidth(),
+                    browser->GetInternalRepresentation()->GetHeight());
+    #endif
+        topsizer->Add(browser, 1, wxALL, 10);
         topsizer->Add(new wxStaticLine(&dlg, -1), 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
         topsizer->Add(new wxButton(&dlg, wxID_OK, "Ok"),
                     0, wxALL | wxALIGN_RIGHT, 15);
@@ -53,7 +59,7 @@
         dlg.Centre();
         dlg.ShowModal();
 
-        wxMemoryFSHandler::RemoveFile("logo.pcx");
+        wxMemoryFSHandler::RemoveFile("logo.png");
         wxMemoryFSHandler::RemoveFile("about.htm");
     }
     @endcode

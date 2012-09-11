@@ -3345,6 +3345,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(WEBVIEW_SRC_PLATFORM)
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
+    src/common/webviewfshandler.cpp
 </set>
 
 <set var="WEBVIEW_HDR_PLATFORM" hints="files">
@@ -3366,6 +3367,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(WEBVIEW_HDR_PLATFORM)
     wx/webview.h
     wx/webviewarchivehandler.h
+    wx/webviewfshandler.h
 </set>
 
 <!-- ====================================================================== -->

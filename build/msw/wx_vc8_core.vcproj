@@ -7832,6 +7832,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\webviewfshandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\persist\window.h"
 				>
 			</File>

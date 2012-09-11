@@ -540,6 +540,8 @@ All (GUI):
 - Support hexadecimal numbers in wxSpinCtrl.
 - Respect window max size in wxBoxSizer (Nathan Ridge).
 - Add support for searching in wxWebView for MSW and GTK (Allonii).
+- Add generic wxFileSystem support to wxWebView with 
+  wxWebViewFSHandler (Nick Matthews).
 - Add possibility to hide and show again wxRibbonBar pages (wxBen).
 - Add wxRibbonBar pages highlighting (wxBen).
 - Add expand/collapse button to wxRibbonBar (rakeshthp).
