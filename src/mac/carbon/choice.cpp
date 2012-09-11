@@ -366,6 +366,12 @@ wxSize wxChoice::DoGetBestSize() const
         lbWidth += cx ;
     }
 
+    if (GetWindowVariant() == wxWINDOW_VARIANT_SMALL)
+    {
+        // JACS: fixes height and resulting misalignment of controls. Tested on 10.3, 10.4, 10.5, 10.6, 10.7, 10.8.
+        lbHeight -= 3;
+    }
+
     return wxSize( lbWidth, lbHeight );
 }
 

@@ -70,8 +70,13 @@ bool wxButton::Create(wxWindow *parent,
         }
         else if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL )
         {
-            bounds.bottom = bounds.top + 17 ;
-            m_maxHeight = 17 ;
+            int h = 17;
+#if wxUSE_MAC_BUTTON_POSITION_FIX
+            // JACS: 18 pixels is more realistic, tested on 10.3, 10.4, 10.5, 10.6, 10.7, 10.8.
+            h += 1;
+#endif
+            bounds.bottom = bounds.top + h ;
+            m_maxHeight = h ;
         }
         else if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
         {
@@ -226,3 +231,104 @@ wxInt32 wxButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF
 
     return noErr;
 }
+
+#if wxUSE_MAC_BUTTON_POSITION_FIX
+extern void wxMacWindowToNative( const wxWindowMac* window , Rect *rect );
+
+void wxButton::DoMoveWindow(int x, int y, int width, int height)
+{
+    // this is never called for a toplevel window, so we know we have a parent
+    int former_x , former_y , former_w, former_h ;
+
+    // Get true coordinates of former position
+    DoGetPosition( &former_x , &former_y ) ;
+    DoGetSize( &former_w , &former_h ) ;
+
+    wxWindow *parent = GetParent();
+    if ( parent )
+    {
+        wxPoint pt(parent->GetClientAreaOrigin());
+        former_x += pt.x ;
+        former_y += pt.y ;
+    }
+
+    int actualWidth = width ;
+    int actualHeight = height ;
+    int actualX = x;
+    int actualY = y;
+
+    if ((m_minWidth != -1) && (actualWidth < m_minWidth))
+        actualWidth = m_minWidth;
+    if ((m_minHeight != -1) && (actualHeight < m_minHeight))
+        actualHeight = m_minHeight;
+    if ((m_maxWidth != -1) && (actualWidth > m_maxWidth))
+        actualWidth = m_maxWidth;
+    if ((m_maxHeight != -1) && (actualHeight > m_maxHeight))
+        actualHeight = m_maxHeight;
+
+    bool doMove = false, doResize = false ;
+
+    if ( actualX != former_x || actualY != former_y )
+        doMove = true ;
+
+    if ( actualWidth != former_w || actualHeight != former_h )
+        doResize = true ;
+
+    if ( m_peer != NULL && ( doMove || doResize ) )
+    {
+        // as the borders are drawn outside the native control, we adjust now
+
+        wxRect bounds( wxPoint( actualX + MacGetLeftBorderSize() ,actualY + MacGetTopBorderSize() ),
+            wxSize( actualWidth - (MacGetLeftBorderSize() + MacGetRightBorderSize()) ,
+                actualHeight - (MacGetTopBorderSize() + MacGetBottomBorderSize()) ) ) ;
+
+        Rect r ;
+        wxMacRectToNative( &bounds , &r ) ;
+
+        if ( !GetParent()->IsTopLevel() )
+            wxMacWindowToNative( GetParent() , &r ) ;
+
+        MacInvalidateBorders() ;
+
+        m_cachedClippedRectValid = false ;
+
+        // JACS: move the button up a pixel
+        if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL )
+            r.top -= 1;
+
+        m_peer->SetRect( &r ) ;
+
+        wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
+
+        MacInvalidateBorders() ;
+
+        MacRepositionScrollBars() ;
+        if ( doMove )
+        {
+            wxPoint point(actualX, actualY);
+            wxMoveEvent event(point, m_windowId);
+            event.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(event) ;
+        }
+
+        if ( doResize )
+        {
+            MacRepositionScrollBars() ;
+            wxSize size(actualWidth, actualHeight);
+            wxSizeEvent event(size, m_windowId);
+            event.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(event);
+        }
+    }
+}
+
+void wxButton::DoGetPosition(int *x, int *y) const
+{
+    wxButtonBase::DoGetPosition(x, y);
+    // JACS: we've moved the button up in DoMoveWindow,
+    // so correct the position when we report it back.
+    if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL )
+      *y += 1;
+}
+#endif
+    // wxUSE_MAC_BUTTON_POSITION_FIX
