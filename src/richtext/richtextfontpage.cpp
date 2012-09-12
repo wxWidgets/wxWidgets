@@ -315,9 +315,9 @@ bool wxRichTextFontPage::TransferDataFromWindow()
 
     wxTextAttrEx* attr = GetAttributes();
 
-    if (m_faceListBox->GetSelection() != wxNOT_FOUND)
+    if (!m_faceTextCtrl->GetValue().IsEmpty())
     {
-        wxString faceName = m_faceListBox->GetFaceName(m_faceListBox->GetSelection());
+        wxString faceName = m_faceTextCtrl->GetValue();
         if (!faceName.IsEmpty())
         {
             wxFont font(attr->GetFont().Ok() ? attr->GetFont() : *wxNORMAL_FONT);

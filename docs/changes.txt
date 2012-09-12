@@ -100,6 +100,8 @@ All (GUI):
 - wxRTC: improved outline and line spacing controls, and added page break control.
 - wxRTC: added ability to deselect attributes in font formatting dialog.
 - wxRTC: fixed caret sizing when navigating near a large object.
+- wxRTC: you can now remove the font face name attribute by clearing the name field
+  in the font dialog.
 - Fixed buffer overrun when saving ICO image with a width that's not a multiple of 4.
 - Fixed wxOwnerDrawnComboBox/wxBitmapComboBox client data corruption when
   wxCB_SORT is used.
@@ -114,6 +116,12 @@ wxMSW:
 wxGTK:
 
 - Fix wxClipboard::GetData() for asymmetric wxDataObjects (Timothy Lee).
+
+wxMac:
+
+- In small variant mode, comboboxes and choice controls have a more sensible height,
+  and you can fix a button position and size problem by setting wxUSE_MAC_BUTTON_POSITION_FIX
+  to 1 in include/wx/mac/carbon/button.h. This will fix alignment glitches.
 
 
 2.8.12:
