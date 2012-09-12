@@ -25,6 +25,7 @@ BEGIN_EVENT_TABLE( wxRichTextFontPage, wxPanel )
     EVT_LISTBOX( ID_RICHTEXTFONTPAGE_FACELISTBOX, wxRichTextFontPage::OnFaceListBoxSelected )
     EVT_BUTTON( ID_RICHTEXTFONTPAGE_COLOURCTRL, wxRichTextFontPage::OnColourClicked )
     EVT_BUTTON( ID_RICHTEXTFONTPAGE_BGCOLOURCTRL, wxRichTextFontPage::OnColourClicked )
+    EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_SMALLCAPSCTRL, wxRichTextFontPage::OnCapsctrlClick )
 
 ////@begin wxRichTextFontPage event table entries
     EVT_TEXT( ID_RICHTEXTFONTPAGE_FACETEXTCTRL, wxRichTextFontPage::OnFaceTextCtrlUpdated )
@@ -259,6 +260,13 @@ void wxRichTextFontPage::CreateControls()
         m_capitalsCtrl->SetToolTip(_("Check to show the text in capitals."));
     itemBoxSizer30->Add(m_capitalsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
+    wxCheckBox* itemCheckBox33 = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_SMALLCAPSCTRL, _("Small C&apitals"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+    itemCheckBox33->SetValue(false);
+    itemCheckBox33->SetHelpText(_("Check to show the text in small capitals."));
+    if (wxRichTextFontPage::ShowToolTips())
+        itemCheckBox33->SetToolTip(_("Check to show the text in small capitals."));
+    itemBoxSizer30->Add(itemCheckBox33, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
     m_superscriptCtrl = new wxCheckBox( itemPanel1, ID_RICHTEXTFONTPAGE_SUPERSCRIPT, _("Supe&rscript"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
     m_superscriptCtrl->SetValue(false);
     m_superscriptCtrl->SetHelpText(_("Check to show the text in superscript."));
@@ -436,6 +444,22 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_CAPITALS);
     }
 
+    wxCheckBox* smallCapitalsCtrl = (wxCheckBox*)FindWindow(ID_RICHTEXTFONTPAGE_SMALLCAPSCTRL);
+    if (smallCapitalsCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
+    {
+        attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_SMALL_CAPITALS);
+
+        if (smallCapitalsCtrl->Get3StateValue() == wxCHK_CHECKED)
+            attr->SetTextEffects(attr->GetTextEffects() | wxTEXT_ATTR_EFFECT_SMALL_CAPITALS);
+        else
+            attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_SMALL_CAPITALS);
+    }
+    else
+    {
+        attr->SetTextEffectFlags(attr->GetTextEffectFlags() & ~wxTEXT_ATTR_EFFECT_SMALL_CAPITALS);
+        attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_SMALL_CAPITALS);
+    }
+
     if (m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
     {
         attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_SUPERSCRIPT);
@@ -553,6 +577,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
         ((wxCheckBox*)FindWindow(ID_RICHTEXTFONTPAGE_BGCOLOURCTRL_LABEL))->SetValue(false);
     }
 
+    wxCheckBox* smallCapitalsCtrl = (wxCheckBox*)FindWindow(ID_RICHTEXTFONTPAGE_SMALLCAPSCTRL);
     if (attr->HasTextEffects())
     {
         if (attr->GetTextEffectFlags() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
@@ -574,6 +599,16 @@ bool wxRichTextFontPage::TransferDataToWindow()
         }
         else
             m_capitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+
+        if (attr->GetTextEffectFlags() & wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)
+        {
+            if (attr->GetTextEffects() & wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)
+                smallCapitalsCtrl->Set3StateValue(wxCHK_CHECKED);
+            else
+                smallCapitalsCtrl->Set3StateValue(wxCHK_UNCHECKED);
+        }
+        else
+            smallCapitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
 
         if ( attr->GetTextEffectFlags() & (wxTEXT_ATTR_EFFECT_SUPERSCRIPT | wxTEXT_ATTR_EFFECT_SUBSCRIPT) )
         {
@@ -603,6 +638,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
     {
         m_strikethroughCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         m_capitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+        smallCapitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         m_superscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         m_subscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
     }
@@ -706,6 +742,12 @@ void wxRichTextFontPage::UpdatePreview()
     if (m_capitalsCtrl->Get3StateValue() == wxCHK_CHECKED)
     {
         textEffects |= wxTEXT_ATTR_EFFECT_CAPITALS;
+    }
+
+    wxCheckBox* smallCapitalsCtrl = (wxCheckBox*)FindWindow(ID_RICHTEXTFONTPAGE_SMALLCAPSCTRL);
+    if (smallCapitalsCtrl->Get3StateValue() == wxCHK_CHECKED)
+    {
+        textEffects |= wxTEXT_ATTR_EFFECT_SMALL_CAPITALS;
     }
 
     if ( m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED )

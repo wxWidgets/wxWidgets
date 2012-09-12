@@ -5375,21 +5375,26 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     wxString str = m_text;
     wxString toRemove = wxRichTextLineBreakChar;
     str.Replace(toRemove, wxT(" "));
-    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
         str.MakeUpper();
 
     long len = range.GetLength();
     wxString stringChunk = str.Mid(range.GetStart() - offset, (size_t) len);
 
     wxFont textFont = textAttr.GetFont();
-    if (textFont.Ok())
-        wxCheckSetFont(dc, textFont);
 
     int charHeight = dc.GetCharHeight();
 
     int x, y;
     if ( textFont.Ok() )
     {
+        if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SMALL_CAPITALS))
+        {
+            textFont.SetPointSize((int) (textFont.GetPointSize()*0.75));
+            wxCheckSetFont(dc, textFont);
+            charHeight = dc.GetCharHeight();
+        }
+
         if ( textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) )
         {
             double size = static_cast<double>(textFont.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
@@ -5690,6 +5695,13 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             wxCheckSetFont(dc, textFont);
             bScript = true;
         }
+        else if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SMALL_CAPITALS))
+        {
+            wxFont textFont = font;
+            textFont.SetPointSize((int) (textFont.GetPointSize()*0.75));
+            wxCheckSetFont(dc, textFont);
+            bScript = true;
+        }
         else
         {
             wxCheckSetFont(dc, font);
@@ -5710,7 +5722,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     wxString stringChunk = str.Mid(startPos, (size_t) len);
 
-    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
         stringChunk.MakeUpper();
 
     wxCoord w, h;
