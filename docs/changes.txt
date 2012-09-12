@@ -102,6 +102,8 @@ All (GUI):
 - wxRTC: fixed caret sizing when navigating near a large object.
 - wxRTC: you can now remove the font face name attribute by clearing the name field
   in the font dialog.
+- wxRTC: added font dialog and editor support for the wxTEXT_ATTR_EFFECT_SMALL_CAPITALS
+  text effect.
 - Fixed buffer overrun when saving ICO image with a width that's not a multiple of 4.
 - Fixed wxOwnerDrawnComboBox/wxBitmapComboBox client data corruption when
   wxCB_SORT is used.
