@@ -6280,7 +6280,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
     wxString str = m_text;
     wxString toRemove = wxRichTextLineBreakChar;
     str.Replace(toRemove, wxT(" "));
-    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
         str.MakeUpper();
 
     long len = range.GetLength();
@@ -6296,6 +6296,13 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
     int x, y;
     if ( textFont.IsOk() )
     {
+        if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SMALL_CAPITALS))
+        {
+            textFont.SetPointSize((int) (textFont.GetPointSize()*0.75));
+            wxCheckSetFont(dc, textFont);
+            charHeight = dc.GetCharHeight();
+        }
+
         if ( textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) )
         {
             if (textFont.IsUsingSizeInPixels())
@@ -6634,6 +6641,13 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             wxCheckSetFont(dc, textFont);
             bScript = true;
         }
+        else if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SMALL_CAPITALS))
+        {
+            wxFont textFont = font;
+            textFont.SetPointSize((int) (textFont.GetPointSize()*0.75));
+            wxCheckSetFont(dc, textFont);
+            bScript = true;
+        }
         else
         {
             wxCheckSetFont(dc, font);
@@ -6650,7 +6664,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     wxString stringChunk = str.Mid(startPos, (size_t) len);
 
-    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
         stringChunk.MakeUpper();
 
     wxCoord w, h;
