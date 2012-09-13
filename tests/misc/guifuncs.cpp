@@ -177,6 +177,18 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
         wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91)))
     );
 
+    btn2->Show();
+    wxWindow* btn3 = new wxButton(btn2, wxID_ANY, "3", wxPoint(0, 0));
+    btn3->Disable();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Point over recursive disabled child controls corresponds to deepest child",
+        btn3,
+        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91)))
+    );
+    wxASSERT(wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91))) == btn3);
+
     wxDELETE(btn1);
+    wxDELETE(btn3);     // delete child before parent
     wxDELETE(btn2);
 }

@@ -7215,9 +7215,21 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     {
         // WindowFromPoint() ignores the disabled children but we're supposed
         // to take them into account, so check if we have a child at this
-        // coordinate.
-        ::ScreenToClient(hWnd, &pt2);
-        hWnd = ::ChildWindowFromPointEx(hWnd, pt2, CWP_SKIPINVISIBLE);
+        // coordinate using ChildWindowFromPointEx().
+        for ( ;; )
+        {
+            pt2.x = pt.x;
+            pt2.y = pt.y;
+            ::ScreenToClient(hWnd, &pt2);
+            HWND child = ::ChildWindowFromPointEx(hWnd, pt2, CWP_SKIPINVISIBLE);
+            if ( child == hWnd || !child )
+                break;
+
+            // ChildWindowFromPointEx() only examines the immediate children
+            // but we want to get the deepest (top in Z-order) one, so continue
+            // iterating for as long as it finds anything.
+            hWnd = child;
+        }
     }
 
     return wxGetWindowFromHWND((WXHWND)hWnd);
