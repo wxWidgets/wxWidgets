@@ -518,24 +518,92 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags = 0);
 bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
 
 /**
-    Loads a user-defined Windows resource as a string. If the resource is
-    found, the function creates a new character array and copies the data into
-    it. A pointer to this data is returned. If unsuccessful, @NULL is returned.
+    Loads an object from Windows resource file.
 
-    The resource must be defined in the @c .rc file using the following syntax:
+    This function loads the resource with the given name and type from the
+    resources embedded into a Windows application.
 
+    The typical use for it is to load some data from the data files embedded
+    into the program itself. For example, you could have the following fragment
+    in your @c .rc file
     @code
-    myResource TEXT file.ext
+        mydata  MYDATA  "myfile.dat"
+    @endcode
+    and then use it in the following way:
+    @code
+        const void* data = NULL;
+        size_t size = 0;
+        if ( !wxLoadUserResource(&data, &size, "mydata", "MYDATA") ) {
+            ... handle error ...
+        }
+        else {
+            // Use the data in any way, for example:
+            wxMemoryInputStream is(data, size);
+            ... read the data from stream ...
+        }
     @endcode
 
-    Where @c file.ext is a file that the resource compiler can find.
+    @param outData Filled with the pointer to the data on successful return.
+        Notice that this pointer does @em not need to be freed by the caller.
+    @param outLen Filled with the length of the data in bytes.
+    @param resourceName The name of the resource to load.
+    @param resourceType The type of the resource in usual Windows format, i.e.
+        either a real string like "MYDATA" or an integer created by the
+        standard Windows @c MAKEINTRESOURCE() macro, including any constants
+        for the standard resources types like @c RT_RCDATA.
+    @param module The @c HINSTANCE of the module to load the resources from.
+        The current module is used by default.
+    @return true if the data was loaded from resource or false if it couldn't
+        be found (in which case no error is logged) or was found but couldn't
+        be loaded (which is unexpected and does result in an error message).
 
     This function is available under Windows only.
 
+    @library{wxbase}
+
+    @header{wx/utils.h}
+
+    @since 2.9.1
+ */
+bool
+wxLoadUserResource(const void **outData,
+                   size_t *outLen,
+                   const wxString& resourceName,
+                   const wxChar* resourceType = "TEXT",
+                   WXHINSTANCE module = 0);
+
+/**
+    Loads a user-defined Windows resource as a string.
+
+    This is a wrapper for the general purpose overload wxLoadUserResource(const
+    void**, size_t*, const wxString&, const wxChar*, WXHINSTANCE) and can be
+    more convenient for the string data, but does an extra copy compared to the
+    general version.
+
+    @param resourceName The name of the resource to load.
+    @param resourceType The type of the resource in usual Windows format, i.e.
+        either a real string like "MYDATA" or an integer created by the
+        standard Windows @c MAKEINTRESOURCE() macro, including any constants
+        for the standard resources types like @c RT_RCDATA.
+    @param pLen Filled with the length of the returned buffer if it is
+        non-@NULL. This parameter should be used if NUL characters can occur in
+        the resource data. It is new since wxWidgets 2.9.1
+    @param module The @c HINSTANCE of the module to load the resources from.
+        The current module is used by default. This parameter is new since
+        wxWidgets 2.9.1.
+    @return A pointer to the data to be <tt>delete[]<tt>d by caller on success
+        or @NULL on error.
+
+    This function is available under Windows only.
+
+    @library{wxbase}
+
     @header{wx/utils.h}
 */
-wxString wxLoadUserResource(const wxString& resourceName,
-                            const wxString& resourceType = "TEXT");
+char* wxLoadUserResource(const wxString& resourceName,
+                         const wxChar* resourceType = "TEXT",
+                         int* pLen = NULL,
+                         WXHINSTANCE module = 0);
 
 /**
     @deprecated Replaced by wxWindow::Close(). See the
