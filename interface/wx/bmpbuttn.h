@@ -99,5 +99,21 @@ public:
                 long style = wxBU_AUTODRAW,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
+
+    /**
+        Helper function creating a standard-looking "Close" button.
+
+        To get the best results, platform-specific code may need to be used to
+        create a small, title bar-like "Close" button. This function is
+        provided to avoid the need to test for the current platform and creates
+        the button with as native look as possible.
+
+        @param parent The button parent window, must be non-@NULL.
+        @param winid The identifier for the new button.
+        @return The new button.
+
+        @since 2.9.5
+     */
+    static wxBitmapButton* NewCloseButton(wxWindow* parent, wxWindowID winid);
 };
 

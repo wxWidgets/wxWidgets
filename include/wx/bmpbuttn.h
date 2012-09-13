@@ -25,6 +25,8 @@
     #define wxHAS_BUTTON_BITMAP
 #endif
 
+class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
+
 // ----------------------------------------------------------------------------
 // wxBitmapButton: a button which shows bitmaps instead of the usual string.
 // It has different bitmaps for different states (focused/disabled/pressed)
@@ -63,6 +65,12 @@ public:
                                 style | wxBU_NOTEXT | wxBU_EXACTFIT,
                                 validator, name);
     }
+
+    // Special creation function for a standard "Close" bitmap. It allows to
+    // simply create a close button with the image appropriate for the common
+    // platform.
+    static wxBitmapButton* NewCloseButton(wxWindow* parent, wxWindowID winid);
+
 
     // set/get the margins around the button
     virtual void SetMargins(int x, int y)

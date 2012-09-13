@@ -26,6 +26,9 @@
     #include "wx/image.h"
 #endif
 
+#include "wx/artprov.h"
+#include "wx/renderer.h"
+
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
@@ -89,5 +92,68 @@ bitmap "selected" ,
 bitmap "focus" ,
 bitmap "disabled" ,
 */
+
+namespace
+{
+
+#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
+
+wxBitmap
+GetCloseButtonBitmap(wxWindow *win,
+                     const wxSize& size,
+                     const wxColour& colBg,
+                     int flags = 0)
+{
+    wxBitmap bmp(size);
+    wxMemoryDC dc(bmp);
+    dc.SetBackground(colBg);
+    dc.Clear();
+    wxRendererNative::Get().
+        DrawTitleBarBitmap(win, dc, size, wxTITLEBAR_BUTTON_CLOSE, flags);
+    return bmp;
+}
+
+#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+} // anonymous namespace
+
+/* static */
+wxBitmapButton*
+wxBitmapButtonBase::NewCloseButton(wxWindow* parent, wxWindowID winid)
+{
+    wxCHECK_MSG( parent, NULL, wxS("Must have a valid parent") );
+
+    const wxColour colBg = parent->GetBackgroundColour();
+
+#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
+    const wxSize sizeBmp = wxArtProvider::GetSizeHint(wxART_BUTTON);
+    wxBitmap bmp = GetCloseButtonBitmap(parent, sizeBmp, colBg);
+#else // !wxHAS_DRAW_TITLE_BAR_BITMAP
+    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_CLOSE, wxART_BUTTON);
+#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+    wxBitmapButton* const button = new wxBitmapButton
+                                       (
+                                        parent,
+                                        winid,
+                                        bmp,
+                                        wxDefaultPosition,
+                                        wxDefaultSize,
+                                        wxBORDER_NONE
+                                       );
+
+#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
+    button->SetBitmapPressed(
+        GetCloseButtonBitmap(parent, sizeBmp, colBg, wxCONTROL_PRESSED));
+
+    button->SetBitmapCurrent(
+        GetCloseButtonBitmap(parent, sizeBmp, colBg, wxCONTROL_CURRENT));
+#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+    // The button should blend with its parent background.
+    button->SetBackgroundColour(colBg);
+
+    return button;
+}
 
 #endif // wxUSE_BMPBUTTON

@@ -38,40 +38,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/artprov.h"
-#include "wx/renderer.h"
 #include "wx/scopeguard.h"
 
 BEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
     EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)
 END_EVENT_TABLE()
-
-// ----------------------------------------------------------------------------
-// local helpers
-// ----------------------------------------------------------------------------
-
-namespace
-{
-
-#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
-
-wxBitmap
-GetCloseButtonBitmap(wxWindow *win,
-                     const wxSize& size,
-                     const wxColour& colBg,
-                     int flags = 0)
-{
-    wxBitmap bmp(size);
-    wxMemoryDC dc(bmp);
-    dc.SetBackground(colBg);
-    dc.Clear();
-    wxRendererNative::Get().
-        DrawTitleBarBitmap(win, dc, size, wxTITLEBAR_BUTTON_CLOSE, flags);
-    return bmp;
-}
-
-#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
-
-} // anonymous namespace
 
 // ============================================================================
 // implementation
@@ -111,31 +82,7 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
 
     m_text = new wxStaticText(this, wxID_ANY, "");
 
-#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
-    const wxSize sizeBmp = wxArtProvider::GetSizeHint(wxART_BUTTON);
-    wxBitmap bmp = GetCloseButtonBitmap(this, sizeBmp, colBg);
-#else // !wxHAS_DRAW_TITLE_BAR_BITMAP
-    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_CLOSE, wxART_BUTTON);
-#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
-    m_button = new wxBitmapButton
-                   (
-                    this,
-                    wxID_ANY,
-                    bmp,
-                    wxDefaultPosition,
-                    wxDefaultSize,
-                    wxBORDER_NONE
-                   );
-
-#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
-    m_button->SetBitmapPressed(
-        GetCloseButtonBitmap(this, sizeBmp, colBg, wxCONTROL_PRESSED));
-
-    m_button->SetBitmapCurrent(
-        GetCloseButtonBitmap(this, sizeBmp, colBg, wxCONTROL_CURRENT));
-#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
-
-    m_button->SetBackgroundColour(colBg);
+    m_button = wxBitmapButton::NewCloseButton(parent, wxID_ANY);
     m_button->SetToolTip(_("Hide this notification message."));
 
     // center the text inside the sizer with an icon to the left of it and a

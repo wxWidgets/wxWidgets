@@ -547,6 +547,7 @@ All (GUI):
 - Add expand/collapse button to wxRibbonBar (rakeshthp).
 - Fix item data access in wxDataViewListCtrl (Kry).
 - Fix problem with floating maximized AUI panes (Laurent Poujoulat).
+- Add wxBitmapButton::NewCloseButton().
 
 wxGTK:
 
