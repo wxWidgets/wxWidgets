@@ -550,6 +550,11 @@ void wxComboBox::Clear()
         wxTextEntry::Clear();
 }
 
+bool wxComboBox::ContainsHWND(WXHWND hWnd) const
+{
+    return hWnd == GetEditHWNDIfAvailable();
+}
+
 void wxComboBox::GetSelection(long *from, long *to) const
 {
     if ( !HasFlag(wxCB_READONLY) )

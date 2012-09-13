@@ -367,7 +367,23 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     WXHBRUSH hbr = 0;
     if ( !colBg.IsOk() )
     {
-        if ( wxWindow *win = wxFindWinFromHandle(hWnd) )
+        wxWindow *win = wxFindWinFromHandle( hWnd );
+        if ( !win )
+        {
+            // If this HWND doesn't correspond to a wxWindow, it still might be
+            // one of its children for which we need to set the background
+            // brush, e.g. this is the case for the EDIT control that is part
+            // of wxComboBox. Check for this by asking the parent if it has it:
+            HWND parent = ::GetParent(hWnd);
+            if ( parent )
+            {
+                wxWindow *winParent = wxFindWinFromHandle( parent );
+                if( winParent && winParent->ContainsHWND( hWnd ) )
+                    win = winParent;
+             }
+        }
+
+        if ( win )
             hbr = win->MSWGetBgBrush(pDC);
 
         // if the control doesn't have any bg colour, foreground colour will be

@@ -92,6 +92,7 @@ public:
     virtual void SetSelection(long from, long to)
         { wxTextEntry::SetSelection(from, to); }
     virtual int GetSelection() const { return wxChoice::GetSelection(); }
+    virtual bool ContainsHWND(WXHWND hWnd) const;
     virtual void GetSelection(long *from, long *to) const;
 
     virtual bool IsEditable() const;
