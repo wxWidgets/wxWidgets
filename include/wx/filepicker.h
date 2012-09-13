@@ -183,11 +183,6 @@ public:        // internal functions
     // event handler for our picker
     void OnFileDirChange(wxFileDirPickerEvent &);
 
-    // Returns TRUE if the current path is a valid one
-    // (i.e. a valid file for a wxFilePickerWidget or a valid
-    //  folder for a wxDirPickerWidget).
-    virtual bool CheckPath(const wxString &str) const = 0;
-
     // TRUE if any textctrl change should update the current working directory
     virtual bool IsCwdToUpdate() const = 0;
 

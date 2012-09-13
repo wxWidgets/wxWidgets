@@ -63,8 +63,6 @@ bool wxFileDirPickerCtrlBase::CreateBase(wxWindow *parent,
                                          const wxValidator& validator,
                                          const wxString &name )
 {
-    wxASSERT_MSG(path.empty() || CheckPath(path), wxT("Invalid initial path!"));
-
     if (!wxPickerBase::CreateBase(parent, id, path, pos, size,
                                    style, validator, name))
         return false;
@@ -119,8 +117,13 @@ void wxFileDirPickerCtrlBase::UpdatePickerFromTextCtrl()
     // string otherwise we would generate a wxFileDirPickerEvent when changing
     // from e.g. /home/user to /home/user/ and we want to avoid it !
     wxString newpath(GetTextCtrlValue());
-    if (!CheckPath(newpath))
-        return;       // invalid user input
+
+    // Notice that we use to check here whether the current path is valid, i.e.
+    // if the corresponding file or directory exists for the controls with
+    // wxFLP_FILE_MUST_EXIST or wxDIRP_DIR_MUST_EXIST flag, however we don't do
+    // this any more as we still must notify the program about any changes in
+    // the control, otherwise its view of it would be different from what is
+    // actually shown on the screen, resulting in very confusing UI.
 
     if (m_pickerIface->GetPath() != newpath)
     {
@@ -199,15 +202,6 @@ bool wxFilePickerCtrl::Create(wxWindow *parent,
     return true;
 }
 
-bool wxFilePickerCtrl::CheckPath(const wxString& path) const
-{
-    // if wxFLP_SAVE was given or wxFLP_FILE_MUST_EXIST has NOT been given we
-    // must accept any path
-    return HasFlag(wxFLP_SAVE) ||
-            !HasFlag(wxFLP_FILE_MUST_EXIST) ||
-                wxFileName::FileExists(path);
-}
-
 wxString wxFilePickerCtrl::GetTextCtrlValue() const
 {
     // filter it through wxFileName to remove any spurious path separator
@@ -244,12 +238,6 @@ bool wxDirPickerCtrl::Create(wxWindow *parent,
         GetTextCtrl()->AutoCompleteDirectories();
 
     return true;
-}
-
-bool wxDirPickerCtrl::CheckPath(const wxString& path) const
-{
-    // if wxDIRP_DIR_MUST_EXIST has NOT been given we must accept any path
-    return !HasFlag(wxDIRP_DIR_MUST_EXIST) || wxFileName::DirExists(path);
 }
 
 wxString wxDirPickerCtrl::GetTextCtrlValue() const
