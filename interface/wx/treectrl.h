@@ -691,8 +691,8 @@ public:
 
     /**
         Inserts an item before one identified
-        by its position (@a before). @a before must be less than the number of
-        children.
+        by its position (@a pos). @a pos must be less than or equal to
+        the number of children.
 
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
@@ -700,7 +700,7 @@ public:
         image is used for both selected and unselected items.
     */
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
-                            size_t before,
+                            size_t pos,
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
