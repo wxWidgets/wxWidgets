@@ -1022,6 +1022,73 @@ const wxSize wxDefaultSize;
 #define wxBITMAP(bitmapName)
 
 /**
+    Creates a bitmap from either application resources or embedded image data
+    in PNG format.
+
+    This macro is similar to wxBITMAP() but works with bitmap data in PNG
+    format and not BMP or XPM.
+
+    Under Windows the given @a bitmapName must be present in the application
+    resource file with the type @c RCDATA and refer to a PNG image. I.e. you
+    should have a definition similar to the following in your @c .rc file:
+    @code
+        mybitmap    RCDATA  "mybitmap.png"
+    @endcode
+    to be able to use @c wxBITMAP_PNG(mybitmap) in the code.
+
+    Under OS X the file with the specified name and "png" extension must be
+    present in the "Resources" subdirectory of the application bundle.
+
+    Under the other platforms, this is equivalent to wxBITMAP_PNG_FROM_DATA()
+    and so loads the image data from the array called @c bitmapName_png that
+    must exist. Notice that it @e must be an array and not a pointer as the
+    macro needs to be able to determine its size. Such an array can be produced
+    by a number of conversion programs. A very simple one is included in
+    wxWidgets distribution as @c misc/scripts/png2c.py.
+
+    Finally notice that you must register PNG image handler to be able to
+    load bitmaps from PNG data. This can be done either by calling
+    wxInitAllImageHandlers() which also registers all the other image formats
+    or including the necessary header:
+    @code
+        #include <wx/imagpng.h>
+    @endcode
+    and calling
+    @code
+        wxImage::AddHandler(new wxPNGHandler);
+    @endcode
+    in your application startup code.
+
+    @see wxBITMAP_PNG_FROM_DATA()
+
+    @header{wx/gdicmn.h}
+
+    @since 2.9.5
+ */
+#define wxBITMAP_PNG(bitmapName)
+
+/**
+    Creates a bitmap from embedded image data in PNG format.
+
+    This macro is a thin wrapper around wxBitmap::NewFromPNGData() and takes
+    just the base name of the array containing the image data and computes its
+    size internally. In other words, the array called @c bitmapName_png must
+    exist. Notice that it @e must be an array and not a pointer as the macro
+    needs to be able to determine its size. Such an array can be produced by a
+    number of conversion programs. A very simple one is included in wxWidgets
+    distribution as @c misc/scripts/png2c.py.
+
+    You can use wxBITMAP_PNG() to load the PNG bitmaps from resources on the
+    platforms that support this and only fall back to loading them from data
+    under the other ones (i.e. not Windows and not OS X).
+
+    @header{wx/gdicmn.h}
+
+    @since 2.9.5
+ */
+#define wxBITMAP_PNG_FROM_DATA(bitmapName)
+
+/**
     This macro loads an icon from either application resources (on the
     platforms for which they exist, i.e. Windows and OS2) or from an XPM file.
     This can help to avoid using @ifdef_ when creating icons.

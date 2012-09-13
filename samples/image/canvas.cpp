@@ -35,6 +35,7 @@
 
 #include "smile.xbm"
 #include "smile.xpm"
+#include "cursor_png.c"
 
 #include "canvas.h"
 
@@ -376,6 +377,19 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
         free(data);
     }
+
+    // This macro loads PNG from either resources on the platforms that support
+    // this (Windows and OS X) or from in-memory data (coming from cursor_png.c
+    // included above in our case).
+    my_png_from_res = wxBITMAP_PNG(cursor);
+
+    // This one always loads PNG from memory but exists for consistency with
+    // the above one and also because it frees you from the need to specify the
+    // length explicitly, without it you'd have to do it and also spell the
+    // array name in full, like this:
+    //
+    // my_png_from_mem = wxBitmap::NewFromPNGData(cursor_png, WXSIZEOF(cursor_png));
+    my_png_from_mem = wxBITMAP_PNG_FROM_DATA(cursor);
 }
 
 MyCanvas::~MyCanvas()
@@ -635,6 +649,13 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
             dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, true );
         }
     }
+
+    dc.DrawText("PNG from resources", 30, 2460);
+    if ( my_png_from_res.IsOk() )
+        dc.DrawBitmap(my_png_from_res, 30, 2480, true);
+    dc.DrawText("PNG from memory", 230, 2460);
+    if ( my_png_from_mem.IsOk() )
+        dc.DrawBitmap(my_png_from_mem, 230, 2480, true);
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()

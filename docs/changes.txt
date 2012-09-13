@@ -536,6 +536,7 @@ All:
 
 All (GUI):
 
+- Add wxBITMAP_PNG() macro similar to wxBITMAP() but for PNG files.
 - Add new wxSimplebook class.
 - Support hexadecimal numbers in wxSpinCtrl.
 - Respect window max size in wxBoxSizer (Nathan Ridge).

@@ -78,8 +78,17 @@ wxBitmap bmp(wxBITMAP(bmpname));
 
 You should always use wxICON() and wxBITMAP() macros because they work for any
 platform (unlike the code above which doesn't deal with wxMac, wxX11, ...) and
-are shorter and more clear than versions with many @ifdef_ blocks. Even better,
-use the same XPMs on all platforms.
+are shorter and more clear than versions with many @ifdef_ blocks.
+Alternatively, you could use the same XPMs on all platforms and avoid dealing
+with Windows resource files.
+
+If you'd like to embed bitmaps with alpha transparency in your program, neither
+XPM nor BMP formats are appropriate as they don't have support for alpha and
+another format, typically PNG, should be used. wxWidgets provides a similar
+helper for PNG bitmaps called wxBITMAP_PNG() that can be used to either load
+PNG files embedded in resources (meaning either Windows resource section of the
+executable file or OS X "Resource" subdirectory of the application bundle) or
+arrays containing PNG data included into the program code itself.
 
 @li @ref overview_bitmap_supportedformats
 @li @ref overview_bitmap_handlers

@@ -218,6 +218,28 @@ enum wxStockCursor
     #define wxBITMAP(name) wxBitmap(name##_xpm, wxBITMAP_TYPE_XPM)
 #endif // platform
 
+// Macro for creating wxBitmap from in-memory PNG data.
+//
+// It reads PNG data from name_png static byte arrays that can be created using
+// e.g. misc/scripts/png2c.py.
+//
+// This macro exists mostly as a helper for wxBITMAP_PNG() below but also
+// because it's slightly more convenient to use than NewFromPNGData() directly.
+#define wxBITMAP_PNG_FROM_DATA(name) \
+    wxBitmap::NewFromPNGData(name##_png, WXSIZEOF(name##_png))
+
+// Similar to wxBITMAP but used for the bitmaps in PNG format.
+//
+// Under Windows they should be embedded into the resource file using RT_RCDATA
+// resource type and under OS X the PNG file with the specified name must be
+// available in the resource subdirectory of the bundle. Elsewhere, this is
+// exactly the same thing as wxBITMAP_PNG_FROM_DATA() described above.
+#if defined(__WINDOWS__) || defined(__WXOSX__)
+    #define wxBITMAP_PNG(name) wxBitmap(wxS(#name), wxBITMAP_TYPE_PNG_RESOURCE)
+#else
+    #define wxBITMAP_PNG(name) wxBITMAP_PNG_FROM_DATA(name)
+#endif
+
 // ===========================================================================
 // classes
 // ===========================================================================

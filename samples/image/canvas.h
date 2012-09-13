@@ -38,6 +38,8 @@ public:
     wxBitmap  my_horse_ico16;
     wxBitmap  my_horse_ico;
     wxBitmap  my_horse_cur;
+    wxBitmap  my_png_from_res,
+              my_png_from_mem;
 
     wxBitmap  my_smile_xbm;
     wxBitmap  my_square;

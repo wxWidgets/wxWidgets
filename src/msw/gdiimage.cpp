@@ -39,6 +39,18 @@
 #include "wx/msw/dib.h"
 #endif
 
+// By default, use PNG resource handler if we can, i.e. have support for
+// loading PNG images in the library. This symbol could be predefined as 0 to
+// avoid doing this if anybody ever needs to do it for some reason.
+#if !defined(wxUSE_PNG_RESOURCE_HANDLER) && wxUSE_LIBPNG && wxUSE_IMAGE
+    #define wxUSE_PNG_RESOURCE_HANDLER 1
+#endif
+
+#if wxUSE_PNG_RESOURCE_HANDLER
+    #include "wx/image.h"
+    #include "wx/utils.h"       // For wxLoadUserResource()
+#endif
+
 #ifdef __WXWINCE__
 #include <winreg.h>
 #include <shellapi.h>
@@ -173,6 +185,27 @@ private:
     DECLARE_DYNAMIC_CLASS(wxICOResourceHandler)
 };
 
+#if wxUSE_PNG_RESOURCE_HANDLER
+
+class WXDLLEXPORT wxPNGResourceHandler : public wxBitmapHandler
+{
+public:
+    wxPNGResourceHandler() : wxBitmapHandler(wxS("Windows PNG resource"),
+                                             wxString(),
+                                             wxBITMAP_TYPE_PNG_RESOURCE)
+    {
+    }
+
+    virtual bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name, wxBitmapType flags,
+                          int desiredWidth, int desiredHeight);
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxPNGResourceHandler);
+};
+
+#endif // wxUSE_PNG_RESOURCE_HANDLER
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -181,6 +214,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxBMPFileHandler, wxBitmapHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxBMPResourceHandler, wxBitmapHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxICOFileHandler, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxICOResourceHandler, wxObject)
+#if wxUSE_PNG_RESOURCE_HANDLER
+IMPLEMENT_DYNAMIC_CLASS(wxPNGResourceHandler, wxBitmapHandler)
+#endif // wxUSE_PNG_RESOURCE_HANDLER
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -306,8 +342,11 @@ void wxGDIImage::InitStandardHandlers()
 #ifndef __WXMICROWIN__
     AddHandler(new wxBMPResourceHandler);
     AddHandler(new wxBMPFileHandler);
-    AddHandler(new wxICOResourceHandler);
     AddHandler(new wxICOFileHandler);
+    AddHandler(new wxICOResourceHandler);
+#if wxUSE_PNG_RESOURCE_HANDLER
+    AddHandler(new wxPNGResourceHandler);
+#endif // wxUSE_PNG_RESOURCE_HANDLER
 #endif
 }
 
@@ -561,6 +600,55 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 
     return icon->IsOk();
 }
+
+#if wxUSE_PNG_RESOURCE_HANDLER
+
+// ----------------------------------------------------------------------------
+// PNG handler
+// ----------------------------------------------------------------------------
+
+bool wxPNGResourceHandler::LoadFile(wxBitmap *bitmap,
+                                    const wxString& name,
+                                    wxBitmapType WXUNUSED(flags),
+                                    int WXUNUSED(desiredWidth),
+                                    int WXUNUSED(desiredHeight))
+{
+    const void* pngData = NULL;
+    size_t pngSize = 0;
+
+    // Currently we hardcode RCDATA resource type as this is what is usually
+    // used for the embedded images. We could allow specifying the type as part
+    // of the name in the future (e.g. "type:name" or something like this) if
+    // really needed.
+    if ( !wxLoadUserResource(&pngData, &pngSize,
+                             name,
+                             RT_RCDATA,
+                             wxGetInstance()) )
+    {
+        // Notice that this message is not translated because only the
+        // programmer (and not the end user) can make any use of it.
+        wxLogError(wxS("Bitmap in PNG format \"%s\" not found, check ")
+                   wxS("that the resource file contains \"RCDATA\" ")
+                   wxS("resource with this name."),
+                   name);
+
+        return false;
+    }
+
+    *bitmap = wxBitmap::NewFromPNGData(pngData, pngSize);
+    if ( !bitmap->IsOk() )
+    {
+        wxLogError(wxS("Couldn't load resource bitmap \"%s\" as a PNG. "),
+                   wxS("Have you registered PNG image handler?"),
+                   name);
+
+        return false;
+    }
+
+    return true;
+}
+
+#endif // wxUSE_PNG_RESOURCE_HANDLER
 
 // ----------------------------------------------------------------------------
 // private functions

@@ -260,7 +260,7 @@ SOURCE=.\image.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\..\..\samples\sample.rc
+SOURCE=.\image.rc
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -89,7 +89,7 @@ protected:
 
 // Unfortunately, currently wxBitmap does not inherit from wxBitmapBase on all
 // platforms and this is not easy to fix. So we extract at least some common
-// methods into this class from which both wxBitmapBase (and hase wxBitmap on
+// methods into this class from which both wxBitmapBase (and hence wxBitmap on
 // all platforms where it does inherit from it) and wxBitmap in wxMSW and other
 // exceptional ports (only wxPM and old wxCocoa) inherit.
 class WXDLLIMPEXP_CORE wxBitmapHelpers

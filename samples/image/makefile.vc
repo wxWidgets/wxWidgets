@@ -34,7 +34,7 @@ IMAGE_OBJECTS =  \
 	$(OBJS)\image_image.obj \
 	$(OBJS)\image_canvas.obj
 IMAGE_RESOURCES =  \
-	$(OBJS)\image_sample.res
+	$(OBJS)\image_image.res
 
 ### Conditionally set variables: ###
 
@@ -356,7 +356,7 @@ clean:
 	-if exist $(OBJS)\image.ilk del $(OBJS)\image.ilk
 	-if exist $(OBJS)\image.pdb del $(OBJS)\image.pdb
 
-$(OBJS)\image.exe: $(IMAGE_OBJECTS) $(OBJS)\image_sample.res
+$(OBJS)\image.exe: $(IMAGE_OBJECTS) $(OBJS)\image_image.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\image.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
 	$(IMAGE_OBJECTS) $(IMAGE_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
 <<
@@ -365,12 +365,11 @@ data:
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg cursor.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
-$(OBJS)\image_sample.res: .\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\..\samples\sample.rc
-
 $(OBJS)\image_image.obj: .\image.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(IMAGE_CXXFLAGS) .\image.cpp
 
 $(OBJS)\image_canvas.obj: .\canvas.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(IMAGE_CXXFLAGS) .\canvas.cpp
 
+$(OBJS)\image_image.res: .\image.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\image.rc
