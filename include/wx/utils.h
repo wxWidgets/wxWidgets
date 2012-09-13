@@ -818,6 +818,10 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
     // Return the pointer to the resource data. This pointer is read-only, use
     // the overload below if you need to modify the data.
     //
+    // Notice that the resource type can be either a real string or an integer
+    // produced by MAKEINTRESOURCE(). In particular, any standard resource type,
+    // i.e any RT_XXX constant, could be passed here.
+    //
     // Returns true on success, false on failure. Doesn't log an error message
     // if the resource is not found (because this could be expected) but does
     // log one if any other error occurs.
@@ -825,7 +829,7 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
     wxLoadUserResource(const void **outData,
                        size_t *outLen,
                        const wxString& resourceName,
-                       const wxString& resourceType = wxUserResourceStr,
+                       const wxChar* resourceType = wxUserResourceStr,
                        WXHINSTANCE module = 0);
 
     // This function allocates a new buffer and makes a copy of the resource
@@ -835,7 +839,7 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
     // Returns NULL on failure.
     WXDLLIMPEXP_BASE char*
     wxLoadUserResource(const wxString& resourceName,
-                       const wxString& resourceType = wxUserResourceStr,
+                       const wxChar* resourceType = wxUserResourceStr,
                        int* pLen = NULL,
                        WXHINSTANCE module = 0);
 #endif // __WINDOWS__

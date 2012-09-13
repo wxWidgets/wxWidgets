@@ -1103,14 +1103,14 @@ bool
 wxLoadUserResource(const void **outData,
                    size_t *outLen,
                    const wxString& resourceName,
-                   const wxString& resourceType,
+                   const wxChar* resourceType,
                    WXHINSTANCE instance)
 {
     wxCHECK_MSG( outData && outLen, false, "output pointers can't be NULL" );
 
     HRSRC hResource = ::FindResource(instance,
                                      resourceName.t_str(),
-                                     resourceType.t_str());
+                                     resourceType);
     if ( !hResource )
         return false;
 
@@ -1139,7 +1139,7 @@ wxLoadUserResource(const void **outData,
 
 char *
 wxLoadUserResource(const wxString& resourceName,
-                   const wxString& resourceType,
+                   const wxChar* resourceType,
                    int* pLen,
                    WXHINSTANCE instance)
 {
