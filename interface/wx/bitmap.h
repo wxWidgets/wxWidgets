@@ -585,6 +585,31 @@ public:
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
     /**
+        Loads a bitmap from the memory containing image data in PNG format.
+
+        This helper function provides the simplest way to create a wxBitmap
+        from PNG image data. On most platforms, it's simply a wrapper around
+        wxImage loading functions and so requires the PNG image handler to be
+        registered by either calling wxInitAllImageHandlers() which also
+        registers all the other image formats or including the necessary
+        header:
+        @code
+            #include <wx/imagpng.h>
+        @endcode
+        and calling
+        @code
+            wxImage::AddHandler(new wxPNGHandler);
+        @endcode
+        in your application startup code.
+
+        However under OS X this function uses native image loading and so
+        doesn't require wxWidgets PNG support.
+
+        @since 2.9.5
+     */
+    static wxBitmap NewFromPNGData(const void* data, size_t size);
+
+    /**
         Finds the handler with the given name, and removes it.
         The handler is not deleted.
 

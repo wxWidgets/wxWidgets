@@ -64,7 +64,8 @@ protected:
 // wxBitmap
 // ========================================================================
 
-class WXDLLIMPEXP_CORE wxBitmap: public wxGDIObject
+class WXDLLIMPEXP_CORE wxBitmap: public wxGDIObject,
+                                 public wxBitmapHelpers
 {
 // ------------------------------------------------------------------------
 // initialization

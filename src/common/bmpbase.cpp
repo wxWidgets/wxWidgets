@@ -23,6 +23,12 @@
     #include "wx/image.h"
 #endif // WX_PRECOMP
 
+#if wxUSE_IMAGE && wxUSE_LIBPNG && wxUSE_STREAMS
+    #define wxHAS_PNG_LOAD
+
+    #include "wx/mstream.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxVariant support
 // ----------------------------------------------------------------------------
@@ -36,6 +42,31 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxIcon,WXDLLEXPORT)
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxBitmap>)
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxIcon>)
 #endif
+
+// ----------------------------------------------------------------------------
+// wxBitmapHelpers
+// ----------------------------------------------------------------------------
+
+// wxOSX has a native version and doesn't use this one.
+
+#ifndef __WXOSX__
+
+/* static */
+wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
+{
+    wxBitmap bitmap;
+
+#ifdef wxHAS_PNG_LOAD
+    wxMemoryInputStream is(data, size);
+    wxImage image(is, wxBITMAP_TYPE_PNG);
+    if ( image.IsOk() )
+        bitmap = wxBitmap(image);
+#endif // wxHAS_PNG_LOAD
+
+    return bitmap;
+}
+
+#endif // !__WXOSX__
 
 // ----------------------------------------------------------------------------
 // wxBitmapBase

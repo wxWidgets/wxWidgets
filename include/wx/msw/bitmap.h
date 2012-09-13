@@ -43,7 +43,8 @@ enum wxBitmapTransparency
 // NOTE: for wxMSW we don't use the wxBitmapBase base class declared in bitmap.h!
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage
+class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage,
+                                  public wxBitmapHelpers
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later

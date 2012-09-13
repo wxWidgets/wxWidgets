@@ -1736,6 +1736,18 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
     return false ;
 }
 
+/* static */
+wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
+{
+    wxCFRef<CGDataProviderRef>
+        provider(CGDataProviderCreateWithData(NULL, data, size, NULL) );
+    wxCFRef<CGImageRef>
+        image(CGImageCreateWithPNGDataProvider(provider, NULL, true,
+                                                kCGRenderingIntentDefault));
+
+    return wxBitmap(image);
+}
+
 void wxBitmap::InitStandardHandlers()
 {
 #if wxOSX_USE_COCOA_OR_CARBON

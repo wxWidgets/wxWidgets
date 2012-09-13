@@ -63,7 +63,8 @@ public:
 // wxBitmap: a mono or colour bitmap
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage
+class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage,
+                                  public wxBitmapHelpers
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later

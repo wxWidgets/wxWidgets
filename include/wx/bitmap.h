@@ -83,6 +83,23 @@ protected:
 #define wxBITMAP_SCREEN_DEPTH       (-1)
 
 
+// ----------------------------------------------------------------------------
+// wxBitmapHelpers: container for various bitmap methods common to all ports.
+// ----------------------------------------------------------------------------
+
+// Unfortunately, currently wxBitmap does not inherit from wxBitmapBase on all
+// platforms and this is not easy to fix. So we extract at least some common
+// methods into this class from which both wxBitmapBase (and hase wxBitmap on
+// all platforms where it does inherit from it) and wxBitmap in wxMSW and other
+// exceptional ports (only wxPM and old wxCocoa) inherit.
+class WXDLLIMPEXP_CORE wxBitmapHelpers
+{
+public:
+    // Create a new wxBitmap from the PNG data in the given buffer.
+    static wxBitmap NewFromPNGData(const void* data, size_t size);
+};
+
+
 // All ports except wxMSW and wxOS2 use wxBitmapHandler and wxBitmapBase as
 // base class for wxBitmapHandler; wxMSW and wxOS2 use wxGDIImageHandler as
 // base class since it allows some code reuse there.
@@ -132,12 +149,12 @@ private:
     DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
-
 // ----------------------------------------------------------------------------
 // wxBitmap: class which represents platform-dependent bitmap (unlike wxImage)
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxBitmapBase : public wxGDIObject
+class WXDLLIMPEXP_CORE wxBitmapBase : public wxGDIObject,
+                                      public wxBitmapHelpers
 {
 public:
     /*
