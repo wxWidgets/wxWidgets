@@ -277,12 +277,14 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar keychar
             keychar = 0;
     }
 
-    if ( keycode == WXK_DOWN || keycode == WXK_NUMPAD_DOWN || keycode == WXK_RIGHT )
+    const bool readOnly = (comboStyle & wxCB_READONLY) != 0;
+
+    if ( keycode == WXK_DOWN || keycode == WXK_NUMPAD_DOWN || ( keycode == WXK_RIGHT && readOnly ) )
     {
         value++;
         StopPartialCompletion();
     }
-    else if ( keycode == WXK_UP || keycode == WXK_NUMPAD_UP || keycode == WXK_LEFT )
+    else if ( keycode == WXK_UP || keycode == WXK_NUMPAD_UP || ( keycode == WXK_LEFT && readOnly ) )
     {
         value--;
         StopPartialCompletion();
@@ -297,17 +299,17 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar keychar
         value-=10;
         StopPartialCompletion();
     }
-    else if ( keycode == WXK_HOME || keycode == WXK_NUMPAD_HOME )
+    else if ( ( keycode == WXK_HOME || keycode == WXK_NUMPAD_HOME ) && readOnly )
     {
         value=0;
         StopPartialCompletion();
     }
-    else if ( keycode == WXK_END || keycode == WXK_NUMPAD_END )
+    else if ( ( keycode == WXK_END || keycode == WXK_NUMPAD_END ) && readOnly )
     {
         value=itemCount-1;
         StopPartialCompletion();
     }
-    else if ( keychar && (comboStyle & wxCB_READONLY) )
+    else if ( keychar && readOnly )
     {
         // Try partial completion
 
