@@ -3,18 +3,17 @@ msgstr ""
 "Project-Id-Version: wxWidgets\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-27 11:51+0200\n"
-"PO-Revision-Date: 2012-03-01 21:02+0100\n"
+"PO-Revision-Date: 2012-09-14 10:26+0100\n"
 "Last-Translator: Zbyněk Schwarz <zbynek.schwarz@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
-"Language: \n"
+"Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
-"X-Poedit-Language: Czech\n"
-"X-Poedit-Country: CZECH REPUBLIC\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 1524,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
+"X-Generator: Poedit 1.5.3\n"
 
 #: ../src/common/debugrpt.cpp:582
 msgid ""
@@ -34,9 +33,9 @@ msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Děkujeme Vám a omlouváme se za nepříjemnosti!\n"
 
 #: ../src/common/prntbase.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "Strana %d z %d"
+msgstr " (kopie %d z %d)"
 
 #: ../src/common/log.cpp:428
 #, c-format
@@ -139,7 +138,7 @@ msgstr "%s se nevešlo do tar hlavičky záznamu '%s'"
 #: ../src/common/fldlgcmn.cpp:107
 #, c-format
 msgid "%s files (%s)|%s"
-msgstr "%s souborů (%s)|%s"
+msgstr "Soubory %s (%s)|%s"
 
 #: ../src/common/stockitem.cpp:140 ../src/html/helpfrm.cpp:143
 #: ../src/html/helpfrm.cpp:145
@@ -218,7 +217,7 @@ msgstr "&Styl odrážek:"
 
 #: ../src/common/stockitem.cpp:147
 msgid "&CD-Rom"
-msgstr "&CD-ROM"
+msgstr "&CD-Rom"
 
 #: ../src/generic/wizard.cpp:433 ../src/generic/fontdlgg.cpp:471
 #: ../src/generic/fontdlgg.cpp:490 ../src/osx/carbon/fontdlg.cpp:586
@@ -525,9 +524,8 @@ msgid "&Position (tenths of a mm):"
 msgstr "&Pozice (desetiny mm):"
 
 #: ../src/richtext/richtextsizepage.cpp:476
-#, fuzzy
 msgid "&Position mode:"
-msgstr "&Režim obtékání:"
+msgstr "&Režim pozice:"
 
 #: ../src/common/stockitem.cpp:182
 msgid "&Preferences"
@@ -1170,7 +1168,7 @@ msgstr "O %s"
 
 #: ../src/richtext/richtextsizepage.cpp:482
 msgid "Absolute"
-msgstr ""
+msgstr "Absolutní"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"
@@ -2411,9 +2409,8 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "Nelze načíst zvuková data z '%s'."
 
 #: ../src/msw/dirdlg.cpp:439
-#, fuzzy
 msgid "Couldn't obtain folder name"
-msgstr "Nelze vytvořit časovač"
+msgstr "Nelze získat název složky"
 
 #: ../src/unix/sound_sdl.cpp:226
 #, c-format
@@ -2651,9 +2648,9 @@ msgid "Did you know..."
 msgstr "Víte, že..."
 
 #: ../src/dfb/wrapdfb.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
-msgstr "Vyskytla se DirectFB chyba %d."
+msgstr "Vyskytla se chyba DirectFB %d."
 
 #: ../src/motif/filedlg.cpp:217
 msgid "Directories"
@@ -2718,9 +2715,8 @@ msgid "Do you want to save changes to %s?"
 msgstr "Chcete uložit změny v %s?"
 
 #: ../src/common/prntbase.cpp:526
-#, fuzzy
 msgid "Document:"
-msgstr "Dokumentace "
+msgstr "Dokument:"
 
 #: ../src/generic/aboutdlgg.cpp:74
 msgid "Documentation by "
@@ -3235,14 +3231,14 @@ msgid "Failed to kill process %d"
 msgstr "Nepodařilo se vynuceně ukončit proces %d"
 
 #: ../src/common/image.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "Nelze načíst obrázek %d z proudu."
+msgstr "Nelze načíst bitmapu \"%s\" ze zdrojů."
 
 #: ../src/common/image.cpp:2270
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "Nelze načíst obrázek %d z proudu."
+msgstr "Nelze načíst ikonu \"%s\" ze zdrojů."
 
 #: ../src/common/iconbndl.cpp:183
 #, c-format
@@ -3346,9 +3342,9 @@ msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Nelze analyzovat formy množného čísla: '%s'"
 
 #: ../src/unix/mediactrl.cpp:1269
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "Nelze otevřít zobrazení \"%s\"."
+msgstr "\"%s\" nelze připravit k přehrávání."
 
 #: ../src/msw/clipbrd.cpp:648
 msgid "Failed to put data on the clipboard"
@@ -3480,9 +3476,9 @@ msgid "Failed to set text in the text control."
 msgstr "Nelze nastavit text v textovém poli."
 
 #: ../src/unix/threadpsx.cpp:1141
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "Nelze nastavit prioritu vlákna %d."
+msgstr "Nelze nastavit úroveň souběžnosti vlákna na %lu"
 
 #: ../src/unix/threadpsx.cpp:1338 ../src/unix/threadpsx.cpp:1348
 #, c-format
@@ -3646,9 +3642,8 @@ msgid "First page"
 msgstr "První  stránka"
 
 #: ../src/richtext/richtextsizepage.cpp:483
-#, fuzzy
 msgid "Fixed"
-msgstr "Neproporcionální písmo:"
+msgstr "Pevná"
 
 #: ../src/html/helpwnd.cpp:1220
 msgid "Fixed font:"
@@ -4090,9 +4085,8 @@ msgid "Insert"
 msgstr "Vložit"
 
 #: ../src/richtext/richtextbuffer.cpp:7246
-#, fuzzy
 msgid "Insert Field"
-msgstr "Vložit text"
+msgstr "Vložit pole"
 
 #: ../src/richtext/richtextbuffer.cpp:7157
 #: ../src/richtext/richtextbuffer.cpp:8063
@@ -4728,7 +4722,7 @@ msgstr "Max šířka: "
 #: ../src/unix/mediactrl.cpp:1007
 #, c-format
 msgid "Media playback error: %s"
-msgstr ""
+msgstr "Chyba při přehrávání: %s"
 
 #: ../src/common/fs_mem.cpp:176
 #, c-format
@@ -5393,9 +5387,8 @@ msgid "Please select the columns to show and define their order:"
 msgstr "Prosím vyberte sloupce k zobrazení a určete jejich pořadí:"
 
 #: ../src/common/prntbase.cpp:522
-#, fuzzy
 msgid "Please wait while printing..."
-msgstr "Prosím vyčkejte až skončí tisk\n"
+msgstr "Prosím vyčkejte až skončí tisk..."
 
 #: ../src/propgrid/advprops.cpp:632
 msgid "Point Size"
@@ -5440,7 +5433,7 @@ msgstr "Předvolby..."
 
 #: ../src/common/prntbase.cpp:530
 msgid "Preparing"
-msgstr ""
+msgstr "Připravování"
 
 #: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:574
 #: ../src/html/helpwnd.cpp:1236
@@ -5480,9 +5473,8 @@ msgid "Print in colour"
 msgstr "Tisknout barevně"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print previe&w..."
-msgstr "Náhle&d tisku"
+msgstr "Náhle&d tisku..."
 
 #: ../src/gtk/gnome/gprint.cpp:940
 msgid "Print preview"
@@ -5493,9 +5485,8 @@ msgid "Print preview creation failed."
 msgstr "Nelze vytvořit náhled tisku"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print preview..."
-msgstr "Náhled tisku"
+msgstr "Náhled tisku..."
 
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Print spooling"
@@ -5551,9 +5542,9 @@ msgid "Printing Error"
 msgstr "Chyba tisku"
 
 #: ../src/common/prntbase.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d of %d"
-msgstr "Tisk strany %d..."
+msgstr "Tisk strany %d z %d"
 
 #: ../src/generic/printps.cpp:202
 #, c-format
@@ -5582,7 +5573,7 @@ msgstr "Vykreslovač průběhu nemůže vykreslit typ hodnoty; typ hodnoty: "
 
 #: ../src/common/prntbase.cpp:529
 msgid "Progress:"
-msgstr ""
+msgstr "Postup:"
 
 #: ../src/common/stockitem.cpp:185
 msgid "Properties"
@@ -5682,9 +5673,8 @@ msgid "Regular"
 msgstr "Normální"
 
 #: ../src/richtext/richtextsizepage.cpp:481
-#, fuzzy
 msgid "Relative"
-msgstr "Ozdobné"
+msgstr "Relativní"
 
 #: ../src/generic/helpext.cpp:463
 msgid "Relevant entries:"
@@ -5695,9 +5685,8 @@ msgid "Remove"
 msgstr "Odstranit"
 
 #: ../src/richtext/richtextctrl.cpp:1420
-#, fuzzy
 msgid "Remove Bullet"
-msgstr "Odstranit"
+msgstr "Odstranit odrážku"
 
 #: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
@@ -6100,9 +6089,8 @@ msgstr "Statement, 5 1/2 x 8 1/2 palce"
 #: ../src/richtext/richtextsizepage.cpp:480
 #: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:485
-#, fuzzy
 msgid "Static"
-msgstr "Stav: "
+msgstr "Statické"
 
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Status:"
@@ -6263,9 +6251,8 @@ msgstr "Velikost vnitřního okraje dole."
 #: ../src/richtext/richtextsizepage.cpp:579
 #: ../src/richtext/richtextsizepage.cpp:587
 #: ../src/richtext/richtextsizepage.cpp:589
-#, fuzzy
 msgid "The bottom position."
-msgstr "Pozice tabulátoru"
+msgstr "Dolní pozice."
 
 #: ../src/richtext/richtextliststylepage.cpp:255
 #: ../src/richtext/richtextliststylepage.cpp:257
@@ -6370,9 +6357,8 @@ msgstr "Velikost písma v bodech."
 
 #: ../src/richtext/richtextfontpage.cpp:188
 #: ../src/richtext/richtextfontpage.cpp:190
-#, fuzzy
 msgid "The font size units, points or pixels."
-msgstr "Velikost písma v bodech."
+msgstr "Jednotky velikosti písma, body nebo pixely."
 
 #: ../src/generic/fontdlgg.cpp:387 ../src/generic/fontdlgg.cpp:389
 msgid "The font style."
@@ -6408,9 +6394,8 @@ msgstr "Velikost vnitřního okraje vlevo."
 #: ../src/richtext/richtextsizepage.cpp:495
 #: ../src/richtext/richtextsizepage.cpp:503
 #: ../src/richtext/richtextsizepage.cpp:505
-#, fuzzy
 msgid "The left position."
-msgstr "Pozice tabulátoru"
+msgstr "Pozice vlevo."
 
 #: ../src/richtext/richtextindentspage.cpp:313
 #: ../src/richtext/richtextindentspage.cpp:315
@@ -6445,7 +6430,6 @@ msgstr "Maximální šířka objektu."
 
 #: ../src/richtext/richtextsizepage.cpp:382
 #: ../src/richtext/richtextsizepage.cpp:384
-#, fuzzy
 msgid "The object minimum height."
 msgstr "Minimální výška objektu."
 
@@ -6521,9 +6505,8 @@ msgstr "Velikost vnitřního okraje vpravo."
 #: ../src/richtext/richtextsizepage.cpp:551
 #: ../src/richtext/richtextsizepage.cpp:559
 #: ../src/richtext/richtextsizepage.cpp:561
-#, fuzzy
 msgid "The right position."
-msgstr "Pozice tabulátoru"
+msgstr "Pozice vpravo."
 
 #: ../src/richtext/richtextindentspage.cpp:292
 #: ../src/richtext/richtextliststylepage.cpp:440
@@ -6584,9 +6567,8 @@ msgstr "Velikost vnitřního okraje nahoře."
 #: ../src/richtext/richtextsizepage.cpp:523
 #: ../src/richtext/richtextsizepage.cpp:531
 #: ../src/richtext/richtextsizepage.cpp:533
-#, fuzzy
 msgid "The top position."
-msgstr "Pozice tabulátoru"
+msgstr "Horní pozice."
 
 #: ../src/common/cmdline.cpp:1054
 #, c-format
@@ -6995,9 +6977,8 @@ msgstr "Jednotky pro vnitřní okraj dole."
 
 #: ../src/richtext/richtextsizepage.cpp:598
 #: ../src/richtext/richtextsizepage.cpp:600
-#, fuzzy
 msgid "Units for the bottom position."
-msgstr "Jednotky pro vnitřní okraj dole."
+msgstr "Jednotky pro dolní pozici."
 
 #: ../src/richtext/richtextborderspage.cpp:283
 #: ../src/richtext/richtextborderspage.cpp:285
@@ -7021,9 +7002,8 @@ msgstr "Jednotky pro vnitřní okraj vlevo."
 
 #: ../src/richtext/richtextsizepage.cpp:514
 #: ../src/richtext/richtextsizepage.cpp:516
-#, fuzzy
 msgid "Units for the left position."
-msgstr "Jednotky pro vnitřní okraj vlevo."
+msgstr "Jednotky pro pozici vlevo."
 
 #: ../src/richtext/richtextsizepage.cpp:447
 #: ../src/richtext/richtextsizepage.cpp:449
@@ -7077,9 +7057,8 @@ msgstr "Jednotky pro vnitřní okraj vpravo."
 
 #: ../src/richtext/richtextsizepage.cpp:570
 #: ../src/richtext/richtextsizepage.cpp:572
-#, fuzzy
 msgid "Units for the right position."
-msgstr "Jednotky pro vnitřní okraj vpravo."
+msgstr "Jednotky pro pozici vpravo."
 
 #: ../src/richtext/richtextborderspage.cpp:343
 #: ../src/richtext/richtextborderspage.cpp:345
@@ -7103,9 +7082,8 @@ msgstr "Jednotky pro vnitřní okraj nahoře."
 
 #: ../src/richtext/richtextsizepage.cpp:542
 #: ../src/richtext/richtextsizepage.cpp:544
-#, fuzzy
 msgid "Units for the top position."
-msgstr "Jednotky pro vnitřní okraj nahoře."
+msgstr "Jednotky pro horní pozici."
 
 #: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
 msgid "Unknown"
@@ -7396,9 +7374,8 @@ msgid "Windows Japanese (CP 932) or Shift-JIS"
 msgstr "Japonské pro Windows (CP 932) nebo Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:181
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Arabské pro Windows (CP 1256)"
+msgstr "Johab pro Windows (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:170
 msgid "Windows Korean (CP 949)"
@@ -7434,9 +7411,8 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Turecké pro Windows (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Řecké pro Windows (CP 1253)"
+msgstr "Vietnamština pro Windows (CP 1258)"
 
 #: ../src/msw/utils.cpp:1296
 msgid "Windows Vista"
@@ -8084,7 +8060,7 @@ msgstr "popis kontextu procesu"
 #: ../src/richtext/richtextfontpage.cpp:184
 #: ../src/richtext/richtextfontpage.cpp:187
 msgid "pt"
-msgstr ""
+msgstr "pt"
 
 #: ../src/richtext/richtextfontpage.cpp:185
 #: ../src/richtext/richtextborderspage.cpp:279
