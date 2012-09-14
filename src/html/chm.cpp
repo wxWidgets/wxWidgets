@@ -563,7 +563,6 @@ void
 wxChmInputStream::CreateHHPStream()
 {
     wxFileName file;
-    bool topic = false;
     bool hhc = false;
     bool hhk = false;
     wxInputStream *i;
@@ -631,7 +630,6 @@ wxChmInputStream::CreateHHPStream()
                     break;
                 case 2: // DEFAULT_TOPIC
                     tmp = "Default Topic=";
-                    topic = true;
                     break;
                 case 3: // TITLE
                     tmp = "Title=";
