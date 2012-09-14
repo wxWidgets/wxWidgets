@@ -48,7 +48,7 @@
 
 #if wxPG_COMPATIBILITY_1_4
 
-// Used to establish backwards compatiblity
+// Used to establish backwards compatibility
 const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
 
 #endif

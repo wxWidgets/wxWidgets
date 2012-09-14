@@ -1437,7 +1437,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
     {
         if ( !(argFlags & wxPG_EDITABLE_VALUE ))
         {
-            // This really should not occurr...
+            // This really should not occur...
             // wxASSERT(false);
             ResetNextIndex();
             return false;
@@ -2204,7 +2204,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
 
 wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
 {
-    // This code is basicly copied from datectlg.cpp's SetFormat
+    // This code is basically copied from datectlg.cpp's SetFormat
     //
     wxString format;
 

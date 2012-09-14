@@ -5165,7 +5165,7 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
     int splitterHitOffset;
     state->HitTestH( x, &splitterHit, &splitterHitOffset );
 
-    // No event type check - basicly calling this method should
+    // No event type check - basically calling this method should
     // just stop dragging.
     // Left up after dragged?
     if ( m_dragStatus >= 1 )
