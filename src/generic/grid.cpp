@@ -6502,8 +6502,8 @@ wxGridCellCoords wxGrid::XYToCell(int x, int y) const
 
 // compute row or column from some (unscrolled) coordinate value, using either
 // m_defaultRowHeight/m_defaultColWidth or binary search on array of
-// m_rowBottoms/m_colRights to do it quickly (linear search shouldn't be used
-// for large grids)
+// m_rowBottoms/m_colRights to do it quickly in O(log n) time.
+// NOTE: This may not work correctly for reordered columns.
 int wxGrid::PosToLinePos(int coord,
                          bool clipToMinMax,
                          const wxGridOperations& oper) const
@@ -6531,26 +6531,11 @@ int wxGrid::PosToLinePos(int coord,
     }
 
 
-    // adjust maxPos before starting the binary search
-    if ( maxPos >= numLines )
-    {
-        maxPos = numLines  - 1;
-    }
-    else
-    {
-        if ( coord >= lineEnds[oper.GetLineAt(this, maxPos)])
-        {
-            minPos = maxPos;
-            const int minDist = oper.GetMinimalAcceptableLineSize(this);
-            if ( minDist )
-                maxPos = coord / minDist;
-            else
-                maxPos = numLines - 1;
-        }
-
-        if ( maxPos >= numLines )
-            maxPos = numLines  - 1;
-    }
+    // binary search is quite efficient and we can't really make any assumptions
+    // on where to start here since row and columns could be of size 0 if they are
+    // hidden. While this could be made more efficient, some profiling will be
+    // necessary to determine if it really is a performance bottleneck
+    maxPos = numLines  - 1;
 
     // check if the position is beyond the last column
     const int lineAtMaxPos = oper.GetLineAt(this, maxPos);
