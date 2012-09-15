@@ -65,7 +65,7 @@ public:
     @style{wxRIBBON_BAR_DEFAULT_STYLE}
         Defined as wxRIBBON_BAR_FLOW_HORIZONTAL |
         wxRIBBON_BAR_SHOW_PAGE_LABELS | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
-        wxRIBBON_BAR_SHOW_TOGGLE_BUTTON.
+        wxRIBBON_BAR_SHOW_TOGGLE_BUTTON | wxRIBBON_BAR_SHOW_HELP_BUTTON.
     @style{wxRIBBON_BAR_FOLDBAR_STYLE}
         Defined as wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
         | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
@@ -87,6 +87,9 @@ public:
     @style{wxRIBBON_BAR_SHOW_TOGGLE_BUTTON}
         Causes a toggle button to appear on the ribbon bar at top-right corner.
         This style is new since wxWidgets 2.9.5.
+    @style{wxRIBBON_BAR_SHOW_HELP_BUTTON)
+        Causes a help button to appear on the ribbon bar at the top-right corner.
+        This style is new since wxWidgets 2.9.5.
     @endStyleTable
 
 
@@ -107,9 +110,12 @@ public:
         Triggered when the right mouse button is released on a tab.
     @event{EVT_RIBBONBAR_TAB_LEFT_DCLICK(id, func)}
         Triggered when the left mouse button is double clicked on a tab.
-    @event{EVT_RIBBONBAR_TOGGLE_BUTTON_CLICK(id, func)}
+    @event{EVT_RIBBONBAR_TOGGLED(id, func)}
         Triggered when the button triggering the ribbon bar is clicked. This
         event is new since wxWidgets 2.9.5.
+    @event{EVT_RIBBONBAR_HELP_CLICK(id, func)}
+        Triggered when the help button is clicked. This even is new since
+        wxWidgets 2.9.5.
     @endEventTable
 
     @library{wxribbon}

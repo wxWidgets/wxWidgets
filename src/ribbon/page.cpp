@@ -1091,4 +1091,9 @@ wxSize wxRibbonPage::DoGetBestSize() const
     return best;
 }
 
+void wxRibbonPage::HideIfExpanded()
+{
+    wxStaticCast(m_parent, wxRibbonBar)->HideIfExpanded();
+}
+
 #endif // wxUSE_RIBBON

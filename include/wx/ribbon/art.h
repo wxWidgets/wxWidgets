@@ -21,6 +21,7 @@
 #include "wx/font.h"
 #include "wx/pen.h"
 #include "wx/bitmap.h"
+#include "wx/ribbon/bar.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -306,7 +307,12 @@ public:
                         wxDC& dc,
                         wxRibbonBar* wnd,
                         const wxRect& rect,
-                        bool upBitmap) = 0;
+                        wxRibbonDisplayMode mode) = 0;
+
+    virtual void DrawHelpButton(
+                        wxDC& dc,
+                        wxRibbonBar* wnd,
+                        const wxRect& rect) = 0;
 
     virtual void GetBarTabWidth(
                         wxDC& dc,
@@ -392,9 +398,9 @@ public:
                         bool is_last,
                         wxRect* dropdown_region) = 0;
 
-    virtual wxRect GetBarToggleButtonArea(wxDC& dc,
-                                          const wxRibbonBar* wnd,
-                                          wxRect rect)= 0;
+    virtual wxRect GetBarToggleButtonArea(const wxRect& rect)= 0;
+
+    virtual wxRect GetRibbonHelpButtonArea(const wxRect& rect) = 0;
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
@@ -510,7 +516,11 @@ public:
                         wxDC& dc,
                         wxRibbonBar* wnd,
                         const wxRect& rect,
-                        bool upBitmap);
+                        wxRibbonDisplayMode mode);
+
+    void DrawHelpButton(wxDC& dc,
+                        wxRibbonBar* wnd,
+                        const wxRect& rect);
 
     void GetBarTabWidth(
                         wxDC& dc,
@@ -591,9 +601,9 @@ public:
                         bool is_last,
                         wxRect* dropdown_region);
 
-    wxRect GetBarToggleButtonArea(wxDC& dc,
-                                  const wxRibbonBar* wnd,
-                                  wxRect rect);
+    wxRect GetBarToggleButtonArea(const wxRect& rect);
+
+    wxRect GetRibbonHelpButtonArea(const wxRect& rect);
 
 protected:
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);
@@ -632,6 +642,8 @@ protected:
     wxBitmap m_panel_extension_bitmap[2];
     wxBitmap m_ribbon_toggle_up_bitmap[2];
     wxBitmap m_ribbon_toggle_down_bitmap[2];
+    wxBitmap m_ribbon_toggle_pin_bitmap[2];
+    wxBitmap m_ribbon_bar_help_button_bitmap[2];
 
     wxColour m_primary_scheme_colour;
     wxColour m_secondary_scheme_colour;
@@ -745,6 +757,8 @@ protected:
     int m_gallery_bitmap_padding_right_size;
     int m_gallery_bitmap_padding_top_size;
     int m_gallery_bitmap_padding_bottom_size;
+    int m_toggle_button_offset;
+    int m_help_button_offset;
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonAUIArtProvider : public wxRibbonMSWArtProvider

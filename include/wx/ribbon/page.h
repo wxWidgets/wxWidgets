@@ -61,6 +61,8 @@ public:
 
     virtual void RemoveChild(wxWindowBase *child);
 
+    void HideIfExpanded();
+
 protected:
     virtual wxSize DoGetBestSize() const;
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }

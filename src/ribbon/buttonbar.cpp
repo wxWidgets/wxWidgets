@@ -17,6 +17,7 @@
 
 #if wxUSE_RIBBON
 
+#include "wx/ribbon/panel.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/art.h"
 #include "wx/dcbuffer.h"
@@ -1100,6 +1101,8 @@ void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
                 m_lock_active_state = true;
                 ProcessWindowEvent(notification);
                 m_lock_active_state = false;
+
+                wxStaticCast(m_parent, wxRibbonPanel)->HideIfExpanded();
             } while(false);
             if(m_active_button) // may have been NULLed by event handler
             {

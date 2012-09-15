@@ -19,7 +19,6 @@
 
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/art_internal.h"
-#include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/gallery.h"
 #include "wx/ribbon/toolbar.h"
@@ -122,6 +121,151 @@ static const char* const panel_toggle_up_xpm[] = {
   "x     x",
   "       ",};
 
+static const char* const ribbon_toggle_pin_xpm[] = {
+  "12 9 3 1",
+  "  c None",
+  "x c #FF00FF",
+  ". c #FF00FF",
+  "   xx       ",
+  "   x.x   xxx",
+  "   x..xxx..x",
+  "xxxx.......x",
+  "x..........x",
+  "xxxx.......x",
+  "   x..xxx..x",
+  "   x.x   xxx",
+  "   xx       "
+};
+
+static const char * const ribbon_help_button_xpm[] = {
+"12 12 112 2",
+"   c #163B95",
+".  c none",
+"X  c #1B3F98",
+"o  c #1B4097",
+"O  c #1D4198",
+"+  c #1E4298",
+"@  c #1E439B",
+"#  c #1A419F",
+"$  c #1E439D",
+"%  c #204398",
+"&  c #204399",
+"*  c #25479B",
+"=  c #25489A",
+"-  c #284A9D",
+";  c #2A4C9D",
+":  c #30519E",
+">  c #3B589A",
+",  c #3D599B",
+"<  c #1840A2",
+"1  c #1E45A1",
+"2  c #1E4AB4",
+"3  c #2D4FA0",
+"4  c #224AAC",
+"5  c #254DAC",
+"6  c #294FA9",
+"7  c #2B52AE",
+"8  c #3051A0",
+"9  c #3354A0",
+"0  c #3354A2",
+"q  c #3454A3",
+"w  c #3456A4",
+"e  c #3556A4",
+"r  c #3C5BA3",
+"t  c #395AA6",
+"y  c #3E5CA6",
+"u  c #3E5DA7",
+"i  c #3F5EA6",
+"p  c #2A51B0",
+"a  c #2E55B5",
+"s  c #2752BA",
+"d  c #3058B8",
+"f  c #3F61B2",
+"g  c #415FA7",
+"h  c #4562A7",
+"j  c #4864A7",
+"k  c #4D67A5",
+"l  c #4361A8",
+"z  c #4361A9",
+"x  c #4663A8",
+"c  c #4563AA",
+"v  c #4764AA",
+"b  c #4B68AE",
+"n  c #506AA8",
+"m  c #516DAD",
+"M  c #546EAC",
+"N  c #5F75AB",
+"B  c #5A72AC",
+"V  c #5C77B6",
+"C  c #6C7DA7",
+"Z  c #6077AD",
+"A  c #687DAF",
+"S  c #637BB4",
+"D  c #687FB7",
+"F  c #2D59C1",
+"G  c #2E5AC2",
+"H  c #2F5ECE",
+"J  c #3763CC",
+"K  c #4169CB",
+"L  c #7787AC",
+"P  c #7E8CAE",
+"I  c #7A8BB5",
+"U  c #7B8CB4",
+"Y  c #7C8FBD",
+"T  c #758FCA",
+"R  c #808CA8",
+"E  c #969DAF",
+"W  c #8291B4",
+"Q  c #8A95B0",
+"!  c #8B96B1",
+"~  c #8F9AB3",
+"^  c #8D98B5",
+"/  c #8E9AB7",
+"(  c #8997B8",
+")  c #949EB9",
+"_  c #99A1B4",
+"`  c #ADAFB7",
+"'  c #A5ABB8",
+"]  c #A6ABB8",
+"[  c #AAAFBE",
+"{  c #AFB2BE",
+"}  c #B0B1B6",
+"|  c #BAB8B6",
+" . c #B4B5BC",
+".. c #B6B9BF",
+"X. c #BBB9B8",
+"o. c #8C9DC3",
+"O. c #8EA3D4",
+"+. c #97AAD4",
+"@. c #ACB5C9",
+"#. c #B3B7C0",
+"$. c #A1B1D5",
+"%. c #BAC3D7",
+"&. c #BEC6D6",
+"*. c #D7D2C7",
+"=. c #C2C8D6",
+"-. c #D2D6DF",
+";. c #E8E4DA",
+":. c #CED5E4",
+">. c #FFF9EC",
+",. c #F3F4F5",
+"<. c #F6F8FB",
+"1. c None",
+/* pixels */
+"1.1.1.1.#./ W ~ } 1.1.1.",
+"1.1.1.U r c b t h Q 1.1.",
+"1.1.A 3 $.<.,.&.m w ^ 1.",
+"1.( 0 z :.%.=.;.) e x ` ",
+"1.n u v M * B *.R O @ P ",
+"' i z l - 9 { | > $ # Z ",
+"_ y l ; & [ X., 1 6 4 D ",
+"] g 8 o :  .C < 7 a s o.",
+"1.k X % = I S 5 d G K ..",
+"1.! .   j >.-.p F H +.1.",
+"1.1.L X + Y V 2 J O.1.1.",
+"1.1.1.E N q f T @.1.1.1."
+};
+
 wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
 {
     m_flags = 0;
@@ -154,6 +298,8 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
     m_gallery_bitmap_padding_right_size = 4;
     m_gallery_bitmap_padding_top_size = 4;
     m_gallery_bitmap_padding_bottom_size = 4;
+    m_toggle_button_offset = 22;
+    m_help_button_offset = 22;
 }
 
 wxRibbonMSWArtProvider::~wxRibbonMSWArtProvider()
@@ -343,6 +489,8 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
         copy->m_panel_extension_bitmap[i] = m_panel_extension_bitmap[i];
         copy->m_ribbon_toggle_up_bitmap[i] = m_ribbon_toggle_up_bitmap[i];
         copy->m_ribbon_toggle_down_bitmap[i] = m_ribbon_toggle_down_bitmap[i];
+        copy->m_ribbon_toggle_pin_bitmap[i] = m_ribbon_toggle_pin_bitmap[i];
+        copy->m_ribbon_bar_help_button_bitmap[i] = m_ribbon_bar_help_button_bitmap[i];
     }
     copy->m_toolbar_drop_bitmap = m_toolbar_drop_bitmap;
 
@@ -1023,11 +1171,15 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             m_page_toggle_face_colour = colour;
             m_ribbon_toggle_down_bitmap[0] = wxRibbonLoadPixmap(panel_toggle_down_xpm, colour);
             m_ribbon_toggle_up_bitmap[0] = wxRibbonLoadPixmap(panel_toggle_up_xpm, colour);
+            m_ribbon_toggle_pin_bitmap[0] = wxRibbonLoadPixmap(ribbon_toggle_pin_xpm, colour);
+            m_ribbon_bar_help_button_bitmap[0] = wxRibbonLoadPixmap(ribbon_help_button_xpm, colour);
             break;
         case wxRIBBON_ART_PAGE_TOGGLE_HOVER_FACE_COLOUR:
             m_page_toggle_hover_face_colour = colour;
             m_ribbon_toggle_down_bitmap[1] = wxRibbonLoadPixmap(panel_toggle_down_xpm, colour);
             m_ribbon_toggle_up_bitmap[1] = wxRibbonLoadPixmap(panel_toggle_up_xpm, colour);
+            m_ribbon_toggle_pin_bitmap[1] = wxRibbonLoadPixmap(ribbon_toggle_pin_xpm, colour);
+            m_ribbon_bar_help_button_bitmap[1] = wxRibbonLoadPixmap(ribbon_help_button_xpm, colour);
             break;
         default:
             wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
@@ -2517,8 +2669,9 @@ void
 wxRibbonMSWArtProvider::DrawToggleButton(wxDC& dc,
                                          wxRibbonBar* wnd,
                                          const wxRect& rect,
-                                         bool upBitmap)
+                                         wxRibbonDisplayMode mode)
 {
+    int bindex = 0;
     DrawPartialPageBackground(dc, wnd, rect, false);
 
     dc.DestroyClippingRegion();
@@ -2528,19 +2681,44 @@ wxRibbonMSWArtProvider::DrawToggleButton(wxDC& dc,
     {
         dc.SetPen(m_ribbon_toggle_pen);
         dc.SetBrush(m_ribbon_toggle_brush);
-        dc.DrawRoundedRectangle(rect.GetX(), rect.GetY(), 12, 12, 1.0);
-        if(upBitmap)
-            dc.DrawBitmap(m_ribbon_toggle_up_bitmap[1], rect.GetX()+2, rect.GetY()+2, true);
-        else
-            dc.DrawBitmap(m_ribbon_toggle_down_bitmap[1], rect.GetX()+2, rect.GetY()+2, true);
+        dc.DrawRoundedRectangle(rect.GetX(), rect.GetY(), 20, 20, 1.0);
+        bindex = 1;
+    }
+    switch(mode)
+    {
+        case wxRIBBON_BAR_PINNED:
+            dc.DrawBitmap(m_ribbon_toggle_up_bitmap[bindex], rect.GetX()+7, rect.GetY()+6, true);
+            break;
+        case wxRIBBON_BAR_MINIMIZED:
+            dc.DrawBitmap(m_ribbon_toggle_down_bitmap[bindex], rect.GetX()+7, rect.GetY()+6, true);
+            break;
+        case wxRIBBON_BAR_EXPANDED:
+            dc.DrawBitmap(m_ribbon_toggle_pin_bitmap[bindex], rect.GetX ()+4, rect.GetY ()+5, true);
+            break;
+    }
+}
+
+void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
+                                       wxRibbonBar* wnd,
+                                       const wxRect& rect)
+{
+    DrawPartialPageBackground(dc, wnd, rect, false);
+
+    dc.DestroyClippingRegion();
+    dc.SetClippingRegion(rect);
+
+    if ( wnd->IsHelpButtonHovered() )
+    {
+        dc.SetPen(m_ribbon_toggle_pen);
+        dc.SetBrush(m_ribbon_toggle_brush);
+        dc.DrawRoundedRectangle(rect.GetX(), rect.GetY(), 20, 20, 1.0);
+        dc.DrawBitmap(m_ribbon_bar_help_button_bitmap[1], rect.GetX ()+4, rect.GetY()+5, true);
     }
     else
     {
-        if(upBitmap)
-            dc.DrawBitmap(m_ribbon_toggle_up_bitmap[0], rect.GetX()+2, rect.GetY()+2, true);
-        else
-            dc.DrawBitmap(m_ribbon_toggle_down_bitmap[0], rect.GetX()+2, rect.GetY()+2, true);
+        dc.DrawBitmap(m_ribbon_bar_help_button_bitmap[0], rect.GetX ()+4, rect.GetY()+5, true);
     }
+
 }
 
 void wxRibbonMSWArtProvider::GetBarTabWidth(
@@ -2998,12 +3176,21 @@ wxSize wxRibbonMSWArtProvider::GetToolSize(
 }
 
 wxRect
-wxRibbonMSWArtProvider::GetBarToggleButtonArea(wxDC& WXUNUSED(dc),
-                                               const wxRibbonBar* WXUNUSED(wnd),
-                                               wxRect rect)
+wxRibbonMSWArtProvider::GetBarToggleButtonArea(const wxRect& rect)
 {
-    rect = wxRect(rect.GetWidth()-30, 6, 12, 12);
-    return rect;
+    wxRect rectOut = wxRect(rect.GetWidth()-m_toggle_button_offset, 2, 20, 20);
+    if ( (m_toggle_button_offset==22) && (m_help_button_offset==22) )
+        m_help_button_offset += 22;
+    return rectOut;
+}
+
+wxRect
+wxRibbonMSWArtProvider::GetRibbonHelpButtonArea(const wxRect& rect)
+{
+    wxRect rectOut = wxRect(rect.GetWidth()-m_help_button_offset, 2, 20, 20);
+    if ( (m_toggle_button_offset==22) && (m_help_button_offset==22) )
+        m_toggle_button_offset += 22;
+    return rectOut;
 }
 
 #endif // wxUSE_RIBBON

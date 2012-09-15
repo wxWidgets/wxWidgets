@@ -84,6 +84,8 @@ public:
 
     long GetFlags() { return m_flags; }
 
+    void HideIfExpanded();
+
 protected:
     virtual wxSize DoGetBestSize() const;
     virtual wxSize GetPanelSizerBestSize() const;

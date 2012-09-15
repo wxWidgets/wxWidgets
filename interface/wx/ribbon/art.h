@@ -662,6 +662,47 @@ public:
                         long state) = 0;
 
     /**
+        Draw toggle button on wxRibbonBar. This should draw a small toggle button
+        at top right corner of ribbon bar.
+
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto, which is always the panel
+            whose background and chrome is being drawn. The panel label and
+            other panel attributes can be obtained by querying this.
+        @param rect
+            The rectangle within which to draw.
+        @param mode
+            The wxRibbonDisplayMode which should be applied to display button
+
+        @since 2.9.5
+    */
+    virtual void DrawToggleButton(wxDC& dc,
+                                  wxRibbonBar* wnd,
+                                  const wxRect& rect,
+                                  wxRibbonDisplayMode mode) = 0;
+
+    /**
+        Draw help button on wxRibbonBar. This should draw a help button
+        at top right corner of ribbon bar.
+
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto, which is always the panel
+            whose background and chrome is being drawn. The panel label and
+            other panel attributes can be obtained by querying this.
+        @param rect
+            The rectangle within which to draw.
+
+        @since 2.9.5
+    */
+    virtual void DrawHelpButton(wxDC& dc,
+                                wxRibbonBar* wnd,
+                                const wxRect& rect) = 0;
+
+    /**
         Calculate the ideal and minimum width (in pixels) of a tab in a ribbon
         bar.
         
@@ -961,4 +1002,24 @@ public:
                         bool is_first,
                         bool is_last,
                         wxRect* dropdown_region) = 0;
+
+    /**
+        Calculate the position and size of the ribbon's toggle button.
+
+        @param rect
+            The ribbon bar rectangle from which calculate toggle button rectangle.
+
+        @since 2.9.5
+    */
+    virtual wxRect GetBarToggleButtonArea(const wxRect& rect) = 0;
+
+    /**
+        Calculate the position and size of the ribbon's help button.
+
+        @param rect
+            The ribbon bar rectangle from which calculate help button rectangle.
+
+        @since 2.9.5
+    */
+    virtual wxRect GetRibbonHelpButtonArea(const wxRect& rect) = 0;
 };

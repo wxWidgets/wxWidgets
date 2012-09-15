@@ -29,16 +29,25 @@ enum wxRibbonBarOption
     wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS = 1 << 4,
     wxRIBBON_BAR_ALWAYS_SHOW_TABS = 1 << 5,
     wxRIBBON_BAR_SHOW_TOGGLE_BUTTON = 1 << 6,
+    wxRIBBON_BAR_SHOW_HELP_BUTTON = 1 << 7,
 
     wxRIBBON_BAR_DEFAULT_STYLE =  wxRIBBON_BAR_FLOW_HORIZONTAL
                                 | wxRIBBON_BAR_SHOW_PAGE_LABELS
                                 | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
-                                | wxRIBBON_BAR_SHOW_TOGGLE_BUTTON,
+                                | wxRIBBON_BAR_SHOW_TOGGLE_BUTTON
+                                | wxRIBBON_BAR_SHOW_HELP_BUTTON,
 
     wxRIBBON_BAR_FOLDBAR_STYLE =  wxRIBBON_BAR_FLOW_VERTICAL
                                 | wxRIBBON_BAR_SHOW_PAGE_ICONS
                                 | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
                                 | wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS
+};
+
+enum wxRibbonDisplayMode
+{
+    wxRIBBON_BAR_PINNED,
+    wxRIBBON_BAR_MINIMIZED,
+    wxRIBBON_BAR_EXPANDED
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
@@ -144,6 +153,9 @@ public:
 
     // Implementation only.
     bool IsToggleButtonHovered() const { return m_toggle_button_hovered; }
+    bool IsHelpButtonHovered() const { return m_help_button_hovered; }
+
+    void HideIfExpanded();
 
 protected:
     friend class wxRibbonPage;
@@ -151,7 +163,7 @@ protected:
     virtual wxSize DoGetBestSize() const;
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = NULL);
-    void HitTestToggleButton(wxPoint position);
+    void HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hover_flag);
 
     void CommonInit(long style);
     void AddPage(wxRibbonPage *page);
@@ -175,11 +187,13 @@ protected:
     void OnMouseLeave(wxMouseEvent& evt);
     void OnMouseDoubleClick(wxMouseEvent& evt);
     void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type);
+    void OnKillFocus(wxFocusEvent& evt);
 
     wxRibbonPageTabInfoArray m_pages;
     wxRect m_tab_scroll_left_button_rect;
     wxRect m_tab_scroll_right_button_rect;
     wxRect m_toggle_button_rect;
+    wxRect m_help_button_rect;
     long m_flags;
     int m_tabs_total_width_ideal;
     int m_tabs_total_width_minimum;
@@ -195,6 +209,9 @@ protected:
     bool m_arePanelsShown;
     bool m_bar_hovered;
     bool m_toggle_button_hovered;
+    bool m_help_button_hovered;
+
+    wxRibbonDisplayMode m_ribbon_state;
 
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonBar)
@@ -212,6 +229,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_D
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP, wxRibbonBarEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONBAR_TAB_LEFT_DCLICK, wxRibbonBarEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONBAR_TOGGLED, wxRibbonBarEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONBAR_HELP_CLICKED, wxRibbonBarEvent);
 
 typedef void (wxEvtHandler::*wxRibbonBarEventFunction)(wxRibbonBarEvent&);
 
@@ -234,6 +252,8 @@ typedef void (wxEvtHandler::*wxRibbonBarEventFunction)(wxRibbonBarEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_RIBBONBAR_TAB_LEFT_DCLICK, winid, wxRibbonBarEventHandler(fn))
 #define EVT_RIBBONBAR_TOGGLED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_RIBBONBAR_TOGGLED, winid, wxRibbonBarEventHandler(fn))
+#define EVT_RIBBONBAR_HELP_CLICK(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_RIBBONBAR_HELP_CLICKED, winid, wxRibbonBarEventHandler(fn))
 #else
 
 // wxpython/swig event work
@@ -245,6 +265,7 @@ typedef void (wxEvtHandler::*wxRibbonBarEventFunction)(wxRibbonBarEvent&);
 %constant wxEventType wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP;
 %constant wxEventType wxEVT_COMMAND_RIBBONBAR_TAB_LEFT_DCLICK;
 %constant wxEventType wxEVT_COMMAND_RIBBONBAR_TOGGLED;
+%constant wxEventType wxEVT_COMMAND_RIBBONBAR_HELP_CLICKED;
 
 %pythoncode {
     EVT_RIBBONBAR_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGED, 1 )
@@ -255,6 +276,7 @@ typedef void (wxEvtHandler::*wxRibbonBarEventFunction)(wxRibbonBarEvent&);
     EVT_RIBBONBAR_TAB_RIGHT_UP = wx.PyEventBinder( wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP, 1 )
     EVT_RIBBONBAR_TAB_LEFT_DCLICK = wx.PyEventBinder( wxEVT_COMMAND_RIBBONBAR_TAB_LEFT_DCLICK, 1 )
     EVT_RIBBONBAR_TOGGLED = wx.PyEventBinder( wxEVT_COMMAND_RIBBONBAR_TOGGLED, 1 )
+    EVT_RIBBONBAR_HELP_CLICK = wx.PyEventBinder( wxEVT_COMMAND_RIBBONBAR_HELP_CLICKED, 1 )
 }
 #endif
 

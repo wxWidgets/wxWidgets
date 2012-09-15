@@ -1099,4 +1099,9 @@ wxRect wxRibbonPanel::GetExpandedPosition(wxRect panel,
     return best;
 }
 
+void wxRibbonPanel::HideIfExpanded()
+{
+    wxStaticCast(m_parent, wxRibbonPage)->HideIfExpanded();
+}
+
 #endif // wxUSE_RIBBON

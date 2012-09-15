@@ -135,6 +135,9 @@ public:
     void OnShowPages(wxRibbonButtonBarEvent& evt);
     void OnTogglePanels(wxCommandEvent& evt);
     void OnRibbonBarToggled(wxRibbonBarEvent& evt);
+    void OnRibbonBarHelpClicked(wxRibbonBarEvent& evt);
+
+    void OnSizeEvent(wxSizeEvent& evt);
 
     void OnExtButton(wxRibbonPanelEvent& evt);
 
@@ -236,6 +239,8 @@ EVT_RIBBONBUTTONBAR_CLICKED(ID_REMOVE_PAGE, MyFrame::OnRemovePage)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_HIDE_PAGES, MyFrame::OnHidePages)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SHOW_PAGES, MyFrame::OnShowPages)
 EVT_RIBBONBAR_TOGGLED(wxID_ANY, MyFrame::OnRibbonBarToggled)
+EVT_RIBBONBAR_HELP_CLICK(wxID_ANY, MyFrame::OnRibbonBarHelpClicked)
+EVT_SIZE(MyFrame::OnSizeEvent)
 END_EVENT_TABLE()
 
 #include "align_center.xpm"
@@ -264,7 +269,12 @@ END_EVENT_TABLE()
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, wxT("wxRibbon Sample Application"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
 {
-    m_ribbon = new wxRibbonBar(this);
+    m_ribbon = new wxRibbonBar(this,-1,wxDefaultPosition, wxDefaultSize, wxRIBBON_BAR_FLOW_HORIZONTAL
+                                | wxRIBBON_BAR_SHOW_PAGE_LABELS
+                                | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
+                                | wxRIBBON_BAR_SHOW_TOGGLE_BUTTON
+                                | wxRIBBON_BAR_SHOW_HELP_BUTTON
+                                );
 
     {
         wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"), ribbon_xpm);
@@ -1016,4 +1026,20 @@ void MyFrame::OnRibbonBarToggled(wxRibbonBarEvent& WXUNUSED(evt))
                              m_ribbon->ArePanelsShown()
                                 ? "expanded"
                                 : "collapsed"));
+}
+
+void MyFrame::OnRibbonBarHelpClicked(wxRibbonBarEvent& WXUNUSED(evt))
+{
+    AddText("Ribbon bar help clicked");
+}
+
+// This shows how to hide ribbon dynamically if there is not enough space.
+void MyFrame::OnSizeEvent(wxSizeEvent& evt)
+{
+    if ( evt.GetSize().GetWidth() < 200 )
+        m_ribbon->Hide();
+    else
+        m_ribbon->Show();
+
+    evt.Skip();
 }
