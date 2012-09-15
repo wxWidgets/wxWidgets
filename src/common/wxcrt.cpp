@@ -834,7 +834,8 @@ wxChar32* wxStrdup(const wxChar32* s)
 {
   size_t size = (wxStrlen(s) + 1) * sizeof(wxChar32);
   wxChar32 *ret = (wxChar32*) malloc(size);
-  memcpy(ret, s, size);
+  if ( ret )
+      memcpy(ret, s, size);
   return ret;
 }
 #endif

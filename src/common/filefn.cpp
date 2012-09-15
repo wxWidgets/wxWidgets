@@ -1574,8 +1574,12 @@ wxString wxGetOSDirectory()
 #ifdef __WXWINCE__
     return wxString(wxT("\\Windows"));
 #elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-    wxChar buf[256];
-    GetWindowsDirectory(buf, 256);
+    wxChar buf[MAX_PATH];
+    if ( !GetWindowsDirectory(buf, MAX_PATH) )
+    {
+        wxLogLastError(wxS("GetWindowsDirectory"));
+    }
+
     return wxString(buf);
 #elif defined(__WXMAC__) && wxOSX_USE_CARBON
     return wxMacFindFolderNoSeparator(kOnSystemDisk, 'macs', false);

@@ -996,7 +996,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
     // just launched process
     if ( !ddeServer.empty() )
     {
-        bool ok;
+        bool ddeOK;
 
         // give the process the time to init itself
         //
@@ -1015,15 +1015,15 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
             case WAIT_TIMEOUT:
                 wxLogDebug(wxT("Timeout too small in WaitForInputIdle"));
 
-                ok = false;
+                ddeOK = false;
                 break;
 
             case 0:
                 // ok, process ready to accept DDE requests
-                ok = wxExecuteDDE(ddeServer, ddeTopic, ddeCommand);
+                ddeOK = wxExecuteDDE(ddeServer, ddeTopic, ddeCommand);
         }
 
-        if ( !ok )
+        if ( !ddeOK )
         {
             wxLogDebug(wxT("Failed to send DDE request to the process \"%s\"."),
                        cmd.c_str());

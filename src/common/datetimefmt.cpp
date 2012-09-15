@@ -514,7 +514,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
                         // (indirectly) set the year correctly
                         while ( (nLostWeekDays % 7) != 0 )
                         {
-                            nLostWeekDays += year++ % 4 ? 1 : 2;
+                            nLostWeekDays += (year++ % 4) ? 1 : 2;
                         }
 
                         // finally move the year below 2000 so that the 2-digit
@@ -1725,12 +1725,12 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         if ( len > lenRest )
             continue;
 
-        const wxString::const_iterator pEnd = p + len;
-        if ( wxString(p, pEnd).CmpNoCase(dateStr) == 0 )
+        const wxString::const_iterator pEndStr = p + len;
+        if ( wxString(p, pEndStr).CmpNoCase(dateStr) == 0 )
         {
             // nothing can follow this, so stop here
 
-            p = pEnd;
+            p = pEndStr;
 
             int dayDiffFromToday = literalDates[n].dayDiffFromToday;
             *this = Today();
@@ -1739,7 +1739,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                 *this += wxDateSpan::Days(dayDiffFromToday);
             }
 
-            *end = pEnd;
+            *end = pEndStr;
 
             return true;
         }

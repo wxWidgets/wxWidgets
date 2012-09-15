@@ -636,22 +636,23 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
            extWithDot = wxT('.');
         extWithDot += ext;
 
-        wxRegKey key(wxRegKey::HKCR, extWithDot);
-        if ( !key.Exists() ) key.Create();
-        key.SetValue(wxEmptyString, filetype);
+        wxRegKey key2(wxRegKey::HKCR, extWithDot);
+        if ( !key2.Exists() )
+            key2.Create();
+        key2.SetValue(wxEmptyString, filetype);
 
         // now set any mimetypes we may have, but ignore it if none
-        const wxString& mimetype = ftInfo.GetMimeType();
-        if ( !mimetype.empty() )
+        const wxString& mimetype2 = ftInfo.GetMimeType();
+        if ( !mimetype2.empty() )
         {
             // set the MIME type
-            ok = key.SetValue(wxT("Content Type"), mimetype);
+            ok = key2.SetValue(wxT("Content Type"), mimetype2);
 
             if ( ok )
             {
                 // create the MIME key
                 wxString strKey = MIME_DATABASE_KEY;
-                strKey << mimetype;
+                strKey << mimetype2;
                 wxRegKey keyMIME(wxRegKey::HKCR, strKey);
                 ok = keyMIME.Create();
 

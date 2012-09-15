@@ -506,12 +506,13 @@ bool wxFSVolumeBase::Create(const wxString& name)
     if (!rc)
     {
         wxLogError(_("Cannot read typename from '%s'!"), m_volName.c_str());
-        return m_isOk;
+        return false;
     }
     m_dispName = fi.szDisplayName;
 
     // all tests passed.
-    return m_isOk = true;
+    m_isOk = true;
+    return true;
 } // Create
 
 //=============================================================================

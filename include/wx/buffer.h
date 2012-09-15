@@ -230,7 +230,8 @@ protected:
     static CharType *StrCopy(const CharType *src, size_t len)
     {
         CharType *dst = (CharType*)malloc(sizeof(CharType) * (len + 1));
-        memcpy(dst, src, sizeof(CharType) * (len + 1));
+        if ( dst )
+            memcpy(dst, src, sizeof(CharType) * (len + 1));
         return dst;
     }
 
