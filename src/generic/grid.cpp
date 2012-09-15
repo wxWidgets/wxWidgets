@@ -8241,9 +8241,15 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     for ( int rowOrCol = 0; rowOrCol < max; rowOrCol++ )
     {
         if ( column )
+        {
             row = rowOrCol;
-        else
+            col = colOrRow;
+        }
+          else
+        {
+            row = colOrRow;
             col = rowOrCol;
+        }
 
         // we need to account for the cells spanning multiple columns/rows:
         // while they may need a lot of space, they don't need all of it in
@@ -8261,6 +8267,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             GetCellSize(row, col, &numRows, &numCols);
         }
 
+        // get cell ( main cell if CellSpan_Inside ) renderer best size
         wxGridCellAttr *attr = GetCellAttr(row, col);
         wxGridCellRenderer *renderer = attr->GetRenderer(this, row, col);
         if ( renderer )
@@ -8295,12 +8302,12 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 
     if ( column )
     {
-        dc.GetMultiLineTextExtent( GetColLabelValue(col), &w, &h );
+        dc.GetMultiLineTextExtent( GetColLabelValue(colOrRow), &w, &h );
         if ( GetColLabelTextOrientation() == wxVERTICAL )
             w = h;
     }
     else
-        dc.GetMultiLineTextExtent( GetRowLabelValue(row), &w, &h );
+        dc.GetMultiLineTextExtent( GetRowLabelValue(colOrRow), &w, &h );
 
     extent = column ? w : h;
     if ( extent > extentMax )
@@ -8327,20 +8334,20 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         // comment in SetColSize() for explanation of why this isn't done
         // in SetColSize().
         if ( !setAsMin )
-            extentMax = wxMax(extentMax, GetColMinimalWidth(col));
+            extentMax = wxMax(extentMax, GetColMinimalWidth(colOrRow));
 
-        SetColSize( col, extentMax );
+        SetColSize( colOrRow, extentMax );
         if ( !GetBatchCount() )
         {
             if ( m_useNativeHeader )
             {
-                GetGridColHeader()->UpdateColumn(col);
+                GetGridColHeader()->UpdateColumn(colOrRow);
             }
             else
             {
                 int cw, ch, dummy;
                 m_gridWin->GetClientSize( &cw, &ch );
-                wxRect rect ( CellToRect( 0, col ) );
+                wxRect rect ( CellToRect( 0, colOrRow ) );
                 rect.y = 0;
                 CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
                 rect.width = cw - rect.x;
@@ -8355,14 +8362,14 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         // comment in SetColSize() for explanation of why this isn't done
         // in SetRowSize().
         if ( !setAsMin )
-            extentMax = wxMax(extentMax, GetRowMinimalHeight(row));
+            extentMax = wxMax(extentMax, GetRowMinimalHeight(colOrRow));
 
-        SetRowSize(row, extentMax);
+        SetRowSize(colOrRow, extentMax);
         if ( !GetBatchCount() )
         {
             int cw, ch, dummy;
             m_gridWin->GetClientSize( &cw, &ch );
-            wxRect rect( CellToRect( row, 0 ) );
+            wxRect rect( CellToRect( colOrRow, 0 ) );
             rect.x = 0;
             CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
             rect.width = m_rowLabelWidth;
@@ -8374,9 +8381,9 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     if ( setAsMin )
     {
         if ( column )
-            SetColMinimalWidth(col, extentMax);
+            SetColMinimalWidth(colOrRow, extentMax);
         else
-            SetRowMinimalHeight(row, extentMax);
+            SetRowMinimalHeight(colOrRow, extentMax);
     }
 }
 
