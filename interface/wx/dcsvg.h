@@ -10,16 +10,15 @@
     @class wxSVGFileDC
 
     A wxSVGFileDC is a device context onto which graphics and text can be
-    drawn, and the output produced as a vector file, in SVG format (see the W3C
-    SVG Specifications <http://www.w3.org/TR/2001/REC-SVG-20010904/>). This
-    format can be read by a range of programs, including a Netscape plugin
-    (Adobe), full details are given in the SVG Implementation and Resource
-    Directory <http://www.svgi.org/>. Vector formats may often be smaller than
-    raster formats.
+    drawn, and the output produced as a vector file, in SVG format.
+
+    This format can be read by a range of programs, including a Netscape plugin
+    (Adobe) and the open source Inkscape program (http://inkscape.org/).  Full
+    details are given in the W3C SVG recommendation (http://www.w3.org/TR/SVG/).
 
     The intention behind wxSVGFileDC is that it can be used to produce a file
     corresponding to the screen display context, wxSVGFileDC, by passing the
-    wxSVGFileDC as a parameter instead of a wxSVGFileDC. Thus the wxSVGFileDC
+    wxSVGFileDC as a parameter instead of a wxDC. Thus the wxSVGFileDC
     is a write-only class.
 
     As the wxSVGFileDC is a vector format, raster operations like GetPixel()
