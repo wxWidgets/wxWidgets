@@ -817,7 +817,7 @@ public:
 
         @beginTable
         @hdr3col{platform, generic syntax, example}
-        @row3col{wxGTK2, <tt>[FACE-NAME] [bold] [oblique|italic] [POINTSIZE]</tt>, Monospace bold 10}
+        @row3col{wxGTK2, <tt>[underlined] [strikethrough] [FACE-NAME] [bold] [oblique|italic] [POINTSIZE]</tt>, Monospace bold 10}
         @row3col{wxMSW, <tt>[light|bold] [italic] [FACE-NAME] [POINTSIZE] [ENCODING]</tt>, Tahoma 10 WINDOWS-1252}
         @endTable
 
@@ -825,7 +825,9 @@ public:
 
         For more detailed information about the allowed syntaxes you can look at the
         documentation of the native API used for font-rendering
-        (e.g. @c pango_font_description_from_string on GTK).
+        (e.g. @c pango_font_description_from_string under GTK, although notice
+        that it doesn't support the "underlined" and "strikethrough" attributes
+        and so those are handled by wxWidgets itself).
 
         Note that unlike SetNativeFontInfo(), this function doesn't always restore all
         attributes of the wxFont object under all platforms; e.g. on wxMSW the font family

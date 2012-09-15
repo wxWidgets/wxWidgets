@@ -64,14 +64,24 @@
 void wxNativeFontInfo::Init()
 {
     description = NULL;
+    m_underlined = false;
+    m_strikethrough = false;
 }
 
 void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
 {
     if (info.description)
+    {
         description = pango_font_description_copy(info.description);
+        m_underlined = info.GetUnderlined();
+        m_strikethrough = info.GetStrikethrough();
+    }
     else
+    {
         description = NULL;
+        m_underlined = false;
+        m_strikethrough = false;
+    }
 }
 
 void wxNativeFontInfo::Free()
@@ -130,12 +140,12 @@ wxFontWeight wxNativeFontInfo::GetWeight() const
 
 bool wxNativeFontInfo::GetUnderlined() const
 {
-    return false;
+    return m_underlined;
 }
 
 bool wxNativeFontInfo::GetStrikethrough() const
 {
-    return false;
+    return m_strikethrough;
 }
 
 wxString wxNativeFontInfo::GetFaceName() const
@@ -262,16 +272,18 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
     }
 }
 
-void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
+void wxNativeFontInfo::SetUnderlined(bool underlined)
 {
-    // wxWindowDCImpl::DoDrawText will take care of rendering font with
-    // the underline attribute!
-    wxFAIL_MSG( "not implemented" );
+    // Pango doesn't have the underlined attribute so we store it separately
+    // (and handle it specially in wxWindowDCImpl::DoDrawText()).
+    m_underlined = underlined;
 }
 
-void wxNativeFontInfo::SetStrikethrough(bool WXUNUSED(strikethrough))
+void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
 {
-    wxFAIL_MSG( "not implemented" );
+    // As with the underlined attribute above, we handle this one separately as
+    // Pango doesn't support it as part of the font description.
+    m_strikethrough = strikethrough;
 }
 
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
@@ -365,6 +377,14 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
 
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
+    wxString str(s);
+
+    // Pango font description doesn't have 'underlined' or 'strikethrough'
+    // attributes, so we handle them specially by extracting them from the
+    // string before passing it to Pango.
+    m_underlined = str.StartsWith(wxS("underlined "), &str);
+    m_strikethrough = str.StartsWith(wxS("strikethrough "), &str);
+
     if (description)
         pango_font_description_free( description );
 
@@ -375,7 +395,6 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     // we do the check on the size here using same (arbitrary) limits used by
     // pango > 1.13. Note that the segfault could happen also for pointsize
     // smaller than this limit !!
-    wxString str(s);
     const size_t pos = str.find_last_of(wxS(" "));
     double size;
     if ( pos != wxString::npos && wxString(str, pos + 1).ToDouble(&size) )
@@ -407,8 +426,18 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 wxString wxNativeFontInfo::ToString() const
 {
     wxGtkString str(pango_font_description_to_string( description ));
+    wxString desc = wxPANGO_CONV_BACK(str);
 
-    return wxPANGO_CONV_BACK(str);
+    // Augment the string with the attributes not handled by Pango.
+    //
+    // Notice that we must add them in the same order they are extracted in
+    // FromString() above.
+    if (m_strikethrough)
+        desc.insert(0, wxS("strikethrough "));
+    if (m_underlined)
+        desc.insert(0, wxS("underlined "));
+
+    return desc;
 }
 
 bool wxNativeFontInfo::FromUserString(const wxString& s)

@@ -71,6 +71,11 @@ class WXDLLIMPEXP_CORE wxNativeFontInfo
 public:
 #if wxUSE_PANGO
     PangoFontDescription *description;
+
+    // Pango font description doesn't have these attributes, so we store them
+    // separately and handle them ourselves in {To,From}String() methods.
+    bool m_underlined;
+    bool m_strikethrough;
 #elif defined(_WX_X_FONTLIKE)
     // the members can't be accessed directly as we only parse the
     // xFontName on demand

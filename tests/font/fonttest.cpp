@@ -26,6 +26,8 @@
 
 #include "wx/font.h"
 
+#include "asserthelper.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -204,6 +206,12 @@ void FontTestCase::GetSet()
         CPPUNIT_ASSERT( test.IsOk() );
         CPPUNIT_ASSERT_EQUAL( true, test.GetUnderlined() );
 
+        // test Get/SetStrikethrough()
+
+        test.SetStrikethrough(true);
+        CPPUNIT_ASSERT( test.IsOk() );
+        CPPUNIT_ASSERT_EQUAL( true, test.GetStrikethrough() );
+
 
         // test Get/SetWeight()
 
@@ -245,6 +253,26 @@ void FontTestCase::NativeFontInfo()
 #if !defined(__WXGTK__) && !defined(__WXX11__)
     CPPUNIT_ASSERT( !font.SetNativeFontInfo("bloordyblop") );
 #endif
+
+    // Pango font description doesn't have 'underlined' and 'strikethrough'
+    // attributes, so wxNativeFontInfo implements these itself. Test if these
+    // are properly preserved by wxNativeFontInfo or its string description.
+    font.SetUnderlined(true);
+    font.SetStrikethrough(true);
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    font.SetUnderlined(false);
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    font.SetUnderlined(true);
+    font.SetStrikethrough(false);
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    // note: the GetNativeFontInfoUserDesc() doesn't preserve all attributes
+    // according to docs, so it is not tested.
 }
 
 void FontTestCase::NativeFontInfoUserDesc()
