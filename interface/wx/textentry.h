@@ -430,6 +430,13 @@ public:
     virtual void SelectAll();
 
     /**
+        Deselects selected text in the control.
+
+        @since 2.9.5
+    */
+    virtual void SelectNone();
+
+    /**
         Sets a hint shown in an empty unfocused text control.
 
         The hints are usually used to indicate to the user what is supposed to

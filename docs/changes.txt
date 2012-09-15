@@ -549,6 +549,8 @@ All (GUI):
 - Fix item data access in wxDataViewListCtrl (Kry).
 - Fix problem with floating maximized AUI panes (Laurent Poujoulat).
 - Add wxBitmapButton::NewCloseButton().
+- Add wxTextEntry::SelectNone() (troelsk).
+- Restore the original wxGrid col/row size when unhiding it (Michael Richards).
 
 wxGTK:
 

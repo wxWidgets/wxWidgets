@@ -2564,13 +2564,19 @@ void wxGrid::InitColWidths()
 
 int wxGrid::GetColWidth(int col) const
 {
-    return m_colWidths.IsEmpty() ? m_defaultColWidth : m_colWidths[col];
+    if ( m_colWidths.IsEmpty() )
+        return m_defaultColWidth;
+
+    // a negative width indicates a hidden column
+    return m_colWidths[col] > 0 ? m_colWidths[col] : 0;
 }
 
 int wxGrid::GetColLeft(int col) const
 {
-    return m_colRights.IsEmpty() ? GetColPos( col ) * m_defaultColWidth
-                                 : m_colRights[col] - m_colWidths[col];
+    if ( m_colRights.IsEmpty() )
+        return GetColPos( col ) * m_defaultColWidth;
+
+    return m_colRights[col] - GetColWidth(col);
 }
 
 int wxGrid::GetColRight(int col) const
@@ -2581,13 +2587,20 @@ int wxGrid::GetColRight(int col) const
 
 int wxGrid::GetRowHeight(int row) const
 {
-    return m_rowHeights.IsEmpty() ? m_defaultRowHeight : m_rowHeights[row];
+    // no custom heights / hidden rows
+    if ( m_rowHeights.IsEmpty() )
+        return m_defaultRowHeight;
+
+    // a negative height indicates a hidden row
+    return m_rowHeights[row] > 0 ? m_rowHeights[row] : 0;
 }
 
 int wxGrid::GetRowTop(int row) const
 {
-    return m_rowBottoms.IsEmpty() ? row * m_defaultRowHeight
-                                  : m_rowBottoms[row] - m_rowHeights[row];
+    if ( m_rowBottoms.IsEmpty() )
+        return row * m_defaultRowHeight;
+
+    return m_rowBottoms[row] - GetRowHeight(row);
 }
 
 int wxGrid::GetRowBottom(int row) const
@@ -8017,12 +8030,64 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
     }
 }
 
+namespace
+{
+
+// This is a common part of SetRowSize() and SetColSize() which takes care of
+// updating the height/width of a row/column depending on its current value and
+// the new one.
+//
+// Returns the difference between the new and the old size.
+int UpdateRowOrColSize(int& sizeCurrent, int sizeNew)
+{
+    // On input here sizeCurrent can be negative if it's currently hidden (the
+    // real size is its absolute value then). And sizeNew can be 0 to indicate
+    // that the row/column should be hidden or -1 to indicate that it should be
+    // shown again.
+
+    if ( sizeNew < 0 )
+    {
+        // We're showing back a previously hidden row/column.
+        wxASSERT_MSG( sizeNew == -1, wxS("New size must be positive or -1.") );
+
+        wxASSERT_MSG( sizeCurrent < 0, wxS("May only show back if hidden.") );
+
+        sizeCurrent = -sizeCurrent;
+
+        // This is positive which is correct.
+        return sizeCurrent;
+    }
+    else if ( sizeNew == 0 )
+    {
+        // We're hiding a row/column.
+        wxASSERT_MSG( sizeCurrent > 0, wxS("Can't hide if already hidden.") );
+
+        sizeCurrent = -sizeCurrent;
+
+        // This is negative which is correct.
+        return sizeCurrent;
+    }
+    else // We're just changing the row/column size.
+    {
+        // Here it could have been hidden or not previously.
+        const int sizeOld = sizeCurrent < 0 ? 0 : sizeCurrent;
+
+        sizeCurrent = sizeNew;
+
+        return sizeCurrent - sizeOld;
+    }
+}
+
+} // anonymous namespace
+
 void wxGrid::SetRowSize( int row, int height )
 {
-    wxCHECK_RET( row >= 0 && row < m_numRows, wxT("invalid row index") );
+    // See comment in SetColSize
+    if ( height > 0 && height < GetRowMinimalAcceptableHeight())
+        return;
 
-    // if < 0 then calculate new height from label
-    if ( height < 0 )
+    // The value of -1 is special and means to fit the height to the row label.
+    if ( height == -1 )
     {
         long w, h;
         wxArrayString lines;
@@ -8034,9 +8099,12 @@ void wxGrid::SetRowSize( int row, int height )
         height = wxMax(h, GetRowMinimalAcceptableHeight());
     }
 
-    // See comment in SetColSize
-    if ( height > 0 && height < GetRowMinimalAcceptableHeight())
-        return;
+    DoSetRowSize(row, height);
+}
+
+void wxGrid::DoSetRowSize( int row, int height )
+{
+    wxCHECK_RET( row >= 0 && row < m_numRows, wxT("invalid row index") );
 
     if ( m_rowHeights.IsEmpty() )
     {
@@ -8044,10 +8112,10 @@ void wxGrid::SetRowSize( int row, int height )
         InitRowHeights();
     }
 
-    int h = wxMax( 0, height );
-    int diff = h - m_rowHeights[row];
+    const int diff = UpdateRowOrColSize(m_rowHeights[row], height);
+    if ( !diff )
+        return;
 
-    m_rowHeights[row] = h;
     for ( int i = row; i < m_numRows; i++ )
     {
         m_rowBottoms[i] += diff;
@@ -8080,10 +8148,16 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
 
 void wxGrid::SetColSize( int col, int width )
 {
-    wxCHECK_RET( col >= 0 && col < m_numCols, wxT("invalid column index") );
+    // we intentionally don't test whether the width is less than
+    // GetColMinimalWidth() here but we do compare it with
+    // GetColMinimalAcceptableWidth() as otherwise things currently break (see
+    // #651) -- and we also always allow the width of 0 as it has the special
+    // sense of hiding the column
+    if ( width > 0 && width < GetColMinimalAcceptableWidth() )
+        return;
 
-    // if < 0 then calculate new width from label
-    if ( width < 0 )
+    // The value of -1 is special and means to fit the width to the column label.
+    if ( width == -1 )
     {
         long w, h;
         wxArrayString lines;
@@ -8099,13 +8173,12 @@ void wxGrid::SetColSize( int col, int width )
         width = wxMax(width, GetColMinimalAcceptableWidth());
     }
 
-    // we intentionally don't test whether the width is less than
-    // GetColMinimalWidth() here but we do compare it with
-    // GetColMinimalAcceptableWidth() as otherwise things currently break (see
-    // #651) -- and we also always allow the width of 0 as it has the special
-    // sense of hiding the column
-    if ( width > 0 && width < GetColMinimalAcceptableWidth() )
-        return;
+    DoSetColSize(col, width);
+}
+
+void wxGrid::DoSetColSize( int col, int width )
+{
+    wxCHECK_RET( col >= 0 && col < m_numCols, wxT("invalid column index") );
 
     if ( m_colWidths.IsEmpty() )
     {
@@ -8113,8 +8186,10 @@ void wxGrid::SetColSize( int col, int width )
         InitColWidths();
     }
 
-    const int diff = width - m_colWidths[col];
-    m_colWidths[col] = width;
+    const int diff = UpdateRowOrColSize(m_colWidths[col], width);
+    if ( !diff )
+        return;
+
     if ( m_useNativeHeader )
         GetGridColHeader()->UpdateColumn(col);
     //else: will be refreshed when the header is redrawn
@@ -8491,6 +8566,7 @@ void wxGrid::AutoSizeRowLabelSize( int row )
 
     // autosize row height depending on label text
     SetRowSize(row, -1);
+
     ForceRefresh();
 }
 
@@ -8506,6 +8582,7 @@ void wxGrid::AutoSizeColLabelSize( int col )
 
     // autosize column width depending on label text
     SetColSize(col, -1);
+
     ForceRefresh();
 }
 
@@ -8921,7 +8998,16 @@ int wxGridSizesInfo::GetSize(unsigned pos) const
 {
     wxUnsignedToIntHashMap::const_iterator it = m_customSizes.find(pos);
 
-    return it == m_customSizes.end() ? m_sizeDefault : it->second;
+    // if it's not found return the default
+    if ( it == m_customSizes.end() )
+      return m_sizeDefault;
+
+    // otherwise return 0 if it's hidden, currently there is no way to get
+    // its size before it had been hidden
+    if ( it->second < 0 )
+      return 0;
+
+    return it->second;
 }
 
 // ----------------------------------------------------------------------------

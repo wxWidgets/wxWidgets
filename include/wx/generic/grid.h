@@ -1357,13 +1357,13 @@ public:
     // ------ row and col sizes
     void     SetDefaultRowSize( int height, bool resizeExistingRows = false );
     void     SetRowSize( int row, int height );
-    void     HideRow(int row) { SetRowSize(row, 0); }
-    void     ShowRow(int row) { SetRowSize(row, -1); }
+    void     HideRow(int row) { DoSetRowSize(row, 0); }
+    void     ShowRow(int row) { DoSetRowSize(row, -1); }
 
     void     SetDefaultColSize( int width, bool resizeExistingCols = false );
     void     SetColSize( int col, int width );
-    void     HideCol(int col) { SetColSize(col, 0); }
-    void     ShowCol(int col) { SetColSize(col, -1); }
+    void     HideCol(int col) { DoSetColSize(col, 0); }
+    void     ShowCol(int col) { DoSetColSize(col, -1); }
 
     // the row and column sizes can be also set all at once using
     // wxGridSizesInfo which holds all of them at once
@@ -2294,6 +2294,16 @@ private:
                       const wxSize& sizeCellArea,
                       const wxGridCellCoords& topLeft,
                       const wxGridCellCoords& bottomRight );
+
+    // Implementation of public Set{Row,Col}Size() and {Hide,Show}{Row,Col}().
+    // They interpret their height or width parameter slightly different from
+    // the public methods where -1 in it means "auto fit to the label" for the
+    // compatibility reasons. Here it means "show a previously hidden row or
+    // column" while 0 means "hide it" just as in the public methods. And any
+    // positive values are handled naturally, i.e. they just specify the size.
+    void DoSetRowSize( int row, int height );
+    void DoSetColSize( int col, int width );
+
 
     // these sets contain the indices of fixed, i.e. non-resizable
     // interactively, grid rows or columns and are NULL if there are no fixed

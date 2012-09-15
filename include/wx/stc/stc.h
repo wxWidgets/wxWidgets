@@ -4587,6 +4587,11 @@ public:
         }
     }
 
+    virtual void SelectNone()
+    {
+        ClearSelections();
+    }
+
 #ifdef SWIG
     void GetSelection(long* OUTPUT, long* OUTPUT) const;
 #else
