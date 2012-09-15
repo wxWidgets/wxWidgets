@@ -299,7 +299,8 @@ wxFont::wxFont(int pointSize,
                                   GetStyleFromFlags(flags),
                                   GetWeightFromFlags(flags),
                                   GetUnderlinedFromFlags(flags),
-                                  false, face, encoding);
+                                  GetStrikethroughFromFlags(flags),
+                                  face, encoding);
 }
 
 bool wxFont::Create( int pointSize,

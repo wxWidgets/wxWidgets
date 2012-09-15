@@ -318,6 +318,10 @@ protected:
         return (flags & wxFONTFLAG_UNDERLINED) != 0;
     }
 
+    static bool GetStrikethroughFromFlags(int flags)
+    {
+        return (flags & wxFONTFLAG_STRIKETHROUGH) != 0;
+    }
 
 private:
     // the currently default encoding: by default, it's the default system
