@@ -253,23 +253,26 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     CalcBoundingBox((wxCoord)(x + w*cos(rad)), (wxCoord)(y - h*sin(rad)));
 
     // wxT("bottom left") and wxT("bottom right")
-    x += (wxCoord)(h*sin(rad));
-    y += (wxCoord)(h*cos(rad));
-    CalcBoundingBox(x, y);
     CalcBoundingBox((wxCoord)(x + h*sin(rad)), (wxCoord)(y + h*cos(rad)));
+    CalcBoundingBox((wxCoord)(x + h*sin(rad) + w*cos(rad)), (wxCoord)(y + h*cos(rad) - w*sin(rad)));
 
     if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
     {
         // draw background first
         // just like DoDrawRectangle except we pass the text color to it and set the border to a 1 pixel wide text background
 
-        sTmp.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" "), x,y+desc-h, w, h );
+        sTmp.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" "), x, y, w, h );
         s = sTmp + wxT("style=\"") + wxBrushString(m_textBackgroundColour);
         s += wxT("stroke-width:1; ") + wxPenString(m_textBackgroundColour);
         sTmp.Printf ( wxT("\" transform=\"rotate( %s %d %d )  \" />"), NumStr(-angle), x,y );
         s += sTmp + wxT("\n");
         write(s);
     }
+
+    // convert x,y to SVG text x,y (the coordinates of the text baseline)
+    x = (wxCoord)(x + (h-desc)*sin(rad));
+    y = (wxCoord)(y + (h-desc)*cos(rad));
+
     //now do the text itself
     s.Printf (wxT(" <text x=\"%d\" y=\"%d\" "),x,y );
 

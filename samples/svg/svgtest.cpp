@@ -40,6 +40,8 @@
     #include "../sample.xpm"
 #endif
 
+#include <math.h>
+
 class MyChild;
 class MyCanvas;
 
@@ -321,7 +323,7 @@ MyCanvas::MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size)
     SetBackgroundColour(wxColour(wxT("WHITE")));
 
     m_child = parent;
-    m_index = m_child->GetFrame()->GetCountOfChildren() % 7;
+    m_index = m_child->GetFrame()->GetCountOfChildren() % 8;
 }
 
 // Define the repainting behaviour
@@ -490,6 +492,50 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawBitmap ( wxBitmap(svgbitmap_xpm), 50,15);
 #if wxUSE_STATUSBAR
             s = wxT("Icon and Bitmap ");
+#endif // wxUSE_STATUSBAR
+            break;
+
+        case 7:
+            wxString txtStr;
+            wxCoord txtX, txtY, txtW, txtH, txtDescent, txtEL;
+            wxCoord txtPad = 0;
+
+            wP = *wxRED_PEN;
+            dc.SetPen(wP);
+            //dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
+            //dc.SetTextBackground(*wxBLUE);
+
+            // Horizontal text
+            txtStr = wxT("Horizontal string");
+            dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
+            txtX = 50;
+            txtY = 300;
+            dc.DrawRectangle(txtX, txtY, txtW + 2*txtPad, txtH + 2*txtPad);
+            dc.DrawText(txtStr, txtX + txtPad, txtY + txtPad);
+
+            // Vertical text
+            txtStr = wxT("Vertical string");
+            dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
+            txtX = 50;
+            txtY = 250;
+            dc.DrawRectangle(txtX, txtY - (txtW + 2*txtPad), txtH + 2*txtPad, txtW + 2*txtPad);
+            dc.DrawRotatedText(txtStr, txtX + txtPad, txtY - txtPad, 90);
+
+            // 45 degree text
+            txtStr = wxT("45 deg string");
+            dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
+            double lenW = (double)(txtW + 2*txtPad) / sqrt(2.0);
+            double lenH = (double)(txtH + 2*txtPad) / sqrt(2.0);
+            double padding = (double)txtPad / sqrt(2.0);
+            txtX = 150;
+            txtY = 200;
+            dc.DrawLine(txtX - padding, txtY, txtX + lenW, txtY - lenW); // top
+            dc.DrawLine(txtX + lenW, txtY - lenW, txtX - padding + lenH + lenW, txtY + (lenH - lenW));
+            dc.DrawLine(txtX - padding, txtY, txtX - padding + lenH, txtY + lenH);
+            dc.DrawLine(txtX - padding + lenH, txtY + lenH, txtX - padding + lenH + lenW, txtY + (lenH - lenW)); // bottom
+            dc.DrawRotatedText(txtStr, txtX, txtY, 45);
+#if wxUSE_STATUSBAR
+            s = wxT("Text position test page");
 #endif // wxUSE_STATUSBAR
             break;
 
