@@ -186,16 +186,18 @@ private:
 
    void Init (const wxString &filename, int width, int height, double dpi);
 
-   void NewGraphics();
-
    void write( const wxString &s );
 
 private:
+   // If m_graphics_changed is true, close the current <g> element and start a
+   // new one for the last pen/brush change.
+   void NewGraphicsIfNeeded();
+
    wxFileOutputStream *m_outfile;
    wxString            m_filename;
    int                 m_sub_images; // number of png format images we have
    bool                m_OK;
-   bool                m_graphics_changed;
+   bool                m_graphics_changed;  // set by Set{Brush,Pen}()
    int                 m_width, m_height;
    double              m_dpi;
 

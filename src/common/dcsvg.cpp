@@ -195,7 +195,7 @@ wxSize wxSVGFileDCImpl::GetPPI() const
 
 void wxSVGFileDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
     wxString s;
     s.Printf ( wxT("<path d=\"M%d %d L%d %d\" /> \n"), x1,y1,x2,y2 );
     if (m_OK)
@@ -218,7 +218,7 @@ void wxSVGFileDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset , wxC
 void wxSVGFileDCImpl::DoDrawPoint (wxCoord x1, wxCoord y1)
 {
     wxString s;
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
     s = wxT("<g style = \"stroke-linecap:round;\" > ") + wxString(wxT("\n"));
     write(s);
     DoDrawLine ( x1,y1,x1,y1 );
@@ -239,7 +239,7 @@ void wxSVGFileDCImpl::DoDrawText(const wxString& text, wxCoord x1, wxCoord y1)
 void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoord y, double angle)
 {
     //known bug; if the font is drawn in a scaled DC, it will not behave exactly as wxMSW
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
     wxString s, sTmp;
 
     // calculate bounding box
@@ -303,7 +303,7 @@ void wxSVGFileDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoo
 void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
 
 {
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
     wxString s;
 
     s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" "),
@@ -320,7 +320,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
                                     wxCoord xoffset, wxCoord yoffset,
                                     wxPolygonFillMode fillStyle)
 {
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
     wxString s, sTmp;
     s = wxT("<polygon style=\"");
     if ( fillStyle == wxODDEVEN_RULE )
@@ -343,7 +343,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
 void wxSVGFileDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 {
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
 
     int rh = height /2;
     int rw = width  /2;
@@ -369,7 +369,7 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
 
     Might be better described as Pie drawing */
 
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
     wxString s;
 
     // we need the radius of the circle which has two estimates
@@ -428,7 +428,7 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
 
     //known bug: SVG draws with the current pen along the radii, but this does not happen in wxMSW
 
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
 
     wxString s;
     //radius
@@ -512,7 +512,6 @@ void wxSVGFileDCImpl::SetBackgroundMode( int mode )
 
 
 void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
-
 {
     m_brush = brush;
 
@@ -529,8 +528,13 @@ void wxSVGFileDCImpl::SetPen(const wxPen& pen)
     m_graphics_changed = true;
 }
 
-void wxSVGFileDCImpl::NewGraphics()
+void wxSVGFileDCImpl::NewGraphicsIfNeeded()
 {
+    if ( !m_graphics_changed )
+        return;
+
+    m_graphics_changed = false;
+
     wxString s, sBrush, sPenCap, sPenJoin, sPenStyle, sLast, sWarn;
 
     sBrush = wxT("</g>\n<g style=\"") + wxBrushString ( m_brush.GetColour(), m_brush.GetStyle() )
@@ -567,7 +571,6 @@ void wxSVGFileDCImpl::NewGraphics()
 
     s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + wxT("\n") + sWarn;
     write(s);
-    m_graphics_changed = false;
 }
 
 
@@ -614,7 +617,7 @@ void wxSVGFileDCImpl::DoDrawIcon(const class wxIcon & myIcon, wxCoord x, wxCoord
 
 void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y , bool  WXUNUSED(bTransparent) /*=0*/ )
 {
-    if (m_graphics_changed) NewGraphics();
+    NewGraphicsIfNeeded();
 
     wxString sTmp, s, sPNG;
     if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == NULL )
