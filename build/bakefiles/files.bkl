@@ -3723,6 +3723,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/richtext/richtextstylepage.h
     wx/richtext/richtextstyles.h
     wx/richtext/richtextsymboldlg.h
+    wx/richtext/richtexttabspage.h
     wx/richtext/richtextuicustomization.h
     wx/richtext/richtextxml.h
 </set>
