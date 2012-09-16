@@ -487,10 +487,10 @@ void wxVarScrollHelperBase::RefreshUnits(size_t from, size_t to)
         to = GetVisibleEnd();
 
     // calculate the rect occupied by these units on screen
-    int orient_size, nonorient_size, orient_pos;
-    orient_size = nonorient_size = orient_pos = 0;
+    int orient_size = 0,
+        orient_pos = 0;
 
-    nonorient_size = GetNonOrientationTargetSize();
+    int nonorient_size = GetNonOrientationTargetSize();
 
     for ( size_t nBefore = GetVisibleBegin();
           nBefore < from;
