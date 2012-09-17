@@ -7592,6 +7592,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtexttabspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextuicustomization.h"
 				>
 			</File>

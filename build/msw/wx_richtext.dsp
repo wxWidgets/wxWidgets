@@ -606,6 +606,10 @@ SOURCE=..\..\include\wx\richtext\richtextsymboldlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtexttabspage.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextuicustomization.h
 # End Source File
 # Begin Source File
