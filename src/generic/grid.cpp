@@ -8089,6 +8089,10 @@ void wxGrid::SetRowSize( int row, int height )
     // The value of -1 is special and means to fit the height to the row label.
     if ( height == -1 )
     {
+        // As with the columns, ignore attempts to auto-size the hidden rows.
+        if ( GetRowHeight(row) == 0 )
+            return;
+
         long w, h;
         wxArrayString lines;
         wxClientDC dc(m_rowLabelWin);
@@ -8159,6 +8163,12 @@ void wxGrid::SetColSize( int col, int width )
     // The value of -1 is special and means to fit the width to the column label.
     if ( width == -1 )
     {
+        // We currently don't support auto-sizing hidden columns. We could, but
+        // it's not clear whether this is really needed and it would make the
+        // code more complex.
+        if ( GetColWidth(col) == 0 )
+            return;
+
         long w, h;
         wxArrayString lines;
         wxClientDC dc(m_colWindow);
@@ -8275,6 +8285,19 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 {
     const bool column = direction == wxGRID_COLUMN;
 
+    // We don't support auto-sizing hidden rows or columns, this doesn't seem
+    // to make much sense.
+    if ( column )
+    {
+        if ( GetColWidth(colOrRow) == 0 )
+            return;
+    }
+    else
+    {
+        if ( GetRowHeight(colOrRow) == 0 )
+            return;
+    }
+
     wxClientDC dc(m_gridWin);
 
     // cancel editing of cell
@@ -8305,7 +8328,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             row = rowOrCol;
             col = colOrRow;
         }
-          else
+        else
         {
             row = colOrRow;
             col = rowOrCol;
