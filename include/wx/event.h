@@ -3006,7 +3006,7 @@ public:
 protected:
     // Init the hash table with the entries of the static event table.
     void InitHashTable();
-    // Helper funtion of InitHashTable() to insert 1 entry into the hash table.
+    // Helper function of InitHashTable() to insert 1 entry into the hash table.
     void AddEntry(const wxEventTableEntry &entry);
     // Allocate and init with null pointers the base hash table.
     void AllocEventTypeTable(size_t size);
