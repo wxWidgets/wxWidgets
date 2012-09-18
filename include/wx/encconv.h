@@ -110,8 +110,8 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             // Equivalence is defined in terms of convertibility:
             // 2 encodings are equivalent if you can convert text between
             // then without losing information (it may - and will - happen
-            // that you loose special chars like quotation marks or em-dashes
-            // but you shouldn't loose any diacritics and language-specific
+            // that you lose special chars like quotation marks or em-dashes
+            // but you shouldn't lose any diacritics and language-specific
             // characters when converting between equivalent encodings).
             //
             // Convert() method is not limited to converting between
