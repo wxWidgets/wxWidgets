@@ -3534,9 +3534,14 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         wxTreeEvent
             hevent(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP,  this, hoverItem);
 
-        if ( GetEventHandler()->ProcessEvent(hevent) && hevent.IsAllowed() )
+        if ( GetEventHandler()->ProcessEvent(hevent) )
         {
-            SetToolTip(hevent.m_label);
+            // If the user permitted the tooltip change, update it, otherwise
+            // remove any old tooltip we might have.
+            if ( hevent.IsAllowed() )
+                SetToolTip(hevent.m_label);
+            else
+                SetToolTip(NULL);
         }
     }
 #endif
@@ -4004,11 +4009,24 @@ bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
     return true;
 }
 
-// Process the tooltip event, to speed up event processing.
-// Doesn't actually get a tooltip.
 void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
 {
-    event.Veto();
+#if wxUSE_TOOLTIPS
+    wxTreeItemId itemId = event.GetItem();
+    const wxGenericTreeItem* const pItem = (wxGenericTreeItem*)itemId.m_pItem;
+
+    // Check if the item fits into the client area:
+    if ( pItem->GetX() + pItem->GetWidth() > GetClientSize().x )
+    {
+        // If it doesn't, show its full text in the tooltip.
+        event.SetLabel(pItem->GetText());
+    }
+    else
+#endif // wxUSE_TOOLTIPS
+    {
+        // veto processing the event, nixing any tooltip
+        event.Veto();
+    }
 }
 
 
