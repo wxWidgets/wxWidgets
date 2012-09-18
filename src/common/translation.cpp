@@ -1950,7 +1950,7 @@ wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
 
     if ( !wxLoadUserResource(&mo_data, &mo_size,
                              resname,
-                             GetResourceType(),
+                             GetResourceType().t_str(),
                              GetModule()) )
         return NULL;
 
