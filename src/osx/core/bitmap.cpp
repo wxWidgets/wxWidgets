@@ -103,8 +103,10 @@ public:
     IconRef       GetIconRef();
 
 #ifndef __WXOSX_IPHONE__
+#ifndef __LP64__
     // returns a Pict from the bitmap content
     PicHandle     GetPictHandle();
+#endif
 #endif
 
     CGContextRef  GetBitmapContext() const;
@@ -127,7 +129,9 @@ public:
 
     IconRef       m_iconRef;
 #ifndef __WXOSX_IPHONE__
+#ifndef __LP64__
     PicHandle     m_pictHandle;
+#endif
 #endif
     CGContextRef  m_hBitmap;
 };
@@ -247,7 +251,9 @@ void wxBitmapRefData::Init()
 
 #ifndef __WXOSX_IPHONE__
     m_iconRef = NULL ;
+#ifndef __LP64__
     m_pictHandle = NULL ;
+#endif
 #endif
     m_hBitmap = NULL ;
 
@@ -379,8 +385,12 @@ void *wxBitmapRefData::BeginRawAccess()
     wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") ) ;
     wxASSERT( m_rawAccessCount == 0 ) ;
 #ifndef __WXOSX_IPHONE__
-    wxASSERT_MSG( m_pictHandle == NULL && m_iconRef == NULL ,
+#ifndef __LP64__
+    wxASSERT_MSG( m_pictHandle == NULL,
         wxT("Currently, modifing bitmaps that are used in controls already is not supported") ) ;
+#endif
+    wxASSERT_MSG( m_iconRef == NULL ,
+                 wxT("Currently, modifing bitmaps that are used in controls already is not supported") ) ;
 #endif
     ++m_rawAccessCount ;
 
@@ -428,8 +438,40 @@ IconRef wxBitmapRefData::GetIconRef()
         OSType dataType = 0 ;
         OSType maskType = 0 ;
 
+#ifdef __LP64__
+        // since we don't have PICT conversion available under 64 bit, use
+        // the next larger standard icon size
+        // TODO: Use NSImage
+        if (sz <= 16)
+            sz = 16;
+        else if ( sz <= 32)
+            sz = 32;
+        else if ( sz <= 48)
+            sz = 48;
+        else if ( sz <= 128)
+            sz = 128;
+        else if ( sz <= 256)
+            sz = 256;
+        else if ( sz <= 512)
+            sz = 512;
+        else if ( sz <= 1024)
+            sz = 1024;
+#endif
+        
         switch (sz)
         {
+            case 1024:
+                dataType = kIconServices1024PixelDataARGB;
+                break;
+                
+            case 512:
+                dataType = kIconServices512PixelDataARGB;
+                break;
+                
+            case 256:
+                dataType = kIconServices256PixelDataARGB;
+                break;
+ 
             case 128:
                 dataType = kIconServices128PixelDataARGB ;
                 break;
@@ -583,8 +625,10 @@ IconRef wxBitmapRefData::GetIconRef()
         }
         else
         {
+#ifndef __LP64__
             PicHandle pic = GetPictHandle() ;
             SetIconFamilyData( iconFamily, 'PICT' , (Handle) pic ) ;
+#endif
         }
         // transform into IconRef
 
@@ -600,10 +644,15 @@ IconRef wxBitmapRefData::GetIconRef()
     return m_iconRef ;
 }
 
+#ifndef __WXOSX_IPHONE__
+#ifndef __LP64__
 PicHandle wxBitmapRefData::GetPictHandle()
 {
     return m_pictHandle ;
 }
+#endif
+#endif
+
 #endif
 
 CGImageRef wxBitmapRefData::CreateCGImage() const
