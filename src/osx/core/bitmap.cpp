@@ -98,15 +98,10 @@ public:
     // rescaled to 16 x 16
     bool          HasNativeSize();
 
+#ifndef __WXOSX_IPHONE__
     // caller should increase ref count if needed longer
     // than the bitmap exists
     IconRef       GetIconRef();
-
-#ifndef __WXOSX_IPHONE__
-#ifndef __LP64__
-    // returns a Pict from the bitmap content
-    PicHandle     GetPictHandle();
-#endif
 #endif
 
     CGContextRef  GetBitmapContext() const;
@@ -127,12 +122,10 @@ public:
     bool          m_ok;
     mutable CGImageRef    m_cgImageRef;
 
-    IconRef       m_iconRef;
 #ifndef __WXOSX_IPHONE__
-#ifndef __LP64__
-    PicHandle     m_pictHandle;
+    IconRef       m_iconRef;
 #endif
-#endif
+
     CGContextRef  m_hBitmap;
 };
 
@@ -193,13 +186,6 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
             info->contentType = kControlContentCGImageRef ;
             info->u.imageRef = (CGImageRef) bmap->CreateCGImage() ;
         }
-        else
-        {
-#ifndef __LP64__
-            info->contentType = kControlContentPictHandle ;
-            info->u.picture = bmap->GetPictHandle() ;
-#endif
-        }
     }
 }
 
@@ -251,9 +237,6 @@ void wxBitmapRefData::Init()
 
 #ifndef __WXOSX_IPHONE__
     m_iconRef = NULL ;
-#ifndef __LP64__
-    m_pictHandle = NULL ;
-#endif
 #endif
     m_hBitmap = NULL ;
 
@@ -385,10 +368,6 @@ void *wxBitmapRefData::BeginRawAccess()
     wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") ) ;
     wxASSERT( m_rawAccessCount == 0 ) ;
 #ifndef __WXOSX_IPHONE__
-#ifndef __LP64__
-    wxASSERT_MSG( m_pictHandle == NULL,
-        wxT("Currently, modifing bitmaps that are used in controls already is not supported") ) ;
-#endif
     wxASSERT_MSG( m_iconRef == NULL ,
                  wxT("Currently, modifing bitmaps that are used in controls already is not supported") ) ;
 #endif
@@ -438,8 +417,7 @@ IconRef wxBitmapRefData::GetIconRef()
         OSType dataType = 0 ;
         OSType maskType = 0 ;
 
-#ifdef __LP64__
-        // since we don't have PICT conversion available under 64 bit, use
+        // since we don't have PICT conversion available, use
         // the next larger standard icon size
         // TODO: Use NSImage
         if (sz <= 16)
@@ -456,7 +434,6 @@ IconRef wxBitmapRefData::GetIconRef()
             sz = 512;
         else if ( sz <= 1024)
             sz = 1024;
-#endif
         
         switch (sz)
         {
@@ -624,13 +601,6 @@ IconRef wxBitmapRefData::GetIconRef()
                 DisposeHandle( maskdata ) ;
             }
         }
-        else
-        {
-#ifndef __LP64__
-            PicHandle pic = GetPictHandle() ;
-            SetIconFamilyData( iconFamily, 'PICT' , (Handle) pic ) ;
-#endif
-        }
         // transform into IconRef
 
         // cleaner version existing from 10.3 upwards
@@ -644,15 +614,6 @@ IconRef wxBitmapRefData::GetIconRef()
 
     return m_iconRef ;
 }
-
-#ifndef __WXOSX_IPHONE__
-#ifndef __LP64__
-PicHandle wxBitmapRefData::GetPictHandle()
-{
-    return m_pictHandle ;
-}
-#endif
-#endif
 
 #endif
 
@@ -793,13 +754,6 @@ void wxBitmapRefData::Free()
         ReleaseIconRef( m_iconRef ) ;
         m_iconRef = NULL ;
     }
-
-#ifndef __LP64__
-    if ( m_pictHandle )
-    {
-        m_pictHandle = NULL ;
-    }
-#endif
 #endif
     if ( m_hBitmap )
     {
