@@ -308,6 +308,8 @@ public:
 
     /**
         Sets the increment value.
+        @note You may also need to increase the number of visible digits
+        using SetDigits
     */
     void SetIncrement(double inc);
 
