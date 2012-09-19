@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 27 August 2012                                                     *
+ * Date : 19 September 2012                                                  *
  *                                                                           *
  *****************************************************************************/
 
@@ -888,11 +888,14 @@ typedef pid_t GPid;
 
 /*
  * Use libnotify library.
+ * Use libnotify 0.7+ API.
  */
 #ifdef VMS_GTK2
 #define wxUSE_LIBNOTIFY 1
+#define wxUSE_LIBNOTIFY_0_7 1
 #else
 #define wxUSE_LIBNOTIFY 0
+#define wxUSE_LIBNOTIFY_0_7 0
 #endif
 /*
  * Use libXpm
