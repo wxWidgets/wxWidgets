@@ -2267,12 +2267,17 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
 
     // update the control before scrolling it
     if (m_dirty)
-#if defined( __WXMSW__ ) || defined(__WXMAC__)
+    {
+#if defined( __WXMSW__ ) 
         Update();
+#elif defined(__WXMAC__)
+        Update();
+        DoDirtyProcessing();
 #else
         DoDirtyProcessing();
 #endif
-
+    }
+        
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
 
     int itemY = gitem->GetY();
@@ -2289,6 +2294,12 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
     {
         // need to scroll up by enough to show this item fully
         itemY += itemHeight - clientHeight;
+#ifdef __WXOSX__
+        // because itemY below will be divided by PIXELS_PER_UNIT it may
+        // be rounded down, with the result of the item still only being 
+        // partially visible, so make sure we are rounding up
+        itemY += PIXELS_PER_UNIT-1;
+#endif
     }
     else if ( itemY > start_y*PIXELS_PER_UNIT )
     {
