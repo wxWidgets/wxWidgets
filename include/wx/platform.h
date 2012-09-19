@@ -27,6 +27,9 @@
 #    ifndef MAC_OS_X_VERSION_10_6
 #       define MAC_OS_X_VERSION_10_6 1060
 #    endif
+#    ifndef MAC_OS_X_VERSION_10_7
+#       define MAC_OS_X_VERSION_10_7 1070
+#    endif
 #    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
@@ -647,6 +650,9 @@
 #        endif
 #        ifndef MAC_OS_X_VERSION_10_6
 #           define MAC_OS_X_VERSION_10_6 1060
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_7
+#           define MAC_OS_X_VERSION_10_7 1070
 #        endif
 #    else
 #        error "only mach-o configurations are supported"
