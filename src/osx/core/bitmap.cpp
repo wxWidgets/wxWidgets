@@ -460,10 +460,11 @@ IconRef wxBitmapRefData::GetIconRef()
         
         switch (sz)
         {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
             case 1024:
                 dataType = kIconServices1024PixelDataARGB;
                 break;
-                
+#endif
             case 512:
                 dataType = kIconServices512PixelDataARGB;
                 break;
