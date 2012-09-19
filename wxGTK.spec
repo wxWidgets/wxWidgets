@@ -2,6 +2,9 @@
 %define ver  2.9.5
 %define ver2 2.9
 %define rel  1
+# version for package name according to OpenSuse policy:
+# http://en.opensuse.org/openSUSE:Shared_library_packaging_policy
+%define sver 2_9-5
 
 # Configurable settings (use --with(out) {unicode,gtk2} on rpmbuild cmd line):
 %define unicode 1
@@ -49,15 +52,22 @@
     %define wxbaseconfiglink	wxbase-%{ver2}-config
 %endif
 
+%if 0%{?suse_version}
+# avoiding shlib-policy-name-error: Your package contains a single shared
+# library but is not named after its SONAME.
+    %define glname  libwx_%{buildname}_gl-%{sver}
+%else
+    %define glname  %{name}-gl
+%endif
+
 Summary: The GTK+ %{gtkver} port of the wxWidgets library
 Name: %{name}
 Version: %{ver}
 Release: %{rel}
 License: wxWindows Licence
-Group: X11/Libraries
-Source: wxGTK-%{ver}.tar.bz2
+Group: System/Libraries
+Source: wxWidgets-%{ver}.tar.bz2
 URL: http://www.wxwidgets.org
-Packager: Vadim Zeitlin <vadim@wxwindows.org>
 Prefix: %{_prefix}
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: %{wxbasename} = %{ver}
@@ -68,12 +78,33 @@ BuildRequires: gtk+-devel >= 1.2.0
 %endif
 
 BuildRequires: zlib-devel, libjpeg-devel, libpng-devel, libtiff-devel
+# on RedHat 5 default GCC 4.1.2 crashes during compilation
+%if 0%{?rhel} == 5
+BuildRequires: gcc44-c++
+%else
+BuildRequires: gcc-c++
+%endif
+
+%if 0%{?suse_version}
+BuildRequires: libexpat-devel, Mesa-devel, xorg-x11-libSM-devel
+BuildRequires: gstreamer-0_10-devel, gstreamer-0_10-plugins-base-devel
+%else
+%if 0%{?mandriva_version}
+BuildRequires: libexpat-devel, libmesaglu-devel, libsm-devel
+# For now disabling mediactrl
+# FIXME: How to resolve OBS Mandriva dependecies for these?
+#BuildRequires: libgstreamer-devel, libgstreamer-plugins-base-devel
+%else
+BuildRequires: expat-devel, libGLU-devel, libSM-devel
+BuildRequires: gstreamer-devel, gstreamer-plugins-base-devel
+%endif
+%endif
 
 # all packages providing an implementation of wxWidgets library (regardless of
 # the toolkit used) should provide the (virtual) wxwin package, this makes it
 # possible to require wxwin instead of requiring "wxgtk or wxmotif or wxuniv..."
-Provides: wxwin
-Provides: wxGTK
+Provides: wxwin = %{version}
+Provides: wxGTK = %{version}
 
 %description
 wxWidgets is a free C++ library for cross-platform GUI development.
@@ -81,35 +112,36 @@ With wxWidgets, you can create applications for different GUIs (GTK+,
 Motif, MS Windows, MacOS X, Windows CE, GPE) from the same source code.
 
 %package -n wx-i18n
-Summary: The translations for the wxWidgets library.
-Group: X11/Libraries
+Summary: The translations for the wxWidgets library
+Group: System/Libraries
 
 %description -n wx-i18n
 The translations files for the wxWidgets library.
 
 %package devel
 Summary: The GTK+ %{gtkver} port of the wxWidgets library
-Group: X11/Libraries
+Group: Development/Libraries
 Requires: %{name} = %{ver}
+Requires: %{glname} = %{ver}
 Requires: %{wxbasename}-devel = %{ver}
-Provides: wxGTK-devel
+Provides: wxGTK-devel = %{version}
 
 %description devel
 The GTK+ %{gtkver} port of the wxWidgets library, header files.
 
-%package gl
-Summary: The GTK+ %{gtkver} port of the wxWidgets library, OpenGL add-on.
-Group: X11/Libraries
+%package -n %{glname}
+Summary: The GTK+ %{gtkver} port of the wxWidgets library, OpenGL add-on
+Group: System/Libraries
 Requires: %{name} = %{ver}
-Provides: wxGTK-gl
+Provides: wxGTK-gl = %{version}
 
-%description gl
+%description -n %{glname}
 OpenGL add-on library for wxGTK, the GTK+ %{gtkver} port of the wxWidgets library.
 
 %package -n %{wxbasename}
 Summary: wxBase library - non-GUI support classes of the wxWidgets toolkit
 Group: Development/Libraries
-Provides: wxBase
+Provides: wxBase = %{version}
 
 %description -n %{wxbasename}
 wxBase is a collection of C++ classes providing basic data structures (strings,
@@ -120,27 +152,30 @@ compression). wxBase currently supports Win32, most Unix variants (Linux,
 FreeBSD, Solaris, HP-UX) and MacOS X (Carbon and Mach-0).
 
 %package -n %{wxbasename}-devel
-Summary: wxBase library, header files.
+Summary: wxBase library, header files
 Group: Development/Libraries
-Provides: wxBase-devel
+Provides: wxBase-devel = %{version}
 
 %description -n %{wxbasename}-devel
 wxBase library - non-GUI support classes of the wxWidgets toolkit,
 header files.
 
 %prep
-%setup -q -n wxGTK-%{ver}
+%setup -q -n wxWidgets-%{ver}
 
 %build
-if [ "$SMP" != "" ]; then
-    export MAKE="make -j$SMP"
-else
-    export MAKE="make"
-fi
+
+%if 0%{?rhel} == 5
+export CC=gcc44
+export CXX=g++44
+%endif
+# if it's not set OpenSuse warns: "compiled without RPM_OPT_FLAGS"
+export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
+export CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 mkdir obj-shared
 cd obj-shared
-../configure --prefix=%{_prefix} --libdir=%{_libdir} \
+../configure --prefix=%{_prefix} --libdir=%{_libdir} --disable-rpath \
 %if ! %{gtk2}
 			      --with-gtk=1 \
 %else
@@ -151,16 +186,17 @@ cd obj-shared
 %else
 			      --disable-unicode \
 %endif
-			      --with-opengl \
-			      --with-gnomeprint \
-			      --enable-mediactrl
-$MAKE
+%if ! 0%{?mandriva_version}
+			      --enable-mediactrl \
+%endif
+			      --with-opengl
+make %{?_smp_mflags}
 
 cd ..
 
 mkdir obj-static
 cd obj-static
-../configure --prefix=%{_prefix} --libdir=%{_libdir} \
+../configure --prefix=%{_prefix} --libdir=%{_libdir} --disable-rpath \
 %if ! %{gtk2}
 			      --with-gtk=1 \
 %else
@@ -172,10 +208,11 @@ cd obj-static
 %else
 			      --disable-unicode \
 %endif
-			      --with-opengl \
-			      --with-gnomeprint \
-			      --enable-mediactrl
-$MAKE
+%if ! 0%{?mandriva_version}
+			      --enable-mediactrl \
+%endif
+			      --with-opengl
+make %{?_smp_mflags}
 
 cd ..
 
@@ -446,20 +483,22 @@ ln -sf %{_libdir}/wx/config/%{wxbaseconfig} %{_bindir}/%{wxbaseconfiglink}
 %preun  -n %{wxbasename}-devel
 rm -f %{_bindir}/%{wxbaseconfiglink}
 
-%post gl
+%post -n %{glname}
 /sbin/ldconfig
 
-%postun gl
+%postun -n %{glname}
 /sbin/ldconfig
 
 %files
 %defattr(-,root,root)
-%doc COPYING.LIB *.txt
+#doc COPYING.LIB *.txt
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_aui-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so.*
+%if ! 0%{?mandriva_version}
 %{_libdir}/libwx_%{buildname}_media-%{ver2}.so.*
+%endif
 %{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.so.*
@@ -473,13 +512,26 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 
 %files devel -f core-headers.files
 %defattr(-,root,root)
+%dir %{_includedir}/wx-%{ver2}/wx/aui
+%dir %{_includedir}/wx-%{ver2}/wx/gtk
+%dir %{_includedir}/wx-%{ver2}/wx/gtk/gnome
+%dir %{_includedir}/wx-%{ver2}/wx/gtk/hildon
+%dir %{_includedir}/wx-%{ver2}/wx/persist
+%dir %{_includedir}/wx-%{ver2}/wx/propgrid
+%dir %{_includedir}/wx-%{ver2}/wx/ribbon
+%dir %{_includedir}/wx-%{ver2}/wx/richtext
+%dir %{_includedir}/wx-%{ver2}/wx/stc
+%dir %{_includedir}/wx-%{ver2}/wx/unix
+%dir %{_includedir}/wx-%{ver2}/wx/xrc
 # shared libs
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_aui-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so
+%if ! 0%{?mandriva_version}
 %{_libdir}/libwx_%{buildname}_media-%{ver2}.so
+%endif
 %{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.so
@@ -492,7 +544,9 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.a
+%if ! 0%{?mandriva_version}
 %{_libdir}/libwx_%{buildname}_media-%{ver2}.a
+%endif
 %{_libdir}/libwx_%{buildname}_propgrid-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_ribbon-%{ver2}.a
@@ -500,6 +554,12 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_stc-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.a
 %dir %{_libdir}/wx
+%dir %{_libdir}/wx/config
+%dir %{_libdir}/wx/include
+%dir %{_libdir}/wx/include/%{wxconfig}
+%dir %{_libdir}/wx/include/%{wxconfig}/wx
+%dir %{_libdir}/wx/include/%{wxconfigstatic}
+%dir %{_libdir}/wx/include/%{wxconfigstatic}/wx
 %{_libdir}/wx/config/%{wxconfig}
 %{_libdir}/wx/include/%{wxconfig}/wx/setup.h
 %{_libdir}/wx/config/%{wxconfigstatic}
@@ -513,6 +573,14 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %files -n %{wxbasename}-devel -f wxbase-headers.paths
 %defattr (-,root,root)
 %dir %{_includedir}/wx-%{ver2}
+%dir %{_includedir}/wx-%{ver2}/wx
+%dir %{_includedir}/wx-%{ver2}/wx/generic
+%dir %{_includedir}/wx-%{ver2}/wx/html
+%dir %{_includedir}/wx-%{ver2}/wx/meta
+%dir %{_includedir}/wx-%{ver2}/wx/protocol
+%dir %{_includedir}/wx-%{ver2}/wx/unix
+%dir %{_includedir}/wx-%{ver2}/wx/xml
+%dir %{_datadir}/bakefile/presets
 %{_libdir}/libwx_base*-%{ver2}.so
 %{_libdir}/libwx_base*-%{ver2}.a
 %if %{unicode}
@@ -520,9 +588,11 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %endif
 %{_libdir}/libwxscintilla-%{ver2}.a
 %dir %{_libdir}/wx
+%dir %{_datadir}/bakefile
+%dir %{_datadir}/bakefile/presets
 %{_datadir}/aclocal/*.m4
 %{_datadir}/bakefile/presets/*
 
-%files gl
+%files -n %{glname}
 %defattr(-,root,root)
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.so.*
