@@ -620,20 +620,13 @@ void wxWindowBase::DoCentre(int dir)
 // fits the window around the children
 void wxWindowBase::Fit()
 {
-    if ( !GetChildren().empty() )
-    {
-        SetSize(GetBestSize());
-    }
-    //else: do nothing if we have no children
+    SetSize(GetBestSize());
 }
 
 // fits virtual size (ie. scrolled area etc.) around children
 void wxWindowBase::FitInside()
 {
-    if ( GetChildren().GetCount() > 0 )
-    {
-        SetVirtualSize( GetBestVirtualSize() );
-    }
+    SetVirtualSize( GetBestVirtualSize() );
 }
 
 // On Mac, scrollbars are explicitly children.
