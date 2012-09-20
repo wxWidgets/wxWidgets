@@ -548,6 +548,9 @@ All (GUI):
 - Add expand/collapse button to wxRibbonBar (rakeshthp).
 - Fix item data access in wxDataViewListCtrl (Kry).
 - Fix problem with floating maximized AUI panes (Laurent Poujoulat).
+- Add owned client data support to wxRibbonButtonBar. Notice that the client
+  data now must be set using the SetItemClient{Data,Object}() methods and not
+  when inserting the button (Laurent Poujoulat).
 - Add wxBitmapButton::NewCloseButton().
 - Add wxTextEntry::SelectNone() (troelsk).
 - Restore the original wxGrid col/row size when unhiding it (Michael Richards).

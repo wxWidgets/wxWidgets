@@ -81,8 +81,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxBitmap& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                const wxString& help_string = wxEmptyString,
-                wxObject* client_data = NULL);
+                const wxString& help_string = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* InsertButton(
                 size_t pos,
@@ -122,8 +121,12 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxBitmap& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                const wxString& help_string = wxEmptyString,
-                wxObject* client_data = NULL);
+                const wxString& help_string = wxEmptyString);
+
+    void SetItemClientObject(wxRibbonButtonBarButtonBase* item, wxClientData* data);
+    wxClientData* GetItemClientObject(const wxRibbonButtonBarButtonBase* item) const;
+    void SetItemClientData(wxRibbonButtonBarButtonBase* item, void* data);
+    void* GetItemClientData(const wxRibbonButtonBarButtonBase* item) const;
 
     virtual size_t GetButtonCount() const;
     virtual wxRibbonButtonBarButtonBase *GetItem(size_t n) const;

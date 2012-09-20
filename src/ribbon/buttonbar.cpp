@@ -117,7 +117,7 @@ public:
     wxBitmap bitmap_small;
     wxBitmap bitmap_small_disabled;
     wxRibbonButtonBarButtonSizeInfo sizes[3];
-    wxObject* client_data;
+    wxClientDataContainer client_data;
     int id;
     wxRibbonButtonKind kind;
     long state;
@@ -278,12 +278,10 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
                 const wxBitmap& bitmap_disabled,
                 const wxBitmap& bitmap_small_disabled,
                 wxRibbonButtonKind kind,
-                const wxString& help_string,
-                wxObject* client_data)
+                const wxString& help_string)
 {
     return InsertButton(GetButtonCount(), button_id, label, bitmap,
-        bitmap_small, bitmap_disabled,bitmap_small_disabled, kind, help_string,
-        client_data);
+        bitmap_small, bitmap_disabled,bitmap_small_disabled, kind, help_string);
 }
 
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
@@ -295,8 +293,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
                 const wxBitmap& bitmap_disabled,
                 const wxBitmap& bitmap_small_disabled,
                 wxRibbonButtonKind kind,
-                const wxString& help_string,
-                wxObject* client_data)
+                const wxString& help_string)
 {
     wxASSERT(bitmap.IsOk() || bitmap_small.IsOk());
     if(m_buttons.IsEmpty())
@@ -358,7 +355,6 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     }
     base->kind = kind;
     base->help_string = help_string;
-    base->client_data = client_data;
     base->state = 0;
 
     wxClientDC temp_dc(this);
@@ -370,6 +366,42 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     m_layouts_valid = false;
     return base;
 }
+
+
+void
+wxRibbonButtonBar::SetItemClientObject(wxRibbonButtonBarButtonBase* item,
+                                       wxClientData* data)
+{
+    wxCHECK_RET( item, "Can't associate client object with an invalid item" );
+
+    item->client_data.SetClientObject(data);
+}
+
+wxClientData*
+wxRibbonButtonBar::GetItemClientObject(const wxRibbonButtonBarButtonBase* item) const
+{
+    wxCHECK_MSG( item, NULL, "Can't get client object for an invalid item" );
+
+    return item->client_data.GetClientObject();
+}
+
+void
+wxRibbonButtonBar::SetItemClientData(wxRibbonButtonBarButtonBase* item,
+                                     void* data)
+{
+    wxCHECK_RET( item, "Can't associate client data with an invalid item" );
+
+    item->client_data.SetClientData(data);
+}
+
+void*
+wxRibbonButtonBar::GetItemClientData(const wxRibbonButtonBarButtonBase* item) const
+{
+    wxCHECK_MSG( item, NULL, "Can't get client data for an invalid item" );
+
+    return item->client_data.GetClientData();
+}
+
 
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
                 size_t pos,

@@ -231,8 +231,6 @@ public:
             The kind of button to add.
         @param help_string
             The UI help string to associate with the new button.
-        @param client_data
-            Client data to associate with the new button.
         
         @return An opaque pointer which can be used only with other button bar
             methods.
@@ -249,8 +247,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxBitmap& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                const wxString& help_string = wxEmptyString,
-                wxObject* client_data = NULL);
+                const wxString& help_string = wxEmptyString);
 
     /**
         Inserts a button to the button bar (simple version) at the given position.
@@ -345,8 +342,6 @@ public:
             The kind of button to add.
         @param help_string
             The UI help string to associate with the new button.
-        @param client_data
-            Client data to associate with the new button.
 
         @return An opaque pointer which can be used only with other button bar
             methods.
@@ -367,8 +362,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxBitmap& bitmap_small_disabled = wxNullBitmap,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                const wxString& help_string = wxEmptyString,
-                wxObject* client_data = NULL);
+                const wxString& help_string = wxEmptyString);
 
     /**
         Returns the number of buttons in this button bar.
@@ -376,6 +370,37 @@ public:
         @since 2.9.4
     */
     virtual size_t GetButtonCount() const;
+
+    /**
+        Set the client object associated with a button. The button bar
+        owns the given object and takes care of its deletion.
+        Please, note that you cannot use both client object and client data.
+
+        @since 2.9.5
+    */
+    void SetItemClientObject(wxRibbonButtonBarButtonBase* item, wxClientData* data);
+
+    /**
+        Get the client object associated with a button.
+
+        @since 2.9.5
+    */
+    wxClientData* GetItemClientObject(const wxRibbonButtonBarButtonBase* item) const;
+
+    /**
+        Set the client data associated with a button.
+        Please, note that you cannot use both client object and client data.
+
+        @since 2.9.5
+    */
+    void SetItemClientData(wxRibbonButtonBarButtonBase* item, void* data);
+
+    /**
+        Get the client data associated with a button.
+
+        @since 2.9.5
+    */
+    void* GetItemClientData(const wxRibbonButtonBarButtonBase* item) const;
 
     /**
         Returns the N-th button of the bar.
