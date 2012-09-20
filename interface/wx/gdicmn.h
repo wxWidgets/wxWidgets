@@ -447,21 +447,35 @@ public:
 
     /**
        Set the left side of the rectangle.
+
+       Notice that because the rectangle stores its left side and width,
+       calling SetLeft() changes the right side position too -- but does
+       preserve the width.
     */
     void SetLeft(int left);
 
     /**
        Set the right side of the rectangle.
+
+       Notice that this doesn't affect GetLeft() return value but changes the
+       rectangle width to set its right side to the given position.
      */
     void SetRight(int right);
 
     /**
        Set the top edge of the rectangle.
+
+       Notice that because the rectangle stores its top side and height,
+       calling SetTop() changes the bottom side position too -- but does
+       preserve the height.
      */
     void SetTop(int top);
 
     /**
-       Set the bottome edge of th rectangle.
+       Set the bottom edge of the rectangle.
+
+       Notice that this doesn't affect GetTop() return value but changes the
+       rectangle height to set its bottom side to the given position.
      */
     void SetBottom(int bottom);
 
