@@ -4495,6 +4495,9 @@ public:
     // Returns the current UseAntiAliasing setting.
     bool GetUseAntiAliasing();
 
+    // Clear annotations from the given line.
+    void AnnotationClearLine(int line);
+
 
 
     // The following methods are nearly equivalent to their similarly named

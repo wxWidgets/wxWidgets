@@ -4444,6 +4444,9 @@ bool wxStyledTextCtrl::GetUseAntiAliasing() {
     return m_swx->GetUseAntiAliasing();
 }
 
+void wxStyledTextCtrl::AnnotationClearLine(int line) {
+    SendMsg(SCI_ANNOTATIONSETTEXT, line, NULL);
+}
 
 
 

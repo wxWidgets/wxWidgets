@@ -3139,6 +3139,13 @@ public:
     void AnnotationClearAll();
 
     /**
+       Clear the annotations from the given line.
+
+       @since 2.9.5
+    */
+    void AnnotationClearAll(int line);
+
+    /**
        Set the visibility for the annotations for a view
     */
     void AnnotationSetVisible(int visible);
