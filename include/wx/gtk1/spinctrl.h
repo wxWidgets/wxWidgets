@@ -68,7 +68,10 @@ public:
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
 
-protected:
+    virtual int GetBase() const { return m_base; }
+    virtual bool SetBase(int base);
+
+ protected:
     virtual wxSize DoGetBestSize() const;
 
     // Widgets that use the style->base colour for the BG colour should
@@ -76,6 +79,14 @@ protected:
     virtual bool UseGTKStyleBase() const { return true; }
 
 private:
+    // Common part of all ctors.
+    void Init()
+    {
+        m_base = 10;
+    }
+
+    int m_base;
+
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
     DECLARE_EVENT_TABLE()
 };

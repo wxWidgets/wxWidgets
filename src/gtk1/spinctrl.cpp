@@ -44,6 +44,38 @@ extern bool   g_blockEventsOnDrag;
 //-----------------------------------------------------------------------------
 
 extern "C" {
+
+static gboolean
+wx_gtk_spin_input(GtkSpinButton* spin, gdouble* val, wxSpinCtrl* win)
+{
+    // We might use g_ascii_strtoll() here but it's 2.12+ only, so use our own
+    // wxString function even if this requires an extra conversion.
+    const wxString
+        text(wxString::FromUTF8(gtk_entry_get_text(GTK_ENTRY(spin))));
+
+    long lval;
+    if ( !text.ToLong(&lval, win->GetBase()) )
+        return FALSE;
+
+    *val = lval;
+
+    return TRUE;
+}
+
+static gint
+wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
+{
+    const gint val = gtk_spin_button_get_value_as_int(spin);
+
+    gtk_entry_set_text
+    (
+        GTK_ENTRY(spin),
+        wxPrivate::wxSpinCtrlFormatAsHex(val, win->GetMax()).utf8_str()
+    );
+
+    return TRUE;
+}
+
 static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
@@ -303,6 +335,42 @@ wxSize wxSpinCtrl::DoGetBestSize() const
     wxSize best(95, ret.y);
     CacheBestSize(best);
     return best;
+}
+
+bool wxSpinCtrl::SetBase(int base)
+{
+    // Currently we only support base 10 and 16. We could add support for base
+    // 8 quite easily but wxMSW doesn't support it natively so don't bother
+    // with doing something wxGTK-specific here.
+    if ( base != 10 && base != 16 )
+        return false;
+
+    if ( base == m_base )
+        return true;
+
+    m_base = base;
+
+    // We need to be able to enter letters for any base greater than 10.
+    gtk_spin_button_set_numeric( GTK_SPIN_BUTTON(m_widget), m_base <= 10 );
+
+    if ( m_base != 10 )
+    {
+        gtk_signal_connect( GTK_OBJECT(m_widget), "input",
+                              GTK_SIGNAL_FUNC(wx_gtk_spin_input), this);
+        gtk_signal_connect( GTK_OBJECT(m_widget), "output",
+                              GTK_SIGNAL_FUNC(wx_gtk_spin_output), this);
+    }
+    else
+    {
+        gtk_signal_disconnect_by_func(GTK_OBJECT(m_widget),
+                                             GTK_SIGNAL_FUNC(wx_gtk_spin_input),
+                                             this);
+        gtk_signal_disconnect_by_func(GTK_OBJECT(m_widget),
+                                             GTK_SIGNAL_FUNC(wx_gtk_spin_output),
+                                             this);
+    }
+
+    return true;
 }
 
 // static
