@@ -4387,20 +4387,24 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
         AC_MSG_WARN([backtrace() is not available, wxStackWalker will not be available])
         wxUSE_STACKWALKER=no
     else
-        AC_CACHE_CHECK([for __cxa_demangle() in <cxxabi.h>], wx_cv_func_cxa_demangle,
-            [
-                AC_LANG_PUSH(C++)
-                AC_TRY_LINK([#include <cxxabi.h>],
-                    [
-                        int rc;
-                        __cxxabiv1::__cxa_demangle("foo", 0, 0, &rc);
-                    ],
-                    wx_cv_func_cxa_demangle=yes,
-                    wx_cv_func_cxa_demangle=no
-                )
-                AC_LANG_POP()
-            ]
-        )
+        if test "$ac_cv_header_cxxabi_h" = "yes"; then
+            AC_CACHE_CHECK([for __cxa_demangle() in <cxxabi.h>], wx_cv_func_cxa_demangle,
+                [
+                    AC_LANG_PUSH(C++)
+                    AC_TRY_LINK([#include <cxxabi.h>],
+                        [
+                            int rc;
+                            __cxxabiv1::__cxa_demangle("foo", 0, 0, &rc);
+                        ],
+                        wx_cv_func_cxa_demangle=yes,
+                        wx_cv_func_cxa_demangle=no
+                    )
+                    AC_LANG_POP()
+                ]
+            )
+        else
+            wx_cv_func_cxa_demangle=no
+        fi
 
         if test "$wx_cv_func_cxa_demangle" = "yes"; then
             AC_DEFINE(HAVE_CXA_DEMANGLE)
@@ -5094,6 +5098,29 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
           if test "$wx_cv_cc___thread" = "yes"; then
             AC_DEFINE(HAVE___THREAD_KEYWORD)
           fi
+        fi
+
+        if test "$ac_cv_header_cxxabi_h" = "yes"; then
+            AC_CACHE_CHECK([for abi::__forced_unwind() in <cxxabi.h>],
+                wx_cv_type_abi_forced_unwind,
+                [
+                    AC_LANG_PUSH(C++)
+                    AC_TRY_COMPILE([#include <cxxabi.h>],
+                        [
+                            void foo(abi::__forced_unwind&);
+                        ],
+                        wx_cv_type_abi_forced_unwind=yes,
+                        wx_cv_type_abi_forced_unwind=no
+                    )
+                    AC_LANG_POP()
+                ]
+            )
+        else
+            wx_cv_type_abi_forced_unwind=no
+        fi
+
+        if test "$wx_cv_type_abi_forced_unwind" = "yes"; then
+            AC_DEFINE(HAVE_ABI_FORCEDUNWIND)
         fi
     fi
 

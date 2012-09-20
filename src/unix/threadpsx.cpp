@@ -54,7 +54,7 @@
     #include <thread.h>
 #endif
 
-#ifdef HAVE_CXXABI_H
+#ifdef HAVE_ABI_FORCEDUNWIND
     #include <cxxabi.h>
 #endif
 
@@ -861,7 +861,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
                        wxT("Thread %p Entry() returned %lu."),
                        THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
         }
-#ifdef HAVE_CXXABI_H
+#ifdef HAVE_ABI_FORCEDUNWIND
         // When using common C++ ABI under Linux we must always rethrow this
         // special exception used to unwind the stack when the thread was
         // cancelled, otherwise the thread library would simply terminate the
@@ -872,7 +872,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
             pthread->SetState(STATE_EXITED);
             throw;
         }
-#endif // HAVE_CXXABI_H
+#endif // HAVE_ABI_FORCEDUNWIND
         wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
         {

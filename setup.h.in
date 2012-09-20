@@ -1225,8 +1225,8 @@
 /* Define if you have the <sys/select.h> header file.  */
 #undef HAVE_SYS_SELECT_H
 
-/* Define if you have <cxxabi.h> header file. */
-#undef HAVE_CXXABI_H
+/* Define if you have abi::__forced_unwind in your <cxxabi.h>. */
+#undef HAVE_ABI_FORCEDUNWIND
 
 /* Define if fdopen is available.  */
 #undef HAVE_FDOPEN
