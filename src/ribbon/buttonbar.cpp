@@ -1098,6 +1098,7 @@ void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
                 }
                 notification.SetEventObject(this);
                 notification.SetBar(this);
+                notification.SetButton(m_active_button->base);
                 m_lock_active_state = true;
                 ProcessWindowEvent(notification);
                 m_lock_active_state = false;

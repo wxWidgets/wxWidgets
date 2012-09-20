@@ -484,7 +484,8 @@ public:
     */
     wxRibbonButtonBarEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonButtonBar* bar = NULL);
+                       wxRibbonButtonBar* bar = NULL,
+                       wxRibbonButtonBarButtonBase* button = NULL);
 
     /**
         Returns the bar which contains the button which the event relates to.
@@ -496,6 +497,20 @@ public:
     */
     void SetBar(wxRibbonButtonBar* bar);
     
+    /**
+        Returns the button which the event relates to.
+
+        @since 2.9.5
+    */
+    wxRibbonButtonBarButtonBase* GetButton();
+
+    /**
+        Sets the button relating to this event.
+
+        @since 2.9.5
+    */
+    void SetButton(wxRibbonButtonBarButtonBase* bar);
+
     /**
         Display a popup menu as a result of this (dropdown clicked) event.
     */

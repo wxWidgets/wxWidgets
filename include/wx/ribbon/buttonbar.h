@@ -195,25 +195,30 @@ class WXDLLIMPEXP_RIBBON wxRibbonButtonBarEvent : public wxCommandEvent
 public:
     wxRibbonButtonBarEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonButtonBar* bar = NULL)
+                       wxRibbonButtonBar* bar = NULL,
+                       wxRibbonButtonBarButtonBase* button = NULL)
         : wxCommandEvent(command_type, win_id)
-        , m_bar(bar)
+        , m_bar(bar), m_button(button)
     {
     }
 #ifndef SWIG
     wxRibbonButtonBarEvent(const wxRibbonButtonBarEvent& e) : wxCommandEvent(e)
     {
         m_bar = e.m_bar;
+        m_button = e.m_button;
     }
 #endif
     wxEvent *Clone() const { return new wxRibbonButtonBarEvent(*this); }
 
     wxRibbonButtonBar* GetBar() {return m_bar;}
+    wxRibbonButtonBarButtonBase *GetButton() { return m_button; }
     void SetBar(wxRibbonButtonBar* bar) {m_bar = bar;}
+    void SetButton(wxRibbonButtonBarButtonBase* button) { m_button = button; }
     bool PopupMenu(wxMenu* menu);
 
 protected:
     wxRibbonButtonBar* m_bar;
+    wxRibbonButtonBarButtonBase *m_button;
 
 #ifndef SWIG
 private:
