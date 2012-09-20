@@ -337,55 +337,60 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
     int x, y;
     wxRect r = wxRectFromPRectangle(rc);
     wxBitmap bmp(r.width, r.height, 32);
-    wxAlphaPixelData pixData(bmp);
 
-    // Set the fill pixels
-    ColourDesired cdf(fill.AsLong());
-    int red   = cdf.GetRed();
-    int green = cdf.GetGreen();
-    int blue  = cdf.GetBlue();
+    // This block is needed to ensure that the changes done to the bitmap via
+    // pixel data object are committed before the bitmap is drawn.
+    {
+        wxAlphaPixelData pixData(bmp);
 
-    wxAlphaPixelData::Iterator p(pixData);
-    for (y=0; y<r.height; y++) {
-        p.MoveTo(pixData, 0, y);
-        for (x=0; x<r.width; x++) {
-            p.Red()   = wxPy_premultiply(red,   alphaFill);
-            p.Green() = wxPy_premultiply(green, alphaFill);
-            p.Blue()  = wxPy_premultiply(blue,  alphaFill);
-            p.Alpha() = alphaFill;
-            ++p;
+        // Set the fill pixels
+        ColourDesired cdf(fill.AsLong());
+        int red   = cdf.GetRed();
+        int green = cdf.GetGreen();
+        int blue  = cdf.GetBlue();
+
+        wxAlphaPixelData::Iterator p(pixData);
+        for (y=0; y<r.height; y++) {
+            p.MoveTo(pixData, 0, y);
+            for (x=0; x<r.width; x++) {
+                p.Red()   = wxPy_premultiply(red,   alphaFill);
+                p.Green() = wxPy_premultiply(green, alphaFill);
+                p.Blue()  = wxPy_premultiply(blue,  alphaFill);
+                p.Alpha() = alphaFill;
+                ++p;
+            }
         }
-    }
 
-    // Set the outline pixels
-    ColourDesired cdo(outline.AsLong());
-    red   = cdo.GetRed();
-    green = cdo.GetGreen();
-    blue  = cdo.GetBlue();
-    for (x=0; x<r.width; x++) {
-        p.MoveTo(pixData, x, 0);
-        p.Red()   = wxPy_premultiply(red,   alphaOutline);
-        p.Green() = wxPy_premultiply(green, alphaOutline);
-        p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
-        p.Alpha() = alphaOutline;
-        p.MoveTo(pixData, x, r.height-1);
-        p.Red()   = wxPy_premultiply(red,   alphaOutline);
-        p.Green() = wxPy_premultiply(green, alphaOutline);
-        p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
-        p.Alpha() = alphaOutline;
-    }
+        // Set the outline pixels
+        ColourDesired cdo(outline.AsLong());
+        red   = cdo.GetRed();
+        green = cdo.GetGreen();
+        blue  = cdo.GetBlue();
+        for (x=0; x<r.width; x++) {
+            p.MoveTo(pixData, x, 0);
+            p.Red()   = wxPy_premultiply(red,   alphaOutline);
+            p.Green() = wxPy_premultiply(green, alphaOutline);
+            p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
+            p.Alpha() = alphaOutline;
+            p.MoveTo(pixData, x, r.height-1);
+            p.Red()   = wxPy_premultiply(red,   alphaOutline);
+            p.Green() = wxPy_premultiply(green, alphaOutline);
+            p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
+            p.Alpha() = alphaOutline;
+        }
 
-    for (y=0; y<r.height; y++) {
-        p.MoveTo(pixData, 0, y);
-        p.Red()   = wxPy_premultiply(red,   alphaOutline);
-        p.Green() = wxPy_premultiply(green, alphaOutline);
-        p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
-        p.Alpha() = alphaOutline;
-        p.MoveTo(pixData, r.width-1, y);
-        p.Red()   = wxPy_premultiply(red,   alphaOutline);
-        p.Green() = wxPy_premultiply(green, alphaOutline);
-        p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
-        p.Alpha() = alphaOutline;
+        for (y=0; y<r.height; y++) {
+            p.MoveTo(pixData, 0, y);
+            p.Red()   = wxPy_premultiply(red,   alphaOutline);
+            p.Green() = wxPy_premultiply(green, alphaOutline);
+            p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
+            p.Alpha() = alphaOutline;
+            p.MoveTo(pixData, r.width-1, y);
+            p.Red()   = wxPy_premultiply(red,   alphaOutline);
+            p.Green() = wxPy_premultiply(green, alphaOutline);
+            p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
+            p.Alpha() = alphaOutline;
+        }
     }
 
     // Draw the bitmap
