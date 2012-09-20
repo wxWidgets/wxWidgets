@@ -1591,9 +1591,15 @@ case "${host}" in
   ;;
 esac
 
-dnl POSIX needs this for select(), but old systems don't have it
 if test "$USE_UNIX" = 1 ; then
+    dnl POSIX needs this for select(), but old systems don't have it
     AC_CHECK_HEADERS([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
+
+    dnl Header defining C++ ABI is currently only available with g++ but test
+    dnl for it unconditionally in case it becomes supported by other compilers.
+    AC_LANG_PUSH(C++)
+    AC_CHECK_HEADERS([cxxabi.h],,, [AC_INCLUDES_DEFAULT()])
+    AC_LANG_POP()
 fi
 
 dnl ---------------------------------------------------------------------------
