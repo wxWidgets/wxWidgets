@@ -79,20 +79,21 @@ wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
     const wxClassInfo* const oldFirst = wxClassInfo::GetFirst();
     Load( libname, flags );
 
-    // It is simple to know what is the last object we registered, it's just
-    // the new head of the wxClassInfo list:
-    m_ourLast = wxClassInfo::GetFirst();
+    // It is simple to know what is the first object in the linked list of
+    // wxClassInfo that we registered (it's also the last one chronologically),
+    // it's just the new head of the wxClassInfo list:
+    m_ourFirst = wxClassInfo::GetFirst();
 
     // But to find the first wxClassInfo created by this library we need to
     // iterate until we get to the previous head as we don't have the links in
     // the backwards direction:
-    if ( m_ourLast != oldFirst )
+    if ( m_ourFirst != oldFirst )
     {
-        for ( const wxClassInfo* info = m_ourLast; ; info = info->GetNext() )
+        for ( const wxClassInfo* info = m_ourFirst; ; info = info->GetNext() )
         {
             if ( info->GetNext() == oldFirst )
             {
-                m_ourFirst = info;
+                m_ourLast = info;
                 break;
             }
         }
