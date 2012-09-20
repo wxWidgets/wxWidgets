@@ -518,6 +518,13 @@ public:
     virtual void SetRepresentedFilename(const wxString& filename);
 
     /**
+        Show the wxTopLevelWindow, but do not give it keyboard focus. This can be
+        used for pop up or notification windows that should not steal the current
+        focus.
+     */
+    virtual void ShowWithoutActivating();
+    
+    /**
         Depending on the value of @a show parameter the window is either shown
         full screen or restored to its normal state. @a style is a bit list
         containing some or all of the following values, which indicate what
