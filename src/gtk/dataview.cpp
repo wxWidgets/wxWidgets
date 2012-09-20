@@ -3366,7 +3366,6 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataVie
     m_owner = owner;
     m_wx_model = wx_model;
 
-    m_gtk_model = NULL;
     m_root = NULL;
     m_sort_order = GTK_SORT_ASCENDING;
     m_sort_column = -1;
