@@ -137,6 +137,9 @@ public:
     virtual void EnableButton(int button_id, bool enable = true);
     virtual void ToggleButton(int button_id, bool checked);
 
+    virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
+    virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
+
     virtual void SetArtProvider(wxRibbonArtProvider* art);
     virtual bool IsSizingContinuous() const;
 

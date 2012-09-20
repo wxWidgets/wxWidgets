@@ -443,6 +443,23 @@ public:
             @false to set it to the untoggled/unpressed/unchecked state.
     */
     virtual void ToggleButton(int button_id, bool checked);
+
+    /**
+        Returns the active item of the button bar or NULL if there is none.
+        The active button is the one being clicked.
+
+        @since 2.9.5
+    */
+    virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
+
+    /**
+        Returns the hovered item of the button bar or NULL if there is none.
+        The hovered button is the one the mouse is over.
+
+        @since 2.9.5
+    */
+    virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
+
 };
 
 /**

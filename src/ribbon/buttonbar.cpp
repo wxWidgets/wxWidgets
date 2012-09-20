@@ -1139,6 +1139,19 @@ void wxRibbonButtonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
     if(repaint)
         Refresh(false);
 }
+
+wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetActiveItem() const
+{
+    return m_active_button == NULL ? NULL : m_active_button->base;
+}
+
+
+wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetHoveredItem() const
+{
+    return m_hovered_button == NULL ? NULL : m_hovered_button->base;
+}
+
+
 wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetItem(size_t n) const
 {
     wxCHECK_MSG(n >= 0 && n < m_buttons.GetCount(), NULL, "wxRibbonButtonBar item's index is out of bound");
