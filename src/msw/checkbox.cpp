@@ -273,7 +273,7 @@ bool wxCheckBox::SetForegroundColour(const wxColour& colour)
     // the only way to change the checkbox foreground colour under Windows XP
     // is to owner draw it
     if ( wxUxThemeEngine::GetIfActive() )
-        MakeOwnerDrawn(colour.IsOk());
+        MSWMakeOwnerDrawn(colour.IsOk());
 
     return true;
 }
@@ -284,7 +284,7 @@ bool wxCheckBox::IsOwnerDrawn() const
         (::GetWindowLong(GetHwnd(), GWL_STYLE) & BS_OWNERDRAW) == BS_OWNERDRAW;
 }
 
-void wxCheckBox::MakeOwnerDrawn(bool ownerDrawn)
+void wxCheckBox::MSWMakeOwnerDrawn(bool ownerDrawn)
 {
     long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 

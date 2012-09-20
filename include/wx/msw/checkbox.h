@@ -52,14 +52,14 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
+    // make the checkbox owner drawn or reset it to normal style
+    void MSWMakeOwnerDrawn(bool ownerDrawn);
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
     virtual void DoSet3StateValue(wxCheckBoxState value);
     virtual wxCheckBoxState DoGet3StateValue() const;
-
-    // make the checkbox owner drawn or reset it to normal style
-    void MakeOwnerDrawn(bool ownerDrawn);
 
     // return true if this checkbox is owner drawn
     bool IsOwnerDrawn() const;
