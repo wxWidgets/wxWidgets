@@ -21,6 +21,7 @@
 #include "wx/ribbon/art.h"
 #include "wx/dcbuffer.h"
 #include "wx/app.h"
+#include "wx/vector.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -465,10 +466,21 @@ void wxRibbonBar::SetTabCtrlMargins(int left, int right)
     RecalculateTabSizes();
 }
 
-static int OrderPageTabInfoBySmallWidthAsc(wxRibbonPageTabInfo **first, wxRibbonPageTabInfo **second)
+struct PageComparedBySmallWidthAsc
 {
-    return (**first).small_must_have_separator_width - (**second).small_must_have_separator_width;
-}
+    wxEXPLICIT PageComparedBySmallWidthAsc(wxRibbonPageTabInfo* page)
+        : m_page(page)
+    {
+    }
+
+    bool operator<(const PageComparedBySmallWidthAsc& other) const
+    {
+        return m_page->small_must_have_separator_width
+                < other.m_page->small_must_have_separator_width;
+    }
+
+    wxRibbonPageTabInfo *m_page;
+};
 
 void wxRibbonBar::RecalculateTabSizes()
 {
@@ -624,30 +636,27 @@ void wxRibbonBar::RecalculateTabSizes()
             if(width >= total_small_width)
             {
                 // Do (2)
-                wxRibbonPageTabInfoArray sorted_pages;
-                for(i = 0; i < numtabs; ++i)
-                {
-                    // Sneaky obj array trickery to not copy the tab descriptors
-                    if (!m_pages.Item(i).shown)
-                        continue;
-                    sorted_pages.Add(&m_pages.Item(i));
-                }
-                sorted_pages.Sort(OrderPageTabInfoBySmallWidthAsc);
+                wxVector<PageComparedBySmallWidthAsc> sorted_pages;
+                sorted_pages.reserve(numtabs);
+                for ( i = 0; i < numtabs; ++i )
+                    sorted_pages.push_back(PageComparedBySmallWidthAsc(&m_pages.Item(i)));
+
+                wxVectorSort(sorted_pages);
                 width -= tabsep * (numtabs - 1);
                 for(i = 0; i < numtabs; ++i)
                 {
-                    wxRibbonPageTabInfo& info = sorted_pages.Item(i);
-                    if (!info.shown)
+                    wxRibbonPageTabInfo* info = sorted_pages[i].m_page;
+                    if (!info->shown)
                         continue;
-                    if(info.small_must_have_separator_width * (int)(numtabs - i) <= width)
+                    if(info->small_must_have_separator_width * (int)(numtabs - i) <= width)
                     {
-                        info.rect.width = info.small_must_have_separator_width;;
+                        info->rect.width = info->small_must_have_separator_width;;
                     }
                     else
                     {
-                        info.rect.width = width / (numtabs - i);
+                        info->rect.width = width / (numtabs - i);
                     }
-                    width -= info.rect.width;
+                    width -= info->rect.width;
                 }
                 for(i = 0; i < numtabs; ++i)
                 {
@@ -658,7 +667,6 @@ void wxRibbonBar::RecalculateTabSizes()
                     info.rect.y = y;
                     info.rect.height = m_tab_height;
                     x += info.rect.width + tabsep;
-                    sorted_pages.Detach(numtabs - (i + 1));
                 }
             }
             else
