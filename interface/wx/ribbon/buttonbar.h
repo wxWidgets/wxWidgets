@@ -378,6 +378,29 @@ public:
     virtual size_t GetButtonCount() const;
 
     /**
+        Returns the N-th button of the bar.
+
+        @see GetButtonCount()
+
+        @since 2.9.5
+    */
+    virtual wxRibbonButtonBarButtonBase *GetItem(size_t n) const;
+
+    /**
+        Returns the first button having a given id or NULL if none matches.
+
+        @since 2.9.5
+    */
+    virtual wxRibbonButtonBarButtonBase *GetItemById(int id) const;
+
+    /**
+        Returns the id of a button.
+
+        @since 2.9.5
+    */
+    virtual int GetItemId(wxRibbonButtonBarButtonBase *) const;
+
+    /**
         Calculate button layouts and positions.
         
         Must be called after buttons are added to the button bar, as otherwise

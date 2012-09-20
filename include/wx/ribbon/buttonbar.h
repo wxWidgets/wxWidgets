@@ -126,6 +126,10 @@ public:
                 wxObject* client_data = NULL);
 
     virtual size_t GetButtonCount() const;
+    virtual wxRibbonButtonBarButtonBase *GetItem(size_t n) const;
+    virtual wxRibbonButtonBarButtonBase *GetItemById(int id) const;
+    virtual int GetItemId(wxRibbonButtonBarButtonBase *button) const;
+
 
     virtual bool Realize();
     virtual void ClearButtons();

@@ -1139,6 +1139,32 @@ void wxRibbonButtonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
     if(repaint)
         Refresh(false);
 }
+wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetItem(size_t n) const
+{
+    wxCHECK_MSG(n >= 0 && n < m_buttons.GetCount(), NULL, "wxRibbonButtonBar item's index is out of bound");
+    return m_buttons.Item(n);
+}
+
+wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetItemById(int button_id) const
+{
+    size_t count = m_buttons.GetCount();
+    for ( size_t i = 0; i < count; ++i )
+    {
+        wxRibbonButtonBarButtonBase* button = m_buttons.Item(i);
+        if ( button->id == button_id )
+            return button;
+    }
+
+    return NULL;
+
+}
+
+int wxRibbonButtonBar::GetItemId(wxRibbonButtonBarButtonBase *item) const
+{
+    wxCHECK_MSG(item != NULL, wxNOT_FOUND, "wxRibbonButtonBar item should not be NULL");
+    return item->id;
+}
+
 
 bool wxRibbonButtonBarEvent::PopupMenu(wxMenu* menu)
 {
