@@ -681,54 +681,80 @@ MyNestedSizerFrame::MyNestedSizerFrame(const wxString &title, int x, int y )
 // MyWrapSizerFrame
 // ----------------------------------------------------------------------------
 
+BEGIN_EVENT_TABLE(MyWrapSizerFrame, wxFrame)
+    EVT_MENU(wxID_ADD, MyWrapSizerFrame::OnAddCheckbox)
+    EVT_MENU(wxID_REMOVE, MyWrapSizerFrame::OnRemoveCheckbox)
+END_EVENT_TABLE()
 
 MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
     : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y), wxSize(200,-1) )
 {
     wxMenu *menu = new wxMenu;
 
-    menu->Append(wxID_ABOUT, "Do nothing");
+    menu->Append(wxID_ADD, "&Add a checkbox\tCtrl-+");
+    menu->Append(wxID_REMOVE, "&Remove a checkbox\tCtrl--");
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(menu, "&File");
+    menu_bar->Append(menu, "&Wrap sizer");
 
     SetMenuBar( menu_bar );
 
     wxBoxSizer *root = new wxBoxSizer( wxVERTICAL );
 
-#if 0
-    wxSizer *row = new wxWrapSizer;
-    int i;
-    for (i = 0; i < 4; i++)
-       row->Add( new wxButton( this, -1, "Hello" ), 0, wxALL, 10 );
-    root->Add( row, 0, wxGROW );
+    wxStaticBoxSizer *topSizer = new wxStaticBoxSizer( wxVERTICAL, this, "Wrapping check-boxes" );
+    m_checkboxParent = topSizer->GetStaticBox();
+    m_wrapSizer = new wxWrapSizer(wxHORIZONTAL);
 
-    row = new wxWrapSizer;
-    for (i = 0; i < 4; i++)
-       row->Add( new wxButton( this, -1, "Hello" ) );
-    root->Add( row, 0, wxGROW );
-
-#else
     // A number of checkboxes inside a wrap sizer
-    wxSizer *ps_mid = new wxStaticBoxSizer( wxVERTICAL, this, "Wrapping check-boxes" );
-    wxSizer *ps_mid_wrap = new wxWrapSizer(wxHORIZONTAL);
-    ps_mid->Add( ps_mid_wrap, 100, wxEXPAND );
-    for( int ix=0; ix<6; ix++ )
-            ps_mid_wrap->Add( new wxCheckBox(this,wxID_ANY,wxString::Format("Option %d",ix+1)), 0, wxALIGN_CENTRE|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-    root->Add( ps_mid, 0, wxEXPAND | wxALL, 5 );
+    for( int i = 0; i < 6; i++ )
+        DoAddCheckbox();
+
+    topSizer->Add( m_wrapSizer, wxSizerFlags(1).Expand());
+    root->Add( topSizer, wxSizerFlags().Expand().Border());
 
     // A shaped item inside a box sizer
-    wxSizer *ps_bottom = new wxStaticBoxSizer( wxVERTICAL, this, "With wxSHAPED item" );
-    wxSizer *ps_bottom_box = new wxBoxSizer(wxHORIZONTAL);
-    ps_bottom->Add( ps_bottom_box, 100, wxEXPAND );
-    ps_bottom_box->Add( new wxListBox(this,wxID_ANY,wxPoint(0,0),wxSize(70,70)), 0, wxEXPAND|wxSHAPED );
-    ps_bottom_box->Add( 10,10 );
-    ps_bottom_box->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
+    wxSizer *bottomSizer = new wxStaticBoxSizer( wxVERTICAL, this, "With wxSHAPED item" );
+    wxSizer *horzBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    bottomSizer->Add( horzBoxSizer, 100, wxEXPAND );
+    horzBoxSizer->Add( new wxListBox(this,wxID_ANY,wxPoint(0,0),wxSize(70,70)), 0, wxEXPAND|wxSHAPED );
+    horzBoxSizer->Add( 10,10 );
+    horzBoxSizer->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
 
-    root->Add( ps_bottom, 1, wxEXPAND | wxALL, 5 );
-#endif
+    root->Add( bottomSizer, 1, wxEXPAND | wxALL, 5 );
 
     // Set sizer for window
     SetSizerAndFit( root );
 }
 
+void MyWrapSizerFrame::DoAddCheckbox()
+{
+    m_wrapSizer->Add(new wxCheckBox
+                         (
+                            m_checkboxParent,
+                            wxID_ANY,
+                            wxString::Format
+                            (
+                                "Option %d",
+                                (int)m_wrapSizer->GetItemCount() + 1
+                            )
+                         ),
+                     wxSizerFlags().Centre().Border());
+}
+
+void MyWrapSizerFrame::OnAddCheckbox(wxCommandEvent& WXUNUSED(event))
+{
+    DoAddCheckbox();
+    Layout();
+}
+
+void MyWrapSizerFrame::OnRemoveCheckbox(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_wrapSizer->IsEmpty() )
+    {
+        wxLogStatus(this, "No more checkboxes to remove.");
+        return;
+    }
+
+    delete m_wrapSizer->GetItem(m_wrapSizer->GetItemCount() - 1)->GetWindow();
+    Layout();
+}

@@ -133,6 +133,17 @@ class MyWrapSizerFrame: public wxFrame
 {
 public:
     MyWrapSizerFrame(const wxString &title, int x, int y );
+
+private:
+    void OnAddCheckbox(wxCommandEvent& event);
+    void OnRemoveCheckbox(wxCommandEvent& event);
+
+    void DoAddCheckbox();
+
+    wxWindow* m_checkboxParent;
+    wxSizer* m_wrapSizer;
+
+    DECLARE_EVENT_TABLE()
 };
 
 // controls and menu constants
