@@ -595,7 +595,7 @@ All:
 - Fix deadlock due to too many events in Unix console apps (Lukasz Michalski).
 - Added wxDir::GetNameWithSep().
 - Allow unloading wxPluginLibrary objects in any order (manyleaves).
-- Fix passing strings with embedded NULs in wxThreadEvents (sodev).
+- Fix passing strings with embedded NULs in wxThreadEvents (Steffen Olszewski).
 
 All (GUI):
 
