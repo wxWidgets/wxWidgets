@@ -2861,11 +2861,15 @@ public:
     means that the event originated from a keyboard context button event, and you
     should compute a suitable position yourself, for example by calling wxGetMousePosition().
 
-    When a keyboard context menu button is pressed on Windows, a right-click event
-    with default position is sent first, and if this event is not processed, the
-    context menu event is sent. So if you process mouse events and you find your
-    context menu event handler is not being called, you could call wxEvent::Skip()
-    for mouse right-down events.
+    Notice that the exact sequence of mouse events is different across the
+    platforms. For example, under MSW the context menu event is generated after
+    @c EVT_RIGHT_UP event and only if it was not handled but under GTK the
+    context menu event is generated after @c EVT_RIGHT_DOWN event. This is
+    correct in the sense that it ensures that the context menu is shown
+    according to the current platform UI conventions and also means that you
+    must not handle (or call wxEvent::Skip() in your handler if you do have
+    one) neither right mouse down nor right mouse up event if you plan on
+    handling @c EVT_CONTEXT_MENU event.
 
     @beginEventTable{wxContextMenuEvent}
     @event{EVT_CONTEXT_MENU(func)}
