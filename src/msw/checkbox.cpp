@@ -134,7 +134,7 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 // wxCheckBox geometry
 // ----------------------------------------------------------------------------
 
-wxSize wxCheckBox::DoGetBestSize() const
+wxSize wxCheckBox::DoGetBestClientSize() const
 {
     static int s_checkSize = 0;
 
