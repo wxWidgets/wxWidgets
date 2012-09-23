@@ -55,6 +55,9 @@ public:
     // make the checkbox owner drawn or reset it to normal style
     void MSWMakeOwnerDrawn(bool ownerDrawn);
 
+    // implementation only from now on
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
