@@ -628,9 +628,7 @@ void wxMDIParentFrame::OnMDIChild(wxCommandEvent& event)
             int childId = wxGetWindowId(child->GetHWND());
             if ( childId == event.GetId() )
             {
-                ::SendMessage( GetWinHwnd(GetClientWindow()),
-                        WM_MDIACTIVATE,
-                        (WPARAM)child->GetHWND(), 0);
+                wxStaticCast(child, wxMDIChildFrame)->Activate();
                 return;
             }
         }
