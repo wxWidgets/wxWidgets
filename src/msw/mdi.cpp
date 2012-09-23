@@ -1037,6 +1037,11 @@ void wxMDIChildFrame::Activate()
     wxMDIParentFrame * const parent = GetMDIParent();
     if ( parent && parent->GetClientWindow() )
     {
+        // Activating an iconized MDI frame doesn't do anything, so restore it
+        // first to really present it to the user.
+        if ( IsIconized() )
+            Restore();
+
         ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIACTIVATE,
                       (WPARAM) GetHwnd(), 0);
     }
