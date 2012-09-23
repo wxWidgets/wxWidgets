@@ -3151,6 +3151,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/ole/dropsrc.h \
 	wx/msw/ole/droptgt.h \
 	wx/msw/ole/oleutils.h \
+	wx/msw/ole/safearray.h \
 	wx/msw/ownerdrw.h \
 	wx/msw/palette.h \
 	wx/msw/panel.h \
@@ -3668,6 +3669,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/ole/dropsrc.h \
 	wx/msw/ole/droptgt.h \
 	wx/msw/ole/oleutils.h \
+	wx/msw/ole/safearray.h \
 	wx/msw/ownerdrw.h \
 	wx/msw/palette.h \
 	wx/msw/panel.h \
@@ -5268,6 +5270,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
 	monodll_oleutils.o \
+	monodll_safearray.o \
 	monodll_msw_palette.o \
 	monodll_msw_pen.o \
 	monodll_msw_popupwin.o \
@@ -5329,6 +5332,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
 	monodll_oleutils.o \
+	monodll_safearray.o \
 	monodll_msw_palette.o \
 	monodll_msw_pen.o \
 	monodll_msw_popupwin.o \
@@ -6204,6 +6208,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
 	monodll_oleutils.o \
+	monodll_safearray.o \
 	monodll_msw_palette.o \
 	monodll_msw_pen.o \
 	monodll_msw_popupwin.o \
@@ -6265,6 +6270,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
 	monodll_oleutils.o \
+	monodll_safearray.o \
 	monodll_msw_palette.o \
 	monodll_msw_pen.o \
 	monodll_msw_popupwin.o \
@@ -7474,6 +7480,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
 	monolib_oleutils.o \
+	monolib_safearray.o \
 	monolib_msw_palette.o \
 	monolib_msw_pen.o \
 	monolib_msw_popupwin.o \
@@ -7535,6 +7542,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
 	monolib_oleutils.o \
+	monolib_safearray.o \
 	monolib_msw_palette.o \
 	monolib_msw_pen.o \
 	monolib_msw_popupwin.o \
@@ -8410,6 +8418,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
 	monolib_oleutils.o \
+	monolib_safearray.o \
 	monolib_msw_palette.o \
 	monolib_msw_pen.o \
 	monolib_msw_popupwin.o \
@@ -8471,6 +8480,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
 	monolib_oleutils.o \
+	monolib_safearray.o \
 	monolib_msw_palette.o \
 	monolib_msw_pen.o \
 	monolib_msw_popupwin.o \
@@ -9855,6 +9865,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
 	coredll_oleutils.o \
+	coredll_safearray.o \
 	coredll_msw_palette.o \
 	coredll_msw_pen.o \
 	coredll_msw_popupwin.o \
@@ -9916,6 +9927,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
 	coredll_oleutils.o \
+	coredll_safearray.o \
 	coredll_msw_palette.o \
 	coredll_msw_pen.o \
 	coredll_msw_popupwin.o \
@@ -10791,6 +10803,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
 	coredll_oleutils.o \
+	coredll_safearray.o \
 	coredll_msw_palette.o \
 	coredll_msw_pen.o \
 	coredll_msw_popupwin.o \
@@ -10852,6 +10865,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
 	coredll_oleutils.o \
+	coredll_safearray.o \
 	coredll_msw_palette.o \
 	coredll_msw_pen.o \
 	coredll_msw_popupwin.o \
@@ -11500,6 +11514,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
 	corelib_oleutils.o \
+	corelib_safearray.o \
 	corelib_msw_palette.o \
 	corelib_msw_pen.o \
 	corelib_msw_popupwin.o \
@@ -11561,6 +11576,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
 	corelib_oleutils.o \
+	corelib_safearray.o \
 	corelib_msw_palette.o \
 	corelib_msw_pen.o \
 	corelib_msw_popupwin.o \
@@ -12436,6 +12452,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
 	corelib_oleutils.o \
+	corelib_safearray.o \
 	corelib_msw_palette.o \
 	corelib_msw_pen.o \
 	corelib_msw_popupwin.o \
@@ -12497,6 +12514,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
 	corelib_oleutils.o \
+	corelib_safearray.o \
 	corelib_msw_palette.o \
 	corelib_msw_pen.o \
 	corelib_msw_popupwin.o \
@@ -19413,6 +19431,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_palette.o: $(srcdir)/src/msw/palette.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
 
@@ -25109,6 +25133,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_palette.o: $(srcdir)/src/msw/palette.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
@@ -30972,6 +31002,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_palette.o: $(srcdir)/src/msw/palette.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
 
@@ -35216,6 +35252,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_palette.o: $(srcdir)/src/msw/palette.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp

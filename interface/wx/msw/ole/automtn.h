@@ -215,6 +215,133 @@ public:
     virtual bool GetAsAny(wxAny* any) const;
 };
 
+/**
+    @class wxVariantDataSafeArray
+
+    This class represents a thin wrapper for Microsoft Windows SAFEARRAY type.
+
+    It is used for converting between wxVariant and OLE VARIANT
+    with type set to VT_ARRAY, which has more than one dimension.
+    When wxVariant stores wxVariantDataSafeArray, it returns "safearray" as its type.
+
+    wxVariantDataSafeArray does NOT manage the SAFEARRAY it points to.
+    If you want to pass it to a wxAutomationObject as a parameter:
+        -# Assign a SAFEARRAY pointer to it and store it in a wxVariant.
+        -# Call the wxAutomationObject method (CallMethod(), SetProperty() or Invoke())
+        -# wxAutomationObject will destroy the array after the approapriate automation call.
+
+    An example of creating a 2-dimensional SAFEARRAY containing VARIANTs
+    and storing it in a wxVariant
+    @code
+    SAFEARRAYBOUND bounds[2]; // 2 dimensions
+    wxSafeArray<VT_VARIANT> safeArray;
+    unsigned rowCount = 1000;
+    unsigned colCount = 20;
+
+    bounds[0].lLbound = 0; // elements start at 0
+    bounds[0].cElements = rowCount;
+    bounds[1].lLbound = 0; // elements start at 0
+    bounds[1].cElements = colCount;
+
+    if ( !safeArray.Create(bounds, 2) )
+        return false;
+
+    long indices[2];
+
+    for ( unsigned row = 0; row < rowCount; row++ )
+    {
+        indices[0] = row;
+        for ( unsigned col = 0; col < colCount; col++ )
+        {
+            indices[1] = col;
+            if ( !safeArray.SetElement(indices, wxString::Format("R%ud C%ud", i+1, j+1)) )(
+               return false;
+        }
+    }
+    range.PutProperty("Value", wxVariant(new wxVariantDataSafeArray(sa.Detach())));
+    @endcode
+
+    If you you received wxVariantDataSafeArray as a result of wxAutomationObject method call:
+    (1) Get the data out of the array.
+    (2) Destroy the array.
+    @code
+    wxVariant result;
+    result = range.GetProperty("Value");
+    if ( result.GetType() == "safearray" )
+    {
+        wxSafeArray<VT_VARIANT> safeArray;
+        wxVariantDataSafeArray* const
+            sa = wxStaticCastVariantData(variant.GetData(), wxVariantDataSafeArray);
+
+        if ( !safeArray.Attach(sa.GetValue() )
+        {
+            if ( !safeArray.HasArray() )
+                SafeArrayDestroy(sa.GetValue()); // we have to dispose the SAFEARRAY ourselves
+            return false;
+        }
+
+        // get the data from the SAFEARRAY using wxSafeArray::GetElement()
+        // SAFEARRAY will be disposed by safeArray's dtor
+    }
+    @endcode
+
+    @onlyfor{wxmsw}
+    @since 2.9.5
+
+    @library{wxcore}
+    @category{data}
+
+    @see wxAutomationObject, wxVariant, wxVariantData, wxVariantDataErrorCode
+
+    @header{wx/msw/ole/oleutils.h}
+*/
+class wxVariantDataSafeArray : public wxVariantData
+{
+public:
+    /**
+        Constructor initializes the object to @a value.
+    */
+    explicit wxVariantDataSafeArray(SAFEARRAY* value = NULL);
+
+    /**
+        Returns the stored array.
+    */
+    SAFEARRAY* GetValue() const;
+
+    /**
+        Set the stored array.
+    */
+    void SetValue(SAFEARRAY* value);
+
+    /**
+        Returns true if @a data is of wxVariantDataErrorCode type
+        and contains the same SCODE value.
+    */
+    virtual bool Eq(wxVariantData& data) const;
+
+    /**
+        Fills the provided string with the textual representation of this
+        object.
+
+        The error code is just a number, so it's output as such.
+    */
+    virtual bool Write(wxString& str) const;
+
+    /**
+        Returns a copy of itself.
+    */
+    wxVariantData* Clone() const;
+
+    /**
+        Returns "safearray".
+    */
+    virtual wxString GetType() const;
+
+    /**
+        Converts the value of this object to wxAny.
+    */
+    virtual bool GetAsAny(wxAny* any) const;
+};
 
 /**
     @class wxAutomationObject
@@ -245,7 +372,7 @@ public:
     @library{wxcore}
     @category{data}
 
-    @see wxVariant, wxVariantDataCurrency, wxVariantDataErrorCode
+    @see wxVariant, wxVariantDataCurrency, wxVariantDataErrorCode, wxVariantDataSafeArray
 */
 class wxAutomationObject : public wxObject
 {

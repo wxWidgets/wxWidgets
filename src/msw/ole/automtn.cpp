@@ -222,6 +222,12 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
             {
                 vReturn.pdispVal = NULL;
             }
+            // Mustn't free the SAFEARRAY if it is contained in the retValue
+            if ((vReturn.vt & VT_ARRAY) &&
+                    retValue.GetType() == wxS("safearray"))
+            {
+                vReturn.parray = NULL;
+            }
         }
     }
     return true;

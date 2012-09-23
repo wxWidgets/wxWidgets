@@ -289,6 +289,35 @@ private:
     SCODE m_value;
 };
 
+// wrapper for SAFEARRAY, used for passing multidimensional arrays in wxVariant
+class WXDLLIMPEXP_CORE wxVariantDataSafeArray : public wxVariantData
+{
+public:
+    wxEXPLICIT wxVariantDataSafeArray(SAFEARRAY* value = NULL)
+    {
+        m_value = value;
+    }
+
+    SAFEARRAY* GetValue() const { return m_value; }
+    void SetValue(SAFEARRAY* value) { m_value = value; }
+
+    virtual bool Eq(wxVariantData& data) const;
+
+#if wxUSE_STD_IOSTREAM
+    virtual bool Write(wxSTD ostream& str) const;
+#endif
+    virtual bool Write(wxString& str) const;
+
+    wxVariantData* Clone() const { return new wxVariantDataSafeArray(m_value); }
+    virtual wxString GetType() const { return wxS("safearray"); }
+
+    DECLARE_WXANY_CONVERSION()
+
+private:
+    SAFEARRAY* m_value;
+};
+
+
 WXDLLIMPEXP_CORE bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant);
 WXDLLIMPEXP_CORE bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant);
 #endif // wxUSE_VARIANT

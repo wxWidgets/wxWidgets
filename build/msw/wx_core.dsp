@@ -2315,6 +2315,10 @@ SOURCE=..\..\src\msw\richmsgdlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\ole\safearray.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\scrolbar.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -5357,6 +5361,10 @@ SOURCE=..\..\include\wx\msw\region.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\richmsgdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\safearray.h
 # End Source File
 # Begin Source File
 

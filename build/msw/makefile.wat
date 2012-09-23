@@ -293,6 +293,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dropsrc.obj &
 	$(OBJS)\monodll_droptgt.obj &
 	$(OBJS)\monodll_oleutils.obj &
+	$(OBJS)\monodll_safearray.obj &
 	$(OBJS)\monodll_palette.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_popupwin.obj &
@@ -569,6 +570,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dropsrc.obj &
 	$(OBJS)\monodll_droptgt.obj &
 	$(OBJS)\monodll_oleutils.obj &
+	$(OBJS)\monodll_safearray.obj &
 	$(OBJS)\monodll_palette.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_popupwin.obj &
@@ -1093,6 +1095,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dropsrc.obj &
 	$(OBJS)\monolib_droptgt.obj &
 	$(OBJS)\monolib_oleutils.obj &
+	$(OBJS)\monolib_safearray.obj &
 	$(OBJS)\monolib_palette.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_popupwin.obj &
@@ -1369,6 +1372,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dropsrc.obj &
 	$(OBJS)\monolib_droptgt.obj &
 	$(OBJS)\monolib_oleutils.obj &
+	$(OBJS)\monolib_safearray.obj &
 	$(OBJS)\monolib_palette.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_popupwin.obj &
@@ -1790,6 +1794,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dropsrc.obj &
 	$(OBJS)\coredll_droptgt.obj &
 	$(OBJS)\coredll_oleutils.obj &
+	$(OBJS)\coredll_safearray.obj &
 	$(OBJS)\coredll_palette.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_popupwin.obj &
@@ -2066,6 +2071,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dropsrc.obj &
 	$(OBJS)\coredll_droptgt.obj &
 	$(OBJS)\coredll_oleutils.obj &
+	$(OBJS)\coredll_safearray.obj &
 	$(OBJS)\coredll_palette.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_popupwin.obj &
@@ -2346,6 +2352,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dropsrc.obj &
 	$(OBJS)\corelib_droptgt.obj &
 	$(OBJS)\corelib_oleutils.obj &
+	$(OBJS)\corelib_safearray.obj &
 	$(OBJS)\corelib_palette.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_popupwin.obj &
@@ -2622,6 +2629,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dropsrc.obj &
 	$(OBJS)\corelib_droptgt.obj &
 	$(OBJS)\corelib_oleutils.obj &
+	$(OBJS)\corelib_safearray.obj &
 	$(OBJS)\corelib_palette.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_popupwin.obj &
@@ -7885,6 +7893,11 @@ $(OBJS)\monodll_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_safearray.obj :  .AUTODEPEND ..\..\src\msw\ole\safearray.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -10306,6 +10319,11 @@ $(OBJS)\monolib_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_safearray.obj :  .AUTODEPEND ..\..\src\msw\ole\safearray.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -12691,6 +12709,11 @@ $(OBJS)\coredll_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_safearray.obj :  .AUTODEPEND ..\..\src\msw\ole\safearray.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_palette.obj :  .AUTODEPEND ..\..\src\msw\palette.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -14102,6 +14125,11 @@ $(OBJS)\corelib_droptgt.obj :  .AUTODEPEND ..\..\src\msw\ole\droptgt.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_oleutils.obj :  .AUTODEPEND ..\..\src\msw\ole\oleutils.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_safearray.obj :  .AUTODEPEND ..\..\src\msw\ole\safearray.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

@@ -2832,6 +2832,10 @@
 				/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\ole\safearray.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\scrolbar.cpp"
 				>
 				<FileConfiguration
@@ -6141,6 +6145,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\richmsgdlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\ole\safearray.h"
 				>
 			</File>
 			<File

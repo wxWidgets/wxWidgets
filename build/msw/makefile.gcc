@@ -1800,6 +1800,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dropsrc.o \
 	$(OBJS)\monodll_droptgt.o \
 	$(OBJS)\monodll_oleutils.o \
+	$(OBJS)\monodll_safearray.o \
 	$(OBJS)\monodll_palette.o \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
@@ -2076,6 +2077,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dropsrc.o \
 	$(OBJS)\monodll_droptgt.o \
 	$(OBJS)\monodll_oleutils.o \
+	$(OBJS)\monodll_safearray.o \
 	$(OBJS)\monodll_palette.o \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
@@ -2595,6 +2597,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dropsrc.o \
 	$(OBJS)\monolib_droptgt.o \
 	$(OBJS)\monolib_oleutils.o \
+	$(OBJS)\monolib_safearray.o \
 	$(OBJS)\monolib_palette.o \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
@@ -2871,6 +2874,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dropsrc.o \
 	$(OBJS)\monolib_droptgt.o \
 	$(OBJS)\monolib_oleutils.o \
+	$(OBJS)\monolib_safearray.o \
 	$(OBJS)\monolib_palette.o \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
@@ -3281,6 +3285,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dropsrc.o \
 	$(OBJS)\coredll_droptgt.o \
 	$(OBJS)\coredll_oleutils.o \
+	$(OBJS)\coredll_safearray.o \
 	$(OBJS)\coredll_palette.o \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
@@ -3557,6 +3562,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dropsrc.o \
 	$(OBJS)\coredll_droptgt.o \
 	$(OBJS)\coredll_oleutils.o \
+	$(OBJS)\coredll_safearray.o \
 	$(OBJS)\coredll_palette.o \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
@@ -3835,6 +3841,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dropsrc.o \
 	$(OBJS)\corelib_droptgt.o \
 	$(OBJS)\corelib_oleutils.o \
+	$(OBJS)\corelib_safearray.o \
 	$(OBJS)\corelib_palette.o \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
@@ -4111,6 +4118,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dropsrc.o \
 	$(OBJS)\corelib_droptgt.o \
 	$(OBJS)\corelib_oleutils.o \
+	$(OBJS)\corelib_safearray.o \
 	$(OBJS)\corelib_palette.o \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
@@ -7612,6 +7620,11 @@ $(OBJS)\monodll_oleutils.o: ../../src/msw/ole/oleutils.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_safearray.o: ../../src/msw/ole/safearray.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_palette.o: ../../src/msw/palette.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10033,6 +10046,11 @@ $(OBJS)\monolib_oleutils.o: ../../src/msw/ole/oleutils.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_safearray.o: ../../src/msw/ole/safearray.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_palette.o: ../../src/msw/palette.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12418,6 +12436,11 @@ $(OBJS)\coredll_oleutils.o: ../../src/msw/ole/oleutils.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_safearray.o: ../../src/msw/ole/safearray.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_palette.o: ../../src/msw/palette.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13829,6 +13852,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_oleutils.o: ../../src/msw/ole/oleutils.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_safearray.o: ../../src/msw/ole/safearray.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

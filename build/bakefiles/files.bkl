@@ -1683,6 +1683,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/dropsrc.cpp
     src/msw/ole/droptgt.cpp
     src/msw/ole/oleutils.cpp
+    src/msw/ole/safearray.cpp
     src/msw/palette.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
@@ -1842,6 +1843,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/dropsrc.h
     wx/msw/ole/droptgt.h
     wx/msw/ole/oleutils.h
+    wx/msw/ole/safearray.h
     wx/msw/ownerdrw.h
     wx/msw/palette.h
     wx/msw/panel.h
