@@ -184,7 +184,7 @@ void wxStackWalker::ProcessFrames(size_t skip)
 
     // we have 3 more "intermediate" frames which the calling code doesn't know
     // about, account for them
-    skip += 3;
+    skip += 1;
 
     // call addr2line only once since this call may be very slow
     // (it has to load in memory the entire EXE of this app which may be quite
