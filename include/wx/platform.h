@@ -30,6 +30,9 @@
 #    ifndef MAC_OS_X_VERSION_10_7
 #       define MAC_OS_X_VERSION_10_7 1070
 #    endif
+#    ifndef MAC_OS_X_VERSION_10_8
+#       define MAC_OS_X_VERSION_10_8 1080
+#    endif
 #    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
@@ -654,6 +657,9 @@
 #        ifndef MAC_OS_X_VERSION_10_7
 #           define MAC_OS_X_VERSION_10_7 1070
 #        endif
+#        ifndef MAC_OS_X_VERSION_10_8
+#           define MAC_OS_X_VERSION_10_8 1080
+#        endif
 #    else
 #        error "only mach-o configurations are supported"
 #    endif
@@ -740,7 +746,7 @@
 
 /* Choose which method we will use for updating menus
  * - in OnIdle, or when we receive a wxEVT_MENU_OPEN event.
- * Presently, only Windows and GTK+ support wxEVT_MENU_OPEN.
+ * Presently, only Windows, OS X and GTK+ support wxEVT_MENU_OPEN.
  */
 #ifndef wxUSE_IDLEMENUUPDATES
 #    if (defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX__)) && !defined(__WXUNIVERSAL__)
