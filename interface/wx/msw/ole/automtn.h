@@ -254,7 +254,7 @@ public:
         for ( unsigned col = 0; col < colCount; col++ )
         {
             indices[1] = col;
-            if ( !safeArray.SetElement(indices, wxString::Format("R%ud C%ud", i+1, j+1)) )(
+            if ( !safeArray.SetElement(indices, wxString::Format("R%u C%u", row+1, col+1)) )
                return false;
         }
     }
@@ -314,8 +314,8 @@ public:
     void SetValue(SAFEARRAY* value);
 
     /**
-        Returns true if @a data is of wxVariantDataErrorCode type
-        and contains the same SCODE value.
+        Returns true if @a data is of wxVariantDataSafeArray type
+        and contains the same SAFEARRAY* value.
     */
     virtual bool Eq(wxVariantData& data) const;
 
@@ -323,7 +323,7 @@ public:
         Fills the provided string with the textual representation of this
         object.
 
-        The error code is just a number, so it's output as such.
+        Only the address of SAFEARRAY pointer is output.
     */
     virtual bool Write(wxString& str) const;
 
