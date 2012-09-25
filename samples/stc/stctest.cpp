@@ -330,6 +330,7 @@ AppFrame::AppFrame (const wxString &title)
     m_edit->SetFocus();
 
     FileOpen (wxT("stctest.cpp"));
+    m_edit->SetSelection(0,0);
 }
 
 AppFrame::~AppFrame () {

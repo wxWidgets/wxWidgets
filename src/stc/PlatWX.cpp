@@ -277,7 +277,14 @@ void SurfaceImpl::LineTo(int x_, int y_) {
 void SurfaceImpl::Polygon(Point *pts, int npts, ColourDesired fore, ColourDesired back) {
     PenColour(fore);
     BrushColour(back);
-    hdc->DrawPolygon(npts, (wxPoint*)pts);
+    wxPoint *p = new wxPoint[npts];
+
+    for (int i=0; i<npts; i++) {
+        p[i].x = pts[i].x;
+        p[i].y = pts[i].y;
+    }
+    hdc->DrawPolygon(npts, p);
+    delete [] p;
 }
 
 void SurfaceImpl::RectangleDraw(PRectangle rc, ColourDesired fore, ColourDesired back) {
