@@ -319,10 +319,12 @@ protected:
 
         // append this stack frame's info in the dialog
         if (!frame.GetFileName().empty() || !fncname.empty())
+        {
             gtk_assert_dialog_append_stack_frame(m_dlg,
-                                                fncname.mb_str(),
-                                                frame.GetFileName().mb_str(),
+                                                fncname.utf8_str(),
+                                                frame.GetFileName().utf8_str(),
                                                 frame.GetLine());
+        }
     }
 
 private:
