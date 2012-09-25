@@ -120,6 +120,9 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     // initialize language
     m_language = NULL;
 
+    // Use all the bits in the style byte as styles, not indicators.
+    SetStyleBits(8);
+    
     // default font for all styles
     SetViewEOL (g_CommonPrefs.displayEOLEnable);
     SetIndentationGuides (g_CommonPrefs.indentGuideEnable);
