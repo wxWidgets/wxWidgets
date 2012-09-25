@@ -197,11 +197,15 @@ public:
     virtual bool Quit() = 0;
 
     /**
-        For wxHtmlHelpController, the title is set (with %s indicating the
-        page title) and also the size and position of the frame if the frame is
-        already open. @a newFrameEachTime is ignored.
+        Set the parameters of the frame window.
+
+        For wxHtmlHelpController, @a title specifies the title string format
+        (with @c %s being replaced by the actual page title) and @a size and
+        @a position specify the geometry of the frame.
 
         For all other help controllers this function has no effect.
+
+        Finally, @a newFrameEachTime is always ignored currently.
     */
     virtual void SetFrameParameters(const wxString& title,
                                     const wxSize& size,
