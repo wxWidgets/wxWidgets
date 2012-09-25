@@ -335,7 +335,7 @@ static void get_stackframe_callback(void* p)
 {
     StackDump* dump = static_cast<StackDump*>(p);
     // skip over frames up to including wxOnAssert()
-    dump->ProcessFrames(3);
+    dump->ProcessFrames(7);
 }
 
 #endif // wxDEBUG_LEVEL && wxUSE_STACKWALKER

@@ -182,17 +182,18 @@ void wxStackWalker::ProcessFrames(size_t skip)
     if (!ms_symbols || !m_depth)
         return;
 
-    // we have 3 more "intermediate" frames which the calling code doesn't know
-    // about, account for them
+    // we are another level down from Walk(), so adjust the number of stack
+    // frames to skip accordingly
     skip += 1;
 
     // call addr2line only once since this call may be very slow
     // (it has to load in memory the entire EXE of this app which may be quite
     //  big, especially if it contains debug info and is compiled statically!)
-    int towalk = InitFrames(frames, m_depth - skip, &ms_addresses[skip], &ms_symbols[skip]);
+    int numFrames = InitFrames(frames, m_depth - skip,
+                               &ms_addresses[skip], &ms_symbols[skip]);
 
     // now do user-defined operations on each frame
-    for ( int n = 0; n < towalk - (int)skip; n++ )
+    for ( int n = 0; n < numFrames; n++ )
         OnStackFrame(frames[n]);
 }
 

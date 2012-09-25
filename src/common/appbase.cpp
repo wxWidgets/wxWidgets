@@ -953,7 +953,7 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
     static const int maxLines = 20;
 
     StackDump dump;
-    dump.Walk(2, maxLines); // don't show OnAssert() call itself
+    dump.Walk(8, maxLines); // 8 is chosen to hide all OnAssert() calls
     stackTrace = dump.GetStackTrace();
 
     const int count = stackTrace.Freq(wxT('\n'));
