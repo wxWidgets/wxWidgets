@@ -87,7 +87,7 @@ public:
     @style{wxRIBBON_BAR_SHOW_TOGGLE_BUTTON}
         Causes a toggle button to appear on the ribbon bar at top-right corner.
         This style is new since wxWidgets 2.9.5.
-    @style{wxRIBBON_BAR_SHOW_HELP_BUTTON)
+    @style{wxRIBBON_BAR_SHOW_HELP_BUTTON}
         Causes a help button to appear on the ribbon bar at the top-right corner.
         This style is new since wxWidgets 2.9.5.
     @endStyleTable
