@@ -613,6 +613,11 @@ void wxTextCtrl::Init()
 
 wxTextCtrl::~wxTextCtrl()
 {
+    // this is also done by wxWindowGTK dtor, but has to be done here so our
+    // DoThaw() override is called
+    while (IsFrozen())
+        Thaw();
+
     if (m_anonymousMarkList)
         g_slist_free(m_anonymousMarkList);
 }
