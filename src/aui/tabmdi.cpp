@@ -80,6 +80,8 @@ wxAuiMDIParentFrame::wxAuiMDIParentFrame(wxWindow *parent,
 
 wxAuiMDIParentFrame::~wxAuiMDIParentFrame()
 {
+    // Avoid having GetActiveChild() called after m_pClientWindow is destroyed
+    SendDestroyEvent();
     // Make sure the client window is destructed before the menu bars are!
     wxDELETE(m_pClientWindow);
 
@@ -212,7 +214,8 @@ bool wxAuiMDIParentFrame::ProcessEvent(wxEvent& event)
 
     // let the active child (if any) process the event first.
     bool res = false;
-    if (m_pActiveChild &&
+    wxAuiMDIChildFrame* pActiveChild = GetActiveChild();
+    if (pActiveChild &&
         event.IsCommandEvent() &&
         event.GetEventObject() != m_pClientWindow &&
            !(event.GetEventType() == wxEVT_ACTIVATE ||
@@ -223,7 +226,7 @@ bool wxAuiMDIParentFrame::ProcessEvent(wxEvent& event)
              event.GetEventType() == wxEVT_COMMAND_KILL_FOCUS )
        )
     {
-        res = m_pActiveChild->GetEventHandler()->ProcessEvent(event);
+        res = pActiveChild->GetEventHandler()->ProcessEvent(event);
     }
 
     if (!res)
@@ -241,12 +244,15 @@ bool wxAuiMDIParentFrame::ProcessEvent(wxEvent& event)
 
 wxAuiMDIChildFrame *wxAuiMDIParentFrame::GetActiveChild() const
 {
-    return m_pActiveChild;
+    return GetClientWindow()->GetActiveChild();
 }
 
 void wxAuiMDIParentFrame::SetActiveChild(wxAuiMDIChildFrame* pChildFrame)
 {
-    m_pActiveChild = pChildFrame;
+    if (GetClientWindow()->GetActiveChild() != pChildFrame)
+    {
+        GetClientWindow()->SetActiveChild(pChildFrame);
+    }
 }
 
 wxAuiMDIClientWindow *wxAuiMDIParentFrame::GetClientWindow() const
@@ -287,7 +293,6 @@ void wxAuiMDIParentFrame::Init()
 {
     m_pLastEvt = NULL;
     m_pClientWindow = NULL;
-    m_pActiveChild = NULL;
 #if wxUSE_MENUS
     m_pWindowMenu = NULL;
     m_pMyMenuBar = NULL;
@@ -327,18 +332,24 @@ void wxAuiMDIParentFrame::DoHandleMenu(wxCommandEvent& event)
     switch (event.GetId())
     {
         case wxWINDOWCLOSE:
-            if (m_pActiveChild)
-                m_pActiveChild->Close();
+        {
+            wxAuiMDIChildFrame* pActiveChild = GetActiveChild();
+            if (pActiveChild)
+                pActiveChild->Close();
             break;
+        }
         case wxWINDOWCLOSEALL:
-            while (m_pActiveChild)
+        {
+            wxAuiMDIChildFrame* pActiveChild;
+            while ((pActiveChild = GetActiveChild()) != NULL)
             {
-                if (!m_pActiveChild->Close())
+                if (!pActiveChild->Close())
                 {
                     return; // failure
                 }
             }
             break;
+        }
         case wxWINDOWNEXT:
             ActivateNext();
             break;
@@ -497,12 +508,21 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
 
     SetMDIParentFrame(parent);
 
-    // this is the currently active child
-    parent->SetActiveChild(this);
-
     m_title = title;
 
     pClientWindow->AddPage(this, title, m_activateOnCreate);
+
+    // Check that the parent notion of the active child coincides with our one.
+    // This is less obvious that it seems because we must honour
+    // m_activateOnCreate flag but only if it's not the first child because
+    // this one becomes active unconditionally.
+    wxASSERT_MSG
+    (
+        (m_activateOnCreate || pClientWindow->GetPageCount() == 1)
+            == (parent->GetActiveChild() == this),
+        wxS("Logic error: child [not] activated when it should [not] have been.")
+    );
+
     pClientWindow->Refresh();
 
     return true;
@@ -523,7 +543,6 @@ bool wxAuiMDIChildFrame::Destroy()
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
 
-        pParentFrame->SetActiveChild(NULL);
         pParentFrame->SetChildMenuBar(NULL);
     }
 
@@ -698,6 +717,14 @@ void wxAuiMDIChildFrame::Init()
 
 bool wxAuiMDIChildFrame::Show(bool show)
 {
+    // wxAuiMDIChildFrame uses m_activateOnCreate only to decide whether to
+    // activate the frame when it is created.  After Create() is called,
+    // m_activateOnCreate will never be read again.  Therefore, calling this
+    // function after Create() is pointless and you probably want to call
+    // Activate() instead.
+    wxCHECK_MSG( !GetHandle(), false,
+                 wxS("Show() has no effect after Create(). Do you mean Activate()?") );
+
     m_activateOnCreate = show;
 
     // do nothing
@@ -785,6 +812,15 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
 int wxAuiMDIClientWindow::SetSelection(size_t nPage)
 {
     return wxAuiNotebook::SetSelection(nPage);
+}
+
+wxAuiMDIChildFrame* wxAuiMDIClientWindow::GetActiveChild()
+{
+    const int sel = GetSelection();
+    if ( sel == wxNOT_FOUND )
+        return NULL;
+
+    return wxStaticCast(GetPage(sel), wxAuiMDIChildFrame);
 }
 
 void wxAuiMDIClientWindow::PageChanged(int old_selection, int new_selection)

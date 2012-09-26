@@ -85,7 +85,6 @@ public:
 
 protected:
     wxAuiMDIClientWindow*   m_pClientWindow;
-    wxAuiMDIChildFrame*     m_pActiveChild;
     wxEvent*                m_pLastEvt;
 
 #if wxUSE_MENUS
@@ -250,6 +249,11 @@ public:
                               long style = wxVSCROLL | wxHSCROLL);
 
     virtual int SetSelection(size_t page);
+    virtual wxAuiMDIChildFrame* GetActiveChild();
+    virtual void SetActiveChild(wxAuiMDIChildFrame* pChildFrame)
+    {
+        SetSelection(GetPageIndex(pChildFrame));
+    }
 
 protected:
 
