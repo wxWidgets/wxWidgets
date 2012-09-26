@@ -126,11 +126,10 @@ Microsoft Visual C++ Compilation
 You may wish to visit http://wiki.wxwidgets.org/Microsoft_Visual_C%2B%2B_Guide
 for a more informal and detailed description of the process summarized below.
 
-Please note that the VC++ 6.0 project files will work for VC++ .NET as well.
-
-VC++ 5.0 can also be used, providing Service Pack 3 is applied. Without it
-you will have trouble with internal compiler errors. It is available for
-download at: ftp://ftp.microsoft.com/developr/visualstudio/sp3/full.
+Please note that currently ready to use projeect files are provided for VC++
+versions 6 through to 9 (also known as 6, 2003, 2005 and 2008). For VC++ 10 and
+11 (2010 and 2012, respectively), you will need to import the existing VC9
+project files.
 
 Using project files (VC++ 6 and later):
 
@@ -139,7 +138,6 @@ Using project files (VC++ 6 and later):
 2. Open build\msw\wx.dsw, which has configurations for static
    compilation or DLL compilation, and each of these available in
    Unicode/ANSI, Debug/Release and wxUniversal or native variations.
-   Normally you'll use a static linking ANSI configuration.
    Choose the Win32 Debug or Win32 Release configuration (or any other that
    suits your needs) and use Batch Build to compile _all_ projects. If you
    know you won't need some of the libraries (e.g. the HTML part), you don't have
@@ -148,7 +146,7 @@ Using project files (VC++ 6 and later):
 
    If you want to build DLL configurations in wx.dsw project you unfortunately
    need to build them in the proper order (jpeg, png, tiff, zlib, regex, expat,
-   base, net, odbc, core, gl, html, media, qa, adv, dbgrid, xrc, aui, richtext,
+   base, net, core, gl, html, media, qa, adv, xrc, aui, richtext,
    propgrid) manually because VC6 doesn't always respect the correct build order.
 
    Alternatively, use the special wx_dll.dsw project which adds the
@@ -221,8 +219,8 @@ the .NET Framework SDK:
 
 Using project files:
 
-1. Open the VC++ 6 workspace file: build\msw\wx.dsw. Visual Studio will then
-   convert the projects to the current Visual C++ project format.
+1. Open the solution file for the version you use: build\msw\wx_vc8.sln or
+   wx_vc9.sln.
 
 2. To add 64-bit targets, go to the 'Build' menu and choose 'Configuration
    Manager...'.  In the 'Active solution platform' drop down choose '<new>',
@@ -245,7 +243,7 @@ Using project files:
    build other configurations.
 
 4. To compile one of the samples open one of the sample projects, such as
-   samples\minimal\minimal.dsw. Visual Studio will convert the project as in
+   samples\minimal\minimal_vc7.vcproj. Visual Studio will convert the project as in
    step 1, then add a 64-bit target as in step 2, and build.
 
 Using makefiles:
@@ -346,12 +344,6 @@ the following preprocessor directive:
 (check the samples -- e.g., \wx2\samples\minimal\minimal.cpp -- for
 more details)
 
-Borland 16 Bit Compilation for Windows 3.1
-----------------------------------------------------------------
-
-The last version of wxWidgets to support 16-bit compilation with Borland was
-2.2.7 - Please download and read the instructions in that release
-
 Watcom C++ 10.6/11 and OpenWatcom Compilation
 ----------------------------------------------------------------
 
@@ -393,8 +385,7 @@ and MinGW from:
 
 Both Cygwin and MinGW can be used with configure (assuming you have MSYS
 installed in case of MinGW). You will need new enough MinGW version, preferably
-MinGW 2.0 (ships with gcc3) or at least 1.0 (gcc-2.95.3). GCC versions older
-than 2.95.3 don't work; you can use wxWidgets 2.4 with them.
+MinGW 3.4.2+ (ships with gcc3).
 
 NOTE: some notes specific to old Cygwin (< 1.1.x) are at the end of this
       section (see OLD VERSIONS)
@@ -464,16 +455,7 @@ Notes:
 2. libwx.a is 100 MB or more - but much less if compiled with no
    debug info (-g0) and level 4 optimization (-O4).
 
-3. If you get a link error under MinGW 2.95.2 referring to:
-
-   EnumDAdvise__11IDataObjectPP13IEnumSTATDATA@8
-
-   then you need to edit the file objidl.h at line 663 and add
-   a missing PURE keyword:
-
-   STDMETHOD(EnumDAdvise)(THIS_ IEnumSTATDATA**) PURE;
-
-4. There's a bug in MinGW headers for some early distributions.
+3. There's a bug in MinGW headers for some early distributions.
 
    in include/windows32/defines.h, where it says:
 
@@ -485,7 +467,7 @@ Notes:
 
    (a missing bracket).
 
-5. OpenGL support should work with MinGW as-is. However,
+4. OpenGL support should work with MinGW as-is. However,
    if you wish to generate import libraries appropriate either for
    the MS OpenGL libraries or the SGI OpenGL libraries, go to
    include/wx/msw/gl and use:
@@ -498,7 +480,7 @@ Notes:
 
    and similarly for glu[32].def.
 
-6. The 'make install' step is optional, and copies files
+5. The 'make install' step is optional, and copies files
    as follows:
 
    /usr/local/lib - wxmswXYZd.dll.a and wxmswXYZd.dll
@@ -508,12 +490,12 @@ Notes:
    You may need to do this if using wx-config with the
    default root path.
 
-7. With Cygwin, you can invoke gdb --nw myfile.exe to
+6. With Cygwin, you can invoke gdb --nw myfile.exe to
    debug an executable. If there are memory leaks, they will be
    flagged when the program quits. You can use Cygwin gdb
    to debug MinGW executables.
 
-8. Note that gcc's precompiled headers do not work on current versions of
+7. Note that gcc's precompiled headers do not work on current versions of
    Cygwin. If your version of Cygwin is affected you will need to use the
    --disable-precomp-headers configure option.
 
@@ -532,50 +514,26 @@ OLD VERSIONS:
   from e.g. the MinGW distribution, to a directory in your path.
 
 
-Symantec & DigitalMars C++ Compilation
+DigitalMars C++ Compilation
 ----------------------------------------------------------------
 
-The DigitalMars compiler is a free successor to the Symantec compiler
-and can be downloaded from http://www.digitalmars.com/
+Digital Mars compiler is no longer updated as the project is discontinued.
+wxWidgets 2.8 was the last version to compile with this compiler.
 
-1. You need to download and unzip in turn (later packages will overwrite
-   older files)
-      Digital Mars C/C++ Compiler Version 8.40 or later
-      Basic utilities
-   from http://www.digitalmars.com/download/freecompiler.html
-
-2. Change directory to build\msw and type 'make -f makefile.dmc' to
-   make the wxWidgets core library.
-
-3. Change directory to samples\minimal and type 'make -f makefile.dmc'
-   to make this sample. Most of the other samples also work.
-
-
-Note that if you don't have the files makefile.dmc you may create them yourself
-using bakefile tool according to the instructions in build\bakefiles\README:
-
-    cd build\bakefiles
-    bakefile_gen -f dmars -b wx.bkl
-    bakefile_gen -f dmars -b ../../samples/minimal/minimal.bkl
-
-
-Note that wxUSE_STD_STRING is disabled in wx/string.h for Digital Mars as this
-compiler doesn't come with standard C++ library headers by default. If you
-install STLPort or another STL implementation, you'll need to edit wx/string.h
-and remove the check for Digital Mars in it (search for __DMC__).
-
-
-16-bit compilation is no longer supported.
 
 Configuring the Build
 ================================================================
 
 So far the instructions only explain how to build release DLLs of wxWidgets
 and did not cover any configuration. It is possible to change many aspects of
-the build, including debug/release and ANSI/Unicode settings. All makefiles in
-build\msw directory use same options (with a few exceptions documented below)
-and the only difference between them is in object files and library directory
-names and in make invocation command.
+the build, including debug/release and static/dynamic settings.
+
+Notice that in the previous versions of wxWidgets it was possible to build the
+library in either ANSI or Unicode mode but in wxWidgets 2.9 and later only a
+single, combined, build mode exists. It is still possible to set UNICODE=0 to
+disable Unicode support entirely but it is strongly not recommended and should
+be never necessary.
+
 
 Changing the Settings
 ----------------------------------------------------------------
@@ -594,26 +552,26 @@ Examples of invoking make in Unicode debug build (other options described
 below are set analogically):
 
 Visual C++:
-  > nmake -f makefile.vc BUILD=debug UNICODE=1
+  > nmake -f makefile.vc BUILD=debug
 
 Borland C++:
-  > make -f makefile.bcc -DBUILD=debug -DUNICODE=1
+  > make -f makefile.bcc -DBUILD=debug
   (Note that you have to use -D to set the variable, unlike in other make
   tools!)
 
 Watcom C/C++:
-  > wmake -f makefile.wat BUILD=debug UNICODE=1
+  > wmake -f makefile.wat BUILD=debug
 
 MinGW using native makefiles:
-  > mingw32-make -f makefile.gcc BUILD=debug UNICODE=1
+  > mingw32-make -f makefile.gcc BUILD=debug
 
 MinGW using configure:
-  > ./configure --enable-debug --enable-unicode
+  > ./configure --enable-debug
   (see ./configure --help on details; configure is not covered in this
   section)
 
 Cygwin using configure:
-  > ./configure --disable-precomp-headers --enable-debug --enable-unicode
+  > ./configure --disable-precomp-headers --enable-debug
   (use --disable-precomp-headers if Cygwin doesn't support precompiled
   headers)
 
@@ -634,12 +592,13 @@ SHARED=1
   (SHARED=0).
 
 UNICODE=0
-  To build ANSI versions of the libraries, add UNICODE=0 to make invocation
-  (default is UNICODE=1). If you want to be able to use Unicode version on
-  Windows9x, you will need to set MSLU=1 as well.
+  To completely disable Unicode support (default is UNICODE=1). It should not
+  be necessary to do this unless, perhaps, you still wish to target Win9x
+  systems and can't use MSLU (which requires MSLU=1) for some reason.
 
-  This option affect name of the library ('u' is appended) and the directory
-  where the library and setup.h are store (ditto).
+  This option affect name of the library ('u' is appended in the default
+  Unicode build) and the directory where the library and setup.h are store
+  (ditto).
 
 WXUNIV=1
   Build wxUniversal instead of native wxMSW (see
