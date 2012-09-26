@@ -63,7 +63,7 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 
 wxMenuBar::~wxMenuBar()
 {
-    if (m_widget)
+    if (m_widget && IsAttached())
     {
         // Work around a probable bug in Ubuntu 12.04 which causes a warning if
         // gtk_widget_destroy() is called on a wxMenuBar attached to a frame
