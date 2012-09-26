@@ -339,7 +339,8 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     gtk_widget_destroy( menu->m_owner );
     menu->m_owner = NULL;
 
-    DetachFromFrame( menu, m_menuBarFrame );
+    if ( m_menuBarFrame )
+        DetachFromFrame( menu, m_menuBarFrame );
 
     return menu;
 }
