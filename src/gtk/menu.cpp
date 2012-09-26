@@ -68,6 +68,7 @@ wxMenuBar::~wxMenuBar()
         // Work around a probable bug in Ubuntu 12.04 which causes a warning if
         // gtk_widget_destroy() is called on a wxMenuBar attached to a frame
         GtkWidget* widget = m_widget;
+        m_focusWidget =
         m_widget = NULL;
         g_object_unref(widget);
     }
