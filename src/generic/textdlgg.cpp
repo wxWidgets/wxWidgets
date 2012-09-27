@@ -65,17 +65,21 @@ END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxTextEntryDialog, wxDialog)
 
-wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
+bool wxTextEntryDialog::Create(wxWindow *parent,
                                      const wxString& message,
                                      const wxString& caption,
                                      const wxString& value,
                                      long style,
                                      const wxPoint& pos)
-                 : wxDialog(GetParentForModalDialog(parent, style),
-                            wxID_ANY, caption, pos, wxDefaultSize,
-                            wxDEFAULT_DIALOG_STYLE),
-                   m_value(value)
 {
+    if ( !wxDialog::Create(GetParentForModalDialog(parent, style),
+                           wxID_ANY, caption,
+                           pos, wxDefaultSize,
+                           wxDEFAULT_DIALOG_STYLE) )
+    {
+        return false;
+    }
+
     m_dialogStyle = style;
     m_value = value;
 
@@ -126,6 +130,8 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     m_textctrl->SetFocus();
 
     wxEndBusyCursor();
+
+    return true;
 }
 
 void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )

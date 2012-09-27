@@ -78,8 +78,28 @@ class wxTextEntryDialog : public wxDialog
 {
 public:
     /**
-        Constructor. Use ShowModal() to show the dialog.
+        Default constructor.
 
+        Call Create() to really create the dialog later.
+
+        @since 2.9.5
+     */
+    wxTextEntryDialog();
+
+    /**
+        Constructor.
+
+        Use ShowModal() to show the dialog.
+
+        See Create() method for parameter description.
+    */
+    wxTextEntryDialog(wxWindow* parent, const wxString& message,
+                      const wxString& caption = wxGetTextFromUserPromptStr,
+                      const wxString& value = wxEmptyString,
+                      long style = wxTextEntryDialogStyle,
+                      const wxPoint& pos = wxDefaultPosition);
+
+    /**
         @param parent
             Parent window.
         @param message
@@ -95,8 +115,10 @@ public:
             here.
         @param pos
             Dialog position.
+
+        @since 2.9.5
     */
-    wxTextEntryDialog(wxWindow* parent, const wxString& message,
+    bool Create(wxWindow* parent, const wxString& message,
                       const wxString& caption = wxGetTextFromUserPromptStr,
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
