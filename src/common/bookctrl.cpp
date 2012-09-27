@@ -148,16 +148,8 @@ wxSize wxBookCtrlBase::DoGetBestSize() const
         for ( size_t nPage = 0; nPage < nCount; nPage++ )
         {
             const wxWindow * const pPage = m_pages[nPage];
-            if( pPage )
-            {
-                wxSize childBestSize(pPage->GetBestSize());
-
-                if ( childBestSize.x > bestSize.x )
-                    bestSize.x = childBestSize.x;
-
-                if ( childBestSize.y > bestSize.y )
-                    bestSize.y = childBestSize.y;
-            }
+            if ( pPage )
+                bestSize.IncTo(pPage->GetBestSize());
         }
     }
 
