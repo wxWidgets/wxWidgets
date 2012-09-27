@@ -75,7 +75,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     if ( !wxDialog::Create(GetParentForModalDialog(parent, style),
                            wxID_ANY, caption,
                            pos, wxDefaultSize,
-                           wxDEFAULT_DIALOG_STYLE) )
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) )
     {
         return false;
     }
