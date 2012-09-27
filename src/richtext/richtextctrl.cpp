@@ -2709,11 +2709,6 @@ wxRichTextRange wxRichTextCtrl::AddImage(const wxImage& image)
 // selection and ranges
 // ----------------------------------------------------------------------------
 
-void wxRichTextCtrl::SelectAll()
-{
-    SetSelection(-1, -1);
-}
-
 /// Select none
 void wxRichTextCtrl::SelectNone()
 {

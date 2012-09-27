@@ -1007,12 +1007,6 @@ public:
     void SetSelection(const wxRichTextSelection& sel) { m_selection = sel; }
     //@}
 
-
-    /**
-        Selects all the text in the buffer.
-    */
-    virtual void SelectAll();
-
     /**
         Makes the control editable, or not.
     */
