@@ -137,25 +137,29 @@ wxSize wxBookCtrlBase::DoGetBestSize() const
 {
     wxSize bestSize;
 
-    // iterate over all pages, get the largest width and height
-    const size_t nCount = m_pages.size();
-    for ( size_t nPage = 0; nPage < nCount; nPage++ )
+    if (m_fitToCurrentPage && GetCurrentPage())
     {
-        const wxWindow * const pPage = m_pages[nPage];
-        if( pPage )
+        bestSize = GetCurrentPage()->GetBestSize();
+    }
+    else
+    {
+        // iterate over all pages, get the largest width and height
+        const size_t nCount = m_pages.size();
+        for ( size_t nPage = 0; nPage < nCount; nPage++ )
         {
-            wxSize childBestSize(pPage->GetBestSize());
+            const wxWindow * const pPage = m_pages[nPage];
+            if( pPage )
+            {
+                wxSize childBestSize(pPage->GetBestSize());
 
-            if ( childBestSize.x > bestSize.x )
-                bestSize.x = childBestSize.x;
+                if ( childBestSize.x > bestSize.x )
+                    bestSize.x = childBestSize.x;
 
-            if ( childBestSize.y > bestSize.y )
-                bestSize.y = childBestSize.y;
+                if ( childBestSize.y > bestSize.y )
+                    bestSize.y = childBestSize.y;
+            }
         }
     }
-
-    if (m_fitToCurrentPage && GetCurrentPage())
-        bestSize = GetCurrentPage()->GetBestSize();
 
     // convert display area to window area, adding the size necessary for the
     // tabs
