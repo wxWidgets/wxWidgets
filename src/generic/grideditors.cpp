@@ -496,7 +496,7 @@ void wxGridCellTextEditor::DoBeginEdit(const wxString& startValue)
 {
     Text()->SetValue(startValue);
     Text()->SetInsertionPointEnd();
-    Text()->SetSelection(-1, -1);
+    Text()->SelectAll();
     Text()->SetFocus();
 }
 

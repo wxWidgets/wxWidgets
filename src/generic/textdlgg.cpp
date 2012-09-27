@@ -122,7 +122,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     if ( style & wxCENTRE )
         Centre( wxBOTH );
 
-    m_textctrl->SetSelection(-1, -1);
+    m_textctrl->SelectAll();
     m_textctrl->SetFocus();
 
     wxEndBusyCursor();

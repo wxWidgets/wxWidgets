@@ -497,7 +497,7 @@ void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
         tc->SetValue(correctText);
     }
 
-    tc->SetSelection(-1,-1);
+    tc->SelectAll();
 }
 
 void wxPGTextCtrlEditor::OnFocus( wxPGProperty* property,

@@ -765,7 +765,7 @@ void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
         if ( m_combo->GetTextCtrl() )
             m_combo->GetTextCtrl()->SelectAll();
         else
-            m_combo->SetSelection(-1,-1);
+            m_combo->SelectAll();
     }
 
     // Send focus indication to parent.

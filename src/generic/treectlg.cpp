@@ -454,7 +454,7 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     (void)Create(m_owner, wxID_ANY, m_startValue,
                  rect.GetPosition(), rect.GetSize());
 
-    SetSelection(-1, -1);
+    SelectAll();
 }
 
 void wxTreeTextCtrl::EndEdit(bool discardChanges)
