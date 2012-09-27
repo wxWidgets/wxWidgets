@@ -109,21 +109,17 @@ wxSize wxBookCtrlBase::CalcSizeFromPage(const wxSize& sizePage) const
     if ( !m_bookctrl || !m_bookctrl->IsShown() )
         return sizePage;
 
+    // Notice that the controller size is its current size while we really want
+    // to have its best size. So we only take into account its size in the
+    // direction in which we should add it but not in the other one, where the
+    // controller size is determined by the size of wxBookCtrl itself.
     const wxSize sizeController = GetControllerSize();
 
     wxSize size = sizePage;
     if ( IsVertical() )
-    {
-        if ( sizeController.x > sizePage.x )
-            size.x = sizeController.x;
         size.y += sizeController.y + GetInternalBorder();
-    }
     else // left/right aligned
-    {
         size.x += sizeController.x + GetInternalBorder();
-        if ( sizeController.y > sizePage.y )
-            size.y = sizeController.y;
-    }
 
     return size;
 }
