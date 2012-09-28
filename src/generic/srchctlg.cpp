@@ -67,8 +67,9 @@ public:
 
         SetHint(_("Search"));
 
-        // remove the default minsize, the searchctrl will have one instead
-        SetSizeHints(wxDefaultCoord,wxDefaultCoord);
+        // Ensure that our best size is recomputed using our overridden
+        // DoGetBestSize().
+        InvalidateBestSize();
     }
 
 
