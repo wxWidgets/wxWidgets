@@ -594,7 +594,7 @@ protected:
 #endif
 
     // Gets a font.
-    wxFont GetFont(const wxString& param = wxT("font"));
+    wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = NULL);
 
     // Gets the value of a boolean attribute (only "0" and "1" are valid values)
     bool GetBoolAttr(const wxString& attr, bool defaultv);

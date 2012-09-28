@@ -557,6 +557,7 @@ All (GUI):
 - Fix text origin and extent computations in wxSVGFileDC (Neil Chittenden).
 - Show tooltips for the too long items in generic wxTreeCtrl (Steven Houchins).
 - Add wxStyledTextCtrl::AnnotationClearLine() (sentieshar).
+- Add "inherit" to <font> XRC tag (Steffen Olszewski, Gero Meßsysteme GmbH).
 
 wxGTK:
 

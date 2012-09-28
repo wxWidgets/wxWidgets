@@ -150,7 +150,7 @@ void wxListCtrlXmlHandler::HandleListItem()
     if (HasParam(wxT("data")))
         item.SetData(GetLong(wxT("data")));
     if (HasParam(wxT("font")))
-        item.SetFont(GetFont());
+        item.SetFont(GetFont(wxT("font"), list));
     if (HasParam(wxT("state")))
         item.SetState(GetStyle(wxT("state")));
     if (HasParam(wxT("textcolour")))

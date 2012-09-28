@@ -934,18 +934,63 @@ lay them out using wxSizers, absolute positioning, everything you like!
                 <object class="choicebookpage">
                     <label>wxStaticText</label>
                     <object class="wxPanel" name="statictext">
+                        <font>
+                            <size>12</size>
+                        </font>
                         <object class="wxFlexGridSizer">
-                            <cols>1</cols>
+                            <cols>2</cols>
                             <rows>0</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
-                            <growablecols>0</growablecols>
-                            <growablerows>0</growablerows>
+                            <growablecols>0,1</growablecols>
+                            <growablerows>0,1,2</growablerows>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="wxID_STATIC">
+                                    <label>Default font:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="controls_statictext">
                                     <label>It was a dark and stormy night.</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="wxID_STATIC">
+                                    <label>Default constructed bold font:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_statictext">
+                                    <label>It was a dark and stormy night.</label>
+                                    <font>
+                                      <weight>bold</weight>
+                                    </font>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="wxID_STATIC">
+                                    <label>Inheritance constructed bold font:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_statictext">
+                                    <label>It was a dark and stormy night.</label>
+                                    <font>
+                                      <inherit>1</inherit>
+                                      <weight>bold</weight>
+                                    </font>
                                 </object>
                             </object>
                         </object>

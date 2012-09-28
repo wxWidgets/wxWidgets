@@ -2201,7 +2201,7 @@ static wxFont GetSystemFont(const wxString& name)
     return wxNullFont;
 }
 
-wxFont wxXmlResourceHandler::GetFont(const wxString& param)
+wxFont wxXmlResourceHandler::GetFont(const wxString& param, wxWindow* parent)
 {
     wxXmlNode *font_node = GetParamNode(param);
     if (font_node == NULL)
@@ -2304,8 +2304,21 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     }
 #endif // wxUSE_FONTMAP
 
+    wxFont font;
+
     // is this font based on a system font?
-    wxFont font = GetSystemFont(GetParamValue(wxT("sysfont")));
+    if (HasParam(wxT("sysfont")))
+    {
+        font = GetSystemFont(GetParamValue(wxT("sysfont")));
+    }
+    // or should the font of the widget be used?
+    else if (GetBool(wxT("inherit"), false))
+    {
+        if (parent)
+            font = parent->GetFont();
+        else
+            ReportError("no parent window specified to derive the font from");
+    }
 
     if (font.IsOk())
     {
@@ -2368,9 +2381,9 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
         wnd->SetToolTip(GetText(wxT("tooltip")));
 #endif
     if (HasParam(wxT("font")))
-        wnd->SetFont(GetFont(wxT("font")));
+        wnd->SetFont(GetFont(wxT("font"), wnd));
     if (HasParam(wxT("ownfont")))
-        wnd->SetOwnFont(GetFont(wxT("ownfont")));
+        wnd->SetOwnFont(GetFont(wxT("ownfont"), wnd));
     if (HasParam(wxT("help")))
         wnd->SetHelpText(GetText(wxT("help")));
 }

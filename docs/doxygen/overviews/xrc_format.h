@@ -402,7 +402,8 @@ Examples:
 
 XRC uses similar, but more flexible, abstract description of fonts to that
 used by wxFont class. A font can be described either in terms of its elementary
-properties, or it can be derived from one of system fonts.
+properties, or it can be derived from one of system fonts or the parent window
+font.
 
 The font property element is "composite" element: unlike majority of
 properties, it doesn't have text value but contains several child elements
@@ -413,7 +414,8 @@ and can be one of the following "sub-properties":
 @hdr3col{property, type, description}
 @row3col{size, unsigned integer,
     Pixel size of the font (default: wxNORMAL_FONT's size or @c sysfont's
-    size if the @c sysfont property is used.}
+    size if the @c sysfont property is used or the current size of the font
+    of the enclosing control if the @c inherit property is used.}
 @row3col{style, enum,
     One of "normal", "italic" or "slant" (default: normal).}
 @row3col{weight, enum,
@@ -431,14 +433,18 @@ and can be one of the following "sub-properties":
     (default: unspecified).}
 @row3col{sysfont, ,
     Symbolic name of system standard font(one of wxSYS_*_FONT constants).}
+@row3col{inherit, @ref overview_xrcformat_type_bool,
+    If true, the font of the enclosing control is used. If this property and the
+    @c sysfont property are specified the @c sysfont property takes precedence.}
 @row3col{relativesize, float,
-    Float, font size relative to chosen system font's size; can only be
-    used when 'sysfont' is used and when 'size' is not used.}
+    Float, font size relative to chosen system font's or inherited font's size;
+    can only be used when 'sysfont' or 'inherit' is used and when 'size' is not
+    used.}
 @endTable
 
 All of them are optional, if they are missing, appropriate wxFont default is
-used. If the @c sysfont property is used, then the defaults are taken from it
-instead.
+used. If the @c sysfont or @c inherit property is used, then the defaults are
+taken from it instead.
 
 Examples:
 @code
@@ -455,6 +461,10 @@ Examples:
     <relativesize>1.5</relativesize>
 </font>
 @endcode
+
+@note You cannot use @c inherit for a font that gets used before the enclosing
+      control is created, e.g. if the control gets the font passed as parameter
+      for its constructor, or if the control is not derived from wxWindow.
 
 
 @section overview_xrcformat_windows Controls and Windows
