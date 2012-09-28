@@ -73,7 +73,7 @@ public:
 
     virtual wxControl *GetWidget() const { return m_srchCtrl; }
     virtual wxTextEntryBase *GetTextEntry() const { return m_srchCtrl; }
-    virtual void RecreateWidget() { CreateControl(); }
+    virtual void RecreateWidget();
 
     // lazy creation of the content
     virtual void CreateContent();
@@ -172,6 +172,14 @@ void SearchCtrlWidgetsPage::CreateControl()
                                   wxSize(150, -1), style);
 }
 
+void SearchCtrlWidgetsPage::RecreateWidget()
+{
+    CreateControl();
+
+    GetSizer()->Add(m_srchCtrl, wxSizerFlags().Centre().TripleBorder());
+
+    Layout();
+}
 
 wxMenu* SearchCtrlWidgetsPage::CreateTestMenu()
 {
