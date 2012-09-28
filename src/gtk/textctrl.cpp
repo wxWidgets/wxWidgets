@@ -1831,12 +1831,10 @@ void wxTextCtrl::DoFreeze()
 {
     wxCHECK_RET(m_text != NULL, wxT("invalid text ctrl"));
 
-    wxWindow::DoFreeze();
+    GTKFreezeWidget(m_text);
 
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        GTKFreezeWidget(m_text);
-
         // removing buffer dramatically speeds up insertion:
         g_object_ref(m_buffer);
         GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
@@ -1877,12 +1875,9 @@ void wxTextCtrl::DoThaw()
                 GTK_TEXT_VIEW(m_text), m_showPositionOnThaw);
             m_showPositionOnThaw = NULL;
         }
-
-        // and thaw the window
-        GTKThawWidget(m_text);
     }
 
-    wxWindow::DoThaw();
+    GTKThawWidget(m_text);
 }
 
 // ----------------------------------------------------------------------------

@@ -1970,22 +1970,21 @@ static void style_updated(GtkWidget*, GtkStyle*, wxWindow* win)
 }
 
 //-----------------------------------------------------------------------------
-// "unrealize" from m_wxwindow
+// "unrealize"
 //-----------------------------------------------------------------------------
 
 static void unrealize(GtkWidget*, wxWindow* win)
 {
-    if (win->m_imData)
-        gtk_im_context_set_client_window(win->m_imData->context, NULL);
-
-    g_signal_handlers_disconnect_by_func(
-        win->m_wxwindow, (void*)style_updated, win);
+    win->GTKHandleUnrealize();
 }
 
 } // extern "C"
 
 void wxWindowGTK::GTKHandleRealized()
 {
+    if (IsFrozen())
+        DoFreeze();
+
     if (m_imData)
     {
         gtk_im_context_set_client_window
@@ -2045,6 +2044,23 @@ void wxWindowGTK::GTKHandleRealized()
         g_signal_connect(m_wxwindow,
             detailed_signal,
             G_CALLBACK(style_updated), this);
+    }
+}
+
+void wxWindowGTK::GTKHandleUnrealize()
+{
+    // unrealizing a frozen window seems to have some lingering effect
+    // preventing updates to the affected area
+    if (IsFrozen())
+        DoThaw();
+
+    if (m_wxwindow)
+    {
+        if (m_imData)
+            gtk_im_context_set_client_window(m_imData->context, NULL);
+
+        g_signal_handlers_disconnect_by_func(
+            m_wxwindow, (void*)style_updated, this);
     }
 }
 
@@ -2453,7 +2469,6 @@ void wxWindowGTK::PostCreation()
 
         g_signal_connect (m_imData->context, "commit",
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
-        g_signal_connect(m_wxwindow, "unrealize", G_CALLBACK(unrealize), this);
     }
 
     // focus handling
@@ -2498,13 +2513,14 @@ void wxWindowGTK::PostCreation()
     // was in fact realized already.
     if ( gtk_widget_get_realized(connect_widget) )
     {
-        gtk_window_realized_callback(connect_widget, this);
+        GTKHandleRealized();
     }
     else
     {
         g_signal_connect (connect_widget, "realize",
                           G_CALLBACK (gtk_window_realized_callback), this);
     }
+    g_signal_connect(connect_widget, "unrealize", G_CALLBACK(unrealize), this);
 
     if (!IsTopLevel())
     {
@@ -4668,91 +4684,38 @@ GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
 // freeze/thaw
 // ----------------------------------------------------------------------------
 
-extern "C"
+void wxWindowGTK::GTKFreezeWidget(GtkWidget* widget)
 {
-
-// this is called if we attempted to freeze unrealized widget when it finally
-// is realized (and so can be frozen):
-static void wx_frozen_widget_realize(GtkWidget* w, wxWindowGTK* win)
-{
-    wxASSERT( w && gtk_widget_get_has_window(w) );
-    wxASSERT( gtk_widget_get_realized(w) );
-
-    g_signal_handlers_disconnect_by_func
-    (
-        w,
-        (void*)wx_frozen_widget_realize,
-        win
-    );
-
-    GdkWindow* window;
-    if (w == win->m_wxwindow)
-        window = win->GTKGetDrawingWindow();
-    else
-        window = gtk_widget_get_window(w);
-    gdk_window_freeze_updates(window);
+    if (widget && gtk_widget_get_has_window(widget))
+    {
+        GdkWindow* window = gtk_widget_get_window(widget);
+        if (window)
+            gdk_window_freeze_updates(window);
+    }
 }
 
-} // extern "C"
-
-void wxWindowGTK::GTKFreezeWidget(GtkWidget *w)
+void wxWindowGTK::GTKThawWidget(GtkWidget* widget)
 {
-    if ( !w || !gtk_widget_get_has_window(w) )
-        return; // window-less widget, cannot be frozen
-
-    GdkWindow* window = gtk_widget_get_window(w);
-    if (window == NULL)
+    if (widget && gtk_widget_get_has_window(widget))
     {
-        // we can't thaw unrealized widgets because they don't have GdkWindow,
-        // so set it up to be done immediately after realization:
-        g_signal_connect_after
-        (
-            w,
-            "realize",
-            G_CALLBACK(wx_frozen_widget_realize),
-            this
-        );
-        return;
+        GdkWindow* window = gtk_widget_get_window(widget);
+        if (window)
+            gdk_window_thaw_updates(window);
     }
-
-    if (w == m_wxwindow)
-        window = GTKGetDrawingWindow();
-    gdk_window_freeze_updates(window);
-}
-
-void wxWindowGTK::GTKThawWidget(GtkWidget *w)
-{
-    if ( !w || !gtk_widget_get_has_window(w) )
-        return; // window-less widget, cannot be frozen
-
-    GdkWindow* window = gtk_widget_get_window(w);
-    if (window == NULL)
-    {
-        // the widget wasn't realized yet, no need to thaw
-        g_signal_handlers_disconnect_by_func
-        (
-            w,
-            (void*)wx_frozen_widget_realize,
-            this
-        );
-        return;
-    }
-
-    if (w == m_wxwindow)
-        window = GTKGetDrawingWindow();
-    gdk_window_thaw_updates(window);
 }
 
 void wxWindowGTK::DoFreeze()
 {
-    GTKFreezeWidget(m_widget);
-    if ( m_wxwindow && m_widget != m_wxwindow )
-        GTKFreezeWidget(m_wxwindow);
+    GtkWidget* widget = m_wxwindow;
+    if (widget == NULL)
+        widget = m_widget;
+    GTKFreezeWidget(widget);
 }
 
 void wxWindowGTK::DoThaw()
 {
-    GTKThawWidget(m_widget);
-    if ( m_wxwindow && m_widget != m_wxwindow )
-        GTKThawWidget(m_wxwindow);
+    GtkWidget* widget = m_wxwindow;
+    if (widget == NULL)
+        widget = m_widget;
+    GTKThawWidget(widget);
 }

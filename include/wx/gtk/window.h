@@ -204,6 +204,7 @@ public:
     // Called when m_widget becomes realized. Derived classes must call the
     // base class method if they override it.
     virtual void GTKHandleRealized();
+    void GTKHandleUnrealize();
 
 protected:
     // for controls composed of multiple GTK widgets, return true to eliminate
