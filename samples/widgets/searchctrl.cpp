@@ -91,9 +91,6 @@ protected:
     // (re)create the control
     void CreateControl();
 
-    // reset the control parameters
-    void Reset();
-
 
     wxSearchCtrl*       m_srchCtrl;
     wxCheckBox*         m_searchBtnCheck;
@@ -140,7 +137,6 @@ void SearchCtrlWidgetsPage::CreateContent()
 {
     m_srchCtrl = NULL;
 
-    Reset();
     CreateControl();
 
 
@@ -174,10 +170,6 @@ void SearchCtrlWidgetsPage::CreateControl()
 
     m_srchCtrl = new wxSearchCtrl(this, -1, wxEmptyString, wxDefaultPosition,
                                   wxSize(150, -1), style);
-}
-
-void SearchCtrlWidgetsPage::Reset()
-{
 }
 
 
