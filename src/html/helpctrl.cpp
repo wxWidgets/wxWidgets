@@ -341,12 +341,12 @@ void wxHtmlHelpController::SetHelpWindow(wxHtmlHelpWindow* helpWindow)
         helpWindow->SetController(this);
 }
 
-void wxHtmlHelpController::SetFrameParameters(const wxString& title,
+void wxHtmlHelpController::SetFrameParameters(const wxString& titleFormat,
                                    const wxSize& size,
                                    const wxPoint& pos,
                                    bool WXUNUSED(newFrameEachTime))
 {
-    SetTitleFormat(title);
+    SetTitleFormat(titleFormat);
     wxHtmlHelpFrame* frame = wxDynamicCast(FindTopLevelWindow(), wxHtmlHelpFrame);
     wxHtmlHelpDialog* dialog = wxDynamicCast(FindTopLevelWindow(), wxHtmlHelpDialog);
     if (frame)

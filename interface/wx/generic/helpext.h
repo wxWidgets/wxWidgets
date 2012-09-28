@@ -140,7 +140,7 @@ public:
     /**
         Allows one to override the default settings for the help frame.
     */
-    virtual void SetFrameParameters(const wxString& title,
+    virtual void SetFrameParameters(const wxString& titleFormat,
                                     const wxSize& size,
                                     const wxPoint& pos = wxDefaultPosition,
                                     bool newFrameEachTime = false);

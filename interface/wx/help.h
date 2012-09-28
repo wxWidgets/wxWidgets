@@ -199,15 +199,15 @@ public:
     /**
         Set the parameters of the frame window.
 
-        For wxHtmlHelpController, @a title specifies the title string format
-        (with @c %s being replaced by the actual page title) and @a size and
-        @a position specify the geometry of the frame.
+        For wxHtmlHelpController, @a titleFormat specifies the title string
+        format (with @c %s being replaced by the actual page title) and @a size
+        and @a position specify the geometry of the frame.
 
         For all other help controllers this function has no effect.
 
         Finally, @a newFrameEachTime is always ignored currently.
     */
-    virtual void SetFrameParameters(const wxString& title,
+    virtual void SetFrameParameters(const wxString& titleFormat,
                                     const wxSize& size,
                                     const wxPoint& pos = wxDefaultPosition,
                                     bool newFrameEachTime = false);
