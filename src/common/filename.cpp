@@ -642,7 +642,7 @@ bool wxFileSystemObjectExists(const wxString& path, int flags)
 
     // we must use GetFileAttributes() instead of the ANSI C functions because
     // it can cope with network (UNC) paths unlike them
-    DWORD ret = ::GetFileAttributes(path.t_str());
+    DWORD ret = ::GetFileAttributes(strPath.t_str());
 
     if ( ret == INVALID_FILE_ATTRIBUTES )
         return false;
