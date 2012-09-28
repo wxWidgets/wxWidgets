@@ -993,20 +993,23 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         btn_rect.SetSize(size.size);
         if(btn_rect.Contains(cursor))
         {
-            new_hovered = &instance;
-            new_hovered_state = instance.base->state;
-            new_hovered_state &= ~wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK;
-            wxPoint offset(cursor);
-            offset -= btn_rect.GetTopLeft();
-            if(size.normal_region.Contains(offset))
+            if((instance.base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) == 0)
             {
-                new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED;
+                new_hovered = &instance;
+                new_hovered_state = instance.base->state;
+                new_hovered_state &= ~wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK;
+                wxPoint offset(cursor);
+                offset -= btn_rect.GetTopLeft();
+                if(size.normal_region.Contains(offset))
+                {
+                    new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED;
+                }
+                if(size.dropdown_region.Contains(offset))
+                {
+                    new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED;
+                }
+                break;
             }
-            if(size.dropdown_region.Contains(offset))
-            {
-                new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED;
-            }
-            break;
         }
     }
 
@@ -1082,16 +1085,19 @@ void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
         btn_rect.SetSize(size.size);
         if(btn_rect.Contains(cursor))
         {
-            m_active_button = &instance;
-            cursor -= btn_rect.GetTopLeft();
-            long state = 0;
-            if(size.normal_region.Contains(cursor))
-                state = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE;
-            else if(size.dropdown_region.Contains(cursor))
-                state = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
-            instance.base->state |= state;
-            Refresh(false);
-            break;
+            if((instance.base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) == 0)
+            {
+                m_active_button = &instance;
+                cursor -= btn_rect.GetTopLeft();
+                long state = 0;
+                if(size.normal_region.Contains(cursor))
+                    state = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE;
+                else if(size.dropdown_region.Contains(cursor))
+                    state = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
+                instance.base->state |= state;
+                Refresh(false);
+                break;
+            }
         }
     }
 }

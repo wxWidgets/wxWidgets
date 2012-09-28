@@ -94,6 +94,8 @@ public:
     void OnCheck(wxRibbonButtonBarEvent& evt);
     void OnEnable(wxRibbonButtonBarEvent& evt);
     void OnDisable(wxRibbonButtonBarEvent& evt);
+    void OnDisabled(wxRibbonButtonBarEvent& evt);
+    void OnEnableUpdated(wxRibbonButtonBarEvent& evt);
     void OnChangeText1(wxRibbonButtonBarEvent& evt);
     void OnChangeText2(wxRibbonButtonBarEvent& evt);
     void OnCircleButton(wxRibbonButtonBarEvent& evt);
@@ -187,6 +189,8 @@ bool MyApp::OnInit()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_ENABLE, MyFrame::OnEnable)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_DISABLE, MyFrame::OnDisable)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_DISABLED, MyFrame::OnDisabled)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_UI_ENABLE_UPDATED, MyFrame::OnEnableUpdated)
 EVT_UPDATE_UI(ID_UI_ENABLE_UPDATED, MyFrame::OnEnableUpdateUI)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_CHECK, MyFrame::OnCheck)
 EVT_UPDATE_UI(ID_UI_CHECK_UPDATED, MyFrame::OnCheckUpdateUI)
@@ -621,6 +625,16 @@ void MyFrame::OnEnable(wxRibbonButtonBarEvent& WXUNUSED(evt))
 void MyFrame::OnDisable(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_bEnabled = false;
+}
+
+void MyFrame::OnDisabled(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText("ERROR: Disabled button activated (not supposed to happen)");
+}
+
+void MyFrame::OnEnableUpdated(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText("Button activated");
 }
 
 void MyFrame::OnCheck(wxRibbonButtonBarEvent& WXUNUSED(evt))
