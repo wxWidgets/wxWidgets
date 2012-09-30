@@ -373,6 +373,23 @@ public:
     ssize_t Read(void* buffer, size_t count);
 
     /**
+        Reads the entire contents of the file into a string.
+
+        @param str
+            Non-@NULL pointer to a string to read data into.
+        @param conv
+            Conversion object to use in Unicode build; by default supposes
+            that file contents is encoded in UTF-8 but falls back to the
+            current locale encoding (or Latin-1 if it is UTF-8 too) if it is
+            not.
+
+        @return @true if file was read successfully, @false otherwise.
+
+        @since 2.9.5
+    */
+    bool ReadAll(wxString* str, const wxMBConv& conv = wxConvAuto());
+
+    /**
         Seeks to the specified position.
 
         @param ofs

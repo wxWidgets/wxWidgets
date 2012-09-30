@@ -19,7 +19,7 @@
 
 #include  "wx/string.h"
 #include  "wx/filefn.h"
-#include  "wx/strconv.h"
+#include  "wx/convauto.h"
 
 // ----------------------------------------------------------------------------
 // class wxFile: raw file IO
@@ -70,6 +70,8 @@ public:
   int  fd() const { return m_fd; }
 
   // read/write (unbuffered)
+    // read all data from the file into a string (useful for text files)
+  bool ReadAll(wxString *str, const wxMBConv& conv = wxConvAuto());
     // returns number of bytes read or wxInvalidOffset on error
   ssize_t Read(void *pBuf, size_t nCount);
     // returns the number of bytes written

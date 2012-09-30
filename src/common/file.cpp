@@ -291,6 +291,34 @@ bool wxFile::Close()
 // read/write
 // ----------------------------------------------------------------------------
 
+bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
+{
+    wxCHECK_MSG( str, false, wxS("Output string must be non-NULL") );
+
+    size_t length = wx_truncate_cast(size_t, Length());
+    wxCHECK_MSG( (wxFileOffset)length == Length(), false, wxT("huge file not supported") );
+
+    wxCharBuffer buf(length);
+    char* p = buf.data();
+    for ( ;; )
+    {
+        static const unsigned READSIZE = 4096;
+
+        ssize_t read = Read(p, length > READSIZE ? READSIZE : length);
+        if ( read == wxInvalidOffset )
+            return false;
+
+        p += read;
+    }
+
+    *p = 0;
+
+    wxString strTmp(buf, conv);
+    str->swap(strTmp);
+
+    return true;
+}
+
 // read
 ssize_t wxFile::Read(void *pBuf, size_t nCount)
 {
