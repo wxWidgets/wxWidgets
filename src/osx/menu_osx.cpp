@@ -616,11 +616,10 @@ void wxMenuBar::MacInstallMenuBar()
     
     // hide items in the apple menu that don't exist in the wx menubar
     
-    int menuid = 0;
     wxMenuItem* appleItem = NULL;
     wxMenuItem* wxItem = NULL;
 
-    menuid = wxApp::s_macAboutMenuItemId;
+    int menuid = wxApp::s_macAboutMenuItemId;
     appleItem = m_appleMenu->FindItem(menuid);
     wxItem = FindItem(menuid);
     if ( appleItem != NULL )

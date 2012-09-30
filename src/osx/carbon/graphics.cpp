@@ -147,9 +147,7 @@ OSStatus wxMacDrawCGImage(
 
 CGColorRef wxMacCreateCGColor( const wxColour& col )
 {
-    CGColorRef retval = 0;
-
-    retval = col.CreateCGColor();
+    CGColorRef retval = col.CreateCGColor();
 
     wxASSERT(retval != NULL);
     return retval;
