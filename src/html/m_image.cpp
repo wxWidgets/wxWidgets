@@ -298,6 +298,11 @@ public:
     virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const;
 
     void SetImage(const wxImage& img);
+
+    // If "alt" text is set, it will be used when converting this cell to text.
+    void SetAlt(const wxString& alt);
+    virtual wxString ConvertToText(wxHtmlSelection *sel) const;
+
 #if wxUSE_GIF && wxUSE_TIMER
     void AdvanceAnimation(wxTimer *timer);
     virtual void Layout(int w);
@@ -320,6 +325,7 @@ private:
     double              m_scale;
     wxHtmlImageMapCell *m_imageMap;
     wxString            m_mapName;
+    wxString            m_alt;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageCell);
 };
@@ -472,6 +478,16 @@ void wxHtmlImageCell::SetImage(const wxImage& img)
             m_bitmap = new wxBitmap(img);
     }
 #endif
+}
+
+void wxHtmlImageCell::SetAlt(const wxString& alt)
+{
+    m_alt = alt;
+}
+
+wxString wxHtmlImageCell::ConvertToText(wxHtmlSelection* WXUNUSED(sel)) const
+{
+    return m_alt;
 }
 
 #if wxUSE_GIF && wxUSE_TIMER
@@ -703,6 +719,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                                           al, mn);
                 m_WParser->ApplyStateToCell(cel);
                 cel->SetId(tag.GetParam(wxT("id"))); // may be empty
+                cel->SetAlt(tag.GetParam(wxT("alt")));
                 m_WParser->GetContainer()->InsertCell(cel);
                 if (str)
                     delete str;
