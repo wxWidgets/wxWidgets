@@ -2465,8 +2465,15 @@ bool wxDataViewMainWindow::Cleared()
     DestroyTree();
     m_selection.Clear();
 
-    SortPrepare();
-    BuildTree( GetModel() );
+    if (GetModel())
+    {
+        SortPrepare();
+        BuildTree( GetModel() );
+    }
+    else
+    {
+        m_count = 0;
+    }
 
     GetOwner()->InvalidateColBestWidths();
     UpdateDisplay();
@@ -4526,13 +4533,23 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
     if (!wxDataViewCtrlBase::AssociateModel( model ))
         return false;
 
-    m_notifier = new wxGenericDataViewModelNotifier( m_clientArea );
-
-    model->AddNotifier( m_notifier );
+    if (model)
+    {
+        m_notifier = new wxGenericDataViewModelNotifier( m_clientArea );
+        model->AddNotifier( m_notifier );
+    }
+    else if (m_notifier)
+    {
+        m_notifier->Cleared();
+        m_notifier = NULL;
+    }
 
     m_clientArea->DestroyTree();
 
-    m_clientArea->BuildTree(model);
+    if (model)
+    {
+        m_clientArea->BuildTree(model);
+    }
 
     m_clientArea->UpdateDisplay();
 
