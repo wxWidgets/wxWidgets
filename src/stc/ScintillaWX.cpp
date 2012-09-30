@@ -748,8 +748,16 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
     if (paintState == paintAbandoned) {
         // Painting area was insufficient to cover new styling or brace
-        // highlight positions
+        // highlight positions.  So trigger a new paint event that will
+        // repaint the whole window.
+        stc->Refresh(false);
+        
+#if defined(__WXOSX__)
+        // On Mac we also need to finish the current paint to make sure that
+        // everything is on the screen that needs to be there between now and
+        // when the next paint event arrives.
         FullPaintDC(dc);
+#endif
     }
     paintState = notPainting;
 }
@@ -757,8 +765,8 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
 // Force the whole window to be repainted
 void ScintillaWX::FullPaint() {
-    wxClientDC dc(stc);
-    FullPaintDC(&dc);
+    stc->Refresh(false);
+    stc->Update();
 }
 
 
