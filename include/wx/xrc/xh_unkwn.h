@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_unkwn.h
-// Purpose:     XML resource handler for unkown widget
+// Purpose:     XML resource handler for unknown widget
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
 // RCS-ID:      $Id$
