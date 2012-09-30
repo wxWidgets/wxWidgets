@@ -28,7 +28,7 @@ class WXDLLIMPEXP_CORE wxRadioBox : public wxControl,
 {
 public:
     // ctors and dtor
-    wxRadioBox() { Init(); }
+    wxRadioBox() { }
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
                const wxString& title,
@@ -41,8 +41,6 @@ public:
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
     {
-        Init();
-
         Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
     }
 
@@ -57,8 +55,6 @@ public:
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
     {
-        Init();
-
         Create( parent, id, title, pos, size, choices, majorDim, style, val, name );
     }
 

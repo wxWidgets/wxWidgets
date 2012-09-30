@@ -357,9 +357,6 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // common part of all ctors (not virtual because called from ctor)
-    void Init();
-
     // Create a GtkScrolledWindow containing the given widget (usually
     // m_wxwindow but not necessarily) and assigns it to m_widget. Also shows
     // the widget passed to it.
@@ -404,6 +401,8 @@ protected:
     void ConstrainSize();
 
 private:
+    void Init();
+
     enum ScrollUnit { ScrollUnit_Line, ScrollUnit_Page, ScrollUnit_Max };
 
     // common part of ScrollLines() and ScrollPages() and could be used, in the

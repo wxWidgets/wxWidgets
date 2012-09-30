@@ -26,7 +26,7 @@ typedef struct _WebKitWebView WebKitWebView;
 class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 {
 public:
-    wxWebViewWebKit() { Init(); }
+    wxWebViewWebKit() { }
 
     wxWebViewWebKit(wxWindow *parent,
            wxWindowID id = wxID_ANY,
@@ -35,8 +35,6 @@ public:
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxString& name = wxWebViewNameStr)
     {
-        Init();
-
         Create(parent, id, url, pos, size, style, name);
     }
 
