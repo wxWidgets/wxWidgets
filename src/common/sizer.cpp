@@ -209,18 +209,28 @@ void wxSizerItem::DoSetSpacer(const wxSize& size)
 
 wxSize wxSizerItem::AddBorderToSize(const wxSize& size) const
 {
-    if (size == wxDefaultSize)
-        return size;
-
     wxSize result = size;
-    if (m_flag & wxWEST)
-        result.x += m_border;
-    if (m_flag & wxEAST)
-        result.x += m_border;
-    if (m_flag & wxNORTH)
-        result.y += m_border;
-    if (m_flag & wxSOUTH)
-        result.y += m_border;
+
+    // Notice that we shouldn't modify the unspecified component(s) of the
+    // size, it's perfectly valid to have either min or max size specified in
+    // one direction only and it shouldn't be applied in the other one then.
+
+    if ( result.x != wxDefaultCoord )
+    {
+        if (m_flag & wxWEST)
+            result.x += m_border;
+        if (m_flag & wxEAST)
+            result.x += m_border;
+    }
+
+    if ( result.y != wxDefaultCoord )
+    {
+        if (m_flag & wxNORTH)
+            result.y += m_border;
+        if (m_flag & wxSOUTH)
+            result.y += m_border;
+    }
+
     return result;
 }
 
