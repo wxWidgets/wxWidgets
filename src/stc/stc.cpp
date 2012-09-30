@@ -47,7 +47,11 @@
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
-#include "wx/ffile.h"
+#if wxUSE_FFILE
+    #include "wx/ffile.h"
+#elif wxUSE_FILE
+    #include "wx/ffile.h"
+#endif
 
 #include "ScintillaWX.h"
 
@@ -4383,57 +4387,102 @@ void wxStyledTextCtrl::DoSetValue(const wxString& value, int flags)
     // SetValue_SendEvent bit of the flags
 }
 
-#if wxUSE_TEXTCTRL
-bool wxStyledTextCtrl::DoSaveFile(const wxString& filename, int fileType)
+bool
+wxStyledTextCtrl::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
 {
-   bool ok = wxTextAreaBase::DoSaveFile(filename, fileType);
-#else
-bool wxStyledTextCtrl::SaveFile(const wxString& filename)
-{
+#if wxUSE_FFILE || wxUSE_FILE
+
 #if wxUSE_FFILE
-    wxFFile file(filename, wxT("w"));
-    bool ok = file.IsOpened() && file.Write(GetValue(), *wxConvCurrent);
-#else
-    bool ok = false;
-#endif // wxUSE_FFILE
+    // Take care to use "b" to ensure that possibly non-native EOLs in the file
+    // contents are not mangled when saving it.
+    wxFFile file(filename, wxS("wb"));
+#elif wxUSE_FILE
+    wxFile file(filename, wxFile::write);
 #endif
-    if (ok)
+
+    if ( file.IsOpened() && file.Write(GetValue(), *wxConvCurrent) )
     {
         SetSavePoint();
+
+        return true;
     }
-    return ok;
+
+#endif // !wxUSE_FFILE && !wxUSE_FILE
+
+    return false;
 }
 
-#if wxUSE_TEXTCTRL
-bool wxStyledTextCtrl::DoLoadFile(const wxString& filename, int fileType)
+bool
+wxStyledTextCtrl::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
 {
-   bool ok = wxTextAreaBase::DoLoadFile(filename, fileType);
-#else
-bool wxStyledTextCtrl::LoadFile(const wxString& filename)
-{
+#if wxUSE_FFILE || wxUSE_FILE
+
 #if wxUSE_FFILE
-    wxFFile file(filename);
-    bool ok = file.IsOpened();
-    if (ok)
+    // As above, we want to read the real EOLs from the file, e.g. without
+    // translating them to just LFs under Windows, so that the original CR LF
+    // are preserved when it's written back.
+    wxFFile file(filename, wxS("rb"));
+#else
+    wxFile file(filename);
+#endif
+
+    if ( file.IsOpened() )
     {
         wxString text;
-        ok = file.ReadAll(&text, *wxConvCurrent);
-        if (ok)
+        if ( file.ReadAll(&text, *wxConvCurrent) )
         {
+            // Detect the EOL: we use just the first line because there is not
+            // much we can do if the file uses inconsistent EOLs anyhow, we'd
+            // need to ask the user about the one we should really use and we
+            // don't currently provide a way to do it.
+            //
+            // We also only check for Unix and DOS EOLs but not classic Mac
+            // CR-only one as it's obsolete by now.
+            const wxString::size_type posLF = text.find('\n');
+            if ( posLF != wxString::npos )
+            {
+                // Set EOL mode to ensure that the new lines inserted into the
+                // text use the same EOLs as the existing ones.
+                if ( posLF > 0 && text[posLF - 1] == '\r' )
+                    SetEOLMode(wxSTC_EOL_CRLF);
+                else
+                    SetEOLMode(wxSTC_EOL_LF);
+            }
+            //else: Use the default EOL for the current platform.
+
             SetValue(text);
+            EmptyUndoBuffer();
+            SetSavePoint();
+
+            return true;
         }
     }
-#else
-    bool ok = false;
-#endif // wxUSE_FFILE
-#endif
-   if (ok)
-   {
-       EmptyUndoBuffer();
-       SetSavePoint();
-   }
-   return ok;
+#endif // !wxUSE_FFILE && !wxUSE_FILE
+
+   return false;
 }
+
+// If we don't derive from wxTextAreaBase, we need to implement these methods
+// ourselves, otherwise we already inherit them.
+#if !wxUSE_TEXTCTRL
+
+bool wxStyledTextCtrl::SaveFile(const wxString& filename)
+{
+    if ( filename.empty() )
+        return false;
+
+    return DoSaveFile(filename, wxTEXT_TYPE_ANY);
+}
+
+bool wxStyledTextCtrl::LoadFile(const wxString& filename)
+{
+    if ( filename.empty() )
+        return false;
+
+    return DoLoadFile(filename, wxTEXT_TYPE_ANY);
+}
+
+#endif // !wxUSE_TEXTCTRL
 
 #if wxUSE_DRAG_AND_DROP
 wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
