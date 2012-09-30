@@ -89,23 +89,15 @@ inline StringFormat* GetDrawTextStringFormat()
 {
     if ( !gs_drawTextStringFormat )
     {
-        // We create this string format with exactly the same flags as
-        // StringFormat::GenericTypographic() is documented to use in MSDN
-        // except for the last one which doesn't make any difference for
-        // DrawText() but that we do want to use when measuring text.
-        //
-        // The reason for not just using GenericTypographic itself is that it
-        // does something else (what exactly is unfortunately not documented),
-        // which results in string being displayed quite differently from the
-        // default rendering, see #14537.
-        gs_drawTextStringFormat
-            = new StringFormat
-                  (
-                    StringFormatFlagsLineLimit |
-                    StringFormatFlagsNoClip |
-                    StringFormatFlagsNoFitBlackBox |
-                    StringFormatFlagsMeasureTrailingSpaces
-                  );
+        gs_drawTextStringFormat = new StringFormat(StringFormat::GenericTypographic());
+
+        // This doesn't make any difference for DrawText() actually but we want
+        // this behaviour when measuring text.
+        gs_drawTextStringFormat->SetFormatFlags
+        (
+            gs_drawTextStringFormat->GetFormatFlags()
+                | StringFormatFlagsMeasureTrailingSpaces
+        );
     }
 
     return gs_drawTextStringFormat;
