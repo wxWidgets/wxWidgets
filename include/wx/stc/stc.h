@@ -4710,6 +4710,7 @@ public:
     static wxVersionInfo GetLibraryVersionInfo();
 
 protected:
+    virtual void DoSetValue(const wxString& value, int flags);
     virtual wxString DoGetValue() const { return GetText(); }
     virtual wxWindow *GetEditableWindow() { return this; }
 

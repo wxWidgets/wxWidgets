@@ -4372,6 +4372,17 @@ void wxStyledTextCtrl::ScrollToColumn(int column) {
 }
 
 
+void wxStyledTextCtrl::DoSetValue(const wxString& value, int flags)
+{
+    if ( flags & SetValue_SelectionOnly )
+        ReplaceSelection(value);
+    else
+        SetText(value);
+
+    // We don't send wxEVT_COMMAND_TEXT_UPDATED anyhow, so ignore the
+    // SetValue_SendEvent bit of the flags
+}
+
 #if wxUSE_TEXTCTRL
 bool wxStyledTextCtrl::DoSaveFile(const wxString& filename, int fileType)
 {
