@@ -77,7 +77,11 @@ enum
     wxSOCKET_BLOCK = 4,
     wxSOCKET_REUSEADDR = 8,
     wxSOCKET_BROADCAST = 16,
-    wxSOCKET_NOBIND = 32
+    wxSOCKET_NOBIND = 32,
+    wxSOCKET_NOWAIT_READ = 64,
+    wxSOCKET_WAITALL_READ = 128,
+    wxSOCKET_NOWAIT_WRITE = 256,
+    wxSOCKET_WAITALL_WRITE = 512
 };
 
 typedef int wxSocketFlags;
@@ -123,6 +127,8 @@ public:
     bool IsData() { return WaitForRead(0, 0); }
     bool IsDisconnected() const { return !IsConnected(); }
     wxUint32 LastCount() const { return m_lcount; }
+    wxUint32 LastReadCount() const { return m_lcount_read; }
+    wxUint32 LastWriteCount() const { return m_lcount_write; }
     wxSocketError LastError() const;
     void SaveState();
     void RestoreState();
@@ -171,6 +177,8 @@ public:
     bool GetOption(int level, int optname, void *optval, int *optlen);
     bool SetOption(int level, int optname, const void *optval, int optlen);
     wxUint32 GetLastIOSize() const { return m_lcount; }
+    wxUint32 GetLastIOReadSize() const { return m_lcount_read; }
+    wxUint32 GetLastIOWriteSize() const { return m_lcount_write; }
 
     // event handling
     void *GetClientData() const { return m_clientData; }
@@ -254,6 +262,8 @@ private:
     bool          m_writing;          // busy writing?
     bool          m_closed;           // was the other end closed?
     wxUint32      m_lcount;           // last IO transaction size
+    wxUint32      m_lcount_read;      // last IO transaction size of Read() direction.
+    wxUint32      m_lcount_write;     // last IO transaction size of Write() direction.
     unsigned long m_timeout;          // IO timeout value in seconds
                                       // (TODO: remove, wxSocketImpl has it too)
     wxList        m_states;           // stack of states (TODO: remove!)

@@ -572,7 +572,32 @@ enum wxSocketEventFlags
     in the output buffer. This is the same as issuing exactly one nonblocking
     low-level call to @b recv() or @b send(). Note that @e nonblocking here
     refers to when the function returns, not to whether the GUI blocks during
-    this time.
+    this time.  Also note that this flag impacts both Read and Write
+    operations.  If it is desired to control Read independently of Write, for
+    example you want no wait on Read(), but you do want to wait on Write(), then
+    use wxSOCKET_NOWAIT_READ and wxSOCKET_NOWAIT_WRITE.
+
+    If @b wxSOCKET_NOWAIT_READ (this flag is new since wxWidgets 2.9.5) is
+    specified, Read operations will return immediately. Read operations will
+    retrieve only available data. This is the same as issuing exactly one
+    nonblocking low-level call to @b recv(). Note that @e nonblocking here
+    refers to when the function returns, not to whether the GUI blocks during
+    this time.  This flag should not be enabled if ReadMsg() is going to be
+    used (it will be ignored), if you do then thread-safety may be at risk.
+    Note that wxSOCKET_NOWAIT_READ impacts only Read operations and does not
+    impact Write operations, allowing Read and Write operations to be set
+    differently.
+
+    If @b wxSOCKET_NOWAIT_WRITE (this flag is new since wxWidgets 2.9.5) is
+    specified, Write operations will return immediately. Write operations will
+    write as much data as possible, depending on how much space is available in
+    the output buffer. This is the same as issuing exactly one nonblocking
+    low-level call to @b send(). Note that @e nonblocking here refers to when
+    the function returns, not to whether the GUI blocks during this time.  This
+    flag should not be enabled if WriteMsg() is going to be used (it will be
+    ignored), if you use it then thread safety may be at risk. Note that
+    wxSOCKET_NOWAIT_WRITE impacts only Write operations and does not impact
+    Write operations, allowing Read and Write operations to be set differently.
 
     If @b wxSOCKET_WAITALL is specified, IO calls won't return until ALL
     the data has been read or written (or until an error occurs), blocking if
@@ -580,7 +605,32 @@ enum wxSocketEventFlags
     same as having a loop which makes as many blocking low-level calls to
     @b recv() or @b send() as needed so as to transfer all the data. Note
     that @e blocking here refers to when the function returns, not
-    to whether the GUI blocks during this time.
+    to whether the GUI blocks during this time.  Note that wxSOCKET_WAITALL
+    impacts both Read and Write operations.  If you desire to wait
+    for all on just Read operations, but not on Write operations, (or vice versa),
+    use wxSOCKET_WAITALL_READ or wxSOCKET_WAITALL_WRITE.
+
+    If @b wxSOCKET_WAITALL_READ (this flag is new since wxWidgets 2.9.5) is
+    specified, Read operations won't return until ALL the data has been read
+    (or until an error occurs), blocking if necessary, and issuing several low
+    level calls if necessary. This is the same as having a loop which makes as
+    many blocking low-level calls to @b recv() as needed so as to transfer all
+    the data. Note that @e blocking here refers to when the function returns,
+    not to whether the GUI blocks during this time.  Note that
+    wxSOCKET_WAITALL_READ only has an impact on Read operations, and has no
+    impact on Write operations, allowing Read and Write operations to have
+    different settings.
+
+    If @b wxSOCKET_WAITALL_WRITE (this flag is new since wxWidgets 2.9.5) is
+    specified, Write() and WriteMsg() calls won't return until ALL the data has
+    been written (or until an error occurs), blocking if necessary, and issuing
+    several low level calls if necessary. This is the same as having a loop
+    which makes as many blocking low-level calls to @b send() as needed so as
+    to transfer all the data. Note that @e blocking here refers to when the
+    function returns, not to whether the GUI blocks during this time.  Note
+    that wxSOCKET_WAITALL_WRITE only has an impact on Write operations, and has
+    no impact on Read operations, allowing Read and Write operations to have
+    different settings.
 
     The @b wxSOCKET_BLOCK flag controls whether the GUI blocks during
     IO operations. If this flag is specified, the socket will not yield
@@ -627,9 +677,13 @@ enum
     wxSOCKET_BLOCK = 4,     ///< Block the GUI (do not yield) while reading/writing data.
     wxSOCKET_REUSEADDR = 8, ///< Allows the use of an in-use port.
     wxSOCKET_BROADCAST = 16, ///< Switches the socket to broadcast mode
-    wxSOCKET_NOBIND = 32    ///< Stops the socket from being bound to a specific
+    wxSOCKET_NOBIND = 32,   ///< Stops the socket from being bound to a specific
                             ///< adapter (normally used in conjunction with
                             ///< @b wxSOCKET_BROADCAST)
+    wxSOCKET_NOWAIT_READ = 64,    ///< Read as much data as possible and return immediately
+    wxSOCKET_WAITALL_READ = 128,  ///< Wait for all required data to be read unless an error occurs.
+    wxSOCKET_NOWAIT_WRITE = 256,   ///< Write as much data as possible and return immediately
+    wxSOCKET_WAITALL_WRITE = 512   ///< Wait for all required data to be written unless an error occurs.
 };
 
 
@@ -804,8 +858,41 @@ public:
         Use this function to get the number of bytes actually transferred
         after using one of the following IO calls: Discard(), Peek(), Read(),
         ReadMsg(), Unread(), Write(), WriteMsg().
+
+        @deprecated
+        This function is kept mostly for backwards compatibility.  Use
+        LastReadCount() or LastWriteCount() instead.  LastCount() is still
+        needed for use with less commonly used functions: Discard(),
+        Peek(), and Unread().
     */
     wxUint32 LastCount() const;
+
+    /**
+        Returns the number of bytes read by the last Read() or ReadMsg()
+        call (receive direction only).
+
+        This function is thread-safe, in case Read() is executed in a
+        different thread than Write().  Use LastReadCount() instead of
+        LastCount() for this reason.
+
+        Unlike LastCount(), the functions Discard(), Peek(), and Unread()
+        are currently not supported by LastReadCount().
+
+        @since 2.9.5
+    */
+    wxUint32 LastReadCount() const;
+
+    /**
+        Returns the number of bytes written by the last Write() or WriteMsg()
+        call (transmit direction only).
+
+        This function is thread-safe, in case Write() is executed in a
+        different thread than Read().  Use LastWriteCount() instead of
+        LastCount() for this reason.
+
+        @since 2.9.5
+    */
+    wxUint32 LastWriteCount() const;
 
     /**
         Returns the last wxSocket error. See @ref wxSocketError .
@@ -936,7 +1023,7 @@ public:
     /**
         Read up to the given number of bytes from the socket.
 
-        Use LastCount() to verify the number of bytes actually read.
+        Use LastReadCount() to verify the number of bytes actually read.
         Use Error() to determine if the operation succeeded.
 
         @param buffer
@@ -950,7 +1037,7 @@ public:
             The exact behaviour of Read() depends on the combination of flags being used.
             For a detailed explanation, see SetFlags()
 
-        @see Error(), LastError(), LastCount(),
+        @see Error(), LastError(), LastReadCount(),
              SetFlags()
     */
     wxSocketBase& Read(void* buffer, wxUint32 nbytes);
@@ -962,7 +1049,7 @@ public:
         bytes will be discarded. This function always waits for the buffer to
         be entirely filled, unless an error occurs.
 
-        Use LastCount() to verify the number of bytes actually read.
+        Use LastReadCount() to verify the number of bytes actually read.
 
         Use Error() to determine if the operation succeeded.
 
@@ -978,8 +1065,15 @@ public:
             and it will always ignore the @b wxSOCKET_NOWAIT flag.
             The exact behaviour of ReadMsg() depends on the @b wxSOCKET_BLOCK flag.
             For a detailed explanation, see SetFlags().
+            For thread safety, in case ReadMsg() and WriteMsg() are called in
+            different threads, it is a good idea to call
+            SetFlags(wxSOCKET_WAITALL|wx_SOCKET_BLOCK) before the first calls
+            to ReadMsg() and WriteMsg() in different threads, as each of these
+            functions will call SetFlags() which performs read/modify/write.  By
+            setting these flags before the multi-threading, it will ensure that
+            they don't get reset by thread race conditions.
 
-        @see Error(), LastError(), LastCount(), SetFlags(), WriteMsg()
+        @see Error(), LastError(), LastReadCount(), SetFlags(), WriteMsg()
     */
     wxSocketBase& ReadMsg(void* buffer, wxUint32 nbytes);
 
@@ -1163,7 +1257,7 @@ public:
     /**
         Write up to the given number of bytes to the socket.
 
-        Use LastCount() to verify the number of bytes actually written.
+        Use LastWriteCount() to verify the number of bytes actually written.
 
         Use Error() to determine if the operation succeeded.
 
@@ -1179,7 +1273,7 @@ public:
         The exact behaviour of Write() depends on the combination of flags being used.
         For a detailed explanation, see SetFlags().
 
-        @see Error(), LastError(), LastCount(), SetFlags()
+        @see Error(), LastError(), LastWriteCount(), SetFlags()
     */
     wxSocketBase& Write(const void* buffer, wxUint32 nbytes);
 
@@ -1192,7 +1286,7 @@ public:
         This function always waits for the entire buffer to be sent, unless an
         error occurs.
 
-        Use LastCount() to verify the number of bytes actually written.
+        Use LastWriteCount() to verify the number of bytes actually written.
 
         Use Error() to determine if the operation succeeded.
 
@@ -1209,8 +1303,15 @@ public:
         it will always ignore the @b wxSOCKET_NOWAIT flag. The exact behaviour of
         WriteMsg() depends on the @b wxSOCKET_BLOCK flag. For a detailed explanation,
         see SetFlags().
+        For thread safety, in case ReadMsg() and WriteMsg() are called in
+        different threads, it is a good idea to call
+        @code SetFlags(wxSOCKET_WAITALL|wx_SOCKET_BLOCK) @endcode before the
+        first calls to ReadMsg() and WriteMsg() in different threads, as each
+        of these functions calls SetFlags() which performs read/modify/write.
+        By setting these flags before the multi-threading, it will ensure that
+        they don't get reset by thread race conditions.
 
-        @see  Error(), LastError(), LastCount(), SetFlags(), ReadMsg()
+        @see  Error(), LastError(), LastWriteCount(), SetFlags(), ReadMsg()
 
     */
     wxSocketBase& WriteMsg(const void* buffer, wxUint32 nbytes);
@@ -1321,7 +1422,7 @@ public:
     /**
         Write a buffer of @a nbytes bytes to the socket.
 
-        Use wxSocketBase::LastCount() to verify the number of bytes actually wrote.
+        Use wxSocketBase::LastWriteCount() to verify the number of bytes actually wrote.
         Use wxSocketBase::Error() to determine if the operation succeeded.
 
         @param address

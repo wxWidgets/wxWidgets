@@ -186,6 +186,7 @@ void SocketTestCase::ReadNormal()
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastCount() );
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastReadCount() );
 
 
     char bufBig[102400];
@@ -193,6 +194,7 @@ void SocketTestCase::ReadNormal()
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
     CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastCount() );
+    CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastReadCount() );
 }
 
 void SocketTestCase::ReadBlock()
@@ -206,6 +208,7 @@ void SocketTestCase::ReadBlock()
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastCount() );
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastReadCount() );
 
 
     char bufBig[102400];
@@ -213,6 +216,7 @@ void SocketTestCase::ReadBlock()
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
     CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastCount() );
+    CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastReadCount() );
 }
 
 void SocketTestCase::ReadNowait()
@@ -242,6 +246,7 @@ void SocketTestCase::ReadWaitall()
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(buf), (size_t)sock->LastCount() );
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(buf), (size_t)sock->LastReadCount() );
 }
 
 void SocketTestCase::UrlTest()

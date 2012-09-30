@@ -529,6 +529,8 @@ Major new features in this release
 
 All:
 
+- Add separate read/written bytes counters and per-direction NOWAIT and WAITALL
+  flags to wxSocket (Rob Bresalier).
 - Add wxDir::Close() method (Silverstorm82).
 - Fix compilation of wxHash{Map,Set} with g++ 4.7 (Nathan Ridge).
 - Fix posting large amounts of data in wxHTTP (Platonides).
