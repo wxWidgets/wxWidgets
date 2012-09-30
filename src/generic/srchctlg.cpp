@@ -322,7 +322,6 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
                                         wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN,
                                         m_cancelBitmap);
 
-    SetForegroundColour( m_text->GetForegroundColour() );
     SetBackgroundColour( m_text->GetBackgroundColour() );
 
     RecalcBitmaps();
