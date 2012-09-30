@@ -231,7 +231,7 @@ BEGIN_EVENT_TABLE(wxSearchButton, wxControl)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
-    EVT_SEARCHCTRL_SEARCH_BTN(wxID_ANY, wxSearchCtrl::OnSearchButton)
+    EVT_SEARCHCTRL_CANCEL_BTN(wxID_ANY, wxSearchCtrl::OnCancelButton)
     EVT_SET_FOCUS(wxSearchCtrl::OnSetFocus)
     EVT_SIZE(wxSearchCtrl::OnSize)
 END_EVENT_TABLE()
@@ -1172,9 +1172,9 @@ void wxSearchCtrl::RecalcBitmaps()
     }
 }
 
-void wxSearchCtrl::OnSearchButton( wxCommandEvent& event )
+void wxSearchCtrl::OnCancelButton( wxCommandEvent& WXUNUSED(event) )
 {
-    event.Skip();
+    m_text->Clear();
 }
 
 void wxSearchCtrl::OnSetFocus( wxFocusEvent& /*event*/ )

@@ -219,7 +219,7 @@ protected:
     virtual wxBitmap RenderSearchBitmap( int x, int y, bool renderDrop );
     virtual wxBitmap RenderCancelBitmap( int x, int y );
 
-    virtual void OnSearchButton( wxCommandEvent& event );
+    void OnCancelButton( wxCommandEvent& event );
 
     void OnSetFocus( wxFocusEvent& event );
     void OnSize( wxSizeEvent& event );
