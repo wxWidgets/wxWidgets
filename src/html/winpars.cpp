@@ -214,6 +214,11 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_Link = wxHtmlLinkInfo( wxEmptyString );
     m_LinkColor.Set(0, 0, 0xFF);
     m_ActualColor.Set(0, 0, 0);
+    const wxColour windowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ;
+    m_ActualBackgroundColor = m_windowInterface
+                            ? m_windowInterface->GetHTMLBackgroundColour()
+                            : windowColour;
+    m_ActualBackgroundMode = wxBRUSHSTYLE_TRANSPARENT;
     m_Align = wxHTML_ALIGN_LEFT;
     m_ScriptMode = wxHTML_SCRIPT_NORMAL;
     m_ScriptBaseline = 0;
@@ -238,16 +243,13 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 #endif
 
     m_Container->InsertCell(new wxHtmlColourCell(m_ActualColor));
-    wxColour windowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ;
 
     m_Container->InsertCell
                  (
                    new wxHtmlColourCell
                        (
-                         m_windowInterface
-                            ? m_windowInterface->GetHTMLBackgroundColour()
-                            : windowColour,
-                         wxHTML_CLR_BACKGROUND
+                         m_ActualBackgroundColor,
+                         m_ActualBackgroundMode == wxBRUSHSTYLE_TRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND
                        )
                   );
 

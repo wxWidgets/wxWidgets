@@ -91,10 +91,13 @@ public:
     const wxColour& GetFgColour() const { return m_fgColour; }
     void SetBgColour(const wxColour& c) { m_bgColour = c; }
     const wxColour& GetBgColour() const { return m_bgColour; }
+    void SetBgMode(int m) { m_bgMode = m; }
+    int GetBgMode() const { return m_bgMode; }
 
 private:
     wxHtmlSelectionState  m_selState;
     wxColour              m_fgColour, m_bgColour;
+    int                   m_bgMode;
 };
 
 

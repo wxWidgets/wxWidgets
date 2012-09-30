@@ -36,8 +36,9 @@
 //                  Used by wxHtmlColourCell to determine clr of what is changing
 //--------------------------------------------------------------------------------
 
-#define wxHTML_CLR_FOREGROUND        0x0001
-#define wxHTML_CLR_BACKGROUND        0x0002
+#define wxHTML_CLR_FOREGROUND                0x0001
+#define wxHTML_CLR_BACKGROUND                0x0002
+#define wxHTML_CLR_TRANSPARENT_BACKGROUND    0x0004
 
 
 
