@@ -288,7 +288,11 @@ public:
     // implement wxTextEntryBase pure virtual methods
     // ----------------------------------------------
 
-    virtual void WriteText(const wxString& text) { AddText(text); }
+    virtual void WriteText(const wxString& text)
+    {
+        ReplaceSelection(text);
+    }
+
     virtual void Remove(long from, long to)
     {
         Replace(from, to, "");
