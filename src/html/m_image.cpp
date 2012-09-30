@@ -718,6 +718,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                                           m_WParser->GetPixelScale(),
                                           al, mn);
                 m_WParser->ApplyStateToCell(cel);
+                m_WParser->StopCollapsingSpaces();
                 cel->SetId(tag.GetParam(wxT("id"))); // may be empty
                 cel->SetAlt(tag.GetParam(wxT("alt")));
                 m_WParser->GetContainer()->InsertCell(cel);

@@ -138,6 +138,11 @@ public:
     // applies current parser state (link, sub/supscript, ...) to given cell
     void ApplyStateToCell(wxHtmlCell *cell);
 
+    // Needs to be called after inserting a cell that interrupts the flow of
+    // the text like e.g. <img> and tells us to not consider any of the
+    // following space as being part of the same space run as before.
+    void StopCollapsingSpaces() { m_tmpLastWasSpace = false; }
+
 #if !wxUSE_UNICODE
     void SetInputEncoding(wxFontEncoding enc);
     wxFontEncoding GetInputEncoding() const { return m_InputEnc; }
