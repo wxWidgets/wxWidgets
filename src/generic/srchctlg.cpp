@@ -168,7 +168,11 @@ public:
           m_bmp(bmp)
     { }
 
-    void SetBitmapLabel(const wxBitmap& label) { m_bmp = label; }
+    void SetBitmapLabel(const wxBitmap& label)
+    {
+        m_bmp = label;
+        InvalidateBestSize();
+    }
 
     // The buttons in wxSearchCtrl shouldn't accept focus from keyboard because
     // this would interfere with the usual TAB processing: the user expects
