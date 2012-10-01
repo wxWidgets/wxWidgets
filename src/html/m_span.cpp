@@ -65,7 +65,7 @@ TAG_HANDLER_BEGIN(SPAN, "SPAN" )
             if ( wxHtmlTag::ParseAsColour(str, &clr) )
             {
                 m_WParser->SetActualBackgroundColor(clr);
-                m_WParser->SetActualBackgroundMode(wxBRUSHSTYLE_SOLID);
+                m_WParser->SetActualBackgroundMode(wxSOLID);
                 m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
             }
         }
@@ -171,7 +171,7 @@ TAG_HANDLER_BEGIN(SPAN, "SPAN" )
             m_WParser->SetActualBackgroundMode(oldbackmode);
             m_WParser->SetActualBackgroundColor(oldbackclr);
             m_WParser->GetContainer()->InsertCell(
-                new wxHtmlColourCell(oldbackclr, oldbackmode == wxBRUSHSTYLE_TRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
+                new wxHtmlColourCell(oldbackclr, oldbackmode == wxTRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
         }
 
         return true;
