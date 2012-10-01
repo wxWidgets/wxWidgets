@@ -244,14 +244,18 @@ bool wxAuiMDIParentFrame::ProcessEvent(wxEvent& event)
 
 wxAuiMDIChildFrame *wxAuiMDIParentFrame::GetActiveChild() const
 {
-    return GetClientWindow()->GetActiveChild();
+    // We can be called before the client window is created, so check for its
+    // existence.
+    wxAuiMDIClientWindow* const client = GetClientWindow();
+    return client ? client->GetActiveChild() : NULL;
 }
 
 void wxAuiMDIParentFrame::SetActiveChild(wxAuiMDIChildFrame* pChildFrame)
 {
-    if (GetClientWindow()->GetActiveChild() != pChildFrame)
+    wxAuiMDIClientWindow* const client = GetClientWindow();
+    if (client && client->GetActiveChild() != pChildFrame)
     {
-        GetClientWindow()->SetActiveChild(pChildFrame);
+        client->SetActiveChild(pChildFrame);
     }
 }
 
