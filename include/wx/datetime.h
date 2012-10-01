@@ -1063,6 +1063,8 @@ public:
     inline wxTimeSpan Subtract(const wxDateTime& dt) const;
     inline wxTimeSpan operator-(const wxDateTime& dt2) const;
 
+    wxDateSpan DiffAsDateSpan(const wxDateTime& dt) const;
+
     // conversion to/from text
     // ------------------------------------------------------------------------
 

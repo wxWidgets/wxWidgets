@@ -1212,6 +1212,7 @@ void DateTimeTestCase::TestTimeArithmetics()
         CPPUNIT_ASSERT_EQUAL( dt, dt1 - span );
         CPPUNIT_ASSERT_EQUAL( dt, dt2 + span );
         CPPUNIT_ASSERT_EQUAL( dt1, dt2 + 2*span );
+        CPPUNIT_ASSERT_EQUAL( span, dt1.DiffAsDateSpan(dt) );
     }
 }
 

@@ -846,6 +846,15 @@ public:
         them as a wxTimeSpan.
     */
     wxTimeSpan Subtract(const wxDateTime& dt) const;
+    /**
+       Returns the difference between this object and @a dt as a wxDateSpan.
+
+       This method allows to find the number of entire years, months, weeks and
+       days between @a dt and this date.
+
+       @since 2.9.5
+    */
+    wxDateSpan DiffAsDateSpan(const wxDateTime& dt) const;
 
     /**
         Adds the given date span to this object.

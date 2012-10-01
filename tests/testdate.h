@@ -20,6 +20,17 @@ inline std::ostream& operator<<(std::ostream& ostr, const wxDateTime& dt)
     return ostr;
 }
 
+// need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateSpan objects
+inline std::ostream& operator<<(std::ostream& ostr, const wxDateSpan& span)
+{
+    ostr << span.GetYears() << "Y, "
+         << span.GetMonths() << "M, "
+         << span.GetWeeks() << "W, "
+         << span.GetDays() << "D";
+
+    return ostr;
+}
+
 WX_CPPUNIT_ALLOW_EQUALS_TO_INT(wxDateTime::wxDateTime_t)
 
 #endif // _WX_TESTS_TESTDATE_H_

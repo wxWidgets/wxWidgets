@@ -1602,6 +1602,47 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
     return *this;
 }
 
+wxDateSpan wxDateTime::DiffAsDateSpan(const wxDateTime& dt) const
+{
+    wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime"));
+
+    // If dt is larger than this, calculations below needs to be inverted.
+    int inv = 1;
+    if ( dt > *this )
+        inv = -1;
+
+    int y = GetYear() - dt.GetYear();
+
+    // If month diff is negative, dt is the year before, so decrease year
+    // and set month diff to its inverse, e.g. January - December should be 1,
+    // not -11.
+    int m = GetMonth() - dt.GetMonth();
+    if ( m * inv < 0 )
+    {
+        m += inv * MONTHS_IN_YEAR;
+        y -= inv;
+    }
+
+    // Same logic for days as for months above. Use number of days in month
+    // from the month which end date we're crossing.
+    int d = GetDay() - dt.GetDay();
+    if ( d * inv < 0 )
+    {
+        d += inv * wxDateTime::GetNumberOfDays(
+            inv > 0 ? dt.GetMonth() : GetMonth(),
+            inv > 0 ? dt.GetYear() : GetMonth());
+        m -= inv;
+    }
+
+    int w =  d / DAYS_PER_WEEK;
+
+    // Remove weeks from d, since wxDateSpan only keep days as the ones
+    // not in complete weeks
+    d -= w * DAYS_PER_WEEK;
+
+    return wxDateSpan(y, m, w, d);
+}
+
 // ----------------------------------------------------------------------------
 // Weekday and monthday stuff
 // ----------------------------------------------------------------------------
