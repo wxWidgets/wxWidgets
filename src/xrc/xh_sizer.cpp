@@ -419,7 +419,8 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
             break;
         }
 
-        if ( (int)l >= nslots )
+        const int n = static_cast<int>(l);
+        if ( n >= nslots )
         {
             ReportParamError
             (
@@ -428,7 +429,7 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
                 (
                     "invalid %s index %d: must be less than %d",
                     rows ? "row" : "column",
-                    l,
+                    n,
                     nslots
                 )
             );
@@ -438,9 +439,9 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
         }
 
         if (rows)
-            sizer->AddGrowableRow(l);
+            sizer->AddGrowableRow(n);
         else
-            sizer->AddGrowableCol(l);
+            sizer->AddGrowableCol(n);
     }
 }
 
