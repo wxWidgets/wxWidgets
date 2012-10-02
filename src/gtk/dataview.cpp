@@ -1810,7 +1810,7 @@ wxgtk_renderer_editing_started( GtkCellRenderer *WXUNUSED(cell), GtkCellEditable
     {
         s_user_data = item.GetID();
 
-        g_signal_connect (GTK_CELL_EDITABLE (editable), "editing_done",
+        g_signal_connect (editable, "editing_done",
             G_CALLBACK (wxgtk_cell_editable_editing_done),
             (gpointer) wxrenderer );
 
@@ -1842,7 +1842,7 @@ void wxDataViewRenderer::GtkPackIntoColumn(GtkTreeViewColumn *column)
 void wxDataViewRenderer::GtkInitHandlers()
 {
     {
-        g_signal_connect (GTK_CELL_RENDERER(m_renderer), "editing_started",
+        g_signal_connect (m_renderer, "editing_started",
             G_CALLBACK (wxgtk_renderer_editing_started),
             this);
     }

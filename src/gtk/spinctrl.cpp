@@ -413,17 +413,17 @@ bool wxSpinCtrl::SetBase(int base)
 
     if ( m_base != 10 )
     {
-        g_signal_connect( GTK_SPIN_BUTTON(m_widget), "input",
+        g_signal_connect( m_widget, "input",
                               G_CALLBACK(wx_gtk_spin_input), this);
-        g_signal_connect( GTK_SPIN_BUTTON(m_widget), "output",
+        g_signal_connect( m_widget, "output",
                               G_CALLBACK(wx_gtk_spin_output), this);
     }
     else
     {
-        g_signal_handlers_disconnect_by_func(GTK_SPIN_BUTTON(m_widget),
+        g_signal_handlers_disconnect_by_func(m_widget,
                                              (gpointer)wx_gtk_spin_input,
                                              this);
-        g_signal_handlers_disconnect_by_func(GTK_SPIN_BUTTON(m_widget),
+        g_signal_handlers_disconnect_by_func(m_widget,
                                              (gpointer)wx_gtk_spin_output,
                                              this);
     }

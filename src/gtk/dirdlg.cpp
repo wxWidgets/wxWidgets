@@ -140,7 +140,7 @@ bool wxDirDialog::Create(wxWindow* parent,
     // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
     // the dialog when the user press ESC on the dialog: in that case a second call to
     // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
-    g_signal_connect (G_OBJECT(m_widget),
+    g_signal_connect (m_widget,
                     "delete_event",
                     G_CALLBACK (gtk_widget_hide_on_delete),
                     (gpointer)this);

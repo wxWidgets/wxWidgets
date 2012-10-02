@@ -298,7 +298,7 @@ static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
         /* add the expander */
         dlg->expander = gtk_expander_new_with_mnemonic ("Back_trace:");
         gtk_box_pack_start (GTK_BOX(vbox), dlg->expander, TRUE, TRUE, 0);
-        g_signal_connect (GTK_EXPANDER(dlg->expander), "activate",
+        g_signal_connect (dlg->expander, "activate",
                             G_CALLBACK(gtk_assert_dialog_expander_callback), dlg);
     }
 
