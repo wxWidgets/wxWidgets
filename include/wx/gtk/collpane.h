@@ -35,11 +35,6 @@ public:
         Create(parent, winid, label, pos, size, style, val, name);
     }
 
-    void Init()
-    {
-        m_bIgnoreNextChange = false;
-    }
-
     bool Create(wxWindow *parent,
                 wxWindowID winid,
                 const wxString& label,
@@ -69,6 +64,11 @@ public:     // used by GTK callbacks
     wxString m_strLabel;
 
 private:
+    void Init()
+    {
+        m_bIgnoreNextChange = false;
+    }
+
     void OnSize(wxSizeEvent&);
     virtual void AddChildGTK(wxWindowGTK* child);
     GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;

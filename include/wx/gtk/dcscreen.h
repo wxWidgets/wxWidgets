@@ -25,7 +25,7 @@ public:
 
     virtual void DoGetSize(int *width, int *height) const;
 
-protected:
+private:
     void Init();
 
     DECLARE_ABSTRACT_CLASS(wxScreenDCImpl)

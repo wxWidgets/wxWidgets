@@ -95,8 +95,6 @@ public:
         Create(parent, id, anim, pos, size, style, name);
     }
 
-    void Init();
-
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxAnimation& anim = wxNullAnimation,
                 const wxPoint& pos = wxDefaultPosition,
@@ -146,6 +144,9 @@ protected:      // internal vars
 
 private:
     typedef wxAnimationCtrlBase base_type;
+
+    void Init();
+
     DECLARE_DYNAMIC_CLASS(wxAnimationCtrl)
     DECLARE_EVENT_TABLE()
 };

@@ -128,9 +128,6 @@ protected:
     virtual void DoSetSizeHints( int minW, int minH,
                                  int maxW, int maxH,
                                  int incW, int incH);
-    // common part of all ctors
-    void Init();
-
     // move the window to the specified location and resize it
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
@@ -148,6 +145,7 @@ protected:
     bool m_deferShow;
 
 private:
+    void Init();
     wxSize& GetCachedDecorSize();
 
     // size hint increments

@@ -119,15 +119,14 @@ public:
 protected:
     virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );
 
-    // common part of all ctors
-    void Init();
-
     virtual wxGDIRefData* CreateGDIRefData() const;
     virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const;
 
     virtual wxFontFamily DoGetFamily() const;
 
 private:
+    void Init();
+
     DECLARE_DYNAMIC_CLASS(wxFont)
 };
 

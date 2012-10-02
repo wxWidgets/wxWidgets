@@ -142,10 +142,9 @@ public:
 
     virtual GtkCellRendererText *GtkGetTextRenderer() const;
 
-protected:
+private:
     bool Init(wxDataViewCellMode mode, int align);
 
-private:
     // Called from GtkGetTextRenderer() to really create the renderer if
     // necessary.
     void GtkInitTextRenderer();

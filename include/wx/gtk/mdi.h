@@ -67,11 +67,11 @@ public:
     virtual void OnInternalIdle();
 
 protected:
-    void Init();
     virtual void DoGetClientSize(int* width, int* height) const;
 
 private:
     friend class wxMDIChildFrame;
+    void Init();
 
     DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 };

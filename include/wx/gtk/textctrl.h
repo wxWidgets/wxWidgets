@@ -158,9 +158,6 @@ protected:
     virtual void DoFreeze();
     virtual void DoThaw();
 
-    // common part of all ctors
-    void Init();
-
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
@@ -179,6 +176,8 @@ protected:
     void GTKSetJustification();
 
 private:
+    void Init();
+
     // overridden wxTextEntry virtual methods
     virtual GtkEditable *GetEditable() const;
     virtual GtkEntry *GetEntry() const;

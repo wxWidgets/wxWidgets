@@ -49,7 +49,6 @@ public:
     }
 
 protected:
-    void Init() { m_pngData = NULL; m_pngSize = 0; }
     void Clear() { free(m_pngData); }
     void ClearAll() { Clear(); Init(); }
 
@@ -57,6 +56,9 @@ protected:
     void       *m_pngData;
 
     void DoConvertToPng();
+
+private:
+    void Init() { m_pngData = NULL; m_pngSize = 0; }
 };
 
 // ----------------------------------------------------------------------------

@@ -176,13 +176,6 @@ public:     // overrides
     FILEDIRBTN_OVERRIDES
 
 protected:
-    // common part of all ctors
-    void Init()
-    {
-        m_dialog = NULL;
-        m_bIgnoreNextChange = false;
-    }
-
     wxDialog *m_dialog;
 
 public:    // used by the GTK callback only
@@ -192,6 +185,12 @@ public:    // used by the GTK callback only
     void GTKUpdatePath(const char *gtkpath);
 
 private:
+    void Init()
+    {
+        m_dialog = NULL;
+        m_bIgnoreNextChange = false;
+    }
+
     DECLARE_DYNAMIC_CLASS(wxDirButton)
 };
 

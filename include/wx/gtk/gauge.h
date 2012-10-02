@@ -71,15 +71,14 @@ public:
         m_gaugePos;
 
 protected:
-    // common part of all ctors
-    void Init() { m_rangeMax = m_gaugePos = 0; }
-
     // set the gauge value to the value of m_gaugePos
     void DoSetGauge();
 
     virtual wxSize DoGetBestSize() const;
 
 private:
+    void Init() { m_rangeMax = m_gaugePos = 0; }
+
     DECLARE_DYNAMIC_CLASS(wxGauge)
 };
 

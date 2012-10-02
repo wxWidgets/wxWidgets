@@ -107,9 +107,6 @@ public:
     bool DoPhase(int phase);
 #endif
 
-    // common part of all ctors
-    void Init();
-
     // Called by GTK event handler when the current page is definitely changed.
     void GTKOnPageChanged();
 
@@ -138,6 +135,7 @@ private:
     // the padding set by SetPadding()
     int m_padding;
 
+    void Init();
     virtual void AddChildGTK(wxWindowGTK* child);
 
     DECLARE_DYNAMIC_CLASS(wxNotebook)
