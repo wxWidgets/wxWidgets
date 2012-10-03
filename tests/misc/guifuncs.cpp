@@ -134,59 +134,89 @@ void MiscGUIFuncsTestCase::ParseFileDialogFilter()
     );
 }
 
+namespace
+{
+
+// This class is used as a test window here. We can't use a real wxButton
+// because we can't create other windows as its children in wxGTK.
+class TestButton : public wxWindow
+{
+public:
+    TestButton(wxWindow* parent, const wxString& label, const wxPoint& pos)
+        : wxWindow(parent, wxID_ANY, pos, wxSize(100, 50))
+    {
+        SetLabel(label);
+    }
+};
+
+// Helper function returning the label of the window at the given point or
+// "NONE" if there is no window there.
+wxString GetLabelOfWindowAtPoint(wxWindow* parent, int x, int y)
+{
+    wxWindow* const
+        win = wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(x, y)));
+    return win ? win->GetLabel() : wxString("NONE");
+}
+
+} // anonymous namespace
+
 void MiscGUIFuncsTestCase::FindWindowAtPoint()
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
     CPPUNIT_ASSERT( parent );
 
-    CPPUNIT_ASSERT_MESSAGE
+    // Set a label to allow distinguishing it from the other windows in the
+    // assertion messages.
+    parent->SetLabel("parent");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "No window for a point outside of the window",
-        !wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(900, 900)))
+        "NONE",
+        GetLabelOfWindowAtPoint(parent, 900, 900)
     );
 
-    wxWindow* btn1 = new wxButton(parent, wxID_ANY, "1", wxPoint(10, 10));
+    wxWindow* btn1 = new TestButton(parent, "1", wxPoint(10, 10));
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "Point over a child control corresponds to it",
-        btn1,
-        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 11)))
+        btn1->GetLabel(),
+        GetLabelOfWindowAtPoint(parent, 11, 11)
     );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "Point outside of any child control returns the TLW itself",
-        parent,
-        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(5, 5)))
+        parent->GetLabel(),
+        GetLabelOfWindowAtPoint(parent, 5, 5)
     );
 
-    wxWindow* btn2 = new wxButton(parent, wxID_ANY, "2", wxPoint(10, 90));
+    wxWindow* btn2 = new TestButton(parent, "2", wxPoint(10, 90));
     btn2->Disable();
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "Point over a disabled child control still corresponds to it",
-        btn2,
-        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91)))
+        btn2->GetLabel(),
+        GetLabelOfWindowAtPoint(parent, 11, 91)
     );
 
     btn2->Hide();
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "Point over a hidden child control doesn't take it into account",
-        parent,
-        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91)))
+        parent->GetLabel(),
+        GetLabelOfWindowAtPoint(parent, 11, 91)
     );
 
     btn2->Show();
-    wxWindow* btn3 = new wxButton(btn2, wxID_ANY, "3", wxPoint(0, 0));
+    wxWindow* btn3 = new TestButton(btn2, "3", wxPoint(0, 0));
     btn3->Disable();
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "Point over recursive disabled child controls corresponds to deepest child",
-        btn3,
-        wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91)))
+        btn3->GetLabel(),
+        GetLabelOfWindowAtPoint(parent, 11, 91)
     );
-    wxASSERT(wxFindWindowAtPoint(parent->ClientToScreen(wxPoint(11, 91))) == btn3);
 
     wxDELETE(btn1);
     wxDELETE(btn3);     // delete child before parent
