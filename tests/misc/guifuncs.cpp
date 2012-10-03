@@ -206,6 +206,13 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
     // assertion messages.
     parent->SetLabel("parent");
 
+    wxWindow* btn1 = new TestButton(parent, "1", wxPoint(10, 10));
+    wxWindow* btn2 = new TestButton(parent, "2", wxPoint(10, 90));
+    wxWindow* btn3 = new TestButton(btn2, "3", wxPoint(20, 20));
+
+    // We need this to realize the windows created above under wxGTK.
+    wxYield();
+
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "No window for a point outside of the window",
@@ -213,7 +220,6 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
         GetLabelOfWindowAtPoint(parent, 900, 900)
     );
 
-    wxWindow* btn1 = new TestButton(parent, "1", wxPoint(10, 10));
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
         "Point over a child control corresponds to it",
@@ -228,7 +234,6 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
         GetLabelOfWindowAtPoint(parent, 5, 5)
     );
 
-    wxWindow* btn2 = new TestButton(parent, "2", wxPoint(10, 90));
     btn2->Disable();
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
@@ -246,16 +251,22 @@ void MiscGUIFuncsTestCase::FindWindowAtPoint()
     );
 
     btn2->Show();
-    wxWindow* btn3 = new TestButton(btn2, "3", wxPoint(0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Point over child control corresponds to the child",
+        btn3->GetLabel(),
+        GetLabelOfWindowAtPoint(parent, 31, 111)
+    );
+
     btn3->Disable();
     CPPUNIT_ASSERT_EQUAL_MESSAGE
     (
-        "Point over recursive disabled child controls corresponds to deepest child",
+        "Point over disabled child controls still corresponds to this child",
         btn3->GetLabel(),
-        GetLabelOfWindowAtPoint(parent, 11, 91)
+        GetLabelOfWindowAtPoint(parent, 31, 111)
     );
 
-    wxDELETE(btn1);
-    wxDELETE(btn3);     // delete child before parent
-    wxDELETE(btn2);
+    btn1->Destroy();
+    btn2->Destroy();
+    // btn3 was already deleted when its parent was
 }
