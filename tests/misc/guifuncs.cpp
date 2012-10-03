@@ -28,6 +28,7 @@
 #include "wx/button.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
+#include "wx/panel.h"
 
 #include "asserthelper.h"
 
