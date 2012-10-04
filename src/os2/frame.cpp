@@ -1071,9 +1071,8 @@ MRESULT EXPENTRY wxFrameMainWndProc( HWND   hWnd,
 {
     MRESULT  rc = (MRESULT)0;
     bool     bProcessed = false;
-    wxFrame* pWnd  = NULL;
 
-    pWnd = (wxFrame*) wxFindWinFromHandle((WXHWND) hWnd);
+    wxFrame* pWnd  = (wxFrame*) wxFindWinFromHandle((WXHWND) hWnd);
     switch (ulMsg)
     {
         case WM_QUERYFRAMECTLCOUNT:

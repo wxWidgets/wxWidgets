@@ -263,7 +263,6 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
                              void **clientData,
                              wxClientDataType type)
 {
-    long lIndex = 0;
     LONG lIndexType = 0;
     bool incrementPos = false;
 
