@@ -99,6 +99,16 @@ enum wxScrollbarVisibility
     of (10,-90).
 
     @beginStyleTable
+    @style{wxHSCROLL}
+           If this style is specified and ::wxVSCROLL isn't, the window will be
+           scrollable only in horizontal direction (by default, i.e. if neither
+           this style nor ::wxVSCROLL is specified, it scrolls in both
+           directions).
+    @style{wxVSCROLL}
+           If this style is specified and ::wxHSCROLL isn't, the window will be
+           scrollable only in vertical direction (by default, i.e. if neither
+           this style nor ::wxHSCROLL is specified, it scrolls in both
+           directions).
     @style{wxRETAINED}
            Uses a backing pixmap to speed refreshes. Motif only.
     @endStyleTable
