@@ -235,7 +235,16 @@ public:
         @since 2.9.0
     */
     static void MakeDisabled(unsigned char* r, unsigned char* g, unsigned char* b, unsigned char brightness = 255);
-    
+
+    /**
+        Make a disabled version of this colour.
+
+        This method modifies the object in place and returns the object itself.
+
+        @since 2.9.5
+     */
+    wxColour& MakeDisabled(unsigned char brightness = 255);
+
     /**
         Create a grey colour from (in/out) rgb parameters using integer arithmetic.
         @since 2.9.0

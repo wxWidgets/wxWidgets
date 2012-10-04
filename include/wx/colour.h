@@ -167,6 +167,7 @@ public:
     static void          ChangeLightness(unsigned char* r, unsigned char* g, unsigned char* b, int ialpha);
 
     wxColour ChangeLightness(int ialpha) const;
+    wxColour& MakeDisabled(unsigned char brightness = 255);
 
     // old, deprecated
     // ---------------

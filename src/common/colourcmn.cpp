@@ -273,6 +273,16 @@ void wxColourBase::MakeDisabled(unsigned char* r, unsigned char* g, unsigned cha
     *b = AlphaBlend(*b, brightness, 0.4);
 }
 
+wxColour& wxColourBase::MakeDisabled(unsigned char brightness)
+{
+    unsigned char r = Red(),
+                  g = Green(),
+                  b = Blue();
+    MakeDisabled(&r, &g, &b, brightness);
+    Set(r, g, b, Alpha());
+    return static_cast<wxColour&>(*this);
+}
+
 // AlphaBlend is used by ChangeLightness and MakeDisabled
 
 // static
