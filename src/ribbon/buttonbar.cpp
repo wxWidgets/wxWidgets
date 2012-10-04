@@ -1193,7 +1193,7 @@ wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetHoveredItem() const
 
 wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetItem(size_t n) const
 {
-    wxCHECK_MSG(n >= 0 && n < m_buttons.GetCount(), NULL, "wxRibbonButtonBar item's index is out of bound");
+    wxCHECK_MSG(n < m_buttons.GetCount(), NULL, "wxRibbonButtonBar item's index is out of bound");
     return m_buttons.Item(n);
 }
 
