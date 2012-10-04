@@ -295,7 +295,7 @@ bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
 {
     wxCHECK_MSG( str, false, wxS("Output string must be non-NULL") );
 
-    size_t length = wx_truncate_cast(size_t, Length());
+    ssize_t length = Length();
     wxCHECK_MSG( (wxFileOffset)length == Length(), false, wxT("huge file not supported") );
 
     wxCharBuffer buf(length);
@@ -309,6 +309,10 @@ bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
             return false;
 
         p += nread;
+        if ( length <= nread )
+            break;
+
+        length -= nread;
     }
 
     *p = 0;

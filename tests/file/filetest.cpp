@@ -34,6 +34,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( FileTestCase );
+        CPPUNIT_TEST( ReadAll );
 #if wxUSE_UNICODE
         CPPUNIT_TEST( RoundTripUTF8 );
         CPPUNIT_TEST( RoundTripUTF16 );
@@ -42,6 +43,7 @@ private:
         CPPUNIT_TEST( TempFile );
     CPPUNIT_TEST_SUITE_END();
 
+    void ReadAll();
 #if wxUSE_UNICODE
     void RoundTripUTF8() { DoRoundTripTest(wxConvUTF8); }
     void RoundTripUTF16() { DoRoundTripTest(wxMBConvUTF16()); }
@@ -64,6 +66,29 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileTestCase, "FileTestCase" );
 // ----------------------------------------------------------------------------
 // tests implementation
 // ----------------------------------------------------------------------------
+
+void FileTestCase::ReadAll()
+{
+    TestFile tf;
+
+    const char* text = "Ream\nde";
+
+    {
+        wxFile fout(tf.GetName(), wxFile::write);
+        CPPUNIT_ASSERT( fout.IsOpened() );
+        fout.Write(text, strlen(text));
+        CPPUNIT_ASSERT( fout.Close() );
+    }
+
+    {
+        wxFile fin(tf.GetName(), wxFile::read);
+        CPPUNIT_ASSERT( fin.IsOpened() );
+
+        wxString s;
+        CPPUNIT_ASSERT( fin.ReadAll(&s) );
+        CPPUNIT_ASSERT_EQUAL( text, s );
+    }
+}
 
 #if wxUSE_UNICODE
 
