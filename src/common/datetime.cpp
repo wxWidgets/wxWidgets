@@ -1612,25 +1612,34 @@ wxDateSpan wxDateTime::DiffAsDateSpan(const wxDateTime& dt) const
         inv = -1;
 
     int y = GetYear() - dt.GetYear();
+    int m = GetMonth() - dt.GetMonth();
+    int d = GetDay() - dt.GetDay();
 
     // If month diff is negative, dt is the year before, so decrease year
     // and set month diff to its inverse, e.g. January - December should be 1,
     // not -11.
-    int m = GetMonth() - dt.GetMonth();
-    if ( m * inv < 0 )
+    if ( m * inv < 0 || (m == 0 && d * inv < 0))
     {
         m += inv * MONTHS_IN_YEAR;
         y -= inv;
     }
 
-    // Same logic for days as for months above. Use number of days in month
-    // from the month which end date we're crossing.
-    int d = GetDay() - dt.GetDay();
+    // Same logic for days as for months above.
     if ( d * inv < 0 )
     {
-        d += inv * wxDateTime::GetNumberOfDays(
-            inv > 0 ? dt.GetMonth() : GetMonth(),
-            inv > 0 ? dt.GetYear() : GetMonth());
+        // Use number of days in month from the month which end date we're
+        // crossing. That is month before this for positive diff, and this
+        // month for negative diff.
+        // If we're on january and using previous month, we get december
+        // previous year, but don't care, december has same amount of days
+        // every year.
+        wxDateTime::Month monthfordays = GetMonth();
+        if (inv > 0 && monthfordays == wxDateTime::Jan)
+            monthfordays = wxDateTime::Dec;
+        else if (inv > 0)
+            monthfordays = static_cast<wxDateTime::Month>(monthfordays - 1);
+
+        d += inv * wxDateTime::GetNumberOfDays(monthfordays, GetYear());
         m -= inv;
     }
 

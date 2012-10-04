@@ -1214,6 +1214,31 @@ void DateTimeTestCase::TestTimeArithmetics()
         CPPUNIT_ASSERT_EQUAL( dt1, dt2 + 2*span );
         CPPUNIT_ASSERT_EQUAL( span, dt1.DiffAsDateSpan(dt) );
     }
+
+    // More date span arithmetics tests
+    wxDateTime dtd1(5, wxDateTime::Jun, 1998);
+    wxDateTime dtd2(6, wxDateTime::Aug, 1999);
+
+    // All parts in dtd2 is after dtd1
+    CPPUNIT_ASSERT_EQUAL( wxDateSpan(1, 2, 0, 1), dtd2.DiffAsDateSpan(dtd1) );
+
+    // Year and month after, day earlier, so no full month
+    // Jul has 31 days, so it's 31 - 5 + 4 = 30, or 4w 2d
+    dtd2.Set(4, wxDateTime::Aug, 1999);
+    CPPUNIT_ASSERT_EQUAL( wxDateSpan(1, 1, 4, 2), dtd2.DiffAsDateSpan(dtd1) );
+
+    // Year and day after, month earlier, so no full year, but same day diff as
+    // first example
+    dtd2.Set(6, wxDateTime::May, 1999);
+    CPPUNIT_ASSERT_EQUAL( wxDateSpan(0, 11, 0, 1), dtd2.DiffAsDateSpan(dtd1) );
+
+    // Year after, month and day earlier, so no full month and no full year
+    // April has 30 days, so it's 30 - 5 + 4 = 29, or 4w 1d
+    dtd2.Set(4, wxDateTime::May, 1999);
+    CPPUNIT_ASSERT_EQUAL( wxDateSpan(0, 10, 4, 1), dtd2.DiffAsDateSpan(dtd1) );
+
+    // And a reverse. Now we should use days in Jun (again 30 => 4w 1d)
+    CPPUNIT_ASSERT_EQUAL( wxDateSpan(0, -10, -4, -1), dtd1.DiffAsDateSpan(dtd2) );
 }
 
 void DateTimeTestCase::TestDSTBug()
