@@ -244,6 +244,7 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     m_button_bar_hover_background_brush = LikeSecondary(1.7);
     m_button_bar_active_background_brush = LikeSecondary(1.4);
     m_button_bar_label_colour = m_tab_label_colour;
+    m_button_bar_label_disabled_colour = m_tab_label_colour;
     m_gallery_border_pen = m_tab_border_pen;
     m_gallery_item_border_pen = m_button_bar_hover_border_pen;
     m_gallery_hover_background_brush = LikePrimary(1.2);
@@ -1082,7 +1083,9 @@ void wxRibbonAUIArtProvider::DrawButtonBarButton(
     }
 
     dc.SetFont(m_button_bar_label_font);
-    dc.SetTextForeground(m_button_bar_label_colour);
+    dc.SetTextForeground(state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED
+                            ? m_button_bar_label_disabled_colour
+                            : m_button_bar_label_colour);
     DrawButtonBarButtonForeground(dc, rect, kind, state, label, bitmap_large,
         bitmap_small);
 }

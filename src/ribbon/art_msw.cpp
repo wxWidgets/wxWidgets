@@ -435,6 +435,8 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     m_gallery_button_active_background_top_brush = LikeSecondary(-9.0, 0.15, -0.08);
 
     m_button_bar_label_colour = m_tab_label_colour;
+    m_button_bar_label_disabled_colour = m_tab_label_colour;
+
     m_button_bar_hover_border_pen = LikeSecondary(-6.2, -0.47, -0.14);
     m_button_bar_hover_background_gradient_colour = LikeSecondary(-0.6, 0.16, 0.04);
     m_button_bar_hover_background_colour = LikeSecondary(-0.2, 0.16, -0.10);
@@ -502,6 +504,7 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     copy->m_page_toggle_hover_face_colour = m_page_toggle_hover_face_colour;
 
     copy->m_button_bar_label_colour = m_button_bar_label_colour;
+    copy->m_button_bar_label_disabled_colour = m_button_bar_label_disabled_colour;
     copy->m_tab_label_colour = m_tab_label_colour;
     copy->m_tab_separator_colour = m_tab_separator_colour;
     copy->m_tab_separator_gradient_colour = m_tab_separator_gradient_colour;
@@ -754,6 +757,8 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id) const
     {
         case wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR:
             return m_button_bar_label_colour;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR:
+            return m_button_bar_label_disabled_colour;
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR:
             return m_button_bar_hover_border_pen.GetColour();
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR:
@@ -911,6 +916,9 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
     {
         case wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR:
             m_button_bar_label_colour = colour;
+            break;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR:
+            m_button_bar_label_disabled_colour = colour;
             break;
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR:
             m_button_bar_hover_border_pen.SetColour(colour);
@@ -2444,7 +2452,9 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
     }
 
     dc.SetFont(m_button_bar_label_font);
-    dc.SetTextForeground(m_button_bar_label_colour);
+    dc.SetTextForeground(state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED
+                            ? m_button_bar_label_disabled_colour
+                            : m_button_bar_label_colour);
     DrawButtonBarButtonForeground(dc, rect, kind, state, label, bitmap_large,
         bitmap_small);
 }

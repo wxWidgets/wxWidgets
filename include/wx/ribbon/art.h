@@ -131,7 +131,8 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_COLOUR,
-    wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_GRADIENT_COLOUR
+    wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR
 };
 
 enum wxRibbonScrollButtonStyle
@@ -650,6 +651,7 @@ protected:
     wxColour m_tertiary_scheme_colour;
 
     wxColour m_button_bar_label_colour;
+    wxColour m_button_bar_label_disabled_colour;
     wxColour m_tab_label_colour;
     wxColour m_tab_separator_colour;
     wxColour m_tab_separator_gradient_colour;

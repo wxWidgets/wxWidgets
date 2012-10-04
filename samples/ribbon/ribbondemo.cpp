@@ -405,6 +405,11 @@ MyFrame::MyFrame()
         bar->AddButton(ID_CHANGE_TEXT1, wxT("One"), ribbon_xpm);
         bar->AddButton(ID_CHANGE_TEXT2, wxT("Two"), ribbon_xpm);
         bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, wxT("Zero"), ribbon_xpm);
+
+        //Also set the general disabled text colour:
+        wxRibbonArtProvider* artProvider = m_ribbon->GetArtProvider();
+        wxColour tColour = artProvider->GetColor(wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR);
+        artProvider->SetColor(wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR, tColour.MakeDisabled());
     }
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Empty Page"), empty_xpm);
     {
