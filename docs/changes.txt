@@ -563,6 +563,7 @@ All (GUI):
 - Add wxStyledTextCtrl::AnnotationClearLine() (sentieshar).
 - Add support for background-color style to span element in wxHTML (gevorg).
 - Add "inherit" to <font> XRC tag (Steffen Olszewski, Gero Meßsysteme GmbH).
+- Add support for wxALWAYS_SHOW_SB style to wxScrolled<> (Catalin Raceanu).
 
 wxGTK:
 

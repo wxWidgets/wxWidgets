@@ -109,6 +109,9 @@ enum wxScrollbarVisibility
            scrollable only in vertical direction (by default, i.e. if neither
            this style nor ::wxHSCROLL is specified, it scrolls in both
            directions).
+    @style{wxALWAYS_SHOW_SB}
+           Since wxWidgets 2.9.5, specifying this style makes the window always
+           show its scrollbars, even if they are not used. See ShowScrollbars().
     @style{wxRETAINED}
            Uses a backing pixmap to speed refreshes. Motif only.
     @endStyleTable

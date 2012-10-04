@@ -384,6 +384,9 @@ public:
         if ( !(style & (wxHSCROLL | wxVSCROLL)) )
             style |= wxHSCROLL | wxVSCROLL;
 
+        if ( style & wxALWAYS_SHOW_SB )
+            ShowScrollbars(wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS);
+
         return T::Create(parent, winid, pos, size, style, name);
     }
 
