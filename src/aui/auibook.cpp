@@ -1093,11 +1093,11 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
     {
         m_isDragging = false;
 
-        wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, m_windowId);
-        evt.SetSelection(GetIdxFromWindow(m_clickTab));
-        evt.SetOldSelection(evt.GetSelection());
-        evt.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(evt);
+        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, m_windowId);
+        e.SetSelection(GetIdxFromWindow(m_clickTab));
+        e.SetOldSelection(e.GetSelection());
+        e.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(e);
 
         return;
     }
@@ -1121,11 +1121,11 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 
         if (!(m_pressedButton->curState & wxAUI_BUTTON_STATE_DISABLED))
         {
-            wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, m_windowId);
-            evt.SetSelection(GetIdxFromWindow(m_clickTab));
-            evt.SetInt(m_pressedButton->id);
-            evt.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(evt);
+            wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, m_windowId);
+            e.SetSelection(GetIdxFromWindow(m_clickTab));
+            e.SetInt(m_pressedButton->id);
+            e.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(e);
         }
 
         m_pressedButton = NULL;
@@ -1254,11 +1254,11 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
 
     if (m_isDragging)
     {
-        wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, m_windowId);
-        evt.SetSelection(GetIdxFromWindow(m_clickTab));
-        evt.SetOldSelection(evt.GetSelection());
-        evt.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(evt);
+        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, m_windowId);
+        e.SetSelection(GetIdxFromWindow(m_clickTab));
+        e.SetOldSelection(e.GetSelection());
+        e.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(e);
         return;
     }
 
@@ -1269,11 +1269,11 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     if (abs(pos.x - m_clickPt.x) > drag_x_threshold ||
         abs(pos.y - m_clickPt.y) > drag_y_threshold)
     {
-        wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, m_windowId);
-        evt.SetSelection(GetIdxFromWindow(m_clickTab));
-        evt.SetOldSelection(evt.GetSelection());
-        evt.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(evt);
+        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, m_windowId);
+        e.SetSelection(GetIdxFromWindow(m_clickTab));
+        e.SetOldSelection(e.GetSelection());
+        e.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(e);
 
         m_isDragging = true;
     }

@@ -423,8 +423,8 @@ BEGIN_EVENT_TABLE(wxTreeTextCtrl,wxTextCtrl)
 END_EVENT_TABLE()
 
 wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
-                               wxGenericTreeItem *item)
-              : m_itemEdited(item), m_startValue(item->GetText())
+                               wxGenericTreeItem *itm)
+              : m_itemEdited(itm), m_startValue(itm->GetText())
 {
     m_owner = owner;
     m_aboutToFinish = false;

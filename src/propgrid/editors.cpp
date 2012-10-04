@@ -882,7 +882,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
             if ( comValIndex >= 0 )
             {
                 const wxPGCommonValue* cv = GetCommonValue(comValIndex);
-                wxPGCellRenderer* renderer = cv->GetRenderer();
+                renderer = cv->GetRenderer();
                 r.width = rect.width;
                 renderer->Render( dc, r, this, p, m_selColumn, comValIndex, renderFlags );
                 return;
@@ -1619,8 +1619,8 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
         // If mouse cursor was on the item, toggle the value now.
         if ( propGrid->GetInternalFlags() & wxPG_FL_ACTIVATION_BY_CLICK )
         {
-            wxPoint pt = cb->ScreenToClient(::wxGetMousePosition());
-            if ( pt.x <= (wxPG_XBEFORETEXT-2+cb->m_boxHeight) )
+            wxPoint point = cb->ScreenToClient(::wxGetMousePosition());
+            if ( point.x <= (wxPG_XBEFORETEXT-2+cb->m_boxHeight) )
             {
                 if ( cb->m_state & wxSCB_STATE_CHECKED )
                     cb->m_state &= ~wxSCB_STATE_CHECKED;

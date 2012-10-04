@@ -2530,9 +2530,9 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
                 Refresh(false);
                 if (res != -1)
                 {
-                    wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, res);
-                    e.SetEventObject(this);
-                    GetParent()->GetEventHandler()->ProcessEvent(e);
+                    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, res);
+                    event.SetEventObject(this);
+                    GetParent()->GetEventHandler()->ProcessEvent(event);
                 }
             }
 

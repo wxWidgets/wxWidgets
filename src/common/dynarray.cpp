@@ -158,13 +158,13 @@ void name::Grow(size_t nIncrement)                                          \
   if( (m_nCount == m_nSize) || ((m_nSize - m_nCount) < nIncrement) ) {      \
     if( m_nSize == 0 ) {                                                    \
       /* was empty, determine initial size */                               \
-      size_t size = WX_ARRAY_DEFAULT_INITIAL_SIZE;                          \
-      if (size < nIncrement) size = nIncrement;                             \
+      size_t sz = WX_ARRAY_DEFAULT_INITIAL_SIZE;                            \
+      if (sz < nIncrement) sz = nIncrement;                                 \
       /* allocate some memory */                                            \
-      m_pItems = new T[size];                                               \
+      m_pItems = new T[sz];                                                 \
       /* only grow if allocation succeeded */                               \
       if ( m_pItems ) {                                                     \
-          m_nSize = size;                                                   \
+          m_nSize = sz;                                                     \
       }                                                                     \
     }                                                                       \
     else                                                                    \

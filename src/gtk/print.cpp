@@ -1501,9 +1501,9 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
     int i;
     for (i = 1; i < n; i++)
     {
-        int x = points[i].x + xoffset;
-        int y = points[i].y + yoffset;
-        cairo_line_to( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
+        int xx = points[i].x + xoffset;
+        int yy = points[i].y + yoffset;
+        cairo_line_to( m_cairo, XLOG2DEV(xx), YLOG2DEV(yy) );
     }
     cairo_close_path(m_cairo);
 

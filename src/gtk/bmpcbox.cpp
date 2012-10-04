@@ -102,9 +102,9 @@ bool wxBitmapComboBox::Create(wxWindow *parent,
     // Select 'value' in entry-less mode
     if ( !GetEntry() )
     {
-        int n = FindString(value);
-        if ( n != wxNOT_FOUND )
-            SetSelection(n);
+        int i = FindString(value);
+        if (i != wxNOT_FOUND)
+            SetSelection(i);
     }
 
     return true;

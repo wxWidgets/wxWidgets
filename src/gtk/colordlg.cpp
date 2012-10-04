@@ -131,13 +131,13 @@ void wxColourDialog::ColourDataToDialog()
         gtk_color_selection_dialog_get_color_selection(
         GTK_COLOR_SELECTION_DIALOG(m_widget)));
 
-    const wxColour& c = m_data.GetColour();
-    if (c.IsOk())
+    const wxColour& color = m_data.GetColour();
+    if (color.IsOk())
     {
 #ifdef __WXGTK3__
-        gtk_color_selection_set_current_rgba(sel, c);
+        gtk_color_selection_set_current_rgba(sel, color);
 #else
-        gtk_color_selection_set_current_color(sel, c.GetColor());
+        gtk_color_selection_set_current_color(sel, color.GetColor());
 #endif
     }
 

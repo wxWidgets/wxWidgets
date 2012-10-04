@@ -289,7 +289,7 @@ public:
         T_LEFT_BRACKET, T_RIGHT_BRACKET
     };
     Type type() const { return m_type; }
-    void setType(Type type) { m_type = type; }
+    void setType(Type t) { m_type = t; }
     // for T_NUMBER only
     typedef int Number;
     Number number() const { return m_number; }
@@ -466,7 +466,7 @@ private:
 class wxPluralFormsNode
 {
 public:
-    wxPluralFormsNode(const wxPluralFormsToken& token) : m_token(token) {}
+    wxPluralFormsNode(const wxPluralFormsToken& t) : m_token(t) {}
     const wxPluralFormsToken& token() const { return m_token; }
     const wxPluralFormsNode* node(unsigned i) const
         { return m_nodes[i].get(); }

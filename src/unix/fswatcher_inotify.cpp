@@ -268,8 +268,8 @@ protected:
         // renames
         else if (nativeFlags & IN_MOVE)
         {
-            wxInotifyCookies::iterator it = m_cookies.find(inevt.cookie);
-            if ( it == m_cookies.end() )
+            wxInotifyCookies::iterator it2 = m_cookies.find(inevt.cookie);
+            if ( it2 == m_cookies.end() )
             {
                 int size = sizeof(inevt) + inevt.len;
                 inotify_event* e = (inotify_event*) operator new (size);
@@ -280,7 +280,7 @@ protected:
             }
             else
             {
-                inotify_event& oldinevt = *(it->second);
+                inotify_event& oldinevt = *(it2->second);
 
                 wxFileSystemWatcherEvent event(flags);
                 if ( inevt.mask & IN_MOVED_FROM )
@@ -295,7 +295,7 @@ protected:
                 }
                 SendEvent(event);
 
-                m_cookies.erase(it);
+                m_cookies.erase(it2);
                 delete &oldinevt;
             }
         }

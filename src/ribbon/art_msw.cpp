@@ -1428,7 +1428,7 @@ void wxRibbonMSWArtProvider::ReallyDrawTabSeparator(wxWindow* wnd, const wxRect&
 }
 
 void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
-        wxWindow* wnd, const wxRect& rect, wxRibbonPage* page,
+        wxWindow* wnd, const wxRect& r, wxRibbonPage* page,
         wxPoint offset, bool hovered)
 {
     wxRect background;
@@ -1465,7 +1465,7 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
     lower_rect.y += upper_rect.height;
     lower_rect.height -= upper_rect.height;
 
-    wxRect paint_rect(rect);
+    wxRect paint_rect(r);
     paint_rect.x += offset.x;
     paint_rect.y += offset.y;
 

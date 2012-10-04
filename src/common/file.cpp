@@ -204,17 +204,17 @@ bool wxFile::Create(const wxString& fileName, bool bOverwrite, int accessMode)
 {
     // if bOverwrite we create a new file or truncate the existing one,
     // otherwise we only create the new file and fail if it already exists
-    int fd = wxOpen( fileName,
+    int fildes = wxOpen( fileName,
                      O_BINARY | O_WRONLY | O_CREAT |
                      (bOverwrite ? O_TRUNC : O_EXCL),
                      accessMode );
-    if ( CheckForError(fd) )
+    if ( CheckForError(fildes) )
     {
         wxLogSysError(_("can't create file '%s'"), fileName);
         return false;
     }
 
-    Attach(fd);
+    Attach(fildes);
     return true;
 }
 
@@ -258,15 +258,15 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
     accessMode &= wxS_IRUSR | wxS_IWUSR;
 #endif // __WINDOWS__
 
-    int fd = wxOpen( fileName, flags, accessMode);
+    int fildes = wxOpen( fileName, flags, accessMode);
 
-    if ( CheckForError(fd) )
+    if ( CheckForError(fildes) )
     {
         wxLogSysError(_("can't open file '%s'"), fileName);
         return false;
     }
 
-    Attach(fd);
+    Attach(fildes);
     return true;
 }
 
@@ -304,11 +304,11 @@ bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
     {
         static const unsigned READSIZE = 4096;
 
-        ssize_t read = Read(p, length > READSIZE ? READSIZE : length);
-        if ( read == wxInvalidOffset )
+        ssize_t nread = Read(p, length > READSIZE ? READSIZE : length);
+        if ( nread == wxInvalidOffset )
             return false;
 
-        p += read;
+        p += nread;
     }
 
     *p = 0;

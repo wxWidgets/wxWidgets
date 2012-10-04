@@ -377,9 +377,9 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
     // if maximized bit changed and it is now set
     if (event->changed_mask & event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
     {
-        wxMaximizeEvent event(win->GetId());
-        event.SetEventObject(win);
-        win->HandleWindowEvent(event);
+        wxMaximizeEvent evt(win->GetId());
+        evt.SetEventObject(win);
+        win->HandleWindowEvent(evt);
     }
 
     return false;

@@ -2877,7 +2877,6 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             if ( !m_colAt.IsEmpty() )
             {
                 //Shift the column IDs
-                int i;
                 for ( i = 0; i < m_numCols - numCols; i++ )
                 {
                     if ( m_colAt[i] >= (int)pos )
@@ -2947,7 +2946,6 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 m_colAt.Add( 0, numCols );
 
                 //Set the new columns' positions
-                int i;
                 for ( i = oldNumCols; i < m_numCols; i++ )
                 {
                     m_colAt[i] = i;
@@ -3531,9 +3529,8 @@ void wxGrid::DoUpdateResizeColWidth(int w)
 
 void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 {
-    int x, y;
-    wxPoint pos( event.GetPosition() );
-    CalcUnscrolledPosition( pos.x, pos.y, &x, &y );
+    int x;
+    CalcUnscrolledPosition( event.GetPosition().x, 0, &x, NULL );
 
     int col = XToCol(x);
     if ( event.Dragging() )
@@ -3649,14 +3646,13 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     //
     else if ( event.LeftDown() )
     {
-        int col = XToEdgeOfCol(x);
-        if ( col != wxNOT_FOUND && CanDragColSize(col) )
+        int colEdge = XToEdgeOfCol(x);
+        if ( colEdge != wxNOT_FOUND && CanDragColSize(colEdge) )
         {
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, GetColLabelWindow());
         }
         else // not a request to start resizing
         {
-            col = XToCol(x);
             if ( col >= 0 &&
                  !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) )
             {
@@ -4415,14 +4411,14 @@ bool wxGrid::DoEndDragResizeLine(const wxGridOperations& oper)
             oper.SelectSize(rect) = oper.Select(size);
 
             int subtractLines = 0;
-            const int lineStart = doper.PosToLine(this, posLineStart);
-            if ( lineStart >= 0 )
+            int line = doper.PosToLine(this, posLineStart);
+            if ( line >= 0 )
             {
                 // ensure that if we have a multi-cell block we redraw all of
                 // it by increasing the refresh area to cover it entirely if a
                 // part of it is affected
                 const int lineEnd = doper.PosToLine(this, posLineEnd, true);
-                for ( int line = lineStart; line < lineEnd; line++ )
+                for ( ; line < lineEnd; line++ )
                 {
                     int cellLines = oper.Select(
                         GetCellSize(oper.MakeCoords(m_dragRowOrCol, line)));

@@ -172,7 +172,6 @@ wxMarkupParser::ParseAttrs(wxString attrs, TagAndAttrs& tagAndAttrs)
             else // Must be a CSS-like size specification
             {
                 int cssSize = 1;
-                wxString rest;
                 if ( value.StartsWith("xx-", &rest) )
                     cssSize = 3;
                 else if ( value.StartsWith("x-", &rest) )
