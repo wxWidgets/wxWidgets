@@ -1704,6 +1704,16 @@ public:
     int GetMonths() const;
 
     /**
+        Returns the combined number of months in this date span, counting both
+        years and months.
+
+        @see GetYears(), GetMonths()
+
+        @since 2.9.5
+    */
+    int GetTotalMonths() const;
+
+    /**
         Returns the combined number of days in this date span, counting both
         weeks and days. This doesn't take months or years into account.
 

@@ -535,7 +535,7 @@ All:
 - Fix compilation of wxHash{Map,Set} with g++ 4.7 (Nathan Ridge).
 - Fix posting large amounts of data in wxHTTP (Platonides).
 - Add wxFile::ReadAll() for consistency with wxFFile.
-- Add wxDateTime::DiffAsDateSpan() (jonasr).
+- Add wxDateTime::DiffAsDateSpan() and wxDateSpan::GetTotalMonths() (jonasr).
 - Added Nepali translation (Him Prasad Gautam).
 
 All (GUI):
