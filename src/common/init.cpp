@@ -410,6 +410,11 @@ static void DoCommonPostCleanup()
     delete wxMessageOutput::Set(NULL);
 
 #if wxUSE_LOG
+    // call this first as it has a side effect: in addition to flushing all
+    // logs for this thread, it also flushes everything logged from other
+    // threads
+    wxLog::FlushActive();
+
     // and now delete the last logger as well
     //
     // we still don't disable log target auto-vivification even if any log
