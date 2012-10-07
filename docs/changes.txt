@@ -574,6 +574,7 @@ wxGTK:
 - Provide native implementation of wxNotificationMessage using libnotify.
 - Generate clipboard events for wxComboBox and not only wxTextCtrl.
 - Improve drag-and-drop of URLs.
+- Make key event handling consistent with wxMSW (John Rails).
 
 wxMSW:
 

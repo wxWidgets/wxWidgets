@@ -640,6 +640,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect_after (m_widget, "focus_out_event",
                       G_CALLBACK (gtk_frame_focus_out_callback), this);
 
+    // GTK processes key events at the top level first, which handles for
+    // menu accelerators and shortcuts before passing the event on to the
+    // focus child window to begin propagation. We want to propagate
+    // first, so we connect gtk_window_propagate_key_event to
+    // key_press_event.
+    g_signal_connect (m_widget, "key_press_event",
+                      G_CALLBACK (gtk_window_propagate_key_event), NULL);
+
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
     if (GDK_IS_X11_SCREEN(gtk_window_get_screen(GTK_WINDOW(m_widget))))
