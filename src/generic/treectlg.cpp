@@ -1599,8 +1599,12 @@ wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
         {
             itemid = GetNext(itemid);
         }
-        // If we haven't found the item, id.IsOk() will be false, as per
-        // documentation
+        // If we haven't found the item but wrapped back to the one we started
+        // from, id.IsOk() must be false
+        if ( itemid == idParent )
+        {
+            itemid = wxTreeItemId();
+        }
     }
 
     return itemid;
