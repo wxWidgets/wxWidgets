@@ -3310,17 +3310,23 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             {
                 // find the next item starting with the given prefix
                 wxChar ch = (wxChar)keyCode;
+                wxTreeItemId id;
 
-                wxTreeItemId id = FindItem(m_current, m_findPrefix + ch);
-                if ( !id.IsOk() )
+                // if the same character is typed multiple times then go to the
+                // next entry starting with that character instead of searching
+                // for an item starting with multiple copies of this character,
+                // this is more useful and is how it works under Windows.
+                if ( m_findPrefix.length() == 1 && m_findPrefix[0] == ch )
                 {
-                    // no such item
-                    break;
+                    id = FindItem(m_current, ch);
                 }
-
-                SelectItem(id);
-
-                m_findPrefix += ch;
+                else
+                {
+                    const wxString newPrefix(m_findPrefix + ch);
+                    id = FindItem(m_current, newPrefix);
+                    if ( id.IsOk() )
+                        m_findPrefix = newPrefix;
+                }
 
                 // also start the timer to reset the current prefix if the user
                 // doesn't press any more alnum keys soon -- we wouldn't want
@@ -3330,7 +3336,14 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                     m_findTimer = new wxTreeFindTimer(this);
                 }
 
+                // Notice that we should start the timer even if we didn't find
+                // anything to make sure we reset the search state later.
                 m_findTimer->Start(wxTreeFindTimer::DELAY, wxTIMER_ONE_SHOT);
+
+                if ( id.IsOk() )
+                {
+                    SelectItem(id);
+                }
             }
             else
             {
