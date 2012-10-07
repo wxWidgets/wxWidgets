@@ -1167,7 +1167,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // draw the HTML window contents
     dc->SetMapMode(wxMM_TEXT);
-    dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    dc->SetBackgroundMode(wxTRANSPARENT);
     dc->SetLayoutDirection(GetLayoutDirection());
 
     wxHtmlRenderingInfo rinfo;
