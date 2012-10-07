@@ -259,6 +259,8 @@ private:
 //                  the wxHtmlWinParser object
 //-----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_HTML wxHtmlStyleParams;
+
 class WXDLLIMPEXP_HTML wxHtmlWinTagHandler : public wxHtmlTagHandler
 {
     DECLARE_ABSTRACT_CLASS(wxHtmlWinTagHandler)
@@ -270,6 +272,8 @@ public:
 
 protected:
     wxHtmlWinParser *m_WParser; // same as m_Parser, but overcasted
+
+    void ApplyStyle(const wxHtmlStyleParams &styleParams);
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlWinTagHandler);
 };

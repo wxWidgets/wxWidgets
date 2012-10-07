@@ -562,6 +562,7 @@ All (GUI):
 - Show tooltips for the too long items in generic wxTreeCtrl (Steven Houchins).
 - Add wxStyledTextCtrl::AnnotationClearLine() (sentieshar).
 - Add support for background-color style to span element in wxHTML (gevorg).
+- Add limited support for CSS styles for <a> tags too in wxHTML (gevorg).
 - Add "inherit" to <font> XRC tag (Steffen Olszewski, Gero Meßsysteme GmbH).
 - Add support for wxALWAYS_SHOW_SB style to wxScrolled<> (Catalin Raceanu).
 

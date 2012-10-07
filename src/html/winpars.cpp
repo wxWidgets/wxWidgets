@@ -25,6 +25,7 @@
 #include "wx/html/htmldefs.h"
 #include "wx/html/winpars.h"
 #include "wx/html/htmlwin.h"
+#include "wx/html/styleparams.h"
 #include "wx/fontmap.h"
 #include "wx/uri.h"
 
@@ -752,6 +753,112 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxHtmlWinTagHandler, wxHtmlTagHandler)
+
+void wxHtmlWinTagHandler::ApplyStyle(const wxHtmlStyleParams &styleParams)
+{
+    wxString str;
+
+    str = styleParams.GetParam(wxS("color"));
+    if ( !str.empty() )
+    {
+        wxColour clr;
+        if ( wxHtmlTag::ParseAsColour(str, &clr) )
+        {
+            m_WParser->SetActualColor(clr);
+            m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr));
+        }
+    }
+
+    str = styleParams.GetParam(wxS("background-color"));
+    if ( !str.empty() )
+    {
+        wxColour clr;
+        if ( wxHtmlTag::ParseAsColour(str, &clr) )
+        {
+            m_WParser->SetActualBackgroundColor(clr);
+            m_WParser->SetActualBackgroundMode(wxSOLID);
+            m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
+        }
+    }
+
+    str = styleParams.GetParam(wxS("font-size"));
+    if ( !str.empty() )
+    {
+        // Point size
+        int foundIndex = str.Find(wxS("pt"));
+        if (foundIndex != wxNOT_FOUND)
+        {
+            str.Truncate(foundIndex);
+
+            long sizeValue;
+            if (str.ToLong(&sizeValue) == true)
+            {
+                // Set point size
+                m_WParser->SetFontPointSize(sizeValue);
+                m_WParser->GetContainer()->InsertCell(
+                    new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+            }
+        }
+        // else: check for other ways of specifying size (TODO)
+    }
+
+    str = styleParams.GetParam(wxS("font-weight"));
+    if ( !str.empty() )
+    {
+        // Only bold and normal supported just now
+        if ( str == wxS("bold") )
+        {
+            m_WParser->SetFontBold(true);
+            m_WParser->GetContainer()->InsertCell(
+                new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+        }
+        else if ( str == wxS("normal") )
+        {
+            m_WParser->SetFontBold(false);
+            m_WParser->GetContainer()->InsertCell(
+                new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+        }
+    }
+
+    str = styleParams.GetParam(wxS("font-style"));
+    if ( !str.empty() )
+    {
+        // "oblique" and "italic" are more or less the same.
+        // "inherit" (using the parent font) is not supported.
+        if ( str == wxS("oblique") || str == wxS("italic") )
+        {
+            m_WParser->SetFontItalic(true);
+            m_WParser->GetContainer()->InsertCell(
+                new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+        }
+        else if ( str == wxS("normal") )
+        {
+            m_WParser->SetFontItalic(false);
+            m_WParser->GetContainer()->InsertCell(
+                new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+        }
+    }
+
+    str = styleParams.GetParam(wxS("text-decoration"));
+    if ( !str.empty() )
+    {
+        // Only underline is supported.
+        if ( str == wxS("underline") )
+        {
+            m_WParser->SetFontUnderlined(true);
+            m_WParser->GetContainer()->InsertCell(
+                new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+        }
+    }
+
+    str = styleParams.GetParam(wxS("font-family"));
+    if ( !str.empty() )
+    {
+        m_WParser->SetFontFace(str);
+        m_WParser->GetContainer()->InsertCell(
+            new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
+    }
+}
 
 //-----------------------------------------------------------------------------
 // wxHtmlTagsModule
