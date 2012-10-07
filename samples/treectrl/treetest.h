@@ -222,6 +222,7 @@ public:
     void OnToggleButtons(wxCommandEvent& event);
     void OnToggleImages(wxCommandEvent& event);
     void OnToggleStates(wxCommandEvent& event);
+    void OnToggleBell(wxCommandEvent& event);
     void OnToggleAlternateImages(wxCommandEvent& event);
     void OnToggleAlternateStates(wxCommandEvent& event);
     void OnSetImageSize(wxCommandEvent& event);
@@ -339,6 +340,7 @@ enum
     TreeTest_Recreate,
     TreeTest_ToggleImages,
     TreeTest_ToggleStates,
+    TreeTest_ToggleBell,
     TreeTest_ToggleAlternateImages,
     TreeTest_ToggleAlternateStates,
     TreeTest_ToggleButtons,

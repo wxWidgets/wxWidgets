@@ -349,6 +349,10 @@ public:
     virtual void EndEditLabel(const wxTreeItemId& item,
                               bool discardChanges = false) = 0;
 
+        // Enable or disable beep when incremental match doesn't find any item.
+        // Only implemented in the generic version currently.
+    virtual void EnableBellOnNoMatch(bool WXUNUSED(on) = true) { }
+
     // sorting
     // -------
 

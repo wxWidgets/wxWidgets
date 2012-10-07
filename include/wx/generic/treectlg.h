@@ -65,7 +65,6 @@ public:
                 const wxValidator &validator = wxDefaultValidator,
                 const wxString& name = wxTreeCtrlNameStr);
 
-
     // implement base class pure virtuals
     // ----------------------------------
 
@@ -168,6 +167,8 @@ public:
     virtual wxTextCtrl *GetEditControl() const;
     virtual void EndEditLabel(const wxTreeItemId& item,
                               bool discardChanges = false);
+
+    virtual void EnableBellOnNoMatch(bool on = true);
 
     virtual void SortChildren(const wxTreeItemId& item);
 
@@ -275,6 +276,10 @@ protected:
     // incremental search data
     wxString             m_findPrefix;
     wxTimer             *m_findTimer;
+    // This flag is set to 0 if the bell is disabled, 1 if it is enabled and -1
+    // if it is globally enabled but has been temporarily disabled because we
+    // had already beeped for this particular search.
+    int                  m_findBell;
 
     bool                 m_dropEffectAboveItem;
 
@@ -352,6 +357,10 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
 private:
+    // Reset the state of the last find (i.e. keyboard incremental search)
+    // operation.
+    void ResetFindState();
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl)
     wxDECLARE_NO_COPY_CLASS(wxGenericTreeCtrl);

@@ -113,6 +113,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(Recreate)
     MENU_LINK(ToggleImages)
     MENU_LINK(ToggleStates)
+    MENU_LINK(ToggleBell)
     MENU_LINK(ToggleAlternateImages)
     MENU_LINK(ToggleAlternateStates)
     MENU_LINK(ToggleButtons)
@@ -247,6 +248,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 #endif // NO_MULTIPLE_SELECTION
     style_menu->AppendCheckItem(TreeTest_ToggleImages, wxT("Toggle show ima&ges"));
     style_menu->AppendCheckItem(TreeTest_ToggleStates, wxT("Toggle show st&ates"));
+    style_menu->AppendCheckItem(TreeTest_ToggleBell, wxT("Toggle &bell on no match"));
     style_menu->AppendCheckItem(TreeTest_ToggleAlternateImages, wxT("Toggle alternate images"));
     style_menu->AppendCheckItem(TreeTest_ToggleAlternateStates, wxT("Toggle alternate state images"));
     style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
@@ -703,6 +705,11 @@ void MyFrame::OnToggleStates(wxCommandEvent& WXUNUSED(event))
         m_treeCtrl->CreateStateImageList(false);
         wxGetApp().SetShowStates(true);
     }
+}
+
+void MyFrame::OnToggleBell(wxCommandEvent& event)
+{
+    m_treeCtrl->EnableBellOnNoMatch(event.IsChecked());
 }
 
 void MyFrame::OnToggleAlternateImages(wxCommandEvent& WXUNUSED(event))

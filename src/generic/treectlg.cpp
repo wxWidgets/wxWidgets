@@ -127,7 +127,7 @@ public:
 
     wxTreeFindTimer( wxGenericTreeCtrl *owner ) { m_owner = owner; }
 
-    virtual void Notify() { m_owner->m_findPrefix.clear(); }
+    virtual void Notify() { m_owner->ResetFindState(); }
 
 private:
     wxGenericTreeCtrl *m_owner;
@@ -956,6 +956,7 @@ void wxGenericTreeCtrl::Init()
     m_renameTimer = NULL;
 
     m_findTimer = NULL;
+    m_findBell = 0;  // default is to not ring bell at all
 
     m_dropEffectAboveItem = false;
 
@@ -1043,6 +1044,11 @@ wxGenericTreeCtrl::~wxGenericTreeCtrl()
 
     if (m_ownsImageListButtons)
         delete m_imageListButtons;
+}
+
+void wxGenericTreeCtrl::EnableBellOnNoMatch( bool on )
+{
+    m_findBell = on;
 }
 
 // -----------------------------------------------------------------------------
@@ -1555,6 +1561,13 @@ wxTreeItemId wxGenericTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 void wxGenericTreeCtrl::ResetTextControl()
 {
     m_textCtrl = NULL;
+}
+
+void wxGenericTreeCtrl::ResetFindState()
+{
+    m_findPrefix.clear();
+    if ( m_findBell )
+        m_findBell = 1;
 }
 
 // find the first item starting with the given prefix after the given item
@@ -3347,6 +3360,24 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                 if ( id.IsOk() )
                 {
                     SelectItem(id);
+
+                    // Reset the bell flag if it had been temporarily disabled
+                    // before.
+                    if ( m_findBell )
+                        m_findBell = 1;
+                }
+                else // No such item
+                {
+                    // Signal it with a bell if enabled.
+                    if ( m_findBell == 1 )
+                    {
+                        ::wxBell();
+
+                        // Disable it for the next unsuccessful match, we only
+                        // beep once, this is usually enough and continuing to
+                        // do it would be annoying.
+                        m_findBell = -1;
+                    }
                 }
             }
             else

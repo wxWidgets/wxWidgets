@@ -565,6 +565,7 @@ All (GUI):
 - Add limited support for CSS styles for <a> tags too in wxHTML (gevorg).
 - Add "inherit" to <font> XRC tag (Steffen Olszewski, Gero Meßsysteme GmbH).
 - Add support for wxALWAYS_SHOW_SB style to wxScrolled<> (Catalin Raceanu).
+- Add wxTreeCtrl::EnableBellOnNoMatch() (Jonathan Dagresta).
 
 wxGTK:
 
