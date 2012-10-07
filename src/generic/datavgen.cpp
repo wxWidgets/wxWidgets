@@ -3939,9 +3939,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    // set the focus to ourself if any of the mouse buttons are pressed
-    if(event.ButtonDown() && !HasFocus())
-        SetFocus();
+    if(event.LeftDown())
+    {
+        // Not skipping this event would prevent the system from setting focus
+        // to this window.
+        event.Skip();
+    }
 
     int x = event.GetX();
     int y = event.GetY();
