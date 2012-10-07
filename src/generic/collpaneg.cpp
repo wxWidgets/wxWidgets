@@ -190,6 +190,8 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
     if ( IsCollapsed() == collapse )
         return;
 
+    InvalidateBestSize();
+
     // update our state
     m_pPane->Show(!collapse);
 
