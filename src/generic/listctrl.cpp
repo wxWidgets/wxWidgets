@@ -2300,7 +2300,10 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 #endif // __WXMAC__
 
     if ( event.LeftDown() )
-        SetFocus();
+    {
+        // Ensure we skip the event to let the system set focus to this window.
+        event.Skip();
+    }
 
     // Pretend that the event happened in wxListCtrl itself.
     wxMouseEvent me(event);
