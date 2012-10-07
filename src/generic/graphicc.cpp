@@ -2186,7 +2186,7 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
 {
     widths.Empty();
     wxCHECK_RET( !m_font.IsNull(), wxT("wxCairoContext::GetPartialTextExtents - no valid font set") );
-#if __WXGTK__
+#ifdef __WXGTK__
     const wxCharBuffer data = text.utf8_str();
     int w = 0;
     if (data.length())
