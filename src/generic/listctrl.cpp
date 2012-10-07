@@ -2470,9 +2470,10 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                     m_renameTimer->Start(dclick > 0 ? dclick : 250, true);
                 }
             }
+
+            m_lastOnSame = false;
         }
 
-        m_lastOnSame = false;
         m_lineSelectSingleOnUp = (size_t)-1;
     }
     else
@@ -2564,8 +2565,16 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (m_current != oldCurrent)
             RefreshLine( oldCurrent );
 
-        // forceClick is only set if the previous click was on another item
-        m_lastOnSame = !forceClick && (m_current == oldCurrent) && oldWasSelected;
+        // Set the flag telling us whether the next click on this item should
+        // start editing its label. This should happen if we clicked on the
+        // current item and it was already selected, i.e. if this click was not
+        // done to select it.
+        //
+        // It should not happen if this was a double click (forceClick is true)
+        // nor if we hadn't had the focus before as then this click was used to
+        // give focus to the control.
+        m_lastOnSame = (m_current == oldCurrent) && oldWasSelected &&
+                            !forceClick && HasFocus();
     }
 }
 

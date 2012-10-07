@@ -4289,8 +4289,15 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         m_currentCol = col;
         m_currentColSetByKeyboard = false;
 
+        // This flag is used to decide whether we should start editing the item
+        // label. We do it if the user clicks twice (but not double clicks,
+        // i.e. simulateClick is false) on the same item but not if the click
+        // was used for something else already, e.g. selecting the item (so it
+        // must have been already selected) or giving the focus to the control
+        // (so it must have had focus already).
         m_lastOnSame = !simulateClick && ((col == oldCurrentCol) &&
-                        (current == oldCurrentRow)) && oldWasSelected;
+                        (current == oldCurrentRow)) && oldWasSelected &&
+                        HasFocus();
 
         // Call ActivateCell() after everything else as under GTK+
         if ( IsCellEditableInMode(item, col, wxDATAVIEW_CELL_ACTIVATABLE) )

@@ -3779,7 +3779,14 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             // ==> LeftDown() || LeftDClick()
             if ( event.LeftDown() )
             {
-                m_lastOnSame = item == m_current;
+                // If we click on an already selected item but do it to return
+                // the focus to the control, it shouldn't start editing the
+                // item label because it's too easy to start editing
+                // accidentally (and also because nobody else does it like
+                // this). So only set this flag, used to decide whether we
+                // should start editing the label later, if we already have
+                // focus.
+                m_lastOnSame = item == m_current && HasFocus();
             }
 
             if ( flags & wxTREE_HITTEST_ONITEMBUTTON )
