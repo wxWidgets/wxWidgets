@@ -3305,7 +3305,8 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             if ( !event.HasModifiers() &&
                  ((keyCode >= '0' && keyCode <= '9') ||
                   (keyCode >= 'a' && keyCode <= 'z') ||
-                  (keyCode >= 'A' && keyCode <= 'Z' )))
+                  (keyCode >= 'A' && keyCode <= 'Z') ||
+                  (keyCode == '_')))
             {
                 // find the next item starting with the given prefix
                 wxChar ch = (wxChar)keyCode;
