@@ -194,11 +194,8 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
 
     if (page.active)
         tab_rect.height += 2 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
-    // if no bitmap is set, we need a tiny correction
-    if (! page.bitmap.IsOk())
-        tab_rect.height += 1;
 
-    int gap_rect_height = 6 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
+    int gap_rect_height = 10 * GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder;
     int gap_rect_x = 1, gap_start = 0, gap_width = 0;
     int gap_rect_y = tab_rect.y - gap_rect_height;
     int gap_rect_width = window_rect.width;
@@ -238,6 +235,15 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     GdkWindow* window = impldc->GetGDKWindow();
 
+    // Before drawing the active tab itself, draw a box without border, because some themes
+    // have transparent gaps and a line would be visible at the bottom of the tab
+    if (page.active)
+        gtk_paint_box(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+                      NULL, widget,
+                      const_cast<char*>("notebook"),
+                      gap_rect_x, gap_rect_y,
+                      gap_rect_width, gap_rect_height);
+
     if (tab_pos == wxAUI_NB_BOTTOM)
     {
         if (page.active)
@@ -276,6 +282,15 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
                            tab_rect.width, tab_rect.height,
                            GTK_POS_BOTTOM);
     }
+
+    // After drawing the inactive tab itself, draw a box with the same dimensions as the gap-box,
+    // otherwise we don't get a gap-box, if the active tab is invisible
+    if (!page.active)
+        gtk_paint_box(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+                      NULL, widget,
+                      const_cast<char*>("notebook"),
+                      gap_rect_x, gap_rect_y,
+                      gap_rect_width, gap_rect_height);
 
     wxCoord textX = tab_rect.x + padding + style_notebook->xthickness;
 
