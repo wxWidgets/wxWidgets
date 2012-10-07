@@ -147,6 +147,7 @@ protected:
     void OnThaw(wxCommandEvent& event);
     void OnToggleLines(wxCommandEvent& event);
     void OnToggleHeader(wxCommandEvent& event);
+    void OnToggleBell(wxCommandEvent& event);
 #ifdef __WXOSX__
     void OnToggleMacUseGeneric(wxCommandEvent& event);
 #endif // __WXOSX__
@@ -219,6 +220,7 @@ enum
     LIST_SET_BG_COL,
     LIST_TOGGLE_MULTI_SEL,
     LIST_TOGGLE_HEADER,
+    LIST_TOGGLE_BELL,
     LIST_TOGGLE_FIRST,
     LIST_SHOW_COL_INFO,
     LIST_SHOW_SEL_INFO,

@@ -391,6 +391,27 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+// wxListFindTimer (internal)
+//-----------------------------------------------------------------------------
+
+class wxListFindTimer: public wxTimer
+{
+public:
+    // reset the current prefix after half a second of inactivity
+    enum { DELAY = 500 };
+
+    wxListFindTimer( wxListMainWindow *owner )
+        : m_owner(owner)
+    {
+    }
+
+    virtual void Notify();
+
+private:
+    wxListMainWindow *m_owner;
+};
+
+//-----------------------------------------------------------------------------
 // wxListTextCtrlWrapper: wraps a wxTextCtrl to make it work for inline editing
 //-----------------------------------------------------------------------------
 
@@ -555,6 +576,11 @@ public:
     void OnRenameTimer();
     bool OnRenameAccept(size_t itemEdit, const wxString& value);
     void OnRenameCancelled(size_t itemEdit);
+
+    void OnFindTimer();
+    // set whether or not to ring the find bell
+    // (does nothing on MSW - bell is always rung)
+    void EnableBellOnNoMatch( bool on );
 
     void OnMouse( wxMouseEvent &event );
 
@@ -729,6 +755,15 @@ protected:
 
     bool                 m_lastOnSame;
     wxTimer             *m_renameTimer;
+
+    // incremental search data
+    wxString             m_findPrefix;
+    wxTimer             *m_findTimer;
+    // This flag is set to 0 if the bell is disabled, 1 if it is enabled and -1
+    // if it is globally enabled but has been temporarily disabled because we
+    // had already beeped for this particular search.
+    int                  m_findBell;
+
     bool                 m_isCreated;
     int                  m_dragCount;
     wxPoint              m_dragStart;
@@ -778,6 +813,9 @@ protected:
 
     // force us to recalculate the range of visible lines
     void ResetVisibleLinesRange() { m_lineFrom = (size_t)-1; }
+
+    // find the first item starting with the given prefix after the given item
+    size_t PrefixFindItem(size_t item, const wxString& prefix) const;
 
     // get the colour to be used for drawing the rules
     wxColour GetRuleColour() const

@@ -149,6 +149,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
     EVT_MENU(LIST_TOGGLE_HEADER, MyFrame::OnToggleHeader)
+    EVT_MENU(LIST_TOGGLE_BELL, MyFrame::OnToggleBell)
 #ifdef __WXOSX__
     EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
 #endif // __WXOSX__
@@ -258,6 +259,7 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->Check(LIST_TOGGLE_MULTI_SEL, true);
     menuList->AppendCheckItem(LIST_TOGGLE_HEADER, "Toggle &header\tCtrl-H");
     menuList->Check(LIST_TOGGLE_HEADER, true);
+    menuList->AppendCheckItem(LIST_TOGGLE_BELL, "Toggle &bell on no match");
 
     wxMenu *menuCol = new wxMenu;
     menuCol->Append(LIST_SET_FG_COL, wxT("&Foreground colour..."));
@@ -366,6 +368,11 @@ void MyFrame::OnToggleHeader(wxCommandEvent& event)
     m_listCtrl->ToggleWindowStyle(wxLC_NO_HEADER);
 }
 
+void MyFrame::OnToggleBell(wxCommandEvent& event)
+{
+    m_listCtrl->EnableBellOnNoMatch(event.IsChecked());
+}
+
 #ifdef __WXOSX__
 
 void MyFrame::OnToggleMacUseGeneric(wxCommandEvent& event)
@@ -468,6 +475,10 @@ void MyFrame::RecreateList(long flags, bool withText)
             default:
                 wxFAIL_MSG( wxT("unknown listctrl mode") );
         }
+
+        wxMenuBar* const mb = GetMenuBar();
+        if ( mb )
+            m_listCtrl->EnableBellOnNoMatch(mb->IsChecked(LIST_TOGGLE_BELL));
     }
 
     DoSize();
@@ -1096,6 +1107,13 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
     long item;
 
+    if ( !wxGetKeyState(WXK_SHIFT) )
+    {
+        LogEvent(event, wxT("OnListKeyDown"));
+        event.Skip();
+        return;
+    }
+
     switch ( event.GetKeyCode() )
     {
         case 'C': // colorize
@@ -1237,26 +1255,7 @@ void MyListCtrl::OnChar(wxKeyEvent& event)
 {
     wxLogMessage(wxT("Got char event."));
 
-    switch ( event.GetKeyCode() )
-    {
-        case 'n':
-        case 'N':
-        case 'c':
-        case 'C':
-        case 'r':
-        case 'R':
-        case 'u':
-        case 'U':
-        case 'd':
-        case 'D':
-        case 'i':
-        case 'I':
-            // these are the keys we process ourselves
-            break;
-
-        default:
-            event.Skip();
-    }
+    event.Skip();
 }
 
 void MyListCtrl::OnRightClick(wxMouseEvent& event)

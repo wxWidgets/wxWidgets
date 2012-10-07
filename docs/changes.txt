@@ -566,6 +566,7 @@ All (GUI):
 - Add "inherit" to <font> XRC tag (Steffen Olszewski, Gero Meßsysteme GmbH).
 - Add support for wxALWAYS_SHOW_SB style to wxScrolled<> (Catalin Raceanu).
 - Add wxTreeCtrl::EnableBellOnNoMatch() (Jonathan Dagresta).
+- Implement incremental search in wxGenericListCtrl (Jonathan Dagresta).
 
 wxGTK:
 

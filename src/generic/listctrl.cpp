@@ -1372,6 +1372,15 @@ void wxListRenameTimer::Notify()
 }
 
 //-----------------------------------------------------------------------------
+// wxListFindTimer (internal)
+//-----------------------------------------------------------------------------
+
+void wxListFindTimer::Notify()
+{
+    m_owner->OnFindTimer();
+}
+
+//-----------------------------------------------------------------------------
 // wxListTextCtrlWrapper (internal)
 //-----------------------------------------------------------------------------
 
@@ -1563,6 +1572,8 @@ void wxListMainWindow::Init()
 
     m_lastOnSame = false;
     m_renameTimer = new wxListRenameTimer( this );
+    m_findTimer = NULL;
+    m_findBell = 0;  // default is to not ring bell at all
     m_textctrlWrapper = NULL;
 
     m_current =
@@ -1625,6 +1636,7 @@ wxListMainWindow::~wxListMainWindow()
     delete m_highlightBrush;
     delete m_highlightUnfocusedBrush;
     delete m_renameTimer;
+    delete m_findTimer;
 }
 
 void wxListMainWindow::SetReportView(bool inReportView)
@@ -2288,6 +2300,18 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
     GetEventHandler()->ProcessEvent( le );
 }
 
+void wxListMainWindow::OnFindTimer()
+{
+    m_findPrefix.clear();
+    if ( m_findBell )
+        m_findBell = 1;
+}
+
+void wxListMainWindow::EnableBellOnNoMatch( bool on )
+{
+    m_findBell = on;
+}
+
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
 #ifdef __WXMAC__
@@ -2801,7 +2825,8 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             event.m_keyCode = WXK_RIGHT;
     }
 
-    switch ( event.GetKeyCode() )
+    int keyCode = event.GetKeyCode();
+    switch ( keyCode )
     {
         case WXK_UP:
             if ( m_current > 0 )
@@ -2899,7 +2924,79 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         default:
-            event.Skip();
+            if ( !event.HasModifiers() &&
+                 ((keyCode >= '0' && keyCode <= '9') ||
+                  (keyCode >= 'a' && keyCode <= 'z') ||
+                  (keyCode >= 'A' && keyCode <= 'Z') ||
+                  (keyCode == '_') ||
+                  (keyCode == '+') ||
+                  (keyCode == '*') ||
+                  (keyCode == '-')))
+            {
+                // find the next item starting with the given prefix
+                wxChar ch = (wxChar)keyCode;
+                size_t item;
+
+                // if the same character is typed multiple times then go to the
+                // next entry starting with that character instead of searching
+                // for an item starting with multiple copies of this character,
+                // this is more useful and is how it works under Windows.
+                if ( m_findPrefix.length() == 1 && m_findPrefix[0] == ch )
+                {
+                    item = PrefixFindItem(m_current, ch);
+                }
+                else
+                {
+                    const wxString newPrefix(m_findPrefix + ch);
+                    item = PrefixFindItem(m_current, newPrefix);
+                    if ( item != (size_t)-1 )
+                        m_findPrefix = newPrefix;
+                }
+
+                // also start the timer to reset the current prefix if the user
+                // doesn't press any more alnum keys soon -- we wouldn't want
+                // to use this prefix for a new item search
+                if ( !m_findTimer )
+                {
+                    m_findTimer = new wxListFindTimer( this );
+                }
+
+                // Notice that we should start the timer even if we didn't find
+                // anything to make sure we reset the search state later.
+                m_findTimer->Start(wxListFindTimer::DELAY, wxTIMER_ONE_SHOT);
+
+                // restart timer even when there's no match so bell get's reset
+                if ( item != (size_t)-1 )
+                {
+                    // Select the found item and go to it.
+                    HighlightAll(false);
+                    SetItemState(item,
+                                 wxLIST_STATE_FOCUSED | wxLIST_STATE_SELECTED,
+                                 wxLIST_STATE_FOCUSED | wxLIST_STATE_SELECTED);
+
+                    // Reset the bell flag if it had been temporarily disabled
+                    // before.
+                    if ( m_findBell )
+                        m_findBell = 1;
+                }
+                else // No such item
+                {
+                    // Signal it with a bell if enabled.
+                    if ( m_findBell == 1 )
+                    {
+                        ::wxBell();
+
+                        // Disable it for the next unsuccessful match, we only
+                        // beep once, this is usually enough and continuing to
+                        // do it would be annoying.
+                        m_findBell = -1;
+                    }
+                }
+            }
+            else
+            {
+                event.Skip();
+            }
     }
 }
 
@@ -4321,6 +4418,61 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
         *to = m_lineTo;
 }
 
+size_t
+wxListMainWindow::PrefixFindItem(size_t idParent,
+                                 const wxString& prefixOrig) const
+{
+    // if no items then just return
+    if ( idParent == (size_t)-1 )
+        return idParent;
+
+    // match is case insensitive as this is more convenient to the user: having
+    // to press Shift-letter to go to the item starting with a capital letter
+    // would be too bothersome
+    wxString prefix = prefixOrig.Lower();
+
+    // determine the starting point: we shouldn't take the current item (this
+    // allows to switch between two items starting with the same letter just by
+    // pressing it) but we shouldn't jump to the next one if the user is
+    // continuing to type as otherwise he might easily skip the item he wanted
+    size_t itemid = idParent;
+    if ( prefix.length() == 1 )
+    {
+        itemid += 1;
+    }
+
+    // look for the item starting with the given prefix after it
+    while ( ( itemid < (size_t)GetItemCount() ) &&
+            !GetLine(itemid)->GetText(0).Lower().StartsWith(prefix) )
+    {
+        itemid += 1;
+    }
+
+    // if we haven't found anything...
+    if ( !( itemid < (size_t)GetItemCount() ) )
+    {
+        // ... wrap to the beginning
+        itemid = 0;
+
+        // and try all the items (stop when we get to the one we started from)
+        while ( ( itemid < (size_t)GetItemCount() ) && itemid != idParent &&
+                    !GetLine(itemid)->GetText(0).Lower().StartsWith(prefix) )
+        {
+            itemid += 1;
+        }
+        // If we haven't found the item, id will be (size_t)-1, as per
+        // documentation
+        if ( !( itemid < (size_t)GetItemCount() ) ||
+             ( ( itemid == idParent ) &&
+               !GetLine(itemid)->GetText(0).Lower().StartsWith(prefix) ) )
+        {
+            itemid = (size_t)-1;
+        }
+    }
+
+    return itemid;
+}
+
 // -------------------------------------------------------------------------------------
 // wxGenericListCtrl
 // -------------------------------------------------------------------------------------
@@ -5278,6 +5430,11 @@ void wxGenericListCtrl::RefreshItem(long item)
 void wxGenericListCtrl::RefreshItems(long itemFrom, long itemTo)
 {
     m_mainWin->RefreshLines(itemFrom, itemTo);
+}
+
+void wxGenericListCtrl::EnableBellOnNoMatch( bool on )
+{
+    m_mainWin->EnableBellOnNoMatch(on);
 }
 
 // Generic wxListCtrl is more or less a container for two other
