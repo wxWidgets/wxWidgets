@@ -2811,6 +2811,13 @@ public:
     void AutoSizeRows(bool setAsMin = true);
 
     /**
+        Returns @true if the cell value can overflow.
+
+        A cell can overflow if the next cell in the row is empty.
+    */
+    bool GetCellOverflow(int row, int col) const;
+
+    /**
         Returns the current height of the column labels.
     */
     int GetColLabelSize() const;
@@ -2834,6 +2841,11 @@ public:
         Returns @true if the specified column is not currently hidden.
      */
     bool IsColShown(int col) const;
+
+    /**
+        Returns @true if the cells can overflow by default.
+    */
+    bool GetDefaultCellOverflow() const;
 
     /**
         Returns the default height for column labels.
@@ -2879,6 +2891,11 @@ public:
         Returns @true if the specified row is not currently hidden.
      */
     bool IsRowShown(int row) const;
+
+    /**
+        Sets the overflow permission of the cell.
+    */
+    void SetCellOverflow(int row, int col, bool allow);
 
     /**
         Sets the height of the column labels.
@@ -2946,6 +2963,11 @@ public:
      */
     void ShowCol(int col);
 
+
+    /**
+        Sets the default overflow permission of the cells.
+    */
+    void SetDefaultCellOverflow( bool allow );
 
     /**
         Sets the default width for columns in the grid.
