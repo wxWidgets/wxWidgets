@@ -197,6 +197,7 @@ public:
     void SetPrintConfig( GtkPrintSettings * config );
 
     GtkPrintOperation* GetPrintJob() { return m_job; }
+    void SetPrintJob(GtkPrintOperation *job) { m_job = job; }
 
     GtkPrintContext *GetPrintContext() { return m_context; }
     void SetPrintContext(GtkPrintContext *context) {m_context = context; }
@@ -206,6 +207,8 @@ public:
     void SetPageSetupToSettings(GtkPrintSettings* settings, GtkPageSetup* page_setup);
 
 private:
+    // NB: m_config is created and owned by us, but the other objects are not
+    //     and their accessors don't change their ref count.
     GtkPrintSettings    *m_config;
     GtkPrintOperation   *m_job;
     GtkPrintContext     *m_context;

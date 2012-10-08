@@ -33,6 +33,7 @@
 #include "wx/fontutil.h"
 #include "wx/dynlib.h"
 #include "wx/paper.h"
+#include "wx/scopeguard.h"
 
 #include <gtk/gtk.h>
 
@@ -234,13 +235,12 @@ IMPLEMENT_CLASS(wxGtkPrintNativeData, wxPrintNativeDataBase)
 wxGtkPrintNativeData::wxGtkPrintNativeData()
 {
     m_config = gtk_print_settings_new();
-    m_job = gtk_print_operation_new();
+    m_job = NULL;
     m_context = NULL;
 }
 
 wxGtkPrintNativeData::~wxGtkPrintNativeData()
 {
-    g_object_unref(m_job);
     g_object_unref(m_config);
 }
 
@@ -904,7 +904,10 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) printdata.GetNativeData();
 
-    GtkPrintOperation * const printOp = native->GetPrintJob();
+    wxGtkObject<GtkPrintOperation> printOp(gtk_print_operation_new());
+    native->SetPrintJob(printOp);
+    wxON_BLOCK_EXIT_OBJ1(*native, wxGtkPrintNativeData::SetPrintJob,
+                         static_cast<GtkPrintOperation*>(NULL));
 
     wxPrinterToGtkData dataToSend;
     dataToSend.printer = this;
