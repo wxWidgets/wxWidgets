@@ -1543,7 +1543,10 @@ public:
 
         for (i = 0; i < page_count; ++i)
         {
-            int height = m_rect.height - m_tabCtrlHeight;
+            wxAuiNotebookPage& page = pages.Item(i);
+            int border_width = m_tabs->GetArtProvider()->GetBorderWidth(page.window);
+
+            int height = m_rect.height - m_tabCtrlHeight - border_width;
             if ( height < 0 )
             {
                 // avoid passing negative height to wxWindow::SetSize(), this
@@ -1551,15 +1554,19 @@ public:
                 height = 0;
             }
 
-            wxAuiNotebookPage& page = pages.Item(i);
             if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
             {
-                page.window->SetSize(m_rect.x, m_rect.y, m_rect.width, height);
+                page.window->SetSize(m_rect.x + 2 * border_width,
+                                     m_rect.y + 2 *  border_width,
+                                     m_rect.width - 4 * border_width,
+                                     height);
             }
             else //TODO: if (GetFlags() & wxAUI_NB_TOP)
             {
-                page.window->SetSize(m_rect.x, m_rect.y + m_tabCtrlHeight,
-                                     m_rect.width, height);
+                page.window->SetSize(m_rect.x + 2 * border_width,
+                                     m_rect.y + m_tabCtrlHeight,
+                                     m_rect.width - 4 * border_width,
+                                     height);
             }
             // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
             // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}

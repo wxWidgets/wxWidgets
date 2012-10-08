@@ -79,6 +79,23 @@ void wxAuiGtkTabArt::DrawBackground(wxDC& dc, wxWindow* WXUNUSED(wnd), const wxR
                                        rect.x, rect.y, rect.width, rect.height);
 }
 
+void wxAuiGtkTabArt::DrawBorder(wxDC& WXUNUSED(dc), wxWindow* wnd, const wxRect& rect)
+{
+    int generic_border_width = wxAuiGenericTabArt::GetBorderWidth(wnd);
+
+    if (!wnd) return;
+    if (!wnd->m_wxwindow) return;
+    if (!gtk_widget_is_drawable(wnd->m_wxwindow)) return;
+
+    GtkStyle *style_notebook = gtk_widget_get_style(wxGTKPrivate::GetNotebookWidget());
+
+    gtk_paint_box(style_notebook, wnd->GTKGetDrawingWindow(), GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+                  NULL, wnd->m_wxwindow,
+                  const_cast<char*>("notebook"),
+                  rect.x + generic_border_width + 1, rect.y + generic_border_width + 1,
+                  rect.width - (generic_border_width + 1), rect.height - (generic_border_width + 1));
+}
+
 void ButtonStateAndShadow(int button_state, GtkStateType &state, GtkShadowType &shadow)
 {
 
@@ -462,6 +479,12 @@ int wxAuiGtkTabArt::GetBestTabCtrlSize(wxWindow* wnd,
     SetSelectedFont(m_normalFont);
     int tab_height = 3 * gtk_widget_get_style(wxGTKPrivate::GetNotebookWidget())->ythickness + wxAuiGenericTabArt::GetBestTabCtrlSize(wnd, pages, required_bmp_size);
     return tab_height;
+}
+
+int wxAuiGtkTabArt::GetBorderWidth(wxWindow* wnd)
+{
+    return wxAuiGenericTabArt::GetBorderWidth(wnd) + wxMax(GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_hborder,
+                                                           GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder);
 }
 
 wxSize wxAuiGtkTabArt::GetTabSize(wxDC& dc,

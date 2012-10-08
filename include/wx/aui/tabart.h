@@ -56,6 +56,11 @@ public:
     virtual void SetColour(const wxColour& colour) = 0;
     virtual void SetActiveColour(const wxColour& colour) = 0;
 
+    virtual void DrawBorder(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& rect) = 0;
+
     virtual void DrawBackground(
                          wxDC& dc,
                          wxWindow* wnd,
@@ -95,6 +100,9 @@ public:
 
     virtual int GetIndentSize() = 0;
 
+    virtual int GetBorderWidth(
+                         wxWindow* wnd) = 0;
+
     virtual int GetBestTabCtrlSize(
                          wxWindow* wnd,
                          const wxAuiNotebookPageArray& pages,
@@ -121,6 +129,11 @@ public:
     void SetColour(const wxColour& colour);
     void SetActiveColour(const wxColour& colour);
 
+    void DrawBorder(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& rect);
+
     void DrawBackground(
                  wxDC& dc,
                  wxWindow* wnd,
@@ -145,6 +158,9 @@ public:
                  wxRect* outRect);
 
     int GetIndentSize();
+
+    int GetBorderWidth(
+                 wxWindow* wnd);
 
     wxSize GetTabSize(
                  wxDC& dc,
@@ -209,6 +225,11 @@ public:
     void SetColour(const wxColour& colour);
     void SetActiveColour(const wxColour& colour);
 
+    void DrawBorder(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& rect);
+
     void DrawBackground(
                  wxDC& dc,
                  wxWindow* wnd,
@@ -233,6 +254,9 @@ public:
                  wxRect* outRect);
 
     int GetIndentSize();
+
+    int GetBorderWidth(
+                 wxWindow* wnd);
 
     wxSize GetTabSize(
                  wxDC& dc,

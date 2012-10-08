@@ -27,6 +27,8 @@
 
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
+#include "wx/aui/auibook.h"
+#include "wx/aui/tabart.h"
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -466,7 +468,7 @@ void wxAuiDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *WXUNUSED(window), i
     dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 }
 
-void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow *WXUNUSED(window), const wxRect& _rect,
+void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow* window, const wxRect& _rect,
                                   wxAuiPaneInfo& pane)
 {
     dc.SetPen(m_borderPen);
@@ -492,10 +494,21 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow *WXUNUSED(window), const
     }
     else
     {
-        for (i = 0; i < border_width; ++i)
+        // notebooks draw the border themselves, so they can use native rendering (e.g. tabartgtk)
+        wxAuiTabArt* art = 0;
+        wxAuiNotebook* nb = wxDynamicCast(window, wxAuiNotebook);
+        if (nb)
+            art = nb->GetArtProvider();
+
+        if (art)
+            art->DrawBorder(dc, window, rect);
+        else
         {
-            dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
-            rect.Deflate(1);
+            for (i = 0; i < border_width; ++i)
+            {
+                dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+                rect.Deflate(1);
+            }
         }
     }
 }

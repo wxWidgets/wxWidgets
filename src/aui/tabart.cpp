@@ -31,6 +31,8 @@
 
 #include "wx/renderer.h"
 #include "wx/aui/auibook.h"
+#include "wx/aui/framemanager.h"
+#include "wx/aui/dockart.h"
 
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
@@ -243,6 +245,18 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
     m_tabCtrlHeight = tab_ctrl_size.y;
 }
 
+
+void wxAuiGenericTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
+{
+    int i, border_width = GetBorderWidth(wnd);
+
+    wxRect theRect(rect);
+    for (i = 0; i < border_width; ++i)
+    {
+        dc.DrawRectangle(theRect.x, theRect.y, theRect.width, theRect.height);
+        theRect.Deflate(1);
+    }
+}
 
 void wxAuiGenericTabArt::DrawBackground(wxDC& dc,
                                         wxWindow* WXUNUSED(wnd),
@@ -584,6 +598,18 @@ int wxAuiGenericTabArt::GetIndentSize()
     return 5;
 }
 
+int wxAuiGenericTabArt::GetBorderWidth(wxWindow* wnd)
+{
+    wxAuiManager* mgr = wxAuiManager::GetManager(wnd);
+    if (mgr)
+    {
+       wxAuiDockArt*  art = mgr->GetArtProvider();
+        if (art)
+            return art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
+    }
+    return 1;
+}
+
 wxSize wxAuiGenericTabArt::GetTabSize(wxDC& dc,
                                       wxWindow* WXUNUSED(wnd),
                                       const wxString& caption,
@@ -908,6 +934,18 @@ void wxAuiSimpleTabArt::SetActiveColour(const wxColour& colour)
     m_selectedBkPen = wxPen(colour);
 }
 
+void wxAuiSimpleTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
+{
+    int i, border_width = GetBorderWidth(wnd);
+
+    wxRect theRect(rect);
+    for (i = 0; i < border_width; ++i)
+    {
+        dc.DrawRectangle(theRect.x, theRect.y, theRect.width, theRect.height);
+        theRect.Deflate(1);
+    }
+}
+
 void wxAuiSimpleTabArt::DrawBackground(wxDC& dc,
                                        wxWindow* WXUNUSED(wnd),
                                        const wxRect& rect)
@@ -1085,6 +1123,18 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
 int wxAuiSimpleTabArt::GetIndentSize()
 {
     return 0;
+}
+
+int wxAuiSimpleTabArt::GetBorderWidth(wxWindow* wnd)
+{
+    wxAuiManager* mgr = wxAuiManager::GetManager(wnd);
+    if (mgr)
+    {
+       wxAuiDockArt*  art = mgr->GetArtProvider();
+        if (art)
+            return art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
+    }
+    return 1;
 }
 
 wxSize wxAuiSimpleTabArt::GetTabSize(wxDC& dc,

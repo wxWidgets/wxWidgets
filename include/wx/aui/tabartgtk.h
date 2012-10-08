@@ -33,6 +33,7 @@ public:
     wxAuiGtkTabArt();
 
     virtual wxAuiTabArt* Clone();
+    virtual void DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect);
     virtual void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect);
     virtual void DrawTab(wxDC& dc,
                          wxWindow* wnd,
@@ -46,6 +47,7 @@ public:
                     int button_state, int orientation, wxRect* out_rect);
     int GetBestTabCtrlSize(wxWindow* wnd, const wxAuiNotebookPageArray& pages,
                             const wxSize& required_bmp_size);
+    int GetBorderWidth(wxWindow* wnd);
     virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
                               const wxBitmap& bitmap, bool active,
                               int close_button_state, int* x_extent);
