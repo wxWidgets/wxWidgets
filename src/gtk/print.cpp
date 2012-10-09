@@ -1179,8 +1179,6 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
 #if wxCAIRO_SCALE
     m_PS2DEV = 1.0;
     m_DEV2PS = 1.0;
-
-    cairo_scale( m_cairo, 72.0 / (double)m_resolution, 72.0 / (double)m_resolution );
 #else
     m_PS2DEV = (double)m_resolution / 72.0;
     m_DEV2PS = 72.0 / (double)m_resolution;
@@ -1192,15 +1190,6 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
 
     m_signX = 1;  // default x-axis left to right.
     m_signY = 1;  // default y-axis bottom up -> top down.
-
-    // By default the origin of the Cairo context is in the upper left
-    // corner of the printable area. We need to translate it so that it
-    // is in the upper left corner of the paper (without margins)
-    GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
-    gdouble ml, mt;
-    ml = gtk_page_setup_get_left_margin (setup, GTK_UNIT_POINTS);
-    mt = gtk_page_setup_get_top_margin (setup, GTK_UNIT_POINTS);
-    cairo_translate(m_cairo, -ml, -mt);
 }
 
 wxGtkPrinterDCImpl::~wxGtkPrinterDCImpl()
@@ -2102,7 +2091,24 @@ void wxGtkPrinterDCImpl::EndDoc()
 
 void wxGtkPrinterDCImpl::StartPage()
 {
-    return;
+    // Notice that we may change the Cairo transformation matrix only here and
+    // not before (e.g. in wxGtkPrinterDCImpl ctor as we used to do) in order
+    // to not affect _gtk_print_context_rotate_according_to_orientation() which
+    // is used in GTK+ itself and wouldn't work correctly if we applied these
+    // transformations before it is called.
+
+    // By default the origin of the Cairo context is in the upper left
+    // corner of the printable area. We need to translate it so that it
+    // is in the upper left corner of the paper (without margins)
+    GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
+    gdouble ml, mt;
+    ml = gtk_page_setup_get_left_margin (setup, GTK_UNIT_POINTS);
+    mt = gtk_page_setup_get_top_margin (setup, GTK_UNIT_POINTS);
+    cairo_translate(m_cairo, -ml, -mt);
+
+#if wxCAIRO_SCALE
+    cairo_scale( m_cairo, 72.0 / (double)m_resolution, 72.0 / (double)m_resolution );
+#endif
 }
 
 void wxGtkPrinterDCImpl::EndPage()
