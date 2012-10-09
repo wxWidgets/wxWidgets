@@ -92,10 +92,8 @@ public:
             event.Skip();
     }
 
-    void OnTextEnter(wxCommandEvent& event)
+    void OnTextEvent(wxCommandEvent& event)
     {
-        // We need to forward this event to the spin control itself as it's
-        // supposed to generate it if wxTE_PROCESS_ENTER is used with it.
         wxCommandEvent eventCopy(event);
         eventCopy.SetEventObject(m_spin);
         eventCopy.SetId(m_spin->GetId());
@@ -118,7 +116,15 @@ private:
 
 BEGIN_EVENT_TABLE(wxSpinCtrlTextGeneric, wxTextCtrl)
     EVT_CHAR(wxSpinCtrlTextGeneric::OnChar)
-    EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlTextGeneric::OnTextEnter)
+
+    // Forward the text events to wxSpinCtrl itself adjusting them slightly in
+    // the process.
+    EVT_TEXT(wxID_ANY, wxSpinCtrlTextGeneric::OnTextEvent)
+
+    // And we need to forward this one too as wxSpinCtrl is supposed to
+    // generate it if wxTE_PROCESS_ENTER is used with it (and if it isn't,
+    // we're never going to get EVT_TEXT_ENTER in the first place).
+    EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlTextGeneric::OnTextEvent)
 
     EVT_KILL_FOCUS(wxSpinCtrlTextGeneric::OnKillFocus)
 END_EVENT_TABLE()
