@@ -1295,7 +1295,12 @@ public:
           wxEventBasicPayloadMixin(event),
           m_clientData(event.m_clientData),
           m_clientObject(event.m_clientObject)
-        { }
+    {
+        // Because GetString() can retrieve the string text only on demand, we
+        // need to copy it explicitly.
+        if ( m_cmdString.empty() )
+            m_cmdString = event.GetString();
+    }
 
     // Set/Get client data from controls
     void SetClientData(void* clientData) { m_clientData = clientData; }
