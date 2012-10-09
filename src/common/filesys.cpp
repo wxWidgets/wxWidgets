@@ -262,7 +262,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     }
 
     return new wxFSFile(is,
-                        right,
+                        location,
                         wxEmptyString,
                         GetAnchor(location)
 #if wxUSE_DATETIME
