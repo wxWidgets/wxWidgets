@@ -3244,7 +3244,8 @@ void wxRichTextCtrl::Replace(long from, long to,
 
     SetDefaultStyle(attr);
 
-    DoWriteText(value, SetValue_SelectionOnly);
+    if (!value.IsEmpty())
+        DoWriteText(value, SetValue_SelectionOnly);
 
     EndBatchUndo();
 }
