@@ -3547,6 +3547,11 @@ protected:
         GetBestSize() returns an arbitrary hardcoded size for the window, so
         you must override it when implementing a custom window class.
 
+        Notice that the best size returned by this function is cached
+        internally, so if anything that results in the best size changing (e.g.
+        change to the control contents) happens, you need to call
+        InvalidateBestSize() to notify wxWidgets about it.
+
         @see @ref overview_windowsizing
 
         @since 2.9.0
