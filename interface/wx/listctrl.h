@@ -417,7 +417,7 @@ public:
 
         @since 2.9.5
     */
-    void EnableBellOnNoMatch(bool on);
+    void EnableBellOnNoMatch(bool on = true);
 
     /**
         Finish editing the label.
