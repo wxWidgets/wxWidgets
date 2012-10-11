@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 19 September 2012                                                  *
+ * Date : 11 October 2012                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -1349,6 +1349,9 @@ typedef pid_t GPid;
 
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT
+
+/* Define if you have abi::__forced_unwind in your <cxxabi.h>. */
+#undef HAVE_ABI_FORCEDUNWIND
 
 /* Define if fdopen is available.  */
 #define HAVE_FDOPEN 1
