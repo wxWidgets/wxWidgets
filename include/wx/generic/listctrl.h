@@ -144,7 +144,7 @@ public:
     void RefreshItem(long item);
     void RefreshItems(long itemFrom, long itemTo);
 
-    virtual void EnableBellOnNoMatch(bool on);
+    virtual void EnableBellOnNoMatch(bool on = true);
 
 #if WXWIN_COMPATIBILITY_2_6
     // obsolete, don't use
