@@ -65,6 +65,10 @@
     #include "wx/dde.h"
 #endif // __WINDOWS__
 
+#ifndef wxHAS_IMAGES_IN_RESOURCES
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // the usual application and main frame classes
 // ----------------------------------------------------------------------------
@@ -438,6 +442,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
          m_timerIdleWakeUp(this, Exec_TimerIdle),
          m_timerBg(this, Exec_TimerBg)
 {
+    SetIcon(wxICON(sample));
+
     m_pidLast = 0;
 
 #ifdef __WXMAC__
