@@ -73,7 +73,7 @@ public:
 
     // Returns whether we or one of our children accepts focus.
     bool AcceptsFocusRecursively() const
-    bool AcceptsFocus() const { return m_acceptsFocus; }
+        { return m_acceptsFocusSelf || m_acceptsFocusChildren; }
 
     // We accept focus from keyboard if we accept it at all.
     bool AcceptsFocusFromKeyboard() const { return AcceptsFocusRecursively(); }
@@ -205,7 +205,13 @@ public:
     {
         BaseWindowClass::AddChild(child);
 
-        m_container.UpdateCanFocusChildren();
+        if ( m_container.UpdateCanFocusChildren() )
+        {
+            // Under MSW we must have wxTAB_TRAVERSAL style for TAB navigation
+            // to work.
+            if ( !BaseWindowClass::HasFlag(wxTAB_TRAVERSAL) )
+                BaseWindowClass::ToggleWindowStyle(wxTAB_TRAVERSAL);
+        }
     }
 
     WXDLLIMPEXP_INLINE_CORE virtual void RemoveChild(wxWindowBase *child)
@@ -216,6 +222,8 @@ public:
 
         BaseWindowClass::RemoveChild(child);
 
+        // We could reset wxTAB_TRAVERSAL here but it doesn't seem to do any
+        // harm to keep it.
         m_container.UpdateCanFocusChildren();
     }
 
