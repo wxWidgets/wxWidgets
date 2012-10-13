@@ -26,9 +26,6 @@
     items.
 
 
-    A listbox callback gets an event @c wxEVT_COMMAND_LISTBOX_SELECTED for
-    single clicks, and @c wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
-
     @beginStyleTable
     @style{wxLB_SINGLE}
         Single-selection list.
