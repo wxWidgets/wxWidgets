@@ -47,14 +47,17 @@
 // wxControlContainerBase
 // ----------------------------------------------------------------------------
 
-void wxControlContainerBase::SetCanFocus(bool acceptsFocus)
+bool wxControlContainerBase::UpdateCanFocusChildren()
 {
-    if ( acceptsFocus == m_acceptsFocus )
-        return;
+    const bool acceptsFocusChildren = HasAnyFocusableChildren();
+    if ( acceptsFocusChildren != m_acceptsFocusChildren )
+    {
+        m_acceptsFocusChildren = acceptsFocusChildren;
 
-    m_acceptsFocus = acceptsFocus;
+        m_winParent->SetCanFocus(AcceptsFocusRecursively());
+    }
 
-    m_winParent->SetCanFocus(m_acceptsFocus);
+    return m_acceptsFocusChildren;
 }
 
 bool wxControlContainerBase::HasAnyFocusableChildren() const

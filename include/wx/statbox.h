@@ -28,7 +28,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticBoxNameStr[];
 class WXDLLIMPEXP_CORE wxStaticBoxBase : public wxNavigationEnabled<wxControl>
 {
 public:
-    wxStaticBoxBase() { }
+    wxStaticBoxBase() { m_container.DisableSelfFocus(); }
 
     // overridden base class virtuals
     virtual bool HasTransparentBackground() { return true; }
