@@ -585,6 +585,7 @@ wxMSW:
 - Better support for SAFEARRAY in OLE Automation code (PB).
 - Fix calling Iconize(false) on hidden top level windows (Christian Walther).
 - Don't send any events from wxSpinCtrl::SetRange() even if the value changed.
+- Display system drag images during drag and drop if available (PeterO).
 
 
 2.9.4: (released 2012-07-09)

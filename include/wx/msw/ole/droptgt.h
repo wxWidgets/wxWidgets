@@ -19,6 +19,7 @@
 // ----------------------------------------------------------------------------
 
 class  wxIDropTarget;
+struct IDropTargetHelper;
 struct IDataObject;
 
 // ----------------------------------------------------------------------------
@@ -60,12 +61,26 @@ public:
     // GetData() when it's called from inside OnData()
     void MSWSetDataSource(IDataObject *pIDataSource);
 
+    // These functions take care of all things necessary to support native drag
+    // images.
+    //
+    // {Init,End}DragImageSupport() are called during Register/Revoke,
+    // UpdateDragImageOnXXX() functions are called on the corresponding drop
+    // target events.
+    void MSWInitDragImageSupport();
+    void MSWEndDragImageSupport();
+    void MSWUpdateDragImageOnData(wxCoord x, wxCoord y, wxDragResult res);
+    void MSWUpdateDragImageOnDragOver(wxCoord x, wxCoord y, wxDragResult res);
+    void MSWUpdateDragImageOnEnter(wxCoord x, wxCoord y, wxDragResult res);
+    void MSWUpdateDragImageOnLeave();
+
 private:
     // helper used by IsAcceptedData() and GetData()
     wxDataFormat MSWGetSupportedFormat(IDataObject *pIDataSource) const;
 
-    wxIDropTarget *m_pIDropTarget; // the pointer to our COM interface
-    IDataObject   *m_pIDataSource; // the pointer to the source data object
+    wxIDropTarget     *m_pIDropTarget; // the pointer to our COM interface
+    IDataObject       *m_pIDataSource; // the pointer to the source data object
+    IDropTargetHelper *m_dropTargetHelper; // the pointer to the drop target helper
 
     wxDECLARE_NO_COPY_CLASS(wxDropTarget);
 };

@@ -28,6 +28,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/vector.h"
     #include "wx/wxcrtvararg.h"
 #endif
 
@@ -35,6 +36,7 @@
 
 #if wxUSE_OLE && defined(__WIN32__) && !defined(__GNUWIN32_OLD__)
 
+#include "wx/scopedarray.h"
 #include "wx/msw/private.h"         // includes <windows.h>
 
 #ifdef __WXWINCE__
@@ -67,6 +69,9 @@
     #define GetTymedName(tymed) wxEmptyString
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
+namespace
+{
+
 wxDataFormat HtmlFormatFixup(wxDataFormat format)
 {
     // Since the HTML format is dynamically registered, the wxDF_HTML
@@ -81,6 +86,78 @@ wxDataFormat HtmlFormatFixup(wxDataFormat format)
     }
     return format;
 }
+
+// helper function for wxCopyStgMedium()
+HGLOBAL wxGlobalClone(HGLOBAL hglobIn)
+{
+    HGLOBAL hglobOut = NULL;
+
+    LPVOID pvIn = GlobalLock(hglobIn);
+    if (pvIn)
+    {
+        SIZE_T cb = GlobalSize(hglobIn);
+        hglobOut = GlobalAlloc(GMEM_FIXED, cb);
+        if (hglobOut)
+        {
+            CopyMemory(hglobOut, pvIn, cb);
+        }
+        GlobalUnlock(hglobIn);
+    }
+
+    return hglobOut;
+}
+
+// Copies the given STGMEDIUM structure.
+//
+// This is an local implementation of the function with the same name in
+// urlmon.lib but to use that function would require linking with urlmon.lib
+// and we don't want to require it, so simple reimplement it here.
+HRESULT wxCopyStgMedium(const STGMEDIUM *pmediumIn, STGMEDIUM *pmediumOut)
+{
+    HRESULT hres = S_OK;
+    STGMEDIUM stgmOut = *pmediumIn;
+
+    if (pmediumIn->pUnkForRelease == NULL &&
+        !(pmediumIn->tymed & (TYMED_ISTREAM | TYMED_ISTORAGE)))
+    {
+        // Object needs to be cloned.
+        if (pmediumIn->tymed == TYMED_HGLOBAL)
+        {
+            stgmOut.hGlobal = wxGlobalClone(pmediumIn->hGlobal);
+            if (!stgmOut.hGlobal)
+            {
+                hres = E_OUTOFMEMORY;
+            }
+        }
+        else
+        {
+            hres = DV_E_TYMED; // Don't know how to clone GDI objects.
+        }
+    }
+
+    if ( SUCCEEDED(hres) )
+    {
+        switch ( stgmOut.tymed )
+        {
+            case TYMED_ISTREAM:
+                stgmOut.pstm->AddRef();
+                break;
+
+            case TYMED_ISTORAGE:
+                stgmOut.pstg->AddRef();
+                break;
+        }
+
+        if ( stgmOut.pUnkForRelease )
+            stgmOut.pUnkForRelease->AddRef();
+
+        *pmediumOut = stgmOut;
+    }
+
+    return hres;
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC interface implementation
@@ -142,7 +219,121 @@ private:
     bool m_mustDelete;
 
     wxDECLARE_NO_COPY_CLASS(wxIDataObject);
+
+    // The following code is need to be able to store system data the operating
+    // system is using for it own purposes, e.g. drag images.
+
+    class SystemDataEntry
+    {
+    public:
+        // Ctor takes ownership of the pointers.
+        SystemDataEntry(FORMATETC *pformatetc, STGMEDIUM *pmedium)
+            : pformatetc(pformatetc), pmedium(pmedium)
+        {
+        }
+
+        ~SystemDataEntry()
+        {
+            delete pformatetc;
+            delete pmedium;
+        }
+
+        FORMATETC *pformatetc;
+        STGMEDIUM *pmedium;
+    };
+    typedef wxVector<SystemDataEntry*> SystemData;
+
+    // get system data specified by the given format
+    bool GetSystemData(wxDataFormat format, STGMEDIUM*) const;
+
+    // determines if the data object contains system data specified by the given format.
+    bool HasSystemData(wxDataFormat format) const;
+
+    // save system data
+    HRESULT SaveSystemData(FORMATETC*, STGMEDIUM*, BOOL fRelease);
+
+    // container for system data
+    SystemData m_systemData;
 };
+
+bool
+wxIDataObject::GetSystemData(wxDataFormat format, STGMEDIUM *pmedium) const
+{
+    for ( SystemData::const_iterator it = m_systemData.begin();
+          it != m_systemData.end();
+          ++it )
+    {
+        FORMATETC* formatEtc = (*it)->pformatetc;
+        if ( formatEtc->cfFormat == format )
+        {
+            wxCopyStgMedium((*it)->pmedium, pmedium);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool
+wxIDataObject::HasSystemData(wxDataFormat format) const
+{
+    for ( SystemData::const_iterator it = m_systemData.begin();
+          it != m_systemData.end();
+          ++it )
+    {
+        FORMATETC* formatEtc = (*it)->pformatetc;
+        if ( formatEtc->cfFormat == format )
+            return true;
+    }
+
+    return false;
+}
+
+// save system data
+HRESULT
+wxIDataObject::SaveSystemData(FORMATETC *pformatetc,
+                                 STGMEDIUM *pmedium,
+                                 BOOL fRelease)
+{
+    if ( pformatetc == NULL || pmedium == NULL )
+        return E_INVALIDARG;
+
+    // remove entry if already available
+    for ( SystemData::iterator it = m_systemData.begin();
+          it != m_systemData.end();
+          ++it )
+    {
+        if ( pformatetc->tymed & (*it)->pformatetc->tymed &&
+             pformatetc->dwAspect == (*it)->pformatetc->dwAspect &&
+             pformatetc->cfFormat == (*it)->pformatetc->cfFormat )
+        {
+            delete (*it);
+            m_systemData.erase(it);
+            break;
+        }
+    }
+
+    // create new format/medium
+    FORMATETC* pnewformatEtc = new FORMATETC;
+    STGMEDIUM* pnewmedium = new STGMEDIUM;
+
+    wxZeroMemory(*pnewformatEtc);
+    wxZeroMemory(*pnewmedium);
+
+    // copy format
+    *pnewformatEtc = *pformatetc;
+
+    // copy or take ownerschip of medium
+    if ( fRelease )
+        *pnewmedium = *pmedium;
+    else
+        wxCopyStgMedium(pmedium, pnewmedium);
+
+    // save entry
+    m_systemData.push_back(new SystemDataEntry(pnewformatEtc, pnewmedium));
+
+    return S_OK;
+}
 
 // ============================================================================
 // implementation
@@ -289,6 +480,14 @@ wxIDataObject::wxIDataObject(wxDataObject *pDataObject)
 
 wxIDataObject::~wxIDataObject()
 {
+    // delete system data
+    for ( SystemData::iterator it = m_systemData.begin();
+          it != m_systemData.end();
+          ++it )
+    {
+        delete (*it);
+    }
+
     if ( m_mustDelete )
     {
         delete m_pDataObject;
@@ -309,6 +508,13 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
     // to pass the data
     wxDataFormat format = (wxDataFormat::NativeFormat)pformatetcIn->cfFormat;
     format = HtmlFormatFixup(format);
+
+    // is this system data?
+    if ( GetSystemData(format, pmedium) )
+    {
+        // pmedium is already filled with corresponding data, so we're ready.
+        return S_OK;
+    }
 
     switch ( format )
     {
@@ -445,6 +651,17 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
             m_pDataObject->SetData(wxDF_ENHMETAFILE, 0, &pmedium->hEnhMetaFile);
             break;
 
+        case TYMED_ISTREAM:
+            // check if this format is supported
+            if ( !m_pDataObject->IsSupported(pformatetc->cfFormat,
+                                             wxDataObject::Set) )
+            {
+                // As this is not a supported format (content data), assume it
+                // is system data and save it.
+                return SaveSystemData(pformatetc, pmedium, fRelease);
+            }
+            break;
+
         case TYMED_MFPICT:
             // fall through - we pass METAFILEPICT through HGLOBAL
         case TYMED_HGLOBAL:
@@ -453,15 +670,11 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
 
                 format = HtmlFormatFixup(format);
 
-                // this is quite weird, but for file drag and drop, explorer
-                // calls our SetData() with the formats we do *not* support!
-                //
-                // as we can't fix this bug in explorer (it's a bug because it
-                // should only use formats returned by EnumFormatEtc), do the
-                // check here
+                // check if this format is supported
                 if ( !m_pDataObject->IsSupported(format, wxDataObject::Set) ) {
-                    // go away!
-                    return DV_E_FORMATETC;
+                    // As above, assume that unsupported format must be system
+                    // data and just save it.
+                    return SaveSystemData(pformatetc, pmedium, fRelease);
                 }
 
                 // copy data
@@ -595,6 +808,13 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
         wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::QueryGetData: %s ok"),
                    wxGetFormatName(format));
     }
+    else if ( HasSystemData(format) )
+    {
+        wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::QueryGetData: %s ok (system data)"),
+                   wxGetFormatName(format));
+        // this is system data, so no further checks needed.
+        return S_OK;
+    }
     else {
         wxLogTrace(wxTRACE_OleCalls,
                    wxT("wxIDataObject::QueryGetData: %s unsupported"),
@@ -640,19 +860,30 @@ STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDir,
     wxDataObject::Direction dir = dwDir == DATADIR_GET ? wxDataObject::Get
                                                        : wxDataObject::Set;
 
-    ULONG nFormatCount = wx_truncate_cast(ULONG, m_pDataObject->GetFormatCount(dir));
-    wxDataFormat format;
-    wxDataFormat *formats;
-    formats = nFormatCount == 1 ? &format : new wxDataFormat[nFormatCount];
-    m_pDataObject->GetAllFormats(formats, dir);
+    // format count is total of user specified and system formats.
+    const size_t ourFormatCount = m_pDataObject->GetFormatCount(dir);
+    const size_t sysFormatCount = m_systemData.size();
 
-    wxIEnumFORMATETC *pEnum = new wxIEnumFORMATETC(formats, nFormatCount);
+    const ULONG
+        nFormatCount = wx_truncate_cast(ULONG, ourFormatCount + sysFormatCount);
+
+    // fill format array with formats ...
+    wxScopedArray<wxDataFormat> formats(new wxDataFormat[nFormatCount]);
+
+    // ... from content data (supported formats)
+    m_pDataObject->GetAllFormats(formats.get(), dir);
+
+    // ... from system data
+    for ( size_t j = 0; j < sysFormatCount; j++ )
+    {
+        SystemDataEntry* entry = m_systemData[j];
+        wxDataFormat& format = formats[ourFormatCount + j];
+        format = entry->pformatetc->cfFormat;
+    }
+
+    wxIEnumFORMATETC *pEnum = new wxIEnumFORMATETC(formats.get(), nFormatCount);
     pEnum->AddRef();
     *ppenumFormatEtc = pEnum;
-
-    if ( formats != &format ) {
-        delete [] formats;
-    }
 
     return S_OK;
 }
