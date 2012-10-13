@@ -212,6 +212,10 @@ public:
     virtual bool CanApplyThemeBorder() const { return false; }
 
 protected:
+    // Implement "update locking" in a custom way for this control.
+    virtual void DoFreeze();
+    virtual void DoThaw();
+
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
 
