@@ -385,6 +385,8 @@ public:
         Returns @true if the window (or in case of composite controls, its main
         child window) has focus.
 
+        @since 2.9.0
+
         @see FindFocus()
     */
     virtual bool HasFocus() const;
