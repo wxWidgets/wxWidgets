@@ -223,11 +223,6 @@ public:
         BaseWindowClass::SetFocus();
     }
 
-    void AcceptFocus(bool acceptFocus)
-    {
-        m_container.SetCanFocus(acceptFocus);
-    }
-
 protected:
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL
     void OnNavigationKey(wxNavigationKeyEvent& event)
@@ -271,10 +266,6 @@ public:                                                                       \
     virtual void RemoveChild(wxWindowBase *child);                            \
     virtual void SetFocus();                                                  \
     void SetFocusIgnoringChildren();                                          \
-    void AcceptFocus(bool acceptFocus)                                        \
-    {                                                                         \
-        m_container.SetCanFocus(acceptFocus);                                 \
-    }                                                                         \
                                                                               \
 protected:                                                                    \
     wxControlContainer m_container
