@@ -160,6 +160,8 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_COLNATIVEHEADER, GridFrame::SetNativeColHeader )
     EVT_MENU( ID_COLDEFAULTHEADER, GridFrame::SetDefaultColHeader )
     EVT_MENU( ID_COLCUSTOMHEADER, GridFrame::SetCustomColHeader )
+    EVT_MENU_RANGE( ID_TAB_STOP, ID_TAB_LEAVE, GridFrame::SetTabBehaviour )
+    EVT_MENU( ID_TAB_CUSTOM, GridFrame::SetTabCustomHandler )
     EVT_MENU( ID_TOGGLEGRIDLINES, GridFrame::ToggleGridLines )
     EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_CELLOVERFLOW, GridFrame::CellOverflow )
@@ -320,6 +322,12 @@ GridFrame::GridFrame()
     colHeaderMenu->AppendRadioItem( ID_COLNATIVEHEADER, wxT("&Native") );
     colHeaderMenu->AppendRadioItem( ID_COLCUSTOMHEADER, wxT("&Custom") );
 
+    wxMenu *tabBehaviourMenu = new wxMenu;
+    tabBehaviourMenu->AppendRadioItem(ID_TAB_STOP, "&Stop at the boundary");
+    tabBehaviourMenu->AppendRadioItem(ID_TAB_WRAP, "&Wrap at the boundary");
+    tabBehaviourMenu->AppendRadioItem(ID_TAB_LEAVE, "&Leave the grid");
+    tabBehaviourMenu->AppendRadioItem(ID_TAB_CUSTOM, "&Custom tab handler");
+    viewMenu->AppendSubMenu(tabBehaviourMenu, "&Tab behaviour");
 
     wxMenu *colMenu = new wxMenu;
     colMenu->Append( ID_SETLABELCOLOUR, wxT("Set &label colour...") );
@@ -658,6 +666,42 @@ void GridFrame::SetDefaultColHeader( wxCommandEvent& WXUNUSED(ev) )
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(false);
     grid->SetUseNativeColLabels(false);
+}
+
+
+void GridFrame::OnGridCustomTab(wxGridEvent& event)
+{
+    // just for testing, make the cursor move up and down instead of the usual
+    // left and right
+    if ( event.ShiftDown() )
+    {
+        if ( grid->GetGridCursorRow() > 0 )
+            grid->MoveCursorUp( false );
+    }
+    else
+    {
+        if ( grid->GetGridCursorRow() < grid->GetNumberRows() - 1 )
+            grid->MoveCursorDown( false );
+    }
+}
+
+void GridFrame::SetTabBehaviour(wxCommandEvent& event)
+{
+    // To make any built-in behaviour work, we need to disable the custom TAB
+    // handler, otherwise it would be overriding them.
+    grid->Disconnect(wxEVT_GRID_TABBING,
+                     wxGridEventHandler(GridFrame::OnGridCustomTab));
+
+    grid->SetTabBehaviour(
+            static_cast<wxGrid::TabBehaviour>(event.GetId() - ID_TAB_STOP)
+        );
+}
+
+void GridFrame::SetTabCustomHandler(wxCommandEvent&)
+{
+    grid->Connect(wxEVT_GRID_TABBING,
+                  wxGridEventHandler(GridFrame::OnGridCustomTab),
+                  NULL, this);
 }
 
 

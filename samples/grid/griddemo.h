@@ -42,6 +42,8 @@ class GridFrame : public wxFrame
     void SetNativeColHeader ( wxCommandEvent& );
     void SetCustomColHeader( wxCommandEvent& );
     void SetDefaultColHeader( wxCommandEvent& );
+    void SetTabBehaviour( wxCommandEvent& );
+    void SetTabCustomHandler( wxCommandEvent& );
     void ToggleGridLines( wxCommandEvent& );
     void AutoSizeCols( wxCommandEvent& );
     void CellOverflow( wxCommandEvent& );
@@ -102,6 +104,8 @@ class GridFrame : public wxFrame
     void OnSetHighlightWidth(wxCommandEvent&);
     void OnSetROHighlightWidth(wxCommandEvent&);
 
+    void OnGridCustomTab(wxGridEvent& event);
+
 public:
     GridFrame();
     ~GridFrame();
@@ -140,6 +144,10 @@ public:
         ID_COLDEFAULTHEADER,
         ID_COLNATIVEHEADER,
         ID_COLCUSTOMHEADER,
+        ID_TAB_STOP,
+        ID_TAB_WRAP,
+        ID_TAB_LEAVE,
+        ID_TAB_CUSTOM,
         ID_GRIDLINECOLOUR,
         ID_INSERTROW,
         ID_INSERTCOL,

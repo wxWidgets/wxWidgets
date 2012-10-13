@@ -1895,6 +1895,29 @@ public:
     };
 
     /**
+        Constants defining different support built-in TAB handling behaviours.
+
+        The elements of this enum determine what happens when TAB is pressed
+        when the cursor is in the rightmost column (or Shift-TAB is pressed
+        when the cursor is in the leftmost one).
+
+        @see SetTabBehaviour(), @c wxEVT_GRID_TABBING
+
+        @since 2.9.5
+     */
+    enum TabBehaviour
+    {
+        /// Do nothing, this is default.
+        Tab_Stop,
+
+        /// Move to the beginning of the next (or the end of the previous) row.
+        Tab_Wrap,
+
+        /// Move to the next (or the previous) control after the grid.
+        Tab_Leave
+    };
+
+    /**
         @name Constructors and Initialization
      */
     //@{
@@ -3469,6 +3492,25 @@ public:
     */
     void SetGridCursor(const wxGridCellCoords& coords);
 
+    /**
+        Set the grid's behaviour when the user presses the TAB key.
+
+        Pressing the TAB key moves the grid cursor right in the current row, if
+        there is a cell at the right and, similarly, Shift-TAB moves the cursor
+        to the left in the current row if it's not in the first column.
+
+        What happens if the cursor can't be moved because it it's already at
+        the beginning or end of the row can be configured using this function,
+        see wxGrid::TabBehaviour documentation for the detailed description.
+
+        IF none of the standard behaviours is appropriate, you can always
+        handle @c wxEVT_GRID_TABBING event directly to implement a custom
+        TAB-handling logic.
+
+        @since 2.9.5
+    */
+    void SetTabBehaviour(TabBehaviour behaviour);
+
     //@}
 
 
@@ -4462,6 +4504,12 @@ public:
         and updates the column to indicate the new sort order and refreshes
         itself.
         This event macro corresponds to @c wxEVT_GRID_COL_SORT event type.
+    @event{EVT_GRID_TABBING(func)}
+        This event is generated when the user presses TAB or Shift-TAB in the
+        grid. It can be used to customize the simple default TAB handling
+        logic, e.g. to go to the next non-empty cell instead of just the next
+        cell. See also wxGrid::SetTabBehaviour(). This event is new since
+        wxWidgets 2.9.5.
     @endEventTable
 
     @library{wxadv}

@@ -155,6 +155,7 @@ wxDEFINE_EVENT( wxEVT_GRID_SELECT_CELL, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_EDITOR_SHOWN, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_EDITOR_HIDDEN, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_EDITOR_CREATED, wxGridEditorCreatedEvent );
+wxDEFINE_EVENT( wxEVT_GRID_TABBING, wxGridEvent );
 
 // ----------------------------------------------------------------------------
 // private helpers
@@ -2514,6 +2515,8 @@ void wxGrid::Init()
     // now anyhow, so just set the parameters directly
     m_xScrollPixelsPerLine = GRID_SCROLL_LINE_X;
     m_yScrollPixelsPerLine = GRID_SCROLL_LINE_Y;
+
+    m_tabBehaviour = Tab_Stop;
 }
 
 // ----------------------------------------------------------------------------
@@ -4933,30 +4936,18 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_TAB:
-                if (event.ShiftDown())
                 {
-                    if ( GetGridCursorCol() > 0 )
+                    // send an event to the grid's parents for custom handling
+                    wxGridEvent gridEvt(GetId(), wxEVT_GRID_TABBING, this,
+                                        GetGridCursorRow(), GetGridCursorCol(),
+                                        -1, -1, false, event);
+                    if ( ProcessWindowEvent(gridEvt) )
                     {
-                        MoveCursorLeft( false );
-                    }
-                    else
-                    {
-                        // at left of grid
-                        DisableCellEditControl();
+                        // the event has been handled so no need for more processing
+                        break;
                     }
                 }
-                else
-                {
-                    if ( GetGridCursorCol() < GetNumberCols() - 1 )
-                    {
-                        MoveCursorRight( false );
-                    }
-                    else
-                    {
-                        // at right of grid
-                        DisableCellEditControl();
-                    }
-                }
+                DoGridProcessTab( event );
                 break;
 
             case WXK_HOME:
@@ -5086,6 +5077,69 @@ void wxGrid::OnChar( wxKeyEvent& event )
 
 void wxGrid::OnEraseBackground(wxEraseEvent&)
 {
+}
+
+void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)
+{
+    const bool isForwardTab = !kbdState.ShiftDown();
+
+    // TAB processing only changes when we are at the borders of the grid, so
+    // let's first handle the common behaviour when we are not at the border.
+    if ( isForwardTab )
+    {
+        if ( GetGridCursorCol() < GetNumberCols() - 1 )
+        {
+            MoveCursorRight( false );
+            return;
+        }
+    }
+    else // going back
+    {
+        if ( GetGridCursorCol() )
+        {
+            MoveCursorLeft( false );
+            return;
+        }
+    }
+
+
+    // We only get here if the cursor is at the border of the grid, apply the
+    // configured behaviour.
+    switch ( m_tabBehaviour )
+    {
+        case Tab_Stop:
+            // Nothing special to do, we remain at the current cell.
+            break;
+
+        case Tab_Wrap:
+            // Go to the beginning of the next or the end of the previous row.
+            if ( isForwardTab )
+            {
+                if ( GetGridCursorRow() < GetNumberRows() - 1 )
+                {
+                    GoToCell( GetGridCursorRow() + 1, 0 );
+                    return;
+                }
+            }
+            else
+            {
+                if ( GetGridCursorRow() > 0 )
+                {
+                    GoToCell( GetGridCursorRow() - 1, GetNumberCols() - 1 );
+                    return;
+                }
+            }
+            break;
+
+        case Tab_Leave:
+            if ( Navigate( isForwardTab ? wxNavigationKeyEvent::IsForward
+                                        : wxNavigationKeyEvent::IsBackward ) )
+                return;
+            break;
+    }
+
+    // If we remain in this cell, stop editing it if we were doing so.
+    DisableCellEditControl();
 }
 
 bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )

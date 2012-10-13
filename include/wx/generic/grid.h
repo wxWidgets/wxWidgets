@@ -918,6 +918,15 @@ public:
         wxGridSelectRowsOrColumns = wxGridSelectRows | wxGridSelectColumns
     };
 
+    // Different behaviour of the TAB key when the end (or the beginning, for
+    // Shift-TAB) of the current row is reached:
+    enum TabBehaviour
+    {
+        Tab_Stop,   // Do nothing, this is default.
+        Tab_Wrap,   // Move to the next (or previous) row.
+        Tab_Leave   // Move to the next (or previous) control.
+    };
+
     // creation and destruction
     // ------------------------
 
@@ -1171,6 +1180,8 @@ public:
     bool MoveCursorDownBlock( bool expandSelection );
     bool MoveCursorLeftBlock( bool expandSelection );
     bool MoveCursorRightBlock( bool expandSelection );
+
+    void SetTabBehaviour(TabBehaviour behaviour) { m_tabBehaviour = behaviour; }
 
 
     // ------ label and gridline formatting
@@ -2074,6 +2085,8 @@ protected:
     bool       m_editable;              // applies to whole grid
     bool       m_cellEditCtrlEnabled;   // is in-place edit currently shown?
 
+    TabBehaviour m_tabBehaviour;        // determines how the TAB key behaves
+
     void Init();        // common part of all ctors
     void Create();
     void CreateColumnWindow();
@@ -2241,6 +2254,8 @@ private:
     void DoEndDragResizeCol(const wxMouseEvent& event);
     void DoEndMoveCol(int pos);
 
+    // process a TAB keypress
+    void DoGridProcessTab(wxKeyboardState& kbdState);
 
     // common implementations of methods defined for both rows and columns
     void DeselectLine(int line, const wxGridOperations& oper);
@@ -2598,6 +2613,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_EDITOR_CREATED, wxGridEdit
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_BEGIN_DRAG, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_COL_MOVE, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_COL_SORT, wxGridEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_TABBING, wxGridEvent );
 
 typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
 typedef void (wxEvtHandler::*wxGridSizeEventFunction)(wxGridSizeEvent&);
@@ -2648,6 +2664,7 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_EDITOR_HIDDEN(id, fn)       wx__DECLARE_GRIDEVT(EDITOR_HIDDEN, id, fn)
 #define EVT_GRID_CMD_EDITOR_CREATED(id, fn)      wx__DECLARE_GRIDEDITOREVT(EDITOR_CREATED, id, fn)
 #define EVT_GRID_CMD_CELL_BEGIN_DRAG(id, fn)     wx__DECLARE_GRIDEVT(CELL_BEGIN_DRAG, id, fn)
+#define EVT_GRID_CMD_TABBING(id, fn)             wx__DECLARE_GRIDEVT(TABBING, id, fn)
 
 // same as above but for any id (exists mainly for backwards compatibility but
 // then it's also true that you rarely have multiple grid in the same window)
@@ -2671,6 +2688,7 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_EDITOR_HIDDEN(fn)       EVT_GRID_CMD_EDITOR_HIDDEN(wxID_ANY, fn)
 #define EVT_GRID_EDITOR_CREATED(fn)      EVT_GRID_CMD_EDITOR_CREATED(wxID_ANY, fn)
 #define EVT_GRID_CELL_BEGIN_DRAG(fn)     EVT_GRID_CMD_CELL_BEGIN_DRAG(wxID_ANY, fn)
+#define EVT_GRID_TABBING(fn)             EVT_GRID_CMD_TABBING(wxID_ANY, fn)
 
 // we used to have a single wxEVT_GRID_CELL_CHANGE event but it was split into
 // wxEVT_GRID_CELL_CHANGING and CHANGED ones in wx 2.9.0, however the CHANGED
