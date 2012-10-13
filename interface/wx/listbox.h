@@ -25,6 +25,10 @@
     performance nor from user interface point of view, for large number of
     items.
 
+    Notice that currently @c TAB characters in list box items text are not
+    handled consistently under all platforms, so they should be replaced by
+    spaces to display strings properly everywhere. The list box doesn't
+    support any other control characters at all.
 
     @beginStyleTable
     @style{wxLB_SINGLE}
