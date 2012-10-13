@@ -375,17 +375,22 @@ void wxNotebook::UpdateSelection(int selNew)
     {
         wxNotebookPage *pPage = m_pages[selNew];
         pPage->Show(true);
+
+        // In addition to showing the page, we also want to give focus to it to
+        // make it possible to work with it from keyboard easily. However there
+        // are two exceptions: first, don't touch the focus at all if the
+        // notebook itself is not currently shown.
+        if ( ::IsWindowVisible(GetHwnd()) )
+        {
+            // And second, don't give focus away if the tab control itself has
+            // it, as this is how the native property sheets behave: if you
+            // explicitly click on the tab label giving it focus, it will
+            // remain after switching to another page. But if the focus was
+            // inside the notebook page, it switches to the new page.
+            if ( !HasFocus() )
+                pPage->SetFocus();
+        }
     }
-
-    // Changing the page should give the focus to it but, as per bug report
-    // http://sf.net/tracker/index.php?func=detail&aid=1150659&group_id=9863&atid=109863,
-    // we should not set the focus to it directly since it erroneously
-    // selects radio buttons and breaks keyboard handling for a notebook's
-    // scroll buttons. So give focus to the notebook and not the page.
-
-    // but don't do this is the notebook is hidden
-    if ( ::IsWindowVisible(GetHwnd()) )
-        SetFocus();
 
     m_selection = selNew;
 }
