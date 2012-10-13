@@ -99,11 +99,15 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( exstyle )
     {
 #ifndef __WXWINCE__
+        // We may have children inside this static box, so use this style for
+        // TAB navigation to work if we ever use IsDialogMessage() to implement
+        // it (currently we don't because it's too buggy and implement TAB
+        // navigation ourselves, but this could change in the future).
+        *exstyle |= WS_EX_CONTROLPARENT;
+
         if (wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
-            *exstyle = WS_EX_TRANSPARENT;
-        else
+            *exstyle |= WS_EX_TRANSPARENT;
 #endif
-            *exstyle = 0;
     }
 
     styleWin |= BS_GROUPBOX;
