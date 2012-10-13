@@ -17,8 +17,14 @@
     (clicking an item toggles the item on or off independently of other
     selections).
 
-    List box elements are numbered from zero.
-    Their number may be limited under some platforms.
+    List box elements are numbered from zero and while the maximal number of
+    elements is unlimited, it is usually better to use a virtual control, not
+    requiring to add all the items to it at once, such as wxDataViewCtrl or
+    wxListCtrl with @c wxLC_VIRTUAL style, once more than a few hundreds items
+    need to be displayed because this control is not optimized, neither from
+    performance nor from user interface point of view, for large number of
+    items.
+
 
     A listbox callback gets an event @c wxEVT_COMMAND_LISTBOX_SELECTED for
     single clicks, and @c wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
