@@ -2072,6 +2072,8 @@ void wxGtkPrinterDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width
 {
     cairo_rectangle ( m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
     cairo_clip(m_cairo);
+
+    wxDCImpl::DoSetClippingRegion(x, y, width, height);
 }
 
 void wxGtkPrinterDCImpl::DestroyClippingRegion()

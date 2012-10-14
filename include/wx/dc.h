@@ -433,8 +433,12 @@ public:
 
     // clipping
 
+    // Note that this pure virtual method has an implementation that updates
+    // the values returned by DoGetClippingBox() and so can be called from the
+    // derived class overridden version if it makes sense (i.e. if the clipping
+    // box coordinates are not already updated in some other way).
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
-                                     wxCoord width, wxCoord height) = 0;
+                                     wxCoord w, wxCoord h) = 0;
 
     // NB: this function works with device coordinates, not the logical ones!
     virtual void DoSetDeviceClippingRegion(const wxRegion& region) = 0;
