@@ -150,8 +150,9 @@ public:
     wxODButtonImageData(wxAnyButton *btn, const wxBitmap& bitmap)
     {
         SetBitmap(bitmap, wxAnyButton::State_Normal);
+#if wxUSE_IMAGE
         SetBitmap(bitmap.ConvertToDisabled(), wxAnyButton::State_Disabled);
-
+#endif
         m_dir = wxLEFT;
 
         // we use margins when we have both bitmap and text, but when we have
@@ -222,8 +223,12 @@ public:
         // initialize all bitmaps except for the disabled one to normal state
         for ( int n = 0; n < wxAnyButton::State_Max; n++ )
         {
+#if wxUSE_IMAGE
             m_iml.Add(n == wxAnyButton::State_Disabled ? bitmap.ConvertToDisabled()
                                                     : bitmap);
+#else
+            m_iml.Add(bitmap);
+#endif
         }
 
         m_data.himl = GetHimagelistOf(&m_iml);
