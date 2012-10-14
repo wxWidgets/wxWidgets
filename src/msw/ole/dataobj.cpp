@@ -28,7 +28,6 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
-    #include "wx/vector.h"
     #include "wx/wxcrtvararg.h"
 #endif
 
@@ -37,6 +36,7 @@
 #if wxUSE_OLE && defined(__WIN32__) && !defined(__GNUWIN32_OLD__)
 
 #include "wx/scopedarray.h"
+#include "wx/vector.h"
 #include "wx/msw/private.h"         // includes <windows.h>
 
 #ifdef __WXWINCE__
