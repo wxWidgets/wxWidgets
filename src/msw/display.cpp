@@ -35,7 +35,7 @@
     #include "wx/frame.h"
 #endif
 
-#include "wx/dynload.h"
+#include "wx/dynlib.h"
 #include "wx/sysopt.h"
 
 #include "wx/display_impl.h"
