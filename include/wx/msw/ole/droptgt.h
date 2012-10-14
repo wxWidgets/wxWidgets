@@ -19,7 +19,7 @@
 // ----------------------------------------------------------------------------
 
 class  wxIDropTarget;
-struct IDropTargetHelper;
+struct wxIDropTargetHelper;
 struct IDataObject;
 
 // ----------------------------------------------------------------------------
@@ -80,7 +80,7 @@ private:
 
     wxIDropTarget     *m_pIDropTarget; // the pointer to our COM interface
     IDataObject       *m_pIDataSource; // the pointer to the source data object
-    IDropTargetHelper *m_dropTargetHelper; // the pointer to the drop target helper
+    wxIDropTargetHelper *m_dropTargetHelper; // the drop target helper
 
     wxDECLARE_NO_COPY_CLASS(wxDropTarget);
 };

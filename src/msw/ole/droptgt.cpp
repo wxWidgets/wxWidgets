@@ -50,6 +50,30 @@
 
 #include "wx/msw/ole/oleutils.h"
 
+#include <initguid.h>
+
+// Some (very) old SDKs don't define IDropTargetHelper, so define our own
+// version of it here.
+struct wxIDropTargetHelper : public IUnknown
+{
+    virtual HRESULT STDMETHODCALLTYPE DragEnter(HWND hwndTarget,
+                                                IDataObject *pDataObject,
+                                                POINT *ppt,
+                                                DWORD dwEffect) = 0;
+    virtual HRESULT STDMETHODCALLTYPE DragLeave() = 0;
+    virtual HRESULT STDMETHODCALLTYPE DragOver(POINT *ppt, DWORD dwEffect) = 0;
+    virtual HRESULT STDMETHODCALLTYPE Drop(IDataObject *pDataObject,
+                                           POINT *ppt,
+                                           DWORD dwEffect) = 0;
+    virtual HRESULT STDMETHODCALLTYPE Show(BOOL fShow) = 0;
+};
+
+namespace
+{
+    DEFINE_GUID(wxIID_IDropTargetHelper,
+                0x4657278B,0x411B,0x11D2,0x83,0x9A,0x00,0xC0,0x4F,0xD9,0x18,0xD0);
+}
+
 // ----------------------------------------------------------------------------
 // IDropTarget interface: forward all interesting things to wxDropTarget
 // (the name is unfortunate, but wx_I_DropTarget is not at all the same thing
@@ -581,7 +605,7 @@ wxDropTarget::MSWInitDragImageSupport()
 {
     // Use the default drop target helper to show shell drag images
     CoCreateInstance(CLSID_DragDropHelper, NULL, CLSCTX_INPROC_SERVER,
-                     IID_IDropTargetHelper, (LPVOID*)&m_dropTargetHelper);
+                     wxIID_IDropTargetHelper, (LPVOID*)&m_dropTargetHelper);
 }
 
 void
