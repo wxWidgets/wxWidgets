@@ -713,8 +713,8 @@ void FileSystemWatcherTestCase::TestTrees()
 #ifndef __WINDOWS__
             // When there's no file mask, wxMSW sets a single watch
             // on the trunk which is implemented recursively.
-            // wxGTK always sets an additional watch for each file/subdir
-            treeitems += (subdirs*files) + subdirs + 1; // +1 for 'child'
+            // wxGTK always sets an additional watch for each subdir
+            treeitems += subdirs + 1; // +1 for 'child'
 #endif // __WINDOWS__
 
             // Store the initial count; there may already be some watches
@@ -761,9 +761,9 @@ void FileSystemWatcherTestCase::TestTrees()
             const int initial = m_watcher->GetWatchedPathsCount();
 
             // When we use a filter, both wxMSW and wxGTK implementations set
-            // an additional watch for each file/subdir. Test by passing *.txt
-            // We expect the dirs and the other 2 files to be skipped
-            const size_t treeitems = subdirs + 1;
+            // an additional watch for each subdir (+1 for the root dir itself
+            // and another +1 for "child").
+            const size_t treeitems = subdirs + 2;
             m_watcher->AddTree(dir, wxFSW_EVENT_ALL, "*.txt");
 
             const int plustree = m_watcher->GetWatchedPathsCount();

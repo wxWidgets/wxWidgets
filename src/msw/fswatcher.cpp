@@ -316,8 +316,12 @@ void wxIOCPThread::ProcessNativeEvents(wxVector<wxEventProcessingData>& events)
             // CHECK I heard that returned path can be either in short on long
             // form...need to account for that!
             wxFileName path = GetEventPath(*watch, e);
-            wxFileSystemWatcherEvent event(flags, path, path);
-            SendEvent(event);
+            // For files, check that it matches any filespec
+            if ( m_service->MatchesFilespec(path, watch->GetFilespec()) )
+            {
+                wxFileSystemWatcherEvent event(flags, path, path);
+                SendEvent(event);
+            }
         }
     }
 }

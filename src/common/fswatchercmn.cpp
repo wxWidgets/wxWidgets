@@ -173,34 +173,20 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
         {
         }
 
-        // CHECK we choose which files to delegate to Add(), maybe we should pass
-        // all of them to Add() and let it choose? this is useful when adding a
-        // file to a dir that is already watched, then not only should we know
-        // about that, but Add() should also behave well then
-        virtual wxDirTraverseResult OnFile(const wxString& filename)
+        virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename))
         {
-            if ( m_watcher->AddAny(wxFileName::FileName(filename),
-                                   m_events, wxFSWPath_File) )
-            {
-                wxLogTrace(wxTRACE_FSWATCHER,
-                       "--- AddTree adding file '%s' ---", filename);
-            }
+            // There is no need to watch individual files as we watch the
+            // parent directory which will notify us about any changes in them.
             return wxDIR_CONTINUE;
         }
 
         virtual wxDirTraverseResult OnDir(const wxString& dirname)
         {
-            // We can't currently watch only the files with the given filespec
-            // in the subdirectories so we only watch subdirectories at all if
-            // we want to watch everything.
-            if ( m_filespec.empty() )
+            if ( m_watcher->AddAny(wxFileName::DirName(dirname),
+                                   m_events, wxFSWPath_Tree, m_filespec) )
             {
-                if ( m_watcher->AddAny(wxFileName::DirName(dirname),
-                                       m_events, wxFSWPath_Dir) )
-                {
-                    wxLogTrace(wxTRACE_FSWATCHER,
-                       "--- AddTree adding directory '%s' ---", dirname);
-                }
+                wxLogTrace(wxTRACE_FSWATCHER,
+                   "--- AddTree adding directory '%s' ---", dirname);
             }
             return wxDIR_CONTINUE;
         }
@@ -216,7 +202,7 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
     dir.Traverse(traverser, filespec);
 
     // Add the path itself explicitly as Traverse() doesn't return it.
-    AddAny(path.GetPathWithSep(), events, wxFSWPath_Dir, filespec);
+    AddAny(path.GetPathWithSep(), events, wxFSWPath_Tree, filespec);
 
     return true;
 }
@@ -237,24 +223,16 @@ bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
         {
         }
 
-        virtual wxDirTraverseResult OnFile(const wxString& filename)
+        virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename))
         {
-            m_watcher->Remove(wxFileName(filename));
+            // We never watch the individual files when watching the tree, so
+            // nothing to do here.
             return wxDIR_CONTINUE;
         }
 
         virtual wxDirTraverseResult OnDir(const wxString& dirname)
         {
-            // Currently the subdirectories would have been added only if there
-            // is no filespec.
-            //
-            // Notice that we still need to recurse into them even if we're
-            // using a filespec because they can contain files matching it.
-            if ( m_filespec.empty() )
-            {
-                m_watcher->Remove(wxFileName::DirName(dirname));
-            }
-
+            m_watcher->Remove(wxFileName::DirName(dirname));
             return wxDIR_CONTINUE;
         }
 

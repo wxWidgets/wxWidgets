@@ -89,6 +89,12 @@ public:
         return true;
     }
 
+    // Check whether any filespec matches the file's ext (if present)
+    bool MatchesFilespec(const wxFileName& fn, const wxString& filespec) const
+    {
+        return filespec.empty() || wxMatchWild(filespec, fn.GetFullName());
+    }
+
 protected:
     virtual bool DoAdd(wxSharedPtr<wxFSWatchEntry> watch) = 0;
 

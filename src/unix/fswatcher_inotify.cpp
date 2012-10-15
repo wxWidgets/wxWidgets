@@ -282,18 +282,23 @@ protected:
             {
                 inotify_event& oldinevt = *(it2->second);
 
-                wxFileSystemWatcherEvent event(flags);
-                if ( inevt.mask & IN_MOVED_FROM )
+                // Tell the owner, in case it's interested
+                // If there's a filespec, assume he's not
+                if ( watch.GetFilespec().empty() )
                 {
-                    event.SetPath(GetEventPath(watch, inevt));
-                    event.SetNewPath(GetEventPath(watch, oldinevt));
+                    wxFileSystemWatcherEvent event(flags);
+                    if ( inevt.mask & IN_MOVED_FROM )
+                    {
+                        event.SetPath(GetEventPath(watch, inevt));
+                        event.SetNewPath(GetEventPath(watch, oldinevt));
+                    }
+                    else
+                    {
+                        event.SetPath(GetEventPath(watch, oldinevt));
+                        event.SetNewPath(GetEventPath(watch, inevt));
+                    }
+                    SendEvent(event);
                 }
-                else
-                {
-                    event.SetPath(GetEventPath(watch, oldinevt));
-                    event.SetNewPath(GetEventPath(watch, inevt));
-                }
-                SendEvent(event);
 
                 m_cookies.erase(it2);
                 delete &oldinevt;
@@ -303,8 +308,12 @@ protected:
         else
         {
             wxFileName path = GetEventPath(watch, inevt);
-            wxFileSystemWatcherEvent event(flags, path, path);
-            SendEvent(event);
+            // For files, check that it matches any filespec
+            if ( MatchesFilespec(path, watch.GetFilespec()) )
+            {
+                wxFileSystemWatcherEvent event(flags, path, path);
+                SendEvent(event);
+            }
         }
     }
 
@@ -323,11 +332,18 @@ protected:
             wxCHECK_RET(wit != m_watchMap.end(),
                              "Watch descriptor not present in the watch map!");
 
+            // Tell the owner, in case it's interested
+            // If there's a filespec, assume he's not
             wxFSWatchEntry& watch = *(wit->second);
-            int flags = Native2WatcherFlags(inevt.mask);
-            wxFileName path = GetEventPath(watch, inevt);
-            wxFileSystemWatcherEvent event(flags, path, path);
-            SendEvent(event);
+            if ( watch.GetFilespec().empty() )
+            {
+                int flags = Native2WatcherFlags(inevt.mask);
+                wxFileName path = GetEventPath(watch, inevt);
+                {
+                    wxFileSystemWatcherEvent event(flags, path, path);
+                    SendEvent(event);
+                }
+            }
 
             m_cookies.erase(it);
             delete &inevt;
