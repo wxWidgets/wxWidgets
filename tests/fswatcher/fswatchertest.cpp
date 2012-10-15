@@ -653,6 +653,9 @@ void FileSystemWatcherTestCase::TestTrees()
         void GrowTree(wxFileName dir)
         {
             CPPUNIT_ASSERT(dir.Mkdir());
+            // Now add a subdir with an easy name to remember in WatchTree()
+            dir.AppendDir("child");
+            CPPUNIT_ASSERT(dir.Mkdir());
 
             // Create a branch of 5 numbered subdirs, each containing 3
             // numbered files
@@ -711,7 +714,7 @@ void FileSystemWatcherTestCase::TestTrees()
             // When there's no file mask, wxMSW sets a single watch
             // on the trunk which is implemented recursively.
             // wxGTK always sets an additional watch for each file/subdir
-            treeitems += (subdirs*files) + subdirs;
+            treeitems += (subdirs*files) + subdirs + 1; // +1 for 'child'
 #endif // __WINDOWS__
 
             // Store the initial count; there may already be some watches
@@ -724,6 +727,27 @@ void FileSystemWatcherTestCase::TestTrees()
 
             CPPUNIT_ASSERT_EQUAL(initial + treeitems, plustree);
 
+            m_watcher->RemoveTree(dir);
+            CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
+
+            // Now test the refcount mechanism by watching items more than once
+            wxFileName child(dir);
+            child.AppendDir("child");
+            m_watcher->AddTree(child);
+            // Check some watches were added; we don't care about the number
+            CPPUNIT_ASSERT(initial < m_watcher->GetWatchedPathsCount());
+            // Now watch the whole tree and check that the count is the same
+            // as it was the first time, despite also adding 'child' separately
+            // Except that in wxMSW this isn't true: each watch will be a
+            // single, recursive dir; so fudge the count
+            size_t fudge = 0;
+#ifdef __WINDOWS__
+            fudge = 1;
+#endif // __WINDOWS__
+            m_watcher->AddTree(dir);
+            CPPUNIT_ASSERT_EQUAL(plustree + fudge, m_watcher->GetWatchedPathsCount());
+            m_watcher->RemoveTree(child);
+            CPPUNIT_ASSERT(initial < m_watcher->GetWatchedPathsCount());
             m_watcher->RemoveTree(dir);
             CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
         }

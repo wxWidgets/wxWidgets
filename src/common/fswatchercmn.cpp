@@ -108,17 +108,28 @@ wxFileSystemWatcherBase::AddAny(const wxFileName& path,
     if (canonical.IsEmpty())
         return false;
 
-    wxCHECK_MSG(m_watches.find(canonical) == m_watches.end(), false,
-                wxString::Format("Path '%s' is already watched", canonical));
-
     // adding a path in a platform specific way
     wxFSWatchInfo watch(canonical, events, type, filespec);
     if ( !m_service->Add(watch) )
         return false;
 
-    // on success, add path to our 'watch-list'
-    wxFSWatchInfoMap::value_type val(canonical, watch);
-    return m_watches.insert(val).second;
+    // on success, either add path to our 'watch-list'
+    // or, if already watched, inc the refcount. This may happen if
+    // a dir is Add()ed, then later AddTree() is called on a parent dir
+    wxFSWatchInfoMap::iterator it = m_watches.find(canonical);
+    if ( it == m_watches.end() )
+    {
+        wxFSWatchInfoMap::value_type val(canonical, watch);
+        m_watches.insert(val).second;
+    }
+    else
+    {
+        wxFSWatchInfo& watch = it->second;
+        int count = watch.IncRef();
+        wxLogTrace(wxTRACE_FSWATCHER,
+                   "'%s' is now watched %d times", canonical, count);
+    }
+    return true;
 }
 
 bool wxFileSystemWatcherBase::Remove(const wxFileName& path)
@@ -132,12 +143,17 @@ bool wxFileSystemWatcherBase::Remove(const wxFileName& path)
     wxCHECK_MSG(it != m_watches.end(), false,
                 wxString::Format("Path '%s' is not watched", canonical));
 
-    // remove from watch-list
-    wxFSWatchInfo watch = it->second;
-    m_watches.erase(it);
+    // Decrement the watch's refcount and remove from watch-list if 0
+    bool ret = true;
+    wxFSWatchInfo& watch = it->second;
+    if ( !watch.DecRef() )
+    {
+        // remove in a platform specific way
+        ret = m_service->Remove(watch);
 
-    // remove in a platform specific way
-    return m_service->Remove(watch);
+        m_watches.erase(it);
+    }
+    return ret;
 }
 
 bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,

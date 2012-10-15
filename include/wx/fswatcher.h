@@ -196,7 +196,7 @@ class wxFSWatchInfo
 {
 public:
     wxFSWatchInfo() :
-        m_events(-1), m_type(wxFSWPath_None)
+        m_events(-1), m_type(wxFSWPath_None), m_refcount(-1)
     {
     }
 
@@ -204,7 +204,8 @@ public:
                   int events,
                   wxFSWPathType type,
                   const wxString& filespec = wxString()) :
-        m_path(path), m_filespec(filespec), m_events(events), m_type(type)
+        m_path(path), m_filespec(filespec), m_events(events), m_type(type),
+        m_refcount(1)
     {
     }
 
@@ -225,11 +226,27 @@ public:
         return m_type;
     }
 
+    // Reference counting of watch entries is used to avoid watching the same
+    // file system path multiple times (this can happen even accidentally, e.g.
+    // when you have a recursive watch and then decide to watch some file or
+    // directory under it separately).
+    int IncRef()
+    {
+        return ++m_refcount;
+    }
+
+    int DecRef()
+    {
+        wxASSERT_MSG( m_refcount > 0, wxS("Trying to decrement a zero count") );
+        return --m_refcount;
+    }
+
 protected:
     wxString m_path;
     wxString m_filespec;      // For tree watches, holds any filespec to apply
     int m_events;
     wxFSWPathType m_type;
+    int m_refcount;
 };
 
 WX_DECLARE_STRING_HASH_MAP(wxFSWatchInfo, wxFSWatchInfoMap);

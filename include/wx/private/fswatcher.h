@@ -49,8 +49,13 @@ public:
 
     virtual bool Add(const wxFSWatchInfo& winfo)
     {
-        wxCHECK_MSG( m_watches.find(winfo.GetPath()) == m_watches.end(), false,
-                     "Path '%s' is already watched");
+        if ( m_watches.find(winfo.GetPath()) != m_watches.end() )
+        {
+            wxLogTrace(wxTRACE_FSWATCHER,
+                       "Path '%s' is already watched", winfo.GetPath());
+            // This can happen if a dir is watched, then a parent tree added
+            return true;
+        }
 
         // construct watch entry
         wxSharedPtr<wxFSWatchEntry> watch(new wxFSWatchEntry(winfo));
@@ -66,8 +71,13 @@ public:
     virtual bool Remove(const wxFSWatchInfo& winfo)
     {
         wxFSWatchEntries::iterator it = m_watches.find(winfo.GetPath());
-        wxCHECK_MSG( it != m_watches.end(), false, "Path '%s' is not watched");
-
+        if ( it == m_watches.end() )
+        {
+            wxLogTrace(wxTRACE_FSWATCHER,
+                       "Path '%s' is not watched", winfo.GetPath());
+            // This can happen if a dir is watched, then a parent tree added
+            return true;
+        }
         wxSharedPtr<wxFSWatchEntry> watch = it->second;
         m_watches.erase(it);
         return DoRemove(watch);
