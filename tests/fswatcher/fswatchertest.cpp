@@ -417,11 +417,9 @@ private:
     CPPUNIT_TEST_SUITE( FileSystemWatcherTestCase );
         CPPUNIT_TEST( TestEventCreate );
         CPPUNIT_TEST( TestEventDelete );
-
-        // FIXME: Currently this test fails under Windows.
-#ifndef __WINDOWS__
+#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
         CPPUNIT_TEST( TestTrees );
-#endif // __WINDOWS__
+#endif
 
         // kqueue-based implementation doesn't collapse create/delete pairs in
         // renames and doesn't detect neither modifications nor access to the
@@ -446,10 +444,9 @@ private:
     void TestEventRename();
     void TestEventModify();
     void TestEventAccess();
-#ifndef __WINDOWS__
-    void TestTrees();
-#endif // __WINDOWS__
-
+#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
+    void TestTrees();   // Visual C++ 6 can't build this
+#endif
     void TestNoEventsAfterRemove();
 
     DECLARE_NO_COPY_CLASS(FileSystemWatcherTestCase)
@@ -641,7 +638,8 @@ void FileSystemWatcherTestCase::TestEventAccess()
 // ----------------------------------------------------------------------------
 // TestTrees
 // ----------------------------------------------------------------------------
-#ifndef __WINDOWS__
+
+#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
 void FileSystemWatcherTestCase::TestTrees()
 {
     class TreeTester : public EventHandler
@@ -664,10 +662,11 @@ void FileSystemWatcherTestCase::TestTrees()
                 CPPUNIT_ASSERT(dir.Mkdir());
 
                 const wxString prefix = dir.GetPathWithSep();
+                const wxString ext[] = { ".txt", ".log", "" };
                 for ( unsigned f = 0; f < files; ++f )
                 {
                     // Just create the files.
-                    wxFile(prefix + wxString::Format("file%u", f+1),
+                    wxFile(prefix + wxString::Format("file%u", f+1) + ext[f],
                            wxFile::write);
                 }
             }
@@ -707,8 +706,13 @@ void FileSystemWatcherTestCase::TestTrees()
         {
             CPPUNIT_ASSERT(m_watcher);
 
-            const size_t
-                treeitems = (subdirs*files) + subdirs + 1; // +1 for the trunk
+            size_t treeitems = 1; // the trunk
+#ifndef __WINDOWS__
+            // When there's no file mask, wxMSW sets a single watch
+            // on the trunk which is implemented recursively.
+            // wxGTK always sets an additional watch for each file/subdir
+            treeitems += (subdirs*files) + subdirs;
+#endif // __WINDOWS__
 
             // Store the initial count; there may already be some watches
             const int initial = m_watcher->GetWatchedPathsCount();
@@ -720,6 +724,28 @@ void FileSystemWatcherTestCase::TestTrees()
 
             CPPUNIT_ASSERT_EQUAL(initial + treeitems, plustree);
 
+            m_watcher->RemoveTree(dir);
+            CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
+        }
+
+        void WatchTreeWithFilespec(const wxFileName& dir)
+        {
+            CPPUNIT_ASSERT(m_watcher);
+            CPPUNIT_ASSERT(dir.DirExists()); // Was built in WatchTree()
+
+            // Store the initial count; there may already be some watches
+            const int initial = m_watcher->GetWatchedPathsCount();
+
+            // When we use a filter, both wxMSW and wxGTK implementations set
+            // an additional watch for each file/subdir. Test by passing *.txt
+            // We expect the dirs and the other 2 files to be skipped
+            const size_t treeitems = subdirs + 1;
+            m_watcher->AddTree(dir, wxFSW_EVENT_ALL, "*.txt");
+
+            const int plustree = m_watcher->GetWatchedPathsCount();
+            CPPUNIT_ASSERT_EQUAL(initial + treeitems, plustree);
+
+            // RemoveTree should try to remove only those files that were added
             m_watcher->RemoveTree(dir);
             CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
         }
@@ -750,6 +776,12 @@ void FileSystemWatcherTestCase::TestTrees()
 
             WatchDir(singledir);
             WatchTree(treedir);
+            // Now test adding and removing a tree using a filespec
+            // wxMSW uses the generic method to add matching files; which fails
+            // as it doesn't support adding files :/ So disable the test
+#ifndef __WINDOWS__
+            WatchTreeWithFilespec(treedir);
+#endif // __WINDOWS__
 
             RemoveSingleWatch(singledir);
             // Add it back again, ready to test RemoveAll()
@@ -781,7 +813,8 @@ void FileSystemWatcherTestCase::TestTrees()
     TreeTester tester;
     tester.Run();
 }
-#endif // __WINDOWS__
+#endif // !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
+
 
 namespace
 {

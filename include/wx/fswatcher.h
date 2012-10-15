@@ -200,8 +200,11 @@ public:
     {
     }
 
-    wxFSWatchInfo(const wxString& path, int events, wxFSWPathType type) :
-        m_path(path), m_events(events), m_type(type)
+    wxFSWatchInfo(const wxString& path,
+                  int events,
+                  wxFSWPathType type,
+                  const wxString& filespec = wxString()) :
+        m_path(path), m_filespec(filespec), m_events(events), m_type(type)
     {
     }
 
@@ -209,6 +212,8 @@ public:
     {
         return m_path;
     }
+
+    const wxString& GetFilespec() const { return m_filespec; }
 
     int GetFlags() const
     {
@@ -222,6 +227,7 @@ public:
 
 protected:
     wxString m_path;
+    wxString m_filespec;      // For tree watches, holds any filespec to apply
     int m_events;
     wxFSWPathType m_type;
 };
@@ -260,7 +266,7 @@ public:
      * of particular type.
      */
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                         const wxString& filter = wxEmptyString);
+                         const wxString& filespec = wxEmptyString);
 
     /**
      * Removes path from the list of watched paths.
@@ -310,7 +316,8 @@ public:
     //
     // Delegates the real work of adding the path to wxFSWatcherImpl::Add() and
     // updates m_watches if the new path was successfully added.
-    bool AddAny(const wxFileName& path, int events, wxFSWPathType type);
+    bool AddAny(const wxFileName& path, int events, wxFSWPathType type,
+                const wxString& filespec = wxString());
 
 protected:
 
