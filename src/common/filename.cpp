@@ -332,6 +332,48 @@ static bool IsUNCPath(const wxString& path, wxPathFormat format)
                             !IsDOSPathSep(path[2u]);
 }
 
+#ifndef __WIN32__
+
+// Under Unix-ish systems (basically everything except Windows) we may work
+// either with the file itself or its target in case it's a symbolic link, as
+// determined by wxFileName::ShouldFollowLink(). StatAny() can be used to stat
+// the appropriate file with an extra twist that it also works (by following
+// the symlink by default) when there is no wxFileName object at all, as is the
+// case in static methods.
+
+// Private implementation, don't call directly, use one of the overloads below.
+bool DoStatAny(wxStructStat& st, wxString path, const wxFileName* fn)
+{
+    // We need to remove any trailing slashes from the path because they could
+    // interfere with the symlink following decision: even if we use lstat(),
+    // it would still follow the symlink if we pass it a path with a slash at
+    // the end because the symlink resolution would happen while following the
+    // path and not for the last path element itself.
+
+    while ( wxEndsWithPathSeparator(path) )
+        path.RemoveLast();
+
+    int ret = !fn || fn->ShouldFollowLink() ? wxStat(path, &st)
+                                            : wxLstat(path, &st);
+    return ret == 0;
+}
+
+// Overloads to use for a case when we don't have wxFileName object and when we
+// do have one.
+inline
+bool StatAny(wxStructStat& st, const wxString& path)
+{
+    return DoStatAny(st, path, NULL);
+}
+
+inline
+bool StatAny(wxStructStat& st, const wxFileName& fn)
+{
+    return DoStatAny(st, fn.GetFullPath(), &fn);
+}
+
+#endif // !__WIN32__
+
 // ----------------------------------------------------------------------------
 // private constants
 // ----------------------------------------------------------------------------
@@ -357,6 +399,7 @@ void wxFileName::Assign( const wxFileName &filepath )
     m_ext = filepath.GetExt();
     m_relative = filepath.m_relative;
     m_hasExt = filepath.m_hasExt;
+    m_dontFollowLinks = filepath.m_dontFollowLinks;
 }
 
 void wxFileName::Assign(const wxString& volume,
@@ -566,6 +609,9 @@ void wxFileName::Clear()
 
     // nor any extension
     m_hasExt = false;
+
+    // follow symlinks by default
+    m_dontFollowLinks = false;
 }
 
 /* static */
@@ -623,8 +669,12 @@ void RemoveTrailingSeparatorsFromPath(wxString& strPath)
 
 #endif // __WINDOWS__ || __OS2__
 
-bool wxFileSystemObjectExists(const wxString& path, int flags)
+bool
+wxFileSystemObjectExists(const wxString& path, int flags,
+                         const wxFileName* fn = NULL)
 {
+    wxUnusedVar(fn);    // It's only used under Unix
+
     // Should the existence of file/directory with this name be accepted, i.e.
     // result in the true return value from this function?
     const bool acceptFile = (flags & wxFileSystemObject_File) != 0;
@@ -683,7 +733,7 @@ bool wxFileSystemObjectExists(const wxString& path, int flags)
     return false;
 #else // Non-MSW, non-OS/2
     wxStructStat st;
-    if ( wxStat(strPath, &st) != 0 )
+    if ( !DoStatAny(st, strPath, fn) )
         return false;
 
     if ( S_ISREG(st.st_mode) )
@@ -699,7 +749,7 @@ bool wxFileSystemObjectExists(const wxString& path, int flags)
 
 bool wxFileName::FileExists() const
 {
-    return wxFileName::FileExists( GetFullPath() );
+    return wxFileSystemObjectExists(GetFullPath(), wxFileSystemObject_File, this);
 }
 
 /* static */
@@ -710,13 +760,18 @@ bool wxFileName::FileExists( const wxString &filePath )
 
 bool wxFileName::DirExists() const
 {
-    return wxFileName::DirExists( GetPath() );
+    return wxFileSystemObjectExists(GetPath(), wxFileSystemObject_Dir, this);
 }
 
 /* static */
 bool wxFileName::DirExists( const wxString &dirPath )
 {
     return wxFileSystemObjectExists(dirPath, wxFileSystemObject_Dir);
+}
+
+bool wxFileName::Exists() const
+{
+    return wxFileSystemObjectExists(GetFullPath(), wxFileSystemObject_Any, this);
 }
 
 /* static */
@@ -1779,8 +1834,7 @@ bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
 
 #if defined(__UNIX__)
     wxStructStat st1, st2;
-    if ( wxStat(fn1.GetFullPath(), &st1) == 0 &&
-            wxStat(fn2.GetFullPath(), &st2) == 0 )
+    if ( StatAny(st1, fn1) && StatAny(st2, fn2) )
     {
         if ( st1.st_ino == st2.st_ino && st1.st_dev == st2.st_dev )
             return true;
@@ -2647,7 +2701,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 #elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__OS2__) || (defined(__DOS__) && defined(__WATCOMC__))
     // no need to test for IsDir() here
     wxStructStat stBuf;
-    if ( wxStat( GetFullPath(), &stBuf) == 0 )
+    if ( StatAny(stBuf, *this) )
     {
         // Android defines st_*time fields as unsigned long, but time_t as long,
         // hence the static_casts.

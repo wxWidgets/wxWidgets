@@ -132,13 +132,13 @@ public:
         // is contructed (the name will be empty), otherwise a file name and
         // extension are extracted from it
     wxFileName( const wxString& fullpath, wxPathFormat format = wxPATH_NATIVE )
-        { Assign( fullpath, format ); }
+        { Assign( fullpath, format ); m_dontFollowLinks = false; }
 
         // from a directory name and a file name
     wxFileName(const wxString& path,
                const wxString& name,
                wxPathFormat format = wxPATH_NATIVE)
-        { Assign(path, name, format); }
+        { Assign(path, name, format); m_dontFollowLinks = false; }
 
         // from a volume, directory name, file base name and extension
     wxFileName(const wxString& volume,
@@ -146,14 +146,14 @@ public:
                const wxString& name,
                const wxString& ext,
                wxPathFormat format = wxPATH_NATIVE)
-        { Assign(volume, path, name, ext, format); }
+        { Assign(volume, path, name, ext, format); m_dontFollowLinks = false; }
 
         // from a directory name, file base name and extension
     wxFileName(const wxString& path,
                const wxString& name,
                const wxString& ext,
                wxPathFormat format = wxPATH_NATIVE)
-        { Assign(path, name, ext, format); }
+        { Assign(path, name, ext, format); m_dontFollowLinks = false; }
 
         // the same for delayed initialization
 
@@ -224,7 +224,7 @@ public:
 
         // does anything at all with this name (i.e. file, directory or some
         // other file system object such as a device, socket, ...) exist?
-    bool Exists() const { return Exists(GetFullPath()); }
+    bool Exists() const;
     static bool Exists(const wxString& path);
 
 
@@ -366,6 +366,26 @@ public:
                       wxPathFormat format = wxPATH_NATIVE)
         { return Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE |
                            wxPATH_NORM_TILDE, cwd, format); }
+
+
+    // If the path is a symbolic link (Unix-only), indicate that all
+    // filesystem operations on this path should be performed on the link
+    // itself and not on the file it points to, as is the case by default.
+    //
+    // No effect if this is not a symbolic link.
+    void DontFollowLink()
+    {
+        m_dontFollowLinks = true;
+    }
+
+    // If the path is a symbolic link (Unix-only), returns whether various
+    // file operations should act on the link itself, or on its target.
+    //
+    // This does not test if the path is really a symlink or not.
+    bool ShouldFollowLink() const
+    {
+        return !m_dontFollowLinks;
+    }
 
 #if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
         // if the path is a shortcut, return the target and optionally,
@@ -606,6 +626,11 @@ private:
     // the difference is important as file with name "foo" and without
     // extension has full name "foo" while with empty extension it is "foo."
     bool            m_hasExt;
+
+    // by default, symlinks are dereferenced but this flag can be set with
+    // DontFollowLink() to change this and make different operations work on
+    // this file path itself instead of the target of the symlink
+    bool            m_dontFollowLinks;
 };
 
 #endif // _WX_FILENAME_H_

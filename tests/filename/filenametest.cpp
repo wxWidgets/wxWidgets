@@ -141,6 +141,9 @@ private:
         CPPUNIT_TEST( TestGetTimes );
         CPPUNIT_TEST( TestExists );
         CPPUNIT_TEST( TestIsSame );
+#if defined(__UNIX__)
+        CPPUNIT_TEST( TestSymlinks );
+#endif // __UNIX__
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -160,6 +163,9 @@ private:
     void TestGetTimes();
     void TestExists();
     void TestIsSame();
+#if defined(__UNIX__)
+    void TestSymlinks();
+#endif // __UNIX__
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -727,3 +733,133 @@ void FileNameTestCase::TestIsSame()
     CPPUNIT_ASSERT( fn3.SameAs(fn4) );
 #endif // __UNIX__
 }
+
+#if defined(__UNIX__)
+
+// Tests for functions that are changed by ShouldFollowLink()
+void FileNameTestCase::TestSymlinks()
+{
+    const wxString tmpdir(wxStandardPaths::Get().GetTempDir());
+
+    wxFileName tmpfn(wxFileName::DirName(tmpdir));
+
+    wxDateTime dtAccessTmp, dtModTmp, dtCreateTmp;
+    CPPUNIT_ASSERT(tmpfn.GetTimes(&dtAccessTmp, &dtModTmp, &dtCreateTmp));
+
+    // Create a temporary directory
+    wxString name = tmpdir + "/filenametestXXXXXX";
+    wxString tempdir = wxString::From8BitData(mkdtemp(name.char_str()));
+    tempdir << wxFileName::GetPathSeparator();
+    wxFileName tempdirfn(wxFileName::DirName(tempdir));
+    CPPUNIT_ASSERT(tempdirfn.DirExists());
+
+    // Create a regular file in that dir, to act as a symlink target
+    wxFileName targetfn(wxFileName::CreateTempFileName(tempdir));
+    CPPUNIT_ASSERT(targetfn.FileExists());
+
+    // Create a symlink to that file, and another to the home dir
+    wxFileName linktofile(tempdir, "linktofile");
+    CPPUNIT_ASSERT_EQUAL(0, symlink(targetfn.GetFullPath().c_str(),
+                                        linktofile.GetFullPath().c_str()));
+
+    const wxString linktodirName(tempdir + "/linktodir");
+    wxFileName linktodir(wxFileName::DirName(linktodirName));
+    CPPUNIT_ASSERT_EQUAL(0, symlink(tmpfn.GetFullPath().c_str(),
+                                        linktodirName.c_str()));
+
+    // And symlinks to both of those symlinks
+    wxFileName linktofilelnk(tempdir, "linktofilelnk");
+    CPPUNIT_ASSERT_EQUAL(0, symlink(linktofile.GetFullPath().c_str(),
+                                    linktofilelnk.GetFullPath().c_str()));
+    wxFileName linktodirlnk(tempdir, "linktodirlnk");
+    CPPUNIT_ASSERT_EQUAL(0, symlink(linktodir.GetFullPath().c_str(),
+                                    linktodirlnk.GetFullPath().c_str()));
+
+    // Run the tests twice: once in the default symlink following mode and the
+    // second time without following symlinks.
+    bool deref = true;
+    for ( int n = 0; n < 2; ++n, deref = !deref )
+    {
+        const std::string msg(deref ? " failed for the link target"
+                                    : " failed for the path itself");
+
+        if ( !deref )
+        {
+            linktofile.DontFollowLink();
+            linktodir.DontFollowLink();
+            linktofilelnk.DontFollowLink();
+            linktodirlnk.DontFollowLink();
+        }
+
+        // Test SameAs()
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Comparison with file" + msg,
+            deref, linktofile.SameAs(targetfn)
+        );
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Comparison with directory" + msg,
+            deref, linktodir.SameAs(tmpfn)
+        );
+
+        // A link-to-a-link should dereference through to the final target
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Comparison with link to a file" + msg,
+            deref,
+            linktofilelnk.SameAs(targetfn)
+        );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Comparison with link to a directory" + msg,
+            deref,
+            linktodirlnk.SameAs(tmpfn)
+        );
+
+        // Test GetTimes()
+        wxDateTime dtAccess, dtMod, dtCreate;
+        CPPUNIT_ASSERT_MESSAGE
+        (
+            "Getting times of a directory" + msg,
+            linktodir.GetTimes(&dtAccess, &dtMod, &dtCreate)
+        );
+
+        // IsEqualTo() should be true only when dereferencing. Don't test each
+        // individually: accessing to create the link will have updated some
+        bool equal = dtCreate.IsEqualTo(dtCreateTmp) &&
+                     dtMod.IsEqualTo(dtModTmp) &&
+                     dtAccess.IsEqualTo(dtAccessTmp);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Comparing directory times" + msg,
+            deref,
+            equal
+        );
+
+        // Test Exists()
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Testing file existence" + msg,
+            deref,
+            linktofile.FileExists()
+        );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Testing directory existence" + msg,
+            deref,
+            linktodir.DirExists()
+        );
+    }
+
+    // Finally test Exists() after removing the file.
+    CPPUNIT_ASSERT(wxRemoveFile(targetfn.GetFullPath()));
+    CPPUNIT_ASSERT(!wxFileName(tempdir, "linktofile").Exists());
+    CPPUNIT_ASSERT(linktofile.Exists());
+
+    // Clean-up, and also tests removal of a dir containing a symlink-to-dir
+    CPPUNIT_ASSERT(tempdirfn.Rmdir(wxPATH_RMDIR_RECURSIVE));
+}
+
+#endif // __UNIX__

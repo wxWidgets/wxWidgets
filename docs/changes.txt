@@ -529,6 +529,7 @@ Major new features in this release
 
 All:
 
+- Add support for symlinks to wxFileName (David Hart).
 - Add separate read/written bytes counters and per-direction NOWAIT and WAITALL
   flags to wxSocket (Rob Bresalier).
 - Add wxDir::Close() method (Silverstorm82).

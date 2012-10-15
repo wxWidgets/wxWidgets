@@ -485,6 +485,27 @@ public:
                               wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Turns off symlink dereferencing.
+
+        By default, all operations in this class work on the target of a
+        symbolic link (symlink) if the path of the file is actually a symlink.
+        Using this method allows to turn off this "symlink following" behaviour
+        and apply the operations to this path itself, even if it is a symlink.
+
+        The following methods are currently affected by this option:
+            - GetTimes() (but not SetTimes() as there is no portable way to
+              change the time of symlink itself).
+            - Existence checks: FileExists(), DirExists() and Exists() (notice
+              that static versions of these methods always follow symlinks).
+            - IsSameAs().
+
+        @see ShouldFollowLink()
+
+        @since 2.9.5
+    */
+    void DontFollowLink();
+
+     /**
         Calls the static overload of this function with the full path of this
         object.
 
@@ -1205,6 +1226,17 @@ public:
         Sets the volume specifier.
     */
     void SetVolume(const wxString& volume);
+
+    /**
+        Return whether some operations will follow symlink.
+
+        By default, file operations "follow symlink", i.e. operate on its
+        target and not on the symlink itself. See DontFollowLink() for more
+        information.
+
+        @since 2.9.5
+    */
+    bool ShouldFollowLink() const;
 
     //@{
     /**
