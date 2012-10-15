@@ -2294,7 +2294,7 @@ Optional Features:
   --enable-accessibility  enable accessibility support
   --enable-uiactionsim    use wxUIActionSimulator (experimental)
   --enable-dctransform    use wxDC::SetTransformMatrix and related
-  --enable-webview_webkit use wxWebView WebKit backend
+  --enable-webviewwebkit  use wxWebView WebKit backend
   --enable-palette        use wxPalette class
   --enable-image          use wxImage class
   --enable-gif            use gif images (GIF file format)
@@ -2309,7 +2309,7 @@ Optional Features:
   --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)
   --enable-uxtheme        enable support for Windows XP themed look (Win32 only)
   --enable-wxdib          use wxDIB class (Win32 only)
-  --enable-webview_ie     use wxWebView IE backend (Win32 only)
+  --enable-webviewie      use wxWebView IE backend (Win32 only)
   --enable-autoidman      use automatic ids management
   --disable-largefile     omit support for large files
   --disable-gtktest       do not try to compile and run a test GTK+ program
