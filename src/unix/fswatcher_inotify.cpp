@@ -222,9 +222,15 @@ protected:
         {
             // It is now safe to remove it from the stale descriptors too, we
             // won't get any more events for it.
-            m_staleDescriptors.Remove(inevt.wd);
-            wxLogTrace(wxTRACE_FSWATCHER,
+            // However if we're here because a dir that we're still watching
+            // has just been deleted, its wd won't be on this list
+            const int pos = m_staleDescriptors.Index(inevt.wd);
+            if ( pos != wxNOT_FOUND )
+            {
+                m_staleDescriptors.RemoveAt(static_cast<size_t>(pos));
+                wxLogTrace(wxTRACE_FSWATCHER,
                        "Removed wd %i from the stale-wd cache", inevt.wd);
+            }
             return;
         }
 
