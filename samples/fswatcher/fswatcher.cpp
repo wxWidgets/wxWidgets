@@ -420,6 +420,60 @@ void MyFrame::OnFileSystemEvent(wxFileSystemWatcherEvent& event)
     // TODO remove when code is rock-solid
     wxLogTrace(wxTRACE_FSWATCHER, "*** %s ***", event.ToString());
     LogEvent(event);
+
+    int type = event.GetChangeType();
+    if ((type == wxFSW_EVENT_DELETE) || (type == wxFSW_EVENT_RENAME))
+    {
+        // If path is one of our watched dirs, we need to react to this
+        // otherwise there'll be asserts if later we try to remove it
+        wxString eventpath = event.GetPath().GetFullPath();
+        bool found(false);
+        for (size_t n = m_filesList->GetItemCount(); n > 0; --n)
+        {
+            wxString path, foo = m_filesList->GetItemText(n-1);
+            if ((!m_filesList->GetItemText(n-1).StartsWith("Dir:  ", &path)) &&
+                (!m_filesList->GetItemText(n-1).StartsWith("Tree: ", &path)))
+            {
+                wxFAIL_MSG("Unexpected item in wxListView.");
+            }
+            if (path == eventpath)
+            {
+                if (type == wxFSW_EVENT_DELETE)
+                {
+                    m_filesList->DeleteItem(n-1);
+                }
+                else
+                {
+                    // At least in wxGTK, we'll never get here: renaming the top
+                    // watched dir gives IN_MOVE_SELF and no new-name info.
+                    // However I'll leave the code in case other platforms do
+                    wxString newname = event.GetNewPath().GetFullPath();
+                    if (newname.empty() ||
+                        newname == event.GetPath().GetFullPath())
+                    {
+                        // Just in case either of these are possible...
+                        wxLogTrace(wxTRACE_FSWATCHER,
+                                   "Invalid attempt to rename to %s", newname);
+                        return;
+                    }
+                    wxString prefix =
+                        m_filesList->GetItemText(n-1).StartsWith("Dir:  ") ?
+                                      "Dir:  " : "Tree: ";
+                    m_filesList->SetItemText(n-1, prefix + newname);
+                }
+                found = true;
+                // Don't break: a filepath may have been added more than once
+            }
+        }
+
+        if (found)
+        {
+            wxString msg = wxString::Format(
+                           "Your watched path %s has been deleted or renamed\n",
+                           eventpath);
+            m_evtConsole->AppendText(msg);
+        }
+    }
 }
 
 
