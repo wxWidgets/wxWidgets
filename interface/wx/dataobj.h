@@ -54,7 +54,7 @@
     necessary initialisations and so an attempt to do clipboard format
     registration at this time will usually lead to a crash!
 
-    @library{wxbase}
+    @library{wxcore}
     @category{dnd}
 
     @see @ref overview_dnd, @ref page_samples_dnd, wxDataObject

@@ -230,7 +230,7 @@ wxEventType wxEVT_FILECTRL_FILTERCHANGED;
         The current file filter of the file control has been changed
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{events}
 */
 class wxFileCtrlEvent : public wxCommandEvent

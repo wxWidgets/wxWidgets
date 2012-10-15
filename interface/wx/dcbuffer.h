@@ -139,7 +139,7 @@ public:
     have native double-buffering, otherwise, it is a typedef of
     wxBufferedPaintDC.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{dc}
 
     @see wxDC, wxBufferedPaintDC, wxPaintDC

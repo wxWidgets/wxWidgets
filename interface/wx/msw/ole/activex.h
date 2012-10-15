@@ -278,7 +278,7 @@ public:
 
     @onlyfor{wxmsw}
 
-    @library{wxbase}
+    @library{wxcore}
     @category{ctrl,ipc}
 
     @see wxActiveXEvent, @ref page_samples_flash

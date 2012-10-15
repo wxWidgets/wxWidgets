@@ -14,7 +14,7 @@
     objects. Currently, only wxIPV4address is implemented. An experimental
     implementation for IPV6, wxIPV6address, is being developed.
 
-    @library{wxbase}
+    @library{wxnet}
     @category{net}
 */
 class wxIPaddress : public wxSockAddress
@@ -103,7 +103,7 @@ public:
 
     A class for working with IPv4 network addresses.
 
-    @library{wxbase}
+    @library{wxnet}
     @category{net}
 */
 class wxIPV4address : public wxIPaddress
@@ -400,7 +400,7 @@ public:
 
     You are unlikely to need to use this class: only wxSocketBase uses it.
 
-    @library{wxbase}
+    @library{wxnet}
     @category{net}
 
     @see wxSocketBase, wxIPaddress, wxIPV4address

@@ -407,7 +407,7 @@ protected:
     In addition, these parameters specify the pane's docked position, floating
     position, preferred size, minimum size, caption text among many other parameters.
 
-    @library{wxbase}
+    @library{wxaui}
     @category{aui}
 
     @see wxAuiManager, wxAuiDockArt

@@ -77,7 +77,7 @@ public:
     example, to show all the log messages in a frame but still continue to process
     them normally by showing the standard log dialog.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{logging}
 
     @see wxLogTextCtrl
@@ -566,7 +566,7 @@ public:
     The text control must have been created with @c wxTE_MULTILINE style by the
     caller previously.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{logging}
 
     @see wxTextCtrl, wxStreamToTextRedirector

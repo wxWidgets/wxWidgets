@@ -1055,7 +1055,7 @@ public:
         The state image has been clicked.
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{events}
 
     @see wxTreeCtrl

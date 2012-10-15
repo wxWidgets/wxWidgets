@@ -132,7 +132,7 @@ public:
     at least creation of new file/directory and access, modification, move
     (rename) or deletion of an existing one.
 
-    @library{wxcore}
+    @library{wxbase}
     @category{events}
 
     @see wxFileSystemWatcher

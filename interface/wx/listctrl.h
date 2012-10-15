@@ -1295,7 +1295,7 @@ protected:
     @endEventTable
 
 
-    @library{wxbase}
+    @library{wxcore}
     @category{events}
 
     @see wxListCtrl
@@ -1412,7 +1412,7 @@ wxEventType wxEVT_COMMAND_LIST_ITEM_FOCUSED;
 
     Represents the attributes (color, font, ...) of a wxListCtrl's wxListItem.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{data}
 
     @see @ref overview_listctrl, wxListCtrl, wxListItem
@@ -1614,7 +1614,7 @@ public:
     or SetFont() functions on it passing it the colour/font to use.
     If the colour/font is not specified, the default list control colour/font is used.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{data}
 
     @see wxListCtrl
