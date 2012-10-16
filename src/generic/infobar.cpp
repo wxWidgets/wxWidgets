@@ -82,7 +82,7 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
 
     m_text = new wxStaticText(this, wxID_ANY, "");
 
-    m_button = wxBitmapButton::NewCloseButton(parent, wxID_ANY);
+    m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
     m_button->SetToolTip(_("Hide this notification message."));
 
     // center the text inside the sizer with an icon to the left of it and a
