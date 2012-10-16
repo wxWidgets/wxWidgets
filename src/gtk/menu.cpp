@@ -70,6 +70,8 @@ wxMenuBar::~wxMenuBar()
         GtkWidget* widget = m_widget;
         m_focusWidget =
         m_widget = NULL;
+        g_signal_handlers_disconnect_matched(widget,
+            GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, this);
         g_object_unref(widget);
     }
 }
