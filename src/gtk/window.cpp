@@ -226,6 +226,17 @@ int          g_lastButtonNumber = 0;
 // the trace mask used for the focus debugging messages
 #define TRACE_FOCUS wxT("focus")
 
+// A handy function to run from under gdb to show information about the given
+// GtkWidget. Right now it only shows its type, we could enhance it to show
+// more information later but this is already pretty useful.
+const char* wxDumpGtkWidget(GtkWidget* w)
+{
+    static wxString s;
+    s.Printf("GtkWidget %p, type \"%s\"", w, G_OBJECT_TYPE_NAME(w));
+
+    return s.c_str();
+}
+
 //-----------------------------------------------------------------------------
 // "expose_event"/"draw" from m_wxwindow
 //-----------------------------------------------------------------------------
