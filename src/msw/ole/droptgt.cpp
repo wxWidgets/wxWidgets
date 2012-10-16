@@ -70,6 +70,8 @@ struct wxIDropTargetHelper : public IUnknown
 
 namespace
 {
+    DEFINE_GUID(wxCLSID_DragDropHelper,
+                0x4657278A,0x411B,0x11D2,0x83,0x9A,0x00,0xC0,0x4F,0xD9,0x18,0xD0);
     DEFINE_GUID(wxIID_IDropTargetHelper,
                 0x4657278B,0x411B,0x11D2,0x83,0x9A,0x00,0xC0,0x4F,0xD9,0x18,0xD0);
 }
@@ -604,7 +606,7 @@ void
 wxDropTarget::MSWInitDragImageSupport()
 {
     // Use the default drop target helper to show shell drag images
-    CoCreateInstance(CLSID_DragDropHelper, NULL, CLSCTX_INPROC_SERVER,
+    CoCreateInstance(wxCLSID_DragDropHelper, NULL, CLSCTX_INPROC_SERVER,
                      wxIID_IDropTargetHelper, (LPVOID*)&m_dropTargetHelper);
 }
 
