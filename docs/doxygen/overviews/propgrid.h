@@ -471,9 +471,9 @@ void MyWindowClass::OnPropertyGridChanged(wxPropertyGridEvent& event)
         return;
 
     // Handle changes in values, as needed
-    if ( property.GetName() == "MyStringProperty" )
+    if ( property->GetName() == "MyStringProperty" )
         OnMyStringPropertyChanged(value.As<wxString>());
-    else if ( property.GetName() == "MyColourProperty" )
+    else if ( property->GetName() == "MyColourProperty" )
         OnMyColourPropertyChanged(value.As<wxColour>());
 }
 
