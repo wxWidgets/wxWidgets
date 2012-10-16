@@ -930,6 +930,10 @@ public:
     int GetId() const { return m_id; }
     void SetId(int Id) { m_id = Id; }
 
+    // Returns the user data optionally associated with the event handler when
+    // using Connect() or Bind().
+    wxObject *GetEventUserData() const { return m_callbackUserData; }
+
     // Can instruct event processor that we wish to ignore this event
     // (treat as if the event table entry had not been found): this must be done
     // to allow the event processing by the base classes (calling event.Skip()
