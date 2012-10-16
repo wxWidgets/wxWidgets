@@ -26,6 +26,8 @@ public:
 
     virtual ~wxInotifyFileSystemWatcher();
 
+    void OnDirDeleted(const wxString& path);
+
 protected:
     bool Init();
 };

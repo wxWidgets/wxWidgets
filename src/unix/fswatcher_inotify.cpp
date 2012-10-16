@@ -271,6 +271,76 @@ protected:
         {
             return;
         }
+
+        // Creation
+        // We need do something here only if the original watch was recursive;
+        // we don't watch a child dir itself inside a non-tree watch.
+        // We watch only dirs explicitly, so we don't want file IN_CREATEs.
+        // Distinguish by whether nativeFlags contain IN_ISDIR
+        else if ((nativeFlags & IN_CREATE) &&
+                 (watch.GetType() == wxFSWPath_Tree) && (inevt.mask & IN_ISDIR))
+        {
+            wxFileName fn = GetEventPath(watch, inevt);
+            // Though it's a dir, fn treats it as a file. So:
+            fn.AssignDir(fn.GetFullPath());
+
+            if (m_watcher->AddAny(fn, wxFSW_EVENT_ALL,
+                                   wxFSWPath_Tree, watch.GetFilespec()))
+            {
+                // Tell the owner, in case it's interested
+                // If there's a filespec, assume he's not
+                if (watch.GetFilespec().empty())
+                {
+                    wxFileSystemWatcherEvent event(flags, fn, fn);
+                    SendEvent(event);
+                }
+            }
+        }
+
+        // Deletion
+        // We watch only dirs explicitly, so we don't want file IN_DELETEs.
+        // We obviously can't check using DirExists() as the object has been
+        // deleted; and nativeFlags here doesn't contain IN_ISDIR, even for
+        // a dir. Fortunately IN_DELETE_SELF doesn't happen for files. We need
+        // to do something here only inside a tree watch, or if it's the parent
+        // dir that's deleted. Otherwise let the parent dir cope
+        else if ((nativeFlags & IN_DELETE_SELF) &&
+                    ((watch.GetType() == wxFSWPath_Dir) ||
+                     (watch.GetType() == wxFSWPath_Tree)))
+        {
+            // We must remove the deleted directory from the map, so that
+            // DoRemoveInotify() isn't called on it in the future. Don't assert
+            // if the wd isn't found: repeated IN_DELETE_SELFs can occur
+            wxFileName fn = GetEventPath(watch, inevt);
+            wxString path(fn.GetPathWithSep());
+
+            if (m_watchMap.erase(inevt.wd) == 1)
+            {
+                // Delete from wxFileSystemWatcher
+                wxDynamicCast(m_watcher, wxInotifyFileSystemWatcher)->
+                                            OnDirDeleted(path);
+
+                // Now remove from our local list of watched items
+                wxFSWatchEntries::iterator wit =
+                                        m_watches.find(path);
+                if (wit != m_watches.end())
+                {
+                    m_watches.erase(wit);
+                }
+
+                // Cache the wd in case any events arrive late
+                m_staleDescriptors.Add(inevt.wd);
+            }
+
+            // Tell the owner, in case it's interested
+            // If there's a filespec, assume he's not
+            if (watch.GetFilespec().empty())
+            {
+                wxFileSystemWatcherEvent event(flags, fn, fn);
+                SendEvent(event);
+            }
+        }
+
         // renames
         else if (nativeFlags & IN_MOVE)
         {
@@ -533,6 +603,19 @@ bool wxInotifyFileSystemWatcher::Init()
 {
     m_service = new wxFSWatcherImplUnix(this);
     return m_service->Init();
+}
+
+void wxInotifyFileSystemWatcher::OnDirDeleted(const wxString& path)
+{
+    if (!path.empty())
+    {
+        wxFSWatchInfoMap::iterator it = m_watches.find(path);
+        wxCHECK_RET(it != m_watches.end(),
+                    wxString::Format("Path '%s' is not watched", path));
+
+        // path has been deleted, so we must forget it whatever its refcount
+        m_watches.erase(it);
+    }
 }
 
 #endif // wxHAS_INOTIFY
