@@ -67,8 +67,8 @@ public:
     wxFindReplaceData(wxUint32 flags) { Init(); SetFlags(flags); }
 
     // accessors
-    const wxString& GetFindString() { return m_FindWhat; }
-    const wxString& GetReplaceString() { return m_ReplaceWith; }
+    const wxString& GetFindString() const { return m_FindWhat; }
+    const wxString& GetReplaceString() const { return m_ReplaceWith; }
 
     int GetFlags() const { return m_Flags; }
 
