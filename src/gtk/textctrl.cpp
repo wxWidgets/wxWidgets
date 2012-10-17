@@ -546,8 +546,6 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
     if ( win->IgnoreTextUpdate() )
         return;
 
-    if (!win->m_hasVMT) return;
-
     if ( win->MarkDirtyOnChange() )
         win->MarkDirty();
 
@@ -607,12 +605,18 @@ void wxTextCtrl::Init()
     SetUpdateFont(false);
 
     m_text = NULL;
+    m_buffer = NULL;
     m_showPositionOnThaw = NULL;
     m_anonymousMarkList = NULL;
 }
 
 wxTextCtrl::~wxTextCtrl()
 {
+    if (m_text)
+        GTKDisconnect(m_text);
+    if (m_buffer)
+        GTKDisconnect(m_buffer);
+
     // this is also done by wxWindowGTK dtor, but has to be done here so our
     // DoThaw() override is called
     while (IsFrozen())

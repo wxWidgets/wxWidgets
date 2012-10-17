@@ -70,8 +70,7 @@ wxMenuBar::~wxMenuBar()
         GtkWidget* widget = m_widget;
         m_focusWidget =
         m_widget = NULL;
-        g_signal_handlers_disconnect_matched(widget,
-            GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, this);
+        GTKDisconnect(widget);
         g_object_unref(widget);
     }
 }
@@ -750,7 +749,8 @@ wxMenu::~wxMenu()
     // Destroying a menu generates a "hide" signal even if it's not shown
     // currently, so disconnect it to avoid dummy wxEVT_MENU_CLOSE events
     // generation.
-    g_signal_handlers_disconnect_by_func(m_menu, (gpointer)menu_hide, this);
+    g_signal_handlers_disconnect_matched(m_menu,
+        GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, this);
 
     // see wxMenu::Init
     g_object_unref(m_menu);
@@ -913,6 +913,10 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         return NULL;
 
     GtkWidget * const mitem = item->GetMenuItem();
+
+    g_signal_handlers_disconnect_matched(mitem,
+        GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, item);
+
 #ifdef __WXGTK3__
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
 #else

@@ -4462,6 +4462,11 @@ wxDataViewCtrl::~wxDataViewCtrl()
             // This won't do anything if we're not editing it
             wxcol->GetRenderer()->CancelEditing();
         }
+
+        GTKDisconnect(m_treeview);
+        GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview));
+        if (selection)
+            GTKDisconnect(selection);
     }
 
     m_cols.Clear();
@@ -4471,6 +4476,7 @@ wxDataViewCtrl::~wxDataViewCtrl()
 
 void wxDataViewCtrl::Init()
 {
+    m_treeview = NULL;
     m_internal = NULL;
 
     m_cols.DeleteContents( true );

@@ -33,8 +33,6 @@ extern "C" {
 static void
 gtkcombobox_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    if (!combo->m_hasVMT) return;
-
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );
@@ -86,6 +84,12 @@ BEGIN_EVENT_TABLE(wxComboBox, wxChoice)
     EVT_UPDATE_UI(wxID_CLEAR, wxComboBox::OnUpdateDelete)
     EVT_UPDATE_UI(wxID_SELECTALL, wxComboBox::OnUpdateSelectAll)
 END_EVENT_TABLE()
+
+wxComboBox::~wxComboBox()
+{
+    if (m_entry)
+        GTKDisconnect(m_entry);
+}
 
 void wxComboBox::Init()
 {

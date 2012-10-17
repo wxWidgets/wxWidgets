@@ -33,6 +33,7 @@ public:
     {
         Create(parent, id, title, pos, size, style, name);
     }
+    ~wxMiniFrame();
 
     bool Create(wxWindow *parent,
             wxWindowID id,

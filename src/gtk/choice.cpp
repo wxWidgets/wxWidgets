@@ -103,9 +103,6 @@ wxChoice::~wxChoice()
 
 void wxChoice::SendSelectionChangedEvent(wxEventType evt_type)
 {
-    if (!m_hasVMT)
-        return;
-
     if (GetSelection() == -1)
         return;
 

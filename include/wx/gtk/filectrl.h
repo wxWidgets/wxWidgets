@@ -88,7 +88,7 @@ public:
         Create( parent, id, defaultDirectory, defaultFilename, wildCard, style, pos, size, name );
     }
 
-    virtual ~wxGtkFileCtrl() {}
+    virtual ~wxGtkFileCtrl();
 
     bool Create( wxWindow *parent,
                  wxWindowID id,

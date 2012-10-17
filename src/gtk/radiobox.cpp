@@ -58,7 +58,6 @@ extern bool          g_blockEventsOnDrag;
 extern "C" {
 static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBox *rb )
 {
-    if (!rb->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
     if (!gtk_toggle_button_get_active(button)) return;
@@ -78,7 +77,6 @@ static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBo
 extern "C" {
 static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxRadioBox *rb )
 {
-    if (!rb->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
     if ( ((gdk_event->keyval == GDK_Tab) ||
@@ -319,6 +317,7 @@ wxRadioBox::~wxRadioBox()
     while (node)
     {
         GtkWidget *button = GTK_WIDGET( node->GetData()->button );
+        GTKDisconnect(button);
         gtk_widget_destroy( button );
         node = node->GetNext();
     }

@@ -269,7 +269,7 @@ gtk_frame_configure_callback( GtkWidget* widget,
                               GdkEventConfigure *WXUNUSED(event),
                               wxTopLevelWindowGTK *win )
 {
-    if (!win->m_hasVMT || !win->IsShown())
+    if (!win->IsShown())
         return FALSE;
 
     wxPoint point;

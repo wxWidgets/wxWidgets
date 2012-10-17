@@ -59,8 +59,6 @@ public:
     // implement base class (pure) virtual methods
     // -------------------------------------------
 
-    virtual bool Destroy();
-
     virtual void Raise();
     virtual void Lower();
 
@@ -308,7 +306,6 @@ public:
     // extra (wxGTK-specific) flags
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
     bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
-    bool                 m_hasVMT:1;            // set after PostCreation() is called
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
     bool                 m_clipPaintRegion:1;   // true after ScrollWindow()
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
@@ -352,6 +349,7 @@ protected:
 
     void GTKFreezeWidget(GtkWidget *w);
     void GTKThawWidget(GtkWidget *w);
+    void GTKDisconnect(void* instance);
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );

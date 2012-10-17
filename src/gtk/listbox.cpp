@@ -404,7 +404,13 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-    m_hasVMT = false;
+    if (m_treeview)
+    {
+        GTKDisconnect(m_treeview);
+        GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
+        if (selection)
+            GTKDisconnect(selection);
+    }
 
     Clear();
 }

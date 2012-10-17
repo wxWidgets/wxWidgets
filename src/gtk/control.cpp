@@ -139,9 +139,7 @@ void wxControl::GTKFixSensitivity(bool WXUNUSED_IN_GTK3(onlyIfUnderMouse))
 #endif
         )
     {
-        wxPoint pt = wxGetMousePosition();
-        wxRect rect(ClientToScreen(wxPoint(0, 0)), GetSize());
-        if (!onlyIfUnderMouse || rect.Contains(pt))
+        if (!onlyIfUnderMouse || GetScreenRect().Contains(wxGetMousePosition()))
         {
             Hide();
             Show();

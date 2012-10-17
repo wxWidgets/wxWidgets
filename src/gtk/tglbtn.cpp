@@ -29,7 +29,7 @@ extern bool      g_blockEventsOnDrag;
 extern "C" {
 static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxToggleButton *cb)
 {
-    if (!cb->m_hasVMT || g_blockEventsOnDrag)
+    if (g_blockEventsOnDrag)
         return;
 
     // Generate a wx event.

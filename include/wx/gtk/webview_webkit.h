@@ -10,7 +10,7 @@
 #ifndef _WX_GTK_WEBKITCTRL_H_
 #define _WX_GTK_WEBKITCTRL_H_
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
 
@@ -26,7 +26,7 @@ typedef struct _WebKitWebView WebKitWebView;
 class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 {
 public:
-    wxWebViewWebKit() { }
+    wxWebViewWebKit();
 
     wxWebViewWebKit(wxWindow *parent,
            wxWindowID id = wxID_ANY,

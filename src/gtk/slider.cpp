@@ -129,7 +129,7 @@ gtk_value_changed(GtkRange* range, wxSlider* win)
     const double oldPos = win->m_pos;
     win->m_pos = value;
 
-    if (!win->m_hasVMT || g_blockEventsOnDrag)
+    if (g_blockEventsOnDrag)
         return;
 
     if (win->GTKEventsDisabled())
@@ -275,10 +275,13 @@ static gchar* gtk_format_value(GtkScale*, double value, void*)
 
 wxSlider::wxSlider()
 {
-    m_pos = 0;
-    m_scrollEventType = GTK_SCROLL_NONE;
-    m_needThumbRelease = false;
-    m_blockScrollEvent = false;
+    m_scale = NULL;
+}
+
+wxSlider::~wxSlider()
+{
+    if (m_scale && m_scale != m_widget)
+        GTKDisconnect(m_scale);
 }
 
 bool wxSlider::Create(wxWindow *parent,
@@ -294,6 +297,8 @@ bool wxSlider::Create(wxWindow *parent,
 {
     m_pos = value;
     m_scrollEventType = GTK_SCROLL_NONE;
+    m_needThumbRelease = false;
+    m_blockScrollEvent = false;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))

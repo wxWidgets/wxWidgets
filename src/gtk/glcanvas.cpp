@@ -99,9 +99,6 @@ gtk_glcanvas_size_callback(GtkWidget *WXUNUSED(widget),
                            GtkAllocation * WXUNUSED(alloc),
                            wxGLCanvas *win)
 {
-    if (!win->m_hasVMT)
-        return;
-
     wxSizeEvent event( wxSize(win->m_width,win->m_height), win->GetId() );
     event.SetEventObject( win );
     win->HandleWindowEvent( event );

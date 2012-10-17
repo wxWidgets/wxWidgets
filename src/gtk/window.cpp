@@ -950,8 +950,6 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                                GdkEventKey *gdk_event,
                                wxWindow *win )
 {
-    if (!win->m_hasVMT)
-        return FALSE;
     if (g_blockEventsOnDrag)
         return FALSE;
 
@@ -1124,9 +1122,6 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
                                  GdkEventKey *gdk_event,
                                  wxWindowGTK *win )
 {
-    if (!win->m_hasVMT)
-        return FALSE;
-
     if (g_blockEventsOnDrag)
         return FALSE;
 
@@ -1276,13 +1271,11 @@ bool wxWindowGTK::GTKProcessEvent(wxEvent& event) const
 
 bool wxWindowGTK::GTKShouldIgnoreEvent() const
 {
-    return !m_hasVMT || g_blockEventsOnDrag;
+    return g_blockEventsOnDrag;
 }
 
 int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
 {
-    if (!m_hasVMT)
-        return FALSE;
     if (g_blockEventsOnDrag)
         return TRUE;
     if (g_blockEventsOnScroll)
@@ -2191,8 +2184,6 @@ void wxWindowGTK::Init()
     m_width = 0;
     m_height = 0;
 
-    m_hasVMT = false;
-
     m_showOnIdle = false;
 
     m_noExpose = false;
@@ -2359,6 +2350,12 @@ bool wxWindowGTK::Create( wxWindow *parent,
     return true;
 }
 
+void wxWindowGTK::GTKDisconnect(void* instance)
+{
+    g_signal_handlers_disconnect_matched(instance,
+        GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, this);
+}
+
 wxWindowGTK::~wxWindowGTK()
 {
     SendDestroyEvent();
@@ -2371,22 +2368,13 @@ wxWindowGTK::~wxWindowGTK()
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
 
-    m_hasVMT = false;
+    if (m_widget)
+        GTKDisconnect(m_widget);
+    if (m_wxwindow && m_wxwindow != m_widget)
+        GTKDisconnect(m_wxwindow);
 
     // destroy children before destroying this window itself
     DestroyChildren();
-
-    // unhook focus handlers to prevent stray events being
-    // propagated to this (soon to be) dead object
-    if (m_focusWidget != NULL)
-    {
-        g_signal_handlers_disconnect_by_func (m_focusWidget,
-                                              (gpointer) gtk_window_focus_in_callback,
-                                              this);
-        g_signal_handlers_disconnect_by_func (m_focusWidget,
-                                              (gpointer) gtk_window_focus_out_callback,
-                                              this);
-    }
 
     if (m_widget)
         Show( false );
@@ -2564,8 +2552,6 @@ void wxWindowGTK::PostCreation()
 
     InheritAttributes();
 
-    m_hasVMT = true;
-
     SetLayoutDirection(wxLayout_Default);
 
     // unless the window was created initially hidden (i.e. Hide() had been
@@ -2608,13 +2594,6 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_enter_callback), this);
     g_signal_connect (widget, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
-}
-
-bool wxWindowGTK::Destroy()
-{
-    m_hasVMT = false;
-
-    return wxWindowBase::Destroy();
 }
 
 static GSList* gs_queueResizeList;
@@ -4571,7 +4550,7 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
     // update current position
     m_scrollPos[barIndex] = value;
     // If event should be ignored, or integral position has not changed
-    if (!m_hasVMT || g_blockEventsOnDrag || wxRound(value) == wxRound(oldPos))
+    if (g_blockEventsOnDrag || wxRound(value) == wxRound(oldPos))
     {
         return wxEVT_NULL;
     }

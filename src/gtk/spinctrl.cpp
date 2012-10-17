@@ -39,7 +39,7 @@ extern "C" {
 static void
 gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrlGTKBase* win)
 {
-    if (!win->m_hasVMT || g_blockEventsOnDrag)
+    if (g_blockEventsOnDrag)
         return;
 
     if (wxIsKindOf(win, wxSpinCtrl))
@@ -69,9 +69,6 @@ extern "C" {
 static void
 gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 {
-    if (!win->m_hasVMT)
-        return;
-
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetEventObject( win );
     event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));

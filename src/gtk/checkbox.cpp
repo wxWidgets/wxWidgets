@@ -30,8 +30,6 @@ extern bool           g_blockEventsOnDrag;
 extern "C" {
 static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
 {
-    if (!cb->m_hasVMT) return;
-
     if (g_blockEventsOnDrag) return;
 
     // Transitions for 3state checkbox must be done manually, GTK's checkbox

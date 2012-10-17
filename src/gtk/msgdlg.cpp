@@ -292,6 +292,7 @@ int wxMessageDialog::ShowModal()
         gtk_window_present( GTK_WINDOW(m_parent->m_widget) );
 
     gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
+    GTKDisconnect(m_widget);
     gtk_widget_destroy(m_widget);
     g_object_unref(m_widget);
     m_widget = NULL;

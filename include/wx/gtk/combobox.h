@@ -56,6 +56,7 @@ public:
         Init();
         Create(parent, id, value, pos, size, choices, style, validator, name);
     }
+    ~wxComboBox();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value = wxEmptyString,

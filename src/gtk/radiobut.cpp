@@ -32,8 +32,6 @@ extern "C" {
 static
 void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *rb )
 {
-    if (!rb->m_hasVMT) return;
-
     if (g_blockEventsOnDrag) return;
 
     if (!gtk_toggle_button_get_active(button)) return;

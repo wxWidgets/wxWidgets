@@ -33,11 +33,6 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
                                  GParamSpec*,
                                  wxWebViewWebKit *webKitCtrl)
 {
-    // We can be called from webkit_web_view_dispose() during the window
-    // destruction, don't use half-destroyed object in this case.
-    if ( webKitCtrl->IsBeingDeleted() )
-        return;
-
     wxString url = webKitCtrl->GetCurrentURL();
 
     WebKitLoadStatus status;
@@ -391,6 +386,11 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 
+wxWebViewWebKit::wxWebViewWebKit()
+{
+    m_web_view = NULL;
+}
+
 bool wxWebViewWebKit::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxString &url,
@@ -456,11 +456,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
 wxWebViewWebKit::~wxWebViewWebKit()
 {
-    // The main goal here is to set m_isBeingDeleted to true to avoid the use
-    // of this -- already half-destroyed -- object from WebKit callbacks, but
-    // just setting it would prevent wxWindowDestroyEvent from being sent, so
-    // send it now instead.
-    SendDestroyEvent();
+    if (m_web_view)
+        GTKDisconnect(m_web_view);
 }
 
 bool wxWebViewWebKit::Enable( bool enable )

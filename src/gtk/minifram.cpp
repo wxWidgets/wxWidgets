@@ -81,7 +81,7 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
 
     wxGTKCairoDC dc(cr);
 #else
-    if (!win->m_hasVMT || gdk_event->count > 0 ||
+    if (gdk_event->count > 0 ||
         gdk_event->window != gtk_widget_get_window(widget))
     {
         return false;
@@ -144,7 +144,7 @@ extern "C" {
 static gboolean
 gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, wxMiniFrame* win)
 {
-    if (!win->m_hasVMT || gdk_event->window != gtk_widget_get_window(widget))
+    if (gdk_event->window != gtk_widget_get_window(widget))
         return false;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -224,7 +224,7 @@ extern "C" {
 static gboolean
 gtk_window_button_release_callback(GtkWidget* widget, GdkEventButton* gdk_event, wxMiniFrame* win)
 {
-    if (!win->m_hasVMT || gdk_event->window != gtk_widget_get_window(widget))
+    if (gdk_event->window != gtk_widget_get_window(widget))
         return false;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -257,9 +257,8 @@ extern "C" {
 static gboolean
 gtk_window_leave_callback(GtkWidget *widget,
                           GdkEventCrossing* gdk_event,
-                          wxMiniFrame *win)
+                          wxMiniFrame*)
 {
-    if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
     if (gdk_event->window != gtk_widget_get_window(widget))
         return false;
@@ -278,7 +277,7 @@ extern "C" {
 static gboolean
 gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxMiniFrame *win )
 {
-    if (!win->m_hasVMT || gdk_event->window != gtk_widget_get_window(widget))
+    if (gdk_event->window != gtk_widget_get_window(widget))
         return false;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -339,6 +338,15 @@ static unsigned char close_bits[]={
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame,wxFrame)
+
+wxMiniFrame::~wxMiniFrame()
+{
+    if (m_widget)
+    {
+        GtkWidget* eventbox = gtk_bin_get_child(GTK_BIN(m_widget));
+        GTKDisconnect(eventbox);
+    }
+}
 
 bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,

@@ -285,6 +285,12 @@ extern "C"
 
 IMPLEMENT_DYNAMIC_CLASS( wxGtkFileCtrl, wxControl )
 
+wxGtkFileCtrl::~wxGtkFileCtrl()
+{
+    if (m_fcWidget)
+        GTKDisconnect(m_fcWidget);
+}
+
 void wxGtkFileCtrl::Init()
 {
     m_checkNextSelEvent = false;
