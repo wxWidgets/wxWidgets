@@ -95,6 +95,13 @@ void MeasuringTextTestCase::DCGetTextExtent()
     wxClientDC dc(wxTheApp->GetTopWindow());
 
     DoTestGetTextExtent(dc);
+
+    int w;
+    dc.GetMultiLineTextExtent("Good\nbye", &w, NULL);
+    const wxSize sz = dc.GetTextExtent("Good");
+    CPPUNIT_ASSERT_EQUAL( sz.x, w );
+
+    CPPUNIT_ASSERT( dc.GetMultiLineTextExtent("Good\nbye").y >= 2*sz.y );
 }
 
 void MeasuringTextTestCase::WindowGetTextExtent()

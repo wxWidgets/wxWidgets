@@ -101,7 +101,8 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
                 if ( !heightLineDefault )
                 {
                     // but we don't know it yet - choose something reasonable
-                    DoGetTextExtent(wxS("W"), NULL, &heightLineDefault);
+                    int dummy;
+                    DoGetTextExtent(wxS("W"), &dummy, &heightLineDefault);
                 }
 
                 heightTextTotal += heightLineDefault;
