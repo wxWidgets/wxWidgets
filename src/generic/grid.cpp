@@ -5558,7 +5558,7 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
         // implicitly, causing this out-of order render.
 #if !defined(__WXMAC__)
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
-        editor->PaintBackground(rect, attr);
+        editor->PaintBackground(dc, rect, *attr);
         editor->DecRef();
 #endif
     }

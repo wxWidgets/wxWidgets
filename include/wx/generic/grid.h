@@ -213,7 +213,9 @@ public:
 
     // Draws the part of the cell not occupied by the control: the base class
     // version just fills it with background colour from the attribute
-    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
+    virtual void PaintBackground(wxDC& dc,
+                                 const wxRect& rectCell,
+                                 const wxGridCellAttr& attr);
 
 
     // The methods called by wxGrid when a cell is edited: first BeginEdit() is

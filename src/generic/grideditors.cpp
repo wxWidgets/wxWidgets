@@ -246,21 +246,14 @@ void wxGridCellEditor::Create(wxWindow* WXUNUSED(parent),
         m_control->PushEventHandler(evtHandler);
 }
 
-void wxGridCellEditor::PaintBackground(const wxRect& rectCell,
-                                       wxGridCellAttr *attr)
+void wxGridCellEditor::PaintBackground(wxDC& dc,
+                                       const wxRect& rectCell,
+                                       const wxGridCellAttr& attr)
 {
     // erase the background because we might not fill the cell
-    wxClientDC dc(m_control->GetParent());
-    wxGridWindow* gridWindow = wxDynamicCast(m_control->GetParent(), wxGridWindow);
-    if (gridWindow)
-        gridWindow->GetOwner()->PrepareDC(dc);
-
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(attr->GetBackgroundColour()));
+    dc.SetBrush(wxBrush(attr.GetBackgroundColour()));
     dc.DrawRectangle(rectCell);
-
-    // redraw the control we just painted over
-    m_control->Refresh();
 }
 
 void wxGridCellEditor::Destroy()
@@ -423,8 +416,9 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
 
-void wxGridCellTextEditor::PaintBackground(const wxRect& WXUNUSED(rectCell),
-                                           wxGridCellAttr * WXUNUSED(attr))
+void wxGridCellTextEditor::PaintBackground(wxDC& WXUNUSED(dc),
+                                           const wxRect& WXUNUSED(rectCell),
+                                           const wxGridCellAttr& WXUNUSED(attr))
 {
     // as we fill the entire client area,
     // don't do anything here to minimize flicker
@@ -1451,8 +1445,9 @@ void wxGridCellChoiceEditor::SetSize(const wxRect& rect)
     wxGridCellEditor::SetSize(rectTallEnough);
 }
 
-void wxGridCellChoiceEditor::PaintBackground(const wxRect& rectCell,
-                                             wxGridCellAttr * attr)
+void wxGridCellChoiceEditor::PaintBackground(wxDC& dc,
+                                             const wxRect& rectCell,
+                                             const wxGridCellAttr& attr)
 {
     // as we fill the entire client area, don't do anything here to minimize
     // flicker
@@ -1460,7 +1455,7 @@ void wxGridCellChoiceEditor::PaintBackground(const wxRect& rectCell,
     // TODO: It doesn't actually fill the client area since the height of a
     // combo always defaults to the standard.  Until someone has time to
     // figure out the right rectangle to paint, just do it the normal way.
-    wxGridCellEditor::PaintBackground(rectCell, attr);
+    wxGridCellEditor::PaintBackground(dc, rectCell, attr);
 }
 
 void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)

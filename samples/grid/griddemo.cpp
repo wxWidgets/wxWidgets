@@ -444,6 +444,9 @@ GridFrame::GridFrame()
     grid->SetCellValue( 0, 5, wxT("Press\nCtrl+arrow\nto skip over\ncells") );
 
     grid->SetRowSize( 99, 60 );
+    grid->SetCellValue(98, 98, "Test background colour setting");
+    grid->SetCellBackgroundColour(98, 99, wxColour(255, 127, 127));
+    grid->SetCellBackgroundColour(99, 98, wxColour(255, 127, 127));
     grid->SetCellValue( 99, 99, wxT("Ctrl+End\nwill go to\nthis cell") );
     grid->SetCellValue( 1, 0, wxT("This default cell will overflow into neighboring cells, but not if you turn overflow off."));
 
@@ -465,6 +468,7 @@ GridFrame::GridFrame()
 
     grid->SetCellRenderer(3, 0, new wxGridCellBoolRenderer);
     grid->SetCellEditor(3, 0, new wxGridCellBoolEditor);
+    grid->SetCellBackgroundColour(3, 0, wxColour(255, 127, 127));
 
     wxGridCellAttr *attr;
     attr = new wxGridCellAttr;
