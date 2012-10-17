@@ -51,6 +51,7 @@
 #include <string.h>
 
 #include "wx/msw/private/dc.h"
+#include "wx/private/textmeasure.h"
 
 using namespace wxMSWImpl;
 
@@ -1857,109 +1858,19 @@ void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
     }
 #endif // __WXMICROWIN__
 
-    HFONT hfontOld;
-    if ( font )
-    {
-        wxASSERT_MSG( font->IsOk(), wxT("invalid font in wxMSWDCImpl::GetTextExtent") );
+    wxASSERT_MSG( !font || font->IsOk(), wxT("invalid font in wxMSWDCImpl::GetTextExtent") );
 
-        hfontOld = (HFONT)::SelectObject(GetHdc(), GetHfontOf(*font));
-    }
-    else // don't change the font
-    {
-        hfontOld = 0;
-    }
-
-    SIZE sizeRect;
-    const size_t len = string.length();
-    if ( !::GetTextExtentPoint32(GetHdc(), string.t_str(), len, &sizeRect) )
-    {
-        wxLogLastError(wxT("GetTextExtentPoint32()"));
-    }
-
-#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
-    // the result computed by GetTextExtentPoint32() may be too small as it
-    // accounts for under/overhang of the first/last character while we want
-    // just the bounding rect for this string so adjust the width as needed
-    // (using API not available in 2002 SDKs of WinCE)
-    if ( len > 0 )
-    {
-        ABC width;
-        const wxChar chFirst = *string.begin();
-        if ( ::GetCharABCWidths(GetHdc(), chFirst, chFirst, &width) )
-        {
-            if ( width.abcA < 0 )
-                sizeRect.cx -= width.abcA;
-
-            if ( len > 1 )
-            {
-                const wxChar chLast = *string.rbegin();
-                ::GetCharABCWidths(GetHdc(), chLast, chLast, &width);
-            }
-            //else: we already have the width of the last character
-
-            if ( width.abcC < 0 )
-                sizeRect.cx -= width.abcC;
-        }
-        //else: GetCharABCWidths() failed, not a TrueType font?
-    }
-#endif // !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
-
-    if (x)
-        *x = sizeRect.cx;
-    if (y)
-        *y = sizeRect.cy;
-
-    if ( descent || externalLeading )
-    {
-        DoGetFontMetrics(NULL, NULL, descent, NULL, externalLeading, NULL);
-    }
-
-    if ( hfontOld )
-    {
-        ::SelectObject(GetHdc(), hfontOld);
-    }
+    wxTextMeasure txm(GetOwner(), font);
+    txm.GetTextExtent(string, x, y, descent, externalLeading);
 }
 
 
-// Each element of the array will be the width of the string up to and
-// including the coresoponding character in text.
-
 bool wxMSWDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
-    static int maxLenText = -1;
-    static int maxWidth = -1;
-    int fit = 0;
-    SIZE sz = {0,0};
-    int stlen = text.length();
+    wxCHECK_MSG( GetFont().IsOk(), false, wxT("Invalid font") );
 
-    if (maxLenText == -1)
-    {
-        // Win9x and WinNT+ have different limits
-        int version = wxGetOsVersion();
-        maxLenText = version == wxOS_WINDOWS_NT ? 65535 : 8192;
-        maxWidth =   version == wxOS_WINDOWS_NT ? INT_MAX : 32767;
-    }
-
-    widths.Empty();
-    widths.Add(0, stlen);  // fill the array with zeros
-    if (stlen == 0)
-        return true;
-
-    if (!::GetTextExtentExPoint(GetHdc(),
-                                text.c_str(),           // string to check
-                                wxMin(stlen, maxLenText),
-                                maxWidth,
-                                &fit,                   // [out] count of chars
-                                                        // that will fit
-                                &widths[0],             // array to fill
-                                &sz))
-    {
-        // API failed
-        wxLogLastError(wxT("GetTextExtentExPoint"));
-        return false;
-    }
-
-    return true;
+    wxTextMeasure txm(GetOwner(), NULL); // don't change the font
+    return txm.GetPartialTextExtents(text, widths, 1.0);
 }
 
 namespace

@@ -25,6 +25,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/object.h"
+#include "wx/private/textmeasure.h"
 
 //-----------------------------------------------------------------------------
 // local defines
@@ -1532,100 +1533,27 @@ void wxWindowDCImpl::DoGetTextExtent(const wxString &string,
                                  wxCoord *descent, wxCoord *externalLeading,
                                  const wxFont *theFont) const
 {
-    if ( width )
-        *width = 0;
-    if ( height )
-        *height = 0;
-    if ( descent )
-        *descent = 0;
-    if ( externalLeading )
-        *externalLeading = 0;
-
-    if (string.empty())
-        return;
-
-    // ensure that theFont is always non-NULL
+    // ensure we work with a valid font
+    const wxFont *fontToUse;
     if ( !theFont || !theFont->IsOk() )
-        theFont = &m_font;
+        fontToUse = &m_font;
+    else
+        fontToUse = theFont;
 
-    // and use it if it's valid
-    if ( theFont->IsOk() )
-    {
-        pango_layout_set_font_description
-        (
-            m_layout,
-            theFont->GetNativeFontInfo()->description
-        );
-    }
+    wxCHECK_RET( fontToUse->IsOk(), wxT("invalid font") );
 
-    // Set layout's text
-    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(string, *theFont);
-    if ( !dataUTF8 )
-    {
-        // hardly ideal, but what else can we do if conversion failed?
-        return;
-    }
-
-    pango_layout_set_text(m_layout, dataUTF8, -1);
-
-    int h;
-    pango_layout_get_pixel_size(m_layout, width, &h);
-    if (descent)
-    {
-        PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
-        int baseline = pango_layout_iter_get_baseline(iter);
-        pango_layout_iter_free(iter);
-        *descent = h - PANGO_PIXELS(baseline);
-    }
-    if (height)
-        *height = h;
-
-    // Reset old font description
-    if (theFont->IsOk())
-        pango_layout_set_font_description( m_layout, m_fontdesc );
+    wxTextMeasure txm(GetOwner(), fontToUse);
+    txm.GetTextExtent(string, width, height, descent, externalLeading);
 }
 
 
 bool wxWindowDCImpl::DoGetPartialTextExtents(const wxString& text,
                                          wxArrayInt& widths) const
 {
-    const size_t len = text.length();
-    widths.Empty();
-    widths.Add(0, len);
+    wxCHECK_MSG( m_font.IsOk(), false, wxT("Invalid font") );
 
-    if (text.empty())
-        return true;
-
-    // Set layout's text
-    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(text, m_font);
-    if ( !dataUTF8 )
-    {
-        // hardly ideal, but what else can we do if conversion failed?
-        wxLogLastError(wxT("DoGetPartialTextExtents"));
-        return false;
-    }
-
-    pango_layout_set_text(m_layout, dataUTF8, -1);
-
-    // Calculate the position of each character based on the widths of
-    // the previous characters
-
-    // Code borrowed from Scintilla's PlatGTK
-    PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
-    PangoRectangle pos;
-    pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
-    size_t i = 0;
-    while (pango_layout_iter_next_cluster(iter))
-    {
-        pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
-        int position = PANGO_PIXELS(pos.x);
-        widths[i++] = position;
-    }
-    while (i < len)
-        widths[i++] = PANGO_PIXELS(pos.x + pos.width);
-    pango_layout_iter_free(iter);
-
-    return true;
+    wxTextMeasure txm(GetOwner(), &m_font);
+    return txm.GetPartialTextExtents(text, widths, m_scaleX);
 }
 
 

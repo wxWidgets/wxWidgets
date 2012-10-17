@@ -81,6 +81,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/keyboard.h"
 #include "wx/msw/dcclient.h"
+#include "wx/private/textmeasure.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -2164,31 +2165,18 @@ void wxWindowMSW::DoGetTextExtent(const wxString& string,
                                   int *externalLeading,
                                   const wxFont *fontToUse) const
 {
-    wxASSERT_MSG( !fontToUse || fontToUse->IsOk(),
-                    wxT("invalid font in GetTextExtent()") );
-
-    HFONT hfontToUse;
-    if ( fontToUse )
-        hfontToUse = GetHfontOf(*fontToUse);
+    // ensure we work with a valid font
+    wxFont font;
+    if ( !fontToUse || !fontToUse->IsOk() )
+        font = GetFont();
     else
-        hfontToUse = GetHfontOf(GetFont());
+        font = *fontToUse;
 
-    WindowHDC hdc(GetHwnd());
-    SelectInHDC selectFont(hdc, hfontToUse);
+    wxCHECK_RET( font.IsOk(), wxT("invalid font in GetTextExtent()") );
 
-    SIZE sizeRect;
-    TEXTMETRIC tm;
-    ::GetTextExtentPoint32(hdc, string.t_str(), string.length(), &sizeRect);
-    GetTextMetrics(hdc, &tm);
-
-    if ( x )
-        *x = sizeRect.cx;
-    if ( y )
-        *y = sizeRect.cy;
-    if ( descent )
-        *descent = tm.tmDescent;
-    if ( externalLeading )
-        *externalLeading = tm.tmExternalLeading;
+    const wxWindow* win = static_cast<const wxWindow*>(this);
+    wxTextMeasure txm(win, &font);
+    txm.GetTextExtent(string, x, y, descent, externalLeading);
 }
 
 // ---------------------------------------------------------------------------

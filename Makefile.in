@@ -4814,6 +4814,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
 	monodll_textentrycmn.o \
+	monodll_textmeasurecmn.o \
 	monodll_toplvcmn.o \
 	monodll_treebase.o \
 	monodll_uiactioncmn.o \
@@ -5031,6 +5032,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
 	monodll_textentrycmn.o \
+	monodll_textmeasurecmn.o \
 	monodll_toplvcmn.o \
 	monodll_treebase.o \
 	monodll_uiactioncmn.o \
@@ -5086,6 +5088,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_generic_icon.o \
 	monodll_generic_imaglist.o \
 	monodll_mask.o \
+	monodll_generic_textmeasure.o \
 	monodll_dfb_app.o \
 	monodll_dfb_bitmap.o \
 	monodll_dfb_brush.o \
@@ -5119,6 +5122,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS =  \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
 	monodll_paletteg.o \
+	monodll_generic_textmeasure.o \
 	monodll_gtk1_app.o \
 	monodll_gtk1_bitmap.o \
 	monodll_gtk1_brush.o \
@@ -5176,6 +5180,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk_region.o \
 	monodll_gtk_renderer.o \
 	monodll_gtk_settings.o \
+	monodll_gtk_textmeasure.o \
 	monodll_gtk_timer.o \
 	monodll_gtk_tooltip.o \
 	monodll_gtk_toplevel.o \
@@ -5213,6 +5218,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk_region.o \
 	monodll_gtk_renderer.o \
 	monodll_gtk_settings.o \
+	monodll_gtk_textmeasure.o \
 	monodll_gtk_timer.o \
 	monodll_gtk_tooltip.o \
 	monodll_gtk_toplevel.o \
@@ -5229,6 +5235,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_unix_fontutil.o \
 	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
+	monodll_generic_textmeasure.o \
 	monodll_x11_bitmap.o \
 	monodll_x11_brush.o \
 	monodll_x11_palette.o \
@@ -5279,6 +5286,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_region.o \
 	monodll_msw_renderer.o \
 	monodll_msw_settings.o \
+	monodll_msw_textmeasure.o \
 	monodll_msw_tooltip.o \
 	monodll_msw_toplevel.o \
 	monodll_uiaction.o \
@@ -5341,6 +5349,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_region.o \
 	monodll_msw_renderer.o \
 	monodll_msw_settings.o \
+	monodll_msw_textmeasure.o \
 	monodll_msw_tooltip.o \
 	monodll_msw_toplevel.o \
 	monodll_uiaction.o \
@@ -5359,6 +5368,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
+	monodll_generic_textmeasure.o \
 	monodll_generic_timer.o \
 	monodll_x11_app.o \
 	monodll_x11_bitmap.o \
@@ -5476,7 +5486,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_generic_listctrl.o \
 	monodll_paletteg.o \
 	monodll_regiong.o \
-	monodll_generic_statusbr.o
+	monodll_generic_statusbr.o \
+	monodll_generic_textmeasure.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -5871,6 +5882,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_mdig.o \
 	monodll_prntdlgg.o \
 	monodll_generic_statusbr.o \
+	monodll_generic_textmeasure.o \
 	monodll_os2_accel.o \
 	monodll_os2_app.o \
 	monodll_os2_bitmap.o \
@@ -6024,6 +6036,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_generic_icon.o \
 	monodll_generic_imaglist.o \
 	monodll_mask.o \
+	monodll_generic_textmeasure.o \
 	monodll_dfb_app.o \
 	monodll_dfb_bitmap.o \
 	monodll_dfb_brush.o \
@@ -6057,6 +6070,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
 	monodll_paletteg.o \
+	monodll_generic_textmeasure.o \
 	monodll_gtk1_app.o \
 	monodll_gtk1_bitmap.o \
 	monodll_gtk1_brush.o \
@@ -6114,6 +6128,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk_region.o \
 	monodll_gtk_renderer.o \
 	monodll_gtk_settings.o \
+	monodll_gtk_textmeasure.o \
 	monodll_gtk_timer.o \
 	monodll_gtk_tooltip.o \
 	monodll_gtk_toplevel.o \
@@ -6151,6 +6166,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk_region.o \
 	monodll_gtk_renderer.o \
 	monodll_gtk_settings.o \
+	monodll_gtk_textmeasure.o \
 	monodll_gtk_timer.o \
 	monodll_gtk_tooltip.o \
 	monodll_gtk_toplevel.o \
@@ -6167,6 +6183,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_unix_fontutil.o \
 	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
+	monodll_generic_textmeasure.o \
 	monodll_x11_bitmap.o \
 	monodll_x11_brush.o \
 	monodll_x11_palette.o \
@@ -6217,6 +6234,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_region.o \
 	monodll_msw_renderer.o \
 	monodll_msw_settings.o \
+	monodll_msw_textmeasure.o \
 	monodll_msw_tooltip.o \
 	monodll_msw_toplevel.o \
 	monodll_uiaction.o \
@@ -6279,6 +6297,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_region.o \
 	monodll_msw_renderer.o \
 	monodll_msw_settings.o \
+	monodll_msw_textmeasure.o \
 	monodll_msw_tooltip.o \
 	monodll_msw_toplevel.o \
 	monodll_uiaction.o \
@@ -6297,6 +6316,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_uiactionx11.o \
 	monodll_utilsx11.o \
 	monodll_generic_icon.o \
+	monodll_generic_textmeasure.o \
 	monodll_generic_timer.o \
 	monodll_x11_app.o \
 	monodll_x11_bitmap.o \
@@ -7024,6 +7044,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
 	monolib_textentrycmn.o \
+	monolib_textmeasurecmn.o \
 	monolib_toplvcmn.o \
 	monolib_treebase.o \
 	monolib_uiactioncmn.o \
@@ -7241,6 +7262,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
 	monolib_textentrycmn.o \
+	monolib_textmeasurecmn.o \
 	monolib_toplvcmn.o \
 	monolib_treebase.o \
 	monolib_uiactioncmn.o \
@@ -7296,6 +7318,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_generic_icon.o \
 	monolib_generic_imaglist.o \
 	monolib_mask.o \
+	monolib_generic_textmeasure.o \
 	monolib_dfb_app.o \
 	monolib_dfb_bitmap.o \
 	monolib_dfb_brush.o \
@@ -7329,6 +7352,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
 	monolib_paletteg.o \
+	monolib_generic_textmeasure.o \
 	monolib_gtk1_app.o \
 	monolib_gtk1_bitmap.o \
 	monolib_gtk1_brush.o \
@@ -7386,6 +7410,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk_region.o \
 	monolib_gtk_renderer.o \
 	monolib_gtk_settings.o \
+	monolib_gtk_textmeasure.o \
 	monolib_gtk_timer.o \
 	monolib_gtk_tooltip.o \
 	monolib_gtk_toplevel.o \
@@ -7423,6 +7448,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk_region.o \
 	monolib_gtk_renderer.o \
 	monolib_gtk_settings.o \
+	monolib_gtk_textmeasure.o \
 	monolib_gtk_timer.o \
 	monolib_gtk_tooltip.o \
 	monolib_gtk_toplevel.o \
@@ -7439,6 +7465,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_unix_fontutil.o \
 	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
+	monolib_generic_textmeasure.o \
 	monolib_x11_bitmap.o \
 	monolib_x11_brush.o \
 	monolib_x11_palette.o \
@@ -7489,6 +7516,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_region.o \
 	monolib_msw_renderer.o \
 	monolib_msw_settings.o \
+	monolib_msw_textmeasure.o \
 	monolib_msw_tooltip.o \
 	monolib_msw_toplevel.o \
 	monolib_uiaction.o \
@@ -7551,6 +7579,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_region.o \
 	monolib_msw_renderer.o \
 	monolib_msw_settings.o \
+	monolib_msw_textmeasure.o \
 	monolib_msw_tooltip.o \
 	monolib_msw_toplevel.o \
 	monolib_uiaction.o \
@@ -7569,6 +7598,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
+	monolib_generic_textmeasure.o \
 	monolib_generic_timer.o \
 	monolib_x11_app.o \
 	monolib_x11_bitmap.o \
@@ -7686,7 +7716,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_listctrl.o \
 	monolib_paletteg.o \
 	monolib_regiong.o \
-	monolib_generic_statusbr.o
+	monolib_generic_statusbr.o \
+	monolib_generic_textmeasure.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -8081,6 +8112,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_mdig.o \
 	monolib_prntdlgg.o \
 	monolib_generic_statusbr.o \
+	monolib_generic_textmeasure.o \
 	monolib_os2_accel.o \
 	monolib_os2_app.o \
 	monolib_os2_bitmap.o \
@@ -8234,6 +8266,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_generic_icon.o \
 	monolib_generic_imaglist.o \
 	monolib_mask.o \
+	monolib_generic_textmeasure.o \
 	monolib_dfb_app.o \
 	monolib_dfb_bitmap.o \
 	monolib_dfb_brush.o \
@@ -8267,6 +8300,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
 	monolib_paletteg.o \
+	monolib_generic_textmeasure.o \
 	monolib_gtk1_app.o \
 	monolib_gtk1_bitmap.o \
 	monolib_gtk1_brush.o \
@@ -8324,6 +8358,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk_region.o \
 	monolib_gtk_renderer.o \
 	monolib_gtk_settings.o \
+	monolib_gtk_textmeasure.o \
 	monolib_gtk_timer.o \
 	monolib_gtk_tooltip.o \
 	monolib_gtk_toplevel.o \
@@ -8361,6 +8396,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk_region.o \
 	monolib_gtk_renderer.o \
 	monolib_gtk_settings.o \
+	monolib_gtk_textmeasure.o \
 	monolib_gtk_timer.o \
 	monolib_gtk_tooltip.o \
 	monolib_gtk_toplevel.o \
@@ -8377,6 +8413,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_unix_fontutil.o \
 	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
+	monolib_generic_textmeasure.o \
 	monolib_x11_bitmap.o \
 	monolib_x11_brush.o \
 	monolib_x11_palette.o \
@@ -8427,6 +8464,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_region.o \
 	monolib_msw_renderer.o \
 	monolib_msw_settings.o \
+	monolib_msw_textmeasure.o \
 	monolib_msw_tooltip.o \
 	monolib_msw_toplevel.o \
 	monolib_uiaction.o \
@@ -8489,6 +8527,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_region.o \
 	monolib_msw_renderer.o \
 	monolib_msw_settings.o \
+	monolib_msw_textmeasure.o \
 	monolib_msw_tooltip.o \
 	monolib_msw_toplevel.o \
 	monolib_uiaction.o \
@@ -8507,6 +8546,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_uiactionx11.o \
 	monolib_utilsx11.o \
 	monolib_generic_icon.o \
+	monolib_generic_textmeasure.o \
 	monolib_generic_timer.o \
 	monolib_x11_app.o \
 	monolib_x11_bitmap.o \
@@ -9409,6 +9449,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
 	coredll_textentrycmn.o \
+	coredll_textmeasurecmn.o \
 	coredll_toplvcmn.o \
 	coredll_treebase.o \
 	coredll_uiactioncmn.o \
@@ -9626,6 +9667,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
 	coredll_textentrycmn.o \
+	coredll_textmeasurecmn.o \
 	coredll_toplvcmn.o \
 	coredll_treebase.o \
 	coredll_uiactioncmn.o \
@@ -9681,6 +9723,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_generic_icon.o \
 	coredll_generic_imaglist.o \
 	coredll_mask.o \
+	coredll_generic_textmeasure.o \
 	coredll_dfb_app.o \
 	coredll_dfb_bitmap.o \
 	coredll_dfb_brush.o \
@@ -9714,6 +9757,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
 	coredll_paletteg.o \
+	coredll_generic_textmeasure.o \
 	coredll_gtk1_app.o \
 	coredll_gtk1_bitmap.o \
 	coredll_gtk1_brush.o \
@@ -9771,6 +9815,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk_region.o \
 	coredll_gtk_renderer.o \
 	coredll_gtk_settings.o \
+	coredll_gtk_textmeasure.o \
 	coredll_gtk_timer.o \
 	coredll_gtk_tooltip.o \
 	coredll_gtk_toplevel.o \
@@ -9808,6 +9853,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk_region.o \
 	coredll_gtk_renderer.o \
 	coredll_gtk_settings.o \
+	coredll_gtk_textmeasure.o \
 	coredll_gtk_timer.o \
 	coredll_gtk_tooltip.o \
 	coredll_gtk_toplevel.o \
@@ -9824,6 +9870,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_unix_fontutil.o \
 	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
+	coredll_generic_textmeasure.o \
 	coredll_x11_bitmap.o \
 	coredll_x11_brush.o \
 	coredll_x11_palette.o \
@@ -9874,6 +9921,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_region.o \
 	coredll_msw_renderer.o \
 	coredll_msw_settings.o \
+	coredll_msw_textmeasure.o \
 	coredll_msw_tooltip.o \
 	coredll_msw_toplevel.o \
 	coredll_uiaction.o \
@@ -9936,6 +9984,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_region.o \
 	coredll_msw_renderer.o \
 	coredll_msw_settings.o \
+	coredll_msw_textmeasure.o \
 	coredll_msw_tooltip.o \
 	coredll_msw_toplevel.o \
 	coredll_uiaction.o \
@@ -9954,6 +10003,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
+	coredll_generic_textmeasure.o \
 	coredll_generic_timer.o \
 	coredll_x11_app.o \
 	coredll_x11_bitmap.o \
@@ -10071,7 +10121,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_listctrl.o \
 	coredll_paletteg.o \
 	coredll_regiong.o \
-	coredll_generic_statusbr.o
+	coredll_generic_statusbr.o \
+	coredll_generic_textmeasure.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -10466,6 +10517,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_mdig.o \
 	coredll_prntdlgg.o \
 	coredll_generic_statusbr.o \
+	coredll_generic_textmeasure.o \
 	coredll_os2_accel.o \
 	coredll_os2_app.o \
 	coredll_os2_bitmap.o \
@@ -10619,6 +10671,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_generic_icon.o \
 	coredll_generic_imaglist.o \
 	coredll_mask.o \
+	coredll_generic_textmeasure.o \
 	coredll_dfb_app.o \
 	coredll_dfb_bitmap.o \
 	coredll_dfb_brush.o \
@@ -10652,6 +10705,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
 	coredll_paletteg.o \
+	coredll_generic_textmeasure.o \
 	coredll_gtk1_app.o \
 	coredll_gtk1_bitmap.o \
 	coredll_gtk1_brush.o \
@@ -10709,6 +10763,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk_region.o \
 	coredll_gtk_renderer.o \
 	coredll_gtk_settings.o \
+	coredll_gtk_textmeasure.o \
 	coredll_gtk_timer.o \
 	coredll_gtk_tooltip.o \
 	coredll_gtk_toplevel.o \
@@ -10746,6 +10801,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk_region.o \
 	coredll_gtk_renderer.o \
 	coredll_gtk_settings.o \
+	coredll_gtk_textmeasure.o \
 	coredll_gtk_timer.o \
 	coredll_gtk_tooltip.o \
 	coredll_gtk_toplevel.o \
@@ -10762,6 +10818,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_unix_fontutil.o \
 	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
+	coredll_generic_textmeasure.o \
 	coredll_x11_bitmap.o \
 	coredll_x11_brush.o \
 	coredll_x11_palette.o \
@@ -10812,6 +10869,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_region.o \
 	coredll_msw_renderer.o \
 	coredll_msw_settings.o \
+	coredll_msw_textmeasure.o \
 	coredll_msw_tooltip.o \
 	coredll_msw_toplevel.o \
 	coredll_uiaction.o \
@@ -10874,6 +10932,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_region.o \
 	coredll_msw_renderer.o \
 	coredll_msw_settings.o \
+	coredll_msw_textmeasure.o \
 	coredll_msw_tooltip.o \
 	coredll_msw_toplevel.o \
 	coredll_uiaction.o \
@@ -10892,6 +10951,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_uiactionx11.o \
 	coredll_utilsx11.o \
 	coredll_generic_icon.o \
+	coredll_generic_textmeasure.o \
 	coredll_generic_timer.o \
 	coredll_x11_app.o \
 	coredll_x11_bitmap.o \
@@ -11058,6 +11118,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
 	corelib_textentrycmn.o \
+	corelib_textmeasurecmn.o \
 	corelib_toplvcmn.o \
 	corelib_treebase.o \
 	corelib_uiactioncmn.o \
@@ -11275,6 +11336,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
 	corelib_textentrycmn.o \
+	corelib_textmeasurecmn.o \
 	corelib_toplvcmn.o \
 	corelib_treebase.o \
 	corelib_uiactioncmn.o \
@@ -11330,6 +11392,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_generic_icon.o \
 	corelib_generic_imaglist.o \
 	corelib_mask.o \
+	corelib_generic_textmeasure.o \
 	corelib_dfb_app.o \
 	corelib_dfb_bitmap.o \
 	corelib_dfb_brush.o \
@@ -11363,6 +11426,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
 	corelib_paletteg.o \
+	corelib_generic_textmeasure.o \
 	corelib_gtk1_app.o \
 	corelib_gtk1_bitmap.o \
 	corelib_gtk1_brush.o \
@@ -11420,6 +11484,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk_region.o \
 	corelib_gtk_renderer.o \
 	corelib_gtk_settings.o \
+	corelib_gtk_textmeasure.o \
 	corelib_gtk_timer.o \
 	corelib_gtk_tooltip.o \
 	corelib_gtk_toplevel.o \
@@ -11457,6 +11522,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk_region.o \
 	corelib_gtk_renderer.o \
 	corelib_gtk_settings.o \
+	corelib_gtk_textmeasure.o \
 	corelib_gtk_timer.o \
 	corelib_gtk_tooltip.o \
 	corelib_gtk_toplevel.o \
@@ -11473,6 +11539,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_unix_fontutil.o \
 	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
+	corelib_generic_textmeasure.o \
 	corelib_x11_bitmap.o \
 	corelib_x11_brush.o \
 	corelib_x11_palette.o \
@@ -11523,6 +11590,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_region.o \
 	corelib_msw_renderer.o \
 	corelib_msw_settings.o \
+	corelib_msw_textmeasure.o \
 	corelib_msw_tooltip.o \
 	corelib_msw_toplevel.o \
 	corelib_uiaction.o \
@@ -11585,6 +11653,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_region.o \
 	corelib_msw_renderer.o \
 	corelib_msw_settings.o \
+	corelib_msw_textmeasure.o \
 	corelib_msw_tooltip.o \
 	corelib_msw_toplevel.o \
 	corelib_uiaction.o \
@@ -11603,6 +11672,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
+	corelib_generic_textmeasure.o \
 	corelib_generic_timer.o \
 	corelib_x11_app.o \
 	corelib_x11_bitmap.o \
@@ -11720,7 +11790,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_listctrl.o \
 	corelib_paletteg.o \
 	corelib_regiong.o \
-	corelib_generic_statusbr.o
+	corelib_generic_statusbr.o \
+	corelib_generic_textmeasure.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -12115,6 +12186,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_mdig.o \
 	corelib_prntdlgg.o \
 	corelib_generic_statusbr.o \
+	corelib_generic_textmeasure.o \
 	corelib_os2_accel.o \
 	corelib_os2_app.o \
 	corelib_os2_bitmap.o \
@@ -12268,6 +12340,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_generic_icon.o \
 	corelib_generic_imaglist.o \
 	corelib_mask.o \
+	corelib_generic_textmeasure.o \
 	corelib_dfb_app.o \
 	corelib_dfb_bitmap.o \
 	corelib_dfb_brush.o \
@@ -12301,6 +12374,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
 	corelib_paletteg.o \
+	corelib_generic_textmeasure.o \
 	corelib_gtk1_app.o \
 	corelib_gtk1_bitmap.o \
 	corelib_gtk1_brush.o \
@@ -12358,6 +12432,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk_region.o \
 	corelib_gtk_renderer.o \
 	corelib_gtk_settings.o \
+	corelib_gtk_textmeasure.o \
 	corelib_gtk_timer.o \
 	corelib_gtk_tooltip.o \
 	corelib_gtk_toplevel.o \
@@ -12395,6 +12470,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk_region.o \
 	corelib_gtk_renderer.o \
 	corelib_gtk_settings.o \
+	corelib_gtk_textmeasure.o \
 	corelib_gtk_timer.o \
 	corelib_gtk_tooltip.o \
 	corelib_gtk_toplevel.o \
@@ -12411,6 +12487,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_unix_fontutil.o \
 	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
+	corelib_generic_textmeasure.o \
 	corelib_x11_bitmap.o \
 	corelib_x11_brush.o \
 	corelib_x11_palette.o \
@@ -12461,6 +12538,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_region.o \
 	corelib_msw_renderer.o \
 	corelib_msw_settings.o \
+	corelib_msw_textmeasure.o \
 	corelib_msw_tooltip.o \
 	corelib_msw_toplevel.o \
 	corelib_uiaction.o \
@@ -12523,6 +12601,7 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_region.o \
 	corelib_msw_renderer.o \
 	corelib_msw_settings.o \
+	corelib_msw_textmeasure.o \
 	corelib_msw_tooltip.o \
 	corelib_msw_toplevel.o \
 	corelib_uiaction.o \
@@ -12541,6 +12620,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_uiactionx11.o \
 	corelib_utilsx11.o \
 	corelib_generic_icon.o \
+	corelib_generic_textmeasure.o \
 	corelib_generic_timer.o \
 	corelib_x11_app.o \
 	corelib_x11_bitmap.o \
@@ -14432,7 +14512,8 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_fontpickerg.o \
 	monodll_generic_listctrl.o \
 	monodll_prntdlgg.o \
-	monodll_generic_statusbr.o
+	monodll_generic_statusbr.o \
+	monodll_generic_textmeasure.o
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
@@ -14561,7 +14642,8 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_12 =  \
 	monolib_fontpickerg.o \
 	monolib_generic_listctrl.o \
 	monolib_prntdlgg.o \
-	monolib_generic_statusbr.o
+	monolib_generic_statusbr.o \
+	monolib_generic_textmeasure.o
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_12 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_12)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_17 =  \
 	monolib_generic_caret.o \
@@ -14690,7 +14772,8 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14 =  \
 	coredll_fontpickerg.o \
 	coredll_generic_listctrl.o \
 	coredll_prntdlgg.o \
-	coredll_generic_statusbr.o
+	coredll_generic_statusbr.o \
+	coredll_generic_textmeasure.o
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_14 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_1_1 =  \
 	coredll_generic_caret.o \
@@ -14807,7 +14890,8 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0 =  \
 	corelib_fontpickerg.o \
 	corelib_generic_listctrl.o \
 	corelib_prntdlgg.o \
-	corelib_generic_statusbr.o
+	corelib_generic_statusbr.o \
+	corelib_generic_textmeasure.o
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_1_0 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 	corelib_generic_caret.o \
@@ -19065,6 +19149,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_settings.o: $(srcdir)/src/gtk/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/settings.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk_textmeasure.o: $(srcdir)/src/gtk/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/textmeasure.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_textmeasure.o: $(srcdir)/src/gtk/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/textmeasure.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk_timer.o: $(srcdir)/src/gtk/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/timer.cpp
 
@@ -19109,6 +19199,33 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_dcscreen.o: $(srcdir)/src/gtk/dcscreen.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dcscreen.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_gtk1_app.o: $(srcdir)/src/gtk1/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/app.cpp
@@ -19484,6 +19601,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_settings.o: $(srcdir)/src/msw/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/settings.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_textmeasure.o: $(srcdir)/src/msw/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/textmeasure.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_textmeasure.o: $(srcdir)/src/msw/textmeasure.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/textmeasure.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_tooltip.o: $(srcdir)/src/msw/tooltip.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/tooltip.cpp
@@ -21689,6 +21812,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_textentrycmn.o: $(srcdir)/src/common/textentrycmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textentrycmn.cpp
+
+@COND_USE_GUI_1@monodll_textmeasurecmn.o: $(srcdir)/src/common/textmeasurecmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textmeasurecmn.cpp
 
 @COND_USE_GUI_1@monodll_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
@@ -24768,6 +24894,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_settings.o: $(srcdir)/src/gtk/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/settings.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk_textmeasure.o: $(srcdir)/src/gtk/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/textmeasure.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_textmeasure.o: $(srcdir)/src/gtk/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/textmeasure.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk_timer.o: $(srcdir)/src/gtk/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/timer.cpp
 
@@ -24812,6 +24944,33 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_dcscreen.o: $(srcdir)/src/gtk/dcscreen.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dcscreen.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_gtk1_app.o: $(srcdir)/src/gtk1/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/app.cpp
@@ -25187,6 +25346,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_settings.o: $(srcdir)/src/msw/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/settings.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_textmeasure.o: $(srcdir)/src/msw/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/textmeasure.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_textmeasure.o: $(srcdir)/src/msw/textmeasure.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/textmeasure.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_tooltip.o: $(srcdir)/src/msw/tooltip.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/tooltip.cpp
@@ -27392,6 +27557,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_textentrycmn.o: $(srcdir)/src/common/textentrycmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textentrycmn.cpp
+
+@COND_USE_GUI_1@monolib_textmeasurecmn.o: $(srcdir)/src/common/textmeasurecmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textmeasurecmn.cpp
 
 @COND_USE_GUI_1@monolib_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
@@ -30636,6 +30804,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_settings.o: $(srcdir)/src/gtk/settings.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/settings.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk_textmeasure.o: $(srcdir)/src/gtk/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/textmeasure.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_textmeasure.o: $(srcdir)/src/gtk/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/textmeasure.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk_timer.o: $(srcdir)/src/gtk/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/timer.cpp
 
@@ -30680,6 +30854,33 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_dcscreen.o: $(srcdir)/src/gtk/dcscreen.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/dcscreen.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_gtk1_app.o: $(srcdir)/src/gtk1/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/app.cpp
@@ -31055,6 +31256,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_msw_settings.o: $(srcdir)/src/msw/settings.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/settings.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_textmeasure.o: $(srcdir)/src/msw/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/textmeasure.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_msw_textmeasure.o: $(srcdir)/src/msw/textmeasure.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/textmeasure.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_tooltip.o: $(srcdir)/src/msw/tooltip.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/tooltip.cpp
@@ -33261,6 +33468,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_textentrycmn.o: $(srcdir)/src/common/textentrycmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/textentrycmn.cpp
 
+@COND_USE_GUI_1@coredll_textmeasurecmn.o: $(srcdir)/src/common/textmeasurecmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/textmeasurecmn.cpp
+
 @COND_USE_GUI_1@coredll_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
 
@@ -34887,6 +35097,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_settings.o: $(srcdir)/src/gtk/settings.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/settings.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk_textmeasure.o: $(srcdir)/src/gtk/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/textmeasure.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_textmeasure.o: $(srcdir)/src/gtk/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/textmeasure.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk_timer.o: $(srcdir)/src/gtk/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/timer.cpp
 
@@ -34931,6 +35147,33 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_dcscreen.o: $(srcdir)/src/gtk/dcscreen.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/dcscreen.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_textmeasure.o: $(srcdir)/src/generic/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textmeasure.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_gtk1_app.o: $(srcdir)/src/gtk1/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/app.cpp
@@ -35306,6 +35549,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_msw_settings.o: $(srcdir)/src/msw/settings.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/settings.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_textmeasure.o: $(srcdir)/src/msw/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/textmeasure.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_msw_textmeasure.o: $(srcdir)/src/msw/textmeasure.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/textmeasure.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_tooltip.o: $(srcdir)/src/msw/tooltip.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/tooltip.cpp
@@ -37511,6 +37760,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_textentrycmn.o: $(srcdir)/src/common/textentrycmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/textentrycmn.cpp
+
+@COND_USE_GUI_1@corelib_textmeasurecmn.o: $(srcdir)/src/common/textmeasurecmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/textmeasurecmn.cpp
 
 @COND_USE_GUI_1@corelib_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp

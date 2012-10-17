@@ -1809,6 +1809,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_region.o \
 	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
+	$(OBJS)\monodll_textmeasure.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
 	$(OBJS)\monodll_uiaction.o \
@@ -1994,6 +1995,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tbarbase.o \
 	$(OBJS)\monodll_textcmn.o \
 	$(OBJS)\monodll_textentrycmn.o \
+	$(OBJS)\monodll_textmeasurecmn.o \
 	$(OBJS)\monodll_toplvcmn.o \
 	$(OBJS)\monodll_treebase.o \
 	$(OBJS)\monodll_uiactioncmn.o \
@@ -2086,6 +2088,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_region.o \
 	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
+	$(OBJS)\monodll_textmeasure.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
 	$(OBJS)\monodll_uiaction.o \
@@ -2265,6 +2268,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tbarbase.o \
 	$(OBJS)\monodll_textcmn.o \
 	$(OBJS)\monodll_textentrycmn.o \
+	$(OBJS)\monodll_textmeasurecmn.o \
 	$(OBJS)\monodll_toplvcmn.o \
 	$(OBJS)\monodll_treebase.o \
 	$(OBJS)\monodll_uiactioncmn.o \
@@ -2606,6 +2610,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_region.o \
 	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
+	$(OBJS)\monolib_textmeasure.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
 	$(OBJS)\monolib_uiaction.o \
@@ -2791,6 +2796,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tbarbase.o \
 	$(OBJS)\monolib_textcmn.o \
 	$(OBJS)\monolib_textentrycmn.o \
+	$(OBJS)\monolib_textmeasurecmn.o \
 	$(OBJS)\monolib_toplvcmn.o \
 	$(OBJS)\monolib_treebase.o \
 	$(OBJS)\monolib_uiactioncmn.o \
@@ -2883,6 +2889,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_region.o \
 	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
+	$(OBJS)\monolib_textmeasure.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
 	$(OBJS)\monolib_uiaction.o \
@@ -3062,6 +3069,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tbarbase.o \
 	$(OBJS)\monolib_textcmn.o \
 	$(OBJS)\monolib_textentrycmn.o \
+	$(OBJS)\monolib_textmeasurecmn.o \
 	$(OBJS)\monolib_toplvcmn.o \
 	$(OBJS)\monolib_treebase.o \
 	$(OBJS)\monolib_uiactioncmn.o \
@@ -3294,6 +3302,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_region.o \
 	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
+	$(OBJS)\coredll_textmeasure.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
 	$(OBJS)\coredll_uiaction.o \
@@ -3479,6 +3488,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_tbarbase.o \
 	$(OBJS)\coredll_textcmn.o \
 	$(OBJS)\coredll_textentrycmn.o \
+	$(OBJS)\coredll_textmeasurecmn.o \
 	$(OBJS)\coredll_toplvcmn.o \
 	$(OBJS)\coredll_treebase.o \
 	$(OBJS)\coredll_uiactioncmn.o \
@@ -3571,6 +3581,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_region.o \
 	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
+	$(OBJS)\coredll_textmeasure.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
 	$(OBJS)\coredll_uiaction.o \
@@ -3750,6 +3761,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_tbarbase.o \
 	$(OBJS)\coredll_textcmn.o \
 	$(OBJS)\coredll_textentrycmn.o \
+	$(OBJS)\coredll_textmeasurecmn.o \
 	$(OBJS)\coredll_toplvcmn.o \
 	$(OBJS)\coredll_treebase.o \
 	$(OBJS)\coredll_uiactioncmn.o \
@@ -3850,6 +3862,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_region.o \
 	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
+	$(OBJS)\corelib_textmeasure.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
 	$(OBJS)\corelib_uiaction.o \
@@ -4035,6 +4048,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_tbarbase.o \
 	$(OBJS)\corelib_textcmn.o \
 	$(OBJS)\corelib_textentrycmn.o \
+	$(OBJS)\corelib_textmeasurecmn.o \
 	$(OBJS)\corelib_toplvcmn.o \
 	$(OBJS)\corelib_treebase.o \
 	$(OBJS)\corelib_uiactioncmn.o \
@@ -4127,6 +4141,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_region.o \
 	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
+	$(OBJS)\corelib_textmeasure.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
 	$(OBJS)\corelib_uiaction.o \
@@ -4306,6 +4321,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_tbarbase.o \
 	$(OBJS)\corelib_textcmn.o \
 	$(OBJS)\corelib_textentrycmn.o \
+	$(OBJS)\corelib_textmeasurecmn.o \
 	$(OBJS)\corelib_toplvcmn.o \
 	$(OBJS)\corelib_treebase.o \
 	$(OBJS)\corelib_uiactioncmn.o \
@@ -7665,6 +7681,11 @@ $(OBJS)\monodll_settings.o: ../../src/msw/settings.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_textmeasure.o: ../../src/msw/textmeasure.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_tooltip.o: ../../src/msw/tooltip.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8316,6 +8337,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_textentrycmn.o: ../../src/common/textentrycmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_textmeasurecmn.o: ../../src/common/textmeasurecmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10091,6 +10117,11 @@ $(OBJS)\monolib_settings.o: ../../src/msw/settings.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_textmeasure.o: ../../src/msw/textmeasure.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_tooltip.o: ../../src/msw/tooltip.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10742,6 +10773,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_textentrycmn.o: ../../src/common/textentrycmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_textmeasurecmn.o: ../../src/common/textmeasurecmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12481,6 +12517,11 @@ $(OBJS)\coredll_settings.o: ../../src/msw/settings.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_textmeasure.o: ../../src/msw/textmeasure.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_tooltip.o: ../../src/msw/tooltip.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13132,6 +13173,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_textentrycmn.o: ../../src/common/textentrycmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_textmeasurecmn.o: ../../src/common/textmeasurecmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13901,6 +13947,11 @@ $(OBJS)\corelib_settings.o: ../../src/msw/settings.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_textmeasure.o: ../../src/msw/textmeasure.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_tooltip.o: ../../src/msw/tooltip.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -14552,6 +14603,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_textentrycmn.o: ../../src/common/textentrycmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_textmeasurecmn.o: ../../src/common/textmeasurecmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

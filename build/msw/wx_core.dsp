@@ -714,6 +714,10 @@ SOURCE=..\..\src\common\textentrycmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\textmeasurecmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\toplvcmn.cpp
 # End Source File
 # Begin Source File
@@ -2705,6 +2709,10 @@ SOURCE=..\..\src\msw\textentry.cpp
 
 !ENDIF
 
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\textmeasure.cpp
 # End Source File
 # Begin Source File
 

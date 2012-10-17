@@ -43,6 +43,7 @@
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/win_gtk.h"
+#include "wx/private/textmeasure.h"
 using namespace wxGTKImpl;
 
 #ifdef GDK_WINDOWING_X11
@@ -3080,52 +3081,18 @@ void wxWindowGTK::DoGetTextExtent( const wxString& string,
                                    int *externalLeading,
                                    const wxFont *theFont ) const
 {
-    wxFont fontToUse = theFont ? *theFont : GetFont();
+    // ensure we work with a valid font
+    wxFont fontToUse;
+    if ( !theFont || !theFont->IsOk() )
+        fontToUse = GetFont();
+    else
+        fontToUse = *theFont;
 
     wxCHECK_RET( fontToUse.IsOk(), wxT("invalid font") );
 
-    if (string.empty())
-    {
-        if (x) (*x) = 0;
-        if (y) (*y) = 0;
-        return;
-    }
-
-    PangoContext *context = NULL;
-    if (m_widget)
-        context = gtk_widget_get_pango_context( m_widget );
-
-    if (!context)
-    {
-        if (x) (*x) = 0;
-        if (y) (*y) = 0;
-        return;
-    }
-
-    PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
-    PangoLayout *layout = pango_layout_new(context);
-    pango_layout_set_font_description(layout, desc);
-    {
-        const wxCharBuffer data = wxGTK_CONV( string );
-        if ( data )
-            pango_layout_set_text(layout, data, strlen(data));
-    }
-
-    PangoRectangle rect;
-    pango_layout_get_extents(layout, NULL, &rect);
-
-    if (x) (*x) = (wxCoord) PANGO_PIXELS(rect.width);
-    if (y) (*y) = (wxCoord) PANGO_PIXELS(rect.height);
-    if (descent)
-    {
-        PangoLayoutIter *iter = pango_layout_get_iter(layout);
-        int baseline = pango_layout_iter_get_baseline(iter);
-        pango_layout_iter_free(iter);
-        *descent = *y - PANGO_PIXELS(baseline);
-    }
-    if (externalLeading) (*externalLeading) = 0;  // ??
-
-    g_object_unref (layout);
+    const wxWindow* win = static_cast<const wxWindow*>(this);
+    wxTextMeasure txm(win, &fontToUse);
+    txm.GetTextExtent(string, x, y, descent, externalLeading);
 }
 
 void wxWindowGTK::GTKDisableFocusOutEvent()

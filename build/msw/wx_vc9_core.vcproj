@@ -1267,6 +1267,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\textmeasurecmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\toplvcmn.cpp"
 				>
 			</File>
@@ -3310,6 +3314,10 @@
 					Name="DLL Universal Release|Win32"
 					ExcludedFromBuild="true"
 				/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\textmeasure.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\tglbtn.cpp"

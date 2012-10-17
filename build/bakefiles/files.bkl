@@ -737,6 +737,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/tbarbase.cpp
     src/common/textcmn.cpp
     src/common/textentrycmn.cpp
+    src/common/textmeasurecmn.cpp
     src/common/toplvcmn.cpp
     src/common/treebase.cpp
     src/common/uiactioncmn.cpp
@@ -1082,6 +1083,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/region.cpp
     src/gtk/renderer.cpp
     src/gtk/settings.cpp
+    src/gtk/textmeasure.cpp
     src/gtk/timer.cpp
     src/gtk/tooltip.cpp
     src/gtk/toplevel.cpp
@@ -1255,6 +1257,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(XWIN_LOWLEVEL_SRC)
     src/generic/icon.cpp
     src/generic/paletteg.cpp
+    src/generic/textmeasure.cpp
     src/gtk1/app.cpp
     src/gtk1/bitmap.cpp
     src/gtk1/brush.cpp
@@ -1416,6 +1419,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MOTIF_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
+    src/generic/textmeasure.cpp
     src/x11/bitmap.cpp
     src/x11/brush.cpp
     src/x11/palette.cpp
@@ -1581,6 +1585,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="X11_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
     src/generic/icon.cpp
+    src/generic/textmeasure.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
     src/x11/bitmap.cpp
@@ -1692,6 +1697,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/region.cpp
     src/msw/renderer.cpp
     src/msw/settings.cpp
+    src/msw/textmeasure.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp
     src/msw/uiaction.cpp
@@ -1965,6 +1971,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/mask.cpp
+    src/generic/textmeasure.cpp
     src/dfb/app.cpp
     src/dfb/bitmap.cpp
     src/dfb/brush.cpp
@@ -2041,6 +2048,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/mdig.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
+    src/generic/textmeasure.cpp
     <!-- OS/2 specific files: -->
     src/os2/accel.cpp
     src/os2/app.cpp
@@ -2316,6 +2324,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
+    src/generic/textmeasure.cpp
 </if>
 </set>
 
@@ -2658,6 +2667,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/paletteg.cpp
     src/generic/regiong.cpp
     src/generic/statusbr.cpp
+    src/generic/textmeasure.cpp
 </set>
 <set var="COCOA_HDR" hints="files">
     wx/cocoa/NSApplication.h

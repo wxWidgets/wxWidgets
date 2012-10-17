@@ -38,6 +38,8 @@
     #include "wx/window.h"
 #endif
 
+#include "wx/private/textmeasure.h"
+
 #ifdef __WXMSW__
     #include "wx/msw/dcclient.h"
     #include "wx/msw/dcmemory.h"
@@ -511,78 +513,10 @@ void wxDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     ComputeScaleAndOrigin();
 }
 
-
-// Each element of the widths array will be the width of the string up to and
-// including the corresponding character in text.  This is the generic
-// implementation, the port-specific classes should do this with native APIs
-// if available and if faster.  Note: pango_layout_index_to_pos is much slower
-// than calling GetTextExtent!!
-
-#define FWC_SIZE 256
-
-class FontWidthCache
-{
-public:
-    FontWidthCache() : m_scaleX(1), m_widths(NULL) { }
-    ~FontWidthCache() { delete []m_widths; }
-
-    void Reset()
-    {
-        if (!m_widths)
-            m_widths = new int[FWC_SIZE];
-
-        memset(m_widths, 0, sizeof(int)*FWC_SIZE);
-    }
-
-    wxFont m_font;
-    double m_scaleX;
-    int *m_widths;
-};
-
-static FontWidthCache s_fontWidthCache;
-
 bool wxDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
-    int totalWidth = 0;
-
-    const size_t len = text.length();
-    widths.Empty();
-    widths.Add(0, len);
-
-    // reset the cache if font or horizontal scale have changed
-    if ( !s_fontWidthCache.m_widths ||
-         !wxIsSameDouble(s_fontWidthCache.m_scaleX, m_scaleX) ||
-         (s_fontWidthCache.m_font != GetFont()) )
-    {
-        s_fontWidthCache.Reset();
-        s_fontWidthCache.m_font = GetFont();
-        s_fontWidthCache.m_scaleX = m_scaleX;
-    }
-
-    // Calculate the position of each character based on the widths of
-    // the previous characters
-    int w, h;
-    for ( size_t i = 0; i < len; i++ )
-    {
-        const wxChar c = text[i];
-        unsigned int c_int = (unsigned int)c;
-
-        if ((c_int < FWC_SIZE) && (s_fontWidthCache.m_widths[c_int] != 0))
-        {
-            w = s_fontWidthCache.m_widths[c_int];
-        }
-        else
-        {
-            DoGetTextExtent(c, &w, &h);
-            if (c_int < FWC_SIZE)
-                s_fontWidthCache.m_widths[c_int] = w;
-        }
-
-        totalWidth += w;
-        widths[i] = totalWidth;
-    }
-
-    return true;
+    wxTextMeasure tm(GetOwner(), &m_font);
+    return tm.GetPartialTextExtents(text, widths, m_scaleX);
 }
 
 void wxDCImpl::GetMultiLineTextExtent(const wxString& text,
@@ -591,64 +525,8 @@ void wxDCImpl::GetMultiLineTextExtent(const wxString& text,
                                       wxCoord *h,
                                       const wxFont *font) const
 {
-    wxCoord widthTextMax = 0, widthLine,
-            heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
-
-    wxString curLine;
-    for ( wxString::const_iterator pc = text.begin(); ; ++pc )
-    {
-        if ( pc == text.end() || *pc == wxT('\n') )
-        {
-            if ( curLine.empty() )
-            {
-                // we can't use GetTextExtent - it will return 0 for both width
-                // and height and an empty line should count in height
-                // calculation
-
-                // assume that this line has the same height as the previous
-                // one
-                if ( !heightLineDefault )
-                    heightLineDefault = heightLine;
-
-                if ( !heightLineDefault )
-                {
-                    // but we don't know it yet - choose something reasonable
-                    DoGetTextExtent(wxT("W"), NULL, &heightLineDefault,
-                                  NULL, NULL, font);
-                }
-
-                heightTextTotal += heightLineDefault;
-            }
-            else
-            {
-                DoGetTextExtent(curLine, &widthLine, &heightLine,
-                              NULL, NULL, font);
-                if ( widthLine > widthTextMax )
-                    widthTextMax = widthLine;
-                heightTextTotal += heightLine;
-            }
-
-            if ( pc == text.end() )
-            {
-               break;
-            }
-            else // '\n'
-            {
-               curLine.clear();
-            }
-        }
-        else
-        {
-            curLine += *pc;
-        }
-    }
-
-    if ( x )
-        *x = widthTextMax;
-    if ( y )
-        *y = heightTextTotal;
-    if ( h )
-        *h = heightLine;
+    wxTextMeasure tm(GetOwner(), font && font->IsOk() ? font : &m_font);
+    tm.GetMultiLineTextExtent(text, x, y, h);
 }
 
 void wxDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
