@@ -36,17 +36,12 @@ class MeasuringContextTestCase : public CppUnit::TestCase
 public:
     MeasuringContextTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
-
 private:
     CPPUNIT_TEST_SUITE( MeasuringContextTestCase );
         CPPUNIT_TEST( GetTextExtent );
     CPPUNIT_TEST_SUITE_END();
 
     void GetTextExtent();
-
-    wxWindow *m_win;
 
     DECLARE_NO_COPY_CLASS(MeasuringContextTestCase)
 };
@@ -56,20 +51,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION( MeasuringContextTestCase );
 
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MeasuringContextTestCase, "MeasuringContextTestCase" );
-
-// ----------------------------------------------------------------------------
-// test initialization
-// ----------------------------------------------------------------------------
-
-void MeasuringContextTestCase::setUp()
-{
-    m_win = wxTheApp->GetTopWindow();
-}
-
-void MeasuringContextTestCase::tearDown()
-{
-    m_win = NULL;
-}
 
 // ----------------------------------------------------------------------------
 // tests themselves
