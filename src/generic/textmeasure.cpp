@@ -23,6 +23,11 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+    #include "wx/dc.h"
+#endif //WX_PRECOMP
+
 #include "wx/private/textmeasure.h"
 
 #if wxUSE_GENERIC_TEXTMEASURE
