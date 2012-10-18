@@ -351,7 +351,16 @@ bool DoStatAny(wxStructStat& st, wxString path, const wxFileName* fn)
     // path and not for the last path element itself.
 
     while ( wxEndsWithPathSeparator(path) )
-        path.RemoveLast();
+    {
+        const size_t posLast = path.length() - 1;
+        if ( !posLast )
+        {
+            // Don't turn "/" into empty string.
+            break;
+        }
+
+        path.erase(posLast);
+    }
 
     int ret = !fn || fn->ShouldFollowLink() ? wxStat(path, &st)
                                             : wxLstat(path, &st);
