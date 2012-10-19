@@ -572,6 +572,7 @@ All (GUI):
 - Implement incremental search in wxGenericListCtrl (Jonathan Dagresta).
 - Make TAB behaviour in wxGrid more flexible (Fulvio Senore).
 - Add missing styles support to wxWindow XRC hanlder (Steffen Olszewski).
+- Allow specifying all wxFlexGridSizer parameters in XRC (Steffen Olszewski).
 
 wxGTK:
 

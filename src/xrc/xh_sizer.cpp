@@ -270,6 +270,7 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     // set growable rows and cols for sizers which support this
     if ( wxFlexGridSizer *flexsizer = wxDynamicCast(sizer, wxFlexGridSizer) )
     {
+        SetFlexibleMode(flexsizer);
         SetGrowables(flexsizer, wxT("growablerows"), true);
         SetGrowables(flexsizer, wxT("growablecols"), false);
     }
@@ -395,6 +396,50 @@ bool wxSizerXmlHandler::ValidateGridSizerChildren()
 }
 
 
+void wxSizerXmlHandler::SetFlexibleMode(wxFlexGridSizer* fsizer)
+{
+    if (HasParam(wxT("flexibledirection")))
+    {
+        wxString dir = GetParamValue(wxT("flexibledirection"));
+
+        if (dir == wxT("wxVERTICAL"))
+            fsizer->SetFlexibleDirection(wxVERTICAL);
+        else if (dir == wxT("wxHORIZONTAL"))
+            fsizer->SetFlexibleDirection(wxHORIZONTAL);
+        else if (dir == wxT("wxBOTH"))
+            fsizer->SetFlexibleDirection(wxBOTH);
+        else
+        {
+            ReportParamError
+            (
+                wxT("flexibledirection"),
+                wxString::Format("unknown direction \"%s\"", dir)
+            );
+        }
+    }
+
+    if (HasParam(wxT("nonflexiblegrowmode")))
+    {
+        wxString mode = GetParamValue(wxT("nonflexiblegrowmode"));
+
+        if (mode == wxT("wxFLEX_GROWMODE_NONE"))
+            fsizer->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_NONE);
+        else if (mode == wxT("wxFLEX_GROWMODE_SPECIFIED"))
+            fsizer->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
+        else if (mode == wxT("wxFLEX_GROWMODE_ALL"))
+            fsizer->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_ALL);
+        else
+        {
+            ReportParamError
+            (
+                wxT("nonflexiblegrowmode"),
+                wxString::Format("unknown grow mode \"%s\"", mode)
+            );
+        }
+    }
+}
+
+
 void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
                                      const wxChar* param,
                                      bool rows)
@@ -408,18 +453,35 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
 
     while (tkn.HasMoreTokens())
     {
-        unsigned long l;
-        if (!tkn.GetNextToken().ToULong(&l))
+        wxString propStr;
+        wxString idxStr = tkn.GetNextToken().BeforeFirst(wxT(':'), &propStr);
+
+        unsigned long li;
+        if (!idxStr.ToULong(&li))
         {
             ReportParamError
             (
                 param,
-                "value must be comma-separated list of row numbers"
+                "value must be a comma-separated list of numbers"
             );
             break;
         }
 
-        const int n = static_cast<int>(l);
+        unsigned long lp = 0;
+        if (!propStr.empty())
+        {
+            if (!propStr.ToULong(&lp))
+            {
+                ReportParamError
+                (
+                    param,
+                    "value must be a comma-separated list of numbers"
+                );
+                break;
+            }
+        }
+
+        const int n = static_cast<int>(li);
         if ( n >= nslots )
         {
             ReportParamError
@@ -439,9 +501,9 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
         }
 
         if (rows)
-            sizer->AddGrowableRow(n);
+            sizer->AddGrowableRow(n, static_cast<int>(lp));
         else
-            sizer->AddGrowableCol(n);
+            sizer->AddGrowableCol(n, static_cast<int>(lp));
     }
 }
 

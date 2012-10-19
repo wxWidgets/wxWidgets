@@ -1919,8 +1919,8 @@ Example of sizers XRC code:
         <rows>0</rows>
         <vgap>0</vgap>
         <hgap>0</hgap>
-        <growablecols>0</growablecols>
-        <growablerows>0</growablerows>
+        <growablecols>0:1</growablecols>
+        <growablerows>0:1</growablerows>
         <object class="sizeritem">
             <flag>wxALIGN_CENTRE|wxALL</flag>
             <border>5</border>
@@ -2001,12 +2001,22 @@ class-specific properties. All classes support the following properties:
 @row3col{cols, integer, Number of columns in the grid (default: 0 - determine automatically).}
 @row3col{vgap, integer, Vertical gap between children (default: 0).}
 @row3col{hgap, integer, Horizontal gap between children (default: 0).}
+@row3col{flexibledirection, @ref overview_xrcformat_type_style,
+    Flexible direction, @c wxVERTICAL, @c wxHORIZONTAL or @c wxBOTH (default).
+    This property is only available since wxWidgets 2.9.5.}
+@row3col{nonflexiblegrowmode, @ref overview_xrcformat_type_style,
+    Grow mode in the non-flexible direction,
+    @c wxFLEX_GROWMODE_NONE, @c wxFLEX_GROWMODE_SPECIFIED (default) or
+    @c wxFLEX_GROWMODE_ALL.
+    This property is only available since wxWidgets 2.9.5.}
 @row3col{growablerows, comma-separated integers list,
-    Comma-separated list of indexes of rows that are growable
-    (default: none).}
+    Comma-separated list of indexes of rows that are growable (none by default).
+    Since wxWidgets 2.9.5 optional proportion can be appended to each number
+    after a colon (@c :).}
 @row3col{growablecols, comma-separated integers list,
-    Comma-separated list of indexes of columns that are growable
-    (default: none).}
+    Comma-separated list of indexes of columns that are growable (none by default).
+    Since wxWidgets 2.9.5 optional proportion can be appended to each number
+    after a colon (@c :).}
 @endTable
 
 @subsection overview_xrcformat_wxgridbagsizer wxGridBagSizer
@@ -2015,11 +2025,21 @@ class-specific properties. All classes support the following properties:
 @hdr3col{property, type, description}
 @row3col{vgap, integer, Vertical gap between children (default: 0).}
 @row3col{hgap, integer, Horizontal gap between children (default: 0).}
+@row3col{flexibledirection, @ref overview_xrcformat_type_style,
+    Flexible direction, @c wxVERTICAL, @c wxHORIZONTAL, @c wxBOTH (default: @c wxBOTH).}
+@row3col{nonflexiblegrowmode, @ref overview_xrcformat_type_style,
+    Grow mode in the non-flexible direction,
+    @c wxFLEX_GROWMODE_NONE, @c wxFLEX_GROWMODE_SPECIFIED, @c wxFLEX_GROWMODE_ALL
+    (default: @c wxFLEX_GROWMODE_SPECIFIED).}
 @row3col{growablerows, comma-separated integers list,
-    Comma-separated list of indexes of rows that are growable
+    Comma-separated list of indexes of rows that are growable,
+    optionally the proportion can be appended after each number
+    separated by a @c :
     (default: none).}
 @row3col{growablecols, comma-separated integers list,
-    Comma-separated list of indexes of columns that are growable
+    Comma-separated list of indexes of columns that are growable,
+    optionally the proportion can be appended after each number
+    separated by a @c :
     (default: none).}
 @endTable
 
