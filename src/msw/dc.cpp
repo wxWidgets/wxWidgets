@@ -1867,8 +1867,6 @@ void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
 
 bool wxMSWDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
-    wxCHECK_MSG( GetFont().IsOk(), false, wxT("Invalid font") );
-
     wxTextMeasure txm(GetOwner(), NULL); // don't change the font
     return txm.GetPartialTextExtents(text, widths, 1.0);
 }
