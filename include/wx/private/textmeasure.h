@@ -70,6 +70,8 @@ protected:
     virtual void BeginMeasuring() { }
     virtual void EndMeasuring() { }
 
+    friend class MeasuringGuard;
+
     // RAII wrapper for the two methods above.
     class MeasuringGuard
     {
