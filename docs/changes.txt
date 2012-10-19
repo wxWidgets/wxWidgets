@@ -571,6 +571,7 @@ All (GUI):
 - Add wxTreeCtrl::EnableBellOnNoMatch() (Jonathan Dagresta).
 - Implement incremental search in wxGenericListCtrl (Jonathan Dagresta).
 - Make TAB behaviour in wxGrid more flexible (Fulvio Senore).
+- Add missing styles support to wxWindow XRC hanlder (Steffen Olszewski).
 
 wxGTK:
 
