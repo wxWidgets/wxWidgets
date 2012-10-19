@@ -3068,6 +3068,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         break;
     }
 
+    InvalidateBestSize();
+
     if (result && !GetBatchCount() )
         m_gridWin->Refresh();
 
@@ -7117,6 +7119,7 @@ void wxGrid::SetRowLabelSize( int width )
         }
 
         m_rowLabelWidth = width;
+        InvalidateBestSize();
         CalcWindowSizes();
         wxScrolledWindow::Refresh( true );
     }
@@ -7146,6 +7149,7 @@ void wxGrid::SetColLabelSize( int height )
         }
 
         m_colLabelHeight = height;
+        InvalidateBestSize();
         CalcWindowSizes();
         wxScrolledWindow::Refresh( true );
     }
@@ -8175,6 +8179,8 @@ void wxGrid::DoSetRowSize( int row, int height )
         m_rowBottoms[i] += diff;
     }
 
+    InvalidateBestSize();
+
     if ( !GetBatchCount() )
     {
         CalcDimensions();
@@ -8258,6 +8264,8 @@ void wxGrid::DoSetColSize( int col, int width )
     {
         m_colRights[GetColAt(colPos)] += diff;
     }
+
+    InvalidateBestSize();
 
     if ( !GetBatchCount() )
     {
@@ -8667,11 +8675,6 @@ wxSize wxGrid::DoGetBestSize() const
     // change the column/row sizes, only calculate them
     wxSize size(self->SetOrCalcColumnSizes(true) - m_rowLabelWidth + m_extraWidth,
                 self->SetOrCalcRowSizes(true) - m_colLabelHeight + m_extraHeight);
-
-    // NOTE: This size should be cached, but first we need to add calls to
-    // InvalidateBestSize everywhere that could change the results of this
-    // calculation.
-    // CacheBestSize(size);
 
     return wxSize(size.x + m_rowLabelWidth, size.y + m_colLabelHeight)
             + GetWindowBorderSize();
