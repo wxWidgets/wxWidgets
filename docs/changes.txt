@@ -530,6 +530,7 @@ Major new features in this release
 All:
 
 - Add support for symlinks to wxFileName (David Hart).
+- Allow testing for symlink/FIFO/socket existence in wxFileName (David Hart).
 - Many important bug fixes in wxFileSystemWatcher (David Hart).
 - Add separate read/written bytes counters and per-direction NOWAIT and WAITALL
   flags to wxSocket (Rob Bresalier).

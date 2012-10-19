@@ -672,17 +672,38 @@ void FileNameTestCase::TestExists()
 
     CPPUNIT_ASSERT( fn.FileExists() );
     CPPUNIT_ASSERT( !wxFileName::DirExists(fn.GetFullPath()) );
+
+    CPPUNIT_ASSERT( fn.Exists(wxFILE_EXISTS_REGULAR) );
+    CPPUNIT_ASSERT( !fn.Exists(wxFILE_EXISTS_DIR) );
     CPPUNIT_ASSERT( fn.Exists() );
 
     wxFileName dirTemp(wxFileName::DirName(wxFileName::GetTempDir()));
     CPPUNIT_ASSERT( !dirTemp.FileExists() );
     CPPUNIT_ASSERT( dirTemp.DirExists() );
+
+    CPPUNIT_ASSERT( dirTemp.Exists(wxFILE_EXISTS_DIR) );
+    CPPUNIT_ASSERT( !dirTemp.Exists(wxFILE_EXISTS_REGULAR) );
     CPPUNIT_ASSERT( dirTemp.Exists() );
 
 #ifdef __UNIX__
     CPPUNIT_ASSERT( !wxFileName::FileExists("/dev/null") );
     CPPUNIT_ASSERT( !wxFileName::DirExists("/dev/null") );
     CPPUNIT_ASSERT( wxFileName::Exists("/dev/null") );
+    CPPUNIT_ASSERT( wxFileName::Exists("/dev/null", wxFILE_EXISTS_DEVICE) );
+#ifdef __LINUX__
+    // These files are only guaranteed to exist under Linux.
+    CPPUNIT_ASSERT( !wxFileName::Exists("/dev/core", wxFILE_EXISTS_SYMLINK) );
+    CPPUNIT_ASSERT( wxFileName::Exists("/dev/core",
+                    wxFILE_EXISTS_SYMLINK | wxFILE_EXISTS_NO_FOLLOW) );
+    CPPUNIT_ASSERT( wxFileName::Exists("/dev/log", wxFILE_EXISTS_SOCKET) );
+#endif // __LINUX__
+    wxString fifo = dirTemp.GetPath() + "/fifo";
+    if (mkfifo(fifo, 0600) == 0)
+    {
+        wxON_BLOCK_EXIT1(wxRemoveFile, fifo);
+
+        CPPUNIT_ASSERT( wxFileName::Exists(fifo, wxFILE_EXISTS_FIFO) );
+    }
 #endif // __UNIX__
 }
 
@@ -838,7 +859,7 @@ void FileNameTestCase::TestSymlinks()
             equal
         );
 
-        // Test Exists()
+        // Test (File|Dir)Exists()
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "Testing file existence" + msg,
@@ -850,6 +871,46 @@ void FileNameTestCase::TestSymlinks()
             "Testing directory existence" + msg,
             deref,
             linktodir.DirExists()
+        );
+
+        // Test wxFileName::Exists
+        // The wxFILE_EXISTS_NO_FOLLOW flag should override DontFollowLink()
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Testing file existence" + msg,
+            false,
+            linktofile.Exists(wxFILE_EXISTS_REGULAR | wxFILE_EXISTS_NO_FOLLOW)
+        );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Testing directory existence" + msg,
+            false,
+            linktodir.Exists(wxFILE_EXISTS_DIR | wxFILE_EXISTS_NO_FOLLOW)
+        );
+        // and the static versions
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Testing file existence" + msg,
+            false,
+            wxFileName::Exists(linktofile.GetFullPath(), wxFILE_EXISTS_REGULAR | wxFILE_EXISTS_NO_FOLLOW)
+        );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Testing file existence" + msg,
+            true,
+            wxFileName::Exists(linktofile.GetFullPath(), wxFILE_EXISTS_REGULAR)
+        );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Testing directory existence" + msg,
+            false,
+            wxFileName::Exists(linktodir.GetFullPath(), wxFILE_EXISTS_DIR | wxFILE_EXISTS_NO_FOLLOW)
+        );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            "Testing directory existence" + msg,
+            true,
+            wxFileName::Exists(linktodir.GetFullPath(), wxFILE_EXISTS_DIR)
         );
     }
 

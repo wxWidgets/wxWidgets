@@ -91,6 +91,23 @@ enum
 };
 
 /**
+    Flags for wxFileName::Exists().
+
+    @since 2.9.5
+ */
+enum
+{
+    wxFILE_EXISTS_REGULAR   = 0x0001,  //!< Check for existence of a regular file
+    wxFILE_EXISTS_DIR       = 0x0002,  //!< Check for existence of a directory
+    wxFILE_EXISTS_SYMLINK   = 0x0004,  //!< Check for existence of a symbolic link
+    wxFILE_EXISTS_DEVICE    = 0x0008,  //!< Check for existence of a device
+    wxFILE_EXISTS_FIFO      = 0x0016,  //!< Check for existence of a FIFO
+    wxFILE_EXISTS_SOCKET    = 0x0032,  //!< Check for existence of a socket
+    wxFILE_EXISTS_ANY       = 0x0FFF,  //!< Check for existence of anything
+    wxFILE_EXISTS_NO_FOLLOW = 0x1000   //!< Don't dereference a contained symbolic link
+};
+
+/**
     The return value of wxFileName::GetSize() in case of error.
 */
 wxULongLong wxInvalidSize;
@@ -509,24 +526,32 @@ public:
         Calls the static overload of this function with the full path of this
         object.
 
-        @since 2.9.4
+        @since 2.9.4 (@a flags is new since 2.9.5)
      */
-    bool Exists() const;
+    bool Exists(int flags = wxFILE_EXISTS_ANY) const;
 
     /**
         Returns @true if either a file or a directory or something else with
         this name exists in the file system.
 
+        Don't dereference @a path if it is a symbolic link and @a flags
+        argument contains ::wxFILE_EXISTS_NO_FOLLOW.
+
         This method is equivalent to @code FileExists() || DirExists() @endcode
-        under most systems but under Unix it also returns true if the file
+        under Windows, but under Unix it also returns true if the file
         identifies a special file system object such as a device, a socket or a
         FIFO.
+
+        Alternatively you may check for the existence of a file system entry of
+        a specific type by passing the appropriate @a flags (this parameter is
+        new since wxWidgets 2.9.5). E.g. to test for a symbolic link existence
+        you could use ::wxFILE_EXISTS_SYMLINK.
 
         @since 2.9.4
 
         @see FileExists(), DirExists()
      */
-    static bool Exists(const wxString& path);
+    static bool Exists(const wxString& path, int flags = wxFILE_EXISTS_ANY);
 
     /**
         Returns @true if the file with this name exists.
