@@ -1633,11 +1633,20 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
 
 long wxXmlResourceHandler::GetLong(const wxString& param, long defaultv)
 {
-    long value;
+    long value = defaultv;
     wxString str1 = GetParamValue(param);
 
-    if (!str1.ToLong(&value))
-        value = defaultv;
+    if (!str1.empty())
+    {
+        if (!str1.ToLong(&value))
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format("invalid long specification \"%s\"", str1)
+            );
+        }
+    }
 
     return value;
 }
@@ -1649,9 +1658,18 @@ float wxXmlResourceHandler::GetFloat(const wxString& param, float defaultv)
     // strings in XRC always use C locale so make sure to use the
     // locale-independent wxString::ToCDouble() and not ToDouble() which uses
     // the current locale with a potentially different decimal point character
-    double value;
-    if (!str.ToCDouble(&value))
-        value = defaultv;
+    double value = defaultv;
+    if (!str.empty())
+    {
+        if (!str.ToCDouble(&value))
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format("invalid float specification \"%s\"", str)
+            );
+        }
+    }
 
     return wx_truncate_cast(float, value);
 }
@@ -2240,6 +2258,14 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param, wxWindow* parent)
             istyle = wxITALIC;
         else if (style == wxT("slant"))
             istyle = wxSLANT;
+        else if (style != wxT("normal"))
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format("unknown font style \"%s\"", style)
+            );
+        }
     }
 
     // weight
@@ -2252,6 +2278,14 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param, wxWindow* parent)
             iweight = wxBOLD;
         else if (weight == wxT("light"))
             iweight = wxLIGHT;
+        else if (weight != wxT("normal"))
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format("unknown font weight \"%s\"", weight)
+            );
+        }
     }
 
     // underline
@@ -2270,6 +2304,14 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param, wxWindow* parent)
         else if (family == wxT("swiss")) ifamily = wxSWISS;
         else if (family == wxT("modern")) ifamily = wxMODERN;
         else if (family == wxT("teletype")) ifamily = wxTELETYPE;
+        else
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format("unknown font family \"%s\"", family)
+            );
+        }
     }
 
 
@@ -2318,6 +2360,14 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param, wxWindow* parent)
     if (HasParam(wxT("sysfont")))
     {
         font = GetSystemFont(GetParamValue(wxT("sysfont")));
+        if (HasParam(wxT("inherit")))
+        {
+            ReportParamError
+            (
+                param,
+                "double specification of \"sysfont\" and \"inherit\""
+            );
+        }
     }
     // or should the font of the widget be used?
     else if (GetBool(wxT("inherit"), false))
@@ -2325,13 +2375,29 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param, wxWindow* parent)
         if (parent)
             font = parent->GetFont();
         else
-            ReportError("no parent window specified to derive the font from");
+        {
+            ReportParamError
+            (
+                param,
+                "no parent window specified to derive the font from"
+            );
+        }
     }
 
     if (font.IsOk())
     {
         if (hasSize && isize != -1)
+        {
             font.SetPointSize(isize);
+            if (HasParam(wxT("relativesize")))
+            {
+                ReportParamError
+                (
+                    param,
+                    "double specification of \"size\" and \"relativesize\""
+                );
+            }
+        }
         else if (HasParam(wxT("relativesize")))
             font.SetPointSize(int(font.GetPointSize() *
                                      GetFloat(wxT("relativesize"))));
