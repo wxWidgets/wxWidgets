@@ -1906,6 +1906,11 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
             }
         }
     }
+
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+        m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
 }
 
 // -----------------------------------------------------------------------
