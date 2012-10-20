@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Translation of WXPythonTrunk.Po, 1.1.1\n"
+"Project-Id-Version: Translation of wxWidgets.po, 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-27 11:51+0200\n"
-"PO-Revision-Date: 2012-08-13 19:25+0545\n"
-"Last-Translator: Him Prasad Gautam <drishtibachak@gmail.com>\n"
+"PO-Revision-Date: 2012-10-20 09:45+0545\n"
+"Last-Translator: \n"
 "Language-Team: Him Prasad Gautam <himjee@yahoo.com>\n"
 "Language: Nepali\n"
 "MIME-Version: 1.0\n"
@@ -14,31 +14,33 @@ msgstr ""
 "योजनाको नाम र संस्करण: पाइथनट्रक को अनुवाद, - १.१.१\n"
 "फ्रथम अनुवादक: हिम प्रसाद गौतम(नेपाल) <drishtibachak@gmail.com>, <himjee@yahoo."
 "com>\n"
-"अनुवाद मिति: २०६९ साल साउन  १ गते\n"
+"अनुवाद मिति: २०६९ साल साउन १ गते\n"
 "पुनरावलोकन मिति: २०६९ साल श्रावण १६ गते\n"
 "भाषा टोली: हिम प्रसाद गौतम <drishtivachak@gmail.com> मात्रै\n"
 "plural-forms: nplurals=2; plural=n > 1\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../src/common/debugrpt.cpp:582
 msgid ""
 "\n"
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
+"\n"
+" कृपया यो प्रतिवेदन कार्यक्रम सम्भार कर्ता लाई पेश गर्नु होला । धन्यवाद!\n"
 
 #: ../src/richtext/richtextstyledlg.cpp:218
 #: ../src/richtext/richtextstyledlg.cpp:230
 msgid " "
-msgstr ""
+msgstr " "
 
 #: ../src/generic/dbgrptg.cpp:323
-#, fuzzy
-msgid "              Thank you and we're sorry for the inconvenience!\n"
+msgid "    Thank you and we're sorry for the inconvenience!\n"
 msgstr "धन्यवाद, असुविधाको लागि क्षमा प्रार्थी छौं । !\n"
 
 #: ../src/common/prntbase.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "पृष्ट %d बट्टा %d"
+msgstr "%d बट्टा %d को नक्कल"
 
 #: ../src/common/log.cpp:428
 #, c-format
@@ -46,16 +48,15 @@ msgid " (error %ld: %s)"
 msgstr " (गल्ती %ld: %s)"
 
 #: ../src/common/imagtiff.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid " (in module \"%s\")"
 msgstr "(Module \"%s\"मा)"
 
 #: ../src/common/docview.cpp:1615
 msgid " - "
-msgstr ""
+msgstr " - "
 
 #: ../src/richtext/richtextprint.cpp:585 ../src/html/htmprint.cpp:705
-#, fuzzy
 msgid " Preview"
 msgstr "चेहरा"
 
@@ -102,11 +103,11 @@ msgid "%i of %i"
 msgstr "%i बट्टा %i"
 
 #: ../src/generic/filectrlg.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "%ld byte"
 msgid_plural "%ld bytes"
-msgstr[0] "%ld byte"
-msgstr[1] "%ld byte"
+msgstr[0] "%ld बाइट"
+msgstr[1] "%ld बाइटहरू"
 
 #: ../src/html/helpwnd.cpp:1047
 #, c-format
@@ -527,9 +528,8 @@ msgid "&Position (tenths of a mm):"
 msgstr "&स्थान (मिलि मिटरको दसौँ भाग):"
 
 #: ../src/richtext/richtextsizepage.cpp:476
-#, fuzzy
 msgid "&Position mode:"
-msgstr "&तैरि रहेको मुद्रा:"
+msgstr "&अवस्था मुद्रा:"
 
 #: ../src/common/stockitem.cpp:182
 msgid "&Preferences"
@@ -747,12 +747,12 @@ msgstr "'%s' गल्ती छ"
 #: ../src/common/cmdline.cpp:941 ../src/common/cmdline.cpp:959
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
-msgstr "'%s' सहि सङ्ख्यात्मक मान विकल्प '%s' को लागि   हदैन"
+msgstr "'%s' सहि सङ्ख्यात्मक मान विकल्प '%s' को लागि हदैन"
 
 #: ../src/common/translation.cpp:930
 #, c-format
 msgid "'%s' is not a valid message catalog."
-msgstr "'%s' सहि सन्देश सूची  होइन"
+msgstr "'%s' सहि सन्देश सूची होइन"
 
 #: ../src/common/textbuf.cpp:240
 #, c-format
@@ -1172,7 +1172,7 @@ msgstr "%s को बारेमा"
 
 #: ../src/richtext/richtextsizepage.cpp:482
 msgid "Absolute"
-msgstr ""
+msgstr "निरपेक्ष"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"
@@ -1250,7 +1250,7 @@ msgstr "सबै शैलीहरू"
 
 #: ../src/propgrid/manager.cpp:1495
 msgid "Alphabetic Mode"
-msgstr "वर्णीय  मुद्रा"
+msgstr "वर्णीय मुद्रा"
 
 #: ../src/common/xtistrm.cpp:430
 msgid "Already Registered Object passed to SetObjectClassInfo"
@@ -2360,7 +2360,7 @@ msgstr "विन्डोमा तथ्याङ्क सार्न सक
 
 #: ../src/os2/thread.cpp:161
 msgid "Couldn't acquire a mutex lock"
-msgstr "mutex चाबी  पाउन सकिएन"
+msgstr "mutex चाबी पाउन सकिएन"
 
 #: ../src/msw/imaglist.cpp:167 ../src/msw/imaglist.cpp:198
 #: ../src/msw/imaglist.cpp:210 ../src/msw/dragimag.cpp:194
@@ -2411,9 +2411,8 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "आवाज '%s' को तथ्याङ्क वहन गर्न सकिएन"
 
 #: ../src/msw/dirdlg.cpp:439
-#, fuzzy
 msgid "Couldn't obtain folder name"
-msgstr "टाइम र सिर्जना गर्न सकिएन"
+msgstr "थैलीको नाम पाउनसकिएन"
 
 #: ../src/unix/sound_sdl.cpp:226
 #, c-format
@@ -2519,7 +2518,7 @@ msgstr "DIB शीर्षक: फाइलको लागि तस्वि�
 
 #: ../src/common/imagbmp.cpp:992
 msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "DIB शीर्षक: फाइलको लागि  तस्विर छोडाइ >32767 pixels"
+msgstr "DIB शीर्षक: फाइलको लागि तस्विर छोडाइ >32767 pixels"
 
 #: ../src/common/imagbmp.cpp:1016
 msgid "DIB Header: Unknown bitdepth in file."
@@ -2613,14 +2612,14 @@ msgid "Delete style %s?"
 msgstr "शैली %s मेटाउने हो?"
 
 #: ../src/unix/snglinst.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Deleted stale lock file '%s'."
-msgstr "बासी चाबी फाइल '%s'. हटाउन सकिएन ।"
+msgstr "बासी चाबी फाइल '%s'. हटाइयो ।"
 
 #: ../src/common/module.cpp:125
 #, c-format
 msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
-msgstr "आश्रय  \"%s\" मोड्युल \"%s\" मा छदै छैन"
+msgstr "आश्रय \"%s\" मोड्युल \"%s\" मा छदै छैन"
 
 #: ../src/common/stockitem.cpp:197
 msgid "Descending"
@@ -2651,9 +2650,9 @@ msgid "Did you know..."
 msgstr "के तपाइलाई थाहा छ?"
 
 #: ../src/dfb/wrapdfb.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
-msgstr "DirectFB %d गल्ती भयो ।"
+msgstr "DirectFB %d गल्ती हुन पुग्यो ।"
 
 #: ../src/motif/filedlg.cpp:217
 msgid "Directories"
@@ -2706,6 +2705,12 @@ msgid ""
 "New value is \n"
 "%s %1"
 msgstr ""
+"के तपाई \"%2$s\"विस्तार भएका %१$s फाइलहरूलाई दिइएको आदेश मेटाएर फेरी लेख्न चाहनु "
+"हुन्छ? \n"
+"हालको मान \n"
+"%s, \n"
+"नयाँ मान \n"
+"%s %1"
 
 #: ../src/common/docview.cpp:534
 #, c-format
@@ -2713,9 +2718,8 @@ msgid "Do you want to save changes to %s?"
 msgstr "के तपाइ %s मा परिवर्तन लाई बचत गर्न चाहनु हुन्छ?"
 
 #: ../src/common/prntbase.cpp:526
-#, fuzzy
 msgid "Document:"
-msgstr "अभिलेखन कर्ता"
+msgstr "कागजात"
 
 #: ../src/generic/aboutdlgg.cpp:74
 msgid "Documentation by "
@@ -2776,7 +2780,7 @@ msgstr "ENTER"
 
 #: ../src/unix/fswatcher_inotify.cpp:358
 msgid "EOF while reading from inotify descriptor"
-msgstr "inotify ब्याख्याकारबाट पढ्दा फाइलको अन्तमा  पुगियो । "
+msgstr "inotify ब्याख्याकारबाट पढ्दा फाइलको अन्तमा पुगियो । "
 
 #: ../src/common/accelcmn.cpp:65
 msgid "ESC"
@@ -2872,7 +2876,7 @@ msgstr "खाम Invite 220 x 220 मिमी"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "वातावरणीय चल विस्तार असफल भयो: '%c' स्थान    %u मा ('%s' को)  हराएको छ ।"
+msgstr "वातावरणीय चल विस्तार असफल भयो: '%c' स्थान %u मा ('%s' को) हराएको छ ।"
 
 #: ../src/generic/dirctrlg.cpp:662 ../src/generic/dirctrlg.cpp:680
 #: ../src/generic/dirctrlg.cpp:691 ../src/generic/dirdlgg.cpp:353
@@ -2975,7 +2979,7 @@ msgstr "अनुहारको नाम"
 
 #: ../src/unix/snglinst.cpp:270
 msgid "Failed to access lock file."
-msgstr "चाबी  फाइल हेर्न सकिएन ।"
+msgstr "चाबी फाइल हेर्न सकिएन ।"
 
 #: ../src/unix/epolldispatcher.cpp:117
 #, c-format
@@ -3101,6 +3105,8 @@ msgid ""
 "Failed to create directory '%s'\n"
 "(Do you have the required permissions?)"
 msgstr ""
+"घर्रा '%s' सिर्जना गर्न सकिएन । \n"
+"(केतपाइ सित आवश्यक स्वीकृती छ?)"
 
 #: ../src/unix/epolldispatcher.cpp:85
 msgid "Failed to create epoll descriptor"
@@ -3225,14 +3231,14 @@ msgid "Failed to kill process %d"
 msgstr "प्रक्रिया %d लाई मार्न सकिएन ।"
 
 #: ../src/common/image.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "stream बाट %d तस्विर वहन गर्न सकिएन "
+msgstr "श्रोतबाट %s BitMap वहन गर्न सकिएन "
 
 #: ../src/common/image.cpp:2270
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "stream बाट %d तस्विर वहन गर्न सकिएन "
+msgstr "श्रोतबाट %s प्रतिमा वहन गर्न सकिएन "
 
 #: ../src/common/iconbndl.cpp:183
 #, c-format
@@ -3281,7 +3287,7 @@ msgstr "चाबी फाइल '%s' मा चाबी लगाउन स�
 #: ../src/unix/epolldispatcher.cpp:137
 #, c-format
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
-msgstr "ब्याख्याकार %d (epoll ब्याख्याकार %d  मा ) फेर बदल गर्न सकिएन ।"
+msgstr "ब्याख्याकार %d (epoll ब्याख्याकार %d मा ) फेर बदल गर्न सकिएन ।"
 
 #: ../src/common/filename.cpp:2573
 #, c-format
@@ -3336,9 +3342,9 @@ msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "बहुवचन स्वरूप '%s' पठाउन सकिएन ।"
 
 #: ../src/unix/mediactrl.cpp:1269
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "दृश्य \"%s\" खोल्न सकिएन ।"
+msgstr "\"%s\" लाई बजाउने तयारी असफल भयो ।"
 
 #: ../src/msw/clipbrd.cpp:648
 msgid "Failed to put data on the clipboard"
@@ -3469,9 +3475,9 @@ msgid "Failed to set text in the text control."
 msgstr "पाठ नियन्त्रक मा पाठ राख्न सकिएन ।"
 
 #: ../src/unix/threadpsx.cpp:1141
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "thread प्राथमिकता %d कायम गर्न सकिएन ।"
+msgstr "thread स्वीकृति तहलाई %lu मा तय गर्न सकिएन ।"
 
 #: ../src/unix/threadpsx.cpp:1338 ../src/unix/threadpsx.cpp:1348
 #, c-format
@@ -3526,7 +3532,7 @@ msgstr "DDE सर्भर '%s' को दर्ता खारेज गर�
 #: ../src/unix/epolldispatcher.cpp:156
 #, c-format
 msgid "Failed to unregister descriptor %d from epoll descriptor %d"
-msgstr "ब्याख्याकार %d को दर्ता epoll ब्याख्याकार %d वाट  खारेज गर्न सकिएन ।"
+msgstr "ब्याख्याकार %d को दर्ता epoll ब्याख्याकार %d वाट खारेज गर्न सकिएन ।"
 
 #: ../src/common/fileconf.cpp:1038
 msgid "Failed to update user configuration file."
@@ -3571,12 +3577,11 @@ msgstr ""
 "फाइल '%s' पहिले देखि नै छ, के तपाइ वास्तवमा नै यसलाई मेटाएर नया राख्न चाहनु हुन्छ?"
 
 #: ../src/os2/filedlg.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s' already exists.\n"
 "Do you want to replace it?"
-msgstr ""
-"फाइल '%s' पहिले देखि नै छ, के तपाइ वास्तवमा नै यसलाई मेटाएर नया राख्न चाहनु हुन्छ?"
+msgstr "फाइल '%s' पहिले देखि नै छ, के तपाइ यसलाई मेटाएर नया राख्न चाहनु हुन्छ?"
 
 #: ../src/common/filefn.cpp:1201
 #, c-format
@@ -3635,9 +3640,8 @@ msgid "First page"
 msgstr "प्रथम पृष्ट"
 
 #: ../src/richtext/richtextsizepage.cpp:483
-#, fuzzy
 msgid "Fixed"
-msgstr "निश्चित वरणाकृति:"
+msgstr "निश्चित "
 
 #: ../src/html/helpwnd.cpp:1220
 msgid "Fixed font:"
@@ -3959,6 +3963,8 @@ msgid ""
 "If you have any additional information pertaining to this bug\n"
 "report, please enter it here and it will be joined to it:"
 msgstr ""
+"यदि तपाइसित यो उडुस सित सम्बन्धित कुनै थप जानकारी छ भने \n"
+"खबर दिनुहोस्, कृपया यसलाई यहाँ प्रविष्टी गरेमा यहाँ जोडिने छ:"
 
 #: ../src/generic/dbgrptg.cpp:321
 msgid ""
@@ -3967,6 +3973,10 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
+"यदि तपाई यो खान तलासी प्रतिवेदनलाई पूरै दबाउन चाहनु हुन्छ भने \"रद्द गर\" भन्ने टाँकलाई "
+"दबाउनु होला \n"
+"तर ख्याल राख्नु होस्, यसले कार्यक्रमको स्तरलाई प्रभावित पनि पार्न सक्छ । \n"
+"सम्भव भएसम्म प्रतिवेदन उत्पादन गर्नु उचित हुन्छ ।\n"
 
 #: ../src/msw/registry.cpp:1396
 #, c-format
@@ -4037,7 +4047,7 @@ msgstr "फाइल '%s' को स्वीकृति तय गर्न �
 #: ../src/common/gifdecod.cpp:819
 #, c-format
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
-msgstr "अशुद्ध GIF  फ्रेम  आकार (%u, %d) (फ्रेम #%u का लागि ) "
+msgstr "अशुद्ध GIF फ्रेम आकार (%u, %d) (फ्रेम #%u का लागि ) "
 
 #: ../src/msw/ole/automtn.cpp:619
 msgid "Incorrect number of arguments."
@@ -4072,9 +4082,8 @@ msgid "Insert"
 msgstr "घुसाउ"
 
 #: ../src/richtext/richtextbuffer.cpp:7246
-#, fuzzy
 msgid "Insert Field"
-msgstr "पाठ घुसाउ"
+msgstr "क्षेत्र घुसाउ"
 
 #: ../src/richtext/richtextbuffer.cpp:7157
 #: ../src/richtext/richtextbuffer.cpp:8063
@@ -4469,7 +4478,7 @@ msgstr "वरणाकृतिका आकारहरूको सुची 
 #: ../src/richtext/richtextfontpage.cpp:197
 #: ../src/richtext/richtextfontpage.cpp:199
 msgid "Lists the available fonts."
-msgstr "उपलब्ध वरणाकृतिहरूको  सुची"
+msgstr "उपलब्ध वरणाकृतिहरूको सुची"
 
 #: ../src/common/fldlgcmn.cpp:326
 #, c-format
@@ -4709,7 +4718,7 @@ msgstr "अधिकतम छोडाइ:"
 #: ../src/unix/mediactrl.cpp:1007
 #, c-format
 msgid "Media playback error: %s"
-msgstr ""
+msgstr "श्रव्य सामाग्री पृष्ठध्वनी त्रुटी: %s"
 
 #: ../src/common/fs_mem.cpp:176
 #, c-format
@@ -4746,7 +4755,7 @@ msgstr "न्यून छोडाइ:"
 
 #: ../src/msw/ole/automtn.cpp:652
 msgid "Missing a required parameter."
-msgstr "आवश्यक parameter छुडेको  छ"
+msgstr "आवश्यक parameter छुडेको छ"
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Modern"
@@ -4869,7 +4878,7 @@ msgstr "चलायमान सञ्चालक %ld जस्ताका �
 #: ../src/dfb/bitmap.cpp:643 ../src/dfb/bitmap.cpp:677
 #, c-format
 msgid "No bitmap handler for type %d defined."
-msgstr "%d किसिमको लागि  कुनै पनि bitmap सञ्चालक परिभाषित गरिएको छैन।"
+msgstr "%d किसिमको लागि कुनै पनि bitmap सञ्चालक परिभाषित गरिएको छैन।"
 
 #: ../src/osx/carbon/dataview.cpp:1785
 msgid "No column existing."
@@ -4899,6 +4908,9 @@ msgid ""
 "Do you want to use this encoding (otherwise you will have to choose another "
 "one)?"
 msgstr ""
+"encoding '%s' मा पाठहरूलाई देखाउन कुनै पनि वर्णाकृति पाइएन । \n"
+"तर वैकल्पिक encoding '%s' भने उपलब्ध छ । \n"
+"के तपाइ यो encoding लाई प्रयोग गर्न चाहनु हुन्छ (अन्यथा तपाइले अर्कै छान्नु पर्छ)?"
 
 #: ../src/common/fontmap.cpp:427
 #, c-format
@@ -4907,6 +4919,9 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
+"encoding '%s' मा पाठहरू देखाउन कुनै पनि वर्णाकृति पाईएन ।\n"
+"के तपाई यो encoding मा धेखाउनका लागि कुनै वर्णाकृति चयन गर्नु हुन्छ? \n"
+"(अन्यथा यो encoding मा कुनै पनि पाठ शुद्ध रूपमा देखाउन सकिदैन)?"
 
 #: ../src/generic/animateg.cpp:143
 msgid "No handler found for animation type."
@@ -5018,7 +5033,7 @@ msgstr "ठीक"
 #: ../src/msw/ole/automtn.cpp:676
 #, c-format
 msgid "OLE Automation error in %s: %s"
-msgstr "%s  मा OLE स्वचालित गल्ती : %s "
+msgstr "%s मा OLE स्वचालित गल्ती : %s "
 
 #: ../include/wx/richtext/richtextimagedlg.h:39
 msgid "Object Properties"
@@ -5083,8 +5098,7 @@ msgid "Orientation"
 msgstr "झुकाव"
 
 #: ../src/common/windowid.cpp:260
-#, fuzzy
-msgid "Out of window IDs.  Recommend shutting down application."
+msgid "Out of window IDs. Recommend shutting down application."
 msgstr "विन्डो IDs भन्दा बाहिर. अनुप्रयोग लाई बन्द गर्न सिफारिस गरिन्छ ।"
 
 #: ../src/richtext/richtextborderspage.cpp:400
@@ -5307,9 +5321,8 @@ msgid "Passing a already registered object to SetObject"
 msgstr "पहिले नै दर्ता भएको वस्तु SetObject मा पठाउँदै ।"
 
 #: ../src/common/xtistrm.cpp:481
-#, fuzzy
 msgid "Passing an unknown object to GetObject"
-msgstr "अज्ञात वस्तुलाई GetObject मा पठाइँदै "
+msgstr "अज्ञात वस्तुलाई GetObject मा पठाइँदै छ "
 
 #: ../src/richtext/richtextctrl.cpp:3082 ../src/common/stockitem.cpp:181
 #: ../src/stc/stc_i18n.cpp:20
@@ -5360,15 +5373,17 @@ msgid ""
 "(at least version 4.70 is required but you have %d.%02d)\n"
 "or this program won't operate correctly."
 msgstr ""
+"कृपया comctl32.dll को नयाँ संस्करण भित्रयाउनु होला \n"
+"(कम्तिमा संस्करण ४.७० आवश्यक देखिन्छ तर तपाई सित त %d %02d मात्रै रहेछ)\n"
+"अन्यथा यो कार्यक्रमले राम्ररी काम गर्ने छैन ।"
 
 #: ../src/common/headerctrlcmn.cpp:60
 msgid "Please select the columns to show and define their order:"
 msgstr "कृपया देखाउने महलहरू चयन गरेर तिनिहरूको क्रम उल्लेख गर्नु होस्:"
 
 #: ../src/common/prntbase.cpp:522
-#, fuzzy
 msgid "Please wait while printing..."
-msgstr "कृपया पर्खनु होस् है छाप्ने काम हुँदैछ ।\n"
+msgstr "कृपया पर्खनु होस् है छाप्ने काम हुँदैछ ।"
 
 #: ../src/propgrid/advprops.cpp:632
 msgid "Point Size"
@@ -5413,7 +5428,7 @@ msgstr "प्राथमिकताहरू.."
 
 #: ../src/common/prntbase.cpp:530
 msgid "Preparing"
-msgstr ""
+msgstr "तयारी हुदैछ ।"
 
 #: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:574
 #: ../src/html/helpwnd.cpp:1236
@@ -5453,9 +5468,8 @@ msgid "Print in colour"
 msgstr "रङ्गिन छाप्ने काम"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print previe&w..."
-msgstr "छापिने चेहरा"
+msgstr "&छापिने चेहरा"
 
 #: ../src/gtk/gnome/gprint.cpp:940
 msgid "Print preview"
@@ -5466,7 +5480,6 @@ msgid "Print preview creation failed."
 msgstr "छापिने चेहराको सिर्जना असफल भयो ।"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print preview..."
 msgstr "छापिने चेहरा"
 
@@ -5524,9 +5537,9 @@ msgid "Printing Error"
 msgstr "छपाइमा गल्ती"
 
 #: ../src/common/prntbase.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d of %d"
-msgstr "पृष्ट %d.. छापिँदै छ ।"
+msgstr "पृष्ट %d बट्टा %d छापिँदै छ ।"
 
 #: ../src/generic/printps.cpp:202
 #, c-format
@@ -5554,7 +5567,7 @@ msgstr "प्रगति दोहोरो पन मान दोहोर�
 
 #: ../src/common/prntbase.cpp:529
 msgid "Progress:"
-msgstr ""
+msgstr "प्रगति"
 
 #: ../src/common/stockitem.cpp:185
 msgid "Properties"
@@ -5639,6 +5652,8 @@ msgid ""
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
+"सामान्य रूपमा यस प्रणालीलेकाम गर्नका लागि Registry कुञ्जी '%s' चाहिन्छ ।\n"
+"यसलाई मेट्नु भयो भने यो प्रणाली निकम्मा हुने छ ।सञ्चालन त तुहियो!"
 
 #: ../src/msw/registry.cpp:521
 #, c-format
@@ -5651,9 +5666,8 @@ msgid "Regular"
 msgstr "नियमित"
 
 #: ../src/richtext/richtextsizepage.cpp:481
-#, fuzzy
 msgid "Relative"
-msgstr "श्रृङ्गार युक्त"
+msgstr "सापेक्षित"
 
 #: ../src/generic/helpext.cpp:463
 msgid "Relevant entries:"
@@ -5664,9 +5678,8 @@ msgid "Remove"
 msgstr "हटाउ"
 
 #: ../src/richtext/richtextctrl.cpp:1420
-#, fuzzy
 msgid "Remove Bullet"
-msgstr "हटाउ"
+msgstr "गोली चिन्ह हटाउ"
 
 #: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
@@ -5847,7 +5860,7 @@ msgstr "खण्ड"
 #: ../src/common/ffile.cpp:219
 #, c-format
 msgid "Seek error on file '%s'"
-msgstr "फाइल '%s' मा खोजीको गल्ती  ।"
+msgstr "फाइल '%s' मा खोजीको गल्ती ।"
 
 #: ../src/common/ffile.cpp:209
 #, c-format
@@ -6066,9 +6079,8 @@ msgstr "बयान, 5 1/2 x 8 1/2इन्च"
 #: ../src/richtext/richtextsizepage.cpp:480
 #: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:485
-#, fuzzy
 msgid "Static"
-msgstr "स्थिति:"
+msgstr "स्थिर"
 
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Status:"
@@ -6229,9 +6241,8 @@ msgstr "पुछार ख्रेस्रा को आकार"
 #: ../src/richtext/richtextsizepage.cpp:579
 #: ../src/richtext/richtextsizepage.cpp:587
 #: ../src/richtext/richtextsizepage.cpp:589
-#, fuzzy
 msgid "The bottom position."
-msgstr "tab को स्थान "
+msgstr "पुछार स्थान "
 
 #: ../src/richtext/richtextliststylepage.cpp:255
 #: ../src/richtext/richtextliststylepage.cpp:257
@@ -6256,6 +6267,9 @@ msgid ""
 "another charset to replace it with or choose\n"
 "[Cancel] if it cannot be replaced"
 msgstr ""
+"वर्णसेट '%s' चिन्न सकिएन । \n"
+" तपाइले यसको सट्टामा अर्को वर्णसेट छान्न सक्नु हुन्छ।\n"
+" अथवा अर्को साट्न सकिदैन भने [Cancel] गर्नु होस् । "
 
 #: ../src/msw/ole/dataobj.cpp:177
 #, c-format
@@ -6268,20 +6282,26 @@ msgid "The default style for the next paragraph."
 msgstr "अघिल्लो अनुच्छेदका लागि निर्धारित शैली "
 
 #: ../src/generic/dirdlgg.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The directory '%s' does not exist\n"
 "Create it now?"
-msgstr "Registry कुञ्जी '%s' नभएकोले नाम फेर्न सकिँदैन ।"
+msgstr ""
+"घर्रा '%s' भेट्टिएन ।\n"
+"नयाँ सिर्जना गर्ने हो?"
 
 #: ../src/html/htmprint.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The document \"%s\" doesn't fit on the page horizontally and will be "
 "truncated if printed.\n"
 "\n"
 "Would you like to proceed with printing it nevertheless?"
-msgstr "यो कागजातका सबै सामाग्री पृष्टको तेर्सो तर्फ आँटेन, Print गर्दा केही काटिने छ ।"
+msgstr ""
+"\"%s\" कागजातका सबै सामाग्री पृष्टको तेर्सो तर्फ आँटेन, यदि छाप्ने कार्य गरियो भने केही "
+"अंश काटिने छ । \n"
+"\n"
+"के तपाई जस्तो सुकै भए पनि छाप्न चाहनु हुन्छ?"
 
 #: ../src/common/docview.cpp:1181
 #, c-format
@@ -6289,6 +6309,8 @@ msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
 "It has been removed from the most recently used files list."
 msgstr ""
+"फाइल '%s' नभेटिएकोले खोल्न सकिएन ।\n"
+"यसलाई हालै प्रयोग गरेका फाइलहरूको सूचीबाट हटाइयो ।"
 
 #: ../src/richtext/richtextindentspage.cpp:221
 #: ../src/richtext/richtextindentspage.cpp:223
@@ -6325,9 +6347,8 @@ msgstr "वरणाकृतिको आकार (थोप्लोमा).�
 
 #: ../src/richtext/richtextfontpage.cpp:188
 #: ../src/richtext/richtextfontpage.cpp:190
-#, fuzzy
 msgid "The font size units, points or pixels."
-msgstr "वरणाकृतिको आकार (थोप्लोमा).वरणाकृतिको आकार in थोप्लोs"
+msgstr "वरणाकृति आकारको एकाई, विन्दु अथवा पिक्सेल"
 
 #: ../src/generic/fontdlgg.cpp:387 ../src/generic/fontdlgg.cpp:389
 msgid "The font style."
@@ -6363,9 +6384,8 @@ msgstr "देब्रे ख्रेस्रा को आकार"
 #: ../src/richtext/richtextsizepage.cpp:495
 #: ../src/richtext/richtextsizepage.cpp:503
 #: ../src/richtext/richtextsizepage.cpp:505
-#, fuzzy
 msgid "The left position."
-msgstr "tab को स्थान "
+msgstr "देब्रे स्थान "
 
 #: ../src/richtext/richtextindentspage.cpp:313
 #: ../src/richtext/richtextindentspage.cpp:315
@@ -6400,7 +6420,6 @@ msgstr "वस्तुको अधिकतम छोडाइ"
 
 #: ../src/richtext/richtextsizepage.cpp:382
 #: ../src/richtext/richtextsizepage.cpp:384
-#, fuzzy
 msgid "The object minimum height."
 msgstr "वस्तुको न्यूनतम उचाइ"
 
@@ -6445,6 +6464,8 @@ msgid ""
 "private information,\n"
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
+"निम्न लिखित फाइलहरू प्रतिवेदनमा समाबेस छन् ।. यदि यी फाइलहरुमा निजी सूचना छ भने\n"
+"कृपया टिक नगर्नु होला । यसो गरेमा यीनिहरूलाई प्रतिवेदनबाट हटाइने छ । \n"
 
 #: ../src/common/cmdline.cpp:1076
 #, c-format
@@ -6472,9 +6493,8 @@ msgstr "दाहिने ख्रेस्रा को आकार"
 #: ../src/richtext/richtextsizepage.cpp:551
 #: ../src/richtext/richtextsizepage.cpp:559
 #: ../src/richtext/richtextsizepage.cpp:561
-#, fuzzy
 msgid "The right position."
-msgstr "tab को स्थान "
+msgstr "दाहिने स्थान "
 
 #: ../src/richtext/richtextindentspage.cpp:292
 #: ../src/richtext/richtextliststylepage.cpp:440
@@ -6535,9 +6555,8 @@ msgstr "सिरान ख्रेस्रा को आकार"
 #: ../src/richtext/richtextsizepage.cpp:523
 #: ../src/richtext/richtextsizepage.cpp:531
 #: ../src/richtext/richtextsizepage.cpp:533
-#, fuzzy
 msgid "The top position."
-msgstr "tab को स्थान "
+msgstr "सिरान स्थान "
 
 #: ../src/common/cmdline.cpp:1054
 #, c-format
@@ -6892,7 +6911,7 @@ msgstr "बृहत् भारतीय 16 bit युनिकोड (UTF-16B
 
 #: ../src/common/fmapbase.cpp:187
 msgid "Unicode 16 bit Little Endian (UTF-16LE)"
-msgstr "सानो  भारतीय 16 bit युनिकोड (UTF-16LE)"
+msgstr "सानो भारतीय 16 bit युनिकोड (UTF-16LE)"
 
 #: ../src/common/fmapbase.cpp:188 ../src/common/fmapbase.cpp:194
 msgid "Unicode 32 bit (UTF-32)"
@@ -6940,9 +6959,8 @@ msgstr "पुछार ख्रेस्रा को एकाइ"
 
 #: ../src/richtext/richtextsizepage.cpp:598
 #: ../src/richtext/richtextsizepage.cpp:600
-#, fuzzy
 msgid "Units for the bottom position."
-msgstr "पुछार ख्रेस्रा को एकाइ"
+msgstr "पुछार स्थानको एकाइ"
 
 #: ../src/richtext/richtextborderspage.cpp:283
 #: ../src/richtext/richtextborderspage.cpp:285
@@ -6966,9 +6984,8 @@ msgstr "देब्रे ख्रेस्रा को एकाइ"
 
 #: ../src/richtext/richtextsizepage.cpp:514
 #: ../src/richtext/richtextsizepage.cpp:516
-#, fuzzy
 msgid "Units for the left position."
-msgstr "देब्रे ख्रेस्रा को एकाइ"
+msgstr "देब्रे स्थानको एकाइ"
 
 #: ../src/richtext/richtextsizepage.cpp:447
 #: ../src/richtext/richtextsizepage.cpp:449
@@ -7022,9 +7039,8 @@ msgstr "दाहिने ख्रेस्राको एकाइ"
 
 #: ../src/richtext/richtextsizepage.cpp:570
 #: ../src/richtext/richtextsizepage.cpp:572
-#, fuzzy
 msgid "Units for the right position."
-msgstr "दाहिने ख्रेस्राको एकाइ"
+msgstr "दाहिने स्थानको एकाइ"
 
 #: ../src/richtext/richtextborderspage.cpp:343
 #: ../src/richtext/richtextborderspage.cpp:345
@@ -7048,9 +7064,8 @@ msgstr "सिरान ख्रेस्राको एकाइ"
 
 #: ../src/richtext/richtextsizepage.cpp:542
 #: ../src/richtext/richtextsizepage.cpp:544
-#, fuzzy
 msgid "Units for the top position."
-msgstr "सिरान ख्रेस्राको एकाइ"
+msgstr "सिरान स्थानकोएकाइ"
 
 #: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
 msgid "Unknown"
@@ -7232,7 +7247,7 @@ msgstr "विन्डोज_दाहिने"
 #: ../src/unix/epolldispatcher.cpp:214
 #, c-format
 msgid "Waiting for IO on epoll descriptor %d failed"
-msgstr " epoll ब्याख्याकार %d मा IO  को पर्खाइ असफल भयो ।"
+msgstr " epoll ब्याख्याकार %d मा IO को पर्खाइ असफल भयो ।"
 
 #: ../src/common/log.cpp:230
 msgid "Warning: "
@@ -7341,9 +7356,8 @@ msgid "Windows Japanese (CP 932) or Shift-JIS"
 msgstr "जापानी विन्डोज (CP 932) अथवा Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:181
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "अरबी विन्डोज (CP 1256)"
+msgstr "जोहब विन्डोज (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:170
 msgid "Windows Korean (CP 949)"
@@ -7372,16 +7386,15 @@ msgstr "विन्डोज सर्बर 2008 R2"
 
 #: ../src/common/fmapbase.cpp:167
 msgid "Windows Thai (CP 874)"
-msgstr "थाइ विन्डोज  (CP 874)"
+msgstr "थाइ विन्डोज (CP 874)"
 
 #: ../src/common/fmapbase.cpp:176
 msgid "Windows Turkish (CP 1254)"
 msgstr "तुर्कि विन्डोज (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "ग्रीक विन्डोज (CP 1253)"
+msgstr "भियतनामी विन्डोज (CP 1253)"
 
 #: ../src/msw/utils.cpp:1296
 msgid "Windows Vista"
@@ -7411,7 +7424,7 @@ msgstr "फाइल '%s' को लेखाइमा गल्ती"
 #: ../src/xml/xml.cpp:837
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
-msgstr "XML पठाउन मा गल्ती:  '%s' (%d लाइनमा)"
+msgstr "XML पठाउन मा गल्ती: '%s' (%d लाइनमा)"
 
 #: ../src/common/xpmdecod.cpp:797
 msgid "XPM: Malformed pixel data!"
@@ -7495,6 +7508,10 @@ msgid ""
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
+"पहिले DdeInitialize function लाई आह्वान नगरी DDEML function लाई आह्वान गरियो "
+"। \n"
+"अथवा \n"
+"अवैध परिचायक लाई DDEML function मा पटाइयो ।"
 
 #: ../src/msw/dde.cpp:1151
 msgid "a client's attempt to establish a conversation has failed."
@@ -7534,6 +7551,9 @@ msgid ""
 "that was terminated by the client, or the server\n"
 "terminated before completing a transaction."
 msgstr ""
+"सर्बर-फक्षको कारोबारको प्रयास गरेकोले कुराकानिको क्रम ग्राहकले काटि दियो । \n"
+" अथवा \n"
+"सर्बरले नै कारोबार समाप्त हुनु अगावै काटि दियो ।"
 
 #: ../src/msw/dde.cpp:1154
 msgid "a transaction failed."
@@ -7550,6 +7570,9 @@ msgid ""
 "or an application initialized as APPCMD_CLIENTONLY has \n"
 "attempted to perform server transactions."
 msgstr ""
+"अनुप्रयोगले APPCLASS_MONITOR को रूपमा DDE कारोबारको प्रयास आरम्भ गर्‍यो । \n"
+"अथवा \n"
+" अनुप्रयोगले APPCMD_CLIENTONLY को रूपमा सर्बर कारोबार को प्रयास आरम्भ गरायो।"
 
 #: ../src/msw/dde.cpp:1160
 msgid "an internal call to the PostMessage function has failed. "
@@ -7567,6 +7590,10 @@ msgid ""
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
+"अवैध कारोबार परिचायकलाई DDEML function मा पठाइयो । \n"
+" एक पटक अनुप्रयोगले XTYP_XACT_COMPLETE लाई \n"
+" फिर्ता पठाइ सके पछि, \n"
+" कारोबार परिचायक लाई फिर्ता बोलाउने कार्य मान्य हुने छैन । "
 
 #: ../src/common/zipstrm.cpp:1273
 msgid "assuming this is a multi-part zip concatenated"
@@ -7662,7 +7689,7 @@ msgstr "फाइल ब्याख्याकार %d लाई माझ्
 #: ../src/common/file.cpp:407 ../src/msw/wince/filefnwce.cpp:199
 #, c-format
 msgid "can't get seek position on file descriptor %d"
-msgstr "फाइल ब्याख्याकार %d मा खोजी  को स्थान पाउन सकिँदैन ।"
+msgstr "फाइल ब्याख्याकार %d मा खोजी को स्थान पाउन सकिँदैन ।"
 
 #: ../src/common/fontmap.cpp:326
 msgid "can't load any font, aborting"
@@ -7813,7 +7840,7 @@ msgstr "एघारौं"
 #: ../src/common/fileconf.cpp:1869
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
-msgstr "प्रविष्टि '%s' समूह '%s' मा एक पल्ट भन्दा बढि  देखिन्छ "
+msgstr "प्रविष्टि '%s' समूह '%s' मा एक पल्ट भन्दा बढि देखिन्छ "
 
 #: ../src/html/chm.cpp:344
 msgid "error in data format"
@@ -7877,7 +7904,7 @@ msgstr "फाइल '%s', लाइन %d: अपरिवर्तित क�
 #: ../src/common/fileconf.cpp:575
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
-msgstr "फाइल '%s': वर्ण %c  (%d लाइनमा ) अनपेक्षित छ ।"
+msgstr "फाइल '%s': वर्ण %c (%d लाइनमा ) अनपेक्षित छ ।"
 
 #: ../src/richtext/richtextbuffer.cpp:7874
 msgid "files"
@@ -8018,7 +8045,7 @@ msgstr "प्रक्रिया सन्दर्भको बयान"
 #: ../src/richtext/richtextfontpage.cpp:184
 #: ../src/richtext/richtextfontpage.cpp:187
 msgid "pt"
-msgstr ""
+msgstr "pt"
 
 #: ../src/richtext/richtextfontpage.cpp:185
 #: ../src/richtext/richtextborderspage.cpp:279
