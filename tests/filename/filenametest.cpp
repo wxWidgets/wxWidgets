@@ -698,7 +698,7 @@ void FileNameTestCase::TestExists()
     CPPUNIT_ASSERT( wxFileName::Exists("/dev/log", wxFILE_EXISTS_SOCKET) );
 #endif // __LINUX__
     wxString fifo = dirTemp.GetPath() + "/fifo";
-    if (mkfifo(fifo, 0600) == 0)
+    if (mkfifo(fifo.c_str(), 0600) == 0)
     {
         wxON_BLOCK_EXIT1(wxRemoveFile, fifo);
 
