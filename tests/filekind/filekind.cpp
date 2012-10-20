@@ -127,11 +127,13 @@ void FileKindTestCase::File()
 void FileKindTestCase::Pipe()
 {
     int afd[2];
+    int rc;
 #ifdef __UNIX__
-    pipe(afd);
+    rc = pipe(afd);
 #else
-    _pipe(afd, 256, O_BINARY);
+    rc = _pipe(afd, 256, O_BINARY);
 #endif
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to create pipe", 0, rc);
 
     wxFile file0(afd[0]);
     wxFile file1(afd[1]);

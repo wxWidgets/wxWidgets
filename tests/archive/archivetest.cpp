@@ -672,7 +672,10 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
         wxString tmparc = fn.GetPath(wxPATH_GET_SEPARATOR) + fn.GetFullName();
 
         // call the archiver to create an archive file
-        system(wxString::Format(archiver, tmparc.c_str()).mb_str());
+        if ( system(wxString::Format(archiver, tmparc.c_str()).mb_str()) == -1 )
+        {
+            wxLogError("Failed to run acrhiver command \"%s\"", archiver);
+        }
 
         // then load the archive file
         {
@@ -895,7 +898,11 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
         }
 
         // call unarchiver
-        system(wxString::Format(unarchiver, tmparc.c_str()).mb_str());
+        if ( system(wxString::Format(unarchiver, tmparc.c_str()).mb_str()) == -1 )
+        {
+            wxLogError("Failed to run unarchiver command \"%s\"", unarchiver);
+        }
+
         wxRemoveFile(tmparc);
     }
     else {
