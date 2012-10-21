@@ -187,8 +187,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
                           G_CALLBACK (gtkcombobox_popupshown_callback), this);
     }
 
-    SetInitialSize(size); // need this too because this is a wxControlWithItems
-
     return true;
 }
 
