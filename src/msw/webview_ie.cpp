@@ -104,9 +104,27 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
 wxWebViewIE::~wxWebViewIE()
 {
-    for(unsigned int i = 0; i < m_factories.size(); i++)
+    wxDynamicLibrary urlMon(wxT("urlmon.dll"));
+    if(urlMon.HasSymbol(wxT("CoInternetGetSession")))
     {
-        m_factories[i]->Release();
+        typedef HRESULT (WINAPI *CoInternetGetSession_t)(DWORD,
+                                                         wxIInternetSession**,
+                                                         DWORD);
+        wxDYNLIB_FUNCTION(CoInternetGetSession_t, CoInternetGetSession, urlMon);
+
+        wxIInternetSession* session;
+        HRESULT res = (*pfnCoInternetGetSession)(0, &session, 0);
+        if(FAILED(res))
+        {
+            wxFAIL_MSG("Could not retrive internet session");
+        }
+
+        for(unsigned int i = 0; i < m_factories.size(); i++)
+        {
+            session->UnregisterNameSpace(m_factories[i], 
+                                        (m_factories[i]->GetName()).wc_str());
+            m_factories[i]->Release();
+        }
     }
     FindClear();
 }

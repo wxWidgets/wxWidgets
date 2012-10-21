@@ -241,7 +241,10 @@ public:
 class ClassFactory : public IClassFactory
 {
 public:
-    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler) {}
+    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler) 
+    { AddRef(); }
+
+    wxString GetName() { return m_handler->GetName(); }
 
     //IClassFactory
     HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown* pUnkOuter,
