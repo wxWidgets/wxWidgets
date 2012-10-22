@@ -2283,6 +2283,12 @@ wxGraphicsBitmap wxGDIPlusRenderer::CreateSubBitmap( const wxGraphicsBitmap &bit
 class wxGDIPlusRendererModule : public wxModule
 {
 public:
+    wxGDIPlusRendererModule()
+    {
+        // We must be uninitialized before GDI+ DLL itself is unloaded.
+        AddDependency("wxGdiPlusModule");
+    }
+
     virtual bool OnInit() { return true; }
     virtual void OnExit()
     {
