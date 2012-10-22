@@ -48,6 +48,7 @@ public:
     int GetBestTabCtrlSize(wxWindow* wnd, const wxAuiNotebookPageArray& pages,
                             const wxSize& required_bmp_size);
     int GetBorderWidth(wxWindow* wnd);
+    int GetAdditionalBorderSpace(wxWindow* wnd);
     virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
                               const wxBitmap& bitmap, bool active,
                               int close_button_state, int* x_extent);

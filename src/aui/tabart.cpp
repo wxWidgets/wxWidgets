@@ -610,6 +610,11 @@ int wxAuiGenericTabArt::GetBorderWidth(wxWindow* wnd)
     return 1;
 }
 
+int wxAuiGenericTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
+{
+    return 0;
+}
+
 wxSize wxAuiGenericTabArt::GetTabSize(wxDC& dc,
                                       wxWindow* WXUNUSED(wnd),
                                       const wxString& caption,
@@ -1135,6 +1140,11 @@ int wxAuiSimpleTabArt::GetBorderWidth(wxWindow* wnd)
             return art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
     }
     return 1;
+}
+
+int wxAuiSimpleTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
+{
+    return 0;
 }
 
 wxSize wxAuiSimpleTabArt::GetTabSize(wxDC& dc,

@@ -487,6 +487,11 @@ int wxAuiGtkTabArt::GetBorderWidth(wxWindow* wnd)
                                                            GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder);
 }
 
+int wxAuiGtkTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
+{
+    return 2 * GetBorderWidth(wnd);
+}
+
 wxSize wxAuiGtkTabArt::GetTabSize(wxDC& dc,
                               wxWindow* wnd,
                               const wxString& caption,

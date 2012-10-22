@@ -103,6 +103,9 @@ public:
     virtual int GetBorderWidth(
                          wxWindow* wnd) = 0;
 
+    virtual int GetAdditionalBorderSpace(
+                         wxWindow* wnd) = 0;
+
     virtual int GetBestTabCtrlSize(
                          wxWindow* wnd,
                          const wxAuiNotebookPageArray& pages,
@@ -160,6 +163,9 @@ public:
     int GetIndentSize();
 
     int GetBorderWidth(
+                 wxWindow* wnd);
+
+    int GetAdditionalBorderSpace(
                  wxWindow* wnd);
 
     wxSize GetTabSize(
@@ -256,6 +262,9 @@ public:
     int GetIndentSize();
 
     int GetBorderWidth(
+                 wxWindow* wnd);
+
+    int GetAdditionalBorderSpace(
                  wxWindow* wnd);
 
     wxSize GetTabSize(
