@@ -47,10 +47,15 @@
 #include "wx/tokenzr.h"
 #include "wx/thread.h"
 
-#if wxUSE_EXCEPTIONS && wxUSE_STL
-    #include <exception>
-    #include <typeinfo>
-#endif
+#if wxUSE_STL
+    #if wxUSE_EXCEPTIONS
+        #include <exception>
+        #include <typeinfo>
+    #endif
+    #if wxUSE_INTL
+        #include <locale>
+    #endif
+#endif // wxUSE_STL
 
 #if !defined(__WINDOWS__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
@@ -834,7 +839,19 @@ bool wxConsoleAppTraitsBase::HasStderr()
 #if wxUSE_INTL
 void wxAppTraitsBase::SetLocale()
 {
+    // We want to use the user locale by default in GUI applications in order
+    // to show the numbers, dates &c in the familiar format -- and also accept
+    // this format on input (especially important for decimal comma/dot).
     wxSetlocale(LC_ALL, "");
+
+#if wxUSE_STL
+    // At least in some environments, e.g. MinGW-64, if the global C++ locale
+    // is different from the global C locale, all stream operations temporarily
+    // change the locale resulting in a huge slowdown (3 times slower in some
+    // real-life applications), so change the C++ locale to match.
+    std::locale::global(std::locale(""));
+#endif  //wxUSE_STL
+
     wxUpdateLocaleIsUtf8();
 }
 #endif
