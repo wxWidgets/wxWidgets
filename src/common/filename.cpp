@@ -772,7 +772,7 @@ bool wxFileName::DirExists() const
     if ( !ShouldFollowLink() )
         flags |= wxFILE_EXISTS_NO_FOLLOW;
 
-    return Exists(GetFullPath(), flags);
+    return Exists(GetPath(), flags);
 }
 
 /* static */

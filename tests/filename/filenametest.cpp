@@ -677,7 +677,13 @@ void FileNameTestCase::TestExists()
     CPPUNIT_ASSERT( !fn.Exists(wxFILE_EXISTS_DIR) );
     CPPUNIT_ASSERT( fn.Exists() );
 
-    wxFileName dirTemp(wxFileName::DirName(wxFileName::GetTempDir()));
+    const wxString& tempdir = wxFileName::GetTempDir();
+
+    wxFileName fileInTempDir(tempdir, "bloordyblop");
+    CPPUNIT_ASSERT( !fileInTempDir.Exists() );
+    CPPUNIT_ASSERT( fileInTempDir.DirExists() );
+
+    wxFileName dirTemp(wxFileName::DirName(tempdir));
     CPPUNIT_ASSERT( !dirTemp.FileExists() );
     CPPUNIT_ASSERT( dirTemp.DirExists() );
 
