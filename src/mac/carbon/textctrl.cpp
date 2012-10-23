@@ -489,11 +489,11 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 void wxTextCtrl::DoSetValue(const wxString& str, int flags)
 {
     // optimize redraws
-    if ( GetValue() == str )
-        return;
+    if ( GetValue() != str )
+        GetPeer()->SetStringValue( str ) ;
 
-    GetPeer()->SetStringValue( str ) ;
-
+    // Must call this even if nothing was actually set, else the m_ignoreEvtText logic
+    // will not work, e.g. when called from wxComboCtrlBase::SetValue.
     if ( (flags & SetValue_SendEvent) && m_triggerOnSetValue )
     {
         SendTextUpdatedEvent();
