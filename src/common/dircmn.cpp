@@ -115,7 +115,9 @@ size_t wxDir::Traverse(wxDirTraverser& sink,
     if ( flags & wxDIR_DIRS )
     {
         wxString dirname;
-        for ( bool cont = GetFirst(&dirname, wxEmptyString, wxDIR_DIRS | (flags & wxDIR_HIDDEN) );
+        for ( bool cont = GetFirst(&dirname, wxEmptyString,
+                                   (flags & ~(wxDIR_FILES | wxDIR_DOTDOT))
+                                   | wxDIR_DIRS);
               cont;
               cont = cont && GetNext(&dirname) )
         {
