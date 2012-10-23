@@ -784,11 +784,12 @@ void FileNameTestCase::TestSymlinks()
     wxFileName targetfn(wxFileName::CreateTempFileName(tempdir));
     CPPUNIT_ASSERT(targetfn.FileExists());
 
-    // Create a symlink to that file, and another to the home dir
+    // Create a symlink to that file
     wxFileName linktofile(tempdir, "linktofile");
     CPPUNIT_ASSERT_EQUAL(0, symlink(targetfn.GetFullPath().c_str(),
                                         linktofile.GetFullPath().c_str()));
 
+    // ... and another to the temporary directory
     const wxString linktodirName(tempdir + "/linktodir");
     wxFileName linktodir(wxFileName::DirName(linktodirName));
     CPPUNIT_ASSERT_EQUAL(0, symlink(tmpfn.GetFullPath().c_str(),
@@ -925,8 +926,20 @@ void FileNameTestCase::TestSymlinks()
     CPPUNIT_ASSERT(!wxFileName(tempdir, "linktofile").Exists());
     CPPUNIT_ASSERT(linktofile.Exists());
 
-    // Clean-up, and also tests removal of a dir containing a symlink-to-dir
+    // This is also a convenient place to test Rmdir() as we have things to
+    // remove.
+
+    // First, check that removing a symlink to a directory fails.
+    CPPUNIT_ASSERT( !wxFileName::Rmdir(linktodirName) );
+
+    // And recursively removing it only removes the symlink itself, not the
+    // directory.
+    CPPUNIT_ASSERT( wxFileName::Rmdir(linktodirName, wxPATH_RMDIR_RECURSIVE) );
+    CPPUNIT_ASSERT( tmpfn.Exists() );
+
+    // Finally removing the directory itself does remove everything.
     CPPUNIT_ASSERT(tempdirfn.Rmdir(wxPATH_RMDIR_RECURSIVE));
+    CPPUNIT_ASSERT( !tempdirfn.Exists() );
 }
 
 #endif // __UNIX__

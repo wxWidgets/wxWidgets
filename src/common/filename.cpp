@@ -1415,6 +1415,21 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
     if ( flags != 0 )   // wxPATH_RMDIR_FULL or wxPATH_RMDIR_RECURSIVE
 #endif // !__WINDOWS__
     {
+#ifndef __WINDOWS__
+        if ( flags & wxPATH_RMDIR_RECURSIVE )
+        {
+            // When deleting the tree recursively, we are supposed to delete
+            // this directory itself even when it is a symlink -- but without
+            // following it. Do it here as wxRmdir() would simply follow if
+            // called for a symlink.
+            if ( wxFileName::Exists(dir, wxFILE_EXISTS_SYMLINK |
+                                         wxFILE_EXISTS_NO_FOLLOW) )
+            {
+                return wxRemoveFile(dir);
+            }
+        }
+#endif // !__WINDOWS__
+
         wxString path(dir);
         if ( path.Last() != wxFILE_SEP_PATH )
             path += wxFILE_SEP_PATH;
@@ -1426,8 +1441,11 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
 
         wxString filename;
 
-        // first delete all subdirectories
-        bool cont = d.GetFirst(&filename, "", wxDIR_DIRS | wxDIR_HIDDEN);
+        // First delete all subdirectories: notice that we don't follow
+        // symbolic links, potentially leading outside this directory, to avoid
+        // unpleasant surprises.
+        bool cont = d.GetFirst(&filename, wxString(),
+                               wxDIR_DIRS | wxDIR_HIDDEN | wxDIR_NO_FOLLOW);
         while ( cont )
         {
             wxFileName::Rmdir(path + filename, flags);
@@ -1437,8 +1455,11 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
 #ifndef __WINDOWS__
         if ( flags & wxPATH_RMDIR_RECURSIVE )
         {
-            // delete all files too
-            cont = d.GetFirst(&filename, "", wxDIR_FILES | wxDIR_HIDDEN);
+            // Delete all files too and, for the same reasons as above, don't
+            // follow symlinks which could refer to the files outside of this
+            // directory and just delete the symlinks themselves.
+            cont = d.GetFirst(&filename, wxString(),
+                              wxDIR_FILES | wxDIR_HIDDEN | wxDIR_NO_FOLLOW);
             while ( cont )
             {
                 ::wxRemoveFile(path + filename);
