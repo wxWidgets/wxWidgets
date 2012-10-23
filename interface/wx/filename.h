@@ -99,7 +99,16 @@ enum
 {
     wxFILE_EXISTS_REGULAR   = 0x0001,  //!< Check for existence of a regular file
     wxFILE_EXISTS_DIR       = 0x0002,  //!< Check for existence of a directory
-    wxFILE_EXISTS_SYMLINK   = 0x0004,  //!< Check for existence of a symbolic link
+    /**
+        Check for existence of a symlink.
+
+        Notice that this flag should be used either with
+        ::wxFILE_EXISTS_NO_FOLLOW or with a wxFileName object on which
+        wxFileName::DontFollowLink() had been called, otherwise it would never
+        be satisfied as wxFileName::Exists() would be checking for the
+        existence of the symlink target and not the symlink itself.
+     */
+    wxFILE_EXISTS_SYMLINK   = 0x0004,
     wxFILE_EXISTS_DEVICE    = 0x0008,  //!< Check for existence of a device
     wxFILE_EXISTS_FIFO      = 0x0016,  //!< Check for existence of a FIFO
     wxFILE_EXISTS_SOCKET    = 0x0032,  //!< Check for existence of a socket
