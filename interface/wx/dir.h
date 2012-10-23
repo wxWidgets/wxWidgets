@@ -94,8 +94,8 @@ public:
 
 
 /**
-    These flags define what kind of filenames are included in the list of files
-    enumerated by wxDir::GetFirst() and wxDir::GetNext().
+    These flags affect the behaviour of GetFirst/GetNext() and Traverse(),
+    determining what types are included in the list of items they produce.
 */
 enum wxDirFlags
 {
@@ -104,8 +104,28 @@ enum wxDirFlags
     wxDIR_HIDDEN    = 0x0004,   ///< Includes hidden files.
     wxDIR_DOTDOT    = 0x0008,   ///< Includes "." and "..".
 
-    //! Combination of the @c wxDIR_FILES, @c wxDIR_DIRS, @c wxDIR_HIDDEN flags
-    //! defined above.
+    /**
+        Don't follow symbolic links during the directory traversal.
+
+        This flag is ignored under systems not supporting symbolic links (i.e.
+        non-Unix ones).
+
+        Notice that this flag is @e not included in wxDIR_DEFAULT and so the
+        default behaviour of wxDir::Traverse() is to follow symbolic links,
+        even if they lead outside of the directory being traversed.
+
+        @since 2.9.5
+     */
+    wxDIR_NO_FOLLOW = 0x0010,
+
+    /**
+        Default directory traversal flags include both files and directories,
+        even hidden.
+
+        Notice that by default wxDIR_NO_FOLLOW is @e not included, meaning that
+        symbolic links are followed by default. If this is not desired, you
+        must pass that flag explicitly.
+     */
     wxDIR_DEFAULT   = wxDIR_FILES | wxDIR_DIRS | wxDIR_HIDDEN
 };
 

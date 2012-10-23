@@ -150,10 +150,13 @@ bool wxDirData::Read(wxString *filename)
             break;
         }
 
-        // check the type now: notice that we want to check the type of this
-        // path itself and not whatever it points to in case of a symlink
+        // check the type now: notice that we may want to check the type of
+        // the path itself and not whatever it points to in case of a symlink
         wxFileName fn = wxFileName::DirName(path + de_d_name);
-        fn.DontFollowLink();
+        if ( m_flags & wxDIR_NO_FOLLOW )
+        {
+            fn.DontFollowLink();
+        }
 
         if ( !(m_flags & wxDIR_FILES) && !fn.DirExists() )
         {

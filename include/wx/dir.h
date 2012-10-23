@@ -22,14 +22,17 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 // constants
 // ----------------------------------------------------------------------------
 
-// these flags define what kind of filenames is included in the list of files
-// enumerated by GetFirst/GetNext
+// These flags affect the behaviour of GetFirst/GetNext() and Traverse().
+// They define what types are included in the list of items they produce.
+// Note that wxDIR_NO_FOLLOW is relevant only on Unix and ignored under systems
+// not supporting symbolic links.
 enum wxDirFlags
 {
     wxDIR_FILES     = 0x0001,       // include files
     wxDIR_DIRS      = 0x0002,       // include directories
     wxDIR_HIDDEN    = 0x0004,       // include hidden files
     wxDIR_DOTDOT    = 0x0008,       // include '.' and '..'
+    wxDIR_NO_FOLLOW = 0x0010,       // don't dereference any symlink
 
     // by default, enumerate everything except '.' and '..'
     wxDIR_DEFAULT   = wxDIR_FILES | wxDIR_DIRS | wxDIR_HIDDEN
