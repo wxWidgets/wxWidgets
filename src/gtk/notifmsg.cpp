@@ -25,10 +25,11 @@
 
 #if wxUSE_NOTIFICATION_MESSAGE && wxUSE_LIBNOTIFY
 
-#ifndef WX_PRECOMP
-#endif // WX_PRECOMP
-
 #include "wx/notifmsg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
 
 #include <libnotify/notify.h>
 
