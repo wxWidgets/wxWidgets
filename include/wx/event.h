@@ -3311,7 +3311,7 @@ public:
     }
 
     // Notice that we use P1 and not T1 for the parameter to allow passing
-    // parameters that are only convertible to the type taken by the method
+    // parameters that are convertible to the type taken by the method
     // instead of being exactly the same, to be closer to the usual method call
     // semantics.
     template <typename T, typename T1, typename P1>
