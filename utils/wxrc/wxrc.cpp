@@ -952,7 +952,14 @@ XmlResApp::FindStrings(const wxString& filename, wxXmlNode *node)
                 node/*not n!*/->GetName() == wxT("tooltip") ||
                 node/*not n!*/->GetName() == wxT("htmlcode") ||
                 node/*not n!*/->GetName() == wxT("title") ||
-                node/*not n!*/->GetName() == wxT("item")
+                node/*not n!*/->GetName() == wxT("item") ||
+                node/*not n!*/->GetName() == wxT("message") ||
+                node/*not n!*/->GetName() == wxT("note") ||
+                node/*not n!*/->GetName() == wxT("defaultdirectory") ||
+                node/*not n!*/->GetName() == wxT("defaultfilename") ||
+                node/*not n!*/->GetName() == wxT("defaultfolder") ||
+                node/*not n!*/->GetName() == wxT("filter") ||
+                node/*not n!*/->GetName() == wxT("caption")
             ))
             // ...and known to contain translatable string
         {
