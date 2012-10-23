@@ -5907,6 +5907,9 @@
 				RelativePath="..\..\include\wx\xrc\xh_animatctrl.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_auinotbk.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_bannerwindow.h">
 			</File>
 			<File

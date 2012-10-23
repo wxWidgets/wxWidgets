@@ -7108,6 +7108,10 @@ SOURCE=..\..\include\wx\xrc\xh_animatctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_auinotbk.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_bannerwindow.h
 # End Source File
 # Begin Source File

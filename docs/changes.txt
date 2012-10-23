@@ -544,6 +544,7 @@ All:
 
 All (GUI):
 
+- Add support for wxAuiNotebook to XRC (Steven Lamerton).
 - Add wxBITMAP_PNG() macro similar to wxBITMAP() but for PNG files.
 - Add new wxSimplebook class.
 - Support hexadecimal numbers in wxSpinCtrl.

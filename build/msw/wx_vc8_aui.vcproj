@@ -1082,6 +1082,10 @@
 				RelativePath="..\..\include\wx\aui\tabmdi.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_auinotbk.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -1114,6 +1118,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\aui\tabmdi.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_auinotbk.cpp"
 				>
 			</File>
 		</Filter>

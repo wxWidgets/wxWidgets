@@ -560,6 +560,10 @@ SOURCE=..\..\include\wx\aui\tabart.h
 
 SOURCE=..\..\include\wx\aui\tabmdi.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_auinotbk.h
+# End Source File
 # End Group
 # Begin Group "Source Files"
 
@@ -591,6 +595,10 @@ SOURCE=..\..\src\aui\tabart.cpp
 # Begin Source File
 
 SOURCE=..\..\src\aui\tabmdi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_auinotbk.cpp
 # End Source File
 # End Group
 # End Target

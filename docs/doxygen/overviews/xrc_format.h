@@ -536,6 +536,48 @@ controls cannot have children.
 @endTable
 
 
+@subsubsection xrc_wxauinotebook wxAuiNotebook
+
+A wxAuiNotebook can have one or more child objects of the @c notebookpage
+pseudo-class.
+@c notebookpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+     Page label (required).}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+     Bitmap shown alongside the label (default: none).}
+@row3col{selected, @ref overview_xrcformat_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+Each @c notebookpage must have exactly one non-toplevel window as its child.
+
+Example:
+@code
+<object class="wxAuiNotebook">
+    <style>wxBK_BOTTOM</style>
+    <object class="notebookpage">
+        <label>Page 1</label>
+        <bitmap>bitmap.png</bitmap>
+        <object class="wxPanel" name="page_1">
+            ...
+        </object>
+    </object>
+</object>
+@endcode
+
+Notice that wxAuiNotebook support in XRC is available in wxWidgets 2.9.5 and
+later only and you need to explicitly register its handler using
+@code
+    #include <wx/xrc/xh_auinotbk.h>
+
+    AddHandler(new wxAuiNotebookXmlHandler);
+@endcode
+to use it.
+
+
 @subsubsection xrc_wxbannerwindow wxBannerWindow
 
 @beginTable
