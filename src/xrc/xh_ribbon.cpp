@@ -25,6 +25,10 @@
 
 #include "wx/scopeguard.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/menu.h"
+#endif
+
 // Ribbon bars can contain only pages which are usually panels but may contain
 // any wxWindow.
 //
