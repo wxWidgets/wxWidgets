@@ -478,6 +478,53 @@ public:
     virtual void AddPendingEvent(const wxEvent& event);
 
     /**
+         Asynchronously call the given method.
+
+         Calling this function on an object schedules an asynchronous call to
+         the method specified as CallAfter() argument at a (slightly) later
+         time. This is useful when processing some events as certain actions
+         typically can't be performed inside their handlers, e.g. you shouldn't
+         show a modal dialog from a mouse click event handler as this would
+         break the mouse capture state -- but you can call a method showing
+         this message dialog after the current event handler completes.
+
+         The method being called must be the method of the object on which
+         CallAfter() itself is called.
+
+         Notice that it is safe to use CallAfter() from other, non-GUI,
+         threads, but that the method will be always called in the main, GUI,
+         thread context.
+
+         Example of use:
+         @code
+         class MyFrame : public wxFrame {
+            void OnClick(wxMouseEvent& event) {
+                CallAfter(&MyFrame::ShowPosition, event.GetPosition());
+            }
+
+            void ShowPosition(const wxPoint& pos) {
+                if ( wxMessageBox(
+                        wxString::Format("Perform click at (%d, %d)?",
+                                         pos.x, pos.y), "", wxYES_NO) == wxYES )
+                {
+                    ... do take this click into account ...
+                }
+            }
+         };
+         @endcode
+
+         @param method The method to call.
+         @param x1 The (optional) first parameter to pass to the method.
+         @param x2 The (optional) second parameter to pass to the method.
+
+         Note that currently only up to 2 arguments can be passed.
+
+         @since 2.9.5
+     */
+    template<typename T, typename T1, ...>
+    void CallAfter(void (T::*method)(T1, ...), T1 x1, ...);
+
+    /**
         Processes an event, searching event tables and calling zero or more suitable
         event handler function(s).
 

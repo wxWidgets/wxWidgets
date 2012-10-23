@@ -156,8 +156,9 @@ const wxEventType wxEVT_NULL = wxNewEventType();
 
 wxDEFINE_EVENT( wxEVT_IDLE, wxIdleEvent );
 
-// Thread event
+// Thread and asynchronous call events
 wxDEFINE_EVENT( wxEVT_THREAD, wxThreadEvent );
+wxDEFINE_EVENT( wxEVT_ASYNC_METHOD_CALL, wxAsyncMethodCallEvent );
 
 #endif // wxUSE_BASE
 
@@ -1563,6 +1564,15 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
     // Then static per-class event tables
     if ( GetEventHashTable().HandleEvent(event, this) )
         return true;
+
+    // There is an implicit entry for async method calls procession in every
+    // event handler:
+    if ( event.GetEventType() == wxEVT_ASYNC_METHOD_CALL &&
+            event.GetEventObject() == this )
+    {
+        static_cast<wxAsyncMethodCallEvent&>(event).Execute();
+        return true;
+    }
 
     // We don't have a handler for this event.
     return false;
