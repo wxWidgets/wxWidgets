@@ -784,6 +784,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/treebkg.cpp
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
+    src/xrc/xmlreshandler.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1013,6 +1014,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/vscroll.h
     wx/xpmdecod.h
     wx/xpmhand.h
+    wx/xrc/xmlreshandler.h
 </set>
 
 <!-- ====================================================================== -->
@@ -3428,8 +3430,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_propdlg.cpp
     src/xrc/xh_radbt.cpp
     src/xrc/xh_radbx.cpp
-    <!-- disabled until linking problems are fixed -->
-    <!-- src/xrc/xh_richtext.cpp -->
     src/xrc/xh_scrol.cpp
     src/xrc/xh_scwin.cpp
     src/xrc/xh_htmllbox.cpp
@@ -3498,7 +3498,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_propdlg.h
     wx/xrc/xh_radbt.h
     wx/xrc/xh_radbx.h
-    <!-- wx/xrc/xh_richtext.h -->
     wx/xrc/xh_scrol.h
     wx/xrc/xh_scwin.h
     wx/xrc/xh_htmllbox.h
@@ -3715,6 +3714,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/richtext/richtextstyles.cpp
     src/richtext/richtextsymboldlg.cpp
     src/richtext/richtextxml.cpp
+    src/xrc/xh_richtext.cpp
 </set>
 <set var="RICHTEXT_HDR" hints="files">
     wx/richtext/richtextbackgroundpage.h
@@ -3739,6 +3739,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/richtext/richtexttabspage.h
     wx/richtext/richtextuicustomization.h
     wx/richtext/richtextxml.h
+    wx/xrc/xh_richtext.h
 </set>
 
 

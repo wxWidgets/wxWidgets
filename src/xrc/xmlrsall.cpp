@@ -146,9 +146,6 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_RADIOBTN
     AddHandler(new wxRadioButtonXmlHandler);
 #endif
-#if 0 && wxUSE_RICHTEXT
-    AddHandler(new wxRichTextCtrlXmlHandler);
-#endif
 #if wxUSE_SCROLLBAR
     AddHandler(new wxScrollBarXmlHandler);
 #endif

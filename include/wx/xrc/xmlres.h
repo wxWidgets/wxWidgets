@@ -31,6 +31,8 @@
 
 #include "wx/xml/xml.h"
 
+#include "wx/xrc/xmlreshandler.h"
+
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 
 class WXDLLIMPEXP_FWD_CORE wxIconBundle;
@@ -43,7 +45,6 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
-class WXDLLIMPEXP_FWD_XRC wxXmlResourceHandler;
 class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactory;
 class wxXmlSubclassFactories;
 class wxXmlResourceModule;
@@ -393,7 +394,7 @@ private:
     // domain to pass to translation functions, if any.
     wxString m_domain;
 
-    friend class wxXmlResourceHandler;
+    friend class wxXmlResourceHandlerImpl;
     friend class wxXmlResourceModule;
     friend class wxIdRangeManager;
     friend class wxIdRange;
@@ -443,18 +444,20 @@ private:
 #define XRCSIZERITEM(window, id) \
     ((window).GetSizer() ? (window).GetSizer()->GetItemById(XRCID(id)) : NULL)
 
-// wxXmlResourceHandler is an abstract base class for resource handlers
-// capable of creating a control from an XML node.
 
-class WXDLLIMPEXP_XRC wxXmlResourceHandler : public wxObject
+// wxXmlResourceHandlerImpl is the back-end of the wxXmlResourceHander class to
+// really implementing all its functionality. It is defined in the "xrc"
+// library unlike wxXmlResourceHandler itself which is defined in "core" to
+// allow inheriting from it in the code from the other libraries too.
+
+class WXDLLIMPEXP_XRC wxXmlResourceHandlerImpl : public wxXmlResourceHandlerImplBase
 {
-DECLARE_ABSTRACT_CLASS(wxXmlResourceHandler)
 public:
     // Constructor.
-    wxXmlResourceHandler();
+    wxXmlResourceHandlerImpl(wxXmlResourceHandler *handler);
 
     // Destructor.
-    virtual ~wxXmlResourceHandler() {}
+    virtual ~wxXmlResourceHandlerImpl() {}
 
     // Creates an object (menu, dialog, control, ...) from an XML node.
     // Should check for validity.
@@ -465,33 +468,12 @@ public:
     wxObject *CreateResource(wxXmlNode *node, wxObject *parent,
                              wxObject *instance);
 
-    // This one is called from CreateResource after variables
-    // were filled.
-    virtual wxObject *DoCreateResource() = 0;
-
-    // Returns true if it understands this node and can create
-    // a resource from it, false otherwise.
-    virtual bool CanHandle(wxXmlNode *node) = 0;
-
-    // Sets the parent resource.
-    void SetParentResource(wxXmlResource *res) { m_resource = res; }
-
-protected:
-    wxXmlResource *m_resource;
-    wxArrayString m_styleNames;
-    wxArrayInt m_styleValues;
-
-    // Variables (filled by CreateResource)
-    wxXmlNode *m_node;
-    wxString m_class;
-    wxObject *m_parent, *m_instance;
-    wxWindow *m_parentAsWindow;
 
     // --- Handy methods:
 
     // Returns true if the node has a property class equal to classname,
     // e.g. <object class="wxDialog">.
-    static bool IsOfClass(wxXmlNode *node, const wxString& classname);
+    bool IsOfClass(wxXmlNode *node, const wxString& classname) const;
 
     // Gets node content from wxXML_ENTITY_NODE
     // The problem is, <tag>content<tag> is represented as
@@ -511,13 +493,6 @@ protected:
 
     // Returns the parameter value from given node.
     wxString GetParamValue(const wxXmlNode* node);
-
-    // Add a style flag (e.g. wxMB_DOCKABLE) to the list of flags
-    // understood by this handler.
-    void AddStyle(const wxString& name, int value);
-
-    // Add styles common to all wxWindow-derived classes.
-    void AddWindowStyles();
 
     // Gets style flags from text in form "flag | flag2| flag3 |..."
     // Only understands flags added with AddStyle
@@ -611,12 +586,11 @@ protected:
 
     // Creates a resource from a node.
     wxObject *CreateResFromNode(wxXmlNode *node,
-                                wxObject *parent, wxObject *instance = NULL)
-        { return m_resource->CreateResFromNode(node, parent, instance); }
+                                wxObject *parent, wxObject *instance = NULL);
 
     // helper
 #if wxUSE_FILESYSTEM
-    wxFileSystem& GetCurFileSystem() { return m_resource->GetCurFileSystem(); }
+    wxFileSystem& GetCurFileSystem();
 #endif
 
     // reports input error at position 'context'
@@ -629,8 +603,6 @@ protected:
 
 
 // Programmer-friendly macros for writing XRC handlers:
-
-#define XRC_ADD_STYLE(style) AddStyle(wxT(#style), style)
 
 #define XRC_MAKE_INSTANCE(variable, classname) \
    classname *variable = NULL; \

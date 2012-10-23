@@ -1402,6 +1402,15 @@ Example:
     Maximum length of the text entered (default: unlimited).}
 @endTable
 
+Notice that wxRichTextCtrl support in XRC is available in wxWidgets 2.9.5 and
+later only and you need to explicitly register its handler using
+@code
+    #include <wx/xrc/xh_richtext.h>
+
+    AddHandler(new wxRichTextCtrl);
+@endcode
+to use it.
+
 
 @subsubsection xrc_wxscrollbar wxScrollBar
 

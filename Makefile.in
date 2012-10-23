@@ -1970,7 +1970,8 @@ RICHTEXTDLL_OBJECTS =  \
 	richtextdll_richtextstyledlg.o \
 	richtextdll_richtextstyles.o \
 	richtextdll_richtextsymboldlg.o \
-	richtextdll_richtextxml.o
+	richtextdll_richtextxml.o \
+	richtextdll_xh_richtext.o
 RICHTEXTDLL_ODEP = $(_____pch_wxprec_richtextdll_wx_wxprec_h_gch___depname)
 RICHTEXTLIB_CXXFLAGS = $(__richtextlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1987,7 +1988,8 @@ RICHTEXTLIB_OBJECTS =  \
 	richtextlib_richtextstyledlg.o \
 	richtextlib_richtextstyles.o \
 	richtextlib_richtextsymboldlg.o \
-	richtextlib_richtextxml.o
+	richtextlib_richtextxml.o \
+	richtextlib_xh_richtext.o
 RICHTEXTLIB_ODEP = $(_____pch_wxprec_richtextlib_wx_wxprec_h_gch___depname)
 STCDLL_CXXFLAGS = $(__stcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -4245,6 +4247,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/vscroll.h \
 	wx/xpmdecod.h \
 	wx/xpmhand.h \
+	wx/xrc/xmlreshandler.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	$(ADVANCED_HDR) \
@@ -4385,6 +4388,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/richtext/richtexttabspage.h \
 	wx/richtext/richtextuicustomization.h \
 	wx/richtext/richtextxml.h \
+	wx/xrc/xh_richtext.h \
 	wx/stc/stc.h \
 	$(WEBVIEW_HDR_PLATFORM) \
 	wx/webview.h \
@@ -4694,6 +4698,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_richtextstyles.o \
 	monodll_richtextsymboldlg.o \
 	monodll_richtextxml.o \
+	monodll_xh_richtext.o \
 	monodll_stc.o \
 	monodll_PlatWX.o \
 	monodll_ScintillaWX.o
@@ -4861,7 +4866,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_treectlg.o \
 	monodll_treebkg.o \
 	monodll_vlbox.o \
-	monodll_vscroll.o
+	monodll_vscroll.o \
+	monodll_xmlreshandler.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
@@ -5079,7 +5085,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_treectlg.o \
 	monodll_treebkg.o \
 	monodll_vlbox.o \
-	monodll_vscroll.o
+	monodll_vscroll.o \
+	monodll_xmlreshandler.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_hid.o monodll_utilsexc_cf.o
@@ -6924,6 +6931,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_richtextstyles.o \
 	monolib_richtextsymboldlg.o \
 	monolib_richtextxml.o \
+	monolib_xh_richtext.o \
 	monolib_stc.o \
 	monolib_PlatWX.o \
 	monolib_ScintillaWX.o
@@ -7091,7 +7099,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_treectlg.o \
 	monolib_treebkg.o \
 	monolib_vlbox.o \
-	monolib_vscroll.o
+	monolib_vscroll.o \
+	monolib_xmlreshandler.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
@@ -7309,7 +7318,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_treectlg.o \
 	monolib_treebkg.o \
 	monolib_vlbox.o \
-	monolib_vscroll.o
+	monolib_vscroll.o \
+	monolib_xmlreshandler.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_COCOA@	monolib_hid.o monolib_utilsexc_cf.o
@@ -9496,7 +9506,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_treectlg.o \
 	coredll_treebkg.o \
 	coredll_vlbox.o \
-	coredll_vscroll.o
+	coredll_vscroll.o \
+	coredll_xmlreshandler.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
@@ -9714,7 +9725,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_treectlg.o \
 	coredll_treebkg.o \
 	coredll_vlbox.o \
-	coredll_vscroll.o
+	coredll_vscroll.o \
+	coredll_xmlreshandler.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_4 = \
 @COND_TOOLKIT_COCOA@	coredll_hid.o coredll_utilsexc_cf.o
@@ -11165,7 +11177,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_treectlg.o \
 	corelib_treebkg.o \
 	corelib_vlbox.o \
-	corelib_vscroll.o
+	corelib_vscroll.o \
+	corelib_xmlreshandler.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
@@ -11383,7 +11396,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_treectlg.o \
 	corelib_treebkg.o \
 	corelib_vlbox.o \
-	corelib_vscroll.o
+	corelib_vscroll.o \
+	corelib_xmlreshandler.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_6 = \
 @COND_TOOLKIT_COCOA@	corelib_hid.o corelib_utilsexc_cf.o
@@ -18650,6 +18664,9 @@ monodll_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(MONO
 monodll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
+monodll_xh_richtext.o: $(srcdir)/src/xrc/xh_richtext.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_richtext.cpp
+
 monodll_stc.o: $(srcdir)/src/stc/stc.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/stc/stc.cpp
 
@@ -21953,6 +21970,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
 
+@COND_USE_GUI_1@monodll_xmlreshandler.o: $(srcdir)/src/xrc/xmlreshandler.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xmlreshandler.cpp
+
 @COND_USE_GUI_1@monodll_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
 
@@ -24394,6 +24414,9 @@ monolib_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(MONO
 
 monolib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
+
+monolib_xh_richtext.o: $(srcdir)/src/xrc/xh_richtext.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_richtext.cpp
 
 monolib_stc.o: $(srcdir)/src/stc/stc.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/stc/stc.cpp
@@ -27697,6 +27720,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
+
+@COND_USE_GUI_1@monolib_xmlreshandler.o: $(srcdir)/src/xrc/xmlreshandler.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xmlreshandler.cpp
 
 @COND_USE_GUI_1@monolib_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
@@ -33608,6 +33634,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
 
+@COND_USE_GUI_1@coredll_xmlreshandler.o: $(srcdir)/src/xrc/xmlreshandler.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/xrc/xmlreshandler.cpp
+
 corelib_event.o: $(srcdir)/src/common/event.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -37901,6 +37930,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_vscroll.o: $(srcdir)/src/generic/vscroll.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/vscroll.cpp
 
+@COND_USE_GUI_1@corelib_xmlreshandler.o: $(srcdir)/src/xrc/xmlreshandler.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/xrc/xmlreshandler.cpp
+
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_ADV
 
@@ -39716,6 +39748,9 @@ richtextdll_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(
 richtextdll_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(RICHTEXTDLL_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
 
+richtextdll_xh_richtext.o: $(srcdir)/src/xrc/xh_richtext.cpp $(RICHTEXTDLL_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_richtext.cpp
+
 richtextlib_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(RICHTEXTLIB_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
 
@@ -39745,6 +39780,9 @@ richtextlib_richtextsymboldlg.o: $(srcdir)/src/richtext/richtextsymboldlg.cpp $(
 
 richtextlib_richtextxml.o: $(srcdir)/src/richtext/richtextxml.cpp $(RICHTEXTLIB_ODEP)
 	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextxml.cpp
+
+richtextlib_xh_richtext.o: $(srcdir)/src/xrc/xh_richtext.cpp $(RICHTEXTLIB_ODEP)
+	$(CXXC) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_richtext.cpp
 
 stcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(STCDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/lexlib --include-dir $(top_srcdir)/src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS --define WXUSINGDLL --define WXMAKINGDLL_STC

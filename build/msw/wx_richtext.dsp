@@ -616,6 +616,10 @@ SOURCE=..\..\include\wx\richtext\richtextuicustomization.h
 
 SOURCE=..\..\include\wx\richtext\richtextxml.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_richtext.h
+# End Source File
 # End Group
 # Begin Group "Source Files"
 
@@ -659,6 +663,10 @@ SOURCE=..\..\src\richtext\richtextsymboldlg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\richtext\richtextxml.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_richtext.cpp
 # End Source File
 # End Group
 # End Target

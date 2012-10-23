@@ -252,6 +252,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_richtextstyles.obj &
 	$(OBJS)\monodll_richtextsymboldlg.obj &
 	$(OBJS)\monodll_richtextxml.obj &
+	$(OBJS)\monodll_xh_richtext.obj &
 	$(OBJS)\monodll_stc.obj &
 	$(OBJS)\monodll_PlatWX.obj &
 	$(OBJS)\monodll_ScintillaWX.obj
@@ -533,7 +534,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_treectlg.obj &
 	$(OBJS)\monodll_treebkg.obj &
 	$(OBJS)\monodll_vlbox.obj &
-	$(OBJS)\monodll_vscroll.obj
+	$(OBJS)\monodll_vscroll.obj &
+	$(OBJS)\monodll_xmlreshandler.obj
 !endif
 !endif
 !ifeq USE_GUI 1
@@ -806,7 +808,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_treectlg.obj &
 	$(OBJS)\monodll_treebkg.obj &
 	$(OBJS)\monodll_vlbox.obj &
-	$(OBJS)\monodll_vscroll.obj
+	$(OBJS)\monodll_vscroll.obj &
+	$(OBJS)\monodll_xmlreshandler.obj
 !endif
 !endif
 ____ADVANCED_SRC_FILENAMES_OBJECTS =
@@ -1058,6 +1061,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_richtextstyles.obj &
 	$(OBJS)\monolib_richtextsymboldlg.obj &
 	$(OBJS)\monolib_richtextxml.obj &
+	$(OBJS)\monolib_xh_richtext.obj &
 	$(OBJS)\monolib_stc.obj &
 	$(OBJS)\monolib_PlatWX.obj &
 	$(OBJS)\monolib_ScintillaWX.obj
@@ -1339,7 +1343,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_treectlg.obj &
 	$(OBJS)\monolib_treebkg.obj &
 	$(OBJS)\monolib_vlbox.obj &
-	$(OBJS)\monolib_vscroll.obj
+	$(OBJS)\monolib_vscroll.obj &
+	$(OBJS)\monolib_xmlreshandler.obj
 !endif
 !endif
 !ifeq USE_GUI 1
@@ -1612,7 +1617,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_treectlg.obj &
 	$(OBJS)\monolib_treebkg.obj &
 	$(OBJS)\monolib_vlbox.obj &
-	$(OBJS)\monolib_vscroll.obj
+	$(OBJS)\monolib_vscroll.obj &
+	$(OBJS)\monolib_xmlreshandler.obj
 !endif
 !endif
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =
@@ -2042,7 +2048,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_treectlg.obj &
 	$(OBJS)\coredll_treebkg.obj &
 	$(OBJS)\coredll_vlbox.obj &
-	$(OBJS)\coredll_vscroll.obj
+	$(OBJS)\coredll_vscroll.obj &
+	$(OBJS)\coredll_xmlreshandler.obj
 !endif
 !endif
 !ifeq USE_GUI 1
@@ -2315,7 +2322,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_treectlg.obj &
 	$(OBJS)\coredll_treebkg.obj &
 	$(OBJS)\coredll_vlbox.obj &
-	$(OBJS)\coredll_vscroll.obj
+	$(OBJS)\coredll_vscroll.obj &
+	$(OBJS)\coredll_xmlreshandler.obj
 !endif
 !endif
 __corelib___depname =
@@ -2604,7 +2612,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_treectlg.obj &
 	$(OBJS)\corelib_treebkg.obj &
 	$(OBJS)\corelib_vlbox.obj &
-	$(OBJS)\corelib_vscroll.obj
+	$(OBJS)\corelib_vscroll.obj &
+	$(OBJS)\corelib_xmlreshandler.obj
 !endif
 !endif
 !ifeq USE_GUI 1
@@ -2877,7 +2886,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_treectlg.obj &
 	$(OBJS)\corelib_treebkg.obj &
 	$(OBJS)\corelib_vlbox.obj &
-	$(OBJS)\corelib_vscroll.obj
+	$(OBJS)\corelib_vscroll.obj &
+	$(OBJS)\corelib_xmlreshandler.obj
 !endif
 !endif
 ____wxcore_namedll_DEP =
@@ -5038,7 +5048,8 @@ RICHTEXTDLL_OBJECTS =  &
 	$(OBJS)\richtextdll_richtextstyledlg.obj &
 	$(OBJS)\richtextdll_richtextstyles.obj &
 	$(OBJS)\richtextdll_richtextsymboldlg.obj &
-	$(OBJS)\richtextdll_richtextxml.obj
+	$(OBJS)\richtextdll_richtextxml.obj &
+	$(OBJS)\richtextdll_xh_richtext.obj
 RICHTEXTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -5059,7 +5070,8 @@ RICHTEXTLIB_OBJECTS =  &
 	$(OBJS)\richtextlib_richtextstyledlg.obj &
 	$(OBJS)\richtextlib_richtextstyles.obj &
 	$(OBJS)\richtextlib_richtextsymboldlg.obj &
-	$(OBJS)\richtextlib_richtextxml.obj
+	$(OBJS)\richtextlib_richtextxml.obj &
+	$(OBJS)\richtextlib_xh_richtext.obj
 STCDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -7728,6 +7740,9 @@ $(OBJS)\monodll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtext
 $(OBJS)\monodll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_richtext.obj :  .AUTODEPEND ..\..\src\xrc\xh_richtext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_stc.obj :  .AUTODEPEND ..\..\src\stc\stc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8840,6 +8855,11 @@ $(OBJS)\monodll_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_xmlreshandler.obj :  .AUTODEPEND ..\..\src\xrc\xmlreshandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -10164,6 +10184,9 @@ $(OBJS)\monolib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\richtext
 $(OBJS)\monolib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_xh_richtext.obj :  .AUTODEPEND ..\..\src\xrc\xh_richtext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_stc.obj :  .AUTODEPEND ..\..\src\stc\stc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -11276,6 +11299,11 @@ $(OBJS)\monolib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_xmlreshandler.obj :  .AUTODEPEND ..\..\src\xrc\xmlreshandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -13679,6 +13707,11 @@ $(OBJS)\coredll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
+!ifeq USE_GUI 1
+$(OBJS)\coredll_xmlreshandler.obj :  .AUTODEPEND ..\..\src\xrc\xmlreshandler.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
 $(OBJS)\corelib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -15109,6 +15142,11 @@ $(OBJS)\corelib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
+!ifeq USE_GUI 1
+$(OBJS)\corelib_xmlreshandler.obj :  .AUTODEPEND ..\..\src\xrc\xmlreshandler.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
 $(OBJS)\advdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -16297,6 +16335,9 @@ $(OBJS)\richtextdll_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\rich
 $(OBJS)\richtextdll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
 
+$(OBJS)\richtextdll_xh_richtext.obj :  .AUTODEPEND ..\..\src\xrc\xh_richtext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
 $(OBJS)\richtextlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
@@ -16328,6 +16369,9 @@ $(OBJS)\richtextlib_richtextsymboldlg.obj :  .AUTODEPEND ..\..\src\richtext\rich
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\richtextlib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_xh_richtext.obj :  .AUTODEPEND ..\..\src\xrc\xh_richtext.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\stcdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp

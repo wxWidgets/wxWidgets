@@ -8056,6 +8056,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_richtext.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_scrol.h"
 				>
 			</File>
@@ -8144,11 +8148,25 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xmlreshandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xpmdecod.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xpmhand.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<File
+				RelativePath="..\..\src\xrc\xmlreshandler.cpp"
 				>
 			</File>
 		</Filter>

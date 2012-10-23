@@ -1134,6 +1134,10 @@
 				RelativePath="..\..\include\wx\richtext\richtextxml.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_richtext.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -1178,6 +1182,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\richtext\richtextxml.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_richtext.cpp"
 				>
 			</File>
 		</Filter>
