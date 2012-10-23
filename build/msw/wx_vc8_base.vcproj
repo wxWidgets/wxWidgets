@@ -2062,6 +2062,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\meta\removeref.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\rtti.h"
 				>
 			</File>

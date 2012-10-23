@@ -1475,6 +1475,10 @@ SOURCE=..\..\include\wx\regex.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\meta\removeref.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\rtti.h
 # End Source File
 # Begin Source File

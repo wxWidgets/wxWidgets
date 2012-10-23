@@ -543,6 +543,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/meta/int2type.h
     wx/meta/movable.h
     wx/meta/pod.h
+    wx/meta/removeref.h
     wx/fswatcher.h
     wx/generic/fswatcher.h
 </set>
