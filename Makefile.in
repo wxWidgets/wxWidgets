@@ -1904,7 +1904,8 @@ RIBBONDLL_OBJECTS =  \
 	ribbondll_gallery.o \
 	ribbondll_page.o \
 	ribbondll_panel.o \
-	ribbondll_toolbar.o
+	ribbondll_toolbar.o \
+	ribbondll_xh_ribbon.o
 RIBBONDLL_ODEP =  $(_____pch_wxprec_ribbondll_wx_wxprec_h_gch___depname)
 RIBBONLIB_CXXFLAGS = $(__ribbonlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1921,7 +1922,8 @@ RIBBONLIB_OBJECTS =  \
 	ribbonlib_gallery.o \
 	ribbonlib_page.o \
 	ribbonlib_panel.o \
-	ribbonlib_toolbar.o
+	ribbonlib_toolbar.o \
+	ribbonlib_xh_ribbon.o
 RIBBONLIB_ODEP =  $(_____pch_wxprec_ribbonlib_wx_wxprec_h_gch___depname)
 PROPGRIDDLL_CXXFLAGS = $(__propgriddll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -4369,6 +4371,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/ribbon/page.h \
 	wx/ribbon/panel.h \
 	wx/ribbon/toolbar.h \
+	wx/xrc/xh_ribbon.h \
 	wx/richtext/richtextbackgroundpage.h \
 	wx/richtext/richtextborderspage.h \
 	wx/richtext/richtextbuffer.h \
@@ -4692,6 +4695,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_page.o \
 	monodll_ribbon_panel.o \
 	monodll_ribbon_toolbar.o \
+	monodll_xh_ribbon.o \
 	monodll_richtextbuffer.o \
 	monodll_richtextctrl.o \
 	monodll_richtextformatdlg.o \
@@ -6926,6 +6930,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_page.o \
 	monolib_ribbon_panel.o \
 	monolib_ribbon_toolbar.o \
+	monolib_xh_ribbon.o \
 	monolib_richtextbuffer.o \
 	monolib_richtextctrl.o \
 	monolib_richtextformatdlg.o \
@@ -18642,6 +18647,9 @@ monodll_ribbon_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONODLL_ODEP)
 monodll_ribbon_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
 
+monodll_xh_ribbon.o: $(srcdir)/src/xrc/xh_ribbon.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_ribbon.cpp
+
 monodll_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
 
@@ -24395,6 +24403,9 @@ monolib_ribbon_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONOLIB_ODEP)
 
 monolib_ribbon_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
+
+monolib_xh_ribbon.o: $(srcdir)/src/xrc/xh_ribbon.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_ribbon.cpp
 
 monolib_richtextbuffer.o: $(srcdir)/src/richtext/richtextbuffer.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextbuffer.cpp
@@ -39651,6 +39662,9 @@ ribbondll_panel.o: $(srcdir)/src/ribbon/panel.cpp $(RIBBONDLL_ODEP)
 ribbondll_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
 
+ribbondll_xh_ribbon.o: $(srcdir)/src/xrc/xh_ribbon.cpp $(RIBBONDLL_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_ribbon.cpp
+
 ribbonlib_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
 
@@ -39680,6 +39694,9 @@ ribbonlib_panel.o: $(srcdir)/src/ribbon/panel.cpp $(RIBBONLIB_ODEP)
 
 ribbonlib_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
+
+ribbonlib_xh_ribbon.o: $(srcdir)/src/xrc/xh_ribbon.cpp $(RIBBONLIB_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_ribbon.cpp
 
 propgriddll_version_rc.o: $(srcdir)/src/msw/version.rc $(PROPGRIDDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_PROPGRID

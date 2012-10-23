@@ -1532,7 +1532,8 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_gallery.obj \
 	$(OBJS)\ribbondll_page.obj \
 	$(OBJS)\ribbondll_panel.obj \
-	$(OBJS)\ribbondll_toolbar.obj
+	$(OBJS)\ribbondll_toolbar.obj \
+	$(OBJS)\ribbondll_xh_ribbon.obj
 RIBBONDLL_RESOURCES =  \
 	$(OBJS)\ribbondll_version.res
 RIBBONLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_503)$(__DEBUGRUNTIME) /DWIN32 \
@@ -1559,7 +1560,8 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_gallery.obj \
 	$(OBJS)\ribbonlib_page.obj \
 	$(OBJS)\ribbonlib_panel.obj \
-	$(OBJS)\ribbonlib_toolbar.obj
+	$(OBJS)\ribbonlib_toolbar.obj \
+	$(OBJS)\ribbonlib_xh_ribbon.obj
 PROPGRIDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_519)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG).pdb \
@@ -2035,6 +2037,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_page.obj \
 	$(OBJS)\monodll_ribbon_panel.obj \
 	$(OBJS)\monodll_ribbon_toolbar.obj \
+	$(OBJS)\monodll_xh_ribbon.obj \
 	$(OBJS)\monodll_richtextbuffer.obj \
 	$(OBJS)\monodll_richtextctrl.obj \
 	$(OBJS)\monodll_richtextformatdlg.obj \
@@ -2840,6 +2843,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_page.obj \
 	$(OBJS)\monolib_ribbon_panel.obj \
 	$(OBJS)\monolib_ribbon_toolbar.obj \
+	$(OBJS)\monolib_xh_ribbon.obj \
 	$(OBJS)\monolib_richtextbuffer.obj \
 	$(OBJS)\monolib_richtextctrl.obj \
 	$(OBJS)\monolib_richtextformatdlg.obj \
@@ -7959,6 +7963,9 @@ $(OBJS)\monodll_ribbon_panel.obj: ..\..\src\ribbon\panel.cpp
 $(OBJS)\monodll_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
+$(OBJS)\monodll_xh_ribbon.obj: ..\..\src\xrc\xh_ribbon.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_ribbon.cpp
+
 $(OBJS)\monodll_richtextbuffer.obj: ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextbuffer.cpp
 
@@ -10405,6 +10412,9 @@ $(OBJS)\monolib_ribbon_panel.obj: ..\..\src\ribbon\panel.cpp
 
 $(OBJS)\monolib_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
+
+$(OBJS)\monolib_xh_ribbon.obj: ..\..\src\xrc\xh_ribbon.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_ribbon.cpp
 
 $(OBJS)\monolib_richtextbuffer.obj: ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextbuffer.cpp
@@ -16467,6 +16477,9 @@ $(OBJS)\ribbondll_panel.obj: ..\..\src\ribbon\panel.cpp
 $(OBJS)\ribbondll_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
+$(OBJS)\ribbondll_xh_ribbon.obj: ..\..\src\xrc\xh_ribbon.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\xrc\xh_ribbon.cpp
+
 $(OBJS)\ribbonlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -16499,6 +16512,9 @@ $(OBJS)\ribbonlib_panel.obj: ..\..\src\ribbon\panel.cpp
 
 $(OBJS)\ribbonlib_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
+
+$(OBJS)\ribbonlib_xh_ribbon.obj: ..\..\src\xrc\xh_ribbon.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\xrc\xh_ribbon.cpp
 
 $(OBJS)\propgriddll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp

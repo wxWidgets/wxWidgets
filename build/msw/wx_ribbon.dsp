@@ -564,6 +564,10 @@ SOURCE=..\..\include\wx\ribbon\panel.h
 
 SOURCE=..\..\include\wx\ribbon\toolbar.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_ribbon.h
+# End Source File
 # End Group
 # Begin Group "Source Files"
 
@@ -607,6 +611,10 @@ SOURCE=..\..\src\ribbon\panel.cpp
 # Begin Source File
 
 SOURCE=..\..\src\ribbon\toolbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_ribbon.cpp
 # End Source File
 # End Group
 # End Target

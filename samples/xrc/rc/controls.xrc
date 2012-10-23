@@ -746,6 +746,51 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
                 <object class="choicebookpage">
+                    <label>wxRibbonBar</label>
+                    <object class="wxRibbonBar" name="ribbonbar">
+                        <object class="page" name="RibbonPage1">
+                            <label>First</label>
+                            <object class="panel">
+                                <label>Applicative stuff</label>
+                                <object class="wxRibbonButtonBar">
+                                    <object class="button" name="App">
+                                        <bitmap>derivdlg.xpm</bitmap>
+                                        <label>Derived</label>
+                                    </object>
+                                    <object class="button" name="App2">
+                                        <bitmap>basicdlg.xpm</bitmap>
+                                        <label>Basic</label>
+                                    </object>
+                                    <object class="button" name="App3">
+                                        <bitmap>custclas.xpm</bitmap>
+                                        <label>Custom</label>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                        <object class="page" name="RibbonPage2">
+                            <label>Second page</label>
+                            <object class="panel">
+                                <label>Gallery test</label>
+                                <object class="wxRibbonGallery">
+                                    <object class="item">
+                                        <bitmap>derivdlg.xpm</bitmap>
+                                    </object>
+                                    <object class="item">
+                                        <bitmap>basicdlg.xpm</bitmap>
+                                    </object>
+                                    <object class="item">
+                                        <bitmap>custclas.xpm</bitmap>
+                                    </object>
+                                    <object class="item">
+                                        <bitmap>artprov.xpm</bitmap>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="choicebookpage">
                     <label>wxScrollBar</label>
                     <object class="wxPanel" name="scrollbar">
                         <object class="wxFlexGridSizer">

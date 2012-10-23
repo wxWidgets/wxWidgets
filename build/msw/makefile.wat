@@ -243,6 +243,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_page.obj &
 	$(OBJS)\monodll_ribbon_panel.obj &
 	$(OBJS)\monodll_ribbon_toolbar.obj &
+	$(OBJS)\monodll_xh_ribbon.obj &
 	$(OBJS)\monodll_richtextbuffer.obj &
 	$(OBJS)\monodll_richtextctrl.obj &
 	$(OBJS)\monodll_richtextformatdlg.obj &
@@ -1053,6 +1054,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_page.obj &
 	$(OBJS)\monolib_ribbon_panel.obj &
 	$(OBJS)\monolib_ribbon_toolbar.obj &
+	$(OBJS)\monolib_xh_ribbon.obj &
 	$(OBJS)\monolib_richtextbuffer.obj &
 	$(OBJS)\monolib_richtextctrl.obj &
 	$(OBJS)\monolib_richtextformatdlg.obj &
@@ -4972,7 +4974,8 @@ RIBBONDLL_OBJECTS =  &
 	$(OBJS)\ribbondll_gallery.obj &
 	$(OBJS)\ribbondll_page.obj &
 	$(OBJS)\ribbondll_panel.obj &
-	$(OBJS)\ribbondll_toolbar.obj
+	$(OBJS)\ribbondll_toolbar.obj &
+	$(OBJS)\ribbondll_xh_ribbon.obj
 RIBBONLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -4993,7 +4996,8 @@ RIBBONLIB_OBJECTS =  &
 	$(OBJS)\ribbonlib_gallery.obj &
 	$(OBJS)\ribbonlib_page.obj &
 	$(OBJS)\ribbonlib_panel.obj &
-	$(OBJS)\ribbonlib_toolbar.obj
+	$(OBJS)\ribbonlib_toolbar.obj &
+	$(OBJS)\ribbonlib_xh_ribbon.obj
 PROPGRIDDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -7717,6 +7721,9 @@ $(OBJS)\monodll_ribbon_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 $(OBJS)\monodll_ribbon_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_ribbon.obj :  .AUTODEPEND ..\..\src\xrc\xh_ribbon.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -10162,6 +10169,9 @@ $(OBJS)\monolib_ribbon_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ribbon_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_ribbon.obj :  .AUTODEPEND ..\..\src\xrc\xh_ribbon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
@@ -16225,6 +16235,9 @@ $(OBJS)\ribbondll_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 $(OBJS)\ribbondll_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONDLL_CXXFLAGS) $<
 
+$(OBJS)\ribbondll_xh_ribbon.obj :  .AUTODEPEND ..\..\src\xrc\xh_ribbon.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONDLL_CXXFLAGS) $<
+
 $(OBJS)\ribbonlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
 
@@ -16256,6 +16269,9 @@ $(OBJS)\ribbonlib_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
 
 $(OBJS)\ribbonlib_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
+
+$(OBJS)\ribbonlib_xh_ribbon.obj :  .AUTODEPEND ..\..\src\xrc\xh_ribbon.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
 
 $(OBJS)\propgriddll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp

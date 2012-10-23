@@ -7272,6 +7272,10 @@ SOURCE=..\..\include\wx\xrc\xh_radbx.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_ribbon.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_richtext.h
 # End Source File
 # Begin Source File

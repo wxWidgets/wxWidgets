@@ -38,6 +38,10 @@
 
 #include "wx/xrc/xmlres.h"          // XRC XML resources
 
+#if wxUSE_RIBBON
+    #include "wx/xrc/xh_ribbon.h"
+#endif // wxUSE_RIBBON
+
 #include "wx/cshelp.h"              // wxSimpleHelpProvider for helptext
 
 #include "myframe.h"
@@ -77,6 +81,10 @@ bool MyApp::OnInit()
     // save some space to only initialize the ones you will be using. See
     // wxXRC docs for details.
     wxXmlResource::Get()->InitAllHandlers();
+
+#if wxUSE_RIBBON
+    wxXmlResource::Get()->AddHandler(new wxRibbonXmlHandler);
+#endif
 
     // Load all of the XRC files that will be used. You can put everything
     // into one giant XRC file if you wanted, but then they become more

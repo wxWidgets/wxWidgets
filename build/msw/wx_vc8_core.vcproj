@@ -8060,6 +8060,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_ribbon.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_richtext.h"
 				>
 			</File>

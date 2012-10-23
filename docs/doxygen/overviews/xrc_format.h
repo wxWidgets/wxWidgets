@@ -1434,6 +1434,53 @@ Example:
 @endcode
 
 
+@subsubsection xrc_wxribbon wxRibbon
+
+A wxRibbonBar is a container of ribbon pages which, in turn, contain elements
+that can be wxRibbonControl or wxRibbonGallery.
+
+Example:
+@code
+<object class="wxRibbonBar" name="ribbonbar">
+    <object class="page" name="FilePage">
+        <label>First</label>
+        <object class="panel">
+            <label>File</label>
+            <object class="wxRibbonButtonBar">
+                <object class="button" name="Open">
+                    <bitmap>open.xpm</bitmap>
+                    <label>Open</label>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="page" name="ViewPage">
+        <label>View</label>
+        <object class="panel">
+            <label>Zoom</label>
+            <object class="wxRibbonGallery">
+                <object class="item">
+                    <bitmap>zoomin.xpm</bitmap>
+                </object>
+                <object class="item">
+                    <bitmap>zoomout.xpm</bitmap>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+@endcode
+
+Notice that wxRibbon support in XRC is available in wxWidgets 2.9.5 and
+later only and you need to explicitly register its handler using
+@code
+    #include <wx/xrc/xh_ribbon.h>
+
+    AddHandler(new wxRibbonXmlHandler);
+@endcode
+to use it.
+
+
 @subsubsection xrc_wxrichtextctrl wxRichTextCtrl
 
 @beginTable
