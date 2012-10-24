@@ -19,6 +19,10 @@
 
 #include "wx/dynlib.h"
 
+#ifdef __UNIX__
+    #include "wx/filename.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -57,6 +61,13 @@ void DynamicLibraryTestCase::Load()
     static const wxChar *LIB_NAME = wxT("/lib/libc.so.6");
 #endif
     static const wxChar *FUNC_NAME = wxT("strlen");
+
+    if ( !wxFileName::Exists(LIB_NAME) )
+    {
+        wxLogWarning("Shared library \"%s\" doesn't exist, "
+                     "skipping DynamicLibraryTestCase::Load() test.");
+        return;
+    }
 #else
     #error "don't know how to test wxDllLoader on this platform"
 #endif
