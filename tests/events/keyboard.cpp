@@ -349,22 +349,22 @@ void KeyboardEventTestCase::ShiftLetter()
 void KeyboardEventTestCase::ShiftSpecial()
 {
     wxUIActionSimulator sim;
-    sim.Char(WXK_TAB, wxMOD_SHIFT);
+    sim.Char(WXK_F3, wxMOD_SHIFT);
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL( 2, m_win->GetKeyDownCount() );
     ASSERT_KEY_EVENT_IS( m_win->GetKeyDownEvent(0),
                          ModKeyDown(WXK_SHIFT) );
     ASSERT_KEY_EVENT_IS( m_win->GetKeyDownEvent(1),
-                         KeyDesc(WXK_TAB, wxMOD_SHIFT) );
+                         KeyDesc(WXK_F3, wxMOD_SHIFT) );
 
     CPPUNIT_ASSERT_EQUAL( 1, m_win->GetCharCount() );
     ASSERT_KEY_EVENT_IS( m_win->GetCharEvent(),
-                         KeyDesc(WXK_TAB, wxMOD_SHIFT) );
+                         KeyDesc(WXK_F3, wxMOD_SHIFT) );
 
     CPPUNIT_ASSERT_EQUAL( 2, m_win->GetKeyUpCount() );
     ASSERT_KEY_EVENT_IS( m_win->GetKeyUpEvent(0),
-                         KeyDesc(WXK_TAB, wxMOD_SHIFT) );
+                         KeyDesc(WXK_F3, wxMOD_SHIFT) );
     ASSERT_KEY_EVENT_IS( m_win->GetKeyUpEvent(1),
                          ModKeyUp(WXK_SHIFT) );
 }
