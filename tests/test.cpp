@@ -479,6 +479,13 @@ bool TestApp::OnInit()
 #endif
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << std::endl;
 
+    if ( m_detail )
+    {
+        // Output some important information about the test environment.
+        cout << "Running under " << wxGetOsDescription() << ", "
+                "locale is " << setlocale(LC_ALL, NULL) << std::endl;
+    }
+
 #if wxUSE_GUI
     // create a hidden parent window to be used as parent for the GUI controls
     wxTestableFrame* frame = new wxTestableFrame();
