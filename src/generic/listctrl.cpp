@@ -2238,19 +2238,10 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
         return NULL;
     }
 
-    // We have to call this here because the label in question might just have
-    // been added and no screen update taken place.
     if ( m_dirty )
     {
-        // TODO: use wxTheApp->SafeYieldFor(NULL, wxEVT_CATEGORY_UI) instead
-        //       so that no pending events may change the item count (see below)
-        //       IMPORTANT: needs to be tested!
-        wxSafeYield();
-
-        // Pending events dispatched by wxSafeYield might have changed the item
-        // count
-        if ( (size_t)item >= GetItemCount() )
-            return NULL;
+        // Ensure the display is updated before we start editing.
+        Update();
     }
 
     wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
