@@ -1565,6 +1565,7 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
     if ( GetEventHashTable().HandleEvent(event, this) )
         return true;
 
+#ifdef wxHAS_CALL_AFTER
     // There is an implicit entry for async method calls processing in every
     // event handler:
     if ( event.GetEventType() == wxEVT_ASYNC_METHOD_CALL &&
@@ -1573,6 +1574,7 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
         static_cast<wxAsyncMethodCallEvent&>(event).Execute();
         return true;
     }
+#endif // wxHAS_CALL_AFTER
 
     // We don't have a handler for this event.
     return false;
