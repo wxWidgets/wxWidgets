@@ -35,6 +35,12 @@
 
 #include "wx/meta/removeref.h"
 
+#ifdef wxHAS_REMOVEREF
+    // CallAfter() implementation requires wxRemoveRef(), so just disable it
+    // for compilers too broken to not allow defining it.
+    #define wxHAS_CALL_AFTER
+#endif
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -1276,6 +1282,8 @@ private:
 // done asynchronously, i.e. at some later time, instead of immediately when
 // the event object is constructed.
 
+#ifdef wxHAS_CALL_AFTER
+
 // This is a base class used to process all method calls.
 class wxAsyncMethodCallEvent : public wxEvent
 {
@@ -1422,6 +1430,9 @@ private:
     const ParamType1 m_param1;
     const ParamType2 m_param2;
 };
+
+#endif // wxHAS_CALL_AFTER
+
 
 #if wxUSE_GUI
 
@@ -3294,6 +3305,7 @@ public:
         // NOTE: uses AddPendingEvent(); call only from secondary threads
 #endif
 
+#ifdef wxHAS_CALL_AFTER
     // Asynchronous method calls: these methods schedule the given method
     // pointer for a later call (during the next idle event loop iteration).
     //
@@ -3331,6 +3343,7 @@ public:
                 static_cast<T*>(this), method, x1, x2)
         );
     }
+#endif // wxHAS_CALL_AFTER
 
 
     // Connecting and disconnecting

@@ -519,6 +519,9 @@ public:
 
          Note that currently only up to 2 arguments can be passed.
 
+         @note This method is not available with Visual C++ 6 which doesn't
+               have the required support for C++ templates to implement it.
+
          @since 2.9.5
      */
     template<typename T, typename T1, ...>

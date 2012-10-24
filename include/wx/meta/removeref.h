@@ -11,8 +11,12 @@
 #ifndef _WX_META_REMOVEREF_H_
 #define _WX_META_REMOVEREF_H_
 
-// wxRemoveRef<> is similar to C++11 std::remove_reference<> but works with any
+// wxRemoveRef<> is similar to C++11 std::remove_reference<> but works with all
 // compilers (but, to compensate for this, doesn't work with rvalue references).
+
+// Except that it doesn't work with VC++ 6 as there doesn't seem to be any way
+// to partially specialize a template for references with it.
+#ifndef __VISUALC6__
 
 template <typename T>
 struct wxRemoveRef
@@ -25,5 +29,9 @@ struct wxRemoveRef<T&>
 {
     typedef T type;
 };
+
+#define wxHAS_REMOVEREF
+
+#endif // !__VISUALC6__
 
 #endif // _WX_META_REMOVEREF_H_
