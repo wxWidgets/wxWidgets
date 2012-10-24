@@ -67,21 +67,52 @@ public:
     */
     void SetLogicalFunction(wxRasterOperationMode function);
 
+    /**
+        Sets the clipping region for this device context to the intersection of
+        the given region described by the parameters of this method and the previously
+        set clipping region.
+        Clipping is implemented in the SVG output using SVG group elements (<g>), with
+        nested group elements being used to represent clipping region intersections when
+        two or more calls are made to SetClippingRegion().
+    */
+    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width,
+                           wxCoord height);
+
+    /**
+        This is an overloaded member function, provided for convenience. It differs from the
+        above function only in what argument(s) it accepts.
+    */
+    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
+
+    /**
+        This is an overloaded member function, provided for convenience. It differs from the
+        above function only in what argument(s) it accepts.
+    */
+    void SetClippingRegion(const wxRect& rect);
+
+    /**
+        This function is not implemented in this DC class.
+        It could be implemented in future if a GetPoints() function were made available on wxRegion.
+    */
+    void SetClippingRegion(const wxRegion& region);
+
+    /**
+        Destroys the current clipping region so that none of the DC is clipped.
+        Since intersections arising from sequential calls to SetClippingRegion are represented
+        with nested SVG group elements (<g>), all such groups are closed when
+        DestroyClippingRegion is called.
+    */
+    void DestroyClippingRegion();
+
     //@{
     /**
         Functions not implemented in this DC class.
     */
     void CrossHair(wxCoord x, wxCoord y);
-    void DestroyClippingRegion();
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
                    wxFloodFillStyle style = wxFLOOD_SURFACE);
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
     bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
-    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width,
-                           wxCoord height);
-    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
-    void SetClippingRegion(const wxRect& rect);
-    void SetClippingRegion(const wxRegion& region);
     void SetPalette(const wxPalette& palette);
     bool StartDoc(const wxString& message);
     //@}

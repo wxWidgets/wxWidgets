@@ -130,6 +130,9 @@ void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height, dou
 
     m_OK = true;
 
+    m_clipUniqueId = 0;
+    m_clipNestingLevel = 0;
+
     m_mm_to_pix_x = dpi/25.4;
     m_mm_to_pix_y = dpi/25.4;
 
@@ -470,6 +473,59 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
     }
 }
 
+void wxSVGFileDCImpl::DoSetClippingRegion( int x,  int y, int width, int height )
+{
+    wxString svg;
+
+    // End current graphics group to ensure proper xml nesting (e.g. so that
+    // graphics can be subsequently changed inside the clipping region)
+    svg << "</g>\n"
+           "<defs>\n"
+           "<clipPath id=\"clip" << m_clipNestingLevel << "\">\n"
+           "<rect id=\"cliprect" << m_clipNestingLevel << "\" "
+                "x=\"" << x << "\" "
+                "y=\"" << y << "\" "
+                "width=\"" << width << "\" "
+                "height=\"" << height << "\" "
+                "style=\"stroke: gray; fill: none;\"/>\n"
+           "</clipPath>\n"
+           "</defs>\n"
+           "<g style=\"clip-path: url(#clip" << m_clipNestingLevel << ");\">\n";
+
+    write(svg);
+
+    // Re-apply current graphics to ensure proper xml nesting
+    DoStartNewGraphics();
+
+    m_clipUniqueId++;
+    m_clipNestingLevel++;
+}
+
+void wxSVGFileDCImpl::DestroyClippingRegion()
+{
+    wxString svg;
+
+    // End current graphics element to ensure proper xml nesting (e.g. graphics
+    // might have been changed inside the clipping region)
+    svg << "</g>\n";
+
+    // Close clipping group elements
+    for ( size_t i = 0; i < m_clipUniqueId; i++ )
+    {
+        svg << "</g>";
+    }
+    svg << "\n";
+
+    write(svg);
+
+    // Re-apply current graphics (e.g. brush may have been changed inside one
+    // of the clipped regions - that change will have been lost after xml
+    // elements for the clipped region have been closed).
+    DoStartNewGraphics();
+
+    m_clipUniqueId = 0;
+}
+
 void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent , wxCoord *externalLeading , const wxFont *font) const
 
 {
@@ -538,9 +594,16 @@ void wxSVGFileDCImpl::NewGraphicsIfNeeded()
 
     m_graphics_changed = false;
 
+    write(wxS("</g>\n"));
+
+    DoStartNewGraphics();
+}
+
+void wxSVGFileDCImpl::DoStartNewGraphics()
+{
     wxString s, sBrush, sPenCap, sPenJoin, sPenStyle, sLast;
 
-    sBrush = wxT("</g>\n<g style=\"") + wxBrushString ( m_brush.GetColour(), m_brush.GetStyle() )
+    sBrush = wxS("<g style=\"") + wxBrushString ( m_brush.GetColour(), m_brush.GetStyle() )
             + wxPenString(m_pen.GetColour(), m_pen.GetStyle());
 
     switch ( m_pen.GetCap() )

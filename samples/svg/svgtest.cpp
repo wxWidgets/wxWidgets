@@ -323,7 +323,7 @@ MyCanvas::MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size)
     SetBackgroundColour(wxColour(wxT("WHITE")));
 
     m_child = parent;
-    m_index = m_child->GetFrame()->GetCountOfChildren() % 8;
+    m_index = m_child->GetFrame()->GetCountOfChildren() % 9;
 }
 
 // Define the repainting behaviour
@@ -496,6 +496,68 @@ void MyCanvas::OnDraw(wxDC& dc)
             break;
 
         case 7:
+            dc.SetTextForeground(wxT("RED"));
+            dc.DrawText(wxT("Red = Clipping Off"), 30, 5);
+            dc.SetTextForeground(wxT("GREEN"));
+            dc.DrawText(wxT("Green = Clipping On"), 30, 25);
+
+            dc.SetTextForeground(wxT("BLACK"));
+
+            dc.SetPen(*wxRED_PEN);
+            dc.SetBrush (wxBrush (wxT("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
+            dc.DrawCheckMark ( 80,50,75,75);
+            dc.DrawRectangle ( 80,50,75,75);
+
+            dc.SetPen(*wxGREEN_PEN);
+
+            // Clipped checkmarks
+            dc.DrawRectangle(180,50,75,75);
+            dc.SetClippingRegion(180,50,75,75);                   // x,y,width,height version
+            dc.DrawCheckMark ( 180,50,75,75);
+            dc.DestroyClippingRegion();
+
+            dc.DrawRectangle(wxRect(80,150,75,75));
+            dc.SetClippingRegion(wxPoint(80,150),wxSize(75,75));  // pt,size version
+            dc.DrawCheckMark ( 80,150,75,75);
+            dc.DestroyClippingRegion();
+
+            dc.DrawRectangle(wxRect(180,150,75,75));
+            dc.SetClippingRegion(wxRect(180,150,75,75));          // rect version
+            dc.DrawCheckMark ( 180,150,75,75);
+            dc.DestroyClippingRegion();
+
+            dc.DrawRectangle(wxRect( 80,250,50,65));
+            dc.DrawRectangle(wxRect(105,260,50,65));
+            dc.SetClippingRegion(wxRect( 80,250,50,65));  // second call to SetClippingRegion
+            dc.SetClippingRegion(wxRect(105,260,50,65));  // forms intersection with previous
+            dc.DrawCheckMark(80,250,75,75);
+            dc.DestroyClippingRegion();                   // only one call to destroy (there's no stack)
+
+            /*
+            ** Clipping by wxRegion not implemented for SVG.   Should be
+            ** possible, but need to access points that define the wxRegion
+            ** from inside DoSetDeviceClippingRegion() and wxRegion does not
+            ** implement anything like getPoints().
+            points[0].x = 180; points[0].y = 250;
+            points[1].x = 255; points[1].y = 250;
+            points[2].x = 180; points[2].y = 325;
+            points[3].x = 255; points[3].y = 325;
+            points[4].x = 180; points[4].y = 250;
+
+            dc.DrawLines (5, points);
+            wxRegion reg = wxRegion(5,points);
+
+            dc.SetClippingRegion(reg);
+            dc.DrawCheckMark ( 180,250,75,75);
+            dc.DestroyClippingRegion();
+            */
+
+#if wxUSE_STATUSBAR
+            s = wxT("Clipping region");
+#endif // wxUSE_STATUSBAR
+            break;
+
+        case 8:
             wxString txtStr;
             wxCoord txtX, txtY, txtW, txtH, txtDescent, txtEL;
             wxCoord txtPad = 0;
@@ -538,7 +600,6 @@ void MyCanvas::OnDraw(wxDC& dc)
             s = wxT("Text position test page");
 #endif // wxUSE_STATUSBAR
             break;
-
     }
 #if wxUSE_STATUSBAR
     m_child->SetStatusText(s);

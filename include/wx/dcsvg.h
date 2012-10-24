@@ -54,10 +54,7 @@ public:
         wxFAIL_MSG(wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?"));
     }
 
-    virtual void DestroyClippingRegion()
-    {
-        wxFAIL_MSG(wxT("wxSVGFILEDC::void Call not yet implemented"));
-    }
+    virtual void DestroyClippingRegion();
 
     virtual wxCoord GetCharHeight() const;
     virtual wxCoord GetCharWidth() const;
@@ -175,10 +172,7 @@ private:
        wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetDeviceClippingRegion not yet implemented"));
    }
 
-   virtual void DoSetClippingRegion( int WXUNUSED(x),  int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
-   {
-       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetClippingRegion not yet implemented"));
-   }
+   virtual void DoSetClippingRegion(int x,  int y, int width, int height);
 
    virtual void DoGetSizeMM( int *width, int *height ) const;
 
@@ -193,6 +187,10 @@ private:
    // new one for the last pen/brush change.
    void NewGraphicsIfNeeded();
 
+   // Open a new graphics group setting up all the attributes according to
+   // their current values in wxDC.
+   void DoStartNewGraphics();
+
    wxFileOutputStream *m_outfile;
    wxString            m_filename;
    int                 m_sub_images; // number of png format images we have
@@ -201,7 +199,14 @@ private:
    int                 m_width, m_height;
    double              m_dpi;
 
-private:
+   // The clipping nesting level is incremented by every call to
+   // SetClippingRegion() and reset when DestroyClippingRegion() is called.
+   size_t m_clipNestingLevel;
+
+   // Unique ID for every clipping graphics group: this is simply always
+   // incremented in each SetClippingRegion() call.
+   size_t m_clipUniqueId;
+
    DECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl)
 };
 
