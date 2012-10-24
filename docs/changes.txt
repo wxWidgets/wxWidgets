@@ -541,6 +541,7 @@ All:
 - Fix posting large amounts of data in wxHTTP (Platonides).
 - Add wxFile::ReadAll() for consistency with wxFFile.
 - Add wxDateTime::DiffAsDateSpan() and wxDateSpan::GetTotalMonths() (jonasr).
+- Add wxVector::assign() (Jonas Rydberg).
 - Added Nepali translation (Him Prasad Gautam).
 
 All (GUI):

@@ -205,6 +205,14 @@ public:
         clear();
     }
 
+    void assign(size_type p_size, const value_type& v)
+    {
+        clear();
+        reserve(p_size);
+        for ( size_t n = 0; n < p_size; n++ )
+            push_back(v);
+    }
+
     void swap(wxVector& v)
     {
         wxSwap(m_size, v.m_size);

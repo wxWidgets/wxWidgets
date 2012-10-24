@@ -62,6 +62,15 @@ public:
     ~wxVector();
 
     /**
+        Resizes the vector to @a n and assigns @a v to all elements.
+
+        @see resize()
+
+        @since 2.9.5
+     */
+    void assign(size_type n, const value_type& v);
+
+    /**
         Returns item at position @a idx.
     */
     const value_type& at(size_type idx) const;
