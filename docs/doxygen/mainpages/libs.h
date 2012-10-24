@@ -46,7 +46,7 @@ digraph Dependancies
     wxXML -> wxBase;
 
     wxAdvanced -> wxCore;
-    wxAUI -> wxAdvanced; wxAUI -> wxHTML; wxAUI -> wxXML;
+    wxAUI -> wxAdvanced; wxAUI -> wxHTML;
     wxGL -> wxCore;
     wxHTML -> wxCore;
     wxMedia -> wxCore;
