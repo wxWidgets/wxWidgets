@@ -46,11 +46,13 @@ private:
     void OnClear(wxCommandEvent& WXUNUSED(event)) { m_evtConsole->Clear(); }
     void OnQuit(wxCommandEvent& WXUNUSED(event)) { Close(true); }
     void OnWatch(wxCommandEvent& event);
+    void OnFollowLinks(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
     void OnAdd(wxCommandEvent& event);
     void OnAddTree(wxCommandEvent& event);
     void OnRemove(wxCommandEvent& event);
+    void OnRemoveUpdateUI(wxUpdateUIEvent& event);
 
     void OnFileSystemEvent(wxFileSystemWatcherEvent& event);
     void LogEvent(const wxFileSystemWatcherEvent& event);
@@ -58,6 +60,7 @@ private:
     wxTextCtrl *m_evtConsole;         // events console
     wxListView *m_filesList;          // list of watched paths
     wxFileSystemWatcher* m_watcher;   // file system watcher
+    bool m_followLinks;               // should symlinks be dereferenced
 
     const static wxString LOG_FORMAT; // how to format events
 };
@@ -135,7 +138,7 @@ IMPLEMENT_APP(MyApp)
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
     : wxFrame(NULL, wxID_ANY, title),
-      m_watcher(NULL)
+      m_watcher(NULL), m_followLinks(false)
 {
     SetIcon(wxICON(sample));
 
@@ -145,6 +148,7 @@ MyFrame::MyFrame(const wxString& title)
         MENU_ID_QUIT = wxID_EXIT,
         MENU_ID_CLEAR = wxID_CLEAR,
         MENU_ID_WATCH = 101,
+        MENU_ID_DEREFERENCE,
 
         BTN_ID_ADD = 200,
         BTN_ID_ADD_TREE,
@@ -165,6 +169,18 @@ MyFrame::MyFrame(const wxString& title)
     wxMenuItem* it = menuMon->AppendCheckItem(MENU_ID_WATCH, "&Watch\tCtrl-W");
     // started by default, because file system watcher is started by default
     it->Check(true);
+
+#if defined(__UNIX__)
+    // Let the user decide whether to dereference symlinks. If he makes the
+    // wrong choice, asserts will occur if the symlink target is also watched
+    it = menuMon->AppendCheckItem(MENU_ID_DEREFERENCE,
+                                  "&Follow symlinks\tCtrl-F",
+                                  _("If checked, dereference symlinks")
+                                 );
+    it->Check(false);
+    Connect(MENU_ID_DEREFERENCE, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(MyFrame::OnFollowLinks));
+#endif // __UNIX__
 
     // the "About" item should be in the help menu
     wxMenu *menuHelp = new wxMenu;
@@ -263,6 +279,8 @@ MyFrame::MyFrame(const wxString& title)
             wxCommandEventHandler(MyFrame::OnAddTree));
     Connect(BTN_ID_REMOVE, wxEVT_COMMAND_BUTTON_CLICKED,
             wxCommandEventHandler(MyFrame::OnRemove));
+    Connect(BTN_ID_REMOVE, wxEVT_UPDATE_UI,
+            wxUpdateUIEventHandler(MyFrame::OnRemoveUpdateUI));
 
     // and show itself (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -324,6 +342,11 @@ void MyFrame::OnWatch(wxCommandEvent& event)
     }
 }
 
+void MyFrame::OnFollowLinks(wxCommandEvent& event)
+{
+    m_followLinks = event.IsChecked();
+}
+
 void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
     AddEntry(wxFSWPath_Dir);
@@ -353,15 +376,23 @@ void MyFrame::AddEntry(wxFSWPathType type, wxString filename)
 
     wxString prefix;
     bool ok = false;
+
+    // This will tell wxFileSystemWatcher whether to dereference symlinks
+    wxFileName fn = wxFileName::DirName(filename);
+    if (!m_followLinks)
+    {
+        fn.DontFollowLink();
+    }
+
     switch ( type )
     {
         case wxFSWPath_Dir:
-            ok = m_watcher->Add(wxFileName::DirName(filename));
+            ok = m_watcher->Add(fn);
             prefix = "Dir:  ";
             break;
 
         case wxFSWPath_Tree:
-            ok = m_watcher->AddTree(wxFileName::DirName(filename));
+            ok = m_watcher->AddTree(fn);
             prefix = "Tree: ";
             break;
 
@@ -390,15 +421,23 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
         return;
 
     bool ret;
-    wxString path;
-    // TODO we know it is a dir, but it doesn't have to be
-    if (m_filesList->GetItemText(idx).StartsWith("Dir:  ", &path))
+    wxString path = m_filesList->GetItemText(idx).Mid(6);
+
+    // This will tell wxFileSystemWatcher whether to dereference symlinks
+    wxFileName fn = wxFileName::DirName(path);
+    if (!m_followLinks)
     {
-        ret = m_watcher->Remove(wxFileName::DirName(path));
+        fn.DontFollowLink();
     }
-    else if (m_filesList->GetItemText(idx).StartsWith("Tree: ", &path))
+
+    // TODO we know it is a dir, but it doesn't have to be
+    if (m_filesList->GetItemText(idx).StartsWith("Dir:  "))
     {
-        ret = m_watcher->RemoveTree(wxFileName::DirName(path));
+        ret = m_watcher->Remove(fn);
+    }
+    else if (m_filesList->GetItemText(idx).StartsWith("Tree: "))
+    {
+        ret = m_watcher->RemoveTree(fn);
     }
     else
     {
@@ -413,6 +452,11 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
     {
         m_filesList->DeleteItem(idx);
     }
+}
+
+void MyFrame::OnRemoveUpdateUI(wxUpdateUIEvent& event)
+{
+    event.Enable(m_filesList->GetFirstSelected() != wxNOT_FOUND);
 }
 
 void MyFrame::OnFileSystemEvent(wxFileSystemWatcherEvent& event)

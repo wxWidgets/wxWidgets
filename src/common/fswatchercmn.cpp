@@ -198,8 +198,14 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
     };
 
     wxDir dir(path.GetFullPath());
+    // Prevent asserts or infinite loops in trees containing symlinks
+    int flags = wxDIR_DEFAULT; // TODO: we ignore files, so why use wxDIR_FILES?
+    if ( !path.ShouldFollowLink() )
+    {
+        flags |= wxDIR_NO_FOLLOW;
+    }
     AddTraverser traverser(this, events, filespec);
-    dir.Traverse(traverser, filespec);
+    dir.Traverse(traverser, filespec, flags);
 
     // Add the path itself explicitly as Traverse() doesn't return it.
     AddAny(path.GetPathWithSep(), events, wxFSWPath_Tree, filespec);
@@ -260,8 +266,17 @@ bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
 #endif // __WINDOWS__
 
     wxDir dir(path.GetFullPath());
+    // AddTree() might have used the wxDIR_NO_FOLLOW to prevent asserts or
+    // infinite loops in trees containing symlinks. We need to do the same
+    // or we'll try to remove unwatched items. Let's hope the caller used
+    // the same ShouldFollowLink() setting as in AddTree()...
+    int flags = wxDIR_DEFAULT;  // See the TODO in AddTree()
+    if ( !path.ShouldFollowLink() )
+    {
+        flags |= wxDIR_NO_FOLLOW;
+    }
     RemoveTraverser traverser(this, filespec);
-    dir.Traverse(traverser, filespec);
+    dir.Traverse(traverser, filespec, flags);
 
     // As in AddTree() above, handle the path itself explicitly.
     Remove(path);

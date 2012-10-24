@@ -60,6 +60,10 @@ public:
         to this directory itself or its immediate children will generate the
         events. Use AddTree() to monitor the directory recursively.
 
+        Note that on platforms that use symbolic links, you should consider the
+        possibility that @a path is a symlink. To watch the symlink itself and
+        not its target you may call wxFileName::DontFollowLink() on @a path.
+
         @param path
             The name of the path to watch.
         @param events
@@ -68,29 +72,38 @@ public:
     virtual bool Add(const wxFileName& path, int events = wxFSW_EVENT_ALL);
 
     /**
-        This is the same as Add(), but recursively adds every file/directory in
-        the tree rooted at @a path.
+        This is the same as Add(), but also recursively adds every
+        file/directory in the tree rooted at @a path.
 
         Additionally a file mask can be specified to include only files
         matching that particular mask.
 
-        This method is implemented efficiently under MSW but shouldn't be used
-        for the directories with a lot of children (such as e.g. the root
-        directory) under the other platforms as it calls Add() there for each
-        subdirectory potentially creating a lot of watches and taking a long
-        time to execute.
+        This method is implemented efficiently on MSW, but should be used with
+        care on other platforms for directories with lots of children (e.g. the
+        root directory) as it calls Add() for each subdirectory, potentially
+        creating a lot of watches and taking a long time to execute.
+
+        Note that on platforms that use symbolic links, you will probably want
+        to have called wxFileName::DontFollowLink on @a path. This is especially
+        important if the symlink targets may themselves be watched.
      */
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
                          const wxString& filter = wxEmptyString);
 
     /**
         Removes @a path from the list of watched paths.
+
+        See the comment in Add() about symbolic links. @a path should treat
+        symbolic links in the same way as in the original Add() call.
      */
     virtual bool Remove(const wxFileName& path);
 
     /**
-        Same as Remove(), but also removes every file/directory belonging to
-        the tree rooted at @a path.
+        This is the same as Remove(), but also removes every file/directory
+        belonging to the tree rooted at @a path.
+
+        See the comment in AddTree() about symbolic links. @a path should treat
+        symbolic links in the same way as in the original AddTree() call.
      */
     virtual bool RemoveTree(const wxFileName& path);
 

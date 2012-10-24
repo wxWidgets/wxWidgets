@@ -650,12 +650,13 @@ void FileSystemWatcherTestCase::TestTrees()
     public:
         TreeTester() : subdirs(5), files(3) {}
 
-        void GrowTree(wxFileName dir)
+        void GrowTree(wxFileName dir, bool withSymlinks)
         {
             CPPUNIT_ASSERT(dir.Mkdir());
             // Now add a subdir with an easy name to remember in WatchTree()
             dir.AppendDir("child");
             CPPUNIT_ASSERT(dir.Mkdir());
+            wxFileName child(dir);  // Create a copy to which to symlink
 
             // Create a branch of 5 numbered subdirs, each containing 3
             // numbered files
@@ -672,6 +673,18 @@ void FileSystemWatcherTestCase::TestTrees()
                     wxFile(prefix + wxString::Format("file%u", f+1) + ext[f],
                            wxFile::write);
                 }
+#if defined(__UNIX__)
+                if ( withSymlinks )
+                {
+                    // Create a symlink to a files, and another to 'child'
+                    CPPUNIT_ASSERT_EQUAL(0,
+                        symlink(wxString(prefix + "file1").c_str(),
+                        wxString(prefix + "file.lnk").c_str()));
+                    CPPUNIT_ASSERT_EQUAL(0,
+                        symlink(child.GetFullPath().c_str(),
+                        wxString(prefix + "dir.lnk").c_str()));
+                }
+#endif // __UNIX__
             }
         }
 
@@ -720,7 +733,7 @@ void FileSystemWatcherTestCase::TestTrees()
             // Store the initial count; there may already be some watches
             const int initial = m_watcher->GetWatchedPathsCount();
 
-            GrowTree(dir);
+            GrowTree(dir, false /* no symlinks */);
 
             m_watcher->AddTree(dir);
             const int plustree = m_watcher->GetWatchedPathsCount();
@@ -750,6 +763,22 @@ void FileSystemWatcherTestCase::TestTrees()
             CPPUNIT_ASSERT(initial < m_watcher->GetWatchedPathsCount());
             m_watcher->RemoveTree(dir);
             CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
+#if defined(__UNIX__)
+            // Finally, test a tree containing internal symlinks
+            RmDir(dir);
+            GrowTree(dir, true /* test symlinks */);
+
+            // Without the DontFollowLink() call AddTree() would now assert
+            // (and without the assert, it would infinitely loop)
+            wxFileName fn = dir;
+            fn.DontFollowLink();
+            CPPUNIT_ASSERT(m_watcher->AddTree(fn));
+            CPPUNIT_ASSERT(m_watcher->RemoveTree(fn));
+
+            // Regrow the tree without symlinks, ready for the next test
+            RmDir(dir);
+            GrowTree(dir, false);
+#endif // __UNIX__
         }
 
         void WatchTreeWithFilespec(const wxFileName& dir)
