@@ -383,7 +383,8 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
         *out_button_rect = DrawCloseButton(dc, widget, close_button_state, rect, wxRIGHT, &area);
     }
 
-    tab_rect.width = std::min(tab_rect.width, clip_width);
+    if ( clip_width < tab_rect.width )
+        tab_rect.width = clip_width;
     *out_tab_rect = tab_rect;
 
     dc.DestroyClippingRegion();
