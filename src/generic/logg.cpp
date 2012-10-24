@@ -448,6 +448,9 @@ public:
     wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTitle);
     virtual ~wxLogFrame();
 
+    // Don't prevent the application from exiting if just this frame remains.
+    virtual bool ShouldPreventAppExit() const { return false; }
+
     // menu callbacks
     void OnClose(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
