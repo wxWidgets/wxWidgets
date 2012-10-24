@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.8.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-24 09:56+0200\n"
-"PO-Revision-Date: 2012-08-17 11:36+0300\n"
+"PO-Revision-Date: 2012-08-19 14:57+0300\n"
 "Last-Translator: Jānis Eisaks <jancs@dv.lv>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwindows.org>\n"
 "Language: Latvian\n"
@@ -369,7 +369,6 @@ msgid "&Help"
 msgstr "&Palīdzība"
 
 #: ../src/common/stockitem.cpp:129
-#, fuzzy
 msgid "&Home"
 msgstr "&Mājas"
 
@@ -658,7 +657,7 @@ msgstr "&Jā"
 #: ../src/msw/regconf.cpp:253
 #, c-format
 msgid "'%s' has extra '..', ignored."
-msgstr "'%s' ir lieks '..', ignorēts."
+msgstr "'%s' ir lieks '..', nav ņemts vērā."
 
 #: ../src/common/valtext.cpp:128
 #: ../src/common/valtext.cpp:158
@@ -1357,9 +1356,8 @@ msgid "Ca&pitals"
 msgstr "Lieli burti"
 
 #: ../src/os2/thread.cpp:116
-#, fuzzy
 msgid "Can not create mutex."
-msgstr "Neizdevās izveidot %1 rezerves kopijas failu"
+msgstr ""
 
 #: ../src/common/filefn.cpp:1383
 #, c-format
@@ -1370,37 +1368,37 @@ msgstr "Nav iespējams uzskaitīt failus '%s'"
 #: ../src/msw/dir.cpp:201
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
-msgstr ""
+msgstr "Nav iespējams uzskaitīt failus mapē '%s'"
 
 #: ../src/os2/thread.cpp:516
 #, c-format
 msgid "Can not resume thread %lu"
-msgstr ""
+msgstr "Nav iespējams atsākt pavedienu %lu"
 
 #: ../src/msw/thread.cpp:889
 #: ../src/mac/classic/thread.cpp:487
-#, fuzzy, c-format
+#, c-format
 msgid "Can not resume thread %x"
-msgstr "Nevar atsākt failu %1."
+msgstr "Nav iespējams atsākt pavedienu %x."
 
 #: ../src/msw/thread.cpp:525
 msgid "Can not start thread: error writing TLS."
-msgstr ""
+msgstr "Nav iespējams palaist pavedienu: kļūda rakstot TLS."
 
 #: ../src/os2/thread.cpp:502
 #, c-format
 msgid "Can not suspend thread %lu"
-msgstr ""
+msgstr "Nav iespējams apturēt pavedienu %lu"
 
 #: ../src/msw/thread.cpp:874
 #: ../src/mac/classic/thread.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "Can not suspend thread %x"
-msgstr "Neizdodas izgrūzt datus"
+msgstr "Nav iespējams apturēt pavedienu %x"
 
 #: ../src/msw/thread.cpp:793
 msgid "Can not wait for thread termination"
-msgstr ""
+msgstr "Nevar gaidīt uz pavediena apstāšanos"
 
 #: ../src/common/cmdproc.cpp:262
 msgid "Can't &Undo "
@@ -1430,9 +1428,8 @@ msgstr "Nav iespējams izveidot reģistra atslēgu '%s'"
 #: ../src/msw/thread.cpp:651
 #: ../src/mac/classic/thread.cpp:435
 #: ../src/mac/carbon/mpthread.cpp:906
-#, fuzzy
 msgid "Can't create thread"
-msgstr "Nevar izveidot dokumentu."
+msgstr "Nav iespējams izveidot pavedienu"
 
 #: ../src/msw/window.cpp:3605
 #, c-format
@@ -1497,12 +1494,12 @@ msgstr "Nevar ielādēt attēlu no faila '%s': fails neeksistē."
 #: ../src/msw/registry.cpp:393
 #, c-format
 msgid "Can't open registry key '%s'"
-msgstr "Nav iespējas atvērt reģistra atslēgu '%s'"
+msgstr "Nav iespējams atvērt reģistra atslēgu '%s'"
 
 #: ../src/common/zstream.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Can't read from inflate stream: %s"
-msgstr "Nevar nolasīt no straumes: %s"
+msgstr ""
 
 #: ../src/common/zstream.cpp:239
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
@@ -1532,9 +1529,8 @@ msgstr "Nav iespējams saglabāt žurnāla saturu failā."
 
 #: ../src/os2/thread.cpp:466
 #: ../src/msw/thread.cpp:607
-#, fuzzy
 msgid "Can't set thread priority"
-msgstr "Nevar iestatīt datumu."
+msgstr "Nav iespējams uzstādīt pavediena prioritāti"
 
 #: ../src/msw/registry.cpp:818
 #: ../src/msw/registry.cpp:860
@@ -1578,9 +1574,9 @@ msgid "Cannot find container for unknown control '%s'."
 msgstr ""
 
 #: ../src/xrc/xmlres.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find font node '%s'."
-msgstr "Nevar atrast fontu %1, fails %2."
+msgstr ""
 
 #: ../src/msw/dialup.cpp:858
 msgid "Cannot find the location of address book file"
@@ -1613,7 +1609,7 @@ msgstr "Nav iespējams inicializēt SciTech MGL!"
 
 #: ../src/mgl/window.cpp:547
 msgid "Cannot initialize display."
-msgstr "Nevar atvērt ekrānu."
+msgstr "Nav iespējams atvērt ekrānu."
 
 #: ../src/msw/volume.cpp:600
 #, c-format
@@ -1643,7 +1639,7 @@ msgstr "Nav iespējams atvērt satura failu: %s"
 #: ../src/xrc/xmlres.cpp:442
 #, c-format
 msgid "Cannot open file '%s'."
-msgstr "Nevar atvērt failu '%s'."
+msgstr "Nav iespējams atvērt failu '%s'."
 
 #: ../src/generic/dcpsg.cpp:1583
 msgid "Cannot open file for PostScript printing!"
@@ -1655,19 +1651,19 @@ msgid "Cannot open index file: %s"
 msgstr "Nav iespējams atvērt indeksu failu: %s"
 
 #: ../src/common/intl.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse Plural-Forms:'%s'"
-msgstr "Nevar izanalizēt notikuma aprakstu \"%s\""
+msgstr ""
 
 #: ../src/xrc/xmlres.cpp:1252
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse coordinates from '%s'."
-msgstr "Nevar tulkot %s uz %s"
+msgstr ""
 
 #: ../src/xrc/xmlres.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse dimension from '%s'."
-msgstr "Nevar tulkot %s uz %s"
+msgstr ""
 
 #: ../src/html/helpwnd.cpp:1538
 msgid "Cannot print empty page."
@@ -1685,15 +1681,15 @@ msgstr ""
 
 #: ../src/unix/threadpsx.cpp:732
 msgid "Cannot start thread: error writing TLS"
-msgstr ""
+msgstr "Nav iespējams palaist pavedienu: kļūda rakstot TLS"
 
 #: ../src/mac/carbon/mpthread.cpp:972
 msgid "Cannot wait for thread termination."
-msgstr ""
+msgstr "Nevar gaidīt uz pavediena apstāšanos."
 
 #: ../src/mac/carbon/mpthread.cpp:888
 msgid "Cant create the thread event queue"
-msgstr ""
+msgstr "Nevar izveidot pavediena izpildes rindu"
 
 #: ../src/html/helpwnd.cpp:532
 msgid "Case sensitive"
@@ -1990,7 +1986,7 @@ msgstr "Krāsa:"
 #: ../src/common/init.cpp:189
 #, c-format
 msgid "Command line argument %d couldn't be converted to Unicode and will be ignored."
-msgstr "Komandrindas parametru %d nav iespējams pārvērst uz Unikodu, tāpēc tas tiks ignorēts."
+msgstr "Komandrindas parametru %d nav iespējams pārvērst uz Unikodu, tāpēc tas netiks ņemts vērā."
 
 #: ../src/html/helpwnd.cpp:1552
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
@@ -2046,25 +2042,24 @@ msgid "Could not create temporary file '%s'"
 msgstr "Neizdevās izveidot pagaidu failu '%s'"
 
 #: ../src/html/chm.cpp:274
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s into %s: %s"
-msgstr "Neizevās iegūt Applet"
+msgstr ""
 
 #: ../contrib/src/deprecated/resource.cpp:1830
 #: ../contrib/src/deprecated/resource.cpp:1960
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find resource include file %s."
-msgstr "Neizdevās atrast/atvērt lekcijas failu '%1'."
+msgstr ""
 
 #: ../src/generic/tabg.cpp:1049
-#, fuzzy
 msgid "Could not find tab for id"
-msgstr "Neizdevās atrast spraudi '%1' programmai '%2'"
+msgstr ""
 
 #: ../src/html/chm.cpp:445
 #, c-format
 msgid "Could not locate file '%s'."
-msgstr "Nevarēja atrast failu '%s'."
+msgstr "Neizdevās atrast failu '%s'."
 
 #: ../contrib/src/deprecated/resource.cpp:829
 #, c-format
@@ -2082,13 +2077,13 @@ msgstr ""
 
 #: ../src/common/prntbase.cpp:1521
 msgid "Could not start document preview."
-msgstr "Nav iespējams parādīt dokumenta priekšskatījumu."
+msgstr "Neizdevās parādīt dokumenta priekšskatījumu."
 
 #: ../src/gtk/gnome/gprint.cpp:893
 #: ../src/generic/printps.cpp:181
 #: ../src/msw/printwin.cpp:230
 msgid "Could not start printing."
-msgstr "Nav iespējams sākt drukāšanu."
+msgstr "Neizdevās sākt drukāšanu."
 
 #: ../src/common/wincmn.cpp:1555
 msgid "Could not transfer data to window"
@@ -2096,9 +2091,8 @@ msgstr "Neizdevās pārvietot datus uz logu"
 
 #: ../src/mac/carbon/mpthread.cpp:222
 #: ../src/mac/carbon/mpthread.cpp:301
-#, fuzzy
 msgid "Could not unlock mutex"
-msgstr "Nevarēja atvērt konsoli.\n"
+msgstr ""
 
 #: ../src/os2/thread.cpp:149
 msgid "Couldn't acquire a mutex lock"
@@ -2110,22 +2104,21 @@ msgstr ""
 #: ../src/msw/imaglist.cpp:165
 #: ../src/msw/imaglist.cpp:177
 msgid "Couldn't add an image to the image list."
-msgstr "Nevarēja pievienot attēlu sarakstam."
+msgstr "Neizdevās pievienot attēlu sarakstam."
 
 #: ../src/os2/timer.cpp:144
 #: ../src/msw/timer.cpp:101
 msgid "Couldn't create a timer"
-msgstr "Nevarēja izveidot hronometru"
+msgstr "Neizdevās izveidot hronometru"
 
 #: ../src/mgl/cursor.cpp:132
 #: ../src/mgl/cursor.cpp:163
 msgid "Couldn't create cursor."
-msgstr "Nevarēja izveidot kursoru."
+msgstr "Neizdevās izveidot kursoru."
 
 #: ../src/mac/carbon/overlay.cpp:125
-#, fuzzy
 msgid "Couldn't create the overlay window"
-msgstr "Nevar izveidot starpliktuves apskates logu"
+msgstr ""
 
 #: ../src/mac/carbon/overlay.cpp:161
 msgid "Couldn't end the context on the overlay window"
@@ -2139,7 +2132,7 @@ msgstr "Simbols '%s' nav atrodams dinamiskajā bibliotēkā"
 #: ../src/msw/thread.cpp:915
 #: ../src/mac/classic/thread.cpp:517
 msgid "Couldn't get the current thread pointer"
-msgstr ""
+msgstr "Nevar iegūt pašreizējā pavediena rādītāju"
 
 #: ../src/mac/carbon/overlay.cpp:132
 msgid "Couldn't init the context on the overlay window"
@@ -2147,27 +2140,26 @@ msgstr ""
 
 #: ../src/common/imagpng.cpp:621
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr "Nav iespējams atvērt PNG attēlu - bojāts fails vai nepietiek atmiņas."
+msgstr "Neizdevās atvērt PNG attēlu - bojāts fails vai nepietiek atmiņas."
 
 #: ../src/unix/sound.cpp:471
 #, c-format
 msgid "Couldn't load sound data from '%s'."
-msgstr "Nav iespējams ielādēt skaņas datus no '%s'."
+msgstr "Neizdevās ielādēt skaņas datus no '%s'."
 
 #: ../src/unix/sound_sdl.cpp:228
 #, c-format
 msgid "Couldn't open audio: %s"
-msgstr "Nevarēja atvērt audio: %s"
+msgstr "Neizdevās atvērt audio: %s"
 
 #: ../src/msw/ole/dataobj.cpp:144
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
-msgstr "Nav iespējams reģistrēt starpliktuves formātu '%s'."
+msgstr "Neizdevās reģistrēt starpliktuves formātu '%s'."
 
 #: ../src/os2/thread.cpp:166
-#, fuzzy
 msgid "Couldn't release a mutex"
-msgstr "Neizdevās dzēst laidiena datni %s"
+msgstr ""
 
 #: ../src/msw/listctrl.cpp:727
 #, c-format
@@ -2178,13 +2170,12 @@ msgstr ""
 #: ../src/common/imagpng.cpp:679
 #: ../src/common/imagpng.cpp:687
 msgid "Couldn't save PNG image."
-msgstr "Nevarēja saglabāt PNG attēlu."
+msgstr "Neizdevās saglabāt PNG attēlu."
 
 #: ../src/msw/thread.cpp:668
 #: ../src/mac/classic/thread.cpp:775
-#, fuzzy
 msgid "Couldn't terminate thread"
-msgstr "Šķirot pēc pavediena"
+msgstr "Nav iespējams pārtraukt pavedienu"
 
 #: ../src/common/xtistrm.cpp:157
 msgid "Create Parameter not found in declared RTTI Parameters"
@@ -2227,9 +2218,8 @@ msgid "D sheet, 22 x 34 in"
 msgstr "D loksne, 559 x 864 mm"
 
 #: ../src/msw/dde.cpp:627
-#, fuzzy
 msgid "DDE poke request failed"
-msgstr "Neizdevās apstrādāt pieprasījumu."
+msgstr ""
 
 #: ../src/common/menucmn.cpp:97
 msgid "DECIMAL"
@@ -2336,9 +2326,9 @@ msgid "Deleted stale lock file '%s'."
 msgstr "Izdzēsts izmantotais slēdzenes fails '%s'."
 
 #: ../src/common/module.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
-msgstr "Vecāka mape neeksistē"
+msgstr ""
 
 #: ../src/generic/dirctrlg.cpp:672
 msgid "Desktop"
@@ -2389,7 +2379,7 @@ msgstr "Mape nepastāv."
 
 #: ../src/html/helpwnd.cpp:498
 msgid "Display all index items that contain given substring. Search is case insensitive."
-msgstr "Parādīt visus indeksa ierakstus, kas satur norādīto apakšvirkni. Meklēšana ir reģistrjūtīga."
+msgstr "Parādīt visus indeksa ierakstus, kas satur norādīto apakšvirkni. Meklēšana nav reģistrjūtīga."
 
 #: ../src/html/helpwnd.cpp:695
 msgid "Display options dialog"
@@ -2551,9 +2541,8 @@ msgid "Error saving user configuration data."
 msgstr "Kļūda saglabājot lietotāja konfigurācijas datus."
 
 #: ../src/mac/carbon/mpthread.cpp:477
-#, fuzzy
 msgid "Error while waiting on semaphore"
-msgstr "Gadījās kļūda, veicot darbību uz \"%s\" (%s): %s"
+msgstr ""
 
 #: ../src/common/log.cpp:468
 msgid "Error: "
@@ -2588,16 +2577,14 @@ msgstr "Executive, 7 1/4 x 10 1/2 in"
 #: ../contrib/src/deprecated/resource.cpp:1869
 #: ../contrib/src/deprecated/resource.cpp:1999
 #: ../contrib/src/deprecated/resource.cpp:3101
-#, fuzzy
 msgid "Expected '*' while parsing resource."
-msgstr "Kļūda, analizējot argumentus: %s\n"
+msgstr ""
 
 #: ../contrib/src/deprecated/resource.cpp:1886
 #: ../contrib/src/deprecated/resource.cpp:2015
 #: ../contrib/src/deprecated/resource.cpp:3118
-#, fuzzy
 msgid "Expected '=' while parsing resource."
-msgstr "Kļūda, analizējot argumentus: %s\n"
+msgstr ""
 
 #: ../contrib/src/deprecated/resource.cpp:1855
 #: ../contrib/src/deprecated/resource.cpp:1985
@@ -2615,9 +2602,9 @@ msgid "Extended Unix Codepage for Japanese (EUC-JP)"
 msgstr "Paplašinātā Unix kodu lapa japāņu valodai (EUC-JP)"
 
 #: ../src/html/chm.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Extraction of '%s' into '%s' failed."
-msgstr "&Atspiešana apakšmapē:"
+msgstr ""
 
 #: ../src/common/menucmn.cpp:251
 #: ../src/common/menucmn.cpp:323
@@ -2625,9 +2612,9 @@ msgid "F"
 msgstr "F"
 
 #: ../src/msw/dialup.cpp:887
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to %s dialup connection: %s"
-msgstr "ftpfs: savienojums ar serveri neizdevās: %s"
+msgstr "Neizdevās %s iezvanpieeja savienojumu: %s"
 
 #: ../src/unix/snglinst.cpp:270
 msgid "Failed to access lock file."
@@ -2648,9 +2635,8 @@ msgid "Failed to clean up debug report directory \"%s\""
 msgstr "Nav iespējams iztīrīt atkļūdošanas atskaites mapi \"%s\""
 
 #: ../src/common/filename.cpp:190
-#, fuzzy
 msgid "Failed to close file handle"
-msgstr "Neizdevās aizvērt failu '%s': fclose() neizdevās: %s"
+msgstr ""
 
 #: ../src/unix/snglinst.cpp:335
 #, c-format
@@ -2716,9 +2702,8 @@ msgid "Failed to create a temporary file name"
 msgstr "Neizdevās izveidot pagaidu faila nosaukumu"
 
 #: ../src/msw/utilsexc.cpp:225
-#, fuzzy
 msgid "Failed to create an anonymous pipe"
-msgstr "Neizdevās izveidot sīkattēlu katalogu '%s'."
+msgstr ""
 
 #: ../src/msw/dde.cpp:442
 #, c-format
@@ -2765,7 +2750,7 @@ msgstr "Neizdevās iztīrīt starpliktuvi."
 
 #: ../src/unix/displayx11.cpp:211
 msgid "Failed to enumerate video modes"
-msgstr ""
+msgstr "Neizdevās uzskaitīt video režīmus"
 
 #: ../src/msw/dde.cpp:646
 msgid "Failed to establish an advise loop with DDE server"
@@ -2863,7 +2848,7 @@ msgstr "Neizdevās pārbaudīt slēdzenes failu '%s'"
 
 #: ../src/unix/threadpsx.cpp:910
 msgid "Failed to join a thread, potential memory leak detected - please restart the program"
-msgstr ""
+msgstr "Kļūda pievienojoties pavedienam, atrasta iespējama atmiņas noplūde - lūdzu pārstartējiet programmu"
 
 #: ../src/msw/utils.cpp:725
 #, c-format
@@ -2900,9 +2885,9 @@ msgid "Failed to lock the lock file '%s'"
 msgstr "Neizdevās aizslēgt slēdzenes failu '%s'"
 
 #: ../src/common/filename.cpp:2208
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to modify file times for '%s'"
-msgstr "Neizdevās uzstādīt pieejas tiesības failam %s"
+msgstr ""
 
 #: ../src/common/filename.cpp:178
 #, c-format
@@ -2940,19 +2925,17 @@ msgid "Failed to read config options."
 msgstr "Neizdevās nolasīt konfigurācijas datus."
 
 #: ../src/unix/utilsunx.cpp:599
-#, fuzzy
 msgid "Failed to redirect child process input/output"
-msgstr "Nevarēju novadīt bērnprocesa (%s) izvadi vai ievadi"
+msgstr ""
 
 #: ../src/msw/utilsexc.cpp:651
-#, fuzzy
 msgid "Failed to redirect the child process IO"
-msgstr "Nevarēju novadīt bērnprocesa (%s) izvadi vai ievadi"
+msgstr ""
 
 #: ../src/msw/dde.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to register DDE server '%s'"
-msgstr "ftpfs: savienojums ar serveri neizdevās: %s"
+msgstr "Neizdevās reģistrēt DDE serveri '%s'"
 
 #: ../src/msw/glcanvas.cpp:331
 msgid "Failed to register OpenGL window class."
@@ -2998,9 +2981,9 @@ msgid "Failed to retrieve data from the clipboard."
 msgstr "Neizdevās iegūt datus no starpliktuves."
 
 #: ../src/common/filename.cpp:2311
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to retrieve file times for '%s'"
-msgstr "Neizdevās uzstādīt pieejas tiesības failam %s"
+msgstr "Neizdevās iegūt faila '%s' laikus"
 
 #: ../src/msw/dialup.cpp:492
 msgid "Failed to retrieve text of RAS error message"
@@ -3025,9 +3008,8 @@ msgid "Failed to set FTP transfer mode to %s."
 msgstr "Neizdevās uzstādīt FTP datu pārraides režīmu %s."
 
 #: ../src/msw/clipbrd.cpp:373
-#, fuzzy
 msgid "Failed to set clipboard data."
-msgstr "Kopē iezīmētos datus uz starpliktuvi."
+msgstr "Neizdevās iestatīt starpliktuves datus."
 
 #: ../src/unix/snglinst.cpp:182
 #, c-format
@@ -3039,15 +3021,14 @@ msgid "Failed to set temporary file permissions"
 msgstr "Neizdevās uzstādīt pieejas tiesības pagaidu failam"
 
 #: ../src/gtk/textctrl.cpp:1015
-#, fuzzy
 msgid "Failed to set text in the text control."
-msgstr "Neizdevās uzstādīt vērtību %d kontrolei %d no ierīces \"%s\"."
+msgstr ""
 
 #: ../src/unix/threadpsx.cpp:1253
 #: ../src/unix/threadpsx.cpp:1263
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread priority %d."
-msgstr "Neizdevās iestatīt kontu."
+msgstr "Neizdevās uzstādīt pavediena prioritāti %d."
 
 #: ../src/common/fs_mem.cpp:266
 #, c-format
@@ -3056,9 +3037,8 @@ msgstr "Neizdevās saglabāt attēlu '%s' atmiņas VFS!"
 
 #: ../src/unix/threadpsx.cpp:1436
 #: ../src/mac/carbon/mpthread.cpp:1268
-#, fuzzy
 msgid "Failed to terminate a thread."
-msgstr "Neizdevās izveidot pavedienu"
+msgstr "Neizdevās pārtraukt pavedienu."
 
 #: ../src/msw/dde.cpp:665
 msgid "Failed to terminate the advise loop with DDE server"
@@ -3070,9 +3050,9 @@ msgid "Failed to terminate the dialup connection: %s"
 msgstr "Neizdevās pārtraukt iezvanpieejas savienojumu: %s"
 
 #: ../src/common/filename.cpp:2223
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to touch the file '%s'"
-msgstr "Neizdevās atvērt failu %s : %s\n"
+msgstr ""
 
 #: ../src/unix/snglinst.cpp:329
 #, c-format
@@ -3080,9 +3060,9 @@ msgid "Failed to unlock lock file '%s'"
 msgstr "Neizdevās atslēgt slēdzenes failu '%s'"
 
 #: ../src/msw/dde.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "ftpfs: savienojums ar serveri neizdevās: %s"
+msgstr "Neizdevās dereģistrēt DDE serveri '%s'"
 
 #: ../src/common/fileconf.cpp:1066
 msgid "Failed to update user configuration file."
@@ -3201,14 +3181,12 @@ msgid "Fonts index file %s disappeared while loading fonts."
 msgstr "Fontu saraksta fails %s ir pazudis fontu ielādes laikā."
 
 #: ../src/unix/utilsunx.cpp:546
-#, fuzzy
 msgid "Fork failed"
-msgstr "Neizdevās sadalīt (%s)"
+msgstr ""
 
 #: ../src/common/xtixml.cpp:232
-#, fuzzy
 msgid "Forward hrefs are not supported"
-msgstr "Kompresētas ikonas nav atbalstītas"
+msgstr ""
 
 #: ../contrib/src/deprecated/resource.cpp:1838
 #: ../contrib/src/deprecated/resource.cpp:1968
@@ -3239,7 +3217,7 @@ msgstr "GIF: datu plūsma šķiet aprauta."
 
 #: ../src/common/imaggif.cpp:54
 msgid "GIF: error in GIF image format."
-msgstr "GIG: kļūda GIF attēla formātā."
+msgstr "GIF: kļūda GIF attēla formātā."
 
 #: ../src/common/imaggif.cpp:57
 msgid "GIF: not enough memory."
@@ -3320,7 +3298,6 @@ msgid "HELP"
 msgstr "Palīdzība"
 
 #: ../src/common/menucmn.cpp:78
-#, fuzzy
 msgid "HOME"
 msgstr "Mājas"
 
@@ -3329,9 +3306,9 @@ msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "HTML Help Project (*.hhp)|*.hhp|"
 
 #: ../src/html/htmlwin.cpp:630
-#, fuzzy, c-format
+#, c-format
 msgid "HTML anchor %s does not exist."
-msgstr "VFS mape neeksistē."
+msgstr ""
 
 #: ../src/html/helpwnd.cpp:1548
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
@@ -3361,9 +3338,8 @@ msgid "Help Index"
 msgstr "Palīdzības saturs"
 
 #: ../src/html/helpwnd.cpp:1536
-#, fuzzy
 msgid "Help Printing"
-msgstr "Kļūda drukājot"
+msgstr "Palīdzība par drukāšanu"
 
 #: ../src/html/helpwnd.cpp:820
 msgid "Help Topics"
@@ -3524,9 +3500,8 @@ msgid "Impossible to create a rich edit control, using simple text control inste
 msgstr ""
 
 #: ../src/unix/utilsunx.cpp:435
-#, fuzzy
 msgid "Impossible to get child process input"
-msgstr "Nevarēju novadīt bērnprocesa (%s) izvadi vai ievadi"
+msgstr ""
 
 #: ../src/common/filefn.cpp:1091
 #, c-format
@@ -3961,9 +3936,8 @@ msgstr "Žurnāls saglabāts failā '%s'."
 
 #: ../include/wx/xti.h:497
 #: ../include/wx/xti.h:501
-#, fuzzy
 msgid "Long Conversions not supported"
-msgstr "Failu augšuieplāde nav atbalstīta."
+msgstr ""
 
 #: ../src/richtext/richtextliststylepage.cpp:486
 #: ../src/richtext/richtextbulletspage.cpp:284
@@ -3977,9 +3951,8 @@ msgstr "Romiešu cipari ar mazajiem burtiem"
 
 #: ../src/gtk/mdi.cpp:470
 #: ../src/gtk1/mdi.cpp:462
-#, fuzzy
 msgid "MDI child"
-msgstr "Virs bērna"
+msgstr ""
 
 #: ../src/common/menucmn.cpp:86
 msgid "MENU"
@@ -4108,9 +4081,8 @@ msgstr "Nē"
 
 #: ../contrib/src/deprecated/resource.cpp:2505
 #: ../contrib/src/deprecated/resource.cpp:2659
-#, fuzzy
 msgid "No XBM facility available!"
-msgstr "Informācija vairs nav pieejama."
+msgstr ""
 
 #: ../contrib/src/deprecated/resource.cpp:2677
 msgid "No XPM icon facility available!"
@@ -4152,20 +4124,18 @@ msgid "No handler found for XML node '%s', class '%s'!"
 msgstr ""
 
 #: ../src/generic/animateg.cpp:144
-#, fuzzy
 msgid "No handler found for animation type."
-msgstr "Kļūda: Nav meklēšanas organizators dokumenta tipam:'%1'·"
+msgstr ""
 
 #: ../src/common/image.cpp:2177
 #: ../src/common/image.cpp:2220
-#, fuzzy
 msgid "No handler found for image type."
-msgstr "Kļūda: Nav meklēšanas organizators dokumenta tipam:'%1'·"
+msgstr ""
 
 #: ../src/common/image.cpp:2273
-#, fuzzy, c-format
+#, c-format
 msgid "No image handler for type %d defined."
-msgstr "Kļūda: Nav meklēšanas organizators dokumenta tipam:'%1'·"
+msgstr ""
 
 #: ../src/common/image.cpp:2185
 #: ../src/common/image.cpp:2228
@@ -4175,9 +4145,9 @@ msgstr ""
 
 #: ../src/common/image.cpp:2252
 #: ../src/common/image.cpp:2288
-#, fuzzy, c-format
+#, c-format
 msgid "No image handler for type %s defined."
-msgstr "Kļūda: Nav meklēšanas organizators dokumenta tipam:'%1'·"
+msgstr ""
 
 #: ../src/html/helpwnd.cpp:874
 msgid "No matching page found yet"
@@ -4197,9 +4167,9 @@ msgid "No unused colour in image."
 msgstr "Attēls nesatur neizmantotas krāsas."
 
 #: ../src/generic/helpext.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "No valid mappings found in the file \"%s\"."
-msgstr "Failā Nav Atrasti Derīgi Dati"
+msgstr ""
 
 #: ../src/common/fmapbase.cpp:115
 msgid "Nordic (ISO-8859-10)"
@@ -4271,7 +4241,7 @@ msgstr "Darbība nav atļauta."
 #: ../src/common/cmdline.cpp:716
 #, c-format
 msgid "Option '%s' requires a value, '=' expected."
-msgstr "Iestatījumam '%s' ir nepieciešama vērtība, tik sagaidīta zīme '='."
+msgstr "Iestatījumam '%s' ir nepieciešama vērtība, tiek sagaidīta zīme '='."
 
 #: ../src/common/cmdline.cpp:737
 #, c-format
@@ -4341,7 +4311,7 @@ msgstr "PGUP"
 
 #: ../src/common/imagpnm.cpp:88
 msgid "PNM: Couldn't allocate memory."
-msgstr "PNM: nevar pieškirt atmiņu."
+msgstr "PNM: nevar piešķirt atmiņu."
 
 #: ../src/common/imagpnm.cpp:72
 msgid "PNM: File format is not recognized."
@@ -4355,27 +4325,27 @@ msgstr "PNM: fails šķiet aprauts."
 
 #: ../src/common/paper.cpp:189
 msgid "PRC 16K 146 x 215 mm"
-msgstr "PRC 16K 146 x 215 mm"
+msgstr "ĶTR 16K 146 x 215 mm"
 
 #: ../src/common/paper.cpp:202
 msgid "PRC 16K Rotated"
-msgstr "PRC 16K Rotated"
+msgstr "ĶTR 16K pagriezta"
 
 #: ../src/common/paper.cpp:190
 msgid "PRC 32K 97 x 151 mm"
-msgstr "PRC 32K 97 x 151 mm"
+msgstr "ĶTR 32K 97 x 151 mm"
 
 #: ../src/common/paper.cpp:203
 msgid "PRC 32K Rotated"
-msgstr "PRC 32K Rotated"
+msgstr "ĶTR 32K pagriezta"
 
 #: ../src/common/paper.cpp:191
 msgid "PRC 32K(Big) 97 x 151 mm"
-msgstr "PRC 32K(Big) 97 x 151 mm"
+msgstr "ĶTR 32K(Big) 97 x 151 mm"
 
 #: ../src/common/paper.cpp:204
 msgid "PRC 32K(Big) Rotated"
-msgstr "PRC 32K(Big) pagriezts"
+msgstr "ĶTR 32K(Big) pagriezta"
 
 #: ../src/common/paper.cpp:192
 msgid "PRC Envelope #1 102 x 165 mm"
@@ -4531,9 +4501,8 @@ msgid "Permissions"
 msgstr "Atļaujas"
 
 #: ../include/wx/unix/pipe.h:47
-#, fuzzy
 msgid "Pipe creation failed"
-msgstr "Neveiksmīga mapes izveidošana"
+msgstr ""
 
 #: ../src/gtk1/fontdlg.cpp:75
 msgid "Please choose a valid font."
@@ -4561,9 +4530,8 @@ msgid ""
 msgstr ""
 
 #: ../src/common/prntbase.cpp:323
-#, fuzzy
 msgid "Please wait while printing\n"
-msgstr "Lūdzu, gaidiet, serverim nosūtīts pieprasījums..."
+msgstr "Lūdzu, gaidiet, notiek drukāšana\n"
 
 #: ../src/generic/prntdlgg.cpp:610
 #: ../src/generic/prntdlgg.cpp:865
@@ -4622,9 +4590,8 @@ msgid "Print preview"
 msgstr "Drukas priekšskatījums"
 
 #: ../src/generic/prntdlgg.cpp:628
-#, fuzzy
 msgid "Print spooling"
-msgstr "Drukas izmērs"
+msgstr "Drukas spolēšana"
 
 #: ../src/html/helpwnd.cpp:689
 msgid "Print this page"
@@ -4839,9 +4806,8 @@ msgid "SCROLL_LOCK"
 msgstr "SCROLL_LOCK"
 
 #: ../src/common/menucmn.cpp:89
-#, fuzzy
 msgid "SELECT"
-msgstr " Atlasīt "
+msgstr "ATLASĪT"
 
 #: ../src/common/menucmn.cpp:95
 msgid "SEPARATOR"
@@ -4852,9 +4818,8 @@ msgid "SHIFT-JIS"
 msgstr "SHIFT-JIS"
 
 #: ../src/common/menucmn.cpp:92
-#, fuzzy
 msgid "SNAPSHOT"
-msgstr "momentuzņēmums"
+msgstr "Momentuzņēmums"
 
 #: ../src/common/menucmn.cpp:80
 msgid "SPACE"
@@ -4914,7 +4879,7 @@ msgstr ""
 
 #: ../src/generic/fdrepdlg.cpp:159
 msgid "Search direction"
-msgstr "Me~klēšanas virziens"
+msgstr "Meklēšanas virziens"
 
 #: ../src/generic/fdrepdlg.cpp:111
 msgid "Search for:"
@@ -4933,9 +4898,9 @@ msgid "Sections"
 msgstr "Sadaļas"
 
 #: ../src/common/ffile.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "Seek error on file '%s'"
-msgstr "Lasīšanas kļūda failā `%s': %s\n"
+msgstr ""
 
 #: ../src/common/ffile.cpp:212
 #, c-format
@@ -4980,7 +4945,6 @@ msgid "Select underlining or no underlining."
 msgstr "Izvēlieties pasvītroto vai nepasvītroto."
 
 #: ../src/motif/filedlg.cpp:217
-#, fuzzy
 msgid "Selection"
 msgstr "Iezīmējums"
 
@@ -5345,7 +5309,6 @@ msgstr "Starpliktuves formāts '%d' nepastāv."
 
 #: ../src/richtext/richtextstylepage.cpp:127
 #: ../src/richtext/richtextstylepage.cpp:129
-#, fuzzy
 msgid "The default style for the next paragraph."
 msgstr "Nākošās rindkopas noklusētais stils."
 
@@ -5402,9 +5365,8 @@ msgstr "Fonts, no kura ņemt simbolu."
 #: ../src/generic/fontdlgg.cpp:336
 #: ../src/generic/fontdlgg.cpp:341
 #: ../src/generic/fontdlgg.cpp:343
-#, fuzzy
 msgid "The font point size."
-msgstr "Iestatīt dokumenta fonta punkta izmēru."
+msgstr "Fonta izmērs punktos."
 
 #: ../src/mac/carbon/fontdlg.cpp:466
 #: ../src/mac/carbon/fontdlg.cpp:468
@@ -5546,19 +5508,19 @@ msgstr ""
 
 #: ../src/msw/thread.cpp:1268
 msgid "Thread module initialization failed: can not store value in thread local storage"
-msgstr ""
+msgstr "Kļūda inicializējot pavediena moduli: nav iespējams saglabāt vērtību pavediena lokālajā glabātuvē"
 
 #: ../src/unix/threadpsx.cpp:1618
 msgid "Thread module initialization failed: failed to create thread key"
-msgstr ""
+msgstr "Kļūda inicializējot pavediena moduli: nav iespējams izveidot pavediena atslēgu"
 
 #: ../src/msw/thread.cpp:1256
 msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
-msgstr ""
+msgstr "Kļūda inicializējot pavediena moduli: nav iespējams piešķirt indeksu pavediena lokālajā glabātuvē"
 
 #: ../src/unix/threadpsx.cpp:1136
 msgid "Thread priority setting is ignored."
-msgstr ""
+msgstr "Pavediena prioritātes iestatījums nav ņemts vērā."
 
 #: ../src/msw/mdi.cpp:172
 #, fuzzy
@@ -5571,9 +5533,8 @@ msgid "Tile &Vertically"
 msgstr "Atspulgs pa vertikāli"
 
 #: ../src/common/ftp.cpp:631
-#, fuzzy
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
-msgstr "FTP serveris neatbalsta pasīvo režīmu."
+msgstr ""
 
 #: ../src/os2/timer.cpp:130
 #: ../src/msw/timer.cpp:111
@@ -5793,9 +5754,9 @@ msgid "Unkown Property %s"
 msgstr "Nezināma īpašība %s"
 
 #: ../src/common/mimecmn.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
-msgstr "Nav definēts MIME tips grāmatzīmē URI '%s'"
+msgstr ""
 
 #: ../src/common/cmdproc.cpp:257
 #: ../src/common/cmdproc.cpp:283
@@ -6040,9 +6001,9 @@ msgid "Write error on file '%s'"
 msgstr "Rakstīšanas kļūda failā '%s'"
 
 #: ../src/xml/xml.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "XML parsing error: '%s' at line %d"
-msgstr "Kļūda parsējot failu rindā: %1 un kolonnā %2 . "
+msgstr ""
 
 #: ../src/common/xpmdecod.cpp:794
 msgid "XPM: Malformed pixel data!"
@@ -6198,9 +6159,8 @@ msgid "an internal call to the PostMessage function has failed. "
 msgstr ""
 
 #: ../src/msw/dde.cpp:1079
-#, fuzzy
 msgid "an internal error has occurred in the DDEML."
-msgstr "Vednim notika negaidīta kļūda."
+msgstr ""
 
 #: ../src/msw/dde.cpp:1085
 msgid ""
@@ -6216,7 +6176,7 @@ msgstr ""
 #: ../src/common/fileconf.cpp:1893
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
-msgstr "mēģinājums mainīt nemainīgu atslēgu '%s' ignorēts."
+msgstr "mēģinājums mainīt nemainīgu atslēgu '%s' nav ņemts vērā."
 
 #: ../src/html/chm.cpp:330
 msgid "bad arguments to library function"
@@ -6248,9 +6208,9 @@ msgid "can't close file '%s'"
 msgstr "nevar aizvērt failu '%s'"
 
 #: ../src/common/file.cpp:278
-#, fuzzy, c-format
+#, c-format
 msgid "can't close file descriptor %d"
-msgstr "Kļūda, palaižot faila deskriptoru: %s"
+msgstr ""
 
 #: ../src/common/file.cpp:544
 #, c-format
@@ -6292,9 +6252,9 @@ msgid "can't find user's HOME, using current directory."
 msgstr "lietotāja mājas mape nav atrodama, izmanto pašreizējo mapi."
 
 #: ../src/common/file.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "can't flush file descriptor %d"
-msgstr "Kļūda, palaižot faila deskriptoru: %s"
+msgstr ""
 
 #: ../src/common/file.cpp:392
 #: ../src/msw/wince/filefnwce.cpp:199
@@ -6335,9 +6295,9 @@ msgid "can't re-initialize zlib inflate stream"
 msgstr ""
 
 #: ../src/common/file.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "can't read from file descriptor %d"
-msgstr "Nespēju nolasīt no faila '%s': %s"
+msgstr ""
 
 #: ../src/common/file.cpp:539
 #, c-format
@@ -6361,9 +6321,9 @@ msgid "can't write buffer '%s' to disk."
 msgstr "nevar ierakstīt bufera '%s' saturu diskā."
 
 #: ../src/common/file.cpp:318
-#, fuzzy, c-format
+#, c-format
 msgid "can't write to file descriptor %d"
-msgstr "Nevar rakstīt BMP failā"
+msgstr ""
 
 #: ../src/common/fileconf.cpp:1060
 msgid "can't write user configuration file."
@@ -6407,9 +6367,8 @@ msgid "default"
 msgstr "noklusētais"
 
 #: ../src/common/xtistrm.cpp:839
-#, fuzzy
 msgid "delegate has no type info"
-msgstr "Darbvirsmas elementa failam %1 nav tipa (Type=...) ieraksta."
+msgstr ""
 
 #: ../src/common/debugrpt.cpp:530
 msgid "dump of the process state (binary)"
@@ -6455,9 +6414,8 @@ msgid "error reading zip central directory"
 msgstr ""
 
 #: ../src/common/zipstrm.cpp:1664
-#, fuzzy
 msgid "error reading zip local header"
-msgstr "Kļūda, nolasot BMP faila galveni no '%s'"
+msgstr ""
 
 #: ../src/common/zipstrm.cpp:2383
 #, c-format
@@ -6465,14 +6423,13 @@ msgid "error writing zip entry '%s': bad crc or length"
 msgstr ""
 
 #: ../src/msw/dialup.cpp:888
-#, fuzzy
 msgid "establish"
-msgstr "Izveido tīkla savienojumu"
+msgstr "Izveidot"
 
 #: ../src/common/ffile.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "failed to flush the file '%s'"
-msgstr "Neizdevās atvērt failu %s : %s\n"
+msgstr ""
 
 #: ../src/common/datetime.cpp:4027
 msgid "fifteenth"
@@ -6485,7 +6442,7 @@ msgstr "piektais"
 #: ../src/common/fileconf.cpp:673
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
-msgstr "fails '%s', rinda %d: '%s' ignorēts pēc grupas galvenes."
+msgstr "fails '%s', rinda %d: pēc grupas galvenes '%s' nav ņemts vērā."
 
 #: ../src/common/fileconf.cpp:702
 #, c-format
@@ -6500,7 +6457,7 @@ msgstr "fails '%s', rinda %d: atslēga '%s' pirmo reizi atrasta rindā %d."
 #: ../src/common/fileconf.cpp:715
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
-msgstr "fails '%s', rinda %d: nemainīgās atslēgas vērtība '%s' ignorēta."
+msgstr "fails '%s', rinda %d: nemainīgās atslēgas vērtība '%s' nav ņemta vērā."
 
 #: ../src/common/fileconf.cpp:637
 #, c-format
@@ -6550,19 +6507,16 @@ msgid "incorrect size given for tar entry"
 msgstr ""
 
 #: ../src/msw/dialup.cpp:888
-#, fuzzy
 msgid "initiate"
-msgstr "Nevar inicializēt %1 protokolu"
+msgstr "inicializēt"
 
 #: ../src/common/tarstrm.cpp:989
-#, fuzzy
 msgid "invalid data in extended tar header"
-msgstr "Nederīgi galveņu dati iekš '%s': platums=%lu, augstums=%lu, baiti=%lu"
+msgstr ""
 
 #: ../src/common/file.cpp:452
-#, fuzzy
 msgid "invalid eof() return value."
-msgstr "Nederīga atgrieztā vērtība no %s"
+msgstr ""
 
 #: ../src/generic/logg.cpp:1185
 msgid "invalid message box return value"
@@ -6581,9 +6535,9 @@ msgid "light"
 msgstr "viegls"
 
 #: ../src/common/intl.cpp:1580
-#, fuzzy, c-format
+#, c-format
 msgid "locale '%s' can not be set."
-msgstr "Sagatavi \"$1\" nevar izdzēst."
+msgstr "lokāli '%s' nav iespējams uzstādīt."
 
 #: ../src/common/intl.cpp:1151
 #, c-format
@@ -6631,9 +6585,8 @@ msgid "out of memory"
 msgstr "pietrūkst atmiņas"
 
 #: ../src/common/debugrpt.cpp:506
-#, fuzzy
 msgid "process context description"
-msgstr "Ideogrāfisko aprakstu zīmes"
+msgstr "procesa konteksta apraksts"
 
 #: ../src/html/chm.cpp:334
 msgid "read error"
@@ -6654,18 +6607,16 @@ msgid "reading zip stream (entry %s): bad length"
 msgstr ""
 
 #: ../src/msw/dde.cpp:1073
-#, fuzzy
 msgid "reentrancy problem."
-msgstr "Aprakstiet problēmu"
+msgstr ""
 
 #: ../src/common/datetime.cpp:4014
 msgid "second"
-msgstr "sekunde"
+msgstr "otrais"
 
 #: ../src/html/chm.cpp:338
-#, fuzzy
 msgid "seek error"
-msgstr "Meklēšanas kļūdu biežums"
+msgstr ""
 
 #: ../src/common/datetime.cpp:4029
 msgid "seventeenth"
@@ -6711,9 +6662,8 @@ msgstr "str"
 #: ../src/common/tarstrm.cpp:1021
 #: ../src/common/tarstrm.cpp:1490
 #: ../src/common/tarstrm.cpp:1512
-#, fuzzy
 msgid "tar entry not open"
-msgstr "Nevarēja atvērt konsoli.\n"
+msgstr ""
 
 #: ../src/common/datetime.cpp:4022
 msgid "tenth"
@@ -6799,9 +6749,8 @@ msgstr "nezināms rindas noslēgums"
 
 #: ../src/common/file.cpp:360
 #: ../src/msw/wince/filefnwce.cpp:167
-#, fuzzy
 msgid "unknown seek origin"
-msgstr "Vārda izcelsme: <br/>%1"
+msgstr ""
 
 #: ../src/common/fmapbase.cpp:699
 #, c-format
