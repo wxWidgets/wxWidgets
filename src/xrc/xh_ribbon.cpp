@@ -146,7 +146,12 @@ wxObject* wxRibbonXmlHandler::Handle_button()
     if (GetBool(wxT("hybrid")))
         kind = wxRIBBON_BUTTON_HYBRID;
 
-#if wxUSE_MENUS
+    // FIXME: The code below uses wxXmlNode directly but this can't be done
+    //        in the ribbon library code as it would force it to always link
+    //        with the xml library. Disable it for now but the real solution
+    //        would be to virtualize GetChildren() and GetNext() methods via
+    //        wxXmlResourceHandler, just as we already do for many others.
+#if 0 // wxUSE_MENUS
     // check whether we have dropdown tag inside
     wxMenu *menu = NULL; // menu for drop down items
     wxXmlNode * const nodeDropdown = GetParamNode("dropdown");
