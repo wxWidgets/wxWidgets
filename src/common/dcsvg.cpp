@@ -538,7 +538,7 @@ void wxSVGFileDCImpl::NewGraphicsIfNeeded()
 
     m_graphics_changed = false;
 
-    wxString s, sBrush, sPenCap, sPenJoin, sPenStyle, sLast, sWarn;
+    wxString s, sBrush, sPenCap, sPenJoin, sPenStyle, sLast;
 
     sBrush = wxT("</g>\n<g style=\"") + wxBrushString ( m_brush.GetColour(), m_brush.GetStyle() )
             + wxPenString(m_pen.GetColour(), m_pen.GetStyle());
@@ -572,7 +572,7 @@ void wxSVGFileDCImpl::NewGraphicsIfNeeded()
     sLast.Printf( wxT("stroke-width:%d\" \n   transform=\"translate(%s %s) scale(%s %s)\">"),
                 m_pen.GetWidth(), NumStr(m_logicalOriginX), NumStr(m_logicalOriginY), NumStr(m_scaleX), NumStr(m_scaleY)  );
 
-    s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + wxT("\n") + sWarn;
+    s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + wxT("\n");
     write(s);
 }
 
