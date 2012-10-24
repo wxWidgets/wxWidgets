@@ -199,7 +199,7 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
 
     wxDir dir(path.GetFullPath());
     // Prevent asserts or infinite loops in trees containing symlinks
-    int flags = wxDIR_DEFAULT; // TODO: we ignore files, so why use wxDIR_FILES?
+    int flags = wxDIR_DIRS;
     if ( !path.ShouldFollowLink() )
     {
         flags |= wxDIR_NO_FOLLOW;
@@ -270,7 +270,7 @@ bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
     // infinite loops in trees containing symlinks. We need to do the same
     // or we'll try to remove unwatched items. Let's hope the caller used
     // the same ShouldFollowLink() setting as in AddTree()...
-    int flags = wxDIR_DEFAULT;  // See the TODO in AddTree()
+    int flags = wxDIR_DIRS;
     if ( !path.ShouldFollowLink() )
     {
         flags |= wxDIR_NO_FOLLOW;
