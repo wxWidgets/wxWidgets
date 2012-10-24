@@ -483,6 +483,9 @@ public:
     /**
         Constructs the object from @a timet value holding the number of seconds
         since Jan 1, 1970.
+
+        If @a timet is invalid, i.e. @code (time_t)-1 @endcode, wxDateTime
+        becomes invalid too, i.e. its IsValid() will return @false.
     */
     wxDateTime& Set(time_t timet);
     /**
