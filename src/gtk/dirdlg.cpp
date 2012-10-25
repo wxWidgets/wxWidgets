@@ -131,7 +131,7 @@ void wxDirDialog::GTKOnAccept()
     // change to the directory where the user went if asked
     if (HasFlag(wxDD_CHANGE_DIR))
     {
-        chdir(m_selectedDirectory);
+        chdir(m_selectedDirectory.fn_str());
     }
 
     EndDialog(wxID_OK);
