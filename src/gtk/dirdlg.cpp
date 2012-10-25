@@ -35,49 +35,15 @@
 #include <unistd.h> // chdir
 #endif
 
-//-----------------------------------------------------------------------------
-// "clicked" for OK-button
-//-----------------------------------------------------------------------------
-
 extern "C" {
-static void gtk_dirdialog_ok_callback(GtkWidget *widget, wxDirDialog *dialog)
-{
-    // change to the directory where the user went if asked
-    if (dialog->HasFlag(wxDD_CHANGE_DIR))
-    {
-        wxGtkString filename(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget)));
-        chdir(filename);
-    }
-
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
-    event.SetEventObject(dialog);
-    dialog->HandleWindowEvent(event);
-}
-}
-
-//-----------------------------------------------------------------------------
-// "clicked" for Cancel-button
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void gtk_dirdialog_cancel_callback(GtkWidget *WXUNUSED(w),
-                                           wxDirDialog *dialog)
-{
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-    event.SetEventObject(dialog);
-    dialog->HandleWindowEvent(event);
-}
-}
-
-extern "C" {
-static void gtk_dirdialog_response_callback(GtkWidget *w,
+static void gtk_dirdialog_response_callback(GtkWidget * WXUNUSED(w),
                                              gint response,
                                              wxDirDialog *dialog)
 {
     if (response == GTK_RESPONSE_ACCEPT)
-        gtk_dirdialog_ok_callback(w, dialog);
+        dialog->GTKOnAccept();
     else // GTK_RESPONSE_CANCEL or GTK_RESPONSE_NONE
-        gtk_dirdialog_cancel_callback(w, dialog);
+        dialog->GTKOnCancel();
 }
 }
 
@@ -86,10 +52,6 @@ static void gtk_dirdialog_response_callback(GtkWidget *w,
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxDirDialog, wxDialog)
-
-BEGIN_EVENT_TABLE(wxDirDialog, wxDirDialogBase)
-    EVT_BUTTON(wxID_OK, wxDirDialog::OnFakeOk)
-END_EVENT_TABLE()
 
 wxDirDialog::wxDirDialog(wxWindow* parent,
                          const wxString& title,
@@ -156,15 +118,28 @@ bool wxDirDialog::Create(wxWindow* parent,
         G_CALLBACK (gtk_dirdialog_response_callback), this);
 
     if ( !defaultPath.empty() )
-        gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
-                                             wxGTK_CONV_FN(defaultPath) );
+        SetPath(defaultPath);
 
     return true;
 }
 
-void wxDirDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
+void wxDirDialog::GTKOnAccept()
 {
+    wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
+    m_selectedDirectory = wxString::FromUTF8(str);
+
+    // change to the directory where the user went if asked
+    if (HasFlag(wxDD_CHANGE_DIR))
+    {
+        chdir(m_selectedDirectory);
+    }
+
     EndDialog(wxID_OK);
+}
+
+void wxDirDialog::GTKOnCancel()
+{
+    EndDialog(wxID_CANCEL);
 }
 
 void wxDirDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)
@@ -186,8 +161,7 @@ void wxDirDialog::SetPath(const wxString& dir)
 
 wxString wxDirDialog::GetPath() const
 {
-    wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-    return wxString::FromUTF8(str);
+    return m_selectedDirectory;
 }
 
 #endif // wxUSE_DIRDLG
