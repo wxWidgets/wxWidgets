@@ -22,6 +22,8 @@
 #include "wx/htmllbox.h"
 #include "wx/filesys.h"
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxSimpleHtmlListBoxXmlHandler, wxXmlResourceHandler)
 
 wxSimpleHtmlListBoxXmlHandler::wxSimpleHtmlListBoxXmlHandler()

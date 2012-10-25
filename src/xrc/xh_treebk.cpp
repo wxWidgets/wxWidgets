@@ -26,6 +26,8 @@
 #include "wx/treebook.h"
 #include "wx/imaglist.h"
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxTreebookXmlHandler, wxXmlResourceHandler)
 
 wxTreebookXmlHandler::wxTreebookXmlHandler()

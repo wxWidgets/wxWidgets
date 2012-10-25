@@ -25,6 +25,8 @@
     #include "wx/checklst.h"
 #endif
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBoxXmlHandler, wxXmlResourceHandler)
 
 wxCheckListBoxXmlHandler::wxCheckListBoxXmlHandler()

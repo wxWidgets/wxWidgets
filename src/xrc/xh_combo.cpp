@@ -25,6 +25,8 @@
     #include "wx/textctrl.h"    // for wxTE_PROCESS_ENTER
 #endif
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxComboBoxXmlHandler, wxXmlResourceHandler)
 
 wxComboBoxXmlHandler::wxComboBoxXmlHandler()

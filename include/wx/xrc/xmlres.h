@@ -29,18 +29,6 @@
 #include "wx/animate.h"
 #include "wx/vector.h"
 
-// We want to prevent the handlers defined outside of the XRC library from ever
-// using wxXmlNode directly as this would result in linking errors as the other
-// libraries don't link with the xml one (only xrc does). So do not include
-// this header unless building xrc itself (where a lot of code does use
-// wxXmlNode directly).
-#ifdef WXMAKINGDLL_XRC
-    #include "wx/xml/xml.h"
-#else
-    class WXDLLIMPEXP_FWD_XML wxXmlDocument;
-    class WXDLLIMPEXP_FWD_XML wxXmlNode;
-#endif
-
 #include "wx/xrc/xmlreshandler.h"
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
@@ -55,6 +43,8 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxToolBar;
 
+class WXDLLIMPEXP_FWD_XML wxXmlDocument;
+class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactory;
 class wxXmlSubclassFactories;
 class wxXmlResourceModule;

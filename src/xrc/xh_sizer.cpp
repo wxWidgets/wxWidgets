@@ -35,6 +35,7 @@
 #include "wx/notebook.h"
 #include "wx/tokenzr.h"
 
+#include "wx/xml/xml.h"
 
 //-----------------------------------------------------------------------------
 // wxSizerXmlHandler

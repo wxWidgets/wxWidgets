@@ -24,6 +24,8 @@
     #include "wx/radiobox.h"
 #endif
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBoxXmlHandler, wxXmlResourceHandler)
 
 wxRadioBoxXmlHandler::wxRadioBoxXmlHandler()

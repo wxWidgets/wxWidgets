@@ -24,6 +24,8 @@
     #include "wx/choice.h"
 #endif
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxChoiceXmlHandler, wxXmlResourceHandler)
 
 wxChoiceXmlHandler::wxChoiceXmlHandler()

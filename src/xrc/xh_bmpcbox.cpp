@@ -26,6 +26,8 @@
 
 #include "wx/bmpcbox.h"
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapComboBoxXmlHandler, wxXmlResourceHandler)
 
 wxBitmapComboBoxXmlHandler::wxBitmapComboBoxXmlHandler()
