@@ -43,31 +43,38 @@
 extern "C"
 void
 wx_gtk_insert_text_callback(GtkEditable *editable,
-                            const gchar * WXUNUSED(new_text),
+                            const gchar * new_text,
                             gint WXUNUSED(new_text_length),
                             gint * WXUNUSED(position),
                             wxTextEntry *text)
 {
-    // we should only be called if we have a max len limit at all
     GtkEntry *entry = GTK_ENTRY (editable);
 
-    const int text_length = gtk_entry_get_text_length(entry);
 #if GTK_CHECK_VERSION(3,0,0) || defined(GSEAL_ENABLE)
     const int text_max_length = gtk_entry_buffer_get_max_length(gtk_entry_get_buffer(entry));
 #else
     const int text_max_length = entry->text_max_length;
 #endif
+
+    // we should only be called if we have a max len limit at all
     wxCHECK_RET(text_max_length, "shouldn't be called");
 
     // check that we don't overflow the max length limit
-    //
-    // FIXME: this doesn't work when we paste a string which is going to be
-    //        truncated
-    if (text_length == text_max_length)
+
+    const int text_length = gtk_entry_get_text_length(entry);
+
+    // We can't use new_text_length as it is in bytes while we want to count
+    // characters (in first approximation, anyhow...).
+    if ( text_length + g_utf8_strlen(new_text, -1) > text_max_length )
     {
-        // we don't need to run the base class version at all
+        // Prevent the new text from being inserted.
         g_signal_stop_emission_by_name (editable, "insert_text");
 
+        // Currently we don't insert anything at all, but it would be better to
+        // insert as many characters as would fit into the text control and
+        // only discard the rest.
+
+        // Notify the user code about overflow.
         text->SendMaxLenEvent();
     }
 }
