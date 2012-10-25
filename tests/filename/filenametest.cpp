@@ -698,9 +698,8 @@ void FileNameTestCase::TestExists()
     CPPUNIT_ASSERT( wxFileName::Exists("/dev/null", wxFILE_EXISTS_DEVICE) );
 #ifdef __LINUX__
     // These files are only guaranteed to exist under Linux.
-    CPPUNIT_ASSERT( !wxFileName::Exists("/dev/core", wxFILE_EXISTS_SYMLINK) );
-    CPPUNIT_ASSERT( wxFileName::Exists("/dev/core",
-                    wxFILE_EXISTS_SYMLINK | wxFILE_EXISTS_NO_FOLLOW) );
+    // No need for wxFILE_EXISTS_NO_FOLLOW here; wxFILE_EXISTS_SYMLINK implies it
+    CPPUNIT_ASSERT( wxFileName::Exists("/dev/core", wxFILE_EXISTS_SYMLINK) );
     CPPUNIT_ASSERT( wxFileName::Exists("/dev/log", wxFILE_EXISTS_SOCKET) );
 #endif // __LINUX__
     wxString fifo = dirTemp.GetPath() + "/fifo";
@@ -923,7 +922,15 @@ void FileNameTestCase::TestSymlinks()
 
     // Finally test Exists() after removing the file.
     CPPUNIT_ASSERT(wxRemoveFile(targetfn.GetFullPath()));
-    CPPUNIT_ASSERT(!wxFileName(tempdir, "linktofile").Exists());
+    // This should succeed, as the symlink still exists and
+    // the default wxFILE_EXISTS_ANY implies wxFILE_EXISTS_NO_FOLLOW
+    CPPUNIT_ASSERT(wxFileName(tempdir, "linktofile").Exists());
+    // So should this one, as wxFILE_EXISTS_SYMLINK does too
+    CPPUNIT_ASSERT(wxFileName(tempdir, "linktofile").
+                                            Exists(wxFILE_EXISTS_SYMLINK));
+    // but not this one, as the now broken symlink is followed
+    CPPUNIT_ASSERT(!wxFileName(tempdir, "linktofile").
+                                            Exists(wxFILE_EXISTS_REGULAR));
     CPPUNIT_ASSERT(linktofile.Exists());
 
     // This is also a convenient place to test Rmdir() as we have things to

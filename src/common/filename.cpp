@@ -737,7 +737,12 @@ wxFileSystemObjectExists(const wxString& path, int flags)
     if ( S_ISDIR(st.st_mode) )
         return acceptDir;
     if ( S_ISLNK(st.st_mode) )
-        return (flags & wxFILE_EXISTS_SYMLINK) != 0;
+    {
+        // Take care to not test for "!= 0" here as this would erroneously
+        // return true if only wxFILE_EXISTS_NO_FOLLOW, which is part of
+        // wxFILE_EXISTS_SYMLINK, is set too.
+        return (flags & wxFILE_EXISTS_SYMLINK) == wxFILE_EXISTS_SYMLINK;
+    }
     if ( S_ISBLK(st.st_mode) || S_ISCHR(st.st_mode) )
         return (flags & wxFILE_EXISTS_DEVICE) != 0;
     if ( S_ISFIFO(st.st_mode) )
@@ -1422,8 +1427,7 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
             // this directory itself even when it is a symlink -- but without
             // following it. Do it here as wxRmdir() would simply follow if
             // called for a symlink.
-            if ( wxFileName::Exists(dir, wxFILE_EXISTS_SYMLINK |
-                                         wxFILE_EXISTS_NO_FOLLOW) )
+            if ( wxFileName::Exists(dir, wxFILE_EXISTS_SYMLINK) )
             {
                 return wxRemoveFile(dir);
             }

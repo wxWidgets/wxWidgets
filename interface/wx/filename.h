@@ -102,18 +102,16 @@ enum
     /**
         Check for existence of a symlink.
 
-        Notice that this flag should be used either with
-        ::wxFILE_EXISTS_NO_FOLLOW or with a wxFileName object on which
-        wxFileName::DontFollowLink() had been called, otherwise it would never
-        be satisfied as wxFileName::Exists() would be checking for the
-        existence of the symlink target and not the symlink itself.
+        Notice that this flag also sets ::wxFILE_EXISTS_NO_FOLLOW, otherwise it
+        would never be satisfied as wxFileName::Exists() would be checking for
+        the existence of the symlink target and not the symlink itself.
      */
-    wxFILE_EXISTS_SYMLINK   = 0x0004,
+    wxFILE_EXISTS_SYMLINK   = 0x1004,
     wxFILE_EXISTS_DEVICE    = 0x0008,  //!< Check for existence of a device
     wxFILE_EXISTS_FIFO      = 0x0016,  //!< Check for existence of a FIFO
     wxFILE_EXISTS_SOCKET    = 0x0032,  //!< Check for existence of a socket
-    wxFILE_EXISTS_ANY       = 0x0FFF,  //!< Check for existence of anything
     wxFILE_EXISTS_NO_FOLLOW = 0x1000   //!< Don't dereference a contained symbolic link
+    wxFILE_EXISTS_ANY       = 0x1FFF,  //!< Check for existence of anything
 };
 
 /**
