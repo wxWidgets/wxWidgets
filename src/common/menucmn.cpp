@@ -49,6 +49,17 @@ WX_DEFINE_LIST(wxMenuItemList)
 // implementation
 // ============================================================================
 
+// If we use idle menu updates (see include/wx/platform.h) instead of
+// the open menu event, for example to work around Ubuntu global menu problems,
+// then we should use menu event handler behaviour backported from 2.9
+// otherwise event handling won't work properly (the source event handler is wrong).
+// However, for compatibility, we will use old event handling otherwise.
+#if defined(__WXGTK__) && wxUSE_IDLEMENUUPDATES
+#define wxUSE_NEWMENUEVENTHANDLING 1
+#else
+#define wxUSE_NEWMENUEVENTHANDLING 0
+#endif
+
 // ----------------------------------------------------------------------------
 // wxAcceleratorEntry
 // ----------------------------------------------------------------------------
@@ -711,22 +722,37 @@ wxMenuItem* wxMenuBase::FindItemByPosition(size_t position) const
 // wxMenu helpers used by derived classes
 // ----------------------------------------------------------------------------
 
+static wxWindow* wxGetMenuWindow(wxMenuBase* menu)
+{
+#if wxUSE_NEWMENUEVENTHANDLING
+  const wxMenuBase* m = menu;
+  while (m->GetParent())
+  {
+      m = m->GetParent();
+  }
+  return m->GetMenuBar() ? (wxWindow*) m->GetMenuBar()->GetFrame() : (wxWindow*) m->GetInvokingWindow();
+#else
+  return menu->GetInvokingWindow();
+#endif
+}
+
 // Update a menu and all submenus recursively. source is the object that has
 // the update event handlers defined for it. If NULL, the menu or associated
 // window will be used.
 void wxMenuBase::UpdateUI(wxEvtHandler* source)
 {
-    if (GetInvokingWindow())
+    wxWindow* win = wxGetMenuWindow(this);
+    if (win)
     {
         // Don't update menus if the parent
         // frame is about to get deleted
-        wxWindow *tlw = wxGetTopLevelParent( GetInvokingWindow() );
+        wxWindow *tlw = wxGetTopLevelParent( win );
         if (tlw && wxPendingDelete.Member(tlw))
             return;
     }
 
-    if ( !source && GetInvokingWindow() )
-        source = GetInvokingWindow()->GetEventHandler();
+    if ( !source && win )
+        source = win->GetEventHandler();
     if ( !source )
         source = GetEventHandler();
     if ( !source )
