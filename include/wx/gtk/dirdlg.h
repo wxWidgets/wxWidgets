@@ -50,6 +50,8 @@ protected:
 
 
 private:
+    wxString m_selectedDirectory;
+
     DECLARE_DYNAMIC_CLASS(wxDirDialog)
     DECLARE_EVENT_TABLE()
     void OnFakeOk( wxCommandEvent &event );

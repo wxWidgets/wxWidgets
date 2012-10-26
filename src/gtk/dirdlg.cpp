@@ -95,6 +95,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
                         const wxString& defaultPath, long style,
                         const wxPoint& pos, const wxSize& sz,
                         const wxString& name)
+    : m_selectedDirectory(defaultPath)
 {
     if (!gtk_check_version(2,4,0))
     {
@@ -152,7 +153,11 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
 void wxDirDialog::OnFakeOk( wxCommandEvent &event )
 {
     if (!gtk_check_version(2,4,0))
+    {
+        wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
+        m_selectedDirectory = wxString::FromUTF8(str);
         EndDialog(wxID_OK);
+    }
     else
         wxGenericDirDialog::OnOK( event );
 }
@@ -199,8 +204,7 @@ wxString wxDirDialog::GetPath() const
 {
     if (!gtk_check_version(2,4,0))
     {
-        wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-        return wxString::FromUTF8(str);
+        return m_selectedDirectory;
     }
 
     return wxGenericDirDialog::GetPath();
