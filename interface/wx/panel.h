@@ -31,7 +31,7 @@
         Process a navigation key event.
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{miscwnd}
 
     @see wxDialog

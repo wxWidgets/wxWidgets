@@ -46,7 +46,7 @@ enum wxPrinterError
     You can derive a new class from this and override some or all member functions
     to change the behaviour and appearance; or you can leave it as it is.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see wxPreviewFrame, wxPreviewCanvas, wxPrintPreview
@@ -120,7 +120,7 @@ public:
     A preview canvas is the default canvas used by the print preview
     system to display the preview.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see wxPreviewFrame, wxPreviewControlBar, wxPrintPreview
@@ -183,7 +183,7 @@ enum wxPreviewFrameModalityKind
     Member functions may be overridden to replace functionality, or the
     class may be used without derivation.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see wxPreviewCanvas, wxPreviewControlBar, wxPrintPreview
@@ -293,7 +293,7 @@ public:
     affected. It is recommended to use native preview functionality on
     platforms that offer it (OS X, GTK+).
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPrintout, wxPrinter,
@@ -444,7 +444,7 @@ public:
     but this and associated classes provide a more convenient and general method
     of printing.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPrintout, wxPrintPreview
@@ -562,7 +562,7 @@ public:
     to create the print preview image, and to create the printed paper image, and
     achieve a common appearance to the preview image and the printed page.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPageSetupDialog,

@@ -65,7 +65,7 @@
            This flag tells the dialog that it should show remaining time.
     @endStyleTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{cmndlg}
 */
 class wxGenericProgressDialog : public wxDialog
