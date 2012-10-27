@@ -11,8 +11,6 @@
 #ifndef _WX_PRIVATE_TEXTMEASURE_H_
 #define _WX_PRIVATE_TEXTMEASURE_H_
 
-#include "wx/vector.h"
-
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxFont;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -48,9 +46,11 @@ public:
                                 wxCoord *heightOneLine = NULL);
 
     // Find the dimensions of the largest string.
-    void GetLargestStringExtent(const wxVector<wxString>& strings,
-                                wxCoord *width,
-                                wxCoord *height);
+    wxSize GetLargestStringExtent(size_t n, const wxString* strings);
+    wxSize GetLargestStringExtent(const wxArrayString& strings)
+    {
+        return GetLargestStringExtent(strings.size(), &strings[0]);
+    }
 
     // Fill the array with the widths for each "0..N" substrings for N from 1
     // to text.length().
@@ -93,7 +93,7 @@ protected:
 
 
     // The main function of this class, to be implemented in platform-specific
-    // way used by all our public methods except GetLargestStringExtents().
+    // way used by all our public methods.
     //
     // The width and height pointers here are never NULL and the input string
     // is not empty.
