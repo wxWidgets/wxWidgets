@@ -20,6 +20,7 @@
 #include "wx/colour.h"
 #include "wx/filesys.h"
 #include "wx/imaglist.h"
+#include "wx/window.h"
 
 class WXDLLIMPEXP_FWD_ADV wxAnimation;
 
