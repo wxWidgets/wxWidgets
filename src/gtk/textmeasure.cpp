@@ -28,6 +28,7 @@
 
 #include "wx/fontutil.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/dc.h"
 
 #ifndef __WXGTK3__
     #include "wx/gtk/dcclient.h"
@@ -41,11 +42,24 @@ void wxTextMeasure::Init()
 {
     wxASSERT_MSG( m_font, wxT("wxTextMeasure needs a valid wxFont") );
 
-#ifndef __WXGTK3__
-    m_wdc = NULL;
-#endif // GTK+ < 3
     m_context = NULL;
     m_layout = NULL;
+
+#ifndef __WXGTK3__
+    m_wdc = NULL;
+
+    if ( m_dc )
+    {
+        wxClassInfo* const ci = m_dc->GetImpl()->GetClassInfo();
+
+        // Currently the code here only works with wxWindowDCImpl and only in
+        // wxGTK2 as wxGTK3 uses Cairo and not Pango for all its DCs.
+        if ( ci->IsKindOf(wxCLASSINFO(wxWindowDCImpl)))
+        {
+            m_useDCImpl = false;
+        }
+    }
+#endif // GTK+ < 3
 }
 
 // Get Gtk needed elements, if we have not them yet.

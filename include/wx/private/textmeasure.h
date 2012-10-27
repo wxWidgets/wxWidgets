@@ -111,11 +111,31 @@ protected:
                                          wxArrayInt& widths,
                                          double scaleX) = 0;
 
+    // Call either DoGetTextExtent() or wxDC::GetTextExtent() depending on the
+    // value of m_useDCImpl.
+    //
+    // This must be always used instead of calling DoGetTextExtent() directly!
+    void CallGetTextExtent(const wxString& string,
+                           wxCoord *width,
+                           wxCoord *height,
+                           wxCoord *descent = NULL,
+                           wxCoord *externalLeading = NULL);
+
 
     // Exactly one of m_dc and m_win is non-NULL for any given object of this
     // class.
     const wxDC* const m_dc;
     const wxWindow* const m_win;
+
+    // If this is true, simply forward to wxDC::GetTextExtent() from our
+    // CallGetTextExtent() instead of calling our own DoGetTextExtent().
+    //
+    // We need this because our DoGetTextExtent() typically only works with
+    // native DCs, i.e. those having an HDC under Windows or using Pango under
+    // GTK+. However wxTextMeasure object can be constructed for any wxDC, not
+    // necessarily a native one and in this case we must call back into the DC
+    // implementation of text measuring itself.
+    bool m_useDCImpl;
 
     // This one can be NULL or not.
     const wxFont* const m_font;

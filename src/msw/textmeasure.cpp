@@ -24,7 +24,6 @@
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/msw/dc.h"
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
@@ -32,6 +31,8 @@
 #endif //WX_PRECOMP
 
 #include "wx/private/textmeasure.h"
+
+#include "wx/msw/dc.h"
 
 // ============================================================================
 // wxTextMeasure implementation
@@ -41,6 +42,16 @@ void wxTextMeasure::Init()
 {
     m_hdc = NULL;
     m_hfontOld = NULL;
+
+    if ( m_dc )
+    {
+        wxClassInfo* const ci = m_dc->GetImpl()->GetClassInfo();
+
+        if ( ci->IsKindOf(wxCLASSINFO(wxMSWDCImpl)))
+        {
+            m_useDCImpl = false;
+        }
+    }
 }
 
 void wxTextMeasure::BeginMeasuring()

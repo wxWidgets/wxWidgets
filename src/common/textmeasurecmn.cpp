@@ -36,6 +36,10 @@ wxTextMeasureBase::wxTextMeasureBase(const wxDC *dc, const wxFont *theFont)
       m_font(theFont)
 {
     wxASSERT_MSG( dc, wxS("wxTextMeasure needs a valid wxDC") );
+
+    // By default, use wxDC version, we'll explicitly reset this to false in
+    // the derived classes if the DC is of native variety.
+    m_useDCImpl = true;
 }
 
 wxTextMeasureBase::wxTextMeasureBase(const wxWindow *win, const wxFont *theFont)
@@ -44,6 +48,21 @@ wxTextMeasureBase::wxTextMeasureBase(const wxWindow *win, const wxFont *theFont)
       m_font(theFont)
 {
     wxASSERT_MSG( win, wxS("wxTextMeasure needs a valid wxWindow") );
+
+    // We don't have any wxDC so we can't forward to it.
+    m_useDCImpl = false;
+}
+
+void wxTextMeasureBase::CallGetTextExtent(const wxString& string,
+                                          wxCoord *width,
+                                          wxCoord *height,
+                                          wxCoord *descent,
+                                          wxCoord *externalLeading)
+{
+    if ( m_useDCImpl )
+        m_dc->GetTextExtent(string, width, height, descent, externalLeading);
+    else
+        DoGetTextExtent(string, width, height, descent, externalLeading);
 }
 
 void wxTextMeasureBase::GetTextExtent(const wxString& string,
@@ -70,7 +89,7 @@ void wxTextMeasureBase::GetTextExtent(const wxString& string,
 
     MeasuringGuard guard(*this);
 
-    DoGetTextExtent(string, width, height, descent, externalLeading);
+    CallGetTextExtent(string, width, height, descent, externalLeading);
 }
 
 void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
@@ -103,14 +122,14 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
                 {
                     // but we don't know it yet - choose something reasonable
                     int dummy;
-                    DoGetTextExtent(wxS("W"), &dummy, &heightLineDefault);
+                    CallGetTextExtent(wxS("W"), &dummy, &heightLineDefault);
                 }
 
                 heightTextTotal += heightLineDefault;
             }
             else
             {
-                DoGetTextExtent(curLine, &widthLine, &heightLine);
+                CallGetTextExtent(curLine, &widthLine, &heightLine);
                 if ( widthLine > widthTextMax )
                     widthTextMax = widthLine;
                 heightTextTotal += heightLine;
@@ -150,7 +169,7 @@ void wxTextMeasureBase::GetLargestStringExtent(const wxVector<wxString>& strings
           i != strings.end();
           ++i )
     {
-        DoGetTextExtent(*i, &w, &h);
+        CallGetTextExtent(*i, &w, &h);
 
         if ( w > widthMax )
             widthMax = w;

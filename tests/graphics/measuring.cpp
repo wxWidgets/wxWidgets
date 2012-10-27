@@ -31,6 +31,8 @@
 #endif
 
 #include "wx/dcclient.h"
+#include "wx/dcps.h"
+#include "wx/metafile.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -102,6 +104,22 @@ void MeasuringTextTestCase::DCGetTextExtent()
     CPPUNIT_ASSERT_EQUAL( sz.x, w );
 
     CPPUNIT_ASSERT( dc.GetMultiLineTextExtent("Good\nbye").y >= 2*sz.y );
+
+    // Test the functions with some other DC kinds also.
+#if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
+    wxPostScriptDC psdc;
+    // wxPostScriptDC doesn't have any font set by default but its
+    // GetTextExtent() requires one to be set. This is probably a bug and we
+    // should set the default font in it implicitly but for now just work
+    // around it.
+    psdc.SetFont(*wxNORMAL_FONT);
+    DoTestGetTextExtent(psdc);
+#endif
+
+#if wxUSE_ENH_METAFILE
+    wxEnhMetaFileDC metadc;
+    DoTestGetTextExtent(metadc);
+#endif
 }
 
 void MeasuringTextTestCase::WindowGetTextExtent()
