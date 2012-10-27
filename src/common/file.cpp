@@ -302,7 +302,7 @@ bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
     char* p = buf.data();
     for ( ;; )
     {
-        static const unsigned READSIZE = 4096;
+        static const ssize_t READSIZE = 4096;
 
         ssize_t nread = Read(p, length > READSIZE ? READSIZE : length);
         if ( nread == wxInvalidOffset )
