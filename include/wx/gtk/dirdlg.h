@@ -29,7 +29,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
 
-    virtual ~wxDirDialog() { }
+    virtual ~wxDirDialog();
 
 
 public:     // overrides from wxGenericDirDialog
@@ -50,8 +50,6 @@ protected:
 
 
 private:
-    wxString m_selectedDirectory;
-
     DECLARE_DYNAMIC_CLASS(wxDirDialog)
     DECLARE_EVENT_TABLE()
     void OnFakeOk( wxCommandEvent &event );

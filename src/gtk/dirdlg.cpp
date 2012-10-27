@@ -27,6 +27,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/filedlg.h"
+    #include "wx/hashmap.h"
 #endif
 
 #include "wx/gtk/private.h"
@@ -91,11 +92,13 @@ BEGIN_EVENT_TABLE(wxDirDialog,wxGenericDirDialog)
     EVT_BUTTON(wxID_OK, wxDirDialog::OnFakeOk)
 END_EVENT_TABLE()
 
+WX_DECLARE_VOIDPTR_HASH_MAP(wxString, wxDirDialogPaths);
+static wxDirDialogPaths gs_paths;
+
 wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
                         const wxString& defaultPath, long style,
                         const wxPoint& pos, const wxSize& sz,
                         const wxString& name)
-    : m_selectedDirectory(defaultPath)
 {
     if (!gtk_check_version(2,4,0))
     {
@@ -142,6 +145,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
         g_signal_connect (m_widget, "response",
             G_CALLBACK (gtk_dirdialog_response_callback), this);
 
+        gs_paths[this] = defaultPath;
         if ( !defaultPath.empty() )
             gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
                     defaultPath.utf8_str() );
@@ -150,12 +154,17 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
         wxGenericDirDialog::Create(parent, title, defaultPath, style, pos, sz, name);
 }
 
+wxDirDialog::~wxDirDialog()
+{
+    gs_paths.erase(this);
+}
+
 void wxDirDialog::OnFakeOk( wxCommandEvent &event )
 {
     if (!gtk_check_version(2,4,0))
     {
         wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-        m_selectedDirectory = wxString::FromUTF8(str);
+        gs_paths[this] = wxString::FromUTF8(str);
         EndDialog(wxID_OK);
     }
     else
@@ -204,7 +213,7 @@ wxString wxDirDialog::GetPath() const
 {
     if (!gtk_check_version(2,4,0))
     {
-        return m_selectedDirectory;
+        return gs_paths[const_cast<void*>(static_cast<const void*>(this))];
     }
 
     return wxGenericDirDialog::GetPath();
