@@ -2,7 +2,8 @@
 // Name:        wx/gtk/private/textmeasure.h
 // Purpose:     wxGTK-specific declaration of wxTextMeasure class
 // Author:      Manuel Martin
-// Created:     2012-19-05
+// Created:     2012-10-05
+// RCS-ID:      $Id:
 // Copyright:   (c) 1997-2012 wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

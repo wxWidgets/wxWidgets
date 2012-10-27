@@ -2,9 +2,9 @@
 // Name:        src/msw/textmeasure.cpp
 // Purpose:     wxTextMeasure implementation for wxMSW
 // Author:      Manuel Martin
-// Created:     2012-19-05
-// RCS-ID:
-// Copyright:
+// Created:     2012-10-05
+// RCS-ID:      $Id:
+// Copyright:   (c) 1997-2012 wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
