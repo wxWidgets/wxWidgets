@@ -19,6 +19,7 @@
 
 #include "wx/xrc/xh_animatctrl.h"
 #include "wx/animate.h"
+#include "wx/scopedptr.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxAnimationCtrlXmlHandler, wxXmlResourceHandler)
 
@@ -33,9 +34,11 @@ wxObject *wxAnimationCtrlXmlHandler::DoCreateResource()
 {
     XRC_MAKE_INSTANCE(ctrl, wxAnimationCtrl)
 
+    wxScopedPtr<wxAnimation> animation(GetAnimation(wxT("animation")));
+
     ctrl->Create(m_parentAsWindow,
                   GetID(),
-                  GetAnimation(wxT("animation")),
+                  animation ? *animation : wxNullAnimation,
                   GetPosition(), GetSize(),
                   GetStyle(wxT("style"), wxAC_DEFAULT_STYLE),
                   GetName());

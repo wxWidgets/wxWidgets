@@ -51,7 +51,8 @@
 #include "custclas.h"
 // And our objref dialog, for the object reference and ID range example.
 #include "objrefdlg.h"
-// For functions to manipulate our wxTreeCtrl and wxListCtrl
+// For functions to manipulate the corresponding controls.
+#include "wx/animate.h"
 #include "wx/treectrl.h"
 #include "wx/listctrl.h"
 

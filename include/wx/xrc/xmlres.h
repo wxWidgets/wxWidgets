@@ -26,7 +26,6 @@
 #include "wx/icon.h"
 #include "wx/artprov.h"
 #include "wx/colour.h"
-#include "wx/animate.h"
 #include "wx/vector.h"
 
 #include "wx/xrc/xmlreshandler.h"
@@ -565,7 +564,7 @@ public:
 
 #if wxUSE_ANIMATIONCTRL
     // Gets an animation.
-    wxAnimation GetAnimation(const wxString& param = wxT("animation"));
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"));
 #endif
 
     // Gets a font.

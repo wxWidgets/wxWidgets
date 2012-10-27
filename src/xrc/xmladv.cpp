@@ -33,42 +33,45 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/animate.h"
+#include "wx/scopedptr.h"
+
 // ============================================================================
 // implementation
 // ============================================================================
 
 #if wxUSE_ANIMATIONCTRL
-wxAnimation wxXmlResourceHandlerImpl::GetAnimation(const wxString& param)
+wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param)
 {
     const wxString name = GetParamValue(param);
     if ( name.empty() )
-        return wxNullAnimation;
+        return NULL;
 
     // load the animation from file
-    wxAnimation ani;
+    wxScopedPtr<wxAnimation> ani(new wxAnimation);
 #if wxUSE_FILESYSTEM
     wxFSFile * const
         fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
     if ( fsfile )
     {
-        ani.Load(*fsfile->GetStream());
+        ani->Load(*fsfile->GetStream());
         delete fsfile;
     }
 #else
-    ani.LoadFile(name);
+    ani->LoadFile(name);
 #endif
 
-    if ( !ani.IsOk() )
+    if ( !ani->IsOk() )
     {
         ReportParamError
         (
             param,
             wxString::Format("cannot create animation from \"%s\"", name)
         );
-        return wxNullAnimation;
+        return NULL;
     }
 
-    return ani;
+    return ani.release();
 }
 #endif // wxUSE_ANIMATIONCTRL
 

@@ -18,9 +18,10 @@
 #include "wx/string.h"
 #include "wx/artprov.h"
 #include "wx/colour.h"
-#include "wx/animate.h"
 #include "wx/filesys.h"
 #include "wx/imaglist.h"
+
+class WXDLLIMPEXP_FWD_ADV wxAnimation;
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XML wxXmlResource;
@@ -87,7 +88,7 @@ public:
     virtual wxImageList *GetImageList(const wxString& param = wxT("imagelist")) = 0;
 
 #if wxUSE_ANIMATIONCTRL
-    virtual wxAnimation GetAnimation(const wxString& param = wxT("animation")) = 0;
+    virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation")) = 0;
 #endif
 
     virtual wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = NULL) = 0;
@@ -305,7 +306,7 @@ protected:
     }
 
 #if wxUSE_ANIMATIONCTRL
-    wxAnimation GetAnimation(const wxString& param = wxT("animation"))
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"))
     {
         return GetImpl()->GetAnimation(param);
     }
