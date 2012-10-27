@@ -798,17 +798,7 @@ BEGIN_EVENT_TABLE(wxAuiToolBar, wxControl)
     EVT_SET_CURSOR(wxAuiToolBar::OnSetCursor)
 END_EVENT_TABLE()
 
-
-wxAuiToolBar::wxAuiToolBar(wxWindow* parent,
-                           wxWindowID id,
-                           const wxPoint& position,
-                           const wxSize& size,
-                           long style)
-                            : wxControl(parent,
-                                        id,
-                                        position,
-                                        size,
-                                        style | wxBORDER_NONE)
+void wxAuiToolBar::Init()
 {
     m_sizer = new wxBoxSizer(wxHORIZONTAL);
     m_buttonWidth = -1;
@@ -824,15 +814,29 @@ wxAuiToolBar::wxAuiToolBar(wxWindow* parent,
     m_gripperSizerItem = NULL;
     m_overflowSizerItem = NULL;
     m_dragging = false;
+    m_gripperVisible = (m_style & wxAUI_TB_GRIPPER) ? true : false;
+    m_overflowVisible = (m_style & wxAUI_TB_OVERFLOW) ? true : false;
+    m_overflowState = 0;
+}
+
+bool wxAuiToolBar::Create(wxWindow* parent,
+                           wxWindowID id,
+                           const wxPoint& pos,
+                           const wxSize& size,
+                           long style)
+{
+    style = style|wxBORDER_NONE;
+
+    if (!wxControl::Create(parent, id, pos, size, style))
+        return false;
+
+    m_style = style;
     m_orientation = GetOrientation(style);
     if (m_orientation == wxBOTH)
     {
         m_orientation = wxHORIZONTAL;
     }
-    m_style = style | wxBORDER_NONE;
-    m_gripperVisible = (m_style & wxAUI_TB_GRIPPER) ? true : false;
-    m_overflowVisible = (m_style & wxAUI_TB_OVERFLOW) ? true : false;
-    m_overflowState = 0;
+
     SetMargins(5, 5, 2, 2);
     SetFont(*wxNORMAL_FONT);
     SetArtFlags();
@@ -840,8 +844,9 @@ wxAuiToolBar::wxAuiToolBar(wxWindow* parent,
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-}
 
+    return true;
+}
 
 wxAuiToolBar::~wxAuiToolBar()
 {

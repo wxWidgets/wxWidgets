@@ -439,13 +439,25 @@ protected:
 class WXDLLIMPEXP_AUI wxAuiToolBar : public wxControl
 {
 public:
+    wxAuiToolBar() { Init(); }
 
     wxAuiToolBar(wxWindow* parent,
-                 wxWindowID id = -1,
-                 const wxPoint& position = wxDefaultPosition,
+                 wxWindowID id = wxID_ANY,
+                 const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 long style = wxAUI_TB_DEFAULT_STYLE);
+                 long style = wxAUI_TB_DEFAULT_STYLE)
+    {
+        Init();
+        Create(parent, id, pos, size, style);
+    }
+
     virtual ~wxAuiToolBar();
+
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0);
 
     void SetWindowStyleFlag(long style);
     long GetWindowStyleFlag() const;
@@ -581,6 +593,7 @@ public:
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
 
 protected:
+    void Init();
 
     virtual void OnCustomRender(wxDC& WXUNUSED(dc),
                                 const wxAuiToolBarItem& WXUNUSED(item),

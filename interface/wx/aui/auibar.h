@@ -596,11 +596,32 @@ public:
 class wxAuiToolBar : public wxControl
 {
 public:
+    /**
+        Default constructor, use Create() later.
+
+        @since 2.9.5
+     */
+    wxAuiToolBar();
+
+    /**
+        Constructor creating and initializing the object.
+     */
     wxAuiToolBar(wxWindow* parent,
-                 wxWindowID id = -1,
+                 wxWindowID id = wxID_ANY,
                  const wxPoint& position = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxAUI_TB_DEFAULT_STYLE);
+
+    /**
+        Really create wxAuiToolBar created using default constructor.
+
+        @since 2.9.5
+     */
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxAUI_TB_DEFAULT_STYLE);
     virtual ~wxAuiToolBar();
 
     void SetWindowStyleFlag(long style);
