@@ -61,18 +61,20 @@ public:
                                wxArrayInt& widths,
                                double scaleX);
 
-protected:
+
     // These functions are called by our public methods before and after each
     // call to DoGetTextExtent(). Derived classes may override them to prepare
     // for -- possibly several -- subsequent calls to DoGetTextExtent().
     //
     // As these calls must be always paired, they're never called directly but
     // only by our friend MeasuringGuard class.
+    //
+    // NB: They're public only to allow VC6 to compile this code, there doesn't
+    //     seem to be any way to give MeasuringGuard access to them (FIXME-VC6)
     virtual void BeginMeasuring() { }
     virtual void EndMeasuring() { }
 
-    friend class MeasuringGuard;
-
+protected:
     // RAII wrapper for the two methods above.
     class MeasuringGuard
     {
