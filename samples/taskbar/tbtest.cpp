@@ -138,7 +138,7 @@ MyDialog::MyDialog(const wxString& title)
     }
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
-    m_dockIcon = new MyTaskBarIcon(wxTaskBarIcon::DOCK);
+    m_dockIcon = new MyTaskBarIcon(wxTBI_DOCK);
     if ( !m_dockIcon->SetIcon(wxICON(sample)) )
     {
         wxLogError(wxT("Could not set icon."));
