@@ -603,6 +603,7 @@ wxMSW:
 wxOSX:
 
 - Fix pages range in the print dialog (Auria).
+- Implement image support in wxNotebook for wxOSX/Cocoa (Malcolm MacLeod).
 
 
 2.9.4: (released 2012-07-09)
