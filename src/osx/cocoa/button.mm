@@ -16,6 +16,7 @@
 #endif
 
 #include "wx/button.h"
+#include "wx/toplevel.h"
 
 #include "wx/osx/private.h"
 
@@ -170,6 +171,23 @@ public:
             }
         }
     }
+
+    void SetAcceleratorFromLabel(const wxString& label)
+    {
+        const int accelPos = wxControl::FindAccelIndex(label);
+        if ( accelPos != wxNOT_FOUND )
+        {
+            wxString accelstring(label[accelPos + 1]); // Skip '&' itself
+            accelstring.MakeLower();
+            wxCFStringRef cfText(accelstring);
+            [GetNSButton() setKeyEquivalent:cfText.AsNSString()];
+            [GetNSButton() setKeyEquivalentModifierMask:NSCommandKeyMask];
+        }
+        else
+        {
+            [GetNSButton() setKeyEquivalent:@""];
+        }
+    }
     
     
 private:
@@ -182,6 +200,23 @@ private:
 };
 
 } // anonymous namespace
+
+// Set the keyboard accelerator key from the label (e.g. "Click &Me")
+void wxButton::OSXSetAcceleratorFromLabel(const wxString& label)
+{
+    // Skip setting the accelerator for the default buttons as this would
+    // overwrite the default "Enter" which should be preserved.
+    wxTopLevelWindow * const
+        tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( tlw )
+    {
+        if ( tlw->GetDefaultItem() == this )
+            return;
+    }
+
+    wxButtonCocoaImpl *impl = static_cast<wxButtonCocoaImpl*>(GetPeer());
+    impl->SetAcceleratorFromLabel(label);
+}
 
 extern "C" void SetBezelStyleFromBorderFlags(NSButton *v, long style);
     
@@ -264,9 +299,11 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
 
         }
     }
-    
+
     [v setButtonType:NSMomentaryPushInButton];
-    return new wxButtonCocoaImpl( wxpeer, v );
+    wxButtonCocoaImpl* const impl = new wxButtonCocoaImpl( wxpeer, v );
+    impl->SetAcceleratorFromLabel(label);
+    return impl;
 }
 
 void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
@@ -274,7 +311,10 @@ void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
     if ( [m_osxView isKindOfClass:[NSButton class]] )
     {
         if ( isDefault )
+        {
             [(NSButton*)m_osxView setKeyEquivalent: @"\r" ];
+            [(NSButton*)m_osxView setKeyEquivalentModifierMask: 0];
+        }
         else
             [(NSButton*)m_osxView setKeyEquivalent: @"" ];
     }
