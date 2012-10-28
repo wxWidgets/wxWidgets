@@ -31,6 +31,7 @@
 #include "wx/renderer.h"
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
+#include "wx/splitter.h"
 #include "wx/osx/private.h"
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
@@ -122,6 +123,8 @@ public:
                                     wxTitleBarButton button,
                                     int flags = 0);
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
     void DrawMacThemeButton(wxWindow *win,
@@ -279,6 +282,37 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     }
 }
 
+wxSplitterRenderParams
+wxRendererMac::GetSplitterParams(const wxWindow *win)
+{
+    // see below
+    SInt32 sashWidth,
+            border;
+#if wxOSX_USE_COCOA
+    if ( win->HasFlag(wxSP_3DSASH) )
+        GetThemeMetric( kThemeMetricPaneSplitterHeight, &sashWidth ); // Cocoa == Carbon == 7
+    else if ( win->HasFlag(wxSP_NOSASH) ) // actually Cocoa doesn't allow 0
+        sashWidth = 0;
+    else // no 3D effect - Cocoa [NSSplitView dividerThickNess] for NSSplitViewDividerStyleThin
+        sashWidth = 1;
+#else // Carbon
+    if ( win->HasFlag(wxSP_3DSASH) )
+        GetThemeMetric( kThemeMetricPaneSplitterHeight, &sashWidth );
+    else if ( win->HasFlag(wxSP_NOSASH) )
+        sashWidth = 0;
+    else // no 3D effect
+        GetThemeMetric( kThemeMetricSmallPaneSplitterHeight, &sashWidth );
+#endif // Cocoa/Carbon
+
+    if ( win->HasFlag(wxSP_3DBORDER) )
+        border = 2;
+    else // no 3D effect
+        border = 0;
+
+    return wxSplitterRenderParams(sashWidth, border, false);
+}
+
+
 void wxRendererMac::DrawSplitterSash( wxWindow *win,
     wxDC& dc,
     const wxSize& size,
@@ -288,7 +322,9 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 {
     bool hasMetal = win->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL;
     SInt32 height;
-    GetThemeMetric( kThemeMetricSmallPaneSplitterHeight, &height );
+
+    height = wxRendererNative::Get().GetSplitterParams(win).widthSash;
+
     HIRect splitterRect;
     if (orient == wxVERTICAL)
         splitterRect = CGRectMake( position, 0, height, size.y );
@@ -323,11 +359,14 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
             CGContextFillRect(cgContext,splitterRect);
         }
 
-        HIThemeSplitterDrawInfo drawInfo;
-        drawInfo.version = 0;
-        drawInfo.state = kThemeStateActive;
-        drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone;
-        HIThemeDrawPaneSplitter( &splitterRect, &drawInfo, cgContext, kHIThemeOrientationNormal );
+        if ( win->HasFlag(wxSP_3DSASH) )
+        {
+            HIThemeSplitterDrawInfo drawInfo;
+            drawInfo.version = 0;
+            drawInfo.state = kThemeStateActive;
+            drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone;
+            HIThemeDrawPaneSplitter( &splitterRect, &drawInfo, cgContext, kHIThemeOrientationNormal );
+        }
     }
 }
 
