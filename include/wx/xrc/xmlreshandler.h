@@ -185,15 +185,15 @@ protected:
     // Everything else is simply forwarded to wxXmlResourceHandlerImpl.
     void ReportError(wxXmlNode *context, const wxString& message)
     {
-        return GetImpl()->ReportError(context, message);
+        GetImpl()->ReportError(context, message);
     }
     void ReportError(const wxString& message)
     {
-        return GetImpl()->ReportError(message);
+        GetImpl()->ReportError(message);
     }
     void ReportParamError(const wxString& param, const wxString& message)
     {
-        return GetImpl()->ReportParamError(param, message);
+        GetImpl()->ReportParamError(param, message);
     }
 
     bool IsOfClass(wxXmlNode *node, const wxString& classname) const
