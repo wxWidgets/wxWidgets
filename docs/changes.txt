@@ -600,6 +600,10 @@ wxMSW:
 - Don't send any events from wxSpinCtrl::SetRange() even if the value changed.
 - Display system drag images during drag and drop if available (PeterO).
 
+wxOSX:
+
+- Fix pages range in the print dialog (Auria).
+
 
 2.9.4: (released 2012-07-09)
 ------

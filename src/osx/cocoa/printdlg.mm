@@ -65,6 +65,11 @@ int wxMacPrintDialog::ShowModal()
 
     NSPrintPanel* panel = [NSPrintPanel printPanel];
     NSPrintInfo* printInfo = ((wxOSXCocoaPrintData*)m_printDialogData.GetPrintData().GetNativeData())->GetNSPrintInfo();
+
+    NSMutableDictionary* dict = [printInfo printSettings];
+    [dict setValue:[NSNumber numberWithInt:m_printDialogData.GetMinPage()] forKey:@"com_apple_print_PrintSettings_PMFirstPage"];
+    [dict setValue:[NSNumber numberWithInt:m_printDialogData.GetMaxPage()] forKey:@"com_apple_print_PrintSettings_PMLastPage"];
+
     if ( (NSInteger)[panel runModalWithPrintInfo:printInfo] == NSOKButton )
     {
         result = wxID_OK;
