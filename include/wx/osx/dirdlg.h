@@ -12,6 +12,10 @@
 #ifndef _WX_DIRDLG_H_
 #define _WX_DIRDLG_H_
 
+#if wxOSX_USE_COCOA
+    DECLARE_WXCOCOA_OBJC_CLASS(NSOpenPanel);
+#endif
+
 class WXDLLIMPEXP_CORE wxDirDialog : public wxDirDialogBase
 {
 public:
@@ -34,14 +38,16 @@ public:
     virtual void ModalFinishedCallback(void* panel, int returnCode);
 #endif
 
-protected:
-
-    DECLARE_DYNAMIC_CLASS(wxDirDialog)
-
+private:
 #if wxOSX_USE_COCOA
+    // Create and initialize NSOpenPanel that we use in both ShowModal() and
+    // ShowWindowModal().
+    WX_NSOpenPanel OSXCreatePanel() const;
+
     WX_NSObject m_sheetDelegate;
 #endif
+
+    DECLARE_DYNAMIC_CLASS(wxDirDialog)
 };
 
-#endif
-    // _WX_DIRDLG_H_
+#endif // _WX_DIRDLG_H_

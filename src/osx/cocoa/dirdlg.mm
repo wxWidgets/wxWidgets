@@ -55,12 +55,8 @@ wxDirDialog::~wxDirDialog()
     [m_sheetDelegate release];
 }
 
-void wxDirDialog::ShowWindowModal()
+WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
 {
-    wxCFStringRef dir( m_path );
-    
-    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
-    
     NSOpenPanel *oPanel = [NSOpenPanel openPanel];
     [oPanel setCanChooseDirectories:YES];
     [oPanel setResolvesAliases:YES];
@@ -71,38 +67,36 @@ void wxDirDialog::ShowWindowModal()
 
     if ( HasFlag(wxDD_NEW_DIR_BUTTON) )
         [oPanel setCanCreateDirectories:YES];
-    
+
+    return oPanel;
+}
+
+void wxDirDialog::ShowWindowModal()
+{
     wxNonOwnedWindow* parentWindow = NULL;
-    
+
     if (GetParent())
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
-    
-    wxASSERT_MSG(parentWindow, "Window modal display requires parent.");
-    
-    if (parentWindow)
-    {
-        NSWindow* nativeParent = parentWindow->GetWXWindow();
-        [oPanel beginSheetForDirectory:dir.AsNSString() file:nil types: nil
-            modalForWindow: nativeParent modalDelegate: m_sheetDelegate
-            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
-            contextInfo: nil];
-    }
+
+    wxCHECK_RET(parentWindow, "Window modal display requires parent.");
+
+    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
+
+    NSOpenPanel *oPanel = OSXCreatePanel();
+
+    NSWindow* nativeParent = parentWindow->GetWXWindow();
+    wxCFStringRef dir( m_path );
+    [oPanel beginSheetForDirectory:dir.AsNSString() file:nil types: nil
+        modalForWindow: nativeParent modalDelegate: m_sheetDelegate
+        didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
+        contextInfo: nil];
 }
 
 int wxDirDialog::ShowModal()
 {
     wxCFEventLoopPauseIdleEvents pause;
 
-    NSOpenPanel *oPanel = [NSOpenPanel openPanel];
-    [oPanel setCanChooseDirectories:YES];
-    [oPanel setResolvesAliases:YES];
-    [oPanel setCanChooseFiles:NO];
-
-    wxCFStringRef cf( m_message );
-    [oPanel setMessage:cf.AsNSString()];
-
-    if ( HasFlag(wxDD_NEW_DIR_BUTTON) )
-        [oPanel setCanCreateDirectories:YES];
+    NSOpenPanel *oPanel = OSXCreatePanel();
 
     wxCFStringRef dir( m_path );
 
@@ -127,7 +121,7 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
         result = wxID_OK;
     }
     SetReturnCode(result);
-    
+
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
