@@ -814,8 +814,8 @@ void wxAuiToolBar::Init()
     m_gripperSizerItem = NULL;
     m_overflowSizerItem = NULL;
     m_dragging = false;
-    m_gripperVisible = (m_style & wxAUI_TB_GRIPPER) ? true : false;
-    m_overflowVisible = (m_style & wxAUI_TB_OVERFLOW) ? true : false;
+    m_gripperVisible = (m_windowStyle & wxAUI_TB_GRIPPER) ? true : false;
+    m_overflowVisible = (m_windowStyle & wxAUI_TB_OVERFLOW) ? true : false;
     m_overflowState = 0;
 }
 
@@ -830,7 +830,7 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     if (!wxControl::Create(parent, id, pos, size, style))
         return false;
 
-    m_style = style;
+    m_windowStyle = style;
     m_orientation = GetOrientation(style);
     if (m_orientation == wxBOTH)
     {
@@ -862,20 +862,20 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
 
     wxControl::SetWindowStyleFlag(style);
 
-    m_style = style;
+    m_windowStyle = style;
 
     if (m_art)
     {
         SetArtFlags();
     }
 
-    if (m_style & wxAUI_TB_GRIPPER)
+    if (m_windowStyle & wxAUI_TB_GRIPPER)
         m_gripperVisible = true;
     else
         m_gripperVisible = false;
 
 
-    if (m_style & wxAUI_TB_OVERFLOW)
+    if (m_windowStyle & wxAUI_TB_OVERFLOW)
         m_overflowVisible = true;
     else
         m_overflowVisible = false;
@@ -884,11 +884,6 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
     else
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_BOTTOM);
-}
-
-long wxAuiToolBar::GetWindowStyleFlag() const
-{
-    return m_style;
 }
 
 void wxAuiToolBar::SetArtProvider(wxAuiToolBarArt* art)
@@ -1373,9 +1368,9 @@ void wxAuiToolBar::SetGripperVisible(bool visible)
 {
     m_gripperVisible = visible;
     if (visible)
-        m_style |= wxAUI_TB_GRIPPER;
+        m_windowStyle |= wxAUI_TB_GRIPPER;
     else
-        m_style &= ~wxAUI_TB_GRIPPER;
+        m_windowStyle &= ~wxAUI_TB_GRIPPER;
     Realize();
     Refresh(false);
 }
@@ -1390,9 +1385,9 @@ void wxAuiToolBar::SetOverflowVisible(bool visible)
 {
     m_overflowVisible = visible;
     if (visible)
-        m_style |= wxAUI_TB_OVERFLOW;
+        m_windowStyle |= wxAUI_TB_OVERFLOW;
     else
-        m_style &= ~wxAUI_TB_OVERFLOW;
+        m_windowStyle &= ~wxAUI_TB_OVERFLOW;
     Refresh(false);
 }
 
@@ -1679,7 +1674,7 @@ wxSize wxAuiToolBar::GetHintSize(int dock_direction) const
 
 bool wxAuiToolBar::IsPaneValid(const wxAuiPaneInfo& pane) const
 {
-    return IsPaneValid(m_style, pane);
+    return IsPaneValid(m_windowStyle, pane);
 }
 
 bool wxAuiToolBar::IsPaneValid(long style, const wxAuiPaneInfo& pane)
@@ -1713,7 +1708,7 @@ bool wxAuiToolBar::IsPaneValid(long style) const
 
 void wxAuiToolBar::SetArtFlags() const
 {
-    unsigned int artflags = m_style & ~wxAUI_ORIENTATION_MASK;
+    unsigned int artflags = m_windowStyle & ~wxAUI_ORIENTATION_MASK;
     if (m_orientation == wxVERTICAL)
     {
         artflags |= wxAUI_TB_VERTICAL;
@@ -1948,7 +1943,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
                 vert_sizer->AddStretchSpacer(1);
                 ctrl_m_sizerItem = vert_sizer->Add(item.m_window, 0, wxEXPAND);
                 vert_sizer->AddStretchSpacer(1);
-                if ( (m_style & wxAUI_TB_TEXT) &&
+                if ( (m_windowStyle & wxAUI_TB_TEXT) &&
                      m_toolTextOrientation == wxAUI_TBTOOL_TEXT_BOTTOM &&
                      !item.GetLabel().empty() )
                 {
@@ -1998,7 +1993,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     // add drop down area
     m_overflowSizerItem = NULL;
 
-    if (m_style & wxAUI_TB_OVERFLOW)
+    if (m_windowStyle & wxAUI_TB_OVERFLOW)
     {
         int overflow_size = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);
         if (overflow_size > 0 && m_overflowVisible)
@@ -2065,7 +2060,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     m_minWidth = size.x;
     m_minHeight = size.y;
 
-    if ((m_style & wxAUI_TB_NO_AUTORESIZE) == 0)
+    if ((m_windowStyle & wxAUI_TB_NO_AUTORESIZE) == 0)
     {
         wxSize curSize = GetClientSize();
         wxSize new_size = GetMinSize();
@@ -2285,7 +2280,7 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
         // pane state member is public, so it might have been changed
         // without going through wxPaneInfo::SetFlag() check
         bool ok = pane.IsOk();
-        wxCHECK2_MSG(!ok || IsPaneValid(m_style, pane), ok = false,
+        wxCHECK2_MSG(!ok || IsPaneValid(m_windowStyle, pane), ok = false,
                     "window settings and pane settings are incompatible");
         if (ok)
         {
@@ -2307,7 +2302,7 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
                 }
             }
             else if (pane.IsResizable() &&
-                    GetOrientation(m_style) == wxBOTH)
+                    GetOrientation(m_windowStyle) == wxBOTH)
             {
                 // changing orientation in OnSize causes havoc
                 int x, y;

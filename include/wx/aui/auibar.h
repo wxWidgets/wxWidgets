@@ -459,8 +459,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0);
 
-    void SetWindowStyleFlag(long style);
-    long GetWindowStyleFlag() const;
+    virtual void SetWindowStyleFlag(long style);
 
     void SetArtProvider(wxAuiToolBarArt* art);
     wxAuiToolBarArt* GetArtProvider() const;
@@ -664,7 +663,6 @@ protected:
     bool m_dragging;
     bool m_gripperVisible;
     bool m_overflowVisible;
-    long m_style;
 
     bool RealizeHelper(wxClientDC& dc, bool horizontal);
     static bool IsPaneValid(long style, const wxAuiPaneInfo& pane);
