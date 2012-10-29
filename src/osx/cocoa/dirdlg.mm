@@ -65,7 +65,7 @@ WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
     wxCFStringRef cf( m_message );
     [oPanel setMessage:cf.AsNSString()];
 
-    if ( HasFlag(wxDD_NEW_DIR_BUTTON) )
+    if ( !HasFlag(wxDD_DIR_MUST_EXIST) )
         [oPanel setCanCreateDirectories:YES];
 
     return oPanel;
