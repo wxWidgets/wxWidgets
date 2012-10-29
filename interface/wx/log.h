@@ -68,520 +68,6 @@ public:
     wxThreadIdType threadId;
 };
 
-/**
-    @class wxLogWindow
-
-    This class represents a background log window: to be precise, it collects all
-    log messages in the log frame which it manages but also passes them on to the
-    log target which was active at the moment of its creation. This allows you, for
-    example, to show all the log messages in a frame but still continue to process
-    them normally by showing the standard log dialog.
-
-    @library{wxcore}
-    @category{logging}
-
-    @see wxLogTextCtrl
-*/
-class wxLogWindow : public wxLogInterposer
-{
-public:
-    /**
-        Creates the log frame window and starts collecting the messages in it.
-
-        @param pParent
-            The parent window for the log frame, may be @NULL
-        @param szTitle
-            The title for the log frame
-        @param show
-            @true to show the frame initially (default), otherwise
-            Show() must be called later.
-        @param passToOld
-            @true to process the log messages normally in addition to logging them 
-            in the log frame (default), @false to only log them in the log frame.
-            Note that if no targets were set using wxLog::SetActiveTarget() then 
-            wxLogWindow simply becomes the active one and messages won't be passed
-            to other targets.
-    */
-    wxLogWindow(wxWindow* pParent, const wxString& szTitle, bool show = true,
-                bool passToOld = true);
-
-    /**
-        Returns the associated log frame window. This may be used to position or resize
-        it but use Show() to show or hide it.
-    */
-    wxFrame* GetFrame() const;
-
-    /**
-        Called if the user closes the window interactively, will not be
-        called if it is destroyed for another reason (such as when program
-        exits).
-
-        Return @true from here to allow the frame to close, @false to
-        prevent this from happening.
-
-        @see OnFrameDelete()
-    */
-    virtual bool OnFrameClose(wxFrame* frame);
-
-    /**
-        Called immediately after the log frame creation allowing for
-        any extra initializations.
-    */
-    virtual void OnFrameCreate(wxFrame* frame);
-
-    /**
-        Called right before the log frame is going to be deleted: will
-        always be called unlike OnFrameClose().
-    */
-    virtual void OnFrameDelete(wxFrame* frame);
-
-    /**
-        Shows or hides the frame.
-    */
-    void Show(bool show = true);
-};
-
-
-
-/**
-    @class wxLogInterposerTemp
-
-    A special version of wxLogChain which uses itself as the new log target.
-    It forwards log messages to the previously installed one in addition to
-    processing them itself. Unlike wxLogInterposer, it doesn't delete the old
-    target which means it can be used to temporarily redirect log output.
-
-    As per wxLogInterposer, this class must be derived from to implement
-    wxLog::DoLog and/or wxLog::DoLogString methods.
-
-    @library{wxbase}
-    @category{logging}
-*/
-class wxLogInterposerTemp : public wxLogChain
-{
-public:
-    /**
-        The default constructor installs this object as the current active log target.
-    */
-    wxLogInterposerTemp();
-};
-
-
-
-/**
-    @class wxLogChain
-
-    This simple class allows you to chain log sinks, that is to install a new sink but
-    keep passing log messages to the old one instead of replacing it completely as
-    wxLog::SetActiveTarget does.
-
-    It is especially useful when you want to divert the logs somewhere (for
-    example to a file or a log window) but also keep showing the error messages
-    using the standard dialogs as wxLogGui does by default.
-
-    Example of usage:
-
-    @code
-    wxLogChain *logChain = new wxLogChain(new wxLogStderr);
-
-    // all the log messages are sent to stderr and also processed as usually
-    ...
-
-    // don't delete logChain directly as this would leave a dangling
-    // pointer as active log target, use SetActiveTarget() instead
-    delete wxLog::SetActiveTarget(...something else or NULL...);
-    @endcode
-
-    @library{wxbase}
-    @category{logging}
-*/
-class wxLogChain : public wxLog
-{
-public:
-    /**
-        Sets the specified @c logger (which may be @NULL) as the default log
-        target but the log messages are also passed to the previous log target if any.
-    */
-    wxLogChain(wxLog* logger);
-
-    /**
-        Destroys the previous log target.
-    */
-    virtual ~wxLogChain();
-
-    /**
-        Detaches the old log target so it won't be destroyed when the wxLogChain object
-        is destroyed.
-    */
-    void DetachOldLog();
-
-    /**
-        Returns the pointer to the previously active log target (which may be @NULL).
-    */
-    wxLog* GetOldLog() const;
-
-    /**
-        Returns @true if the messages are passed to the previously active log
-        target (default) or @false if PassMessages() had been called.
-    */
-    bool IsPassingMessages() const;
-
-    /**
-        By default, the log messages are passed to the previously active log target.
-        Calling this function with @false parameter disables this behaviour
-        (presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
-        it can be reenabled by calling it again with @a passMessages set to @true.
-    */
-    void PassMessages(bool passMessages);
-
-    /**
-        Sets another log target to use (may be @NULL).
-
-        The log target specified in the wxLogChain(wxLog*) constructor or in a
-        previous call to this function is deleted.
-        This doesn't change the old log target value (the one the messages are
-        forwarded to) which still remains the same as was active when wxLogChain
-        object was created.
-    */
-    void SetLog(wxLog* logger);
-};
-
-
-
-/**
-    @class wxLogGui
-
-    This is the default log target for the GUI wxWidgets applications.
-
-    Please see @ref overview_log_customize for explanation of how to change the
-    default log target.
-
-    An object of this class is used by default to show the log messages created
-    by using wxLogMessage(), wxLogError() and other logging functions. It
-    doesn't display the messages logged by them immediately however but
-    accumulates all messages logged during an event handler execution and then
-    shows them all at once when its Flush() method is called during the idle
-    time processing. This has the important advantage of showing only a single
-    dialog to the user even if several messages were logged because of a single
-    error as it often happens (e.g. a low level function could log a message
-    because it failed to open a file resulting in its caller logging another
-    message due to the failure of higher level operation requiring the use of
-    this file). If you need to force the display of all previously logged
-    messages immediately you can use wxLog::FlushActive() to force the dialog
-    display.
-
-    Also notice that if an error message is logged when several informative
-    messages had been already logged before, the informative messages are
-    discarded on the assumption that they are not useful -- and may be
-    confusing and hence harmful -- any more after the error. The warning
-    and error messages are never discarded however and any informational
-    messages logged after the first error one are also kept (as they may
-    contain information about the error recovery). You may override DoLog()
-    method to change this behaviour.
-
-    At any rate, it is possible that that several messages were accumulated
-    before this class Flush() method is called. If this is the case, Flush()
-    uses a custom dialog which shows the last message directly and allows the
-    user to view the previously logged ones by expanding the "Details"
-    wxCollapsiblePane inside it. This custom dialog also provides the buttons
-    for copying the log messages to the clipboard and saving them to a file.
-
-    However if only a single message is present when Flush() is called, just a
-    wxMessageBox() is used to show it. This has the advantage of being closer
-    to the native behaviour but it doesn't give the user any possibility to
-    copy or save the message (except for the recent Windows versions where @c
-    Ctrl-C may be pressed in the message box to copy its contents to the
-    clipboard) so you may want to override DoShowSingleLogMessage() to
-    customize wxLogGui -- the dialogs sample shows how to do this.
-
-    @library{wxcore}
-    @category{logging}
-*/
-class wxLogGui : public wxLog
-{
-public:
-    /**
-        Default constructor.
-    */
-    wxLogGui();
-
-    /**
-        Presents the accumulated log messages, if any, to the user.
-
-        This method is called during the idle time and should show any messages
-        accumulated in wxLogGui#m_aMessages field to the user.
-     */
-    virtual void Flush();
-
-protected:
-    /**
-        Returns the appropriate title for the dialog.
-
-        The title is constructed from wxApp::GetAppDisplayName() and the
-        severity string (e.g. "error" or "warning") appropriate for the current
-        wxLogGui#m_bErrors and wxLogGui#m_bWarnings values.
-     */
-    wxString GetTitle() const;
-
-    /**
-        Returns wxICON_ERROR, wxICON_WARNING or wxICON_INFORMATION depending on
-        the current maximal severity.
-
-        This value is suitable to be used in the style parameter of
-        wxMessageBox() function.
-     */
-    int GetSeverityIcon() const;
-
-    /**
-        Forgets all the currently stored messages.
-
-        If you override Flush() (and don't call the base class version), you
-        must call this method to avoid messages being logged over and over
-        again.
-     */
-    void Clear();
-
-
-    /**
-        All currently accumulated messages.
-
-        This array may be empty if no messages were logged.
-
-        @see m_aSeverity, m_aTimes
-     */
-    wxArrayString m_aMessages;
-
-    /**
-        The severities of each logged message.
-
-        This array is synchronized with wxLogGui#m_aMessages, i.e. the n-th
-        element of this array corresponds to the severity of the n-th message.
-        The possible severity values are @c wxLOG_XXX constants, e.g.
-        wxLOG_Error, wxLOG_Warning, wxLOG_Message etc.
-     */
-    wxArrayInt m_aSeverity;
-
-    /**
-        The time stamps of each logged message.
-
-        The elements of this array are time_t values corresponding to the time
-        when the message was logged.
-     */
-    wxArrayLong m_aTimes;
-
-    /**
-        True if there any error messages.
-     */
-    bool m_bErrors;
-
-    /**
-        True if there any warning messages.
-
-        If both wxLogGui#m_bErrors and this member are false, there are only
-        informational messages to be shown.
-     */
-    bool m_bWarnings;
-
-    /**
-        True if there any messages to be shown to the user.
-
-        This variable is used instead of simply checking whether
-        wxLogGui#m_aMessages array is empty to allow blocking further calls to
-        Flush() while a log dialog is already being shown, even if the messages
-        array hasn't been emptied yet.
-     */
-    bool m_bHasMessages;
-
-private:
-    /**
-        Method called by Flush() to show a single log message.
-
-        This function can be overridden to show the message in a different way.
-        By default a simple wxMessageBox() call is used.
-
-        @param message
-            The message to show (it can contain multiple lines).
-        @param title
-            The suggested title for the dialog showing the message, see
-            GetTitle().
-        @param style
-            One of @c wxICON_XXX constants, see GetSeverityIcon().
-     */
-    virtual void DoShowSingleLogMessage(const wxString& message,
-                                        const wxString& title,
-                                        int style);
-
-    /**
-        Method called by Flush() to show multiple log messages.
-
-        This function can be overridden to show the messages in a different way.
-        By default a special log dialog showing the most recent message and
-        allowing the user to expand it to view the previously logged ones is
-        used.
-
-        @param messages
-            Array of messages to show; it contains more than one element.
-        @param severities
-            Array of message severities containing @c wxLOG_XXX values.
-        @param times
-            Array of time_t values indicating when each message was logged.
-        @param title
-            The suggested title for the dialog showing the message, see
-            GetTitle().
-        @param style
-            One of @c wxICON_XXX constants, see GetSeverityIcon().
-     */
-    virtual void DoShowMultipleLogMessages(const wxArrayString& messages,
-                                           const wxArrayInt& severities,
-                                           const wxArrayLong& times,
-                                           const wxString& title,
-                                           int style);
-};
-
-
-
-/**
-    @class wxLogStream
-
-    This class can be used to redirect the log messages to a C++ stream.
-
-    Please note that this class is only available if wxWidgets was compiled with
-    the standard iostream library support (@c wxUSE_STD_IOSTREAM must be on).
-
-    @library{wxbase}
-    @category{logging}
-
-    @see wxLogStderr, wxStreamToTextRedirector
-*/
-class wxLogStream : public wxLog
-{
-public:
-    /**
-        Constructs a log target which sends all the log messages to the given
-        output stream. If it is @NULL, the messages are sent to @c cerr.
-    */
-    wxLogStream(std::ostream *ostr = NULL);
-};
-
-
-
-/**
-    @class wxLogStderr
-
-    This class can be used to redirect the log messages to a C file stream (not to
-    be confused with C++ streams).
-
-    It is the default log target for the non-GUI wxWidgets applications which
-    send all the output to @c stderr.
-
-    @library{wxbase}
-    @category{logging}
-
-    @see wxLogStream
-*/
-class wxLogStderr : public wxLog
-{
-public:
-    /**
-        Constructs a log target which sends all the log messages to the given
-        @c FILE. If it is @NULL, the messages are sent to @c stderr.
-    */
-    wxLogStderr(FILE* fp = NULL);
-};
-
-
-
-/**
-    @class wxLogBuffer
-
-    wxLogBuffer is a very simple implementation of log sink which simply collects
-    all the logged messages in a string (except the debug messages which are output
-    in the usual way immediately as we're presumably not interested in collecting
-    them for later). The messages from different log function calls are separated
-    by the new lines.
-
-    All the messages collected so far can be shown to the user (and the current
-    buffer cleared) by calling the overloaded wxLogBuffer::Flush method.
-
-    @library{wxbase}
-    @category{logging}
-*/
-class wxLogBuffer : public wxLog
-{
-public:
-    /**
-        The default ctor does nothing.
-    */
-    wxLogBuffer();
-
-    /**
-        Shows all the messages collected so far to the user (using a message box in the
-        GUI applications or by printing them out to the console in text mode) and
-        clears the internal buffer.
-    */
-    virtual void Flush();
-
-    /**
-        Returns the current buffer contains. Messages from different log function calls
-        are separated with the new lines in the buffer.
-        The buffer can be cleared by Flush() which will also show the current
-        contents to the user.
-    */
-    const wxString& GetBuffer() const;
-};
-
-
-
-/**
-    @class wxLogInterposer
-
-    A special version of wxLogChain which uses itself as the new log target.
-    It forwards log messages to the previously installed one in addition to
-    processing them itself.
-
-    Unlike wxLogChain which is usually used directly as is, this class must be
-    derived from to implement wxLog::DoLog and/or wxLog::DoLogString methods.
-
-    wxLogInterposer destroys the previous log target in its destructor.
-    If you don't want this to happen, use wxLogInterposerTemp instead.
-
-    @library{wxbase}
-    @category{logging}
-*/
-class wxLogInterposer : public wxLogChain
-{
-public:
-    /**
-        The default constructor installs this object as the current active log target.
-    */
-    wxLogInterposer();
-};
-
-
-
-/**
-    @class wxLogTextCtrl
-
-    Using these target all the log messages can be redirected to a text control.
-    The text control must have been created with @c wxTE_MULTILINE style by the
-    caller previously.
-
-    @library{wxcore}
-    @category{logging}
-
-    @see wxTextCtrl, wxStreamToTextRedirector
-*/
-class wxLogTextCtrl : public wxLog
-{
-public:
-    /**
-        Constructs a log target which sends all the log messages to the given text
-        control. The @a textctrl parameter cannot be @NULL.
-    */
-    wxLogTextCtrl(wxTextCtrl* pTextCtrl);
-};
-
-
 
 
 /**
@@ -1116,6 +602,230 @@ protected:
     virtual void DoLogText(const wxString& msg);
 
     //@}
+};
+
+
+
+/**
+    @class wxLogChain
+
+    This simple class allows you to chain log sinks, that is to install a new sink but
+    keep passing log messages to the old one instead of replacing it completely as
+    wxLog::SetActiveTarget does.
+
+    It is especially useful when you want to divert the logs somewhere (for
+    example to a file or a log window) but also keep showing the error messages
+    using the standard dialogs as wxLogGui does by default.
+
+    Example of usage:
+
+    @code
+    wxLogChain *logChain = new wxLogChain(new wxLogStderr);
+
+    // all the log messages are sent to stderr and also processed as usually
+    ...
+
+    // don't delete logChain directly as this would leave a dangling
+    // pointer as active log target, use SetActiveTarget() instead
+    delete wxLog::SetActiveTarget(...something else or NULL...);
+    @endcode
+
+    @library{wxbase}
+    @category{logging}
+*/
+class wxLogChain : public wxLog
+{
+public:
+    /**
+        Sets the specified @c logger (which may be @NULL) as the default log
+        target but the log messages are also passed to the previous log target if any.
+    */
+    wxLogChain(wxLog* logger);
+
+    /**
+        Destroys the previous log target.
+    */
+    virtual ~wxLogChain();
+
+    /**
+        Detaches the old log target so it won't be destroyed when the wxLogChain object
+        is destroyed.
+    */
+    void DetachOldLog();
+
+    /**
+        Returns the pointer to the previously active log target (which may be @NULL).
+    */
+    wxLog* GetOldLog() const;
+
+    /**
+        Returns @true if the messages are passed to the previously active log
+        target (default) or @false if PassMessages() had been called.
+    */
+    bool IsPassingMessages() const;
+
+    /**
+        By default, the log messages are passed to the previously active log target.
+        Calling this function with @false parameter disables this behaviour
+        (presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
+        it can be reenabled by calling it again with @a passMessages set to @true.
+    */
+    void PassMessages(bool passMessages);
+
+    /**
+        Sets another log target to use (may be @NULL).
+
+        The log target specified in the wxLogChain(wxLog*) constructor or in a
+        previous call to this function is deleted.
+        This doesn't change the old log target value (the one the messages are
+        forwarded to) which still remains the same as was active when wxLogChain
+        object was created.
+    */
+    void SetLog(wxLog* logger);
+};
+
+
+
+/**
+    @class wxLogInterposerTemp
+
+    A special version of wxLogChain which uses itself as the new log target.
+    It forwards log messages to the previously installed one in addition to
+    processing them itself. Unlike wxLogInterposer, it doesn't delete the old
+    target which means it can be used to temporarily redirect log output.
+
+    As per wxLogInterposer, this class must be derived from to implement
+    wxLog::DoLog and/or wxLog::DoLogString methods.
+
+    @library{wxbase}
+    @category{logging}
+*/
+class wxLogInterposerTemp : public wxLogChain
+{
+public:
+    /**
+        The default constructor installs this object as the current active log target.
+    */
+    wxLogInterposerTemp();
+};
+
+
+
+/**
+    @class wxLogStream
+
+    This class can be used to redirect the log messages to a C++ stream.
+
+    Please note that this class is only available if wxWidgets was compiled with
+    the standard iostream library support (@c wxUSE_STD_IOSTREAM must be on).
+
+    @library{wxbase}
+    @category{logging}
+
+    @see wxLogStderr, wxStreamToTextRedirector
+*/
+class wxLogStream : public wxLog
+{
+public:
+    /**
+        Constructs a log target which sends all the log messages to the given
+        output stream. If it is @NULL, the messages are sent to @c cerr.
+    */
+    wxLogStream(std::ostream *ostr = NULL);
+};
+
+
+
+/**
+    @class wxLogStderr
+
+    This class can be used to redirect the log messages to a C file stream (not to
+    be confused with C++ streams).
+
+    It is the default log target for the non-GUI wxWidgets applications which
+    send all the output to @c stderr.
+
+    @library{wxbase}
+    @category{logging}
+
+    @see wxLogStream
+*/
+class wxLogStderr : public wxLog
+{
+public:
+    /**
+        Constructs a log target which sends all the log messages to the given
+        @c FILE. If it is @NULL, the messages are sent to @c stderr.
+    */
+    wxLogStderr(FILE* fp = NULL);
+};
+
+
+
+/**
+    @class wxLogBuffer
+
+    wxLogBuffer is a very simple implementation of log sink which simply collects
+    all the logged messages in a string (except the debug messages which are output
+    in the usual way immediately as we're presumably not interested in collecting
+    them for later). The messages from different log function calls are separated
+    by the new lines.
+
+    All the messages collected so far can be shown to the user (and the current
+    buffer cleared) by calling the overloaded wxLogBuffer::Flush method.
+
+    @library{wxbase}
+    @category{logging}
+*/
+class wxLogBuffer : public wxLog
+{
+public:
+    /**
+        The default ctor does nothing.
+    */
+    wxLogBuffer();
+
+    /**
+        Shows all the messages collected so far to the user (using a message box in the
+        GUI applications or by printing them out to the console in text mode) and
+        clears the internal buffer.
+    */
+    virtual void Flush();
+
+    /**
+        Returns the current buffer contains. Messages from different log function calls
+        are separated with the new lines in the buffer.
+        The buffer can be cleared by Flush() which will also show the current
+        contents to the user.
+    */
+    const wxString& GetBuffer() const;
+};
+
+
+
+/**
+    @class wxLogInterposer
+
+    A special version of wxLogChain which uses itself as the new log target.
+    It forwards log messages to the previously installed one in addition to
+    processing them itself.
+
+    Unlike wxLogChain which is usually used directly as is, this class must be
+    derived from to implement wxLog::DoLog and/or wxLog::DoLogString methods.
+
+    wxLogInterposer destroys the previous log target in its destructor.
+    If you don't want this to happen, use wxLogInterposerTemp instead.
+
+    @library{wxbase}
+    @category{logging}
+*/
+class wxLogInterposer : public wxLogChain
+{
+public:
+    /**
+        The default constructor installs this object as the current active log target.
+    */
+    wxLogInterposer();
 };
 
 
