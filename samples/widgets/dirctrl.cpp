@@ -42,6 +42,7 @@
 
 #include "wx/wupdlock.h"
 #include "wx/stdpaths.h"
+#include "wx/filename.h"
 
 #include "widgets.h"
 
@@ -349,10 +350,13 @@ void DirCtrlWidgetsPage::OnRadioBox(wxCommandEvent& WXUNUSED(event))
     }
 
     m_dirCtrl->SetPath(path);
-    if(!m_dirCtrl->GetPath().IsSameAs(path))
+
+    // Notice that we must use wxFileName comparison instead of simple wxString
+    // comparison as the paths returned may differ by case only.
+    if ( wxFileName(m_dirCtrl->GetPath()) != path )
     {
-        wxLogMessage(wxT("Selected standard path and path from control do not match!"));
-        m_radioStdPath->SetSelection(stdPathUnknown);
+        wxLogMessage("Failed to go to \"%s\", the current path is \"%s\".",
+                     path, m_dirCtrl->GetPath());
     }
 }
 
