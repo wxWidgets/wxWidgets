@@ -161,6 +161,8 @@ public:
     // If the path string has been used (we're at the leaf), done is set to true
     virtual wxTreeItemId FindChild(wxTreeItemId parentId, const wxString& path, bool& done);
 
+    wxString GetPath(wxTreeItemId itemId) const;
+
     // Resize the components of the control
     virtual void DoResize();
 

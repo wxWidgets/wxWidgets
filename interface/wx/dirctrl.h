@@ -163,6 +163,13 @@ public:
     virtual wxString GetPath() const;
 
     /**
+        Gets the path corresponding to the given tree control item.
+
+        @since 2.9.5
+    */
+    wxString GetPath(wxTreeItemId itemId) const;
+
+    /**
         Fills the array @a paths with the selected directories and filenames.
     */
     virtual void GetPaths(wxArrayString& paths) const;

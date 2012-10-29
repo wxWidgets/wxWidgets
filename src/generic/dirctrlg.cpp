@@ -1038,6 +1038,13 @@ bool wxGenericDirCtrl::CollapsePath(const wxString& path)
     return true;
 }
 
+wxString wxGenericDirCtrl::GetPath(wxTreeItemId itemId) const
+{
+    const wxDirItemData*
+        data = static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
+
+    return data->m_path;
+}
 
 wxString wxGenericDirCtrl::GetPath() const
 {
@@ -1050,8 +1057,7 @@ wxString wxGenericDirCtrl::GetPath() const
         {
             // return first string only
             wxTreeItemId treeid = items[0];
-            wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
-            return data->m_path;
+            return GetPath(treeid);
         }
 
         return wxEmptyString;
@@ -1060,8 +1066,7 @@ wxString wxGenericDirCtrl::GetPath() const
     wxTreeItemId treeid = m_treeCtrl->GetSelection();
     if (treeid)
     {
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
-        return data->m_path;
+        return GetPath(treeid);
     }
     else
         return wxEmptyString;
@@ -1076,8 +1081,7 @@ void wxGenericDirCtrl::GetPaths(wxArrayString& paths) const
     for ( unsigned n = 0; n < items.size(); n++ )
     {
         wxTreeItemId treeid = items[n];
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
-        paths.Add(data->m_path);
+        paths.push_back(GetPath(treeid));
     }
 }
 
