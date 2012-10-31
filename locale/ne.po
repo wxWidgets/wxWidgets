@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Translation of wxWidgets.po, 1.1.1\n"
+"Project-Id-Version: Translation of WXWidgits.Po, 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-27 11:51+0200\n"
-"PO-Revision-Date: 2012-10-20 09:45+0545\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2012-10-22 07:53+0545\n"
+"Last-Translator:  \n"
 "Language-Team: Him Prasad Gautam <himjee@yahoo.com>\n"
 "Language: Nepali\n"
 "MIME-Version: 1.0\n"
@@ -172,7 +172,7 @@ msgstr "&शैली लागू गर"
 
 #: ../src/msw/mdi.cpp:168
 msgid "&Arrange Icons"
-msgstr "&मूर्ति मिलाउ"
+msgstr "&प्रतिमा मिलाउ"
 
 #: ../src/common/stockitem.cpp:196
 msgid "&Ascending"
@@ -235,7 +235,7 @@ msgstr "&Cascade"
 
 #: ../include/wx/richtext/richtextbuffer.h:5476
 msgid "&Cell"
-msgstr "&कोठा"
+msgstr "&कोशिका"
 
 #: ../src/richtext/richtextsymboldlg.cpp:440
 msgid "&Character code:"
@@ -573,7 +573,7 @@ msgstr " शैली को&नाम फेर.."
 
 #: ../src/generic/fdrepdlg.cpp:180
 msgid "&Replace"
-msgstr "&बदलि देउ"
+msgstr "&प्रतिस्थापन"
 
 #: ../src/richtext/richtextstyledlg.cpp:295
 msgid "&Restart numbering"
@@ -1754,7 +1754,7 @@ msgstr "sockets लाइ सुरु गर्न सकिँदैन ।"
 #: ../src/msw/volume.cpp:620
 #, c-format
 msgid "Cannot load icon from '%s'."
-msgstr "'%s' बाट मूर्ति वहन गर्न सकिँदैन ।"
+msgstr "'%s' बाट प्रतिमा वहन गर्न सकिँदैन ।"
 
 #: ../src/xrc/xmlres.cpp:362
 #, c-format
@@ -1851,7 +1851,7 @@ msgstr "निर्दिष्ट मुद्रा"
 
 #: ../src/richtext/richtextbuffer.cpp:8843
 msgid "Cell Properties"
-msgstr "कोठा गुणहरू"
+msgstr "कोशिका गुणहरू"
 
 #: ../src/common/fmapbase.cpp:162
 msgid "Celtic (ISO-8859-14)"
@@ -2020,105 +2020,105 @@ msgstr "लग पुस्तिका का सामाग्रीहरू
 #: ../src/richtext/richtextstyledlg.cpp:260
 #: ../src/richtext/richtextstyledlg.cpp:262
 msgid "Click to apply the selected style."
-msgstr "चयन गरिएको शैली लागू गर्न पिटिक्क पार्नु होस्"
+msgstr "चयन गरिएको शैली लागू गर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextliststylepage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:284
 #: ../src/richtext/richtextbulletspage.cpp:234
 #: ../src/richtext/richtextbulletspage.cpp:236
 msgid "Click to browse for a symbol."
-msgstr "चिन्ह खोतल्न पिटिक्क पार्नु होस"
+msgstr "चिन्ह खोतल्न किटिक्क पार्नु होस"
 
 #: ../src/osx/carbon/fontdlg.cpp:587 ../src/osx/carbon/fontdlg.cpp:589
 msgid "Click to cancel changes to the font."
-msgstr "वरणाकृति परिवर्तन रद्द गर्न पिटिक्क पार्नु होस्"
+msgstr "वरणाकृति परिवर्तन रद्द गर्न किटिक्क पार्नु होस्"
 
 #: ../src/generic/fontdlgg.cpp:473 ../src/generic/fontdlgg.cpp:492
 msgid "Click to cancel the font selection."
-msgstr "वरणाकृतिको चयन रद्द गर्न पिटिक्क पार्नु होस्"
+msgstr "वरणाकृतिको चयन रद्द गर्न किटिक्क पार्नु होस्"
 
 #: ../src/osx/carbon/fontdlg.cpp:568 ../src/osx/carbon/fontdlg.cpp:570
 msgid "Click to change the font colour."
-msgstr "वरणाकृतिको रङ्ग फेर्न पिटिक्क पार्नु होस्"
+msgstr "वरणाकृतिको रङ्ग फेर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextfontpage.cpp:274
 #: ../src/richtext/richtextfontpage.cpp:276
 msgid "Click to change the text background colour."
-msgstr "पाठको पृष्ठभूमि रङ्ग फेर्न पिटिक्क पार्नु होस्"
+msgstr "पाठको पृष्ठभूमि रङ्ग फेर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextfontpage.cpp:261
 #: ../src/richtext/richtextfontpage.cpp:263
 msgid "Click to change the text colour."
-msgstr "पाठको रङ्ग फेर्न पिटिक्क पार्नु होस्"
+msgstr "पाठको रङ्ग फेर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextliststylepage.cpp:196
 #: ../src/richtext/richtextliststylepage.cpp:198
 msgid "Click to choose the font for this level."
-msgstr "यो तहमा वरणाकृति छान्न पिटिक्क पार्नु होस्"
+msgstr "यो तहमा वरणाकृति छान्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextstyledlg.cpp:287
 #: ../src/richtext/richtextstyledlg.cpp:289
 msgid "Click to close this window."
-msgstr "यो विन्डो बन्द गर्न पिटिक्क पार्नु होस्"
+msgstr "यो विन्डो बन्द गर्न किटिक्क पार्नु होस्"
 
 #: ../src/osx/carbon/fontdlg.cpp:594 ../src/osx/carbon/fontdlg.cpp:596
 msgid "Click to confirm changes to the font."
-msgstr "वरणाकृति परिवर्तन यकिन गर्न पिटिक्क पार्नु होस्"
+msgstr "वरणाकृति परिवर्तन यकिन गर्न किटिक्क पार्नु होस्"
 
 #: ../src/generic/fontdlgg.cpp:478 ../src/generic/fontdlgg.cpp:480
 #: ../src/generic/fontdlgg.cpp:485 ../src/generic/fontdlgg.cpp:487
 msgid "Click to confirm the font selection."
-msgstr "वरणाकृतिको चयन यकिन गर्न पिटिक्क पार्नु होस्"
+msgstr "वरणाकृतिको चयन यकिन गर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextstyledlg.cpp:252
 #: ../src/richtext/richtextstyledlg.cpp:254
 msgid "Click to create a new box style."
-msgstr "नया बाकस शैली सिर्जना गर्न पिटिक्क पार्नु होस्"
+msgstr "नया बाकस शैली सिर्जना गर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextstyledlg.cpp:234
 #: ../src/richtext/richtextstyledlg.cpp:236
 msgid "Click to create a new character style."
-msgstr "नया वर्ण शैली सिर्जना गर्न पिटिक्क पार्नु होस्"
+msgstr "नया वर्ण शैली सिर्जना गर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextstyledlg.cpp:246
 #: ../src/richtext/richtextstyledlg.cpp:248
 msgid "Click to create a new list style."
-msgstr "Click to create a नया सूचि शैली सिर्जना गर्न पिटिक्क पार्नु होस्"
+msgstr "Click to create a नया सूचि शैली सिर्जना गर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextstyledlg.cpp:240
 #: ../src/richtext/richtextstyledlg.cpp:242
 msgid "Click to create a new paragraph style."
-msgstr "नया अनुच्छेद शैली सिर्जना गर्न पिटिक्क पार्नु होस्"
+msgstr "नया अनुच्छेद शैली सिर्जना गर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtexttabspage.cpp:138
 #: ../src/richtext/richtexttabspage.cpp:140
 msgid "Click to create a new tab position."
-msgstr "नया tab स्थान सिर्जना गर्न पिटिक्क पार्नु होस्"
+msgstr "नया tab स्थान सिर्जना गर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtexttabspage.cpp:150
 #: ../src/richtext/richtexttabspage.cpp:152
 msgid "Click to delete all tab positions."
-msgstr "सबै tab स्थानहरू मेटाउन पिटिक्क पार्नु होस्"
+msgstr "सबै tab स्थानहरू मेटाउन किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextstyledlg.cpp:278
 #: ../src/richtext/richtextstyledlg.cpp:280
 msgid "Click to delete the selected style."
-msgstr "चयन गरेको शैली मेटाउन पिटिक्क पार्नु होस्"
+msgstr "चयन गरेको शैली मेटाउन किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtexttabspage.cpp:144
 #: ../src/richtext/richtexttabspage.cpp:146
 msgid "Click to delete the selected tab position."
-msgstr "चयन गरेको tab स्थान मेटाउन पिटिक्क पार्नु होस्"
+msgstr "चयन गरेको tab स्थान मेटाउन किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextstyledlg.cpp:272
 #: ../src/richtext/richtextstyledlg.cpp:274
 msgid "Click to edit the selected style."
-msgstr "चयन गरेको शैली सम्पादन गर्न पिटिक्क पार्नु होस्"
+msgstr "चयन गरेको शैली सम्पादन गर्न किटिक्क पार्नु होस्"
 
 #: ../src/richtext/richtextstyledlg.cpp:266
 #: ../src/richtext/richtextstyledlg.cpp:268
 msgid "Click to rename the selected style."
-msgstr "चयन गरेको शैलीको नाम फेर्न पिटिक्क पार्नु होस्"
+msgstr "चयन गरेको शैलीको नाम फेर्न किटिक्क पार्नु होस्"
 
 #: ../src/generic/dbgrptg.cpp:94 ../src/generic/progdlgg.cpp:805
 #: ../src/generic/progdlgg.cpp:810 ../src/richtext/richtextstyledlg.cpp:285
@@ -2331,7 +2331,7 @@ msgstr "शीर्षक बयान तय गर्न सकिएन"
 
 #: ../src/osx/carbon/dataview.cpp:2597
 msgid "Could not set icon."
-msgstr "मूर्ति तय गर्न सकिएन"
+msgstr "प्रतिमा तय गर्न सकिएन"
 
 #: ../src/osx/carbon/dataview.cpp:2618
 msgid "Could not set maximum width."
@@ -3029,7 +3029,7 @@ msgstr "दृश्य \"%s\" बन्द गर्न सकिएन ।"
 
 #: ../src/msw/dialup.cpp:819
 msgid "Failed to connect: missing username/password."
-msgstr "जोड्न सकिएन: ग्राहकको नाम/password छैन ।"
+msgstr "जोड्न सकिएन: ग्राहकको नाम/पाल्सीशब्द छैन ।"
 
 #: ../src/msw/dialup.cpp:765
 msgid "Failed to connect: no ISP to dial."
@@ -3120,7 +3120,7 @@ msgstr "फाइलहरू '%s' का लागि registry प्रवि�
 #: ../src/msw/fdrepdlg.cpp:443
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
-msgstr "स्तरीय पत्ता लगाउने/बदल्ने पर्दा (गल्ती कोड %d) सिर्जना गर्न सकिएन ।"
+msgstr "स्तरीय फेला पार्ने/प्रतिस्थापित गर्ने पातो (गल्ती संहिता %d) सिर्जना गर्न सकिएन ।"
 
 #: ../src/unix/evtloopunix.cpp:96
 msgid "Failed to create wake up pipe used by event loop."
@@ -3910,15 +3910,15 @@ msgstr "ICO: तस्विर फाइल लेखाइमा गल्त�
 
 #: ../src/common/imagbmp.cpp:1151
 msgid "ICO: Image too tall for an icon."
-msgstr "ICO: मूर्तिको लागि तस्विर धेरै अग्लो भयो"
+msgstr "ICO: प्रतिमाको लागि तस्विर धेरै अग्लो भयो"
 
 #: ../src/common/imagbmp.cpp:1159
 msgid "ICO: Image too wide for an icon."
-msgstr "ICO: मूर्तिको लागि तस्विर धेरै चौडा भयो"
+msgstr "ICO: प्रतिमाको लागि तस्विर धेरै चौडा भयो"
 
 #: ../src/common/imagbmp.cpp:1416
 msgid "ICO: Invalid icon index."
-msgstr "ICO: मूर्ति अनुक्रमणिका मिलेन"
+msgstr "ICO: प्रतिमा अनुक्रमणिका मिलेन"
 
 #: ../src/common/imagiff.cpp:760
 msgid "IFF: data stream seems to be truncated."
@@ -3950,7 +3950,7 @@ msgstr "ISO-2022-JP"
 
 #: ../src/osx/carbon/dataview.cpp:2421
 msgid "Icon & text renderer cannot render value; value type: "
-msgstr "मूर्ति र पाठ renderer cannot render value; मानको किसिम: "
+msgstr "प्रतिमा र पाठ renderer cannot render value; मानको किसिम: "
 
 #: ../src/html/htmprint.cpp:283
 msgid ""
@@ -4798,7 +4798,7 @@ msgstr "पछिल्लो अनुच्छेदमा वस्तुल�
 
 #: ../src/richtext/richtextbuffer.cpp:8841
 msgid "Multiple Cell Properties"
-msgstr "बहु कोठा गुणहरू"
+msgstr "बहु कोशिका गुणहरू"
 
 #: ../src/common/accelcmn.cpp:82
 msgid "NUM_LOCK"
@@ -5704,15 +5704,15 @@ msgstr "&बदलि देउ"
 
 #: ../src/richtext/richtextctrl.cpp:3242 ../src/common/stockitem.cpp:189
 msgid "Replace"
-msgstr "बदलि देउ"
+msgstr "प्रतिस्थापन गर"
 
 #: ../src/generic/fdrepdlg.cpp:183
 msgid "Replace &all"
-msgstr "&सबै बदलि देउ "
+msgstr "&सबैको प्रतिस्थापन "
 
 #: ../src/common/stockitem.cpp:262
 msgid "Replace selection"
-msgstr "चयन बदलि देउ "
+msgstr "चयनको प्रतिस्थापन"
 
 #: ../src/generic/fdrepdlg.cpp:125
 msgid "Replace with:"
@@ -5878,7 +5878,7 @@ msgstr "सबै चयन गर"
 
 #: ../src/common/docview.cpp:1868
 msgid "Select a document template"
-msgstr "एउटा कागजातको टुक्रा चयन गर ।"
+msgstr "एउटा कागजात  लेखोट चयन गर ।"
 
 #: ../src/common/docview.cpp:1942
 msgid "Select a document view"
@@ -5915,7 +5915,7 @@ msgstr "विकल्प '%s' पछि विभाजक अपेक्ष�
 
 #: ../src/richtext/richtextbuffer.cpp:9797
 msgid "Set Cell Style"
-msgstr "कोठा शैली तय गर्नु होस् ।"
+msgstr "कोशिका शैली तय गर्नु होस् ।"
 
 #: ../include/wx/xtiprop.h:180
 msgid "SetProperty called w/o valid setter"
@@ -5927,7 +5927,7 @@ msgstr "घर्रा खोलेको समय अभिलेखनको
 
 #: ../src/generic/prntdlgg.cpp:194
 msgid "Setup..."
-msgstr "Setup"
+msgstr "स्थापक"
 
 #: ../src/msw/dialup.cpp:564
 msgid "Several active dialup connections found, choosing one randomly."
@@ -6192,7 +6192,7 @@ msgstr "Teletype"
 
 #: ../src/common/docview.cpp:1869
 msgid "Templates"
-msgstr "Templates"
+msgstr "लेखोट"
 
 #: ../src/osx/carbon/dataview.cpp:2374
 msgid "Text renderer cannot render value; value type: "
@@ -6298,8 +6298,8 @@ msgid ""
 "\n"
 "Would you like to proceed with printing it nevertheless?"
 msgstr ""
-"\"%s\" कागजातका सबै सामाग्री पृष्टको तेर्सो तर्फ आँटेन, यदि छाप्ने कार्य गरियो भने केही "
-"अंश काटिने छ । \n"
+"\"%s\" कागजातका सबै सामाग्री पृष्टको तेर्सो तर्फ आँटेन, यदि छाप्ने कार्य गरियो भने केही अंश "
+"काटिने छ । \n"
 "\n"
 "के तपाई जस्तो सुकै भए पनि छाप्न चाहनु हुन्छ?"
 
@@ -6605,7 +6605,7 @@ msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
 msgstr ""
-"यो Program निकै पुरानो GTK+ संस्करणमा प्रशोधन गरियो । कृपया GTK+ 2.12 अथवा यो भन्दा "
+"यो कार्यक्रम निकै पुरानो GTK+ संस्करणमा प्रशोधन गरियो । कृपया GTK+ 2.12 अथवा यो भन्दा "
 "नया संस्करण राख्नु होला ।"
 
 #: ../src/msw/datecontrols.cpp:60
