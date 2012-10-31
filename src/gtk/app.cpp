@@ -143,29 +143,26 @@ bool wxApp::DoIdle()
 #if wxUSE_THREADS
     wxMutexLocker lock(m_idleMutex);
 #endif
-    // if a new idle source was added during ProcessIdle
-    if (m_idleSourceId != 0)
-    {
-        // remove it
-        g_source_remove(m_idleSourceId);
-        m_idleSourceId = 0;
-    }
 
-    // Pending events can be added asynchronously,
-    // need to keep idle source if any have appeared
-    if (HasPendingEvents())
-        needMore = true;
-
-    // if more idle processing requested
-    if (needMore)
+    bool keepSource = false;
+    // if a new idle source has not been added, either as a result of idle
+    // processing above or by another thread calling WakeUpIdle()
+    if (m_idleSourceId == 0)
     {
-        // keep this source installed
-        m_idleSourceId = id_save;
-        return true;
+        // if more idle processing was requested or pending events have appeared
+        if (needMore || HasPendingEvents())
+        {
+            // keep this source installed
+            m_idleSourceId = id_save;
+            keepSource = true;
+        }
+        else // add hooks and remove this source
+            wx_add_idle_hooks();
     }
-    // add hooks and remove this source
-    wx_add_idle_hooks();
-    return false;
+    // else remove this source, leave new one installed
+    // we must keep an idle source, otherwise a wakeup could be lost
+
+    return keepSource;
 }
 
 //-----------------------------------------------------------------------------
