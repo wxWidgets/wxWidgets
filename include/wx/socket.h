@@ -71,17 +71,17 @@ enum wxSocketError
 // socket options/flags bit masks
 enum
 {
-    wxSOCKET_NONE = 0,
-    wxSOCKET_NOWAIT = 1,
-    wxSOCKET_WAITALL = 2,
-    wxSOCKET_BLOCK = 4,
-    wxSOCKET_REUSEADDR = 8,
-    wxSOCKET_BROADCAST = 16,
-    wxSOCKET_NOBIND = 32,
-    wxSOCKET_NOWAIT_READ = 64,
-    wxSOCKET_WAITALL_READ = 128,
-    wxSOCKET_NOWAIT_WRITE = 256,
-    wxSOCKET_WAITALL_WRITE = 512
+    wxSOCKET_NONE           = 0x0000,
+    wxSOCKET_NOWAIT_READ    = 0x0001,
+    wxSOCKET_NOWAIT_WRITE   = 0x0002,
+    wxSOCKET_NOWAIT         = wxSOCKET_NOWAIT_READ | wxSOCKET_NOWAIT_WRITE,
+    wxSOCKET_WAITALL_READ   = 0x0004,
+    wxSOCKET_WAITALL_WRITE  = 0x0008,
+    wxSOCKET_WAITALL        = wxSOCKET_WAITALL_READ | wxSOCKET_WAITALL_WRITE,
+    wxSOCKET_BLOCK          = 0x0010,
+    wxSOCKET_REUSEADDR      = 0x0020,
+    wxSOCKET_BROADCAST      = 0x0040,
+    wxSOCKET_NOBIND         = 0x0080
 };
 
 typedef int wxSocketFlags;
