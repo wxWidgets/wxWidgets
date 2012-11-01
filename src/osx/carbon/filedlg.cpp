@@ -26,6 +26,7 @@
 #include "wx/filename.h"
 
 #include "wx/osx/private.h"
+#include "wx/testing.h"
 
 #ifndef __DARWIN__
     #include <Navigation.h>
@@ -476,6 +477,8 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 
 int wxFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     m_paths.Empty();
     m_fileNames.Empty();
 

@@ -13,6 +13,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dirdlg.h"
+#include "wx/testing.h"
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
@@ -42,6 +43,8 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
 
 int wxDirDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     // TODO
     return wxID_CANCEL;
 }

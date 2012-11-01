@@ -23,6 +23,7 @@
 
 #include "wx/tokenzr.h"
 #include "wx/stockitem.h"
+#include "wx/testing.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -151,6 +152,8 @@ static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
 
 int wxFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxBeginBusyCursor();
 
     //  static char fileBuf[512];

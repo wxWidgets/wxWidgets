@@ -440,6 +440,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_virtlistctrltest.obj &
 	$(OBJS)\test_gui_webtest.obj &
 	$(OBJS)\test_gui_windowtest.obj &
+	$(OBJS)\test_gui_dialogtest.obj &
 	$(OBJS)\test_gui_clone.obj &
 	$(OBJS)\test_gui_propagation.obj &
 	$(OBJS)\test_gui_keyboard.obj &
@@ -952,6 +953,9 @@ $(OBJS)\test_gui_webtest.obj :  .AUTODEPEND .\controls\webtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_windowtest.obj :  .AUTODEPEND .\controls\windowtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_dialogtest.obj :  .AUTODEPEND .\controls\dialogtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_clone.obj :  .AUTODEPEND .\events\clone.cpp

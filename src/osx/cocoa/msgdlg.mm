@@ -21,6 +21,7 @@
 #include "wx/control.h"
 #include "wx/thread.h"
 #include "wx/evtloop.h"
+#include "wx/testing.h"
 #include "wx/osx/private.h"
 
 
@@ -62,6 +63,8 @@ wxMessageDialog::~wxMessageDialog()
 
 int wxMessageDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxCFEventLoopPauseIdleEvents pause;
     
     int resultbutton = wxID_CANCEL;

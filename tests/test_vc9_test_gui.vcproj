@@ -880,6 +880,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\dialogtest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dummy.cpp"
 				>
 				<FileConfiguration

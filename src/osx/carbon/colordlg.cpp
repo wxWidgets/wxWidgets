@@ -14,6 +14,7 @@
 
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
+#include "wx/testing.h"
 
 
 #if !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
@@ -47,6 +48,8 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 int wxColourDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     RGBColor currentColor ;
 
     m_colourData.m_dataColour.GetRGBColor( &currentColor );

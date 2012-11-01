@@ -34,6 +34,7 @@
 #include "wx/dynlib.h"
 #include "wx/paper.h"
 #include "wx/scopeguard.h"
+#include "wx/testing.h"
 
 #include <gtk/gtk.h>
 
@@ -623,6 +624,8 @@ wxGtkPrintDialog::~wxGtkPrintDialog()
 // This is called even if we actually don't want the dialog to appear.
 int wxGtkPrintDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     // We need to restore the settings given in the constructor.
     wxPrintData data = m_printDialogData.GetPrintData();
     wxGtkPrintNativeData *native =
@@ -747,6 +750,8 @@ wxGtkPageSetupDialog::~wxGtkPageSetupDialog()
 
 int wxGtkPageSetupDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     // Get the config.
     m_pageDialogData.GetPrintData().ConvertToNative();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();

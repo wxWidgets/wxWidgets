@@ -20,6 +20,7 @@
 
 #include "wx/thread.h"
 #include "wx/osx/private.h"
+#include "wx/testing.h"
 
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
@@ -36,6 +37,8 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 
 int wxMessageDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     int resultbutton = wxID_CANCEL;
 
     const long style = GetMessageDialogStyle();

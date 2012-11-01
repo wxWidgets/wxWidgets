@@ -22,6 +22,7 @@
     #include "wx/math.h"
 #endif
 
+#include "wx/testing.h"
 #include "wx/os2/private.h"
 
 #include <stdlib.h>
@@ -34,6 +35,8 @@ IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
 int wxMessageDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     HWND                            hWnd = 0;
     ULONG                           ulStyle = MB_OK;
     int                             nAns = wxOK;

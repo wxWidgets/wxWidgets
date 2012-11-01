@@ -32,6 +32,7 @@
 
 #include "wx/filename.h"
 #include "wx/evtloop.h"
+#include "wx/testing.h"
 
 #include "wx/osx/private.h"
 
@@ -94,6 +95,8 @@ void wxDirDialog::ShowWindowModal()
 
 int wxDirDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxCFEventLoopPauseIdleEvents pause;
 
     NSOpenPanel *oPanel = OSXCreatePanel();

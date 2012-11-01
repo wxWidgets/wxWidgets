@@ -39,6 +39,7 @@
 #include "wx/msgdlg.h"
 #include "wx/artprov.h"
 #include "wx/textwrapper.h"
+#include "wx/testing.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -268,6 +269,8 @@ void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 
 int wxGenericMessageDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     if ( !m_created )
     {
         m_created = true;

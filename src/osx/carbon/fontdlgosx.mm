@@ -28,6 +28,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/testing.h"
 
 // ============================================================================
 // implementation
@@ -434,6 +435,8 @@ bool wxFontDialog::Create(wxWindow *parent)
 
 int wxFontDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     //Start the pool.  Required for carbon interaction
     //(For those curious, the only thing that happens
     //if you don't do this is a bunch of error

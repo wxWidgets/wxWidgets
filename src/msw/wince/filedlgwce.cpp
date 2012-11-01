@@ -47,6 +47,7 @@
 #include <string.h>
 
 #include "wx/filename.h"
+#include "wx/testing.h"
 
 // ============================================================================
 // implementation
@@ -112,6 +113,8 @@ void wxFileDialog::SetPath(const wxString& path)
 
 int wxFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxWindow* parentWindow = GetParent();
     if (!parentWindow)
         parentWindow = wxTheApp->GetTopWindow();

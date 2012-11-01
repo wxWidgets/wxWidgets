@@ -14,6 +14,7 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/printdlg.h"
+#include "wx/testing.h"
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
@@ -59,6 +60,8 @@ void wxOSXCocoaPrintData::UpdateToPMState()
 
 int wxMacPrintDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     m_printDialogData.GetPrintData().ConvertToNative();
 
     int result = wxID_CANCEL;
@@ -82,6 +85,8 @@ int wxMacPrintDialog::ShowModal()
 
 int wxMacPageSetupDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     m_pageSetupData.GetPrintData().ConvertToNative();
     ((wxOSXCocoaPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferFrom( &m_pageSetupData );
 

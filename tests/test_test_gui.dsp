@@ -315,6 +315,10 @@ SOURCE=.\controls\datepickerctrltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\dialogtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\dummy.cpp
 # ADD BASE CPP /Yc"testprec.h"
 # ADD CPP /Yc"testprec.h"

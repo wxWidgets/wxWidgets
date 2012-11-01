@@ -31,6 +31,7 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
+#include "wx/testing.h"
 
 #import <AppKit/NSAlert.h>
 // ============================================================================
@@ -72,6 +73,8 @@ void wxCocoaMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& va
 
 int wxCocoaMessageDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxAutoNSAutoreleasePool thePool;
 
     NSAlert *alert = [[[NSAlert alloc] init] autorelease];

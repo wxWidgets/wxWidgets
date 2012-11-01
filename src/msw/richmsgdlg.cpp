@@ -18,6 +18,7 @@
 #if wxUSE_RICHMSGDLG
 
 #include "wx/richmsgdlg.h"
+#include "wx/testing.h"
 
 #ifndef WX_PRECOMP
     #include "wx/msw/private.h"
@@ -33,6 +34,8 @@
 
 int wxRichMessageDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
 #ifdef wxHAS_MSW_TASKDIALOG
     using namespace wxMSWMessageDialog;
 

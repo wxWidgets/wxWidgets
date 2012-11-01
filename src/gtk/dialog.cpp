@@ -19,6 +19,7 @@
 #include "wx/evtloop.h"
 
 #include "wx/scopedptr.h"
+#include "wx/testing.h"
 
 #include <gtk/gtk.h>
 
@@ -100,6 +101,8 @@ void wxDialog::SetModal( bool WXUNUSED(flag) )
 
 int wxDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxASSERT_MSG( !IsModal(), "ShowModal() can't be called twice" );
 
     // release the mouse if it's currently captured as the window having it

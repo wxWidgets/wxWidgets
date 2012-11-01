@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/testing.h"
 
 //-----------------------------------------------------------------------------
 // wxDialog
@@ -165,6 +166,8 @@ bool wxDialog::IsModal() const
 
 int wxDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     if ( IsModal() )
     {
        wxFAIL_MSG( wxT("wxDialog:ShowModal called twice") );

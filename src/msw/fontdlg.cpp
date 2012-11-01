@@ -27,6 +27,7 @@
 #if wxUSE_FONTDLG
 
 #include "wx/fontdlg.h"
+#include "wx/testing.h"
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcdlg.h"
@@ -55,6 +56,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 int wxFontDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     // It should be OK to always use GDI simulations
     DWORD flags = CF_SCREENFONTS /* | CF_NOSIMULATIONS */ ;
 

@@ -43,12 +43,15 @@
 #include "wx/bookctrl.h"
 #include "wx/scrolwin.h"
 #include "wx/textwrapper.h"
+#include "wx/testing.h"
 
 #if wxUSE_DISPLAY
 #include "wx/display.h"
 #endif
 
 extern WXDLLEXPORT_DATA(const char) wxDialogNameStr[] = "dialog";
+
+wxModalDialogHook *wxModalDialogHook::ms_instance = NULL;
 
 // ----------------------------------------------------------------------------
 // XTI

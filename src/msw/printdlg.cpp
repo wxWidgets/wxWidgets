@@ -39,6 +39,7 @@
 #include "wx/msw/printdlg.h"
 #include "wx/msw/dcprint.h"
 #include "wx/paper.h"
+#include "wx/testing.h"
 
 #include <stdlib.h>
 
@@ -738,6 +739,8 @@ wxWindowsPrintDialog::~wxWindowsPrintDialog()
 
 int wxWindowsPrintDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     ConvertToNative( m_printDialogData );
 
     PRINTDLG *pd = (PRINTDLG*) m_printDlg;
@@ -957,6 +960,8 @@ wxWindowsPageSetupDialog::~wxWindowsPageSetupDialog()
 
 int wxWindowsPageSetupDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     ConvertToNative( m_pageSetupData );
 
     PAGESETUPDLG *pd = (PAGESETUPDLG *) m_pageDlg;

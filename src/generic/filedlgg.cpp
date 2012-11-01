@@ -49,6 +49,7 @@
 #include "wx/filectrl.h"
 #include "wx/generic/filedlgg.h"
 #include "wx/debug.h"
+#include "wx/testing.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -308,6 +309,8 @@ wxBitmapButton* wxGenericFileDialog::AddBitmapButton( wxWindowID winId,
 
 int wxGenericFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     if (CreateExtraControl())
     {
         wxSizer *sizer = GetSizer();

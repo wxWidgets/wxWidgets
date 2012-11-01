@@ -47,6 +47,7 @@
 #include "wx/filename.h"
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
+#include "wx/testing.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -449,6 +450,8 @@ void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 
 int wxFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     HWND hWnd = 0;
     if (m_parent) hWnd = (HWND) m_parent->GetHWND();
     if (!hWnd && wxTheApp->GetTopWindow())

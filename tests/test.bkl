@@ -185,6 +185,7 @@
             controls/virtlistctrltest.cpp
             controls/webtest.cpp
             controls/windowtest.cpp
+            controls/dialogtest.cpp
             events/clone.cpp
             events/propagation.cpp
             events/keyboard.cpp

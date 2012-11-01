@@ -204,6 +204,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_virtlistctrltest.o \
 	test_gui_webtest.o \
 	test_gui_windowtest.o \
+	test_gui_dialogtest.o \
 	test_gui_clone.o \
 	test_gui_propagation.o \
 	test_gui_keyboard.o \
@@ -865,6 +866,9 @@ test_gui_webtest.o: $(srcdir)/controls/webtest.cpp $(TEST_GUI_ODEP)
 
 test_gui_windowtest.o: $(srcdir)/controls/windowtest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/windowtest.cpp
+
+test_gui_dialogtest.o: $(srcdir)/controls/dialogtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/dialogtest.cpp
 
 test_gui_clone.o: $(srcdir)/events/clone.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/clone.cpp

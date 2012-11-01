@@ -29,6 +29,7 @@
 #include "wx/filename.h" // wxFilename
 #include "wx/tokenzr.h" // wxStringTokenizer
 #include "wx/filefn.h" // ::wxGetCwd
+#include "wx/testing.h"
 
 //-----------------------------------------------------------------------------
 // "clicked" for OK-button
@@ -342,6 +343,8 @@ void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
 
 int wxFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     CreateExtraControl();
 
     return wxDialog::ShowModal();

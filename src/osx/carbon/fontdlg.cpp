@@ -42,6 +42,7 @@
 
 #include "wx/fontdlg.h"
 #include "wx/fontutil.h"
+#include "wx/testing.h"
 
 #if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
@@ -229,6 +230,8 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 
 int wxFontDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
 #if wxOSX_USE_CARBON
 
     OSStatus err ;

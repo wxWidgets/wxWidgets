@@ -27,6 +27,7 @@
 #if wxUSE_COLOURDLG && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
 
 #include "wx/colordlg.h"
+#include "wx/testing.h"
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcdlg.h"
@@ -114,6 +115,8 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 int wxColourDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     // initialize the struct used by Windows
     CHOOSECOLOR chooseColorStruct;
     memset(&chooseColorStruct, 0, sizeof(CHOOSECOLOR));

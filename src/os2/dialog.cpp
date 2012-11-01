@@ -26,6 +26,7 @@
 #include "wx/os2/private.h"
 #include "wx/evtloop.h"
 #include "wx/scopedptr.h"
+#include "wx/testing.h"
 
 #define wxDIALOG_DEFAULT_X 300
 #define wxDIALOG_DEFAULT_Y 300
@@ -219,6 +220,8 @@ bool wxDialog::Show( bool bShow )
 //
 int wxDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxASSERT_MSG( !IsModal(), wxT("wxDialog::ShowModal() reentered?") );
 
     m_endModalCalled = false;

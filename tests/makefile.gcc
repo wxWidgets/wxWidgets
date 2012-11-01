@@ -183,6 +183,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_virtlistctrltest.o \
 	$(OBJS)\test_gui_webtest.o \
 	$(OBJS)\test_gui_windowtest.o \
+	$(OBJS)\test_gui_dialogtest.o \
 	$(OBJS)\test_gui_clone.o \
 	$(OBJS)\test_gui_propagation.o \
 	$(OBJS)\test_gui_keyboard.o \
@@ -891,6 +892,9 @@ $(OBJS)\test_gui_webtest.o: ./controls/webtest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_windowtest.o: ./controls/windowtest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_dialogtest.o: ./controls/dialogtest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_clone.o: ./events/clone.cpp

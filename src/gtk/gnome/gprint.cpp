@@ -34,6 +34,7 @@
 #include "wx/dynlib.h"
 #include "wx/paper.h"
 #include "wx/dcprint.h"
+#include "wx/testing.h"
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-pango.h>
@@ -591,6 +592,8 @@ wxGnomePrintDialog::~wxGnomePrintDialog()
 
 int wxGnomePrintDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     int response = gtk_dialog_run (GTK_DIALOG (m_widget));
 
     if (response == GNOME_PRINT_DIALOG_RESPONSE_CANCEL)
@@ -736,6 +739,8 @@ wxPageSetupDialogData& wxGnomePageSetupDialog::GetPageSetupDialogData()
 
 int wxGnomePageSetupDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();
 

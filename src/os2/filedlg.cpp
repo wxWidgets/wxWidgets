@@ -39,6 +39,7 @@
 #include <string.h>
 
 #include "wx/tokenzr.h"
+#include "wx/testing.h"
 
 #define wxMAXPATH                    1024
 #define wxMAXFILE                    1024
@@ -104,6 +105,8 @@ void wxFileDialog::GetPaths (
 
 int wxFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxString                        sTheFilter;
     wxString                        sFilterBuffer;
     wxChar*                         pzFilterBuffer;

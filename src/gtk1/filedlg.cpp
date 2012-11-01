@@ -13,6 +13,7 @@
 #if wxUSE_FILEDLG
 
 #include "wx/filedlg.h"
+#include "wx/testing.h"
 
 
 //-----------------------------------------------------------------------------
@@ -49,6 +50,8 @@ void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 
 int wxFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     return wxGenericFileDialog::ShowModal();
 }
 

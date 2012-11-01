@@ -33,6 +33,7 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
+#include "wx/testing.h"
 
 #import <AppKit/NSOpenPanel.h>
 #import <AppKit/NSSavePanel.h>
@@ -196,6 +197,8 @@ void wxFileDialog::SetPath(const wxString& path)
 
 int wxFileDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxAutoNSAutoreleasePool thePool;
 
     m_fileNames.Empty();

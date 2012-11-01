@@ -19,6 +19,7 @@
 #if wxUSE_COLOURDLG
 
 #include "wx/colordlg.h"
+#include "wx/testing.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -82,6 +83,8 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 int wxColourDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     ColourDataToDialog();
 
     gint result = gtk_dialog_run(GTK_DIALOG(m_widget));

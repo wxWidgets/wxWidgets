@@ -42,6 +42,7 @@
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
+#include "wx/testing.h"
 
 #if wxUSE_MSGBOX_HOOK
     #include "wx/fontutil.h"
@@ -591,6 +592,8 @@ int wxMessageDialog::ShowMessageBox()
 
 int wxMessageDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {

@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/filename.h"
+#include "wx/testing.h"
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
@@ -104,6 +105,8 @@ wxDirDialog::~wxDirDialog()
 
 int wxDirDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     wxAutoNSAutoreleasePool thePool;
 
     m_fileNames.Empty();

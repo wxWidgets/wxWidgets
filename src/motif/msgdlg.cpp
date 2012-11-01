@@ -40,6 +40,7 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/testing.h"
 #include "wx/motif/private.h"
 
 // ----------------------------------------------------------------------------
@@ -105,6 +106,8 @@ extern "C"
 
 int wxMessageDialog::ShowModal()
 {
+    WX_TESTING_SHOW_MODAL_HOOK();
+
     const long style = GetMessageDialogStyle();
 
     DialogCreateFunction dialogCreateFunction;
