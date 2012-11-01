@@ -108,7 +108,7 @@ public:
           See also the help sample for notes on how to specify section numbers for
           various help file formats.
     */
-    virtual bool DisplaySection(int sectionNo) = 0;;
+    virtual bool DisplaySection(int sectionNo) = 0;
 
     /**
         Displays the text in a popup window, if possible.

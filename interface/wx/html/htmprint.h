@@ -348,6 +348,12 @@ private:
 };
 
 
+enum {
+    wxPAGE_ODD,
+    wxPAGE_EVEN,
+    wxPAGE_ALL
+};
+
 
 /**
     @class wxHtmlPrintout

@@ -16,7 +16,7 @@
     @library{wxhtml}
     @category{help,html}
 */
-class wxHtmlHelpDialog : public wxFrame
+class wxHtmlHelpDialog : public wxDialog
 {
 public:
     wxHtmlHelpDialog(wxHtmlHelpData* data = NULL);
@@ -26,7 +26,7 @@ public:
 
         For the possible values of @a style, please see wxHtmlHelpController.
     */
-    wxHtmlHelpDialog(wxWindow* parent, int wxWindowID,
+    wxHtmlHelpDialog(wxWindow* parent, wxWindowID id,
                      const wxString& title = wxEmptyString,
                      int style = wxHF_DEFAULT_STYLE,
                      wxHtmlHelpData* data = NULL);

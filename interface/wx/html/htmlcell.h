@@ -7,6 +7,81 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+/**
+   @class wxHtmlRenderingStyle
+ 
+   wxHtmlSelection is data holder with information about text selection.
+   Selection is defined by two positions (beginning and end of the selection)
+   and two leaf(!) cells at these positions.
+
+   @library{wxhtml}
+   @category{html}
+*/
+class wxHtmlSelection
+{
+public:
+    wxHtmlSelection();
+
+    // this version is used for the user selection defined with the mouse
+    void Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
+             const wxPoint& toPos, const wxHtmlCell *toCell);
+    void Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell);
+
+    const wxHtmlCell *GetFromCell() const;
+    const wxHtmlCell *GetToCell() const;
+
+    // these values are in absolute coordinates:
+    const wxPoint& GetFromPos() const;
+    const wxPoint& GetToPos() const;
+
+    // these are From/ToCell's private data
+    void ClearFromToCharacterPos();
+    bool AreFromToCharacterPosSet() const;
+
+    void SetFromCharacterPos (wxCoord pos);
+    void SetToCharacterPos (wxCoord pos);
+    wxCoord GetFromCharacterPos () const;
+    wxCoord GetToCharacterPos () const;
+
+    bool IsEmpty() const;
+};
+
+
+
+enum wxHtmlSelectionState
+{
+    wxHTML_SEL_OUT,     // currently rendered cell is outside the selection
+    wxHTML_SEL_IN,      // ... is inside selection
+    wxHTML_SEL_CHANGING // ... is the cell on which selection state changes
+};
+
+
+/**
+   @class wxHtmlRenderingState
+
+   Selection state is passed to wxHtmlCell::Draw so that it can render itself
+   differently e.g. when inside text selection or outside it.
+
+   @library{wxhtml}
+   @category{html}
+*/
+class wxHtmlRenderingState
+{
+public:
+    wxHtmlRenderingState();
+
+    void SetSelectionState(wxHtmlSelectionState s);
+    wxHtmlSelectionState GetSelectionState() const;
+
+    void SetFgColour(const wxColour& c);
+    const wxColour& GetFgColour() const;
+    void SetBgColour(const wxColour& c);
+    const wxColour& GetBgColour() const;
+    void SetBgMode(int m);
+    int GetBgMode() const;
+};
+
+
 
 /**
     @class wxHtmlRenderingStyle
@@ -66,6 +141,25 @@ public:
 
     wxHtmlRenderingState& GetState();
     //@}
+};
+
+
+
+// Flags for wxHtmlCell::FindCellByPos
+enum
+{
+    wxHTML_FIND_EXACT             = 1,
+    wxHTML_FIND_NEAREST_BEFORE    = 2,
+    wxHTML_FIND_NEAREST_AFTER     = 4
+};
+
+
+// Superscript/subscript/normal script mode of a cell
+enum wxHtmlScriptMode
+{
+    wxHTML_SCRIPT_NORMAL,
+    wxHTML_SCRIPT_SUB,
+    wxHTML_SCRIPT_SUP
 };
 
 

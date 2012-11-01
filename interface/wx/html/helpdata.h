@@ -7,6 +7,69 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @class wxHtmlBookRecord
+
+    Helper class for wxHtmlHelpData
+*/
+class wxHtmlBookRecord
+{
+public:
+    wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath,
+                     const wxString& title, const wxString& start);
+
+    wxString GetBookFile() const;
+    wxString GetTitle() const;
+    wxString GetStart() const;
+    wxString GetBasePath() const;
+    
+    /* SetContentsRange: store in the bookrecord where in the index/contents lists the
+     * book's records are stored. This to facilitate searching in a specific book.
+     * This code will have to be revised when loading/removing books becomes dynamic.
+     * (as opposed to appending only)
+     * Note that storing index range is pointless, because the index is alphab. sorted. */
+    void SetContentsRange(int start, int end);
+    int GetContentsStart() const;
+    int GetContentsEnd() const;
+
+    void SetTitle(const wxString& title);
+    void SetBasePath(const wxString& path);
+    void SetStart(const wxString& start);
+
+    // returns full filename of page (which is part of the book),
+    // i.e. with book's basePath prepended. If page is already absolute
+    // path, basePath is _not_ prepended.
+    wxString GetFullPath(const wxString &page) const;
+};
+
+
+
+/**
+    @class wxHtmlHelpDataItem
+
+    Helper class for wxHtmlHelpData
+*/
+struct wxHtmlHelpDataItem
+{
+    wxHtmlHelpDataItem();
+
+    int level;
+    wxHtmlHelpDataItem *parent;
+    int id;
+    wxString name;
+    wxString page;
+    wxHtmlBookRecord *book;
+
+    // returns full filename of m_Page, i.e. with book's basePath prepended
+    wxString GetFullPath() const;
+
+    // returns item indented with spaces if it has level>1:
+    wxString GetIndentedName() const;
+};
+
+
+
+
+/**
     @class wxHtmlHelpData
 
     This class is used by wxHtmlHelpController and wxHtmlHelpFrame to access HTML
