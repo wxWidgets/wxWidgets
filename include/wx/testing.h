@@ -76,6 +76,9 @@ private:
 #include <queue>
 #include "wx/afterstd.h"
 #include "wx/cpp.h"
+#include "wx/dialog.h"
+#include "wx/msgdlg.h"
+#include "wx/filedlg.h"
 
 class wxTestingModalHook;
 
