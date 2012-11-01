@@ -100,6 +100,13 @@ bool wxChoice::Create(wxWindow *parent,
 // adding/deleting items to/from the list
 // ----------------------------------------------------------------------------
 
+void wxChoice::DoAfterItemCountChange()
+{
+    InvalidateBestSize();
+
+    GetPeer()->SetMaximum( GetCount() );
+}
+
 int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
                             unsigned int pos,
                             void **clientData, wxClientDataType type)
@@ -132,7 +139,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         AssignNewItemClientData(idx, clientData, i, type);
     }
 
-    GetPeer()->SetMaximum( GetCount() );
+    DoAfterItemCountChange();
 
     return pos - 1;
 }
@@ -148,8 +155,8 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
     m_strings.RemoveAt( n ) ;
     m_datas.RemoveAt( n ) ;
-    GetPeer()->SetMaximum( GetCount() ) ;
 
+    DoAfterItemCountChange();
 }
 
 void wxChoice::DoClear()
@@ -162,7 +169,7 @@ void wxChoice::DoClear()
     m_strings.Empty() ;
     m_datas.Empty() ;
 
-    GetPeer()->SetMaximum( 0 ) ;
+    DoAfterItemCountChange();
 }
 
 // ----------------------------------------------------------------------------
