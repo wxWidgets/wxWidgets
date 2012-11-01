@@ -69,8 +69,12 @@ void wxTextMeasure::BeginMeasuring()
         m_hdc = ::GetDC(GetHwndOf(m_win));
     }
 
-    if ( m_font )
-        m_hfontOld = (HFONT)::SelectObject(m_hdc, GetHfontOf(*m_font));
+    // We need to set the font if it's explicitly specified, of course, but
+    // also if we're associated with a window because the window HDC created
+    // above has the default font selected into it and not the font of the
+    // window.
+    if ( m_font || m_win )
+        m_hfontOld = (HFONT)::SelectObject(m_hdc, GetHfontOf(GetFont()));
 }
 
 void wxTextMeasure::EndMeasuring()
