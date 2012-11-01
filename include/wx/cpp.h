@@ -128,8 +128,8 @@
    (With thanks to https://groups.google.com/d/topic/comp.std.c/d-6Mj5Lko_s/discussion
    and http://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros)
 */
-#define wxCALL_FOR_EACH_NARG(...)  wxCALL_FOR_EACH_NARG_(__VA_ARGS__, wxCALL_FOR_EACH_RSEQ_N())
-#define wxCALL_FOR_EACH_NARG_(...) wxCALL_FOR_EACH_ARG_N(__VA_ARGS__)
+#define wxCALL_FOR_EACH_NARG(...)   wxCALL_FOR_EACH_NARG_((__VA_ARGS__, wxCALL_FOR_EACH_RSEQ_N()))
+#define wxCALL_FOR_EACH_NARG_(args) wxCALL_FOR_EACH_ARG_N args
 #define wxCALL_FOR_EACH_ARG_N(_1, _2, _3, _4, _5, _6, _7, _8, N, ...) N
 #define wxCALL_FOR_EACH_RSEQ_N() 8, 7, 6, 5, 4, 3, 2, 1, 0
 
@@ -142,11 +142,11 @@
 #define wxCALL_FOR_EACH_7(what, x, ...)   what(7, x)  wxCALL_FOR_EACH_6(what,  __VA_ARGS__)
 #define wxCALL_FOR_EACH_8(what, x, ...)   what(8, x)  wxCALL_FOR_EACH_7(what,  __VA_ARGS__)
 
-#define wxCALL_FOR_EACH_(N, what, ...) \
-    wxCONCAT(wxCALL_FOR_EACH_, N)(what, __VA_ARGS__)
+#define wxCALL_FOR_EACH_(N, args) \
+    wxCONCAT(wxCALL_FOR_EACH_, N) args
 
 #define wxCALL_FOR_EACH(what, ...) \
-    wxCALL_FOR_EACH_(wxCALL_FOR_EACH_NARG(__VA_ARGS__), what, __VA_ARGS__)
+    wxCALL_FOR_EACH_(wxCALL_FOR_EACH_NARG(__VA_ARGS__), (what, __VA_ARGS__))
 
 #else
     #define wxCALL_FOR_EACH  Error_wx_CALL_FOR_EACH_requires_variadic_macros_support
