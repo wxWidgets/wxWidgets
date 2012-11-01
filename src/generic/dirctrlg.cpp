@@ -666,7 +666,7 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
     }
 
     wxTreeItemId treeid = event.GetItem();
-    wxDirItemData *data = (wxDirItemData*)m_treeCtrl->GetItemData( treeid );
+    wxDirItemData *data = GetItemData( treeid );
     wxASSERT( data );
 
     wxString new_name( wxPathOnly( data->m_path ) );
@@ -716,7 +716,7 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
 {
     wxTreeItemId child;
 
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(parentId);
+    wxDirItemData *data = GetItemData(parentId);
     if (!data->m_isExpanded)
         return;
 
@@ -731,7 +731,7 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
 
 void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 {
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(parentId);
+    wxDirItemData *data = GetItemData(parentId);
 
     if (data->m_isExpanded)
         return;
@@ -922,7 +922,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     wxTreeItemId childId = m_treeCtrl->GetFirstChild(parentId, cookie);
     while (childId.IsOk())
     {
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
+        wxDirItemData* data = GetItemData(childId);
 
         if (data && !data->m_path.empty())
         {
@@ -973,7 +973,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
     if (!lastId.IsOk())
         return false;
 
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(lastId);
+    wxDirItemData *data = GetItemData(lastId);
     if (data->m_isDir)
     {
         m_treeCtrl->Expand(lastId);
@@ -986,7 +986,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
         bool selectedChild = false;
         while (childId.IsOk())
         {
-            data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
+            data = GetItemData(childId);
 
             if (data && data->m_path != wxEmptyString && !data->m_isDir)
             {
@@ -1036,6 +1036,11 @@ bool wxGenericDirCtrl::CollapsePath(const wxString& path)
     m_treeCtrl->EnsureVisible(lastId);
 
     return true;
+}
+
+wxDirItemData* wxGenericDirCtrl::GetItemData(wxTreeItemId itemId)
+{
+    return static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
 }
 
 wxString wxGenericDirCtrl::GetPath(wxTreeItemId itemId) const

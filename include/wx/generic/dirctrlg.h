@@ -192,6 +192,7 @@ protected:
 
 private:
     void PopulateNode(wxTreeItemId node);
+    wxDirItemData* GetItemData(wxTreeItemId itemId);
 
     bool            m_showHidden;
     wxTreeItemId    m_rootId;
