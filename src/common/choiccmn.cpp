@@ -28,6 +28,8 @@
 
 #include "wx/choice.h"
 
+#include "wx/private/textmeasure.h"
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -101,6 +103,21 @@ wxCONSTRUCTOR_4( wxChoice, wxWindow*, Parent, wxWindowID, Id, \
 wxChoiceBase::~wxChoiceBase()
 {
     // this destructor is required for Darwin
+}
+
+wxSize wxChoiceBase::DoGetBestSize() const
+{
+    // a reasonable width for an empty choice list
+    wxSize best(80, -1);
+
+    const unsigned int nItems = GetCount();
+    if ( nItems > 0 )
+    {
+        wxTextMeasure txm(this);
+        best.x = txm.GetLargestStringExtent(GetStrings()).x;
+    }
+
+    return best;
 }
 
 // ----------------------------------------------------------------------------

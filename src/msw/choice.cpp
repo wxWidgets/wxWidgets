@@ -587,34 +587,18 @@ void wxChoice::DoSetSize(int x, int y,
 
 wxSize wxChoice::DoGetBestSize() const
 {
-    // find the widest string
-    int wChoice = 0;
-    int hChoice;
-    const unsigned int nItems = GetCount();
-    for ( unsigned int i = 0; i < nItems; i++ )
-    {
-        int wLine;
-        GetTextExtent(GetString(i), &wLine, NULL);
-        if ( wLine > wChoice )
-            wChoice = wLine;
-    }
+    // The base version returns the size of the largest string
+    wxSize best( wxChoiceBase::DoGetBestSize() );
 
-    // give it some reasonable default value if there are no strings in the
-    // list
-    if ( wChoice == 0 )
-        wChoice = 100;
+    // We just need to adjust it to account for the arrow width.
+    best.x += 5*GetCharWidth();
 
-    // the combobox should be slightly larger than the widest string
-    wChoice += 5*GetCharWidth();
+    // set height on our own
     if( HasFlag( wxCB_SIMPLE ) )
-    {
-        hChoice = SetHeightSimpleComboBox( nItems );
-    }
+        best.y = SetHeightSimpleComboBox(GetCount());
     else
-        hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight());
+        best.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight());
 
-    wxSize best(wChoice, hChoice);
-    CacheBestSize(best);
     return best;
 }
 

@@ -343,35 +343,13 @@ GdkWindow *wxChoice::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     return gtk_widget_get_window(m_widget);
 }
 
-// Notice that this method shouldn't be necessary, because GTK calculates
-// properly size of the combobox but for unknown reasons it doesn't work
-// correctly in wx without this.
 wxSize wxChoice::DoGetBestSize() const
 {
-    // strangely, this returns a width of 188 pixels from GTK+ (?)
-    wxSize ret( wxControl::DoGetBestSize() );
-
-    // we know better our horizontal extent: it depends on the longest string
-    // in the combobox
-    if ( m_widget )
-    {
-        ret.x = GetCount() > 0 ? 0 : 60;  // start with something "sensible"
-        int width;
-        unsigned int count = GetCount();
-        for ( unsigned int n = 0; n < count; n++ )
-        {
-            GetTextExtent(GetString(n), &width, NULL, NULL, NULL );
-            if ( width + 40 > ret.x ) // 40 for drop down arrow and space around text
-                ret.x = width + 40;
-        }
-    }
-
-    // empty combobox should have some reasonable default size too
-    if ((GetCount() == 0) && (ret.x < 80))
-        ret.x = 80;
-
-    CacheBestSize(ret);
-    return ret;
+    // Get the height of the control from GTK+ itself, but use our own version
+    // to compute the width large enough to show all our strings as GTK+
+    // doesn't seem to take the control contents into account.
+    return wxSize(wxChoiceBase::DoGetBestSize().x + 40,
+                  wxControl::DoGetBestSize().y);
 }
 
 void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)

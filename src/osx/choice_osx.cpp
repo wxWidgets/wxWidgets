@@ -259,37 +259,13 @@ bool wxChoice::OSXHandleClicked( double WXUNUSED(timestampsec) )
 
 wxSize wxChoice::DoGetBestSize() const
 {
-    int lbWidth = GetCount() > 0 ? 20 : 100;  // some defaults
-    wxSize baseSize = wxWindow::DoGetBestSize();
-    int lbHeight = baseSize.y;
-    int wLine;
+    // We use the base window size for the height (which is wrong as it doesn't
+    // take the font into account -- TODO) and add some margins to the width
+    // computed by the base class method to account for the arrow.
+    const int lbHeight = wxWindow::DoGetBestSize().y;
 
-    {
-        wxClientDC dc(const_cast<wxChoice*>(this));
-
-        // Find the widest line
-        for(unsigned int i = 0; i < GetCount(); i++)
-        {
-            wxString str(GetString(i));
-
-            wxCoord width, height ;
-            dc.GetTextExtent( str , &width, &height);
-            wLine = width ;
-
-            lbWidth = wxMax( lbWidth, wLine ) ;
-        }
-
-        // Add room for the popup arrow
-        lbWidth += 2 * lbHeight ;
-
-        wxCoord width, height ;
-        dc.GetTextExtent( wxT("X"), &width, &height);
-        int cx = width ;
-
-        lbWidth += cx ;
-    }
-
-    return wxSize( lbWidth, lbHeight );
+    return wxSize(wxChoiceBase::DoGetBestSize().x + 2*lbHeight + GetCharWidth(),
+                  lbHeight);
 }
 
 #endif // wxUSE_CHOICE
