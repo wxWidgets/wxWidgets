@@ -112,6 +112,7 @@ protected:
     void OnStdPath(wxCommandEvent& event);
     void OnCheckBox(wxCommandEvent& event);
     void OnRadioBox(wxCommandEvent& event);
+    void OnSelChanged(wxTreeEvent& event);
 
     // reset the control parameters
     void Reset();
@@ -154,6 +155,7 @@ BEGIN_EVENT_TABLE(DirCtrlWidgetsPage, WidgetsPage)
     EVT_BUTTON(DirCtrlPage_SetPath, DirCtrlWidgetsPage::OnButtonSetPath)
     EVT_CHECKBOX(wxID_ANY, DirCtrlWidgetsPage::OnCheckBox)
     EVT_RADIOBOX(wxID_ANY, DirCtrlWidgetsPage::OnRadioBox)
+    EVT_DIRCTRL_CHANGED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnSelChanged)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -168,6 +170,7 @@ DirCtrlWidgetsPage::DirCtrlWidgetsPage(WidgetsBookCtrl *book,
                                        wxImageList *imaglist)
                    :WidgetsPage(book, imaglist, dirctrl_xpm)
 {
+    m_dirCtrl = NULL;
 }
 
 void DirCtrlWidgetsPage::CreateContent()
@@ -358,6 +361,17 @@ void DirCtrlWidgetsPage::OnRadioBox(wxCommandEvent& WXUNUSED(event))
         wxLogMessage("Failed to go to \"%s\", the current path is \"%s\".",
                      path, m_dirCtrl->GetPath());
     }
+}
+
+void DirCtrlWidgetsPage::OnSelChanged(wxTreeEvent& event)
+{
+    if ( m_dirCtrl )
+    {
+        wxLogMessage("Selection changed to \"%s\"",
+                     m_dirCtrl->GetPath(event.GetItem()));
+    }
+
+    event.Skip();
 }
 
 #endif // wxUSE_DIRDLG

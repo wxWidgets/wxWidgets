@@ -111,6 +111,7 @@ public:
     void OnCollapseItem(wxTreeEvent &event );
     void OnBeginEditItem(wxTreeEvent &event );
     void OnEndEditItem(wxTreeEvent &event );
+    void OnTreeSelChange(wxTreeEvent &event);
     void OnSize(wxSizeEvent &event );
 
     // Try to expand as much of the given path as possible.
@@ -209,6 +210,13 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericDirCtrl)
     wxDECLARE_NO_COPY_CLASS(wxGenericDirCtrl);
 };
+
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_DIRCTRL_CHANGED, wxTreeEvent );
+
+#define wx__DECLARE_DIRCTRL_EVT(evt, id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_DIRCTRL_ ## evt, id, wxTreeEventHandler(fn))
+
+#define EVT_DIRCTRL_CHANGED(id, fn) wx__DECLARE_DIRCTRL_EVT(CHANGED, id, fn)
 
 //-----------------------------------------------------------------------------
 // wxDirFilterListCtrl

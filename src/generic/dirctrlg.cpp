@@ -103,6 +103,12 @@ extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[];
 bool wxIsDriveAvailable(const wxString& dirName);
 
 // ----------------------------------------------------------------------------
+// events
+// ----------------------------------------------------------------------------
+
+wxDEFINE_EVENT( wxEVT_COMMAND_DIRCTRL_CHANGED, wxTreeEvent );
+
+// ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, DOS, OS2, MAC, UNIX (returns "/")
 // ----------------------------------------------------------------------------
 
@@ -441,6 +447,7 @@ BEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
   EVT_TREE_ITEM_COLLAPSED     (wxID_TREECTRL, wxGenericDirCtrl::OnCollapseItem)
   EVT_TREE_BEGIN_LABEL_EDIT   (wxID_TREECTRL, wxGenericDirCtrl::OnBeginEditItem)
   EVT_TREE_END_LABEL_EDIT     (wxID_TREECTRL, wxGenericDirCtrl::OnEndEditItem)
+  EVT_TREE_SEL_CHANGED        (wxID_TREECTRL, wxGenericDirCtrl::OnTreeSelChange)
   EVT_SIZE                    (wxGenericDirCtrl::OnSize)
 END_EVENT_TABLE()
 
@@ -692,6 +699,17 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
         dialog.ShowModal();
         event.Veto();
     }
+}
+
+void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
+{
+    wxTreeEvent changedEvent(wxEVT_COMMAND_DIRCTRL_CHANGED, GetId());
+
+    changedEvent.SetItem(event.GetItem());
+    changedEvent.SetClientObject(m_treeCtrl->GetItemData(event.GetItem()));
+
+    GetEventHandler()->SafelyProcessEvent(changedEvent);
+    event.Skip();
 }
 
 void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)

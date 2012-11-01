@@ -581,6 +581,7 @@ All (GUI):
 - Close wxLogWindow automatically if it's the last remaining top level window.
 - Implement clipping for wxSVGFileDC (Steve Benbow).
 - Added wxDirCtrl::GetPath() (troelsk).
+- Added wxEVT_COMMAND_DIRCTRL_CHANGED event (troelsk).
 
 wxGTK:
 
