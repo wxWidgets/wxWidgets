@@ -49,7 +49,6 @@ protected:
                                          wxArrayInt& widths,
                                          double scaleX);
 
-
     // This class is only used for DC text measuring with GTK+ 2 as GTK+ 3 uses
     // Cairo and not Pango for this. However it's still used even with GTK+ 3
     // for window text measuring, so the context and the layout are still

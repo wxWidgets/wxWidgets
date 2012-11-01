@@ -53,6 +53,13 @@ wxTextMeasureBase::wxTextMeasureBase(const wxWindow *win, const wxFont *theFont)
     m_useDCImpl = false;
 }
 
+wxFont wxTextMeasureBase::GetFont() const
+{
+    return m_font ? *m_font
+                  : m_win ? m_win->GetFont()
+                          : m_dc->GetFont();
+}
+
 void wxTextMeasureBase::CallGetTextExtent(const wxString& string,
                                           wxCoord *width,
                                           wxCoord *height,

@@ -23,7 +23,8 @@ class wxTextMeasureBase
 {
 public:
     // The first ctor argument must be non-NULL, i.e. each object of this class
-    // is associated with either a valid wxDC or a valid wxWindow.
+    // is associated with either a valid wxDC or a valid wxWindow. The font can
+    // be NULL to use the current DC/window font or can be specified explicitly.
     wxTextMeasureBase(const wxDC *dc, const wxFont *theFont);
     wxTextMeasureBase(const wxWindow *win, const wxFont *theFont);
 
@@ -122,6 +123,10 @@ protected:
                            wxCoord *height,
                            wxCoord *descent = NULL,
                            wxCoord *externalLeading = NULL);
+
+    // Return a valid font: if one was given to us in the ctor, use this one,
+    // otherwise use the current font of the associated wxDC or wxWindow.
+    wxFont GetFont() const;
 
 
     // Exactly one of m_dc and m_win is non-NULL for any given object of this

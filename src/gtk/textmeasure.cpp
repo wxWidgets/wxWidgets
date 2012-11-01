@@ -40,8 +40,6 @@
 
 void wxTextMeasure::Init()
 {
-    wxASSERT_MSG( m_font, wxT("wxTextMeasure needs a valid wxFont") );
-
     m_context = NULL;
     m_layout = NULL;
 
@@ -87,7 +85,7 @@ void wxTextMeasure::BeginMeasuring()
     if ( m_layout )
     {
         pango_layout_set_font_description(m_layout,
-                                          m_font->GetNativeFontInfo()->description);
+                                          GetFont().GetNativeFontInfo()->description);
     }
 }
 
@@ -124,7 +122,7 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
     }
 
     // Set layout's text
-    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(string, *m_font);
+    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(string, GetFont());
     if ( !dataUTF8 )
     {
         // hardly ideal, but what else can we do if conversion failed?
@@ -167,7 +165,7 @@ bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
                                             double WXUNUSED(scaleX))
 {
     // Set layout's text
-    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(text, *m_font);
+    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(text, GetFont());
     if ( !dataUTF8 )
     {
         // hardly ideal, but what else can we do if conversion failed?
