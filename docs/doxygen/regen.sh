@@ -20,11 +20,19 @@ me=$(basename $0)
 path=${0%%/$me}        # path from which the script has been launched
 current=$(pwd)
 cd $path
-if [ "$WXWIDGETS" = "" ]; then
-    export WXWIDGETS=`cd ../.. && pwd`
+if [[ -z "$WXWIDGETS" ]]; then
+    WXWIDGETS=`cd ../.. && pwd`
+    # Use the real path in case it's a symlink
+    if command -v readlink; then
+        normalized=`readlink -e $WXWIDGETS`
+        if [[ -n $normalized ]]; then
+            WXWIDGETS=$normalized
+        fi
+    fi 
     if [ "$OSTYPE" = "cygwin" ]; then
-        export WXWIDGETS=`cygpath -w $WXWIDGETS`
+        WXWIDGETS=`cygpath -w $WXWIDGETS`
     fi
+    export WXWIDGETS
 fi
 
 if [ "$DOXYGEN" = "" ]; then
