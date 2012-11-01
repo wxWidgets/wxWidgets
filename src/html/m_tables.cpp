@@ -288,7 +288,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         {
             wxString wd = tag.GetParam(wxT("WIDTH"));
 
-            if (wd[wd.length()-1] == wxT('%'))
+            if (!wd.empty() && wd[wd.length()-1] == wxT('%'))
             {
                 if ( wxSscanf(wd.c_str(), wxT("%i%%"), &m_ColsInfo[c].width) == 1 )
                 {
@@ -704,7 +704,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                 {
                     wxString wd = tag.GetParam(wxT("WIDTH"));
 
-                    if (wd[wd.length()-1] == wxT('%'))
+                    if (!wd.empty() && wd[wd.length()-1] == wxT('%'))
                     {
                         int width = 0;
                         wxSscanf(wd.c_str(), wxT("%i%%"), &width);
