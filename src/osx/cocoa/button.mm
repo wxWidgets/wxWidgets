@@ -17,6 +17,7 @@
 
 #include "wx/button.h"
 #include "wx/toplevel.h"
+#include "wx/tglbtn.h"
 
 #include "wx/osx/private.h"
 
@@ -82,124 +83,120 @@
 - (NSControlSize)controlSize;
 @end
 
-namespace
+wxButtonCocoaImpl::wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v)
+: wxWidgetCocoaImpl(wxpeer, v)
 {
+    SetNeedsFrame(false);
+}
 
-class wxButtonCocoaImpl : public wxWidgetCocoaImpl, public wxButtonImpl
+void wxButtonCocoaImpl::SetBitmap(const wxBitmap& bitmap)
 {
-public:
-    wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v)
-        : wxWidgetCocoaImpl(wxpeer, v)
+    // switch bezel style for plain pushbuttons
+    if ( bitmap.IsOk() )
     {
-        SetNeedsFrame(false);
+        if ([GetNSButton() bezelStyle] == NSRoundedBezelStyle)
+            [GetNSButton() setBezelStyle:NSRegularSquareBezelStyle];
     }
-
-    virtual void SetBitmap(const wxBitmap& bitmap)
+    else
     {
-        // switch bezel style for plain pushbuttons
-        if ( bitmap.IsOk() )
-        {
-            if ([GetNSButton() bezelStyle] == NSRoundedBezelStyle)
-                [GetNSButton() setBezelStyle:NSRegularSquareBezelStyle];
-        }
-        else
-        {
-            [GetNSButton() setBezelStyle:NSRoundedBezelStyle];
-        }
-        
-        wxWidgetCocoaImpl::SetBitmap(bitmap);
+        [GetNSButton() setBezelStyle:NSRoundedBezelStyle];
     }
+    
+    wxWidgetCocoaImpl::SetBitmap(bitmap);
+}
 
 #if wxUSE_MARKUP
-    virtual void SetLabelMarkup(const wxString& markup)
-    {
-        wxMarkupToAttrString toAttr(GetWXPeer(), markup);
-        NSMutableAttributedString *attrString = toAttr.GetNSAttributedString();
-
-        // Button text is always centered.
-        NSMutableParagraphStyle *
-            paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setAlignment: NSCenterTextAlignment];
-        [attrString addAttribute:NSParagraphStyleAttributeName
-                    value:paragraphStyle
-                    range:NSMakeRange(0, [attrString length])];
-        [paragraphStyle release];
-
-        [GetNSButton() setAttributedTitle:attrString];
-    }
+void wxButtonCocoaImpl::SetLabelMarkup(const wxString& markup)
+{
+    wxMarkupToAttrString toAttr(GetWXPeer(), markup);
+    NSMutableAttributedString *attrString = toAttr.GetNSAttributedString();
+    
+    // Button text is always centered.
+    NSMutableParagraphStyle *
+    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setAlignment: NSCenterTextAlignment];
+    [attrString addAttribute:NSParagraphStyleAttributeName
+                       value:paragraphStyle
+                       range:NSMakeRange(0, [attrString length])];
+    [paragraphStyle release];
+    
+    [GetNSButton() setAttributedTitle:attrString];
+}
 #endif // wxUSE_MARKUP
 
-    void SetPressedBitmap( const wxBitmap& bitmap )
+void wxButtonCocoaImpl::SetPressedBitmap( const wxBitmap& bitmap )
+{
+    NSButton* button = GetNSButton();
+    [button setAlternateImage: bitmap.GetNSImage()];
+    if ( GetWXPeer()->IsKindOf(wxCLASSINFO(wxToggleButton)) )
     {
-        NSButton* button = GetNSButton();
-        [button setAlternateImage: bitmap.GetNSImage()];
+        [button setButtonType:NSToggleButton];
+    }
+    else
+    {
         [button setButtonType:NSMomentaryChangeButton];
     }
+}
 
-    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const
+void wxButtonCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &bottom) const
+{
+    left = top = right = bottom = 0;
+    NSControlSize size = NSRegularControlSize;
+    if ( [m_osxView respondsToSelector:@selector(controlSize)] )
+        size = [m_osxView controlSize];
+    else if ([m_osxView respondsToSelector:@selector(cell)])
     {
-        left = top = right = bottom = 0;
-        NSControlSize size = NSRegularControlSize;
-        if ( [m_osxView respondsToSelector:@selector(controlSize)] )
-            size = [m_osxView controlSize];
-        else if ([m_osxView respondsToSelector:@selector(cell)])
-        {
-            id cell = [(id)m_osxView cell];
-            if ([cell respondsToSelector:@selector(controlSize)])
-                size = [cell controlSize];
-        }
-        
-        if ( [GetNSButton() bezelStyle] == NSRoundedBezelStyle )
-        {
-            switch( size )
-            {
-                case NSRegularControlSize:
-                    left = right = 6;
-                    top = 4;
-                    bottom = 8;
-                    break;
-                case NSSmallControlSize:
-                    left = right = 5;
-                    top = 4;
-                    bottom = 7;
-                    break;
-                case NSMiniControlSize:
-                    left = right = 1;
-                    top = 0;
-                    bottom = 2;
-                    break;
-            }
-        }
-    }
-
-    void SetAcceleratorFromLabel(const wxString& label)
-    {
-        const int accelPos = wxControl::FindAccelIndex(label);
-        if ( accelPos != wxNOT_FOUND )
-        {
-            wxString accelstring(label[accelPos + 1]); // Skip '&' itself
-            accelstring.MakeLower();
-            wxCFStringRef cfText(accelstring);
-            [GetNSButton() setKeyEquivalent:cfText.AsNSString()];
-            [GetNSButton() setKeyEquivalentModifierMask:NSCommandKeyMask];
-        }
-        else
-        {
-            [GetNSButton() setKeyEquivalent:@""];
-        }
+        id cell = [(id)m_osxView cell];
+        if ([cell respondsToSelector:@selector(controlSize)])
+            size = [cell controlSize];
     }
     
-    
-private:
-    NSButton *GetNSButton() const
+    if ( [GetNSButton() bezelStyle] == NSRoundedBezelStyle )
     {
-        wxASSERT( [m_osxView isKindOfClass:[NSButton class]] );
-
-        return static_cast<NSButton *>(m_osxView);
+        switch( size )
+        {
+            case NSRegularControlSize:
+                left = right = 6;
+                top = 4;
+                bottom = 8;
+                break;
+            case NSSmallControlSize:
+                left = right = 5;
+                top = 4;
+                bottom = 7;
+                break;
+            case NSMiniControlSize:
+                left = right = 1;
+                top = 0;
+                bottom = 2;
+                break;
+        }
     }
-};
+}
 
-} // anonymous namespace
+void wxButtonCocoaImpl::SetAcceleratorFromLabel(const wxString& label)
+{
+    const int accelPos = wxControl::FindAccelIndex(label);
+    if ( accelPos != wxNOT_FOUND )
+    {
+        wxString accelstring(label[accelPos + 1]); // Skip '&' itself
+        accelstring.MakeLower();
+        wxCFStringRef cfText(accelstring);
+        [GetNSButton() setKeyEquivalent:cfText.AsNSString()];
+        [GetNSButton() setKeyEquivalentModifierMask:NSCommandKeyMask];
+    }
+    else
+    {
+        [GetNSButton() setKeyEquivalent:@""];
+    }
+}
+
+NSButton *wxButtonCocoaImpl::GetNSButton() const
+{
+    wxASSERT( [m_osxView isKindOfClass:[NSButton class]] );
+    
+    return static_cast<NSButton *>(m_osxView);
+}
 
 // Set the keyboard accelerator key from the label (e.g. "Click &Me")
 void wxButton::OSXSetAcceleratorFromLabel(const wxString& label)
