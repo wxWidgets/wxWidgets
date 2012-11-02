@@ -255,6 +255,24 @@ protected :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl)
 };
 
+DECLARE_WXCOCOA_OBJC_CLASS( wxNSButton );
+
+class wxButtonCocoaImpl : public wxWidgetCocoaImpl, public wxButtonImpl
+{
+public:
+    wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v);
+    virtual void SetBitmap(const wxBitmap& bitmap);
+#if wxUSE_MARKUP
+    virtual void SetLabelMarkup(const wxString& markup);
+#endif // wxUSE_MARKUP
+    
+    void SetPressedBitmap( const wxBitmap& bitmap );
+    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const;
+    
+private:
+    NSButton *GetNSButton() const;
+};
+
 #ifdef __OBJC__
 
     WXDLLIMPEXP_CORE NSScreen* wxOSXGetMenuScreen();
