@@ -1693,7 +1693,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGResourceHandler, wxBundleResourceHandler)
 
 class WXDLLEXPORT wxJPEGResourceHandler: public wxBundleResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxPNGResourceHandler)
+    DECLARE_DYNAMIC_CLASS(wxJPEGResourceHandler)
     
 public:
     inline wxJPEGResourceHandler()
