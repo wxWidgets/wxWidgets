@@ -44,7 +44,7 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     SetBezelStyleFromBorderFlags(v, style);
 
     [v setButtonType:NSOnOffButton];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
     return c;
 }
 
@@ -60,13 +60,13 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
+    SetBezelStyleFromBorderFlags(v, style);
+    
     if (label.IsOk())
         [v setImage:label.GetNSImage() ];
 
-    SetBezelStyleFromBorderFlags(v, style);
-
     [v setButtonType:NSOnOffButton];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
     return c;
 }
 
