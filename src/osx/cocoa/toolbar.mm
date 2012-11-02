@@ -1428,7 +1428,9 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
                 wxNSToolBarButton* v = [[wxNSToolBarButton alloc] initWithFrame:toolrect];
 
-                [v setBezelStyle:NSRegularSquareBezelStyle];
+                [v setBezelStyle:NSSmallSquareBezelStyle];
+                [[v cell] setControlSize:NSSmallControlSize];
+                [v setFont:[NSFont fontWithName:[[v font] fontName] size:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
                 [v setBordered:NO];
                 [v setButtonType: ( tool->CanBeToggled() ? NSToggleButton : NSMomentaryPushInButton )];
                 [v setImplementation:tool];
