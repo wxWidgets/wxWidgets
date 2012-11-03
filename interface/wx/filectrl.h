@@ -57,7 +57,7 @@ enum
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{filectrl.png}
+    @appearance{filectrl}
 
     @nativeimpl{wxgtk}
 

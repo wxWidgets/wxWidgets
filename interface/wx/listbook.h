@@ -57,7 +57,7 @@ wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING;
 
     @library{wxcore}
     @category{bookctrl}
-    @appearance{listbook.png}
+    @appearance{listbook}
 
     @see wxBookCtrl, wxNotebook, @ref page_samples_notebook
 */

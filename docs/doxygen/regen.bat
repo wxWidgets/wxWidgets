@@ -8,18 +8,11 @@ REM readable.
 mkdir out 2>&1 >NUL
 mkdir out\html 2>&1 >NUL
 mkdir out\html\generic 2>&1 >NUL
-mkdir out\html\wxgtk 2>&1 >NUL
-mkdir out\html\wxmsw 2>&1 >NUL
-mkdir out\html\wxmac 2>&1 >NUL
 
 REM These not automatically copied by Doxygen because they're not
 REM used in doxygen documentation, only in our html footer and by our
 REM custom aliases
-copy images\powered-by-wxwidgets.png out\html 2>&1 >NUL
 copy images\generic\*.png out\html\generic 2>&1 >NUL
-copy images\wxgtk\*.png out\html\wxgtk 2>&1 >NUL
-copy images\wxmsw\*.png out\html\wxmsw 2>&1 >NUL
-copy images\wxmac\*.png out\html\wxmac 2>&1 >NUL
 copy wxwidgets.js out\html 2>&1 >NUL
 
 REM set cfgfile variable to the right doxyfile to use,

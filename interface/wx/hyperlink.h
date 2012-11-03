@@ -94,7 +94,7 @@ wxEventType wxEVT_COMMAND_HYPERLINK;
 
     @library{wxadv}
     @category{ctrl}
-    @appearance{hyperlinkctrl.png}
+    @appearance{hyperlinkctrl}
 
     @see wxURL, wxHyperlinkEvent
 */

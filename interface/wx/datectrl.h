@@ -77,7 +77,7 @@ enum
 
     @library{wxadv}
     @category{pickers}
-    @appearance{datepickerctrl.png}
+    @appearance{datepickerctrl}
 
     @see wxCalendarCtrl, wxDateEvent
 */

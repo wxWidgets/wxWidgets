@@ -184,7 +184,7 @@ public:
 
     @library{wxrichtext}
     @category{richtext}
-    @appearance{richtextctrl.png}
+    @appearance{richtextctrl}
 
  */
 

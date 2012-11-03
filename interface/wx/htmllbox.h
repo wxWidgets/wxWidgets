@@ -197,7 +197,7 @@ protected:
 
     @library{wxhtml}
     @category{ctrl}
-    @appearance{simplehtmllistbox.png}
+    @appearance{simplehtmllistbox}
 
     @see wxSimpleHtmlListBox::Create
 */

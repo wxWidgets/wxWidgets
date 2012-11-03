@@ -44,7 +44,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{staticbox.png}
+    @appearance{staticbox}
 
     @see wxStaticText, wxStaticBoxSizer
 */

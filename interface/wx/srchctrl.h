@@ -55,7 +55,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{searchctrl.png}
+    @appearance{searchctrl}
 
     @see wxTextCtrl::Create, wxValidator
 */

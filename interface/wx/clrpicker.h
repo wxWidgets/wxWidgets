@@ -46,7 +46,7 @@ wxEventType wxEVT_COMMAND_COLOURPICKER_CHANGED;
 
     @library{wxcore}
     @category{pickers}
-    @appearance{colourpickerctrl.png}
+    @appearance{colourpickerctrl}
 
     @see wxColourDialog, wxColourPickerEvent
 */

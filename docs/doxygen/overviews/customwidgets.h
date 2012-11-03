@@ -8,57 +8,53 @@
 
 /**
 
-@page overview_customwidgets Creating a custom widget
+@page overview_customwidgets Creating a Custom Widget
 
-@li @ref overview_customwidgets_whenwhy
-@li @ref overview_customwidgets_how
+@tableofcontents
 
-<hr>
+Typically combining the existing @ref group_class_ctrl controls in wxDialogs
+and wxFrames is sufficient to fullfill any GUI design. Using the wxWidgets
+standard controls makes your GUI looks native on all ports and is obviously
+easier and faster.
 
-
-@section overview_customwidgets_whenwhy When and why you should write your custom widget
-
-Typically combining the existing @ref group_class_ctrl controls in wxDialogs and
-wxFrames is sufficient to fullfill any GUI design.
-Using the wxWidgets standard controls makes your GUI looks native on all ports
-and is obviously easier and faster.
-
-However there are situations where you need to show some particular kind of data
-which is not suited to any existing control.
-In these cases rather than hacking an existing control for something it has not
-been conceived for, it's better to write a new widget.
+However there are situations where you need to show some particular kind of
+data which is not suited to any existing control. In these cases rather than
+hacking an existing control for something it has not been conceived for, it's
+better to write a new widget.
 
 
-@section overview_customwidgets_how How to write the custom widget
+
+@section overview_customwidgets_how Writing a Custom Widget
 
 There are at least two very different ways to implement a new widget.
 
 The first is to build it upon wxWidgets existing classes, thus deriving it from
-wxControl or wxWindow. In this way you'll get a @b generic widget.
-This method has the advantage that writing a single
-implementation works on all ports; the disadvantage is that it the widget will
-look the same on all platforms, and thus it may not integrate well with the
-native look and feel.
+wxControl or wxWindow. In this way you'll get a @b generic widget. This method
+has the advantage that writing a single implementation works on all ports; the
+disadvantage is that it the widget will look the same on all platforms, and
+thus it may not integrate well with the native look and feel.
 
-The second method is to build it directly upon the native toolkits of the platforms you
-want to support (e.g. GTK+, Carbon and GDI). In this way you'll get a @b native widget.
-This method in fact has the advantage of a native look and feel but requires different
-implementations and thus more work.
+The second method is to build it directly upon the native toolkits of the
+platforms you want to support (e.g. GTK+, Carbon and GDI). In this way you'll
+get a @b native widget. This method in fact has the advantage of a native look
+and feel but requires different implementations and thus more work.
 
 In both cases you'll want to better explore some hot topics like:
 - @ref overview_windowsizing
 - @ref overview_events_custom to implement your custom widget's events.
-You will probably need also to gain some familiarity with the wxWidgets sources,
-since you'll need to interface with some undocumented wxWidgets internal mechanisms.
+
+You will probably need also to gain some familiarity with the wxWidgets
+sources, since you'll need to interface with some undocumented wxWidgets
+internal mechanisms.
 
 
-@subsection overview_customwidgets_how_generic Writing a generic widget
+
+@subsection overview_customwidgets_how_generic Writing a Generic Widget
 
 Generic widgets are typically derived from wxControl or wxWindow.
 They are easy to write. The typical "template" is as follows:
 
 @code
-
 enum MySpecialWidgetStyles
 {
     SWS_LOOK_CRAZY = 1,
@@ -120,12 +116,11 @@ private:
 
 
 
-@subsection overview_customwidgets_how_native Writing a native widget
+@subsection overview_customwidgets_how_native Writing a Native Widget
 
-Writing a native widget is typically more difficult as it requires you to
-know the APIs of the platforms you want to support.
-See @ref page_port_nativedocs for links to the documentation manuals of the
-various toolkits.
+Writing a native widget is typically more difficult as it requires you to know
+the APIs of the platforms you want to support. See @ref page_port_nativedocs
+for links to the documentation manuals of the various toolkits.
 
 The organization used by wxWidgets consists in:
 - declaring the common interface of the control in a generic header, using
@@ -141,4 +136,3 @@ The organization used by wxWidgets consists in:
   and @c "src/msw/button.cpp" files.
 
 */
-

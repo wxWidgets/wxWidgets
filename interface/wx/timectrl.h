@@ -45,7 +45,7 @@ enum
 
     @library{wxadv}
     @category{pickers}
-    @appearance{timepickerctrl.png}
+    @appearance{timepickerctrl}
 
     @see wxDatePickerCtrl, wxDateEvent
 

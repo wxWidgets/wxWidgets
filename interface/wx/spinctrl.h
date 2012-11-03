@@ -47,7 +47,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{spinctrl.png}
+    @appearance{spinctrl}
 
     @see wxSpinButton, wxSpinCtrlDouble, wxControl
 */
@@ -213,7 +213,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{spinctrldouble.png}
+    @appearance{spinctrldouble}
 
     @see wxSpinButton, wxSpinCtrl, wxControl
 */

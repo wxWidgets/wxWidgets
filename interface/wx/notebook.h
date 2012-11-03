@@ -110,7 +110,7 @@ wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
 
     @library{wxcore}
     @category{bookctrl}
-    @appearance{notebook.png}
+    @appearance{notebook}
 
     @see wxBookCtrl, wxBookCtrlEvent, wxImageList, @ref page_samples_notebook
 */

@@ -797,7 +797,7 @@ wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_DROP;
 
     @library{wxadv}
     @category{ctrl,dvc}
-    @appearance{dataviewctrl.png}
+    @appearance{dataviewctrl}
 */
 class wxDataViewCtrl : public wxControl
 {
@@ -2432,7 +2432,7 @@ public:
 
     @library{wxadv}
     @category{ctrl,dvc}
-    @appearance{dataviewtreectrl.png}
+    @appearance{dataviewtreectrl}
 */
 class wxDataViewTreeCtrl : public wxDataViewCtrl
 {

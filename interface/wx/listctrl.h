@@ -267,7 +267,7 @@ enum
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{listctrl.png}
+    @appearance{listctrl}
 
     @see @ref overview_listctrl, wxListView, wxListBox, wxTreeCtrl, wxImageList,
          wxListEvent, wxListItem, wxEditableListBox
@@ -1496,7 +1496,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{listview.png}
+    @appearance{listview}
 
     @see wxListView::SetColumnImage
 */

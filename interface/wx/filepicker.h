@@ -72,7 +72,7 @@ wxEventType wxEVT_COMMAND_DIRPICKER_CHANGED;
 
     @library{wxcore}
     @category{pickers}
-    @appearance{filepickerctrl.png}
+    @appearance{filepickerctrl}
 
     @see wxFileDialog, wxFileDirPickerEvent
 */
@@ -215,7 +215,7 @@ public:
 
     @library{wxcore}
     @category{pickers}
-    @appearance{dirpickerctrl.png}
+    @appearance{dirpickerctrl}
 
     @see wxDirDialog, wxFileDirPickerEvent
 */

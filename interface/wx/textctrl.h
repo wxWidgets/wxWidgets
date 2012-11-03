@@ -1153,7 +1153,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{textctrl.png}
+    @appearance{textctrl}
 
     @see wxTextCtrl::Create, wxValidator
 */

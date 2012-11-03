@@ -87,7 +87,7 @@ enum wxTipKind
 
     @library{wxadv}
     @category{miscwnd}
-    @appearance{richtooltip.png}
+    @appearance{richtooltip}
 
     @since 2.9.3
  */

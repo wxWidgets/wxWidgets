@@ -26,7 +26,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{checklistbox.png}
+    @appearance{checklistbox}
 
     @see wxListBox, wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
 */

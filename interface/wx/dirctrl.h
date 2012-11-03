@@ -46,7 +46,7 @@ enum
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{genericdirctrl.png}
+    @appearance{genericdirctrl}
     @event{EVT_DIRCTRL_CHANGED(id, func)}
           Selected directory has changed.
           Processes a @c wxEVT_COMMAND_DIRCTRL_CHANGED event type.

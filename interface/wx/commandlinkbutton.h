@@ -40,7 +40,7 @@
 
     @library{wxadv}
     @category{ctrl}
-    @appearance{commandlinkbutton.png}
+    @appearance{commandlinkbutton}
 
     @see wxButton, wxBitmapButton
 */

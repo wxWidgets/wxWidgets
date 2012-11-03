@@ -59,7 +59,7 @@ wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING;
 
     @library{wxcore}
     @category{bookctrl}
-    @appearance{choicebook.png}
+    @appearance{choicebook}
 
     @see @ref overview_bookctrl, wxNotebook, @ref page_samples_notebook
 */

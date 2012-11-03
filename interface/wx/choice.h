@@ -26,7 +26,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{choice.png}
+    @appearance{choice}
 
     @see wxListBox, wxComboBox, wxCommandEvent
 */

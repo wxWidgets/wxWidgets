@@ -103,7 +103,7 @@ wxEventType wxEVT_COMMAND_COLLPANE_CHANGED;
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{collapsiblepane.png}
+    @appearance{collapsiblepane}
 
     @see wxPanel, wxCollapsiblePaneEvent
 */

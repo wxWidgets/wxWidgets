@@ -95,7 +95,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{button.png}
+    @appearance{button}
 
     @see wxBitmapButton
 */

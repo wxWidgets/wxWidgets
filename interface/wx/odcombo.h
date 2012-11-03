@@ -77,7 +77,7 @@ enum
 
     @library{wxadv}
     @category{ctrl}
-    @appearance{ownerdrawncombobox.png}
+    @appearance{ownerdrawncombobox}
 
     @see wxComboCtrl, wxComboBox, wxVListBox, wxCommandEvent
 */

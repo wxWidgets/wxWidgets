@@ -360,7 +360,7 @@ struct wxComboCtrlFeatures
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{comboctrl.png}
+    @appearance{comboctrl}
 
     @see wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxComboPopup,
          wxCommandEvent

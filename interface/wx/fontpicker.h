@@ -52,7 +52,7 @@ wxEventType wxEVT_COMMAND_FONTPICKER_CHANGED;
 
     @library{wxcore}
     @category{pickers}
-    @appearance{fontpickerctrl.png}
+    @appearance{fontpickerctrl}
 
     @see wxFontDialog, wxFontPickerEvent
 */

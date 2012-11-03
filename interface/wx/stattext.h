@@ -47,7 +47,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{statictext.png}
+    @appearance{statictext}
 
     @see wxStaticBitmap, wxStaticBox
 */

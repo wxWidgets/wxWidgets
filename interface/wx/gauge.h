@@ -48,7 +48,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{gauge.png}
+    @appearance{gauge}
 
     @see wxSlider, wxScrollBar
 */

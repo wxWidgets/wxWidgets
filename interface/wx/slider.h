@@ -137,7 +137,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{slider.png}
+    @appearance{slider}
 
     @see @ref overview_events, wxScrollBar
 */

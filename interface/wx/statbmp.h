@@ -19,7 +19,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{staticbitmap.png}
+    @appearance{staticbitmap}
 
     @see wxStaticBitmap, wxStaticBox
 */

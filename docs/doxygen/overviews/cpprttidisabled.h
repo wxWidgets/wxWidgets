@@ -10,18 +10,10 @@
 
 @page overview_cpp_rtti_disabled Caveats When Not Using C++ RTTI
 
-@li @ref overview_cpp_rtti_disabled_intro
-@li @ref overview_cpp_rtti_disabled_bind
-@li @ref overview_cpp_rtti_disabled_wxany
+@tableofcontents
 
-@see
+@see @ref overview_rtti, wxEvtHandler::Bind(), wxAny
 
-@li @ref overview_rtti
-@li wxEvtHandler::Bind()
-@li wxAny
-
-
-<hr>
 
 
 @section overview_cpp_rtti_disabled_intro Introduction
@@ -43,6 +35,7 @@ created in one physical binary may not be recognized as its correct type when
 used in another one.
 
 
+
 @section overview_cpp_rtti_disabled_bind Bind() Issues
 
 wxWidgets 2.9.0 introduced a new @ref overview_events_bind system, using
@@ -55,6 +48,7 @@ to this problem simply if you only need to use Bind<>() and not Unbind<>().
 
 Also, if you only bind and unbind same event handler inside same binary, you
 should be fine.
+
 
 
 @section overview_cpp_rtti_disabled_wxany wxAny Issues
@@ -92,4 +86,3 @@ library that called the WX_IMPLEMENT_ANY_VALUE_TYPE() macro, and WXIMPORT
 otherwise.
 
 */
-

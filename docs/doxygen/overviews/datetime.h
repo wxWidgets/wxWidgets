@@ -10,62 +10,40 @@
 
 @page overview_datetime Date and Time
 
-Classes: wxDateTime, wxDateSpan, wxTimeSpan, wxCalendarCtrl
-
-@li @ref overview_datetime_introduction
-@li @ref overview_datetime_classes
-@li @ref overview_datetime_characteristics
-@li @ref overview_datetime_timespandiff
-@li @ref overview_datetime_arithmetics
-@li @ref overview_datetime_timezones
-@li @ref overview_datetime_dst
-@li @ref overview_datetime_holidays
-@li @ref overview_datetime_compat
-
-
-<hr>
-
-
-@section overview_datetime_introduction Introduction
+@tableofcontents
 
 wxWidgets provides a set of powerful classes to work with dates and times. Some
 of the supported features of wxDateTime class are:
 
 @li Wide range: the range of supported dates goes from about 4714 B.C. to
     some 480 million years in the future.
-
 @li Precision: not using floating point calculations anywhere ensures that
     the date calculations don't suffer from rounding errors.
-
 @li Many features: not only all usual calculations with dates are supported,
-    but also more exotic week and year day calculations, work day testing, standard
-    astronomical functions, conversion to and from strings in either strict or free
-    format.
-
+    but also more exotic week and year day calculations, work day testing,
+    standard astronomical functions, conversion to and from strings in either
+    strict or free format.
 @li Efficiency: objects of wxDateTime are small (8 bytes) and working with
     them is fast
-
-
-
-@section overview_datetime_classes All date/time classes at a glance
 
 There are 3 main classes declared in @c wx/datetime.h: except wxDateTime itself
 which represents an absolute moment in time, there are also two classes -
 wxTimeSpan and wxDateSpan - which represent the intervals of time.
 
 There are also helper classes which are used together with wxDateTime:
-wxDateTimeHolidayAuthority which is used to determine whether a given date
-is a holiday or not and wxDateTimeWorkDays which is a derivation of this
-class for which (only) Saturdays and Sundays are the holidays. See more about
-these classes in the discussion of the holidays (see @ref overview_datetime_holidays).
+wxDateTimeHolidayAuthority which is used to determine whether a given date is a
+holiday or not and wxDateTimeWorkDays which is a derivation of this class for
+which (only) Saturdays and Sundays are the holidays. See more about these
+classes in the discussion of the holidays (see
+@ref overview_datetime_holidays).
 
 Finally, in other parts of this manual you may find mentions of wxDate and
-wxTime classes. @ref overview_datetime_compat are obsolete and
-superseded by wxDateTime.
+wxTime classes. @ref overview_datetime_compat are obsolete and superseded by
+wxDateTime.
 
 
 
-@section overview_datetime_characteristics wxDateTime characteristics
+@section overview_datetime_characteristics wxDateTime Characteristics
 
 wxDateTime stores the time as a signed number of
 milliseconds since the Epoch which is fixed, by convention, to Jan 1, 1970 -
@@ -94,7 +72,7 @@ ruled out.
 
 
 
-@section overview_datetime_timespandiff Difference between wxDateSpan and wxTimeSpan
+@section overview_datetime_timespandiff wxDateSpan and wxTimeSpan
 
 While there is only one logical way to represent an absolute moment in the
 time (and hence only one wxDateTime class), there are at least two methods to
@@ -129,7 +107,7 @@ just @c wxDateTime::Now() + wxDateSpan::Month()).
 
 
 
-@section overview_datetime_arithmetics Date arithmetics
+@section overview_datetime_arithmetics Date Arithmetics
 
 Many different operations may be performed with the dates, however not all of
 them make sense. For example, multiplying a date by a number is an invalid
@@ -141,14 +119,11 @@ Here is what can be done:
 @li @b Addition: a wxTimeSpan or wxDateSpan can be added to wxDateTime
     resulting in a new wxDateTime object and also 2 objects of the same span class
     can be added together giving another object of the same class.
-
 @li @b Subtraction: the same types of operations as above are
     allowed and, additionally, a difference between two wxDateTime objects can be
     taken and this will yield wxTimeSpan.
-
 @li @b Multiplication: a wxTimeSpan or wxDateSpan object can be
     multiplied by an integer number resulting in an object of the same type.
-
 @li <b>Unary minus</b>: a wxTimeSpan or wxDateSpan object may finally be
     negated giving an interval of the same magnitude but of opposite time
     direction.
@@ -160,7 +135,7 @@ are only implemented as members and Neg() is the synonym for unary minus.
 
 
 
-@section overview_datetime_timezones Time zone considerations
+@section overview_datetime_timezones Time Zone Considerations
 
 Although the time is always stored internally in GMT, you will usually work in
 the local time zone. Because of this, all wxDateTime constructors and setters
@@ -207,7 +182,7 @@ printf("The time is %s in GMT", dt.FormatTime(wxDateTime::GMT).c_str());
 
 
 
-@section overview_datetime_dst Daylight saving time (DST)
+@section overview_datetime_dst Daylight Saving Time (DST)
 
 DST (a.k.a. 'summer time') handling is always a delicate task which is better
 left to the operating system which is supposed to be configured by the

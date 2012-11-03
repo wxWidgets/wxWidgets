@@ -158,7 +158,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{treectrl.png}
+    @appearance{treectrl}
 
     @see wxDataViewTreeCtrl, wxTreeEvent, wxTreeItemData, @ref overview_treectrl,
          wxListBox, wxListCtrl, wxImageList

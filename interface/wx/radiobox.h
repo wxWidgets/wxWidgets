@@ -29,7 +29,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{radiobox.png}
+    @appearance{radiobox}
 
     @see @ref overview_events, wxRadioButton, wxCheckBox
 */

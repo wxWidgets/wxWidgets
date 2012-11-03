@@ -105,7 +105,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{scrollbar.png}
+    @appearance{scrollbar}
 
     @see @ref overview_scrolling, @ref overview_events, wxScrolled
 */

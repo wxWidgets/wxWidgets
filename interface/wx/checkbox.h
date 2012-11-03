@@ -69,7 +69,7 @@ enum wxCheckBoxState
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{checkbox.png}
+    @appearance{checkbox}
 
     @see wxRadioButton, wxCommandEvent
 */
