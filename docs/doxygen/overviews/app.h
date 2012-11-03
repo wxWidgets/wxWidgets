@@ -10,13 +10,8 @@
 
 @page overview_app wxApp Overview
 
-Classes: wxApp
+@tableofcontents
 
-@li @ref overview_app_intro
-@li @ref overview_app_shutdown
-
-
-<hr>
 
 
 @section overview_app_intro Introduction
@@ -73,6 +68,7 @@ application object construction time.
 You can also use DECLARE_APP(appClass) in a header file to declare the wxGetApp
 function which returns a reference to the application object. Otherwise you can
 only use the global @c wxTheApp pointer which is of type @c wxApp*.
+
 
 
 @section overview_app_shutdown Application Shutdown

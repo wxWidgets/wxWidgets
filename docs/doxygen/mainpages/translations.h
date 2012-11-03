@@ -11,28 +11,26 @@
 
 @page page_translations Translations
 
+@tableofcontents
+
 wxWidgets uses a certain number of user-readable strings such as
-<tt>"help"</tt> or <tt>"Load file"</tt> which should be translated to the
-users language if it is different from English. wxWidgets has built in support
-for internationalization (@e i18n from now on) which allows for this to happen
+<tt>"help"</tt> or <tt>"Load file"</tt> which should be translated to the users
+language if it is different from English. wxWidgets has built in support for
+internationalization (@e i18n from now on) which allows for this to happen
 automatically if the translations to the current language are available.
 
 You may find here the list of all existing translations with the addresses of
 the official translators whom you should contact if you would like to submit
 any corrections to the translations for your language.
 
-Also, please see @ref page_translations_howtohelp if you would like to translate
-wxWidgets to your language if it is not mentioned here (or to help with one which
-already is - it is quite helpful to have several translators for one language at
-least for proof reading).
-
-@li @ref page_translations_avail
-@li @ref page_translations_howtohelp
-
-<hr>
+Also, please see @ref page_translations_howtohelp if you would like to
+translate wxWidgets to your language if it is not mentioned here (or to help
+with one which already is - it is quite helpful to have several translators for
+one language at least for proof reading).
 
 
-@section page_translations_avail Available translations
+
+@section page_translations_avail Available Translations
 
 Below is the table containing the list of languages supported by wxWidgets.
 The columns of this table have the obvious meaning: in each row you will see
@@ -349,7 +347,8 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 <br>
 
 
-@section page_translations_howtohelp How to help
+
+@section page_translations_howtohelp How to Help
 
 wxWidgets uses the standard <a href="http://www.gnu.org/software/gettext/">GNU
 gettext</a> tools for i18n so if you are already familiar with them you

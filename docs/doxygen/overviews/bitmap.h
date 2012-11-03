@@ -10,11 +10,7 @@
 
 @page overview_bitmap Bitmaps and Icons
 
-Classes:
-@li wxBitmap
-@li wxBitmapHandler
-@li wxIcon
-@li wxCursor
+@tableofcontents
 
 The wxBitmap class encapsulates the concept of a platform-dependent bitmap,
 either monochrome or colour. Platform-specific methods for creating a wxBitmap
@@ -90,11 +86,8 @@ PNG files embedded in resources (meaning either Windows resource section of the
 executable file or OS X "Resource" subdirectory of the application bundle) or
 arrays containing PNG data included into the program code itself.
 
-@li @ref overview_bitmap_supportedformats
-@li @ref overview_bitmap_handlers
+@see @ref group_class_gdi
 
-
-<hr>
 
 
 @section overview_bitmap_supportedformats Supported Bitmap File Formats

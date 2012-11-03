@@ -10,6 +10,8 @@
 
 @page page_libs Library List
 
+@tableofcontents
+
 wxWidgets can be built either as a single large library (this is called a
 <em>monolithic build</em>) or as several smaller libraries
 (<em>multilib build</em>). Multilib build is the default.
@@ -66,6 +68,34 @@ libraries), and all green libraries depend on the @ref page_libs_wxcore library
 (i.e. they are GUI libraries).
 
 
+
+@section page_libs_wxadv wxAdvanced
+
+Advanced or rarely used GUI classes:
+
+@li wxCalendarCtrl
+@li wxGrid classes
+@li wxJoystick
+@li wxLayoutAlgorithm
+@li wxSplashScreen
+@li wxTaskBarIcon
+@li wxSound
+@li wxWizard
+@li wxSashLayoutWindow
+@li wxSashWindow
+@li ...others
+
+Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
+
+
+@section page_libs_wxaui wxAui
+
+This contains the Advanced User Interface docking library.
+
+Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
+@ref page_libs_wxcore, @ref page_libs_wxbase.
+
+
 @section page_libs_wxbase wxBase
 
 Every wxWidgets application must link against this library. It contains
@@ -84,12 +114,30 @@ applications don't.
 Requires @ref page_libs_wxbase.
 
 
-@section page_libs_wxaui wxAui
+@section page_libs_wxgl wxGL
 
-This contains the Advanced User Interface docking library.
+This library contains wxGLCanvas class for integrating OpenGL library with
+wxWidgets. Unlike all others, this library is @b not part of the monolithic
+library, it is always built as separate library.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
-@ref page_libs_wxcore, @ref page_libs_wxbase.
+Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
+
+
+@section page_libs_wxhtml wxHTML
+
+Simple HTML renderer and other @ref overview_html are contained in this
+library, as well as wxHtmlHelpController, wxBestHelpController and
+wxHtmlListBox.
+
+Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
+
+
+@section page_libs_wxmedia wxMedia
+
+Miscellaneous classes related to multimedia. Currently this library only
+contains wxMediaCtrl but more classes will be added in the future.
+
+Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
 
 
 @section page_libs_wxnet wxNet
@@ -112,6 +160,15 @@ This contains the wxPropertyGrid control.
 Requires @ref page_libs_wxadv, @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
+@section page_libs_wxqa wxQA
+
+This is the library containing extra classes for quality assurance. Currently
+it only contains wxDebugReport and related classes, but more will be added to
+it in the future.
+
+Requires @ref page_libs_wxxml, @ref page_libs_wxcore, @ref page_libs_wxbase.
+
+
 @section page_libs_wxribbon wxRibbon
 
 This contains the Ribbon User Interface components library.
@@ -122,76 +179,6 @@ Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 @section page_libs_wxrichtext wxRichText
 
 This contains generic rich text control functionality.
-
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
-@ref page_libs_wxcore, @ref page_libs_wxbase.
-
-
-@section page_libs_wxxml wxXML
-
-This library contains simple classes for parsing XML documents.
-
-Requires @ref page_libs_wxbase.
-
-
-@section page_libs_wxadv wxAdvanced
-
-Advanced or rarely used GUI classes:
-
-@li wxCalendarCtrl
-@li wxGrid classes
-@li wxJoystick
-@li wxLayoutAlgorithm
-@li wxSplashScreen
-@li wxTaskBarIcon
-@li wxSound
-@li wxWizard
-@li wxSashLayoutWindow
-@li wxSashWindow
-@li ...others
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
-
-
-@section page_libs_wxmedia wxMedia
-
-Miscellaneous classes related to multimedia. Currently this library only
-contains wxMediaCtrl but more classes will be added in the future.
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
-
-
-@section page_libs_wxgl wxGL
-
-This library contains wxGLCanvas class for integrating OpenGL library with
-wxWidgets. Unlike all others, this library is @b not part of the monolithic
-library, it is always built as separate library.
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
-
-
-@section page_libs_wxhtml wxHTML
-
-Simple HTML renderer and other @ref overview_html are contained in this
-library, as well as wxHtmlHelpController, wxBestHelpController and
-wxHtmlListBox.
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
-
-
-@section page_libs_wxqa wxQA
-
-This is the library containing extra classes for quality assurance. Currently
-it only contains wxDebugReport and related classes, but more will be added to
-it in the future.
-
-Requires @ref page_libs_wxxml, @ref page_libs_wxcore, @ref page_libs_wxbase.
-
-
-@section page_libs_wxxrc wxXRC
-
-This library contains wxXmlResource class that provides access to XML resource
-files in XRC format.
 
 Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
@@ -210,5 +197,20 @@ The wxWebView library contains the wxWebView control and its associated classes.
 
 Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 
-*/
 
+@section page_libs_wxxml wxXML
+
+This library contains simple classes for parsing XML documents.
+
+Requires @ref page_libs_wxbase.
+
+
+@section page_libs_wxxrc wxXRC
+
+This library contains wxXmlResource class that provides access to XML resource
+files in XRC format.
+
+Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
+@ref page_libs_wxcore, @ref page_libs_wxbase.
+
+*/

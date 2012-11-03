@@ -6,17 +6,18 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 /**
 
 @mainpage Documentation
+
 @author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn,
         Stefan Csomor, Francesco Montorsi, Bryan Petty, et al
-@date July, 2012
+
+@date September, 2012
 
 @image html main_wxlogo.png
 
-@section manual_user User Manual:
+@section manual_user User Manual
 
 @li @subpage page_introduction
 @li @subpage page_copyright
@@ -28,7 +29,7 @@
 @li @subpage page_multiplatform
 @li @subpage page_port
 
-@section manual_reference Reference Manual:
+@section manual_reference Reference Manual
 
 @li @subpage page_constants
 @li @subpage page_translations

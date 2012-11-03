@@ -9,7 +9,7 @@
 
 /**
 
-@page page_stdevtid Standard event identifiers
+@page page_stdevtid Standard Event Identifiers
 
 wxWidgets defines a special identifier value @c wxID_ANY which is used in
 the following two situations:

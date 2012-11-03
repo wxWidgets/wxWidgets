@@ -10,6 +10,8 @@
 
 @page overview_backwardcompat Backwards Compatibility
 
+@tableofcontents
+
 Many of the GUIs and platforms supported by wxWidgets are continuously
 evolving, and some of the new platforms wxWidgets now supports were quite
 unimaginable even a few years ago. In this environment wxWidgets must also
@@ -20,13 +22,6 @@ interface across many platforms, but also to provide an interface that is
 reasonably stable over time, to help protect its users from some of the
 uncertainty of the future.
 
-@li @ref overview_backwardcompat_versionnumbering
-@li @ref overview_backwardcompat_sourcecompat
-@li @ref overview_backwardcompat_libbincompat
-@li @ref overview_backwardcompat_appbincompat
-
-
-<hr>
 
 
 @section overview_backwardcompat_versionnumbering The Version Numbering Scheme
@@ -170,4 +165,3 @@ numbers. It won't, for example, help you write code compatible with 2.6.x using
 wxWidgets 2.8.x.
 
 */
-

@@ -6,19 +6,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 /**
 
 @page page_introduction Introduction
 
-@li @ref page_introduction_whatis
-@li @ref page_introduction_why
-@li @ref page_introduction_requirements
-@li @ref page_introduction_where
-@li @ref page_introduction_acknowledgements
+@tableofcontents
 
-
-<hr>
 
 
 @section page_introduction_whatis What is wxWidgets?
@@ -119,7 +112,7 @@ here are some of the benefits:
 @li Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
 
 
-@section page_introduction_requirements wxWidgets requirements
+@section page_introduction_requirements wxWidgets Requirements
 
 To make use of wxWidgets, you currently need one of the following setups.
 

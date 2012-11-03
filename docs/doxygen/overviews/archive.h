@@ -10,6 +10,8 @@
 
 @page overview_archive Archive Formats
 
+@tableofcontents
+
 The archive classes handle archive formats such as zip, tar, rar and cab.
 Currently wxZip, wxTar and wxZlib classes are included.
 
@@ -30,17 +32,6 @@ The classes are designed to handle archives on both seekable streams such as
 disk files, or non-seekable streams such as pipes and sockets (see
 @ref overview_archive_noseek).
 
-See also wxFileSystem.
-
-@li @ref overview_archive_create
-@li @ref overview_archive_extract
-@li @ref overview_archive_modify
-@li @ref overview_archive_byname
-@li @ref overview_archive_generic
-@li @ref overview_archive_noseek
-
-
-<hr>
 
 
 @section overview_archive_create Creating an Archive

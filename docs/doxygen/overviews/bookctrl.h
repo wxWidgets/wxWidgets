@@ -10,25 +10,7 @@
 
 @page overview_bookctrl wxBookCtrl Overview
 
-Classes:
-
-@li wxChoicebook
-@li wxListbook
-@li wxNotebook
-@li wxSimplebook
-@li wxTreebook
-@li wxToolbook
-
-Sections:
-
-@li @ref overview_bookctrl_intro
-@li @ref overview_bookctrl_bestbookctrl
-
-
-<hr>
-
-
-@section overview_bookctrl_intro Introduction
+@tableofcontents
 
 A book control is a convenient way of displaying multiple pages of information,
 displayed one page at a time. wxWidgets has five variants of this control:
@@ -45,6 +27,10 @@ See the @ref page_samples_notebook for an example of wxBookCtrl usage.
 Notice that wxSimplebook is special in that it only allows the program to
 change the selection, thus it's usually used in slightly different
 circumstances than the other variants.
+
+@see @ref group_class_bookctrl
+
+
 
 @section overview_bookctrl_bestbookctrl Best Book
 

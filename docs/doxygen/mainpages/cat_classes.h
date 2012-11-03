@@ -10,59 +10,11 @@
 
 @page page_class_cat Summarized Class List by Category
 
+@tableofcontents
+
 This page contains a summarized listing of classes, please see the
 @ref group_class page for a full listing.
 
-@beginInvisibleTable
-<tr><td>
-@li @ref page_class_cat_basicwnd
-@li @ref page_class_cat_winlayout
-@li @ref page_class_cat_managedwnd
-@li @ref page_class_cat_menus
-@li @ref page_class_cat_ctrl
-@li @ref page_class_cat_validator
-@li @ref page_class_cat_pickers
-@li @ref page_class_cat_aui
-@li @ref page_class_cat_cmndlg
-@li @ref page_class_cat_html
-@li @ref page_class_cat_miscwnd
-</td><td>
-@li @ref page_class_cat_dc
-@li @ref page_class_cat_gdi
-@li @ref page_class_cat_gc
-@li @ref page_class_cat_image
-@li @ref page_class_cat_events
-@li @ref page_class_cat_appmanagement
-@li @ref page_class_cat_printing
-@li @ref page_class_cat_dvf
-@li @ref page_class_cat_dnd
-@li @ref page_class_cat_vfs
-@li @ref page_class_cat_threading
-</td><td>
-@li @ref page_class_cat_rtti
-@li @ref page_class_cat_debugging
-@li @ref page_class_cat_logging
-@li @ref page_class_cat_data
-@li @ref page_class_cat_conv
-@li @ref page_class_cat_containers
-@li @ref page_class_cat_smartpointers
-@li @ref page_class_cat_file
-@li @ref page_class_cat_streams
-@li @ref page_class_cat_xml
-@li @ref page_class_cat_xrc
-</td><td>
-@li @ref page_class_cat_net
-@li @ref page_class_cat_archive
-@li @ref page_class_cat_ipc
-@li @ref page_class_cat_help
-@li @ref page_class_cat_media
-@li @ref page_class_cat_gl
-@li @ref page_class_cat_misc
-</td></tr>
-@endTable
-
-
-<hr>
 
 
 @section page_class_cat_basicwnd Basic Windows

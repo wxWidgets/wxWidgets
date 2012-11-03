@@ -9,31 +9,20 @@
 
 /**
 
-@page page_wxusedef wxUSE preprocessor symbols defined by wxWidgets
+@page page_wxusedef wxUSE Preprocessor Symbols
+
+@tableofcontents
 
 This section documents the wxUSE preprocessor symbols used in the wxWidgets
 source, grouped by category (and sorted by alphabetical order inside each
 category). These symbols are always defined and whether the given feature is
 active or not depends on their value: if defined as @c 1, feature is active,
-otherwise it is disabled. Because of this these symbols should be always tested
+otherwise it is disabled. Because of this these symbols should always be tested
 using @if_ and not @ifdef_.
 
-@li @ref page_wxusedef_important
-@li @ref page_wxusedef_multi
-@li @ref page_wxusedef_unix
-@li @ref page_wxusedef_x11
-@li @ref page_wxusedef_gtk
-@li @ref page_wxusedef_mac
-@li @ref page_wxusedef_motif
-@li @ref page_wxusedef_cocoa
-@li @ref page_wxusedef_os2
-@li @ref page_wxusedef_msw
-@li @ref page_wxusedef_univ
 
 
-<hr>
-
-@section page_wxusedef_important Most important wxUSE symbols
+@section page_wxusedef_important Most Important Symbols
 
 This table summarizes some of the global build features affecting the entire
 library:
@@ -60,7 +49,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_multi Generic wxUSE preprocessor symbols
+@section page_wxusedef_multi Generic Symbols
 
 @beginDefList
 @itemdef{wxUSE_ABOUTDLG, Use wxAboutDialogInfo class.}
@@ -269,7 +258,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_unix wxUSE preprocessor symbols used only under Unix platforms
+@section page_wxusedef_unix Unix Platform Symbols
 
 @beginDefList
 @itemdef{wxUSE_EPOLL_DISPATCHER, Use wxEpollDispatcher class. See also wxUSE_SELECT_DISPATCHER.}
@@ -281,7 +270,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_x11 wxUSE preprocessor symbols used only in wxX11 Platform
+@section page_wxusedef_x11 wxX11 Symbols
 
 @beginDefList
 @itemdef{wxUSE_NANOX, Use NanoX.}
@@ -289,7 +278,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_gtk wxUSE preprocessor symbols used only in wxGTK port
+@section page_wxusedef_gtk wxGTK Symbols
 
 @beginDefList
 @itemdef{wxUSE_DETECT_SM, Use code to detect X11 session manager.}
@@ -300,7 +289,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_mac wxUSE preprocessor symbols used only in wxMac port
+@section page_wxusedef_mac wxMac Symbols
 
 @beginDefList
 @itemdef{wxUSE_MAC_CRITICAL_REGION_MUTEX, See src/osx/carbon/thread.cpp file.}
@@ -310,7 +299,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_motif wxUSE preprocessor symbols used only in wxMotif port
+@section page_wxusedef_motif wxMotif Symbols
 
 @beginDefList
 @itemdef{wxUSE_GADGETS, Use xmCascadeButtonGadgetClass, xmLabelGadgetClass, xmPushButtonGadgetClass and xmToggleButtonGadgetClass classes.}
@@ -318,14 +307,14 @@ library:
 @endDefList
 
 
-@section page_wxusedef_cocoa wxUSE preprocessor symbols used only in Cocoa port
+@section page_wxusedef_cocoa Cocoa Symbols
 
 @beginDefList
 @itemdef{wxUSE_OBJC_UNIQUIFYING, Enable Objective-C class name uniquifying.}
 @endDefList
 
 
-@section page_wxusedef_os2 wxUSE preprocessor symbols used only in OS2 port
+@section page_wxusedef_os2 OS2 Symbols
 
 @beginDefList
 @itemdef{wxUSE_CONSOLEDEBUG, See src/os2/app.cpp file.}
@@ -337,7 +326,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_msw wxUSE preprocessor symbols used only in wxMSW port
+@section page_wxusedef_msw wxMSW Symbols
 
 @beginDefList
 @itemdef{wxUSE_ACCESSIBILITY, Enable accessibility support}
@@ -373,7 +362,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_univ wxUSE preprocessor symbols used only in wxUniversal
+@section page_wxusedef_univ wxUniversal Symbols
 
 @beginDefList
 @itemdef{wxUSE_ALL_THEMES, Use all themes in wxUniversal; See wx/univ/theme.h file.}

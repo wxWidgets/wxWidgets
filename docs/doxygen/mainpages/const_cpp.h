@@ -9,24 +9,16 @@
 
 /**
 
-@page page_cppconst Preprocessor symbols defined by wxWidgets
+@page page_cppconst Preprocessor Symbols
 
-These are preprocessor symbols used in the wxWidgets source, grouped
-by category (and sorted by alphabetical order inside each category).
-All of these macros except for the @c wxUSE_XXX variety is defined if the
-corresponding condition is @true and undefined if it isn't, so they should be
-always tested using @ifdef_ and not @if_.
+@tableofcontents
 
-@li @ref page_cppconst_guisystem
-@li @ref page_cppconst_os
-@li @ref page_cppconst_cpu
-@li @ref page_cppconst_hardware
-@li @ref page_cppconst_compiler
-@li @ref page_cppconst_featuretests
-@li @ref page_cppconst_msvc_setup_h
-@li @ref page_cppconst_miscellaneous
+These are preprocessor symbols used in the wxWidgets source, grouped by
+category (and sorted by alphabetical order inside each category). All of these
+macros except for the @c wxUSE_XXX variety is defined if the corresponding
+condition is @true and undefined if it isn't, so they should be always tested
+using @ifdef_ and not @if_.
 
-<hr>
 
 
 @section page_cppconst_guisystem GUI system
@@ -81,7 +73,8 @@ The convention is to use the @c __WX prefix for these
 symbols, although this has not always been followed.
 
 
-@section page_cppconst_os Operating systems
+
+@section page_cppconst_os Operating Systems
 
 @beginDefList
 @itemdef{__APPLE__, any Mac OS version}
@@ -117,7 +110,7 @@ symbols, although this has not always been followed.
 
 
 
-@section page_cppconst_cpu Hardware architectures (CPU)
+@section page_cppconst_cpu Hardware Architectures (CPU)
 
 Note that not all of these symbols are always defined, it depends on the
 compiler used.
@@ -131,7 +124,7 @@ compiler used.
 
 
 
-@section page_cppconst_hardware Hardware type
+@section page_cppconst_hardware Hardware Type
 
 @beginDefList
 @itemdef{__SMARTPHONE__, Generic mobile devices with phone buttons and a small display}
@@ -173,7 +166,7 @@ compiler used.
 
 
 
-@section page_cppconst_featuretests Feature tests
+@section page_cppconst_featuretests Feature Tests
 
 Some library features may not be always available even if they were selected
 by the user. To make it possible to check if this is the case, the library
@@ -224,7 +217,7 @@ Currently the following symbols exist:
 
 
 
-@section page_cppconst_msvc_setup_h Libraries selection for MSVC setup.h
+@section page_cppconst_msvc_setup_h Library Selection for MSVC
 
 Microsoft Visual C++ users may use the special @c wx/setup.h file for this
 compiler in @c include/msvc subdirectory. This file implicitly links in all the
@@ -234,6 +227,7 @@ configurations. However sometimes linking with all the libraries is not
 desirable, for example because some of them were not built and this is where
 the symbols in this section can be helpful: defining them allows to not link
 with the corresponding library. The following symbols are honoured:
+
     - wxNO_ADV_LIB
     - wxNO_AUI_LIB
     - wxNO_HTML_LIB

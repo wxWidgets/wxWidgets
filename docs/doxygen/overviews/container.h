@@ -10,7 +10,11 @@
 
 @page overview_container Container Classes
 
-Classes: wxList<T>, wxArray<T>, wxVector<T>, wxStack<T>, wxHashMap, wxHashSet
+@tableofcontents
+
+@see @ref group_class_containers
+
+
 
 @section overview_container_intro Overview
 
@@ -45,6 +49,7 @@ std::vector<T> and std::list<T> if possible and wxVector<T> or wxDList<T> if
 it isn't and only use legacy wxWidgets containers such as wxArray<T> and
 wxList<T> when you must, i.e. when you use a wxWidgets function taking or
 returning a container of such type.
+
 
 
 @section overview_container_legacy Legacy Classes
@@ -91,6 +96,7 @@ wxArrayString is somewhat special: it is an optimized version of wxArray which
 uses its knowledge about wxString reference counting schema.
 
 
+
 @section overview_container_std STL Build
 
 To build wxWidgets with the standard containers you need to set
@@ -125,6 +131,4 @@ default one. Here are the most important differences:
    class. Please either use std::vector<bool> directly or use an integer array
    instead.
 
-
 */
-

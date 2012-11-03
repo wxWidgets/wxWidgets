@@ -146,9 +146,7 @@ enum AdjustFlags
     By default, screenshots are generated under the subdirectory "screenshots"
     of current working directory. During updating or adding new screenshots,
     first make sure screenshots are generated correctly, and then copy them to
-    the following subdirectory of docs/doxygen/images:
-
-    "wxmsw" for MS Windows, "wxgtk" for Linux and "wxmac" for Mac OS.
+    the "docs/doxygen/images" folder directly.
 
     @section tag_gui_assumption The Assumption of GUI
 

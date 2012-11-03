@@ -9,12 +9,14 @@
 
 /**
 
-@page page_stockitems Stock items
+@page page_stockitems Stock Items
 
-The following is the list of the window IDs for which stock buttons and menu items
-are created.
+The following is the list of the window IDs for which stock buttons and menu
+items are created.
+
 See the wxButton constructor and the wxMenuItem constructor for classes which
 automatically add stock bitmaps when using stock IDs.
+
 Also note that you can retrieve stock bitmaps using wxArtProvider.
 
 @beginDefList
@@ -93,7 +95,7 @@ Also note that you can retrieve stock bitmaps using wxArtProvider.
 @stock{wxID_ZOOM_OUT,zoom-out,Zoom &Out}
 @endDefList
 
-Note that some of the IDs listed above also have a stock accelerator
-and an associated help string.
+Note that some of the IDs listed above also have a stock accelerator and an
+associated help string.
 
 */
