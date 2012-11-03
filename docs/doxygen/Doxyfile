@@ -376,7 +376,7 @@ DOCSET_PUBLISHER_NAME  = wxWidgets Team
 
 GENERATE_HTMLHELP      = $(GENERATE_HTMLHELP)
 CHM_FILE               = ..\wx.chm # Windows style separator is required.
-HHC_LOCATION           = hhc.exe # Don't modify, see Doxyfile_chm for info
+HHC_LOCATION           = hhc.exe
 GENERATE_CHI           = NO
 CHM_INDEX_ENCODING     =
 BINARY_TOC             = NO
