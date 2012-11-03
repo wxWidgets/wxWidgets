@@ -13,7 +13,7 @@
 @author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn,
         Stefan Csomor, Francesco Montorsi, Bryan Petty, et al
 
-@date September, 2012
+@date November, 2012
 
 @image html main_wxlogo.png
 
