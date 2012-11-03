@@ -382,19 +382,19 @@ essentially the usual wxWidgets API; wxWidgets will combine the menubar and
 toolbar. However, there are some restrictions:
 
 @li You must create the frame's primary toolbar with wxFrame::CreateToolBar(),
-because this uses the special wxToolMenuBar class (derived from wxToolBar) to
-implement the combined toolbar and menubar. Otherwise, you can create and
-manage toolbars using the wxToolBar class as usual, for example to implement an
-optional formatting toolbar above the menubar as Pocket Word does. But don't
-assign a wxToolBar to a frame using SetToolBar - you should always use
-CreateToolBar for the main frame toolbar.
+    because this uses the special wxToolMenuBar class (derived from wxToolBar)
+    to implement the combined toolbar and menubar. Otherwise, you can create
+    and manage toolbars using the wxToolBar class as usual, for example to
+    implement an optional formatting toolbar above the menubar as Pocket Word
+    does. But don't assign a wxToolBar to a frame using SetToolBar - you should
+    always use CreateToolBar for the main frame toolbar.
 @li Deleting and adding tools to wxToolMenuBar after Realize is called is not
-@supported.
+    supported.
 @li For speed, colours are not remapped to the system colours as they are in
-wxMSW. Provide the tool bitmaps either with the correct system button
-background, or with transparency (for example, using XPMs).
+    wxMSW. Provide the tool bitmaps either with the correct system button
+    background, or with transparency (for example, using XPMs).
 @li Adding controls to wxToolMenuBar is not supported. However, wxToolBar
-supports controls.
+    supports controls.
 
 Unlike in all other ports, a wxDialog has a wxToolBar automatically created for
 you. You may either leave it blank, or access it with wxDialog::GetToolBar()
@@ -529,17 +529,26 @@ eVC++ format.
 
 When you have converted the wxWidgets workspace, edit the configuration
 properties for each configuration and in the Librarian, add a relative path
-..\\..\\lib to each library path. For example:
-<tt>..\\$(PlatformName)\\$(ConfigurationName)\\wx_mono.lib</tt>.
+
+@verbatim ..\..\lib @endverbatim
+
+to each library path. For example:
+
+@verbatim ..\$(PlatformName)\$(ConfigurationName)\wx_mono.lib @endverbatim
 
 Then, for a sample you want to compile, edit the configuration properties
 and make sure
-<tt>..\\..\\lib\\$(PlatformName)\\$(ConfigurationName)</tt>
-is in the Linker/General/Additional Library Directories property.
-Also change the Linker/Input/Additional Dependencies property to something like
-<tt>coredll.lib wx_mono.lib wx_wxjpeg.lib wx_wxpng.lib wx_wxzlib.lib wx_wxexpat.lib
-    commctrl.lib winsock.lib wininet.lib</tt>
-(since the library names in the wxWidgets workspace were changed by VS 2005).
+
+@verbatim ..\..\lib\$(PlatformName)\$(ConfigurationName) @endverbatim
+
+is in the Linker/General/Additional Library Directories property. Also change
+the Linker/Input/Additional Dependencies property to something like
+
+@verbatim
+coredll.lib wx_mono.lib wx_wxjpeg.lib wx_wxpng.lib wx_wxzlib.lib wx_wxexpat.lib commctrl.lib winsock.lib wininet.lib
+@endverbatim
+
+since the library names in the wxWidgets workspace were changed by VS 2005.
 
 Alternately, you could edit all the names to be identical to the original eVC++
 names, but this will probably be more fiddly.

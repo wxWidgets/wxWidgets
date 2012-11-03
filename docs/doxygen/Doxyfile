@@ -331,14 +331,14 @@ IGNORE_PREFIX          = wx
 # HTML Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_HTML          = YES # Only re-enable in format-specific config files.
+GENERATE_HTML          = $(GENERATE_HTML)
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            = custom_header.html
 HTML_FOOTER            = custom_footer.html
 HTML_STYLESHEET        =
 HTML_EXTRA_STYLESHEET  = extra_stylesheet.css
-HTML_EXTRA_FILES       =
+HTML_EXTRA_FILES       = wxwidgets.js
 HTML_COLORSTYLE_HUE    = 220 # Default: 220
 HTML_COLORSTYLE_SAT    = 255 # Default: 100
 HTML_COLORSTYLE_GAMMA  = 100 # Default: 80
@@ -355,15 +355,15 @@ FORMULA_TRANSPARENT    = YES
 USE_MATHJAX            = NO
 MATHJAX_RELPATH        = http://cdn.mathjax.org/mathjax/latest
 MATHJAX_EXTENSIONS     =
-SEARCHENGINE           = YES
-SERVER_BASED_SEARCH    = YES
+SEARCHENGINE           = $(SEARCHENGINE)
+SERVER_BASED_SEARCH    = $(SERVER_BASED_SEARCH)
 
 
 #---------------------------------------------------------------------------
 # Docset Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_DOCSET        = NO # Only re-enable in format-specific config files.
+GENERATE_DOCSET        = $(GENERATE_DOCSET)
 DOCSET_FEEDNAME        = "wxWidgets 2.9"
 DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx29
 DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
@@ -374,7 +374,7 @@ DOCSET_PUBLISHER_NAME  = wxWidgets Team
 # CHM Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_HTMLHELP      = NO # Only re-enable in format-specific config files.
+GENERATE_HTMLHELP      = $(GENERATE_HTMLHELP)
 CHM_FILE               = ..\wx.chm # Windows style separator is required.
 HHC_LOCATION           = hhc.exe # Don't modify, see Doxyfile_chm for info
 GENERATE_CHI           = NO
@@ -387,7 +387,7 @@ TOC_EXPAND             = NO
 # QHP Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_QHP           = NO # Only re-enable in format-specific config files.
+GENERATE_QHP           = $(GENERATE_QHP)
 QCH_FILE               =
 QHP_NAMESPACE          = org.wxwidgets.doxygen
 QHP_VIRTUAL_FOLDER     = doc
@@ -401,7 +401,7 @@ QHG_LOCATION           =
 # Eclipse Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_ECLIPSEHELP   = NO # Only re-enable in format-specific config files.
+GENERATE_ECLIPSEHELP   = NO
 ECLIPSE_DOC_ID         = org.wxwidgets.doxygen
 
 
@@ -409,7 +409,7 @@ ECLIPSE_DOC_ID         = org.wxwidgets.doxygen
 # LaTeX Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_LATEX         = NO # Only re-enable in format-specific config files.
+GENERATE_LATEX         = $(GENERATE_LATEX)
 LATEX_OUTPUT           = latex
 LATEX_CMD_NAME         = latex
 MAKEINDEX_CMD_NAME     = makeindex
@@ -430,7 +430,7 @@ LATEX_BIB_STYLE        = plain
 # RTF Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_RTF           = NO # Only re-enable in format-specific config files.
+GENERATE_RTF           = NO
 RTF_OUTPUT             = rtf
 COMPACT_RTF            = NO
 RTF_HYPERLINKS         = NO
@@ -442,7 +442,7 @@ RTF_EXTENSIONS_FILE    =
 # Man Page Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_MAN           = NO # Only re-enable in format-specific config files.
+GENERATE_MAN           = NO
 MAN_OUTPUT             = man
 MAN_EXTENSION          = .3
 MAN_LINKS              = NO
@@ -452,7 +452,7 @@ MAN_LINKS              = NO
 # XML Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_XML           = NO # Only re-enable in format-specific config files.
+GENERATE_XML           = $(GENERATE_XML)
 XML_OUTPUT             = xml
 XML_SCHEMA             =
 XML_DTD                =
@@ -463,14 +463,14 @@ XML_PROGRAMLISTING     = NO # Default: YES
 # AutoGen Definitions Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_AUTOGEN_DEF   = NO # Only re-enable in format-specific config files.
+GENERATE_AUTOGEN_DEF   = NO
 
 
 #---------------------------------------------------------------------------
 # Perl Module Output Options
 #---------------------------------------------------------------------------
 
-GENERATE_PERLMOD       = NO # Only re-enable in format-specific config files.
+GENERATE_PERLMOD       = NO
 PERLMOD_LATEX          = YES # Default: NO
 PERLMOD_PRETTY         = YES
 PERLMOD_MAKEVAR_PREFIX =

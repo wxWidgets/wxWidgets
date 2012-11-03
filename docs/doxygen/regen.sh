@@ -47,14 +47,52 @@ mkdir -p out/html/generic
 # used in doxygen documentation, only in our html footer and by our
 # custom aliases
 cp images/generic/*png out/html/generic
-cp wxwidgets.js out/html
 
-# which configuration should we use?
-if [[ -z "$1" ]]; then
-    cfgfile="Doxyfile_all"
-else
-    cfgfile="Doxyfile_$1"
-fi
+# Defaults for settings controlled by this script
+export GENERATE_DOCSET="NO";
+export GENERATE_HTML="NO";
+export GENERATE_HTMLHELP="NO";
+export GENERATE_LATEX="NO";
+export GENERATE_QHP="NO";
+export GENERATE_XML="NO";
+export SEARCHENGINE="NO";
+export SERVER_BASED_SEARCH="NO";
+
+# Which format should we generate during this run?
+case "$1" in
+    all) # All *main* formats, not all formats, here for backwards compat.
+        export GENERATE_HTML="YES";
+        export GENERATE_HTMLHELP="YES";
+        export GENERATE_XML="YES";
+        ;;
+    chm)
+        export GENERATE_HTML="YES";
+        export GENERATE_HTMLHELP="YES";
+        ;;
+    docset)
+        export GENERATE_DOCSET="YES";
+        export GENERATE_HTML="YES";
+        ;;
+    latex)
+        export GENERATE_LATEX="YES";
+        ;;
+    php) # HTML, but with PHP Search Engine
+        export GENERATE_HTML="YES";
+        export SEARCHENGINE="YES";
+        export SERVER_BASED_SEARCH="YES";
+        ;;
+    qch)
+        export GENERATE_HTML="YES";
+        export GENERATE_QHP="YES";
+        ;;
+    xml)
+        export GENERATE_XML="YES";
+        ;;
+    *) # Default to HTML only
+        export GENERATE_HTML="YES";
+        export SEARCHENGINE="YES";
+        ;;
+esac
 
 #
 # NOW RUN DOXYGEN
@@ -63,7 +101,7 @@ fi
 #     otherwise when generating the CHM file with Doxygen, those files are
 #     not included!
 #
-$DOXYGEN $cfgfile
+$DOXYGEN Doxyfile
 
 if [[ "$1" = "qch" ]]; then
     # we need to add missing files to the .qhp
