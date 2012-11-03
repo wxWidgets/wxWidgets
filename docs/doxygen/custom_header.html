@@ -6,14 +6,16 @@
 <!--BEGIN PROJECT_NAME--><title>$projectname: $title</title><!--END PROJECT_NAME-->
 <!--BEGIN !PROJECT_NAME--><title>$title</title><!--END !PROJECT_NAME-->
 <link href="$relpath$tabs.css" rel="stylesheet" type="text/css"/>
-<link href="$relpath$custom_stylesheet.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="$relpath$jquery.js"></script>
+<script type="text/javascript" src="$relpath$dynsections.js"></script>
 $treeview
 $search
 $mathjax
+<link href="$relpath$$stylesheet" rel="stylesheet" type="text/css" />
+$extrastylesheet
 </head>
 <body>
-<div id="top"><!-- do not remove this div! -->
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 
 <!--BEGIN TITLEAREA-->
 <div id="titlearea">
@@ -21,9 +23,13 @@ $mathjax
  <tbody>
  <tr>
   <!--BEGIN PROJECT_LOGO-->
-  <td id="projectlogo"><a href="http://www.wxwidgets.org/" target="_new"><img alt="Logo" src="$relpath$$projectlogo"/></a></td>
+  <td id="projectlogo">
+    <a href="http://www.wxwidgets.org/" target="_new">
+      <img alt="wxWidgets" src="$relpath$$projectlogo"/>
+    </a>
+  </td>
   <!--END PROJECT_LOGO-->
-  <td style="padding: 0.5em; text-align: right;">
+  <td style="padding-left: 0.5em; text-align: right;">
    <!--BEGIN PROJECT_NUMBER--><span id="projectnumber">Version: $projectnumber</span><!--END PROJECT_NUMBER-->
   </td>
   <!--BEGIN DISABLE_INDEX-->
