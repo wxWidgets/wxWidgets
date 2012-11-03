@@ -121,11 +121,6 @@ if [[ "$1" = "docset" ]]; then
     XARDIR="http://docs.wxwidgets.org/docsets"
     XCODE_INSTALL=`sh xcode-select -print-path`
     
-    cp wxdocsettabs.css out/html/wxtabs.css
-    cp wxdocsetwidgets.css out/html/wxwidgets.css
-    cp img_downArrow.png out/html
-    cp background_navigation.png out/html
-    
     cd out/html
     DESTINATIONDIR=`pwd`
     
@@ -140,7 +135,7 @@ if [[ "$1" = "docset" ]]; then
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL http://docs.wxwidgets.org
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 2.9"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2011 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2012 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
     
     $XCODE_INSTALL/usr/bin/docsetutil package -atom $DESTINATIONDIR/$ATOM -download-url $XARDIR/$XAR -output $DESTINATIONDIR/$XAR $DESTINATIONDIR/$DOCSETNAME
 
