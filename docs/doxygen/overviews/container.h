@@ -12,12 +12,6 @@
 
 @tableofcontents
 
-@see @ref group_class_containers
-
-
-
-@section overview_container_intro Overview
-
 For historical reasons, wxWidgets uses custom container classes internally.
 This was unfortunately unavoidable during a long time when the standard library
 wasn't widely available and can't be easily changed even now that it is for
@@ -49,6 +43,8 @@ std::vector<T> and std::list<T> if possible and wxVector<T> or wxDList<T> if
 it isn't and only use legacy wxWidgets containers such as wxArray<T> and
 wxList<T> when you must, i.e. when you use a wxWidgets function taking or
 returning a container of such type.
+
+@see @ref group_class_containers
 
 
 

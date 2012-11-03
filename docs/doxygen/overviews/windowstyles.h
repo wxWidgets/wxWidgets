@@ -10,6 +10,8 @@
 
 @page overview_windowstyles Window Styles
 
+@tableofcontents
+
 Window styles are used to specify alternative behaviour and appearances for
 windows, when they are created. The symbols are defined in such a way that they
 can be combined in a 'bit-list' using the C++ @e bitwise-or operator.
@@ -27,4 +29,3 @@ Most windows can use the generic styles listed for wxWindow in addition to
 their own styles.
 
 */
-

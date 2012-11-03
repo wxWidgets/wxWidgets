@@ -10,12 +10,10 @@
 
 @page overview_splitterwindow wxSplitterWindow Overview
 
-Classes: wxSplitterWindow
+@tableofcontents
 
-@li @ref overview_splitterwindow_appearance
-@li @ref overview_splitterwindow_example
+@see wxSplitterWindow
 
-<hr>
 
 
 @section overview_splitterwindow_appearance Appearance
@@ -80,4 +78,3 @@ void MyFrame::OnUnsplit(wxCommandEvent& event)
 @endcode
 
 */
-

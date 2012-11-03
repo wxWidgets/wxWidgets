@@ -10,22 +10,13 @@
 
 @page overview_mbconv wxMBConv Overview
 
-Classes: wxMBConv, wxMBConvLibc, wxMBConvUTF7, wxMBConvUTF8, wxCSConv,
-         wxMBConvUTF16, wxMBConvUTF32
+@tableofcontents
 
 The wxMBConv classes in wxWidgets enable an Unicode-aware application to easily
 convert between Unicode and the variety of 8-bit encoding systems still in use.
 
-@li @ref overview_mbconv_need
-@li @ref overview_mbconv_string
-@li @ref overview_mbconv_classes
-@li @ref overview_mbconv_objects
-@li @ref overview_mbconv_csconv
-@li @ref overview_mbconv_converting
-@li @ref overview_mbconv_buffers
+@see @ref group_class_conv
 
-
-<hr>
 
 
 @section overview_mbconv_need Background: The Need for Conversion
@@ -190,4 +181,3 @@ reflects the correct return value of cWX2MB (either char* or wxCharBuffer),
 except for the const.
 
 */
-

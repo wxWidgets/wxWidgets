@@ -10,6 +10,8 @@
 
 @page overview_unixprinting Printing Under Unix (GTK+)
 
+@tableofcontents
+
 Printing under Unix has always been a cause of problems as Unix does not
 provide a standard way to display text and graphics on screen and print it to a
 printer using the same application programming interface - instead, displaying
@@ -43,4 +45,3 @@ code. Note that the application will not require a GTK+ version = 2.10 to be
 installed in order to run (there will be no dependency on this version).
 
 */
-

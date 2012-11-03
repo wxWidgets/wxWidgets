@@ -10,17 +10,7 @@
 
 @page overview_refcount Reference Counting
 
-@li @ref overview_refcount_ignore
-@li @ref overview_refcount_equality
-@li @ref overview_refcount_destruct
-@li @ref overview_refcount_list
-@li @ref overview_refcount_object
-
-
-<hr>
-
-
-@section overview_refcount_ignore Why You Shouldn't Care About It
+@tableofcontents
 
 Many wxWidgets objects use a technique known as <em>reference counting</em>,
 also known as <em>copy on write</em> (COW). This means that when an object is
@@ -97,20 +87,20 @@ operators and copy constructors since they are reference-counted:
 Note that the list above reports the objects which are reference counted in all
 ports of wxWidgets; some ports may use this technique also for other classes.
 
-All the objects implement a function @b IsOk() to test if they are referencing valid
-data; when the objects are in uninitialized state, you can only use the @b IsOk() getter;
-trying to call any other getter, e.g. wxBrush::GetStyle() on the ::wxNullBrush object,
-will result in an assert failure in debug builds.
+All the objects implement a function @b IsOk() to test if they are referencing
+valid data; when the objects are in uninitialized state, you can only use the
+@b IsOk() getter; trying to call any other getter, e.g. wxBrush::GetStyle() on
+the ::wxNullBrush object, will result in an assert failure in debug builds.
 
 
 @section overview_refcount_object Making Your Own Reference Counted Class
 
-Reference counting can be implemented easily using wxObject or using
-the intermediate wxRefCounter class directly. 
-Alternatively, you can also use the wxObjectDataPtr<T> template.
+Reference counting can be implemented easily using wxObject or using the
+intermediate wxRefCounter class directly.  Alternatively, you can also use the
+wxObjectDataPtr<T> template.
 
-First, derive a new class from wxRefCounter (or wxObjectRefData when
-using a wxObject derived class) and put the memory-consuming data in it.
+First, derive a new class from wxRefCounter (or wxObjectRefData when using a
+wxObject derived class) and put the memory-consuming data in it.
 
 Then derive a new class from wxObject and implement there the public interface
 which will be seen by the user of your class. You'll probably want to add a
@@ -133,4 +123,3 @@ that the modifications won't affect other instances which are eventually
 sharing your object's data.
 
 */
-

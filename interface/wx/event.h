@@ -4315,7 +4315,7 @@ public:
 
     See the macro DEFINE_EVENT_TYPE() for more info.
 
-    @see @ref overview_events_introduction
+    @see @ref overview_events
 */
 typedef int wxEventType;
 

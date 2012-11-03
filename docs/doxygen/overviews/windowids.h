@@ -10,21 +10,7 @@
 
 @page overview_windowids Window IDs
 
-@li @ref overview_windowids_intro
-@li @ref overview_windowids_type
-@li @ref overview_windowids_using
-
-@see
-
-@li wxIdManager
-@li wxWindow::NewControlId
-@li wxWindow::UnreserveControlId
-
-
-<hr>
-
-
-@section overview_windowids_intro Introduction
+@tableofcontents
 
 Various controls and other parts of wxWidgets need an ID.  Sometimes the ID may
 be directly provided by the user or have a predefined value, such as
@@ -49,6 +35,8 @@ by any other objects.  This will make sure that the ID values do not clash with
 one another.  This is accomplished by keeping a reference count for each of the
 IDs that can possibly be returned by wxWindow::NewControlId. Other IDs are not
 reference counted.
+
+@see wxIdManager, wxWindow::NewControlId(), wxWindow::UnreserveControlId()
 
 
 @section overview_windowids_type Data Types
@@ -85,4 +73,3 @@ This is done already for windows, menu items, and tool bar items. It should
 only be used in the main thread, as it is not thread safe.
 
 */
-

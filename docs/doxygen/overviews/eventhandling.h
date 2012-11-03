@@ -10,19 +10,7 @@
 
 @page overview_events Events and Event Handling
 
-Related classes: wxEvtHandler, wxWindow, wxEvent
-
-@li @ref overview_events_introduction
-@li @ref overview_events_eventhandling
-@li @ref overview_events_processing
-@li @ref overview_events_custom
-@li @ref overview_events_misc
-
-
-<hr>
-
-
-@section overview_events_introduction Introduction to Events
+@tableofcontents
 
 Like with all the other GUI frameworks, the control of flow in wxWidgets
 applications is event-based: the program normally performs most of its actions
@@ -56,6 +44,9 @@ To be more precise, each event is described by:
  typical window contains several buttons, all generating the same button click
  event), checking the event source object or its id allows to distinguish
  between them.
+
+@see wxEvtHandler, wxWindow, wxEvent
+
 
 
 @section overview_events_eventhandling Event Handling
@@ -872,11 +863,10 @@ your identifiers don't conflict accidentally.
 
 
 
-@subsection overview_events_list List of wxWidgets events
+@subsection overview_events_list List of wxWidgets Events
 
 For the full list of event classes, please see the
 @ref group_class_events "event classes group page".
 
 
 */
-

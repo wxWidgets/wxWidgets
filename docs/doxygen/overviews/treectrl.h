@@ -10,7 +10,7 @@
 
 @page overview_treectrl wxTreeCtrl Overview
 
-Classes: wxTreeCtrl, wxImageList
+@tableofcontents
 
 The tree control displays its items in a tree like structure. Each item has
 its own (optional) icon and a label. An item may be either collapsed (meaning
@@ -18,6 +18,8 @@ that its children are not visible) or expanded (meaning that its children are
 shown). Each item in the tree is identified by its @c itemId which is of opaque
 data type wxTreeItemId. You can test whether an item is valid by calling
 wxTreeItemId::IsOk.
+
+@see wxTreeCtrl, wxImageList
 
 The items text and image may be retrieved and changed with (Get|Set)ItemText
 and (Get|Set)ItemImage. In fact, an item may even have two images associated
@@ -79,4 +81,3 @@ nothing by default, but it is common to associate them with deleting an item
 from a tree and inserting a new one into it.
 
 */
-

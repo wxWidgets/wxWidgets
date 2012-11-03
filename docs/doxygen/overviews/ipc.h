@@ -10,15 +10,7 @@
 
 @page overview_ipc Interprocess Communication
 
-Classes: wxServer, wxConnection, wxClient
-
-@li @ref overview_ipc_datatransfer
-@li @ref overview_ipc_examples
-@li @ref overview_ipc_dde
-
-
-<hr>
-
+@tableofcontents
 
 wxWidgets has a number of different classes to help with interprocess
 communication and network programming. This section only discusses one family
@@ -216,4 +208,3 @@ connection->StartAdvise("Item");
 @endcode
 
 */
-

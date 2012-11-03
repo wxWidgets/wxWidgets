@@ -10,18 +10,7 @@
 
 @page overview_validator wxValidator Overview
 
-Classes: wxValidator, wxTextValidator, wxGenericValidator, wxIntegerValidator,
-wxFloatingPointValidator
-
-@li @ref overview_validator_intro
-@li @ref overview_validator_anatomy
-@li @ref overview_validator_dialogs
-
-
-<hr>
-
-
-@section overview_validator_intro Validator basic concepts
+@tableofcontents
 
 The aim of the validator concept is to make dialogs very much easier to write.
 A validator is an object that can be plugged into a control (such as a
@@ -62,6 +51,10 @@ giving the error, and the dialog is not dismissed.
 
 Note that any wxWindow may have a validator; using the @c wxWS_EX_VALIDATE_RECURSIVELY
 style (see wxWindow extended styles) you can also implement recursive validation.
+
+@see wxValidator, wxTextValidator, wxGenericValidator, wxIntegerValidator,
+     wxFloatingPointValidator
+
 
 
 @section overview_validator_anatomy Anatomy of a Validator
@@ -147,4 +140,3 @@ the controls setting validators, since validators can't be specified in a
 dialog resource.
 
 */
-

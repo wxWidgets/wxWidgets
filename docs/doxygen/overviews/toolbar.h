@@ -10,16 +10,7 @@
 
 @page overview_toolbar Toolbar Overview
 
-Classes: wxToolBar
-
-@li @ref overview_toolbar_intro
-@li @ref overview_toolbar_library
-
-
-<hr>
-
-
-@section overview_toolbar_intro Introduction
+@tableofcontents
 
 The toolbar family of classes allows an application to use toolbars in a
 variety of configurations and styles.
@@ -90,4 +81,3 @@ Include @c "wx/toolbar.h", or if using a class directly, one of:
 An example of using a toolbar is given in the "toolbar" sample.
 
 */
-

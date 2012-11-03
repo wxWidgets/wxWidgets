@@ -10,13 +10,7 @@
 
 @page overview_i18n Internationalization
 
-@li @ref overview_i18n_intro
-@li @ref overview_i18n_menuaccel
-
-<hr>
-
-
-@section overview_i18n_intro Introduction
+@tableofcontents
 
 Although internationalization of an application (i18n for short) involves far
 more than just translating its text messages to another message - date, time
@@ -70,6 +64,7 @@ Translating your application involves several steps:
     given language: see wxLocale.
 
 
+
 @section overview_i18n_menuaccel Translating Menu Accelerators
 
 If you translate the accelerator modifier names (Ctrl, Alt and Shift) in your
@@ -87,4 +82,3 @@ translated special key names such as Backspace, End, Insert, etc.
 @li @ref page_samples_internat - Shows you how all this looks in practice.
 
 */
-

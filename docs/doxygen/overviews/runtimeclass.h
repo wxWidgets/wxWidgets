@@ -10,20 +10,7 @@
 
 @page overview_rtti Runtime Type Information (RTTI)
 
-@li @ref overview_rtti_intro
-@li @ref overview_rtti_classinfo
-@li @ref overview_rtti_example
-
-@see
-
-@li wxObject
-@li wxClassInfo
-
-
-<hr>
-
-
-@section overview_rtti_intro Introduction
+@tableofcontents
 
 One of the failings of C++ used to be that no runtime information was provided
 about a class and its position in the inheritance hierarchy. Another, which
@@ -72,6 +59,8 @@ The function wxCreateDynamicObject can be used to construct a new object of a
 given type, by supplying a string name. If you have a pointer to the
 wxClassInfo object instead, then you can simply call wxClassInfo::CreateObject.
 
+@see wxObject
+
 
 @section overview_rtti_classinfo wxClassInfo
 
@@ -92,11 +81,6 @@ constructor function which returns a new object.
 You can get the wxClassInfo for a class by using the CLASSINFO macro, e.g.
 CLASSINFO(wxFrame). You can get the wxClassInfo for an object using
 wxObject::GetClassInfo.
-
-@see
-
-@li wxObject
-@li wxCreateDynamicObject
 
 
 @section overview_rtti_example Example
@@ -128,4 +112,3 @@ wxFrame::wxFrame()
 @endcode
 
 */
-

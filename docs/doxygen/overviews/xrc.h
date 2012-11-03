@@ -10,7 +10,7 @@
 
 @page overview_xrc XML Based Resource System (XRC)
 
-Classes: wxXmlResource, wxXmlResourceHandler
+@tableofcontents
 
 The XML-based resource system, known as XRC, allows user interface elements
 such as dialogs, menu bars and toolbars, to be stored in text files and loaded
@@ -36,15 +36,8 @@ There are several advantages to using XRC resources:
 
 XRC was written by Vaclav Slavik.
 
-@li @ref overview_xrc_gettingstarted
-@li @ref overview_xrc_xrcsample
-@li @ref overview_xrc_binaryresourcefiles
-@li @ref overview_xrc_embeddedresource
-@li @ref overview_xrc_cppheader
-@li @ref overview_xrc_newresourcehandlers
+@see wxXmlResource, wxXmlResourceHandler, @ref overview_xrcformat
 
-See also the separate @ref overview_xrcformat page for more information, and
-details about the XRC file format.
 
 
 @section overview_xrc_gettingstarted Getting Started with XRC
@@ -545,4 +538,3 @@ built-in getters it contains. It's very easy to retrieve also complex
 structures out of XRC files using them.
 
 */
-

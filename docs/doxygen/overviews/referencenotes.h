@@ -10,6 +10,8 @@
 
 @page overview_referencenotes Notes on Using this Reference Manual
 
+@tableofcontents
+
 In the descriptions of the wxWidgets classes and their member functions, note
 that descriptions of inherited member functions are not duplicated in derived
 classes unless their behaviour is different. So in using a class such as
@@ -20,4 +22,3 @@ value of ::wxDefaultSize and ::wxDefaultPosition, in which case wxWidgets will
 choose suitable values.
 
 */
-

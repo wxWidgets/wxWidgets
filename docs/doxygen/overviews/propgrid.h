@@ -10,42 +10,22 @@
 
 @page overview_propgrid wxPropertyGrid Overview
 
-Key Classes:
-@li wxPGProperty
-@li wxPropertyGrid
-@li wxPropertyGridEvent
-@li wxPropertyGridManager
-@li wxPropertyGridPage
+@tableofcontents
 
-  wxPropertyGrid is a specialized grid for editing properties - in other
-words name = value pairs. List of ready-to-use property classes include
-strings, numbers, flag sets, fonts, colours and many others. It is possible,
-for example, to categorize properties, set up a complete tree-hierarchy,
-add more than two columns, and set arbitrary per-property attributes.
+wxPropertyGrid is a specialized grid for editing properties - in other words
+name = value pairs. List of ready-to-use property classes include strings,
+numbers, flag sets, fonts, colours and many others. It is possible, for
+example, to categorize properties, set up a complete tree-hierarchy, add more
+than two columns, and set arbitrary per-property attributes.
 
-  As this version of wxPropertyGrid has some backward-incompatible changes
-from version 1.4, everybody who need to maintain custom property classes
-should carefully read final section in @ref propgrid_compat.
+As this version of wxPropertyGrid has some backward-incompatible changes from
+version 1.4, everybody who need to maintain custom property classes should
+carefully read final section in @ref propgrid_compat.
 
-@li @ref propgrid_basics
-@li @ref propgrid_categories
-@li @ref propgrid_parentprops
-@li @ref propgrid_enumandflags
-@li @ref propgrid_advprops
-@li @ref propgrid_processingvalues
-@li @ref propgrid_iterating
-@li @ref propgrid_events
-@li @ref propgrid_tooltipandhint
-@li @ref propgrid_validating
-@li @ref propgrid_populating
-@li @ref propgrid_cellrender
-@li @ref propgrid_keyhandling
-@li @ref propgrid_customizing
-@li @ref propgrid_usage2
-@li @ref propgrid_subclassing
-@li @ref propgrid_misc
-@li @ref propgrid_proplist
-@li @ref propgrid_compat
+@see wxPropertyGrid, wxPropertyGridEvent, wxPropertyGridManager,
+     wxPropertyGridPage, wxPGProperty
+
+
 
 @section propgrid_basics Creating and Populating wxPropertyGrid
 

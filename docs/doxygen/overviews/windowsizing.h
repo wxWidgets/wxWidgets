@@ -10,16 +10,13 @@
 
 @page overview_windowsizing Window Sizing Overview
 
+@tableofcontents
+
 It can sometimes be confusing to keep track of the various size-related
 attributes of a wxWindow, how they relate to each other, and how they interact
 with sizers. This document will attempt to clear the fog a little, and give
 some simple explanations of things.
 
-@li @ref overview_windowsizing_glossary
-@li @ref overview_windowsizing_func
-
-
-<hr>
 
 
 @section overview_windowsizing_glossary Glossary
@@ -121,4 +118,3 @@ some simple explanations of things.
     the default @c EVT_SIZE handler for container windows.
 
 */
-

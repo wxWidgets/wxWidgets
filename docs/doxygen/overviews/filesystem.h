@@ -10,20 +10,14 @@
 
 @page overview_fs wxFileSystem Overview
 
-The wxHTML library uses a @b virtual file systems mechanism
-similar to the one used in Midnight Commander, Dos Navigator,
-FAR or almost any modern file manager. It allows the user to access
-data stored in archives as if they were ordinary files. On-the-fly
-generated files that exist only in memory are also supported.
+@tableofcontents
 
-@li @ref overview_fs_classes
-@li @ref overview_fs_locations
-@li @ref overview_fs_combined
-@li @ref overview_fs_wxhtmlfs
-@li @ref overview_fs_init
+The wxHTML library uses a @b virtual file system mechanism similar to the one
+used in Midnight Commander, Dos Navigator, FAR or almost any modern file
+manager. It allows the user to access data stored in archives as if they were
+ordinary files. On-the-fly generated files that exist only in memory are also
+supported.
 
-
-<hr>
 
 
 @section overview_fs_classes Classes
@@ -113,4 +107,3 @@ bool MyApp::OnInit()
 @endcode
 
 */
-

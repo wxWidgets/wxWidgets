@@ -10,22 +10,7 @@
 
 @page overview_string wxString Overview
 
-Classes: wxString, wxArrayString, wxStringTokenizer
-
-@li @ref overview_string_intro
-@li @ref overview_string_internal
-@li @ref overview_string_binary
-@li @ref overview_string_comparison
-@li @ref overview_string_advice
-@li @ref overview_string_related
-@li @ref overview_string_tuning
-@li @ref overview_string_settings
-
-
-<hr>
-
-
-@section overview_string_intro Introduction
+@tableofcontents
 
 wxString is a class which represents a Unicode string of arbitrary length and
 containing arbitrary Unicode characters.
@@ -44,7 +29,7 @@ has been done to make existing code using ANSI string literals work as it did
 in previous versions.
 
 
-@section overview_string_internal Internal wxString encoding
+@section overview_string_internal Internal wxString Encoding
 
 Since wxWidgets 3.0 wxString internally uses <b>UTF-16</b> (with Unicode
 code units stored in @c wchar_t) under Windows and <b>UTF-8</b> (with Unicode
@@ -246,7 +231,7 @@ For this conversion, the @a wxConvLibc class instance is used.
 See wxCSConv and wxMBConv.
 
 
-@subsection overview_string_iterating Iterating wxString's characters
+@subsection overview_string_iterating Iterating wxString Characters
 
 As previously described, when <tt>wxUSE_UNICODE_UTF8==1</tt>, wxString internally
 uses the variable-length UTF8 encoding.
@@ -288,7 +273,7 @@ these problems: wxIsEmpty() verifies whether the string is empty (returning
 case-insensitive string comparison function known either as @c stricmp() or
 @c strcasecmp() on different platforms.
 
-The <tt>@<wx/string.h@></tt> header also defines ::wxSnprintf and ::wxVsnprintf
+The <tt>@<wx/string.h@></tt> header also defines wxSnprintf() and wxVsnprintf()
 functions which should be used instead of the inherently dangerous standard
 @c sprintf() and which use @c snprintf() instead which does buffer size checks
 whenever possible. Of course, you may also use wxString::Printf which is also
@@ -391,4 +376,3 @@ also defined, otherwise @c wxUSE_UNICODE_WCHAR is.
 See also @ref page_wxusedef_important.
 
 */
-

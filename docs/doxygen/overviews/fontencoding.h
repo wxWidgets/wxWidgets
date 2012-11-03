@@ -10,6 +10,8 @@
 
 @page overview_fontencoding Font Encodings
 
+@tableofcontents
+
 wxWidgets has support for multiple font encodings.
 
 By encoding we mean here the mapping between the character codes and the
@@ -20,10 +22,10 @@ letters of foreign alphabets and here other encodings come into play. Please
 note that we will only discuss 8-bit fonts here and not Unicode
 (see @ref overview_unicode).
 
-Font encoding support is ensured by several classes:
-wxFont itself, but also wxFontEnumerator and wxFontMapper. wxFont encoding
-support is reflected by a (new) constructor parameter @e encoding which takes
-one of the following values (elements of enumeration type @c wxFontEncoding):
+Font encoding support is ensured by several classes: wxFont itself, but also
+wxFontEnumerator and wxFontMapper. wxFont encoding support is reflected by a
+(new) constructor parameter @e encoding which takes one of the following values
+(elements of enumeration type @c wxFontEncoding):
 
 @beginDefList
 @itemdef{wxFONTENCODING_SYSTEM,
@@ -63,26 +65,23 @@ written in Cyrillic) are different on different platforms and because the
 fonts in the given encoding might just not be installed (this is especially a
 problem with Unix, or, in general, non-Win32 systems).
 
-To clarify, the wxFontEnumerator
-class may be used to enumerate both all available encodings and to find the
-facename(s) in which the given encoding exists. If you can find the font in
-the correct encoding with wxFontEnumerator then your troubles are over, but,
-unfortunately, sometimes this is not enough. For example, there is no standard
-way (that I know of, please tell me if you do!) to find a font on a Windows system
-for KOI8 encoding (only for WinCyrillic one which is quite different), so
-wxFontEnumerator will never return one, even if the user has installed a KOI8
-font on his system.
+To clarify, the wxFontEnumerator class may be used to enumerate both all
+available encodings and to find the facename(s) in which the given encoding
+exists. If you can find the font in the correct encoding with wxFontEnumerator
+then your troubles are over, but, unfortunately, sometimes this is not enough.
+For example, there is no standard way (that I know of, please tell me if you
+do!) to find a font on a Windows system for KOI8 encoding (only for WinCyrillic
+one which is quite different), so wxFontEnumerator will never return one, even
+if the user has installed a KOI8 font on his system.
 
 To solve this problem, a wxFontMapper class is provided.
 
-This class stores the mapping between the encodings and the font face
-names which support them in wxConfigBase object. 
-Of course, it would be fairly useless if it tried to determine these mappings by
-itself, so, instead, it (optionally) asks the user and remembers his answers
-so that the next time the program will automatically choose the correct font.
-All these topics are illustrated by the @ref page_samples_font;
-please refer to it and the documentation of the classes mentioned here for
-further explanations.
+This class stores the mapping between the encodings and the font face names
+which support them in wxConfigBase object.  Of course, it would be fairly
+useless if it tried to determine these mappings by itself, so, instead, it
+(optionally) asks the user and remembers his answers so that the next time the
+program will automatically choose the correct font. All these topics are
+illustrated by the @ref page_samples_font; please refer to it and the
+documentation of the classes mentioned here for further explanations.
 
 */
-

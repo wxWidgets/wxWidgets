@@ -12,12 +12,6 @@
 
 @tableofcontents
 
-@see @ref overview_rtti, wxEvtHandler::Bind(), wxAny
-
-
-
-@section overview_cpp_rtti_disabled_intro Introduction
-
 @note C++ RTTI is usually enabled by default in most wxWidgets builds. If you
       do not know if your build has C++ RTTI enabled or not, then it probably
       is enabled, and you should not worry about anything mentioned in this
@@ -33,6 +27,8 @@ However, this system is not perfect and one proven scenario where it may break
 is a shared library or DLL build. More specifically, a template class instance
 created in one physical binary may not be recognized as its correct type when
 used in another one.
+
+@see @ref overview_rtti, wxEvtHandler::Bind(), wxAny
 
 
 

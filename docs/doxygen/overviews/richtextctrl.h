@@ -10,48 +10,7 @@
 
 @page overview_richtextctrl wxRichTextCtrl Overview
 
-@li @ref overview_richtextctrl_classes
-@li @ref overview_richtextctrl_intro
-@li @ref overview_richtextctrl_example
-@li @ref overview_richtextctrl_starting
-@li @ref overview_richtextctrl_styles
-@li @ref overview_richtextctrl_dialogs
-@li @ref overview_richtextctrl_impl
-@li @ref overview_richtextctrl_nested_object
-@li @ref overview_richtextctrl_context_menus
-@li @ref overview_richtextctrl_roadmap
-
-
-<hr>
-
-
-@section overview_richtextctrl_classes Related Classes
-
-<b>Major classes:</b>
-wxRichTextCtrl, wxRichTextBuffer, wxRichTextEvent
-
-<b>Helper classes:</b>
-wxTextAttr, wxRichTextRange
-
-<b>File handler classes:</b>
-wxRichTextFileHandler, wxRichTextHTMLHandler, wxRichTextXMLHandler
-
-<b>Style classes:</b>
-wxRichTextCharacterStyleDefinition, wxRichTextParagraphStyleDefinition,
-wxRichTextListStyleDefinition, wxRichTextStyleSheet
-
-<b>Additional controls:</b>
-wxRichTextStyleComboCtrl, wxRichTextStyleListBox, wxRichTextStyleListCtrl
-
-<b>Printing classes:</b>
-wxRichTextPrinting, wxRichTextPrintout, wxRichTextHeaderFooterData
-
-<b>Dialog classes:</b>
-wxRichTextStyleOrganiserDialog, wxRichTextFormattingDialog,
-wxSymbolPickerDialog
-
-
-@section overview_richtextctrl_intro Introduction
+@tableofcontents
 
 wxRichTextCtrl provides a generic implementation of a rich text editor that can
 handle different character styles, paragraph formatting, and images. It's aimed
@@ -60,9 +19,9 @@ editing, wxStyledTextCtrl is a better choice.
 
 Despite its name, it cannot currently read or write RTF (rich text format)
 files. Instead, it uses its own XML format, and can also read and write plain
-text. In future we expect to provide RTF or OpenDocument file capabilities. Custom file formats
-can be supported by creating additional file handlers and registering them with
-the control.
+text. In future we expect to provide RTF or OpenDocument file capabilities.
+Custom file formats can be supported by creating additional file handlers and
+registering them with the control.
 
 wxRichTextCtrl is largely compatible with the wxTextCtrl API, but extends it
 where necessary. The control can be used where the native rich text
@@ -92,6 +51,33 @@ wxRichTextCtrl, with fewer features in the former case.
 
 A good way to understand wxRichTextCtrl's capabilities is to compile and run
 the sample, @c samples/richtext, and browse the code.
+
+
+
+@section overview_richtextctrl_classes Related Classes
+
+<b>Major classes:</b>
+wxRichTextCtrl, wxRichTextBuffer, wxRichTextEvent
+
+<b>Helper classes:</b>
+wxTextAttr, wxRichTextRange
+
+<b>File handler classes:</b>
+wxRichTextFileHandler, wxRichTextHTMLHandler, wxRichTextXMLHandler
+
+<b>Style classes:</b>
+wxRichTextCharacterStyleDefinition, wxRichTextParagraphStyleDefinition,
+wxRichTextListStyleDefinition, wxRichTextStyleSheet
+
+<b>Additional controls:</b>
+wxRichTextStyleComboCtrl, wxRichTextStyleListBox, wxRichTextStyleListCtrl
+
+<b>Printing classes:</b>
+wxRichTextPrinting, wxRichTextPrintout, wxRichTextHeaderFooterData
+
+<b>Dialog classes:</b>
+wxRichTextStyleOrganiserDialog, wxRichTextFormattingDialog,
+wxSymbolPickerDialog
 
 
 @section overview_richtextctrl_example Code Example
@@ -416,54 +402,65 @@ objects with the same style where just one would do. So a Defragment function
 is called when updating the control's display, to ensure that the minimum
 number of objects is used.
 
+
 @section overview_richtextctrl_nested_object Nested Objects
 
-wxRichTextCtrl supports nested objects such as text boxes and tables. To achieve
-compatibility with the existing API, there is the concept of @e object @e focus.
-When the user clicks on a nested text box, the object focus is set to that
-container object so all keyboard input and API functions apply to that
-container. The application can change the focus using wxRichTextCtrl::SetObjectFocus.
-Call this function with a @null parameter to set the focus back to the top-level
-object.
+wxRichTextCtrl supports nested objects such as text boxes and tables. To
+achieve compatibility with the existing API, there is the concept of @e object
+@e focus. When the user clicks on a nested text box, the object focus is set to
+that container object so all keyboard input and API functions apply to that
+container. The application can change the focus using
+wxRichTextCtrl::SetObjectFocus. Call this function with a @c null parameter to
+set the focus back to the top-level object.
 
 An event will be sent to the control when the focus changes.
 
-When the user clicks on the control, wxRichTextCtrl determines which container to set
-as the current object focus by calling the found container's overrided wxRichTextObject::AcceptsFocus
-function. For example, although a table is a container, it must not itself be
-the object focus because there is no text editing at the table level. Instead, a cell
-within the table must accept the focus.
+When the user clicks on the control, wxRichTextCtrl determines which container
+to set as the current object focus by calling the found container's overrided
+wxRichTextObject::AcceptsFocus function. For example, although a table is a
+container, it must not itself be the object focus because there is no text
+editing at the table level. Instead, a cell within the table must accept the
+focus.
 
 Since with nested objects it is not possible to represent a section with merely
 a start position and an end position, the class wxRichTextSelection is provided
-which stores multiple ranges (for non-contiguous selections such as table cells) and
-a pointer to the container object in question. You can pass wxRichTextSelection
-to wxRichTextCtrl::SetSelection or get an instance of it from wxRichTextCtrl::GetSelection.
+which stores multiple ranges (for non-contiguous selections such as table
+cells) and a pointer to the container object in question. You can pass
+wxRichTextSelection to wxRichTextCtrl::SetSelection or get an instance of it
+from wxRichTextCtrl::GetSelection.
 
-When selecting multiple objects, such as cell tables, the wxRichTextCtrl dragging handler code calls the
-function wxRichTextObject::HandlesChildSelections to determine whether the children
-can be individual selections. Currently only table cells can be multiply-selected
+When selecting multiple objects, such as cell tables, the wxRichTextCtrl
+dragging handler code calls the function
+wxRichTextObject::HandlesChildSelections to determine whether the children can
+be individual selections. Currently only table cells can be multiply-selected
 in this way.
 
-@section overview_richtextctrl_context_menus Context menus and property dialogs
 
-There are three ways you can make use of context menus: you can let wxRichTextCtrl handle everything and provide a basic menu;
-you can set your own context menu using wxRichTextCtrl::SetContextMenu but let wxRichTextCtrl handle showing it and adding property items;
-or you can override the default context menu behaviour by adding a context menu event handler
-to your class in the normal way.
+@section overview_richtextctrl_context_menus Context Menus and Property Dialogs
 
-If you right-click over a text box in cell in a table, you may want to edit the properties of
-one of these objects - but which properties will you be editing?
+There are three ways you can make use of context menus: you can let
+wxRichTextCtrl handle everything and provide a basic menu; you can set your own
+context menu using wxRichTextCtrl::SetContextMenu but let wxRichTextCtrl handle
+showing it and adding property items; or you can override the default context
+menu behaviour by adding a context menu event handler to your class in the
+normal way.
 
-Well, the default behaviour allows up to three property-editing menu items simultaneously - for the object clicked on,
-the container of that object, and the container's parent (depending on whether any of these
-objects return @true from their wxRichTextObject::CanEditProperties functions).
-If you supply a context menu, add a property command item using the wxID_RICHTEXT_PROPERTIES1 identifier,
-so that wxRichTextCtrl can find the position to add command items. The object should
-tell the control what label to use by returning a string from wxRichTextObject::GetPropertiesMenuLabel.
+If you right-click over a text box in cell in a table, you may want to edit the
+properties of one of these objects - but which properties will you be editing?
 
-Since there may be several property-editing commands showing, it is recommended that you don't
-include the word Properties - just the name of the object, such as Text Box or Table.
+Well, the default behaviour allows up to three property-editing menu items
+simultaneously - for the object clicked on, the container of that object, and
+the container's parent (depending on whether any of these objects return @true
+from their wxRichTextObject::CanEditProperties functions). If you supply a
+context menu, add a property command item using the wxID_RICHTEXT_PROPERTIES1
+identifier, so that wxRichTextCtrl can find the position to add command items.
+The object should tell the control what label to use by returning a string from
+wxRichTextObject::GetPropertiesMenuLabel.
+
+Since there may be several property-editing commands showing, it is recommended
+that you don't include the word Properties - just the name of the object, such
+as Text Box or Table.
+
 
 @section overview_richtextctrl_roadmap Development Roadmap
 
@@ -504,4 +501,3 @@ high level to low level wxDC API is unnecessary. However this would require
 additions to the wxWidgets API.
 
 */
-

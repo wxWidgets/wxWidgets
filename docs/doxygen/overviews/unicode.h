@@ -10,6 +10,8 @@
 
 @page overview_unicode Unicode Support in wxWidgets
 
+@tableofcontents
+
 This section describes how does wxWidgets support Unicode and how can it affect
 your programs.
 
@@ -19,14 +21,8 @@ correct any more. Please see @ref overview_changes_unicode for the details of
 these changes.
 
 You can skip the first two sections if you're already familiar with Unicode and
-wish to jump directly in the details of its support in the library:
-@li @ref overview_unicode_what
-@li @ref overview_unicode_encodings
-@li @ref overview_unicode_supportin
-@li @ref overview_unicode_pitfalls
-@li @ref overview_unicode_supportout
+wish to jump directly in the details of its support in the library.
 
-<hr>
 
 
 @section overview_unicode_what What is Unicode?
@@ -436,4 +432,3 @@ the return value of any of the functions mentioned in this section to another
 function directly.
 
 */
-

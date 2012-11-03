@@ -10,19 +10,10 @@
 
 @page overview_python wxPython Overview
 
+@tableofcontents
+
 This topic was written by Robin Dunn, author of the
 <a href="http://www.python.org/">wxPython</a> wrapper.
-
-@li @ref overview_python_what
-@li @ref overview_python_why
-@li @ref overview_python_othergui
-@li @ref overview_python_using
-@li @ref overview_python_classes
-@li @ref overview_python_help
-
-
-<hr>
-
 
 @section overview_python_what What is wxPython?
 
@@ -466,4 +457,3 @@ Or you can send mail directly to the list using this address:
 wxpython-users@lists.wxwidgets.org
 
 */
-

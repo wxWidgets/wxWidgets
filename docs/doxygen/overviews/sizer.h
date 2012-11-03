@@ -10,8 +10,7 @@
 
 @page overview_sizer Sizers Overview
 
-Classes: wxSizer, wxBoxSizer, wxStaticBoxSizer, wxGridSizer, wxFlexGridSizer,
-         wxGridBagSizer
+@tableofcontents
 
 Sizers, as represented by the wxSizer class and its descendants in the
 wxWidgets class hierarchy, have become the method of choice to define the
@@ -29,15 +28,9 @@ classes.
 For information about the wxWidgets resource system, which can describe
 sizer-based dialogs, see the @ref overview_xrc.
 
-@li @ref overview_sizer_idea
-@li @ref overview_sizer_features
-@li @ref overview_sizer_hiding
-@li @ref overview_sizer_box
-@li @ref overview_sizer_types
-@li @ref overview_sizer_button
+@see wxSizer, wxBoxSizer, wxStaticBoxSizer, wxGridSizer, wxFlexGridSizer,
+     wxGridBagSizer
 
-
-<hr>
 
 
 @section overview_sizer_idea The Idea Behind Sizers
@@ -368,4 +361,3 @@ wxMORE      // return wxID_MORE
 @endcode
 
 */
-

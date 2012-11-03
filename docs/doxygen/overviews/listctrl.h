@@ -10,9 +10,10 @@
 
 @page overview_listctrl wxListCtrl Overview
 
-Classes: wxListCtrl, wxImageList
+@tableofcontents
 
-@todo Sorry, this topic hasn't been written yet.
+@todo The wxListCtrl topic overview still needs to be written, sorry.
+
+@see wxListCtrl, wxImageList, wxListItem
 
 */
-

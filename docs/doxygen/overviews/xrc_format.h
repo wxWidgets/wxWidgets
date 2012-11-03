@@ -18,34 +18,10 @@
 
 @page overview_xrcformat XRC File Format
 
-Table of contents:
-- @ref overview_xrcformat_overview
-- @ref overview_xrcformat_root
-- @ref overview_xrcformat_objects
-    - @ref overview_xrcformat_object
-    - @ref overview_xrcformat_object_ref
-- @ref overview_xrcformat_datatypes
-- @ref overview_xrcformat_windows
-    - @ref overview_xrcformat_std_props
-    - @ref overview_xrcformat_controls
-- @ref overview_xrcformat_sizers
-- @ref overview_xrcformat_other_objects
-- @ref overview_xrcformat_platform
-- @ref overview_xrcformat_idranges
-- @ref overview_xrcformat_extending
-    - @ref overview_xrcformat_extending_subclass
-    - @ref overview_xrcformat_extending_unknown
-    - @ref overview_xrcformat_extending_custom
-- @ref overview_xrcformat_packed
-- @ref overview_xrcformat_oldversions
+@tableofcontents
 
-This document describes the format of XRC resource files, as used by wxXmlResource.
-
-
-<hr>
-
-
-@section overview_xrcformat_overview Overview
+This document describes the format of XRC resource files, as used by
+wxXmlResource.
 
 XRC file is a XML file with all of its elements in the
 @c http://www.wxwidgets.org/wxxrc namespace. For backward compatibility,
@@ -64,6 +40,7 @@ wxXmlResource::LoadDialog() and other LoadXXX methods. They must have
 
 Child objects are not directly accessible via wxXmlResource, they can only
 be accessed using XRCCTRL().
+
 
 
 @section overview_xrcformat_root Resource Root Element

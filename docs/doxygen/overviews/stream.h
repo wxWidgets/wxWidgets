@@ -8,32 +8,9 @@
 
 /**
 
-@page overview_stream Stream classes overview
+@page overview_stream Stream Classes Overview
 
-Classes:
-@li wxStreamBase
-@li wxStreamBuffer
-@li wxInputStream
-@li wxOutputStream
-@li wxFilterInputStream
-@li wxFilterOutputStream
-@li wxFileInputStream
-@li wxFileOutputStream
-@li wxTextInputStream
-@li wxTextOutputStream
-@li wxDataInputStream
-@li wxDataOutputStream
-
-@li @ref overview_stream_intro
-@li @ref overview_stream_example
-
-<hr>
-
-
-
-@section overview_stream_intro Introduction
-
-@subsection overview_stream_intro_std wxWidgets and Standard Streams
+@tableofcontents
 
 wxWidgets provides its own set of stream classes in order to support platforms
 not providing standard C++ streams implementation and also to make it possible
@@ -51,7 +28,8 @@ stream as a standard stream (the converse possibility to use a standard stream
 as a wxWidgets stream is planned for a future release).
 
 
-@subsection overview_stream_intro_overview Stream Classes
+
+@section overview_stream_classes Stream Classes
 
 wxStream classes are divided in two main groups:
 
@@ -126,4 +104,3 @@ off_t position = in_stream.TellI();
 @endcode
 
 */
-

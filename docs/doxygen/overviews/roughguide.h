@@ -10,6 +10,8 @@
 
 @page overview_roughguide A Quick Guide to Writing Applications
 
+@tableofcontents
+
 To set a wxWidgets application going, you will need to derive a wxApp class and
 override wxApp::OnInit.
 
@@ -54,9 +56,6 @@ platform-independent @ref group_funcmacro_file, and you may find it handy to
 maintain and search a list of paths using wxPathList. There's many
 @ref group_funcmacro_misc of operating system methods and other functions.
 
-@see
-
-@li @ref group_class
+@see @ref group_class
 
 */
-
