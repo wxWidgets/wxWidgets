@@ -15,7 +15,8 @@ html, body {
     min-height: 100%;
 }
 
-div.contents {
+div.contents, div.searchresults {
+    margin-top: 10px;
     margin-right: 12px;
     padding-bottom: 70px;
 }
@@ -29,6 +30,17 @@ div.contents {
     font: 120% Tahoma, Arial, sans-serif;
     text-align: right;
     padding: 0.5em 1em;
+}
+
+.tabs {
+    font-size: 14px;
+}
+.tabs2, .tabs3 {
+    font-size: 12px;
+}
+
+.navpath ul {
+    font-size: 12px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -56,6 +68,15 @@ h3 {
 h4 {
     font-size: 100%;
     margin-top: 0.5em;
+}
+
+div.headertitle h1 {
+    margin: 10px 2px;
+    border: none;
+    padding: 0;
+    width: auto;
+    color: black;
+    font-weight: bold;
 }
 
 div.toc h3 {

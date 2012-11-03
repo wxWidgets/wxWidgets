@@ -356,7 +356,7 @@ USE_MATHJAX            = NO
 MATHJAX_RELPATH        = http://cdn.mathjax.org/mathjax/latest
 MATHJAX_EXTENSIONS     =
 SEARCHENGINE           = YES
-SERVER_BASED_SEARCH    = NO
+SERVER_BASED_SEARCH    = YES
 
 
 #---------------------------------------------------------------------------
