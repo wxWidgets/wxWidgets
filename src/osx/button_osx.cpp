@@ -51,22 +51,22 @@ bool wxButton::Create(wxWindow *parent,
     const wxValidator& validator,
     const wxString& name)
 {
-    DontCreatePeer();
-    
-    m_marginX =
-    m_marginY = 0;
-
     // FIXME: this hack is needed because we're called from
     //        wxBitmapButton::Create() with this style and we currently use a
     //        different wxWidgetImpl method (CreateBitmapButton() rather than
     //        CreateButton()) for creating bitmap buttons, but we really ought
     //        to unify the creation of buttons of all kinds and then remove
     //        this check
-    if ( style & wxBU_NOTEXT )
+    if ( style & wxBU_NOTEXT && !ShouldCreatePeer() )
     {
         return wxControl::Create(parent, id, pos, size, style,
                                  validator, name);
     }
+
+    DontCreatePeer();
+
+    m_marginX =
+    m_marginY = 0;
 
     wxString label;
 

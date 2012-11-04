@@ -259,7 +259,10 @@ public:
     // optimization to avoid creating a user pane in wxWindow::Create if we already know
     // we will replace it with our own peer
     void                DontCreatePeer();
-    
+
+    // return true unless DontCreatePeer() had been called
+    bool                ShouldCreatePeer() const;
+
     // sets the native implementation wrapper, can replace an existing peer, use peer = NULL to 
     // release existing peer
     void                SetPeer(wxOSXWidgetImpl* peer);

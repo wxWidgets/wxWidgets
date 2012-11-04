@@ -301,6 +301,11 @@ wxOSXWidgetImpl* wxWindowMac::GetPeer() const
     return m_peer == kOSXNoWidgetImpl ? NULL : m_peer ; 
 }
 
+bool wxWindowMac::ShouldCreatePeer() const
+{
+    return m_peer != kOSXNoWidgetImpl;
+}
+
 void wxWindowMac::DontCreatePeer()
 {
     m_peer = kOSXNoWidgetImpl;
