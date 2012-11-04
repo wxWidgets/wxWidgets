@@ -1919,7 +1919,7 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
            mode = kCGBlendModeDestinationAtop;
             break;
         case wxCOMPOSITION_XOR:
-            mode = kCGBlendModeXOR;
+            mode = kCGBlendModeExclusion; // Not kCGBlendModeXOR!
             break;
 
         case wxCOMPOSITION_ADD:
