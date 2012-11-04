@@ -198,23 +198,6 @@ NSButton *wxButtonCocoaImpl::GetNSButton() const
     return static_cast<NSButton *>(m_osxView);
 }
 
-// Set the keyboard accelerator key from the label (e.g. "Click &Me")
-void wxButton::OSXUpdateAfterLabelChange(const wxString& label)
-{
-    // Skip setting the accelerator for the default buttons as this would
-    // overwrite the default "Enter" which should be preserved.
-    wxTopLevelWindow * const
-        tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-    if ( tlw )
-    {
-        if ( tlw->GetDefaultItem() == this )
-            return;
-    }
-
-    wxButtonCocoaImpl *impl = static_cast<wxButtonCocoaImpl*>(GetPeer());
-    impl->SetAcceleratorFromLabel(label);
-}
-
 // Set bezel style depending on the wxBORDER_XXX flags specified by the style
 // and also accounting for the label (bezels are different for multiline
 // buttons and normal ones) and the ID (special bezel is used for help button).
@@ -274,6 +257,32 @@ SetBezelStyleFromBorderFlags(NSButton *v,
 
         [v setBezelStyle:bezel];
     }
+}
+
+// Set the keyboard accelerator key from the label (e.g. "Click &Me")
+void wxButton::OSXUpdateAfterLabelChange(const wxString& label)
+{
+    wxButtonCocoaImpl *impl = static_cast<wxButtonCocoaImpl*>(GetPeer());
+
+    // Update the bezel style as may be necessary if our new label is multi
+    // line while the old one wasn't (or vice versa).
+    SetBezelStyleFromBorderFlags(impl->GetNSButton(),
+                                 GetWindowStyle(),
+                                 GetId(),
+                                 label);
+
+
+    // Skip setting the accelerator for the default buttons as this would
+    // overwrite the default "Enter" which should be preserved.
+    wxTopLevelWindow * const
+        tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( tlw )
+    {
+        if ( tlw->GetDefaultItem() == this )
+            return;
+    }
+
+    impl->SetAcceleratorFromLabel(label);
 }
 
 

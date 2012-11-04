@@ -270,7 +270,6 @@ public:
     void GetLayoutInset(int &left , int &top , int &right, int &bottom) const;
     void SetAcceleratorFromLabel(const wxString& label);
 
-private:
     NSButton *GetNSButton() const;
 };
 
