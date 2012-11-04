@@ -688,10 +688,25 @@ void wxNSTextViewControl::SetStyle(long start,
                                 long end,
                                 const wxTextAttr& style)
 {
-    if (m_textView) {
+    if ( !m_textView )
+        return;
+
+    if ( start == -1 && end == -1 )
+    {
+        NSMutableDictionary* const
+            attrs = [NSMutableDictionary dictionaryWithCapacity:3];
+        if ( style.HasFont() )
+            [attrs setValue:style.GetFont().OSXGetNSFont() forKey:NSFontAttributeName];
+        if ( style.HasBackgroundColour() )
+            [attrs setValue:style.GetBackgroundColour().OSXGetNSColor() forKey:NSBackgroundColorAttributeName];
+        if ( style.HasTextColour() )
+            [attrs setValue:style.GetTextColour().OSXGetNSColor() forKey:NSForegroundColorAttributeName];
+
+        [m_textView setTypingAttributes:attrs];
+    }
+    else // Set the attributes just for this range.
+    {
         NSRange range = NSMakeRange(start, end-start);
-        if (start == -1 && end == -1)
-            range = [m_textView selectedRange];
 
         NSTextStorage* storage = [m_textView textStorage];
         if ( style.HasFont() )
@@ -699,7 +714,7 @@ void wxNSTextViewControl::SetStyle(long start,
 
         if ( style.HasBackgroundColour() )
             [storage addAttribute:NSBackgroundColorAttributeName value:style.GetBackgroundColour().OSXGetNSColor() range:range];
-        
+
         if ( style.HasTextColour() )
             [storage addAttribute:NSForegroundColorAttributeName value:style.GetTextColour().OSXGetNSColor() range:range];
     }
