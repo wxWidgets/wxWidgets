@@ -694,18 +694,14 @@ void wxNSTextViewControl::SetStyle(long start,
             range = [m_textView selectedRange];
 
         NSTextStorage* storage = [m_textView textStorage];
+        if ( style.HasFont() )
+            [storage addAttribute:NSFontAttributeName value:style.GetFont().OSXGetNSFont() range:range];
+
+        if ( style.HasBackgroundColour() )
+            [storage addAttribute:NSBackgroundColorAttributeName value:style.GetBackgroundColour().OSXGetNSColor() range:range];
         
-        wxFont font = style.GetFont();
-        if (style.HasFont() && font.IsOk())
-            [storage addAttribute:NSFontAttributeName value:font.OSXGetNSFont() range:range];
-        
-        wxColour bgcolor = style.GetBackgroundColour();
-        if (style.HasBackgroundColour() && bgcolor.IsOk())
-            [storage addAttribute:NSBackgroundColorAttributeName value:bgcolor.OSXGetNSColor() range:range];
-        
-        wxColour fgcolor = style.GetTextColour();
-        if (style.HasTextColour() && fgcolor.IsOk())
-            [storage addAttribute:NSForegroundColorAttributeName value:fgcolor.OSXGetNSColor() range:range];
+        if ( style.HasTextColour() )
+            [storage addAttribute:NSForegroundColorAttributeName value:style.GetTextColour().OSXGetNSColor() range:range];
     }
 }
 
