@@ -215,34 +215,71 @@ void wxButton::OSXSetAcceleratorFromLabel(const wxString& label)
     impl->SetAcceleratorFromLabel(label);
 }
 
-extern "C" void SetBezelStyleFromBorderFlags(NSButton *v, long style);
-    
-// set bezel style depending on the wxBORDER_XXX flags specified by the style
-void SetBezelStyleFromBorderFlags(NSButton *v, long style)
+// Set bezel style depending on the wxBORDER_XXX flags specified by the style
+// and also accounting for the label (bezels are different for multiline
+// buttons and normal ones) and the ID (special bezel is used for help button).
+//
+// This is extern because it's also used in src/osx/cocoa/tglbtn.mm.
+extern "C"
+void
+SetBezelStyleFromBorderFlags(NSButton *v,
+                             long style,
+                             wxWindowID winid,
+                             const wxString& label = wxString())
 {
-    if ( style & wxBORDER_NONE )
+    // We can't display a custom label inside a button with help bezel style so
+    // we only use it if we are using the default label. wxButton itself checks
+    // if the label is just "Help" in which case it discards it and passes us
+    // an empty string.
+    if ( winid == wxID_HELP && label.empty() )
     {
-        [v setBezelStyle:NSShadowlessSquareBezelStyle];
-        [v setBordered:NO];
+        [v setBezelStyle:NSHelpButtonBezelStyle];
     }
-    else // we do have a border
+    else
     {
-        // see trac #11128 for a thorough discussion
-        if ( (style & wxBORDER_MASK) == wxBORDER_RAISED )
-            [v setBezelStyle:NSRegularSquareBezelStyle];
-        else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
-            [v setBezelStyle:NSSmallSquareBezelStyle];
-        else if ( (style & wxBORDER_MASK) == wxBORDER_SIMPLE )
-            [v setBezelStyle:NSShadowlessSquareBezelStyle];
-        else
-            [v setBezelStyle:NSRegularSquareBezelStyle];
+        // We can't use rounded bezel styles for multiline buttons as they are
+        // only meant to be used at certain sizes, so the style used depends on
+        // whether the label is single or multi line.
+        const bool isSingleLine = label.find_first_of("\n\r") == wxString::npos;
+
+        NSBezelStyle bezel;
+        switch ( style & wxBORDER_MASK )
+        {
+            case wxBORDER_NONE:
+                bezel = NSShadowlessSquareBezelStyle;
+                [v setBordered:NO];
+                break;
+
+            case wxBORDER_SIMPLE:
+                bezel = NSShadowlessSquareBezelStyle;
+                break;
+
+            case wxBORDER_SUNKEN:
+                bezel = isSingleLine ? NSTexturedRoundedBezelStyle
+                                     : NSSmallSquareBezelStyle;
+                break;
+
+            default:
+                wxFAIL_MSG( "Unknown border style" );
+                // fall through
+
+            case 0:
+            case wxBORDER_STATIC:
+            case wxBORDER_RAISED:
+            case wxBORDER_THEME:
+                bezel = isSingleLine ? NSRoundedBezelStyle
+                                     : NSRegularSquareBezelStyle;
+                break;
+        }
+
+        [v setBezelStyle:bezel];
     }
 }
 
 
 wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
-                                    wxWindowID id,
+                                    wxWindowID winid,
                                     const wxString& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
@@ -252,50 +289,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    // We can't display a custom label inside a button with help bezel style so
-    // we only use it if we are using the default label. wxButton itself checks
-    // if the label is just "Help" in which case it discards it and passes us
-    // an empty string.
-    if ( id == wxID_HELP && label.empty() )
-    {
-        [v setBezelStyle:NSHelpButtonBezelStyle];
-    }
-    else
-    {
-        if ( style & wxBORDER_NONE )
-        {
-            [v setBezelStyle:NSShadowlessSquareBezelStyle];
-            [v setBordered:NO];
-        }
-        else 
-        {
-            // the following styles only exist for certain sizes, so avoid them for
-            // multi-line
-            if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
-            {
-                if ( (style & wxBORDER_MASK) == wxBORDER_RAISED )
-                    [v setBezelStyle:NSRoundedBezelStyle];
-                else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
-                    [v setBezelStyle:NSTexturedRoundedBezelStyle];
-                else if ( (style & wxBORDER_MASK) == wxBORDER_SIMPLE )
-                    [v setBezelStyle:NSShadowlessSquareBezelStyle];
-                else
-                    [v setBezelStyle:NSRoundedBezelStyle];
-            }
-            else 
-            {
-                if ( (style & wxBORDER_MASK) == wxBORDER_RAISED )
-                    [v setBezelStyle:NSRegularSquareBezelStyle];
-                else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
-                    [v setBezelStyle:NSSmallSquareBezelStyle];
-                else if ( (style & wxBORDER_MASK) == wxBORDER_SIMPLE )
-                    [v setBezelStyle:NSShadowlessSquareBezelStyle];
-                else
-                    [v setBezelStyle:NSRegularSquareBezelStyle];
-            }
-
-        }
-    }
+    SetBezelStyleFromBorderFlags(v, style, winid, label);
 
     [v setButtonType:NSMomentaryPushInButton];
     wxButtonCocoaImpl* const impl = new wxButtonCocoaImpl( wxpeer, v );
@@ -327,7 +321,7 @@ void wxWidgetCocoaImpl::PerformClick()
 
 wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
                                                    wxWindowMac* WXUNUSED(parent),
-                                                   wxWindowID WXUNUSED(id),
+                                                   wxWindowID winid,
                                                    const wxBitmap& bitmap,
                                                    const wxPoint& pos,
                                                    const wxSize& size,
@@ -337,7 +331,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style);
+    SetBezelStyleFromBorderFlags(v, style, winid);
 
     if (bitmap.IsOk())
         [v setImage:bitmap.GetNSImage() ];
@@ -484,7 +478,7 @@ public :
 
 wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
-                                    wxWindowID WXUNUSED(winid),
+                                    wxWindowID winid,
                                     const wxString& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
@@ -496,7 +490,7 @@ wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
     if ( !label.empty() )
         [v setTitle:wxCFStringRef(label).AsNSString()];
 
-    SetBezelStyleFromBorderFlags(v, style);
+    SetBezelStyleFromBorderFlags(v, style, winid, label);
 
     return new wxDisclosureTriangleCocoaImpl( wxpeer, v );
 }

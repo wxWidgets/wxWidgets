@@ -27,12 +27,15 @@
 
 // from button.mm
 
-extern "C" void SetBezelStyleFromBorderFlags(NSButton *v, long style);
+extern "C" void SetBezelStyleFromBorderFlags(NSButton *v,
+                                             long style,
+                                             wxWindowID winid = wxID_ANY,
+                                             const wxString& label = wxString());
 
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
-                                    wxWindowID WXUNUSED(id),
-                                    const wxString& WXUNUSED(label),
+                                    wxWindowID winid,
+                                    const wxString& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -41,7 +44,7 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style);
+    SetBezelStyleFromBorderFlags(v, style, winid, label);
 
     [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
@@ -50,7 +53,7 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
 
 wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
-                                    wxWindowID WXUNUSED(id),
+                                    wxWindowID winid,
                                     const wxBitmap& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
@@ -60,7 +63,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style);
+    SetBezelStyleFromBorderFlags(v, style, winid);
     
     if (label.IsOk())
         [v setImage:label.GetNSImage() ];
