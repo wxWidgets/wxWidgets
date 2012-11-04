@@ -2191,6 +2191,7 @@ void wxWindowGTK::Init()
     m_nativeSizeEvent = false;
 #ifdef __WXGTK3__
     m_paintContext = NULL;
+    m_styleProvider = NULL;
 #endif
 
     m_isScrolling = false;
@@ -2389,6 +2390,11 @@ wxWindowGTK::~wxWindowGTK()
     // gets painted again
     while (IsFrozen())
         Thaw();
+
+#ifdef __WXGTK3__
+    if (m_styleProvider)
+        g_object_unref(m_styleProvider);
+#endif
 
     if (m_widget)
     {
@@ -4011,16 +4017,8 @@ PangoContext *wxWindowGTK::GTKGetPangoDefaultContext()
 }
 
 #ifndef __WXGTK3__
-GtkRcStyle *wxWindowGTK::GTKCreateWidgetStyle(bool forceStyle)
+GtkRcStyle* wxWindowGTK::GTKCreateWidgetStyle()
 {
-    // do we need to apply any changes at all?
-    if ( !forceStyle &&
-         !m_font.IsOk() &&
-         !m_foregroundColour.IsOk() && !m_backgroundColour.IsOk() )
-    {
-        return NULL;
-    }
-
     GtkRcStyle *style = gtk_rc_style_new();
 
     if ( m_font.IsOk() )
@@ -4081,18 +4079,35 @@ GtkRcStyle *wxWindowGTK::GTKCreateWidgetStyle(bool forceStyle)
 }
 #endif // !__WXGTK3__
 
-void wxWindowGTK::GTKApplyWidgetStyle(bool WXUNUSED_IN_GTK3(forceStyle))
+void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
 {
-#ifdef __WXGTK3__
-    DoApplyWidgetStyle(NULL);
-#else
-    GtkRcStyle *style = GTKCreateWidgetStyle(forceStyle);
-    if ( style )
+    if (forceStyle || m_font.IsOk() ||
+        m_foregroundColour.IsOk() || m_backgroundColour.IsOk())
     {
+#ifdef __WXGTK3__
+        if (m_backgroundColour.IsOk())
+        {
+            // create a GtkStyleProvider to override "background-image"
+            if (m_styleProvider == NULL)
+                m_styleProvider = GTK_STYLE_PROVIDER(gtk_css_provider_new());
+            const char css[] =
+                "*{background-image:-gtk-gradient(linear,0 0,0 1,"
+                "from(rgba(%u,%u,%u,%g)),to(rgba(%u,%u,%u,%g)))}";
+            char buf[sizeof(css) + 20];
+            const unsigned r = m_backgroundColour.Red();
+            const unsigned g = m_backgroundColour.Green();
+            const unsigned b = m_backgroundColour.Blue();
+            const double a = m_backgroundColour.Alpha() / 255.0;
+            g_snprintf(buf, sizeof(buf), css, r, g, b, a, r, g, b, a);
+            gtk_css_provider_load_from_data(GTK_CSS_PROVIDER(m_styleProvider), buf, -1, NULL);
+        }
+        DoApplyWidgetStyle(NULL);
+#else
+        GtkRcStyle* style = GTKCreateWidgetStyle();
         DoApplyWidgetStyle(style);
         g_object_unref(style);
-    }
 #endif
+    }
 
     // Style change may affect GTK+'s size calculation:
     InvalidateBestSize();
@@ -4130,6 +4145,25 @@ void wxWindowGTK::GTKApplyStyle(GtkWidget* widget, GtkRcStyle* WXUNUSED_IN_GTK3(
     gtk_widget_override_font(widget, pfd);
     gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, m_foregroundColour);
     gtk_widget_override_background_color(widget, GTK_STATE_FLAG_NORMAL, m_backgroundColour);
+
+    // setting background color has no effect with some themes when the widget style
+    // has a "background-image" property, so we need to override that as well
+
+    GtkStyleContext* context = gtk_widget_get_style_context(widget);
+    if (m_styleProvider)
+        gtk_style_context_remove_provider(context, m_styleProvider);
+    cairo_pattern_t* pattern = NULL;
+    if (m_backgroundColour.IsOk())
+    {
+        gtk_style_context_get(context,
+            GTK_STATE_FLAG_NORMAL, "background-image", &pattern, NULL);
+    }
+    if (pattern)
+    {
+        cairo_pattern_destroy(pattern);
+        gtk_style_context_add_provider(context,
+            m_styleProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
 #else
     gtk_widget_modify_style(widget, style);
 #endif

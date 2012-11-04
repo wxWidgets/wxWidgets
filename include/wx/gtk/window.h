@@ -14,6 +14,7 @@
 
 #ifdef __WXGTK3__
     typedef struct _cairo cairo_t;
+    typedef struct _GtkStyleProvider GtkStyleProvider;
     #define WXUNUSED_IN_GTK3(x)
 #else
     #define WXUNUSED_IN_GTK3(x) x
@@ -373,10 +374,8 @@ protected:
 #ifndef __WXGTK3__
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create
-    // modified GTK style with non-standard attributes. If forceStyle=true,
-    // creates empty GtkRcStyle if there are no modifications, otherwise
-    // returns NULL in such case.
-    GtkRcStyle *GTKCreateWidgetStyle(bool forceStyle = false);
+    // modified GTK style with non-standard attributes.
+    GtkRcStyle* GTKCreateWidgetStyle();
 #endif
 
     void GTKApplyWidgetStyle(bool forceStyle = false);
@@ -414,6 +413,8 @@ private:
 #ifdef __WXGTK3__
     // paint context is stashed here so wxPaintDC can use it
     cairo_t* m_paintContext;
+    // style provider for "background-image"
+    GtkStyleProvider* m_styleProvider;
 
 public:
     cairo_t* GTKPaintContext() const
