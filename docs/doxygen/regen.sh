@@ -36,6 +36,21 @@ if [ "$DOXYGEN" = "" ]; then
     DOXYGEN=doxygen
 fi
 
+# Check that doxygen has the correct version as different versions of it are
+# unfortunately not always (in fact, practically never) compatible.
+#
+# Still allow using incompatible version for some quick local testing if really
+# needed and 1.8.2 can't be installed for whatever reason.
+if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
+    doxygen_version=`$DOXYGEN --version`
+    doxygen_version_required=1.8.2
+    if [[ $doxygen_version != $doxygen_version_required ]]; then
+        echo "Doxygen version $doxygen_version is not supported."
+        echo "Please use Doxygen $doxygen_version_required or export WX_SKIP_DOXYGEN_VERSION_CHECK."
+        exit 1
+    fi
+fi
+
 # prepare folders for the cp commands below
 mkdir -p out/html       # we need to copy files in this folder below
 mkdir -p out/html/generic
