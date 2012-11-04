@@ -120,7 +120,7 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
     if (returnCode == NSOKButton )
     {
         NSOpenPanel* oPanel = (NSOpenPanel*)panel;
-        SetPath( wxCFStringRef::AsString([[oPanel filenames] objectAtIndex:0]));
+        SetPath( wxCFStringRef::AsStringWithNormalizationFormC([[oPanel filenames] objectAtIndex:0]));
         result = wxID_OK;
     }
     SetReturnCode(result);

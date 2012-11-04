@@ -71,7 +71,7 @@ void wxBell()
     const size_t count = [fileNames count];
     for (i = 0; i < count; i++)
     {
-        fileList.Add( wxCFStringRef::AsString([fileNames objectAtIndex:i]) );
+        fileList.Add( wxCFStringRef::AsStringWithNormalizationFormC([fileNames objectAtIndex:i]) );
     }
 
     wxTheApp->MacOpenFiles(fileList);
