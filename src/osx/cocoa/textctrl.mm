@@ -869,10 +869,10 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
         wxMacEditHelper helper(m_textField);
         BOOL hasUndo = [editor respondsToSelector:@selector(setAllowsUndo:)];
         if ( hasUndo )
-            [editor setAllowsUndo:NO];
+            [(NSTextView*)editor setAllowsUndo:NO];
         [editor insertText:wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
         if ( hasUndo )
-            [editor setAllowsUndo:YES];
+            [(NSTextView*)editor setAllowsUndo:YES];
     }
     else
     {
