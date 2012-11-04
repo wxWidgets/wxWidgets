@@ -699,7 +699,12 @@ wxString wxCFStringRef::AsString( NSString* ref, wxFontEncoding encoding )
 {
     return AsString( (CFStringRef) ref, encoding );
 }
-#endif
+
+wxString wxCFStringRef::AsStringWithNormalizationFormC( NSString* ref, wxFontEncoding encoding )
+{
+    return AsStringWithNormalizationFormC( (CFStringRef) ref, encoding );
+}
+#endif // wxOSX_USE_COCOA_OR_IPHONE
 
 
 //
