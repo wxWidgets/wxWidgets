@@ -59,6 +59,10 @@ for f in $changed_sources; do
             # This file defines _T() for compatibility so don't check it.
             ;;
 
+        */docs/doxygen/overviews/changes_since28.h)
+            # And this one describes changes from _T() to wxT().
+            ;;
+
         *)
             if  svnl cat $f | fgrep -qw '_T'; then
                 echo "Please use wxT() instead of _T() in $f." >&2
