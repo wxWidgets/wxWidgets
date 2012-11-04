@@ -21,14 +21,11 @@ path=${0%%/$me}        # path from which the script has been launched
 current=$(pwd)
 cd $path
 if [[ -z "$WXWIDGETS" ]]; then
-    WXWIDGETS=`cd ../.. && pwd`
-    # Use the real path in case it's a symlink
-    if command -v readlink; then
-        normalized=`readlink -e $WXWIDGETS`
-        if [[ -n $normalized ]]; then
-            WXWIDGETS=$normalized
-        fi
-    fi 
+    # Notice the use of -P to ensure we get the canonical path even if there
+    # are symlinks in the current path. This is important because Doxygen
+    # strips this string from the paths in the generated files textually and it
+    # wouldn't work if it contained symlinks.
+    WXWIDGETS=`cd ../.. && pwd -P`
     if [ "$OSTYPE" = "cygwin" ]; then
         WXWIDGETS=`cygpath -w $WXWIDGETS`
     fi
