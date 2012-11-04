@@ -102,7 +102,7 @@ void wxButton::SetLabel(const wxString& label)
 
     wxAnyButton::SetLabel(label);
 #if wxOSX_USE_COCOA
-    OSXSetAcceleratorFromLabel(label);
+    OSXUpdateAfterLabelChange(label);
 #endif
 }
 

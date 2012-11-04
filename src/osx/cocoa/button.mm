@@ -199,7 +199,7 @@ NSButton *wxButtonCocoaImpl::GetNSButton() const
 }
 
 // Set the keyboard accelerator key from the label (e.g. "Click &Me")
-void wxButton::OSXSetAcceleratorFromLabel(const wxString& label)
+void wxButton::OSXUpdateAfterLabelChange(const wxString& label)
 {
     // Skip setting the accelerator for the default buttons as this would
     // overwrite the default "Enter" which should be preserved.

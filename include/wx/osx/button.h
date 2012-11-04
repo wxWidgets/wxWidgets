@@ -50,7 +50,7 @@ public:
     virtual bool        OSXHandleClicked( double timestampsec );
 
 #if wxOSX_USE_COCOA
-    void OSXSetAcceleratorFromLabel(const wxString& label);
+    void OSXUpdateAfterLabelChange(const wxString& label);
 #endif
 
 protected:
