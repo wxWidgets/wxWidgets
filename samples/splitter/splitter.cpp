@@ -111,7 +111,7 @@ public:
     void OnUpdateUIInvisible(wxUpdateUIEvent& event);
 
 private:
-    wxScrolledWindow *m_left, *m_right;
+    wxWindow *m_left, *m_right;
 
     wxSplitterWindow* m_splitter;
     wxWindow *m_replacewindow;
@@ -276,12 +276,10 @@ MyFrame::MyFrame()
 #if 1
     m_left = new MyCanvas(m_splitter, true);
     m_left->SetBackgroundColour(*wxRED);
-    m_left->SetScrollbars(20, 20, 5, 5);
     m_left->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
     m_right = new MyCanvas(m_splitter, false);
     m_right->SetBackgroundColour(*wxCYAN);
-    m_right->SetScrollbars(20, 20, 5, 5);
 #else // for testing kbd navigation inside the splitter
     m_left = new wxTextCtrl(m_splitter, wxID_ANY, wxT("first text"));
     m_right = new wxTextCtrl(m_splitter, wxID_ANY, wxT("second text"));
@@ -537,6 +535,7 @@ MyCanvas::MyCanvas(wxWindow* parent, bool mirror)
                            wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     m_mirror = mirror;
+    SetScrollbars(20, 20, 5, 5);
 }
 
 void MyCanvas::OnDraw(wxDC& dcOrig)
