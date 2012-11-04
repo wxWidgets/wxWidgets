@@ -3483,11 +3483,7 @@ wxTextCtrl *wxGenericTreeCtrl::EditLabel(const wxTreeItemId& item,
     // question might just have been added and no screen
     // update taken place.
     if ( m_dirty )
-#if defined( __WXMSW__ ) || defined(__WXMAC__)
-        Update();
-#else
         DoDirtyProcessing();
-#endif
 
     // TODO: use textCtrlClass here to create the control of correct class
     m_textCtrl = new wxTreeTextCtrl(this, itemEdit);
