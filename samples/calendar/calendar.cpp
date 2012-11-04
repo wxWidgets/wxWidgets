@@ -914,7 +914,9 @@ MyDateDialog::MyDateDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
                                         dtpStyle);
     m_datePicker->SetRange(wxDateTime(1, wxDateTime::Jan, 1900),
                             wxDefaultDateTime);
-    m_dateText = new wxStaticText(this, wxID_ANY, wxString());
+    m_dateText = new wxStaticText(this, wxID_ANY,
+                                  dt.IsValid() ? dt.FormatISODate()
+                                               : wxString());
 
     const wxSizerFlags flags = wxSizerFlags().Centre().Border();
     wxFlexGridSizer* const sizerMain = new wxFlexGridSizer(2);
@@ -925,14 +927,9 @@ MyDateDialog::MyDateDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
                    flags);
     sizerMain->Add(m_dateText, flags);
 
-    wxStdDialogButtonSizer *sizerBtns = new wxStdDialogButtonSizer;
-    sizerBtns->AddButton(new wxButton(this, wxID_OK));
-    sizerBtns->AddButton(new wxButton(this, wxID_CANCEL));
-    sizerBtns->Realize();
-
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(sizerMain, flags);
-    sizerTop->Add(sizerBtns, flags);
+    sizerTop->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), flags);
 
     SetSizerAndFit(sizerTop);
 }
@@ -968,7 +965,8 @@ MyTimeDialog::MyTimeDialog(wxWindow *parent)
     else
 #endif // wxUSE_TIMEPICKCTRL_GENERIC
     m_timePicker = new wxTimePickerCtrl(this, wxID_ANY);
-    m_timeText = new wxStaticText(this, wxID_ANY, wxString());
+    m_timeText = new wxStaticText(this, wxID_ANY,
+                                  m_timePicker->GetValue().FormatISOTime());
 
     const wxSizerFlags flags = wxSizerFlags().Centre().Border();
     wxFlexGridSizer* const sizerMain = new wxFlexGridSizer(2);
@@ -979,14 +977,9 @@ MyTimeDialog::MyTimeDialog(wxWindow *parent)
                    flags);
     sizerMain->Add(m_timeText, flags);
 
-    wxStdDialogButtonSizer* sizerBtns = new wxStdDialogButtonSizer;
-    sizerBtns->AddButton(new wxButton(this, wxID_OK));
-    sizerBtns->AddButton(new wxButton(this, wxID_CANCEL));
-    sizerBtns->Realize();
-
     wxSizer* sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(sizerMain, flags);
-    sizerTop->Add(sizerBtns, flags);
+    sizerTop->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), flags);
 
     SetSizerAndFit(sizerTop);
 }
