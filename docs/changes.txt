@@ -604,7 +604,6 @@ wxMSW:
 
 wxOSX/Cocoa:
 
-- Fix pages range in the print dialog (Auria).
 - Implement image support in wxNotebook (Malcolm MacLeod).
 - Add support for button mnemonics (joostn).
 
