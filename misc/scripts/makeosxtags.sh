@@ -2,7 +2,7 @@
 . `dirname $0`/makeunixtags.sh
 create_tags osx
 
-osx_port=${1-carbon}
+osx_port=${1-cocoa}
 if [[ $osx_port = carbon ]]; then
     ext=cpp
 else
