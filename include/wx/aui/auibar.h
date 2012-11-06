@@ -457,7 +457,7 @@ public:
                 wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = 0);
+                long style = wxAUI_TB_DEFAULT_STYLE);
 
     virtual void SetWindowStyleFlag(long style);
 
