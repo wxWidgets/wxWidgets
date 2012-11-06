@@ -89,6 +89,10 @@ protected:
 
     DECLARE_CLASS(wxEditableListBox)
     DECLARE_EVENT_TABLE()
+
+private:
+    void SwapItems(long i1, long i2);
+
 };
 
 #endif  // wxUSE_EDITABLELISTBOX

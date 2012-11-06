@@ -370,26 +370,32 @@ void wxEditableListBox::OnEditItem(wxCommandEvent& WXUNUSED(event))
     m_listCtrl->EditLabel(m_selection);
 }
 
+void wxEditableListBox::SwapItems(long i1, long i2)
+{
+    // swap the text
+    wxString t1 = m_listCtrl->GetItemText(i1);
+    wxString t2 = m_listCtrl->GetItemText(i2);
+    m_listCtrl->SetItemText(i1, t2);
+    m_listCtrl->SetItemText(i2, t1);
+
+    // swap the item data
+    long d1 = m_listCtrl->GetItemData(i1);
+    long d2 = m_listCtrl->GetItemData(i2);
+    m_listCtrl->SetItemData(i1, d2);
+    m_listCtrl->SetItemData(i2, d1);
+}
+
+
 void wxEditableListBox::OnUpItem(wxCommandEvent& WXUNUSED(event))
 {
-    wxString t1, t2;
-
-    t1 = m_listCtrl->GetItemText(m_selection - 1);
-    t2 = m_listCtrl->GetItemText(m_selection);
-    m_listCtrl->SetItemText(m_selection - 1, t2);
-    m_listCtrl->SetItemText(m_selection, t1);
+    SwapItems(m_selection - 1, m_selection);
     m_listCtrl->SetItemState(m_selection - 1,
                              wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void wxEditableListBox::OnDownItem(wxCommandEvent& WXUNUSED(event))
 {
-    wxString t1, t2;
-
-    t1 = m_listCtrl->GetItemText(m_selection + 1);
-    t2 = m_listCtrl->GetItemText(m_selection);
-    m_listCtrl->SetItemText(m_selection + 1, t2);
-    m_listCtrl->SetItemText(m_selection, t1);
+    SwapItems(m_selection + 1, m_selection);
     m_listCtrl->SetItemState(m_selection + 1,
                              wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
