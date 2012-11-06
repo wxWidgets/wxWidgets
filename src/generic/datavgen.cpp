@@ -3085,44 +3085,44 @@ void wxDataViewMainWindow::Expand( unsigned int row )
     if (!node->HasChildren())
         return;
 
-            if (!node->IsOpen())
-            {
-                if ( !SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem()) )
-                {
-                    // Vetoed by the event handler.
-                    return;
-                }
+    if (!node->IsOpen())
+    {
+        if ( !SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem()) )
+        {
+            // Vetoed by the event handler.
+            return;
+        }
 
-                node->ToggleOpen();
+        node->ToggleOpen();
 
-                // build the children of current node
-                if( node->GetChildNodes().empty() )
-                {
-                    SortPrepare();
-                    ::BuildTreeHelper(GetModel(), node->GetItem(), node);
-                }
+        // build the children of current node
+        if( node->GetChildNodes().empty() )
+        {
+            SortPrepare();
+            ::BuildTreeHelper(GetModel(), node->GetItem(), node);
+        }
 
-                // By expanding the node all row indices that are currently in the selection list
-                // and are greater than our node have become invalid. So we have to correct that now.
-                const unsigned rowAdjustment = node->GetSubTreeCount();
-                for(unsigned i=0; i<m_selection.size(); ++i)
-                {
-                    const unsigned testRow = m_selection[i];
-                    // all rows above us are not affected, so skip them
-                    if(testRow <= row)
-                        continue;
+        // By expanding the node all row indices that are currently in the selection list
+        // and are greater than our node have become invalid. So we have to correct that now.
+        const unsigned rowAdjustment = node->GetSubTreeCount();
+        for(unsigned i=0; i<m_selection.size(); ++i)
+        {
+            const unsigned testRow = m_selection[i];
+            // all rows above us are not affected, so skip them
+            if(testRow <= row)
+                continue;
 
-                    m_selection[i] += rowAdjustment;
-                }
+            m_selection[i] += rowAdjustment;
+        }
 
-                if(m_currentRow > row)
-                    ChangeCurrentRow(m_currentRow + rowAdjustment);
+        if(m_currentRow > row)
+            ChangeCurrentRow(m_currentRow + rowAdjustment);
 
-                m_count = -1;
-                UpdateDisplay();
-                // Send the expanded event
-                SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED,node->GetItem());
-            }
+        m_count = -1;
+        UpdateDisplay();
+        // Send the expanded event
+        SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED,node->GetItem());
+    }
 }
 
 void wxDataViewMainWindow::Collapse(unsigned int row)
