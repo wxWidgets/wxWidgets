@@ -1695,11 +1695,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxDataViewModel *model = GetModel();
     wxAutoBufferedPaintDC dc( this );
 
-#ifdef __WXMSW__
     dc.SetBrush(GetOwner()->GetBackgroundColour());
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.DrawRectangle(GetClientSize());
-#endif
 
     if ( IsEmpty() )
     {
