@@ -705,11 +705,18 @@ void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
 {
     wxTreeEvent changedEvent(wxEVT_COMMAND_DIRCTRL_CHANGED, GetId());
 
+    changedEvent.SetEventObject(this);
     changedEvent.SetItem(event.GetItem());
     changedEvent.SetClientObject(m_treeCtrl->GetItemData(event.GetItem()));
 
-    GetEventHandler()->SafelyProcessEvent(changedEvent);
-    event.Skip();
+    if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
+    {
+        event.Veto();
+    }
+    else
+    {
+        event.Skip();
+    }
 }
 
 void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
