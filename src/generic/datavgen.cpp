@@ -347,7 +347,7 @@ public:
     static wxDataViewTreeNode* CreateRootNode()
     {
         wxDataViewTreeNode *n = new wxDataViewTreeNode(NULL, wxDataViewItem());
-        n->SetHasChildren(true);
+        n->m_branchData = new BranchNodeData;
         n->m_branchData->open = true;
         return n;
     }
@@ -416,6 +416,11 @@ public:
 
     void ToggleOpen()
     {
+        // We do not allow the (invisible) root node to be collapsed because
+        // there is no way to expand it again.
+        if ( !m_parent )
+            return;
+
         wxCHECK_RET( m_branchData != NULL, "can't open leaf node" );
 
         int sum = 0;
@@ -446,6 +451,11 @@ public:
 
     void SetHasChildren(bool has)
     {
+        // The invisible root item always has children, so ignore any attempts
+        // to change this.
+        if ( !m_parent )
+            return;
+
         if ( !has )
         {
             wxDELETE(m_branchData);
