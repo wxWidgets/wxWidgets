@@ -804,7 +804,7 @@ void wxAuiToolBar::Init()
     m_buttonWidth = -1;
     m_buttonHeight = -1;
     m_sizerElementCount = 0;
-    m_actionPos = wxPoint(-1,-1);
+    m_actionPos = wxDefaultPosition;
     m_actionItem = NULL;
     m_tipItem = NULL;
     m_art = new wxAuiDefaultToolBarArt;
@@ -814,9 +814,10 @@ void wxAuiToolBar::Init()
     m_gripperSizerItem = NULL;
     m_overflowSizerItem = NULL;
     m_dragging = false;
-    m_gripperVisible = (m_windowStyle & wxAUI_TB_GRIPPER) ? true : false;
-    m_overflowVisible = (m_windowStyle & wxAUI_TB_OVERFLOW) ? true : false;
+    m_gripperVisible = false;
+    m_overflowVisible = false;
     m_overflowState = 0;
+    m_orientation = wxHORIZONTAL;
 }
 
 bool wxAuiToolBar::Create(wxWindow* parent,
@@ -831,6 +832,10 @@ bool wxAuiToolBar::Create(wxWindow* parent,
         return false;
 
     m_windowStyle = style;
+
+    m_gripperVisible  = (style & wxAUI_TB_GRIPPER) ? true : false;
+    m_overflowVisible = (style & wxAUI_TB_OVERFLOW) ? true : false;
+
     m_orientation = GetOrientation(style);
     if (m_orientation == wxBOTH)
     {
