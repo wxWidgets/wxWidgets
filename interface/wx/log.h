@@ -6,6 +6,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#if wxUSE_BASE
 
 /**
     Different standard log levels (you may also define your own) used with
@@ -69,101 +70,537 @@ public:
 };
 
 /**
-    @class wxLogWindow
+    @class wxLogFormatter
 
-    This class represents a background log window: to be precise, it collects all
-    log messages in the log frame which it manages but also passes them on to the
-    log target which was active at the moment of its creation. This allows you, for
-    example, to show all the log messages in a frame but still continue to process
-    them normally by showing the standard log dialog.
+    wxLogFormatter class is used to format the log messages. It implements the
+    default formatting and can be derived from to create custom formatters.
 
-    @library{wxcore}
-    @category{logging}
+    The default implementation formats the message into a string containing
+    the time stamp, level-dependent prefix and the message itself.
 
-    @see wxLogTextCtrl
-*/
-class wxLogWindow : public wxLogInterposer
-{
-public:
-    /**
-        Creates the log frame window and starts collecting the messages in it.
+    To change it, you can derive from it and override its Format() method. For
+    example, to include the thread id in the log messages you can use
+    @code
+        class LogFormatterWithThread : public wxLogFormatter
+        {
+            virtual wxString Format(wxLogLevel level,
+                                    const wxString& msg,
+                                    const wxLogRecordInfo& info) const
+            {
+                return wxString::Format("[%d] %s(%d) : %s",
+                    info.threadId, info.filename, info.line, msg);
+            }
+        };
+    @endcode
+    And then associate it with wxLog instance using its SetFormatter(). Then,
+    if you call:
 
-        @param pParent
-            The parent window for the log frame, may be @NULL
-        @param szTitle
-            The title for the log frame
-        @param show
-            @true to show the frame initially (default), otherwise
-            Show() must be called later.
-        @param passToOld
-            @true to process the log messages normally in addition to logging them 
-            in the log frame (default), @false to only log them in the log frame.
-            Note that if no targets were set using wxLog::SetActiveTarget() then 
-            wxLogWindow simply becomes the active one and messages won't be passed
-            to other targets.
-    */
-    wxLogWindow(wxWindow* pParent, const wxString& szTitle, bool show = true,
-                bool passToOld = true);
+    @code
+        wxLogMessage(_("*** Application started ***"));
+    @endcode
 
-    /**
-        Returns the associated log frame window. This may be used to position or resize
-        it but use Show() to show or hide it.
-    */
-    wxFrame* GetFrame() const;
+    the log output could be something like:
 
-    /**
-        Called if the user closes the window interactively, will not be
-        called if it is destroyed for another reason (such as when program
-        exits).
-
-        Return @true from here to allow the frame to close, @false to
-        prevent this from happening.
-
-        @see OnFrameDelete()
-    */
-    virtual bool OnFrameClose(wxFrame* frame);
-
-    /**
-        Called immediately after the log frame creation allowing for
-        any extra initializations.
-    */
-    virtual void OnFrameCreate(wxFrame* frame);
-
-    /**
-        Called right before the log frame is going to be deleted: will
-        always be called unlike OnFrameClose().
-    */
-    virtual void OnFrameDelete(wxFrame* frame);
-
-    /**
-        Shows or hides the frame.
-    */
-    void Show(bool show = true);
-};
-
-
-
-/**
-    @class wxLogInterposerTemp
-
-    A special version of wxLogChain which uses itself as the new log target.
-    It forwards log messages to the previously installed one in addition to
-    processing them itself. Unlike wxLogInterposer, it doesn't delete the old
-    target which means it can be used to temporarily redirect log output.
-
-    As per wxLogInterposer, this class must be derived from to implement
-    wxLog::DoLog and/or wxLog::DoLogString methods.
+    @verbatim
+        [7872] d:\testApp\src\testApp.cpp(85) : *** Application started ***
+    @endverbatim
 
     @library{wxbase}
     @category{logging}
+
+    @see @ref overview_log
+
+    @since 2.9.4
 */
-class wxLogInterposerTemp : public wxLogChain
+class wxLogFormatter
 {
 public:
     /**
-        The default constructor installs this object as the current active log target.
+        The default ctor does nothing.
     */
-    wxLogInterposerTemp();
+    wxLogFormatter();
+
+
+    /**
+        This function creates the full log message string.
+
+        Override it to customize the output string format.
+
+        @param level
+            The level of this log record, e.g. ::wxLOG_Error.
+        @param msg
+            The log message itself.
+        @param info
+            All the other information (such as time, component, location...)
+            associated with this log record.
+
+        @return
+            The formated message.
+
+        @note
+            Time stamping is disabled for Visual C++ users in debug builds by
+            default because otherwise it would be impossible to directly go to the line
+            from which the log message was generated by simply clicking in the debugger
+            window on the corresponding error message. If you wish to enable it, override
+            FormatTime().
+    */
+    virtual wxString Format(wxLogLevel level,
+                            const wxString& msg,
+                            const wxLogRecordInfo& info) const;
+
+protected:
+    /**
+        This function formats the time stamp part of the log message.
+
+        Override this function if you need to customize just the time stamp.
+
+        @param time
+            Time to format.
+
+        @return
+            The formated time string, may be empty.
+    */
+    virtual wxString FormatTime(time_t time) const;
+};
+
+
+/**
+    @class wxLog
+
+    wxLog class defines the interface for the <em>log targets</em> used by wxWidgets
+    logging functions as explained in the @ref overview_log.
+
+    The only situations when you need to directly use this class is when you want
+    to derive your own log target because the existing ones don't satisfy your
+    needs.
+
+    Otherwise, it is completely hidden behind the @ref group_funcmacro_log "wxLogXXX() functions"
+    and you may not even know about its existence.
+
+    @note For console-mode applications, the default target is wxLogStderr, so
+          that all @e wxLogXXX() functions print on @c stderr when @c wxUSE_GUI = 0.
+
+    @library{wxbase}
+    @category{logging}
+
+    @see @ref overview_log, @ref group_funcmacro_log "wxLogXXX() functions"
+*/
+class wxLog
+{
+public:
+    /**
+        @name Trace mask functions
+    */
+    //@{
+
+    /**
+        Add the @a mask to the list of allowed masks for wxLogTrace().
+
+        @see RemoveTraceMask(), GetTraceMasks()
+    */
+    static void AddTraceMask(const wxString& mask);
+
+    /**
+        Removes all trace masks previously set with AddTraceMask().
+
+        @see RemoveTraceMask()
+    */
+    static void ClearTraceMasks();
+
+    /**
+        Returns the currently allowed list of string trace masks.
+
+        @see AddTraceMask().
+    */
+    static const wxArrayString& GetTraceMasks();
+
+    /**
+        Returns @true if the @a mask is one of allowed masks for wxLogTrace().
+
+        See also: AddTraceMask(), RemoveTraceMask()
+    */
+    static bool IsAllowedTraceMask(const wxString& mask);
+
+    /**
+        Remove the @a mask from the list of allowed masks for
+        wxLogTrace().
+
+        @see AddTraceMask()
+    */
+    static void RemoveTraceMask(const wxString& mask);
+
+    //@}
+
+
+
+    /**
+        @name Log target functions
+    */
+    //@{
+
+    /**
+        Instructs wxLog to not create new log targets on the fly if there is none
+        currently (see GetActiveTarget()).
+
+        (Almost) for internal use only: it is supposed to be called by the
+        application shutdown code (where you don't want the log target to be
+        automatically created anymore).
+
+        Note that this function also calls ClearTraceMasks().
+    */
+    static void DontCreateOnDemand();
+
+    /**
+        Returns the pointer to the active log target (may be @NULL).
+
+        Notice that if SetActiveTarget() hadn't been previously explicitly
+        called, this function will by default try to create a log target by
+        calling wxAppTraits::CreateLogTarget() which may be overridden in a
+        user-defined traits class to change the default behaviour. You may also
+        call DontCreateOnDemand() to disable this behaviour.
+
+        When this function is called from threads other than main one,
+        auto-creation doesn't happen. But if the thread has a thread-specific
+        log target previously set by SetThreadActiveTarget(), it is returned
+        instead of the global one. Otherwise, the global log target is
+        returned.
+    */
+    static wxLog* GetActiveTarget();
+
+    /**
+        Sets the specified log target as the active one.
+
+        Returns the pointer to the previous active log target (may be @NULL).
+        To suppress logging use a new instance of wxLogNull not @NULL.  If the
+        active log target is set to @NULL a new default log target will be
+        created when logging occurs.
+
+        @see SetThreadActiveTarget()
+    */
+    static wxLog* SetActiveTarget(wxLog* logtarget);
+
+    /**
+        Sets a thread-specific log target.
+
+        The log target passed to this function will be used for all messages
+        logged by the current thread using the usual wxLog functions. This
+        shouldn't be called from the main thread which never uses a thread-
+        specific log target but can be used for the other threads to handle
+        thread logging completely separately; instead of buffering thread log
+        messages in the main thread logger.
+
+        Notice that unlike for SetActiveTarget(), wxWidgets does not destroy
+        the thread-specific log targets when the thread terminates so doing
+        this is your responsibility.
+
+        This method is only available if @c wxUSE_THREADS is 1, i.e. wxWidgets
+        was compiled with threads support.
+
+        @param logger
+            The new thread-specific log target, possibly @NULL.
+        @return
+            The previous thread-specific log target, initially @NULL.
+
+        @since 2.9.1
+     */
+    static wxLog *SetThreadActiveTarget(wxLog *logger);
+
+    /**
+        Flushes the current log target if any, does nothing if there is none.
+
+        When this method is called from the main thread context, it also
+        flushes any previously buffered messages logged by the other threads.
+        When it is called from the other threads it simply calls Flush() on the
+        currently active log target, so it mostly makes sense to do this if a
+        thread has its own logger set with SetThreadActiveTarget().
+    */
+    static void FlushActive();
+
+    /**
+        Resumes logging previously suspended by a call to Suspend().
+        All messages logged in the meanwhile will be flushed soon.
+    */
+    static void Resume();
+
+    /**
+        Suspends the logging until Resume() is called.
+
+        Note that the latter must be called the same number of times as the former
+        to undo it, i.e. if you call Suspend() twice you must call Resume() twice as well.
+
+        Note that suspending the logging means that the log sink won't be flushed
+        periodically, it doesn't have any effect if the current log target does the
+        logging immediately without waiting for Flush() to be called (the standard
+        GUI log target only shows the log dialog when it is flushed, so Suspend()
+        works as expected with it).
+
+        @see Resume(), wxLogNull
+    */
+    static void Suspend();
+
+    //@}
+
+
+
+    /**
+        @name Log level functions
+    */
+    //@{
+
+    /**
+        Returns the current log level limit.
+
+        All messages at levels strictly greater than the value returned by this
+        function are not logged at all.
+
+        @see SetLogLevel(), IsLevelEnabled()
+    */
+    static wxLogLevel GetLogLevel();
+
+    /**
+        Returns true if logging at this level is enabled for the current thread.
+
+        This function only returns @true if logging is globally enabled and if
+        @a level is less than or equal to the maximal log level enabled for the
+        given @a component.
+
+        @see IsEnabled(), SetLogLevel(), GetLogLevel(), SetComponentLevel()
+
+        @since 2.9.1
+     */
+    static bool IsLevelEnabled(wxLogLevel level, wxString component);
+
+    /**
+        Sets the log level for the given component.
+
+        For example, to disable all but error messages from wxWidgets network
+        classes you may use
+        @code
+            wxLog::SetComponentLevel("wx/net", wxLOG_Error);
+        @endcode
+
+        SetLogLevel() may be used to set the global log level.
+
+        @param component
+            Non-empty component name, possibly using slashes (@c /) to separate
+            it into several parts.
+        @param level
+            Maximal level of log messages from this component which will be
+            handled instead of being simply discarded.
+
+        @since 2.9.1
+     */
+    static void SetComponentLevel(const wxString& component, wxLogLevel level);
+
+    /**
+        Specifies that log messages with level greater (numerically) than
+        @a logLevel should be ignored and not sent to the active log target.
+
+        @see SetComponentLevel()
+    */
+    static void SetLogLevel(wxLogLevel logLevel);
+
+    //@}
+
+
+
+    /**
+        @name Enable/disable features functions
+    */
+    //@{
+
+    /**
+        Globally enable or disable logging.
+
+        Calling this function with @false argument disables all log messages
+        for the current thread.
+
+        @see wxLogNull, IsEnabled()
+
+        @return
+            The old state, i.e. @true if logging was previously enabled and
+            @false if it was disabled.
+     */
+    static bool EnableLogging(bool enable = true);
+
+    /**
+        Returns true if logging is enabled at all now.
+
+        @see IsLevelEnabled(), EnableLogging()
+     */
+    static bool IsEnabled();
+
+    /**
+        Returns whether the repetition counting mode is enabled.
+    */
+    static bool GetRepetitionCounting();
+
+    /**
+        Enables logging mode in which a log message is logged once, and in case exactly
+        the same message successively repeats one or more times, only the number of
+        repetitions is logged.
+    */
+    static void SetRepetitionCounting(bool repetCounting = true);
+
+    /**
+        Returns the current timestamp format string.
+
+        Notice that the current time stamp is only used by the default log
+        formatter and custom formatters may ignore this format.
+    */
+    static const wxString& GetTimestamp();
+
+    /**
+        Sets the timestamp format prepended by the default log targets to all
+        messages. The string may contain any normal characters as well as %
+        prefixed format specifiers, see @e strftime() manual for details.
+        Passing an empty string to this function disables message time stamping.
+
+        Notice that the current time stamp is only used by the default log
+        formatter and custom formatters may ignore this format. You can also
+        define a custom wxLogFormatter to customize the time stamp handling
+        beyond changing its format.
+    */
+    static void SetTimestamp(const wxString& format);
+
+    /**
+        Disables time stamping of the log messages.
+
+        Notice that the current time stamp is only used by the default log
+        formatter and custom formatters may ignore calls to this function.
+
+        @since 2.9.0
+    */
+    static void DisableTimestamp();
+
+    /**
+        Returns whether the verbose mode is currently active.
+    */
+    static bool GetVerbose();
+
+    /**
+        Activates or deactivates verbose mode in which the verbose messages are
+        logged as the normal ones instead of being silently dropped.
+
+        The verbose messages are the trace messages which are not disabled in the
+        release mode and are generated by wxLogVerbose().
+
+        @see @ref overview_log
+    */
+    static void SetVerbose(bool verbose = true);
+
+    //@}
+
+
+    /**
+        Sets the specified formatter as the active one.
+
+        @param formatter
+            The new formatter. If @NULL, reset to the default formatter.
+
+        Returns the pointer to the previous formatter. You must delete it
+        if you don't plan to attach it again to a wxLog object later.
+
+        @since 2.9.4
+    */
+    wxLogFormatter *SetFormatter(wxLogFormatter* formatter);
+
+
+    /**
+        Some of wxLog implementations, most notably the standard wxLogGui class,
+        buffer the messages (for example, to avoid showing the user a zillion of modal
+        message boxes one after another -- which would be really annoying).
+        This function shows them all and clears the buffer contents.
+        If the buffer is already empty, nothing happens.
+
+        If you override this method in a derived class, call the base class
+        version first, before doing anything else.
+    */
+    virtual void Flush();
+
+    /**
+        Log the given record.
+
+        This function should only be called from the DoLog() implementations in
+        the derived classes if they need to call DoLogRecord() on another log
+        object (they can, of course, just use wxLog::DoLogRecord() call syntax
+        to call it on the object itself). It should not be used for logging new
+        messages which can be only sent to the currently active logger using
+        OnLog() which also checks if the logging (for this level) is enabled
+        while this method just directly calls DoLog().
+
+        Example of use of this class from wxLogChain:
+        @code
+        void wxLogChain::DoLogRecord(wxLogLevel level,
+                                     const wxString& msg,
+                                     const wxLogRecordInfo& info)
+        {
+            // let the previous logger show it
+            if ( m_logOld && IsPassingMessages() )
+                m_logOld->LogRecord(level, msg, info);
+
+            // and also send it to the new one
+            if ( m_logNew && m_logNew != this )
+                m_logNew->LogRecord(level, msg, info);
+        }
+        @endcode
+
+        @since 2.9.1
+     */
+    void LogRecord(wxLogLevel level, const wxString& msg, const wxLogRecordInfo& info);
+
+protected:
+    /**
+        @name Logging callbacks.
+
+        The functions which should be overridden by custom log targets.
+
+        When defining a new log target, you have a choice between overriding
+        DoLogRecord(), which provides maximal flexibility, DoLogTextAtLevel()
+        which can be used if you don't intend to change the default log
+        messages formatting but want to handle log messages of different levels
+        differently or, in the simplest case, DoLogText().
+     */
+    //@{
+
+    /**
+        Called to log a new record.
+
+        Any log message created by wxLogXXX() functions is passed to this
+        method of the active log target. The default implementation prepends
+        the timestamp and, for some log levels (e.g. error and warning), the
+        corresponding prefix to @a msg and passes it to DoLogTextAtLevel().
+
+        You may override this method to implement custom formatting of the
+        log messages or to implement custom filtering of log messages (e.g. you
+        could discard all log messages coming from the given source file).
+     */
+    virtual void DoLogRecord(wxLogLevel level,
+                             const wxString& msg,
+                             const wxLogRecordInfo& info);
+
+    /**
+        Called to log the specified string at given level.
+
+        The base class versions logs debug and trace messages on the system
+        default debug output channel and passes all the other messages to
+        DoLogText().
+    */
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg);
+
+    /**
+        Called to log the specified string.
+
+        A simple implementation might just send the string to @c stdout or
+        @c stderr or save it in a file (of course, the already existing
+        wxLogStderr can be used for this).
+
+        The base class version of this function asserts so it must be
+        overridden if you don't override DoLogRecord() or DoLogTextAtLevel().
+    */
+    virtual void DoLogText(const wxString& msg);
+
+    //@}
 };
 
 
@@ -244,6 +681,290 @@ public:
         object was created.
     */
     void SetLog(wxLog* logger);
+};
+
+
+
+/**
+    @class wxLogInterposer
+
+    A special version of wxLogChain which uses itself as the new log target.
+    It forwards log messages to the previously installed one in addition to
+    processing them itself.
+
+    Unlike wxLogChain which is usually used directly as is, this class must be
+    derived from to implement wxLog::DoLog and/or wxLog::DoLogString methods.
+
+    wxLogInterposer destroys the previous log target in its destructor.
+    If you don't want this to happen, use wxLogInterposerTemp instead.
+
+    @library{wxbase}
+    @category{logging}
+*/
+class wxLogInterposer : public wxLogChain
+{
+public:
+    /**
+        The default constructor installs this object as the current active log target.
+    */
+    wxLogInterposer();
+};
+
+
+
+/**
+    @class wxLogInterposerTemp
+
+    A special version of wxLogChain which uses itself as the new log target.
+    It forwards log messages to the previously installed one in addition to
+    processing them itself. Unlike wxLogInterposer, it doesn't delete the old
+    target which means it can be used to temporarily redirect log output.
+
+    As per wxLogInterposer, this class must be derived from to implement
+    wxLog::DoLog and/or wxLog::DoLogString methods.
+
+    @library{wxbase}
+    @category{logging}
+*/
+class wxLogInterposerTemp : public wxLogChain
+{
+public:
+    /**
+        The default constructor installs this object as the current active log target.
+    */
+    wxLogInterposerTemp();
+};
+
+
+/**
+    @class wxLogStream
+
+    This class can be used to redirect the log messages to a C++ stream.
+
+    Please note that this class is only available if wxWidgets was compiled with
+    the standard iostream library support (@c wxUSE_STD_IOSTREAM must be on).
+
+    @library{wxbase}
+    @category{logging}
+
+    @see wxLogStderr, wxStreamToTextRedirector
+*/
+class wxLogStream : public wxLog
+{
+public:
+    /**
+        Constructs a log target which sends all the log messages to the given
+        output stream. If it is @NULL, the messages are sent to @c cerr.
+    */
+    wxLogStream(std::ostream *ostr = NULL);
+};
+
+
+
+/**
+    @class wxLogStderr
+
+    This class can be used to redirect the log messages to a C file stream (not to
+    be confused with C++ streams).
+
+    It is the default log target for the non-GUI wxWidgets applications which
+    send all the output to @c stderr.
+
+    @library{wxbase}
+    @category{logging}
+
+    @see wxLogStream
+*/
+class wxLogStderr : public wxLog
+{
+public:
+    /**
+        Constructs a log target which sends all the log messages to the given
+        @c FILE. If it is @NULL, the messages are sent to @c stderr.
+    */
+    wxLogStderr(FILE* fp = NULL);
+};
+
+
+
+/**
+    @class wxLogBuffer
+
+    wxLogBuffer is a very simple implementation of log sink which simply collects
+    all the logged messages in a string (except the debug messages which are output
+    in the usual way immediately as we're presumably not interested in collecting
+    them for later). The messages from different log function calls are separated
+    by the new lines.
+
+    All the messages collected so far can be shown to the user (and the current
+    buffer cleared) by calling the overloaded wxLogBuffer::Flush method.
+
+    @library{wxbase}
+    @category{logging}
+*/
+class wxLogBuffer : public wxLog
+{
+public:
+    /**
+        The default ctor does nothing.
+    */
+    wxLogBuffer();
+
+    /**
+        Shows all the messages collected so far to the user (using a message box in the
+        GUI applications or by printing them out to the console in text mode) and
+        clears the internal buffer.
+    */
+    virtual void Flush();
+
+    /**
+        Returns the current buffer contains. Messages from different log function calls
+        are separated with the new lines in the buffer.
+        The buffer can be cleared by Flush() which will also show the current
+        contents to the user.
+    */
+    const wxString& GetBuffer() const;
+};
+
+
+
+/**
+    @class wxLogNull
+
+    This class allows you to temporarily suspend logging. All calls to the log
+    functions during the life time of an object of this class are just ignored.
+
+    In particular, it can be used to suppress the log messages given by wxWidgets
+    itself but it should be noted that it is rarely the best way to cope with this
+    problem as @b all log messages are suppressed, even if they indicate a
+    completely different error than the one the programmer wanted to suppress.
+
+    For instance, the example of the overview:
+
+    @code
+      wxFile file;
+
+      // wxFile.Open() normally complains if file can't be opened, we don't want it
+      {
+        wxLogNull logNo;
+        if ( !file.Open("bar") )
+          ... process error ourselves ...
+      } // ~wxLogNull called, old log sink restored
+
+      wxLogMessage("..."); // ok
+    @endcode
+
+    would be better written as:
+
+    @code
+      wxFile file;
+
+      // don't try to open file if it doesn't exist, we are prepared to deal with
+      // this ourselves - but all other errors are not expected
+      if ( wxFile::Exists("bar") )
+      {
+          // gives an error message if the file couldn't be opened
+          file.Open("bar");
+      }
+      else
+      {
+          ...
+      }
+    @endcode
+
+
+    @library{wxbase}
+    @category{logging}
+*/
+class wxLogNull
+{
+public:
+    /**
+        Suspends logging.
+    */
+    wxLogNull();
+
+    /**
+        Resumes logging.
+    */
+    ~wxLogNull();
+};
+
+#endif // wxUSE_BASE
+
+#if wxUSE_GUI
+
+/**
+    @class wxLogWindow
+
+    This class represents a background log window: to be precise, it collects all
+    log messages in the log frame which it manages but also passes them on to the
+    log target which was active at the moment of its creation. This allows you, for
+    example, to show all the log messages in a frame but still continue to process
+    them normally by showing the standard log dialog.
+
+    @library{wxcore}
+    @category{logging}
+
+    @see wxLogTextCtrl
+*/
+class wxLogWindow : public wxLogInterposer
+{
+public:
+    /**
+        Creates the log frame window and starts collecting the messages in it.
+
+        @param pParent
+            The parent window for the log frame, may be @NULL
+        @param szTitle
+            The title for the log frame
+        @param show
+            @true to show the frame initially (default), otherwise
+            Show() must be called later.
+        @param passToOld
+            @true to process the log messages normally in addition to logging them
+            in the log frame (default), @false to only log them in the log frame.
+            Note that if no targets were set using wxLog::SetActiveTarget() then
+            wxLogWindow simply becomes the active one and messages won't be passed
+            to other targets.
+    */
+    wxLogWindow(wxWindow* pParent, const wxString& szTitle, bool show = true,
+                bool passToOld = true);
+
+    /**
+        Returns the associated log frame window. This may be used to position or resize
+        it but use Show() to show or hide it.
+    */
+    wxFrame* GetFrame() const;
+
+    /**
+        Called if the user closes the window interactively, will not be
+        called if it is destroyed for another reason (such as when program
+        exits).
+
+        Return @true from here to allow the frame to close, @false to
+        prevent this from happening.
+
+        @see OnFrameDelete()
+    */
+    virtual bool OnFrameClose(wxFrame* frame);
+
+    /**
+        Called immediately after the log frame creation allowing for
+        any extra initializations.
+    */
+    virtual void OnFrameCreate(wxFrame* frame);
+
+    /**
+        Called right before the log frame is going to be deleted: will
+        always be called unlike OnFrameClose().
+    */
+    virtual void OnFrameDelete(wxFrame* frame);
+
+    /**
+        Shows or hides the frame.
+    */
+    void Show(bool show = true);
 };
 
 
@@ -441,125 +1162,6 @@ private:
 
 
 /**
-    @class wxLogStream
-
-    This class can be used to redirect the log messages to a C++ stream.
-
-    Please note that this class is only available if wxWidgets was compiled with
-    the standard iostream library support (@c wxUSE_STD_IOSTREAM must be on).
-
-    @library{wxbase}
-    @category{logging}
-
-    @see wxLogStderr, wxStreamToTextRedirector
-*/
-class wxLogStream : public wxLog
-{
-public:
-    /**
-        Constructs a log target which sends all the log messages to the given
-        output stream. If it is @NULL, the messages are sent to @c cerr.
-    */
-    wxLogStream(std::ostream *ostr = NULL);
-};
-
-
-
-/**
-    @class wxLogStderr
-
-    This class can be used to redirect the log messages to a C file stream (not to
-    be confused with C++ streams).
-
-    It is the default log target for the non-GUI wxWidgets applications which
-    send all the output to @c stderr.
-
-    @library{wxbase}
-    @category{logging}
-
-    @see wxLogStream
-*/
-class wxLogStderr : public wxLog
-{
-public:
-    /**
-        Constructs a log target which sends all the log messages to the given
-        @c FILE. If it is @NULL, the messages are sent to @c stderr.
-    */
-    wxLogStderr(FILE* fp = NULL);
-};
-
-
-
-/**
-    @class wxLogBuffer
-
-    wxLogBuffer is a very simple implementation of log sink which simply collects
-    all the logged messages in a string (except the debug messages which are output
-    in the usual way immediately as we're presumably not interested in collecting
-    them for later). The messages from different log function calls are separated
-    by the new lines.
-
-    All the messages collected so far can be shown to the user (and the current
-    buffer cleared) by calling the overloaded wxLogBuffer::Flush method.
-
-    @library{wxbase}
-    @category{logging}
-*/
-class wxLogBuffer : public wxLog
-{
-public:
-    /**
-        The default ctor does nothing.
-    */
-    wxLogBuffer();
-
-    /**
-        Shows all the messages collected so far to the user (using a message box in the
-        GUI applications or by printing them out to the console in text mode) and
-        clears the internal buffer.
-    */
-    virtual void Flush();
-
-    /**
-        Returns the current buffer contains. Messages from different log function calls
-        are separated with the new lines in the buffer.
-        The buffer can be cleared by Flush() which will also show the current
-        contents to the user.
-    */
-    const wxString& GetBuffer() const;
-};
-
-
-
-/**
-    @class wxLogInterposer
-
-    A special version of wxLogChain which uses itself as the new log target.
-    It forwards log messages to the previously installed one in addition to
-    processing them itself.
-
-    Unlike wxLogChain which is usually used directly as is, this class must be
-    derived from to implement wxLog::DoLog and/or wxLog::DoLogString methods.
-
-    wxLogInterposer destroys the previous log target in its destructor.
-    If you don't want this to happen, use wxLogInterposerTemp instead.
-
-    @library{wxbase}
-    @category{logging}
-*/
-class wxLogInterposer : public wxLogChain
-{
-public:
-    /**
-        The default constructor installs this object as the current active log target.
-    */
-    wxLogInterposer();
-};
-
-
-
-/**
     @class wxLogTextCtrl
 
     Using these target all the log messages can be redirected to a text control.
@@ -582,606 +1184,9 @@ public:
 };
 
 
+#endif // wxUSE_GUI
 
-
-/**
-    @class wxLogFormatter
-
-    wxLogFormatter class is used to format the log messages. It implements the
-    default formatting and can be derived from to create custom formatters.
-
-    The default implementation formats the message into a string containing
-    the time stamp, level-dependent prefix and the message itself.
-
-    To change it, you can derive from it and override its Format() method. For
-    example, to include the thread id in the log messages you can use
-    @code
-        class LogFormatterWithThread : public wxLogFormatter
-        {
-            virtual wxString Format(wxLogLevel level,
-                                    const wxString& msg,
-                                    const wxLogRecordInfo& info) const
-            {
-                return wxString::Format("[%d] %s(%d) : %s",
-                    info.threadId, info.filename, info.line, msg);
-            }
-        };
-    @endcode
-    And then associate it with wxLog instance using its SetFormatter(). Then,
-    if you call:
-
-    @code
-        wxLogMessage(_("*** Application started ***"));
-    @endcode
-
-    the log output could be something like:
-
-    @verbatim
-        [7872] d:\testApp\src\testApp.cpp(85) : *** Application started ***
-    @endverbatim
-
-    @library{wxbase}
-    @category{logging}
-
-    @see @ref overview_log
-
-    @since 2.9.4
-*/
-class wxLogFormatter
-{
-public:
-    /**
-        The default ctor does nothing.
-    */
-    wxLogFormatter();
-
-
-    /**
-        This function creates the full log message string.
-
-        Override it to customize the output string format.
-
-        @param level
-            The level of this log record, e.g. ::wxLOG_Error.
-        @param msg
-            The log message itself.
-        @param info
-            All the other information (such as time, component, location...)
-            associated with this log record.
-
-        @return
-            The formated message.
-
-        @note
-            Time stamping is disabled for Visual C++ users in debug builds by
-            default because otherwise it would be impossible to directly go to the line
-            from which the log message was generated by simply clicking in the debugger
-            window on the corresponding error message. If you wish to enable it, override
-            FormatTime().
-    */
-    virtual wxString Format(wxLogLevel level,
-                            const wxString& msg,
-                            const wxLogRecordInfo& info) const;
-
-protected:
-    /**
-        This function formats the time stamp part of the log message.
-
-        Override this function if you need to customize just the time stamp.
-
-        @param time
-            Time to format.
-
-        @return
-            The formated time string, may be empty.
-    */
-    virtual wxString FormatTime(time_t time) const;
-};
-
-
-/**
-    @class wxLog
-
-    wxLog class defines the interface for the <em>log targets</em> used by wxWidgets
-    logging functions as explained in the @ref overview_log.
-    
-    The only situations when you need to directly use this class is when you want
-    to derive your own log target because the existing ones don't satisfy your
-    needs.
-
-    Otherwise, it is completely hidden behind the @ref group_funcmacro_log "wxLogXXX() functions" 
-    and you may not even know about its existence.
-
-    @note For console-mode applications, the default target is wxLogStderr, so
-          that all @e wxLogXXX() functions print on @c stderr when @c wxUSE_GUI = 0.
-
-    @library{wxbase}
-    @category{logging}
-
-    @see @ref overview_log, @ref group_funcmacro_log "wxLogXXX() functions" 
-*/
-class wxLog
-{
-public:
-    /**
-        @name Trace mask functions
-    */
-    //@{
-    
-    /**
-        Add the @a mask to the list of allowed masks for wxLogTrace().
-
-        @see RemoveTraceMask(), GetTraceMasks()
-    */
-    static void AddTraceMask(const wxString& mask);
-
-    /**
-        Removes all trace masks previously set with AddTraceMask().
-
-        @see RemoveTraceMask()
-    */
-    static void ClearTraceMasks();
-
-    /**
-        Returns the currently allowed list of string trace masks.
-
-        @see AddTraceMask().
-    */
-    static const wxArrayString& GetTraceMasks();
-
-    /**
-        Returns @true if the @a mask is one of allowed masks for wxLogTrace().
-
-        See also: AddTraceMask(), RemoveTraceMask()
-    */
-    static bool IsAllowedTraceMask(const wxString& mask);
-
-    /**
-        Remove the @a mask from the list of allowed masks for
-        wxLogTrace().
-
-        @see AddTraceMask()
-    */
-    static void RemoveTraceMask(const wxString& mask);
-    
-    //@}
-
-
-
-    /**
-        @name Log target functions
-    */
-    //@{
-    
-    /**
-        Instructs wxLog to not create new log targets on the fly if there is none
-        currently (see GetActiveTarget()). 
-        
-        (Almost) for internal use only: it is supposed to be called by the
-        application shutdown code (where you don't want the log target to be
-        automatically created anymore).
-
-        Note that this function also calls ClearTraceMasks().
-    */
-    static void DontCreateOnDemand();
-
-    /**
-        Returns the pointer to the active log target (may be @NULL).
-
-        Notice that if SetActiveTarget() hadn't been previously explicitly
-        called, this function will by default try to create a log target by
-        calling wxAppTraits::CreateLogTarget() which may be overridden in a
-        user-defined traits class to change the default behaviour. You may also
-        call DontCreateOnDemand() to disable this behaviour.
-
-        When this function is called from threads other than main one,
-        auto-creation doesn't happen. But if the thread has a thread-specific
-        log target previously set by SetThreadActiveTarget(), it is returned
-        instead of the global one. Otherwise, the global log target is
-        returned.
-    */
-    static wxLog* GetActiveTarget();
-
-    /**
-        Sets the specified log target as the active one.
-
-        Returns the pointer to the previous active log target (may be @NULL).
-        To suppress logging use a new instance of wxLogNull not @NULL.  If the
-        active log target is set to @NULL a new default log target will be
-        created when logging occurs.
-
-        @see SetThreadActiveTarget()
-    */
-    static wxLog* SetActiveTarget(wxLog* logtarget);
-
-    /**
-        Sets a thread-specific log target.
-
-        The log target passed to this function will be used for all messages
-        logged by the current thread using the usual wxLog functions. This
-        shouldn't be called from the main thread which never uses a thread-
-        specific log target but can be used for the other threads to handle
-        thread logging completely separately; instead of buffering thread log
-        messages in the main thread logger.
-
-        Notice that unlike for SetActiveTarget(), wxWidgets does not destroy
-        the thread-specific log targets when the thread terminates so doing
-        this is your responsibility.
-
-        This method is only available if @c wxUSE_THREADS is 1, i.e. wxWidgets
-        was compiled with threads support.
-
-        @param logger
-            The new thread-specific log target, possibly @NULL.
-        @return
-            The previous thread-specific log target, initially @NULL.
-
-        @since 2.9.1
-     */
-    static wxLog *SetThreadActiveTarget(wxLog *logger);
-    
-    /**
-        Flushes the current log target if any, does nothing if there is none.
-
-        When this method is called from the main thread context, it also
-        flushes any previously buffered messages logged by the other threads.
-        When it is called from the other threads it simply calls Flush() on the
-        currently active log target, so it mostly makes sense to do this if a
-        thread has its own logger set with SetThreadActiveTarget().
-    */
-    static void FlushActive();
-    
-    /**
-        Resumes logging previously suspended by a call to Suspend().
-        All messages logged in the meanwhile will be flushed soon.
-    */
-    static void Resume();
-
-    /**
-        Suspends the logging until Resume() is called.
-
-        Note that the latter must be called the same number of times as the former
-        to undo it, i.e. if you call Suspend() twice you must call Resume() twice as well.
-
-        Note that suspending the logging means that the log sink won't be flushed
-        periodically, it doesn't have any effect if the current log target does the
-        logging immediately without waiting for Flush() to be called (the standard
-        GUI log target only shows the log dialog when it is flushed, so Suspend()
-        works as expected with it).
-
-        @see Resume(), wxLogNull
-    */
-    static void Suspend();
-    
-    //@}
-    
-
-
-    /**
-        @name Log level functions
-    */
-    //@{
-    
-    /**
-        Returns the current log level limit.
-
-        All messages at levels strictly greater than the value returned by this
-        function are not logged at all.
-
-        @see SetLogLevel(), IsLevelEnabled()
-    */
-    static wxLogLevel GetLogLevel();
-    
-    /**
-        Returns true if logging at this level is enabled for the current thread.
-
-        This function only returns @true if logging is globally enabled and if
-        @a level is less than or equal to the maximal log level enabled for the
-        given @a component.
-
-        @see IsEnabled(), SetLogLevel(), GetLogLevel(), SetComponentLevel()
-
-        @since 2.9.1
-     */
-    static bool IsLevelEnabled(wxLogLevel level, wxString component);
-
-    /**
-        Sets the log level for the given component.
-
-        For example, to disable all but error messages from wxWidgets network
-        classes you may use
-        @code
-            wxLog::SetComponentLevel("wx/net", wxLOG_Error);
-        @endcode
-
-        SetLogLevel() may be used to set the global log level.
-
-        @param component
-            Non-empty component name, possibly using slashes (@c /) to separate
-            it into several parts.
-        @param level
-            Maximal level of log messages from this component which will be
-            handled instead of being simply discarded.
-
-        @since 2.9.1
-     */
-    static void SetComponentLevel(const wxString& component, wxLogLevel level);
-
-    /**
-        Specifies that log messages with level greater (numerically) than
-        @a logLevel should be ignored and not sent to the active log target.
-
-        @see SetComponentLevel()
-    */
-    static void SetLogLevel(wxLogLevel logLevel);
-    
-    //@}
-
-
-
-    /**
-        @name Enable/disable features functions
-    */
-    //@{
-    
-    /**
-        Globally enable or disable logging.
-
-        Calling this function with @false argument disables all log messages
-        for the current thread.
-
-        @see wxLogNull, IsEnabled()
-
-        @return
-            The old state, i.e. @true if logging was previously enabled and
-            @false if it was disabled.
-     */
-    static bool EnableLogging(bool enable = true);
-
-    /**
-        Returns true if logging is enabled at all now.
-
-        @see IsLevelEnabled(), EnableLogging()
-     */
-    static bool IsEnabled();
-    
-    /**
-        Returns whether the repetition counting mode is enabled.
-    */
-    static bool GetRepetitionCounting();
-
-    /**
-        Enables logging mode in which a log message is logged once, and in case exactly
-        the same message successively repeats one or more times, only the number of
-        repetitions is logged.
-    */
-    static void SetRepetitionCounting(bool repetCounting = true);
-    
-    /**
-        Returns the current timestamp format string.
-
-        Notice that the current time stamp is only used by the default log
-        formatter and custom formatters may ignore this format.
-    */
-    static const wxString& GetTimestamp();
-
-    /**
-        Sets the timestamp format prepended by the default log targets to all
-        messages. The string may contain any normal characters as well as %
-        prefixed format specifiers, see @e strftime() manual for details.
-        Passing an empty string to this function disables message time stamping.
-
-        Notice that the current time stamp is only used by the default log
-        formatter and custom formatters may ignore this format. You can also
-        define a custom wxLogFormatter to customize the time stamp handling
-        beyond changing its format.
-    */
-    static void SetTimestamp(const wxString& format);
-
-    /**
-        Disables time stamping of the log messages.
-
-        Notice that the current time stamp is only used by the default log
-        formatter and custom formatters may ignore calls to this function.
-
-        @since 2.9.0
-    */
-    static void DisableTimestamp();
-    
-    /**
-        Returns whether the verbose mode is currently active.
-    */
-    static bool GetVerbose();
-
-    /**
-        Activates or deactivates verbose mode in which the verbose messages are
-        logged as the normal ones instead of being silently dropped.
-        
-        The verbose messages are the trace messages which are not disabled in the
-        release mode and are generated by wxLogVerbose().
-        
-        @see @ref overview_log
-    */
-    static void SetVerbose(bool verbose = true);
-    
-    //@}
-    
-
-    /**
-        Sets the specified formatter as the active one.
-
-        @param formatter
-            The new formatter. If @NULL, reset to the default formatter.
-
-        Returns the pointer to the previous formatter. You must delete it
-        if you don't plan to attach it again to a wxLog object later.
-
-        @since 2.9.4
-    */
-    wxLogFormatter *SetFormatter(wxLogFormatter* formatter);
-    
-
-    /**
-        Some of wxLog implementations, most notably the standard wxLogGui class,
-        buffer the messages (for example, to avoid showing the user a zillion of modal
-        message boxes one after another -- which would be really annoying).
-        This function shows them all and clears the buffer contents.
-        If the buffer is already empty, nothing happens.
-
-        If you override this method in a derived class, call the base class
-        version first, before doing anything else.
-    */
-    virtual void Flush();
-    
-    /**
-        Log the given record.
-
-        This function should only be called from the DoLog() implementations in
-        the derived classes if they need to call DoLogRecord() on another log
-        object (they can, of course, just use wxLog::DoLogRecord() call syntax
-        to call it on the object itself). It should not be used for logging new
-        messages which can be only sent to the currently active logger using
-        OnLog() which also checks if the logging (for this level) is enabled
-        while this method just directly calls DoLog().
-
-        Example of use of this class from wxLogChain:
-        @code
-        void wxLogChain::DoLogRecord(wxLogLevel level,
-                                     const wxString& msg,
-                                     const wxLogRecordInfo& info)
-        {
-            // let the previous logger show it
-            if ( m_logOld && IsPassingMessages() )
-                m_logOld->LogRecord(level, msg, info);
-
-            // and also send it to the new one
-            if ( m_logNew && m_logNew != this )
-                m_logNew->LogRecord(level, msg, info);
-        }
-        @endcode
-
-        @since 2.9.1
-     */
-    void LogRecord(wxLogLevel level, const wxString& msg, const wxLogRecordInfo& info);
-
-protected:
-    /**
-        @name Logging callbacks.
-
-        The functions which should be overridden by custom log targets.
-
-        When defining a new log target, you have a choice between overriding
-        DoLogRecord(), which provides maximal flexibility, DoLogTextAtLevel()
-        which can be used if you don't intend to change the default log
-        messages formatting but want to handle log messages of different levels
-        differently or, in the simplest case, DoLogText().
-     */
-    //@{
-
-    /**
-        Called to log a new record.
-
-        Any log message created by wxLogXXX() functions is passed to this
-        method of the active log target. The default implementation prepends
-        the timestamp and, for some log levels (e.g. error and warning), the
-        corresponding prefix to @a msg and passes it to DoLogTextAtLevel().
-
-        You may override this method to implement custom formatting of the
-        log messages or to implement custom filtering of log messages (e.g. you
-        could discard all log messages coming from the given source file).
-     */
-    virtual void DoLogRecord(wxLogLevel level,
-                             const wxString& msg,
-                             const wxLogRecordInfo& info);
-
-    /**
-        Called to log the specified string at given level.
-
-        The base class versions logs debug and trace messages on the system
-        default debug output channel and passes all the other messages to
-        DoLogText().
-    */
-    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg);
-
-    /**
-        Called to log the specified string.
-
-        A simple implementation might just send the string to @c stdout or
-        @c stderr or save it in a file (of course, the already existing
-        wxLogStderr can be used for this).
-
-        The base class version of this function asserts so it must be
-        overridden if you don't override DoLogRecord() or DoLogTextAtLevel().
-    */
-    virtual void DoLogText(const wxString& msg);
-
-    //@}
-};
-
-
-
-/**
-    @class wxLogNull
-
-    This class allows you to temporarily suspend logging. All calls to the log
-    functions during the life time of an object of this class are just ignored.
-
-    In particular, it can be used to suppress the log messages given by wxWidgets
-    itself but it should be noted that it is rarely the best way to cope with this
-    problem as @b all log messages are suppressed, even if they indicate a
-    completely different error than the one the programmer wanted to suppress.
-
-    For instance, the example of the overview:
-
-    @code
-      wxFile file;
-
-      // wxFile.Open() normally complains if file can't be opened, we don't want it
-      {
-        wxLogNull logNo;
-        if ( !file.Open("bar") )
-          ... process error ourselves ...
-      } // ~wxLogNull called, old log sink restored
-
-      wxLogMessage("..."); // ok
-    @endcode
-
-    would be better written as:
-
-    @code
-      wxFile file;
-
-      // don't try to open file if it doesn't exist, we are prepared to deal with
-      // this ourselves - but all other errors are not expected
-      if ( wxFile::Exists("bar") )
-      {
-          // gives an error message if the file couldn't be opened
-          file.Open("bar");
-      }
-      else
-      {
-          ...
-      }
-    @endcode
-
-
-    @library{wxbase}
-    @category{logging}
-*/
-class wxLogNull
-{
-public:
-    /**
-        Suspends logging.
-    */
-    wxLogNull();
-
-    /**
-        Resumes logging.
-    */
-    ~wxLogNull();
-};
-
+#if wxUSE_BASE
 
 
 // ============================================================================
@@ -1447,3 +1452,4 @@ void wxVLogSysError(const char* formatString, va_list argPtr);
 
 //@}
 
+#endif // wxUSE_BASE
