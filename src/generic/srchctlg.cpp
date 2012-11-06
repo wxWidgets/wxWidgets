@@ -1176,9 +1176,10 @@ void wxSearchCtrl::RecalcBitmaps()
     }
 }
 
-void wxSearchCtrl::OnCancelButton( wxCommandEvent& WXUNUSED(event) )
+void wxSearchCtrl::OnCancelButton( wxCommandEvent& event )
 {
     m_text->Clear();
+    event.Skip();
 }
 
 void wxSearchCtrl::OnSetFocus( wxFocusEvent& /*event*/ )
