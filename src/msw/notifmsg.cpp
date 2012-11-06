@@ -288,6 +288,23 @@ wxBalloonNotifMsgImpl::DoShow(const wxString& title,
                               int timeout,
                               int flags)
 {
+    if ( !m_icon->IsIconInstalled() )
+    {
+        // If we failed to install the icon (which does happen sometimes,
+        // although only in unusual circumstances, e.g. it happens regularly,
+        // albeit not constantly, if we're used soon after resume from suspend
+        // under Windows 7), we should not call ShowBalloon() because it would
+        // just assert and return and we must delete the icon ourselves because
+        // otherwise its associated wxTaskBarIconWindow would remain alive
+        // forever because we're not going to receive a notification about icon
+        // disappearance from the system if we failed to install it in the
+        // first place.
+        delete m_icon;
+        m_icon = NULL;
+
+        return false;
+    }
+
     timeout *= 1000; // Windows expresses timeout in milliseconds
 
     return m_icon->ShowBalloon(title, message, timeout, flags);
