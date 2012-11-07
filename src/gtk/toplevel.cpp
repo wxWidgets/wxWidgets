@@ -382,6 +382,9 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
         win->HandleWindowEvent(evt);
     }
 
+    if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
+        win->m_fsIsShowing = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+
     return false;
 }
 }
