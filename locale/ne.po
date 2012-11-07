@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Translation of WXWidgits.Po, 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-27 11:51+0200\n"
-"PO-Revision-Date: 2012-10-22 07:53+0545\n"
-"Last-Translator:  \n"
+"PO-Revision-Date: 2012-11-07 08:11+0545\n"
+"Last-Translator: हिम प्रसाद गौतम \n"
 "Language-Team: Him Prasad Gautam <himjee@yahoo.com>\n"
 "Language: Nepali\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgid " "
 msgstr " "
 
 #: ../src/generic/dbgrptg.cpp:323
-msgid "    Thank you and we're sorry for the inconvenience!\n"
+msgid "  Thank you and we're sorry for the inconvenience!\n"
 msgstr "धन्यवाद, असुविधाको लागि क्षमा प्रार्थी छौं । !\n"
 
 #: ../src/common/prntbase.cpp:547
@@ -757,7 +757,7 @@ msgstr "'%s' सहि सन्देश सूची होइन"
 #: ../src/common/textbuf.cpp:240
 #, c-format
 msgid "'%s' is probably a binary buffer."
-msgstr "'%s' सम्भवता binary buffer हो ।"
+msgstr "'%s' सम्भवतः binary buffer हो ।"
 
 #: ../src/common/valtext.cpp:248
 #, c-format
@@ -772,7 +772,7 @@ msgstr "'%s' मा ASCII वर्णहरू मात्रै हुन स
 #: ../src/common/valtext.cpp:242
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
-msgstr "'%s' मा वर्णहरू मात्रै हु सक्छ ।"
+msgstr "'%s' मा वर्णहरू मात्रै हुन सक्छ ।"
 
 #: ../src/common/valtext.cpp:244
 #, c-format
@@ -976,7 +976,7 @@ msgstr ": अज्ञात पाठ समूह"
 
 #: ../src/common/fontmap.cpp:414
 msgid ": unknown encoding"
-msgstr ": अज्ञात encoding"
+msgstr ": अज्ञात अनुसंहिता"
 
 #: ../src/generic/wizard.cpp:438
 msgid "< &Back"
@@ -1238,7 +1238,7 @@ msgstr "सबै फाइलहरू (%s)|%s"
 
 #: ../include/wx/defs.h:2774
 msgid "All files (*)|*"
-msgstr "सबै फाइल(*)|*"
+msgstr "सबै फाइलहरू(*)|*"
 
 #: ../include/wx/defs.h:2771
 msgid "All files (*.*)|*.*"
@@ -2510,7 +2510,7 @@ msgstr "मेटाइ देउ"
 
 #: ../src/common/imagbmp.cpp:1045
 msgid "DIB Header: Encoding doesn't match bitdepth."
-msgstr "DIB शीर्षक: Encoding bitdepth सित मिल्दैन "
+msgstr "DIB शीर्षक: अनुसंहिता bitdepth सित मिल्दैन "
 
 #: ../src/common/imagbmp.cpp:1000
 msgid "DIB Header: Image height > 32767 pixels for file."
@@ -2526,7 +2526,7 @@ msgstr "DIB शीर्षक: फाइलमा अज्ञात bitdepth "
 
 #: ../src/common/imagbmp.cpp:1028
 msgid "DIB Header: Unknown encoding in file."
-msgstr "DIB शीर्षक: फाइलमा अज्ञात encoding"
+msgstr "DIB शीर्षक: फाइलमा अज्ञात अनुसंहिता"
 
 #: ../src/common/accelcmn.cpp:81
 msgid "DIVIDE"
@@ -2571,7 +2571,7 @@ msgstr "श्रृङ्गार युक्त"
 
 #: ../src/common/fmapbase.cpp:797
 msgid "Default encoding"
-msgstr "निर्धारित encoding"
+msgstr "निर्धारित अनुसंहिता"
 
 #: ../src/dfb/fontmgr.cpp:181
 msgid "Default font"
@@ -3025,7 +3025,7 @@ msgstr "क्लिप पाटी बन्द गर्न सकिएन �
 #: ../src/x11/utils.cpp:204
 #, c-format
 msgid "Failed to close the display \"%s\""
-msgstr "दृश्य \"%s\" बन्द गर्न सकिएन ।"
+msgstr "पटल \"%s\" बन्द गर्न सकिएन ।"
 
 #: ../src/msw/dialup.cpp:819
 msgid "Failed to connect: missing username/password."
@@ -3129,7 +3129,7 @@ msgstr "event loop ले प्रयोग गर्ने Wake Up Pipe सि
 #: ../src/html/winpars.cpp:737
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
-msgstr "%s encoding मा html कागजात सिर्जना गर्न सकिएन ।"
+msgstr "%s अनुसंहितामा html कागजात प्रदर्शन गर्न सकिएन ।"
 
 #: ../src/msw/clipbrd.cpp:128
 msgid "Failed to empty the clipboard."
@@ -3175,7 +3175,7 @@ msgstr "ISP नामहरू %s पाउन सकिएन ।"
 #: ../src/msw/ole/automtn.cpp:569
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
-msgstr "\"%s\" का लागि पुराना स्वचालित interface पाउन सकिएन ।"
+msgstr "\"%s\" का लागि पुराना स्वचालित परिदृष्य पाउन सकिएन ।"
 
 #: ../src/msw/clipbrd.cpp:748
 msgid "Failed to get data from the clipboard"
@@ -3326,7 +3326,7 @@ msgstr "अनुगमनका लागि घर्रा \"%s\" खोल�
 #: ../src/x11/utils.cpp:223
 #, c-format
 msgid "Failed to open display \"%s\"."
-msgstr "दृश्य \"%s\" खोल्न सकिएन ।"
+msgstr "पटल \"%s\" खोल्न सकिएन ।"
 
 #: ../src/common/filename.cpp:1054
 msgid "Failed to open temporary file."
@@ -3387,7 +3387,7 @@ msgstr "DDE सर्भर '%s' दर्ता गर्न सकिएन �
 #: ../src/common/fontmap.cpp:246
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
-msgstr "वर्ण समूह '%s' को encoding याद राख्न सकिएन ।"
+msgstr "वर्णसेट '%s' को अनुसंहिता सम्झन सकिएन ।"
 
 #: ../src/common/debugrpt.cpp:226
 #, c-format
@@ -4123,12 +4123,7 @@ msgstr "नमिल्दो TIFF तस्विर अनुक्रमण�
 msgid "Invalid data view item"
 msgstr "नमिल्दो तथ्याङ्क दृश्य सामाग्री"
 
-#: ../src/common/appcmn.cpp:246
-#, c-format
-msgid "Invalid display mode specification '%s'."
-msgstr "नमिल्दो दृश्य मुद्रा मानक '%s'"
-
-#: ../src/x11/app.cpp:122
+#: ../src/common/appcmn.cpp:246 ../src/x11/app.cpp:122
 #, c-format
 msgid "Invalid geometry specification '%s'"
 msgstr "नमिल्दो ज्यामिति मानक '%s'"
@@ -4908,9 +4903,9 @@ msgid ""
 "Do you want to use this encoding (otherwise you will have to choose another "
 "one)?"
 msgstr ""
-"encoding '%s' मा पाठहरूलाई देखाउन कुनै पनि वर्णाकृति पाइएन । \n"
-"तर वैकल्पिक encoding '%s' भने उपलब्ध छ । \n"
-"के तपाइ यो encoding लाई प्रयोग गर्न चाहनु हुन्छ (अन्यथा तपाइले अर्कै छान्नु पर्छ)?"
+"अनुसंहिता '%s' मा पाठहरूलाई देखाउन कुनै पनि वर्णाकृति पाइएन । \n"
+"तर वैकल्पिक अनुसंहिता '%s' भने उपलब्ध छ । \n"
+"के तपाइ यो अनुसंहिता लाई प्रयोग गर्न चाहनु हुन्छ (अन्यथा तपाइले अर्कै छान्नु पर्छ)?"
 
 #: ../src/common/fontmap.cpp:427
 #, c-format
@@ -4919,9 +4914,9 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
-"encoding '%s' मा पाठहरू देखाउन कुनै पनि वर्णाकृति पाईएन ।\n"
-"के तपाई यो encoding मा धेखाउनका लागि कुनै वर्णाकृति चयन गर्नु हुन्छ? \n"
-"(अन्यथा यो encoding मा कुनै पनि पाठ शुद्ध रूपमा देखाउन सकिदैन)?"
+"अनुसंहिता '%s' मा पाठहरू देखाउन कुनै पनि वर्णाकृति पाईएन ।\n"
+"के तपाई यो अनुसंहितामा धेखाउनका लागि कुनै वर्णाकृति चयन गर्नु हुन्छ? \n"
+"(अन्यथा यो अनुसंहितामा कुनै पनि पाठ शुद्ध रूपमा देखाउन सकिदैन)?"
 
 #: ../src/generic/animateg.cpp:143
 msgid "No handler found for animation type."
@@ -5360,7 +5355,7 @@ msgstr "भण्डारमा भएको फाइल छान्नु �
 
 #: ../src/html/helpwnd.cpp:814
 msgid "Please choose the page to display:"
-msgstr "कृपया देखाइने पृष्ट छान्नु होस् ।"
+msgstr "कृपया प्रदर्शन गर्नु पर्ने पृष्ट छान्नु होस् ।"
 
 #: ../src/msw/dialup.cpp:786
 msgid "Please choose which ISP do you want to connect to"
@@ -5878,7 +5873,7 @@ msgstr "सबै चयन गर"
 
 #: ../src/common/docview.cpp:1868
 msgid "Select a document template"
-msgstr "एउटा कागजात  लेखोट चयन गर ।"
+msgstr "एउटा कागजात लेखोट चयन गर ।"
 
 #: ../src/common/docview.cpp:1942
 msgid "Select a document view"
@@ -6811,7 +6806,7 @@ msgstr "स्थानीय घिसार्दै राखिने तथ
 
 #: ../src/gtk/app.cpp:442
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
-msgstr "GTK+ लाई सुरुवात गर्न सकिएन, के दृश्यक त राम्ररी मिलाएको छ ?"
+msgstr "GTK+ लाई सुरुवात गर्न सकिएन, के पटल त राम्ररी मिलाएको छ ?"
 
 #: ../src/gtk/app.cpp:275
 msgid "Unable to initialize Hildon program"
@@ -7106,7 +7101,7 @@ msgstr "अज्ञात गतिसित पुस्तकालय गल
 #: ../src/common/fmapbase.cpp:811
 #, c-format
 msgid "Unknown encoding (%d)"
-msgstr "अज्ञात encoding (%d)"
+msgstr "अज्ञात अनुसंहिता (%d)"
 
 #: ../src/msw/ole/automtn.cpp:672
 #, c-format
@@ -7799,7 +7794,7 @@ msgstr "दबाब गल्ती"
 
 #: ../src/common/regex.cpp:240
 msgid "conversion to 8-bit encoding failed"
-msgstr "8-bit encoding मा रूपान्तरण असफल भयो ।"
+msgstr "8-bit अनुसंहिता मा रूपान्तरण असफल भयो ।"
 
 #: ../src/common/accelcmn.cpp:183
 msgid "ctrl"
@@ -8185,7 +8180,7 @@ msgstr "छैठौँ"
 
 #: ../src/common/appcmn.cpp:207
 msgid "specify display mode to use (e.g. 640x480-16)"
-msgstr "प्रयोगका लागि दृश्यक मुद्रा तोक्नु होला (e.g. 640x480-16)"
+msgstr "प्रयोगका लागि पटल मुद्रा तोक्नु होला (जस्तै 640x480-16)"
 
 #: ../src/common/appcmn.cpp:193
 msgid "specify the theme to use"
@@ -8351,11 +8346,11 @@ msgstr "wxWidget's नियन्त्रक सुरुवात गरि�
 #: ../src/motif/app.cpp:246
 #, c-format
 msgid "wxWidgets could not open display for '%s': exiting."
-msgstr "wxWidgets ले दृश्यक '%s' लाइ खोल्न सकेन: बहिर्गमन गरिदैं छ ।"
+msgstr "wxWidgets ले पटल '%s' लाइ खोल्न सकेन: बहिर्गमन गरिदैं छ ।"
 
 #: ../src/x11/app.cpp:165
 msgid "wxWidgets could not open display. Exiting."
-msgstr "wxWidgets ले दृश्यक खोल्न सकेन: बहिर्गमन गरिदैं छ ।"
+msgstr "wxWidgets ले पटल खोल्न सकेन: बहिर्गमन गरिदैं छ ।"
 
 #: ../src/richtext/richtextsymboldlg.cpp:435
 msgid "xxxx"
