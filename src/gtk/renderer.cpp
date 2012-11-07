@@ -721,16 +721,14 @@ void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, i
 #endif
 }
 
-//TODO: GTK3 implementations for the remaining functions below
-
 // Uses the theme to draw the border and fill for something like a wxTextCtrl
 void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
-    GtkWidget *entry = wxGTKPrivate::GetTextEntryWidget();
-
     wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
     if (drawable == NULL)
         return;
+
+    GtkWidget* entry = wxGTKPrivate::GetTextEntryWidget();
 
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
@@ -738,6 +736,14 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
 
     gtk_widget_set_can_focus(entry, (flags & wxCONTROL_CURRENT) != 0);
 
+#ifdef __WXGTK3__
+    GtkStyleContext* sc = gtk_widget_get_style_context(entry);
+    gtk_style_context_save(sc);
+    gtk_style_context_set_state(sc, stateTypeToFlags[state]);
+    gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_render_frame(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_style_context_restore(sc);
+#else
     gtk_paint_shadow
     (
         gtk_widget_get_style(entry),
@@ -752,14 +758,17 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
         rect.width,
         rect.height
   );
+#endif
 }
 
 // Draw the equivalent of a wxComboBox
 void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
-    GtkWidget *combo = wxGTKPrivate::GetComboBoxWidget();
-
     wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    if (drawable == NULL)
+        return;
+
+    GtkWidget* combo = wxGTKPrivate::GetComboBoxWidget();
 
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
@@ -767,9 +776,18 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
 
     gtk_widget_set_can_focus(combo, (flags & wxCONTROL_CURRENT) != 0);
 
-    if (drawable == NULL)
-        return;
-
+#ifdef __WXGTK3__
+    GtkStyleContext* sc = gtk_widget_get_style_context(combo);
+    gtk_style_context_save(sc);
+    gtk_style_context_set_state(sc, stateTypeToFlags[state]);
+    gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_render_frame(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_style_context_restore(sc);
+    wxRect r = rect;
+    r.x += r.width - r.height;
+    r.width = r.height;
+    DrawComboBoxDropButton(win, dc, r, flags);
+#else
     gtk_paint_shadow
     (
         gtk_widget_get_style(combo),
@@ -827,8 +845,8 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
         r.width,
         r.height-2
     );
+#endif
 }
-
 
 void wxRendererGTK::DrawChoice(wxWindow* win, wxDC& dc,
                            const wxRect& rect, int flags)
@@ -840,12 +858,28 @@ void wxRendererGTK::DrawChoice(wxWindow* win, wxDC& dc,
 // Draw a themed radio button
 void wxRendererGTK::DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
-    GtkWidget *button = wxGTKPrivate::GetRadioButtonWidget();
-
     wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
     if (drawable == NULL)
         return;
 
+    GtkWidget* button = wxGTKPrivate::GetRadioButtonWidget();
+
+#ifdef __WXGTK3__
+    int state = GTK_STATE_FLAG_NORMAL;
+    if (flags & wxCONTROL_CHECKED)
+        state = GTK_STATE_FLAG_ACTIVE;
+    else if (flags & wxCONTROL_UNDETERMINED)
+        state = GTK_STATE_FLAG_INCONSISTENT;
+    if (flags & wxCONTROL_DISABLED)
+        state |= GTK_STATE_FLAG_INSENSITIVE;
+
+    GtkStyleContext* sc = gtk_widget_get_style_context(button);
+    gtk_style_context_save(sc);
+    gtk_style_context_add_class(sc, GTK_STYLE_CLASS_RADIO);
+    gtk_style_context_set_state(sc, GtkStateFlags(state));
+    gtk_render_option(sc, drawable, rect.x, rect.y, rect.width, rect.height); 
+    gtk_style_context_restore(sc);
+#else
     GtkShadowType shadow_type = GTK_SHADOW_OUT;
     if ( flags & wxCONTROL_CHECKED )
         shadow_type = GTK_SHADOW_IN;
@@ -875,4 +909,5 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect,
         dc.LogicalToDeviceY(rect.y),
         rect.width, rect.height
     );
+#endif
 }
