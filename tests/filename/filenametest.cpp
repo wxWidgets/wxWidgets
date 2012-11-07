@@ -702,13 +702,15 @@ void FileNameTestCase::TestExists()
     CPPUNIT_ASSERT( wxFileName::Exists("/dev/core", wxFILE_EXISTS_SYMLINK) );
     CPPUNIT_ASSERT( wxFileName::Exists("/dev/log", wxFILE_EXISTS_SOCKET) );
 #endif // __LINUX__
+#ifndef __VMS
     wxString fifo = dirTemp.GetPath() + "/fifo";
-    if (mkfifo(fifo.c_str(), 0600) == 0)
+   if (mkfifo(fifo.c_str(), 0600) == 0)
     {
         wxON_BLOCK_EXIT1(wxRemoveFile, fifo);
 
         CPPUNIT_ASSERT( wxFileName::Exists(fifo, wxFILE_EXISTS_FIFO) );
     }
+#endif
 #endif // __UNIX__
 }
 
@@ -773,9 +775,15 @@ void FileNameTestCase::TestSymlinks()
     CPPUNIT_ASSERT(tmpfn.GetTimes(&dtAccessTmp, &dtModTmp, &dtCreateTmp));
 
     // Create a temporary directory
+#ifdef __VMS
+    wxString name = tmpdir + ".filenametestXXXXXX]";
+    mkdir( name.char_str() , 0222 );
+    wxString tempdir = name;
+#else
     wxString name = tmpdir + "/filenametestXXXXXX";
     wxString tempdir = wxString::From8BitData(mkdtemp(name.char_str()));
     tempdir << wxFileName::GetPathSeparator();
+#endif
     wxFileName tempdirfn(wxFileName::DirName(tempdir));
     CPPUNIT_ASSERT(tempdirfn.DirExists());
 
