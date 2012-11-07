@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 December 2011                                                     *
+# Date : 6 November 2012                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -224,7 +224,8 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		statbmpcmn.obj,dirctrlcmn.obj,gridcmn.obj,odcombocmn.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
 		valnum.obj,numformatter.obj,markupparser.obj,\
-		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj
+		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
+		textmeasurecmn.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -428,7 +429,7 @@ SOURCES = \
 		bmpbtncmn.cpp,checklstcmn.cpp,statbmpcmn.cpp,dirctrlcmn.cpp,\
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
 		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
-		richtooltipcmn.cpp persist.cpp time.cpp
+		richtooltipcmn.cpp persist.cpp time.cpp textmeasurecmn.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -713,3 +714,4 @@ affinematrix2d.obj : affinematrix2d.cpp
 richtooltipcmn.obj : richtooltipcmn.cpp
 persist.obj : persist.cpp
 time.obj : time.cpp
+textmeasurecmn.obj : textmeasurecmn.cpp
