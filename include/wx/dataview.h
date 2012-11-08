@@ -939,7 +939,7 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 class WXDLLIMPEXP_ADV wxDataViewListStoreLine
 {
 public:
-    wxDataViewListStoreLine( wxUIntPtr data = NULL )
+    wxDataViewListStoreLine( wxUIntPtr data = 0 )
     {
         m_data = data;
     }
@@ -966,9 +966,9 @@ public:
     void InsertColumn( unsigned int pos, const wxString &varianttype );
     void AppendColumn( const wxString &varianttype );
 
-    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
-    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
-    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 );
+    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 );
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = 0 );
     void DeleteItem( unsigned int pos );
     void DeleteAllItems();
 
@@ -1053,11 +1053,11 @@ public:
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
 
-    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL )
+    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 )
         { GetStore()->AppendItem( values, data ); }
-    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL )
+    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 )
         { GetStore()->PrependItem( values, data ); }
-    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL )
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = 0 )
         { GetStore()->InsertItem( row, values, data ); }
     void DeleteItem( unsigned row )
         { GetStore()->DeleteItem( row ); }
