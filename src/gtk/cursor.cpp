@@ -14,7 +14,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
-    #include "wx/app.h"
     #include "wx/image.h"
     #include "wx/bitmap.h"
     #include "wx/log.h"
@@ -51,9 +50,15 @@ wxCursorRefData::wxCursorRefData()
 
 wxCursorRefData::~wxCursorRefData()
 {
-    if (m_cursor) gdk_cursor_unref( m_cursor );
+    if (m_cursor)
+    {
+#ifdef __WXGTK3__
+        g_object_unref(m_cursor);
+#else
+        gdk_cursor_unref(m_cursor);
+#endif
+    }
 }
-
 
 //-----------------------------------------------------------------------------
 // wxCursor
@@ -65,7 +70,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
 
 // used in the following two ctors
 extern GtkWidget *wxGetRootWindow();
-
 
 wxCursor::wxCursor()
 {
