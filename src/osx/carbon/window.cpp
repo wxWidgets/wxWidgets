@@ -1404,7 +1404,15 @@ void wxMacControl::Enable( bool enable )
 
 void wxMacControl::SetDrawingEnabled( bool enable )
 {
-    HIViewSetDrawingEnabled( m_controlRef , enable );
+    if ( enable )
+    {
+        HIViewSetDrawingEnabled( m_controlRef , true );
+        HIViewSetNeedsDisplay( m_controlRef, true);
+    }
+    else
+    {
+        HIViewSetDrawingEnabled( m_controlRef , false );
+    }
 }
 
 void wxMacControl::GetRectInWindowCoords( Rect *r )

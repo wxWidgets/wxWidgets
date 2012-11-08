@@ -282,6 +282,8 @@ public :
 
     virtual bool        NeedsFrame() const;
     virtual void        SetNeedsFrame( bool needs );
+    
+    virtual void        SetDrawingEnabled(bool enabled);
 
     virtual bool        CanFocus() const = 0;
     // return true if successful

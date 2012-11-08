@@ -89,6 +89,8 @@ public :
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
     virtual bool        GetNeedsDisplay() const;
 
+    virtual void        SetDrawingEnabled(bool enabled);
+
     virtual bool        CanFocus() const;
     // return true if successful
     virtual bool        SetFocus();

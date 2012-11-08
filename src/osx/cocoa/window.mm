@@ -2586,6 +2586,18 @@ void wxWidgetCocoaImpl::SetFlipped(bool flipped)
     m_isFlipped = flipped;
 }
 
+void wxWidgetCocoaImpl::SetDrawingEnabled(bool enabled)
+{
+    if ( enabled )
+    {
+        [[m_osxView window] enableFlushWindow];
+        [m_osxView setNeedsDisplay:YES];
+    }
+    else
+    {
+        [[m_osxView window] disableFlushWindow];
+    }
+}
 //
 // Factory methods
 //

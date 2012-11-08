@@ -1362,27 +1362,23 @@ void wxWindowMac::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 
     if ( !IsShownOnScreen() )
         return ;
+    
+    if ( IsFrozen() )
+        return;
 
     GetPeer()->SetNeedsDisplay( rect ) ;
 }
 
 void wxWindowMac::DoFreeze()
 {
-#if wxOSX_USE_CARBON
     if ( GetPeer() && GetPeer()->IsOk() )
         GetPeer()->SetDrawingEnabled( false ) ;
-#endif
 }
 
 void wxWindowMac::DoThaw()
 {
-#if wxOSX_USE_CARBON
     if ( GetPeer() && GetPeer()->IsOk() )
-    {
         GetPeer()->SetDrawingEnabled( true ) ;
-        GetPeer()->InvalidateWithChildren() ;
-    }
-#endif
 }
 
 wxWindow *wxGetActiveWindow()
@@ -2853,4 +2849,8 @@ void wxWidgetImpl::SetNeedsFrame( bool needs )
 bool wxWidgetImpl::NeedsFrame() const
 {
     return m_needsFrame;
+}
+
+void wxWidgetImpl::SetDrawingEnabled(bool WXUNUSED(enabled))
+{
 }
