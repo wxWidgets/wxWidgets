@@ -199,6 +199,10 @@ wxApp::~wxApp()
 
 bool wxApp::SetNativeTheme(const wxString& theme)
 {
+#ifdef __WXGTK3__
+    wxUnusedVar(theme);
+    return false;
+#else
     wxString path;
     path = gtk_rc_get_theme_dir();
     path += "/";
@@ -219,6 +223,7 @@ bool wxApp::SetNativeTheme(const wxString& theme)
     gtk_rc_reparse_all_for_settings(gtk_settings_get_default(), TRUE);
 
     return true;
+#endif
 }
 
 bool wxApp::OnInitGui()
