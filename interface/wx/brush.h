@@ -361,7 +361,7 @@ wxBrush* wxRED_BRUSH;
 
     @see wxBrush
 */
-class wxBrushList : public wxList
+class wxBrushList
 {
 public:
     /**

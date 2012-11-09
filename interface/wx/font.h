@@ -1062,7 +1062,7 @@ wxFont* wxSWISS_FONT;
 
     @see wxFont
 */
-class wxFontList : public wxList
+class wxFontList
 {
 public:
     /**
