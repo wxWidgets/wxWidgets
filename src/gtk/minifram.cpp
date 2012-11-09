@@ -193,17 +193,20 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
 
     gdk_window_raise(gtk_widget_get_window(win->m_widget));
 
-    gdk_pointer_grab( gtk_widget_get_window(widget), false,
-                      (GdkEventMask)
-                         (GDK_BUTTON_PRESS_MASK |
-                          GDK_BUTTON_RELEASE_MASK |
-                          GDK_POINTER_MOTION_MASK        |
-                          GDK_POINTER_MOTION_HINT_MASK  |
-                          GDK_BUTTON_MOTION_MASK        |
-                          GDK_BUTTON1_MOTION_MASK),
-                      NULL,
-                      NULL,
-                      (unsigned int) GDK_CURRENT_TIME );
+    const GdkEventMask mask = GdkEventMask(
+        GDK_BUTTON_PRESS_MASK |
+        GDK_BUTTON_RELEASE_MASK |
+        GDK_POINTER_MOTION_MASK |
+        GDK_POINTER_MOTION_HINT_MASK |
+        GDK_BUTTON_MOTION_MASK |
+        GDK_BUTTON1_MOTION_MASK);
+#ifdef __WXGTK3__
+    gdk_device_grab(
+        gdk_event->device, gdk_event->window, GDK_OWNERSHIP_NONE,
+        false, mask, NULL, gdk_event->time);
+#else
+    gdk_pointer_grab(gdk_event->window, false, mask, NULL, NULL, gdk_event->time);
+#endif
 
     win->m_diffX = x;
     win->m_diffY = y;
@@ -235,7 +238,11 @@ gtk_window_button_release_callback(GtkWidget* widget, GdkEventButton* gdk_event,
     int x = (int)gdk_event->x;
     int y = (int)gdk_event->y;
 
-    gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
+#ifdef __WXGTK3__
+    gdk_device_ungrab(gdk_event->device, gdk_event->time);
+#else
+    gdk_pointer_ungrab(gdk_event->time);
+#endif
     int org_x = 0;
     int org_y = 0;
     gdk_window_get_origin(gtk_widget_get_window(widget), &org_x, &org_y);
@@ -282,19 +289,17 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
 
+    int x = int(gdk_event->x);
+    int y = int(gdk_event->y);
+
     if (gdk_event->is_hint)
     {
-       int x = 0;
-       int y = 0;
-       GdkModifierType state;
-       gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
-       gdk_event->x = x;
-       gdk_event->y = y;
-       gdk_event->state = state;
+#ifdef __WXGTK3__
+       gdk_window_get_device_position(gdk_event->window, gdk_event->device, &x, &y, NULL);
+#else
+       gdk_window_get_pointer(gdk_event->window, &x, &y, NULL);
+#endif
     }
-
-    int x = (int)gdk_event->x;
-    int y = (int)gdk_event->y;
 
     if (!win->m_isDragging)
     {
