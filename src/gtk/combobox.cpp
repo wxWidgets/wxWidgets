@@ -404,4 +404,17 @@ void wxComboBox::Dismiss()
 {
     gtk_combo_box_popdown( GTK_COMBO_BOX(m_widget) );
 }
+
+wxSize wxComboBox::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxSize tsize( wxChoice::DoGetSizeFromTextSize(xlen, ylen) );
+
+    // Add the margins we have previously set, but only the horizontal border
+    // as vertical one has been taken account in the prevoius call.
+    // Also get other GTK+ margins.
+    tsize.IncBy( GTKGetEntryMargins(GetEntry()).x, 0);
+
+    return tsize;
+}
+
 #endif // wxUSE_COMBOBOX

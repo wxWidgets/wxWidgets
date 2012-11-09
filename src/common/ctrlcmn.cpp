@@ -149,6 +149,12 @@ void wxControlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 #endif // wxUSE_RADIOBTN
 }
 
+wxSize wxControlBase::DoGetSizeFromTextSize(int WXUNUSED(xlen),
+                                            int WXUNUSED(ylen)) const
+{
+    return wxSize(-1, -1);
+}
+
 /* static */
 wxString wxControlBase::GetLabelText(const wxString& label)
 {

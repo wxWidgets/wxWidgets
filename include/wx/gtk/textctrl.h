@@ -155,6 +155,8 @@ protected:
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
+
     virtual void DoFreeze();
     virtual void DoThaw();
 

@@ -145,6 +145,8 @@ protected:
     // custom list stores.
     virtual void GTKCreateComboBoxWidget();
 
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
+
     virtual GtkEntry *GetEntry() const
         { return m_entry; }
 

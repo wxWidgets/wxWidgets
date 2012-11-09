@@ -153,6 +153,47 @@ public:
     wxString GetLabelText() const;
 
     /**
+        Determine the size needed by the control to leave the given area for
+        its text.
+
+        This function is mostly useful with control displaying short amounts of
+        text that can be edited by the user, e.g. wxTextCtrl, wxComboBox,
+        wxSearchCtrl etc. Typically it is used to size these controls for the
+        maximal amount of input they are supposed to contain, for example:
+        @code
+            // Create a control for post code entry.
+            wxTextCtrl* postcode = new wxTextCtrl(this, ...);
+
+            // And set its initial and minimal size to be big enough for
+            // entering 5 digits.
+            postcode->SetInitialSize(
+                postcode->GetSizeFromTextSize(
+                    postcode->GetTextExtent("99999")));
+        @endcode
+
+        Currently this method is only implemented for wxTextCtrl, wxComboBox
+        and wxChoice in wxGTK.
+
+        @param xlen The horizontal extent of the area to leave for text, in
+            pixels.
+        @param ylen The vertical extent of the area to leave for text, in
+            pixels. By default -1 meaning that the vertical component of the
+            returned size should be the default height of this control.
+        @return The size that the control should have to leave the area of the
+            specified size for its text. May return wxDefaultSize if this
+            method is not implemented for this particular control under the
+            current platform.
+
+        @since 2.9.5
+     */
+    wxSize GetSizeFromTextSize(int xlen, int ylen = -1) const;
+
+    /**
+        @overload
+    */
+    wxSize GetSizeFromTextSize(const wxSize& tsize) const;
+
+    /**
         Sets the control's label.
 
         All "&" characters in the @a label are special and indicate that the

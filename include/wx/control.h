@@ -134,6 +134,10 @@ public:
     // wxControl-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
 
+    wxSize GetSizeFromTextSize(int xlen, int ylen = -1) const
+        { return DoGetSizeFromTextSize(xlen, ylen); }
+    wxSize GetSizeFromTextSize(const wxSize& tsize) const
+        { return DoGetSizeFromTextSize(tsize.x, tsize.y); }
 
 
     // static utilities for mnemonics char (&) handling
@@ -192,6 +196,8 @@ protected:
     virtual bool DoSetLabelMarkup(const wxString& markup);
 #endif // wxUSE_MARKUP
 
+    // override this to return the total control's size from a string size
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;

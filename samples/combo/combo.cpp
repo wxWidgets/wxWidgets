@@ -981,7 +981,8 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     groupSizer = new wxStaticBoxSizer(new wxStaticBox(dlg,wxID_ANY,wxT(" wxOwnerDrawnComboBox ")),
                                       wxVERTICAL);
 
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Writable, sorted:")), 0,
+    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+                     wxT("Writable, with margins, sorted:")), 0,
                      wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, border );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
@@ -993,12 +994,14 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     odc->Append(wxT("H - Appended Item")); // test sorting in append
 
     odc->SetValue(wxT("Dot Dash"));
-
-    groupSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    odc->SetMargins(15, 10);
+    groupSizer->Add( odc, 0, wxALIGN_CENTER_VERTICAL|wxALL, border );
+    groupSizer->AddStretchSpacer();
 
     //
     // Readonly ODComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Read-only:")), 0,
+    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+                     wxT("Read-only, big font:")), 0,
                      wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
@@ -1007,10 +1010,12 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
                                    wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
                                   );
 
+    odc->SetFont(odc->GetFont().Scale(1.5));
     odc->SetValue(wxT("Dot Dash"));
     odc->SetText(wxT("Dot Dash (Testing SetText)"));
 
-    groupSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( odc, 0, wxALL, border );
+    groupSizer->AddStretchSpacer();
 
     //
     // Disabled ODComboBox
@@ -1026,7 +1031,7 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     odc->SetValue(wxT("Dot Dash"));
     odc->Enable(false);
 
-    groupSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( odc, 3, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
@@ -1037,7 +1042,8 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     //
     // wxComboBox
     //
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Writable, sorted:")), 0,
+    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,
+                     wxT("Writable, with margins, sorted:")), 0,
                      wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, border );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
@@ -1049,12 +1055,14 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     cb->Append(wxT("H - Appended Item")); // test sorting in append
 
     cb->SetValue(wxT("Dot Dash"));
-
-    groupSizer->Add( cb, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    cb->SetMargins(15, 10);
+    groupSizer->Add( cb, 0, wxALIGN_CENTER_VERTICAL|wxALL, border );
+    groupSizer->AddStretchSpacer();
 
     //
     // Readonly wxComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Read-only:")), 0,
+    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+                     wxT("Read-only, big font:")), 0,
                      wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
@@ -1063,9 +1071,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
                         wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
                        );
 
+    cb->SetFont(cb->GetFont().Scale(1.5));
     cb->SetValue(wxT("Dot Dash"));
 
-    groupSizer->Add( cb, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( cb, 0, wxALL, border );
+    groupSizer->AddStretchSpacer();
 
     //
     // Disabled wxComboBox
@@ -1081,11 +1091,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     cb->SetValue(wxT("Dot Dash"));
     cb->Enable(false);
 
-    groupSizer->Add( cb, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( cb, 3, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, border );
+    colSizer->Add( rowSizer, 1, wxEXPAND|wxALL, border );
 
     dlg->SetSizer( colSizer );
     colSizer->SetSizeHints( dlg );

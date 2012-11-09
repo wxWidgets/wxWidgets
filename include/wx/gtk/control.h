@@ -12,6 +12,7 @@
 
 typedef struct _GtkLabel GtkLabel;
 typedef struct _GtkFrame GtkFrame;
+typedef struct _GtkEntry GtkEntry;
 
 //-----------------------------------------------------------------------------
 // wxControl
@@ -99,6 +100,12 @@ protected:
 
     // Fix sensitivity due to bug in GTK+ < 2.14
     void GTKFixSensitivity(bool onlyIfUnderMouse = true);
+
+    // Ask GTK+ for preferred size. Use it after setting the font.
+    wxSize GTKGetPreferredSize(GtkWidget* widget) const;
+
+    // Inner margins in a GtkEntry
+    wxPoint GTKGetEntryMargins(GtkEntry* entry) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxControl)

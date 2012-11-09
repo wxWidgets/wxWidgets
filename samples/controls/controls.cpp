@@ -770,7 +770,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // ------------------------------------------------------------------------
 #if wxUSE_CHOICE
     panel = new wxPanel(m_book);
-    m_choice = new MyChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,wxDefaultCoord), 5, choices );
+    m_choice = new MyChoice( panel, ID_CHOICE, wxPoint(10,10), wxDefaultSize, 5, choices );
     m_choiceSorted = new MyChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,wxDefaultCoord),
                                    5, choices, wxCB_SORT );
 
@@ -778,12 +778,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     SetChoiceClientData(wxT("choice"), m_choiceSorted);
 
     m_choice->SetSelection(2);
-    (void)new wxButton( panel, ID_CHOICE_SEL_NUM, wxT("Select #&2"), wxPoint(180,30), wxSize(140,30) );
-    (void)new wxButton( panel, ID_CHOICE_SEL_STR, wxT("&Select 'This'"), wxPoint(340,30), wxSize(140,30) );
-    (void)new wxButton( panel, ID_CHOICE_CLEAR, wxT("&Clear"), wxPoint(180,80), wxSize(140,30) );
-    (void)new wxButton( panel, ID_CHOICE_APPEND, wxT("&Append 'Hi!'"), wxPoint(340,80), wxSize(140,30) );
-    (void)new wxButton( panel, ID_CHOICE_DELETE, wxT("D&elete selected item"), wxPoint(180,130), wxSize(140,30) );
-    (void)new wxButton( panel, ID_CHOICE_FONT, wxT("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
+    (void)new wxButton( panel, ID_CHOICE_SEL_NUM, wxT("Select #&2"), wxPoint(220,30), wxSize(140,30) );
+    (void)new wxButton( panel, ID_CHOICE_SEL_STR, wxT("&Select 'This'"), wxPoint(380,30), wxSize(140,30) );
+    (void)new wxButton( panel, ID_CHOICE_CLEAR, wxT("&Clear"), wxPoint(220,80), wxSize(140,30) );
+    (void)new wxButton( panel, ID_CHOICE_APPEND, wxT("&Append 'Hi!'"), wxPoint(380,80), wxSize(140,30) );
+    (void)new wxButton( panel, ID_CHOICE_DELETE, wxT("D&elete selected item"), wxPoint(220,130), wxSize(140,30) );
+    (void)new wxButton( panel, ID_CHOICE_FONT, wxT("Set &Italic font"), wxPoint(380,130), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, wxT("&Disable"), wxPoint(20,130), wxSize(140,30) );
 
     m_book->AddPage(panel, wxT("wxChoice"), false, Image_Choice);
@@ -793,20 +793,21 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // combo page
     // ------------------------------------------------------------------------
     panel = new wxPanel(m_book);
-    (void)new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
-                           wxPoint(5, 5), wxSize(150, 100));
     m_combo = new MyComboBox( panel, ID_COMBO, wxT("This"),
-                              wxPoint(20,25), wxSize(120, wxDefaultCoord),
+                              wxPoint(15,25), wxDefaultSize,
                               5, choices,
                               wxTE_PROCESS_ENTER);
+    wxSize combosize(m_combo->GetBestSize().x + 20, 100);
+    (void)new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
+                           wxPoint(5, 5), combosize);
 
-    (void)new wxButton( panel, ID_COMBO_SEL_NUM, wxT("Select #&2"), wxPoint(180,30), wxSize(140,30) );
-    (void)new wxButton( panel, ID_COMBO_SEL_STR, wxT("&Select 'This'"), wxPoint(340,30), wxSize(140,30) );
-    (void)new wxButton( panel, ID_COMBO_CLEAR, wxT("&Clear"), wxPoint(180,80), wxSize(140,30) );
-    (void)new wxButton( panel, ID_COMBO_APPEND, wxT("&Append 'Hi!'"), wxPoint(340,80), wxSize(140,30) );
-    (void)new wxButton( panel, ID_COMBO_DELETE, wxT("D&elete selected item"), wxPoint(180,130), wxSize(140,30) );
-    (void)new wxButton( panel, ID_COMBO_FONT, wxT("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
-    (void)new wxButton( panel, ID_COMBO_SET_TEXT, wxT("Set 'Hi!' at #2"), wxPoint(340,180), wxSize(140,30) );
+    (void)new wxButton( panel, ID_COMBO_SEL_NUM, wxT("Select #&2"), wxPoint(220,30), wxSize(140,30) );
+    (void)new wxButton( panel, ID_COMBO_SEL_STR, wxT("&Select 'This'"), wxPoint(380,30), wxSize(140,30) );
+    (void)new wxButton( panel, ID_COMBO_CLEAR, wxT("&Clear"), wxPoint(220,80), wxSize(140,30) );
+    (void)new wxButton( panel, ID_COMBO_APPEND, wxT("&Append 'Hi!'"), wxPoint(380,80), wxSize(140,30) );
+    (void)new wxButton( panel, ID_COMBO_DELETE, wxT("D&elete selected item"), wxPoint(220,130), wxSize(140,30) );
+    (void)new wxButton( panel, ID_COMBO_FONT, wxT("Set &Italic font"), wxPoint(380,130), wxSize(140,30) );
+    (void)new wxButton( panel, ID_COMBO_SET_TEXT, wxT("Set 'Hi!' at #2"), wxPoint(380,180), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_COMBO_ENABLE, wxT("&Disable"), wxPoint(20,130), wxSize(140,30) );
     m_book->AddPage(panel, wxT("wxComboBox"), false, Image_Combo);
 

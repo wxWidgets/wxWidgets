@@ -348,8 +348,38 @@ wxSize wxChoice::DoGetBestSize() const
     // Get the height of the control from GTK+ itself, but use our own version
     // to compute the width large enough to show all our strings as GTK+
     // doesn't seem to take the control contents into account.
-    return wxSize(wxChoiceBase::DoGetBestSize().x + 40,
-                  wxControl::DoGetBestSize().y);
+    return GetSizeFromTextSize(wxChoiceBase::DoGetBestSize().x);
+}
+
+wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxASSERT_MSG( m_widget, wxS("GetSizeFromTextSize called before creation") );
+
+    // a GtkEntry for wxComboBox and a GtkCellView for wxChoice
+    GtkWidget* childPart = gtk_bin_get_child(GTK_BIN(m_widget));
+
+    // Set a as small as possible size for the control, so preferred sizes
+    // return "natural" sizes, not taking into account the previous ones (which
+    // seems to be GTK+3 behaviour)
+    gtk_widget_set_size_request(m_widget, 0, 0);
+
+    // We are interested in the difference of sizes between the whole contol
+    // and its child part. I.e. arrow, separators, etc.
+    GtkRequisition req;
+    gtk_widget_size_request(childPart, &req);
+    wxSize totalS = GTKGetPreferredSize(m_widget);
+
+    wxSize tsize(xlen + totalS.x - req.width, totalS.y);
+
+    // For a wxChoice, not for wxComboBox, add some margins
+    if ( !GTK_IS_ENTRY(childPart) )
+        tsize.IncBy(5, 0);
+
+    // Perhaps the user wants something different from CharHeight
+    if ( ylen > 0 )
+        tsize.IncBy(0, ylen - GetCharHeight());
+
+    return tsize;
 }
 
 void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)

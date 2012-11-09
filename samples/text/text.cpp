@@ -1074,15 +1074,21 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_password = new MyTextCtrl( this, wxID_ANY, wxT(""),
       wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
 
-    m_readonly = new MyTextCtrl( this, wxID_ANY, wxT("Read only"),
-      wxPoint(10,90), wxSize(140,wxDefaultCoord), wxTE_READONLY );
-
     m_limited = new MyTextCtrl(this, wxID_ANY, "",
-                              wxPoint(10, 130), wxSize(140, wxDefaultCoord));
+                              wxPoint(10, 90), wxDefaultSize);
     m_limited->SetHint("Max 8 ch");
     m_limited->SetMaxLength(8);
+    wxSize size2 = m_limited->GetSizeFromTextSize(m_limited->GetTextExtent("WWWWWWWW"));
+    m_limited->SetSizeHints(size2, size2);
 
     // multi line text controls
+
+    wxString string3L("Read only\nMultiline\nFitted size");
+    m_readonly = new MyTextCtrl( this, wxID_ANY, string3L,
+               wxPoint(10, 120), wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY );
+    wxWindowDC dc(m_readonly);
+    size2 = m_readonly->GetSizeFromTextSize(dc.GetMultiLineTextExtent(string3L));
+    m_readonly->SetMinSize(size2);
 
     m_horizontal = new MyTextCtrl( this, wxID_ANY, wxT("Multiline text control with a horizontal scrollbar.\n"),
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL);
@@ -1137,7 +1143,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif
 
     m_tab = new MyTextCtrl( this, 100, wxT("Multiline, allow <TAB> processing."),
-      wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
+      wxPoint(180,90), wxDefaultSize, wxTE_MULTILINE |  wxTE_PROCESS_TAB );
     m_tab->SetClientData((void *)wxT("tab"));
 
     m_enter = new MyTextCtrl( this, 100, wxT("Multiline, allow <ENTER> processing."),
@@ -1173,13 +1179,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxBoxSizer *column1 = new wxBoxSizer(wxVERTICAL);
     column1->Add( m_text, 0, wxALL | wxEXPAND, 10 );
     column1->Add( m_password, 0, wxALL | wxEXPAND, 10 );
-    column1->Add( m_readonly, 0, wxALL | wxEXPAND, 10 );
-    column1->Add( m_limited, 0, wxALL | wxEXPAND, 10 );
+    column1->Add( m_readonly, 0, wxALL, 10 );
+    column1->Add( m_limited, 0, wxALL, 10 );
     column1->Add( m_horizontal, 1, wxALL | wxEXPAND, 10 );
 
     wxBoxSizer *column2 = new wxBoxSizer(wxVERTICAL);
     column2->Add( m_multitext, 1, wxALL | wxEXPAND, 10 );
-    column2->Add( m_tab, 1, wxALL | wxEXPAND, 10 );
+    column2->Add( m_tab, 0, wxALL | wxEXPAND, 10 );
     column2->Add( m_enter, 1, wxALL | wxEXPAND, 10 );
 
     wxBoxSizer *row1 = new wxBoxSizer(wxHORIZONTAL);

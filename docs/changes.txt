@@ -582,6 +582,7 @@ All (GUI):
 - Implement clipping for wxSVGFileDC (Steve Benbow).
 - Added wxDirCtrl::GetPath() (troelsk).
 - Added wxEVT_COMMAND_DIRCTRL_CHANGED event (troelsk).
+- Added wxControl::GetSizeFromTextSize() (Manuel Martin).
 
 wxGTK:
 
