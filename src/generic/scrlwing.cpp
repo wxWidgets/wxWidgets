@@ -147,6 +147,7 @@ void wxAutoScrollTimer::Notify()
         // first scroll the window if we are allowed to do it
         wxScrollWinEvent event1(m_eventType, m_pos, m_orient);
         event1.SetEventObject(m_win);
+        event1.SetId(m_win->GetId());
         if ( m_scrollHelper->SendAutoScrollEvents(event1) &&
                 m_win->GetEventHandler()->ProcessEvent(event1) )
         {
@@ -858,6 +859,7 @@ void wxScrollHelperBase::HandleOnChar(wxKeyEvent& event)
 
     newEvent.SetPosition(0);
     newEvent.SetEventObject(m_win);
+    newEvent.SetId(m_win->GetId());
 
     // this is the default, it's changed to wxHORIZONTAL below if needed
     newEvent.SetOrientation(wxVERTICAL);
