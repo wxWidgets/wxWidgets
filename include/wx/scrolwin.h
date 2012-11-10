@@ -252,10 +252,6 @@ protected:
     // delete the event handler we installed
     void DeleteEvtHandler();
 
-    // calls wxScrollHelperEvtHandler::ResetDrawnFlag(), see explanation
-    // in wxScrollHelperEvtHandler::ProcessEvent()
-    void ResetDrawnFlag();
-
     // this function should be overridden to return the size available for
     // m_targetWindow inside m_win of the given size
     //
@@ -376,8 +372,6 @@ public:
         this->MacSetClipChildren(true);
 #endif
 
-        this->Connect(wxEVT_PAINT, wxPaintEventHandler(wxScrolled::OnPaint));
-
         // by default, we're scrollable in both directions (but if one of the
         // styles is specified explicitly, we shouldn't add the other one
         // automatically)
@@ -408,16 +402,6 @@ protected:
     }
 
 private:
-    // this is needed for wxEVT_PAINT processing hack described in
-    // wxScrollHelperEvtHandler::ProcessEvent()
-    void OnPaint(wxPaintEvent& event)
-    {
-        // the user code didn't really draw the window if we got here, so set
-        // this flag to try to call OnDraw() later
-        ResetDrawnFlag();
-        event.Skip();
-    }
-
     // VC++ 6 gives warning for the declaration of template member function
     // without definition
 #ifndef __VISUALC6__
