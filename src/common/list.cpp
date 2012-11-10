@@ -762,6 +762,6 @@ void _WX_LIST_HELPER_wxStringListBase::DeleteFunction( wxString WXUNUSED(X) )
 {
 }
 
-wxStringListBase::BaseListType wxStringListBase::EmptyList;
+_WX_LIST_HELPER_wxStringListBase::BaseListType _WX_LIST_HELPER_wxStringListBase::EmptyList;
 
 #endif // !wxUSE_STD_CONTAINERS

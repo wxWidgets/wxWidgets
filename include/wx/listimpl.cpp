@@ -17,7 +17,7 @@
     {                                                                         \
         delete X;                                                             \
     }                                                                         \
-    name::BaseListType name::EmptyList;
+    _WX_LIST_HELPER_##name::BaseListType _WX_LIST_HELPER_##name::EmptyList;
 
 #else // !wxUSE_STD_CONTAINERS
     #undef WX_DEFINE_LIST_2

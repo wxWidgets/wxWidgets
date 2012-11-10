@@ -54,7 +54,7 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 class WXDLLIMPEXP_FWD_BASE wxProcess;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
-class WXDLLIMPEXP_FWD_CORE wxWindowList;
+class wxWindowList;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // ----------------------------------------------------------------------------

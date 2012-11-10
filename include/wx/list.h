@@ -148,21 +148,22 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
     decl _WX_LIST_HELPER_##liT                                                \
     {                                                                         \
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
+        typedef std::list<elT> BaseListType;                                  \
     public:                                                                   \
+        static BaseListType EmptyList;                                        \
         static void DeleteFunction( _WX_LIST_ITEM_TYPE_##liT X );             \
     };                                                                        \
                                                                               \
     WX_LIST_VC6_WORKAROUND(elT, liT, decl)                                    \
-    decl liT : public std::list<elT>                                          \
+    class liT : public std::list<elT>                                          \
     {                                                                         \
     private:                                                                  \
         typedef std::list<elT> BaseListType;                                  \
-        static BaseListType EmptyList;                                        \
                                                                               \
         bool m_destroy;                                                       \
                                                                               \
     public:                                                                   \
-        decl compatibility_iterator                                           \
+        class compatibility_iterator                                           \
         {                                                                     \
         private:                                                              \
             /* Workaround for broken VC6 nested class name resolution */      \
@@ -174,7 +175,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
                                                                               \
         public:                                                               \
             compatibility_iterator()                                          \
-                : m_iter(EmptyList.end()), m_list( NULL ) {}                  \
+                : m_iter(_WX_LIST_HELPER_##liT::EmptyList.end()), m_list( NULL ) {}                  \
             compatibility_iterator( liT* li, iterator i )                     \
                 : m_iter( i ), m_list( li ) {}                                \
             compatibility_iterator( const liT* li, iterator i )               \
