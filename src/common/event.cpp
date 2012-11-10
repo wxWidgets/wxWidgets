@@ -1675,15 +1675,6 @@ wxEvtHandler::DoUnbind(int id,
     if (!m_dynamicEvents)
         return false;
 
-    // Remove connection from tracker node (wxEventConnectionRef)
-    wxEvtHandler *eventSink = func.GetEvtHandler();
-    if ( eventSink && eventSink != this )
-    {
-        wxEventConnectionRef *evtConnRef = FindRefInTrackerList(eventSink);
-        if ( evtConnRef )
-            evtConnRef->DecRef();
-    }
-
     wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
     {
@@ -1695,6 +1686,15 @@ wxEvtHandler::DoUnbind(int id,
             entry->m_fn->IsMatching(func) &&
             ((entry->m_callbackUserData == userData) || !userData))
         {
+            // Remove connection from tracker node (wxEventConnectionRef)
+            wxEvtHandler *eventSink = entry->m_fn->GetEvtHandler();
+            if ( eventSink && eventSink != this )
+            {
+                wxEventConnectionRef *evtConnRef = FindRefInTrackerList(eventSink);
+                if ( evtConnRef )
+                    evtConnRef->DecRef();
+            }
+
             delete entry->m_callbackUserData;
             m_dynamicEvents->Erase( node );
             delete entry;

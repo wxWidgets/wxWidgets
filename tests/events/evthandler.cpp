@@ -160,6 +160,8 @@ private:
     CPPUNIT_TEST_SUITE( EvtHandlerTestCase );
         CPPUNIT_TEST( BuiltinConnect );
         CPPUNIT_TEST( LegacyConnect );
+        CPPUNIT_TEST( DisconnectWildcard );
+        CPPUNIT_TEST( AutoDisconnect );
 #ifdef wxHAS_EVENT_BIND
         CPPUNIT_TEST( BindFunction );
         CPPUNIT_TEST( BindStaticMethod );
@@ -174,6 +176,8 @@ private:
 
     void BuiltinConnect();
     void LegacyConnect();
+    void DisconnectWildcard();
+    void AutoDisconnect();
 #ifdef wxHAS_EVENT_BIND
     void BindFunction();
     void BindStaticMethod();
@@ -247,6 +251,31 @@ void EvtHandlerTestCase::LegacyConnect()
     handler.Disconnect( LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
     handler.Disconnect( 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
     handler.Disconnect( 0, 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
+}
+
+void EvtHandlerTestCase::DisconnectWildcard()
+{
+    // should be able to disconnect a different handler using "wildcard search"
+    MyHandler sink;
+    wxEvtHandler source;
+    source.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), NULL, &sink);
+    CPPUNIT_ASSERT(source.Disconnect(wxID_ANY, wxEVT_IDLE));
+    // destruction of source and sink here should properly clean up the
+    // wxEventConnectionRef without crashing
+}
+
+void EvtHandlerTestCase::AutoDisconnect()
+{
+    wxEvtHandler source;
+    {
+        MyHandler sink;
+        source.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), NULL, &sink);
+        // mismatched event type, so nothing should be disconnected
+        CPPUNIT_ASSERT(!source.Disconnect(wxEVT_THREAD, wxIdleEventHandler(MyHandler::OnIdle), NULL, &sink));
+    }
+    // destruction of sink should have automatically disconnected it, so
+    // there should be nothing to disconnect anymore
+    CPPUNIT_ASSERT(!source.Disconnect(wxID_ANY, wxEVT_IDLE));
 }
 
 #ifdef wxHAS_EVENT_BIND
