@@ -341,11 +341,13 @@ public:
     bool IsActive() const;
 
     /**
+        Set whether this tool has a drop down button.
 
+        This is only valid for wxITEM_NORMAL tools.
     */
     void SetHasDropDown(bool b);
     /**
-
+        Returns whether the toolbar item has an associated drop down button.
     */
     bool HasDropDown() const;
 
@@ -704,7 +706,21 @@ public:
     void EnableTool(int tool_id, bool state);
     bool GetToolEnabled(int tool_id) const;
 
+    /**
+        Set whether the specified toolbar item has a drop down button.
+
+        This is only valid for wxITEM_NORMAL tools.
+
+        @see wxAuiToolBarItem::SetHasDropDown()
+    */
     void SetToolDropDown(int tool_id, bool dropdown);
+
+    /**
+        Returns whether the specified toolbar item has an associated drop down
+        button.
+
+        @see wxAuiToolBarItem::HasDropDown()
+    */
     bool GetToolDropDown(int tool_id) const;
 
     void SetToolBorderPadding(int padding);

@@ -1261,16 +1261,16 @@ void wxAuiToolBar::SetToolDropDown(int tool_id, bool dropdown)
     if (!item)
         return;
 
-    item->m_dropDown = dropdown;
+    item->SetHasDropDown(dropdown);
 }
 
 bool wxAuiToolBar::GetToolDropDown(int tool_id) const
 {
     wxAuiToolBarItem* item = FindTool(tool_id);
     if (!item)
-        return 0;
+        return false;
 
-    return item->m_dropDown;
+    return item->HasDropDown();
 }
 
 void wxAuiToolBar::SetToolSticky(int tool_id, bool sticky)
@@ -2411,41 +2411,36 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             break;
         }
 
-        if (item.m_kind == wxITEM_SEPARATOR)
+        switch ( item.m_kind )
         {
-            // draw a separator
-            m_art->DrawSeparator(dc, this, item_rect);
-        }
-        else if (item.m_kind == wxITEM_LABEL)
-        {
-            // draw a text label only
-            m_art->DrawLabel(dc, this, item, item_rect);
-        }
-        else if (item.m_kind == wxITEM_NORMAL)
-        {
-            // draw a regular button or dropdown button
-            if (!item.m_dropDown)
+            case wxITEM_NORMAL:
+                // draw a regular or dropdown button
+                if (!item.m_dropDown)
+                    m_art->DrawButton(dc, this, item, item_rect);
+                else
+                    m_art->DrawDropDownButton(dc, this, item, item_rect);
+                break;
+
+            case wxITEM_CHECK:
+            case wxITEM_RADIO:
+                // draw a toggle button
                 m_art->DrawButton(dc, this, item, item_rect);
-            else
-                m_art->DrawDropDownButton(dc, this, item, item_rect);
-        }
-        else if (item.m_kind == wxITEM_CHECK)
-        {
-            // draw either a regular or dropdown toggle button
-            if (!item.m_dropDown)
-                m_art->DrawButton(dc, this, item, item_rect);
-            else
-                m_art->DrawDropDownButton(dc, this, item, item_rect);
-        }
-        else if (item.m_kind == wxITEM_RADIO)
-        {
-            // draw a toggle button
-            m_art->DrawButton(dc, this, item, item_rect);
-        }
-        else if (item.m_kind == wxITEM_CONTROL)
-        {
-            // draw the control's label
-            m_art->DrawControlLabel(dc, this, item, item_rect);
+                break;
+
+            case wxITEM_SEPARATOR:
+                // draw a separator
+                m_art->DrawSeparator(dc, this, item_rect);
+                break;
+
+            case wxITEM_LABEL:
+                // draw a text label only
+                m_art->DrawLabel(dc, this, item, item_rect);
+                break;
+
+            case wxITEM_CONTROL:
+                // draw the control's label
+                m_art->DrawControlLabel(dc, this, item, item_rect);
+                break;
         }
 
         // fire a signal to see if the item wants to be custom-rendered

@@ -211,7 +211,14 @@ public:
     void SetActive(bool b) { m_active = b; }
     bool IsActive() const { return m_active; }
 
-    void SetHasDropDown(bool b) { m_dropDown = b; }
+    void SetHasDropDown(bool b)
+    {
+        wxCHECK_RET( !b || m_kind == wxITEM_NORMAL,
+                     wxS("Only normal tools can have drop downs") );
+
+        m_dropDown = b;
+    }
+
     bool HasDropDown() const { return m_dropDown; }
 
     void SetSticky(bool b) { m_sticky = b; }
