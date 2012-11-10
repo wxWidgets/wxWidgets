@@ -650,7 +650,11 @@ void FileSystemWatcherTestCase::TestTrees()
     public:
         TreeTester() : subdirs(5), files(3) {}
 
-        void GrowTree(wxFileName dir, bool withSymlinks)
+        void GrowTree(wxFileName dir
+#ifdef __UNIX__
+                      , bool withSymlinks = false
+#endif
+                      )
         {
             CPPUNIT_ASSERT(dir.Mkdir());
             // Now add a subdir with an easy name to remember in WatchTree()
@@ -733,7 +737,7 @@ void FileSystemWatcherTestCase::TestTrees()
             // Store the initial count; there may already be some watches
             const int initial = m_watcher->GetWatchedPathsCount();
 
-            GrowTree(dir, false /* no symlinks */);
+            GrowTree(dir);
 
             m_watcher->AddTree(dir);
             const int plustree = m_watcher->GetWatchedPathsCount();
