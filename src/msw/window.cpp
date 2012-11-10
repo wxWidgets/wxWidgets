@@ -4816,6 +4816,8 @@ bool wxWindowMSW::HandlePaint()
     // be called from inside the event handlers called above)
     m_updateRegion.Clear();
 
+    wxPaintDCImpl::EndPaint((wxWindow *)this);
+
     return processed;
 }
 
