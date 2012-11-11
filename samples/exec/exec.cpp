@@ -312,8 +312,7 @@ enum
     Exec_TimerBg,
 
     // menu items
-    Exec_Quit = 100,
-    Exec_Kill,
+    Exec_Kill = 100,
     Exec_ClearLog,
     Exec_BeginBusyCursor,
     Exec_EndBusyCursor,
@@ -332,6 +331,7 @@ enum
     Exec_Flags_ShowConsole,
     Exec_Flags_NoEvents,
     Exec_About = wxID_ABOUT,
+    Exec_Quit = wxID_EXIT,
 
     // control ids
     Exec_Btn_Send = 1000,
