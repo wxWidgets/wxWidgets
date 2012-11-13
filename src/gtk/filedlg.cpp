@@ -385,6 +385,8 @@ void wxFileDialog::SetMessage(const wxString& message)
 
 void wxFileDialog::SetPath(const wxString& path)
 {
+    wxFileDialogBase::SetPath(path);
+
     // Don't do anything if no path is specified, in particular don't set the
     // path to m_dir below as this would result in opening the dialog in the
     // parent directory of this one instead of m_dir itself.
@@ -401,12 +403,9 @@ void wxFileDialog::SetPath(const wxString& path)
 
 void wxFileDialog::SetDirectory(const wxString& dir)
 {
-    if (m_fc.SetDirectory( dir ))
-    {
-        // Cache the dir, as gtk_file_chooser_get_current_folder()
-        // doesn't return anything until the dialog has been shown
-        m_dir = dir;
-    }
+    wxFileDialogBase::SetDirectory(dir);
+
+    m_fc.SetDirectory(dir);
 }
 
 wxString wxFileDialog::GetDirectory() const
@@ -423,10 +422,11 @@ wxString wxFileDialog::GetDirectory() const
 
 void wxFileDialog::SetFilename(const wxString& name)
 {
+    wxFileDialogBase::SetFilename(name);
+
     if (HasFdFlag(wxFD_SAVE))
     {
         gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
-        m_fileName = name;
     }
 
     else
@@ -438,7 +438,6 @@ void wxFileDialog::SetFilename(const wxString& name)
             return;
         }
         SetPath(wxFileName(path, name).GetFullPath());
-        m_fileName = name;
     }
 }
 
