@@ -104,14 +104,12 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
 
     int style = win->GetWindowStyle();
 
-#ifndef __WXGTK3__
     if (style & wxRESIZE_BORDER)
     {
         dc.SetBrush( *wxGREY_BRUSH );
         dc.SetPen( *wxTRANSPARENT_PEN );
         dc.DrawRectangle( win->m_width - 14, win->m_height-14, 14, 14 );
     }
-#endif
 
     if (win->m_miniTitle && !win->GetTitle().empty())
     {
@@ -156,7 +154,6 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
     int y = (int)gdk_event->y;
     int x = (int)gdk_event->x;
 
-#ifndef __WXGTK3__
     if ((style & wxRESIZE_BORDER) &&
         (x > win->m_width-14) && (y > win->m_height-14))
     {
@@ -177,7 +174,6 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
 
         return TRUE;
     }
-#endif
 
     if (win->m_miniTitle && (style & wxCLOSE_BOX))
     {
@@ -303,7 +299,6 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
 
     if (!win->m_isDragging)
     {
-#ifndef __WXGTK3__
         if (win->GetWindowStyle() & wxRESIZE_BORDER)
         {
             if ((x > win->m_width-14) && (y > win->m_height-14))
@@ -312,7 +307,6 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
                gdk_window_set_cursor(gtk_widget_get_window(widget), NULL);
             win->GTKUpdateCursor(false);
         }
-#endif
         return TRUE;
     }
 
