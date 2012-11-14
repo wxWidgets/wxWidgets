@@ -1832,12 +1832,24 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 
     if ( IsSingleLine() )
     {
-        // default height
-        tsize.y = GTKGetPreferredSize(m_widget).y;
-        // Add the margins we have previously set, but only the horizontal border
-        // as vertical one has been taken account at GTKGetPreferredSize().
-        // Also get other GTK+ margins.
-        tsize.IncBy( GTKGetEntryMargins(GetEntry()).x, 0);
+        if ( HasFlag(wxBORDER_NONE) )
+        {
+            tsize.y = cHeight;
+#ifdef __WXGTK3__
+            tsize.IncBy(9, 0);
+#else
+            tsize.IncBy(4, 0);
+#endif // GTK3
+        }
+        else
+        {
+            // default height
+            tsize.y = GTKGetPreferredSize(m_widget).y;
+            // Add the margins we have previously set, but only the horizontal border
+            // as vertical one has been taken account at GTKGetPreferredSize().
+            // Also get other GTK+ margins.
+            tsize.IncBy( GTKGetEntryMargins(GetEntry()).x, 0);
+        }
     }
 
     //multiline
@@ -1851,17 +1863,21 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
         tsize.y = cHeight;
         if ( ylen <= 0 )
         {
-            tsize.y = cHeight * wxMax(wxMin(GetNumberOfLines(), 10), 2);
+            tsize.y = 1 + cHeight * wxMax(wxMin(GetNumberOfLines(), 10), 2);
             // add space for horizontal scrollbar
             if ( m_scrollBar[0] && (m_windowStyle & wxHSCROLL) )
                 tsize.IncBy(0, GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[0])).y + 3);
         }
 
-        // hardcode borders, margins, etc
-        tsize.IncBy(5, 5);
+        if ( !HasFlag(wxBORDER_NONE) )
+        {
+            // hardcode borders, margins, etc
+            tsize.IncBy(5, 4);
+        }
     }
 
-    // Perhaps the user wants something different from CharHeight
+    // Perhaps the user wants something different from CharHeight, or ylen
+    // is used as the height of a multiline text.
     if ( ylen > 0 )
         tsize.IncBy(0, ylen - cHeight);
 
