@@ -2806,8 +2806,8 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
             gtk_scrolled_window_get_policy(GTK_SCROLLED_WINDOW(m_widget),
                                            &policy[ScrollDir_Horz],
                                            &policy[ScrollDir_Vert]);
-            const int scrollbar_spacing =
-                GTK_SCROLLED_WINDOW_GET_CLASS(m_widget)->scrollbar_spacing;
+            int scrollbar_spacing;
+            gtk_widget_style_get(m_widget, "scrollbar-spacing", &scrollbar_spacing, NULL);
 
             for ( int i = 0; i < ScrollDir_Max; i++ )
             {
