@@ -172,7 +172,7 @@ public:
         @endcode
 
         Currently this method is only implemented for wxTextCtrl, wxComboBox
-        and wxChoice in wxGTK.
+        and wxChoice in wxMSW and wxGTK.
 
         @param xlen The horizontal extent of the area to leave for text, in
             pixels.

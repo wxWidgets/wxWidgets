@@ -661,4 +661,20 @@ bool wxComboBox::SetHint(const wxString& hintOrig)
 
 #endif // wxUSE_UXTHEME
 
+wxSize wxComboBox::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxSize tsize( wxChoice::DoGetSizeFromTextSize(xlen, ylen) );
+
+    if ( !HasFlag(wxCB_READONLY) )
+    {
+        // Add the margins we have previously set
+        wxPoint marg( GetMargins() );
+        marg.x = wxMax(0, marg.x);
+        marg.y = wxMax(0, marg.y);
+        tsize.IncBy( marg );
+    }
+
+    return tsize;
+}
+
 #endif // wxUSE_COMBOBOX

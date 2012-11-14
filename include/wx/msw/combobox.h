@@ -132,6 +132,8 @@ protected:
     virtual void DoSetToolTip(wxToolTip *tip);
 #endif
 
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
+
     // this is the implementation of GetEditHWND() which can also be used when
     // we don't have the edit control, it simply returns NULL then
     //

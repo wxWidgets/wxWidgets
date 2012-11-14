@@ -612,18 +612,7 @@ void wxChoice::DoSetSize(int x, int y,
 wxSize wxChoice::DoGetBestSize() const
 {
     // The base version returns the size of the largest string
-    wxSize best( wxChoiceBase::DoGetBestSize() );
-
-    // We just need to adjust it to account for the arrow width.
-    best.x += 5*GetCharWidth();
-
-    // set height on our own
-    if( HasFlag( wxCB_SIMPLE ) )
-        best.y = SetHeightSimpleComboBox(GetCount());
-    else
-        best.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight());
-
-    return best;
+    return GetSizeFromTextSize(wxChoiceBase::DoGetBestSize().x);
 }
 
 int wxChoice::SetHeightSimpleComboBox(int nItems) const
@@ -632,6 +621,38 @@ int wxChoice::SetHeightSimpleComboBox(int nItems) const
     wxGetCharSize( GetHWND(), &cx, &cy, GetFont() );
     int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, (WPARAM)-1, 0);
     return EDIT_HEIGHT_FROM_CHAR_HEIGHT( cy ) * wxMin( wxMax( nItems, 3 ), 6 ) + hItem - 1;
+}
+
+wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    int cHeight = GetCharHeight();
+
+    // We are interested in the difference of sizes between the whole control
+    // and its child part. I.e. arrow, separators, etc.
+    wxSize tsize(xlen, 0);
+
+    WinStruct<COMBOBOXINFO> info;
+    if ( MSWGetComboBoxInfo(&info) )
+    {
+        tsize.x += info.rcItem.left + info.rcButton.right - info.rcItem.right
+                    + info.rcItem.left + 3; // right and extra margins
+    }
+    else // Just use some rough approximation.
+    {
+        tsize.x += 4*cHeight;
+    }
+
+    // set height on our own
+    if( HasFlag( wxCB_SIMPLE ) )
+        tsize.y = SetHeightSimpleComboBox(GetCount());
+    else
+        tsize.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cHeight);
+
+    // Perhaps the user wants something different from CharHeight
+    if ( ylen > 0 )
+        tsize.IncBy(0, ylen - cHeight);
+
+    return tsize;
 }
 
 // ----------------------------------------------------------------------------

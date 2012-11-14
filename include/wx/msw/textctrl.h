@@ -236,6 +236,7 @@ protected:
     bool SendUpdateEvent();
 
     virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
 
 #if wxUSE_RICHEDIT
     // Apply the character-related parts of wxTextAttr to the given selection

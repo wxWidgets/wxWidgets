@@ -127,6 +127,7 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
 
     // Show or hide the popup part of the control.
     void MSWDoPopupOrDismiss(bool show);
