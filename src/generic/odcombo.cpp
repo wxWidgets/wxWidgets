@@ -725,6 +725,8 @@ void wxVListBoxComboPopup::CalcWidths()
         // wxWindow::GetTextExtent (assuming same dc is used
         // for all calls, as we do here).
         wxClientDC dc(m_combo);
+        if ( !m_useFont.IsOk() )
+            m_useFont = m_combo->GetFont();
         dc.SetFont(m_useFont);
 
         for ( i=0; i<n; i++ )
@@ -1169,6 +1171,22 @@ wxCoord wxOwnerDrawnComboBox::OnMeasureItem( size_t WXUNUSED(item) ) const
 wxCoord wxOwnerDrawnComboBox::OnMeasureItemWidth( size_t WXUNUSED(item) ) const
 {
     return -1;
+}
+
+wxSize wxOwnerDrawnComboBox::DoGetBestSize() const
+{
+    wxSize best( wxComboCtrlBase::DoGetBestSize() );
+
+    if ( GetCount() > 0 )
+    {
+        wxOwnerDrawnComboBox* odc = const_cast<wxOwnerDrawnComboBox*>(this);
+        best.x = odc->GetWidestItemWidth();
+        // TODO: this class may also have GetHightestItemHeight() and
+        // GetHightestItem() methods, and so set the whole (edit part + arrow)
+        // control's height according with this max height, not only max width.
+    }
+
+    return GetSizeFromTextSize(best.x);
 }
 
 void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc,

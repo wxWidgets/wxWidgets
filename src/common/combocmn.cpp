@@ -1359,20 +1359,34 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
 
 wxSize wxComboCtrlBase::DoGetBestSize() const
 {
-    wxSize sizeText(150,0);
+    int width = m_text ? m_text->GetBestSize().x : 80;
 
-    if ( m_text )
-        sizeText = m_text->GetBestSize();
+    return GetSizeFromTextSize(width);
+}
 
-    // TODO: Better method to calculate close-to-native control height.
+wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    // Calculate close-to-native control height
 
     int fhei;
+
+#if wxUSE_COMBOBOX && (defined(__WXMSW__) || defined(__WXGTK__)) \
+        && !defined(__WXUNIVERSAL__)
+    wxComboBox* cb = new wxComboBox;
+    cb->Hide();
+    cb->Create(const_cast<wxComboCtrlBase*>(this), wxID_ANY);
+    if ( m_font.IsOk() )
+        cb->SetFont(m_font);
+    fhei = cb->GetBestSize().y;
+    cb->Destroy();
+#else
     if ( m_font.IsOk() )
         fhei = (m_font.GetPointSize()*2) + 5;
     else if ( wxNORMAL_FONT->IsOk() )
         fhei = (wxNORMAL_FONT->GetPointSize()*2) + 5;
     else
-        fhei = sizeText.y + 4;
+        fhei = 22;
+#endif // only for wxComboBox on MSW or GTK
 
     // Need to force height to accommodate bitmap?
     int btnSizeY = m_btnSize.y;
@@ -1392,11 +1406,6 @@ wxSize wxComboCtrlBase::DoGetBestSize() const
         fhei += 4;
 */
 
-    // Final adjustments
-#ifdef __WXGTK__
-    fhei += 1;
-#endif
-
 #ifdef __WXMAC__
     // these are the numbers from the HIG:
     switch ( m_windowVariant )
@@ -1415,11 +1424,19 @@ wxSize wxComboCtrlBase::DoGetBestSize() const
 #endif
 
     fhei += 2 * FOCUS_RING;
-    int width = sizeText.x + FOCUS_RING + COMBO_MARGIN + DEFAULT_DROPBUTTON_WIDTH;
 
-    wxSize ret(width, fhei);
-    CacheBestSize(ret);
-    return ret;
+    // Calculate width
+    int fwid = xlen + FOCUS_RING + COMBO_MARGIN + DEFAULT_DROPBUTTON_WIDTH;
+
+    // Add the margins we have previously set
+    wxPoint marg( GetMargins() );
+    fwid += wxMax(0, marg.x);
+    fhei += wxMax(0, marg.y);
+
+    if ( ylen > 0 )
+        fhei += ylen - GetCharHeight();
+
+    return wxSize(fwid, fhei);
 }
 
 void wxComboCtrlBase::OnSizeEvent( wxSizeEvent& event )
@@ -2033,7 +2050,7 @@ void wxComboCtrlBase::OnCharEvent(wxKeyEvent& event)
 
 void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
-// On Mac, this leads to infinite recursion and eventually a crash 
+// On Mac, this leads to infinite recursion and eventually a crash
 #ifndef __WXMAC__
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {

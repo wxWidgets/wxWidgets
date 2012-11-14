@@ -541,7 +541,10 @@ protected:
     void DestroyPopup();
 
     // override the base class virtuals involved in geometry calculations
+    // The common version only sets a default width, so the derived classes
+    // should override it and set the height and change the width as needed.
     virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
 
     // also set the embedded wxTextCtrl colours
     virtual bool SetForegroundColour(const wxColour& colour);

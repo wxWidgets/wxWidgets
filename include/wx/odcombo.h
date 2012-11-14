@@ -355,6 +355,10 @@ protected:
     // Callback for item width, or -1 for default/undetermined
     virtual wxCoord OnMeasureItemWidth( size_t item ) const;
 
+    // override base implementation so we can return the size for the
+    // largest item
+    virtual wxSize DoGetBestSize() const;
+
     // Callback for background drawing. Flags are same as with
     // OnDrawItem.
     virtual void OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags ) const;
