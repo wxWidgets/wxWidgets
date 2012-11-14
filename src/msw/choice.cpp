@@ -36,6 +36,8 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/dynlib.h"
+
 #include "wx/msw/private.h"
 
 // ============================================================================
@@ -196,6 +198,28 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 wxChoice::~wxChoice()
 {
     Clear();
+}
+
+bool wxChoice::MSWGetComboBoxInfo(COMBOBOXINFO* info) const
+{
+    // TODO-Win9x: Get rid of this once we officially drop support for Win9x
+    //             and just call the function directly.
+#if wxUSE_DYNLIB_CLASS
+    typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, COMBOBOXINFO*);
+    static GetComboBoxInfo_t s_pfnGetComboBoxInfo = NULL;
+    static bool s_triedToLoad = false;
+    if ( !s_triedToLoad )
+    {
+        s_triedToLoad = true;
+        wxLoadedDLL dllUser32("user32.dll");
+        wxDL_INIT_FUNC(s_pfn, GetComboBoxInfo, dllUser32);
+    }
+
+    if ( s_pfnGetComboBoxInfo )
+        return (*s_pfnGetComboBoxInfo)(GetHwnd(), info) != 0;
+#endif // wxUSE_DYNLIB_CLASS
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------

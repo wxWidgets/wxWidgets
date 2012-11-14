@@ -39,7 +39,6 @@
 #endif
 
 #include "wx/clipbrd.h"
-#include "wx/dynlib.h"
 #include "wx/wupdlock.h"
 #include "wx/msw/private.h"
 
@@ -378,26 +377,9 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 
 WXHWND wxComboBox::GetEditHWNDIfAvailable() const
 {
-#if wxUSE_DYNLIB_CLASS
-#if defined(WINVER) && WINVER >= 0x0500
-    typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, COMBOBOXINFO*);
-    static GetComboBoxInfo_t s_pfnGetComboBoxInfo = NULL;
-    static bool s_triedToLoad = false;
-    if ( !s_triedToLoad )
-    {
-        s_triedToLoad = true;
-        wxLoadedDLL dllUser32("user32.dll");
-        wxDL_INIT_FUNC(s_pfn, GetComboBoxInfo, dllUser32);
-    }
-
-    if ( s_pfnGetComboBoxInfo )
-    {
-        WinStruct<COMBOBOXINFO> info;
-        (*s_pfnGetComboBoxInfo)(GetHwnd(), &info);
+    WinStruct<COMBOBOXINFO> info;
+    if ( MSWGetComboBoxInfo(&info) )
         return info.hwndItem;
-    }
-#endif // WINVER >= 0x0500
-#endif // wxUSE_DYNLIB_CLASS
 
     if (HasFlag(wxCB_SIMPLE))
     {
