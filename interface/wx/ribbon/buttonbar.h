@@ -485,6 +485,25 @@ public:
     */
     virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
 
+    /**
+        Indicates whether tooltips are shown for disabled buttons.
+
+        By default they are not shown.
+
+        @since 2.9.5
+    */
+    void SetShowToolTipsForDisabled(bool show);
+
+    /**
+        Sets whether tooltips should be shown for disabled buttons or not.
+
+        You may wish to show it to explain why a button is disabled or
+        what it normally does when enabled.
+
+        @since 2.9.5
+    */
+    bool GetShowToolTipsForDisabled() const;
+
 };
 
 /**

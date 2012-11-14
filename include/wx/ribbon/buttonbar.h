@@ -147,6 +147,10 @@ public:
     virtual bool IsSizingContinuous() const;
 
     virtual wxSize GetMinSize() const;
+
+    void SetShowToolTipsForDisabled(bool show);
+    bool GetShowToolTipsForDisabled() const;
+
 protected:
     friend class wxRibbonButtonBarEvent;
     virtual wxSize DoGetBestSize() const;
@@ -186,6 +190,7 @@ protected:
     int m_current_layout;
     bool m_layouts_valid;
     bool m_lock_active_state;
+    bool m_show_tooltips_for_disabled;
 
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonButtonBar)

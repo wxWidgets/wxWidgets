@@ -800,8 +800,19 @@ void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
     m_hovered_button = NULL;
     m_active_button = NULL;
     m_lock_active_state = false;
+    m_show_tooltips_for_disabled = false;
 
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+}
+
+void wxRibbonButtonBar::SetShowToolTipsForDisabled(bool show)
+{
+    m_show_tooltips_for_disabled = show;
+}
+
+bool wxRibbonButtonBar::GetShowToolTipsForDisabled() const
+{
+    return m_show_tooltips_for_disabled;
 }
 
 wxSize wxRibbonButtonBar::GetMinSize() const
@@ -979,6 +990,7 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
 {
     wxPoint cursor(evt.GetPosition());
     wxRibbonButtonBarButtonInstance* new_hovered = NULL;
+    wxRibbonButtonBarButtonInstance* tooltipButton = NULL;
     long new_hovered_state = 0;
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
@@ -995,6 +1007,7 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         {
             if((instance.base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) == 0)
             {
+                tooltipButton = &instance;
                 new_hovered = &instance;
                 new_hovered_state = instance.base->state;
                 new_hovered_state &= ~wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK;
@@ -1010,13 +1023,21 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
                 }
                 break;
             }
+            else if (m_show_tooltips_for_disabled)
+            {
+                tooltipButton = &instance;
+            }
         }
     }
 
 #if wxUSE_TOOLTIPS
-    if(new_hovered == NULL && GetToolTip())
+    if(tooltipButton == NULL && GetToolTip())
     {
         UnsetToolTip();
+    }
+    if(tooltipButton)
+    {
+        SetToolTip(tooltipButton->base->help_string);
     }
 #endif
 
@@ -1031,9 +1052,6 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         if(m_hovered_button != NULL)
         {
             m_hovered_button->base->state = new_hovered_state;
-#if wxUSE_TOOLTIPS
-            SetToolTip(m_hovered_button->base->help_string);
-#endif
         }
         Refresh(false);
     }

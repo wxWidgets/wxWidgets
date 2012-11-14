@@ -583,6 +583,7 @@ All (GUI):
 - Added wxDirCtrl::GetPath() (troelsk).
 - Added wxEVT_COMMAND_DIRCTRL_CHANGED event (troelsk).
 - Added wxControl::GetSizeFromTextSize() (Manuel Martin).
+- Optionally allow showing tooltips for disabled ribbon buttons (wxBen).
 
 wxGTK:
 
