@@ -561,6 +561,33 @@ public:
 
     //@}
 
+    /**
+        Sets the C locale to the default locale for the current environment.
+
+        It is advised to call this to ensure that the underlying toolkit uses
+        the locale in which the numbers and monetary amounts are shown in the
+        format expected by user and so on.
+
+        Calling this function is roughly equivalent to calling
+        @code
+            setlocale(LC_ALL, "");
+        @endcode
+        but performs additional toolkit-specific tasks under some platforms and
+        so should be used instead of @c setlocale() itself. Alternatively, you
+        can use wxLocale to change the locale with more control.
+
+        Notice that this does @em not change the global C++ locale, you need to
+        do it explicitly if you want, e.g.
+        @code
+            std::locale::global(std::locale(""));
+        @endcode
+        but be warned that locale support in C++ standard library can be poor
+        or worse under some platforms, e.g. the above line results in an
+        immediate crash under OS X up to the version 10.8.2.
+
+        @since 2.9.5
+     */
+    void SetCLocale();
 
     /**
         Number of command line arguments (after environment-specific processing).

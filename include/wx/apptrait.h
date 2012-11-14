@@ -77,12 +77,6 @@ public:
     // except in the case of wxMac and wxCocoa
     virtual wxStandardPaths& GetStandardPaths();
 
-#if wxUSE_INTL
-    // called during wxApp initialization to set the locale to correspond to
-    // the user default (i.e. system locale under Windows, LC_ALL under Unix)
-    virtual void SetLocale();
-#endif // wxUSE_INTL
-
 
     // functions abstracting differences between GUI and console modes
     // ------------------------------------------------------------------------

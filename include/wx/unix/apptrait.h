@@ -67,10 +67,6 @@ public:
 #endif
     virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
 
-#if defined(__WXGTK__) && wxUSE_INTL
-    virtual void SetLocale();
-#endif // __WXGTK__
-
 #ifdef __WXGTK20__
     virtual wxString GetDesktopEnvironment() const;
     virtual wxString GetStandardCmdLineOptions(wxArrayString& names,

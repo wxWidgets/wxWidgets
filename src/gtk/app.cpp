@@ -309,9 +309,9 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     if (encName.CmpNoCase(wxT("@locale")) == 0)
         encName.clear();
     encName.MakeUpper();
-#if wxUSE_INTL
     if (encName.empty())
     {
+#if wxUSE_INTL
         // (2) if a non default locale is set, assume that the user wants his
         //     filenames in this locale too
         encName = wxLocale::GetSystemEncodingName().Upper();
@@ -330,22 +330,14 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
                 encName.clear();
             }
         }
+#endif // wxUSE_INTL
 
         // (3) finally use UTF-8 by default
         if ( encName.empty() )
             encName = wxT("UTF-8");
         wxSetEnv(wxT("G_FILENAME_ENCODING"), encName);
     }
-#else
-    if (encName.empty())
-        encName = wxT("UTF-8");
 
-    // if wxUSE_INTL==0 it probably indicates that only "C" locale is supported
-    // by the program anyhow so prevent GTK+ from calling setlocale(LC_ALL, "")
-    // from gtk_init_check() as it does by default
-    gtk_disable_setlocale();
-
-#endif // wxUSE_INTL
     static wxConvBrokenFileNames fileconv(encName);
     wxConvFileName = &fileconv;
 #endif // __UNIX__
@@ -366,13 +358,17 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
     int argcGTK = argc_;
 
+    // Prevent gtk_init_check() from changing the locale automatically for
+    // consistency with the other ports that don't do it. If necessary,
+    // wxApp::SetCLocale() may be explicitly called.
+    gtk_disable_setlocale();
+
 #ifdef __WXGPE__
     init_result = true;  // is there a _check() version of this?
     gpe_application_init( &argcGTK, &argvGTK );
 #else
     init_result = gtk_init_check( &argcGTK, &argvGTK ) != 0;
 #endif
-    wxUpdateLocaleIsUtf8();
 
     if ( argcGTK != argc_ )
     {

@@ -174,10 +174,6 @@ wxAppConsoleBase::~wxAppConsoleBase()
 
 bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 {
-#if wxUSE_INTL
-    GetTraits()->SetLocale();
-#endif // wxUSE_INTL
-
     return true;
 }
 
@@ -784,6 +780,18 @@ void wxAppConsoleBase::OnAssert(const wxChar *file,
     OnAssertFailure(file, line, NULL, cond, msg);
 }
 
+// ----------------------------------------------------------------------------
+// Miscellaneous other methods
+// ----------------------------------------------------------------------------
+
+void wxAppConsoleBase::SetCLocale()
+{
+    // We want to use the user locale by default in GUI applications in order
+    // to show the numbers, dates &c in the familiar format -- and also accept
+    // this format on input (especially important for decimal comma/dot).
+    wxSetlocale(LC_ALL, "");
+}
+
 // ============================================================================
 // other classes implementations
 // ============================================================================
@@ -835,26 +843,6 @@ bool wxConsoleAppTraitsBase::HasStderr()
 // ----------------------------------------------------------------------------
 // wxAppTraits
 // ----------------------------------------------------------------------------
-
-#if wxUSE_INTL
-void wxAppTraitsBase::SetLocale()
-{
-    // We want to use the user locale by default in GUI applications in order
-    // to show the numbers, dates &c in the familiar format -- and also accept
-    // this format on input (especially important for decimal comma/dot).
-    wxSetlocale(LC_ALL, "");
-
-#if wxUSE_STL
-    // At least in some environments, e.g. MinGW-64, if the global C++ locale
-    // is different from the global C locale, all stream operations temporarily
-    // change the locale resulting in a huge slowdown (3 times slower in some
-    // real-life applications), so change the C++ locale to match.
-    std::locale::global(std::locale(""));
-#endif  //wxUSE_STL
-
-    wxUpdateLocaleIsUtf8();
-}
-#endif
 
 #if wxUSE_THREADS
 void wxMutexGuiEnterImpl();

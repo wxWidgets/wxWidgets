@@ -290,18 +290,6 @@ wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 }
 
 
-#if wxUSE_INTL && defined(__UNIX__)
-void wxGUIAppTraits::SetLocale()
-{
-#ifdef __WXGTK3__
-    setlocale(LC_ALL, "");
-#else
-    gtk_set_locale();
-#endif
-    wxUpdateLocaleIsUtf8();
-}
-#endif
-
 #ifdef __UNIX__
 
 #if wxDEBUG_LEVEL && wxUSE_STACKWALKER

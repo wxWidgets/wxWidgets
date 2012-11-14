@@ -236,6 +236,18 @@ public:
     wxEventLoopBase* GetMainLoop() const
         { return m_mainLoop; }
 
+    // This function sets the C locale to the default locale for the current
+    // environment. It is advised to call this to ensure that the underlying
+    // toolkit uses the locale in which the numbers and monetary amounts are
+    // shown in the format expected by user and so on.
+    //
+    // Notice that this does _not_ change the global C++ locale, you need to do
+    // it explicitly if you want.
+    //
+    // Finally, notice that while this function is virtual, it is not supposed
+    // to be overridden outside of the library itself.
+    virtual void SetCLocale();
+
 
     // event processing functions
     // --------------------------

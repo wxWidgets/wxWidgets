@@ -527,6 +527,13 @@ Major new features in this release
 2.9.5: (released ????-??-??)
 ----------------------------
 
+INCOMPATIBLE CHANGES SINCE 2.9.4:
+
+- The locale is not set automatically on startup any more, unlike in the
+  previous 2.9 versions (but like in 2.8). Use wxLocale (preferred) or call
+  wxApp::SetCLocale() from your overridden wxApp::Initialize() to restore the
+  old behaviour.
+
 All:
 
 - Add wxEvtHandler::CallAfter() method for asynchronous method calls.
