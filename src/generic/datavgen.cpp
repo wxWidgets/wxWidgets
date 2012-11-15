@@ -3943,10 +3943,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    if(event.LeftDown())
+    if(event.ButtonDown())
     {
-        // Not skipping this event would prevent the system from setting focus
-        // to this window.
+        // Not skipping button down events would prevent the system from
+        // setting focus to this window as most (all?) of them do by default,
+        // so skip it to enable default handling.
         event.Skip();
     }
 
