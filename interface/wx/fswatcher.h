@@ -68,6 +68,7 @@ public:
             The name of the path to watch.
         @param events
             An optional filter to receive only events of particular types.
+            This is currently implemented only for GTK.
      */
     virtual bool Add(const wxFileName& path, int events = wxFSW_EVENT_ALL);
 

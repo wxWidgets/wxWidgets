@@ -190,8 +190,9 @@ class EventHandler : public wxEvtHandler
 public:
     enum { WAIT_DURATION = 3 };
 
-    EventHandler() :
-        eg(EventGenerator::Get()), m_loop(0), m_count(0), m_watcher(0)
+    EventHandler(int types = wxFSW_EVENT_ALL) :
+        eg(EventGenerator::Get()), m_loop(0), m_count(0), m_watcher(0),
+        m_eventTypes(types)
     {
         m_loop = new wxEventLoop();
         Connect(wxEVT_IDLE, wxIdleEventHandler(EventHandler::OnIdle));
@@ -289,7 +290,7 @@ public:
 
         // add dir to be watched
         wxFileName dir = EventGenerator::GetWatchDir();
-        CPPUNIT_ASSERT(m_watcher->Add(dir, wxFSW_EVENT_ALL));
+        CPPUNIT_ASSERT(m_watcher->Add(dir, m_eventTypes));
 
         return true;
     }
@@ -389,6 +390,7 @@ protected:
     int m_count;                // idle events count
 
     wxFileSystemWatcher* m_watcher;
+    int m_eventTypes;  // Which event-types to watch. Normally all of them
     bool tested;  // indicates, whether we have already passed the test
 
     #include "wx/arrimpl.cpp"
@@ -436,6 +438,10 @@ private:
 #endif // __WINDOWS__
 #endif // !wxHAS_KQUEUE
 
+#ifdef wxHAS_INOTIFY
+        CPPUNIT_TEST( TestSingleWatchtypeEvent );
+#endif // wxHAS_INOTIFY
+
         CPPUNIT_TEST( TestNoEventsAfterRemove );
     CPPUNIT_TEST_SUITE_END();
 
@@ -444,6 +450,9 @@ private:
     void TestEventRename();
     void TestEventModify();
     void TestEventAccess();
+#ifdef wxHAS_INOTIFY
+    void TestSingleWatchtypeEvent();
+#endif // wxHAS_INOTIFY
 #if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
     void TestTrees();   // Visual C++ 6 can't build this
 #endif
@@ -634,6 +643,44 @@ void FileSystemWatcherTestCase::TestEventAccess()
     EventTester tester;
     tester.Run();
 }
+
+#ifdef wxHAS_INOTIFY
+// ----------------------------------------------------------------------------
+// TestSingleWatchtypeEvent: Watch only wxFSW_EVENT_ACCESS
+// ----------------------------------------------------------------------------
+void FileSystemWatcherTestCase::TestSingleWatchtypeEvent()
+{
+    wxLogDebug("TestSingleWatchtypeEvent()");
+
+    class EventTester : public EventHandler
+    {
+    public:
+        // We could pass wxFSW_EVENT_CREATE or MODIFY instead, but not RENAME or
+        // DELETE as the event path fields would be wrong in CheckResult()
+        EventTester() : EventHandler(wxFSW_EVENT_ACCESS) {}
+
+        virtual void GenerateEvent()
+        {
+            // As wxFSW_EVENT_ACCESS is passed to the ctor only ReadFile() will
+            // generate an event. Without it they all will, and the test fails
+            CPPUNIT_ASSERT(eg.CreateFile());
+            CPPUNIT_ASSERT(eg.ModifyFile());
+            CPPUNIT_ASSERT(eg.ReadFile());
+        }
+
+        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        {
+            wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS);
+            event.SetPath(eg.m_file);
+            event.SetNewPath(eg.m_file);
+            return event;
+        }
+    };
+
+    EventTester tester;
+    tester.Run();
+}
+#endif // wxHAS_INOTIFY
 
 // ----------------------------------------------------------------------------
 // TestTrees

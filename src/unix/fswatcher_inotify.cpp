@@ -479,10 +479,31 @@ protected:
         return path;
     }
 
-    static int Watcher2NativeFlags(int WXUNUSED(flags))
+    static int Watcher2NativeFlags(int flags)
     {
-        // TODO: it would be nice to subscribe only to the events we really need
-        return IN_ALL_EVENTS;
+        // Start with the standard case of wanting all events
+        if (flags == wxFSW_EVENT_ALL)
+        {
+            return IN_ALL_EVENTS;
+        }
+
+        static const int flag_mapping[][2] = {
+            { wxFSW_EVENT_ACCESS, IN_ACCESS },
+            { wxFSW_EVENT_MODIFY, IN_MODIFY },
+            { wxFSW_EVENT_RENAME, IN_MOVE   },
+            { wxFSW_EVENT_CREATE, IN_CREATE },
+            { wxFSW_EVENT_DELETE, IN_DELETE|IN_DELETE_SELF|IN_MOVE_SELF }
+            // wxFSW_EVENT_ERROR/WARNING make no sense here
+        };
+
+        int native_flags = 0;
+        for ( unsigned int i=0; i < WXSIZEOF(flag_mapping); ++i)
+        {
+            if (flags & flag_mapping[i][0])
+                native_flags |= flag_mapping[i][1];
+        }
+
+        return native_flags;
     }
 
     static int Native2WatcherFlags(int flags)
@@ -504,7 +525,7 @@ protected:
             { IN_UNMOUNT,       wxFSW_EVENT_ERROR  },
             { IN_Q_OVERFLOW,    wxFSW_EVENT_WARNING},
 
-            // ignored, because this is genereted mainly by watcher::Remove()
+            // ignored, because this is generated mainly by watcher::Remove()
             { IN_IGNORED,        0 }
         };
 
