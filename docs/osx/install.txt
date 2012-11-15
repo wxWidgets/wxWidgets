@@ -17,7 +17,11 @@ a wxWidgets directory.
 
 Next use Terminal (under Applications, Utilities, Terminal) to access a command 
 prompt.  Use cd to change directories to your wxWidgets directory and execute 
-one of the following sets of commands from the wxWidgets directory
+one of the following sets of commands from the wxWidgets directory.
+
+For Carbon, you'll need to have Xcode 3.x installed (you can also have Xcode 4.x
+installed, but the Carbon build needs 3.x, and the /Developer directory which is
+installed when you install Xcode 3.x.
 
 ---------
 
@@ -35,7 +39,7 @@ cd demos;   make;cd ..
 # Build the library for Carbon
 mkdir build-carbon-debug
 cd build-carbon-debug
-../configure --with-osx_carbon --enable-debug
+../configure --enable-debug --disable-shared --enable-macosx_arch=i386 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk  CC=/Developer/usr/bin/gcc-4.2 CXX=/Developer/usr/bin/g++-4.2 LD=/Developer/usr/bin/ld
 make
 # Build the samples and demos
 cd samples;make;cd ..
