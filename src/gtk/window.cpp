@@ -1641,7 +1641,10 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
         case GDK_SCROLL_LEFT:
             event.m_wheelRotation = -120;
             break;
-
+#if GTK_CHECK_VERSION(3,4,0)
+        case GDK_SCROLL_SMOOTH:
+            // TODO
+#endif
         default:
             return false;  // Unknown/unhandled direction
     }
@@ -1658,6 +1661,11 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
         case GDK_SCROLL_RIGHT:
             event.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
             break;
+#if GTK_CHECK_VERSION(3,4,0)
+        case GDK_SCROLL_SMOOTH:
+            // TODO
+            break;
+#endif
     }
 
     if (win->GTKProcessEvent(event))
