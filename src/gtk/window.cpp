@@ -1532,8 +1532,11 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     {
         int x = 0;
         int y = 0;
-        GdkModifierType state;
-        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+#ifdef __WXGTK3__
+        gdk_window_get_device_position(gdk_event->window, gdk_event->device, &x, &y, NULL);
+#else
+        gdk_window_get_pointer(gdk_event->window, &x, &y, NULL);
+#endif
         gdk_event->x = x;
         gdk_event->y = y;
     }
@@ -1546,7 +1549,12 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     if ( g_captureWindow )
     {
         // synthesise a mouse enter or leave event if needed
-        GdkWindow *winUnderMouse = gdk_window_at_pointer(NULL, NULL);
+        GdkWindow* winUnderMouse =
+#ifdef __WXGTK3__
+            gdk_device_get_window_at_position(gdk_event->device, NULL, NULL);
+#else
+            gdk_window_at_pointer(NULL, NULL);
+#endif
         // This seems to be necessary and actually been added to
         // GDK itself in version 2.0.X
         gdk_flush();
@@ -2114,7 +2122,7 @@ bool wxGetKeyState(wxKeyCode WXUNUSED(key))
 }
 #endif // __WINDOWS__
 
-static void GetMouseState(int& x, int& y, GdkModifierType& mask)
+static GdkDisplay* GetDisplay()
 {
     wxWindow* tlw = NULL;
     if (!wxTopLevelWindows.empty())
@@ -2124,7 +2132,7 @@ static void GetMouseState(int& x, int& y, GdkModifierType& mask)
         display = gtk_widget_get_display(tlw->m_widget);
     else
         display = gdk_display_get_default();
-    gdk_display_get_pointer(display, NULL, &x, &y, &mask);
+    return display;
 }
 
 wxMouseState wxGetMouseState()
@@ -2135,7 +2143,17 @@ wxMouseState wxGetMouseState()
     gint y;
     GdkModifierType mask;
 
-    GetMouseState(x, y, mask);
+    GdkDisplay* display = GetDisplay();
+#ifdef __WXGTK3__
+    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    GdkScreen* screen;
+    gdk_device_get_position(device, &screen, &x, &y);
+    GdkWindow* window = gdk_screen_get_root_window(screen);
+    gdk_device_get_state(device, window, NULL, &mask);
+#else
+    gdk_display_get_pointer(display, NULL, &x, &y, &mask);
+#endif
 
     ms.SetX(x);
     ms.SetY(y);
@@ -4268,7 +4286,11 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
 {
     // ensure that the menu appears entirely on screen
     GtkRequisition req;
+#ifdef __WXGTK3__
+    gtk_widget_get_preferred_size(GTK_WIDGET(menu), &req, NULL);
+#else
     gtk_widget_get_child_requisition(GTK_WIDGET(menu), &req);
+#endif
 
     wxSize sizeScreen = wxGetDisplaySize();
     wxPoint *pos = (wxPoint*)user_data;
@@ -4394,15 +4416,25 @@ void wxWindowGTK::DoCaptureMouse()
     if (!cursor->IsOk())
         cursor = wxSTANDARD_CURSOR;
 
+    const GdkEventMask mask = GdkEventMask(
+        GDK_BUTTON_PRESS_MASK |
+        GDK_BUTTON_RELEASE_MASK |
+        GDK_POINTER_MOTION_HINT_MASK |
+        GDK_POINTER_MOTION_MASK);
+#ifdef __WXGTK3__
+    GdkDisplay* display = gdk_window_get_display(window);
+    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    gdk_device_grab(
+        device, window, GDK_OWNERSHIP_NONE, false, mask,
+        cursor->GetCursor(), unsigned(GDK_CURRENT_TIME));
+#else
     gdk_pointer_grab( window, FALSE,
-                      (GdkEventMask)
-                         (GDK_BUTTON_PRESS_MASK |
-                          GDK_BUTTON_RELEASE_MASK |
-                          GDK_POINTER_MOTION_HINT_MASK |
-                          GDK_POINTER_MOTION_MASK),
+                      mask,
                       NULL,
                       cursor->GetCursor(),
                       (guint32)GDK_CURRENT_TIME );
+#endif
     g_captureWindow = this;
     g_captureWindowHasMouse = true;
 }
@@ -4424,7 +4456,14 @@ void wxWindowGTK::DoReleaseMouse()
     if (!window)
         return;
 
+#ifdef __WXGTK3__
+    GdkDisplay* display = gdk_window_get_display(window);
+    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+#else
     gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
+#endif
 }
 
 void wxWindowGTK::GTKReleaseMouseAndNotify()
@@ -4650,8 +4689,14 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 wxPoint wxGetMousePosition()
 {
     int x, y;
-    GdkModifierType unused;
-    GetMouseState(x, y, unused);
+    GdkDisplay* display = GetDisplay();
+#ifdef __WXGTK3__
+    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    gdk_device_get_position(device, NULL, &x, &y);
+#else
+    gdk_display_get_pointer(display, NULL, &x, &y, NULL);
+#endif
     return wxPoint(x, y);
 }
 
