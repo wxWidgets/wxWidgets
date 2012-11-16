@@ -1742,7 +1742,7 @@ wx_window_focus_callback(GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_window_enter_callback( GtkWidget *widget,
+gtk_window_enter_callback( GtkWidget*,
                            GdkEventCrossing *gdk_event,
                            wxWindowGTK *win )
 {
@@ -1751,17 +1751,8 @@ gtk_window_enter_callback( GtkWidget *widget,
     // Event was emitted after a grab
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
 
-    int x = 0;
-    int y = 0;
-    GdkModifierType state = (GdkModifierType)0;
-
-    gdk_window_get_pointer(gtk_widget_get_window(widget), &x, &y, &state);
-
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
     InitMouseEvent(win, event, gdk_event);
-    wxPoint pt = win->GetClientAreaOrigin();
-    event.m_x = x + pt.x;
-    event.m_y = y + pt.y;
 
     if ( !g_captureWindow )
     {
@@ -1780,7 +1771,7 @@ gtk_window_enter_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_window_leave_callback( GtkWidget *widget,
+gtk_window_leave_callback( GtkWidget*,
                            GdkEventCrossing *gdk_event,
                            wxWindowGTK *win )
 {
@@ -1790,13 +1781,6 @@ gtk_window_leave_callback( GtkWidget *widget,
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
-
-    int x = 0;
-    int y = 0;
-    GdkModifierType state = (GdkModifierType)0;
-
-    gdk_window_get_pointer(gtk_widget_get_window(widget), &x, &y, &state);
-
     InitMouseEvent(win, event, gdk_event);
 
     return win->GTKProcessEvent(event);
