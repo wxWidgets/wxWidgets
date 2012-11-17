@@ -340,6 +340,10 @@ public:
     virtual bool ValueChanged(const wxDataViewItem& item,
                               unsigned int col);
 
+    
+    virtual bool IsListModel() const;
+    virtual bool IsVirtualListModel() const;
+
 protected:
 
     /**
@@ -366,7 +370,7 @@ public:
     /**
         Destructor.
     */
-    virtual ~wxDataViewIndexListModel();
+    virtual ~wxDataViewListModel();
 
     /**
         Compare method that sorts the items by their index.
@@ -420,23 +424,58 @@ public:
     /**
         Returns the number of items (or rows) in the list.
     */
-    unsigned int GetCount() const;
-
-    /**
-        Returns the wxDataViewItem at the given @e row.
-    */
-    wxDataViewItem GetItem(unsigned int row) const;
+    unsigned int GetCount() const = 0;
 
     /**
         Returns the position of given @e item.
     */
-    unsigned int GetRow(const wxDataViewItem& item) const;
+    unsigned int GetRow(const wxDataViewItem& item) const = 0;
 
     /**
         Override this to allow getting values from the model.
     */
     virtual void GetValueByRow(wxVariant& variant, unsigned int row,
-                          unsigned int col) const = 0;
+                               unsigned int col) const = 0;
+
+    /**
+        Called in order to set a value in the model.
+    */
+    virtual bool SetValueByRow(const wxVariant& variant, unsigned int row,
+                               unsigned int col) = 0;
+};
+
+
+/**
+    @class wxDataViewIndexListModel
+
+    wxDataViewIndexListModel is a specialized data model which lets you address
+    an item by its position (row) rather than its wxDataViewItem (which you can
+    obtain from this class).
+    This model also provides its own wxDataViewIndexListModel::Compare
+    method which sorts the model's data by the index.
+
+    This model is not a virtual model since the control stores each wxDataViewItem.
+    Use wxDataViewVirtualListModel if you need to display millions of items or
+    have other reason to use a virtual control.
+
+    @see wxDataViewListModel for the API.
+    
+    @library{wxadv}
+    @category{dvc}
+*/
+
+class wxDataViewIndexListModel : public wxDataViewListModel
+{
+public:
+    /**
+        Constructor.
+    */
+    wxDataViewIndexListModel(unsigned int initial_size = 0);
+
+    /**
+       Returns the wxDataViewItem at the given @e row.
+    */
+    wxDataViewItem GetItem(unsigned int row) const;
 
     /**
         Call this after if the data has to be read again from the model.
@@ -482,41 +521,6 @@ public:
     */
     void RowsDeleted(const wxArrayInt& rows);
 
-    /**
-        Called in order to set a value in the model.
-    */
-    virtual bool SetValueByRow(const wxVariant& variant, unsigned int row,
-                          unsigned int col) = 0;
-};
-
-
-/**
-    @class wxDataViewIndexListModel
-
-    wxDataViewIndexListModel is a specialized data model which lets you address
-    an item by its position (row) rather than its wxDataViewItem (which you can
-    obtain from this class).
-    This model also provides its own wxDataViewIndexListModel::Compare
-    method which sorts the model's data by the index.
-
-    This model is not a virtual model since the control stores each wxDataViewItem.
-    Use wxDataViewVirtualListModel if you need to display millions of items or
-    have other reason to use a virtual control.
-
-    @see wxDataViewListModel for the API.
-    
-    @library{wxadv}
-    @category{dvc}
-*/
-
-class wxDataViewIndexListModel : public wxDataViewListModel
-{
-public:
-    /**
-        Constructor.
-    */
-    wxDataViewIndexListModel(unsigned int initial_size = 0);
-
 };
 
 /**
@@ -542,6 +546,55 @@ public:
         Constructor.
     */
     wxDataViewVirtualListModel(unsigned int initial_size = 0);
+
+    /**
+       Returns the wxDataViewItem at the given @e row.
+    */
+    wxDataViewItem GetItem(unsigned int row) const;
+
+    /**
+        Call this after if the data has to be read again from the model.
+        This is useful after major changes when calling the methods below
+        (possibly thousands of times) doesn't make sense.
+    */
+    void Reset(unsigned int new_size);
+
+    /**
+        Call this after a row has been appended to the model.
+    */
+    void RowAppended();
+
+    /**
+        Call this after a row has been changed.
+    */
+    void RowChanged(unsigned int row);
+
+    /**
+        Call this after a row has been deleted.
+    */
+    void RowDeleted(unsigned int row);
+
+    /**
+        Call this after a row has been inserted at the given position.
+    */
+    void RowInserted(unsigned int before);
+
+    /**
+        Call this after a row has been prepended to the model.
+    */
+    void RowPrepended();
+
+    /**
+        Call this after a value has been changed.
+    */
+    void RowValueChanged(unsigned int row, unsigned int col);
+
+    /**
+        Call this after rows have been deleted.
+        The array will internally get copied and sorted in descending order so
+        that the rows with the highest position will be deleted first.
+    */
+    void RowsDeleted(const wxArrayInt& rows);
 
 };
 
@@ -591,6 +644,52 @@ public:
         Call this to indicate that the item shall be displayed in italic text.
     */
     void SetItalic(bool set);
+
+
+    /**
+       Returns true if the colour property has been set.
+    */
+    bool HasColour() const;
+
+    /**
+       Returns this attribute's colour.
+    */
+    const wxColour& GetColour() const;
+
+    /**
+       Returns true if any property affecting the font has been set.
+    */
+    bool HasFont() const;
+
+    /**
+       Returns value of the bold property.
+    */
+    bool GetBold() const;
+
+    /**
+       Returns value of the italics property.
+    */
+    bool GetItalic() const;
+
+    /**
+       Returns true if the background colour property has been set.
+    */
+    bool HasBackgroundColour() const;
+
+    /**
+       Returns the colour to be used for the background.
+    */
+    const wxColour& GetBackgroundColour() const;
+
+    /**
+       Returns true if none of the properties have been set.
+    */
+    bool IsDefault() const;
+
+    /**
+       Return the font based on the given one with this attribute applied to it.
+    */
+    wxFont GetEffectiveFont(const wxFont& font) const;
 };
 
 
@@ -823,6 +922,16 @@ public:
     virtual ~wxDataViewCtrl();
 
     /**
+        Create the control. Useful for two step creation.
+    */
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxDataViewCtrlNameStr);
+
+    /**
         Appends a wxDataViewColumn to the control. Returns @true on success.
 
         Note that there is a number of short cut methods which implicitly create
@@ -864,6 +973,25 @@ public:
 
     //@{
     /**
+        Prepends a column for rendering a bitmap. Returns the wxDataViewColumn
+        created in the function or @NULL on failure.
+    */
+    wxDataViewColumn* PrependBitmapColumn(const wxString& label,
+                                         unsigned int model_column,
+                                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                         int width = -1,
+                                         wxAlignment align = wxALIGN_CENTER,
+                                         int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* PrependBitmapColumn(const wxBitmap& label,
+                                         unsigned int model_column,
+                                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                         int width = -1,
+                                         wxAlignment align = wxALIGN_CENTER,
+                                         int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    //@{
+    /**
         Appends a column for rendering a date. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
 
@@ -877,6 +1005,28 @@ public:
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendDateColumn(const wxBitmap& label,
+                                       unsigned int model_column,
+                                       wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+                                       int width = -1,
+                                       wxAlignment align = wxALIGN_NOT,
+                                       int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    //@{
+    /**
+        Prepends a column for rendering a date. Returns the wxDataViewColumn
+        created in the function or @NULL on failure.
+
+        @note The @a align parameter is applied to both the column header and
+              the column renderer.
+    */
+    wxDataViewColumn* PrependDateColumn(const wxString& label,
+                                       unsigned int model_column,
+                                       wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+                                       int width = -1,
+                                       wxAlignment align = wxALIGN_NOT,
+                                       int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* PrependDateColumn(const wxBitmap& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
                                        int width = -1,
@@ -909,6 +1059,29 @@ public:
 
     //@{
     /**
+        Prepends a column for rendering text with an icon. Returns the wxDataViewColumn
+        created in the function or @NULL on failure.
+        This method uses the wxDataViewIconTextRenderer class.
+
+        @note The @a align parameter is applied to both the column header and
+              the column renderer.
+    */
+    wxDataViewColumn* PrependIconTextColumn(const wxString& label,
+                                           unsigned int model_column,
+                                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                           int width = -1,
+                                           wxAlignment align = wxALIGN_NOT,
+                                           int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* PrependIconTextColumn(const wxBitmap& label,
+                                           unsigned int model_column,
+                                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                           int width = -1,
+                                           wxAlignment align = wxALIGN_NOT,
+                                           int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    //@{
+    /**
         Appends a column for rendering a progress indicator. Returns the
         wxDataViewColumn created in the function or @NULL on failure.
 
@@ -922,6 +1095,28 @@ public:
                                            wxAlignment align = wxALIGN_CENTER,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendProgressColumn(const wxBitmap& label,
+                                           unsigned int model_column,
+                                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                           int width = 80,
+                                           wxAlignment align = wxALIGN_CENTER,
+                                           int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    //@{
+    /**
+        Prepends a column for rendering a progress indicator. Returns the
+        wxDataViewColumn created in the function or @NULL on failure.
+
+        @note The @a align parameter is applied to both the column header and
+              the column renderer.
+    */
+    wxDataViewColumn* PrependProgressColumn(const wxString& label,
+                                           unsigned int model_column,
+                                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                           int width = 80,
+                                           wxAlignment align = wxALIGN_CENTER,
+                                           int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* PrependProgressColumn(const wxBitmap& label,
                                            unsigned int model_column,
                                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                            int width = 80,
@@ -953,6 +1148,28 @@ public:
 
     //@{
     /**
+        Prepends a column for rendering text. Returns the wxDataViewColumn
+        created in the function or @NULL on failure.
+
+        @note The @a align parameter is applied to both the column header and
+              the column renderer.
+    */
+    wxDataViewColumn* PrependTextColumn(const wxString& label,
+                                       unsigned int model_column,
+                                       wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                       int width = -1,
+                                       wxAlignment align = wxALIGN_NOT,
+                                       int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* PrependTextColumn(const wxBitmap& label,
+                                       unsigned int model_column,
+                                       wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                       int width = -1,
+                                       wxAlignment align = wxALIGN_NOT,
+                                       int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    //@{
+    /**
         Appends a column for rendering a toggle. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
 
@@ -966,6 +1183,28 @@ public:
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendToggleColumn(const wxBitmap& label,
+                                         unsigned int model_column,
+                                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                         int width = 30,
+                                         wxAlignment align = wxALIGN_CENTER,
+                                         int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    //@{
+    /**
+        Prepends a column for rendering a toggle. Returns the wxDataViewColumn
+        created in the function or @NULL on failure.
+
+        @note The @a align parameter is applied to both the column header and
+              the column renderer.
+    */
+    wxDataViewColumn* PrependToggleColumn(const wxString& label,
+                                         unsigned int model_column,
+                                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                         int width = 30,
+                                         wxAlignment align = wxALIGN_CENTER,
+                                         int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* PrependToggleColumn(const wxBitmap& label,
                                          unsigned int model_column,
                                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                          int width = 30,
@@ -988,16 +1227,6 @@ public:
         Collapses the item.
     */
     virtual void Collapse(const wxDataViewItem& item);
-
-    /**
-        Create the control. Useful for two step creation.
-    */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxDataViewCtrlNameStr);
 
     /**
         Deletes given column.
@@ -1458,7 +1687,7 @@ enum wxDataViewCellRenderState
     - wxDataViewSpinRenderer.
     - wxDataViewChoiceRenderer.
 
-    Additionally, the user can write own renderers by deriving from
+    Additionally, the user can write their own renderers by deriving from
     wxDataViewCustomRenderer.
 
     The ::wxDataViewCellMode and ::wxDataViewCellRenderState flags accepted
@@ -1578,6 +1807,21 @@ public:
         editing process finished.
     */
     virtual bool Validate(wxVariant& value);
+
+    
+    virtual bool HasEditorCtrl() const;
+    virtual wxWindow* CreateEditorCtrl(wxWindow * parent,
+                                       wxRect labelRect,
+                                       const wxVariant& value);
+    virtual bool GetValueFromEditorCtrl(wxWindow * editor,
+                                        wxVariant& value);
+    virtual bool StartEditing( const wxDataViewItem &item, wxRect labelRect );
+    virtual void CancelEditing();
+    virtual bool FinishEditing();
+    wxWindow *GetEditorCtrl();
+
+protected:
+    wxDataViewCtrl* GetView() const;
 };
 
 
@@ -1802,7 +2046,7 @@ public:
     */
     wxDataViewCustomRenderer(const wxString& varianttype = "string",
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                             int align = -1, bool no_init = false);
+                             int align = wxDVR_DEFAULT_ALIGNMENT);
 
     /**
         Destructor.
@@ -1966,6 +2210,12 @@ public:
                            wxDataViewModel* model,
                            const wxDataViewItem & item,
                            unsigned int col);
+
+protected:
+    /**
+       Helper for GetSize() implementations, respects attributes.
+    */
+    wxSize GetTextExtent(const wxString& str) const;
 };
 
 
@@ -3146,5 +3396,21 @@ public:
         Return the last row that will be displayed.
     */
     int GetCacheTo() const;
+
+
+
+    
+    wxDataViewItem GetItem() const;
+    void SetItem( const wxDataViewItem &item );
+    void SetEditCanceled(bool editCancelled);
+    void SetPosition( int x, int y );
+    void SetCache(int from, int to);
+    wxDataObject *GetDataObject() const;
+    void SetDataFormat( const wxDataFormat &format );
+    void SetDataSize( size_t size );
+    void SetDataBuffer( void* buf );
+    int GetDragFlags() const;
+    void SetDropEffect( wxDragResult effect );
+
 };
 
