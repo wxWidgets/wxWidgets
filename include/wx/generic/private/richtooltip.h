@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GENERIC_PRIVATE_RICHTOOLTIP_H_
-#define _GENERIC_PRIVATE_RICHTOOLTIP_H_
+#define _WX_GENERIC_PRIVATE_RICHTOOLTIP_H_
 
 #include "wx/icon.h"
 #include "wx/colour.h"
