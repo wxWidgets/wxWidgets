@@ -28,7 +28,7 @@ class WXDLLIMPEXP_BASE wxStdInputStreamBuffer : public std::streambuf
 {
 public:
     wxStdInputStreamBuffer(wxInputStream& stream);
-    virtual ~wxStdInputStreamBuffer() { }
+    virtual ~wxStdInputStreamBuffer() wxNOEXCEPT { }
 
 protected:
     virtual std::streambuf *setbuf(char *s, std::streamsize n);
@@ -71,7 +71,7 @@ class WXDLLIMPEXP_BASE wxStdInputStream : public std::istream
 {
 public:
     wxStdInputStream(wxInputStream& stream);
-    virtual ~wxStdInputStream() { }
+    virtual ~wxStdInputStream() wxNOEXCEPT { }
 
 protected:
     wxStdInputStreamBuffer m_streamBuffer;
@@ -85,7 +85,7 @@ class WXDLLIMPEXP_BASE wxStdOutputStreamBuffer : public std::streambuf
 {
 public:
     wxStdOutputStreamBuffer(wxOutputStream& stream);
-    virtual ~wxStdOutputStreamBuffer() { }
+    virtual ~wxStdOutputStreamBuffer() wxNOEXCEPT { }
 
 protected:
     virtual std::streambuf *setbuf(char *s, std::streamsize n);
@@ -112,7 +112,7 @@ class WXDLLIMPEXP_BASE wxStdOutputStream : public std::ostream
 {
 public:
     wxStdOutputStream(wxOutputStream& stream);
-    virtual ~wxStdOutputStream() { }
+    virtual ~wxStdOutputStream() wxNOEXCEPT { }
 
 protected:
     wxStdOutputStreamBuffer m_streamBuffer;

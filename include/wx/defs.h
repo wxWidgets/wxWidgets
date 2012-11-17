@@ -3335,6 +3335,17 @@ typedef const void* WXWidget;
 #define DECLARE_NO_ASSIGN_CLASS(classname) \
     wxDECLARE_NO_ASSIGN_CLASS(classname);
 
+/* Macro that can be used to indicate that a function doesn't throw. */
+#if defined(__cplusplus) && __cplusplus >= 199711L /* C++98 */
+#   if __cplusplus >= 201103L /* >= C++11 */
+#       define wxNOEXCEPT   noexcept
+#   else
+#       define wxNOEXCEPT   throw()
+#   endif
+#else
+#   define wxNOEXCEPT
+#endif
+
 /*  --------------------------------------------------------------------------- */
 /*  If a manifest is being automatically generated, add common controls 6 to it */
 /*  --------------------------------------------------------------------------- */

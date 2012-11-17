@@ -679,7 +679,7 @@ public:
     // --------
 
     wxTextCtrlBase() { }
-    virtual ~wxTextCtrlBase() { }
+    virtual ~wxTextCtrlBase() wxNOEXCEPT { }
 
 
     // more readable flag testing methods

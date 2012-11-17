@@ -550,6 +550,7 @@ All:
 - Add wxFile::ReadAll() for consistency with wxFFile.
 - Add wxDateTime::DiffAsDateSpan() and wxDateSpan::GetTotalMonths() (jonasr).
 - Add wxVector::assign() (Jonas Rydberg).
+- Add wxNOEXCEPT (Marian VooDooMan Meravy).
 - Added Nepali translation (Him Prasad Gautam).
 
 All (GUI):
