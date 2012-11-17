@@ -602,6 +602,7 @@ wxGTK:
 - Improve drag-and-drop of URLs.
 - Make key event handling consistent with wxMSW (John Rails).
 - Fix printing in landscape mode (Marcin Wojdyr).
+- Fix path selection in wx{File,Dir}Dialog with GTK+ > 2.24.10 (obfuscated).
 
 wxMSW:
 

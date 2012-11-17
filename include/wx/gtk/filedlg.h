@@ -59,6 +59,9 @@ public:
 
     virtual bool SupportsExtraControl() const { return true; }
 
+    // Implementation only.
+    void GTKOnAccept();
+    void GTKOnCancel();
 
 protected:
     // override this from wxTLW since the native
@@ -69,10 +72,10 @@ protected:
 
 
 private:
-    void OnFakeOk( wxCommandEvent &event );
     void OnSize(wxSizeEvent&);
     virtual void AddChildGTK(wxWindowGTK* child);
 
+    wxString m_selectedDirectory;
     wxGtkFileChooser    m_fc;
 
     DECLARE_DYNAMIC_CLASS(wxFileDialog)

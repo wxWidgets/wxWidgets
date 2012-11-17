@@ -31,89 +31,16 @@
 #include "wx/filefn.h" // ::wxGetCwd
 #include "wx/testing.h"
 
-//-----------------------------------------------------------------------------
-// "clicked" for OK-button
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
-{
-    int style = dialog->GetWindowStyle();
-    wxGtkString filename(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget)));
-
-    // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
-#ifndef __WXGTK3__
-#if GTK_CHECK_VERSION(2,7,3)
-    if (gtk_check_version(2, 7, 3) != NULL)
-#endif
-    {
-        if ((style & wxFD_SAVE) && (style & wxFD_OVERWRITE_PROMPT))
-        {
-            if ( g_file_test(filename, G_FILE_TEST_EXISTS) )
-            {
-                wxString msg;
-
-                msg.Printf(
-                    _("File '%s' already exists, do you really want to overwrite it?"),
-                    wxString::FromUTF8(filename));
-
-                wxMessageDialog dlg(dialog, msg, _("Confirm"),
-                                   wxYES_NO | wxICON_QUESTION);
-                if (dlg.ShowModal() != wxID_YES)
-                    return;
-            }
-        }
-    }
-#endif
-
-    if (style & wxFD_FILE_MUST_EXIST)
-    {
-        if ( !g_file_test(filename, G_FILE_TEST_EXISTS) )
-        {
-            wxMessageDialog dlg( dialog, _("Please choose an existing file."),
-                                 _("Error"), wxOK| wxICON_ERROR);
-            dlg.ShowModal();
-            return;
-        }
-    }
-
-    // change to the directory where the user went if asked
-    if (style & wxFD_CHANGE_DIR)
-    {
-        // Use chdir to not care about filename encodings
-        wxGtkString folder(g_path_get_dirname(filename));
-        chdir(folder);
-    }
-
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
-    event.SetEventObject(dialog);
-    dialog->HandleWindowEvent(event);
-}
-}
-
-//-----------------------------------------------------------------------------
-// "clicked" for Cancel-button
-//-----------------------------------------------------------------------------
-
 extern "C"
 {
-
-static void
-gtk_filedialog_cancel_callback(GtkWidget * WXUNUSED(w), wxFileDialog *dialog)
-{
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-    event.SetEventObject(dialog);
-    dialog->HandleWindowEvent(event);
-}
-
-static void gtk_filedialog_response_callback(GtkWidget *w,
+static void gtk_filedialog_response_callback(GtkWidget * WXUNUSED(w),
                                              gint response,
                                              wxFileDialog *dialog)
 {
     if (response == GTK_RESPONSE_ACCEPT)
-        gtk_filedialog_ok_callback(w, dialog);
+        dialog->GTKOnAccept();
     else    // GTK_RESPONSE_CANCEL or GTK_RESPONSE_NONE
-        gtk_filedialog_cancel_callback(w, dialog);
+        dialog->GTKOnCancel();
 }
 
 static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
@@ -155,7 +82,6 @@ void wxFileDialog::AddChildGTK(wxWindowGTK* child)
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxFileDialogBase)
 
 BEGIN_EVENT_TABLE(wxFileDialog,wxFileDialogBase)
-    EVT_BUTTON(wxID_OK, wxFileDialog::OnFakeOk)
     EVT_SIZE(wxFileDialog::OnSize)
 END_EVENT_TABLE()
 
@@ -335,10 +261,61 @@ wxFileDialog::~wxFileDialog()
             GTK_FILE_CHOOSER(m_widget), NULL);
     }
 }
-
-void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
+void wxFileDialog::GTKOnAccept()
 {
+    int style = GetWindowStyle();
+    wxString filename = m_fc.GetPath();
+    m_selectedDirectory = m_fc.GetDirectory();
+
+    // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
+#ifndef __WXGTK3__
+#if GTK_CHECK_VERSION(2,7,3)
+    if (gtk_check_version(2, 7, 3) != NULL)
+#endif
+    {
+        if ((style & wxFD_SAVE) && (style & wxFD_OVERWRITE_PROMPT))
+        {
+            if ( g_file_test(filename.utf8_str(), G_FILE_TEST_EXISTS) )
+            {
+                wxString msg;
+
+                msg.Printf(
+                    _("File '%s' already exists, do you really want to overwrite it?"),
+                    wxString::FromUTF8(filename.utf8_str()));
+
+                wxMessageDialog dlg(this, msg, _("Confirm"),
+                                   wxYES_NO | wxICON_QUESTION);
+                if (dlg.ShowModal() != wxID_YES)
+                    return;
+            }
+        }
+    }
+#endif
+
+    if (style & wxFD_FILE_MUST_EXIST)
+    {
+        if ( !g_file_test(filename.utf8_str(), G_FILE_TEST_EXISTS) )
+        {
+            wxMessageDialog dlg( this, _("Please choose an existing file."),
+                                 _("Error"), wxOK| wxICON_ERROR);
+            dlg.ShowModal();
+            return;
+        }
+    }
+
+    // change to the directory where the user went if asked
+    if (style & wxFD_CHANGE_DIR)
+    {
+        // Use chdir to not care about filename encodings
+        wxGtkString folder(g_path_get_dirname(filename.utf8_str()));
+        chdir(folder);
+    }
     EndDialog(wxID_OK);
+}
+
+void wxFileDialog::GTKOnCancel()
+{
+    EndDialog(wxID_CANCEL);
 }
 
 int wxFileDialog::ShowModal()
@@ -406,18 +383,12 @@ void wxFileDialog::SetDirectory(const wxString& dir)
     wxFileDialogBase::SetDirectory(dir);
 
     m_fc.SetDirectory(dir);
+    m_selectedDirectory = dir;
 }
 
 wxString wxFileDialog::GetDirectory() const
 {
-    wxString currentDir( m_fc.GetDirectory() );
-    if (currentDir.empty())
-    {
-        // m_fc.GetDirectory() will return empty until the dialog has been shown
-        // in which case use any previously provided value
-        currentDir = m_dir;
-    }
-    return currentDir;
+    return m_selectedDirectory;
 }
 
 void wxFileDialog::SetFilename(const wxString& name)
