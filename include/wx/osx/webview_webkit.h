@@ -87,7 +87,12 @@ public:
     virtual void Redo();
 
     //Find function
-    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT) { return wxNOT_FOUND; };
+    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT) 
+    { 
+        wxUnusedVar(text);
+        wxUnusedVar(flags);
+        return wxNOT_FOUND; 
+    }
 
     //Clipboard functions
     virtual bool CanCut() const { return true; }
