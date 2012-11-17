@@ -490,6 +490,7 @@ protected:
         static const int flag_mapping[][2] = {
             { wxFSW_EVENT_ACCESS, IN_ACCESS },
             { wxFSW_EVENT_MODIFY, IN_MODIFY },
+            { wxFSW_EVENT_ATTRIB, IN_ATTRIB },
             { wxFSW_EVENT_RENAME, IN_MOVE   },
             { wxFSW_EVENT_CREATE, IN_CREATE },
             { wxFSW_EVENT_DELETE, IN_DELETE|IN_DELETE_SELF|IN_MOVE_SELF }
@@ -511,7 +512,7 @@ protected:
         static const int flag_mapping[][2] = {
             { IN_ACCESS,        wxFSW_EVENT_ACCESS }, // generated during read!
             { IN_MODIFY,        wxFSW_EVENT_MODIFY },
-            { IN_ATTRIB,        0 },
+            { IN_ATTRIB,        wxFSW_EVENT_ATTRIB },
             { IN_CLOSE_WRITE,   0 },
             { IN_CLOSE_NOWRITE, 0 },
             { IN_OPEN,          0 },

@@ -44,14 +44,14 @@ enum
     wxFSW_EVENT_RENAME = 0x04,
     wxFSW_EVENT_MODIFY = 0x08,
     wxFSW_EVENT_ACCESS = 0x10,
+    wxFSW_EVENT_ATTRIB = 0x20, // Currently this is wxGTK-only
 
     // error events
-    wxFSW_EVENT_WARNING = 0x20,
-    wxFSW_EVENT_ERROR = 0x40,
-
+    wxFSW_EVENT_WARNING = 0x40,
+    wxFSW_EVENT_ERROR = 0x80,
     wxFSW_EVENT_ALL = wxFSW_EVENT_CREATE | wxFSW_EVENT_DELETE |
                          wxFSW_EVENT_RENAME | wxFSW_EVENT_MODIFY |
-                         wxFSW_EVENT_ACCESS |
+                         wxFSW_EVENT_ACCESS | wxFSW_EVENT_ATTRIB |
                          wxFSW_EVENT_WARNING | wxFSW_EVENT_ERROR
 };
 

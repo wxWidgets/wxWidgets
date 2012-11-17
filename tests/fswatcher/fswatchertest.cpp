@@ -439,6 +439,7 @@ private:
 #endif // !wxHAS_KQUEUE
 
 #ifdef wxHAS_INOTIFY
+        CPPUNIT_TEST( TestEventAttribute );
         CPPUNIT_TEST( TestSingleWatchtypeEvent );
 #endif // wxHAS_INOTIFY
 
@@ -451,6 +452,7 @@ private:
     void TestEventModify();
     void TestEventAccess();
 #ifdef wxHAS_INOTIFY
+    void TestEventAttribute();
     void TestSingleWatchtypeEvent();
 #endif // wxHAS_INOTIFY
 #if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
@@ -645,6 +647,37 @@ void FileSystemWatcherTestCase::TestEventAccess()
 }
 
 #ifdef wxHAS_INOTIFY
+// ----------------------------------------------------------------------------
+// TestEventAttribute
+// ----------------------------------------------------------------------------
+void FileSystemWatcherTestCase::TestEventAttribute()
+{
+    wxLogDebug("TestEventAttribute()");
+
+    class EventTester : public EventHandler
+    {
+    public:
+        virtual void GenerateEvent()
+        {
+            CPPUNIT_ASSERT(eg.TouchFile());
+        }
+
+        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        {
+            wxFileSystemWatcherEvent event(wxFSW_EVENT_ATTRIB);
+            event.SetPath(eg.m_file);
+            event.SetNewPath(eg.m_file);
+            return event;
+        }
+    };
+
+    // we need to create a file to touch
+    EventGenerator::Get().CreateFile();
+
+    EventTester tester;
+    tester.Run();
+}
+
 // ----------------------------------------------------------------------------
 // TestSingleWatchtypeEvent: Watch only wxFSW_EVENT_ACCESS
 // ----------------------------------------------------------------------------

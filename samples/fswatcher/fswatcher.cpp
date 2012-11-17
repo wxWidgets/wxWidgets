@@ -535,6 +535,8 @@ static wxString GetFSWEventChangeTypeName(int changeType)
         return "MODIFY";
     case wxFSW_EVENT_ACCESS:
         return "ACCESS";
+    case wxFSW_EVENT_ATTRIB: // Currently this is wxGTK-only
+        return "ATTRIBUTE";
     }
 
     return "INVALID_TYPE";

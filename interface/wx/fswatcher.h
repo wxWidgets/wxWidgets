@@ -249,6 +249,15 @@ enum wxFSWFlags
     wxFSW_EVENT_ACCESS = 0x10,
 
     /**
+        The item's metadata was changed, e.g.\ its permissions or timestamps.
+
+        This event is currently only detected under Linux.
+
+        @since 2.9.5
+     */
+    wxFSW_EVENT_ATTRIB = 0x20,
+
+    /**
         A warning condition arose.
 
         This is something that probably needs to be shown to the user in an
@@ -257,7 +266,7 @@ enum wxFSWFlags
         more events will still be coming in the future, unlike for the error
         condition below.
      */
-    wxFSW_EVENT_WARNING = 0x20,
+    wxFSW_EVENT_WARNING = 0x40,
 
     /**
         An error condition arose.
@@ -266,11 +275,11 @@ enum wxFSWFlags
         and the program can stop watching the directories currently being
         monitored.
     */
-    wxFSW_EVENT_ERROR = 0x40,
+    wxFSW_EVENT_ERROR = 0x80,
 
     wxFSW_EVENT_ALL = wxFSW_EVENT_CREATE | wxFSW_EVENT_DELETE |
                          wxFSW_EVENT_RENAME | wxFSW_EVENT_MODIFY |
-                         wxFSW_EVENT_ACCESS |
+                         wxFSW_EVENT_ACCESS | wxFSW_EVENT_ATTRIB |
                          wxFSW_EVENT_WARNING | wxFSW_EVENT_ERROR
 };
 

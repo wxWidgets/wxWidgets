@@ -541,6 +541,7 @@ All:
 - Add wxDIR_NO_FOLLOW flag for wxDir traversal (David Hart).
 - Allow testing for symlink/FIFO/socket existence in wxFileName (David Hart).
 - Many important bug fixes in wxFileSystemWatcher (David Hart).
+- Add wxFSW_EVENT_ATTRIB flag support to wxFileSystemWatcher (David Hart).
 - Add separate read/written bytes counters and per-direction NOWAIT and WAITALL
   flags to wxSocket (Rob Bresalier).
 - Add wxDir::Close() method (Silverstorm82).
