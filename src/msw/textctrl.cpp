@@ -74,6 +74,11 @@
 
 #include "wx/msw/missing.h"
 
+// FIXME-VC6: This seems to be only missing from VC6 headers.
+#ifndef SPI_GETCARETWIDTH
+    #define SPI_GETCARETWIDTH 0x2006
+#endif
+
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
 // dummy value used for m_dropTarget, different from any valid pointer value
