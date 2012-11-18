@@ -200,12 +200,12 @@ wxChoice::~wxChoice()
     Clear();
 }
 
-bool wxChoice::MSWGetComboBoxInfo(COMBOBOXINFO* info) const
+bool wxChoice::MSWGetComboBoxInfo(tagCOMBOBOXINFO* info) const
 {
     // TODO-Win9x: Get rid of this once we officially drop support for Win9x
     //             and just call the function directly.
 #if wxUSE_DYNLIB_CLASS
-    typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, COMBOBOXINFO*);
+    typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, tagCOMBOBOXINFO*);
     static GetComboBoxInfo_t s_pfnGetComboBoxInfo = NULL;
     static bool s_triedToLoad = false;
     if ( !s_triedToLoad )
