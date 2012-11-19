@@ -4686,18 +4686,23 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 }
 
 // Get the current mouse position.
-wxPoint wxGetMousePosition()
+void wxGetMousePosition(int* x, int* y)
 {
-    int x, y;
     GdkDisplay* display = GetDisplay();
 #ifdef __WXGTK3__
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
-    gdk_device_get_position(device, NULL, &x, &y);
+    gdk_device_get_position(device, NULL, x, y);
 #else
-    gdk_display_get_pointer(display, NULL, &x, &y, NULL);
+    gdk_display_get_pointer(display, NULL, x, y, NULL);
 #endif
-    return wxPoint(x, y);
+}
+
+wxPoint wxGetMousePosition()
+{
+    wxPoint pt;
+    wxGetMousePosition(&pt.x, &pt.y);
+    return pt;
 }
 
 GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
