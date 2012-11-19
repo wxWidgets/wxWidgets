@@ -3,7 +3,7 @@
 // Purpose:     Generic wxTreeListCtrl implementation.
 // Author:      Vadim Zeitlin
 // Created:     2011-08-19
-// RCS-ID:      $Id: wxhead.cpp,v 1.11 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -1029,10 +1029,14 @@ bool wxTreeListCtrl::Create(wxWindow* parent,
     }
 
     m_view = new wxDataViewCtrl;
+    long styleDataView = HasFlag(wxTL_MULTIPLE) ? wxDV_MULTIPLE
+                                                : wxDV_SINGLE;
+    if ( HasFlag(wxTL_NO_HEADER) )
+        styleDataView |= wxDV_NO_HEADER;
+
     if ( !m_view->Create(this, wxID_ANY,
                          wxPoint(0, 0), GetClientSize(),
-                         HasFlag(wxTL_MULTIPLE) ? wxDV_MULTIPLE
-                                                : wxDV_SINGLE) )
+                         styleDataView) )
     {
         delete m_view;
         m_view = NULL;

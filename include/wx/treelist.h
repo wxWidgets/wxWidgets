@@ -3,7 +3,7 @@
 // Purpose:     wxTreeListCtrl class declaration.
 // Author:      Vadim Zeitlin
 // Created:     2011-08-17
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,7 @@ enum
     wxTL_CHECKBOX       = 0x0002,       // Show checkboxes in the first column.
     wxTL_3STATE         = 0x0004,       // Allow 3rd state in checkboxes.
     wxTL_USER_3STATE    = 0x0008,       // Allow user to set 3rd state.
+    wxTL_NO_HEADER      = 0x0010,       // Column titles not visible.
 
     wxTL_DEFAULT_STYLE  = wxTL_SINGLE,
     wxTL_STYLE_MASK     = wxTL_SINGLE |

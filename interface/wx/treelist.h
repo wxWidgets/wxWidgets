@@ -21,6 +21,15 @@ enum
     wxTL_CHECKBOX       = 0x0002,       /// Show checkboxes in the first column.
     wxTL_3STATE         = 0x0004,       /// Allow 3rd state in checkboxes.
     wxTL_USER_3STATE    = 0x0008,       /// Allow user to set 3rd state.
+    /**
+        Don't show the column headers.
+
+        By default this control shows the column headers, using this class
+        allows to avoid this and show only the data.
+
+        @since 2.9.5
+     */
+    wxTL_NO_HEADER      = 0x0010,
 
     wxTL_DEFAULT_STYLE  = wxTL_SINGLE,
     wxTL_STYLE_MASK     = wxTL_SINGLE |
