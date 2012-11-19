@@ -43,7 +43,7 @@ public:
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxTextCtrlNameStr);
-    virtual ~wxTextCtrl();
+    virtual ~wxTextCtrl() wxNOEXCEPT;
 
 // ------------------------------------------------------------------------
 // Cocoa specifics

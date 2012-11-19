@@ -99,7 +99,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxTextCtrlNameStr);
 
-    virtual ~wxTextCtrl();
+    virtual ~wxTextCtrl() wxNOEXCEPT;
 
     // implement base class pure virtuals
     // ----------------------------------
