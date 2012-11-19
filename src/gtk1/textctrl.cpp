@@ -226,7 +226,7 @@ void wxTextCtrl::Init()
     m_vScrollbar = NULL;
 }
 
-wxTextCtrl::~wxTextCtrl()
+wxTextCtrl::~wxTextCtrl() wxNOEXCEPT
 {
 }
 

@@ -764,7 +764,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     return true;
 }
 
-wxTextCtrl::~wxTextCtrl()
+wxTextCtrl::~wxTextCtrl() wxNOEXCEPT
 {
     delete m_cmdProcessor;
 

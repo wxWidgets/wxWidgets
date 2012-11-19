@@ -95,6 +95,8 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
 public:
     wxTreeTextCtrl(wxGenericTreeCtrl *owner, wxGenericTreeItem *item);
 
+    virtual ~wxTreeTextCtrl() wxNOEXCEPT {}
+
     void EndEdit( bool discardChanges );
 
     const wxGenericTreeItem* item() const { return m_itemEdited; }
