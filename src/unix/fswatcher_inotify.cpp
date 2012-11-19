@@ -261,7 +261,7 @@ protected:
         // check out for error/warning condition
         if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
         {
-            wxString errMsg = GetErrorDescription(Watcher2NativeFlags(flags));
+            wxString errMsg = GetErrorDescription(nativeFlags);
             wxFileSystemWatcherEvent event(flags, errMsg);
             SendEvent(event);
         }

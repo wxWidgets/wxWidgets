@@ -42,6 +42,10 @@ static wxString GetFSWEventChangeTypeName(int type)
         return "ACCESS";
     case wxFSW_EVENT_ATTRIB: // Currently this is wxGTK-only
         return "ATTRIBUTE";
+    case wxFSW_EVENT_WARNING:
+        return "WARNING";
+    case wxFSW_EVENT_ERROR:
+        return "ERROR";
     }
 
     // should never be reached!
