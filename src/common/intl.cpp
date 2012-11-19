@@ -781,8 +781,9 @@ wxString wxLocale::GetSystemEncodingName()
     UINT codepage = ::GetACP();
     encname.Printf(wxS("windows-%u"), codepage);
 #elif defined(__WXMAC__)
-    // default is just empty string, this resolves to the default system
-    // encoding later
+    encname = wxCFStringRef::AsString(
+                CFStringGetNameOfEncoding(CFStringGetSystemEncoding())
+              );
 #elif defined(__UNIX_LIKE__)
 
 #if defined(HAVE_LANGINFO_H) && defined(CODESET)
