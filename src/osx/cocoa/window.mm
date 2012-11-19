@@ -2125,6 +2125,9 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
     NSView* container = parent->GetWXWidget() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
     [container addSubview:m_osxView];
+    
+    if( m_wxPeer->IsFrozen() )
+        [[m_osxView window] disableFlushWindow];
 }
 
 void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
