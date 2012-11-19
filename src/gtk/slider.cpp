@@ -312,7 +312,6 @@ bool wxSlider::Create(wxWindow *parent,
         m_scale = gtk_vscale_new( NULL );
     else
         m_scale = gtk_hscale_new( NULL );
-    g_object_ref(m_scale);
 
     if (style & wxSL_MIN_MAX_LABELS)
     {
@@ -322,7 +321,6 @@ bool wxSlider::Create(wxWindow *parent,
             m_widget = gtk_hbox_new(false, 0);
         else
             m_widget = gtk_vbox_new(false, 0);
-        g_object_ref(m_widget);
         gtk_container_add( GTK_CONTAINER(m_widget), m_scale );
 
         GtkWidget *box;
@@ -330,25 +328,21 @@ bool wxSlider::Create(wxWindow *parent,
             box = gtk_vbox_new(false,0);
         else
             box = gtk_hbox_new(false,0);
-        g_object_ref(box);
         gtk_widget_show(box);
         gtk_container_add( GTK_CONTAINER(m_widget), box );
 
         m_minLabel = gtk_label_new(NULL);
-        g_object_ref(m_minLabel);
         gtk_widget_show( m_minLabel );
         gtk_container_add( GTK_CONTAINER(box), m_minLabel );
         gtk_box_set_child_packing( GTK_BOX(box), m_minLabel, FALSE, FALSE, 0, GTK_PACK_START );
 
         // expanding empty space between the min/max labels
         GtkWidget *space = gtk_label_new(NULL);
-        g_object_ref(space);
         gtk_widget_show( space );
         gtk_container_add( GTK_CONTAINER(box), space );
         gtk_box_set_child_packing( GTK_BOX(box), space, TRUE, FALSE, 0, GTK_PACK_START );
 
         m_maxLabel = gtk_label_new(NULL);
-        g_object_ref(m_maxLabel);
         gtk_widget_show( m_maxLabel );
         gtk_container_add( GTK_CONTAINER(box), m_maxLabel );
         gtk_box_set_child_packing( GTK_BOX(box), m_maxLabel, FALSE, FALSE, 0, GTK_PACK_END );
@@ -359,6 +353,7 @@ bool wxSlider::Create(wxWindow *parent,
         m_maxLabel = NULL;
         m_minLabel = NULL;
     }
+    g_object_ref(m_widget);
 
     const bool showValueLabel = (style & wxSL_VALUE_LABEL) != 0;
     gtk_scale_set_draw_value(GTK_SCALE (m_scale), showValueLabel );
