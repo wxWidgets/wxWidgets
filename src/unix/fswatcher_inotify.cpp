@@ -265,6 +265,13 @@ protected:
             wxFileSystemWatcherEvent event(flags, errMsg);
             SendEvent(event);
         }
+        // Now IN_UNMOUNT. We must do so here, as it's not in the watch flags
+        if (nativeFlags & IN_UNMOUNT)
+        {
+            wxFileName path = GetEventPath(watch, inevt);
+            wxFileSystemWatcherEvent event(wxFSW_EVENT_UNMOUNT, path, path);
+            SendEvent(event);
+        }
         // filter out ignored events and those not asked for.
         // we never filter out warnings or exceptions
         else if ((flags == 0) || !(flags & watch.GetFlags()))
@@ -488,12 +495,13 @@ protected:
         }
 
         static const int flag_mapping[][2] = {
-            { wxFSW_EVENT_ACCESS, IN_ACCESS },
-            { wxFSW_EVENT_MODIFY, IN_MODIFY },
-            { wxFSW_EVENT_ATTRIB, IN_ATTRIB },
-            { wxFSW_EVENT_RENAME, IN_MOVE   },
-            { wxFSW_EVENT_CREATE, IN_CREATE },
-            { wxFSW_EVENT_DELETE, IN_DELETE|IN_DELETE_SELF|IN_MOVE_SELF }
+            { wxFSW_EVENT_ACCESS, IN_ACCESS   },
+            { wxFSW_EVENT_MODIFY, IN_MODIFY   },
+            { wxFSW_EVENT_ATTRIB, IN_ATTRIB   },
+            { wxFSW_EVENT_RENAME, IN_MOVE     },
+            { wxFSW_EVENT_CREATE, IN_CREATE   },
+            { wxFSW_EVENT_DELETE, IN_DELETE|IN_DELETE_SELF|IN_MOVE_SELF },
+            { wxFSW_EVENT_UNMOUNT, IN_UNMOUNT }
             // wxFSW_EVENT_ERROR/WARNING make no sense here
         };
 
@@ -523,7 +531,7 @@ protected:
             { IN_DELETE_SELF,   wxFSW_EVENT_DELETE },
             { IN_MOVE_SELF,     wxFSW_EVENT_DELETE },
 
-            { IN_UNMOUNT,       wxFSW_EVENT_ERROR  },
+            { IN_UNMOUNT,       wxFSW_EVENT_UNMOUNT},
             { IN_Q_OVERFLOW,    wxFSW_EVENT_WARNING},
 
             // ignored, because this is generated mainly by watcher::Remove()
@@ -549,8 +557,6 @@ protected:
     {
         switch ( flag )
         {
-        case IN_UNMOUNT:
-            return _("File system containing watched object was unmounted");
         case IN_Q_OVERFLOW:
             return _("Event queue overflowed");
         }

@@ -258,6 +258,18 @@ enum wxFSWFlags
     wxFSW_EVENT_ATTRIB = 0x20,
 
     /**
+        The file system containing a watched item was unmounted.
+
+        wxFSW_EVENT_UNMOUNT cannot be set; unmount events are produced automatically. This flag
+        is therefore not included in wxFSW_EVENT_ALL.
+
+        This event is currently only detected under Linux.
+
+        @since 2.9.5
+    */
+    wxFSW_EVENT_UNMOUNT = 0x2000,
+
+    /**
         A warning condition arose.
 
         This is something that probably needs to be shown to the user in an

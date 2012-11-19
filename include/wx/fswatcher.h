@@ -53,6 +53,9 @@ enum
                          wxFSW_EVENT_RENAME | wxFSW_EVENT_MODIFY |
                          wxFSW_EVENT_ACCESS | wxFSW_EVENT_ATTRIB |
                          wxFSW_EVENT_WARNING | wxFSW_EVENT_ERROR
+#ifdef wxHAS_INOTIFY
+    ,wxFSW_EVENT_UNMOUNT = 0x2000
+#endif
 };
 
 // Type of the path watched, used only internally for now.
