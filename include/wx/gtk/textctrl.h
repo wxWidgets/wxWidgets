@@ -30,7 +30,7 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString &name = wxTextCtrlNameStr);
 
-    virtual ~wxTextCtrl() wxNOEXCEPT;
+    virtual ~wxTextCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

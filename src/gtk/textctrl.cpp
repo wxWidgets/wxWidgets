@@ -610,7 +610,7 @@ void wxTextCtrl::Init()
     m_anonymousMarkList = NULL;
 }
 
-wxTextCtrl::~wxTextCtrl() wxNOEXCEPT
+wxTextCtrl::~wxTextCtrl()
 {
     if (m_text)
         GTKDisconnect(m_text);

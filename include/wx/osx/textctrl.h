@@ -47,7 +47,7 @@ public:
         Create(parent, id, value, pos, size, style, validator, name);
     }
 
-    virtual ~wxTextCtrl() wxNOEXCEPT;
+    virtual ~wxTextCtrl();
 
     bool Create(wxWindow *parent,
         wxWindowID id,

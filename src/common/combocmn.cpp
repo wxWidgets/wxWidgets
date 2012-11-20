@@ -940,7 +940,7 @@ class wxComboCtrlTextCtrl : public wxTextCtrl
 {
 public:
     wxComboCtrlTextCtrl() : wxTextCtrl() { }
-    virtual ~wxComboCtrlTextCtrl() wxNOEXCEPT { }
+    virtual ~wxComboCtrlTextCtrl() { }
 
     virtual wxWindow *GetMainWindowOfCompositeControl()
     {

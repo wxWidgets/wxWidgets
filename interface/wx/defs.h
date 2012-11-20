@@ -1725,22 +1725,6 @@ template <typename T> wxSwap(T& first, T& second);
 */
 void wxVaCopy(va_list argptrDst, va_list argptrSrc);
 
-/**
-    Macro that can be used to indicate that a function doesn't throw any
-    exceptions.
-
-    This macro expands to `noexcept` when using C++11 compiler or `throw()` for
-    older C++ compilers or nothing when used with a C++ compiler too old to
-    support even this.
-
-    Notice that `noexcept` and `throw()` have different semantics in case an
-    exception @e is thrown, so this macro should be used only if you don't rely
-    on the behaviour provided by the latter but not the former.
-
-    @since 2.9.5
- */
-#define wxNOEXCEPT
-
 //@}
 
 

@@ -229,7 +229,7 @@ void wxTextCtrl::Init()
     m_isNativeCaretShown = true;
 }
 
-wxTextCtrl::~wxTextCtrl() wxNOEXCEPT
+wxTextCtrl::~wxTextCtrl()
 {
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
     if ( m_dropTarget == wxRICHTEXT_DEFAULT_DROPTARGET )
