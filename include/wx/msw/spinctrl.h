@@ -116,6 +116,7 @@ protected:
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetClientSize(int *x, int *y) const;
 #if wxUSE_TOOLTIPS

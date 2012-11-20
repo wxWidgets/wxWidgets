@@ -337,10 +337,39 @@ GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
 
 wxSize wxSpinCtrlGTKBase::DoGetBestSize() const
 {
-    wxSize ret( wxControl::DoGetBestSize() );
-    wxSize best(95, ret.y); // FIXME: 95?
-    CacheBestSize(best);
-    return best;
+    return DoGetSizeFromTextSize(95); // TODO: 95 is completely arbitrary
+}
+
+wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxASSERT_MSG( m_widget, wxS("GetSizeFromTextSize called before creation") );
+
+    // Set an as small as possible size for the control, so preferred sizes
+    // return "natural" sizes, not taking into account the previous ones (which
+    // seems to be GTK+3 behaviour)
+    gtk_widget_set_size_request(m_widget, 0, 0);
+
+    // Both Gtk+2 and Gtk+3 use current value/range to measure control's width.
+    // So, we can't ask Gtk+ for its width. Instead, we used hardcoded values.
+
+    // Returned height is OK
+    wxSize totalS = GTKGetPreferredSize(m_widget);
+
+#if GTK_CHECK_VERSION(3,4,0)
+    // two buttons in horizontal
+    totalS.x = 46 + 15; // margins included
+#else
+    // two small buttons in vertical
+    totalS.x = GetFont().GetPixelSize().y + 13; // margins included
+#endif
+
+    wxSize tsize(xlen + totalS.x, totalS.y);
+
+    // Check if the user requested a non-standard height.
+    if ( ylen > 0 )
+        tsize.IncBy(0, ylen - GetCharHeight());
+
+    return tsize;
 }
 
 // static

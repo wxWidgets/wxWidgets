@@ -108,6 +108,7 @@ public:
 protected:
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
 #ifdef __WXMSW__

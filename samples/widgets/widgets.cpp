@@ -875,6 +875,10 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
         (*it)->SetFont(m_font);
         (*it)->Refresh();
     }
+
+    // The best size of the widget could have changed after changing its font,
+    // so re-layout to show it correctly.
+    page->Layout();
 #else
     wxLogMessage(wxT("Font selection dialog not available in current build."));
 #endif

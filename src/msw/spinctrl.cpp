@@ -718,25 +718,28 @@ bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
+    return DoGetSizeFromTextSize(DEFAULT_ITEM_WIDTH);
+}
+
+wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
     wxSize sizeBtn = wxSpinButton::DoGetBestSize();
-    sizeBtn.x += DEFAULT_ITEM_WIDTH + MARGIN_BETWEEN;
 
     int y;
     wxGetCharSize(GetHWND(), NULL, &y, GetFont());
-    y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(y);
-
     // JACS: we should always use the height calculated
     // from above, because otherwise we'll get a spin control
     // that's too big. So never use the height calculated
     // from wxSpinButton::DoGetBestSize().
 
-    // if ( sizeBtn.y < y )
-    {
-        // make the text tall enough
-        sizeBtn.y = y;
-    }
+    wxSize tsize(xlen + sizeBtn.x + MARGIN_BETWEEN + 0.3 * y + 10,
+                 EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
 
-    return sizeBtn;
+    // Check if the user requested a non-standard height.
+    if ( ylen > 0 )
+        tsize.IncBy(0, ylen - y);
+
+    return tsize;
 }
 
 void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)

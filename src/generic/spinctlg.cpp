@@ -283,10 +283,26 @@ wxWindowList wxSpinCtrlGenericBase::GetCompositeWindowParts() const
 
 wxSize wxSpinCtrlGenericBase::DoGetBestSize() const
 {
-    wxSize sizeBtn  = m_spinButton->GetBestSize(),
-           sizeText = m_textCtrl->GetBestSize();
+    return DoGetSizeFromTextSize(m_textCtrl->GetBestSize().x, -1);
+}
 
-    return wxSize(sizeBtn.x + sizeText.x + MARGIN, sizeText.y);
+wxSize wxSpinCtrlGenericBase::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxSize sizeBtn  = m_spinButton->GetBestSize();
+    wxSize totalS( m_textCtrl->GetBestSize() );
+
+    wxSize tsize(xlen + sizeBtn.x + MARGIN, totalS.y);
+#if defined(__WXMSW__)
+    tsize.IncBy(0.4 * totalS.y + 4, 0);
+#elif defined(__WXGTK__)
+    tsize.IncBy(totalS.y + 10, 0);
+#endif // MSW GTK
+
+    // Check if the user requested a non-standard height.
+    if ( ylen > 0 )
+        tsize.IncBy(0, ylen - GetCharHeight());
+
+    return tsize;
 }
 
 void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
