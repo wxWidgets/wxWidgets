@@ -269,6 +269,14 @@ wxSpinCtrlGenericBase::~wxSpinCtrlGenericBase()
     wxDELETE(m_spinButton);
 }
 
+wxWindowList wxSpinCtrlGenericBase::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    parts.push_back(m_textCtrl);
+    parts.push_back(m_spinButton);
+    return parts;
+}
+
 // ----------------------------------------------------------------------------
 // geometry
 // ----------------------------------------------------------------------------

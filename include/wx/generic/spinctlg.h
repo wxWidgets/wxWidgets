@@ -22,6 +22,8 @@
 
 #if wxUSE_SPINBTN
 
+#include "wx/compositewin.h"
+
 class WXDLLIMPEXP_FWD_CORE wxSpinButton;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
@@ -40,7 +42,8 @@ class wxSpinCtrlTextGeneric; // wxTextCtrl used for the wxSpinCtrlGenericBase
 // function ambiguity.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxSpinCtrlGenericBase : public wxSpinCtrlBase
+class WXDLLIMPEXP_CORE wxSpinCtrlGenericBase
+                : public wxCompositeWindow<wxSpinCtrlBase>
 {
 public:
     wxSpinCtrlGenericBase() { Init(); }
@@ -155,6 +158,9 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    // Implement pure virtual function inherited from wxCompositeWindow.
+    virtual wxWindowList GetCompositeWindowParts() const;
 
     DECLARE_EVENT_TABLE()
 };
