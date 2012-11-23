@@ -926,7 +926,8 @@ outlineView:(NSOutlineView*)outlineView
                     size_t const dataSize       = event.GetDataObject()->GetDataSize(idDataFormat);
                     size_t const dataBufferSize = sizeof(wxDataFormatId)+dataSize;
                     // variable definitions (used in all case statements):
-                    wxMemoryBuffer dataBuffer(dataBufferSize);
+                    // give additional headroom for trailing NULL
+                    wxMemoryBuffer dataBuffer(dataBufferSize+4);
 
                     dataBuffer.AppendData(&idDataFormat,sizeof(wxDataFormatId));
                     switch (idDataFormat)
@@ -958,7 +959,6 @@ outlineView:(NSOutlineView*)outlineView
                             break;
                         default:
                             wxFAIL_MSG("Data object has invalid or unsupported data format");
-                            [dataArray release];
                             return NO;
                     }
                 }
@@ -976,7 +976,6 @@ outlineView:(NSOutlineView*)outlineView
             }
             else
             {
-                [dataArray release];
                 delete itemObject;
                 return NO; // dragging was vetoed or no data available
             }
