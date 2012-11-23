@@ -3,7 +3,7 @@
 // Purpose:     Native MSW implementation of wxRichToolTip.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-18
-// RCS-ID:      $Id: wxhead.cpp,v 1.11 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -123,13 +123,15 @@ public:
         }
     }
 
-    virtual void SetTimeout(unsigned milliseconds)
+    virtual void SetTimeout(unsigned millisecondsTimeout,
+                            unsigned millisecondsDelay)
     {
-        // We don't support changing the timeout (maybe TTM_SETDELAYTIME could
-        // be used for this?).
+        // We don't support changing the timeout or the delay
+        // (maybe TTM_SETDELAYTIME could be used for this?).
         m_canUseNative = false;
 
-        wxRichToolTipGenericImpl::SetTimeout(milliseconds);
+        wxRichToolTipGenericImpl::SetTimeout(millisecondsTimeout,
+                                             millisecondsDelay);
     }
 
     virtual void SetTipKind(wxTipKind tipKind)

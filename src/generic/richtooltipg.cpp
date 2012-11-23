@@ -3,7 +3,7 @@
 // Purpose:     Implementation of wxRichToolTip.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-07
-// RCS-ID:      $Id: wxhead.cpp,v 1.11 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -232,7 +232,7 @@ public:
         }
     }
 
-    void DoShow()
+    void SetPosition()
     {
         wxPoint pos = GetTipPoint();
 
@@ -241,18 +241,30 @@ public:
         pos -= m_anchorPos;
 
         Move(pos, wxSIZE_NO_ADJUSTMENTS);
+    }
 
+    void DoShow()
+    {
         Popup();
     }
 
-    void SetTimeout(unsigned timeout)
+    void SetTimeoutAndShow(unsigned timeout, unsigned delay)
     {
-        if ( !timeout )
+        if ( !timeout && !delay )
+        {
+            DoShow();
             return;
+        }
 
         Connect(wxEVT_TIMER, wxTimerEventHandler(wxRichToolTipPopup::OnTimer));
 
-        m_timer.Start(timeout, true /* one shot */);
+        m_timeout = timeout; // set for use in OnTimer if we have a delay
+        m_delayShow = delay != 0;
+
+        if ( !m_delayShow )
+            DoShow();
+
+        m_timer.Start((delay ? delay : timeout), true /* one shot */);
     }
 
 protected:
@@ -560,10 +572,22 @@ private:
     // Timer event handler hides the tooltip when the timeout expires.
     void OnTimer(wxTimerEvent& WXUNUSED(event))
     {
-        // Doing "Notify" here ensures that our OnDismiss() is called and so we
-        // also Destroy() ourselves. We could use Dismiss() and call Destroy()
-        // explicitly from here as well.
-        DismissAndNotify();
+        if ( !m_delayShow )
+        {
+            // Doing "Notify" here ensures that our OnDismiss() is called and so we
+            // also Destroy() ourselves. We could use Dismiss() and call Destroy()
+            // explicitly from here as well.
+            DismissAndNotify();
+
+            return;
+        }
+
+        m_delayShow = false;
+
+        if ( m_timeout )
+            m_timer.Start(m_timeout, true);
+
+        DoShow();
     }
 
 
@@ -573,6 +597,12 @@ private:
 
     // The timer counting down the time until we're hidden.
     wxTimer m_timer;
+
+    // We will need to accesss the timeout period when delaying showing tooltip.
+    int m_timeout;
+
+    // If true, delay showing the tooltip.
+    bool m_delayShow;
 
     wxDECLARE_NO_COPY_CLASS(wxRichToolTipPopup);
 };
@@ -621,9 +651,11 @@ void wxRichToolTipGenericImpl::SetStandardIcon(int icon)
     }
 }
 
-void wxRichToolTipGenericImpl::SetTimeout(unsigned milliseconds)
+void wxRichToolTipGenericImpl::SetTimeout(unsigned millisecondsTimeout,
+                                          unsigned millisecondsDelay)
 {
-    m_timeout = milliseconds;
+    m_delay = millisecondsDelay;
+    m_timeout = millisecondsTimeout;
 }
 
 void wxRichToolTipGenericImpl::SetTipKind(wxTipKind tipKind)
@@ -653,9 +685,9 @@ void wxRichToolTipGenericImpl::ShowFor(wxWindow* win)
 
     popup->SetBackgroundColours(m_colStart, m_colEnd);
 
-    popup->DoShow();
-
-    popup->SetTimeout(m_timeout);
+    popup->SetPosition();
+    // show or start the timer to delay showing the popup
+    popup->SetTimeoutAndShow( m_timeout, m_delay );
 }
 
 // Currently only wxMSW provides a native implementation.

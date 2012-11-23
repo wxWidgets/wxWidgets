@@ -1854,13 +1854,14 @@ public:
                                     WXSIZEOF(bgStyles), bgStyles,
                                     1, wxRA_SPECIFY_ROWS);
 
-        const wxString timeouts[] = { "&None", "&Default", "&3 seconds" };
+        const wxString timeouts[] = { "&None", "&Default (no delay)", "&3 seconds" };
         wxCOMPILE_TIME_ASSERT( WXSIZEOF(timeouts) == Timeout_Max, TmMismatch );
         m_timeouts = new wxRadioBox(this, wxID_ANY, "Timeout:",
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(timeouts), timeouts,
                                     1, wxRA_SPECIFY_ROWS);
         m_timeouts->SetSelection(Timeout_Default);
+        m_timeDelay = new wxCheckBox(this, wxID_ANY, "Delay show" );
 
         // Lay them out.
         m_textBody->SetMinSize(wxSize(300, 200));
@@ -1872,6 +1873,7 @@ public:
         sizer->Add(m_tipKinds, wxSizerFlags().Centre().Border());
         sizer->Add(m_bgStyles, wxSizerFlags().Centre().Border());
         sizer->Add(m_timeouts, wxSizerFlags().Centre().Border());
+        sizer->Add(m_timeDelay, wxSizerFlags().Centre().Border());
         wxBoxSizer* const sizerBtns = new wxBoxSizer(wxHORIZONTAL);
         sizerBtns->Add(btnShowText, wxSizerFlags().Border(wxRIGHT));
         sizerBtns->Add(btnShowBtn, wxSizerFlags().Border(wxLEFT));
@@ -1972,17 +1974,22 @@ private:
                 break;
         }
 
+        int delay = m_timeDelay->IsChecked() ? 500 : 0;
+
         switch ( m_timeouts->GetSelection() )
         {
             case Timeout_None:
-                tip.SetTimeout(0);
+                // Don't call SetTimeout unnecessarily
+                // or msw will show generic impl
+                if ( delay )
+                    tip.SetTimeout(0, delay);
                 break;
 
             case Timeout_Default:
                 break;
 
             case Timeout_3sec:
-                tip.SetTimeout(3000);
+                tip.SetTimeout(3000, delay);
                 break;
         }
 
@@ -1997,6 +2004,7 @@ private:
     wxRadioBox* m_tipKinds;
     wxRadioBox* m_bgStyles;
     wxRadioBox* m_timeouts;
+    wxCheckBox* m_timeDelay;
 };
 
 void MyFrame::OnRichTipDialog(wxCommandEvent& WXUNUSED(event))

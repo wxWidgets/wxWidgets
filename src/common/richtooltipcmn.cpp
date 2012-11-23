@@ -3,7 +3,7 @@
 // Purpose:     wxRichToolTip implementation common to all platforms.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-18
-// RCS-ID:      $Id: wxhead.cpp,v 1.11 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,9 +57,10 @@ void wxRichToolTip::SetIcon(const wxIcon& icon)
     m_impl->SetCustomIcon(icon);
 }
 
-void wxRichToolTip::SetTimeout(unsigned milliseconds)
+void wxRichToolTip::SetTimeout(unsigned milliseconds,
+                               unsigned millisecondsDelay)
 {
-    m_impl->SetTimeout(milliseconds);
+    m_impl->SetTimeout(milliseconds, millisecondsDelay);
 }
 
 void wxRichToolTip::SetTipKind(wxTipKind tipKind)

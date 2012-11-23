@@ -3,7 +3,7 @@
 // Purpose:     Declaration of wxRichToolTip class.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-07
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,8 @@ public:
     // elapses but this method can be used to change this or also disable
     // hiding the tooltip automatically entirely by passing 0 in this parameter
     // (but doing this can result in native version not being used).
-    void SetTimeout(unsigned milliseconds);
+    // Optionally specify a show delay.
+    void SetTimeout(unsigned milliseconds, unsigned millisecondsShowdelay = 0);
 
     // Choose the tip kind, possibly none. By default the tip is positioned
     // automatically, as if wxTipKind_Auto was used.

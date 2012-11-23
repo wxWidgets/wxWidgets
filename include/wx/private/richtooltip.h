@@ -3,7 +3,7 @@
 // Purpose:     wxRichToolTipImpl declaration.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-18
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,8 @@ public:
                                      const wxColour& colEnd) = 0;
     virtual void SetCustomIcon(const wxIcon& icon) = 0;
     virtual void SetStandardIcon(int icon) = 0;
-    virtual void SetTimeout(unsigned milliseconds) = 0;
+    virtual void SetTimeout(unsigned milliseconds,
+                            unsigned millisecondsShowdelay = 0) = 0;
     virtual void SetTipKind(wxTipKind tipKind) = 0;
     virtual void SetTitleFont(const wxFont& font) = 0;
 
