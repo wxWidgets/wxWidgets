@@ -259,10 +259,14 @@ void wxBell()
 
 @end
 
-wxNSAppController* appcontroller = nil;
+WX_NSObject appcontroller = nil;
 
 NSLayoutManager* gNSLayoutManager = nil;
 
+WX_NSObject wxApp::OSXCreateAppController()
+{
+    return [[wxNSAppController alloc] init];
+}
 
 bool wxApp::DoInitGui()
 {
@@ -272,7 +276,7 @@ bool wxApp::DoInitGui()
     {
         [wxNSApplication sharedApplication];
 
-        appcontroller = [[wxNSAppController alloc] init];
+        appcontroller = OSXCreateAppController();
         [NSApp setDelegate:appcontroller];
 
         // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads
