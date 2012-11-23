@@ -640,6 +640,8 @@ bool wxRibbonPage::DoActualLayout()
         ShowScrollButtons();
     else if(todo_hide_scroll_buttons)
         HideScrollButtons();
+    else if(m_scroll_buttons_visible)
+        ShowScrollButtons();
 
     Refresh();
     return true;
@@ -679,29 +681,33 @@ void wxRibbonPage::ShowScrollButtons()
 
     if(show_left)
     {
-        if(m_scroll_left_btn == NULL)
+        wxMemoryDC temp_dc;
+        wxSize size;
+        long direction;
+        if(GetMajorAxis() == wxHORIZONTAL)
         {
-            wxMemoryDC temp_dc;
-            wxSize size;
-            long direction;
-            if(GetMajorAxis() == wxHORIZONTAL)
-            {
-                direction = wxRIBBON_SCROLL_BTN_LEFT;
-                size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
-                size.SetHeight(GetSize().GetHeight());
-            }
-            else
-            {
-                direction = wxRIBBON_SCROLL_BTN_UP;
-                size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
-                size.SetWidth(GetSize().GetWidth());
-            }
-            m_scroll_left_btn = new wxRibbonPageScrollButton(this, wxID_ANY, GetPosition(), size, direction);
-            if(!IsShown())
-            {
-                m_scroll_left_btn->Hide();
-            }
-            reposition = true;
+              direction = wxRIBBON_SCROLL_BTN_LEFT;
+              size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+              size.SetHeight(GetSize().GetHeight());
+        }
+        else
+        {
+              direction = wxRIBBON_SCROLL_BTN_UP;
+              size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+              size.SetWidth(GetSize().GetWidth());
+        }
+        if (m_scroll_left_btn)
+        {
+              m_scroll_left_btn->SetSize(size);
+        }
+        else
+        {
+              m_scroll_left_btn = new wxRibbonPageScrollButton(this, wxID_ANY, GetPosition(), size, direction);
+              reposition = true;
+        }
+        if(!IsShown())
+        {
+              m_scroll_left_btn->Hide();
         }
     }
     else
@@ -716,30 +722,34 @@ void wxRibbonPage::ShowScrollButtons()
 
     if(show_right)
     {
-        if(m_scroll_right_btn == NULL)
+        wxMemoryDC temp_dc;
+        wxSize size;
+        long direction;
+        if(GetMajorAxis() == wxHORIZONTAL)
         {
-            wxMemoryDC temp_dc;
-            wxSize size;
-            long direction;
-            if(GetMajorAxis() == wxHORIZONTAL)
-            {
-                direction = wxRIBBON_SCROLL_BTN_RIGHT;
-                size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
-                size.SetHeight(GetSize().GetHeight());
-            }
-            else
-            {
-                direction = wxRIBBON_SCROLL_BTN_DOWN;
-                size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
-                size.SetWidth(GetSize().GetWidth());
-            }
-            wxPoint initial_pos = GetPosition() + GetSize() - size;
-            m_scroll_right_btn = new wxRibbonPageScrollButton(this, wxID_ANY, initial_pos, size, direction);
-            if(!IsShown())
-            {
-                m_scroll_right_btn->Hide();
-            }
-            reposition = true;
+              direction = wxRIBBON_SCROLL_BTN_RIGHT;
+              size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+              size.SetHeight(GetSize().GetHeight());
+        }
+        else
+        {
+              direction = wxRIBBON_SCROLL_BTN_DOWN;
+              size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+              size.SetWidth(GetSize().GetWidth());
+        }
+        wxPoint initial_pos = GetPosition() + GetSize() - size;
+        if (m_scroll_right_btn)
+        {
+              m_scroll_right_btn->SetSize(size);
+        }
+        else
+        {
+              m_scroll_right_btn = new wxRibbonPageScrollButton(this, wxID_ANY, initial_pos, size, direction);
+              reposition = true;
+        }
+        if(!IsShown())
+        {
+              m_scroll_right_btn->Hide();
         }
     }
     else
