@@ -21,6 +21,7 @@
 #include "wx/string.h"
 #include "wx/frame.h"
 #include "wx/filehistory.h"
+#include "wx/vector.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
     #include "wx/print.h"
@@ -60,11 +61,9 @@ enum
 
 #define wxMAX_FILE_HISTORY 9
 
-#ifndef __VISUALC6__
 typedef wxVector<wxDocument*> wxDocVector;
 typedef wxVector<wxView*> wxViewVector;
 typedef wxVector<wxDocTemplate*> wxDocTemplateVector;
-#endif
 
 class WXDLLIMPEXP_CORE wxDocument : public wxEvtHandler
 {
@@ -148,8 +147,12 @@ public:
     virtual bool RemoveView(wxView *view);
 
 #ifndef __VISUALC6__
-    wxViewVector GetViewsVector() const { return m_documentViews.AsVector<wxView*>(); }
-#endif
+    wxViewVector GetViewsVector() const
+    {
+        return m_documentViews.AsVector<wxView*>();
+    }
+#endif // !__VISUALC6__
+
     wxList& GetViews() { return m_documentViews; }
     const wxList& GetViews() const { return m_documentViews; }
 
@@ -467,9 +470,17 @@ public:
     virtual wxView *GetCurrentView() const { return m_currentView; }
 
 #ifndef __VISUALC6__
-    wxDocVector GetDocumentsVector() const { return m_docs.AsVector<wxDocument*>(); }
-    wxDocTemplateVector GetTemplatesVector() const { return m_templates.AsVector<wxDocTemplate*>(); }
-#endif
+    wxDocVector GetDocumentsVector() const
+    {
+        return m_docs.AsVector<wxDocument*>();
+    }
+
+    wxDocTemplateVector GetTemplatesVector() const
+    {
+        return m_templates.AsVector<wxDocTemplate*>();
+    }
+#endif // !__VISUALC6__
+
     wxList& GetDocuments() { return m_docs; }
     wxList& GetTemplates() { return m_templates; }
 
