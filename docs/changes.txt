@@ -644,6 +644,7 @@ All:
 - Added wxDir::GetNameWithSep().
 - Allow unloading wxPluginLibrary objects in any order (manyleaves).
 - Fix passing strings with embedded NULs in wxThreadEvents (Steffen Olszewski).
+- Add wxList::AsVector<>() helper (troelsk).
 
 All (GUI):
 

@@ -391,6 +391,13 @@ public:
         Returns the size of the list.
     */
     size_type size() const;
+
+    /**
+        Returns a wxVector holding the list elements.
+
+        @since 2.9.5
+    */
+    wxVector<T> AsVector() const;
 };
 
 

@@ -32,6 +32,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/vector.h"
 
 #if wxUSE_STD_CONTAINERS
     #include "wx/beforestd.h"
@@ -1215,6 +1216,23 @@ public:
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
 #endif // !wxUSE_STD_CONTAINERS
+
+#ifndef __VISUALC6__
+    template<typename T>
+    wxVector<T> AsVector() const
+    {
+        wxVector<T> vector(size());
+        size_t i = 0;
+
+        for ( const_iterator it = begin(); it != end(); ++it )
+        {
+            vector[i++] = static_cast<T>(*it);
+        }
+
+        return vector;
+    }
+#endif // !__VISUALC6__
+
 };
 
 #if !wxUSE_STD_CONTAINERS
