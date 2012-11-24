@@ -53,6 +53,10 @@
     #include "wx/ffile.h"
 #endif
 
+#ifdef __WXGTK__
+    #include "wx/dcbuffer.h"
+#endif
+
 #include "ScintillaWX.h"
 
 //----------------------------------------------------------------------
@@ -4612,7 +4616,11 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
+#ifdef __WXGTK__
+    wxBufferedPaintDC dc(this);
+#else
     wxPaintDC dc(this);
+#endif
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 
