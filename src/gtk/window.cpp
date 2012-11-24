@@ -2380,6 +2380,16 @@ wxWindowGTK::~wxWindowGTK()
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
 
+    // Unlike the above cases, which can happen in normal circumstances, a
+    // window shouldn't be destroyed while it still has capture, so even though
+    // we still reset the global pointer to avoid leaving it dangling and
+    // crashing afterwards, also complain about it.
+    if ( g_captureWindow == this )
+    {
+        wxFAIL_MSG( wxS("Destroying window with mouse capture") );
+        g_captureWindow = NULL;
+    }
+
     if (m_widget)
         GTKDisconnect(m_widget);
     if (m_wxwindow && m_wxwindow != m_widget)
