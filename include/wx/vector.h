@@ -241,12 +241,12 @@ public:
         // increase the size twice, unless we're already too big or unless
         // more is requested
         //
-        // NB: casts to size_type are needed to suppress mingw32 warnings about
-        //     mixing enums and ints in the same expression
+        // NB: casts to size_type are needed to suppress warnings about
+        //     mixing enumeral and non-enumeral type in conditional expression
         const size_type increment = m_size > 0
                                      ? m_size < ALLOC_MAX_SIZE
                                         ? m_size
-                                        : ALLOC_MAX_SIZE
+                                        : (size_type)ALLOC_MAX_SIZE
                                      : (size_type)ALLOC_INITIAL_SIZE;
         if ( m_capacity + increment > n )
             n = m_capacity + increment;
