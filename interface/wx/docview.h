@@ -7,6 +7,27 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    A vector of wxDocument pointers.
+
+    @since 2.9.5
+*/
+typedef wxVector<wxDocument*> wxDocVector;
+
+/**
+    A vector of wxView pointers.
+
+    @since 2.9.5
+*/
+typedef wxVector<wxView*> wxViewVector;
+
+/**
+    A vector of wxDocTemplate pointers.
+
+    @since 2.9.5
+*/
+typedef wxVector<wxDocTemplate*> wxDocTemplateVector;
+
+/**
     @class wxDocTemplate
 
     The wxDocTemplate class is used to model the relationship between a
@@ -533,6 +554,20 @@ public:
         Returns the currently active view
     */
     virtual wxView* GetCurrentView() const;
+
+    /**
+        Returns a vector of wxDocument pointers.
+
+        @since 2.9.5
+    */
+    wxDocVector GetDocumentsVector() const;
+
+    /**
+        Returns a vector of wxDocTemplate pointers.
+
+        @since 2.9.5
+    */
+    wxDocTemplateVector GetTemplatesVector() const;
 
     /**
         Returns a reference to the list of documents.
@@ -1298,6 +1333,13 @@ public:
         document filename if it was set or, otherwise, the string @b unnamed.
     */
     virtual wxString GetUserReadableName() const;
+
+    /**
+        Returns a vector of wxView pointers.
+
+        @since 2.9.5
+    */
+    wxViewVector GetViewsVector() const;
 
     //@{
     /**

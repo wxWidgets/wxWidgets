@@ -385,16 +385,19 @@ void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
         default:
             wxFAIL_MSG( "unknown mode ");
     }
+    const wxDocVector
+      docList = wxDocManager::GetDocumentManager()->GetDocumentsVector();
 
     wxLogMessage
     (
         "This is the wxWidgets Document/View Sample\n"
         "running in %s mode.\n"
+        "%d open documents.\n"
         "\n"
         "Authors: Julian Smart, Vadim Zeitlin\n"
         "\n"
         "Usage: docview [--{mdi,sdi,single}]",
-        modeName
+        modeName,
+        static_cast<int>(docList.size())
     );
 }
-

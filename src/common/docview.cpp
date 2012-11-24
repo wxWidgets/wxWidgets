@@ -76,8 +76,6 @@
     #include "wx/wfstream.h"
 #endif
 
-typedef wxVector<wxDocTemplate *> wxDocTemplates;
-
 // ----------------------------------------------------------------------------
 // wxWidgets macros
 // ----------------------------------------------------------------------------
@@ -1384,11 +1382,11 @@ namespace
 {
 
 // helper function: return only the visible templates
-wxDocTemplates GetVisibleTemplates(const wxList& allTemplates)
+wxDocTemplateVector GetVisibleTemplates(const wxList& allTemplates)
 {
     // select only the visible templates
     const size_t totalNumTemplates = allTemplates.GetCount();
-    wxDocTemplates templates;
+    wxDocTemplateVector templates;
     if ( totalNumTemplates )
     {
         templates.reserve(totalNumTemplates);
@@ -1425,7 +1423,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
     // this ought to be const but SelectDocumentType/Path() are not
     // const-correct and can't be changed as, being virtual, this risks
     // breaking user code overriding them
-    wxDocTemplates templates(GetVisibleTemplates(m_templates));
+    wxDocTemplateVector templates(GetVisibleTemplates(m_templates));
     const size_t numTemplates = templates.size();
     if ( !numTemplates )
     {
@@ -1532,7 +1530,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
 
 wxView *wxDocManager::CreateView(wxDocument *doc, long flags)
 {
-    wxDocTemplates templates(GetVisibleTemplates(m_templates));
+    wxDocTemplateVector templates(GetVisibleTemplates(m_templates));
     const size_t numTemplates = templates.size();
 
     if ( numTemplates == 0 )

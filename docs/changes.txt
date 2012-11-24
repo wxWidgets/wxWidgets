@@ -687,6 +687,7 @@ All (GUI):
 - Added support for Korean Johab and Vietnamese encodings (jank9201).
 - Fix off by 1 bug with setting font size in points in wxHTML (gevorg).
 - Fix return value of wxGenericListCtrl::InsertColumn() (Sebastian Walderich).
+- Add wxDocManager::Get{Views,Documents,Templates}Vector() (troelsk).
 
 GTK:
 

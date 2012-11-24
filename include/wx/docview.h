@@ -60,6 +60,12 @@ enum
 
 #define wxMAX_FILE_HISTORY 9
 
+#ifndef __VISUALC6__
+typedef wxVector<wxDocument*> wxDocVector;
+typedef wxVector<wxView*> wxViewVector;
+typedef wxVector<wxDocTemplate*> wxDocTemplateVector;
+#endif
+
 class WXDLLIMPEXP_CORE wxDocument : public wxEvtHandler
 {
 public:
@@ -140,8 +146,13 @@ public:
 
     virtual bool AddView(wxView *view);
     virtual bool RemoveView(wxView *view);
+
+#ifndef __VISUALC6__
+    wxViewVector GetViewsVector() const { return m_documentViews.AsVector<wxView*>(); }
+#endif
     wxList& GetViews() { return m_documentViews; }
     const wxList& GetViews() const { return m_documentViews; }
+
     wxView *GetFirstView() const;
 
     virtual void UpdateAllViews(wxView *sender = NULL, wxObject *hint = NULL);
@@ -455,6 +466,10 @@ public:
     virtual void ActivateView(wxView *view, bool activate = true);
     virtual wxView *GetCurrentView() const { return m_currentView; }
 
+#ifndef __VISUALC6__
+    wxDocVector GetDocumentsVector() const { return m_docs.AsVector<wxDocument*>(); }
+    wxDocTemplateVector GetTemplatesVector() const { return m_templates.AsVector<wxDocTemplate*>(); }
+#endif
     wxList& GetDocuments() { return m_docs; }
     wxList& GetTemplates() { return m_templates; }
 
