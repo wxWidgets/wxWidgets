@@ -28,7 +28,6 @@ inline void wxVectorSort(wxVector<T>& v)
 
 #else // !wxUSE_STD_CONTAINERS
 
-#include "wx/utils.h"
 #include "wx/scopeguard.h"
 #include "wx/meta/movable.h"
 #include "wx/meta/if.h"
@@ -245,7 +244,9 @@ public:
         // NB: casts to size_type are needed to suppress mingw32 warnings about
         //     mixing enums and ints in the same expression
         const size_type increment = m_size > 0
-                                     ? wxMin(m_size, (size_type)ALLOC_MAX_SIZE)
+                                     ? m_size < ALLOC_MAX_SIZE
+                                        ? m_size
+                                        : ALLOC_MAX_SIZE
                                      : (size_type)ALLOC_INITIAL_SIZE;
         if ( m_capacity + increment > n )
             n = m_capacity + increment;
