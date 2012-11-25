@@ -205,6 +205,10 @@ protected:
     // frame
     virtual void AttachMenuBar(wxMenuBar *menubar);
 
+    // Return true if we should update the menu item state from idle event
+    // handler or false if we should delay it until the menu is opened.
+    static bool ShouldUpdateMenuFromIdle();
+
     wxMenuBar *m_frameMenuBar;
 #endif // wxUSE_MENUS
 
