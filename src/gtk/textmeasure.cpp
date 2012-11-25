@@ -116,8 +116,11 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
 {
     if ( !m_context )
     {
-        *width =
-        *height = 0;
+        if ( width )
+            *width = 0;
+
+        if ( height )
+            *height = 0;
         return;
     }
 
