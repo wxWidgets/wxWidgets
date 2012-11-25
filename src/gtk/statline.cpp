@@ -14,8 +14,8 @@
 
 #if wxUSE_STATLINE
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <gtk/gtk.h>
+#include "wx/gtk/private/gtk2-compat.h"
 
 //-----------------------------------------------------------------------------
 // wxStaticLine
@@ -43,9 +43,11 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
         return FALSE;
     }
 
-    if ( IsVertical() )
+    const bool isVertical = IsVertical();
+    m_widget = gtk_separator_new(GtkOrientation(isVertical));
+    g_object_ref(m_widget);
+    if (isVertical)
     {
-        m_widget = gtk_vseparator_new();
         if (size.x == -1)
         {
             wxSize new_size( size );
@@ -55,7 +57,6 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
     }
     else
     {
-        m_widget = gtk_hseparator_new();
         if (size.y == -1)
         {
             wxSize new_size( size );
@@ -63,7 +64,6 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
             SetSize( new_size );
         }
     }
-    g_object_ref(m_widget);
 
     m_parent->DoAddChild( this );
 
@@ -76,7 +76,7 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
 wxVisualAttributes
 wxStaticLine::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_vseparator_new());
+    return GetDefaultAttributesFromGTKWidget(gtk_separator_new(GTK_ORIENTATION_VERTICAL));
 }
 
 #endif

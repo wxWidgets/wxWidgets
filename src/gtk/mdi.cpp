@@ -200,7 +200,7 @@ void wxMDIParentFrame::DoGetClientSize(int* width, int* height) const
             if (menubar && menubar->IsShown())
             {
                 GtkRequisition req;
-                gtk_widget_size_request(menubar->m_widget, &req);
+                gtk_widget_get_preferred_height(menubar->m_widget, NULL, &req.height);
                 *height -= req.height;
                 if (*height < 0) *height = 0;
             }

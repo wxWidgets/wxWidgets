@@ -19,6 +19,7 @@
 #endif // WX_PRECOMP
 
 #include <gtk/gtk.h>
+#include "wx/gtk/private/gtk2-compat.h"
 
 #if wxUSE_LIBHILDON
     #include <hildon-widgets/hildon-window.h>
@@ -79,10 +80,10 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         // menu bar
         if (m_frameMenuBar && m_frameMenuBar->IsShown())
         {
-            GtkRequisition req;
-            gtk_widget_size_request(m_frameMenuBar->m_widget, &req);
+            int h;
+            gtk_widget_get_preferred_height(m_frameMenuBar->m_widget, NULL, &h);
 #if !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
-            *height -= req.height;
+            *height -= h;
 #endif
         }
 #endif // wxUSE_MENUS_NATIVE
@@ -98,17 +99,23 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
     // tool bar
     if (m_frameToolBar && m_frameToolBar->IsShown())
     {
-        GtkRequisition req;
-        gtk_widget_size_request(m_frameToolBar->m_widget, &req);
         if (m_frameToolBar->IsVertical())
         {
             if (width)
-                *width -= req.width;
+            {
+                int w;
+                gtk_widget_get_preferred_width(m_frameToolBar->m_widget, NULL, &w);
+                *width -= w;
+            }
         }
         else
         {
             if (height)
-                *height -= req.height;
+            {
+                int h;
+                gtk_widget_get_preferred_height(m_frameToolBar->m_widget, NULL, &h);
+                *height -= h;
+            }
         }
     }
 #endif // wxUSE_TOOLBAR
@@ -323,11 +330,11 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
             // Vertical toolbar and m_wxwindow go into an hbox, inside the
             // vbox (m_mainWidget). hbox is created on demand.
             GtkWidget* hbox = gtk_widget_get_parent(m_wxwindow);
-            if (!GTK_IS_HBOX(hbox))
+            if (hbox == m_mainWidget)
             {
-                hbox = gtk_hbox_new(false, 0);
+                hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
                 gtk_widget_show(hbox);
-                gtk_container_add(GTK_CONTAINER(m_mainWidget), hbox);
+                gtk_box_pack_start(GTK_BOX(m_mainWidget), hbox, true, true, 0);
                 gtk_widget_reparent(m_wxwindow, hbox);
             }
             gtk_widget_reparent(toolbar->m_widget, hbox);

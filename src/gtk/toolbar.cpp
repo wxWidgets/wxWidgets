@@ -271,18 +271,15 @@ void wxToolBarTool::SetImage()
 void wxToolBarTool::CreateDropDown()
 {
     gtk_tool_item_set_homogeneous(m_item, false);
-    GtkWidget* box;
-    GtkWidget* arrow;
+    GtkOrientation orient = GTK_ORIENTATION_HORIZONTAL;
+    GtkArrowType arrowType = GTK_ARROW_DOWN;
     if (GetToolBar()->HasFlag(wxTB_LEFT | wxTB_RIGHT))
     {
-        box = gtk_vbox_new(false, 0);
-        arrow = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
+        orient = GTK_ORIENTATION_VERTICAL;
+        arrowType = GTK_ARROW_RIGHT;
     }
-    else
-    {
-        box = gtk_hbox_new(false, 0);
-        arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE);
-    }
+    GtkWidget* box = gtk_box_new(orient, 0);
+    GtkWidget* arrow = gtk_arrow_new(arrowType, GTK_SHADOW_NONE);
     GtkWidget* tool_button = gtk_bin_get_child(GTK_BIN(m_item));
     gtk_widget_reparent(tool_button, box);
     GtkWidget* arrow_button = gtk_toggle_button_new();

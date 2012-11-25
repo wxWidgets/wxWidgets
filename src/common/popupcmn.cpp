@@ -323,7 +323,14 @@ bool wxPopupTransientWindow::Show( bool show )
 #ifdef __WXGTK__
     if (!show)
     {
+#ifdef __WXGTK3__
+        GdkDisplay* display = gtk_widget_get_display(m_widget);
+        GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+        GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+        gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+#else
         gdk_pointer_ungrab( (guint32)GDK_CURRENT_TIME );
+#endif
 
         gtk_grab_remove( m_widget );
     }
@@ -350,15 +357,25 @@ bool wxPopupTransientWindow::Show( bool show )
     {
         gtk_grab_add( m_widget );
 
-        gdk_pointer_grab( gtk_widget_get_window(m_widget), true,
-                          (GdkEventMask)
-                            (GDK_BUTTON_PRESS_MASK |
-                             GDK_BUTTON_RELEASE_MASK |
-                             GDK_POINTER_MOTION_HINT_MASK |
-                             GDK_POINTER_MOTION_MASK),
+        const GdkEventMask mask = GdkEventMask(
+            GDK_BUTTON_PRESS_MASK |
+            GDK_BUTTON_RELEASE_MASK |
+            GDK_POINTER_MOTION_HINT_MASK |
+            GDK_POINTER_MOTION_MASK);
+        GdkWindow* window = gtk_widget_get_window(m_widget);
+#ifdef __WXGTK3__
+        GdkDisplay* display = gdk_window_get_display(window);
+        GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+        GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+        gdk_device_grab(device, window,
+            GDK_OWNERSHIP_NONE, false, mask, NULL, unsigned(GDK_CURRENT_TIME));
+#else
+        gdk_pointer_grab( window, true,
+                          mask,
                           NULL,
                           NULL,
                           (guint32)GDK_CURRENT_TIME );
+#endif
     }
 #endif
 

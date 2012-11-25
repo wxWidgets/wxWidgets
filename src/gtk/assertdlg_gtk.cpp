@@ -29,9 +29,6 @@
 #define SOURCE_FILE_COLIDX             2
 #define LINE_NUMBER_COLIDX             3
 
-
-
-
 /* ----------------------------------------------------------------------------
    GtkAssertDialog helpers
  ---------------------------------------------------------------------------- */
@@ -117,10 +114,12 @@ void gtk_assert_dialog_process_backtrace (GtkAssertDialog *dlg)
 
     /* toggle busy cursor */
     gdk_window_set_cursor (parent, NULL);
+#ifdef __WXGTK3__
+    g_object_unref(cur);
+#else
     gdk_cursor_unref (cur);
+#endif
 }
-
-
 
 extern "C" {
 /* ----------------------------------------------------------------------------
@@ -223,7 +222,6 @@ static void gtk_assert_dialog_continue_callback(GtkWidget*, GtkAssertDialog* dlg
 static void     gtk_assert_dialog_init              (GtkAssertDialog        *self);
 static void     gtk_assert_dialog_class_init        (GtkAssertDialogClass *klass);
 
-
 GType gtk_assert_dialog_get_type()
 {
     static GType assert_dialog_type;
@@ -263,13 +261,13 @@ static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
 
         /* start the main vbox */
         gtk_widget_push_composite_child ();
-        vbox = gtk_vbox_new (FALSE, 8);
+        vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
         gtk_container_set_border_width (GTK_CONTAINER(vbox), 8);
         gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg))), vbox, true, true, 5);
 
 
         /* add the icon+message hbox */
-        hbox = gtk_hbox_new (FALSE, 0);
+        hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
         /* icon */
@@ -280,7 +278,7 @@ static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
             GtkWidget *vbox2, *info;
 
             /* message */
-            vbox2 = gtk_vbox_new (FALSE, 0);
+            vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
             gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 0);
             info = gtk_label_new ("An assertion failed!");
             gtk_box_pack_start (GTK_BOX(vbox2), info, TRUE, TRUE, 8);
@@ -306,7 +304,7 @@ static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
         GtkWidget *hbox, *vbox, *button, *sw;
 
         /* create expander's vbox */
-        vbox = gtk_vbox_new (FALSE, 0);
+        vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_add (GTK_CONTAINER (dlg->expander), vbox);
 
         /* add a scrollable window under the expander */
@@ -322,7 +320,7 @@ static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
         gtk_container_add (GTK_CONTAINER (sw), dlg->treeview);
 
         /* create button's hbox */
-        hbox = gtk_hbutton_box_new ();
+        hbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
         gtk_box_pack_end (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
         gtk_button_box_set_layout (GTK_BUTTON_BOX(hbox), GTK_BUTTONBOX_END);
 
@@ -360,8 +358,6 @@ static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
     gtk_widget_pop_composite_child ();
     gtk_widget_show_all (GTK_WIDGET(dlg));
 }
-
-
 
 /* ----------------------------------------------------------------------------
    GtkAssertDialog public API

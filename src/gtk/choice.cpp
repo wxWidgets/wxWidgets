@@ -324,7 +324,6 @@ int wxChoice::GetColumns() const
     return intval;
 }
 
-
 void wxChoice::GTKDisableEvents()
 {
     g_signal_handlers_block_by_func(m_widget,
@@ -336,7 +335,6 @@ void wxChoice::GTKEnableEvents()
     g_signal_handlers_unblock_by_func(m_widget,
                                 (gpointer) gtk_choice_changed_callback, this);
 }
-
 
 GdkWindow *wxChoice::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
@@ -366,7 +364,7 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
     // We are interested in the difference of sizes between the whole contol
     // and its child part. I.e. arrow, separators, etc.
     GtkRequisition req;
-    gtk_widget_size_request(childPart, &req);
+    gtk_widget_get_preferred_size(childPart, NULL, &req);
     wxSize totalS = GTKGetPreferredSize(m_widget);
 
     wxSize tsize(xlen + totalS.x - req.width, totalS.y);
@@ -388,13 +386,11 @@ void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
     GTKApplyStyle(gtk_bin_get_child(GTK_BIN(m_widget)), style);
 }
 
-
 // static
 wxVisualAttributes
 wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_combo_box_new());
 }
-
 
 #endif // wxUSE_CHOICE || wxUSE_COMBOBOX

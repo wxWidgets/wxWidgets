@@ -317,16 +317,7 @@ wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
 {
     GtkRequisition req;
 #ifdef __WXGTK3__
-    if (gtk_widget_get_request_mode(widget) != GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    {
-        gtk_widget_get_preferred_height(widget, NULL, &req.height);
-        gtk_widget_get_preferred_width_for_height(widget, req.height, NULL, &req.width);
-    }
-    else
-    {
-        gtk_widget_get_preferred_width(widget, NULL, &req.width);
-        gtk_widget_get_preferred_height_for_width(widget, req.width, NULL, &req.height);
-    }
+    gtk_widget_get_preferred_size(widget, NULL, &req);
 #else
     GTK_WIDGET_GET_CLASS(widget)->size_request(widget, &req);
 #endif

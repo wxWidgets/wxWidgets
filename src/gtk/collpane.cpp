@@ -223,8 +223,7 @@ wxSize wxCollapsiblePane::DoGetBestSize() const
 
     GtkRequisition req;
 #ifdef __WXGTK3__
-    gtk_widget_get_preferred_width(m_widget, NULL, &req.width);
-    gtk_widget_get_preferred_height_for_width(m_widget, req.width, NULL, &req.height);
+    gtk_widget_get_preferred_size(m_widget, NULL, &req);
 #else
     GTK_WIDGET_GET_CLASS(m_widget)->size_request(m_widget, &req);
 #endif

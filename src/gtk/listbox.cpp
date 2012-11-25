@@ -36,7 +36,7 @@
 #include "wx/gtk/treeentry_gtk.h"
 
 #include <gdk/gdkkeysyms.h>
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef __WXGTK3__
 #include <gdk/gdkkeysyms-compat.h>
 #endif
 
@@ -781,7 +781,7 @@ void wxListBox::DoScrollToCell(int n, float alignY, float alignX)
     wxCHECK_RET( IsValid(n), wxT("invalid index"));
 
     //RN: I have no idea why this line is needed...
-    if (gdk_pointer_is_grabbed () && gtk_widget_has_grab(GTK_WIDGET(m_treeview)))
+    if (gtk_widget_has_grab(GTK_WIDGET(m_treeview)))
         return;
 
     GtkTreeIter iter;

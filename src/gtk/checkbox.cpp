@@ -120,7 +120,7 @@ bool wxCheckBox::Create(wxWindow *parent,
         m_widgetLabel = gtk_label_new("");
         gtk_misc_set_alignment(GTK_MISC(m_widgetLabel), 0.0, 0.5);
 
-        m_widget = gtk_hbox_new(FALSE, 0);
+        m_widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start(GTK_BOX(m_widget), m_widgetLabel, FALSE, FALSE, 3);
         gtk_box_pack_start(GTK_BOX(m_widget), m_widgetCheckbox, FALSE, FALSE, 3);
 

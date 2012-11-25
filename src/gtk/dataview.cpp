@@ -1705,8 +1705,11 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
                     GTK_TREE_MODEL(wxgtk_model), &iter ));
                 GdkRectangle cell_area;
                 gtk_tree_view_get_cell_area( widget, path, gcolumn, &cell_area );
-
+#ifdef __WXGTK3__
+                GtkAdjustment* hadjust = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(widget));
+#else
                 GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
+#endif
                 double d = gtk_adjustment_get_value( hadjust );
                 int xdiff = (int) d;
 
@@ -2987,7 +2990,7 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
     SetWidth( width );
 
     // Create container for icon and label
-    GtkWidget *box = gtk_hbox_new( FALSE, 1 );
+    GtkWidget* box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
     gtk_widget_show( box );
     // gtk_container_set_border_width((GtkContainer*)box, 2);
     m_image = gtk_image_new();
@@ -4353,7 +4356,7 @@ void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
         wxWindow *child = node->GetData();
 
         GtkRequisition req;
-        gtk_widget_size_request( child->m_widget, &req );
+        gtk_widget_get_preferred_size(child->m_widget, NULL, &req);
 
         GtkAllocation alloc;
         alloc.x = child->m_x;
@@ -4376,14 +4379,15 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
                                      GdkEventMotion *gdk_event,
                                      wxDataViewCtrl *dv )
 {
+    int x = gdk_event->x;
+    int y = gdk_event->y;
     if (gdk_event->is_hint)
     {
-        int x = 0;
-        int y = 0;
-        GdkModifierType state;
-        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
-        gdk_event->x = x;
-        gdk_event->y = y;
+#ifdef __WXGTK3__
+        gdk_window_get_device_position(gdk_event->window, gdk_event->device, &x, &y, NULL);
+#else
+        gdk_window_get_pointer(gdk_event->window, &x, &y, NULL);
+#endif
     }
 
     wxGtkTreePath path;
@@ -4392,7 +4396,7 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
     gint cell_y = 0;
     if (gtk_tree_view_get_path_at_pos(
         GTK_TREE_VIEW(dv->GtkGetTreeView()),
-        (int) gdk_event->x, (int) gdk_event->y,
+        x, y,
         path.ByRef(),
         &column,
         &cell_x,

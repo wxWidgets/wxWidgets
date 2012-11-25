@@ -314,7 +314,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     for ( size_t n = 0; n < pageCount; n++ )
     {
         GtkRequisition req;
-        gtk_widget_size_request(GetNotebookPage(n)->m_box, &req);
+        gtk_widget_get_preferred_size(GetNotebookPage(n)->m_box, NULL, &req);
         sizeTabMax.IncTo(wxSize(req.width, req.height));
     }
 
@@ -429,7 +429,7 @@ bool wxNotebook::InsertPage( size_t position,
     // first page.
     pageData->m_imageIndex = imageId;
 
-    pageData->m_box = gtk_hbox_new(false, 1);
+    pageData->m_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
     gtk_container_set_border_width(GTK_CONTAINER(pageData->m_box), 2);
 
     pageData->m_image = NULL;
@@ -503,7 +503,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     const size_t count = GetPageCount();
     size_t i = 0;
 
-#if !GTK_CHECK_VERSION(3,0,0) && !defined(GSEAL_ENABLE)
+#ifndef __WXGTK3__
     GtkNotebook * notebook = GTK_NOTEBOOK(m_widget);
     if (gtk_notebook_get_scrollable(notebook))
         i = g_list_position( notebook->children, notebook->first_tab );

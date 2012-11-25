@@ -171,17 +171,12 @@ wxSize wxButtonBase::GetDefaultSize()
         //     button's size. We have to retrieve both values and combine them.
 
         GtkWidget *wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-        GtkWidget *box = gtk_hbutton_box_new();
+        GtkWidget *box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
         GtkWidget *btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
         gtk_container_add(GTK_CONTAINER(box), btn);
         gtk_container_add(GTK_CONTAINER(wnd), box);
         GtkRequisition req;
-#ifdef __WXGTK3__
-        gtk_widget_get_preferred_height(btn, NULL, &req.height);
-        gtk_widget_get_preferred_width_for_height(btn, req.height, NULL, &req.width);
-#else
-        gtk_widget_size_request(btn, &req);
-#endif
+        gtk_widget_get_preferred_size(btn, NULL, &req);
 
         gint minwidth, minheight;
         gtk_widget_style_get(box,

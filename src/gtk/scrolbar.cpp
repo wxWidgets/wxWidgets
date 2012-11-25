@@ -138,10 +138,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     }
 
     const bool isVertical = (style & wxSB_VERTICAL) != 0;
-    if (isVertical)
-        m_widget = gtk_vscrollbar_new( NULL );
-    else
-        m_widget = gtk_hscrollbar_new( NULL );
+    m_widget = gtk_scrollbar_new(GtkOrientation(isVertical), NULL);
     g_object_ref(m_widget);
 
     m_scrollBar[0] = (GtkRange*)m_widget;
@@ -235,7 +232,7 @@ void wxScrollBar::SetRange(int range)
 wxVisualAttributes
 wxScrollBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_vscrollbar_new(NULL));
+    return GetDefaultAttributesFromGTKWidget(gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, NULL));
 }
 
 #endif // wxUSE_SCROLLBAR
