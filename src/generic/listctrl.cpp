@@ -4612,13 +4612,14 @@ void wxGenericListCtrl::OnScroll(wxScrollWinEvent& event)
     // the window the next time
     m_mainWin->ResetVisibleLinesRange();
 
-    HandleOnScroll( event );
-
     if ( event.GetOrientation() == wxHORIZONTAL && HasHeader() )
     {
         m_headerWin->Refresh();
         m_headerWin->Update();
     }
+
+    // Let the window be scrolled as usual by the default handler.
+    event.Skip();
 }
 
 void wxGenericListCtrl::SetSingleStyle( long style, bool add )
