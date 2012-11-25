@@ -30,6 +30,9 @@
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/mnemonics.h"
 
+// Number of currently open modal dialogs, defined in src/gtk/toplevel.cpp.
+extern int wxOpenModalDialogsCount;
+
 // we use normal item but with a special id for the menu title
 static const int wxGTK_TITLE_ID = -3;
 
@@ -45,6 +48,10 @@ static void wxGetGtkAccel(const wxMenuItem*, guint*, GdkModifierType*);
 
 static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 {
+    // See the comment about Ubuntu Unity in menuitem_activate().
+    if ( wxOpenModalDialogsCount )
+        return;
+
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
@@ -478,6 +485,16 @@ extern "C" {
 static void menuitem_activate(GtkWidget*, wxMenuItem* item)
 {
     if (!item->IsEnabled())
+        return;
+
+    // Unity hack: under Ubuntu Unity the global menu bar is not affected by a
+    // modal dialog being shown, so the user can select a menu item before
+    // hiding the dialog and, in particular, a new instance of the same dialog
+    // can be shown again, breaking a lot of programs not expecting this.
+    //
+    // So explicitly ignore any menu events generated while any modal dialogs
+    // are opened.
+    if ( wxOpenModalDialogsCount )
         return;
 
     int id = item->GetId();
