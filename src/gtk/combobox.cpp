@@ -409,10 +409,14 @@ wxSize wxComboBox::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxSize tsize( wxChoice::DoGetSizeFromTextSize(xlen, ylen) );
 
-    // Add the margins we have previously set, but only the horizontal border
-    // as vertical one has been taken account in the prevoius call.
-    // Also get other GTK+ margins.
-    tsize.IncBy( GTKGetEntryMargins(GetEntry()).x, 0);
+    GtkEntry* entry = GetEntry();
+    if (entry)
+    {
+        // Add the margins we have previously set, but only the horizontal border
+        // as vertical one has been taken account in the previous call.
+        // Also get other GTK+ margins.
+        tsize.IncBy(GTKGetEntryMargins(entry).x, 0);
+    }
 
     return tsize;
 }
