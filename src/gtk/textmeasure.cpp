@@ -165,8 +165,11 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
 
 bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
                                             wxArrayInt& widths,
-                                            double WXUNUSED(scaleX))
+                                            double scaleX)
 {
+    if ( !m_layout )
+        return wxTextMeasureBase::DoGetPartialTextExtents(text, widths, scaleX);
+
     // Set layout's text
     const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(text, GetFont());
     if ( !dataUTF8 )

@@ -150,8 +150,11 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
 
 bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
                                             wxArrayInt& widths,
-                                            double WXUNUSED(scaleX))
+                                            double scaleX)
 {
+    if ( !m_hdc )
+        return wxTextMeasureBase::DoGetPartialTextExtents(text, widths, scaleX);
+
     static int maxLenText = -1;
     static int maxWidth = -1;
 
