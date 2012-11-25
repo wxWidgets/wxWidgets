@@ -234,6 +234,14 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
                                              int state)
 {
     wxVisualAttributes attr;
+
+    GtkWidget* tlw = NULL;
+    if (gtk_widget_get_parent(widget) == NULL)
+    {
+        tlw = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        gtk_container_add(GTK_CONTAINER(tlw), widget);
+    }
+
 #ifdef __WXGTK3__
     GtkStateFlags stateFlag = GTK_STATE_FLAG_NORMAL;
     if (state)
@@ -258,29 +266,30 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     if (!style)
         style = gtk_widget_get_default_style();
 
-    if (!style)
+    if (style)
     {
-        return wxWindow::GetClassDefaultAttributes(wxWINDOW_VARIANT_NORMAL);
-    }
+        // get the style's colours
+        attr.colFg = wxColour(style->fg[state]);
+        if (useBase)
+            attr.colBg = wxColour(style->base[state]);
+        else
+            attr.colBg = wxColour(style->bg[state]);
 
-    // get the style's colours
-    attr.colFg = wxColour(style->fg[state]);
-    if (useBase)
-        attr.colBg = wxColour(style->base[state]);
+        // get the style's font
+        if (!style->font_desc)
+            style = gtk_widget_get_default_style();
+        if (style && style->font_desc)
+        {
+            wxNativeFontInfo info;
+            info.description = style->font_desc;
+            attr.font = wxFont(info);
+            info.description = NULL;
+        }
+    }
     else
-        attr.colBg = wxColour(style->bg[state]);
-
-    // get the style's font
-    if ( !style->font_desc )
-        style = gtk_widget_get_default_style();
-    if ( style && style->font_desc )
-    {
-        wxNativeFontInfo info;
-        info.description = style->font_desc;
-        attr.font = wxFont(info);
-        info.description = NULL;
-    }
+        attr = wxWindow::GetClassDefaultAttributes(wxWINDOW_VARIANT_NORMAL);
 #endif
+
     if (!attr.font.IsOk())
     {
         GtkSettings *settings = gtk_settings_get_default();
@@ -296,56 +305,9 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         g_free (font_name);
     }
 
-    return attr;
-}
+    if (tlw)
+        gtk_widget_destroy(tlw);
 
-
-//static
-wxVisualAttributes
-wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNew_t widget_new,
-                                             bool useBase,
-                                             int state)
-{
-    wxVisualAttributes attr;
-    // NB: we need toplevel window so that GTK+ can find the right style
-    GtkWidget *wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    GtkWidget* widget = widget_new();
-    gtk_container_add(GTK_CONTAINER(wnd), widget);
-    attr = GetDefaultAttributesFromGTKWidget(widget, useBase, state);
-    gtk_widget_destroy(wnd);
-    return attr;
-}
-
-//static
-wxVisualAttributes
-wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromStr_t widget_new,
-                                             bool useBase,
-                                             int state)
-{
-    wxVisualAttributes attr;
-    // NB: we need toplevel window so that GTK+ can find the right style
-    GtkWidget *wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    GtkWidget* widget = widget_new("");
-    gtk_container_add(GTK_CONTAINER(wnd), widget);
-    attr = GetDefaultAttributesFromGTKWidget(widget, useBase, state);
-    gtk_widget_destroy(wnd);
-    return attr;
-}
-
-
-//static
-wxVisualAttributes
-wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t widget_new,
-                                             bool useBase,
-                                             int state)
-{
-    wxVisualAttributes attr;
-    // NB: we need toplevel window so that GTK+ can find the right style
-    GtkWidget *wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    GtkWidget* widget = widget_new(NULL);
-    gtk_container_add(GTK_CONTAINER(wnd), widget);
-    attr = GetDefaultAttributesFromGTKWidget(widget, useBase, state);
-    gtk_widget_destroy(wnd);
     return attr;
 }
 

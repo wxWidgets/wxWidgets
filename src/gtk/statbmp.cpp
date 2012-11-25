@@ -75,8 +75,7 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
 wxVisualAttributes
 wxStaticBitmap::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    // TODO: overload to allow using gtk_pixmap_new?
-    return GetDefaultAttributesFromGTKWidget(gtk_label_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_image_new());
 }
 
 #endif // wxUSE_STATBMP

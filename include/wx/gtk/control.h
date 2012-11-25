@@ -18,13 +18,6 @@ typedef struct _GtkEntry GtkEntry;
 // wxControl
 //-----------------------------------------------------------------------------
 
-// C-linkage function pointer types for GetDefaultAttributesFromGTKWidget
-extern "C" {
-    typedef GtkWidget* (*wxGtkWidgetNew_t)(void);
-    typedef GtkWidget* (*wxGtkWidgetNewFromStr_t)(const char*);
-    typedef GtkWidget* (*wxGtkWidgetNewFromAdj_t)(GtkAdjustment*);
-}
-
 class WXDLLIMPEXP_CORE wxControl : public wxControlBase
 {
     typedef wxControlBase base_type;
@@ -78,19 +71,6 @@ protected:
     // These are used by GetDefaultAttributes
     static wxVisualAttributes
         GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
-                                          bool useBase = false,
-                                          int state = 0);
-    static wxVisualAttributes
-        GetDefaultAttributesFromGTKWidget(wxGtkWidgetNew_t,
-                                          bool useBase = false,
-                                          int state = 0);
-    static wxVisualAttributes
-        GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromStr_t,
-                                          bool useBase = false,
-                                          int state = 0);
-
-    static wxVisualAttributes
-        GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t,
                                           bool useBase = false,
                                           int state = 0);
 

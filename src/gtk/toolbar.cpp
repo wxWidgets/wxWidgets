@@ -763,7 +763,7 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 wxVisualAttributes
 wxToolBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_toolbar_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_toolbar_new());
 }
 
 #endif // wxUSE_TOOLBAR_NATIVE

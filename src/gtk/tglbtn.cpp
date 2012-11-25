@@ -235,7 +235,7 @@ wxSize wxToggleButton::DoGetBestSize() const
 wxVisualAttributes
 wxToggleButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_toggle_button_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_toggle_button_new());
 }
 
 #endif // wxUSE_TOGGLEBTN

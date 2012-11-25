@@ -95,7 +95,7 @@ GdkWindow *wxAnyButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 wxVisualAttributes
 wxAnyButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_button_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_button_new());
 }
 
 // ----------------------------------------------------------------------------

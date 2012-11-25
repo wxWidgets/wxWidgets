@@ -2009,7 +2009,7 @@ bool wxTextCtrl::GTKProcessEvent(wxEvent& event) const
 wxVisualAttributes
 wxTextCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_entry_new, true);
+    return GetDefaultAttributesFromGTKWidget(gtk_entry_new(), true);
 }
 
 #endif // wxUSE_TEXTCTRL

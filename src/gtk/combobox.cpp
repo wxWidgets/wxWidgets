@@ -290,9 +290,9 @@ wxVisualAttributes
 wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
 #ifdef __WXGTK3__
-    return GetDefaultAttributesFromGTKWidget(gtk_combo_box_new_with_entry, true);
+    return GetDefaultAttributesFromGTKWidget(gtk_combo_box_new_with_entry(), true);
 #else
-    return GetDefaultAttributesFromGTKWidget(gtk_combo_box_entry_new, true);
+    return GetDefaultAttributesFromGTKWidget(gtk_combo_box_entry_new(), true);
 #endif
 }
 

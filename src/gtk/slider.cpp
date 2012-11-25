@@ -533,7 +533,7 @@ GdkWindow *wxSlider::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 wxVisualAttributes
 wxSlider::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_vscale_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_vscale_new(NULL));
 }
 
 #endif // wxUSE_SLIDER

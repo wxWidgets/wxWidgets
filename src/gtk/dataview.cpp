@@ -5104,7 +5104,7 @@ void wxDataViewCtrl::GtkEnableSelectionEvents()
 wxVisualAttributes
 wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_tree_view_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_tree_view_new());
 }
 
 void wxDataViewCtrl::DoApplyWidgetStyle(GtkRcStyle *style)

@@ -248,7 +248,7 @@ void wxStaticText::DoSetLabel(const wxString& str)
 wxVisualAttributes
 wxStaticText::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_label_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_label_new(""));
 }
 
 #endif // wxUSE_STATTEXT

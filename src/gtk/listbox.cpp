@@ -931,7 +931,7 @@ wxSize wxListBox::DoGetBestSize() const
 wxVisualAttributes
 wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_tree_view_new, true);
+    return GetDefaultAttributesFromGTKWidget(gtk_tree_view_new(), true);
 }
 
 #endif // wxUSE_LISTBOX

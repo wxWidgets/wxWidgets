@@ -393,7 +393,7 @@ void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
 wxVisualAttributes
 wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_combo_box_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_combo_box_new());
 }
 
 

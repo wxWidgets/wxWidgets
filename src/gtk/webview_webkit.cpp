@@ -1004,7 +1004,7 @@ void wxWebViewWebKit::FindClear()
 wxVisualAttributes
 wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-     return GetDefaultAttributesFromGTKWidget(webkit_web_view_new);
+     return GetDefaultAttributesFromGTKWidget(webkit_web_view_new());
 }
 
 

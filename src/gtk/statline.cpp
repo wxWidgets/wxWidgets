@@ -76,7 +76,7 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
 wxVisualAttributes
 wxStaticLine::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_vseparator_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_vseparator_new());
 }
 
 #endif

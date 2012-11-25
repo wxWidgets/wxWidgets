@@ -334,7 +334,7 @@ wxSize wxButton::DoGetBestSize() const
 wxVisualAttributes
 wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_button_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_button_new());
 }
 
 #endif // wxUSE_BUTTON

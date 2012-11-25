@@ -128,7 +128,7 @@ wxVisualAttributes wxGauge::GetDefaultAttributes() const
 wxVisualAttributes
 wxGauge::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_progress_bar_new,
+    return GetDefaultAttributesFromGTKWidget(gtk_progress_bar_new(),
                                              false, GTK_STATE_ACTIVE);
 }
 

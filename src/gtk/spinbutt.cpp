@@ -217,9 +217,7 @@ wxSize wxSpinButton::DoGetBestSize() const
 wxVisualAttributes
 wxSpinButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    // TODO: overload to accept functions like gtk_spin_button_new?
-    // Until then use a similar type
-    return GetDefaultAttributesFromGTKWidget(gtk_button_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_spin_button_new_with_range(0, 100, 1));
 }
 
 #endif

@@ -607,7 +607,7 @@ GdkWindow *wxNotebook::GTKGetWindow(wxArrayGdkWindows& windows) const
 wxVisualAttributes
 wxNotebook::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_notebook_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_notebook_new());
 }
 
 #endif

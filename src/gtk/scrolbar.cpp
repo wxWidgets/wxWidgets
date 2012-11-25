@@ -235,7 +235,7 @@ void wxScrollBar::SetRange(int range)
 wxVisualAttributes
 wxScrollBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_vscrollbar_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_vscrollbar_new(NULL));
 }
 
 #endif // wxUSE_SCROLLBAR

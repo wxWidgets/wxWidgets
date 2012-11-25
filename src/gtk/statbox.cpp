@@ -152,7 +152,7 @@ void wxStaticBox::GTKWidgetDoSetMnemonic(GtkWidget* w)
 wxVisualAttributes
 wxStaticBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_frame_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_frame_new(""));
 }
 
 

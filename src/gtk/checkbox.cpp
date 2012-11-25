@@ -236,7 +236,7 @@ GdkWindow *wxCheckBox::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 wxVisualAttributes
 wxCheckBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_check_button_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_check_button_new());
 }
 
 #endif
