@@ -26,6 +26,7 @@
 #include "wx/frame.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/menu.h"
     #include "wx/menuitem.h"
     #include "wx/dcclient.h"
