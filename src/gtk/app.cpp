@@ -542,7 +542,7 @@ bool wxApp::GTKIsUsingGlobalMenu()
         // XDG_CURRENT_DESKTOP env var being set to "Unity".
         wxString proxy;
         s_isUsingGlobalMenu = wxGetEnv("UBUNTU_MENUPROXY", &proxy) &&
-                                !proxy.empty();
+                                !proxy.empty() && proxy != "0";
     }
 
     return s_isUsingGlobalMenu == 1;
