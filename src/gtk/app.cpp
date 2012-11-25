@@ -529,6 +529,25 @@ void wxGUIAppTraits::MutexGuiLeave()
 }
 #endif // wxUSE_THREADS
 
+/* static */
+bool wxApp::GTKIsUsingGlobalMenu()
+{
+    static int s_isUsingGlobalMenu = -1;
+    if ( s_isUsingGlobalMenu == -1 )
+    {
+        // Currently we just check for this environment variable because this
+        // is how support for the global menu is implemented under Ubuntu.
+        //
+        // If we ever get false positives, we could also check for
+        // XDG_CURRENT_DESKTOP env var being set to "Unity".
+        wxString proxy;
+        s_isUsingGlobalMenu = wxGetEnv("UBUNTU_MENUPROXY", &proxy) &&
+                                !proxy.empty();
+    }
+
+    return s_isUsingGlobalMenu == 1;
+}
+
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 // Maemo-specific method: get the main program object
 HildonProgram *wxApp::GetHildonProgram()
