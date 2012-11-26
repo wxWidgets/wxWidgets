@@ -259,7 +259,7 @@ private:
 //                  the wxHtmlWinParser object
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_HTML wxHtmlStyleParams;
+class WXDLLIMPEXP_FWD_HTML wxHtmlStyleParams;
 
 class WXDLLIMPEXP_HTML wxHtmlWinTagHandler : public wxHtmlTagHandler
 {

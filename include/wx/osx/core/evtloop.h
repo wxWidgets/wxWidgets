@@ -15,7 +15,7 @@
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoop );
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopObserver );
 
-class WXDLLIMPEXP_BASE wxCFEventLoopPauseIdleEvents;
+class WXDLLIMPEXP_FWD_BASE wxCFEventLoopPauseIdleEvents;
 
 class WXDLLIMPEXP_BASE wxCFEventLoop : public wxEventLoopBase
 {
