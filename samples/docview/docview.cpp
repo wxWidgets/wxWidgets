@@ -385,8 +385,14 @@ void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
         default:
             wxFAIL_MSG( "unknown mode ");
     }
-    const wxDocVector
-      docList = wxDocManager::GetDocumentManager()->GetDocumentsVector();
+
+#ifdef __VISUALC6__
+    const int docsCount =
+        wxDocManager::GetDocumentManager()->GetDocuments().GetCount();
+#else
+    const int docsCount =
+        wxDocManager::GetDocumentManager()->GetDocumentsVector().size();
+#endif
 
     wxLogMessage
     (
@@ -398,6 +404,6 @@ void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
         "\n"
         "Usage: docview [--{mdi,sdi,single}]",
         modeName,
-        static_cast<int>(docList.size())
+        docsCount
     );
 }
