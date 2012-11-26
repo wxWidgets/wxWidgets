@@ -33,11 +33,11 @@
     #include "wx/meta/convertible.h"
 #endif
 
-#include "wx/meta/removeref.h"
+// Currently VC6 and VC7 are known to not be able to compile CallAfter() code,
+// so disable it for them.
+#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(8)
+    #include "wx/meta/removeref.h"
 
-#ifdef wxHAS_REMOVEREF
-    // CallAfter() implementation requires wxRemoveRef(), so just disable it
-    // for compilers too broken to not allow defining it.
     #define wxHAS_CALL_AFTER
 #endif
 

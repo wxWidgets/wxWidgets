@@ -527,7 +527,8 @@ public:
 
          Note that currently only up to 2 arguments can be passed.
 
-         @note This method is not available with Visual C++ 6 which doesn't
+         @note This method is not available with Visual C++ before version 8
+               (Visual Studio 2005) as earlier versions of the compiler don't
                have the required support for C++ templates to implement it.
 
          @since 2.9.5
