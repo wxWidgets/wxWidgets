@@ -420,7 +420,7 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
     if (idx == -1)
         return;
 
-    bool ret;
+    bool ret = false;
     wxString path = m_filesList->GetItemText(idx).Mid(6);
 
     // This will tell wxFileSystemWatcher whether to dereference symlinks
