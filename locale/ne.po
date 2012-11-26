@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Translation of WXWidgits.Po, 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-27 11:51+0200\n"
-"PO-Revision-Date: 2012-11-07 08:11+0545\n"
+"PO-Revision-Date: 2012-11-13 10:25+0545\n"
 "Last-Translator: हिम प्रसाद गौतम \n"
 "Language-Team: Him Prasad Gautam <himjee@yahoo.com>\n"
 "Language: Nepali\n"
@@ -40,7 +40,7 @@ msgstr "धन्यवाद, असुविधाको लागि क्�
 #: ../src/common/prntbase.cpp:547
 #, c-format
 msgid " (copy %d of %d)"
-msgstr "%d बट्टा %d को नक्कल"
+msgstr "%2$d मध्ये %1$d को प्रतिलिपी"
 
 #: ../src/common/log.cpp:428
 #, c-format
@@ -100,7 +100,7 @@ msgstr "%d को %lu"
 #: ../src/html/helpwnd.cpp:1682 ../src/html/helpwnd.cpp:1720
 #, c-format
 msgid "%i of %i"
-msgstr "%i बट्टा %i"
+msgstr "%2$i मध्ये %1$i"
 
 #: ../src/generic/filectrlg.cpp:309
 #, c-format
@@ -231,7 +231,7 @@ msgstr "&रद्द"
 
 #: ../src/msw/mdi.cpp:164
 msgid "&Cascade"
-msgstr "&Cascade"
+msgstr "&खप्टिएको"
 
 #: ../include/wx/richtext/richtextbuffer.h:5476
 msgid "&Cell"
@@ -1569,7 +1569,7 @@ msgstr "registry कुञ्जी '%s' सिर्जना गर्न स�
 
 #: ../src/msw/thread.cpp:696 ../src/os2/thread.cpp:495
 msgid "Can't create thread"
-msgstr "thread सिर्जना गर्न सकिँदैन ।"
+msgstr "धागो सिर्जना गर्न सकिँदैन ।"
 
 #: ../src/msw/window.cpp:3780
 #, c-format
@@ -1670,7 +1670,7 @@ msgstr "लग पुस्तिकाका सामाग्रीहरू�
 
 #: ../src/msw/thread.cpp:652 ../src/os2/thread.cpp:478
 msgid "Can't set thread priority"
-msgstr "thread प्राथमिकता सेट गर्न सकिँदैन ।"
+msgstr "धागोको प्राथमिकता तय गर्न सकिँदैन ।"
 
 #: ../src/msw/registry.cpp:896 ../src/msw/registry.cpp:940
 #: ../src/msw/registry.cpp:1066
@@ -1807,16 +1807,16 @@ msgstr "'%s' बाट typename पढ्न सकिँदैन ।"
 #: ../src/os2/thread.cpp:528
 #, c-format
 msgid "Cannot resume thread %lu"
-msgstr "thread %lu फेरि सुरु गर्न सकिँदैन ।"
+msgstr "धागो %lu फेरि सुरु गर्न सकिँदैन ।"
 
 #: ../src/msw/thread.cpp:922
 #, c-format
 msgid "Cannot resume thread %x"
-msgstr "thread %x फेरि सुरु गर्न सकिँदैन ।"
+msgstr "धागो %x फेरि सुरु गर्न सकिँदैन ।"
 
 #: ../src/unix/threadpsx.cpp:1194
 msgid "Cannot retrieve thread scheduling policy."
-msgstr "thread कार्य सुची नीति प्राप्त गर्न सकिँदैन ।"
+msgstr "धागो कार्य सुची नीति प्राप्त गर्न सकिँदैन ।"
 
 #: ../src/common/intl.cpp:545
 #, c-format
@@ -1825,21 +1825,21 @@ msgstr "भाषा \"%s\" लाइ स्थानीयतामा से�
 
 #: ../src/unix/threadpsx.cpp:818 ../src/msw/thread.cpp:570
 msgid "Cannot start thread: error writing TLS."
-msgstr "thread सुरु गर्न सकिँदैन: TLS लेखाइमा गल्ती भयो ।"
+msgstr "धागो सुरु गर्न सकिँदैन: TLS लेखाइमा गल्ती भयो ।"
 
 #: ../src/os2/thread.cpp:514
 #, c-format
 msgid "Cannot suspend thread %lu"
-msgstr "thread %lu लाइ निलम्बन गर्न सकिँदैन ।"
+msgstr "धागो %lu लाइ निलम्बन गर्न सकिँदैन ।"
 
 #: ../src/msw/thread.cpp:907
 #, c-format
 msgid "Cannot suspend thread %x"
-msgstr "thread %x लाइ निलम्बन गर्न सकिँदैन ।"
+msgstr "धागो %x लाइ निलम्बन गर्न सकिँदैन ।"
 
 #: ../src/msw/thread.cpp:830
 msgid "Cannot wait for thread termination"
-msgstr "thread को समाप्ति पर्खन सकिँदैन ।"
+msgstr "धागो को समाप्ति पर्खन सकिँदैन ।"
 
 #: ../src/html/helpwnd.cpp:547
 msgid "Case sensitive"
@@ -2391,7 +2391,7 @@ msgstr "wxBrush बाट hatch शैली पाउन सकिएन "
 
 #: ../src/msw/thread.cpp:948
 msgid "Couldn't get the current thread pointer"
-msgstr "चालू thread Adder पाउन सकिएन"
+msgstr "चालू धागो बर्धक पाउन सकिएन"
 
 #: ../src/osx/carbon/overlay.cpp:130
 msgid "Couldn't init the context on the overlay window"
@@ -2440,7 +2440,7 @@ msgstr "PNG तस्विर बचत गर्न सकिएन"
 
 #: ../src/msw/thread.cpp:715
 msgid "Couldn't terminate thread"
-msgstr "thread बन्द गर्न सकिएन"
+msgstr "धागो बन्द गर्न सकिएन"
 
 #: ../src/common/xtistrm.cpp:171
 #, c-format
@@ -2685,7 +2685,7 @@ msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
 msgstr ""
-"प्रदान गरिएको शब्द भएका सबै अनुसूची लाई देखाउ । खोज तलासले ठूलो वा सानो वर्णको वास्ता "
+"प्रदान गरिएको शब्द खण्ड भएका सबै अनुसूची लाई देखाउ । खोजी ठूलो वा सानो वर्णको वास्ता "
 "गर्दैन । "
 
 #: ../src/html/helpwnd.cpp:693
@@ -3066,7 +3066,7 @@ msgstr "registry उप-कुञ्जी '%s' को नक्कल '%s' म�
 
 #: ../src/msw/dde.cpp:1074
 msgid "Failed to create DDE string"
-msgstr "DDE string को सिर्जना गर्न सकिएन ।"
+msgstr "DDE पदावलीको सिर्जना गर्न सकिएन ।"
 
 #: ../src/msw/mdi.cpp:579
 msgid "Failed to create MDI parent frame."
@@ -3223,7 +3223,7 @@ msgstr "सङ्केत चालक स्थापित गर्न स�
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
-msgstr "Thread जोड्न सकिएन, भण्डार चुहावट प्रबल छ- कृपया कार्यक्रम फेरी सुरु गर्नु होला"
+msgstr "धागो जोड्न सकिएन, भण्डार चुहावट प्रबल छ- कृपया कार्यक्रम फेरी सुरु गर्नु होला"
 
 #: ../src/msw/utils.cpp:745
 #, c-format
@@ -3477,12 +3477,12 @@ msgstr "पाठ नियन्त्रक मा पाठ राख्न �
 #: ../src/unix/threadpsx.cpp:1141
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "thread स्वीकृति तहलाई %lu मा तय गर्न सकिएन ।"
+msgstr "धागो स्वीकृति तहलाई %lu मा तय गर्न सकिएन ।"
 
 #: ../src/unix/threadpsx.cpp:1338 ../src/unix/threadpsx.cpp:1348
 #, c-format
 msgid "Failed to set thread priority %d."
-msgstr "thread प्राथमिकता %d कायम गर्न सकिएन ।"
+msgstr "धागो प्राथमिकता %d कायम गर्न सकिएन ।"
 
 #: ../src/unix/utilsunx.cpp:709
 msgid "Failed to set up non-blocking pipe, the program might hang."
@@ -3503,7 +3503,7 @@ msgstr "wake Up pipe लाई न टालिएको मुद्राम�
 
 #: ../src/unix/threadpsx.cpp:1530
 msgid "Failed to terminate a thread."
-msgstr "thread लाई बन्द गर्न सकिएन ।"
+msgstr "धागो लाई बन्द गर्न सकिएन ।"
 
 #: ../src/msw/dde.cpp:747
 msgid "Failed to terminate the advise loop with DDE server"
@@ -6092,7 +6092,7 @@ msgstr "Strikethrough"
 #: ../src/common/colourcmn.cpp:46
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
-msgstr "String को रङ्ग : गलत रङ्ग specification : %s"
+msgstr "पदावलीको रङ्ग : गलत रङ्ग specification : %s"
 
 #: ../src/richtext/richtextformatdlg.cpp:317 ../src/propgrid/advprops.cpp:648
 msgid "Style"
@@ -6442,7 +6442,7 @@ msgstr[1] "अघिल्लो सन्देश %lu पटक दोहो�
 
 #: ../src/common/log.cpp:277
 msgid "The previous message repeated once."
-msgstr " पछिल्लो सन्देश एक पटक दोहोरियो ।"
+msgstr " पछिल्लो सन्देश फेरी  दोहोरियो ।"
 
 #: ../src/gtk/print.cpp:933 ../src/gtk/print.cpp:1116
 msgid "The print dialog returned an error."
@@ -6614,21 +6614,21 @@ msgstr ""
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
-msgstr "Thread module सुरु हुन सकेन: स्थानीय Thread भण्डारमा कुनै मान राख्न सकिँदैन ।"
+msgstr "धागो module सुरु हुन सकेन: स्थानीय धागो भण्डारमा कुनै मान राख्न सकिँदैन ।"
 
 #: ../src/unix/threadpsx.cpp:1719
 msgid "Thread module initialization failed: failed to create thread key"
-msgstr "Thread module को सुरुवात असफल भयो : thread कुञ्जी सिर्जना गर्न असफल भयो ।"
+msgstr "धागो module को सुरुवात असफल भयो : धागो कुञ्जी सिर्जना गर्न असफल भयो ।"
 
 #: ../src/msw/thread.cpp:1278
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
-msgstr "Thread module सुरु हुन सकेन: स्थानीय thread भण्डारमा सुची राख्न सम्भव छैन ।"
+msgstr "धागो module सुरु हुन सकेन: स्थानीय धागो भण्डारमा सुची राख्न सम्भव छैन ।"
 
 #: ../src/unix/threadpsx.cpp:1221
 msgid "Thread priority setting is ignored."
-msgstr "Thread प्राथमिकता कायम लाइ बेवास्ता गरियो"
+msgstr "धागो प्राथमिकता कायम लाइ बेवास्ता गरियो"
 
 #: ../src/msw/mdi.cpp:165
 msgid "Tile &Horizontally"
@@ -6782,7 +6782,7 @@ msgstr "I/O completion port लाई सिर्जना गर्न सक�
 
 #: ../src/msw/fswatcher.cpp:85
 msgid "Unable to create IOCP worker thread"
-msgstr "IOCP worker सिर्जना गर्न सकिएन ।"
+msgstr "IOCP श्रमिक धागो सिर्जना गर्न सकिएन ।"
 
 #: ../src/unix/fswatcher_inotify.cpp:75
 msgid "Unable to create inotify instance"
@@ -6849,7 +6849,7 @@ msgstr "घडी '%s' लाई कायम गर्न सकिएन ।"
 
 #: ../src/msw/fswatcher.cpp:92
 msgid "Unable to start IOCP worker thread"
-msgstr "IOCP worker thread लाई सुरुवात गर्न सकिएन ।"
+msgstr "IOCP श्रमिक धागो लाई सुरुवात गर्न सकिएन ।"
 
 #: ../src/common/stockitem.cpp:202
 msgid "Undelete"
@@ -6888,7 +6888,7 @@ msgstr "अचानक नया I/O completion port को सिर्जन�
 
 #: ../src/msw/fswatcher.cpp:71
 msgid "Ungraceful worker thread termination"
-msgstr "Ungraceful worker thread termination"
+msgstr "Ungraceful श्रमिक धागोको समाप्ति"
 
 #: ../src/richtext/richtextsymboldlg.cpp:460
 #: ../src/richtext/richtextsymboldlg.cpp:461
@@ -7936,7 +7936,7 @@ msgstr "tar मा अपूरो header हिस्सा"
 
 #: ../src/common/xtixml.cpp:490
 msgid "incorrect event handler string, missing dot"
-msgstr "अशुद्ध घटना सञ्चालक , थोप्लो छुटेको छ ।"
+msgstr "अशुद्ध घटना सञ्चालक पदावली, थोप्लो छुटेको छ ।"
 
 #: ../src/common/tarstrm.cpp:1382
 msgid "incorrect size given for tar entry"
