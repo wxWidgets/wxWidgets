@@ -2270,14 +2270,20 @@ void wxWindowGTK::GTKCreateScrolledWindowWith(GtkWidget* view)
         }
     }
 
-    if (HasFlag(wxALWAYS_SHOW_SB))
-    {
-        gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS );
-    }
-    else
-    {
-        gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
-    }
+    // If wx[HV]SCROLL is not given, the corresponding scrollbar is not shown
+    // at all. Otherwise it may be shown only on demand (default) or always, if
+    // the wxALWAYS_SHOW_SB is specified.
+    GtkPolicyType horzPolicy = HasFlag(wxHSCROLL)
+                                ? HasFlag(wxALWAYS_SHOW_SB)
+                                    ? GTK_POLICY_ALWAYS
+                                    : GTK_POLICY_AUTOMATIC
+                                : GTK_POLICY_NEVER;
+    GtkPolicyType vertPolicy = HasFlag(wxVSCROLL)
+                                ? HasFlag(wxALWAYS_SHOW_SB)
+                                    ? GTK_POLICY_ALWAYS
+                                    : GTK_POLICY_AUTOMATIC
+                                : GTK_POLICY_NEVER;
+    gtk_scrolled_window_set_policy( scrolledWindow, horzPolicy, vertPolicy );
 
     m_scrollBar[ScrollDir_Horz] = GTK_RANGE(gtk_scrolled_window_get_hscrollbar(scrolledWindow));
     m_scrollBar[ScrollDir_Vert] = GTK_RANGE(gtk_scrolled_window_get_vscrollbar(scrolledWindow));
