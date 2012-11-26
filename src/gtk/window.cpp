@@ -2396,10 +2396,15 @@ wxWindowGTK::~wxWindowGTK()
         g_captureWindow = NULL;
     }
 
-    if (m_widget)
-        GTKDisconnect(m_widget);
-    if (m_wxwindow && m_wxwindow != m_widget)
+    if (m_wxwindow)
+    {
         GTKDisconnect(m_wxwindow);
+        GtkWidget* parent = gtk_widget_get_parent(m_wxwindow);
+        if (parent)
+            GTKDisconnect(parent);
+    }
+    if (m_widget && m_widget != m_wxwindow)
+        GTKDisconnect(m_widget);
 
     // destroy children before destroying this window itself
     DestroyChildren();
