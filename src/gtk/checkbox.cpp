@@ -91,6 +91,13 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
 
 wxCheckBox::wxCheckBox()
 {
+    m_widgetCheckbox = NULL;
+}
+
+wxCheckBox::~wxCheckBox()
+{
+    if (m_widgetCheckbox && m_widgetCheckbox != m_widget)
+        GTKDisconnect(m_widgetCheckbox);
 }
 
 bool wxCheckBox::Create(wxWindow *parent,
