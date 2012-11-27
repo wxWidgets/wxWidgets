@@ -450,12 +450,19 @@ extern int wxOSXGetIdFromSelector(SEL action );
         if ( wxpeer )
         {
             wxpeer->HandleActivated(0, false);
+            // as for wx the deactivation also means loosing focus we
+            // must trigger this manually
+            [window makeFirstResponder:nil];
+            
+            // TODO Remove if no problems arise with Popup Windows
+#if 0
             // Needed for popup window since the firstResponder
             // (focus in wx) doesn't change when this
             // TLW becomes inactive.
             wxFocusEvent event( wxEVT_KILL_FOCUS, wxpeer->GetId());
             event.SetEventObject(wxpeer);
             wxpeer->HandleWindowEvent(event);
+#endif
         }
     }
 }
