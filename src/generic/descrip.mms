@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 November 2012                                                     *
+# Date : 27 November 2012                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -310,3 +310,4 @@ timectrlg.obj : timectrlg.cpp
 richtooltipg.obj : richtooltipg.cpp
 statbmpg.obj : statbmpg.cpp
 textmeasure.obj : textmeasure.cpp
+editlbox.obj : editlbox.cpp
