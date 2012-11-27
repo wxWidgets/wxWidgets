@@ -2540,7 +2540,7 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
             event.SetWindow(otherWindow->GetWXPeer());
         thisWindow->HandleWindowEvent(event) ;
     }
-    else // !receivedFocuss
+    else // !receivedFocus
     {
 #if wxUSE_CARET
         if ( thisWindow->GetCaret() )
