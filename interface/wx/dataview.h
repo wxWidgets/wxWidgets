@@ -2177,14 +2177,25 @@ public:
     virtual bool HasEditorCtrl() const;
 
     /**
-        Override this to react to a left click.
-        This method will only be called in @c wxDATAVIEW_CELL_ACTIVATABLE mode.
+        Override this to react to a left click.  This method will only be
+        called in @c wxDATAVIEW_CELL_ACTIVATABLE mode.  This method is
+        deprecated, please use ActivateCell instead.
     */
-    virtual bool LeftClick( const wxPoint& cursor,
-                            const wxRect& cell,
+    virtual bool LeftClick( wxPoint cursor,
+                            wxRect cell,
                             wxDataViewModel * model,
                             const wxDataViewItem & item,
                             unsigned int col );
+
+    /**
+       Override this to react to the activation of a cell.  This method is
+       deprecated, please use ActivateCell instead.
+    */
+    virtual bool Activate(wxRect cell,
+                          wxDataViewModel * model,
+                          const wxDataViewItem & item,
+                          unsigned int col);
+
 
     /**
         Override this to render the cell.
