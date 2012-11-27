@@ -1438,7 +1438,10 @@ void wxWidgetCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_c
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )
+    {
+        wxpeer->OSXSimulateFocusEvents();
         wxpeer->OSXHandleClicked(0);
+    }
 }
 
 void wxWidgetCocoaImpl::controlDoubleAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
