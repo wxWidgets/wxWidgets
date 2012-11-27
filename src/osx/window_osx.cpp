@@ -602,6 +602,25 @@ void wxWindowMac::SetFocus()
     GetPeer()->SetFocus() ;
 }
 
+void wxWindowMac::OSXSimulateFocusEvents()
+{
+    wxWindow* former = FindFocus() ;
+    if ( former != NULL && former != this )
+    {
+        {
+            wxFocusEvent event( wxEVT_KILL_FOCUS, former->GetId());
+            event.SetEventObject(former);
+            former->HandleWindowEvent(event) ;
+        }
+
+        {
+            wxFocusEvent event(wxEVT_SET_FOCUS, former->GetId());
+            event.SetEventObject(former);
+            former->HandleWindowEvent(event);
+        }
+    }
+}
+
 void wxWindowMac::DoCaptureMouse()
 {
     wxApp::s_captureWindow = (wxWindow*) this ;
