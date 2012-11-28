@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_OLE && wxUSE_VARIANT
+
 #ifndef WX_PRECOMP
     #include "wx/variant.h"
 #endif // WX_PRECOMP
@@ -131,4 +133,4 @@ bool wxSafeArrayBase::Unlock()
     return true;
 }
 
-
+#endif  // wxUSE_OLE && wxUSE_VARIANT
