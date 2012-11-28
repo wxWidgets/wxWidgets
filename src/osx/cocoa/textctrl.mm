@@ -515,7 +515,8 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
 
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:NO];
-    [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    // TODO Remove if no regression, this was causing automatic resizes of multi-line textfields when the tlw changed
+    // [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     NSSize contentSize = [m_scrollView contentSize];
 
     wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
@@ -909,6 +910,40 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
         event.SetString( GetTextEntry()->GetValue() );
         wxpeer->HandleWindowEvent( event );
     }
+}
+
+// as becoming first responder on a window - triggers a resign on the same control, we have to avoid
+// the resign notification writing back native selection values before we can set our own
+
+static WXWidget s_widgetBecomingFirstResponder = nil;
+
+bool wxNSTextFieldControl::becomeFirstResponder(WXWidget slf, void *_cmd)
+{
+    s_widgetBecomingFirstResponder = slf;
+    bool retval = wxWidgetCocoaImpl::becomeFirstResponder(slf, _cmd);
+    s_widgetBecomingFirstResponder = nil;
+    if ( retval )
+    {
+        NSText* editor = [m_textField currentEditor];
+        if ( editor )
+            [editor setSelectedRange:NSMakeRange(m_selStart, m_selEnd-m_selStart)];
+    }
+    return retval;
+}
+
+bool wxNSTextFieldControl::resignFirstResponder(WXWidget slf, void *_cmd)
+{
+    if ( slf != s_widgetBecomingFirstResponder )
+    {
+        NSText* editor = [m_textField currentEditor];
+        if ( editor )
+        {
+            NSRange range = [editor selectedRange];
+            m_selStart = range.location;
+            m_selEnd = range.location + range.length;
+        }
+    }
+    return wxWidgetCocoaImpl::resignFirstResponder(slf, _cmd);
 }
 
 bool wxNSTextFieldControl::SetHint(const wxString& hint)
