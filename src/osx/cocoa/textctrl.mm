@@ -499,6 +499,13 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
+        wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
+        if ( fieldEditor )
+        {
+            NSRange range = [fieldEditor selectedRange];
+            timpl->SetInternalSelection(range.location, range.location + range.length);
+        }
+
         impl->DoNotifyFocusEvent( false, NULL );
     }
 }
@@ -864,11 +871,11 @@ void wxNSTextFieldControl::SetSelection( long from , long to )
     {
         [editor setSelectedRange:NSMakeRange(from, to-from)];
     }
-    else
-    {
-        m_selStart = from;
-        m_selEnd = to;
-    }
+
+    // the editor might still be in existence, but we might be already passed our 'focus lost' storage
+    // of the selection, so make sure we copy this
+    m_selStart = from;
+    m_selEnd = to;
 }
 
 void wxNSTextFieldControl::WriteText(const wxString& str)
@@ -912,6 +919,12 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     }
 }
 
+void wxNSTextFieldControl::SetInternalSelection( long from , long to )
+{
+    m_selStart = from;
+    m_selEnd = to;
+}
+
 // as becoming first responder on a window - triggers a resign on the same control, we have to avoid
 // the resign notification writing back native selection values before we can set our own
 
@@ -926,7 +939,13 @@ bool wxNSTextFieldControl::becomeFirstResponder(WXWidget slf, void *_cmd)
     {
         NSText* editor = [m_textField currentEditor];
         if ( editor )
+        {
+            long textLength = [[m_textField stringValue] length];
+            m_selStart = wxMin(textLength,wxMax(m_selStart,0)) ;
+            m_selEnd = wxMax(0,wxMin(textLength,m_selEnd)) ;
+            
             [editor setSelectedRange:NSMakeRange(m_selStart, m_selEnd-m_selStart)];
+        }
     }
     return retval;
 }

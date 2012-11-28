@@ -48,6 +48,8 @@ public :
     virtual bool becomeFirstResponder(WXWidget slf, void *_cmd);
     virtual bool resignFirstResponder(WXWidget slf, void *_cmd);
 
+    virtual void SetInternalSelection( long from , long to );
+
 protected :
     NSTextField* m_textField;
     long m_selStart;
