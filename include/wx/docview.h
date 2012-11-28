@@ -147,10 +147,7 @@ public:
     virtual bool RemoveView(wxView *view);
 
 #ifndef __VISUALC6__
-    wxViewVector GetViewsVector() const
-    {
-        return m_documentViews.AsVector<wxView*>();
-    }
+    wxViewVector GetViewsVector() const;
 #endif // !__VISUALC6__
 
     wxList& GetViews() { return m_documentViews; }
@@ -470,15 +467,8 @@ public:
     virtual wxView *GetCurrentView() const { return m_currentView; }
 
 #ifndef __VISUALC6__
-    wxDocVector GetDocumentsVector() const
-    {
-        return m_docs.AsVector<wxDocument*>();
-    }
-
-    wxDocTemplateVector GetTemplatesVector() const
-    {
-        return m_templates.AsVector<wxDocTemplate*>();
-    }
+    wxDocVector GetDocumentsVector() const;
+    wxDocTemplateVector GetTemplatesVector() const;
 #endif // !__VISUALC6__
 
     wxList& GetDocuments() { return m_docs; }
@@ -1020,6 +1010,23 @@ enum
     wxDEFAULT_DOCMAN_FLAGS = wxDOC_SDI
 };
 #endif // WXWIN_COMPATIBILITY_2_8
+
+#ifndef __VISUALC6__
+inline wxViewVector wxDocument::GetViewsVector() const
+{
+    return m_documentViews.AsVector<wxView*>();
+}
+
+inline wxDocVector wxDocManager::GetDocumentsVector() const
+{
+    return m_docs.AsVector<wxDocument*>();
+}
+
+inline wxDocTemplateVector wxDocManager::GetTemplatesVector() const
+{
+    return m_templates.AsVector<wxDocTemplate*>();
+}
+#endif // !__VISUALC6__
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 
