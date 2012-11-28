@@ -350,7 +350,11 @@ void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
         GetParent()->MacChildAdded() ;
         
         // adjust font, controlsize etc
-        DoSetWindowVariant( m_windowVariant ) ;
+        GetPeer()->SetControlSize( m_windowVariant );
+        InheritAttributes();
+        // in case nothing has been set, use the variant default fonts
+        if ( !m_hasFont )
+            DoSetWindowVariant( m_windowVariant );
         
         GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
         
