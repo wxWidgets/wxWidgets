@@ -232,9 +232,14 @@ public:
         }
     }
 
-    void SetPosition()
+    void SetPosition(wxRect* rect)
     {
-        wxPoint pos = GetTipPoint();
+        wxPoint pos;
+
+        if ( !rect || rect->IsEmpty() )
+            pos = GetTipPoint();
+        else
+            pos = wxPoint( rect->x + rect->width / 2, rect->y + rect->height / 2 );
 
         // We want our anchor point to coincide with this position so offset
         // the position of the top left corner passed to Move() accordingly.
@@ -668,7 +673,7 @@ void wxRichToolTipGenericImpl::SetTitleFont(const wxFont& font)
     m_titleFont = font;
 }
 
-void wxRichToolTipGenericImpl::ShowFor(wxWindow* win)
+void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, wxRect* rect = NULL);
 {
     // Set the focus to the window the tooltip refers to to make it look active.
     win->SetFocus();
@@ -685,7 +690,7 @@ void wxRichToolTipGenericImpl::ShowFor(wxWindow* win)
 
     popup->SetBackgroundColours(m_colStart, m_colEnd);
 
-    popup->SetPosition();
+    popup->SetPosition(rect);
     // show or start the timer to delay showing the popup
     popup->SetTimeoutAndShow( m_timeout, m_delay );
 }

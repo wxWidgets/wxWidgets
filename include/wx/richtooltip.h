@@ -87,8 +87,8 @@ public:
     // or colour appropriate for the current platform.
     void SetTitleFont(const wxFont& font);
 
-    // Show the tooltip for the given window.
-    void ShowFor(wxWindow* win);
+    // Show the tooltip for the given window and optionally a specified area.
+    void ShowFor(wxWindow* win, wxRect* rect = NULL);
 
     // Non-virtual dtor as this class is not supposed to be derived from.
     ~wxRichToolTip();

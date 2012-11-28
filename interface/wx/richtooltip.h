@@ -175,15 +175,20 @@ public:
     void SetTitleFont(const wxFont& font);
 
     /**
-        Show the tooltip for the given window.
+        Show the tooltip for the given window and optionally specify where to
+        show the tooltip.
 
-        The tooltip tip points to the (middle of the) specified window which
-        must be non-@NULL.
+        By default the tooltip tip points to the (middle of the) specified
+        window which must be non-@NULL or, if @a rect is non-@NULL, the middle
+        of the specified wxRect.
 
         Currently the native MSW implementation is used only if @a win is a
-        wxTextCtrl. This limitation may be removed in the future.
+        wxTextCtrl and @a rect is @NULL. This limitation may be removed in the
+        future.
+
+        Parameter @a rect is new since wxWidgets 2.9.5.
      */
-    void ShowFor(wxWindow* win);
+    void ShowFor(wxWindow* win, wxRect* rect = NULL);
 
     /**
         Destructor.

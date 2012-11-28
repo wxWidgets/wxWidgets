@@ -594,6 +594,7 @@ All (GUI):
 - Optionally allow showing tooltips for disabled ribbon buttons (wxBen).
 - Add wxTL_NO_HEADER style to wxTreeListCtrl (robboto).
 - Add possibility to delay showing wxRichToolTip (John Roberts).
+- Add "rect" paramerer to wxRichToolTip::ShowFor() (John Roberts).
 
 wxGTK:
 

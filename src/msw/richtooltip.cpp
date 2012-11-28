@@ -151,13 +151,13 @@ public:
         wxRichToolTipGenericImpl::SetTitleFont(font);
     }
 
-    virtual void ShowFor(wxWindow* win)
+    virtual void ShowFor(wxWindow* win, wxRect* rect = NULL);
     {
         // TODO: We could use native tooltip control to show native balloon
         //       tooltips for any window but right now we use the simple
         //       EM_SHOWBALLOONTIP API which can only be used with text
         //       controls.
-        if ( m_canUseNative )
+        if ( m_canUseNative && !rect )
         {
             wxTextCtrl* const text = wxDynamicCast(win, wxTextCtrl);
             if ( text )
@@ -175,7 +175,7 @@ public:
         // Don't set m_canUseNative to false here, we could be able to use the
         // native tooltips if we're called for a different window the next
         // time.
-        wxRichToolTipGenericImpl::ShowFor(win);
+        wxRichToolTipGenericImpl::ShowFor(win, rect);
     }
 
 private:
