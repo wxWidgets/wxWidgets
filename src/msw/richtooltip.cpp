@@ -151,7 +151,7 @@ public:
         wxRichToolTipGenericImpl::SetTitleFont(font);
     }
 
-    virtual void ShowFor(wxWindow* win, wxRect* rect = NULL);
+    virtual void ShowFor(wxWindow* win, wxRect* rect)
     {
         // TODO: We could use native tooltip control to show native balloon
         //       tooltips for any window but right now we use the simple
