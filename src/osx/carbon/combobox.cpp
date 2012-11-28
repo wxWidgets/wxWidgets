@@ -58,7 +58,7 @@ protected:
         {
             wxNavigationKeyEvent NavEvent;
             NavEvent.SetEventObject(this);
-            NavEvent.SetDirection(true);
+            NavEvent.SetDirection(!event.ShiftDown());
             NavEvent.SetWindowChange(false);
 
             // Get the parent of the combo and have it process the navigation?
