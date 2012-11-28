@@ -30,7 +30,8 @@
 extern "C" void SetBezelStyleFromBorderFlags(NSButton *v,
                                              long style,
                                              wxWindowID winid = wxID_ANY,
-                                             const wxString& label = wxString());
+                                             const wxString& label = wxString(),
+                                             const wxBitmap& bitmap = wxBitmap());
 
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
@@ -63,7 +64,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style, winid);
+    SetBezelStyleFromBorderFlags(v, style, winid, wxString(), label);
     
     if (label.IsOk())
         [v setImage:label.GetNSImage() ];

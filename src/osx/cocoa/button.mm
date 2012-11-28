@@ -208,7 +208,8 @@ void
 SetBezelStyleFromBorderFlags(NSButton *v,
                              long style,
                              wxWindowID winid,
-                             const wxString& label = wxString())
+                             const wxString& label = wxString(),
+                             const wxBitmap& bitmap = wxBitmap())
 {
     // We can't display a custom label inside a button with help bezel style so
     // we only use it if we are using the default label. wxButton itself checks
@@ -220,10 +221,13 @@ SetBezelStyleFromBorderFlags(NSButton *v,
     }
     else
     {
-        // We can't use rounded bezel styles for multiline buttons as they are
-        // only meant to be used at certain sizes, so the style used depends on
-        // whether the label is single or multi line.
-        const bool isSingleLine = label.find_first_of("\n\r") == wxString::npos;
+        // We can't use rounded bezel styles neither for multiline buttons nor
+        // for buttons containing (big) icons as they are only meant to be used
+        // at certain sizes, so the style used depends on whether the label is
+        // single or multi line.
+        const bool
+            isSimpleText = (label.find_first_of("\n\r") == wxString::npos)
+                                && (!bitmap.IsOk() || bitmap.GetHeight() < 20);
 
         NSBezelStyle bezel;
         switch ( style & wxBORDER_MASK )
@@ -238,7 +242,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
                 break;
 
             case wxBORDER_SUNKEN:
-                bezel = isSingleLine ? NSTexturedRoundedBezelStyle
+                bezel = isSimpleText ? NSTexturedRoundedBezelStyle
                                      : NSSmallSquareBezelStyle;
                 break;
 
@@ -250,7 +254,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
             case wxBORDER_STATIC:
             case wxBORDER_RAISED:
             case wxBORDER_THEME:
-                bezel = isSingleLine ? NSRoundedBezelStyle
+                bezel = isSimpleText ? NSRoundedBezelStyle
                                      : NSRegularSquareBezelStyle;
                 break;
         }
@@ -340,7 +344,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style, winid);
+    SetBezelStyleFromBorderFlags(v, style, winid, wxString(), bitmap);
 
     if (bitmap.IsOk())
         [v setImage:bitmap.GetNSImage() ];
