@@ -527,8 +527,7 @@ void wxSpinCtrlGenericBase::SetValue(const wxString& text)
     else // not a number at all or out of range
     {
         m_textCtrl->SetValue(text);
-        m_textCtrl->SetSelection(0, -1);
-        m_textCtrl->SetInsertionPointEnd();
+        m_textCtrl->SelectAll();
     }
 }
 
@@ -559,7 +558,7 @@ bool wxSpinCtrlGenericBase::DoSetValue(double val)
         if ( !DoTextToValue(str, &m_value ) )    // wysiwyg for textctrl
             m_value = val;
         m_textCtrl->SetValue( str );
-        m_textCtrl->SetInsertionPointEnd();
+        m_textCtrl->SelectAll();
         m_textCtrl->DiscardEdits();
         return true;
     }
