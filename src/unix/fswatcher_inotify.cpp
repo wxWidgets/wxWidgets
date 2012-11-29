@@ -271,6 +271,24 @@ protected:
             return;
         }
 
+        if (inevt.wd == -1)
+        {
+            // Although this is not supposed to happen, we seem to be getting
+            // occasional IN_ACCESS/IN_MODIFY events without valid watch value.
+            wxFileSystemWatcherEvent
+                event
+                (
+                    wxFSW_EVENT_WARNING,
+                    wxString::Format
+                    (
+                        _("Invalid inotify event for \"%s\""),
+                        inevt.len ? inevt.name : ""
+                    )
+                );
+            SendEvent(event);
+            return;
+        }
+
         wxFSWatchEntry& watch = *(it->second);
 
         // Now IN_UNMOUNT. We must do so here, as it's not in the watch flags
