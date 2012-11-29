@@ -438,19 +438,24 @@ protected:
 
             // get watch entry for this event
             wxFSWatchEntryDescriptors::iterator wit = m_watchMap.find(inevt.wd);
-            wxCHECK_RET(wit != m_watchMap.end(),
-                             "Watch descriptor not present in the watch map!");
-
-            // Tell the owner, in case it's interested
-            // If there's a filespec, assume he's not
-            wxFSWatchEntry& watch = *(wit->second);
-            if ( watch.GetFilespec().empty() )
+            if (wit == m_watchMap.end())
             {
-                int flags = Native2WatcherFlags(inevt.mask);
-                wxFileName path = GetEventPath(watch, inevt);
+                wxLogTrace(wxTRACE_FSWATCHER,
+                            "Watch descriptor not present in the watch map!");
+            }
+            else
+            {
+                // Tell the owner, in case it's interested
+                // If there's a filespec, assume he's not
+                wxFSWatchEntry& watch = *(wit->second);
+                if ( watch.GetFilespec().empty() )
                 {
-                    wxFileSystemWatcherEvent event(flags, path, path);
-                    SendEvent(event);
+                    int flags = Native2WatcherFlags(inevt.mask);
+                    wxFileName path = GetEventPath(watch, inevt);
+                    {
+                        wxFileSystemWatcherEvent event(flags, path, path);
+                        SendEvent(event);
+                    }
                 }
             }
 
