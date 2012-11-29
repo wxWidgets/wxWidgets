@@ -685,6 +685,19 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         enc = wxFontMapper::Get()->CharsetToEncoding(charset);
 #endif
 
+    // No conversion was done on the title yet; at least
+    // test for a common case.
+    if (charset == wxT("utf-8") && !title.IsEmpty())
+    {
+        char *buf = new char[title.Length()+1];
+        size_t i;
+        for (i = 0; i < title.Length(); i++)
+            buf[i] = (char) title[i];
+        buf[i] = 0;
+        title = wxString::FromUTF8(buf);
+        delete[] buf;
+    }
+
     bool rtval = AddBookParam(*fi, enc,
                               title, contents, index, start, fsys.GetPath());
     delete fi;
