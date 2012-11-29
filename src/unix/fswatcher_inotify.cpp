@@ -236,25 +236,29 @@ protected:
 
         // get watch entry for this event
         wxFSWatchEntryDescriptors::iterator it = m_watchMap.find(inevt.wd);
-        if (it == m_watchMap.end())
-        {
-            // It's not in the map; check if was recently removed from it.
-            if (m_staleDescriptors.Index(inevt.wd) != wxNOT_FOUND)
-            {
-                wxLogTrace(wxTRACE_FSWATCHER,
-                           "Got an event for stale wd %i", inevt.wd);
-            }
-            else
-            {
-                wxFAIL_MSG("Event for unknown watch descriptor.");
-            }
 
-            // In any case, don't process this event: it's either for an
-            // already removed entry, or for a completely unknown one.
-            return;
+        // wd will be -1 for IN_Q_OVERFLOW, which would trigger the wxFAIL_MSG
+        if (inevt.wd != -1)
+        {
+            if (it == m_watchMap.end())
+            {
+                // It's not in the map; check if was recently removed from it.
+                if (m_staleDescriptors.Index(inevt.wd) != wxNOT_FOUND)
+                {
+                    wxLogTrace(wxTRACE_FSWATCHER,
+                               "Got an event for stale wd %i", inevt.wd);
+                }
+                else
+                {
+                    wxFAIL_MSG("Event for unknown watch descriptor.");
+                }
+
+                // In any case, don't process this event: it's either for an
+                // already removed entry, or for a completely unknown one.
+                return;
+            }
         }
 
-        wxFSWatchEntry& watch = *(it->second);
         int nativeFlags = inevt.mask;
         int flags = Native2WatcherFlags(nativeFlags);
 
@@ -264,7 +268,11 @@ protected:
             wxString errMsg = GetErrorDescription(nativeFlags);
             wxFileSystemWatcherEvent event(flags, errMsg);
             SendEvent(event);
+            return;
         }
+
+        wxFSWatchEntry& watch = *(it->second);
+
         // Now IN_UNMOUNT. We must do so here, as it's not in the watch flags
         if (nativeFlags & IN_UNMOUNT)
         {
