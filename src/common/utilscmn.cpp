@@ -70,8 +70,6 @@
 #endif
 
 #if wxUSE_GUI
-    #include "wx/colordlg.h"
-    #include "wx/fontdlg.h"
     #include "wx/notebook.h"
     #include "wx/statusbr.h"
 #endif // wxUSE_GUI
@@ -1482,89 +1480,6 @@ wxString wxGetPasswordFromUser(const wxString& message,
 }
 
 #endif // wxUSE_TEXTDLG
-
-#if wxUSE_COLOURDLG
-
-wxColour wxGetColourFromUser(wxWindow *parent,
-                             const wxColour& colInit,
-                             const wxString& caption,
-                             wxColourData *ptrData)
-{
-    // contains serialized representation of wxColourData used the last time
-    // the dialog was shown: we want to reuse it the next time in order to show
-    // the same custom colours to the user (and we can't just have static
-    // wxColourData itself because it's a GUI object and so should be destroyed
-    // before GUI shutdown and doing it during static cleanup is too late)
-    static wxString s_strColourData;
-
-    wxColourData data;
-    if ( !ptrData )
-    {
-        ptrData = &data;
-        if ( !s_strColourData.empty() )
-        {
-            if ( !data.FromString(s_strColourData) )
-            {
-                wxFAIL_MSG( "bug in wxColourData::FromString()?" );
-            }
-
-#ifdef __WXMSW__
-            // we don't get back the "choose full" flag value from the native
-            // dialog and so we can't preserve it between runs, so we decide to
-            // always use it as it seems better than not using it (user can
-            // just ignore the extra controls in the dialog but having to click
-            // a button each time to show them would be very annoying
-            data.SetChooseFull(true);
-#endif // __WXMSW__
-        }
-    }
-
-    if ( colInit.IsOk() )
-    {
-        ptrData->SetColour(colInit);
-    }
-
-    wxColour colRet;
-    wxColourDialog dialog(parent, ptrData);
-    if (!caption.empty())
-        dialog.SetTitle(caption);
-    if ( dialog.ShowModal() == wxID_OK )
-    {
-        *ptrData = dialog.GetColourData();
-        colRet = ptrData->GetColour();
-        s_strColourData = ptrData->ToString();
-    }
-    //else: leave colRet invalid
-
-    return colRet;
-}
-
-#endif // wxUSE_COLOURDLG
-
-#if wxUSE_FONTDLG
-
-wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit, const wxString& caption)
-{
-    wxFontData data;
-    if ( fontInit.IsOk() )
-    {
-        data.SetInitialFont(fontInit);
-    }
-
-    wxFont fontRet;
-    wxFontDialog dialog(parent, data);
-    if (!caption.empty())
-        dialog.SetTitle(caption);
-    if ( dialog.ShowModal() == wxID_OK )
-    {
-        fontRet = dialog.GetFontData().GetChosenFont();
-    }
-    //else: leave it invalid
-
-    return fontRet;
-}
-
-#endif // wxUSE_FONTDLG
 
 // ----------------------------------------------------------------------------
 // wxSafeYield and supporting functions
