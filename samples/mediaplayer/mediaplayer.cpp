@@ -1013,7 +1013,7 @@ void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
       )
     {
         if(currentpage->m_mediactrl->GetState() == wxMEDIASTATE_PLAYING)
-    {
+        {
             if( !currentpage->m_mediactrl->Pause() )
                 wxMessageBox(wxT("Couldn't pause movie!"));
         }
@@ -1300,7 +1300,7 @@ void wxMediaPlayerFrame::OnChangeSong(wxListEvent& WXUNUSED(evt))
     wxListItem listitem;
     currentpage->m_playlist->GetSelectedItem(listitem);
     if(listitem.GetData())
-    DoPlayFile((*((wxString*) listitem.GetData())));
+        DoPlayFile((*((wxString*) listitem.GetData())));
     else
         wxMessageBox(wxT("No selected item!"));
 }
