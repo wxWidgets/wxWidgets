@@ -200,7 +200,7 @@ public:
 
     @see wxAnimationCtrl, @sample{animate}
 */
-class wxAnimation : public wxGDIObject
+class wxAnimation : public wxObject
 {
 public:
     /**

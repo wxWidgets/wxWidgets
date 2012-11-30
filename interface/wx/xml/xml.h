@@ -434,6 +434,17 @@ public:
 };
 
 
+//* special indentation value for wxXmlDocument::Save
+#define wxXML_NO_INDENTATION           (-1)
+
+//* flags for wxXmlDocument::Load
+enum wxXmlDocumentLoadFlag
+{
+    wxXMLDOC_NONE,
+    wxXMLDOC_KEEP_WHITESPACE_NODES
+};
+
+
 
 /**
     @class wxXmlDocument

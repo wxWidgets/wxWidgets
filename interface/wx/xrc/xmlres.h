@@ -90,6 +90,12 @@ public:
     void AddHandler(wxXmlResourceHandler* handler);
 
     /**
+       Add a new handler at the begining of the handler list.
+     */
+    void InsertHandler(wxXmlResourceHandler *handler);
+
+    
+    /**
         Attaches an unknown control to the given panel/window/dialog.
         Unknown controls are used in conjunction with \<object class="unknown"\>.
     */
@@ -103,6 +109,14 @@ public:
     */
     void ClearHandlers();
 
+    /**
+       Registers subclasses factory for use in XRC.  This is useful only for
+       language bindings developers who need a way to implement subclassing in
+       wxWidgets ports that don't support wxRTTI (e.g. wxPython).
+    */
+    static void AddSubclassFactory(wxXmlSubclassFactory *factory);
+
+    
     /**
         Compares the XRC version to the argument.
 
@@ -260,7 +274,16 @@ public:
     bool LoadDialog(wxDialog* dlg, wxWindow* parent, const wxString& name);
 
     /**
-        Loads a frame.
+       Loads a frame from the resource. @a parent points to parent window (if any).
+    */
+    wxFrame *LoadFrame(wxWindow* parent, const wxString& name);
+
+    /**
+        Loads the contents of a frame onto an existing wxFrame.
+
+        This form is used to finish creation of an already existing instance
+        (the main reason for this is that you may want to use derived class
+        with a new event table).
     */
     bool LoadFrame(wxFrame* frame, wxWindow* parent,
                    const wxString& name);
