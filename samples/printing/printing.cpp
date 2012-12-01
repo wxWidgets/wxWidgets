@@ -161,7 +161,7 @@ void MyApp::Draw(wxDC&dc)
 
     dc.DrawText( wxT("Rectangle 200 by 80"), 40, 40);
 
-    dc.SetPen( wxPen(*wxBLACK,0,wxDOT_DASH) );
+    dc.SetPen( wxPen(*wxBLACK, 0, wxPENSTYLE_DOT_DASH) );
     dc.DrawEllipse(50, 140, 100, 50);
     dc.SetPen(*wxRED_PEN);
 

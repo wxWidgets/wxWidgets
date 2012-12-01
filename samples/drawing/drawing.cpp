@@ -426,22 +426,22 @@ void MyCanvas::DrawTestBrushes(wxDC& dc)
     dc.DrawText(wxT("Solid green"), x + 10, y + 10);
 
     y += HEIGHT;
-    dc.SetBrush(wxBrush(*wxRED, wxCROSSDIAG_HATCH));
+    dc.SetBrush(wxBrush(*wxRED, wxBRUSHSTYLE_CROSSDIAG_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
     dc.DrawText(wxT("Diagonally hatched red"), x + 10, y + 10);
 
     y += HEIGHT;
-    dc.SetBrush(wxBrush(*wxBLUE, wxCROSS_HATCH));
+    dc.SetBrush(wxBrush(*wxBLUE, wxBRUSHSTYLE_CROSS_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
     dc.DrawText(wxT("Cross hatched blue"), x + 10, y + 10);
 
     y += HEIGHT;
-    dc.SetBrush(wxBrush(*wxCYAN, wxVERTICAL_HATCH));
+    dc.SetBrush(wxBrush(*wxCYAN, wxBRUSHSTYLE_VERTICAL_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
     dc.DrawText(wxT("Vertically hatched cyan"), x + 10, y + 10);
 
     y += HEIGHT;
-    dc.SetBrush(wxBrush(*wxBLACK, wxHORIZONTAL_HATCH));
+    dc.SetBrush(wxBrush(*wxBLACK, wxBRUSHSTYLE_HORIZONTAL_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
     dc.DrawText(wxT("Horizontally hatched black"), x + 10, y + 10);
 
@@ -458,7 +458,7 @@ void MyCanvas::DrawTestBrushes(wxDC& dc)
 
 void MyCanvas::DrawTestPoly(wxDC& dc)
 {
-    wxBrush brushHatch(*wxRED, wxFDIAGONAL_HATCH);
+    wxBrush brushHatch(*wxRED, wxBRUSHSTYLE_FDIAGONAL_HATCH);
     dc.SetBrush(brushHatch);
 
     wxPoint star[5];
@@ -503,31 +503,31 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.DrawText(wxT("Solid/dot/short dash/long dash/dot dash"), x + 150, y + 10);
     dc.SetPen( wxPen( *wxBLACK, width ) );
     dc.DrawLine( x+20, y+20, 100, y+20 );
-    dc.SetPen( wxPen( wxT("black"), width, wxDOT) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_DOT) );
     dc.DrawLine( x+20, y+30, 100, y+30 );
-    dc.SetPen( wxPen( wxT("black"), width, wxSHORT_DASH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_SHORT_DASH) );
     dc.DrawLine( x+20, y+40, 100, y+40 );
-    dc.SetPen( wxPen( wxT("black"), width, wxLONG_DASH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_LONG_DASH) );
     dc.DrawLine( x+20, y+50, 100, y+50 );
-    dc.SetPen( wxPen( wxT("black"), width, wxDOT_DASH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_DOT_DASH) );
     dc.DrawLine( x+20, y+60, 100, y+60 );
 
     dc.DrawText(wxT("Misc hatches"), x + 150, y + 70);
-    dc.SetPen( wxPen( wxT("black"), width, wxBDIAGONAL_HATCH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_BDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+70, 100, y+70 );
-    dc.SetPen( wxPen( wxT("black"), width, wxCROSSDIAG_HATCH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_CROSSDIAG_HATCH) );
     dc.DrawLine( x+20, y+80, 100, y+80 );
-    dc.SetPen( wxPen( wxT("black"), width, wxFDIAGONAL_HATCH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_FDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+90, 100, y+90 );
-    dc.SetPen( wxPen( wxT("black"), width, wxCROSS_HATCH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_CROSS_HATCH) );
     dc.DrawLine( x+20, y+100, 100, y+100 );
-    dc.SetPen( wxPen( wxT("black"), width, wxHORIZONTAL_HATCH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_HORIZONTAL_HATCH) );
     dc.DrawLine( x+20, y+110, 100, y+110 );
-    dc.SetPen( wxPen( wxT("black"), width, wxVERTICAL_HATCH) );
+    dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_VERTICAL_HATCH) );
     dc.DrawLine( x+20, y+120, 100, y+120 );
 
     dc.DrawText(wxT("User dash"), x + 150, y + 140);
-    wxPen ud( wxT("black"), width, wxUSER_DASH );
+    wxPen ud( *wxBLACK, width, wxPENSTYLE_USER_DASH );
     wxDash dash1[6];
     dash1[0] = 8;  // Long dash  <---------+
     dash1[1] = 2;  // Short gap            |
@@ -1669,7 +1669,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         dc.SetPen( *wxGREY_PEN );
         dc.SetBrush( wxColour( 192,192,192,64 ) );
 #else
-        dc.SetPen( wxPen( *wxLIGHT_GREY, 2, ) );
+        dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
         dc.SetBrush( *wxTRANSPARENT_BRUSH );
 #endif
         dc.DrawRectangle( newrect );
