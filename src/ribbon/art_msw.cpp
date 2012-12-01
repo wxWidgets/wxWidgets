@@ -2468,6 +2468,11 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
                         const wxBitmap& bitmap_large,
                         const wxBitmap& bitmap_small)
 {
+    const wxColour
+        arrowColour(state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED
+                        ? m_button_bar_label_disabled_colour
+                        : m_button_bar_label_colour);
+
     switch(state & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
     {
     case wxRIBBON_BUTTONBAR_BUTTON_LARGE:
@@ -2487,7 +2492,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
                 {
                     DrawDropdownArrow(dc, rect.x + rect.width / 2,
                         ypos + (label_h * 3) / 2,
-                        m_button_bar_label_colour);
+                        arrowColour);
                 }
             }
             else
@@ -2515,7 +2520,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
                                 DrawDropdownArrow(dc,
                                     iX + 2 +label_w - arrow_width,
                                     ypos + label_h / 2 + 1,
-                                    m_button_bar_label_colour);
+                                    arrowColour);
                             }
                             break;
                         }
@@ -2537,8 +2542,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
             x_cursor += label_w + 3;
             if(kind != wxRIBBON_BUTTON_NORMAL)
             {
-                DrawDropdownArrow(dc, x_cursor, rect.y + rect.height / 2,
-                    m_button_bar_label_colour);
+                DrawDropdownArrow(dc, x_cursor, rect.y + rect.height / 2, arrowColour);
             }
             break;
         }
