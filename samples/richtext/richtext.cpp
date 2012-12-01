@@ -985,13 +985,13 @@ void MyFrame::WriteInitialText()
     r.WriteImage(wxBitmap(smiley_xpm));
     r.WriteText(wxT(" Well, you can change text "));
 
-    r.BeginTextColour(wxColour(255, 0, 0));
+    r.BeginTextColour(*wxRED);
     r.WriteText(wxT("colour, like this red bit."));
     r.EndTextColour();
 
     wxRichTextAttr backgroundColourAttr;
     backgroundColourAttr.SetBackgroundColour(*wxGREEN);
-    backgroundColourAttr.SetTextColour(wxColour(0, 0, 255));
+    backgroundColourAttr.SetTextColour(*wxBLUE);
     r.BeginStyle(backgroundColourAttr);
     r.WriteText(wxT(" And this blue on green bit."));
     r.EndStyle();

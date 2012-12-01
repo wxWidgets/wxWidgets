@@ -541,7 +541,7 @@ void ODComboboxWidgetsPage::CreateCombo()
 
     if ( m_chkBitmapbutton->GetValue() )
     {
-        wxBitmap bmpNormal = CreateBitmap(wxColour(0,0,255));
+        wxBitmap bmpNormal = CreateBitmap(*wxBLUE);
         wxBitmap bmpPressed = CreateBitmap(wxColour(0,0,128));
         wxBitmap bmpHover = CreateBitmap(wxColour(128,128,255));
         m_combobox->SetButtonBitmaps(bmpNormal,m_chkStdbutton->GetValue(),bmpPressed,bmpHover);

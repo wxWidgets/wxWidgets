@@ -367,7 +367,7 @@ RegFrame::RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, in
         : wxFrame(parent, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     // this reduces flicker effects
-    SetBackgroundColour(wxColour(255, 255, 255));
+    SetBackgroundColour(*wxWHITE);
 
     // set the icon
     // ------------

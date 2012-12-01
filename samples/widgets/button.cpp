@@ -619,7 +619,7 @@ wxBitmap ButtonWidgetsPage::CreateBitmap(const wxString& label)
     wxBitmap bmp(180, 70); // shouldn't hardcode but it's simpler like this
     wxMemoryDC dc;
     dc.SelectObject(bmp);
-    dc.SetBackground(wxBrush(*wxCYAN));
+    dc.SetBackground(*wxCYAN_BRUSH);
     dc.Clear();
     dc.SetTextForeground(*wxBLACK);
     dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + wxT("\n")

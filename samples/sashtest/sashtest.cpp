@@ -108,7 +108,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   win->SetDefaultSize(wxSize(1000, 30));
   win->SetOrientation(wxLAYOUT_HORIZONTAL);
   win->SetAlignment(wxLAYOUT_TOP);
-  win->SetBackgroundColour(wxColour(255, 0, 0));
+  win->SetBackgroundColour(*wxRED);
   win->SetSashVisible(wxSASH_BOTTOM, true);
 
   m_topWindow = win;
@@ -120,7 +120,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   win->SetDefaultSize(wxSize(1000, 30));
   win->SetOrientation(wxLAYOUT_HORIZONTAL);
   win->SetAlignment(wxLAYOUT_BOTTOM);
-  win->SetBackgroundColour(wxColour(0, 0, 255));
+  win->SetBackgroundColour(*wxBLUE);
   win->SetSashVisible(wxSASH_TOP, true);
 
   m_bottomWindow = win;
@@ -132,7 +132,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   win->SetDefaultSize(wxSize(120, 1000));
   win->SetOrientation(wxLAYOUT_VERTICAL);
   win->SetAlignment(wxLAYOUT_LEFT);
-  win->SetBackgroundColour(wxColour(0, 255, 0));
+  win->SetBackgroundColour(*wxGREEN);
   win->SetSashVisible(wxSASH_RIGHT, true);
   win->SetExtraBorderSize(10);
 

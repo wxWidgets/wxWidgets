@@ -1603,7 +1603,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
                     | wxSUNKEN_BORDER);
 
     //  Set the background of our listctrl to white
-    m_playlist->SetBackgroundColour(wxColour(255,255,255));
+    m_playlist->SetBackgroundColour(*wxWHITE);
 
     //  The layout of the headers of the listctrl are like
     //  |   | File               |  Length

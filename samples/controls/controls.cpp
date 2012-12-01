@@ -1250,8 +1250,8 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        s_colOld = wxColour(wxT("red"));
-        SetBackgroundColour(wxT("white"));
+        s_colOld = *wxRED;
+        SetBackgroundColour(*wxWHITE);
 
         m_lbSelectThis->SetForegroundColour(wxT("white"));
         m_lbSelectThis->SetBackgroundColour(wxT("red"));

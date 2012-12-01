@@ -490,7 +490,7 @@ SeeThroughFrame::SeeThroughFrame()
                   wxSTAY_ON_TOP),
          m_currentState(STATE_SEETHROUGH)
 {
-    SetBackgroundColour(wxColour(255, 255, 255, 255));
+    SetBackgroundColour(*wxWHITE);
     SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
 }
 

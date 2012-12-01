@@ -86,7 +86,7 @@ bool MyApp::OnInit(void)
 #endif
 
   // object allocation
-  wxBrush* brush = new wxBrush(*wxRED);
+  wxBrush* brush = new wxBrush(*wxRED_BRUSH);
   wxBitmap* bitmap = new wxBitmap(100, 100);
 
   // non-object allocation

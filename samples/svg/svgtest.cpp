@@ -320,7 +320,7 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size)
     : wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
 {
-    SetBackgroundColour(wxColour(wxT("WHITE")));
+    SetBackgroundColour(*wxWHITE);
 
     m_child = parent;
     m_index = m_child->GetFrame()->GetCountOfChildren() % 9;

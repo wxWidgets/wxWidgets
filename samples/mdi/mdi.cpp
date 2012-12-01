@@ -340,7 +340,7 @@ MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
                            wxNO_FULL_REPAINT_ON_RESIZE |
                            wxVSCROLL | wxHSCROLL)
 {
-    SetBackgroundColour(wxColour("WHITE"));
+    SetBackgroundColour(*wxWHITE);
     SetCursor(wxCursor(wxCURSOR_PENCIL));
 
     SetScrollbars(20, 20, 50, 50);

@@ -1302,19 +1302,19 @@ void MyCanvas::DrawGradients(wxDC& dc)
     r3.y += 60;
     wxRect r4 = r2;
     r4.y += 60;
-    dc.SetPen(wxPen(wxColour(255, 0, 0)));
+    dc.SetPen(*wxRED_PEN);
     dc.DrawRectangle(r);
     r.Deflate(1);
-    dc.GradientFillLinear(r, wxColour(0,255,0), wxColour(0,0,0), wxNORTH);
+    dc.GradientFillLinear(r, *wxGREEN, *wxBLACK, wxNORTH);
     dc.DrawRectangle(r2);
     r2.Deflate(1);
-    dc.GradientFillLinear(r2, wxColour(0,0,0), wxColour(0,255,0), wxSOUTH);
+    dc.GradientFillLinear(r2, *wxBLACK, *wxGREEN, wxSOUTH);
     dc.DrawRectangle(r3);
     r3.Deflate(1);
-    dc.GradientFillLinear(r3, wxColour(0,255,0), wxColour(0,0,0), wxEAST);
+    dc.GradientFillLinear(r3, *wxGREEN, *wxBLACK, wxEAST);
     dc.DrawRectangle(r4);
     r4.Deflate(1);
-    dc.GradientFillLinear(r4, wxColour(0,0,0), wxColour(0,255,0), wxWEST);
+    dc.GradientFillLinear(r4, *wxBLACK, *wxGREEN, wxWEST);
 
 #if wxUSE_GRAPHICS_CONTEXT
     if (m_useContext)
@@ -1328,9 +1328,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         dc.DrawText(wxT("Linear Gradient with Stops"), gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
-        stops = wxGraphicsGradientStops(wxColour(255,0,0), wxColour(0,0,255));
+        stops = wxGraphicsGradientStops(*wxRED, *wxBLUE);
         stops.Add(wxColour(255,255,0), 0.33f);
-        stops.Add(wxColour(0,255,0), 0.67f);
+        stops.Add(*wxGREEN, 0.67f);
 
         gc->SetBrush(gc->CreateLinearGradientBrush(gfr.x, gfr.y,
                                                    gfr.x + gfr.width, gfr.y + gfr.height,
@@ -1365,11 +1365,11 @@ void MyCanvas::DrawGradients(wxDC& dc)
         dc.DrawText(wxT("Linear Gradient with Stops and Gaps"), gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
-        stops = wxGraphicsGradientStops(wxColour(255,0,0), wxColour(0,0,255));
+        stops = wxGraphicsGradientStops(*wxRED, *wxBLUE);
         stops.Add(wxColour(255,255,0), 0.33f);
         stops.Add(wxTransparentColour, 0.33f);
         stops.Add(wxTransparentColour, 0.67f);
-        stops.Add(wxColour(0,255,0), 0.67f);
+        stops.Add(*wxGREEN, 0.67f);
 
         gc->SetBrush(gc->CreateLinearGradientBrush(gfr.x, gfr.y + gfr.height,
                                                    gfr.x + gfr.width, gfr.y,
@@ -1404,12 +1404,12 @@ void MyCanvas::DrawGradients(wxDC& dc)
         dc.DrawText(wxT("Gradients with Stops and Transparency"), gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
-        stops = wxGraphicsGradientStops(wxColour(255,0,0), wxTransparentColour);
-        stops.Add(wxColour(255,0,0), 0.33f);
+        stops = wxGraphicsGradientStops(*wxRED, wxTransparentColour);
+        stops.Add(*wxRED, 0.33f);
         stops.Add(wxTransparentColour, 0.33f);
         stops.Add(wxTransparentColour, 0.67f);
-        stops.Add(wxColour(0,0,255), 0.67f);
-        stops.Add(wxColour(0,0,255), 1.0f);
+        stops.Add(*wxBLUE, 0.67f);
+        stops.Add(*wxBLUE, 1.0f);
 
         pth = gc->CreatePath();
         pth.MoveToPoint(gfr.x,gfr.y);
