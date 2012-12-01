@@ -96,7 +96,7 @@ public:
 
     /**
         Detaches this event handler from the parent specified in the constructor
-        (see wxEvtHandler::Unlink() for a similar but not identic function).
+        (see wxEvtHandler::Unlink() for a similar but not identical function).
     
         Normally, a wxProcess object is deleted by its parent when it receives the
         notification about the process termination. 

@@ -36,7 +36,7 @@ public:
     wxGCDC( const wxPrinterDC& printerDC );
 
     /**
-       Construct a wxGCDC from an existing grtaphics context.
+       Construct a wxGCDC from an existing graphics context.
     */
     wxGCDC(wxGraphicsContext* context);
 

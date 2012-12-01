@@ -304,8 +304,8 @@ public:
     void SetInitialDirectory(const wxString& dir);
 
     /**
-        Sets the absolute path of  (the default converter uses current locale's
-        charset)the currently selected directory.
+        Sets the absolute path of the currently selected directory (the default converter uses current locale's
+        charset).
         This must be a valid directory if @c wxDIRP_DIR_MUST_EXIST style was given.
     */
     void SetPath(const wxString& dirname);

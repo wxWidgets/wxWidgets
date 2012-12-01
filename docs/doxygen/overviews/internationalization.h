@@ -17,7 +17,7 @@ more than just translating its text messages to another message - date, time
 and currency formats need changing too, some languages are written left to
 right and others right to left, character encoding may differ and many other
 things may need changing too - it is a necessary first step. wxWidgets provides
-facilities for message translation with it's wxLocale class and is itself fully
+facilities for message translation with its wxLocale class and is itself fully
 translated into several languages. Please consult wxWidgets home page for the
 most up-to-date translations - and if you translate it into one of the
 languages not done yet, your translations would be gratefully accepted for

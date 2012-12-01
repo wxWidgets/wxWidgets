@@ -1795,7 +1795,7 @@ public:
     you can do:
     @code
         if (wxStringCheck<wxIsdigit>(myString))
-            ... // the entire string contains oly digits!
+            ... // the entire string contains only digits!
         else
             ... // at least one character of myString is not a digit
     @endcode
