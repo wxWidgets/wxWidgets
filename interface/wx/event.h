@@ -224,7 +224,7 @@ public:
     void SetTimestamp(long timeStamp = 0);
 
     /**
-        Test if this event should be propagated or not, i.e. if the propagation level
+        Test if this event should be propagated or not, i.e.\ if the propagation level
         is currently greater than 0.
     */
     bool ShouldPropagate() const;
@@ -2726,7 +2726,7 @@ public:
     int GetLinesPerAction() const;
 
     /**
-        Returns the logical mouse position in pixels (i.e. translated according to the
+        Returns the logical mouse position in pixels (i.e.\ translated according to the
         translation set for the DC, which usually indicates that the window has been
         scrolled).
     */

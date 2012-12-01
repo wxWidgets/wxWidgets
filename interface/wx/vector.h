@@ -112,7 +112,7 @@ public:
 
 
     /**
-        Returns vector's current capacity, i.e. how much memory is allocated.
+        Returns vector's current capacity, i.e.\ how much memory is allocated.
 
         @see reserve()
     */

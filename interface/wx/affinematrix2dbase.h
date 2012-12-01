@@ -185,7 +185,7 @@ public:
     void TransformPoint(wxDouble* x, wxDouble* y) const;
 
     /**
-        Applies the linear part of this matrix, i.e. without translation.
+        Applies the linear part of this matrix, i.e.\ without translation.
 
         @param p
             The source receiving the transformations.

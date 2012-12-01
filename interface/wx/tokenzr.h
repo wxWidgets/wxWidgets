@@ -136,7 +136,7 @@ public:
     wxString GetNextToken();
 
     /**
-        Returns the current position (i.e. one index after the last returned
+        Returns the current position (i.e.\ one index after the last returned
         token or 0 if GetNextToken() has never been called) in the original
         string.
     */

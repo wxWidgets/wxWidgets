@@ -902,7 +902,7 @@ public:
     bool IsEnabled(int id) const;
 
     /**
-        Inserts the given @a item at position 0, i.e. before all the other
+        Inserts the given @a item at position 0, i.e.\ before all the other
         existing items.
 
         @see Append(), Insert()
@@ -910,7 +910,7 @@ public:
     wxMenuItem* Prepend(wxMenuItem* item);
 
     /**
-        Inserts the given @a item at position 0, i.e. before all the other
+        Inserts the given @a item at position 0, i.e.\ before all the other
         existing items.
 
         @see Append(), Insert()

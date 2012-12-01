@@ -190,7 +190,7 @@ public:
     bool IsSelected(size_t item) const;
 
     /**
-        Selects or deselects the specified item which must be valid (i.e. not
+        Selects or deselects the specified item which must be valid (i.e.\ not
         equal to @c wxNOT_FOUND).
 
         @return @true if the items selection status has changed or @false
@@ -270,7 +270,7 @@ public:
     void SetSelectionBackground(const wxColour& col);
 
     /**
-        Toggles the state of the specified @a item, i.e. selects it if it was
+        Toggles the state of the specified @a item, i.e.\ selects it if it was
         unselected and deselects it if it was selected.
 
         This method is only valid for multi selection listboxes.

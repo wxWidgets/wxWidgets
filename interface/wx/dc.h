@@ -73,7 +73,7 @@ enum wxMappingMode
     wxMM_TWIPS,
 
     /**
-        Each logical unit is a @e "printer point" i.e. 1/72 of an inch.
+        Each logical unit is a @e "printer point" i.e.\ 1/72 of an inch.
         Equivalent to about 353 micrometers.
     */
     wxMM_POINTS
@@ -1413,7 +1413,7 @@ public:
     bool IsOk() const;
 
     /**
-        Sets the x and y axis orientation (i.e., the direction from lowest to
+        Sets the x and y axis orientation (i.e.\ the direction from lowest to
         highest values on the axis). The default orientation is x axis from
         left to right and y axis from top down.
 
@@ -1427,7 +1427,7 @@ public:
     void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
     /**
-        Sets the device origin (i.e., the origin in pixels after scaling has
+        Sets the device origin (i.e.\ the origin in pixels after scaling has
         been applied). This function may be useful in Windows printing
         operations for placing a graphic on a page.
     */

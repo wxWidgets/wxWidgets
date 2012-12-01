@@ -106,7 +106,7 @@ public:
     int GetTextCtrlProportion() const;
 
     /**
-        Returns @true if this window has a valid text control (i.e. if the @c
+        Returns @true if this window has a valid text control (i.e.\ if the @c
         wxPB_USE_TEXTCTRL style was given when creating this control).
     */
     bool HasTextCtrl() const;

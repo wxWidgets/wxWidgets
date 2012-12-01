@@ -115,7 +115,7 @@ public:
     virtual wxString GetConfigDir() const;
 
     /**
-        Return the location of the applications global, i.e. not user-specific,
+        Return the location of the applications global, i.e.\ not user-specific,
         data files.
 
         Example return values:
@@ -159,7 +159,7 @@ public:
     virtual wxString GetExecutablePath() const;
 
     /**
-        Return the program installation prefix, e.g. @c /usr, @c /opt or @c /home/zeitlin.
+        Return the program installation prefix, e.g.\ @c /usr, @c /opt or @c /home/zeitlin.
 
         If the prefix had been previously by SetInstallPrefix(), returns that
         value, otherwise tries to determine it automatically (Linux only right now)

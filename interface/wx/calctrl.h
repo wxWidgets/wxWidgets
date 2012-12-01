@@ -145,7 +145,7 @@ public:
     bool HasBackgroundColour() const;
 
     /**
-        Returns @true if a non-default (i.e. any) border is set.
+        Returns @true if a non-default (i.e.\ any) border is set.
     */
     bool HasBorder() const;
 

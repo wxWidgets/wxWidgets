@@ -954,9 +954,8 @@ public:
     void Set(int width, int height);
 
     /**
-        Combine this size object with another one replacing the default (i.e.
-        equal to -1) components of this object with those of the other. It is
-        typically used like this:
+        Combine this size object with another one replacing the default (i.e.\ equal to -1)
+        components of this object with those of the other. It is typically used like this:
 
         @code
         if ( !size.IsFullySpecified() )

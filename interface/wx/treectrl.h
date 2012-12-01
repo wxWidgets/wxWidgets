@@ -726,7 +726,7 @@ public:
     virtual bool IsBold(const wxTreeItemId& item) const;
 
     /**
-        Returns @true if the control is empty (i.e. has no items, even no root
+        Returns @true if the control is empty (i.e.\ has no items, even no root
         one).
     */
     bool IsEmpty() const;

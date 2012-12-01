@@ -319,7 +319,7 @@ public:
                                     wxObject* clientData = NULL);
 
     /**
-        Adds any control to the toolbar, typically e.g. a wxComboBox.
+        Adds any control to the toolbar, typically e.g.\ a wxComboBox.
 
         @param control
             The control to be added.

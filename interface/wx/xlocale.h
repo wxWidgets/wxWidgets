@@ -82,7 +82,7 @@ public:
     static wxXLocale& GetCLocale();
 
     /**
-        Returns @true if this object is initialized, i.e. represents a valid locale
+        Returns @true if this object is initialized, i.e.\ represents a valid locale
         or @false otherwise.
     */
     bool IsOk() const;

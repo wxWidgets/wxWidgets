@@ -97,7 +97,7 @@ public:
     wxProtocol& GetProtocol();
 
     /**
-        Returns @true if this object is correctly initialized, i.e. if
+        Returns @true if this object is correctly initialized, i.e.\ if
         GetError() returns ::wxURL_NOERR.
     */
     bool IsOk() const;

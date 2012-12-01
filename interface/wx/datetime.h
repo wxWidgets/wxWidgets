@@ -754,7 +754,7 @@ public:
 
     /**
         Returns @true if the date is equal to another one up to the given time
-        interval, i.e. if the absolute difference between the two dates is less
+        interval, i.e.\ if the absolute difference between the two dates is less
         than this interval.
     */
     bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const;
@@ -1214,7 +1214,7 @@ public:
                                       WeekFlags flags = Monday_First);
 
     /**
-        Sets the date to the day number @a yday in the same year (i.e., unlike
+        Sets the date to the day number @a yday in the same year (i.e.\ unlike
         the other functions, this one does not use the current year). The day
         number should be in the range 1-366 for the leap years and 1-365 for
         the other ones.
@@ -1339,7 +1339,7 @@ public:
 
 
     /**
-        Converts the year in absolute notation (i.e. a number which can be
+        Converts the year in absolute notation (i.e.\ a number which can be
         negative, positive or zero) to the year in BC/AD notation. For the
         positive years, nothing is done, but the year 0 is year 1 BC and so for
         other years there is a difference of 1.
@@ -1381,7 +1381,7 @@ public:
                                  Country country = Country_Default);
 
     /**
-        Get the current century, i.e. first two digits of the year, in given
+        Get the current century, i.e.\ first two digits of the year, in given
         calendar (only Gregorian is currently supported).
     */
     static int GetCentury(int year);
@@ -1567,7 +1567,7 @@ public:
 
     /**
         Returns the object corresponding to the midnight of the current day
-        (i.e. the same as Now(), but the time part is set to 0).
+        (i.e.\ the same as Now(), but the time part is set to 0).
 
         @see Now()
     */
@@ -2016,7 +2016,7 @@ public:
     bool IsEqualTo(const wxTimeSpan& ts) const;
 
     /**
-        Compares two timespans: works with the absolute values, i.e. -2 hours
+        Compares two timespans: works with the absolute values, i.e.\ -2 hours
         is longer than 1 hour. Also, it will return @false if the timespans are
         equal in absolute value.
     */
@@ -2038,7 +2038,7 @@ public:
     bool IsPositive() const;
 
     /**
-        Compares two timespans: works with the absolute values, i.e. 1 hour is
+        Compares two timespans: works with the absolute values, i.e.\ 1 hour is
         shorter than -2 hours. Also, it will return @false if the timespans are
         equal in absolute value.
     */

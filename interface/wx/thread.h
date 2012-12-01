@@ -1092,7 +1092,7 @@ public:
     /**
         Gets the thread identifier: this is a platform dependent number that uniquely
         identifies the thread throughout the system during its existence
-        (i.e. the thread identifiers may be reused).
+        (i.e.\ the thread identifiers may be reused).
     */
     wxThreadIdType GetId() const;
 
@@ -1123,7 +1123,7 @@ public:
     unsigned int GetPriority() const;
 
     /**
-        Returns @true if the thread is alive (i.e. started and not terminating).
+        Returns @true if the thread is alive (i.e.\ started and not terminating).
 
         Note that this function can only safely be used with joinable threads, not
         detached ones as the latter delete themselves and so when the real thread is

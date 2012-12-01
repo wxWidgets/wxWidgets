@@ -1356,7 +1356,7 @@ public:
     bool IsOk() const;
 
     /**
-        Returns @true if the given pixel is transparent, i.e. either has the mask
+        Returns @true if the given pixel is transparent, i.e.\ either has the mask
         colour if this image has a mask or if this image has alpha channel and alpha
         value of this pixel is strictly less than @a threshold.
     */

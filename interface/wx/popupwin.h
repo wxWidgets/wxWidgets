@@ -38,7 +38,7 @@ public:
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
     /**
-        Move the popup window to the right position, i.e. such that it is
+        Move the popup window to the right position, i.e.\ such that it is
         entirely visible.
 
         The popup is positioned at ptOrigin + size if it opens below and to the

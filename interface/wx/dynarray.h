@@ -254,36 +254,36 @@ public:
     wxSortedArray(int (*)(T first, T second)compareFunction);
 
     /**
-        Performs a shallow array copy (i.e. doesn't copy the objects pointed to
+        Performs a shallow array copy (i.e.\ doesn't copy the objects pointed to
         even if the source array contains the items of pointer type).
     */
     wxArray(const wxArray& array);
 
     /**
-        Performs a shallow array copy (i.e. doesn't copy the objects pointed to
+        Performs a shallow array copy (i.e.\ doesn't copy the objects pointed to
         even if the source array contains the items of pointer type).
     */
     wxSortedArray(const wxSortedArray& array);
 
     /**
-        Performs a deep copy (i.e. the array element are copied too).
+        Performs a deep copy (i.e.\ the array element are copied too).
     */
     wxObjArray(const wxObjArray& array);
 
     /**
-        Performs a shallow array copy (i.e. doesn't copy the objects pointed to
+        Performs a shallow array copy (i.e.\ doesn't copy the objects pointed to
         even if the source array contains the items of pointer type).
     */
     wxArray& operator=(const wxArray& array);
 
     /**
-        Performs a shallow array copy (i.e. doesn't copy the objects pointed to
+        Performs a shallow array copy (i.e.\ doesn't copy the objects pointed to
         even if the source array contains the items of pointer type).
     */
     wxSortedArray& operator=(const wxSortedArray& array);
 
     /**
-        Performs a deep copy (i.e. the array element are copied too).
+        Performs a deep copy (i.e.\ the array element are copied too).
     */
     wxObjArray& operator=(const wxObjArray& array);
 
@@ -376,7 +376,7 @@ public:
     T& Item(size_t index) const;
 
     /**
-        Returns the last element in the array, i.e. is the same as calling
+        Returns the last element in the array, i.e.\ is the same as calling
         "Item(GetCount() - 1)". An assert failure is raised in the debug mode
         if the array is empty.
 

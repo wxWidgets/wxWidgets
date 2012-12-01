@@ -259,7 +259,7 @@ public:
     bool HasValue(const wxDataViewItem& item, unsigned col) const;
 
     /**
-        Override this to indicate of @a item is a container, i.e. if
+        Override this to indicate of @a item is a container, i.e.\ if
         it can have child items.
     */
     virtual bool IsContainer(const wxDataViewItem& item) const = 0;

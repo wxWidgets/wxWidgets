@@ -119,7 +119,7 @@ public:
     virtual bool HangUp() = 0;
 
     /**
-        Returns @true if the computer has a permanent network connection (i.e.
+        Returns @true if the computer has a permanent network connection (i.e.\
         is on a LAN) and so there is no need to use Dial() function to go
         online.
 

@@ -339,8 +339,8 @@ public:
 
     /**
         This method may be overridden in the derived classes to return @false to
-        indicate that this control doesn't accept input at all (i.e. behaves like
-        e.g. wxStaticText) and so doesn't need focus.
+        indicate that this control doesn't accept input at all (i.e.\ behaves like
+        e.g.\ wxStaticText) and so doesn't need focus.
 
         @see AcceptsFocusFromKeyboard()
     */
@@ -535,7 +535,7 @@ public:
     bool IsDescendant(wxWindowBase* win) const;
 
     /**
-        Reparents the window, i.e. the window will be removed from its
+        Reparents the window, i.e.\ the window will be removed from its
         current parent window (e.g. a non-standard toolbar in a wxFrame)
         and then re-inserted into another.
 
@@ -1401,7 +1401,7 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
 
     /**
-       Get the client rectangle in window (i.e. client) coordinates
+       Get the client rectangle in window (i.e.\ client) coordinates
     */
     wxRect GetClientRect() const;
 
@@ -2364,7 +2364,7 @@ public:
     virtual bool HideWithEffect(wxShowEffect effect,
                                 unsigned int timeout = 0);
     /**
-        Returns @true if the window is enabled, i.e. if it accepts user input,
+        Returns @true if the window is enabled, i.e.\ if it accepts user input,
         @false otherwise.
 
         Notice that this method can return @false even if this window itself hadn't
@@ -2404,7 +2404,7 @@ public:
     virtual bool IsShown() const;
 
     /**
-        Returns @true if the window is physically visible on the screen, i.e. it
+        Returns @true if the window is physically visible on the screen, i.e.\ it
         is shown and all its parents up to the toplevel window are shown as well.
 
         @see IsShown()
@@ -3223,7 +3223,7 @@ public:
     virtual void InitDialog();
 
     /**
-        Returns @true if the window contents is double-buffered by the system, i.e. if
+        Returns @true if the window contents is double-buffered by the system, i.e.\ if
         any drawing done on the window is really done on a temporary backing surface
         and transferred to the screen all at once later.
 
@@ -3245,7 +3245,7 @@ public:
 
     /**
         Returns @true if this window is intrinsically enabled, @false otherwise,
-        i.e. if @ref Enable() Enable(@false) had been called. This method is
+        i.e.\ if @ref Enable() Enable(@false) had been called. This method is
         mostly used for wxWidgets itself, user code should normally use
         IsEnabled() instead.
     */
@@ -3599,7 +3599,7 @@ protected:
     virtual int DoGetBestClientWidth(int height) const;
 
     /**
-        Sets the initial window size if none is given (i.e. at least one of the
+        Sets the initial window size if none is given (i.e.\ at least one of the
         components of the size passed to ctor/Create() is wxDefaultCoord).
         @deprecated Use SetInitialSize() instead.
     */

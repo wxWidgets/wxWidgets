@@ -37,19 +37,19 @@ public:
     bool GetAddress(void* addr, size_t* len) const;
 
     /**
-        Returns the base name of this module, e.g. @c "kernel32.dll" or
+        Returns the base name of this module, e.g.\ @c "kernel32.dll" or
         @c "libc-2.3.2.so".
     */
     wxString GetName() const;
 
     /**
-        Returns the full path of this module if available, e.g.
-        @c "c:\windows\system32\kernel32.dll" or @c "/lib/libc-2.3.2.so".
+        Returns the full path of this module if available, e.g.\ @c "c:\windows\system32\kernel32.dll"
+        or @c "/lib/libc-2.3.2.so".
     */
     wxString GetPath() const;
 
     /**
-        Returns the version of this module, e.g. @c "5.2.3790.0" or @c "2.3.2".
+        Returns the version of this module, e.g.\ @c "5.2.3790.0" or @c "2.3.2".
         The returned string is empty if the version information is not
         available.
     */
@@ -138,7 +138,7 @@ public:
                                            wxPluginCategory cat = wxDL_PLUGIN_GUI);
 
     /**
-        Detaches this object from its library handle, i.e. the object will not
+        Detaches this object from its library handle, i.e.\ the object will not
         unload the library any longer in its destructor but it is now the
         callers responsibility to do this using Unload().
     */

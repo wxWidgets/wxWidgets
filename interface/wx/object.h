@@ -262,7 +262,7 @@ public:
     virtual wxClassInfo* GetClassInfo() const;
 
     /**
-        Returns the wxObject::m_refData pointer, i.e. the data referenced by this object.
+        Returns the wxObject::m_refData pointer, i.e.\ the data referenced by this object.
 
         @see Ref(), UnRef(), wxObject::m_refData, SetRefData(), wxObjectRefData
     */

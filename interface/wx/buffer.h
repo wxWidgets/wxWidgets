@@ -178,7 +178,7 @@ public:
     wxCharTypeBuffer(const wxScopedCharTypeBuffer<T>& src);
 
     /**
-        Assigns @a str to this buffer and takes ownership of it (i.e. the
+        Assigns @a str to this buffer and takes ownership of it (i.e.\ the
         buffer becomes "owned").
      */
     wxCharTypeBuffer& operator=(const CharType *str);

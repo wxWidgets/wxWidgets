@@ -642,7 +642,7 @@ public:
     bool IsShown(size_t index) const;
 
     /**
-        Call this to force layout of the children anew, e.g. after having added a child
+        Call this to force layout of the children anew, e.g.\ after having added a child
         to or removed a child (window, other sizer or space) from the sizer while
         keeping the current dimension.
     */

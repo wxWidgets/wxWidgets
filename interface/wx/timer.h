@@ -86,7 +86,7 @@ public:
     wxEvtHandler* GetOwner() const;
 
     /**
-        Returns @true if the timer is one shot, i.e. if it will stop after firing
+        Returns @true if the timer is one shot, i.e.\ if it will stop after firing
         the first notification automatically.
     */
     bool IsOneShot() const;

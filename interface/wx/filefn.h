@@ -322,7 +322,7 @@ wxString wxPathOnly(const wxString& path);
 bool wxIsWild(const wxString& pattern);
 
 /**
-    Returns @true if the argument is an absolute filename, i.e. with a slash
+    Returns @true if the argument is an absolute filename, i.e.\ with a slash
     or drive name at the beginning.
 
     @header{wx/filefn.h}

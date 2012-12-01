@@ -214,7 +214,7 @@ public:
     virtual void Iconize(bool iconize = true);
 
     /**
-        Returns @true if this window is currently active, i.e. if the user is
+        Returns @true if this window is currently active, i.e.\ if the user is
         currently working with it.
     */
     virtual bool IsActive();

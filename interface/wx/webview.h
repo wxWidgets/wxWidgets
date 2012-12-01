@@ -372,7 +372,7 @@ public:
     virtual wxString GetPageText() const = 0;
 
     /**
-        Returns whether the web control is currently busy (e.g. loading a page).
+        Returns whether the web control is currently busy (e.g.\ loading a page).
     */
     virtual bool IsBusy() const = 0;
 

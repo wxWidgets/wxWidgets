@@ -43,7 +43,7 @@ enum
     /** Mouse is currently over the control. */
     wxCONTROL_CURRENT    = 0x00000010,
 
-    /** Selected item in e.g. listbox. */
+    /** Selected item in e.g.\ listbox. */
     wxCONTROL_SELECTED   = 0x00000020,
 
     /** (Check/radio button) is checked. */

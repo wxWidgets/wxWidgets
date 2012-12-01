@@ -37,7 +37,7 @@ public:
     virtual ~wxTipProvider();
 
     /**
-        Returns the index of the current tip (i.e. the one which would be returned by GetTip()).
+        Returns the index of the current tip (i.e.\ the one which would be returned by GetTip()).
 
         The program usually remembers the value returned by this function after calling
         wxShowTip(). Note that it is not the same as the value which was passed to
