@@ -292,7 +292,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 {
     if (!gtk_check_version(2,4,0))
+    {
+        wxGtkString str(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_widget)));
+        m_dir = wxString::FromUTF8(str);
         EndDialog(wxID_OK);
+    }
     else
         wxGenericFileDialog::OnListOk( event );
 }
@@ -417,19 +421,6 @@ void wxFileDialog::SetDirectory(const wxString& dir)
 
 wxString wxFileDialog::GetDirectory() const
 {
-    if (!gtk_check_version(2,4,0))
-    {
-        wxGtkString str(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_widget)));
-        wxString currentDir( wxString::FromUTF8(str) );
-        if (currentDir.empty())
-        {
-            // gtk_file_chooser_get_current_folder will return empty until the dialog has been shown
-            // in which case use any previously provided value
-            currentDir = m_dir;
-        }
-        return currentDir;
-    }
-
     return wxGenericFileDialog::GetDirectory();
 }
 
