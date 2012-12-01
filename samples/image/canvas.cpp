@@ -63,7 +63,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     wxMemoryDC dc;
     dc.SelectObject( bitmap );
-    dc.SetBrush( wxBrush( wxT("orange"), wxSOLID ) );
+    dc.SetBrush( wxBrush( wxS("orange") ) );
     dc.SetPen( *wxBLACK_PEN );
     dc.DrawRectangle( 0, 0, 100, 100 );
     dc.SetBrush( *wxWHITE_BRUSH );
@@ -407,7 +407,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawBitmap( my_square, 30, 30 );
 
     dc.DrawText( wxT("Drawn directly"), 150, 10 );
-    dc.SetBrush( wxBrush( wxT("orange"), wxSOLID ) );
+    dc.SetBrush( wxBrush( wxS("orange") ) );
     dc.SetPen( *wxBLACK_PEN );
     dc.DrawRectangle( 150, 30, 100, 100 );
     dc.SetBrush( *wxWHITE_BRUSH );

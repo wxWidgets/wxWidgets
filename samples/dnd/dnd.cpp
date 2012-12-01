@@ -342,7 +342,7 @@ public:
 
     virtual void Draw(wxDC& dc)
     {
-        dc.SetPen(wxPen(m_col, 1, wxSOLID));
+        dc.SetPen(wxPen(m_col));
     }
 
 protected:
@@ -395,7 +395,7 @@ public:
         dc.DrawLine(p3, p1);
 
         //works in multicolor modes; on GTK (at least) will fail in 16-bit color
-        dc.SetBrush(wxBrush(m_col, wxSOLID));
+        dc.SetBrush(wxBrush(m_col));
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
     }
 };
@@ -431,7 +431,7 @@ public:
         dc.DrawLine(p3, p4);
         dc.DrawLine(p4, p1);
 
-        dc.SetBrush(wxBrush(m_col, wxSOLID));
+        dc.SetBrush(wxBrush(m_col));
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
     }
 };
@@ -459,7 +459,7 @@ public:
 
         dc.DrawEllipse(m_pos, m_size);
 
-        dc.SetBrush(wxBrush(m_col, wxSOLID));
+        dc.SetBrush(wxBrush(m_col));
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
     }
 };
@@ -2023,7 +2023,7 @@ void DnDShapeDataObject::CreateBitmap() const
     wxBitmap bitmap(x, y);
     wxMemoryDC dc;
     dc.SelectObject(bitmap);
-    dc.SetBrush(wxBrush(wxT("white"), wxSOLID));
+    dc.SetBrush(*wxWHITE_BRUSH);
     dc.Clear();
     m_shape->Draw(dc);
     dc.SelectObject(wxNullBitmap);

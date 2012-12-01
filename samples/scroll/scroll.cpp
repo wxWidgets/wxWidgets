@@ -1233,10 +1233,8 @@ MyAutoScrollingWindow::DCNormalize(int x, int y, int w, int h)
 void MyAutoScrollingWindow::OnDraw(wxDC& dc)
 {
     dc.SetFont(m_font);
-    wxBrush normBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)
-            , wxSOLID);
-    wxBrush selBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)
-            , wxSOLID);
+    wxBrush normBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    wxBrush selBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     dc.SetPen(*wxTRANSPARENT_PEN);
     const wxString str = sm_testData;
     size_t strLength = str.length();

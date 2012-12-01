@@ -421,7 +421,7 @@ void MyCanvas::DrawTestBrushes(wxDC& dc)
     wxCoord x = 10,
             y = 10;
 
-    dc.SetBrush(wxBrush(*wxGREEN, wxSOLID));
+    dc.SetBrush(*wxGREEN_BRUSH);
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
     dc.DrawText(wxT("Solid green"), x + 10, y + 10);
 
@@ -495,13 +495,13 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
 
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
-    dc.SetPen( wxPen( wxT("black"), width, wxSOLID) );
+    dc.SetPen( wxPen( *wxBLACK, width ) );
     dc.SetBrush( *wxRED_BRUSH );
     dc.DrawText(wxString::Format(wxT("Testing lines of width %d"), width), x + 10, y - 10);
     dc.DrawRectangle( x+10, y+10, 100, 190 );
 
     dc.DrawText(wxT("Solid/dot/short dash/long dash/dot dash"), x + 150, y + 10);
-    dc.SetPen( wxPen( wxT("black"), width, wxSOLID) );
+    dc.SetPen( wxPen( *wxBLACK, width ) );
     dc.DrawLine( x+20, y+20, 100, y+20 );
     dc.SetPen( wxPen( wxT("black"), width, wxDOT) );
     dc.DrawLine( x+20, y+30, 100, y+30 );
@@ -733,12 +733,8 @@ void MyCanvas::DrawDefault(wxDC& dc)
     wxMemoryDC memdc2;
     memdc2.SelectObject(bitmap2);
 
-    wxColour clr(255, 255, 0);
-    wxBrush yellowBrush(clr, wxSOLID);
-    memdc2.SetBackground(yellowBrush);
+    memdc2.SetBackground(*wxYELLOW_BRUSH);
     memdc2.Clear();
-
-    wxPen yellowPen(clr, 1, wxSOLID);
 
     // Now draw a white rectangle with red outline. It should
     // entirely eclipse the yellow background.
@@ -757,8 +753,8 @@ void MyCanvas::DrawDefault(wxDC& dc)
     // Draw a yellow rectangle filling the bitmap
 
     x = 600; int y = 270;
-    dc.SetPen(yellowPen);
-    dc.SetBrush(yellowBrush);
+    dc.SetPen(*wxYELLOW_PEN);
+    dc.SetBrush(*wxYELLOW_BRUSH);
     dc.DrawRectangle(x, y, totalWidth, totalHeight);
 
     // Now draw a white rectangle with red outline. It should
@@ -890,7 +886,7 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
     static const wxCoord h = 60;
 
     // reuse the text colour here
-    dc.SetPen(wxPen(m_owner->m_colourForeground, 1, wxSOLID));
+    dc.SetPen(wxPen(m_owner->m_colourForeground));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     size_t n;
@@ -907,7 +903,7 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
     }
 
     // now some filled rectangles
-    dc.SetBrush(wxBrush(m_owner->m_colourForeground, wxSOLID));
+    dc.SetBrush(wxBrush(m_owner->m_colourForeground));
 
     for ( n = 0; n < WXSIZEOF(rasterOperations); n++ )
     {
@@ -936,22 +932,22 @@ void MyCanvas::DrawAlpha(wxDC& dc)
     wxDouble width = 180 ;
     wxDouble radius = 30 ;
 
-    dc.SetPen( wxPen( wxColour( 128, 0, 0, 255 ),12, wxSOLID));
-    dc.SetBrush( wxBrush( wxColour( 255, 0, 0, 255),wxSOLID));
+    dc.SetPen( wxPen( wxColour( 128, 0, 0 ), 12 ));
+    dc.SetBrush(*wxRED_BRUSH);
 
     wxRect r(margin,margin+width*0.66,width,width) ;
 
     dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
 
-    dc.SetPen( wxPen( wxColour( 0, 0, 128, 255 ),12, wxSOLID));
-    dc.SetBrush( wxBrush( wxColour( 0, 0, 255, 255),wxSOLID));
+    dc.SetPen( wxPen( wxColour( 0, 0, 128 ), 12));
+    dc.SetBrush(*wxBLUE_BRUSH);
 
     r.Offset( width * 0.8 , - width * 0.66 ) ;
 
     dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
 
-    dc.SetPen( wxPen( wxColour( 128, 128, 0, 255 ),12, wxSOLID));
-    dc.SetBrush( wxBrush( wxColour( 192, 192, 0, 255),wxSOLID));
+    dc.SetPen( wxPen( wxColour( 128, 128, 0 ), 12));
+    dc.SetBrush( wxBrush( wxColour( 192, 192, 0)));
 
     r.Offset( width * 0.8 , width *0.5 ) ;
 
@@ -998,7 +994,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     gc->PushState(); // save current translation/scale/other state
     gc->Translate(60, 75); // reposition the context origin
 
-    gc->SetPen(wxPen("navy", 1));
+    gc->SetPen(wxPen("navy"));
     gc->SetBrush(wxBrush("pink"));
 
     for( int i = 0 ; i < 3 ; ++i )
@@ -1230,9 +1226,9 @@ void MyCanvas::DrawSplines(wxDC& dc)
             letters[m][n].y = center.y + h[ letters[m][n].y ];
         }
 
-        dc.SetPen( wxPen( wxT("blue"), 1, wxDOT) );
+        dc.SetPen( wxPen( *wxBLUE, 1, wxDOT) );
         dc.DrawLines(5, letters[m]);
-        dc.SetPen( wxPen( wxT("black"), 4, wxSOLID) );
+        dc.SetPen( wxPen( *wxBLACK, 4) );
         dc.DrawSpline(5, letters[m]);
     }
 
@@ -1557,9 +1553,7 @@ void MyCanvas::Draw(wxDC& pdc)
 
     if ( m_owner->m_textureBackground) {
         if ( ! m_owner->m_backgroundBrush.IsOk() ) {
-            wxColour clr(0,128,0);
-            wxBrush b(clr, wxSOLID);
-            dc.SetBackground(b);
+            dc.SetBackground(wxBrush(wxColour(0, 128, 0)));
         }
     }
 
@@ -1675,7 +1669,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         dc.SetPen( *wxGREY_PEN );
         dc.SetBrush( wxColour( 192,192,192,64 ) );
 #else
-        dc.SetPen( wxPen( *wxLIGHT_GREY, 2, wxSOLID ) );
+        dc.SetPen( wxPen( *wxLIGHT_GREY, 2, ) );
         dc.SetBrush( *wxTRANSPARENT_BRUSH );
 #endif
         dc.DrawRectangle( newrect );

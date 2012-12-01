@@ -1023,7 +1023,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     PrepareDC(dc);
 
     // set background
-    dc.SetBackground(wxBrush(wxT("white"), wxSOLID));
+    dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
     dc.SetFont(m_font);
 
@@ -1105,7 +1105,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     // draw the lines between them
-    dc.SetPen(wxPen(wxColour(wxT("blue")), 1, wxSOLID));
+    dc.SetPen(*wxBLUE_PEN);
     int l;
 
     // horizontal
