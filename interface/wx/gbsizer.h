@@ -93,12 +93,20 @@ public:
     wxSizerItem* Add(wxSizer* sizer, const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0, int border = 0, wxObject* userData = NULL);
+    wxSizerItem* Add(wxGBSizerItem* item);
+
+    /**
+        Adds a spacer to the given position.
+        @a width and @a height specify the dimension of the spacer to be added.
+
+        @return A valid pointer if the spacer was successfully placed at the
+                 given position, or @NULL if something was already there.
+    */
     wxSizerItem* Add(int width, int height, const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0, int border = 0, wxObject* userData = NULL);
-    wxSizerItem* Add(wxGBSizerItem* item);
-    //@}
 
+    //@}
     /**
         Called when the managed size of the sizer is needed or when layout
         needs done.
