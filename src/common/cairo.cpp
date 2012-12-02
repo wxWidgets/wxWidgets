@@ -384,11 +384,6 @@ bool wxCairoInit()
     return wxCairo::Initialize();
 }
 
-void wxCairoCleanUp()
-{
-    wxCairo::CleanUp();
-}
-
 extern "C"
 {
 

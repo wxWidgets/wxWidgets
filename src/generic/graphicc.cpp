@@ -28,7 +28,6 @@
 #include <cairo.h>
 
 bool wxCairoInit();
-void wxCairoCleanUp();
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -2397,13 +2396,6 @@ public :
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
 
-protected :
-    bool EnsureIsLoaded();
-    void Load();
-    void Unload();
-    friend class wxCairoModule;
-private :
-    int m_loaded;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoRenderer)
 } ;
 
@@ -2414,34 +2406,14 @@ private :
 IMPLEMENT_DYNAMIC_CLASS(wxCairoRenderer,wxGraphicsRenderer)
 
 static wxCairoRenderer gs_cairoGraphicsRenderer;
-// temporary hack to allow creating a cairo context on any platform
-extern wxGraphicsRenderer* gCairoRenderer;
-wxGraphicsRenderer* gCairoRenderer = &gs_cairoGraphicsRenderer;
 
-bool wxCairoRenderer::EnsureIsLoaded()
-{
-#ifndef __WXGTK__
-    Load();
-    return wxCairoInit();
+#ifdef __WXGTK__
+    #define ENSURE_LOADED_OR_RETURN(returnOnFail)
 #else
-    return true;
+    #define ENSURE_LOADED_OR_RETURN(returnOnFail)  \
+        if (!wxCairoInit())                        \
+            return returnOnFail
 #endif
-}
-
-void wxCairoRenderer::Load()
-{
-    wxCairoInit();
-}
-
-void wxCairoRenderer::Unload()
-{
-    wxCairoCleanUp();
-}
-
-// call EnsureIsLoaded() and return returnOnFail value if it fails
-#define ENSURE_LOADED_OR_RETURN(returnOnFail)  \
-    if ( !EnsureIsLoaded() )                   \
-        return (returnOnFail)
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxWindowDC& dc)
 {
