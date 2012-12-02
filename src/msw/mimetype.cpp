@@ -227,17 +227,36 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
     wxLogNull nolog;
     wxString strKey;
 
+    // Since Windows Vista the association used by Explorer is different from
+    // the association information stored in the traditional part of the
+    // registry. Unfortunately the new schema doesn't seem to be documented
+    // anywhere so using it involves a bit of guesswork:
+    //
+    // The information is stored under Explorer-specific key whose path is
+    // below. The interesting part is UserChoice subkey which is the only one
+    // we use so far but there is also OpenWithProgids subkey which can exist
+    // even if UserChoice doesn't. However in practice there doesn't seem to be
+    // any cases when OpenWithProgids values for the given extension are
+    // different from those found directly under HKCR\.ext, so for now we don't
+    // bother to use this, apparently the programs registering their file type
+    // associations do it in both places. We do use UserChoice because when the
+    // association is manually changed by the user it's only recorded there and
+    // so must override whatever value was created under HKCR by the setup
+    // program.
+
     {
-        wxRegKey explorerKey(wxRegKey::HKCU, wxT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\") + m_ext);
-        if (explorerKey.Exists())
+        wxRegKey explorerKey
+                 (
+                    wxRegKey::HKCU,
+                    wxT("Software\\Microsoft\\Windows\\CurrentVersion\\")
+                    wxT("Explorer\\FileExts\\") +
+                    m_ext +
+                    wxT("\\UserChoice")
+                 );
+        if ( explorerKey.Open(wxRegKey::Read) &&
+                explorerKey.QueryValue(wxT("Progid"), strKey) )
         {
-            if (explorerKey.Open(wxRegKey::Read))
-            {
-                if (explorerKey.QueryValue(wxT("Progid"), strKey))
-                {
-                    strKey = wxFileTypeImplGetCurVer(strKey);
-                }
-            }
+            strKey = wxFileTypeImplGetCurVer(strKey);
         }
     }
 
