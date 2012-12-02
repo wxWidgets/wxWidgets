@@ -792,22 +792,9 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             // same thing anyhow)
             m_lastAcceptedSelection = wxID_NONE;
 
-            {
-                const int n = GetSelection();
-
-                wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
-                event.SetInt(n);
-                event.SetEventObject(this);
-
-                if ( n > -1 )
-                {
-                    event.SetString(GetStringSelection());
-                    InitCommandEventWithItems(event, n);
-                }
-
-                ProcessCommand(event);
-            }
+            SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
             break;
+
 
         // don't handle CBN_SELENDCANCEL: just leave m_lastAcceptedSelection
         // valid and the selection will be undone in CBN_CLOSEUP above

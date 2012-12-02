@@ -236,23 +236,7 @@ void * wxChoice::DoGetItemClientData(unsigned int n) const
 
 bool wxChoice::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
-    wxCommandEvent event( wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
-
-    // actually n should be made sure by the os to be a valid selection, but ...
-    int n = GetSelection();
-    if ( n > -1 )
-    {
-        event.SetInt( n );
-        event.SetString( GetStringSelection() );
-        event.SetEventObject( this );
-
-        if ( HasClientObjectData() )
-            event.SetClientObject( GetClientObject( n ) );
-        else if ( HasClientUntypedData() )
-            event.SetClientData( GetClientData( n ) );
-
-        ProcessCommand( event );
-    }
+    SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
 
     return true ;
 }

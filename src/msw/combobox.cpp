@@ -311,16 +311,9 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // could get a wrong value when it calls our GetValue()
             ::SetWindowText(GetHwnd(), value.t_str());
 
-            {
-                wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
-                event.SetInt(sel);
-                event.SetString(value);
-                InitCommandEventWithItems(event, sel);
+            SendSelectionChangedEvent(wxEVT_COMMAND_COMBOBOX_SELECTED);
 
-                ProcessCommand(event);
-            }
-
-            // fall through: for compability with wxGTK, also send the text
+            // fall through: for compatibility with wxGTK, also send the text
             // update event when the selection changes (this also seems more
             // logical as the text does change)
 

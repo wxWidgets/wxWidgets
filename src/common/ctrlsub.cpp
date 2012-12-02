@@ -292,4 +292,19 @@ wxControlWithItemsBase::InitCommandEventWithItems(wxCommandEvent& event, int n)
     }
 }
 
+void wxControlWithItemsBase::SendSelectionChangedEvent(wxEventType eventType)
+{
+    const int n = GetSelection();
+    if ( n == wxNOT_FOUND )
+        return;
+
+    wxCommandEvent event(eventType, m_windowId);
+    event.SetInt(n);
+    event.SetEventObject(this);
+    event.SetString(GetStringSelection());
+    InitCommandEventWithItems(event, n);
+
+    HandleWindowEvent(event);
+}
+
 #endif // wxUSE_CONTROLS

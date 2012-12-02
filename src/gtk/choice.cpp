@@ -101,22 +101,6 @@ wxChoice::~wxChoice()
     delete m_strings;
 }
 
-void wxChoice::SendSelectionChangedEvent(wxEventType evt_type)
-{
-    if (GetSelection() == -1)
-        return;
-
-    wxCommandEvent event( evt_type, GetId() );
-
-    int n = GetSelection();
-    event.SetInt( n );
-    event.SetString( GetStringSelection() );
-    event.SetEventObject( this );
-    InitCommandEventWithItems( event, n );
-
-    HandleWindowEvent( event );
-}
-
 void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
 {
 #ifdef __WXGTK3__

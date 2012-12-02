@@ -441,6 +441,12 @@ public:
     // colour
     virtual bool ShouldInheritColours() const { return false; }
 
+
+    // Implementation only from now on.
+
+    // Generate an event of the given type for the selection change.
+    void SendSelectionChangedEvent(wxEventType eventType);
+
 protected:
     // fill in the client object or data field of the event as appropriate
     //
