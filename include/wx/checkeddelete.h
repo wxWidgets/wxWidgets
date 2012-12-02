@@ -11,6 +11,8 @@
 #ifndef _WX_CHECKEDDELETE_H_
 #define _WX_CHECKEDDELETE_H_
 
+#include "wx/cpp.h"
+
 // TODO: provide wxCheckedDelete[Array]() template functions too
 
 // ----------------------------------------------------------------------------
@@ -26,28 +28,17 @@
    still force a semicolon after the macro
 */
 
-#ifdef __WATCOMC__
-    #define wxFOR_ONCE(name)              for(int name=0; name<1; name++)
-    #define wxPRE_NO_WARNING_SCOPE(name)  wxFOR_ONCE(wxMAKE_UNIQUE_NAME(name))
-    #define wxPOST_NO_WARNING_SCOPE(name)
-#else
-    #define wxPRE_NO_WARNING_SCOPE(name)  do
-    #define wxPOST_NO_WARNING_SCOPE(name) while ( wxFalse )
-#endif
-
 #define wxCHECKED_DELETE(ptr)                                                 \
-    wxPRE_NO_WARNING_SCOPE(scope_var1)                                        \
-    {                                                                         \
+    wxSTATEMENT_MACRO_BEGIN                                                   \
         typedef char complete[sizeof(*ptr)];                                  \
         delete ptr;                                                           \
-    } wxPOST_NO_WARNING_SCOPE(scope_var1)
+    wxSTATEMENT_MACRO_END
 
 #define wxCHECKED_DELETE_ARRAY(ptr)                                           \
-    wxPRE_NO_WARNING_SCOPE(scope_var2)                                        \
-    {                                                                         \
+    wxSTATEMENT_MACRO_BEGIN                                                   \
         typedef char complete[sizeof(*ptr)];                                  \
         delete [] ptr;                                                        \
-    } wxPOST_NO_WARNING_SCOPE(scope_var2)
+    wxSTATEMENT_MACRO_END
 
 
 #endif // _WX_CHECKEDDELETE_H_
