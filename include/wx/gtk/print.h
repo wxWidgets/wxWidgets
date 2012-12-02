@@ -19,8 +19,6 @@
 #include "wx/printdlg.h"
 #include "wx/prntbase.h"
 #include "wx/dc.h"
-#include "wx/cairo.h"
-
 
 typedef struct _GtkPrintOperation GtkPrintOperation;
 typedef struct _GtkPrintContext GtkPrintContext;
