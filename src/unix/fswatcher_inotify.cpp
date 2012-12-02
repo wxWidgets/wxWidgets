@@ -250,11 +250,26 @@ protected:
                 }
                 else
                 {
-                    wxFAIL_MSG("Event for unknown watch descriptor.");
+                    // In theory we shouldn't reach here. In practice, some
+                    // events, e.g. IN_MODIFY, arrive just after the IN_IGNORED
+                    // so their wd has already been discarded. Warn about them.
+                    wxFileSystemWatcherEvent
+                        event
+                        (
+                            wxFSW_EVENT_WARNING,
+                            wxString::Format
+                            (
+                             _("Unexpected event for \"%s\": no "
+                               "matching watch descriptor."),
+                             inevt.len ? inevt.name : ""
+                            )
+                        );
+                    SendEvent(event);
+
                 }
 
                 // In any case, don't process this event: it's either for an
-                // already removed entry, or for a completely unknown one.
+                // already removed entry, or for an unknown one.
                 return;
             }
         }
