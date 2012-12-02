@@ -5145,9 +5145,6 @@
 				RelativePath="..\..\include\wx\ribbon\buttonbar.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\cairo.h">
-			</File>
-			<File
 				RelativePath="..\..\include\wx\calctrl.h">
 			</File>
 			<File

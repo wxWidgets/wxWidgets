@@ -6092,10 +6092,6 @@ SOURCE=..\..\include\wx\ribbon\buttonbar.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\cairo.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\calctrl.h
 # End Source File
 # Begin Source File

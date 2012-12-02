@@ -793,7 +793,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/bmpbuttn.h
     wx/brush.h
     wx/button.h
-    wx/cairo.h
     wx/checkbox.h
     wx/checklst.h
     wx/choicdlg.h

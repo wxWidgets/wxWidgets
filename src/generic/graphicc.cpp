@@ -25,7 +25,10 @@
 // the wx dll in order to load them dynamically.
 #define cairo_public 
 
-#include "wx/cairo.h"
+#include <cairo.h>
+
+bool wxCairoInit();
+void wxCairoCleanUp();
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"

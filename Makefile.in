@@ -4031,7 +4031,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/bmpbuttn.h \
 	wx/brush.h \
 	wx/button.h \
-	wx/cairo.h \
 	wx/checkbox.h \
 	wx/checklst.h \
 	wx/choicdlg.h \
