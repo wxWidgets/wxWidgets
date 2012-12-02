@@ -106,7 +106,8 @@ protected:
     // common part of all ctors
     void Init()
     {
-        m_lastAcceptedSelection = wxID_NONE;
+        m_lastAcceptedSelection =
+        m_pendingSelection = wxID_NONE;
         m_heightOwn = wxDefaultCoord;
     }
 
@@ -162,10 +163,13 @@ protected:
     virtual void MSWEndDeferWindowPos();
 #endif // wxUSE_DEFERRED_SIZING
 
-    // last "completed" selection, i.e. not the transient one while the user is
-    // browsing the popup list: this is only used when != wxID_NONE which is
-    // the case while the drop down is opened
-    int m_lastAcceptedSelection;
+    // These variables are only used while the drop down is opened.
+    //
+    // The first one contains the item that had been originally selected before
+    // the drop down was opened and the second one the item we should select
+    // when the drop down is closed again.
+    int m_lastAcceptedSelection,
+        m_pendingSelection;
 
     // the height of the control itself if it was set explicitly or
     // wxDefaultCoord if it hadn't

@@ -740,9 +740,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     /*
         The native control provides a great variety in the events it sends in
         the different selection scenarios (undoubtedly for greater amusement of
-        the programmers using it). For the reference, here are the cases when
-        the final selection is accepted (things are quite interesting when it
-        is cancelled too):
+        the programmers using it). Here are the different cases:
 
         A. Selecting with just the arrows without opening the dropdown:
             1. CBN_SELENDOK
@@ -764,6 +762,12 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         Admire the different order of messages in all of those cases, it must
         surely have taken a lot of effort to Microsoft developers to achieve
         such originality.
+
+        Additionally, notice that CBN_SELENDCANCEL doesn't seem to actually
+        cancel anything, if we get CBN_SELCHANGE before it, as it happens in
+        the case (B), the selection is still accepted. This doesn't make much
+        sense and directly contradicts MSDN documentation but is how the native
+        comboboxes behave and so we do the same thing.
      */
     switch ( param )
     {
@@ -776,31 +780,40 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             break;
 
         case CBN_CLOSEUP:
-            // if the selection was accepted by the user, it should have been
-            // reset to wxID_NONE by CBN_SELENDOK, otherwise the selection was
-            // cancelled and we must restore the old one
-            if ( m_lastAcceptedSelection != wxID_NONE )
+            if ( m_pendingSelection != wxID_NONE )
             {
-                SetSelection(m_lastAcceptedSelection);
-                m_lastAcceptedSelection = wxID_NONE;
+                // This can only happen in the case (B), so set the item
+                // selected in the drop down as our real selection.
+                SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
+                m_pendingSelection = wxID_NONE;
             }
             break;
 
         case CBN_SELENDOK:
-            // reset it to prevent CBN_CLOSEUP from undoing the selection (it's
-            // ok to reset it now as GetCurrentSelection() will now return the
-            // same thing anyhow)
-            m_lastAcceptedSelection = wxID_NONE;
+            // Reset the variables to prevent CBN_CLOSEUP from doing anything,
+            // it's not needed if we do get CBN_SELENDOK.
+            m_lastAcceptedSelection =
+            m_pendingSelection = wxID_NONE;
 
             SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
             break;
 
+        case CBN_SELCHANGE:
+            // If we get this event after CBN_SELENDOK, i.e. cases (A) or (C)
+            // above, we don't have anything to do. But in the case (B) we need
+            // to remember that the selection should really change once the
+            // drop down is closed.
+            if ( m_lastAcceptedSelection != wxID_NONE )
+                m_pendingSelection = GetCurrentSelection();
+            break;
 
-        // don't handle CBN_SELENDCANCEL: just leave m_lastAcceptedSelection
-        // valid and the selection will be undone in CBN_CLOSEUP above
-
-        // don't handle CBN_SELCHANGE neither, we don't want to generate events
-        // while the dropdown is opened -- but do add it if we ever need this
+        case CBN_SELENDCANCEL:
+            // Do not reset m_pendingSelection here -- it would make sense but,
+            // as described above, native controls keep the selection even when
+            // closing the drop down by pressing Escape or TAB, so conform to
+            // their behaviour.
+            m_lastAcceptedSelection = wxID_NONE;
+            break;
 
         default:
             return false;
