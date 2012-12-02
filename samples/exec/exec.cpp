@@ -457,11 +457,18 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Exec_Kill, wxT("&Kill process...\tCtrl-K"),
                      wxT("Kill a process by PID"));
     menuFile->AppendSeparator();
-    menuFile->Append(Exec_ClearLog, wxT("&Clear log\tCtrl-L"),
-                     wxT("Clear the log window"));
+    menuFile->Append(Exec_OpenFile, wxT("Open &file...\tCtrl-F"),
+                     wxT("Launch the command to open this kind of files"));
+    menuFile->Append(Exec_LaunchFile, wxT("La&unch file...\tShift-Ctrl-F"),
+                     wxT("Launch the default application associated with the file"));
+    menuFile->Append(Exec_OpenURL, wxT("Open &URL...\tCtrl-U"),
+                     wxT("Launch the default browser with the given URL"));
     menuFile->AppendSeparator();
     menuFile->Append(Exec_BeginBusyCursor, wxT("Show &busy cursor\tCtrl-C"));
     menuFile->Append(Exec_EndBusyCursor, wxT("Show &normal cursor\tShift-Ctrl-C"));
+    menuFile->AppendSeparator();
+    menuFile->Append(Exec_ClearLog, wxT("&Clear log\tCtrl-L"),
+                     wxT("Clear the log window"));
     menuFile->AppendSeparator();
     menuFile->Append(Exec_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
@@ -488,13 +495,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     execMenu->Append(Exec_POpen, wxT("&Open a pipe to a command...\tCtrl-P"),
                      wxT("Open a pipe to and from another program"));
 
-    execMenu->AppendSeparator();
-    execMenu->Append(Exec_OpenFile, wxT("Open &file...\tCtrl-F"),
-                     wxT("Launch the command to open this kind of files"));
-    execMenu->Append(Exec_LaunchFile, wxT("La&unch file...\tShift-Ctrl-F"),
-                     wxT("Launch the default application associated with the file"));
-    execMenu->Append(Exec_OpenURL, wxT("Open &URL...\tCtrl-U"),
-                     wxT("Launch the default browser with the given URL"));
 #ifdef __WINDOWS__
     execMenu->AppendSeparator();
     execMenu->Append(Exec_DDEExec, wxT("Execute command via &DDE...\tCtrl-D"));
