@@ -64,8 +64,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
 
-    void SendSelectionChangedEvent(wxEventType evt_type);
-
     int GetSelection() const;
     void SetSelection(int n);
 
