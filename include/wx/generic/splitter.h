@@ -212,7 +212,7 @@ public:
     virtual void DrawSashTracker(int x, int y);
 
     // Tests for x, y over sash
-    virtual bool SashHitTest(int x, int y, int tolerance = 5);
+    virtual bool SashHitTest(int x, int y);
 
     // Resizes subwindows
     virtual void SizeWindows();

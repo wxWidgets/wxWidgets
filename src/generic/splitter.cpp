@@ -323,7 +323,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     }  // left up && dragging
     else if ((event.Moving() || event.Leaving() || event.Entering()) && (m_dragMode == wxSPLIT_DRAG_NONE))
     {
-        if ( event.Leaving() || !SashHitTest(x, y, 0) )
+        if ( event.Leaving() || !SashHitTest(x, y) )
             OnLeaveSash();
         else
             OnEnterSash();
@@ -484,16 +484,15 @@ void wxSplitterWindow::SetSashGravity(double gravity)
     m_sashGravity = gravity;
 }
 
-bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
+bool wxSplitterWindow::SashHitTest(int x, int y)
 {
     if ( m_windowTwo == NULL || m_sashPosition == 0)
         return false; // No sash
 
     int z = m_splitMode == wxSPLIT_VERTICAL ? x : y;
-    int hitMin = m_sashPosition - tolerance;
-    int hitMax = m_sashPosition + GetSashSize() - 1 + tolerance;
+    int hitMax = m_sashPosition + GetSashSize() - 1;
 
-    return z >=  hitMin && z <= hitMax;
+    return z >= m_sashPosition && z <= hitMax;
 }
 
 void wxSplitterWindow::SetSashInvisible(bool invisible)
@@ -1047,7 +1046,7 @@ void wxSplitterWindow::OnSetCursor(wxSetCursorEvent& event)
     // and like this we explicitly say that our cursor should not be used for
     // children windows which overlap us
 
-    if ( SashHitTest(event.GetX(), event.GetY(), 0) )
+    if ( SashHitTest(event.GetX(), event.GetY()) )
     {
         // default processing is ok
         event.Skip();
