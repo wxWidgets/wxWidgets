@@ -491,7 +491,7 @@ bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
 
     int z = m_splitMode == wxSPLIT_VERTICAL ? x : y;
     int hitMin = m_sashPosition - tolerance;
-    int hitMax = m_sashPosition + GetSashSize() + tolerance;
+    int hitMax = m_sashPosition + GetSashSize() - 1 + tolerance;
 
     return z >=  hitMin && z <= hitMax;
 }
