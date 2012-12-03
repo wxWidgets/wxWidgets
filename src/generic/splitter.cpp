@@ -323,7 +323,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     }  // left up && dragging
     else if ((event.Moving() || event.Leaving() || event.Entering()) && (m_dragMode == wxSPLIT_DRAG_NONE))
     {
-        if ( event.Leaving() || !SashHitTest(x, y) )
+        if ( event.Leaving() || !SashHitTest(x, y, 0) )
             OnLeaveSash();
         else
             OnEnterSash();
