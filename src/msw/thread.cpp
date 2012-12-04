@@ -589,9 +589,14 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
     // each thread has its own SEH translator so install our own a.s.a.p.
     DisableAutomaticSETranslator();
 
+    // NB: Notice that we can't use wxCriticalSectionLocker in this function as
+    //     we use SEH and it's incompatible with C++ object dtors.
+
     // first of all, check whether we hadn't been cancelled already and don't
     // start the user code at all then
+    thread->m_critsect.Enter();
     const bool hasExited = thread->m_internal->GetState() == STATE_EXITED;
+    thread->m_critsect.Leave();
 
     // run the thread function itself inside a SEH try/except block
     wxSEH_TRY
@@ -609,10 +614,6 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
     const bool isDetached = thread->IsDetached();
     if ( !hasExited )
     {
-        // enter m_critsect before changing the thread state
-        //
-        // NB: can't use wxCriticalSectionLocker here as we use SEH and it's
-        //     incompatible with C++ object dtors
         thread->m_critsect.Enter();
         thread->m_internal->SetState(STATE_EXITED);
         thread->m_critsect.Leave();
