@@ -1019,6 +1019,8 @@ void wxAbort()
 #if wxDEBUG_LEVEL
 
 // break into the debugger
+#ifndef wxTrap
+
 void wxTrap()
 {
 #if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
@@ -1031,6 +1033,8 @@ void wxTrap()
     // TODO
 #endif // Win/Unix
 }
+
+#endif // wxTrap already defined as a macro
 
 // default assert handler
 static void
@@ -1181,6 +1185,8 @@ static void LINKAGEMODE SetTraceMasks()
 
 #if wxDEBUG_LEVEL
 
+bool wxTrapInAssert = false;
+
 static
 bool DoShowAssertDialog(const wxString& msg)
 {
@@ -1199,7 +1205,14 @@ bool DoShowAssertDialog(const wxString& msg)
                           MB_YESNOCANCEL | MB_ICONSTOP ) )
     {
         case IDYES:
-            wxTrap();
+            // If we called wxTrap() directly from here, the programmer would
+            // see this function and a few more calls between his own code and
+            // it in the stack trace which would be perfectly useless and often
+            // confusing. So instead just set the flag here and let the macros
+            // defined in wx/debug.h call wxTrap() themselves, this ensures
+            // that the debugger will show the line in the user code containing
+            // the failing assert.
+            wxTrapInAssert = true;
             break;
 
         case IDCANCEL:

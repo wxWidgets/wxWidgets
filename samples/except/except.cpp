@@ -120,6 +120,7 @@ public:
     void OnThrowUnhandled(wxCommandEvent& event);
 
     void OnCrash(wxCommandEvent& event);
+    void OnTrap(wxCommandEvent& event);
 #if wxUSE_ON_FATAL_EXCEPTION
     void OnHandleCrash(wxCommandEvent& event);
 #endif
@@ -188,6 +189,7 @@ enum
     Except_ThrowObject,
     Except_ThrowUnhandled,
     Except_Crash,
+    Except_Trap,
 #if wxUSE_ON_FATAL_EXCEPTION
     Except_HandleCrash,
 #endif // wxUSE_ON_FATAL_EXCEPTION
@@ -217,6 +219,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Except_ThrowObject, MyFrame::OnThrowObject)
     EVT_MENU(Except_ThrowUnhandled, MyFrame::OnThrowUnhandled)
     EVT_MENU(Except_Crash, MyFrame::OnCrash)
+    EVT_MENU(Except_Trap, MyFrame::OnTrap)
 #if wxUSE_ON_FATAL_EXCEPTION
     EVT_MENU(Except_HandleCrash, MyFrame::OnHandleCrash)
 #endif // wxUSE_ON_FATAL_EXCEPTION
@@ -353,6 +356,8 @@ MyFrame::MyFrame()
     menuFile->Append(Except_ThrowUnhandled,
                         wxT("Throw &unhandled exception\tCtrl-U"));
     menuFile->Append(Except_Crash, wxT("&Crash\tCtrl-C"));
+    menuFile->Append(Except_Trap, "&Trap\tCtrl-T",
+                     "Break into the debugger (if one is running)");
     menuFile->AppendSeparator();
 #if wxUSE_ON_FATAL_EXCEPTION
     menuFile->AppendCheckItem(Except_HandleCrash, wxT("&Handle crashes\tCtrl-H"));
@@ -445,6 +450,11 @@ void MyFrame::OnThrowUnhandled(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCrash(wxCommandEvent& WXUNUSED(event))
 {
     DoCrash();
+}
+
+void MyFrame::OnTrap(wxCommandEvent& WXUNUSED(event))
+{
+    wxTrap();
 }
 
 #if wxUSE_ON_FATAL_EXCEPTION
