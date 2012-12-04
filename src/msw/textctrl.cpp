@@ -499,7 +499,23 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
     SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
                 SWP_NOZORDER|SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|
                 SWP_FRAMECHANGED);
-#endif
+
+    if ( IsSingleLine() )
+    {
+        // If we don't set the margins explicitly, their size depends on the
+        // control initial size, see #2438. So explicitly set them to something
+        // consistent. And for this we have 2 candidates: EC_USEFONTINFO (which
+        // sets the left margin to 3 pixels, at least under Windows 7) or 0. We
+        // use the former because it looks like it was meant to be used as the
+        // default (what else would it be there for?) and 0 looks bad in
+        // classic mode, i.e. without themes. Also, the margin can be reset to
+        // 0 easily by calling SetMargins() explicitly but setting it to the
+        // default value is not currently supported.
+        ::SendMessage(GetHwnd(), EM_SETMARGINS,
+                      EC_LEFTMARGIN | EC_RIGHTMARGIN,
+                      MAKELPARAM(EC_USEFONTINFO, EC_USEFONTINFO));
+    }
+#endif // !__WXWINCE__
 
     return true;
 }
