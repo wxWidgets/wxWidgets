@@ -2516,7 +2516,7 @@ wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
 {
     wxGraphicsPen p;
     ENSURE_LOADED_OR_RETURN(p);
-    if (pen.IsOk() && pen.GetStyle() == wxPENSTYLE_TRANSPARENT)
+    if (pen.IsOk() && pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
         p.SetRefData(new wxCairoPenData( this, pen ));
     }
@@ -2527,7 +2527,7 @@ wxGraphicsBrush wxCairoRenderer::CreateBrush(const wxBrush& brush )
 {
     wxGraphicsBrush p;
     ENSURE_LOADED_OR_RETURN(p);
-    if (brush.IsOk() && brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT)
+    if (brush.IsOk() && brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
     {
         p.SetRefData(new wxCairoBrushData( this, brush ));
     }
