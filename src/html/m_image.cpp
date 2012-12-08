@@ -676,16 +676,16 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
 
                 if (tag.HasParam(wxT("WIDTH")))
                 {
-                    wxString param = tag.GetParam(wxT("WIDTH"));
-                    wxSscanf(param.c_str(), wxT("%i"), &w);
-                    if (param.EndsWith(wxT("%"))) {
-                        if (w < 0)
-                            w = 0;
-                        else if (w > 100)
-                            w = 100;
-                        wpercent = true;
+                    if (tag.GetParamAsIntOrPercent(wxT("WIDTH"), &w, wpercent))
+                    {
+                        if (wpercent)
+                        {
+                            if (w < 0)
+                                w = 0;
+                            else if (w > 100)
+                                w = 100;
+                        }
                     }
-
                 }
 
                 if (tag.HasParam(wxT("HEIGHT")))

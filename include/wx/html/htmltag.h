@@ -104,6 +104,8 @@ public:
     // Convenience functions:
     bool GetParamAsColour(const wxString& par, wxColour *clr) const;
     bool GetParamAsInt(const wxString& par, int *clr) const;
+    bool GetParamAsIntOrPercent(const wxString& param,
+                                int* value, bool& isPercent) const;
 
     // Scans param like scanf() functions family does.
     // Example : ScanParam("COLOR", "\"#%X\"", &clr);

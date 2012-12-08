@@ -702,19 +702,18 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             {
                 if (tag.HasParam(wxT("WIDTH")))
                 {
-                    wxString wd = tag.GetParam(wxT("WIDTH"));
-
-                    if (!wd.empty() && wd[wd.length()-1] == wxT('%'))
+                    int width = 0;
+                    bool wpercent = false;
+                    if (tag.GetParamAsIntOrPercent(wxT("WIDTH"), &width, wpercent))
                     {
-                        int width = 0;
-                        wxSscanf(wd.c_str(), wxT("%i%%"), &width);
-                        m_Table->SetWidthFloat(width, wxHTML_UNITS_PERCENT);
-                    }
-                    else
-                    {
-                        int width = 0;
-                        wxSscanf(wd.c_str(), wxT("%i"), &width);
-                        m_Table->SetWidthFloat((int)(m_WParser->GetPixelScale() * width), wxHTML_UNITS_PIXELS);
+                        if (wpercent)
+                        {
+                            m_Table->SetWidthFloat(width, wxHTML_UNITS_PERCENT);
+                        }
+                        else
+                        {
+                            m_Table->SetWidthFloat((int)(m_WParser->GetPixelScale() * width), wxHTML_UNITS_PIXELS);
+                        }
                     }
                 }
                 else

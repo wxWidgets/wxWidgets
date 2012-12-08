@@ -587,6 +587,38 @@ bool wxHtmlTag::GetParamAsInt(const wxString& par, int *clr) const
     return true;
 }
 
+bool
+wxHtmlTag::GetParamAsIntOrPercent(const wxString& par,
+                                  int* value,
+                                  bool& isPercent) const
+{
+    const wxString param = GetParam(par);
+    if ( param.empty() )
+        return false;
+
+    wxString num;
+    if ( param.EndsWith("%", &num) )
+    {
+        isPercent = true;
+    }
+    else
+    {
+        isPercent = false;
+        num = param;
+    }
+
+    long lValue;
+    if ( !num.ToLong(&lValue) )
+        return false;
+
+    if ( lValue > INT_MAX || lValue < INT_MIN )
+        return false;
+
+    *value = static_cast<int>(lValue);
+
+    return true;
+}
+
 wxString wxHtmlTag::GetAllParams() const
 {
     // VS: this function is for backward compatibility only,
