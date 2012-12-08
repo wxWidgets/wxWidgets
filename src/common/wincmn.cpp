@@ -2263,7 +2263,7 @@ void wxWindowBase::UnsetConstraints(wxLayoutConstraints *c)
 {
     if ( c )
     {
-        if ( c->left.GetOtherWindow() && (c->top.GetOtherWindow() != this) )
+        if ( c->left.GetOtherWindow() && (c->left.GetOtherWindow() != this) )
             c->left.GetOtherWindow()->RemoveConstraintReference(this);
         if ( c->top.GetOtherWindow() && (c->top.GetOtherWindow() != this) )
             c->top.GetOtherWindow()->RemoveConstraintReference(this);
