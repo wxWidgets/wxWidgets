@@ -511,10 +511,6 @@ bool wxFile::Eof() const
     {
         wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
     }
-    else if ( iRc != 1 )
-    {
-        wxFAIL_MSG(wxT("invalid eof() return value."));
-    }
 
     return true;
 }
