@@ -370,7 +370,7 @@ public:
     // implement wxTextAreaBase pure virtual methods
     // ---------------------------------------------
 
-    virtual int GetLineLength(long n) const { return GetLine(n).length(); }
+    virtual int GetLineLength(long lineNo) const { return static_cast<int>(GetLineText(lineNo).length()); }
     virtual wxString GetLineText(long lineNo) const
     {
         wxString text = GetLine(static_cast<int>(lineNo));
