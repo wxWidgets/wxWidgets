@@ -1355,9 +1355,7 @@ wxString wxFindNextFile()
     wxCHECK_MSG( gs_dir, "", "You must call wxFindFirstFile before!" );
 
     wxString result;
-    gs_dir->GetNext(&result);
-
-    if ( result.empty() )
+    if ( !gs_dir->GetNext(&result) || result.empty() )
     {
         wxDELETE(gs_dir);
         return result;
