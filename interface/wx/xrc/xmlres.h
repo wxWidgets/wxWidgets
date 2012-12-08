@@ -643,6 +643,11 @@ protected:
     long GetLong(const wxString& param, long defaultv = 0);
 
     /**
+        Gets a float value from the parameter.
+    */
+    float GetFloat(const wxString& param, float defaultv = 0);
+
+    /**
         Returns the resource name.
     */
     wxString GetName();
