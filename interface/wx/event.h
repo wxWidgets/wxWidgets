@@ -4277,7 +4277,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see ::wxSetCursor, wxWindow::wxSetCursor
+    @see ::wxSetCursor, wxWindow::SetCursor
 */
 class wxSetCursorEvent : public wxEvent
 {
