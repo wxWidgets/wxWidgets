@@ -952,9 +952,40 @@ public:
     */
     virtual wxSize GetMinSize() const;
 
+    /**
+        Returns the horizontal component of window minimal size.
+
+        The returned value is wxDefaultCoord if the minimal width was not set.
+
+        @see GetMinSize()
+     */
     int GetMinWidth() const;
+
+    /**
+        Returns the vertical component of window minimal size.
+
+        The returned value is wxDefaultCoord if the minimal height was not set.
+
+        @see GetMinSize()
+     */
     int GetMinHeight() const;
+
+    /**
+        Returns the horizontal component of window maximal size.
+
+        The returned value is wxDefaultCoord if the maximal width was not set.
+
+        @see GetMaxSize()
+     */
     int GetMaxWidth() const;
+
+    /**
+        Returns the vertical component of window maximal size.
+
+        The returned value is wxDefaultCoord if the maximal width was not set.
+
+        @see GetMaxSize()
+     */
     int GetMaxHeight() const;
 
     /**
