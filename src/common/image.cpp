@@ -2880,10 +2880,6 @@ wxImage::HSVValue wxImage::RGBtoHSV(const RGBValue& rgb)
             case BLUE:
                 hue = 4.0 + (red - green) / deltaRGB;
                 break;
-
-            default:
-                wxFAIL_MSG(wxT("hue not specified"));
-                break;
         }
 
         hue /= 6.0;
