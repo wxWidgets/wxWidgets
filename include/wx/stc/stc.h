@@ -4629,7 +4629,17 @@ public:
     // ---------------------------------------------
 
     virtual int GetLineLength(long n) const { return GetLine(n).length(); }
-    virtual wxString GetLineText(long n) const { return GetLine(n); }
+    virtual wxString GetLineText(long lineNo) const
+    {
+        wxString text = GetLine(static_cast<int>(lineNo));
+        size_t lastNewLine = text.find_last_not_of(wxS("\r\n"));
+
+        if ( lastNewLine != wxString::npos )
+            text.erase(lastNewLine + 1); // remove trailing cr+lf
+        else
+            text.clear();
+        return text;
+    }
     virtual int GetNumberOfLines() const { return GetLineCount(); }
 
     virtual bool IsModified() const { return GetModify(); }
