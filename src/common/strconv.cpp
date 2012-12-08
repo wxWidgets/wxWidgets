@@ -460,7 +460,6 @@ wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
         // because we want the buffer to always be NUL-terminated, even if the
         // input isn't (as otherwise the caller has no way to know its length)
         wxWCharBuffer wbuf(dstLen);
-        wbuf.data()[dstLen] = L'\0';
         if ( ToWChar(wbuf.data(), dstLen, inBuff, inLen) != wxCONV_FAILED )
         {
             if ( outLen )

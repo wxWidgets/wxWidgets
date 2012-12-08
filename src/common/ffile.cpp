@@ -102,7 +102,7 @@ bool wxFFile::ReadAll(wxString *str, const wxMBConv& conv)
 
     clearerr(m_fp);
 
-    wxCharBuffer buf(length + 1);
+    wxCharBuffer buf(length);
 
     // note that real length may be less than file length for text files with DOS EOLs
     // ('\r's get dropped by CRT when reading which means that we have

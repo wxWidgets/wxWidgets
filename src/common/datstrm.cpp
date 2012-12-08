@@ -114,11 +114,10 @@ wxString wxDataInputStream::ReadString()
     if ( len > 0 )
     {
 #if wxUSE_UNICODE
-        wxCharBuffer tmp(len + 1);
+        wxCharBuffer tmp(len);
         if ( tmp )
         {
             m_input->Read(tmp.data(), len);
-            tmp.data()[len] = '\0';
             ret = m_conv->cMB2WX(tmp.data());
         }
 #else

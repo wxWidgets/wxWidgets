@@ -154,9 +154,8 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     else
     {
         size_t size = s->GetSize();
-        wxCharBuffer buf( size+1 );
+        wxCharBuffer buf( size );
         s->Read( buf.data(), size );
-        *(buf.data() + size) = 0;
         wxString tmpdoc( buf, wxConvISO8859_1);
 
         wxString charset = wxHtmlParser::ExtractCharsetInformation(tmpdoc);
