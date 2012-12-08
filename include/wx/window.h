@@ -752,7 +752,7 @@ public:
     bool IsDescendant(wxWindowBase* win) const;
 
         // it doesn't really change parent, use Reparent() instead
-    void SetParent( wxWindowBase *parent ) { m_parent = (wxWindow *)parent; }
+    void SetParent( wxWindowBase *parent );
         // change the real parent of this window, return true if the parent
         // was changed, false otherwise (error or newParent == oldParent)
     virtual bool Reparent( wxWindowBase *newParent );
