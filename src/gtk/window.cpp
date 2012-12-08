@@ -842,7 +842,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     event.m_keyCode = key_code;
 
 #if wxUSE_UNICODE
-    event.m_uniChar = gdk_keyval_to_unicode(key_code ? key_code : keysym);
+    event.m_uniChar = gdk_keyval_to_unicode(key_code);
     if ( !event.m_uniChar && event.m_keyCode <= WXK_DELETE )
     {
         // Set Unicode key code to the ASCII equivalent for compatibility. E.g.
