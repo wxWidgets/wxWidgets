@@ -31,10 +31,6 @@
 
 #include "wx/gtk/private.h"
 
-#ifdef __UNIX__
-#include <unistd.h> // chdir
-#endif
-
 extern "C" {
 static void gtk_dirdialog_response_callback(GtkWidget * WXUNUSED(w),
                                              gint response,
@@ -131,7 +127,7 @@ void wxDirDialog::GTKOnAccept()
     // change to the directory where the user went if asked
     if (HasFlag(wxDD_CHANGE_DIR))
     {
-        chdir(m_selectedDirectory.fn_str());
+        wxSetWorkingDirectory(m_selectedDirectory);
     }
 
     EndDialog(wxID_OK);
