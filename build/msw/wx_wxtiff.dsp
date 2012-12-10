@@ -299,11 +299,23 @@ SOURCE=..\..\src\tiff\libtiff\tif_getimage.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\tiff\libtiff\tif_jbig.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\tiff\libtiff\tif_jpeg.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\tiff\libtiff\tif_jpeg_12.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\tiff\libtiff\tif_luv.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\tiff\libtiff\tif_lzma.c
 # End Source File
 # Begin Source File
 

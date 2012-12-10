@@ -167,8 +167,11 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_fax3sm.obj \
 	$(OBJS)\wxtiff_tif_flush.obj \
 	$(OBJS)\wxtiff_tif_getimage.obj \
+	$(OBJS)\wxtiff_tif_jbig.obj \
 	$(OBJS)\wxtiff_tif_jpeg.obj \
+	$(OBJS)\wxtiff_tif_jpeg_12.obj \
 	$(OBJS)\wxtiff_tif_luv.obj \
+	$(OBJS)\wxtiff_tif_lzma.obj \
 	$(OBJS)\wxtiff_tif_lzw.obj \
 	$(OBJS)\wxtiff_tif_next.obj \
 	$(OBJS)\wxtiff_tif_ojpeg.obj \
@@ -6454,11 +6457,20 @@ $(OBJS)\wxtiff_tif_flush.obj: ..\..\src\tiff\libtiff\tif_flush.c
 $(OBJS)\wxtiff_tif_getimage.obj: ..\..\src\tiff\libtiff\tif_getimage.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_getimage.c
 
+$(OBJS)\wxtiff_tif_jbig.obj: ..\..\src\tiff\libtiff\tif_jbig.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_jbig.c
+
 $(OBJS)\wxtiff_tif_jpeg.obj: ..\..\src\tiff\libtiff\tif_jpeg.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_jpeg.c
 
+$(OBJS)\wxtiff_tif_jpeg_12.obj: ..\..\src\tiff\libtiff\tif_jpeg_12.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_jpeg_12.c
+
 $(OBJS)\wxtiff_tif_luv.obj: ..\..\src\tiff\libtiff\tif_luv.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_luv.c
+
+$(OBJS)\wxtiff_tif_lzma.obj: ..\..\src\tiff\libtiff\tif_lzma.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_lzma.c
 
 $(OBJS)\wxtiff_tif_lzw.obj: ..\..\src\tiff\libtiff\tif_lzw.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_lzw.c

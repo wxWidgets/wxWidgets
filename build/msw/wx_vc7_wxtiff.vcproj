@@ -510,10 +510,19 @@
 				RelativePath="..\..\src\tiff\libtiff\tif_getimage.c">
 			</File>
 			<File
+				RelativePath="..\..\src\tiff\libtiff\tif_jbig.c">
+			</File>
+			<File
 				RelativePath="..\..\src\tiff\libtiff\tif_jpeg.c">
 			</File>
 			<File
+				RelativePath="..\..\src\tiff\libtiff\tif_jpeg_12.c">
+			</File>
+			<File
 				RelativePath="..\..\src\tiff\libtiff\tif_luv.c">
+			</File>
+			<File
+				RelativePath="..\..\src\tiff\libtiff\tif_lzma.c">
 			</File>
 			<File
 				RelativePath="..\..\src\tiff\libtiff\tif_lzw.c">

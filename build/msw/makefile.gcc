@@ -150,8 +150,11 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_fax3sm.o \
 	$(OBJS)\wxtiff_tif_flush.o \
 	$(OBJS)\wxtiff_tif_getimage.o \
+	$(OBJS)\wxtiff_tif_jbig.o \
 	$(OBJS)\wxtiff_tif_jpeg.o \
+	$(OBJS)\wxtiff_tif_jpeg_12.o \
 	$(OBJS)\wxtiff_tif_luv.o \
+	$(OBJS)\wxtiff_tif_lzma.o \
 	$(OBJS)\wxtiff_tif_lzw.o \
 	$(OBJS)\wxtiff_tif_next.o \
 	$(OBJS)\wxtiff_tif_ojpeg.o \
@@ -5939,10 +5942,19 @@ $(OBJS)\wxtiff_tif_flush.o: ../../src/tiff/libtiff/tif_flush.c
 $(OBJS)\wxtiff_tif_getimage.o: ../../src/tiff/libtiff/tif_getimage.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxtiff_tif_jbig.o: ../../src/tiff/libtiff/tif_jbig.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxtiff_tif_jpeg.o: ../../src/tiff/libtiff/tif_jpeg.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxtiff_tif_jpeg_12.o: ../../src/tiff/libtiff/tif_jpeg_12.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxtiff_tif_luv.o: ../../src/tiff/libtiff/tif_luv.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxtiff_tif_lzma.o: ../../src/tiff/libtiff/tif_lzma.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxtiff_tif_lzw.o: ../../src/tiff/libtiff/tif_lzw.c

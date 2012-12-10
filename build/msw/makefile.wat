@@ -3755,8 +3755,11 @@ WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_fax3sm.obj &
 	$(OBJS)\wxtiff_tif_flush.obj &
 	$(OBJS)\wxtiff_tif_getimage.obj &
+	$(OBJS)\wxtiff_tif_jbig.obj &
 	$(OBJS)\wxtiff_tif_jpeg.obj &
+	$(OBJS)\wxtiff_tif_jpeg_12.obj &
 	$(OBJS)\wxtiff_tif_luv.obj &
+	$(OBJS)\wxtiff_tif_lzma.obj &
 	$(OBJS)\wxtiff_tif_lzw.obj &
 	$(OBJS)\wxtiff_tif_next.obj &
 	$(OBJS)\wxtiff_tif_ojpeg.obj &
@@ -6212,10 +6215,19 @@ $(OBJS)\wxtiff_tif_flush.obj :  .AUTODEPEND ..\..\src\tiff\libtiff\tif_flush.c
 $(OBJS)\wxtiff_tif_getimage.obj :  .AUTODEPEND ..\..\src\tiff\libtiff\tif_getimage.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
+$(OBJS)\wxtiff_tif_jbig.obj :  .AUTODEPEND ..\..\src\tiff\libtiff\tif_jbig.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+
 $(OBJS)\wxtiff_tif_jpeg.obj :  .AUTODEPEND ..\..\src\tiff\libtiff\tif_jpeg.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
+$(OBJS)\wxtiff_tif_jpeg_12.obj :  .AUTODEPEND ..\..\src\tiff\libtiff\tif_jpeg_12.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+
 $(OBJS)\wxtiff_tif_luv.obj :  .AUTODEPEND ..\..\src\tiff\libtiff\tif_luv.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+
+$(OBJS)\wxtiff_tif_lzma.obj :  .AUTODEPEND ..\..\src\tiff\libtiff\tif_lzma.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_lzw.obj :  .AUTODEPEND ..\..\src\tiff\libtiff\tif_lzw.c

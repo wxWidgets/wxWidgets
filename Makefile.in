@@ -185,8 +185,11 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_fax3sm.o \
 	wxtiff_tif_flush.o \
 	wxtiff_tif_getimage.o \
+	wxtiff_tif_jbig.o \
 	wxtiff_tif_jpeg.o \
+	wxtiff_tif_jpeg_12.o \
 	wxtiff_tif_luv.o \
+	wxtiff_tif_lzma.o \
 	wxtiff_tif_lzw.o \
 	wxtiff_tif_next.o \
 	wxtiff_tif_ojpeg.o \
@@ -2127,12 +2130,10 @@ COND_USE_GUI_1_wxUSE_LIBTIFF_builtin___wxtiff___depname = \
 @COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= install_wxtiff
 @COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin@__uninstall_wxtiff___depname \
 @COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= uninstall_wxtiff
-@COND_PLATFORM_UNIX_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_unix.o
 @COND_PLATFORM_MACOSX_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_unix.o
 @COND_PLATFORM_OS2_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_unix.o
+@COND_PLATFORM_UNIX_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_unix.o
 @COND_PLATFORM_WIN32_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_win32.o
-@COND_PLATFORM_MACOS_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_apple.o
-@COND_PLATFORM_MSDOS_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_msdos.o
 COND_wxUSE_EXPAT_builtin___wxexpat___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wxexpat$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_wxUSE_EXPAT_builtin@__wxexpat___depname = $(COND_wxUSE_EXPAT_builtin___wxexpat___depname)
@@ -16228,12 +16229,6 @@ wxjpeg_jdmerge.o: $(srcdir)/src/jpeg/jdmerge.c
 wxtiff_tif_win32.o: $(srcdir)/src/tiff/libtiff/tif_win32.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_win32.c
 
-wxtiff_tif_apple.o: $(srcdir)/src/tiff/libtiff/tif_apple.c
-	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_apple.c
-
-wxtiff_tif_msdos.o: $(srcdir)/src/tiff/libtiff/tif_msdos.c
-	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_msdos.c
-
 wxtiff_tif_aux.o: $(srcdir)/src/tiff/libtiff/tif_aux.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_aux.c
 
@@ -16282,11 +16277,20 @@ wxtiff_tif_flush.o: $(srcdir)/src/tiff/libtiff/tif_flush.c
 wxtiff_tif_getimage.o: $(srcdir)/src/tiff/libtiff/tif_getimage.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_getimage.c
 
+wxtiff_tif_jbig.o: $(srcdir)/src/tiff/libtiff/tif_jbig.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_jbig.c
+
 wxtiff_tif_jpeg.o: $(srcdir)/src/tiff/libtiff/tif_jpeg.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_jpeg.c
 
+wxtiff_tif_jpeg_12.o: $(srcdir)/src/tiff/libtiff/tif_jpeg_12.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_jpeg_12.c
+
 wxtiff_tif_luv.o: $(srcdir)/src/tiff/libtiff/tif_luv.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_luv.c
+
+wxtiff_tif_lzma.o: $(srcdir)/src/tiff/libtiff/tif_lzma.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_lzma.c
 
 wxtiff_tif_lzw.o: $(srcdir)/src/tiff/libtiff/tif_lzw.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_lzw.c
