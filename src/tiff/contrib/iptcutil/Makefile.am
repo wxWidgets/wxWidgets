@@ -32,5 +32,5 @@ noinst_PROGRAMS = iptcutil
 iptcutil_SOURCES = iptcutil.c
 iptcutil_LDADD = $(LIBTIFF)
 
-INCLUDES = -I$(top_srcdir)/libtiff
+AM_CPPFLAGS = -I$(top_srcdir)/libtiff
 

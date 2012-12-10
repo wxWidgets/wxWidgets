@@ -1,4 +1,4 @@
-.\" $Id: tiffcmp.1,v 1.4 2005/11/02 11:07:19 dron Exp $
+.\" $Id: tiffcmp.1,v 1.6 2009-08-24 19:13:40 bfriesen Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -61,7 +61,7 @@ will terminate if it encounters any difference.
 .B \-l
 List each byte of image data that differs between the files.
 .TP
-.B \-z number
+.BI \-z " number"
 List specified number of image data bytes that differs between the files.
 .TP
 .B \-t
@@ -70,14 +70,15 @@ Ignore any differences in directory tags.
 Tags that are not recognized by the library are not
 compared; they may also generate spurious diagnostics.
 .PP
-The image data of tiled files is not compared, since the TIFFReadScanline()
-function is used.  A error will be reported for tiled files.
+The image data of tiled files is not compared, since the
+.I TIFFReadScanline()
+function is used.  An error will be reported for tiled files.
 .PP
 The pixel and/or sample number reported in differences may be off
 in some exotic cases. 
 .SH "SEE ALSO"
 .BR pal2rgb (1),
-.bR tiffinfo (1),
+.BR tiffinfo (1),
 .BR tiffcp (1),
 .BR tiffmedian (1),
 .BR libtiff (3TIFF)

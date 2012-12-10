@@ -1,4 +1,4 @@
-.\"	$Id: fax2ps.1,v 1.3 2005/11/02 11:07:19 dron Exp $
+.\"	$Id: fax2ps.1,v 1.4 2006-04-20 12:17:19 dron Exp $
 .\"
 .\" Copyright (c) 1991-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -22,6 +22,7 @@
 .\" LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
 .\" OF THIS SOFTWARE.
 .\"
+.ds Ps PostScript
 .if n .po 0
 .TH FAX2PS 1 "November 2, 2005" "libtiff"
 .SH NAME
@@ -33,7 +34,7 @@ facsimile to compressed \*(Ps\(tm
 [
 .I options
 ] [
-.IR file ...
+.I file ...\&
 ]
 .SH DESCRIPTION
 .I fax2ps
@@ -88,7 +89,7 @@ This algorithm can, however, be ineffective
 for continuous-tone and white-on-black images.
 For these images, it sometimes is more efficient to send
 the raster bitmap image directly; see
-.IR tiff2ps (1).
+.BR tiff2ps (1).
 .SH OPTIONS
 .TP 10
 .BI \-p " number"

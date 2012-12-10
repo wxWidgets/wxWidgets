@@ -24,19 +24,11 @@
     </tr>
     <tr>
       <th>Latest Stable Release</th>
-      <td><a href="v3.8.2.html">v3.8.2</a></td>
-    </tr>
-    <tr>
-      <th>Latest Development Release</th>
-      <td><a href="v3.8.2.html">v3.8.2</a></td>
+      <td><a href="v4.0.3.html">v4.0.3</a></td>
     </tr>
     <tr>
       <th>Master Download Site</th>
-      <td><a href="ftp://ftp.remotesensing.org/pub/libtiff">ftp.remotesensing.org</a>, directory pub/libtiff</td>
-    </tr>
-    <tr>
-      <th>Mirror Download Site</th>
-      <td><a href="http://libtiff.maptools.org/dl/">http://libtiff.maptools.org/dl/</a></td>
+      <td><a href="http://download.osgeo.org/libtiff">download.osgeo.org</a>, directory libtiff</td>
     </tr>
     <tr>
       <th>Windows Binaries</th>
@@ -53,8 +45,12 @@
     <tr>
       <th>Anonymous CVS</th>
       <td><tt>export CVSROOT=:pserver:cvsanon@cvs.maptools.org:/cvs/maptools/cvsroot<br>
-        cvs login # use empty password"<br>
-        cvs checkout libtiff<br></tt></td>
+	cvs login</tt><br>
+	(use empty password)<br>
+	<tt>cvs checkout libtiff<br></tt>
+	to get the stable libtiff code or<br>
+	<tt>cvs checkout -r branch-3-9 libtiff</tt><br>
+	to get the previous stable branch supporting the 3.9.X release series.</td>
     </tr>
   </table>
   <hr>
@@ -66,23 +62,20 @@
   </p>
   <p>
     Included in this software distribution is a library, libtiff, for
-    reading and writing TIFF, a small collection of tools for doing simple
-    manipulations of TIFF images on UNIX systems,
-    and documentation on the library and
-    tools.  A small assortment of TIFF-related software for UNIX
-    that has been contributed by others is also included.
+    reading and writing TIFF, a small collection of tools for doing
+    simple manipulations of TIFF images, and documentation on the
+    library and tools.  Libtiff is a portable software, it was built
+    and tested on various systems: UNIX flavors (Linux, BSD, Solaris,
+    MacOS X), Windows, and OpenVMS.  It should be possible to port
+    libtiff and additional tools on other OSes.
   </p>
   <p>
     The library, along with associated tool programs, should handle most of
     your needs for reading and writing TIFF images on 32- and 64-bit
-    machines.  This software can also be used on older 16-bit systems
-    though it may require some effort and you may need to leave out some of
-    the compression support.
+    machines.
   </p>
   <p>
-    The software was orginally authored and maintained by Sam Leffler.
-    While he keeps a fatherly eye on the mailing list, he is no longer
-    responsible for day to day maintenance.
+    The software was originally authored and maintained by Sam Leffler.
   </p>
   <p>
     Questions should be sent to the TIFF mailing list:
@@ -94,7 +87,9 @@
     The persons responsible for putting up this site and putting together
     versions &gt;= 3.5.1 are
     <a href="http://pobox.com/~warmerdam">Frank Warmerdam</a>,
-    <a href="mailto:dron@ak4719.spb.edu">Andrey Kiselev</a> and Mike Welles.
+    <a href="mailto:dron@ak4719.spb.edu">Andrey Kiselev</a>,
+    <a href="mailto:bfriesen@GraphicsMagick.org">Bob Friesenhahn</a>, 
+    Joris Van Damme and Lee Howard.
   </p>
   <p>
     The following sections are included in this documentation:
@@ -113,9 +108,16 @@
     <li><a href="misc.html">Acknowledgements and copyright issues</a></li>
     <li><a href="man/index.html">Man Pages</a></li>
   </ul>
+  <p>
+    <b>BigTIFF News</b>
+  </p>
+  <ul>
+    <li><a href="BigTIFFProposal.html">BigTIFF project proposal</a> (work is completed!)</li>
+    <li><a href="bigtiffpr.html">Press release: Currently extending LibTiff</a> (work is completed!)</li>
+  </ul>
   <hr>
   <p>
-    Last updated  $Date: 2006/03/23 14:54:01 $.
+    Last updated  $Date: 2012-06-16 00:19:37 $.
   </p>
 </body>
 </html>

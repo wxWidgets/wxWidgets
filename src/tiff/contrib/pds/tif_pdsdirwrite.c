@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/contrib/pds/tif_pdsdirwrite.c,v 1.3 2005/12/21 12:23:13 joris Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/contrib/pds/tif_pdsdirwrite.c,v 1.4 2010-06-08 18:55:15 bfriesen Exp $ */
 
 /* When writing data to TIFF files, it is often useful to store application-
    specific data in a private TIFF directory so that the tags don't need to
@@ -962,3 +962,10 @@ TIFFLinkDirectory(TIFF* tif)
 	}
 	return (1);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

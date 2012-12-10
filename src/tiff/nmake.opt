@@ -1,4 +1,4 @@
-# $Id: nmake.opt,v 1.16 2006/03/23 14:54:01 dron Exp $
+# $Id: nmake.opt,v 1.18 2006/06/07 16:33:45 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@ak4719.spb.edu>
 #
@@ -60,12 +60,6 @@ LOGLUV_SUPPORT	= 1
 #JPEG_LIB 	= $(JPEGDIR)/Release/jpeg.lib
 
 #
-# Uncomment following lines to enable Old JPEG support
-# (modified IJG JPEG library required, read the contrib\ojpeg\README first).
-#
-#OJPEG_SUPPORT = 1
-
-#
 # Uncomment and edit following lines to enable ZIP support
 # (required for Deflate compression and Pixar log-format)
 #
@@ -73,6 +67,14 @@ LOGLUV_SUPPORT	= 1
 #ZLIBDIR 	= d:/projects/zlib-1.2.1
 #ZLIB_INCLUDE	= -I$(ZLIBDIR)
 #ZLIB_LIB 	= $(ZLIBDIR)/zlib.lib
+
+#
+# Uncomment and edit following lines to enable ISO JBIG support
+#
+#JBIG_SUPPORT	= 1
+#JBIGDIR 	= d:/projects/jbigkit
+#JBIG_INCLUDE	= -I$(JBIGDIR)/libjbig
+#JBIG_LIB 	= $(JBIGDIR)/libjbig/jbig.lib
 
 #
 # Uncomment following line to enable Pixar log-format algorithm
@@ -110,9 +112,9 @@ CHECK_JPEG_YCBCR_SUBSAMPLING = 1
 #
 # Pick debug or optimized build flags.  We default to an optimized build
 # with no debugging information.
-# NOTE: /GX option required if you want to build the C++ stream API
+# NOTE: /EHsc option required if you want to build the C++ stream API
 #
-OPTFLAGS =	/Ox /MD /GX /W3
+OPTFLAGS =	/Ox /MD /EHsc /W3 /D_CRT_SECURE_NO_DEPRECATE
 #OPTFLAGS = 	/Zi 
 
 #
@@ -181,10 +183,7 @@ EXTRAFLAGS	= -DLOGLUV_SUPPORT $(EXTRAFLAGS)
 
 !IFDEF JPEG_SUPPORT
 LIBS		= $(LIBS) $(JPEG_LIB)
-EXTRAFLAGS	= -DJPEG_SUPPORT $(EXTRAFLAGS)
-!IFDEF OJPEG_SUPPORT
-EXTRAFLAGS	= -DOJPEG_SUPPORT $(EXTRAFLAGS)
-!ENDIF
+EXTRAFLAGS	= -DJPEG_SUPPORT -DOJPEG_SUPPORT $(EXTRAFLAGS)
 !ENDIF
 
 !IFDEF ZIP_SUPPORT
@@ -193,6 +192,11 @@ EXTRAFLAGS	= -DZIP_SUPPORT $(EXTRAFLAGS)
 !IFDEF PIXARLOG_SUPPORT
 EXTRAFLAGS	= -DPIXARLOG_SUPPORT $(EXTRAFLAGS)
 !ENDIF
+!ENDIF
+
+!IFDEF JBIG_SUPPORT
+LIBS		= $(LIBS) $(JBIG_LIB)
+EXTRAFLAGS	= -DJBIG_SUPPORT $(EXTRAFLAGS)
 !ENDIF
 
 !IFDEF STRIPCHOP_SUPPORT

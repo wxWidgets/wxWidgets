@@ -1,13 +1,15 @@
-$Header: /cvs/maptools/cvsroot/libtiff/README,v 1.5 2004/10/30 13:44:45 dron Exp $
+$Header: /cvs/maptools/cvsroot/libtiff/README,v 1.7 2012-02-18 21:53:27 bfriesen Exp $
 
 
 TIFF Software Distribution
 --------------------------
 This file is just a placeholder; all the documentation is now in
 HTML in the html directory.  To view the documentation point your
-favorite WWW viewer at html/index.html; e.g.
+favorite WWW viewer at html/index.html; 
 
-    netscape html/index.html
+e.g.
+
+    firefox html/index.html
 
 If you don't have an HTML viewer then you can read the HTML source
 or fetch a PostScript version of this documentation from the directory

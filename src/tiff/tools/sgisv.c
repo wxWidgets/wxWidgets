@@ -33,8 +33,8 @@
 
 #include "tiffio.h"
 
-typedef unsigned char u_char;
-typedef unsigned long u_long;
+typedef unsigned char unsigned char;
+typedef unsigned long uint32;
 
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
@@ -151,16 +151,16 @@ usage(void)
 }
 
 static void
-svRGBSeparate(TIFF* tif, u_long* ss, int xsize, int ysize)
+svRGBSeparate(TIFF* tif, uint32* ss, int xsize, int ysize)
 {
 	tsize_t stripsize = TIFFStripSize(tif);
-	u_char *rbuf = (u_char *)_TIFFmalloc(3*stripsize);
-	u_char *gbuf = rbuf + stripsize;
-	u_char *bbuf = gbuf + stripsize;
+	unsigned char *rbuf = (unsigned char *)_TIFFmalloc(3*stripsize);
+	unsigned char *gbuf = rbuf + stripsize;
+	unsigned char *bbuf = gbuf + stripsize;
 	register int y;
 
 	for (y = 0; y <= ysize; y += rowsperstrip) {
-		u_char *rp, *gp, *bp;
+		unsigned char *rp, *gp, *bp;
 		register int x;
 		register uint32 n;
 
@@ -170,7 +170,7 @@ svRGBSeparate(TIFF* tif, u_long* ss, int xsize, int ysize)
 		rp = rbuf; gp = gbuf; bp = bbuf;
 		do {
 			for (x = 0; x <= xsize; x++) {
-				u_long v = ss[x];
+				uint32 v = ss[x];
 				rp[x] = v;
 				gp[x] = v >> 8;
 				bp[x] = v >> 16;
@@ -192,14 +192,14 @@ svRGBSeparate(TIFF* tif, u_long* ss, int xsize, int ysize)
 }
 
 static void
-svRGBContig(TIFF* tif, u_long* ss, int xsize, int ysize)
+svRGBContig(TIFF* tif, uint32* ss, int xsize, int ysize)
 {
 	register int x, y;
 	tsize_t stripsize = TIFFStripSize(tif);
-	u_char *strip = (u_char *)_TIFFmalloc(stripsize);
+	unsigned char *strip = (unsigned char *)_TIFFmalloc(stripsize);
 
 	for (y = 0; y <= ysize; y += rowsperstrip) {
-		register u_char *pp = strip;
+		register unsigned char *pp = strip;
 		register uint32 n;
 
 		n = rowsperstrip;
@@ -207,7 +207,7 @@ svRGBContig(TIFF* tif, u_long* ss, int xsize, int ysize)
 			n = ysize-y+1;
 		do {
 			for (x = 0; x <= xsize; x++) {
-				u_long v = ss[x];
+				uint32 v = ss[x];
 				pp[0] = v;
 				pp[1] = v >> 8;
 				pp[2] = v >> 16;
@@ -231,14 +231,14 @@ svRGBContig(TIFF* tif, u_long* ss, int xsize, int ysize)
 #define	BLUE	CVT(11)		/* 11% */
 
 static void
-svGrey(TIFF* tif, u_long* ss, int xsize, int ysize)
+svGrey(TIFF* tif, uint32* ss, int xsize, int ysize)
 {
 	register int x, y;
-	u_char *buf = (u_char *)_TIFFmalloc(TIFFScanlineSize(tif));
+	unsigned char *buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
 
 	for (y = 0; y <= ysize; y++) {
 		for (x = 0; x <= xsize; x++) {
-			u_char *cp = (u_char *)&ss[x];
+			unsigned char *cp = (unsigned char *)&ss[x];
 			buf[x] = (RED*cp[3] + GREEN*cp[2] + BLUE*cp[1]) >> 8;
 		}
 		if (TIFFWriteScanline(tif, buf, (uint32) y, 0) < 0)
@@ -257,7 +257,7 @@ tiffsv(char* name, int x1, int x2, int y1, int y2)
 	TIFF *tif;
 	int xsize, ysize;
 	int xorg, yorg;
-	u_long *scrbuf;
+	uint32 *scrbuf;
 
 	xorg = MIN(x1,x2);
 	yorg = MIN(y1,y2);
@@ -295,7 +295,7 @@ tiffsv(char* name, int x1, int x2, int y1, int y2)
 	TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
 	rowsperstrip = TIFFDefaultStripSize(tif, rowsperstrip);
 	TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
-	scrbuf = (u_long *)_TIFFmalloc((xsize+1)*(ysize+1)*sizeof (u_long));
+	scrbuf = (uint32 *)_TIFFmalloc((xsize+1)*(ysize+1)*sizeof (uint32));
 	readdisplay(xorg, yorg, xorg+xsize, yorg+ysize, scrbuf, RD_FREEZE);
 	if (photometric == PHOTOMETRIC_RGB) {
 		if (config == PLANARCONFIG_SEPARATE)
@@ -307,3 +307,10 @@ tiffsv(char* name, int x1, int x2, int y1, int y2)
 	(void) TIFFClose(tif);
 	_TIFFfree((char *)scrbuf);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

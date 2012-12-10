@@ -37,7 +37,11 @@ static char sccsid[] = "@(#)lsearch.c	8.1 (Berkeley) 6/4/93";
 __RCSID("$NetBSD: lsearch.c,v 1.2 2005/07/06 15:47:15 drochner Exp $");
 #endif
 
-#include <sys/types.h>
+#ifdef _WIN32_WCE
+# include <wce_types.h>
+#else
+# include <sys/types.h>
+#endif
 
 #ifndef NULL
 # define NULL 0

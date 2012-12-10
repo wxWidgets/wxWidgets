@@ -1,4 +1,4 @@
-.\" $Id: tiff2rgba.1,v 1.3 2005/11/02 11:07:19 dron Exp $
+.\" $Id: tiff2rgba.1,v 1.4 2006-04-20 12:17:19 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -31,7 +31,7 @@ image to RGBA color space
 .SH SYNOPSIS
 .B tiff2rgba
 [
-options
+.I options
 ]
 .I input.tif
 .I output.tif
@@ -50,7 +50,9 @@ esoteric combinations of BitsPerSample, photometric interpretation,
 block organization and planar configuration.  
 .P
 The generated images are stripped images with four samples per pixel 
-(red, green, blue and alpha) or if the -n flag is used, three samples
+(red, green, blue and alpha) or if the
+.B \-n
+flag is used, three samples
 per pixel (red, green, and blue).  The resulting images are always planar
 configuration contiguous.  For this reason, this program is a useful utility
 for transform exotic TIFF files into a form ingestible by almost any TIFF
@@ -61,11 +63,11 @@ supporting software.
 Specify a compression scheme to use when writing image data:
 .B "\-c none"
 for no compression (the default),
-.B "-c packbits"
+.B "\-c packbits"
 for the PackBits compression algorithm,
-.B "-c zip
+.B "\-c zip"
 for the Deflate compression algorithm,
-.B "-c jpeg
+.B "\-c jpeg"
 for the JPEG compression algorithm,
 and
 .B "\-c lzw"
@@ -83,7 +85,9 @@ images on systems with limited RAM.
 .TP
 .B \-n
 Drop the alpha component from the output file, producing a pure RGB file.
-Currently this does not work if the -b flag is also in effect.
+Currently this does not work if the
+.B \-b
+flag is also in effect.
 .SH "SEE ALSO"
 .BR tiff2bw (1),
 .BR TIFFReadRGBAImage (3t),

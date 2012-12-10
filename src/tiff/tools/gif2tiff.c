@@ -44,6 +44,10 @@
 # include <unistd.h>
 #endif
 
+#ifdef NEED_LIBPORT
+# include "libport.h"
+#endif
+
 #include "tiffio.h"
 
 #define	GIFGAMMA	(1.5)		/* smaller makes output img brighter */
@@ -250,7 +254,7 @@ readscreen(void)
     global = buf[4] & 0x80;
     if (global) {
         globalbits = (buf[4] & 0x07) + 1;
-        fread(globalmap,3,1<<globalbits,infile);
+        fread(globalmap,3,((size_t)1)<<globalbits,infile);
     }
 }
 
@@ -285,7 +289,7 @@ readgifimage(char* mode)
 
         fprintf(stderr, "   local colors: %d\n", 1<<localbits);
 
-        fread(localmap, 3, 1<<localbits, infile);
+        fread(localmap, 3, ((size_t)1)<<localbits, infile);
         initcolors(localmap, 1<<localbits);
     } else if (global) {
         initcolors(globalmap, 1<<globalbits);
@@ -503,6 +507,10 @@ rasterize(int interleaved, char* mode)
     strip = 0;
     stripsize = TIFFStripSize(tif);
     for (row=0; row<height; row += rowsperstrip) {
+	if (rowsperstrip > height-row) {
+	    rowsperstrip = height-row;
+	    stripsize = TIFFVStripSize(tif, rowsperstrip);
+	}
 	if (TIFFWriteEncodedStrip(tif, strip, newras+row*width, stripsize) < 0)
 	    break;
 	strip++;
@@ -513,3 +521,10 @@ rasterize(int interleaved, char* mode)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

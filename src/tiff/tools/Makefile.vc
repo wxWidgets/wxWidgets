@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.11 2006/03/23 14:54:02 dron Exp $
+# $Id: Makefile.vc,v 1.15 2009-01-22 20:53:07 fwarmerdam Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@ak4719.spb.edu>
 #
@@ -28,13 +28,14 @@
 
 !INCLUDE ..\nmake.opt
 
-TARGETS	=	bmp2tiff.exe tiffcp.exe tiffinfo.exe tiffdump.exe \
-		fax2tiff.exe fax2ps.exe gif2tiff.exe pal2rgb.exe ppm2tiff.exe \
+TARGETS	=	bmp2tiff.exe tiffinfo.exe tiffdump.exe fax2tiff.exe \
+		fax2ps.exe gif2tiff.exe pal2rgb.exe ppm2tiff.exe \
 		rgb2ycbcr.exe thumbnail.exe ras2tiff.exe raw2tiff.exe \
 		tiff2bw.exe tiff2rgba.exe tiff2pdf.exe tiff2ps.exe \
-		tiffcmp.exe tiffdither.exe tiffmedian.exe tiffsplit.exe 
+		tiffcmp.exe tiffcp.exe tiffcrop.exe tiffdither.exe \
+		tiffmedian.exe tiffset.exe tiffsplit.exe 
 
-INCL		= 	-I..\libtiff
+INCL		= 	-I..\libtiff -I..\port -DNEED_LIBPORT
 LIBS		=	$(LIBS) ..\port\libport.lib ..\libtiff\libtiff.lib
 
 default:	$(TARGETS)
@@ -47,4 +48,5 @@ tiffgt.exe:
 
 clean:
 	-del *.exe
+	-del *.exe.manifest
 	-del *.obj

@@ -35,6 +35,10 @@
 # include <unistd.h>
 #endif
 
+#ifdef NEED_LIBPORT
+# include "libport.h"
+#endif
+
 #include "rasterfile.h"
 #include "tiffio.h"
 
@@ -43,10 +47,6 @@
 #endif
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
-
-#ifndef BINMODE
-#define	BINMODE
-#endif
 
 static	uint16 compression = (uint16) -1;
 static	int jpegcolormode = JPEGCOLORMODE_RGB;
@@ -87,13 +87,14 @@ main(int argc, char* argv[])
 		}
 	if (argc - optind != 2)
 		usage();
-	in = fopen(argv[optind], "r" BINMODE);
+	in = fopen(argv[optind], "rb");
 	if (in == NULL) {
 		fprintf(stderr, "%s: Can not open.\n", argv[optind]);
 		return (-1);
 	}
 	if (fread(&h, sizeof (h), 1, in) != 1) {
 		fprintf(stderr, "%s: Can not read header.\n", argv[optind]);
+		fclose(in);
 		return (-2);
 	}
 	if (strcmp(h.ras_magic, RAS_MAGIC) == 0) {
@@ -118,11 +119,15 @@ main(int argc, char* argv[])
 #endif
 	} else {
 		fprintf(stderr, "%s: Not a rasterfile.\n", argv[optind]);
+		fclose(in);
 		return (-3);
 	}
 	out = TIFFOpen(argv[optind+1], "w");
 	if (out == NULL)
+	{
+		fclose(in);
 		return (-4);
+	}
 	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32) h.ras_width);
 	TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32) h.ras_height);
 	TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
@@ -224,6 +229,7 @@ main(int argc, char* argv[])
 			break;
 	}
 	(void) TIFFClose(out);
+	fclose(in);
 	return (0);
 }
 
@@ -301,3 +307,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

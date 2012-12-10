@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_extension.c,v 1.4 2004/10/02 13:29:41 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_extension.c,v 1.7 2010-03-10 18:56:48 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -41,13 +41,13 @@ int TIFFGetTagListCount( TIFF *tif )
     return td->td_customValueCount;
 }
 
-ttag_t TIFFGetTagListEntry( TIFF *tif, int tag_index )
+uint32 TIFFGetTagListEntry( TIFF *tif, int tag_index )
 
 {
     TIFFDirectory* td = &tif->tif_dir;
 
     if( tag_index < 0 || tag_index >= td->td_customValueCount )
-        return (ttag_t) -1;
+        return (uint32)(-1);
     else
         return td->td_customValues[tag_index].info->field_tag;
 }
@@ -102,10 +102,17 @@ void TIFFSetClientInfo( TIFF *tif, void *data, const char *name )
     link = (TIFFClientInfoLink *) _TIFFmalloc(sizeof(TIFFClientInfoLink));
     assert (link != NULL);
     link->next = tif->tif_clientinfo;
-    link->name = (char *) _TIFFmalloc(strlen(name)+1);
+    link->name = (char *) _TIFFmalloc((tmsize_t)(strlen(name)+1));
     assert (link->name != NULL);
     strcpy(link->name, name);
     link->data = data;
 
     tif->tif_clientinfo = link;
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

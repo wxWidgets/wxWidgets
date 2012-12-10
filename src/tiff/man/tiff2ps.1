@@ -1,4 +1,4 @@
-.\" $Id: tiff2ps.1,v 1.8 2005/11/02 11:07:19 dron Exp $
+.\" $Id: tiff2ps.1,v 1.10 2009-01-12 02:05:19 bfriesen Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -22,12 +22,13 @@
 .\" LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
 .\" OF THIS SOFTWARE.
 .\"
+.ds Ps PostScript
 .if n .po 0
 .TH TIFF2PS 1 "November 2, 2005" "libtiff"
 .SH NAME
 tiff2ps \- convert a
 .SM TIFF
-image to \*(Ps\(tm
+image to \*(Ps\*(Tm
 .SH SYNOPSIS
 .B tiff2ps
 [
@@ -108,18 +109,23 @@ the height of the printed image.
 .TP
 .B \-c
 Center the image in the output. This option only shows an effect if both
-the -w and the -h option are given.
+the
+.B \-w
+and the
+.B \-h
+option are given.
 .TP
 .B \-d
 Set the initial
 .SM TIFF
 directory to the specified directory number.
-(NB: directories are numbered starting at zero.)
+(NB: Directories are numbered starting at zero.)
 This option is useful for selecting individual pages in a
 multi-page (e.g. facsimile) file.
 .TP
 .B \-e
-Force the generation of Encapsulated \*(Ps (implies -z).
+Force the generation of Encapsulated \*(Ps (implies
+.BR \-z ).
 .TP
 .B \-h
 Specify the vertical size of the printed area (in inches).
@@ -130,6 +136,13 @@ be split in several pages. Option
 .B \-L
 may be used for specifying size of split images overlapping.
 .TP
+.B \-W
+Specify the maximum width of image (in inches). Images with larger sizes will
+be split in several pages. Options
+.B \-L
+and 
+.B \-W
+are mutually exclusive.
 .B \-i
 Enable/disable pixel interpolation.  This option requires a
 single numeric value: zero to disable pixel interpolation and
@@ -139,6 +152,8 @@ non-zero to enable.  The default is enabled.
 Specify the size of overlapping for split images (in inches). Used in
 conjunction with
 .B \-H
+option and
+.B \-W
 option.
 .TP
 .B \-l
@@ -147,14 +162,17 @@ the width of the printed image.
 .TP
 .B \-m
 Where possible render using the
-.B imagemask
-\*(Ps operator instead of the image operator.  When this option is specified
+.I imagemask
+\*(Ps operator instead of the
+.I image
+operator.  When this option is specified
 .I tiff2ps
 will use
-.B imagemask
+.I imagemask
 for rendering 1 bit deep images.  If this option is not specified
-or if the image depth is greater than 1 then the image operator
-is used.
+or if the image depth is greater than 1 then the
+.I image
+operator is used.
 .TP
 .B \-o
 Set the initial
@@ -163,13 +181,18 @@ directory to the
 .SM IFD
 at the specified file offset.
 This option is useful for selecting thumbnail images and the
-like which are hidden using the SubIFD tag.
+like which are hidden using the
+.I SubIFD
+tag.
 .TP
 .B \-p
 Force the generation of (non-Encapsulated) \*(Ps.
 .TP
-.B \-r
-Rotate image by 180 degrees.
+.B \-r 90|180|270|auto
+Rotate image by 90, 180, 270 degrees or auto.  Auto picks the best
+fit for the image on the specified paper size (eg portrait
+or landscape) if -h or -w is specified. Rotation is in degrees 
+counterclockwise. Auto rotates 90 degrees ccw to produce landscape.
 .TP
 .B \-s
 Generate output for a single IFD (page) in the input file.
@@ -195,7 +218,7 @@ page and this option has no affect.
 The following generates \*(Ps Level 2 for all pages of a facsimile:
 .RS
 .nf
-tiff2ps -a2 fax.tif | lpr
+tiff2ps \-a2 fax.tif | lpr
 .fi
 .RE
 Note also that if you have version 2.6.1 or newer of Ghostscript then you
@@ -205,15 +228,15 @@ To generate Encapsulated \*(Ps for a the image at directory 2
 of an image use:
 .RS
 .nf
-tiff2ps -d 1 foo.tif
+tiff2ps \-d 1 foo.tif
 .fi
 .RE
-(notice that directories are numbered starting at zero.)
+(Notice that directories are numbered starting at zero.)
 .PP
 If you have a long image, it may be split in several pages:
 .RS
 .nf
-tiff2ps -h11 -w8.5 -H14 -L.5 foo.tif > foo.ps
+tiff2ps \-h11 \-w8.5 \-H14 \-L.5 foo.tif > foo.ps
 .fi
 .RE
 The page size is set to 8.5x11 by
@@ -234,8 +257,8 @@ This conversion results in output that is six times
 bigger than the original image and which takes a long time
 to send to a printer over a serial line.
 Matters are even worse for 4-, 2-, and 1-bit palette images.
-.SH BUGS
-Does not handle tiled images when generating PS Level I output.
+.PP
+Does not handle tiled images when generating \*(Ps Level I output.
 .SH "SEE ALSO"
 .BR pal2rgb (1),
 .BR tiffinfo (1),

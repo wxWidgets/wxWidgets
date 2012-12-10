@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.18.1 -->
-<!-- CreationDate: Mon Mar 13 18:03:13 2006 -->
+<!-- CreationDate: Sat Feb 24 18:37:19 2007 -->
 <html>
 <head>
 <meta name="generator" content="groff -Thtml, see www.gnu.org">
@@ -15,7 +15,6 @@
 <a href="#OPTIONS">OPTIONS</a><br>
 <a href="#EXAMPLES">EXAMPLES</a><br>
 <a href="#BUGS">BUGS</a><br>
-<a href="#BUGS">BUGS</a><br>
 <a href="#SEE ALSO">SEE ALSO</a><br>
 
 <hr>
@@ -28,7 +27,7 @@
 <td width="8%"></td>
 <td width="91%">
 <p>tiff2ps &minus; convert a <small>TIFF</small> image to
-&trade;</p>
+PostScript&trade;</p>
 </td>
 </table>
 <a name="SYNOPSIS"></a>
@@ -52,26 +51,28 @@
 <td width="8%"></td>
 <td width="91%">
 <p><i>tiff2ps</i> reads <small>TIFF</small> images and
-writes or Encapsulated (EPS) on the standard output. By
-default, <i>tiff2ps</i> writes Encapsulated for the first
-image in the specified <small>TIFF</small> image file.</p>
+writes PostScript or Encapsulated PostScript (EPS) on the
+standard output. By default, <i>tiff2ps</i> writes
+Encapsulated PostScript for the first image in the specified
+<small>TIFF</small> image file.</p>
 <!-- INDENTATION -->
-<p>By default, <i>tiff2ps</i> will generate that fills a
-printed area specified by the <small>TIFF</small> tags in
-the input file. If the file does not contain
+<p>By default, <i>tiff2ps</i> will generate PostScript that
+fills a printed area specified by the <small>TIFF</small>
+tags in the input file. If the file does not contain
 <i>XResolution</i> or <i>YResolution</i> tags, then the
 printed area is set according to the image dimensions. The
 <b>&minus;w</b> and <b>&minus;h</b> options (see below) can
 be used to set the dimensions of the printed area in inches;
 overriding any relevant <small>TIFF</small> tags.</p>
 <!-- INDENTATION -->
-<p>The generated for <small>RGB,</small> palette, and
-<small>CMYK</small> images uses the <i>colorimage</i>
-operator. The generated for greyscale and bilevel images
-uses the <i>image</i> operator. When the <i>colorimage</i>
-operator is used, code to emulate this operator on older
-printers is also generated. Note that this emulation code
-can be very slow.</p>
+<p>The PostScript generated for <small>RGB,</small> palette,
+and <small>CMYK</small> images uses the <i>colorimage</i>
+operator. The PostScript generated for greyscale and bilevel
+images uses the <i>image</i> operator. When the
+<i>colorimage</i> operator is used, PostScript code to
+emulate this operator on older PostScript printers is also
+generated. Note that this emulation code can be very
+slow.</p>
 <!-- INDENTATION -->
 <p>Color images with associated alpha data are composited
 over a white background.</p>
@@ -91,7 +92,7 @@ over a white background.</p>
 <td width="5%"></td>
 <td width="80%">
 
-<p>Generate Level 1 (the default).</p>
+<p>Generate PostScript Level 1 (the default).</p>
 </td>
 <td width="0%">
 </td>
@@ -104,7 +105,7 @@ over a white background.</p>
 <td width="5%"></td>
 <td width="80%">
 
-<p>Generate Level 2.</p>
+<p>Generate PostScript Level 2.</p>
 </td>
 <td width="0%">
 </td>
@@ -117,8 +118,9 @@ over a white background.</p>
 <td width="5%"></td>
 <td width="80%">
 
-<p>Generate Level 3. It basically allows one to use the
-/flateDecode filter for ZIP compressed TIFF images.</p>
+<p>Generate PostScript Level 3. It basically allows one to
+use the /flateDecode filter for ZIP compressed TIFF
+images.</p>
 </td>
 <td width="0%">
 </td>
@@ -160,7 +162,8 @@ This does not affect the height of the printed image.</p>
 <td width="80%">
 
 <p>Center the image in the output. This option only shows
-an effect if both the -w and the -h option are given.</p>
+an effect if both the <b>&minus;w</b> and the
+<b>&minus;h</b> option are given.</p>
 </td>
 <td width="0%">
 </td>
@@ -174,7 +177,7 @@ an effect if both the -w and the -h option are given.</p>
 <td width="80%">
 
 <p>Set the initial <small>TIFF</small> directory to the
-specified directory number. (NB: directories are numbered
+specified directory number. (NB: Directories are numbered
 starting at zero.) This option is useful for selecting
 individual pages in a multi-page (e.g. facsimile) file.</p>
 </td>
@@ -189,7 +192,8 @@ individual pages in a multi-page (e.g. facsimile) file.</p>
 <td width="5%"></td>
 <td width="80%">
 
-<p>Force the generation of Encapsulated (implies -z).</p>
+<p>Force the generation of Encapsulated PostScript (implies
+<b>&minus;z</b>).</p>
 </td>
 <td width="0%">
 </td>
@@ -276,12 +280,12 @@ does not affect the width of the printed image.</p>
 <td width="5%"></td>
 <td width="80%">
 
-<p>Where possible render using the <b>imagemask</b>
-operator instead of the image operator. When this option is
-specified <i>tiff2ps</i> will use <b>imagemask</b> for
-rendering 1 bit deep images. If this option is not specified
-or if the image depth is greater than 1 then the image
-operator is used.</p>
+<p>Where possible render using the <i>imagemask</i>
+PostScript operator instead of the <i>image</i> operator.
+When this option is specified <i>tiff2ps</i> will use
+<i>imagemask</i> for rendering 1 bit deep images. If this
+option is not specified or if the image depth is greater
+than 1 then the <i>image</i> operator is used.</p>
 </td>
 <td width="0%">
 </td>
@@ -297,7 +301,7 @@ operator is used.</p>
 <p>Set the initial <small>TIFF</small> directory to the
 <small>IFD</small> at the specified file offset. This option
 is useful for selecting thumbnail images and the like which
-are hidden using the SubIFD tag.</p>
+are hidden using the <i>SubIFD</i> tag.</p>
 </td>
 <td width="0%">
 </td>
@@ -310,7 +314,8 @@ are hidden using the SubIFD tag.</p>
 <td width="5%"></td>
 <td width="80%">
 
-<p>Force the generation of (non-Encapsulated) .</p>
+<p>Force the generation of (non-Encapsulated)
+PostScript.</p>
 </td>
 <td width="0%">
 </td>
@@ -392,12 +397,12 @@ inches.</p>
 <td width="5%"></td>
 <td width="80%">
 
-<p>When generating Level 2, data is scaled so that it does
-not image into the <i>deadzone</i> on a page (the outer
-margin that the printing device is unable to mark). This
-option suppresses this behavior. When Level 1 is generated,
-data is imaged to the entire printed page and this option
-has no affect.</p>
+<p>When generating PostScript Level 2, data is scaled so
+that it does not image into the <i>deadzone</i> on a page
+(the outer margin that the printing device is unable to
+mark). This option suppresses this behavior. When PostScript
+Level 1 is generated, data is imaged to the entire printed
+page and this option has no affect.</p>
 </td>
 <td width="0%">
 </td>
@@ -410,8 +415,8 @@ has no affect.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p>The following generates Level 2 for all pages of a
-facsimile:</p></td>
+<p>The following generates PostScript Level 2 for all pages
+of a facsimile:</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -419,7 +424,7 @@ facsimile:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiff2ps -a2 fax.tif | lpr
+<pre>tiff2ps &minus;a2 fax.tif | lpr
 </pre>
 </td>
 </table>
@@ -434,8 +439,8 @@ facsimile:</p></td>
 Ghostscript then you can efficiently preview facsimile
 generated with the above command.</p>
 <!-- INDENTATION -->
-<p>To generate Encapsulated for a the image at directory 2
-of an image use:</p></td>
+<p>To generate Encapsulated PostScript for a the image at
+directory 2 of an image use:</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -443,7 +448,7 @@ of an image use:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiff2ps -d 1 foo.tif
+<pre>tiff2ps &minus;d 1 foo.tif
 </pre>
 </td>
 </table>
@@ -454,7 +459,7 @@ of an image use:</p></td>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p>(notice that directories are numbered starting at
+<p>(Notice that directories are numbered starting at
 zero.)</p>
 <!-- INDENTATION -->
 <p>If you have a long image, it may be split in several
@@ -466,7 +471,7 @@ pages:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiff2ps -h11 -w8.5 -H14 -L.5 foo.tif &gt; foo.ps
+<pre>tiff2ps &minus;h11 &minus;w8.5 &minus;H14 &minus;L.5 foo.tif &gt; foo.ps
 </pre>
 </td>
 </table>
@@ -495,24 +500,15 @@ readability).</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p>Because does not support the notion of a colormap, 8-bit
-palette images produce 24-bit images. This conversion
-results in output that is six times bigger than the original
-image and which takes a long time to send to a printer over
-a serial line. Matters are even worse for 4-, 2-, and 1-bit
-palette images.</p>
-</td>
-</table>
-<a name="BUGS"></a>
-<h2>BUGS</h2>
+<p>Because PostScript does not support the notion of a
+colormap, 8-bit palette images produce 24-bit PostScript
+images. This conversion results in output that is six times
+bigger than the original image and which takes a long time
+to send to a printer over a serial line. Matters are even
+worse for 4-, 2-, and 1-bit palette images.</p>
 <!-- INDENTATION -->
-<table width="100%" border=0 rules="none" frame="void"
-       cols="2" cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="8%"></td>
-<td width="91%">
-<p>Does not handle tiled images when generating PS Level I
-output.</p>
+<p>Does not handle tiled images when generating PostScript
+Level I output.</p>
 </td>
 </table>
 <a name="SEE ALSO"></a>

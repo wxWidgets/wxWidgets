@@ -1,4 +1,4 @@
-# $Id: SConstruct,v 1.2 2006/03/23 14:54:00 dron Exp $
+# $Id: SConstruct,v 1.4 2007/02/24 15:03:47 dron Exp $
 
 # Tag Image File Format (TIFF) Software
 #
@@ -76,7 +76,7 @@ Export([ 'env', 'idir_prefix', 'idir_lib', 'idir_bin', 'idir_inc', 'idir_doc' ])
 
 # Now proceed to system feature checks
 target_cpu, target_vendor, target_kernel, target_os = \
-    os.popen("./config.guess").readlines()[0].split("-")
+    os.popen("./config/config.guess").readlines()[0].split("-")
 
 def Define(context, key, have):
     import SCons.Conftest
@@ -132,6 +132,7 @@ if target_os != 'cygwin' \
 # Check for system headers
 conf.CheckCHeader('assert.h')
 conf.CheckCHeader('fcntl.h')
+conf.CheckCHeader('io.h')
 conf.CheckCHeader('limits.h')
 conf.CheckCHeader('malloc.h')
 conf.CheckCHeader('search.h')
@@ -145,6 +146,7 @@ conf.CheckFunc('memmove')
 conf.CheckFunc('memset')
 conf.CheckFunc('mmap')
 conf.CheckFunc('pow')
+conf.CheckFunc('setmode')
 conf.CheckFunc('sqrt')
 conf.CheckFunc('strchr')
 conf.CheckFunc('strrchr')

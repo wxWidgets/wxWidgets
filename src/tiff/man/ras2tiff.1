@@ -1,4 +1,4 @@
-.\" $Id: ras2tiff.1,v 1.3 2005/11/02 11:07:19 dron Exp $
+.\" $Id: ras2tiff.1,v 1.4 2006-04-20 12:17:19 dron Exp $
 .\"
 .\" Copyright (c) 1990-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -65,11 +65,11 @@ is 24 or 1 (min-is-black) if the depth is not 24.
 Specify a compression scheme to use when writing image data:
 .B "\-c none"
 for no compression,
-.B "-c packbits"
+.B "\-c packbits"
 for the PackBits compression algorithm,
-.B "-c jpeg"
+.B "\-c jpeg"
 for the baseline JPEG compression algorithm,
-.B "-c zip
+.B "\-c zip
 for the Deflate compression algorithm,
 and
 .B "\-c lzw"

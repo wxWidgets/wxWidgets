@@ -1,4 +1,4 @@
-.\" $Id: TIFFReadRGBAStrip.3tiff,v 1.3 2005/11/02 11:07:18 dron Exp $
+.\" $Id: TIFFReadRGBAStrip.3tiff,v 1.3 2005-11-02 11:07:18 dron Exp $
 .\"
 .\" Copyright (c) 1991-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.

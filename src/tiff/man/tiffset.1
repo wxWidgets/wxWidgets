@@ -1,4 +1,4 @@
-.\" $Id: tiffset.1,v 1.2 2005/11/02 11:07:19 dron Exp $
+.\" $Id: tiffset.1,v 1.5 2011-03-26 12:07:20 fwarmerdam Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -31,7 +31,7 @@ header
 .SH SYNOPSIS
 .B tiffset
 [
-options
+.I options
 ]
 .I filename.tif
 .SH DESCRIPTION
@@ -41,10 +41,16 @@ sets the value of a
 header to a specified value.
 .SH OPTIONS
 .TP
-.B \-s tagnumber [count] value ...
+.BI \-d " dirnumber"
+change the current directory (starting at 0).
+.TP
+.BI \-s " tagnumber" "\fR [\fP" " count" "\fR ]\fP" " value ..."
 Set the value of the named tag to the value or values specified.
 .TP
-.B \-sf tagnumber filename
+.BI \-sd " diroffset"
+change the current directory by offset.
+.TP
+.BI \-sf " tagnumber filename"
 Set the value of the tag to the contents of filename.  This option is
 supported for ASCII tags only.
 .SH EXAMPLES
@@ -52,24 +58,32 @@ The following example sets the image description tag (270) of a.tif to
 the contents of the file descrip:
 .RS
 .nf
-tiffset -sf 270 descrip a.tif
+tiffset \-sf 270 descrip a.tif
 .fi
 .RE
 .PP
 The following example sets the artist tag (315) of a.tif to the string
-"Anonymous":
+``Anonymous'':
 .RS
 .nf
-tiffset -s 305 Anonymous a.tif
+tiffset \-s 315 Anonymous a.tif
 .fi
 .RE
 .PP
 This example sets the resolution of the file a.tif to 300 dpi:
 .RS
 .nf
-tiffset -s 296 2 a.tif
-tiffset -s 282 300.0 a.tif
-tiffset -s 283 300.0 a.tif
+tiffset \-s 296 2 a.tif
+tiffset \-s 282 300.0 a.tif
+tiffset \-s 283 300.0 a.tif
+.fi
+.RE
+.PP
+Set the photometric interpretation of the third page of a.tif to
+min-is-black (ie. inverts it):
+.RS
+.nf
+tiffset -d 2 -s 262 1 a.tif
 .fi
 .RE
 .SH "SEE ALSO"

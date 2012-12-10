@@ -10,6 +10,9 @@
    machine */
 #define HAVE_IEEEFP 1
 
+/* Define to 1 if you have the `jbg_newlen' function. */
+#define HAVE_JBG_NEWLEN 1
+
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
 
@@ -68,6 +71,9 @@
    machine */
 #define HAVE_IEEEFP 1
 
+/* Define to 1 if you have the `jbg_newlen' function. */
+#define HAVE_JBG_NEWLEN 1
+
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
 
@@ -80,14 +86,31 @@
 /* Define to 1 if you have the <search.h> header file. */
 #define HAVE_SEARCH_H 1
 
+/* Define to 1 if you have the `setmode' function. */
+#define HAVE_SETMODE 1
+
 /* The size of a `int', as computed by sizeof. */
 #define SIZEOF_INT 4
 
 /* The size of a `long', as computed by sizeof. */
 #define SIZEOF_LONG 4
 
+/* Signed 64-bit type formatter */
+#define TIFF_INT64_FORMAT "%I64d"
+
+/* Signed 64-bit type */
+#define TIFF_INT64_T signed __int64
+
+/* Unsigned 64-bit type formatter */
+#define TIFF_UINT64_FORMAT "%I64u"
+
+/* Unsigned 64-bit type */
+#define TIFF_UINT64_T unsigned __int64
+
 /* Set the native cpu bit order */
 #define HOST_FILLORDER FILLORDER_LSB2MSB
+
+#define snprintf _snprintf
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
@@ -128,3 +151,10 @@ typedef	long int32;
 #endif /* _WIN32_WCE */
 
 #endif /* __APPLE__/!__APPLE__ */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

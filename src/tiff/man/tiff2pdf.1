@@ -1,4 +1,4 @@
-.\" $Id: tiff2pdf.1,v 1.4 2005/11/02 11:07:19 dron Exp $
+.\" $Id: tiff2pdf.1,v 1.7 2010-12-11 22:47:49 faxguy Exp $
 .\" 
 .\"  Copyright (c) 2003 Ross Finlayson
 .\" 
@@ -24,16 +24,17 @@
 .\" Process this file with
 .\" groff -man -Tascii tiff2pdf.1
 .\"
-.TH TIFF2PDF 1 "November 2, 2005" "libtiff"
+.TH TIFF2PDF 1 "April 20, 2006" "libtiff"
 .SH NAME
-tiff2pdf - convert a TIFF image to a PDF document
+tiff2pdf \- convert a TIFF image to a PDF document
 .SH SYNOPSIS
-.B tiff2pdf [
+.B tiff2pdf
+[
 .I options 
-.B ] 
+] 
 .I input.tiff
 .SH DESCRIPTION
-.B tiff2pdf
+.I tiff2pdf
 opens a TIFF image and writes a PDF document to standard output.
 .PP
 The program converts one TIFF file to one PDF file, including multiple page 
@@ -50,7 +51,7 @@ If the input TIFF file is of huge dimensions (greater than 10000 pixels height
 or width) convert the input image to a tiled TIFF if it is not already.
 .PP
 The standard output is standard output.  Set the output file name with the 
-.BI -o output.pdf
+.BI \-o " output.pdf"
 option.
 .PP
 All black and white files are compressed into a single strip CCITT G4 Fax
@@ -107,11 +108,11 @@ length can be set by the
 option, the default unit is inch.
 .PP
 Various items of the output document information can be set with the
-.B \-e,
-.B \-c, 
-.B \-a,
-.B \-t,
-.B \-s,
+.BR \-e ,
+.BR \-c , 
+.BR \-a ,
+.BR \-t ,
+.BR \-s ,
 and
 .B \-k
 options.  Setting the argument of the option to "" for these 
@@ -123,17 +124,23 @@ The Portable Document Format (PDF) specification is copyrighted by Adobe
 Systems, Incorporated.
 .SH OPTIONS
 .TP
-.BI \-o output-file
-Set the output to go to file 
+.BI \-o " output-file"
+Set the output to go to file.
 .I output-file
 .TP
 .B \-j  
-Compress with JPEG (requires libjpeg configured with libtiff).
+Compress with JPEG (requires
+.I libjpeg
+configured with
+.IR libtiff ).
 .TP
 .B \-z  
-Compress with Zip/Deflate (requires zlib configured with libtiff).
+Compress with Zip/Deflate (requires
+.I zlib
+configured with
+.IR libtiff ).
 .TP
-.BI \-q quality
+.BI \-q " quality"
 Set the compression quality, 1-100 for JPEG.
 .TP
 .B \-n
@@ -141,7 +148,7 @@ Do not allow data to be converted without uncompressing, no compressed
 data passthrough.
 .TP
 .BI \-b
-Set PDF "Interpolate" user preference.
+Set PDF ``Interpolate'' user preference.
 .TP
 .B \-d  
 Do not compress (decompress).
@@ -149,95 +156,98 @@ Do not compress (decompress).
 .B \-i  
 Invert colors.
 .TP
-.BI \-p paper-size
-Set paper size, eg "letter", "legal", "A4".
+.BI \-p " paper-size"
+Set paper size, e.g.,
+.BR letter ,
+.BR legal ,
+.BR A4 .
 .TP
-.BI \-u [i|m]
+.B \-F
+Cause the tiff to fill the PDF page.
+.TP
+.BR \-u " [" i | m ]
 Set distance unit,
-.I i
+.B i
 for inch, 
-.I m
+.B m
 for centimeter.
 .TP
-.BI \-w width
+.BI \-w " width"
 Set width in units.
 .TP
-.BI \-l length
+.BI \-l " length"
 Set length in units.
 .TP
-.BI \-x xres
+.BI \-x " xres"
 Set x/width resolution default.
 .TP
-.BI \-y yres
+.BI \-y " yres"
 Set y/length resolution default.
 .TP
-.BI \-r [d|o]
+.BR \-r " [" d | o ]
 Set
-.I d
+.B d
 for resolution default for images without resolution, 
-.I o for resolution override for all images.
+.B o
+for resolution override for all images.
 .TP
 .BI \-f
-Set PDF "Fit Window" user preference.
+Set PDF ``Fit Window'' user preference.
 .TP
-.BI \-e YYYYMMDDHHMMSS
+.BI \-e " YYYYMMDDHHMMSS"
 Set document information date, overrides image or current date/time default,
 .I YYYYMMDDHHMMSS.
 .TP
-.BI \-c creator
+.BI \-c " creator"
 Set document information creator, overrides image software default.
 .TP
-.BI \-a author
-Set document information author, overrides image artist default
+.BI \-a " author"
+Set document information author, overrides image artist default.
 .TP
-.BI \-t title
-Set document information title, overrides image document name default
+.BI \-t " title"
+Set document information title, overrides image document name default.
 .TP
-.BI \-s subject
-Set document information subject, overrides image image description default
+.BI \-s " subject"
+Set document information subject, overrides image image description default.
 .TP
-.BI \-k keywords
+.BI \-k " keywords"
 Set document information keywords.
 .TP
 .B \-h  
 List usage reminder to stderr and exit.
-.TP
 .SH EXAMPLES
 .TP
 The following example would generate the file output.pdf from input.tiff.
-.PP
 .RS
-.NF
-tiff2pdf -o output.pdf input.tiff
-.FI
+.nf
+tiff2pdf \-o output.pdf input.tiff
+.fi
 .RE
 .PP
 The following example would generate PDF output from input.tiff and write it 
 to standard output.
-.PP
 .RS
-.NF
+.nf
 tiff2pdf input.tiff
-.FI
+.fi
 .RE
 .PP
 The following example would generate the file output.pdf from input.tiff, 
 putting the image pages on a letter sized page, compressing the output 
-with JPEG, with JPEG quality 75, setting the title to "Document", and setting 
-the "Fit Window" option.
-.PP
+with JPEG, with JPEG quality 75, setting the title to ``Document'', and setting 
+the ``Fit Window'' option.
 .RS
-.NF
-tiff2pdf -p letter -j -q 75 -t "Document" -f -o output.pdf input.tiff
-.FI
+.nf
+tiff2pdf \-p letter \-j \-q 75 \-t "Document" \-f \-o output.pdf input.tiff
+.fi
 .RE
 .SH BUGS
 Please report bugs via the web interface at 
 .IP
 \%http://bugzilla.remotesensing.org/enter_bug.cgi?product=libtiff
 .SH "SEE ALSO"
-.BR libtiff (3) ,
-.BR tiffcp (1) , 
+.BR libtiff (3),
+.BR tiffcp (1), 
 .BR tiff2ps (1)
 .PP
 Libtiff library home page:

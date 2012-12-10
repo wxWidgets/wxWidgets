@@ -1,4 +1,4 @@
-.\" $Id: tiffdither.1,v 1.3 2005/11/02 11:07:19 dron Exp $
+.\" $Id: tiffdither.1,v 1.4 2006-04-20 12:17:19 dron Exp $
 .\"
 .\" Copyright (c) 1990-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -102,11 +102,15 @@ By default,
 will create a new file with the same fill order as the original.
 Specifying
 .B "\-f lsb2msb"
-will force data to be written with the FillOrder tag set to
+will force data to be written with the
+.I Fill\%Order
+tag set to
 .SM LSB2MSB ,
 while
 .B "\-f msb2lsb"
-will force data to be written with the FillOrder tag set to
+will force data to be written with the
+.I Fill\%Order
+tag set to
 .SM MSB2LSB .
 .TP
 .B \-t

@@ -65,36 +65,51 @@
  * State block for each open TIFF
  * file using ZIP compression/decompression.
  */
-typedef	struct {
+typedef struct {
 	TIFFPredictorState predict;
-	z_stream	stream;
-	int		zipquality;		/* compression level */
-	int		state;			/* state flags */
-#define	ZSTATE_INIT	0x1		/* zlib setup successfully */
+        z_stream        stream;
+	int             zipquality;            /* compression level */
+	int             state;                 /* state flags */
+#define ZSTATE_INIT_DECODE 0x01
+#define ZSTATE_INIT_ENCODE 0x02
 
-	TIFFVGetMethod	vgetparent;		/* super-class method */
-	TIFFVSetMethod	vsetparent;		/* super-class method */
+	TIFFVGetMethod  vgetparent;            /* super-class method */
+	TIFFVSetMethod  vsetparent;            /* super-class method */
 } ZIPState;
 
-#define	ZState(tif)		((ZIPState*) (tif)->tif_data)
-#define	DecoderState(tif)	ZState(tif)
-#define	EncoderState(tif)	ZState(tif)
+#define ZState(tif)             ((ZIPState*) (tif)->tif_data)
+#define DecoderState(tif)       ZState(tif)
+#define EncoderState(tif)       ZState(tif)
 
-static	int ZIPEncode(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int ZIPDecode(TIFF*, tidata_t, tsize_t, tsample_t);
+static int ZIPEncode(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s);
+static int ZIPDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s);
+
+static int
+ZIPFixupTags(TIFF* tif)
+{
+	(void) tif;
+	return (1);
+}
 
 static int
 ZIPSetupDecode(TIFF* tif)
 {
-	ZIPState* sp = DecoderState(tif);
 	static const char module[] = "ZIPSetupDecode";
+	ZIPState* sp = DecoderState(tif);
 
 	assert(sp != NULL);
+        
+        /* if we were last encoding, terminate this mode */
+	if (sp->state & ZSTATE_INIT_ENCODE) {
+	    deflateEnd(&sp->stream);
+	    sp->state = 0;
+	}
+
 	if (inflateInit(&sp->stream) != Z_OK) {
-		TIFFErrorExt(tif->tif_clientdata, module, "%s: %s", tif->tif_name, sp->stream.msg);
+		TIFFErrorExt(tif->tif_clientdata, module, "%s", sp->stream.msg);
 		return (0);
 	} else {
-		sp->state |= ZSTATE_INIT;
+		sp->state |= ZSTATE_INIT_DECODE;
 		return (1);
 	}
 }
@@ -103,66 +118,103 @@ ZIPSetupDecode(TIFF* tif)
  * Setup state for decoding a strip.
  */
 static int
-ZIPPreDecode(TIFF* tif, tsample_t s)
+ZIPPreDecode(TIFF* tif, uint16 s)
 {
+	static const char module[] = "ZIPPreDecode";
 	ZIPState* sp = DecoderState(tif);
 
 	(void) s;
 	assert(sp != NULL);
+
+	if( (sp->state & ZSTATE_INIT_DECODE) == 0 )
+            tif->tif_setupdecode( tif );
+
 	sp->stream.next_in = tif->tif_rawdata;
-	sp->stream.avail_in = tif->tif_rawcc;
+	assert(sizeof(sp->stream.avail_in)==4);  /* if this assert gets raised,
+	    we need to simplify this code to reflect a ZLib that is likely updated
+	    to deal with 8byte memory sizes, though this code will respond
+	    apropriately even before we simplify it */
+	sp->stream.avail_in = (uInt) tif->tif_rawcc;
+	if ((tmsize_t)sp->stream.avail_in != tif->tif_rawcc)
+	{
+		TIFFErrorExt(tif->tif_clientdata, module, "ZLib cannot deal with buffers this size");
+		return (0);
+	}
 	return (inflateReset(&sp->stream) == Z_OK);
 }
 
 static int
-ZIPDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
+ZIPDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s)
 {
-	ZIPState* sp = DecoderState(tif);
 	static const char module[] = "ZIPDecode";
+	ZIPState* sp = DecoderState(tif);
 
 	(void) s;
 	assert(sp != NULL);
+	assert(sp->state == ZSTATE_INIT_DECODE);
+
+        sp->stream.next_in = tif->tif_rawcp;
+	sp->stream.avail_in = (uInt) tif->tif_rawcc;
+        
 	sp->stream.next_out = op;
-	sp->stream.avail_out = occ;
+	assert(sizeof(sp->stream.avail_out)==4);  /* if this assert gets raised,
+	    we need to simplify this code to reflect a ZLib that is likely updated
+	    to deal with 8byte memory sizes, though this code will respond
+	    apropriately even before we simplify it */
+	sp->stream.avail_out = (uInt) occ;
+	if ((tmsize_t)sp->stream.avail_out != occ)
+	{
+		TIFFErrorExt(tif->tif_clientdata, module, "ZLib cannot deal with buffers this size");
+		return (0);
+	}
 	do {
 		int state = inflate(&sp->stream, Z_PARTIAL_FLUSH);
 		if (state == Z_STREAM_END)
 			break;
 		if (state == Z_DATA_ERROR) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "%s: Decoding error at scanline %d, %s",
-			    tif->tif_name, tif->tif_row, sp->stream.msg);
+			    "Decoding error at scanline %lu, %s",
+			    (unsigned long) tif->tif_row, sp->stream.msg);
 			if (inflateSync(&sp->stream) != Z_OK)
 				return (0);
 			continue;
 		}
 		if (state != Z_OK) {
-			TIFFErrorExt(tif->tif_clientdata, module, "%s: zlib error: %s",
-			    tif->tif_name, sp->stream.msg);
+			TIFFErrorExt(tif->tif_clientdata, module, "ZLib error: %s",
+			    sp->stream.msg);
 			return (0);
 		}
 	} while (sp->stream.avail_out > 0);
 	if (sp->stream.avail_out != 0) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "%s: Not enough data at scanline %d (short %d bytes)",
-		    tif->tif_name, tif->tif_row, sp->stream.avail_out);
+		    "Not enough data at scanline %lu (short " TIFF_UINT64_FORMAT " bytes)",
+		    (unsigned long) tif->tif_row, (TIFF_UINT64_T) sp->stream.avail_out);
 		return (0);
 	}
+
+        tif->tif_rawcp = sp->stream.next_in;
+        tif->tif_rawcc = sp->stream.avail_in;
+
 	return (1);
 }
 
 static int
 ZIPSetupEncode(TIFF* tif)
 {
-	ZIPState* sp = EncoderState(tif);
 	static const char module[] = "ZIPSetupEncode";
+	ZIPState* sp = EncoderState(tif);
 
 	assert(sp != NULL);
+	if (sp->state & ZSTATE_INIT_DECODE) {
+		inflateEnd(&sp->stream);
+		sp->state = 0;
+	}
+
 	if (deflateInit(&sp->stream, sp->zipquality) != Z_OK) {
-		TIFFErrorExt(tif->tif_clientdata, module, "%s: %s", tif->tif_name, sp->stream.msg);
+		TIFFErrorExt(tif->tif_clientdata, module, "%s", sp->stream.msg);
 		return (0);
 	} else {
-		sp->state |= ZSTATE_INIT;
+		sp->state |= ZSTATE_INIT_ENCODE;
 		return (1);
 	}
 }
@@ -171,14 +223,27 @@ ZIPSetupEncode(TIFF* tif)
  * Reset encoding state at the start of a strip.
  */
 static int
-ZIPPreEncode(TIFF* tif, tsample_t s)
+ZIPPreEncode(TIFF* tif, uint16 s)
 {
+	static const char module[] = "ZIPPreEncode";
 	ZIPState *sp = EncoderState(tif);
 
 	(void) s;
 	assert(sp != NULL);
+	if( sp->state != ZSTATE_INIT_ENCODE )
+            tif->tif_setupencode( tif );
+
 	sp->stream.next_out = tif->tif_rawdata;
+	assert(sizeof(sp->stream.avail_out)==4);  /* if this assert gets raised,
+	    we need to simplify this code to reflect a ZLib that is likely updated
+	    to deal with 8byte memory sizes, though this code will respond
+	    apropriately even before we simplify it */
 	sp->stream.avail_out = tif->tif_rawdatasize;
+	if ((tmsize_t)sp->stream.avail_out != tif->tif_rawdatasize)
+	{
+		TIFFErrorExt(tif->tif_clientdata, module, "ZLib cannot deal with buffers this size");
+		return (0);
+	}
 	return (deflateReset(&sp->stream) == Z_OK);
 }
 
@@ -186,25 +251,37 @@ ZIPPreEncode(TIFF* tif, tsample_t s)
  * Encode a chunk of pixels.
  */
 static int
-ZIPEncode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
+ZIPEncode(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 {
-	ZIPState *sp = EncoderState(tif);
 	static const char module[] = "ZIPEncode";
+	ZIPState *sp = EncoderState(tif);
+
+	assert(sp != NULL);
+	assert(sp->state == ZSTATE_INIT_ENCODE);
 
 	(void) s;
 	sp->stream.next_in = bp;
-	sp->stream.avail_in = cc;
+	assert(sizeof(sp->stream.avail_in)==4);  /* if this assert gets raised,
+	    we need to simplify this code to reflect a ZLib that is likely updated
+	    to deal with 8byte memory sizes, though this code will respond
+	    apropriately even before we simplify it */
+	sp->stream.avail_in = (uInt) cc;
+	if ((tmsize_t)sp->stream.avail_in != cc)
+	{
+		TIFFErrorExt(tif->tif_clientdata, module, "ZLib cannot deal with buffers this size");
+		return (0);
+	}
 	do {
 		if (deflate(&sp->stream, Z_NO_FLUSH) != Z_OK) {
-			TIFFErrorExt(tif->tif_clientdata, module, "%s: Encoder error: %s",
-			    tif->tif_name, sp->stream.msg);
+			TIFFErrorExt(tif->tif_clientdata, module, "Encoder error: %s",
+			    sp->stream.msg);
 			return (0);
 		}
 		if (sp->stream.avail_out == 0) {
 			tif->tif_rawcc = tif->tif_rawdatasize;
 			TIFFFlushData1(tif);
 			sp->stream.next_out = tif->tif_rawdata;
-			sp->stream.avail_out = tif->tif_rawdatasize;
+			sp->stream.avail_out = (uInt) tif->tif_rawdatasize;  /* this is a safe typecast, as check is made already in ZIPPreEncode */
 		}
 	} while (sp->stream.avail_in > 0);
 	return (1);
@@ -217,8 +294,8 @@ ZIPEncode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 static int
 ZIPPostEncode(TIFF* tif)
 {
-	ZIPState *sp = EncoderState(tif);
 	static const char module[] = "ZIPPostEncode";
+	ZIPState *sp = EncoderState(tif);
 	int state;
 
 	sp->stream.avail_in = 0;
@@ -227,19 +304,18 @@ ZIPPostEncode(TIFF* tif)
 		switch (state) {
 		case Z_STREAM_END:
 		case Z_OK:
-		    if ((int)sp->stream.avail_out != (int)tif->tif_rawdatasize)
-                    {
-			    tif->tif_rawcc =
-				tif->tif_rawdatasize - sp->stream.avail_out;
-			    TIFFFlushData1(tif);
-			    sp->stream.next_out = tif->tif_rawdata;
-			    sp->stream.avail_out = tif->tif_rawdatasize;
-		    }
-		    break;
+			if ((tmsize_t)sp->stream.avail_out != tif->tif_rawdatasize)
+			{
+				tif->tif_rawcc =  tif->tif_rawdatasize - sp->stream.avail_out;
+				TIFFFlushData1(tif);
+				sp->stream.next_out = tif->tif_rawdata;
+				sp->stream.avail_out = (uInt) tif->tif_rawdatasize;  /* this is a safe typecast, as check is made already in ZIPPreEncode */
+			}
+			break;
 		default:
-			TIFFErrorExt(tif->tif_clientdata, module, "%s: zlib error: %s",
-			tif->tif_name, sp->stream.msg);
-		    return (0);
+			TIFFErrorExt(tif->tif_clientdata, module, "ZLib error: %s",
+			    sp->stream.msg);
+			return (0);
 		}
 	} while (state != Z_STREAM_END);
 	return (1);
@@ -257,12 +333,12 @@ ZIPCleanup(TIFF* tif)
 	tif->tif_tagmethods.vgetfield = sp->vgetparent;
 	tif->tif_tagmethods.vsetfield = sp->vsetparent;
 
-	if (sp->state&ZSTATE_INIT) {
-		/* NB: avoid problems in the library */
-		if (tif->tif_mode == O_RDONLY)
-			inflateEnd(&sp->stream);
-		else
-			deflateEnd(&sp->stream);
+	if (sp->state & ZSTATE_INIT_ENCODE) {
+		deflateEnd(&sp->stream);
+		sp->state = 0;
+	} else if( sp->state & ZSTATE_INIT_DECODE) {
+		inflateEnd(&sp->stream);
+		sp->state = 0;
 	}
 	_TIFFfree(sp);
 	tif->tif_data = NULL;
@@ -271,19 +347,19 @@ ZIPCleanup(TIFF* tif)
 }
 
 static int
-ZIPVSetField(TIFF* tif, ttag_t tag, va_list ap)
+ZIPVSetField(TIFF* tif, uint32 tag, va_list ap)
 {
-	ZIPState* sp = ZState(tif);
 	static const char module[] = "ZIPVSetField";
+	ZIPState* sp = ZState(tif);
 
 	switch (tag) {
 	case TIFFTAG_ZIPQUALITY:
-		sp->zipquality = va_arg(ap, int);
-		if (tif->tif_mode != O_RDONLY && (sp->state&ZSTATE_INIT)) {
+		sp->zipquality = (int) va_arg(ap, int);
+		if ( sp->state&ZSTATE_INIT_ENCODE ) {
 			if (deflateParams(&sp->stream,
 			    sp->zipquality, Z_DEFAULT_STRATEGY) != Z_OK) {
-				TIFFErrorExt(tif->tif_clientdata, module, "%s: zlib error: %s",
-				    tif->tif_name, sp->stream.msg);
+				TIFFErrorExt(tif->tif_clientdata, module, "ZLib error: %s",
+				    sp->stream.msg);
 				return (0);
 			}
 		}
@@ -295,7 +371,7 @@ ZIPVSetField(TIFF* tif, ttag_t tag, va_list ap)
 }
 
 static int
-ZIPVGetField(TIFF* tif, ttag_t tag, va_list ap)
+ZIPVGetField(TIFF* tif, uint32 tag, va_list ap)
 {
 	ZIPState* sp = ZState(tif);
 
@@ -309,23 +385,32 @@ ZIPVGetField(TIFF* tif, ttag_t tag, va_list ap)
 	return (1);
 }
 
-static const TIFFFieldInfo zipFieldInfo[] = {
-    { TIFFTAG_ZIPQUALITY,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
-      TRUE,	FALSE,	"" },
+static const TIFFField zipFields[] = {
+    { TIFFTAG_ZIPQUALITY, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT, TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, TRUE, FALSE, "", NULL },
 };
 
 int
 TIFFInitZIP(TIFF* tif, int scheme)
 {
+	static const char module[] = "TIFFInitZIP";
 	ZIPState* sp;
 
 	assert( (scheme == COMPRESSION_DEFLATE)
 		|| (scheme == COMPRESSION_ADOBE_DEFLATE));
 
 	/*
+	 * Merge codec-specific tag information.
+	 */
+	if (!_TIFFMergeFields(tif, zipFields, TIFFArrayCount(zipFields))) {
+		TIFFErrorExt(tif->tif_clientdata, module,
+			     "Merging Deflate codec-specific tags failed");
+		return 0;
+	}
+
+	/*
 	 * Allocate state block so tag methods have storage to record values.
 	 */
-	tif->tif_data = (tidata_t) _TIFFmalloc(sizeof (ZIPState));
+	tif->tif_data = (uint8*) _TIFFmalloc(sizeof (ZIPState));
 	if (tif->tif_data == NULL)
 		goto bad;
 	sp = ZState(tif);
@@ -335,10 +420,8 @@ TIFFInitZIP(TIFF* tif, int scheme)
 	sp->stream.data_type = Z_BINARY;
 
 	/*
-	 * Merge codec-specific tag information and
-	 * override parent get/set field methods.
+	 * Override parent get/set field methods.
 	 */
-	_TIFFMergeFieldInfo(tif, zipFieldInfo, TIFFArrayCount(zipFieldInfo));
 	sp->vgetparent = tif->tif_tagmethods.vgetfield;
 	tif->tif_tagmethods.vgetfield = ZIPVGetField; /* hook for codec tags */
 	sp->vsetparent = tif->tif_tagmethods.vsetfield;
@@ -351,11 +434,12 @@ TIFFInitZIP(TIFF* tif, int scheme)
 	/*
 	 * Install codec methods.
 	 */
+	tif->tif_fixuptags = ZIPFixupTags; 
 	tif->tif_setupdecode = ZIPSetupDecode;
 	tif->tif_predecode = ZIPPreDecode;
 	tif->tif_decoderow = ZIPDecode;
 	tif->tif_decodestrip = ZIPDecode;
-	tif->tif_decodetile = ZIPDecode;
+	tif->tif_decodetile = ZIPDecode;  
 	tif->tif_setupencode = ZIPSetupEncode;
 	tif->tif_preencode = ZIPPreEncode;
 	tif->tif_postencode = ZIPPostEncode;
@@ -369,10 +453,17 @@ TIFFInitZIP(TIFF* tif, int scheme)
 	(void) TIFFPredictorInit(tif);
 	return (1);
 bad:
-	TIFFErrorExt(tif->tif_clientdata, "TIFFInitZIP",
+	TIFFErrorExt(tif->tif_clientdata, module,
 		     "No space for ZIP state block");
 	return (0);
 }
 #endif /* ZIP_SUPORT */
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

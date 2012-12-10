@@ -35,6 +35,10 @@
 # include <unistd.h>
 #endif
 
+#ifdef NEED_LIBPORT
+# include "libport.h"
+#endif
+
 #include "tiffio.h"
 
 #define	streq(a,b)	(strcmp(a,b) == 0)
@@ -361,7 +365,7 @@ static struct cpTag {
     { TIFFTAG_DATETIME,			1, TIFF_ASCII },
     { TIFFTAG_ARTIST,			1, TIFF_ASCII },
     { TIFFTAG_HOSTCOMPUTER,		1, TIFF_ASCII },
-    { TIFFTAG_WHITEPOINT,		1, TIFF_RATIONAL },
+    { TIFFTAG_WHITEPOINT,		2, TIFF_RATIONAL },
     { TIFFTAG_PRIMARYCHROMATICITIES,	(uint16) -1,TIFF_RATIONAL },
     { TIFFTAG_HALFTONEHINTS,		2, TIFF_SHORT },
     { TIFFTAG_BADFAXLINES,		1, TIFF_LONG },
@@ -422,3 +426,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

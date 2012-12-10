@@ -1,4 +1,4 @@
-.\" $Id: TIFFSetField.3tiff,v 1.4 2006/01/02 23:50:44 bfriesen Exp $
+.\" $Id: TIFFSetField.3tiff,v 1.5 2010-05-06 02:54:46 olivier Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -146,7 +146,7 @@ TIFFTAG_PHOTOSHOP	?	uint32,void*	count, data
 TIFFTAG_PLANARCONFIG	1	uint16	\(dg
 TIFFTAG_PREDICTOR	1	uint16	\(dg
 TIFFTAG_PRIMARYCHROMATICITIES	1	float*	6-entry array
-TIFFTAG_REFERENCEBLACKWHITE	1	float*	\(dg 2*SamplesPerPixel array
+TIFFTAG_REFERENCEBLACKWHITE	1	float*	\(dg 6-entry array
 TIFFTAG_RESOLUTIONUNIT	1	uint16
 TIFFTAG_RICHTIFFIPTC	2	uint32,void*	count, data
 TIFFTAG_ROWSPERSTRIP	1	uint32	\(dg must be > 0

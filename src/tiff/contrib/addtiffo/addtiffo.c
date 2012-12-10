@@ -28,6 +28,10 @@
  ******************************************************************************
  *
  * $Log: addtiffo.c,v $
+ * Revision 1.7  2010-06-08 18:55:15  bfriesen
+ * * contrib: Add an emacs formatting mode footer to all source files
+ * so that emacs can be effectively used.
+ *
  * Revision 1.6  2005/12/16 05:59:55  fwarmerdam
  * Major upgrade to support YCbCr subsampled jpeg images
  *
@@ -163,3 +167,10 @@ int main( int argc, char ** argv )
 
     return( 0 );
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.15 2006/03/23 14:54:02 dron Exp $
+# $Id: Makefile.vc,v 1.22 2009-06-23 18:25:43 fwarmerdam Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@ak4719.spb.edu>
 #
@@ -29,7 +29,7 @@
 
 !INCLUDE ..\nmake.opt
 
-INCL	= -I. $(JPEG_INCLUDE) $(ZLIB_INCLUDE)
+INCL	= -I. $(JPEG_INCLUDE) $(ZLIB_INCLUDE) $(JBIG_INCLUDE)
 
 !IFDEF USE_WIN_CRT_LIB
 OBJ_SYSDEP_MODULE = tif_unix.obj
@@ -53,7 +53,9 @@ OBJ	= \
 	tif_fax3.obj \
 	tif_fax3sm.obj \
 	tif_getimage.obj \
+	tif_jbig.obj \
 	tif_jpeg.obj \
+	tif_jpeg_12.obj \
 	tif_ojpeg.obj \
 	tif_flush.obj \
 	tif_luv.obj \
@@ -78,11 +80,11 @@ OBJ	= \
 
 all:	libtiff.lib $(DLLNAME)
 
-tif_config.h:	tif_config.h.vc
-	copy tif_config.h.vc tif_config.h
+tif_config.h:	tif_config.vc.h
+	copy tif_config.vc.h tif_config.h
 
-tiffconf.h:	tiffconf.h.vc
-	copy tiffconf.h.vc tiffconf.h
+tiffconf.h:	tiffconf.vc.h
+	copy tiffconf.vc.h tiffconf.h
 
 libtiff.lib:	tif_config.h tiffconf.h $(OBJ)
 	$(AR) /out:libtiff.lib $(OBJ) $(LIBS)
@@ -92,7 +94,9 @@ $(DLLNAME):	tif_config.h tiffconf.h libtiff.def $(OBJ)
 	/implib:libtiff_i.lib $(OBJ) $(LIBS)
 	
 clean:
+	-del tif_config.h tiffconf.h
 	-del *.obj
 	-del *.lib
 	-del *.dll
-	-del *.exe
+	-del *.dll.manifest
+	-del *.pdb

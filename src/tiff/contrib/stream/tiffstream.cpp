@@ -229,4 +229,10 @@ TiffStream::isOpen(thandle_t fd)
 	return (ts->m_inStream != NULL ||
 		   ts->m_outStream != NULL ||
 		   ts->m_ioStream != NULL);
-}
+}/*
+ * Local Variables:
+ * mode: c++
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

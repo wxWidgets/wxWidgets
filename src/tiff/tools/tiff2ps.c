@@ -36,10 +36,75 @@
 # include <unistd.h>
 #endif
 
+#ifdef NEED_LIBPORT
+# include "libport.h"
+#endif
+
 #include "tiffio.h"
 
 /*
  * Revision history
+ *
+ * 2010-Sep-17
+ *    Richard Nolde: Reinstate code from Feb 2009 that never got
+ *    accepted into CVS with major modifications to handle -H and -W
+ *    options. Replaced original PlaceImage function with several
+ *    new functions that make support for multiple output pages
+ *    from a single image easier to understand. Added additional
+ *    warning messages for incompatible command line options.
+ *    Add new command line options to specify PageOrientation
+ *    Document Structuring Comment for landscape or portrait
+ *    and code to determine the values from ouput width and height
+ *    if not specified on the command line.
+ *    Add new command line option to specify document creator
+ *    as an alterntive to the string "tiff2ps" following model
+ *    of patch submitted by Thomas Jarosch for specifiying a
+ *    document title which is also supported now.
+ *
+ * 2009-Feb-11
+ *    Richard Nolde: Added support for rotations of 90, 180, 270
+ *    and auto using -r <90|180|270|auto>.  Auto picks the best
+ *    fit for the image on the specified paper size (eg portrait
+ *    or landscape) if -h or -w is specified. Rotation is in
+ *    degrees counterclockwise since that is how Postscript does
+ *    it. The auto opption rotates the image 90 degrees ccw to
+ *    produce landscape if that is a better fit than portait.
+ *
+ *    Cleaned up code in TIFF2PS and broke into smaller functions
+ *    to simplify rotations.
+ *
+ *    Identified incompatible options and returned errors, eg
+ *    -i for imagemask operator is only available for Level2 or
+ *    Level3 Postscript in the current implmentation since there
+ *    is a difference in the way the operands are called for Level1
+ *    and there is no function to provide the Level1 version.
+ *    -H was not handled properly if -h and/or -w were specified.
+ *    It should only clip the masked images if the scaled image
+ *    exceeds the maxPageHeight specified with -H.
+ *  
+ *    New design allows for all of the following combinations:
+ *    Conversion of TIFF to Postscript with optional rotations
+ *    of 90, 180, 270, or auto degrees counterclockwise
+ *    Conversion of TIFF to Postscript with entire image scaled
+ *    to maximum of values spedified with -h or -w while
+ *    maintaining aspect ratio. Same rotations apply.
+ *    Conversion of TIFF to Postscript with clipping of output
+ *    viewport to height specified with -H, producing multiple
+ *    pages at this height and original width as needed.
+ *    Same rotations apply.
+ *    Conversion of TIFF to Postscript with image scaled to 
+ *    maximum specified by -h and -w and the resulting scaled
+ *    image is presented in an output viewport clipped by -H height.
+ *    The same rotations apply.
+ *
+ *    Added maxPageWidth option using -W flag. MaxPageHeight and
+ *    MaxPageWidth are mutually exclusive since the aspect ratio
+ *    cannot be maintained if you set both.
+ *    Rewrote PlaceImage to allow maxPageHeight and maxPageWidth
+ *    options to work with values smaller or larger than the
+ *    physical paper size and still preserve the aspect ratio.
+ *    This is accomplished by creating multiple pages across
+ *    as well as down if need be.
  *
  * 2001-Mar-21
  *    I (Bruce A. Mallett) added this revision history comment ;)
@@ -53,8 +118,8 @@
  *    Added an experimental ASCII85 encoder which can be used
  *    only when there is a single buffer of bytes to be encoded.
  *    This version is much faster at encoding a straight-line
- *    buffer of data because it can avoid alot of the loop
- *    overhead of the byte-by-bye version.  To use this version
+ *    buffer of data because it can avoid a lot of the loop
+ *    overhead of the byte-by-byte version.  To use this version
  *    you need to define EXP_ASCII85ENCODER (experimental ...).
  *
  *    Added bug fix given by Michael Schmidt to PS_Lvl2page()
@@ -115,10 +180,15 @@ int	generateEPSF = TRUE;		/* generate Encapsulated PostScript */
 int	PSduplex = FALSE;		/* enable duplex printing */
 int	PStumble = FALSE;		/* enable top edge binding */
 int	PSavoiddeadzone = TRUE;		/* enable avoiding printer deadzone */
-double	maxPageHeight = 0;		/* maximum size to fit on page */
+double	maxPageHeight = 0;		/* maximum height to select from image and print per page */
+double	maxPageWidth  = 0;		/* maximum width  to select from image and print per page */
 double	splitOverlap = 0;		/* amount for split pages to overlag */
-int	rotate = FALSE;			/* rotate image by 180 degrees */
-char	*filename;			/* input filename */
+int	rotation = 0;                   /* optional value for rotation angle */
+int     auto_rotate = 0;                /* rotate image for best fit on the page */
+char	*filename = NULL;		/* input filename */
+char    *title = NULL;                  /* optional document title string */
+char    *creator = NULL;                /* optional document creator string */
+char    pageOrientation[12];            /* set optional PageOrientation DSC to Landscape or Portrait */
 int	useImagemask = FALSE;		/* Use imagemask instead of image operator */
 uint16	res_unit = 0;			/* Resolution units: 2 - inches, 3 - cm */
 
@@ -141,11 +211,22 @@ void	PSRawDataBW(FILE*, TIFF*, uint32, uint32);
 void	Ascii85Init(void);
 void	Ascii85Put(unsigned char code, FILE* fd);
 void	Ascii85Flush(FILE* fd);
-void    PSHead(FILE*, TIFF*, uint32, uint32, double, double, double, double);
+void    PSHead(FILE*, double, double, double, double);
 void	PSTail(FILE*, int);
+int     psStart(FILE *, int, int, int *, double *, double, double, double,
+                double, double, double, double, double, double, double);
+int     psPageSize(FILE *, int, double, double, double, double, double, double);
+int     psRotateImage(FILE *, int, double, double, double, double);
+int     psMaskImage(FILE *, TIFF *, int, int, int *, double, double,
+		    double, double, double, double, double, double, double);
+int     psScaleImage(FILE *, double, int, int, double, double, double, double,
+                     double, double);
+int     get_viewport (double, double, double, double, double *, double *, int);
+int     exportMaskedImage(FILE *, double, double, double, double, int, int,
+			  double, double, double, int, int);
 
 #if	defined( EXP_ASCII85ENCODER)
-int Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw_p, int raw_l );
+tsize_t Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw_p, tsize_t raw_l );
 #endif
 
 static	void usage(int);
@@ -164,7 +245,9 @@ main(int argc, char* argv[])
 	extern int optind;
 	FILE* output = stdout;
 
-	while ((c = getopt(argc, argv, "b:d:h:H:L:i:w:l:o:O:acelmrxyzps1238DT")) != -1)
+        pageOrientation[0] = '\0';
+
+	while ((c = getopt(argc, argv, "b:d:h:H:W:L:i:w:l:o:O:P:C:r:t:acemxyzps1238DT")) != -1)
 		switch (c) {
 		case 'b':
 			bottommargin = atof(optarg);
@@ -172,7 +255,10 @@ main(int argc, char* argv[])
 		case 'c':
 			centered = 1;
 			break;
-		case 'd':
+                case 'C':
+                        creator = optarg;
+                        break;
+		case 'd': /* without -a, this only processes one image at this IFD */
 			dirnum = atoi(optarg);
 			break;
 		case 'D':
@@ -185,7 +271,7 @@ main(int argc, char* argv[])
 			PStumble = TRUE;
 			break;
 		case 'e':
-			PSavoiddeadzone = FALSE;
+                        PSavoiddeadzone = FALSE;
 			generateEPSF = TRUE;
 			break;
 		case 'h':
@@ -193,7 +279,9 @@ main(int argc, char* argv[])
 			break;
 		case 'H':
 			maxPageHeight = atof(optarg);
-			if (pageHeight==0) pageHeight = maxPageHeight;
+			break;
+		case 'W':
+			maxPageWidth = atof(optarg);
 			break;
 		case 'L':
 			splitOverlap = atof(optarg);
@@ -202,7 +290,22 @@ main(int argc, char* argv[])
 			useImagemask = TRUE;
 			break;
 		case 'o':
-			diroff = (uint32) strtoul(optarg, NULL, 0);
+		        switch (optarg[0])
+                          {
+                          case '0':
+                          case '1':
+                          case '2':
+                          case '3':
+                          case '4':
+                          case '5':
+                          case '6':
+                          case '7':
+                          case '8':
+                          case '9': diroff = (uint32) strtoul(optarg, NULL, 0);
+			          break;
+                          default: TIFFError ("-o", "Offset must be a numeric value.");
+			    exit (1);
+			  }
 			break;
 		case 'O':		/* XXX too bad -o is already taken */
 			output = fopen(optarg, "w");
@@ -213,21 +316,57 @@ main(int argc, char* argv[])
 				exit(-2);
 			}
 			break;
+		case 'P':
+                        switch (optarg[0])
+                          {
+                          case 'l':
+                          case 'L': strcpy (pageOrientation, "Landscape");
+			            break; 
+                          case 'p':
+                          case 'P': strcpy (pageOrientation, "Portrait");
+			            break; 
+                          default: TIFFError ("-P", "Page orientation must be Landscape or Portrait");
+			           exit (-1);
+			  }
+			break;
 		case 'l':
 			leftmargin = atof(optarg);
 			break;
-		case 'a':
+		case 'a': /* removed fall through to generate warning below, R Nolde 09-01-2010 */
 			printAll = TRUE;
-			/* fall thru... */
+			break;
 		case 'p':
 			generateEPSF = FALSE;
 			break;
 		case 'r':
-			rotate = TRUE;
+                        if (strcmp (optarg, "auto") == 0)
+			  {
+                          rotation = 0;
+                          auto_rotate = TRUE;
+                          }
+                        else
+			  {
+ 			  rotation = atoi(optarg);
+                          auto_rotate = FALSE;
+			  }
+                        switch (rotation)
+                          {
+			  case   0:
+                          case  90:
+                          case 180:
+                          case 270:
+			    break;
+			  default:
+                            fprintf (stderr, "Rotation angle must be 90, 180, 270 (degrees ccw) or auto\n");
+			    exit (-1);
+			  }
 			break;
 		case 's':
 			printAll = FALSE;
 			break;
+                case 't':
+                        title = optarg;
+                        break;
 		case 'w':
 			pageWidth = atof(optarg);
 			break;
@@ -259,6 +398,67 @@ main(int argc, char* argv[])
 		case '?':
 			usage(-1);
 		}
+
+        if (useImagemask == TRUE)
+          {
+	  if ((level2 == FALSE) && (level3 == FALSE))
+            {
+	    TIFFError ("-m "," imagemask operator requres Postscript Level2 or Level3");
+	    exit (1);
+            }
+          }
+
+        if (pageWidth && (maxPageWidth > pageWidth))
+	  {
+	  TIFFError ("-W", "Max viewport width cannot exceed page width");
+	  exit (1);
+          }
+
+	if (pageHeight && (maxPageHeight > pageHeight))
+	  {
+	  TIFFError ("-H", "Max viewport height cannot exceed page height");
+	  exit (1);
+          }
+
+        /* auto rotate requires a specified page width and height */
+        if (auto_rotate == TRUE)
+          {
+	  if ((pageWidth == 0) || (pageHeight == 0))
+	    TIFFWarning ("-r auto", " requires page height and width specified with -h and -w");
+
+          if ((maxPageWidth > 0) || (maxPageHeight > 0))
+            {
+	    TIFFError ("-r auto", " is incompatible with maximum page width/height specified by -H or -W");
+            exit (1);
+            }
+          }
+        if ((maxPageWidth > 0) && (maxPageHeight > 0))
+            {
+	    TIFFError ("-H and -W", " Use only one of -H or -W to define a viewport");
+            exit (1);
+            }
+
+        if ((generateEPSF == TRUE) && (printAll == TRUE))
+          {
+	  TIFFError(" -e and -a", "Warning: Cannot generate Encapsulated Postscript for multiple images");
+	  generateEPSF = FALSE;
+          }
+
+        if ((generateEPSF == TRUE) && (PSduplex == TRUE))
+          {
+	  TIFFError(" -e and -D", "Warning: Encapsulated Postscript does not support Duplex option");
+	  PSduplex = FALSE;
+          }
+
+        if ((generateEPSF == TRUE) && (PStumble == TRUE))
+          {
+	  TIFFError(" -e and -T", "Warning: Encapsulated Postscript does not support Top Edge Binding option");
+	  PStumble = FALSE;
+          }
+
+        if ((generateEPSF == TRUE) && (PSavoiddeadzone == TRUE))
+	  PSavoiddeadzone = FALSE;
+
 	for (; argc - optind > 0; optind++) {
 		TIFF* tif = TIFFOpen(filename = argv[optind], "r");
 		if (tif != NULL) {
@@ -269,7 +469,11 @@ main(int argc, char* argv[])
 			    !TIFFSetSubDirectory(tif, diroff))
 				return (-1);
 			np = TIFF2PS(output, tif, pageWidth, pageHeight,
-				leftmargin, bottommargin, centered);
+				     leftmargin, bottommargin, centered);
+                        if (np < 0)
+                          {
+			  TIFFError("Error", "Unable to process %s", filename);
+                          }
 			TIFFClose(tif);
 		}
 	}
@@ -350,6 +554,7 @@ checkImage(TIFF* tif)
 	switch (bitspersample) {
 	case 1: case 2:
 	case 4: case 8:
+	case 16:
 		break;
 	default:
 		TIFFError(filename, "Can not handle %d-bit/sample image",
@@ -402,7 +607,8 @@ PhotoshopBanner(FILE* fd, uint32 w, uint32 h, int bs, int nc, char* startline)
 	fprintf(fd, "\"\n");
 }
 
-/*
+/*   Convert pixel width and height pw, ph, to points pprw, pprh 
+ *   using image resolution and resolution units from TIFF tags.
  *   pw : image width in pixels
  *   ph : image height in pixels
  * pprw : image width in PS units (72 dpi)
@@ -415,8 +621,9 @@ setupPageState(TIFF* tif, uint32* pw, uint32* ph, double* pprw, double* pprh)
 
 	TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, pw);
 	TIFFGetField(tif, TIFFTAG_IMAGELENGTH, ph);
-	if (res_unit == 0)
-		TIFFGetFieldDefaulted(tif, TIFFTAG_RESOLUTIONUNIT, &res_unit);
+	if (res_unit == 0)	/* Not specified as command line option */
+		if (!TIFFGetFieldDefaulted(tif, TIFFTAG_RESOLUTIONUNIT, &res_unit))
+			res_unit = RESUNIT_INCH;
 	/*
 	 * Calculate printable area.
 	 */
@@ -432,13 +639,28 @@ setupPageState(TIFF* tif, uint32* pw, uint32* ph, double* pprw, double* pprh)
 		break;
 	case RESUNIT_INCH:
 		break;
-	case RESUNIT_NONE:
-	default:
-		xres *= PS_UNIT_SIZE, yres *= PS_UNIT_SIZE;
+	case RESUNIT_NONE:	/* Subsequent code assumes we have converted to inches! */
+		res_unit = RESUNIT_INCH;
+		break;
+	default:	/* Last ditch guess for unspecified RESUNIT case
+			 * check that the resolution is not inches before scaling it.
+			 * Moved to end of function with additional check, RJN, 08-31-2010
+			 * if (xres != PS_UNIT_SIZE || yres != PS_UNIT_SIZE)
+			 * xres *= PS_UNIT_SIZE, yres *= PS_UNIT_SIZE;
+			 */
 		break;
 	}
-	*pprh = PSUNITS(*ph, yres);
-	*pprw = PSUNITS(*pw, xres);
+	/* This is a hack to deal with images that have no meaningful Resolution Size
+	 * but may have x and/or y resolutions of 1 pixel per undefined unit.
+	 */
+	if ((xres > 1.0) && (xres != PS_UNIT_SIZE))
+		*pprw = PSUNITS(*pw, xres);
+	else
+		*pprw = PSUNITS(*pw, PS_UNIT_SIZE);
+	if ((yres > 1.0) && (yres != PS_UNIT_SIZE))
+		*pprh = PSUNITS(*ph, yres);
+	else
+		*pprh = PSUNITS(*ph, PS_UNIT_SIZE);
 }
 
 static int
@@ -459,229 +681,922 @@ static	tsize_t	tf_numberstrips;
 static	char *hex = "0123456789abcdef";
 
 /*
- * imagewidth & imageheight are 1/72 inches
- * pagewidth & pageheight are inches
+ * Pagewidth and pageheight are the output size in points,
+ * may refer to values specified with -h and -w, or to
+ * values read from the image if neither -h nor -w are used.
+ * Imagewidth and imageheight are image size in points.
+ * Ximages and Yimages are number of pages across and down.
+ * Only one of maxPageHeight or maxPageWidth can be used.
+ * These are global variables unfortunately.
  */
-int
-PlaceImage(FILE *fp, double pagewidth, double pageheight,
-	   double imagewidth, double imageheight, int splitpage,
-	   double lm, double bm, int cnt)
+int get_subimage_count(double pagewidth,  double pageheight,
+		       double imagewidth, double imageheight,
+		       int *ximages, int *yimages,
+		       int rotation, double scale)
 {
-	double xtran = 0;
-	double ytran = 0;
-	double xscale = 1;
-	double yscale = 1;
-	double left_offset = lm * PS_UNIT_SIZE;
-	double bottom_offset = bm * PS_UNIT_SIZE;
-	double subimageheight;
-	double splitheight;
-	double overlap;
+	int pages = 1;
+	double splitheight = 0;  /* Requested Max Height in points */
+	double splitwidth  = 0;  /* Requested Max Width in points */
+	double overlap     = 0;  /* Repeated edge width in points */
 
-	pagewidth *= PS_UNIT_SIZE;
+	splitheight = maxPageHeight * PS_UNIT_SIZE;
+	splitwidth  = maxPageWidth  * PS_UNIT_SIZE;
+	overlap     = splitOverlap  * PS_UNIT_SIZE;
+	pagewidth  *= PS_UNIT_SIZE;
 	pageheight *= PS_UNIT_SIZE;
 
-	if (maxPageHeight==0)
-		splitheight = 0;
-	else
-		splitheight = maxPageHeight * PS_UNIT_SIZE;
-	overlap = splitOverlap * PS_UNIT_SIZE;
-
-	/*
-	 * WIDTH:
-	 *      if too wide, scrunch to fit
-	 *      else leave it alone
-	 */
-	if (imagewidth <= pagewidth) {
-		xscale = imagewidth;
-	} else {
-		xscale = pagewidth;
+	if ((imagewidth < 1.0) || (imageheight < 1.0))
+	{
+		TIFFError("get_subimage_count", "Invalid image width or height");
+		return (0);
 	}
 
-	/* HEIGHT:
-	 *      if too long, scrunch to fit
-	 *      if too short, move to top of page
-	 */
-	if (imageheight <= pageheight) {
-		yscale = imageheight;
-		ytran = pageheight - imageheight;
-	} else if (imageheight > pageheight &&
-		(splitheight == 0 || imageheight <= splitheight)) {
-		yscale = pageheight;
-	} else /* imageheight > splitheight */ {
-		subimageheight = imageheight - (pageheight-overlap)*splitpage;
-		if (subimageheight <= pageheight) {
-			yscale = imageheight;
-			ytran = pageheight - subimageheight;
-			splitpage = 0;
-		} else if ( subimageheight > pageheight && subimageheight <= splitheight) {
-			yscale = imageheight * pageheight / subimageheight;
-			ytran = 0;
-			splitpage = 0;
-		} else /* sumimageheight > splitheight */ {
-			yscale = imageheight;
-			ytran = pageheight - subimageheight;
-			splitpage++;
-		}
-	}
-	
-	bottom_offset += ytran / (cnt?2:1);
-	if (cnt)
-	    left_offset += xtran / 2;
-	fprintf(fp, "%f %f translate\n", left_offset, bottom_offset);
-	fprintf(fp, "%f %f scale\n", xscale, yscale);
-	if (rotate)
-	    fputs ("1 1 translate 180 rotate\n", fp);
+  switch (rotation)
+    {
+    case 0:
+    case 180: if (splitheight > 0) /* -H maxPageHeight */
+                {
+               if (imageheight > splitheight) /* More than one vertical image segment */
+                 {
+                 if (pagewidth)
+                   *ximages = (int)ceil((scale * imagewidth)  / (pagewidth - overlap));
+                  else
+                   *ximages = 1;
+                 *yimages = (int)ceil((scale * imageheight) / (splitheight - overlap)); /* Max vert pages needed */
+                 }
+                else
+                 {
+                 if (pagewidth)
+                   *ximages = (int)ceil((scale * imagewidth) / (pagewidth - overlap));    /* Max horz pages needed */
+                  else
+                   *ximages = 1;
+                 *yimages = 1;                                                     /* Max vert pages needed */
+                 }
+               }
+              else
+               {
+                if (splitwidth > 0) /* -W maxPageWidth */
+                 {
+                 if (imagewidth >splitwidth)
+                   {
+                   *ximages = (int)ceil((scale * imagewidth)  / (splitwidth - overlap));   /* Max horz pages needed */
+                    if (pageheight)
+                     *yimages = (int)ceil((scale * imageheight) / (pageheight - overlap)); /* Max vert pages needed */
+                    else
+                     *yimages = 1;
+                   }
+                  else
+                   {
+                   *ximages = 1;                                                     /* Max vert pages needed */
+                    if (pageheight)
+                     *yimages = (int)ceil((scale * imageheight) / (pageheight - overlap)); /* Max vert pages needed */
+                    else
+                     *yimages = 1;
+                   }
+                 }
+                else
+                 {
+                 *ximages = 1;
+                 *yimages = 1;
+                 }
+               }
+             break;
+    case 90:
+    case 270: if (splitheight > 0) /* -H maxPageHeight */
+                {
+               if (imagewidth > splitheight) /* More than one vertical image segment */
+                 {
+                 *yimages = (int)ceil((scale * imagewidth) / (splitheight - overlap)); /* Max vert pages needed */
+                  if (pagewidth)
+                   *ximages = (int)ceil((scale * imageheight) / (pagewidth - overlap));   /* Max horz pages needed */
+                  else
+                   *ximages = 1;
+                 }
+                else
+                 {
+                 *yimages = 1;                                                     /* Max vert pages needed */
+                  if (pagewidth)
+                   *ximages = (int)ceil((scale * imageheight) / (pagewidth - overlap));    /* Max horz pages needed */
+                  else
+                   *ximages = 1;
+                 }
+               }
+              else
+               {
+                if (splitwidth > 0) /* -W maxPageWidth */
+                 {
+                 if (imageheight > splitwidth)
+                   {
+                   if (pageheight)
+                     *yimages = (int)ceil((scale * imagewidth) / (pageheight - overlap)); /* Max vert pages needed */
+                    else
+                     *yimages = 1;
+                   *ximages = (int)ceil((scale * imageheight)  / (splitwidth - overlap));   /* Max horz pages needed */
+                   }
+                  else
+                   {
+                   if (pageheight)
+                     *yimages = (int)ceil((scale * imagewidth) / (pageheight - overlap));  /* Max horz pages needed */
+                    else
+                     *yimages = 1;
+                   *ximages = 1;                                                     /* Max vert pages needed */
+                   }
+                 }
+                else
+                 {
+                 *ximages = 1;
+                 *yimages = 1;
+                 }
+               }
+             break;
+    default:  *ximages = 1;
+             *yimages = 1;
+  }
+  pages = (*ximages) * (*yimages);
+  return (pages);
+  }
 
-	return splitpage;
+/* New version of PlaceImage that handles only the translation and rotation
+ * for a single output page.
+ */
+int exportMaskedImage(FILE *fp, double pagewidth, double pageheight,
+                     double imagewidth, double imageheight,
+                      int row, int column,
+                      double left_offset, double bott_offset,
+                     double scale, int center, int rotation)
+  {
+  double xtran = 0.0;
+  double ytran = 0.0;
+
+  double xscale = 1.0;
+  double yscale = 1.0;
+
+  double splitheight    = 0;  /* Requested Max Height in points */
+  double splitwidth     = 0;  /* Requested Max Width in points */
+  double overlap        = 0;  /* Repeated edge width in points */
+  double subimage_height = 0.0;
+
+  splitheight = maxPageHeight * PS_UNIT_SIZE;
+  splitwidth  = maxPageWidth  * PS_UNIT_SIZE;
+  overlap     = splitOverlap  * PS_UNIT_SIZE;
+  xscale = scale * imagewidth;
+  yscale = scale * imageheight;
+
+  if ((xscale < 0.0) || (yscale < 0.0))
+    {
+    TIFFError("exportMaskedImage", "Invalid parameters.");
+    return (-1);
+    }
+
+  /* If images are cropped to a vewport with -H or -W, the output pages are shifted to
+   * the top of each output page rather than the Postscript default lower edge.
+   */
+  switch (rotation)
+    {
+    case 0:
+    case 180: if (splitheight > 0) /* -H maxPageHeight */
+                {
+               if (splitheight < imageheight) /* More than one vertical image segments */
+                 {
+                 xtran = -1.0 * column * (pagewidth - overlap);
+                  subimage_height = imageheight - ((splitheight - overlap) * row);
+                 ytran  = pageheight - subimage_height * (pageheight / splitheight);
+                  }
+                else  /* Only one page in vertical direction */
+                 {
+                 xtran = -1.0 * column * (pagewidth - overlap);
+                  ytran = splitheight - imageheight;
+                 }
+               }
+              else
+               {
+                if (splitwidth > 0) /* maxPageWidth */
+                 {
+                 if (splitwidth < imagewidth)
+                   {
+                   xtran = -1.0  * column * splitwidth;
+                   ytran = -1.0 * row * (pageheight - overlap);
+                    }
+                  else /* Only one page in horizontal direction */
+                   {
+                    ytran = -1.0 * row * (pageheight - overlap);
+                    xtran = 0;
+                   }
+                 }
+                else    /* Simple case, no splitting */
+                 {
+                 ytran = pageheight - imageheight;
+                 xtran = 0;
+                  }
+                }
+              bott_offset += ytran / (center ? 2 : 1);
+              left_offset += xtran / (center ? 2 : 1);
+              break;
+    case  90:
+    case 270:  if (splitheight > 0) /* -H maxPageHeight */
+                {
+               if (splitheight < imagewidth) /* More than one vertical image segments */
+                 {
+                 xtran = -1.0 * column * (pageheight - overlap);
+                 /* Commented code places image at bottom of page instead of top.
+                     ytran = -1.0 * row * splitheight;
+                   */
+                  if (row == 0)
+                    ytran = -1.0 * (imagewidth - splitheight);
+                  else
+                    ytran = -1.0 * (imagewidth - (splitheight - overlap) * (row + 1));
+                  }
+                else  /* Only one page in vertical direction */
+                 {
+                  xtran = -1.0 * column * (pageheight - overlap);
+                  ytran = splitheight - imagewidth;
+                 }
+		}
+              else
+               {
+                if (splitwidth > 0) /* maxPageWidth */
+                 {
+                 if (splitwidth < imageheight)
+                   {
+                    xtran = -1.0  * column * splitwidth;
+                    ytran = -1.0 * row * (pagewidth - overlap);
+                    }
+                  else /* Only one page in horizontal direction */
+                   {
+                    ytran = -1.0 * row * (pagewidth - overlap);
+                    xtran = 0;
+                   }
+                 }
+                else    /* Simple case, no splitting */
+                 {
+                 ytran = pageheight - imageheight;
+                 xtran = 0; /* pagewidth  - imagewidth; */
+                  }
+                }
+              bott_offset += ytran / (center ? 2 : 1);
+              left_offset += xtran / (center ? 2 : 1);
+              break;
+    default:  xtran = 0;
+             ytran = 0;
+    }
+
+  switch (rotation)
+    {
+    case   0: fprintf(fp, "%f %f translate\n", left_offset, bott_offset);
+              fprintf(fp, "%f %f scale\n", xscale, yscale);
+             break;
+    case 180: fprintf(fp, "%f %f translate\n", left_offset, bott_offset);
+              fprintf(fp, "%f %f scale\n1 1 translate 180 rotate\n",  xscale, yscale);
+              break;
+    case  90: fprintf(fp, "%f %f translate\n", left_offset, bott_offset);
+              fprintf(fp, "%f %f scale\n1 0 translate 90 rotate\n", yscale, xscale);
+              break;
+    case 270: fprintf(fp, "%f %f translate\n", left_offset, bott_offset);
+              fprintf(fp, "%f %f scale\n0 1 translate 270 rotate\n", yscale, xscale);
+              break;
+    default:  TIFFError ("exportMaskedImage", "Unsupported rotation angle %d. No rotation", rotation);
+             fprintf( fp, "%f %f scale\n", xscale, yscale);
+              break;
+    }
+
+  return (0);
+  }
+
+/* Rotate an image without scaling or clipping */
+int  psRotateImage (FILE * fd, int rotation, double pswidth, double psheight,
+                    double left_offset, double bottom_offset)
+  {
+  if ((left_offset != 0.0) || (bottom_offset != 0))
+    fprintf (fd, "%f %f translate\n", left_offset, bottom_offset);
+
+  /* Exchange width and height for 90/270 rotations */
+  switch (rotation)
+    {
+    case   0: fprintf (fd, "%f %f scale\n", pswidth, psheight);
+              break;
+    case  90: fprintf (fd, "%f %f scale\n1 0 translate 90 rotate\n", psheight, pswidth);
+              break;
+    case 180: fprintf (fd, "%f %f scale\n1 1 translate 180 rotate\n", pswidth, psheight);
+              break;
+    case 270: fprintf (fd, "%f %f scale\n0 1 translate 270 rotate\n", psheight, pswidth);
+              break;
+    default:  TIFFError ("psRotateImage", "Unsupported rotation %d.", rotation);
+             fprintf( fd, "%f %f scale\n", pswidth, psheight);
+              return (1);
+    }
+  return (0);
+  }
+
+/* Scale and rotate an image to a single output page. */
+int psScaleImage(FILE * fd, double scale, int rotation, int center,
+                 double reqwidth, double reqheight, double pswidth, double psheight,
+                 double left_offset, double bottom_offset)
+  {
+  double hcenter = 0.0, vcenter = 0.0;
+
+  /* Adjust offsets for centering */
+  if (center)
+    {
+    switch (rotation)
+      {
+      case   90: vcenter = (reqheight - pswidth * scale) / 2;
+                hcenter = (reqwidth - psheight * scale) / 2;
+                 fprintf (fd, "%f %f translate\n", hcenter, vcenter);
+                 fprintf (fd, "%f %f scale\n1 0 translate 90 rotate\n", psheight * scale, pswidth * scale);
+                 break;
+      case  180: hcenter = (reqwidth - pswidth * scale) / 2;
+                vcenter = (reqheight - psheight * scale) / 2;
+                 fprintf (fd, "%f %f translate\n", hcenter, vcenter);
+                 fprintf (fd, "%f %f scale\n1 1 translate 180 rotate\n", pswidth * scale, psheight * scale);
+                 break;
+      case  270: vcenter = (reqheight - pswidth * scale) / 2;
+                hcenter = (reqwidth - psheight * scale) / 2;
+                 fprintf (fd, "%f %f translate\n", hcenter, vcenter);
+                 fprintf (fd, "%f %f scale\n0 1 translate 270 rotate\n", psheight * scale, pswidth * scale);
+                 break;
+      case    0:
+      default:   hcenter = (reqwidth - pswidth * scale) / 2;
+                vcenter = (reqheight - psheight * scale) / 2;
+                 fprintf (fd, "%f %f translate\n", hcenter, vcenter);
+                 fprintf (fd, "%f %f scale\n", pswidth * scale, psheight * scale);
+                 break;
+      }
+    }
+  else  /* Not centered */
+    {
+    switch (rotation)
+      {
+      case 0:   fprintf (fd, "%f %f translate\n", left_offset ? left_offset : 0.0,
+                         bottom_offset ? bottom_offset : reqheight - (psheight * scale));
+                fprintf (fd, "%f %f scale\n", pswidth * scale, psheight * scale);
+                break;
+      case 90:  fprintf (fd, "%f %f translate\n", left_offset ? left_offset : 0.0,
+                         bottom_offset ? bottom_offset : reqheight - (pswidth * scale));
+                fprintf (fd, "%f %f scale\n1 0 translate 90 rotate\n", psheight * scale, pswidth * scale);
+                break;
+      case 180: fprintf (fd, "%f %f translate\n", left_offset ? left_offset : 0.0,
+                         bottom_offset ? bottom_offset : reqheight - (psheight * scale));
+                fprintf (fd, "%f %f scale\n1 1 translate 180 rotate\n", pswidth * scale, psheight * scale);
+                break;
+      case 270: fprintf (fd, "%f %f translate\n", left_offset ? left_offset : 0.0,
+                         bottom_offset ? bottom_offset : reqheight - (pswidth * scale));
+                fprintf (fd, "%f %f scale\n0 1 translate 270 rotate\n", psheight * scale, pswidth * scale);
+                break;
+      default:  TIFFError ("psScaleImage", "Unsupported rotation  %d", rotation);
+               fprintf (fd, "%f %f scale\n", pswidth * scale, psheight * scale);
+                return (1);
+      }
+    }
+
+  return (0);
+  }
+
+/* This controls the visible portion of the page which is displayed.
+ * N.B. Setting maxPageHeight no longer sets pageheight if not set explicitly
+ */
+int psPageSize (FILE * fd, int rotation, double pgwidth, double pgheight,
+                double reqwidth, double reqheight, double pswidth, double psheight)
+  {
+  double xscale = 1.0, yscale = 1.0, scale = 1.0;
+  double splitheight;
+  double splitwidth;
+  double new_width;
+  double new_height;
+
+  splitheight = maxPageHeight * PS_UNIT_SIZE;
+  splitwidth  = maxPageWidth  * PS_UNIT_SIZE;
+
+  switch (rotation)
+    {
+    case   0:
+    case 180: if ((splitheight > 0) || (splitwidth > 0))
+                {
+               if (pgwidth != 0 || pgheight != 0)
+                  {
+                 xscale = reqwidth / (splitwidth ? splitwidth : pswidth);
+                 yscale = reqheight / (splitheight ? splitheight : psheight);
+                  scale = (xscale < yscale) ? xscale : yscale;
+                  }
+                new_width = splitwidth ? splitwidth : scale * pswidth;
+                new_height = splitheight ? splitheight : scale * psheight;
+                if (strlen(pageOrientation))
+                  fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
+                else
+                  fprintf (fd, "%%%%PageOrientation: %s\n", (new_width > new_height) ? "Landscape" : "Portrait");
+                fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)new_width, (long)new_height);
+                fprintf (fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
+                       new_width, new_height);
+                }
+             else /* No viewport defined with -H or -W */
+                {
+                if ((pgwidth == 0) && (pgheight == 0)) /* Image not scaled */
+                  {
+                  if (strlen(pageOrientation))
+                    fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
+                  else
+                    fprintf (fd, "%%%%PageOrientation: %s\n", (pswidth > psheight) ? "Landscape" : "Portrait");
+                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)pswidth, (long)psheight);
+                  fprintf(fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
+                          pswidth, psheight);
+                  }
+               else /* Image scaled */
+                  {
+                  if (strlen(pageOrientation))
+                    fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
+                  else
+                    fprintf (fd, "%%%%PageOrientation: %s\n", (reqwidth > reqheight) ? "Landscape" : "Portrait");
+                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)reqwidth, (long)reqheight);
+                  fprintf(fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
+                           reqwidth, reqheight);
+                  }
+                }
+             break;
+    case  90:
+    case 270: if ((splitheight > 0) || (splitwidth > 0))
+               {
+               if (pgwidth != 0 || pgheight != 0)
+                  {
+                 xscale = reqwidth / (splitwidth ? splitwidth : pswidth);
+                 yscale = reqheight / (splitheight ? splitheight : psheight);
+                  scale = (xscale < yscale) ? xscale : yscale;
+                  }
+                new_width = splitwidth ? splitwidth : scale * psheight;
+                new_height = splitheight ? splitheight : scale * pswidth;
+
+                if (strlen(pageOrientation))
+                  fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
+                else
+                  fprintf (fd, "%%%%PageOrientation: %s\n", (new_width > new_height) ? "Landscape" : "Portrait");
+                fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)new_width, (long)new_height);
+                fprintf (fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
+                       new_width, new_height);
+                }
+              else
+                {
+                if ((pgwidth == 0) && (pgheight == 0)) /* Image not scaled */
+                  {
+                  if (strlen(pageOrientation))
+                    fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
+                  else
+                    fprintf (fd, "%%%%PageOrientation: %s\n", (psheight > pswidth) ? "Landscape" : "Portrait");
+                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)psheight, (long)pswidth);
+                  fprintf(fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
+                         psheight, pswidth);
+                  }
+               else /* Image scaled */
+                  {
+                  if (strlen(pageOrientation))
+                    fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
+                  else
+                    fprintf (fd, "%%%%PageOrientation: %s\n", (reqwidth > reqheight) ? "Landscape" : "Portrait");
+                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)reqwidth, (long)reqheight);
+                  fprintf(fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
+                          reqwidth, reqheight);
+                  }
+               }
+             break;
+    default:  TIFFError ("psPageSize", "Invalid rotation %d", rotation);
+      return (1);
+    }
+  fputs("<<\n  /Policies <<\n    /PageSize 3\n  >>\n>> setpagedevice\n", fd);
+
+  return (0);
+  } /* end psPageSize */
+
+/* Mask an image as a series of pages, each only showing a section defined
+ * by the maxPageHeight or maxPageWidth options.
+ */
+int psMaskImage(FILE *fd, TIFF *tif, int rotation, int center,
+                int *npages, double pixwidth, double pixheight,
+               double left_margin, double bottom_margin,
+                double pgwidth, double pgheight,
+               double pswidth, double psheight, double scale)
+  {
+  int i, j;
+  int ximages = 1, yimages = 1;
+  int pages = *npages;
+  double view_width = 0;
+  double view_height = 0;
+
+  if (get_viewport (pgwidth, pgheight, pswidth, psheight, &view_width, &view_height, rotation))
+    {
+    TIFFError ("get_viewport", "Unable to set image viewport");
+    return (-1);
+    }
+
+  if (get_subimage_count(pgwidth, pgheight, pswidth, psheight,
+                        &ximages, &yimages, rotation, scale) < 1)
+    {
+    TIFFError("get_subimage_count", "Invalid image count: %d columns, %d rows", ximages, yimages);
+    return (-1);
+    }
+
+  for (i = 0; i < yimages; i++)
+    {
+    for (j = 0; j < ximages; j++)
+       {
+       pages++;
+       *npages = pages;
+       fprintf(fd, "%%%%Page: %d %d\n", pages, pages);
+
+       /* Write out the PageSize info for non EPS files */
+       if (!generateEPSF && ( level2 || level3 ))
+         {
+         if (psPageSize(fd, rotation, pgwidth, pgheight,
+                        view_width, view_height, pswidth, psheight))
+           return (-1);
+        }
+       fprintf(fd, "gsave\n");
+       fprintf(fd, "100 dict begin\n");
+       if (exportMaskedImage(fd, view_width, view_height, pswidth, psheight,
+                            i, j, left_margin, bottom_margin,
+                            scale, center, rotation))
+        {
+        TIFFError("exportMaskedImage", "Invalid image parameters.");
+        return (-1);
+        }
+       PSpage(fd, tif, pixwidth, pixheight);
+       fprintf(fd, "end\n");
+       fprintf(fd, "grestore\n");
+       fprintf(fd, "showpage\n");
+       }
+    }
+
+  return (pages);
+  }
+
+/* Compute scale factor and write out file header */
+int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
+            double ox, double oy, double pgwidth, double pgheight,
+           double reqwidth, double reqheight, double pswidth, double psheight,
+           double left_offset, double bottom_offset)
+  {
+  double maxsource = 0.0;    /* Used for auto rotations */
+  double maxtarget = 0.0;
+  double xscale = 1.0, yscale = 1.0;
+  double splitheight;
+  double splitwidth;
+  double view_width = 0.0, view_height = 0.0;
+  double page_width = 0.0, page_height = 0.0;
+
+  /* Splitheight and splitwidth are in inches */
+  splitheight = maxPageHeight * PS_UNIT_SIZE;
+  splitwidth  = maxPageWidth * PS_UNIT_SIZE;
+
+  page_width = pgwidth * PS_UNIT_SIZE;
+  page_height = pgheight * PS_UNIT_SIZE;
+
+  /* If user has specified a page width and height and requested the
+   * image to be auto-rotated to fit on that media, we match the
+   * longest dimension of the image to the longest dimension of the
+   * target media but we have to ignore auto rotate if user specified
+   * maxPageHeight since this makes life way too complicated. */
+  if (auto_rotate)
+    {
+    if ((splitheight != 0) || (splitwidth != 0))
+      {
+      TIFFError ("psStart", "Auto-rotate is incompatible with page splitting ");
+      return (1);
+      }
+
+    /* Find longest edges in image and output media */
+    maxsource = (pswidth >= psheight) ? pswidth : psheight;
+    maxtarget = (reqwidth >= reqheight) ? reqwidth : reqheight;
+
+    if (((maxsource == pswidth) && (maxtarget != reqwidth)) ||
+        ((maxsource == psheight) && (maxtarget != reqheight)))
+      {  /* optimal orientaion does not match input orientation */
+      *rotation = 90;
+      xscale = (reqwidth - left_offset)/psheight;
+      yscale = (reqheight - bottom_offset)/pswidth;
+      }
+    else /* optimal orientaion matches input orientation */
+      {
+      xscale = (reqwidth - left_offset)/pswidth;
+      yscale = (reqheight - bottom_offset)/psheight;
+      }
+    *scale = (xscale < yscale) ? xscale : yscale;
+
+    /* Do not scale image beyound original size */
+    if (*scale > 1.0)
+      *scale = 1.0;
+
+    /* Set the size of the displayed image to requested page size
+     * and optimal orientation.
+     */
+    if (!npages)
+      PSHead(fd, reqwidth, reqheight, ox, oy);
+
+    return (0);
+    }
+
+  /* N.B. If pgwidth or pgheight are set from maxPageHeight/Width,
+   * we have a problem with the tests below under splitheight.
+   */
+
+  switch (*rotation)  /* Auto rotate has NOT been specified */
+    {
+    case   0:
+    case 180: if ((splitheight != 0)  || (splitwidth != 0))
+                {  /* Viewport clipped to maxPageHeight or maxPageWidth */
+                if ((page_width != 0) || (page_height != 0)) /* Image scaled */
+                  {
+                 xscale = (reqwidth  - left_offset) / (page_width ? page_width : pswidth);
+                 yscale = (reqheight - bottom_offset) / (page_height ? page_height : psheight);
+                  *scale = (xscale < yscale) ? xscale : yscale;
+                  /*
+                  if (*scale > 1.0)
+                    *scale = 1.0;
+                   */
+                 }
+                else       /* Image clipped but not scaled */
+                 *scale = 1.0;
+
+                view_width = splitwidth ? splitwidth : *scale * pswidth;
+                view_height = splitheight ? splitheight: *scale * psheight;
+               }
+              else   /* Viewport not clipped to maxPageHeight or maxPageWidth */
+                {
+                if ((page_width != 0) || (page_height != 0))
+                  {   /* Image scaled  */
+                  xscale = (reqwidth - left_offset) / pswidth;
+                  yscale = (reqheight - bottom_offset) / psheight;
+
+                  view_width = reqwidth;
+                  view_height = reqheight;
+                 }
+                else
+                  {  /* Image not scaled  */
+                  xscale = (pswidth - left_offset)/pswidth;
+                  yscale = (psheight - bottom_offset)/psheight;
+
+                  view_width = pswidth;
+                  view_height = psheight;
+                 }
+               }
+             break;
+    case  90:
+    case 270: if ((splitheight != 0) || (splitwidth != 0))
+                {  /* Viewport clipped to maxPageHeight or maxPageWidth */
+                if ((page_width != 0) || (page_height != 0)) /* Image scaled */
+                  {
+                 xscale = (reqwidth - left_offset)/ psheight;
+                 yscale = (reqheight - bottom_offset)/ pswidth;
+                  *scale = (xscale < yscale) ? xscale : yscale;
+                  /*
+                  if (*scale > 1.0)
+                    *scale = 1.0;
+                 */
+                 }
+                else  /* Image clipped but not scaled */
+                 *scale = 1.0;
+                view_width = splitwidth ? splitwidth : *scale * psheight;
+                view_height = splitheight ? splitheight : *scale * pswidth;
+               }
+              else /* Viewport not clipped to maxPageHeight or maxPageWidth */
+                {
+                if ((page_width != 0) || (page_height != 0)) /* Image scaled */
+                  {
+                  xscale = (reqwidth - left_offset) / psheight;
+                  yscale = (reqheight - bottom_offset) / pswidth;
+
+                 view_width = reqwidth;
+                 view_height = reqheight;
+                 }
+                else
+                  {
+                  xscale = (pswidth  - left_offset)/ psheight;
+                 yscale = (psheight  - bottom_offset)/ pswidth;
+
+                 view_width = psheight;
+                 view_height = pswidth;
+                  }
+                }
+              break;
+    default:  TIFFError ("psPageSize", "Invalid rotation %d", *rotation);
+              return (1);
+    }
+
+  if (!npages)
+    PSHead(fd, (page_width ? page_width : view_width), (page_height ? page_height : view_height), ox, oy);
+
+  *scale = (xscale < yscale) ? xscale : yscale;
+  if (*scale > 1.0)
+    *scale = 1.0;
+
+  return (0);
+  }
+
+int get_viewport (double pgwidth, double pgheight, double pswidth, double psheight,
+                  double *view_width, double *view_height, int rotation)
+  {
+  /* Only one of maxPageHeight or maxPageWidth can be specified */
+  if (maxPageHeight != 0)   /* Clip the viewport to maxPageHeight on each page */
+    {
+    *view_height = maxPageHeight * PS_UNIT_SIZE;
+    /*
+     * if (res_unit == RESUNIT_CENTIMETER)
+     * *view_height /= 2.54F;
+     */
+    }
+  else
+    {
+    if (pgheight != 0) /* User has set PageHeight with -h flag */
+      {
+      *view_height = pgheight * PS_UNIT_SIZE; /* Postscript size for Page Height in inches */
+      /* if (res_unit == RESUNIT_CENTIMETER)
+       *  *view_height /= 2.54F;
+       */
+      }
+    else /* If no width or height are specified, use the original size from image */
+      switch (rotation)
+        {
+        default:
+        case   0:
+        case 180: *view_height = psheight;
+                 break;
+        case  90:
+        case 270: *view_height = pswidth;
+                 break;
+       }
+    }
+
+  if (maxPageWidth != 0)   /* Clip the viewport to maxPageWidth on each page */
+    {
+    *view_width = maxPageWidth * PS_UNIT_SIZE;
+    /* if (res_unit == RESUNIT_CENTIMETER)
+     *  *view_width /= 2.54F;
+     */
+    }
+  else
+    {
+    if (pgwidth != 0)  /* User has set PageWidth with -w flag */
+      {
+      *view_width = pgwidth * PS_UNIT_SIZE; /* Postscript size for Page Width in inches */
+      /* if (res_unit == RESUNIT_CENTIMETER)
+       * *view_width /= 2.54F;
+       */
+      }
+    else  /* If no width or height are specified, use the original size from image */
+      switch (rotation)
+        {
+        default:
+        case   0:
+        case 180: *view_width = pswidth;
+                 break;
+        case  90:
+        case 270: *view_width = psheight; /* (*view_height / psheight) * psheight; */
+                 break;
+       }
+    }
+
+  return (0);
+  }
+
+/* pgwidth and pgheight specify page width and height in inches from -h and -w flags
+ * lm and bm are the LeftMargin and BottomMargin in inches
+ * center causes the image to be centered on the page if the paper size is
+ * larger than the image size
+ * returns the sequence number of the page processed or -1 on error
+ */
+
+int TIFF2PS(FILE* fd, TIFF* tif, double pgwidth, double pgheight, double lm, double bm, int center)
+  {
+  uint32 pixwidth = 0, pixheight = 0;  /* Image width and height in pixels */
+  double ox = 0.0, oy = 0.0;  /* Offset from current Postscript origin */
+  double pswidth, psheight;   /* Original raw image width and height in points */
+  double view_width, view_height; /* Viewport width and height in points */
+  double scale = 1.0;
+  double left_offset = lm * PS_UNIT_SIZE;
+  double bottom_offset = bm * PS_UNIT_SIZE;
+  uint32 subfiletype;
+  uint16* sampleinfo;
+  static int npages = 0;
+
+  if (!TIFFGetField(tif, TIFFTAG_XPOSITION, &ox))
+     ox = 0;
+  if (!TIFFGetField(tif, TIFFTAG_YPOSITION, &oy))
+     oy = 0;
+
+  /* Consolidated all the tag information into one code segment, Richard Nolde */
+  do {
+     tf_numberstrips = TIFFNumberOfStrips(tif);
+     TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &tf_rowsperstrip);
+     TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitspersample);
+     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel);
+     TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planarconfiguration);
+     TIFFGetField(tif, TIFFTAG_COMPRESSION, &compression);
+     TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES, &extrasamples, &sampleinfo);
+     alpha = (extrasamples == 1 && sampleinfo[0] == EXTRASAMPLE_ASSOCALPHA);
+     if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric))
+       {
+       switch (samplesperpixel - extrasamples)
+             {
+            case 1: if (isCCITTCompression(tif))
+                      photometric = PHOTOMETRIC_MINISWHITE;
+                    else
+                       photometric = PHOTOMETRIC_MINISBLACK;
+                    break;
+            case 3: photometric = PHOTOMETRIC_RGB;
+                    break;
+            case 4: photometric = PHOTOMETRIC_SEPARATED;
+                    break;
+            }
+       }
+
+     /* Read image tags for width and height in pixels pixwidth, pixheight,
+      * and convert to points pswidth, psheight
+      */
+     setupPageState(tif, &pixwidth, &pixheight, &pswidth, &psheight);
+     view_width = pswidth;
+     view_height = psheight;
+
+     if (get_viewport (pgwidth, pgheight, pswidth, psheight, &view_width, &view_height, rotation))
+       {
+       TIFFError("get_viewport", "Unable to set image viewport");
+       return (1);
+       }
+
+     /* Write the Postscript file header with Bounding Box and Page Size definitions */
+     if (psStart(fd, npages, auto_rotate, &rotation, &scale, ox, oy,
+                pgwidth, pgheight, view_width, view_height, pswidth, psheight,
+                 left_offset, bottom_offset))
+       return (-1);
+
+     if (checkImage(tif))  /* Aborts if unsupported image parameters */
+       {
+       tf_bytesperrow = TIFFScanlineSize(tif);
+
+       /* Set viewport clipping and scaling options */
+       if ((maxPageHeight) || (maxPageWidth)  || (pgwidth != 0) || (pgheight != 0))
+         {
+        if ((maxPageHeight) || (maxPageWidth)) /* used -H or -W  option */
+           {
+          if (psMaskImage(fd, tif, rotation, center, &npages, pixwidth, pixheight,
+                          left_offset, bottom_offset, pgwidth, pgheight,
+                           pswidth, psheight, scale) < 0)
+            return (-1);
+          }
+         else  /* N.B. Setting maxPageHeight no longer sets pgheight */
+           {
+           if (pgwidth != 0 || pgheight != 0)
+             {
+             /* User did not specify a maxium page height or width using -H or -W flag
+              * but did use -h or -w flag to scale to a specific size page.
+              */
+             npages++;
+             fprintf(fd, "%%%%Page: %d %d\n", npages, npages);
+
+             if (!generateEPSF && ( level2 || level3 ))
+               {
+              /* Write out the PageSize info for non EPS files */
+              if (psPageSize(fd, rotation, pgwidth, pgheight,
+                              view_width, view_height, pswidth, psheight))
+                return (-1);
+               }
+             fprintf(fd, "gsave\n");
+             fprintf(fd, "100 dict begin\n");
+             if (psScaleImage(fd, scale, rotation, center, view_width, view_height,
+                              pswidth, psheight, left_offset, bottom_offset))
+              return (-1);
+
+             PSpage(fd, tif, pixwidth, pixheight);
+             fprintf(fd, "end\n");
+             fprintf(fd, "grestore\n");
+             fprintf(fd, "showpage\n");
+            }
+          }
+        }
+       else  /* Simple rotation: user did not use -H, -W, -h or -w */
+         {
+         npages++;
+         fprintf(fd, "%%%%Page: %d %d\n", npages, npages);
+
+         if (!generateEPSF && ( level2 || level3 ))
+           {
+          /* Write out the PageSize info for non EPS files */
+          if (psPageSize(fd, rotation, pgwidth, pgheight,
+                          view_width, view_height, pswidth, psheight))
+           return (-1);
+         }
+         fprintf(fd, "gsave\n");
+         fprintf(fd, "100 dict begin\n");
+        if (psRotateImage(fd, rotation, pswidth, psheight, left_offset, bottom_offset))
+           return (-1);
+
+         PSpage(fd, tif, pixwidth, pixheight);
+         fprintf(fd, "end\n");
+         fprintf(fd, "grestore\n");
+         fprintf(fd, "showpage\n");
+         }
+       }
+  if (generateEPSF)
+    break;
+  TIFFGetFieldDefaulted(tif, TIFFTAG_SUBFILETYPE, &subfiletype);
+  } while (((subfiletype & FILETYPE_PAGE) || printAll) && TIFFReadDirectory(tif));
+
+return(npages);
 }
-
-
-/* returns the sequence number of the page processed */
-int
-TIFF2PS(FILE* fd, TIFF* tif,
-	double pw, double ph, double lm, double bm, int cnt)
-{
-	uint32 w, h;
-	float ox, oy;
-        double prw, prh;
-	double scale = 1.0;
-	uint32 subfiletype;
-	uint16* sampleinfo;
-	static int npages = 0;
-	int split;
-
-	if (!TIFFGetField(tif, TIFFTAG_XPOSITION, &ox))
-		ox = 0;
-	if (!TIFFGetField(tif, TIFFTAG_YPOSITION, &oy))
-		oy = 0;
-	setupPageState(tif, &w, &h, &prw, &prh);
-
-	do {
-		tf_numberstrips = TIFFNumberOfStrips(tif);
-		TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP,
-		    &tf_rowsperstrip);
-		setupPageState(tif, &w, &h, &prw, &prh);
-		if (!npages)
-			PSHead(fd, tif, w, h, prw, prh, ox, oy);
-		TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE,
-		    &bitspersample);
-		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL,
-		    &samplesperpixel);
-		TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG,
-		    &planarconfiguration);
-		TIFFGetField(tif, TIFFTAG_COMPRESSION, &compression);
-		TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
-		    &extrasamples, &sampleinfo);
-		alpha = (extrasamples == 1 &&
-			 sampleinfo[0] == EXTRASAMPLE_ASSOCALPHA);
-		if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric)) {
-			switch (samplesperpixel - extrasamples) {
-			case 1:
-				if (isCCITTCompression(tif))
-					photometric = PHOTOMETRIC_MINISWHITE;
-				else
-					photometric = PHOTOMETRIC_MINISBLACK;
-				break;
-			case 3:
-				photometric = PHOTOMETRIC_RGB;
-				break;
-			case 4:
-				photometric = PHOTOMETRIC_SEPARATED;
-				break;
-			}
-		}
-		if (checkImage(tif)) {
-			tf_bytesperrow = TIFFScanlineSize(tif);
-			npages++;
-			fprintf(fd, "%%%%Page: %d %d\n", npages, npages);
-			if (!generateEPSF && ( level2 || level3 )) {
-				double psw, psh;
-				if (pw != 0.0) {
-					psw = pw * PS_UNIT_SIZE;
-					if (res_unit == RESUNIT_CENTIMETER)
-						psw *= 2.54F;
-				} else
-					psw=rotate ? prh:prw;
-				if (ph != 0.0) {
-					psh = ph * PS_UNIT_SIZE;
-					if (res_unit == RESUNIT_CENTIMETER)
-						psh *= 2.54F;
-				} else
-					psh=rotate ? prw:prh;
-				fprintf(fd,
-	"1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
-					psw, psh);
-				fputs(
-	"<<\n  /Policies <<\n    /PageSize 3\n  >>\n>> setpagedevice\n",
-				      fd);
-			}
-			fprintf(fd, "gsave\n");
-			fprintf(fd, "100 dict begin\n");
-			if (pw != 0 || ph != 0) {
-				double psw = pw, psh = ph;
-				if (!psw)
-					psw = prw;
-				if (!psh)
-					psh = prh;
-				if (maxPageHeight) { /* used -H option */
-					split = PlaceImage(fd,psw,psh,prw,prh,
-							   0,lm,bm,cnt);
-					while( split ) {
-					    PSpage(fd, tif, w, h);
-					    fprintf(fd, "end\n");
-					    fprintf(fd, "grestore\n");
-					    fprintf(fd, "showpage\n");
-					    npages++;
-					    fprintf(fd, "%%%%Page: %d %d\n",
-						    npages, npages);
-					    fprintf(fd, "gsave\n");
-					    fprintf(fd, "100 dict begin\n");
-					    split = PlaceImage(fd,psw,psh,prw,prh,
-							       split,lm,bm,cnt);
-					}
-				} else {
-					double left_offset = lm * PS_UNIT_SIZE;
-					double bottom_offset = bm * PS_UNIT_SIZE;
-					psw *= PS_UNIT_SIZE;
-					psh *= PS_UNIT_SIZE;
-
-					/* NB: maintain image aspect ratio */
-					scale = psw/prw < psh/prh ?
-						psw/prw : psh/prh;
-					if (scale > 1.0)
-						scale = 1.0;
-					if (cnt) {
-						bottom_offset +=
-							(psh - prh * scale) / 2;
-						left_offset +=
-							(psw - prw * scale) / 2;
-					}
-					fprintf(fd, "%f %f translate\n",
-						left_offset, bottom_offset);
-					fprintf(fd, "%f %f scale\n",
-						prw * scale, prh * scale);
-					if (rotate)
-						fputs ("1 1 translate 180 rotate\n", fd);
-				}
-			} else {
-				fprintf(fd, "%f %f scale\n", prw, prh);
-				if (rotate)
-					fputs ("1 1 translate 180 rotate\n", fd);
-			}
-			PSpage(fd, tif, w, h);
-			fprintf(fd, "end\n");
-			fprintf(fd, "grestore\n");
-			fprintf(fd, "showpage\n");
-		}
-		if (generateEPSF)
-			break;
-		TIFFGetFieldDefaulted(tif, TIFFTAG_SUBFILETYPE, &subfiletype);
-	} while (((subfiletype & FILETYPE_PAGE) || printAll) &&
-	    TIFFReadDirectory(tif));
-
-	return(npages);
-}
-
 
 static char DuplexPreamble[] = "\
 %%BeginFeature: *Duplex True\n\
@@ -716,40 +1631,48 @@ gsave newpath clippath pathbbox grestore\n\
 ";
 
 void
-PSHead(FILE *fd, TIFF *tif, uint32 w, uint32 h,
-       double pw, double ph, double ox, double oy)
+PSHead(FILE *fd, double pagewidth, double pageheight, double xoff, double yoff)
 {
 	time_t t;
 
-	(void) tif; (void) w; (void) h;
 	t = time(0);
 	fprintf(fd, "%%!PS-Adobe-3.0%s\n", generateEPSF ? " EPSF-3.0" : "");
-	fprintf(fd, "%%%%Creator: tiff2ps\n");
-	fprintf(fd, "%%%%Title: %s\n", filename);
+	fprintf(fd, "%%%%Creator: %s\n", creator ? creator : "tiff2ps");
+        fprintf(fd, "%%%%Title: %s\n", title ? title : filename);
 	fprintf(fd, "%%%%CreationDate: %s", ctime(&t));
 	fprintf(fd, "%%%%DocumentData: Clean7Bit\n");
-	fprintf(fd, "%%%%Origin: %ld %ld\n", (long) ox, (long) oy);
-	/* NB: should use PageBoundingBox */
-	fprintf(fd, "%%%%BoundingBox: 0 0 %ld %ld\n",
-	    (long) ceil(pw), (long) ceil(ph));
+	/* NB: should use PageBoundingBox for each page instead of BoundingBox *
+         * PageBoundingBox DSC added in PSPageSize function, R Nolde 09-01-2010
+         */
+	fprintf(fd, "%%%%Origin: %ld %ld\n", (long) xoff, (long) yoff);
+        fprintf(fd, "%%%%BoundingBox: 0 0 %ld %ld\n",
+	       (long) ceil(pagewidth), (long) ceil(pageheight));
+
 	fprintf(fd, "%%%%LanguageLevel: %d\n", (level3 ? 3 : (level2 ? 2 : 1)));
-	fprintf(fd, "%%%%Pages: (atend)\n");
+        if (generateEPSF == TRUE)
+	  fprintf(fd, "%%%%Pages: 1 1\n");
+        else
+	  fprintf(fd, "%%%%Pages: (atend)\n");
 	fprintf(fd, "%%%%EndComments\n");
-	fprintf(fd, "%%%%BeginSetup\n");
-	if (PSduplex)
+        if (generateEPSF == FALSE)
+          {
+  	  fprintf(fd, "%%%%BeginSetup\n");
+	  if (PSduplex)
 		fprintf(fd, "%s", DuplexPreamble);
-	if (PStumble)
+	  if (PStumble)
 		fprintf(fd, "%s", TumblePreamble);
-	if (PSavoiddeadzone && (level2 || level3))
+	  if (PSavoiddeadzone && (level2 || level3))
 		fprintf(fd, "%s", AvoidDeadZonePreamble);
-	fprintf(fd, "%%%%EndSetup\n");
+	  fprintf(fd, "%%%%EndSetup\n");
+	  }
 }
 
 void
 PSTail(FILE *fd, int npages)
 {
 	fprintf(fd, "%%%%Trailer\n");
-	fprintf(fd, "%%%%Pages: %d\n", npages);
+        if (generateEPSF == FALSE)
+	  fprintf(fd, "%%%%Pages: %d\n", npages);
 	fprintf(fd, "%%%%EOF\n");
 }
 
@@ -1173,6 +2096,26 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	return(use_rawdata);
 }
 
+/* Flip the byte order of buffers with 16 bit samples */
+static void
+PS_FlipBytes(unsigned char* buf, tsize_t count)
+{
+	int i;
+	unsigned char temp;
+
+	if (count <= 0 || bitspersample <= 8) {
+		return;
+	}
+
+	count--;
+
+	for (i = 0; i < count; i += 2) {
+		temp = buf[i];
+		buf[i] = buf[i + 1];
+		buf[i + 1] = temp;
+	}
+}
+
 #define MAXLINE		36
 
 int
@@ -1180,12 +2123,13 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 {
 	uint16 fillorder;
 	int use_rawdata, tiled_image, breaklen = MAXLINE;
-	uint32 chunk_no, num_chunks, *bc;
+	uint32 chunk_no, num_chunks;
+        uint64 *bc;
 	unsigned char *buf_data, *cp;
 	tsize_t chunk_size, byte_count;
 
 #if defined( EXP_ASCII85ENCODER )
-	int			ascii85_l;	/* Length, in bytes, of ascii85_p[] data */
+	tsize_t			ascii85_l;	/* Length, in bytes, of ascii85_p[] data */
 	uint8		*	ascii85_p = 0;	/* Holds ASCII85 encoded data */
 #endif
 
@@ -1220,8 +2164,8 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	}
 	buf_data = (unsigned char *)_TIFFmalloc(chunk_size);
 	if (!buf_data) {
-		TIFFError(filename, "Can't alloc %u bytes for %s.",
-			chunk_size, tiled_image ? "tiles" : "strips");
+		TIFFError(filename, "Can't alloc %lu bytes for %s.",
+			(unsigned long) chunk_size, tiled_image ? "tiles" : "strips");
 		return(FALSE);
 	}
 
@@ -1277,6 +2221,13 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 				tiled_image ? "tile" : "strip", chunk_no);
 			if (ascii85)
 				Ascii85Put('\0', fd);
+		}
+		/*
+		 * for 16 bits, the two bytes must be most significant
+		 * byte first
+		 */
+		if (bitspersample == 16 && !TIFFIsBigEndian(tif)) {
+			PS_FlipBytes(buf_data, byte_count);
 		}
 		/*
 		 * For images with alpha, matte against a white background;
@@ -1462,7 +2413,8 @@ void
 PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 {
 	uint32 row;
-	int breaklen = MAXLINE, cc, es = samplesperpixel - nc;
+	int breaklen = MAXLINE, es = samplesperpixel - nc;
+	tsize_t cc;
 	unsigned char *tf_buf;
 	unsigned char *cp, c;
 
@@ -1476,6 +2428,13 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 		if (TIFFReadScanline(tif, tf_buf, row, 0) < 0)
 			break;
 		cp = tf_buf;
+		/*
+		 * for 16 bits, the two bytes must be most significant
+		 * byte first
+		 */
+		if (bitspersample == 16 && !HOST_BIGENDIAN) {
+			PS_FlipBytes(cp, tf_bytesperrow);
+		}
 		if (alpha) {
 			int adjust;
 			cc = 0;
@@ -1517,7 +2476,8 @@ void
 PSDataColorSeparate(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 {
 	uint32 row;
-	int breaklen = MAXLINE, cc;
+	int breaklen = MAXLINE;
+	tsize_t cc;
 	tsample_t s, maxs;
 	unsigned char *tf_buf;
 	unsigned char *cp, c;
@@ -1551,7 +2511,8 @@ PSDataPalette(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 {
 	uint16 *rmap, *gmap, *bmap;
 	uint32 row;
-	int breaklen = MAXLINE, cc, nc;
+	int breaklen = MAXLINE, nc;
+	tsize_t cc;
 	unsigned char *tf_buf;
 	unsigned char *cp, c;
 
@@ -1628,17 +2589,19 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	tstrip_t s;
 
 #if defined( EXP_ASCII85ENCODER )
-	int	ascii85_l;		/* Length, in bytes, of ascii85_p[] data */
+	tsize_t	ascii85_l;		/* Length, in bytes, of ascii85_p[] data */
 	uint8	*ascii85_p = 0;		/* Holds ASCII85 encoded data */
 #endif
 
 	(void) w; (void) h;
 	tf_buf = (unsigned char *) _TIFFmalloc(stripsize);
-        memset(tf_buf, 0, stripsize);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for scanline buffer");
 		return;
 	}
+
+	// FIXME
+	memset(tf_buf, 0, stripsize);
 
 #if defined( EXP_ASCII85ENCODER )
 	if ( ascii85 ) {
@@ -1666,7 +2629,7 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		Ascii85Init();
 
 	for (s = 0; s < TIFFNumberOfStrips(tif); s++) {
-		int cc = TIFFReadEncodedStrip(tif, s, tf_buf, stripsize);
+		tmsize_t cc = TIFFReadEncodedStrip(tif, s, tf_buf, stripsize);
 		if (cc < 0) {
 			TIFFError(filename, "Can't read strip");
 			break;
@@ -1676,6 +2639,13 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 			for (cp += cc; --cp >= tf_buf;)
 				*cp = ~*cp;
 			cp++;
+		}
+		/*
+		 * for 16 bits, the two bytes must be most significant
+		 * byte first
+		 */
+		if (bitspersample == 16 && !HOST_BIGENDIAN) {
+			PS_FlipBytes(cp, cc);
 		}
 		if (ascii85) {
 #if defined( EXP_ASCII85ENCODER )
@@ -1742,16 +2712,17 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 void
 PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 {
-	uint32 *bc;
+	uint64 *bc;
 	uint32 bufsize;
-	int breaklen = MAXLINE, cc;
+	int breaklen = MAXLINE;
+	tmsize_t cc;
 	uint16 fillorder;
 	unsigned char *tf_buf;
 	unsigned char *cp, c;
 	tstrip_t s;
 
 #if defined( EXP_ASCII85ENCODER )
-	int			ascii85_l;		/* Length, in bytes, of ascii85_p[] data */
+	tsize_t 		ascii85_l;		/* Length, in bytes, of ascii85_p[] data */
 	uint8		*	ascii85_p = 0;		/* Holds ASCII85 encoded data */
 #endif
 
@@ -1763,11 +2734,11 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	 * Find largest strip:
 	 */
 
-	bufsize = bc[0];
+	bufsize = (uint32) bc[0];
 
 	for ( s = 0; ++s < (tstrip_t)tf_numberstrips; ) {
 		if ( bc[s] > bufsize )
-			bufsize = bc[s];
+			bufsize = (uint32) bc[s];
 	}
 
 	tf_buf = (unsigned char*) _TIFFmalloc(bufsize);
@@ -1799,7 +2770,7 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 #endif
 
 	for (s = 0; s < (tstrip_t) tf_numberstrips; s++) {
-		cc = TIFFReadRawStrip(tif, s, tf_buf, bc[s]);
+		cc = TIFFReadRawStrip(tif, s, tf_buf, (tmsize_t) bc[s]);
 		if (cc < 0) {
 			TIFFError(filename, "Can't read strip");
 			break;
@@ -1949,11 +2920,11 @@ Ascii85Flush(FILE* fd)
 *
 *****************************************************************************/
 
-int Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw_p, int raw_l )
+tsize_t Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw_p, tsize_t raw_l )
 
 {
     char                        ascii85[5];     /* Encoded 5 tuple */
-    int                         ascii85_l;      /* Number of bytes written to ascii85_p[] */
+    tsize_t                     ascii85_l;      /* Number of bytes written to ascii85_p[] */
     int                         rc;             /* Return code */
     uint32                      val32;          /* Unencoded 4 tuple */
 
@@ -2010,7 +2981,7 @@ int Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw_p, 
     
         if ( raw_l > 0 )
         {
-            int             len;                /* Output this many bytes */
+            tsize_t         len;                /* Output this many bytes */
     
             len = raw_l + 1;
             val32 = *++raw_p << 24;             /* Prime the pump */
@@ -2059,24 +3030,27 @@ char* stuff[] = {
 " -2            generate PostScript Level 2",
 " -3            generate PostScript Level 3",
 " -8            disable use of ASCII85 encoding with PostScript Level 2/3",
-" -a            convert all directories in file (default is first)",
+" -a            convert all directories in file (default is first), Not EPS",
 " -b #          set the bottom margin to # inches",
 " -c            center image (-b and -l still add to this)",
-" -d #          convert directory number #",
+" -d #          set initial directory to # counting from zero",
 " -D            enable duplex printing (two pages per sheet of paper)",
 " -e            generate Encapsulated PostScript (EPS) (implies -z)",
-" -h #          assume printed page height is # inches (default 11)",
-" -w #          assume printed page width is # inches (default 8.5)",
+" -h #          set printed page height to # inches (no default)",
+" -w #          set printed page width to # inches (no default)",
 " -H #          split image if height is more than # inches",
+" -P L or P     set optional PageOrientation DSC comment to Landscape or Portrait",
+" -W #          split image if width is more than # inches",
 " -L #          overLap split images by # inches",
 " -i #          enable/disable (Nz/0) pixel interpolation (default: enable)",
 " -l #          set the left margin to # inches",
 " -m            use \"imagemask\" operator instead of \"image\"",
-" -o #          convert directory at file offset #",
+" -o #          convert directory at file offset # bytes",
 " -O file       write PostScript to file instead of standard output",
 " -p            generate regular PostScript",
-" -r            rotate by 180 degrees",
+" -r # or auto  rotate by 90, 180, 270 degrees or auto",
 " -s            generate PostScript for a single image",
+" -t name       set postscript document title. Otherwise the filename is used",
 " -T            print pages for top edge binding",
 " -x            override resolution units as centimeters",
 " -y            override resolution units as inches",
@@ -2097,4 +3071,3 @@ usage(int code)
 	exit(code);
 }
 
-/* vim: set ts=8 sts=8 sw=8 noet: */

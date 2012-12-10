@@ -174,8 +174,8 @@ openfailure:
 "    ImageWidth=%ld, ImageLength=%ld, RowsPerStrip=%ld, Compression=%d,\n"
 "    BitsPerSample=%d, SamplesPerPixel=%d, SampleFormat=%d,\n"
 "    PlanarConfiguration=%d, PhotometricInterpretation=%d.\n",
-		 name, width, length, rowsperstrip, compression,
-		 bps, spp, sampleformat, planarconfig,
+		 name, (long) width, (long) length, (long) rowsperstrip,
+                 compression, bps, spp, sampleformat, planarconfig,
 		 photometric);
 	return -1;
 }
@@ -252,8 +252,8 @@ openfailure:
 "    ImageWidth=%ld, ImageLength=%ld, RowsPerStrip=%ld, Compression=%d,\n"
 "    BitsPerSample=%d, SamplesPerPixel=%d, SampleFormat=%d,\n"
 "    PlanarConfiguration=%d, PhotometricInterpretation=%d.\n",
-		 name, width, length, rowsperstrip, compression,
-		 bps, spp, sampleformat, planarconfig,
+		 name, (long) width, (long) length, (long) rowsperstrip,
+                 compression, bps, spp, sampleformat, planarconfig,
 		 photometric);
 	return -1;
 }
@@ -263,6 +263,7 @@ write_scanlines(TIFF *tif, const tdata_t array, const tsize_t size)
 {
 	uint32		length, row;
 	tsize_t		scanlinesize, offset;
+        (void) size;
 
 	if (!TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &length)) {
 		fprintf (stderr, "Can't get tag %d.\n", TIFFTAG_IMAGELENGTH);
@@ -278,7 +279,7 @@ write_scanlines(TIFF *tif, const tdata_t array, const tsize_t size)
 	for (offset = 0, row = 0; row < length; offset+=scanlinesize, row++) {
 		if (TIFFWriteScanline(tif, (char *)array + offset, row, 0) < 0) {
 			fprintf (stderr,
-				 "Can't write image data at row %lu.\n", row);
+				 "Can't write image data at row %lu.\n", (long) row);
 			return -1;
 		}
         }

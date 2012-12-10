@@ -60,8 +60,10 @@ int
 main(int argc, char **argv)
 {
 	TIFF		*tif;
-	int		i;
+	unsigned int	i;
 	unsigned char	buf[3] = { 0, 127, 255 };
+        (void) argc;
+        (void) argv;
 
 	/* Test whether we can write tags. */
 	tif = TIFFOpen(filename, "w");

@@ -44,11 +44,11 @@
 # include <io.h>
 #endif
 
-#include "tiffiop.h"
-
-#ifndef BINMODE
-# define	BINMODE
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
+
+#include "tiffiop.h"
 
 #ifndef EXIT_SUCCESS
 # define EXIT_SUCCESS	0
@@ -258,7 +258,7 @@ main(int argc, char* argv[])
 	else if (compression_in == COMPRESSION_CCITTFAX4)
 		TIFFSetField(faxTIFF, TIFFTAG_GROUP4OPTIONS, group4options_in);
 	for (pn = 0; optind < argc; pn++, optind++) {
-		in = fopen(argv[optind], "r" BINMODE);
+		in = fopen(argv[optind], "rb");
 		if (in == NULL) {
 			fprintf(stderr,
 			    "%s: %s: Can not open\n", argv[0], argv[optind]);
@@ -351,7 +351,7 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 	uint16 badrun;
 	int ok;
 
-	tifin->tif_rawdatasize = TIFFGetFileSize(tifin);
+	tifin->tif_rawdatasize = (tmsize_t)TIFFGetFileSize(tifin);
 	tifin->tif_rawdata = _TIFFmalloc(tifin->tif_rawdatasize);
 	if (tifin->tif_rawdata == NULL) {
 		TIFFError(tifin->tif_name, "Not enough memory");
@@ -460,3 +460,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

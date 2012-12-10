@@ -50,6 +50,10 @@
 # include <unistd.h>
 #endif
 
+#ifdef NEED_LIBPORT
+# include "libport.h"
+#endif
+
 #include "tiffio.h"
 
 #define	MAX_CMAP_SIZE	256
@@ -893,3 +897,10 @@ bad:
 	_TIFFfree(nextline);
 	_TIFFfree(outline);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

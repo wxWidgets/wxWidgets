@@ -1,4 +1,4 @@
-.\" $Id: raw2tiff.1,v 1.5 2005/11/02 11:07:19 dron Exp $
+.\" $Id: raw2tiff.1,v 1.7 2009-08-24 19:13:40 bfriesen Exp $
 .\"
 .\" Copyright (c) 1990-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -44,99 +44,102 @@ By default, the
 image is created with data samples packed (\c
 .IR PlanarConfiguration =1),
 compressed with the PackBits algorithm (\c
-.IR Compression = 32773),
+.IR Compression =32773),
 and with each strip no more than 8 kilobytes.
 These characteristics can overridden, or explicitly specified
 with the options described below.
 .SH OPTIONS
 .TP
-.B \-H <number>
+.BI \-H " number"
 size of input image file header in bytes (0 by default). This amount of data
 just will be skipped from the start of file while reading.
 .TP
-.B \-w <number>
+.BI \-w " number"
 width of input image in pixels (can be guessed, see
 .SM
 .B "GUESSING THE IMAGE GEOMETRY"
 below).
 .TP
-.B \-l <number>
-length of input image in lines(can be guessed, see
+.BI \-l " number"
+length of input image in lines (can be guessed, see
 .SM
 .B "GUESSING THE IMAGE GEOMETRY"
 below).
 .TP
-.B \-b <number>
+.BI \-b " number"
 number of bands in input image (1 by default).
 .TP
-.B \-d data_type
+.BI \-d " data_type"
 type of samples in input image, where
-.B data_type
+.I data_type
 may be:
+.ta \w'\fBdouble  \fR'u
 .br
-.I byte\t\t
+.B byte\t
 8-bit unsigned integer (default),
 .br
-.I short\t
+.B short\t
 16-bit unsigned integer,
 .br
-.I long\t\t
+.B long\t
 32-bit unsigned integer,
 .br
-.I sbyte\t
+.B sbyte\t
 8-bit signed integer,
 .br
-.I sshort\t
+.B sshort\t
 16-bit signed integer,
 .br
-.I slong\t
+.B slong\t
 32-bit signed integer,
 .br
-.I float\t
+.B float\t
 32-bit IEEE floating point,
 .br
-.I double\t
-64-bit IEEE floating point,
+.B double\t
+64-bit IEEE floating point.
 .TP
-.B \-i config
+.BI \-i " config"
 type of samples interleaving in input image, where
-.B config
+.I config
 may be:
+.ta \w'\fBpixel  \fR'u
 .br
-.I pixel\t
+.B pixel\t
 pixel interleaved data (default),
 .br
-.I band\t\t
+.B band\t
 band interleaved data.
 .TP
-.B \-p photo
+.BI \-p " photo"
 photometric interpretation (color space) of the input image, where
-.B photo
+.I photo
 may be:
+.ta \w'\fBminiswhite  \fR'u
 .br
-.I miniswhite
+.B miniswhite\t
 white color represented with 0 value,
 .br
-.I minisblack
+.B minisblack\t
 black color represented with 0 value (default),
 .br
-.I rgb\t\t
+.B rgb\t
 image has RGB color model,
 .br
-.I cmyk\t\t
+.B cmyk\t
 image has CMYK (separated) color model,
 .br
-.I ycbcr\t\t
+.B ycbcr\t
 image has YCbCr color model,
 .br
-.I cielab\t
+.B cielab\t
 image has CIE L*a*b color model,
 .br
-.I icclab\t
+.B icclab\t
 image has ICC L*a*b color model,
 .br
-.I itulab\t
-image has ITU L*a*b color model,
+.B itulab\t
+image has ITU L*a*b color model.
 .TP
 .B \-s
 swap bytes fetched from the input file.
@@ -151,17 +154,17 @@ input data has MSB2LSB bit order.
 Specify a compression scheme to use when writing image data:
 .B "\-c none"
 for no compression,
-.B "-c packbits"
+.B "\-c packbits"
 for the PackBits compression algorithm (the default),
-.B "-c jpeg"
+.B "\-c jpeg"
 for the baseline JPEG compression algorithm,
-.B "-c zip
+.B "\-c zip"
 for the Deflate compression algorithm,
 and
 .B "\-c lzw"
 for Lempel-Ziv & Welch.
 .TP
-.B \-r <number>
+.BI \-r " number"
 Write data with a specified number of rows per strip;
 by default the number of rows/strip is selected so that each strip
 is approximately 8 kilobytes.
@@ -184,7 +187,7 @@ There is no magic, it is just a mathematical statistics, so it can be wrong
 in some cases. But for most ordinary images guessing method will work fine.
 .SH "SEE ALSO"
 .BR pal2rgb (1),
-.bR tiffinfo (1),
+.BR tiffinfo (1),
 .BR tiffcp (1),
 .BR tiffmedian (1),
 .BR libtiff (3)

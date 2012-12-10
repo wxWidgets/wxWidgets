@@ -40,5 +40,5 @@ tiff_palette_LDADD = $(LIBTIFF)
 tiff_rgb_SOURCES = tiff-rgb.c
 tiff_rgb_LDADD = $(LIBTIFF)
 
-INCLUDES = -I$(top_srcdir)/libtiff
+AM_CPPFLAGS = -I$(top_srcdir)/libtiff
 

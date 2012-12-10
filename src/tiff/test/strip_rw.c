@@ -57,6 +57,8 @@ main(int argc, char **argv)
 	uint32		rowsperstrip;
 	uint16		compression;
 	uint16		spp, bps, photometric, sampleformat, planarconfig;
+        (void) argc;
+        (void) argv;
 
 	/* 
 	 * Test two special cases: image consisting from single line and image

@@ -40,9 +40,9 @@
 
 #include "tiffio.h"
 
-const char	*filename = "ascii_test.tiff";
+static const char filename[] = "ascii_test.tiff";
 
-static struct Tags {
+static const struct {
 	ttag_t		tag;
 	const char	*value;
 } ascii_tags[] = {
@@ -56,21 +56,23 @@ static struct Tags {
 	{ TIFFTAG_ARTIST, "Andrey V. Kiselev" },
 	{ TIFFTAG_HOSTCOMPUTER, "Debian GNU/Linux (Sarge)" },
 	{ TIFFTAG_TARGETPRINTER, "No printer" },
-	{ TIFFTAG_PIXAR_TEXTUREFORMAT, "No texture" },
-	{ TIFFTAG_PIXAR_WRAPMODES, "No wrap" },
-	{ TIFFTAG_COPYRIGHT, "Copyright (c) 2004, Andrey Kiselev" }
+	{ TIFFTAG_COPYRIGHT, "Copyright (c) 2004, Andrey Kiselev" },
+	{ TIFFTAG_FAXSUBADDRESS, "Fax subaddress" },
+	/* DGN tags */
+	{ TIFFTAG_UNIQUECAMERAMODEL, "No camera" },
+	{ TIFFTAG_CAMERASERIALNUMBER, "1234567890" }
 };
 #define NTAGS   (sizeof (ascii_tags) / sizeof (ascii_tags[0]))
 
-const char *ink_names = "Red\0Green\0Blue";
+static const char ink_names[] = "Red\0Green\0Blue";
 const int ink_names_size = 15;
 
 int
-main(int argc, char **argv)
+main()
 {
 	TIFF		*tif;
-	int		i;
-	unsigned char	buf[3] = { 0, 127, 255 };
+	size_t		i;
+	unsigned char	buf[] = { 0, 127, 255 };
 	char		*value;
 
 	/* Test whether we can write tags. */
@@ -92,7 +94,7 @@ main(int argc, char **argv)
 		fprintf (stderr, "Can't set BitsPerSample tag.\n");
 		goto failure;
 	}
-	if (!TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3)) {
+	if (!TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, sizeof(buf))) {
 		fprintf (stderr, "Can't set SamplesPerPixel tag.\n");
 		goto failure;
 	}
@@ -108,19 +110,21 @@ main(int argc, char **argv)
 	for (i = 0; i < NTAGS; i++) {
 		if (!TIFFSetField(tif, ascii_tags[i].tag,
 				  ascii_tags[i].value)) {
-			fprintf(stderr, "Can't set tag %d.\n",
-				(int)ascii_tags[i].tag);
+			fprintf(stderr, "Can't set tag %lu.\n",
+				(unsigned long)ascii_tags[i].tag);
 			goto failure;
 		}
 	}
 
 	/* InkNames tag has special form, so we handle it separately. */
 	if (!TIFFSetField(tif, TIFFTAG_NUMBEROFINKS, 3)) {
-		fprintf (stderr, "Can't set tag %d.\n", TIFFTAG_NUMBEROFINKS);
+		fprintf (stderr, "Can't set tag %d (NUMBEROFINKS).\n",
+                         TIFFTAG_NUMBEROFINKS);
 		goto failure;
 	}
 	if (!TIFFSetField(tif, TIFFTAG_INKNAMES, ink_names_size, ink_names)) {
-		fprintf (stderr, "Can't set tag %d.\n", TIFFTAG_INKNAMES);
+		fprintf (stderr, "Can't set tag %d (INKNAMES).\n",
+			 TIFFTAG_INKNAMES);
 		goto failure;
 	}
 
@@ -142,15 +146,16 @@ main(int argc, char **argv)
 	for (i = 0; i < NTAGS; i++) {
 		if (!TIFFGetField(tif, ascii_tags[i].tag, &value)
 		    || strcmp(value, ascii_tags[i].value)) {
-			fprintf(stderr, "Can't get tag %d.\n",
-				(int)ascii_tags[i].tag);
+			fprintf(stderr, "Can't get tag %lu.\n",
+				(unsigned long)ascii_tags[i].tag);
 			goto failure;
 		}
 	}
 
 	if (!TIFFGetField(tif, TIFFTAG_INKNAMES, &value)
 	    || memcmp(value, ink_names, ink_names_size)) {
-		fprintf (stderr, "Can't get tag %d.\n", TIFFTAG_INKNAMES);
+		fprintf (stderr, "Can't get tag %d (INKNAMES).\n",
+			 TIFFTAG_INKNAMES);
 		goto failure;
 	}
 
@@ -161,9 +166,11 @@ main(int argc, char **argv)
 	return 0;
 
 failure:
-	/* Something goes wrong; close file and return unsuccessful status. */
+	/* 
+	 * Something goes wrong; close file and return unsuccessful status.
+	 * Do not remove the file for further manual investigation.
+	 */
 	TIFFClose(tif);
-	unlink(filename);
 	return 1;
 }
 

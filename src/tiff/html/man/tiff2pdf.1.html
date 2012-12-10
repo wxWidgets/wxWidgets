@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.18.1 -->
-<!-- CreationDate: Mon Mar 13 18:03:12 2006 -->
+<!-- CreationDate: Sat Feb 24 18:37:19 2007 -->
 <html>
 <head>
 <meta name="generator" content="groff -Thtml, see www.gnu.org">
@@ -26,7 +26,8 @@
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p>tiff2pdf - convert a TIFF image to a PDF document</p>
+<p>tiff2pdf &minus; convert a TIFF image to a PDF
+document</p>
 </td>
 </table>
 <a name="SYNOPSIS"></a>
@@ -37,8 +38,7 @@
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>tiff2pdf [</b> <i>options</i> <b>]</b>
-<i>input.tiff</i></p>
+<p><b>tiff2pdf</b> [ <i>options</i> ] <i>input.tiff</i></p>
 </td>
 </table>
 <a name="DESCRIPTION"></a>
@@ -49,7 +49,7 @@
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>tiff2pdf</b> opens a TIFF image and writes a PDF
+<p><i>tiff2pdf</i> opens a TIFF image and writes a PDF
 document to standard output.</p>
 <!-- INDENTATION -->
 <p>The program converts one TIFF file to one PDF file,
@@ -67,7 +67,8 @@ or width) convert the input image to a tiled TIFF if it is
 not already.</p>
 <!-- INDENTATION -->
 <p>The standard output is standard output. Set the output
-file name with the <b>-o</b><i>output.pdf</i> option.</p>
+file name with the <b>&minus;o</b> <i>output.pdf</i>
+option.</p>
 <!-- INDENTATION -->
 <p>All black and white files are compressed into a single
 strip CCITT G4 Fax compressed PDF, unless tiled, where tiled
@@ -109,13 +110,14 @@ resolution and page width and length can be set by the
 <b>&minus;u</b> option, the default unit is inch.</p>
 <!-- INDENTATION -->
 <p>Various items of the output document information can be
-set with the <b>&minus;e, &minus;c, &minus;a, &minus;t,
-&minus;s,</b> and <b>&minus;k</b> options. Setting the
-argument of the option to &quot;&quot; for these tags causes
-the relevant document information field to be not written.
-Some of the document information values otherwise get their
-information from the input TIFF image, the software, author,
-document name, and image description.</p>
+set with the <b>&minus;e</b>, <b>&minus;c</b>,
+<b>&minus;a</b>, <b>&minus;t</b>, <b>&minus;s</b>, and
+<b>&minus;k</b> options. Setting the argument of the option
+to &quot;&quot; for these tags causes the relevant document
+information field to be not written. Some of the document
+information values otherwise get their information from the
+input TIFF image, the software, author, document name, and
+image description.</p>
 <!-- INDENTATION -->
 <p>The Portable Document Format (PDF) specification is
 copyrighted by Adobe Systems, Incorporated.</p>
@@ -129,7 +131,7 @@ copyrighted by Adobe Systems, Incorporated.</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;o</b><i>output-file</i></p></td>
+<p><b>&minus;o</b> <i>output-file</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -137,7 +139,7 @@ copyrighted by Adobe Systems, Incorporated.</p>
 <tr valign="top" align="left">
 <td width="21%"></td>
 <td width="77%">
-<p>Set the output to go to file <i>output-file</i></p>
+<p>Set the output to go to file. <i>output-file</i></p>
 </td>
 </table>
 <!-- TABS -->
@@ -152,8 +154,8 @@ copyrighted by Adobe Systems, Incorporated.</p>
 <td width="5%"></td>
 <td width="77%">
 
-<p>Compress with JPEG (requires libjpeg configured with
-libtiff).</p>
+<p>Compress with JPEG (requires <i>libjpeg</i> configured
+with <i>libtiff</i>).</p>
 </td>
 <tr valign="top" align="left">
 <td width="11%"></td>
@@ -164,8 +166,8 @@ libtiff).</p>
 <td width="5%"></td>
 <td width="77%">
 
-<p>Compress with Zip/Deflate (requires zlib configured with
-libtiff).</p>
+<p>Compress with Zip/Deflate (requires <i>zlib</i>
+configured with <i>libtiff</i>).</p>
 </td>
 </table>
 <!-- INDENTATION -->
@@ -174,7 +176,7 @@ libtiff).</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;q</b><i>quality</i></p></td>
+<p><b>&minus;q</b> <i>quality</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -209,7 +211,8 @@ no compressed data passthrough.</p>
 <td width="7%"></td>
 <td width="77%">
 
-<p>Set PDF &quot;Interpolate&quot; user preference.</p>
+<p>Set PDF &lsquo;&lsquo;Interpolate&rsquo;&rsquo; user
+preference.</p>
 </td>
 <tr valign="top" align="left">
 <td width="11%"></td>
@@ -240,7 +243,7 @@ no compressed data passthrough.</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;p</b><i>paper-size</i></p></td>
+<p><b>&minus;p</b> <i>paper-size</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -248,8 +251,8 @@ no compressed data passthrough.</p>
 <tr valign="top" align="left">
 <td width="21%"></td>
 <td width="77%">
-<p>Set paper size, eg &quot;letter&quot;, &quot;legal&quot;,
-&quot;A4&quot;.</p>
+<p>Set paper size, e.g., <b>letter</b>, <b>legal</b>,
+<b>A4</b>.</p>
 </td>
 </table>
 <!-- INDENTATION -->
@@ -258,7 +261,7 @@ no compressed data passthrough.</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;u</b><i>[i|m]</i></p></td>
+<p><b>&minus;u</b> [<b>i</b>|<b>m</b>]</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -266,7 +269,7 @@ no compressed data passthrough.</p>
 <tr valign="top" align="left">
 <td width="21%"></td>
 <td width="77%">
-<p>Set distance unit, <i>i</i> for inch, <i>m</i> for
+<p>Set distance unit, <b>i</b> for inch, <b>m</b> for
 centimeter.</p>
 </td>
 </table>
@@ -276,7 +279,7 @@ centimeter.</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;w</b><i>width</i></p></td>
+<p><b>&minus;w</b> <i>width</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -293,7 +296,7 @@ centimeter.</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;l</b><i>length</i></p></td>
+<p><b>&minus;l</b> <i>length</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -304,34 +307,21 @@ centimeter.</p>
 <p>Set length in units.</p>
 </td>
 </table>
-<!-- TABS -->
+<!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
-       cols="5" cellspacing="0" cellpadding="0">
+       cols="2" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
-<td width="11%"></td>
-<td width="8%">
-
-<p><b>&minus;x</b><i>xres</i></p>
-</td>
-<td width="13%"></td>
-<td width="47%">
-
+<td width="10%"></td>
+<td width="89%">
+<p><b>&minus;x</b> <i>xres</i></p></td>
+</table>
+<!-- INDENTATION -->
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="21%"></td>
+<td width="77%">
 <p>Set x/width resolution default.</p>
-</td>
-<td width="19%">
-</td>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="8%">
-
-<p><b>&minus;y</b><i>yres</i></p>
-</td>
-<td width="13%"></td>
-<td width="47%">
-
-<p>Set y/length resolution default.</p>
-</td>
-<td width="19%">
 </td>
 </table>
 <!-- INDENTATION -->
@@ -340,7 +330,7 @@ centimeter.</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;r</b><i>[d|o]</i></p></td>
+<p><b>&minus;y</b> <i>yres</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -348,9 +338,26 @@ centimeter.</p>
 <tr valign="top" align="left">
 <td width="21%"></td>
 <td width="77%">
-<p>Set <i>d</i> for resolution default for images without
-resolution, <i>o for resolution override for all
-images.</i></p>
+<p>Set y/length resolution default.</p>
+</td>
+</table>
+<!-- INDENTATION -->
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="89%">
+<p><b>&minus;r</b> [<b>d</b>|<b>o</b>]</p></td>
+</table>
+<!-- INDENTATION -->
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="21%"></td>
+<td width="77%">
+<p>Set <b>d</b> for resolution default for images without
+resolution, <b>o</b> for resolution override for all
+images.</p>
 </td>
 </table>
 <!-- TABS -->
@@ -363,11 +370,12 @@ images.</i></p>
 <p><b>&minus;f</b></p>
 </td>
 <td width="13%"></td>
-<td width="54%">
+<td width="57%">
 
-<p>Set PDF &quot;Fit Window&quot; user preference.</p>
+<p>Set PDF &lsquo;&lsquo;Fit Window&rsquo;&rsquo; user
+preference.</p>
 </td>
-<td width="17%">
+<td width="14%">
 </td>
 </table>
 <!-- INDENTATION -->
@@ -376,7 +384,7 @@ images.</i></p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;e</b><i>YYYYMMDDHHMMSS</i></p></td>
+<p><b>&minus;e</b> <i>YYYYMMDDHHMMSS</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -394,7 +402,7 @@ date/time default, <i>YYYYMMDDHHMMSS.</i></p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;c</b><i>creator</i></p></td>
+<p><b>&minus;c</b> <i>creator</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -412,7 +420,7 @@ software default.</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;a</b><i>author</i></p></td>
+<p><b>&minus;a</b> <i>author</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -421,7 +429,7 @@ software default.</p>
 <td width="21%"></td>
 <td width="77%">
 <p>Set document information author, overrides image artist
-default</p>
+default.</p>
 </td>
 </table>
 <!-- INDENTATION -->
@@ -430,7 +438,7 @@ default</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;t</b><i>title</i></p></td>
+<p><b>&minus;t</b> <i>title</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -439,7 +447,7 @@ default</p>
 <td width="21%"></td>
 <td width="77%">
 <p>Set document information title, overrides image document
-name default</p>
+name default.</p>
 </td>
 </table>
 <!-- INDENTATION -->
@@ -448,7 +456,7 @@ name default</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;s</b><i>subject</i></p></td>
+<p><b>&minus;s</b> <i>subject</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -457,7 +465,7 @@ name default</p>
 <td width="21%"></td>
 <td width="77%">
 <p>Set document information subject, overrides image image
-description default</p>
+description default.</p>
 </td>
 </table>
 <!-- INDENTATION -->
@@ -466,7 +474,7 @@ description default</p>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>&minus;k</b><i>keywords</i></p></td>
+<p><b>&minus;k</b> <i>keywords</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -493,12 +501,7 @@ description default</p>
 </td>
 <td width="14%">
 </td>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="2%">
-</td>
-<td width="13%"></td>
-<td width="57%">
+</table>
 <a name="EXAMPLES"></a>
 <h2>EXAMPLES</h2>
 <!-- INDENTATION -->
@@ -516,17 +519,19 @@ from input.tiff.</p></td>
 <tr valign="top" align="left">
 <td width="20%"></td>
 <td width="79%">
-<p>tiff2pdf -o output.pdf input.tiff</p></td>
+<pre>tiff2pdf &minus;o output.pdf input.tiff
+</pre>
+</td>
 </table>
 <!-- INDENTATION -->
+
 <table width="100%" border=0 rules="none" frame="void"
        cols="2" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
 <p>The following example would generate PDF output from
-input.tiff and write it to standard output.</p>
-</td>
+input.tiff and write it to standard output.</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -534,9 +539,12 @@ input.tiff and write it to standard output.</p>
 <tr valign="top" align="left">
 <td width="20%"></td>
 <td width="79%">
-<p>tiff2pdf input.tiff</p></td>
+<pre>tiff2pdf input.tiff
+</pre>
+</td>
 </table>
 <!-- INDENTATION -->
+
 <table width="100%" border=0 rules="none" frame="void"
        cols="2" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
@@ -545,9 +553,9 @@ input.tiff and write it to standard output.</p>
 <p>The following example would generate the file output.pdf
 from input.tiff, putting the image pages on a letter sized
 page, compressing the output with JPEG, with JPEG quality
-75, setting the title to &quot;Document&quot;, and setting
-the &quot;Fit Window&quot; option.</p>
-</td>
+75, setting the title to
+&lsquo;&lsquo;Document&rsquo;&rsquo;, and setting the
+&lsquo;&lsquo;Fit Window&rsquo;&rsquo; option.</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -555,12 +563,14 @@ the &quot;Fit Window&quot; option.</p>
 <tr valign="top" align="left">
 <td width="20%"></td>
 <td width="79%">
-<p>tiff2pdf -p letter -j -q 75 -t &quot;Document&quot; -f -o
-output.pdf input.tiff</p></td>
+<pre>tiff2pdf &minus;p letter &minus;j &minus;q 75 &minus;t &quot;Document&quot; &minus;f &minus;o output.pdf input.tiff
+</pre>
+</td>
 </table>
 <a name="BUGS"></a>
 <h2>BUGS</h2>
 <!-- INDENTATION -->
+
 <table width="100%" border=0 rules="none" frame="void"
        cols="2" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
@@ -587,8 +597,8 @@ output.pdf input.tiff</p></td>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="89%">
-<p><b>libtiff</b>(3)<b>, tiffcp</b>(1)<b>,
-tiff2ps</b>(1)</p>
+<p><b>libtiff</b>(3), <b>tiffcp</b>(1),
+<b>tiff2ps</b>(1)</p>
 <!-- INDENTATION -->
 <p>Libtiff library home page:
 <b>http://www.remotesensing.org/libtiff/</b></p>

@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.18.1 -->
-<!-- CreationDate: Mon Mar 13 18:03:12 2006 -->
+<!-- CreationDate: Sat Feb 24 18:37:19 2007 -->
 <html>
 <head>
 <meta name="generator" content="groff -Thtml, see www.gnu.org">
@@ -53,10 +53,10 @@ output.tif</i></p>
 <small>TIFF.</small> By default, the <small>TIFF</small>
 image is created with data samples packed
 (<i>PlanarConfiguration</i>=1), compressed with the PackBits
-algorithm (<i>Compression</i>=<i>32773),</i> and with each
-strip no more than 8 kilobytes. These characteristics can
-overridden, or explicitly specified with the options
-described below.</p>
+algorithm (<i>Compression</i>=32773), and with each strip no
+more than 8 kilobytes. These characteristics can overridden,
+or explicitly specified with the options described
+below.</p>
 </td>
 </table>
 <a name="OPTIONS"></a>
@@ -67,7 +67,7 @@ described below.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;H &lt;number&gt;</b></p></td>
+<p><b>&minus;H</b> <i>number</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -86,7 +86,7 @@ file while reading.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;w &lt;number&gt;</b></p></td>
+<p><b>&minus;w</b> <i>number</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -105,7 +105,7 @@ below).</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;l &lt;number&gt;</b></p></td>
+<p><b>&minus;l</b> <i>number</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -113,7 +113,7 @@ below).</p>
 <tr valign="top" align="left">
 <td width="19%"></td>
 <td width="80%">
-<p>length of input image in lines(can be guessed, see
+<p>length of input image in lines (can be guessed, see
 <b><small>GUESSING THE IMAGE GEOMETRY</small></b>
 below).</p>
 </td>
@@ -124,7 +124,7 @@ below).</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;b &lt;number&gt;</b></p></td>
+<p><b>&minus;b</b> <i>number</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -141,7 +141,7 @@ below).</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;d data_type</b></p></td>
+<p><b>&minus;d</b> <i>data_type</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -149,117 +149,91 @@ below).</p>
 <tr valign="top" align="left">
 <td width="19%"></td>
 <td width="80%">
-<p>type of samples in input image, where <b>data_type</b>
+<p>type of samples in input image, where <i>data_type</i>
 may be:</p></td>
 </table>
 <!-- TABS -->
 <table width="100%" border=0 rules="none" frame="void"
-       cols="5" cellspacing="0" cellpadding="0">
+       cols="3" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="10%">
 
-<p><i>byte</i></p>
+<p><b>byte</b></p>
 </td>
-<td width="6%">
-</td>
-<td width="6%">
+<td width="70%">
 
 <p>8-bit unsigned integer (default),</p>
 </td>
-<td width="61%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="10%">
 
-<p><i>short</i></p>
+<p><b>short</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="70%">
 
 <p>16-bit unsigned integer,</p>
 </td>
-<td width="61%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="10%">
 
-<p><i>long</i></p>
+<p><b>long</b></p>
 </td>
-<td width="6%">
-</td>
-<td width="6%">
+<td width="70%">
 
 <p>32-bit unsigned integer,</p>
 </td>
-<td width="61%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="10%">
 
-<p><i>sbyte</i></p>
+<p><b>sbyte</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="70%">
 
 <p>8-bit signed integer,</p>
 </td>
-<td width="61%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="10%">
 
-<p><i>sshort</i></p>
+<p><b>sshort</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="70%">
 
 <p>16-bit signed integer,</p>
 </td>
-<td width="61%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="10%">
 
-<p><i>slong</i></p>
+<p><b>slong</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="70%">
 
 <p>32-bit signed integer,</p>
 </td>
-<td width="61%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="10%">
 
-<p><i>float</i></p>
+<p><b>float</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="70%">
 
 <p>32-bit IEEE floating point,</p>
 </td>
-<td width="61%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="10%">
 
-<p><i>double</i></p>
+<p><b>double</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="70%">
 
-<p>64-bit IEEE floating point,</p>
-</td>
-<td width="61%">
+<p>64-bit IEEE floating point.</p>
 </td>
 </table>
 <!-- INDENTATION -->
@@ -268,7 +242,7 @@ may be:</p></td>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;i config</b></p></td>
+<p><b>&minus;i</b> <i>config</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -277,37 +251,30 @@ may be:</p></td>
 <td width="19%"></td>
 <td width="80%">
 <p>type of samples interleaving in input image, where
-<b>config</b> may be:</p></td>
+<i>config</i> may be:</p></td>
 </table>
 <!-- TABS -->
 <table width="100%" border=0 rules="none" frame="void"
-       cols="5" cellspacing="0" cellpadding="0">
+       cols="3" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="8%">
 
-<p><i>pixel</i></p>
+<p><b>pixel</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="71%">
 
 <p>pixel interleaved data (default),</p>
 </td>
-<td width="61%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="8%">
 
-<p><i>band</i></p>
+<p><b>band</b></p>
 </td>
-<td width="6%">
-</td>
-<td width="6%">
+<td width="71%">
 
 <p>band interleaved data.</p>
-</td>
-<td width="61%">
 </td>
 </table>
 <!-- INDENTATION -->
@@ -316,7 +283,7 @@ may be:</p></td>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;p photo</b></p></td>
+<p><b>&minus;p</b> <i>photo</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -325,100 +292,90 @@ may be:</p></td>
 <td width="19%"></td>
 <td width="80%">
 <p>photometric interpretation (color space) of the input
-image, where <b>photo</b> may be:<i><br>
-miniswhite</i> white color represented with 0 value,<i><br>
-minisblack</i> black color represented with 0 value
-(default),</p></td>
+image, where <i>photo</i> may be:</p></td>
 </table>
 <!-- TABS -->
 <table width="100%" border=0 rules="none" frame="void"
-       cols="6" cellspacing="0" cellpadding="0">
+       cols="3" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="15%">
 
-<p><i>rgb</i></p>
+<p><b>miniswhite</b></p>
 </td>
-<td width="6%">
+<td width="65%">
+
+<p>white color represented with 0 value,</p>
 </td>
-<td width="6%">
+<tr valign="top" align="left">
+<td width="19%"></td>
+<td width="15%">
+
+<p><b>minisblack</b></p>
+</td>
+<td width="65%">
+
+<p>black color represented with 0 value (default),</p>
+</td>
+<tr valign="top" align="left">
+<td width="19%"></td>
+<td width="15%">
+
+<p><b>rgb</b></p>
+</td>
+<td width="65%">
 
 <p>image has RGB color model,</p>
 </td>
-<td width="6%"></td>
-<td width="55%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="15%">
 
-<p><i>cmyk</i></p>
+<p><b>cmyk</b></p>
 </td>
-<td width="6%">
-</td>
-<td width="6%">
+<td width="65%">
 
 <p>image has CMYK (separated) color model,</p>
 </td>
-<td width="6%"></td>
-<td width="55%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="15%">
 
-<p><i>ycbcr</i></p>
+<p><b>ycbcr</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
-</td>
-<td width="6%">
+<td width="65%">
 
 <p>image has YCbCr color model,</p>
 </td>
-<td width="55%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="15%">
 
-<p><i>cielab</i></p>
+<p><b>cielab</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="65%">
 
 <p>image has CIE L*a*b color model,</p>
 </td>
-<td width="6%"></td>
-<td width="55%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="15%">
 
-<p><i>icclab</i></p>
+<p><b>icclab</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="65%">
 
 <p>image has ICC L*a*b color model,</p>
 </td>
-<td width="6%"></td>
-<td width="55%">
-</td>
 <tr valign="top" align="left">
 <td width="19%"></td>
-<td width="6%">
+<td width="15%">
 
-<p><i>itulab</i></p>
+<p><b>itulab</b></p>
 </td>
-<td width="6%"></td>
-<td width="6%">
+<td width="65%">
 
-<p>image has ITU L*a*b color model,</p>
-</td>
-<td width="6%"></td>
-<td width="55%">
+<p>image has ITU L*a*b color model.</p>
 </td>
 </table>
 <!-- TABS -->
@@ -473,12 +430,12 @@ minisblack</i> black color represented with 0 value
 <td width="80%">
 
 <p>Specify a compression scheme to use when writing image
-data: <b>&minus;c none</b> for no compression, <b>-c
+data: <b>&minus;c none</b> for no compression, <b>&minus;c
 packbits</b> for the PackBits compression algorithm (the
-default), <b>-c jpeg</b> for the baseline JPEG compression
-algorithm, <b>-c zip</b> for the Deflate compression
-algorithm, and <b>&minus;c lzw</b> for Lempel-Ziv &amp;
-Welch.</p>
+default), <b>&minus;c jpeg</b> for the baseline JPEG
+compression algorithm, <b>&minus;c zip</b> for the Deflate
+compression algorithm, and <b>&minus;c lzw</b> for
+Lempel-Ziv &amp; Welch.</p>
 </td>
 <td width="0%">
 </td>
@@ -489,7 +446,7 @@ Welch.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;r &lt;number&gt;</b></p></td>
+<p><b>&minus;r</b> <i>number</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"

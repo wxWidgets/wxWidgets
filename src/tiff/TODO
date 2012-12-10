@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/TODO,v 1.6 2002/10/10 05:28:43 warmerda Exp $
+#	$Header: /cvs/libtiff/TODO,v 1.6 2002/10/10 05:28:43 warmerda Exp $
 
 o gif2tiff segaulting on selected images
 o tiffcmp read data by strip/tile instead of scanline

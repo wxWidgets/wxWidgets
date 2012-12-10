@@ -1,4 +1,4 @@
-.\" $Id: libtiff.3tiff,v 1.3 2005/11/02 11:07:19 dron Exp $
+.\" $Id: libtiff.3tiff,v 1.4 2012-07-29 15:45:30 tgl Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -163,9 +163,18 @@ TIFFCurrentTile		return index of current tile
 TIFFDataWidth 		return the size of TIFF data types
 TIFFError		library error handler
 TIFFFdOpen		open a file for reading or writing
+TIFFFieldDataType	get data type from field information
+TIFFFieldName		get field name from field information
+TIFFFieldPassCount	get whether to pass a value count to Get/SetField
+TIFFFieldReadCount	get number of values to be read from field
+TIFFFieldTag		get tag value from field information
+TIFFFieldWithName	get field information given field name
+TIFFFieldWithTag	get field information given tag
+TIFFFieldWriteCount	get number of values to be written to field
 TIFFFileName		return name of open file
 TIFFFileno		return open file descriptor
 TIFFFindCODEC		find standard codec for the specific scheme
+TIFFFindField		get field information given tag and data type
 TIFFFlush		flush all pending writes
 TIFFFlushData		flush pending data writes
 TIFFGetBitRevTable	return bit reversal table

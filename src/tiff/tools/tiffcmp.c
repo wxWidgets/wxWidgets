@@ -29,9 +29,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"
@@ -51,7 +56,7 @@ static	uint32 imagelength;
 static	void usage(void);
 static	int tiffcmp(TIFF*, TIFF*);
 static	int cmptags(TIFF*, TIFF*);
-static	int ContigCompare(int, uint32, unsigned char*, unsigned char*, int);
+static	int ContigCompare(int, uint32, unsigned char*, unsigned char*, tsize_t);
 static	int SeparateCompare(int, int, uint32, unsigned char*, unsigned char*);
 static	void PrintIntDiff(uint32, int, uint32, uint32, uint32);
 static	void PrintFloatDiff(uint32, int, uint32, double, double);
@@ -308,7 +313,7 @@ cmptags(TIFF* tif1, TIFF* tif2)
 
 static int
 ContigCompare(int sample, uint32 row,
-	      unsigned char* p1, unsigned char* p2, int size)
+	      unsigned char* p1, unsigned char* p2, tsize_t size)
 {
     uint32 pix;
     int ppb = 8 / bitspersample;
@@ -383,7 +388,7 @@ ContigCompare(int sample, uint32 row,
 			int	s;
 
 			for(s = 0; s < samples_to_test; s++) {
-				if (*pix1 != *pix2) {
+				if (fabs(*pix1 - *pix2) < 0.000000000001) {
 					PrintFloatDiff(row, sample, pix,
 						       *pix1, *pix2);
 				}
@@ -630,3 +635,10 @@ leof(const char* name, uint32 row, int s)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */
