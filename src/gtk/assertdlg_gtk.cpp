@@ -231,8 +231,9 @@ static void gtk_assert_dialog_continue_callback(GtkWidget*, GtkAssertDialog* dlg
    GtkAssertDialogClass implementation
  ---------------------------------------------------------------------------- */
 
-static void     gtk_assert_dialog_init              (GtkAssertDialog        *self);
-static void     gtk_assert_dialog_class_init        (GtkAssertDialogClass *klass);
+extern "C" {
+static void gtk_assert_dialog_init(GTypeInstance* instance, void*);
+}
 
 GType gtk_assert_dialog_get_type()
 {
@@ -245,12 +246,12 @@ GType gtk_assert_dialog_get_type()
             sizeof (GtkAssertDialogClass),
             NULL,           /* base_init */
             NULL,           /* base_finalize */
-            (GClassInitFunc) gtk_assert_dialog_class_init,
+            NULL,
             NULL,           /* class_finalize */
             NULL,           /* class_data */
             sizeof (GtkAssertDialog),
             16,             /* n_preallocs */
-            (GInstanceInitFunc) gtk_assert_dialog_init,
+            gtk_assert_dialog_init,
             NULL
         };
         assert_dialog_type = g_type_register_static (GTK_TYPE_DIALOG, "GtkAssertDialog", &assert_dialog_info, (GTypeFlags)0);
@@ -259,13 +260,10 @@ GType gtk_assert_dialog_get_type()
     return assert_dialog_type;
 }
 
-static void gtk_assert_dialog_class_init(GtkAssertDialogClass*)
+extern "C" {
+static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
 {
-    /* no special initializations required */
-}
-
-static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
-{
+    GtkAssertDialog* dlg = GTK_ASSERT_DIALOG(instance);
     GtkWidget *continuebtn;
 
     {
@@ -372,6 +370,7 @@ static void gtk_assert_dialog_init(GtkAssertDialog* dlg)
     gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
     gtk_widget_pop_composite_child ();
     gtk_widget_show_all (GTK_WIDGET(dlg));
+}
 }
 
 /* ----------------------------------------------------------------------------
