@@ -392,6 +392,17 @@ protected:
         // renames
         else if (nativeFlags & IN_MOVE)
         {
+            // IN_MOVE events are produced in the following circumstances:
+            // * A move within a dir (what the user sees as a rename) gives an
+            //   IN_MOVED_FROM and IN_MOVED_TO pair, each with the same path.
+            // * A move within watched dir foo/ e.g. from foo/bar1/ to foo/bar2/
+            //   will also produce such a pair, but with different paths.
+            // * A move to baz/ will give only an IN_MOVED_FROM for foo/bar1;
+            //   if baz/ is inside a different watch, that gets the IN_MOVED_TO.
+
+            // The first event to arrive, usually the IN_MOVED_FROM, is
+            // cached to await a matching IN_MOVED_TO; should none arrive, the
+            // unpaired event will be processed later in ProcessRenames().
             wxInotifyCookies::iterator it2 = m_cookies.find(inevt.cookie);
             if ( it2 == m_cookies.end() )
             {
@@ -410,15 +421,35 @@ protected:
                 // If there's a filespec, assume he's not
                 if ( watch.GetFilespec().empty() )
                 {
+                    // The the only way to know the path for the first event,
+                    // normally the IN_MOVED_FROM, is to retrieve the watch
+                    // corresponding to oldinevt. This is needed for a move
+                    // within a watch.
+                    wxFSWatchEntry* oldwatch;
+                    wxFSWatchEntryDescriptors::iterator oldwatch_it =
+                                                m_watchMap.find(oldinevt.wd);
+                    if (oldwatch_it != m_watchMap.end())
+                    {
+                        oldwatch = oldwatch_it->second;
+                    }
+                    else
+                    {
+                        wxLogTrace(wxTRACE_FSWATCHER,
+                            "oldinevt's watch descriptor not in the watch map");
+                        // For want of a better alternative, use 'watch'. That
+                        // will work fine for renames, though not for moves
+                        oldwatch = &watch;
+                    }
+
                     wxFileSystemWatcherEvent event(flags);
                     if ( inevt.mask & IN_MOVED_FROM )
                     {
                         event.SetPath(GetEventPath(watch, inevt));
-                        event.SetNewPath(GetEventPath(watch, oldinevt));
+                        event.SetNewPath(GetEventPath(*oldwatch, oldinevt));
                     }
                     else
                     {
-                        event.SetPath(GetEventPath(watch, oldinevt));
+                        event.SetPath(GetEventPath(*oldwatch, oldinevt));
                         event.SetNewPath(GetEventPath(watch, inevt));
                     }
                     SendEvent(event);
@@ -443,6 +474,8 @@ protected:
 
     void ProcessRenames()
     {
+        // After all of a batch of events has been processed, this deals with
+        // any still-unpaired IN_MOVED_FROM or IN_MOVED_TO events.
         wxInotifyCookies::iterator it = m_cookies.begin();
         while ( it != m_cookies.end() )
         {
