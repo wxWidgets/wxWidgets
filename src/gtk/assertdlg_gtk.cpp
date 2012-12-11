@@ -34,6 +34,7 @@
    GtkAssertDialog helpers
  ---------------------------------------------------------------------------- */
 
+static
 GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
                                             const gchar *stock)
 {
@@ -52,6 +53,7 @@ GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
     return button;
 }
 
+static
 GtkWidget *gtk_assert_dialog_add_button (GtkAssertDialog *dlg, const gchar *label,
                                          const gchar *stock, gint response_id)
 {
@@ -66,6 +68,7 @@ GtkWidget *gtk_assert_dialog_add_button (GtkAssertDialog *dlg, const gchar *labe
 
 #if wxUSE_STACKWALKER
 
+static
 void gtk_assert_dialog_append_text_column (GtkWidget *treeview, const gchar *name, int index)
 {
     GtkCellRenderer *renderer;
@@ -79,6 +82,7 @@ void gtk_assert_dialog_append_text_column (GtkWidget *treeview, const gchar *nam
     gtk_tree_view_column_set_reorderable (column, TRUE);
 }
 
+static
 GtkWidget *gtk_assert_dialog_create_backtrace_list_model ()
 {
     GtkListStore *store;
@@ -105,6 +109,7 @@ GtkWidget *gtk_assert_dialog_create_backtrace_list_model ()
     return treeview;
 }
 
+static
 void gtk_assert_dialog_process_backtrace (GtkAssertDialog *dlg)
 {
     /* set busy cursor */
