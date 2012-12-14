@@ -629,6 +629,10 @@ void wxDataObject::AddSupportedTypes( void* cfarray)
         {
             CFArrayAppendValue((CFMutableArrayRef)cfarray, kUTTypePDF);
         }
+        else if ( dataFormat.GetType() == wxDF_PRIVATE )
+        {
+            CFArrayAppendValue((CFMutableArrayRef)cfarray, (CFStringRef) dataFormat.GetFormatId());
+        }
     }
     delete[] array;
 }
