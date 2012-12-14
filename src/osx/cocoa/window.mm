@@ -1150,7 +1150,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             
             // super of built-ins keeps the mouse up, as wx expects this event, we have to synthesize it
             // only trigger if at this moment the mouse is already up
-            if ( [ event type]  == NSLeftMouseDown && !( [NSEvent pressedMouseButtons] & 0x01) )
+            if ( [ event type]  == NSLeftMouseDown && !wxGetMouseState().LeftIsDown() )
             {
                 wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
                 SetupMouseEvent(wxevent , event) ;
