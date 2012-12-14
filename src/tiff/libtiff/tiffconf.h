@@ -7,6 +7,10 @@
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
 
+#ifdef __MINGW32__
+#include <basetyps.h>
+#endif
+
 /* Define to 1 if the system has the type `int16'. */
 /* #undef HAVE_INT16 */
 
