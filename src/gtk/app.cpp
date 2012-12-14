@@ -288,10 +288,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     if ( !wxAppBase::Initialize(argc_, argv_) )
         return false;
 
-    // disable Ubuntu "overlay scrollbar" until we figure out how to keep it
-    // from messing up our window contents when scrolling, see ticket #14871
-    wxSetEnv(wxS("LIBOVERLAY_SCROLLBAR"), wxS("0"));
-
 #if wxUSE_THREADS
     if (!g_thread_supported())
     {
