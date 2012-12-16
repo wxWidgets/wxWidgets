@@ -381,6 +381,12 @@ static inline gint wx_gdk_visual_get_depth(GdkVisual* visual)
 }
 #define gdk_visual_get_depth wx_gdk_visual_get_depth
 
+static inline gboolean wx_gtk_window_has_group(GtkWindow* window)
+{
+    return window->group != NULL;
+}
+#define gtk_window_has_group wx_gtk_window_has_group
+
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.24
 
