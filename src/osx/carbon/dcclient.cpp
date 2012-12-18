@@ -58,6 +58,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     if ( cg == NULL )
     {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
+        SetDeviceOrigin(-window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize());
     }
     else
     {
@@ -157,7 +158,11 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
     m_window->GetClientSize( &m_width , &m_height);
     if ( !m_window->IsShownOnScreen() )
         m_width = m_height = 0;
-    SetDeviceOrigin( origin.x, origin.y );
+    
+    int x0,y0;
+    DoGetDeviceOrigin(&x0,&y0);
+    SetDeviceOrigin( origin.x + x0, origin.y + y0 );
+    
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 
