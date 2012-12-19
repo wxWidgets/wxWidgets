@@ -246,9 +246,26 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 
 CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
 {
-    CGColorRef color ;
-    HIThemeBrushCreateCGColor( brush, &color );
-    return color;
+    const int maxcachedbrush = 58+5; // negative indices are for metabrushes, cache down to -5)
+    int brushindex = brush+5;
+    if ( brushindex < 0 || brush > brushindex )
+    {
+        CGColorRef color ;
+        HIThemeBrushCreateCGColor( brush, &color );
+        return color;
+    }
+    else
+    {
+        static bool inited = false;
+        static CGColorRef themecolors[maxcachedbrush+1];
+        if ( !inited )
+        {
+            for ( int i = 0 ; i <= maxcachedbrush ; ++i )
+                HIThemeBrushCreateCGColor( i-5, &themecolors[i] );
+            inited = true;
+        }
+        return CGColorRetain(themecolors[brushindex ]);
+    }
 }
 
 //---------------------------------------------------------------------------
