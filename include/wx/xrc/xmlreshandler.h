@@ -354,6 +354,15 @@ protected:
     wxWindow *m_parentAsWindow;
     wxXmlResource *m_resource;
 
+    // provide method access to those member variables
+    wxXmlResource* GetResource() const        { return m_resource; }
+    wxXmlNode* GetNode() const                { return m_node; }
+    wxString GetClass() const                 { return m_class; }
+    wxObject* GetParent() const               { return m_parent; }
+    wxObject* GetInstance() const             { return m_instance; }
+    wxWindow* GetParentAsWindow() const       { return m_parentAsWindow; }
+
+    
     wxArrayString m_styleNames;
     wxArrayInt m_styleValues;
 

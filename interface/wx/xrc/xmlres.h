@@ -537,7 +537,7 @@ protected:
     /**
         Creates an animation (see wxAnimation) from the filename specified in @a param.
     */
-    wxAnimation GetAnimation(const wxString& param = "animation");
+    wxAnimation* GetAnimation(const wxString& param = "animation");
 
     /**
         Gets a bitmap.
@@ -742,5 +742,55 @@ protected:
         @since 2.9.0
      */
     void ReportParamError(const wxString& param, const wxString& message);
+
+
+    /**
+       After CreateResource has been called this will return the current
+       wxXmlResource object.
+       
+       @since 2.9.5
+    */
+    wxXmlResource* GetResource() const;
+
+    /**
+       After CreateResource has been called this will return the XML node
+       being processed.
+
+       @since 2.9.5
+    */
+    wxXmlNode* GetNode() const;
+
+    /**
+       After CreateResource has been called this will return the class name of
+       the XML resource node being processed.
+
+       @since 2.9.5
+    */
+    wxString GetClass() const;
+
+    /**
+       After CreateResource has been called this will return the current
+       item's parent, if any.
+
+       @since 2.9.5
+    */
+    wxObject* GetParent() const;
+
+    /**
+       After CreateResource has been called this will return the instance that
+       the XML resource content should be created upon, if it has already been
+       created.  If @NULL then the handler should create the object itself.
+
+       @since 2.9.5
+    */
+    wxObject* GetInstance() const;
+
+    /**
+       After CreateResource has been called this will return the item's parent
+       as a wxWindow.
+
+       @since 2.9.5
+    */
+    wxWindow* GetParentAsWindow() const;    
 };
 
