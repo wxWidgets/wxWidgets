@@ -248,7 +248,7 @@ CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
 {
     const int maxcachedbrush = 58+5; // negative indices are for metabrushes, cache down to -5)
     int brushindex = brush+5;
-    if ( brushindex < 0 || brush > brushindex )
+    if ( brushindex < 0 || brushindex > maxcachedbrush )
     {
         CGColorRef color ;
         HIThemeBrushCreateCGColor( brush, &color );
