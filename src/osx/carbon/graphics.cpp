@@ -1486,7 +1486,7 @@ public:
     // fast convenience methods
     
     
-    virtual void DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
 
     void SetNativeContext( CGContextRef cg );
 
@@ -2706,7 +2706,7 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
 }
 
 
-void wxMacCoreGraphicsContext::DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     if (m_composition == wxCOMPOSITION_DEST) 
         return; 
