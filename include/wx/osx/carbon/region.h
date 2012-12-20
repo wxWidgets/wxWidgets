@@ -55,6 +55,7 @@ protected:
 
     virtual bool DoOffset(wxCoord x, wxCoord y);
     virtual bool DoCombine(const wxRegion& region, wxRegionOp op);
+    virtual bool DoUnionWithRect(const wxRect& rect);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRegion)

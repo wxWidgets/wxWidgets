@@ -169,6 +169,21 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
     return true ;
 }
 
+bool wxRegion::DoUnionWithRect(const wxRect& rect)
+{
+    if ( !m_refData )
+    {
+        m_refData = new wxRegionRefData(rect.x , rect.y , rect.width , rect.height);
+        return true;
+    }
+    
+    AllocExclusive();
+    
+    CGRect r = CGRectMake(rect.x , rect.y , rect.width , rect.height);
+    HIShapeUnionWithRect(M_REGION , &r);
+    
+    return true;
+}
 
 //! Union /e region with this.
 bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
