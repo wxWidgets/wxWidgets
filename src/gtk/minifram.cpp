@@ -435,6 +435,10 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 void wxMiniFrame::DoGetClientSize(int* width, int* height) const
 {
     wxFrame::DoGetClientSize(width, height);
+
+    if (m_useCachedClientSize)
+        return;
+
     if (width)
     {
         *width -= 2 * m_miniEdge;

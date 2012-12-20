@@ -216,11 +216,12 @@ extern "C" {
 static void
 size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
 {
-    if (win->m_oldClientWidth  != alloc->width ||
-        win->m_oldClientHeight != alloc->height)
+    win->m_useCachedClientSize = true;
+    if (win->m_clientWidth  != alloc->width ||
+        win->m_clientHeight != alloc->height)
     {
-        win->m_oldClientWidth  = alloc->width;
-        win->m_oldClientHeight = alloc->height;
+        win->m_clientWidth  = alloc->width;
+        win->m_clientHeight = alloc->height;
 
         GtkAllocation a;
         gtk_widget_get_allocation(win->m_widget, &a);
@@ -343,7 +344,8 @@ gtk_frame_map_callback( GtkWidget*,
         // tlw that was "rolled up" with some WMs.
         // Queue a resize rather than sending size event directly to allow
         // children to be made visible first.
-        win->m_oldClientWidth = 0;
+        win->m_useCachedClientSize = false;
+        win->m_clientWidth = 0;
         gtk_widget_queue_resize(win->m_wxwindow);
     }
     // it is possible for m_isShown to be false here, see bug #9909
@@ -1067,12 +1069,13 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     if (m_width != oldSize.x || m_height != oldSize.y)
     {
         m_deferShowAllowed = true;
+        m_useCachedClientSize = false;
 
         int w, h;
         GTKDoGetSize(&w, &h);
         gtk_window_resize(GTK_WINDOW(m_widget), w, h);
 
-        GetClientSize(&m_oldClientWidth, &m_oldClientHeight);
+        DoGetClientSize(&m_clientWidth, &m_clientHeight);
         wxSizeEvent event(GetSize(), GetId());
         event.SetEventObject(this);
         HandleWindowEvent(event);
@@ -1102,6 +1105,8 @@ void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
         if ( height )
             *height = 0;
     }
+    else if (m_useCachedClientSize)
+        base_type::DoGetClientSize(width, height);
     else
     {
         GTKDoGetSize(width, height);
@@ -1159,6 +1164,7 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
         GetCachedDecorSize() = decorSize;
     if (m_updateDecorSize && m_decorSize != decorSize)
     {
+        m_useCachedClientSize = false;
         const wxSize diff = decorSize - m_decorSize;
         m_decorSize = decorSize;
         bool resized = false;
@@ -1186,7 +1192,7 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
             m_height += diff.y;
             if (m_width  < 1) m_width  = 1;
             if (m_height < 1) m_height = 1;
-            m_oldClientWidth = 0;
+            m_clientWidth = 0;
             gtk_widget_queue_resize(m_wxwindow);
         }
     }
@@ -1194,7 +1200,7 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
     {
         // gtk_widget_show() was deferred, do it now
         m_deferShow = false;
-        GetClientSize(&m_oldClientWidth, &m_oldClientHeight);
+        DoGetClientSize(&m_clientWidth, &m_clientHeight);
         wxSizeEvent sizeEvent(GetSize(), GetId());
         sizeEvent.SetEventObject(this);
         HandleWindowEvent(sizeEvent);

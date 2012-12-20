@@ -255,7 +255,11 @@ public:
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
-    int                  m_oldClientWidth,m_oldClientHeight;
+    int m_clientWidth, m_clientHeight;
+    // Whether the client size variables above are known to be correct
+    // (because they have been validated by a size-allocate) and should
+    // be used to report client size
+    bool m_useCachedClientSize;
 
     // see the docs in src/gtk/window.cpp
     GtkWidget           *m_widget;          // mostly the widget seen by the rest of GTK

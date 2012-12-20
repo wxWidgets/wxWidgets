@@ -74,6 +74,9 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 
     wxFrameBase::DoGetClientSize(width, height);
 
+    if (m_useCachedClientSize)
+        return;
+
     if (height)
     {
 #if wxUSE_MENUS_NATIVE
@@ -287,7 +290,8 @@ void wxFrame::DetachMenuBar()
     wxFrameBase::DetachMenuBar();
 
     // make sure next size_allocate causes a wxSizeEvent
-    m_oldClientWidth = 0;
+    m_useCachedClientSize = false;
+    m_clientWidth = 0;
 }
 
 void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
@@ -314,7 +318,8 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 #endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2/!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
     }
     // make sure next size_allocate causes a wxSizeEvent
-    m_oldClientWidth = 0;
+    m_useCachedClientSize = false;
+    m_clientWidth = 0;
 }
 #endif // wxUSE_MENUS_NATIVE
 
@@ -365,7 +370,8 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
         gtk_widget_set_size_request(toolbar->m_widget, -1, -1);
     }
     // make sure next size_allocate causes a wxSizeEvent
-    m_oldClientWidth = 0;
+    m_useCachedClientSize = false;
+    m_clientWidth = 0;
 }
 
 #endif // wxUSE_TOOLBAR
@@ -382,7 +388,8 @@ void wxFrame::SetStatusBar(wxStatusBar *statbar)
         gtk_box_set_child_packing(GTK_BOX(m_mainWidget),
             statbar->m_widget, false, false, 0, GTK_PACK_END);
         // make sure next size_allocate on statusbar causes a size event
-        statbar->m_oldClientWidth = 0;
+        statbar->m_useCachedClientSize = false;
+        statbar->m_clientWidth = 0;
         int h = -1;
         if (statbar->m_wxwindow)
         {
@@ -392,6 +399,7 @@ void wxFrame::SetStatusBar(wxStatusBar *statbar)
         gtk_widget_set_size_request(statbar->m_widget, -1, h);
     }
     // make sure next size_allocate causes a wxSizeEvent
-    m_oldClientWidth = 0;
+    m_useCachedClientSize = false;
+    m_clientWidth = 0;
 }
 #endif // wxUSE_STATUSBAR

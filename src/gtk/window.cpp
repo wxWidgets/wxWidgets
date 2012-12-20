@@ -1910,10 +1910,11 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
         if (w < 0) w = 0;
         if (h < 0) h = 0;
     }
-    if (win->m_oldClientWidth != w || win->m_oldClientHeight != h)
+    win->m_useCachedClientSize = true;
+    if (win->m_clientWidth != w || win->m_clientHeight != h)
     {
-        win->m_oldClientWidth  = w;
-        win->m_oldClientHeight = h;
+        win->m_clientWidth  = w;
+        win->m_clientHeight = h;
         // this callback can be connected to m_wxwindow,
         // so always get size from m_widget->allocation
         GtkAllocation a;
@@ -1960,18 +1961,9 @@ static void style_updated(GtkWidget*, wxWindow* win)
 static void style_updated(GtkWidget*, GtkStyle*, wxWindow* win)
 #endif
 {
-    if (win->IsTopLevel())
-    {
-        wxSysColourChangedEvent event;
-        event.SetEventObject(win);
-        win->GTKProcessEvent(event);
-    }
-    else
-    {
-        // Border width could change, which will change client size.
-        // Make sure size event occurs for this
-        win->m_oldClientWidth = 0;
-    }
+    wxSysColourChangedEvent event;
+    event.SetEventObject(win);
+    win->GTKProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -2035,8 +2027,7 @@ void wxWindowGTK::GTKHandleRealized()
 
     GTKUpdateCursor(true, false);
 
-    if (m_wxwindow &&
-        (IsTopLevel() || HasFlag(wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME)))
+    if (m_wxwindow && IsTopLevel())
     {
         // attaching to style changed signal after realization avoids initial
         // changes we don't care about
@@ -2064,8 +2055,11 @@ void wxWindowGTK::GTKHandleUnrealize()
         if (m_imData)
             gtk_im_context_set_client_window(m_imData->context, NULL);
 
-        g_signal_handlers_disconnect_by_func(
-            m_wxwindow, (void*)style_updated, this);
+        if (IsTopLevel())
+        {
+            g_signal_handlers_disconnect_by_func(
+                m_wxwindow, (void*)style_updated, this);
+        }
     }
 }
 
@@ -2214,8 +2208,9 @@ void wxWindowGTK::Init()
         m_scrollPos[dir] = 0;
     }
 
-    m_oldClientWidth =
-    m_oldClientHeight = 0;
+    m_clientWidth =
+    m_clientHeight = 0;
+    m_useCachedClientSize = false;
 
     m_clipPaintRegion = false;
 
@@ -2731,6 +2726,10 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         height = m_height;
 
     const bool sizeChange = m_width != width || m_height != height;
+
+    if (sizeChange)
+        m_useCachedClientSize = false;
+
     if (sizeChange || m_x != x || m_y != y)
     {
         m_x = x;
@@ -2760,7 +2759,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     {
         // update these variables to keep size_allocate handler
         // from sending another size event for this change
-        GetClientSize( &m_oldClientWidth, &m_oldClientHeight );
+        DoGetClientSize(&m_clientWidth, &m_clientHeight);
 
         wxSizeEvent event( wxSize(m_width,m_height), GetId() );
         event.SetEventObject( this );
@@ -2824,6 +2823,13 @@ void wxWindowGTK::DoSetClientSize( int width, int height )
 void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
+
+    if (m_useCachedClientSize)
+    {
+        if (width)  *width  = m_clientWidth;
+        if (height) *height = m_clientHeight;
+        return;
+    }
 
     int w = m_width;
     int h = m_height;

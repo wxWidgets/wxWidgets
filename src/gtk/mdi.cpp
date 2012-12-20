@@ -191,7 +191,7 @@ void wxMDIParentFrame::DoGetClientSize(int* width, int* height) const
 {
     wxFrame::DoGetClientSize(width, height);
 
-    if (height)
+    if (!m_useCachedClientSize && height)
     {
         wxMDIChildFrame* active_child_frame = GetActiveChild();
         if (active_child_frame)
