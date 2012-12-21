@@ -2103,10 +2103,7 @@ void wxClientDCImpl::DoGetSize(int *width, int *height) const
 {
     wxCHECK_RET( m_window, wxT("GetSize() doesn't work without window") );
 
-    if (m_window->m_wxwindow && m_gdkwindow)
-        gdk_drawable_get_size(m_gdkwindow, width, height);
-    else
-        m_window->GetClientSize(width, height);
+    m_window->GetClientSize(width, height);
 }
 
 //-----------------------------------------------------------------------------
