@@ -32,6 +32,11 @@
 
 #include <windows.h>
 
+/* This define is missing from VC6 headers. */
+#ifndef INVALID_SET_FILE_POINTER
+#define INVALID_SET_FILE_POINTER ((DWORD)-1)
+#endif
+
 static tmsize_t
 _tiffReadProc(thandle_t fd, void* buf, tmsize_t size)
 {
