@@ -16,7 +16,15 @@ enum wxDialogLayoutAdaptationMode
     wxDIALOG_ADAPTATION_MODE_DISABLED = 2   ///< Disable this dialog overriding global status.
 };
 
+#define wxDIALOG_NO_PARENT      0x00000020  ///< Don't make owned by apps top window
+
 #define wxDEFAULT_DIALOG_STYLE  (wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX)
+
+
+#define wxDIALOG_ADAPTATION_NONE             0  ///< Don't do any layout adaptation
+#define wxDIALOG_ADAPTATION_STANDARD_SIZER   1  ///< Only look for wxStdDialogButtonSizer for non-scrolling part
+#define wxDIALOG_ADAPTATION_ANY_SIZER        2  ///< Also look for any suitable sizer for non-scrolling part
+#define wxDIALOG_ADAPTATION_LOOSE_BUTTONS    3  ///< Also look for 'loose' standard buttons for non-scrolling part
 
 /**
     @class wxDialog

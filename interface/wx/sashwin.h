@@ -174,6 +174,42 @@ public:
         @see GetSashVisible()
     */
     void SetSashVisible(wxSashEdgePosition edge, bool visible);
+
+
+    /**
+       Get border size
+    */
+    int GetEdgeMargin(wxSashEdgePosition edge) const;
+
+    /**
+       Sets the default sash border size
+    */
+    void SetDefaultBorderSize(int width);
+
+    /**
+       Gets the default sash border size
+    */
+    int GetDefaultBorderSize() const;
+
+    /**
+       Sets the additional border size between child and sash window
+    */
+    void SetExtraBorderSize(int width);
+
+    /**
+       Gets the addition border size between child and sash window
+    */
+    int GetExtraBorderSize() const;
+
+    /**
+       Tests for x, y over sash
+    */
+    wxSashEdgePosition SashHitTest(int x, int y, int tolerance = 2);
+
+    /**
+       Resizes subwindows
+    */
+    void SizeWindows();
 };
 
 
