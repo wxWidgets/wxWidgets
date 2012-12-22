@@ -106,6 +106,10 @@ public:
     // Clear() is necessary. If false, the whole canvas is invalidated and a
     // Clear() is necessary. Disable for when the scroll increment is used to
     // actually scroll a non-constant distance
+    //
+    // Notice that calling this method with a false argument doesn't disable
+    // scrolling the window in this direction, it just changes the mechanism by
+    // which it is implemented to not use wxWindow::ScrollWindow().
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
 
     // Disable use of keyboard keys for scrolling. By default cursor movement
@@ -279,6 +283,10 @@ protected:
 
     wxTimer              *m_timerAutoScroll;
 
+    // The number of pixels to scroll in horizontal and vertical directions
+    // respectively.
+    //
+    // If 0, means that the scrolling in the given direction is disabled.
     int                   m_xScrollPixelsPerLine;
     int                   m_yScrollPixelsPerLine;
     int                   m_xScrollPosition;

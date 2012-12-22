@@ -297,21 +297,22 @@ public:
     void DoPrepareDC(wxDC& dc);
 
     /**
-        Enable or disable physical scrolling in the given direction. Physical
-        scrolling is the physical transfer of bits up or down the
-        screen when a scroll event occurs. If the application scrolls by a
-        variable amount (e.g. if there are different font sizes) then physical
-        scrolling will not work, and you should switch it off. Note that you
-        will have to reposition child windows yourself, if physical scrolling
-        is disabled.
+        Enable or disable use of wxWindow::ScrollWindow() for scrolling.
+
+        By default, when a scrolled window is logically scrolled,
+        wxWindow::ScrollWindow() is called on the underlying window which
+        scrolls the window contents and only invalidates the part of the window
+        newly brought into view. If @false is passed as an argument, then this
+        "physical scrolling" is disabled and the window is entirely invalidated
+        whenever it is scrolled by calling wxWindow::Refresh().
+
+        It should be rarely necessary to disable physical scrolling, so this
+        method shouldn't be called in normal circumstances.
 
         @param xScrolling
             If @true, enables physical scrolling in the x direction.
         @param yScrolling
             If @true, enables physical scrolling in the y direction.
-
-        @remarks Physical scrolling may not be available on all platforms. Where
-                 it is available, it is enabled by default.
     */
     void EnableScrolling(bool xScrolling, bool yScrolling);
 
