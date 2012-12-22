@@ -337,7 +337,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageDialog dialog(this, wxT("List test sample\nJulian Smart (c) 1997"),
-            wxT("About list test"), wxOK|wxCANCEL);
+            wxT("About list test"));
 
     dialog.ShowModal();
 }
