@@ -129,7 +129,7 @@ class WXDLLIMPEXP_ADV wxGridCellWorker : public wxClientDataContainer, public wx
 public:
     wxGridCellWorker() { }
 
-    // interpret renderer parameters: arbitrary string whose interpretatin is
+    // interpret renderer parameters: arbitrary string whose interpretation is
     // left to the derived classes
     virtual void SetParameters(const wxString& params);
 

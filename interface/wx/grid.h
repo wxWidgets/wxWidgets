@@ -23,9 +23,11 @@
          wxGridCellFloatRenderer, wxGridCellNumberRenderer,
          wxGridCellStringRenderer
 */
-class wxGridCellRenderer
+class wxGridCellRenderer : public wxClientDataContainer, public wxRefCounter
 {
 public:
+    wxGridCellRenderer();
+
     /**
         This function must be implemented in derived classes to return a copy
         of itself.
@@ -50,6 +52,12 @@ public:
     */
     virtual wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                int row, int col) = 0;
+
+protected:
+    /**
+        The destructor is private because only DecRef() can delete us.
+    */
+    virtual ~wxGridCellRenderer();
 };
 
 /**
@@ -343,7 +351,7 @@ public:
          wxGridCellFloatEditor, wxGridCellNumberEditor,
          wxGridCellTextEditor
 */
-class wxGridCellEditor
+class wxGridCellEditor : public wxClientDataContainer, public wxRefCounter
 {
 public:
     /**
@@ -424,7 +432,7 @@ public:
         Draws the part of the cell not occupied by the control: the base class
         version just fills it with background colour from the attribute.
     */
-    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr* attr);
+    virtual void PaintBackground(wxDC& dc, const wxRect& rectCell, wxGridCellAttr& attr);
 
     /**
         Reset the value in the control back to its starting value.
@@ -453,6 +461,11 @@ public:
         called to let the editor do something about that first key if desired.
     */
     virtual void StartingKey(wxKeyEvent& event);
+
+    /**
+       Returns the value currently in the editor control.
+     */
+    virtual wxString GetValue() const = 0;
 
 protected:
 
@@ -716,7 +729,7 @@ protected:
     @library{wxadv}
     @category{grid}
 */
-class wxGridCellAttr
+class wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
 {
 public:
     /**
@@ -912,6 +925,13 @@ public:
         Sets the text colour.
     */
     void SetTextColour(const wxColour& colText);
+
+protected:
+
+    /**
+        The destructor is private because only DecRef() can delete us.
+    */
+    virtual ~wxGridCellAttr();
 };
 
 /**
@@ -1742,6 +1762,53 @@ struct wxGridSizesInfo
 };
 
 
+
+/**
+    Rendering styles supported by wxGrid::Render() method.
+
+    @since 2.9.4
+ */
+enum wxGridRenderStyle
+{
+    /// Draw grid row header labels.
+    wxGRID_DRAW_ROWS_HEADER = 0x001,
+
+    /// Draw grid column header labels.
+    wxGRID_DRAW_COLS_HEADER = 0x002,
+
+    /// Draw grid cell border lines.
+    wxGRID_DRAW_CELL_LINES = 0x004,
+
+    /**
+        Draw a bounding rectangle around the rendered cell area.
+
+        Useful where row or column headers are not drawn or where there is
+        multi row or column cell clipping and therefore no cell border at
+        the rendered outer boundary.
+    */
+    wxGRID_DRAW_BOX_RECT = 0x008,
+
+    /**
+        Draw the grid cell selection highlight if a selection is present.
+
+        At present the highlight colour drawn depends on whether the grid
+        window loses focus before drawing begins.
+    */
+    wxGRID_DRAW_SELECTION = 0x010,
+
+    /**
+        The default render style.
+
+        Includes all except wxGRID_DRAW_SELECTION.
+     */
+    wxGRID_DRAW_DEFAULT = wxGRID_DRAW_ROWS_HEADER |
+                          wxGRID_DRAW_COLS_HEADER |
+                          wxGRID_DRAW_CELL_LINES |
+                          wxGRID_DRAW_BOX_RECT
+};
+
+
+
 /**
     @class wxGrid
 
@@ -1848,50 +1915,6 @@ public:
 
         /// This cell spans several physical wxGrid cells.
         CellSpan_Main
-    };
-
-    /**
-        Rendering styles supported by wxGrid::Render() method.
-
-        @since 2.9.4
-     */
-    enum wxGridRenderStyle
-    {
-        /// Draw grid row header labels.
-        wxGRID_DRAW_ROWS_HEADER = 0x001,
-
-        /// Draw grid column header labels.
-        wxGRID_DRAW_COLS_HEADER = 0x002,
-
-        /// Draw grid cell border lines.
-        wxGRID_DRAW_CELL_LINES = 0x004,
-
-        /**
-            Draw a bounding rectangle around the rendered cell area.
-
-            Useful where row or column headers are not drawn or where there is
-            multi row or column cell clipping and therefore no cell border at
-            the rendered outer boundary.
-        */
-        wxGRID_DRAW_BOX_RECT = 0x008,
-
-        /**
-            Draw the grid cell selection highlight if a selection is present.
-
-            At present the highlight colour drawn depends on whether the grid
-            window loses focus before drawing begins.
-        */
-        wxGRID_DRAW_SELECTION = 0x010,
-
-        /**
-            The default render style.
-
-            Includes all except wxGRID_DRAW_SELECTION.
-         */
-        wxGRID_DRAW_DEFAULT = wxGRID_DRAW_ROWS_HEADER |
-                              wxGRID_DRAW_COLS_HEADER |
-                              wxGRID_DRAW_CELL_LINES |
-                              wxGRID_DRAW_BOX_RECT
     };
 
     /**
