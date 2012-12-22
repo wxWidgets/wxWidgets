@@ -2414,6 +2414,8 @@ wxGrid::SetTable(wxGridTableBase *table,
         m_created = true;
     }
 
+    InvalidateBestSize();
+
     return m_created;
 }
 
