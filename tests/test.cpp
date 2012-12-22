@@ -472,6 +472,8 @@ bool TestApp::OnInit()
     if ( !TestAppBase::OnInit() )
         return false;
 
+    SetCLocale();
+
 #if wxUSE_GUI
     cout << "Test program for wxWidgets GUI features\n"
 #else
