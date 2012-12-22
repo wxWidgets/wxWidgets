@@ -137,6 +137,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SORT, MyFrame::OnSort)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
     EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
+    EVT_MENU(LIST_ROW_LINES, MyFrame::OnSetRowLines)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
     EVT_MENU(LIST_SHOW_SEL_INFO, MyFrame::OnShowSelInfo)
@@ -160,6 +161,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
     EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateToggleHeader)
+    EVT_UPDATE_UI(LIST_ROW_LINES, MyFrame::OnUpdateRowLines)
 END_EVENT_TABLE()
 
 // My frame constructor
@@ -264,6 +266,7 @@ MyFrame::MyFrame(const wxChar *title)
     wxMenu *menuCol = new wxMenu;
     menuCol->Append(LIST_SET_FG_COL, wxT("&Foreground colour..."));
     menuCol->Append(LIST_SET_BG_COL, wxT("&Background colour..."));
+    menuCol->AppendCheckItem(LIST_ROW_LINES, wxT("Alternating colours"));
 
     wxMenuBar *menubar = new wxMenuBar;
     menubar->Append(menuFile, wxT("&File"));
@@ -482,6 +485,8 @@ void MyFrame::RecreateList(long flags, bool withText)
     }
 
     DoSize();
+
+    GetMenuBar()->Check(LIST_ROW_LINES, false);
 
     m_logWindow->Clear();
 }
@@ -836,6 +841,11 @@ void MyFrame::OnUpdateToggleHeader(wxUpdateUIEvent& event)
     event.Check(!m_listCtrl->HasFlag(wxLC_NO_HEADER));
 }
 
+void MyFrame::OnUpdateRowLines(wxUpdateUIEvent& event)
+{
+    event.Enable(m_listCtrl->HasFlag(wxLC_VIRTUAL));
+}
+
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
 {
     m_listCtrl->SetForegroundColour(wxGetColourFromUser(this));
@@ -845,6 +855,12 @@ void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnSetBgColour(wxCommandEvent& WXUNUSED(event))
 {
     m_listCtrl->SetBackgroundColour(wxGetColourFromUser(this));
+    m_listCtrl->Refresh();
+}
+
+void MyFrame::OnSetRowLines(wxCommandEvent& event)
+{
+    m_listCtrl->EnableAlternateRowColours(event.IsChecked());
     m_listCtrl->Refresh();
 }
 
@@ -1328,7 +1344,7 @@ wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const
         return &s_attrHighlight;
     }
 
-    return item % 2 ? NULL : (wxListItemAttr *)&m_attr;
+    return wxListCtrl::OnGetItemAttr(item);
 }
 
 void MyListCtrl::InsertItemInReportView(int i)

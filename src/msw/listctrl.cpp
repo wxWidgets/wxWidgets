@@ -3089,15 +3089,6 @@ int wxListCtrl::OnGetItemColumnImage(long item, long column) const
     return -1;
 }
 
-wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) const
-{
-    wxASSERT_MSG( item >= 0 && item < GetItemCount(),
-                  wxT("invalid item index in OnGetItemAttr()") );
-
-    // no attributes by default
-    return NULL;
-}
-
 wxListItemAttr *wxListCtrl::DoGetItemColumnAttr(long item, long column) const
 {
     if ( IsVirtual() )

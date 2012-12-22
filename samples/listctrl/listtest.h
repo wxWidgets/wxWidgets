@@ -37,8 +37,7 @@ public:
                const wxPoint& pos,
                const wxSize& size,
                long style)
-        : wxListCtrl(parent, id, pos, size, style),
-          m_attr(*wxBLUE, *wxLIGHT_GREY, wxNullFont)
+        : wxListCtrl(parent, id, pos, size, style)
         {
             m_updated = -1;
 
@@ -88,8 +87,6 @@ private:
     virtual int OnGetItemColumnImage(long item, long column) const;
     virtual wxListItemAttr *OnGetItemAttr(long item) const;
 
-    wxListItemAttr m_attr;
-
     long m_updated;
 
 
@@ -135,6 +132,7 @@ protected:
     void OnSort(wxCommandEvent& event);
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
+    void OnSetRowLines(wxCommandEvent& event);
     void OnToggleMultiSel(wxCommandEvent& event);
     void OnShowColInfo(wxCommandEvent& event);
     void OnShowSelInfo(wxCommandEvent& event);
@@ -156,6 +154,7 @@ protected:
     void OnUpdateUIEnableInReport(wxUpdateUIEvent& event);
     void OnUpdateToggleMultiSel(wxUpdateUIEvent& event);
     void OnUpdateToggleHeader(wxUpdateUIEvent& event);
+    void OnUpdateRowLines(wxUpdateUIEvent& event);
 
     wxImageList *m_imageListNormal;
     wxImageList *m_imageListSmall;
@@ -218,6 +217,7 @@ enum
     LIST_FIND,
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
+    LIST_ROW_LINES,
     LIST_TOGGLE_MULTI_SEL,
     LIST_TOGGLE_HEADER,
     LIST_TOGGLE_BELL,

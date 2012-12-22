@@ -2588,19 +2588,6 @@ int wxListCtrl::OnGetItemColumnImage (
     return -1;
 } // end of wxListCtrl::OnGetItemColumnImage
 
-wxListItemAttr* wxListCtrl::OnGetItemAttr (
-  long                              WXUNUSED_UNLESS_DEBUG(lItem)
-) const
-{
-    wxASSERT_MSG( lItem >= 0 && lItem < GetItemCount(),
-                  wxT("invalid item index in OnGetItemAttr()") );
-
-    //
-    // No attributes by default
-    //
-    return NULL;
-} // end of wxListCtrl::OnGetItemAttr
-
 void wxListCtrl::SetItemCount (
   long                              lCount
 )

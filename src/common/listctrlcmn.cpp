@@ -216,4 +216,38 @@ wxSize wxListCtrlBase::DoGetBestClientSize() const
     return wxSize(totalWidth, 10*dc.GetCharHeight());
 }
 
+void wxListCtrlBase::SetAlternateRowColour(const wxColour& colour)
+{
+    wxASSERT(HasFlag(wxLC_VIRTUAL));
+    m_alternateRowColour.SetBackgroundColour(colour);
+}
+
+void wxListCtrlBase::EnableAlternateRowColours(bool enable)
+{
+    if ( enable )
+    {
+        // This code is copied from wxDataViewMainWindow::OnPaint()
+
+        // Determine the alternate rows colour automatically from the
+        // background colour.
+        const wxColour bgColour = GetBackgroundColour();
+
+        // Depending on the background, alternate row color
+        // will be 3% more dark or 50% brighter.
+        int alpha = bgColour.GetRGB() > 0x808080 ? 97 : 150;
+        SetAlternateRowColour(bgColour.ChangeLightness(alpha));
+    }
+    else // Disable striping by setting invalid alternative colour.
+    {
+        SetAlternateRowColour(wxColour());
+    }
+}
+
+wxListItemAttr *wxListCtrlBase::OnGetItemAttr(long item) const
+{
+    return (m_alternateRowColour.GetBackgroundColour().IsOk() && (item % 2))
+        ? wxConstCast(&m_alternateRowColour, wxListItemAttr)
+        : NULL; // no attributes by default
+}
+
 #endif // wxUSE_LISTCTRL

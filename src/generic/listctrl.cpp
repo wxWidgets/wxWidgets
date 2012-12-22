@@ -5397,16 +5397,6 @@ int wxGenericListCtrl::OnGetItemColumnImage(long item, long column) const
    return -1;
 }
 
-wxListItemAttr *
-wxGenericListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) const
-{
-    wxASSERT_MSG( item >= 0 && item < GetItemCount(),
-                  wxT("invalid item index in OnGetItemAttr()") );
-
-    // no attributes by default
-    return NULL;
-}
-
 void wxGenericListCtrl::SetItemCount(long count)
 {
     wxASSERT_MSG( IsVirtual(), wxT("this is for virtual controls only") );

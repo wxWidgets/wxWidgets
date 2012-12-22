@@ -291,9 +291,6 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
     // return the icon for the given item and column.
     virtual int OnGetItemColumnImage(long item, long column) const;
 
-    // return the attribute for the item (may return NULL if none)
-    virtual wxListItemAttr *OnGetItemAttr(long item) const;
-
 /* Why should we need this function? Leave for now.
  * We might need it because item data may have changed,
  * but the display needs refreshing (in string callback mode)

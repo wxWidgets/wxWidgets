@@ -446,6 +446,8 @@ public:
     virtual int GetColumnWidth(int col) const = 0;
     virtual bool SetColumnWidth(int col, int width) = 0;
 
+    // return the attribute for the item (may return NULL if none)
+    virtual wxListItemAttr *OnGetItemAttr(long item) const;
 
     // Other miscellaneous accessors.
     // ------------------------------
@@ -458,12 +460,19 @@ public:
     // Only implemented in the generic version currently.
     virtual void EnableBellOnNoMatch(bool WXUNUSED(on) = true) { }
 
+    void EnableAlternateRowColours(bool enable = true);
+    void SetAlternateRowColour(const wxColour& colour);
+
 protected:
     // Real implementations methods to which our public forwards.
     virtual long DoInsertColumn(long col, const wxListItem& info) = 0;
 
     // Overridden methods of the base class.
     virtual wxSize DoGetBestClientSize() const;
+
+private:
+    // user defined color to draw row lines, may be invalid
+    wxListItemAttr m_alternateRowColour;
 };
 
 // ----------------------------------------------------------------------------

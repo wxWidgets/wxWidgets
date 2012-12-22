@@ -408,6 +408,27 @@ public:
                           wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
 
     /**
+        Enable alternating row background colours (also called zebra striping).
+
+        This method can only be called for the control in virtual report mode,
+        i.e. having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
+
+        When enabling alternating colours, the appropriate colour for the even
+        rows is chosen automatically depending on the default foreground and
+        background colours which are used for the odd rows.
+
+        @param enable
+            If @true, enable alternating row background colours, i.e. different
+            colours for the odd and even rows. If @false, disable this feature
+            and use the same background colour for all rows.
+
+        @since 2.9.5
+
+        @see SetAlternateRowColour()
+     */
+    void EnableAlternateRowColours(bool enable = true);
+
+    /**
         Enable or disable a beep if there is no match for the currently
         entered text when searching for the item from keyboard.
 
@@ -749,6 +770,26 @@ public:
         list or report views (this is a limitation of the native Win32 control).
     */
     wxRect GetViewRect() const;
+
+    /**
+        Set the alternative row background colour to a specific colour.
+
+        It is recommended to call EnableAlternateRowColours() instead of using
+        these methods as native implementations of this control might support
+        alternating row colours but not setting the exact colour to be used for
+        them.
+
+        As EnableAlternateRowColours(), this method can only be used with
+        controls having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
+
+        @param colour
+            A valid alternative row background colour to enable alternating
+            rows or invalid colour to disable them and use the same colour for
+            all rows.
+
+        @since 2.9.5
+     */
+    void SetAlternateRowColour(const wxColour& colour);
 
     /**
         Determines which item (if any) is at the specified point, giving details
