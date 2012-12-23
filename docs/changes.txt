@@ -596,6 +596,7 @@ All (GUI):
 - Add possibility to delay showing wxRichToolTip (John Roberts).
 - Add "rect" paramerer to wxRichToolTip::ShowFor() (John Roberts).
 - Add wxListCtrl::EnableAlternateRowColours() (troelsk).
+- Fix wrong tab order in wxAuiNotebook after dragging (Mark Barber).
 
 wxGTK:
 

@@ -2542,6 +2542,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
 
             wxWindow* src_tab = dest_tabs->GetWindowFromIdx(src_idx);
             dest_tabs->MovePage(src_tab, dest_idx);
+            m_tabs.MovePage(m_tabs.GetPage(src_idx).window, dest_idx);
             dest_tabs->SetActivePage((size_t)dest_idx);
             dest_tabs->DoShowHide();
             dest_tabs->Refresh();
@@ -2726,7 +2727,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                 if (insert_idx == -1)
                     insert_idx = dest_tabs->GetPageCount();
                 dest_tabs->InsertPage(page_info.window, page_info, insert_idx);
-                nb->m_tabs.AddPage(page_info.window, page_info);
+                nb->m_tabs.InsertPage(page_info.window, page_info, insert_idx);
 
                 nb->DoSizing();
                 dest_tabs->DoShowHide();
