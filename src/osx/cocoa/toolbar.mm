@@ -1591,43 +1591,20 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
         int w, h;
         GetSize( &w, &h );
 
-        bool drawMetalTheme = MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL;
-
-        if ( UMAGetSystemVersion() < 0x1050 )
-        {
-            if ( !drawMetalTheme )
-            {
-                HIThemePlacardDrawInfo info;
-                memset( &info, 0, sizeof(info) );
-                info.version = 0;
-                info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive;
-
-                CGContextRef cgContext = (CGContextRef) MacGetCGContextRef();
-                HIRect rect = CGRectMake( 0, 0, w, h );
-                HIThemeDrawPlacard( &rect, &info, cgContext, kHIThemeOrientationNormal );
-            }
-            else
-            {
-                // leave the background as it is (striped or metal)
-            }
-        }
-        else
-        {
-            wxPaintDC dc(this);
-            
-            wxRect rect(0,0,w,h);
-            
-            dc.GradientFillLinear( rect , wxColour( 0xCC,0xCC,0xCC ), wxColour( 0xA8,0xA8,0xA8 ) , wxSOUTH );
-            dc.SetPen( wxPen( wxColour( 0x51,0x51,0x51 ) ) );
-            if ( HasFlag(wxTB_LEFT) )
-                dc.DrawLine(w-1, 0, w-1, h);
-            else if ( HasFlag(wxTB_RIGHT) )
-                dc.DrawLine(0, 0, 0, h);
-            else if ( HasFlag(wxTB_BOTTOM) )
-                dc.DrawLine(0, 0, w, 0);
-            else if ( HasFlag(wxTB_TOP) )
-                dc.DrawLine(0, h-1, w, h-1);
-        }
+        wxPaintDC dc(this);
+        
+        wxRect rect(0,0,w,h);
+        
+        dc.GradientFillLinear( rect , wxColour( 0xCC,0xCC,0xCC ), wxColour( 0xA8,0xA8,0xA8 ) , wxSOUTH );
+        dc.SetPen( wxPen( wxColour( 0x51,0x51,0x51 ) ) );
+        if ( HasFlag(wxTB_LEFT) )
+            dc.DrawLine(w-1, 0, w-1, h);
+        else if ( HasFlag(wxTB_RIGHT) )
+            dc.DrawLine(0, 0, 0, h);
+        else if ( HasFlag(wxTB_BOTTOM) )
+            dc.DrawLine(0, 0, w, 0);
+        else if ( HasFlag(wxTB_TOP) )
+            dc.DrawLine(0, h-1, w, h-1);
     }
     event.Skip();
 }
