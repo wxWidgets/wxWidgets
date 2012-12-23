@@ -172,7 +172,9 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
     }
 
     wxDateTimeWidgetImpl* c = new wxDateTimeWidgetCocoaImpl(wxpeer, v);
+#if !wxOSX_USE_NATIVE_FLIPPED
     c->SetFlipped(false);
+#endif
     return c;
 }
 

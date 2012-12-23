@@ -911,6 +911,8 @@ BOOL wxOSX_resignFirstResponder(NSView* self, SEL _cmd)
     return impl->resignFirstResponder(self, _cmd);
 }
 
+#if !wxOSX_USE_NATIVE_FLIPPED
+
 BOOL wxOSX_isFlipped(NSView* self, SEL _cmd)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -919,6 +921,8 @@ BOOL wxOSX_isFlipped(NSView* self, SEL _cmd)
 
     return impl->isFlipped(self, _cmd) ? YES:NO;
 }
+
+#endif
 
 typedef void (*wxOSX_DrawRectHandlerPtr)(NSView* self, SEL _cmd, NSRect rect);
 
@@ -1297,11 +1301,14 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     return r;
 }
 
-bool wxWidgetCocoaImpl::isFlipped(WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
+#if !wxOSX_USE_NATIVE_FLIPPED
+
+bool wxWidgetCocoaImpl::isFlipped(WXWidget slf, void *WXUNUSED(_cmd))
 {
     return m_isFlipped;
 }
 
+#endif
 
 #define OSX_DEBUG_DRAWING 0
 
@@ -1310,15 +1317,20 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     // preparing the update region
     
     wxRegion updateRgn;
+
+    // since adding many rects to a region is a costly process, by default use the bounding rect
+#if 0
     const NSRect *rects;
     NSInteger count;
-
     [slf getRectsBeingDrawn:&rects count:&count];
     for ( int i = 0 ; i < count ; ++i )
     {
         updateRgn.Union(wxFromNSRect(slf, rects[i]));
     }
-
+#else
+    updateRgn.Union(wxFromNSRect(slf,*(NSRect*)rect));
+#endif
+    
     wxWindow* wxpeer = GetWXPeer();
 
     if ( wxpeer->MacGetLeftBorderSize() != 0 || wxpeer->MacGetTopBorderSize() != 0 )
@@ -1373,7 +1385,7 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     CGContextStrokePath(context);
 #endif
     
-    if ( !m_isFlipped )
+    if ( ![slf isFlipped] )
     {
         CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
         CGContextScaleCTM( context, 1, -1 );
@@ -1395,7 +1407,7 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
         CGContextSaveGState( context );
     }
     // as we called restore above, we have to flip again if necessary
-    if ( !m_isFlipped )
+    if ( ![slf isFlipped] )
     {
         CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
         CGContextScaleCTM( context, 1, -1 );
@@ -1523,7 +1535,9 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(resignFirstResponder), (IMP) wxOSX_resignFirstResponder, "c@:" )
 
+#if !wxOSX_USE_NATIVE_FLIPPED
     wxOSX_CLASS_ADD_METHOD(c, @selector(isFlipped), (IMP) wxOSX_isFlipped, "c@:" )
+#endif
     wxOSX_CLASS_ADD_METHOD(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_NSRect={_NSPoint=ff}{_NSSize=ff}}" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlAction:), (IMP) wxOSX_controlAction, "v@:@" )
@@ -1581,7 +1595,9 @@ wxWidgetCocoaImpl::wxWidgetCocoaImpl()
 void wxWidgetCocoaImpl::Init()
 {
     m_osxView = NULL;
+#if !wxOSX_USE_NATIVE_FLIPPED
     m_isFlipped = true;
+#endif
     m_lastKeyDownEvent = NULL;
     m_hasEditor = false;
 }
@@ -2587,10 +2603,14 @@ void wxWidgetCocoaImpl::ReleaseMouse()
     //    [[m_osxView window] enableCursorRects];
 }
 
+#if !wxOSX_USE_NATIVE_FLIPPED
+
 void wxWidgetCocoaImpl::SetFlipped(bool flipped)
 {
     m_isFlipped = flipped;
 }
+
+#endif
 
 void wxWidgetCocoaImpl::SetDrawingEnabled(bool enabled)
 {

@@ -140,8 +140,10 @@ public :
     virtual void        SetupMouseEvent(wxMouseEvent &wxevent, NSEvent * nsEvent);
 
 
+#if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);
     virtual bool        IsFlipped() const { return m_isFlipped; }
+#endif
 
     // cocoa thunk connected calls
 
@@ -157,7 +159,9 @@ public :
     virtual bool                acceptsFirstResponder(WXWidget slf, void* _cmd);
     virtual bool                becomeFirstResponder(WXWidget slf, void* _cmd);
     virtual bool                resignFirstResponder(WXWidget slf, void* _cmd);
+#if !wxOSX_USE_NATIVE_FLIPPED
     virtual bool                isFlipped(WXWidget slf, void* _cmd);
+#endif
     virtual void                drawRect(void* rect, WXWidget slf, void* _cmd);
 
     virtual void                controlAction(WXWidget slf, void* _cmd, void* sender);
@@ -170,7 +174,9 @@ public :
 protected:
     WXWidget m_osxView;
     NSEvent* m_lastKeyDownEvent;
+#if !wxOSX_USE_NATIVE_FLIPPED
     bool m_isFlipped;
+#endif
     // if it the control has an editor, that editor will already send some
     // events, don't resend them
     bool m_hasEditor;

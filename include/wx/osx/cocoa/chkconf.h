@@ -21,6 +21,13 @@
 #endif
 
 /*
+ * leave is isFlipped and don't override
+ */
+#ifndef wxOSX_USE_NATIVE_FLIPPED 
+    #define wxOSX_USE_NATIVE_FLIPPED 1
+#endif
+
+/*
  * text rendering system
  */
 
