@@ -2711,6 +2711,13 @@ void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w
     if (m_composition == wxCOMPOSITION_DEST) 
         return; 
 
+    // when using shading, we have to go back to drawing paths 
+    if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
+    {
+        wxGraphicsContext::DrawRectangle( x,y,w,h );
+        return;
+    }
+
     CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( !m_brush.IsNull() )
     {
