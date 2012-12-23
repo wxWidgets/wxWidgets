@@ -78,7 +78,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
         {
             bool setup = false ;
 #if wxOSX_USE_CORE_TEXT
-            if (  UMAGetSystemVersion() >= 0x1050 )
+            if ( !setup )
             {
                 CTFontDescriptorRef descr;
                 if ( cEvent.GetParameter<CTFontDescriptorRef>( kEventParamCTFontDescriptor, typeCTFontDescriptorRef, &descr ) == noErr )
@@ -243,7 +243,7 @@ int wxFontDialog::ShowModal()
 
     bool setup = false;
 #if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
+    if ( !setup )
     {
         CTFontDescriptorRef descr = (CTFontDescriptorRef) CTFontCopyFontDescriptor( (CTFontRef) font.OSXGetCTFont() );
         err = SetFontInfoForSelection (kFontSelectionCoreTextType,1, &descr , NULL);
