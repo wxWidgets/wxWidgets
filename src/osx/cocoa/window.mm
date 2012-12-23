@@ -783,6 +783,14 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     }
     [super removeTrackingRect:tag];
 }
+
+#if wxOSX_USE_NATIVE_FLIPPED
+- (BOOL)isFlipped
+{
+    return YES;
+}
+#endif
+
 @end // wxNSView
 
 //
