@@ -231,92 +231,105 @@ public:
 
 /* mshtml.h */
 
-#include <mshtml.h>
-
-#if defined(__MINGW32__) || defined(__VISUALC6__)
-
 typedef enum _tagwxPOINTER_GRAVITY
 {
-    POINTER_GRAVITY_Left = 0,
-    POINTER_GRAVITY_Right = 1,
-    POINTER_GRAVITY_Max = 2147483647
-} POINTER_GRAVITY;
+    wxPOINTER_GRAVITY_Left = 0,
+    wxPOINTER_GRAVITY_Right = 1,
+    wxPOINTER_GRAVITY_Max = 2147483647
+} wxPOINTER_GRAVITY;
 
 typedef enum _tagwxELEMENT_ADJACENCY
 {
-    ELEM_ADJ_BeforeBegin = 0,
-    ELEM_ADJ_AfterBegin = 1,
-    ELEM_ADJ_BeforeEnd = 2,
-    ELEM_ADJ_AfterEnd = 3,
-    ELEMENT_ADJACENCY_Max = 2147483647
-} ELEMENT_ADJACENCY;
+    wxELEM_ADJ_BeforeBegin = 0,
+    wxELEM_ADJ_AfterBegin = 1,
+    wxELEM_ADJ_BeforeEnd = 2,
+    wxELEM_ADJ_AfterEnd = 3,
+    wxELEMENT_ADJACENCY_Max = 2147483647
+} wxELEMENT_ADJACENCY;
 
 typedef enum _tagwxMARKUP_CONTEXT_TYPE
 {
-    CONTEXT_TYPE_None = 0,
-    CONTEXT_TYPE_Text = 1,
-    CONTEXT_TYPE_EnterScope = 2,
-    CONTEXT_TYPE_ExitScope = 3,
-    CONTEXT_TYPE_NoScope = 4,
-    MARKUP_CONTEXT_TYPE_Max = 2147483647
-} MARKUP_CONTEXT_TYPE;
+    wxCONTEXT_TYPE_None = 0,
+    wxCONTEXT_TYPE_Text = 1,
+    wxCONTEXT_TYPE_EnterScope = 2,
+    wxCONTEXT_TYPE_ExitScope = 3,
+    wxCONTEXT_TYPE_NoScope = 4,
+    wxMARKUP_CONTEXT_TYPE_Max = 2147483647
+} wxMARKUP_CONTEXT_TYPE;
 
 typedef enum _tagwxFINDTEXT_FLAGS
 {
-    FINDTEXT_BACKWARDS = 0x1,
-    FINDTEXT_WHOLEWORD = 0x2,
-    FINDTEXT_MATCHCASE = 0x4,
-    FINDTEXT_RAW = 0x20000,
-    FINDTEXT_MATCHDIAC = 0x20000000,
-    FINDTEXT_MATCHKASHIDA = 0x40000000,
-    FINDTEXT_MATCHALEFHAMZA = 0x80000000,
-    FINDTEXT_FLAGS_Max = 2147483647
-} FINDTEXT_FLAGS;
+    wxFINDTEXT_BACKWARDS = 0x1,
+    wxFINDTEXT_WHOLEWORD = 0x2,
+    wxFINDTEXT_MATCHCASE = 0x4,
+    wxFINDTEXT_RAW = 0x20000,
+    wxFINDTEXT_MATCHDIAC = 0x20000000,
+    wxFINDTEXT_MATCHKASHIDA = 0x40000000,
+    wxFINDTEXT_MATCHALEFHAMZA = 0x80000000,
+    wxFINDTEXT_FLAGS_Max = 2147483647
+} wxFINDTEXT_FLAGS;
 
 typedef enum _tagwxMOVEUNIT_ACTION
 {
-    MOVEUNIT_PREVCHAR = 0,
-    MOVEUNIT_NEXTCHAR = 1,
-    MOVEUNIT_PREVCLUSTERBEGIN = 2,
-    MOVEUNIT_NEXTCLUSTERBEGIN = 3,
-    MOVEUNIT_PREVCLUSTEREND = 4,
-    MOVEUNIT_NEXTCLUSTEREND = 5,
-    MOVEUNIT_PREVWORDBEGIN = 6,
-    MOVEUNIT_NEXTWORDBEGIN = 7,
-    MOVEUNIT_PREVWORDEND = 8,
-    MOVEUNIT_NEXTWORDEND = 9,
-    MOVEUNIT_PREVPROOFWORD = 10,
-    MOVEUNIT_NEXTPROOFWORD = 11,
-    MOVEUNIT_NEXTURLBEGIN = 12,
-    MOVEUNIT_PREVURLBEGIN = 13,
-    MOVEUNIT_NEXTURLEND = 14,
-    MOVEUNIT_PREVURLEND = 15,
-    MOVEUNIT_PREVSENTENCE = 16,
-    MOVEUNIT_NEXTSENTENCE = 17,
-    MOVEUNIT_PREVBLOCK = 18,
-    MOVEUNIT_NEXTBLOCK = 19,
-    MOVEUNIT_ACTION_Max = 2147483647
-} MOVEUNIT_ACTION;
+    wxMOVEUNIT_PREVCHAR = 0,
+    wxMOVEUNIT_NEXTCHAR = 1,
+    wxMOVEUNIT_PREVCLUSTERBEGIN = 2,
+    wxMOVEUNIT_NEXTCLUSTERBEGIN = 3,
+    wxMOVEUNIT_PREVCLUSTEREND = 4,
+    wxMOVEUNIT_NEXTCLUSTEREND = 5,
+    wxMOVEUNIT_PREVWORDBEGIN = 6,
+    wxMOVEUNIT_NEXTWORDBEGIN = 7,
+    wxMOVEUNIT_PREVWORDEND = 8,
+    wxMOVEUNIT_NEXTWORDEND = 9,
+    wxMOVEUNIT_PREVPROOFWORD = 10,
+    wxMOVEUNIT_NEXTPROOFWORD = 11,
+    wxMOVEUNIT_NEXTURLBEGIN = 12,
+    wxMOVEUNIT_PREVURLBEGIN = 13,
+    wxMOVEUNIT_NEXTURLEND = 14,
+    wxMOVEUNIT_PREVURLEND = 15,
+    wxMOVEUNIT_PREVSENTENCE = 16,
+    wxMOVEUNIT_NEXTSENTENCE = 17,
+    wxMOVEUNIT_PREVBLOCK = 18,
+    wxMOVEUNIT_NEXTBLOCK = 19,
+    wxMOVEUNIT_ACTION_Max = 2147483647
+} wxMOVEUNIT_ACTION;
 
 typedef enum _tagwxELEMENT_TAG_ID
 {
-    TAGID_NULL = 0, TAGID_UNKNOWN = 1, TAGID_A = 2, TAGID_ACRONYM = 3, TAGID_ADDRESS = 4, TAGID_APPLET = 5, TAGID_AREA = 6, TAGID_B = 7, TAGID_BASE = 8,
-    TAGID_BASEFONT = 9, TAGID_BDO = 10, TAGID_BGSOUND = 11, TAGID_BIG = 12, TAGID_BLINK = 13, TAGID_BLOCKQUOTE = 14, TAGID_BODY = 15, TAGID_BR = 16,
-    TAGID_BUTTON = 17, TAGID_CAPTION = 18, TAGID_CENTER = 19, TAGID_CITE = 20, TAGID_CODE = 21, TAGID_COL = 22, TAGID_COLGROUP = 23, TAGID_COMMENT = 24,
-    TAGID_COMMENT_RAW = 25, TAGID_DD = 26, TAGID_DEL = 27, TAGID_DFN = 28, TAGID_DIR = 29, TAGID_DIV = 30, TAGID_DL = 31, TAGID_DT = 32, TAGID_EM = 33,
-    TAGID_EMBED = 34, TAGID_FIELDSET = 35, TAGID_FONT = 36, TAGID_FORM = 37, TAGID_FRAME = 38, TAGID_FRAMESET = 39, TAGID_GENERIC = 40, TAGID_H1 = 41,
-    TAGID_H2 = 42, TAGID_H3 = 43, TAGID_H4 = 44, TAGID_H5 = 45, TAGID_H6 = 46, TAGID_HEAD = 47, TAGID_HR = 48, TAGID_HTML = 49, TAGID_I = 50, TAGID_IFRAME = 51,
-    TAGID_IMG = 52, TAGID_INPUT = 53, TAGID_INS = 54, TAGID_KBD = 55, TAGID_LABEL = 56, TAGID_LEGEND = 57, TAGID_LI = 58, TAGID_LINK = 59, TAGID_LISTING = 60,
-    TAGID_MAP = 61, TAGID_MARQUEE = 62, TAGID_MENU = 63, TAGID_META = 64, TAGID_NEXTID = 65, TAGID_NOBR = 66, TAGID_NOEMBED = 67, TAGID_NOFRAMES = 68,
-    TAGID_NOSCRIPT = 69, TAGID_OBJECT = 70, TAGID_OL = 71, TAGID_OPTION = 72, TAGID_P = 73, TAGID_PARAM = 74, TAGID_PLAINTEXT = 75, TAGID_PRE = 76,
-    TAGID_Q = 77, TAGID_RP = 78, TAGID_RT = 79, TAGID_RUBY = 80, TAGID_S = 81, TAGID_SAMP = 82, TAGID_SCRIPT = 83, TAGID_SELECT = 84, TAGID_SMALL = 85,
-    TAGID_SPAN = 86, TAGID_STRIKE = 87, TAGID_STRONG = 88, TAGID_STYLE = 89, TAGID_SUB = 90, TAGID_SUP = 91, TAGID_TABLE = 92, TAGID_TBODY = 93, TAGID_TC = 94,
-    TAGID_TD = 95, TAGID_TEXTAREA = 96, TAGID_TFOOT = 97, TAGID_TH = 98, TAGID_THEAD = 99, TAGID_TITLE = 100, TAGID_TR = 101, TAGID_TT = 102, TAGID_U = 103,
-    TAGID_UL = 104, TAGID_VAR = 105, TAGID_WBR = 106, TAGID_XMP = 107, TAGID_ROOT = 108, TAGID_OPTGROUP = 109, TAGID_COUNT = 110,
-    TAGID_LAST_PREDEFINED = 10000, ELEMENT_TAG_ID_Max = 2147483647
-} ELEMENT_TAG_ID;
-
-#endif
+    wxTAGID_NULL = 0, wxTAGID_UNKNOWN = 1, wxTAGID_A = 2, wxTAGID_ACRONYM = 3,
+    wxTAGID_ADDRESS = 4, wxTAGID_APPLET = 5, wxTAGID_AREA = 6, wxTAGID_B = 7,
+    wxTAGID_BASE = 8, wxTAGID_BASEFONT = 9, wxTAGID_BDO = 10, 
+    wxTAGID_BGSOUND = 11, wxTAGID_BIG = 12, wxTAGID_BLINK = 13, 
+    wxTAGID_BLOCKQUOTE = 14, wxTAGID_BODY = 15, wxTAGID_BR = 16,
+    wxTAGID_BUTTON = 17, wxTAGID_CAPTION = 18, wxTAGID_CENTER = 19,
+    wxTAGID_CITE = 20, wxTAGID_CODE = 21, wxTAGID_COL = 22,
+    wxTAGID_COLGROUP = 23, wxTAGID_COMMENT = 24, wxTAGID_COMMENT_RAW = 25,
+    wxTAGID_DD = 26, wxTAGID_DEL = 27, wxTAGID_DFN = 28, wxTAGID_DIR = 29,
+    wxTAGID_DIV = 30, wxTAGID_DL = 31, wxTAGID_DT = 32, wxTAGID_EM = 33,
+    wxTAGID_EMBED = 34, wxTAGID_FIELDSET = 35, wxTAGID_FONT = 36,
+    wxTAGID_FORM = 37, wxTAGID_FRAME = 38, wxTAGID_FRAMESET = 39,
+    wxTAGID_GENERIC = 40, wxTAGID_H1 = 41, wxTAGID_H2 = 42, wxTAGID_H3 = 43,
+    wxTAGID_H4 = 44, wxTAGID_H5 = 45, wxTAGID_H6 = 46, wxTAGID_HEAD = 47,
+    wxTAGID_HR = 48, wxTAGID_HTML = 49, wxTAGID_I = 50, wxTAGID_IFRAME = 51,
+    wxTAGID_IMG = 52, wxTAGID_INPUT = 53, wxTAGID_INS = 54, wxTAGID_KBD = 55,
+    wxTAGID_LABEL = 56, wxTAGID_LEGEND = 57, wxTAGID_LI = 58, wxTAGID_LINK = 59,
+    wxTAGID_LISTING = 60, wxTAGID_MAP = 61, wxTAGID_MARQUEE = 62,
+    wxTAGID_MENU = 63, wxTAGID_META = 64, wxTAGID_NEXTID = 65,
+    wxTAGID_NOBR = 66, wxTAGID_NOEMBED = 67, wxTAGID_NOFRAMES = 68,
+    wxTAGID_NOSCRIPT = 69, wxTAGID_OBJECT = 70, wxTAGID_OL = 71,
+    wxTAGID_OPTION = 72, wxTAGID_P = 73, wxTAGID_PARAM = 74,
+    wxTAGID_PLAINTEXT = 75, wxTAGID_PRE = 76, wxTAGID_Q = 77, wxTAGID_RP = 78,
+    wxTAGID_RT = 79, wxTAGID_RUBY = 80, wxTAGID_S = 81, wxTAGID_SAMP = 82,
+    wxTAGID_SCRIPT = 83, wxTAGID_SELECT = 84, wxTAGID_SMALL = 85,
+    wxTAGID_SPAN = 86, wxTAGID_STRIKE = 87, wxTAGID_STRONG = 88,
+    wxTAGID_STYLE = 89, wxTAGID_SUB = 90, wxTAGID_SUP = 91, wxTAGID_TABLE = 92,
+    wxTAGID_TBODY = 93, wxTAGID_TC = 94, wxTAGID_TD = 95, wxTAGID_TEXTAREA = 96,
+    wxTAGID_TFOOT = 97, wxTAGID_TH = 98, wxTAGID_THEAD = 99,
+    wxTAGID_TITLE = 100, wxTAGID_TR = 101, wxTAGID_TT = 102, wxTAGID_U = 103,
+    wxTAGID_UL = 104, wxTAGID_VAR = 105, wxTAGID_WBR = 106, wxTAGID_XMP = 107,
+    wxTAGID_ROOT = 108, wxTAGID_OPTGROUP = 109, wxTAGID_COUNT = 110,
+    wxTAGID_LAST_PREDEFINED = 10000, wxELEMENT_TAG_ID_Max = 2147483647
+} wxELEMENT_TAG_ID;
 
 struct wxIHTMLStyle : public IDispatch
 {
@@ -788,25 +801,25 @@ struct wxIMarkupPointer : public IUnknown
 {
 public:
     virtual HRESULT wxSTDCALL OwningDoc(IHTMLDocument2 **ppDoc) = 0;
-    virtual HRESULT wxSTDCALL Gravity(POINTER_GRAVITY *pGravity) = 0;
-    virtual HRESULT wxSTDCALL SetGravity(POINTER_GRAVITY Gravity) = 0;
+    virtual HRESULT wxSTDCALL Gravity(wxPOINTER_GRAVITY *pGravity) = 0;
+    virtual HRESULT wxSTDCALL SetGravity(wxPOINTER_GRAVITY Gravity) = 0;
     virtual HRESULT wxSTDCALL Cling(BOOL *pfCling) = 0;
     virtual HRESULT wxSTDCALL SetCling(BOOL fCLing) = 0;
     virtual HRESULT wxSTDCALL Unposition(void) = 0;
     virtual HRESULT wxSTDCALL IsPositioned(BOOL *pfPositioned) = 0;
     virtual HRESULT wxSTDCALL GetContainer(wxIMarkupContainer **ppContainer) = 0;
-    virtual HRESULT wxSTDCALL MoveAdjacentToElement(IHTMLElement *pElement, ELEMENT_ADJACENCY eAdj) = 0;
+    virtual HRESULT wxSTDCALL MoveAdjacentToElement(IHTMLElement *pElement, wxELEMENT_ADJACENCY eAdj) = 0;
     virtual HRESULT wxSTDCALL MoveToPointer(wxIMarkupPointer *pPointer) = 0;
     virtual HRESULT wxSTDCALL MoveToContainer(wxIMarkupContainer *pContainer, BOOL fAtStart) = 0;
-    virtual HRESULT wxSTDCALL Left(BOOL fMove, MARKUP_CONTEXT_TYPE *pContext, IHTMLElement **ppElement, long *pcch, OLECHAR *pchText) = 0;
-    virtual HRESULT wxSTDCALL Right(BOOL fMove, MARKUP_CONTEXT_TYPE *pContext, IHTMLElement **ppElement, long *pcch, OLECHAR *pchText) = 0;
+    virtual HRESULT wxSTDCALL Left(BOOL fMove, wxMARKUP_CONTEXT_TYPE *pContext, IHTMLElement **ppElement, long *pcch, OLECHAR *pchText) = 0;
+    virtual HRESULT wxSTDCALL Right(BOOL fMove, wxMARKUP_CONTEXT_TYPE *pContext, IHTMLElement **ppElement, long *pcch, OLECHAR *pchText) = 0;
     virtual HRESULT wxSTDCALL CurrentScope(IHTMLElement **ppElemCurrent) = 0;
     virtual HRESULT wxSTDCALL IsLeftOf(wxIMarkupPointer *pPointerThat, BOOL *pfResult) = 0;
     virtual HRESULT wxSTDCALL IsLeftOfOrEqualTo(wxIMarkupPointer *pPointerThat, BOOL *pfResult) = 0;
     virtual HRESULT wxSTDCALL IsRightOf(wxIMarkupPointer *pPointerThat, BOOL *pfResult) = 0;
     virtual HRESULT wxSTDCALL IsRightOfOrEqualTo(wxIMarkupPointer *pPointerThat, BOOL *pfResult) = 0;
     virtual HRESULT wxSTDCALL IsEqualTo(wxIMarkupPointer *pPointerThat, BOOL *pfAreEqual) = 0;
-    virtual HRESULT wxSTDCALL MoveUnit(MOVEUNIT_ACTION muAction) = 0;
+    virtual HRESULT wxSTDCALL MoveUnit(wxMOVEUNIT_ACTION muAction) = 0;
     virtual HRESULT wxSTDCALL FindText(OLECHAR *pchFindText, DWORD dwFlags, wxIMarkupPointer *pIEndMatch, wxIMarkupPointer *pIEndSearch) = 0;
 };
 
@@ -815,7 +828,7 @@ struct wxIMarkupServices : public IUnknown
 public:
     virtual HRESULT wxSTDCALL CreateMarkupPointer(wxIMarkupPointer **ppPointer) = 0;
     virtual HRESULT wxSTDCALL CreateMarkupContainer(wxIMarkupContainer **ppMarkupContainer) = 0;
-    virtual HRESULT wxSTDCALL CreateElement(ELEMENT_TAG_ID tagID, OLECHAR *pchAttributes, IHTMLElement **ppElement) = 0;
+    virtual HRESULT wxSTDCALL CreateElement(wxELEMENT_TAG_ID tagID, OLECHAR *pchAttributes, IHTMLElement **ppElement) = 0;
     virtual HRESULT wxSTDCALL CloneElement(IHTMLElement *pElemCloneThis, IHTMLElement **ppElementTheClone) = 0;
     virtual HRESULT wxSTDCALL InsertElement(IHTMLElement *pElementInsert, wxIMarkupPointer *pPointerStart, wxIMarkupPointer *pPointerFinish) = 0;
     virtual HRESULT wxSTDCALL RemoveElement(IHTMLElement *pElementRemove) = 0;
@@ -826,9 +839,9 @@ public:
     virtual HRESULT wxSTDCALL ParseString(OLECHAR *pchHTML, DWORD dwFlags, wxIMarkupContainer **ppContainerResult, wxIMarkupPointer *ppPointerStart, wxIMarkupPointer *ppPointerFinish) = 0;
     virtual HRESULT wxSTDCALL ParseGlobal(HGLOBAL hglobalHTML, DWORD dwFlags, wxIMarkupContainer **ppContainerResult, wxIMarkupPointer *pPointerStart, wxIMarkupPointer *pPointerFinish) = 0;
     virtual HRESULT wxSTDCALL IsScopedElement(IHTMLElement *pElement, BOOL *pfScoped) = 0;
-    virtual HRESULT wxSTDCALL GetElementTagId(IHTMLElement *pElement, ELEMENT_TAG_ID *ptagId) = 0;
-    virtual HRESULT wxSTDCALL GetTagIDForName(BSTR bstrName, ELEMENT_TAG_ID *ptagId) = 0;
-    virtual HRESULT wxSTDCALL GetNameForTagID(ELEMENT_TAG_ID tagId, BSTR *pbstrName) = 0;
+    virtual HRESULT wxSTDCALL GetElementTagId(IHTMLElement *pElement, wxELEMENT_TAG_ID *ptagId) = 0;
+    virtual HRESULT wxSTDCALL GetTagIDForName(BSTR bstrName, wxELEMENT_TAG_ID *ptagId) = 0;
+    virtual HRESULT wxSTDCALL GetNameForTagID(wxELEMENT_TAG_ID tagId, BSTR *pbstrName) = 0;
     virtual HRESULT wxSTDCALL MovePointersToRange(wxIHTMLTxtRange *pIRange, wxIMarkupPointer *pPointerStart, wxIMarkupPointer *pPointerFinish) = 0;
     virtual HRESULT wxSTDCALL MoveRangeToPointers(wxIMarkupPointer *pPointerStart, wxIMarkupPointer *pPointerFinish, wxIHTMLTxtRange *pIRange) = 0;
     virtual HRESULT wxSTDCALL BeginUndoUnit(OLECHAR *pchTitle) = 0;

@@ -998,16 +998,16 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
             pIMS->CreateMarkupPointer(&ptrBegin);
             pIMS->CreateMarkupPointer(&ptrEnd);
 
-            ptrBegin->SetGravity(POINTER_GRAVITY_Right);
+            ptrBegin->SetGravity(wxPOINTER_GRAVITY_Right);
             ptrBegin->MoveToContainer(pIMC, TRUE);
             //Create the find flag from the wx one.
             if(flags & wxWEB_VIEW_FIND_ENTIRE_WORD)
             {
-                find_flag |= FINDTEXT_WHOLEWORD;
+                find_flag |= wxFINDTEXT_WHOLEWORD;
             }
             if(flags & wxWEB_VIEW_FIND_MATCH_CASE)
             {
-                find_flag |= FINDTEXT_MATCHCASE;
+                find_flag |= wxFINDTEXT_MATCHCASE;
             }
 
             //A little speed-up to avoid to re-alloc in the positions vector.
@@ -1026,7 +1026,7 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
                         if(flags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT)
                         {
                             IHTMLElement* pFontEl;
-                            pIMS->CreateElement(TAGID_FONT, attr_bstr, &pFontEl);
+                            pIMS->CreateElement(wxTAGID_FONT, attr_bstr, &pFontEl);
                             pIMS->InsertElement(pFontEl, ptrBegin, ptrEnd);
                         }
                         if(internal_flag & wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT)
