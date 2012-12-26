@@ -2537,7 +2537,8 @@ wxArrayStringProperty::ArrayStringToString( wxString& dst,
     if ( flags & Escape )
     {
         preas = delimiter;
-        pdr = wxS("\\") + static_cast<wchar_t>(delimiter);
+        pdr = wxS("\\");
+        pdr += delimiter;
     }
 
     if ( itemCount )
