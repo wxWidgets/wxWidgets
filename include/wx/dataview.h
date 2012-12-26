@@ -432,7 +432,6 @@ public:
 
 private:
     unsigned int m_size;
-    bool m_ordered;
 };
 #endif
 
