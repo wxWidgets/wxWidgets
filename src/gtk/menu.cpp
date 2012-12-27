@@ -291,6 +291,7 @@ void wxMenuBar::GtkAppend(wxMenu* menu, const wxString& title, int pos)
 
         gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
     }
+    g_object_ref(menu->m_owner);
 
     gtk_widget_show( menu->m_owner );
 
@@ -339,6 +340,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu->m_owner), NULL);
 
     gtk_widget_destroy( menu->m_owner );
+    g_object_unref(menu->m_owner);
     menu->m_owner = NULL;
 
     if ( m_menuBarFrame )
@@ -726,8 +728,6 @@ void wxMenu::Init()
 
     m_accel = gtk_accel_group_new();
     m_menu = gtk_menu_new();
-    // NB: keep reference to the menu so that it is not destroyed behind
-    //     our back by GTK+ e.g. when it is removed from menubar:
     g_object_ref_sink(m_menu);
 
     m_owner = NULL;
@@ -762,14 +762,15 @@ wxMenu::~wxMenu()
     g_signal_handlers_disconnect_matched(m_menu,
         GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, this);
 
-    // see wxMenu::Init
-    g_object_unref(m_menu);
-
-    // if the menu is inserted in another menu at this time, there was
-    // one more reference to it:
     if (m_owner)
-       gtk_widget_destroy(m_owner);
+    {
+        gtk_widget_destroy(m_owner);
+        g_object_unref(m_owner);
+    }
+    else
+        gtk_widget_destroy(m_menu);
 
+    g_object_unref(m_menu);
     g_object_unref(m_accel);
 }
 
