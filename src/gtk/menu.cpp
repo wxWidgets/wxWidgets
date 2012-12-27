@@ -70,16 +70,6 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 
 wxMenuBar::~wxMenuBar()
 {
-    if (m_widget && IsAttached())
-    {
-        // Work around a probable bug in Ubuntu 12.04 which causes a warning if
-        // gtk_widget_destroy() is called on a wxMenuBar attached to a frame
-        GtkWidget* widget = m_widget;
-        m_focusWidget =
-        m_widget = NULL;
-        GTKDisconnect(widget);
-        g_object_unref(widget);
-    }
 }
 
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
@@ -342,8 +332,11 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return NULL;
 
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu->m_owner), NULL);
+    // remove item from menubar before destroying item to avoid spurious
+    // warnings from Ubuntu libdbusmenu
     gtk_container_remove(GTK_CONTAINER(m_menubar), menu->m_owner);
+    // remove submenu to avoid destroying it when item is destroyed
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu->m_owner), NULL);
 
     gtk_widget_destroy( menu->m_owner );
     menu->m_owner = NULL;
@@ -775,7 +768,7 @@ wxMenu::~wxMenu()
     // if the menu is inserted in another menu at this time, there was
     // one more reference to it:
     if (m_owner)
-       gtk_widget_destroy(m_menu);
+       gtk_widget_destroy(m_owner);
 
     g_object_unref(m_accel);
 }
