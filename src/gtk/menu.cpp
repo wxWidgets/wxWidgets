@@ -337,7 +337,11 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     // warnings from Ubuntu libdbusmenu
     gtk_container_remove(GTK_CONTAINER(m_menubar), menu->m_owner);
     // remove submenu to avoid destroying it when item is destroyed
+#ifdef __WXGTK3__
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu->m_owner), NULL);
+#else
+    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu->m_owner));
+#endif
 
     gtk_widget_destroy( menu->m_owner );
     g_object_unref(menu->m_owner);
@@ -931,20 +935,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 #ifdef __WXGTK3__
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
 #else
-    if (!gtk_check_version(2,12,0))
-    {
-        // gtk_menu_item_remove_submenu() is deprecated since 2.12, but
-        // gtk_menu_item_set_submenu() can now be used with NULL submenu now so
-        // just do use it.
-        gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
-    }
-    else // GTK+ < 2.12
-    {
-        // In 2.10 calling gtk_menu_item_set_submenu() with NULL submenu
-        // results in critical GTK+ error messages so use the old function
-        // instead.
-        gtk_menu_item_remove_submenu(GTK_MENU_ITEM(mitem));
-    }
+    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(mitem));
 #endif
 
     gtk_widget_destroy(mitem);
