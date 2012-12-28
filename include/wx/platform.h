@@ -74,13 +74,9 @@
 #    endif
 #endif /* Win32 */
 
-#if defined(__WXMSW__)
+#if defined(_WIN32)
 #   if !defined(__WINDOWS__)
 #       define __WINDOWS__
-#   endif
-
-#   ifndef _WIN32
-#        define _WIN32
 #   endif
 
 #   ifndef WIN32
@@ -90,7 +86,25 @@
 #   ifndef __WIN32__
 #        define __WIN32__
 #   endif
-#endif /* __WXMSW__ */
+#endif /* _WIN32 */
+
+/* Don't use widget toolkit specific code in non-GUI code */
+#if defined(wxUSE_GUI) && !wxUSE_GUI
+#   ifdef __WXMSW__
+#       undef __WXMSW__
+#   endif
+#   ifdef __WXGTK__
+#       undef __WXGTK__
+#   endif
+#endif
+
+#if defined(__WXGTK__) && defined(__WINDOWS__)
+
+#   ifdef __WXMSW__
+#       undef __WXMSW__
+#   endif
+
+#endif /* __WXGTK__ && __WINDOWS__ */
 
 /* detect MS SmartPhone */
 #if defined( WIN32_PLATFORM_WFSP )
@@ -541,7 +555,6 @@
     !defined(__DOS__) && \
     !defined(__WXPM__) && \
     !defined(__WXMOTIF__) && \
-    !defined(__WXGTK__) && \
     !defined(__WXX11__)
 #    include "wx/msw/gccpriv.h"
 #else

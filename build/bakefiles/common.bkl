@@ -436,13 +436,29 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
                 </set>
             </if>
             <if cond="FORMAT!='msevc4prj'">
-                <msvc-headers-setup-h>
-                    msw/setup.h
-                    univ/setup.h
-                </msvc-headers-setup-h>
+                <!-- Unfortunately we have to include wx/univ/setup.h in both
+                     cases because WXUNIV==1 is not a weak condition, but at
+                     least don't include wxGTK setup.h when building wxMSW. -->
+                <if cond="TOOLKIT=='MSW'">
+                    <msvc-headers-setup-h>
+                        msw/setup.h
+                        univ/setup.h
+                    </msvc-headers-setup-h>
+                </if>
+                <if cond="TOOLKIT=='GTK'">
+                    <msvc-headers-setup-h>
+                        gtk/setup.h
+                        univ/setup.h
+                    </msvc-headers-setup-h>
+                </if>
                 <set var="_custom_build_include_wx_msw_setup_h">
                     <if cond="WXUNIV=='0' and TOOLKIT=='MSW'">
                         $(msvc_copy_setup_h_script % 'msw\setup.h')
+                    </if>
+                </set>
+                <set var="_custom_build_include_wx_gtk_setup_h">
+                    <if cond="WXUNIV=='0' and TOOLKIT=='GTK'">
+                        $(msvc_copy_setup_h_script % 'gtk\setup.h')
                     </if>
                 </set>
                 <set var="_custom_build_include_wx_univ_setup_h">
@@ -510,6 +526,11 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="MONOLITHIC=='0'">$(EXTRALIBS_GUI)</if>
     </set>
 
+    <!-- GTK+ under Windows requires -mms-bitfields gcc switch -->
+    <set var="CXXFLAGS_GTK_WINDOWS_GCC">
+        <if cond="TOOLKIT=='GTK' and FORMAT=='mingw'">-mms-bitfields</if>
+    </set>
+
     <template id="wx" template="common_settings">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
@@ -536,6 +557,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         </cppflags-watcom>
         <cxxflags-mingw>
             -Wno-ctor-dtor-privacy <!-- only defines a private destructor and has no friends -->
+             $(CXXFLAGS_GTK_WINDOWS_GCC)
         </cxxflags-mingw>
     </template>
 
@@ -596,12 +618,16 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         </if>
     </template>
 
+    <set var="LIB_GTK">
+        <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1' and TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">gtk-win32-2.0.lib gdk-win32-2.0.lib pangocairo-1.0.lib gdk_pixbuf-2.0.lib cairo.lib pango-1.0.lib gobject-2.0.lib gthread-2.0.lib glib-2.0.lib</if>
+    </set>
 
     <!-- for GUI libs/samples: -->
     <template id="wx_append_nomono" template_append="wx_append_base_nomono">
         <sys-lib>$(LIB_TIFF)</sys-lib>
         <sys-lib>$(LIB_JPEG)</sys-lib>
         <sys-lib>$(LIB_PNG)</sys-lib>
+        <ldlibs>$(LIB_GTK)</ldlibs>
         <ldlibs>$(EXTRALIBS_FOR_GUI)</ldlibs>
     </template>
 
@@ -650,11 +676,13 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
 
         <if cond="IS_MSVC_PRJ=='1' and BUILDING_LIB=='1'">
             <msvc-file-group>Common Sources:src/common/*</msvc-file-group>
+            <msvc-file-group>GTK+ Sources:src/gtk/*</msvc-file-group>
             <msvc-file-group>MSW Sources:src/msw/*</msvc-file-group>
             <msvc-file-group>Generic Sources:src/generic/*</msvc-file-group>
             <msvc-file-group>wxUniv Sources:src/univ/*</msvc-file-group>
             <msvc-file-group>wxHTML Sources:src/html/*</msvc-file-group>
             <msvc-file-group>Setup Headers:*/setup.h</msvc-file-group>
+            <msvc-file-group>GTK+ Headers:*wx/gtk/*.h</msvc-file-group>
             <msvc-file-group>MSW Headers:*wx/msw/*.h</msvc-file-group>
             <msvc-file-group>Generic Headers:*wx/generic/*.h</msvc-file-group>
             <msvc-file-group>wxUniv Headers:*wx/univ/*.h</msvc-file-group>
@@ -688,7 +716,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <postlink-command>$(DYLIB_RPATH_POSTLINK)</postlink-command>
         </if>
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
-        
+
     </template>
 
     <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">

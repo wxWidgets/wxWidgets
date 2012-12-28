@@ -50,6 +50,16 @@ CPP = cpp32 -Sr -oCON
 SHARED = 0
 !endif
 
+# Used toolkit [MSW,GTK]
+!ifndef TOOLKIT
+TOOLKIT = MSW
+!endif
+
+# GTK+ toolkit version [,2]
+!ifndef TOOLKIT_VERSION
+TOOLKIT_VERSION =
+!endif
+
 # Build wxUniversal instead of native port? [0,1]
 !ifndef WXUNIV
 WXUNIV = 0

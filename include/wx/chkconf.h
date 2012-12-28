@@ -1211,8 +1211,11 @@
 
 #if defined(__WXWINCE__)
 #  include "wx/msw/wince/chkconf.h"
-#elif defined(__WXMSW__)
+#elif defined(__WINDOWS__)
 #  include "wx/msw/chkconf.h"
+#  if defined(__WXGTK__)
+#      include "wx/gtk/chkconf.h"
+#  endif
 #elif defined(__WXGTK__)
 #  include "wx/gtk/chkconf.h"
 #elif defined(__WXCOCOA__)
@@ -1233,9 +1236,9 @@
 
 /*
     __UNIX__ is also defined under Cygwin but we shouldn't perform these checks
-    there if we're building wxMSW.
+    there if we're building Windows ports.
  */
-#if defined(__UNIX__) && !defined(__WXMSW__)
+#if defined(__UNIX__) && !defined(__WINDOWS__)
 #   include "wx/unix/chkconf.h"
 #endif
 

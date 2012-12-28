@@ -932,7 +932,7 @@ enum wxWinVersion
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
 
-#if wxUSE_GUI
+#if wxUSE_GUI && defined(__WXMSW__)
 
 // cursor stuff
 extern HCURSOR wxGetCurrentBusyCursor();    // from msw/utils.cpp
@@ -1069,6 +1069,6 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
 
 #endif // __WIN64__/__WIN32__
 
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && __WXMSW__
 
 #endif // _WX_PRIVATE_H_
