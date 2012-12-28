@@ -107,8 +107,9 @@
         }
 
     #else /* !__INTELC__ */
-
+        wxGCC_WARNING_SUPPRESS(float-equal)
         inline bool wxIsSameDouble(double x, double y) { return x == y; }
+        wxGCC_WARNING_RESTORE(float-equal)
 
     #endif /* __INTELC__/!__INTELC__ */
 

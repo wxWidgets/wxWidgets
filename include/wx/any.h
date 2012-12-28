@@ -912,6 +912,8 @@ public:
     WXANY_IMPLEMENT_INT_EQ_OP(wxLongLong_t, wxULongLong_t)
 #endif
 
+    wxGCC_WARNING_SUPPRESS(float-equal)
+
     bool operator==(float value) const
     {
         if ( !wxAnyValueTypeImpl<float>::IsSameClass(m_type) )
@@ -931,6 +933,8 @@ public:
             static_cast<double>
                 (wxAnyValueTypeImpl<double>::GetValue(m_buffer));
     }
+
+    wxGCC_WARNING_RESTORE(float-equal)
 
     bool operator==(bool value) const
     {
