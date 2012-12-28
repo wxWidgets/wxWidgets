@@ -587,6 +587,11 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
+            // The control is not supposed to send HDN_TRACK when using
+            // HDS_FULLDRAG (which we do use) but apparently some versions of
+            // comctl32.dll still do it, see #13506, so catch both messages
+            // just in case we are dealing with one of these buggy versions.
+        case HDN_TRACK:
         case HDN_ITEMCHANGING:
             if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) )
             {
