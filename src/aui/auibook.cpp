@@ -1233,10 +1233,9 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         }
     }
 
-    wxWindow* wnd = NULL;
-
 #if wxUSE_TOOLTIPS
-   if (evt.Moving() && TabHitTest(evt.m_x, evt.m_y, &wnd))
+    wxWindow* wnd = NULL;
+    if (evt.Moving() && TabHitTest(evt.m_x, evt.m_y, &wnd))
     {
         wxString tooltip(m_pages[GetIdxFromWindow(wnd)].tooltip);
 
@@ -1247,8 +1246,8 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     }
     else
         UnsetToolTip();
-#endif
-   
+#endif // wxUSE_TOOLTIPS
+
     if (!evt.LeftIsDown() || m_clickPt == wxDefaultPosition)
         return;
 
