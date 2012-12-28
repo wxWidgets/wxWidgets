@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/wxcrtvararg.h"
+    #include "wx/brush.h"
 #endif
 
 #include "wx/html/forcelnk.h"
