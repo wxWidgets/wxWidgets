@@ -75,6 +75,9 @@ public:
     virtual void BeginMeasuring() { }
     virtual void EndMeasuring() { }
 
+    // This is another method which is only used by MeasuringGuard.
+    bool IsUsingDCImpl() const { return m_useDCImpl; }
+
 protected:
     // RAII wrapper for the two methods above.
     class MeasuringGuard
@@ -82,12 +85,16 @@ protected:
     public:
         MeasuringGuard(wxTextMeasureBase& tm) : m_tm(tm)
         {
-            m_tm.BeginMeasuring();
+            // BeginMeasuring() should only be called if we have a native DC,
+            // so don't call it if we delegate to a DC of unknown type.
+            if ( !m_tm.IsUsingDCImpl() )
+                m_tm.BeginMeasuring();
         }
 
         ~MeasuringGuard()
         {
-            m_tm.EndMeasuring();
+            if ( !m_tm.IsUsingDCImpl() )
+                m_tm.EndMeasuring();
         }
 
     private:
