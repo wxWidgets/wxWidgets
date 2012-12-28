@@ -949,13 +949,11 @@ wxSize wxRibbonToolBar::GetBestSizeForParentSize(const wxSize& parentSize) const
 
     // Choose row count with largest possible area
     wxSize size = parentSize;
-    wxOrientation major_axis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
-        wxVERTICAL : wxHORIZONTAL;
 
     // A toolbar should maximize its width whether vertical or horizontal, so
     // force the major axis to be horizontal. Without this, there will be
     // redundant horizontal space.
-    major_axis = wxHORIZONTAL;
+    wxOrientation major_axis = wxHORIZONTAL;
     wxSize bestSize = m_sizes[0];
 
     if(m_nrows_max != m_nrows_min)
