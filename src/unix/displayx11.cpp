@@ -424,6 +424,8 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     Display * const dpy = wxGetX11Display();
     wxCHECK_RET( dpy, wxT("can't be called before initializing the GUI") );
 
+    wxRect rectClient;
+
     const Atom atomWorkArea = XInternAtom(dpy, "_NET_WORKAREA", True);
     if ( atomWorkArea )
     {
@@ -459,29 +461,46 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
                         numItems != 4 )
             {
                 wxLogDebug(wxT("XGetWindowProperty(\"_NET_WORKAREA\") failed"));
-                return;
             }
-
-            if ( x )
-                *x = workareas[0];
-            if ( y )
-                *y = workareas[1];
-            if ( width )
-                *width = workareas[2];
-            if ( height )
-                *height = workareas[3];
-
-            return;
+            else
+            {
+                rectClient = wxRect(workareas[0], workareas[1],
+                                    workareas[2], workareas[3]);
+            }
         }
     }
 
-    // if we get here, _NET_WORKAREA is not supported so return the entire
-    // screen size as fall back
-    if (x)
-        *x = 0;
-    if (y)
-        *y = 0;
-    wxDisplaySize(width, height);
+    // Although _NET_WORKAREA is supposed to return the client size of the
+    // screen, not all implementations are conforming, apparently, see #14419,
+    // so make sure we return a subset of the primary display.
+    wxRect rectFull;
+#if wxUSE_DISPLAY
+    ScreensInfo screens;
+    const ScreenInfo& info = screens[0];
+    rectFull = wxRect(info.x_org, info.y_org, info.width, info.height);
+#else
+    wxDisplaySize(&rectFull.width, &rectFull.height);
+#endif
+
+    if ( !rectClient.width || !rectClient.height )
+    {
+        // _NET_WORKAREA not available or didn't work, fall back to the total
+        // display size.
+        rectClient = rectFull;
+    }
+    else
+    {
+        rectClient = rectClient.Intersect(rectFull);
+    }
+
+    if ( x )
+        *x = rectClient.x;
+    if ( y )
+        *y = rectClient.y;
+    if ( width )
+        *width = rectClient.width;
+    if ( height )
+        *height = rectClient.height;
 }
 
 #endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
