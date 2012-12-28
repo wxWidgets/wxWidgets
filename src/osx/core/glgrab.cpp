@@ -115,7 +115,6 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     void * data;
     long bytewidth;
     GLint width, height;
-    long bytes;
 
     CGLContextObj    glContextObj;
     CGLPixelFormatObj pixelFormatObj ;
@@ -157,7 +156,6 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
 
     bytewidth = width * 4; // Assume 4 bytes/pixel for now
     bytewidth = (bytewidth + 3) & ~3; // Align to 4 bytes
-    bytes = bytewidth * height; // width * height
 
     /* Build bitmap context */
     data = malloc(height * bytewidth);
