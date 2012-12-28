@@ -71,7 +71,8 @@
 
     @see wxEditableListBox, wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
 */
-class wxListBox : public wxControlWithItems
+class wxListBox : public wxControl,
+                  public wxItemContainer
 {
 public:
     /**
