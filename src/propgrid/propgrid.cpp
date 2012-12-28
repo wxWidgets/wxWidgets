@@ -4557,7 +4557,6 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     if ( !HasVirtualWidth() )
     {
         m_pState->SetVirtualWidth(width);
-        x = width;
     }
 
     m_width = width;
