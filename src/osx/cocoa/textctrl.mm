@@ -988,7 +988,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxWidgetCocoaImpl* c = NULL;
 
-    if ( style & wxTE_MULTILINE || style & wxTE_RICH || style & wxTE_RICH2 )
+    if ( style & wxTE_MULTILINE )
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
