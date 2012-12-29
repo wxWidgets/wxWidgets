@@ -1422,14 +1422,53 @@ LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
-    wxUint32 lcid = LOCALE_USER_DEFAULT;
-    if ( wxGetLocale() )
+    const wxLanguageInfo * const
+        info = wxGetLocale() ? GetLanguageInfo(wxGetLocale()->GetLanguage())
+                             : NULL;
+    if ( !info )
     {
-        const wxLanguageInfo * const
-            info = GetLanguageInfo(wxGetLocale()->GetLanguage());
-        if ( info )
-            lcid = info->GetLCID();
+        // wxSetLocale() hadn't been called yet of failed, hence CRT must be
+        // using "C" locale -- but check it to detect bugs that would happen if
+        // this were not the case.
+        wxASSERT_MSG( strcmp(setlocale(LC_ALL, NULL), "C") == 0,
+                      wxS("You probably called setlocale() directly instead ")
+                      wxS("of calling wxSetLocale() and now there is a ")
+                      wxS("mismatch between C/C++ and Windows locale.\n")
+                      wxS("Things are going to break, use wxSetLocale() to ")
+                      wxS("avoid this!") );
+
+
+        // Return the hard coded values for C locale. This is really the right
+        // thing to do as there is no LCID we can use in the code below in this
+        // case, even LOCALE_INVARIANT is not quite the same as C locale (the
+        // only difference is that it uses %Y instead of %y in the date format
+        // but this difference is significant enough).
+        switch ( index )
+        {
+            case wxLOCALE_THOUSANDS_SEP:
+                return wxString();
+
+            case wxLOCALE_DECIMAL_POINT:
+                return ".";
+
+            case wxLOCALE_SHORT_DATE_FMT:
+                return "%m/%d/%y";
+
+            case wxLOCALE_LONG_DATE_FMT:
+                return "%A, %B %d, %Y";
+
+            case wxLOCALE_TIME_FMT:
+                return "%H:%M:%S";
+
+            case wxLOCALE_DATE_TIME_FMT:
+                return "%m/%d/%y %H:%M:%S";
+
+            default:
+                wxFAIL_MSG( "unknown wxLocaleInfo" );
+        }
     }
+
+    const wxUint32 lcid = info->GetLCID();
 
     wxString str;
 
