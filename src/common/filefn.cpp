@@ -61,6 +61,7 @@
 
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
     #include "wx/msw/mslu.h"
 
     // sys/cygwin.h is needed for cygwin_conv_to_full_win32_path()
