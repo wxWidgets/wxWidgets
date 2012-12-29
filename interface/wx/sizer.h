@@ -1884,6 +1884,12 @@ public:
     int GetOrientation() const;
 
     /**
+        Sets the orientation of the box sizer, either wxVERTICAL
+        or wxHORIZONTAL.
+    */
+    void SetOrientation(int orient);
+
+    /**
         Implements the calculation of a box sizer's dimensions and then sets
         the size of its children (calling wxWindow::SetSize if the child is a window).
 

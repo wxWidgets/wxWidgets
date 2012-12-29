@@ -635,7 +635,7 @@ protected:
 
         @since 2.9.1
     */
-    wxImageList *GetImageList(const wxString& param = wxT("imagelist"));
+    wxImageList *GetImageList(const wxString& param = "imagelist");
 
     /**
         Gets the integer value from the parameter.
