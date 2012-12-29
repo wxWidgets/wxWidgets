@@ -434,7 +434,7 @@ static pascal OSStatus wxMacUnicodeTextControlControlEventHandler( EventHandlerC
             ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
             if ( controlPart == kControlFocusNoPart )
             {
-                // about to loose focus -> store selection to field
+                // about to lose focus -> store selection to field
                 focus->GetData<ControlEditTextSelectionRec>( 0, kControlEditTextSelectionTag, &focus->m_selection );
             }
             result = CallNextEventHandler(handler,event) ;

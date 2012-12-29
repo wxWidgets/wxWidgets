@@ -450,7 +450,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
         if ( wxpeer )
         {
             wxpeer->HandleActivated(0, false);
-            // as for wx the deactivation also means loosing focus we
+            // as for wx the deactivation also means losing focus we
             // must trigger this manually
             [window makeFirstResponder:nil];
             

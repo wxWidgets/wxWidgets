@@ -387,7 +387,7 @@ bool wxWindowMac::MacIsUserPane() const
 /*
  * Right now we have the following setup :
  * a border that is not part of the native control is always outside the
- * control's border (otherwise we loose all native intelligence, future ways
+ * control's border (otherwise we lose all native intelligence, future ways
  * may be to have a second embedding control responsible for drawing borders
  * and backgrounds eventually)
  * so all this border calculations have to be taken into account when calling

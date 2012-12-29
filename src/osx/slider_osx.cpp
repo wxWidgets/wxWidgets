@@ -489,7 +489,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
     if (GetWindowStyle() & wxSL_LABELS)
     {
-        // make sure we don't allow the entire control to be resized accidently
+        // make sure we don't allow the entire control to be resized accidentally
         if (width == GetSize().x)
             m_minWidth = -1;
     }

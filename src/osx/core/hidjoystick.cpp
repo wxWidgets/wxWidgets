@@ -566,7 +566,7 @@ void wxHIDJoystick::BuildCookies(CFArrayRef Array)
 
     //
     // I wasted two hours of my life on this line :(
-    // accidently removed it during some source cleaning...
+    // accidentally removed it during some source cleaning...
     //
     MakeCookies(Array);
 
