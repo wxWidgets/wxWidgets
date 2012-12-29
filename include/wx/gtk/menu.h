@@ -48,14 +48,13 @@ public:
     virtual void Attach(wxFrame *frame);
     virtual void Detach();
 
-    // implementation only from now on
-    GtkWidget       *m_menubar; // Public for hildon support
-
 private:
     // common part of Append and Insert
     void GtkAppend(wxMenu* menu, const wxString& title, int pos = -1);
 
     void Init(size_t n, wxMenu *menus[], const wxString titles[], long style);
+
+    GtkWidget* m_menubar;
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };

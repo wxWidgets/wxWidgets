@@ -302,7 +302,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
     {
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
         hildon_window_set_menu(HILDON_WINDOW(m_widget),
-                               GTK_MENU(m_frameMenuBar->m_menubar));
+                               GTK_MENU(m_frameMenuBar->m_widget));
 #else // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
         m_frameMenuBar->SetParent(this);
 
