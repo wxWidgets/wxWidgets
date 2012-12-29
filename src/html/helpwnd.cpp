@@ -355,8 +355,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     wxSizer *navigSizer = NULL;
 
 #ifdef __WXMSW__
-    wxBorder htmlWindowBorder = GetDefaultBorder();
-    htmlWindowBorder = wxBORDER_THEME;
+    wxBorder htmlWindowBorder = wxBORDER_THEME;
 #else
     wxBorder htmlWindowBorder = wxBORDER_SUNKEN;
 #endif
