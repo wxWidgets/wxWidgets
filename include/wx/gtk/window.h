@@ -184,11 +184,6 @@ public:
     static wxLayoutDirection GTKGetLayout(GtkWidget *widget);
     static void GTKSetLayout(GtkWidget *widget, wxLayoutDirection dir);
 
-    // return true if this window must have a non-NULL parent, false if it can
-    // be created without parent (normally only top level windows but in wxGTK
-    // there is also the exception of wxMenuBar)
-    virtual bool GTKNeedsParent() const { return !IsTopLevel(); }
-
     // This is called when capture is taken from the window. It will
     // fire off capture lost events.
     void GTKReleaseMouseAndNotify();
@@ -403,6 +398,11 @@ protected:
 
 private:
     void Init();
+
+    // return true if this window must have a non-NULL parent, false if it can
+    // be created without parent (normally only top level windows but in wxGTK
+    // there is also the exception of wxMenuBar)
+    virtual bool GTKNeedsParent() const { return !IsTopLevel(); }
 
     enum ScrollUnit { ScrollUnit_Line, ScrollUnit_Page, ScrollUnit_Max };
 

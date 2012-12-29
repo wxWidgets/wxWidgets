@@ -41,10 +41,6 @@ public:
     void SetLayoutDirection(wxLayoutDirection dir);
     wxLayoutDirection GetLayoutDirection() const;
 
-    // wxMenuBar is not a top level window but it still doesn't need a parent
-    // window
-    virtual bool GTKNeedsParent() const { return false; }
-
     virtual void Attach(wxFrame *frame);
     virtual void Detach();
 
@@ -53,6 +49,10 @@ private:
     void GtkAppend(wxMenu* menu, const wxString& title, int pos = -1);
 
     void Init(size_t n, wxMenu *menus[], const wxString titles[], long style);
+
+    // wxMenuBar is not a top level window but it still doesn't need a parent
+    // window
+    virtual bool GTKNeedsParent() const { return false; }
 
     GtkWidget* m_menubar;
 
