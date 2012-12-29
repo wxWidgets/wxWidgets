@@ -166,8 +166,6 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
 {
     wxDialog::Create(m_parent, wxID_ANY, m_caption, m_pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
 
-    bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     wxBoxSizer *icon_text = new wxBoxSizer( wxHORIZONTAL );
@@ -182,7 +180,7 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
                                     wxID_ANY,
                                     wxArtProvider::GetMessageBoxIcon(m_dialogStyle)
                                    );
-        if (is_pda)
+        if ( wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA )
             topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
         else
             icon_text->Add(icon, wxSizerFlags().Top().Border(wxRIGHT, 20));
