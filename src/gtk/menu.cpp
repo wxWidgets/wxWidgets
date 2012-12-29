@@ -597,7 +597,18 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 
 wxMenuItem::~wxMenuItem()
 {
+    if (m_menuItem)
+        g_object_unref(m_menuItem);
    // don't delete menu items, the menus take care of that
+}
+
+void wxMenuItem::SetMenuItem(GtkWidget* menuItem)
+{
+    if (m_menuItem)
+        g_object_unref(m_menuItem);
+    m_menuItem = menuItem;
+    if (menuItem)
+        g_object_ref(menuItem);
 }
 
 void wxMenuItem::SetItemLabel( const wxString& str )
