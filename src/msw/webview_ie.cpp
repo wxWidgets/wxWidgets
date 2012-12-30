@@ -28,6 +28,7 @@
 #include "wx/filesys.h"
 #include "wx/dynlib.h"
 #include <initguid.h>
+#include <wininet.h>
 
 /* These GUID definitions are our own implementation to support interfaces
  * normally in urlmon.h. See include/wx/msw/webview_ie.h
@@ -49,6 +50,13 @@ enum //Internal find flags
 };
 
 }
+
+//Convenience function for error conversion
+#define WX_ERROR_CASE(error, wxerror) \
+        case error: \
+            event.SetString(#error); \
+            event.SetInt(wxerror); \
+            break;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
 
@@ -1321,125 +1329,66 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
         case DISPID_NAVIGATEERROR:
         {
-            wxWebViewNavigationError errorType = wxWEB_NAV_ERR_OTHER;
-            wxString errorCode = "?";
+            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR, GetId(),
+                                 evt[1].GetString(), evt[2].GetString());
+            event.SetEventObject(this);
+
             switch (evt[3].GetLong())
             {
-            case INET_E_INVALID_URL: // (0x800C0002L or -2146697214)
-                errorCode = "INET_E_INVALID_URL";
-                errorType = wxWEB_NAV_ERR_REQUEST;
-                break;
-            case INET_E_NO_SESSION: // (0x800C0003L or -2146697213)
-                errorCode = "INET_E_NO_SESSION";
-                errorType = wxWEB_NAV_ERR_CONNECTION;
-                break;
-            case INET_E_CANNOT_CONNECT: // (0x800C0004L or -2146697212)
-                errorCode = "INET_E_CANNOT_CONNECT";
-                errorType = wxWEB_NAV_ERR_CONNECTION;
-                break;
-            case INET_E_RESOURCE_NOT_FOUND: // (0x800C0005L or -2146697211)
-                errorCode = "INET_E_RESOURCE_NOT_FOUND";
-                errorType = wxWEB_NAV_ERR_NOT_FOUND;
-                break;
-            case INET_E_OBJECT_NOT_FOUND: // (0x800C0006L or -2146697210)
-                errorCode = "INET_E_OBJECT_NOT_FOUND";
-                errorType = wxWEB_NAV_ERR_NOT_FOUND;
-                break;
-            case INET_E_DATA_NOT_AVAILABLE: // (0x800C0007L or -2146697209)
-                errorCode = "INET_E_DATA_NOT_AVAILABLE";
-                errorType = wxWEB_NAV_ERR_NOT_FOUND;
-                break;
-            case INET_E_DOWNLOAD_FAILURE: // (0x800C0008L or -2146697208)
-                errorCode = "INET_E_DOWNLOAD_FAILURE";
-                errorType = wxWEB_NAV_ERR_CONNECTION;
-                break;
-            case INET_E_AUTHENTICATION_REQUIRED: // (0x800C0009L or -2146697207)
-                errorCode = "INET_E_AUTHENTICATION_REQUIRED";
-                errorType = wxWEB_NAV_ERR_AUTH;
-                break;
-            case INET_E_NO_VALID_MEDIA: // (0x800C000AL or -2146697206)
-                errorCode = "INET_E_NO_VALID_MEDIA";
-                errorType = wxWEB_NAV_ERR_REQUEST;
-                break;
-            case INET_E_CONNECTION_TIMEOUT: // (0x800C000BL or -2146697205)
-                errorCode = "INET_E_CONNECTION_TIMEOUT";
-                errorType = wxWEB_NAV_ERR_CONNECTION;
-                break;
-            case INET_E_INVALID_REQUEST: // (0x800C000CL or -2146697204)
-                errorCode = "INET_E_INVALID_REQUEST";
-                errorType = wxWEB_NAV_ERR_REQUEST;
-                break;
-            case INET_E_UNKNOWN_PROTOCOL: // (0x800C000DL or -2146697203)
-                errorCode = "INET_E_UNKNOWN_PROTOCOL";
-                errorType = wxWEB_NAV_ERR_REQUEST;
-                break;
-            case INET_E_SECURITY_PROBLEM: // (0x800C000EL or -2146697202)
-                errorCode = "INET_E_SECURITY_PROBLEM";
-                errorType = wxWEB_NAV_ERR_SECURITY;
-                break;
-            case INET_E_CANNOT_LOAD_DATA: // (0x800C000FL or -2146697201)
-                errorCode = "INET_E_CANNOT_LOAD_DATA";
-                errorType = wxWEB_NAV_ERR_OTHER;
-                break;
-            case INET_E_CANNOT_INSTANTIATE_OBJECT:
-                // CoCreateInstance will return an error code if this happens,
-                // we'll handle this above.
-                return;
-                break;
-            case INET_E_REDIRECT_FAILED: // (0x800C0014L or -2146697196)
-                errorCode = "INET_E_REDIRECT_FAILED";
-                errorType = wxWEB_NAV_ERR_OTHER;
-                break;
-            case INET_E_REDIRECT_TO_DIR: // (0x800C0015L or -2146697195)
-                errorCode = "INET_E_REDIRECT_TO_DIR";
-                errorType = wxWEB_NAV_ERR_REQUEST;
-                break;
-            case INET_E_CANNOT_LOCK_REQUEST: // (0x800C0016L or -2146697194)
-                errorCode = "INET_E_CANNOT_LOCK_REQUEST";
-                errorType = wxWEB_NAV_ERR_OTHER;
-                break;
-            case INET_E_USE_EXTEND_BINDING: // (0x800C0017L or -2146697193)
-                errorCode = "INET_E_USE_EXTEND_BINDING";
-                errorType = wxWEB_NAV_ERR_OTHER;
-                break;
-            case INET_E_TERMINATED_BIND: // (0x800C0018L or -2146697192)
-                errorCode = "INET_E_TERMINATED_BIND";
-                errorType = wxWEB_NAV_ERR_OTHER;
-                break;
-            case INET_E_INVALID_CERTIFICATE: // (0x800C0019L or -2146697191)
-                errorCode = "INET_E_INVALID_CERTIFICATE";
-                errorType = wxWEB_NAV_ERR_CERTIFICATE;
-                break;
-            case INET_E_CODE_DOWNLOAD_DECLINED: // (0x800C0100L or -2146696960)
-                errorCode = "INET_E_CODE_DOWNLOAD_DECLINED";
-                errorType = wxWEB_NAV_ERR_USER_CANCELLED;
-                break;
-            case INET_E_RESULT_DISPATCHED: // (0x800C0200L or -2146696704)
-                // cancel request cancelled...
-                errorCode = "INET_E_RESULT_DISPATCHED";
-                errorType = wxWEB_NAV_ERR_OTHER;
-                break;
-            case INET_E_CANNOT_REPLACE_SFP_FILE: // (0x800C0300L or -2146696448)
-                errorCode = "INET_E_CANNOT_REPLACE_SFP_FILE";
-                errorType = wxWEB_NAV_ERR_SECURITY;
-                break;
-            case INET_E_CODE_INSTALL_BLOCKED_BY_HASH_POLICY:
-                errorCode = "INET_E_CODE_INSTALL_BLOCKED_BY_HASH_POLICY";
-                errorType = wxWEB_NAV_ERR_SECURITY;
-                break;
-            case INET_E_CODE_INSTALL_SUPPRESSED:
-                errorCode = "INET_E_CODE_INSTALL_SUPPRESSED";
-                errorType = wxWEB_NAV_ERR_SECURITY;
-                break;
-            }
+                // 400 Error codes
+                WX_ERROR_CASE(HTTP_STATUS_BAD_REQUEST, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_DENIED, wxWEB_NAV_ERR_AUTH)
+                WX_ERROR_CASE(HTTP_STATUS_PAYMENT_REQ, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(HTTP_STATUS_FORBIDDEN, wxWEB_NAV_ERR_AUTH)
+                WX_ERROR_CASE(HTTP_STATUS_NOT_FOUND, wxWEB_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(HTTP_STATUS_BAD_METHOD, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_NONE_ACCEPTABLE, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(HTTP_STATUS_PROXY_AUTH_REQ, wxWEB_NAV_ERR_AUTH)
+                WX_ERROR_CASE(HTTP_STATUS_REQUEST_TIMEOUT, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_CONFLICT, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_GONE, wxWEB_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(HTTP_STATUS_LENGTH_REQUIRED, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_PRECOND_FAILED, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_REQUEST_TOO_LARGE, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_URI_TOO_LONG, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_UNSUPPORTED_MEDIA, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_RETRY_WITH, wxWEB_NAV_ERR_OTHER)
 
-            wxString url = evt[1].GetString();
-            wxString target = evt[2].GetString();
-            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR, GetId(),
-                                 url, target);
-            event.SetEventObject(this);
-            event.SetInt(errorType);
-            event.SetString(errorCode);
+                // 500 - Error codes
+                WX_ERROR_CASE(HTTP_STATUS_SERVER_ERROR, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_NOT_SUPPORTED, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_BAD_GATEWAY, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_SERVICE_UNAVAIL, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_GATEWAY_TIMEOUT, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_VERSION_NOT_SUP, wxWEB_NAV_ERR_REQUEST)
+
+                // URL Moniker error codes
+                WX_ERROR_CASE(INET_E_INVALID_URL, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_NO_SESSION, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(INET_E_CANNOT_CONNECT, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(INET_E_RESOURCE_NOT_FOUND, wxWEB_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(INET_E_OBJECT_NOT_FOUND, wxWEB_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(INET_E_DATA_NOT_AVAILABLE, wxWEB_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(INET_E_DOWNLOAD_FAILURE, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(INET_E_AUTHENTICATION_REQUIRED, wxWEB_NAV_ERR_AUTH)
+                WX_ERROR_CASE(INET_E_NO_VALID_MEDIA, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_CONNECTION_TIMEOUT, wxWEB_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(INET_E_INVALID_REQUEST, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_UNKNOWN_PROTOCOL, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_SECURITY_PROBLEM, wxWEB_NAV_ERR_SECURITY)
+                WX_ERROR_CASE(INET_E_CANNOT_LOAD_DATA, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_REDIRECT_FAILED, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_REDIRECT_TO_DIR, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_CANNOT_LOCK_REQUEST, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_USE_EXTEND_BINDING, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_TERMINATED_BIND, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_INVALID_CERTIFICATE, wxWEB_NAV_ERR_CERTIFICATE)
+                WX_ERROR_CASE(INET_E_CODE_DOWNLOAD_DECLINED, wxWEB_NAV_ERR_USER_CANCELLED)
+                WX_ERROR_CASE(INET_E_RESULT_DISPATCHED, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_CANNOT_REPLACE_SFP_FILE, wxWEB_NAV_ERR_SECURITY)
+                WX_ERROR_CASE(INET_E_CODE_INSTALL_BLOCKED_BY_HASH_POLICY, wxWEB_NAV_ERR_SECURITY)
+                WX_ERROR_CASE(INET_E_CODE_INSTALL_SUPPRESSED, wxWEB_NAV_ERR_SECURITY)
+            }
             HandleWindowEvent(event);
             break;
         }

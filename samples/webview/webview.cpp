@@ -965,48 +965,30 @@ void WebFrame::OnSelectAll(wxCommandEvent& WXUNUSED(evt))
   * Callback invoked when a loading error occurs
   */
 void WebFrame::OnError(wxWebViewEvent& evt)
-{
-    wxString errorCategory;
+{   
+#define WX_ERROR_CASE(type) \
+    case type: \
+        category = #type; \
+        break;
+
+    wxString category;
     switch (evt.GetInt())
     {
-    case  wxWEB_NAV_ERR_CONNECTION:
-        errorCategory = "wxWEB_NAV_ERR_CONNECTION";
-        break;
-
-    case wxWEB_NAV_ERR_CERTIFICATE:
-        errorCategory = "wxWEB_NAV_ERR_CERTIFICATE";
-        break;
-
-    case wxWEB_NAV_ERR_AUTH:
-        errorCategory = "wxWEB_NAV_ERR_AUTH";
-        break;
-
-    case wxWEB_NAV_ERR_SECURITY:
-        errorCategory = "wxWEB_NAV_ERR_SECURITY";
-        break;
-
-    case wxWEB_NAV_ERR_NOT_FOUND:
-        errorCategory = "wxWEB_NAV_ERR_NOT_FOUND";
-        break;
-
-    case wxWEB_NAV_ERR_REQUEST:
-        errorCategory = "wxWEB_NAV_ERR_REQUEST";
-        break;
-
-    case wxWEB_NAV_ERR_USER_CANCELLED:
-        errorCategory = "wxWEB_NAV_ERR_USER_CANCELLED";
-        break;
-
-    case wxWEB_NAV_ERR_OTHER:
-        errorCategory = "wxWEB_NAV_ERR_OTHER";
-        break;
+        WX_ERROR_CASE(wxWEB_NAV_ERR_CONNECTION);
+        WX_ERROR_CASE(wxWEB_NAV_ERR_CERTIFICATE);
+        WX_ERROR_CASE(wxWEB_NAV_ERR_AUTH);
+        WX_ERROR_CASE(wxWEB_NAV_ERR_SECURITY);
+        WX_ERROR_CASE(wxWEB_NAV_ERR_NOT_FOUND);
+        WX_ERROR_CASE(wxWEB_NAV_ERR_REQUEST);
+        WX_ERROR_CASE(wxWEB_NAV_ERR_USER_CANCELLED);
+        WX_ERROR_CASE(wxWEB_NAV_ERR_OTHER);
     }
 
-    wxLogMessage("%s", "Error; url='" + evt.GetURL() + "', error='" + errorCategory + "' (" + evt.GetString() + ")");
+    wxLogMessage("%s", "Error; url='" + evt.GetURL() + "', error='" + category + " (" + evt.GetString() + ")'");
 
     //Show the info bar with an error
     m_info->ShowMessage(_("An error occurred loading ") + evt.GetURL() + "\n" +
-    "'" + errorCategory + "' (" + evt.GetString() + ")", wxICON_ERROR);
+    "'" + category + "'", wxICON_ERROR);
 
     UpdateState();
 }
