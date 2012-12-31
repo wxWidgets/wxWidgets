@@ -143,6 +143,7 @@ public:
     void OnFindDone(wxCommandEvent& evt);
     void OnFindText(wxCommandEvent& evt);
     void OnFindOptions(wxCommandEvent& evt);
+    void OnEnableContextMenu(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -188,6 +189,7 @@ private:
     wxMenuItem* m_selection_clear;
     wxMenuItem* m_selection_delete;
     wxMenuItem* m_find;
+    wxMenuItem* m_context_menu;
 
     wxInfoBar *m_info;
     wxStaticText* m_info_text;
@@ -403,6 +405,8 @@ WebFrame::WebFrame(const wxString& url) :
     wxMenuItem* loadscheme =  m_tools_menu->Append(wxID_ANY, _("Custom Scheme Example"));
     wxMenuItem* usememoryfs =  m_tools_menu->Append(wxID_ANY, _("Memory File System Example"));
 
+    m_context_menu = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Context Menu"));
+
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
@@ -509,6 +513,8 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnUseMemoryFS),  NULL, this );
     Connect(m_find->GetId(), wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(WebFrame::OnFind),  NULL, this );
+    Connect(m_context_menu->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(WebFrame::OnEnableContextMenu), NULL, this );
 
     //Connect the idle events
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(WebFrame::OnIdle), NULL, this);
@@ -657,6 +663,11 @@ void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
 void WebFrame::OnUseMemoryFS(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->LoadURL("memory:page1.htm");
+}
+
+void WebFrame::OnEnableContextMenu(wxCommandEvent& evt)
+{
+    m_browser->EnableContextMenu(evt.IsChecked());
 }
 
 void WebFrame::OnFind(wxCommandEvent& WXUNUSED(evt))
@@ -849,6 +860,8 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
 
     m_selection_clear->Enable(m_browser->HasSelection());
     m_selection_delete->Enable(m_browser->HasSelection());
+
+    m_context_menu->Check(m_browser->IsContextMenuEnabled());
 
     //Firstly we clear the existing menu items, then we add the current ones
     wxMenuHistoryMap::const_iterator it;

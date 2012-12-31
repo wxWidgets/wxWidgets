@@ -271,8 +271,9 @@ private:
 class DocHostUIHandler : public wxIDocHostUIHandler
 {
 public:
-    DocHostUIHandler() {};
+    DocHostUIHandler(wxWebView* browser) { m_browser = browser; }
     ~DocHostUIHandler() {};
+
     virtual HRESULT wxSTDCALL ShowContextMenu(DWORD dwID, POINT *ppt,
                                               IUnknown *pcmdtReserved,
                                               IDispatch *pdispReserved);
@@ -319,6 +320,9 @@ public:
                                                IDataObject **ppDORet);
     //IUnknown
     DECLARE_IUNKNOWN_METHODS;
+
+private:
+    wxWebView* m_browser;
 };
 
 class wxFindPointers

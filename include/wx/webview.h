@@ -103,6 +103,11 @@ extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[];
 class WXDLLIMPEXP_WEBVIEW wxWebView : public wxControl
 {
 public:
+    wxWebView()
+    {
+        m_showMenu = true;
+    }
+
     virtual ~wxWebView() {}
 
     virtual bool Create(wxWindow* parent,
@@ -124,12 +129,17 @@ public:
            const wxString& name = wxWebViewNameStr);
 
     //General methods
+    virtual void EnableContextMenu(bool enable = true)
+    {
+        m_showMenu = enable;
+    }
     virtual wxString GetCurrentTitle() const = 0;
     virtual wxString GetCurrentURL() const = 0;
     // TODO: handle choosing a frame when calling GetPageSource()?
     virtual wxString GetPageSource() const = 0;
     virtual wxString GetPageText() const = 0;
     virtual bool IsBusy() const = 0;
+    virtual bool IsContextMenuEnabled() const { return m_showMenu; }
     virtual bool IsEditable() const = 0;
     virtual void LoadURL(const wxString& url) = 0;
     virtual void Print() = 0;
@@ -196,6 +206,9 @@ public:
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
+
+private:
+    bool m_showMenu;
 
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };

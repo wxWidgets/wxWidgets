@@ -1346,6 +1346,15 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
     webKitWindow->Print();
 }
+
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element
+                                                 defaultMenuItems:(NSArray *) defaultMenuItems
+{
+    if(webKitWindow->IsContextMenuEnabled())
+        return defaultMenuItems;
+    else
+        return nil;
+}
 @end
 
 #endif //wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT

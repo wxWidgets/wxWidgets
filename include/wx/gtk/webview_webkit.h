@@ -63,6 +63,7 @@ public:
     virtual bool CanGoBack() const;
     virtual bool CanGoForward() const;
     virtual void ClearHistory();
+    virtual void EnableContextMenu(bool enable = true);
     virtual void EnableHistory(bool enable = true);
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory();
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory();

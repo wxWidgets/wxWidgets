@@ -488,6 +488,20 @@ public:
     virtual void Paste() = 0;
 
     /**
+        @name Context Menu
+    */
+
+    /**
+        Enable or disbale the right click context menu.
+    */
+    virtual void EnableContextMenu(bool enable = true);
+
+   /**
+        Returns @true if a context menu will be shown on right click.
+    */
+    virtual bool IsContextMenuEnabled() const;
+
+    /**
         @name History
     */
 

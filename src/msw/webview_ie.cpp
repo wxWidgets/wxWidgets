@@ -100,7 +100,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
     m_webBrowser->put_RegisterAsBrowser(VARIANT_TRUE);
     m_webBrowser->put_RegisterAsDropTarget(VARIANT_TRUE);
 
-    m_uiHandler = new DocHostUIHandler;
+    m_uiHandler = new DocHostUIHandler(this);
 
     m_container = new wxIEContainer(this, IID_IWebBrowser2, m_webBrowser, m_uiHandler);
 
@@ -1549,7 +1549,10 @@ HRESULT wxSTDCALL DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
     wxUnusedVar(ppt);
     wxUnusedVar(pcmdtReserved);
     wxUnusedVar(pdispReserved);
-    return E_NOTIMPL;
+    if(m_browser->IsContextMenuEnabled()) 
+        return E_NOTIMPL; 
+    else 
+        return S_OK; 
 }
 
 HRESULT wxSTDCALL DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)

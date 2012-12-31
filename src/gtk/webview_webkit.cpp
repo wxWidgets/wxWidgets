@@ -378,6 +378,23 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
     }
 }
 
+#if WEBKIT_CHECK_VERSION(1, 10, 0)
+
+static gboolean
+wxgtk_webview_webkit_context_menu(WebKitWebView *,
+                                  GtkWidget *,
+                                  WebKitHitTestResult *,
+                                  gboolean,
+                                  wxWebViewWebKit *webKitCtrl)
+{
+    if(webKitCtrl->IsContextMenuEnabled())
+        return FALSE;
+    else
+        return TRUE;
+}
+
+#endif
+
 } // extern "C"
 
 //-----------------------------------------------------------------------------
@@ -433,6 +450,11 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     g_signal_connect_after(m_web_view, "resource-request-starting",
                            G_CALLBACK(wxgtk_webview_webkit_resource_req), this);
+      
+#if WEBKIT_CHECK_VERSION(1, 10, 0)    
+     g_signal_connect_after(m_web_view, "context-menu",
+                           G_CALLBACK(wxgtk_webview_webkit_context_menu), this);
+#endif
 
     m_parent->DoAddChild( this );
 
@@ -924,6 +946,15 @@ void wxWebViewWebKit::RunScript(const wxString& javascript)
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     m_handlerList.push_back(handler);
+}
+
+void wxWebViewWebKit::EnableContextMenu(bool enable)
+{
+#if !WEBKIT_CHECK_VERSION(1, 10, 0) //If we are using an older version
+    g_object_set(webkit_web_view_get_settings(m_web_view), 
+                 "enable-default-context-menu", enable, NULL);
+#endif
+    wxWebView::EnableContextMenu(enable);
 }
 
 long wxWebViewWebKit::Find(const wxString& text, int flags)
