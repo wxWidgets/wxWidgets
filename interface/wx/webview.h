@@ -492,12 +492,19 @@ public:
     */
 
     /**
-        Enable or disbale the right click context menu.
+        Enable or disable the right click context menu.
+
+        By default the standard context menu is enabled, this method can be
+        used to disable it or re-enable it later.
+
+        @since 2.9.5
     */
     virtual void EnableContextMenu(bool enable = true);
 
    /**
         Returns @true if a context menu will be shown on right click.
+
+        @since 2.9.5
     */
     virtual bool IsContextMenuEnabled() const;
 
