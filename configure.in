@@ -4366,22 +4366,25 @@ dnl backtrace() and backtrace_symbols() for wxStackWalker
 if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     AC_CACHE_CHECK([for backtrace() in <execinfo.h>], wx_cv_func_backtrace,
         [
-            AC_LANG_PUSH(C++)
-            AC_TRY_COMPILE([#include <execinfo.h>],
+            AC_SEARCH_LIBS(backtrace, execinfo,
                 [
-                    void *trace[1];
-                    char **messages;
-
-                    backtrace(trace, 1);
-                    messages = backtrace_symbols(trace, 1);
+                    AC_LANG_PUSH(C++)
+                    AC_TRY_LINK([#include <execinfo.h>],
+                        [
+                            void *trace[1];
+                            char **messages;
+                            backtrace(trace, 1);
+                            messages = backtrace_symbols(trace, 1);
+                        ],
+                        wx_cv_func_backtrace=yes,
+                        wx_cv_func_backtrace=no
+                    )
+                    AC_LANG_POP()
                 ],
-                wx_cv_func_backtrace=yes,
                 wx_cv_func_backtrace=no
             )
-            AC_LANG_POP()
         ]
     )
-
 
     if test "$wx_cv_func_backtrace" = "no"; then
         AC_MSG_WARN([backtrace() is not available, wxStackWalker will not be available])
