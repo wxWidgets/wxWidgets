@@ -14,17 +14,11 @@
 #pragma hdrstop
 #endif
 
-#include "wx/filectrl.h"
-
 #if wxUSE_FILECTRL && !defined(__WXUNIVERSAL__)
 
-#ifndef WX_PRECOMP
-#    include "wx/sizer.h"
-#    include "wx/debug.h"
-#endif
+#include "wx/filectrl.h"
 
 #include "wx/gtk/private.h"
-#include "wx/filedlg.h"
 #include "wx/filename.h"
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
@@ -456,8 +450,7 @@ void wxGtkFileCtrl::GetFilenames( wxArrayString& files ) const
 
 void wxGtkFileCtrl::ShowHidden(bool show)
 {
-    // gtk_file_chooser_set_show_hidden() is new in 2.6
-    g_object_set (G_OBJECT (m_fcWidget), "show-hidden", show, NULL);
+    gtk_file_chooser_set_show_hidden(m_fcWidget, show);
 }
 
 #endif // wxUSE_FILECTRL
