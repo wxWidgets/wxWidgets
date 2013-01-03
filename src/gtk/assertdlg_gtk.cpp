@@ -433,6 +433,8 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
     return g_string_free (string, FALSE);
 }
 
+#endif // wxUSE_STACKWALKER
+
 void gtk_assert_dialog_set_message(GtkAssertDialog *dlg, const gchar *msg)
 {
     /* prepend and append the <b> tag
@@ -447,6 +449,8 @@ void gtk_assert_dialog_set_message(GtkAssertDialog *dlg, const gchar *msg)
     g_free (decorated_msg);
     g_free (escaped_msg);
 }
+
+#if wxUSE_STACKWALKER
 
 void gtk_assert_dialog_set_backtrace_callback(GtkAssertDialog *assertdlg,
                                               GtkAssertDialogStackFrameCallback callback,
