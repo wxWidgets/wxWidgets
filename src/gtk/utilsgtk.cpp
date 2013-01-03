@@ -334,9 +334,9 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
         // wxWidgets idle processing to work correctly which might not be the
         // case when assert happens
         GtkWidget *dialog = gtk_assert_dialog_new();
+#if wxUSE_STACKWALKER
         gtk_assert_dialog_set_message(GTK_ASSERT_DIALOG(dialog), msg.mb_str());
 
-#if wxUSE_STACKWALKER
         // save the current stack ow...
         StackDump dump(GTK_ASSERT_DIALOG(dialog));
         dump.SaveStack(100); // showing more than 100 frames is not very useful
