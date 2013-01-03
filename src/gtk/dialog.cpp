@@ -95,11 +95,6 @@ bool wxDialog::IsModal() const
     return m_modalShowing;
 }
 
-void wxDialog::SetModal( bool WXUNUSED(flag) )
-{
-    wxFAIL_MSG( wxT("wxDialog:SetModal obsolete now") );
-}
-
 // Workaround for Ubuntu overlay scrollbar, which adds our GtkWindow to a
 // private window group in a GtkScrollbar realize handler. This breaks the grab
 // done by gtk_window_set_modal(), and allows menus and toolbars in the parent

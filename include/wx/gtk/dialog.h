@@ -39,7 +39,6 @@ public:
     virtual int ShowModal();
     virtual void EndModal( int retCode );
     virtual bool IsModal() const;
-    void SetModal( bool modal );
 
     // implementation
     // --------------

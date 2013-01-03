@@ -555,19 +555,6 @@ public:
     static wxDialogLayoutAdapter* SetLayoutAdapter(wxDialogLayoutAdapter* adapter);
 
     /**
-        @deprecated This function doesn't work for all ports, just use
-                    ShowModal() to show a modal dialog instead.
-
-        Allows the programmer to specify whether the dialog box is modal
-        (Show() blocks control until the dialog is hidden) or modeless (control
-        returns immediately).
-
-        @param flag
-            If @true, the dialog will be modal, otherwise it will be modeless.
-    */
-    void SetModal(bool flag);
-
-    /**
         Sets the return code for this window.
 
         A return code is normally associated with a modal dialog, where
