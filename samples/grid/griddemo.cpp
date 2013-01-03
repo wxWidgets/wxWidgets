@@ -992,6 +992,7 @@ void GridFrame::AutoSizeLabelsRow(wxCommandEvent& WXUNUSED(event))
 void GridFrame::AutoSizeTable(wxCommandEvent& WXUNUSED(event))
 {
     grid->AutoSize();
+    Layout();
 }
 
 
