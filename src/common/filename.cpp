@@ -100,6 +100,7 @@
 
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
+    #include <shlobj.h>         // for CLSID_ShellLink
     #include "wx/msw/missing.h"
 #endif
 
@@ -1703,13 +1704,6 @@ bool wxFileName::ReplaceHomeDir(wxPathFormat format)
 // quotation marks."
 
 #if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
-// The following lines are necessary under WinCE
-// #include "wx/msw/private.h"
-// #include <ole2.h>
-#include <shlobj.h>
-#if defined(__WXWINCE__)
-#include <shlguid.h>
-#endif
 
 bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                    wxString& targetFilename,
