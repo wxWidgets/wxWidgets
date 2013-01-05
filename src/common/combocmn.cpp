@@ -23,26 +23,11 @@
     #pragma hdrstop
 #endif
 
+#include "wx/combo.h"
+
 #if wxUSE_COMBOBOX
 #include "wx/combobox.h"
 extern WXDLLEXPORT_DATA(const char) wxComboBoxNameStr[] = "comboBox";
-#endif
-
-#if wxUSE_COMBOCTRL
-
-#ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/log.h"
-    #include "wx/dcclient.h"
-    #include "wx/settings.h"
-    #include "wx/timer.h"
-    #include "wx/textctrl.h"
-#endif
-
-#include "wx/tooltip.h"
-
-#include "wx/combo.h"
-
 
 // ----------------------------------------------------------------------------
 // XTI
@@ -109,6 +94,21 @@ wxEMPTY_HANDLERS_TABLE(wxComboBox)
 
 wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
                 wxString, Value, wxPoint, Position, wxSize, Size )
+
+#endif // wxUSE_COMBOBOX
+
+#if wxUSE_COMBOCTRL
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/log.h"
+    #include "wx/dcclient.h"
+    #include "wx/settings.h"
+    #include "wx/timer.h"
+    #include "wx/textctrl.h"
+#endif
+
+#include "wx/tooltip.h"
 
 // constants
 // ----------------------------------------------------------------------------
