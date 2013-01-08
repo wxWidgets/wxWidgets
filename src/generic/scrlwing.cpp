@@ -162,7 +162,16 @@ void wxAutoScrollTimer::Notify()
 
             event2.SetEventObject(m_win);
 
-            // FIXME: we don't fill in the other members - ok?
+            wxMouseState mouseState = wxGetMouseState();
+
+            event2.m_leftDown = mouseState.LeftDown();
+            event2.m_middleDown = mouseState.MiddleDown();
+            event2.m_rightDown = mouseState.RightDown();
+
+            event2.m_shiftDown = mouseState.ShiftDown();
+            event2.m_controlDown = mouseState.ControlDown();
+            event2.m_altDown = mouseState.AltDown();
+            event2.m_metaDown = mouseState.MetaDown();
 
             m_win->GetEventHandler()->ProcessEvent(event2);
         }
