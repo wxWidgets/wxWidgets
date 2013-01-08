@@ -627,6 +627,13 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 
     if (!event.Dragging())
     {
+        // We may have accidentally lost a mouse-up event, especially on Linux
+        if (m_dragging)
+        {
+            m_dragging = false;
+            if (GetCapture() == this)
+                ReleaseMouse();
+        }
         event.Skip();
         return;
     }
