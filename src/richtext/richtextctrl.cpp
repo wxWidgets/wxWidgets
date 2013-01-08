@@ -751,6 +751,14 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
 /// Mouse-movements
 void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 {
+    if (!event.Dragging() && m_dragging)
+    {
+        // We may have accidentally lost a mouse-up event, especially on Linux
+        m_dragging = false;
+        if (GetCapture() == this)
+            ReleaseMouse();
+    }
+
 #if wxUSE_DRAG_AND_DROP
     size_t distance = 0;
     if (m_preDrag || m_dragging)
