@@ -2674,7 +2674,7 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
     absentStyleAttributes |= (~style.GetFlags() & wxTEXT_ATTR_ALL);
     absentTextEffectAttributes |= (~style.GetTextEffectFlags() & 0xFFFF);
 
-    if (style.HasFont())
+    // if (style.HasFont())
     {
         if (style.HasFontSize() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_SIZE))
         {
@@ -2698,6 +2698,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_SIZE);
             }
         }
+        else if (!style.HasFontSize() && currentStyle.HasFontSize())
+        {
+            multipleStyleAttributes |= wxTEXT_ATTR_FONT_SIZE;
+            currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_SIZE);
+        }
 
         if (style.HasFontItalic() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_ITALIC))
         {
@@ -2720,6 +2725,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_ITALIC);
             }
         }
+        else if (!style.HasFontItalic() && currentStyle.HasFontItalic())
+        {
+            multipleStyleAttributes |= wxTEXT_ATTR_FONT_ITALIC;
+            currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_ITALIC);
+        }
 
         if (style.HasFontWeight() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_WEIGHT))
         {
@@ -2741,6 +2751,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
                 wxSetFontPreservingStyles(currentStyle, font);
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_WEIGHT);
             }
+        }
+        else if (!style.HasFontWeight() && currentStyle.HasFontWeight())
+        {
+            multipleStyleAttributes |= wxTEXT_ATTR_FONT_WEIGHT;
+            currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_WEIGHT);
         }
 
         if (style.HasFontFaceName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_FACE))
@@ -2767,6 +2782,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_FACE);
             }
         }
+        else if (!style.HasFontFaceName() && currentStyle.HasFontFaceName())
+        {
+            multipleStyleAttributes |= wxTEXT_ATTR_FONT_FACE;
+            currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_FACE);
+        }
 
         if (style.HasFontUnderlined() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_UNDERLINE))
         {
@@ -2789,6 +2809,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_UNDERLINE);
             }
         }
+        else if (!style.HasFontUnderlined() && currentStyle.HasFontUnderlined())
+        {
+            multipleStyleAttributes |= wxTEXT_ATTR_FONT_UNDERLINE;
+            currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_UNDERLINE);
+        }
     }
 
     if (style.HasTextColour() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_TEXT_COLOUR))
@@ -2805,6 +2830,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         else
             currentStyle.SetTextColour(style.GetTextColour());
     }
+    else if (!style.HasTextColour() && currentStyle.HasTextColour())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_TEXT_COLOUR;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_TEXT_COLOUR);
+    }
 
     if (style.HasBackgroundColour() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BACKGROUND_COLOUR))
     {
@@ -2819,6 +2849,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         }
         else
             currentStyle.SetBackgroundColour(style.GetBackgroundColour());
+    }
+    else if (!style.HasBackgroundColour() && currentStyle.HasBackgroundColour())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_BACKGROUND_COLOUR;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BACKGROUND_COLOUR);
     }
 
     if (style.HasAlignment() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_ALIGNMENT))
@@ -2835,6 +2870,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         else
             currentStyle.SetAlignment(style.GetAlignment());
     }
+    else if (!style.HasAlignment() && currentStyle.HasAlignment())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_ALIGNMENT;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_ALIGNMENT);
+    }
 
     if (style.HasTabs() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_TABS))
     {
@@ -2849,6 +2889,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         }
         else
             currentStyle.SetTabs(style.GetTabs());
+    }
+    else if (!style.HasTabs() && currentStyle.HasTabs())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_TABS;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_TABS);
     }
 
     if (style.HasLeftIndent() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LEFT_INDENT))
@@ -2865,6 +2910,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         else
             currentStyle.SetLeftIndent(style.GetLeftIndent(), style.GetLeftSubIndent());
     }
+    else if (!style.HasLeftIndent() && currentStyle.HasLeftIndent())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_LEFT_INDENT;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LEFT_INDENT);
+    }
 
     if (style.HasRightIndent() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_RIGHT_INDENT))
     {
@@ -2879,6 +2929,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         }
         else
             currentStyle.SetRightIndent(style.GetRightIndent());
+    }
+    else if (!style.HasRightIndent() && currentStyle.HasRightIndent())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_RIGHT_INDENT;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_RIGHT_INDENT);
     }
 
     if (style.HasParagraphSpacingAfter() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARA_SPACING_AFTER))
@@ -2895,6 +2950,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         else
             currentStyle.SetParagraphSpacingAfter(style.GetParagraphSpacingAfter());
     }
+    else if (!style.HasParagraphSpacingAfter() && currentStyle.HasParagraphSpacingAfter())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_PARA_SPACING_AFTER;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARA_SPACING_AFTER);
+    }
 
     if (style.HasParagraphSpacingBefore() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARA_SPACING_BEFORE))
     {
@@ -2909,6 +2969,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         }
         else
             currentStyle.SetParagraphSpacingBefore(style.GetParagraphSpacingBefore());
+    }
+    else if (!style.HasParagraphSpacingBefore() && currentStyle.HasParagraphSpacingBefore())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_PARA_SPACING_BEFORE;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARA_SPACING_BEFORE);
     }
 
     if (style.HasLineSpacing() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LINE_SPACING))
@@ -2925,6 +2990,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         else
             currentStyle.SetLineSpacing(style.GetLineSpacing());
     }
+    else if (!style.HasLineSpacing() && currentStyle.HasLineSpacing())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_LINE_SPACING;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LINE_SPACING);
+    }
 
     if (style.HasCharacterStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_CHARACTER_STYLE_NAME))
     {
@@ -2939,6 +3009,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         }
         else
             currentStyle.SetCharacterStyleName(style.GetCharacterStyleName());
+    }
+    else if (!style.HasCharacterStyleName() && currentStyle.HasCharacterStyleName())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_CHARACTER_STYLE_NAME;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_CHARACTER_STYLE_NAME);
     }
 
     if (style.HasParagraphStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARAGRAPH_STYLE_NAME))
@@ -2955,6 +3030,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         else
             currentStyle.SetParagraphStyleName(style.GetParagraphStyleName());
     }
+    else if (!style.HasParagraphStyleName() && currentStyle.HasParagraphStyleName())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_PARAGRAPH_STYLE_NAME;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARAGRAPH_STYLE_NAME);
+    }
 
     if (style.HasListStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LIST_STYLE_NAME))
     {
@@ -2969,6 +3049,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         }
         else
             currentStyle.SetListStyleName(style.GetListStyleName());
+    }
+    else if (!style.HasListStyleName() && currentStyle.HasListStyleName())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_LIST_STYLE_NAME;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LIST_STYLE_NAME);
     }
 
     if (style.HasBulletStyle() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_STYLE))
@@ -2985,6 +3070,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         else
             currentStyle.SetBulletStyle(style.GetBulletStyle());
     }
+    else if (!style.HasBulletStyle() && currentStyle.HasBulletStyle())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_BULLET_STYLE;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_STYLE);
+    }
 
     if (style.HasBulletNumber() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_NUMBER))
     {
@@ -2999,6 +3089,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         }
         else
             currentStyle.SetBulletNumber(style.GetBulletNumber());
+    }
+    else if (!style.HasBulletNumber() && currentStyle.HasBulletNumber())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_BULLET_NUMBER;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_NUMBER);
     }
 
     if (style.HasBulletText() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_TEXT))
@@ -3018,6 +3113,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
             currentStyle.SetBulletFont(style.GetBulletFont());
         }
     }
+    else if (!style.HasBulletText() && currentStyle.HasBulletText())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_BULLET_TEXT;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_TEXT);
+    }
 
     if (style.HasBulletName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_NAME))
     {
@@ -3034,6 +3134,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         {
             currentStyle.SetBulletName(style.GetBulletName());
         }
+    }
+    else if (!style.HasBulletName() && currentStyle.HasBulletName())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_BULLET_NAME;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_NAME);
     }
 
     if (style.HasURL() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_URL))
@@ -3091,6 +3196,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         if (currentStyle.GetTextEffectFlags() == 0)
             currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_EFFECTS);
     }
+    else if (!style.HasTextEffects() && currentStyle.HasTextEffects())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_EFFECTS;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_EFFECTS);
+    }
 
     if (style.HasOutlineLevel() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_OUTLINE_LEVEL))
     {
@@ -3105,6 +3215,11 @@ bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long
         }
         else
             currentStyle.SetOutlineLevel(style.GetOutlineLevel());
+    }
+    else if (!style.HasOutlineLevel() && currentStyle.HasOutlineLevel())
+    {
+        multipleStyleAttributes |= wxTEXT_ATTR_OUTLINE_LEVEL;
+        currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_OUTLINE_LEVEL);
     }
 
     return true;
@@ -3147,7 +3262,14 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                 wxTextAttrEx paraStyle = para->GetCombinedAttributes();
                 paraStyle.SetFlags(paraStyle.GetFlags() & wxTEXT_ATTR_PARAGRAPH);
 
+                // Don't reset character styles at this point, so temporarily remove character attributes so we
+                // don't register them as absent.
+                long oldFlags = style.GetFlags();
+                style.SetFlags(oldFlags & ~wxTEXT_ATTR_CHARACTER);
+
                 wxCollectStyle2(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesPara, absentTextEffectAttributesPara);
+
+                style.SetFlags(style.GetFlags() | (oldFlags & wxTEXT_ATTR_CHARACTER));
 
                 wxRichTextObjectList::compatibility_iterator childNode = para->GetChildren().GetFirst();
 
@@ -3159,9 +3281,16 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                         wxTextAttrEx childStyle = para->GetCombinedAttributes(child->GetAttributes());
 
                         // Now collect character attributes only
+                        // Don't reset paragraph styles at this point, so temporarily remove paragraph attributes so we
+                        // don't register them as absent.
+                        long oldFlags = style.GetFlags();
+                        style.SetFlags(oldFlags & ~wxTEXT_ATTR_PARAGRAPH);
+
                         childStyle.SetFlags(childStyle.GetFlags() & wxTEXT_ATTR_CHARACTER);
 
                         wxCollectStyle2(style, childStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesChar, absentTextEffectAttributesChar);
+
+                        style.SetFlags(style.GetFlags() | (oldFlags & wxTEXT_ATTR_PARAGRAPH));
                     }
 
                     childNode = childNode->GetNext();
