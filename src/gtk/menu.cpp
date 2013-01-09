@@ -439,8 +439,8 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return (wxMenu*) NULL;
 
-    gtk_menu_item_remove_submenu( GTK_MENU_ITEM(menu->m_owner) );
     gtk_container_remove(GTK_CONTAINER(m_menubar), menu->m_owner);
+    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu->m_owner));
 
     gtk_widget_destroy( menu->m_owner );
     menu->m_owner = NULL;
@@ -1095,7 +1095,7 @@ wxMenu::~wxMenu()
        // if the menu is inserted in another menu at this time, there was
        // one more reference to it:
        if ( m_owner )
-           gtk_widget_destroy( m_menu );
+           gtk_widget_destroy(m_owner);
    }
 }
 
