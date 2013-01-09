@@ -164,9 +164,9 @@ void wxAutoScrollTimer::Notify()
 
             wxMouseState mouseState = wxGetMouseState();
 
-            event2.m_leftDown = mouseState.LeftDown();
-            event2.m_middleDown = mouseState.MiddleDown();
-            event2.m_rightDown = mouseState.RightDown();
+            event2.m_leftDown = mouseState.LeftIsDown();
+            event2.m_middleDown = mouseState.MiddleIsDown();
+            event2.m_rightDown = mouseState.RightIsDown();
 
             event2.m_shiftDown = mouseState.ShiftDown();
             event2.m_controlDown = mouseState.ControlDown();
