@@ -1982,12 +1982,14 @@ void wxWindowGTK::GTKHandleRealized()
     if (IsFrozen())
         DoFreeze();
 
+    GdkWindow* const window = GTKGetDrawingWindow();
+
     if (m_imData)
     {
         gtk_im_context_set_client_window
         (
             m_imData->context,
-            m_wxwindow ? GTKGetDrawingWindow()
+            window ? window
                        : gtk_widget_get_window(m_widget)
         );
     }
@@ -1998,7 +2000,6 @@ void wxWindowGTK::GTKHandleRealized()
 #if wxGTK_HAS_COMPOSITING_SUPPORT
         if (IsTransparentBackgroundSupported())
         {
-            GdkWindow* const window = GTKGetDrawingWindow();
             if (window)
                 gdk_window_set_composited(window, true);
         }
@@ -2010,16 +2011,14 @@ void wxWindowGTK::GTKHandleRealized()
         }
     }
 
-
-    // We cannot set colours and fonts before the widget
-    // been realized, so we do this directly after realization
-    // or otherwise in idle time
-
-    if (m_needsStyleChange)
+#ifndef __WXGTK3__
+    if (window && (
+        m_backgroundStyle == wxBG_STYLE_PAINT ||
+        m_backgroundStyle == wxBG_STYLE_TRANSPARENT))
     {
-        SetBackgroundStyle(GetBackgroundStyle());
-        m_needsStyleChange = false;
+        gdk_window_set_back_pixmap(window, NULL, false);
     }
+#endif
 
     wxWindowCreateEvent event(static_cast<wxWindow*>(this));
     event.SetEventObject( this );
@@ -2213,8 +2212,6 @@ void wxWindowGTK::Init()
     m_useCachedClientSize = false;
 
     m_clipPaintRegion = false;
-
-    m_needsStyleChange = false;
 
     m_cursor = *wxSTANDARD_CURSOR;
 
@@ -4221,40 +4218,10 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
 #ifndef __WXGTK3__
     GdkWindow *window;
-    if ( m_wxwindow )
+    if ((style == wxBG_STYLE_PAINT || style == wxBG_STYLE_TRANSPARENT) &&
+        (window = GTKGetDrawingWindow()))
     {
-        window = GTKGetDrawingWindow();
-    }
-    else
-    {
-        GtkWidget * const w = GetConnectWidget();
-        window = w ? gtk_widget_get_window(w) : NULL;
-    }
-
-    bool wantNoBackPixmap = style == wxBG_STYLE_PAINT || style == wxBG_STYLE_TRANSPARENT;
-
-    if ( wantNoBackPixmap )
-    {
-        if (window)
-        {
-            // Make sure GDK/X11 doesn't refresh the window
-            // automatically.
-            gdk_window_set_back_pixmap( window, NULL, FALSE );
-            m_needsStyleChange = false;
-        }
-        else // window not realized yet
-        {
-            // Do when window is realized
-            m_needsStyleChange = true;
-        }
-
-        // Don't apply widget style, or we get a grey background
-    }
-    else
-    {
-        // apply style change (forceStyle=true so that new style is applied
-        // even if the bg colour changed from valid to wxNullColour):
-        GTKApplyWidgetStyle(true);
+        gdk_window_set_back_pixmap(window, NULL, false);
     }
 #endif // !__WXGTK3__
 

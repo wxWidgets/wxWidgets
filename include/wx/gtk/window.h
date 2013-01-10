@@ -311,8 +311,6 @@ public:
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
     bool                 m_dirtyTabOrder:1;     // tab order changed, GTK focus
                                                 // chain needs update
-    bool                 m_needsStyleChange:1;  // May not be able to change
-                                                // background style until OnIdle
     bool                 m_mouseButtonDown:1;
 
     bool                 m_showOnIdle:1;        // postpone showing the window until idle
