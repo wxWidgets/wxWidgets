@@ -2020,8 +2020,6 @@ void wxWindowGTK::GTKHandleRealized()
     }
 #endif
 
-    GTKApplyWidgetStyle();
-
     wxWindowCreateEvent event(static_cast<wxWindow*>(this));
     event.SetEventObject( this );
     GTKProcessEvent( event );
@@ -2581,6 +2579,9 @@ void wxWindowGTK::PostCreation()
 
     if (!WX_IS_PIZZA(gtk_widget_get_parent(m_widget)) && !GTK_IS_WINDOW(m_widget))
         gtk_widget_set_size_request(m_widget, m_width, m_height);
+
+    // apply any font or color changes made before creation
+    GTKApplyWidgetStyle();
 
     InheritAttributes();
 

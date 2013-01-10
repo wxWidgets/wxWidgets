@@ -105,7 +105,6 @@ void wxControl::PostCreation(const wxSize& size)
     gtk_widget_ensure_style(m_widget);
 #endif
 
-    GTKApplyWidgetStyle();
     SetInitialSize(size);
 }
 
