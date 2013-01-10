@@ -1512,7 +1512,7 @@ public:
                 else // No Unicode equivalent.
                 {
                     // It's a special key, deal with all the known ones:
-                    switch ( GetKeyCode() )
+                    switch ( event.GetKeyCode() )
                     {
                         case WXK_LEFT:
                         case WXK_RIGHT:
