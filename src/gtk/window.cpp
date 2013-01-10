@@ -2020,6 +2020,8 @@ void wxWindowGTK::GTKHandleRealized()
     }
 #endif
 
+    GTKApplyWidgetStyle();
+
     wxWindowCreateEvent event(static_cast<wxWindow*>(this));
     event.SetEventObject( this );
     GTKProcessEvent( event );
@@ -4009,46 +4011,46 @@ void wxWindowGTK::GTKApplyToolTip(const char* tip)
 
 bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
-
     if (!wxWindowBase::SetBackgroundColour(colour))
         return false;
 
-#ifndef __WXGTK3__
-    if (colour.IsOk())
+    if (m_widget)
     {
-        // We need the pixel value e.g. for background clearing.
-        m_backgroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
-    }
+#ifndef __WXGTK3__
+        if (colour.IsOk())
+        {
+            // We need the pixel value e.g. for background clearing.
+            m_backgroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
+        }
 #endif
 
-    // apply style change (forceStyle=true so that new style is applied
-    // even if the bg colour changed from valid to wxNullColour)
-    GTKApplyWidgetStyle(true);
+        // apply style change (forceStyle=true so that new style is applied
+        // even if the bg colour changed from valid to wxNullColour)
+        GTKApplyWidgetStyle(true);
+    }
 
     return true;
 }
 
 bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
-
     if (!wxWindowBase::SetForegroundColour(colour))
-    {
         return false;
-    }
 
-#ifndef __WXGTK3__
-    if (colour.IsOk())
+    if (m_widget)
     {
-        // We need the pixel value e.g. for background clearing.
-        m_foregroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
-    }
+#ifndef __WXGTK3__
+        if (colour.IsOk())
+        {
+            // We need the pixel value e.g. for background clearing.
+            m_foregroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
+        }
 #endif
 
-    // apply style change (forceStyle=true so that new style is applied
-    // even if the bg colour changed from valid to wxNullColour):
-    GTKApplyWidgetStyle(true);
+        // apply style change (forceStyle=true so that new style is applied
+        // even if the bg colour changed from valid to wxNullColour):
+        GTKApplyWidgetStyle(true);
+    }
 
     return true;
 }
@@ -4390,14 +4392,15 @@ GdkWindow *wxWindowGTK::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 
 bool wxWindowGTK::SetFont( const wxFont &font )
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
-
     if (!wxWindowBase::SetFont(font))
         return false;
 
-    // apply style change (forceStyle=true so that new style is applied
-    // even if the font changed from valid to wxNullFont):
-    GTKApplyWidgetStyle(true);
+    if (m_widget)
+    {
+        // apply style change (forceStyle=true so that new style is applied
+        // even if the font changed from valid to wxNullFont):
+        GTKApplyWidgetStyle(true);
+    }
 
     return true;
 }
