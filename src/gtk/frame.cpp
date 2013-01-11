@@ -668,8 +668,8 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
     else
     {
         m_menuBarHeight = 2;
-        GtkUpdateSize();        // resize window in OnInternalIdle
     }
+    GtkUpdateSize();
 }
 
 void wxFrame::UpdateMenuBarSize()
