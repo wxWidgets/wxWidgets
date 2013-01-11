@@ -674,6 +674,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 
 void wxFrame::UpdateMenuBarSize()
 {
+    int oldMenuBarHeight = m_menuBarHeight;
     m_menuBarHeight = 2;
 
     // this is called after Remove with a NULL m_frameMenuBar
@@ -690,7 +691,8 @@ void wxFrame::UpdateMenuBarSize()
     }
 
     // resize window in OnInternalIdle
-    GtkUpdateSize();
+    if (oldMenuBarHeight != m_menuBarHeight)
+        GtkUpdateSize();
 }
 
 #endif // wxUSE_MENUS_NATIVE
