@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/dialog.h"
     #include "wx/frame.h"
     #include "wx/bitmap.h"
     #include "wx/app.h"
