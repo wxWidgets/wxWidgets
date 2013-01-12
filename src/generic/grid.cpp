@@ -8106,8 +8106,11 @@ int UpdateRowOrColSize(int& sizeCurrent, int sizeNew)
         // We're showing back a previously hidden row/column.
         wxASSERT_MSG( sizeNew == -1, wxS("New size must be positive or -1.") );
 
-        wxASSERT_MSG( sizeCurrent < 0, wxS("May only show back if hidden.") );
+        // If it's already visible, simply do nothing.
+        if ( sizeCurrent >= 0 )
+            return 0;
 
+        // Otherwise show it by restoring its old size.
         sizeCurrent = -sizeCurrent;
 
         // This is positive which is correct.
@@ -8116,8 +8119,13 @@ int UpdateRowOrColSize(int& sizeCurrent, int sizeNew)
     else if ( sizeNew == 0 )
     {
         // We're hiding a row/column.
-        wxASSERT_MSG( sizeCurrent > 0, wxS("Can't hide if already hidden.") );
 
+        // If it's already hidden, simply do nothing.
+        if ( sizeCurrent <= 0 )
+            return 0;
+
+        // Otherwise hide it and also remember the shown size to be able to
+        // restore it later.
         sizeCurrent = -sizeCurrent;
 
         // This is negative which is correct.

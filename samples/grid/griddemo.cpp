@@ -211,6 +211,11 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SIZE_LABELS_ROW, GridFrame::AutoSizeLabelsRow )
     EVT_MENU( ID_SIZE_GRID, GridFrame::AutoSizeTable )
 
+    EVT_MENU( ID_HIDECOL, GridFrame::HideCol )
+    EVT_MENU( ID_SHOWCOL, GridFrame::ShowCol )
+    EVT_MENU( ID_HIDEROW, GridFrame::HideRow )
+    EVT_MENU( ID_SHOWROW, GridFrame::ShowRow )
+
     EVT_MENU( ID_SET_HIGHLIGHT_WIDTH, GridFrame::OnSetHighlightWidth)
     EVT_MENU( ID_SET_RO_HIGHLIGHT_WIDTH, GridFrame::OnSetROHighlightWidth)
 
@@ -293,7 +298,10 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_AUTOSIZECOLS, "&Auto-size cols");
     viewMenu->AppendCheckItem(ID_CELLOVERFLOW, "&Overflow cells");
     viewMenu->AppendCheckItem(ID_RESIZECELL, "&Resize cell (7,1)");
-
+    viewMenu->Append(ID_HIDECOL, "&Hide column A");
+    viewMenu->Append(ID_SHOWCOL, "&Show column A");
+    viewMenu->Append(ID_HIDEROW, "&Hide row 2");
+    viewMenu->Append(ID_SHOWROW, "&Show row 2");
     wxMenu *rowLabelMenu = new wxMenu;
 
     viewMenu->Append( ID_ROWLABELALIGN, wxT("R&ow label alignment"),
@@ -2308,4 +2316,24 @@ void GridFrame::OnRenderPaint( wxPaintEvent& event )
              m_gridBitmap.GetWidth(),
              m_gridBitmap.GetHeight(),
              &memDc, 0, 0 );
+}
+
+void GridFrame::HideCol( wxCommandEvent& WXUNUSED(event) )
+{
+    grid->HideCol(0);
+}
+
+void GridFrame::ShowCol( wxCommandEvent& WXUNUSED(event) )
+{
+    grid->ShowCol(0);
+}
+
+void GridFrame::HideRow( wxCommandEvent& WXUNUSED(event) )
+{
+    grid->HideRow(1);
+}
+
+void GridFrame::ShowRow( wxCommandEvent& WXUNUSED(event) )
+{
+    grid->ShowRow(1);
 }

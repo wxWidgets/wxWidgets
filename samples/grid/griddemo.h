@@ -88,6 +88,12 @@ class GridFrame : public wxFrame
     void AutoSizeLabelsRow(wxCommandEvent& event);
     void AutoSizeTable(wxCommandEvent& event);
 
+    void HideCol(wxCommandEvent& event);
+    void ShowCol(wxCommandEvent& event);
+    void HideRow(wxCommandEvent& event);
+    void ShowRow(wxCommandEvent& event);
+
+
     void OnLabelLeftClick( wxGridEvent& );
     void OnCellLeftClick( wxGridEvent& );
     void OnRowSize( wxGridSizeEvent& );
@@ -131,6 +137,10 @@ public:
         ID_TOGGLEGRIDLINES,
         ID_AUTOSIZECOLS,
         ID_CELLOVERFLOW,
+        ID_HIDECOL,
+        ID_SHOWCOL,
+        ID_HIDEROW,
+        ID_SHOWROW,
         ID_RESIZECELL,
         ID_SETLABELCOLOUR,
         ID_SETLABELTEXTCOLOUR,

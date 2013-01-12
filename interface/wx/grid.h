@@ -2988,8 +2988,7 @@ public:
         To show the column later you need to call SetColSize() with non-0
         width or ShowCol() to restore the previous column width.
 
-        Notice that this method shouldn't be called if the column is already
-        hidden.
+        If the column is already hidden, this method doesn't do anything.
 
         @param col
             The column index.
@@ -3002,8 +3001,7 @@ public:
         The column is shown again with the same width that it had before
         HideCol() call.
 
-        Notice that this method shouldn't be called if the column is not
-        currently hidden.
+        If the column is currently shown, this method doesn't do anything.
 
         @see HideCol(), SetColSize()
      */
@@ -3073,6 +3071,8 @@ public:
         To show the row later you need to call SetRowSize() with non-0
         width or ShowRow() to restore its original height.
 
+        If the row is already hidden, this method doesn't do anything.
+
         @param col
             The row index.
      */
@@ -3083,6 +3083,8 @@ public:
 
         The row is shown again with the same height that it had before
         HideRow() call.
+
+        If the row is currently shown, this method doesn't do anything.
 
         @see HideRow(), SetRowSize()
      */
