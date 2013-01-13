@@ -32,6 +32,7 @@
 
 class wxFSFile;
 class wxFileSystem;
+class wxWebView;
 
 enum wxWebViewZoom
 {
@@ -78,13 +79,6 @@ enum wxWebViewFindFlags
     wxWEB_VIEW_FIND_DEFAULT =          0
 };
 
-enum wxWebViewBackend
-{
-    wxWEB_VIEW_BACKEND_DEFAULT,
-    wxWEB_VIEW_BACKEND_WEBKIT,
-    wxWEB_VIEW_BACKEND_IE
-};
-
 //Base class for custom scheme handlers
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 {
@@ -99,6 +93,24 @@ private:
 
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[];
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[];
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendIE[];
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendWebKit[];
+
+class WXDLLIMPEXP_WEBVIEW wxWebViewFactory : public wxObject
+{
+public:
+    virtual wxWebView* Create() = 0;
+    virtual wxWebView* Create(wxWindow* parent,
+                              wxWindowID id,
+                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = 0,
+                              const wxString& name = wxWebViewNameStr) = 0;
+};
+
+WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewFactory>, wxStringWebViewFactoryMap);
 
 class WXDLLIMPEXP_WEBVIEW wxWebView : public wxControl
 {
@@ -118,17 +130,22 @@ public:
            long style = 0,
            const wxString& name = wxWebViewNameStr) = 0;
 
-    static wxWebView* New(wxWebViewBackend backend = wxWEB_VIEW_BACKEND_DEFAULT);
+    // Factory methods allowing the use of custom factories registered with
+    // RegisterFactory
+    static wxWebView* New(const wxString& backend = wxWebViewBackendDefault);
     static wxWebView* New(wxWindow* parent,
-           wxWindowID id,
-           const wxString& url = wxWebViewDefaultURLStr,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           wxWebViewBackend backend = wxWEB_VIEW_BACKEND_DEFAULT,
-           long style = 0,
-           const wxString& name = wxWebViewNameStr);
+                          wxWindowID id,
+                          const wxString& url = wxWebViewDefaultURLStr,
+                          const wxPoint& pos = wxDefaultPosition,
+                          const wxSize& size = wxDefaultSize,
+                          const wxString& backend = wxWebViewBackendDefault,
+                          long style = 0,
+                          const wxString& name = wxWebViewNameStr);
 
-    //General methods
+    static void RegisterFactory(const wxString& backend, 
+                                wxSharedPtr<wxWebViewFactory> factory);
+
+    // General methods
     virtual void EnableContextMenu(bool enable = true)
     {
         m_showMenu = enable;
@@ -208,7 +225,11 @@ protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 
 private:
+    static void InitFactoryMap();
+    static wxStringWebViewFactoryMap::iterator FindFactory(const wxString &backend);
+
     bool m_showMenu;
+    static wxStringWebViewFactoryMap m_factoryMap;
 
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };

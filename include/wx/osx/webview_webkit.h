@@ -168,6 +168,20 @@ private:
     //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
 };
 
+class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory
+{
+public:
+    virtual wxWebView* Create() { return new wxWebViewWebKit; }
+    virtual wxWebView* Create(wxWindow* parent,
+                              wxWindowID id,
+                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = 0,
+                              const wxString& name = wxWebViewNameStr)
+    { return new wxWebViewWebKit(parent, id, url, pos, size, style, name); }
+};
+
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT
 
 #endif // _WX_WEBKIT_H_

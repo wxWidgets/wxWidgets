@@ -141,6 +141,46 @@ public:
 };
 
 /**
+    @class wxWebViewFactory
+
+    An abstract factory class for creating wxWebView backends. Each
+    implementation of wxWebView should have its own factory.
+
+    @since 2.9.5
+    @library{wxwebview}
+    @category{webview}
+
+    @see wxWebView
+ */
+class wxWebViewFactory : public wxObject
+{
+public:
+    /**
+        Function to create a new wxWebView with two-step creation,
+        wxWebView::Create should be called on the returned object.
+        @return the created wxWebView
+     */
+    virtual wxWebView* Create() = 0;
+
+    /**
+        Function to create a new wxWebView with parameters.
+        @param parent Parent window for the control
+        @param id ID of this control
+        @param url Initial URL to load
+        @param pos Position of the control
+        @param size Size of the control
+        @return the created wxWebView
+    */
+    virtual wxWebView* Create(wxWindow* parent,
+                              wxWindowID id,
+                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = 0,
+                              const wxString& name = wxWebViewNameStr) = 0;
+};
+
+/**
     @class wxWebViewHandler
 
     The base class for handling custom schemes in wxWebView, for example to
@@ -290,35 +330,49 @@ public:
                         const wxString& name = wxWebViewNameStr) = 0;
 
     /**
-        Factory function to create a new wxWebView for two-step creation
-        (you need to call wxWebView::Create on the returned object)
-        @param backend which web engine to use as backend for wxWebView
-        @return the created wxWebView, or NULL if the requested backend is
-                not available
+        Factory function to create a new wxWebView with two-step creation,
+        wxWebView::Create should be called on the returned object.
+        @param backend The backend web rendering engine to use. 
+                       @c wxWebViewBackendDefault, @c wxWebViewBackendIE and
+                       @c wxWebViewBackendWebKit are predefined where appropriate.
+        @return The created wxWebView
+        @since 2.9.5
      */
-    static wxWebView* New(wxWebViewBackend backend = wxWEB_VIEW_BACKEND_DEFAULT);
-
+    static wxWebView* New(const wxString& backend = wxWebViewBackendDefault);
+    
     /**
-        Factory function to create a new wxWebView
-        @param parent parent window to create this view in
+        Factory function to create a new wxWebView using a wxWebViewFactory.
+        @param parent Parent window for the control
         @param id ID of this control
-        @param url URL to load by default in the web view
-        @param pos position to create this control at
-               (you may use wxDefaultPosition if you use sizers)
-        @param size size to create this control with
-               (you may use wxDefaultSize if you use sizers)
-        @param backend which web engine to use as backend for wxWebView
-        @return the created wxWebView, or NULL if the requested backend
+        @param url Initial URL to load
+        @param pos Position of the control
+        @param size Size of the control
+        @param backend The backend web rendering engine to use.
+                       @c wxWebViewBackendDefault, @c wxWebViewBackendIE and
+                       @c wxWebViewBackendWebKit are predefined where appropriate.
+        @return The created wxWebView, or @c NULL if the requested backend
                 is not available
+        @since 2.9.5
     */
     static wxWebView* New(wxWindow* parent,
-           wxWindowID id,
-           const wxString& url = wxWebViewDefaultURLStr,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           wxWebViewBackend backend = wxWEB_VIEW_BACKEND_DEFAULT,
-           long style = 0,
-           const wxString& name = wxWebViewNameStr);
+                          wxWindowID id,
+                          const wxString& url = wxWebViewDefaultURLStr,
+                          const wxPoint& pos = wxDefaultPosition,
+                          const wxSize& size = wxDefaultSize,
+                          const wxString& backend = wxWebViewBackendDefault,
+                          long style = 0,
+                          const wxString& name = wxWebViewNameStr);
+
+    /** 
+        Allows the registering of new backend for wxWebView. @a backend can be
+        used as an argument to New().
+        @param backend The name for the new backend to be registered under
+        @param factory A shared pointer to the factory which creates the 
+                       appropriate backend.
+        @since 2.9.5
+    */
+    static void RegisterFactory(const wxString& backend, 
+                                wxSharedPtr<wxWebViewFactory> factory);
 
     /**
         Get the title of the current web page, or its URL/path if title is not

@@ -533,6 +533,8 @@ INCOMPATIBLE CHANGES SINCE 2.9.4:
   previous 2.9 versions (but like in 2.8). Use wxLocale (preferred) or call
   wxApp::SetCLocale() from your overridden wxApp::Initialize() to restore the
   old behaviour.
+- wxWebView::New now takes a string identifier for the backend to be used
+  rather than a wxWebViewBackend enum value.
 
 All:
 
@@ -564,6 +566,8 @@ All (GUI):
 - Add generic wxFileSystem support to wxWebView with 
   wxWebViewFSHandler (Nick Matthews).
 - Add possibility to disable context menu in wxWebView.
+- Add ability to register custom wxWebView backends using 
+  wxWebView::RegisterFactory and a wxWebViewFactory derived class.
 - Add possibility to hide and show again wxRibbonBar pages (wxBen).
 - Add wxRibbonBar pages highlighting (wxBen).
 - Add expand/collapse button to wxRibbonBar (rakeshthp).

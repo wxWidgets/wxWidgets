@@ -195,6 +195,20 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
 
+class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryIE : public wxWebViewFactory
+{
+public:
+    virtual wxWebView* Create() { return new wxWebViewIE; }
+    virtual wxWebView* Create(wxWindow* parent,
+                              wxWindowID id,
+                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = 0,
+                              const wxString& name = wxWebViewNameStr)
+    { return new wxWebViewIE(parent, id, url, pos, size, style, name); }
+};
+
 class VirtualProtocol : public wxIInternetProtocol
 {
 protected:
