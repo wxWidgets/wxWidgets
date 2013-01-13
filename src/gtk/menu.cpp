@@ -62,7 +62,8 @@ static bool IsMenuEventAllowed(wxMenu* menu)
         wxWindow* tlw = wxGetTopLevelParent(menu->GetWindow());
         if ( !tlw || !wxDynamicCast(tlw, wxDialog) )
         {
-            return true;
+            // This must be an event from a menu bar of one of the frames.
+            return false;
         }
     }
 
