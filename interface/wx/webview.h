@@ -93,21 +93,6 @@ enum wxWebViewFindFlags
     wxWEB_VIEW_FIND_DEFAULT =          0
 };
 
-/**
- * List of available backends for wxWebView
- */
-enum wxWebViewBackend
-{
-    /** Value that may be passed to wxWebView to let it pick an appropriate
-     * engine for the current platform*/
-    wxWEB_VIEW_BACKEND_DEFAULT,
-
-    /** The WebKit web engine */
-    wxWEB_VIEW_BACKEND_WEBKIT,
-
-    /** Use Microsoft Internet Explorer as web engine */
-    wxWEB_VIEW_BACKEND_IE
-};
 
 /**
     @class wxWebViewHistoryItem
