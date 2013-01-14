@@ -602,7 +602,7 @@ void wxRichTextObject::Invalidate(const wxRichTextRange& invalidRange)
         // If this is a floating object, size may not be recalculated
         // after floats have been collected in an early stage of Layout.
         // So avoid resetting the cache for floating objects during layout.
-        if (!IsFloating())
+        if (!IsFloating() || !wxRichTextBuffer::GetFloatingLayoutMode())
             SetCachedSize(wxDefaultSize);
         SetMaxSize(wxDefaultSize);
         SetMinSize(wxDefaultSize);
@@ -1076,7 +1076,8 @@ bool wxRichTextObject::LayoutToBestSize(wxDC& dc, wxRichTextDrawingContext& cont
         // If a paragraph, align the whole paragraph.
         // Problem with this: if we're limited by a floating object, a line may be centered
         // w.r.t. the smaller resulting box rather than the actual available width.
-        if (attr.HasAlignment() && !GetContainer()->GetFloatCollector()->HasFloats()) // FIXME: aligning whole paragraph not compatible with floating objects
+        // FIXME: aligning whole paragraph not compatible with floating objects
+        if (attr.HasAlignment() && (!wxRichTextBuffer::GetFloatingLayoutMode() || (GetContainer()->GetFloatCollector() && !GetContainer()->GetFloatCollector()->HasFloats())))
         {
             // centering, right-justification
             if (attr.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
@@ -1492,7 +1493,7 @@ bool wxRichTextCompositeObject::GetRangeSize(const wxRichTextRange& range, wxSiz
         if (!child->GetRange().IsOutside(range))
         {
             // Floating objects have a zero size within the paragraph.
-            if (child->IsFloating())
+            if (child->IsFloating() && wxRichTextBuffer::GetFloatingLayoutMode())
             {
                 if (partialExtents)
                 {
@@ -1581,7 +1582,7 @@ void wxRichTextCompositeObject::Invalidate(const wxRichTextRange& invalidRange)
         }
         else if (child->IsTopLevel())
         {
-            if (child->IsFloating() && GetBuffer()->GetFloatCollector() && GetBuffer()->GetFloatCollector()->HasFloat(child))
+            if (wxRichTextBuffer::GetFloatingLayoutMode() && child->IsFloating() && GetBuffer()->GetFloatCollector() && GetBuffer()->GetFloatCollector()->HasFloat(child))
             {
                 // Don't invalidate subhierarchy if we've already been laid out
             }
@@ -1740,7 +1741,7 @@ int wxRichTextParagraphLayoutBox::HitTest(wxDC& dc, wxRichTextDrawingContext& co
         return wxRICHTEXT_HITTEST_NONE;
 
     int ret = wxRICHTEXT_HITTEST_NONE;
-    if (m_floatCollector && (flags & wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS) == 0)
+    if (wxRichTextBuffer::GetFloatingLayoutMode() && m_floatCollector && (flags & wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS) == 0)
         ret = m_floatCollector->HitTest(dc, context, pt, textPosition, obj, flags);
 
     if (ret == wxRICHTEXT_HITTEST_NONE)
@@ -1755,7 +1756,7 @@ int wxRichTextParagraphLayoutBox::HitTest(wxDC& dc, wxRichTextDrawingContext& co
 /// Draw the floating objects
 void wxRichTextParagraphLayoutBox::DrawFloats(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style)
 {
-    if (m_floatCollector)
+    if (wxRichTextBuffer::GetFloatingLayoutMode() && m_floatCollector)
         m_floatCollector->Draw(dc, context, range, selection, rect, descent, style);
 }
 
@@ -1789,7 +1790,9 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, wxRichTextDrawingContext& cont
         theseFlags &= ~wxRICHTEXT_DRAW_GUIDELINES;
     DrawBoxAttributes(dc, GetBuffer(), attr, thisRect, theseFlags);
 
-    DrawFloats(dc, context, range, selection, rect, descent, style);
+    if (wxRichTextBuffer::GetFloatingLayoutMode())
+        DrawFloats(dc, context, range, selection, rect, descent, style);
+    
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
@@ -1923,7 +1926,8 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
 
     // Gather information about only those floating objects that will not be formatted,
     // after which floats will be gathered per-paragraph during layout.
-    UpdateFloatingObjects(availableSpace, node ? node->GetData() : (wxRichTextObject*) NULL);
+    if (wxRichTextBuffer::GetFloatingLayoutMode())
+        UpdateFloatingObjects(availableSpace, node ? node->GetData() : (wxRichTextObject*) NULL);
 
     // A way to force speedy rest-of-buffer layout (the 'else' below)
     bool forceQuickLayout = false;
@@ -2027,7 +2031,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
         maxHeight = 0; // topMargin + bottomMargin;
 
     // Check the bottom edge of any floating object
-    if (GetFloatCollector() && GetFloatCollector()->HasFloats())
+    if (wxRichTextBuffer::GetFloatingLayoutMode() && GetFloatCollector() && GetFloatCollector()->HasFloats())
     {
         int bottom = GetFloatCollector()->GetLastRectBottom();
         if (bottom > maxHeight)
@@ -4502,7 +4506,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
             {
                 wxRichTextObject* child = node2->GetData();
 
-                if (!child->IsFloating() && child->GetRange().GetLength() > 0 && !child->GetRange().IsOutside(lineRange) && !lineRange.IsOutside(range))
+                if ((!child->IsFloating() || !wxRichTextBuffer::GetFloatingLayoutMode()) && child->GetRange().GetLength() > 0 && !child->GetRange().IsOutside(lineRange) && !lineRange.IsOutside(range))
                 {
                     // Draw this part of the line at the correct position
                     wxRichTextRange objectRange(child->GetRange());
@@ -4575,9 +4579,15 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     // Deal with floating objects firstly before the normal layout
     wxRichTextBuffer* buffer = GetBuffer();
     wxASSERT(buffer);
+
     wxRichTextFloatCollector* collector = GetContainer()->GetFloatCollector();
-    wxASSERT(collector);
-    LayoutFloat(dc, context, rect, parentRect, style, collector);
+
+    if (wxRichTextBuffer::GetFloatingLayoutMode())
+    {
+        wxASSERT(collector != NULL);
+        if (collector)
+            LayoutFloat(dc, context, rect, parentRect, style, collector);
+    }
 
     wxRichTextAttr attr = GetCombinedAttributes();
     context.ApplyVirtualAttributes(attr, this);
@@ -4665,8 +4675,8 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         // If floating, ignore. We already laid out floats.
         // Also ignore if empty object, except if we haven't got any
         // size yet.
-        if (child->IsFloating() || !child->IsShown() ||
-            (child->GetRange().GetLength() == 0 && maxHeight > spaceBeforePara)
+        if ((child->IsFloating() && wxRichTextBuffer::GetFloatingLayoutMode())
+            || !child->IsShown() || (child->GetRange().GetLength() == 0 && maxHeight > spaceBeforePara)
             )
         {
             node = node->GetNext();
@@ -4775,20 +4785,24 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                 lineAscent = wxMax(childSize.y-childDescent, maxAscent);
             }
             lineHeight = wxMax(lineHeight, (lineDescent + lineAscent));
-            wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
 
-            // Adjust availableRect to the space that is available when taking floating objects into account.
-
-            if (floatAvailableRect.x + startOffset > availableRect.x)
+            if (wxRichTextBuffer::GetFloatingLayoutMode() && collector)
             {
-                int newX = floatAvailableRect.x + startOffset;
-                int newW = availableRect.width - (newX - availableRect.x);
-                availableRect.x = newX;
-                availableRect.width = newW;
-            }
+                wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
 
-            if (floatAvailableRect.width < availableRect.width)
-                availableRect.width = floatAvailableRect.width;
+                // Adjust availableRect to the space that is available when taking floating objects into account.
+
+                if (floatAvailableRect.x + startOffset > availableRect.x)
+                {
+                    int newX = floatAvailableRect.x + startOffset;
+                    int newW = availableRect.width - (newX - availableRect.x);
+                    availableRect.x = newX;
+                    availableRect.width = newW;
+                }
+
+                if (floatAvailableRect.width < availableRect.width)
+                    availableRect.width = floatAvailableRect.width;
+            }
 
             currentPosition.x = availableRect.x - rect.x;
 
@@ -5018,7 +5032,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
             // If floating, ignore. We already laid out floats.
             // Also ignore if empty object, except if we haven't got any
             // size yet.
-            if (!child->IsFloating() && child->GetRange().GetLength() != 0 && !wxDynamicCast(child, wxRichTextPlainText))
+            if ((!child->IsFloating() || !wxRichTextBuffer::GetFloatingLayoutMode()) && child->GetRange().GetLength() != 0 && !wxDynamicCast(child, wxRichTextPlainText))
             {
                 if (child->GetCachedSize().x > minWidth)
                     minWidth = child->GetMinSize().x;
@@ -5230,7 +5244,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             if (!child->GetRange().IsOutside(range))
             {
                 // Floating objects have a zero size within the paragraph.
-                if (child->IsFloating())
+                if (child->IsFloating() && wxRichTextBuffer::GetFloatingLayoutMode())
                 {
                     if (partialExtents)
                     {
@@ -5394,7 +5408,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                 {
                     wxRichTextObject* child = node2->GetData();
 
-                    if (!child->IsFloating() && !child->GetRange().IsOutside(lineRange))
+                    if ((!child->IsFloating() || !wxRichTextBuffer::GetFloatingLayoutMode()) && !child->GetRange().IsOutside(lineRange))
                     {
                         wxRichTextRange rangeToUse = lineRange;
                         rangeToUse.LimitTo(child->GetRange());
@@ -6948,6 +6962,7 @@ wxRichTextFieldTypeHashMap  wxRichTextBuffer::sm_fieldTypes;
 wxRichTextRenderer*         wxRichTextBuffer::sm_renderer = NULL;
 int                         wxRichTextBuffer::sm_bulletRightMargin = 20;
 float                       wxRichTextBuffer::sm_bulletProportion = (float) 0.3;
+bool                        wxRichTextBuffer::sm_floatingLayoutMode = true;
 
 /// Initialisation
 void wxRichTextBuffer::Init()
@@ -10285,7 +10300,7 @@ bool wxRichTextAction::Do()
             ApplyParagraphs(GetNewParagraphs());
 
             // Invalidate the whole buffer if there were floating objects
-            if (container->GetFloatingObjectCount() > 0)
+            if (wxRichTextBuffer::GetFloatingLayoutMode() && container->GetFloatingObjectCount() > 0)
                 m_buffer->InvalidateHierarchy(wxRICHTEXT_ALL);
             else
             {
@@ -10321,7 +10336,7 @@ bool wxRichTextAction::Do()
             // InvalidateHierarchy goes up the hierarchy as well as down, otherwise with a nested object,
             // Layout() would stop prematurely at the top level.
             // Invalidate the whole buffer if there were floating objects
-            if (container->GetFloatingObjectCount() > 0)
+            if (wxRichTextBuffer::GetFloatingLayoutMode() && container->GetFloatingObjectCount() > 0)
                 m_buffer->InvalidateHierarchy(wxRICHTEXT_ALL);
             else
                 container->InvalidateHierarchy(GetRange());
@@ -10358,7 +10373,7 @@ bool wxRichTextAction::Do()
             // InvalidateHierarchy goes up the hierarchy as well as down, otherwise with a nested object,
             // Layout() would stop prematurely at the top level.
             // Invalidate the whole buffer if there were floating objects
-            if (container->GetFloatingObjectCount() > 0)
+            if (wxRichTextBuffer::GetFloatingLayoutMode() && container->GetFloatingObjectCount() > 0)
                 m_buffer->InvalidateHierarchy(wxRICHTEXT_ALL);
             else
                 container->InvalidateHierarchy(GetRange());
@@ -10504,7 +10519,7 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
 
             // Refresh everything if there were floating objects or the container changed size
             // (we can't yet optimize in these cases, since more complex interaction with other content occurs)
-            if (container->GetFloatingObjectCount() > 0 || (container->GetParent() && containerRect != container->GetRect()))
+            if ((wxRichTextBuffer::GetFloatingLayoutMode() && container->GetFloatingObjectCount() > 0) || (container->GetParent() && containerRect != container->GetRect()))
             {
                 m_ctrl->Refresh(false);
             }

@@ -5376,6 +5376,19 @@ public:
     */
     void SetScale(double scale) { m_scale = scale; }
 
+    /**
+        Sets the floating layout mode. Pass @false to speed up editing by not performing
+        floating layout. This setting affects all buffers.
+
+    */
+    static void SetFloatingLayoutMode(bool mode) { sm_floatingLayoutMode = mode; }
+
+    /**
+        Returns the floating layout mode. The default is @true, where objects
+        are laid out according to their floating status.
+    */
+    static bool GetFloatingLayoutMode() { return sm_floatingLayoutMode; }
+
 protected:
 
     /// Command processor
@@ -5428,6 +5441,9 @@ protected:
 
     /// Factor to multiply by character height to get a reasonable bullet size
     static float            sm_bulletProportion;
+
+    /// Floating layout mode, @true by default
+    static bool             sm_floatingLayoutMode;
 
     /// Scaling factor in use: needed to calculate correct dimensions when printing
     double                  m_scale;

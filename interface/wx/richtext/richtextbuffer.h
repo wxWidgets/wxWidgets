@@ -5244,6 +5244,19 @@ public:
     */
     void SetScale(double scale) { m_scale = scale; }
 
+    /**
+        Returns the floating layout mode. The default is @true, where objects
+        are laid out according to their floating status.
+    */
+    static bool GetFloatingLayoutMode();
+
+    /**
+        Sets the floating layout mode. Pass @false to speed up editing by not performing
+        floating layout. This setting affects all buffers.
+
+    */
+    static void SetFloatingLayoutMode(bool mode);
+
 protected:
 
     /// Command processor
