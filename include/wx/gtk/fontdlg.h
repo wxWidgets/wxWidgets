@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTK_FONTDLGH__
-#define __GTK_FONTDLGH__
+#ifndef _WX_GTK_FONTDLG_H_
+#define _WX_GTK_FONTDLG_H_
 
 //-----------------------------------------------------------------------------
 // wxFontDialog
@@ -26,9 +26,6 @@ public:
 
     virtual ~wxFontDialog();
 
-    // implementation only
-    void SetChosenFont(const char *name);
-
 #if WXWIN_COMPATIBILITY_2_6
     // deprecated interface, don't use
     wxDEPRECATED( wxFontDialog(wxWindow *parent, const wxFontData *data) );
@@ -38,7 +35,6 @@ protected:
     // create the GTK dialog
     virtual bool DoCreate(wxWindow *parent);
 
-private:
     DECLARE_DYNAMIC_CLASS(wxFontDialog)
 };
 

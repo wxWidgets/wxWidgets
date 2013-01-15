@@ -129,18 +129,6 @@ static inline guint16 wx_gtk_entry_get_text_length(GtkEntry* entry)
 }
 #define gtk_entry_get_text_length wx_gtk_entry_get_text_length
 
-static inline GtkWidget* wx_gtk_font_selection_dialog_get_cancel_button(GtkFontSelectionDialog* fsd)
-{
-    return fsd->cancel_button;
-}
-#define gtk_font_selection_dialog_get_cancel_button wx_gtk_font_selection_dialog_get_cancel_button
-
-static inline GtkWidget* wx_gtk_font_selection_dialog_get_ok_button(GtkFontSelectionDialog* fsd)
-{
-    return fsd->ok_button;
-}
-#define gtk_font_selection_dialog_get_ok_button wx_gtk_font_selection_dialog_get_ok_button
-
 static inline const guchar* wx_gtk_selection_data_get_data(GtkSelectionData* selection_data)
 {
     return selection_data->data;
