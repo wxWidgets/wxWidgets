@@ -10745,7 +10745,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
     // the image so long as the new cached bitmap size hasn't changed.
 
     wxImage image;
-    if (resetCache || m_originalImageSize.GetWidth() <= 0 || m_originalImageSize.GetHeight() <= -1)
+    if (resetCache || m_originalImageSize.GetWidth() <= 0 || m_originalImageSize.GetHeight() <= 0)
     {
         m_imageCache = wxNullBitmap;
 
