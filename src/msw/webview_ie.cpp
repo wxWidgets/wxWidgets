@@ -1620,8 +1620,10 @@ HRESULT wxSTDCALL DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg,
 {
     if(lpMsg && lpMsg->message == WM_KEYDOWN)
     {
-        //control is down?
-        if((GetKeyState(VK_CONTROL) & 0x8000 ))
+        // check control is down but that it isn't right-alt which is mapped to
+        // alt + ctrl
+        if(GetKeyState(VK_CONTROL) & 0x8000 && 
+         !(GetKeyState(VK_MENU) & 0x8000))
         {
             //skip the accelerators used by the control
             switch(lpMsg->wParam)
