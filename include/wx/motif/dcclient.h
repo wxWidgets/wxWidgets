@@ -121,9 +121,9 @@ protected:
         wxCoord width, wxCoord height);
     virtual void DoSetDeviceClippingRegion(const wxRegion& region);
 
-    virtual void DoDrawLines(int n, wxPoint points[],
+    virtual void DoDrawLines(int n, const wxPoint points[],
         wxCoord xoffset, wxCoord yoffset);
-    virtual void DoDrawPolygon(int n, wxPoint points[],
+    virtual void DoDrawPolygon(int n, const wxPoint points[],
         wxCoord xoffset, wxCoord yoffset,
         wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 

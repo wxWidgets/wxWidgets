@@ -336,12 +336,12 @@ public:
                             ) const;
 
     virtual void DoDrawLines( int     n
-                             ,wxPoint vaPoints[]
+                             ,const wxPoint vaPoints[]
                              ,wxCoord vXoffset
                              ,wxCoord yYoffset
                             );
     virtual void DoDrawPolygon( int     n
-                               ,wxPoint vaPoints[]
+                               ,const wxPoint vaPoints[]
                                ,wxCoord vXoffset
                                ,wxCoord vYoffset
                                ,wxPolygonFillMode     nFillStyle = wxODDEVEN_RULE

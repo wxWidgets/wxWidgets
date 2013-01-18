@@ -362,11 +362,11 @@ void wxCocoaDCImpl::DoDrawPoint( int x, int y )
 {
 };
 
-void wxCocoaDCImpl::DoDrawPolygon( int, wxPoint *, int, int, wxPolygonFillMode)
+void wxCocoaDCImpl::DoDrawPolygon( int, const wxPoint *, int, int, wxPolygonFillMode)
 {
 };
 
-void wxCocoaDCImpl::DoDrawLines( int, wxPoint *, int, int )
+void wxCocoaDCImpl::DoDrawLines( int, const wxPoint *, int, int )
 {
 }
 

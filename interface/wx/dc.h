@@ -413,7 +413,7 @@ public:
         Not supported by wxPerl.
         @endWxPerlOnly
     */
-    void DrawLines(int n, wxPoint points[], wxCoord xoffset = 0,
+    void DrawLines(int n, const wxPoint points[], wxCoord xoffset = 0,
                    wxCoord yoffset = 0);
     /**
         This method uses a list of wxPoints, adding the optional offset
@@ -455,7 +455,7 @@ public:
         Not supported by wxPerl.
         @endWxPerlOnly
     */
-    void DrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0,
+    void DrawPolygon(int n, const wxPoint points[], wxCoord xoffset = 0,
                      wxCoord yoffset = 0,
                      wxPolygonFillMode fill_style = wxODDEVEN_RULE);
     /**
@@ -504,7 +504,7 @@ public:
         the DrawPolygon() member function, the polygons created by this
         method are not closed automatically.
     */
-    void DrawPolyPolygon(int n, int count[], wxPoint points[],
+    void DrawPolyPolygon(int n, const int count[], const wxPoint points[],
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
                          wxPolygonFillMode fill_style = wxODDEVEN_RULE);
 
@@ -579,7 +579,7 @@ public:
         Not supported by wxPerl.
         @endWxPerlOnly
     */
-    void DrawSpline(int n, wxPoint points[]);
+    void DrawSpline(int n, const wxPoint points[]);
 
     /**
         @overload

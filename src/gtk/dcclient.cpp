@@ -697,7 +697,7 @@ void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     CalcBoundingBox (x, y);
 }
 
-void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset )
+void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
@@ -711,17 +711,21 @@ void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCo
         xoffset != 0 || yoffset != 0 || XLOG2DEV(10) != 10 || YLOG2DEV(10) != 10;
 
     // GdkPoint and wxPoint have the same memory layout, so we can cast one to the other
-    GdkPoint* gpts = reinterpret_cast<GdkPoint*>(points);
+    const GdkPoint* gpts = reinterpret_cast<const GdkPoint*>(points);
+    GdkPoint* gpts_alloc = NULL;
 
     if (doScale)
-        gpts = new GdkPoint[n];
+    {
+        gpts_alloc = new GdkPoint[n];
+        gpts = gpts_alloc;
+    }
 
     for (int i = 0; i < n; i++)
     {
         if (doScale)
         {
-            gpts[i].x = XLOG2DEV(points[i].x + xoffset);
-            gpts[i].y = YLOG2DEV(points[i].y + yoffset);
+            gpts_alloc[i].x = XLOG2DEV(points[i].x + xoffset);
+            gpts_alloc[i].y = YLOG2DEV(points[i].y + yoffset);
         }
         CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
     }
@@ -729,11 +733,10 @@ void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCo
     if (m_gdkwindow)
         gdk_draw_lines( m_gdkwindow, m_penGC, gpts, n);
 
-    if (doScale)
-        delete[] gpts;
+    delete[] gpts_alloc;
 }
 
-void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
+void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                     wxCoord xoffset, wxCoord yoffset,
                                     wxPolygonFillMode WXUNUSED(fillStyle) )
 {
@@ -746,18 +749,22 @@ void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
         xoffset != 0 || yoffset != 0 || XLOG2DEV(10) != 10 || YLOG2DEV(10) != 10;
 
     // GdkPoint and wxPoint have the same memory layout, so we can cast one to the other
-    GdkPoint* gdkpoints = reinterpret_cast<GdkPoint*>(points);
+    const GdkPoint* gdkpoints = reinterpret_cast<const GdkPoint*>(points);
+    GdkPoint* gdkpoints_alloc = NULL;
 
     if (doScale)
-        gdkpoints = new GdkPoint[n];
+    {
+        gdkpoints_alloc = new GdkPoint[n];
+        gdkpoints = gdkpoints_alloc;
+    }
 
     int i;
     for (i = 0 ; i < n ; i++)
     {
         if (doScale)
         {
-            gdkpoints[i].x = XLOG2DEV(points[i].x + xoffset);
-            gdkpoints[i].y = YLOG2DEV(points[i].y + yoffset);
+            gdkpoints_alloc[i].x = XLOG2DEV(points[i].x + xoffset);
+            gdkpoints_alloc[i].y = YLOG2DEV(points[i].y + yoffset);
         }
         CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
     }
@@ -793,8 +800,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
         }
     }
 
-    if (doScale)
-        delete[] gdkpoints;
+    delete[] gdkpoints_alloc;
 }
 
 void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )

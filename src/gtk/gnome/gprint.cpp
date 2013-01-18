@@ -1189,7 +1189,7 @@ void wxGnomePrinterDCImpl::DoDrawPoint(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 {
 }
 
-void wxGnomePrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxGnomePrinterDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     if (n <= 0) return;
 
@@ -1210,7 +1210,7 @@ void wxGnomePrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset,
     gs_libGnomePrint->gnome_print_stroke ( m_gpc);
 }
 
-void wxGnomePrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
+void wxGnomePrinterDCImpl::DoDrawPolygon(int n, const wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
                                    wxPolygonFillMode WXUNUSED(fillStyle))
 {
@@ -1258,7 +1258,7 @@ void wxGnomePrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
     }
 }
 
-void wxGnomePrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
+void wxGnomePrinterDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
 {
 #if wxUSE_NEW_DC
     wxDCImpl::DoDrawPolyPolygon( n, count, points, xoffset, yoffset, fillStyle );

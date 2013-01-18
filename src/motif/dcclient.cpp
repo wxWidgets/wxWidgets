@@ -438,7 +438,7 @@ void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     CalcBoundingBox (x, y);
 }
 
-void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset )
+void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset )
 {
     wxCHECK_RET( IsOk(), "invalid dc" );
 
@@ -470,7 +470,7 @@ void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCo
     }
 }
 
-void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
+void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                 wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle )
 {
     wxCHECK_RET( IsOk(), "invalid dc" );

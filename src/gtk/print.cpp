@@ -1457,7 +1457,7 @@ void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
     CalcBoundingBox( x, y );
 }
 
-void wxGtkPrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxGtkPrinterDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     if ( m_pen.IsTransparent() )
         return;
@@ -1479,7 +1479,7 @@ void wxGtkPrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, w
     cairo_stroke ( m_cairo);
 }
 
-void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
+void wxGtkPrinterDCImpl::DoDrawPolygon(int n, const wxPoint points[],
                                        wxCoord xoffset, wxCoord yoffset,
                                        wxPolygonFillMode fillStyle)
 {
@@ -1515,7 +1515,7 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
     cairo_restore(m_cairo);
 }
 
-void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[],
+void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
                                            wxCoord xoffset, wxCoord yoffset,
                                            wxPolygonFillMode fillStyle)
 {

@@ -608,7 +608,7 @@ void wxGCDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     DoDrawLine( x , y , x + 1 , y + 1 );
 }
 
-void wxGCDCImpl::DoDrawLines(int n, wxPoint points[],
+void wxGCDCImpl::DoDrawLines(int n, const wxPoint points[],
                          wxCoord xoffset, wxCoord yoffset)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawLines - invalid DC") );
@@ -642,7 +642,7 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
         // empty list
         return;
 
-    wxPoint *p = node->GetData();
+    const wxPoint *p = node->GetData();
 
     wxCoord x1 = p->x;
     wxCoord y1 = p->y;
@@ -686,7 +686,7 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 }
 #endif // wxUSE_SPLINES
 
-void wxGCDCImpl::DoDrawPolygon( int n, wxPoint points[],
+void wxGCDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                 wxCoord xoffset, wxCoord yoffset,
                                 wxPolygonFillMode fillStyle )
 {
@@ -715,8 +715,8 @@ void wxGCDCImpl::DoDrawPolygon( int n, wxPoint points[],
 }
 
 void wxGCDCImpl::DoDrawPolyPolygon(int n,
-                               int count[],
-                               wxPoint points[],
+                               const int count[],
+                               const wxPoint points[],
                                wxCoord xoffset,
                                wxCoord yoffset,
                                wxPolygonFillMode fillStyle)

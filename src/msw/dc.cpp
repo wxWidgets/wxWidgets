@@ -881,7 +881,7 @@ void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 }
 
 void wxMSWDCImpl::DoDrawPolygon(int n,
-                         wxPoint points[],
+                         const wxPoint points[],
                          wxCoord xoffset,
                          wxCoord yoffset,
                          wxPolygonFillMode WXUNUSED_IN_WINCE(fillStyle))
@@ -929,8 +929,8 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
 
 void
 wxMSWDCImpl::DoDrawPolyPolygon(int n,
-                        int count[],
-                        wxPoint points[],
+                        const int count[],
+                        const wxPoint points[],
                         wxCoord xoffset,
                         wxCoord yoffset,
                         wxPolygonFillMode fillStyle)
@@ -982,7 +982,7 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
   // __WXWINCE__
 }
 
-void wxMSWDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     WXMICROWIN_CHECK_HDC
 

@@ -239,7 +239,7 @@ void wxDFBDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
     // FIXME_DFB: implement special cases for common formats (RGB24,RGBA/RGB32)
 }
 
-void wxDFBDCImpl::DoDrawPolygon(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
+void wxDFBDCImpl::DoDrawPolygon(int WXUNUSED(n), const wxPoint WXUNUSED(points)[],
                                 wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset),
                                 wxPolygonFillMode WXUNUSED(fillStyle))
 {
@@ -248,7 +248,7 @@ void wxDFBDCImpl::DoDrawPolygon(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
     wxFAIL_MSG( "DrawPolygon not implemented" );
 }
 
-void wxDFBDCImpl::DoDrawLines(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
+void wxDFBDCImpl::DoDrawLines(int WXUNUSED(n), const wxPoint WXUNUSED(points)[],
                               wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset))
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );

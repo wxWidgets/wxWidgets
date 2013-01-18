@@ -836,7 +836,7 @@ void wxPMDCImpl::DoDrawPoint(
 } // end of wxPMDCImpl::DoDrawPoint
 
 void wxPMDCImpl::DoDrawPolygon( int n,
-                          wxPoint vPoints[],
+                          const wxPoint vPoints[],
                           wxCoord vXoffset,
                           wxCoord vYoffset,
                           wxPolygonFillMode nFillStyle )
@@ -903,7 +903,7 @@ void wxPMDCImpl::DoDrawPolygon( int n,
 
 void wxPMDCImpl::DoDrawLines(
   int                               n
-, wxPoint                           vPoints[]
+, const wxPoint                           vPoints[]
 , wxCoord                           vXoffset
 , wxCoord                           vYoffset
 )

@@ -597,7 +597,7 @@ void wxPostScriptDCImpl::DoDrawPoint (wxCoord x, wxCoord y)
     CalcBoundingBox( x, y );
 }
 
-void wxPostScriptDCImpl::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
+void wxPostScriptDCImpl::DoDrawPolygon (int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -667,7 +667,7 @@ void wxPostScriptDCImpl::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset
     }
 }
 
-void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
+void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, const int count[], const wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -743,7 +743,7 @@ void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, int count[], wxPoint points[]
     }
 }
 
-void wxPostScriptDCImpl::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxPostScriptDCImpl::DoDrawLines (int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 

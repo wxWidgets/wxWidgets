@@ -126,12 +126,12 @@ private:
 
    virtual void DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
 
-   virtual void DoDrawLines(int n, wxPoint points[],
+   virtual void DoDrawLines(int n, const wxPoint points[],
                             wxCoord xoffset = 0, wxCoord yoffset = 0);
 
    virtual void DoDrawPoint(wxCoord, wxCoord);
 
-   virtual void DoDrawPolygon(int n, wxPoint points[],
+   virtual void DoDrawPolygon(int n, const wxPoint points[],
                               wxCoord xoffset, wxCoord yoffset,
                               wxPolygonFillMode fillStyle);
 
