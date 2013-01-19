@@ -666,7 +666,13 @@ bool wxRichTextListStylePage::TransferDataFromWindow()
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_SYMBOL;
 
         else if (index == wxRICHTEXT_BULLETINDEX_BITMAP)
+        {
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_BITMAP;
+            if (m_bulletNameCtrl->GetValue().IsEmpty())
+                attr->SetFlags(attr->GetFlags() & ~wxTEXT_ATTR_BULLET_NAME);
+            else
+                attr->SetBulletName(m_bulletNameCtrl->GetValue());
+        }
 
         else if (index == wxRICHTEXT_BULLETINDEX_STANDARD)
         {
@@ -1262,7 +1268,7 @@ void wxRichTextListStylePage::OnNumberUpdate( wxUpdateUIEvent& event )
 void wxRichTextListStylePage::OnStandardBulletUpdate( wxUpdateUIEvent& event )
 {
     int sel = m_styleListBox->GetSelection();
-    event.Enable( sel == wxRICHTEXT_BULLETINDEX_STANDARD );
+    event.Enable( sel == wxRICHTEXT_BULLETINDEX_STANDARD || sel == wxRICHTEXT_BULLETINDEX_BITMAP );
 }
 
 /*!
@@ -1348,5 +1354,3 @@ void wxRichTextListStylePage::OnBulletAlignmentCtrlSelected( wxCommandEvent& WXU
 {
     TransferAndPreview();
 }
-
-
