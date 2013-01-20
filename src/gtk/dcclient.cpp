@@ -996,7 +996,7 @@ void wxWindowDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     DoDrawBitmap( (const wxBitmap&)icon, x, y, true );
 }
 
-// scale a pixbuf, return new pixbuf, unref old one
+// scale a pixbuf
 static GdkPixbuf*
 Scale(GdkPixbuf* pixbuf, int dst_w, int dst_h, double sx, double sy)
 {
@@ -1004,20 +1004,21 @@ Scale(GdkPixbuf* pixbuf, int dst_w, int dst_h, double sx, double sy)
         GDK_COLORSPACE_RGB, gdk_pixbuf_get_has_alpha(pixbuf), 8, dst_w, dst_h);
     gdk_pixbuf_scale(pixbuf, pixbuf_scaled,
         0, 0, dst_w, dst_h, 0, 0, sx, sy, GDK_INTERP_NEAREST);
-    g_object_unref(pixbuf);
     return pixbuf_scaled;
 }
 
-// scale part of a pixmap using pixbuf scaling, return pixbuf
+// scale part of a pixmap using pixbuf scaling
 static GdkPixbuf*
 Scale(GdkPixmap* pixmap, int x, int y, int w, int h, int dst_w, int dst_h, double sx, double sy)
 {
     GdkPixbuf* pixbuf = gdk_pixbuf_get_from_drawable(
         NULL, pixmap, NULL, x, y, 0, 0, w, h);
-    return Scale(pixbuf, dst_w, dst_h, sx, sy);
+    GdkPixbuf* pixbuf2 = Scale(pixbuf, dst_w, dst_h, sx, sy);
+    g_object_unref(pixbuf);
+    return pixbuf2;
 }
 
-// scale part of a mask pixmap, return new mask, unref old one
+// scale part of a mask pixmap
 static GdkPixmap*
 ScaleMask(GdkPixmap* mask, int x, int y, int w, int h, int dst_w, int dst_h, double sx, double sy)
 {
@@ -1041,12 +1042,10 @@ ScaleMask(GdkPixmap* mask, int x, int y, int w, int h, int dst_w, int dst_h, dou
     g_object_unref(pixbuf);
     GdkPixmap* pixmap = gdk_bitmap_create_from_data(mask, data, dst_w, dst_h);
     delete[] data;
-    g_object_unref(mask);
     return pixmap;
 }
 
 // Make a new mask from part of a mask and a clip region.
-// Return new mask, unref old one.
 static GdkPixmap*
 ClipMask(GdkPixmap* mask, GdkRegion* clipRegion, int x, int y, int dst_x, int dst_y, int w, int h)
 {
@@ -1061,7 +1060,6 @@ ClipMask(GdkPixmap* mask, GdkRegion* clipRegion, int x, int y, int dst_x, int ds
     // draw old mask onto new one, with clip
     gdk_draw_drawable(pixmap, gc, mask, x, y, 0, 0, w, h);
     g_object_unref(gc);
-    g_object_unref(mask);
     return pixmap;
 }
 
@@ -1136,39 +1134,42 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     }
     if (mask)
     {
-        g_object_ref(mask);
+        GdkPixmap* mask_new = NULL;
         if (isScaled)
+        {
             mask = ScaleMask(mask, 0, 0, w, h, ww, hh, m_scaleX, m_scaleY);
+            mask_new = mask;
+        }
         if (overlap == wxPartRegion)
         {
             // need a new mask that also masks the clipped area,
             // because gc can't have both a mask and a clip region
             mask = ClipMask(mask, clipRegion, 0, 0, xx, yy, ww, hh);
+            if (mask_new)
+                g_object_unref(mask_new);
+            mask_new = mask;
         }
         gdk_gc_set_clip_mask(use_gc, mask);
         gdk_gc_set_clip_origin(use_gc, xx, yy);
+        if (mask_new)
+            g_object_unref(mask_new);
     }
 
     // determine whether to use pixmap or pixbuf
     GdkPixmap* pixmap = NULL;
+    GdkPixmap* pixmap_new = NULL;
     GdkPixbuf* pixbuf = NULL;
+    GdkPixbuf* pixbuf_new = NULL;
     if (bitmap.HasPixmap())
         pixmap = bitmap.GetPixmap();
     if (pixmap && gdk_drawable_get_depth(pixmap) == 1)
     {
         // convert mono pixmap to color using text fg/bg colors
         pixmap = MonoToColor(pixmap, 0, 0, w, h);
+        pixmap_new = pixmap;
     }
     else if (hasAlpha || pixmap == NULL)
-    {
-        pixmap = NULL;
         pixbuf = bitmap.GetPixbuf();
-        g_object_ref(pixbuf);
-    }
-    else
-    {
-        g_object_ref(pixmap);
-    }
 
     if (isScaled)
     {
@@ -1176,26 +1177,26 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
             pixbuf = Scale(pixbuf, ww, hh, m_scaleX, m_scaleY);
         else
             pixbuf = Scale(pixmap, 0, 0, w, h, ww, hh, m_scaleX, m_scaleY);
+
+        pixbuf_new = pixbuf;
     }
 
     if (pixbuf)
     {
         gdk_draw_pixbuf(m_gdkwindow, use_gc, pixbuf,
             0, 0, xx, yy, ww, hh, GDK_RGB_DITHER_NORMAL, 0, 0);
-        g_object_unref(pixbuf);
     }
     else
     {
         gdk_draw_drawable(m_gdkwindow, use_gc, pixmap, 0, 0, xx, yy, ww, hh);
     }
 
-    if (pixmap)
-        g_object_unref(pixmap);
+    if (pixbuf_new)
+        g_object_unref(pixbuf_new);
+    if (pixmap_new)
+        g_object_unref(pixmap_new);
     if (mask)
-    {
-        g_object_unref(mask);
         gdk_gc_set_clip_region(use_gc, clipRegion);
-    }
 }
 
 bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
@@ -1304,7 +1305,6 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
 
     if (mask)
     {
-        g_object_ref(mask);
         int srcMask_x = src_x;
         int srcMask_y = src_y;
         if (xsrcMask != -1 || ysrcMask != -1)
@@ -1312,10 +1312,12 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
             srcMask_x = source->LogicalToDeviceX(xsrcMask);
             srcMask_y = source->LogicalToDeviceY(ysrcMask);
         }
+        GdkPixmap* mask_new = NULL;
         if (isScaled)
         {
             mask = ScaleMask(mask, srcMask_x, srcMask_y,
                 src_w, src_h, dst_w, dst_h, scale_x, scale_y);
+            mask_new = mask;
             srcMask_x = 0;
             srcMask_y = 0;
         }
@@ -1325,11 +1327,16 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
             // because gc can't have both a mask and a clip region
             mask = ClipMask(mask, clipRegion,
                 srcMask_x, srcMask_y, dst_x, dst_y, dst_w, dst_h);
+            if (mask_new)
+                g_object_unref(mask_new);
+            mask_new = mask;
             srcMask_x = 0;
             srcMask_y = 0;
         }
         gdk_gc_set_clip_mask(use_gc, mask);
         gdk_gc_set_clip_origin(use_gc, dst_x - srcMask_x, dst_y - srcMask_y);
+        if (mask_new)
+            g_object_unref(mask_new);
     }
 
     GdkPixmap* pixmap = NULL;
@@ -1369,10 +1376,8 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
     if (pixmap)
         g_object_unref(pixmap);
     if (mask)
-    {
-        g_object_unref(mask);
         gdk_gc_set_clip_region(use_gc, clipRegion);
-    }
+
     return true;
 }
 
