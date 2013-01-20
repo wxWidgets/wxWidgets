@@ -6663,7 +6663,7 @@ int wxGrid::XToPos(int x) const
     return PosToLinePos(x, true /* clip */, wxGridColumnOperations());
 }
 
-// return the row number such that the y coord is near the edge of, or -1 if
+// return the row/col number such that the pos is near the edge of, or -1 if
 // not near an edge.
 //
 // notice that position can only possibly be near an edge if the row/column is
@@ -6672,21 +6672,20 @@ int wxGrid::XToPos(int x) const
 // _never_ be considered to be near the edge).
 int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
 {
-    const int line = oper.PosToLine(this, pos, true);
+    // Get the bottom or rightmost line that could match.
+    int line = oper.PosToLine(this, pos, true);
 
-    if ( oper.GetLineSize(this, line) > WXGRID_LABEL_EDGE_ZONE )
+    // Go backwards until we find a line that is big enough.
+    while ( oper.GetLineSize(this, line) <= WXGRID_LABEL_EDGE_ZONE )
     {
-        // We know that we are in this line, test whether we are close enough
-        // to start or end border, respectively.
-        if ( abs(oper.GetLineEndPos(this, line) - pos) < WXGRID_LABEL_EDGE_ZONE )
-            return line;
-        else if ( line > 0 &&
-                    pos - oper.GetLineStartPos(this,
-                                               line) < WXGRID_LABEL_EDGE_ZONE )
-        {
-            return oper.GetLineBefore(this, line);
-        }
+        line = oper.GetLineBefore(this, line);
+        if ( line <= 0 )
+            break;
     }
+
+    // If the bottom or right touches then we have a match
+    if ( abs(oper.GetLineEndPos(this, line) - pos) < WXGRID_LABEL_EDGE_ZONE )
+      return line;
 
     return -1;
 }

@@ -579,6 +579,7 @@ All (GUI):
 - Add wxBitmapButton::NewCloseButton().
 - Add wxTextEntry::SelectNone() (troelsk).
 - Restore the original wxGrid col/row size when unhiding it (Michael Richards).
+- Don't show hidden wxGrid columns/rows when resizing them (Michael Richards).
 - Fix text origin and extent computations in wxSVGFileDC (Neil Chittenden).
 - Show tooltips for the too long items in generic wxTreeCtrl (Steven Houchins).
 - Add wxStyledTextCtrl::AnnotationClearLine() (sentieshar).
