@@ -1921,7 +1921,6 @@ wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
     {
         // adjust the weekdays to non-US style.
         wdYearStart = ConvertWeekDayToMondayBase(wdYearStart);
-        wdTarget = ConvertWeekDayToMondayBase(wdTarget);
 
         // quoting from http://www.cl.cam.ac.uk/~mgk25/iso-time.html:
         //
@@ -1937,22 +1936,24 @@ wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
         //
 
         // if Jan 1 is Thursday or less, it is in the first week of this year
-        if ( wdYearStart < 4 )
-        {
-            // count the number of entire weeks between Jan 1 and this date
-            week = (nDayInYear + wdYearStart + 6 - wdTarget)/7;
+        int dayCountFix = wdYearStart < 4 ? 6 : -1;
 
-            // be careful to check for overflow in the next year
-            if ( week == 53 && tm.mday - wdTarget > 28 )
-                    week = 1;
-        }
-        else // Jan 1 is in the last week of the previous year
+        // count the number of week
+        week = (nDayInYear + wdYearStart + dayCountFix) / DAYS_PER_WEEK;
+
+        // check if we happen to be at the last week of previous year:
+        if ( week == 0 )
         {
-            // check if we happen to be at the last week of previous year:
-            if ( tm.mon == Jan && tm.mday < 8 - wdYearStart )
-                week = wxDateTime(31, Dec, GetYear()-1).GetWeekOfYear();
-            else
-                week = (nDayInYear + wdYearStart - 1 - wdTarget)/7;
+            week = wxDateTime(31, Dec, GetYear() - 1).GetWeekOfYear();
+        }
+        else if ( week == 53 )
+        {
+            int wdYearEnd = (wdYearStart + 364 + IsLeapYear(GetYear()))
+                                % DAYS_PER_WEEK;
+
+            // Week 53 only if last day of year is Thursday or later.
+            if ( wdYearEnd < 3 )
+                week = 1;
         }
     }
 

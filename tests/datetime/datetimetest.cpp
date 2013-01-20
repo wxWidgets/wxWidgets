@@ -537,6 +537,11 @@ for n in range(20):
         { {  2, wxDateTime::Jan, 2004, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 1, 1,   2 },
         { {  5, wxDateTime::Jan, 2010, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 2, 2,   5 },
         { {  3, wxDateTime::Jan, 2011, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 2, 2,   3 },
+        { { 31, wxDateTime::Dec, 2009, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 }, 53, 5, 5, 365 },
+        { { 31, wxDateTime::Dec, 2012, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 6, 6, 366 },
+        { { 29, wxDateTime::Dec, 2013, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 }, 52, 5, 5, 363 },
+        { { 30, wxDateTime::Dec, 2013, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 6, 5, 364 },
+        { { 31, wxDateTime::Dec, 2013, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 6, 5, 365 },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(weekNumberTestDates); n++ )
