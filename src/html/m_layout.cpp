@@ -355,7 +355,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if (tag.GetParamAsColour(wxT("BGCOLOR"), &clr))
         {
             m_WParser->GetContainer()->InsertCell(
-                new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
+                new wxHtmlColourCell(clr, wxHTML_CLR_TRANSPARENT_BACKGROUND));
             winIface->SetHTMLBackgroundColour(clr);
         }
 
