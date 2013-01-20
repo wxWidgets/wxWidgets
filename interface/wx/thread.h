@@ -676,17 +676,6 @@ enum wxThreadError
 };
 
 /**
-   Defines the interval of priority
-*/
-enum
-{
-    WXTHREAD_MIN_PRIORITY      = 0u,
-    WXTHREAD_DEFAULT_PRIORITY  = 50u,
-    WXTHREAD_MAX_PRIORITY      = 100u
-};
-
-
-/**
     @class wxThread
 
     A thread is basically a path of execution through a program.
@@ -1113,12 +1102,9 @@ public:
     static wxThreadIdType GetMainId();
 
     /**
-        Gets the priority of the thread, between zero and 100.
+        Gets the priority of the thread, between 0 (lowest) and 100 (highest).
 
-        The following priorities are defined:
-          - @b WXTHREAD_MIN_PRIORITY: 0
-          - @b WXTHREAD_DEFAULT_PRIORITY: 50
-          - @b WXTHREAD_MAX_PRIORITY: 100
+        @see SetPriority()
     */
     unsigned int GetPriority() const;
 
@@ -1234,13 +1220,15 @@ public:
     static bool SetConcurrency(size_t level);
 
     /**
-        Sets the priority of the thread, between 0 and 100.
+        Sets the priority of the thread, between 0 (lowest) and 100 (highest).
+
         It can only be set after calling Create() but before calling Run().
 
-        The following priorities are defined:
-          - @b WXTHREAD_MIN_PRIORITY: 0
-          - @b WXTHREAD_DEFAULT_PRIORITY: 50
-          - @b WXTHREAD_MAX_PRIORITY: 100
+        The following symbolic constants can be used in addition to raw
+        values in 0..100 range:
+          - ::wxPRIORITY_MIN: 0
+          - ::wxPRIORITY_DEFAULT: 50
+          - ::wxPRIORITY_MAX: 100
     */
     void SetPriority(unsigned int priority);
 

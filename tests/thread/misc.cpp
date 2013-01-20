@@ -257,8 +257,8 @@ void MiscThreadTestCase::TestDetached()
         threads[n] = new MyDetachedThread(10, 'A' + n);
     }
 
-    threads[0]->SetPriority(WXTHREAD_MIN_PRIORITY);
-    threads[1]->SetPriority(WXTHREAD_MAX_PRIORITY);
+    threads[0]->SetPriority(wxPRIORITY_MIN);
+    threads[1]->SetPriority(wxPRIORITY_MAX);
 
     for ( n = 0; n < nThreads; n++ )
     {

@@ -354,7 +354,7 @@ public:
     {
         m_hThread = 0;
         m_eState = STATE_NEW;
-        m_nPriority = WXTHREAD_DEFAULT_PRIORITY;
+        m_nPriority = wxPRIORITY_DEFAULT;
     }
 
     ~wxThreadInternal()
@@ -497,7 +497,7 @@ bool wxThreadInternal::Create( wxThread* pThread,
         return false;
     }
     m_hThread = tid;
-    if (m_nPriority != WXTHREAD_DEFAULT_PRIORITY)
+    if (m_nPriority != wxPRIORITY_DEFAULT)
     {
         SetPriority(m_nPriority);
     }

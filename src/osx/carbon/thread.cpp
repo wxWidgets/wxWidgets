@@ -475,7 +475,7 @@ public:
     {
         m_tid = kInvalidID;
         m_state = STATE_NEW;
-        m_prio = WXTHREAD_DEFAULT_PRIORITY;
+        m_prio = wxPRIORITY_DEFAULT;
         m_notifyQueueId = kInvalidID;
         m_exitcode = 0;
         m_cancelled = false ;
@@ -683,7 +683,7 @@ bool wxThreadInternal::Create( wxThread *thread, unsigned int stackSize )
         return false;
     }
 
-    if ( m_prio != WXTHREAD_DEFAULT_PRIORITY )
+    if ( m_prio != wxPRIORITY_DEFAULT )
         SetPriority( m_prio );
 
     return true;
@@ -1110,8 +1110,7 @@ bool wxThread::TestDestroy()
 
 void wxThread::SetPriority(unsigned int prio)
 {
-    wxCHECK_RET( ((int)WXTHREAD_MIN_PRIORITY <= (int)prio) &&
-                 ((int)prio <= (int)WXTHREAD_MAX_PRIORITY),
+    wxCHECK_RET( wxPRIORITY_MIN <= prio && prio <= wxPRIORITY_MAX,
                  wxT("invalid thread priority") );
 
     wxCriticalSectionLocker lock(m_critsect);

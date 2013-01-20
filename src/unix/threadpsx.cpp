@@ -954,7 +954,7 @@ wxThreadInternal::wxThreadInternal()
 {
     m_state = STATE_NEW;
     m_cancelled = false;
-    m_prio = WXTHREAD_DEFAULT_PRIORITY;
+    m_prio = wxPRIORITY_DEFAULT;
     m_threadId = 0;
     m_exitcode = 0;
 
@@ -1231,7 +1231,7 @@ wxThreadError wxThread::Create(unsigned int WXUNUSED_STACKSIZE(stackSize))
     }
     else if ( max_prio == min_prio )
     {
-        if ( prio != WXTHREAD_DEFAULT_PRIORITY )
+        if ( prio != wxPRIORITY_DEFAULT )
         {
             // notify the programmer that this doesn't work here
             wxLogWarning(_("Thread priority setting is ignored."));
@@ -1320,8 +1320,7 @@ wxThreadError wxThread::Run()
 
 void wxThread::SetPriority(unsigned int prio)
 {
-    wxCHECK_RET( ((int)WXTHREAD_MIN_PRIORITY <= (int)prio) &&
-                 ((int)prio <= (int)WXTHREAD_MAX_PRIORITY),
+    wxCHECK_RET( wxPRIORITY_MIN <= prio && prio <= wxPRIORITY_MAX,
                  wxT("invalid thread priority") );
 
     wxCriticalSectionLocker lock(m_critsect);
@@ -1347,8 +1346,7 @@ void wxThread::SetPriority(unsigned int prio)
             //
             // FIXME this is not true for 2.6!!
 
-            // map wx priorites WXTHREAD_MIN_PRIORITY..WXTHREAD_MAX_PRIORITY
-            // to Unix priorities 20..-20
+            // map wx priorites 0..100 to Unix priorities 20..-20
             if ( setpriority(PRIO_PROCESS, 0, -(2*(int)prio)/5 + 20) == -1 )
             {
                 wxLogError(_("Failed to set thread priority %d."), prio);
