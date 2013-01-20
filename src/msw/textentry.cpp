@@ -956,9 +956,12 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 
     if ( margins.x != -1 )
     {
-        // left margin
+        // Set both horizontal margins to the given value, we don't distinguish
+        // between left and right margin at wx API level and it seems to be
+        // better to change both of them than only left one.
         ::SendMessage(GetEditHwnd(), EM_SETMARGINS,
-                      EC_LEFTMARGIN, MAKELONG(margins.x, 0));
+                      EC_LEFTMARGIN | EC_RIGHTMARGIN,
+                      MAKELONG(margins.x, margins.x));
     }
 
     if ( margins.y != -1 )
