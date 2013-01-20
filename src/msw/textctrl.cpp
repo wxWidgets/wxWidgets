@@ -1023,7 +1023,7 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
 
     EDITSTREAM eds;
     wxZeroMemory(eds);
-    eds.dwCookie = (DWORD)&data;
+    eds.dwCookie = (DWORD_PTR)&data;
     eds.pfnCallback = wxRichEditStreamOut;
 
     ::SendMessage
