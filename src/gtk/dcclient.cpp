@@ -1164,9 +1164,12 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
         pixmap = bitmap.GetPixmap();
     if (pixmap && gdk_drawable_get_depth(pixmap) == 1)
     {
-        // convert mono pixmap to color using text fg/bg colors
-        pixmap = MonoToColor(pixmap, 0, 0, w, h);
-        pixmap_new = pixmap;
+        if (gdk_drawable_get_depth(m_gdkwindow) != 1)
+        {
+            // convert mono pixmap to color using text fg/bg colors
+            pixmap = MonoToColor(pixmap, 0, 0, w, h);
+            pixmap_new = pixmap;
+        }
     }
     else if (hasAlpha || pixmap == NULL)
         pixbuf = bitmap.GetPixbuf();
@@ -1340,7 +1343,8 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
     }
 
     GdkPixmap* pixmap = NULL;
-    if (gdk_drawable_get_depth(srcDrawable) == 1)
+    if (gdk_drawable_get_depth(srcDrawable) == 1 &&
+        (gdk_drawable_get_depth(m_gdkwindow) != 1 || isScaled))
     {
         // Convert mono pixmap to color using text fg/bg colors.
         // Scaling/drawing is simpler if this is done first.
