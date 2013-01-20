@@ -511,9 +511,23 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         // classic mode, i.e. without themes. Also, the margin can be reset to
         // 0 easily by calling SetMargins() explicitly but setting it to the
         // default value is not currently supported.
-        ::SendMessage(GetHwnd(), EM_SETMARGINS,
-                      EC_LEFTMARGIN | EC_RIGHTMARGIN,
-                      MAKELPARAM(EC_USEFONTINFO, EC_USEFONTINFO));
+        //
+        // Finally, notice that EC_USEFONTINFO is used differently for plain
+        // and rich text controls.
+        WPARAM wParam;
+        LPARAM lParam;
+        if ( IsRich() )
+        {
+            wParam = EC_USEFONTINFO;
+            lParam = 0;
+        }
+        else // plain EDIT, EC_USEFONTINFO is used in lParam with them.
+        {
+            wParam = EC_LEFTMARGIN | EC_RIGHTMARGIN;
+            lParam = MAKELPARAM(EC_USEFONTINFO, EC_USEFONTINFO);
+        }
+
+        ::SendMessage(GetHwnd(), EM_SETMARGINS, wParam, lParam);
     }
 #endif // !__WXWINCE__
 
