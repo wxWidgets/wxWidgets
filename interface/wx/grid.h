@@ -395,10 +395,10 @@ public:
         its string form and possibly saved internally using its real type by
         BeginEdit()). If it isn't, it just returns @false, otherwise it must do
         the following:
-            # Save the new value internally so that ApplyEdit() could apply it.
-            # Fill @a newval (which is never @NULL) with the string
+            - Save the new value internally so that ApplyEdit() could apply it.
+            - Fill @a newval (which is never @NULL) with the string
             representation of the new value.
-            # Return @true
+            - Return @true
 
         Notice that it must @em not modify the grid as the change could still
         be vetoed.
