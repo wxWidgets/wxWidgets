@@ -448,6 +448,11 @@ bool wxFileDialog::CheckFile( const wxString& filename )
 void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 {
     NSSavePanel* panel = (NSSavePanel*) nativeWindow;
+    // for sandboxed app we cannot access the outer structures
+    // this leads to problems with extra controls, so as a temporary
+    // workaround for crashes we don't support those yet
+    if ( [panel contentView] == nil )
+        return;
     
     wxNonOwnedWindow::Create( GetParent(), nativeWindow );
     wxWindow* extracontrol = NULL;
@@ -693,7 +698,9 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
     
-    UnsubclassWin();
+    // workaround for sandboxed app, see above
+    if ( m_isNativeWindowWrapper )
+        UnsubclassWin();
     [(NSSavePanel*) panel setAccessoryView:nil];
 }
 
