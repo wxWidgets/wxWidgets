@@ -37,6 +37,10 @@ class WXDLLIMPEXP_CORE wxValidator : public wxEvtHandler
 {
 public:
     wxValidator();
+    wxValidator(const wxValidator& other)
+        : m_validatorWindow(other.m_validatorWindow)
+    {
+    }
     virtual ~wxValidator();
 
     // Make a clone of this validator (or return NULL) - currently necessary
@@ -87,7 +91,7 @@ private:
     static bool ms_isSilent;
 
     DECLARE_DYNAMIC_CLASS(wxValidator)
-    wxDECLARE_NO_COPY_CLASS(wxValidator);
+    wxDECLARE_NO_ASSIGN_CLASS(wxValidator);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
