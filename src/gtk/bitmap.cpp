@@ -273,6 +273,46 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
     return true;
 }
 
+wxBitmap wxMask::GetBitmap() const
+{
+    wxBitmap bitmap;
+    if (m_bitmap)
+    {
+#ifdef __WXGTK3__
+        cairo_surface_t* mask = m_bitmap;
+        const int w = cairo_image_surface_get_width(mask);
+        const int h = cairo_image_surface_get_height(mask);
+        GdkPixbuf* pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8, w, h);
+        const guchar* src = cairo_image_surface_get_data(mask);
+        guchar* dst = gdk_pixbuf_get_pixels(pixbuf);
+        const int stride_src = cairo_image_surface_get_stride(mask);
+        const int stride_dst = gdk_pixbuf_get_rowstride(pixbuf);
+        for (int j = 0; j < h; j++, src += stride_src, dst += stride_dst)
+        {
+            guchar* d = dst;
+            for (int i = 0; i < w; i++, d += 3)
+            {
+                d[0] = src[i];
+                d[1] = src[i];
+                d[2] = src[i];
+            }
+        }
+        bitmap = wxBitmap(pixbuf, 1);
+#else
+        GdkPixmap* mask = m_bitmap;
+        int w, h;
+        gdk_drawable_get_size(mask, &w, &h);
+        GdkPixmap* pixmap = gdk_pixmap_new(mask, w, h, -1);
+        GdkGC* gc = gdk_gc_new(pixmap);
+        gdk_gc_set_function(gc, GDK_COPY_INVERT);
+        gdk_draw_drawable(pixmap, gc, mask, 0, 0, 0, 0, w, h);
+        g_object_unref(gc);
+        bitmap = wxBitmap(pixmap);
+#endif
+    }
+    return bitmap;
+}
+
 #ifdef __WXGTK3__
 wxMask::operator cairo_surface_t*() const
 #else
@@ -907,46 +947,6 @@ void wxBitmap::SetMask( wxMask *mask )
     AllocExclusive();
     delete M_BMPDATA->m_mask;
     M_BMPDATA->m_mask = mask;
-}
-
-wxBitmap wxMask::GetBitmap() const
-{
-    wxBitmap bitmap;
-    if (m_bitmap)
-    {
-#ifdef __WXGTK3__
-        cairo_surface_t* mask = m_bitmap;
-        const int w = cairo_image_surface_get_width(mask);
-        const int h = cairo_image_surface_get_height(mask);
-        GdkPixbuf* pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8, w, h);
-        const guchar* src = cairo_image_surface_get_data(mask);
-        guchar* dst = gdk_pixbuf_get_pixels(pixbuf);
-        const int stride_src = cairo_image_surface_get_stride(mask);
-        const int stride_dst = gdk_pixbuf_get_rowstride(pixbuf);
-        for (int j = 0; j < h; j++, src += stride_src, dst += stride_dst)
-        {
-            guchar* d = dst;
-            for (int i = 0; i < w; i++, d += 3)
-            {
-                d[0] = src[i];
-                d[1] = src[i];
-                d[2] = src[i];
-            }
-        }
-        bitmap = wxBitmap(pixbuf, 1);
-#else
-        GdkPixmap* mask = m_bitmap;
-        int w, h;
-        gdk_drawable_get_size(mask, &w, &h);
-        GdkPixmap* pixmap = gdk_pixmap_new(mask, w, h, -1);
-        GdkGC* gc = gdk_gc_new(pixmap);
-        gdk_gc_set_function(gc, GDK_COPY_INVERT);
-        gdk_draw_drawable(pixmap, gc, mask, 0, 0, 0, 0, w, h);
-        g_object_unref(gc);
-        bitmap = wxBitmap(pixmap);
-#endif
-    }
-    return bitmap;
 }
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
