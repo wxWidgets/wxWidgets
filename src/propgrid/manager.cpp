@@ -745,12 +745,14 @@ bool wxPropertyGridManager::DoSelectPage( int index )
             return false;
     }
 
+#if wxUSE_TOOLBAR
     wxPropertyGridPage* prevPage;
 
     if ( m_selPage >= 0 )
         prevPage = GetPage(m_selPage);
     else
         prevPage = m_emptyPage;
+#endif
 
     wxPropertyGridPage* nextPage;
 
