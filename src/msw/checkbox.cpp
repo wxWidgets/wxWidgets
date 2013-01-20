@@ -378,32 +378,35 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     RECT& rect = dis->rcItem;
     RECT rectCheck,
          rectLabel;
-    rectCheck.top =
-    rectLabel.top = rect.top;
-    rectCheck.bottom =
-    rectLabel.bottom = rect.bottom;
-    const int checkSize = GetBestSize().y;
+    rectLabel.top = rect.top + (rect.bottom - rect.top - GetBestSize().y) / 2;
+    rectLabel.bottom = rectLabel.top + GetBestSize().y;
     const int MARGIN = 3;
+    const int CXMENUCHECK = ::GetSystemMetrics(SM_CXMENUCHECK);
+    // the space between the checkbox and the label is included in the
+    // check-mark bitmap
+    const int checkSize = wxMin(CXMENUCHECK - MARGIN, GetSize().y);
+    rectCheck.top = rect.top + (rect.bottom - rect.top - checkSize) / 2;
+    rectCheck.bottom = rectCheck.top + checkSize;
 
     const bool isRightAligned = HasFlag(wxALIGN_RIGHT);
     if ( isRightAligned )
     {
-        rectCheck.right = rect.right;
-        rectCheck.left = rectCheck.right - checkSize;
-
-        rectLabel.right = rectCheck.left - MARGIN;
+        rectLabel.right = rect.right - CXMENUCHECK;
         rectLabel.left = rect.left;
+
+        rectCheck.left = rectLabel.right + ( CXMENUCHECK + MARGIN - checkSize ) / 2;
+        rectCheck.right = rectCheck.left + checkSize;
     }
     else // normal, left-aligned checkbox
     {
-        rectCheck.left = rect.left;
+        rectCheck.left = rect.left + ( CXMENUCHECK - MARGIN - checkSize ) / 2;
         rectCheck.right = rectCheck.left + checkSize;
 
-        rectLabel.left = rectCheck.right + MARGIN;
+        rectLabel.left = rect.left + CXMENUCHECK;
         rectLabel.right = rect.right;
     }
 
-    // show we draw a focus rect?
+    // shall we draw a focus rect?
     const bool isFocused = m_isPressed || FindFocus() == this;
 
 
@@ -456,10 +459,20 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     // around it
     if ( isFocused )
     {
+        RECT oldLabelRect = rectLabel; // needed if right aligned
+
         if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel,
                          fmt | DT_CALCRECT) )
         {
             wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
+        }
+
+        if ( isRightAligned )
+        {
+            // move the label rect to the right
+            const int labelWidth = rectLabel.right - rectLabel.left;
+            rectLabel.right = oldLabelRect.right;
+            rectLabel.left = rectLabel.right - labelWidth;
         }
     }
 

@@ -628,6 +628,7 @@ wxMSW:
 - Display system drag images during drag and drop if available (PeterO).
 - Fix setting initial wxSpinCtrl value outside 0..100 range (joim).
 - Fix changing labels of menu items with bitmaps (Daniel Hyams).
+- Fix appearance of multiline coloured wxCheckBox (Catalin Raceanu).
 
 wxOSX/Cocoa:
 
