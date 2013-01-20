@@ -399,9 +399,11 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
     // show it again for a different cell.
     style |= wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxNO_BORDER | wxTE_RICH2;
 
-    m_control = new wxTextCtrl(parent, id, wxEmptyString,
-                               wxDefaultPosition, wxDefaultSize,
-                               style);
+    wxTextCtrl* const text = new wxTextCtrl(parent, id, wxEmptyString,
+                                            wxDefaultPosition, wxDefaultSize,
+                                            style);
+    text->SetMargins(0, 0);
+    m_control = text;
 
 #ifdef __WXOSX__
     wxWidgetImpl* impl = m_control->GetPeer();
