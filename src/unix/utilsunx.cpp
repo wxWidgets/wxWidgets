@@ -132,6 +132,10 @@
     #include <sys/sysinfo.h>   // for SAGET and MINFO structures
 #endif
 
+#ifdef HAVE_SETPRIORITY
+    #include <sys/resource.h>   // for setpriority()
+#endif
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
@@ -545,6 +549,21 @@ long wxExecute(char **argv, int flags, wxProcess *process,
         }
     }
 
+    // priority: we need to map wxWidgets priority which is in the range 0..100
+    // to Unix nice value which is in the range -20..19. As there is an odd
+    // number of elements in our range and an even number in the Unix one, we
+    // have to do it in this rather ugly way to guarantee that:
+    //  1. wxPRIORITY_{MIN,DEFAULT,MAX} map to -20, 0 and 19 respectively.
+    //  2. The mapping is monotonously increasing.
+    //  3. The mapping is onto the target range.
+    int prio = process->GetPriority();
+    if ( prio <= 50 )
+        prio = (2*prio)/5 - 20;
+    else if ( prio < 55 )
+        prio = 1;
+    else
+        prio = (2*prio)/5 - 21;
+
     // fork the process
     //
     // NB: do *not* use vfork() here, it completely breaks this code for some
@@ -577,6 +596,13 @@ long wxExecute(char **argv, int flags, wxProcess *process,
             setsid();
         }
 #endif // !__VMS
+
+#if defined(HAVE_SETPRIORITY)
+        if ( setpriority(PRIO_PROCESS, 0, prio) != 0 )
+        {
+            wxLogSysError(_("Failed to set process priority"));
+        }
+#endif // HAVE_SETPRIORITY
 
         // redirect stdin, stdout and stderr
         if ( pipeIn.IsOk() )

@@ -58,10 +58,13 @@
     #include <cxxabi.h>
 #endif
 
+#ifdef HAVE_SETPRIORITY
+    #include <sys/resource.h>   // for setpriority()
+#endif
+
 // we use wxFFile under Linux in GetCPUCount()
 #ifdef __LINUX__
     #include "wx/ffile.h"
-    #include <sys/resource.h>   // for setpriority()
 #endif
 
 #define THR_ID_CAST(id)  (reinterpret_cast<void*>(id))

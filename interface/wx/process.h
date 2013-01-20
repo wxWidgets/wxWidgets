@@ -243,6 +243,20 @@ public:
         The caught output stream is returned by GetInputStream() as a non-seekable stream.
     */
     void Redirect();
+
+    /**
+        Sets the priority of the process, between 0 (lowest) and 100 (highest).
+        It can only be set before the process is created.
+
+        The following symbolic constants can be used in addition to raw
+        values in 0..100 range:
+          - @b wxPRIORITY_MIN: 0
+          - @b wxPRIORITY_DEFAULT: 50
+          - @b wxPRIORITY_MAX: 100
+
+        @since 2.9.5
+    */
+    void SetPriority(unsigned priority);
 };
 
 

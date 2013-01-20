@@ -852,6 +852,26 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         }
     }
 
+    // Translate wxWidgets priority to Windows conventions.
+    unsigned prio = handler->GetPriority();
+    if ( prio <= 20 )
+        dwFlags |= IDLE_PRIORITY_CLASS;
+    else if ( prio <= 40 )
+        dwFlags |= BELOW_NORMAL_PRIORITY_CLASS;
+    else if ( prio <= 60 )
+        dwFlags |= NORMAL_PRIORITY_CLASS;
+    else if ( prio <= 80 )
+        dwFlags |= ABOVE_NORMAL_PRIORITY_CLASS;
+    else if ( prio <= 99 )
+        dwFlags |= HIGH_PRIORITY_CLASS;
+    else if ( prio <= 100 )
+        dwFlags |= REALTIME_PRIORITY_CLASS;
+    else
+    {
+        wxFAIL_MSG(wxT("invalid value of thread priority parameter"));
+        dwFlags |= THREAD_PRIORITY_NORMAL;
+    }
+
     bool ok = ::CreateProcess
                 (
                     // WinCE requires appname to be non null

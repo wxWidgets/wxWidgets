@@ -1240,6 +1240,9 @@
 /* Define if getgrgid_r is available. */
 #undef HAVE_GETGRGID_R
 
+/* Define if setpriority() is available. */
+#undef HAVE_SETPRIORITY
+
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
 

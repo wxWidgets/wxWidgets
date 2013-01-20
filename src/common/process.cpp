@@ -50,6 +50,7 @@ void wxProcess::Init(wxEvtHandler *parent, int id, int flags)
 
     m_id         = id;
     m_pid        = 0;
+    m_priority   = wxPRIORITY_DEFAULT;
     m_redirect   = (flags & wxPROCESS_REDIRECT) != 0;
 
 #if wxUSE_STREAMS
@@ -176,3 +177,10 @@ bool wxProcess::Exists(int pid)
     }
 }
 
+void wxProcess::SetPriority(unsigned priority)
+{
+    wxCHECK_RET( priority >= wxPRIORITY_MIN && priority <= wxPRIORITY_MAX,
+                 wxS("Invalid process priority value.") );
+
+    m_priority = priority;
+}

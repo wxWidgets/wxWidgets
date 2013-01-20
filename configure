@@ -35173,6 +35173,19 @@ $as_echo "$wx_cv_struct_tm_has_gmtoff" >&6; }
 fi
 
 
+for ac_func in setpriority
+do :
+  ac_fn_c_check_func "$LINENO" "setpriority" "ac_cv_func_setpriority"
+if test "x$ac_cv_func_setpriority" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_SETPRIORITY 1
+_ACEOF
+
+fi
+done
+
+
+
 if test "$wxUSE_SOCKETS" = "yes"; then
         if test "$TOOLKIT" != "MSW"; then
                 ac_fn_c_check_func "$LINENO" "socket" "ac_cv_func_socket"
