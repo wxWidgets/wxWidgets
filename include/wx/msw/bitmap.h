@@ -160,7 +160,6 @@ public:
 #endif // wxUSE_PALETTE
 
     wxMask *GetMask() const;
-    wxBitmap GetMaskBitmap() const;
     void SetMask(wxMask *mask);
 
     // these functions are internal and shouldn't be used, they risk to
@@ -237,6 +236,8 @@ public:
     bool Create(const wxBitmap& bitmap, const wxColour& colour);
     bool Create(const wxBitmap& bitmap, int paletteIndex);
     bool Create(const wxBitmap& bitmap);
+
+    wxBitmap GetBitmap() const;
 
     // Implementation
     WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }

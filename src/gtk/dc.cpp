@@ -154,7 +154,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
         {
             wxMask* mask = bitmap.GetMask();
             if (mask)
-                maskSurf = mask->GetBitmap();
+                maskSurf = *mask;
         }
     }
     if (maskSurf)

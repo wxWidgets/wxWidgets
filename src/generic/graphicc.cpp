@@ -1404,7 +1404,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // fully transparent or fully opaque
     if (bmpSource.GetMask())
     {
-        wxBitmap bmpMask = bmpSource.GetMaskBitmap();
+        wxBitmap bmpMask = bmpSource.GetMask()->GetBitmap();
         bufferFormat = CAIRO_FORMAT_ARGB32;
         data = (wxUint32*)m_buffer;
         wxNativePixelData

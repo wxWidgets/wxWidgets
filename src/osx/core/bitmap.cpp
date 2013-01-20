@@ -1649,6 +1649,28 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     return true;
 }
 
+wxBitmap wxMask::GetBitmap() const
+{
+    wxBitmap bitmap(m_width, m_height, 1);
+    unsigned char* dst = static_cast<unsigned char*>(bitmap.BeginRawAccess());
+    const int dst_stride = bitmap.GetBitmapData()->GetBytesPerRow();
+    const unsigned char* src = static_cast<unsigned char*>(GetRawAccess());
+    for (int j = 0; j < m_height; j++, src += m_bytesPerRow, dst += dst_stride)
+    {
+        unsigned char* d = dst;
+        for (int i = 0; i < m_width; i++)
+        {
+            const unsigned char byte = src[i];
+            *d++ = 0xff;
+            *d++ = byte;
+            *d++ = byte;
+            *d++ = byte;
+        }
+    }
+    bitmap.EndRawAccess();
+    return bitmap;
+}
+
 WXHBITMAP wxMask::GetHBITMAP() const
 {
     return m_maskBitmap ;

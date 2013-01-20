@@ -769,5 +769,13 @@ public:
         Constructs a mask from a bitmap and a colour that indicates the background.
     */
     bool Create(const wxBitmap& bitmap, const wxColour& colour);
+
+    /**
+        Returns the mask as a monochrome bitmap.
+        Currently this method is implemented in wxMSW, wxGTK and wxOSX.
+
+        @since 2.9.5
+    */
+    wxBitmap GetBitmap() const;
 };
 

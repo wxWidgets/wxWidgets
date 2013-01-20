@@ -57,6 +57,8 @@ public:
     bool Create(const wxBitmap& bitmap);
     bool Create(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
+    wxBitmap GetBitmap() const;
+
     // Implementation below
 
     void Init() ;

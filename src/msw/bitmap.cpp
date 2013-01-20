@@ -1173,12 +1173,10 @@ wxMask *wxBitmap::GetMask() const
     return GetBitmapData() ? GetBitmapData()->GetMask() : NULL;
 }
 
-wxBitmap wxBitmap::GetMaskBitmap() const
+wxBitmap wxMask::GetBitmap() const
 {
     wxBitmap bmp;
-    wxMask *mask = GetMask();
-    if ( mask )
-        bmp.SetHBITMAP(mask->GetMaskBitmap());
+    bmp.SetHBITMAP(m_maskBitmap);
     return bmp;
 }
 

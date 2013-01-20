@@ -32,14 +32,15 @@ public:
 #endif // wxUSE_PALETTE
     wxMask( const wxBitmap& bitmap );
     virtual ~wxMask();
+    wxBitmap GetBitmap() const;
 
     // implementation
 #ifdef __WXGTK3__
     wxMask(cairo_surface_t*);
-    cairo_surface_t* GetBitmap() const;
+    operator cairo_surface_t*() const;
 #else
     wxMask(GdkPixmap*);
-    GdkPixmap* GetBitmap() const;
+    operator GdkPixmap*() const;
 #endif
 
 protected:
@@ -80,7 +81,7 @@ public:
 #if wxUSE_IMAGE
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH);
 #endif // wxUSE_IMAGE
-    wxBitmap(GdkPixbuf* pixbuf);
+    wxBitmap(GdkPixbuf* pixbuf, int depth = 0);
     virtual ~wxBitmap();
 
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
@@ -132,6 +133,7 @@ public:
     GdkPixmap *GetPixmap() const;
     bool HasPixmap() const;
     bool HasPixbuf() const;
+    wxBitmap(GdkPixmap* pixmap);
 #endif
     GdkPixbuf *GetPixbuf() const;
 

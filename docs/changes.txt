@@ -606,6 +606,7 @@ All (GUI):
 - Add wxListCtrl::EnableAlternateRowColours() (troelsk).
 - Fix wrong tab order in wxAuiNotebook after dragging (Mark Barber).
 - Fix bug in generic wxDataViewCtrl column dragging (jobuz).
+- Add wxMask::GetBitmap() for wxMSW, wxGTK and wxOSX
 
 wxGTK:
 
