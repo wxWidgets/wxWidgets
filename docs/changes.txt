@@ -623,6 +623,7 @@ wxMSW:
 - Fix calling Iconize(false) on hidden top level windows (Christian Walther).
 - Don't send any events from wxSpinCtrl::SetRange() even if the value changed.
 - Display system drag images during drag and drop if available (PeterO).
+- Fix setting initial wxSpinCtrl value outside 0..100 range (joim).
 
 wxOSX/Cocoa:
 

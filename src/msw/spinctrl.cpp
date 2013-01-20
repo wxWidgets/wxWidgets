@@ -399,12 +399,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( value.ToLong(&initialFromText) )
         initial = initialFromText;
 
-    SetValue(initial);
-
-    m_oldValue = initial;
-
-    // Set the range in the native control
+    // Set the range in the native control: notice that we must do it before
+    // calling SetValue() to use the correct validity checks for the initial
+    // value.
     SetRange(min, max);
+    SetValue(initial);
 
     // Also set the text part of the control if it was specified independently
     // but don't generate an event for this, it would be unexpected.

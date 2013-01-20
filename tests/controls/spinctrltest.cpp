@@ -83,6 +83,14 @@ void SpinCtrlTestCase::Initial()
                             0, 100, 17);
     CPPUNIT_ASSERT_EQUAL( 17, m_spin->GetValue() );
 
+    // Recreate the control with another "initial" outside of standard spin
+    // ctrl range.
+    delete m_spin;
+    m_spin = new wxSpinCtrl(parent, wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize, 0,
+                            0, 200, 150);
+    CPPUNIT_ASSERT_EQUAL( 150, m_spin->GetValue() );
+
     // But if the text string is specified, it takes precedence.
     delete m_spin;
     m_spin = new wxSpinCtrl(parent, wxID_ANY, "99",
