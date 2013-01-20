@@ -1862,18 +1862,23 @@ public:
     // Find the position of the event
     void GetPosition(wxCoord *xpos, wxCoord *ypos) const
     {
-        if (xpos) *xpos = m_x;
-        if (ypos) *ypos = m_y;
+        if (xpos)
+            *xpos = GetX();
+        if (ypos)
+            *ypos = GetY();
     }
 
+    // This version if provided only for backwards compatiblity, don't use.
     void GetPosition(long *xpos, long *ypos) const
     {
-        if (xpos) *xpos = (long)m_x;
-        if (ypos) *ypos = (long)m_y;
+        if (xpos)
+            *xpos = GetX();
+        if (ypos)
+            *ypos = GetY();
     }
 
     wxPoint GetPosition() const
-        { return wxPoint(m_x, m_y); }
+        { return wxPoint(GetX(), GetY()); }
 
     // Get X position
     wxCoord GetX() const;
@@ -1911,6 +1916,8 @@ public:
     }
 
 public:
+    // Do not use these fields directly, they are initialized on demand, so
+    // call GetX() and GetY() or GetPosition() instead.
     wxCoord       m_x, m_y;
 
     long          m_keyCode;

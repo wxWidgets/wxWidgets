@@ -1543,11 +1543,15 @@ public:
     /**
         Obtains the position (in client coordinates) at which the key was pressed.
 
-        Notice that this position is simply the current mouse pointer position
-        and has no special relationship to the key event itself.
+        Notice that under most platforms this position is simply the current
+        mouse pointer position and has no special relationship to the key event
+        itself.
+
+        @a x and @a y may be @NULL if the corresponding coordinate is not
+        needed.
     */
     wxPoint GetPosition() const;
-    void GetPosition(long* x, long* y) const;
+    void GetPosition(wxCoord* x, wxCoord* y) const;
     //@}
 
     /**
