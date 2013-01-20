@@ -400,7 +400,7 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
     FILE *fHandle = wxFopen(tempFileBuf.fn_str(), wxT("wb"));
     if (!fHandle)
         return false;
-    fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);
+    fwrite((void *)&header, 1, sizeof(mfPLACEABLEHEADER), fHandle);
 
     // Calculate origin and extent
     int originX = x1;
@@ -410,14 +410,14 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
 
     // Read metafile header and write
     METAHEADER metaHeader;
-    fread((void *)&metaHeader, sizeof(unsigned char), sizeof(metaHeader), fd);
+    fread((void *)&metaHeader, 1, sizeof(metaHeader), fd);
 
     if (useOriginAndExtent)
         metaHeader.mtSize += 15;
     else
         metaHeader.mtSize += 5;
 
-    fwrite((void *)&metaHeader, sizeof(unsigned char), sizeof(metaHeader), fHandle);
+    fwrite((void *)&metaHeader, 1, sizeof(metaHeader), fHandle);
 
     // Write SetMapMode, SetWindowOrigin and SetWindowExt records
     char modeBuffer[8];
@@ -442,12 +442,12 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
     extentRecord->rdParm[0] = extentY;
     extentRecord->rdParm[1] = extentX;
 
-    fwrite((void *)modeBuffer, sizeof(char), 8, fHandle);
+    fwrite((void *)modeBuffer, 1, 8, fHandle);
 
     if (useOriginAndExtent)
     {
-        fwrite((void *)originBuffer, sizeof(char), 10, fHandle);
-        fwrite((void *)extentBuffer, sizeof(char), 10, fHandle);
+        fwrite((void *)originBuffer, 1, 10, fHandle);
+        fwrite((void *)extentBuffer, 1, 10, fHandle);
     }
 
     int ch = -2;

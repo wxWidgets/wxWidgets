@@ -567,7 +567,7 @@ wxPNGHandler::LoadFile(wxImage *image,
 
     for (i = 0; i < height; i++)
     {
-        if ((lines[i] = (unsigned char *)malloc( (size_t)(width * (sizeof(unsigned char) * 4)))) == NULL)
+        if ((lines[i] = (unsigned char *)malloc( (size_t)(width * 4))) == NULL)
             goto error;
     }
 

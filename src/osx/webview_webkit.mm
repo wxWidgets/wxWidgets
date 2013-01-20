@@ -134,7 +134,7 @@ static pascal OSStatus wxWebKitKeyEventHandler(EventHandlerCallRef handler,
 #endif
 
     GetEventParameter(event, kEventParamKeyMacCharCodes, typeChar, NULL,
-                      sizeof(char), NULL, &charCode );
+                      1, NULL, &charCode );
     GetEventParameter(event, kEventParamKeyCode, typeUInt32, NULL,
                       sizeof(UInt32), NULL, &keyCode );
     GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL,

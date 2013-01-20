@@ -890,9 +890,9 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     {
         if ( no_bits == 1 )
         {
-            int linesize = ( the_width / (sizeof(unsigned char) * 8)) ;
-            if ( the_width % (sizeof(unsigned char) * 8) )
-                linesize += sizeof(unsigned char);
+            int linesize = the_width / 8;
+            if ( the_width % 8 )
+                linesize++;
 
             unsigned char* linestart = (unsigned char*) bits ;
             unsigned char* destptr = (unsigned char*) BeginRawAccess() ;

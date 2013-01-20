@@ -580,7 +580,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
     if ( conv )
     {
         const char * const text = (const char *)data;
-        const size_t len = size/sizeof(char);
+        const size_t len = size;
 
         realSize = conv->ToWChar(NULL, 0, text, len);
         if ( realSize == wxCONV_FAILED )
@@ -627,7 +627,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
         if ( realSize == wxCONV_FAILED )
             return false;
 
-        realData = (LPBYTE)buffer.GetWriteBuf(realSize*sizeof(char));
+        realData = (LPBYTE)buffer.GetWriteBuf(realSize);
         if ( !realData )
             return false;
 

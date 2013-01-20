@@ -1306,7 +1306,7 @@ size_t wxFileDataObject::GetDataSize() const
     if ( wxGetOsVersion() == wxOS_WINDOWS_9X )
     {
         // Win9x always uses ANSI file names and MSLU doesn't help with this
-        sizeOfChar = sizeof(char);
+        sizeOfChar = 1;
     }
     else
     {
@@ -1325,7 +1325,7 @@ size_t wxFileDataObject::GetDataSize() const
         // add filename length plus null byte
         size_t len;
 #if wxUSE_UNICODE_MSLU
-        if ( sizeOfChar == sizeof(char) )
+        if ( sizeOfChar == 1 )
             len = strlen(m_filenames[i].mb_str(*wxConvFileName));
         else
 #endif // wxUSE_UNICODE_MSLU
@@ -1362,7 +1362,7 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
     pDrop->fWide = wxUSE_UNICODE;
 #endif
 
-    const size_t sizeOfChar = pDrop->fWide ? sizeof(wchar_t) : sizeof(char);
+    const size_t sizeOfChar = pDrop->fWide ? sizeof(wchar_t) : 1;
 
     // set start of filenames list (null separated)
     BYTE *pbuf = (BYTE *)(pDrop + 1);
@@ -1373,7 +1373,7 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
         // copy filename to pbuf and add null terminator
         size_t len;
 #if wxUSE_UNICODE_MSLU
-        if ( sizeOfChar == sizeof(char) )
+        if ( sizeOfChar == 1 )
         {
             wxCharBuffer buf(m_filenames[i].mb_str(*wxConvFileName));
             len = strlen(buf);
