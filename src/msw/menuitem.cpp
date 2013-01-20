@@ -681,15 +681,6 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     if ( !hMenu || ::GetMenuState(hMenu, id, MF_BYCOMMAND) == (UINT)-1 )
         return;
 
-#if wxUSE_OWNER_DRAWN
-    if ( IsOwnerDrawn() )
-    {
-        // we don't need to do anything for owner drawn items, they will redraw
-        // themselves using the new text the next time they're displayed
-        return;
-    }
-#endif // owner drawn
-
     // update the text of the native menu item
     WinStruct<MENUITEMINFO> info;
 
@@ -712,11 +703,26 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
         return;
     }
 
-    if ( isLaterThanWin95 )
-        info.fMask |= MIIM_STRING;
-    //else: MIIM_TYPE already specified
-    info.dwTypeData = wxMSW_CONV_LPTSTR(m_text);
-    info.cch = m_text.length();
+#if wxUSE_OWNER_DRAWN
+    // Don't set the text for the owner drawn items, they don't use it and even
+    // though setting it doesn't seem to actually do any harm under Windows 7,
+    // avoid doing this relatively nonsensical operation just in case it does
+    // break something on other, past or future, Windows versions.
+    //
+    // Notice that we do need to call SetMenuItemInfo() even for the ownerdrawn
+    // items however as otherwise their size wouldn't be recalculated as
+    // WM_MEASUREITEM wouldn't be sent and this could result in display
+    // problems if the length of the menu item changed significantly.
+    if ( !IsOwnerDrawn() )
+#endif // wxUSE_OWNER_DRAWN
+    {
+        if ( isLaterThanWin95 )
+            info.fMask |= MIIM_STRING;
+        //else: MIIM_TYPE already specified
+        info.dwTypeData = wxMSW_CONV_LPTSTR(m_text);
+        info.cch = m_text.length();
+    }
+
     if ( !::SetMenuItemInfo(hMenu, id, FALSE, &info) )
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
