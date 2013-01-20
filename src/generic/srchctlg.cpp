@@ -72,6 +72,10 @@ public:
         InvalidateBestSize();
     }
 
+    virtual wxWindow* GetMainWindowOfCompositeControl()
+    {
+        return m_search;
+    }
 
     // provide access to the base class protected methods to wxSearchCtrl which
     // needs to forward to them
@@ -181,6 +185,11 @@ public:
     // the search button can be already activated by pressing "Enter" so there
     // is really no reason for it to be able to get focus from keyboard.
     virtual bool AcceptsFocusFromKeyboard() const { return false; }
+
+    virtual wxWindow* GetMainWindowOfCompositeControl()
+    {
+        return m_search;
+    }
 
 protected:
     wxSize DoGetBestSize() const

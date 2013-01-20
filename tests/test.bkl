@@ -172,6 +172,7 @@
             controls/radiobuttontest.cpp
             controls/rearrangelisttest.cpp
             controls/richtextctrltest.cpp
+            controls/searchctrltest.cpp
             controls/slidertest.cpp
             controls/spinctrldbltest.cpp
             controls/spinctrltest.cpp

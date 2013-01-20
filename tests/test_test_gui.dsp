@@ -477,6 +477,10 @@ SOURCE=.\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\searchctrltest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\misc\selstoretest.cpp
 # End Source File
 # Begin Source File
