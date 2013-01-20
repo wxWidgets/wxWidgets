@@ -821,7 +821,11 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                         new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
                 }
 
-                CallParseInnerWithBg(tag, m_Table->GetRowDefaultBackgroundColour());
+                wxColour bgCol;
+                if ( !tag.GetParamAsColour(wxT("BGCOLOR"), &bgCol) )
+                    bgCol = m_Table->GetRowDefaultBackgroundColour();
+
+                CallParseInnerWithBg(tag, bgCol);
 
                 if ( isHeader )
                 {
