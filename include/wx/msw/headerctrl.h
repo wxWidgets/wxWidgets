@@ -127,6 +127,9 @@ private:
     // the offset of the window used to emulate scrolling it
     int m_scrollOffset;
 
+    // actual column we are dragging or -1 if not dragging anything
+    int m_colBeingDragged;
+
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);
 };
 

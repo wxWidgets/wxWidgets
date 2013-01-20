@@ -64,6 +64,7 @@ void wxHeaderCtrl::Init()
     m_numColumns = 0;
     m_imageList = NULL;
     m_scrollOffset = 0;
+    m_colBeingDragged = -1;
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -525,6 +526,9 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case HDN_ITEMCLICK:
         case HDN_ITEMDBLCLICK:
             evtType = GetClickEventType(code == HDN_ITEMDBLCLICK, nmhdr->iButton);
+
+            // We're not dragging any more.
+            m_colBeingDragged = -1;
             break;
 
             // although we should get the notifications about the right clicks
@@ -622,8 +626,18 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             if ( nmhdr->iItem == -1 )
                 break;
 
+            // If we are dragging a column that is not draggable and the mouse
+            // is moved over a different column then we get the column number from
+            // the column under the mouse. This results in an unexpected behaviour
+            // if this column is draggable. To prevent this remember the column we
+            // are dragging for the complete drag and drop cycle.
+            if ( m_colBeingDragged == -1 )
+            {
+                m_colBeingDragged = idx;
+            }
+
             // column must have the appropriate flag to be draggable
-            if ( !GetColumn(idx).IsReorderable() )
+            if ( !GetColumn(m_colBeingDragged).IsReorderable() )
             {
                 veto = true;
                 break;
@@ -644,10 +658,16 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             order = MSWFromNativeOrder(order);
 
             evtType = wxEVT_COMMAND_HEADER_END_REORDER;
+
+            // We (successfully) ended dragging the column.
+            m_colBeingDragged = -1;
             break;
 
         case NM_RELEASEDCAPTURE:
             evtType = wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED;
+
+            // Dragging the column was cancelled.
+            m_colBeingDragged = -1;
             break;
     }
 
