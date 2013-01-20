@@ -62,9 +62,17 @@ namespace
 // constants
 // ---------------------------------------------------------------------------
 
-// This range gives a maximum of 500 MDI children. Should be enough :-)
+// First ID for the MDI child menu item in the "Window" menu.
 const int wxFIRST_MDI_CHILD = 4100;
-const int wxLAST_MDI_CHILD = 4600;
+
+// There can be no more than 9 children in the "Window" menu as beginning with
+// the tenth one they're not shown and "More windows..." menu item is used
+// instead.
+const int wxLAST_MDI_CHILD = wxFIRST_MDI_CHILD + 8;
+
+// The ID of the "More windows..." menu item is the next one after the last
+// child.
+const int wxID_MDI_MORE_WINDOWS = wxLAST_MDI_CHILD + 1;
 
 // The MDI "Window" menu label
 const char *WINDOW_MENU_LABEL = gettext_noop("&Window");
@@ -562,8 +570,9 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
                 WXHWND hwnd;
                 UnpackCommand(wParam, lParam, &id, &hwnd, &cmd);
 
-                if ( cmd == 0 /* menu */ &&
-                        id >= SC_SIZE /* first system menu command */ )
+                if ( id == wxID_MDI_MORE_WINDOWS ||
+                     (cmd == 0 /* menu */ &&
+                        id >= SC_SIZE /* first system menu command */) )
                 {
                     MSWDefWindowProc(message, wParam, lParam);
                     processed = true;
