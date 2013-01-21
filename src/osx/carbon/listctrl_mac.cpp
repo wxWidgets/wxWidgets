@@ -2661,11 +2661,10 @@ enum
 static void calculateCGDrawingBounds(CGRect inItemRect, CGRect *outIconRect, CGRect *outTextRect, bool hasIcon = false)
 {
   float textBottom;
-  float iconH, iconW = 0;
+  float iconW = 0;
   float padding = kItemPadding;
   if (hasIcon)
   {
-    iconH = kIconHeight;
     iconW = kIconWidth;
     padding = padding*2;
   }
