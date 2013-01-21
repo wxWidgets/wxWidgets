@@ -419,12 +419,12 @@ void MyCanvas::OnEraseBackground( wxEraseEvent& event )
     wxDC& dc = *event.GetDC();
     dc.SetPen(*wxGREEN_PEN);
 
-    PrepareDC( dc );
-
     // clear any junk currently displayed
     dc.Clear();
 
-    const wxSize size = GetClientSize();
+    PrepareDC( dc );
+
+    const wxSize size = GetVirtualSize();
     for ( int x = 0; x < size.x; x += 15 )
     {
         dc.DrawLine(x, 0, x, size.y);
