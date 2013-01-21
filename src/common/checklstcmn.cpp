@@ -99,4 +99,22 @@ wxCONSTRUCTOR_4( wxCheckListBox, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size )
 
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+unsigned int wxCheckListBoxBase::GetCheckedItems(wxArrayInt& checkedItems) const
+{
+    unsigned int const numberOfItems = GetCount();
+
+    checkedItems.clear();
+    for ( unsigned int i = 0; i < numberOfItems; ++i )
+    {
+        if ( IsChecked(i) )
+            checkedItems.push_back(i);
+    }
+
+    return checkedItems.size();
+}
+
 #endif

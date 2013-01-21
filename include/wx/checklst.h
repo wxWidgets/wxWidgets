@@ -37,6 +37,8 @@ public:
     virtual bool IsChecked(unsigned int item) const = 0;
     virtual void Check(unsigned int item, bool check = true) = 0;
 
+    virtual unsigned int GetCheckedItems(wxArrayInt& checkedItems) const;
+
     wxDECLARE_NO_COPY_CLASS(wxCheckListBoxBase);
 };
 

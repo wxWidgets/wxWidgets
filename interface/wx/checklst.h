@@ -151,6 +151,19 @@ public:
             Index of item whose check status is to be returned.
     */
     bool IsChecked(unsigned int item) const;
-    
+
+    /**
+        Return the indices of the checked items.
+
+        @param checkedItems
+            A reference to the array that is filled with the indices of the
+            checked items.
+        @return The number of checked items.
+
+        @see Check(), IsChecked()
+
+        @since 2.9.5
+    */
+    unsigned int GetCheckedItems(wxArrayInt& checkedItems) const;
 };
 
