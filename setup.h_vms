@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 11 October 2012                                                    *
+ * Date : 21 January 2013                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -1364,6 +1364,9 @@ typedef pid_t GPid;
 
 /* Define if getgrgid_r is available. */
 #undef HAVE_GETGRGID_R
+
+/* Define if setpriority() is available. */
+#undef HAVE_SETPRIORITY
 
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
