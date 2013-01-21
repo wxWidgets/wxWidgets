@@ -46,7 +46,7 @@ static void gtk_checklist_toggled(GtkCellRendererToggle * WXUNUSED(renderer),
 // wxCheckListBox
 //-----------------------------------------------------------------------------
 
-wxCheckListBox::wxCheckListBox() : wxListBox()
+wxCheckListBox::wxCheckListBox() : wxCheckListBoxBase()
 {
     m_hasCheckBoxes = true;
 }
