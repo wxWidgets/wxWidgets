@@ -556,7 +556,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
     //  1. wxPRIORITY_{MIN,DEFAULT,MAX} map to -20, 0 and 19 respectively.
     //  2. The mapping is monotonously increasing.
     //  3. The mapping is onto the target range.
-    int prio = process->GetPriority();
+    int prio = process ? process->GetPriority() : 0;
     if ( prio <= 50 )
         prio = (2*prio)/5 - 20;
     else if ( prio < 55 )
@@ -598,7 +598,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
 #endif // !__VMS
 
 #if defined(HAVE_SETPRIORITY)
-        if ( setpriority(PRIO_PROCESS, 0, prio) != 0 )
+        if ( prio && setpriority(PRIO_PROCESS, 0, prio) != 0 )
         {
             wxLogSysError(_("Failed to set process priority"));
         }
