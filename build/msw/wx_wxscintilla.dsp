@@ -17,12 +17,8 @@ CFG=wxscintilla - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxscintilla - Win32 DLL Universal Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxscintilla - Win32 DLL Universal Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxscintilla - Win32 DLL Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxscintilla - Win32 DLL Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxscintilla - Win32 Universal Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxscintilla - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxscintilla - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxscintilla - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
@@ -34,53 +30,7 @@ CFG=wxscintilla - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "wxscintilla - Win32 DLL Universal Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivudll\wxscintilla"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivudll\wxscintilla"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxscintilla.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxscintilla.lib"
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Universal Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivuddll\wxscintilla"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivuddll\wxscintilla"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_dll\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_dll\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxscintillad.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxscintillad.lib"
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Release"
+!IF  "$(CFG)" == "wxscintilla - Win32 DLL Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -125,52 +75,6 @@ BSC32=bscmake.exe
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxscintillad.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxscintillad.lib"
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 Universal Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivu\wxscintilla"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivu\wxscintilla"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivu" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxscintilla.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxscintilla.lib"
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 Universal Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivud\wxscintilla"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivud\wxscintilla"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /Gm /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\lexlib" /I "..\..\src\stc\scintilla\src" /I "..\..\lib\vc_lib\mswunivud" /I "..\..\include" /Zi /Fd..\..\lib\vc_lib\wxscintillad.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxscintillad.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxscintillad.lib"
 
 !ELSEIF  "$(CFG)" == "wxscintilla - Win32 Release"
 
@@ -222,12 +126,8 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "wxscintilla - Win32 DLL Universal Release"
-# Name "wxscintilla - Win32 DLL Universal Debug"
 # Name "wxscintilla - Win32 DLL Release"
 # Name "wxscintilla - Win32 DLL Debug"
-# Name "wxscintilla - Win32 Universal Release"
-# Name "wxscintilla - Win32 Universal Debug"
 # Name "wxscintilla - Win32 Release"
 # Name "wxscintilla - Win32 Debug"
 # Begin Group "Source Files"
@@ -717,27 +617,7 @@ SOURCE=..\..\src\stc\scintilla\src\XPM.cxx
 
 SOURCE=..\..\include\wx\msw\genrcdefs.h
 
-!IF  "$(CFG)" == "wxscintilla - Win32 DLL Universal Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h
-InputPath=..\..\include\wx\msw\genrcdefs.h
-
-"..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswunivu\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Universal Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h
-InputPath=..\..\include\wx\msw\genrcdefs.h
-
-"..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswunivud\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Release"
+!IF  "$(CFG)" == "wxscintilla - Win32 DLL Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h
 InputPath=..\..\include\wx\msw\genrcdefs.h
@@ -754,26 +634,6 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 
 "..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswud\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 Universal Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h
-InputPath=..\..\include\wx\msw\genrcdefs.h
-
-"..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswunivu\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 Universal Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h
-InputPath=..\..\include\wx\msw\genrcdefs.h
-
-"..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswunivud\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h"
 
 # End Custom Build
 
@@ -804,19 +664,7 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 
 SOURCE=..\..\include\wx\msw\setup.h
 
-!IF  "$(CFG)" == "wxscintilla - Win32 DLL Universal Release"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Universal Debug"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Release"
+!IF  "$(CFG)" == "wxscintilla - Win32 DLL Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
 InputPath=..\..\include\wx\msw\setup.h
@@ -833,18 +681,6 @@ InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 Universal Release"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 Universal Debug"
-
-# Begin Custom Build - 
 
 # End Custom Build
 
@@ -875,27 +711,7 @@ InputPath=..\..\include\wx\msw\setup.h
 
 SOURCE=..\..\include\wx\univ\setup.h
 
-!IF  "$(CFG)" == "wxscintilla - Win32 DLL Universal Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h
-InputPath=..\..\include\wx\univ\setup.h
-
-"..\..\lib\vc_dll\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Universal Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h
-InputPath=..\..\include\wx\univ\setup.h
-
-"..\..\lib\vc_dll\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Release"
+!IF  "$(CFG)" == "wxscintilla - Win32 DLL Release"
 
 # Begin Custom Build - 
 
@@ -904,26 +720,6 @@ InputPath=..\..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "wxscintilla - Win32 DLL Debug"
 
 # Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 Universal Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
-InputPath=..\..\include\wx\univ\setup.h
-
-"..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "wxscintilla - Win32 Universal Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
-InputPath=..\..\include\wx\univ\setup.h
-
-"..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h
 
 # End Custom Build
 

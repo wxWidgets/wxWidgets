@@ -71,14 +71,26 @@
         </if>
     </if>
 
-    <option name="WXUNIV">
-        <values>0,1</values>
-        <values-description>,Universal</values-description>
-        <default-value>0</default-value>
-        <description>
-            Build wxUniversal instead of native port?
-        </description>
-    </option>
+    <!--
+        Don't include wxUniversal configurations in project files, they
+        confuse people who don't know what "Universal" means and double the
+        number of configurations. If you do need to build wxUniversal, either
+        use the make files or comment out the 3 lines below and rerun
+        bakefile_gen to regenerate the projects with them.
+     -->
+    <if cond="IS_MSVC_PRJ=='1'">
+        <set var="WXUNIV">0</set>
+    </if>
+    <if cond="IS_MSVC_PRJ=='0'">
+        <option name="WXUNIV">
+            <values>0,1</values>
+            <values-description>,Universal</values-description>
+            <default-value>0</default-value>
+            <description>
+                Build wxUniversal instead of native port?
+            </description>
+        </option>
+    </if>
 
     <!-- don't include ANSI configuration in project files, it's going to be
          eventually removed anyway and it only doubles the number of build
