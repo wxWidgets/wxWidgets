@@ -214,6 +214,19 @@ void wxAuiDefaultToolBarArt::DrawBackground(
     dc.GradientFillLinear(rect, startColour, endColour, wxSOUTH);
 }
 
+void wxAuiDefaultToolBarArt::DrawPlainBackground(wxDC& dc,
+                                                   wxWindow* WXUNUSED(wnd),
+                                                   const wxRect& _rect)
+{
+    wxRect rect = _rect;
+    rect.height++;
+
+    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+
+    dc.DrawRectangle(rect.GetX() - 1, rect.GetY() - 1,
+                     rect.GetWidth() + 2, rect.GetHeight() + 1);
+}
+
 void wxAuiDefaultToolBarArt::DrawLabel(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
@@ -2367,8 +2380,10 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     bool horizontal = m_orientation == wxHORIZONTAL;
 
-
-    m_art->DrawBackground(dc, this, cli_rect);
+    if (m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND)
+        m_art->DrawPlainBackground(dc, this, cli_rect);
+    else
+        m_art->DrawBackground(dc, this, cli_rect);
 
     int gripperSize = m_art->GetElementSize(wxAUI_TBART_GRIPPER_SIZE);
     int dropdown_size = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);

@@ -39,6 +39,7 @@ enum wxAuiToolBarStyle
     // analogous to wxAUI_TB_VERTICAL, but forces the toolbar
     // to be horizontal
     wxAUI_TB_HORIZONTAL    = 1 << 7,
+    wxAUI_TB_PLAIN_BACKGROUND = 1 << 8,
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
     wxAUI_ORIENTATION_MASK = (wxAUI_TB_VERTICAL | wxAUI_TB_HORIZONTAL),
     wxAUI_TB_DEFAULT_STYLE = 0
@@ -282,6 +283,11 @@ public:
                          wxWindow* wnd,
                          const wxRect& rect) = 0;
 
+    virtual void DrawPlainBackground(
+                                  wxDC& dc,
+                                  wxWindow* wnd,
+                                  const wxRect& rect) = 0;
+
     virtual void DrawLabel(
                          wxDC& dc,
                          wxWindow* wnd,
@@ -362,6 +368,10 @@ public:
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxRect& rect);
+
+    virtual void DrawPlainBackground(wxDC& dc,
+                                  wxWindow* wnd,
+                                  const wxRect& rect);
 
     virtual void DrawLabel(
                 wxDC& dc,
