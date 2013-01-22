@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 November 2012                                                     *
+# Date : 21 january 2013                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -589,6 +589,7 @@ platinfo.obj : platinfo.cpp
 popupcmn.obj : popupcmn.cpp
 prntbase.obj : prntbase.cpp
 process.obj : process.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(UNSCOMZER) process.cpp
 protocol.obj : protocol.cpp
 quantize.obj : quantize.cpp
 radiocmn.obj : radiocmn.cpp
