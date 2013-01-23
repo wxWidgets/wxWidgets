@@ -477,7 +477,13 @@ public:
     size_t m_httpsize;
     unsigned long m_read_bytes;
 
-    wxHTTPStream(wxHTTP *http) : wxSocketInputStream(*http), m_http(http) {}
+    wxHTTPStream(wxHTTP *http) : wxSocketInputStream(*http)
+    {
+        m_http = http;
+        m_httpsize = 0;
+        m_read_bytes = 0;
+    }
+
     size_t GetSize() const { return m_httpsize; }
     virtual ~wxHTTPStream(void) { m_http->Abort(); }
 
