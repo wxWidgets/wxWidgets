@@ -1,7 +1,7 @@
 '''
 This script will delete dependences from *.vcp files.
 After using this script, next time when you will try to save project,
-you will have wait untill 'Visual Tools' will rebuild all dependencies
+you will have wait until 'Visual Tools' will rebuild all dependencies
 and this process might take HUGE amount of time
 
 Author : Viktor Voroshylo

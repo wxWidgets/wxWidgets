@@ -1486,7 +1486,7 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRe
     }
     else
     {
-        //Dummy return to surpress a compiler warning
+        //Dummy return to suppress a compiler warning
         wxFAIL;
         return INET_E_DOWNLOAD_FAILURE;
     }

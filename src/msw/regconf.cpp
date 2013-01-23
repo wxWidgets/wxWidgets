@@ -79,7 +79,7 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   bool bDoUseGlobal = (style & wxCONFIG_USE_GLOBAL_FILE) != 0;
 
   // the convention is to put the programs keys under <vendor>\<appname>
-  // (but it can be overridden by specifying the pathes explicitly in strLocal
+  // (but it can be overridden by specifying the paths explicitly in strLocal
   // and/or strGlobal)
   if ( strLocal.empty() || (strGlobal.empty() && bDoUseGlobal) )
   {

@@ -396,7 +396,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
 
     // From MSDN: How To Modify Printer Settings with the DocumentProperties() Function
     // The purpose of this is to fill the DEVMODE with privdata from printer driver.
-    // If we have a printer name and OpenPrinter sucessfully returns
+    // If we have a printer name and OpenPrinter successfully returns
     // this replaces the PrintDlg function which creates the DEVMODE filled only with data from default printer.
     if ( !m_devMode && !printerName.IsEmpty() )
     {

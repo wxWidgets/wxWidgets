@@ -1430,7 +1430,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // it doesn't seem useful to use WS_CLIPSIBLINGS here as we officially
     // don't support overlapping windows and it only makes sense for them and,
     // presumably, gives the system some extra work (to manage more clipping
-    // regions), so avoid it alltogether
+    // regions), so avoid it altogether
 
 
     if ( flags & wxVSCROLL )
@@ -5451,7 +5451,7 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
     };
 
 #ifdef wxHAS_XBUTTON
-    // the same messages are used for both auxillary mouse buttons so we need
+    // the same messages are used for both auxiliary mouse buttons so we need
     // to adjust the index manually
     switch ( msg )
     {

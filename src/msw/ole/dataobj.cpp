@@ -930,7 +930,7 @@ void wxDataObject::SetAutoDelete()
     ((wxIDataObject *)m_pIDataObject)->SetDeleteFlag();
     m_pIDataObject->Release();
 
-    // so that the dtor doesnt' crash
+    // so that the dtor doesn't crash
     m_pIDataObject = NULL;
 }
 
@@ -1316,7 +1316,7 @@ size_t wxFileDataObject::GetDataSize() const
     static const size_t sizeOfChar = sizeof(wxChar);
 #endif // wxUSE_UNICODE_MSLU/!wxUSE_UNICODE_MSLU
 
-    // inital size of DROPFILES struct + null byte
+    // initial size of DROPFILES struct + null byte
     size_t sz = sizeof(DROPFILES) + sizeOfChar;
 
     const size_t count = m_filenames.size();

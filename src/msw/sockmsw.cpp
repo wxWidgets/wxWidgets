@@ -120,7 +120,7 @@ typedef struct thread_data{
 #ifdef __WXWINCE__
 /* This thread handles socket events on WinCE using WSAEventSelect() as
  * WSAAsyncSelect is not supported. When an event occurs for the socket, it is
- * checked what kind of event happend and the correct message gets posted so
+ * checked what kind of event happened and the correct message gets posted so
  * that the hidden window can handle it as it would in other MSW builds.
 */
 DWORD WINAPI SocketThread(LPVOID data)
