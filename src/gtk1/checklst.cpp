@@ -22,7 +22,7 @@
 // wxCheckListBox
 //-----------------------------------------------------------------------------
 
-wxCheckListBox::wxCheckListBox() : wxListBox()
+wxCheckListBox::wxCheckListBox() : wxCheckListBoxBase()
 {
     m_hasCheckBoxes = true;
 }
