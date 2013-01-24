@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.8.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-24 09:56+0200\n"
-"PO-Revision-Date: 2012-08-19 14:57+0300\n"
+"PO-Revision-Date: 2013-01-23 13:14+0300\n"
 "Last-Translator: Jānis Eisaks <jancs@dv.lv>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwindows.org>\n"
 "Language: Latvian\n"
@@ -2328,7 +2328,7 @@ msgstr "Izdzēsts izmantotais slēdzenes fails '%s'."
 #: ../src/common/module.cpp:124
 #, c-format
 msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
-msgstr ""
+msgstr "Bibliotēka \"%s\", kas nepieciešama moduļa \"%s\" darbībai, nepastāv."
 
 #: ../src/generic/dirctrlg.cpp:672
 msgid "Desktop"
@@ -2397,6 +2397,11 @@ msgid ""
 "New value is \n"
 "%s %1"
 msgstr ""
+"Vai vēlaties nomainīt %s failiem ar paplašinājumu \"%s\" izmantoto komandu?\n"
+"Pašreizējā \n"
+"%s, \n"
+"Jaunā \n"
+"%s %1"
 
 #: ../src/common/docview.cpp:462
 #, c-format
@@ -2636,7 +2641,7 @@ msgstr "Nav iespējams iztīrīt atkļūdošanas atskaites mapi \"%s\""
 
 #: ../src/common/filename.cpp:190
 msgid "Failed to close file handle"
-msgstr ""
+msgstr "Neizdevās aizvērt faila turi"
 
 #: ../src/unix/snglinst.cpp:335
 #, c-format
@@ -2769,7 +2774,7 @@ msgstr "Neizdevās izpildīt '%s'\n"
 
 #: ../src/common/debugrpt.cpp:672
 msgid "Failed to execute curl, please install it in PATH."
-msgstr ""
+msgstr "Neizdevās palaist curl, lūdzu, uzstādiet to ceļā PATH."
 
 #: ../contrib/src/deprecated/resource.cpp:2499
 #, c-format
@@ -2839,7 +2844,7 @@ msgstr "Neizdevās inicializēt OpenGL"
 
 #: ../src/gtk/textctrl.cpp:1072
 msgid "Failed to insert text in the control."
-msgstr ""
+msgstr "Neizdevās ievietot tekstu vadīklā."
 
 #: ../src/unix/snglinst.cpp:242
 #, c-format
@@ -3022,7 +3027,7 @@ msgstr "Neizdevās uzstādīt pieejas tiesības pagaidu failam"
 
 #: ../src/gtk/textctrl.cpp:1015
 msgid "Failed to set text in the text control."
-msgstr ""
+msgstr "Neizdevās iestatīt tekstu teksta vadīklā."
 
 #: ../src/unix/threadpsx.cpp:1253
 #: ../src/unix/threadpsx.cpp:1263
@@ -3052,7 +3057,7 @@ msgstr "Neizdevās pārtraukt iezvanpieejas savienojumu: %s"
 #: ../src/common/filename.cpp:2223
 #, c-format
 msgid "Failed to touch the file '%s'"
-msgstr ""
+msgstr "Neizdevās pieskarties (touch) failam '%s'"
 
 #: ../src/unix/snglinst.cpp:329
 #, c-format
@@ -3071,7 +3076,7 @@ msgstr "Neizdevās atsvaidzināt lietotāja konfigurācijas failu."
 #: ../src/common/debugrpt.cpp:685
 #, c-format
 msgid "Failed to upload the debug report (error code %d)."
-msgstr ""
+msgstr "Neizdevās augšupielādēt atkļūdošanas atskaiti (kļūda kods %d)."
 
 #: ../src/unix/snglinst.cpp:169
 #, c-format
@@ -3308,7 +3313,7 @@ msgstr "HTML Help Project (*.hhp)|*.hhp|"
 #: ../src/html/htmlwin.cpp:630
 #, c-format
 msgid "HTML anchor %s does not exist."
-msgstr ""
+msgstr "HTML enkurs %s nepastāv."
 
 #: ../src/html/helpwnd.cpp:1548
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
@@ -3465,11 +3470,11 @@ msgstr ""
 
 #: ../include/wx/xti.h:1668
 msgid "Illegal Parameter Count for ConstructObject Method"
-msgstr ""
+msgstr "Nederīgs parametru skaits metodei ConstructObject"
 
 #: ../include/wx/xti.h:1742
 msgid "Illegal Parameter Count for Create Method"
-msgstr ""
+msgstr "Nederīgs parametru skaits metodei Create"
 
 #: ../src/generic/filedlgg.cpp:830
 #: ../src/generic/dirctrlg.cpp:708
@@ -3594,11 +3599,11 @@ msgstr "Nederīgs slēdzenes fails '%s'."
 #: ../src/common/xtistrm.cpp:361
 #: ../src/common/xtistrm.cpp:376
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
-msgstr ""
+msgstr "GetObjectClassInfo nodots nederīgs vai tukšs objekta ID"
 
 #: ../src/common/xtistrm.cpp:391
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
-msgstr ""
+msgstr "HasObjectClassInfo nodots nederīgs vai tukšs objekta ID"
 
 #: ../src/common/regex.cpp:304
 #, c-format
@@ -4104,6 +4109,9 @@ msgid ""
 "but an alternative encoding '%s' is available.\n"
 "Do you want to use this encoding (otherwise you will have to choose another one)?"
 msgstr ""
+"Nav atrasts fonts teksta attēlošanai kodējumā '%s',\n"
+"taču ir pieejams alternatīvam kodējumam '%s'.\n"
+"Vai vēlaties izmantot šo kodējumu (citādi būs jāizvēlas cits)?"
 
 #: ../src/common/fontmap.cpp:424
 #, c-format
@@ -4112,6 +4120,9 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
+"Nav atrasts fonts teksta attēlošanai kodējumā '%s'\n"
+"Vai vēlaties izvēlēties citu fontu šim kodējumam\n"
+"(citādi teksts šajā kodējumā tiks attēlots nekorekti)?"
 
 #: ../src/dfb/fontmgr.cpp:156
 #, c-format
@@ -4251,7 +4262,7 @@ msgstr "Iestatījumam '%s' ir nepieciešama vērtība."
 #: ../src/common/cmdline.cpp:802
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
-msgstr ""
+msgstr "Iestatījums '%s': '%s' nav iespējams pārvērst par datumu."
 
 #: ../src/generic/prntdlgg.cpp:616
 #: ../src/generic/dirdlgg.cpp:185
@@ -4703,7 +4714,7 @@ msgstr "Reģistra atslēga '%s' jau pastāv."
 #: ../src/msw/registry.cpp:535
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
-msgstr ""
+msgstr "Reģistra atslēga '%s' nepastāv, pārdēvēt nav iespējams."
 
 #: ../src/msw/registry.cpp:667
 #, c-format
@@ -4712,6 +4723,9 @@ msgid ""
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
+"Reģistra atslēga '%s' ir nepieciešama normālai sistēmas darbībai,\n"
+"tās dzēšana var novest sistēmu nelietojamā stāvoklī:\n"
+"darbība atcelta."
 
 #: ../src/msw/registry.cpp:462
 #, c-format
@@ -4770,7 +4784,7 @@ msgstr "Aizstāt ar:"
 
 #: ../src/xrc/xmlres.cpp:504
 msgid "Resource files must have same version number!"
-msgstr ""
+msgstr "Resursu failu versiju numuriem ir jāsakrīt!"
 
 #: ../src/common/stockitem.cpp:150
 msgid "Revert to Saved"
@@ -4857,7 +4871,7 @@ msgstr "Saglabāt aktīvo dokumentu"
 
 #: ../src/common/stockitem.cpp:213
 msgid "Save current document with a different filename"
-msgstr ""
+msgstr "Saglabāt pašreizējo dokumentu ar citu nosaukumu"
 
 #: ../src/generic/logg.cpp:511
 msgid "Save log contents to file"
@@ -4875,7 +4889,7 @@ msgstr "Meklēt"
 
 #: ../src/html/helpwnd.cpp:536
 msgid "Search contents of help book(s) for all occurences of the text you typed above"
-msgstr ""
+msgstr "Meklēt palīdzības grāmatas(-u) saturā tekstu, ko ievadījāt augstāk"
 
 #: ../src/generic/fdrepdlg.cpp:159
 msgid "Search direction"
@@ -4887,6 +4901,7 @@ msgstr "Meklēt:"
 
 #: ../src/html/helpwnd.cpp:1063
 msgid "Search in all books"
+
 msgstr "Meklēt visās grāmatās"
 
 #: ../src/html/helpwnd.cpp:873
@@ -5139,7 +5154,7 @@ msgstr ""
 #: ../src/msw/colour.cpp:35
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
-msgstr ""
+msgstr "Virkne par krāsu: nepareiza krāsas specifikācija: %s"
 
 #: ../include/wx/xti.h:424
 #: ../include/wx/xti.h:428
@@ -5686,6 +5701,7 @@ msgstr "Unikods 16 bit (UTF-16)"
 msgid "Unicode 16 bit Big Endian (UTF-16BE)"
 msgstr "Unikods 16 bit Big Endian (UTF-16BE)"
 
+
 #: ../src/common/fmapbase.cpp:141
 msgid "Unicode 16 bit Little Endian (UTF-16LE)"
 msgstr "Unikods 16 bit Little Endian (UTF-16LE)"
@@ -5722,7 +5738,7 @@ msgstr "Nezināma DDE kļūda %08x"
 
 #: ../src/common/xtistrm.cpp:366
 msgid "Unknown Object passed to GetObjectClassInfo"
-msgstr ""
+msgstr "GetObjectClassInfo nodots nezināms objekts"
 
 #: ../src/unix/dlunix.cpp:339
 msgid "Unknown dynamic library error"
@@ -5756,7 +5772,7 @@ msgstr "Nezināma īpašība %s"
 #: ../src/common/mimecmn.cpp:214
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
-msgstr ""
+msgstr "Nenoslēgta '{' MIME tipa %s ierakstā."
 
 #: ../src/common/cmdproc.cpp:257
 #: ../src/common/cmdproc.cpp:283
