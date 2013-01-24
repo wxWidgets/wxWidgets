@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-18 18:11+0100\n"
-"PO-Revision-Date: 2012-08-19 15:21+0300\n"
+"PO-Revision-Date: 2013-01-23 13:14+0300\n"
 "Last-Translator: Jānis Eisaks <jancs@dv.lv>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwindows.org>\n"
 "Language: Latvian\n"
@@ -1759,7 +1759,7 @@ msgstr ""
 
 #: ../src/osx/carbon/dataview.cpp:896
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
-msgstr ""
+msgstr "Nevar izveidot jaunas lejas ID. Iespējams, sasniegts maksimālais sleju skaits."
 
 #: ../src/common/filefn.cpp:1333
 #, c-format
@@ -2510,7 +2510,7 @@ msgstr ""
 #: ../src/msw/listctrl.cpp:757
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
-msgstr ""
+msgstr "Nav iespējams iegūt informāciju par saraksta vadīklas vienumu %d."
 
 #: ../src/common/imagpng.cpp:747
 #: ../src/common/imagpng.cpp:758
@@ -2706,7 +2706,7 @@ msgstr "Izdzēsts izmantotais slēdzenes fails '%s'."
 #: ../src/common/module.cpp:125
 #, c-format
 msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
-msgstr ""
+msgstr "Bibliotēka \"%s\", kas nepieciešama moduļa \"%s\" darbībai, nepastāv."
 
 #: ../src/common/stockitem.cpp:197
 msgid "Descending"
@@ -3297,7 +3297,7 @@ msgstr "Neizdevās izveidot iezvanpieejas savienojumu: %s"
 
 #: ../src/gtk/textctrl.cpp:1100
 msgid "Failed to insert text in the control."
-msgstr ""
+msgstr "Neizdevās ievietot tekstu vadīklā."
 
 #: ../src/unix/snglinst.cpp:242
 #, c-format
@@ -3543,7 +3543,7 @@ msgstr "Neizdevās uzstādīt pieejas tiesības pagaidu failam"
 
 #: ../src/gtk/textctrl.cpp:1041
 msgid "Failed to set text in the text control."
-msgstr ""
+msgstr "Neizdevās iestatīt tekstu teksta vadīklā."
 
 #: ../src/unix/threadpsx.cpp:1333
 #: ../src/unix/threadpsx.cpp:1343
@@ -3584,7 +3584,7 @@ msgstr "Neizdevās pārtraukt iezvanpieejas savienojumu: %s"
 #: ../src/common/filename.cpp:2597
 #, c-format
 msgid "Failed to touch the file '%s'"
-msgstr ""
+msgstr "Neizdevās pieskarties (touch) failam '%s'"
 
 #: ../src/unix/snglinst.cpp:329
 #, c-format
@@ -3608,7 +3608,7 @@ msgstr "Neizdevās atsvaidzināt lietotāja konfigurācijas failu."
 #: ../src/common/debugrpt.cpp:713
 #, c-format
 msgid "Failed to upload the debug report (error code %d)."
-msgstr ""
+msgstr "Neizdevās augšupielādēt atkļūdošanas atskaiti (kļūda kods %d)."
 
 #: ../src/unix/snglinst.cpp:169
 #, c-format
@@ -3884,7 +3884,7 @@ msgstr "HTML Help Project (*.hhp)|*.hhp|"
 #: ../src/html/htmlwin.cpp:655
 #, c-format
 msgid "HTML anchor %s does not exist."
-msgstr ""
+msgstr "HTML enkurs %s nepastāv."
 
 #: ../src/html/helpwnd.cpp:1556
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
@@ -4059,11 +4059,11 @@ msgstr ""
 
 #: ../src/common/xti.cpp:514
 msgid "Illegal Parameter Count for ConstructObject Method"
-msgstr ""
+msgstr "Nederīgs parametru skaits metodei ConstructObject"
 
 #: ../src/common/xti.cpp:502
 msgid "Illegal Parameter Count for Create Method"
-msgstr ""
+msgstr "Nederīgs parametru skaits metodei Create"
 
 #: ../src/generic/dirctrlg.cpp:662
 #: ../src/generic/filectrlg.cpp:785
@@ -4211,11 +4211,11 @@ msgstr ""
 #: ../src/common/xtistrm.cpp:410
 #: ../src/common/xtistrm.cpp:425
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
-msgstr ""
+msgstr "GetObjectClassInfo nodots nederīgs vai tukšs objekta ID"
 
 #: ../src/common/xtistrm.cpp:440
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
-msgstr ""
+msgstr "HasObjectClassInfo nodots nederīgs vai tukšs objekta ID"
 
 #: ../src/common/regex.cpp:314
 #, c-format
@@ -4225,7 +4225,7 @@ msgstr "Nederīga regulārā izteiksme '%s': %s"
 #: ../src/common/config.cpp:227
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
-msgstr ""
+msgstr "Konfigurācijas failā nederīga vērtība %ld Bula atslēgai \"%s\"."
 
 #: ../src/generic/fontdlgg.cpp:330
 #: ../src/richtext/richtextfontpage.cpp:293
@@ -4443,9 +4443,9 @@ msgstr "Pēdējā lapa"
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Pēdējais atkārtotais paziņojums (\"%s\", %lu reize) netika izvadīts"
+msgstr[1] "Pēdējie atkārtotie paziņojumi (\"%s\", %lu reizes) netika izvadīti"
+msgstr[2] "Pēdējais atkārtotais paziņojums (\"%s\", %lu reize) netika izvadīts"
 
 #: ../src/common/paper.cpp:105
 msgid "Ledger, 17 x 11 in"
@@ -4954,18 +4954,16 @@ msgid "No column existing."
 msgstr "Nav nevienas slejas"
 
 #: ../src/osx/carbon/dataview.cpp:1675
-#, fuzzy
 msgid "No column for the specified column existing."
-msgstr "Saraksta dialogam nav norādīti kolonnu nosaukumi.\n"
+msgstr "Norādītajai slejai atbilstoša sleja nepastāv."
 
 #: ../src/osx/carbon/dataview.cpp:1424
-#, fuzzy
 msgid "No column for the specified column position existing."
-msgstr "Saraksta dialogam nav norādīti kolonnu nosaukumi.\n"
+msgstr "Norādītajai slejas pozīcijai atbilstoša sleja nepastāv."
 
 #: ../src/common/utilscmn.cpp:1046
 msgid "No default application configured for HTML files."
-msgstr ""
+msgstr "Noklusētā aplikācija HTML failu attēlošanai nav iestatīta."
 
 #: ../src/generic/helpext.cpp:450
 msgid "No entries found."
@@ -4978,6 +4976,9 @@ msgid ""
 "but an alternative encoding '%s' is available.\n"
 "Do you want to use this encoding (otherwise you will have to choose another one)?"
 msgstr ""
+"Nav atrasts fonts teksta attēlošanai kodējumā '%s',\n"
+"taču ir pieejams alternatīvam kodējumam '%s'.\n"
+"Vai vēlaties izmantot šo kodējumu (citādi būs jāizvēlas cits)?"
 
 #: ../src/common/fontmap.cpp:425
 #, c-format
@@ -4986,6 +4987,9 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
+"Nav atrasts fonts teksta attēlošanai kodējumā '%s'\n"
+"Vai vēlaties izvēlēties citu fontu šim kodējumam\n"
+"(citādi teksts šajā kodējumā tiks attēlots nekorekti)?"
 
 #: ../src/generic/animateg.cpp:143
 msgid "No handler found for animation type."
@@ -5142,7 +5146,7 @@ msgstr "Atvērt..."
 #: ../src/osx/carbon/glcanvas.cpp:49
 #, c-format
 msgid "OpenGL function \"%s\" failed: %s (error %d)"
-msgstr ""
+msgstr "OpenGL funkcija \"%s\" nav izpildīta: %s (kļūda %d)"
 
 #: ../src/generic/dirctrlg.cpp:691
 #: ../src/generic/dirdlgg.cpp:353
@@ -5178,7 +5182,7 @@ msgstr "Orientācija"
 
 #: ../src/common/windowid.cpp:260
 msgid "Out of window IDs.  Recommend shutting down application."
-msgstr ""
+msgstr "Logu ID ir beigušies. Ieteicams aizvērt aplikāciju."
 
 #: ../src/richtext/richtextborderspage.cpp:400
 #: ../src/richtext/richtextborderspage.cpp:533
@@ -6186,7 +6190,7 @@ msgstr "Caursvītrots"
 #: ../src/common/colourcmn.cpp:46
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
-msgstr ""
+msgstr "Virkne par krāsu: nepareiza krāsas specifikācija: %s"
 
 #: ../src/richtext/richtextformatdlg.cpp:313
 #: ../src/propgrid/advprops.cpp:648
@@ -7118,7 +7122,7 @@ msgstr "Nezināma DDE kļūda %08x"
 
 #: ../src/common/xtistrm.cpp:415
 msgid "Unknown Object passed to GetObjectClassInfo"
-msgstr ""
+msgstr "GetObjectClassInfo nodots nezināms objekts"
 
 #: ../src/common/imagpng.cpp:615
 #, c-format
@@ -7179,7 +7183,7 @@ msgstr "Nezināma opcija '%s'"
 #: ../src/common/mimecmn.cpp:231
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
-msgstr ""
+msgstr "Nenoslēgta '{' MIME tipa %s ierakstā."
 
 #: ../src/common/cmdproc.cpp:263
 #: ../src/common/cmdproc.cpp:289
@@ -7490,7 +7494,7 @@ msgstr "XPM: kļūdaina krāsa definīcija '%s' rindā %d!"
 
 #: ../src/common/xpmdecod.cpp:756
 msgid "XPM: no colors left to use for mask!"
-msgstr ""
+msgstr "XPM: nav atlikusi neviena maskai izmantojam krāsa!"
 
 #: ../src/common/xpmdecod.cpp:783
 #, c-format
@@ -8369,7 +8373,7 @@ msgstr ""
 
 #: ../src/osx/carbon/dataview.cpp:908
 msgid "wxWidget's control not initialized."
-msgstr ""
+msgstr "wxWidget's vadīkla nav inicializēta."
 
 #: ../src/motif/app.cpp:246
 #, c-format
