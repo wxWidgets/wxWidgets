@@ -383,7 +383,7 @@ void wxRibbonPage::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // When a resize triggers the scroll buttons to become visible, the page is resized.
     // This resize from within a resize event can cause (MSW) wxWidgets some confusion,
     // and report the 1st size to the 2nd size event. Hence the most recent size is
-    // remembered internally and used in Layout() where appropiate.
+    // remembered internally and used in Layout() where appropriate.
 
     if(GetMajorAxis() == wxHORIZONTAL)
     {

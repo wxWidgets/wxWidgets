@@ -945,7 +945,7 @@ bool wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
         // If height isn't preserved (i.e. it is reduced), then the minimum
         // size for the button bar will decrease, preventing the original
         // layout from being used (in some cases).
-        // It may be a good idea to always preverse the height, but for now
+        // It may be a good idea to always preserve the height, but for now
         // it is only done when the first button is involved in a collapse.
         preserve_height = true;
     }

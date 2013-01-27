@@ -936,7 +936,7 @@ void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
         HideExpanded();
         // Do not skip event, as the panel has been de-expanded, causing the
         // child with focus to be reparented (and hidden). If the event
-        // continues propogation then bad things happen.
+        // continues propagation then bad things happen.
     }
     else
     {
