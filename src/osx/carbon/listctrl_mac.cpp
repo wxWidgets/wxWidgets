@@ -685,7 +685,7 @@ bool wxListCtrl::Create(wxWindow *parent,
             (EventHandlerRef *)&m_macListCtrlEventHandler);
 
         m_renameTimer = new wxListCtrlRenameTimer( this );
-        
+
         Connect( wxID_ANY, wxEVT_CHAR, wxCharEventHandler(wxListCtrl::OnChar), NULL, this );
         Connect( wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxListCtrl::OnLeftDown), NULL, this );
         Connect( wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(wxListCtrl::OnDblClick), NULL, this );
@@ -803,8 +803,7 @@ void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
 bool wxListCtrl::SetFont(const wxFont& font)
 {
-    bool rv = true;
-    rv = wxListCtrlBase::SetFont(font);
+    bool rv = wxListCtrlBase::SetFont(font);
     if (m_genericImpl)
         rv = m_genericImpl->SetFont(font);
     return rv;
