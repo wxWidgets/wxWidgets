@@ -326,7 +326,7 @@ void wxAuiDefaultToolBarArt::DrawButton(
         }
         else if (item.GetState() & wxAUI_BUTTON_STATE_CHECKED)
         {
-            // it's important to put this code in an else statment after the
+            // it's important to put this code in an else statement after the
             // hover, otherwise hovers won't draw properly for checked items
             dc.SetPen(wxPen(m_highlightColour));
             dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(170)));
