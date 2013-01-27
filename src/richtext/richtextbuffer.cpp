@@ -10774,6 +10774,10 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
             // Subtract borders
             sz = buffer->GetRichTextCtrl()->GetClientSize();
 
+            // Use a minimum size to stop images becoming very small
+            sz.x = wxMax(sz.x, 100);
+            sz.y = wxMax(sz.y, 100);
+
             wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
             marginRect = wxRect(0, 0, sz.x, sz.y);
             buffer->GetBoxRects(dc, buffer, buffer->GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
@@ -10860,6 +10864,10 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
         if (height != m_originalImageSize.GetHeight())
             width = (int) (float(m_originalImageSize.GetWidth()) * (float(height)/float(m_originalImageSize.GetHeight())));
     }
+
+    // Prevent the use of zero size
+    width = wxMax(1, width);
+    height = wxMax(1, height);
 
     if (m_imageCache.IsOk() && m_imageCache.GetWidth() == width && m_imageCache.GetHeight() == height)
     {
