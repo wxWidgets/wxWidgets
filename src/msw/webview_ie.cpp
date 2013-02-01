@@ -45,8 +45,8 @@ DEFINE_GUID(wxIID_IMarkupContainer,0x3050f5f9,0x98b5,0x11cf,0xbb,0x82,0,0xaa,0,0
 
 enum //Internal find flags
 {
-    wxWEB_VIEW_FIND_ADD_POINTERS =      0x0001,
-    wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT =  0x0002
+    wxWEBVIEW_FIND_ADD_POINTERS =      0x0001,
+    wxWEBVIEW_FIND_REMOVE_HIGHLIGHT =  0x0002
 };
 
 }
@@ -84,7 +84,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
     m_historyLoadingFromList = false;
     m_historyEnabled = true;
     m_historyPosition = -1;
-    m_zoomType = wxWEB_VIEW_ZOOM_TYPE_TEXT;
+    m_zoomType = wxWEBVIEW_ZOOM_TYPE_TEXT;
     FindClear();
 
     if (::CoCreateInstance(CLSID_WebBrowser, NULL,
@@ -188,13 +188,13 @@ void wxWebViewIE::DoSetPage(const wxString& html, const wxString& baseUrl)
 
             //We send the events when we are done to mimic webkit
             //Navigated event
-            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+            wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED,
                                  GetId(), baseUrl, "");
             event.SetEventObject(this);
             HandleWindowEvent(event);
 
             //Document complete event
-            event.SetEventType(wxEVT_COMMAND_WEB_VIEW_LOADED);
+            event.SetEventType(wxEVT_COMMAND_WEBVIEW_LOADED);
             event.SetEventObject(this);
             HandleWindowEvent(event);
         }
@@ -241,16 +241,16 @@ wxWebViewZoom wxWebViewIE::GetZoom() const
 {
     switch( m_zoomType )
     {
-        case wxWEB_VIEW_ZOOM_TYPE_LAYOUT:
+        case wxWEBVIEW_ZOOM_TYPE_LAYOUT:
             return GetIEOpticalZoom();
-        case wxWEB_VIEW_ZOOM_TYPE_TEXT:
+        case wxWEBVIEW_ZOOM_TYPE_TEXT:
             return GetIETextZoom();
         default:
             wxFAIL;
     }
 
     //Dummy return to stop compiler warnings
-    return wxWEB_VIEW_ZOOM_MEDIUM;
+    return wxWEBVIEW_ZOOM_MEDIUM;
 
 }
 
@@ -258,10 +258,10 @@ void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
 {
     switch( m_zoomType )
     {
-        case wxWEB_VIEW_ZOOM_TYPE_LAYOUT:
+        case wxWEBVIEW_ZOOM_TYPE_LAYOUT:
             SetIEOpticalZoom(zoom);
             break;
-        case wxWEB_VIEW_ZOOM_TYPE_TEXT:
+        case wxWEBVIEW_ZOOM_TYPE_TEXT:
             SetIETextZoom(zoom);
             break;
         default:
@@ -317,19 +317,19 @@ void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
     //We make a somewhat arbitray map here, taken from values used by webkit
     switch(level)
     {
-        case wxWEB_VIEW_ZOOM_TINY:
+        case wxWEBVIEW_ZOOM_TINY:
             V_I4(&zoomVariant) = 60;
             break;
-        case wxWEB_VIEW_ZOOM_SMALL:
+        case wxWEBVIEW_ZOOM_SMALL:
             V_I4(&zoomVariant) = 80;
             break;
-        case wxWEB_VIEW_ZOOM_MEDIUM:
+        case wxWEBVIEW_ZOOM_MEDIUM:
             V_I4(&zoomVariant) = 100;
             break;
-        case wxWEB_VIEW_ZOOM_LARGE:
+        case wxWEBVIEW_ZOOM_LARGE:
             V_I4(&zoomVariant) = 130;
             break;
-        case wxWEB_VIEW_ZOOM_LARGEST:
+        case wxWEBVIEW_ZOOM_LARGEST:
             V_I4(&zoomVariant) = 160;
             break;
         default:
@@ -365,23 +365,23 @@ wxWebViewZoom wxWebViewIE::GetIEOpticalZoom() const
     //We make a somewhat arbitray map here, taken from values used by webkit
     if (zoom <= 65)
     {
-        return wxWEB_VIEW_ZOOM_TINY;
+        return wxWEBVIEW_ZOOM_TINY;
     }
     else if (zoom > 65 && zoom <= 90)
     {
-        return wxWEB_VIEW_ZOOM_SMALL;
+        return wxWEBVIEW_ZOOM_SMALL;
     }
     else if (zoom > 90 && zoom <= 115)
     {
-        return wxWEB_VIEW_ZOOM_MEDIUM;
+        return wxWEBVIEW_ZOOM_MEDIUM;
     }
     else if (zoom > 115 && zoom <= 145)
     {
-        return wxWEB_VIEW_ZOOM_LARGE;
+        return wxWEBVIEW_ZOOM_LARGE;
     }
     else /*if (zoom > 145) */ //Using else removes a compiler warning
     {
-        return wxWEB_VIEW_ZOOM_LARGEST;
+        return wxWEBVIEW_ZOOM_LARGEST;
     }
 }
 
@@ -404,7 +404,7 @@ bool wxWebViewIE::CanSetZoomType(wxWebViewZoomType type) const
     key.QueryValue("Version", value);
 
     long version = wxAtoi(value.Left(1));
-    if(version <= 6 && type == wxWEB_VIEW_ZOOM_TYPE_LAYOUT)
+    if(version <= 6 && type == wxWEBVIEW_ZOOM_TYPE_LAYOUT)
         return false;
     else
         return true;
@@ -508,10 +508,10 @@ void wxWebViewIE::Reload(wxWebViewReloadFlags flags)
 
     switch(flags)
     {
-        case wxWEB_VIEW_RELOAD_DEFAULT:
+        case wxWEBVIEW_RELOAD_DEFAULT:
             V_I2(&level) = REFRESH_NORMAL;
             break;
-        case wxWEB_VIEW_RELOAD_NO_CACHE:
+        case wxWEBVIEW_RELOAD_NO_CACHE:
             V_I2(&level) = REFRESH_COMPLETELY;
             break;
         default:
@@ -634,9 +634,9 @@ long wxWebViewIE::Find(const wxString& text, int flags)
     if(text.IsEmpty())
     {
         ClearSelection();
-        if(m_findFlags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT)
+        if(m_findFlags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT)
         {
-            FindInternal(m_findText, (m_findFlags &~ wxWEB_VIEW_FIND_HIGHLIGHT_RESULT), wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT);
+            FindInternal(m_findText, (m_findFlags &~ wxWEBVIEW_FIND_HIGHLIGHT_RESULT), wxWEBVIEW_FIND_REMOVE_HIGHLIGHT);
         }
         FindClear();
         return wxNOT_FOUND;
@@ -645,25 +645,25 @@ long wxWebViewIE::Find(const wxString& text, int flags)
     if(m_findText == text)
     {
         //Just do a highlight?
-        if((flags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT) != (m_findFlags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT))
+        if((flags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT) != (m_findFlags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT))
         {
             m_findFlags = flags;
             if(!m_findPointers.empty())
             {
-                FindInternal(m_findText, m_findFlags, ((flags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT) == 0 ? wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT : 0));
+                FindInternal(m_findText, m_findFlags, ((flags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT) == 0 ? wxWEBVIEW_FIND_REMOVE_HIGHLIGHT : 0));
             }
             return m_findPosition;
         }
-        else if(((m_findFlags & wxWEB_VIEW_FIND_ENTIRE_WORD) == (flags & wxWEB_VIEW_FIND_ENTIRE_WORD)) && ((m_findFlags & wxWEB_VIEW_FIND_MATCH_CASE) == (flags&wxWEB_VIEW_FIND_MATCH_CASE)))
+        else if(((m_findFlags & wxWEBVIEW_FIND_ENTIRE_WORD) == (flags & wxWEBVIEW_FIND_ENTIRE_WORD)) && ((m_findFlags & wxWEBVIEW_FIND_MATCH_CASE) == (flags&wxWEBVIEW_FIND_MATCH_CASE)))
         {
             m_findFlags = flags;
-            return FindNext(((flags & wxWEB_VIEW_FIND_BACKWARDS) ? -1 : 1));
+            return FindNext(((flags & wxWEBVIEW_FIND_BACKWARDS) ? -1 : 1));
         }
     }
     //Remove old highlight if any.
-    if(m_findFlags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT)
+    if(m_findFlags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT)
     {
-        FindInternal(m_findText, (m_findFlags &~ wxWEB_VIEW_FIND_HIGHLIGHT_RESULT), wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT);
+        FindInternal(m_findText, (m_findFlags &~ wxWEBVIEW_FIND_HIGHLIGHT_RESULT), wxWEBVIEW_FIND_REMOVE_HIGHLIGHT);
     }
     //Reset find variables.
     FindClear();
@@ -671,7 +671,7 @@ long wxWebViewIE::Find(const wxString& text, int flags)
     m_findText = text;
     m_findFlags = flags;
     //find the text and return count.
-    FindInternal(text, flags, wxWEB_VIEW_FIND_ADD_POINTERS);
+    FindInternal(text, flags, wxWEBVIEW_FIND_ADD_POINTERS);
     return m_findPointers.empty() ? wxNOT_FOUND : m_findPointers.size();
 }
 
@@ -1009,11 +1009,11 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
             ptrBegin->SetGravity(wxPOINTER_GRAVITY_Right);
             ptrBegin->MoveToContainer(pIMC, TRUE);
             //Create the find flag from the wx one.
-            if(flags & wxWEB_VIEW_FIND_ENTIRE_WORD)
+            if(flags & wxWEBVIEW_FIND_ENTIRE_WORD)
             {
                 find_flag |= wxFINDTEXT_WHOLEWORD;
             }
-            if(flags & wxWEB_VIEW_FIND_MATCH_CASE)
+            if(flags & wxWEBVIEW_FIND_MATCH_CASE)
             {
                 find_flag |= wxFINDTEXT_MATCHCASE;
             }
@@ -1031,20 +1031,20 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
                     if(IsElementVisible(elm))
                     {
                         //Highlight the word if the flag was set.
-                        if(flags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT)
+                        if(flags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT)
                         {
                             IHTMLElement* pFontEl;
                             pIMS->CreateElement(wxTAGID_FONT, attr_bstr, &pFontEl);
                             pIMS->InsertElement(pFontEl, ptrBegin, ptrEnd);
                         }
-                        if(internal_flag & wxWEB_VIEW_FIND_REMOVE_HIGHLIGHT)
+                        if(internal_flag & wxWEBVIEW_FIND_REMOVE_HIGHLIGHT)
                         {
                             IHTMLElement* pFontEl;
                             ptrBegin->CurrentScope(&pFontEl);
                             pIMS->RemoveElement(pFontEl);
                             pFontEl->Release();
                         }
-                        if(internal_flag & wxWEB_VIEW_FIND_ADD_POINTERS)
+                        if(internal_flag & wxWEBVIEW_FIND_ADD_POINTERS)
                         {
                             wxIMarkupPointer *cptrBegin, *cptrEnd;
                             pIMS->CreateMarkupPointer(&cptrBegin);
@@ -1089,7 +1089,7 @@ long wxWebViewIE::FindNext(int direction)
 
     if(m_findPosition >= (signed)m_findPointers.size())
     {
-        if(m_findFlags & wxWEB_VIEW_FIND_WRAP)
+        if(m_findFlags & wxWEBVIEW_FIND_WRAP)
         {
             m_findPosition = 0;
         }
@@ -1101,7 +1101,7 @@ long wxWebViewIE::FindNext(int direction)
     }
     else if(m_findPosition < 0)
     {
-        if(m_findFlags & wxWEB_VIEW_FIND_WRAP)
+        if(m_findFlags & wxWEBVIEW_FIND_WRAP)
         {
             m_findPosition = m_findPointers.size()-1;
         }
@@ -1149,7 +1149,7 @@ void wxWebViewIE::FindClear()
 {
     //Reset find variables.
     m_findText.Empty();
-    m_findFlags = wxWEB_VIEW_FIND_DEFAULT;
+    m_findFlags = wxWEBVIEW_FIND_DEFAULT;
     m_findPosition = -1;
 
     //The m_findPointers contains pointers for the found text.
@@ -1217,7 +1217,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             wxString url = evt[1].GetString();
             wxString target = evt[3].GetString();
 
-            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
+            wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATING,
                                  GetId(), url, target);
 
             //skip empty javascript events.
@@ -1252,7 +1252,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             wxString url = evt[1].GetString();
             // TODO: set target parameter if possible
             wxString target = wxEmptyString;
-            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+            wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED,
                                  GetId(), url, target);
             event.SetEventObject(this);
             HandleWindowEvent(event);
@@ -1303,7 +1303,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             FindClear();
             // TODO: set target parameter if possible
             wxString target = wxEmptyString;
-            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED, GetId(),
+            wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_LOADED, GetId(),
                                  url, target);
             event.SetEventObject(this);
             HandleWindowEvent(event);
@@ -1319,7 +1319,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
         {
             wxString title = evt[0].GetString();
 
-            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+            wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED,
                                  GetId(), GetCurrentURL(), "");
             event.SetString(title);
             event.SetEventObject(this);
@@ -1329,65 +1329,65 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
         case DISPID_NAVIGATEERROR:
         {
-            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR, GetId(),
+            wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR, GetId(),
                                  evt[1].GetString(), evt[2].GetString());
             event.SetEventObject(this);
 
             switch (evt[3].GetLong())
             {
                 // 400 Error codes
-                WX_ERROR_CASE(HTTP_STATUS_BAD_REQUEST, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(HTTP_STATUS_DENIED, wxWEB_NAV_ERR_AUTH)
-                WX_ERROR_CASE(HTTP_STATUS_PAYMENT_REQ, wxWEB_NAV_ERR_OTHER)
-                WX_ERROR_CASE(HTTP_STATUS_FORBIDDEN, wxWEB_NAV_ERR_AUTH)
-                WX_ERROR_CASE(HTTP_STATUS_NOT_FOUND, wxWEB_NAV_ERR_NOT_FOUND)
-                WX_ERROR_CASE(HTTP_STATUS_BAD_METHOD, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(HTTP_STATUS_NONE_ACCEPTABLE, wxWEB_NAV_ERR_OTHER)
-                WX_ERROR_CASE(HTTP_STATUS_PROXY_AUTH_REQ, wxWEB_NAV_ERR_AUTH)
-                WX_ERROR_CASE(HTTP_STATUS_REQUEST_TIMEOUT, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(HTTP_STATUS_CONFLICT, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(HTTP_STATUS_GONE, wxWEB_NAV_ERR_NOT_FOUND)
-                WX_ERROR_CASE(HTTP_STATUS_LENGTH_REQUIRED, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(HTTP_STATUS_PRECOND_FAILED, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(HTTP_STATUS_REQUEST_TOO_LARGE, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(HTTP_STATUS_URI_TOO_LONG, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(HTTP_STATUS_UNSUPPORTED_MEDIA, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(HTTP_STATUS_RETRY_WITH, wxWEB_NAV_ERR_OTHER)
+                WX_ERROR_CASE(HTTP_STATUS_BAD_REQUEST, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_DENIED, wxWEBVIEW_NAV_ERR_AUTH)
+                WX_ERROR_CASE(HTTP_STATUS_PAYMENT_REQ, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR_CASE(HTTP_STATUS_FORBIDDEN, wxWEBVIEW_NAV_ERR_AUTH)
+                WX_ERROR_CASE(HTTP_STATUS_NOT_FOUND, wxWEBVIEW_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(HTTP_STATUS_BAD_METHOD, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_NONE_ACCEPTABLE, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR_CASE(HTTP_STATUS_PROXY_AUTH_REQ, wxWEBVIEW_NAV_ERR_AUTH)
+                WX_ERROR_CASE(HTTP_STATUS_REQUEST_TIMEOUT, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_CONFLICT, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_GONE, wxWEBVIEW_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(HTTP_STATUS_LENGTH_REQUIRED, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_PRECOND_FAILED, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_REQUEST_TOO_LARGE, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_URI_TOO_LONG, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_UNSUPPORTED_MEDIA, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_RETRY_WITH, wxWEBVIEW_NAV_ERR_OTHER)
 
                 // 500 - Error codes
-                WX_ERROR_CASE(HTTP_STATUS_SERVER_ERROR, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(HTTP_STATUS_NOT_SUPPORTED, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(HTTP_STATUS_BAD_GATEWAY, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(HTTP_STATUS_SERVICE_UNAVAIL, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(HTTP_STATUS_GATEWAY_TIMEOUT, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(HTTP_STATUS_VERSION_NOT_SUP, wxWEB_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(HTTP_STATUS_SERVER_ERROR, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_NOT_SUPPORTED, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_BAD_GATEWAY, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_SERVICE_UNAVAIL, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_GATEWAY_TIMEOUT, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(HTTP_STATUS_VERSION_NOT_SUP, wxWEBVIEW_NAV_ERR_REQUEST)
 
                 // URL Moniker error codes
-                WX_ERROR_CASE(INET_E_INVALID_URL, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(INET_E_NO_SESSION, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(INET_E_CANNOT_CONNECT, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(INET_E_RESOURCE_NOT_FOUND, wxWEB_NAV_ERR_NOT_FOUND)
-                WX_ERROR_CASE(INET_E_OBJECT_NOT_FOUND, wxWEB_NAV_ERR_NOT_FOUND)
-                WX_ERROR_CASE(INET_E_DATA_NOT_AVAILABLE, wxWEB_NAV_ERR_NOT_FOUND)
-                WX_ERROR_CASE(INET_E_DOWNLOAD_FAILURE, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(INET_E_AUTHENTICATION_REQUIRED, wxWEB_NAV_ERR_AUTH)
-                WX_ERROR_CASE(INET_E_NO_VALID_MEDIA, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(INET_E_CONNECTION_TIMEOUT, wxWEB_NAV_ERR_CONNECTION)
-                WX_ERROR_CASE(INET_E_INVALID_REQUEST, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(INET_E_UNKNOWN_PROTOCOL, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(INET_E_SECURITY_PROBLEM, wxWEB_NAV_ERR_SECURITY)
-                WX_ERROR_CASE(INET_E_CANNOT_LOAD_DATA, wxWEB_NAV_ERR_OTHER)
-                WX_ERROR_CASE(INET_E_REDIRECT_FAILED, wxWEB_NAV_ERR_OTHER)
-                WX_ERROR_CASE(INET_E_REDIRECT_TO_DIR, wxWEB_NAV_ERR_REQUEST)
-                WX_ERROR_CASE(INET_E_CANNOT_LOCK_REQUEST, wxWEB_NAV_ERR_OTHER)
-                WX_ERROR_CASE(INET_E_USE_EXTEND_BINDING, wxWEB_NAV_ERR_OTHER)
-                WX_ERROR_CASE(INET_E_TERMINATED_BIND, wxWEB_NAV_ERR_OTHER)
-                WX_ERROR_CASE(INET_E_INVALID_CERTIFICATE, wxWEB_NAV_ERR_CERTIFICATE)
-                WX_ERROR_CASE(INET_E_CODE_DOWNLOAD_DECLINED, wxWEB_NAV_ERR_USER_CANCELLED)
-                WX_ERROR_CASE(INET_E_RESULT_DISPATCHED, wxWEB_NAV_ERR_OTHER)
-                WX_ERROR_CASE(INET_E_CANNOT_REPLACE_SFP_FILE, wxWEB_NAV_ERR_SECURITY)
-                WX_ERROR_CASE(INET_E_CODE_INSTALL_BLOCKED_BY_HASH_POLICY, wxWEB_NAV_ERR_SECURITY)
-                WX_ERROR_CASE(INET_E_CODE_INSTALL_SUPPRESSED, wxWEB_NAV_ERR_SECURITY)
+                WX_ERROR_CASE(INET_E_INVALID_URL, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_NO_SESSION, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(INET_E_CANNOT_CONNECT, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(INET_E_RESOURCE_NOT_FOUND, wxWEBVIEW_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(INET_E_OBJECT_NOT_FOUND, wxWEBVIEW_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(INET_E_DATA_NOT_AVAILABLE, wxWEBVIEW_NAV_ERR_NOT_FOUND)
+                WX_ERROR_CASE(INET_E_DOWNLOAD_FAILURE, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(INET_E_AUTHENTICATION_REQUIRED, wxWEBVIEW_NAV_ERR_AUTH)
+                WX_ERROR_CASE(INET_E_NO_VALID_MEDIA, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_CONNECTION_TIMEOUT, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR_CASE(INET_E_INVALID_REQUEST, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_UNKNOWN_PROTOCOL, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_SECURITY_PROBLEM, wxWEBVIEW_NAV_ERR_SECURITY)
+                WX_ERROR_CASE(INET_E_CANNOT_LOAD_DATA, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_REDIRECT_FAILED, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_REDIRECT_TO_DIR, wxWEBVIEW_NAV_ERR_REQUEST)
+                WX_ERROR_CASE(INET_E_CANNOT_LOCK_REQUEST, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_USE_EXTEND_BINDING, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_TERMINATED_BIND, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_INVALID_CERTIFICATE, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR_CASE(INET_E_CODE_DOWNLOAD_DECLINED, wxWEBVIEW_NAV_ERR_USER_CANCELLED)
+                WX_ERROR_CASE(INET_E_RESULT_DISPATCHED, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR_CASE(INET_E_CANNOT_REPLACE_SFP_FILE, wxWEBVIEW_NAV_ERR_SECURITY)
+                WX_ERROR_CASE(INET_E_CODE_INSTALL_BLOCKED_BY_HASH_POLICY, wxWEBVIEW_NAV_ERR_SECURITY)
+                WX_ERROR_CASE(INET_E_CODE_INSTALL_SUPPRESSED, wxWEBVIEW_NAV_ERR_SECURITY)
             }
             HandleWindowEvent(event);
             break;
@@ -1396,7 +1396,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
         {
             wxString url = evt[4].GetString();
 
-            wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+            wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NEWWINDOW,
                                  GetId(), url, wxEmptyString);
             event.SetEventObject(this);
             HandleWindowEvent(event);

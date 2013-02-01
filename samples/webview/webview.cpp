@@ -282,7 +282,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_toolbar->Realize();
 
     // Set find values.
-    m_findFlags = wxWEB_VIEW_FIND_DEFAULT;
+    m_findFlags = wxWEBVIEW_FIND_DEFAULT;
     m_findText = wxEmptyString;
     m_findCount = 0;
 
@@ -411,7 +411,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
     m_tools_enable_history->Check();
-    if(!m_browser->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT))
+    if(!m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT))
         m_tools_layout->Enable(false);
 
 
@@ -445,17 +445,17 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
 
     // Connect the webview events
-    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEBVIEW_NAVIGATING,
             wxWebViewEventHandler(WebFrame::OnNavigationRequest), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEBVIEW_NAVIGATED,
             wxWebViewEventHandler(WebFrame::OnNavigationComplete), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_LOADED,
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEBVIEW_LOADED,
             wxWebViewEventHandler(WebFrame::OnDocumentLoaded), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_ERROR,
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEBVIEW_ERROR,
             wxWebViewEventHandler(WebFrame::OnError), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEBVIEW_NEWWINDOW,
             wxWebViewEventHandler(WebFrame::OnNewWindow), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+    Connect(m_browser->GetId(), wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED,
             wxWebViewEventHandler(WebFrame::OnTitleChanged), NULL, this);
 
     // Connect the menu events
@@ -697,16 +697,16 @@ void WebFrame::OnFindText(wxCommandEvent& evt)
     int flags = 0;
 
     if(m_find_toolbar_wrap->IsChecked())
-        flags |= wxWEB_VIEW_FIND_WRAP;
+        flags |= wxWEBVIEW_FIND_WRAP;
     if(m_find_toolbar_wholeword->IsChecked())
-        flags |= wxWEB_VIEW_FIND_ENTIRE_WORD;
+        flags |= wxWEBVIEW_FIND_ENTIRE_WORD;
     if(m_find_toolbar_matchcase->IsChecked())
-        flags |= wxWEB_VIEW_FIND_MATCH_CASE;
+        flags |= wxWEBVIEW_FIND_MATCH_CASE;
     if(m_find_toolbar_highlight->IsChecked())
-        flags |= wxWEB_VIEW_FIND_HIGHLIGHT_RESULT;
+        flags |= wxWEBVIEW_FIND_HIGHLIGHT_RESULT;
 
     if(m_find_toolbar_previous->GetId() == evt.GetId())
-        flags |= wxWEB_VIEW_FIND_BACKWARDS;
+        flags |= wxWEBVIEW_FIND_BACKWARDS;
 
     wxString find_text = m_find_ctrl->GetValue();
     long count = m_browser->Find(find_text, flags);
@@ -834,19 +834,19 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     wxWebViewZoom zoom = m_browser->GetZoom();
     switch (zoom)
     {
-    case wxWEB_VIEW_ZOOM_TINY:
+    case wxWEBVIEW_ZOOM_TINY:
         m_tools_tiny->Check();
         break;
-    case wxWEB_VIEW_ZOOM_SMALL:
+    case wxWEBVIEW_ZOOM_SMALL:
         m_tools_small->Check();
         break;
-    case wxWEB_VIEW_ZOOM_MEDIUM:
+    case wxWEBVIEW_ZOOM_MEDIUM:
         m_tools_medium->Check();
         break;
-    case wxWEB_VIEW_ZOOM_LARGE:
+    case wxWEBVIEW_ZOOM_LARGE:
         m_tools_large->Check();
         break;
-    case wxWEB_VIEW_ZOOM_LARGEST:
+    case wxWEBVIEW_ZOOM_LARGEST:
         m_tools_largest->Check();
         break;
     }
@@ -913,23 +913,23 @@ void WebFrame::OnSetZoom(wxCommandEvent& evt)
 {
     if (evt.GetId() == m_tools_tiny->GetId())
     {
-        m_browser->SetZoom(wxWEB_VIEW_ZOOM_TINY);
+        m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
     }
     else if (evt.GetId() == m_tools_small->GetId())
     {
-        m_browser->SetZoom(wxWEB_VIEW_ZOOM_SMALL);
+        m_browser->SetZoom(wxWEBVIEW_ZOOM_SMALL);
     }
     else if (evt.GetId() == m_tools_medium->GetId())
     {
-        m_browser->SetZoom(wxWEB_VIEW_ZOOM_MEDIUM);
+        m_browser->SetZoom(wxWEBVIEW_ZOOM_MEDIUM);
     }
     else if (evt.GetId() == m_tools_large->GetId())
     {
-        m_browser->SetZoom(wxWEB_VIEW_ZOOM_LARGE);
+        m_browser->SetZoom(wxWEBVIEW_ZOOM_LARGE);
     }
     else if (evt.GetId() == m_tools_largest->GetId())
     {
-        m_browser->SetZoom(wxWEB_VIEW_ZOOM_LARGEST);
+        m_browser->SetZoom(wxWEBVIEW_ZOOM_LARGEST);
     }
     else
     {
@@ -940,9 +940,9 @@ void WebFrame::OnSetZoom(wxCommandEvent& evt)
 void WebFrame::OnZoomLayout(wxCommandEvent& WXUNUSED(evt))
 {
     if(m_tools_layout->IsChecked())
-        m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
+        m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
     else
-        m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_TEXT);
+        m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT);
 }
 
 void WebFrame::OnHistory(wxCommandEvent& evt)
@@ -987,14 +987,14 @@ void WebFrame::OnError(wxWebViewEvent& evt)
     wxString category;
     switch (evt.GetInt())
     {
-        WX_ERROR_CASE(wxWEB_NAV_ERR_CONNECTION);
-        WX_ERROR_CASE(wxWEB_NAV_ERR_CERTIFICATE);
-        WX_ERROR_CASE(wxWEB_NAV_ERR_AUTH);
-        WX_ERROR_CASE(wxWEB_NAV_ERR_SECURITY);
-        WX_ERROR_CASE(wxWEB_NAV_ERR_NOT_FOUND);
-        WX_ERROR_CASE(wxWEB_NAV_ERR_REQUEST);
-        WX_ERROR_CASE(wxWEB_NAV_ERR_USER_CANCELLED);
-        WX_ERROR_CASE(wxWEB_NAV_ERR_OTHER);
+        WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_CONNECTION);
+        WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_CERTIFICATE);
+        WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_AUTH);
+        WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_SECURITY);
+        WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_NOT_FOUND);
+        WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_REQUEST);
+        WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_USER_CANCELLED);
+        WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_OTHER);
     }
 
     wxLogMessage("%s", "Error; url='" + evt.GetURL() + "', error='" + category + " (" + evt.GetString() + ")'");

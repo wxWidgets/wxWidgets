@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WEB_VIEW_H_
-#define _WX_WEB_VIEW_H_
+#ifndef _WX_WEBVIEW_H_
+#define _WX_WEBVIEW_H_
 
 #include "wx/defs.h"
 
@@ -36,47 +36,47 @@ class wxWebView;
 
 enum wxWebViewZoom
 {
-    wxWEB_VIEW_ZOOM_TINY,
-    wxWEB_VIEW_ZOOM_SMALL,
-    wxWEB_VIEW_ZOOM_MEDIUM,
-    wxWEB_VIEW_ZOOM_LARGE,
-    wxWEB_VIEW_ZOOM_LARGEST
+    wxWEBVIEW_ZOOM_TINY,
+    wxWEBVIEW_ZOOM_SMALL,
+    wxWEBVIEW_ZOOM_MEDIUM,
+    wxWEBVIEW_ZOOM_LARGE,
+    wxWEBVIEW_ZOOM_LARGEST
 };
 
 enum wxWebViewZoomType
 {
     //Scales entire page, including images
-    wxWEB_VIEW_ZOOM_TYPE_LAYOUT,
-    wxWEB_VIEW_ZOOM_TYPE_TEXT
+    wxWEBVIEW_ZOOM_TYPE_LAYOUT,
+    wxWEBVIEW_ZOOM_TYPE_TEXT
 };
 
 enum wxWebViewNavigationError
 {
-    wxWEB_NAV_ERR_CONNECTION,
-    wxWEB_NAV_ERR_CERTIFICATE,
-    wxWEB_NAV_ERR_AUTH,
-    wxWEB_NAV_ERR_SECURITY,
-    wxWEB_NAV_ERR_NOT_FOUND,
-    wxWEB_NAV_ERR_REQUEST,
-    wxWEB_NAV_ERR_USER_CANCELLED,
-    wxWEB_NAV_ERR_OTHER
+    wxWEBVIEW_NAV_ERR_CONNECTION,
+    wxWEBVIEW_NAV_ERR_CERTIFICATE,
+    wxWEBVIEW_NAV_ERR_AUTH,
+    wxWEBVIEW_NAV_ERR_SECURITY,
+    wxWEBVIEW_NAV_ERR_NOT_FOUND,
+    wxWEBVIEW_NAV_ERR_REQUEST,
+    wxWEBVIEW_NAV_ERR_USER_CANCELLED,
+    wxWEBVIEW_NAV_ERR_OTHER
 };
 
 enum wxWebViewReloadFlags
 {
     //Default, may access cache
-    wxWEB_VIEW_RELOAD_DEFAULT,
-    wxWEB_VIEW_RELOAD_NO_CACHE
+    wxWEBVIEW_RELOAD_DEFAULT,
+    wxWEBVIEW_RELOAD_NO_CACHE
 };
 
 enum wxWebViewFindFlags
 {
-    wxWEB_VIEW_FIND_WRAP =             0x0001,
-    wxWEB_VIEW_FIND_ENTIRE_WORD =      0x0002,
-    wxWEB_VIEW_FIND_MATCH_CASE =       0x0004,
-    wxWEB_VIEW_FIND_HIGHLIGHT_RESULT = 0x0008,
-    wxWEB_VIEW_FIND_BACKWARDS =        0x0010,
-    wxWEB_VIEW_FIND_DEFAULT =          0
+    wxWEBVIEW_FIND_WRAP =             0x0001,
+    wxWEBVIEW_FIND_ENTIRE_WORD =      0x0002,
+    wxWEBVIEW_FIND_MATCH_CASE =       0x0004,
+    wxWEBVIEW_FIND_HIGHLIGHT_RESULT = 0x0008,
+    wxWEBVIEW_FIND_BACKWARDS =        0x0010,
+    wxWEBVIEW_FIND_DEFAULT =          0
 };
 
 //Base class for custom scheme handlers
@@ -161,7 +161,7 @@ public:
     virtual void LoadURL(const wxString& url) = 0;
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
-    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
     virtual void RunScript(const wxString& javascript) = 0;
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
@@ -219,7 +219,7 @@ public:
     //Get the pointer to the underlying native engine.
     virtual void* GetNativeBackend() const = 0;
     //Find function
-    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT) = 0;
+    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) = 0;
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
@@ -255,12 +255,12 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebViewEvent);
 };
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEB_VIEW_NAVIGATING, wxWebViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEB_VIEW_NAVIGATED, wxWebViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEB_VIEW_LOADED, wxWebViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEB_VIEW_ERROR, wxWebViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, wxWebViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEBVIEW_NAVIGATING, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEBVIEW_NAVIGATED, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEBVIEW_LOADED, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEBVIEW_ERROR, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEBVIEW_NEWWINDOW, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -268,30 +268,30 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 #define wxWebViewEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxWebViewEventFunction, func)
 
-#define EVT_WEB_VIEW_NAVIGATING(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NAVIGATING, id, \
+#define EVT_WEBVIEW_NAVIGATING(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEBVIEW_NAVIGATING, id, \
                      wxWebViewEventHandler(fn))
 
-#define EVT_WEB_VIEW_NAVIGATED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NAVIGATED, id, \
+#define EVT_WEBVIEW_NAVIGATED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEBVIEW_NAVIGATED, id, \
                      wxWebViewEventHandler(fn))
 
-#define EVT_WEB_VIEW_LOADED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_LOADED, id, \
+#define EVT_WEBVIEW_LOADED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEBVIEW_LOADED, id, \
                      wxWebViewEventHandler(fn))
 
-#define EVT_WEB_VIEW_ERROR(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_ERROR, id, \
+#define EVT_WEBVIEW_ERROR(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEBVIEW_ERROR, id, \
                      wxWebViewEventHandler(fn))
 
-#define EVT_WEB_VIEW_NEWWINDOW(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW, id, \
+#define EVT_WEBVIEW_NEWWINDOW(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEBVIEW_NEWWINDOW, id, \
                      wxWebViewEventHandler(fn))
 
-#define EVT_WEB_VIEW_TITLE_CHANGED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED, id, \
+#define EVT_WEBVIEW_TITLE_CHANGED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED, id, \
                      wxWebViewEventHandler(fn))
 
 #endif // wxUSE_WEBVIEW
 
-#endif // _WX_WEB_VIEW_H_
+#endif // _WX_WEBVIEW_H_

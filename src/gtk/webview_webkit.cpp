@@ -59,7 +59,7 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
         }
 
         webKitCtrl->m_busy = false;
-        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED,
+        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_LOADED,
                              webKitCtrl->GetId(),
                              url, target);
 
@@ -69,7 +69,7 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
     else if (status ==  WEBKIT_LOAD_COMMITTED)
     {
         webKitCtrl->m_busy = true;
-        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED,
                              webKitCtrl->GetId(),
                              url, target);
 
@@ -101,7 +101,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     const gchar* uri = webkit_network_request_get_uri(request);
 
     wxString target = webkit_web_frame_get_name (frame);
-    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATING,
                          webKitCtrl->GetId(),
                          wxString( uri, wxConvUTF8 ),
                          target);
@@ -155,7 +155,7 @@ wxgtk_webview_webkit_error(WebKitWebView*,
                            wxWebViewWebKit* webKitWindow)
 {
     webKitWindow->m_busy = false;
-    wxWebViewNavigationError type = wxWEB_NAV_ERR_OTHER;
+    wxWebViewNavigationError type = wxWEBVIEW_NAV_ERR_OTHER;
 
     GError* error = (GError*)web_error;
     wxString description(error->message, wxConvUTF8);
@@ -165,12 +165,12 @@ wxgtk_webview_webkit_error(WebKitWebView*,
         switch (error->code)
         {
             case SOUP_STATUS_CANCELLED:
-                type = wxWEB_NAV_ERR_USER_CANCELLED;
+                type = wxWEBVIEW_NAV_ERR_USER_CANCELLED;
                 break;
 
             case SOUP_STATUS_CANT_RESOLVE:
             case SOUP_STATUS_NOT_FOUND:
-                type = wxWEB_NAV_ERR_NOT_FOUND;
+                type = wxWEBVIEW_NAV_ERR_NOT_FOUND;
                 break;
 
             case SOUP_STATUS_CANT_RESOLVE_PROXY:
@@ -178,54 +178,54 @@ wxgtk_webview_webkit_error(WebKitWebView*,
             case SOUP_STATUS_CANT_CONNECT_PROXY:
             case SOUP_STATUS_SSL_FAILED:
             case SOUP_STATUS_IO_ERROR:
-                type = wxWEB_NAV_ERR_CONNECTION;
+                type = wxWEBVIEW_NAV_ERR_CONNECTION;
                 break;
 
             case SOUP_STATUS_MALFORMED:
             //case SOUP_STATUS_TOO_MANY_REDIRECTS:
-                type = wxWEB_NAV_ERR_REQUEST;
+                type = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
 
             //case SOUP_STATUS_NO_CONTENT:
             //case SOUP_STATUS_RESET_CONTENT:
 
             case SOUP_STATUS_BAD_REQUEST:
-                type = wxWEB_NAV_ERR_REQUEST;
+                type = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
 
             case SOUP_STATUS_UNAUTHORIZED:
             case SOUP_STATUS_FORBIDDEN:
-                type = wxWEB_NAV_ERR_AUTH;
+                type = wxWEBVIEW_NAV_ERR_AUTH;
                 break;
 
             case SOUP_STATUS_METHOD_NOT_ALLOWED:
             case SOUP_STATUS_NOT_ACCEPTABLE:
-                type = wxWEB_NAV_ERR_SECURITY;
+                type = wxWEBVIEW_NAV_ERR_SECURITY;
                 break;
 
             case SOUP_STATUS_PROXY_AUTHENTICATION_REQUIRED:
-                type = wxWEB_NAV_ERR_AUTH;
+                type = wxWEBVIEW_NAV_ERR_AUTH;
                 break;
 
             case SOUP_STATUS_REQUEST_TIMEOUT:
-                type = wxWEB_NAV_ERR_CONNECTION;
+                type = wxWEBVIEW_NAV_ERR_CONNECTION;
                 break;
 
             //case SOUP_STATUS_PAYMENT_REQUIRED:
             case SOUP_STATUS_REQUEST_ENTITY_TOO_LARGE:
             case SOUP_STATUS_REQUEST_URI_TOO_LONG:
             case SOUP_STATUS_UNSUPPORTED_MEDIA_TYPE:
-                type = wxWEB_NAV_ERR_REQUEST;
+                type = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
 
             case SOUP_STATUS_BAD_GATEWAY:
             case SOUP_STATUS_SERVICE_UNAVAILABLE:
             case SOUP_STATUS_GATEWAY_TIMEOUT:
-                type = wxWEB_NAV_ERR_CONNECTION;
+                type = wxWEBVIEW_NAV_ERR_CONNECTION;
                 break;
 
             case SOUP_STATUS_HTTP_VERSION_NOT_SUPPORTED:
-                type = wxWEB_NAV_ERR_REQUEST;
+                type = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
             //case SOUP_STATUS_INSUFFICIENT_STORAGE:
             //case SOUP_STATUS_NOT_EXTENDED:
@@ -240,15 +240,15 @@ wxgtk_webview_webkit_error(WebKitWebView*,
             //WEBKIT_NETWORK_ERROR_TRANSPORT:
 
             case WEBKIT_NETWORK_ERROR_UNKNOWN_PROTOCOL:
-                type = wxWEB_NAV_ERR_REQUEST;
+                type = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
 
             case WEBKIT_NETWORK_ERROR_CANCELLED:
-                type = wxWEB_NAV_ERR_USER_CANCELLED;
+                type = wxWEBVIEW_NAV_ERR_USER_CANCELLED;
                 break;
 
             case WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST:
-                type = wxWEB_NAV_ERR_NOT_FOUND;
+                type = wxWEBVIEW_NAV_ERR_NOT_FOUND;
                 break;
         }
     }
@@ -262,7 +262,7 @@ wxgtk_webview_webkit_error(WebKitWebView*,
             //case WEBKIT_POLICY_ERROR_CANNOT_SHOW_URL:
             //case WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE:
             case WEBKIT_POLICY_ERROR_CANNOT_USE_RESTRICTED_PORT:
-                type = wxWEB_NAV_ERR_SECURITY;
+                type = wxWEBVIEW_NAV_ERR_SECURITY;
                 break;
         }
     }
@@ -274,7 +274,7 @@ wxgtk_webview_webkit_error(WebKitWebView*,
     }
     */
 
-    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR,
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR,
                          webKitWindow->GetId(),
                          uri, "");
     event.SetString(description);
@@ -299,7 +299,7 @@ wxgtk_webview_webkit_new_window(WebKitWebView*,
     const gchar* uri = webkit_network_request_get_uri(request);
 
     wxString target = webkit_web_frame_get_name (frame);
-    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NEWWINDOW,
                                        webKitCtrl->GetId(),
                                        wxString( uri, wxConvUTF8 ),
                                        target);
@@ -318,7 +318,7 @@ wxgtk_webview_webkit_title_changed(WebKitWebView*,
                                    gchar *title,
                                    wxWebViewWebKit *webKitCtrl)
 {
-    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED,
                          webKitCtrl->GetId(),
                          webKitCtrl->GetCurrentURL(),
                          "");
@@ -529,7 +529,7 @@ void wxWebViewWebKit::Stop()
 
 void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
 {
-    if (flags & wxWEB_VIEW_RELOAD_NO_CACHE)
+    if (flags & wxWEBVIEW_RELOAD_NO_CACHE)
     {
         webkit_web_view_reload_bypass_cache(m_web_view);
     }
@@ -722,28 +722,28 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     // arbitrary way to map float zoom to our common zoom enum
     if (zoom <= 0.65)
     {
-        return wxWEB_VIEW_ZOOM_TINY;
+        return wxWEBVIEW_ZOOM_TINY;
     }
     else if (zoom > 0.65 && zoom <= 0.90)
     {
-        return wxWEB_VIEW_ZOOM_SMALL;
+        return wxWEBVIEW_ZOOM_SMALL;
     }
     else if (zoom > 0.90 && zoom <= 1.15)
     {
-        return wxWEB_VIEW_ZOOM_MEDIUM;
+        return wxWEBVIEW_ZOOM_MEDIUM;
     }
     else if (zoom > 1.15 && zoom <= 1.45)
     {
-        return wxWEB_VIEW_ZOOM_LARGE;
+        return wxWEBVIEW_ZOOM_LARGE;
     }
     else if (zoom > 1.45)
     {
-        return wxWEB_VIEW_ZOOM_LARGEST;
+        return wxWEBVIEW_ZOOM_LARGEST;
     }
 
     // to shut up compilers, this can never be reached logically
     wxASSERT(false);
-    return wxWEB_VIEW_ZOOM_MEDIUM;
+    return wxWEBVIEW_ZOOM_MEDIUM;
 }
 
 
@@ -752,23 +752,23 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
     // arbitrary way to map our common zoom enum to float zoom
     switch (zoom)
     {
-        case wxWEB_VIEW_ZOOM_TINY:
+        case wxWEBVIEW_ZOOM_TINY:
             SetWebkitZoom(0.6f);
             break;
 
-        case wxWEB_VIEW_ZOOM_SMALL:
+        case wxWEBVIEW_ZOOM_SMALL:
             SetWebkitZoom(0.8f);
             break;
 
-        case wxWEB_VIEW_ZOOM_MEDIUM:
+        case wxWEBVIEW_ZOOM_MEDIUM:
             SetWebkitZoom(1.0f);
             break;
 
-        case wxWEB_VIEW_ZOOM_LARGE:
+        case wxWEBVIEW_ZOOM_LARGE:
             SetWebkitZoom(1.3);
             break;
 
-        case wxWEB_VIEW_ZOOM_LARGEST:
+        case wxWEBVIEW_ZOOM_LARGEST:
             SetWebkitZoom(1.6);
             break;
 
@@ -780,7 +780,7 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
 {
     webkit_web_view_set_full_content_zoom(m_web_view,
-                                          (type == wxWEB_VIEW_ZOOM_TYPE_LAYOUT ?
+                                          (type == wxWEBVIEW_ZOOM_TYPE_LAYOUT ?
                                           TRUE : FALSE));
 }
 
@@ -788,8 +788,8 @@ wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
 {
     gboolean fczoom = webkit_web_view_get_full_content_zoom(m_web_view);
 
-    if (fczoom) return wxWEB_VIEW_ZOOM_TYPE_LAYOUT;
-    else        return wxWEB_VIEW_ZOOM_TYPE_TEXT;
+    if (fczoom) return wxWEBVIEW_ZOOM_TYPE_LAYOUT;
+    else        return wxWEBVIEW_ZOOM_TYPE_TEXT;
 }
 
 bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType) const
@@ -961,7 +961,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
 {
     bool newSearch = false;
     if(text != m_findText || 
-       (flags & wxWEB_VIEW_FIND_MATCH_CASE) != (m_findFlags & wxWEB_VIEW_FIND_MATCH_CASE))
+       (flags & wxWEBVIEW_FIND_MATCH_CASE) != (m_findFlags & wxWEBVIEW_FIND_MATCH_CASE))
     {
         newSearch = true;
         //If it is a new search we need to clear existing highlights
@@ -982,11 +982,11 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
     }
 
     bool wrap = false, matchCase = false, forward = true;
-    if(flags & wxWEB_VIEW_FIND_WRAP)
+    if(flags & wxWEBVIEW_FIND_WRAP)
         wrap = true;
-    if(flags & wxWEB_VIEW_FIND_MATCH_CASE)
+    if(flags & wxWEBVIEW_FIND_MATCH_CASE)
         matchCase = true;
-    if(flags & wxWEB_VIEW_FIND_BACKWARDS)
+    if(flags & wxWEBVIEW_FIND_BACKWARDS)
         forward = false;
 
     if(newSearch)
@@ -1010,7 +1010,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
     }
 
     //Highlight them if needed
-    bool highlight = flags & wxWEB_VIEW_FIND_HIGHLIGHT_RESULT ? true : false;
+    bool highlight = flags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT ? true : false;
     webkit_web_view_set_highlight_text_matches(m_web_view, highlight);     
 
     if(!webkit_web_view_search_text(m_web_view, wxGTK_CONV(text), matchCase, forward, wrap))

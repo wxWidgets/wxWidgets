@@ -54,7 +54,7 @@ public:
     virtual bool CanGoForward() const;
     virtual void GoBack();
     virtual void GoForward();
-    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT);
     virtual void Stop();
     virtual wxString GetPageSource() const;
     virtual wxString GetPageText() const;
@@ -87,7 +87,7 @@ public:
     virtual void Redo();
 
     //Find function
-    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT) 
+    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) 
     { 
         wxUnusedVar(text);
         wxUnusedVar(flags);

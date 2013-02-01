@@ -462,7 +462,7 @@ void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
     if ( !m_webView )
         return;
 
-    if (flags & wxWEB_VIEW_RELOAD_NO_CACHE)
+    if (flags & wxWEBVIEW_RELOAD_NO_CACHE)
     {
         // TODO: test this indeed bypasses the cache
         [[m_webView preferences] setUsesPageCache:NO];
@@ -599,7 +599,7 @@ void wxWebViewWebKit::SetZoomType(wxWebViewZoomType zoomType)
 {
     // there is only one supported zoom type at the moment so this setter
     // does nothing beyond checking sanity
-    wxASSERT(zoomType == wxWEB_VIEW_ZOOM_TYPE_TEXT);
+    wxASSERT(zoomType == wxWEBVIEW_ZOOM_TYPE_TEXT);
 }
 
 wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
@@ -607,7 +607,7 @@ wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
     // for now that's the only one that is supported
     // FIXME: does the default zoom type change depending on webkit versions? :S
     //        Then this will be wrong
-    return wxWEB_VIEW_ZOOM_TYPE_TEXT;
+    return wxWEBVIEW_ZOOM_TYPE_TEXT;
 }
 
 bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType type) const
@@ -617,7 +617,7 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType type) const
         // for now that's the only one that is supported
         // TODO: I know recent versions of webkit support layout zoom too,
         //       check if we can support it
-        case wxWEB_VIEW_ZOOM_TYPE_TEXT:
+        case wxWEBVIEW_ZOOM_TYPE_TEXT:
             return true;
 
         default:
@@ -782,28 +782,28 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     // arbitrary way to map float zoom to our common zoom enum
     if (zoom <= 0.55)
     {
-        return wxWEB_VIEW_ZOOM_TINY;
+        return wxWEBVIEW_ZOOM_TINY;
     }
     else if (zoom > 0.55 && zoom <= 0.85)
     {
-        return wxWEB_VIEW_ZOOM_SMALL;
+        return wxWEBVIEW_ZOOM_SMALL;
     }
     else if (zoom > 0.85 && zoom <= 1.15)
     {
-        return wxWEB_VIEW_ZOOM_MEDIUM;
+        return wxWEBVIEW_ZOOM_MEDIUM;
     }
     else if (zoom > 1.15 && zoom <= 1.45)
     {
-        return wxWEB_VIEW_ZOOM_LARGE;
+        return wxWEBVIEW_ZOOM_LARGE;
     }
     else if (zoom > 1.45)
     {
-        return wxWEB_VIEW_ZOOM_LARGEST;
+        return wxWEBVIEW_ZOOM_LARGEST;
     }
 
     // to shut up compilers, this can never be reached logically
     wxASSERT(false);
-    return wxWEB_VIEW_ZOOM_MEDIUM;
+    return wxWEBVIEW_ZOOM_MEDIUM;
 }
 
 void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
@@ -811,23 +811,23 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
     // arbitrary way to map our common zoom enum to float zoom
     switch (zoom)
     {
-        case wxWEB_VIEW_ZOOM_TINY:
+        case wxWEBVIEW_ZOOM_TINY:
             SetWebkitZoom(0.4f);
             break;
 
-        case wxWEB_VIEW_ZOOM_SMALL:
+        case wxWEBVIEW_ZOOM_SMALL:
             SetWebkitZoom(0.7f);
             break;
 
-        case wxWEB_VIEW_ZOOM_MEDIUM:
+        case wxWEBVIEW_ZOOM_MEDIUM:
             SetWebkitZoom(1.0f);
             break;
 
-        case wxWEB_VIEW_ZOOM_LARGE:
+        case wxWEBVIEW_ZOOM_LARGE:
             SetWebkitZoom(1.3);
             break;
 
-        case wxWEB_VIEW_ZOOM_LARGEST:
+        case wxWEBVIEW_ZOOM_LARGEST:
             SetWebkitZoom(1.6);
             break;
 
@@ -1032,7 +1032,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxString target = wxStringWithNSString([frame name]);
-        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATED,
+        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED,
                              webKitWindow->GetId(),
                              wxStringWithNSString( url ),
                              target);
@@ -1050,7 +1050,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
 
         wxString target = wxStringWithNSString([frame name]);
-        wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_LOADED,
+        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_LOADED,
                              webKitWindow->GetId(),
                              wxStringWithNSString( url ),
                              target);
@@ -1062,7 +1062,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 
 wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 {
-    *out = wxWEB_NAV_ERR_OTHER;
+    *out = wxWEBVIEW_NAV_ERR_OTHER;
 
     if ([[error domain] isEqualToString:NSURLErrorDomain])
     {
@@ -1071,7 +1071,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
             case NSURLErrorCannotFindHost:
             case NSURLErrorFileDoesNotExist:
             case NSURLErrorRedirectToNonExistentLocation:
-                *out = wxWEB_NAV_ERR_NOT_FOUND;
+                *out = wxWEBVIEW_NAV_ERR_NOT_FOUND;
                 break;
 
             case NSURLErrorResourceUnavailable:
@@ -1081,7 +1081,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 #endif
             case NSURLErrorBadURL:
             case NSURLErrorFileIsDirectory:
-                *out = wxWEB_NAV_ERR_REQUEST;
+                *out = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
 
             case NSURLErrorTimedOut:
@@ -1092,12 +1092,12 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
             //case NSURLErrorInternationalRoamingOff:
             //case NSURLErrorCallIsActive:
             //case NSURLErrorDataNotAllowed:
-                *out = wxWEB_NAV_ERR_CONNECTION;
+                *out = wxWEBVIEW_NAV_ERR_CONNECTION;
                 break;
 
             case NSURLErrorCancelled:
             case NSURLErrorUserCancelledAuthentication:
-                *out = wxWEB_NAV_ERR_USER_CANCELLED;
+                *out = wxWEBVIEW_NAV_ERR_USER_CANCELLED;
                 break;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
@@ -1106,7 +1106,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
             case NSURLErrorCannotParseResponse:
 #endif
             case NSURLErrorBadServerResponse:
-                *out = wxWEB_NAV_ERR_REQUEST;
+                *out = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
 
             case NSURLErrorUserAuthenticationRequired:
@@ -1114,11 +1114,11 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
             case NSURLErrorClientCertificateRequired:
 #endif
-                *out = wxWEB_NAV_ERR_AUTH;
+                *out = wxWEBVIEW_NAV_ERR_AUTH;
                 break;
 
             case NSURLErrorNoPermissionsToReadFile:
-				*out = wxWEB_NAV_ERR_SECURITY;
+				*out = wxWEBVIEW_NAV_ERR_SECURITY;
                 break;
 
             case NSURLErrorServerCertificateHasBadDate:
@@ -1126,7 +1126,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
             case NSURLErrorServerCertificateHasUnknownRoot:
             case NSURLErrorServerCertificateNotYetValid:
             case NSURLErrorClientCertificateRejected:
-                *out = wxWEB_NAV_ERR_CERTIFICATE;
+                *out = wxWEBVIEW_NAV_ERR_CERTIFICATE;
                 break;
         }
     }
@@ -1150,7 +1150,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
         wxWebViewNavigationError type;
         wxString description = nsErrorToWxHtmlError(error, &type);
-		wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR,
+		wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR,
 		                     webKitWindow->GetId(),
                              wxStringWithNSString( url ),
                              wxEmptyString);
@@ -1176,7 +1176,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 		wxWebViewNavigationError type;
         wxString description = nsErrorToWxHtmlError(error, &type);
-		wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_ERROR,
+		wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR,
 		                     webKitWindow->GetId(),
                              wxStringWithNSString( url ),
                              wxEmptyString);
@@ -1192,7 +1192,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                                          forFrame:(WebFrame *)frame
 {
     wxString target = wxStringWithNSString([frame name]);
-    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED,
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED,
                          webKitWindow->GetId(),
                          webKitWindow->GetCurrentURL(),
                          target);
@@ -1224,7 +1224,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     webKitWindow->m_busy = true;
     NSString *url = [[request URL] absoluteString];
     wxString target = wxStringWithNSString([frame name]);
-    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NAVIGATING,
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATING,
                          webKitWindow->GetId(),
                          wxStringWithNSString( url ), target);
 
@@ -1251,7 +1251,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     wxUnusedVar(actionInformation);
 
     NSString *url = [[request URL] absoluteString];
-    wxWebViewEvent event(wxEVT_COMMAND_WEB_VIEW_NEWWINDOW,
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NEWWINDOW,
                          webKitWindow->GetId(),
                          wxStringWithNSString( url ), "");
 

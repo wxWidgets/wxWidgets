@@ -11,11 +11,11 @@
 */
 enum wxWebViewZoom
 {
-    wxWEB_VIEW_ZOOM_TINY,
-    wxWEB_VIEW_ZOOM_SMALL,
-    wxWEB_VIEW_ZOOM_MEDIUM, //!< default size
-    wxWEB_VIEW_ZOOM_LARGE,
-    wxWEB_VIEW_ZOOM_LARGEST
+    wxWEBVIEW_ZOOM_TINY,
+    wxWEBVIEW_ZOOM_SMALL,
+    wxWEBVIEW_ZOOM_MEDIUM, //!< default size
+    wxWEBVIEW_ZOOM_LARGE,
+    wxWEBVIEW_ZOOM_LARGEST
 };
 
 /**
@@ -26,12 +26,12 @@ enum wxWebViewZoomType
     /**
         The entire layout scales when zooming, including images
     */
-    wxWEB_VIEW_ZOOM_TYPE_LAYOUT,
+    wxWEBVIEW_ZOOM_TYPE_LAYOUT,
     /**
         Only the text changes in size when zooming, images and other layout
         elements retain their initial size
     */
-    wxWEB_VIEW_ZOOM_TYPE_TEXT
+    wxWEBVIEW_ZOOM_TYPE_TEXT
 };
 
 /**
@@ -40,22 +40,22 @@ enum wxWebViewZoomType
 enum wxWebViewNavigationError
 {
     /** Connection error (timeout, etc.) */
-    wxWEB_NAV_ERR_CONNECTION,
+    wxWEBVIEW_NAV_ERR_CONNECTION,
     /** Invalid certificate */
-    wxWEB_NAV_ERR_CERTIFICATE,
+    wxWEBVIEW_NAV_ERR_CERTIFICATE,
     /** Authentication required */
-    wxWEB_NAV_ERR_AUTH,
+    wxWEBVIEW_NAV_ERR_AUTH,
     /** Other security error */
-    wxWEB_NAV_ERR_SECURITY,
+    wxWEBVIEW_NAV_ERR_SECURITY,
     /** Requested resource not found */
-    wxWEB_NAV_ERR_NOT_FOUND,
+    wxWEBVIEW_NAV_ERR_NOT_FOUND,
     /** Invalid request/parameters (e.g. bad URL, bad protocol,
         unsupported resource type) */
-    wxWEB_NAV_ERR_REQUEST,
+    wxWEBVIEW_NAV_ERR_REQUEST,
     /** The user cancelled (e.g. in a dialog) */
-    wxWEB_NAV_ERR_USER_CANCELLED,
+    wxWEBVIEW_NAV_ERR_USER_CANCELLED,
     /** Another (exotic) type of error that didn't fit in other categories*/
-    wxWEB_NAV_ERR_OTHER
+    wxWEBVIEW_NAV_ERR_OTHER
 };
 
 /**
@@ -64,9 +64,9 @@ enum wxWebViewNavigationError
 enum wxWebViewReloadFlags
 {
     /** Default reload, will access cache */
-    wxWEB_VIEW_RELOAD_DEFAULT,
+    wxWEBVIEW_RELOAD_DEFAULT,
     /** Reload the current view without accessing the cache */
-    wxWEB_VIEW_RELOAD_NO_CACHE
+    wxWEBVIEW_RELOAD_NO_CACHE
 };
 
 /**
@@ -75,22 +75,22 @@ enum wxWebViewReloadFlags
 enum wxWebViewFindFlags
 {
     /** Causes the search to restart when end or beginning reached */
-    wxWEB_VIEW_FIND_WRAP =             0x0001,
+    wxWEBVIEW_FIND_WRAP =             0x0001,
 
     /** Matches an entire word when searching */
-    wxWEB_VIEW_FIND_ENTIRE_WORD =      0x0002,
+    wxWEBVIEW_FIND_ENTIRE_WORD =      0x0002,
 
     /** Match case, i.e. case sensitive searching */
-    wxWEB_VIEW_FIND_MATCH_CASE =       0x0004,
+    wxWEBVIEW_FIND_MATCH_CASE =       0x0004,
 
     /** Highlights the search results */
-    wxWEB_VIEW_FIND_HIGHLIGHT_RESULT = 0x0008,
+    wxWEBVIEW_FIND_HIGHLIGHT_RESULT = 0x0008,
 
     /** Searches for phrase in backward direction */
-    wxWEB_VIEW_FIND_BACKWARDS =        0x0010,
+    wxWEBVIEW_FIND_BACKWARDS =        0x0010,
 
     /** The default flag, which is simple searching */
-    wxWEB_VIEW_FIND_DEFAULT =          0
+    wxWEBVIEW_FIND_DEFAULT =          0
 };
 
 
@@ -209,7 +209,7 @@ public:
 
     @section descriptions Backend Descriptions
 
-    @par wxWEB_VIEW_BACKEND_IE (MSW)
+    @par wxWEBVIEW_BACKEND_IE (MSW)
 
     The IE backend uses Microsoft's Trident rendering engine, specifically the
     version used by the locally installed copy of Internet Explorer. As such it
@@ -221,7 +221,7 @@ public:
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
 
-    @par wxWEB_VIEW_WEBKIT (GTK)
+    @par wxWEBVIEW_WEBKIT (GTK)
 
     Under GTK the WebKit backend uses
     <a href="http://webkitgtk.org/">WebKitGTK+</a>. The current minimum version
@@ -231,7 +231,7 @@ public:
     resources such as images and stylesheets are currently loaded using the
     data:// scheme.
 
-    @par wxWEB_VIEW_WEBKIT (OSX)
+    @par wxWEBVIEW_WEBKIT (OSX)
 
     The OSX WebKit backend uses Apple's
     <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
@@ -244,9 +244,9 @@ public:
     immediately and perform their work in the background. This includes
     functions such as LoadUrl() and Reload(). To receive notification of the
     progress and completion of these functions you need to handle the events
-    that are provided. Specifically @c wxEVT_COMMAND_WEB_VIEW_LOADED notifies
+    that are provided. Specifically @c wxEVT_COMMAND_WEBVIEW_LOADED notifies
     when the page or a sub-frame has finished loading and
-    @c wxEVT_COMMAND_WEB_VIEW_ERROR notifies that an error has occurred.
+    @c wxEVT_COMMAND_WEBVIEW_ERROR notifies that an error has occurred.
 
     @section vfs Virtual File Systems and Custom Schemes
 
@@ -265,32 +265,32 @@ public:
     @c scheme:///C:/example/docs.zip;protocol=zip/main.htm
 
     @beginEventEmissionTable{wxWebViewEvent}
-    @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_NAVIGATING event, generated before trying
+    @event{EVT_WEBVIEW_NAVIGATING(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
        resource. Note that if the displayed HTML document has several frames, one
        such event will be generated per frame.
-    @event{EVT_WEB_VIEW_NAVIGATED(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_NAVIGATED event generated after it was
+    @event{EVT_WEBVIEW_NAVIGATED(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_NAVIGATED event generated after it was
        confirmed that a resource would be requested. This event may not be vetoed.
        Note that if the displayed HTML document has several frames, one such event
        will be generated per frame.
-    @event{EVT_WEB_VIEW_LOADED(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
+    @event{EVT_WEBVIEW_LOADED(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_LOADED event generated when the document
        is fully loaded and displayed. Note that if the displayed HTML document has
        several frames, one such event will be generated per frame.
-    @event{EVT_WEB_VIEW_ERROR(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
+    @event{EVT_WEBVIEW_ERROR(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_ERROR event generated when a navigation
        error occurs.
        The integer associated with this event will be a wxWebNavigationError item.
        The string associated with this event may contain a backend-specific more
        precise error message/code.
-    @event{EVT_WEB_VIEW_NEWWINDOW(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
+    @event{EVT_WEBVIEW_NEWWINDOW(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab.
-    @event{EVT_WEB_VIEW_TITLE_CHANGED(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED event, generated when
+    @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
     @endEventTable
 
@@ -445,11 +445,11 @@ public:
         Reload the currently displayed URL.
         @param flags A bit array that may optionally contain reload options.
     */
-    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT) = 0;
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
         Runs the given javascript code.
-        @note When using wxWEB_VIEW_BACKEND_IE you must wait for the current
+        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
     */
     virtual void RunScript(const wxString& javascript) = 0;
@@ -466,7 +466,7 @@ public:
         @param html    The string that contains the HTML data to display.
         @param baseUrl URL assigned to the HTML data, to be used to resolve
                     relative paths, for instance.
-        @note When using wxWEB_VIEW_BACKEND_IE you must wait for the current
+        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling SetPage().
     */
     virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
@@ -481,8 +481,8 @@ public:
 
     /**
         Stop the current page loading process, if any.
-        May trigger an error event of type @c wxWEB_NAV_ERR_USER_CANCELLED.
-        TODO: make @c wxWEB_NAV_ERR_USER_CANCELLED errors uniform across ports.
+        May trigger an error event of type @c wxWEBVIEW_NAV_ERR_USER_CANCELLED.
+        TODO: make @c wxWEBVIEW_NAV_ERR_USER_CANCELLED errors uniform across ports.
     */
     virtual void Stop() = 0;
 
@@ -613,7 +613,7 @@ public:
     virtual void ClearSelection() = 0;
 
     /**
-        Deletes the current selection. Note that for @c wxWEB_VIEW_BACKEND_WEBKIT
+        Deletes the current selection. Note that for @c wxWEBVIEW_BACKEND_WEBKIT
         the selection must be editable, either through SetEditable or the
         correct HTML attribute.
     */
@@ -678,14 +678,14 @@ public:
                 returned. Then for every time its called with the same search
                 phrase it will return the number of the current match.
         @note This function will restart the search if the flags
-              @c wxWEB_VIEW_FIND_ENTIRE_WORD or @c wxWEB_VIEW_FIND_MATCH_CASE
+              @c wxWEBVIEW_FIND_ENTIRE_WORD or @c wxWEBVIEW_FIND_MATCH_CASE
               are changed, since this will require a new search. To reset the
               search, for example reseting the highlights call the function
               with an empty search phrase. This always returns @c wxNOT_FOUND
               on the OSX WebKit backend.
         @since 2.9.5
     */
-    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEB_VIEW_FIND_DEFAULT) = 0;
+    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT) = 0;
 
     /**
         @name Zoom
@@ -737,32 +737,32 @@ public:
     wxWebView objects.
 
     @beginEventEmissionTable{wxWebViewEvent}
-    @event{EVT_WEB_VIEW_NAVIGATING(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_NAVIGATING event, generated before trying
+    @event{EVT_WEBVIEW_NAVIGATING(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
        resource. Note that if the displayed HTML document has several frames, one
        such event will be generated per frame.
-    @event{EVT_WEB_VIEW_NAVIGATED(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_NAVIGATED event generated after it was
+    @event{EVT_WEBVIEW_NAVIGATED(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_NAVIGATED event generated after it was
        confirmed that a resource would be requested. This event may not be vetoed.
        Note that if the displayed HTML document has several frames, one such event
        will be generated per frame.
-    @event{EVT_WEB_VIEW_LOADED(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_LOADED event generated when the document
+    @event{EVT_WEBVIEW_LOADED(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_LOADED event generated when the document
        is fully loaded and displayed. Note that if the displayed HTML document has
        several frames, one such event will be generated per frame.
-    @event{EVT_WEB_VIEW_ERROR(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_ERROR event generated when a navigation
+    @event{EVT_WEBVIEW_ERROR(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_ERROR event generated when a navigation
        error occurs.
        The integer associated with this event will be a wxWebNavigationError item.
        The string associated with this event may contain a backend-specific more
        precise error message/code.
-    @event{EVT_WEB_VIEW_NEWWINDOW(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_NEWWINDOW event, generated when a new
+    @event{EVT_WEBVIEW_NEWWINDOW(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab.
-    @event{EVT_WEB_VIEW_TITLE_CHANGED(id, func)}
-       Process a @c wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED event, generated when
+    @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
+       Process a @c wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
     @endEventTable
 
@@ -793,9 +793,9 @@ public:
 };
 
 
-wxEventType wxEVT_COMMAND_WEB_VIEW_NAVIGATING;
-wxEventType wxEVT_COMMAND_WEB_VIEW_NAVIGATED;
-wxEventType wxEVT_COMMAND_WEB_VIEW_LOADED;
-wxEventType wxEVT_COMMAND_WEB_VIEW_ERROR;
-wxEventType wxEVT_COMMAND_WEB_VIEW_NEWWINDOW;
-wxEventType wxEVT_COMMAND_WEB_VIEW_TITLE_CHANGED;
+wxEventType wxEVT_COMMAND_WEBVIEW_NAVIGATING;
+wxEventType wxEVT_COMMAND_WEBVIEW_NAVIGATED;
+wxEventType wxEVT_COMMAND_WEBVIEW_LOADED;
+wxEventType wxEVT_COMMAND_WEBVIEW_ERROR;
+wxEventType wxEVT_COMMAND_WEBVIEW_NEWWINDOW;
+wxEventType wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED;

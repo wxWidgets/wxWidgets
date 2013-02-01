@@ -9,8 +9,8 @@
 
 // Based on webviewarchivehandler.h file by Steven Lamerton
 
-#ifndef _WX_WEB_VIEW_FS_HANDLER_H_
-#define _WX_WEB_VIEW_FS_HANDLER_H_
+#ifndef _WX_WEBVIEW_FS_HANDLER_H_
+#define _WX_WEBVIEW_FS_HANDLER_H_
 
 #include "wx/setup.h"
 
@@ -35,4 +35,4 @@ private:
 
 #endif // wxUSE_WEBVIEW
 
-#endif // _WX_WEB_VIEW_FS_HANDLER_H_
+#endif // _WX_WEBVIEW_FS_HANDLER_H_

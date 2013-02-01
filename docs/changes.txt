@@ -540,6 +540,8 @@ INCOMPATIBLE CHANGES SINCE 2.9.4:
   old behaviour.
 - wxWebView::New now takes a string identifier for the backend to be used
   rather than a wxWebViewBackend enum value.
+- wxWebView identifiers of the form WEB_VIEW_* have been renamed to WEBVIEW_*
+  for consistency with the rest of wxWidgets.
 
 All:
 

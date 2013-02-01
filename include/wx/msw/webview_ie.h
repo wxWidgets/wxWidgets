@@ -75,7 +75,7 @@ public:
     virtual void ClearHistory();
     virtual void EnableHistory(bool enable = true);
     virtual void Stop();
-    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT);
 
     virtual wxString GetPageSource() const;
     virtual wxString GetPageText() const;
@@ -108,7 +108,7 @@ public:
     virtual void Redo();
 
     //Find function
-    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT);
+    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT);
 
     //Editing functions
     virtual void SetEditable(bool enable = true);
