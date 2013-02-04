@@ -1424,8 +1424,15 @@ public:
     */
     void SetTextBoxAttr(const wxTextBoxAttr& attr) { m_textBoxAttr = attr; }
 
+    /**
+        Returns @true if no attributes are set.
+    */
+    bool IsDefault() const { return (GetFlags() == 0) && m_textBoxAttr.IsDefault(); }
+
     wxTextBoxAttr    m_textBoxAttr;
 };
+
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxRichTextAttr, wxRichTextAttrArray, WXDLLIMPEXP_RICHTEXT);
 
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxVariant, wxRichTextVariantArray, WXDLLIMPEXP_RICHTEXT);
 
@@ -2010,6 +2017,43 @@ public:
     */
     bool ApplyVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const;
 
+    /**
+        Gets the count for mixed virtual attributes for individual positions within the object.
+        For example, individual characters within a text object may require special highlighting.
+    */
+    int GetVirtualSubobjectAttributesCount(wxRichTextObject* obj) const;
+
+    /**
+        Gets the mixed virtual attributes for individual positions within the object.
+        For example, individual characters within a text object may require special highlighting.
+        The function is passed the count returned by GetVirtualSubobjectAttributesCount.
+    */
+    int GetVirtualSubobjectAttributes(wxRichTextObject* obj, wxArrayInt& positions, wxRichTextAttrArray& attributes) const;
+
+    /**
+        Do we have virtual text for this object? Virtual text allows an application
+        to replace characters in an object for editing and display purposes, for example
+        for highlighting special characters.
+    */
+    bool HasVirtualText(const wxRichTextPlainText* obj) const;
+
+    /**
+        Gets the virtual text for this object.
+    */
+    bool GetVirtualText(const wxRichTextPlainText* obj, wxString& text) const;
+
+    /**
+        Enables virtual attribute processing.
+    */
+
+    void EnableVirtualAttributes(bool b);
+
+    /**
+        Returns @true if virtual attribute processing is enabled.
+    */
+
+    bool GetVirtualAttributesEnabled() const;
+
     wxRichTextBuffer*   m_buffer;
 };
 
@@ -2129,13 +2173,25 @@ public:
     /**
         Returns @true if this object can merge itself with the given one.
     */
-    virtual bool CanMerge(wxRichTextObject* WXUNUSED(object)) const { return false; }
+    virtual bool CanMerge(wxRichTextObject* object, wxRichTextDrawingContext& context) const { return false; }
 
     /**
         Returns @true if this object merged itself with the given one.
         The calling code will then delete the given object.
     */
-    virtual bool Merge(wxRichTextObject* WXUNUSED(object)) { return false; }
+    virtual bool Merge(wxRichTextObject* object, wxRichTextDrawingContext& context) { return false; }
+
+    /**
+        Returns @true if this object can potentially be split, by virtue of having
+        different virtual attributes for individual sub-objects.
+    */
+    virtual bool CanSplit(wxRichTextDrawingContext& context) const;
+
+    /**
+        Returns the final object in the split objects if this object was split due to differences between sub-object virtual attributes.
+        Returns itself if it was not split.
+    */
+    virtual wxRichTextObject* Split(wxRichTextDrawingContext& context);
 
     /**
         Dump object data to the given output stream for debugging.
@@ -2688,7 +2744,7 @@ public:
     /**
         Recursively merges all pieces that can be merged.
     */
-    bool Defragment(const wxRichTextRange& range = wxRICHTEXT_ALL);
+    bool Defragment(wxRichTextDrawingContext& context, const wxRichTextRange& range = wxRICHTEXT_ALL);
 
     /**
         Moves the object recursively, by adding the offset from old to new.
@@ -4169,9 +4225,13 @@ public:
 
     virtual bool IsEmpty() const { return m_text.empty(); }
 
-    virtual bool CanMerge(wxRichTextObject* object) const;
+    virtual bool CanMerge(wxRichTextObject* object, wxRichTextDrawingContext& context) const;
 
-    virtual bool Merge(wxRichTextObject* object);
+    virtual bool Merge(wxRichTextObject* object, wxRichTextDrawingContext& context);
+
+    virtual bool CanSplit(wxRichTextDrawingContext& context) const;
+
+    virtual wxRichTextObject* Split(wxRichTextDrawingContext& context);
 
     virtual void Dump(wxTextOutputStream& stream);
 
@@ -6111,6 +6171,31 @@ public:
         Provides virtual attributes that we can provide.
     */
     virtual bool GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const = 0;
+
+    /**
+        Gets the count for mixed virtual attributes for individual positions within the object.
+        For example, individual characters within a text object may require special highlighting.
+    */
+    virtual int GetVirtualSubobjectAttributesCount(wxRichTextObject* obj) const = 0;
+
+    /**
+        Gets the mixed virtual attributes for individual positions within the object.
+        For example, individual characters within a text object may require special highlighting.
+        Returns the number of virtual attributes found.
+    */
+    virtual int GetVirtualSubobjectAttributes(wxRichTextObject* obj, wxArrayInt& positions, wxRichTextAttrArray& attributes) const = 0;
+
+    /**
+        Do we have virtual text for this object? Virtual text allows an application
+        to replace characters in an object for editing and display purposes, for example
+        for highlighting special characters.
+    */
+    virtual bool HasVirtualText(const wxRichTextPlainText* obj) const = 0;
+
+    /**
+        Gets the virtual text for this object.
+    */
+    virtual bool GetVirtualText(const wxRichTextPlainText* obj, wxString& text) const = 0;
 
     /**
         Sets the name of the handler.

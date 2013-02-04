@@ -355,6 +355,7 @@ void wxRichTextCtrl::Init()
     m_selectionAnchorObject = NULL;
     m_selectionState = wxRichTextCtrlSelectionState_Normal;
     m_editable = true;
+    m_useVirtualAttributes = false;
     m_verticalScrollbarEnabled = true;
     m_caretAtLineStart = false;
     m_dragging = false;
@@ -2941,7 +2942,8 @@ void wxRichTextCtrl::DoWriteText(const wxString& value, int flags)
     wxString valueUnix = wxTextFile::Translate(value, wxTextFileType_Unix);
 
     GetFocusObject()->InsertTextWithUndo(& GetBuffer(), m_caretPosition+1, valueUnix, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
-    GetBuffer().Defragment();
+    wxRichTextDrawingContext context(& GetBuffer());
+    GetBuffer().Defragment(context);
 
     if ( flags & SetValue_SendEvent )
         wxTextCtrl::SendTextUpdatedEvent(this);
@@ -3890,7 +3892,7 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
         dc.SetFont(GetFont());
 
         wxRichTextDrawingContext context(& GetBuffer());
-        GetBuffer().Defragment();
+        GetBuffer().Defragment(context);
         GetBuffer().UpdateRanges();     // If items were deleted, ranges need recalculation
         GetBuffer().Layout(dc, context, availableSpace, availableSpace, flags);
         GetBuffer().Invalidate(wxRICHTEXT_NONE);

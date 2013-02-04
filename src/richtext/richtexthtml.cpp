@@ -75,7 +75,8 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
 
     ClearTemporaryImageLocations();
 
-    buffer->Defragment();
+    wxRichTextDrawingContext context(buffer);
+    buffer->Defragment(context);
 
 #if wxUSE_UNICODE
     wxCSConv* customEncoding = NULL;

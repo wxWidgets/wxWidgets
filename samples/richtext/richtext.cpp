@@ -1181,7 +1181,8 @@ void MyFrame::WriteInitialText()
         cellAttr.GetTextBoxAttr().GetWidth().SetValue(200, wxTEXT_ATTR_UNITS_PIXELS);
         cellAttr.GetTextBoxAttr().GetHeight().SetValue(150, wxTEXT_ATTR_UNITS_PIXELS);
 
-        wxRichTextTable* table = r.WriteTable(3, 2, attr, cellAttr);
+        //wxRichTextTable* table = r.WriteTable(3, 2, attr, cellAttr);
+        wxRichTextTable* table = r.WriteTable(24, 2, attr, cellAttr);
         int i, j;
         for (j = 0; j < table->GetRowCount(); j++)
         {
@@ -2079,6 +2080,31 @@ public:
         Provides virtual attributes that we can provide.
     */
     virtual bool GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const;
+
+    /**
+        Gets the count for mixed virtual attributes for individual positions within the object.
+        For example, individual characters within a text object may require special highlighting.
+    */
+    virtual int GetVirtualSubobjectAttributesCount(wxRichTextObject* WXUNUSED(obj)) const { return 0; }
+
+    /**
+        Gets the mixed virtual attributes for individual positions within the object.
+        For example, individual characters within a text object may require special highlighting.
+        Returns the number of virtual attributes found.
+    */
+    virtual int GetVirtualSubobjectAttributes(wxRichTextObject* WXUNUSED(obj), wxArrayInt& WXUNUSED(positions), wxRichTextAttrArray& WXUNUSED(attributes)) const  { return 0; }
+
+    /**
+        Do we have virtual text for this object? Virtual text allows an application
+        to replace characters in an object for editing and display purposes, for example
+        for highlighting special characters.
+    */
+    virtual bool HasVirtualText(const wxRichTextPlainText* WXUNUSED(obj)) const { return false; }
+
+    /**
+        Gets the virtual text for this object.
+    */
+    virtual bool GetVirtualText(const wxRichTextPlainText* WXUNUSED(obj), wxString& WXUNUSED(text)) const { return false; }
 
     wxColour    m_lockBackgroundColour;
 };

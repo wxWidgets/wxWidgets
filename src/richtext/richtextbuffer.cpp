@@ -1400,7 +1400,7 @@ wxRichTextObject* wxRichTextCompositeObject::GetChildAtPosition(long pos) const
 }
 
 /// Recursively merge all pieces that can be merged.
-bool wxRichTextCompositeObject::Defragment(const wxRichTextRange& range)
+bool wxRichTextCompositeObject::Defragment(wxRichTextDrawingContext& context, const wxRichTextRange& range)
 {
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -1410,24 +1410,85 @@ bool wxRichTextCompositeObject::Defragment(const wxRichTextRange& range)
         {
             wxRichTextCompositeObject* composite = wxDynamicCast(child, wxRichTextCompositeObject);
             if (composite)
-                composite->Defragment();
+                composite->Defragment(context);
 
-            if (node->GetNext())
+            // Optimization: if there are no virtual attributes, we won't need to
+            // to split objects in order to paint individually attributed chunks.
+            // So only merge in this case.
+            if (!context.GetVirtualAttributesEnabled())
             {
-                wxRichTextObject* nextChild = node->GetNext()->GetData();
-                if (child->CanMerge(nextChild) && child->Merge(nextChild))
+                if (node->GetNext())
                 {
-                    nextChild->Dereference();
-                    m_children.Erase(node->GetNext());
-
-                    // Don't set node -- we'll see if we can merge again with the next
-                    // child.
+                    wxRichTextObject* nextChild = node->GetNext()->GetData();
+                    if (child->CanMerge(nextChild, context) && child->Merge(nextChild, context))
+                    {
+                        nextChild->Dereference();
+                        m_children.Erase(node->GetNext());
+                    }
+                    else
+                        node = node->GetNext();
                 }
                 else
                     node = node->GetNext();
             }
             else
-                node = node->GetNext();
+            {
+                // If we might have virtual attributes, we first see if we have to split
+                // objects so that they may be painted with potential virtual attributes,
+                // since text objects can only draw or measure with a single attributes object
+                // at a time.
+                wxRichTextObject* childAfterSplit = child;
+                if (child->CanSplit(context))
+                {
+                    childAfterSplit = child->Split(context);
+                    node = m_children.Find(childAfterSplit);                        
+                }
+
+                if (node->GetNext())
+                {
+                    wxRichTextObject* nextChild = node->GetNext()->GetData();
+                    wxRichTextObjectList::compatibility_iterator nextNode = node->GetNext();
+                    
+                    // First split child and nextChild so we have smaller fragments to merge.
+                    // Then Merge only has to test per-object virtual attributes
+                    // because for an object with all the same sub-object attributes,
+                    // then any general virtual attributes should be merged with sub-objects by
+                    // the implementation.
+                    
+                    wxRichTextObject* nextChildAfterSplit = nextChild;
+
+                    if (nextChildAfterSplit->CanSplit(context))
+                        nextChildAfterSplit = nextChild->Split(context);
+
+                    bool splitNextChild = nextChild != nextChildAfterSplit;
+                        
+                    // See if we can merge this new fragment with (perhaps the first part of) the next object.
+                    // Note that we use nextChild because if we had split nextChild, the first object always
+                    // remains (and further parts are appended). However we must use childAfterSplit since
+                    // it's the last part of a possibly split child.
+                    
+                    if (childAfterSplit->CanMerge(nextChild, context) && childAfterSplit->Merge(nextChild, context))
+                    {
+                        nextChild->Dereference();
+                        m_children.Erase(node->GetNext());
+
+                        // Don't set node -- we'll see if we can merge again with the next
+                        // child. UNLESS we split this or the next child, in which case we know we have to
+                        // move on to the end of the next child.
+                        if (splitNextChild)
+                            node = m_children.Find(nextChildAfterSplit);
+                    }
+                    else
+                    {
+                        if (splitNextChild)
+                            node = m_children.Find(nextChildAfterSplit); // start from the last object in the split
+                        else
+                            node = node->GetNext();
+                    }
+                }
+                else
+                    node = node->GetNext();
+            }
         }
         else
             node = node->GetNext();
@@ -3795,8 +3856,21 @@ wxRichTextRange wxRichTextParagraphLayoutBox::GetInvalidRange(bool wholeParagrap
         wxRichTextParagraph* para1 = GetParagraphAtPosition(range.GetStart());
         if (para1)
             range.SetStart(para1->GetRange().GetStart());
-        // floating layout make all child should be relayout
-        range.SetEnd(GetOwnRange().GetEnd());
+
+        // FIXME: be more intelligent about this. Check if we have floating objects
+        // before the end of the range. But it's not clear how we can in general
+        // tell where it's safe to stop laying out.
+        // Anyway, this code is central to efficiency when laying in floating mode.
+        if (!wxRichTextBuffer::GetFloatingLayoutMode())
+        {
+            wxRichTextParagraph* para2 = GetParagraphAtPosition(range.GetEnd());
+            if (para2)
+                range.SetEnd(para2->GetRange().GetEnd());
+        }
+        else
+            // Floating layout means that all children should be laid out,
+            // because we can't tell how the whole buffer will be affected.
+            range.SetEnd(GetOwnRange().GetEnd());
     }
     return range;
 }
@@ -6313,8 +6387,14 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
 
     int offset = GetRange().GetStart();
 
-    // Replace line break characters with spaces
     wxString str = m_text;
+    if (context.HasVirtualText(this))
+    {
+        if (!context.GetVirtualText(this, str) || str.Length() != m_text.Length())
+            str = m_text;
+    }
+
+    // Replace line break characters with spaces
     wxString toRemove = wxRichTextLineBreakChar;
     str.Replace(toRemove, wxT(" "));
     if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
@@ -6696,6 +6776,12 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     long len = range.GetLength();
 
     wxString str(m_text);
+    if (context.HasVirtualText(this))
+    {
+        if (!context.GetVirtualText(this, str) || str.Length() != m_text.Length())
+            str = m_text;
+    }
+
     wxString toReplace = wxRichTextLineBreakChar;
     str.Replace(toReplace, wxT(" "));
 
@@ -6902,15 +6988,44 @@ wxString wxRichTextPlainText::GetTextForRange(const wxRichTextRange& range) cons
 }
 
 /// Returns true if this object can merge itself with the given one.
-bool wxRichTextPlainText::CanMerge(wxRichTextObject* object) const
+bool wxRichTextPlainText::CanMerge(wxRichTextObject* object, wxRichTextDrawingContext& context) const
 {
-    return object->GetClassInfo() == wxCLASSINFO(wxRichTextPlainText) &&
-        (m_text.empty() || (wxTextAttrEq(GetAttributes(), object->GetAttributes()) && m_properties == object->GetProperties()));
+    // JACS 2013-01-27
+    if (!context.GetVirtualAttributesEnabled())
+    {
+        return object->GetClassInfo() == wxCLASSINFO(wxRichTextPlainText) &&
+            (m_text.empty() || (wxTextAttrEq(GetAttributes(), object->GetAttributes()) && m_properties == object->GetProperties()));
+    }
+    else
+    {
+        wxRichTextPlainText* otherObj = wxDynamicCast(object, wxRichTextPlainText);
+        if (!otherObj || m_text.empty())
+            return false;
+            
+        if (!wxTextAttrEq(GetAttributes(), object->GetAttributes()) || !(m_properties == object->GetProperties()))
+            return false;
+            
+        // Check if differing virtual attributes makes it impossible to merge
+        // these strings.
+        
+        bool hasVirtualAttr1 = context.HasVirtualAttributes((wxRichTextObject*) this);
+        bool hasVirtualAttr2 = context.HasVirtualAttributes((wxRichTextObject*) object);
+        if (!hasVirtualAttr1 && !hasVirtualAttr2)
+            return true;
+        else if (hasVirtualAttr1 != hasVirtualAttr2)
+            return false;
+        else
+        {
+            wxRichTextAttr virtualAttr1 = context.GetVirtualAttributes((wxRichTextObject*) this);
+            wxRichTextAttr virtualAttr2 = context.GetVirtualAttributes((wxRichTextObject*) object);
+            return virtualAttr1 == virtualAttr2;
+        }
+    }
 }
 
 /// Returns true if this object merged itself with the given one.
 /// The calling code will then delete the given object.
-bool wxRichTextPlainText::Merge(wxRichTextObject* object)
+bool wxRichTextPlainText::Merge(wxRichTextObject* object, wxRichTextDrawingContext& WXUNUSED(context))
 {
     wxRichTextPlainText* textObject = wxDynamicCast(object, wxRichTextPlainText);
     wxASSERT( textObject != NULL );
@@ -6923,6 +7038,214 @@ bool wxRichTextPlainText::Merge(wxRichTextObject* object)
     }
     else
         return false;
+}
+
+bool wxRichTextPlainText::CanSplit(wxRichTextDrawingContext& context) const
+{
+    // If this object has any virtual attributes at all, whether for the whole object
+    // or individual ones, we should try splitting it by calling Split.
+    // Must be more than one character in order to be able to split.
+    return m_text.Length() > 1 && context.HasVirtualAttributes((wxRichTextObject*) this);
+}
+
+wxRichTextObject* wxRichTextPlainText::Split(wxRichTextDrawingContext& context)
+{
+    int count = context.GetVirtualSubobjectAttributesCount(this);
+    if (count > 0 && GetParent())
+    {
+        wxRichTextCompositeObject* parent = wxDynamicCast(GetParent(), wxRichTextCompositeObject);
+        wxRichTextObjectList::compatibility_iterator node = parent->GetChildren().Find(this);
+        if (node)
+        {
+            const wxRichTextAttr emptyAttr;
+            wxRichTextObjectList::compatibility_iterator next = node->GetNext();
+    
+            wxArrayInt positions;
+            wxRichTextAttrArray attributes;
+            if (context.GetVirtualSubobjectAttributes(this, positions, attributes) && positions.GetCount() > 0)
+            {
+                wxASSERT(positions.GetCount() == attributes.GetCount());
+                
+                // We will gather up runs of text with the same virtual attributes
+                
+                int len = m_text.Length();
+                int i = 0;
+                
+                // runStart and runEnd represent the accumulated run with a consistent attribute
+                // that hasn't yet been appended
+                int runStart = -1;
+                int runEnd = -1;
+                wxRichTextAttr currentAttr;
+                wxString text = m_text;
+                wxRichTextPlainText* lastPlainText = this;
+                
+                for (i = 0; i < (int) positions.GetCount(); i++)
+                {
+                    int pos = positions[i];
+                    wxASSERT(pos >= 0 && pos < len);
+                    if (pos >= 0 && pos < len)
+                    {
+                        const wxRichTextAttr& attr = attributes[i];
+                        
+                        if (pos == 0)
+                        {
+                            runStart = 0;
+                            currentAttr = attr;
+                        }
+                        // Check if there was a gap from the last known attribute and this.
+                        // In that case, we need to do something with the span of non-attributed text.
+                        else if ((pos-1) > runEnd)
+                        {
+                            if (runEnd == -1)
+                            {
+                                // We hadn't processed anything previously, so the previous run is from the text start
+                                // to just before this position. The current attribute remains empty.
+                                runStart = 0;
+                                runEnd = pos-1;
+                            }
+                            else
+                            {
+                                // If the previous attribute matches the gap's attribute (i.e., no attributes)
+                                // then just extend the run.
+                                if (currentAttr.IsDefault())
+                                {
+                                    runEnd = pos-1;
+                                }
+                                else
+                                {
+                                    // We need to add an object, or reuse the existing one.
+                                    if (runStart == 0)
+                                    {
+                                        lastPlainText = this;
+                                        SetText(text.Mid(runStart, runEnd - runStart + 1));
+                                    }
+                                    else
+                                    {
+                                        wxRichTextPlainText* obj = new wxRichTextPlainText;
+                                        lastPlainText = obj;
+                                        obj->SetAttributes(GetAttributes());
+                                        obj->SetProperties(GetProperties());
+                                        obj->SetParent(parent);
+
+                                        obj->SetText(text.Mid(runStart, runEnd - runStart + 1));
+                                        if (next)
+                                            parent->GetChildren().Insert(next, obj);
+                                        else
+                                            parent->GetChildren().Append(obj);
+                                    }
+                                    
+                                    runStart = runEnd+1;
+                                    runEnd = pos-1;
+
+                                    currentAttr = emptyAttr;
+                                }
+                            }
+                        }
+                            
+                        wxASSERT(runEnd == pos-1);
+
+                        // Now we only have to deal with the previous run
+                        if (currentAttr == attr)
+                        {
+                            // If we still have the same attributes, then we
+                            // simply increase the run size.
+                            runEnd = pos;
+                        }
+                        else
+                        {
+                            if (runEnd >= 0)
+                            {
+                                // We need to add an object, or reuse the existing one.
+                                if (runStart == 0)
+                                {
+                                    lastPlainText = this;
+                                    SetText(text.Mid(runStart, runEnd - runStart + 1));
+                                }
+                                else
+                                {
+                                    wxRichTextPlainText* obj = new wxRichTextPlainText;
+                                    lastPlainText = obj;
+                                    obj->SetAttributes(GetAttributes());
+                                    obj->SetProperties(GetProperties());
+                                    obj->SetParent(parent);
+
+                                    obj->SetText(text.Mid(runStart, runEnd - runStart + 1));
+                                    if (next)
+                                        parent->GetChildren().Insert(next, obj);
+                                    else
+                                        parent->GetChildren().Append(obj);
+                                }
+                            }
+
+                            runStart = pos;
+                            runEnd = pos;
+
+                            currentAttr = attr;
+                        }
+                    }
+                }
+                
+                // We may still have a run to add, and possibly a no-attribute text fragment after that.
+                // If the whole string was already a single attribute (the run covers the whole string), don't split.
+                if ((runStart != -1) && !(runStart == 0 && runEnd == (len-1)))
+                {
+                    // If the current attribute is empty, merge the run with the next fragment
+                    // which by definition (because it's not specified) has empty attributes.
+                    if (currentAttr.IsDefault())
+                        runEnd = (len-1);
+
+                    if (runEnd < (len-1))
+                    {
+                        // We need to add an object, or reuse the existing one.
+                        if (runStart == 0)
+                        {
+                            lastPlainText = this;
+                            SetText(text.Mid(runStart, runEnd - runStart + 1));
+                        }
+                        else
+                        {
+                            wxRichTextPlainText* obj = new wxRichTextPlainText;
+                            lastPlainText = obj;
+                            obj->SetAttributes(GetAttributes());
+                            obj->SetProperties(GetProperties());
+                            obj->SetParent(parent);
+                        
+                            obj->SetText(text.Mid(runStart, runEnd - runStart + 1));
+                            if (next)
+                                parent->GetChildren().Insert(next, obj);
+                            else
+                                parent->GetChildren().Append(obj);                        
+                        }
+                        
+                        runStart = runEnd+1;
+                        runEnd = (len-1);
+                    }
+
+                    // Now the last, non-attributed fragment at the end, if any
+                    if ((runStart < len) && !(runStart == 0 && runEnd == (len-1)))
+                    {
+                        wxASSERT(runStart != 0);
+
+                        wxRichTextPlainText* obj = new wxRichTextPlainText;
+                        obj->SetAttributes(GetAttributes());
+                        obj->SetProperties(GetProperties());
+                        obj->SetParent(parent);
+                        
+                        obj->SetText(text.Mid(runStart, runEnd - runStart + 1));
+                        if (next)
+                            parent->GetChildren().Insert(next, obj);
+                        else
+                            parent->GetChildren().Append(obj);
+                        
+                        lastPlainText = obj;
+                    }
+                }
+                
+                return lastPlainText;
+            }
+        }
+    }
+    return this;
 }
 
 /// Dump to output stream for debugging
@@ -13098,6 +13421,9 @@ void wxTextAttrCollectCommonAttributes(wxTextAttr& currentStyle, const wxTextAtt
 
 WX_DEFINE_OBJARRAY(wxRichTextVariantArray);
 
+// JACS 2013-01-27
+WX_DEFINE_OBJARRAY(wxRichTextAttrArray);
+
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextProperties, wxObject)
 
 bool wxRichTextProperties::operator==(const wxRichTextProperties& props) const
@@ -13411,8 +13737,19 @@ bool wxRichTextSelection::WithinSelection(const wxRichTextRange& range, const wx
 IMPLEMENT_CLASS(wxRichTextDrawingHandler, wxObject)
 IMPLEMENT_CLASS(wxRichTextDrawingContext, wxObject)
 
+wxRichTextDrawingContext::wxRichTextDrawingContext(wxRichTextBuffer* buffer)
+{
+    Init();
+    m_buffer = buffer;
+    if (m_buffer && m_buffer->GetRichTextCtrl())
+        EnableVirtualAttributes(m_buffer->GetRichTextCtrl()->GetVirtualAttributesEnabled());
+}
+
 bool wxRichTextDrawingContext::HasVirtualAttributes(wxRichTextObject* obj) const
 {
+    if (!GetVirtualAttributesEnabled())
+        return false;
+
     wxList::compatibility_iterator node = m_buffer->GetDrawingHandlers().GetFirst();
     while (node)
     {
@@ -13428,6 +13765,9 @@ bool wxRichTextDrawingContext::HasVirtualAttributes(wxRichTextObject* obj) const
 wxRichTextAttr wxRichTextDrawingContext::GetVirtualAttributes(wxRichTextObject* obj) const
 {
     wxRichTextAttr attr;
+    if (!GetVirtualAttributesEnabled())
+        return attr;
+
     // We apply all handlers, so we can may combine several different attributes
     wxList::compatibility_iterator node = m_buffer->GetDrawingHandlers().GetFirst();
     while (node)
@@ -13447,6 +13787,9 @@ wxRichTextAttr wxRichTextDrawingContext::GetVirtualAttributes(wxRichTextObject* 
 
 bool wxRichTextDrawingContext::ApplyVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const
 {
+    if (!GetVirtualAttributesEnabled())
+        return false;
+
     if (HasVirtualAttributes(obj))
     {
         wxRichTextAttr a(GetVirtualAttributes(obj));
@@ -13455,6 +13798,75 @@ bool wxRichTextDrawingContext::ApplyVirtualAttributes(wxRichTextAttr& attr, wxRi
     }
     else
         return false;
+}
+
+int wxRichTextDrawingContext::GetVirtualSubobjectAttributesCount(wxRichTextObject* obj) const
+{
+    if (!GetVirtualAttributesEnabled())
+        return 0;
+
+    wxList::compatibility_iterator node = m_buffer->GetDrawingHandlers().GetFirst();
+    while (node)
+    {
+        wxRichTextDrawingHandler *handler = (wxRichTextDrawingHandler*)node->GetData();
+        int count = handler->GetVirtualSubobjectAttributesCount(obj);
+        if (count > 0)
+            return count;
+
+        node = node->GetNext();
+    }
+    return 0;
+}
+
+int wxRichTextDrawingContext::GetVirtualSubobjectAttributes(wxRichTextObject* obj, wxArrayInt& positions, wxRichTextAttrArray& attributes) const
+{
+    if (!GetVirtualAttributesEnabled())
+        return 0;
+
+    wxList::compatibility_iterator node = m_buffer->GetDrawingHandlers().GetFirst();
+    while (node)
+    {
+        wxRichTextDrawingHandler *handler = (wxRichTextDrawingHandler*)node->GetData();
+        if (handler->GetVirtualSubobjectAttributes(obj, positions, attributes))
+            return positions.GetCount();
+
+        node = node->GetNext();
+    }
+    return 0;
+}
+
+bool wxRichTextDrawingContext::HasVirtualText(const wxRichTextPlainText* obj) const
+{
+    if (!GetVirtualAttributesEnabled())
+        return false;
+
+    wxList::compatibility_iterator node = m_buffer->GetDrawingHandlers().GetFirst();
+    while (node)
+    {
+        wxRichTextDrawingHandler *handler = (wxRichTextDrawingHandler*)node->GetData();
+        if (handler->HasVirtualText(obj))
+            return true;
+
+        node = node->GetNext();
+    }
+    return false;
+}
+
+bool wxRichTextDrawingContext::GetVirtualText(const wxRichTextPlainText* obj, wxString& text) const
+{
+    if (!GetVirtualAttributesEnabled())
+        return false;
+
+    wxList::compatibility_iterator node = m_buffer->GetDrawingHandlers().GetFirst();
+    while (node)
+    {
+        wxRichTextDrawingHandler *handler = (wxRichTextDrawingHandler*)node->GetData();
+        if (handler->GetVirtualText(obj, text))
+            return true;
+
+        node = node->GetNext();
+    }
+    return false;
 }
 
 /// Adds a handler to the end

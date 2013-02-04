@@ -1725,6 +1725,18 @@ public:
     */
     wxRect GetScaledRect(const wxRect& rect) const;
 
+    /**
+        Returns @true if this control can use virtual attributes and virtual text.
+        The default is @false.
+    */
+    bool GetVirtualAttributesEnabled() const;
+
+    /**
+        Pass @true to let the control use virtual attributes.
+        The default is @false.
+    */
+    void EnableVirtualAttributes(bool b);
+
 // Command handlers
 
     /**

@@ -1760,6 +1760,18 @@ public:
     */
     wxRect GetScaledRect(const wxRect& rect) const;
 
+    /**
+        Returns @true if this control can use virtual attributes and virtual text.
+        The default is @false.
+    */
+    bool GetVirtualAttributesEnabled() const { return m_useVirtualAttributes; }
+
+    /**
+        Pass @true to let the control use virtual attributes.
+        The default is @false.
+    */
+    void EnableVirtualAttributes(bool b) { m_useVirtualAttributes = b; }
+
 // Command handlers
 
     /**
@@ -2253,6 +2265,9 @@ protected:
 
     /// Are we editable?
     bool                    m_editable;
+
+    /// Can we use virtual attributes and virtual text?
+    bool                    m_useVirtualAttributes;
 
     /// Is the vertical scrollbar enabled?
     bool                    m_verticalScrollbarEnabled;
