@@ -179,7 +179,7 @@ bool wxProcess::Exists(int pid)
 
 void wxProcess::SetPriority(unsigned priority)
 {
-    wxCHECK_RET( priority >= wxPRIORITY_MIN && priority <= wxPRIORITY_MAX,
+    wxCHECK_RET( priority <= wxPRIORITY_MAX,
                  wxS("Invalid process priority value.") );
 
     m_priority = priority;
