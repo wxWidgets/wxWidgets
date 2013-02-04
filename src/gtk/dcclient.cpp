@@ -731,7 +731,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     }
 
     if (m_gdkwindow)
-        gdk_draw_lines( m_gdkwindow, m_penGC, gpts, n);
+        gdk_draw_lines( m_gdkwindow, m_penGC, (GdkPoint*) gpts, n);
 
     delete[] gpts_alloc;
 }
@@ -777,7 +777,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
             bool originChanged;
             DrawingSetup(gc, originChanged);
 
-            gdk_draw_polygon(m_gdkwindow, gc, true, gdkpoints, n);
+            gdk_draw_polygon(m_gdkwindow, gc, true, (GdkPoint*) gdkpoints, n);
 
             if (originChanged)
                 gdk_gc_set_ts_origin(gc, 0, 0);
@@ -795,7 +795,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                gdkpoints[(i+1)%n].y);
             }
 */
-            gdk_draw_polygon( m_gdkwindow, m_penGC, FALSE, gdkpoints, n );
+            gdk_draw_polygon( m_gdkwindow, m_penGC, FALSE, (GdkPoint*) gdkpoints, n );
 
         }
     }
