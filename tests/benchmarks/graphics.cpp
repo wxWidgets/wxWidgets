@@ -28,6 +28,10 @@ struct GraphicsBenchmarkOptions
         height = 600;
 
         numLines = 10000;
+
+        testBitmaps =
+        testLines =
+        testRectangles = false;
     }
 
     long mapMode,
@@ -35,6 +39,10 @@ struct GraphicsBenchmarkOptions
          width,
          height,
          numLines;
+
+    bool testBitmaps,
+         testLines,
+         testRectangles;
 } opts;
 
 class GraphicsBenchmarkFrame : public wxFrame
@@ -97,6 +105,9 @@ private:
 
     void BenchmarkLines(const char *msg, wxDC& dc)
     {
+        if ( !opts.testLines )
+            return;
+
         if ( opts.mapMode != 0 )
             dc.SetMapMode((wxMappingMode)opts.mapMode);
         if ( opts.penWidth != 0 )
@@ -127,6 +138,9 @@ private:
 
     void BenchmarkRectangles(const char *msg, wxDC& dc)
     {
+        if ( !opts.testRectangles )
+            return;
+
         if ( opts.mapMode != 0 )
             dc.SetMapMode((wxMappingMode)opts.mapMode);
         if ( opts.penWidth != 0 )
@@ -153,6 +167,9 @@ private:
 
     void BenchmarkBitmaps(const char *msg, wxDC& dc)
     {
+        if ( !opts.testBitmaps )
+            return;
+
         if ( opts.mapMode != 0 )
             dc.SetMapMode((wxMappingMode)opts.mapMode);
         if ( opts.penWidth != 0 )
@@ -186,6 +203,9 @@ public:
     {
         static const wxCmdLineEntryDesc desc[] =
         {
+            { wxCMD_LINE_SWITCH, "",  "bitmaps" },
+            { wxCMD_LINE_SWITCH, "",  "lines" },
+            { wxCMD_LINE_SWITCH, "",  "rectangles" },
             { wxCMD_LINE_OPTION, "m", "map-mode", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "p", "pen-width", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "w", "width", "", wxCMD_LINE_VAL_NUMBER },
@@ -210,6 +230,17 @@ public:
             return false;
         if ( parser.Found("L", &opts.numLines) && opts.numLines < 1 )
             return false;
+
+        opts.testBitmaps = parser.Found("bitmaps");
+        opts.testLines = parser.Found("lines");
+        opts.testRectangles = parser.Found("rectangles");
+        if ( !(opts.testBitmaps || opts.testLines || opts.testRectangles) )
+        {
+            // Do everything by default.
+            opts.testBitmaps =
+            opts.testLines =
+            opts.testRectangles = true;
+        }
 
         return true;
     }
