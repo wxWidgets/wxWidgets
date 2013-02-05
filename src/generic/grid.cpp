@@ -6675,17 +6675,28 @@ int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
     // Get the bottom or rightmost line that could match.
     int line = oper.PosToLine(this, pos, true);
 
-    // Go backwards until we find a line that is big enough.
-    while ( oper.GetLineSize(this, line) <= WXGRID_LABEL_EDGE_ZONE )
+    if ( oper.GetLineSize(this, line) > WXGRID_LABEL_EDGE_ZONE )
     {
-        line = oper.GetLineBefore(this, line);
-        if ( line <= 0 )
-            break;
-    }
+        // We know that we are in this line, test whether we are close enough
+        // to start or end border, respectively.
+        if ( abs(oper.GetLineEndPos(this, line) - pos) < WXGRID_LABEL_EDGE_ZONE )
+            return line;
+        else if ( line > 0 &&
+                    pos - oper.GetLineStartPos(this,
+                                               line) < WXGRID_LABEL_EDGE_ZONE )
+        {
+            // We need to find the previous visible line, so skip all the
+            // hidden (of size 0) ones.
+            do
+            {
+                line = oper.GetLineBefore(this, line);
+            }
+            while ( line >= 0 && oper.GetLineSize(this, line) == 0 );
 
-    // If the bottom or right touches then we have a match
-    if ( abs(oper.GetLineEndPos(this, line) - pos) < WXGRID_LABEL_EDGE_ZONE )
-      return line;
+            // It can possibly be -1 here.
+            return line;
+        }
+    }
 
     return -1;
 }
