@@ -29,7 +29,7 @@ struct GraphicsBenchmarkOptions
         width = 800;
         height = 600;
 
-        numLines = 10000;
+        numIters = 1000;
 
         testBitmaps =
         testImages =
@@ -49,7 +49,7 @@ struct GraphicsBenchmarkOptions
          penWidth,
          width,
          height,
-         numLines;
+         numIters;
 
     bool testBitmaps,
          testImages,
@@ -141,7 +141,7 @@ private:
         wxStopWatch sw;
         int x = 0,
             y = 0;
-        for ( int n = 0; n < opts.numLines; n++ )
+        for ( int n = 0; n < opts.numIters; n++ )
         {
             int x1 = rand() % opts.width,
                 y1 = rand() % opts.height;
@@ -155,7 +155,7 @@ private:
         const long t = sw.Time();
 
         wxPrintf("%ld lines done in %ldms = %gus/line\n",
-                 opts.numLines, t, (1000. * t)/opts.numLines);
+                 opts.numIters, t, (1000. * t)/opts.numIters);
     }
 
 
@@ -175,7 +175,7 @@ private:
         fflush(stdout);
 
         wxStopWatch sw;
-        for ( int n = 0; n < opts.numLines; n++ )
+        for ( int n = 0; n < opts.numIters; n++ )
         {
             int x = rand() % opts.width,
                 y = rand() % opts.height;
@@ -186,7 +186,7 @@ private:
         const long t = sw.Time();
 
         wxPrintf("%ld rects done in %ldms = %gus/rect\n",
-                 opts.numLines, t, (1000. * t)/opts.numLines);
+                 opts.numIters, t, (1000. * t)/opts.numIters);
     }
 
     void BenchmarkBitmaps(const wxString& msg, wxDC& dc)
@@ -203,7 +203,7 @@ private:
         fflush(stdout);
 
         wxStopWatch sw;
-        for ( int n = 0; n < opts.numLines; n++ )
+        for ( int n = 0; n < opts.numIters; n++ )
         {
             int x = rand() % opts.width,
                 y = rand() % opts.height;
@@ -214,7 +214,7 @@ private:
         const long t = sw.Time();
 
         wxPrintf("%ld bitmaps done in %ldms = %gus/bitmap\n",
-                 opts.numLines, t, (1000. * t)/opts.numLines);
+                 opts.numIters, t, (1000. * t)/opts.numIters);
     }
 
     void BenchmarkImages(const wxString& msg, wxDC& dc)
@@ -231,8 +231,7 @@ private:
         wxImage image(wxSize(opts.width, opts.height), false /* don't clear */);
 
         wxStopWatch sw;
-        const int numImages = opts.numLines;
-        for ( int n = 0; n < numImages; n++ )
+        for ( int n = 0; n < opts.numIters; n++ )
         {
             image.Clear(n % 256);
             dc.DrawBitmap(image, 0, 0);
@@ -241,8 +240,8 @@ private:
         const long t = sw.Time();
 
         wxPrintf("%ld images done in %ldms = %gus/image or %d FPS\n",
-                 numImages, t, (1000. * t)/numImages,
-                 (1000*numImages + t - 1)/t);
+                 opts.numIters, t, (1000. * t)/opts.numIters,
+                 (1000*opts.numIters + t - 1)/t);
     }
 
     void BenchmarkRawBitmaps(const wxString& msg, wxDC& dc)
@@ -260,8 +259,7 @@ private:
         wxNativePixelData data(bitmap);
 
         wxStopWatch sw;
-        const int numImages = opts.numLines;
-        for ( int n = 0; n < numImages; n++ )
+        for ( int n = 0; n < opts.numIters; n++ )
         {
             const unsigned char c = n % 256;
             {
@@ -289,8 +287,8 @@ private:
         const long t = sw.Time();
 
         wxPrintf("%ld raw bitmaps done in %ldms = %gus/bitmap or %d FPS\n",
-                 numImages, t, (1000. * t)/numImages,
-                 (1000*numImages + t - 1)/t);
+                 opts.numIters, t, (1000. * t)/opts.numIters,
+                 (1000*opts.numIters + t - 1)/t);
     }
 
 
@@ -318,7 +316,8 @@ public:
             { wxCMD_LINE_OPTION, "p", "pen-width", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "w", "width", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "h", "height", "", wxCMD_LINE_VAL_NUMBER },
-            { wxCMD_LINE_OPTION, "L", "lines", "", wxCMD_LINE_VAL_NUMBER },
+            { wxCMD_LINE_OPTION, "I", "images", "", wxCMD_LINE_VAL_NUMBER },
+            { wxCMD_LINE_OPTION, "N", "number-of-iterations", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_NONE },
         };
 
@@ -336,7 +335,7 @@ public:
             return false;
         if ( parser.Found("h", &opts.height) && opts.height < 1 )
             return false;
-        if ( parser.Found("L", &opts.numLines) && opts.numLines < 1 )
+        if ( parser.Found("N", &opts.numIters) && opts.numIters < 1 )
             return false;
 
         opts.testBitmaps = parser.Found("bitmaps");
