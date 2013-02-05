@@ -19,6 +19,33 @@
 #include "wx/stopwatch.h"
 #include "wx/crt.h"
 
+#if wxUSE_GLCANVAS
+    #include "wx/glcanvas.h"
+    #ifdef _MSC_VER
+        #pragma comment(lib, "opengl32")
+    #endif
+#endif // wxUSE_GLCANVAS
+
+#if wxUSE_GLCANVAS
+
+GLuint g_texture;
+wxImage g_image;
+
+void InitializeTexture(int w, int h)
+{
+    glGenTextures(1, &g_texture);
+    glBindTexture(GL_TEXTURE_2D, g_texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    g_image.Create(w, h, false /* don't clear */);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0,
+                 GL_RGB, g_image.GetWidth(), g_image.GetHeight(), 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, g_image.GetData());
+}
+#endif // wxUSE_GLCANVAS
+
 struct GraphicsBenchmarkOptions
 {
     GraphicsBenchmarkOptions()
@@ -42,7 +69,8 @@ struct GraphicsBenchmarkOptions
         useMemory = false;
 
         useDC =
-        useGC = false;
+        useGC =
+        useGL = false;
     }
 
     long mapMode,
@@ -62,7 +90,8 @@ struct GraphicsBenchmarkOptions
          useMemory;
 
     bool useDC,
-         useGC;
+         useGC,
+         useGL;
 } opts;
 
 class GraphicsBenchmarkFrame : public wxFrame
@@ -71,14 +100,55 @@ public:
     GraphicsBenchmarkFrame()
         : wxFrame(NULL, wxID_ANY, "wxWidgets Graphics Benchmark")
     {
-        Connect(wxEVT_PAINT,
-                wxPaintEventHandler(GraphicsBenchmarkFrame::OnPaint));
+        SetClientSize(opts.width, opts.height);
+
+#if wxUSE_GLCANVAS
+        m_glCanvas = NULL;
+
+        if ( opts.useGL )
+        {
+            m_glCanvas = new wxGLCanvas(this, wxID_ANY, NULL,
+                                        wxPoint(0, 0),
+                                        wxSize(opts.width, opts.height));
+            m_glContext = new wxGLContext(m_glCanvas);
+            m_glContext->SetCurrent(*m_glCanvas);
+
+            glViewport(0, 0, opts.width, opts.height);
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            glOrtho(-1, 1, -1, 1, -1, 1);
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+            InitializeTexture(opts.width, opts.height);
+
+            m_glCanvas->Connect(
+                wxEVT_PAINT,
+                wxPaintEventHandler(GraphicsBenchmarkFrame::OnGLRender),
+                NULL,
+                this
+            );
+        }
+        else // Not using OpenGL
+#endif // wxUSE_GLCANVAS
+        {
+            Connect(wxEVT_PAINT,
+                    wxPaintEventHandler(GraphicsBenchmarkFrame::OnPaint));
+        }
+
+        Connect(wxEVT_SIZE, wxSizeEventHandler(GraphicsBenchmarkFrame::OnSize));
 
         m_bitmap.Create(64, 64, 32);
 
         Show();
-        SetClientSize(opts.width, opts.height);
     }
+
+#if wxUSE_GLCANVAS
+    virtual ~GraphicsBenchmarkFrame()
+    {
+        delete m_glContext;
+    }
+#endif // wxUSE_GLCANVAS
 
 private:
     // Just change the image in some (quick) way to show that it's really being
@@ -93,6 +163,54 @@ private:
             n++;
         }
     }
+
+#if wxUSE_GLCANVAS
+    void OnGLRender(wxPaintEvent& WXUNUSED(event))
+    {
+        m_glContext->SetCurrent(*m_glCanvas);
+        glEnable(GL_TEXTURE_2D);
+
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        wxPrintf("Benchmarking %s: ", "OpenGL images");
+        fflush(stdout);
+
+        wxStopWatch sw;
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            UpdateRGB(g_image.GetData(), n);
+
+            glTexSubImage2D(GL_TEXTURE_2D, 0,
+                            0, 0, opts.width, opts.height,
+                            GL_RGB, GL_UNSIGNED_BYTE, g_image.GetData());
+            glBegin(GL_QUADS);
+                glTexCoord2f(0, 0);
+                glVertex2f(-1.0, -1.0);
+
+                glTexCoord2f(0, 1);
+                glVertex2f(-1.0, 1.0);
+
+                glTexCoord2f(1, 1);
+                glVertex2f(1.0, 1.0);
+
+                glTexCoord2f(1, 0);
+                glVertex2f(1.0, -1.0);
+            glEnd();
+
+            m_glCanvas->SwapBuffers();
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld images done in %ldms = %gus/image or %d FPS\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters,
+                 (1000*opts.numIters + t - 1)/t);
+
+        wxTheApp->ExitMainLoop();
+    }
+#endif // wxUSE_GLCANVAS
+
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         if ( opts.usePaint )
@@ -306,6 +424,10 @@ private:
 
 
     wxBitmap m_bitmap;
+#if wxUSE_GLCANVAS
+    wxGLCanvas* m_glCanvas;
+    wxGLContext* m_glContext;
+#endif // wxUSE_GLCANVAS
 };
 
 class GraphicsBenchmarkApp : public wxApp
@@ -325,6 +447,9 @@ public:
             { wxCMD_LINE_SWITCH, "",  "memory" },
             { wxCMD_LINE_SWITCH, "",  "dc" },
             { wxCMD_LINE_SWITCH, "",  "gc" },
+#if wxUSE_GLCANVAS
+            { wxCMD_LINE_SWITCH, "",  "gl" },
+#endif // wxUSE_GLCANVAS
             { wxCMD_LINE_OPTION, "m", "map-mode", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "p", "pen-width", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "w", "width", "", wxCMD_LINE_VAL_NUMBER },
@@ -379,10 +504,24 @@ public:
 
         opts.useDC = parser.Found("dc");
         opts.useGC = parser.Found("gc");
-        if ( !(opts.useDC || opts.useGC) )
+#if wxUSE_GLCANVAS
+        opts.useGL = parser.Found("gl");
+        if ( opts.useGL )
         {
-            opts.useDC =
-            opts.useGC = true;
+            if ( opts.useDC || opts.useGC )
+            {
+                wxLogError("Can't use both OpenGL and normal graphics.");
+                return false;
+            }
+        }
+        else // Not using OpenGL
+#endif // wxUSE_GLCANVAS
+        {
+            if ( !(opts.useDC || opts.useGC) )
+            {
+                opts.useDC =
+                opts.useGC = true;
+            }
         }
 
         return true;
