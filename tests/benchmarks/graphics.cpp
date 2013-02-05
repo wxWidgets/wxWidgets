@@ -203,7 +203,7 @@ private:
 
         const long t = sw.Time();
 
-        wxPrintf("%ld images done in %ldms = %gus/image or %d FPS\n",
+        wxPrintf("%ld images done in %ldms = %gus/image or %ld FPS\n",
                  opts.numIters, t, (1000. * t)/opts.numIters,
                  (1000*opts.numIters + t - 1)/t);
 
@@ -369,7 +369,7 @@ private:
 
         const long t = sw.Time();
 
-        wxPrintf("%ld images done in %ldms = %gus/image or %d FPS\n",
+        wxPrintf("%ld images done in %ldms = %gus/image or %ld FPS\n",
                  opts.numIters, t, (1000. * t)/opts.numIters,
                  (1000*opts.numIters + t - 1)/t);
     }
@@ -417,7 +417,7 @@ private:
 
         const long t = sw.Time();
 
-        wxPrintf("%ld raw bitmaps done in %ldms = %gus/bitmap or %d FPS\n",
+        wxPrintf("%ld raw bitmaps done in %ldms = %gus/bitmap or %ld FPS\n",
                  opts.numIters, t, (1000. * t)/opts.numIters,
                  (1000*opts.numIters + t - 1)/t);
     }
