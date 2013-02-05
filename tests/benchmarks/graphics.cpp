@@ -32,6 +32,13 @@ struct GraphicsBenchmarkOptions
         testBitmaps =
         testLines =
         testRectangles = false;
+
+        usePaint =
+        useClient =
+        useMemory = false;
+
+        useDC =
+        useGC = false;
     }
 
     long mapMode,
@@ -43,6 +50,13 @@ struct GraphicsBenchmarkOptions
     bool testBitmaps,
          testLines,
          testRectangles;
+
+    bool usePaint,
+         useClient,
+         useMemory;
+
+    bool useDC,
+         useGC;
 } opts;
 
 class GraphicsBenchmarkFrame : public wxFrame
@@ -63,18 +77,21 @@ public:
 private:
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
+        if ( opts.usePaint )
         {
             wxPaintDC dc(this);
             wxGCDC gcdc(dc);
             BenchmarkDCAndGC("paint", dc, gcdc);
         }
 
+        if ( opts.useClient )
         {
             wxClientDC dc(this);
             wxGCDC gcdc(dc);
             BenchmarkDCAndGC("client", dc, gcdc);
         }
 
+        if ( opts.useMemory )
         {
             wxBitmap bmp(opts.width, opts.height);
             wxMemoryDC dc(bmp);
@@ -87,8 +104,10 @@ private:
 
     void BenchmarkDCAndGC(const char* dckind, wxDC& dc, wxGCDC& gcdc)
     {
-        BenchmarkAll(wxString::Format("%6s DC", dckind), dc);
-        BenchmarkAll(wxString::Format("%6s GC", dckind), gcdc);
+        if ( opts.useDC )
+            BenchmarkAll(wxString::Format("%6s DC", dckind), dc);
+        if ( opts.useGC )
+            BenchmarkAll(wxString::Format("%6s GC", dckind), gcdc);
     }
 
     void BenchmarkAll(const wxString& msg, wxDC& dc)
@@ -204,6 +223,11 @@ public:
             { wxCMD_LINE_SWITCH, "",  "bitmaps" },
             { wxCMD_LINE_SWITCH, "",  "lines" },
             { wxCMD_LINE_SWITCH, "",  "rectangles" },
+            { wxCMD_LINE_SWITCH, "",  "paint" },
+            { wxCMD_LINE_SWITCH, "",  "client" },
+            { wxCMD_LINE_SWITCH, "",  "memory" },
+            { wxCMD_LINE_SWITCH, "",  "dc" },
+            { wxCMD_LINE_SWITCH, "",  "gc" },
             { wxCMD_LINE_OPTION, "m", "map-mode", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "p", "pen-width", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "w", "width", "", wxCMD_LINE_VAL_NUMBER },
@@ -238,6 +262,24 @@ public:
             opts.testBitmaps =
             opts.testLines =
             opts.testRectangles = true;
+        }
+
+        opts.usePaint = parser.Found("paint");
+        opts.useClient = parser.Found("client");
+        opts.useMemory = parser.Found("memory");
+        if ( !(opts.usePaint || opts.useClient || opts.useMemory) )
+        {
+            opts.usePaint =
+            opts.useClient =
+            opts.useMemory = true;
+        }
+
+        opts.useDC = parser.Found("dc");
+        opts.useGC = parser.Found("gc");
+        if ( !(opts.useDC || opts.useGC) )
+        {
+            opts.useDC =
+            opts.useGC = true;
         }
 
         return true;
