@@ -109,6 +109,7 @@ private:
             dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
 
         wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
 
         wxStopWatch sw;
         int x = 0,
@@ -144,6 +145,7 @@ private:
         dc.SetBrush( *wxRED_BRUSH );
 
         wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
 
         wxStopWatch sw;
         for ( int n = 0; n < opts.numLines; n++ )
@@ -171,6 +173,7 @@ private:
             dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
 
         wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
 
         wxStopWatch sw;
         for ( int n = 0; n < opts.numLines; n++ )
