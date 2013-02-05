@@ -133,7 +133,7 @@ enum AdjustFlags
     @class AutoCaptureMechanism
 
     AutoCaptureMechanism provides an easy-to-use and adjustable facility to
-    take the screenshots for all controls fully automaticly and correctly. It
+    take the screenshots for all controls fully automatically and correctly. It
     also provides an advanced feature to union screenshots of different
     states/modes of a control.
 
@@ -151,17 +151,17 @@ enum AdjustFlags
     @section tag_gui_assumption The Assumption of GUI
 
     Unfortunately, this class have an assumption about the structure of GUI: It
-    must have the follwoing top-down structure:
+    must have the following top-down structure:
 
     wxNotebook->wxPanel->wxSizer->wxControl
 
     That means, in the wxNotebook associated with this class, controls that
     needs to be taken screenshots are placed on different panels(for grouping)
-    and layed out by wxSizers.
+    and laid out by wxSizers.
 
     @section tag_tutorial Tutorial
 
-    In the contruction, you should associate a wxNotebook with this class, in
+    In the construction, you should associate a wxNotebook with this class, in
     that wxNotebook, controls that needs to be captured are placed on different
     panels(for grouping).
 
@@ -172,7 +172,7 @@ enum AdjustFlags
     on the second panel, then a page turn, and so on.
 
     When you are done, simply call CaptureAll(), then screenshots of all
-    controls will be automaticly generated.
+    controls will be automatically generated.
 
     @section tag_autoadjust Make Use of Auto Adjustments
 
