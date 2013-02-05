@@ -81,6 +81,18 @@ public:
     }
 
 private:
+    // Just change the image in some (quick) way to show that it's really being
+    // updated on screen.
+    void UpdateRGB(unsigned char* data, int n)
+    {
+        for ( int y = 0; y < opts.height; ++y )
+        {
+            memset(data, n % 256, 3*opts.width);
+
+            data += 3*opts.width;
+            n++;
+        }
+    }
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         if ( opts.usePaint )
@@ -233,7 +245,7 @@ private:
         wxStopWatch sw;
         for ( int n = 0; n < opts.numIters; n++ )
         {
-            image.Clear(n % 256);
+            UpdateRGB(image.GetData(), n);
             dc.DrawBitmap(image, 0, 0);
         }
 
@@ -261,7 +273,7 @@ private:
         wxStopWatch sw;
         for ( int n = 0; n < opts.numIters; n++ )
         {
-            const unsigned char c = n % 256;
+            unsigned char c = n % 256;
             {
                 wxNativePixelData::Iterator p(data);
                 for ( int y = 0; y < opts.height; ++y )
@@ -278,6 +290,7 @@ private:
 
                     p = rowStart;
                     p.OffsetY(data, 1);
+                    c++;
                 }
             }
 
