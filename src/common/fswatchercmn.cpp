@@ -130,7 +130,7 @@ wxFileSystemWatcherBase::AddAny(const wxFileName& path,
     if ( it == m_watches.end() )
     {
         wxFSWatchInfoMap::value_type val(canonical, watch);
-        m_watches.insert(val).second;
+        m_watches.insert(val);
     }
     else
     {
