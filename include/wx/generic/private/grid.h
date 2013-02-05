@@ -692,7 +692,10 @@ public:
         { return grid->GetColPos(line); }
 
     virtual int GetLineBefore(const wxGrid* grid, int line) const
-        { return grid->GetColAt(wxMax(0, grid->GetColPos(line) - 1)); }
+    {
+        int posBefore = grid->GetColPos(line) - 1;
+        return posBefore >= 0 ? grid->GetColAt(posBefore) : wxNOT_FOUND;
+    }
 
     virtual wxWindow *GetHeaderWindow(wxGrid *grid) const
         { return grid->GetGridColLabelWindow(); }
