@@ -570,6 +570,18 @@ bool wxLocale::Init(int language, int flags)
 #endif // !WX_NO_LOCALE_SUPPORT
 }
 
+namespace
+{
+
+// Small helper function: get the value of the given environment variable and
+// return true only if the variable was found and has non-empty value.
+inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
+{
+    return wxGetEnv(name, value) && !value->empty();
+}
+
+} // anonymous namespace
+
 /*static*/ int wxLocale::GetSystemLanguage()
 {
     CreateLanguagesDB();
@@ -592,9 +604,9 @@ bool wxLocale::Init(int language, int flags)
     str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
     langFull += str.AsString();
 #else
-    if (!wxGetEnv(wxS("LC_ALL"), &langFull) &&
-        !wxGetEnv(wxS("LC_MESSAGES"), &langFull) &&
-        !wxGetEnv(wxS("LANG"), &langFull))
+    if (!wxGetNonEmptyEnvVar(wxS("LC_ALL"), &langFull) &&
+        !wxGetNonEmptyEnvVar(wxS("LC_MESSAGES"), &langFull) &&
+        !wxGetNonEmptyEnvVar(wxS("LANG"), &langFull))
     {
         // no language specified, treat it as English
         return wxLANGUAGE_ENGLISH_US;
