@@ -72,8 +72,13 @@
     @style{wxBU_BOTTOM}
         Aligns the label to the bottom of the button. Windows and GTK+ only.
     @style{wxBU_EXACTFIT}
-        Creates the button as small as possible instead of making it of the
-        standard size (which is the default behaviour ).
+        By default, all buttons are made of at least the standard button size,
+        even if their contents is small enough to fit into a smaller size. This
+        is done for consistency as most platforms use buttons of the same size
+        in the native dialogs, but can be overridden by specifying this flag.
+        If it is given, the button will be made just big enough for its
+        contents. Notice that under MSW the button will still have at least the
+        standard height, even with this style, if it has a non-empty label.
     @style{wxBU_NOTEXT}
         Disables the display of the text label in the button even if it has one
         or its id is one of the standard stock ids with an associated label:
