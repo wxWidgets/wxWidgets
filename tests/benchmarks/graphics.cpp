@@ -14,6 +14,8 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/dcgraph.h"
+#include "wx/image.h"
+#include "wx/rawbmp.h"
 #include "wx/stopwatch.h"
 #include "wx/crt.h"
 
@@ -30,7 +32,9 @@ struct GraphicsBenchmarkOptions
         numLines = 10000;
 
         testBitmaps =
+        testImages =
         testLines =
+        testRawBitmaps =
         testRectangles = false;
 
         usePaint =
@@ -48,7 +52,9 @@ struct GraphicsBenchmarkOptions
          numLines;
 
     bool testBitmaps,
+         testImages,
          testLines,
+         testRawBitmaps,
          testRectangles;
 
     bool usePaint,
@@ -112,9 +118,11 @@ private:
 
     void BenchmarkAll(const wxString& msg, wxDC& dc)
     {
-        BenchmarkLines(msg, dc);
-        BenchmarkRectangles(msg, dc);
         BenchmarkBitmaps(msg, dc);
+        BenchmarkImages(msg, dc);
+        BenchmarkLines(msg, dc);
+        BenchmarkRawBitmaps(msg, dc);
+        BenchmarkRectangles(msg, dc);
     }
 
     void BenchmarkLines(const wxString& msg, wxDC& dc)
@@ -209,6 +217,82 @@ private:
                  opts.numLines, t, (1000. * t)/opts.numLines);
     }
 
+    void BenchmarkImages(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testImages )
+            return;
+
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        wxImage image(wxSize(opts.width, opts.height), false /* don't clear */);
+
+        wxStopWatch sw;
+        const int numImages = opts.numLines;
+        for ( int n = 0; n < numImages; n++ )
+        {
+            image.Clear(n % 256);
+            dc.DrawBitmap(image, 0, 0);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld images done in %ldms = %gus/image or %d FPS\n",
+                 numImages, t, (1000. * t)/numImages,
+                 (1000*numImages + t - 1)/t);
+    }
+
+    void BenchmarkRawBitmaps(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testRawBitmaps )
+            return;
+
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        wxBitmap bitmap(opts.width, opts.height, 24);
+        wxNativePixelData data(bitmap);
+
+        wxStopWatch sw;
+        const int numImages = opts.numLines;
+        for ( int n = 0; n < numImages; n++ )
+        {
+            const unsigned char c = n % 256;
+            {
+                wxNativePixelData::Iterator p(data);
+                for ( int y = 0; y < opts.height; ++y )
+                {
+                    wxNativePixelData::Iterator rowStart = p;
+
+                    for ( int x = 0; x < opts.width; ++x )
+                    {
+                        p.Red() =
+                        p.Green() =
+                        p.Blue() = c;
+                        ++p;
+                    }
+
+                    p = rowStart;
+                    p.OffsetY(data, 1);
+                }
+            }
+
+            dc.DrawBitmap(bitmap, 0, 0);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld raw bitmaps done in %ldms = %gus/bitmap or %d FPS\n",
+                 numImages, t, (1000. * t)/numImages,
+                 (1000*numImages + t - 1)/t);
+    }
+
 
     wxBitmap m_bitmap;
 };
@@ -221,7 +305,9 @@ public:
         static const wxCmdLineEntryDesc desc[] =
         {
             { wxCMD_LINE_SWITCH, "",  "bitmaps" },
+            { wxCMD_LINE_SWITCH, "",  "images" },
             { wxCMD_LINE_SWITCH, "",  "lines" },
+            { wxCMD_LINE_SWITCH, "",  "rawbmp" },
             { wxCMD_LINE_SWITCH, "",  "rectangles" },
             { wxCMD_LINE_SWITCH, "",  "paint" },
             { wxCMD_LINE_SWITCH, "",  "client" },
@@ -254,13 +340,18 @@ public:
             return false;
 
         opts.testBitmaps = parser.Found("bitmaps");
+        opts.testImages = parser.Found("images");
         opts.testLines = parser.Found("lines");
+        opts.testRawBitmaps = parser.Found("rawbmp");
         opts.testRectangles = parser.Found("rectangles");
-        if ( !(opts.testBitmaps || opts.testLines || opts.testRectangles) )
+        if ( !(opts.testBitmaps || opts.testImages || opts.testLines
+                    || opts.testRawBitmaps || opts.testRectangles) )
         {
             // Do everything by default.
             opts.testBitmaps =
+            opts.testImages =
             opts.testLines =
+            opts.testRawBitmaps =
             opts.testRectangles = true;
         }
 
