@@ -40,7 +40,8 @@
 enum {
     // menu IDs
     myID_PROPERTIES = wxID_HIGHEST,
-    myID_INDENTINC,
+    myID_EDIT_FIRST,
+    myID_INDENTINC = myID_EDIT_FIRST,
     myID_INDENTRED,
     myID_FINDNEXT,
     myID_REPLACE,
@@ -73,6 +74,7 @@ enum {
     myID_PAGEPREV,
     myID_PAGENEXT,
     myID_SELECTLINE,
+    myID_EDIT_LAST = myID_SELECTLINE,
     myID_WINDOW_MINIMAL,
 
     // other IDs
