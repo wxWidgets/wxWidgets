@@ -51,8 +51,6 @@ public:
     GraphicsBenchmarkFrame()
         : wxFrame(NULL, wxID_ANY, "wxWidgets Graphics Benchmark")
     {
-        Connect(wxEVT_CREATE,
-                wxWindowCreateEventHandler(GraphicsBenchmarkFrame::OnCreate));
         Connect(wxEVT_PAINT,
                 wxPaintEventHandler(GraphicsBenchmarkFrame::OnPaint));
 
@@ -63,47 +61,44 @@ public:
     }
 
 private:
-    void OnCreate(wxWindowCreateEvent&)
-    {
-        wxClientDC dc(this);
-        BenchmarkLines("dc   client", dc);
-        BenchmarkRectangles("dc   client", dc);
-        BenchmarkBitmaps("dc   client", dc);
-
-        wxGCDC gcdc( dc );
-        BenchmarkLines("gcdc client", gcdc);
-        BenchmarkRectangles("gcdc client", gcdc);
-        BenchmarkBitmaps("gcdc client", gcdc);
-
-        wxBitmap bmp(opts.width, opts.height);
-        wxMemoryDC dc2(bmp);
-        BenchmarkLines("dc   memory", dc2);
-        BenchmarkRectangles("dc   memory", dc2);
-        BenchmarkBitmaps("dc   memory", dc2);
-
-        wxGCDC gcdc2( dc2 );
-        BenchmarkLines("gcdc memory", gcdc2);
-        BenchmarkRectangles("gcdc memory", gcdc2);
-        BenchmarkBitmaps("gcdc memory", gcdc2);
-    }
-
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
-        wxPaintDC dc(this);
-        BenchmarkLines("dc    paint", dc);
-        BenchmarkRectangles("dc    paint", dc);
-        BenchmarkBitmaps("dc    paint", dc);
+        {
+            wxPaintDC dc(this);
+            wxGCDC gcdc(dc);
+            BenchmarkDCAndGC("paint", dc, gcdc);
+        }
 
-        wxGCDC gcdc( dc );
-        BenchmarkLines("gcdc  paint", gcdc);
-        BenchmarkRectangles("gcdc  paint", gcdc);
-        BenchmarkBitmaps("gcdc  paint", gcdc);
+        {
+            wxClientDC dc(this);
+            wxGCDC gcdc(dc);
+            BenchmarkDCAndGC("client", dc, gcdc);
+        }
+
+        {
+            wxBitmap bmp(opts.width, opts.height);
+            wxMemoryDC dc(bmp);
+            wxGCDC gcdc(dc);
+            BenchmarkDCAndGC("memory", dc, gcdc);
+        }
 
         wxTheApp->ExitMainLoop();
     }
 
+    void BenchmarkDCAndGC(const char* dckind, wxDC& dc, wxGCDC& gcdc)
+    {
+        BenchmarkAll(wxString::Format("%6s DC", dckind), dc);
+        BenchmarkAll(wxString::Format("%6s GC", dckind), gcdc);
+    }
 
-    void BenchmarkLines(const char *msg, wxDC& dc)
+    void BenchmarkAll(const wxString& msg, wxDC& dc)
+    {
+        BenchmarkLines(msg, dc);
+        BenchmarkRectangles(msg, dc);
+        BenchmarkBitmaps(msg, dc);
+    }
+
+    void BenchmarkLines(const wxString& msg, wxDC& dc)
     {
         if ( !opts.testLines )
             return;
@@ -113,7 +108,7 @@ private:
         if ( opts.penWidth != 0 )
             dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
 
-        wxPrintf("Benchmarking %s DC: ", msg);
+        wxPrintf("Benchmarking %s: ", msg);
 
         wxStopWatch sw;
         int x = 0,
@@ -136,7 +131,7 @@ private:
     }
 
 
-    void BenchmarkRectangles(const char *msg, wxDC& dc)
+    void BenchmarkRectangles(const wxString& msg, wxDC& dc)
     {
         if ( !opts.testRectangles )
             return;
@@ -148,7 +143,7 @@ private:
 
         dc.SetBrush( *wxRED_BRUSH );
 
-        wxPrintf("Benchmarking %s DC: ", msg);
+        wxPrintf("Benchmarking %s: ", msg);
 
         wxStopWatch sw;
         for ( int n = 0; n < opts.numLines; n++ )
@@ -165,7 +160,7 @@ private:
                  opts.numLines, t, (1000. * t)/opts.numLines);
     }
 
-    void BenchmarkBitmaps(const char *msg, wxDC& dc)
+    void BenchmarkBitmaps(const wxString& msg, wxDC& dc)
     {
         if ( !opts.testBitmaps )
             return;
@@ -175,7 +170,7 @@ private:
         if ( opts.penWidth != 0 )
             dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
 
-        wxPrintf("Benchmarking %s DC: ", msg);
+        wxPrintf("Benchmarking %s: ", msg);
 
         wxStopWatch sw;
         for ( int n = 0; n < opts.numLines; n++ )
