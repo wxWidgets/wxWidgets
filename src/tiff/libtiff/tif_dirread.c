@@ -585,7 +585,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryFloat(TIFF* tif, TIFFDirEntry* d
 				err=TIFFReadDirEntryCheckedLong8(tif,direntry,&m);
 				if (err!=TIFFReadDirEntryErrOk)
 					return(err);
-#if defined(__WIN32__) && (_MSC_VER < 1500)
+#if defined(__WIN32__) && defined(_MSC_VER) && (_MSC_VER < 1500)
 				/*
 				 * XXX: MSVC 6.0 does not support conversion
 				 * of 64-bit integers into floating point
@@ -696,7 +696,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryDouble(TIFF* tif, TIFFDirEntry* 
 				err=TIFFReadDirEntryCheckedLong8(tif,direntry,&m);
 				if (err!=TIFFReadDirEntryErrOk)
 					return(err);
-#if defined(__WIN32__) && (_MSC_VER < 1500)
+#if defined(__WIN32__) && defined(_MSC_VER) && (_MSC_VER < 1500)
 				/*
 				 * XXX: MSVC 6.0 does not support conversion
 				 * of 64-bit integers into floating point
@@ -2321,7 +2321,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryFloatArray(TIFF* tif, TIFFDirEnt
 				{
 					if (tif->tif_flags&TIFF_SWAB)
 						TIFFSwabLong8(ma);
-#if defined(__WIN32__) && (_MSC_VER < 1500)
+#if defined(__WIN32__) && defined(_MSC_VER) && (_MSC_VER < 1500)
 					/*
 					 * XXX: MSVC 6.0 does not support
 					 * conversion of 64-bit integers into
@@ -2564,7 +2564,7 @@ TIFFReadDirEntryDoubleArray(TIFF* tif, TIFFDirEntry* direntry, double** value)
 				{
 					if (tif->tif_flags&TIFF_SWAB)
 						TIFFSwabLong8(ma);
-#if defined(__WIN32__) && (_MSC_VER < 1500)
+#if defined(__WIN32__) && defined(_MSC_VER) && (_MSC_VER < 1500)
 					/*
 					 * XXX: MSVC 6.0 does not support
 					 * conversion of 64-bit integers into
