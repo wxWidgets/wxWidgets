@@ -2026,7 +2026,10 @@ public:
                 return false;
             }
 
-            if ( recurse && !OnRecurse(child) )
+            // Notice that validation should never recurse into top level
+            // children, e.g. some other dialog which might happen to be
+            // currently shown.
+            if ( recurse && !child->IsTopLevel() && !OnRecurse(child) )
             {
                 return false;
             }
