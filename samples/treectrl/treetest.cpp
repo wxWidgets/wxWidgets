@@ -227,8 +227,10 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
            *tree_menu = new wxMenu,
            *item_menu = new wxMenu;
 
+#if wxUSE_LOG
     file_menu->Append(TreeTest_ClearLog, wxT("&Clear log\tCtrl-L"));
     file_menu->AppendSeparator();
+#endif // wxUSE_LOG
     file_menu->Append(TreeTest_About, wxT("&About"));
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, wxT("E&xit\tAlt-X"));
@@ -336,6 +338,16 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     m_textCtrl = new wxTextCtrl(m_panel, wxID_ANY, wxT(""),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
+
+#ifdef __WXMOTIF__
+    // For some reason, we get a memcpy crash in wxLogStream::DoLogStream
+    // on gcc/wxMotif, if we use wxLogTextCtl. Maybe it's just gcc?
+    delete wxLog::SetActiveTarget(new wxLogStderr);
+#else
+    // set our text control as the log target
+    wxLogTextCtrl *logWindow = new wxLogTextCtrl(m_textCtrl);
+    delete wxLog::SetActiveTarget(logWindow);
+#endif
 #endif // wxUSE_LOG
 
     CreateTreeWithDefStyle();
@@ -349,18 +361,6 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     // create a status bar
     CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR
-
-#if wxUSE_LOG
-#ifdef __WXMOTIF__
-    // For some reason, we get a memcpy crash in wxLogStream::DoLogStream
-    // on gcc/wxMotif, if we use wxLogTextCtl. Maybe it's just gcc?
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-#else
-    // set our text control as the log target
-    wxLogTextCtrl *logWindow = new wxLogTextCtrl(m_textCtrl);
-    delete wxLog::SetActiveTarget(logWindow);
-#endif
-#endif // wxUSE_LOG
 }
 
 MyFrame::~MyFrame()
