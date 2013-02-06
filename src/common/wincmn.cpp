@@ -1991,95 +1991,160 @@ void wxWindowBase::MakeModal(bool modal)
 }
 #endif // WXWIN_COMPATIBILITY_2_8
 
+#if wxUSE_VALIDATORS
+
+namespace
+{
+
+// This class encapsulates possibly recursive iteration on window children done
+// by Validate() and TransferData{To,From}Window() and allows to avoid code
+// duplication in all three functions.
+class ValidationTraverserBase
+{
+public:
+    wxEXPLICIT ValidationTraverserBase(wxWindowBase* win)
+        : m_win(static_cast<wxWindow*>(win))
+    {
+    }
+
+    // Traverse all the direct children calling OnDo() on them and also all
+    // grandchildren if wxWS_EX_VALIDATE_RECURSIVELY is used, calling
+    // OnRecurse() for them.
+    bool DoForAllChildren()
+    {
+        const bool recurse = m_win->HasExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
+
+        wxWindowList& children = m_win->GetChildren();
+        for ( wxWindowList::iterator i = children.begin();
+              i != children.end();
+              ++i )
+        {
+            wxWindow* const child = static_cast<wxWindow*>(*i);
+            wxValidator* const validator = child->GetValidator();
+            if ( validator && !OnDo(validator) )
+            {
+                return false;
+            }
+
+            if ( recurse && !OnRecurse(child) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+protected:
+    // Called for each child, validator is guaranteed to be non-NULL.
+    virtual bool OnDo(wxValidator* validator) = 0;
+
+    // Called for each child if we need to recurse into its children.
+    virtual bool OnRecurse(wxWindow* child) = 0;
+
+
+    // The window whose children we're traversing.
+    wxWindow* const m_win;
+
+    wxDECLARE_NO_COPY_CLASS(ValidationTraverserBase);
+};
+
+} // anonymous namespace
+
+#endif // wxUSE_VALIDATORS
+
 bool wxWindowBase::Validate()
 {
 #if wxUSE_VALIDATORS
-    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
-
-    wxWindowList::compatibility_iterator node;
-    for ( node = m_children.GetFirst(); node; node = node->GetNext() )
+    class ValidateTraverser : public ValidationTraverserBase
     {
-        wxWindowBase *child = node->GetData();
-        wxValidator *validator = child->GetValidator();
-        if ( validator && !validator->Validate((wxWindow *)this) )
+    public:
+        wxEXPLICIT ValidateTraverser(wxWindowBase* win)
+            : ValidationTraverserBase(win)
         {
-            return false;
         }
 
-        if ( recurse && !child->Validate() )
+        virtual bool OnDo(wxValidator* validator)
         {
-            return false;
+            return validator->Validate(m_win);
         }
-    }
-#endif // wxUSE_VALIDATORS
 
+        virtual bool OnRecurse(wxWindow* child)
+        {
+            return child->Validate();
+        }
+    };
+
+    return ValidateTraverser(this).DoForAllChildren();
+#else // !wxUSE_VALIDATORS
     return true;
+#endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 }
 
 bool wxWindowBase::TransferDataToWindow()
 {
 #if wxUSE_VALIDATORS
-    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
-
-    wxWindowList::compatibility_iterator node;
-    for ( node = m_children.GetFirst(); node; node = node->GetNext() )
+    class DataToWindowTraverser : public ValidationTraverserBase
     {
-        wxWindowBase *child = node->GetData();
-        wxValidator *validator = child->GetValidator();
-        if ( validator && !validator->TransferToWindow() )
+    public:
+        wxEXPLICIT DataToWindowTraverser(wxWindowBase* win)
+            : ValidationTraverserBase(win)
         {
-            wxLogWarning(_("Could not transfer data to window"));
+        }
+
+        virtual bool OnDo(wxValidator* validator)
+        {
+            if ( !validator->TransferToWindow() )
+            {
+                wxLogWarning(_("Could not transfer data to window"));
 #if wxUSE_LOG
-            wxLog::FlushActive();
+                wxLog::FlushActive();
 #endif // wxUSE_LOG
 
-            return false;
-        }
-
-        if ( recurse )
-        {
-            if ( !child->TransferDataToWindow() )
-            {
-                // warning already given
                 return false;
             }
-        }
-    }
-#endif // wxUSE_VALIDATORS
 
+            return true;
+        }
+
+        virtual bool OnRecurse(wxWindow* child)
+        {
+            return child->TransferDataToWindow();
+        }
+    };
+
+    return DataToWindowTraverser(this).DoForAllChildren();
+#else // !wxUSE_VALIDATORS
     return true;
+#endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 }
 
 bool wxWindowBase::TransferDataFromWindow()
 {
 #if wxUSE_VALIDATORS
-    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
-
-    wxWindowList::compatibility_iterator node;
-    for ( node = m_children.GetFirst(); node; node = node->GetNext() )
+    class DataFromWindowTraverser : public ValidationTraverserBase
     {
-        wxWindow *child = node->GetData();
-        wxValidator *validator = child->GetValidator();
-        if ( validator && !validator->TransferFromWindow() )
+    public:
+        DataFromWindowTraverser(wxWindowBase* win)
+            : ValidationTraverserBase(win)
         {
-            // nop warning here because the application is supposed to give
-            // one itself - we don't know here what might have gone wrongly
-
-            return false;
         }
 
-        if ( recurse )
+        virtual bool OnDo(wxValidator* validator)
         {
-            if ( !child->TransferDataFromWindow() )
-            {
-                // warning already given
-                return false;
-            }
+            return validator->TransferFromWindow();
         }
-    }
-#endif // wxUSE_VALIDATORS
 
+        virtual bool OnRecurse(wxWindow* child)
+        {
+            return child->TransferDataFromWindow();
+        }
+    };
+
+    return DataFromWindowTraverser(this).DoForAllChildren();
+#else // !wxUSE_VALIDATORS
     return true;
+#endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 }
 
 void wxWindowBase::InitDialog()
