@@ -240,6 +240,7 @@ wxCursor::wxCursor(const wxString& filename,
             break;
 
 #ifndef __WXWINCE__
+        case wxBITMAP_TYPE_ANI:
         case wxBITMAP_TYPE_CUR:
             hcursor = ::LoadCursorFromFile(filename.t_str());
             break;

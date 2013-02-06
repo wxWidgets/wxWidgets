@@ -640,6 +640,7 @@ wxMSW:
 - Fix setting initial wxSpinCtrl value outside 0..100 range (joim).
 - Fix changing labels of menu items with bitmaps (Daniel Hyams).
 - Fix appearance of multiline coloured wxCheckBox (Catalin Raceanu).
+- Allow creating wxCursor from ANI files (Catalin Raceanu).
 
 wxOSX/Cocoa:
 

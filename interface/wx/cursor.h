@@ -135,8 +135,9 @@ public:
             platforms:
             - under Windows, it defaults to @c wxBITMAP_TYPE_CUR_RESOURCE.
               Other permitted types under Windows are @c wxBITMAP_TYPE_CUR
-              (to load a cursor from a .cur cursor file) and @c wxBITMAP_TYPE_ICO
-              (to load a cursor from a .ico icon file).
+              (to load a cursor from a .cur cursor file), @c wxBITMAP_TYPE_ICO
+              (to load a cursor from a .ico icon file) and @c wxBITMAP_TYPE_ANI
+              (to load a cursor from a .ani icon file).
             - under MacOS, it defaults to @c wxBITMAP_TYPE_MACCURSOR_RESOURCE;
               when specifying a string resource name, first the color cursors 'crsr' 
               and then the black/white cursors 'CURS' in the resource chain are scanned 
