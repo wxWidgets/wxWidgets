@@ -4509,7 +4509,7 @@ bool wxStyledTextCtrl::GetUseAntiAliasing() {
 }
 
 void wxStyledTextCtrl::AnnotationClearLine(int line) {
-    SendMsg(SCI_ANNOTATIONSETTEXT, line, NULL);
+    SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)NULL);
 }
 
 
