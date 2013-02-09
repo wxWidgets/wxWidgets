@@ -553,7 +553,7 @@ public:
     // NB: As GetLineAt(), currently this is always identity for rows.
     virtual int GetLinePos(const wxGrid *grid, int line) const = 0;
 
-    // Return the index of the line just before the given one.
+    // Return the index of the line just before the given one or wxNOT_FOUND.
     virtual int GetLineBefore(const wxGrid* grid, int line) const = 0;
 
     // Get the row or column label window
@@ -626,7 +626,7 @@ public:
         { return line; } // TODO: implement row reordering
 
     virtual int GetLineBefore(const wxGrid* WXUNUSED(grid), int line) const
-        { return line ? line - 1 : line; }
+        { return line - 1; }
 
     virtual wxWindow *GetHeaderWindow(wxGrid *grid) const
         { return grid->GetGridRowLabelWindow(); }
