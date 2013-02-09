@@ -13,7 +13,9 @@ EMIT(#ifndef _WX_RCDEFS_H)
 EMIT(#define _WX_RCDEFS_H)
 
 #ifdef _MSC_FULL_VER
-EMIT(#define WX_MSC_FULL_VER _MSC_FULL_VER)
+#if _MSC_FULL_VER < 140040130
+EMIT(#define wxUSE_RC_MANIFEST 1)
+#endif
 #endif
 
 #ifdef _M_AMD64

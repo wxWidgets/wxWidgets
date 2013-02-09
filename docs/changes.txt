@@ -496,6 +496,11 @@ Build system changes
   configurations if you need them is to use nmake from the command line with
   WXUNIV=1 or UNICODE=0 command line parameter respectively.
 
+- The manifest is not included by wx/msw/wx.rc any longer for MSVC compiler.
+  If you're using MSVC 6 or 7 which require it, you must explicitly define
+  wxUSE_RC_MANIFEST=1 and also predefine WX_CPU_X86 in the resource compiler
+  options in your project file.
+
 
 Major new features in this release
 ----------------------------------

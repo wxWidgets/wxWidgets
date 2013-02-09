@@ -797,6 +797,8 @@ following to use wxWidgets:
   - _UNICODE unless you want to use deprecated ANSI build of wxWidgets.
   - NDEBUG if you want to build in release mode, i.e. disable asserts.
   - WXUSINGDLL if you are using DLL build of wxWidgets.
+* If using MSVC 6 or 7 only (i.e. not for later versions), also define
+  wxUSE_RC_MANIFEST=1 and WX_CPU_X86.
 * Add $WXWIN/lib/prefix_lib-or-dll to the libraries path. The prefix depends
   on the compiler, by default it is "vc" for MSVC, "gcc" for g++ and so on.
 * Add the list of libraries to link with to the linker input. The exact list
