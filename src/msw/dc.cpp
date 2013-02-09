@@ -149,6 +149,22 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
 
 #endif // wxHAS_RAW_BITMAP
 
+namespace wxMSW
+{
+
+// Wrappers for the dynamically loaded {Set,Get}Layout() functions. They work
+// in exactly the same way as the standard functions and return GDI_ERROR if
+// they're not actually available.
+DWORD GetLayout(HDC hdc);
+DWORD SetLayout(HDC hdc, DWORD dwLayout);
+
+// Create a compatible HDC and copy the layout of the source DC to it. This is
+// necessary in order to draw bitmaps (which are usually blitted from a
+// temporary compatible memory DC to the real target DC) using the same layout.
+HDC CreateCompatibleDCWithLayout(HDC hdc);
+
+} // namespace wxMSW
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -1326,7 +1342,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 #endif // wxUSE_SYSTEM_OPTIONS
         {
             HDC cdc = GetHdc();
-            HDC hdcMem = ::CreateCompatibleDC(GetHdc());
+            HDC hdcMem = wxMSW::CreateCompatibleDCWithLayout(cdc);
             HGDIOBJ hOldBitmap = ::SelectObject(hdcMem, GetHbitmapOf(bmp));
 #if wxUSE_PALETTE
             wxPalette *pal = bmp.GetPalette();
@@ -1358,17 +1374,16 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
             // level
             wxMemoryDC memDC;
 
+            memDC.SetLayoutDirection(GetLayoutDirection());
             memDC.SelectObjectAsSource(bmp);
 
             GetOwner()->Blit(x, y, width, height, &memDC, 0, 0, wxCOPY, useMask);
-
-            memDC.SelectObject(wxNullBitmap);
         }
     }
     else // no mask, just use BitBlt()
     {
         HDC cdc = GetHdc();
-        HDC memdc = ::CreateCompatibleDC( cdc );
+        HDC memdc = wxMSW::CreateCompatibleDCWithLayout( cdc );
         HBITMAP hbitmap = (HBITMAP) bmp.GetHBITMAP( );
 
         wxASSERT_MSG( hbitmap, wxT("bitmap is ok but HBITMAP is NULL?") );
@@ -2267,8 +2282,8 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
             buffer_bmap = (HBITMAP) bitmapCacheEntry->m_bitmap;
 #else // !wxUSE_DC_CACHEING
             // create a temp buffer bitmap and DCs to access it and the mask
-            dc_mask = ::CreateCompatibleDC(hdcSrc);
-            dc_buffer = ::CreateCompatibleDC(GetHdc());
+            dc_mask = wxMSW::CreateCompatibleDCWithLayout(hdcSrc);
+            dc_buffer = wxMSW::CreateCompatibleDCWithLayout(GetHdc());
             buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), dstWidth, dstHeight);
 #endif // wxUSE_DC_CACHEING/!wxUSE_DC_CACHEING
             HGDIOBJ hOldMaskBitmap = ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
@@ -2581,7 +2596,7 @@ wxDCCacheEntry* wxMSWDCImpl::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
 
         node = node->GetNext();
     }
-    WXHDC hDC = (WXHDC) ::CreateCompatibleDC((HDC) dc);
+    WXHDC hDC = (WXHDC) wxMSW::CreateCompatibleDCWithLayout((HDC) dc);
     if ( !hDC)
     {
         wxLogLastError(wxT("CreateCompatibleDC"));
@@ -2813,20 +2828,47 @@ void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
 
 #if wxUSE_DYNLIB_CLASS
 
-static DWORD wxGetDCLayout(HDC hdc)
+namespace wxMSW
+{
+
+DWORD GetLayout(HDC hdc)
 {
     typedef DWORD (WINAPI *GetLayout_t)(HDC);
     static GetLayout_t
         wxDL_INIT_FUNC(s_pfn, GetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
 
-    return s_pfnGetLayout ? s_pfnGetLayout(hdc) : (DWORD)-1;
+    return s_pfnGetLayout ? s_pfnGetLayout(hdc) : GDI_ERROR;
 }
+
+DWORD SetLayout(HDC hdc, DWORD dwLayout)
+{
+    typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
+    static SetLayout_t
+        wxDL_INIT_FUNC(s_pfn, SetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
+
+    return s_pfnSetLayout ? s_pfnSetLayout(hdc, dwLayout) : GDI_ERROR;
+}
+
+HDC CreateCompatibleDCWithLayout(HDC hdc)
+{
+    HDC hdcNew = ::CreateCompatibleDC(hdc);
+    if ( hdcNew )
+    {
+        DWORD dwLayout = wxMSW::GetLayout(hdc);
+        if ( dwLayout != GDI_ERROR )
+            wxMSW::SetLayout(hdcNew, dwLayout);
+    }
+
+    return hdcNew;
+}
+
+} // namespace wxMSW
 
 wxLayoutDirection wxMSWDCImpl::GetLayoutDirection() const
 {
-    DWORD layout = wxGetDCLayout(GetHdc());
+    DWORD layout = wxMSW::GetLayout(GetHdc());
 
-    if ( layout == (DWORD)-1 )
+    if ( layout == GDI_ERROR )
         return wxLayout_Default;
 
     return layout & LAYOUT_RTL ? wxLayout_RightToLeft : wxLayout_LeftToRight;
@@ -2834,12 +2876,6 @@ wxLayoutDirection wxMSWDCImpl::GetLayoutDirection() const
 
 void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
 {
-    typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
-    static SetLayout_t
-        wxDL_INIT_FUNC(s_pfn, SetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
-    if ( !s_pfnSetLayout )
-        return;
-
     if ( dir == wxLayout_Default )
     {
         dir = wxTheApp->GetLayoutDirection();
@@ -2847,16 +2883,40 @@ void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
             return;
     }
 
-    DWORD layout = wxGetDCLayout(GetHdc());
+    DWORD layout = GetLayout(GetHdc());
+    if ( layout == GDI_ERROR )
+        return;
+
     if ( dir == wxLayout_RightToLeft )
         layout |= LAYOUT_RTL;
     else
         layout &= ~LAYOUT_RTL;
 
-    s_pfnSetLayout(GetHdc(), layout);
+    wxMSW::SetLayout(GetHdc(), layout);
 }
 
 #else // !wxUSE_DYNLIB_CLASS
+
+// Provide stubs to avoid ifdefs in the code using these functions.
+namespace wxMSW
+{
+
+DWORD GetLayout(HDC WXUNUSED(hdc))
+{
+    return GDI_ERROR;
+}
+
+DWORD SetLayout(HDC WXUNUSED(hdc), DWORD WXUNUSED(dwLayout))
+{
+    return GDI_ERROR;
+}
+
+HDC CreateCompatibleDCWithLayout(HDC hdc)
+{
+    return ::CreateCompatibleDC(hdc);
+}
+
+} // namespace wxMSW
 
 // we can't provide RTL support without dynamic loading, so stub it out
 wxLayoutDirection wxMSWDCImpl::GetLayoutDirection() const
