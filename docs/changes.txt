@@ -635,6 +635,7 @@ wxGTK:
 
 wxMSW:
 
+- Fix pulsing of bitmaps in focused buttons under Windows 7 (Catalin Raceanu).
 - Fix setting colours for the text part of wxComboBox (Igor Korot).
 - Add support for CURRENCY and SCODE types to OLE Automation helpers (PB).
 - Allow setting LCID used by wxAutomationObject (PB).
