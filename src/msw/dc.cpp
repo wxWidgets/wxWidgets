@@ -2883,7 +2883,7 @@ void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
             return;
     }
 
-    DWORD layout = GetLayout(GetHdc());
+    DWORD layout = wxMSW::GetLayout(GetHdc());
     if ( layout == GDI_ERROR )
         return;
 
