@@ -17,6 +17,12 @@
     If you want to display larger images portably, you may use generic
     implementation wxGenericStaticBitmap declared in \<wx/generic/statbmpg.h\>.
 
+    Notice that for the best results, the size of the control should be the
+    same as the size of the image displayed in it, as happens by default if
+    if it's not resized explicitly. Otherwise, behaviour depends on the
+    platform: under MSW, the bitmap is drawn centred inside the control, while
+    elsewhere it is drawn at the origin of the control.
+
     @library{wxcore}
     @category{ctrl}
     @appearance{staticbitmap}
