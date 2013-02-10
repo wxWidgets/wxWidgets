@@ -410,6 +410,17 @@ public:
     // weird wxToolBar case and MSWGetBgBrushForChild() itself is used by
     // MSWGetBgBrush() to actually find the right brush to use.
 
+    // Adjust the origin for the brush returned by MSWGetBgBrushForChild().
+    //
+    // This needs to be overridden for scrolled windows to ensure that the
+    // scrolling of their associated DC is taken into account.
+    //
+    // Both parameters must be non-NULL.
+    virtual void MSWAdjustBrushOrg(int* WXUNUSED(xOrg),
+                                   int* WXUNUSED(yOrg)) const
+    {
+    }
+
     // The brush returned from here must remain valid at least until the next
     // event loop iteration. Returning 0, as is done by default, indicates
     // there is no custom background brush.

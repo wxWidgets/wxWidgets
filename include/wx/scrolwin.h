@@ -399,12 +399,18 @@ public:
 #endif
     }
 
+#ifdef __WXMSW__
     // we need to return a special WM_GETDLGCODE value to process just the
     // arrows but let the other navigation characters through
-#ifdef __WXMSW__
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     {
         return FilterMSWWindowProc(nMsg, T::MSWWindowProc(nMsg, wParam, lParam));
+    }
+
+    // Take into account the scroll origin.
+    virtual void MSWAdjustBrushOrg(int* xOrg, int* yOrg) const
+    {
+        CalcUnscrolledPosition(*xOrg, *yOrg, xOrg, yOrg);
     }
 #endif // __WXMSW__
 

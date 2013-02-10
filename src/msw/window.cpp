@@ -4959,7 +4959,11 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child)
 
         ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
 
-        if ( !::SetBrushOrgEx((HDC)hDC, -rc.left, -rc.top, NULL) )
+        int x = rc.left,
+            y = rc.top;
+        MSWAdjustBrushOrg(&x, &y);
+
+        if ( !::SetBrushOrgEx((HDC)hDC, -x, -y, NULL) )
         {
             wxLogLastError(wxT("SetBrushOrgEx(bg brush)"));
         }
