@@ -648,6 +648,7 @@ wxMSW:
 - Fix appearance of multiline coloured wxCheckBox (Catalin Raceanu).
 - Allow creating wxCursor from ANI files (Catalin Raceanu).
 - Add wxIcon::CreateFromHICON() (troelsk).
+- Improve wxCURSOR_RIGHT_ARROW appearance (DoltAlya).
 
 wxOSX/Cocoa:
 

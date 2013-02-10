@@ -50,7 +50,6 @@ WXCURSOR_PBRUSH         CURSOR  DISCARDABLE     "wx/msw/pbrush.cur"
 WXCURSOR_PLEFT          CURSOR  DISCARDABLE     "wx/msw/pntleft.cur"
 WXCURSOR_PRIGHT         CURSOR  DISCARDABLE     "wx/msw/pntright.cur"
 WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
-WXCURSOR_RIGHT_ARROW    CURSOR  DISCARDABLE     "wx/msw/rightarr.cur"
 WXCURSOR_CROSS          CURSOR  DISCARDABLE     "wx/msw/cross.cur"
 
 
