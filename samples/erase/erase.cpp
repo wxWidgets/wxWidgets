@@ -362,6 +362,8 @@ MyCanvas::MyCanvas(wxFrame *parent)
 
 void MyCanvas::DoPaint(wxDC& dc)
 {
+    PrepareDC(dc);
+
     if ( m_eraseBgInPaint )
     {
         dc.SetBackground(*wxLIGHT_GREY);
@@ -391,15 +393,11 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ( m_useBuffer )
     {
         wxAutoBufferedPaintDC dc(this);
-        PrepareDC(dc);
-
         DoPaint(dc);
     }
     else
     {
         wxPaintDC dc(this);
-        PrepareDC(dc);
-
         DoPaint(dc);
     }
 }
