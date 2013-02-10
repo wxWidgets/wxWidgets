@@ -156,3 +156,14 @@ bool wxIcon::LoadFile(const wxString& filename,
 
     return handler->Load(this, filename, type, desiredWidth, desiredHeight);
 }
+
+bool wxIcon::CreateFromHICON(WXHICON icon)
+{
+    SetHICON(icon);
+    if ( !IsOk() )
+        return false;
+
+    SetSize(wxGetHiconSize(icon));
+
+    return true;
+}

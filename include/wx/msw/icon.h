@@ -65,6 +65,8 @@ public:
                           wxBitmapType type = wxICON_DEFAULT_TYPE,
                           int desiredWidth = -1, int desiredHeight = -1);
 
+    bool CreateFromHICON(WXHICON icon);
+
     // implementation only from now on
     wxIconRefData *GetIconData() const { return (wxIconRefData *)m_refData; }
 

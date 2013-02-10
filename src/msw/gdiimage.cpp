@@ -432,9 +432,6 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
 {
     icon->UnRef();
 
-    // actual size
-    wxSize size;
-
     HICON hicon = NULL;
 
     // Parse the filename: it may be of the form "filename;n" in order to
@@ -515,25 +512,23 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
         return false;
     }
 
-    size = wxGetHiconSize(hicon);
+    if ( !icon->CreateFromHICON(hicon) )
+        return false;
 
-    if ( (desiredWidth != -1 && desiredWidth != size.x) ||
-         (desiredHeight != -1 && desiredHeight != size.y) )
+    if ( (desiredWidth != -1 && desiredWidth != icon->GetWidth()) ||
+         (desiredHeight != -1 && desiredHeight != icon->GetHeight()) )
     {
         wxLogTrace(wxT("iconload"),
                    wxT("Returning false from wxICOFileHandler::Load because of the size mismatch: actual (%d, %d), requested (%d, %d)"),
-                   size.x, size.y,
+                   icon->GetWidth(), icon->GetHeight(),
                    desiredWidth, desiredHeight);
 
-        ::DestroyIcon(hicon);
+        icon->UnRef();
 
         return false;
     }
 
-    icon->SetHICON((WXHICON)hicon);
-    icon->SetSize(size.x, size.y);
-
-    return icon->IsOk();
+    return true;
 }
 
 bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
@@ -593,12 +588,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
     }
 #endif
 
-    wxSize size = wxGetHiconSize(hicon);
-    icon->SetSize(size.x, size.y);
-
-    icon->SetHICON((WXHICON)hicon);
-
-    return icon->IsOk();
+    return icon->CreateFromHICON((WXHICON)hicon);
 }
 
 #if wxUSE_PNG_RESOURCE_HANDLER
