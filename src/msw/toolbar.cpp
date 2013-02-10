@@ -1695,7 +1695,9 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 // toolbar icons with comctl32.dll < 6.0.
 void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 {
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
     MSWDoEraseBackground(event.GetDC()->GetHDC());
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
