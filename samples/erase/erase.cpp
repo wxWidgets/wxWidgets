@@ -365,7 +365,11 @@ void MyCanvas::DoPaint(wxDC& dc)
     if ( m_eraseBgInPaint )
     {
         dc.SetBackground(*wxLIGHT_GREY);
-        dc.Clear();
+
+        // Erase the entire virtual area, not just the client area.
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(GetBackgroundColour());
+        dc.DrawRectangle(GetVirtualSize());
 
         dc.DrawText("Background erased in OnPaint", 65, 110);
     }
