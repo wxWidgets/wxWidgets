@@ -2482,8 +2482,19 @@ void wxAuiNotebook::OnTabClicked(wxAuiNotebookEvent& evt)
     SetSelectionToWindow(wnd);
 }
 
-void wxAuiNotebook::OnTabBgDClick(wxAuiNotebookEvent& WXUNUSED(evt))
+void wxAuiNotebook::OnTabBgDClick(wxAuiNotebookEvent& evt)
 {
+    // select the tab ctrl which received the db click
+    int selection;
+    wxWindow* wnd;
+    wxAuiTabCtrl* ctrl = (wxAuiTabCtrl*)evt.GetEventObject();
+    if (   (ctrl != NULL)
+        && ((selection = ctrl->GetActivePage()) != wxNOT_FOUND)
+        && ((wnd = ctrl->GetWindowFromIdx(selection)) != NULL))
+    {
+        SetSelectionToWindow(wnd);
+    }
+
     // notify owner that the tabbar background has been double-clicked
     wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, m_windowId);
     e.SetEventObject(this);
