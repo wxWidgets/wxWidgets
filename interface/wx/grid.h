@@ -968,6 +968,7 @@ public:
                             wxDC& dc,
                             wxRect& rect) const = 0;
 };
+
 /**
     Common base class for row and column headers renderers.
 
@@ -1698,6 +1699,87 @@ public:
     virtual bool CanHaveAttributes();
 };
 
+
+
+enum wxGridTableRequest
+{
+    wxGRIDTABLE_REQUEST_VIEW_GET_VALUES = 2000,
+    wxGRIDTABLE_REQUEST_VIEW_SEND_VALUES,
+    wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+    wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
+    wxGRIDTABLE_NOTIFY_ROWS_DELETED,
+    wxGRIDTABLE_NOTIFY_COLS_INSERTED,
+    wxGRIDTABLE_NOTIFY_COLS_APPENDED,
+    wxGRIDTABLE_NOTIFY_COLS_DELETED
+};
+
+
+/**
+   @class wxGridTableMessage
+
+   A simple class used to pass messages from the table to the grid.
+
+    @library{wxadv}
+    @category{grid}
+*/
+class wxGridTableMessage
+{
+public:
+    wxGridTableMessage();
+    wxGridTableMessage( wxGridTableBase *table, int id,
+                        int comInt1 = -1,
+                        int comInt2 = -1 );
+
+    void SetTableObject( wxGridTableBase *table );
+    wxGridTableBase * GetTableObject() const;
+    void SetId( int id );
+    int  GetId();
+    void SetCommandInt( int comInt1 );
+    int  GetCommandInt();
+    void SetCommandInt2( int comInt2 );
+    int  GetCommandInt2();
+};
+
+
+
+/**
+   @class wxGridStringTable
+
+   Simplest type of data table for a grid for small tables of strings
+   that are stored in memory
+*/
+class wxGridStringTable : public wxGridTableBase
+{
+public:
+    wxGridStringTable();
+    wxGridStringTable( int numRows, int numCols );
+
+    // these are pure virtual in wxGridTableBase
+    virtual int GetNumberRows();
+    virtual int GetNumberCols();
+    virtual wxString GetValue( int row, int col );
+    virtual void SetValue( int row, int col, const wxString& value );
+
+    // overridden functions from wxGridTableBase
+    void Clear();
+    bool InsertRows( size_t pos = 0, size_t numRows = 1 );
+    bool AppendRows( size_t numRows = 1 );
+    bool DeleteRows( size_t pos = 0, size_t numRows = 1 );
+    bool InsertCols( size_t pos = 0, size_t numCols = 1 );
+    bool AppendCols( size_t numCols = 1 );
+    bool DeleteCols( size_t pos = 0, size_t numCols = 1 );
+
+    void SetRowLabelValue( int row, const wxString& );
+    void SetColLabelValue( int col, const wxString& );
+    wxString GetRowLabelValue( int row );
+    wxString GetColLabelValue( int col );
+};
+
+
+
+
+
+
 /**
     @class wxGridSizesInfo
 
@@ -2013,6 +2095,11 @@ public:
     */
     bool SetTable(wxGridTableBase* table, bool takeOwnership = false,
                   wxGridSelectionModes selmode = wxGridSelectCells);
+
+    /**
+       Receive and handle a message from the table.
+    */
+    bool ProcessTableMessage(wxGridTableMessage& msg);
 
     //@}
 
@@ -4821,4 +4908,27 @@ public:
     */
     void SetRow(int row);
 };
+
+
+wxEventType wxEVT_GRID_CELL_LEFT_CLICK;
+wxEventType wxEVT_GRID_CELL_RIGHT_CLICK;
+wxEventType wxEVT_GRID_CELL_LEFT_DCLICK;
+wxEventType wxEVT_GRID_CELL_RIGHT_DCLICK;
+wxEventType wxEVT_GRID_LABEL_LEFT_CLICK;
+wxEventType wxEVT_GRID_LABEL_RIGHT_CLICK;
+wxEventType wxEVT_GRID_LABEL_LEFT_DCLICK;
+wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK;
+wxEventType wxEVT_GRID_ROW_SIZE;
+wxEventType wxEVT_GRID_COL_SIZE;
+wxEventType wxEVT_GRID_RANGE_SELECT;
+wxEventType wxEVT_GRID_CELL_CHANGING;
+wxEventType wxEVT_GRID_CELL_CHANGED;
+wxEventType wxEVT_GRID_SELECT_CELL;
+wxEventType wxEVT_GRID_EDITOR_SHOWN;
+wxEventType wxEVT_GRID_EDITOR_HIDDEN;
+wxEventType wxEVT_GRID_EDITOR_CREATED;
+wxEventType wxEVT_GRID_CELL_BEGIN_DRAG;
+wxEventType wxEVT_GRID_COL_MOVE;
+wxEventType wxEVT_GRID_COL_SORT;
+wxEventType wxEVT_GRID_TABBING;
 
