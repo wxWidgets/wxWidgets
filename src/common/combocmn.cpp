@@ -2050,21 +2050,23 @@ void wxComboCtrlBase::OnCharEvent(wxKeyEvent& event)
 
 void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
-// On Mac, this leads to infinite recursion and eventually a crash
-#ifdef __WXMAC__
-    wxUnusedVar(event);
-#else
+    // On Mac, setting focus here leads to infinite recursion and eventually
+    // a crash due to the SetFocus call producing another event.
+    // Handle Mac in OnIdleEvent using m_resetFocus.
+    
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
-        wxWindow* tc = GetTextCtrl();
-        if ( tc && tc != DoFindFocus() )
+        if ( GetTextCtrl() && !GetTextCtrl()->HasFocus() )
         {
-            tc->SetFocus();
+#ifdef __WXMAC__
+            m_resetFocus = true;
+#else
+            GetTextCtrl()->SetFocus();
+#endif
         }
     }
-
+    
     Refresh();
-#endif
 }
 
 void wxComboCtrlBase::OnIdleEvent( wxIdleEvent& WXUNUSED(event) )
@@ -2072,9 +2074,8 @@ void wxComboCtrlBase::OnIdleEvent( wxIdleEvent& WXUNUSED(event) )
     if ( m_resetFocus )
     {
         m_resetFocus = false;
-        wxWindow* tc = GetTextCtrl();
-        if ( tc )
-            tc->SetFocus();
+        if ( GetTextCtrl() )
+            GetTextCtrl()->SetFocus();
     }
 }
 
