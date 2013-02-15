@@ -67,8 +67,6 @@ static Widget GetXmText( const wxComboBox* cb )
 void  wxComboBoxCallback (Widget w, XtPointer clientData,
                           XmComboBoxCallbackStruct * cbs);
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
-
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxString& value,
                         const wxPoint& pos,
