@@ -989,9 +989,9 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 {
     wxString fontspec;
     fontspec.Printf(wxT("-*-%s-*-*-*-*-*-*-*-*-*-*-%s-%s"),
-                    !info.facename ? wxT("*") : info.facename.c_str(),
-                    info.xregistry.c_str(),
-                    info.xencoding.c_str());
+                    info.facename.empty() ? wxString("*") : info.facename,
+                    info.xregistry,
+                    info.xencoding);
 
     return wxTestFontSpec(fontspec);
 }
