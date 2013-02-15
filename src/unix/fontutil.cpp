@@ -29,12 +29,12 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/font.h" // wxFont enums
-    #include "wx/encinfo.h"
     #include "wx/hash.h"
     #include "wx/utils.h"       // for wxGetDisplay()
     #include "wx/module.h"
 #endif // PCH
 
+#include "wx/encinfo.h"
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
 #include "wx/fontenum.h"
