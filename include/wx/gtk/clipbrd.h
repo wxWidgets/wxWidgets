@@ -118,6 +118,9 @@ private:
     GtkWidget *m_clipboardWidget;  // for getting and offering data
     GtkWidget *m_targetsWidget;    // for getting list of supported formats
 
+    // ID of the connection to "selection_get" signal, initially 0.
+    unsigned long m_idSelectionGetHandler;
+
     bool m_open;
     bool m_formatSupported;
 
