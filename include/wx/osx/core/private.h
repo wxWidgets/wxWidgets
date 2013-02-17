@@ -311,7 +311,8 @@ public :
     virtual wxBitmap    GetBitmap() const = 0;
     virtual void        SetBitmap( const wxBitmap& bitmap ) = 0;
     virtual void        SetBitmapPosition( wxDirection dir ) = 0;
-    virtual void        SetupTabs( const wxNotebook &notebook ) =0;
+    virtual void        SetupTabs( const wxNotebook &notebook ) {};
+    virtual int         TabHitTest( const wxPoint & WXUNUSED(pt), long *flags ) {*flags=1; return -1;};
     virtual void        GetBestRect( wxRect *r ) const = 0;
     virtual bool        IsEnabled() const = 0;
     virtual void        Enable( bool enable ) = 0;
