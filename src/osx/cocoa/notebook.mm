@@ -260,6 +260,26 @@ public:
             }
         }
     }
+
+    int TabHitTest(const wxPoint & pt, long* flags)
+    {
+        int retval = wxNOT_FOUND;
+        
+        NSPoint nspt = wxToNSPoint( m_osxView, pt );
+        
+        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        
+        NSTabViewItem* hitItem = [slf tabViewItemAtPoint:nspt];
+        
+        if (!hitItem) {
+            *flags = wxBK_HITTEST_NOWHERE;
+        } else {
+            retval = [slf indexOfTabViewItem:hitItem];
+            *flags = wxBK_HITTEST_ONLABEL;
+        }
+        
+        return retval; 
+    }
 };
 
 
