@@ -1090,7 +1090,7 @@ void wxHtmlWindow::DoEraseBackground(wxDC& dc)
     if ( m_bmpBg.IsOk() )
     {
         // draw the background bitmap tiling it over the entire window area
-        const wxSize sz = GetClientSize();
+        const wxSize sz = GetVirtualSize();
         const wxSize sizeBmp(m_bmpBg.GetWidth(), m_bmpBg.GetHeight());
         for ( wxCoord x = 0; x < sz.x; x += sizeBmp.x )
         {
