@@ -1132,9 +1132,10 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
         if (m)
             mask = *m;
     }
+
+    GdkPixmap* mask_new = NULL;
     if (mask)
     {
-        GdkPixmap* mask_new = NULL;
         if (isScaled)
         {
             mask = ScaleMask(mask, 0, 0, w, h, ww, hh, m_scaleX, m_scaleY);
@@ -1151,8 +1152,6 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
         }
         gdk_gc_set_clip_mask(use_gc, mask);
         gdk_gc_set_clip_origin(use_gc, xx, yy);
-        if (mask_new)
-            g_object_unref(mask_new);
     }
 
     // determine whether to use pixmap or pixbuf
@@ -1199,7 +1198,16 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     if (pixmap_new)
         g_object_unref(pixmap_new);
     if (mask)
+    {
         gdk_gc_set_clip_region(use_gc, clipRegion);
+
+        // Notice that we can only release the mask now, we can't do it before
+        // the calls to gdk_draw_xxx() above as they crash with X error with
+        // GTK+ up to 2.20.1 (i.e. it works with 2.20 but is known to not work
+        // with 2.16.1 and below).
+        if (mask_new)
+            g_object_unref(mask_new);
+    }
 }
 
 bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
