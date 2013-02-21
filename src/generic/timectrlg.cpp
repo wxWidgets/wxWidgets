@@ -270,7 +270,7 @@ private:
 
     void OnTextClick(wxMouseEvent& event)
     {
-        Field field wxDUMMY_INITIALIZE(Field_Max);
+        Field field = Field_Max; // Initialize just to suppress warnings.
         long pos;
         switch ( m_text->HitTest(event.GetPosition(), &pos) )
         {
