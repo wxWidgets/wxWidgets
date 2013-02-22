@@ -64,6 +64,8 @@ def getVisCVersion():
         return '71'
     if 'Version 15' in text:
         return '90'
+    if 'Version 16' in text:
+        return '100'
     # TODO: Add more tests to get the other versions...
     else:
         return 'FIXME'
