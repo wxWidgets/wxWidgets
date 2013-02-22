@@ -26,6 +26,7 @@ contribDir = None
 options = None
 configure_opts = None
 exitWithException = True
+nmakeCommand = 'nmake.exe'
 
 verbose = False
 
@@ -170,6 +171,7 @@ def main(scriptName, args):
     global options
     global configure_opts
     global wxBuilder
+    global nmakeCommand
     
     scriptDir = os.path.dirname(os.path.abspath(scriptName))
     wxRootDir = os.path.abspath(os.path.join(scriptDir, "..", ".."))
@@ -216,6 +218,7 @@ def main(scriptName, args):
         "extra_make"    : ("", "Extra args to pass on [n]make's command line."),
         "features"      : ("", "A comma-separated list of wxUSE_XYZ defines on Win, or a list of configure flags on unix."),
         "verbose"       : (False, "Print commands as they are run, (to aid with debugging this script)"),
+        "jom"           : (False, "Use jom.exe instead of nmake for MSW builds."),
     }
         
     parser = optparse.OptionParser(usage="usage: %prog [options]", version="%prog 1.0")
@@ -439,8 +442,11 @@ def main(scriptName, args):
                 args.append(
                     "CPPFLAGS=/I%s" %
                      os.path.join(os.environ.get("CAIRO_ROOT", ""), 'include\\cairo'))
+                
+            if options.jom:
+                nmakeCommand = 'jom.exe'
     
-            wxBuilder = builder.MSVCBuilder()
+            wxBuilder = builder.MSVCBuilder(commandName=nmakeCommand)
             
         if toolkit == "msvcProject":
             args = []
