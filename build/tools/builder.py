@@ -188,8 +188,8 @@ class AutoconfBuilder(GNUMakeBuilder):
 
 
 class MSVCBuilder(Builder):
-    def __init__(self):
-        Builder.__init__(self, commandName="nmake.exe", formatName="msvc")
+    def __init__(self, commandName="nmake.exe"):
+        Builder.__init__(self, commandName=commandName, formatName="msvc")
 
     def isAvailable(self):
         PATH = os.environ['PATH'].split(os.path.pathsep)
