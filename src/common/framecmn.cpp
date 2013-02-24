@@ -41,15 +41,16 @@ extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[] = "status_line";
 // event table
 // ----------------------------------------------------------------------------
 
-#if wxUSE_MENUS && wxUSE_STATUSBAR
+#if wxUSE_MENUS
+
+#if wxUSE_STATUSBAR
 BEGIN_EVENT_TABLE(wxFrameBase, wxTopLevelWindow)
     EVT_MENU_OPEN(wxFrameBase::OnMenuOpen)
     EVT_MENU_CLOSE(wxFrameBase::OnMenuClose)
 
     EVT_MENU_HIGHLIGHT_ALL(wxFrameBase::OnMenuHighlight)
 END_EVENT_TABLE()
-
-#endif // wxUSE_MENUS && wxUSE_IDLEMENUUPDATES
+#endif // wxUSE_STATUSBAR
 
 /* static */
 bool wxFrameBase::ShouldUpdateMenuFromIdle()
@@ -66,6 +67,8 @@ bool wxFrameBase::ShouldUpdateMenuFromIdle()
 
     return wxUSE_IDLEMENUUPDATES != 0;
 }
+
+#endif // wxUSE_MENUS
 
 // ============================================================================
 // implementation
