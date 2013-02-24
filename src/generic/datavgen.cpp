@@ -678,6 +678,7 @@ public:
 
     void SetRowHeight( int lineHeight ) { m_lineHeight = lineHeight; }
     int GetRowHeight() const { return m_lineHeight; }
+    int GetDefaultRowHeight() const;
 
     // Some useful functions for row and item mapping
     wxDataViewItem GetItemByRow( unsigned int row ) const;
@@ -1398,15 +1399,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_currentColSetByKeyboard = false;
     m_useCellFocus = false;
     m_currentRow = (unsigned)-1;
-
-#ifdef __WXMSW__
-    // We would like to use the same line height that Explorer uses. This is
-    // different from standard ListView control since Vista.
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
-        m_lineHeight = wxMax(16, GetCharHeight()) + 6; // 16 = mini icon height
-    else
-#endif // __WXMSW__
-        m_lineHeight = wxMax(16, GetCharHeight()) + 1; // 16 = mini icon height
+    m_lineHeight = GetDefaultRowHeight();
 
 #if wxUSE_DRAG_AND_DROP
     m_dragCount = 0;
@@ -1447,6 +1440,20 @@ wxDataViewMainWindow::~wxDataViewMainWindow()
     DestroyTree();
     delete m_renameTimer;
 }
+
+
+int wxDataViewMainWindow::GetDefaultRowHeight() const
+{
+#ifdef __WXMSW__
+    // We would like to use the same line height that Explorer uses. This is
+    // different from standard ListView control since Vista.
+    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+        return wxMax(16, GetCharHeight()) + 6; // 16 = mini icon height
+    else
+#endif // __WXMSW__
+        return wxMax(16, GetCharHeight()) + 1; // 16 = mini icon height
+}
+
 
 
 #if wxUSE_DRAG_AND_DROP
@@ -4542,6 +4549,31 @@ void wxDataViewCtrl::SetFocus()
     if (m_clientArea)
         m_clientArea->SetFocus();
 }
+
+bool wxDataViewCtrl::SetFont(const wxFont & font)
+{
+    if (!wxControl::SetFont(font))
+        return false;
+
+    if (m_headerArea)
+        m_headerArea->SetFont(font);
+
+    if (m_clientArea)
+    {
+        m_clientArea->SetFont(font);
+        m_clientArea->SetRowHeight(m_clientArea->GetDefaultRowHeight());
+    }
+
+    if (m_headerArea || m_clientArea)
+    {
+        InvalidateColBestWidths();
+        Layout();
+    }
+
+    return true;
+}
+
+
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {

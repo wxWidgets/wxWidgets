@@ -182,6 +182,8 @@ public:
 
     virtual void SetFocus();
 
+    virtual bool SetFont(const wxFont & font);
+
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource( const wxDataFormat &format );
     virtual bool EnableDropTarget( const wxDataFormat &format );
