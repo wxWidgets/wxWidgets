@@ -597,6 +597,8 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
+    wxThread* toDelete = NULL;
+    {
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
     // stop the last thread
@@ -606,7 +608,15 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
     }
     else
     {
-        wxGetApp().m_threads.Last()->Delete();
+        toDelete = wxGetApp().m_threads.Last();
+    }
+    }
+
+    if ( toDelete )
+    {
+        // This can still crash if the thread gets to delete itself
+        // in the mean time.
+        toDelete->Delete();
 
 #if wxUSE_STATUSBAR
         SetStatusText(wxT("Last thread stopped."), 1);
