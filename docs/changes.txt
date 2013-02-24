@@ -649,6 +649,7 @@ wxMSW:
 - Allow creating wxCursor from ANI files (Catalin Raceanu).
 - Add wxIcon::CreateFromHICON() (troelsk).
 - Improve wxCURSOR_RIGHT_ARROW appearance (DoltAlya).
+- Generate menu highlight events for popup menus in wxDialog (Sam Partington).
 
 wxOSX/Cocoa:
 

@@ -88,6 +88,7 @@ protected:
     void OnClearLog(wxCommandEvent& event);
     void OnClearLogUpdateUI(wxUpdateUIEvent& event);
 #endif // USE_LOG_WINDOW
+    void OnShowDialog(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
 
@@ -138,13 +139,19 @@ protected:
     void OnMenuOpen(wxMenuEvent& event)
         {
 #if USE_LOG_WINDOW
-            LogMenuOpenOrClose(event, wxT("opened")); event.Skip();
+            LogMenuOpenCloseOrHighlight(event, wxT("opened")); event.Skip();
 #endif
         }
     void OnMenuClose(wxMenuEvent& event)
         {
 #if USE_LOG_WINDOW
-          LogMenuOpenOrClose(event, wxT("closed")); event.Skip();
+          LogMenuOpenCloseOrHighlight(event, wxT("closed")); event.Skip();
+#endif
+       }
+    void OnMenuHighlight(wxMenuEvent& event)
+        {
+#if USE_LOG_WINDOW
+          LogMenuOpenCloseOrHighlight(event, wxT("highlighted")); event.Skip();
 #endif
        }
 
@@ -153,7 +160,9 @@ protected:
     void OnSize(wxSizeEvent& event);
 
 private:
-    void LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what);
+#if USE_LOG_WINDOW
+    void LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxChar *what);
+#endif
     void ShowContextMenu(const wxPoint& pos);
 
     wxMenu *CreateDummyMenu(wxString *title);
@@ -173,6 +182,51 @@ private:
 
     // the previous log target
     wxLog *m_logOld;
+
+    DECLARE_EVENT_TABLE()
+};
+
+class MyDialog : public wxDialog
+{
+public:
+    MyDialog(wxWindow* parent);
+
+#if USE_CONTEXT_MENU
+    void OnContextMenu(wxContextMenuEvent& event);
+#else
+    void OnRightUp(wxMouseEvent& event)
+        { ShowContextMenu(event.GetPosition()); }
+#endif
+
+    void OnMenuOpen(wxMenuEvent& event)
+        {
+#if USE_LOG_WINDOW
+            LogMenuOpenCloseOrHighlight(event, wxT("opened")); event.Skip();
+#endif
+        }
+    void OnMenuClose(wxMenuEvent& event)
+        {
+#if USE_LOG_WINDOW
+          LogMenuOpenCloseOrHighlight(event, wxT("closed")); event.Skip();
+#endif
+       }
+    void OnMenuHighlight(wxMenuEvent& event)
+        {
+#if USE_LOG_WINDOW
+          LogMenuOpenCloseOrHighlight(event, wxT("highlighted")); event.Skip();
+#endif
+       }
+
+private:
+#if USE_LOG_WINDOW
+    void LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxChar *what);
+#endif
+    void ShowContextMenu(const wxPoint& pos);
+
+#if USE_LOG_WINDOW
+    // the control used for logging
+    wxTextCtrl *m_textctrl;
+#endif
 
     DECLARE_EVENT_TABLE()
 };
@@ -206,6 +260,7 @@ enum
 #if USE_LOG_WINDOW
     Menu_File_ClearLog = 100,
 #endif
+    Menu_File_ShowDialog,
 
     Menu_MenuBar_Toggle = 200,
     Menu_MenuBar_Append,
@@ -275,6 +330,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_File_ClearLog, MyFrame::OnClearLog)
     EVT_UPDATE_UI(Menu_File_ClearLog, MyFrame::OnClearLogUpdateUI)
 #endif
+    EVT_MENU(Menu_File_ShowDialog, MyFrame::OnShowDialog)
 
     EVT_MENU(Menu_Help_About, MyFrame::OnAbout)
 
@@ -329,8 +385,20 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU_OPEN(MyFrame::OnMenuOpen)
     EVT_MENU_CLOSE(MyFrame::OnMenuClose)
+    EVT_MENU_HIGHLIGHT_ALL(MyFrame::OnMenuHighlight)
 
     EVT_SIZE(MyFrame::OnSize)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+#if USE_CONTEXT_MENU
+    EVT_CONTEXT_MENU(MyDialog::OnContextMenu)
+#else
+    EVT_RIGHT_UP(MyDialog::OnRightUp)
+#endif
+    EVT_MENU_OPEN(MyDialog::OnMenuOpen)
+    EVT_MENU_CLOSE(MyDialog::OnMenuClose)
+    EVT_MENU_HIGHLIGHT_ALL(MyDialog::OnMenuHighlight)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
@@ -468,6 +536,10 @@ MyFrame::MyFrame()
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
 #endif // USE_LOG_WINDOW
+
+    fileMenu->Append(Menu_File_ShowDialog, wxT("Show &Dialog\tCtrl-D"),
+                        wxT("Show a dialog"));
+    fileMenu->AppendSeparator();
 
     fileMenu->Append(Menu_File_Quit, wxT("E&xit\tAlt-X"), wxT("Quit menu sample"));
 
@@ -675,6 +747,12 @@ void MyFrame::OnClearLogUpdateUI(wxUpdateUIEvent& event)
 }
 
 #endif // USE_LOG_WINDOW
+
+void MyFrame::OnShowDialog(wxCommandEvent& WXUNUSED(event))
+{
+    MyDialog dlg(this);
+    dlg.ShowModal();
+}
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
@@ -1122,14 +1200,20 @@ void MyFrame::OnTestRadio(wxCommandEvent& event)
 }
 
 #if USE_LOG_WINDOW
-void MyFrame::LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what)
+void MyFrame::LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxChar *what)
 {
     wxString msg;
     msg << wxT("A ")
         << ( event.IsPopup() ? wxT("popup ") : wxT("") )
         << wxT("menu has been ")
-        << what
-        << wxT(".");
+        << what;
+
+    if ( event.GetEventType() == wxEVT_MENU_HIGHLIGHT )
+    {
+        msg << wxT(" (id=") << event.GetId() << wxT(")");
+    }
+
+    msg << wxT(".");
 
     wxLogStatus(this, msg.c_str());
 }
@@ -1189,3 +1273,76 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 #endif // __WXUNIVERSAL__
 }
 
+// ----------------------------------------------------------------------------
+// MyDialog
+// ----------------------------------------------------------------------------
+
+MyDialog::MyDialog(wxWindow* parent)
+    :    wxDialog(parent, wxID_ANY, "Test Dialog")
+{
+#if USE_LOG_WINDOW
+    // create the log text window
+    m_textctrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                                wxDefaultPosition, wxDefaultSize,
+                                wxTE_MULTILINE);
+    m_textctrl->SetEditable(false);
+
+    m_textctrl->AppendText(wxT("Dialogs do not have menus, but popup menus should function the same\n\n")
+                 wxT("Right click this text ctrl to test popup menus.\n"));
+#endif
+#ifdef __POCKETPC__
+    EnableContextMenu();
+#endif
+}
+
+#if USE_LOG_WINDOW
+void MyDialog::LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxChar *what)
+{
+    wxString msg;
+    msg << wxT("A ")
+        << ( event.IsPopup() ? wxT("popup ") : wxT("") )
+        << wxT("menu has been ")
+        << what;
+    if ( event.GetEventType() == wxEVT_MENU_HIGHLIGHT )
+    {
+        msg << wxT(" (id=") << event.GetId() << wxT(")");
+    }
+    msg << wxT(".\n");
+
+    m_textctrl->AppendText(msg);
+}
+#endif // USE_LOG_WINDOW
+#if USE_CONTEXT_MENU
+void MyDialog::OnContextMenu(wxContextMenuEvent& event)
+{
+    wxPoint point = event.GetPosition();
+    // If from keyboard
+    if (point.x == -1 && point.y == -1) {
+        wxSize size = GetSize();
+        point.x = size.x / 2;
+        point.y = size.y / 2;
+    } else {
+        point = ScreenToClient(point);
+    }
+    ShowContextMenu(point);
+}
+#endif
+
+void MyDialog::ShowContextMenu(const wxPoint& pos)
+{
+    wxMenu menu;
+
+    menu.Append(Menu_Help_About, wxT("&About"));
+    menu.Append(Menu_Popup_ToBeDeleted, wxT("To be &deleted"));
+    menu.AppendCheckItem(Menu_Popup_ToBeChecked, wxT("To be &checked"));
+    menu.Append(Menu_Popup_ToBeGreyed, wxT("To be &greyed"),
+                wxT("This menu item should be initially greyed out"));
+    menu.AppendSeparator();
+    menu.Append(Menu_File_Quit, wxT("E&xit"));
+
+    menu.Delete(Menu_Popup_ToBeDeleted);
+    menu.Check(Menu_Popup_ToBeChecked, true);
+    menu.Enable(Menu_Popup_ToBeGreyed, false);
+
+    PopupMenu(&menu, pos);
+}

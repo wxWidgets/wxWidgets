@@ -272,7 +272,6 @@ public:
     wxWindow *SetTmpDefaultItem(wxWindow *win)
         { wxWindow *old = GetDefaultItem(); m_winTmpDefault = win; return old; }
 
-
     // implementation only from now on
     // -------------------------------
 
@@ -304,6 +303,13 @@ public:
     virtual bool OSXIsModified() const { return m_modified; }
 
     virtual void SetRepresentedFilename(const wxString& WXUNUSED(filename)) { }
+
+#if wxUSE_MENUS || wxUSE_TOOLBAR
+    // show help text for the currently selected menu or toolbar item
+    // (typically in the status bar) or hide it and restore the status bar text
+    // originally shown before the menu was opened if show == false
+    virtual void DoGiveHelp(const wxString& WXUNUSED(text), bool WXUNUSED(show))  {}
+#endif
 
 protected:
     // the frame client to screen translation should take account of the

@@ -462,7 +462,7 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
     }
 
     if ( !processed )
-        rc = wxWindow::MSWWindowProc(message, wParam, lParam);
+        rc = wxDialogBase::MSWWindowProc(message, wParam, lParam);
 
     return rc;
 }
