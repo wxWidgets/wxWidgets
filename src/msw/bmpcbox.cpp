@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/settings.h"
+#include "wx/vector.h"
 
 #include "wx/msw/dcclient.h"
 #include "wx/msw/private.h"
@@ -134,6 +135,12 @@ void wxBitmapComboBox::RecreateControl()
     size.y = GetBestSize().y;
     wxArrayString strings = GetStrings();
 
+    // Save the client data pointers before clearing the control.
+    wxVector<wxClientData*> clientData;
+    clientData.reserve(strings.size());
+    for ( size_t n = 0; n < strings.size(); ++n )
+        clientData.push_back(GetClientObject(n));
+
     wxComboBox::DoClear();
 
     HWND hwnd = GetHwnd();
@@ -146,7 +153,7 @@ void wxBitmapComboBox::RecreateControl()
     // initialize the controls contents
     for ( unsigned int i = 0; i < strings.size(); i++ )
     {
-        wxComboBox::Append(strings[i]);
+        wxComboBox::Append(strings[i], clientData[i]);
     }
 
     // and make sure it has the same attributes as before
