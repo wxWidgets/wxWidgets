@@ -73,7 +73,7 @@ WXDLLIMPEXP_CORE wxString wxGetStockHelpString(wxWindowID id,
 
 #ifdef __WXGTK20__
 
-// Translates stock ID to GTK+'s stock item string indentifier:
+// Translates stock ID to GTK+'s stock item string identifier:
 WXDLLIMPEXP_CORE const char *wxGetStockGtkID(wxWindowID id);
 
 #endif

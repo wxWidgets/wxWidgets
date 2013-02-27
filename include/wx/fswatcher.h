@@ -152,7 +152,7 @@ public:
 
     virtual wxEventCategory GetEventCategory() const
     {
-        // TODO this has to be merged with "similiar" categories and changed
+        // TODO this has to be merged with "similar" categories and changed
         return wxEVT_CATEGORY_UNKNOWN;
     }
 

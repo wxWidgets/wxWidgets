@@ -425,7 +425,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // by default, these functions use the escape character to escape the
-// separators occuring inside the string to be joined, this can be disabled by
+// separators occurring inside the string to be joined, this can be disabled by
 // passing '\0' as escape
 
 WXDLLIMPEXP_BASE wxString wxJoin(const wxArrayString& arr,
