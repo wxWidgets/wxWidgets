@@ -242,7 +242,7 @@ public:
 
     Many of the methods in wxWebView are asynchronous, i.e. they return
     immediately and perform their work in the background. This includes
-    functions such as LoadUrl() and Reload(). To receive notification of the
+    functions such as LoadURL() and Reload(). To receive notification of the
     progress and completion of these functions you need to handle the events
     that are provided. Specifically @c wxEVT_COMMAND_WEBVIEW_LOADED notifies
     when the page or a sub-frame has finished loading and
