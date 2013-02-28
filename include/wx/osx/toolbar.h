@@ -72,6 +72,10 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 #endif
 
 #if wxOSX_USE_NATIVE_TOOLBAR
+    // make all tools selectable
+    void OSXSetSelectableTools(bool set);
+    void OSXSelectTool(int toolId);
+
     bool MacInstallNativeToolbar(bool usesNative);
     void MacUninstallNativeToolbar();
     bool MacWantsNativeToolbar();
