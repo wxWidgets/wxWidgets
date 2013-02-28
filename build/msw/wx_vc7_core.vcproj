@@ -583,6 +583,9 @@
 				RelativePath="..\..\src\common\popupcmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\preferencescmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\prntbase.cpp">
 			</File>
 			<File
@@ -1102,6 +1105,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\numdlgg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\preferencesg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\printps.cpp">

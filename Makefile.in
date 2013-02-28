@@ -4818,6 +4818,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_persist.o \
 	monodll_pickerbase.o \
 	monodll_popupcmn.o \
+	monodll_preferencescmn.o \
 	monodll_prntbase.o \
 	monodll_quantize.o \
 	monodll_radiobtncmn.o \
@@ -4870,6 +4871,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_msgdlgg.o \
 	monodll_numdlgg.o \
 	monodll_progdlgg.o \
+	monodll_preferencesg.o \
 	monodll_printps.o \
 	monodll_renderg.o \
 	monodll_richmsgdlgg.o \
@@ -5037,6 +5039,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_persist.o \
 	monodll_pickerbase.o \
 	monodll_popupcmn.o \
+	monodll_preferencescmn.o \
 	monodll_prntbase.o \
 	monodll_quantize.o \
 	monodll_radiobtncmn.o \
@@ -5089,6 +5092,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_msgdlgg.o \
 	monodll_numdlgg.o \
 	monodll_progdlgg.o \
+	monodll_preferencesg.o \
 	monodll_printps.o \
 	monodll_renderg.o \
 	monodll_richmsgdlgg.o \
@@ -5863,6 +5867,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_nonownedwnd.o \
 	monodll_osx_cocoa_notebook.o \
 	monodll_osx_cocoa_radiobut.o \
+	monodll_preferences.o \
 	monodll_cocoa_printdlg.o \
 	monodll_osx_cocoa_scrolbar.o \
 	monodll_osx_cocoa_slider.o \
@@ -7057,6 +7062,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_persist.o \
 	monolib_pickerbase.o \
 	monolib_popupcmn.o \
+	monolib_preferencescmn.o \
 	monolib_prntbase.o \
 	monolib_quantize.o \
 	monolib_radiobtncmn.o \
@@ -7109,6 +7115,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_msgdlgg.o \
 	monolib_numdlgg.o \
 	monolib_progdlgg.o \
+	monolib_preferencesg.o \
 	monolib_printps.o \
 	monolib_renderg.o \
 	monolib_richmsgdlgg.o \
@@ -7276,6 +7283,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_persist.o \
 	monolib_pickerbase.o \
 	monolib_popupcmn.o \
+	monolib_preferencescmn.o \
 	monolib_prntbase.o \
 	monolib_quantize.o \
 	monolib_radiobtncmn.o \
@@ -7328,6 +7336,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_msgdlgg.o \
 	monolib_numdlgg.o \
 	monolib_progdlgg.o \
+	monolib_preferencesg.o \
 	monolib_printps.o \
 	monolib_renderg.o \
 	monolib_richmsgdlgg.o \
@@ -8102,6 +8111,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_nonownedwnd.o \
 	monolib_osx_cocoa_notebook.o \
 	monolib_osx_cocoa_radiobut.o \
+	monolib_preferences.o \
 	monolib_cocoa_printdlg.o \
 	monolib_osx_cocoa_scrolbar.o \
 	monolib_osx_cocoa_slider.o \
@@ -9468,6 +9478,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_persist.o \
 	coredll_pickerbase.o \
 	coredll_popupcmn.o \
+	coredll_preferencescmn.o \
 	coredll_prntbase.o \
 	coredll_quantize.o \
 	coredll_radiobtncmn.o \
@@ -9520,6 +9531,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_msgdlgg.o \
 	coredll_numdlgg.o \
 	coredll_progdlgg.o \
+	coredll_preferencesg.o \
 	coredll_printps.o \
 	coredll_renderg.o \
 	coredll_richmsgdlgg.o \
@@ -9687,6 +9699,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_persist.o \
 	coredll_pickerbase.o \
 	coredll_popupcmn.o \
+	coredll_preferencescmn.o \
 	coredll_prntbase.o \
 	coredll_quantize.o \
 	coredll_radiobtncmn.o \
@@ -9739,6 +9752,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_msgdlgg.o \
 	coredll_numdlgg.o \
 	coredll_progdlgg.o \
+	coredll_preferencesg.o \
 	coredll_printps.o \
 	coredll_renderg.o \
 	coredll_richmsgdlgg.o \
@@ -10513,6 +10527,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_nonownedwnd.o \
 	coredll_osx_cocoa_notebook.o \
 	coredll_osx_cocoa_radiobut.o \
+	coredll_preferences.o \
 	coredll_cocoa_printdlg.o \
 	coredll_osx_cocoa_scrolbar.o \
 	coredll_osx_cocoa_slider.o \
@@ -11139,6 +11154,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_persist.o \
 	corelib_pickerbase.o \
 	corelib_popupcmn.o \
+	corelib_preferencescmn.o \
 	corelib_prntbase.o \
 	corelib_quantize.o \
 	corelib_radiobtncmn.o \
@@ -11191,6 +11207,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_msgdlgg.o \
 	corelib_numdlgg.o \
 	corelib_progdlgg.o \
+	corelib_preferencesg.o \
 	corelib_printps.o \
 	corelib_renderg.o \
 	corelib_richmsgdlgg.o \
@@ -11358,6 +11375,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_persist.o \
 	corelib_pickerbase.o \
 	corelib_popupcmn.o \
+	corelib_preferencescmn.o \
 	corelib_prntbase.o \
 	corelib_quantize.o \
 	corelib_radiobtncmn.o \
@@ -11410,6 +11428,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_msgdlgg.o \
 	corelib_numdlgg.o \
 	corelib_progdlgg.o \
+	corelib_preferencesg.o \
 	corelib_printps.o \
 	corelib_renderg.o \
 	corelib_richmsgdlgg.o \
@@ -12184,6 +12203,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_nonownedwnd.o \
 	corelib_osx_cocoa_notebook.o \
 	corelib_osx_cocoa_radiobut.o \
+	corelib_preferences.o \
 	corelib_cocoa_printdlg.o \
 	corelib_osx_cocoa_scrolbar.o \
 	corelib_osx_cocoa_slider.o \
@@ -17716,6 +17736,9 @@ monodll_osx_cocoa_notebook.o: $(srcdir)/src/osx/cocoa/notebook.mm $(MONODLL_ODEP
 monodll_osx_cocoa_radiobut.o: $(srcdir)/src/osx/cocoa/radiobut.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/radiobut.mm
 
+monodll_preferences.o: $(srcdir)/src/osx/cocoa/preferences.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/preferences.mm
+
 monodll_cocoa_printdlg.o: $(srcdir)/src/osx/cocoa/printdlg.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/printdlg.mm
 
@@ -21952,6 +21975,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_popupcmn.o: $(srcdir)/src/common/popupcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/popupcmn.cpp
 
+@COND_USE_GUI_1@monodll_preferencescmn.o: $(srcdir)/src/common/preferencescmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/preferencescmn.cpp
+
 @COND_USE_GUI_1@monodll_prntbase.o: $(srcdir)/src/common/prntbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/prntbase.cpp
 
@@ -22107,6 +22133,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/progdlgg.cpp
+
+@COND_USE_GUI_1@monodll_preferencesg.o: $(srcdir)/src/generic/preferencesg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/preferencesg.cpp
 
 @COND_USE_GUI_1@monodll_printps.o: $(srcdir)/src/generic/printps.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/printps.cpp
@@ -23562,6 +23591,9 @@ monolib_osx_cocoa_notebook.o: $(srcdir)/src/osx/cocoa/notebook.mm $(MONOLIB_ODEP
 
 monolib_osx_cocoa_radiobut.o: $(srcdir)/src/osx/cocoa/radiobut.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/radiobut.mm
+
+monolib_preferences.o: $(srcdir)/src/osx/cocoa/preferences.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/preferences.mm
 
 monolib_cocoa_printdlg.o: $(srcdir)/src/osx/cocoa/printdlg.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/printdlg.mm
@@ -27799,6 +27831,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_popupcmn.o: $(srcdir)/src/common/popupcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/popupcmn.cpp
 
+@COND_USE_GUI_1@monolib_preferencescmn.o: $(srcdir)/src/common/preferencescmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/preferencescmn.cpp
+
 @COND_USE_GUI_1@monolib_prntbase.o: $(srcdir)/src/common/prntbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/prntbase.cpp
 
@@ -27954,6 +27989,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/progdlgg.cpp
+
+@COND_USE_GUI_1@monolib_preferencesg.o: $(srcdir)/src/generic/preferencesg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/preferencesg.cpp
 
 @COND_USE_GUI_1@monolib_printps.o: $(srcdir)/src/generic/printps.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/printps.cpp
@@ -30129,6 +30167,9 @@ coredll_osx_cocoa_notebook.o: $(srcdir)/src/osx/cocoa/notebook.mm $(COREDLL_ODEP
 
 coredll_osx_cocoa_radiobut.o: $(srcdir)/src/osx/cocoa/radiobut.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/radiobut.mm
+
+coredll_preferences.o: $(srcdir)/src/osx/cocoa/preferences.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/preferences.mm
 
 coredll_cocoa_printdlg.o: $(srcdir)/src/osx/cocoa/printdlg.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/printdlg.mm
@@ -33802,6 +33843,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_popupcmn.o: $(srcdir)/src/common/popupcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/popupcmn.cpp
 
+@COND_USE_GUI_1@coredll_preferencescmn.o: $(srcdir)/src/common/preferencescmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/preferencescmn.cpp
+
 @COND_USE_GUI_1@coredll_prntbase.o: $(srcdir)/src/common/prntbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/prntbase.cpp
 
@@ -33957,6 +34001,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/progdlgg.cpp
+
+@COND_USE_GUI_1@coredll_preferencesg.o: $(srcdir)/src/generic/preferencesg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/preferencesg.cpp
 
 @COND_USE_GUI_1@coredll_printps.o: $(srcdir)/src/generic/printps.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/printps.cpp
@@ -34497,6 +34544,9 @@ corelib_osx_cocoa_notebook.o: $(srcdir)/src/osx/cocoa/notebook.mm $(CORELIB_ODEP
 
 corelib_osx_cocoa_radiobut.o: $(srcdir)/src/osx/cocoa/radiobut.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/radiobut.mm
+
+corelib_preferences.o: $(srcdir)/src/osx/cocoa/preferences.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/preferences.mm
 
 corelib_cocoa_printdlg.o: $(srcdir)/src/osx/cocoa/printdlg.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/printdlg.mm
@@ -38170,6 +38220,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_popupcmn.o: $(srcdir)/src/common/popupcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/popupcmn.cpp
 
+@COND_USE_GUI_1@corelib_preferencescmn.o: $(srcdir)/src/common/preferencescmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/preferencescmn.cpp
+
 @COND_USE_GUI_1@corelib_prntbase.o: $(srcdir)/src/common/prntbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/prntbase.cpp
 
@@ -38325,6 +38378,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/progdlgg.cpp
+
+@COND_USE_GUI_1@corelib_preferencesg.o: $(srcdir)/src/generic/preferencesg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/preferencesg.cpp
 
 @COND_USE_GUI_1@corelib_printps.o: $(srcdir)/src/generic/printps.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/printps.cpp

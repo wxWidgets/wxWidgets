@@ -1953,6 +1953,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_persist.o \
 	$(OBJS)\monodll_pickerbase.o \
 	$(OBJS)\monodll_popupcmn.o \
+	$(OBJS)\monodll_preferencescmn.o \
 	$(OBJS)\monodll_prntbase.o \
 	$(OBJS)\monodll_quantize.o \
 	$(OBJS)\monodll_radiobtncmn.o \
@@ -2005,6 +2006,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_progdlgg.o \
+	$(OBJS)\monodll_preferencesg.o \
 	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
 	$(OBJS)\monodll_richmsgdlgg.o \
@@ -2174,6 +2176,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_persist.o \
 	$(OBJS)\monodll_pickerbase.o \
 	$(OBJS)\monodll_popupcmn.o \
+	$(OBJS)\monodll_preferencescmn.o \
 	$(OBJS)\monodll_prntbase.o \
 	$(OBJS)\monodll_quantize.o \
 	$(OBJS)\monodll_radiobtncmn.o \
@@ -2226,6 +2229,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_progdlgg.o \
+	$(OBJS)\monodll_preferencesg.o \
 	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
 	$(OBJS)\monodll_richmsgdlgg.o \
@@ -2695,6 +2699,7 @@ ____GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_cocoa_nonownedwnd.o \
 	$(OBJS)\monodll_osx_cocoa_notebook.o \
 	$(OBJS)\monodll_osx_cocoa_radiobut.o \
+	$(OBJS)\monodll_preferences.o \
 	$(OBJS)\monodll_cocoa_printdlg.o \
 	$(OBJS)\monodll_osx_cocoa_scrolbar.o \
 	$(OBJS)\monodll_osx_cocoa_slider.o \
@@ -3358,6 +3363,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_persist.o \
 	$(OBJS)\monolib_pickerbase.o \
 	$(OBJS)\monolib_popupcmn.o \
+	$(OBJS)\monolib_preferencescmn.o \
 	$(OBJS)\monolib_prntbase.o \
 	$(OBJS)\monolib_quantize.o \
 	$(OBJS)\monolib_radiobtncmn.o \
@@ -3410,6 +3416,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_progdlgg.o \
+	$(OBJS)\monolib_preferencesg.o \
 	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
 	$(OBJS)\monolib_richmsgdlgg.o \
@@ -3579,6 +3586,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_persist.o \
 	$(OBJS)\monolib_pickerbase.o \
 	$(OBJS)\monolib_popupcmn.o \
+	$(OBJS)\monolib_preferencescmn.o \
 	$(OBJS)\monolib_prntbase.o \
 	$(OBJS)\monolib_quantize.o \
 	$(OBJS)\monolib_radiobtncmn.o \
@@ -3631,6 +3639,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_progdlgg.o \
+	$(OBJS)\monolib_preferencesg.o \
 	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
 	$(OBJS)\monolib_richmsgdlgg.o \
@@ -4100,6 +4109,7 @@ ____GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_cocoa_nonownedwnd.o \
 	$(OBJS)\monolib_osx_cocoa_notebook.o \
 	$(OBJS)\monolib_osx_cocoa_radiobut.o \
+	$(OBJS)\monolib_preferences.o \
 	$(OBJS)\monolib_cocoa_printdlg.o \
 	$(OBJS)\monolib_osx_cocoa_scrolbar.o \
 	$(OBJS)\monolib_osx_cocoa_slider.o \
@@ -4678,6 +4688,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_persist.o \
 	$(OBJS)\coredll_pickerbase.o \
 	$(OBJS)\coredll_popupcmn.o \
+	$(OBJS)\coredll_preferencescmn.o \
 	$(OBJS)\coredll_prntbase.o \
 	$(OBJS)\coredll_quantize.o \
 	$(OBJS)\coredll_radiobtncmn.o \
@@ -4730,6 +4741,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_progdlgg.o \
+	$(OBJS)\coredll_preferencesg.o \
 	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
 	$(OBJS)\coredll_richmsgdlgg.o \
@@ -4899,6 +4911,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_persist.o \
 	$(OBJS)\coredll_pickerbase.o \
 	$(OBJS)\coredll_popupcmn.o \
+	$(OBJS)\coredll_preferencescmn.o \
 	$(OBJS)\coredll_prntbase.o \
 	$(OBJS)\coredll_quantize.o \
 	$(OBJS)\coredll_radiobtncmn.o \
@@ -4951,6 +4964,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_progdlgg.o \
+	$(OBJS)\coredll_preferencesg.o \
 	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
 	$(OBJS)\coredll_richmsgdlgg.o \
@@ -5420,6 +5434,7 @@ ____GUI_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_cocoa_nonownedwnd.o \
 	$(OBJS)\coredll_osx_cocoa_notebook.o \
 	$(OBJS)\coredll_osx_cocoa_radiobut.o \
+	$(OBJS)\coredll_preferences.o \
 	$(OBJS)\coredll_cocoa_printdlg.o \
 	$(OBJS)\coredll_osx_cocoa_scrolbar.o \
 	$(OBJS)\coredll_osx_cocoa_slider.o \
@@ -5732,6 +5747,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_persist.o \
 	$(OBJS)\corelib_pickerbase.o \
 	$(OBJS)\corelib_popupcmn.o \
+	$(OBJS)\corelib_preferencescmn.o \
 	$(OBJS)\corelib_prntbase.o \
 	$(OBJS)\corelib_quantize.o \
 	$(OBJS)\corelib_radiobtncmn.o \
@@ -5784,6 +5800,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_progdlgg.o \
+	$(OBJS)\corelib_preferencesg.o \
 	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
 	$(OBJS)\corelib_richmsgdlgg.o \
@@ -5953,6 +5970,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_persist.o \
 	$(OBJS)\corelib_pickerbase.o \
 	$(OBJS)\corelib_popupcmn.o \
+	$(OBJS)\corelib_preferencescmn.o \
 	$(OBJS)\corelib_prntbase.o \
 	$(OBJS)\corelib_quantize.o \
 	$(OBJS)\corelib_radiobtncmn.o \
@@ -6005,6 +6023,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_progdlgg.o \
+	$(OBJS)\corelib_preferencesg.o \
 	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
 	$(OBJS)\corelib_richmsgdlgg.o \
@@ -6474,6 +6493,7 @@ ____GUI_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_cocoa_nonownedwnd.o \
 	$(OBJS)\corelib_osx_cocoa_notebook.o \
 	$(OBJS)\corelib_osx_cocoa_radiobut.o \
+	$(OBJS)\corelib_preferences.o \
 	$(OBJS)\corelib_cocoa_printdlg.o \
 	$(OBJS)\corelib_osx_cocoa_scrolbar.o \
 	$(OBJS)\corelib_osx_cocoa_slider.o \
@@ -11727,6 +11747,8 @@ $(OBJS)\monodll_osx_cocoa_notebook.o: ../../src/osx/cocoa/notebook.mm
 
 $(OBJS)\monodll_osx_cocoa_radiobut.o: ../../src/osx/cocoa/radiobut.mm
 
+$(OBJS)\monodll_preferences.o: ../../src/osx/cocoa/preferences.mm
+
 $(OBJS)\monodll_cocoa_printdlg.o: ../../src/osx/cocoa/printdlg.mm
 
 $(OBJS)\monodll_osx_cocoa_scrolbar.o: ../../src/osx/cocoa/scrolbar.mm
@@ -16640,6 +16662,11 @@ $(OBJS)\monodll_popupcmn.o: ../../src/common/popupcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_preferencescmn.o: ../../src/common/preferencescmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_prntbase.o: ../../src/common/prntbase.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -16896,6 +16923,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_progdlgg.o: ../../src/generic/progdlgg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_preferencesg.o: ../../src/generic/preferencesg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -18683,6 +18715,8 @@ $(OBJS)\monolib_cocoa_nonownedwnd.o: ../../src/osx/cocoa/nonownedwnd.mm
 $(OBJS)\monolib_osx_cocoa_notebook.o: ../../src/osx/cocoa/notebook.mm
 
 $(OBJS)\monolib_osx_cocoa_radiobut.o: ../../src/osx/cocoa/radiobut.mm
+
+$(OBJS)\monolib_preferences.o: ../../src/osx/cocoa/preferences.mm
 
 $(OBJS)\monolib_cocoa_printdlg.o: ../../src/osx/cocoa/printdlg.mm
 
@@ -23597,6 +23631,11 @@ $(OBJS)\monolib_popupcmn.o: ../../src/common/popupcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_preferencescmn.o: ../../src/common/preferencescmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_prntbase.o: ../../src/common/prntbase.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -23853,6 +23892,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_progdlgg.o: ../../src/generic/progdlgg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_preferencesg.o: ../../src/generic/preferencesg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -26073,6 +26117,8 @@ $(OBJS)\coredll_cocoa_nonownedwnd.o: ../../src/osx/cocoa/nonownedwnd.mm
 $(OBJS)\coredll_osx_cocoa_notebook.o: ../../src/osx/cocoa/notebook.mm
 
 $(OBJS)\coredll_osx_cocoa_radiobut.o: ../../src/osx/cocoa/radiobut.mm
+
+$(OBJS)\coredll_preferences.o: ../../src/osx/cocoa/preferences.mm
 
 $(OBJS)\coredll_cocoa_printdlg.o: ../../src/osx/cocoa/printdlg.mm
 
@@ -30551,6 +30597,11 @@ $(OBJS)\coredll_popupcmn.o: ../../src/common/popupcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_preferencescmn.o: ../../src/common/preferencescmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_prntbase.o: ../../src/common/prntbase.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -30807,6 +30858,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_progdlgg.o: ../../src/generic/progdlgg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_preferencesg.o: ../../src/generic/preferencesg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -31368,6 +31424,8 @@ $(OBJS)\corelib_cocoa_nonownedwnd.o: ../../src/osx/cocoa/nonownedwnd.mm
 $(OBJS)\corelib_osx_cocoa_notebook.o: ../../src/osx/cocoa/notebook.mm
 
 $(OBJS)\corelib_osx_cocoa_radiobut.o: ../../src/osx/cocoa/radiobut.mm
+
+$(OBJS)\corelib_preferences.o: ../../src/osx/cocoa/preferences.mm
 
 $(OBJS)\corelib_cocoa_printdlg.o: ../../src/osx/cocoa/printdlg.mm
 
@@ -35846,6 +35904,11 @@ $(OBJS)\corelib_popupcmn.o: ../../src/common/popupcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_preferencescmn.o: ../../src/common/preferencescmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_prntbase.o: ../../src/common/prntbase.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -36102,6 +36165,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_progdlgg.o: ../../src/generic/progdlgg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_preferencesg.o: ../../src/generic/preferencesg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

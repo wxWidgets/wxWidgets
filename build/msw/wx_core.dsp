@@ -518,6 +518,10 @@ SOURCE=..\..\src\common\popupcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\preferencescmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\prntbase.cpp
 # End Source File
 # Begin Source File
@@ -1216,6 +1220,10 @@ SOURCE=..\..\src\generic\msgdlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\numdlgg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\preferencesg.cpp
 # End Source File
 # Begin Source File
 
