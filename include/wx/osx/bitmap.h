@@ -105,6 +105,7 @@ public:
     
     // creates an bitmap from the native image format
     wxBitmap(CGImageRef image);
+    wxBitmap(WX_NSImage image);
 
     // If depth is omitted, will create a bitmap compatible with the display
     wxBitmap(int width, int height, int depth = -1) { (void)Create(width, height, depth); }
@@ -129,6 +130,7 @@ public:
 
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     bool Create( CGImageRef image );
+    bool Create( WX_NSImage image );
     
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);

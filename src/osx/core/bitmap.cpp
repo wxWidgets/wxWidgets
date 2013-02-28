@@ -1005,6 +1005,17 @@ IconRef wxBitmap::CreateIconRef() const
 
 #if wxOSX_USE_COCOA
 
+wxBitmap::wxBitmap(WX_NSImage image)
+{
+    (void)Create(image);
+}
+
+bool wxBitmap::Create(WX_NSImage image)
+{
+    wxCFRef<CGImageRef> cgimage(wxOSXCreateCGImageFromNSImage(image));
+    return Create(cgimage);
+}
+
 WX_NSImage wxBitmap::GetNSImage() const
 {
     wxCFRef< CGImageRef > cgimage(CreateCGImage());
