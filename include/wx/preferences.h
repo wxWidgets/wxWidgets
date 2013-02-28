@@ -37,6 +37,7 @@ class wxPreferencesEditorImpl;
 class WXDLLIMPEXP_CORE wxPreferencesPage
 {
 public:
+    wxPreferencesPage() {}
     virtual ~wxPreferencesPage() {}
 
     // Name of the page, used e.g. for tabs
