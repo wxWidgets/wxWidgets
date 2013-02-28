@@ -3360,7 +3360,8 @@ typedef const void* WXWidget;
 /*  If a manifest is being automatically generated, add common controls 6 to it */
 /*  --------------------------------------------------------------------------- */
 
-#if (!defined wxUSE_NO_MANIFEST || wxUSE_NO_MANIFEST == 0 ) && \
+#if wxUSE_GUI && \
+    (!defined wxUSE_NO_MANIFEST || wxUSE_NO_MANIFEST == 0 ) && \
     ( defined _MSC_FULL_VER && _MSC_FULL_VER >= 140040130 )
 
 #define WX_CC_MANIFEST(cpu)                     \
