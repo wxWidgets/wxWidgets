@@ -37534,7 +37534,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
 
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
-                     erase event exec font image minimal render \
+                     erase event exec font image minimal preferences render \
                      shaped svg taborder vscroll widgets wrapsizer"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then

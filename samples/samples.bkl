@@ -61,6 +61,7 @@
     <subproject id="ownerdrw" template="sub"/>
     <subproject id="popup" template="sub"/>
     <subproject id="power" template="sub"/>
+    <subproject id="preferences" template="sub"/>
     <subproject id="printing" template="sub"/>
     <subproject id="propgrid" template="sub"/>
     <subproject id="regtest" template="sub"/>

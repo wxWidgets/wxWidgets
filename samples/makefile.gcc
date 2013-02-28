@@ -37,7 +37,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -90,6 +90,7 @@ clean:
 	$(MAKE) -C ownerdrw -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C popup -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C power -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C preferences -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C printing -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C propgrid -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C regtest -f makefile.gcc $(MAKEARGS) clean
@@ -267,6 +268,9 @@ popup:
 power: 
 	$(MAKE) -C power -f makefile.gcc $(MAKEARGS) all
 
+preferences: 
+	$(MAKE) -C preferences -f makefile.gcc $(MAKEARGS) all
+
 printing: 
 	$(MAKE) -C printing -f makefile.gcc $(MAKEARGS) all
 
@@ -367,10 +371,10 @@ memcheck:
 	config console controls dataview dialogs dialup display dll dnd docview dragimag \
 	drawing erase event except exec font grid help htlbox html image internat ipc joytest \
 	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
-	opengl ownerdrw popup power printing propgrid regtest render ribbon richtext \
-	sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder \
-	taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview \
-	widgets wizard wrapsizer xrc memcheck
+	opengl ownerdrw popup power preferences printing propgrid regtest render ribbon \
+	richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg \
+	taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll \
+	webview widgets wizard wrapsizer xrc memcheck
 
 
 SHELL := $(COMSPEC)
